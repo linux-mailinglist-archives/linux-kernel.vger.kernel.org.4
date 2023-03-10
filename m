@@ -2,114 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8ECE36B3406
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:08:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 90D606B3411
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 03:12:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCJCI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 21:08:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
+        id S229906AbjCJCMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 21:12:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229560AbjCJCIx (ORCPT
+        with ESMTP id S229823AbjCJCMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 21:08:53 -0500
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1EEFAD57
-        for <linux-kernel@vger.kernel.org>; Thu,  9 Mar 2023 18:08:52 -0800 (PST)
-Received: by mail-lf1-x12f.google.com with SMTP id j11so4743838lfg.13
-        for <linux-kernel@vger.kernel.org>; Thu, 09 Mar 2023 18:08:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678414130;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GNebAFc/OVjCS4NYNisA6Hl/ajEXWUl72HEvVLWLC7Y=;
-        b=VT/rVOK5YHM/n9rhLxP2gV6vMw9yltQDUDDeZoWWjWqwrPSfYA1q8Tqr8ITEKl94Qm
-         F10M2Pr2tTWwWMNUHRAwBocEh3vtx0bZn6JFWiQ8q7I9f0dGiYW2aAR2TXYWcYRKctzB
-         NXcAswjT7BEUbdB87oxx5Z1jkZM7A8hdDFGUsOexyyG8/ZdtMXehfMS8pluemssI2y4Y
-         nOawnYNfC35DziEXFmfN8xsjxszmFCW4vRN0uHIRzzLNfVjOy99SvFuV+p5WszV6AeoV
-         xEOJYIlKHrdlP4jjWsJ/3XsF2M1rLmes93ZA68MmzK/YX+M25tbue7Aacj7mlgpTWHdx
-         lDRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678414130;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GNebAFc/OVjCS4NYNisA6Hl/ajEXWUl72HEvVLWLC7Y=;
-        b=YVI6TcYY9ZcDye93aqt84z0/uLuvTI88qLMAv6wJ9k+cCethlb8H8XIab/XmQAG8gL
-         R+Q03Ek7q3fFuWKRWifjeRiEjwSl0YkuNoN3Yxri26AmBwtYKqtmnfRqdRlbhQPtvGYx
-         S5Zsy39v1cqnW5CcCACPBd+wphczTthc5dKnZV8+iktwk21ge6+5eKwe0ju6Yqup5+ru
-         CV3R+MFqN4I8Gb8SMxadawjqcdGdf4rfY/On0xIfWyBhE0Ic2HeJytUDh+DOJKCgWzAS
-         XdQ6QpZuOfC+rNcIMX/OG/tuEfprTkvTi8ZrZctqyqh53iNuMuV0vzoku+m4hChV6Wv/
-         Kl7A==
-X-Gm-Message-State: AO0yUKXDxTbQrMs9/tdBG+KWG0d8LkTwjp5IMjrYvMfBgLKYeo+pmVCs
-        idRIM2IkAwWgBddru+xBW3svXg==
-X-Google-Smtp-Source: AK7set9YbQOYtZLPwJfvJodS4BJF9I9OC8HAsPOy1rlNikBThFm6bv5J02yx0u+u3eDbPP0sar9Xtg==
-X-Received: by 2002:a05:6512:902:b0:4b6:fddc:1fcd with SMTP id e2-20020a056512090200b004b6fddc1fcdmr196031lft.23.1678414130580;
-        Thu, 09 Mar 2023 18:08:50 -0800 (PST)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id z10-20020ac25dea000000b004db297957e8sm87347lfq.305.2023.03.09.18.08.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Mar 2023 18:08:50 -0800 (PST)
-Message-ID: <7e50790e-5b2d-4c5f-7a31-de71fa6cc967@linaro.org>
-Date:   Fri, 10 Mar 2023 03:08:48 +0100
+        Thu, 9 Mar 2023 21:12:03 -0500
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1019110462A;
+        Thu,  9 Mar 2023 18:12:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678414322; x=1709950322;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=TA76+X6Otimiwp2K+IV8a+AGL8NgZEQqynp7zdfzDSs=;
+  b=L6DA6BvmbE5T8Z3EKFVqgJnbBGQkRWFBaS61ZXY4uNVxPYlJ8uBli3c6
+   53VKUayavKvBNhanp/T1wovDtzlYThWZzFq1CytzRkQ2z4o4nyxNRbYpj
+   IDr/ikiAxxrSbejq97gbwGhq/BC5e3ADzsmPDT+0ruA7Kp5Ukqk2pyb6i
+   jyMV2REZJ/qPr+3f1W9G7wfgE0BPRGRMRQjYs0xhPzzsaZZxhcC7XTdz6
+   E4ynY7zl+CnzZrloOYYNQiKnz1IIeFh+Ruk0RJhm6gnbdZiEYmqGeg6m2
+   bVoNzU3hEXzUMpHROW4saFb/m3TU6myIfrytXpPuL6VDDymvjeoxUqA1X
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="336642841"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="336642841"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 18:12:01 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="923497234"
+X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
+   d="scan'208";a="923497234"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by fmsmga006.fm.intel.com with ESMTP; 09 Mar 2023 18:11:56 -0800
+Message-ID: <21c95149-6acb-e330-acaa-390309269a21@linux.intel.com>
+Date:   Fri, 10 Mar 2023 10:10:56 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/4] pinctrl: qcom: lpass-lpi: use consistent name for
- "group" variable
+ Thunderbird/102.7.1
+Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
+        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
+        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
+        peterx@redhat.com, jasowang@redhat.com,
+        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
+        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH 04/12] iommufd: Pass parent hwpt and user_data to
+ iommufd_hw_pagetable_alloc()
 Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230309154949.658380-1-krzysztof.kozlowski@linaro.org>
- <20230309154949.658380-2-krzysztof.kozlowski@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230309154949.658380-2-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
+To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
+        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
+        robin.murphy@arm.com
+References: <20230309080910.607396-1-yi.l.liu@intel.com>
+ <20230309080910.607396-5-yi.l.liu@intel.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <20230309080910.607396-5-yi.l.liu@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 9.03.2023 16:49, Krzysztof Kozlowski wrote:
-> The set_mux callback in SoC TLMM driver (pinctrl-msm.c) uses "group",
-> not "group_num" for the number of the pin group.  Other places of
-> lpass-lpi also use "group", so let's be consistent for code readability.
+On 3/9/23 4:09 PM, Yi Liu wrote:
+> Nested translation has stage-1 and stage-2 page tables. A stage-1 page
+> table is managed by user space, and it needs to work with a stage-2 page
+> table, which is a parent hwpt for the stage-1 hwpt.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> iommu core already supports accepting parent iommu_domain and user_data
+> to allocate an iommu_domain. This makes iommufd_hw_pagetable_alloc() to
+> accept the parent hwpt and user_data, and relays them to iommu core, to
+> prepare for supporting hw_pagetable allocation with user_data.
+> 
+> Also, add a parent pointer in struct iommufd_hw_pagetable for taking and
+> releasing its refcount.
+> 
+> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
 > ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Konrad
->  drivers/pinctrl/qcom/pinctrl-lpass-lpi.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+>   drivers/iommu/iommufd/device.c          |  2 +-
+>   drivers/iommu/iommufd/hw_pagetable.c    | 28 ++++++++++++++++++++++---
+>   drivers/iommu/iommufd/iommufd_private.h |  5 ++++-
+>   3 files changed, 30 insertions(+), 5 deletions(-)
 > 
-> diff --git a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> index 27fc8b671954..bd32556d75a5 100644
-> --- a/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> +++ b/drivers/pinctrl/qcom/pinctrl-lpass-lpi.c
-> @@ -84,10 +84,10 @@ static int lpi_gpio_get_function_groups(struct pinctrl_dev *pctldev,
->  }
->  
->  static int lpi_gpio_set_mux(struct pinctrl_dev *pctldev, unsigned int function,
-> -			    unsigned int group_num)
-> +			    unsigned int group)
->  {
->  	struct lpi_pinctrl *pctrl = pinctrl_dev_get_drvdata(pctldev);
-> -	const struct lpi_pingroup *g = &pctrl->data->groups[group_num];
-> +	const struct lpi_pingroup *g = &pctrl->data->groups[group];
->  	u32 val;
->  	int i, pin = g->pin;
->  
+> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+> index 5c352807d946..19cd6df46c6a 100644
+> --- a/drivers/iommu/iommufd/device.c
+> +++ b/drivers/iommu/iommufd/device.c
+> @@ -558,7 +558,7 @@ iommufd_device_auto_get_domain(struct iommufd_device *idev,
+>   	}
+>   
+>   	hwpt = iommufd_hw_pagetable_alloc(idev->ictx, ioas, idev,
+> -					  immediate_attach);
+> +					  NULL, NULL, immediate_attach);
+>   	if (IS_ERR(hwpt)) {
+>   		destroy_hwpt = ERR_CAST(hwpt);
+>   		goto out_unlock;
+> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
+> index 84b4a11e62f8..16e92a1c150b 100644
+> --- a/drivers/iommu/iommufd/hw_pagetable.c
+> +++ b/drivers/iommu/iommufd/hw_pagetable.c
+> @@ -24,6 +24,8 @@ void iommufd_hw_pagetable_destroy(struct iommufd_object *obj)
+>   	if (hwpt->domain)
+>   		iommu_domain_free(hwpt->domain);
+>   
+> +	if (hwpt->parent)
+> +		refcount_dec(&hwpt->parent->obj.users);
+>   	refcount_dec(&hwpt->ioas->obj.users);
+>   }
+>   
+> @@ -46,6 +48,8 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+>    * @ictx: iommufd context
+>    * @ioas: IOAS to associate the domain with
+>    * @idev: Device to get an iommu_domain for
+> + * @parent: Optional parent HWPT to associate with the domain with
+> + * @user_data: Optional user_data pointer
+>    * @immediate_attach: True if idev should be attached to the hwpt
+>    *
+>    * Allocate a new iommu_domain and return it as a hw_pagetable. The HWPT
+> @@ -54,14 +58,20 @@ int iommufd_hw_pagetable_enforce_cc(struct iommufd_hw_pagetable *hwpt)
+>    */
+>   struct iommufd_hw_pagetable *
+>   iommufd_hw_pagetable_alloc(struct iommufd_ctx *ictx, struct iommufd_ioas *ioas,
+> -			   struct iommufd_device *idev, bool immediate_attach)
+> +			   struct iommufd_device *idev,
+> +			   struct iommufd_hw_pagetable *parent,
+> +			   void *user_data, bool immediate_attach)
+>   {
+>   	const struct iommu_ops *ops = dev_iommu_ops(idev->dev);
+> +	struct iommu_domain *parent_domain = NULL;
+>   	struct iommufd_hw_pagetable *hwpt;
+>   	int rc;
+>   
+>   	lockdep_assert_held(&ioas->mutex);
+>   
+> +	if (parent && !ops->domain_alloc_user)
+> +		return ERR_PTR(-EOPNOTSUPP);
+
+My understanding here is that we are checking whether domain_alloc_user
+is required. It seems that as long as the caller inputs a valid
+user_data or parent, domain_alloc_user is required. If so,
+
+	if ((user_data || parent) && !ops->domain_alloc_user)
+		return ERR_PTR(-EOPNOTSUPP);
+
+Best regards,
+baolu
