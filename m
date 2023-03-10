@@ -2,136 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BDDF6B3E4C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:46:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF67E6B3E55
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 12:47:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229521AbjCJLql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 06:46:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50202 "EHLO
+        id S229809AbjCJLrf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 06:47:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCJLqh (ORCPT
+        with ESMTP id S229522AbjCJLrd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 06:46:37 -0500
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DCD12859
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:46:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678448778; x=1709984778;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=o7hg4SolW8RVgtgFZuww+xyDrgP1C46gIwpjxCqkG44=;
-  b=Zf0dMXbauxTf0EnF0cyvwxMIkU6rDD1ORb6aK7+QgrJn9W/WfEdDn8+p
-   C7uR7brxlJvC5lfTMVJ/DXdQop8idB1+XuAXY2f19S86wVz3osRG58uhO
-   ezisO80T+Pfq9/n4EwqlhZWztZxyKw6DvDLshDpEgh6ITmoiRBOm0Zeg1
-   aIFGTCqsurkji1s1VxK50HljEAKzgFF0tZYKsDuNQ1+3T58oOSLlC97Vn
-   +geaYnJB42UzcAoZyUSg6TcxIYzcjuXgzjHzumHUuSyEVyfW6Y4E+nlCd
-   0jz1TxEkZrQe5qluef/uOtbadgc91Oe77aC1Rtd5ROJZj2lgHxiRqiF02
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="338263945"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="338263945"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 03:46:18 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="627783937"
-X-IronPort-AV: E=Sophos;i="5.98,249,1673942400"; 
-   d="scan'208";a="627783937"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 10 Mar 2023 03:46:17 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pabCS-0003ox-0i;
-        Fri, 10 Mar 2023 11:46:16 +0000
-Date:   Fri, 10 Mar 2023 19:45:49 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Arnd Bergmann <arnd@arndb.de>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect
- type in assignment (different address spaces)
-Message-ID: <202303101931.gO4cNEu3-lkp@intel.com>
+        Fri, 10 Mar 2023 06:47:33 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 181F91111E2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:46:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678448792;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=drSrYgcBUUgWnWmYCUtrRpfKjp0+Me1c7+7zXqYrcnk=;
+        b=MYldL90f/EAEW9x7hL+KrA6S2ISY+qUoQwrHxEXQ4gTJLkdpvDa4IYHrVpq23EBnao/n/t
+        yvuvGf6wSJmFU6JcSaQiY8Rn0KBCh+lVpQAuvydhjJkjCR6R20wvncD61TiIHoufA6Fqxu
+        OcRZJJI9+LSy7IxaSxWP7Y5Nkwx8/rI=
+Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
+ [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-571-AxVRin2bPkyj2UIkPpiClQ-1; Fri, 10 Mar 2023 06:46:31 -0500
+X-MC-Unique: AxVRin2bPkyj2UIkPpiClQ-1
+Received: by mail-wm1-f69.google.com with SMTP id x18-20020a1c7c12000000b003e1e7d3cf9fso3749181wmc.3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 03:46:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678448789;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=drSrYgcBUUgWnWmYCUtrRpfKjp0+Me1c7+7zXqYrcnk=;
+        b=xevojrboHIz0wbw4gei7w5e33V0bVRr3UOri1CMtWOJ8Pcvfs6Pj5/So5lEgZ4UXns
+         iVCtpww6WDXqKn1CTND57A1XVY7vMce9k3iJ2mG1e997eGhYev8OJoxLqAHAi/lQWW85
+         InVCDaBCxv77Oksi2xyojWtyF9IwVEhC8XtrP4ZhO9CMCkbnrSTaEwCvUtv3mBAmhvJb
+         KAITpuAYJ858wKFBK2bzECqcgUKa9dGcc1Cr4q/nGXRurxbtQSkjgCssP8hNE0Fsqwet
+         LjwpwIsc8V1Ny67uDLvlZ8+bz1UkdLJ1WZoY4sE062p2qLJNi9afm/84F9sa715dIgue
+         pjow==
+X-Gm-Message-State: AO0yUKUZo+0gckf9V3V27ZXVhwF23D6ql4Y75KlNW60QEaIIJfAcOA0w
+        tzqnPVFTtbJavm+RDm8RzoecuohMd0NKtMx6E9VZKZq3S2OcDqowx5nbCJPG8Uh9r6nmiAhlBP9
+        tYCQfavKS9DeCLtfiYwPQaoRMGbM0svRhuePlauKlEgWxnvX57pLdBpwlxCZyYTUFyz3jeO2Jds
+        ZawGDwpZAgXZg=
+X-Received: by 2002:a05:600c:1d97:b0:3ea:f132:63d8 with SMTP id p23-20020a05600c1d9700b003eaf13263d8mr2275226wms.5.1678448789367;
+        Fri, 10 Mar 2023 03:46:29 -0800 (PST)
+X-Google-Smtp-Source: AK7set95RqeyUjLpfSJSMVbnJpHJXacJuVI6Mhcpdv2FAdeyuuMUCcplTBJqcn5CMAxsXTKPTAWs5Q==
+X-Received: by 2002:a05:600c:1d97:b0:3ea:f132:63d8 with SMTP id p23-20020a05600c1d9700b003eaf13263d8mr2275205wms.5.1678448789020;
+        Fri, 10 Mar 2023 03:46:29 -0800 (PST)
+Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
+        by smtp.gmail.com with ESMTPSA id c3-20020a7bc843000000b003eb596cbc54sm1982288wml.0.2023.03.10.03.46.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 03:46:28 -0800 (PST)
+From:   Javier Martinez Canillas <javierm@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Arthur Grillo <arthurgrillo@riseup.net>,
+        =?utf-8?Q?Ma=C3=ADra?= Canal <mairacanal@riseup.net>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Maxime Ripard <maxime@cerno.tech>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        David Airlie <airlied@gmail.com>,
+        David Gow <davidgow@google.com>,
+        =?utf-8?Q?Jos=C3=A9?= =?utf-8?Q?_Exp=C3=B3sito?= 
+        <jose.exposito89@gmail.com>, dri-devel@lists.freedesktop.org
+Subject: Re: [PATCH v2] drm/format-helper: Make conversion_buf_size()
+ support sub-byte pixel fmts
+In-Reply-To: <20230307215039.346863-1-javierm@redhat.com>
+References: <20230307215039.346863-1-javierm@redhat.com>
+Date:   Fri, 10 Mar 2023 12:46:27 +0100
+Message-ID: <87wn3okewc.fsf@minerva.mail-host-address-is-not-set>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-head:   44889ba56cbb3d51154660ccd15818bc77276696
-commit: 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b fbdev: omap: avoid using mach/*.h files
-date:   11 months ago
-config: arm-randconfig-s041-20230310 (https://download.01.org/0day-ci/archive/20230310/202303101931.gO4cNEu3-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 12.1.0
-reproduce:
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # apt-get install sparse
-        # sparse version: v0.6.4-39-gce1a6720-dirty
-        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
-        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
-        git fetch --no-tags linus master
-        git checkout 804f7f19c2e2928aeb8eafef8379fe8b8d13f98b
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross C=1 CF='-fdiagnostic-prefix -D__CHECK_ENDIAN__' O=build_dir ARCH=arm SHELL=/bin/bash drivers/video/fbdev/omap/
+Javier Martinez Canillas <javierm@redhat.com> writes:
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303101931.gO4cNEu3-lkp@intel.com/
+> There are DRM fourcc formats that have pixels smaller than a byte, but the
+> conversion_buf_size() function assumes that pixels are a multiple of bytes
+> and use the struct drm_format_info .cpp field to calculate the dst_pitch.
+>
+> Instead, calculate it by using the bits per pixel (bpp) and divide it by 8
+> to account for formats that have sub-byte pixels.
+>
+> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
+> ---
 
-sparse warnings: (new ones prefixed by >>)
->> drivers/video/fbdev/omap/lcdc.c:642:23: sparse: sparse: incorrect type in assignment (different address spaces) @@     expected void [noderef] __iomem *vaddr @@     got void *static [addressable] [assigned] [toplevel] vram_virt @@
-   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     expected void [noderef] __iomem *vaddr
-   drivers/video/fbdev/omap/lcdc.c:642:23: sparse:     got void *static [addressable] [assigned] [toplevel] vram_virt
---
->> drivers/video/fbdev/omap/omapfb_main.c:1027:11: sparse: sparse: cast removes address space '__iomem' of expression
-
-vim +642 drivers/video/fbdev/omap/lcdc.c
-
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  620  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  621  static int alloc_fbmem(struct omapfb_mem_region *region)
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  622  {
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  623  	int bpp;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  624  	int frame_size;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  625  	struct lcd_panel *panel = lcdc.fbdev->panel;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  626  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  627  	bpp = panel->bpp;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  628  	if (bpp == 12)
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  629  		bpp = 16;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  630  	frame_size = PAGE_ALIGN(panel->x_res * bpp / 8 * panel->y_res);
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  631  	if (region->size > frame_size)
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  632  		frame_size = region->size;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  633  	lcdc.vram_size = frame_size;
-f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  634  	lcdc.vram_virt = dma_alloc_wc(lcdc.fbdev->dev, lcdc.vram_size,
-f6e45661f9be54 drivers/video/fbdev/omap/lcdc.c Luis R. Rodriguez 2016-01-22  635  				      &lcdc.vram_phys, GFP_KERNEL);
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  636  	if (lcdc.vram_virt == NULL) {
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  637  		dev_err(lcdc.fbdev->dev, "unable to allocate FB DMA memory\n");
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  638  		return -ENOMEM;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  639  	}
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  640  	region->size = frame_size;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  641  	region->paddr = lcdc.vram_phys;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17 @642  	region->vaddr = lcdc.vram_virt;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  643  	region->alloc = 1;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  644  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  645  	memset(lcdc.vram_virt, 0, lcdc.vram_size);
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  646  
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  647  	return 0;
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  648  }
-569755c706f0f9 drivers/video/omap/lcdc.c       Imre Deak         2007-07-17  649  
-
-:::::: The code at line 642 was first introduced by commit
-:::::: 569755c706f0f94409edd2ae60b9878cb420844f OMAP: add TI OMAP1 internal LCD controller
-
-:::::: TO: Imre Deak <imre.deak@solidboot.com>
-:::::: CC: Linus Torvalds <torvalds@woody.linux-foundation.org>
+Pushed to drm-misc (drm-misc-next). Thanks!
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Best regards,
+
+Javier Martinez Canillas
+Core Platforms
+Red Hat
+
