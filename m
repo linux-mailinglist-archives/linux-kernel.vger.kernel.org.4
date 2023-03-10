@@ -2,131 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B47776B518B
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:14:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 010866B518F
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231341AbjCJUOU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:14:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37756 "EHLO
+        id S231375AbjCJUOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:14:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229933AbjCJUOO (ORCPT
+        with ESMTP id S229933AbjCJUOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:14:14 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1609F12CBBC;
-        Fri, 10 Mar 2023 12:14:13 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B8D75B822C2;
-        Fri, 10 Mar 2023 20:14:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 578AAC433D2;
-        Fri, 10 Mar 2023 20:14:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678479250;
-        bh=FSvN0dMMOIBal+krA5fTetvx6l6nuLKvzSK+sAbhgiA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=U0l4qrR6LKxW7/w82/tVMbCJVD1vicHfXGsBaVPcgnD0WOykHWSPU4tbANimy2No/
-         QOAx7HIe8xf7kvAKCYGghKebx76Bgs+Ph0WWoD7+reWWpN9MDXhxDBXffzkOkx144i
-         sFG642df2Umtdr4MdDEelvAUEexay8BwrVqJfrpLGX/lwhhPWL9jstuLqMDl5L6JY6
-         h5JUwXFiuvsLxqm5cltSRqwznt7CUJfx1cvGkWB4bpl7Pi4vqs8Expp5pz2D4AW6X+
-         SWIhwqAhkxvsAXzLK1tmFLgdvLzTvQohP5Qs20DPDaXme/x8BR/WqikoyNNVVRVM2Z
-         6XI/Fqf5O2hlQ==
-Date:   Fri, 10 Mar 2023 12:14:08 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Mike Cloaked <mike.cloaked@gmail.com>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
- drives
-Message-ID: <ZAuPkCn49urWBN5P@sol.localdomain>
-References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
- <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
-MIME-Version: 1.0
+        Fri, 10 Mar 2023 15:14:41 -0500
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2082.outbound.protection.outlook.com [40.107.94.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9352912D41A;
+        Fri, 10 Mar 2023 12:14:31 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oYEergHLpzL8GYIZ7zSnQj8/MMw2t+kwDMRKgJ2fHxjD/vuu7nxG3o3cGUwnaqf730OhanT59lRaemx2TJE8Hz7J+cr8X5SgJt1RdGQGaAMp/D5ERNBtJqeUuvwxXLBgOp6SzXFmlMR5IV6eK4dQGTXr4pfzM+7A0tYlFm/jUG5E/tn5L3fBTmEL9i9WuvUeisrd5Ma5FEPmK4MrOOrPFa9ksVJ1goHt7jGtyGLXiJnnWTirewtogA9V7eFHYPPyvIeGTL4+2F/yCMFX9Fgw9m74LBtjFHRBBm/ro80XJyMQ5ngXy7ddX3tOLYfaMY2LpZFz+NoGQnJO91H2QU/n4w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Un1BTE4l6FiAD8cn+pXmQYPW47LzK9GxAOMVACcceHc=;
+ b=VdSSIP1jsNgiQajuryGWZ0X2fDfdsHCTNx40xS18uaFggafx0QRE4VWEmYBI6fBw8S5nGHiqoRa9AhM85iVf3TCJONee+IU3GBAEc6Si5Jbiv+J/O/sKN9YP4HCIqTD0Eiltx7E4wzCAFH8hGegZR4FfK1qQMzReq4fr2/YUf/DwcVkqSnjAgNz/bxezwHhKshW39M8jvcZxcHmFf/PdBl59xI7bnrLsltKAVaV9XTTFgVojGkmYtdzt+JkqlE5NBCiaNJ7FzT7oGZB3pPXVpKR9nBmhC8Jr6XoKbwM69qCN6BjwojjK2w0Q3rdUpbGbPpxYzNCs+ikFfUmQ25bJAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Un1BTE4l6FiAD8cn+pXmQYPW47LzK9GxAOMVACcceHc=;
+ b=EoiMktYIho0EJHCjEyqSD/B4ZFbeC38cqXGPm16F+2tbeRObn2T2EFwBgf3D0kjafkH2fxV/I7hkg6rIjvdMogug7ctykoEPK0qjFd7sf5V591jDHo4RwaifChebGwg4AY30jaIOVoM2fZroq9Rb9BT2qCluDrDyIHgv6Ejp20qXVqMTss6usHro0X31jhG4aRWEGZ1opHd8Ket90kdKNFYyrrBLb52NgF+W0VMRyY4ZlwoEkcdgYLFL2HyZGuF0T2aFnTar1p69h4nZI1NR7sdRT+hYJB4mWtYyrY370UqOlPDpIiLdh210U/3+NnpvmuxCZ3hPPZFslAbuDZ9mqw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by BL3PR12MB6428.namprd12.prod.outlook.com (2603:10b6:208:3b7::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Fri, 10 Mar
+ 2023 20:14:29 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::ef6d:fdf6:352f:efd1%3]) with mapi id 15.20.6178.017; Fri, 10 Mar 2023
+ 20:14:29 +0000
+Date:   Fri, 10 Mar 2023 16:14:27 -0400
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Nicolin Chen <nicolinc@nvidia.com>
+Cc:     kevin.tian@intel.com, joro@8bytes.org, will@kernel.org,
+        robin.murphy@arm.com, alex.williamson@redhat.com, shuah@kernel.org,
+        yi.l.liu@intel.com, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, kvm@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, mjrosato@linux.ibm.com,
+        farman@linux.ibm.com
+Subject: Re: [PATCH v4 1/5] vfio: Do not allow !ops->dma_unmap in
+ vfio_pin/unpin_pages()
+Message-ID: <ZAuPo6o9Qk3dlpf0@nvidia.com>
+References: <cover.1678284812.git.nicolinc@nvidia.com>
+ <2dc87ceb7bf02c7f405bde44e9ee9b21398c5228.1678284812.git.nicolinc@nvidia.com>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2dc87ceb7bf02c7f405bde44e9ee9b21398c5228.1678284812.git.nicolinc@nvidia.com>
+X-ClientProxiedBy: YT4PR01CA0325.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10a::8) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|BL3PR12MB6428:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4f301965-4cba-4cf7-cc51-08db21a40d85
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: dWTbdykJrxjalWNFJh0WomtBAlwToaE4YBBf+LbfEB8wNSFwzfWvj9R9evt8yDjgBRqn6hQ7rg8jvv8W0RSBud2zysIfZyQhPHHulSbzUzAeLqh9i5Ax6CrgEXLAIcnwsh0NorduaqJzyBkYw7p4IDjPkqV3puP1dBFXyJKn0Lv1z0TwLSW0fXqiR7bvIgP949vHwfD3z8FM/I6pDHAsA0+b+OoUtEx8Zti5Tb0g4FfEE8LD0IiCuPRheXpEPdmMwzMuCse52XzvwWSrRCY8KdMD9n6bLABZ0DoH8ihw3l57ZwekXsrYaszx9jON4llccaGXFlL7jIMQuOAgtNv2PklT3ULD5GhTicXiwSwCyl+q/JN93zNxn18J1AUL9GWXhuiYJc6/699t/buUSg+PcOp95Bhh4MjM4smXe7BLcZEf9iTKpgY+uZyOLiNsUiL9yxoj0rQsit1C/lUjFYJpOvEA814vwHdXcKPWMgsrIRcGc8EWgR3xl0fChK1s2JCbozB5R4eX68J8gW6TVmi9sHEn0jH7+ZajMj/VMgGrzGQH1tO11kWDlfEUhO10EJHhm9QnypRRSSHOscyUD+3d/KOpl5H5VkKQnKiWp9lo/guhH8gfPosayhGGgbsPns18Ia/WAz5AOfSRXoeLHwc3iA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(376002)(366004)(346002)(39860400002)(396003)(136003)(451199018)(36756003)(83380400001)(478600001)(6636002)(6506007)(37006003)(316002)(38100700002)(2616005)(6486002)(6512007)(26005)(186003)(41300700001)(2906002)(7416002)(5660300002)(4744005)(66476007)(8936002)(66946007)(8676002)(66556008)(6862004)(4326008)(86362001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?QXJvyRWZVn5UmLMo4uCaV7pID8/Ay9Q1uMT/b9kCHaYrMtrFY3fFDrgVEkE7?=
+ =?us-ascii?Q?SXk1zV/qm26p6z2fuxq71qxXOnAQyc0A6Ko8UDe31PFoOQXn5BKBHRRIpjiT?=
+ =?us-ascii?Q?xtwBeLvVqH0WKorvxsv/tMS3KAwOMefUAd5PSOIlBYeljQdYTxMlUk114I9d?=
+ =?us-ascii?Q?oCg6PE4BU82dZlZmymRF9TXKnn83HWLs6UzQY7qFEt9xW1Y/fAGy8AVBFWwp?=
+ =?us-ascii?Q?T2JWtgOQ89XYWxTzIrIUsR48IjomWw0hHeEuf/tyIw8yyBPCePWx3Zn6Ecp5?=
+ =?us-ascii?Q?07ZA52VyGocTrXbcxIyj7mlpMv9IbhGZPGz23d5B8wUAl0fXvgvpjs4z1dQN?=
+ =?us-ascii?Q?bPkzhwIx0++tKPMkn0THOeuXWhUb+xaQ0A+KynEH7zvD3qLiRN9XWFeuvDH4?=
+ =?us-ascii?Q?egMf5MusnTC8/GSc7hdkW6ZMDPA/0zixkQfMGuCafvkwlbY+k698fy/o7jHR?=
+ =?us-ascii?Q?TKjO88K9uVIFz21an+uQ/9kujHqLYBh2NO1F8/93j1DZ/LkSKXrx6RgZi4/j?=
+ =?us-ascii?Q?5U94gwa7p2NkHmPJ+7GHmECZhbERnAvOFgGoi6a827sIdFQeUBm1bVfNzTu9?=
+ =?us-ascii?Q?LV4KxsWexzs+EkWevAN2uQxYBeGWHc+b8ecGtfbc2eLNPFsyN4HrSvYSvdi6?=
+ =?us-ascii?Q?Se0KrAni6VFn6Ri9xMVv/JzJDgCmf3BsEmWbpbzcf18Wr9OmuooloYmv/uGf?=
+ =?us-ascii?Q?bpy66qVOEBTyZoxJMHegSEkra7YLIlNMmIkmStVkxaYmWGzum7LQ76s83fTb?=
+ =?us-ascii?Q?Jd/t+ZPt4dGF8ORY5Uf1nzOg9Bj1XjNAezmZHNVsJacTfdTWk7VwfNhDEhvK?=
+ =?us-ascii?Q?T5N7aiAyLWPGgaMf/qGwW4iSrMnEtYH/G3zXfGnJdqaAd1UC/Z++bku32MXC?=
+ =?us-ascii?Q?mAmUWHA8b8A8LdVaB/6VUpS7CGnKN5gQcyssibgGymp0vFcNhZ+YoThvZY5+?=
+ =?us-ascii?Q?M/WwXpq1GakDvNt2Aj56VQHCmx1AQuE0gE+ByF8NyrTV1OFkjwoPKlcjEBSu?=
+ =?us-ascii?Q?B5w6EmxR3wIQkFN3YdfV+Ve42fGsASnakjj2SmggzCx368HT8PazEk5g0Evp?=
+ =?us-ascii?Q?FEx2Jyb7+UrbxWSXRerf3xjIalZ93vSA0Au+8DU5mW6pA8lBKZH7+16uUYsB?=
+ =?us-ascii?Q?ySi6dF08urZ3+r5/vMS2QPDcI1Bs5/4JH0jAMrbcAMEqdqZjMEgQdHLkCIh7?=
+ =?us-ascii?Q?o5VLQ+CDEQgMq+VGrLCA4Np7Nkxls7UI7lclQtukhicSgi+nDD9AN15oHQ0A?=
+ =?us-ascii?Q?zjRLQrkQUEzZqFtsexmMxnemN2I0pPMBhkmGuLdVU11fOcEbbTjCQVCWlDko?=
+ =?us-ascii?Q?tK/ItE0j+Y1EfI2ouEwSfdcXHvqRrqudSkrqX50VCcHZxRLM36/EnoWrEE0P?=
+ =?us-ascii?Q?1Ad+6e98SI03rutBAYDJOKyYnwEQ/7MmidJTKxbypAI6xMibKw8rn1vkD0c1?=
+ =?us-ascii?Q?AhoLiKAzwzvaITIj4U19YCNfNY+gKnSTsAqC3CIPNx2xRATcgxiDPXev0ENn?=
+ =?us-ascii?Q?dH/scZZ6AZe2ILuU2qwV/h/TmSS+Tu1XTgnzWOfnJxy7jjkNqElym1iNRPkX?=
+ =?us-ascii?Q?9zLiz1b4hCbQAFRlKO4CVieisRFvRQBukarKfVwx?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4f301965-4cba-4cf7-cc51-08db21a40d85
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Mar 2023 20:14:29.0001
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: k81Vngavi8aOGGYG//ZVwbuqI6TGGOQmLGfE3HaP3hmJHjAKm7sLUyMOW0F/Yo85
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL3PR12MB6428
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 07:33:37PM +0000, Mike Cloaked wrote:
-> With kerne. 6.2.3 if I simply plug in a usb external drive, mount it
-> and umount it, then the journal has a kernel Oops and I have submitted
-> a bug report, that includes the journal output, at
-> https://bugzilla.kernel.org/show_bug.cgi?id=217174
+On Wed, Mar 08, 2023 at 06:25:58AM -0800, Nicolin Chen wrote:
+> A driver that doesn't implement ops->dma_unmap shouldn't be allowed to do
+> vfio_pin/unpin_pages(), though it can use vfio_dma_rw() to access an iova
+> range. Deny !ops->dma_unmap cases in vfio_pin/unpin_pages().
 > 
-> As soon as the usb drive is unmounted, the kernel Oops occurs, and the
-> machine hangs on shutdown and needs a hard reboot.
-> 
-> I have reproduced the same issue on three different machines, and in
-> each case downgrading back to kernel 6.2.2 resolves the issue and it
-> no longer occurs.
-> 
-> This would seem to be a regression in kernel 6.2.3
-> 
-> Mike C
+> Suggested-by: Kevin Tian <kevin.tian@intel.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> Reviewed-by: Yi Liu <yi.l.liu@intel.com>
+> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> ---
+>  drivers/vfio/vfio_main.c | 4 ++++
+>  1 file changed, 4 insertions(+)
 
-Thanks for reporting this!  If this is reliably reproducible and is known to be
-a regression between v6.2.2 and v6.2.3, any chance you could bisect it to find
-out the exact commit that introduced the bug?
+Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
 
-For reference I'm also copying the stack trace from bugzilla below:
-
-BUG: kernel NULL pointer dereference, address: 0000000000000028
- #PF: supervisor read access in kernel mode
- #PF: error_code(0x0000) - not-present page
- PGD 0 P4D 0
- Oops: 0000 [#1] PREEMPT SMP PTI
- CPU: 9 PID: 1118 Comm: lvcreate Tainted: G                T  6.2.3-1>
- Hardware name: To Be Filled By O.E.M. To Be Filled By O.E.M./Z370 Ex>
- RIP: 0010:blk_throtl_update_limit_valid+0x1f/0x110
- Code: 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 41 54 49 89 fc>
- RSP: 0018:ffffb5fd01b47bb8 EFLAGS: 00010046
- RAX: 0000000000000000 RBX: ffff9d09040d8000 RCX: 0000000000000000
- RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
- RBP: ffffffff97b2f648 R08: 0000000000000000 R09: 0000000000000000
- R10: 0000000000000000 R11: 0000000000000000 R12: ffff9d090fce2c00
- R13: ffff9d090aedf060 R14: ffff9d090aedf1c8 R15: ffff9d090aedf0d8
- FS:  00007f3896fc7240(0000) GS:ffff9d109f040000(0000) knlGS:00000000>
- CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 0000000000000028 CR3: 0000000111ce4003 CR4: 00000000003706e0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- Call Trace:
-  <TASK>
-  throtl_pd_offline+0x40/0x70
-  blkcg_deactivate_policy+0xab/0x140
-  ? __pfx_dev_remove+0x10/0x10 [dm_mod]
-  blk_throtl_exit+0x45/0x80
-  disk_release+0x4a/0xf0
-  device_release+0x34/0x90
-  kobject_put+0x97/0x1d0
-  cleanup_mapped_device+0xe0/0x170 [dm_mod]
-  __dm_destroy+0x120/0x1e0 [dm_mod]
-  dev_remove+0x11b/0x190 [dm_mod]
-  ctl_ioctl+0x302/0x5b0 [dm_mod]
-  dm_ctl_ioctl+0xe/0x20 [dm_mod]
-  __x64_sys_ioctl+0x9c/0xe0
-  do_syscall_64+0x5c/0x90
-  entry_SYSCALL_64_after_hwframe+0x72/0xdc
- RIP: 0033:0x7f389745653f
- Code: 00 48 89 44 24 18 31 c0 48 8d 44 24 60 c7 04 24 10 00 00 00 48>
- RSP: 002b:00007ffe5499e4f0 EFLAGS: 00000246 ORIG_RAX: 00000000000000>
- RAX: ffffffffffffffda RBX: 000055d198c3bec0 RCX: 00007f389745653f
- RDX: 000055d1994501b0 RSI: 00000000c138fd04 RDI: 0000000000000003
- RBP: 0000000000000006 R08: 000055d197547088 R09: 00007ffe5499e3a0
- R10: 0000000000000000 R11: 0000000000000246 R12: 000055d1974d10d6
- R13: 000055d199450260 R14: 000055d1974d10c7 R15: 000055d197545bbb
-  </TASK>
- Modules linked in: dm_cache_smq dm_cache dm_persistent_data dm_bio_p>
-  soundcore pcspkr intel_wmi_thunderbolt i2c_smbus mei sysimgblt inpu>
- CR2: 0000000000000028
- ---[ end trace 0000000000000000 ]---
- RIP: 0010:blk_throtl_update_limit_valid+0x1f/0x110
- Code: 90 90 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 41 54 49 89 fc>
+Jason
