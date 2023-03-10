@@ -2,103 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 464D36B397E
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:02:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641866B3984
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 10:02:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbjCJJCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 04:02:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60422 "EHLO
+        id S231483AbjCJJCo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 04:02:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60544 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229968AbjCJJBI (ORCPT
+        with ESMTP id S229634AbjCJJBK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 04:01:08 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5E6F2F8C
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:56:26 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id da10so17637095edb.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 00:56:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678438585;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FTc8WfUJS5pE+gJh6hkTmvwpoZgYTgQwLH01UiXhOZg=;
-        b=ViN+S4WXuglyR2uBtr+EvRXEI4vCdxTY/d41nwNFME843reyuLNTFuMZIg25I8vuss
-         2ICKGF2ls/FrxbadwSh6U3CntGAGTKlBr69PXXsKsHOErXkyX2DAfGcbYohKvGMefCj4
-         DpHgT3pGrHiEaNz/cdWfD2DhKVnTurrzJTUhEWty3kLtbWAC5nG3juAH1kUXR0+iq0MO
-         Fuij61l9E2zJRK/3AQBh/i41ghpBmuMFs5igmHiij6ZP8VA50sfIqeivDUkiOi9bAeN3
-         V/EPm5gktCSIxNbbfKeRATxF7vWzy/nQoOhY8JaayR14VSuXnroe6u0cByFMBLM4CK6P
-         UQfg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678438585;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FTc8WfUJS5pE+gJh6hkTmvwpoZgYTgQwLH01UiXhOZg=;
-        b=6RLs6lzDnvrjVstyxSjfBMFD42Od0IKVDHNkeWvLGvsswS7W7BMQ00vbsTCVbnE6ZX
-         pi+8wYp120sqAkHqo+Xwp/kYUvR01HCgt8qLIamxgXXuBr9bLgCbtVc04TUraMrk0ZR2
-         IfTXKKi4aJT5+oqwtGSkq3/0dhNYbc97eHXMr6VVKv/FPhPRUyMZKV/gtEz8PXMqbqIt
-         eiQgQ6xjoKgTyyHwETcuLjD2isWct7R0U2UJ30FONTbvm96K6o7RRH+FA+UAjoRhXkup
-         90E6OY8u8p/YFykE2/kGFJm5I71SBhrWRM2R2QAgAKmHcmm2Wu1GrhGLX2lPj4E3fPHL
-         l7JQ==
-X-Gm-Message-State: AO0yUKXyU/hQVcxsTKFeei+joirRtcDs6AQoXSC6W54posXM4Y1GrwbA
-        tySomX4UQDFBcHGDvGVRger8rw==
-X-Google-Smtp-Source: AK7set8oQbEa7aHmhTfe/KFEnNmpgd8Cm09atyHmqtwJySaJhkBT/4gR8InAUbnJ3CyZitaM9+lRkw==
-X-Received: by 2002:a17:906:cccf:b0:8ae:f73e:233f with SMTP id ot15-20020a170906cccf00b008aef73e233fmr25072593ejb.32.1678438584872;
-        Fri, 10 Mar 2023 00:56:24 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:2a59:841a:ebc:7974? ([2a02:810d:15c0:828:2a59:841a:ebc:7974])
-        by smtp.gmail.com with ESMTPSA id bh11-20020a170906a0cb00b008d02b6f3f41sm685790ejb.211.2023.03.10.00.56.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 00:56:24 -0800 (PST)
-Message-ID: <87f20b22-6305-7590-1dbf-014b5898b15c@linaro.org>
-Date:   Fri, 10 Mar 2023 09:56:23 +0100
+        Fri, 10 Mar 2023 04:01:10 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81C8104920;
+        Fri, 10 Mar 2023 00:56:32 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4457B6116E;
+        Fri, 10 Mar 2023 08:56:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98640C433EF;
+        Fri, 10 Mar 2023 08:56:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678438591;
+        bh=C4lIEcYHbP1LRvSAoPOxUsnZofcU+ia3egoUMcOO+wo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=nhdgVttWC1VdAmu3PGOfgyzJ9e+urOPw10MfMbIhXda6MSZ2Ur4hE0kHH9KN6sgal
+         sRjZyACngza8mlKp/NGf+m6lccOeM51Q1yTyvVJpT3LYNXwQnfRJd8yOnL27Ysp7M+
+         vIC2q8cKd5cXmIVqSzBp5HywLXX5B8TolPIZztCrv+/XEEYlmfTGCDNKDmOJ8pItnQ
+         YXL18zzNam5y/qL/tXy+39jLcgSihwIDHVLh3MRS8wfDEwQZfZMPo3AieGKslPOa31
+         5KfkI6IDtfS6fMlmU0ONC3IkVJ7bYOjHitcGvNehBT/wQwRLbCPF63BOwxP77Eqsyt
+         X+80tajDaa4AQ==
+Received: from disco-boy.misterjones.org ([51.254.78.96] helo=www.loen.fr)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1paYY9-00GXmV-3R;
+        Fri, 10 Mar 2023 08:56:29 +0000
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 21/28] ASoC: dt-bindings: Update example for enabling
- USB offload on SM8250
-Content-Language: en-US
-To:     Wesley Cheng <quic_wcheng@quicinc.com>,
-        srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
-        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
-        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
-        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
-        andersson@kernel.org, robh+dt@kernel.org,
-        gregkh@linuxfoundation.org, tiwai@suse.com
-Cc:     linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
-        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
-        quic_plai@quicinc.com
-References: <20230308235751.495-1-quic_wcheng@quicinc.com>
- <20230308235751.495-22-quic_wcheng@quicinc.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230308235751.495-22-quic_wcheng@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+Date:   Fri, 10 Mar 2023 08:56:28 +0000
+From:   Marc Zyngier <maz@kernel.org>
+To:     Lucas Tanure <lucas.tanure@collabora.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, kernel@collabora.com,
+        Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
+In-Reply-To: <20230310080518.78054-2-lucas.tanure@collabora.com>
+References: <20230310080518.78054-1-lucas.tanure@collabora.com>
+ <20230310080518.78054-2-lucas.tanure@collabora.com>
+User-Agent: Roundcube Webmail/1.4.13
+Message-ID: <a43dee4ef0e72c393dea6ce924347f81@kernel.org>
+X-Sender: maz@kernel.org
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-SA-Exim-Connect-IP: 51.254.78.96
+X-SA-Exim-Rcpt-To: lucas.tanure@collabora.com, vkoul@kernel.org, kishon@kernel.org, robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org, heiko@sntech.de, tglx@linutronix.de, lpieralisi@kernel.org, kw@linux.com, bhelgaas@google.com, wqu@suse.com, piotr.oniszczuk@gmail.com, pgwipeout@gmail.com, kever.yang@rock-chips.com, linux-phy@lists.infradead.org, devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org, kernel@collabora.com, robin.murphy@arm.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 09/03/2023 00:57, Wesley Cheng wrote:
-> Add an example on enabling of USB offload for the Q6DSP.  The routing can
-> be done by the mixer, which can pass the multimedia stream to the USB
-> backend.
+On 2023-03-10 08:05, Lucas Tanure wrote:
+> The GIC600 integration in RK356x, used in rk3588, doesn't support
+> any of the shareability or cacheability attributes, and requires
+> both values to be set to 0b00 for all the ITS and Redistributor
+> tables.
 > 
-> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> This is loosely based on prior work from XiaoDong Huang and
+> Peter Geis fixing this issue specifically for Rockchip 356x.
 
+No.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+If we are going to do *anything* about this thing, it is by
+describing the actual topology. And it has to work for both DT
+and ACPI.
 
-You still miss binding change to APR/GPR. Where is the USB DAI going to sit?
+Alternatively, this is an erratum.
 
-
-
-Best regards,
-Krzysztof
-
+         M.
+-- 
+Jazz is not dead. It just smells funny...
