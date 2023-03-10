@@ -2,62 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCD806B45A4
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:35:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 359D16B45BB
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232580AbjCJOfj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:35:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44360 "EHLO
+        id S232654AbjCJOgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:36:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232565AbjCJOfa (ORCPT
+        with ESMTP id S232626AbjCJOgW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:35:30 -0500
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2AADCEDB59;
-        Fri, 10 Mar 2023 06:35:23 -0800 (PST)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1F6E1C14;
-        Fri, 10 Mar 2023 06:36:06 -0800 (PST)
-Received: from [192.168.4.21] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F143F3F71A;
-        Fri, 10 Mar 2023 06:35:20 -0800 (PST)
-Message-ID: <ecd41da2-d986-8890-a519-3dfc83019593@arm.com>
-Date:   Fri, 10 Mar 2023 14:35:09 +0000
+        Fri, 10 Mar 2023 09:36:22 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A6F61188C7;
+        Fri, 10 Mar 2023 06:36:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1678458941; i=p.jungkamp@gmx.net;
+        bh=mFAKBwec07W+wMZVRlgIuZRX8jmMl9ZIB3CeRLO90eI=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=UH5Uf8lfBmK+dUPe26G/qqIMHOHA6gVNQXaotuK6yRg01QQT4NOibZONVNrNXsfLj
+         D9eQ5KnUZUu0wzBzM5CWBMii0UP+HvKVHVOcMlw0zyWCpr9TDytcNjKW4KLv87jjE7
+         +12lTQmvhXfrI7PQ01EoXP1xmwZQSDZSc+FIIlMBlI3mJv3EdwgblXNx25vKN0koYy
+         +lTRvuXiCivmpPlcYXJsnbwX9UMi5GJPzYExH3zP2bqczE1qhDRChwxj75vQoemkc4
+         SrgOdrxX1MsUTTuk5CrJzS/0+4e9Gd4zGz1yHk/0O29Duk/Aqa97fsP0wUOFYiL5BQ
+         Nz93C1MxW7gYQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from yoga9.fritz.box ([93.238.84.250]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MWRVb-1q2PSA2GPz-00XuER; Fri, 10
+ Mar 2023 15:35:41 +0100
+Message-ID: <424882ed2a79a641f88b5f2d1ed5a5d3d4fe98d9.camel@gmx.net>
+Subject: Re: BUG: hid-sensor-ids code includes binary data in device name
+From:   Philipp Jungkamp <p.jungkamp@gmx.net>
+To:     srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
+        todd.e.brandt@linux.intel.com, linux-input@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Even Xu <even.xu@intel.com>
+Cc:     Jonathan.Cameron@huawei.com, jkosina@suse.cz,
+        todd.e.brandt@intel.com
+Date:   Fri, 10 Mar 2023 15:35:38 +0100
+In-Reply-To: <317ce138f63b9317ac7be1949a68db5117c19b92.camel@linux.intel.com>
+References: <592bcdcbb3603cf5dfefd09abdd6916db4efc691.camel@linux.intel.com>
+         <317ce138f63b9317ac7be1949a68db5117c19b92.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] vdso: Improve cmd_vdso_check to check all dynamic
- relocations
-Content-Language: en-US
-To:     Fangrui Song <maskray@google.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc:     "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        "loongarch@lists.linux.dev" <loongarch@lists.linux.dev>,
-        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-References: <20220830193701.1702962-1-maskray@google.com>
- <20220910075316.no72fdyqjvunomwm@google.com>
- <CAFP8O3+OwanSJdzd5V3oGJ_MOJOSVdbn+4iBJJKm2LCR8mCA0Q@mail.gmail.com>
- <9ce45cd2-dcd8-11f8-e496-7efe3649e241@csgroup.eu>
- <20221115004625.x4wl6zbg4iiuxl5t@google.com>
- <CAFP8O3LdSJCChGEwT57e=iZopceYkBFuW9XD=yhO1ZszVZGm4g@mail.gmail.com>
- <3ec9737e-3d1a-c014-b91a-0e2d406a3b3d@csgroup.eu>
- <CAFP8O3KZTkSbxXJ2yWt4w-F3xWHY_owCs03wN3Bhss57O-E_JQ@mail.gmail.com>
- <20221221235147.45lkqmosndritfpe@google.com>
-From:   Vincenzo Frascino <vincenzo.frascino@arm.com>
-In-Reply-To: <20221221235147.45lkqmosndritfpe@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+X-Provags-ID: V03:K1:FUveCr1Am3P8y4UZy/e3l87Y7WBAVrENwGPQpjNtgmnswCEz/+/
+ 5ykUALHVxxCBob9HxiORZViK16lHVVsa6c06BCLX9SlUBWsv1Ajoeu7y6ticUF4poTwKCfN
+ b77Ij9b1tOEirIxrPE+YNb7gbBvSl00AE9w82ixfw+USV3SOcqv5TKJ8vGr5oY4+F+DCrTV
+ DQ+NFR2MHAoe9mEs308wA==
+UI-OutboundReport: notjunk:1;M01:P0:CpRuxpJGfuw=;R9k9rI7g0pCK8p4biNpGUWex0Xs
+ zqMcUMMnapb0z/HZCaSulXaM6gP9hr64ibaN9gMTNiFsh5LKb1N16SPKQ0C/OocAwJwx6JFQS
+ AulgOUrKfRm6Xchk7LKJgPILyE0V4jrfEcPSt3UqzgVmsjfF0Ci0bnBOylpavmRmcTVjy/fLR
+ LASKXt0pKLSib2/uxTlc0Xt+TA53oWGQMpOQo7eHOlvIyhU8TYAERWk6wfDhqIA0pjAX8kbAX
+ 2KPt3OoE4g1m35XjiQDt3Iswc5B/6YAghtd6f4PzwLxrCdScvJp9Mjmnu7G4Hpsgn4ms6Yk3P
+ dfO/FFYlUsafjRfpxXRmdB6Py4oDYbL0huJVELyH5y+BfkkamLr3CeMTYIIbTsOOZwF95lZFl
+ MUG1DhTGgMPEH3NMfpCiYdxYoY36xqj7uUiIe12VgJBiT3AUVdlYLul0Pat+70tYpvbwuqUIO
+ 9U8hj9crx1u1M5nGFYgs0UFMMxlZe7RjzGzXO/mGgISRCZJoHHQMq3mpUK2LkCpdF00rJVRgs
+ ID4LYSCdss6YkO/SW/59kghibMH++OOp7ccCDV8XEXgerNAmBwiMv0JyTTFpKbWM5Nh1a5SPL
+ z3ljEC1s90iSmEyzU9eHtXfFLhcmLHJbn34l0xnMseiM8XO7JOLPSgMMrHYEteUhOU3kehHN4
+ akbqqqDsl8oZbiGks/BYVKcj7NzJaGWe+g/+LbcX3NWw9ySBSggrZbVsLfv4X2LNVstGoszU5
+ cgJwaP7Vn5uOe2nqJzVPmW65iliDlCGhwsvFIZmVBhH9B5d9jsmhEj7yNP/y2YqmwcgK9aTpO
+ HddcvRLzmm45v3lMQbL47UskHLTZHNiOUV7fCAiT9FI9QWgew+3f77xZnKwEkw1jCPHZJO3/j
+ LNF5b6YJsZBWQ7FsphBOF486yfNW9RiSv8NKkbWOzzapZb3z+sI26T1n+nODvmyv4hGuf4yBM
+ DPb1rI2JQR5L4MhEd89JLqzMaOk=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,243 +74,162 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Fangrui,
+Hello,
 
-Apologize for the delay, I totally missed that you had a new version of your
-patch since it was threaded with the old one.
+on v3 of the patchset I had this comment on the 'real_usage'
+initialization:
 
-On 12/21/22 23:51, Fangrui Song wrote:
-> The actual intention is that no dynamic relocation exists. However, some
-> GNU ld ports produce unneeded R_*_NONE. (If a port fails to determine
-> the exact .rel[a].dyn size, the trailing zeros become R_*_NONE
-> relocations. E.g. ld's powerpc port recently fixed
-> https://sourceware.org/bugzilla/show_bug.cgi?id=29540) R_*_NONE are
-> generally no-op in the dynamic loaders. So just ignore them.
-> 
-> With the change, we can remove ARCH_REL_TYPE_ABS. ARCH_REL_TYPE_ABS is a
-> bit misnomer as ports may check RELAVETIVE/GLOB_DAT/JUMP_SLOT which are
-> not called "absolute relocations". (The patch is motivated by the arm64
-> port missing R_AARCH64_RELATIVE.)
+> > -	char real_usage[HID_SENSOR_USAGE_LENGTH] =3D { 0 };
+> > +	char real_usage[HID_SENSOR_USAGE_LENGTH];
+> >  	struct platform_device *custom_pdev;
+> >  	const char *dev_name;
+> >  	char *c;
+> >=20
+> > -	/* copy real usage id */
+> > -	memcpy(real_usage, known_sensor_luid[index], 4);
+> > +	memcpy(real_usage, match->luid, 4);
+> > +	real_usage[4] =3D '\0';
+>=20
+> Why the change in approach for setting the NULL character?
+> Doesn't seem relevant to main purpose of this patch.
 
-It makes sense to update the name, it started as "absolute relocations" but then
-it evolved into something else.
+Based on the comment, I changed that in the final v4 revision to:
 
-A part that, did you perform any testing with the generated vDSO libraries?
+> -       char real_usage[HID_SENSOR_USAGE_LENGTH] =3D { 0 };
+> +       char real_usage[HID_SENSOR_USAGE_LENGTH];
+>         struct platform_device *custom_pdev;
+>         const char *dev_name;
+>         char *c;
+> =20
+> -       /* copy real usage id */
+> -       memcpy(real_usage, known_sensor_luid[index], 4);
+> +       memcpy(real_usage, match->luid, 4);
 
-> 
-> Signed-off-by: Fangrui Song <maskray@google.com>
-> Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
-> ---
-> Change from v1:
-> * rebase after 8ac3b5cd3e0521d92f9755e90d140382fc292510 (lib/vdso: use "grep -E"
-> instead of "egrep")
-> * change the commit message to mention an example GNU ld bug; no longer say the
-> patch fixes a deprecated egrep use
-> ---
->  arch/arm/vdso/Makefile            |  3 ---
->  arch/arm64/kernel/vdso/Makefile   |  3 ---
->  arch/arm64/kernel/vdso32/Makefile |  3 ---
->  arch/csky/kernel/vdso/Makefile    |  3 ---
->  arch/loongarch/vdso/Makefile      |  3 ---
->  arch/mips/vdso/Makefile           |  3 ---
->  arch/powerpc/kernel/vdso/Makefile |  1 -
->  arch/riscv/kernel/vdso/Makefile   |  3 ---
->  arch/s390/kernel/vdso32/Makefile  |  2 --
->  arch/s390/kernel/vdso64/Makefile  |  2 --
->  arch/x86/entry/vdso/Makefile      |  4 ----
->  lib/vdso/Makefile                 | 13 ++++---------
->  12 files changed, 4 insertions(+), 39 deletions(-)
-> 
-> diff --git a/arch/arm/vdso/Makefile b/arch/arm/vdso/Makefile
-> index a7ec06ce3785..e58197bba776 100644
-> --- a/arch/arm/vdso/Makefile
-> +++ b/arch/arm/vdso/Makefile
-> @@ -1,8 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
+I ommitted the line adding the null terminator to the string but kept
+that I didn't initialize the 'real_usage' as { 0 } anymore. The string
+now misses the null terminator which leads to the broken utf-8.
 
-I would still add a comment here to say why we are including the generic
-Makefile to prevent that it gets accidentally removed (similar thing for every
-architecture touched by this patch).
+The simple fix is to reintroduce the 0 initialization in
+hid_sensor_register_platform_device. E.g.
 
-With that:
+-	char real_usage[HID_SENSOR_USAGE_LENGTH];
++	char real_usage[HID_SENSOR_USAGE_LENGTH] =3D { 0 };
 
-Reviewed-by: Vincenzo Frascino <vincenzo.frascino@arm.com> # for vDSO, aarch64
-Tested-by: Vincenzo Frascino <vincenzo.frascino@arm.com> # for aarch64
+Where do I need to submit a patch for this? And on which tree should I
+base the patch?
 
->  include $(srctree)/lib/vdso/Makefile
->  
->  hostprogs := vdsomunge
-> diff --git a/arch/arm64/kernel/vdso/Makefile b/arch/arm64/kernel/vdso/Makefile
-> index beaf9586338f..1f2427b13410 100644
-> --- a/arch/arm64/kernel/vdso/Makefile
-> +++ b/arch/arm64/kernel/vdso/Makefile
-> @@ -6,9 +6,6 @@
->  # Heavily based on the vDSO Makefiles for other archs.
->  #
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_AARCH64_JUMP_SLOT|R_AARCH64_GLOB_DAT|R_AARCH64_ABS64
->  include $(srctree)/lib/vdso/Makefile
->  
->  obj-vdso := vgettimeofday.o note.o sigreturn.o
-> diff --git a/arch/arm64/kernel/vdso32/Makefile b/arch/arm64/kernel/vdso32/Makefile
-> index f59bd1a4ead6..d014162c5c71 100644
-> --- a/arch/arm64/kernel/vdso32/Makefile
-> +++ b/arch/arm64/kernel/vdso32/Makefile
-> @@ -3,9 +3,6 @@
->  # Makefile for vdso32
->  #
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_ARM_JUMP_SLOT|R_ARM_GLOB_DAT|R_ARM_ABS32
->  include $(srctree)/lib/vdso/Makefile
->  
->  # Same as cc-*option, but using CC_COMPAT instead of CC
-> diff --git a/arch/csky/kernel/vdso/Makefile b/arch/csky/kernel/vdso/Makefile
-> index 0b6909f10667..86c8c4de1b0f 100644
-> --- a/arch/csky/kernel/vdso/Makefile
-> +++ b/arch/csky/kernel/vdso/Makefile
-> @@ -1,8 +1,5 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_CKCORE_ADDR32|R_CKCORE_JUMP_SLOT
->  include $(srctree)/lib/vdso/Makefile
->  
->  # Symbols present in the vdso
-> diff --git a/arch/loongarch/vdso/Makefile b/arch/loongarch/vdso/Makefile
-> index d89e2ac75f7b..1b2e0f149f55 100644
-> --- a/arch/loongarch/vdso/Makefile
-> +++ b/arch/loongarch/vdso/Makefile
-> @@ -1,9 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0
->  # Objects to go into the VDSO.
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_LARCH_32|R_LARCH_64|R_LARCH_MARK_LA|R_LARCH_JUMP_SLOT
->  include $(srctree)/lib/vdso/Makefile
->  
->  obj-vdso-y := elf.o vgetcpu.o vgettimeofday.o sigreturn.o
-> diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-> index 1f7d5c6c10b0..c060f3596304 100644
-> --- a/arch/mips/vdso/Makefile
-> +++ b/arch/mips/vdso/Makefile
-> @@ -4,9 +4,6 @@
->  # Sanitizer runtimes are unavailable and cannot be linked here.
->   KCSAN_SANITIZE            := n
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_MIPS_JUMP_SLOT|R_MIPS_GLOB_DAT
->  include $(srctree)/lib/vdso/Makefile
->  
->  obj-vdso-y := elf.o vgettimeofday.o sigreturn.o
-> diff --git a/arch/powerpc/kernel/vdso/Makefile b/arch/powerpc/kernel/vdso/Makefile
-> index 6a977b0d8ffc..83c347e9136f 100644
-> --- a/arch/powerpc/kernel/vdso/Makefile
-> +++ b/arch/powerpc/kernel/vdso/Makefile
-> @@ -2,7 +2,6 @@
->  
->  # List of files in the vdso, has to be asm only for now
->  
-> -ARCH_REL_TYPE_ABS :=
-> R_PPC_JUMP_SLOT|R_PPC_GLOB_DAT|R_PPC_ADDR32|R_PPC_ADDR24|R_PPC_ADDR16|R_PPC_ADDR16_LO|R_PPC_ADDR16_HI|R_PPC_ADDR16_HA|R_PPC_ADDR14|R_PPC_ADDR14_BRTAKEN|R_PPC_ADDR14_BRNTAKEN|R_PPC_REL24
->  include $(srctree)/lib/vdso/Makefile
->  
->  obj-vdso32 = sigtramp32-32.o gettimeofday-32.o datapage-32.o cacheflush-32.o
-> note-32.o getcpu-32.o
-> diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-> index 06e6b27f3bcc..d85c37e11b21 100644
-> --- a/arch/riscv/kernel/vdso/Makefile
-> +++ b/arch/riscv/kernel/vdso/Makefile
-> @@ -1,9 +1,6 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  # Copied from arch/tile/kernel/vdso/Makefile
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_RISCV_32|R_RISCV_64|R_RISCV_JUMP_SLOT
->  include $(srctree)/lib/vdso/Makefile
->  # Symbols present in the vdso
->  vdso-syms  = rt_sigreturn
-> diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
-> index 245bddfe9bc0..e795fdbbf484 100644
-> --- a/arch/s390/kernel/vdso32/Makefile
-> +++ b/arch/s390/kernel/vdso32/Makefile
-> @@ -2,8 +2,6 @@
->  # List of files in the vdso
->  
->  KCOV_INSTRUMENT := n
-> -ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
-> -ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
->  
->  include $(srctree)/lib/vdso/Makefile
->  obj-vdso32 = vdso_user_wrapper-32.o note-32.o
-> diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
-> index 9e2b95a222a9..47dbbfdfad68 100644
-> --- a/arch/s390/kernel/vdso64/Makefile
-> +++ b/arch/s390/kernel/vdso64/Makefile
-> @@ -2,8 +2,6 @@
->  # List of files in the vdso
->  
->  KCOV_INSTRUMENT := n
-> -ARCH_REL_TYPE_ABS := R_390_COPY|R_390_GLOB_DAT|R_390_JMP_SLOT|R_390_RELATIVE
-> -ARCH_REL_TYPE_ABS += R_390_GOT|R_390_PLT
->  
->  include $(srctree)/lib/vdso/Makefile
->  obj-vdso64 = vdso_user_wrapper.o note.o
-> diff --git a/arch/x86/entry/vdso/Makefile b/arch/x86/entry/vdso/Makefile
-> index 838613ac15b8..b292c24acb8e 100644
-> --- a/arch/x86/entry/vdso/Makefile
-> +++ b/arch/x86/entry/vdso/Makefile
-> @@ -3,10 +3,6 @@
->  # Building vDSO images for x86.
->  #
->  
-> -# Absolute relocation type $(ARCH_REL_TYPE_ABS) needs to be defined before
-> -# the inclusion of generic Makefile.
-> -ARCH_REL_TYPE_ABS := R_X86_64_JUMP_SLOT|R_X86_64_GLOB_DAT|R_X86_64_RELATIVE|
-> -ARCH_REL_TYPE_ABS += R_386_GLOB_DAT|R_386_JMP_SLOT|R_386_RELATIVE
->  include $(srctree)/lib/vdso/Makefile
->  
->  # Sanitizer runtimes are unavailable and cannot be linked here.
-> diff --git a/lib/vdso/Makefile b/lib/vdso/Makefile
-> index e814061d6aa0..9f031eafc465 100644
-> --- a/lib/vdso/Makefile
-> +++ b/lib/vdso/Makefile
-> @@ -5,18 +5,13 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
->  
->  c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix
-> $(GENERIC_VDSO_DIR), gettimeofday.c)
->  
-> -# This cmd checks that the vdso library does not contain absolute relocation
-> +# This cmd checks that the vdso library does not contain dynamic relocations.
->  # It has to be called after the linking of the vdso library and requires it
->  # as a parameter.
->  #
-> -# $(ARCH_REL_TYPE_ABS) is defined in the arch specific makefile and corresponds
-> -# to the absolute relocation types printed by "objdump -R" and accepted by the
-> -# dynamic linker.
-> -ifndef ARCH_REL_TYPE_ABS
-> -$(error ARCH_REL_TYPE_ABS is not set)
-> -endif
-> -
-> +# As a workaround for some GNU ld ports which produce unneeded R_*_NONE
-> +# dynamic relocations, ignore R_*_NONE.
->  quiet_cmd_vdso_check = VDSOCHK $@
-> -      cmd_vdso_check = if $(OBJDUMP) -R $@ | grep -E -h "$(ARCH_REL_TYPE_ABS)"; \
-> +      cmd_vdso_check = if $(READELF) -rW $@ | grep -v _NONE | grep -q " R_\w*_"; \
->                 then (echo >&2 "$@: dynamic relocations are not supported"; \
->                   rm -f $@; /bin/false); fi
+I'm sorry for the problems my patch caused.
 
--- 
 Regards,
-Vincenzo
+Philipp Jungkamp
+
+On Fri, 2023-03-10 at 01:51 -0800, srinivas pandruvada wrote:
+> +Even
+>=20
+> On Thu, 2023-03-09 at 15:33 -0800, Todd Brandt wrote:
+> > Hi all, I've run into an issue in 6.3.0-rc1 that causes problems
+> > with
+> > ftrace and I've bisected it to this commit:
+> >=20
+> > commit 98c062e8245199fa9121141a0bf1035dc45ae90e (HEAD,
+> > refs/bisect/bad)
+> > Author: Philipp Jungkamp p.jungkamp@gmx.net
+> > Date:=C2=A0=C2=A0 Fri Nov 25 00:38:38 2022 +0100
+> >=20
+> > =C2=A0=C2=A0=C2=A0 HID: hid-sensor-custom: Allow more custom iio sensor=
+s
+> >=20
+> > =C2=A0=C2=A0=C2=A0 The known LUID table for established/known custom HI=
+D sensors
+> > was
+> > =C2=A0=C2=A0=C2=A0 limited to sensors with "INTEL" as manufacturer. But=
+ some
+> > vendors
+> > such
+> > =C2=A0=C2=A0=C2=A0 as Lenovo also include fairly standard iio sensors (=
+e.g.
+> > ambient
+> > light)
+> > =C2=A0=C2=A0=C2=A0 in their custom sensors.
+> >=20
+> > =C2=A0=C2=A0=C2=A0 Expand the known custom sensors table by a tag used =
+for the
+> > platform
+> > =C2=A0=C2=A0=C2=A0 device name and match sensors based on the LUID as w=
+ell as
+> > optionally
+> > =C2=A0=C2=A0=C2=A0 on model and manufacturer properties.
+> >=20
+> > =C2=A0=C2=A0=C2=A0 Signed-off-by: Philipp Jungkamp p.jungkamp@gmx.net
+> > =C2=A0=C2=A0=C2=A0 Reviewed-by: Jonathan Cameron Jonathan.Cameron@huawe=
+i.com
+> > =C2=A0=C2=A0=C2=A0 Acked-by: Srinivas Pandruvada
+> > srinivas.pandruvada@linux.intel.com
+> > =C2=A0=C2=A0=C2=A0 Signed-off-by: Jiri Kosina jkosina@suse.cz
+> >=20
+> > You're using raw data as part of the devname in the "real_usage"
+> > string, but it includes chars other than ASCII, and those chars end
+> > up being printed out in the ftrace log which is meant to be ASCII
+> > only.
+> >=20
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* HID-SENSOR-INT-REAL_USAGE_ID *=
+/
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_name =3D kasprintf(GFP_KERNEL=
+, "HID-SENSOR-INT-%s",
+> > real_usage);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* HID-SENSOR-TAG-REAL_USAGE_ID *=
+/
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 dev_name =3D kasprintf(GFP_KERNEL=
+, "HID-SENSOR-%s-%s",
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 match->tag, real_usage);
+> >=20
+> > My sleepgraph tool started to crash because it read these lines
+> > from
+> > ftrace:
+> >=20
+> > device_pm_callback_start: platform HID-SENSOR-INT-020b?.39.auto,
+> > parent: 001F:8087:0AC2.0003, [suspend]
+> > device_pm_callback_end: platform HID-SENSOR-INT-020b?.39.auto,
+> > err=3D0
+> >=20
+>=20
+> Here tag is:
+> .tag =3D "INT",
+> .luid =3D "020B000000000000",
+>=20
+>=20
+> The LUID is still a string. Probably too long for a dev_name.
+>=20
+> Even,
+>=20
+> Please check.
+>=20
+> Thanks.
+> Srinivas
+>=20
+>=20
+> > The "HID-SENSOR-INT-020b?.39.auto" string includes a binary char
+> > that
+> > kills
+> > python3 code that loops through an ascii file as such:
+> >=20
+> > =C2=A0 File "/usr/bin/sleepgraph", line 5579, in executeSuspend
+> > =C2=A0=C2=A0=C2=A0 for line in fp:
+> > =C2=A0 File "/usr/lib/python3.10/codecs.py", line 322, in decode
+> > =C2=A0=C2=A0=C2=A0 (result, consumed) =3D self._buffer_decode(data, sel=
+f.errors,
+> > final)
+> > UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in
+> > position
+> > 1568: invalid start byte
+> >=20
+> > I've updated sleepgraph to handle random non-ascii chars, but other
+> > tools
+> > may suffer the same fate. Can you rewrite this to ensure that no
+> > binary
+> > chars make it into the devname?
+> >=20
+>=20
+
