@@ -2,105 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2886F6B5152
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:01:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D9A86B515D
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 21:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230035AbjCJUBp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 15:01:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40888 "EHLO
+        id S230523AbjCJUDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 15:03:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbjCJUBk (ORCPT
+        with ESMTP id S230391AbjCJUCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 15:01:40 -0500
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66100126F07
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:01:15 -0800 (PST)
-Received: by mail-yb1-xb2a.google.com with SMTP id o199so4602828ybc.7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 12:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678478474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N0d1xsr+DN56cc9eqodWxWKDt8Iv1tRk/OI0c43Ndtg=;
-        b=LAaS3pGI1Osaw4DtM3xeC30oH8sKranbYZeTuX8Vzg49M1/mogrhIPfN2T0wDRdeeE
-         5xXqWispLmk8ataNHf89gxmqI1sRX90bKlCMDkQ2rQuuRZZVIjkRXT7wuexDjrnlzxOp
-         SL5Ml0goazrs5/ZxLvoGhlAzOQKWoNmxzP6wCtgJE/SJWvkluD2j+q5vKMNd6Ds4/8kV
-         lHg/ZptYboP8N1F6NUu1GyUuTFBQlZq+edJNQNiutMdBmaSTndrAgaqshELwMh/yT/Ym
-         4XY4QVmbeXeGdC96syMjBHY+EN1FojDTRGonTCLATsANiI3gsl5/7t4egfdmjQb+kfA5
-         yWVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678478474;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=N0d1xsr+DN56cc9eqodWxWKDt8Iv1tRk/OI0c43Ndtg=;
-        b=3+1xeguXi825+VpNc+mt/tEMvvWc6Dyec3QEO/6IFpVLXmH4Rn9ck2xa3PUaxxYG6i
-         JptNeaIir8lP5e0VX5Z/4uBbQvmZJY06mO2XneolzmCzNmzUdGOgQpu8KzECA+N8V1BB
-         YH1gppni+KOKdQrc8uAuAlHCX+eGeBA+CF5pDd7HGtP1swMZKssqecgQzqNKo+wDUz+v
-         f0Hp82LprS9r+XVXlsjWlgZvgpXP5EVz4auM3rf9GpMWGlhp3m4wTAzJESH0EJfmhe9I
-         Xxu5O1KFw1Z5OW3UHBzBUbh7AIdawyoM1ZfLyT6k98PdyKwo5MFNteTuD+ROv8FuMBJd
-         j4+g==
-X-Gm-Message-State: AO0yUKWL60AxPhDXbY3Zb12Bu6t4hV78obqpRDi50jmOUDWXQXDwYsOm
-        ZSya5zteWztU5/ZV5SnGpyRF1T9ThU1csJv1Rzsg4Php0Py7QBqAERo=
-X-Google-Smtp-Source: AK7set8PzWChg34BeGJ/K5IA6aQA2R2lLiu+Zi+vILRV/LYxe7V78GhtoR7rdp12bBuHtALcNwqoV++zKjgV3CrYDl4=
-X-Received: by 2002:a05:6902:4c3:b0:a6a:3356:6561 with SMTP id
- v3-20020a05690204c300b00a6a33566561mr13400434ybs.1.1678478473984; Fri, 10 Mar
- 2023 12:01:13 -0800 (PST)
+        Fri, 10 Mar 2023 15:02:55 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEAD7127111;
+        Fri, 10 Mar 2023 12:02:34 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id A63D460501;
+        Fri, 10 Mar 2023 21:02:24 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678478544; bh=YffeLnjDyEIx0w1ntHgM2BilIFpyn+oOnwxK3tGazGo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=XATnsg8W6DxG7i+SYve4S65ExlmyB89A8SYOR+8SmcJm5J1LCELUu7q/g5hdUs98d
+         UfSs4DuW66SglxShrhnRmHO3o48oFp1ywm32/eeNnYulFE9W2kKa0Ql1L3Q8C8kDQF
+         XOBqqDGAubmyWZY0wZR3/aifMGADofdfnocOTDVIDRCAWPyMI2a1Da3T6ZRfxpN5WR
+         whtQYDDTeO9u0yVgvSQS3Ui1OFLzCgmewpGV6ks9zJGlviL+DDF/VFIyoFaLlcYyGx
+         3Mc5HaLq1SPAXPAJZFHPBxS0dm2J6W8wsXd4jE49391HBydEmUcG2sv3rp22XaxEFJ
+         VNcg7HimBxBEw==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id QF18HONfvMVj; Fri, 10 Mar 2023 21:02:22 +0100 (CET)
+Received: from [192.168.1.4] (unknown [77.237.109.125])
+        by domac.alu.hr (Postfix) with ESMTPSA id D037660502;
+        Fri, 10 Mar 2023 21:02:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678478542; bh=YffeLnjDyEIx0w1ntHgM2BilIFpyn+oOnwxK3tGazGo=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=P/mdzVPhYEfanPkfTQqLi9wsf7ysEWmnr1r7Ku5P0mGL4OYJP/8pzN0yVBBf2H2zE
+         XFi7qqqIDiFxzGSpB2PX6zsYmjZ1N5lkvQ48AXiIsuK5XN8rC1n+9uttKz6iE/XjHQ
+         gX4tTFEJcO0OOHcQsrWtADtFO5xM0RvSM6Lhz6VLBjGlVyuPo3g9dzn2wgjbVXkJn6
+         Iwgzz5d2McH8F5ZNnXQKC14gzYjCHcHLiiOVKa4qWcJWdhg2SbMQBWKOHtUeygfEGf
+         wgXPH5Tvm1UgfBCoaMWUGajgLkyrQJiuZgqtpeFA5Cg4UFpJBzIWMJKxiljCbM6Uaw
+         mqDkieiuFEKww==
+Message-ID: <147c1a43-b5a1-a802-3d14-5f2de8306cc3@alu.unizg.hr>
+Date:   Fri, 10 Mar 2023 21:02:18 +0100
 MIME-Version: 1.0
-References: <20230310184201.1302232-1-ajye_huang@compal.corp-partner.google.com>
- <0456bd4e-cfee-b863-e02d-98084b5da0f6@linux.intel.com>
-In-Reply-To: <0456bd4e-cfee-b863-e02d-98084b5da0f6@linux.intel.com>
-From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
-Date:   Sat, 11 Mar 2023 04:01:03 +0800
-Message-ID: <CALprXBamM-M-YdyfX9dQHp_AQAovcqzL5H4rMPsZPXS426+VgA@mail.gmail.com>
-Subject: Re: [PATCH v1] ASoC: Intel: sof_rt5682: Enable Bluetooth offload on adl_rt1019_rt5682
-To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
-        Cezary Rojewski <cezary.rojewski@intel.com>,
-        Liam Girdwood <liam.r.girdwood@linux.intel.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, Brent Lu <brent.lu@intel.com>,
-        Yong Zhi <yong.zhi@intel.com>, dharageswari.r@intel.com,
-        Vamshi Krishna <vamshi.krishna.gopal@intel.com>,
-        ye xingchen <ye.xingchen@zte.com.cn>,
-        alsa-devel@alsa-project.org, Mac Chiang <mac.chiang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 1/2] Add release hook to LSM
+Content-Language: en-US, hr
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>
+Cc:     linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Paul Moore <paul@paul-moore.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Frederick Lawler <fred@cloudflare.com>
+References: <20230310194159.GB528@domac.alu.hr>
+ <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <ZAuJY1MM3hEiT0ri@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 2:48=E2=80=AFAM Pierre-Louis Bossart
-<pierre-louis.bossart@linux.intel.com> wrote:
->
-> This sounds good, but if the intent is to have BT offload enabled across
-> all ADL skews there are still misses, e.g.
->
-> .name =3D "adl_mx98357_rt5682",
->
-> Can we please try to add this BT offload in a more consistent manner, or
-> add a comment when this is officially not planned/supported?
+On 10. 03. 2023. 20:47, Andy Shevchenko wrote:
+> On Fri, Mar 10, 2023 at 08:42:00PM +0100, Mirsad Goran Todorovac wrote:
+>>
+>> Add release() hook to the definition of the LSM modules, to enable calling
+>> destructors and deallocating allocated resources cleanly.
+>>
+>> Signed-off-by: Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+> 
+>> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> 
+> I haven't given you this tag. Sorry, you must not add something
+> which was not explicitly given.
 
-Hi Pierre,
+Hi, Andy,
 
-The "sof-adl-rt1019-rt5682.tplg" for this "adl_rt1019_rt5682" sound
-card also need to enable bt_offload, this one I will submit to SOF
-later this weekend.
-ex, topology: sof-adl-rt1019-rt5682: add bluetooth offload uses SSP2
-link -- https://github.com/ajye-huang/sof/commit/09dcbc3cc1617df652944299c6=
-3082f1936dea6e
+This change could have long lasting consequences if approved, and I am not
+continuing the patch submission without your mentoring and approval.
 
-To be more clear, I think we can add a comment in the commit message
-for mention " The related "sof-adl-rt1019-rt5682.tplg" enabled the
-bt_offload feature", is it ok?
+It is true that I assumed that you have reviewed the patch, but you did not
+explicitly give the Reviewed-by tag.
+
+But I am rather new to this patch submission process, and please would you
+please mentor me to do this the right way.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
