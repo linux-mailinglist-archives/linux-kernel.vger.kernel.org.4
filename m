@@ -2,120 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 401146B528A
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 22:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0396B53C7
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 23:05:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230523AbjCJVHi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 16:07:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
+        id S231918AbjCJWF0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 17:05:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCJVHg (ORCPT
+        with ESMTP id S232281AbjCJWFA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 16:07:36 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 834993AAF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:07:35 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id p10-20020a170902e74a00b0019ec1acba17so3407571plf.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 13:07:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678482455;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JKMtwuyYeWcBJAZM434ryy5EllMIQPaNcu6Sr1IDVM=;
-        b=CXo5UeDRSeE2H3qb+CLXEgYMbSd2aDneg8uH6pXz8G9ZRIeiCOuZWVMNt7RU8tjbHt
-         woTOvwZVipmOUyE4N9waRD9Jr47I/6o2/j6OJV2WqAvsWjfR4frcYnwnyZckjnU3riK2
-         /rUKedqs3rFpKPDZ2uf3km99D6ZV4MtyvXmZPIAk0mR2+0YSdDxrSS3tYwGUTfdRCpbm
-         +yScQChoLnwr1Mq2S6UHXZelO+558jB3BzsubUl4HTm2H7ZeSZU6rHKmwP08xbA9aiOu
-         IJporlxNWuHR7NN+FCIDSDfdT7q+Gr+JozZ1iSYMhou1/56nRP1ojYj3WpSoSGtJ/iaQ
-         o0NQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678482455;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JKMtwuyYeWcBJAZM434ryy5EllMIQPaNcu6Sr1IDVM=;
-        b=r+Rfiaf5Vvcj/yDtNpFXx/Wdk56FSD5pOYoqyJTKEkuubXERE05BN+y3aodvNv6ozv
-         tcEUELlqOut4yCJ00fbdtjdvpf40Sl9ebjPEvN1euLQX2zPSvU6/sSRr3Aj6XvTD19eZ
-         iPvnr6ux+asNM89Hki+ZEuS9PyFhRpVY1tU6eM6aSEG+JVbOZkIRobbWrlAOO/l6Epwp
-         0q74eCGd63ChzPEGuKXdtMJ6ih1/7U6L8Ew8k+/E4MI9YadbyHp2BPZufizQkd1RY1pR
-         389kHAp8+JMaqQXVvs6sw1pIcGLgECKHCthp3Wer9FWncmXdkWrne7xSc5FtjnwuP3Pl
-         l0dA==
-X-Gm-Message-State: AO0yUKUWVKOXpxEt7eZPdGVM767nmN9kEDbFbA5/nOjqTwfhRpZESUla
-        Hm8i1e4qtcS82BfNehwov7GxtPASodU=
-X-Google-Smtp-Source: AK7set9vANUPgzIuHlwrwJIiWycmWxJotd74RaXKUwYIRCFydV0Cwx8VrE4wSNR1vyQIVJ/tlYCB3gZvNWg=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:903:25c5:b0:19a:ebaa:68d7 with SMTP id
- jc5-20020a17090325c500b0019aebaa68d7mr10064359plb.2.1678482455057; Fri, 10
- Mar 2023 13:07:35 -0800 (PST)
-Date:   Fri, 10 Mar 2023 13:07:27 -0800
-In-Reply-To: <432e4844ba65840af4a24f5e3f561aead867f6e7.1678474914.git.jpoimboe@kernel.org>
-Mime-Version: 1.0
-References: <cover.1678474914.git.jpoimboe@kernel.org> <432e4844ba65840af4a24f5e3f561aead867f6e7.1678474914.git.jpoimboe@kernel.org>
-Message-ID: <ZAucD8gHx8Xp8Dlb@google.com>
-Subject: Re: [RFC][PATCH 5/5] x86/kvm: Simplify static call handling
-From:   Sean Christopherson <seanjc@google.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Jason Baron <jbaron@akamai.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paolo Bonzini <pbonzini@redhat.com>
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Fri, 10 Mar 2023 17:05:00 -0500
+X-Greylist: delayed 1800 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Mar 2023 14:03:22 PST
+Received: from s1.sapience.com (s1.sapience.com [72.84.236.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8763314221;
+        Fri, 10 Mar 2023 14:03:21 -0800 (PST)
+Authentication-Results: dkim-srvy7; dkim=pass (Good ed25519-sha256 
+   signature) header.d=sapience.com header.i=@sapience.com 
+   header.a=ed25519-sha256; dkim=pass (Good 2048 bit rsa-sha256 signature) 
+   header.d=sapience.com header.i=@sapience.com header.a=rsa-sha256
+Received: from srv8.prv.sapience.com (srv8.prv.sapience.com [10.164.28.13])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (secp384r1) server-digest SHA384)
+        (No client certificate requested)
+        by s1.sapience.com (Postfix) with ESMTPS id 45F949A0580;
+        Fri, 10 Mar 2023 16:08:22 -0500 (EST)
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=sapience.com;
+ i=@sapience.com; q=dns/txt; s=dk-ed25519-220413; t=1678482502;
+ h=message-id : date : mime-version : subject : to : cc : references :
+ from : in-reply-to : content-type : content-transfer-encoding : from;
+ bh=4LIzV7BjBDoJaxSPqb0qCE7ewLKmWNnbgjun7jsjWuM=;
+ b=/+CkqHys6l8rMtQFtl7j5/jEdvgPvjkWjziTYmpQdattcLy8IGfjSnuBr7HAdCRG3Qdmr
+ jkOVqugVvhbgJWdCQ==
+ARC-Seal: i=1; a=rsa-sha256; d=sapience.com; s=arc6-rsa-220412; t=1678482502;
+        cv=none; b=dgXbrNjb9X/FeDwH/X3UqamfxOFzAgJ8zdQicwv/M42HkL6Bo39thGi2mSzUcWw1oipYdqGMg759eLB5g5zL5Tn2w9aD335Qxs9XMZ254Bjw2sSpYOnliwMJlsmxvv2n/Kuarf9lZXbNlb5eMj6vcxLdlEheZSLHFmfyu9TsasrrNeg3OQm5/KTvUHbXVSkPgYST40VPTRf5Fnw+JlGKNxTmbw7cMzHwCTDkb/Q3FiPLavIGtZmEzl5xMc2UEnl3uABk2Ffs2DZ3OBbMI2AZz9BN+kFQ0T0tZkpt/Y9g9eiLx+9slOnvQQVPbvqenqTJf7KKRrcP0UuvkERIg+WKXg==
+ARC-Message-Signature: i=1; a=rsa-sha256; d=sapience.com; s=arc6-rsa-220412;
+        t=1678482502; c=relaxed/simple;
+        bh=F51x7fOvxs0BdNODisJSWDCL+hfTmIWrQUqeqkDAjG4=;
+        h=DKIM-Signature:DKIM-Signature:Message-ID:Date:MIME-Version:
+         Subject:Content-Language:To:Cc:References:From:In-Reply-To:
+         Content-Type:Content-Transfer-Encoding; b=cPU9Pfa+Rg4kN0Nn6CyD4fQOXinUWkx9KapsgZfYhMpG+Q2Y6QQzrlQ+fK2myWSnZ/Jdvlci9vV0wSIq+pjH9WLn2RWbGcuKu8ofMybkynfWH6WYH+g+p0qj2wGxyTPT5Op7/q248bjJ8+jmr8BkX0ziMjfigkLfRdIFCa5lVV9SUJ33rJTrc73Vvo8auT3zpbi/GWWlqnFMreBxHa9Qxt2SSZYFIeWH37yns4uMEkAlmN8eRlFtbkf0hWfex9rhTgSjc3wV2wvSATOCVR/bLpqAOXvs/DjILms8j30++HuydHu7JQYBA+SlZhhuJ3ysF6H6aHEHNdxBuAQLLpWkFQ==
+ARC-Authentication-Results: i=1; arc-srv8.sapience.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sapience.com;
+ i=@sapience.com; q=dns/txt; s=dk-rsa-220413; t=1678482502;
+ h=message-id : date : mime-version : subject : to : cc : references :
+ from : in-reply-to : content-type : content-transfer-encoding : from;
+ bh=4LIzV7BjBDoJaxSPqb0qCE7ewLKmWNnbgjun7jsjWuM=;
+ b=Wr75IauFj6eWLy4hMzmHMajdpG4IhxIsKwLqSmqmckN/Y4ANtX5MkkY1BjI0gnTtUOBEU
+ KqfJYoJCEksmBO+y0z3xXV2t/DHILODxvAuMznESWuuXR3OYCow1R1PdQICHzjCB1hyGWRZ
+ MQR5bwls4cMzyju1/G94MEIIcYCtZbOnjiftH6WoFiGShnMIHghRea5bMpU3nRR+DCySHoh
+ 8R6MbiyP/DEGpY5yRXtcS8ALrV1NfICCBOLppUX4olp5CamnbbCfH16AoTvSBB31bbuYJRW
+ S5GjQk0ZyEALFdnAoXUT2vj+DL/wuERHGvyWZRon8yhxTRYbwdHuMMIlMTkQ==
+Message-ID: <88b36c03-780f-61a5-4a66-e69072aa7536@sapience.com>
+Date:   Fri, 10 Mar 2023 16:08:21 -0500
+MIME-Version: 1.0
+Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
+ drives
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, Eric Biggers <ebiggers@kernel.org>,
+        Mike Cloaked <mike.cloaked@gmail.com>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, Yu Kuai <yukuai3@huawei.com>
+References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
+ <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
+ <ZAuPkCn49urWBN5P@sol.localdomain> <ZAuQOHnfa7xGvzKI@sol.localdomain>
+ <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
+From:   Genes Lists <lists@sapience.com>
+In-Reply-To: <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"KVM: x86:" please, "x86/kvm" is for guest-side changes.
+On 3/10/23 15:23, Jens Axboe wrote:
+> On 3/10/23 1:16 PM, Eric Biggers wrote:
+...
+> But I would revert:
+> 
+> bfe46d2efe46c5c952f982e2ca94fe2ec5e58e2a
+> 57a425badc05c2e87e9f25713e5c3c0298e4202c
+> 
+> in that order from 6.2.3 and see if that helps. Adding Yu.
+> 
+Confirm the 2 Reverts fixed in my tests as well (nvme + sata drives).
+Nasty crash - some needed to be power cycled as they hung on shutdown.
 
-On Fri, Mar 10, 2023, Josh Poimboeuf wrote:
-> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
-> index 1dfba499d3e5..612531e1c478 100644
-> --- a/arch/x86/include/asm/kvm_host.h
-> +++ b/arch/x86/include/asm/kvm_host.h
-> @@ -1789,8 +1789,6 @@ extern struct kvm_x86_ops kvm_x86_ops;
->  
->  #define KVM_X86_OP(func) \
->  	DECLARE_STATIC_CALL(kvm_x86_##func, *(((struct kvm_x86_ops *)0)->func));
-> -#define KVM_X86_OP_OPTIONAL KVM_X86_OP
-> -#define KVM_X86_OP_OPTIONAL_RET0 KVM_X86_OP
->  #include <asm/kvm-x86-ops.h>
->  
->  int kvm_x86_vendor_init(struct kvm_x86_init_ops *ops);
-> diff --git a/arch/x86/kvm/pmu.c b/arch/x86/kvm/pmu.c
-> index 6accb46295a3..5f7f860c5f17 100644
-> --- a/arch/x86/kvm/pmu.c
-> +++ b/arch/x86/kvm/pmu.c
-> @@ -77,20 +77,15 @@ static struct kvm_pmu_ops kvm_pmu_ops __read_mostly;
->  #define KVM_X86_PMU_OP(func)					     \
->  	DEFINE_STATIC_CALL_NULL(kvm_x86_pmu_##func,			     \
->  				*(((struct kvm_pmu_ops *)0)->func));
-> -#define KVM_X86_PMU_OP_OPTIONAL KVM_X86_PMU_OP
->  #include <asm/kvm-x86-pmu-ops.h>
->  
->  void kvm_pmu_ops_update(const struct kvm_pmu_ops *pmu_ops)
->  {
->  	memcpy(&kvm_pmu_ops, pmu_ops, sizeof(kvm_pmu_ops));
->  
-> -#define __KVM_X86_PMU_OP(func) \
-> -	static_call_update(kvm_x86_pmu_##func, kvm_pmu_ops.func);
->  #define KVM_X86_PMU_OP(func) \
-> -	WARN_ON(!kvm_pmu_ops.func); __KVM_X86_PMU_OP(func)
+Thank you!
 
-I would much prefer to keep KVM mostly as-is, specifically so that we don't lose
-this WARN_ON() that guards against a vendor module neglecting to implement a
-mandatory callback.  This effectively gives KVM "full" protection against consuming
-an unexpectedly-NULL function pointer.
+gene
 
-It's not strictly necessary, but I'm inclinded to keep KVM_X86_OP_OPTIONAL_RET0
-around for documentation purposes.  And if I could figure out the compiler magic
-to make it work, a WARN/BUILD_BUG on the sizeof() the return type of a RET0
-function being larger than sizeof(int).  KVM encountered the fun that occurs on
-a u64 return on 32-bit kernels due to "xor eax, eax" leaving garbage in edx.
+
