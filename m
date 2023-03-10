@@ -2,52 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1CC16B476C
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB8756B472E
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 15:49:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S233318AbjCJOtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 09:49:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46474 "EHLO
+        id S233223AbjCJOtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 09:49:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S233158AbjCJOsT (ORCPT
+        with ESMTP id S233073AbjCJOrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 09:48:19 -0500
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22AEA107D64;
-        Fri, 10 Mar 2023 06:47:32 -0800 (PST)
-Received: by mail-ot1-f50.google.com with SMTP id m25-20020a05683026d900b006941a2838caso3032614otu.7;
-        Fri, 10 Mar 2023 06:47:32 -0800 (PST)
+        Fri, 10 Mar 2023 09:47:40 -0500
+Received: from mail-oa1-f46.google.com (mail-oa1-f46.google.com [209.85.160.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA1BC122385;
+        Fri, 10 Mar 2023 06:47:22 -0800 (PST)
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-17683b570b8so6016638fac.13;
+        Fri, 10 Mar 2023 06:47:22 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678459652;
+        d=1e100.net; s=20210112; t=1678459637;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GsE0EOHWsJSxAvEHDxOBITxOsibWjWWonW0C4i8mXzM=;
-        b=Lvm5LDxlQHrREF2D5ZnOdbZF/q/W2sbOVk6xVvjMSuGlShSnbPCCDYWU91k6nDla1x
-         QCBqVBB57Oc5IecOSAFBNkKSCaz3ZJ15q5vdZm9EquZztqFHBBsKw+ZJaZuhFCGtTCXI
-         epEs+458OtJWZK2Fp2/r8mlRf9Fbqmd5ZJf1EhVDYPZz297007KU+N/4Xpz+1xc/jHfv
-         cG+O3yvCSnyYUQx8Ync5ckgu4CS9khzZ02S3/uqeWCFHw+PlhDbPDj16qDD3dRUPJh9l
-         63RwfBQjYET2daynvq9yHvw6UM9yFBBZ+iWCD1KC1ugLvdcqSC7miVI96VBWTKbKBKxH
-         Mxlw==
-X-Gm-Message-State: AO0yUKUrScO5PBhmidjji0Skjp/cTZ0VOR2mwWvQZDS+hpC9N/0K0OdT
-        SOeQW9kHYl+lPzJs4EEkig==
-X-Google-Smtp-Source: AK7set8SaZ8xFb2Ya0ChvHinEQuYIqvowtAWXeecOlTv8eIVQvsCopa3AU65eVzDB1SWxe/dKs3Mcw==
-X-Received: by 2002:a9d:461d:0:b0:684:a7bb:864d with SMTP id y29-20020a9d461d000000b00684a7bb864dmr12538339ote.12.1678459651748;
-        Fri, 10 Mar 2023 06:47:31 -0800 (PST)
+        bh=W6RZUfpxZGz4Dm4R8EA2e5JxSYmG5e3eiizcyHLczFM=;
+        b=CppJTa/+bQgIIXgEuLYKa/JcK832itzk2u/LAffcFlwco1VBB6/ose0qlrzv4XZfDY
+         rlwaEGl/O7lsvIW88yksXZ81BcMZzu/xQQ3z2ybYgIHpwWBK0RV4hFyu0bgwA7RAZQZ0
+         SUq0tKYnJZf6pGuAmbEGCKdwyI8DKi29DoqS3hTJSAj/Gytj6GW30ndhw3B8Hh/OzS9M
+         Ah7JWBj6I853QGwTl9LsD3wf1cb9ePGYQ73OEPda5qHC5Qk3lSxsL6M9dl6KsfK7/Kp/
+         RfTq9D/XIlaqkIUl6NGHXB0OZAHU4jLG2ABmf2XKaWkV5vDLbpHeIh4sLbmU+C0jf5wN
+         zruA==
+X-Gm-Message-State: AO0yUKUlr1ohp0qjO456RiELJaXgAXl1/kG6JFbX8bjEGFXmWttEf+ca
+        8nAmPzN9NTV5QJbfplq3WA==
+X-Google-Smtp-Source: AK7set9YCVdkxr9MJgpTmYiry9TqiDgZRVo3pENff2tUYDhCzxVMgtjfxR1sYIN8Cj4vNzX3/tDsXA==
+X-Received: by 2002:a05:6870:c10c:b0:163:51eb:b577 with SMTP id f12-20020a056870c10c00b0016351ebb577mr18020937oad.46.1678459637165;
+        Fri, 10 Mar 2023 06:47:17 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t18-20020a9d7292000000b0068bc476d777sm131264otj.13.2023.03.10.06.47.30
+        by smtp.gmail.com with ESMTPSA id ds26-20020a0568705b1a00b0017243edbe5bsm67884oab.58.2023.03.10.06.47.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 06:47:31 -0800 (PST)
-Received: (nullmailer pid 1543640 invoked by uid 1000);
+        Fri, 10 Mar 2023 06:47:16 -0800 (PST)
+Received: (nullmailer pid 1543724 invoked by uid 1000);
         Fri, 10 Mar 2023 14:47:13 -0000
 From:   Rob Herring <robh@kernel.org>
 To:     Eric Piel <eric.piel@tremplin-utc.net>,
         Arnd Bergmann <arnd@arndb.de>,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] misc: lis3lv02d: Fix reading 'st,default-rate' property
+Subject: [PATCH] misc: lis3lv02d: Use of_property_read_bool() for boolean properties
 Date:   Fri, 10 Mar 2023 08:47:13 -0600
-Message-Id: <20230310144713.1543613-1-robh@kernel.org>
+Message-Id: <20230310144713.1543683-1-robh@kernel.org>
 X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -62,28 +62,147 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The property 'st,default-rate' is tested for presence, but the value is
-ignored and the 'default_rate' value is updated with a stale 'val'
-value. Fix this by using of_property_read_u32().
+It is preferred to use typed property access functions (i.e.
+of_property_read_<type> functions) rather than low-level
+of_get_property/of_find_property functions for reading properties.
+Convert reading boolean properties to to of_property_read_bool().
 
 Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- drivers/misc/lis3lv02d/lis3lv02d.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/misc/lis3lv02d/lis3lv02d.c | 64 +++++++++++++++---------------
+ 1 file changed, 32 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/misc/lis3lv02d/lis3lv02d.c b/drivers/misc/lis3lv02d/lis3lv02d.c
-index 3a7808b796b1..efed515d7b50 100644
+index efed515d7b50..299d316f1bda 100644
 --- a/drivers/misc/lis3lv02d/lis3lv02d.c
 +++ b/drivers/misc/lis3lv02d/lis3lv02d.c
-@@ -1085,7 +1085,7 @@ int lis3lv02d_init_dt(struct lis3lv02d *lis3)
- 	if (of_property_read_s32(np, "st,axis-z", &sval) == 0)
- 		pdata->axis_z = sval;
+@@ -965,19 +965,19 @@ int lis3lv02d_init_dt(struct lis3lv02d *lis3)
+ 	if (!pdata)
+ 		return -ENOMEM;
  
--	if (of_get_property(np, "st,default-rate", NULL))
-+	if (of_property_read_u32(np, "st,default-rate", &val) == 0)
- 		pdata->default_rate = val;
+-	if (of_get_property(np, "st,click-single-x", NULL))
++	if (of_property_read_bool(np, "st,click-single-x"))
+ 		pdata->click_flags |= LIS3_CLICK_SINGLE_X;
+-	if (of_get_property(np, "st,click-double-x", NULL))
++	if (of_property_read_bool(np, "st,click-double-x"))
+ 		pdata->click_flags |= LIS3_CLICK_DOUBLE_X;
  
- 	if (of_property_read_s32(np, "st,min-limit-x", &sval) == 0)
+-	if (of_get_property(np, "st,click-single-y", NULL))
++	if (of_property_read_bool(np, "st,click-single-y"))
+ 		pdata->click_flags |= LIS3_CLICK_SINGLE_Y;
+-	if (of_get_property(np, "st,click-double-y", NULL))
++	if (of_property_read_bool(np, "st,click-double-y"))
+ 		pdata->click_flags |= LIS3_CLICK_DOUBLE_Y;
+ 
+-	if (of_get_property(np, "st,click-single-z", NULL))
++	if (of_property_read_bool(np, "st,click-single-z"))
+ 		pdata->click_flags |= LIS3_CLICK_SINGLE_Z;
+-	if (of_get_property(np, "st,click-double-z", NULL))
++	if (of_property_read_bool(np, "st,click-double-z"))
+ 		pdata->click_flags |= LIS3_CLICK_DOUBLE_Z;
+ 
+ 	if (!of_property_read_u32(np, "st,click-threshold-x", &val))
+@@ -994,31 +994,31 @@ int lis3lv02d_init_dt(struct lis3lv02d *lis3)
+ 	if (!of_property_read_u32(np, "st,click-window", &val))
+ 		pdata->click_window = val;
+ 
+-	if (of_get_property(np, "st,irq1-disable", NULL))
++	if (of_property_read_bool(np, "st,irq1-disable"))
+ 		pdata->irq_cfg |= LIS3_IRQ1_DISABLE;
+-	if (of_get_property(np, "st,irq1-ff-wu-1", NULL))
++	if (of_property_read_bool(np, "st,irq1-ff-wu-1"))
+ 		pdata->irq_cfg |= LIS3_IRQ1_FF_WU_1;
+-	if (of_get_property(np, "st,irq1-ff-wu-2", NULL))
++	if (of_property_read_bool(np, "st,irq1-ff-wu-2"))
+ 		pdata->irq_cfg |= LIS3_IRQ1_FF_WU_2;
+-	if (of_get_property(np, "st,irq1-data-ready", NULL))
++	if (of_property_read_bool(np, "st,irq1-data-ready"))
+ 		pdata->irq_cfg |= LIS3_IRQ1_DATA_READY;
+-	if (of_get_property(np, "st,irq1-click", NULL))
++	if (of_property_read_bool(np, "st,irq1-click"))
+ 		pdata->irq_cfg |= LIS3_IRQ1_CLICK;
+ 
+-	if (of_get_property(np, "st,irq2-disable", NULL))
++	if (of_property_read_bool(np, "st,irq2-disable"))
+ 		pdata->irq_cfg |= LIS3_IRQ2_DISABLE;
+-	if (of_get_property(np, "st,irq2-ff-wu-1", NULL))
++	if (of_property_read_bool(np, "st,irq2-ff-wu-1"))
+ 		pdata->irq_cfg |= LIS3_IRQ2_FF_WU_1;
+-	if (of_get_property(np, "st,irq2-ff-wu-2", NULL))
++	if (of_property_read_bool(np, "st,irq2-ff-wu-2"))
+ 		pdata->irq_cfg |= LIS3_IRQ2_FF_WU_2;
+-	if (of_get_property(np, "st,irq2-data-ready", NULL))
++	if (of_property_read_bool(np, "st,irq2-data-ready"))
+ 		pdata->irq_cfg |= LIS3_IRQ2_DATA_READY;
+-	if (of_get_property(np, "st,irq2-click", NULL))
++	if (of_property_read_bool(np, "st,irq2-click"))
+ 		pdata->irq_cfg |= LIS3_IRQ2_CLICK;
+ 
+-	if (of_get_property(np, "st,irq-open-drain", NULL))
++	if (of_property_read_bool(np, "st,irq-open-drain"))
+ 		pdata->irq_cfg |= LIS3_IRQ_OPEN_DRAIN;
+-	if (of_get_property(np, "st,irq-active-low", NULL))
++	if (of_property_read_bool(np, "st,irq-active-low"))
+ 		pdata->irq_cfg |= LIS3_IRQ_ACTIVE_LOW;
+ 
+ 	if (!of_property_read_u32(np, "st,wu-duration-1", &val))
+@@ -1026,32 +1026,32 @@ int lis3lv02d_init_dt(struct lis3lv02d *lis3)
+ 	if (!of_property_read_u32(np, "st,wu-duration-2", &val))
+ 		pdata->duration2 = val;
+ 
+-	if (of_get_property(np, "st,wakeup-x-lo", NULL))
++	if (of_property_read_bool(np, "st,wakeup-x-lo"))
+ 		pdata->wakeup_flags |= LIS3_WAKEUP_X_LO;
+-	if (of_get_property(np, "st,wakeup-x-hi", NULL))
++	if (of_property_read_bool(np, "st,wakeup-x-hi"))
+ 		pdata->wakeup_flags |= LIS3_WAKEUP_X_HI;
+-	if (of_get_property(np, "st,wakeup-y-lo", NULL))
++	if (of_property_read_bool(np, "st,wakeup-y-lo"))
+ 		pdata->wakeup_flags |= LIS3_WAKEUP_Y_LO;
+-	if (of_get_property(np, "st,wakeup-y-hi", NULL))
++	if (of_property_read_bool(np, "st,wakeup-y-hi"))
+ 		pdata->wakeup_flags |= LIS3_WAKEUP_Y_HI;
+-	if (of_get_property(np, "st,wakeup-z-lo", NULL))
++	if (of_property_read_bool(np, "st,wakeup-z-lo"))
+ 		pdata->wakeup_flags |= LIS3_WAKEUP_Z_LO;
+-	if (of_get_property(np, "st,wakeup-z-hi", NULL))
++	if (of_property_read_bool(np, "st,wakeup-z-hi"))
+ 		pdata->wakeup_flags |= LIS3_WAKEUP_Z_HI;
+ 	if (of_get_property(np, "st,wakeup-threshold", &val))
+ 		pdata->wakeup_thresh = val;
+ 
+-	if (of_get_property(np, "st,wakeup2-x-lo", NULL))
++	if (of_property_read_bool(np, "st,wakeup2-x-lo"))
+ 		pdata->wakeup_flags2 |= LIS3_WAKEUP_X_LO;
+-	if (of_get_property(np, "st,wakeup2-x-hi", NULL))
++	if (of_property_read_bool(np, "st,wakeup2-x-hi"))
+ 		pdata->wakeup_flags2 |= LIS3_WAKEUP_X_HI;
+-	if (of_get_property(np, "st,wakeup2-y-lo", NULL))
++	if (of_property_read_bool(np, "st,wakeup2-y-lo"))
+ 		pdata->wakeup_flags2 |= LIS3_WAKEUP_Y_LO;
+-	if (of_get_property(np, "st,wakeup2-y-hi", NULL))
++	if (of_property_read_bool(np, "st,wakeup2-y-hi"))
+ 		pdata->wakeup_flags2 |= LIS3_WAKEUP_Y_HI;
+-	if (of_get_property(np, "st,wakeup2-z-lo", NULL))
++	if (of_property_read_bool(np, "st,wakeup2-z-lo"))
+ 		pdata->wakeup_flags2 |= LIS3_WAKEUP_Z_LO;
+-	if (of_get_property(np, "st,wakeup2-z-hi", NULL))
++	if (of_property_read_bool(np, "st,wakeup2-z-hi"))
+ 		pdata->wakeup_flags2 |= LIS3_WAKEUP_Z_HI;
+ 	if (of_get_property(np, "st,wakeup2-threshold", &val))
+ 		pdata->wakeup_thresh2 = val;
+@@ -1073,9 +1073,9 @@ int lis3lv02d_init_dt(struct lis3lv02d *lis3)
+ 		}
+ 	}
+ 
+-	if (of_get_property(np, "st,hipass1-disable", NULL))
++	if (of_property_read_bool(np, "st,hipass1-disable"))
+ 		pdata->hipass_ctrl |= LIS3_HIPASS1_DISABLE;
+-	if (of_get_property(np, "st,hipass2-disable", NULL))
++	if (of_property_read_bool(np, "st,hipass2-disable"))
+ 		pdata->hipass_ctrl |= LIS3_HIPASS2_DISABLE;
+ 
+ 	if (of_property_read_s32(np, "st,axis-x", &sval) == 0)
 -- 
 2.39.2
 
