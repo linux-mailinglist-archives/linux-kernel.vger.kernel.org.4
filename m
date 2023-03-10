@@ -2,134 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A3D86B34D8
-	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEEBD6B34DC
+	for <lists+linux-kernel@lfdr.de>; Fri, 10 Mar 2023 04:32:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjCJDbO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 9 Mar 2023 22:31:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36466 "EHLO
+        id S229544AbjCJDcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 9 Mar 2023 22:32:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229580AbjCJDbK (ORCPT
+        with ESMTP id S229580AbjCJDcf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 9 Mar 2023 22:31:10 -0500
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47B8B108231;
-        Thu,  9 Mar 2023 19:31:09 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678419069; x=1709955069;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=4j90Fp5tAHlmvDvWO8QQ5maK/YTpz6A1VQay0a/wx4I=;
-  b=U2fe7Rcwl23ZjFFsE1KEDEph6+pmhtc0J5oelbpTI4rJAcI0RkhN7pNw
-   45Zft8183OBn0D8/tJOXrlKS3xbdYFfjPi3T7GHYzSPN/2cnmQwbp8vKi
-   VxIZj8rMhEt8EVR11OEmMZq5EcAGyRw+W/c++ygZlEuBVoqhmO3kYlFvD
-   pArY7YpLEtWz7VngUbLf3E+mvN7Y1LXRHKkCQ9x1sh2aL0ioY5bEMpQau
-   E19DRkAnuLzukF/Bg7HmmR1uN+212l0rm5nTZRP7FE/EyCEAZXL6sh5hx
-   fWjpfMsNou2LAvY0hLLiM3fY/mHS4+EqviIDk0/RT5rOlVt5N3AAl9/9s
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="336654294"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="336654294"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Mar 2023 19:31:08 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10644"; a="923514875"
-X-IronPort-AV: E=Sophos;i="5.98,248,1673942400"; 
-   d="scan'208";a="923514875"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga006.fm.intel.com with ESMTP; 09 Mar 2023 19:31:04 -0800
-Message-ID: <f0076d6a-d764-b018-7442-08a6293f9553@linux.intel.com>
-Date:   Fri, 10 Mar 2023 11:30:04 +0800
+        Thu, 9 Mar 2023 22:32:35 -0500
+Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 339F810C704;
+        Thu,  9 Mar 2023 19:32:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=5nYji9aiOTPkm277QrYAaIqlTmxJJ+NstcSRT3Yv5A4=; b=BlyYntEGWpWNJHstS6q6njadFa
+        P58IUANDyb039xyu+2aDp2c7OzdJYDBxQ5K36A+DuuZuUxMwyf+wQEWfkoOhKX//l4UgaNIAhZroj
+        raHHfhXFjHkvEhH5SRgjFwVGqN5H037vB9hI2lc0ttLBBrZkpqsiVlRQ+zDDlDn2nXR/ym7JEaTMj
+        k6jnj+0wNV9kTXPfzi28opkBB44CtxTJKx85YoHPGh4jQsUxI800+WVVKUEpFmH/vlz+1X4VI7tC3
+        aHldI5fbRXyo7CAXw46+xJ66nAVzuZUZqoth8N05jHB92fCaFVa+cWyRpHY1w0o7SEQpAJUAyFnMg
+        lssdi5Fg==;
+Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
+        id 1paTUM-00FCbC-06;
+        Fri, 10 Mar 2023 03:32:14 +0000
+Date:   Fri, 10 Mar 2023 03:32:13 +0000
+From:   Al Viro <viro@zeniv.linux.org.uk>
+To:     Yangtao Li <frank.li@vivo.com>
+Cc:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        jefflexu@linux.alibaba.com, tytso@mit.edu,
+        adilger.kernel@dilger.ca, rpeterso@redhat.com, agruenba@redhat.com,
+        mark@fasheh.com, jlbec@evilplan.org, joseph.qi@linux.alibaba.com,
+        brauner@kernel.org, linux-erofs@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org,
+        cluster-devel@redhat.com, ocfs2-devel@oss.oracle.com,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [PATCH v3 4/6] ext4: convert to use i_blockmask()
+Message-ID: <20230310033213.GG3390869@ZenIV>
+References: <20230309152127.41427-1-frank.li@vivo.com>
+ <20230309152127.41427-4-frank.li@vivo.com>
+ <20230310031940.GE3390869@ZenIV>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, cohuck@redhat.com, eric.auger@redhat.com,
-        nicolinc@nvidia.com, kvm@vger.kernel.org, mjrosato@linux.ibm.com,
-        chao.p.peng@linux.intel.com, yi.y.sun@linux.intel.com,
-        peterx@redhat.com, jasowang@redhat.com,
-        shameerali.kolothum.thodi@huawei.com, lulu@redhat.com,
-        suravee.suthikulpanit@amd.com, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH 08/12] iommufd/device: Report supported hwpt_types
-Content-Language: en-US
-To:     Yi Liu <yi.l.liu@intel.com>, joro@8bytes.org,
-        alex.williamson@redhat.com, jgg@nvidia.com, kevin.tian@intel.com,
-        robin.murphy@arm.com
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-9-yi.l.liu@intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230309080910.607396-9-yi.l.liu@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310031940.GE3390869@ZenIV>
+Sender: Al Viro <viro@ftp.linux.org.uk>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/9/23 4:09 PM, Yi Liu wrote:
-> This provides a way for userspace to probe the supported hwpt data
-> types by kernel. Currently, kernel only supports IOMMU_HWPT_TYPE_DEFAULT,
-> new types would be added per vendor drivers' extension.
+On Fri, Mar 10, 2023 at 03:19:40AM +0000, Al Viro wrote:
+> On Thu, Mar 09, 2023 at 11:21:25PM +0800, Yangtao Li wrote:
+> > Use i_blockmask() to simplify code.
+> > 
+> > Signed-off-by: Yangtao Li <frank.li@vivo.com>
+> > ---
+> > v3:
+> > -none
+> > v2:
+> > -convert to i_blockmask()
+> >  fs/ext4/inode.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > 
+> > diff --git a/fs/ext4/inode.c b/fs/ext4/inode.c
+> > index d251d705c276..eec36520e5e9 100644
+> > --- a/fs/ext4/inode.c
+> > +++ b/fs/ext4/inode.c
+> > @@ -2218,7 +2218,7 @@ static int mpage_process_page_bufs(struct mpage_da_data *mpd,
+> >  {
+> >  	struct inode *inode = mpd->inode;
+> >  	int err;
+> > -	ext4_lblk_t blocks = (i_size_read(inode) + i_blocksize(inode) - 1)
+> > +	ext4_lblk_t blocks = (i_size_read(inode) + i_blockmask(inode))
+> >  							>> inode->i_blkbits;
 > 
-> Userspace that wants to allocate hw_pagetable with user data should check
-> this. While for the allocation without user data, no need for it. It is
-> supported by default.
-> 
-> Co-developed-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
-> Signed-off-by: Yi Liu <yi.l.liu@intel.com>
-> ---
->   drivers/iommu/iommufd/device.c          |  1 +
->   drivers/iommu/iommufd/hw_pagetable.c    | 18 +++++++++++++++---
->   drivers/iommu/iommufd/iommufd_private.h |  2 ++
->   drivers/iommu/iommufd/main.c            |  2 +-
->   include/uapi/linux/iommufd.h            |  8 ++++++++
->   5 files changed, 27 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
-> index 19cd6df46c6a..0328071dcac1 100644
-> --- a/drivers/iommu/iommufd/device.c
-> +++ b/drivers/iommu/iommufd/device.c
-> @@ -322,6 +322,7 @@ int iommufd_device_get_hw_info(struct iommufd_ucmd *ucmd)
->   
->   	cmd->out_data_type = ops->driver_type;
->   	cmd->data_len = length;
-> +	cmd->out_hwpt_type_bitmap = iommufd_hwpt_type_bitmaps[ops->driver_type];
->   
->   	rc = iommufd_ucmd_respond(ucmd, sizeof(*cmd));
->   
-> diff --git a/drivers/iommu/iommufd/hw_pagetable.c b/drivers/iommu/iommufd/hw_pagetable.c
-> index 67facca98de1..160712256c64 100644
-> --- a/drivers/iommu/iommufd/hw_pagetable.c
-> +++ b/drivers/iommu/iommufd/hw_pagetable.c
-> @@ -173,6 +173,14 @@ static const size_t iommufd_hwpt_alloc_data_size[] = {
->   	[IOMMU_HWPT_TYPE_DEFAULT] = 0,
->   };
->   
-> +/*
-> + * bitmaps of supported hwpt types of by underlying iommu, indexed
-> + * by ops->driver_type which is one of enum iommu_hw_info_type.
-> + */
-> +const u64 iommufd_hwpt_type_bitmaps[] =  {
-> +	[IOMMU_HW_INFO_TYPE_DEFAULT] = BIT_ULL(IOMMU_HWPT_TYPE_DEFAULT),
-> +};
+> Umm...  That actually asks for DIV_ROUND_UP(i_size_read_inode(), i_blocksize(inode)) -
+> compiler should bloody well be able to figure out that division by (1 << n) is
+> shift down by n and it's easier to follow that way...
 
-I am a bit confused here. Why do you need this array? What I read is
-that you want to convert ops->driver_type to a bit position in
-cmd->out_hwpt_type_bitmap.
+BTW, here the fact that you are adding the mask is misleading - it's true,
+but we are not using it as a mask - it's straight arithmetics.
 
-Am I getting it right?
-
-If so, why not just
-	cmd->out_hwpt_type_bitmap = BIT_ULL(ops->driver_type);
-
-?	
-
-Best regards,
-baolu
+One can do an equivalent code where it would've been used as a mask, but that
+would be harder to read -
+	(((i_size_read(inode) - 1) | i_blockmask(inode)) + 1) >> inode->i_blkbits
+and I doubt anyone wants that kind of puzzles to stumble upon.
