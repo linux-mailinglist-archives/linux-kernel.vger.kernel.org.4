@@ -2,258 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0C766B55B9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B050B6B55C0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:38:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbjCJXgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:36:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47968 "EHLO
+        id S231553AbjCJXiF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:38:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231808AbjCJXf6 (ORCPT
+        with ESMTP id S231654AbjCJXiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:35:58 -0500
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 504EB142DCF;
-        Fri, 10 Mar 2023 15:35:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678491356; x=1710027356;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=7p2aJBqq4hOXPvY+L/qEBFntAfiZRLNDaMpI1a8A1yw=;
-  b=HqkeX3NYo6BxUlFn2TzJ2aD1opPrAKhOerm8mh4f0HCtEW2KQhlVpglG
-   NMBDCVlfE8+MMPdzRmG9e15u27gyMgADeZq0YLyPaigHDrs1NXEMNPFPn
-   j/gI+Rop8H55mHoJlv1e1PEF6DGOM9B3QZwvYENe4SeheA7dIRgk6fzoc
-   AIJ+zMVlivcyLZjzbabe1rD6Vpz3623vDMWlHSFeMEdGpf6IB5HEelM7y
-   CS2QWnXniveHlkUHHq6vbmchlb9sRQEiVQNKlvo8RXMoWYSgEJffPi6QP
-   RvzV1vDMJkBJjsE62dl0C9kJ/IFixNS5jo5MN5gaNlbmZIXR7Lh7V1CDR
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="316499255"
-X-IronPort-AV: E=Sophos;i="5.98,251,1673942400"; 
-   d="scan'208";a="316499255"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 15:35:56 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10645"; a="1007298354"
-X-IronPort-AV: E=Sophos;i="5.98,251,1673942400"; 
-   d="scan'208";a="1007298354"
-Received: from wopr.jf.intel.com ([10.54.75.136])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Mar 2023 15:35:55 -0800
-Message-ID: <fe7b41aa975128bd44d351911b0faa17b837033c.camel@linux.intel.com>
-Subject: Re: BUG: hid-sensor-ids code includes binary data in device name
-From:   Todd Brandt <todd.e.brandt@linux.intel.com>
-Reply-To: todd.e.brandt@linux.intel.com
-To:     Philipp Jungkamp <p.jungkamp@gmx.net>,
-        srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Even Xu <even.xu@intel.com>
-Cc:     Jonathan.Cameron@huawei.com, jkosina@suse.cz,
-        todd.e.brandt@intel.com
-Date:   Fri, 10 Mar 2023 15:35:55 -0800
-In-Reply-To: <424882ed2a79a641f88b5f2d1ed5a5d3d4fe98d9.camel@gmx.net>
-References: <592bcdcbb3603cf5dfefd09abdd6916db4efc691.camel@linux.intel.com>
-         <317ce138f63b9317ac7be1949a68db5117c19b92.camel@linux.intel.com>
-         <424882ed2a79a641f88b5f2d1ed5a5d3d4fe98d9.camel@gmx.net>
+        Fri, 10 Mar 2023 18:38:02 -0500
+Received: from mail-yw1-x1132.google.com (mail-yw1-x1132.google.com [IPv6:2607:f8b0:4864:20::1132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DFC2B740
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:37:59 -0800 (PST)
+Received: by mail-yw1-x1132.google.com with SMTP id 00721157ae682-536bbe5f888so127590337b3.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:37:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1678491478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZAsl0x71H/TTZvG/oR3VnRExXsP3bWi1hx0WaLiiJtE=;
+        b=JRXQCPq5zg4qTSmdgtUN7OP9NuAGsnrIjn54cqLJRcwrqbHTRa18hfGhrk/xDG+ZXr
+         EVxMsV2iDJDu2udOakivT+l6gvHAkZuGLkaXpFsa7orCJki3sp8dk00C7WIUAp1I1Tl6
+         eYGsqZ/lew99fWvKU9ppRH7LM+kJoQbS9q2mW4mvk6Rp61nklzhL/Fbw5YMfdkexBJkq
+         fSCpscmBOOej+qEb2mL2mBfgHgJtTKFIZT0oFbWGQ6ab9vOfOj6+viJwmDEBl31kjUVO
+         yxNKRwXF2NjkunG1GCdwbUmwZ4YKcNDU/e9PEAfHA9Mi/Ir2gGOpdzMNxshxh9dVnKcB
+         I4QA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678491478;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZAsl0x71H/TTZvG/oR3VnRExXsP3bWi1hx0WaLiiJtE=;
+        b=DxUVq60RL7mX06192tQSpQf5w84m++/TaRCW3uyKluSKV+zZm/Vg+bWfYap4Oly2nv
+         /VpNi6ymxSxDaD/PgWGodg48ZmI4T9fXcPOYAzbigfBwbXwpSennSVLL014JNS88w3wx
+         yBquLiwgJm0LammZD9oMNzRVgxeft4d1cipc4yZKGUv0TOL6UODSsXFGRSRlqLm2AC7L
+         QyUUCZHJWY6I5WEqnm2yoxqCgyxwjRQvXCTVOWmTLVENft3JiBFQcaAJikPlErbn1/VS
+         Qv9bTw7xh2DoV4emR73Lf9lylnjY0EDk7thoZlMrrKYYpnm187YpmYQGn3jM+rRcSMel
+         9dqg==
+X-Gm-Message-State: AO0yUKW+yqaXjGU7QpMJDsfVUt3mcgi9OZrVtTe68vL1T7+hVmhyJ0H2
+        qUeEnXwZ0bw9U5FGmfbmeiRK93N11pU8Pm1xvui7
+X-Google-Smtp-Source: AK7set/UM/hEEMUK6bVRDLfraDarPiY+xljrjjvUO83Jh4wDTGJ/dbydMv2X6EqZ1OFoJoykot/hNCtL+11T2bdzWew=
+X-Received: by 2002:a0d:dbca:0:b0:533:9d13:a067 with SMTP id
+ d193-20020a0ddbca000000b005339d13a067mr2648739ywe.3.1678491478514; Fri, 10
+ Mar 2023 15:37:58 -0800 (PST)
+MIME-Version: 1.0
+References: <20230310085401.1964889-1-roberto.sassu@huaweicloud.com>
+In-Reply-To: <20230310085401.1964889-1-roberto.sassu@huaweicloud.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Fri, 10 Mar 2023 18:37:47 -0500
+Message-ID: <CAHC9VhR=Kv7U2ERqVadFx4Gu5zR2VJeEb1m4UAD-im-ef4_aVQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] security: Always enable integrity LSM
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>
+Cc:     zohar@linux.ibm.com, dmitry.kasatkin@gmail.com, jmorris@namei.org,
+        serge@hallyn.com, mic@digikod.net, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, keescook@chromium.org,
+        Roberto Sassu <roberto.sassu@huawei.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-10 at 15:35 +0100, Philipp Jungkamp wrote:
-> Hello,
-> 
-> on v3 of the patchset I had this comment on the 'real_usage'
-> initialization:
-> 
-> > > -	char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
-> > > +	char real_usage[HID_SENSOR_USAGE_LENGTH];
-> > >  	struct platform_device *custom_pdev;
-> > >  	const char *dev_name;
-> > >  	char *c;
-> > > 
-> > > -	/* copy real usage id */
-> > > -	memcpy(real_usage, known_sensor_luid[index], 4);
-> > > +	memcpy(real_usage, match->luid, 4);
-> > > +	real_usage[4] = '\0';
-> > 
-> > Why the change in approach for setting the NULL character?
-> > Doesn't seem relevant to main purpose of this patch.
-> 
-> Based on the comment, I changed that in the final v4 revision to:
-> 
-> > -       char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
-> > +       char real_usage[HID_SENSOR_USAGE_LENGTH];
-> >         struct platform_device *custom_pdev;
-> >         const char *dev_name;
-> >         char *c;
-> >  
-> > -       /* copy real usage id */
-> > -       memcpy(real_usage, known_sensor_luid[index], 4);
-> > +       memcpy(real_usage, match->luid, 4);
-> 
-> I ommitted the line adding the null terminator to the string but kept
-> that I didn't initialize the 'real_usage' as { 0 } anymore. The
-> string
-> now misses the null terminator which leads to the broken utf-8.
-> 
-> The simple fix is to reintroduce the 0 initialization in
-> hid_sensor_register_platform_device. E.g.
-> 
-> -	char real_usage[HID_SENSOR_USAGE_LENGTH];
-> +	char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
-> 
+On Fri, Mar 10, 2023 at 3:54=E2=80=AFAM Roberto Sassu
+<roberto.sassu@huaweicloud.com> wrote:
+>
+> From: Roberto Sassu <roberto.sassu@huawei.com>
+>
+> Since the integrity (including IMA and EVM) functions are currently alway=
+s
+> called by the LSM infrastructure, and always after all LSMs, formalize
+> these requirements by introducing a new LSM ordering called LSM_ORDER_LAS=
+T,
+> and set it for the 'integrity' LSM (patch 1).
+>
+> Consequently, revert commit 92063f3ca73a ("integrity: double check
+> iint_cache was initialized"), as the double check becomes always verified
+> (patch 2), and remove 'integrity' from the list of LSMs in
+> security/Kconfig (patch 3).
+>
+> Changelog
+>
+> v3:
+> - Remove Signed-off-by tag by Mimi (suggested by Paul)
+> - Clarify that an LSM with order LSM_ORDER_FIRST or LSM_ORDER_LAST is
+>   always enabled if it is selected in the kernel configuration (suggested
+>   by Paul)
+>
+> v2:
+> - Fix commit message in patch 1 (suggested by Mimi)
+> - Bump version of patch 2 (v1 -> v3) to make one patch set
+> - Add patch 3 (suggested by Mimi)
+>
+> v1:
+> - Add comment for LSM_ORDER_LAST definition (suggested by Mimi)
+> - Add Fixes tag (suggested by Mimi)
+> - Do minor corrections in the commit messages (suggested by Mimi and
+>   Stefan)
+>
+> Roberto Sassu (3):
+>   security: Introduce LSM_ORDER_LAST and set it for the integrity LSM
+>   Revert "integrity: double check iint_cache was initialized"
+>   security: Remove integrity from the LSM list in Kconfig
+>
+>  include/linux/lsm_hooks.h |  1 +
+>  security/Kconfig          | 16 +++++++++-------
+>  security/integrity/iint.c |  9 +--------
+>  security/security.c       | 12 +++++++++---
+>  4 files changed, 20 insertions(+), 18 deletions(-)
 
-I didn't realize that the issue was a buffer overrun. I tested the
-kernel built with this simple fix and it works ok now. i.e. this patch
-is is all that's needed:
+I just merged the full patchset into the lsm/next branch, thanks everyone!
 
-diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-
-custom.c
-index 3e3f89e01d81..d85398721659 100644
---- a/drivers/hid/hid-sensor-custom.c
-+++ b/drivers/hid/hid-sensor-custom.c
-@@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct
-platform_device *pdev,
-                                    struct hid_sensor_hub_device
-*hsdev,
-                                    const struct
-hid_sensor_custom_match *match)
- {
--       char real_usage[HID_SENSOR_USAGE_LENGTH];
-+       char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
-        struct platform_device *custom_pdev;
-        const char *dev_name;
-        char *c;
-
-> Where do I need to submit a patch for this? And on which tree should
-> I
-> base the patch?
-> 
-
-The change is so small it shouldn't require any rebasing. Just send the
-patch to these emails (from MAINTAINERS):
-
-HID SENSOR HUB DRIVERS
-M:  Jiri Kosina <jikos@kernel.org>
-M:  Jonathan Cameron <jic23@kernel.org>
-M:  Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-L:  linux-input@vger.kernel.org
-L:  linux-iio@vger.kernel.org
-
-> I'm sorry for the problems my patch caused.
-> 
-
-No problem. It actually made sleepgraph better because it exposed a bug
-in the ftrace processing code. I wasn't properly handling the corner
-case where ftrace had binary data in it.
-
-> Regards,
-> Philipp Jungkamp
-> 
-> On Fri, 2023-03-10 at 01:51 -0800, srinivas pandruvada wrote:
-> > +Even
-> > 
-> > On Thu, 2023-03-09 at 15:33 -0800, Todd Brandt wrote:
-> > > Hi all, I've run into an issue in 6.3.0-rc1 that causes problems
-> > > with
-> > > ftrace and I've bisected it to this commit:
-> > > 
-> > > commit 98c062e8245199fa9121141a0bf1035dc45ae90e (HEAD,
-> > > refs/bisect/bad)
-> > > Author: Philipp Jungkamp p.jungkamp@gmx.net
-> > > Date:   Fri Nov 25 00:38:38 2022 +0100
-> > > 
-> > >     HID: hid-sensor-custom: Allow more custom iio sensors
-> > > 
-> > >     The known LUID table for established/known custom HID sensors
-> > > was
-> > >     limited to sensors with "INTEL" as manufacturer. But some
-> > > vendors
-> > > such
-> > >     as Lenovo also include fairly standard iio sensors (e.g.
-> > > ambient
-> > > light)
-> > >     in their custom sensors.
-> > > 
-> > >     Expand the known custom sensors table by a tag used for the
-> > > platform
-> > >     device name and match sensors based on the LUID as well as
-> > > optionally
-> > >     on model and manufacturer properties.
-> > > 
-> > >     Signed-off-by: Philipp Jungkamp p.jungkamp@gmx.net
-> > >     Reviewed-by: Jonathan Cameron Jonathan.Cameron@huawei.com
-> > >     Acked-by: Srinivas Pandruvada
-> > > srinivas.pandruvada@linux.intel.com
-> > >     Signed-off-by: Jiri Kosina jkosina@suse.cz
-> > > 
-> > > You're using raw data as part of the devname in the "real_usage"
-> > > string, but it includes chars other than ASCII, and those chars
-> > > end
-> > > up being printed out in the ftrace log which is meant to be ASCII
-> > > only.
-> > > 
-> > > -       /* HID-SENSOR-INT-REAL_USAGE_ID */
-> > > -       dev_name = kasprintf(GFP_KERNEL, "HID-SENSOR-INT-%s",
-> > > real_usage);
-> > > +       /* HID-SENSOR-TAG-REAL_USAGE_ID */
-> > > +       dev_name = kasprintf(GFP_KERNEL, "HID-SENSOR-%s-%s",
-> > > +                            match->tag, real_usage);
-> > > 
-> > > My sleepgraph tool started to crash because it read these lines
-> > > from
-> > > ftrace:
-> > > 
-> > > device_pm_callback_start: platform HID-SENSOR-INT-020b?.39.auto,
-> > > parent: 001F:8087:0AC2.0003, [suspend]
-> > > device_pm_callback_end: platform HID-SENSOR-INT-020b?.39.auto,
-> > > err=0
-> > > 
-> > 
-> > Here tag is:
-> > .tag = "INT",
-> > .luid = "020B000000000000",
-> > 
-> > 
-> > The LUID is still a string. Probably too long for a dev_name.
-> > 
-> > Even,
-> > 
-> > Please check.
-> > 
-> > Thanks.
-> > Srinivas
-> > 
-> > 
-> > > The "HID-SENSOR-INT-020b?.39.auto" string includes a binary char
-> > > that
-> > > kills
-> > > python3 code that loops through an ascii file as such:
-> > > 
-> > >   File "/usr/bin/sleepgraph", line 5579, in executeSuspend
-> > >     for line in fp:
-> > >   File "/usr/lib/python3.10/codecs.py", line 322, in decode
-> > >     (result, consumed) = self._buffer_decode(data, self.errors,
-> > > final)
-> > > UnicodeDecodeError: 'utf-8' codec can't decode byte 0xff in
-> > > position
-> > > 1568: invalid start byte
-> > > 
-> > > I've updated sleepgraph to handle random non-ascii chars, but
-> > > other
-> > > tools
-> > > may suffer the same fate. Can you rewrite this to ensure that no
-> > > binary
-> > > chars make it into the devname?
-> > > 
-> 
-> 
-
+--=20
+paul-moore.com
