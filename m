@@ -2,107 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B512E6B55E5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:44:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FF856B55DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 00:43:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232049AbjCJXoO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 18:44:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59138 "EHLO
+        id S231965AbjCJXnn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 18:43:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232036AbjCJXn5 (ORCPT
+        with ESMTP id S231713AbjCJXnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 18:43:57 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFF1264245
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:43:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678491791;
+        Fri, 10 Mar 2023 18:43:40 -0500
+Received: from out-6.mta1.migadu.com (out-6.mta1.migadu.com [95.215.58.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5459611FF9D
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 15:43:38 -0800 (PST)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678491816;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding;
-        bh=CItiKWqjEFyVHtEXbQCIcOVc9Rye/Ry28d+d9WjUAEQ=;
-        b=XltSBiPY3+ZBYvxOGtDC+LLZnbSK4TNtyuG4SaaeOIzUxmaaXTMbBDlvgJHkmB01zwoHIW
-        +dttkhqnXaixA2aLOnULtPxBTp0Bbdd71+9or6jxa/QyXKacuHjAeRthFl102BPQ6TI3f4
-        fMIM+Xrxhq8zP/Qvx/+GR/a3u8Kb8Qk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-554-PhfRdPegO06_zVT9DIbu9g-1; Fri, 10 Mar 2023 18:43:05 -0500
-X-MC-Unique: PhfRdPegO06_zVT9DIbu9g-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id F0C09185A794;
-        Fri, 10 Mar 2023 23:43:04 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id A1F242026D4B;
-        Fri, 10 Mar 2023 23:43:04 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Reima ISHII <ishiir@g.ecc.u-tokyo.ac.jp>, stable@vger.kernel.org
-Subject: [PATCH] KVM: nVMX: add missing consistency checks for CR0 and CR4
-Date:   Fri, 10 Mar 2023 18:43:04 -0500
-Message-Id: <20230310234304.2908714-1-pbonzini@redhat.com>
+        bh=z4DPZvfjlbyZR04Gs5VqWFFoeLvvcar/vhfVx7MEdnM=;
+        b=UcgdJ+DJVo9GF+Ix3wnxINMhtX483ckxS9anY1bHh8fL0eGkNMCuKJlKj1RTT3X1QfHe15
+        dJeb+N+1TAdv+RZ72TIMdS+If3df0G/LVbGfso6arBItfon0IiusknaIiSUQ4M11FCoxJ8
+        yjSINLfD2aKPSvaVR6zUm3NXPTT/r9E=
+From:   andrey.konovalov@linux.dev
+To:     Marco Elver <elver@google.com>,
+        Catalin Marinas <catalin.marinas@arm.com>
+Cc:     Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        kasan-dev@googlegroups.com,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Will Deacon <will@kernel.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Peter Collingbourne <pcc@google.com>,
+        Evgenii Stepanov <eugenis@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        Weizhao Ouyang <ouyangweizhao@zeku.com>,
+        linux-kernel@vger.kernel.org,
+        Andrey Konovalov <andreyknvl@google.com>
+Subject: [PATCH 1/5] kasan: drop empty tagging-related defines
+Date:   Sat, 11 Mar 2023 00:43:29 +0100
+Message-Id: <bc919c144f8684a7fd9ba70c356ac2a75e775e29.1678491668.git.andreyknvl@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The effective values of the guest CR0 and CR4 registers may differ from
-those included in the VMCS12.  In particular, disabling EPT forces
-CR4.PAE=1 and disabling unrestricted guest mode forces CR0.PG=CR0.PE=1.
+From: Andrey Konovalov <andreyknvl@google.com>
 
-Therefore, checks on these bits cannot be delegated to the processor
-and must be performed by KVM.
+mm/kasan/kasan.h provides a number of empty defines for a few
+arch-specific tagging-related routines, in case the architecture code
+didn't define them.
 
-Reported-by: Reima ISHII <ishiir@g.ecc.u-tokyo.ac.jp>
-Cc: stable@vger.kernel.org
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
+The original idea was to simplify integration in case another architecture
+starts supporting memory tagging. However, right now, if any of those
+routines are not provided by an architecture, Hardware Tag-Based KASAN
+won't work.
+
+Drop the empty defines, as it would be better to get compiler errors
+rather than runtime crashes when adding support for a new architecture.
+
+Also drop empty hw_enable_tagging_sync/async/asymm defines for
+!CONFIG_KASAN_HW_TAGS case, as those are only used in mm/kasan/hw_tags.c.
+
+Signed-off-by: Andrey Konovalov <andreyknvl@google.com>
 ---
- arch/x86/kvm/vmx/nested.c | 14 +++++++++++++-
- 1 file changed, 13 insertions(+), 1 deletion(-)
+ mm/kasan/kasan.h | 26 --------------------------
+ 1 file changed, 26 deletions(-)
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index d93c715cda6a..43693e4772ff 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -3047,6 +3047,19 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
- 					   vmcs12->guest_ia32_perf_global_ctrl)))
- 		return -EINVAL;
+diff --git a/mm/kasan/kasan.h b/mm/kasan/kasan.h
+index a61eeee3095a..b1895526d02f 100644
+--- a/mm/kasan/kasan.h
++++ b/mm/kasan/kasan.h
+@@ -395,28 +395,6 @@ static inline const void *arch_kasan_set_tag(const void *addr, u8 tag)
  
-+	if (CC((vmcs12->guest_cr0 & (X86_CR0_PG | X86_CR0_PE)) == X86_CR0_PG))
-+		return -EINVAL;
-+
-+#ifdef CONFIG_X86_64
-+	ia32e = !!(vmcs12->vm_entry_controls & VM_ENTRY_IA32E_MODE);
-+#else
-+	ia32e = false;
-+#endif
-+	if (CC(ia32e &&
-+	       (!(vmcs12->guest_cr4 & X86_CR4_PAE) ||
-+		!(vmcs12->guest_cr0 & X86_CR0_PG))))
-+		return -EINVAL;
-+
- 	/*
- 	 * If the load IA32_EFER VM-entry control is 1, the following checks
- 	 * are performed on the field for the IA32_EFER MSR:
-@@ -3058,7 +3071,6 @@ static int nested_vmx_check_guest_state(struct kvm_vcpu *vcpu,
- 	 */
- 	if (to_vmx(vcpu)->nested.nested_run_pending &&
- 	    (vmcs12->vm_entry_controls & VM_ENTRY_LOAD_IA32_EFER)) {
--		ia32e = (vmcs12->vm_entry_controls & VM_ENTRY_IA32E_MODE) != 0;
- 		if (CC(!kvm_valid_efer(vcpu, vmcs12->guest_ia32_efer)) ||
- 		    CC(ia32e != !!(vmcs12->guest_ia32_efer & EFER_LMA)) ||
- 		    CC(((vmcs12->guest_cr0 & X86_CR0_PG) &&
+ #ifdef CONFIG_KASAN_HW_TAGS
+ 
+-#ifndef arch_enable_tagging_sync
+-#define arch_enable_tagging_sync()
+-#endif
+-#ifndef arch_enable_tagging_async
+-#define arch_enable_tagging_async()
+-#endif
+-#ifndef arch_enable_tagging_asymm
+-#define arch_enable_tagging_asymm()
+-#endif
+-#ifndef arch_force_async_tag_fault
+-#define arch_force_async_tag_fault()
+-#endif
+-#ifndef arch_get_random_tag
+-#define arch_get_random_tag()	(0xFF)
+-#endif
+-#ifndef arch_get_mem_tag
+-#define arch_get_mem_tag(addr)	(0xFF)
+-#endif
+-#ifndef arch_set_mem_tag_range
+-#define arch_set_mem_tag_range(addr, size, tag, init) ((void *)(addr))
+-#endif
+-
+ #define hw_enable_tagging_sync()		arch_enable_tagging_sync()
+ #define hw_enable_tagging_async()		arch_enable_tagging_async()
+ #define hw_enable_tagging_asymm()		arch_enable_tagging_asymm()
+@@ -430,10 +408,6 @@ void kasan_enable_tagging(void);
+ 
+ #else /* CONFIG_KASAN_HW_TAGS */
+ 
+-#define hw_enable_tagging_sync()
+-#define hw_enable_tagging_async()
+-#define hw_enable_tagging_asymm()
+-
+ static inline void kasan_enable_tagging(void) { }
+ 
+ #endif /* CONFIG_KASAN_HW_TAGS */
 -- 
-2.39.1
+2.25.1
 
