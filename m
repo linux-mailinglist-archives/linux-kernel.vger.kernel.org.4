@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B5136B5761
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 02:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29A1A6B5756
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 02:22:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjCKBWR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 20:22:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40378 "EHLO
+        id S231138AbjCKBWM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 20:22:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjCKBV4 (ORCPT
+        with ESMTP id S230398AbjCKBV4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Fri, 10 Mar 2023 20:21:56 -0500
-Received: from mail-lf1-x131.google.com (mail-lf1-x131.google.com [IPv6:2a00:1450:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD03A12EE7B
+Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E07BF130C1D
         for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:21:52 -0800 (PST)
-Received: by mail-lf1-x131.google.com with SMTP id g17so8956359lfv.4
+Received: by mail-lf1-x129.google.com with SMTP id i9so8936247lfc.6
         for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:21:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678497710;
+        d=linaro.org; s=google; t=1678497712;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GwE7AohqGbIcmWslXi8oNJB/iLnz66+C6xZsC78Hh4M=;
-        b=tp5KEncJYE1bs7xThQ+kOcCyWUtDh2yp0/bxxk1WSNKeDhlaQmMMEbbsw0lLwgPg/0
-         F1CCkAZhRqxz+xuujUkZCyFsMCwxTFlUD529RwO5xeLFnXdcKDfanFuTCjZltiv5Q6q+
-         VjV1zMt28iZrTESwKX0Kap7vhgGM6mFWPhN5zy3cY39JvuZT2GTroqZ6/lM2AyPt9Dsl
-         dHItMxyFyPUqvg9sMC+uPQYc/Fs4JNIL8qvmeyt+TcpgE3wcCfZQ+kgB957fO7RmebKh
-         UqB5g9nDpJcnQREcP8jlRSzv632bo1OPVdYlgfdyy2/bFPYbdUmpph6Xfew2l0L5hIev
-         8GGA==
+        bh=FMJx84Cz95X2op3j3pyAbly9vRkvO+fvFdqYsVQflE8=;
+        b=m3Q1rywjUx1+AaAm5VEuEaYh/D+hmyBAECbnvNFOYp5IZl4naXEqxD+57q3QgFtwWP
+         vHtNunxnV4QNoXloPm7NPnBFGTiT2TV/7NlQiBKv2ljftQr2hUZnIFlYyBrs7vOglYK7
+         xqhJl8dja59tWiYQpagdH2Q9gJ9tiU/irNVNViFyHPy1foa0zo+Mn6jUzh/R/QhEKLFm
+         PV7dhZUJuq2zQBsQ8xUt77Sdz1wk++CbvZ5FNLLAA4wmpEqdDMONDncotIDcjjiqpCDC
+         V49LOs0dddMkOmEH06n2AwzAHr+KVyhHPSKdIOOB2pQhZRgfmzV299kDcxxY9mrm9tm9
+         zisg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678497710;
+        d=1e100.net; s=20210112; t=1678497712;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GwE7AohqGbIcmWslXi8oNJB/iLnz66+C6xZsC78Hh4M=;
-        b=FWvm6w/qSNTnnGovEIK8Dydr0CKjSdpClyOQGIe+Pgx+5/nuwEG2ucZ096xNaHWdOP
-         xuQU81UZuhI9B5iPGrWue26afIHAuUZEn49WGPBXTOygZs9fwT6zn1+rzVc+vDkPxuGz
-         nluVkc521eYc7G6pDfJMj3hew1hTUhxF+M51w+JRrilkOMkoJtwRUJvVan9DldNYzQ9g
-         DtS1IZs/hu/+MbrAzMVxazBuiBI5mHhLGgE9nrso+pe4317iArWxJ6bDGkdvnhpYHcuW
-         H+lqCu5q+9TlnTgMIglUaJ4/hM5FISUVbOFdCrf3yV/ZIUNrAyIXyyeMA5AWBcXzH8ql
-         vqBQ==
-X-Gm-Message-State: AO0yUKX6/mr0tdpLUha2IoZHoPyd8bAKY7UWdny2Lv+98ykcWj++pNDX
-        vc+3WGrbW5CaLHJBvueMQ8mRvw==
-X-Google-Smtp-Source: AK7set+L2dAf+1VpQKyWQQ7A8I7PpISsbHdtf+VwWIaMcYPy1P/2bZ5x4tavogcp2f75Y1DIGA1PPg==
-X-Received: by 2002:ac2:4831:0:b0:4dd:a565:8b8 with SMTP id 17-20020ac24831000000b004dda56508b8mr8174315lft.57.1678497710630;
-        Fri, 10 Mar 2023 17:21:50 -0800 (PST)
+        bh=FMJx84Cz95X2op3j3pyAbly9vRkvO+fvFdqYsVQflE8=;
+        b=bAuHeSWM1LmJwmIaPFBPF2Y56HCpiN86s8n0BMnQvbBEh23YJqfjnX3PgMRfFS7Eq+
+         eBbt0CqpIyyhEhejjPvXgDt5cUwVE9oC8umYT3R7MIxFd78+V0qsfmPNMqW63ghXdhIw
+         7ms/PoWr181NTOmsVzM6vRP9q4ccTJlq/4/cZ23iqLAcLM2OkY4ZEo5HnwFPph6JcWb5
+         5DpXVY4/64bdNsOnNnHjNvAaDKys6F88snxuVKpBr5BYlWcuIt+29iY4huoaC5IMbuOe
+         XxWyj8qS1qedofEc1aAMABDMTfqbCo1NQDnDrRNj2k2Ak+j5sT4apfFYYHs7ne1MQ/bw
+         vcdQ==
+X-Gm-Message-State: AO0yUKWyIChAW7rWEEet8DHGOSOQbNtPSStcprX2Dgf72+XsWFAEMoVY
+        qTrJxeKq4RmLtLTK9FBecnW7TA==
+X-Google-Smtp-Source: AK7set8OgrdGrRcfPTKnhf9v24OK+atHulY0JtVNNIGkAn/RpKNI5uTmx4PQg8iGeyf1WrDzGhALAQ==
+X-Received: by 2002:ac2:4a65:0:b0:4de:d16f:3938 with SMTP id q5-20020ac24a65000000b004ded16f3938mr8979969lfp.53.1678497711961;
+        Fri, 10 Mar 2023 17:21:51 -0800 (PST)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id y26-20020ac2447a000000b004db25f2c103sm142318lfl.86.2023.03.10.17.21.49
+        by smtp.gmail.com with ESMTPSA id y26-20020ac2447a000000b004db25f2c103sm142318lfl.86.2023.03.10.17.21.50
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 17:21:50 -0800 (PST)
+        Fri, 10 Mar 2023 17:21:51 -0800 (PST)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Sat, 11 Mar 2023 02:21:36 +0100
-Subject: [PATCH RFC 06/15] arm64: dts: qcom: msm8996: Add simple-mfd to
+Date:   Sat, 11 Mar 2023 02:21:37 +0100
+Subject: [PATCH RFC 07/15] arm64: dts: qcom: msm8998: Add simple-mfd to
  rpm_msg_ram
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230311-topic-msg_ram-v1-6-e9c2094daf09@linaro.org>
+Message-Id: <20230311-topic-msg_ram-v1-7-e9c2094daf09@linaro.org>
 References: <20230311-topic-msg_ram-v1-0-e9c2094daf09@linaro.org>
 In-Reply-To: <20230311-topic-msg_ram-v1-0-e9c2094daf09@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -68,11 +68,11 @@ Cc:     Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678497700; l=688;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678497700; l=698;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=J8sNWFgvXFFj+ysUZApL4w6CccWyaDk9MIMtC1PdHS8=;
- b=G90Y++nOEXoYmethmum+lQ0hudf0zvsAFikikT/qQH3WxTDyIWHn+jZ7yTOOi03zXiVJ9Oe1nRl6
- kp8g1GEiD3PA3UuqlAyaWFMKl4BvAUQM5R9d/IrqRizqL1naPjuk
+ bh=lBjM7e71S3nptNVLXpXO7/oaBdna3rhesdSFkhVdhCg=;
+ b=wxltn5knKDYzriNske98QNLS9/+8AoU1Ra0cy5dSsPgShI+uOSfYtwjwlOgPKapP8qBhliUIN0+u
+ W4FYv5agD33r8ZJFgbvw/j6OefvmeK1U7h/jwo+BQweqfGeDC3Gz
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -89,20 +89,20 @@ Add the missing compatible to make the node compliant with the bindings.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/msm8996.dtsi | 2 +-
+ arch/arm64/boot/dts/qcom/msm8998.dtsi | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/msm8996.dtsi b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-index 905678e7175d..9a0c1ebf1e52 100644
---- a/arch/arm64/boot/dts/qcom/msm8996.dtsi
-+++ b/arch/arm64/boot/dts/qcom/msm8996.dtsi
-@@ -679,7 +679,7 @@ pciephy_2: phy@3000 {
+diff --git a/arch/arm64/boot/dts/qcom/msm8998.dtsi b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+index 8bc1c59127e5..6efa1bd138bc 100644
+--- a/arch/arm64/boot/dts/qcom/msm8998.dtsi
++++ b/arch/arm64/boot/dts/qcom/msm8998.dtsi
+@@ -833,7 +833,7 @@ gcc: clock-controller@100000 {
  		};
  
- 		rpm_msg_ram: sram@68000 {
+ 		rpm_msg_ram: sram@778000 {
 -			compatible = "qcom,rpm-msg-ram";
 +			compatible = "qcom,rpm-msg-ram", "simple-mfd";
- 			reg = <0x00068000 0x6000>;
+ 			reg = <0x00778000 0x7000>;
  		};
  
 
