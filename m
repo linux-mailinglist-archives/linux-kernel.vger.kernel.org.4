@@ -2,65 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FB7D6B5B94
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:23:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 826226B5B99
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:25:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCKMX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:23:57 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49982 "EHLO
+        id S230157AbjCKMY6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:24:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjCKMXw (ORCPT
+        with ESMTP id S230156AbjCKMYw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:23:52 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1137CF0FF2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:23:52 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id ix20so1776096plb.3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:23:52 -0800 (PST)
+        Sat, 11 Mar 2023 07:24:52 -0500
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E094120866;
+        Sat, 11 Mar 2023 04:24:39 -0800 (PST)
+Received: by mail-wm1-x32a.google.com with SMTP id l7-20020a05600c1d0700b003eb5e6d906bso5043942wms.5;
+        Sat, 11 Mar 2023 04:24:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678537431;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RHyWlNYOWTJpaRchXuBuoW9+Bl6vt/PZv6RitZv+maE=;
-        b=VeTCeUnJguiKcfFaFYvN1RBFf7V7f2qcW7ytfy1bop6uCZfFI1HU9Lwc4rLPjrvWpv
-         bszpcBpkv0AmPl8cSEDp/PrXMaal1u5jCOpIxvtKLORdPj8tskLAHWzLL4U18f+wUjkG
-         crMtAqLOcGwzfOEtkTwdAxoBt/25CfiLGKwt1+t9+fjj3iyYzm9eyubGiErppTOWqX8C
-         VqnqzLLa8ppdMf+XWJA0NGdD2OsSvcP6CP6xHTPLwwVFDptFkviCi5zLKQ385ecsSbnY
-         upNfdanXpMnEHiEEX+rRGgYT99mP4IztlyewKLQIZRUmniPF70riAs/SJGprx4GF5/xh
-         Pu5w==
+        d=gmail.com; s=20210112; t=1678537477;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ktDtq6F5mYK2om1OkmlupbObQARt7GGBfAckHwwPD5s=;
+        b=SJmbpgMg1wWeZlpCieTj0YgVoj6N0l3ju7FpvmBybLKjaMMXTS+HFZDJIcGooFODJs
+         WaE+YlV3Xd+3AucPMZ31HT6n2ImvFxaChorJEhb4ZfNE3Zw7Bx/MpwHXbSEW3c1IzECp
+         qCZkW4tbof5nXEqko3jKaa1nhkY+k1RLgce5njC05FE9K5d4rcpQlyHHVHqic7JOdKEL
+         O8zhLGO2zv7O618oBuDwtQPjZ07OU+ffmmAAwAI+T9yyEyPBVj11HG+U0c+SofnPCsdN
+         E+V5E+++mhzjcZJSJE4JAcAyEhT1+UFsgLMB+b995XWkHzIWCgjFaxAY7HgpjUdE9WMj
+         qBdw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678537431;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RHyWlNYOWTJpaRchXuBuoW9+Bl6vt/PZv6RitZv+maE=;
-        b=1T5Yrex2fu4AVhKj7jQa9y+wfeSa/o0wtOaJN3O72huzhkqh/56gQ/cIXymUTkVCUM
-         ujs/FNvFob39O+bYOpnulnV8NOIUtG36k4OJMFpdjt78NoNWv1ePvsYDSkt3syPyjSwG
-         uxCEpVrhK1Rn5lMCy1qg7a39PMAEK2ATNeLKNcFU8S1ciBEkX0qB6/F0yWbRDZllDMxT
-         xWJrCM2aaAzQjbxOS3BKSeJXHkyyPfTSyUU/NY0Avqwmo0NpUXsAFNZyGkHvWOamzpd2
-         ihaADelOM5BSLpri4gCE3wqIY2EnOjCZsPGH019ulEt3fk9YRYeSbq6BDMNiwgz1Al21
-         joKA==
-X-Gm-Message-State: AO0yUKUyIvlBqPapMi26rqM7nlgaiVlQHG8GVovT6NGroJIW6008T9fN
-        iNI+9IsH8Bzr1Sugw2F7QBc=
-X-Google-Smtp-Source: AK7set/h/eNxdE1SsGotLvCSm2/foTZmvHZT9k8qP5rd04raMPv685hL2Itj7MMA/JruQH7o6CnSHg==
-X-Received: by 2002:a05:6a20:8427:b0:cc:70df:ae20 with SMTP id c39-20020a056a20842700b000cc70dfae20mr5536607pzd.0.1678537431501;
-        Sat, 11 Mar 2023 04:23:51 -0800 (PST)
-Received: from ubuntu ([117.199.152.23])
-        by smtp.gmail.com with ESMTPSA id c15-20020a62e80f000000b005abc0d426c4sm1391911pfi.54.2023.03.11.04.23.50
+        d=1e100.net; s=20210112; t=1678537477;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ktDtq6F5mYK2om1OkmlupbObQARt7GGBfAckHwwPD5s=;
+        b=p3xgUQJAkWsIlts3GSMeJ9v7+fxqNvyj4RWZ2GEw5WlSiCU4XMkoEFA5mu7SchWtMA
+         +Ps9A3DENUturEDdjcXULkmm5Yb+Skh+JYgy3T+o29FlUaKCeIY6SWAHu+8rsk0xyA6L
+         36O51ESgUhPKaLP0zAa+nDG0kUkV/IlSK2du/qPr/T+QteWACcfhFE7vRokRM0EMjk4f
+         SL15qiOQoKa4ly3kMiYJHmSh9rKI0kKMEO9fENKl/enbyg1diH/yNTs9TOAJUaWPYM6s
+         x8bWUbDqYVKekvxrMTsaOcb0Xg+ZF4K7W2RNWVdUmbeXenGnxz3KxsvY5klM2TpR7kKr
+         /nkg==
+X-Gm-Message-State: AO0yUKUC0UIsOPShDczGApTdeYxQQNgf0o7QkCA3lDQ2RKGmCZ/CFmDb
+        NtempJI0U2LZ1edXT/1Z6rddpv3exqw=
+X-Google-Smtp-Source: AK7set96yaiaJ5hySs218YQKWsYE12lJazGBg2QQx4xHtBYi2y4qn1VzdHW+JeV8PI88QTgVwJLjHA==
+X-Received: by 2002:a05:600c:19cf:b0:3eb:3cc9:9f85 with SMTP id u15-20020a05600c19cf00b003eb3cc99f85mr5798593wmq.26.1678537477544;
+        Sat, 11 Mar 2023 04:24:37 -0800 (PST)
+Received: from debian ([63.135.72.41])
+        by smtp.gmail.com with ESMTPSA id z17-20020a5d44d1000000b002c5691f13eesm2339151wrr.50.2023.03.11.04.24.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 04:23:51 -0800 (PST)
-Date:   Sat, 11 Mar 2023 04:23:46 -0800
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     outreachy@lists.linux.dev
-Subject: [PATCH] Staging: pi433: Change bit_rate type from u16 to u32
-Message-ID: <20230311122346.GA21752@ubuntu>
+        Sat, 11 Mar 2023 04:24:37 -0800 (PST)
+Date:   Sat, 11 Mar 2023 12:24:35 +0000
+From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
+        rwarsow@gmx.de
+Subject: Re: [PATCH 5.4 000/357] 5.4.235-rc1 review
+Message-ID: <ZAxzAxJWBUDX1F4N@debian>
+References: <20230310133733.973883071@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20230310133733.973883071@linuxfoundation.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,27 +75,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Change bit_rate type from u16 to u32 inside struct pi433_tx_cfg to
-support bit rates up to 300kbps as per the spec.
+Hi Greg,
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
- drivers/staging/pi433/pi433_if.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+On Fri, Mar 10, 2023 at 02:34:49PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.4.235 release.
+> There are 357 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
 
-diff --git a/drivers/staging/pi433/pi433_if.h b/drivers/staging/pi433/pi433_if.h
-index 25ee0b77a32c..1f8ffaf02d99 100644
---- a/drivers/staging/pi433/pi433_if.h
-+++ b/drivers/staging/pi433/pi433_if.h
-@@ -51,7 +51,7 @@ enum option_on_off {
- #define PI433_TX_CFG_IOCTL_NR	0
- struct pi433_tx_cfg {
- 	__u32			frequency;
--	__u16			bit_rate;
-+	__u32			bit_rate;
- 	__u32			dev_frequency;
- 	enum modulation		modulation;
- 	enum mod_shaping	mod_shaping;
+Build test (gcc version 11.3.1 20230210):
+mips: 65 configs -> 1 failure
+arm: 106 configs -> no failure
+arm64: 2 configs -> no failure
+x86_64: 4 configs -> no failure
+alpha allmodconfig -> no failure
+powerpc allmodconfig -> no failure
+riscv allmodconfig -> no failure
+s390 allmodconfig -> failed
+xtensa allmodconfig -> no failure
+
+Note:
+mips build failed with the error:
+
+arch/mips/lasat/picvue_proc.c:42:44: error: expected ')' before '&' token
+   42 | static DECLARE_TASKLET(pvc_display_tasklet, &pvc_display, 0);
+      |                                            ^~
+      |                                            )
+arch/mips/lasat/picvue_proc.c: In function 'pvc_line_proc_write':
+arch/mips/lasat/picvue_proc.c:87:27: error: 'pvc_display_tasklet' undeclared (first use in this function)
+   87 |         tasklet_schedule(&pvc_display_tasklet);
+      |                           ^~~~~~~~~~~~~~~~~~~
+arch/mips/lasat/picvue_proc.c:87:27: note: each undeclared identifier is reported only once for each function it appears in
+At top level:
+arch/mips/lasat/picvue_proc.c:33:13: error: 'pvc_display' defined but not used [-Werror=unused-function]
+   33 | static void pvc_display(unsigned long data)
+      |             ^~~~~~~~~~~
+
+
+s390 build failed with:
+
+drivers/s390/block/dasd_diag.c:658:23: error: initialization of 'int (*)(struct dasd_device *, __u8)' {aka 'int (*)(struct dasd_device *, unsigned char)'} from incompatible pointer type 'int (*)(struct dasd_device *, __u8,  __u8)' {aka 'int (*)(struct dasd_device *, unsigned char,  unsigned char)'} [-Werror=incompatible-pointer-types]
+  658 |         .pe_handler = dasd_diag_pe_handler,
+      |                       ^~~~~~~~~~~~~~~~~~~~
+drivers/s390/block/dasd_diag.c:658:23: note: (near initialization for 'dasd_diag_discipline.pe_handler')
+
+Boot test:
+x86_64: Booted on my test laptop. No regression.
+x86_64: Booted on qemu. No regression. [1]
+
+[1]. https://openqa.qa.codethink.co.uk/tests/3081
+
+
+Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+
 -- 
-2.25.1
-
+Regards
+Sudip
