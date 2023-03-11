@@ -2,116 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8473F6B6142
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7AF56B613D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229766AbjCKVwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:52:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39218 "EHLO
+        id S229783AbjCKVwo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:52:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230022AbjCKVwu (ORCPT
+        with ESMTP id S229614AbjCKVwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:52:50 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0DD4E5CE;
-        Sat, 11 Mar 2023 13:52:26 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F436B80066;
-        Sat, 11 Mar 2023 21:52:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFBF3C433EF;
-        Sat, 11 Mar 2023 21:52:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678571527;
-        bh=4ihtkamQW1DKeXGj7i+4ho2sOjUjujw9GnHfOu6wzLI=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=sz9VV5mz2YtNPMQCPMir3pAN+2eSzIV/hVgQCLUv6WCO1H+xb50FJ3bHMWZGoLv62
-         ZuBCDrjxE5mvY7yXhgP/c6Whkx9MpLlA9aUTwaqdr1gGo+Zxg7OYbdKtdbQdMlwTym
-         y6hdahKeHbm9Rnh7oyxTydbZOfZ8XFq1oSSLTB7BDVe59TeoB6iAdRBT/pLdS5dyIa
-         oDAoNPfcguNa2x/n62/Zre+KBx/kRnqo3qubKiSPBll56oWACoB109vYEA2RA1d6nC
-         X+vlgY3c0KVmmADyrWeyi1ylXI3Q6URdJWr4wf2CXmyb5PN39jtm3OMmCBoC71nHnb
-         iyTVdVdcd5XWw==
-Message-ID: <e0558e9ece8bfd413080aa3101f2e3d7f746a5e2.camel@kernel.org>
-Subject: Re: [PATCH v5 1/6] KEYS: Create static version of
- public_key_verify_signature
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, zohar@linux.ibm.com,
-        dhowells@redhat.com, dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Sat, 11 Mar 2023 23:52:05 +0200
-In-Reply-To: <20230302164652.83571-2-eric.snowberg@oracle.com>
-References: <20230302164652.83571-1-eric.snowberg@oracle.com>
-         <20230302164652.83571-2-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1-0ubuntu1 
+        Sat, 11 Mar 2023 16:52:40 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F048D6C6BD
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:52:18 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id r15so7269287edq.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:52:18 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678571537;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=TdvdZcJwqOxSED82BHJ454QJEkvE45rumYb+PdMANhk=;
+        b=KbQE9gQ4W/aLSm2gJ9USlzEK9E5MDzHVSJHAzEOumHqjyaHmrM59p+IYOJgO7jdKSm
+         qwQ0OUWtQCq3/rXRCkuAeu6ui3MnC5M9DjyoEU+Kp30A6XtKcoZvKMeWmkE1wXdCs6Os
+         t7GPCYMc9kG+/WxxB2zZ8Ruvc3gIKQTCQaSWHAcT3pmiy0OQJhCzlQtAYjrXgVIQukDq
+         SeO2uy1SnpMT0BfpQr8xFWfHl265T10CNW5NF7eOF/bKBKV/JwF/Z3roY5XKGSleAf0o
+         Eus6x+poIQCGeCNzd1AVlJuBcWIVappwUB3CoWYw+nUl//NtlkmGXTQzmebaTuPkGIAD
+         NKBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678571537;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TdvdZcJwqOxSED82BHJ454QJEkvE45rumYb+PdMANhk=;
+        b=0orTdd5jwXYaR6KUdbNd3BcxNuRP2aBBtAGX8So2UUnMl0lOvlma6G5pEAAcjsvU0l
+         1vScfQtkK4882RvfK38EG5GKVSfczpLpoTRVBnkjTHytk+oLx8sbdPh/Sk8H3DIAyrox
+         Nc0q15eZQvq+6eYrPEWuYY9FbEdFH6r8UifIGYmfDFDiZW4Pwvn0rI0a7nbyYuB1n1xa
+         4p9JG3aasx35pFQb1EW9C9h5zjsiKbYM4GQHvl05QJFFEgqQsws/R8X2kxGDt4zsHAFe
+         JUC0mnRe3yySMlpRrIVBviX/xjhYVJ8VnEd6xSf2xJD2QIULC/nekXCp8yK5K0AjzSE3
+         UCfQ==
+X-Gm-Message-State: AO0yUKW0nrjqQ3kRJLwKzNWAD5kA4MRFYil0nrdMl6y5AXoa+fL2SrBx
+        +qNTgo/O10pmFIVVPlh3F/Q=
+X-Google-Smtp-Source: AK7set/9/649wHsySz4J19RJ3v5gomkREh8afFzkaSUa9/qY3LFUVpM1jnwTCAC10MlTMWFU1ohPSA==
+X-Received: by 2002:a17:906:7493:b0:878:4bda:2011 with SMTP id e19-20020a170906749300b008784bda2011mr6174866ejl.4.1678571537333;
+        Sat, 11 Mar 2023 13:52:17 -0800 (PST)
+Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
+        by smtp.gmail.com with ESMTPSA id bg4-20020a170906a04400b008b1797b77b2sm1503688ejb.221.2023.03.11.13.52.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 13:52:16 -0800 (PST)
+Date:   Sat, 11 Mar 2023 22:52:15 +0100
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH 09/12] staging: rtl8192e: Remove unused variable
+ rfRxIQImbalance and rfRxAFE
+Message-ID: <1d578fc962c938e76bc0df529a3c24bba7abe049.1678569965.git.philipp.g.hortmann@gmail.com>
+References: <cover.1678569965.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1678569965.git.philipp.g.hortmann@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-02 at 11:46 -0500, Eric Snowberg wrote:
-> The kernel test robot reports undefined reference to
-> public_key_verify_signature when CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE
-> is
-> not defined. Create a static version in this case and return -EINVAL.
->=20
-> Fixes: db6c43bd2132 ("crypto: KEYS: convert public key and digsig
-> asym to the akcipher api")
-> Reported-by: kernel test robot <lkp@intel.com>
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
-> Reviewed-by: Petr Vorel <pvorel@suse.cz>
-> ---
-> =C2=A0include/crypto/public_key.h | 9 +++++++++
-> =C2=A01 file changed, 9 insertions(+)
->=20
-> diff --git a/include/crypto/public_key.h
-> b/include/crypto/public_key.h
-> index 68f7aa2a7e55..6d61695e1cde 100644
-> --- a/include/crypto/public_key.h
-> +++ b/include/crypto/public_key.h
-> @@ -80,7 +80,16 @@ extern int create_signature(struct
-> kernel_pkey_params *, const void *, void *);
-> =C2=A0extern int verify_signature(const struct key *,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 const struct public_key_signature *);
-> =C2=A0
-> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE)
-> =C2=A0int public_key_verify_signature(const struct public_key *pkey,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct public_key_signat=
-ure
-> *sig);
-> +#else
-> +static inline
-> +int public_key_verify_signature(const struct public_key *pkey,
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct public_key_signature
-> *sig)
-> +{
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return -EINVAL;
-> +}
-> +#endif
-> =C2=A0
-> =C2=A0#endif /* _LINUX_PUBLIC_KEY_H */
+Remove unused variable rfRxIQImbalance and rfRxAFE because they are just
+once set and not used. Remove unused constants with commenting line.
 
-Reviewed-by: Jarkko Sakkinen <jarkko@kernel.org>
+Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
+---
+ drivers/staging/rtl8192e/rtl8192e/r8190P_def.h    |  2 --
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c    | 10 ----------
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h |  9 ---------
+ 3 files changed, 21 deletions(-)
 
-BR, Jarkko
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h b/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
+index a5d99891688d..a5c2ff5b4260 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
+@@ -107,8 +107,6 @@ struct bb_reg_definition {
+ 	u32 rfintfe;
+ 	u32 rf3wireOffset;
+ 	u32 rfHSSIPara2;
+-	u32 rfRxIQImbalance;
+-	u32 rfRxAFE;
+ 	u32 rfTxIQImbalance;
+ 	u32 rfTxAFE;
+ 	u32 rfLSSIReadBack;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+index 32806bcc953a..5b63b9eac090 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
+@@ -373,16 +373,6 @@ static void _rtl92e_init_bb_rf_reg_def(struct net_device *dev)
+ 	priv->phy_reg_def[RF90_PATH_C].rfHSSIPara2 = rFPGA0_XC_HSSIParameter2;
+ 	priv->phy_reg_def[RF90_PATH_D].rfHSSIPara2 = rFPGA0_XD_HSSIParameter2;
+ 
+-	priv->phy_reg_def[RF90_PATH_A].rfRxIQImbalance = rOFDM0_XARxIQImbalance;
+-	priv->phy_reg_def[RF90_PATH_B].rfRxIQImbalance = rOFDM0_XBRxIQImbalance;
+-	priv->phy_reg_def[RF90_PATH_C].rfRxIQImbalance = rOFDM0_XCRxIQImbalance;
+-	priv->phy_reg_def[RF90_PATH_D].rfRxIQImbalance = rOFDM0_XDRxIQImbalance;
+-
+-	priv->phy_reg_def[RF90_PATH_A].rfRxAFE = rOFDM0_XARxAFE;
+-	priv->phy_reg_def[RF90_PATH_B].rfRxAFE = rOFDM0_XBRxAFE;
+-	priv->phy_reg_def[RF90_PATH_C].rfRxAFE = rOFDM0_XCRxAFE;
+-	priv->phy_reg_def[RF90_PATH_D].rfRxAFE = rOFDM0_XDRxAFE;
+-
+ 	priv->phy_reg_def[RF90_PATH_A].rfTxIQImbalance = rOFDM0_XATxIQImbalance;
+ 	priv->phy_reg_def[RF90_PATH_B].rfTxIQImbalance = rOFDM0_XBTxIQImbalance;
+ 	priv->phy_reg_def[RF90_PATH_C].rfTxIQImbalance = rOFDM0_XCTxIQImbalance;
+diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
+index d0ea7e06f0f7..78e90bf5d79f 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
++++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
+@@ -98,15 +98,6 @@
+ #define rOFDM0_TRxPathEnable		0xc04
+ #define rOFDM0_TRMuxPar			0xc08
+ #define rOFDM0_TRSWIsolation		0xc0c
+-/* RxIQ DC offset, Rx digital filter, DC notch filter */
+-#define rOFDM0_XARxAFE			0xc10
+-#define rOFDM0_XARxIQImbalance		0xc14 /* RxIQ imbalance matrix */
+-#define rOFDM0_XBRxAFE			0xc18
+-#define rOFDM0_XBRxIQImbalance		0xc1c
+-#define rOFDM0_XCRxAFE			0xc20
+-#define rOFDM0_XCRxIQImbalance		0xc24
+-#define rOFDM0_XDRxAFE			0xc28
+-#define rOFDM0_XDRxIQImbalance		0xc2c
+ #define rOFDM0_RxDetector1		0xc30 /* PD, BW & SBD */
+ #define rOFDM0_RxDetector2		0xc34 /* SBD */
+ #define rOFDM0_RxDetector3		0xc38 /* Frame Sync */
+-- 
+2.39.2
+
