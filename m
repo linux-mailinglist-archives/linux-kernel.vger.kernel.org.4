@@ -2,118 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1D9C6B5D4C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A07D26B5D5A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:27:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230418AbjCKPTy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:19:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53812 "EHLO
+        id S230057AbjCKP12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:27:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230001AbjCKPTw (ORCPT
+        with ESMTP id S230353AbjCKP10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:19:52 -0500
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4441064AAC;
-        Sat, 11 Mar 2023 07:19:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=CBIHH9XG4nVS2bo3uP1GEXEkJNI0edg39kNsKztVQlk=; b=l4EjBefxpGWGF2I882PqNfNHfr
-        SQcMBUSWRaxbqFS0QJjhz5ZCNhwpds6Z/gxSjq4P9JrzRll90EflueF5UqPq1t0JSa+DgIT4I09yp
-        DgbiDNgLCOVlBgyFK9KDL4Mqkgfl/MVry2wWZ9EY9l28okHIys5j2gJ+RqYhbSYtkt8k=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pb10Z-0074Ef-9u; Sat, 11 Mar 2023 16:19:43 +0100
-Date:   Sat, 11 Mar 2023 16:19:43 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Klaus Kudielka <klaus.kudielka@gmail.com>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] net: dsa: mv88e6xxx: move call to
- mv88e6xxx_mdios_register()
-Message-ID: <98767929-b401-402b-8e6b-d997cf27bfb0@lunn.ch>
-References: <20230311094141.34578-1-klaus.kudielka@gmail.com>
- <20230311094141.34578-2-klaus.kudielka@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311094141.34578-2-klaus.kudielka@gmail.com>
+        Sat, 11 Mar 2023 10:27:26 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2977810EAAD
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:27:25 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id j11so10391578lfg.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:27:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678548443;
+        h=cc:to:subject:date:from:in-reply-to:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=8s9gnIYUH4a7DISj2GFil2OdRXxeDO2P0HDbRjCc19c=;
+        b=PXcbWJQtlcm5Vz6ToS322SJ+YCuBK2OCQuUf4KN+bVgtMAofOJt5wk1RNk7LBq2KHT
+         toA2JaG67l1njOGKTdpZ55jG5yEnfRkJP6DfUwhUpqWMe51QmyErBBo/g83D5WRO3tqu
+         Mb3Vcd6awES+xdQqkWvioKeuCJWNrG61O4/bsjLHDjGqxIUxgIRcybwQAegJVSCYqjZz
+         JqXktXIxuOQQ/09DqTO0a16ucQL2Ik78QH7yV5rM5EVfncM9rpgRq4avkG+D1vEQ7+/Z
+         nJXtmJdtGLYSKrhAymvPvIoCmQ2OdjISS1kF345czbh8/gSz+tZHPcfE8jlDSQJZbriG
+         MB2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678548443;
+        h=cc:to:subject:date:from:in-reply-to:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=8s9gnIYUH4a7DISj2GFil2OdRXxeDO2P0HDbRjCc19c=;
+        b=TUcNLNVe4l7GHy5L2R9o04EO1odGk/r8WczNd/ISxeE7ltrt3o9vLcaE7LpWUc7Zax
+         ZyjZYIeEDdNbYPUrRnFi7WNCej2VYLPtdSs83nsgCJzmYLquFcrtxTnKhv5PgTdV6a51
+         IYLdxA4MngDWyBfVFtLOKE+H7S10i+kYI4Z56BNUirz8ilBQZfRKpkJfa5dwavMkMslk
+         J+kfDi2qMG/OLteI+XT9wNZjm72qzRY1BMzZiJXWuvRJnypkb1Y0FBkpo3ZT66lSDtvL
+         zyXUl+51Gn5TJHPrI1vCEwh1CQv0v77Ldz/CsCQIQK2+Xs0L9g5u3xyqhu15wWFTFl0A
+         xhRg==
+X-Gm-Message-State: AO0yUKVWCdchBrClRxG9JCnKgECNjvbv746544rTVFyQEyHvpfNyqKBN
+        oA34B0uYtJg4XWtPfvsG0y4fgcaCN+aVk1dIPE0=
+X-Google-Smtp-Source: AK7set9pg2wcl81Ze91WKCr75db/f1RIBL8nLZPSnGDu/scPkZEIKnm8rn0EcVJwpSiS9/WAwgTBRw==
+X-Received: by 2002:a05:6512:390e:b0:4db:26b1:ec52 with SMTP id a14-20020a056512390e00b004db26b1ec52mr9339298lfu.59.1678548443309;
+        Sat, 11 Mar 2023 07:27:23 -0800 (PST)
+Received: from 0001-devicetree-synopsys-dw-mshc-common-add-fifo-access-3.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id d28-20020ac244dc000000b004e7fa99f2b5sm345737lfm.186.2023.03.11.07.27.22
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 07:27:23 -0800 (PST)
+Message-Id: <1678548256.0817535-1-sleirsgoevy@gmail.com>
+In-Reply-To: <1678548256.0817535-0-sleirsgoevy@gmail.com>
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+Date:   Sat, 11 Mar 2023 18:22:41 +0300
+Subject: [PATCH 1/2] devicetree: synopsys-dw-mshc-common: add
+ "fifo-access-32bit" property
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 10:41:41AM +0100, Klaus Kudielka wrote:
-> >From commit 1a136ca2e089 ("net: mdio: scan bus based on bus capabilities
-> for C22 and C45") onwards, mdiobus_scan_bus_c45() is being called on buses
-> with MDIOBUS_NO_CAP. On a Turris Omnia (Armada 385, 88E6176 switch), this
-> causes a significant increase of boot time, from 1.6 seconds, to 6.3
-> seconds. The boot time stated here is until start of /init.
-> 
-> Further testing revealed that the C45 scan is indeed expensive (around
-> 2.7 seconds, due to a huge number of bus transactions), and called twice.
-> 
-> It was suggested, to call mv88e6xxx_mdios_register() at the beginning of
-> mv88e6xxx_setup(), and mv88e6xxx_mdios_unregister() at the end of
-> mv88e6xxx_teardown(). This is accomplished by this patch.
-> 
-> Testing on the Turris Omnia revealed, that this improves the situation.
-> Now mdiobus_scan_bus_c45() is called only once, ending up in a boot time
-> of 4.3 seconds.
+---
+ .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml    | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-For those who are interested, here is a bit of background on why this
-change reduces the number of bus scans.
+diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+index 8dfad89c7..2bc5ac528 100644
+--- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
++++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+@@ -57,6 +57,12 @@ properties:
+       force fifo watermark setting accordingly.
+     $ref: /schemas/types.yaml#/definitions/flag
+ 
++  fifo-access-32bit:
++    description:
++      Specifies that this device requires accesses to its 64-bit registers
++      to be done as pairs of 32-bit accesses, even on architectures where
++      readq is available.
++
+   dmas:
+     maxItems: 1
+ 
+-- 
+2.38.3
 
-The MAC driver probes, which i think in this case is mvneta. Part way
-through its probe, it registers its MDIO bus. That triggers a scan of
-its bus, and the switch is found. The mv88e6xxx driver is then loaded
-and its probe function called. towards the end of the mv88e6xxxx probe
-function, it registers its MDIO bus. That causes a scan of the
-switches MDIO bus. Which is slow. After the scan completes, the
-mv88e6xxx probe continues, and registers the switch with DSA core. The
-core then parses the DT binding for the switch and looks for the
-master ethernet interface. That is the interface which mvneta
-provides. But mvneta is still only part way through its probe. It has
-not yet registered its interface with the netdev core. So the DSA core
-fails to find it and return EPROBE_DEFER. This causes the mv88e6xxx
-driver to unwind its probe. The mvneat then gets a chance to finish
-its probe and register its netdev. Some timer later, the driver core
-runs the probes again for those drivers which returned EPROBE_DEFER,
-mv88e6xxx registers its MDIO bus again, another scan is performed, the
-switch is registered with the code, and this time the master device is
-available, so things continue. The DSA core then calls the drivers
-.setup() callback to get the switch into a usable state.
 
-I think what remains in the probe function is cheap, so it can
-probable stay there and be done twice. But it might be worth putting
-in a few printks to get some time stamps and see if anything is
-expensive.
-
->  static int mv88e6xxx_setup(struct dsa_switch *ds)
-> @@ -3889,6 +3892,10 @@ static int mv88e6xxx_setup(struct dsa_switch *ds)
->  	int err;
->  	int i;
->  
-> +	err = mv88e6xxx_mdios_register(chip);
-> +	if (err)
-> +		return err;
-> +
->  	chip->ds = ds;
->  	ds->slave_mii_bus = mv88e6xxx_default_mdio_bus(chip);
-
-Other calls in mv88e6xxx_setup() can fail, so you need to extend the
-cleanup to remove the mdio bus on failure.
-
-	Andrew
