@@ -2,57 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCA6D6B5D32
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:09:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 560456B5D38
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:11:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCKPJj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:09:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38406 "EHLO
+        id S230001AbjCKPLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:11:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjCKPJh (ORCPT
+        with ESMTP id S229437AbjCKPLd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:09:37 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77EB1524A;
-        Sat, 11 Mar 2023 07:09:35 -0800 (PST)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id A574C40737CF;
-        Sat, 11 Mar 2023 15:09:33 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru A574C40737CF
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678547373;
-        bh=zDtdDisuOVpo+LVgUx80N2IrP23n/FpVuA+p57hry2g=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dQ169L29RkU5TME2eWOgSPKOUnwedTQAze/wANT0pfmGXx+NgY3ZD0YqqroPbBfNH
-         1L4781Vbyc6vDgvCMMU4FhzjEfXH8dbwMhnY+j+O8WIvu4chArXK2epcRlO1fQ1oXY
-         lVdGnmQnGqX1hFaWiiCXiWNhdfn85+jMlkjMpZH4=
-MIME-Version: 1.0
-Date:   Sat, 11 Mar 2023 18:09:33 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
+        Sat, 11 Mar 2023 10:11:33 -0500
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC8C2233E5;
+        Sat, 11 Mar 2023 07:11:31 -0800 (PST)
+Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 1E6171EC0501;
+        Sat, 11 Mar 2023 16:11:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1678547489;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=d3tDult2va7U5ecOKiAJ68n8tKbP1WHykv3YoeJx32s=;
+        b=ZzZRlJGsHlAcooltNW/El62mvS4AgXOhPjNfTZqu36mBSxSiHh4K7bHUHfYO0DCm9ivGaH
+        P3p5Ufg507LYYaCDuGX82pP+Zgkuw+QpOAy7uWIOIpVC1A2YvqjVthdo9cpFhh4/AO3qu2
+        Zf2R0x39eifZqq/wrxVASJXrU69uy5o=
+Date:   Sat, 11 Mar 2023 16:11:28 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 21/26] efi/x86: Explicitly set sections memory
- attributes
-In-Reply-To: <CAMj1kXGzXLp20nbg-NoToENbDQhn1b0Gpi2s8f9DgSSM28BbeQ@mail.gmail.com>
-References: <cover.1671098103.git.baskov@ispras.ru>
- <c38ad7a1b89aff743d4a29882a7022d97d4fea58.1671098103.git.baskov@ispras.ru>
- <CAMj1kXGzXLp20nbg-NoToENbDQhn1b0Gpi2s8f9DgSSM28BbeQ@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <f29b8efc018819cbb8202d13795ba89e@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, debug@rivosinc.com,
+        Mike Rapoport <rppt@linux.ibm.com>
+Subject: Re: [PATCH v7 40/41] x86/shstk: Add ARCH_SHSTK_UNLOCK
+Message-ID: <ZAyaIJFhSh0QyVq0@zn.tnic>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-41-rick.p.edgecombe@intel.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230227222957.24501-41-rick.p.edgecombe@intel.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -62,133 +77,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-10 18:20, Ard Biesheuvel wrote:
-> On Thu, 15 Dec 2022 at 13:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> Explicitly change sections memory attributes in efi_pe_entry in case
->> of incorrect EFI implementations and to reduce access rights to
->> compressed kernel blob. By default it is set executable due to
->> restriction in maximum number of sections that can fit before zero
->> page.
->> 
->> Tested-by: Peter Jones <pjones@redhat.com>
->> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+On Mon, Feb 27, 2023 at 02:29:56PM -0800, Rick Edgecombe wrote:
+> From: Mike Rapoport <rppt@linux.ibm.com>
 > 
-> I don't think we need this patch. Firmware that cares about W^X will
-> map the PE image with R-X for text/rodata and RW- for data/bss, which
-> is sufficient, and firmware that doesn't is a lost cause anyway.
-
-This patch were here mainly here to make .rodata non-executable and for
-the UEFI handover protocol, for which attributes are usually not getting
-applied.
-
-Since the UEFI handover protocol is deprecated, I'll exclude patches 
-from
-v5 and maybe submit it separately modified to apply attributes only when
-booting via this protocol.
-
+> Userspace loaders may lock features before a CRIU restore operation has
+> the chance to set them to whatever state is required by the process
+> being restored. Allow a way for CRIU to unlock features. Add it as an
+> arch_prctl() like the other shadow stack operations, but restrict it being
+> called by the ptrace arch_pctl() interface.
 > 
-> 
->> ---
->>  drivers/firmware/efi/libstub/x86-stub.c | 54 
->> +++++++++++++++++++++++++
->>  1 file changed, 54 insertions(+)
->> 
->> diff --git a/drivers/firmware/efi/libstub/x86-stub.c 
->> b/drivers/firmware/efi/libstub/x86-stub.c
->> index 1f0a2e7075c3..60697fcd8950 100644
->> --- a/drivers/firmware/efi/libstub/x86-stub.c
->> +++ b/drivers/firmware/efi/libstub/x86-stub.c
->> @@ -27,6 +27,12 @@ const efi_dxe_services_table_t *efi_dxe_table;
->>  u32 image_offset __section(".data");
->>  static efi_loaded_image_t *image __section(".data");
->> 
->> +extern char _head[], _ehead[];
->> +extern char _compressed[], _ecompressed[];
->> +extern char _text[], _etext[];
->> +extern char _rodata[], _erodata[];
->> +extern char _data[];
->> +
->>  static efi_status_t
->>  preserve_pci_rom_image(efi_pci_io_protocol_t *pci, struct 
->> pci_setup_rom **__rom)
->>  {
->> @@ -343,6 +349,52 @@ void __noreturn efi_exit(efi_handle_t handle, 
->> efi_status_t status)
->>                 asm("hlt");
->>  }
->> 
->> +
->> +/*
->> + * Manually setup memory protection attributes for each ELF section
->> + * since we cannot do it properly by using PE sections.
->> + */
->> +static void setup_sections_memory_protection(unsigned long 
->> image_base)
->> +{
->> +#ifdef CONFIG_EFI_DXE_MEM_ATTRIBUTES
->> +       efi_dxe_table = 
->> get_efi_config_table(EFI_DXE_SERVICES_TABLE_GUID);
->> +
->> +       if (!efi_dxe_table ||
->> +           efi_dxe_table->hdr.signature != 
->> EFI_DXE_SERVICES_TABLE_SIGNATURE) {
->> +               efi_warn("Unable to locate EFI DXE services table\n");
->> +               efi_dxe_table = NULL;
->> +               return;
->> +       }
->> +
->> +       /* .setup [image_base, _head] */
->> +       efi_adjust_memory_range_protection(image_base,
->> +                                          (unsigned long)_head - 
->> image_base,
->> +                                          EFI_MEMORY_RO | 
->> EFI_MEMORY_XP);
->> +       /* .head.text [_head, _ehead] */
->> +       efi_adjust_memory_range_protection((unsigned long)_head,
->> +                                          (unsigned long)_ehead - 
->> (unsigned long)_head,
->> +                                          EFI_MEMORY_RO);
->> +       /* .rodata..compressed [_compressed, _ecompressed] */
->> +       efi_adjust_memory_range_protection((unsigned long)_compressed,
->> +                                          (unsigned long)_ecompressed 
->> - (unsigned long)_compressed,
->> +                                          EFI_MEMORY_RO | 
->> EFI_MEMORY_XP);
->> +       /* .text [_text, _etext] */
->> +       efi_adjust_memory_range_protection((unsigned long)_text,
->> +                                          (unsigned long)_etext - 
->> (unsigned long)_text,
->> +                                          EFI_MEMORY_RO);
->> +       /* .rodata [_rodata, _erodata] */
->> +       efi_adjust_memory_range_protection((unsigned long)_rodata,
->> +                                          (unsigned long)_erodata - 
->> (unsigned long)_rodata,
->> +                                          EFI_MEMORY_RO | 
->> EFI_MEMORY_XP);
->> +       /* .data, .bss [_data, _end] */
->> +       efi_adjust_memory_range_protection((unsigned long)_data,
->> +                                          (unsigned long)_end - 
->> (unsigned long)_data,
->> +                                          EFI_MEMORY_XP);
->> +#else
->> +       (void)image_base;
->> +#endif
->> +}
->> +
->>  void __noreturn efi_stub_entry(efi_handle_t handle,
->>                                efi_system_table_t *sys_table_arg,
->>                                struct boot_params *boot_params);
->> @@ -687,6 +739,8 @@ asmlinkage unsigned long efi_main(efi_handle_t 
->> handle,
->>                 efi_dxe_table = NULL;
->>         }
->> 
->> +       setup_sections_memory_protection(bzimage_addr - image_offset);
->> +
->>  #ifdef CONFIG_CMDLINE_BOOL
->>         status = efi_parse_options(CONFIG_CMDLINE);
->>         if (status != EFI_SUCCESS) {
->> --
->> 2.37.4
->> 
+> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
+> Tested-by: John Allen <john.allen@amd.com>
+> Tested-by: Kees Cook <keescook@chromium.org>
+> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
+
+That tag is kinda implicit here. Unless he doesn't ACK his own patch.
+:-P
+
+> Reviewed-by: Kees Cook <keescook@chromium.org>
+> Signed-off-by: Mike Rapoport <rppt@linux.ibm.com>
+> [Merged into recent API changes, added commit log and docs]
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+
+...
+
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 2faf9b45ac72..3197ff824809 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -451,9 +451,14 @@ long shstk_prctl(struct task_struct *task, int option, unsigned long features)
+>  		return 0;
+>  	}
+>  
+> -	/* Don't allow via ptrace */
+> -	if (task != current)
+> +	/* Only allow via ptrace */
+> +	if (task != current) {
+
+Is that the only case? task != current means ptrace and there's no other
+way to do this from userspace?
+
+Isn't there some flag which says that task is ptraced? I think we should
+check that one too...
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
