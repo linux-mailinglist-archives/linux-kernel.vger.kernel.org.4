@@ -2,157 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C9CE6B58DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:12:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC0516B58DE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjCKGMP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 01:12:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38276 "EHLO
+        id S229983AbjCKGMi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 01:12:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCKGMN (ORCPT
+        with ESMTP id S229933AbjCKGMf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:12:13 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C402612D428
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:12:11 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id u9so29187696edd.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:12:11 -0800 (PST)
+        Sat, 11 Mar 2023 01:12:35 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E982912EAD3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:12:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678515130;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rVC8LiGnUfG6nH76f2ANmYFw3KtTCvNV7A7+6I82Gks=;
-        b=Og7FiROuZ05YCLv2EfXCEia1iQhtPv/bti70tBPQ44KDDZoAs5Um29S+pPuhla/doW
-         mo/LYVkXv2odN9UJ0Bn50cJX58XBcgRD+UZ9vIOV6Z8im7BhcJ27H+Ou1z4OL8qVbquy
-         6DUvOSKNEb3cOZlEzdXmY431h0NQaFhNcnxoBZFjd6V51Sg0l0p+cANRuTf0ApWY7LkC
-         kB760xeH2xFRuDNqKnYTL4+zmAfh+wCBnYsKtoxABXltDIuQiKAqHaDQZvckAOJFGVkz
-         Nug6iXfwq04SADdIWcyA2ScaGoBvzdJkD9SLRL+9Uk3az+lZE4+LKyI/2MuNKpSgjZDZ
-         nE+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678515130;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rVC8LiGnUfG6nH76f2ANmYFw3KtTCvNV7A7+6I82Gks=;
-        b=i99xr5cqUy4tVczYklp3kpXXI+UV3gmGGLVbrBlbRVd0U2RkM0cSrJB1Gfp9mXrY8u
-         qAtXqkcZw66O6DOBwHDo0MQ5rKuzL9C8dsGFJs4D5ckkNT99+Z1BOKUSzY79/LoD6z4d
-         CUaAEbLnplfQBKnM2x7KS2h2Hinooc9nfJ10p9dzMC6Kwe+GYHp1XROkEMnm0mj5TU8W
-         vcc21Q/9ECKxkfXnrGY0aqPVNs3SY+o01hnNhBC1y5RCdHQ0cP3Sv/lMSKR2R6TLHJFm
-         YOfIHOK35FYzzA+cOexeDcYsNbQ2iQmxUe4kq9EcTawGUsgYq69nrYs2oBtAYSTlvMXj
-         KVGA==
-X-Gm-Message-State: AO0yUKUP/xFUiVhqStFmxCtxG8HoWYxv45WfJvn359B4HyqDOT7v6qZx
-        iEOOvNDQbhKXbEKcu4al0+s=
-X-Google-Smtp-Source: AK7set8K606JzvAv5mqcU/f2BrqbeSpWXF7RngXN9y8ZyHVKNxPGmXOrxixkhn/2bYUOn1H7UHRSSA==
-X-Received: by 2002:a05:6402:1e8e:b0:4bc:3ff2:dbe7 with SMTP id f14-20020a0564021e8e00b004bc3ff2dbe7mr9501767edf.1.1678515129970;
-        Fri, 10 Mar 2023 22:12:09 -0800 (PST)
-Received: from [192.168.10.15] ([37.252.81.68])
-        by smtp.gmail.com with ESMTPSA id s7-20020a508d07000000b004af6c5f1805sm786410eds.52.2023.03.10.22.12.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 22:12:09 -0800 (PST)
-Message-ID: <bfd3eecf-4af2-184c-ff52-5509791fbf49@gmail.com>
-Date:   Sat, 11 Mar 2023 10:12:07 +0400
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=OWb8tP6K5co0u3PaVnKCiie/VSwnLAbMcy7MmkS6nxM=;
+  b=gLdaYAhxborpRn/jE5SXDQpLEDXlk5H+thO+x98lw4WCq6UXm/YTQ6Y8
+   7m+yoohLsMbz3mfK63I/sJnlHEK43uWhIFy3dAO5rHxKgQ3OFiNl8MTtW
+   7Fov+Y5Fx04tO+vW2OusSvZ3kc6waqEPhd0F2obCiPmgGwGs2UfLgrXiO
+   Y=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,252,1673910000"; 
+   d="scan'208";a="96618311"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 07:12:29 +0100
+Date:   Sat, 11 Mar 2023 07:12:30 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Kloudifold <cloudifold.3125@gmail.com>
+cc:     teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
+        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: sm750: Rename camel case functions
+In-Reply-To: <ZAvk8SGjwdYlHEU6@CloudiRingWorld>
+Message-ID: <alpine.DEB.2.22.394.2303110706180.2948@hadrien>
+References: <ZAvk8SGjwdYlHEU6@CloudiRingWorld>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] 9P FS: Fix wild-memory-access write in v9fs_get_acl
-Content-Language: en-US
-To:     Siddh Raman Pant <code@siddh.me>
-Cc:     ericvh <ericvh@gmail.com>, lucho <lucho@ionkov.net>,
-        asmadeus <asmadeus@codewreck.org>,
-        linux_oss <linux_oss@crudebyte.com>,
-        linux-kernel <linux-kernel@vger.kernel.org>,
-        syzbot+cb1d16facb3cc90de5fb 
-        <syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com>,
-        v9fs-developer <v9fs-developer@lists.sourceforge.net>,
-        linux-kernel-mentees 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-References: <20230310202619.433269-1-ivan.orlov0322@gmail.com>
- <186cf19b619.4777c80c154603.5258165448157616593@siddh.me>
-From:   Ivan Orlov <ivan.orlov0322@gmail.com>
-In-Reply-To: <186cf19b619.4777c80c154603.5258165448157616593@siddh.me>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/23 09:16, Siddh Raman Pant wrote:
-> On Sat, 11 Mar 2023 01:56:19 +0530, Ivan Orlov wrote:
->> KASAN reported the following issue:
->> [...]
->>
->> Calling '__v9fs_get_acl' method in 'v9fs_get_acl' creates the
->> following chain of function calls:
->>
->> __v9fs_get_acl
->>        v9fs_fid_get_acl
->>                v9fs_fid_xattr_get
->>                        p9_client_xattrwalk
->>
->> Function p9_client_xattrwalk accepts a pointer to u64-typed
->> variable attr_size and puts some u64 value into it. However,
->> after the executing the p9_client_xattrwalk, in some circumstances
->> we assign the value of u64-typed variable 'attr_size' to the
->> variable 'retval', which we will return. However, the type of
->> 'retval' is ssize_t, and if the value of attr_size is larger
->> than SSIZE_MAX, we will face the signed type overflow. If the
->> overflow occurs, the result of v9fs_fid_xattr_get may be
->> negative, but not classified as an error. When we try to allocate
->> an acl with 'broken' size we receive an error, but don't process
->> it. When we try to free this acl, we face the 'wild-memory-access'
->> error (because it wasn't allocated).
->>
->> This patch will modify the condition in the 'v9fs_fid_xattr_get'
->> function, so it will return an error if the 'attr_size' is larger
->> than SSIZE_MAX.
->>
->> Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
->> Link: https://syzkaller.appspot.com/bug?id=fbbef66d9e4d096242f3617de5d14d12705b4659
->> Signed-off-by: Ivan Orlov ivan.orlov0322@gmail.com>
-> 
-> You should also test with Syzkaller if it gave a reproducer.
-> Check the following docs to know about it:
-> https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
-> 
->> ---
->>   fs/9p/xattr.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
->> index 50f7f3f6b55e..d6f7450107a8 100644
->> --- a/fs/9p/xattr.c
->> +++ b/fs/9p/xattr.c
->> @@ -35,7 +35,7 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
->>   		return retval;
->>   	}
->>   	if (attr_size > buffer_size) {
->> -		if (!buffer_size) /* request to get the attr_size */
->> +		if (!buffer_size && attr_size <= (u64) SSIZE_MAX) /* request to get the attr_size */
->>   			retval = attr_size;
->>   		else
->>   			retval = -ERANGE;
-> 
-> You should use EOVERFLOW for overflow error. Make a new conditional
-> instead of using AND. Also, the explicit u64 cast for SSIZE_MAX can
-> be dropped for better readability.
-> 
-> Thanks,
-> Siddh
-> 
->> -- 
->> 2.34.1
->>
->> _______________________________________________
->> Linux-kernel-mentees mailing list
->> Linux-kernel-mentees@lists.linuxfoundation.org
->> https://lists.linuxfoundation.org/mailman/listinfo/linux-kernel-mentees
 
-Thank you for the review! I will modify the patch according to your 
-comments, resend it as v2 version and test it via syzkaller.
+
+On Sat, 11 Mar 2023, Kloudifold wrote:
+
+> This patch fixes the "CHECK: Avoid CamelCase" reported by
+> checkpatch.pl by renaming camel case functions in
+> sm750_cursor.c and sm750_cursor.h.
+> Modified calls to functions declared in sm750_cursor.h in sm750.c.
+
+Kloudifold,
+
+Please go back and read the entire Outreachy patch tutorial.  It explains
+clearly how to update a patch when you have gotten some feedback about it.
+It also explains how to write a good log message.
+
+With respect to your log message here, you never need to say "This patch".
+It's clear that wat you are talking about a patch.  Please try to avoid
+the word "fix".  As in this case, it naturally leads one to not actually
+explaining what is done.  It is useful to acknowledge that checkpatch
+helped you find the problem, and perhaps useful to provide the checkpatch
+warning, but put all that at the end.  Explain what you have done and why
+first, because that is most interesting to the reader.  There is no need
+to mention the file names in the log message.  That information is easily
+available in the diffstat below.  And the log message should be written in
+the imperative (eg Modify) not the past tense (Modified).
+
+You may find it helpful to look at other patches (git log -p) to get a
+feel for the expected style.
+
+julia
+
+
+>
+> Fixed issue in [PATCH] staging: sm750: Rename camel case functions in sm750_cursor.*
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+>
+> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+> ---
+>  drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
+>  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
+>  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
+>  3 files changed, 24 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
+> index effc7fcc3..5d7249e82 100644
+> --- a/drivers/staging/sm750fb/sm750.c
+> +++ b/drivers/staging/sm750fb/sm750.c
+> @@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+>
+>  	sm750_hw_cursor_disable(cursor);
+>  	if (fbcursor->set & FB_CUR_SETSIZE)
+> -		sm750_hw_cursor_setSize(cursor,
+> -					fbcursor->image.width,
+> -					fbcursor->image.height);
+> +		sm750_hw_cursor_set_size(cursor,
+> +					 fbcursor->image.width,
+> +					 fbcursor->image.height);
+>
+>  	if (fbcursor->set & FB_CUR_SETPOS)
+> -		sm750_hw_cursor_setPos(cursor,
+> -				       fbcursor->image.dx - info->var.xoffset,
+> -				       fbcursor->image.dy - info->var.yoffset);
+> +		sm750_hw_cursor_set_pos(cursor,
+> +					fbcursor->image.dx - info->var.xoffset,
+> +					fbcursor->image.dy - info->var.yoffset);
+>
+>  	if (fbcursor->set & FB_CUR_SETCMAP) {
+>  		/* get the 16bit color of kernel means */
+> @@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
+>  		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
+>  		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
+>
+> -		sm750_hw_cursor_setColor(cursor, fg, bg);
+> +		sm750_hw_cursor_set_color(cursor, fg, bg);
+>  	}
+>
+>  	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
+> -		sm750_hw_cursor_setData(cursor,
+> -					fbcursor->rop,
+> -					fbcursor->image.data,
+> -					fbcursor->mask);
+> +		sm750_hw_cursor_set_data(cursor,
+> +					 fbcursor->rop,
+> +					 fbcursor->image.data,
+> +					 fbcursor->mask);
+>  	}
+>
+>  	if (fbcursor->enable)
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
+> index 43e6f52c2..ff643e33f 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.c
+> +++ b/drivers/staging/sm750fb/sm750_cursor.c
+> @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
+>  	poke32(HWC_ADDRESS, 0);
+>  }
+>
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
+>  {
+>  	cursor->w = w;
+>  	cursor->h = h;
+>  }
+>
+> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
+>  {
+>  	u32 reg;
+>
+> @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
+>  	poke32(HWC_LOCATION, reg);
+>  }
+>
+> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
+>  {
+>  	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
+>  		HWC_COLOR_12_2_RGB565_MASK;
+> @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
+>  	poke32(HWC_COLOR_3, 0xffe0);
+>  }
+>
+> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -			     const u8 *pcol, const u8 *pmsk)
+> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+> +			      const u8 *pcol, const u8 *pmsk)
+>  {
+>  	int i, j, count, pitch, offset;
+>  	u8 color, mask, opr;
+> @@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+>  	}
+>  }
+>
+> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+> -			      const u8 *pcol, const u8 *pmsk)
+> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
+> +			       const u8 *pcol, const u8 *pmsk)
+>  {
+>  	int i, j, count, pitch, offset;
+>  	u8 color, mask;
+> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
+> index b59643dd6..88fa02f63 100644
+> --- a/drivers/staging/sm750fb/sm750_cursor.h
+> +++ b/drivers/staging/sm750fb/sm750_cursor.h
+> @@ -5,11 +5,11 @@
+>  /* hw_cursor_xxx works for voyager,718 and 750 */
+>  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
+>  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
+> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
+> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
+> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
+> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
+> -			     const u8 *data, const u8 *mask);
+> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
+> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
+> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
+> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
+> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
+>  			      const u8 *data, const u8 *mask);
+> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
+> +			       const u8 *data, const u8 *mask);
+>  #endif
+> --
+> 2.39.2
+>
+>
+>
