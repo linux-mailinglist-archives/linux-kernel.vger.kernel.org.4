@@ -2,113 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1002E6B5C42
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:32:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF4DB6B5C44
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:35:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229791AbjCKNcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 08:32:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48024 "EHLO
+        id S229806AbjCKNfD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 08:35:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCKNcT (ORCPT
+        with ESMTP id S229621AbjCKNfB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:32:19 -0500
-Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 814CB110519
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:32:17 -0800 (PST)
-Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-536bf92b55cso153078057b3.12
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:32:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678541536;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=JROGcEBcLkwWjsFbL29UK7bVFuHFrwh+heAFvT0sBUc=;
-        b=y8M8LIyCYjgptBoJ7w1GsZrnQB8ex02EXdkVW0q4iX+ZYIo5qaJgM52z+EAzOhdpI7
-         U0m/s6UG1WEXitNCHizAT7u7UEn36f7JBvvLcHcHz6KTdEEVlsiLf6GU4D4hqzEhT7N7
-         fp3D/A4LrGRotn/4HUEpB748FEN6Eh3dladYyZApbrnfhsXN42YHny3lW4+AnRzCjTK8
-         BfGSayUI0ZxsddGbVjymkThUwsRHF5qoCuNs6KoLHbvx779xEkimrvhl7OQASqaU9dxz
-         UUKtrkPwgcLQzVbHsSEgmJgjYh11m8hG885pM1zAGPyoMhewZUsWalV+oBZiOGEFNHzF
-         5WWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678541536;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JROGcEBcLkwWjsFbL29UK7bVFuHFrwh+heAFvT0sBUc=;
-        b=5cXA8dxPzfumly4RPlU4K7vLqf9Bc4VizEi5sazbSbrATrSTSqA74tvjoivNwhMDzX
-         jGSpQlUrngsAuf6Y2qD3REfR63XOAE/3ye2bxponoreDH9RQu/oZsnqluib8RoIWRm04
-         5LtIfn8ult/gmVTbLKMhfxLMMt2qcerVHiZ0imt59CH32opPPMmW3NUrVZxk6na4w66o
-         2QQ7ljGKgcXlCkzemrMQnf7aQBr5PfQ7B1NDr7XpiYP9wTNIHl/QFPNgchS3NPuqWfce
-         bR0f9Yo7ndp/OBqbUwX8zSqZRh+6JbuteNpXxf7Qhxl6Mmwf6Bb9iNDW5epDGD/LRETS
-         QD6A==
-X-Gm-Message-State: AO0yUKXeeWBheBP2QeU39qmoSkMzrfA5qxoH3F7ceO7tY3AkvYjN1jlZ
-        e3ZhuGf2WCWJXQnhsrGKXYqoxEzVmfEFXzO0074SUQ==
-X-Google-Smtp-Source: AK7set/7HiHYL5eW78ZBNSZ38mIUB1aBNYtIXyUpaYdA5rIb/ax8pB0saCrGLSs60FsOsiJMqZI7dRGrbLExw+I5shQ=
-X-Received: by 2002:a81:ae66:0:b0:541:7266:3fd7 with SMTP id
- g38-20020a81ae66000000b0054172663fd7mr656589ywk.3.1678541536631; Sat, 11 Mar
- 2023 05:32:16 -0800 (PST)
+        Sat, 11 Mar 2023 08:35:01 -0500
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC3224C9C;
+        Sat, 11 Mar 2023 05:34:59 -0800 (PST)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 97A4D5C0094;
+        Sat, 11 Mar 2023 08:34:57 -0500 (EST)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Sat, 11 Mar 2023 08:34:57 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:content-type:date:date:from
+        :from:in-reply-to:message-id:mime-version:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1678541697; x=1678628097; bh=2h
+        vieJeB5EfrLKwyYNa5R+FhNCK+/9JjDOLjM1Jf+jc=; b=jNbGj02MZz+gNFDRwa
+        3JFdV7276641BpyfI0YnEmEh1TEUCWUedMCL0ZfCAdlkdisCYYsb7L3Qu2hzQOeB
+        vaIwrlfoDe/MNrE10KO2cEmp5RWfaJNBSjtR09+VsD2jhgBCcSxyfeTCXkOqGD+e
+        3p3E44EOdVudfmtGe4j7nsYF/wIcMx1JxTGalkAuvoPbCOKFwhXcqppPc6630FM9
+        jF/Y/Q5qVpAoIPSStV1nWD183MtbfYWRmHMt3Zu+4hEcJCT8KtmX5kPp4I19F/YT
+        yaQdxQrHlm2xWwEd9mZqpClUvFvfT/4IweezBRtHX3hUB/dmOaCUF0ntrWtby9xF
+        B3nw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678541697; x=1678628097; bh=2hvieJeB5EfrL
+        KwyYNa5R+FhNCK+/9JjDOLjM1Jf+jc=; b=j5m8CZ8WRBnzRbJI5gekVQxXj1Uk9
+        1F/3xRBWpNSO6/IKPyDo01AdD7y4hZk9fz1hHM4pxKmnZq8rpwHe11Wxz5kD1wPU
+        Bcu/+IFu39YHPWiqD9NkqukWzc8vdV7whWQbH4D+FZ/QOOp0ZlyiREUEGMgG6+xB
+        ABNVlgjrSrqP+wrVdv1ksFOMT9q4ATmJFqBB15ezsF+51HF/+wwr4kksjHMR7tzo
+        pLuzwKJNlUrjYWgU637wnrRtxGpMm0jengxg9X4tIYVoS78xJjptYFF+ywvwG6/t
+        awANKpoSt2fYMcU4OypWmF14eqHHBCRabnJkYF2nRWQF0zYN6AGaMznYw==
+X-ME-Sender: <xms:gYMMZOqsH3u7ODpbMIDAEECdJPvaMwE-SULqQdKcqPC-wQKIqGn-Ow>
+    <xme:gYMMZMr3hH1dyZhmj0D7Cn4ugTEtUULe3g5LbDjgrH7-cizIadnF0x9lGwnXO5ZFa
+    MeBN3Zawrs5VKSfLcs>
+X-ME-Received: <xmr:gYMMZDNV1XmwNHlIjRbm1X9jMBRhWf7sCtxx9BwMCDsiUX1zxc2IWGnSq4gVBw7U88ijL-uWl4SXL-SHmf4JYiWG_r7jtHEiqZLzk3AtS6GhyQrAUA4-b4dQzmODCg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvtddgvdelucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhvvghnucfr
+    vghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtthgvrh
+    hnpeeludffieehueevtdffvedtueelleejuddugfettdevhfefffdvgffhjeehgfelleen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvhgvnh
+    esshhvvghnphgvthgvrhdruggvvh
+X-ME-Proxy: <xmx:gYMMZN6ESJQE5LsFat-67GEvkiso29BATp1f3UOsZ1q7mUrFVQnZUA>
+    <xmx:gYMMZN7KK4e3m-4zTkOpRk00g3ijIEVw_0IMjn3W1la9kAlq5uyThg>
+    <xmx:gYMMZNhwd-8c9u8RHDRoY3jxqgzVH2GfYFiJGwLOD5taCbzgTdHVdg>
+    <xmx:gYMMZHvwn4zmABBadrwGZ1J3VpWWA9pbrX17YlSJa0ekiKgwatZ0Dg>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 11 Mar 2023 08:34:55 -0500 (EST)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>
+Cc:     Sven Peter <sven@svenpeter.dev>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] PCI: apple: Initialize pcie->nvecs before using it
+Date:   Sat, 11 Mar 2023 14:34:53 +0100
+Message-Id: <20230311133453.63246-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org> <50f03895-816f-be8d-d956-d237fb13f5a0@linaro.org>
- <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org> <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
- <858a8925-f11b-652d-3f02-f5ceea7d11fa@linaro.org> <74c0c724-b6a9-3755-7f56-9f421cece1a3@linaro.org>
- <500c7924-c43c-4233-1688-f8b6fbbad66f@linaro.org> <544e6f22-f2f4-2c7c-1978-a96c9763e2ab@linaro.org>
-In-Reply-To: <544e6f22-f2f4-2c7c-1978-a96c9763e2ab@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Date:   Sat, 11 Mar 2023 15:32:05 +0200
-Message-ID: <CAA8EJpr_zrk0cikiE52xvxBFTfj4Bq93UdOxVyThvkRoJayDKw@mail.gmail.com>
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-To:     "Bryan O'Donoghue" <bryan.odonoghue@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 at 14:11, Bryan O'Donoghue
-<bryan.odonoghue@linaro.org> wrote:
->
-> On 11/03/2023 00:54, Konrad Dybcio wrote:
-> >> - Update the commit log and potentially the structure comments
-> > I'm probably just very biased because I authored these commits, but I can't
-> > see which part is not clear.. Could I (and this is not passive-aggressive or
-> > anything) ask for a pointer there?
-> >
->
-> I mean to say "non scaling clocks" isn't an indicator IMO of the fact
-> that these are QoS node specific clocks.
->
-> Right now the interconnect model is predicated on bus and bus_a but,
-> you've found that on some SoCs we have node-specific clocks too.
->
-> :g/non\ scaling/s//non-scaling\ node-specific/g
->
-> would do or "QoS node-specific" the fact the clocks don't scale is
-> incidental the dependency though is that IMO at least these are
-> additional node-specific clocks we need to enable.
+apple_pcie_setup_port computes ilog2(pcie->nvecs) to setup the number of
+MSIs available for each port. It is however called before apple_msi_init
+which actually initializes pcie->nvecs.
+Luckily, pcie->nvecs is part of kzalloc-ed structure and thus
+initialized as zero. ilog2(0) happens to be 0xffffffff which then just
+configures more MSIs in hardware than we actually have. This doesn't
+break anything because we never hand out those vectors.
+Let's swap the order of the two calls so that we use the correctly
+initialized value.
 
-This looks somewhat close to what we have observed in the patches for
-ipq9574 platform. It doesn't have a scaling interconnect (in other
-words, no bus clocks), but some devices have clocks driving the NIU
-(Network Interface Units) which connect the device to NoC.
+Fixes: 476c41ed4597 ("PCI: apple: Implement MSI support")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ drivers/pci/controller/pcie-apple.c | 6 +++++-
+ 1 file changed, 5 insertions(+), 1 deletion(-)
 
->
-> ---
-> bod
+diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+index 66f37e403a09..8b7b084cf287 100644
+--- a/drivers/pci/controller/pcie-apple.c
++++ b/drivers/pci/controller/pcie-apple.c
+@@ -783,6 +783,10 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+ 	cfg->priv = pcie;
+ 	INIT_LIST_HEAD(&pcie->ports);
+ 
++	ret = apple_msi_init(pcie);
++	if (ret)
++		return ret;
++
+ 	for_each_child_of_node(dev->of_node, of_port) {
+ 		ret = apple_pcie_setup_port(pcie, of_port);
+ 		if (ret) {
+@@ -792,7 +796,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+ 		}
+ 	}
+ 
+-	return apple_msi_init(pcie);
++	return 0;
+ }
+ 
+ static int apple_pcie_probe(struct platform_device *pdev)
+-- 
+2.25.1
 
-
-
-
---
-With best wishes
-Dmitry
