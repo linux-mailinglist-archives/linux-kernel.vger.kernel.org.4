@@ -2,105 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4268C6B561E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:00:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A792B6B5620
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231952AbjCKAAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36124 "EHLO
+        id S231720AbjCKADT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:03:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231512AbjCKAAg (ORCPT
+        with ESMTP id S232034AbjCKADQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:00:36 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB3BF6014;
-        Fri, 10 Mar 2023 16:00:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6A63961D7F;
-        Sat, 11 Mar 2023 00:00:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C83FEC4339B;
-        Sat, 11 Mar 2023 00:00:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678492818;
-        bh=zf8Ylz3Hw8HYqz9JDe6oUvlgtpVyIBOE7kQt27FbQsM=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=E4+XI+JsuTuAQyAHdB2a2WJwZtCmCeDv+o1WXnuBEWBy+Bllr+aDIRve8LJNxlJnh
-         DTCHyKNwQg/tEt/rTyU7X9xvU8WGXulv9pC4yD7tV6SkAcLPOzAyD3rggyofyyx3KA
-         xhR/36TxiT2Hh+dxED1DEo8aHmo3natsFVoieREYsxj11LHahuGVyM6qe0ABbUNnio
-         DBZYbxN4K9YynxwGfEM2Bo/wruFD+bdf5kOutqaiO+yadUdU2uFGksvn28uYIcCo1s
-         q7LBXBTOLghphKzZaw2a5cUdm9HnboBJv2uZnKmDaMpZC3TGtb+/GOrI3TPqQQx1u9
-         v3T0WvphFqI6w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id ABC69E21EEA;
-        Sat, 11 Mar 2023 00:00:18 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Fri, 10 Mar 2023 19:03:16 -0500
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A8366D3B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:03:13 -0800 (PST)
+Received: by mail-lf1-x12c.google.com with SMTP id bi9so8791081lfb.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:03:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678492991;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MHjcuN4l8cDafPZ+BEF9zDzwhIfoGIcJ0X1czuhXcas=;
+        b=S56H2eCvJI4jgaO0WQKHONerGaGmsrzeSydyxdYK97k+WstZKqLwToDJr4cJ38fjby
+         TtnkIHGNOYa0vaN++CqBmkaIrur+fLlNF15afEj3B0Bjws6qhAks/zeFl8x4RK/BtF6F
+         6ijk1XWYzJKc8jud79yY5UmDVsH7ioeqIWZWu+KBte5Bee2fa55oq+p0biPZDRGTGll5
+         /NoVe5PmW4cwXVVc05ANG2qiHHWXJc+b+/gCZSFlAT8T9/BAWTgsg6/9ymdcjsqXrptg
+         x18sdCx50fCNWaKV3kH5IVUeP5DErQSytSRjyK4r8RAti9OoD6/OweQx2EykKBY44cQf
+         ejNA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678492991;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MHjcuN4l8cDafPZ+BEF9zDzwhIfoGIcJ0X1czuhXcas=;
+        b=4r0Hbt3WtwpvPhymmvy3E7i9/YB1c12JSgpKoH4jLbjwS5Dd296fkOik5F8URZjxzw
+         K/EXPjJEVfErDPlyEHFGH9HRvuHFA5+jetla33PmYkVBLI3jEfZ9DwssUQCV8rzaZFaa
+         FlZWXN9LfPAvVQJolkGvFhe+j5/ovMc/ti39ftXMVVJ83+RGXpNqo4C7ky2hW9j1nAn5
+         nyligjZfXR7hAI0uEhriQYO4Mz8X1it08sBHnktitwToGpW/1zi3oFkdJwZ4aVGbR9Ix
+         vNF+QlAuPfZI5+J6gX5IxWE3O8gpRVkBtVEo0qGuBY95bDo4J+yY+Ug3k0sHIJcawWZu
+         3q2Q==
+X-Gm-Message-State: AO0yUKV5MLDJ1Eu13kfx596WvW72C60zNjO5Fs4TWsMW3FhpmhsDy6VX
+        g9uO5F/RtL1K4M7iAtKBzCtbuA==
+X-Google-Smtp-Source: AK7set9hgeVrzO4Wf0Zm/vGAFIHZD+LgJTn6U3yE1rgw37XD5V9kyNyAvx/Xu1qrMAJP+EatXfnyOw==
+X-Received: by 2002:ac2:538c:0:b0:4d7:44c9:9f4c with SMTP id g12-20020ac2538c000000b004d744c99f4cmr7084828lfh.4.1678492991353;
+        Fri, 10 Mar 2023 16:03:11 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id o14-20020a05651238ae00b004cb3e97bff8sm124811lft.284.2023.03.10.16.03.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 16:03:10 -0800 (PST)
+Message-ID: <bfdbb8f8-7519-5e9a-837e-09f2ce063b7e@linaro.org>
+Date:   Sat, 11 Mar 2023 01:03:09 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: Qualcomm Kryo core compatibles
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     lkml <linux-kernel@vger.kernel.org>,
+        dt <devicetree@vger.kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+References: <197ea188-c59d-6c53-77fd-3a0551ef8e70@linaro.org>
+ <CAL_JsqLYdyqe+=zb_sDOcffbbb3AUhxsCbUp_1GHk1fKu2xiJw@mail.gmail.com>
+Content-Language: en-US
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <CAL_JsqLYdyqe+=zb_sDOcffbbb3AUhxsCbUp_1GHk1fKu2xiJw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2] nfc: pn533: initialize struct pn533_out_arg properly
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167849281870.3658.1472133083169115470.git-patchwork-notify@kernel.org>
-Date:   Sat, 11 Mar 2023 00:00:18 +0000
-References: <20230309165050.207390-1-pchelkin@ispras.ru>
-In-Reply-To: <20230309165050.207390-1-pchelkin@ispras.ru>
-To:     Fedor Pchelkin <pchelkin@ispras.ru>
-Cc:     kuba@kernel.org, simon.horman@corigine.com,
-        krzysztof.kozlowski@linaro.org, davem@davemloft.net,
-        linuxlovemin@yonsei.ac.kr, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, khoroshilov@ispras.ru,
-        lvc-project@linuxtesting.org,
-        syzbot+1e608ba4217c96d1952f@syzkaller.appspotmail.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
 
-This patch was applied to netdev/net.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
 
-On Thu,  9 Mar 2023 19:50:50 +0300 you wrote:
-> struct pn533_out_arg used as a temporary context for out_urb is not
-> initialized properly. Its uninitialized 'phy' field can be dereferenced in
-> error cases inside pn533_out_complete() callback function. It causes the
-> following failure:
+On 10.03.2023 23:39, Rob Herring wrote:
+> On Wed, Mar 8, 2023 at 4:44 AM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+>>
+>> Hi!
+>>
+>> I was recently debating what to do about Qualcomm Kryo compatibles.
+>>
+>> There are basically 3 cases:
+>>
+>> 1. Falkor/"real Kryo" - the (never shipped?) server platform & MSM8996
+>>
+>> This one's easy, it's actually Kryo so it should stay Kryo.
+>>
+>>
+>> 2. Fake Kryo ("customized" Arm Cortex cores) (MSM8998-SM8x50)
+>>
+>> This one's tough.. Qualcomm marketing material seems to sometimes say
+>> Cortex, sometimes Kryo, sometimes "customized Cortex".. They do use
+>> their own arm IMPLEMENTER_ID in the MIDR_EL1 register and their
+>> PART_NUM values are not Arm-stock, but these cores don't seem to be
+>> any special.. Maybe some irq lines are routed differently? Not sure.
+>>
+>> My proposition here is to do:
+>>
+>> "qcom,kryoXXX", "arm,cortex-ABC"
+>>
+>> or
+>>
+>> "qcom,kryoXXX-PQR", "arm,cortex-ABC"
 > 
-> general protection fault, probably for non-canonical address 0xdffffc0000000000: 0000 [#1] PREEMPT SMP KASAN
-> KASAN: null-ptr-deref in range [0x0000000000000000-0x0000000000000007]
-> CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.2.0-rc3-next-20230110-syzkaller #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/26/2022
-> RIP: 0010:pn533_out_complete.cold+0x15/0x44 drivers/nfc/pn533/usb.c:441
-> Call Trace:
->  <IRQ>
->  __usb_hcd_giveback_urb+0x2b6/0x5c0 drivers/usb/core/hcd.c:1671
->  usb_hcd_giveback_urb+0x384/0x430 drivers/usb/core/hcd.c:1754
->  dummy_timer+0x1203/0x32d0 drivers/usb/gadget/udc/dummy_hcd.c:1988
->  call_timer_fn+0x1da/0x800 kernel/time/timer.c:1700
->  expire_timers+0x234/0x330 kernel/time/timer.c:1751
->  __run_timers kernel/time/timer.c:2022 [inline]
->  __run_timers kernel/time/timer.c:1995 [inline]
->  run_timer_softirq+0x326/0x910 kernel/time/timer.c:2035
->  __do_softirq+0x1fb/0xaf6 kernel/softirq.c:571
->  invoke_softirq kernel/softirq.c:445 [inline]
->  __irq_exit_rcu+0x123/0x180 kernel/softirq.c:650
->  irq_exit_rcu+0x9/0x20 kernel/softirq.c:662
->  sysvec_apic_timer_interrupt+0x97/0xc0 arch/x86/kernel/apic/apic.c:1107
+> I don't see much value in the fallback here. We don't do much with the
+> values anyways as everything uses ID registers anyways. Do you know
+> the level of modification?
+Sadly no..
+
 > 
-> [...]
+>> where PQR is one of:
+>> - silver (LITTLE cores)
+>> - gold (big cores)
+>> - gold_plus (prime core(s))
+>>
+>>
+>> 3. Arm cores modified within Arm implementation-defined allowance (SC8280XP+)
+>>
+>> These cores report Arm IMPLEMENTER_IDs and actual Arm PART_NUMs, which would
+>> suggest they're bone stock Arm Cortex cores, with some Qualcomm-iness coming
+>> as part of implementation details which are.. expected since Cortex allows for
+>> some IMPLEMENTATION DEFINED things. The only non-obvious part here is that
+>> the REVISION field they report does not always seem covered by the Arm TRMs.
+>>
+>> In this case I think going with
+>>
+>> "arm,cortex-ABC"
+>>
+>> is fine.. I already did this for 8550 and 8280xp and Rob seems to have liked it.
+>>
+>> So, I suppose the real question is what to do about 2., should they stay as
+>> they are, or maybe my proposition seems attractive?
+> 
+> What about the generic 'qcom,kryo' strings?
+As I pointed out in 1., IMO it'd be most logical to only use them for
+"true kryo" cores, which are a custom armv8.1-compliant design not
+based on Cortex, used on MSM8996 and some dead server platform. Any other
+"kryo" seems to either fall under 2. or 3.
 
-Here is the summary with links:
-  - [v2] nfc: pn533: initialize struct pn533_out_arg properly
-    https://git.kernel.org/netdev/net/c/484b7059796e
+Konrad
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+> 
+> Rob
