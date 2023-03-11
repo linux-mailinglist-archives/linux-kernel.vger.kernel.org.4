@@ -2,160 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A29C06B58F6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:33:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 989026B58F8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:34:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbjCKGdc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 01:33:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38726 "EHLO
+        id S229776AbjCKGee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 01:34:34 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCKGd0 (ORCPT
+        with ESMTP id S229455AbjCKGeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:33:26 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE021C321;
-        Fri, 10 Mar 2023 22:33:25 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso7126115pjs.3;
-        Fri, 10 Mar 2023 22:33:25 -0800 (PST)
+        Sat, 11 Mar 2023 01:34:31 -0500
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F94E1FF3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:34:30 -0800 (PST)
+Received: by mail-ed1-x535.google.com with SMTP id x3so29145534edb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:34:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678516405;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XJ+nhmVjwHZ6QFf7JMBkQR/zIZ3Yd/huMBL/cm4iNmk=;
-        b=YwbUBaQ94Jkn4cElkpeXswJBzsf17zkSBeqeq1RolkjLWCq6FVODndKYzRo2q/2lE4
-         +Tv+KMz3XsH0UQ0JjqQk7p/xvWq46RjYtzP+5IULTM06SCjJa0h+qqgfNT+7bXs1M8IL
-         +X1k4Kwb5cCWymsteEuOFSaRxRmoNltyDwWyZVPJKJrLDh6jacOT5tLw2lfam8Wf322Y
-         jnvrJKeSU+nsU9EEDkSq1kB/Ppf5aZa5iC3VIHkyV6Q+CHLQMMtCT3XNfe55NH4AbckK
-         VpRx4SBVg7Aw3+rQRP3dPyoIxQ0gKrQroSjfaJnNVWn+A+Qilxg0/yYp3mnpTl9eb9C/
-         Jwhg==
+        d=gmail.com; s=20210112; t=1678516469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=30swHnKIN+jIFvRvtkwwf91dt5wPLQTt2b8IT3CLZQU=;
+        b=kG1dWIaq6ffBsaLcL7TH6rxOfBoF4IsAAAkbKbFc6NQD38+2A1zQymOLWKZ72bZHJY
+         6yM9Kgc7MHHPWAoZlFcc/Yrt4DPgsXwukJ/Jep8hyKCwObeCPYHm6CsSDheUfV+q8C27
+         NhhE65P7iSmmwSJnrieiiPTDyCTrVbqFVB+ooLen3VZ9QpRki2hNZSYskZeLo8Ak6ZtT
+         vNQVUafhd7eDTAd9F3I+pklVKMClH/atScGnzITyr3aFyWtsKEIDH0Iv4jLjtUWY5GT3
+         t2rwlZ9Mrw8xOQDmJ54xQmPnrUkh7GTNw5o39O0PlvdQPl0OiBxQy8tsFOqW7cfFuBoH
+         N8yA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678516405;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XJ+nhmVjwHZ6QFf7JMBkQR/zIZ3Yd/huMBL/cm4iNmk=;
-        b=BgnVUWDPPTjR/JzrSddpx/9QfXNlKtGGjTuO1f3jbWXmsKfHICCmJJZ+KvcbolNsM6
-         ygZrKMLFVOCQgWRVbURnCweInVQGfow+GCAnI6rpjFuzZqGYhtyuzL3JFezEgrtmJ9i/
-         1P1Hwh3D96HGoITdh0O9vvXCsh2APfWMCp1IAUrySsdUvGqwBii8NBKwoeLx1QCHwtZb
-         7V2pO+eYIvJShsoRwkFhPQoTsxtnpsEybRvO36ai/hehxcr/qyoN603L5WS0aInkCTQB
-         eJYQdZYYhp1brZcUyOHs7GULwrI2kh8sylg4ELbtuonC2YwCxP0a2IfKfvQIumgLHaUS
-         5RAQ==
-X-Gm-Message-State: AO0yUKXfJ84FBrp+qUVWrT0RdRMBkC16mBcnfmu20j5PTjeRo6agJkGE
-        /dV/7/9UkkXJWqJB/Wk6odQ=
-X-Google-Smtp-Source: AK7set816qLD75sU6ayDA8I1y1Rgse0n0WSvhFSlB58g0NpWpzg8IoZ8A7Wd7E0BIRnHE2g2/4z+AA==
-X-Received: by 2002:a17:90b:1d88:b0:237:99b8:4eef with SMTP id pf8-20020a17090b1d8800b0023799b84eefmr29501361pjb.9.1678516404934;
-        Fri, 10 Mar 2023 22:33:24 -0800 (PST)
-Received: from redecorated-mbp (124-148-239-17.tpgi.com.au. [124.148.239.17])
-        by smtp.gmail.com with ESMTPSA id l8-20020a17090aaa8800b002349608e80csm850931pjq.47.2023.03.10.22.33.20
+        d=1e100.net; s=20210112; t=1678516469;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=30swHnKIN+jIFvRvtkwwf91dt5wPLQTt2b8IT3CLZQU=;
+        b=W3Ex6ZnzNosGEH1XiLtYaIREHYa+WagqjRzoi5ov/a/lWu1HnO+t4HULt83pYgxiQw
+         q9Ok8wOchvcUoADK0cEu2O+HCMy0mfcb72+Wln+15GhobI85oLESqGR1kAiP7zmaUkvL
+         iTRz/QRqGemAGceByztY/SzjmTB/18w3jWsKAb7TqMFh2q9phT5oV+4H6ma6eD9QBg6e
+         xwrOkDoVJMndR46nM8VC+uVPG7jkH10gSECogmbSB24PIuh5yeqSMCNw/PiPl0V4ENkS
+         GvugsWYqOZ5ACMUO7ukEy9YwvmmMSY+zsqu5lE/I15JxnLTxb9WoiX1HssNQvd+5v3bR
+         xXQQ==
+X-Gm-Message-State: AO0yUKVQyCIY5Uq3yuM+WFTBFT43ZwKXyJg9j0KjD0iQpEMrjzi7xAbG
+        of7tH0nijVWxTb9CX1c46aU=
+X-Google-Smtp-Source: AK7set9Cdn36F612qHzIDj2VO6b1Y3SmxJhRAR1oSJh26tUfrkCWCdgjoNjerHoLPAoP6FloxC/rUQ==
+X-Received: by 2002:a17:906:1097:b0:8b1:4141:8a30 with SMTP id u23-20020a170906109700b008b141418a30mr4923013eju.6.1678516468713;
+        Fri, 10 Mar 2023 22:34:28 -0800 (PST)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id sg42-20020a170907a42a00b009202ce3c8adsm493368ejc.27.2023.03.10.22.34.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 22:33:24 -0800 (PST)
-Date:   Sat, 11 Mar 2023 17:33:13 +1100
-From:   Orlando Chamberlain <orlandoch.dev@gmail.com>
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     linux-doc@vger.kernel.org, linux-input@vger.kernel.org,
-        Jonathan Corbet <corbet@lwn.net>,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-kernel@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
-        Aditya Garg <gargaditya08@live.com>,
-        Aun-Ali Zaidi <admin@kodeit.net>,
-        Kerem Karabay <kekrby@gmail.com>,
-        Andy Shevchenko <andy@infradead.org>,
-        Thomas =?UTF-8?B?V2Vpw59zY2h1aA==?= <thomas@t-8ch.de>
-Subject: Re: [PATCH v5 0/2] Apple Magic Keyboard Backlight
-Message-ID: <20230311173313.66c829a7@redecorated-mbp>
-In-Reply-To: <nycvar.YFH.7.76.2303101535440.1142@cbobk.fhfr.pm>
-References: <20230220115203.76154-1-orlandoch.dev@gmail.com>
-        <nycvar.YFH.7.76.2303101535440.1142@cbobk.fhfr.pm>
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.35; x86_64-pc-linux-gnu)
+        Fri, 10 Mar 2023 22:34:28 -0800 (PST)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, himadrispandya@gmail.com,
+        syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+Subject: [PATCH v2] 9P FS: Fix wild-memory-access write in v9fs_get_acl
+Date:   Sat, 11 Mar 2023 10:34:11 +0400
+Message-Id: <20230311063411.7884-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 15:36:34 +0100 (CET)
-Jiri Kosina <jikos@kernel.org> wrote:
+KASAN reported the following issue:
+[   36.825817][ T5923] BUG: KASAN: wild-memory-access in v9fs_get_acl+0x1a4/0x390
+[   36.827479][ T5923] Write of size 4 at addr 9fffeb37f97f1c00 by task syz-executor798/5923
+[   36.829303][ T5923]
+[   36.829846][ T5923] CPU: 0 PID: 5923 Comm: syz-executor798 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
+[   36.832110][ T5923] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+[   36.834464][ T5923] Call trace:
+[   36.835196][ T5923]  dump_backtrace+0x1c8/0x1f4
+[   36.836229][ T5923]  show_stack+0x2c/0x3c
+[   36.837100][ T5923]  dump_stack_lvl+0xd0/0x124
+[   36.838103][ T5923]  print_report+0xe4/0x4c0
+[   36.839068][ T5923]  kasan_report+0xd4/0x130
+[   36.840052][ T5923]  kasan_check_range+0x264/0x2a4
+[   36.841199][ T5923]  __kasan_check_write+0x2c/0x3c
+[   36.842216][ T5923]  v9fs_get_acl+0x1a4/0x390
+[   36.843232][ T5923]  v9fs_mount+0x77c/0xa5c
+[   36.844163][ T5923]  legacy_get_tree+0xd4/0x16c
+[   36.845173][ T5923]  vfs_get_tree+0x90/0x274
+[   36.846137][ T5923]  do_new_mount+0x25c/0x8c8
+[   36.847066][ T5923]  path_mount+0x590/0xe58
+[   36.848147][ T5923]  __arm64_sys_mount+0x45c/0x594
+[   36.849273][ T5923]  invoke_syscall+0x98/0x2c0
+[   36.850421][ T5923]  el0_svc_common+0x138/0x258
+[   36.851397][ T5923]  do_el0_svc+0x64/0x198
+[   36.852398][ T5923]  el0_svc+0x58/0x168
+[   36.853224][ T5923]  el0t_64_sync_handler+0x84/0xf0
+[   36.854293][ T5923]  el0t_64_sync+0x190/0x194
 
-> On Mon, 20 Feb 2023, Orlando Chamberlain wrote:
-> 
-> > This patchseries adds support for the internal keyboard backlight of
-> > Macs with Apple's "Magic" keyboard (MacBookPro16,* and
-> > MacBookAir9,1), and also documents what names should be used for
-> > keyboard backlight leds in Documentation/leds/well-known-leds.txt.
-> > 
-> > v4->v5:
-> > - use <tab><space><space> for help in Kconfig
-> > - prepend "hid-" to filename in MAINTAINERS
-> > 
-> > v3->v4:
-> > - collect reviews from Andy and Thomas
-> > - remove now unused hdev member of apple_magic_backlight
-> > 
-> > v2->v3:
-> > - remove unneeded header inclusion
-> > - use s32 for report value type
-> > - remove unneeded null check
-> > - don't set drvdata as its never used
-> > - prepend "hid-" to module name
-> > 
-> > v1->v2:
-> > - drop unneeded remove function
-> > - combine set functions
-> > - add missing header inclusions
-> > - avoid char as argument in favour of u8
-> > - handful of style/formatting fixes
-> > - use standard led name ":white:kbd_backlight"
-> > - rename USAGE_MAGIC_BL to HID_USAGE_MAGIC_BL
-> > - New patch documenting preferred keyboard backlight names
-> > 
-> > v1:
-> > https://lore.kernel.org/linux-input/7D70F1FE-7F54-4D0A-8922-5466AA2AD364@live.com/
-> > v2:
-> > https://lore.kernel.org/linux-input/20230216041224.4731-1-orlandoch.dev@gmail.com/
-> > v3:
-> > https://lore.kernel.org/linux-input/20230217102319.3419-1-orlandoch.dev@gmail.com/
-> > v4:
-> > https://lore.kernel.org/linux-input/20230218090709.7467-1-orlandoch.dev@gmail.com/
-> > 
-> > Orlando Chamberlain (2):
-> >   Documentation: leds: standardise keyboard backlight led names
-> >   HID: hid-apple-magic-backlight: Add driver for keyboard backlight
-> > on internal Magic Keyboards
-> > 
-> >  Documentation/leds/well-known-leds.txt  |   8 ++
-> >  MAINTAINERS                             |   6 ++
-> >  drivers/hid/Kconfig                     |  13 +++
-> >  drivers/hid/Makefile                    |   1 +
-> >  drivers/hid/hid-apple-magic-backlight.c | 120
-> > ++++++++++++++++++++++++ 5 files changed, 148 insertions(+)
-> >  create mode 100644 drivers/hid/hid-apple-magic-backlight.c  
-> 
-> Hi,
-> 
-> thanks for creating the support for backlight.
-> 
-> Is there any reason why not to fold all this into existing hid-apple?
-> I don't think we need separate driver for the backlist, separated
-> from the rest of hid-apple support.
+Calling '__v9fs_get_acl' method in 'v9fs_get_acl' creates the
+following chain of function calls:
 
-Hi Jiri,
+__v9fs_get_acl
+	v9fs_fid_get_acl
+		v9fs_fid_xattr_get
+			p9_client_xattrwalk
 
-I think we can do that if we modify hid-apple to support usb endpoints
-with only the keyboard backlight and no keyboard, assuming it doesn't
-prevent the (not upstream) touchbar driver from using the touchbar
-backlight interface (and I don't think it will, given hid-apple lets a
-different driver bind to the trackpad interface of the
-keyboard/trackpad usb device).
+Function p9_client_xattrwalk accepts a pointer to u64-typed
+variable attr_size and puts some u64 value into it. However,
+after the executing the p9_client_xattrwalk, in some circumstances
+we assign the value of u64-typed variable 'attr_size' to the
+variable 'retval', which we will return. However, the type of
+'retval' is ssize_t, and if the value of attr_size is larger
+than SSIZE_MAX, we will face the signed type overflow. If the
+overflow occurs, the result of v9fs_fid_xattr_get may be
+negative, but not classified as an error. When we try to allocate
+an acl with 'broken' size we receive an error, but don't process
+it. When we try to free this acl, we face the 'wild-memory-access'
+error (because it wasn't allocated).
 
-> 
-> Thanks,
-> 
+This patch will add new condition to the 'v9fs_fid_xattr_get'
+function, so it will return an EOVERFLOW error if the 'attr_size'
+is larger than SSIZE_MAX.
+
+In this version of the patch I removed explicit type conversion and
+added separate condition to check the possible overflow and return
+an error (in v1 version I've just modified the existing condition).
+
+Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=fbbef66d9e4d096242f3617de5d14d12705b4659
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ fs/9p/xattr.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
+
+diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
+index 50f7f3f6b55e..6affd6b3f5e6 100644
+--- a/fs/9p/xattr.c
++++ b/fs/9p/xattr.c
+@@ -35,10 +35,14 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
+ 		return retval;
+ 	}
+ 	if (attr_size > buffer_size) {
+-		if (!buffer_size) /* request to get the attr_size */
+-			retval = attr_size;
+-		else
++		if (!buffer_size) {/* request to get the attr_size */
++			if (attr_size > SSIZE_MAX)
++				retval = -EOVERFLOW;
++			else
++				retval = attr_size;
++		} else {
+ 			retval = -ERANGE;
++		}
+ 	} else {
+ 		iov_iter_truncate(&to, attr_size);
+ 		retval = p9_client_read(attr_fid, 0, &to, &err);
+-- 
+2.34.1
 
