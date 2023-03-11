@@ -2,114 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D33D6B6239
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 00:51:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33A596B623C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 00:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCKXuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 18:50:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
+        id S229656AbjCKXvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 18:51:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCKXua (ORCPT
+        with ESMTP id S229457AbjCKXvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 18:50:30 -0500
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB806A1EB;
-        Sat, 11 Mar 2023 15:50:26 -0800 (PST)
+        Sat, 11 Mar 2023 18:51:33 -0500
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E636E6A2D1;
+        Sat, 11 Mar 2023 15:51:32 -0800 (PST)
 Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PZ0651s8Nz4x1R;
-        Sun, 12 Mar 2023 10:50:20 +1100 (AEDT)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PZ07Q3LVDz4x1R;
+        Sun, 12 Mar 2023 10:51:30 +1100 (AEDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678578621;
-        bh=6zS9HL5+zOuldhKavorCuZk9Q4ILZQfJhOytuIRXATw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=b+OwOxWgHgGY2pZp5OAHExX8noKlzcq1GnnqCVEdeI8xJUFhcQNRLqTAEBLbVDRvl
-         hJNCsc6XoKSX1tZjUTXWkJu6L5wXOO4Ed+wVm+akFKnCBwqO2YQ8oi4sN7FiIMY8dC
-         n2RZjaHvzo1/VK7Yu5FQebXFzrKosnarTUveIJGuaMlgN+uuDAA9YMcFJLrfOCtmpf
-         u8p0hKN50JGGxq05UNWPS9nuVjAvCv6fjMANXV2qgVIO0dLdoZgFIFLCdTvBLchk5X
-         pkmkV9E6cDqFOoz3LR3oG116q/DYHuLZaRAZaSwOyYYyfRxiLQJZeATLM8q3VvdHSQ
-         r4EUhxmSQzafg==
-Date:   Sun, 12 Mar 2023 10:50:06 +1100
+        s=201702; t=1678578690;
+        bh=7e66qwPdKy4giTl7AYrBQKeWPO+uFModfiP+nT9Iwtw=;
+        h=Date:From:To:Cc:Subject:From;
+        b=o1w/8FORQcb6bfF5xDDj9ZIOXtfMiFQFQSSqy4kGzFimgZoymiA5JVQljTz1x7Xqz
+         3wJrdIZlW1sDAjeOF76m2+U4CNiC6ZuwI0HIcBbscyE/XVyZIpljdGm4h2xMSQ7yfQ
+         CJxzSuWwov7+ylSCiBBGdypSJGe7/QD/9gv3RSol/vc/K2TQqqIUm27qBUHyJFTL/P
+         /G8PxzOlvfTlNeM+PMHNqj+R+Tu2IPSU0FZmSM9OYMvMVLgOR6bSApKJIF2S1WuOh1
+         PLkNG6fjL2hanI2m9s16mkLtJd7bLLPtq9DNnTacBHVfEHIQ8L6/KdXBye7JdcpSKG
+         /jwtEn3Agvzlw==
+Date:   Sun, 12 Mar 2023 10:51:29 +1100
 From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Mark Brown <broonie@kernel.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: linux-next: Tree for Mar 10 (drivers/spi/spi-mpc512x-psc.c:)
-Message-ID: <20230312105006.6c46df35@canb.auug.org.au>
-In-Reply-To: <ed382974-1613-8a60-913c-60cfc27f8ab3@infradead.org>
-References: <20230310124850.245ba584@canb.auug.org.au>
-        <ed382974-1613-8a60-913c-60cfc27f8ab3@infradead.org>
+To:     Linux Next Mailing List <linux-next@vger.kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: linux-next: no release tomorrow
+Message-ID: <20230312105129.015207bc@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/=UG9yRm=znQfNWeBT6YN1ur";
+Content-Type: multipart/signed; boundary="Sig_/jgSVScL/gvnL5JkN.vgr+yG";
  protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/=UG9yRm=znQfNWeBT6YN1ur
+--Sig_/jgSVScL/gvnL5JkN.vgr+yG
 Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: quoted-printable
 
 Hi all,
 
-On Sat, 11 Mar 2023 15:36:10 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
-te:
->
-> On 3/9/23 17:48, Stephen Rothwell wrote:
-> > Hi all,
-> >=20
-> > Changes since 20230309:
-> >=20
-> > Non-merge commits (relative to Linus' tree): 2087
-> >  2412 files changed, 75248 insertions(+), 89600 deletions(-)
-> >=20
-> > -----------------------------------------------------------------------=
------ =20
->=20
-> on ppc32:
->=20
-> drivers/spi/spi-mpc512x-psc.c: In function 'mpc512x_psc_spi_of_probe':
-> drivers/spi/spi-mpc512x-psc.c:518:17: error: label 'free_ipg_clock' used =
-but not defined
->   518 |                 goto free_ipg_clock;
->       |                 ^~~~
->=20
->=20
-> on allmodconfig.
+There will be no linux-next release tomorrow (Monday).
 
-Caused by commit
-
-  9e21720a4958 ("spi: mpc5xxx-psc: use devm_clk_get_enabled() for core cloc=
-k")
-
-from the spi tree.
 --=20
 Cheers,
 Stephen Rothwell
 
---Sig_/=UG9yRm=znQfNWeBT6YN1ur
+--Sig_/jgSVScL/gvnL5JkN.vgr+yG
 Content-Type: application/pgp-signature
 Content-Description: OpenPGP digital signature
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQNE64ACgkQAVBC80lX
-0GxN2Af+NmlJrOkXtoSL2eIJ8S9gKvRRSQyzncI0XlaWLVl/b05pc7Z467B8Hbdf
-qLv99bVV0fHWJFHFdjO14fjUEJ+sJspXoERFGcsjResQm3bhG6yauG2PCo2FSyBP
-2/aLAlllvUiG5XXata2/GU0yTl4GXArZAYsWm/9g5UFDLczr4apstWNc1R+tzBVJ
-135cYJ4W+uN5gxjH5JY81zNSIBSMdGw4amItwoMpO1N9TvDrmgU5GbGPaEuwXMWo
-xrS1FBToLNSWPAy3/CjzKiNJEe00jEnyAY6C3tBTw3xUBg6zY/Vvx0ohO6Gzd2/I
-vRZjsJ6tfXbTQzi0sfnmIZ/TvO8QFA==
-=ISA1
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQNFAEACgkQAVBC80lX
+0GxINAf/WlpTnrGHlWBbOfY8JSTtSFkxkgF4Qwr4l5usrBtFoWwHYzk+N/wuUsHZ
+/LGqDquTd6wKN917uEaujctHWoYtDaR2Zt23S+yAc8xYrOvlNhEHM4ySsquMvNOF
+/nsQcVpYdWpSb1IX6ML2maiOsnS/PMs0ceaa8S92qM8MORsoUWle08MPwO7PvBb3
+lIq61Cq2LYeM/u8MkqSPWlhypbl9gXLbIFOxkUj2ZHRBwF1x49lthcvgnkaVbFwV
+9W3+PEOaUCIdefzSN+WlyLK/6jmgSIS01O/nilXE8gynerueox3spJT2ZFpgaF4t
+2jsrBU5jnMRfJ2fSYQ09lLREKivjOw==
+=6gUs
 -----END PGP SIGNATURE-----
 
---Sig_/=UG9yRm=znQfNWeBT6YN1ur--
+--Sig_/jgSVScL/gvnL5JkN.vgr+yG--
