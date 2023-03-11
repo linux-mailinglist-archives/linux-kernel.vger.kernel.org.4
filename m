@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D706B5AC3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:10:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C5C46B5AC5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCKLKp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 06:10:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39998 "EHLO
+        id S229821AbjCKLKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 06:10:51 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKLKj (ORCPT
+        with ESMTP id S229655AbjCKLKr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:10:39 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6224C2749F;
-        Sat, 11 Mar 2023 03:10:38 -0800 (PST)
+        Sat, 11 Mar 2023 06:10:47 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2720B138473;
+        Sat, 11 Mar 2023 03:10:45 -0800 (PST)
 Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32BBANKk049370;
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32BBANOk128378;
         Sat, 11 Mar 2023 05:10:23 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
         s=ti-com-17Q1; t=1678533023;
-        bh=ilPGfLPlAmZ74uLHxrHzuH55hDbvAigU+Dx7r7Mbotc=;
-        h=From:To:CC:Subject:Date;
-        b=CU7rKWVxzVI8Yb63BRrmrXpZ3GlCNs9ZmfKDxhxnzYbc7kFUI9XRMCENEDu9wV6hM
-         5Yfv43/BDCcOVX4f8lojQZ/7L1rJYnLwkrGgWjk/RvjXUhLRGSwc6IhxoSSchUbziG
-         ycu8Ch+W1YCYkGmiqZQgG4evV8Kpm7W/RYZaG2xM=
-Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32BBAN6Z111593
+        bh=FX0UQtzeoxEPEV0I2XUNzbT9ib9p9Tzq1vqgooc4OnQ=;
+        h=From:To:CC:Subject:Date:In-Reply-To:References;
+        b=OF+lH80spvz2GSRbNEfK5GkgW+xVQvT6K2Q6ig7ks8adxp9S373N9N0yyByUg6DjG
+         lzcben6KulQ3JPwxKQdKFqJz73elITgivwfHVnKOKMFfRt6+u21gpI0TGhLh1Jj7JG
+         AvZUarPxNJdTZKMNJhcHIW578zYONZh9buzdoPAA=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32BBANvU111599
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
         Sat, 11 Mar 2023 05:10:23 -0600
-Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE111.ent.ti.com
- (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 11
  Mar 2023 05:10:23 -0600
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
  Frontend Transport; Sat, 11 Mar 2023 05:10:23 -0600
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32BBANEf064041;
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32BBANah049564;
         Sat, 11 Mar 2023 05:10:23 -0600
 From:   Nishanth Menon <nm@ti.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
@@ -50,10 +50,12 @@ CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
         Nishanth Menon <nm@ti.com>, Julien Panis <jpanis@baylibre.com>,
         Bryan Brattlof <bb@ti.com>, Jason Kridner <jkridner@gmail.com>,
         Robert Nelson <robertcnelson@gmail.com>
-Subject: [PATCH 0/3] arm64: dts/defconfig/binding: Add support for BeaglePlay
-Date:   Sat, 11 Mar 2023 05:10:19 -0600
-Message-ID: <20230311111022.23717-1-nm@ti.com>
+Subject: [PATCH 1/3] dt-bindings: arm: ti: Add bindings for BeaglePlay
+Date:   Sat, 11 Mar 2023 05:10:20 -0600
+Message-ID: <20230311111022.23717-2-nm@ti.com>
 X-Mailer: git-send-email 2.37.2
+In-Reply-To: <20230311111022.23717-1-nm@ti.com>
+References: <20230311111022.23717-1-nm@ti.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -68,30 +70,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+From: Robert Nelson <robertcnelson@gmail.com>
 
-BeagleBoard.org BeaglePlay[1][2] is an easy to use, affordable open source
-hardware single board computer based on the Texas Instruments AM625
-SoC. Add the base support for the same.
+This board is based on ti,am625
 
-Bootlog: https://gist.github.com/nmenon/f5be177bdbe7537fbfc7b42cd36d430a
+https://beagleplay.org/
+https://git.beagleboard.org/beagleplay/beagleplay
 
-Nishanth Menon (1):
-  arm64: defconfig: Enable drivers for BeaglePlay
+Co-developed-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+---
+ Documentation/devicetree/bindings/arm/ti/k3.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-Robert Nelson (2):
-  dt-bindings: arm: ti: Add bindings for BeaglePlay
-  arm64: dts: ti: Add k3-am625-beagleplay
-
- .../devicetree/bindings/arm/ti/k3.yaml        |   1 +
- arch/arm64/boot/dts/ti/Makefile               |   1 +
- .../arm64/boot/dts/ti/k3-am625-beagleplay.dts | 753 ++++++++++++++++++
- arch/arm64/configs/defconfig                  |   7 +
- 4 files changed, 762 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
-
-[1] https://beagleplay.org/
-[2] https://git.beagleboard.org/beagleplay/beagleplay
+diff --git a/Documentation/devicetree/bindings/arm/ti/k3.yaml b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+index a60a4065caa8..b4703ac88f04 100644
+--- a/Documentation/devicetree/bindings/arm/ti/k3.yaml
++++ b/Documentation/devicetree/bindings/arm/ti/k3.yaml
+@@ -28,6 +28,7 @@ properties:
+       - description: K3 AM625 SoC
+         items:
+           - enum:
++              - beagle,am625-beagleplay
+               - ti,am625-sk
+           - const: ti,am625
+ 
 -- 
 2.37.2
 
