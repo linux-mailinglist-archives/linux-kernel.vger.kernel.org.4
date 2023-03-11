@@ -2,113 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B67AA6B5A87
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 11:34:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70FD6B5A8B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 11:37:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCKKdw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 05:33:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47638 "EHLO
+        id S229891AbjCKKha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 05:37:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229530AbjCKKdt (ORCPT
+        with ESMTP id S229469AbjCKKh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 05:33:49 -0500
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A78F2885
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 02:33:47 -0800 (PST)
-Received: by mail-wm1-x32c.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso4992266wmo.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 02:33:47 -0800 (PST)
+        Sat, 11 Mar 2023 05:37:28 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D93011E6EB
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 02:37:27 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536c02eea4dso147984637b3.4
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 02:37:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112; t=1678530826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gaevICdR3uGJO5MxpE9/ghmqPbvg20KO7Uq8/0/lElI=;
-        b=emSO3Ntc3y8Ed/e0M6rK2CzinbJ/kW/LVOBDc/VojclQCZ1Bq9oubYUzVD4Zqwd93v
-         ig8vypNywV/cwqYyaOZxvQL+S2lVSlqknsUnyfRpIXPZ++lwN4nMt7qmYN5cxcgYqSwe
-         D5GBQ8lcNPmmCYVHLUqo7ql4auo2WAxk3aiUqGq4SlBXWul7ga7Q6G1Xt94VhyiYhjrx
-         otpdD2DeGwUXfFYCgfdyVDErYZi0XOEEYEu+E9Jbv59xokdyPtcraO2IZvTyzATwBEWE
-         /uCRYLJU8dFpAv/X8SXAla1mIjIE9PkepA9G6GM1aJ+kJrl2y6DD6m+zoEBXDPLz6gQD
-         PJyQ==
+        d=0x0f.com; s=google; t=1678531046;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TWkeebSfJbGROfjN6P7AFQQg4m0f28050lcJ2wytDVY=;
+        b=Hs3mq3/Vy8MFaT5UUoVU7ing5Vvo82jutW4nwsFZ8UQbU53fR8LDmdp8uzQtkr43SX
+         z0npi1faggB94oIKzaMVlpJlPq9fiGoT01Ib8/q2LHSP6GDA1he16Xs6+eTaJ6ymAq2c
+         igzFP1qAAM2Qg2QI3XvpRG3CjPViGsQTYbBOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678530826;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gaevICdR3uGJO5MxpE9/ghmqPbvg20KO7Uq8/0/lElI=;
-        b=LddxRZE2OOU+XoHOwKjOopVy3qVXQfMwbggQdW+KmHqMywPeAKZHbGGAPlBuBwURqu
-         4PmguNhX5xHVWQFY6Es0DZ4sJThPxYmej3+hSXN+uzoGnDZ+QVDnA7i/Ly5f9UtCPQpL
-         fnhnOwAt3xlwevmCoM4SFDYQfYiSg97/Wn+MSm6N+SFF6rjqaJeFxDqlrryvWZtZjoYJ
-         37cZ1mKziLcdsmi7xUZZ7BxUL5XZaBgfn+CgsCFCfgG7hlhJewIt9qDta1jrioBsimYT
-         AzesEehyyjrVD7X5Psm7IXRzLY8MZq2TDvpfwtzd1jzrTNZWLcLvLOx+TgW6JpzBo+bf
-         Rd8Q==
-X-Gm-Message-State: AO0yUKVkkObpM9mnZNNMqDiJ9yeFZx7OHJU0gv/XEP2xmBAzcQ2DaeT9
-        oCBK7NdvbNXLAdYrB9NUiKriew==
-X-Google-Smtp-Source: AK7set/iRv1xyDHWGGtSBzAFSZCaRqPduvE3iyIsLdkTOHrtBj3iqh1jlWldZhQpqywYdibCTCMUrw==
-X-Received: by 2002:a05:600c:3582:b0:3eb:38b0:e748 with SMTP id p2-20020a05600c358200b003eb38b0e748mr3708086wmq.13.1678530826415;
-        Sat, 11 Mar 2023 02:33:46 -0800 (PST)
-Received: from equinox (2.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0::2])
-        by smtp.gmail.com with ESMTPSA id 14-20020a05600c228e00b003e118684d56sm2424066wmf.45.2023.03.11.02.33.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 02:33:46 -0800 (PST)
-Date:   Sat, 11 Mar 2023 10:33:44 +0000
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        patches@lists.linux.dev, Hans de Goede <hdegoede@redhat.com>,
-        Martin Kaiser <martin@kaiser.cx>,
-        Larry Finger <Larry.Finger@lwfinger.net>
-Subject: Re: [PATCH] staging: r8188eu: delete driver
-Message-ID: <ZAxZCJn7AN/yWSRh@equinox>
-References: <20230308131934.380395-1-gregkh@linuxfoundation.org>
- <660ef0b7-fb09-5a72-57b1-3b57ddee924e@gmail.com>
+        d=1e100.net; s=20210112; t=1678531046;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TWkeebSfJbGROfjN6P7AFQQg4m0f28050lcJ2wytDVY=;
+        b=WPPNDez3nX9yqHQhgPtO85azxWq6FyyjfB0VHkDFs88V2kFz/mK8OQT49nFPx33yUG
+         CmlX/36QtInoe0xW5o/AGGo4gYZ1Y8B8infHQ0jAX10DBZKq+db3qRaJiN21d8BWm4FC
+         aHG6QZEgKXgbdCH5twrFqXel9EybUwGnvEiwFs7KgJt3KnAnD+xtZBw7TX3fNYiPNzFH
+         +7ka5raJ7S3ub/7UM2Q689vQj4HSlHuviDyxWo0TdYIY7Rz2xVi54gq3pibdiPPlKQiH
+         lPcyn4juhc1pgyPReN3O3hEVOQQtd9Qldmxq9evVGoRZOnOs0k9wRdzGEXWlM6eJVXJv
+         GzTg==
+X-Gm-Message-State: AO0yUKVv4dLI+HUYzD8AW/tdZ62Ke0y7z9v0elybelqYg8iepR1HdgV7
+        pJUGEA3oqQ9XTbYfB76zkpJd4NKlcXZmXm/mh3ejdg==
+X-Google-Smtp-Source: AK7set/zT53jfMaTJhyr+9DuEt+z1ce4le7ZoILliGh7A6Ixjk6cKZhd9minwkCYZRmXjEAn6xSG9+Agez3t5kFkq6s=
+X-Received: by 2002:a81:ae1d:0:b0:524:5bc5:a3d5 with SMTP id
+ m29-20020a81ae1d000000b005245bc5a3d5mr17891444ywh.4.1678531046310; Sat, 11
+ Mar 2023 02:37:26 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <660ef0b7-fb09-5a72-57b1-3b57ddee924e@gmail.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230311092929.2827-1-richard@nod.at>
+In-Reply-To: <20230311092929.2827-1-richard@nod.at>
+From:   Daniel Palmer <daniel@0x0f.com>
+Date:   Sat, 11 Mar 2023 19:37:15 +0900
+Message-ID: <CAFr9PXkZgW7Ky7LEd1jXJYAOuG-KP5iOyR1MSyYJQP7EAbrBaA@mail.gmail.com>
+Subject: Re: [PATCH] ubi: block: Fix missing blk_mq_end_request
+To:     Richard Weinberger <richard@nod.at>
+Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Christoph Hellwig <hch@lst.de>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 10:08:49PM +0300, Pavel Skripkin wrote:
-> Hi Greg,
-> 
-> Greg Kroah-Hartman <gregkh@linuxfoundation.org> says:
-> > Now that the same hardware that the r8188eu driver supported is
-> > supported by the real wireless driver rtl8xxxu, the r8188eu driver can
-> > be deleted.
-> > 
-> > Also the rtl8xxxu driver supports way more devices, and is a fraction of
-> > the overall size, making this a much better overall solution.
-> > 
-> > Thanks to the r8188eu developers and maintainers and reviewers over the
-> > years, your work allowed Linux users to use their hardware before the
-> > real driver was implemented properly.
-> > 
-> > Reported-by: Hans de Goede <hdegoede@redhat.com>
-> > Cc: Martin Kaiser <martin@kaiser.cx>
-> > Cc: Larry Finger <Larry.Finger@lwfinger.net>
-> > Cc: Phillip Potter <phil@philpotter.co.uk>
-> > Cc: Pavel Skripkin <paskripkin@gmail.com>
-> > Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > ---
-> 
-> I guess, I am late to the party, but if it matters
-> 
-> Acked-by: Pavel Skripkin <paskripkin@gmail.com>
-> 
-> 
-> 
-> 
-> With regards,
-> Pavel Skripkin
+Hi Richard,
 
-Same here, won't make it into the deletion commit log entry, but:
+On Sat, 11 Mar 2023 at 18:29, Richard Weinberger <richard@nod.at> wrote:
+>
+> Switching to BLK_MQ_F_BLOCKING wrongly removed the call to
+> blk_mq_end_request(). Add it back to have our IOs finished
 
-Acked-by: Phillip Potter <phil@philpotter.co.uk>
+Machine is booting again. Thanks!
 
-Regards,
-Phil
+Tested-by: Daniel Palmer <daniel@0x0f.com>
+
+Cheers,
+
+Daniel
+
+---
+
+Sorry if this e-mail doesn't get to the mailing lists. gmail is doing
+something wonky and sending e-mails with HTML even with plain text
+selected.
+The original report bounced for a bunch of recipients due to that.
+Guess I'm setting up a better mail client at some point..
