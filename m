@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D46B6B5874
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:11:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048D16B587A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:17:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229776AbjCKFLa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:11:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S229702AbjCKFRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:17:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229614AbjCKFLP (ORCPT
+        with ESMTP id S229562AbjCKFQ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 00:11:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 952F7135B31;
-        Fri, 10 Mar 2023 21:11:14 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 08C0160BA7;
-        Sat, 11 Mar 2023 05:11:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 0E63FC4339E;
-        Sat, 11 Mar 2023 05:11:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678511473;
-        bh=DxASz2lknCh6bcl9lub36jkmurw78TkqTmOu4olxjho=;
-        h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=DPIgP4rd3920N27XufeRw2+qPTF5PuD3gMqXC9clFGVPEaWTxHG6kCwEKZTO4Aggk
-         SBPriM5P85IJwVLJ6H3w3C75/KR6nC0tEyB1hfEBMKlHT85jh8a8hNhUyEsK+EIQcb
-         7UXAFdmjQxrO7RGd53PqrQjWQZc+zdGsObBhmb8urxGBo1QjsrL2c3IBj9YfNDQMx4
-         zko3q1Wp4wjK28r3sg9jpT9C3G6lL+OoTO4nLW3L/12BBULbwNskxhrPXtoUbQ6Ikd
-         McZnHF3GR5pl0iGA2ron42vYwa82ewbDWMYALfKC7/oG3kBqIGCQN6XRvCMaBNlIQn
-         GLASpYWqFiH9w==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id EC1EDC678D5;
-        Sat, 11 Mar 2023 05:11:12 +0000 (UTC)
-From:   Sasha Finkelstein via B4 Relay 
-        <devnull+fnkl.kernel.gmail.com@kernel.org>
-Date:   Sat, 11 Mar 2023 06:11:13 +0100
-Subject: [PATCH v9 5/5] MAINTAINERS: Add entries for Apple PWM driver
+        Sat, 11 Mar 2023 00:16:59 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF04813FF34
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 21:16:57 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32B5GDTQ001604
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Mar 2023 00:16:15 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678511777; bh=SS52Xzz5bwd6jrm6cbVS0S269ALZLJ/7KmthouJjEwo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=YV1mgqWjAmFOygxxsB8WmBMXg6N93/ePszfhQLuMYYCBpjjDF7NExcT/YBKecRqqQ
+         5JsSKo60lHzNd8yEQdMLQOC4/kWzMp5AJJQV5rbrBQrpf5wLoPF4zza37CqJdQsEeG
+         CUzvPsgk5W3bVchnG43ZxGthkysJXhJUEvePBCKQzj4aYa/5+dE99F4zKLUpmWEiDV
+         1JvJdnzAuchc/EcsvwBtNr/Zbn7JkHLp2BFWaDXXWsvatiMuuP3qbfDC89xp3oYqkS
+         d/0fGmY3Wo1Wn2dFOZ78+Y9xOZ/eYL0kWVbYMj9btD9mGuq/iLGnYdjIkUU1iSopn9
+         7QRBx0bqUmvWg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id A4D8315C42F6; Sat, 11 Mar 2023 00:16:13 -0500 (EST)
+Date:   Sat, 11 Mar 2023 00:16:13 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Zhihao Cheng <chengzhihao1@huawei.com>
+Cc:     jack@suse.com, adilger.kernel@dilger.ca,
+        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yi.zhang@huawei.com
+Subject: Re: [PATCH] ext4: Fix WANRON caused by unconsistent boot loader
+ inode's i_size and i_disksize
+Message-ID: <20230311051613.GG860405@mit.edu>
+References: <20230308032643.641113-1-chengzhihao1@huawei.com>
+ <20230308043139.GD860405@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230214-fpwm-v9-5-dbe26bccabd6@gmail.com>
-References: <20230214-fpwm-v9-0-dbe26bccabd6@gmail.com>
-In-Reply-To: <20230214-fpwm-v9-0-dbe26bccabd6@gmail.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <asahi@lists.linux.dev>,
-        Sasha Finkelstein <fnkl.kernel@gmail.com>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>
-Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678511469; l=1109;
- i=fnkl.kernel@gmail.com; s=20230213; h=from:subject:message-id;
- bh=H0yqy74irk0iRnaCY9EguySiHLNBuNpFanSkZMAqDr0=;
- b=XwoGQYfCG0nhebSIi6bZqylI139vfZRnNb5i3ffwsoD6hC3VPSnJR7/CCGK2csjgK4K8JKrs+
- JkUOEjeyKU4Agrc6a+IceoLTgo8Y+zHDvlWdJixf2xENShxDXGBnZc1
-X-Developer-Key: i=fnkl.kernel@gmail.com; a=ed25519;
- pk=7LFSAJtxIWAs9LzCIyX0sSvCZy2wQTyEIu1zch6o804=
-X-Endpoint-Received: by B4 Relay for fnkl.kernel@gmail.com/20230213 with auth_id=28
-X-Original-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Reply-To: <fnkl.kernel@gmail.com>
-X-Spam-Status: No, score=-2.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308043139.GD860405@mit.edu>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
+Actually, after looking more closely at swap_boot_loader_inode(), your
+patch is better one.  I've dropped mine and applied yours, with commit
+message clarified a bit:
 
-Add the MAINTAINERS entries for the driver
-
-Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Acked-by: Sven Peter <sven@svenpeter.dev>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 8d5bc223f305..7c0b7c2bb55f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1955,6 +1955,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
-+F:	Documentation/devicetree/bindings/pwm/pwm-apple.yaml
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:	arch/arm64/boot/dts/apple/
- F:	drivers/bluetooth/hci_bcm4377.c
-@@ -1970,6 +1971,7 @@ F:	drivers/mailbox/apple-mailbox.c
- F:	drivers/nvme/host/apple.c
- F:	drivers/nvmem/apple-efuses.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
-+F:	drivers/pwm/pwm-apple.c
- F:	drivers/soc/apple/*
- F:	drivers/watchdog/apple_wdt.c
- F:	include/dt-bindings/interrupt-controller/apple-aic.h
-
--- 
-Git-137.1)
+    ext4: zero i_disksize when initializing the bootloader inode
+    
+    If the boot loader inode has never been used before, the
+    EXT4_IOC_SWAP_BOOT inode will initialize it, including setting the
+    i_size to 0.  However, if the "never before used" boot loader has a
+    non-zero i_size, then i_disksize will be non-zero, and the
+    inconsistency between i_size and i_disksize can trigger a kernel
+    warning:
+    
+     WARNING: CPU: 0 PID: 2580 at fs/ext4/file.c:319
+     CPU: 0 PID: 2580 Comm: bb Not tainted 6.3.0-rc1-00004-g703695902cfa
+     RIP: 0010:ext4_file_write_iter+0xbc7/0xd10
+     Call Trace:
+      vfs_write+0x3b1/0x5c0
+      ksys_write+0x77/0x160
+      __x64_sys_write+0x22/0x30
+      do_syscall_64+0x39/0x80
+    
+    Reproducer:
+     1. create corrupted image and mount it:
+           mke2fs -t ext4 /tmp/foo.img 200
+           debugfs -wR "sif <5> size 25700" /tmp/foo.img
+           mount -t ext4 /tmp/foo.img /mnt
+           cd /mnt
+           echo 123 > file
+     2. Run the reproducer program:
+           posix_memalign(&buf, 1024, 1024)
+           fd = open("file", O_RDWR | O_DIRECT);
+           ioctl(fd, EXT4_IOC_SWAP_BOOT);
+           write(fd, buf, 1024);
+    
+    Fix this by setting i_disksize as well as i_size to zero when
+    initiaizing the boot loader inode.
+    
+    Link: https://bugzilla.kernel.org/show_bug.cgi?id=217159
+    Cc: stable@kernel.org
+    Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
+    Link: https://lore.kernel.org/r/20230308032643.641113-1-chengzhihao1@huawei.com
+    Signed-off-by: Theodore Ts'o <tytso@mit.edu>
 
