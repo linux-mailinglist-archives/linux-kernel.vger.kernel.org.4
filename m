@@ -2,105 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 26C126B5C73
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:52:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 529436B5C75
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:52:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbjCKNwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 08:52:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52246 "EHLO
+        id S229999AbjCKNwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 08:52:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229809AbjCKNwc (ORCPT
+        with ESMTP id S229957AbjCKNwj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:52:32 -0500
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A296212B968
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:52:26 -0800 (PST)
-Received: by mail-lj1-x22b.google.com with SMTP id t14so8213174ljd.5
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:52:26 -0800 (PST)
+        Sat, 11 Mar 2023 08:52:39 -0500
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A201912BAFB
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:52:36 -0800 (PST)
+X-KPN-MessageId: 07fbba2c-c014-11ed-91cc-005056994fde
+Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id 07fbba2c-c014-11ed-91cc-005056994fde;
+        Sat, 11 Mar 2023 14:52:58 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678542745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jvgHzZP6duBdKPk8LZDKNHr0yVWeUXrSp8nq1pPiUCU=;
-        b=dR6gd0RJlU8aweRFlz2U9JJ7Z9HfzEjj3VgyhfmDBdIcJR1unTuacW2utIUOT7sw2Q
-         xcigT1+UzRqjd4QERw6WTxQ82WoNg40xZkXPUyZvz9PvQlPf1dfltjvjkCbUoEs+Anlk
-         cui8Vrv2tKT6zUGnjsqF1hcFOR7AMXNx2f2xikQU908iHZ3ueFWnqjnOwytgw8f2Fprp
-         GyBmUqg7E7kEdK5+FaQcrmGCT0g7GP6z8LqbOU+CroYj/jLoFMbCwG41FE8v+QM5Vz2s
-         3eKyPNQLaXRJSLOqMp8iUSFLSW5P91M3+wG6JXNF4tgTiv4kULKg9dmU/iZ0eVhkVY8D
-         v6/A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678542745;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jvgHzZP6duBdKPk8LZDKNHr0yVWeUXrSp8nq1pPiUCU=;
-        b=A03jpWoIIRteTCBM4JKgMfiLJev4ov46Lf/CUJBQBHucdrUZEqE66FMO5rNaPdMsq7
-         k7+GOg00vCrl8MtLsOgZcDsfqJxvHTFS/E7r9mFo8GmgylZcQe/6qJKrSf+EmA7a20Lu
-         N37HnajQo4ZSz+256zqwHY7V/wJGqEVKR2/n9gvSqQF9kHMcdpeV9mp9TD6EajBXaS40
-         2YkS7puadn9uT2ZC/c+wbfdptdkervwbAYuGHb6QZTnfmRjE5UcZ4DeSVMpv1ruLmhSD
-         VzbpKBjATOFtg3rgoNtkj4ewooesJaH1wR87gcE1BmBIzU3AQShtUvMFwAI+B6Um/GcG
-         9OIg==
-X-Gm-Message-State: AO0yUKWla16VTuEVym1tkpyb/zUseC6GOHiZzPON6jYDKMYzudto9f8e
-        uMGfj1WwaN6eP3etACuZ47pWbA==
-X-Google-Smtp-Source: AK7set94nyJ5uuOgspSNFWc3OCJIjN1NGbo5rYP3/hTqJeX440u0vllnccEq17uLd9x5QubIBZ+oeg==
-X-Received: by 2002:a2e:7308:0:b0:293:4e6d:9194 with SMTP id o8-20020a2e7308000000b002934e6d9194mr8293403ljc.24.1678542744932;
-        Sat, 11 Mar 2023 05:52:24 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id c11-20020a2e9d8b000000b00295b1b6e063sm333375ljj.34.2023.03.11.05.52.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 05:52:24 -0800 (PST)
-Message-ID: <0ae6e2b3-721d-f43c-0913-0586a8e8e220@linaro.org>
-Date:   Sat, 11 Mar 2023 15:52:23 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 1/9] interconnect: qcom: rpm: make QoS INVALID default
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-1-815606092fff@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230228-topic-qos-v7-1-815606092fff@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        d=xs4all.nl; s=xs4all01;
+        h=subject:to:from:message-id:date;
+        bh=ALu8+PmipZgEw89/BHca117Pe0D8mE1E2egBqYsyknM=;
+        b=sjrN4u6wyciZj9Su2klp6z3W5MCqUI4mPWTKfBbjNphlQpEhkPS4wh3rIecb3c9eaUJOuWTNt1hov
+         H6aOeQnqLPd+q4DWPnyS3wPBhj9sLhJheCwDHM7/i8vxVeFWNVE6xEa+cl0YinRNOHZiH6oUOAqsP1
+         Hg0l7NZdPp8ea5f/8s9lBOa4tk4+DEbmNvAtT4uVOZskqqgXIfdUmNDYgoA9Z0efxAVR1/Zqzgogsz
+         g9ahkxaNZmgg/59ZUTxRRG5crdRNv4pztZGVwXqjc4HZ2TljAjTu7HWhWrmZJOv349Lhf/8DRBElL1
+         QyC0R1je529u6l/iY0dII4zJt815itg==
+X-KPN-MID: 33|VMtRr8A7spxYaBX6YlEci9XrlWDUmmIYGebVH5TkcyTisB5tkpzSAZc1l3g947k
+ GmoE2OYFIfwA6A5NxaH5tNnosy8GNrgIb+RWPh4xV4/U=
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|kZZ8dqbp5Z6By5V/8lQMaupPovkbLuGHIJzRTJ7QFsjhtZ3+Snv1SYpmNLmvJAg
+ kXcXwGJ6a9eCqgA7x4IvYVw==
+X-Originating-IP: 80.61.163.207
+Received: from bloch.sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id f8a10bc9-c013-11ed-9d31-00505699d6e5;
+        Sat, 11 Mar 2023 14:52:33 +0100 (CET)
+Date:   Sat, 11 Mar 2023 14:52:32 +0100
+Message-Id: <874jqrcs4f.fsf@bloch.sibelius.xs4all.nl>
+From:   Mark Kettenis <mark.kettenis@xs4all.nl>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     marcan@marcan.st, sven@svenpeter.dev, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, alyssa@rosenzweig.io,
+        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        iommu@lists.linux.dev, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, robh@kernel.org
+In-Reply-To: <20230311133856.63840-2-sven@svenpeter.dev> (message from Sven
+        Peter on Sat, 11 Mar 2023 14:38:54 +0100)
+Subject: Re: [PATCH v3 1/3] dt-bindings: iommu: dart: Add t8103-usb4-dart compatible
+References: <20230311133856.63840-1-sven@svenpeter.dev> <20230311133856.63840-2-sven@svenpeter.dev>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 23:40, Konrad Dybcio wrote:
-> Currently NOC_QOS_MODE_FIXED is defined as 0x0 which makes it the
-> default option (partial struct initialization). The default option
-> however should be NOC_QOS_MODE_INVALID.
+> From: Sven Peter <sven@svenpeter.dev>
+> Date: Sat, 11 Mar 2023 14:38:54 +0100
 > 
-> That results in bogus QoS configurations being sent for port 0 (which
-> is used for the DRAM endpoint on BIMC, for example) coming from all nodes
-> with .qos.ap_owned = true and uninitialized .qos.qos_mode. It's also an
-> issue for newer SoCs where all nodes are treated as if they were ap_owned,
-> but not all of them have QoS configuration.
+> This DART variant is found in the t8103 (M1) SoCs and used for the
+> USB4/Thunderbolt PCIe ports. Unlike the regular t8103 DART these support
+> up to 64 SIDs and require a slightly different MMIO layout.
 > 
-> The NOC_QOS_MODEs are defined as preprocessor constants and are not used
-> anywhere outside qcom_icc_set_noc_qos(), which is easily worked around.
-> Separate the desc->type values from the values sent to msmbus in the
-> aforementioned function. Make the former an enum for better mainainability.
+> Acked-by: Hector Martin <marcan@marcan.st>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+
+Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+
+> ---
+>  Documentation/devicetree/bindings/iommu/apple,dart.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-
--- 
-With best wishes
-Dmitry
-
+> diff --git a/Documentation/devicetree/bindings/iommu/apple,dart.yaml b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> index 903edf85d72e..7adb1de455a5 100644
+> --- a/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> +++ b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
+> @@ -24,6 +24,7 @@ properties:
+>    compatible:
+>      enum:
+>        - apple,t8103-dart
+> +      - apple,t8103-usb4-dart
+>        - apple,t8110-dart
+>        - apple,t6000-dart
+>  
+> -- 
+> 2.25.1
+> 
+> 
+> 
