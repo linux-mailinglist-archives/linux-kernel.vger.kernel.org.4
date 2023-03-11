@@ -2,95 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843BF6B56BE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:28:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16BEF6B56C5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjCKA17 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:27:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47266 "EHLO
+        id S230185AbjCKAfK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Fri, 10 Mar 2023 19:35:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231625AbjCKA12 (ORCPT
+        with ESMTP id S229541AbjCKAeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:27:28 -0500
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ACAD144852
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:25:52 -0800 (PST)
-Received: by mail-oi1-x22d.google.com with SMTP id s41so5529669oiw.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:25:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678494281;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mUNQTVY5eUxEtGgiVP14QZ+ou44mulHJziOTXdxqLbU=;
-        b=BC6lzsRIhhWkq+N7qS7JisZedC8v2IXl3aqCrXgYgSf6e/EGQCuo4t5Zucw8OEsh5p
-         Dd0ZbGYKuQepBGuFK5QagiDU9DnjzhasUOdEEUv9o7IKPMT7foABcSNQd9Qmn/DNjUcl
-         M+5IxVnrxfyQfWOiSrFv8gRMie4zEiDmKjqFs9aBbjtY0i8inJz9Nq2yslIypZHnA3/x
-         8b3Bw9dqAqAujMfzB8bhQGNiPTWBnnreoCX4NIAbNZj0cVgbGuwPjNWNYmt2kM58OsMf
-         nNXdadnH7T78kQ8HdKkmV/8EibKLFp4XsTdq/56edBiMBsr6/spGHEDiv/dwH604G7B2
-         U9kg==
+        Fri, 10 Mar 2023 19:34:31 -0500
+Received: from mail-io1-f41.google.com (mail-io1-f41.google.com [209.85.166.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBA70E3AB;
+        Fri, 10 Mar 2023 16:33:47 -0800 (PST)
+Received: by mail-io1-f41.google.com with SMTP id v10so2729660iox.8;
+        Fri, 10 Mar 2023 16:33:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678494281;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mUNQTVY5eUxEtGgiVP14QZ+ou44mulHJziOTXdxqLbU=;
-        b=dtQGhhW8aIwm2b+DQMlThKGx3xc8K66BSKCB0QHZc/EhA7LmIPJyWRPE8Q0cueC0bh
-         9xsb7sZOwPIulsJluXunejq6d9YCSXRMlYBXVIGhlsX+6V30iG32fCAOcPgXaCkuyAgG
-         LCoKigOWVfR5Ok2VD/C/0TH+bPAChYiyJoy8YxhWiLRbNuVPmW0vIfX6QfVZCnXRbFHJ
-         qW+xwf5ZLFK068/TmGG5VkJYkmIFGICarbU6PsPeG+uQesn7H0HVOCFmqu7C2+Eb01h6
-         RloNxQLQFIlgfS2TNzi7Svy95OAUaFnVVfFcmQu7MLoZzTR9Hl8BBQ1rnvjBpl7fWyuJ
-         GnHA==
-X-Gm-Message-State: AO0yUKXkHib4p5fkLxS+EQWKn4oaF2hZt/ndsC0TZ0p6Nf7agbptrTh0
-        n6RyiEU9hQJxBGEjsGQ3V0xAC85vdaRqd7/Zhds=
-X-Google-Smtp-Source: AK7set86oLL3zlOw1B3P42jO7jvfaFrcPc2hOGSzF4iFhj0B7mn8fWtdx95+A2FtH5DCQQZ75eluYg==
-X-Received: by 2002:a05:6808:305:b0:36e:b867:76d0 with SMTP id i5-20020a056808030500b0036eb86776d0mr13193919oie.58.1678494281072;
-        Fri, 10 Mar 2023 16:24:41 -0800 (PST)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id a6-20020a056808120600b0037d93a7e8f6sm473857oil.54.2023.03.10.16.24.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 16:24:40 -0800 (PST)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>
-Subject: [PATCH] iio: dac: cio-dac: Fix typo in comment listing supported devices
-Date:   Fri, 10 Mar 2023 19:24:34 -0500
-Message-Id: <20230311002434.8761-1-william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678494758;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ws2skJ37FCki1KwSUpSOEyJRCk/XSPHYtSy0yF1HNaA=;
+        b=T7Ug0VJbZIi0AcpOLt3tuKGjvVyZnoRLOcWxhy1jb2jqCjogHFcKihEILx3xeMTvB7
+         YQK8Bp6frNKQQskuajAU7W/QOC/AD3QVSEddYXw18xAx4warUPjVJp+9G3DyldMAg9ue
+         3FdCrIN5aLQers7moFg1pyIsz7QiCpnwdzZWqVN2kdIKPdULNPhHZ9oSSfqayVlkIuA8
+         rx8sak7L0DjTeichJTPuc8uaNKdGK/yZMmFxIfYAmMzGOimEWNVRwpD6Y8htkV0lPiXC
+         wtxzmuy6hVKT6wn3/6bUF+YC9C6nyxSzlGCPG28eBrIGoKHroBRjQlNicHBMQKlQDodB
+         nI+A==
+X-Gm-Message-State: AO0yUKXu8yPlTQV9s8HgwJhFeugdsyo14izY5uSutp7NrGv0kipz9Tfv
+        S3MWdlsOVMjxzQztaPmavQK2AwK6ZwDgYWJ/L6MaoPdi
+X-Google-Smtp-Source: AK7set/MbE+gdgzBDZPbePFWGMKNZxKoSHr4lcZB10652VHo3Ochc9bFkvSUardatgF5SdUflxsE2WKmpSLSGjzma1Y=
+X-Received: by 2002:a02:94cd:0:b0:3e1:fb3d:4dce with SMTP id
+ x71-20020a0294cd000000b003e1fb3d4dcemr13747156jah.0.1678494757979; Fri, 10
+ Mar 2023 16:32:37 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20230309101111.444-1-ravi.bangoria@amd.com> <20230309101111.444-3-ravi.bangoria@amd.com>
+In-Reply-To: <20230309101111.444-3-ravi.bangoria@amd.com>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Fri, 10 Mar 2023 16:32:26 -0800
+Message-ID: <CAM9d7ci_dRrjq==hu5O0wD2kdN5tSJRNFf2ZtDsQ_X6UXZM3CA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] perf/ibs: Fix interface via core pmu events
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     peterz@infradead.org, eranian@google.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
+        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, santosh.shukla@amd.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver supports the CIO-DAC08 device and not "CIO-DAC06".
+On Thu, Mar 9, 2023 at 2:12 AM Ravi Bangoria <ravi.bangoria@amd.com> wrote:
+>
+> Although, IBS pmu can be invoked via it's own interface, indirect
+> IBS invocation via core pmu event is also supported with fixed set
+> of events: cpu-cycles:p, r076:p (same as cpu-cycles:p) and r0C1:p
+> (micro-ops) for user convenience.
+>
+> This indirect IBS invocation is broken since commit 66d258c5b048
+> ("perf/core: Optimize perf_init_event()"), which added RAW pmu
+> under pmu_idr list and thus if event_init() fails with RAW pmu,
+> it started returning error instead of trying other pmus.
+>
+> Fix it by trying to open event on all pmus if event_init() on user
+> requested pmu returns -ESRCH.
+>
+> Without patch:
+>   $ sudo ./perf record -C 0 -e r076:p -- sleep 1
+>   Error:
+>   The r076:p event is not supported.
+>
+> With patch:
+>   $ sudo ./perf record -C 0 -e r076:p -- sleep 1
+>   [ perf record: Woken up 1 times to write data ]
+>   [ perf record: Captured and wrote 0.341 MB perf.data (37 samples) ]
+>
+> Note that there is no notion of forward pmu mapping. i.e. kernel doesn't
+> know which specific pmu(or a set of pmus) the event should be forwarded
+> to. As of now, only AMD core pmu forwards a set of events to IBS pmu
+> when precise_ip attribute is set and thus trying with all pmus works.
+> But if more pmus starts returning -ESRCH, some sort of forward pmu
+> mapping needs to be introduced through which the event can directly
+> get forwarded to only mapped pmus. Otherwise, trying all pmus can
+> inadvertently open event on wrong pmu.
+>
+> Fixes: 66d258c5b048 ("perf/core: Optimize perf_init_event()")
+> Reported-by: Stephane Eranian <eranian@google.com>
+> Signed-off-by: Ravi Bangoria <ravi.bangoria@amd.com>
+> ---
+>  arch/x86/events/amd/core.c | 11 ++++++++---
+>  kernel/events/core.c       | 10 +++++++++-
+>  2 files changed, 17 insertions(+), 4 deletions(-)
+>
+> diff --git a/arch/x86/events/amd/core.c b/arch/x86/events/amd/core.c
+> index 8c45b198b62f..81d67b899371 100644
+> --- a/arch/x86/events/amd/core.c
+> +++ b/arch/x86/events/amd/core.c
+> @@ -371,10 +371,15 @@ static inline int amd_has_nb(struct cpu_hw_events *cpuc)
+>  static int amd_pmu_hw_config(struct perf_event *event)
+>  {
+>         int ret;
+> +       u64 dummy;
+>
+> -       /* pass precise event sampling to ibs: */
+> -       if (event->attr.precise_ip && get_ibs_caps())
+> -               return -ENOENT;
+> +       if (event->attr.precise_ip) {
+> +               /* pass precise event sampling to ibs by returning -ESRCH */
+> +               if (get_ibs_caps() && !ibs_core_pmu_event(event, &dummy))
+> +                       return -ESRCH;
+> +               else
+> +                       return -ENOENT;
+> +       }
+>
+>         if (has_branch_stack(event) && !x86_pmu.lbr_nr)
+>                 return -EOPNOTSUPP;
+> diff --git a/kernel/events/core.c b/kernel/events/core.c
+> index f79fd8b87f75..e990c71ba34a 100644
+> --- a/kernel/events/core.c
+> +++ b/kernel/events/core.c
+> @@ -11639,18 +11639,26 @@ static struct pmu *perf_init_event(struct perf_event *event)
+>                         goto again;
+>                 }
+>
+> +               /*
+> +                * pmu->event_init() should return -ESRCH only when it
+> +                * wants to forward the event to other pmu.
+> +                */
 
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/iio/dac/cio-dac.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Can we add this to the comment in the struct pmu?  There is a
+description already for other error codes.
 
-diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
-index 791dd999cf29..bb67d3340c9f 100644
---- a/drivers/iio/dac/cio-dac.c
-+++ b/drivers/iio/dac/cio-dac.c
-@@ -4,7 +4,7 @@
-  * Copyright (C) 2016 William Breathitt Gray
-  *
-  * This driver supports the following Measurement Computing devices: CIO-DAC16,
-- * CIO-DAC06, and PC104-DAC06.
-+ * CIO-DAC08, and PC104-DAC06.
-  */
- #include <linux/bitops.h>
- #include <linux/device.h>
+Otherwise looks good.
 
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
--- 
-2.39.2
+Thanks,
+Namhyung
 
+
+> +               if (ret == -ESRCH)
+> +                       goto try_all;
+> +
+>                 if (ret)
+>                         pmu = ERR_PTR(ret);
+>
+>                 goto unlock;
+>         }
+>
+> +try_all:
+>         list_for_each_entry_rcu(pmu, &pmus, entry, lockdep_is_held(&pmus_srcu)) {
+>                 ret = perf_try_init_event(pmu, event);
+>                 if (!ret)
+>                         goto unlock;
+>
+> -               if (ret != -ENOENT) {
+> +               if (ret != -ENOENT && ret != -ESRCH) {
+>                         pmu = ERR_PTR(ret);
+>                         goto unlock;
+>                 }
+> --
+> 2.39.2
+>
