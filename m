@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAC836B5EB9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6589A6B5EBE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:25:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229924AbjCKRYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:24:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
+        id S229897AbjCKRZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:25:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCKRYb (ORCPT
+        with ESMTP id S229562AbjCKRZs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:24:31 -0500
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055415FFD
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:24:30 -0800 (PST)
-Received: by mail-pl1-x633.google.com with SMTP id h8so8759197plf.10
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:24:30 -0800 (PST)
+        Sat, 11 Mar 2023 12:25:48 -0500
+Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE20367E9;
+        Sat, 11 Mar 2023 09:25:47 -0800 (PST)
+Received: by mail-pg1-x529.google.com with SMTP id 16so4774163pge.11;
+        Sat, 11 Mar 2023 09:25:47 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678555469;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112; t=1678555546;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=b6FwHGSQEANaeCWfH/KBmQNj8C6YpMAIejp0LKFAolI=;
-        b=mUmLasf0RmqZjsruP0d+yQMq08cI7p6QDDWCnp9x968wtntHBhMMf4wUkeJYEq2udP
-         ienaKw/hcuRbcgg8uCh+SC+uMtI83x6Rf0Fd2ZpojbesuRI6aeBbLA0qJrZZJRumZ/oc
-         z5Lrb4DvR+4t1Dh9vlKjceAkhG2QMH2DHW0tB9WMUrgvqseQlhycVEYIeLRe0cPTHh0H
-         s/x9vieC1UE2zdUY7xn5XTdEdgjcB+2Loj0MqqDUFB0oXCm+PjciJayniMjcXCsknb3/
-         t+lZhI4WKiVSusT/shj9lGeSSpV6l6uJHwMfoZd5xExiK/W9Cmyt9WkzOPBpbRNlbLPB
-         +NBA==
+        bh=QS/175t+MbbtSL3ZqMpuuGfGkRfZIPfXDt83uLAcCo8=;
+        b=mmMeny8nknefTBsgpe/tmJD2V01bAwE0Y0HxdN301V84cphLfqInQY2dRHmk4rp+w4
+         6JE/nwT8liagmbu8fdyxLAkvy/y50fUwHwo5ZSxR1RlYUK97MkSRBpD+3n5wkAoofVkv
+         MNNDQH3Ys6gnCCG0ss19Jvq+pyYk4r+R1OmfAh1pW4GfHDbNUyZ/HeK15sNmy51z2AMZ
+         C/6LTQXCjA1SIWHP5O5/dHgAKSH49VYEyB1CO0u8zXlTv+5n4X8IDP+mnwSJn24l5ynZ
+         +QyPpSpaKzxWKLnxOSR4FuIbIbYV7aBfH9hONYKdN+RdkLCNAfw/+dFZJW9buL6bdULW
+         gExw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678555469;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678555546;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b6FwHGSQEANaeCWfH/KBmQNj8C6YpMAIejp0LKFAolI=;
-        b=arVaTW0BZwlW0i/zjjKE9+onHYBs60xzKWOoutEedhSbG9BXwJt3iEkfsHToWvJz/A
-         SbhJZ7GyhVDz9oax9VFCuvSAFib7heE2DdTkAW4hMhovDlLD4yAX/3VI2P5xohYrdtgc
-         pmElsD3qCJrDJfCfH3CpYKyFiSHeN/F8pgwyMdXuD6nvvepKx/I+PLsetF5EKcgARJT4
-         ymV/tEfghN9T2wHJ1rUdoO5OzpfAtO6lkDU4QmsRj480EKr0dpWzCett6lPELsdsiDk8
-         gxDUBUwQ40/dsPW7EuOxwyaLXgdzeYS2bwnjFIXkWFjEJxc2SCKWA+Gx/FxEUPt8Y7fn
-         EZ/g==
-X-Gm-Message-State: AO0yUKXKfeMnXJ5LFNIzqjGEx0MVM+R9hN06THwYIN46WQC8VqQw7DJc
-        nDu8QcKKVE8s8ybwmAJATi3bjw==
-X-Google-Smtp-Source: AK7set9HSeT39Yrw1SF2hUonBtgvQmfrvv9eTpVya+N0eoUS1w6+c7OtLfQz/cLudQ5o3ayhDQdmTA==
-X-Received: by 2002:a17:903:6c3:b0:19a:9269:7d1 with SMTP id kj3-20020a17090306c300b0019a926907d1mr5983558plb.4.1678555468870;
-        Sat, 11 Mar 2023 09:24:28 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id kc3-20020a17090333c300b0019a7bb18f98sm1837751plb.48.2023.03.11.09.24.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 09:24:28 -0800 (PST)
-Message-ID: <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
-Date:   Sat, 11 Mar 2023 10:24:27 -0700
+        bh=QS/175t+MbbtSL3ZqMpuuGfGkRfZIPfXDt83uLAcCo8=;
+        b=WwygGQy1R5KuvtpawpQ/OwAvl+u1BBuW35h6NkKQcNa79CtS2fs19wr4C7hKr8RzrN
+         LZlhWfSN6kTBeVidsqCWMel30DRmNwqiI2EYwWOoL/lvHSWc9aSviDQ+/oFZrd9hw1X4
+         wY9KeRRziLMkMw6cJ9HMrk20SrG/ELEQKSOGJb/0xZhMc9c6e2CHkYV1joZ0fdf+rDDE
+         l4lqqOc94FydjOboChe+8dUu4F/6lHGDxmPgVi3HKaTncdu8KOigKHL4eVeeYQ3aWVjt
+         joElweMcaawPtHqQS6BfkTD11+fIrxXjqMLWQjF7cVfQfiO25OPc01ND2yXgc5CM2Jvf
+         5z5w==
+X-Gm-Message-State: AO0yUKU5ojftu6AUuen5DLdgdZ6XyPKB3Ly6m/sFLDGvuyzF4/+RBRqG
+        xMxZN/0H7EuxJJJ5NUnlj8L31Nl05RVwSw==
+X-Google-Smtp-Source: AK7set9ftsFY4ZqIdArrt2/qtu9c+hPHjyWDoZu98KDi1eGfosfEJNXcHZqgNtwJDDaXf+zwsgBtiw==
+X-Received: by 2002:aa7:9546:0:b0:5e0:c59f:b008 with SMTP id w6-20020aa79546000000b005e0c59fb008mr22132343pfq.4.1678555546323;
+        Sat, 11 Mar 2023 09:25:46 -0800 (PST)
+Received: from ubuntu ([117.199.152.23])
+        by smtp.gmail.com with ESMTPSA id j21-20020aa78015000000b00593cd0f37dcsm1711571pfi.169.2023.03.11.09.25.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 09:25:45 -0800 (PST)
+Date:   Sat, 11 Mar 2023 09:25:40 -0800
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     outreachy@lists.linux.dev, GR-Linux-NIC-Dev@marvell.com,
+        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        manishc@marvell.com, netdev@vger.kernel.org, error27@gmail.com
+Cc:     outreachy@lists.linux.dev
+Subject: [PATCH v2] Staging: qlge: Fix indentation in conditional statement
+Message-ID: <20230311172540.GA24832@ubuntu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 0/2] optimise local-tw task resheduling
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <cover.1678474375.git.asml.silence@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <cover.1678474375.git.asml.silence@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 12:04?PM, Pavel Begunkov wrote:
-> io_uring extensively uses task_work, but when a task is waiting
-> for multiple CQEs it causes lots of rescheduling. This series
-> is an attempt to optimise it and be a base for future improvements.
-> 
-> For some zc network tests eventually waiting for a portion of 
-> buffers I've got 10x descrease in the number of context switches,
-> which reduced the CPU consumption more than twice (17% -> 8%).
-> It also helps storage cases, while running fio/t/io_uring against
-> a low performant drive it got 2x descrease of the number of context
-> switches for QD8 and ~4 times for QD32.
-> 
-> Not for inclusion yet, I want to add an optimisation for when
-> waiting for 1 CQE.
+Add tabs/spaces in conditional statements in qlge_dbg.c to fix the
+indentation.
 
-Ran this on the usual peak benchmark, using IRQ. IOPS is around ~70M for
-that, and I see context rates of around 8.1-8.3M/sec with the current
-kernel.
+Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+---
+ v2: Fix indentation in conditional statement, noted by Dan Carpenter
+ <error27@gmail.com>
+ 
+ drivers/staging/qlge/qlge_dbg.c | 35 +++++++++++++++------------------
+ 1 file changed, 16 insertions(+), 19 deletions(-)
 
-Applied the two patches, but didn't see much of a change? Performance is
-about the same, and cx rate ditto. Confused... As you probably know,
-this test waits for 32 ios at the time.
-
-Didn't take a closer look just yet, but I grok the concept. One
-immediate thing I'd want to change is the FACILE part of it. Let's call
-it something a bit more straightforward, perhaps LIGHT? Or LIGHTWEIGHT?
-I can see this mostly being used for filling a CQE, so it could also be
-named something like that. But could also be used for light work in the
-same vein, so might not be a good idea to base the naming on that.
-
+diff --git a/drivers/staging/qlge/qlge_dbg.c b/drivers/staging/qlge/qlge_dbg.c
+index b190a2993033..c7e865f515cf 100644
+--- a/drivers/staging/qlge/qlge_dbg.c
++++ b/drivers/staging/qlge/qlge_dbg.c
+@@ -351,26 +351,23 @@ static int qlge_get_xgmac_regs(struct qlge_adapter *qdev, u32 *buf,
+ 		/* We're reading 400 xgmac registers, but we filter out
+ 		 * several locations that are non-responsive to reads.
+ 		 */
+-		if (i == 0x00000114 ||
+-		    i == 0x00000118 ||
+-			i == 0x0000013c ||
+-			i == 0x00000140 ||
+-			(i > 0x00000150 && i < 0x000001fc) ||
+-			(i > 0x00000278 && i < 0x000002a0) ||
+-			(i > 0x000002c0 && i < 0x000002cf) ||
+-			(i > 0x000002dc && i < 0x000002f0) ||
+-			(i > 0x000003c8 && i < 0x00000400) ||
+-			(i > 0x00000400 && i < 0x00000410) ||
+-			(i > 0x00000410 && i < 0x00000420) ||
+-			(i > 0x00000420 && i < 0x00000430) ||
+-			(i > 0x00000430 && i < 0x00000440) ||
+-			(i > 0x00000440 && i < 0x00000450) ||
+-			(i > 0x00000450 && i < 0x00000500) ||
+-			(i > 0x0000054c && i < 0x00000568) ||
+-			(i > 0x000005c8 && i < 0x00000600)) {
++		if ((i == 0x00000114) || (i == 0x00000118) ||
++		    (i == 0x0000013c) || (i == 0x00000140) ||
++		    (i > 0x00000150 && i < 0x000001fc) ||
++		    (i > 0x00000278 && i < 0x000002a0) ||
++		    (i > 0x000002c0 && i < 0x000002cf) ||
++		    (i > 0x000002dc && i < 0x000002f0) ||
++		    (i > 0x000003c8 && i < 0x00000400) ||
++		    (i > 0x00000400 && i < 0x00000410) ||
++		    (i > 0x00000410 && i < 0x00000420) ||
++		    (i > 0x00000420 && i < 0x00000430) ||
++		    (i > 0x00000430 && i < 0x00000440) ||
++		    (i > 0x00000440 && i < 0x00000450) ||
++		    (i > 0x00000450 && i < 0x00000500) ||
++		    (i > 0x0000054c && i < 0x00000568) ||
++		    (i > 0x000005c8 && i < 0x00000600)) {
+ 			if (other_function)
+-				status =
+-				qlge_read_other_func_xgmac_reg(qdev, i, buf);
++				status = qlge_read_other_func_xgmac_reg(qdev, i, buf);
+ 			else
+ 				status = qlge_read_xgmac_reg(qdev, i, buf);
+ 
 -- 
-Jens Axboe
+2.25.1
 
