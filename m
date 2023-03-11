@@ -2,79 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E20B16B5E2A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 06D2A6B5E2C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:55:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjCKQzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:55:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53922 "EHLO
+        id S229666AbjCKQz2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:55:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCKQzM (ORCPT
+        with ESMTP id S229637AbjCKQzZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:55:12 -0500
-Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B6455520
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:55:10 -0800 (PST)
-Received: by mail-qv1-xf2b.google.com with SMTP id ks17so5652823qvb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:55:10 -0800 (PST)
+        Sat, 11 Mar 2023 11:55:25 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8E160428
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:55:22 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id f11so7740625wrv.8
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:55:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=konsulko.com; s=google; t=1678553709;
+        d=layalina-io.20210112.gappssmtp.com; s=20210112; t=1678553720;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIomLG7UnQJj876RAoaqIkfKcALzjeNdqoIdaS6cOuA=;
-        b=IKHmjVOAfqKWlUeGJMI5dRwxBG4FGobmdNwrOOi1L7o6tWYb0OVzglFy7+hcQ6+4im
-         jsacJ3xMs8PtPQ7lXyI4ZqO35YauGKQ7cv+i2XxdK7gV5eVrPVbKDyscrbjIAP9jUaWW
-         NVuBeO0sdUGldxoRdALANZ9ATWRebkAUZxQNQ=
+        bh=EPWopmrfVhguOzGMPP3tftlAKbC9wyhBQ+UkCCM0q+Y=;
+        b=yLJdGGRdM5q1Q0WUdr4tsq+ObhXti7SoH1o2+dlHpsdAh9tlrZga2KCrB4m/EJu83I
+         aQ9PQoKePr2MTZPufVpcR9Yg56leJ6OlIfV5oLzQSwTJP8H5iVSF98qlJYxz2U2QCEgI
+         UK1CSkkKtj+3bM6aVQwSS5nUfaOZtyD76ql2KBSCygN8eoTGtIC5l4E+/rzVsijI7boI
+         lcy3wsrj2bQmiU/8SohFg4IdlCa/DzGPeKPR9WedMMLmiLhRuNTP13NasFIZ6G5/IMCA
+         o1ClL22pUzH7o816kbz2NdFWjIG4iUzL1sXJodsAjDl8acm2LeJVOG+RawdfQUFrKpqY
+         yvZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678553709;
+        d=1e100.net; s=20210112; t=1678553720;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=EIomLG7UnQJj876RAoaqIkfKcALzjeNdqoIdaS6cOuA=;
-        b=Am7vNMhdxe0dSEuLu8e9OeW4NeOkbJ5RQSz9oYz4i632k0AUMFPhufIiFeL4Ua78FI
-         b067QS13s9uEFMZFMtqev9zB/oPjztSvdZ/NedHYHX7AHOw/8JAlzTLFnbQV2imOPXGk
-         5cSCQzh3S3cw1xogX7yHgi/JU4IMTmuN2Nk3TTuBTc8jES3ovDQ40Kwb2ViJAzQtSzOp
-         FaRAlQ21BQRkQph57o7+fKZx00ZWeaIiH9iAeHRQexNLhBMBS4xkFvkToePKjIXtNOHM
-         1avj004ouitS25snPvzdVMQzKJQVh4IdMRPoMY0+xO0cjEKJRGyndz+cuz5wux7z6DvY
-         uqpg==
-X-Gm-Message-State: AO0yUKUV4sXaR61biCp42Wh6gnEf0q2GZipTpDzodnAXzrFbAIqI1BmU
-        R+Enb1+wiPDa6yy2LjDhC7kvXQ==
-X-Google-Smtp-Source: AK7set+jc34nG16Iv3yaR0QZYNu/Re47mZ/FVzqaCs0fWfCvaN09bMctjtbX7adZwq53L84o9rBuPw==
-X-Received: by 2002:a05:6214:258f:b0:5a3:fffa:f600 with SMTP id fq15-20020a056214258f00b005a3fffaf600mr377474qvb.26.1678553709699;
-        Sat, 11 Mar 2023 08:55:09 -0800 (PST)
-Received: from bill-the-cat (2603-6081-7b00-6400-0000-0000-0000-036b.res6.spectrum.com. [2603:6081:7b00:6400::36b])
-        by smtp.gmail.com with ESMTPSA id i4-20020a05620a248400b0074357fa9e15sm2110419qkn.42.2023.03.11.08.55.08
+        bh=EPWopmrfVhguOzGMPP3tftlAKbC9wyhBQ+UkCCM0q+Y=;
+        b=sTfwIDfbA+MkF20aYvUxAIxz4GjvX2Mu2L9xk1iiOom6Mk3L8hVBIwcH7n0lJsXARE
+         DG8zm44/MxjZIQ48kI6JH8Im4M0TyqlrgsLnfAv96salAgeBzIrorw+KSwTMy6RlFlBw
+         BteSFdG66PGs6NFN1hbPcGH+O/uePKyfj7kP2ebHKh1r+sPSmSXIIb5ny3FnS2P0qeVD
+         MD9yuYufpvW3Hkgq2hhw5QgKpqrRgQdP8P/s9a6M9GPgw41FrEjuMKg7lTwFObDg2XQk
+         FBcaLf3E4aiBgcMt3JKTm6AMfG38kWlVfHjcxlEJr5ipmxS+bdBKfdbRWlYiZJqtVsOu
+         +wrQ==
+X-Gm-Message-State: AO0yUKXViu+I1n2TBI+wZ+2F9EBsPRIC1SqMm5ZUETwK2yLgDnD4Qf00
+        K62CGbx/zJ74WaUJ8Oi57M5NlA==
+X-Google-Smtp-Source: AK7set/V0Nbs8aD/SC20ECZH5DNT0ia5PCP8kCA7jQw/JdnZrn6RgQXSon55bRbGigOBqhz0QMFCMg==
+X-Received: by 2002:a5d:4e85:0:b0:2c7:1aaa:2b49 with SMTP id e5-20020a5d4e85000000b002c71aaa2b49mr21015669wru.23.1678553720414;
+        Sat, 11 Mar 2023 08:55:20 -0800 (PST)
+Received: from airbuntu (host86-168-251-3.range86-168.btcentralplus.com. [86.168.251.3])
+        by smtp.gmail.com with ESMTPSA id z17-20020a5d4c91000000b002c5a1bd5280sm2871996wrs.95.2023.03.11.08.55.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 08:55:09 -0800 (PST)
-Date:   Sat, 11 Mar 2023 11:55:07 -0500
-From:   Tom Rini <trini@konsulko.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Simon Glass <sjg@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        U-Boot Custodians <u-boot-custodians@lists.denx.de>,
-        Masahiro Yamada <yamada.masahiro@socionext.com>,
-        barebox@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        U-Boot Mailing List <u-boot@lists.denx.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Subject: Re: [RESEND PATCH] kconfig: Proposed language extension for multiple
- builds
-Message-ID: <20230311165507.GN3041508@bill-the-cat>
-References: <20230310183717.RESEND.1.Idaaf79c3e768b85750d5a7eb732052576c5e07e5@changeid>
- <bae2702e-3570-f461-b86f-e56ce82a636e@infradead.org>
+        Sat, 11 Mar 2023 08:55:19 -0800 (PST)
+Date:   Sat, 11 Mar 2023 16:55:17 +0000
+From:   Qais Yousef <qyousef@layalina.io>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Kajetan Puchalski <kajetan.puchalski@arm.com>,
+        Jian-Min Liu <jian-min.liu@mediatek.com>,
+        Ingo Molnar <mingo@kernel.org>,
+        Morten Rasmussen <morten.rasmussen@arm.com>,
+        Vincent Donnefort <vdonnefort@google.com>,
+        Quentin Perret <qperret@google.com>,
+        Patrick Bellasi <patrick.bellasi@matbug.net>,
+        Abhijeet Dharmapurikar <adharmap@quicinc.com>,
+        Qais Yousef <qais.yousef@arm.com>,
+        linux-kernel@vger.kernel.org,
+        Jonathan JMChen <jonathan.jmchen@mediatek.com>
+Subject: Re: [RFC PATCH 0/1] sched/pelt: Change PELT halflife at runtime
+Message-ID: <20230311165517.vqgccdzu7zyxko56@airbuntu>
+References: <20221108194843.i4qckcu7zwqstyis@airbuntu>
+ <Y2vMBWpPlIArwnI7@hirez.programming.kicks-ass.net>
+ <424e2c81-987d-f10e-106d-8b4c611768bc@arm.com>
+ <CAKfTPtD0ZOndFef3-JxBn3G9tcX=cZEObjHZ0iqiVTJz7+QrmQ@mail.gmail.com>
+ <20230223153700.55zydy7jyfwidkis@airbuntu>
+ <CAKfTPtDVGcvmR5BoJpyoOBE19PcWZP+6NjSD7MnJyBAc7VMnmg@mail.gmail.com>
+ <20230301172458.intrgsirjauzqmo3@airbuntu>
+ <CAKfTPtDwDdpiQnUqi_OtER5EE0EN4ykDMqtwzHi3d7AyBd_aQA@mail.gmail.com>
+ <20230306191109.bfgnbqr4a5ovze3w@airbuntu>
+ <CAKfTPtBVjAe4U5ec-VZXUfecdQ2A4BEHGX1ZLYspdRsUvd3=8g@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nKkts6aBvDQ9fwd+"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <bae2702e-3570-f461-b86f-e56ce82a636e@infradead.org>
-X-Clacks-Overhead: GNU Terry Pratchett
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+In-Reply-To: <CAKfTPtBVjAe4U5ec-VZXUfecdQ2A4BEHGX1ZLYspdRsUvd3=8g@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,81 +90,265 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 03/07/23 14:22, Vincent Guittot wrote:
+> On Mon, 6 Mar 2023 at 20:11, Qais Yousef <qyousef@layalina.io> wrote:
+> >
+> > On 03/02/23 09:00, Vincent Guittot wrote:
+> > > On Wed, 1 Mar 2023 at 18:25, Qais Yousef <qyousef@layalina.io> wrote:
+> > > >
+> > > > On 03/01/23 11:39, Vincent Guittot wrote:
+> > > > > On Thu, 23 Feb 2023 at 16:37, Qais Yousef <qyousef@layalina.io> wrote:
+> > > > > >
+> > > > > > On 02/09/23 17:16, Vincent Guittot wrote:
+> > > > > >
+> > > > > > > I don't see how util_est_faster can help this 1ms task here ? It's
+> > > > > > > most probably never be preempted during this 1ms. For such an Android
+> > > > > > > Graphics Pipeline short task, hasn't uclamp_min been designed for and
+> > > > > > > a better solution ?
+> > > > > >
+> > > > > > uclamp_min is being used in UI and helping there. But your mileage might vary
+> > > > > > with adoption still.
+> > > > > >
+> > > > > > The major motivation behind this is to help things like gaming as the original
+> > > > > > thread started. It can help UI and other use cases too. Android framework has
+> > > > > > a lot of context on the type of workload that can help it make a decision when
+> > > > > > this helps. And OEMs can have the chance to tune and apply based on the
+> > > > > > characteristics of their device.
+> > > > > >
+> > > > > > > IIUC how util_est_faster works, it removes the waiting time when
+> > > > > > > sharing cpu time with other tasks. So as long as there is no (runnable
+> > > > > > > but not running time), the result is the same as current util_est.
+> > > > > > > util_est_faster makes a difference only when the task alternates
+> > > > > > > between runnable and running slices.
+> > > > > > > Have you considered using runnable_avg metrics in the increase of cpu
+> > > > > > > freq ? This takes into the runnable slice and not only the running
+> > > > > > > time and increase faster than util_avg when tasks compete for the same
+> > > > > > > CPU
+> > > > > >
+> > > > > > Just to understand why we're heading into this direction now.
+> > > > > >
+> > > > > > AFAIU the desired outcome to have faster rampup time (and on HMP faster up
+> > > > > > migration) which both are tied to utilization signal.
+> > > > > >
+> > > > > > Wouldn't make the util response time faster help not just for rampup, but
+> > > > > > rampdown too?
+> > > > > >
+> > > > > > If we improve util response time, couldn't this mean we can remove util_est or
+> > > > > > am I missing something?
+> > > > >
+> > > > > not sure because you still have a ramping step whereas util_est
+> > > > > directly gives you the final tager
+> > > >
+> > > > I didn't get you. tager?
+> > >
+> > > target
+> >
+> > It seems you're referring to the holding function of util_est? ie: keep the
+> > util high to avoid 'spurious' decays?
+> 
+> I mean whatever the half life, you will have to wait the utilization
+> to increase.
 
---nKkts6aBvDQ9fwd+
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes - which is what ramp up delay that is unacceptable in some cases and seem
+to have been raised several times over the years
 
-On Fri, Mar 10, 2023 at 09:39:15PM -0800, Randy Dunlap wrote:
-> Hi--
->=20
-> On 3/10/23 18:37, Simon Glass wrote:
-> > (I am sending this again to get more feedback)
-> >=20
-> > In the case of Linux, only one build is produced so there is only a
-> > single configuration. For other projects, such as U-Boot and Zephyr, the
-> > same code is used to produce multiple builds, each with related (but
-> > different) options enabled.
-> >=20
-> > This can be handled with the existing kconfig language, but it is quite
-> > verbose, somewhat tedious and very error-prone, since there is a lot of
-> > duplication. The result is hard to maintain.
-> >=20
-> > Describe an extension to the Kconfig language to support easier handling
-> > of this use case.
-> >=20
-> > Signed-off-by: Simon Glass <sjg@chromium.org>
->=20
-> IMO Masahiro has already answered this multiple times and I agree with hi=
-s answers.
->=20
-> For others, the full previous thread is at
->   https://lore.kernel.org/all/20230219145453.1.Idaaf79c3e768b85750d5a7eb7=
-32052576c5e07e5@changeid/
+> 
+> >
+> > Isn't this a duplication of the schedutil's filter which is also a holding
+> > function to prevent rapid frequency changes?
+> 
+> util_est is used by scheduler to estimate the final utilization of the cfs
 
-Well, I think what was unclear, or maybe we just wanted to confirm the
-answer was "none at all", was this. As good community neighbors, we see
-a generic issue in the Kconfig language, a tool used frequently outside
-of just the Linux kernel, and would like to contribute back. Ideally
-without having first gone off, designed and implemented something, and
-then been told it's all wrong and to rewrite it first. So what level of
-interest is there in this?
+IIR the commit message that introduced it correctly it is talking about ramp up
+delays - and issues with premature decaying for periodic tasks.
 
-As I pointed out in that thread, I believe barebox has examples where
-some keyword like we're proposing here would help them (and yes, there's
-only a dozen or so symbols so it's also manageable without anything
-special), and Simon believes Zephyr will be in a similar situation soon
-enough (which doesn't use the kernel's implementation of the language).
-Frankly, I keep going back to "tristate" is just the original example of
-what we're talking about here (CONFIG_FOO=3Dn, CONFIG_FOO_MODULE=3Dy), not
-that I'm suggesting we would remove the tristate word.
-So we would really like to make sure as many people and projects are
-aware, as possible.
+So it is a mechanism to speed up util_avg response time. The same issue we're
+trying to address again now.
 
-And as Simon asked in the thread, what about code refactoring that makes
-further maintenance easier? Clearly, such patches would need to be
-against the current appropriate tree.
+> 
+> >
+> > FWIW, that schedutil filter does get tweaked a lot in android world. Many add
+> > an additional down_filter to prevent this premature drop in freq (AFAICT).
+> > Which tells me util_est is not delivering completely on that front in practice.
+> >
+> > >
+> > > >
+> > > > >
+> > > > > >
+> > > > > > Currently we have util response which is tweaked by util_est and then that is
+> > > > > > tweaked further by schedutil with that 25% margin when maping util to
+> > > > > > frequency.
+> > > > >
+> > > > > the 25% is not related to the ramping time but to the fact that you
+> > > > > always need some margin to cover unexpected events and estimation
+> > > > > error
+> > > >
+> > > > At the moment we have
+> > > >
+> > > >         util_avg -> util_est -> (util_est_faster) -> util_map_freq -> schedutil filter ==> current frequency selection
+> > > >
+> > > > I think we have too many transformations before deciding the current
+> > > > frequencies. Which makes it hard to tweak the system response.
+> > >
+> > > What is proposed here with runnable_avg is more to take a new input
+> > > when selecting a frequency: the level of contention on the cpu. But
+> >
+> > What if there's no contention on the CPU and it's just a single task running
+> > there that suddenly becomes always running for a number of frames?
+> >
+> > > this is not used to modify the utilization seen by the scheduler
+> > >
+> > > >
+> > > > >
+> > > > > >
+> > > > > > I think if we can allow improving general util response time by tweaking PELT
+> > > > > > HALFLIFE we can potentially remove util_est and potentially that magic 25%
+> > > > > > margin too.
+> > > > > >
+> > > > > > Why the approach of further tweaking util_est is better?
+> > > > >
+> > > > > note that in this case it doesn't really tweak util_est but Dietmar
+> > > > > has taken into account runnable_avg to increase the freq in case of
+> > > > > contention
+> > > > >
+> > > > > Also IIUC Dietmar's results, the problem seems more linked to the
+> > > > > selection of a higher freq than increasing the utilization;
+> > > > > runnable_avg tests give similar perf results than shorter half life
+> > > > > and better power consumption.
+> > > >
+> > > > Does it ramp down faster too?
+> > >
+> > > I don't think so.
+> > >
+> > > To be honest, I'm not convinced that modifying the half time is the
+> > > right way to solve this. If it was only a matter of half life not
+> > > being suitable for a system, the halk life would be set once at boot
+> > > and people would not ask to modify it at run time.
+> >
+> > I'd like to understand more the reason behind these concerns. What is the
+> > problem with modifying the halflife?
+> 
+> I can somehow understand that some systems would like a different half
+> life than the current one because of the number of cpus, the pace of
+> the system... But this should be fixed at boot. The fact that people
 
---=20
-Tom
+The boot time might be the only thing required. I think some systems only need
+this already. The difficulty in practice is that on some systems this might
+result in worse power over a day of use. So it'll all depend, hence the desire
+to have it as a runtime. Why invent more crystal balls that might or not might
+not be the best thing depends on who you ask?
 
---nKkts6aBvDQ9fwd+
-Content-Type: application/pgp-signature; name="signature.asc"
+> needs to dynamically change the half life means for me that even after
+> changing it then they still don't get the correct  utilization. And I
 
------BEGIN PGP SIGNATURE-----
+What is the correct utilization? It is just a signal in attempt to crystal ball
+the future. It can't be correct in general IMHO. It's best effort that we know
+fails occasionally already.
 
-iQGzBAABCgAdFiEEGjx/cOCPqxcHgJu/FHw5/5Y0tywFAmQMsmcACgkQFHw5/5Y0
-tyx+wwv/dmFZaZi7VhdtJ2VaNC4i1XByc8cyBYW3rT8yVRK75dzQ9I/p0FGL8LCx
-73GpQdSlx+n8S+qPu3d71WUpv5dZBBdqSjD6s4olHY3p+xuriV9Qd1UM9qiEyYXf
-sQH+bVlvK+82C3xADqUiKdgTzKqMKxW2zhUj88qTIHxKpdbzF/7Y7TnuMLH3sAhP
-Ho8dpmM+PKxL0J4i9aMX664hpwU7I4yDBnc0oXa2ROgRdogu0yKt+6TGecs9qsL2
-IUnl9Cp8x6EtFVQd2otm/UUAQrbyGBW+WZDVWcuS99Bs0bGi1Bl7B+IBsP8JOmD0
-jlMcn/IJlo1b7cAKri8mlPGBEXtIcthBJ/TYPmx/MwmG9Oj0WjQPLsfYVuppb/bu
-7i2nHzVRl3+UBWMppuyrsUROhBBdlBEqPJRZJhCHEfHa6kKGucClIoqM7RqmOxtC
-dOSQrs/XyC9gCJ4TUDep5eSiNizYzpl14QcJpxv+iQu86W96tWE5fc4Q4zZSEl5m
-YzXxsFiQ
-=OI2Z
------END PGP SIGNATURE-----
+As I said above - there's a trade-off in perf/power and that will highly depend
+on the system.
 
---nKkts6aBvDQ9fwd+--
+The proposed high contention detection doesn't address this trade-off; rather
+biases the system further towards perf-first. Which is not always the right
+trade-off. It could be a useful addition - but it needs to be a tunable too.
+
+> think that the problem is not really related (or at least not only) to
+> the correctness of utilization tracking but a lack of taking into
+
+It's not correctness issue. It's response time issue. It's a simple
+task of improving the reactiveness of the system. Which has a power cost that
+some users don't want to incur when not necessary.
+
+> account other input when selecting a frequency. And the contention
+> (runnable_avg) is a good input to take into account when selecting a
+> frequency because it reflects that some tasks are waiting to run on
+> the cpu
+
+You did not answer my question above. What if there's no contention and
+a single task on a cpu suddenly moves from mostly idle to always running for
+a number of frames? There's no contention in there. How will this be improved?
+
+> 
+> >
+> > The way I see it it is an important metric of how responsive the system to how
+> > loaded it is. Which drives a lot of important decisions.
+> >
+> > 32ms means the system needs approximately 200ms to detect an always running
+> > task (from idle).
+> >
+> > 16ms halves it to 100ms. And 8ms halves it further to 50ms.
+> >
+> > Or you can phrase it the opposite way, it takes 200ms to detect the system is
+> > now idle from always busy state. etc.
+> >
+> > Why is it bad for a sys admin to have the ability to adjust this response time
+> > as they see fit?
+> 
+> because it will use it to bias the response of the system and abuse it
+> at runtime instead of identifying the root cause.
+
+No one wants to abuse anything. But the one size fits all approach is not
+always right too. And sys admins and end users have the right to tune their
+systems the way they see fit.  There are too many variations out there to hard
+code the system response. I view this like the right to repair - it's their
+system, why do they have to hack the kernel to tune it?
+
+The root cause is that the system reactiveness is controlled by this value.
+And there's a trade-off between perf/power that is highly dependent on the
+system characteristic. On some areas a boot time is all that one needs. In
+others, it might be desired to improve specific use cases like gaming only as
+the speed up at boot time only can hurt overall battery life in normal use
+cases.
+
+I think the story is simple :)
+
+In my view util_est is borderline a hack. We just need to enable control pelt
+ramp-up/down response times + improve schedutil. I highlight a few shortcomings
+that are already known in the practice below. And that phoronix article about
+schedutil not being better than ondemand demonstrates that this is an issue
+outside of mobile too.
+
+schedutil - as the name says it - depends on util signal. Which also depends on
+pelt halflife. I really think this is the most natural and predictable way to
+tune the system. I can't see the drawbacks.
+
+I think we need to distinguish between picking sensible default behavior; and
+enforcing policies or restricting user's choice. AFAICS the discussion is going
+towards the latter.
+
+On the topic of defaults - I do think 16ms is a more sensible default for
+modern day hardware and use cases.
+
+/me runs and hides :)
+
+
+Cheers
+
+--
+Qais Yousef
+
+> 
+> >
+> > What goes wrong?
+> >
+> > AFAICS the two natural places to control the response time of the system is
+> > pelt halflife for overall system responsiveness, and the mapping function in
+> > schedutil for more fine grained frequency response.
+> >
+> > There are issues with current filtering mechanism in schedutil too:
+> >
+> >         1. It drops any requests during the filtering window. At CFS enqueue we
+> >            could end up with multiple calls to cpufreq_update_util(); or if we
+> >            do multiple consecutive enqueues. In a shared domain, there's a race
+> >            which cpu issues the updated freq request first. Which might not be
+> >            the best for the domain during this window.
+> >         2. Maybe it needs asymmetric values for up and down.
+> >
+> > I could be naive, but I see util_est as something we should strive to remove to
+> > be honest. I think there are too many moving cogs.
+> >
+> >
+> > Thanks!
+> >
+> > --
+> > Qais Yousef
