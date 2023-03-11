@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EF236B5C9B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:07:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBBFC6B5C8A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:59:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229922AbjCKOHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:07:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
+        id S229589AbjCKN7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 08:59:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjCKOG5 (ORCPT
+        with ESMTP id S229478AbjCKN72 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:06:57 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2E912DC39
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:06:50 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id c3so8792471qtc.8
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:06:50 -0800 (PST)
+        Sat, 11 Mar 2023 08:59:28 -0500
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 822B5AB8A6
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:59:27 -0800 (PST)
+Received: by mail-wr1-x431.google.com with SMTP id f11so7504437wrv.8
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:59:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678543610;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3jr4lYUE4LbhKnqlf9KsV9sgPswlPNrF5JvpcjFIiws=;
-        b=efew17kBKesrHCtgPKacE9tv9x5k9D6/aVivtmVfC33CxWRbighjnL4ScqzyTiREvH
-         B5OfLtmgmIMhpaMiBUkTSSZWSuY5v9NSYVNStNRzb+/fXrwYMaHcOdbmy60EkJulaI+U
-         hLSAm9AChR9v/FxmKTczURztQl21LhyAQ9SpiJfEyN5Kay2GhlyYWTVw8/onpeSGZ6V2
-         DMVyPIYduyWwuayiVVMBo+ow6Y/2OF2YA4/ZfcL+zPTNIiSrI+DYLFP1EWTE5uUcCBTM
-         9705XMcbloVI7uIfAb8dOdTw0ivy3oSnbgqXJyZyiBarklCN03im771s18fd9lbthMXq
-         uL2Q==
+        d=gmail.com; s=20210112; t=1678543166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LJRQANhCEGiforjUF4Wz2oYn+hKUyKWCbODGuMeniSQ=;
+        b=JIiZNE3piZTJCsdED37IIm8XMSp9EX72kmtzwU+J7mdYahgbVAMXowLQYViHJ7h9us
+         98UEpwBDucgBmIApBqTPNHqtZm4vCsrtJQeGmKZUZ+v+aE2QpS0XMG+TEaXvZfPgrChj
+         G888iVy92TQEqtYbGEZAv3suMTzOaLMl+YYCh4qSBOdMCfUkfmJbUAI53MFtCHTYHP7t
+         9BgSpNHefw8483mdbzuReU2/fOupzw4AlnJxaNf5ZY/h3o6U3KgWUL5drplcszGqsCWU
+         9yLw7G+Ew7BZn5C79OHCJsSB2ooeC8oynkEAqt2gMZluxQ2gVoB3obLIhjApQSQKrA//
+         cZAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678543610;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3jr4lYUE4LbhKnqlf9KsV9sgPswlPNrF5JvpcjFIiws=;
-        b=x9pgneN/rmc5mjvaIr7Sokk3rLMsS/0HeZ1WOqFECe824DNWmpetT9W4fGWPJH6eV6
-         JhF0qZfS/BZxoL/cNG+VY/VaQpzsJ36sIGU0PX79uwK0YC7GGLIZMI/ZEVcIczI6tQYg
-         e/4BntYA1WEM4ds9dYsphiU9b9zqWf4FnNk3wWVSRSb4pY0yc6QSUfjqvieZgHSFCUCi
-         iFPcegua/V1gnXj2CflNepVqTiZCymyBZ+sICDFDA0z1xaukLqrgtlupcR4GzZBMYLKw
-         /oOOdnrFxV+Pqx0LRo0tCKVlBFMiOhKcJUIDMurSKMBmDHUPB4YeVTWBKdI6q5hPlGen
-         JEVw==
-X-Gm-Message-State: AO0yUKU3VXf08Rt8hutGoA3YFzqqyhfz2q0pZiJ4N2ADS0jrnJZox2L4
-        iRTD6kbufiNVzK7iH/wvUpGsOw==
-X-Google-Smtp-Source: AK7set/UIRTG09WzBMk7wO+Lb/OIZ7rFPpLWper7l1UdVQLZnr7HkB4ITdvRNJIXWNz8gLzEII479g==
-X-Received: by 2002:ac8:5dce:0:b0:3bf:e2ff:4c35 with SMTP id e14-20020ac85dce000000b003bfe2ff4c35mr20068022qtx.1.1678543609806;
-        Sat, 11 Mar 2023 06:06:49 -0800 (PST)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id 140-20020a370792000000b0073b69922cfesm1824928qkh.85.2023.03.11.06.06.48
+        d=1e100.net; s=20210112; t=1678543166;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LJRQANhCEGiforjUF4Wz2oYn+hKUyKWCbODGuMeniSQ=;
+        b=KtyxfFuBNkD/6L12hWBijtm5LbC3LCQkwm7q+AvcNLCMBmxPDIRCZvFCcezn8Li416
+         jUvEmV6Fz1lhO4t/y9l65fXxNjFyrLALbOL0RuOd8LU3TgzKRS/AXVATbJSDMeVJfXdK
+         4KQySfmysMZcHDFkUnlFsQZwp1rXEmaVLKpTsCV7GhmdsDokfGPQtz1H9v2xHgkAGMHV
+         sNaZLYTIO7qhIkJvdIC/2cu16BhdXQuYbD0ILOPaqA7OmDruhnXoro8y4EulANX0+Gn5
+         gS0o+/v/wNfmUYVqVFlVo0/BOYKPphQeXwtLwr9X+U1/2g8gK8sKhqd6wSTS7G1hKX27
+         MjPw==
+X-Gm-Message-State: AO0yUKU3PRRj5dCR7X50fl75+VksjWN7qkHC5aWXghUARHvr8VxgHwQq
+        IR+51E4SnmoD6GQmirF2odZJYhyBgUVesw==
+X-Google-Smtp-Source: AK7set+flWmWv1HNs5ZSs/7+QBbG9EVcruCl00JPP/7DWKMEE8Tg5+ucOu2vofksMgs5muQs2jBs2g==
+X-Received: by 2002:a5d:4b04:0:b0:2c5:3cfa:f7dc with SMTP id v4-20020a5d4b04000000b002c53cfaf7dcmr20930026wrq.7.1678543165955;
+        Sat, 11 Mar 2023 05:59:25 -0800 (PST)
+Received: from alaa-emad.. ([41.42.191.171])
+        by smtp.gmail.com with ESMTPSA id s9-20020a5d5109000000b002cea8e3bd54sm245257wrt.53.2023.03.11.05.59.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 06:06:49 -0800 (PST)
-Date:   Sat, 11 Mar 2023 08:57:02 -0500
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: Re: [PATCH] iio: dac: cio-dac: Migrate to the regmap API
-Message-ID: <ZAyIrrLrhmMJqq2w@fedora>
-References: <20230311134012.70822-1-william.gray@linaro.org>
+        Sat, 11 Mar 2023 05:59:25 -0800 (PST)
+From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+To:     outreachy@lists.linux.dev
+Cc:     pure.logic@nexus-software.ie, johan@kernel.org, elder@kernel.org,
+        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        eng.mennamahmoud.mm@gmail.com
+Subject: [PATCH] staging: greybus: eclose macro in a do - while loop
+Date:   Sat, 11 Mar 2023 15:59:19 +0200
+Message-Id: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7eaGiRj104sy96DY"
-Content-Disposition: inline
-In-Reply-To: <20230311134012.70822-1-william.gray@linaro.org>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,55 +71,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+" ERROR: Macros with multiple statements should be enclosed in a do -
+while loop"
 
---7eaGiRj104sy96DY
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reported by checkpath.
 
-On Sat, Mar 11, 2023 at 08:40:12AM -0500, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver.
->=20
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+do loop with the conditional expression set to a constant
+value of zero (0).This creates a loop that
+will execute exactly one time.This is a coding idiom that
+allows a multi-line macro to be used anywhere
+that a single statement can be used.
 
-[...]
+So, enclose `gb_loopback_stats_attrs` macro in do - while (0) to
+fix checkpath error
 
-> @@ -117,8 +148,12 @@ static int cio_dac_probe(struct device *dev, unsigne=
-d int id)
->  	indio_dev->name =3D dev_name(dev);
-> =20
->  	/* initialize DAC outputs to 0V */
-> -	for (i =3D 0; i < CIO_DAC_NUM_CHAN; i++)
-> -		iowrite16(0, priv->base + i);
-> +	for (i =3D 0; i < CIO_DAC_NUM_CHAN; i++) {
-> +		offset =3D i * CIO_DAC_CHANNEL_STRIDE;
-> +		err =3D regmap_write(priv->map, CIO_DAC_BASE + offset, 0);
-> +		if (err)
-> +			return err;
-> +	}
-> =20
->  	return devm_iio_device_register(dev, indio_dev);
->  }
+Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+---
+ drivers/staging/greybus/loopback.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-As soon as I sent this I realized this last hunk is no longer necessary
-because the chan_out_states array is gone so we don't need to match its
-initialized state. I'll remove this block as superfluous and submit a v2
-patch shortly.
+diff --git a/drivers/staging/greybus/loopback.c b/drivers/staging/greybus/loopback.c
+index 1a61fce98056..e86d50638cb5 100644
+--- a/drivers/staging/greybus/loopback.c
++++ b/drivers/staging/greybus/loopback.c
+@@ -162,10 +162,12 @@ static ssize_t name##_avg_show(struct device *dev,		\
+ }									\
+ static DEVICE_ATTR_RO(name##_avg)
+ 
+-#define gb_loopback_stats_attrs(field)				\
+-	gb_loopback_ro_stats_attr(field, min, u);		\
+-	gb_loopback_ro_stats_attr(field, max, u);		\
+-	gb_loopback_ro_avg_attr(field)
++#define gb_loopback_stats_attrs(field)					\
++	do { \
++		gb_loopback_ro_stats_attr(field, min, u);		\
++		gb_loopback_ro_stats_attr(field, max, u);		\
++		gb_loopback_ro_avg_attr(field);				\
++	} while (0)
+ 
+ #define gb_loopback_attr(field, type)					\
+ static ssize_t field##_show(struct device *dev,				\
+-- 
+2.34.1
 
-William Breathitt Gray
-
---7eaGiRj104sy96DY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAyIrgAKCRC1SFbKvhIj
-K1z2AQCXC7YVVHrA7LJgDJsARq//xniX0yAewpIY+ix0wlp33QD9He4DCxaHI52t
-Q4te1JECKhcAK2HyQaQcA7JQMK/j+A8=
-=btlL
------END PGP SIGNATURE-----
-
---7eaGiRj104sy96DY--
