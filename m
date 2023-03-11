@@ -2,109 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5FB176B5D9B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:00:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF64F6B5D9C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbjCKQAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:00:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57350 "EHLO
+        id S230407AbjCKQA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:00:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjCKQA0 (ORCPT
+        with ESMTP id S230378AbjCKQA5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:00:26 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AA41F2090
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:00:25 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id j11so32474608edq.4
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:00:25 -0800 (PST)
+        Sat, 11 Mar 2023 11:00:57 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF8E199C1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:00:55 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id ek18so1347712edb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:00:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678550424;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NBMbxaDpVx3TfaO783vsAGs5TveZ/8Yt54IKh+0DiEk=;
-        b=VitN/wrBrIOmh8Tl+EmJKf9TJJd1nc08BOudi2mQF2PPqNHBg3gqxzfM4tDQQp6XWa
-         xdRUgdNEuAwIPvOCvowBoCFU3KAZcxJ2LOwDRai/80whe47/JJRqXuRyZGiaEo4odIi3
-         bqz1ANYW+Nt2MOfhlnwhwZl6ZydHEyxnIRncmJ2RpHzGWGD2nESk7x8ZTbjCOThaWMyn
-         XVG9BMabHipHGB+W5SNbIwK267HZy/tyiTrDaLbjX5ZXGh4emdaHX9mT/3c/Axrmh5J5
-         Eo6PA/EvrN9Ynpiq8LmKIV0F9VNlIZX0cv1fl0CYC3nv9xtaPWqSDDRXqZZln8d3mRXk
-         adjw==
+        d=gmail.com; s=20210112; t=1678550453;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zH3H4cxNgLOQ6PFJEhsV6rqCe5ksnzMYlcew81Qs5YU=;
+        b=PngSGwZsDShXVr2eFlFeY3I3Tx3pEZMIXHzH2KD0FPx/YRHaQFK4BHmTnrdTZUZhu9
+         EJsgCESZcnTR0HvbFH+XnfWR6n7Vnqo43C9o0+biTBKUI8RNSXsTyK0kWe+X3Xno8jmY
+         tDCl4MwDroXcXFz+l6Uz++zEVfGuqjRf06N0Rq1QV+Quh8SUcDQfg19xsfkn1V0Giumd
+         EsuZnnRxKdoKAYFjDHuc9Emk78nxs8+D0M86lo2RYxrBCmoKc14MiPtr0gugSY6onjtz
+         QH9R9mSaCVOLd3GnF4c2/DYzkxXIPP4ZJ5zPYmjSQUjMQMz7IU3bpRtUmjv0WQdkhdud
+         jPyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678550424;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NBMbxaDpVx3TfaO783vsAGs5TveZ/8Yt54IKh+0DiEk=;
-        b=ymewoqh1aAJnj50tvCw86OAaDkEQhQYegFhL0+toTR6b+MJYaruONsMh/7OhGcw3lQ
-         qlj2XCzWPa60fvs258BvGA7KNUg6FYARULp01x9k78K+ApESfyUJtymv5DxduAVq7lm1
-         5X4beNB1DNFCxisOOUhRZ2lky2hdy10DlRQRAjFazUb29zMBBchdXSHsBAh/ImCCkgsI
-         NAovDUQcvEcAiVyAsmv9CciT8nQLrTDn47Vy1wFg1MDOAyahEbhjjAbncNCIVgD8woXS
-         WPx/8RYvx7DEcftHi0VyUflOlg9DUbfFZBm4iB1LxjPOhkGy5fBx/bhIRQYjAy6CgiBm
-         Wlww==
-X-Gm-Message-State: AO0yUKXtoiOeIPwgRjP701v6h017L2HJeIhD5TlIkS1cVvx34vwVxg//
-        c2kW4geC1YNGqtYRDs2qfJA/KQ==
-X-Google-Smtp-Source: AK7set9G4KtMXYdRcjs6ZsXcBJ0uVk/Tbs6J8XeC+KP3T872bugZUO6tYjkiZ4Puz3c7+tcY+FxwwA==
-X-Received: by 2002:a17:906:49b:b0:8b2:e93:3f59 with SMTP id f27-20020a170906049b00b008b20e933f59mr5117554eja.31.1678550423717;
-        Sat, 11 Mar 2023 08:00:23 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:6927:e94d:fc63:9d6e? ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
-        by smtp.gmail.com with ESMTPSA id n18-20020a170906841200b009222a7192b4sm573232ejx.30.2023.03.11.08.00.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 08:00:23 -0800 (PST)
-Message-ID: <9b6fbb54-705d-3e3a-b7e7-ec62297929cb@linaro.org>
-Date:   Sat, 11 Mar 2023 17:00:22 +0100
+        d=1e100.net; s=20210112; t=1678550453;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zH3H4cxNgLOQ6PFJEhsV6rqCe5ksnzMYlcew81Qs5YU=;
+        b=RxLcfdnCIZiUmuL4GtkcpUVTIddhhKY0vOJ55NXTNmg+Uc75AieR061adQjvhe05Vw
+         06VbGj3DA8XQAuZ08CounQmPYUjt/4sbgO0yrD93LG7RpHOHxYByvkXjgMQ5JxwtkaG7
+         JlNlC/Xwwkn5cGmjPNPoRV4g7dh2d6VOrKNkFPPyvH3cXJxMqEx4rdUJQBGdc6dcPLgJ
+         SV6dCSSlQ0xXZUCsKpVArcB55NQwIJO44KuSE3QwCwkqr8g7vsAB6/Tn3AIj00OBo4NM
+         n12vSLZupWbs1S2w7Y1B6xygEByMibe+c2N85Ve4cM2bvcijDfiadkZL1gE7ajWTrDBw
+         /g9g==
+X-Gm-Message-State: AO0yUKXbJyFiK2TAmtp8X6zziIjc4G/kydkMsLgVz+fd170Z2DViMUrX
+        MlBGzCvyew+Krd+S0cK979XBdrxFOlC7pnnFJ6pvTGYFb98=
+X-Google-Smtp-Source: AK7set+TKUXSTGTiK6vs4/Gq44oEikuQzFpxn3fDuxxc/wOcRb/CJkPOocwIsXWXzOAOPvdq60nsIDFnb5YmDd+1kI0=
+X-Received: by 2002:a50:baa6:0:b0:4ad:6052:ee90 with SMTP id
+ x35-20020a50baa6000000b004ad6052ee90mr15939167ede.7.1678550453304; Sat, 11
+ Mar 2023 08:00:53 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/3] dt-bindings: arm: ti: Add bindings for BeaglePlay
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Julien Panis <jpanis@baylibre.com>, Bryan Brattlof <bb@ti.com>,
-        Jason Kridner <jkridner@gmail.com>,
-        Robert Nelson <robertcnelson@gmail.com>
-References: <20230311111022.23717-1-nm@ti.com>
- <20230311111022.23717-2-nm@ti.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111022.23717-2-nm@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From:   Ajay Garg <ajaygargnsit@gmail.com>
+Date:   Sat, 11 Mar 2023 21:30:40 +0530
+Message-ID: <CAHP4M8UEnLeTbrR1fZOJ2KkRAHLJLewjT2xg78AzzoXPYcz-hA@mail.gmail.com>
+Subject: How to resolve "nptl-signals.h : no such file or directory"
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 12:10, Nishanth Menon wrote:
-> From: Robert Nelson <robertcnelson@gmail.com>
-> 
-> This board is based on ti,am625
+Hi All.
 
-Subject: drop second/last, redundant "bindings for". The "dt-bindings"
-prefix is already stating that these are bindings.
+(Sorry had to write to this list, as the subscription to
+gdb@sourcewave.org seemingly went successful, but never got the
+confirmation email. Even sending emails get bounced).
 
-> 
-> https://beagleplay.org/
-> https://git.beagleboard.org/beagleplay/beagleplay
-> 
-> Co-developed-by: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Nishanth Menon <nm@ti.com>
-> Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
 
-Your chain order is not correct. If Robert is the author, his SoB is first.
+I have been trying to analyze a core, but unable to receive the
+complete backtrace due to following error :
 
-> ---
->  Documentation/devicetree/bindings/arm/ti/k3.yaml | 1 +
->  1 file changed, 1 insertion(+)
+#######################################
+#0  0x0088ad6c in __libc_signal_restore_set (set=0xf48f2a78) at
+../sysdeps/unix/sysv/linux/nptl-signals.h:79
+79 ../sysdeps/unix/sysv/linux/nptl-signals.h: No such file or directory.
+#######################################
 
-Best regards,
-Krzysztof
 
+Following is the (incomplete) backtrace :
+
+#######################################
+[Current thread is 1 (LWP 7491)]
+(gdb) bt
+#0  0x0088ad6c in __libc_signal_restore_set (set=0xf48f2a78) at
+../sysdeps/unix/sysv/linux/nptl-signals.h:79
+#1  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:48
+#2  0x0088cb78 in __GI_abort () at abort.c:89
+#3  <frame with modified names> 0x049b3a54 in func_1 (ffp=<optimized
+out>, base_name=<optimized out>, max_size=<optimized out>,
+file_type=<optimized out>)  at a/b/c/d/e:58
+#4  0x00000270 in ?? ()
+(gdb)
+#######################################
+
+
+Since GDB is able to find raise.c, I did a full base-machine search
+for it, via :
+
+#######################################
+find / -name raise.c 2> /dev/null
+#######################################
+
+but could not find raise.c either on the base-machine filesystem.
+
+
+So, following are my queries :
+
+1.
+Where are raise.c, nptl-signals.h etc. supposed to reside?
+
+2.
+How can we bring back the missing nptl-signals.h file?
+
+
+Will be grateful for pointers.
+
+
+Thanks and Regards,
+Ajay
