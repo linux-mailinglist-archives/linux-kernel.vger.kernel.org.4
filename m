@@ -2,134 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF4C76B5E00
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:40:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 742EC6B5E26
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:55:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbjCKQkP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:40:15 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33046 "EHLO
+        id S229552AbjCKQxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:53:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229874AbjCKQkO (ORCPT
+        with ESMTP id S229450AbjCKQw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:40:14 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDDD18173
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:40:12 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id i10so8694620plr.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:40:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678552812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=f6N0Ulf25aeoYIge+QpxZr0rbx1RoYJ828lEZDXjf8Y=;
-        b=4qg9VKu3vLo4bCMQJ1lLsSPxbAsaQK+BCQEzv+s8BjaTrzgGkSLPdtHP/zkXYnrZ1E
-         2qGDxhupxCKpPgaDCBSYT+ncBDyw5m3xHB+6kMTcSFpbyH11V8a3fyReIfuOagfArqFI
-         uE27MwDu9aaGYk7CF8q8Vt5nQ9iwOIqqcaLHfp6QnTFV9I4TAYoohKXBCHhcUcUKg1HS
-         KZoRwJHhenq6H68JeJnfBl81qINr25sK5P7bF3Jg4yyTM1CkRqbqnRiWF4DQwkzloGDo
-         6nzA9qT7nLXpstd4CtZ+LydjS1aRTJfOQpf1WVCEh5Q2t69ZhL/aVEbCbpEZMNKeB9t/
-         h0vg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678552812;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6N0Ulf25aeoYIge+QpxZr0rbx1RoYJ828lEZDXjf8Y=;
-        b=4QV8xl9JW+ENERPcwz4G+KYJIV4IG38Sg8bY8QSb852G2D9JHltha7lTxH599UW1Y8
-         6QDStZcD8m7Uo1Yl0hpc96RRpZsz8eYvp6Vc9U+aavYR706nGO/bLG9XnNHXz5um/tGP
-         gwzS/4Q4MNAfoFL1/LhHrehZZUILtfHq92QWze7qty78cfdsF8QQUcV/oNQt4SWSFwqy
-         YnZZ3vdpOqOl8OsGcN+u5zlwM0wBiQz6Y1fz/F3WmlIugjzdVg248tj0KM6cq1sfWMdN
-         ShfLXq+6GN/wZK/p8deNB6IFniTKZ7+dvFdnrTmun6cS3EEfF5JY4C59/oAqdkHX5HHJ
-         vZMQ==
-X-Gm-Message-State: AO0yUKXM2aPbw2T4rtJfSQh5xI8sD94yqBWBh5Hsvo0FSWUhoyWF63So
-        zpTvNGb3atmsgqvWsU8bAT5WcAPJrtJNkevPR2JO+g==
-X-Google-Smtp-Source: AK7set9fz5fdGt/ZU0CFXP9O85wO02qjjZE84smKSYAIQlQyoXRPazvJBu52ixyWt3231fvpWPvL4A==
-X-Received: by 2002:a17:903:1387:b0:19f:382d:9740 with SMTP id jx7-20020a170903138700b0019f382d9740mr448884plb.3.1678552811987;
-        Sat, 11 Mar 2023 08:40:11 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id jx4-20020a170903138400b0019edf582a95sm1790401plb.20.2023.03.11.08.40.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 08:40:11 -0800 (PST)
-Message-ID: <d5b5e99f-78c0-6340-4a2f-86ea593c4fab@kernel.dk>
-Date:   Sat, 11 Mar 2023 09:40:10 -0700
+        Sat, 11 Mar 2023 11:52:59 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3CEA13C
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:52:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:Cc:References:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=4f+5jyzSEbbObgrf6Hn1rkbRg4zTr+oj+dlkaLLEfbo=; b=zpVcVNej0fQXq2cHBpx+2tsqcu
+        rDNolOOsXMZA7oYU6SZ4p2+ythe7ANg24SBIXA3TddnW5e+7ao7mCE+lhYoGH5qKN34nGD0FqS1dw
+        HhMn1yuXWfvzWR1+Su+ergTGJXjJWW9HoVziKI0hPHd62bp7VBsl+IQQdzWjBUjLNhaUsa8Gp0eZH
+        xHp04IvUvHz+cAIxHwNZiuuOT2fbTYvns6VroJXbgT00cLFj0keXxG+dVqYER9n9wvTwVSfo9rEnn
+        CChOCdrpapJC9+5XlqbrF4encU0XcuXlxyPnIvM+0/MTFDpHH4ohDMg/g/0BnsS4/F298QhFagBj/
+        3C3Cux6A==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pb2Sl-000ukk-Ik; Sat, 11 Mar 2023 16:52:55 +0000
+Message-ID: <b6530d49-074d-ee68-ed87-57c9d60d4847@infradead.org>
+Date:   Sat, 11 Mar 2023 08:52:53 -0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: Possible kernel fs block code regression in 6.2.3 umounting usb
- drives
+Subject: Re: How to resolve "nptl-signals.h : no such file or directory"
 Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     stable@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Mike Cloaked <mike.cloaked@gmail.com>,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Yu Kuai <yukuai3@huawei.com>, Genes Lists <lists@sapience.com>
-References: <CAOCAAm7AEY9tkZpu2j+Of91fCE4UuE_PqR0UqNv2p2mZM9kqKw@mail.gmail.com>
- <CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com>
- <ZAuPkCn49urWBN5P@sol.localdomain> <ZAuQOHnfa7xGvzKI@sol.localdomain>
- <ad021e89-c05c-f85a-2210-555837473734@kernel.dk>
- <88b36c03-780f-61a5-4a66-e69072aa7536@sapience.com>
- <ZAu030xtaPBGFPBS@sol.localdomain> <ZAxKq+Czx1dQjl6M@kroah.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <ZAxKq+Czx1dQjl6M@kroah.com>
+To:     Ajay Garg <ajaygargnsit@gmail.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHP4M8UEnLeTbrR1fZOJ2KkRAHLJLewjT2xg78AzzoXPYcz-hA@mail.gmail.com>
+Cc:     Jason Wessel <jason.wessel@windriver.com>,
+        Daniel Thompson <daniel.thompson@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        kgdb-bugreport-request@lists.sourceforge.net
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <CAHP4M8UEnLeTbrR1fZOJ2KkRAHLJLewjT2xg78AzzoXPYcz-hA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-n 3/11/23 2:32?AM, Greg Kroah-Hartman wrote:
-> On Fri, Mar 10, 2023 at 02:53:19PM -0800, Eric Biggers wrote:
->> On Fri, Mar 10, 2023 at 04:08:21PM -0500, Genes Lists wrote:
->>> On 3/10/23 15:23, Jens Axboe wrote:
->>>> On 3/10/23 1:16?PM, Eric Biggers wrote:
->>> ...
->>>> But I would revert:
->>>>
->>>> bfe46d2efe46c5c952f982e2ca94fe2ec5e58e2a
->>>> 57a425badc05c2e87e9f25713e5c3c0298e4202c
->>>>
->>>> in that order from 6.2.3 and see if that helps. Adding Yu.
->>>>
->>> Confirm the 2 Reverts fixed in my tests as well (nvme + sata drives).
->>> Nasty crash - some needed to be power cycled as they hung on shutdown.
->>>
->>> Thank you!
->>>
->>> gene
->>>
->>>
->>
->> Great, thanks.  BTW, 6.1 is also affected.  A simple reproducer is to run:
->>
->> 	dmsetup create dev --table "0 128 zero"
->> 	dmsetup remove dev
->>
->> The following kconfigs are needed for the bug to be hit:
->>
->> 	CONFIG_BLK_CGROUP=y
->> 	CONFIG_BLK_DEV_THROTTLING=y
->> 	CONFIG_BLK_DEV_THROTTLING_LOW=y
->>
->> Sasha or Greg, can you please revert the indicated commits from 6.1 and 6.2?
++add some kernel gdb people + list
+
+On 3/11/23 08:00, Ajay Garg wrote:
+> Hi All.
 > 
-> Yes, will go do that right now, thanks for debugging this so quickly!
+> (Sorry had to write to this list, as the subscription to
+> gdb@sourcewave.org seemingly went successful, but never got the
 
-The issue here is that parts of a series was auto-selected. That seems
-like a bad idea to do for stable. Just because something applies without
-other parts of the series doesn't mean it's sane to backport by itself.
+Is that  @sourceware.org ?
 
-How do we prevent that from happening? Maybe we just need to default
-to "if whole series doesn't pick cleanly, don't grab any parts of it
-in auto-selection"? Exception being if it's explicitly marked for stable,
-not uncommon to have a series that starts with a fix or two which should
-go to stable, then the feature bits.
+> confirmation email. Even sending emails get bounced).
+> 
+> 
+> I have been trying to analyze a core, but unable to receive the
+> complete backtrace due to following error :
+> 
+> #######################################
+> #0  0x0088ad6c in __libc_signal_restore_set (set=0xf48f2a78) at
+> ../sysdeps/unix/sysv/linux/nptl-signals.h:79
+> 79 ../sysdeps/unix/sysv/linux/nptl-signals.h: No such file or directory.
+> #######################################
+> 
+> 
+> Following is the (incomplete) backtrace :
+> 
+> #######################################
+> [Current thread is 1 (LWP 7491)]
+> (gdb) bt
+> #0  0x0088ad6c in __libc_signal_restore_set (set=0xf48f2a78) at
+> ../sysdeps/unix/sysv/linux/nptl-signals.h:79
+> #1  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:48
+> #2  0x0088cb78 in __GI_abort () at abort.c:89
+> #3  <frame with modified names> 0x049b3a54 in func_1 (ffp=<optimized
+> out>, base_name=<optimized out>, max_size=<optimized out>,
+> file_type=<optimized out>)  at a/b/c/d/e:58
+> #4  0x00000270 in ?? ()
+> (gdb)
+> #######################################
+> 
+> 
+> Since GDB is able to find raise.c, I did a full base-machine search
+> for it, via :
+> 
+> #######################################
+> find / -name raise.c 2> /dev/null
+> #######################################
+> 
+> but could not find raise.c either on the base-machine filesystem.
+> 
+> 
+> So, following are my queries :
+> 
+> 1.
+> Where are raise.c, nptl-signals.h etc. supposed to reside?
+> 
+> 2.
+> How can we bring back the missing nptl-signals.h file?
+> 
+> 
+> Will be grateful for pointers.
+> 
+> 
+> Thanks and Regards,
+> Ajay
 
 -- 
-Jens Axboe
-
+~Randy
