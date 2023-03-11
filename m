@@ -2,79 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24A8B6B57E2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 03:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458BF6B57E5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 03:54:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCKCmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 21:42:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42126 "EHLO
+        id S229722AbjCKCyh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 21:54:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCKCmo (ORCPT
+        with ESMTP id S229471AbjCKCye (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 21:42:44 -0500
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6802134822;
-        Fri, 10 Mar 2023 18:42:42 -0800 (PST)
-Received: by mail-pj1-x102d.google.com with SMTP id nn12so7045452pjb.5;
-        Fri, 10 Mar 2023 18:42:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678502562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=umqzK/hOBtRu3pNuRypQQc9h+Uu3og0K8NY7WJV+iZA=;
-        b=kuu45IXEDEo/OxCiuuLWr+cOhNq7nvTvneMFTdgJQRJK9aRyg9jc4+yzEk6cD2lVGY
-         iWVqcKOzY9Iv8SzXRhy4XrY+NAlWESOMNUv4uHJI1WXyb8AixJK/zlpatlBAr+NHrFQk
-         ITQR4TvI9KEIoMD8TH/+G/M/d4NA3nNL18VEG4Dho0j65fjhx7C1oyr57KvjghB5q1+n
-         BrNdea2Z924MKhIDwdu7cX2I6fw6i5p/EUPX6l/wqJtHgCOen53t+1KkmUTAXrF1WEME
-         mElV3JADqK/VnUdZn5wxA4sRPgaY/Oj4tOut/CJHGYrEUb2kl93tbIDSxarn372OGKCM
-         Rf0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678502562;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=umqzK/hOBtRu3pNuRypQQc9h+Uu3og0K8NY7WJV+iZA=;
-        b=MGuLOK7SYWNg1K6sJmn2KNfzgYTPi41mBlXqkwpWQK0k457j84ajb6ERYHfZV8pkCy
-         7kL/4ogVFhoE2E94l3CVW09e9AskrR9iHCW72o9t15MhCQiR0KB/5etxu5TcgiV/AWxG
-         nGC+ZZEnS/3fTQ0qfT7O/GMkfvgYfs2rsSukuCzV8O2ZfoBDlL6J0ED6g/Vrcja4tIve
-         nBk74Z5LqNT9JAtaKp9VbuhO5+bocE93cuGH3yL/mXOEBBGGwVeCGshCBW5GkMz7qJLj
-         2kB1Gp7cyo//TEM2dtmUxThpupo9C444idodIT1cy+xCRgRANMUuTVomrPUtfD94NLgc
-         PGBw==
-X-Gm-Message-State: AO0yUKXt9PAGmBMCUjXIc/MLqogaIler283vn+GyfFTXikPUpSAChgaA
-        bB40ntxunJojz80lRwiqvRWWu6vy9To=
-X-Google-Smtp-Source: AK7set+bw2PZKBjOfEpcK/SQBdkFCXFqFMTtZP42+Q9HLXf5vggFG+C38LdqWm3xo4+ebIC7X/Silw==
-X-Received: by 2002:a17:902:eecc:b0:199:2ee:6238 with SMTP id h12-20020a170902eecc00b0019902ee6238mr25679291plb.16.1678502562106;
-        Fri, 10 Mar 2023 18:42:42 -0800 (PST)
-Received: from debian.me (subs28-116-206-12-51.three.co.id. [116.206.12.51])
-        by smtp.gmail.com with ESMTPSA id kt7-20020a170903088700b001963bc7bdb8sm573404plb.274.2023.03.10.18.42.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 18:42:41 -0800 (PST)
-Received: by debian.me (Postfix, from userid 1000)
-        id 767891065A6; Sat, 11 Mar 2023 09:42:36 +0700 (WIB)
-Date:   Sat, 11 Mar 2023 09:42:35 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Vegard Nossum <vegard.nossum@oracle.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, backports@vger.kernel.org,
-        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Stephen Rothwell <sfr@canb.auug.org.au>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH] docs: add backporting and conflict resolution document
-Message-ID: <ZAvqm9EqGq/kJpkT@debian.me>
-References: <20230303162553.17212-1-vegard.nossum@oracle.com>
- <ZAQUkbxQxCanh+9c@debian.me>
- <e70bf38e-af6a-dc63-3249-adbf168a1233@oracle.com>
+        Fri, 10 Mar 2023 21:54:34 -0500
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95DB10DE71;
+        Fri, 10 Mar 2023 18:54:31 -0800 (PST)
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32B1xNfq020198;
+        Sat, 11 Mar 2023 02:54:17 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=v92bosyRvpput1MVe2AVqSZUIGNmc/ve3mzwdINR7YM=;
+ b=TYimoIXq+aTCw9uAZTT+7G01K3r8kbiYIfB6Mul15zFgGEuFT8bah4hcCESd8PA6OQ24
+ QikXzrzBL03qKcnpTujpDv1BTjYdNfbTNur1XpVVvFO+vcegZ8wDkSzqe7MN47G1qcmZ
+ E208XcCMOpImtQP1YCupRDqNAMw28RSc5KIrO3Bboq5oFx6koEbS8IKRn8vfyrpsYGFu
+ OGdDiW8q5fLyO5vNvb875ze0rXgVLynQWpTZVNE+a/RstaXNs6YDdnN0D8Gpjq8NuG57
+ Hb40k+LvNBs7A8TTXzlawAS0V3VJSWELaGsvCXIjKaiQwOlcf48/Gu2rIB91n9tkxri0 LA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p7ndx3nak-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Mar 2023 02:54:17 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32B2sBOu031032
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Mar 2023 02:54:11 GMT
+Received: from [10.216.47.40] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Fri, 10 Mar
+ 2023 18:54:04 -0800
+Message-ID: <c23453b3-4f91-aa0a-c45a-de99ac369048@quicinc.com>
+Date:   Sat, 11 Mar 2023 08:24:01 +0530
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5SlrIDA6gKdGPE62"
-Content-Disposition: inline
-In-Reply-To: <e70bf38e-af6a-dc63-3249-adbf168a1233@oracle.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH 2/8] usb: dwc3: core: Access XHCI address space
+ temporarily to read port info
+Content-Language: en-US
+To:     Thinh Nguyen <Thinh.Nguyen@synopsys.com>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Felipe Balbi <balbi@kernel.org>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "quic_pkondeti@quicinc.com" <quic_pkondeti@quicinc.com>,
+        "quic_ppratap@quicinc.com" <quic_ppratap@quicinc.com>,
+        "quic_wcheng@quicinc.com" <quic_wcheng@quicinc.com>,
+        "quic_jackp@quicinc.com" <quic_jackp@quicinc.com>,
+        "quic_harshq@quicinc.com" <quic_harshq@quicinc.com>,
+        "ahalaney@redhat.com" <ahalaney@redhat.com>,
+        "quic_shazhuss@quicinc.com" <quic_shazhuss@quicinc.com>
+References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+ <20230310163420.7582-3-quic_kriskura@quicinc.com>
+ <20230310235537.afl76rs3pcifbn46@synopsys.com>
+From:   Krishna Kurapati PSSNV <quic_kriskura@quicinc.com>
+In-Reply-To: <20230310235537.afl76rs3pcifbn46@synopsys.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: u4JOIFhSBPWFtPnAyKNic-eMu6vIHybR
+X-Proofpoint-GUID: u4JOIFhSBPWFtPnAyKNic-eMu6vIHybR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-10_10,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ suspectscore=0 impostorscore=0 malwarescore=0 spamscore=0 adultscore=0
+ mlxscore=0 phishscore=0 clxscore=1015 lowpriorityscore=0 bulkscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303110023
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,235 +100,195 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---5SlrIDA6gKdGPE62
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, Mar 07, 2023 at 12:43:42PM +0100, Vegard Nossum wrote:
-> This whole document is meant for the developer doing the backport.
->=20
-> git-format-patch --base=3D is already covered here:
->=20
-> https://docs.kernel.org/process/submitting-patches.html#providing-base-tr=
-ee-information
->=20
-> I don't think we need to repeat it in this document.
+On 3/11/2023 5:25 AM, Thinh Nguyen wrote:
+> On Fri, Mar 10, 2023, Krishna Kurapati wrote:
+>> Currently host-only capable DWC3 controllers support Multiport. Temporarily
+>> map XHCI address space for host-only controllers and parse XHCI Extended
+>> Capabilities registers to read number of physical usb ports connected to the
+>> multiport controller (presuming each port is at least HS capable) and extract
+>> info on how many of these ports are Super Speed capable.
+>>
+>> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+>> ---
+>>   drivers/usb/dwc3/core.c | 75 +++++++++++++++++++++++++++++++++++++++++
+>>   drivers/usb/dwc3/core.h |  9 +++++
+>>   2 files changed, 84 insertions(+)
+>>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 476b63618511..076c0f8a4441 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -37,6 +37,7 @@
+>>   #include "core.h"
+>>   #include "gadget.h"
+>>   #include "io.h"
+>> +#include "../host/xhci.h"
+> 
+> I think better to duplicate some of the logic in dwc3 driver and avoid
+> any direct dependency with the xhci driver.
+> 
+>>   
+>>   #include "debug.h"
+>>   
+>> @@ -1750,6 +1751,65 @@ static struct extcon_dev *dwc3_get_extcon(struct dwc3 *dwc)
+>>   	return edev;
+>>   }
+>>   
+>> +static int dwc3_read_port_info(struct dwc3 *dwc, struct resource *res)
+>> +{
+>> +	void __iomem		*regs;
+>> +	struct resource         dwc_res;
+>> +	u32			offset;
+>> +	u32			temp;
+>> +	u8			major_revision;
+>> +	int			ret = 0;
+>> +
+>> +	/*
+>> +	 * Remap xHCI address space to access XHCI ext cap regs,
+>> +	 * since it is needed to get port info.
+>> +	 */
+>> +	dwc_res = *res;
+>> +	dwc_res.start += 0;
+>> +	dwc_res.end = dwc->xhci_resources[0].start +
+>> +				DWC3_XHCI_REGS_END;
+> 
+> Isn't dwc->xhci_resources[0] already setup at this point? Can we use
+> dwc->xhci_resources[0] directly without copy the setting in dwc_res?
+> 
+>> +
+>> +	regs = ioremap(dwc_res.start, resource_size(&dwc_res));
+>> +	if (IS_ERR(regs))
+>> +		return PTR_ERR(regs);
+>> +
+>> +	offset = xhci_find_next_ext_cap(regs, 0,
+>> +					XHCI_EXT_CAPS_PROTOCOL);
+>> +	while (offset) {
+>> +		temp = readl(regs + offset);
+>> +		major_revision = XHCI_EXT_PORT_MAJOR(temp);
+>> +
+>> +		temp = readl(regs + offset + 0x08);
+>> +		if (major_revision == 0x03) {
+>> +			dwc->num_ss_ports += XHCI_EXT_PORT_COUNT(temp);
+>> +		} else if (major_revision <= 0x02) {
+>> +			dwc->num_ports += XHCI_EXT_PORT_COUNT(temp);
+>> +		} else {
+>> +			dev_err(dwc->dev, "port revision seems wrong\n");
+>> +			ret = -EINVAL;
+>> +			goto unmap_reg;
+>> +		}
+>> +
+>> +		offset = xhci_find_next_ext_cap(regs, offset,
+>> +						XHCI_EXT_CAPS_PROTOCOL);
+>> +	}
+>> +
+>> +	temp = readl(regs + DWC3_XHCI_HCSPARAMS1);
+>> +	if (HCS_MAX_PORTS(temp) != (dwc->num_ss_ports + dwc->num_ports)) {
+>> +		dev_err(dwc->dev, "inconsistency in port info\n");
+>> +		ret = -EINVAL;
+>> +		goto unmap_reg;
+>> +	}
+>> +
+>> +	dev_info(dwc->dev,
+>> +		"num-ports: %d ss-capable: %d\n", dwc->num_ports, dwc->num_ss_ports);
+> 
+> The end user doesn't need to know this info. This should be a debug
+> message. Perhaps it can be a tracepoint if needed?
+> 
+>> +
+>> +unmap_reg:
+>> +	iounmap(regs);
+>> +	return ret;
+>> +}
+>> +
+>>   static int dwc3_probe(struct platform_device *pdev)
+>>   {
+>>   	struct device		*dev = &pdev->dev;
+>> @@ -1757,6 +1817,7 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   	struct dwc3		*dwc;
+>>   
+>>   	int			ret;
+>> +	unsigned int		hw_mode;
+>>   
+>>   	void __iomem		*regs;
+>>   
+>> @@ -1880,6 +1941,20 @@ static int dwc3_probe(struct platform_device *pdev)
+>>   			goto disable_clks;
+>>   	}
+>>   
+>> +	/*
+>> +	 * Currently DWC3 controllers that are host-only capable
+>> +	 * support Multiport.
+>> +	 */
+>> +	hw_mode = DWC3_GHWPARAMS0_MODE(dwc->hwparams.hwparams0);
+>> +	if (hw_mode == DWC3_GHWPARAMS0_MODE_HOST) {
+>> +		ret = dwc3_read_port_info(dwc, res);
+>> +		if (ret)
+>> +			goto disable_clks;
+>> +	} else {
+>> +		dwc->num_ports = 1;
+>> +		dwc->num_ss_ports = 1;
+>> +	}
+>> +
+>>   	spin_lock_init(&dwc->lock);
+>>   	mutex_init(&dwc->mutex);
+>>   
+>> diff --git a/drivers/usb/dwc3/core.h b/drivers/usb/dwc3/core.h
+>> index 582ebd9cf9c2..74386d6a0277 100644
+>> --- a/drivers/usb/dwc3/core.h
+>> +++ b/drivers/usb/dwc3/core.h
+>> @@ -35,6 +35,9 @@
+>>   
+>>   #define DWC3_MSG_MAX	500
+>>   
+>> +/* XHCI Reg constants */
+>> +#define DWC3_XHCI_HCSPARAMS1	0x04
+>> +
+>>   /* Global constants */
+>>   #define DWC3_PULL_UP_TIMEOUT	500	/* ms */
+>>   #define DWC3_BOUNCE_SIZE	1024	/* size of a superspeed bulk */
+>> @@ -1023,6 +1026,10 @@ struct dwc3_scratchpad_array {
+>>    * @usb_psy: pointer to power supply interface.
+>>    * @usb2_phy: pointer to USB2 PHY
+>>    * @usb3_phy: pointer to USB3 PHY
+>> + * @num_ports: Indicates the number of physical USB ports present on HW
+>> + *		presuming each port is at least HS capable
+> 
+> This isn't the number of physical USB ports right? That's the number of
+> usb2 ports the controller is configured with right?. Perhaps we can use
+> num_usb2_ports and num_usb3_ports?
+> 
+Hi Thinh,
 
-OK.
+   Yes, naming this might have created a little confusion.
+num_ports is supposed to indicate number of usb2 ports in the controller.
 
-> >=20
-> > "In most cases, you will likely want to cherry-pick with ``-x`` option
-> > to record upstream commit in the resulting backport commit description,
-> > which looks like::
-> >=20
-> >      (cherry picked from commit <upstream commit>)
-> >=20
-> > However, for backporting to stable, you need to edit the description
-> > above to either::
-> >=20
-> >      commit <upstream commit> upstream
-> >=20
-> > or
-> >      [ Upstream commit <upstream commit> ]
-> >=20
-> > "
->=20
-> Good point -- the original blog post where this came from was meant to
-> be more general than just stable backports, but this document in
-> particular is partly also meant to aid stable contributors we might as
-> well include it.
+Incase of sa8295 (4 port controller with first two ports having ss 
+capability), num_ports would be 4 and num_ss_ports would be 2. (and not 
+6 as what num_ports usually sounds).
+I can rename them accordingly in the next version and update the 
+description as well.
 
-Nice.
+Regards,
+Krishna,
 
->=20
-> > > +For backports, what likely happened was that your older branch is
-> > > +missing a patch compared to the branch you are backporting from --
-> > > +however, it is also possible that your older branch has some commit =
-that
-> > > +doesn't exist in the newer branch. In any case, the result is a conf=
-lict
-> > > +that needs to be resolved.
-> >=20
-> > Another conflict culprit that there are non-prerequisite commits that
-> > change the context line.
->=20
-> I think that's already covered by "missing a patch", or at least that
-> was my intention. I guess we can change it to something like:
->=20
-> +For backports, what likely happened was that the branch you are
-> +backporting from contains patches not in the branch you are backporting
-> +to. However, it is also possible that your older branch has some commit
-> +that doesn't exist in the newer branch. In any case, the result is a
-> +conflict that needs to be resolved.
-
-What I mean is "hey, we have changes that make context lines
-conflicted". By "patches not in the branch", I interpret that as "we
-have possible non-prereqs that cause this (messy) conflict".
-
->=20
-> I'll fiddle a bit more with the exact phrasing.
->=20
-> > > +git log
-> > > +^^^^^^^
-> > > +
-> > > +A good first step is to look at ``git log`` for the file that has the
-> > > +conflict -- this is usually sufficient when there aren't a lot of
-> > > +patches to the file, but may get confusing if the file is big and
-> > > +frequently patched. You should run ``git log`` on the range of commi=
-ts
-> > > +between your currently checked-out branch (``HEAD``) and the parent =
-of
-> > > +the patch you are picking (``COMMIT``), i.e.::
-> > > +
-> > > +    git log HEAD..COMMIT^ -- PATH
-> >=20
-> > HEAD and <commit> swapped, giving empty log. The correct way is:
-> >=20
-> > ```
-> > git log <commit>^..HEAD -- <path>
-> > ```
->=20
-> Hrrm, I've double checked this and I think the original text is correct.
->=20
-> HEAD..<commit>^ gives you commits reachable from <commit>^ (parent of
-> the commit we are backporting), excluding all commits that are reachable
-> from HEAD (the branch we are backporting to).
->=20
-> <commit>^..HEAD, on the other hand, would give you commits reachable
-> from HEAD excluding all commits that are reachable from the parent of
-> the commit we are backporting.
->=20
-> With a diagram like this:
->=20
-> o--o--x--y--<commit>
->     \
->      \--u--v--HEAD
->=20
-> HEAD..<commit>^ would give you x and y while
-> <commit>^..HEAD would give you u and v.
-
-In any case, the HEAD you mentioned is at target branch (linux-x.y),
-right?
-
-> > > +Sometimes the right thing to do will be to also backport the patch t=
-hat
-> > > +did the rename, but that's definitely not the most common case. Inst=
-ead,
-> > > +what you can do is to temporarily rename the file in the branch you'=
-re
-> > > +backporting to (using ``git mv`` and committing the result), restart=
- the
-> > > +attempt to cherry-pick the patch, rename the file back (``git mv`` a=
-nd
-> > > +committing again), and finally squash the result using ``git rebase =
--i``
-> > > +(`tutorial <https://medium.com/@slamflipstrom/a-beginners-guide-to-s=
-quashing-commits-with-git-rebase-8185cf6e62ec>`__)
-> > > +so it appears as a single commit when you are done.
-> >=20
-> > I'm kinda confused with above. Did you mean that after renaming file, I
-> > have to abort cherry-picking (``git cherry-pick --abort``) first and
-> > then redo cherry-picking?
->=20
-> Yes, the idea is that instead of trying to resolve it as a conflict, you
-> rename the file first, do a (clean) cherry-pick, and then rename it back.
->=20
-> What caused the confusion, specifically?
-
-I thought that the sequence was:
-
-```
-$ git checkout -b my-backport linux-x.y
-$ git cherry-pick <upstream commit>
-# we get mv/modified content conflict
-$ git mv <original path> <intended path> && git commit
-$ git cherry-pick --abort
-$ git cherry-pick <upstream commit>
-# resolve content conflicts
-$ git add <conflicted path>... && git commit
-$ git rebase -i linux-x.y
-```
-
->=20
-> > > +Build testing
-> > > +~~~~~~~~~~~~~
-> > > +
-> > > +We won't cover runtime testing here, but it can be a good idea to bu=
-ild
-> > Runtime testing is described in the next section.
-> > > +just the files touched by the patch as a quick sanity check. For the
-> > > +Linux kernel you can build single files like this, assuming you have=
- the
-> > > +``.config`` and build environment set up correctly::
-> > > +
-> > > +    make path/to/file.o
-> > > +
-> > > +Note that this won't discover linker errors, so you should still do a
-> > > +full build after verifying that the single file compiles. By compili=
-ng
-> > > +the single file first you can avoid having to wait for a full build =
-*in
-> > > +case* there are compiler errors in any of the files you've changed.
-> > > +
-> >=20
-> > plain ``make``?
->=20
-> Yes, but I don't think we need to spell that out as it's the common case
-> (in other words, it is presupposed that you know this).
->=20
-> > > +One concrete example of this was where a patch to the system call en=
-try
-> > > +code saved/restored a register and a later patch made use of the sav=
-ed
-> > > +register somewhere in the middle -- since there was no conflict, one
-> > > +could backport the second patch and believe that everything was fine,
-> > > +but in fact the code was now scribbling over an unsaved register.
-> >=20
-> > Did you mean the later patch is the backported syscall patch?
->=20
-> Yes. I'll fiddle a bit with this paragraph to make it clearer.
-
-So, in that case, what would the correct resoultion be regarding to
-registers?
-
-> > For the external link targets, I'd like to separate them from
-> > corresponding link texts (see
-> > https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html=
-#external-links
-> > for details).
->=20
-> We can probably do that, but it doesn't seem to be used much in existing
-> kernel documentation, I find no existing instances of it:
->=20
-> $ git grep '\.\._.*: http' Documentation/
-> $
-
-I recently worked on Documentation/bpf/bpf_devel_QA.rst, where I mention
-this linking syntax.
-
->=20
-> I know that lots of people really prefer to minimize the amount of
-> markup in these files (as they consume them in source form), so I'd
-> really like an ack from others before doing this.
->=20
-
-OK. For now I'm OK with either separating targets or including them.
-
-Thanks for reply!
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---5SlrIDA6gKdGPE62
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZAvqkwAKCRD2uYlJVVFO
-o2MZAQCAq3m2XTlWIsKk4U6tgN+qvnbn7x48TuxMzTC83PN22QEA3zYHSclsym9s
-B/SoMSlJDwi63VCsTGslZfsPe4mb/w8=
-=o/ds
------END PGP SIGNATURE-----
-
---5SlrIDA6gKdGPE62--
+>> + * @num_ss_ports: Indicates the number of USB ports present on HW that are
+>> + *		SS Capable
+>>    * @usb2_generic_phy: pointer to USB2 PHY
+>>    * @usb3_generic_phy: pointer to USB3 PHY
+>>    * @phys_ready: flag to indicate that PHYs are ready
+>> @@ -1158,6 +1165,8 @@ struct dwc3 {
+>>   	struct usb_phy		*usb2_phy;
+>>   	struct usb_phy		*usb3_phy;
+>>   
+>> +	u32			num_ports;
+>> +	u32			num_ss_ports;
+>>   	struct phy		*usb2_generic_phy;
+>>   	struct phy		*usb3_generic_phy;
+>>   
+>> -- 
+>> 2.39.0
+>>
+> 
+> Thanks,
+> Thinh
