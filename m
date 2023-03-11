@@ -2,60 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0579C6B570E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:51:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E17F56B5717
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:51:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbjCKAsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:48:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S230373AbjCKAsj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:48:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjCKArl (ORCPT
+        with ESMTP id S231236AbjCKAr5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:47:41 -0500
-Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE5AC13E09F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:01 -0800 (PST)
-Received: by mail-pj1-x104a.google.com with SMTP id q9-20020a17090a9f4900b00237d026fc55so5074561pjv.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:01 -0800 (PST)
+        Fri, 10 Mar 2023 19:47:57 -0500
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 111A213D1F9
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:09 -0800 (PST)
+Received: by mail-pf1-x449.google.com with SMTP id bw25-20020a056a00409900b005a9d0e66a7aso3619713pfb.5
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678495606;
+        d=google.com; s=20210112; t=1678495608;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=BZgH5Eee9L8XSMp14xmQcQyAmW1Ng+mM4Frav4M8BP8=;
-        b=oDfm8RGtJfI416/t8hlaquI6QMoR4wxUzcfw6CKhAB2RBWVCL1SmwemdG8vpnF0CvJ
-         fTTbQ0GLnEmQu0zQit5uGQpAoptSfwIFDikvaKmcaL6Va2UHNeAaiHC0Z4BcJmZOZfTO
-         jhzLwFGgVX2F+/EsIT9Eq7SRgoWWEjvqKQaBuJxOT9dygHJr2lA8S02HV4MZyCISAYCf
-         ur2XGdzNAYMdzrdlbqm+iIL4ORLD3I3vgYWnRSXVlYByRIOVpHdALznIuIol5S+BOmoJ
-         Xc/oZ9OVUT9VFxlbC065IBwR1FtzkcBcdr99jtBgmkEU10VeljeEb/9awajBkPtOCoIZ
-         u5eQ==
+        bh=9vJeMLqZfyrbvMuuFaCmaxsMrbWr7H337rmJ5xRTXIs=;
+        b=Kah5uerSLv53eTxqQbYkTMm/VSfhMH/uE576qqE1uZPXCNPv3bIF5b9zRIQVfxRcqz
+         dPOzQLBIvzKMXY2ToV2LkU9soOLNbMqV3qJgrhtVChM1+o0YwcQCR6NTOUOuSu20UFRr
+         uPm8SleluvchU6ezjxOKruAnPyBN7+RIAjGeej0r/7a4LfGYyEiq8gNZjNQaCZr1ofdZ
+         bcoVfCnrVdZJplhht6rpTfI8NCAu4i8BA9/9QuX7VzKcMNKygv9WKsqDK7GDW7JGOhb8
+         6og4apy8lwRR4ibTLicAg00A6qnQWea+U1znibqiiiyxqkpo5D/NwcEy1gJqlMR3RLZF
+         nDtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678495606;
+        d=1e100.net; s=20210112; t=1678495608;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=BZgH5Eee9L8XSMp14xmQcQyAmW1Ng+mM4Frav4M8BP8=;
-        b=FFAUozViXRLlfiF+VvMHzLGaSFrfQF6xxqZRZ9a7QSSF1lmqt4zJrOzMZrzFxkZQRo
-         XBOfUvqkT+s5MOW1iejwpAwTnXwqtu2sbBFvprzSejDfHkLgIdFt9gsT1tqd0BLyTAsi
-         5vZoIh5AZrCVWSAAV1xJVzjTwfqIyU71M45eiIUnmydsWdRgXJ+wLGMJ76TDB1FreNcd
-         bE7BEwtJ5hgQlo5K21JGeQ/OPOAAi2OEzIZgCH+MN3NwNNwpsyS9M6qyA5GazKVDdDoh
-         sUcWDlvYoS8hcgd0GZ5sP3xMMp8MpCSMuTY+/QnztLjtZzb60BfpHkctBvWK97gsv+k0
-         YbPA==
-X-Gm-Message-State: AO0yUKXcOnjsP/PJkxGpoKR51/3gVINXRmNF5X/N7l5c7NdBNxsEQj6O
-        1XNa4wa4pYDd6iSLyqSP0oDExBHe0dw=
-X-Google-Smtp-Source: AK7set867AijtX5RzA06gfubmn9RP+tWssyGJSUx8tZ1dOGPMWCKp7lIg0JZVqgZpd5zDJQme4rN9dz4xQ4=
+        bh=9vJeMLqZfyrbvMuuFaCmaxsMrbWr7H337rmJ5xRTXIs=;
+        b=o1ANn5wrE3rZd0XJNKiVDVKEllaNzqP1+x8SWibZIrwgp6YfM8DDmTJ4eMibesJ1Iv
+         HqQEDmTMrfe4OJ8pYMael1Qw9ZhEsh7EqKUkJEt9/UIMNW+FFyIbD+Pegc4HndSniNrZ
+         gWBgTKcMkJu3ZNkcAcgOm2x1KMepFGP9t9391GDXkWb1tgXK1YPKaN7ZVOVhw1JFlKpT
+         wrT+eAsYHELy0EfuIYh+/EzUzf9v7ZLjEKgTRwzQ7hW9nG0f/EYp/YhRgKOMkSZ3tw+S
+         pkefM0kRSSN+aL2dolg02R2UJBk+mtuOOnH/DRnK4W7S14FRCREM47ygpl3euiejvYZE
+         blKQ==
+X-Gm-Message-State: AO0yUKU79vCCSz1phLbyptJKuYCtT2Pg4ermnZ83TAUuvB5cbWWbomoy
+        JZ5394RxhYY8hAicpvUR3wFXloPjs0A=
+X-Google-Smtp-Source: AK7set/oBFTvvesOnOYo5lCSpAdPJKwAaw6kT0Z4sBlj7pCMt7OhvriPscelw4Lvol/Ta+n0BXNT2teFBKs=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a63:a80c:0:b0:4fc:2369:811 with SMTP id
- o12-20020a63a80c000000b004fc23690811mr8981769pgf.6.1678495606218; Fri, 10 Mar
- 2023 16:46:46 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a17:90a:dc0d:b0:235:1fb7:393c with SMTP id
+ i13-20020a17090adc0d00b002351fb7393cmr1625337pjv.1.1678495608015; Fri, 10 Mar
+ 2023 16:46:48 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Mar 2023 16:46:10 -0800
+Date:   Fri, 10 Mar 2023 16:46:11 -0800
 In-Reply-To: <20230311004618.920745-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230311004618.920745-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230311004618.920745-14-seanjc@google.com>
-Subject: [PATCH v3 13/21] KVM: selftests: Drop now-redundant checks on
- PERF_CAPABILITIES writes
+Message-ID: <20230311004618.920745-15-seanjc@google.com>
+Subject: [PATCH v3 14/21] KVM: selftests: Test all fungible features in PERF_CAPABILITIES
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -66,7 +65,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,40 +73,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that vcpu_set_msr() verifies the expected "read what was wrote"
-semantics of all durable MSRs, including PERF_CAPABILITIES, drop the
-now-redundant manual checks in the VMX PMU caps test.
+Verify that userspace can set all fungible features in PERF_CAPABILITIES.
+Drop the now unused #define of the "full-width writes" flag.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c | 6 ------
- 1 file changed, 6 deletions(-)
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  | 29 +++++++++++++++----
+ 1 file changed, 24 insertions(+), 5 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index 035470b38400..f7a27b5c949b 100644
+index f7a27b5c949b..2647282ff380 100644
 --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -51,10 +51,7 @@ static void test_basic_perf_capabilities(union perf_capabilities host_cap)
- 	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, NULL);
+@@ -14,10 +14,11 @@
+ #define _GNU_SOURCE /* for program_invocation_short_name */
+ #include <sys/ioctl.h>
  
- 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, 0);
--	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), 0);
--
- 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.capabilities);
--	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), host_cap.capabilities);
++#include <linux/bitmap.h>
++
+ #include "kvm_util.h"
+ #include "vmx.h"
+ 
+-#define PMU_CAP_FW_WRITES	(1ULL << 13)
+ #define PMU_CAP_LBR_FMT		0x3f
+ 
+ union perf_capabilities {
+@@ -36,6 +37,18 @@ union perf_capabilities {
+ 	u64	capabilities;
+ };
+ 
++/*
++ * The LBR format and most PEBS features are immutable, all other features are
++ * fungible (if supported by the host and KVM).
++ */
++static const union perf_capabilities immutable_caps = {
++	.lbr_format = -1,
++	.pebs_trap  = 1,
++	.pebs_arch_reg = 1,
++	.pebs_format = -1,
++	.pebs_baseline = 1,
++};
++
+ static void guest_code(void)
+ {
+ 	wrmsr(MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
+@@ -58,15 +71,22 @@ static void test_basic_perf_capabilities(union perf_capabilities host_cap)
+ 
+ static void test_fungible_perf_capabilities(union perf_capabilities host_cap)
+ {
++	const uint64_t fungible_caps = host_cap.capabilities & ~immutable_caps.capabilities;
++
+ 	struct kvm_vcpu *vcpu;
+ 	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	int bit;
+ 
+-	/* testcase 1, set capabilities when we have PDCM bit */
+-	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_FW_WRITES);
++	for_each_set_bit(bit, &fungible_caps, 64) {
++		vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, BIT_ULL(bit));
++		vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES,
++			     host_cap.capabilities & ~BIT_ULL(bit));
++	}
++	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.capabilities);
+ 
+ 	/* check whatever we write with KVM_SET_MSR is _not_ modified */
+ 	vcpu_run(vcpu);
+-	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
++	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), host_cap.capabilities);
  
  	kvm_vm_free(vm);
  }
-@@ -67,9 +64,6 @@ static void test_fungible_perf_capabilities(union perf_capabilities host_cap)
- 	/* testcase 1, set capabilities when we have PDCM bit */
- 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, PMU_CAP_FW_WRITES);
+@@ -102,7 +122,6 @@ int main(int argc, char *argv[])
+ 	TEST_REQUIRE(kvm_cpu_property(X86_PROPERTY_PMU_VERSION) > 0);
  
--	/* check capabilities can be retrieved with KVM_GET_MSR */
--	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
--
- 	/* check whatever we write with KVM_SET_MSR is _not_ modified */
- 	vcpu_run(vcpu);
- 	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), PMU_CAP_FW_WRITES);
+ 	host_cap.capabilities = kvm_get_feature_msr(MSR_IA32_PERF_CAPABILITIES);
+-	host_cap.capabilities &= (PMU_CAP_FW_WRITES | PMU_CAP_LBR_FMT);
+ 
+ 	TEST_ASSERT(host_cap.full_width_write,
+ 		    "Full-width writes should always be supported");
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
