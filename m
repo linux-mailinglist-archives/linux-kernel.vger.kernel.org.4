@@ -2,124 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50C8D6B5A4B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 11:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252FD6B5A4F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 11:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229745AbjCKKGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 05:06:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
+        id S229770AbjCKKMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 05:12:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjCKKGh (ORCPT
+        with ESMTP id S229541AbjCKKMn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 05:06:37 -0500
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5243D11EE84
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 02:06:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=7KNwoXgjRer5LKYzZD+EoOuJEliyMODElb5INc7gnKU=;
-  b=dECo1LXl3XnDhsJ0hMJoaeu5Sz4QvB7AR2k2FQ/nPXzkKNU7sHQwEfBp
-   y5zFd2rozPyg15HLCMsC3p1NZ+qcijF1U/Ujqo7xuNBObeZUufguemQds
-   s1AZ89y/6QRajgik8I4etGB7TIkIN58JcJh3E11KINhdY+gfo116/J0R0
-   M=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,252,1673910000"; 
-   d="scan'208";a="49873560"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 11:06:34 +0100
-Date:   Sat, 11 Mar 2023 11:06:33 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: axis-fifo: remove tabs to align arguments
-In-Reply-To: <ZAxNYw2rFQkrdtKl@khadija-virtual-machine>
-Message-ID: <alpine.DEB.2.22.394.2303111104430.2802@hadrien>
-References: <ZAxNYw2rFQkrdtKl@khadija-virtual-machine>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 11 Mar 2023 05:12:43 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B7B01135F4;
+        Sat, 11 Mar 2023 02:12:42 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DD673B802BE;
+        Sat, 11 Mar 2023 10:12:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B5ADC433D2;
+        Sat, 11 Mar 2023 10:12:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678529559;
+        bh=fTbWaXDZBiEVTIjaVEMLEgYkydKCFYLwIdFaPpVm4cg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hygNhxdzaabAT2KAOHBrtEEhFI8Ns9SpPGOFVeiMUwQg64p/obw+IfjxDQwmZGz2v
+         iVSzSjZmegp+48byf4i1fW/zZncOC+Mj1kBJz7wgc8dStW0R7AMLSq7Jr+S2sV+fNX
+         rhPDODTtvYL916dTZIoe1rLSH2lf4NkFwEiOX9fQ=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 6.1.17
+Date:   Sat, 11 Mar 2023 11:12:35 +0100
+Message-Id: <1678529556116102@kroah.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+I'm announcing the release of the 6.1.17 kernel.
 
+All users of the 6.1 kernel series must upgrade.
 
-On Sat, 11 Mar 2023, Khadija Kamran wrote:
+The updated 6.1.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-6.1.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-> In file drivers/staging/axis-fifo/axis-fifo.c, in line 386 and 529, last
+thanks,
 
-last -> the last
+greg k-h
 
-> argument is indented as it were an argument of the second argument.
+------------
 
-as it -> as if it
+ Makefile               |    2 +-
+ block/blk-cgroup.c     |   39 ++++++++-------------------------------
+ include/linux/blkdev.h |    1 -
+ 3 files changed, 9 insertions(+), 33 deletions(-)
 
-> Remove tabs to align the arguments.
->
-> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> ---
-> Changes in v2:
->  - Do not change the alignment of second argument
->  - Align arguments so last argument do not look like an argument of the
->    second argument.
->  - Fixed two instances of the same problem
->
->  drivers/staging/axis-fifo/axis-fifo.c | 14 +++++++-------
->  1 file changed, 7 insertions(+), 7 deletions(-)
->
-> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-> index dfd2b357f484..fbb3ff59dc7c 100644
-> --- a/drivers/staging/axis-fifo/axis-fifo.c
-> +++ b/drivers/staging/axis-fifo/axis-fifo.c
-> @@ -384,9 +384,9 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
->  		mutex_lock(&fifo->read_lock);
->  		ret = wait_event_interruptible_timeout(fifo->read_queue,
->  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
-> -				 (read_timeout >= 0) ?
-> -				  msecs_to_jiffies(read_timeout) :
-> -				  MAX_SCHEDULE_TIMEOUT);
-> +			(read_timeout >= 0) ?
-> +			msecs_to_jiffies(read_timeout) :
-> +			MAX_SCHEDULE_TIMEOUT);
->
->  		if (ret <= 0) {
->  			if (ret == 0) {
-> @@ -527,10 +527,10 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
->  		mutex_lock(&fifo->write_lock);
->  		ret = wait_event_interruptible_timeout(fifo->write_queue,
->  			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
-> -				 >= words_to_write,
+Greg Kroah-Hartman (3):
+      Revert "blk-cgroup: synchronize pd_free_fn() from blkg_free_workfn() and blkcg_deactivate_policy()"
+      Revert "blk-cgroup: dropping parent refcount after pd_free_fn() is done"
+      Linux 6.1.17
 
-There is no need to change the above line.  Maybe one could argue that it
-should be on the line before, but it is not part of the last argument of
-wait_event_interruptible_timeout, so it should not be changed in this
-patch.
-
-julia
-
-> -				 (write_timeout >= 0) ?
-> -				  msecs_to_jiffies(write_timeout) :
-> -				  MAX_SCHEDULE_TIMEOUT);
-> +			>= words_to_write,
-> +			(write_timeout >= 0) ?
-> +			msecs_to_jiffies(write_timeout) :
-> +			MAX_SCHEDULE_TIMEOUT);
->
->  		if (ret <= 0) {
->  			if (ret == 0) {
-> --
-> 2.34.1
->
->
->
