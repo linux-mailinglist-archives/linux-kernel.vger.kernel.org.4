@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 641226B57EE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:01:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1436B57F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:01:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjCKDBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 22:01:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
+        id S229846AbjCKDBh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 22:01:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCKDBb (ORCPT
+        with ESMTP id S229636AbjCKDBe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 22:01:31 -0500
-Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159F71151F7;
-        Fri, 10 Mar 2023 19:01:30 -0800 (PST)
-Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1755e639b65so8050844fac.3;
-        Fri, 10 Mar 2023 19:01:30 -0800 (PST)
+        Fri, 10 Mar 2023 22:01:34 -0500
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCBB61151FE;
+        Fri, 10 Mar 2023 19:01:32 -0800 (PST)
+Received: by mail-oi1-f175.google.com with SMTP id q15so5706486oiw.11;
+        Fri, 10 Mar 2023 19:01:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678503689;
+        d=1e100.net; s=20210112; t=1678503692;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=gU48w4BkL35qUGYQMDtLAo6zqXNIWKSjZ0txcGbB0lA=;
-        b=LrSoj0SWiWDchLT296fHBtU6gVV/I9AOhPWHfqn4O9iT2qFvharrdtFt/hH3ILQaHc
-         gmuQxiJCLn9RSYRB4J6hsmcqangyigBXBjBPsbMGyojv6JRFnEsTc5QfmZiifvsq/gDB
-         covsrSHcT/y8VLbQXxkh7YYK28bZfwPl2es5OgEUOnV1AYfbH3sludwz++NUj2qcTHO5
-         NLwFgKiXKuwTx/D8CXK8dosl+TNMscEmNrLjqVZKPu2/MxRWpfPs1Kdt/YLm0Ye3CBkN
-         eq2z2179b9sUcKktxHRi2u50Bp2JUdjWwzPYwUqqLR6GXX21BSurpA4lLUUxt/CQ970K
-         ikLg==
-X-Gm-Message-State: AO0yUKWTnUSvgg3dbpxIjL5v9+vk6DmsEmnh5ARVsaW9tMRI25tp2N95
-        R0L/jQci25iLlshP1wfiaVrpStPSYQ==
-X-Google-Smtp-Source: AK7set/cI+Eb97yyPps2W9b1GQ4PDnq8XbG2/ZD9c3srZRFWb6wnhcuYJen8/EjWfNsdNt/L8dZKgA==
-X-Received: by 2002:a05:6871:607:b0:176:1df2:4ed2 with SMTP id w7-20020a056871060700b001761df24ed2mr18870123oan.58.1678503689223;
-        Fri, 10 Mar 2023 19:01:29 -0800 (PST)
+        bh=jri5ZvkoWbBWkg71oC+C3ySgZH0mJY2mtT63zB523BU=;
+        b=xAvnFn4bTp3vYM+Dm6p5PYKj9zgEn5CbhZIHJe+Kri3gjHyuFR0EMWO/xkBkgNCEt4
+         MZZDHxJobgd5Ytg3QFcyeFzM2ucLUznnxkX0Q7E0LZHWQheQsddDBdm7GHR88w0Jq1Jm
+         oopyBevQYDDjqSpRfo83iQrs/l1fbYsKC9wmnbNpmwwase/2pYXSpv7qhF6S36mrEOQO
+         ZEhJSoDrtYPz3kAbi2wxKiCA0/NHlLBeUkVojeEioDKA03xJc/n4RcpAeSsXduT0J3fB
+         yHUIJqmCBG4LTXP9CON75w8HTspodAyBPlEbWQlCMEDNTTpUNIOm9kPa0DLHVKMXP9bB
+         s/1g==
+X-Gm-Message-State: AO0yUKXqqhVhbb9fs8mclJXpig8lq09vJTnYlsP4n/5R/Ooht0XZz2JV
+        1VdnrLxP7Im/UBtucSxbIHewQ2WcLA==
+X-Google-Smtp-Source: AK7set8+xv9h4sfYsRTKQE9mJcnl7FoECf5iRh9ipFWm3yGJ8ofnQ/7n2tG/CKcLSjV5vlwe8Mgofw==
+X-Received: by 2002:a05:6808:2805:b0:384:3a60:e2de with SMTP id et5-20020a056808280500b003843a60e2demr12638232oib.29.1678503692015;
+        Fri, 10 Mar 2023 19:01:32 -0800 (PST)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id e3-20020a056870c34300b0017280f7d653sm730261oak.35.2023.03.10.19.01.28
+        by smtp.gmail.com with ESMTPSA id z17-20020a056808049100b0038478923768sm608257oid.3.2023.03.10.19.01.31
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 19:01:28 -0800 (PST)
-Received: (nullmailer pid 3263022 invoked by uid 1000);
+        Fri, 10 Mar 2023 19:01:31 -0800 (PST)
+Received: (nullmailer pid 3263027 invoked by uid 1000);
         Sat, 11 Mar 2023 03:01:27 -0000
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Krishna Kurapati <quic_kriskura@quicinc.com>
-Cc:     ahalaney@redhat.com, linux-usb@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>, quic_ppratap@quicinc.com,
-        quic_shazhuss@quicinc.com, Andy Gross <agross@kernel.org>,
-        quic_wcheng@quicinc.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        quic_harshq@quicinc.com, linux-arm-msm@vger.kernel.org,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Bjorn Andersson <andersson@kernel.org>,
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Andy Gross <agross@kernel.org>, linux-kernel@vger.kernel.org,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        quic_jackp@quicinc.com, quic_pkondeti@quicinc.com
-In-Reply-To: <20230310163420.7582-2-quic_kriskura@quicinc.com>
-References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
- <20230310163420.7582-2-quic_kriskura@quicinc.com>
-Message-Id: <167850338309.3256287.16131101568389793313.robh@kernel.org>
-Subject: Re: [PATCH 1/8] dt-bindings: usb: Add bindings for multiport
- properties on DWC3 controller
+        devicetree@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-arm-msm@vger.kernel.org
+In-Reply-To: <20230311-topic-msg_ram-v1-1-e9c2094daf09@linaro.org>
+References: <20230311-topic-msg_ram-v1-0-e9c2094daf09@linaro.org>
+ <20230311-topic-msg_ram-v1-1-e9c2094daf09@linaro.org>
+Message-Id: <167850338434.3256356.12674736316044440757.robh@kernel.org>
+Subject: Re: [PATCH RFC 01/15] dt-bindings: mfd: Split out Qcom RPM MSG RAM
 Date:   Fri, 10 Mar 2023 21:01:27 -0600
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -79,28 +69,51 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Fri, 10 Mar 2023 22:04:13 +0530, Krishna Kurapati wrote:
-> Add bindings to indicate properties required to support multiport
-> on Snps Dwc3 controller.
+On Sat, 11 Mar 2023 02:21:31 +0100, Konrad Dybcio wrote:
+> The RPM Message RAM is a part of the RPM low-power core's RAM that's a
+> MMIO-mapped region from the main ARM CPUs' POV. It contains sleep stats
+> divided per "RPM master" (ARM cluster, *DSP, ...), an interrupt controller
+> (MPM) that's vital in the low-power mode entry/exit sequence, as it
+> signals the readiness to enter sleep, replays the interrupts after a total
+> power collapse recovery and is able to receive external interrupts from
+> other IPs (like the PMIC, TSENS and USB) on the SoC to initiate a wakeup
+> sequence.
 > 
-> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> On top of that, it contains some regions that are (ab)used by SMEM (by
+> design!), but we're not completely sure what ranges are r/w to/from.
+> This would probably need to be determined on a SoC-by-SoC - or even worse
+> - firmware-by-firmware basis, but since this region is quite "wild west"
+> by design (it may be accessed and altered in one form or another by all of
+> the subsystems at the same time) this shouldn't really worry us..
+> 
+> Split out the bindings and re-model it as a simple-mfd to allow for better
+> representation of the partitions within and allow child devices (MPM,
+> master sleep stats - coming soon).
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
->  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
->  1 file changed, 7 insertions(+), 6 deletions(-)
+>  .../devicetree/bindings/mfd/qcom,rpm-msg-ram.yaml  | 82 ++++++++++++++++++++++
+>  Documentation/devicetree/bindings/sram/sram.yaml   |  2 -
+>  2 files changed, 82 insertions(+), 2 deletions(-)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
-./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
 
 dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/soc/qcom/qcom,smem.example.dtb: sram@fc428000: compatible: ['qcom,rpm-msg-ram'] is too short
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/qcom,rpm-msg-ram.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/qcom,rpm-msg-ram.example.dtb: sram@45f0000: interrupt-controller@1b8: 'oneOf' conditional failed, one must be fixed:
+	'#power-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/qcom,rpm-msg-ram.yaml
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/qcom,rpm-msg-ram.example.dtb: interrupt-controller@1b8: '#power-domain-cells' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interrupt-controller/qcom,mpm.yaml
 
 doc reference errors (make refcheckdocs):
 
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230310163420.7582-2-quic_kriskura@quicinc.com
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230311-topic-msg_ram-v1-1-e9c2094daf09@linaro.org
 
 The base for the series is generally the latest rc1. A different dependency
 should be noted in *this* patch.
