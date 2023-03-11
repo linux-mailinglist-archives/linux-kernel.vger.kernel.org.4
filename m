@@ -2,120 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98EB96B5CE7
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:36:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCB36B5CE9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:37:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbjCKOgK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:36:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40388 "EHLO
+        id S230050AbjCKOhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:37:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230372AbjCKOgH (ORCPT
+        with ESMTP id S229613AbjCKOhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:36:07 -0500
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65A2FE502E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:36:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=jMouezBBL3soxbH8ICdrUfcoEX4o/23uUVRU1belL5g=;
-  b=GlR/HC9kkXXaCptGLEXGraiUmvEnantMZ+bt+V1FCAVQEXVbs0ztVP1o
-   uJgIqdmw2aE5Njv0KuVAIZsXZqEFSoiMyTyXc1EJaoVo0MmFVmYiNDMlg
-   lKDSVceKin35Lt8rHYta2Idi2pCFAn5NjgNrLidLaWLclhyKpIIDEwHoo
-   s=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,252,1673910000"; 
-   d="scan'208";a="96649449"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 15:36:01 +0100
-Date:   Sat, 11 Mar 2023 15:36:01 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     outreachy@lists.linux.dev, pure.logic@nexus-software.ie,
-        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: greybus: eclose macro in a do - while loop
-In-Reply-To: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303111532220.2802@hadrien>
-References: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 11 Mar 2023 09:37:48 -0500
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363322ED47;
+        Sat, 11 Mar 2023 06:37:47 -0800 (PST)
+Received: from mail.ispras.ru (unknown [83.149.199.84])
+        by mail.ispras.ru (Postfix) with ESMTPSA id 85BF340737C1;
+        Sat, 11 Mar 2023 14:37:45 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 85BF340737C1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1678545465;
+        bh=QBxkOprHzpXvFKQDjkx+tcQAOmWBSBKfrdBA2gCrL9s=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=HoLdJ3S+QbJ1EF1rzfcwAyvtoAbbvUzmd0QE+P9qDitmK5PtLzT+N8Sd6K8PD70s0
+         lreGdbkIHcz+M0MbGP3TejO4hACQ4SLRIFYTSX0b2aYBmE9q4l/b9jKYfRgciZFR/V
+         zCYJQEUT4KwToVc91tWnbiBTs7WBPxas3NRbW98s=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Date:   Sat, 11 Mar 2023 17:37:45 +0300
+From:   Evgeniy Baskov <baskov@ispras.ru>
+To:     Ard Biesheuvel <ardb@kernel.org>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v4 13/26] x86/boot: Split trampoline and pt init code
+In-Reply-To: <CAMj1kXGwaX8nGJdRM3==thO=KfXb3UwbF2jJhrqiZK-RcM+QLw@mail.gmail.com>
+References: <cover.1671098103.git.baskov@ispras.ru>
+ <9f951d6332eea6e46ebd46ca919ed5b1b85c0ba3.1671098103.git.baskov@ispras.ru>
+ <CAMj1kXGwaX8nGJdRM3==thO=KfXb3UwbF2jJhrqiZK-RcM+QLw@mail.gmail.com>
+User-Agent: Roundcube Webmail/1.4.4
+Message-ID: <6af9c283edb024c26242120124936a03@ispras.ru>
+X-Sender: baskov@ispras.ru
+Content-Type: text/plain; charset=US-ASCII;
+ format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Menna,
+On 2023-03-10 17:56, Ard Biesheuvel wrote:
+> On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>> 
+>> When allocating trampoline from libstub trampoline allocation is
+>> performed separately, so it needs to be skipped.
+>> 
+>> Split trampoline initialization and allocation code into two
+>> functions to make them invokable separately.
+>> 
+>> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+>> Tested-by: Peter Jones <pjones@redhat.com>
+>> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+>> ---
+>>  arch/x86/boot/compressed/pgtable_64.c | 73 
+>> +++++++++++++++++----------
+>>  1 file changed, 46 insertions(+), 27 deletions(-)
+>> 
+>> diff --git a/arch/x86/boot/compressed/pgtable_64.c 
+>> b/arch/x86/boot/compressed/pgtable_64.c
+>> index c7cf5a1059a8..1f7169248612 100644
+>> --- a/arch/x86/boot/compressed/pgtable_64.c
+>> +++ b/arch/x86/boot/compressed/pgtable_64.c
+>> @@ -106,12 +106,8 @@ static unsigned long 
+>> find_trampoline_placement(void)
+>>         return bios_start - TRAMPOLINE_32BIT_SIZE;
+>>  }
+>> 
+>> -struct paging_config paging_prepare(void *rmode)
+>> +bool trampoline_pgtable_init(struct boot_params *boot_params)
+>>  {
+>> -       struct paging_config paging_config = {};
+>> -
+>> -       /* Initialize boot_params. Required for 
+>> cmdline_find_option_bool(). */
+>> -       boot_params = rmode;
+>> 
+>>         /*
+>>          * Check if LA57 is desired and supported.
+>> @@ -125,26 +121,10 @@ struct paging_config paging_prepare(void *rmode)
+>>          *
+>>          * That's substitute for boot_cpu_has() in early boot code.
+>>          */
+>> -       if (IS_ENABLED(CONFIG_X86_5LEVEL) &&
+>> -                       !cmdline_find_option_bool("no5lvl") &&
+>> -                       native_cpuid_eax(0) >= 7 &&
+>> -                       (native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 
+>> & 31)))) {
+>> -               paging_config.l5_required = 1;
+>> -       }
+>> -
+>> -       paging_config.trampoline_start = find_trampoline_placement();
+>> -
+>> -       trampoline_32bit = (unsigned long 
+>> *)paging_config.trampoline_start;
+>> -
+>> -       /* Preserve trampoline memory */
+>> -       memcpy(trampoline_save, trampoline_32bit, 
+>> TRAMPOLINE_32BIT_SIZE);
+>> -
+>> -       /* Clear trampoline memory first */
+>> -       memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
+>> -
+>> -       /* Copy trampoline code in place */
+>> -       memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / 
+>> sizeof(unsigned long),
+>> -                       &trampoline_32bit_src, 
+>> TRAMPOLINE_32BIT_CODE_SIZE);
+>> +       bool l5_required = IS_ENABLED(CONFIG_X86_5LEVEL) &&
+>> +                          !cmdline_find_option_bool("no5lvl") &&
+>> +                          native_cpuid_eax(0) >= 7 &&
+>> +                          (native_cpuid_ecx(7) & (1 << 
+>> (X86_FEATURE_LA57 & 31)));
+>> 
+>>         /*
+>>          * The code below prepares page table in trampoline memory.
+>> @@ -160,10 +140,10 @@ struct paging_config paging_prepare(void *rmode)
+>>          * We are not going to use the page table in trampoline memory 
+>> if we
+>>          * are already in the desired paging mode.
+>>          */
+>> -       if (paging_config.l5_required == !!(native_read_cr4() & 
+>> X86_CR4_LA57))
+>> +       if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
+>>                 goto out;
+>> 
+>> -       if (paging_config.l5_required) {
+>> +       if (l5_required) {
+>>                 /*
+>>                  * For 4- to 5-level paging transition, set up current 
+>> CR3 as
+>>                  * the first and the only entry in a new top-level 
+>> page table.
+>> @@ -185,6 +165,45 @@ struct paging_config paging_prepare(void *rmode)
+>>                        (void *)src, PAGE_SIZE);
+>>         }
+>> 
+>> +out:
+>> +       return l5_required;
+>> +}
+>> +
+>> +struct paging_config paging_prepare(void *rmode)
+>> +{
+>> +       struct paging_config paging_config = {};
+>> +       bool early_trampoline_alloc = 0;
+> 
+> false
+> 
+>> +
+>> +       /* Initialize boot_params. Required for 
+>> cmdline_find_option_bool(). */
+>> +       boot_params = rmode;
+>> +
+>> +       /*
+>> +        * We only need to find trampoline placement, if we have
+>> +        * not already done it from libstub.
+>> +        */
+>> +
+>> +       paging_config.trampoline_start = find_trampoline_placement();
+>> +       trampoline_32bit = (unsigned long 
+>> *)paging_config.trampoline_start;
+>> +       early_trampoline_alloc = 0;
+>> +
+> 
+> false again
+> 
+> And it never becomes true, nor is it used anywhere else. Can we get rid 
+> of it?
 
-There is a typo in the subject line.
+Yes, probably it is just a leftover of the approach I used
+before. I'll remove that.
+> 
+>> +       /*
+>> +        * Preserve trampoline memory.
+>> +        * When trampoline is located in memory
+>> +        * owned by us, i.e. allocated in EFISTUB,
+>> +        * we don't care about previous contents
+>> +        * of this memory so copying can also be skipped.
+> 
+> Can you please reflow comments so they takes up fewer lines?
+> 
 
-On Sat, 11 Mar 2023, Menna Mahmoud wrote:
+Will fix.
 
-> " ERROR: Macros with multiple statements should be enclosed in a do -
-> while loop"
->
-> Reported by checkpath.
->
-> do loop with the conditional expression set to a constant
-> value of zero (0).This creates a loop that
-> will execute exactly one time.This is a coding idiom that
-> allows a multi-line macro to be used anywhere
-> that a single statement can be used.
->
-> So, enclose `gb_loopback_stats_attrs` macro in do - while (0) to
-> fix checkpath error
-
-The log message should focus on what is done and why.  The checkpatch
-warning text and the fact that the problem was detected using checkpatch
-is useful, but less, so it should come last, not first.
-
-Here, what is done is to enclose a sequence of statements in a macro
-definition in a do-while loop with a test expression 0.
-
-The reason why is to make it safe to use the sequence anywhere a single
-statement can be used.
-
-A period at the end of a sentence should be followed by some whitespace
-before starting the next sentence.
-
-julia
-
-> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> ---
->  drivers/staging/greybus/loopback.c | 10 ++++++----
->  1 file changed, 6 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/staging/greybus/loopback.c b/drivers/staging/greybus/loopback.c
-> index 1a61fce98056..e86d50638cb5 100644
-> --- a/drivers/staging/greybus/loopback.c
-> +++ b/drivers/staging/greybus/loopback.c
-> @@ -162,10 +162,12 @@ static ssize_t name##_avg_show(struct device *dev,		\
->  }									\
->  static DEVICE_ATTR_RO(name##_avg)
->
-> -#define gb_loopback_stats_attrs(field)				\
-> -	gb_loopback_ro_stats_attr(field, min, u);		\
-> -	gb_loopback_ro_stats_attr(field, max, u);		\
-> -	gb_loopback_ro_avg_attr(field)
-> +#define gb_loopback_stats_attrs(field)					\
-> +	do { \
-> +		gb_loopback_ro_stats_attr(field, min, u);		\
-> +		gb_loopback_ro_stats_attr(field, max, u);		\
-> +		gb_loopback_ro_avg_attr(field);				\
-> +	} while (0)
->
->  #define gb_loopback_attr(field, type)					\
->  static ssize_t field##_show(struct device *dev,				\
-> --
-> 2.34.1
->
->
->
+>> +        */
+>> +       memcpy(trampoline_save, trampoline_32bit, 
+>> TRAMPOLINE_32BIT_SIZE);
+>> +
+>> +       /* Clear trampoline memory first */
+>> +       memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
+>> +
+>> +       /* Copy trampoline code in place */
+>> +       memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / 
+>> sizeof(unsigned long),
+>> +                       &trampoline_32bit_src, 
+>> TRAMPOLINE_32BIT_CODE_SIZE);
+>> +
+>> +       paging_config.l5_required = 
+>> trampoline_pgtable_init(boot_params);
+>> +
+>>  out:
+>>         return paging_config;
+>>  }
+>> --
+>> 2.37.4
+>> 
