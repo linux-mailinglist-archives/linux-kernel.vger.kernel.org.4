@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 529436B5C75
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:52:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 978066B5C79
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:54:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCKNwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 08:52:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52448 "EHLO
+        id S229912AbjCKNyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 08:54:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjCKNwj (ORCPT
+        with ESMTP id S229550AbjCKNyH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:52:39 -0500
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.184])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A201912BAFB
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:52:36 -0800 (PST)
-X-KPN-MessageId: 07fbba2c-c014-11ed-91cc-005056994fde
-Received: from smtp.kpnmail.nl (unknown [10.31.155.8])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id 07fbba2c-c014-11ed-91cc-005056994fde;
-        Sat, 11 Mar 2023 14:52:58 +0100 (CET)
+        Sat, 11 Mar 2023 08:54:07 -0500
+Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7795BC98;
+        Sat, 11 Mar 2023 05:54:06 -0800 (PST)
+Received: by mail-oo1-xc33.google.com with SMTP id h18-20020a4abb92000000b00525397f569fso1216157oop.3;
+        Sat, 11 Mar 2023 05:54:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=subject:to:from:message-id:date;
-        bh=ALu8+PmipZgEw89/BHca117Pe0D8mE1E2egBqYsyknM=;
-        b=sjrN4u6wyciZj9Su2klp6z3W5MCqUI4mPWTKfBbjNphlQpEhkPS4wh3rIecb3c9eaUJOuWTNt1hov
-         H6aOeQnqLPd+q4DWPnyS3wPBhj9sLhJheCwDHM7/i8vxVeFWNVE6xEa+cl0YinRNOHZiH6oUOAqsP1
-         Hg0l7NZdPp8ea5f/8s9lBOa4tk4+DEbmNvAtT4uVOZskqqgXIfdUmNDYgoA9Z0efxAVR1/Zqzgogsz
-         g9ahkxaNZmgg/59ZUTxRRG5crdRNv4pztZGVwXqjc4HZ2TljAjTu7HWhWrmZJOv349Lhf/8DRBElL1
-         QyC0R1je529u6l/iY0dII4zJt815itg==
-X-KPN-MID: 33|VMtRr8A7spxYaBX6YlEci9XrlWDUmmIYGebVH5TkcyTisB5tkpzSAZc1l3g947k
- GmoE2OYFIfwA6A5NxaH5tNnosy8GNrgIb+RWPh4xV4/U=
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|kZZ8dqbp5Z6By5V/8lQMaupPovkbLuGHIJzRTJ7QFsjhtZ3+Snv1SYpmNLmvJAg
- kXcXwGJ6a9eCqgA7x4IvYVw==
-X-Originating-IP: 80.61.163.207
-Received: from bloch.sibelius.xs4all.nl (80-61-163-207.fixed.kpn.net [80.61.163.207])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id f8a10bc9-c013-11ed-9d31-00505699d6e5;
-        Sat, 11 Mar 2023 14:52:33 +0100 (CET)
-Date:   Sat, 11 Mar 2023 14:52:32 +0100
-Message-Id: <874jqrcs4f.fsf@bloch.sibelius.xs4all.nl>
-From:   Mark Kettenis <mark.kettenis@xs4all.nl>
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     marcan@marcan.st, sven@svenpeter.dev, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, alyssa@rosenzweig.io,
-        joro@8bytes.org, will@kernel.org, robin.murphy@arm.com,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        iommu@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robh@kernel.org
-In-Reply-To: <20230311133856.63840-2-sven@svenpeter.dev> (message from Sven
-        Peter on Sat, 11 Mar 2023 14:38:54 +0100)
-Subject: Re: [PATCH v3 1/3] dt-bindings: iommu: dart: Add t8103-usb4-dart compatible
-References: <20230311133856.63840-1-sven@svenpeter.dev> <20230311133856.63840-2-sven@svenpeter.dev>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        d=gmail.com; s=20210112; t=1678542846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JezEZK+AICOI0aCjZw5wcLy2MWny1R1bm5pTOcZP52Q=;
+        b=IWAV33oZ0R5ipeJENHaR0hu1TGcacho1kb7emu57od+tpeEKaDo61d820eI0a/8oyl
+         wepF0Xf0e8or6G8wJ8CsgD+5B48L+1QpiFgqAvoTeAqS0BN6QQRftwNUzopboFuHTpy7
+         Ik6PRxu+/WK4xV3GE0plW3F+zQ7gSLq65jHT0/eOSzdGRiPIsj+DBLRhBqHxLpL+wW9/
+         H7iaOddJ2V0AScorw1EsPaHRubnAD6leTmHyZzihfZzhBp7gcLBi17LvA39Ksb7SWxtL
+         3t7bdwr+DTuqYxcuu3DQXMZVk6JWk9m9BC6R62UEWmCfjD2AzH7pxNTqnmpcaEvetIdt
+         qBXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678542846;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JezEZK+AICOI0aCjZw5wcLy2MWny1R1bm5pTOcZP52Q=;
+        b=Mdh247yIcg2F+Tw++kegeslAM3rG1tn4GHCRKXUBmrdmDA02Nqpr79gnQbw25CZvKe
+         EjZwUnevaF7hSD1rL83t10Zk17i3odW9i+Qd1EXCOJJiV7rkGpwrFANbRB+BYZqGNZSx
+         ACPES4zOb+6GLdPG8TrFIiN6qo1x4HFk99uPB1pOIyCZUz3izYWMI4daBT+Mqe0FH/x7
+         9kexLiUz/uyw9S2b6df+b6RkYP+SnxHiKw/csI73GpJckJKZrfZ+lFs9ScKyfBnjy75Q
+         MxZGI8oQqBJw5wbUbxJhTB4qoZKJW7HjE+2ndZvPLDXINgICJe+H3Lfr1qnH690kjoDM
+         cbzg==
+X-Gm-Message-State: AO0yUKWeCOXv3p8USZ+tvUzyzunR6Pl1K5tuYNt44CQkpBGkZuta+bxt
+        OAfjtmwniQz/JEbJyoapBIQ=
+X-Google-Smtp-Source: AK7set/WcLHiSCysTRUjU/YKJhjf7PBNSIjZybwnHqg+QYQ1QJM00HSm+hdT/yVTcZoCLL+49bNHmg==
+X-Received: by 2002:a4a:d74f:0:b0:525:34e:1f02 with SMTP id h15-20020a4ad74f000000b00525034e1f02mr11262226oot.3.1678542846086;
+        Sat, 11 Mar 2023 05:54:06 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id x16-20020a4aca90000000b00524f546997esm1104510ooq.0.2023.03.11.05.54.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 05:54:05 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sat, 11 Mar 2023 05:54:04 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/528] 5.10.173-rc2 review
+Message-ID: <b755d647-a363-46fd-9bf1-c97e68d8700a@roeck-us.net>
+References: <20230311091908.975813595@linuxfoundation.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230311091908.975813595@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Sven Peter <sven@svenpeter.dev>
-> Date: Sat, 11 Mar 2023 14:38:54 +0100
+On Sat, Mar 11, 2023 at 10:20:47AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.173 release.
+> There are 528 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> This DART variant is found in the t8103 (M1) SoCs and used for the
-> USB4/Thunderbolt PCIe ports. Unlike the regular t8103 DART these support
-> up to 64 SIDs and require a slightly different MMIO layout.
+> Responses should be made by Mon, 13 Mar 2023 09:17:40 +0000.
+> Anything received after that time might be too late.
 > 
-> Acked-by: Hector Martin <marcan@marcan.st>
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-Reviewed-by: Mark Kettenis <kettenis@openbsd.org>
+Build results:
+	total: 162 pass: 162 fail: 0
+Qemu test results:
+	total: 485 pass: 485 fail: 0
 
-> ---
->  Documentation/devicetree/bindings/iommu/apple,dart.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/iommu/apple,dart.yaml b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-> index 903edf85d72e..7adb1de455a5 100644
-> --- a/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-> +++ b/Documentation/devicetree/bindings/iommu/apple,dart.yaml
-> @@ -24,6 +24,7 @@ properties:
->    compatible:
->      enum:
->        - apple,t8103-dart
-> +      - apple,t8103-usb4-dart
->        - apple,t8110-dart
->        - apple,t6000-dart
->  
-> -- 
-> 2.25.1
-> 
-> 
-> 
+Tested-by: Guenter Roeck <linux@roeck-us.net>
+
+Guenter
