@@ -2,108 +2,240 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19E526B5934
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 375396B593B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:11:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCKHGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:06:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
+        id S230154AbjCKHLn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:11:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCKHGR (ORCPT
+        with ESMTP id S229827AbjCKHLk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:06:17 -0500
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA23D12FD2F
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:06:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1678518356; bh=6RXXEmOqhalKafvrtSgWBo3rDrx3ENS3jdn0iCV/as8=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=K5Y9jjc3b8kbOnXpYcQnXQUYDpYhq0wVuwWnk8G1j6v/4oat254lhC/3vyChzPtN2
-         XAK6a+e9LiC9JSK48ObCsqimOqw1GiwwQE1ik/1MAtOBV3Wuq9yCJl1zFweK5qI/QK
-         yRKtmMSyZ33cMenqJs2pwRQvh+ITLyZ6zecwWmZg=
-Received: by b221-2.in.mailobj.net [192.168.90.22] with ESMTP
-        via ip-20.mailobj.net [213.182.54.20]
-        Sat, 11 Mar 2023 08:05:56 +0100 (CET)
-X-EA-Auth: 6KHaK3MakurOvyfDc6WzzKHmlWaG4pVZ9jwDoJme9TCa3byNOtXeoCwBMtK2bh3pWF3I2eBQW4qOu+CD5c5gR6AP/GEVuvrF
-Date:   Sat, 11 Mar 2023 12:35:49 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     Dan Carpenter <error27@gmail.com>, outreachy@lists.linux.dev,
-        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: greybus: remove tabs to fix line length and
- merge lines
-Message-ID: <ZAwoTVeMDGu/44Ln@ubun2204.myguest.virtualbox.org>
-References: <ZAusnKYVTGvO5zoi@khadija-virtual-machine>
- <6e9fd119-6566-4778-899e-bc5a7ee7830c@kili.mountain>
- <ZAwelPOv45zThK6j@khadija-virtual-machine>
+        Sat, 11 Mar 2023 02:11:40 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4311C1223B1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:11:39 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id h34so5040787uag.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:11:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678518698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D9IQYwTv/WihtT371pEBgPh49LwJU7wNx5c/eqHzu8M=;
+        b=q+o7EkCrTVEmipUmMGg5mbaHNsEzv5AD6m2GHtexzfSSKWVtBvW0rGcd7YPX7ZMp3+
+         5ID1KAua7rvEs6p3G3xbVWxuZD8ZWKb9/YyMEc9SCoC6PO8xUd0g3KZPYLIv8/sOPLEp
+         Qu/oN5dDS0E4IKuaQKupKX/Eox4E8begc4HO/XwK0yvC6uGqpMmYYmkY6iU9ac/0OqO7
+         q0Eibds305HngAEezgUxIHMUbK3Z+K23sv+psb6KyBEND1PdP8YmJSrEwJOhFp8+BA6c
+         0KRQlGkg4WD1v1qKpn2n0GUK+0xwmOubSCS0ljyL/b/eUPWG9fjynQoWMh30CiLZvcKc
+         l9Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678518698;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=D9IQYwTv/WihtT371pEBgPh49LwJU7wNx5c/eqHzu8M=;
+        b=Dzy3sAVtKYsBXNwn7KIcvb6x68BxFF98dJk36K4rAEtp6Zz/TG7JsrrKFcl87gF+Id
+         8e1fiM5FYWbFyOQ2brEEhmPZve7P8BAV5JTtLXQ2Si/WnvLlY8vzXJECXKa5kJdOeTof
+         m3XzHMrWN8js2nlDjH93XRuhbQFt+QbwMi8/Fg5/1jAhLG6cwOEO8wpRkrAOBm3MHtKd
+         MJdNgPgLNm2tiBwC8V95IlG8H4vVr/qytcdeM9rzCroRk7M1hOqp+ZVoiP8GZrgY+k4e
+         kOwEo/oj0/5Hi5NsDH/Z2lLntfDtxKdwALsvXqfySD41TYYh3AL89X2UFY+APB7+GSN4
+         wUWA==
+X-Gm-Message-State: AO0yUKUSNVvkKfS4rf4JxJ7Rs9uanv8xEoaxcHPFmBfqsMxNBymuemi1
+        hW0lZ7uvYSeLGsS4HcjPcBTdangQ2jjNJJBovbFcbw==
+X-Google-Smtp-Source: AK7set985Ze+dpq3+X1HM7bI73/6P7JqK4L6qawz579lcA+9g2siLvk9XM+IdfgZqL/TVQB+k5y7cLS2RXGhRojjO5A=
+X-Received: by 2002:a9f:314e:0:b0:687:d8e3:6835 with SMTP id
+ n14-20020a9f314e000000b00687d8e36835mr18594988uab.0.1678518698161; Fri, 10
+ Mar 2023 23:11:38 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAwelPOv45zThK6j@khadija-virtual-machine>
+References: <20230310133718.803482157@linuxfoundation.org>
+In-Reply-To: <20230310133718.803482157@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 11 Mar 2023 12:41:26 +0530
+Message-ID: <CA+G9fYu3kGKV_3ruv0zi4znRoNyjV32yUoLBy4MdDuc2WjpB-g@mail.gmail.com>
+Subject: Re: [PATCH 4.19 000/252] 4.19.276-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 11:24:20AM +0500, Khadija Kamran wrote:
-> On Sat, Mar 11, 2023 at 07:16:19AM +0300, Dan Carpenter wrote:
-> > On Sat, Mar 11, 2023 at 03:18:04AM +0500, Khadija Kamran wrote:
-> > > In file drivers/staging/greybus/arche-platform.c,
-> > > - Length of line 181 exceeds 100 columns, fix by removing tabs from the
-> > >   line.
-> > > - If condition and spin_unlock_...() call is split into two lines, join
-> > > them to form a single line.
-> > > 
-> > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > > ---
-> > > Changes in v2:
-> > >  - Change the subject and log message
-> > >  - Merge if condition and spin_unlock...() from two lines to one 
-> > 
-> > Apply your patch and then re-run checkpatch.pl -f on the file.  You will
-> > see the problem.
-> 
-> Hey Dan!
-> When I run checkpatch.pl on my file, I can see that my old CHECK no
-> longer exists instead a new CHECK is mentioned saying 'Alignment should
-> match open parenthesis'. I understand this from your previous email.
-> Should I stop working on this file and leave it as is?
+On Fri, 10 Mar 2023 at 19:45, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.19.276 release.
+> There are 252 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.19.276-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.19.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Hi Dan,
-Not trying to speak for you, so please override my message if this is
-inaccurate.
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Hi Khadija,
-Yes. It is not useful to resolve one warning and introduce another. Tomorrow
-someone else is going to try and revert it. So do not make the "remove tab"
-change. I still like the merging of the split lines. It appears to improve code
-readability. You can send in a v3 with just that merge change and wait for
-feedback.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Also, remember to check your change with checkpatch. There is a section about
-post-commit hooks on the tutorials page. This will allow you to integrate
-checkpatch as part of your git commit step and do the job for you.
+## Build
+* kernel: 4.19.276-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.19.y
+* git commit: 70b2ca70b378b14ffbcd349d80cdfc361e044b01
+* git describe: v4.19.275-253-g70b2ca70b378
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.19.y/build/v4.19=
+.275-253-g70b2ca70b378
 
-And also, always build your change locally on your machine. No new warnings or
-errors should arise.
+## Test Regressions (compared to v4.19.275)
 
-Hope that helps.
-Deepak.
+## Metric Regressions (compared to v4.19.275)
 
+## Test Fixes (compared to v4.19.275)
 
-> Thank you!
-> >
-> > regards,
-> > dan carpenter
-> 
+## Metric Fixes (compared to v4.19.275)
 
+## Test result summary
+total: 71771, pass: 52887, fail: 2333, skip: 16246, xfail: 305
 
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 201 total, 200 passed, 1 failed
+* arm64: 42 total, 41 passed, 1 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 42 total, 42 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 51 total, 51 passed, 0 failed
+* s390: 15 total, 15 passed, 0 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 37 total, 36 passed, 1 failed
+
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
