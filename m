@@ -2,115 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB85B6B619B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 23:57:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D769E6B61F8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 00:10:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbjCKW5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 17:57:43 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42538 "EHLO
+        id S229552AbjCKXKa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 18:10:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229478AbjCKW5l (ORCPT
+        with ESMTP id S229437AbjCKXK2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 17:57:41 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A7705ADC7;
-        Sat, 11 Mar 2023 14:57:40 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D4914B80B01;
-        Sat, 11 Mar 2023 22:57:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81951C433D2;
-        Sat, 11 Mar 2023 22:57:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678575457;
-        bh=NRjBczy/HPk2CwSneiTQ9xUfvWYOCoTY2Vss4hP7PvM=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=EIABw264Fz0h1+O03avqPudnZqPUVSGSUPKhqQeAI1/WoZ0AbezxUeEFlsAMtXWOD
-         CaptaRyYmv8Ky4zohWR1casKUsIBzia4MrJk79oRhfP5FU5xUcRnhsQYEpVZWH+mCk
-         +kG73APRzx7kE4meEZUQouc7q/MHcE6cql4oiKfnp9LcMpfjTaSoUo50QphJRdpZL3
-         q1DNYWI30Q5T2HIbWeRNF9HtT/i3f1uNa0TWrcZLabGSXLaQBLExmwiVkRAqYu6ZBC
-         COysTOFiZPQxB6Xi5OdFDiOIGwfz9rtQqa8INxM75TlDqYNjHauZhXew4q1mvZRa90
-         e1p1lDXGVGBhA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 1F610154037F; Sat, 11 Mar 2023 14:57:37 -0800 (PST)
-Date:   Sat, 11 Mar 2023 14:57:37 -0800
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org, urezki@gmail.com
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <4b5f3af3-7df2-4300-9cb2-8b7da572cda1@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230303213851.2090365-1-joel@joelfernandes.org>
- <20230304010251.GD1301832@paulmck-ThinkPad-P17-Gen-1>
- <20230304045145.GD2176990@google.com>
- <a9e974d1-2b83-44bc-ab2e-56ef9511c2ef@paulmck-laptop>
- <20230311222354.GA2367813@google.com>
+        Sat, 11 Mar 2023 18:10:28 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C37CB4DE3C
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 15:10:26 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id y12so894709ilq.4
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 15:10:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678576226;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4cpvYmVBhD4fHRIrTGT44scJM9mOEe4nde0KEivzpRU=;
+        b=b0DGG+OiczaXdjYEhNUmMwjVPqFwNqfWT2CWfDR8tRxIe5tHVvuLxy6/DeGkZTdWYa
+         QYaA8RbvXZzZDSq2GKecdW9xBKTa+yDmzyK+zuVYYYfRYxsrKDfpUsUzg5t4Fl4qrkj8
+         z9uPrtiurvxE60GSlV4qCRVxIodf/NpJ9bC+FOjNMxYKp7ablkd7CQKiAaQHn0tqJ0T6
+         ySfpg7FxTx9UaXiUyQHt8OZNOvcyATtYH6R/fWwWt5k+kEBn5ot1z6SzosM6L9rJ4iPY
+         pAQ1rPSOj84VcRzI8F1dCfv2yB0NDdfi2BaLEU1O7U6hDcx9ZOkaIqaO3lAunTcnl8qH
+         y+NA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678576226;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4cpvYmVBhD4fHRIrTGT44scJM9mOEe4nde0KEivzpRU=;
+        b=ysCzfwU4sSWTAIW1EgIWYcMjEMWqYRFmhsTGuFeTiWQ9IcLETTbyis+eHAw9McUwIe
+         xhJs5GVydoYlQkf7hNVyuFMv+a85Mqr89i3IWBS0TYfJ47xE29ILecs9fp9GGj/vLkdM
+         xd4f52VYHSVUaGY2iPRd2TM4NCjPcawttI3DQJLyS17RmwZYQHCYOZs4I1A01BZniB+S
+         u6nDXKMTiA7hmjXsYEvcaY45qRFZe9a9uBIC2A623IWPUI/pQUaG7e4IDtTFePaPI8+N
+         iS1ZpjsCTdHPAND8e5aEWpYqbYSAroQU7Hn16bd9pxuefzRazF9fTZOECFa7rfHF8zJR
+         i9SA==
+X-Gm-Message-State: AO0yUKVOd4taDH/hzaRePp3XsxhkQ6gSk8651mP5uOrqcfeGUaOeBE1H
+        FLQX306eOZN/L9hcZ4OzwAY=
+X-Google-Smtp-Source: AK7set8xLaf6sGCvFzp9Oq9/f/JMIaxPKVY87Tn55B/7J2yLpejE7qv7ohOneDZo8+6MZwjoiq29wQ==
+X-Received: by 2002:a05:6e02:1522:b0:317:9945:6054 with SMTP id i2-20020a056e02152200b0031799456054mr23500135ilu.9.1678576226071;
+        Sat, 11 Mar 2023 15:10:26 -0800 (PST)
+Received: from aford-IdeaCentre-A730.lan ([2601:447:d001:897f:3d1b:3fae:4f25:ccd])
+        by smtp.gmail.com with ESMTPSA id y11-20020a02bb0b000000b003fddcf34e0csm679190jan.117.2023.03.11.15.10.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 15:10:25 -0800 (PST)
+From:   Adam Ford <aford173@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     aford@beaconembedded.com, dmitry.baryshkov@linaro.org,
+        quic_abhinavk@quicinc.com, Adam Ford <aford173@gmail.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/bridge: adv7533: Fix adv7533_mode_valid for adv7533 and adv7535
+Date:   Sat, 11 Mar 2023 17:10:07 -0600
+Message-Id: <20230311231007.46174-1-aford173@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311222354.GA2367813@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 10:23:54PM +0000, Joel Fernandes wrote:
-> On Sat, Mar 11, 2023 at 12:44:53PM -0800, Paul E. McKenney wrote:
-> > On Sat, Mar 04, 2023 at 04:51:45AM +0000, Joel Fernandes wrote:
-> > > Hi Paul,
-> > > 
-> > > On Fri, Mar 03, 2023 at 05:02:51PM -0800, Paul E. McKenney wrote:
-> > > [..]
-> > > > > Qiuxu also noted impressive boot-time improvements with earlier version
-> > > > > of patch. An excerpt from the data he shared:
-> > 
-> > Now that we have the measurement methodology put to bed...
-> > 
-> > [ . . . ]
-> > 
-> > > > Mightn't this be simpler if the user was only permitted to write zero,
-> > > > thus just saying "stop immediately"?  If people really need the ability
-> > > > to extend or shorten the time, a patch can be produced at that point.
-> > > > And then a non-zero write to the file would become legal.
-> > > 
-> > > I prefer to keep it this way as with this method, I can not only get to
-> > > have variable rcu_boot_end_delay via boot parameter (as in my first patch), I
-> > > also don't need to add a separate sysfs entry, and can just reuse
-> > > 'rcu_boot_end_delay' parameter, which I also had in my first patch. And
-> > > adding yet another sysfs parameter will actually complicate it even more and
-> > > add more lines of code.
-> > > 
-> > > I tested difference scenarios and it works fine, though I missed that
-> > > mutex locking unfortunately, I did verify different test cases work as
-> > > expected by manual testing.
-> > 
-> > Except that you don't need that extra sysfs value.  You could instead use
-> > any of a number of state variables that tell you that early boot is done.
-> > If the state says early boot (as in parsing the kernel command line),
-> > make the code act as it does now.  Otherwise, make it accept only zero.
-> > 
-> > If there really is some system that wants to set one time limit via
-> > the kernel boot parameter and set another at some time during boot,
-> > there are very simple userspace facilities to make this happen.
-> > 
-> > And there is also a smaller state space and less testing to be done,
-> > benefits which accrue on an ongoing basis.
-> 
-> Ok, thanks for the suggestion and I will consider it when/if posting the next
-> revision of this idea. I got strong pushback from Frederic, Vlad and Steven
-> Rostedt on doing the timeout-based thing, so currently I am analyzing the
-> boot process more to see if it could be optimized instead. I tend to agree
-> with them now also because this feature is new and there could be bugs that
-> this patch might hide..
+When dynamically switching lanes was removed, the intent of the code
+was to check to make sure that higher speed items used 4 lanes, but
+it had the unintended consequence of removing the slower speeds for
+4-lane users.
 
-Agreed, fixing underlying causes is even better.
+This attempts to remedy this by doing a check to see that the
+max frequency doesn't exceed the chip limit, and a second
+check to make sure that the max bit-rate doesn't exceed the
+number of lanes * max bit rate / lane.
 
-							Thanx, Paul
+Fixes: 9a0cdcd6649b ("drm/bridge: adv7533: remove dynamic lane switching from adv7533 bridge")
+
+Signed-off-by: Adam Ford <aford173@gmail.com>
+
+diff --git a/drivers/gpu/drm/bridge/adv7511/adv7533.c b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+index fdfeadcefe80..10a112d36945 100644
+--- a/drivers/gpu/drm/bridge/adv7511/adv7533.c
++++ b/drivers/gpu/drm/bridge/adv7511/adv7533.c
+@@ -103,13 +103,9 @@ void adv7533_dsi_power_off(struct adv7511 *adv)
+ enum drm_mode_status adv7533_mode_valid(struct adv7511 *adv,
+ 					const struct drm_display_mode *mode)
+ {
+-	int lanes;
++	unsigned long max_lane_freq;
+ 	struct mipi_dsi_device *dsi = adv->dsi;
+-
+-	if (mode->clock > 80000)
+-		lanes = 4;
+-	else
+-		lanes = 3;
++	u8 bpp = mipi_dsi_pixel_format_to_bpp(dsi->format);
+ 
+ 	/*
+ 	 * TODO: add support for dynamic switching of lanes
+@@ -117,8 +113,16 @@ enum drm_mode_status adv7533_mode_valid(struct adv7511 *adv,
+ 	 * out the modes which shall need different number of lanes
+ 	 * than what was configured in the device tree.
+ 	 */
+-	if (lanes != dsi->lanes)
+-		return MODE_BAD;
++
++	/* Check max clock for either 7533 or 7535 */
++	if (mode->clock > (adv->type == ADV7533 ? 80000 : 148500))
++		return MODE_CLOCK_HIGH;
++
++	/* Check max clock for each lane */
++	max_lane_freq = (adv->type == ADV7533 ? 800000 : 891000);
++
++	if (mode->clock * bpp > max_lane_freq * adv->num_dsi_lanes)
++		return MODE_CLOCK_HIGH;
+ 
+ 	return MODE_OK;
+ }
+-- 
+2.37.2
+
