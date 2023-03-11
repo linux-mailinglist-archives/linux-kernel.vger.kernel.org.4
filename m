@@ -2,59 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E0406B6136
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 526906B6137
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:51:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229984AbjCKVvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:51:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S229957AbjCKVva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:51:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjCKVvN (ORCPT
+        with ESMTP id S230022AbjCKVvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:51:13 -0500
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8504580CD
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:50:59 -0800 (PST)
-Received: by mail-ed1-x52e.google.com with SMTP id r15so7262451edq.11
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:50:59 -0800 (PST)
+        Sat, 11 Mar 2023 16:51:24 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304172821C
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:51:14 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cy23so34343903edb.12
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:51:14 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678571458;
+        d=gmail.com; s=20210112; t=1678571473; x=1681163473;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YZRztXr+yi1+VTQciICFP+x1t1LeLTBQI5V0a9mBDUU=;
-        b=jrsv3JVCjkddk3WtVccMKFPD0rBNEkDOReh9EgvbeGHtlx4u4dBVST9TGLsYnSrik1
-         fCGRem74PcYWnMSFww/ZBYYkad9whVFjreKmBsKE3WvetcmhfYkkJOMHC3eBVkd3O2/e
-         C/QWu25lRH9Llr0/i8kkw9F1f74a5VveDwjZItIUksclQQNdeUhV4b/wfOZUb6Y6tIgT
-         Ii+SL6IDbR2NS2TuxJmjZsfVhQpFn+UMrBk50894jQRsuplBSocTwjAVWcGTFTBTveVI
-         eHmMGOI9H4LGUV2PxLU2yMFpWhCKCmAJfN8rrOvZ4rKMFZtoZdM8r8i4shwg9Z9k4E86
-         YTTQ==
+        bh=w6eYhhrlk3QpT3Cy5PgSpe5WK/nBGJNkoN3eiwTzKHM=;
+        b=YmBNqxtAmKGEE3Iiif77W37hUZVglXlHDs5uRhhFokF6a5Fv1yXiePXuf63OzZAqUn
+         dB/OO3UQF3DcYJoH9s1FIGrAmLgCaVD/rOTV8nZo15I0pLgQxtGXo9AKobLW9g20KVLP
+         zcNhH1qhMWBk7dTdX9u+bSnk/+J3oM5zEB43m37g7QAbyXXWkKyncS7myOtJKQ8F683v
+         CW1pWIdPlC5iTzFPxsJUo6YQCPaicONJxYJ7hFRKck1RSm7ISuJDrwN8aUtsw8s8Gdh9
+         X4m1zmPtTfKHlEWFJ8c9wHZOtIRSQkhdxMGjLfLVnkJUxzvBNTGj606Q+loccB7sR5u4
+         a4gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678571458;
+        d=1e100.net; s=20210112; t=1678571473; x=1681163473;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=YZRztXr+yi1+VTQciICFP+x1t1LeLTBQI5V0a9mBDUU=;
-        b=o7z6BmKkyzvjGDbIdGjWC0mq006g25eV3/CRy52sRgt7GYhSbH1jPsUxO5GyD7SiDo
-         yMu+094jBZJ05F6pfdR7D0nHoxjT9mv71bcwBJ5UlJOLE1a2UDmU5NSZGZTFkllG1MID
-         pyNZzNJRDGBFnK5QMTzYR4KmI2c6c40Jn4SXMlraPuwSjR8tKZrhrNSQ0ig4n1O0vvby
-         hMs7jV8e83nR8lV7AcizpARg0d9v/A44vrLNaaUI9Sy/FW6CYigmf+IS5FwP6b+x93GU
-         deXDfi2wcU2OFEp3ujBwm5mR3epleIPuo25LnKojRdRBGxNlqf6sXdsiAlRXFzdjBKAY
-         /8oQ==
-X-Gm-Message-State: AO0yUKV3XjgSXk4buigm14FlV9UAjMmUtRh6gra43RqC7nc+MvLxwRgq
-        HlPh+8TH4azPGC2Q1ZSucg0=
-X-Google-Smtp-Source: AK7set+ZhZVUGQysFESJVoq6vJY3frd1ZVHwPO/IGJVBnFykg9eG0tx3wxoLTR87kSNaAYx3KLH9Pw==
-X-Received: by 2002:a17:906:d4:b0:878:5fa4:7443 with SMTP id 20-20020a17090600d400b008785fa47443mr5803546eji.3.1678571458319;
-        Sat, 11 Mar 2023 13:50:58 -0800 (PST)
+        bh=w6eYhhrlk3QpT3Cy5PgSpe5WK/nBGJNkoN3eiwTzKHM=;
+        b=sDfMGJvyI0rsoxqKJmHqZBWkWaJ/Q4Xhtp3Lz3dBhiSnn4mBUA4YB8lZbrj8n5OVsb
+         fXTzd6KH2LpxCcSw37rAWmUFPnh8SBslZYSyraDCgFa8qWe9oWtWW7OwAO9mDiQc6aJ+
+         acbBKu83hYJlB9HbPys6+zPUnCQ669FerhIN0RoC3uFug66UeJaYTg+L4yR4xcK90Kqj
+         0eDJIFqNkRLwtkZY1iPZOPdm0cIrxY8mHqQKwF8qHrkXJXM1KmzZDZxvpkg9u9KqFozm
+         2YQ0EDNCyodSAjIFa6FZ9cMsUxDFjdF4LRyZOU0tykphXTzSWH6Llk9raWYjtS27N0bv
+         Iebg==
+X-Gm-Message-State: AO0yUKVP0U6BNmDU8SAxmG/oH+O3bc1z+gPHhNlaqwYLt+rFZAgys8m7
+        0dppzzE9ABf/PAd+AL4As/c=
+X-Google-Smtp-Source: AK7set8CUc6ZVyzcT29H+6rTnMe9iPW7jMymRuvZHdtUs/1Ax3OLDsqsoS4HDzmVlaoUiSeaFxaUMA==
+X-Received: by 2002:a17:906:74cd:b0:88f:1255:59c with SMTP id z13-20020a17090674cd00b0088f1255059cmr9241551ejl.1.1678571473218;
+        Sat, 11 Mar 2023 13:51:13 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id nb17-20020a1709071c9100b00925867d821fsm125242ejc.120.2023.03.11.13.50.57
+        by smtp.gmail.com with ESMTPSA id g26-20020a170906869a00b008b23b22b062sm1507539ejx.114.2023.03.11.13.51.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 13:50:57 -0800 (PST)
-Date:   Sat, 11 Mar 2023 22:50:56 +0100
+        Sat, 11 Mar 2023 13:51:12 -0800 (PST)
+Date:   Sat, 11 Mar 2023 22:51:11 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 03/12] staging: rtl8192e: Remove unused variable rfintfi
-Message-ID: <f251186fe59855eee3dd465954700a1d0ec50f53.1678569965.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 04/12] staging: rtl8192e: Remove unused RF90_PATH_C and ..D
+ for rfintfo and ..fe
+Message-ID: <3c2237e2b4094129143594a5ab45691e9961e100.1678569965.git.philipp.g.hortmann@gmail.com>
 References: <cover.1678569965.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -70,57 +71,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused variable rfintfi because it is just once set and not used.
+Remove unused priv->phy_reg_def[RF90_PATH_C].rfintfo and
+priv->phy_reg_def[RF90_PATH_D].rfintfo and
+remove unused priv->phy_reg_def[RF90_PATH_C].rfintfe and
+priv->phy_reg_def[RF90_PATH_D].rfintfe.
+The termination condition for the loop is set to
+priv->num_total_rf_path = RTL819X_TOTAL_RF_PATH = 2.
+Because of this pPhyReg = &priv->phy_reg_def[eRFPath]; pPhyReg cannot
+point to array element 2 for RF90_PATH_C and 3 for RF90_PATH_D.
 Remove unused constants as well.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
- drivers/staging/rtl8192e/rtl8192e/r8190P_def.h    | 1 -
- drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c    | 5 -----
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c    | 4 ----
  drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h | 2 --
- 3 files changed, 8 deletions(-)
+ 2 files changed, 6 deletions(-)
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h b/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
-index ac192254a4bb..adedcea5824e 100644
---- a/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
-+++ b/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
-@@ -103,7 +103,6 @@ enum rf_optype {
- 
- struct bb_reg_definition {
- 	u32 rfintfs;
--	u32 rfintfi;
- 	u32 rfintfo;
- 	u32 rfintfe;
- 	u32 rf3wireOffset;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 94b23cb53c36..19fdf56e5e91 100644
+index 19fdf56e5e91..a0dd628b1bf5 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -359,11 +359,6 @@ static void _rtl92e_init_bb_rf_reg_def(struct net_device *dev)
- 	priv->phy_reg_def[RF90_PATH_A].rfintfs = rFPGA0_XAB_RFInterfaceSW;
- 	priv->phy_reg_def[RF90_PATH_B].rfintfs = rFPGA0_XAB_RFInterfaceSW;
+@@ -361,13 +361,9 @@ static void _rtl92e_init_bb_rf_reg_def(struct net_device *dev)
  
--	priv->phy_reg_def[RF90_PATH_A].rfintfi = rFPGA0_XAB_RFInterfaceRB;
--	priv->phy_reg_def[RF90_PATH_B].rfintfi = rFPGA0_XAB_RFInterfaceRB;
--	priv->phy_reg_def[RF90_PATH_C].rfintfi = rFPGA0_XCD_RFInterfaceRB;
--	priv->phy_reg_def[RF90_PATH_D].rfintfi = rFPGA0_XCD_RFInterfaceRB;
--
  	priv->phy_reg_def[RF90_PATH_A].rfintfo = rFPGA0_XA_RFInterfaceOE;
  	priv->phy_reg_def[RF90_PATH_B].rfintfo = rFPGA0_XB_RFInterfaceOE;
- 	priv->phy_reg_def[RF90_PATH_C].rfintfo = rFPGA0_XC_RFInterfaceOE;
+-	priv->phy_reg_def[RF90_PATH_C].rfintfo = rFPGA0_XC_RFInterfaceOE;
+-	priv->phy_reg_def[RF90_PATH_D].rfintfo = rFPGA0_XD_RFInterfaceOE;
+ 
+ 	priv->phy_reg_def[RF90_PATH_A].rfintfe = rFPGA0_XA_RFInterfaceOE;
+ 	priv->phy_reg_def[RF90_PATH_B].rfintfe = rFPGA0_XB_RFInterfaceOE;
+-	priv->phy_reg_def[RF90_PATH_C].rfintfe = rFPGA0_XC_RFInterfaceOE;
+-	priv->phy_reg_def[RF90_PATH_D].rfintfe = rFPGA0_XD_RFInterfaceOE;
+ 
+ 	priv->phy_reg_def[RF90_PATH_A].rf3wireOffset = rFPGA0_XA_LSSIParameter;
+ 	priv->phy_reg_def[RF90_PATH_B].rf3wireOffset = rFPGA0_XB_LSSIParameter;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
-index 616a4b62d4b9..5a47b232945f 100644
+index 5a47b232945f..ec39de9e89fe 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
-@@ -80,8 +80,6 @@
- #define rFPGA0_XC_LSSIReadBack		0x8a8
- #define rFPGA0_XD_LSSIReadBack		0x8ac
- #define rFPGA0_PSDReport		0x8b4
--#define rFPGA0_XAB_RFInterfaceRB	0x8e0
--#define rFPGA0_XCD_RFInterfaceRB	0x8e4
- 
- /* Page 9 - RF mode & OFDM TxSC */
- #define rFPGA1_RFMOD			0x900
+@@ -66,8 +66,6 @@
+ #define rFPGA0_XCD_SwitchControl	0x85c
+ #define rFPGA0_XA_RFInterfaceOE		0x860
+ #define rFPGA0_XB_RFInterfaceOE		0x864
+-#define rFPGA0_XC_RFInterfaceOE		0x868
+-#define rFPGA0_XD_RFInterfaceOE		0x86c
+ #define rFPGA0_XAB_RFInterfaceSW	0x870
+ #define rFPGA0_XAB_RFParameter		0x878
+ #define rFPGA0_XCD_RFParameter		0x87c
 -- 
 2.39.2
 
