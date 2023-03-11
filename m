@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF686B5873
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:11:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 149E06B5876
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:11:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCKFL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:11:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37108 "EHLO
+        id S229977AbjCKFLj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:11:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229603AbjCKFLP (ORCPT
+        with ESMTP id S229722AbjCKFLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 00:11:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1206B12EE5A;
-        Fri, 10 Mar 2023 21:11:14 -0800 (PST)
+        Sat, 11 Mar 2023 00:11:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDEE11CADB;
+        Fri, 10 Mar 2023 21:11:15 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8ED2860B99;
-        Sat, 11 Mar 2023 05:11:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E3FE4C433D2;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D7A2B8242B;
+        Sat, 11 Mar 2023 05:11:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F3D2AC433A4;
         Sat, 11 Mar 2023 05:11:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678511473;
-        bh=PAhBO65+/b8sDxos9NcjPY59ZyKD4hIZ8XfH10uHCyE=;
+        bh=T0yrlYh6fLNBmEygIOf06ax4LoeO/yfEvilUDk3ALb0=;
         h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-        b=b2VaVQWWs3yUT/wjDgrC6PjLhdeLntspNLF4mBj1ljN+xYkjqenvasg80yVEuEViE
-         kzjBIejx6LPVRVFoB0CHF5IkVLjp+yVlkc9qtJtB+9X1AibU29xCAKk4tcFkIq4Aqm
-         EaeJNd87rBoEqF9kCai6JgWDwIiG0r5iwBxjc/mMZ7Jphgw8hQbwM8C7ys2rcOTYkw
-         go8ranmsmlum7KJ4U0zjymBsdtgivafVEUvjehhKLcRE8w6rWdMPOXc6+HW0sy8Ht+
-         RXNUQby4CQLLTD+9mnn8+2ZBIW7m9ulJ/nU3+bJKJYPnudn35cGuOIjludQM3fOjaI
-         lGBGw7SNPE8/A==
+        b=EczB40LA5lG5C/S5UeFdMS1zGEk3pTe/UgogIJIP5LYX8BCVaIe8LWqi5o69FTM0H
+         QcIoBPiSy+j+pE7vzwBqs2co/XVb3MZcIx708cWY1pnG/RP0LABFu88lZt3f5Asxr0
+         xgCQfCIiFXU0M7OSJVpOri6LlQW4VS8ncqEtUGXg/70sDLnEzicscMmmZtB79IGc67
+         OX+a8sLAg9q0P2ME4mBY60FRVWoScOXpmCTm1aHV35sNps/91lXq27a6Dh6mcQFe3a
+         k62FVCUUhKnVaoC0piRXgzkeLsb5k1NcCoHQ7j4ZFF1AfBW0A+nVJgTMk0AqpaoCry
+         16lCdVQ2Y/x+w==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by smtp.lore.kernel.org (Postfix) with ESMTP id D20AEC74A5B;
+        by smtp.lore.kernel.org (Postfix) with ESMTP id DEA84C6FD1C;
         Sat, 11 Mar 2023 05:11:12 +0000 (UTC)
 From:   Sasha Finkelstein via B4 Relay 
         <devnull+fnkl.kernel.gmail.com@kernel.org>
-Date:   Sat, 11 Mar 2023 06:11:11 +0100
-Subject: [PATCH v9 3/5] arm64: dts: apple: t8103: Add PWM controller
+Date:   Sat, 11 Mar 2023 06:11:12 +0100
+Subject: [PATCH v9 4/5] arm64: dts: apple: t600x: Add PWM controller
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230214-fpwm-v9-3-dbe26bccabd6@gmail.com>
+Message-Id: <20230214-fpwm-v9-4-dbe26bccabd6@gmail.com>
 References: <20230214-fpwm-v9-0-dbe26bccabd6@gmail.com>
 In-Reply-To: <20230214-fpwm-v9-0-dbe26bccabd6@gmail.com>
 To:     Thierry Reding <thierry.reding@gmail.com>,
@@ -55,13 +55,14 @@ To:     Thierry Reding <thierry.reding@gmail.com>,
         Sven Peter <sven@svenpeter.dev>,
         Alyssa Rosenzweig <alyssa@rosenzweig.io>
 Cc:     linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Sasha Finkelstein <7d578vix8hzw@opayq.net>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678511469; l=2869;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678511469; l=2061;
  i=fnkl.kernel@gmail.com; s=20230213; h=from:subject:message-id;
- bh=R6FVHucw/1bUgNYLGZV8OMhopQA9RB5yXaUd/bpvUDM=;
- b=ksxlEfvc3K4I75NvF7KJaK5XtCOUsXoDVhpvcB3VtZ7B8tPFExdV4phRdt6p0cxtUE0YrR5pQ
- pdGG7WII5RfD3Mxz3FRa7UNl53iUtP1zwLslCLpvTmTOXSM0FnDmQPT
+ bh=kC8e0IqG+WMbKwdUXKBwuQCvwcxm5IAUASQM0mxJcPI=;
+ b=ylBTfjRjGzHWvEqIWhhn18jeSZMEbiaeiZg+M/rcRcOJhWSSI10M/YUir9QQPA/sTAAL13MGP
+ lmTlMYqmrZgCLZym5lvq6Ad9O/zAvhiaf6Rbbtb4MUvfKfkLO1OyK5n
 X-Developer-Key: i=fnkl.kernel@gmail.com; a=ed25519;
  pk=7LFSAJtxIWAs9LzCIyX0sSvCZy2wQTyEIu1zch6o804=
 X-Endpoint-Received: by B4 Relay for fnkl.kernel@gmail.com/20230213 with auth_id=28
@@ -77,36 +78,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Sasha Finkelstein <fnkl.kernel@gmail.com>
+From: Sasha Finkelstein <7d578vix8hzw@opayq.net>
 
-Adds PWM controller and keyboard backlight bindings for M1 MacBooks
+Adds PWM controller and keyboard backlight bindings for M1 Pro/Max MacBook Pros
 
 Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
-Acked-by: Sven Peter <sven@svenpeter.dev>
+Acked-by: Hector Martin <marcan@marcan.st>
 ---
- arch/arm64/boot/dts/apple/t8103-j293.dts | 17 +++++++++++++++++
- arch/arm64/boot/dts/apple/t8103-j313.dts | 17 +++++++++++++++++
- arch/arm64/boot/dts/apple/t8103.dtsi     |  9 +++++++++
- 3 files changed, 43 insertions(+)
+ arch/arm64/boot/dts/apple/t600x-die0.dtsi      |  9 +++++++++
+ arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi | 18 ++++++++++++++++++
+ 2 files changed, 27 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/apple/t8103-j293.dts b/arch/arm64/boot/dts/apple/t8103-j293.dts
-index 151074109a11..fc55ce0fa40d 100644
---- a/arch/arm64/boot/dts/apple/t8103-j293.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j293.dts
-@@ -11,10 +11,23 @@
+diff --git a/arch/arm64/boot/dts/apple/t600x-die0.dtsi b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
+index 1c41954e3899..9157ae2a9f7f 100644
+--- a/arch/arm64/boot/dts/apple/t600x-die0.dtsi
++++ b/arch/arm64/boot/dts/apple/t600x-die0.dtsi
+@@ -71,6 +71,15 @@ sio_dart_1: iommu@39b008000 {
+ 		power-domains = <&ps_sio_cpu>;
+ 	};
  
- #include "t8103.dtsi"
- #include "t8103-jxxx.dtsi"
++	fpwm0: pwm@39b030000 {
++		compatible = "apple,t6000-fpwm", "apple,s5l-fpwm";
++		reg = <0x3 0x9b030000 0x0 0x4000>;
++		power-domains = <&ps_fpwm0>;
++		clocks = <&clkref>;
++		#pwm-cells = <2>;
++		status = "disabled";
++	};
++
+ 	i2c0: i2c@39b040000 {
+ 		compatible = "apple,t6000-i2c", "apple,i2c";
+ 		reg = <0x3 0x9b040000 0x0 0x4000>;
+diff --git a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
+index 34906d522f0a..96de7165df6d 100644
+--- a/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
++++ b/arch/arm64/boot/dts/apple/t600x-j314-j316.dtsi
+@@ -9,6 +9,8 @@
+  * Copyright The Asahi Linux Contributors
+  */
+ 
 +#include <dt-bindings/leds/common.h>
- 
++
  / {
- 	compatible = "apple,j293", "apple,t8103", "apple,arm-platform";
- 	model = "Apple MacBook Pro (13-inch, M1, 2020)";
+ 	aliases {
+ 		serial0 = &serial0;
+@@ -34,6 +36,18 @@ memory@10000000000 {
+ 		device_type = "memory";
+ 		reg = <0x100 0 0x2 0>; /* To be filled by loader */
+ 	};
 +
 +	led-controller {
 +		compatible = "pwm-leds";
 +		led-0 {
-+			pwms = <&fpwm1 0 40000>;
++			pwms = <&fpwm0 0 40000>;
 +			label = "kbd_backlight";
 +			function = LED_FUNCTION_KBD_BACKLIGHT;
 +			color = <LED_COLOR_ID_WHITE>;
@@ -116,71 +140,17 @@ index 151074109a11..fc55ce0fa40d 100644
 +	};
  };
  
- &bluetooth0 {
-@@ -47,3 +60,7 @@ &i2c2 {
- &i2c4 {
- 	status = "okay";
+ &serial0 {
+@@ -110,5 +124,9 @@ &pcie0_dart_3 {
+ 	status = "disabled";
  };
-+
-+&fpwm1 {
+ 
++&fpwm0 {
 +	status = "okay";
 +};
-diff --git a/arch/arm64/boot/dts/apple/t8103-j313.dts b/arch/arm64/boot/dts/apple/t8103-j313.dts
-index bc1f865aa790..1e26aa1ef525 100644
---- a/arch/arm64/boot/dts/apple/t8103-j313.dts
-+++ b/arch/arm64/boot/dts/apple/t8103-j313.dts
-@@ -11,10 +11,23 @@
- 
- #include "t8103.dtsi"
- #include "t8103-jxxx.dtsi"
-+#include <dt-bindings/leds/common.h>
- 
- / {
- 	compatible = "apple,j313", "apple,t8103", "apple,arm-platform";
- 	model = "Apple MacBook Air (M1, 2020)";
 +
-+	led-controller {
-+		compatible = "pwm-leds";
-+		led-0 {
-+			pwms = <&fpwm1 0 40000>;
-+			label = "kbd_backlight";
-+			function = LED_FUNCTION_KBD_BACKLIGHT;
-+			color = <LED_COLOR_ID_WHITE>;
-+			max-brightness = <255>;
-+			default-state = "keep";
-+		};
-+	};
- };
- 
- &bluetooth0 {
-@@ -39,3 +52,7 @@ &pcie0_dart_2 {
- 
- /delete-node/ &port01;
  /delete-node/ &port02;
-+
-+&fpwm1 {
-+	status = "okay";
-+};
-diff --git a/arch/arm64/boot/dts/apple/t8103.dtsi b/arch/arm64/boot/dts/apple/t8103.dtsi
-index 9859219699f4..5300fd115561 100644
---- a/arch/arm64/boot/dts/apple/t8103.dtsi
-+++ b/arch/arm64/boot/dts/apple/t8103.dtsi
-@@ -432,6 +432,15 @@ i2c4: i2c@235020000 {
- 			status = "disabled"; /* only used in J293 */
- 		};
- 
-+		fpwm1: pwm@235044000 {
-+			compatible = "apple,t8103-fpwm", "apple,s5l-fpwm";
-+			reg = <0x2 0x35044000 0x0 0x4000>;
-+			power-domains = <&ps_fpwm1>;
-+			clocks = <&clkref>;
-+			#pwm-cells = <2>;
-+			status = "disabled";
-+		};
-+
- 		serial0: serial@235200000 {
- 			compatible = "apple,s5l-uart";
- 			reg = <0x2 0x35200000 0x0 0x1000>;
+ /delete-node/ &port03;
 
 -- 
 Git-137.1)
