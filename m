@@ -2,104 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 064136B5916
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:49:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC4846B591C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbjCKGt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 01:49:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33412 "EHLO
+        id S229887AbjCKG5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 01:57:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41766 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCKGt1 (ORCPT
+        with ESMTP id S229744AbjCKG5f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:49:27 -0500
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45593124E8E;
-        Fri, 10 Mar 2023 22:49:26 -0800 (PST)
-Received: by mail-wr1-x430.google.com with SMTP id p4so787254wre.11;
-        Fri, 10 Mar 2023 22:49:26 -0800 (PST)
+        Sat, 11 Mar 2023 01:57:35 -0500
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D3314415F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:57:33 -0800 (PST)
+Received: by mail-vs1-xe30.google.com with SMTP id f13so6659998vsg.6
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:57:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678517365;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=t9Sei6I41qwaNDpvUvee9z5C91oyEDGNKLdeZYKLxNI=;
-        b=edANvY7i593vAONZaHOUC5NiTyvSEIOaEbRI65vr3O9TxYv0ucfrHbTN/3kKRE+Tkj
-         kTzD5JZupdMhbGi/9AnNNPmHiuE08jI/tDmN55s78utBRjPSG+l0RbEZnCYPcGD+Tz1T
-         70SRtuq64yUALwEsep5xNXJc6oI5P3t6w/o40wW1OTAPugx9zilfGYPK0knap2c0m2im
-         5Z/9gQAteGMZ+0W210gckbP716ypWMyoR+YjhAkCz7XgEa42CNrLjViIRviq6sj4NPdo
-         QyuS+vIB0RIRQYRmiUSeCbnb6/CwiOy5Ih0xqHu+CFxbOLzMgGWScerqv1Gusqg8th2l
-         zYaA==
+        d=linaro.org; s=google; t=1678517852;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vgdPDpd/UGNlIjqFRewIYZuipZ5SZ6ADoBVeG2r1SyU=;
+        b=naFt/MGAuhhivbgt/8cEyDQhBUvwpy2sl0pfhuIMCb27ptJIIm8RadFZokbMSe+pa2
+         vyPtQ0zBcgyuqVQUCK4BVIAb57Pxc7HBHlwHBbLkv6P/yV6aQHdCYJLpodxdgocfX6/3
+         biDsoEkAd0j9QjtVOFq17VQJM9uJ0Q4uXV5ci3b2vsYZVsy71LNLvSyQVZo0ZX1cvNL0
+         RnOgldtF+e64EyF5hk3SPjbWPAdqIhWo/O5nDql4U48ewqxp3L0+qmYSWupb7hpAemsC
+         2aNtqjlojZOuSeALo4YBBxhbhNsRqgwug1G4e9jAQqBePx0/FiChMYRFYJMG0W8M3wR+
+         r1MA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517365;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t9Sei6I41qwaNDpvUvee9z5C91oyEDGNKLdeZYKLxNI=;
-        b=n7CfY1O6iP7tzscgWDLZq8nATgRf0P+Zg9a4ptPAFWqVtu3XBkEjVycagqRYqNCXKB
-         D7Ixwf0oOG5uwsIuduaNEbEI9ERFBQF+ROWPuLll32FT8i1xLZeg2KP7vM+OYls43k0V
-         2llxwLfFKq7rw13DDkbpp60Vlf1HCGKUYctoubD2lkd6e77QGL2MkN+cvf9zRpZsLFqj
-         +srshrXnTl3Y2Q9sjPKFBuE7V/n+PQK1nhs7HQiBZB6APwwlGFXjE77shPg3e9ihDpKr
-         L4+AJGGCG+JSC7Ek+r9L2HL9ykRZcdbZ2GfP8Icy5ZKRK2+emeHSSaAU1ZJwZXIlL1U6
-         +CFQ==
-X-Gm-Message-State: AO0yUKWZsUfUzuxeKs2NT1cbLg1pehyUfGBZcChhOeAf9qFYbHNK9pvR
-        w87YyJMrMsl2thplLUK57ig=
-X-Google-Smtp-Source: AK7set/JPr6Wq2tfBtyFn0d5vMSSusNpNT1n3m5tdIocxlx8YgFkE6JLYZ5AoEW5KjyXe2yJU0ieQQ==
-X-Received: by 2002:a5d:4a8c:0:b0:2c7:d7ca:4c88 with SMTP id o12-20020a5d4a8c000000b002c7d7ca4c88mr18447829wrq.55.1678517364619;
-        Fri, 10 Mar 2023 22:49:24 -0800 (PST)
-Received: from ?IPv6:2a02:168:6806:0:c51d:786:86a8:fd19? ([2a02:168:6806:0:c51d:786:86a8:fd19])
-        by smtp.gmail.com with ESMTPSA id l2-20020a5d4bc2000000b002c57475c375sm1584656wrt.110.2023.03.10.22.49.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 22:49:24 -0800 (PST)
-Message-ID: <bff0e542b8c04980e9e3af1d3e6bf739c87eb514.camel@gmail.com>
-Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
- capabilities for C22 and C45
-From:   Klaus Kudielka <klaus.kudielka@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Michael Walle <michael@walle.cc>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Bryan Whitehead <bryan.whitehead@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Joel Stanley <joel@jms.id.au>,
-        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-aspeed@lists.ozlabs.org,
-        Jesse Brandeburg <jesse.brandeburg@intel.com>
-Date:   Sat, 11 Mar 2023 07:49:23 +0100
-In-Reply-To: <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
-References: <20230116-net-next-remove-probe-capabilities-v2-4-15513b05e1f4@walle.cc>
-         <449bde236c08d5ab5e54abd73b645d8b29955894.camel@gmail.com>
-         <100c439a-2a4d-4cb2-96f2-5bf273e2121a@lunn.ch>
-         <712bc92ca6d576f33f63f1e9c2edf0030b10d3ae.camel@gmail.com>
-         <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
-         <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
-         <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
-         <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
-         <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
-         <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
-         <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
+        d=1e100.net; s=20210112; t=1678517852;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vgdPDpd/UGNlIjqFRewIYZuipZ5SZ6ADoBVeG2r1SyU=;
+        b=SsLLiecExjy9YqpnplPH2JYl5FV5B8g/dSjysM/8NYJJGoRAewEPEXRTChdlMnhytA
+         Vv6w/fjqsNn5tfagW+RILiEDIow3HDW6X6YIK/K4DBGBKYYXpsJtHo98wSWQDqIlRBce
+         5zBRIkXUvBrTOZfxwSVdlX5FfkB1IL3CPSC30L6UApPw925j0s/J9r/l02NLm4NcbVEf
+         B81qbmsCM6890SZ5hk2cgvKCddxeqoZTEgDVz97BDH0h+PnV7TMpopFErynCB8Ywvl5B
+         O3VUsceWrVkg9PrT4T7NYYEe8TTFZ/HgRQIMO0/x1CfaTF13UzlFm0wYn5gfjVNg13GK
+         9vpQ==
+X-Gm-Message-State: AO0yUKV8+4dgEIR7tXY/SNZNEdiH2lqJAgLqywfKQf4EsEHuhfnt3KWZ
+        p4n9lKMBsJrZWAvzyswUjQoyn3htV044UAC2Hu3CQQ==
+X-Google-Smtp-Source: AK7set9l7pGapuGhKY2Ko1dHU8JGwrP82s/R7szPdich/FsdTXWES4QS8A2KIuEQsQi7Pyvw/iFJ8zl3kudK0LV9aVc=
+X-Received: by 2002:a67:cfc6:0:b0:402:999f:51dd with SMTP id
+ h6-20020a67cfc6000000b00402999f51ddmr18753346vsm.3.1678517851950; Fri, 10 Mar
+ 2023 22:57:31 -0800 (PST)
+MIME-Version: 1.0
+References: <20230310133733.973883071@linuxfoundation.org>
+In-Reply-To: <20230310133733.973883071@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 11 Mar 2023 12:27:21 +0530
+Message-ID: <CA+G9fYsn6W73x+Mox3XcG9bp-eZ4URbuJ7MdwxzJyM2132VD9Q@mail.gmail.com>
+Subject: Re: [PATCH 5.4 000/357] 5.4.235-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-1 
-MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,14 +73,173 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 2023-03-11 at 00:49 +0100, Andrew Lunn wrote:
-> > Yes, that helps. Primarily, because mdiobus_scan_bus_c45 now is called =
-only once,
-> > and at least some things are done in parallel.
->=20
-> Great. Could you cook up a proper patch and submit it?
+On Fri, 10 Mar 2023 at 19:57, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.235 release.
+> There are 357 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.235-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-I can give it a try. The commit message will be from my perspective,
-and the change Suggested-By you.
+Results from Linaro=E2=80=99s test farm.
 
-Best regards, Klaus
+As others reported, s390 build regressions are noticed.
+
+* s390, build failures
+  - gcc-12-defconfig
+  - gcc-8-defconfig-fe40093d
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build
+* kernel: 5.4.234-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: 71be0366b84f5ed2ce06bcc6feddf31053a41c73
+* git describe: v5.4.233-14-g71be0366b84f
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+33-14-g71be0366b84f
+
+## Test Regressions (compared to v5.4.233)
+
+## Metric Regressions (compared to v5.4.233)
+
+## Test Fixes (compared to v5.4.233)
+
+## Metric Fixes (compared to v5.4.233)
+
+## Test result summary
+total: 124659, pass: 103137, fail: 3281, skip: 17853, xfail: 388
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 144 total, 143 passed, 1 failed
+* arm64: 44 total, 40 passed, 4 failed
+* i386: 26 total, 20 passed, 6 failed
+* mips: 27 total, 27 passed, 0 failed
+* parisc: 6 total, 6 passed, 0 failed
+* powerpc: 30 total, 30 passed, 0 failed
+* riscv: 12 total, 10 passed, 2 failed
+* s390: 6 total, 6 passed, 0 failed
+* sh: 12 total, 12 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 37 total, 35 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+--
+Linaro LKFT
+https://lkft.linaro.org
