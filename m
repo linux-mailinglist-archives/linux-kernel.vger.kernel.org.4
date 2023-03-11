@@ -2,232 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEA2F6B594B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:27:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7BDFF6B595E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:57:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjCKH1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:27:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
+        id S229589AbjCKH50 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:57:26 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjCKH1R (ORCPT
+        with ESMTP id S229476AbjCKH5X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:27:17 -0500
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6951340E8;
-        Fri, 10 Mar 2023 23:27:16 -0800 (PST)
-Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PYZDP3g9JznWTZ;
-        Sat, 11 Mar 2023 15:24:21 +0800 (CST)
-Received: from localhost.localdomain.localdomain (10.175.113.25) by
- dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 11 Mar 2023 15:27:13 +0800
-From:   Kefeng Wang <wangkefeng.wang@huawei.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Muchun Song <muchun.song@linux.dev>
-CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Iurii Zaikin <yzaikin@google.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Muchun Song <songmuchun@bytedance.com>
-Subject: [PATCH v2] mm: hugetlb: move hugeltb sysctls to its own file
-Date:   Sat, 11 Mar 2023 15:47:34 +0800
-Message-ID: <20230311074734.123269-1-wangkefeng.wang@huawei.com>
-X-Mailer: git-send-email 2.35.3
+        Sat, 11 Mar 2023 02:57:23 -0500
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62295121167
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:57:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1678521401; i=efault@gmx.de;
+        bh=HZ41DeMBS/5NTCASOqzG1Oif6+OpCh8Jix5ZBARGSDw=;
+        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
+        b=c3rvqKVmKMAT+W/HpNZfgDYnRtxNLp5IhijULnsADM04VPhn6ePDxL96mh5Em6g6H
+         jXHl/Wx+647XaeJR0n67pbEiUA5riQJnzKCEV0htFgHzJ+CFnnASH3uZzbvVLVgjVU
+         fzZksPKVVgOXK0LfbTift8K6gICKeOGTFjsEGNv0+ojNu9UCX0/2bOfcZmi8FSoAzM
+         slBB5JvDw3w9MrQM5p16u/eNOUi+FtmSi2kxnOJt4Ta9s2nYMZyW5mnlaLxeOa7rbP
+         OXnfp2o+CYjyi/P5ofia2TZTLekopQ1KndihZfTeFslfL9OQHwM3luyhtvFdoPnNKd
+         TBG1J4jKhBc7w==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from homer.fritz.box ([185.191.217.251]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mzyuc-1qVjnr1B2s-00x5VS; Sat, 11
+ Mar 2023 08:56:41 +0100
+Message-ID: <38cca2d87aaebadb502de76be87de9982425042c.camel@gmx.de>
+Subject: Re: [PATCH 10/10] sched/fair: Implement an EEVDF like policy
+From:   Mike Galbraith <efault@gmx.de>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     mingo@kernel.org, vincent.guittot@linaro.org,
+        linux-kernel@vger.kernel.org, juri.lelli@redhat.com,
+        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, corbet@lwn.net,
+        qyousef@layalina.io, chris.hyser@oracle.com,
+        patrick.bellasi@matbug.net, pjt@google.com, pavel@ucw.cz,
+        qperret@google.com, tim.c.chen@linux.intel.com, joshdon@google.com,
+        timj@gnu.org, kprateek.nayak@amd.com, yu.c.chen@intel.com,
+        youssefesmat@chromium.org, joel@joelfernandes.org
+Date:   Sat, 11 Mar 2023 08:56:37 +0100
+In-Reply-To: <58e8015255706fbe83e3a83df8c781bbc734e2a0.camel@gmx.de>
+References: <20230306132521.968182689@infradead.org>
+         <20230306141502.810909205@infradead.org>
+         <bfbfbf041854e2cd1a8ed14e64081062e5d632d3.camel@gmx.de>
+         <9fd2c37a05713c206dcbd5866f67ce779f315e9e.camel@gmx.de>
+         <5b567c5aecabf0a89d92593d99a73bef41bd65da.camel@gmx.de>
+         <20230310203814.GA1605437@hirez.programming.kicks-ass.net>
+         <58e8015255706fbe83e3a83df8c781bbc734e2a0.camel@gmx.de>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.25]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpemm500001.china.huawei.com (7.185.36.107)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:h6VK6LL/jlIZ7zlU+vkfTuBDoEQ4uRHK4jvZS5w5PpdpSDuztZQ
+ LpMIeMj++eYscqxgbcbGMfHWEcw/hrmCbqHZqH01sy/3+FrJ43Scwh+iMHZW7ZLEBXL88Aj
+ rtIUmOsY7VaO9nUrdDNwkwT4pqsrNQnlc2HXYt8KNuzxpP6uXjJHmGr3FanWXIPcaX1HflQ
+ l51dBOEqQrWkCOcgSfG0A==
+UI-OutboundReport: notjunk:1;M01:P0:baMf19YiZLY=;zBlIe6TJdTzO4PIlsnpObmHqiSc
+ F5A+7AAq9zIAG7B/Ft45H6yFUy2jUP9abOaKx4varOSFueNevgPAQOoQAp5PsKiOfemNRi1q2
+ UFBwcqLCGYHfm9aKL1uBc68MBj574NtrhHealzrirfnzUHhtg8AR/00XUN8Ug/hbN7zKhJvGg
+ U4EurJM9YE/INhzqVm5XyrYsWLInJ+QODpQ8lLksRhpyz8AR0xL2RU3YuwBJj82VNf4WJ60ly
+ C7AZwIkrtRC5ZVTbL0Z3xyeKlWJrvojFjyG4OrM4+Q61NZUfAJY1avcpk07CKOauDJ/iM/cWo
+ FFFutnZXTPYeWeTwifGYd4OfVE4pwrlZgG/WX0Gd1Td3jvN0mWPzPqws0mHJ+jdT4/0xTxOiO
+ bs8heIGtZeZdA39TRJAHpg5MY9WkAuRvnWJWKgSZz9AZC8t6lJ/TSykIEnz/gDnuAmQtwUwZh
+ ISMOk7zX2SsPFxdvQIwVUQs2U0PnwN90VK3oKJ0lIryFf8r2TocTbY9MvMazphhyM5NrtCt3H
+ 4KK6hSWUJa07wUPFdMbHqhWXp4GveYMq/s2nhcjlGPrFNMPlFR4T1PO/EY6TjzPdl6VwfHFQ4
+ C5iLIA4YSSJWC8gZycMFtE7wQCwGhkNgKkFAtU6dfkz0T+LbQE3YQ8j+1tc/KwOscmwdiqnfx
+ SdTCDAKrg5vhjIfx2BvP6Wz+D6oE3AholUBdgUtqmEZzcBWz9Nx6CBg/1vMIribAhKhzlTALV
+ RR7Iv6bQFn2fnGOIh6PKl6Wfpr4jXtPsq1DqGVId2n/Clnei34tBZjaGXfBjyT4c1n1ZN4X59
+ CSa261JRQHH8Fy1X+ivITPEhODVMDG6T45mDGdmhicQpOnVo6g4z2aVMGylOXVWdAxdEAADXl
+ dNn4D7i6BweUwZLNTlL3sJclpkAaEab/88dgNhvKsD/mvvHmuIHPin/I8tf1fWMHb2zcfmoIc
+ qr7TYw==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This moves all hugetlb sysctls to its own file, also kill an
-useless hugetlb_treat_movable_handler() since commit d6cb41cc44c6
-("mm, hugetlb: remove hugepages_treat_as_movable sysctl").
+On Sat, 2023-03-11 at 06:53 +0100, Mike Galbraith wrote:
+>
+> massive_intr vs desktop CPU distribution improved as expected, but
+> (to me) oddly, the amount of desktop beating up itself did not.
 
-Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
----
-v2:
-- add __init to hugetlb_sysfs_init
-- update commit and add RBs
+Hmm, maybe expected when fancy deadline math tries to wedge a very wide
+GUI into a not so wide and pretty well saturated CPU.
 
- include/linux/hugetlb.h |  8 -------
- kernel/sysctl.c         | 32 --------------------------
- mm/hugetlb.c            | 51 ++++++++++++++++++++++++++++++++++++++---
- 3 files changed, 48 insertions(+), 43 deletions(-)
-
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 7c977d234aba..4056b05d81ed 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -124,14 +124,6 @@ void hugepage_put_subpool(struct hugepage_subpool *spool);
- 
- void hugetlb_dup_vma_private(struct vm_area_struct *vma);
- void clear_vma_resv_huge_pages(struct vm_area_struct *vma);
--int hugetlb_sysctl_handler(struct ctl_table *, int, void *, size_t *, loff_t *);
--int hugetlb_overcommit_handler(struct ctl_table *, int, void *, size_t *,
--		loff_t *);
--int hugetlb_treat_movable_handler(struct ctl_table *, int, void *, size_t *,
--		loff_t *);
--int hugetlb_mempolicy_sysctl_handler(struct ctl_table *, int, void *, size_t *,
--		loff_t *);
--
- int move_hugetlb_page_tables(struct vm_area_struct *vma,
- 			     struct vm_area_struct *new_vma,
- 			     unsigned long old_addr, unsigned long new_addr,
-diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-index c14552a662ae..ce0297acf97c 100644
---- a/kernel/sysctl.c
-+++ b/kernel/sysctl.c
-@@ -2140,38 +2140,6 @@ static struct ctl_table vm_table[] = {
- 		.extra1		= SYSCTL_ZERO,
- 		.extra2		= SYSCTL_ONE,
- 	},
--#endif
--#ifdef CONFIG_HUGETLB_PAGE
--	{
--		.procname	= "nr_hugepages",
--		.data		= NULL,
--		.maxlen		= sizeof(unsigned long),
--		.mode		= 0644,
--		.proc_handler	= hugetlb_sysctl_handler,
--	},
--#ifdef CONFIG_NUMA
--	{
--		.procname       = "nr_hugepages_mempolicy",
--		.data           = NULL,
--		.maxlen         = sizeof(unsigned long),
--		.mode           = 0644,
--		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
--	},
--#endif
--	 {
--		.procname	= "hugetlb_shm_group",
--		.data		= &sysctl_hugetlb_shm_group,
--		.maxlen		= sizeof(gid_t),
--		.mode		= 0644,
--		.proc_handler	= proc_dointvec,
--	 },
--	{
--		.procname	= "nr_overcommit_hugepages",
--		.data		= NULL,
--		.maxlen		= sizeof(unsigned long),
--		.mode		= 0644,
--		.proc_handler	= hugetlb_overcommit_handler,
--	},
- #endif
- 	{
- 		.procname	= "lowmem_reserve_ratio",
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 712e32b38295..6f3c5f587c66 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -4202,6 +4202,12 @@ static void __init hugetlb_sysfs_init(void)
- 	hugetlb_register_all_nodes();
- }
- 
-+#ifdef CONFIG_SYSCTL
-+static void __init hugetlb_sysctl_init(void);
-+#else
-+static void __init hugetlb_sysctl_init(void) { }
-+#endif
-+
- static int __init hugetlb_init(void)
- {
- 	int i;
-@@ -4257,6 +4263,7 @@ static int __init hugetlb_init(void)
- 
- 	hugetlb_sysfs_init();
- 	hugetlb_cgroup_file_init();
-+	hugetlb_sysctl_init();
- 
- #ifdef CONFIG_SMP
- 	num_fault_mutexes = roundup_pow_of_two(8 * num_possible_cpus());
-@@ -4588,7 +4595,7 @@ static int hugetlb_sysctl_handler_common(bool obey_mempolicy,
- 	return ret;
- }
- 
--int hugetlb_sysctl_handler(struct ctl_table *table, int write,
-+static int hugetlb_sysctl_handler(struct ctl_table *table, int write,
- 			  void *buffer, size_t *length, loff_t *ppos)
- {
- 
-@@ -4597,7 +4604,7 @@ int hugetlb_sysctl_handler(struct ctl_table *table, int write,
- }
- 
- #ifdef CONFIG_NUMA
--int hugetlb_mempolicy_sysctl_handler(struct ctl_table *table, int write,
-+static int hugetlb_mempolicy_sysctl_handler(struct ctl_table *table, int write,
- 			  void *buffer, size_t *length, loff_t *ppos)
- {
- 	return hugetlb_sysctl_handler_common(true, table, write,
-@@ -4605,7 +4612,7 @@ int hugetlb_mempolicy_sysctl_handler(struct ctl_table *table, int write,
- }
- #endif /* CONFIG_NUMA */
- 
--int hugetlb_overcommit_handler(struct ctl_table *table, int write,
-+static int hugetlb_overcommit_handler(struct ctl_table *table, int write,
- 		void *buffer, size_t *length, loff_t *ppos)
- {
- 	struct hstate *h = &default_hstate;
-@@ -4634,6 +4641,44 @@ int hugetlb_overcommit_handler(struct ctl_table *table, int write,
- 	return ret;
- }
- 
-+static struct ctl_table hugetlb_table[] = {
-+	{
-+		.procname	= "nr_hugepages",
-+		.data		= NULL,
-+		.maxlen		= sizeof(unsigned long),
-+		.mode		= 0644,
-+		.proc_handler	= hugetlb_sysctl_handler,
-+	},
-+#ifdef CONFIG_NUMA
-+	{
-+		.procname       = "nr_hugepages_mempolicy",
-+		.data           = NULL,
-+		.maxlen         = sizeof(unsigned long),
-+		.mode           = 0644,
-+		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
-+	},
-+#endif
-+	{
-+		.procname	= "hugetlb_shm_group",
-+		.data		= &sysctl_hugetlb_shm_group,
-+		.maxlen		= sizeof(gid_t),
-+		.mode		= 0644,
-+		.proc_handler	= proc_dointvec,
-+	},
-+	{
-+		.procname	= "nr_overcommit_hugepages",
-+		.data		= NULL,
-+		.maxlen		= sizeof(unsigned long),
-+		.mode		= 0644,
-+		.proc_handler	= hugetlb_overcommit_handler,
-+	},
-+	{ }
-+};
-+
-+static void __init hugetlb_sysctl_init(void)
-+{
-+	register_sysctl_init("vm", hugetlb_table);
-+}
- #endif /* CONFIG_SYSCTL */
- 
- void hugetlb_report_meminfo(struct seq_file *m)
--- 
-2.35.3
-
+	-Mike
