@@ -2,63 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6E216B5AF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA4B46B5AFB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjCKLRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 06:17:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44214 "EHLO
+        id S230192AbjCKLRa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 06:17:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230447AbjCKLQM (ORCPT
+        with ESMTP id S230075AbjCKLQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:16:12 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F4B58C960
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:15:12 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id cn21so535620edb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:15:12 -0800 (PST)
+        Sat, 11 Mar 2023 06:16:36 -0500
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 707621D92E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:15:25 -0800 (PST)
+Received: by mail-ed1-x52e.google.com with SMTP id da10so30809278edb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:15:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678533280;
+        d=linaro.org; s=google; t=1678533301;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=ii5x/Q+JtDY3RQJyVxBKzIOeCRWyExkm9YhpbbdrbmE=;
-        b=j/5MoepSDsQf9wzHX9Q+DN5qGfZKFOp6ro5TkCXoVjU+nBP06h2lHLeWmavj9sDwTh
-         7gv60EHqlQpJnsMPJYzgblxY/481pFHJtsgkrdG8ehdXqO56/8DnHGE9gfjeiHaT092K
-         lseVBUzoJyVOEAByxjxwp4/0Qnuf8MUGDRHvPHpYdgix26pk1OAbZAjXZEAiR1QEyKrZ
-         0AL/+PKSIEZOSuWHygTz0ZoDaKi0x7C9uUm/aBJUj+ela2wffdRQnVQPt2zHaoD5oPrj
-         qWEDK+buTmHAzJtXsGkcWl0VQaPZ78dIsfIUU0vd6JJkLSbSTrU24uBTPm+QaUQWUcV6
-         Zu2g==
+        bh=QbuERcpEYZZP8DGMBzAh4rdJ1ALZ/Zuq4Tpuw7i37QU=;
+        b=s1xUOQhcbhWhG1M5xwYIVLhZzW8yYgXze58GEm8I9tqSPr4cDP1sIZqWFOmshus417
+         cuQTec9FPallYt2WywWTMeP69LfZiVSoGJpdge4ApFV89YZNPV+xwxDVlDQmlTnXb8wU
+         13PbVGrC+6T4iQU5dhn5xDIkk4a/QMR74HCsLRGwQgMkNBO7Ir7Fdt39aLFbGE+tsLbV
+         I+69e+kJFFlIAt1VCvx+3F+Go7BWib3wx29fLQonHklHjg5PVDB9zwBdgX+P+qYNqiSP
+         ufmCh1/sFukPceHV3LzRFgaXTLjpavu6HffksjCEaUAQ7NEXAYg2D2e1F5SDiutcZKZ0
+         2T1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678533280;
+        d=1e100.net; s=20210112; t=1678533301;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ii5x/Q+JtDY3RQJyVxBKzIOeCRWyExkm9YhpbbdrbmE=;
-        b=lYp1VCsCZUtZ43vSaEjwNML8CLauo6tBr5g30ZWJyvx1H5oaTIZ8bVVig78mw9WzmV
-         LpiYrFHi0dLQh7SmkqBSYVdez+VbJPM9dz6xi3SC9icjlEDCHdnK25SqLqdcbflL9m54
-         NG6fhc4I53l39Od59FfVArwYoVJJ+Saw9DnZ+FaWyHPoWvw1a7rowX+9FSSEYiTj/5Pd
-         CXB67qBmxy5uNyZUi82VWfVWC5eZ/fAakhAcvWGSWLSlYbty2+6Wu9h897B5a/EYY6Zy
-         wZKjIl7VYsCiiGMd4RY3ehBBJCV8BISDIVMbn51hasiPGInZG5sxr8yeQq2b12Hs9HSO
-         Z7yg==
-X-Gm-Message-State: AO0yUKVX3SxrgcQWj73+Im68M4hg685lGIWEOPp6SfgPoD1BgkXdEHRk
-        vjzSnuqLpqI1+BiUdVg15TEdVg==
-X-Google-Smtp-Source: AK7set+vTbLLS6UrZSQKDhTEr5i2GL37TKhcaz1X9MdNgwjIEfT2ez7VQidkZv39srr2rWZLT7KDSg==
-X-Received: by 2002:aa7:c493:0:b0:4ae:eb0f:892e with SMTP id m19-20020aa7c493000000b004aeeb0f892emr23230349edq.20.1678533279881;
-        Sat, 11 Mar 2023 03:14:39 -0800 (PST)
+        bh=QbuERcpEYZZP8DGMBzAh4rdJ1ALZ/Zuq4Tpuw7i37QU=;
+        b=CegrfpOtsUIAEA6e/5fYWC0MqhrOpfio5BBAtvA9xCRLNkOQQHJkZAvv1ocV6sBuhD
+         B3otClaniwzHj7eYSiuPuO7Erp6TQAHG11OZLZMshnwHl2lJ/7bcvBGrNNvWYbqKXlaN
+         ZshAnd96lXWd0QQyoPbneuLLbd4eQFf8mF8RjfUlWxllTZSCVCtqkFqKV7e31o9GSAEF
+         YDjYzfg+5+ORX5vy77AmcrcJy13VjmHCaI2PkfciOIKxy0aHN/Z0eST1l4ggtygAAXUK
+         r2W3jtwPmmdG9SVfzpjGrZAFYsgROiR/9xltyvhHNB3FSlNW+DW1SpRc383QWZCnNyNN
+         kCbQ==
+X-Gm-Message-State: AO0yUKVou9IS8PQrEKIEGe0RQ4OQUlijavxvOAwcGArR2mNyYDDCuilW
+        /Y3te+viHJksJlrvVeoCDeQ7Tw==
+X-Google-Smtp-Source: AK7set/SvdvndrUH7v4K4asorZK728UuGdUey1pkP4ms8CL3ApHZAV0xRJzv86TrDbUh979XIWnklA==
+X-Received: by 2002:a17:906:dd7:b0:87e:a34b:9e2b with SMTP id p23-20020a1709060dd700b0087ea34b9e2bmr28951517eji.28.1678533301747;
+        Sat, 11 Mar 2023 03:15:01 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
-        by smtp.gmail.com with ESMTPSA id hv12-20020a17090760cc00b008b17cc28d3dsm990803ejc.20.2023.03.11.03.14.39
+        by smtp.gmail.com with ESMTPSA id lc22-20020a170906dff600b00922b009fc79sm223427ejc.164.2023.03.11.03.15.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 03:14:39 -0800 (PST)
+        Sat, 11 Mar 2023 03:15:01 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Ohad Ben-Cohen <ohad@wizery.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        linux-omap@vger.kernel.org, linux-remoteproc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Marek Vasut <marek.vasut@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Robert Eshleman <bobbyeshleman@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] hwspinlock: omap: drop of_match_ptr for ID table
-Date:   Sat, 11 Mar 2023 12:14:38 +0100
-Message-Id: <20230311111438.251422-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 1/4] iio: adc: rcar-gyroadc: mark OF related data as maybe unused
+Date:   Sat, 11 Mar 2023 12:14:54 +0100
+Message-Id: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -73,30 +74,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).
+The driver can be compile tested with !CONFIG_OF making certain data
+unused:
 
-  drivers/hwspinlock/omap_hwspinlock.c:164:34: error: ‘omap_hwspinlock_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/iio/adc/rcar-gyroadc.c:286:34: error: ‘rcar_gyroadc_child_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/hwspinlock/omap_hwspinlock.c | 2 +-
+ drivers/iio/adc/rcar-gyroadc.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/hwspinlock/omap_hwspinlock.c b/drivers/hwspinlock/omap_hwspinlock.c
-index 1fb3a2550e29..dfe82952671b 100644
---- a/drivers/hwspinlock/omap_hwspinlock.c
-+++ b/drivers/hwspinlock/omap_hwspinlock.c
-@@ -174,7 +174,7 @@ static struct platform_driver omap_hwspinlock_driver = {
- 	.remove		= omap_hwspinlock_remove,
- 	.driver		= {
- 		.name	= "omap_hwspinlock",
--		.of_match_table = of_match_ptr(omap_hwspinlock_of_match),
-+		.of_match_table = omap_hwspinlock_of_match,
- 	},
- };
+diff --git a/drivers/iio/adc/rcar-gyroadc.c b/drivers/iio/adc/rcar-gyroadc.c
+index 27d9e147b4b7..b8972f673c9d 100644
+--- a/drivers/iio/adc/rcar-gyroadc.c
++++ b/drivers/iio/adc/rcar-gyroadc.c
+@@ -283,7 +283,7 @@ static const struct of_device_id rcar_gyroadc_match[] = {
  
+ MODULE_DEVICE_TABLE(of, rcar_gyroadc_match);
+ 
+-static const struct of_device_id rcar_gyroadc_child_match[] = {
++static const struct of_device_id rcar_gyroadc_child_match[] __maybe_unused = {
+ 	/* Mode 1 ADCs */
+ 	{
+ 		.compatible	= "fujitsu,mb88101a",
 -- 
 2.34.1
 
