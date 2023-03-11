@@ -2,70 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 03FB26B5C9E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:10:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59A136B5CA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:11:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCKOKA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:10:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53860 "EHLO
+        id S230028AbjCKOLY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:11:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbjCKOJx (ORCPT
+        with ESMTP id S229981AbjCKOLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:09:53 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9EDA02BB;
-        Sat, 11 Mar 2023 06:09:52 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id j3so5172078wms.2;
-        Sat, 11 Mar 2023 06:09:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678543791;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCBO1BOGc+gpZPFsXFe7s7eySat3RMIoHMBOKQxhii8=;
-        b=Lmi5jlO/TN7FhmYnwjoz/ZHpojzzKxOHrgJnr1cAbEGOKGBuXro0tUNdmMD1EX3XPa
-         4ZV4Ij6UNKvrmiCHza97eWmex9L5el0z2OXzO0/UUsdtX7MCU87Qd+Q1dNS0MsvpnTAR
-         cstcY1aCKj7chxXZoZZI8/AIPIGq3k/CB4R1CMUMHc3WVRiLv5Qu/2UC6QWeAMyvSFJ9
-         Z0iDXjbH7SMo95LK8jSu0E2PjkbFfCbNG6R6RvP2/eZd813HzzT3rNtYasKwhN7cP/kC
-         VbWhxvNXZLr9U3/esnBfAe7CtH1Q4XXTcWQHB8nKJuuD9Huag7Ab61eWfv3u6CNxUnqx
-         M8hQ==
+        Sat, 11 Mar 2023 09:11:22 -0500
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B040F1691
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:10:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678543833;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=rI9UkkY/zqKs0y6gyqXwPg+4g7Xn+4IOJ0Nvb47KScw=;
+        b=Ah5Rhur6v+GdvOTmJum6soXvTEaJZhRK59+Qx4TDjtnMyk96vbYTILvah5Tkg9WfpJxUJT
+        UHEWGbFrM+cFiG5gCAgeDhFLA9tGcX/R8Rmax+/32g879Vey0YSGbyxzoNdSNbGyjn2uMM
+        FvQydjyYzcvq9haQLuYLDzfWgKnijak=
+Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
+ [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-619-mHcqbzw-NRmnyQD9bFQxlw-1; Sat, 11 Mar 2023 09:10:32 -0500
+X-MC-Unique: mHcqbzw-NRmnyQD9bFQxlw-1
+Received: by mail-vs1-f69.google.com with SMTP id f11-20020a67ea8b000000b0042210bcecc9so2649623vso.12
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:10:32 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678543791;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gCBO1BOGc+gpZPFsXFe7s7eySat3RMIoHMBOKQxhii8=;
-        b=phCQyYtEdqP2aG22XwcOyPEBvEAEImW8HaMqC7vRTjUBuWas4dnWJTN1jcwOFmA5+h
-         ygjGRnhBjpSpDFNt7XhTw0tWqkx81iPiKHkzSFNslxxp09d8HEtHaPvujL9fF0a6OWvG
-         RuCHT2BbAZtpxZjis3N2E6IFS9p1q2Q1FM6/c5nhun3zTFmhzyqdKK09XWxdvBbGvUwl
-         PRdK7FiByzgi41x/FAIfr8ghI5M5O9ObiFLVFzJrIufgPRJjW5kRNIhO4Jk0Lhverpnu
-         B9sU6K+YACGT8ZJwe6dtnusIz5AkuNqsiud5Lh0tOQ4FEnlQFhTKOTesDV2zTBpxCPlm
-         4weA==
-X-Gm-Message-State: AO0yUKUf6TrmHQtKFvD9+M/h7NiX19Z52omvZXXq2t4EuOBso168+QHL
-        /f382oggx5tlrKlS6rc0Mw0=
-X-Google-Smtp-Source: AK7set+TEixJO4w7KLuOsc6WmFAXS+b/OLRARH6dptmq1uxzMLeA0gLMuagwnrZbIZVSla3HzzIqYQ==
-X-Received: by 2002:a05:600c:4751:b0:3ea:f0d6:5d36 with SMTP id w17-20020a05600c475100b003eaf0d65d36mr6153712wmo.29.1678543790898;
-        Sat, 11 Mar 2023 06:09:50 -0800 (PST)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id d12-20020a05600c3acc00b003e2052bad94sm2906135wms.33.2023.03.11.06.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 06:09:50 -0800 (PST)
-Date:   Sat, 11 Mar 2023 17:09:37 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     outreachy@lists.linux.dev, manishc@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, coiby.xu@gmail.com,
-        gregkh@linuxfoundation.org, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Staging: qlge: Remove parenthesis around single condition
-Message-ID: <e4caf380-bac5-4df3-bb98-529f5703a410@kili.mountain>
-References: <20230311140409.GA22831@ubuntu>
+        d=1e100.net; s=20210112; t=1678543831;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rI9UkkY/zqKs0y6gyqXwPg+4g7Xn+4IOJ0Nvb47KScw=;
+        b=g8vRunbeGR4FnSeOxV8JClYNfC3fJP9yPSLciGnwYtA5ysGgl/QsiowTj+/BVdsAPk
+         xaILpfvcJ1QiXs40LcTPng2Hrzn2gsVq3yGrDphsS4vBkbVW2Uycr1L9WwhKU+WGHYS8
+         +qYxttR6ZwDebvLY6d/2GMy9vbqIZbSJ+v3RdbdVhyTt/4gfI3UW3BeJU7Hu++yV+XQu
+         Y4daBXm/FHgh93EGwu4uNeKyArgizbFjHjfu8bOdLL9qfxP3E67FZroHko2JesZvr5vM
+         FGWRqBTMszAxtecfCRAqGnMoGbOQKZidI5L3OUdB7smQzNEtC/gfjmdVHiQciD99IoN4
+         WQLw==
+X-Gm-Message-State: AO0yUKVcYmeh9frZlEmgWBUMIj4FnBQLoYBzvt5ns7BG0o8dWgomZc9n
+        vCtXqXMbhEWtV8xLS8RI3DlgLidTlMymZcf0+zB1UAxhKxde0zNgWLwQ8cZXtYRrWSFje0wL19j
+        iYL0zfygw6T2sO7JXOsgczwJEdd+CRbw12XaXWXWT
+X-Received: by 2002:a9f:3001:0:b0:68b:817b:eec8 with SMTP id h1-20020a9f3001000000b0068b817beec8mr18498513uab.0.1678543831516;
+        Sat, 11 Mar 2023 06:10:31 -0800 (PST)
+X-Google-Smtp-Source: AK7set8tL22Z64GFZQlBETeAIXfNC/NFYd/MWg33mB4oH3lVXRGgxR03Dz5LsWIgpcSED5a84XZH6Ovr3dXVwTdKMzQ=
+X-Received: by 2002:a9f:3001:0:b0:68b:817b:eec8 with SMTP id
+ h1-20020a9f3001000000b0068b817beec8mr18498509uab.0.1678543831274; Sat, 11 Mar
+ 2023 06:10:31 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311140409.GA22831@ubuntu>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230311133453.63246-1-sven@svenpeter.dev>
+In-Reply-To: <20230311133453.63246-1-sven@svenpeter.dev>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Sat, 11 Mar 2023 14:10:15 +0000
+Message-ID: <CAOgh=FydD7Or4KBCHaQ-SyRFKx3rBeft1abVjMUMBxvuQbHMjg@mail.gmail.com>
+Subject: Re: [PATCH] PCI: apple: Initialize pcie->nvecs before using it
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,42 +78,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 06:04:09AM -0800, Sumitra Sharma wrote:
-> At line #354 checkpatch.pl:
-> CHECK: Unnecessary parentheses around 'i == 0x00000114'
-> CHECK: Unnecessary parentheses around 'i == 0x00000118'
-> CHECK: Unnecessary parenthesis around 'i == 0x00000140'
-> CHECK: Unnecessary parentheses around 'i == 0x0000013c'
-> 
+On Sat, 11 Mar 2023 at 13:41, Sven Peter <sven@svenpeter.dev> wrote:
+>
+> apple_pcie_setup_port computes ilog2(pcie->nvecs) to setup the number of
+> MSIs available for each port. It is however called before apple_msi_init
+> which actually initializes pcie->nvecs.
+> Luckily, pcie->nvecs is part of kzalloc-ed structure and thus
+> initialized as zero. ilog2(0) happens to be 0xffffffff which then just
+> configures more MSIs in hardware than we actually have. This doesn't
+> break anything because we never hand out those vectors.
+> Let's swap the order of the two calls so that we use the correctly
+> initialized value.
+>
+> Fixes: 476c41ed4597 ("PCI: apple: Implement MSI support")
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-Greg likes the extra parentheses so don't bother sending these sorts of
-patches to staging.
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+Is mise le meas/Regards,
+
+Eric Curtin
+
 > ---
->  drivers/staging/qlge/qlge_dbg.c | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/staging/qlge/qlge_dbg.c b/drivers/staging/qlge/qlge_dbg.c
-> index 66d28358342f..b190a2993033 100644
-> --- a/drivers/staging/qlge/qlge_dbg.c
-> +++ b/drivers/staging/qlge/qlge_dbg.c
-> @@ -351,10 +351,10 @@ static int qlge_get_xgmac_regs(struct qlge_adapter *qdev, u32 *buf,
->  		/* We're reading 400 xgmac registers, but we filter out
->  		 * several locations that are non-responsive to reads.
->  		 */
-> -		if ((i == 0x00000114) ||
-> -		    (i == 0x00000118) ||
-> -			(i == 0x0000013c) ||
-> -			(i == 0x00000140) ||
-> +		if (i == 0x00000114 ||
-> +		    i == 0x00000118 ||
-> +			i == 0x0000013c ||
-> +			i == 0x00000140 ||
-
-The weirder thing about this code is the indenting.  It should be:
-[tab][tab][space][space][space][space](i ==.
-
-regards,
-dan carpenter
+>  drivers/pci/controller/pcie-apple.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-apple.c
+> index 66f37e403a09..8b7b084cf287 100644
+> --- a/drivers/pci/controller/pcie-apple.c
+> +++ b/drivers/pci/controller/pcie-apple.c
+> @@ -783,6 +783,10 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+>         cfg->priv = pcie;
+>         INIT_LIST_HEAD(&pcie->ports);
+>
+> +       ret = apple_msi_init(pcie);
+> +       if (ret)
+> +               return ret;
+> +
+>         for_each_child_of_node(dev->of_node, of_port) {
+>                 ret = apple_pcie_setup_port(pcie, of_port);
+>                 if (ret) {
+> @@ -792,7 +796,7 @@ static int apple_pcie_init(struct pci_config_window *cfg)
+>                 }
+>         }
+>
+> -       return apple_msi_init(pcie);
+> +       return 0;
+>  }
+>
+>  static int apple_pcie_probe(struct platform_device *pdev)
+> --
+> 2.25.1
+>
+>
 
