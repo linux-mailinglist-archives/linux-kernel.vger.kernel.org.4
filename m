@@ -2,50 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F73C6B59F1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:11:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D06826B5A2D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:42:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbjCKJLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 04:11:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
+        id S231154AbjCKJmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 04:42:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbjCKJK6 (ORCPT
+        with ESMTP id S230219AbjCKJmQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 04:10:58 -0500
+        Sat, 11 Mar 2023 04:42:16 -0500
 Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A6CE063;
-        Sat, 11 Mar 2023 01:08:53 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E53213F697;
+        Sat, 11 Mar 2023 01:42:14 -0800 (PST)
 Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
         by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
-        id 1pavDB-002xZd-OZ; Sat, 11 Mar 2023 17:08:22 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 11 Mar 2023 17:08:21 +0800
-Date:   Sat, 11 Mar 2023 17:08:21 +0800
-From:   Herbert Xu <herbert@gondor.apana.org.au>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
+        id 1pavDy-002xZo-Ua; Sat, 11 Mar 2023 17:09:12 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 11 Mar 2023 17:09:10 +0800
+From:   "Herbert Xu" <herbert@gondor.apana.org.au>
+Date:   Sat, 11 Mar 2023 17:09:10 +0800
+Subject: [v7 PATCH 1/8] crypto: stm32 - Save 54 CSR registers
+References: <ZAxFBR3TdA7jUAgJ@gondor.apana.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Lionel Debieve <lionel.debieve@foss.st.com>,
         Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
         linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
         linux-kernel@vger.kernel.org,
         linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
-Subject: [v7 PATCH 0/8] crypto: stm32 - Save and restore between each request
-Message-ID: <ZAxFBR3TdA7jUAgJ@gondor.apana.org.au>
-References: <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
- <Y/3FYZJeLE7DVPBf@gondor.apana.org.au>
- <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
- <Y/3N6zFOZeehJQ/p@gondor.apana.org.au>
- <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com>
- <Y/6sCC2nH0FcD6kJ@gondor.apana.org.au>
- <CACRpkdYN-SDfxXKLt3HWGVkWb3V1rABwvWuytwDrzfTqm81fNA@mail.gmail.com>
- <ZAA8doNUjYmTRScB@gondor.apana.org.au>
- <ZAMQjOdi8GfqDUQI@gondor.apana.org.au>
- <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
+Message-Id: <E1pavDy-002xZo-Ua@formenos.hmeau.com>
 X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
-        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,18 +40,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v7 fixes empty message hashing and moves that into its own patch.
-As a result of this arrangement, I have removed the Reviewd-by's
-and Tested-by's for those two final patches.
+The CSR registers go from 0 to 53.  So the number of registers
+should be 54.
 
-This patch series fixes the import/export functions in the stm32
-driver.  As usual, a failure in import/export indicates a general
-bug in the hash driver that may break as soon as two concurrent
-users show up and hash at the same time using any method other
-than digest or init+finup.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Tested-by: Linus Walleij <linus.walleij@linaro.org>
+Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+---
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+ drivers/crypto/stm32/stm32-hash.c |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/crypto/stm32/stm32-hash.c b/drivers/crypto/stm32/stm32-hash.c
+index 7bf805563ac2..bde2b40a6a32 100644
+--- a/drivers/crypto/stm32/stm32-hash.c
++++ b/drivers/crypto/stm32/stm32-hash.c
+@@ -68,7 +68,7 @@
+ #define HASH_MASK_DATA_INPUT		BIT(1)
+ 
+ /* Context swap register */
+-#define HASH_CSR_REGISTER_NUMBER	53
++#define HASH_CSR_REGISTER_NUMBER	54
+ 
+ /* Status Flags */
+ #define HASH_SR_DATA_INPUT_READY	BIT(0)
