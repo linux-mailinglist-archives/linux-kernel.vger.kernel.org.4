@@ -2,87 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A326B6073
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:18:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AA9A6B6075
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:19:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjCKUSA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 15:18:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S229823AbjCKUTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 15:19:25 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCKUR6 (ORCPT
+        with ESMTP id S229437AbjCKUTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 15:17:58 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2574F4EDB;
-        Sat, 11 Mar 2023 12:17:56 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D1D9B802C8;
-        Sat, 11 Mar 2023 20:17:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 79158C433EF;
-        Sat, 11 Mar 2023 20:17:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678565872;
-        bh=zAct4A8dmYLb2tq1YcKZbZIBN7UDdczcn/skD8kSt3A=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=owmTL6eeeugcG1J/n/MoUyt8Bg8zWaLBFBI5LC0ucS0KQ+vDZgJDlROR+ARetbyl5
-         /pIgnCJiquebkzjtev1wfPFkgiWZKWexbr0zt9Gd5g4BOcBRpjzf6saZ4BYx5AgT4p
-         MGiat+kGTjZbqeHMvDWUn2AVDtfOzx2siR89LIVrFOO5Aha17s+2be+7gOrwed1DGs
-         ZkkmWf6QqlqHiYWEipjFD1SsiXWp9cQd0NU4b3ql5l11vFD9U58izjb6eVsKh337Ta
-         2DAdpDmbq5IJ5tLLpZsZbJ7RP9IKMGaajRtEhyVtkc/O3Z/fdNvAICPpPvp/HTzga7
-         1MhmvvPpZ1mHQ==
-Date:   Sat, 11 Mar 2023 12:17:50 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZAzh7l8qWtkeh/KK@sol.localdomain>
-References: <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzH8Ve05SRLYPnR@sashalap>
+        Sat, 11 Mar 2023 15:19:23 -0500
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4489B2A155;
+        Sat, 11 Mar 2023 12:19:22 -0800 (PST)
+Received: by mail-lf1-x12a.google.com with SMTP id bi9so10960632lfb.2;
+        Sat, 11 Mar 2023 12:19:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678565960;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uAh7UYyS4J9vkKx/jH0XKuV34LhyWxZES+T2osD7hNQ=;
+        b=cqQjIzO+iO6NavgeaUHtf1zFGuowXq66QBnY5qggNrwOeRalYx446q4i/mYo151Ozv
+         HQNe2y08cbq6nCL3zJlocDjeX6VIwbNV0T5uJXu4dA2Mce5hFpYXyJ4OAiGzoikMSSAn
+         gSlhwmyu3u83rwSGw/25Cp4r2O5x2quLQpeiOS/ZfETvbSFvPDN4Q3tWumcEVVko989B
+         EnlP3K4jtsz3RRy1q4OIE/DOZTYu7vK2SCbzPDyA1eDdzcMlNoAg3lrWlWl2Nkj6pccW
+         AKIn5qvLJuna6m5UMXpogklRgaXF7okd9/0CwzpoOXiNCKVlfm9yKSEiXTwSzac5d2++
+         6c0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678565960;
+        h=content-transfer-encoding:content-language:in-reply-to:mime-version
+         :user-agent:date:message-id:from:references:cc:to:subject
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uAh7UYyS4J9vkKx/jH0XKuV34LhyWxZES+T2osD7hNQ=;
+        b=CotzbFH9rCzudo0CCfkMpKchAGEdKkdfsfZ5O2ZWBz3tt1FZqY2tmEJXy4kMOk6/O5
+         NF6A/5GnLn2JuG9dpjys296dYCBgTMM7bS8EieWhRbifWMckgg/honj31ukP3wd09uQ2
+         fhXK5RPP6baIGLsJlwUxxj/rupvEzR+wzRSbvHe56Dp2CL4S6zuOl55Q59OMfQMaSe+V
+         X+Us50P7OHnTHFUzCoUiy6JRchWBCz04OKMus/6x5MwqIYPoXEW+xnEOxVaZr32OgCZ2
+         aRzQ9tOS+LtCz9CD8JSTiukVxN6Z40Tq156FtTfqfmIpDFcnDEBwyCqpmOpuRTKHy8zh
+         AZJw==
+X-Gm-Message-State: AO0yUKXDmt6oV7a9iurJ4DcHuzjX0JurXljdDmEerZtXgvizkghq1QIL
+        VdPsTh8w5HMnFLgh3HCdVGpnF+xbzI0=
+X-Google-Smtp-Source: AK7set+uklYTNxXUbNN62o0JdFcDGyPcIBcaE+KVD4k754JpPhgz+jMKS1iOYb1PfJSx5xTb8xNUNQ==
+X-Received: by 2002:a05:6512:694:b0:4d8:86c1:477f with SMTP id t20-20020a056512069400b004d886c1477fmr1759408lfe.20.1678565960121;
+        Sat, 11 Mar 2023 12:19:20 -0800 (PST)
+Received: from [192.168.1.103] ([31.173.84.174])
+        by smtp.gmail.com with ESMTPSA id c6-20020ac25306000000b004a2c447598fsm410175lfh.159.2023.03.11.12.19.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 12:19:19 -0800 (PST)
+Subject: Re: [PATCH] pata_parport: fix possible memory leak
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Dan Carpenter <error27@gmail.com>, Christoph Hellwig <hch@lst.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <3ab89ddc-cb60-47c4-86ad-cdad94a8a3d7@kili.mountain>
+ <20230311185149.22957-1-linux@zary.sk>
+From:   Sergei Shtylyov <sergei.shtylyov@gmail.com>
+Message-ID: <e02f5626-81be-d949-d2b4-7f70820b409c@gmail.com>
+Date:   Sat, 11 Mar 2023 23:19:18 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAzH8Ve05SRLYPnR@sashalap>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230311185149.22957-1-linux@zary.sk>
+Content-Type: text/plain; charset=utf-8
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 01:26:57PM -0500, Sasha Levin wrote:
-> I'm getting a bunch of suggestions and complaints that I'm not implementing
-> those suggestions fast enough on my spare time.
+On 3/11/23 9:51 PM, Ondrej Zary wrote:
 
-BTW, the "I don't have enough time" argument is also a little frustrating
-because you are currently insisting on doing AUTOSEL at all, at the current
-sensitivity that picks up way too many commits.  I can certainly imagine that
-that uses a lot of your time!  But, many contributors are telling you that
-AUTOSEL is actually *worse than nothing* currently.
+> When ida_alloc() fails, "pi" is not freed although the misleading
+> comment says otherwise.
+> Move the ida_alloc() call up so we really don't have to free it.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://lore.kernel.org/r/202303111822.IHNchbkp-lkp@intel.com/
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-So to some extent this is a self-inflicted problem.  You are *choosing* to spend
-your precious time running in-place with something that is not working well,
-instead of putting AUTOSEL on pause or turning down the sensitivity to free up
-time while improvements to the process are worked on.
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-(And yes, I know there are many stable patches besides AUTOSEL, and it's a lot
-of work, and I'm grateful for what you do.  I am *just* talking about AUTOSEL
-here.  And yes, I agree that AUTOSEL is needed in principle, so there's no need
-to re-hash the arguments for why it exists.  It just needs some improvements.)
+[...]
 
-- Eric
+MBR, Sergey
