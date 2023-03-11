@@ -2,108 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF096B5C98
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:06:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E25C6B5C99
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:06:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229910AbjCKOGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:06:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
+        id S229960AbjCKOG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:06:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCKOGM (ORCPT
+        with ESMTP id S229977AbjCKOG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:06:12 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B594E9F3B;
-        Sat, 11 Mar 2023 06:06:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EE3260C3D;
-        Sat, 11 Mar 2023 14:06:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B566EC433D2;
-        Sat, 11 Mar 2023 14:06:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678543569;
-        bh=K8EAh0QfxzkdULHNSkhCoqGD46lp5v3W4c/Rtfq8ViQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=exnwTTc6fBCxAaB3HtIEtgkhL7325m54NsIZCp8+sq9Z8NIOFUxOfVEzatH+WHnPm
-         KRsmDqAdMXt5FSPI/C5EII1SgRh+jV1y7uIKb1KgqO2WuUlTKrMYcePsqsyReVIhgN
-         7pX8RuuxTnjyGC5HyvJrSL9RbPLlYt6u03S/DeAMn1tRo99N3GOOFf+/KDSA3PSf6y
-         b2Dg49sNM+eNbaIYuvJGRnr407wn8M1xj8iR22NFs9R66K1zVNYuM7zE3ARl19zeeP
-         zNZ2QuLNOwdNK6YIzxsORzicdQN3whnX+Xifm+K7/1zarBhsPJ1BASppKO0NExRtiD
-         6d9kZOJ+wX35w==
-Date:   Sat, 11 Mar 2023 09:06:08 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     Eric Biggers <ebiggers@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZAyK0KM6JmVOvQWy@sashalap>
-References: <20230226034256.771769-12-sashal@kernel.org>
- <Y/rbGxq8oAEsW28j@sol.localdomain>
- <Y/rufenGRpoJVXZr@sol.localdomain>
- <Y/ux9JLHQKDOzWHJ@sol.localdomain>
- <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
+        Sat, 11 Mar 2023 09:06:27 -0500
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4E5DFEF2E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:06:24 -0800 (PST)
+Received: by mail-wr1-x433.google.com with SMTP id q16so7537738wrw.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:06:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678543583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fxlq8/uTJgYMEbjtCGelYIUCNqfehue+4g7FgiD0hVY=;
+        b=VUi3TsHSKJk/dBQ56YS4I8QSPOtNfTHud3Jgr+GSBFzLYIs/OQU96xnPGSQEzk2ONy
+         sQS4StLl0uxIrZTPr1zjHT4dH/VWNuMdATbUbRcO5ydDNkQh04DPe5DX+noDalPl6VVk
+         1PS3YDgqH7U3u9Qda9o7Fhucd5NZQVH/7NfrkaHFPsDEwfclBAuvLn9y/gCxHuKqKdCf
+         OwwobKfMzwgez1R6W+jY2diQYIBNNuhxe2QDgEjxxE4+Ln8GQCmBsOFiiZr8z8tBsnIT
+         UfV1nO5FYOsRkqPJ9jB6DlNoePqPrmkKYQfGZLb/Fyk0gfBfQk+Hq8pV4T+JeWv21uz6
+         D1Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678543583;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fxlq8/uTJgYMEbjtCGelYIUCNqfehue+4g7FgiD0hVY=;
+        b=ZUHcHdsw/5kAnNRPtDMeZJNAezV289PTfjoEsYrkueKi919O811OxtNuZKPc/Bq1AR
+         LDcyGuNI2V3i9Orn+L/yHIAufjjAvlEYNSdzt8L8slvE9ZDAzhSlGvw8hXp8ANGlh4+f
+         cpg8qB9TNcKthu5XPgSCHL+dL8bWj1+sVavlV7F+1O5++05lYH88sA7XFSV7Pu7bDjeY
+         p/MVLa74SvDaMAYgBHUKbVTx8Q4VhD1aLuA0qRwGxoTaRxoD5oOvl1mBunIeRpRo3vJv
+         27s+6cuwIVZao+li6LVM9V1UCSqQ1IB+qaIEZa2hfWxZyp4F/e1CFQxj39zobrbJI2wO
+         rTfg==
+X-Gm-Message-State: AO0yUKUez9ZK9uiPXB13x0YIhzMmLevQD2C5XED39M0ZcQaADqOTa4Em
+        s1MPgG0qbdZlUAPn9JHiKitBZLMyLoqVTyYd
+X-Google-Smtp-Source: AK7set+niR6ndaQ9lj9k0Qtm+UsNN96ToRd2biC72KZoJl9ovhVyeySqVSCqIKU2nFKzshlCcPloOg==
+X-Received: by 2002:a05:6000:d0:b0:2ce:a46f:bbc5 with SMTP id q16-20020a05600000d000b002cea46fbbc5mr1167439wrx.34.1678543583210;
+        Sat, 11 Mar 2023 06:06:23 -0800 (PST)
+Received: from localhost ([102.36.222.112])
+        by smtp.gmail.com with ESMTPSA id a17-20020a5d5091000000b002c55551e6e9sm2547829wrt.108.2023.03.11.06.06.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 06:06:22 -0800 (PST)
+Date:   Sat, 11 Mar 2023 17:06:19 +0300
+From:   Dan Carpenter <error27@gmail.com>
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+Cc:     outreachy@lists.linux.dev, pure.logic@nexus-software.ie,
+        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: greybus: eclose macro in a do - while loop
+Message-ID: <10d2c15b-ff9f-4634-a013-7640c93435a7@kili.mountain>
+References: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZAwe95meyCiv6qc4@casper.infradead.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 06:25:59AM +0000, Matthew Wilcox wrote:
->On Tue, Mar 07, 2023 at 09:45:24PM +0000, Eric Biggers wrote:
->> On Tue, Mar 07, 2023 at 10:18:35PM +0100, Pavel Machek wrote:
->> > I believe that -stable would be more useful without AUTOSEL process.
->>
->> There has to be a way to ensure that security fixes that weren't properly tagged
->> make it to stable anyway.  So, AUTOSEL is necessary, at least in some form.  I
->> think that debating *whether it should exist* is a distraction from what's
->> actually important, which is that the current AUTOSEL process has some specific
->> problems, and these specific problems need to be fixed...
->
->I agree with you, that we need autosel and we also need autosel to
->be better.  I actually see Pavel's mail as a datapoint (or "anecdote",
->if you will) in support of that; the autosel process currently works
->so badly that a long-time contributor thinks it's worse than nothing.
->
->Sasha, what do you need to help you make this better?
+On Sat, Mar 11, 2023 at 03:59:19PM +0200, Menna Mahmoud wrote:
+> " ERROR: Macros with multiple statements should be enclosed in a do -
+> while loop"
+> 
+> Reported by checkpath.
+> 
+> do loop with the conditional expression set to a constant
+> value of zero (0).This creates a loop that
+> will execute exactly one time.This is a coding idiom that
+> allows a multi-line macro to be used anywhere
+> that a single statement can be used.
+> 
+> So, enclose `gb_loopback_stats_attrs` macro in do - while (0) to
+> fix checkpath error
+> 
+> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> ---
 
-What could I do to avoid this?
+This breaks the build.  You need to compile the code before sending a
+patch.
 
-I suppose that if I had a way to know if a certain a commit is part of a
-series, I could either take all of it or none of it, but I don't think I
-have a way of doing that by looking at a commit in Linus' tree
-(suggestions welcome, I'm happy to implement them).
+regards,
+dan carpenter
 
-Other than that, the commit at hand:
-
-1. Describes a real problem that needs to be fixed, so while it was
-reverted for a quick fix, we'll need to go back and bring it in along
-with it's dependency.
-
-2. Soaked for over two weeks between the AUTOSEL mails and the release,
-gone through multiple rounds of reviews.
-
-3. Went through all the tests provided by all the individuals, bots,
-companies, etc who test the tree through multiple rounds of testing (we
-had to do a -rc2 for that releases).
-
-4. Went through whatever tests distros run on the kernel before they
-package and release it.
-
--- 
-Thanks,
-Sasha
