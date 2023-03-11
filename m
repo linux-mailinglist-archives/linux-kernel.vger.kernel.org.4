@@ -2,86 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40DC46B60CC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A78736B60CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCKVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:01:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
+        id S229934AbjCKVCV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:02:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKVBx (ORCPT
+        with ESMTP id S229745AbjCKVCU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:01:53 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096D4515DC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:01:53 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id cn21so4003515edb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:01:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1678568511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mqLiLsZSZqkghPgueB9X9yY17FbUEdbpIwT7a5FTGHQ=;
-        b=ahu2SILpBVmjIN/fyu8SXMNhCl85Y6wEUwLo8mfsBvX2hPGiJilmcEdlX3yWE2Moyp
-         N9muMb0BsILbEQxbvGT8dTcTEgqzHAkVH8SMDB7hKDDadT7tQyfWZV+6AllBg7R1ljhR
-         A7HlWu4jQkj9Q8u/3KH8GMpc4ooxjlzde38Jj5faLL1o0ufoRIkLZOzBzbeHTvbg55x3
-         PjZrt+MYSDWIyd90r5ppRdDc9vGvCVL1VfixYgFFj9WvRHywzmqtqB2swIFxdF7Tod/d
-         WSRQAiwVU7yP3oAv7YqJDrfZgKj5ZAoPKVdO9JtqTBdtzfkMUA0fxmtAC/wbqBTN9MXW
-         nPHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678568511;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mqLiLsZSZqkghPgueB9X9yY17FbUEdbpIwT7a5FTGHQ=;
-        b=oRLG4NExC8mCgbBGxM8NpR5m2U8Dt0wEG9sHN5AHQHKsPPDqXJDRdSF1rJraw646gI
-         s54naVPjBffL+Hf/8VXtwGYPEfzumLiC2XL02llMmJ87isH99F7SmQ3sf2KBr3fN9u4z
-         rafTmvf97KEwgaiE6MI5NBABia1AtHZofwF7y5UNCxBe6OSw6F2+fAe1GE5XPX8TLtcG
-         XISPAhgLO4ZLAKyjcaWOmtbb/gFJ+ZbkBYgzZKR6DR3qILHRUMw7FuceaSY4UpO6MPNG
-         y+vYpSC/qLs+CW7nH8n2FnVp2Ad6zkVfEDTXL8UuYhVffEEsGaK75aV0PUjjWvRSBhX0
-         t/jg==
-X-Gm-Message-State: AO0yUKUsLUS1RMm2NahxKrVD/R5h4okpRLgUZQNcAicOg7vh0r+LZy/T
-        btlteRjkqW3L3K53Kgcppxi8vCytUHzOAMEBF7A=
-X-Google-Smtp-Source: AK7set9T7FoO2Nq2LlElL4QVevBogC3v/8RbnuqWg65zLah33pZl2isqrJhvphk/gfAO/Pw7SKdcFzIHpctQPPCAVjI=
-X-Received: by 2002:a17:906:a3c2:b0:8b1:78b7:6803 with SMTP id
- ca2-20020a170906a3c200b008b178b76803mr15132394ejb.4.1678568511360; Sat, 11
- Mar 2023 13:01:51 -0800 (PST)
+        Sat, 11 Mar 2023 16:02:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C6C96C192;
+        Sat, 11 Mar 2023 13:02:19 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 085EEB80B35;
+        Sat, 11 Mar 2023 21:02:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2626C433EF;
+        Sat, 11 Mar 2023 21:02:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678568536;
+        bh=di7PeN7dVzc3H1ZpzrwXCWo9dYf0lLJhjDGUvasloIg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aGnwpag42rTIf877VTg+uqGIvTTEc8kri2J7d63ewagqvKwDq6RUoQSrj4jngpf1V
+         1az+BKaOuDly/RrgIsbehQOtp++Akp0wt1UnxXnWAsu3CaTNVANmB1pSHjDFlrgGcr
+         DbwprYW3uiH2V3N+7K4EaX1hBrvUT817/MMCy2dt2e0HDMbXS5Nkcij/+rpMIHms2P
+         vKHwnfXpEmgOD74BQNZPLvV1yizhy7Algdkm27lXgPntpvZaurqwtwM+9uW4GTP+1P
+         MRHYkFk8KbSEx3ix+caaaGKmkF7HHB+hNg+a8FLT1fyHG27Xbe0SzxXgQ05CVcr7x4
+         X9CSQo87aEoLA==
+Date:   Sat, 11 Mar 2023 16:02:15 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     Theodore Ts'o <tytso@mit.edu>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZAzsV5qkfxu3nxjv@sashalap>
+References: <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
+ <20230311161644.GH860405@mit.edu>
+ <ZAy+3f1/xfl6dWpI@sol.localdomain>
+ <ZAzH8Ve05SRLYPnR@sashalap>
+ <ZAzh7l8qWtkeh/KK@sol.localdomain>
 MIME-Version: 1.0
-References: <20230311111423.251383-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111423.251383-1-krzysztof.kozlowski@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Mar 2023 22:01:40 +0100
-Message-ID: <CAFBinCC3eWMdS5fH=HBLt1ET5r5jXhc51FVfXjGa62z+FjyJ-Q@mail.gmail.com>
-Subject: Re: [PATCH] irqchip: meson-gpio: mark OF related data as maybe unused
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii; format=flowed
+Content-Disposition: inline
+In-Reply-To: <ZAzh7l8qWtkeh/KK@sol.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 12:14=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
+On Sat, Mar 11, 2023 at 12:17:50PM -0800, Eric Biggers wrote:
+>On Sat, Mar 11, 2023 at 01:26:57PM -0500, Sasha Levin wrote:
+>> I'm getting a bunch of suggestions and complaints that I'm not implementing
+>> those suggestions fast enough on my spare time.
 >
-> The driver can be compile tested with !CONFIG_OF making certain data
-> unused:
+>BTW, the "I don't have enough time" argument is also a little frustrating
+>because you are currently insisting on doing AUTOSEL at all, at the current
+>sensitivity that picks up way too many commits.  I can certainly imagine that
+>that uses a lot of your time!  But, many contributors are telling you that
+>AUTOSEL is actually *worse than nothing* currently.
 >
->   drivers/irqchip/irq-meson-gpio.c:153:34: error: =E2=80=98meson_irq_gpio=
-_matches=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>So to some extent this is a self-inflicted problem.  You are *choosing* to spend
+>your precious time running in-place with something that is not working well,
+>instead of putting AUTOSEL on pause or turning down the sensitivity to free up
+>time while improvements to the process are worked on.
 >
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+>(And yes, I know there are many stable patches besides AUTOSEL, and it's a lot
+>of work, and I'm grateful for what you do.  I am *just* talking about AUTOSEL
+>here.  And yes, I agree that AUTOSEL is needed in principle, so there's no need
+>to re-hash the arguments for why it exists.  It just needs some improvements.)
+
+Just to make sure I'm sending the right message: I'd *love* to improve
+it, but I need help. I'm not pushing back on your ideas, I'm asking for
+help with their implementation.
+
+Maybe I'm putting words in Greg's mouth, but I think we both would
+ideally want to standardize around a single set of tools and scripts,
+it's just the case that both of us started with different set of
+problems we were trying to solve, and so our tooling evolved
+independently.
+
+-- 
+Thanks,
+Sasha
