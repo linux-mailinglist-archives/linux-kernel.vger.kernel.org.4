@@ -2,187 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D78B6B56A0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DD8E6B5647
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:23:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbjCKAYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:24:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
+        id S229923AbjCKAXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:23:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231239AbjCKAYK (ORCPT
+        with ESMTP id S229655AbjCKAW5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:24:10 -0500
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1DF6EBBF
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:23:36 -0800 (PST)
-Received: by mail-pf1-x449.google.com with SMTP id y35-20020a056a00182300b005e8e2c6afe2so3632250pfa.12
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:23:36 -0800 (PST)
+        Fri, 10 Mar 2023 19:22:57 -0500
+Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D31FC1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:22:55 -0800 (PST)
+Received: by mail-qv1-xf2c.google.com with SMTP id o3so4762261qvr.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:22:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678494216;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=cBGww55IndFADhIi2gRbx4Eeimb9jS14b01/bq24sKw=;
-        b=J8wTjmxdI+plA71tRLSg8eCh1bN9Lz2/OIIgJap9P5jXtPhLryn2LEF1p1sc9tZjU8
-         4vS874K7XciuSgn0eiec1PcGsdqql108dxgZeKAqbXcPlDzxFFKAJemxT3cn0ycx4F8J
-         t9L+hetSFEeVGYscMsUb5ZzpF9QwA35B2UKLfa4mhSm+ngdPkxKQq0JY1bx+ciShDMlC
-         Wp/2I4IFek/KNChmcVOW31RdlZoZ7D5sM4+f0EEkuryJ+yNzTa5gnkVLftItV4cHkmjf
-         XWuCayNALVHuXnaUNaoruV7E/vd1uL0dFBcXHDoSaZL9BfdzQ8jny/fVecLu7+dfQzI/
-         oomg==
+        d=linaro.org; s=google; t=1678494174;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HafAvVfPi40ywIy7mcLGZZ7DnFj4XpXONhSNPVRF/Bo=;
+        b=PHRlOKW8Qi27WA04xGObtWiLvK460VN8JnQa27YPrBHdgZ0syFyT2y1R2ejjSCvQGb
+         sWrm/wuP3sL7q1tnllTsutaRfXf15/KqJpyMT8h7NLddPNjOal20X5Z7MLQCH30KYoL2
+         wLqzlTTwbbsy/uS8NJq2+Wo3Dhp/W7aX1HDs8LVcjouSUJzMymTzW4HMawhYntHsEHmB
+         TTN3s+qyktPQCKtMfUXGwfK5ukKk3+MLsv7oPIsiLXJcMTflHE0Dvcvn3YPxjhfeFGzU
+         7ll1djfHv+3WauH9Y/zyomC/KcqwMfN5tP7w2+puxzgugMfqtshutfbnuTBES1JdM3B6
+         OJgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678494216;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678494174;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cBGww55IndFADhIi2gRbx4Eeimb9jS14b01/bq24sKw=;
-        b=Mc7dhh7SaTGdu48LAg1dHVy9ipi3IAtONvFlXxNBuZgH0qQ/QXn3rRNSl0C34DIVRh
-         qBB9tbEj8J+kuk6IQZSKq7DGroz0642mdFKLbe5ptGv92m7dR/5C9fAK7kX4cA5SHcod
-         7B2/yzMq6CPQxVpH+UZXQtyBU0L0xa8BAmHUop7OQQvez+PoPhtlpQ62csnIvfVW8m1C
-         rgmcYxJvQcVjKq/fgwf2TQkJ+5tW4B9N6aYlydHnQaWf9JzKWiBEUk+zSt8WA79fQJZT
-         i9Ld4kPOQJMHpFFRUY/N7/Dh4NEvZDmRdyEy7WMIEw5PXZXD1fMqAwxv5v2TBqVBgeZR
-         osPA==
-X-Gm-Message-State: AO0yUKVSlnX6f2l1yqDHVPOx0LQm50Wlg9yjQq7dRmn+SSK0JJq4iSzR
-        8Kr01ZvXly4208EiyGzyeBfjkP4SKxE=
-X-Google-Smtp-Source: AK7set+nqi2SIsWUy3sc4zAQWFcXXXBIr9W1CBybe0Jv9RMc0f5Y42RcGi60RF3FtsfsuFvm8air7ugvJu0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:a23:b0:23b:353a:2e24 with SMTP id
- o32-20020a17090a0a2300b0023b353a2e24mr78453pjo.5.1678494216070; Fri, 10 Mar
- 2023 16:23:36 -0800 (PST)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Mar 2023 16:22:47 -0800
-In-Reply-To: <20230311002258.852397-1-seanjc@google.com>
-Mime-Version: 1.0
-References: <20230311002258.852397-1-seanjc@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230311002258.852397-17-seanjc@google.com>
-Subject: [PATCH v2 16/27] KVM: x86: Add a new page-track hook to handle
- memslot deletion
-From:   Sean Christopherson <seanjc@google.com>
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>
-Cc:     kvm@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Yan Zhao <yan.y.zhao@intel.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        bh=HafAvVfPi40ywIy7mcLGZZ7DnFj4XpXONhSNPVRF/Bo=;
+        b=Pi+JMNkv+C3Wq5xSrI9SK4ML0zm99PC9bD2o3PMrEaWu/5p5OX2GuFo5FBidZ/3+Vw
+         OL64NL9UaDxP8Yn4j+2WOwUJV03JzqgNAlWScSoqfqiL6sQ/xKTny+PhYkpD9hmSZy2S
+         SXdQZTSzJq1W0wZ5nDlnY95ae2DVDLQggw3WcoCJxvvJPjjAWPk8ICqbq9AMkAVobNmB
+         69wX6UFTqOS2G7SFqK4iq1FoOQ9pZ+X0SvoIdFo7X4zvtikh3FH1xpRJhwL4H6DiSGWf
+         laKXBYNCKksqHuKtD1x85d93nAPrq3iqabts9XOP551I8B2iav7nfVnvYpFZ+jekLdyF
+         kTwg==
+X-Gm-Message-State: AO0yUKXcPIBWtF9ZlHewNKI7xy+o+roMCTuX2gT4UIz+TD/lVapuIUHY
+        t0KBIfQOhAeBeoMQep1iN/8Qpg==
+X-Google-Smtp-Source: AK7set/0j0WVg//8nl3RrzKyyTBjZzoCztF+YRMgAJzwAqVXb6gcu+qdJCdgCq6Q5BOKGxf4OjR4jg==
+X-Received: by 2002:a05:6214:2aa7:b0:56e:ac19:a879 with SMTP id js7-20020a0562142aa700b0056eac19a879mr1592192qvb.8.1678494174079;
+        Fri, 10 Mar 2023 16:22:54 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id 140-20020a370792000000b0073b69922cfesm775432qkh.85.2023.03.10.16.22.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 16:22:53 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH] iio: dac: cio-dac: Fix max DAC write value check for 12-bit
+Date:   Fri, 10 Mar 2023 19:22:48 -0500
+Message-Id: <20230311002248.8548-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yan Zhao <yan.y.zhao@intel.com>
+The CIO-DAC series of devices only supports DAC values up to 12-bit
+rather than 16-bit. Trying to write a 16-bit value results in only the
+lower 12 bits affecting the DAC output which is not what the user
+expects. Instead, adjust the DAC write value check to reject values
+larger than 12-bit so that they fail explicitly as invalid for the user.
 
-Add a new page-track hook, track_remove_region(), that is called when a
-memslot DELETE operation is about to be committed.  The "remove" hook
-will be used by KVMGT and will effectively replace the existing
-track_flush_slot() altogether now that KVM itself doesn't rely on the
-"flush" hook either.
-
-The "flush" hook is flawed as it's invoked before the memslot operation
-is guaranteed to succeed, i.e. KVM might ultimately keep the existing
-memslot without notifying external page track users, a.k.a. KVMGT.  In
-practice, this can't currently happen on x86, but there are no guarantees
-that won't change in the future, not to mention that "flush" does a very
-poor job of describing what is happening.
-
-Pass in the gfn+nr_pages instead of the slot itself so external users,
-i.e. KVMGT, don't need to exposed to KVM internals (memslots).  This will
-help set the stage for additional cleanups to the page-track APIs.
-
-Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
-Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-Co-developed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
+Fixes: 3b8df5fd526e ("iio: Add IIO support for the Measurement Computing CIO-DAC family")
+Cc: stable@vger.kernel.org
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- arch/x86/include/asm/kvm_page_track.h | 12 ++++++++++++
- arch/x86/kvm/mmu/page_track.c         | 23 +++++++++++++++++++++++
- arch/x86/kvm/x86.c                    |  3 +++
- 3 files changed, 38 insertions(+)
+ drivers/iio/dac/cio-dac.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/arch/x86/include/asm/kvm_page_track.h b/arch/x86/include/asm/kvm_page_track.h
-index 6a287bcbe8a9..152c5e7d7868 100644
---- a/arch/x86/include/asm/kvm_page_track.h
-+++ b/arch/x86/include/asm/kvm_page_track.h
-@@ -43,6 +43,17 @@ struct kvm_page_track_notifier_node {
- 	 */
- 	void (*track_flush_slot)(struct kvm *kvm, struct kvm_memory_slot *slot,
- 			    struct kvm_page_track_notifier_node *node);
-+
-+	/*
-+	 * Invoked when a memory region is removed from the guest.  Or in KVM
-+	 * terms, when a memslot is deleted.
-+	 *
-+	 * @gfn:       base gfn of the region being removed
-+	 * @nr_pages:  number of pages in the to-be-removed region
-+	 * @node:      this node
-+	 */
-+	void (*track_remove_region)(gfn_t gfn, unsigned long nr_pages,
-+				    struct kvm_page_track_notifier_node *node);
- };
+diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
+index 791dd999cf29..18a64f72fc18 100644
+--- a/drivers/iio/dac/cio-dac.c
++++ b/drivers/iio/dac/cio-dac.c
+@@ -66,8 +66,8 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+ 	if (mask != IIO_CHAN_INFO_RAW)
+ 		return -EINVAL;
  
- int kvm_page_track_init(struct kvm *kvm);
-@@ -77,6 +88,7 @@ kvm_page_track_unregister_notifier(struct kvm *kvm,
- void kvm_page_track_write(struct kvm_vcpu *vcpu, gpa_t gpa, const u8 *new,
- 			  int bytes);
- void kvm_page_track_flush_slot(struct kvm *kvm, struct kvm_memory_slot *slot);
-+void kvm_page_track_delete_slot(struct kvm *kvm, struct kvm_memory_slot *slot);
+-	/* DAC can only accept up to a 16-bit value */
+-	if ((unsigned int)val > 65535)
++	/* DAC can only accept up to a 12-bit value */
++	if ((unsigned int)val > 4095)
+ 		return -EINVAL;
  
- bool kvm_page_track_has_external_user(struct kvm *kvm);
- 
-diff --git a/arch/x86/kvm/mmu/page_track.c b/arch/x86/kvm/mmu/page_track.c
-index 1cfc0a0ccc23..d4a8a995276a 100644
---- a/arch/x86/kvm/mmu/page_track.c
-+++ b/arch/x86/kvm/mmu/page_track.c
-@@ -304,6 +304,29 @@ void kvm_page_track_flush_slot(struct kvm *kvm, struct kvm_memory_slot *slot)
- 	srcu_read_unlock(&head->track_srcu, idx);
- }
- 
-+/*
-+ * Notify external page track nodes that a memory region is being removed from
-+ * the VM, e.g. so that users can free any associated metadata.
-+ */
-+void kvm_page_track_delete_slot(struct kvm *kvm, struct kvm_memory_slot *slot)
-+{
-+	struct kvm_page_track_notifier_head *head;
-+	struct kvm_page_track_notifier_node *n;
-+	int idx;
-+
-+	head = &kvm->arch.track_notifier_head;
-+
-+	if (hlist_empty(&head->track_notifier_list))
-+		return;
-+
-+	idx = srcu_read_lock(&head->track_srcu);
-+	hlist_for_each_entry_srcu(n, &head->track_notifier_list, node,
-+				srcu_read_lock_held(&head->track_srcu))
-+		if (n->track_remove_region)
-+			n->track_remove_region(slot->base_gfn, slot->npages, n);
-+	srcu_read_unlock(&head->track_srcu, idx);
-+}
-+
- enum pg_level kvm_page_track_max_mapping_level(struct kvm *kvm, gfn_t gfn,
- 					       enum pg_level max_level)
- {
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 47ac9291cd43..0da5ff007d20 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12645,6 +12645,9 @@ void kvm_arch_commit_memory_region(struct kvm *kvm,
- 				const struct kvm_memory_slot *new,
- 				enum kvm_mr_change change)
- {
-+	if (change == KVM_MR_DELETE)
-+		kvm_page_track_delete_slot(kvm, old);
-+
- 	if (!kvm->arch.n_requested_mmu_pages &&
- 	    (change == KVM_MR_CREATE || change == KVM_MR_DELETE)) {
- 		unsigned long nr_mmu_pages;
+ 	priv->chan_out_states[chan->channel] = val;
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.39.2
 
