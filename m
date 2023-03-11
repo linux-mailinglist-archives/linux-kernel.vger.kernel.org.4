@@ -2,112 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB1C06B6168
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 23:14:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A8486B6169
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 23:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230021AbjCKWOB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 17:14:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45194 "EHLO
+        id S230001AbjCKWPF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 17:15:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbjCKWN7 (ORCPT
+        with ESMTP id S229639AbjCKWPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 17:13:59 -0500
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D584D60C
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 14:13:57 -0800 (PST)
-Received: by mail-pf1-x431.google.com with SMTP id z11so5673623pfh.4
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 14:13:57 -0800 (PST)
+        Sat, 11 Mar 2023 17:15:03 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6729C4DE08
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 14:15:02 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536be69eadfso170722457b3.1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 14:15:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678572837;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=YYjk3cJH8tEOs5ozbUpfr8oFA9o81HoYVh9AIBzXHFg=;
-        b=8TQE9D+xWvmMCQ9jenP/l8YinpsjW8h9nNlyAmTtBePF1nGidvBdYymQXDLf8cR1jZ
-         VtSbkF3Pl5ISrxFh2JnhAeaV29VIreJs0uYLfQ12/qy6ecT81sr1ao2jUcTbgPh/+j25
-         xeBc8WAt/+cJWUdBNR5svqLYiX5IH8PNuQ3J843y+kTq14h1VCnstd4IgbX30OSe9KUH
-         cvqQWyTXhWl165jo64IcHDB76tFcgkDKb95Y1mFZgtVQzwj+WZHdgY0LCZw+u0behFvm
-         QOeUr8gB98jU0q2f+K6ur1GDK+hNodHpc7ml6fc7UY1aafrlvq5RxFxee2KvuMSeLGof
-         Tt4g==
+        d=gmail.com; s=20210112; t=1678572901;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xEf+AExShPx1OxizK74Vck7+V+R0v3E0oj9U3JcETH0=;
+        b=hQ007Qi05jzSB4LKYcC5TqSqkWoh+kvnNsR4k4P3CTFT96lSx3YWXmgviAkHmpb+Fk
+         24+KAHaHYVSZ9+JBPQAz0/0xPG4OMPb8PhchAS7iGyegNO7NraeAqT5fnSpc/87wRjpd
+         GfxAzBZXpZypG/Veck+w78fETGR6RWSdXCzJs75WtAxnb2XsrNLG6kiRDMOVbURFAbdD
+         kJkqYJIQz0f6pKY0u7hLhy/lRHKHMo7sCzR37z9OytmlFYUH6cwWSj3rZlhaFaP+X6+G
+         Q4lsO1C4bl8BkwJu51wXMtzo7BrKb0GOBvafOQlg31WUMy/16oQA3xCu4BW5SJSRgGnX
+         Dciw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678572837;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678572901;
+        h=to:subject:message-id:date:from:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YYjk3cJH8tEOs5ozbUpfr8oFA9o81HoYVh9AIBzXHFg=;
-        b=eAD/kKXt/Ece5Rjyq0TaH0SFCXkISSAcFYoEHni8ihFytuEWo/yc5EEcPtm6J7SwE7
-         CtmAhOd9YUUc76/KMoITg+WqNiegL7Q+06mhj3FrxFSHGK/cktkN+T3d4tPbDVHAQl94
-         yAkgfOnWw2AubcQDQAVQbpLj69nDjslJjEPQds6QI5bevHoqkEbA6bpbcMips5KU4YnK
-         yzATtQBSGRVy8uA8Vdt8+uynKUlhdwio3+SaXfL+NHcQLY/LZNYhsc+0ie11dPSld/oy
-         B05N+vBjLUjp7z9rQynkivSoOQS0wgRzY2Mj0VluhmD3RhpNq5KnyXNq0+2ojFTs89ye
-         tboA==
-X-Gm-Message-State: AO0yUKVfpFfSQ3Kb06dbHM+r5hB1JPvMydREHZ2uB0jH70rZLZum3b7F
-        jrGzUjbHqJNYvYpAXvvaNWKa4A==
-X-Google-Smtp-Source: AK7set9gpZ68NKoc9U+dktiUG4mYAhdlMAMuZoJ+hQ2hoW6ixwL2/6x9oE5iKSv/243gwjfJIce1rQ==
-X-Received: by 2002:a05:6a00:1d1c:b0:5d1:f76:d1d7 with SMTP id a28-20020a056a001d1c00b005d10f76d1d7mr10133794pfx.1.1678572836767;
-        Sat, 11 Mar 2023 14:13:56 -0800 (PST)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id h14-20020a62b40e000000b0056283e2bdbdsm1866013pfn.138.2023.03.11.14.13.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 14:13:56 -0800 (PST)
-Message-ID: <3dd54b5c-aad2-0d1c-2f6a-0af4673a7d00@kernel.dk>
-Date:   Sat, 11 Mar 2023 15:13:55 -0700
+        bh=xEf+AExShPx1OxizK74Vck7+V+R0v3E0oj9U3JcETH0=;
+        b=W6s2DiU3tbUqyb4qO8SeYXhhqo+TF6DTG2dedwZWK87t6d0gfjcxjIJS36EpkTygEN
+         sijxN/2EtpFXIA/O8J0+5/YOtCb3M1ySdz1V47OFMw6uDN/VCg7FXnAZokcTAY6mziQm
+         eTNdbKt+wno5PDUWRStLWUG72J9doms4CT6W5gke+xVtWtXZOQgWYy86QlAUIHfCCsso
+         CI22y0w24y3mPgn3FSOfSYQo1VvUK/7JSjh3lWwndN7opao1A49ecquoG+k95vC5Wkqs
+         buhUgMKDX9OAckZkiKJdHX27uyHkfonMzNQSPf0tCsxGhIuGgyQjeTjRLDj4Xv8WnH4R
+         MR4w==
+X-Gm-Message-State: AO0yUKW2QkY8k0znYiphYmMrYmrIvCW+SUXlq74a+EoxkjOO4gpYbrob
+        2jXMSC29nTxltBOBgU42sRuV/wR87OhxKSX33Dk=
+X-Google-Smtp-Source: AK7set+fH3fnYhNF/htKP4HjT93oYN0rrRygKtkMgZbhUhXWl1HDlf+qteIhKJJ+w/jtWfWge+9hgqToUmDB2va/KHk=
+X-Received: by 2002:a81:a906:0:b0:52e:d2a7:1ba1 with SMTP id
+ g6-20020a81a906000000b0052ed2a71ba1mr19518347ywh.1.1678572901627; Sat, 11 Mar
+ 2023 14:15:01 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] io_uring: One wqe per wq
-Content-Language: en-US
-To:     Pavel Begunkov <asml.silence@gmail.com>,
-        Breno Leitao <leitao@debian.org>, io-uring@vger.kernel.org
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org
-References: <20230310201107.4020580-1-leitao@debian.org>
- <ac6a2da7-aa88-b119-6a44-01d2f2ec9b6d@kernel.dk>
- <94795ed1-f7ac-3d1c-9bd6-fcaaaf5f1fd4@gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <94795ed1-f7ac-3d1c-9bd6-fcaaaf5f1fd4@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7110:419:b0:1d0:5a4e:a083 with HTTP; Sat, 11 Mar 2023
+ 14:15:01 -0800 (PST)
+Reply-To: thajxoa@gmail.com
+From:   Thaj Xoa <nambiemagrang@gmail.com>
+Date:   Sat, 11 Mar 2023 22:15:01 +0000
+Message-ID: <CACrRiTEnUUdM53pcmzgfSX75=bLe5jeQFg+1kUWO=zW7BxA0Vg@mail.gmail.com>
+Subject: 
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=4.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: ****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/23 1:56 PM, Pavel Begunkov wrote:
-> On 3/10/23 20:38, Jens Axboe wrote:
->> On 3/10/23 1:11 PM, Breno Leitao wrote:
->>> Right now io_wq allocates one io_wqe per NUMA node.  As io_wq is now
->>> bound to a task, the task basically uses only the NUMA local io_wqe, and
->>> almost never changes NUMA nodes, thus, the other wqes are mostly
->>> unused.
->>
->> What if the task gets migrated to a different node? Unless the task
->> is pinned to a node/cpumask that is local to that node, it will move
->> around freely.
-> 
-> In which case we're screwed anyway and not only for the slow io-wq
-> path but also with the hot path as rings and all io_uring ctx and
-> requests won't be migrated locally.
-
-Oh agree, not saying it's ideal, but it can happen.
-
-What if you deliberately use io-wq to offload work and you set it
-to another mask? That one I supposed we could handle by allocating
-based on the set mask. Two nodes might be more difficult...
-
-For most things this won't really matter as io-wq is a slow path
-for that, but there might very well be cases that deliberately
-offload.
-
-> It's also curious whether io-wq workers will get migrated
-> automatically as they are a part of the thread group.
-
-They certainly will, unless affinitized otherwise.
-
 -- 
-Jens Axboe
+Dear Friend,
 
+How are you today? I have an important message for you just reply to
+me and I will send you more details.
 
+Regards
+Mr Thaj Xoa
