@@ -2,402 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC55F6B5D90
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:56:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C8CD86B5D93
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:56:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbjCKP43 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:56:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44174 "EHLO
+        id S230409AbjCKP4f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:56:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjCKP4D (ORCPT
+        with ESMTP id S229742AbjCKP4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:56:03 -0500
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90E2DEF88
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:55:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678550159; x=1710086159;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=IVuozz6PZ9vpYAeBS0dJtPyxNfg9dEKkyxBDdO46YJ4=;
-  b=VlLeNpn7hNUuE78E25bknvgXxPKXjHKtyRjwgvRY4HRewMf1VrS2lal0
-   7pqoBGHJRDdxAZRjVMcviyN4pHxnlYlYZ6I8QlDGqMvxASOmw9o7an54u
-   s7r3fAuRDHc+1tLtvVmd97zhU2YQGaN0hmvMf7VnzWIf1+LeE8RFnWTEW
-   1dqAKDRzuQwFMtJt/FsPtlMlFatFrpxrk2tZCGEptDWxrZ+okEAkt+OV1
-   tXy88hRQ50bJR94qbAa1Lc9HPbaI11u6qOOAEZTMzoh15FQ8ZBNyyp/4Y
-   fCHOrMDkOu6sRSYAswsJsLViTei5s44VjPJz3UT6ordT1H+5oQTJ6WGWN
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="334386866"
-X-IronPort-AV: E=Sophos;i="5.98,252,1673942400"; 
-   d="scan'208";a="334386866"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 07:55:59 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="680526130"
-X-IronPort-AV: E=Sophos;i="5.98,252,1673942400"; 
-   d="scan'208";a="680526130"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga007.fm.intel.com with ESMTP; 11 Mar 2023 07:55:56 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pb1Zb-0004fh-1f;
-        Sat, 11 Mar 2023 15:55:55 +0000
-Date:   Sat, 11 Mar 2023 23:55:18 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>,
-        outreachy@lists.linux.dev
-Cc:     oe-kbuild-all@lists.linux.dev, pure.logic@nexus-software.ie,
-        johan@kernel.org, elder@kernel.org, gregkh@linuxfoundation.org,
-        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, eng.mennamahmoud.mm@gmail.com
-Subject: Re: [PATCH] staging: greybus: eclose macro in a do - while loop
-Message-ID: <202303112323.45L8NHi2-lkp@intel.com>
-References: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
+        Sat, 11 Mar 2023 10:56:15 -0500
+Received: from domac.alu.hr (domac.alu.unizg.hr [IPv6:2001:b68:2:2800::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9BE1BED;
+        Sat, 11 Mar 2023 07:56:12 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 0E373604F2;
+        Sat, 11 Mar 2023 16:56:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678550169; bh=s5AI3tH+dWxbWSbXy8OcQD5Kry89PyAWfBvcYI7JyUQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=prBs7RYxNmKlx7vVGUl8qaA/yXHvjbkUbtm8x7GxEZaHy6eXtyO88gQagT7uOR5um
+         81r3RszM3nYhYU3Wo+T6yku+tUeXxViZQnmyW6Q+nSn4zgPebsHtPqaqzaYbooh+jB
+         hNKMGjsOWCUsu9UE49YkXgwzOmzt9vqbKyupHeMkPB24RYkYV5qZU3AA6M69ohaSgA
+         NMmkA/Kz1ZNeML59G1yueHpJK+SjEtFNNnU3KyT+ThXS2UgAKZo/YBvsm/uXxa0vxu
+         +t3ozKrhIjCdryykp5p0lwA+ajswJIyg/ynj4FaSyqMlLCroa2uOWxuP4sLL8N0EWW
+         4gfLRvmFYwI+A==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id T7NkecPtnJf2; Sat, 11 Mar 2023 16:56:06 +0100 (CET)
+Received: from [192.168.1.4] (unknown [77.237.109.125])
+        by domac.alu.hr (Postfix) with ESMTPSA id 668D8604ED;
+        Sat, 11 Mar 2023 16:56:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678550166; bh=s5AI3tH+dWxbWSbXy8OcQD5Kry89PyAWfBvcYI7JyUQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=CTCV6XRVLuLr5BIODlTuzvFfAw5bDpMXP0UV9/FHPk6brtVwglXkm6hic8KJRI5U7
+         uZ7hmj9vJk//YVkOxMO0oQn8CF24ILPqvz3pXoX+iCxvlK+EkHP4GDAg8EqWutAOJ/
+         thNW8n/lUBYqTfSRwJKY/NeSXLBfhQLDWNyFVGsfmDgfPTq1x3rxcWyFzox0TVGLkE
+         uIe2mQGZnEyrEw7BeLbXab3XexJWwLbm8vriz1VJq/LJylWeFbT8YVH67qZRookJd+
+         4abjjncjdofoH2w5TALKv6T9weoCJpY41csviMB/jcq/lhWDAta0Ka4mTJGuFpGRc3
+         MKdwq/3h+G0jw==
+Message-ID: <205de56d-5502-fc74-e9a3-58aee25ad79e@alu.unizg.hr>
+Date:   Sat, 11 Mar 2023 16:56:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?UTF-8?Q?Thomas_Wei=c3=9fschuh?= <linux@weissschuh.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        =?UTF-8?Q?Christian_G=c3=b6ttsche?= <cgzones@googlemail.com>,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        Frederick Lawler <fred@cloudflare.com>
+References: <20230310192614.GA528@domac.alu.hr>
+ <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+ <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr>
+ <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
+Content-Language: en-US, hr
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Menna,
+On 11. 03. 2023. 15:59, Paul Moore wrote:
+> On Fri, Mar 10, 2023 at 5:53 PM Mirsad Goran Todorovac
+> <mirsad.todorovac@alu.unizg.hr> wrote:
+>> On 10. 03. 2023. 23:33, Paul Moore wrote:
+>>> On Fri, Mar 10, 2023 at 2:26 PM Mirsad Goran Todorovac
+>>> <mirsad.goran.todorovac@alu.hr> wrote:
+>>>>
+>>>> LSM security/integrity/iint.c had the case of kmem_cache_create() w/o a proper
+>>>> kmem_cache_destroy() destructor.
+>>>>
+>>>> Introducing the release() hook would enable LSMs to release allocated resources
+>>>> on exit, and in proper order, rather than dying all together with kernel shutdown
+>>>> in an undefined order.
+>>>>
+>>>> Thanks,
+>>>>         Mirsad
+>>>>
+>>>> ---
+>>>>  include/linux/lsm_hooks.h | 1 +
+>>>>  security/integrity/iint.c | 7 +++++++
+>>>>  2 files changed, 8 insertions(+)
+>>>
+>>> I only see the 1/2 patch, did you send the 2/2 patch to the LSM list?
+>>> If not, you need to do that
+>>
+>> I will resend everything, because this first attempt was buggy and
+>> incorrect regarding the credits. Will try this, Andy said that I wait
+>> for the comments, but I did not expect them before the weekend.
+>>
+>> Thank you guys for patience, I am just finishing the test of devres
+>> patch and then I will proceed with integrity LSM patch submission.
+> 
+> Thank you for resending the patchset, although a couple of
+> administrative things to consider for your next posting:
+> 
+> * Each time you post a patchset it is generally considered a best
+> practice to increment the version number, e.g. "[PATCH vX 0/2]" with
+> 'X' being the version number.  This makes it easier to identify
+> specific revisions and ensure that everyone is reviewing the latest
+> patchset.
+> 
+> * It is a good idea to use the "./scripts/get_maintainer.pl" script to
+> ensure you have included the right people and mailing lists on your
+> submissions as your latest resend did not include the LSM list when it
+> should have.
 
-Thank you for the patch! Yet something to improve:
+Thank you for the advice, Mr. Moore.
 
-[auto build test ERROR on staging/staging-testing]
+It is really my second attempt at patch submission. I've seen
+later that other contributors add RESEND or increase the patch
+set version.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Menna-Mahmoud/staging-greybus-eclose-macro-in-a-do-while-loop/20230311-220021
-patch link:    https://lore.kernel.org/r/20230311135919.9129-1-eng.mennamahmoud.mm%40gmail.com
-patch subject: [PATCH] staging: greybus: eclose macro in a do - while loop
-config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230311/202303112323.45L8NHi2-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/a0856cd3d280813cb65e083f5a5c72add1a89f15
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Menna-Mahmoud/staging-greybus-eclose-macro-in-a-do-while-loop/20230311-220021
-        git checkout a0856cd3d280813cb65e083f5a5c72add1a89f15
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/staging/
+For the maintainer list, I have trusted the output of a script.
+But yes, it's probably best to check thoroughly twice.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303112323.45L8NHi2-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/staging/greybus/loopback.c:166:9: error: expected identifier or '(' before 'do'
-     166 |         do { \
-         |         ^~
-   drivers/staging/greybus/loopback.c:273:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     273 | gb_loopback_stats_attrs(latency);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:170:11: error: expected identifier or '(' before 'while'
-     170 |         } while (0)
-         |           ^~~~~
-   drivers/staging/greybus/loopback.c:273:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     273 | gb_loopback_stats_attrs(latency);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:166:9: error: expected identifier or '(' before 'do'
-     166 |         do { \
-         |         ^~
-   drivers/staging/greybus/loopback.c:275:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     275 | gb_loopback_stats_attrs(requests_per_second);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:170:11: error: expected identifier or '(' before 'while'
-     170 |         } while (0)
-         |           ^~~~~
-   drivers/staging/greybus/loopback.c:275:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     275 | gb_loopback_stats_attrs(requests_per_second);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:166:9: error: expected identifier or '(' before 'do'
-     166 |         do { \
-         |         ^~
-   drivers/staging/greybus/loopback.c:277:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     277 | gb_loopback_stats_attrs(throughput);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:170:11: error: expected identifier or '(' before 'while'
-     170 |         } while (0)
-         |           ^~~~~
-   drivers/staging/greybus/loopback.c:277:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     277 | gb_loopback_stats_attrs(throughput);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:166:9: error: expected identifier or '(' before 'do'
-     166 |         do { \
-         |         ^~
-   drivers/staging/greybus/loopback.c:279:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     279 | gb_loopback_stats_attrs(apbridge_unipro_latency);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:170:11: error: expected identifier or '(' before 'while'
-     170 |         } while (0)
-         |           ^~~~~
-   drivers/staging/greybus/loopback.c:279:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     279 | gb_loopback_stats_attrs(apbridge_unipro_latency);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:166:9: error: expected identifier or '(' before 'do'
-     166 |         do { \
-         |         ^~
-   drivers/staging/greybus/loopback.c:281:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     281 | gb_loopback_stats_attrs(gbphy_firmware_latency);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:170:11: error: expected identifier or '(' before 'while'
-     170 |         } while (0)
-         |           ^~~~~
-   drivers/staging/greybus/loopback.c:281:1: note: in expansion of macro 'gb_loopback_stats_attrs'
-     281 | gb_loopback_stats_attrs(gbphy_firmware_latency);
-         | ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:319:10: error: 'dev_attr_latency_min' undeclared here (not in a function); did you mean 'dev_attr_timeout_min'?
-     319 |         &dev_attr_latency_min.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~
-         |          dev_attr_timeout_min
->> drivers/staging/greybus/loopback.c:320:10: error: 'dev_attr_latency_max' undeclared here (not in a function); did you mean 'dev_attr_timeout_max'?
-     320 |         &dev_attr_latency_max.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~
-         |          dev_attr_timeout_max
->> drivers/staging/greybus/loopback.c:321:10: error: 'dev_attr_latency_avg' undeclared here (not in a function)
-     321 |         &dev_attr_latency_avg.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:322:10: error: 'dev_attr_requests_per_second_min' undeclared here (not in a function)
-     322 |         &dev_attr_requests_per_second_min.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:323:10: error: 'dev_attr_requests_per_second_max' undeclared here (not in a function)
-     323 |         &dev_attr_requests_per_second_max.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:324:10: error: 'dev_attr_requests_per_second_avg' undeclared here (not in a function)
-     324 |         &dev_attr_requests_per_second_avg.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:325:10: error: 'dev_attr_throughput_min' undeclared here (not in a function); did you mean 'dev_attr_timeout_min'?
-     325 |         &dev_attr_throughput_min.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-         |          dev_attr_timeout_min
->> drivers/staging/greybus/loopback.c:326:10: error: 'dev_attr_throughput_max' undeclared here (not in a function); did you mean 'dev_attr_timeout_max'?
-     326 |         &dev_attr_throughput_max.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
-         |          dev_attr_timeout_max
->> drivers/staging/greybus/loopback.c:327:10: error: 'dev_attr_throughput_avg' undeclared here (not in a function)
-     327 |         &dev_attr_throughput_avg.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~
->> drivers/staging/greybus/loopback.c:328:10: error: 'dev_attr_apbridge_unipro_latency_min' undeclared here (not in a function)
-     328 |         &dev_attr_apbridge_unipro_latency_min.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/greybus/loopback.c:329:10: error: 'dev_attr_apbridge_unipro_latency_max' undeclared here (not in a function)
-     329 |         &dev_attr_apbridge_unipro_latency_max.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/greybus/loopback.c:330:10: error: 'dev_attr_apbridge_unipro_latency_avg' undeclared here (not in a function)
-     330 |         &dev_attr_apbridge_unipro_latency_avg.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/greybus/loopback.c:331:10: error: 'dev_attr_gbphy_firmware_latency_min' undeclared here (not in a function)
-     331 |         &dev_attr_gbphy_firmware_latency_min.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/greybus/loopback.c:332:10: error: 'dev_attr_gbphy_firmware_latency_max' undeclared here (not in a function)
-     332 |         &dev_attr_gbphy_firmware_latency_max.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-   drivers/staging/greybus/loopback.c:333:10: error: 'dev_attr_gbphy_firmware_latency_avg' undeclared here (not in a function)
-     333 |         &dev_attr_gbphy_firmware_latency_avg.attr,
-         |          ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+> With that out of the way, I wanted to make a quick comment on the
+> patch itself.  Currently LSMs do not support unloading, or dynamic
+> loading for that matter.  There are several reasons for this, but
+> perhaps the most important is that in order to help meet the security
+> goals for several of the LSMs they need to be present in the kernel
+> from the very beginning and remain until the very end.  Adding a
+> proper "release" method to a LSM is going to be far more complicated
+> than what you've done with this patchset, involving a lot of
+> discussion both for the LSM layer itself and all of the currently
+> supported LSMs, and ultimately I don't believe it is something we will
+> want to support.
 
 
-vim +166 drivers/staging/greybus/loopback.c
+I have already realised that simply calling kmem_cache_destroy()
+would not even deallocate all possibly allocated subnodes which
+I saw from the source.
 
-   164	
-   165	#define gb_loopback_stats_attrs(field)					\
- > 166		do { \
-   167			gb_loopback_ro_stats_attr(field, min, u);		\
-   168			gb_loopback_ro_stats_attr(field, max, u);		\
-   169			gb_loopback_ro_avg_attr(field);				\
- > 170		} while (0)
-   171	
-   172	#define gb_loopback_attr(field, type)					\
-   173	static ssize_t field##_show(struct device *dev,				\
-   174				    struct device_attribute *attr,		\
-   175				    char *buf)					\
-   176	{									\
-   177		struct gb_loopback *gb = dev_get_drvdata(dev);			\
-   178		return sprintf(buf, "%" #type "\n", gb->field);			\
-   179	}									\
-   180	static ssize_t field##_store(struct device *dev,			\
-   181				    struct device_attribute *attr,		\
-   182				    const char *buf,				\
-   183				    size_t len)					\
-   184	{									\
-   185		int ret;							\
-   186		struct gb_loopback *gb = dev_get_drvdata(dev);			\
-   187		mutex_lock(&gb->mutex);						\
-   188		ret = sscanf(buf, "%"#type, &gb->field);			\
-   189		if (ret != 1)							\
-   190			len = -EINVAL;						\
-   191		else								\
-   192			gb_loopback_check_attr(gb, bundle);			\
-   193		mutex_unlock(&gb->mutex);					\
-   194		return len;							\
-   195	}									\
-   196	static DEVICE_ATTR_RW(field)
-   197	
-   198	#define gb_dev_loopback_ro_attr(field, conn)				\
-   199	static ssize_t field##_show(struct device *dev,		\
-   200				    struct device_attribute *attr,		\
-   201				    char *buf)					\
-   202	{									\
-   203		struct gb_loopback *gb = dev_get_drvdata(dev);			\
-   204		return sprintf(buf, "%u\n", gb->field);				\
-   205	}									\
-   206	static DEVICE_ATTR_RO(field)
-   207	
-   208	#define gb_dev_loopback_rw_attr(field, type)				\
-   209	static ssize_t field##_show(struct device *dev,				\
-   210				    struct device_attribute *attr,		\
-   211				    char *buf)					\
-   212	{									\
-   213		struct gb_loopback *gb = dev_get_drvdata(dev);			\
-   214		return sprintf(buf, "%" #type "\n", gb->field);			\
-   215	}									\
-   216	static ssize_t field##_store(struct device *dev,			\
-   217				    struct device_attribute *attr,		\
-   218				    const char *buf,				\
-   219				    size_t len)					\
-   220	{									\
-   221		int ret;							\
-   222		struct gb_loopback *gb = dev_get_drvdata(dev);			\
-   223		mutex_lock(&gb->mutex);						\
-   224		ret = sscanf(buf, "%"#type, &gb->field);			\
-   225		if (ret != 1)							\
-   226			len = -EINVAL;						\
-   227		else								\
-   228			gb_loopback_check_attr(gb);		\
-   229		mutex_unlock(&gb->mutex);					\
-   230		return len;							\
-   231	}									\
-   232	static DEVICE_ATTR_RW(field)
-   233	
-   234	static void gb_loopback_reset_stats(struct gb_loopback *gb);
-   235	static void gb_loopback_check_attr(struct gb_loopback *gb)
-   236	{
-   237		if (gb->us_wait > GB_LOOPBACK_US_WAIT_MAX)
-   238			gb->us_wait = GB_LOOPBACK_US_WAIT_MAX;
-   239		if (gb->size > gb_dev.size_max)
-   240			gb->size = gb_dev.size_max;
-   241		gb->requests_timedout = 0;
-   242		gb->requests_completed = 0;
-   243		gb->iteration_count = 0;
-   244		gb->send_count = 0;
-   245		gb->error = 0;
-   246	
-   247		if (kfifo_depth < gb->iteration_max) {
-   248			dev_warn(gb->dev,
-   249				 "cannot log bytes %u kfifo_depth %u\n",
-   250				 gb->iteration_max, kfifo_depth);
-   251		}
-   252		kfifo_reset_out(&gb->kfifo_lat);
-   253	
-   254		switch (gb->type) {
-   255		case GB_LOOPBACK_TYPE_PING:
-   256		case GB_LOOPBACK_TYPE_TRANSFER:
-   257		case GB_LOOPBACK_TYPE_SINK:
-   258			gb->jiffy_timeout = usecs_to_jiffies(gb->timeout);
-   259			if (!gb->jiffy_timeout)
-   260				gb->jiffy_timeout = GB_LOOPBACK_TIMEOUT_MIN;
-   261			else if (gb->jiffy_timeout > GB_LOOPBACK_TIMEOUT_MAX)
-   262				gb->jiffy_timeout = GB_LOOPBACK_TIMEOUT_MAX;
-   263			gb_loopback_reset_stats(gb);
-   264			wake_up(&gb->wq);
-   265			break;
-   266		default:
-   267			gb->type = 0;
-   268			break;
-   269		}
-   270	}
-   271	
-   272	/* Time to send and receive one message */
-   273	gb_loopback_stats_attrs(latency);
-   274	/* Number of requests sent per second on this cport */
-   275	gb_loopback_stats_attrs(requests_per_second);
-   276	/* Quantity of data sent and received on this cport */
-   277	gb_loopback_stats_attrs(throughput);
-   278	/* Latency across the UniPro link from APBridge's perspective */
-   279	gb_loopback_stats_attrs(apbridge_unipro_latency);
-   280	/* Firmware induced overhead in the GPBridge */
-   281	gb_loopback_stats_attrs(gbphy_firmware_latency);
-   282	
-   283	/* Number of errors encountered during loop */
-   284	gb_loopback_ro_attr(error);
-   285	/* Number of requests successfully completed async */
-   286	gb_loopback_ro_attr(requests_completed);
-   287	/* Number of requests timed out async */
-   288	gb_loopback_ro_attr(requests_timedout);
-   289	/* Timeout minimum in useconds */
-   290	gb_loopback_ro_attr(timeout_min);
-   291	/* Timeout minimum in useconds */
-   292	gb_loopback_ro_attr(timeout_max);
-   293	
-   294	/*
-   295	 * Type of loopback message to send based on protocol type definitions
-   296	 * 0 => Don't send message
-   297	 * 2 => Send ping message continuously (message without payload)
-   298	 * 3 => Send transfer message continuously (message with payload,
-   299	 *					   payload returned in response)
-   300	 * 4 => Send a sink message (message with payload, no payload in response)
-   301	 */
-   302	gb_dev_loopback_rw_attr(type, d);
-   303	/* Size of transfer message payload: 0-4096 bytes */
-   304	gb_dev_loopback_rw_attr(size, u);
-   305	/* Time to wait between two messages: 0-1000 ms */
-   306	gb_dev_loopback_rw_attr(us_wait, d);
-   307	/* Maximum iterations for a given operation: 1-(2^32-1), 0 implies infinite */
-   308	gb_dev_loopback_rw_attr(iteration_max, u);
-   309	/* The current index of the for (i = 0; i < iteration_max; i++) loop */
-   310	gb_dev_loopback_ro_attr(iteration_count, false);
-   311	/* A flag to indicate synchronous or asynchronous operations */
-   312	gb_dev_loopback_rw_attr(async, u);
-   313	/* Timeout of an individual asynchronous request */
-   314	gb_dev_loopback_rw_attr(timeout, u);
-   315	/* Maximum number of in-flight operations before back-off */
-   316	gb_dev_loopback_rw_attr(outstanding_operations_max, u);
-   317	
-   318	static struct attribute *loopback_attrs[] = {
- > 319		&dev_attr_latency_min.attr,
- > 320		&dev_attr_latency_max.attr,
- > 321		&dev_attr_latency_avg.attr,
- > 322		&dev_attr_requests_per_second_min.attr,
- > 323		&dev_attr_requests_per_second_max.attr,
- > 324		&dev_attr_requests_per_second_avg.attr,
- > 325		&dev_attr_throughput_min.attr,
- > 326		&dev_attr_throughput_max.attr,
- > 327		&dev_attr_throughput_avg.attr,
- > 328		&dev_attr_apbridge_unipro_latency_min.attr,
- > 329		&dev_attr_apbridge_unipro_latency_max.attr,
- > 330		&dev_attr_apbridge_unipro_latency_avg.attr,
- > 331		&dev_attr_gbphy_firmware_latency_min.attr,
- > 332		&dev_attr_gbphy_firmware_latency_max.attr,
- > 333		&dev_attr_gbphy_firmware_latency_avg.attr,
-   334		&dev_attr_type.attr,
-   335		&dev_attr_size.attr,
-   336		&dev_attr_us_wait.attr,
-   337		&dev_attr_iteration_count.attr,
-   338		&dev_attr_iteration_max.attr,
-   339		&dev_attr_async.attr,
-   340		&dev_attr_error.attr,
-   341		&dev_attr_requests_completed.attr,
-   342		&dev_attr_requests_timedout.attr,
-   343		&dev_attr_timeout.attr,
-   344		&dev_attr_outstanding_operations_max.attr,
-   345		&dev_attr_timeout_min.attr,
-   346		&dev_attr_timeout_max.attr,
-   347		NULL,
-   348	};
-   349	ATTRIBUTE_GROUPS(loopback);
-   350	
+It is based on the idea of the userspace programs in which I
+always relinquish memory on the heap instead of relying in just
+exit(). (This also allows greater flexibility with signals,
+but that is OT now.)
+
+If this is bound not to cause any problems with TPMs or vTMPs
+on the virtual machines, maybe it's a non-issue.
+
+> I appreciate your desire to help, and I want to thank you for your
+> patch and the effort behind it, but I don't believe the kobject memory
+> leak you saw at kernel shutdown was a real issue (it was only "leaked"
+> because the system was shutting down) and I'm not sure the current
+> behavior is something we want to change in the near future.
+
+Yes, I was worried about the leaks that would be destroyed
+all at once or in an undefined order.
+
+I have learned about the devm_kalloc() family of functions and
+how it is not used here.
+
+Thank you for considering the patchset at such short notice
+and of course I see more experienced developer's ideas dismissed,
+so I do not take it with disappointment.
+
+I was already aware that there is currently no mechanism to call
+this .release() callback or hook, how should we call it.
+
+Thank you very much for your review.
+
+As I said, I was worried that it could cause problems, in particular
+with vTMPs I've read about, randomness for security, nonces that
+may not repeat even on virtual server rollbacks or restores to
+bare metal and other RFC 4086 considerations which are not even
+completely clear to me, as I do not consider myself an expert
+in either field.
+
+I am a believer of proper cleanups, and this will not change, but
+you have greater experience and knowledge and might find such
+mechanism impractical, which I respect with Vulcan aspired logic
+and respect :-)
+
+This patch attempt gave me a great brainstorming on how the Linux
+drivers work, and I am content with that result. Code of Conduct
+warned that newbie kernel developers get ideas on how things should
+be done that are not accepted.
+
+Thank you once again, and really have a nice and blessed weekend!
+
+Best regards,
+Mirsad
+
+> --
+> paul-moore.com
 
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+ 
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
