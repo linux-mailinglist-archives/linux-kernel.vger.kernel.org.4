@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 926296B56CD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:40:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2B236B56D1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229952AbjCKAjz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:39:55 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S229965AbjCKAkA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:40:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229852AbjCKAju (ORCPT
+        with ESMTP id S229919AbjCKAjw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:39:50 -0500
-Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BD33117231;
-        Fri, 10 Mar 2023 16:39:48 -0800 (PST)
-Received: by mail-qt1-x836.google.com with SMTP id l18so7765898qtp.1;
-        Fri, 10 Mar 2023 16:39:48 -0800 (PST)
+        Fri, 10 Mar 2023 19:39:52 -0500
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E75F711F61B;
+        Fri, 10 Mar 2023 16:39:51 -0800 (PST)
+Received: by mail-qt1-x82b.google.com with SMTP id s12so7688809qtq.11;
+        Fri, 10 Mar 2023 16:39:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678495187;
+        d=gmail.com; s=20210112; t=1678495191;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rkrJtBKgdz9IacsmBdIB0+uEq5L3ahKPJNy4SS1btTU=;
-        b=Nf4Q5bnoJ84mo6BVRKtM3OfYWI13uwKOw3uMc7wGcqg/YFrF0EDMb2Tc70a6r1fzZc
-         Vir55wXtNRFzDTHoKksEBE1mT4Whc3rUCB6/a0qYsGVSTiZtZ1TEhI9YVuoSUTQOWpIZ
-         wkyLW5TGMgj2c/+6vz/qhI3xMN7MdJyqYQkUUjkArXHvmslWI6L/Xb589+yt2NqJ62aO
-         kbpLaP4c6yERZu1yQsMLtGpH/zEzYZeuNWWDxxsC3FvHSaQbKpvi5zFCrlyV+6tabjRH
-         vcZbcVon48Fjz/56NthcczU09cWdHbhFtoufMuJ6CShKWnTHB9IBjP7QRZcPwiJtc50q
-         dKRQ==
+        bh=21XWFqZKFhrw7IqRe7YpT4TCzw//2tpfFn1az0nze7A=;
+        b=H0fDFIKrE+i4ootQK/33BZNQZIOFe5T2gXr49E41EzK7+v+nPMZu5ce7GQgvufox1r
+         xofMSL1BtQS45kz/SyzPCOerPL6qsYRi0a6twooP6fAdZu2ZRX08kGWmrLZ7Z0zZSTZP
+         q+UEKBCQTwBEJR6r7gXIwUeRd0wTaMWuxQ3AU3IKjs4i6DE3h4QiwCXwnyrg4hJfR9Fa
+         OqS3WXoZcjVB0XhOmr7mqX1611c4J16sjcN1h+t7gR00matvjm9r+0NLXtlYAE//yMF/
+         M0fUUbTDdeXlerycqwdx/xfIlphKCqHxxm1rGe7SLvvTxgx6cxy15SvFrAbj2TA/Q5VH
+         y60A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678495187;
+        d=1e100.net; s=20210112; t=1678495191;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rkrJtBKgdz9IacsmBdIB0+uEq5L3ahKPJNy4SS1btTU=;
-        b=y5cQzyzpAV1EQEau6I68uVvLSS0vdf4wVG4lpLxVfnJP3v1Auc7ler5dL0mUZFwQmC
-         ApgPfzi4chvx8FV1kBtn9SNkAcw4KvnL91zHAG+6zkdum3XgA0lLwU7Qwtvmf01ZYQHK
-         PyqYJGy5yQtBOhmx3c8CP5j8yzb86MMM2ejGlAwwHIgnwIy23vJ7IIYpEH15NOl93FEu
-         HB8RPKBgMfk0EEHhGaU0k9v2PsljQyRqqHUOKA465IJXj9unN0zr6Pr0Wvsul56nP2Zl
-         I92o4MC0rq95WLnoKByAbIjmb8OUQkeSVNN/aXjeYnQ4Zu/kAtR/6WqLLoys2HdHMgO2
-         EcxA==
-X-Gm-Message-State: AO0yUKUwI32qxvpqvfx/vTaaicphH9vqRm1Goi+yB0xy8cQVjjSerT2U
-        2vb4bzH7kf9vdozGpdG5syE=
-X-Google-Smtp-Source: AK7set/Bpp6yGdrFeMDx50dFU90Wr4xltqSMpKJQRscRiht85efTCEQ33g7uJ6Dpxtrzuwm9BJqBkA==
-X-Received: by 2002:a05:622a:244:b0:3bd:1bbc:8d8e with SMTP id c4-20020a05622a024400b003bd1bbc8d8emr10459853qtx.0.1678495187484;
-        Fri, 10 Mar 2023 16:39:47 -0800 (PST)
+        bh=21XWFqZKFhrw7IqRe7YpT4TCzw//2tpfFn1az0nze7A=;
+        b=B7V3CrQcSemazJN7jDm84LMKUc3/gAAK/Oc2xIi33syeFgJCvrnhxx5Rgs9ZIlBCD1
+         Xt/gzA94w6PBN8z9x6DbMg9RRNeg7qr42Ead6FoFd6s6lh9Exh67jHRIcfpkqBidrQL/
+         xFxPjntuGYp/RJ+fmC8Iq4FZ27QNC+B/Shm9iDB5Gg8c+tuc29A6jMZyqXaydLqj52Eu
+         2fZDq6EKynrLDiPJMsA6uJPmFy+hPRo66/KHz/I1w8gEj7Y3ic6ubPDff1wYBd8QcWsB
+         XIJksaAIL8FoHQ4YsGclVXDFnGCxxTLOUAbEfLmjHtSIC8VoWSTVbZ6KKsNCr9jD82E8
+         5FNQ==
+X-Gm-Message-State: AO0yUKX8dT8woiYyit7f1wLQgIF0KX5BTQNcjjjedSTAap/ekZREF13z
+        MKLxs5KiR6YBqWDnOTP+LvU=
+X-Google-Smtp-Source: AK7set+uqKakBULmDoJ5Xr6lerX7tivt8yOC0pEZoZHG6hVLZ77mTu5fc8Qx1J0t8jZ7dQbCVw6tHQ==
+X-Received: by 2002:ac8:5ad5:0:b0:3bf:a3fc:c70a with SMTP id d21-20020ac85ad5000000b003bfa3fcc70amr46750078qtd.28.1678495191044;
+        Fri, 10 Mar 2023 16:39:51 -0800 (PST)
 Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a5-20020ac84345000000b003bfaff2a6b9sm868874qtn.10.2023.03.10.16.39.44
+        by smtp.gmail.com with ESMTPSA id a5-20020ac84345000000b003bfaff2a6b9sm868874qtn.10.2023.03.10.16.39.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 16:39:47 -0800 (PST)
+        Fri, 10 Mar 2023 16:39:50 -0800 (PST)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
@@ -78,9 +78,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
         "Georgi Djakov" <quic_c_gdjako@quicinc.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH v4 1/9] lib/show_mem.c: display MovableOnly
-Date:   Fri, 10 Mar 2023 16:38:47 -0800
-Message-Id: <20230311003855.645684-2-opendmb@gmail.com>
+Subject: [PATCH v4 2/9] mm/page_alloc: calculate node_spanned_pages from pfns
+Date:   Fri, 10 Mar 2023 16:38:48 -0800
+Message-Id: <20230311003855.645684-3-opendmb@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230311003855.645684-1-opendmb@gmail.com>
 References: <20230311003855.645684-1-opendmb@gmail.com>
@@ -96,40 +96,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The comment for commit c78e93630d15 ("mm: do not walk all of
-system memory during show_mem") indicates it "also corrects the
-reporting of HighMem as HighMem/MovableOnly as ZONE_MOVABLE has
-similar problems to HighMem with respect to lowmem/highmem
-exhaustion."
+Since the start and end pfns of the node are passed as arguments
+to calculate_node_totalpages() they might as well be used to
+specify the node_spanned_pages value for the node rather than
+accumulating the spans of member zones.
 
-Presuming the similar problems are with regard to the general
-exclusion of kernel allocations from either zone, I believe it
-makes sense to include all ZONE_MOVABLE memory even on systems
-without HighMem.
+This prevents the need for additional adjustments if zones are
+allowed to overlap.
 
-To the extent that this was the intent of the original commit I
-have included a "Fixes" tag, but it seems unnecessary to submit
-to linux-stable.
+The realtotalpages name is reverted to just totalpages to reduce
+the burden of supporting multiple realities.
 
-Fixes: c78e93630d15 ("mm: do not walk all of system memory during show_mem")
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- lib/show_mem.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ mm/page_alloc.c | 11 +++++------
+ 1 file changed, 5 insertions(+), 6 deletions(-)
 
-diff --git a/lib/show_mem.c b/lib/show_mem.c
-index 0d7585cde2a6..6a632b0c35c5 100644
---- a/lib/show_mem.c
-+++ b/lib/show_mem.c
-@@ -27,7 +27,7 @@ void __show_mem(unsigned int filter, nodemask_t *nodemask, int max_zone_idx)
- 			total += zone->present_pages;
- 			reserved += zone->present_pages - zone_managed_pages(zone);
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index ac1fc986af44..b1952f86ab6d 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -7586,7 +7586,7 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ 						unsigned long node_start_pfn,
+ 						unsigned long node_end_pfn)
+ {
+-	unsigned long realtotalpages = 0, totalpages = 0;
++	unsigned long totalpages = 0;
+ 	enum zone_type i;
  
--			if (is_highmem_idx(zoneid))
-+			if (zoneid == ZONE_MOVABLE || is_highmem_idx(zoneid))
- 				highmem += zone->present_pages;
- 		}
+ 	for (i = 0; i < MAX_NR_ZONES; i++) {
+@@ -7617,13 +7617,12 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ 		zone->present_early_pages = real_size;
+ #endif
+ 
+-		totalpages += size;
+-		realtotalpages += real_size;
++		totalpages += real_size;
  	}
+ 
+-	pgdat->node_spanned_pages = totalpages;
+-	pgdat->node_present_pages = realtotalpages;
+-	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, realtotalpages);
++	pgdat->node_spanned_pages = node_end_pfn - node_start_pfn;
++	pgdat->node_present_pages = totalpages;
++	pr_debug("On node %d totalpages: %lu\n", pgdat->node_id, totalpages);
+ }
+ 
+ #ifndef CONFIG_SPARSEMEM
 -- 
 2.34.1
 
