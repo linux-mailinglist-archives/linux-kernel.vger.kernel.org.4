@@ -2,208 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63ED6B5DB6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E13A6B5DBC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:17:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbjCKQQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:16:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54744 "EHLO
+        id S230486AbjCKQRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:17:16 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjCKQQA (ORCPT
+        with ESMTP id S230142AbjCKQRN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:16:00 -0500
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F70E64224;
-        Sat, 11 Mar 2023 08:15:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678551359; x=1710087359;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=aHPHU16CD9i0eyQTn/doZEmUXEpScZhw8p2k0kirEyo=;
-  b=VrF4YRqhRXrxgnUSeIoZ2Wd7UlgITknlFAXpwyK76C5UMm7OiUA3FmuR
-   4/t0jq3syLccoFeUW5r8lOSyMWimLNa8x+9+cIpW11qS8F3heluwImMW5
-   gJtlrd2IF/Nj7VKApMpnlkLbfg98bFpX5a4vXygzQtjVWl34VWDPF+ONl
-   7UesdXl3VXosT3nGhI671U3iig9AUT5qfW+UaNoZWd3W7RhSQY79oDZ39
-   jBrKFK7ZRt8Q520pE+CkJdhIej/F1VsObEcIUm37w+ywtpQf4q7ZiPoKy
-   kv5Zuznu5LyE5+kCZbNrmiVRQhukYebPMiYvXlu/RHjnb2t9ZlUDKsBs5
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="423183218"
-X-IronPort-AV: E=Sophos;i="5.98,252,1673942400"; 
-   d="scan'208";a="423183218"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 08:15:58 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628146557"
-X-IronPort-AV: E=Sophos;i="5.98,252,1673942400"; 
-   d="scan'208";a="628146557"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2023 08:15:56 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pb1sx-0004gP-38;
-        Sat, 11 Mar 2023 16:15:55 +0000
-Date:   Sun, 12 Mar 2023 00:15:44 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Rob Herring <robh@kernel.org>, Michal Simek <monstr@monstr.eu>
-Cc:     oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: xilinx: Use of_property_present() for testing DT
- property presence
-Message-ID: <202303120017.BIw01Y21-lkp@intel.com>
-References: <20230310144725.1545315-1-robh@kernel.org>
+        Sat, 11 Mar 2023 11:17:13 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358102A6DC
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:17:12 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32BGGi06006833
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Mar 2023 11:16:45 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678551406; bh=pk7UJBZS0pGO5djHQvl6UDLseuYPhzAM+aRfDFea3mY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=ojGDog63lbcLBbNtVq7le5fyHKms9oOWTDO4oSVK8AKNS6zOLnVgMsVwDPn9ARvHJ
+         0pezOmtlmVrjSaqLEMvjCAh4k4l5ZwMtLBlF/XhK5idJVIs3h881Ktw1OM66OVOipA
+         Ba9t2BEYTNDxEDBHhc0yH4LseE/Ej3evoXgUz1+nyQNxv5LqkfXs5Mv74ok1NSgsn9
+         HQWreuksic4PHmm+8n/2kl9cHR6zT38D8Q6w1zkB/9OA1ZEVczJw706IXrKUOTfkPj
+         WhHAbzv8fzoa1xAYxJOFrEzYEmAzI1WSXwH0KP91vz8+4j0LTQD9kAGw+5fPBn9Dry
+         6vo0GSLFaSl1g==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 5EC5315C45B9; Sat, 11 Mar 2023 11:16:44 -0500 (EST)
+Date:   Sat, 11 Mar 2023 11:16:44 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Sasha Levin <sashal@kernel.org>
+Cc:     Matthew Wilcox <willy@infradead.org>,
+        Eric Biggers <ebiggers@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <20230311161644.GH860405@mit.edu>
+References: <Y/rbGxq8oAEsW28j@sol.localdomain>
+ <Y/rufenGRpoJVXZr@sol.localdomain>
+ <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+ <Y/y70zJj4kjOVfXa@sashalap>
+ <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310144725.1545315-1-robh@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZAyK0KM6JmVOvQWy@sashalap>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
+On Sat, Mar 11, 2023 at 09:06:08AM -0500, Sasha Levin wrote:
+> 
+> I suppose that if I had a way to know if a certain a commit is part of a
+> series, I could either take all of it or none of it, but I don't think I
+> have a way of doing that by looking at a commit in Linus' tree
+> (suggestions welcome, I'm happy to implement them).
 
-I love your patch! Yet something to improve:
+Well, this is why I think it is a good idea to have a link to the
+patch series in lore.  I know Linus doesn't like it, claiming it
+doesn't add any value, but I have to disagree.  It adds two bits of
+value.
 
-[auto build test ERROR on xilinx-xlnx/master]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+First, if there is any discussion on the review of the patch before it
+goes in, the lore link gives you access to that --- and if people have
+a back-lick in the cover letter of version N to the cover letter of
+version N-1, it allows someone doing code archeology to find all of
+the discussions around the patch series in the lore archives.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rob-Herring/soc-xilinx-Use-of_property_present-for-testing-DT-property-presence/20230310-225437
-base:   https://github.com/Xilinx/linux-xlnx master
-patch link:    https://lore.kernel.org/r/20230310144725.1545315-1-robh%40kernel.org
-patch subject: [PATCH] soc: xilinx: Use of_property_present() for testing DT property presence
-config: arm64-allyesconfig (https://download.01.org/0day-ci/archive/20230312/202303120017.BIw01Y21-lkp@intel.com/config)
-compiler: aarch64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/7d21b118deba11d338baf0365e962a8889f3ac68
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Rob-Herring/soc-xilinx-Use-of_property_present-for-testing-DT-property-presence/20230310-225437
-        git checkout 7d21b118deba11d338baf0365e962a8889f3ac68
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/soc/
+Secondly, the lore link will allow you to figure out whether or not
+the patch is part of a series; b4 can figure this out by looking at
+the in-reply-to headers, and lore will chain the patch series
+together, so if the commit contains a lore link to the patch, the
+AUTOSEL script could use that to find out whether the patch is part of
+the series.
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303120017.BIw01Y21-lkp@intel.com/
+And this is really easy to do.  All you need is the following in
+.git/hooks/applypatch-msg:
 
-All errors (new ones prefixed by >>):
+#!/bin/sh
+# For .git/hooks/applypatch-msg
+#
+. git-sh-setup
+perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link: https://lore.kernel.org/r/$1|g;' "$1"
+test -x "$GIT_DIR/hooks/commit-msg" &&
+	exec "$GIT_DIR/hooks/commit-msg" ${1+"$@"}
+:
 
-   drivers/soc/xilinx/zynqmp_power.c: In function 'zynqmp_pm_probe':
->> drivers/soc/xilinx/zynqmp_power.c:221:20: error: implicit declaration of function 'of_property_present'; did you mean 'fwnode_property_present'? [-Werror=implicit-function-declaration]
-     221 |         } else if (of_property_present(pdev->dev.of_node, "mboxes")) {
-         |                    ^~~~~~~~~~~~~~~~~~~
-         |                    fwnode_property_present
-   cc1: some warnings being treated as errors
+Cheers,
 
+						- Ted
 
-vim +221 drivers/soc/xilinx/zynqmp_power.c
+P.S.  There was a recent patch series where I noticed that I would be
+screwed if AUTOSEL would only take patch 2/2 and not patch 1/2.  I
+dealt with that though by adding an explicit "Cc: stable@kernel.org".
+So that's the other way to avoid breakage; if people were universally
+careful about adding "Cc: stable@kernel.org" tags, then we wouldn't
+need AUTOSEL at all.
 
-   183	
-   184	static int zynqmp_pm_probe(struct platform_device *pdev)
-   185	{
-   186		int ret, irq;
-   187		u32 pm_api_version;
-   188		struct mbox_client *client;
-   189	
-   190		zynqmp_pm_get_api_version(&pm_api_version);
-   191	
-   192		/* Check PM API version number */
-   193		if (pm_api_version < ZYNQMP_PM_VERSION)
-   194			return -ENODEV;
-   195	
-   196		/*
-   197		 * First try to use Xilinx Event Manager by registering suspend_event_callback
-   198		 * for suspend/shutdown event.
-   199		 * If xlnx_register_event() returns -EACCES (Xilinx Event Manager
-   200		 * is not available to use) or -ENODEV(Xilinx Event Manager not compiled),
-   201		 * then use ipi-mailbox or interrupt method.
-   202		 */
-   203		ret = xlnx_register_event(PM_INIT_SUSPEND_CB, 0, 0, false,
-   204					  suspend_event_callback, NULL);
-   205		if (!ret) {
-   206			zynqmp_pm_init_suspend_work = devm_kzalloc(&pdev->dev,
-   207								   sizeof(struct zynqmp_pm_work_struct),
-   208								   GFP_KERNEL);
-   209			if (!zynqmp_pm_init_suspend_work) {
-   210				xlnx_unregister_event(PM_INIT_SUSPEND_CB, 0, 0,
-   211						      suspend_event_callback, NULL);
-   212				return -ENOMEM;
-   213			}
-   214			event_registered = true;
-   215	
-   216			INIT_WORK(&zynqmp_pm_init_suspend_work->callback_work,
-   217				  zynqmp_pm_init_suspend_work_fn);
-   218		} else if (ret != -EACCES && ret != -ENODEV) {
-   219			dev_err(&pdev->dev, "Failed to Register with Xilinx Event manager %d\n", ret);
-   220			return ret;
- > 221		} else if (of_property_present(pdev->dev.of_node, "mboxes")) {
-   222			zynqmp_pm_init_suspend_work =
-   223				devm_kzalloc(&pdev->dev,
-   224					     sizeof(struct zynqmp_pm_work_struct),
-   225					     GFP_KERNEL);
-   226			if (!zynqmp_pm_init_suspend_work)
-   227				return -ENOMEM;
-   228	
-   229			INIT_WORK(&zynqmp_pm_init_suspend_work->callback_work,
-   230				  zynqmp_pm_init_suspend_work_fn);
-   231			client = devm_kzalloc(&pdev->dev, sizeof(*client), GFP_KERNEL);
-   232			if (!client)
-   233				return -ENOMEM;
-   234	
-   235			client->dev = &pdev->dev;
-   236			client->rx_callback = ipi_receive_callback;
-   237	
-   238			rx_chan = mbox_request_channel_byname(client, "rx");
-   239			if (IS_ERR(rx_chan)) {
-   240				dev_err(&pdev->dev, "Failed to request rx channel\n");
-   241				return PTR_ERR(rx_chan);
-   242			}
-   243		} else if (of_property_present(pdev->dev.of_node, "interrupts")) {
-   244			irq = platform_get_irq(pdev, 0);
-   245			if (irq <= 0)
-   246				return -ENXIO;
-   247	
-   248			ret = devm_request_threaded_irq(&pdev->dev, irq, NULL,
-   249							zynqmp_pm_isr,
-   250							IRQF_NO_SUSPEND | IRQF_ONESHOT,
-   251							dev_name(&pdev->dev),
-   252							&pdev->dev);
-   253			if (ret) {
-   254				dev_err(&pdev->dev, "devm_request_threaded_irq '%d' failed with %d\n",
-   255					irq, ret);
-   256				return ret;
-   257			}
-   258		} else {
-   259			dev_err(&pdev->dev, "Required property not found in DT node\n");
-   260			return -ENOENT;
-   261		}
-   262	
-   263		ret = sysfs_create_file(&pdev->dev.kobj, &dev_attr_suspend_mode.attr);
-   264		if (ret) {
-   265			if (event_registered) {
-   266				xlnx_unregister_event(PM_INIT_SUSPEND_CB, 0, 0, suspend_event_callback,
-   267						      NULL);
-   268				event_registered = false;
-   269			}
-   270			dev_err(&pdev->dev, "unable to create sysfs interface\n");
-   271			return ret;
-   272		}
-   273	
-   274		return 0;
-   275	}
-   276	
+And this is another place where I break with commonly received wisdom
+about "Thou Shalt Never, Never Rewind The Git Branch".  Personally, if
+I find that I missed a Cc: stable tag, rewinding the branch to add
+edit the trailers is *far* better a tradeoff than adhering to some
+religious rule about never rewinding git branches.  Of course, I can
+get away with that since I don't have people basing their branches on
+my branch.  But I've seen people who will self-righteously proclaim
+non-rewinding git branches as the One True Way to do git, and I
+profoundly disagree with that point of view.
 
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
