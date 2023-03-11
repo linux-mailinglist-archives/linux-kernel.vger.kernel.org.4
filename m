@@ -2,98 +2,465 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 688876B5A3A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 777916B5A35
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:43:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjCKJrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 04:47:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37224 "EHLO
+        id S230303AbjCKJnT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 04:43:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55064 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCKJrk (ORCPT
+        with ESMTP id S231261AbjCKJmw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 04:47:40 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42A6820A2A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 01:47:39 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id er25so2090871edb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 01:47:39 -0800 (PST)
+        Sat, 11 Mar 2023 04:42:52 -0500
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 545FB13F56F;
+        Sat, 11 Mar 2023 01:42:27 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so5737925wms.0;
+        Sat, 11 Mar 2023 01:42:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678528058;
+        d=gmail.com; s=20210112; t=1678527745;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=QeSYc/xPF4GfQny8J1y07XHI4oidFkVFmRDBc8YwiVI=;
-        b=f02r/i46OW1rUlkVA8qV4GzLGwjebIXg4FFSOW8RPu7jh7Vz0RVKCEiocwOAAg2kYi
-         IVhDdwEdpruwMIhT57wSRNAWc55joEAI1s2pBaNWVjg0iqXlXSqztDk/VVxIU7YImI+u
-         5Wp+Ot3/TlxdkheGc8YAAWHvWs5iOxOeVvvzvb61P0EGXyJpAO8dkvZ3XnW5nKGf22xs
-         gHGldiGvPgrr9fpGkN/JTeXz7S//YxGhZNpvu60EDQcvSZLul8Xuk6FmmIfynmzlgZnj
-         Ys4+XUEbiJ1imksAwvkhfFBUMY3qYC3WNsm5xHdfMYeCk8rNV3fCrFi9xm18SyEiVa34
-         dVEg==
+        bh=icwaBQpU3isAjPs0PsIO348TEf2ba5GwNw/8dGnNFhE=;
+        b=qUkJFQhX+1tkimfn/9AuCcQEbxUco93VmE7zMDsKgjC4YW3RnDGfj4S15KCBCIAlJl
+         PW5oY8M+rOQzZWBFfBI1cCrmvXzjcX+49F5nPPc8fcLZr+K1TrZpuOa1ROacTiTc7CRu
+         c3ebxVPL70gXWLx93TOr2ya44yDeGWpMgTI4fyE1Gz/ZKQV8/pq1o7Tp/iA/Qau9kJ62
+         IbMv8uYRQdJJ5saj3+vKeCkVSUmzHSRZPglA48iMVeDBlVKaaXP3jVjlFwv/2XcI70v8
+         v6boWVSXc6RQoaTRrMMSpUwvIVHNJjvEb7BG6YzJRrSL+PzUz7h6QkM1MDJlM4xjXsSZ
+         zRRQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678528058;
+        d=1e100.net; s=20210112; t=1678527745;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=QeSYc/xPF4GfQny8J1y07XHI4oidFkVFmRDBc8YwiVI=;
-        b=QmhzWUVsUwZWhAgZxl5HA1ELoVnZz+o0zzm3GRJYAS9kB8gUCHfVGdwBUmdbN/ON8q
-         Fo7zKpJGE4KWHyEeFKp4ViQWkeYJa7wmHZhekf22iiNW/n2SEHlSLgpqiGbS56j6Eu7N
-         2XDPmK4InHNnbTm381R9omg1/EVwrHbMsjOiOeIqyFCT2h7oYfdkX6+Jch5iDgsSzZEh
-         yk092hSvGjP1ZoaY8pQgtBrSDiz5jdKl/sT+SBfIcm4BL7pzMVFkbT5JDKkuErx5zMr6
-         vnR81osm/kffXQihMzRkf2BtcqKnrDSDzcVQ5+pKcpfFXAGjBrf3OHEHaRCJg8E1BxvN
-         us4w==
-X-Gm-Message-State: AO0yUKX91hRqJdk4sI0YpFcHr4D5FQW86CXEYLojdtTRlUHQv4vHw1EJ
-        u88z6TgM9i/l2Azah/U+q5uvKhn3wpAyG32fI98=
-X-Google-Smtp-Source: AK7set/xNglzq3mHMOtj+I5WM2DRtAx92Y4ODYnF2xF0FnlDkK+vnWoUAMjxZvFIc+dZW8gC+Ajdsg==
-X-Received: by 2002:a17:906:30d3:b0:8e4:96c4:94a with SMTP id b19-20020a17090630d300b008e496c4094amr27286115ejb.56.1678528057764;
-        Sat, 11 Mar 2023 01:47:37 -0800 (PST)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
-        by smtp.gmail.com with ESMTPSA id u21-20020a509515000000b004bdcc480c41sm952585eda.96.2023.03.11.01.47.36
+        bh=icwaBQpU3isAjPs0PsIO348TEf2ba5GwNw/8dGnNFhE=;
+        b=eTwfKIdRel7sGFxwJb0cxuGtXt7GcmQx1l9QDSTtFC3P7bWR+C/GTwcuKqI8Zq47Dy
+         N5BuGF/gs4k6JTH850N7LDLRE2rmdhDvoslmNPKJRju07SYGynzGda6lEew4hL2RUDMK
+         mG1iD5xLGM7/vL2ZEZ3H7lZccmREUuRPv8i6mEs4xx/7qrpGOWhqfW1VVFRXf3Si7I/o
+         LyYk6hv84kD7MwbP/jFfYVbsQHpgvOQHo26Q0H9Dp4pcRe0W1GjYxVf10BACCspQWUJ6
+         TcE6ojZVVr6sOwWCVJfVYvLY1GwxNN8lgj8vQG00QhdNhWQYfDzTll7Crp+AXzyyhhJw
+         a3jQ==
+X-Gm-Message-State: AO0yUKU365xVOF/aKun09jMaF1/bcrHH7/t0hA1dZW8y2OfgSgTMbTMJ
+        4DKdzH+JFDn/sqMMwmlYB4A=
+X-Google-Smtp-Source: AK7set8k7bhbF79MpPFv+eE9yrV6aL1T97VvBm8tOT4/Th3ZCSSxTe11ibLoA7OG+fjyU9tPBeaSwA==
+X-Received: by 2002:a05:600c:1c96:b0:3eb:3300:1d13 with SMTP id k22-20020a05600c1c9600b003eb33001d13mr5135569wms.14.1678527745499;
+        Sat, 11 Mar 2023 01:42:25 -0800 (PST)
+Received: from mars.. ([2a02:168:6806:0:c51d:786:86a8:fd19])
+        by smtp.gmail.com with ESMTPSA id n19-20020a1c7213000000b003eb39e60ec9sm2275043wmc.36.2023.03.11.01.42.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 01:47:37 -0800 (PST)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Tony Lindgren <tony@atomide.com>, Keerthy <j-keerthy@ti.com>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] rtc: omap: include header for omap_rtc_power_off_program prototype
-Date:   Sat, 11 Mar 2023 10:40:21 +0100
-Message-Id: <20230311094021.79730-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sat, 11 Mar 2023 01:42:25 -0800 (PST)
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Klaus Kudielka <klaus.kudielka@gmail.com>
+Subject: [PATCH 1/2] net: dsa: mv88e6xxx: re-order functions
+Date:   Sat, 11 Mar 2023 10:41:40 +0100
+Message-Id: <20230311094141.34578-1-klaus.kudielka@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Non-static functions should have a prototype:
+Move mv88e6xxx_setup() below mv88e6xxx_mdios_register(), so that we are
+able to call the latter one from here. Do the same thing for the
+inverse functions.
 
-  drivers/rtc/rtc-omap.c:410:5: error: no previous prototype for ‘omap_rtc_power_off_program’ [-Werror=missing-prototypes]
-
-Fixes: 6256f7f7f217 ("rtc: OMAP: Add support for rtc-only mode")
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
 ---
- drivers/rtc/rtc-omap.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/net/dsa/mv88e6xxx/chip.c | 358 +++++++++++++++----------------
+ 1 file changed, 179 insertions(+), 179 deletions(-)
 
-diff --git a/drivers/rtc/rtc-omap.c b/drivers/rtc/rtc-omap.c
-index 4d4f3b1a7309..73634a3ccfd3 100644
---- a/drivers/rtc/rtc-omap.c
-+++ b/drivers/rtc/rtc-omap.c
-@@ -25,6 +25,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/rtc.h>
-+#include <linux/rtc/rtc-omap.h>
+diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
+index 0a5d6c7bb1..496015baac 100644
+--- a/drivers/net/dsa/mv88e6xxx/chip.c
++++ b/drivers/net/dsa/mv88e6xxx/chip.c
+@@ -3672,185 +3672,6 @@ static int mv88e6390_setup_errata(struct mv88e6xxx_chip *chip)
+ 	return mv88e6xxx_software_reset(chip);
+ }
  
- /*
-  * The OMAP RTC is a year/month/day/hours/minutes/seconds BCD clock
+-static void mv88e6xxx_teardown(struct dsa_switch *ds)
+-{
+-	mv88e6xxx_teardown_devlink_params(ds);
+-	dsa_devlink_resources_unregister(ds);
+-	mv88e6xxx_teardown_devlink_regions_global(ds);
+-}
+-
+-static int mv88e6xxx_setup(struct dsa_switch *ds)
+-{
+-	struct mv88e6xxx_chip *chip = ds->priv;
+-	u8 cmode;
+-	int err;
+-	int i;
+-
+-	chip->ds = ds;
+-	ds->slave_mii_bus = mv88e6xxx_default_mdio_bus(chip);
+-
+-	/* Since virtual bridges are mapped in the PVT, the number we support
+-	 * depends on the physical switch topology. We need to let DSA figure
+-	 * that out and therefore we cannot set this at dsa_register_switch()
+-	 * time.
+-	 */
+-	if (mv88e6xxx_has_pvt(chip))
+-		ds->max_num_bridges = MV88E6XXX_MAX_PVT_SWITCHES -
+-				      ds->dst->last_switch - 1;
+-
+-	mv88e6xxx_reg_lock(chip);
+-
+-	if (chip->info->ops->setup_errata) {
+-		err = chip->info->ops->setup_errata(chip);
+-		if (err)
+-			goto unlock;
+-	}
+-
+-	/* Cache the cmode of each port. */
+-	for (i = 0; i < mv88e6xxx_num_ports(chip); i++) {
+-		if (chip->info->ops->port_get_cmode) {
+-			err = chip->info->ops->port_get_cmode(chip, i, &cmode);
+-			if (err)
+-				goto unlock;
+-
+-			chip->ports[i].cmode = cmode;
+-		}
+-	}
+-
+-	err = mv88e6xxx_vtu_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	/* Must be called after mv88e6xxx_vtu_setup (which flushes the
+-	 * VTU, thereby also flushing the STU).
+-	 */
+-	err = mv88e6xxx_stu_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	/* Setup Switch Port Registers */
+-	for (i = 0; i < mv88e6xxx_num_ports(chip); i++) {
+-		if (dsa_is_unused_port(ds, i))
+-			continue;
+-
+-		/* Prevent the use of an invalid port. */
+-		if (mv88e6xxx_is_invalid_port(chip, i)) {
+-			dev_err(chip->dev, "port %d is invalid\n", i);
+-			err = -EINVAL;
+-			goto unlock;
+-		}
+-
+-		err = mv88e6xxx_setup_port(chip, i);
+-		if (err)
+-			goto unlock;
+-	}
+-
+-	err = mv88e6xxx_irl_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_mac_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_phy_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_pvt_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_atu_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_broadcast_setup(chip, 0);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_pot_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_rmu_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_rsvd2cpu_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_trunk_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_devmap_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	err = mv88e6xxx_pri_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-	/* Setup PTP Hardware Clock and timestamping */
+-	if (chip->info->ptp_support) {
+-		err = mv88e6xxx_ptp_setup(chip);
+-		if (err)
+-			goto unlock;
+-
+-		err = mv88e6xxx_hwtstamp_setup(chip);
+-		if (err)
+-			goto unlock;
+-	}
+-
+-	err = mv88e6xxx_stats_setup(chip);
+-	if (err)
+-		goto unlock;
+-
+-unlock:
+-	mv88e6xxx_reg_unlock(chip);
+-
+-	if (err)
+-		return err;
+-
+-	/* Have to be called without holding the register lock, since
+-	 * they take the devlink lock, and we later take the locks in
+-	 * the reverse order when getting/setting parameters or
+-	 * resource occupancy.
+-	 */
+-	err = mv88e6xxx_setup_devlink_resources(ds);
+-	if (err)
+-		return err;
+-
+-	err = mv88e6xxx_setup_devlink_params(ds);
+-	if (err)
+-		goto out_resources;
+-
+-	err = mv88e6xxx_setup_devlink_regions_global(ds);
+-	if (err)
+-		goto out_params;
+-
+-	return 0;
+-
+-out_params:
+-	mv88e6xxx_teardown_devlink_params(ds);
+-out_resources:
+-	dsa_devlink_resources_unregister(ds);
+-
+-	return err;
+-}
+-
+-static int mv88e6xxx_port_setup(struct dsa_switch *ds, int port)
+-{
+-	return mv88e6xxx_setup_devlink_regions_port(ds, port);
+-}
+-
+-static void mv88e6xxx_port_teardown(struct dsa_switch *ds, int port)
+-{
+-	mv88e6xxx_teardown_devlink_regions_port(ds, port);
+-}
+-
+ /* prod_id for switch families which do not have a PHY model number */
+ static const u16 family_prod_id_table[] = {
+ 	[MV88E6XXX_FAMILY_6341] = MV88E6XXX_PORT_SWITCH_ID_PROD_6341,
+@@ -4054,6 +3875,185 @@ static int mv88e6xxx_mdios_register(struct mv88e6xxx_chip *chip,
+ 	return 0;
+ }
+ 
++static void mv88e6xxx_teardown(struct dsa_switch *ds)
++{
++	mv88e6xxx_teardown_devlink_params(ds);
++	dsa_devlink_resources_unregister(ds);
++	mv88e6xxx_teardown_devlink_regions_global(ds);
++}
++
++static int mv88e6xxx_setup(struct dsa_switch *ds)
++{
++	struct mv88e6xxx_chip *chip = ds->priv;
++	u8 cmode;
++	int err;
++	int i;
++
++	chip->ds = ds;
++	ds->slave_mii_bus = mv88e6xxx_default_mdio_bus(chip);
++
++	/* Since virtual bridges are mapped in the PVT, the number we support
++	 * depends on the physical switch topology. We need to let DSA figure
++	 * that out and therefore we cannot set this at dsa_register_switch()
++	 * time.
++	 */
++	if (mv88e6xxx_has_pvt(chip))
++		ds->max_num_bridges = MV88E6XXX_MAX_PVT_SWITCHES -
++				      ds->dst->last_switch - 1;
++
++	mv88e6xxx_reg_lock(chip);
++
++	if (chip->info->ops->setup_errata) {
++		err = chip->info->ops->setup_errata(chip);
++		if (err)
++			goto unlock;
++	}
++
++	/* Cache the cmode of each port. */
++	for (i = 0; i < mv88e6xxx_num_ports(chip); i++) {
++		if (chip->info->ops->port_get_cmode) {
++			err = chip->info->ops->port_get_cmode(chip, i, &cmode);
++			if (err)
++				goto unlock;
++
++			chip->ports[i].cmode = cmode;
++		}
++	}
++
++	err = mv88e6xxx_vtu_setup(chip);
++	if (err)
++		goto unlock;
++
++	/* Must be called after mv88e6xxx_vtu_setup (which flushes the
++	 * VTU, thereby also flushing the STU).
++	 */
++	err = mv88e6xxx_stu_setup(chip);
++	if (err)
++		goto unlock;
++
++	/* Setup Switch Port Registers */
++	for (i = 0; i < mv88e6xxx_num_ports(chip); i++) {
++		if (dsa_is_unused_port(ds, i))
++			continue;
++
++		/* Prevent the use of an invalid port. */
++		if (mv88e6xxx_is_invalid_port(chip, i)) {
++			dev_err(chip->dev, "port %d is invalid\n", i);
++			err = -EINVAL;
++			goto unlock;
++		}
++
++		err = mv88e6xxx_setup_port(chip, i);
++		if (err)
++			goto unlock;
++	}
++
++	err = mv88e6xxx_irl_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_mac_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_phy_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_pvt_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_atu_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_broadcast_setup(chip, 0);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_pot_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_rmu_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_rsvd2cpu_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_trunk_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_devmap_setup(chip);
++	if (err)
++		goto unlock;
++
++	err = mv88e6xxx_pri_setup(chip);
++	if (err)
++		goto unlock;
++
++	/* Setup PTP Hardware Clock and timestamping */
++	if (chip->info->ptp_support) {
++		err = mv88e6xxx_ptp_setup(chip);
++		if (err)
++			goto unlock;
++
++		err = mv88e6xxx_hwtstamp_setup(chip);
++		if (err)
++			goto unlock;
++	}
++
++	err = mv88e6xxx_stats_setup(chip);
++	if (err)
++		goto unlock;
++
++unlock:
++	mv88e6xxx_reg_unlock(chip);
++
++	if (err)
++		return err;
++
++	/* Have to be called without holding the register lock, since
++	 * they take the devlink lock, and we later take the locks in
++	 * the reverse order when getting/setting parameters or
++	 * resource occupancy.
++	 */
++	err = mv88e6xxx_setup_devlink_resources(ds);
++	if (err)
++		return err;
++
++	err = mv88e6xxx_setup_devlink_params(ds);
++	if (err)
++		goto out_resources;
++
++	err = mv88e6xxx_setup_devlink_regions_global(ds);
++	if (err)
++		goto out_params;
++
++	return 0;
++
++out_params:
++	mv88e6xxx_teardown_devlink_params(ds);
++out_resources:
++	dsa_devlink_resources_unregister(ds);
++
++	return err;
++}
++
++static int mv88e6xxx_port_setup(struct dsa_switch *ds, int port)
++{
++	return mv88e6xxx_setup_devlink_regions_port(ds, port);
++}
++
++static void mv88e6xxx_port_teardown(struct dsa_switch *ds, int port)
++{
++	mv88e6xxx_teardown_devlink_regions_port(ds, port);
++}
++
+ static int mv88e6xxx_get_eeprom_len(struct dsa_switch *ds)
+ {
+ 	struct mv88e6xxx_chip *chip = ds->priv;
 -- 
-2.34.1
+2.39.2
 
