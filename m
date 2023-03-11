@@ -2,107 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E30A96B608D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:32:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9741A6B6085
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:32:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229963AbjCKUcf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 15:32:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S229843AbjCKUb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 15:31:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCKUcY (ORCPT
+        with ESMTP id S229437AbjCKUb5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 15:32:24 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 317D26EBA2;
-        Sat, 11 Mar 2023 12:32:22 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id p16so5520063wmq.5;
-        Sat, 11 Mar 2023 12:32:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678566740;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+0kS7aVJWn2QRxzhK3/aqBqmHgTgSZuYdBYMBRoKq/8=;
-        b=Des4jwYTOyK0w+CSUeBjA8GQUVC6GH07szSLdPl5GmR3KoARotp2M+8bDrX7I0/BKw
-         LrzUhIXhlFvyDFfzoOAnrScOyWP37jnULP621Y7hTSEmk38nb9/TpiDgbraLjJogMcy4
-         iWpZgBLkLrk5pKfKTwY3WYLAIjJrRZm6xgTwlub7rhaPhvX4Hh+P8qYf+6z7OJNQaOUZ
-         xgCE86nMh/sfO6b9VtfrNuuJaZCEMO/xXt7xr0ltz19EYZp3HS+n6gqmEl2mhgOxNDRu
-         10rgnDv7NhBSZMm8MeSQNRrtqFgJ9IzplnXzEe0HmnzhK1roPqTaKGxdZ3AWBwo+1Z3F
-         f2Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678566740;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+0kS7aVJWn2QRxzhK3/aqBqmHgTgSZuYdBYMBRoKq/8=;
-        b=ZytGFteQ6mHyu5Y10Vavk/Kput9+5CLy4rbTR8dEmpPcbC8gs4O7cASqd4weARsY8B
-         OZHvQvdkLqn0zHqcqLW+yhR/ZePobyzJA3h0GTN9bY8wj35rbC0Dv1tOYyEIaf7hEuH3
-         p1k3R8OhW9zifhn97LjBqiVwaUiMTC9p6a49fZ3hUojzDjYCMw6uW4Q9WJjvl7NOrDjZ
-         +efOtXBlvHKPCdTQ0skPzhA5SaI6PGphfakBp4qq3TPlcXy6mSAS+Wc8VzTS7ZPMH7Ez
-         WX6WWWgqqqXpnpmw82rXN7MPUDOtjabS5C/5zHn0RzBzLh7tlZkP4/NR18J8YRMnQr0p
-         dp1A==
-X-Gm-Message-State: AO0yUKWrQgMQR5A/mr/FKESa3tULoZNufV+ZtbKWQULT1zckXkkYc3pZ
-        Pq9eoyYnQTQlGiZ3tfZUjIY=
-X-Google-Smtp-Source: AK7set9qnsniMJHBuh+hg9gSiuN6l0ykRvaspRnEDHdfjs2BjTyEkGLcdwA4iNN/mmZqxwol/rX0Kg==
-X-Received: by 2002:a05:600c:4690:b0:3ea:f6c4:305e with SMTP id p16-20020a05600c469000b003eaf6c4305emr6746861wmo.38.1678566740639;
-        Sat, 11 Mar 2023 12:32:20 -0800 (PST)
-Received: from mars.. ([2a02:168:6806:0:cb1:a328:ee29:2bd6])
-        by smtp.gmail.com with ESMTPSA id t17-20020a05600c451100b003dc434b39c7sm4524319wmo.0.2023.03.11.12.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 12:32:20 -0800 (PST)
-From:   Klaus Kudielka <klaus.kudielka@gmail.com>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Klaus Kudielka <klaus.kudielka@gmail.com>
-Subject: [PATCH net-next v2 3/3] net: dsa: mv88e6xxx: mask apparently non-existing phys during probing
-Date:   Sat, 11 Mar 2023 21:31:32 +0100
-Message-Id: <20230311203132.156467-4-klaus.kudielka@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230311203132.156467-1-klaus.kudielka@gmail.com>
-References: <20230311203132.156467-1-klaus.kudielka@gmail.com>
+        Sat, 11 Mar 2023 15:31:57 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B46505A;
+        Sat, 11 Mar 2023 12:31:55 -0800 (PST)
+Received: from [192.168.1.103] (31.173.84.174) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
+ 2023 23:31:47 +0300
+Subject: Re: [PATCH 11/32] parport_pc: add 16-bit and 8-bit fast EPP transfer
+ flags
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230307224627.28011-1-linux@zary.sk>
+ <20230307224627.28011-12-linux@zary.sk>
+ <460ae7d7-a12d-cef3-4343-ac633e15016f@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <6933a0fe-012d-d0e4-78e5-e651ab5f80a0@omp.ru>
+Date:   Sat, 11 Mar 2023 23:31:47 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <460ae7d7-a12d-cef3-4343-ac633e15016f@omp.ru>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.84.174]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 20:21:22
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.174
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/11/2023 20:23:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 6:14:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To avoid excessive mdio bus transactions during probing, mask all phy
-addresses that do not exist (there is a 1:1 mapping between switch port
-number and phy address).
+On 3/11/23 11:09 PM, Sergey Shtylyov wrote:
 
-Suggested-by: Andrew Lunn <andrew@lunn.ch>
-Signed-off-by: Klaus Kudielka <klaus.kudielka@gmail.com>
----
-v2: Patch is new
+>> PARPORT_EPP_FAST flag currently uses 32-bit I/O port access for data
+>> read/write (insl/outsl).
+>> Add PARPORT_EPP_FAST_16 and PARPORT_EPP_FAST_8 that use insw/outsw
+>> and insb/outsb (and PARPORT_EPP_FAST_32 as alias for PARPORT_EPP_FAST).
+>>
+>> Signed-off-by: Ondrej Zary <linux@zary.sk>
+>> ---
+>>  drivers/parport/parport_pc.c | 20 ++++++++++++++++----
+>>  include/uapi/linux/parport.h |  3 +++
+>>  2 files changed, 19 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/parport/parport_pc.c b/drivers/parport/parport_pc.c
+>> index 5784dc20fb38..eda4e4e6d4e8 100644
+>> --- a/drivers/parport/parport_pc.c
+>> +++ b/drivers/parport/parport_pc.c
+>> @@ -298,9 +298,15 @@ static size_t parport_pc_epp_read_data(struct parport *port, void *buf,
+>>  		}
+>>  		return got;
+>>  	}
+>> -	if ((flags & PARPORT_EPP_FAST) && (length > 1)) {
+>> -		if (!(((long)buf | length) & 0x03))
+>> +	if ((length > 1) && ((flags & PARPORT_EPP_FAST_32)
+>> +			   || flags & PARPORT_EPP_FAST_16
+>> +			   || flags & PARPORT_EPP_FAST_8)) {
+> 
+>    Why not:
+> 
+>> +		if ((flags & PARPORT_EPP_FAST_32)
+>> +		    && !(((long)buf | length) & 0x03))
+>>  			insl(EPPDATA(port), buf, (length >> 2));
+>> +		else if ((flags & PARPORT_EPP_FAST_16)
+>> +			 && !(((long)buf | length) & 0x01))
+>> +			insw(EPPDATA(port), buf, length >> 1);
+>>  		else
+>>  			insb(EPPDATA(port), buf, length);
+>
 
- drivers/net/dsa/mv88e6xxx/chip.c | 1 +
- 1 file changed, 1 insertion(+)
+   Oopsie, s/th went wrong while editing... :-/
 
-diff --git a/drivers/net/dsa/mv88e6xxx/chip.c b/drivers/net/dsa/mv88e6xxx/chip.c
-index 29b0f3bb1c..c52798d9ce 100644
---- a/drivers/net/dsa/mv88e6xxx/chip.c
-+++ b/drivers/net/dsa/mv88e6xxx/chip.c
-@@ -3797,6 +3797,7 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
- 	bus->read_c45 = mv88e6xxx_mdio_read_c45;
- 	bus->write_c45 = mv88e6xxx_mdio_write_c45;
- 	bus->parent = chip->dev;
-+	bus->phy_mask = GENMASK(31, mv88e6xxx_num_ports(chip));
- 
- 	if (!external) {
- 		err = mv88e6xxx_g2_irq_mdio_setup(chip, bus);
--- 
-2.39.2
+[...]
 
+MBR, Sergey
