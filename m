@@ -2,76 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7420A6B5E4D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:05:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00E886B5E55
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:07:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbjCKRFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:05:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
+        id S229801AbjCKRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:07:23 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKRFh (ORCPT
+        with ESMTP id S229469AbjCKRHV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:05:37 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8058B763F1;
-        Sat, 11 Mar 2023 09:05:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F2FB60D29;
-        Sat, 11 Mar 2023 17:05:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F196C433D2;
-        Sat, 11 Mar 2023 17:05:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678554334;
-        bh=XwB/GrtD4QgsUuzr8rRrhVy0wwdqbWVx5IYtLaykaI4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=CMKvwDarrN0Q+uUYRkqLiVku1aIdmmGLO1Z+d7R6Fy3zYtD0KIlkkrJRaduaOq1HV
-         iSZ5LAbBuntSp7GdoKNCDX6FMvR14cKslRh5qQmUnfKFmaeFvmI5728Y8I/5Akesi6
-         JJnwDr/Uqpw2f1JyMn2u6GOOVqBCOYsr3DC1/TcWJGhlux7YwvpcXlvoy6kIr+NTfH
-         9yziGSWQSr163N7JA+Rx61KReni0dVYWj+/dRccWueoazXpaoDHIq81wXe8/JvxRCm
-         SCTPxbG1YWfD0gzMQOIwjxKB6vz8dk0cpR2NqnSJDhgKz7AcaaY1h2KCeKszw3N00i
-         SaVe3DP7KUNLg==
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
-Cc:     Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH] MAINTAINERS: update Andi's e-mail to @kernel.org
-Date:   Sat, 11 Mar 2023 18:05:16 +0100
-Message-Id: <20230311170516.178913-1-andi.shyti@kernel.org>
-X-Mailer: git-send-email 2.39.2
+        Sat, 11 Mar 2023 12:07:21 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159B831E20;
+        Sat, 11 Mar 2023 09:07:20 -0800 (PST)
+Received: from [192.168.1.103] (178.176.77.159) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
+ 2023 20:07:11 +0300
+Subject: Re: [PATCH 08/32] pata_parport-bpck6: remove mode from struct
+ ppc_storage
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230307224627.28011-1-linux@zary.sk>
+ <20230307224627.28011-9-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <6747930c-697b-2f9b-0c97-4aa2d1ef9bb4@omp.ru>
+Date:   Sat, 11 Mar 2023 20:07:10 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230307224627.28011-9-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [178.176.77.159]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 16:42:21
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.159 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
+X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.159
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/11/2023 16:45:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 2:00:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the kernel.org e-mail for the maintainer entry
+On 3/8/23 1:46 AM, Ondrej Zary wrote:
 
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
----
- MAINTAINERS | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> introduce mode_map[] that maps bpck6 modes to ppc6 modes and use it to
+> replace mode in ppc_storage
+> 
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 150ff03b42eb..fe6ef7be49a0 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -18543,7 +18543,7 @@ F:	include/linux/clk/samsung.h
+Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+
+[...]
  
- SAMSUNG SPI DRIVERS
- M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
--M:	Andi Shyti <andi@etezian.org>
-+M:	Andi Shyti <andi.shyti@kernel.org>
- L:	linux-spi@vger.kernel.org
- L:	linux-samsung-soc@vger.kernel.org
- S:	Maintained
--- 
-2.39.2
-
+MBR, Sergey
