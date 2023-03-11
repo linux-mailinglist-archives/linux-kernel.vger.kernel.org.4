@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217636B60D2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:03:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1E7B6B60D5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCKVDQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:03:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
+        id S230003AbjCKVD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:03:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCKVDN (ORCPT
+        with ESMTP id S229861AbjCKVDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:03:13 -0500
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C9F9222E4;
-        Sat, 11 Mar 2023 13:03:12 -0800 (PST)
-Received: by mail-ed1-x52d.google.com with SMTP id ek18so3075020edb.6;
-        Sat, 11 Mar 2023 13:03:12 -0800 (PST)
+        Sat, 11 Mar 2023 16:03:25 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603F537724;
+        Sat, 11 Mar 2023 13:03:23 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id cy23so34098192edb.12;
+        Sat, 11 Mar 2023 13:03:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1678568590;
+        d=googlemail.com; s=20210112; t=1678568602;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iJFf8GLtxWXihMug6P0OGoX7CTL7k0wwiBVKeyB4Rpo=;
-        b=pT9GDSN4DyEtHNbHsKZm+0xijlTsTvbU5bIPzBadlF8tLIGLblNyzLF4VXQ5dN+1oa
-         02KI9Pn8XbTyDnI8AiRekzeA6P7tcsqysl4FxqJI5Jgtv/j8ItblEFdxVnlu54pNyDzI
-         83gLA8eoM0Sq8GzdHd/ogzYcPvjE2IMcJ+H1qt91TXwL6K8oAQEoluoIpDI3rSd8PyOc
-         WG236kfMedjpEUs/ovKGbEJZVCyuXzPNUisPfHjJShXO3TgDDTdiy+uRcM3QGSdMvD+4
-         VKmda1fshPzwDmkAkuA3fGsMg3b/1zrwzvnoc/Wpk0Ha3L8ybVW7WxZGOaYnrLQUu/al
-         5JNg==
+        bh=9P7IEAkLy7BcZ65gozk6soUzL4XB53L7ciN8vl0VU/0=;
+        b=Mj3NdSmV6a2J+F31S5HW2+G4vNN8mcI76hOLn6I1zFjdXWXC/WZRnhOdQ1QHDp4//Y
+         tWsqEHcpJ0vL77yH+bJmT9dUvyUbvpvIm2aGBWddYvljUxFx37/4Ir01a2r5j3FG+Bhi
+         wAEft83BiQMHNOJfG/hyrFS3cnfWaJUrYXWxKBWLuIZ+wMhQVdU3dZMEd/Ii2PJ+Bj4v
+         w/qom/IQr+gHPL7notTLZLEK+H/qF1i0KERixOqwYAciKCbfmAwHSId9JhJeXMUMlv9w
+         TAROnkKZlozadKj+LmMDlngzBKq/PLKyjjV1jm7EnL6izYCIHRwb8tXc2U1lCqjM6lhf
+         VMzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678568590;
+        d=1e100.net; s=20210112; t=1678568602;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iJFf8GLtxWXihMug6P0OGoX7CTL7k0wwiBVKeyB4Rpo=;
-        b=feI05ue4Z2HoPhbLGoVZrUMDRufrxr5/TA/1UXz84RrCzXBWIWj4GJwdglKBEALBHB
-         1NLiFeXc1AFIIrYTZ8BnVM9inddeV20tLZ5bPJjGQfzvSuB1kE+eTDjjXVCdH/ZYNIzj
-         Q5S2A3rXVv33KMgUHnXuU7WZH3WcWTStoLrR6dihaGQOEX0vNDjmhCctyC7ZVlrWZyOp
-         LFPUigJ2nIYN+wjr+IpZY4Jb+zOGf/6UQ1caXO4qqB75zBeK2NckveMXM/V+rwT21sAI
-         0aCIVu2J0q31Q4UOhdD+9Xlk++cPVDM4APf6dtEG1yCQhE4LNkUqgkl+O9mGz3z2ILB9
-         SXag==
-X-Gm-Message-State: AO0yUKUsZdm9QXBOa3kvoz0COpC3TWIAkycyjYE2mf/W3VP4tCNz3Q0c
-        20v7YeoVyV+KaWq6TK/+n0h3kNOUvdB7AImfFFk=
-X-Google-Smtp-Source: AK7set+nsdI6U8Akb2Epvh5TLqA4QBXyUOxE40/FSbMxrjd9iHwvD/RJEhXoH5zYK9ZKzGCHNnhGvBPHX4D8aOQhPFs=
-X-Received: by 2002:a17:906:a1c5:b0:8f0:147b:be2 with SMTP id
- bx5-20020a170906a1c500b008f0147b0be2mr14063306ejb.4.1678568590629; Sat, 11
- Mar 2023 13:03:10 -0800 (PST)
+        bh=9P7IEAkLy7BcZ65gozk6soUzL4XB53L7ciN8vl0VU/0=;
+        b=BkyUB++mypT6/3WGDSjEgDIkVv5KtYkjvuZi+HeqaCFHZZVxS+hf5kOVkvR2saFn02
+         pYIYsPNC8mg1hjTX79ru7Nlwi1EPIj3HUOTEjWQ2frk+86eETyWORzqBpzLpa169q8mi
+         EasPDWQuIe/D1BUs1m2Ya3ZeUTugogMNCkbfGl3EqvIAtthoWOgbr3he1ojNznlN2rUF
+         +mfiilTo4vEKY8FHk+yk3eWraDaO4XBz2eFTe97GT0QJjGQNlktz4HGUC8V2YPILR6re
+         d7PPkhxQBOxtlSY6o5ZZZtFL08AS+4EEp66lNfVQGUvS86x0vbnpNVQY7IH+78mmIV/n
+         JgvA==
+X-Gm-Message-State: AO0yUKWcU58NkrBfPSk1vj/4FDVk02cGz+7vYtSXhD2C/fybjGLLRazn
+        dOcTsbgQIotADFCZgKy/QY6YNz8rPBmLE4UJqFw=
+X-Google-Smtp-Source: AK7set8br7hTajHtR5jJ8JEX+gep6ksiKRlkfXEKJA4TcVnIPNqBQgZ3QlWHqwp9ET29p8c4umTLPKrNN3dT4z5U9yA=
+X-Received: by 2002:a17:906:f47:b0:87b:db55:4887 with SMTP id
+ h7-20020a1709060f4700b0087bdb554887mr14138887ejj.4.1678568601780; Sat, 11 Mar
+ 2023 13:03:21 -0800 (PST)
 MIME-Version: 1.0
-References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org> <20230310222857.315629-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310222857.315629-3-krzysztof.kozlowski@linaro.org>
+References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org> <20230310222857.315629-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230310222857.315629-4-krzysztof.kozlowski@linaro.org>
 From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Mar 2023 22:02:59 +0100
-Message-ID: <CAFBinCCZAjbuE-1hgJSUoW=GNT80Y7xReNW2D84H7YJ=yHVPxw@mail.gmail.com>
-Subject: Re: [PATCH 03/16] spi: meson-spicc: Drop of_match_ptr for ID table
+Date:   Sat, 11 Mar 2023 22:03:10 +0100
+Message-ID: <CAFBinCBG90jOdKPubEZvOFXf5B=Ra+HxH6JTTdVn-L1cbWjNYA@mail.gmail.com>
+Subject: Re: [PATCH 04/16] spi: meson-spifc: Drop of_match_ptr for ID table
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
         Broadcom internal kernel review list 
@@ -96,7 +96,7 @@ On Fri, Mar 10, 2023 at 11:29=E2=80=AFPM Krzysztof Kozlowski
 > used and the of_match_ptr does not have any sense (this also allows ACPI
 > matching via PRP0001, even though it is not relevant here).
 >
->   drivers/spi/spi-meson-spicc.c:949:34: error: =E2=80=98meson_spicc_of_ma=
+>   drivers/spi/spi-meson-spifc.c:434:34: error: =E2=80=98meson_spifc_dt_ma=
 tch=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
