@@ -2,115 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 897DA6B5F44
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:40:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 291636B5F4A
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:42:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbjCKRk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:40:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48292 "EHLO
+        id S230209AbjCKRm4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:42:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCKRk4 (ORCPT
+        with ESMTP id S230286AbjCKRmv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:40:56 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85A1272AD;
-        Sat, 11 Mar 2023 09:40:25 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9C03360DD7;
-        Sat, 11 Mar 2023 17:39:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C4B3C4339B;
-        Sat, 11 Mar 2023 17:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678556362;
-        bh=d2twZZt4iEQVL+Jfp+CiaBl6RMLSrb0fiX4DrrOVnsI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=LhVJJ5ZW07oZOtliO+RNPBKjCAgzdlkrDeTvy+dwboCXkWE2H+wiqdazsfouwGYy+
-         oG9sw7f6zIQSveHJKHMXcd0zJoMDTRgVdR8xYXG/pe2q3/22sGxLc2W6R4O+m0Id0+
-         VkxkF6+1R7+5Tt8EfBrO9rLxKHd7L4qSo1zh7C8wRLtY5RHjbqgQPtaptIJOzhpqNq
-         /hroaLOAr+pO8BV9Vr6DTP2WsU32KTlaw8ig88O4bjdNQhc5gLFJv28ML6+T7ZAX9Y
-         c4BXAwv6Kr2e1IZbc3SPEgozuYvzDsrR5HqrFA37ZkgmSkzbjgSidk/abX7b/5s8F4
-         ZlasyQ/6CTSjQ==
-Received: by mail-lj1-f178.google.com with SMTP id g18so8607710ljl.3;
-        Sat, 11 Mar 2023 09:39:21 -0800 (PST)
-X-Gm-Message-State: AO0yUKX+ZuYZPNtMMUnXm8P3E9Faqs/mf7PIPp0rni1a3aNTytqjzsWW
-        gttTUKU/VlMRjbS5uZ/tYbs/VEa/hGW9pTQ9RQE=
-X-Google-Smtp-Source: AK7set/a81dG4zhFZj0+7Z3uTzo4Ho9LtVgw4JBaootkU0p++pREaHz47EgcHfK/YCdyDqqM6tblmpua3tvPyoTLYjg=
-X-Received: by 2002:a2e:aa1c:0:b0:293:4ed3:a404 with SMTP id
- bf28-20020a2eaa1c000000b002934ed3a404mr9076038ljb.2.1678556360060; Sat, 11
- Mar 2023 09:39:20 -0800 (PST)
-MIME-Version: 1.0
-References: <cover.1671098103.git.baskov@ispras.ru> <c38ad7a1b89aff743d4a29882a7022d97d4fea58.1671098103.git.baskov@ispras.ru>
- <CAMj1kXGzXLp20nbg-NoToENbDQhn1b0Gpi2s8f9DgSSM28BbeQ@mail.gmail.com> <f29b8efc018819cbb8202d13795ba89e@ispras.ru>
-In-Reply-To: <f29b8efc018819cbb8202d13795ba89e@ispras.ru>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Sat, 11 Mar 2023 18:39:08 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHAeddy+6MjwgHLH7J=qAO0SaecB7ZGuHNT+13-r1VcQw@mail.gmail.com>
-Message-ID: <CAMj1kXHAeddy+6MjwgHLH7J=qAO0SaecB7ZGuHNT+13-r1VcQw@mail.gmail.com>
-Subject: Re: [PATCH v4 21/26] efi/x86: Explicitly set sections memory attributes
-To:     Evgeniy Baskov <baskov@ispras.ru>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Sat, 11 Mar 2023 12:42:51 -0500
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93F613A86B
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:42:25 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id m6so10689752lfq.5
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:42:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678556438;
+        h=from:cc:to:in-reply-to:message-id:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gucexyEn/MXQiixU059a1/bhO0FmHxte+9JfrT4eP5U=;
+        b=Cgfe5XDz8SfS8eTf0QpykdXbG9cYrS5ve/IsdOeifiD8XvdIovBySvXxPngq0F97rQ
+         joKlicMIS+PAO3OnzTGZLa5z+gmOy0X1oF8NgsCnj60wOnAWw3n6fCQcGxQMulaD4cAR
+         ZlD9udOgMQhr4DUyH2JErtCXToXb7TPODWg88qShBvnqMadV1iGpJP2JvF/Fv1SCZ7T9
+         gCQ490dqwkbnd3ghW+AATEslDPpSJatoqmmADdVFqwPR3xKcw+HrJG5UAHjTGM5kt3Je
+         7ggLmve6k3mhA6GMFNgS1+rgn+SFge/pSAvS13PYnrxIhCx7XykEwAoqtbXH+59n8sPW
+         C7Ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678556438;
+        h=from:cc:to:in-reply-to:message-id:date:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gucexyEn/MXQiixU059a1/bhO0FmHxte+9JfrT4eP5U=;
+        b=TO0uMAOhPul4unPtsA2BKnkosBGIt0YavnrQlt8Sj3wzU+2Zbdh8TV4Yui963YIxFR
+         LxMCJ2OIvmgPigpy7qPptO5tvs+xGDzP9stVwWm21aYgqDUR543sTVG2ZrGvewtV0usm
+         chiPcDSHeZWCtd9rpjDG+Z+JaG6hy19wA8u7rw7my7V7wC4vtlYysaco4G2b/WASCzYS
+         7TsvEIcLqyEVwci+2kpF5EoH51njGlMR3BwU4/MkDM0VXqm0475ey8y3brL9VImfDrBj
+         nSneEpVpiNDdXKHqNaUP/btuwBG86ZQExf5RM071ReYwAbfLYPfUqrbu7Q7nHBjQG9Dl
+         omAA==
+X-Gm-Message-State: AO0yUKU7hNU0z5t4XY2HEixwEK3cJ70tZSB91aRjToTp6cVKMXW8qT98
+        rpV44rG1IWHXEYxuraHCnyMK1KBHTmrX4Cf6Udo=
+X-Google-Smtp-Source: AK7set/ByuxH07OIf+rsMYJEm0uHwVrIPBdKlVOsrrd7+dQNsUrstq4Ogt/j521YGIaIFan1XLNqGQ==
+X-Received: by 2002:ac2:5a4c:0:b0:4dc:7ff4:83f9 with SMTP id r12-20020ac25a4c000000b004dc7ff483f9mr8776360lfn.16.1678556438124;
+        Sat, 11 Mar 2023 09:40:38 -0800 (PST)
+Received: from letter.txt (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id q26-20020ac24a7a000000b004cb3fbc7925sm377977lfp.77.2023.03.11.09.40.37
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 09:40:37 -0800 (PST)
+Date:   Sat, 11 Mar 2023 09:40:37 -0800 (PST)
+Message-ID: <c13993bc-9d12-f20e-de27-fa0b8a58ed33-1-sleirsgoevy@gmail.com>
+In-Reply-To: <c13993bc-9d12-f20e-de27-fa0b8a58ed33@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+X-Spam-Status: No, score=-0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,MISSING_SUBJECT,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 at 16:09, Evgeniy Baskov <baskov@ispras.ru> wrote:
->
-> On 2023-03-10 18:20, Ard Biesheuvel wrote:
-> > On Thu, 15 Dec 2022 at 13:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
-> >>
-> >> Explicitly change sections memory attributes in efi_pe_entry in case
-> >> of incorrect EFI implementations and to reduce access rights to
-> >> compressed kernel blob. By default it is set executable due to
-> >> restriction in maximum number of sections that can fit before zero
-> >> page.
-> >>
-> >> Tested-by: Peter Jones <pjones@redhat.com>
-> >> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
-> >
-> > I don't think we need this patch. Firmware that cares about W^X will
-> > map the PE image with R-X for text/rodata and RW- for data/bss, which
-> > is sufficient, and firmware that doesn't is a lost cause anyway.
->
-> This patch were here mainly here to make .rodata non-executable and for
-> the UEFI handover protocol, for which attributes are usually not getting
-> applied.
->
-> Since the UEFI handover protocol is deprecated, I'll exclude patches
-> from
-> v5 and maybe submit it separately modified to apply attributes only when
-> booting via this protocol.
->
+> > ---
+> >  .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml    | 6 ++++++
+> >  1 file changed, 6 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+> > index 8dfad89c7..2bc5ac528 100644
+> > --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+> > +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+> > @@ -57,6 +57,12 @@ properties:
+> >        force fifo watermark setting accordingly.
+> >      $ref: /schemas/types.yaml#/definitions/flag
+> >  
+> > +  fifo-access-32bit:
+> 
+> Missing type boolean.
 
-I think the issue here is that loaders that use the UEFI handover
-protocol use their own implementations of LoadImage/StartImage as
-well, and some of those tend to do little more than copy the image
-into memory and jump to the EFI handover protocol entry point, without
-even accounting for the image size in memory or clearing the bss.
+Thanks, will add the same $ref as for the entry above.
 
-To be honest, even though I understand the reason these had to be
-implemented, I'm a bit reluctant to cater for the needs of such
-loaders, given that these are all downstream distro forks of GRUB
-(with shim) with varying levels of adherence to the PE/COFF spec.
+> > +    description:
+> > +      Specifies that this device requires accesses to its 64-bit registers
+> > +      to be done as pairs of 32-bit accesses, even on architectures where
+> > +      readq is available.
+> 
+> And why the device would require this? If it has 64-bit registers in the
+> first place, they can be accessed in 64-bit. Otherwise these are not
+> 64-bit registers, but just lower/upper 32-bit, right?
+> 
+> Also, why this cannot be implied from compatible? Why different boards
+> with same SoC should have different FIFO access?
 
-I'm happy to revisit this later if others feel this is important, but
-for the moment, I'd prefer it if we could focus on making the x86
-image work better with compliant loaders, which is what this series is
-primarily about.
+It probably can be implied, but I am not exactly sure on which boards it
+affects, so I decided to go for a new devicetree option. Anyway, the same
+argument applies to the "data-addr" property, which is already in the
+spec, so I supposed that adding such knobs is fine.
