@@ -2,57 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B58F76B5CE1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:34:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED9706B5CF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCKOeg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:34:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39022 "EHLO
+        id S230395AbjCKOli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:41:38 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjCKOef (ORCPT
+        with ESMTP id S229919AbjCKOlh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:34:35 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB322DF4;
-        Sat, 11 Mar 2023 06:34:34 -0800 (PST)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 336FA40737B2;
-        Sat, 11 Mar 2023 14:34:32 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 336FA40737B2
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678545272;
-        bh=7NA0v0UklL3KF4PF6rIZHGKX4sLDfAaTAnnXVW7eDFA=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=NVvCDTnX6cpbsWqeCGCghb70lb8Zay/Zgdm4Agb6Cn4ntPFbNbZW3eK3/FDZ3esn2
-         i0hThMQzmY3zGu7Gg4D8/uJ1l6iupyc0uLmf0n4lGoG/wt+xe7VCqfNVovJ5S5zTMv
-         640gV4vp1WvzxxsuGz2vTHuTyPtjrRaA3sh5sZyc=
+        Sat, 11 Mar 2023 09:41:37 -0500
+X-Greylist: delayed 410 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sat, 11 Mar 2023 06:41:35 PST
+Received: from out-6.mta0.migadu.com (out-6.mta0.migadu.com [91.218.175.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 767D710976F
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:41:35 -0800 (PST)
 MIME-Version: 1.0
-Date:   Sat, 11 Mar 2023 17:34:32 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 12/26] x86/boot: Make kernel_add_identity_map() a
- pointer
-In-Reply-To: <CAMj1kXHY045xxhbC_+JRhwy-vObfKGFA8YnZr7anh6Khuk-HAA@mail.gmail.com>
-References: <cover.1671098103.git.baskov@ispras.ru>
- <2ebefd395ecadb2b2605bc52a8ac223392c0c153.1671098103.git.baskov@ispras.ru>
- <CAMj1kXHY045xxhbC_+JRhwy-vObfKGFA8YnZr7anh6Khuk-HAA@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <85adee064fccab90f045b049bfee95a5@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=rosenzweig.io;
+        s=key1; t=1678545280;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zBm7qCElugUk3cf4BPO+3k33A5MOaMMu/5uGtC/rD4U=;
+        b=FxA/VVQAfMXyId7rkd7f32NeMw3N88hEF/puQCJWeOWApF8QQpDjcixdA9ydVb6SiQtJ/T
+        gzk0cak5UgvpI5yZvlWuaXDIV2EB7jK6pjF3mKaxAvgOBs9ZSonQ0sMAObNYwYfu9RM9Xd
+        8rpQgZVhV9JukB/FogxlT6GFwLG340xII6r6rAuyXyUBshEuMbFN3sWq+npY4wFAj5gF5l
+        z0rDrsZK6y8oGm12IW5llw/9i1t169+tI3FyrE4NzdWdq0VninIMTYDS4FVJHNCM/84KWv
+        ENqlCX/LMHgICBqkt9shuNVT6MhtlXexy8em5cCzYi1OMjx6O06vgemr39EN+g==
+Date:   Sat, 11 Mar 2023 14:34:39 +0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   alyssa@rosenzweig.io
+Message-ID: <64cbf509004d6f34831f8257d3d9e82a@rosenzweig.io>
+Subject: Re: [PATCH] PCI: apple: Initialize pcie->nvecs before using it
+To:     "Sven Peter" <sven@svenpeter.dev>, "Marc Zyngier" <maz@kernel.org>
+Cc:     "Lorenzo Pieralisi" <lpieralisi@kernel.org>,
+        "=?utf-8?B?S3J6eXN6dG9mIFdpbGN6ecWEc2tp?=" <kw@linux.com>,
+        "Rob Herring" <robh@kernel.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        asahi@lists.linux.dev, linux-kernel@vger.kernel.org
+In-Reply-To: <20230311133453.63246-1-sven@svenpeter.dev>
+References: <20230311133453.63246-1-sven@svenpeter.dev>
+X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
         URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -62,151 +54,27 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-10 17:52, Ard Biesheuvel wrote:
-> On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> Convert kernel_add_identity_map() into a function pointer to be able
->> to provide alternative implementations of this function. Required
->> to enable calling the code using this function from EFI environment.
->> 
->> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
->> Tested-by: Peter Jones <pjones@redhat.com>
->> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> ---
->>  arch/x86/boot/compressed/ident_map_64.c |  7 ++++---
->>  arch/x86/boot/compressed/misc.c         | 24 ++++++++++++++++++++++++
->>  arch/x86/boot/compressed/misc.h         | 15 +++------------
->>  3 files changed, 31 insertions(+), 15 deletions(-)
->> 
->> diff --git a/arch/x86/boot/compressed/ident_map_64.c 
->> b/arch/x86/boot/compressed/ident_map_64.c
->> index ba5108c58a4e..1aee524d3c2b 100644
->> --- a/arch/x86/boot/compressed/ident_map_64.c
->> +++ b/arch/x86/boot/compressed/ident_map_64.c
->> @@ -92,9 +92,9 @@ bool has_nx; /* set in head_64.S */
->>  /*
->>   * Adds the specified range to the identity mappings.
->>   */
->> -unsigned long kernel_add_identity_map(unsigned long start,
->> -                                     unsigned long end,
->> -                                     unsigned int flags)
->> +unsigned long kernel_add_identity_map_(unsigned long start,
-> 
-> Please use a more discriminating name here - the trailing _ is rather
-> hard to spot.
-
-Got it. The kernel_add_identity_map_impl() will fit better, I think.
-
-> 
->> +                                      unsigned long end,
->> +                                      unsigned int flags)
->>  {
->>         int ret;
->> 
->> @@ -142,6 +142,7 @@ void initialize_identity_maps(void *rmode)
->>         struct setup_data *sd;
->> 
->>         boot_params = rmode;
->> +       kernel_add_identity_map = kernel_add_identity_map_;
->> 
->>         /* Exclude the encryption mask from __PHYSICAL_MASK */
->>         physical_mask &= ~sme_me_mask;
->> diff --git a/arch/x86/boot/compressed/misc.c 
->> b/arch/x86/boot/compressed/misc.c
->> index aa4a22bc9cf9..c9c235d65d16 100644
->> --- a/arch/x86/boot/compressed/misc.c
->> +++ b/arch/x86/boot/compressed/misc.c
->> @@ -275,6 +275,22 @@ static void parse_elf(void *output, unsigned long 
->> output_len,
->>         free(phdrs);
->>  }
->> 
->> +/*
->> + * This points to actual implementation of mapping function
->> + * for current environment: either EFI API wrapper,
->> + * own implementation or dummy implementation below.
->> + */
->> +unsigned long (*kernel_add_identity_map)(unsigned long start,
->> +                                        unsigned long end,
->> +                                        unsigned int flags);
->> +
->> +static inline unsigned long kernel_add_identity_map_dummy(unsigned 
->> long start,
-> 
-> This function is never called, it only has its address taken, so the
-> 'inline' makes no sense here.
-> 
-
-Indeed. I'll remove the inline.
-
->> +                                                         unsigned 
->> long end,
->> +                                                         unsigned int 
->> flags)
->> +{
->> +       return start;
->> +}
->> +
->>  /*
->>   * The compressed kernel image (ZO), has been moved so that its 
->> position
->>   * is against the end of the buffer used to hold the uncompressed 
->> kernel
->> @@ -312,6 +328,14 @@ asmlinkage __visible void *extract_kernel(void 
->> *rmode, memptr heap,
->> 
->>         init_default_io_ops();
->> 
->> +       /*
->> +        * On 64-bit this pointer is set during page table 
->> uninitialization,
-> 
-> initialization
-
-Thanks!
-
-> 
->> +        * but on 32-bit it remains uninitialized, since paging is 
->> disabled.
->> +        */
->> +       if (IS_ENABLED(CONFIG_X86_32))
->> +               kernel_add_identity_map = 
->> kernel_add_identity_map_dummy;
->> +
->> +
->>         /*
->>          * Detect TDX guest environment.
->>          *
->> diff --git a/arch/x86/boot/compressed/misc.h 
->> b/arch/x86/boot/compressed/misc.h
->> index 38d31bec062d..0076b2845b4b 100644
->> --- a/arch/x86/boot/compressed/misc.h
->> +++ b/arch/x86/boot/compressed/misc.h
->> @@ -180,18 +180,9 @@ static inline int 
->> count_immovable_mem_regions(void) { return 0; }
->>  #ifdef CONFIG_X86_5LEVEL
->>  extern unsigned int __pgtable_l5_enabled, pgdir_shift, ptrs_per_p4d;
->>  #endif
->> -#ifdef CONFIG_X86_64
->> -extern unsigned long kernel_add_identity_map(unsigned long start,
->> -                                            unsigned long end,
->> -                                            unsigned int flags);
->> -#else
->> -static inline unsigned long kernel_add_identity_map(unsigned long 
->> start,
->> -                                                   unsigned long end,
->> -                                                   unsigned int 
->> flags)
->> -{
->> -       return start;
->> -}
->> -#endif
->> +extern unsigned long (*kernel_add_identity_map)(unsigned long start,
->> +                                               unsigned long end,
->> +                                               unsigned int flags);
->>  /* Used by PAGE_KERN* macros: */
->>  extern pteval_t __default_kernel_pte_mask;
->> 
->> --
->> 2.37.4
->> 
+Whoops!=0A=0AReviewed-by: Alyssa Rosenzweig <alyssa@rosenzweig.io>=0A=0AM=
+arch 11, 2023 8:34 AM, "Sven Peter" <sven@svenpeter.dev> wrote:=0A=0A> ap=
+ple_pcie_setup_port computes ilog2(pcie->nvecs) to setup the number of=0A=
+> MSIs available for each port. It is however called before apple_msi_ini=
+t=0A> which actually initializes pcie->nvecs.=0A> Luckily, pcie->nvecs is=
+ part of kzalloc-ed structure and thus=0A> initialized as zero. ilog2(0) =
+happens to be 0xffffffff which then just=0A> configures more MSIs in hard=
+ware than we actually have. This doesn't=0A> break anything because we ne=
+ver hand out those vectors.=0A> Let's swap the order of the two calls so =
+that we use the correctly=0A> initialized value.=0A> =0A> Fixes: 476c41ed=
+4597 ("PCI: apple: Implement MSI support")=0A> Signed-off-by: Sven Peter =
+<sven@svenpeter.dev>=0A> ---=0A> drivers/pci/controller/pcie-apple.c | 6 =
++++++-=0A> 1 file changed, 5 insertions(+), 1 deletion(-)=0A> =0A> diff -=
+-git a/drivers/pci/controller/pcie-apple.c b/drivers/pci/controller/pcie-=
+apple.c=0A> index 66f37e403a09..8b7b084cf287 100644=0A> --- a/drivers/pci=
+/controller/pcie-apple.c=0A> +++ b/drivers/pci/controller/pcie-apple.c=0A=
+> @@ -783,6 +783,10 @@ static int apple_pcie_init(struct pci_config_windo=
+w *cfg)=0A> cfg->priv =3D pcie;=0A> INIT_LIST_HEAD(&pcie->ports);=0A> =0A=
+> + ret =3D apple_msi_init(pcie);=0A> + if (ret)=0A> + return ret;=0A> +=
+=0A> for_each_child_of_node(dev->of_node, of_port) {=0A> ret =3D apple_pc=
+ie_setup_port(pcie, of_port);=0A> if (ret) {=0A> @@ -792,7 +796,7 @@ stat=
+ic int apple_pcie_init(struct pci_config_window *cfg)=0A> }=0A> }=0A> =0A=
+> - return apple_msi_init(pcie);=0A> + return 0;=0A> }=0A> =0A> static in=
+t apple_pcie_probe(struct platform_device *pdev)=0A> -- =0A> 2.25.1
