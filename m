@@ -2,103 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44DDB6B60C7
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:59:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40DC46B60CC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:01:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjCKU7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 15:59:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S229891AbjCKVBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:01:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46902 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCKU7f (ORCPT
+        with ESMTP id S229469AbjCKVBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 15:59:35 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 851A432E4A;
-        Sat, 11 Mar 2023 12:59:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B543B80B34;
-        Sat, 11 Mar 2023 20:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1DE7C433EF;
-        Sat, 11 Mar 2023 20:59:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678568371;
-        bh=Pg2HjLx8GdJVuQLgMAqmAvFJR9XFOR9C+clZu8j8+ao=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uEP1JfXPci4WKn0FuQulm/BYvNFdBPL+5XsZTXIzaMg6ZuPPYfgDW3bG2zYVOKDO5
-         blhzjXAS08vNVsbE8rfX13KldetiH39N5NJpc8D/THypfStHj34DoopNHNxPneTk/C
-         0QI8AvWZ93C2vVyKLFzRK1Gnuz/nrrPBr08h5mHvJlcbvvFKJi+FPAEvAPKsKlCvN3
-         01ipVjM3kk2BZr/6+/NmfWYnshaZJWm/GxmjFmimCGk7D98E0kMc5GHacwqW6T/Vue
-         bcuJz8/kuajttlYhndbFKNf/MEC8tUZiOEprQ2GXS6gdup4ryzAMv/AZ7TN+LAumCv
-         OhqcHD3y7pmVA==
-Date:   Sat, 11 Mar 2023 15:59:30 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Eric Biggers <ebiggers@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZAzrsgAMX+LC9E5A@sashalap>
-References: <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzJltJaydwjCN6E@1wt.eu>
- <ZAzVbzthi8IfptFZ@sol.localdomain>
- <ZAzafagDchRQRxWi@sol.localdomain>
- <ZAzianzvIOUrH5pr@1wt.eu>
+        Sat, 11 Mar 2023 16:01:53 -0500
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096D4515DC
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:01:53 -0800 (PST)
+Received: by mail-ed1-x52f.google.com with SMTP id cn21so4003515edb.0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:01:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1678568511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mqLiLsZSZqkghPgueB9X9yY17FbUEdbpIwT7a5FTGHQ=;
+        b=ahu2SILpBVmjIN/fyu8SXMNhCl85Y6wEUwLo8mfsBvX2hPGiJilmcEdlX3yWE2Moyp
+         N9muMb0BsILbEQxbvGT8dTcTEgqzHAkVH8SMDB7hKDDadT7tQyfWZV+6AllBg7R1ljhR
+         A7HlWu4jQkj9Q8u/3KH8GMpc4ooxjlzde38Jj5faLL1o0ufoRIkLZOzBzbeHTvbg55x3
+         PjZrt+MYSDWIyd90r5ppRdDc9vGvCVL1VfixYgFFj9WvRHywzmqtqB2swIFxdF7Tod/d
+         WSRQAiwVU7yP3oAv7YqJDrfZgKj5ZAoPKVdO9JtqTBdtzfkMUA0fxmtAC/wbqBTN9MXW
+         nPHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678568511;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mqLiLsZSZqkghPgueB9X9yY17FbUEdbpIwT7a5FTGHQ=;
+        b=oRLG4NExC8mCgbBGxM8NpR5m2U8Dt0wEG9sHN5AHQHKsPPDqXJDRdSF1rJraw646gI
+         s54naVPjBffL+Hf/8VXtwGYPEfzumLiC2XL02llMmJ87isH99F7SmQ3sf2KBr3fN9u4z
+         rafTmvf97KEwgaiE6MI5NBABia1AtHZofwF7y5UNCxBe6OSw6F2+fAe1GE5XPX8TLtcG
+         XISPAhgLO4ZLAKyjcaWOmtbb/gFJ+ZbkBYgzZKR6DR3qILHRUMw7FuceaSY4UpO6MPNG
+         y+vYpSC/qLs+CW7nH8n2FnVp2Ad6zkVfEDTXL8UuYhVffEEsGaK75aV0PUjjWvRSBhX0
+         t/jg==
+X-Gm-Message-State: AO0yUKUsLUS1RMm2NahxKrVD/R5h4okpRLgUZQNcAicOg7vh0r+LZy/T
+        btlteRjkqW3L3K53Kgcppxi8vCytUHzOAMEBF7A=
+X-Google-Smtp-Source: AK7set9T7FoO2Nq2LlElL4QVevBogC3v/8RbnuqWg65zLah33pZl2isqrJhvphk/gfAO/Pw7SKdcFzIHpctQPPCAVjI=
+X-Received: by 2002:a17:906:a3c2:b0:8b1:78b7:6803 with SMTP id
+ ca2-20020a170906a3c200b008b178b76803mr15132394ejb.4.1678568511360; Sat, 11
+ Mar 2023 13:01:51 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZAzianzvIOUrH5pr@1wt.eu>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311111423.251383-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111423.251383-1-krzysztof.kozlowski@linaro.org>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 11 Mar 2023 22:01:40 +0100
+Message-ID: <CAFBinCC3eWMdS5fH=HBLt1ET5r5jXhc51FVfXjGa62z+FjyJ-Q@mail.gmail.com>
+Subject: Re: [PATCH] irqchip: meson-gpio: mark OF related data as maybe unused
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 09:19:54PM +0100, Willy Tarreau wrote:
->On Sat, Mar 11, 2023 at 11:46:05AM -0800, Eric Biggers wrote:
->> (And please note, the key word here is *confidence*.  We all agree that it's
->> never possible to be absolutely 100% sure whether a commit is appropriate for
->> stable or not.  That's a red herring.
+On Sat, Mar 11, 2023 at 12:14=E2=80=AFPM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 >
->In fact even developers themselves sometimes don't know, and even when they
->know, sometimes they know after committing it. Many times we've found that
->a bug was accidently resolved by a small change. Just for this it's important
->to support a post-merge analysis.
->> And I would assume, or at least hope, that the neural network thing being used
->> for AUTOSEL outputs a confidence rating and not just a yes/no answer.  If it
->> actually just outputs yes/no, well how is anyone supposed to know that and fix
->> that, given that it does not seem to be an open source project?)
+> The driver can be compile tested with !CONFIG_OF making certain data
+> unused:
 >
->Honestly I don't know. I ran a few experiments with natural language
->processors such as GPT-3 on commit messages which contained human-readable
->instructions, and asking "what am I expected to do with these patches", and
->seeing the bot respond "you should backport them to this version, change
->this and that in that version, and preliminary take that patch". It
->summarized extremely well the instructions delivered by the developer,
->which is awesome, but was not able to provide any form of confidence
->level. I don't know what Sasha uses but wouldn't be surprised it shares
->some such mechanisms and that it might not always be easy to get such a
->confidence level. But I could be wrong.
-
-It's actually pretty stupid: it uses the existence of ~10k of the most
-common words in commit messages + metrics from cqmetrics
-(github.com/dspinellis/cqmetrics) as input.
-
-Although I get a score, which is already set pretty high, confidence is
-really non-existant here: at the end it depends mostly on the writing
-style of said commit author more than anything.
-
--- 
-Thanks,
-Sasha
+>   drivers/irqchip/irq-meson-gpio.c:153:34: error: =E2=80=98meson_irq_gpio=
+_matches=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
