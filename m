@@ -2,62 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0D7D6B5991
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 09:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FB3C6B5994
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 09:56:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCKIzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 03:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
+        id S229929AbjCKI4M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 03:56:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36354 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCKIzE (ORCPT
+        with ESMTP id S229742AbjCKI4K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 03:55:04 -0500
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADF0A457C3;
-        Sat, 11 Mar 2023 00:55:02 -0800 (PST)
-From:   Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678524899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eZsxczpcjg5rADjui7vdfCXvmV1MTXwv9SnZW7oGtIc=;
-        b=l1cOG1tk3Ps29rL3Z0tXrKFLlOCMMGN25MzXBRPiPkTFZFRYhhAajHeqVh8miy/93cLHXX
-        xfVvcgFNqueaiFR+HmEx0EtypV/mL3hsdipo7zxPoG145rZ5ea9sQ+6+13tuQihcxhKVut
-        rKugBIn1XpsNBi4OfmMYKHofi6KFWGnk66RLHUn87iwT2p6M4Hjme7OHPWHDGsJljxsP6G
-        w0N7VO1dLtn8TvIpE21eA2msGCsO8woloRERQM/wTBpPgemvtL6hjqFkzpKL/tDq+SFroD
-        lIxzPsJkHaIW7pt+ubpCni68JATtRsIB6P78UF3cQNI92w802f04SIahC3jo6w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678524899;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=eZsxczpcjg5rADjui7vdfCXvmV1MTXwv9SnZW7oGtIc=;
-        b=23aWpxNuBQG3Y5qL+0wEufISM7B2IONCANHLQe0/OcgU3NIX45IcsFMwnj/eJTz7H31b3u
-        P104X5KLadgsqUCA==
-To:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        kim.phillips@amd.com, brgerst@gmail.com
-Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Usama Arif <usama.arif@bytedance.com>,
-        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
-Subject: Re: [PATCH v14 10/12] x86/smpboot: Send INIT/SIPI/SIPI to secondary
- CPUs in parallel
-In-Reply-To: <20230308171328.1562857-11-usama.arif@bytedance.com>
-References: <20230308171328.1562857-1-usama.arif@bytedance.com>
- <20230308171328.1562857-11-usama.arif@bytedance.com>
-Date:   Sat, 11 Mar 2023 10:54:58 +0200
-Message-ID: <87y1o3acrh.ffs@tglx>
+        Sat, 11 Mar 2023 03:56:10 -0500
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F31F4024
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 00:56:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=uFD3cgMWkcIJ2NqVC1pnXMQq6rewZDYCcFM5WgVsshE=;
+  b=Dr7UHQjtiFWWiss9BeBq04BcEoxxACp5atGLpCd5in7SBLaKAGu9h4ks
+   dLOsWnnrPEpwNhSBxJKVfH+8fVfMzYRj8P3zthhFUbtoEfMjZJdyMGSxJ
+   xf67IhyAfu/VWCUOOaeedW5rVKqCfFnXal/KC/P/eLOqpEqtpFci2kYbm
+   8=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,252,1673910000"; 
+   d="scan'208";a="96627995"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 09:56:07 +0100
+Date:   Sat, 11 Mar 2023 09:56:06 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
+        linux-staging@lists.linux.dev, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: alignment should match opening
+ parenthesis in axis-fifo.c
+In-Reply-To: <ZAtUVBbyMw7ine2e@khadija-virtual-machine>
+Message-ID: <alpine.DEB.2.22.394.2303110954590.2802@hadrien>
+References: <ZAZSmPpB6fcozGa4@khadija-virtual-machine> <alpine.DEB.2.22.394.2303062202500.3050@hadrien> <CACcTnM5GR0ZM5WBaL+BDEK_0QJGr6h2t4tnsnjerHta_nq6Tmg@mail.gmail.com> <ab0fd80-22c-d982-2f4-6fa5f43f858@inria.fr> <CACcTnM4OHFiGrEez6dMzd4jO4YuQZzqpUK86UBMzhd+nFDWezA@mail.gmail.com>
+ <e06f57e6-2a3a-7fde-742d-9d5dd8dd49b0@inria.fr> <ZAtUVBbyMw7ine2e@khadija-virtual-machine>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
@@ -67,29 +54,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08 2023 at 17:13, Usama Arif wrote:
->  
-> +/* Bringup step one: Send INIT/SIPI to the target AP */
-> +static int native_cpu_kick(unsigned int cpu)
-> +{
-> +	return do_cpu_up(cpu, idle_thread_get(cpu));
 
-This idle_thread_get() is not sufficient. bringup_cpu() does:
 
-	struct task_struct *idle = idle_thread_get(cpu);
+On Fri, 10 Mar 2023, Khadija Kamran wrote:
 
-	/*
-	 * Reset stale stack state from the last time this CPU was online.
-	 */
-	scs_task_reset(idle);
-	kasan_unpoison_task_stack(idle);
+> On Tue, Mar 07, 2023 at 09:13:49AM +0100, Julia Lawall wrote:
+> > There are actually two similar issues in axis-fifo.c.  You could fix them
+> > both at once.
+>
+> Hey Julia!
+> I have a question. Should I send the two fixes as a patchset of two
+> patches, and should I send it as [PATCH v2]?
+> Thank you.
 
-But with this new model neither the shadow stack gets reset nor the
-kasan unpoisoning happens _before_ the to be kicked CPU starts
-executing.
+The two issues in axis-fifo.c are very similar.  They could be in a single
+patch.  And that patch could be the v2 of your previous patch.  Just note
+that you have fixed another instance of the same problem in the message
+under the ---.
 
-That needs a new function which does the get() and the above.
-
-Thanks,
-
-        tglx
+julia
