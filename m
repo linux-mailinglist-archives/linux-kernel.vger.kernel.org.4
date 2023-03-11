@@ -2,365 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDBA16B59DC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F73C6B59F1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:11:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231171AbjCKJJ1 convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sat, 11 Mar 2023 04:09:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50932 "EHLO
+        id S230433AbjCKJLb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 04:11:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbjCKJIJ (ORCPT
+        with ESMTP id S230428AbjCKJK6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 04:08:09 -0500
-Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 640A0E1AD;
-        Sat, 11 Mar 2023 01:08:00 -0800 (PST)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by fd01.gateway.ufhost.com (Postfix) with ESMTP id B468A24E22F;
-        Sat, 11 Mar 2023 17:07:55 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 11 Mar
- 2023 17:07:55 +0800
-Received: from ubuntu.localdomain (183.27.96.115) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Sat, 11 Mar
- 2023 17:07:54 +0800
-From:   Hal Feng <hal.feng@starfivetech.com>
-To:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-CC:     Stephen Boyd <sboyd@kernel.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        "Rob Herring" <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Conor Dooley <conor@kernel.org>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        "Daniel Lezcano" <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Emil Renner Berthing <emil.renner.berthing@canonical.com>,
-        Hal Feng <hal.feng@starfivetech.com>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5 21/21] riscv: dts: starfive: Add StarFive JH7110 VisionFive 2 board device tree
-Date:   Sat, 11 Mar 2023 17:07:33 +0800
-Message-ID: <20230311090733.56918-22-hal.feng@starfivetech.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20230311090733.56918-1-hal.feng@starfivetech.com>
-References: <20230311090733.56918-1-hal.feng@starfivetech.com>
+        Sat, 11 Mar 2023 04:10:58 -0500
+Received: from 167-179-156-38.a7b39c.syd.nbn.aussiebb.net (167-179-156-38.a7b39c.syd.nbn.aussiebb.net [167.179.156.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50A6CE063;
+        Sat, 11 Mar 2023 01:08:53 -0800 (PST)
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+        by formenos.hmeau.com with smtp (Exim 4.94.2 #2 (Debian))
+        id 1pavDB-002xZd-OZ; Sat, 11 Mar 2023 17:08:22 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sat, 11 Mar 2023 17:08:21 +0800
+Date:   Sat, 11 Mar 2023 17:08:21 +0800
+From:   Herbert Xu <herbert@gondor.apana.org.au>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Lionel Debieve <lionel.debieve@foss.st.com>,
+        Li kunyu <kunyu@nfschina.com>, davem@davemloft.net,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, mcoquelin.stm32@gmail.com
+Subject: [v7 PATCH 0/8] crypto: stm32 - Save and restore between each request
+Message-ID: <ZAxFBR3TdA7jUAgJ@gondor.apana.org.au>
+References: <CACRpkdZC4z2Xng4=k94rmM=AFzNzTdXkvtkArMnK7afouz=7VA@mail.gmail.com>
+ <Y/3FYZJeLE7DVPBf@gondor.apana.org.au>
+ <Y/3IA4OjmUmjMgh1@gondor.apana.org.au>
+ <Y/3N6zFOZeehJQ/p@gondor.apana.org.au>
+ <CACRpkdZ3rCsOWqooNkPL6m7vZ2Z2Frh2sdxruKhrS0t3QHcSKw@mail.gmail.com>
+ <Y/6sCC2nH0FcD6kJ@gondor.apana.org.au>
+ <CACRpkdYN-SDfxXKLt3HWGVkWb3V1rABwvWuytwDrzfTqm81fNA@mail.gmail.com>
+ <ZAA8doNUjYmTRScB@gondor.apana.org.au>
+ <ZAMQjOdi8GfqDUQI@gondor.apana.org.au>
+ <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [183.27.96.115]
-X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAVu/XHbL9IR5D3h@gondor.apana.org.au>
+X-Spam-Status: No, score=2.7 required=5.0 tests=BAYES_00,HELO_DYNAMIC_IPADDR2,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS,TVD_RCVD_IP,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: **
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emil Renner Berthing <kernel@esmil.dk>
+v7 fixes empty message hashing and moves that into its own patch.
+As a result of this arrangement, I have removed the Reviewd-by's
+and Tested-by's for those two final patches.
 
-Add a minimal device tree for StarFive JH7110 VisionFive 2 board
-which has version A and version B. Support booting and basic
-clock/reset/pinctrl/uart drivers.
+This patch series fixes the import/export functions in the stm32
+driver.  As usual, a failure in import/export indicates a general
+bug in the hash driver that may break as soon as two concurrent
+users show up and hash at the same time using any method other
+than digest or init+finup.
 
-Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
-Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
-Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
-Co-developed-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Signed-off-by: Jianlong Huang <jianlong.huang@starfivetech.com>
-Co-developed-by: Hal Feng <hal.feng@starfivetech.com>
-Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
----
- arch/riscv/boot/dts/starfive/Makefile         |   6 +-
- .../jh7110-starfive-visionfive-2-v1.2a.dts    |  13 ++
- .../jh7110-starfive-visionfive-2-v1.3b.dts    |  13 ++
- .../jh7110-starfive-visionfive-2.dtsi         | 215 ++++++++++++++++++
- 4 files changed, 246 insertions(+), 1 deletion(-)
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
- create mode 100644 arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-
-diff --git a/arch/riscv/boot/dts/starfive/Makefile b/arch/riscv/boot/dts/starfive/Makefile
-index 7b00a48580ca..170956846d49 100644
---- a/arch/riscv/boot/dts/starfive/Makefile
-+++ b/arch/riscv/boot/dts/starfive/Makefile
-@@ -1,2 +1,6 @@
- # SPDX-License-Identifier: GPL-2.0
--dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-beaglev-starlight.dtb jh7100-starfive-visionfive-v1.dtb
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-beaglev-starlight.dtb
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7100-starfive-visionfive-v1.dtb
-+
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7110-starfive-visionfive-2-v1.2a.dtb
-+dtb-$(CONFIG_ARCH_STARFIVE) += jh7110-starfive-visionfive-2-v1.3b.dtb
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
-new file mode 100644
-index 000000000000..4af3300f3cf3
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.2a.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+/dts-v1/;
-+#include "jh7110-starfive-visionfive-2.dtsi"
-+
-+/ {
-+	model = "StarFive VisionFive 2 v1.2A";
-+	compatible = "starfive,visionfive-2-v1.2a", "starfive,jh7110";
-+};
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
-new file mode 100644
-index 000000000000..9230cc3d8946
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2-v1.3b.dts
-@@ -0,0 +1,13 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+/dts-v1/;
-+#include "jh7110-starfive-visionfive-2.dtsi"
-+
-+/ {
-+	model = "StarFive VisionFive 2 v1.3B";
-+	compatible = "starfive,visionfive-2-v1.3b", "starfive,jh7110";
-+};
-diff --git a/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-new file mode 100644
-index 000000000000..2a6d81609284
---- /dev/null
-+++ b/arch/riscv/boot/dts/starfive/jh7110-starfive-visionfive-2.dtsi
-@@ -0,0 +1,215 @@
-+// SPDX-License-Identifier: GPL-2.0 OR MIT
-+/*
-+ * Copyright (C) 2022 StarFive Technology Co., Ltd.
-+ * Copyright (C) 2022 Emil Renner Berthing <kernel@esmil.dk>
-+ */
-+
-+/dts-v1/;
-+#include "jh7110.dtsi"
-+#include "jh7110-pinfunc.h"
-+#include <dt-bindings/gpio/gpio.h>
-+
-+/ {
-+	aliases {
-+		i2c0 = &i2c0;
-+		i2c2 = &i2c2;
-+		i2c5 = &i2c5;
-+		i2c6 = &i2c6;
-+		serial0 = &uart0;
-+	};
-+
-+	chosen {
-+		stdout-path = "serial0:115200n8";
-+	};
-+
-+	cpus {
-+		timebase-frequency = <4000000>;
-+	};
-+
-+	memory@40000000 {
-+		device_type = "memory";
-+		reg = <0x0 0x40000000 0x1 0x0>;
-+	};
-+
-+	gpio-restart {
-+		compatible = "gpio-restart";
-+		gpios = <&sysgpio 35 GPIO_ACTIVE_HIGH>;
-+		priority = <224>;
-+	};
-+};
-+
-+&gmac0_rgmii_rxin {
-+	clock-frequency = <125000000>;
-+};
-+
-+&gmac0_rmii_refin {
-+	clock-frequency = <50000000>;
-+};
-+
-+&gmac1_rgmii_rxin {
-+	clock-frequency = <125000000>;
-+};
-+
-+&gmac1_rmii_refin {
-+	clock-frequency = <50000000>;
-+};
-+
-+&i2srx_bclk_ext {
-+	clock-frequency = <12288000>;
-+};
-+
-+&i2srx_lrck_ext {
-+	clock-frequency = <192000>;
-+};
-+
-+&i2stx_bclk_ext {
-+	clock-frequency = <12288000>;
-+};
-+
-+&i2stx_lrck_ext {
-+	clock-frequency = <192000>;
-+};
-+
-+&mclk_ext {
-+	clock-frequency = <12288000>;
-+};
-+
-+&osc {
-+	clock-frequency = <24000000>;
-+};
-+
-+&rtc_osc {
-+	clock-frequency = <32768>;
-+};
-+
-+&tdm_ext {
-+	clock-frequency = <49152000>;
-+};
-+
-+&i2c0 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c0_pins>;
-+	status = "okay";
-+};
-+
-+&i2c2 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c2_pins>;
-+	status = "okay";
-+};
-+
-+&i2c5 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c5_pins>;
-+	status = "okay";
-+};
-+
-+&i2c6 {
-+	clock-frequency = <100000>;
-+	i2c-sda-hold-time-ns = <300>;
-+	i2c-sda-falling-time-ns = <510>;
-+	i2c-scl-falling-time-ns = <510>;
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&i2c6_pins>;
-+	status = "okay";
-+};
-+
-+&sysgpio {
-+	i2c0_pins: i2c0-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(57, GPOUT_LOW,
-+					      GPOEN_SYS_I2C0_CLK,
-+					      GPI_SYS_I2C0_CLK)>,
-+				 <GPIOMUX(58, GPOUT_LOW,
-+					      GPOEN_SYS_I2C0_DATA,
-+					      GPI_SYS_I2C0_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c2_pins: i2c2-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(3, GPOUT_LOW,
-+					     GPOEN_SYS_I2C2_CLK,
-+					     GPI_SYS_I2C2_CLK)>,
-+				 <GPIOMUX(2, GPOUT_LOW,
-+					     GPOEN_SYS_I2C2_DATA,
-+					     GPI_SYS_I2C2_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c5_pins: i2c5-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(19, GPOUT_LOW,
-+					      GPOEN_SYS_I2C5_CLK,
-+					      GPI_SYS_I2C5_CLK)>,
-+				 <GPIOMUX(20, GPOUT_LOW,
-+					      GPOEN_SYS_I2C5_DATA,
-+					      GPI_SYS_I2C5_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	i2c6_pins: i2c6-0 {
-+		i2c-pins {
-+			pinmux = <GPIOMUX(16, GPOUT_LOW,
-+					      GPOEN_SYS_I2C6_CLK,
-+					      GPI_SYS_I2C6_CLK)>,
-+				 <GPIOMUX(17, GPOUT_LOW,
-+					      GPOEN_SYS_I2C6_DATA,
-+					      GPI_SYS_I2C6_DATA)>;
-+			bias-disable; /* external pull-up */
-+			input-enable;
-+			input-schmitt-enable;
-+		};
-+	};
-+
-+	uart0_pins: uart0-0 {
-+		tx-pins {
-+			pinmux = <GPIOMUX(5, GPOUT_SYS_UART0_TX,
-+					     GPOEN_ENABLE,
-+					     GPI_NONE)>;
-+			bias-disable;
-+			drive-strength = <12>;
-+			input-disable;
-+			input-schmitt-disable;
-+			slew-rate = <0>;
-+		};
-+
-+		rx-pins {
-+			pinmux = <GPIOMUX(6, GPOUT_LOW,
-+					     GPOEN_DISABLE,
-+					     GPI_SYS_UART0_RX)>;
-+			bias-disable; /* external pull-up */
-+			drive-strength = <2>;
-+			input-enable;
-+			input-schmitt-enable;
-+			slew-rate = <0>;
-+		};
-+	};
-+};
-+
-+&uart0 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&uart0_pins>;
-+	status = "okay";
-+};
+Cheers,
 -- 
-2.38.1
-
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
