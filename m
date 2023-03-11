@@ -2,106 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D832D6B580D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA2666B580F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:27:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229809AbjCKD1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 22:27:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44416 "EHLO
+        id S229804AbjCKD1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 22:27:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKD1P (ORCPT
+        with ESMTP id S229655AbjCKD1u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 22:27:15 -0500
-Received: from mail-oo1-xc32.google.com (mail-oo1-xc32.google.com [IPv6:2607:f8b0:4864:20::c32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284F312B012;
-        Fri, 10 Mar 2023 19:27:14 -0800 (PST)
-Received: by mail-oo1-xc32.google.com with SMTP id h18-20020a4abb92000000b00525397f569fso1090299oop.3;
-        Fri, 10 Mar 2023 19:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678505233;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IRQjTFtZ94OO6AEc5izEppuaCdMJD6xuPyl+zIKdfW0=;
-        b=qZ3+51ZkMcXkaOHg75zJzQUFCG2CdbVufZt+1EzJOKfWIsabcrq10X+BVt3yOmD+rL
-         bZLwRSBwwHca7UYHRve/fBHPpMKi8wpsnmZd4RfEa0Up9Mx5tWO9IIAHs0zbRlc5UCPf
-         Cyt30eYc559eRwiOgPBrpA6I8gfZTqNwbdmbdtiJMX8TV2Y+WxhEne1z0wjwjV9iJhqA
-         EIwDHuyfJSpRCWkBDUqyXPI+2BZu8j6UmaTEzPXQr+CI4jEoBi7HWIrJqLVglg3WDLyS
-         H02B0e9VK0N1bRLCdTrw++7klmC7M61fEXcvek3EixfB04ut+3iOdkEVOzLWWSE7ZtQq
-         4lAw==
+        Fri, 10 Mar 2023 22:27:50 -0500
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B14712A4D3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 19:27:49 -0800 (PST)
+Received: by mail-il1-f199.google.com with SMTP id d3-20020a056e02050300b00317999dcfb1so3706349ils.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 19:27:49 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678505233;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IRQjTFtZ94OO6AEc5izEppuaCdMJD6xuPyl+zIKdfW0=;
-        b=gGQBQ+LIlGo9qWxRbLi9C9RtGSgSbnNdCKsHXyfuNOpSqqDqJZGjqnNS+k3Xmei7Gn
-         JF/JBD+KxmaZlN9i90Ps1zbU4e/5FjV829lSlBBECswooPqZphi/e1p5dDZjoYLkL3VQ
-         +4Rk24TMRyJPOLakk7Gc05q+PmI0285nQc1Rqoye1ywELFMkjzoK8Dp7DumqxpVyDGcW
-         NtRC5QTtmKw3zN4/H3q8gFhQ2qPuAdAtGfLGndcF2aiAV14UnM/IwpzW/gJrqe7y2w/P
-         5gINkDKzT90+JAFJAwrTF1cqO81YOAvNUV2uzKkrMs//5U1/Wm7t3aSUh6YVA2sZh9p1
-         3IiA==
-X-Gm-Message-State: AO0yUKVxP0LRxhxPIAXMDvpiCUcyEBcVmO51x7ZoB9JFRph09GfdPVXb
-        FV4G0k478BjR+hAITNiqSgw=
-X-Google-Smtp-Source: AK7set/b/h7yPTGgW+JptrAuYIikQROxM33Mewn9h4AMhQ77jAlxlj5swvFy36v1sw4RTl5ZJUDivQ==
-X-Received: by 2002:a05:6820:123:b0:525:2e75:a615 with SMTP id i3-20020a056820012300b005252e75a615mr11455263ood.8.1678505233488;
-        Fri, 10 Mar 2023 19:27:13 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c26-20020a4ad8da000000b004c60069d1fbsm663982oov.11.2023.03.10.19.27.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 19:27:13 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Fri, 10 Mar 2023 19:27:12 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.4 000/357] 5.4.235-rc1 review
-Message-ID: <69d8df8c-4da3-481d-8731-09320882a75a@roeck-us.net>
-References: <20230310133733.973883071@linuxfoundation.org>
+        d=1e100.net; s=20210112; t=1678505268;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=wtqOT6CzflWo8NFA8wG8H31OfirdzkEX/EGftTEZpNg=;
+        b=Hx4SBTDcEk+5kU2WJjWP/nLuyk8tgNaXzaflamVdpbnfU6enyknrbCPjJ7acH8kHKK
+         1GLcY3w/ZkQw4A8b1xbyoybEHRWeE2H07GJapzTpO5ouEdp17NbsZrcq2v4NNq5nxE2p
+         xIfSyuyti+wcIbZFAtO9iWdbZtMGwC8oMGQKUN30vLA1m7lXBZISggaXz+wsMXqDiddh
+         69qlMKlEC2mmNT3i0i9x8Z1Zik5Olu3+DRyuU8nDXrNM5vXay4Bu5mMdZHdejXVwdFdN
+         XFLmFlNemN1TpAGPL6RTt1hkuM6fRjbRoUykPAlUDsojgKiLQNAP8NkcyNUtCphzHD+0
+         avTw==
+X-Gm-Message-State: AO0yUKViMc5XF++jtafa77xNJzS6McmqR5W5Eri+yOOStIbfT3+qAd7F
+        Clu1D/JTmXvXvt3yHxt114JZRXVAgAFT6+qb5R+nu4+hXsBx
+X-Google-Smtp-Source: AK7set+4D5Nw+EclJocwfNOA8Kqg37WbZUpkaY1C3RDpU+kD5YQFWXAIFO9HzqJpX3OdbtVwZbhNeNchHqZsCFu2qTtIP4q6sPmE
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310133733.973883071@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c04b:0:b0:315:7a34:224 with SMTP id
+ o11-20020a92c04b000000b003157a340224mr2154493ilf.3.1678505268351; Fri, 10 Mar
+ 2023 19:27:48 -0800 (PST)
+Date:   Fri, 10 Mar 2023 19:27:48 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000046238c05f69776ab@google.com>
+Subject: [syzbot] [ntfs?] kernel BUG in ntfs_end_buffer_async_read
+From:   syzbot <syzbot+72ba5fe5556d82ad118b@syzkaller.appspotmail.com>
+To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 02:34:49PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.235 release.
-> There are 357 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
-> 
+Hello,
 
-Build results:
-	total: 159 pass: 157 fail: 2
-Failed builds:
-	s390:defconfig
-	s390:allmodconfig
-Qemu test results:
-	total: 455 pass: 450 fail: 5
-Failed tests:
-	s390:defconfig:nolocktests:smp2:net,default:initrd
-	s390:defconfig:nolocktests:smp2:virtio-blk-ccw:net,virtio-net-pci:rootfs
-	s390:defconfig:nolocktests:smp2:scsi[virtio-ccw]:net,default:rootfs
-	s390:defconfig:nolocktests:virtio-pci:net,virtio-net-pci:rootfs
-	s390:defconfig:nolocktests:scsi[virtio-pci]:net,default:rootfs
+syzbot found the following issue on:
 
-Failures as already reported.
+HEAD commit:    fe15c26ee26e Linux 6.3-rc1
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=12feadbcc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
+dashboard link: https://syzkaller.appspot.com/bug?extid=72ba5fe5556d82ad118b
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
-Guenter
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+72ba5fe5556d82ad118b@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/ntfs/aops.c:130!
+Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
+Modules linked in:
+CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+pc : ntfs_end_buffer_async_read+0xa28/0xb78 fs/ntfs/aops.c:130
+lr : ntfs_end_buffer_async_read+0xa28/0xb78 fs/ntfs/aops.c:130
+sp : ffff80001a477a30
+x29: ffff80001a477a50 x28: ffff0001416534a0 x27: 0000000000000019
+x26: dfff800000000000 x25: 0000000000001000 x24: ffff00013f9ed3a0
+x23: 0000000000000000 x22: ffff00013f9ed6c0 x21: 0000000000000001
+x20: 0000000000020211 x19: 0000000000000330 x18: 1fffe000368995b6
+x17: ffff800015cdd000 x16: ffff80000826e470 x15: 0000000000000000
+x14: 1ffff00002b9c0b2 x13: dfff800000000000 x12: 0000000000000003
+x11: ff8080000965190c x10: 0000000000000000 x9 : ffff80000965190c
+x8 : ffff0000c0af1b40 x7 : ffff800009651140 x6 : 0000000000000000
+x5 : 0000000000000001 x4 : 0000000000000001 x3 : 0000000000000000
+x2 : ffff80001a477940 x1 : 0000000000020211 x0 : 0000000000001000
+Call trace:
+ ntfs_end_buffer_async_read+0xa28/0xb78 fs/ntfs/aops.c:130
+ end_bio_bh_io_sync+0xb0/0x194 fs/buffer.c:2703
+ bio_endio+0x940/0x984 block/bio.c:1607
+ req_bio_endio block/blk-mq.c:795 [inline]
+ blk_update_request+0x444/0xdc0 block/blk-mq.c:927
+ blk_mq_end_request+0x54/0x88 block/blk-mq.c:1054
+ lo_complete_rq+0x140/0x258 drivers/block/loop.c:370
+ blk_complete_reqs block/blk-mq.c:1132 [inline]
+ blk_done_softirq+0x11c/0x168 block/blk-mq.c:1137
+ __do_softirq+0x378/0xfbc kernel/softirq.c:571
+ run_ksoftirqd+0x6c/0x148 kernel/softirq.c:934
+ smpboot_thread_fn+0x4b0/0x96c kernel/smpboot.c:164
+ kthread+0x24c/0x2d4 kernel/kthread.c:376
+ ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
+Code: c8097e88 35ffffa9 17fffdb3 97bafdea (d4210000) 
+---[ end trace 0000000000000000 ]---
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
