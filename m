@@ -2,47 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F40B96B5FE6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:57:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9ABFA6B5FEA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:57:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbjCKS5v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:57:51 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59646 "EHLO
+        id S229848AbjCKS54 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:57:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229788AbjCKS5t (ORCPT
+        with ESMTP id S229450AbjCKS5w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:57:49 -0500
+        Sat, 11 Mar 2023 13:57:52 -0500
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA4534608D;
-        Sat, 11 Mar 2023 10:57:48 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BC0F32CC5;
+        Sat, 11 Mar 2023 10:57:51 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7FE6D60D30;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DE07F60D30;
+        Sat, 11 Mar 2023 18:57:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A1FAC4339C;
         Sat, 11 Mar 2023 18:57:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A245BC433EF;
-        Sat, 11 Mar 2023 18:57:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678561067;
-        bh=Lqr4OX3chGWwRIC8mFZn6C+4F3L6FUhyrcaMkKNpyBE=;
+        s=k20201202; t=1678561070;
+        bh=xaHRhiudUrbS+WkqUe8mCCCOPn8t0yaOAzuTsE+qPwk=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Mxopg+hHvSl30fD9UUm4zdgn0fFEQHDLyNs3b0Jdpqduaqai1SiCON8e+VjmiPdCZ
-         V8PmQtAc3J7iPhoVFiFi9QN5axzL6G1KFnn8PGLmF5UeLz4JAAzAgUtBcsD8XnZl43
-         s/oRDxdvxpiKjh10Gl1R0kA68t94EYIKdklzR6KwiH1uGK+lUyaZTLiXwUSRvgOJ//
-         U5/J+rHYecfOmp8nT1o+vJRb2AyKlp2XUQk3klnrfnF4caK7G7vl6/dQCtw7Afvx7A
-         6bbSEYn5A0P4/uS2f+KYKYm6+W0k1EZNgSSsz7iG1fSVtfWS2M+Ei5Ab3aaPMqCcff
-         zlFLOLTpw+97A==
+        b=Pmhq+ipUicTMrtC7sWL3GgvGORYYsnb9be/+5LuGSHPh6uP36Fzlntpm58qIPpyQF
+         xbxhc9UR6QsFRd1Db/SUcbfC1FhffD21PYNk3QaHaPKeHaPjMJxXKLC2XaIZAEHRy/
+         fHSSdJJ8N3rrqH0b2wK7F/GlizK0DfAqGyNbjpuMeJ4dw6Iakh41v0cy0l78W9e0FX
+         6D7bC5df2Aae9CIVxqbSXx9ZI5zsznL1tDoD5ZhSZ3sg/LF8pPT15oIe6wV7jYJ68y
+         /AIEDxqIWsiq70c6ijs7ZhnajNgPgHfYKFo0rmihbdoQcK1o4jAZWkGunPP0eIJJTt
+         ixLqtdSBHqSlg==
 From:   Mark Brown <broonie@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230310144721.1544756-1-robh@kernel.org>
-References: <20230310144721.1544756-1-robh@kernel.org>
-Subject: Re: [PATCH] regulator: Use of_property_present() for testing DT
- property presence
-Message-Id: <167856106498.960737.3108647307474639813.b4-ty@kernel.org>
-Date:   Sat, 11 Mar 2023 18:57:44 +0000
+To:     Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Tony Lindgren <tony@atomide.com>, Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, linux-omap@vger.kernel.org
+In-Reply-To: <20230310144722.1544843-1-robh@kernel.org>
+References: <20230310144722.1544843-1-robh@kernel.org>
+Subject: Re: [PATCH] regulator: Use of_property_read_bool() for boolean
+ properties
+Message-Id: <167856106679.960737.10591965547383927223.b4-ty@kernel.org>
+Date:   Sat, 11 Mar 2023 18:57:46 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
@@ -56,15 +57,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 08:47:21 -0600, Rob Herring wrote:
+On Fri, 10 Mar 2023 08:47:22 -0600, Rob Herring wrote:
 > It is preferred to use typed property access functions (i.e.
 > of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 > 
-> [...]
+> 
 
 Applied to
 
@@ -72,8 +71,8 @@ Applied to
 
 Thanks!
 
-[1/1] regulator: Use of_property_present() for testing DT property presence
-      commit: 7dda20c97fac52948b948e15e1173ee57c66ed35
+[1/1] regulator: Use of_property_read_bool() for boolean properties
+      commit: 5bd73a162bc881dbb98ff9909dd865286852ee2b
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
