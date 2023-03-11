@@ -2,101 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92EDA6B5D6A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:43:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BE2C6B5D70
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230192AbjCKPns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:43:48 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
+        id S230192AbjCKPrA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:47:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjCKPnn (ORCPT
+        with ESMTP id S230033AbjCKPq5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:43:43 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D755CC11;
-        Sat, 11 Mar 2023 07:43:39 -0800 (PST)
-Received: from [192.168.1.103] (178.176.77.159) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
- 2023 18:43:30 +0300
-Subject: Re: [PATCH 05/32] pata_parport-bpck6: remove lpt_addr from struct
- ppc_storage
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230307224627.28011-1-linux@zary.sk>
- <20230307224627.28011-6-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <2e1730f7-c265-3df7-5278-627e55a1d8b5@omp.ru>
-Date:   Sat, 11 Mar 2023 18:43:30 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 11 Mar 2023 10:46:57 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE71C85A1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:46:55 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id o12so32371525edb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:46:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678549614;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4dVATx5c6hr9pOV2Vp8/XmqV67vmEqF0l4KPE/5Ob10=;
+        b=QGGSkY6z5rMmcEhoqYQjhiYLqmOfGmeHv+u/dyEAay2rvEM6YppXPFcxX1r0ENrjda
+         asrvTU37m3LS+XLxQwLX4Jqid0KARnrHGbahPWTd0mepDfbAcaq4D0BU2VeGS3m/E2BS
+         1xM5v6lK2Zy+5sJo9lb6e9tvQCxAk1BHCDr6O5lzuzp4hIXtfVg2/kJlozXsCaYoGvnJ
+         Jho+wtHt5iTLwlEWZEpLmc5SFY95ZPfQKqVriyUUYjmBtRyULJsuxTokGWxSeCHtBUbA
+         aAucXqsTbi5zmTfCOOJaSwrxQm92FMCSKHMUBpOgqteqt3yBClunNvEtFCACvT9fJurT
+         wVXw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678549614;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4dVATx5c6hr9pOV2Vp8/XmqV67vmEqF0l4KPE/5Ob10=;
+        b=EbhUsMhIiIAV+GqIrA3GG2Bo3/rG7h0s64cj8RDwPuMFsfRCurQb17Qs1B807I0Zqy
+         gz1ztkehyXV7q8lyjoDy59pZje753se0PHRjtN7iGLhH9Y7JjuXZU2RMGaGdfRgXv1vW
+         R2wk2hjHTA6/bXvoE2BbklL0TNzKGG2NrLfnOReWN7a/TCwD4peMJJEBeeAIeqP7TkzM
+         biJC4tZhMEH6ILcF3OqRcvatJSYsfBFDB/uViDVccZ4Frafs2lyWpT0DwGmmnCN37xfV
+         3rFrWro4pARgerbeKGlau4Ai5sOiINmVEeJ8NXbAcWGHUluAFgqUl00cy/vR+HyzO5dw
+         AP6Q==
+X-Gm-Message-State: AO0yUKWZ3gtrpkDmcjtjItMsIr5nqmx2SGLkM8EDwhob6i45enRrERU2
+        IeeHPQInbLcfV/pm2w8GQUx8Ig==
+X-Google-Smtp-Source: AK7set8MNJoq43tQWh5HLqQTE5+KCYEEaH0KtBtq3eP0g+QDew0cU9sHyxx5V05LiXYaUdXaN5O6ng==
+X-Received: by 2002:a17:907:2ce1:b0:8b1:32dd:3af with SMTP id hz1-20020a1709072ce100b008b132dd03afmr39043153ejc.28.1678549613855;
+        Sat, 11 Mar 2023 07:46:53 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:6927:e94d:fc63:9d6e? ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
+        by smtp.gmail.com with ESMTPSA id q16-20020a50aa90000000b004bd6e3ed196sm1310704edc.86.2023.03.11.07.46.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 07:46:53 -0800 (PST)
+Message-ID: <71c7feff-4189-f12f-7353-bce41a61119d@linaro.org>
+Date:   Sat, 11 Mar 2023 16:46:52 +0100
 MIME-Version: 1.0
-In-Reply-To: <20230307224627.28011-6-linux@zary.sk>
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] dt-bindings: pinctrl: Move k3.h to arch
 Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Sekhar Nori <nsekhar@ti.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>
+Cc:     linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        netdev@vger.kernel.org, Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+References: <20230311131325.9750-1-nm@ti.com>
+ <20230311131325.9750-3-nm@ti.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311131325.9750-3-nm@ti.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.77.159]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 15:21:59
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.159 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.159 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;178.176.77.159:7.4.1,7.7.3
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.159
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/11/2023 15:24:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 12:26:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:46 AM, Ondrej Zary wrote:
-
-> lpt_addr duplicates pi->port. Remove it.
+On 11/03/2023 14:13, Nishanth Menon wrote:
+> Move the k3 pinctrl definition to arch dts folder.
 > 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> While at this, fixup MAINTAINERS and header guard macro to better
+> reflect the changes.
+> 
+> Suggested-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Suggested-by: Linus Walleij <linus.walleij@linaro.org>
+> Link: https://lore.kernel.org/all/c4d53e9c-dac0-8ccc-dc86-faada324beba@linaro.org/
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> ---
+> 
+> There is no specific case I can think of at the moment to create a
+> pinctrl.dtsi for the SoCs.. So, unlike other SoCs, I had not done that
+> in the series, if folks have a better opinion about this, please let us
+> discuss.
+> 
+>  MAINTAINERS                                                 | 1 -
+>  arch/arm64/boot/dts/ti/k3-am62.dtsi                         | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-am62a.dtsi                        | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-am64.dtsi                         | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-am65.dtsi                         | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-j7200.dtsi                        | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-j721e.dtsi                        | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-j721s2.dtsi                       | 3 ++-
+>  arch/arm64/boot/dts/ti/k3-j784s4.dtsi                       | 3 ++-
+>  .../pinctrl/k3.h => arch/arm64/boot/dts/ti/k3-pinctrl.h     | 6 +++---
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Bindings are separate from other changes (also DTS). Split the patches.
 
-[...]
+(...)
 
-MBR, Sergey
+>  / {
+>  	model = "Texas Instruments K3 J784S4 SoC";
+>  	compatible = "ti,j784s4";
+> diff --git a/include/dt-bindings/pinctrl/k3.h b/arch/arm64/boot/dts/ti/k3-pinctrl.h
+> similarity index 94%
+> rename from include/dt-bindings/pinctrl/k3.h
+> rename to arch/arm64/boot/dts/ti/k3-pinctrl.h
+> index 469bd29651db..6004e0967ec5 100644
+> --- a/include/dt-bindings/pinctrl/k3.h
+> +++ b/arch/arm64/boot/dts/ti/k3-pinctrl.h
+
+Dropping this file is going to break existing code and I would say is
+also a break of the ABI. You need to keep the header for at least one
+cycle, you can add there a warning for coming deprecation.
+
+See for example:
+https://lore.kernel.org/all/20220605160508.134075-5-krzysztof.kozlowski@linaro.org/
+
+Best regards,
+Krzysztof
+
