@@ -2,111 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B2C26B5FC8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:31:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4402C6B5FCB
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:34:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCKSbX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:31:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51834 "EHLO
+        id S229655AbjCKSeT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:34:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKSbU (ORCPT
+        with ESMTP id S229469AbjCKSeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:31:20 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F2EC5ADD3;
-        Sat, 11 Mar 2023 10:31:19 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 26AA7B80066;
-        Sat, 11 Mar 2023 18:31:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 735B2C433EF;
-        Sat, 11 Mar 2023 18:31:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678559476;
-        bh=e3pDlo/dqmywM4HTT3dwrpN6C06Lxci0w3JGSujSUAw=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=JUTa8xjvRiyaDPOB74RGHCfFuJJI5xfQXyhgLf08aEEmydx6I1jRf8An0Vs/sO7/o
-         W49foSTyE7XQFoypg76VltOiG06rITAaNbUH4x3SB0ext9JiF5jqXYaaUhhDBH0HuL
-         K8sDcvy0Zk4djUJwgJDYNN4cVgITVTfoOY4F3B9pkykk2qt1fPGPGyu7vOcCsiuRWV
-         Q+5Kp7ddjG0sEDlOTe9ZT2ZN44jG1um+7OaQA4KkFIAghTkAgh21oDLFslzmDtILdc
-         iZj1MuhIwW94akoDdylZaEoKEObq+RRbxZY1eAejowhHTDGRdZz0meKGuqwafhR6YA
-         8/wa14MiGoNvA==
-Date:   Sat, 11 Mar 2023 18:31:21 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Robert Eshleman <bobbyeshleman@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/4] iio: dac: ad5755: mark OF related data as maybe
- unused
-Message-ID: <20230311183121.577eb52b@jic23-huawei>
-In-Reply-To: <68e9c7d9-1087-0454-6122-a88c7339ab3c@linaro.org>
-References: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
-        <20230311111457.251475-2-krzysztof.kozlowski@linaro.org>
-        <20230311122208.059a81cb@jic23-huawei>
-        <68e9c7d9-1087-0454-6122-a88c7339ab3c@linaro.org>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 11 Mar 2023 13:34:16 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5017D2A9B9;
+        Sat, 11 Mar 2023 10:34:14 -0800 (PST)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32BIXwDA029958;
+        Sat, 11 Mar 2023 19:33:58 +0100
+Date:   Sat, 11 Mar 2023 19:33:58 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZAzJltJaydwjCN6E@1wt.eu>
+References: <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+ <Y/y70zJj4kjOVfXa@sashalap>
+ <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
+ <20230311161644.GH860405@mit.edu>
+ <ZAy+3f1/xfl6dWpI@sol.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAy+3f1/xfl6dWpI@sol.localdomain>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 13:25:33 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Sat, Mar 11, 2023 at 09:48:13AM -0800, Eric Biggers wrote:
+> The purpose of all these mailing list searches would be to generate a list of
+> potential issues with backporting each commit, which would then undergo brief
+> human review.
 
-> On 11/03/2023 13:22, Jonathan Cameron wrote:
-> > On Sat, 11 Mar 2023 12:14:55 +0100
-> > Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> >  =20
-> >> The driver can be compile tested with !CONFIG_OF making certain data
-> >> unused (of_device_id is not used for device matching): =20
-> >=20
-> > It should be used for device matching I think, so I'd rather see
-> > it assigned for that purpose than hiding the issue. =20
->=20
-> That would require testing and changes. The device matching is via SPI
-> table which has device data. Probably adding OF matching would require
-> bigger changes to for handling the match data.
->=20
-> This was intentional design in this driver, so we are not hiding here
-> anything.
+This is one big part that I suspect is underestimated. I'll speak from my
+past experience maintaining extended LTS for 3.10. I couldn't produce as
+many releases as I would have liked to because despite the scripts that
+helped me figure some series, some dependencies, origin branches etc, the
+whole process of reviewing ~600 patches to end up with ~200 at the end
+(and adapting some of them to fit) required ~16 hours a day for a full
+week-end, and I didn't always have that amount of time available. Any my
+choices were far from being perfect, as during the reviews I got a number
+of "please don't backport this there" and "if you take this one you also
+need these ones". Also I used to intentionally drop what had nothing to
+do on old LTS stuff so even from that perspective my work could have been
+perceived as insufficient.
 
-I doubt it was intentional. Mostly people do this because the magic
-fallbacks to find the spi_device_id entry work.
+The reviewing process is overwhelming, really. There is a point where you
+start to fail and make choices that are not better than a machine's. But
+is a mistake once in a while dramatic if on the other hand it fixes 200
+other issues ? I think not as long as it's transparent and accepted by
+the users, because for one user that could experience a regression (one
+that escaped all the testing in place), thousands get fixes for existing
+problems. I'm not saying that regressions are good, I hate them, but as
+James said, we have to accept that user are part of the quality process.
 
-If we'd noticed at review time it would not have gone in like this.
-Note that the spi_match_id() use of_modalias_node() which has stripped the
-vendor id off the compatible then matches against the spi_device_id
-table.
+My approach on another project I maintain is to announce upfront my own
+level of trust in my backport work, saying "I had a difficult week fixing
+that problem, do not rush on it or be extra careful", or "nothing urgent,
+no need to upgrade if you have no problem" or also "just upgrade, it's
+almost riskless". Users love that, because they know they're part of the
+quality assurance process, and they will either take small risks when
+they can, or wait for others to take risks.
 
-So it 'should' just work.  Now ideally we'd switch to
-spi_get_device_match_data() but that needs more significant changes.
-Though simple enough ones that review would be enough.
+But thinking that having one person review patches affecting many
+subsystem after pre-selection and extra info regarding discussions on
+each individual patch could result in more reliable stable releases is
+just an illusion IMHO, because the root of problem is that there are not
+enough humans to fix all the problems that humans introduce in the first
+place, and despite this we need to fix them. Just like automated scripts
+scraping lore, AUTOSEL does bring some value if it offloads some work
+from the available humans, even in its current state. And I hope that
+more of the selection and review work in the future will be automated
+and even less dependent on humans, because it does have a chance to be
+more reliable in front of that vast amount of work.
 
-Just need to use pointers to the ad75755_chip_info_tbl entries
-rather than the enum in both the spi id table and the of one - this
-avoids the issue with the enum value of 0 counting as a failed match.
+And in any case I've seen you use the word "trivial" several times in
+this thread, and for having been through a little bit of this process
+in the past, I wouldn't use that word anywhere in a description of what
+my experience had been. You really seem to underestimate the difficulty
+here.
 
->=20
-> >=20
-> >  =20
-> >>
-> >>   drivers/iio/dac/ad5755.c:865:34: error: =E2=80=98ad5755_of_match=E2=
-=80=99 defined but not used [-Werror=3Dunused-const-variable=3D] =20
->=20
-> >  =20
->=20
-> Best regards,
-> Krzysztof
->=20
-
+Regards,
+Willy
