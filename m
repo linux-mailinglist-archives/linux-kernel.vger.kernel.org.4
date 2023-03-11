@@ -2,52 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4316B5BB5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:31:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DC696B5BBA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230323AbjCKMbQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:31:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36814 "EHLO
+        id S230250AbjCKMbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:31:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCKMbN (ORCPT
+        with ESMTP id S230363AbjCKMbo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:31:13 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445C812DC02;
-        Sat, 11 Mar 2023 04:31:03 -0800 (PST)
+        Sat, 11 Mar 2023 07:31:44 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1983812E148
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:31:43 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA73760B9E;
-        Sat, 11 Mar 2023 12:31:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99470C433EF;
-        Sat, 11 Mar 2023 12:31:01 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C6B82B8250B
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 12:31:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EFDCC433D2;
+        Sat, 11 Mar 2023 12:31:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678537862;
-        bh=w9TCBSJxLRN61cNOcGXqJ4rfKYTm28LpgtgDLQfcBLE=;
+        s=korg; t=1678537900;
+        bh=C1v9FkUHgXoYcA4yxukKYLrevBXZQGYDW7QFKTnMK4w=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=z/szS/ruxcHd39YFgGdd7sb/CLgOTSN96FrdWEbJnRa/R9reqCkFcwrOq7MzQ+O2w
-         3IDELZUcHkiPeBqGzYIGG5Rgd4X6sb/mS0dsLFc3HCG4QxhbwshIaLUb5gOBgTkfPj
-         6ma4+H0V/hF4/M7YjP8VLzR6ZktBsLTspldnNK/c=
-Date:   Sat, 11 Mar 2023 13:30:59 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/529] 5.10.173-rc1 review
-Message-ID: <ZAx0gyVQhOukSHbB@kroah.com>
-References: <20230310133804.978589368@linuxfoundation.org>
- <ZAxzrMh1zu6WOKyR@debian>
+        b=UOiE9wU+iihACt6MQMjXpS8xMRdJuYNk5fm5alFEH6v4GkAcsmUtxgBms8qgxVKQq
+         0/gGSaLsQvTzPAR8zTWWPXcF19n9+fJyY/2A33/KdOv0pTkc2zSh8gju+l2xkePsPr
+         Art/PGMV3gWOgNTdigfvbOT+mxc9NJuvDAKu4+7g=
+Date:   Sat, 11 Mar 2023 13:31:32 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Sumitra Sharma <sumitraartsy@gmail.com>
+Cc:     outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Staging: pi433: Change bit_rate type from u16 to u32
+Message-ID: <ZAx0pN4Xza/mWq4O@kroah.com>
+References: <20230311122346.GA21752@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZAxzrMh1zu6WOKyR@debian>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230311122346.GA21752@ubuntu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -56,38 +51,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 12:27:24PM +0000, Sudip Mukherjee wrote:
-> Hi Greg,
+On Sat, Mar 11, 2023 at 04:23:46AM -0800, Sumitra Sharma wrote:
+> Change bit_rate type from u16 to u32 inside struct pi433_tx_cfg to
+> support bit rates up to 300kbps as per the spec.
 > 
-> On Fri, Mar 10, 2023 at 02:32:23PM +0100, Greg Kroah-Hartman wrote:
-> > This is the start of the stable review cycle for the 5.10.173 release.
-> > There are 529 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> > 
-> > Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> > Anything received after that time might be too late.
+> Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
+> ---
+>  drivers/staging/pi433/pi433_if.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> Build test (gcc version 11.3.1 20230210):
-> mips: 63 configs -> no failure
-> arm: 104 configs -> no failure
-> arm64: 3 configs -> no failure
-> x86_64: 4 configs -> no failure
-> alpha allmodconfig -> no failure
-> powerpc allmodconfig -> no failure
-> riscv allmodconfig -> no failure
-> s390 allmodconfig -> failure
-> xtensa allmodconfig -> no failure
+> diff --git a/drivers/staging/pi433/pi433_if.h b/drivers/staging/pi433/pi433_if.h
+> index 25ee0b77a32c..1f8ffaf02d99 100644
+> --- a/drivers/staging/pi433/pi433_if.h
+> +++ b/drivers/staging/pi433/pi433_if.h
+> @@ -51,7 +51,7 @@ enum option_on_off {
+>  #define PI433_TX_CFG_IOCTL_NR	0
+>  struct pi433_tx_cfg {
+>  	__u32			frequency;
+> -	__u16			bit_rate;
+> +	__u32			bit_rate;
+>  	__u32			dev_frequency;
+>  	enum modulation		modulation;
+>  	enum mod_shaping	mod_shaping;
+> -- 
+> 2.25.1
 > 
-> Note:
-> s390 build failed with the error:
-> drivers/s390/block/dasd_diag.c:656:23: error: initialization of 'int (*)(struct dasd_device *, __u8)' {aka 'int (*)(struct dasd_device *, unsigned char)'} from incompatible pointer type 'int (*)(struct dasd_device *, __u8,  __u8)' {aka 'int (*)(struct dasd_device *, unsigned char,  unsigned char)'} [-Werror=incompatible-pointer-types]
->   656 |         .pe_handler = dasd_diag_pe_handler,
->       |                       ^~~~~~~~~~~~~~~~~~~~
-> drivers/s390/block/dasd_diag.c:656:23: note: (near initialization for 'dasd_diag_discipline.pe_handler')
+> 
 
-Should be fixed in -rc2.
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- You sent a patch that has been sent multiple times in the past few
+  days, and is identical to ones that has been recently rejected.
+  Please always look at the mailing list traffic to determine if you are
+  duplicating other people's work.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
 
 thanks,
 
-greg k-h
+greg k-h's patch email bot
