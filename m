@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6234E6B5FE1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:55:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AC66B5FE4
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:57:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCKSzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:55:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S229814AbjCKS5V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:57:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCKSzF (ORCPT
+        with ESMTP id S229642AbjCKS5U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:55:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3FED1B57E;
-        Sat, 11 Mar 2023 10:55:03 -0800 (PST)
+        Sat, 11 Mar 2023 13:57:20 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E9346155;
+        Sat, 11 Mar 2023 10:57:16 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 65443B80066;
-        Sat, 11 Mar 2023 18:55:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE79BC433D2;
-        Sat, 11 Mar 2023 18:55:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5EFDAB8068D;
+        Sat, 11 Mar 2023 18:57:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2AC3DC433EF;
+        Sat, 11 Mar 2023 18:57:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678560901;
-        bh=N1RKlCcfEmQ0OHV1fgP6CQcp2dLFer8ChKPns56/O5I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LaFgorof/0OrTKIsG35nFDHtT7dOVFAZZuNgOZGfy3bMEaEAqPdetPZPceieLTDez
-         eveFpRGZnFCOxzCEchZU6swyKj8EoPTkKLEXdvgUGSra6J/YEMFVpt/oG0w1jJrIiw
-         ywxuv+wGjfhQjRWhD3olO+fZYT041OpqYE0fy1f0FXTBmiDoe+JaiVPnYO+pe9W6Ki
-         B98VVjq+FmcDvqUf8UQRzMa6t9RlOHsMuyz6QuMR4KKYqI7vgsHzWmQKz1xGEqgCNZ
-         T5U33rUD8e8keyZIKYbVQREbcySz4j+7+ac1dJ38v54TXDNDUibPkTRD+LD/Gx/BdL
-         cHQCMrxEHmnWQ==
-Date:   Sat, 11 Mar 2023 10:54:59 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZAzOgw8Ui4kh1Z3D@sol.localdomain>
-References: <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzH8Ve05SRLYPnR@sashalap>
+        s=k20201202; t=1678561034;
+        bh=wg33YK0h6t1rgG7Yxr4msszRqOQ0AYH3v0t/NGkFtRc=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=OpWz9dlpyER4mIPb4PlkdRzF63+Cy3tni7aR50Od95Z/NfEzUax0Ovm4Ogd3Q3gzA
+         9KqCioj1UezWa4z/YhUxJ3O+ft8UnaW6y67AKYJ7izpyW08eQ1FO1Xi52EMMucstcN
+         F6gKvrvmhccfhr98VRkCH/7bDZef/BPpZKd0NEwAT2JRJuPCZLneP3edgkQozBp86I
+         lpLMrRZjZvsEae0N6rpfU1VwbQ9ICJWscNnzAbdIioJakDMKqFlAu28p4+NTuC0KME
+         HZ61vctyOeC0uXqLLn0geaGQ1HMpgnaMq8DASuCRC/yOhsvrve3H7UR5GvO9my2o71
+         J4SBlchu3H0Fw==
+Date:   Sat, 11 Mar 2023 18:57:19 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH v2] iio: dac: cio-dac: Migrate to the regmap API
+Message-ID: <20230311185719.7af38a8a@jic23-huawei>
+In-Reply-To: <20230311140218.74920-1-william.gray@linaro.org>
+References: <20230311140218.74920-1-william.gray@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAzH8Ve05SRLYPnR@sashalap>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,72 +55,190 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 01:26:57PM -0500, Sasha Levin wrote:
-> 
-> "job"? do you think I'm paid to do this work?
+On Sat, 11 Mar 2023 09:02:18 -0500
+William Breathitt Gray <william.gray@linaro.org> wrote:
 
-> Why would I stonewall improvements to the process?
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
 > 
-> I'm getting a bunch of suggestions and complaints that I'm not implementing
-> those suggestions fast enough on my spare time.
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+
+Trivial question inline about the includes changes, otherwise looks good to me.
+
+I'm not that fussed about the includes if there is nothing else requiring
+a v3, but obviously want to give it a little time for others to comment.
+
+Jonathan
+
+> ---
+> Changes in v2:
+>  - Remove DAC initialization to 0V in cio_dio_probe() as superfluous now
+>    that the chan_out_states buffer is gone
 > 
-> > One of the first things I would do if I was maintaining the stable kernels is to
-> > set up a way to automatically run searches on the mailing lists, and then take
-> > advantage of that in the stable process in various ways.  Not having that is the
-> > root cause of a lot of the issues with the current process, IMO.
+>  drivers/iio/dac/Kconfig   |  1 +
+>  drivers/iio/dac/cio-dac.c | 66 ++++++++++++++++++++++++++-------------
+>  2 files changed, 46 insertions(+), 21 deletions(-)
 > 
-> "if I was maintaining the stable kernels" - why is this rellevant? give
-> us the tool you've proposed below and we'll be happy to use it. Heck,
-> don't give it to us, use it to review the patches we're sending out for
-> review and let us know if we've missed anything.
+> diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
+> index d3f90cf86143..3acd9c3f388e 100644
+> --- a/drivers/iio/dac/Kconfig
+> +++ b/drivers/iio/dac/Kconfig
+> @@ -277,6 +277,7 @@ config CIO_DAC
+>  	tristate "Measurement Computing CIO-DAC IIO driver"
+>  	depends on X86 && (ISA_BUS || PC104)
+>  	select ISA_BUS_API
+> +	select REGMAP_MMIO
+>  	help
+>  	  Say yes here to build support for the Measurement Computing CIO-DAC
+>  	  analog output device family (CIO-DAC16, CIO-DAC08, PC104-DAC06). The
+> diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
+> index 791dd999cf29..759833a6bd29 100644
+> --- a/drivers/iio/dac/cio-dac.c
+> +++ b/drivers/iio/dac/cio-dac.c
+> @@ -6,16 +6,15 @@
+>   * This driver supports the following Measurement Computing devices: CIO-DAC16,
+>   * CIO-DAC06, and PC104-DAC06.
+>   */
+> -#include <linux/bitops.h>
+> +#include <linux/bits.h>
 
-It's kind of a stretch to claim that maintaining the stable kernels is not part
-of your and Greg's jobs.  But anyway, the real problem is that it's currently
-very hard for others to contribute, given the unique role the stable maintainers
-have and the lack of documentation about it.  Each of the two maintainers has
-their own scripts, and it is not clear how they use them and what processes they
-follow.  (Even just stable-kernel-rules.rst is totally incorrect these days.)
-Actually I still don't even know where your scripts are!  They are not in
-stable-queue/scripts, it seems those are only Greg's scripts?  And if I built
-something, how do I know you would even use it?  You likely have all sorts of
-requirements that I don't even know about.
+I'm not immediately spotting why this change is part of the regmap
+conversion.
 
+It may well make sense, but if unrelated, should probably be in a different patch.
+
+>  #include <linux/device.h>
+> -#include <linux/errno.h>
+> +#include <linux/err.h>
+>  #include <linux/iio/iio.h>
+>  #include <linux/iio/types.h>
+> -#include <linux/io.h>
+> -#include <linux/ioport.h>
+>  #include <linux/isa.h>
+>  #include <linux/module.h>
+>  #include <linux/moduleparam.h>
+> +#include <linux/regmap.h>
+>  #include <linux/types.h>
+>  
+>  #define CIO_DAC_NUM_CHAN 16
+> @@ -35,25 +34,51 @@ static unsigned int num_cio_dac;
+>  module_param_hw_array(base, uint, ioport, &num_cio_dac, 0);
+>  MODULE_PARM_DESC(base, "Measurement Computing CIO-DAC base addresses");
+>  
+> +#define CIO_DAC_BASE 0x00
+> +#define CIO_DAC_CHANNEL_STRIDE 2
+> +
+> +static bool cio_dac_precious_reg(struct device *dev, unsigned int reg)
+> +{
+> +	/*
+> +	 * All registers are considered precious; if the XFER jumper is set on
+> +	 * the device, then no update occurs until a DAC register is read.
+> +	 */
+> +	return true;
+> +}
+> +
+> +static const struct regmap_config cio_dac_regmap_config = {
+> +	.reg_bits = 16,
+> +	.reg_stride = 2,
+> +	.val_bits = 16,
+> +	.io_port = true,
+> +	.max_register = 0x1F,
+> +	.precious_reg = cio_dac_precious_reg,
+> +};
+> +
+>  /**
+>   * struct cio_dac_iio - IIO device private data structure
+> - * @chan_out_states:	channels' output states
+> - * @base:		base memory address of the DAC device
+> + * @map: Regmap for the device
+>   */
+>  struct cio_dac_iio {
+> -	int chan_out_states[CIO_DAC_NUM_CHAN];
+> -	u16 __iomem *base;
+> +	struct regmap *map;
+>  };
+>  
+>  static int cio_dac_read_raw(struct iio_dev *indio_dev,
+>  	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
+>  {
+>  	struct cio_dac_iio *const priv = iio_priv(indio_dev);
+> +	const unsigned int offset = chan->channel * CIO_DAC_CHANNEL_STRIDE;
+> +	int err;
+> +	unsigned int dac_val;
+>  
+>  	if (mask != IIO_CHAN_INFO_RAW)
+>  		return -EINVAL;
+>  
+> -	*val = priv->chan_out_states[chan->channel];
+> +	err = regmap_read(priv->map, CIO_DAC_BASE + offset, &dac_val);
+> +	if (err)
+> +		return err;
+> +
+> +	*val = dac_val;
+>  
+>  	return IIO_VAL_INT;
+>  }
+> @@ -62,6 +87,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+>  	struct iio_chan_spec const *chan, int val, int val2, long mask)
+>  {
+>  	struct cio_dac_iio *const priv = iio_priv(indio_dev);
+> +	const unsigned int offset = chan->channel * CIO_DAC_CHANNEL_STRIDE;
+>  
+>  	if (mask != IIO_CHAN_INFO_RAW)
+>  		return -EINVAL;
+> @@ -70,10 +96,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+>  	if ((unsigned int)val > 65535)
+>  		return -EINVAL;
+>  
+> -	priv->chan_out_states[chan->channel] = val;
+> -	iowrite16(val, priv->base + chan->channel);
+> -
+> -	return 0;
+> +	return regmap_write(priv->map, CIO_DAC_BASE + offset, val);
+>  }
+>  
+>  static const struct iio_info cio_dac_info = {
+> @@ -92,7 +115,7 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
+>  {
+>  	struct iio_dev *indio_dev;
+>  	struct cio_dac_iio *priv;
+> -	unsigned int i;
+> +	void __iomem *regs;
+>  
+>  	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
+>  	if (!indio_dev)
+> @@ -105,21 +128,22 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
+>  		return -EBUSY;
+>  	}
+>  
+> -	priv = iio_priv(indio_dev);
+> -	priv->base = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+> -	if (!priv->base)
+> +	regs = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+> +	if (!regs)
+>  		return -ENOMEM;
+>  
+> +	priv = iio_priv(indio_dev);
+> +	priv->map = devm_regmap_init_mmio(dev, regs, &cio_dac_regmap_config);
+> +	if (IS_ERR(priv->map))
+> +		return dev_err_probe(dev, PTR_ERR(priv->map),
+> +				     "Unable to initialize register map\n");
+> +
+>  	indio_dev->info = &cio_dac_info;
+>  	indio_dev->modes = INDIO_DIRECT_MODE;
+>  	indio_dev->channels = cio_dac_channels;
+>  	indio_dev->num_channels = CIO_DAC_NUM_CHAN;
+>  	indio_dev->name = dev_name(dev);
+>  
+> -	/* initialize DAC outputs to 0V */
+> -	for (i = 0; i < CIO_DAC_NUM_CHAN; i++)
+> -		iowrite16(0, priv->base + i);
+> -
+>  	return devm_iio_device_register(dev, indio_dev);
+>  }
+>  
 > 
-> I've been playing with this in the past - I had a bot that looks at the
-> mailing lists for patches that are tagged for stable, and attempts to
-> apply/build then on the multiple trees to verify that it works and send
-> a reply back if something goes wrong, asking for a backport.
-> 
-> It gets a bit tricky as there's no way to go back from a commit to the
-> initial submission, you start hitting issues like:
-> 
-> - Patches get re-sent multiple times (think stuff like tip trees,
-> reviews from other maintainers, etc).
-> - Different versions of patches - for example, v1 was a single patch
-> and in v2 it became multiple patches.
-> 
-> I'm not arguing against your idea, I'm just saying that it's not
-> trivial. An incomplete work here simply won't scale to the thousands of
-> patches that flow in the trees, and won't be as useful. I don't think
-> that this is trivial as you suggest.
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 
-There are obviously going to be edge cases; another one is commits that show up
-in git without ever having been sent to the mailing list.  I don't think they
-actually matter very much, though.  Worst case, we miss some things, but still
-find everything else.
-
-> 
-> If you disagree, and really think it's trivial, take 5 minutes to write
-> something up? please?
-
-I never said that it's "trivial" or that it would take only 5 minutes; that's
-just silly.  Just that this is possible and it's what needs to be done.
-
-If you don't have time, you should instead be helping ensure that the work gets
-done by someone else (internship, GSoC project, etc.).
-
-And yes, I am interested in contributing, but as I mentioned I think you need to
-first acknowledge that there is a problem, fix your attitude of immediately
-pushing back on everything, and make it easier for people to contribute.
-
-- Eric
