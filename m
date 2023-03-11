@@ -2,87 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCF4A6B604E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:45:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEC6D6B6051
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:46:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229637AbjCKTp4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 14:45:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47326 "EHLO
+        id S229790AbjCKTqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 14:46:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKTpx (ORCPT
+        with ESMTP id S229469AbjCKTqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:45:53 -0500
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279FA6C6A6;
-        Sat, 11 Mar 2023 11:45:52 -0800 (PST)
-Received: by mail-ed1-x52f.google.com with SMTP id y4so4295828edo.2;
-        Sat, 11 Mar 2023 11:45:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678563950;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5zLCrQdyTnukTKt1Qc5hOUjsel2piCYiG6rXSPOyBxA=;
-        b=kPlMtAaUgh8VRT077EHQqqXZp6AZu73vAaGQBT6ZYTPP1rcw7BRwZ9nrphosgEXV1+
-         mQdKdVK/+3MmY/6k2dtZaF8cd+A+J7JvQ0U5xxz5wjGdq7uj/1IHWNXEcLbCn6KJVBpT
-         kxSb+4f0ajGMiYarehtQQP5AA4P5pQQ5ORsAfWog+eadFrrtLSRKkD0vWf49UImvMjij
-         GR7oMjIKpXhRZao4eurFmdi3hlboFm2Vv+/JLhOo15eL7D5WPa1syGCwzEPiZXTa717Z
-         HNNnzxx21/cmVLfXNDEV6BbpOcuGydcr6J/JGU+QgdG+MSFIvVRjnDJ/46vIebz+aq/x
-         3yUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678563950;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=5zLCrQdyTnukTKt1Qc5hOUjsel2piCYiG6rXSPOyBxA=;
-        b=v+TqSjpY9XI4Cwt2xYRQUlsYKqWV6oEPyW1KDcHX+pUTCTc/SLqKUgu2Dei5ZAtkpq
-         EdbKG44i22SctFyU9IhViJe9fHa3DEwYzCH450NAuCrsTE1J1miMOt298Hy1Y+CZm1U3
-         wn1TVU7EODV5zy0VVDq6VuTUQLQYKsgIWqo5uHhc7KE67oO8qeYL7hnhQb8L8/qt5Yzd
-         FmxACSvDLmZPWFUoIsg6zVmOslBQVoSHcICc/BI/uCsvgmVT08Gd1JlwDzR6wAqX2xL2
-         a+PNxPTdj+E+/qfiGx0jIyMLZFXaw6go/TnvKDfPxc/bhUQZf/56TN78SHCLIlJME60Q
-         z/UA==
-X-Gm-Message-State: AO0yUKU/UqTgK+hjTPRhKe9WJTiDK1ws7bh++qtT/vSEPZEgZkrHYETo
-        uvOHD7dXL6pe1L9jQBYqE7r1tksDjrJ1bi3QOHQAFS/tyHARnw9q
-X-Google-Smtp-Source: AK7set/GW4H9oVLyNF+MiokqtN3HHY5yUtJrDVEAVKHOWqYYLtObanyZW07sw7ehQIyDHn1O4BaXc+FDezJRVtIsreE=
-X-Received: by 2002:a17:906:7cc6:b0:8b1:7682:3181 with SMTP id
- h6-20020a1709067cc600b008b176823181mr6185665ejp.9.1678563950540; Sat, 11 Mar
- 2023 11:45:50 -0800 (PST)
+        Sat, 11 Mar 2023 14:46:17 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC4A6E6A3;
+        Sat, 11 Mar 2023 11:46:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id ED85DB80749;
+        Sat, 11 Mar 2023 19:46:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A767C4339C;
+        Sat, 11 Mar 2023 19:46:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678563967;
+        bh=GgFeoExWmv/QOgnHi0mtHAxH4/QAUnv3/xGE2CsTg+w=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uoS5Jdx2Y9UaguI17Jk1QdjVwwOyHTZcL5Or4l66Tlp3nJ5wk1lOXHZ9VnU9WiqYW
+         OnRJgo7NVph67QzjW0q3E7SO6U1fHmz3NUsU/IdCwtou7tfq1LPtBDOBJljaGE4kEH
+         8+S/9Aojmr9rDlL1vWXKTexhPOM5g6dyquZkDI7JRw7jchbote5xe/o/6cbb3yvTnO
+         /BdlV7PFbs9E/4WSqpPShB2UWUkOyW4McFrQjx96wGxjwr3vMP5x87yFRSGsqy6f/B
+         GyEkfhMPz/VmyJKLAnWPPYrxny4xOzUpdTHF+FLtTQyGCheNDv+KBh0um2TUOv8Vl4
+         K6rSWfSwsk7Zg==
+Date:   Sat, 11 Mar 2023 11:46:05 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZAzafagDchRQRxWi@sol.localdomain>
+References: <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
+ <20230311161644.GH860405@mit.edu>
+ <ZAy+3f1/xfl6dWpI@sol.localdomain>
+ <ZAzJltJaydwjCN6E@1wt.eu>
+ <ZAzVbzthi8IfptFZ@sol.localdomain>
 MIME-Version: 1.0
-References: <20230214-fpwm-v9-0-364480b0e4bd@gmail.com> <20230311194254.lydmh23has2e3flj@pengutronix.de>
-In-Reply-To: <20230311194254.lydmh23has2e3flj@pengutronix.de>
-From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
-Date:   Sat, 11 Mar 2023 20:45:39 +0100
-Message-ID: <CAMT+MTRgL2_nVHZapqeFPchY9vnVWKE651DHY3Prq10eaU1EKQ@mail.gmail.com>
-Subject: Re: [PATCH v9 0/5] Hi,
-To:     =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        - <asahi@lists.linux.dev>, Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Sasha Finkelstein <7d578vix8hzw@opayq.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAzVbzthi8IfptFZ@sol.localdomain>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 at 20:43, Uwe Kleine-K=C3=B6nig
-<u.kleine-koenig@pengutronix.de> wrote:
+On Sat, Mar 11, 2023 at 11:24:31AM -0800, Eric Biggers wrote:
+> On Sat, Mar 11, 2023 at 07:33:58PM +0100, Willy Tarreau wrote:
+> > On Sat, Mar 11, 2023 at 09:48:13AM -0800, Eric Biggers wrote:
+> > > The purpose of all these mailing list searches would be to generate a list of
+> > > potential issues with backporting each commit, which would then undergo brief
+> > > human review.
+> > 
+> > This is one big part that I suspect is underestimated. I'll speak from my
+> > past experience maintaining extended LTS for 3.10. I couldn't produce as
+> > many releases as I would have liked to because despite the scripts that
+> > helped me figure some series, some dependencies, origin branches etc, the
+> > whole process of reviewing ~600 patches to end up with ~200 at the end
+> > (and adapting some of them to fit) required ~16 hours a day for a full
+> > week-end, and I didn't always have that amount of time available. Any my
+> > choices were far from being perfect, as during the reviews I got a number
+> > of "please don't backport this there" and "if you take this one you also
+> > need these ones". Also I used to intentionally drop what had nothing to
+> > do on old LTS stuff so even from that perspective my work could have been
+> > perceived as insufficient.
+> > 
+> > The reviewing process is overwhelming, really. There is a point where you
+> > start to fail and make choices that are not better than a machine's. But
+> > is a mistake once in a while dramatic if on the other hand it fixes 200
+> > other issues ? I think not as long as it's transparent and accepted by
+> > the users, because for one user that could experience a regression (one
+> > that escaped all the testing in place), thousands get fixes for existing
+> > problems. I'm not saying that regressions are good, I hate them, but as
+> > James said, we have to accept that user are part of the quality process.
+> > 
+> > My approach on another project I maintain is to announce upfront my own
+> > level of trust in my backport work, saying "I had a difficult week fixing
+> > that problem, do not rush on it or be extra careful", or "nothing urgent,
+> > no need to upgrade if you have no problem" or also "just upgrade, it's
+> > almost riskless". Users love that, because they know they're part of the
+> > quality assurance process, and they will either take small risks when
+> > they can, or wait for others to take risks.
+> > 
+> > But thinking that having one person review patches affecting many
+> > subsystem after pre-selection and extra info regarding discussions on
+> > each individual patch could result in more reliable stable releases is
+> > just an illusion IMHO, because the root of problem is that there are not
+> > enough humans to fix all the problems that humans introduce in the first
+> > place, and despite this we need to fix them. Just like automated scripts
+> > scraping lore, AUTOSEL does bring some value if it offloads some work
+> > from the available humans, even in its current state. And I hope that
+> > more of the selection and review work in the future will be automated
+> > and even less dependent on humans, because it does have a chance to be
+> > more reliable in front of that vast amount of work.
+> 
+> As I said in a part of my email which you did not quote, the fallback option is
+> to send the list of issues to the mailing list for others to review.
+> 
+> If even that fails, then it could be cut down to the *just the most useful*
+> heuristics and decisions made automatically based on those...  "Don't AUTOSEL
+> patch N of a series without 1...N-1" might be a good one.
+> 
+> But again, this comes back to one of the core issues here which is how does one
+> even build something for the stable maintainers if their requirements are
+> unknown to others?
+> 
 
-> apart from the subject this series is the same as the one sent slightly
-> later.
-That is correct, i screwed up the editing of the cover letter and caught it=
- only
-after sending it. Please disregard this series and use the one sent later.
+Another issue that I'd like to reiterate is that AUTOSEL is currently turned up
+to 11.  It's simply selecting too much.
+
+It should be made less sensitive and select higher confidence commits only.
+
+That would cut down on the workload slightly.
+
+(And please note, the key word here is *confidence*.  We all agree that it's
+never possible to be absolutely 100% sure whether a commit is appropriate for
+stable or not.  That's a red herring.
+
+And I would assume, or at least hope, that the neural network thing being used
+for AUTOSEL outputs a confidence rating and not just a yes/no answer.  If it
+actually just outputs yes/no, well how is anyone supposed to know that and fix
+that, given that it does not seem to be an open source project?)
+
+- Eric
