@@ -2,100 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB23A6B5627
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:06:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EB436B562B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230034AbjCKAF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:05:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44470 "EHLO
+        id S230408AbjCKAGb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:06:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229817AbjCKAFr (ORCPT
+        with ESMTP id S230089AbjCKAGV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:05:47 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16EA12EE44;
-        Fri, 10 Mar 2023 16:05:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 922C6B8244B;
-        Sat, 11 Mar 2023 00:05:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B535EC433EF;
-        Sat, 11 Mar 2023 00:05:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678493143;
-        bh=S9pojLzfmvbV7j7EBiSJw4lyKDgK9ycqKJazjt3AdXk=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=QvFm90hrD1s08qU1LCCnAKl767XB/pmtaY+gkJ/7bCieiwKXq5giAJSkQsZpaHdxa
-         2az4FeJXANBYOKV7GByyIRKhSwo5NlThi+8DV1XJXjEtewqbT1sEf5l7rTxPGezxTN
-         wMP1cg748Gpz9ki3xx1sB0hNYbAT/ACoRpKZkl+RRiNTr4Y0WX7kyB6eUPRwXFQaRI
-         G5h+WPJ/gAkEqKWADHlzUcrPQOQAuQK/HC4anfCZ9+X5CPF8Wy7mLxpIBwi759s28X
-         mpOjW/Hkl45Z0G+EVqrZfYiPmLaGZ8pxeSaXasBkW92XBWoWnQWNlaBNrwdGfOBxf6
-         /WstJeOZOJZtg==
-Date:   Fri, 10 Mar 2023 16:05:41 -0800
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Po-Hsu Lin <po-hsu.lin@canonical.com>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        netdev@vger.kernel.org, idosch@mellanox.com,
-        danieller@mellanox.com, petrm@mellanox.com, shuah@kernel.org,
-        pabeni@redhat.com, edumazet@google.com, davem@davemloft.net
-Subject: Re: [PATCHv2] selftests: net: devlink_port_split.py: skip test if
- no suitable device available
-Message-ID: <20230310160541.5ec7722a@kernel.org>
-In-Reply-To: <20230307150030.527726-1-po-hsu.lin@canonical.com>
-References: <20230307150030.527726-1-po-hsu.lin@canonical.com>
+        Fri, 10 Mar 2023 19:06:21 -0500
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AF7613E526
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:06:07 -0800 (PST)
+Received: by mail-lj1-x230.google.com with SMTP id h9so7064751ljq.2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:06:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678493165;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nvWd6RnRtPsl4syozMKjmZ8lJWkYg+/DrGeZ1RVg3jg=;
+        b=m9oP/nOWxDKYfkbYYH6incjMnwiXyGPjUkjfMHEQS36/WFVBYT5Hnbr47iAQ/Jhn78
+         mkZil2n4ckEpjDFr8OaCad28O332YGrB7MWsbnIAe2fJCMBkiwhwJ6uGXtywhdM7piMv
+         eqSDzVnPm79KE0scs6ON3AO/sJ26Lsan5neIp+OCG7Ynu8fDeBx1imbLSc2sIVvhTHvU
+         NyCeAgUtOwpJnE/mT9lYD4y2TvkOpTfPAZRBf0VS7hDADGzIu86KEwXr1huV8eVOR3Au
+         E1SljP/x16mk2BE/2B8b88BQXwdOICJ7/pYyNJmy6qQUVK5ZQ3ykCObPbTYCsCtRE0Or
+         Mrgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678493165;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=nvWd6RnRtPsl4syozMKjmZ8lJWkYg+/DrGeZ1RVg3jg=;
+        b=vhua8EnWL6456g1Tn74vvdCRUQNLr0IWyhzTvnSVUA+NP49XhEW4PbAhVw9XjI+dZT
+         fNfPoEoVd6iZxcuw22GdgM3NfZowzcBqZ7nCKKbb58lewOAapRS1W+AURkEtQ/v/Y7Kd
+         j84nDYxp2SAtOpIFhXO5vSOSYv6eSRHogGW2wFZrvnTQX16HTgraszmHqPWAA6Bt8cKF
+         Q0dCoD46zNfw4aG7Z1lX1qSuyBIx0nJIkAC1tiz75fj/3BhUCrBQw6T/c/OIKZgLyYly
+         9/x9C0HfJ5qI/vqgY3xOHu647/96KS/V74t/c4boaia1zjZnVtjR624G3Ka2gAqAFVaH
+         NiNg==
+X-Gm-Message-State: AO0yUKXczL5rPh1GwXQdXpDemWF9LX5ImH4d+So0zgruym42RziCEjvy
+        37/pqZsbWgZVw0HCHSQAcwneJw==
+X-Google-Smtp-Source: AK7set9/2QfL4loiubmYv5vdmt0lQ9s1Km9YMcKFQl/SUMpIYys4kYlQEHTjc8qKGK4W2556vpzckA==
+X-Received: by 2002:a2e:b173:0:b0:295:b054:6809 with SMTP id a19-20020a2eb173000000b00295b0546809mr8729234ljm.8.1678493165492;
+        Fri, 10 Mar 2023 16:06:05 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id y20-20020a2e5454000000b00295a33eda65sm155824ljd.137.2023.03.10.16.06.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 16:06:05 -0800 (PST)
+Message-ID: <128a4831-a094-3e5a-282b-8e40b2cfd960@linaro.org>
+Date:   Sat, 11 Mar 2023 01:06:03 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/3] ufs: qcom: add __maybe_unused to OF ID table
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-scsi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+References: <20230310214435.275127-1-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230310214435.275127-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue,  7 Mar 2023 23:00:30 +0800 Po-Hsu Lin wrote:
->  def main(cmdline=None):
-> +    test_ran = False
 
-Could you move this variable init right before the 
 
-	for port in ports.if_names:
+On 10.03.2023 22:44, Krzysztof Kozlowski wrote:
+> The driver can be built on ACPI and its .of_match_table uses
+> of_match_ptr(), thus annotate the actual table as maybe unused.
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-line, and call it something like found_max_lanes ?
-
->      parser = make_parser()
->      args = parser.parse_args(cmdline)
+Konrad
+>  drivers/ufs/host/ufs-qcom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
+> index a02cd866e2f8..82d02e7f3b4f 100644
+> --- a/drivers/ufs/host/ufs-qcom.c
+> +++ b/drivers/ufs/host/ufs-qcom.c
+> @@ -1693,7 +1693,7 @@ static int ufs_qcom_remove(struct platform_device *pdev)
+>  	return 0;
+>  }
 >  
-> @@ -240,12 +264,9 @@ def main(cmdline=None):
->          stdout, stderr = run_command(cmd)
->          assert stderr == ""
->  
-> +        validate_devlink_output(json.loads(stdout))
->          devs = json.loads(stdout)['dev']
-> -        if devs:
-> -            dev = list(devs.keys())[0]
-> -        else:
-> -            print("no devlink device was found, test skipped")
-> -            sys.exit(KSFT_SKIP)
-> +        dev = list(devs.keys())[0]
->  
->      cmd = "devlink dev show %s" % dev
->      stdout, stderr = run_command(cmd)
-> @@ -277,6 +298,11 @@ def main(cmdline=None):
->                  split_splittable_port(port, lane, max_lanes, dev)
->  
->                  lane //= 2
-> +        test_ran = True
-> +
-> +    if not test_ran:
-> +        print("Test not started, no suitable device for the test")
-
-Then change the message to 
-
-	f"Test not started, no port of device {dev} reports max_lanes"
-
-> +        sys.exit(KSFT_SKIP)
->  
+> -static const struct of_device_id ufs_qcom_of_match[] = {
+> +static const struct of_device_id ufs_qcom_of_match[] __maybe_unused = {
+>  	{ .compatible = "qcom,ufshc"},
+>  	{},
+>  };
