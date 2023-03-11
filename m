@@ -2,108 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B156B5D54
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54DDB6B5D61
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjCKP0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:26:13 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33224 "EHLO
+        id S229827AbjCKPkS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:40:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230401AbjCKP0K (ORCPT
+        with ESMTP id S229541AbjCKPkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:26:10 -0500
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B310CDB6E0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:26:03 -0800 (PST)
-Received: by mail-lj1-x22d.google.com with SMTP id by8so8363942ljb.7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:26:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678548362;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1ocLrxz9PNmL7rxcHP9+sMO7kezIoSNjbehDL14u8SU=;
-        b=TzU6eWA4meVSyp256D93bSUZ3gTytwUcoofo8swWobouTfAwodXIB4sjeDgT48Tusw
-         ivU86pQx0LtA/JGdGgs3AhmifyQiPEXig0KIvezyGRYnc106eI35bhXqPihLuJB04ZWE
-         /Pa0IbEv7LclMguWYMHbPkL4O3YleimksrxT+sFwFl09xR/hoRP9BLW5+N8LopHbrlLh
-         CBkSU4SvtuOkZkrc8ysZ7nHAcgDD7ihmIr8779DJR4at8arw3qkCcp+lMYLeehdScnFm
-         1QiNoG9BnJ8MaEv1EzDMoEJGAc/9/6xTvvR/oxGgntWxDVWsx1JJMpzEBXLzh1l2xjpq
-         1Log==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678548362;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1ocLrxz9PNmL7rxcHP9+sMO7kezIoSNjbehDL14u8SU=;
-        b=PhVAD4Lc9UZiEw5EjufPb2faUJyt1nqejHRK0iVlBhdJ0iBzQlcFpjO00lHUooW0NW
-         aHAYrkMMMLVzYhteNXxxdeA5hxGbM+m01kzaboL9lFRDX0kQW1NnRjtInMIVdge9HC9Y
-         fs15PhH+rFXs7G7ewtzU3w92AH5RZr1Adk4YxEvFEjmmknUZosBJjyuqtByxiwABn1pJ
-         2Vi3+VEsSn2VUemayC2zC882vAcjAHirJsJ1+znSDpHHpeBE5YOkJLvhUcslKWu1E6IM
-         ULV22EgqmcdT+yOO5s+Glp6WIPF7C4YBnDVG9hD4iK28lBfdeumTnPWZATzKLawJz3Ib
-         tmAA==
-X-Gm-Message-State: AO0yUKUEqGnT2RN/IPbAfD4L43nbOih9NjHHjlpyIEg66ENcdx/o7rbJ
-        y0QzC6CgP07svsYg3Nayv2GCiw==
-X-Google-Smtp-Source: AK7set9+alVCPes/LutSROZa3zyRKf96T2rZ97KnwF3tjoBPKGWNiB+AYEiydpEz6svx0r1ADsKhaQ==
-X-Received: by 2002:a2e:8404:0:b0:298:6f32:c182 with SMTP id z4-20020a2e8404000000b002986f32c182mr3980792ljg.36.1678548362019;
-        Sat, 11 Mar 2023 07:26:02 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id u3-20020ac24c23000000b004dda9e8233asm344904lfq.42.2023.03.11.07.26.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 07:26:01 -0800 (PST)
-Message-ID: <74f154b1-a440-fa83-1a46-a5b9223f5760@linaro.org>
-Date:   Sat, 11 Mar 2023 17:26:00 +0200
+        Sat, 11 Mar 2023 10:40:16 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55C7E584A4;
+        Sat, 11 Mar 2023 07:40:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=L1cjWa/ZkeQ8ynLS3HKj8W+1nV4bPBS6kn+zz6pEL5o=; b=lDIfeYMpfdi1Shz/zgmeAVzusF
+        x0OEDGQ7Z6xWJV0WYKAedb45mhigl1d3v7Rp4+oxS6/c7dG4Gtq5h8DXWBlX2hNo1fHCotl1eOB/J
+        GWSyM2lJOXImtgRMI7Ct7afh4KEiz7rG2+6+STKjo44VLsu9aDw855+FMSxYMvtefYn8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pb1Jo-0074HD-9X; Sat, 11 Mar 2023 16:39:36 +0100
+Date:   Sat, 11 Mar 2023 16:39:36 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
+ capabilities for C22 and C45
+Message-ID: <a57a216d-ff5a-46e6-9780-e53772dcefc8@lunn.ch>
+References: <100c439a-2a4d-4cb2-96f2-5bf273e2121a@lunn.ch>
+ <712bc92ca6d576f33f63f1e9c2edf0030b10d3ae.camel@gmail.com>
+ <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
+ <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
+ <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
+ <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+ <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
+ <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
+ <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
+ <bff0e542b8c04980e9e3af1d3e6bf739c87eb514.camel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-Content-Language: en-GB
-To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
- <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
- <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
- <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <bff0e542b8c04980e9e3af1d3e6bf739c87eb514.camel@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 16:38, Bryan O'Donoghue wrote:
-> On 11/03/2023 14:35, Dmitry Baryshkov wrote:
->>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
->>> be added to the UFS device list of clocks.
->> While we were doing this for some of the clocks (PCIe and USB, if I'm
->> not mistaken), I think that generally this is not fully correct. In my
->> opinion it should be in the interconnect driver, who turns
->> corresponding clocks on and off. These clocks correspond to the SoC
->> topology, rather than the end-device.
->>
+On Sat, Mar 11, 2023 at 07:49:23AM +0100, Klaus Kudielka wrote:
+> On Sat, 2023-03-11 at 00:49 +0100, Andrew Lunn wrote:
+> > > Yes, that helps. Primarily, because mdiobus_scan_bus_c45 now is called only once,
+> > > and at least some things are done in parallel.
+> > 
+> > Great. Could you cook up a proper patch and submit it?
 > 
-> True enough, they are interconnect clocks.
-> 
-> The question is how to only turn them on when the device that depends on 
-> them wants them.
+> I can give it a try. The commit message will be from my perspective,
+> and the change Suggested-By you.
 
-I think we can turn them on an off from qcom_icc_set(). Each node can 
-list required clocks.
+The commit message is fine.
 
--- 
-With best wishes
-Dmitry
+I have one more idea which can speed things up. The scanning of the
+MDIO bus works in two different ways depending on if there is a DT
+node, describing what should be found on the bus. For mv88e6xxx, using
+DT is optional. Some boards do, some don't.
 
+If there is a DT node, only the addresses listed in DT are scanned.
+
+If there is no DT node, by default, all 32 addresses on the bus are
+scanned. However, DSA makes another assumption. There is a one to one
+mapping between port number and PHY address on the MDIO bus. Port 0
+uses MDIO address 0. Port 7 uses MDIO address 7 etc. If you have an 8
+port switch, there is no point scanning addresses 8 to 31, they will
+never be used.
+
+The mdio bus structure has a member phy_mask. This is a bitmap. If bit
+N is set, address N is not scanned. So i suggest you extend
+mv88e6xxx_mdio_register() to set phy_mask based on
+mv88e6xxx_num_ports(chip).
+
+	Andrew
