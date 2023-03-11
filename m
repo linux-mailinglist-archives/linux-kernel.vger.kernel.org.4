@@ -2,149 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0815F6B5AC2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:10:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F24CC6B5AC9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:12:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229652AbjCKLKl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 06:10:41 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39992 "EHLO
+        id S229613AbjCKLMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 06:12:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229510AbjCKLKh (ORCPT
+        with ESMTP id S229469AbjCKLMa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:10:37 -0500
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623FC1378A3;
-        Sat, 11 Mar 2023 03:10:36 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32BBAN8m049374;
-        Sat, 11 Mar 2023 05:10:23 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678533023;
-        bh=GCap63SmwNQD5B9G3c0BIIEkXdQFTueOnPTvaze1C9E=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=hDuZL5jrIwlL3eOSLRhPydSEQ8IekxLp9+Gz4g/TNmvYaRJpDFWZUKzf2VsAI0sDq
-         GauhuCFR/BmxyUlKHUoubAG9BB3aqBwlxft5PkpJPRhi5cmjFzPARxaurFUNcPe697
-         +u4lDt1memKzndXVFssTfgWHB929X9cSqdraNpvA=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32BBANt1109108
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 11 Mar 2023 05:10:23 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 11
- Mar 2023 05:10:23 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sat, 11 Mar 2023 05:10:23 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32BBAN6a049571;
-        Sat, 11 Mar 2023 05:10:23 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>, Julien Panis <jpanis@baylibre.com>,
-        Bryan Brattlof <bb@ti.com>, Jason Kridner <jkridner@gmail.com>,
-        Robert Nelson <robertcnelson@gmail.com>
-Subject: [PATCH 3/3] arm64: defconfig: Enable drivers for BeaglePlay
-Date:   Sat, 11 Mar 2023 05:10:22 -0600
-Message-ID: <20230311111022.23717-4-nm@ti.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230311111022.23717-1-nm@ti.com>
-References: <20230311111022.23717-1-nm@ti.com>
+        Sat, 11 Mar 2023 06:12:30 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523583AAE
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:12:29 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x3so30647903edb.10
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:12:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678533148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=KYRKZXe27DmudkheBo+i7wuEUVnmuvDN257/ihaiBHE=;
+        b=Uw5UZUsTO6MlernaGjy4BtjbvWxPmztoSaLSg2tiWr38IzxELmENmPxcSQMtTkwm2t
+         8j/YDDbSXNjN2Ud3SvjPbV4ZLscX3BTQJqAw1uti+XvG2+vHMLrNwx9EALmqUB4deQt1
+         8KuGM419vOxJFNdsXAJPSAd5prssXRu6Z0P7sd1WOgk/sMQTcJXU8wmVI0y1E1+t8uMt
+         BJ+4nrwoTGgua2i2mfETHNKs3ar+7xkFUFg8pvByeHXwGCw7edJCAISsXX+m/DepGygf
+         13gTAZq/t+XDFptsFcxrljJiV5naNPlRaPGhcp5H7nCI9ykD4GaKa5SFtoxwR20tkODg
+         KBYw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678533148;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KYRKZXe27DmudkheBo+i7wuEUVnmuvDN257/ihaiBHE=;
+        b=auKTNGHQ17ABOgZSANOG4413sJwygw87Z1WhMwLn7NSa/FHosyNgpzh3YEujnTt3cW
+         8NN7bOHU9lWzzsNrhOupILWjp98OeVFDeouKZvO1E5bYZVvKNOL8d+UdM3S2uda7PHWz
+         3Wf3wwJt//bfir/kyxNo/TxD/a9lcPmkX8R/sZS224GpyLjm8JaQt9rBFl6i989yWMWa
+         51T2f7sdmUvjeKrCZr9FCszk2X1N87xhFjpMYc80Ac/RWAWrXddm8jeGvXHL3y+QuTMU
+         a2pFdDyvy6Lhj0Q7DAhToA0/lVAHBHVS8j8vVA/unbWkviZW6hsEef3bu0TAmuTOW3CP
+         nA4w==
+X-Gm-Message-State: AO0yUKV9vAaPc/RByz4gGz6gN83Wu6xh3FQ2pBIrK345j22jeQ0+OJpQ
+        b2RSQjt7IeUgsea2ClEO4tle8Q==
+X-Google-Smtp-Source: AK7set/mGqGr4UEcbnXcED5lkt30f/BfLI0+rmnLATtpCNVoIjUob9wm2sdEMjr45t+NDEzlf6f9Iw==
+X-Received: by 2002:a17:907:168e:b0:8fc:c566:dc67 with SMTP id hc14-20020a170907168e00b008fcc566dc67mr36976725ejc.64.1678533147829;
+        Sat, 11 Mar 2023 03:12:27 -0800 (PST)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
+        by smtp.gmail.com with ESMTPSA id b22-20020a170906709600b008c06de45e75sm987809ejk.107.2023.03.11.03.12.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 03:12:27 -0800 (PST)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Alessandro Zummo <a.zummo@towertech.it>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] rtc: ds1390: mark OF related data as maybe unused
+Date:   Sat, 11 Mar 2023 12:12:26 +0100
+Message-Id: <20230311111226.250922-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable drivers used on BeaglePlay[1]:
-* MDIO_GPIO driver to workaround erratum i2329, DP83TD510 SPE phy
-  (enabled in-kernel to ease usage)
-* TPS65219 PMIC, regulator and power button as modules
-* BQ32K battery backedup RTC and the K3 RTC drivers as modules
+The driver can be compile tested with !CONFIG_OF making certain data
+unused:
 
-bloat-o-meter reports after this change:
-add/remove: 19/2 grow/shrink: 2/0 up/down: 3036/-16 (3020)
-[...]
-Total: Before=18094456, After=18097476, chg +0.02%
+  drivers/rtc/rtc-ds1390.c:216:34: error: ‘ds1390_of_match’ defined but not used [-Werror=unused-const-variable=]
 
-[1] https://beagleplay.org
-Signed-off-by: Nishanth Menon <nm@ti.com>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/configs/defconfig | 7 +++++++
- 1 file changed, 7 insertions(+)
+ drivers/rtc/rtc-ds1390.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 7790ee42c68a..d1d5cb3047da 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -367,11 +367,13 @@ CONFIG_AT803X_PHY=y
- CONFIG_REALTEK_PHY=y
- CONFIG_ROCKCHIP_PHY=y
- CONFIG_DP83867_PHY=y
-+CONFIG_DP83TD510_PHY=y
- CONFIG_VITESSE_PHY=y
- CONFIG_CAN_FLEXCAN=m
- CONFIG_CAN_RCAR=m
- CONFIG_CAN_RCAR_CANFD=m
- CONFIG_CAN_MCP251XFD=m
-+CONFIG_MDIO_GPIO=y
- CONFIG_MDIO_BUS_MUX_MULTIPLEXER=y
- CONFIG_MDIO_BUS_MUX_MMIOREG=y
- CONFIG_USB_PEGASUS=m
-@@ -418,6 +420,7 @@ CONFIG_TOUCHSCREEN_EDT_FT5X06=m
- CONFIG_INPUT_MISC=y
- CONFIG_INPUT_PM8941_PWRKEY=y
- CONFIG_INPUT_PM8XXX_VIBRATOR=m
-+CONFIG_INPUT_TPS65219_PWRBUTTON=m
- CONFIG_INPUT_PWM_BEEPER=m
- CONFIG_INPUT_PWM_VIBRA=m
- CONFIG_INPUT_HISI_POWERKEY=y
-@@ -670,6 +673,7 @@ CONFIG_MFD_SPMI_PMIC=y
- CONFIG_MFD_RK808=y
- CONFIG_MFD_SEC_CORE=y
- CONFIG_MFD_SL28CPLD=y
-+CONFIG_MFD_TPS65219=m
- CONFIG_MFD_ROHM_BD718XX=y
- CONFIG_MFD_WCD934X=m
- CONFIG_REGULATOR_FIXED_VOLTAGE=y
-@@ -699,6 +703,7 @@ CONFIG_REGULATOR_QCOM_SPMI=y
- CONFIG_REGULATOR_RK808=y
- CONFIG_REGULATOR_S2MPS11=y
- CONFIG_REGULATOR_TPS65132=m
-+CONFIG_REGULATOR_TPS65219=m
- CONFIG_REGULATOR_VCTRL=m
- CONFIG_RC_CORE=m
- CONFIG_RC_DECODERS=y
-@@ -1026,6 +1031,7 @@ CONFIG_RTC_DRV_RK808=m
- CONFIG_RTC_DRV_PCF85063=m
- CONFIG_RTC_DRV_PCF85363=m
- CONFIG_RTC_DRV_M41T80=m
-+CONFIG_RTC_DRV_BQ32K=m
- CONFIG_RTC_DRV_RX8581=m
- CONFIG_RTC_DRV_RV3028=m
- CONFIG_RTC_DRV_RV8803=m
-@@ -1045,6 +1051,7 @@ CONFIG_RTC_DRV_SNVS=m
- CONFIG_RTC_DRV_IMX_SC=m
- CONFIG_RTC_DRV_MT6397=m
- CONFIG_RTC_DRV_XGENE=y
-+CONFIG_RTC_DRV_TI_K3=m
- CONFIG_DMADEVICES=y
- CONFIG_DMA_BCM2835=y
- CONFIG_DMA_SUN6I=m
+diff --git a/drivers/rtc/rtc-ds1390.c b/drivers/rtc/rtc-ds1390.c
+index 93ce72b9ae59..f46428ca77cc 100644
+--- a/drivers/rtc/rtc-ds1390.c
++++ b/drivers/rtc/rtc-ds1390.c
+@@ -213,7 +213,7 @@ static int ds1390_probe(struct spi_device *spi)
+ 	return res;
+ }
+ 
+-static const struct of_device_id ds1390_of_match[] = {
++static const struct of_device_id ds1390_of_match[] __maybe_unused = {
+ 	{ .compatible = "dallas,ds1390" },
+ 	{}
+ };
 -- 
-2.37.2
+2.34.1
 
