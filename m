@@ -2,101 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EA516B5BCA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:35:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73D086B5BCD
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:35:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCKMfG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:35:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45766 "EHLO
+        id S230422AbjCKMfq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:35:46 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230480AbjCKMe7 (ORCPT
+        with ESMTP id S229876AbjCKMfo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:34:59 -0500
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7467C13552C;
-        Sat, 11 Mar 2023 04:34:44 -0800 (PST)
-Received: by mail-wm1-x334.google.com with SMTP id c18so5075131wmr.3;
-        Sat, 11 Mar 2023 04:34:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678538083;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=manwNb7+2j+rOZl7hExhu3IXnUZMurmRVTmeoMoFl/A=;
-        b=ZhLtbjcrRv6VCPTl1aXxHgylwCTdeY9SM+oyN+UFdEJeukGsg+I1dDYweQvd/q5mlj
-         rk++oDfANVpoprulonNmefwFH2j6zmvgaFXQ8vYDrz+E0/h06uhyDC3jD5LvnQWE1HWy
-         CLVLGozUXBc8WxnfAacgNQckAwcXf6n/cnB5A8tYYd+eDbk26tU2tg7FrgOp4r93WwFX
-         9A2JZZRfXHs+XEWtkcWJdeMYnDrSKEY4mWWUfRZgMq2QWW7gccFDI3o70eAuEz4gHAPr
-         bKFoHPVIhEYcQO+0b+RiVyhjbNOOzhtnkLGs5nizaIWK7rsz8WoJg1To6p2llT7oiR9e
-         Q4LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678538083;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=manwNb7+2j+rOZl7hExhu3IXnUZMurmRVTmeoMoFl/A=;
-        b=FrCSG+/0uWpyGs4/MIXyZOyEvpfdGnbxi5Rh6WuQhT2Ujzb57qhbrv0JRQTT52Kx6b
-         Ti+ryy19OW026Ij28VvFZBErlOpiIFbUYpYVheiLYpyYEKCI3WPbMGnsBYKu3rgrbdV1
-         klY9o+4W1pJOkYveiQ5ay0wBi/3N3k2Te05JGWEBL+fAgvMKKoYlTTN1000CHifz+1O6
-         yYEP8suD3Et4UJVz1B0e6V/FJJRBr+Nauag69tuH88mVK+TYeXcIQ0TvVeeuIBL7OT5j
-         e0rtsJZE//aPcYkIMIVusenWPJ/iQuqT+xZmAq4EnSfIg8oC2TzLS+SiA8QLATy7oCo/
-         rjUQ==
-X-Gm-Message-State: AO0yUKWKFQ7R5xDkfWqpLlqPdnnwxzrh1RTtYW8WOnRH9WapeKg/Qk3j
-        rxzu2ndlFbraJ3G8pTyywak=
-X-Google-Smtp-Source: AK7set/hUt7B0yJDdtsrQwyTHET9GWDilh5xfTrf9/ZHYXFpc7iv8VfXQhwXxAyyOa7qor2tWjK39Q==
-X-Received: by 2002:a05:600c:1d8d:b0:3ec:3abe:934d with SMTP id p13-20020a05600c1d8d00b003ec3abe934dmr1379018wms.4.1678538082979;
-        Sat, 11 Mar 2023 04:34:42 -0800 (PST)
-Received: from localhost.localdomain ([84.32.202.14])
-        by smtp.gmail.com with ESMTPSA id k7-20020a7bc407000000b003eafc47eb09sm1651094wmi.43.2023.03.11.04.34.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 04:34:42 -0800 (PST)
-From:   Yaroslav Furman <yaro330@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     yaro330@gmail.com, Alan Stern <stern@rowland.harvard.edu>,
-        linux-usb@vger.kernel.org, usb-storage@lists.one-eyed-alien.net,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] uas: Add US_FL_NO_REPORT_OPCODES for JMicron JMS583Gen 2
-Date:   Sat, 11 Mar 2023 14:34:18 +0200
-Message-Id: <20230311123418.16272-1-yaro330@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Sat, 11 Mar 2023 07:35:44 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9A7F1EFF9;
+        Sat, 11 Mar 2023 04:35:43 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 53FFF60B85;
+        Sat, 11 Mar 2023 12:35:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96336C433EF;
+        Sat, 11 Mar 2023 12:35:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678538142;
+        bh=6JfXxe3XoATFDgJFsxCEos+aZos+Ru8vw/oGDup9HKk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=JWdfk00EUqvo5zT5I59OWFNwMcCTIAFvkvB4js5BKAAuQ+aiPhO7ct/9ngNZ9Yoac
+         CBd9gFT1AfLMPxWFqojIJbsgSBlBzEfrVZEoMml0j0ciAbP3LzWAUICRMN7zw75Nhk
+         2pczrMLdQ00vG5vS5EKSzvBEC63qpyVCXT68UImN7fUpB5mWY4JUFBSYuwaXlIxX8Y
+         AOFWjY/hNXAueUCJX4TbD870IW4hFHKJpM7b8I4DgDqyytzw8ZUCYMzrR9ek8Wu/yf
+         75lz4SZOLhIyvkznYZ1vLEuKrELEe1gcEM6CmMeD+YkFtcqft47SFv6lQhIv+l7quN
+         HWsLN/bm2peUg==
+Date:   Sat, 11 Mar 2023 12:35:47 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     William Breathitt Gray <william.gray@linaro.org>
+Cc:     lars@metafoo.de, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] iio: dac: cio-dac: Fix max DAC write value check for
+ 12-bit
+Message-ID: <20230311123547.66adc751@jic23-huawei>
+In-Reply-To: <20230311002248.8548-1-william.gray@linaro.org>
+References: <20230311002248.8548-1-william.gray@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just like other JMicron JMS5xx enclosures, it chokes on report-opcodes,
-let's avoid them.
+On Fri, 10 Mar 2023 19:22:48 -0500
+William Breathitt Gray <william.gray@linaro.org> wrote:
 
-Tested-and-reported-by: Yaroslav Furman <yaro330@gmail.com>
-Signed-off-by: Yaroslav Furman <yaro330@gmail.com>
----
- drivers/usb/storage/unusual_uas.h | 7 +++++++
- 1 file changed, 7 insertions(+)
+> The CIO-DAC series of devices only supports DAC values up to 12-bit
+> rather than 16-bit. Trying to write a 16-bit value results in only the
+> lower 12 bits affecting the DAC output which is not what the user
+> expects. Instead, adjust the DAC write value check to reject values
+> larger than 12-bit so that they fail explicitly as invalid for the user.
+> 
+> Fixes: 3b8df5fd526e ("iio: Add IIO support for the Measurement Computing CIO-DAC family")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+Applied to the fixes-togreg branch of iio.git.
 
-diff --git a/drivers/usb/storage/unusual_uas.h b/drivers/usb/storage/unusual_uas.h
-index c7b763d6d102..e4ff28ba93e5 100644
---- a/drivers/usb/storage/unusual_uas.h
-+++ b/drivers/usb/storage/unusual_uas.h
-@@ -97,6 +97,13 @@ UNUSUAL_DEV(0x152d, 0x0539, 0x0000, 0x9999,
- 		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
- 		US_FL_NO_REPORT_OPCODES),
- 
-+/* Reported by: Yaroslav Furman <yaro330@gmail.com> */
-+UNUSUAL_DEV(0x152d, 0x0583, 0x0000, 0x9999,
-+		"JMicron",
-+		"JMS583Gen 2",
-+		USB_SC_DEVICE, USB_PR_DEVICE, NULL,
-+		US_FL_NO_REPORT_OPCODES),
-+
- /* Reported-by: Claudio Bizzarri <claudio.bizzarri@gmail.com> */
- UNUSUAL_DEV(0x152d, 0x0567, 0x0000, 0x9999,
- 		"JMicron",
--- 
-2.39.2
+Thanks,
+
+Jonathan
+
+> ---
+>  drivers/iio/dac/cio-dac.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
+> index 791dd999cf29..18a64f72fc18 100644
+> --- a/drivers/iio/dac/cio-dac.c
+> +++ b/drivers/iio/dac/cio-dac.c
+> @@ -66,8 +66,8 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+>  	if (mask != IIO_CHAN_INFO_RAW)
+>  		return -EINVAL;
+>  
+> -	/* DAC can only accept up to a 16-bit value */
+> -	if ((unsigned int)val > 65535)
+> +	/* DAC can only accept up to a 12-bit value */
+> +	if ((unsigned int)val > 4095)
+>  		return -EINVAL;
+>  
+>  	priv->chan_out_states[chan->channel] = val;
+> 
+> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 
