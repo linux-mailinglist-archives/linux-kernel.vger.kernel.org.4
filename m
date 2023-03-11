@@ -2,55 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BACFB6B5979
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 09:25:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71F676B597C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 09:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbjCKIZ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 03:25:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51520 "EHLO
+        id S229998AbjCKI0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 03:26:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCKIZ0 (ORCPT
+        with ESMTP id S229994AbjCKI0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 03:25:26 -0500
-Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C3DA12BACC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 00:25:25 -0800 (PST)
-Received: by mail-io1-f72.google.com with SMTP id g21-20020a6be615000000b0074cb292f57dso3647584ioh.17
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 00:25:25 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678523124;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=GX2/0Y3w3KqSGtxgrXjH+vta8IBL8YOoiEI8MS7GY2s=;
-        b=NWmysQSAU55PXFKMYXPbm02kMSkbjbVjhCG3ex3QRWtnA6VNA1Ofj6FmZawhxLuUDf
-         6iZ9qi/FvphhXPKFw71V53gW7VEf0TqGkmu0916eQhKCN+bR02PfifurPQKhyATqte9s
-         ZRyl9vW0gTVlrFeNFg6vwZy+C7Z59mPINzLp5aW1c6HTrky1PtQlaWEWnAXth5kHKgFa
-         duh6y4prvWa5Q/vzYIAtUk6TqmoWQMOoAVynJPYHW5s34OHb8FYJJaJjsHW+i3s+jhIP
-         bhPELdf0h11LEskfHny/6hRq+Vk7KqKVOcPbUgoVmuSlYhEWxkfP6RvBDYvSNU4uQtyR
-         /C9Q==
-X-Gm-Message-State: AO0yUKWeEXoxzYUwF2j+YCRiZuYn4X4U/2kYK/EWBKGpkCY/a6Fc2EUP
-        sKH8dkYrcy2l34CV0GgmF4gqctLHA3KPHNIPpzIZVUlx31MI
-X-Google-Smtp-Source: AK7set/gvA7+wLWwPerArWfX7BHZYxEP7fUn+eY7DKrQuwSlOQ9cIBDqObjcpYEsDxAPmJoyaVfGSc1LdKNy6+6iyg9R6nE4/KaR
+        Sat, 11 Mar 2023 03:26:11 -0500
+Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2041.outbound.protection.outlook.com [40.107.21.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD3E2142DC8;
+        Sat, 11 Mar 2023 00:26:09 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nhPHOx2Juum1NItQ05nrzXVg3dTffwXyz5tpSx7cH2yXUHXhyPgxXfEfzYMES5CGAugNipwFRyntQ4RuSyJWR+nAOJr3lgC9XPgO1FaPdx32ynv3dNQkcrRkuY3/LIXSp5r74mcvRwM4fHmHxp3l9/I+42wKZ5JnLytYU8yCIbGzR9iYOlQzi69Yyedo/Hc9iZqGhbuMCxlN1cqI79ssG+7g86WFEFqh41rVTqDTVcwUfIQlWsry8qNLadwKKmJyEyhwD++S3FNmv5p1+YCAmaw4qV7eb/dX2LkbUC1Yn6Mzpxdskti8DxDYmRYXFWdDY2HYSg5y10zXOlWmNwB3kQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4ynusF5wU7IzzW80gy1F2YJeOkxbKobnkXUSXfoNoyk=;
+ b=J4bmKNB8sNdM2hTyrVV7xBk9zNcuPWHUUMfaJ9DYF/L8PsjZSVszTP3P/e/OmI3rDhcrdXDHzxxo54dswWor1ArlaHOMN7KuIuVr7w0V/yuB/GdQN9KMenHqw6RHNiPTY9fZtGGT2dpxD2CuKmdHFyePY/d/MfQ7UV08xM+5E+ws72YD0/eUziOjb6CBJU87Db2iWMAnwW6SmeUnrwt/t28YEX5s3sce+/p0gXTUgTsuwGgJxWlEs7d0fsON2XxvGNJA8bnjij0KxlE0LU9H27HMbxCL1VB4+wsWQCRbszD8grvWQYVMYoaECMHRmkga+VLe4GW9GEqDkRTl8mLgWg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4ynusF5wU7IzzW80gy1F2YJeOkxbKobnkXUSXfoNoyk=;
+ b=QxF46c4Uzr5Q3mWsoKmdjlofh44+zOBQau0gy6QIVV8PtujHsk5BUwOFe/VTjcidAg08YPDeiXUNCELLtvc3EgZxk9LHI525eX6GYW+AcYm6k58H+w+SLrKONIPACEF/D+k1L6ix4cU/HXpU7NWjKGi9keLJ2gYYwy3wbOpjg5U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
+ by AS8PR04MB8675.eurprd04.prod.outlook.com (2603:10a6:20b:42a::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Sat, 11 Mar
+ 2023 08:26:06 +0000
+Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
+ ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
+ ([fe80::a518:512c:4af1:276e%5]) with mapi id 15.20.6156.027; Sat, 11 Mar 2023
+ 08:26:06 +0000
+From:   meenakshi.aggarwal@nxp.com
+To:     horia.geanta@nxp.com, V.sethi@nxp.com, pankaj.gupta@nxp.com,
+        gaurav.jain@nxp.com, herbert@gondor.apana.org.au,
+        davem@davemloft.net, linux-crypto@vger.kernel.org,
+        linux-kernel@vger.kernel.org, franck.lenormand@nxp.com
+Cc:     vijayb@linux.microsoft.com, code@tyhicks.com
+Subject: [PATCH] drivers: crypto: caam: jr: add .shutdown hook
+Date:   Sat, 11 Mar 2023 13:55:43 +0530
+Message-Id: <20230311082543.2474013-1-meenakshi.aggarwal@nxp.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
+References: <20230221054047.2140558-1-meenakshi.aggarwal@nxp.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR02CA0025.apcprd02.prod.outlook.com
+ (2603:1096:4:195::21) To DU0PR04MB9563.eurprd04.prod.outlook.com
+ (2603:10a6:10:314::7)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1043:b0:316:ff39:6bbf with SMTP id
- p3-20020a056e02104300b00316ff396bbfmr13145480ilj.6.1678523124585; Sat, 11 Mar
- 2023 00:25:24 -0800 (PST)
-Date:   Sat, 11 Mar 2023 00:25:24 -0800
-In-Reply-To: <0059d07f-97ce-724a-39ec-2a640ba82ef5@gmail.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000096a06405f69b9ec6@google.com>
-Subject: Re: [syzbot] [9p?] KASAN: wild-memory-access Write in v9fs_get_acl
-From:   syzbot <syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com>
-To:     asmadeus@codewreck.org, ericvh@gmail.com, himadrispandya@gmail.com,
-        ivan.orlov0322@gmail.com, linux-kernel@vger.kernel.org,
-        linux_oss@crudebyte.com, lucho@ionkov.net,
-        skhan@linuxfoundation.org, syzkaller-bugs@googlegroups.com,
-        v9fs-developer@lists.sourceforge.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR04MB9563:EE_|AS8PR04MB8675:EE_
+X-MS-Office365-Filtering-Correlation-Id: 4b32f962-026b-4e13-211f-08db220a424c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: p0vwsB3hVS212x/Q9mQBoTm7LGzuRsP4Bq6Gxdu5ojsDVpj2uKJ6Cr7lUdplXGN7GSmNyW/VVhlQPEBkCwaCOywxL203R6XJ2OUjwykwCRxQ0l8Ca6lXDJlfnHWpMsEtGx02aM3VljfK9Yjgqd5QK0Ec2WFS/4s4twZY5NDq+w7H+g2VI8Im6craKrWsDRvjMUZwaNo0zf/XsJcg+p9SI+2hnAJuCvYrF6kligd6On++BYnMvBku7fmL6g1H5DcEHcX+9+wwvzLbMup0HFl+LFfDNqqrvxq/ioKQjbA0Ddlcm/MlpC5vbPW+pdRFxS6JHxpUR6iwkk/ewb97LrnUzPvKEAEshc0fqdTgIR3r3FfeqBld4FLJn6r6piFf0XC7iFsutDARIsOnzjpcEA627OnZyKzZNF3vX3RGLWu5s9InJAwU9Kvjxh8M3Hd832hxDPOXbmB7DDqRL/PDhmoDJK4sMYk8QAnvkLxBIDpngVvPSAZ3P5pd63/JeYoOHS1Q++wZILDNz+0RMWJmK0vYvhykxcx+iF/zn+6CeKqE1sXOJfEfIFMwfVaufWtEl+3nTnU2Ue3jx3r+m6OO6CCw0iV7sVT9OHC7uDEobBtgbagppyacv4d+IVQXoxtKswyTe3Cwj4y0OAUxLZ6zDSrEb5gKCIlGWjok7MNnQvHVBvD1HlTe2toHwfbCYWrUpo0p+nrHhXQoj4jJmBKRBIDLCfQPmKbB8RfXFEk1YroJY+Q=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(376002)(136003)(39860400002)(366004)(451199018)(36756003)(6666004)(478600001)(38350700002)(6506007)(316002)(38100700002)(9686003)(52116002)(6486002)(2616005)(2906002)(6512007)(1076003)(186003)(26005)(41300700001)(4744005)(5660300002)(66476007)(8936002)(8676002)(66946007)(66556008)(4326008)(86362001)(142923001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?2c90QEYK/W+x2Z1iMkUjX7c8qD+LHjVdBYzRpe2yyFXyDKMS9jPtjVVN8t24?=
+ =?us-ascii?Q?g6+eonx8xRskcnwhtqEmgi6G8+3XHF9aMiXRDut3L5Z5sfWS4gqy+WZq9S78?=
+ =?us-ascii?Q?k8vR713w3Els/Flh+upchnTUSfDqFtB9Trn+gZf9AIbipG+QC8ywGk6n5Dx/?=
+ =?us-ascii?Q?xiJDghN+1LP0+jktzwJ2vkQH4upheodAj8m1txH6JgNW8JF7cc5AhAyS0eqe?=
+ =?us-ascii?Q?4B621aKicYPU/uNfv2BMxknrJF3gV4zpwwCONLHDPO1dqnr31h/sCXLQKiOM?=
+ =?us-ascii?Q?GYTzdqTx4OY5IeX/sXgU1E5T65I/wpBHqWllZgDtUxZ26QUKxt70W/yhM2Ne?=
+ =?us-ascii?Q?6dxj8+tXWaKGk2HwmVsu/SER2PjuH+OdjBGA7nL1z02a31+NbDpzEgkQ7/yf?=
+ =?us-ascii?Q?+mYubLQDEhA0fpGgHt/H9mECico49LvYX2HI26+jU/Ikr893wfr/BLf8W2SH?=
+ =?us-ascii?Q?ZVItpCouD1d30LuCYYFuLYuXqs78jL4+uW07cU/sUoc/aKPWrLhwKzVsvMF6?=
+ =?us-ascii?Q?H3GDTDqa4xVpWgfdoIFRaigkxm8CaNATGjkUJP1xuTwrJD/UpyQRsNmyfnst?=
+ =?us-ascii?Q?H9VZCDFncVIy0Z3HqOsvTy9UCkJWZs1fKAQcwPmzYiuFvbb1G1b2UqHJQLR0?=
+ =?us-ascii?Q?SrOzvrkZ0pmzTMMBtirm2ejQOhvN67/Xd/HQk3avDG8YsTeogUFoIwNaQM/i?=
+ =?us-ascii?Q?WOxg3guMt+FFxapdoQpHPW//db7uF8UoVujxf/DbJVJaOk9pY3Qv5S+/6QFc?=
+ =?us-ascii?Q?Mo4G+V29WwSA2Wo9PrGaWOv8ok/gT2oIhgt9ihjPKKRKi367OGOvwLpR+yW4?=
+ =?us-ascii?Q?DfnPTS9LAyPOtyEXdyZgXq62Cqa57dC/XCnIClsc0LdFRx/NLSRED1kNE8QG?=
+ =?us-ascii?Q?0514loP3PMdkz0ocK8Bm1wQPQXpBI53+ADIkikZlLwDrkGj67gScFS8PMHrl?=
+ =?us-ascii?Q?wVd0X42EPEJnKaBPMBii5ndmRISeaSF4NqkBbd0XB3SZE4ZaICvFY78FEU9Y?=
+ =?us-ascii?Q?HSw3161QcAawpZn1b71X83xSOBfprJwvljxjFoJTYQKmWoZcMxzvMBshm/LO?=
+ =?us-ascii?Q?d8X8LMKk2DFgvRSc6b90kP/UVSYr9ueeFZPcHRpozdga81nLWZf0e/OlNq0M?=
+ =?us-ascii?Q?qZSq4xfPmRW6tePqRqFHCZdHX49r7CtAlGdXbLLiZS6d7sovirvT/LmnohUf?=
+ =?us-ascii?Q?Ios9ZYh6eeQjIYFcttylAn3cRg4kCGSit005gYlCm62NFNV2KvXx6lbsflCX?=
+ =?us-ascii?Q?mAHAaPmYUefYNe6O4suwxbm2SFzml6yawFWgmi4CwNvZQWcUbkDlrdd/Silw?=
+ =?us-ascii?Q?zrujxG6XRgqvP7lWaKJuyzS7NkEbSSUA1/LhSuaRjcRGmnsmt77fQV6rTfnW?=
+ =?us-ascii?Q?UrUb3QH9i0kRSRHhdqiQ//jVuYCe40Idl/pX7QKrdyurWNfjUpXsyLMDsmz5?=
+ =?us-ascii?Q?pj32u2lRqQ9jEZte6LPbQKwuYqWa1lA0aVKyBBSTCxcCMgY+VWczLhGCHiag?=
+ =?us-ascii?Q?Ow6QTNElRRRDgXbOvSg9GaXTQ9S5VDkfIDaPiLn+VfS6VQ9WoGHdme+YRT0B?=
+ =?us-ascii?Q?Hqiy6bSsN6AEDq+yg7SmzesrssmvfE+gsRRBqd54f062G6YC068IziaPgFW+?=
+ =?us-ascii?Q?aQ=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 4b32f962-026b-4e13-211f-08db220a424c
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2023 08:26:06.4266
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: SgRNvbxCwwFxFvTPfNwJNenQbK0RHygOQhWfJnUJ70DchJmI6LtgM2006ReqhgS1u//tU9oW9E5OK1EaHreEy5jcjRQpdqQycXk/wHa9OjQ=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB8675
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,144 +116,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Gaurav Jain <gaurav.jain@nxp.com>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KASAN: wild-memory-access Write in v9fs_get_acl
+add .shutdown hook in caam_jr driver to support kexec boot
 
-loop0: detected capacity change from 0 to 256
-MINIX-fs: mounting unchecked file system, running fsck is recommended
-==================================================================
-BUG: KASAN: wild-memory-access in instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
-BUG: KASAN: wild-memory-access in atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
-BUG: KASAN: wild-memory-access in __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-BUG: KASAN: wild-memory-access in __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-BUG: KASAN: wild-memory-access in refcount_dec_and_test include/linux/refcount.h:333 [inline]
-BUG: KASAN: wild-memory-access in posix_acl_release include/linux/posix_acl.h:57 [inline]
-BUG: KASAN: wild-memory-access in v9fs_get_acl+0x1a4/0x390 fs/9p/acl.c:102
-Write of size 4 at addr 9fffeb37f97f1c00 by task syz-executor.0/6490
+Signed-off-by: Gaurav Jain <gaurav.jain@nxp.com>
+Tested-by: Vijay Balakrishna <vijayb@linux.microsoft.com>
+Reviewed-by: Pankaj Gupta <pankaj.gupta@nxp.com>
+---
+ drivers/crypto/caam/jr.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-CPU: 0 PID: 6490 Comm: syz-executor.0 Not tainted 6.3.0-rc1-syzkaller-00230-gef5f68cc1f82 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Call trace:
- dump_backtrace+0x1c8/0x1f4 arch/arm64/kernel/stacktrace.c:158
- show_stack+0x2c/0x3c arch/arm64/kernel/stacktrace.c:165
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xd0/0x124 lib/dump_stack.c:106
- print_report+0xe4/0x514 mm/kasan/report.c:433
- kasan_report+0xd4/0x130 mm/kasan/report.c:536
- kasan_check_range+0x264/0x2a4 mm/kasan/generic.c:187
- __kasan_check_write+0x2c/0x3c mm/kasan/shadow.c:37
- instrument_atomic_read_write include/linux/instrumented.h:102 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:176 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- posix_acl_release include/linux/posix_acl.h:57 [inline]
- v9fs_get_acl+0x1a4/0x390 fs/9p/acl.c:102
- v9fs_mount+0x77c/0xa5c fs/9p/vfs_super.c:183
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1501
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3042
- path_mount+0x590/0xe20 fs/namespace.c:3372
- do_mount fs/namespace.c:3385 [inline]
- __do_sys_mount fs/namespace.c:3594 [inline]
- __se_sys_mount fs/namespace.c:3571 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3571
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-==================================================================
-Unable to handle kernel paging request at virtual address 9fffeb37f97f1c00
-Mem abort info:
-  ESR = 0x0000000096000004
-  EC = 0x25: DABT (current EL), IL = 32 bits
-  SET = 0, FnV = 0
-  EA = 0, S1PTW = 0
-  FSC = 0x04: level 0 translation fault
-Data abort info:
-  ISV = 0, ISS = 0x00000004
-  CM = 0, WnR = 0
-[9fffeb37f97f1c00] address between user and kernel address ranges
-Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 0 PID: 6490 Comm: syz-executor.0 Tainted: G    B              6.3.0-rc1-syzkaller-00230-gef5f68cc1f82 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-pstate: 80400005 (Nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : __lse_atomic_fetch_add_release arch/arm64/include/asm/atomic_lse.h:62 [inline]
-pc : __lse_atomic_fetch_sub_release arch/arm64/include/asm/atomic_lse.h:76 [inline]
-pc : arch_atomic_fetch_sub_release arch/arm64/include/asm/atomic.h:51 [inline]
-pc : atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
-pc : __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-pc : __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-pc : refcount_dec_and_test include/linux/refcount.h:333 [inline]
-pc : posix_acl_release include/linux/posix_acl.h:57 [inline]
-pc : v9fs_get_acl+0x1b0/0x390 fs/9p/acl.c:102
-lr : arch_atomic_fetch_sub_release arch/arm64/include/asm/atomic.h:51 [inline]
-lr : atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
-lr : __refcount_sub_and_test include/linux/refcount.h:272 [inline]
-lr : __refcount_dec_and_test include/linux/refcount.h:315 [inline]
-lr : refcount_dec_and_test include/linux/refcount.h:333 [inline]
-lr : posix_acl_release include/linux/posix_acl.h:57 [inline]
-lr : v9fs_get_acl+0x1ac/0x390 fs/9p/acl.c:102
-sp : ffff80001e837970
-x29: ffff80001e837970 x28: dfff800000000000 x27: 1ffff00003d06f3c
-x26: 1ffff00003d06f38 x25: ffff0000dd9041e0 x24: ffff0000dd904178
-x23: ffff0000e5068000 x22: dfff800000000000 x21: 9fffeb37f97f1c00
-x20: 00000000fffffffb x19: fffffffffffffffb x18: 1fffe000368951b6
-x17: ffff800015cdd000 x16: ffff80001245e54c x15: 0000000000000000
-x14: 0000000040000000 x13: 0000000000000002 x12: 0000000000000001
-x11: ff80800009d819b8 x10: 0000000000000000 x9 : ffff800009d819b8
-x8 : 00000000ffffffff x7 : 1fffe000368951b7 x6 : ffff80000828dc14
-x5 : 0000000000000000 x4 : 0000000000000001 x3 : ffff8000081bc3c4
-x2 : 0000000000000001 x1 : 0000000000000000 x0 : 0000000000000000
-Call trace:
- arch_atomic_fetch_sub_release arch/arm64/include/asm/atomic.h:51 [inline]
- atomic_fetch_sub_release include/linux/atomic/atomic-instrumented.h:177 [inline]
- __refcount_sub_and_test include/linux/refcount.h:272 [inline]
- __refcount_dec_and_test include/linux/refcount.h:315 [inline]
- refcount_dec_and_test include/linux/refcount.h:333 [inline]
- posix_acl_release include/linux/posix_acl.h:57 [inline]
- v9fs_get_acl+0x1b0/0x390 fs/9p/acl.c:102
- v9fs_mount+0x77c/0xa5c fs/9p/vfs_super.c:183
- legacy_get_tree+0xd4/0x16c fs/fs_context.c:610
- vfs_get_tree+0x90/0x274 fs/super.c:1501
- do_new_mount+0x25c/0x8c8 fs/namespace.c:3042
- path_mount+0x590/0xe20 fs/namespace.c:3372
- do_mount fs/namespace.c:3385 [inline]
- __do_sys_mount fs/namespace.c:3594 [inline]
- __se_sys_mount fs/namespace.c:3571 [inline]
- __arm64_sys_mount+0x45c/0x594 fs/namespace.c:3571
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall+0x98/0x2c0 arch/arm64/kernel/syscall.c:52
- el0_svc_common+0x138/0x258 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x64/0x198 arch/arm64/kernel/syscall.c:193
- el0_svc+0x58/0x168 arch/arm64/kernel/entry-common.c:637
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:655
- el0t_64_sync+0x190/0x194 arch/arm64/kernel/entry.S:591
-Code: 97b021c6 d503201f 979e3dbf 12800008 (b86802b6) 
----[ end trace 0000000000000000 ]---
-----------------
-Code disassembly (best guess):
-   0:	97b021c6 	bl	0xfffffffffec08718
-   4:	d503201f 	nop
-   8:	979e3dbf 	bl	0xfffffffffe78f704
-   c:	12800008 	mov	w8, #0xffffffff            	// #-1
-* 10:	b86802b6 	ldaddl	w8, w22, [x21] <-- trapping instruction
+diff --git a/drivers/crypto/caam/jr.c b/drivers/crypto/caam/jr.c
+index 724fdec18bf9..ca5b49ea3821 100644
+--- a/drivers/crypto/caam/jr.c
++++ b/drivers/crypto/caam/jr.c
+@@ -163,6 +163,11 @@ static int caam_jr_remove(struct platform_device *pdev)
+ 	return ret;
+ }
+ 
++static void caam_jr_platform_shutdown(struct platform_device *pdev)
++{
++	caam_jr_remove(pdev);
++}
++
+ /* Main per-ring interrupt handler */
+ static irqreturn_t caam_jr_interrupt(int irq, void *st_dev)
+ {
+@@ -618,6 +623,7 @@ static struct platform_driver caam_jr_driver = {
+ 	},
+ 	.probe       = caam_jr_probe,
+ 	.remove      = caam_jr_remove,
++	.shutdown    = caam_jr_platform_shutdown,
+ };
+ 
+ static int __init jr_driver_init(void)
+-- 
+2.25.1
 
-
-Tested on:
-
-commit:         ef5f68cc Merge tag 'scsi-fixes' of git://git.kernel.or..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=115a390ac80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=fd3c6e109ff25818
-dashboard link: https://syzkaller.appspot.com/bug?extid=cb1d16facb3cc90de5fb
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
-
-Note: no patches were applied.
