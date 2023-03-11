@@ -2,207 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5427F6B57C8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 03:18:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A3886B57CF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 03:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjCKCSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 21:18:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S229767AbjCKCXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 21:23:44 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229522AbjCKCSa (ORCPT
+        with ESMTP id S229489AbjCKCXl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 21:18:30 -0500
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 848B946171
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 18:18:28 -0800 (PST)
-Received: by mail-pj1-x1036.google.com with SMTP id y2so7019953pjg.3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 18:18:28 -0800 (PST)
+        Fri, 10 Mar 2023 21:23:41 -0500
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297FC11CD75;
+        Fri, 10 Mar 2023 18:23:39 -0800 (PST)
+Received: by mail-lf1-x132.google.com with SMTP id n2so9015032lfb.12;
+        Fri, 10 Mar 2023 18:23:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678501108;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=xF5ccHQndDVMafnc8PuwPSnqfThQIzwYoAQPJ5moTkU=;
-        b=WlAVqipFrutqeQb1LajnOTIrmYIXwq9kFjOcmZD660P+1aV6/rbWQ9oIfAIh7iSk9x
-         ZvyKWy03fszidlyY5yzJDBp5JQ6OpzfepjV+ux9JKRMY8mqu9lURxzKVW6J2uBWXV4+M
-         K0//tsuzPDyNSzOgRnlllrhb40CqCJCMMhoX/nGBsnuZ2Lrh3pgLlt4ekA44vAsty6rS
-         isvZ33P41ZMJgGYnT+tC6CMN57vUcizL6v3G+/fOzaTAvaXc6ZbQko8LMntYzLwLaELW
-         ZVX4y/pxL8fRGOB03/SmZkVPDfc6Ag+qPhECodK8CcHth+bPCyouarUOwwlq4GP6jWJY
-         ZsnQ==
+        d=gmail.com; s=20210112; t=1678501417;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y6D0xGz1yRgOqNxWPNQKfR3PLp4ljt7A3malbHARYKc=;
+        b=fc1dwEqXyBWxW5fhadWQv814GFXDvw1ZFlPLAGaAsp+0yIY4/fcU5d8m2CQRSY6u7B
+         tR0jIXDZSMND/3Nj1H7XWGZsk0xf04LX6VU8z/w7nEW48GTMzhnEn9VKSKYFk1Kes5dg
+         cJ5fM5sFVUahy0xZCYp54JiOnmlRHAqwsh7u0OAJd/wKB5to0NG+hIWKk0ulVLEQNX2+
+         0QYksx2t0hkIxgvOq/dSx+NJv8KGn0wMNwLDo6dVb5i281YkwyeA2phZZddQERxOUQEq
+         Bjgk/wq44wcmGVEHZjWIdux1Iv8DVzfqhmsY0sH6MkG+HMMd9T8wSiyKXIudrGn0vr/m
+         828g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678501108;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xF5ccHQndDVMafnc8PuwPSnqfThQIzwYoAQPJ5moTkU=;
-        b=w+KmpuuY9AcyrZx88/lbIDUiu7fCEL877WSZoP6H+35XGY82UBPVaV8x6TGXCGEcrQ
-         EkDT8Uyajw4V+JLbKOZ2LUJ7vbPuPNM28cXMTJxWazQUwNrQijpNBxvYDZzy1lG0IpF8
-         Zicbw/Pl8ORwJoa/bVKnhjOpWPm19zpN9Nfsw8YxQBnr5KgA9m9rjL+oTE0dyebqfHO0
-         GBAAshP2pvRce96Rv3t3/ppamZP70YgMFXrwbfAV8jGL2VNjMV1ikxG8h9oizmowrnr0
-         nJiV63Zm5y21o2ptUQm8r6UKJi4TPVYRuMv/Voxjop9xG6OkQPWYXWGA7JJJwJ5S3Wyz
-         xJUg==
-X-Gm-Message-State: AO0yUKUjircFmrhbPnADi2aseArh4oB6CsP9GRltjXYm2Ra+OoODj7e2
-        K/yjPFmZVvY48VaFCIZVbYMWYLNI/qyMXrDU8ac=
-X-Google-Smtp-Source: AK7set+0kYfrFMPUhKsT2aeyolXR9POz42C/YWqY7OiQeI+wo3MdeL5OZdDyCrgilNNF9t3SP/+j1w==
-X-Received: by 2002:a17:90a:498b:b0:236:84a:8d9d with SMTP id d11-20020a17090a498b00b00236084a8d9dmr28551727pjh.39.1678501107874;
-        Fri, 10 Mar 2023 18:18:27 -0800 (PST)
-Received: from CloudiRingWorld ([122.231.69.163])
-        by smtp.gmail.com with ESMTPSA id u18-20020a17090341d200b0019c13d032d8sm553143ple.253.2023.03.10.18.18.27
+        d=1e100.net; s=20210112; t=1678501417;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Y6D0xGz1yRgOqNxWPNQKfR3PLp4ljt7A3malbHARYKc=;
+        b=AcAEOon17/751LzE8lC2AKRFeBnVbqqoGRldmXJW4PHV0dG20MZick+FYdLACtRCqm
+         KOozFZ5WVhFydZ4LZJgRDRwDeQCENRmjz5kH7CEfza4ejt7wVs/dDNRzTucSE0GYMIlT
+         h/M8i/qYvzlRzg6F9XUAbUwNwMR7zjYAGskm/J093kBc7QDKZ3IsPmVFs9UJ4TPCkarz
+         uDiojMkH6pSZsCblXazbaEeTn+xEl6gcO9VUd31oD7pT4GEWDFi8TNyccb/DtQ10+0dD
+         9fI0Id7G5nAQ6rn5j4h1E4iOeGWByVb0jfoiZIv9UgnG6uDeG4q+xNMVf6hQBl5wMO+8
+         15CQ==
+X-Gm-Message-State: AO0yUKVr85A/oHffKbljtIaxy838KKEwxMA6pScAOSrWV0twRiFoOsy5
+        79d7/qW7Dox5xdxC0EG6WkA=
+X-Google-Smtp-Source: AK7set8HfjlwLcBDN909n1kCoiZ5KvSabHSjCrIGn1HLXNDleAUeSEK8NkKp248NXwp501KM76T99g==
+X-Received: by 2002:ac2:4886:0:b0:4dd:9fd8:3a36 with SMTP id x6-20020ac24886000000b004dd9fd83a36mr8148159lfc.1.1678501417193;
+        Fri, 10 Mar 2023 18:23:37 -0800 (PST)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id l14-20020ac24a8e000000b004db45ae3aa8sm159966lfp.50.2023.03.10.18.23.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 18:18:27 -0800 (PST)
-Date:   Sat, 11 Mar 2023 10:18:25 +0800
-From:   Kloudifold <cloudifold.3125@gmail.com>
-To:     teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: sm750: Rename camel case functions
-Message-ID: <ZAvk8SGjwdYlHEU6@CloudiRingWorld>
+        Fri, 10 Mar 2023 18:23:36 -0800 (PST)
+Date:   Sat, 11 Mar 2023 05:23:34 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Jack Chen <zenghuchen@google.com>
+Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Jesus Sanchez-Palencia <jesussanp@google.com>,
+        Mark Slevinsky <markslevinsky@google.com>
+Subject: Re: [PATCH] spi: dw: remove delay between write and read
+Message-ID: <20230311022334.he6ev6tswfc2xcwo@mobilestation>
+References: <20230310153151.293608-1-zenghuchen@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230310153151.293608-1-zenghuchen@google.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch fixes the "CHECK: Avoid CamelCase" reported by
-checkpatch.pl by renaming camel case functions in
-sm750_cursor.c and sm750_cursor.h.
-Modified calls to functions declared in sm750_cursor.h in sm750.c.
+Hi Jack
 
-Fixed issue in [PATCH] staging: sm750: Rename camel case functions in sm750_cursor.*
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+On Fri, Mar 10, 2023 at 10:31:51AM -0500, Jack Chen wrote:
+> Delay between write and read in polling mode is not necessary in dw spi
+> driver. It was added assuming that dw spi controller need the delay to
+> send data from tx fifo to spi devices. But it is not needed because
+> following reasons:
+> 1) dw spi datasheet claims transfer begins when first data word is
+>    present in the transmit FIFO and a slave is enabled. So at least we
+>    do not need the full fifo-size-transfer time delay.
+> 2) in practice, due to spi devices implementation, spi full-duplex
+>    (write and read real data) is always split into two transfers.
 
-Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
----
- drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
- drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
- drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
- 3 files changed, 24 insertions(+), 24 deletions(-)
+In practice the delay is specifically added to minimize the dummy
+loops in the poll-based transfer. It's calculated based on the number
+of bytes pushed to the Tx FIFO and the SPI-bus clock rate (that's why
+the spi_transfer.effective_speed_hz field is initialized in the
+driver). So after all of them are transferred we get to start reading
+data from the Rx FIFO. Until then the kernel thread is supposed to
+sleep giving up the CPU for another tasks.
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index effc7fcc3..5d7249e82 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 
- 	sm750_hw_cursor_disable(cursor);
- 	if (fbcursor->set & FB_CUR_SETSIZE)
--		sm750_hw_cursor_setSize(cursor,
--					fbcursor->image.width,
--					fbcursor->image.height);
-+		sm750_hw_cursor_set_size(cursor,
-+					 fbcursor->image.width,
-+					 fbcursor->image.height);
- 
- 	if (fbcursor->set & FB_CUR_SETPOS)
--		sm750_hw_cursor_setPos(cursor,
--				       fbcursor->image.dx - info->var.xoffset,
--				       fbcursor->image.dy - info->var.yoffset);
-+		sm750_hw_cursor_set_pos(cursor,
-+					fbcursor->image.dx - info->var.xoffset,
-+					fbcursor->image.dy - info->var.yoffset);
- 
- 	if (fbcursor->set & FB_CUR_SETCMAP) {
- 		/* get the 16bit color of kernel means */
-@@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
- 		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
- 
--		sm750_hw_cursor_setColor(cursor, fg, bg);
-+		sm750_hw_cursor_set_color(cursor, fg, bg);
- 	}
- 
- 	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
--		sm750_hw_cursor_setData(cursor,
--					fbcursor->rop,
--					fbcursor->image.data,
--					fbcursor->mask);
-+		sm750_hw_cursor_set_data(cursor,
-+					 fbcursor->rop,
-+					 fbcursor->image.data,
-+					 fbcursor->mask);
- 	}
- 
- 	if (fbcursor->enable)
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2..ff643e33f 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
- 	poke32(HWC_ADDRESS, 0);
- }
- 
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
- {
- 	cursor->w = w;
- 	cursor->h = h;
- }
- 
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
- {
- 	u32 reg;
- 
-@@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
- 	poke32(HWC_LOCATION, reg);
- }
- 
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
- {
- 	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
- 		HWC_COLOR_12_2_RGB565_MASK;
-@@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
- 	poke32(HWC_COLOR_3, 0xffe0);
- }
- 
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-+			      const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask, opr;
-@@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
- 	}
- }
- 
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
--			      const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask;
-diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-index b59643dd6..88fa02f63 100644
---- a/drivers/staging/sm750fb/sm750_cursor.h
-+++ b/drivers/staging/sm750fb/sm750_cursor.h
-@@ -5,11 +5,11 @@
- /* hw_cursor_xxx works for voyager,718 and 750 */
- void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
- void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *data, const u8 *mask);
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
- 			      const u8 *data, const u8 *mask);
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *data, const u8 *mask);
- #endif
--- 
-2.39.2
+> Delay between spi transfers may be needed. But this can be introduced by
+> using a more formal helper function "spi_transfer_delay_exec", in which
+> the delay time is passed by users through spi_ioc_transfer.
 
+This is wrong. spi_transfer.delay is supposed to be executed after the
+whole transfer is completed. You suggest to to do that in between some
+random data chunks pushed and pulled from the controller FIFO.
+Moreover that delay is already performed by the SPI-core:
+https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi.c#L1570
+
+-Serge(y)
+
+> 
+> Signed-off-by: Jack Chen <zenghuchen@google.com>
+> ---
+>  drivers/spi/spi-dw-core.c | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
+> index c3bfb6c84cab..7c10fb353567 100644
+> --- a/drivers/spi/spi-dw-core.c
+> +++ b/drivers/spi/spi-dw-core.c
+> @@ -379,9 +379,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+>  
+>  /*
+>   * The iterative procedure of the poll-based transfer is simple: write as much
+> - * as possible to the Tx FIFO, wait until the pending to receive data is ready
+> - * to be read, read it from the Rx FIFO and check whether the performed
+> - * procedure has been successful.
+> + * as possible to the Tx FIFO, then read from the Rx FIFO and check whether the
+> + * performed procedure has been successful.
+> + *
+> + * Delay is introduced in the end of each transfer before (optionally) changing
+> + * the chipselect status, then starting the next transfer or completing the
+> + * list of @spi_message.
+>   *
+>   * Note this method the same way as the IRQ-based transfer won't work well for
+>   * the SPI devices connected to the controller with native CS due to the
+> @@ -390,21 +393,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
+>  static int dw_spi_poll_transfer(struct dw_spi *dws,
+>  				struct spi_transfer *transfer)
+>  {
+> -	struct spi_delay delay;
+> -	u16 nbits;
+>  	int ret;
+>  
+> -	delay.unit = SPI_DELAY_UNIT_SCK;
+> -	nbits = dws->n_bytes * BITS_PER_BYTE;
+> -
+>  	do {
+>  		dw_writer(dws);
+> -
+> -		delay.value = nbits * (dws->rx_len - dws->tx_len);
+> -		spi_delay_exec(&delay, transfer);
+> -
+>  		dw_reader(dws);
+> -
+> +		spi_transfer_delay_exec(transfer);
+>  		ret = dw_spi_check_status(dws, true);
+>  		if (ret)
+>  			return ret;
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
