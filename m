@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 09AD06B56D8
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:41:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68CD96B56D6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:41:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCKAkg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:40:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53010 "EHLO
+        id S229764AbjCKAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:40:52 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230281AbjCKAkU (ORCPT
+        with ESMTP id S230372AbjCKAkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:40:20 -0500
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71ACA139D3F;
-        Fri, 10 Mar 2023 16:40:06 -0800 (PST)
-Received: by mail-qt1-x833.google.com with SMTP id l13so7747881qtv.3;
-        Fri, 10 Mar 2023 16:40:06 -0800 (PST)
+        Fri, 10 Mar 2023 19:40:32 -0500
+Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7AA814089C;
+        Fri, 10 Mar 2023 16:40:10 -0800 (PST)
+Received: by mail-qt1-x835.google.com with SMTP id l18so7766502qtp.1;
+        Fri, 10 Mar 2023 16:40:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678495205;
+        d=gmail.com; s=20210112; t=1678495209;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=K0kuuT3+6RnS9K3QghRnceBdk8ynqQ1z+mh1LJkGVzo=;
-        b=gYseOYKWDMGUISiNkRcjSjvTTZsw5ZpxUtUzYky9ZIu/8x2vFtu1Ubj2/1NfS4ntqc
-         hX/h/yEUyA2imIDBGlqwTwoMvCjauAQN3YL66devi+3PsmAyF6mABKzTGpk4hMd7icxM
-         YEG/1j8Vk1YoVpNOoeMrCgh/Uo/Rnn3iQf+MpFu+gZkimrhV0E2qnQdFooilVD+K/hHa
-         rndAxQ/V0FYCu+PEVJ8K+hWV4ROJd99Mv7LFTpRov8IlSAc9cA6LofsPSnb+8TjoRVr2
-         L5hPzI4NrF/E1TKlZrGIJ2bO/Ipsdij7LIspIYw/JuzSHIXAlX+sgOjl322atMjd1034
-         P2GQ==
+        bh=5jXGljhJMOsOLQ0WVWyx9Qh8aJ4axzukipUofLqyH0c=;
+        b=E6LvORJlN2jcni/5ioUWmsjOnXgl7B775URlFqKgBop4b56C+en9J/o5VQci/Gr3HZ
+         mDdqxrmhy35dEWIEr0ibeFXQqzumxlSJvxH0I05R+AxhZTacM9/FvPnPJwWedeUC3cvi
+         pQeNNZX6OTbmRuNopd8WQ1Ls+zrYG6cPajDLFXJgfwUMMroLFQt144s5fzywH9RwVKGB
+         dmBEqLB4kzE3dqcZNzL4WQn30AqT97RuhmZuQIzcafVEHXu3L1817x/L3l9h/Gi2ryuc
+         MrvohJM2ORGZfictxJHfVmKJwsQQjwobLzwvo9n/kzxDzegIeFbxcKr7T/9FtgMrtnZZ
+         mFBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678495205;
+        d=1e100.net; s=20210112; t=1678495209;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=K0kuuT3+6RnS9K3QghRnceBdk8ynqQ1z+mh1LJkGVzo=;
-        b=WhVlndF5Bb4OF7zrC0OZQ3hQ92G6RMhm6JunaDo1YU81XrU41IxDquIEbfpXtbTJul
-         Ojim18CbCSWswyP2qfRPClo1Eakt+y6fO2C/eK+TKb2f2sDYPRgxrOXpCnNtiDVPjHRf
-         eNTABcX8cK9HIbudURmOn+jzik3o3jioO6tIgWevKmdEk8ZLsVQQoR/ESZj4AuPs2y7F
-         kPLNiTLDVaOmRm9LKWLMfaqwhORShC8b0zi0qe4E2DY7gF7AOWYVNYJdRsznVS9LzWXC
-         rKDWEwdN4RSIC38bnuSucty/2Ni3W1FIxQwUKnvOHrNYJTG9x6wth/G5GvmzMg8ulNbL
-         o3bA==
-X-Gm-Message-State: AO0yUKXmv0tRq5J5L5owNNn7SzYIBJjz282U80sXaDlSGw+yctR57PXF
-        HHl9MzhRQhdcZUCu3B8/j0s=
-X-Google-Smtp-Source: AK7set8ZGDP7wAjGGI9tJbICfiwjsQBTns3pou3iyFBkgtdpeY6NM2VuirqgiTSIHG6uE67a1R8tZQ==
-X-Received: by 2002:ac8:57cd:0:b0:3bf:d9a9:25f7 with SMTP id w13-20020ac857cd000000b003bfd9a925f7mr12075430qta.6.1678495205288;
-        Fri, 10 Mar 2023 16:40:05 -0800 (PST)
+        bh=5jXGljhJMOsOLQ0WVWyx9Qh8aJ4axzukipUofLqyH0c=;
+        b=wCrNJ4AngMSblqHI3WNxmVOo5fqFUAhrU9uwTILpP7crsDFq10YMGVRXIAKcT9/8dY
+         wynqxZQ30bK4jzqVk5SFRnQsUfCftxVhBSaIv/BmQqNCdDQkcDyqHdn7K/RKy1Bjju+5
+         XcwONWM8do8KmEpKh43ioreWmLid6zJv3ZCB/FLlwgcWPxBIEPoh2PZwXVfCzR7uFh7S
+         P0LdbLPX9DCctsq7zQbfsjx9IcqHgrVNVUOM/oh+aalameWZbyesrDwaEUT6TppidLKv
+         ss4v0CEmN4ikjn3f0vEKnksmF+MTns8ZY6G5OnXp4ml0zsPm9OCWQE7IQniW9wadXsMy
+         wBCA==
+X-Gm-Message-State: AO0yUKVpto3NaC/IE36gL54ro3MxQxmDp3YFSpDTVFok2UgNiQNgeYf5
+        TWRjCaxaSd0t0VYF99XCYuE=
+X-Google-Smtp-Source: AK7set82JZQLeG0mnfSCEhr7dXawy4oS4wEWrjbePSKQBRygykBuuvLPI0fUBxrCTyPQT+oR+bashA==
+X-Received: by 2002:a05:622a:590:b0:3a7:e625:14f with SMTP id c16-20020a05622a059000b003a7e625014fmr44499078qtb.9.1678495208862;
+        Fri, 10 Mar 2023 16:40:08 -0800 (PST)
 Received: from stbirv-lnx-1.igp.broadcom.net ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id a5-20020ac84345000000b003bfaff2a6b9sm868874qtn.10.2023.03.10.16.40.01
+        by smtp.gmail.com with ESMTPSA id a5-20020ac84345000000b003bfaff2a6b9sm868874qtn.10.2023.03.10.16.40.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 16:40:04 -0800 (PST)
+        Fri, 10 Mar 2023 16:40:08 -0800 (PST)
 From:   Doug Berger <opendmb@gmail.com>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
@@ -78,9 +78,9 @@ Cc:     Jonathan Corbet <corbet@lwn.net>, Mike Rapoport <rppt@kernel.org>,
         "Georgi Djakov" <quic_c_gdjako@quicinc.com>,
         linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org, Doug Berger <opendmb@gmail.com>
-Subject: [PATCH v4 6/9] memblock: introduce MEMBLOCK_MOVABLE flag
-Date:   Fri, 10 Mar 2023 16:38:52 -0800
-Message-Id: <20230311003855.645684-7-opendmb@gmail.com>
+Subject: [PATCH v4 7/9] mm/dmb: Introduce Designated Movable Blocks
+Date:   Fri, 10 Mar 2023 16:38:53 -0800
+Message-Id: <20230311003855.645684-8-opendmb@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230311003855.645684-1-opendmb@gmail.com>
 References: <20230311003855.645684-1-opendmb@gmail.com>
@@ -96,83 +96,427 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The MEMBLOCK_MOVABLE flag is introduced to designate a memblock
-as only supporting movable allocations by the page allocator.
+Designated Movable Blocks are blocks of memory that are composed
+of one or more adjacent memblocks that have the MEMBLOCK_MOVABLE
+designation. These blocks must be reserved before receiving that
+designation and will be located in the ZONE_MOVABLE zone rather
+than any other zone that may span them.
 
 Signed-off-by: Doug Berger <opendmb@gmail.com>
 ---
- include/linux/memblock.h |  8 ++++++++
- mm/memblock.c            | 24 ++++++++++++++++++++++++
- 2 files changed, 32 insertions(+)
+ include/linux/dmb.h | 29 ++++++++++++++
+ mm/Kconfig          | 12 ++++++
+ mm/Makefile         |  1 +
+ mm/dmb.c            | 91 +++++++++++++++++++++++++++++++++++++++++++
+ mm/memblock.c       |  6 ++-
+ mm/page_alloc.c     | 95 ++++++++++++++++++++++++++++++++++++++-------
+ 6 files changed, 220 insertions(+), 14 deletions(-)
+ create mode 100644 include/linux/dmb.h
+ create mode 100644 mm/dmb.c
 
-diff --git a/include/linux/memblock.h b/include/linux/memblock.h
-index 50ad19662a32..8eb3ca32dfa7 100644
---- a/include/linux/memblock.h
-+++ b/include/linux/memblock.h
-@@ -47,6 +47,7 @@ enum memblock_flags {
- 	MEMBLOCK_MIRROR		= 0x2,	/* mirrored region */
- 	MEMBLOCK_NOMAP		= 0x4,	/* don't add to kernel direct mapping */
- 	MEMBLOCK_DRIVER_MANAGED = 0x8,	/* always detected via a driver */
-+	MEMBLOCK_MOVABLE	= 0x10,	/* designated movable block */
- };
+diff --git a/include/linux/dmb.h b/include/linux/dmb.h
+new file mode 100644
+index 000000000000..fa2976c0fa21
+--- /dev/null
++++ b/include/linux/dmb.h
+@@ -0,0 +1,29 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __DMB_H__
++#define __DMB_H__
++
++#include <linux/memblock.h>
++
++/*
++ * the buddy -- especially pageblock merging and alloc_contig_range()
++ * -- can deal with only some pageblocks of a higher-order page being
++ *  MIGRATE_MOVABLE, we can use pageblock_nr_pages.
++ */
++#define DMB_MIN_ALIGNMENT_PAGES pageblock_nr_pages
++#define DMB_MIN_ALIGNMENT_BYTES (PAGE_SIZE * DMB_MIN_ALIGNMENT_PAGES)
++
++enum {
++	DMB_DISJOINT = 0,
++	DMB_INTERSECTS,
++	DMB_MIXED,
++};
++
++struct dmb;
++
++extern int dmb_intersects(unsigned long spfn, unsigned long epfn);
++
++extern int dmb_reserve(phys_addr_t base, phys_addr_t size,
++		       struct dmb **res_dmb);
++extern void dmb_init_region(struct memblock_region *region);
++
++#endif
+diff --git a/mm/Kconfig b/mm/Kconfig
+index 4751031f3f05..85ac5f136487 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -913,6 +913,18 @@ config CMA_AREAS
  
- /**
-@@ -125,6 +126,8 @@ int memblock_clear_hotplug(phys_addr_t base, phys_addr_t size);
- int memblock_mark_mirror(phys_addr_t base, phys_addr_t size);
- int memblock_mark_nomap(phys_addr_t base, phys_addr_t size);
- int memblock_clear_nomap(phys_addr_t base, phys_addr_t size);
-+int memblock_mark_movable(phys_addr_t base, phys_addr_t size);
-+int memblock_clear_movable(phys_addr_t base, phys_addr_t size);
+ 	  If unsure, leave the default value "7" in UMA and "19" in NUMA.
  
- void memblock_free_all(void);
- void memblock_free(void *ptr, size_t size);
-@@ -265,6 +268,11 @@ static inline bool memblock_is_driver_managed(struct memblock_region *m)
- 	return m->flags & MEMBLOCK_DRIVER_MANAGED;
- }
++config DMB_COUNT
++	int "Maximum count of Designated Movable Blocks"
++	default 19 if NUMA
++	default 7
++	help
++	  Designated Movable Blocks are blocks of memory that can be used
++	  by the page allocator exclusively for movable pages. They are
++	  managed in ZONE_MOVABLE but may overlap with other zones. This
++	  parameter sets the maximum number of DMBs in the system.
++
++	  If unsure, leave the default value "7" in UMA and "19" in NUMA.
++
+ config MEM_SOFT_DIRTY
+ 	bool "Track memory changes"
+ 	depends on CHECKPOINT_RESTORE && HAVE_ARCH_SOFT_DIRTY && PROC_FS
+diff --git a/mm/Makefile b/mm/Makefile
+index 8e105e5b3e29..824be8fb11cd 100644
+--- a/mm/Makefile
++++ b/mm/Makefile
+@@ -67,6 +67,7 @@ obj-y += page-alloc.o
+ obj-y += init-mm.o
+ obj-y += memblock.o
+ obj-y += $(memory-hotplug-y)
++obj-y += dmb.o
  
-+static inline bool memblock_is_movable(struct memblock_region *m)
+ ifdef CONFIG_MMU
+ 	obj-$(CONFIG_ADVISE_SYSCALLS)	+= madvise.o
+diff --git a/mm/dmb.c b/mm/dmb.c
+new file mode 100644
+index 000000000000..f6c4e2662e0f
+--- /dev/null
++++ b/mm/dmb.c
+@@ -0,0 +1,91 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Designated Movable Block
++ */
++
++#define pr_fmt(fmt) "dmb: " fmt
++
++#include <linux/dmb.h>
++
++struct dmb {
++	unsigned long start_pfn;
++	unsigned long end_pfn;
++};
++
++static struct dmb dmb_areas[CONFIG_DMB_COUNT];
++static unsigned int dmb_area_count;
++
++int dmb_intersects(unsigned long spfn, unsigned long epfn)
 +{
-+	return m->flags & MEMBLOCK_MOVABLE;
++	int i;
++	struct dmb *dmb;
++
++	if (spfn >= epfn)
++		return DMB_DISJOINT;
++
++	for (i = 0; i < dmb_area_count; i++) {
++		dmb = &dmb_areas[i];
++		if (spfn >= dmb->end_pfn)
++			continue;
++		if (epfn <= dmb->start_pfn)
++			return DMB_DISJOINT;
++		if (spfn >= dmb->start_pfn && epfn <= dmb->end_pfn)
++			return DMB_INTERSECTS;
++		else
++			return DMB_MIXED;
++	}
++
++	return DMB_DISJOINT;
++}
++EXPORT_SYMBOL(dmb_intersects);
++
++int __init dmb_reserve(phys_addr_t base, phys_addr_t size,
++		       struct dmb **res_dmb)
++{
++	struct dmb *dmb;
++
++	/* Sanity checks */
++	if (!size || !memblock_is_region_reserved(base, size))
++		return -EINVAL;
++
++	/* ensure minimal alignment required by mm core */
++	if (!IS_ALIGNED(base | size, DMB_MIN_ALIGNMENT_BYTES))
++		return -EINVAL;
++
++	if (dmb_area_count == ARRAY_SIZE(dmb_areas)) {
++		pr_warn("Not enough slots for DMB reserved regions!\n");
++		return -ENOSPC;
++	}
++
++	/*
++	 * Each reserved area must be initialised later, when more kernel
++	 * subsystems (like slab allocator) are available.
++	 */
++	dmb = &dmb_areas[dmb_area_count++];
++
++	dmb->start_pfn = PFN_DOWN(base);
++	dmb->end_pfn = PFN_DOWN(base + size);
++	if (res_dmb)
++		*res_dmb = dmb;
++
++	memblock_mark_movable(base, size);
++	return 0;
 +}
 +
- int memblock_search_pfn_nid(unsigned long pfn, unsigned long *start_pfn,
- 			    unsigned long  *end_pfn);
- void __next_mem_pfn_range(int *idx, int nid, unsigned long *out_start_pfn,
++void __init dmb_init_region(struct memblock_region *region)
++{
++	unsigned long pfn;
++	int i;
++
++	for (pfn = memblock_region_memory_base_pfn(region);
++	     pfn < memblock_region_memory_end_pfn(region);
++	     pfn += pageblock_nr_pages) {
++		struct page *page = pfn_to_page(pfn);
++
++		for (i = 0; i < pageblock_nr_pages; i++)
++			set_page_zone(page + i, ZONE_MOVABLE);
++
++		/* free reserved pageblocks to page allocator */
++		init_reserved_pageblock(page);
++	}
++}
 diff --git a/mm/memblock.c b/mm/memblock.c
-index 25fd0626a9e7..794a099ec3e2 100644
+index 794a099ec3e2..3db06288a5c0 100644
 --- a/mm/memblock.c
 +++ b/mm/memblock.c
-@@ -992,6 +992,30 @@ int __init_memblock memblock_clear_nomap(phys_addr_t base, phys_addr_t size)
- 	return memblock_setclr_flag(base, size, 0, MEMBLOCK_NOMAP);
+@@ -16,6 +16,7 @@
+ #include <linux/kmemleak.h>
+ #include <linux/seq_file.h>
+ #include <linux/memblock.h>
++#include <linux/dmb.h>
+ 
+ #include <asm/sections.h>
+ #include <linux/io.h>
+@@ -2103,13 +2104,16 @@ static void __init memmap_init_reserved_pages(void)
+ 	for_each_reserved_mem_range(i, &start, &end)
+ 		reserve_bootmem_region(start, end);
+ 
+-	/* and also treat struct pages for the NOMAP regions as PageReserved */
+ 	for_each_mem_region(region) {
++		/* treat struct pages for the NOMAP regions as PageReserved */
+ 		if (memblock_is_nomap(region)) {
+ 			start = region->base;
+ 			end = start + region->size;
+ 			reserve_bootmem_region(start, end);
+ 		}
++		/* move Designated Movable Block pages to ZONE_MOVABLE */
++		if (memblock_is_movable(region))
++			dmb_init_region(region);
+ 	}
  }
  
-+/**
-+ * memblock_mark_movable - Mark designated movable block with MEMBLOCK_MOVABLE.
-+ * @base: the base phys addr of the region
-+ * @size: the size of the region
-+ *
-+ * Return: 0 on success, -errno on failure.
-+ */
-+int __init_memblock memblock_mark_movable(phys_addr_t base, phys_addr_t size)
-+{
-+	return memblock_setclr_flag(base, size, 1, MEMBLOCK_MOVABLE);
-+}
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index da1af678995b..26846a9a9fc4 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -76,6 +76,7 @@
+ #include <linux/khugepaged.h>
+ #include <linux/buffer_head.h>
+ #include <linux/delayacct.h>
++#include <linux/dmb.h>
+ #include <asm/sections.h>
+ #include <asm/tlbflush.h>
+ #include <asm/div64.h>
+@@ -414,6 +415,8 @@ static unsigned long required_kernelcore __initdata;
+ static unsigned long required_kernelcore_percent __initdata;
+ static unsigned long required_movablecore __initdata;
+ static unsigned long required_movablecore_percent __initdata;
++static unsigned long min_dmb_pfn[MAX_NUMNODES] __initdata;
++static unsigned long max_dmb_pfn[MAX_NUMNODES] __initdata;
+ static unsigned long zone_movable_pfn[MAX_NUMNODES] __initdata;
+ bool mirrored_kernelcore __initdata_memblock;
+ 
+@@ -2171,7 +2174,7 @@ static int __init deferred_init_memmap(void *data)
+ 	}
+ zone_empty:
+ 	/* Sanity check that the next zone really is unpopulated */
+-	WARN_ON(++zid < MAX_NR_ZONES && populated_zone(++zone));
++	WARN_ON(++zid < ZONE_MOVABLE && populated_zone(++zone));
+ 
+ 	pr_info("node %d deferred pages initialised in %ums\n",
+ 		pgdat->node_id, jiffies_to_msecs(jiffies - start));
+@@ -7022,6 +7025,10 @@ static void __init memmap_init_zone_range(struct zone *zone,
+ 	unsigned long zone_end_pfn = zone_start_pfn + zone->spanned_pages;
+ 	int nid = zone_to_nid(zone), zone_id = zone_idx(zone);
+ 
++	/* Skip overlap of ZONE_MOVABLE */
++	if (zone_id == ZONE_MOVABLE && zone_start_pfn < *hole_pfn)
++		zone_start_pfn = *hole_pfn;
 +
-+/**
-+ * memblock_clear_movable - Clear flag MEMBLOCK_MOVABLE for a specified region.
-+ * @base: the base phys addr of the region
-+ * @size: the size of the region
-+ *
-+ * Return: 0 on success, -errno on failure.
-+ */
-+int __init_memblock memblock_clear_movable(phys_addr_t base, phys_addr_t size)
-+{
-+	return memblock_setclr_flag(base, size, 0, MEMBLOCK_MOVABLE);
-+}
+ 	start_pfn = clamp(start_pfn, zone_start_pfn, zone_end_pfn);
+ 	end_pfn = clamp(end_pfn, zone_start_pfn, zone_end_pfn);
+ 
+@@ -7482,6 +7489,12 @@ static unsigned long __init zone_spanned_pages_in_node(int nid,
+ 				node_start_pfn, node_end_pfn,
+ 				zone_start_pfn, zone_end_pfn);
+ 
++	if (zone_type == ZONE_MOVABLE && max_dmb_pfn[nid]) {
++		if (*zone_start_pfn == *zone_end_pfn)
++			*zone_end_pfn = max_dmb_pfn[nid];
++		*zone_start_pfn = min(*zone_start_pfn, min_dmb_pfn[nid]);
++	}
 +
- static bool should_skip_region(struct memblock_type *type,
- 			       struct memblock_region *m,
- 			       int nid, int flags)
+ 	/* Check that this node has pages within the zone's required range */
+ 	if (*zone_end_pfn < node_start_pfn || *zone_start_pfn > node_end_pfn)
+ 		return 0;
+@@ -7550,12 +7563,21 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
+ 			&zone_start_pfn, &zone_end_pfn);
+ 	nr_absent = __absent_pages_in_range(nid, zone_start_pfn, zone_end_pfn);
+ 
++	if (zone_type == ZONE_MOVABLE && max_dmb_pfn[nid]) {
++		if (zone_start_pfn == zone_end_pfn)
++			zone_end_pfn = max_dmb_pfn[nid];
++		else
++			zone_end_pfn = zone_movable_pfn[nid];
++		zone_start_pfn = min(zone_start_pfn, min_dmb_pfn[nid]);
++		nr_absent += zone_end_pfn - zone_start_pfn;
++	}
++
+ 	/*
+ 	 * ZONE_MOVABLE handling.
+-	 * Treat pages to be ZONE_MOVABLE in ZONE_NORMAL as absent pages
++	 * Treat pages to be ZONE_MOVABLE in other zones as absent pages
+ 	 * and vice versa.
+ 	 */
+-	if (mirrored_kernelcore && zone_movable_pfn[nid]) {
++	if (zone_movable_pfn[nid]) {
+ 		unsigned long start_pfn, end_pfn;
+ 		struct memblock_region *r;
+ 
+@@ -7565,6 +7587,19 @@ static unsigned long __init zone_absent_pages_in_node(int nid,
+ 			end_pfn = clamp(memblock_region_memory_end_pfn(r),
+ 					zone_start_pfn, zone_end_pfn);
+ 
++			if (memblock_is_movable(r)) {
++				if (zone_type != ZONE_MOVABLE) {
++					nr_absent += end_pfn - start_pfn;
++					continue;
++				}
++
++				nr_absent -=  end_pfn - start_pfn;
++				continue;
++			}
++
++			if (!mirrored_kernelcore)
++				continue;
++
+ 			if (zone_type == ZONE_MOVABLE &&
+ 			    memblock_is_mirror(r))
+ 				nr_absent += end_pfn - start_pfn;
+@@ -7584,18 +7619,27 @@ static void __init calculate_node_totalpages(struct pglist_data *pgdat,
+ {
+ 	unsigned long totalpages = 0;
+ 	enum zone_type i;
++	int nid = pgdat->node_id;
++
++	/*
++	 * If Designated Movable Blocks are defined on this node, ensure that
++	 * zone_movable_pfn is also defined for this node.
++	 */
++	if (max_dmb_pfn[nid] && !zone_movable_pfn[nid])
++		zone_movable_pfn[nid] = min(node_end_pfn,
++				arch_zone_highest_possible_pfn[movable_zone]);
+ 
+ 	for (i = 0; i < MAX_NR_ZONES; i++) {
+ 		struct zone *zone = pgdat->node_zones + i;
+ 		unsigned long zone_start_pfn, zone_end_pfn;
+ 		unsigned long spanned, absent, size;
+ 
+-		spanned = zone_spanned_pages_in_node(pgdat->node_id, i,
++		spanned = zone_spanned_pages_in_node(nid, i,
+ 						     node_start_pfn,
+ 						     node_end_pfn,
+ 						     &zone_start_pfn,
+ 						     &zone_end_pfn);
+-		absent = zone_absent_pages_in_node(pgdat->node_id, i,
++		absent = zone_absent_pages_in_node(nid, i,
+ 						   node_start_pfn,
+ 						   node_end_pfn);
+ 
+@@ -8047,15 +8091,27 @@ unsigned long __init node_map_pfn_alignment(void)
+ static unsigned long __init early_calculate_totalpages(void)
+ {
+ 	unsigned long totalpages = 0;
+-	unsigned long start_pfn, end_pfn;
+-	int i, nid;
++	struct memblock_region *r;
+ 
+-	for_each_mem_pfn_range(i, MAX_NUMNODES, &start_pfn, &end_pfn, &nid) {
+-		unsigned long pages = end_pfn - start_pfn;
++	for_each_mem_region(r) {
++		unsigned long start_pfn, end_pfn, pages;
++		int nid;
++
++		nid = memblock_get_region_node(r);
++		start_pfn = memblock_region_memory_base_pfn(r);
++		end_pfn = memblock_region_memory_end_pfn(r);
+ 
+-		totalpages += pages;
+-		if (pages)
++		pages = end_pfn - start_pfn;
++		if (pages) {
++			totalpages += pages;
+ 			node_set_state(nid, N_MEMORY);
++			if (memblock_is_movable(r)) {
++				if (start_pfn < min_dmb_pfn[nid])
++					min_dmb_pfn[nid] = start_pfn;
++				if (end_pfn > max_dmb_pfn[nid])
++					max_dmb_pfn[nid] = end_pfn;
++			}
++		}
+ 	}
+ 	return totalpages;
+ }
+@@ -8068,7 +8124,7 @@ static unsigned long __init early_calculate_totalpages(void)
+  */
+ static void __init find_zone_movable_pfns_for_nodes(void)
+ {
+-	int i, nid;
++	int nid;
+ 	unsigned long usable_startpfn;
+ 	unsigned long kernelcore_node, kernelcore_remaining;
+ 	/* save the state before borrow the nodemask */
+@@ -8196,13 +8252,24 @@ static void __init find_zone_movable_pfns_for_nodes(void)
+ 		kernelcore_remaining = kernelcore_node;
+ 
+ 		/* Go through each range of PFNs within this node */
+-		for_each_mem_pfn_range(i, nid, &start_pfn, &end_pfn, NULL) {
++		for_each_mem_region(r) {
+ 			unsigned long size_pages;
+ 
++			if (memblock_get_region_node(r) != nid)
++				continue;
++
++			start_pfn = memblock_region_memory_base_pfn(r);
++			end_pfn = memblock_region_memory_end_pfn(r);
+ 			start_pfn = max(start_pfn, zone_movable_pfn[nid]);
+ 			if (start_pfn >= end_pfn)
+ 				continue;
+ 
++			/* Skip over Designated Movable Blocks */
++			if (memblock_is_movable(r)) {
++				zone_movable_pfn[nid] = end_pfn;
++				continue;
++			}
++
+ 			/* Account for what is only usable for kernelcore */
+ 			if (start_pfn < usable_startpfn) {
+ 				unsigned long kernel_pages;
+@@ -8351,6 +8418,8 @@ void __init free_area_init(unsigned long *max_zone_pfn)
+ 	}
+ 
+ 	/* Find the PFNs that ZONE_MOVABLE begins at in each node */
++	memset(min_dmb_pfn, 0xff, sizeof(min_dmb_pfn));
++	memset(max_dmb_pfn, 0, sizeof(max_dmb_pfn));
+ 	memset(zone_movable_pfn, 0, sizeof(zone_movable_pfn));
+ 	find_zone_movable_pfns_for_nodes();
+ 
 -- 
 2.34.1
 
