@@ -2,117 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 202CC6B572A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:56:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 723256B5728
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:56:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjCKA4I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:56:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50366 "EHLO
+        id S231279AbjCKA4b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:56:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231795AbjCKAzS (ORCPT
+        with ESMTP id S232086AbjCKAz5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:55:18 -0500
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0339912B94D;
-        Fri, 10 Mar 2023 16:53:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1678496005; i=p.jungkamp@gmx.net;
-        bh=qMpEJq9/VDvSbq1BxRMreV5rXJDYdI69qmniBXaW75w=;
-        h=X-UI-Sender-Class:Subject:From:To:Cc:Date:In-Reply-To:References;
-        b=iPM1hIpLIhXNQTTlyUBg7uUZMyo5kc55l9ZcYRu+TRQ1SNYhiPd/vbFtQ9WyMmm+O
-         Kmka98vWWOSes3mzkAupeu8v0qkbIDznC4wDJzi2UW1nLq+GKsj94kS3+yBLHBYfTC
-         A5qePmK1uhpZmv2QqTATN4xYHP7AFu3cKEJ+v1ndyZBUNkZscIxgO4OVqe2q8QQxA9
-         3GqDOs/dTvfBVeaMPBkOuFWIgKsHQZuXdkUHS9zCAomiXRi7LeB66VrjTtk43siZgp
-         oOdNYM7xEj2TOTxSg/a3ZGZKcU5l5KrWB/5TJ61wbQAJfC61V91QKjaefdoL1bNd6w
-         36JYFtZhKwPVw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.178.149] ([93.238.84.250]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MlNp7-1qHKRs0eKr-00lo4I; Sat, 11
- Mar 2023 01:53:25 +0100
-Message-ID: <b9dab02783e5eeaa74b291d4394150689e7c7b8a.camel@gmx.net>
-Subject: Re: [PATCH] Fix buffer overrun in HID-SENSOR name.
-From:   Philipp Jungkamp <p.jungkamp@gmx.net>
-To:     Todd Brandt <todd.e.brandt@intel.com>, linux-input@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     todd.e.brandt@linux.intel.com, srinivas.pandruvada@linux.intel.com,
-        jic23@kernel.org, jikos@kernel.org
-Date:   Sat, 11 Mar 2023 01:53:22 +0100
-In-Reply-To: <20230310235414.12467-1-todd.e.brandt@intel.com>
-References: <20230310235414.12467-1-todd.e.brandt@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Fri, 10 Mar 2023 19:55:57 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 140ED28E86
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:54:51 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id g17so8905398lfv.4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:54:50 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678496089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cYtXohR9kO8JKnBbb5S/LlpBpqOKA0WNr1Wqy/ElIdk=;
+        b=F1V5/Wn9kgt2mO44rUdEkcx+uQIEouJWL1htc+7dh8YElL6NoOJ5b1M3WOtrj2pDXe
+         dlXyL8RlQ0oSRDCtaKQBIazDzfoLgMR2yeHlraR+QjAGdEhhzTrxcDziU5FU2H/9CE/l
+         0Z3oD4pVKG7lBSAy/iV9xPUsOaQAIxkn42fCkjfsv03Wfkb/utaDFbLu4Orkn/0eJdbX
+         cpQYCXI5QnzZKqAEhrIBhGMU5sIH10t3sGVXRvMFRDFF0GgV+dLuMuW83FVTkUNj8Zo1
+         D8YuXtNpdEde9Ma9tVDkOw8DSypOK0uxs0oF+4FVErPGvI8wCc38gIAQtIV96t65/LR8
+         12JA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678496089;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=cYtXohR9kO8JKnBbb5S/LlpBpqOKA0WNr1Wqy/ElIdk=;
+        b=H67aUpoWuk5lDBS1pLeInaWeGyLAB8TjdnMgoHP8NhlLeYxHt0uuOFIwKpg9rx5TTr
+         gMIXdbwVaxzeUarV+kfjFscalnv9zAlR3xWSu68cEFFGLmfIO2sFpkn3Fy3Nh9gebSOX
+         X7DNPWtsV1Yrlo8ZYNTdgD7ddFdmpipJiJUwj+LXuAEZfdXoaPYwrb1QAuncHPslfThm
+         gC5zi2rpEZ6rG05m3FBbuXECsYW+wZ4EZYzpQ5Du27pThViPWaxbF0F16ogOT2pql0DV
+         ZhM1ebIoBEL002NJUWp555MknMgZ0vi9zUE47O3AiGNGMyHkUQoTOotXZY9M+VpK2H5D
+         rK6A==
+X-Gm-Message-State: AO0yUKUFD11BHA22mmkcV7mMIIJwdO7qaBDqpTdBK25LwPczlLUmnBGT
+        rVAkcSiO/FeU1FAaHHV1jVYMjzbfRGQN84fObKo=
+X-Google-Smtp-Source: AK7set8ChGMwcjyrukIDMtT2ReuMkcAts+DBJM7qrjAjILtZEJFX2hGb3qxq/1p7aWMLfnWUMGpA1g==
+X-Received: by 2002:a19:7406:0:b0:4d8:4fd6:418a with SMTP id v6-20020a197406000000b004d84fd6418amr8045484lfe.6.1678496089221;
+        Fri, 10 Mar 2023 16:54:49 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id l30-20020ac24a9e000000b004dc83d04840sm136374lfp.79.2023.03.10.16.54.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 16:54:48 -0800 (PST)
+Message-ID: <500c7924-c43c-4233-1688-f8b6fbbad66f@linaro.org>
+Date:   Sat, 11 Mar 2023 01:54:47 +0100
 MIME-Version: 1.0
-X-Provags-ID: V03:K1:UFBI+T9+hsbH1HXtKgbA99vW4viypL7GZykNMrSy9AtQFwvxKkD
- jH/PUmPhuFJS7uRjqwAY6Eaa92tFaJ09P9UObRKk2LFccjOo72wp6BYyMPCaiTtvYMv5GUQ
- 4CcuNtK5a3pzvCa4LlviZ/3MFv4dZgurw9ovLWgJ5YdXycAWVSLzgk5nsG2dY5omWScuQXr
- GfzhLGoVXdWb6QiY4MrTw==
-UI-OutboundReport: notjunk:1;M01:P0:KvHxAsUbBT0=;Bs55vAzkdWdYKlzJpu8nVHXaUJW
- ZmWPk/lfKyqOffe4NQ3ZDyMMHIGbzVCOldAagid+/9S7cbSO087Y4IeHKjWdl1tob0X6ZAg80
- EnqmJJD7lNYdztwLjb/JCVOkl7z/LLXs8qn8WxG6nInNqB4TV3w76uZfjHAMCIv4nDjOJv+HK
- pQ/Zhe7nVIppINpmSfyEeAJsgiTrDcOy2zEO0VRIZ2iocfBz7ZB6APGVkVHXhrIOZnCJp4g+n
- 9IfQ95CrZRHH1sM6S3PrAc/HuuN56fULuLvM7m09vLTdi8dafounb8LKP8bRzD/Oyx268wvLo
- iP0HxIKNzG2+cnEevKzckSw9HfFD4A7Wl1FIiKECO/QeTl3x9AeU1KOVC0zscvu6JFAVDMwYx
- Hfj4lNhVpF5NwiYDJIM8l/iMuV3mUwxSUhXyM4b34F5sJIWyr6Ll1sLZ4lYe/2lsu+jfposmz
- STDXEoFGu922RIJ6yDhCgA24xkv2GEzZsDT38V9Foc9/EcgQyFmtZqYr3fXi8D97iTxe9byFC
- M5eUoabcaCoeFpaMGLZvWSJd/qzb8N2crbUCAYpOxhlDlKl8cgI7ViucPJxFr/Emqx10yIAkS
- gYd4fPQcc8SEmvauj0cY8xCkCvraa2VfTyEk29bFLWgwSek62TcjlSb980ZhZ4R4OSsESxheo
- N4HAAvayy0gOIoDDaE2MQbDRUmOjxmWES7SU40ryjjb5mrvWoq6kjST5UaYCtUCHOKgrBlHrG
- KPKZiEorVMuuHXooTI5/BsoCLFI7oIeaaN5vcrMTYqBKp18nvYNBVmF1fhXmijySYVxUCA2zl
- strD7ygUhiZMzVFuHkMK+XLg6bedoetHeHjQYpLdatg3qJjszdI6S5RcUrNw9YPZ7NwoZ/Okg
- soutaLWjvnMaM6N4NkV42vJAvnaDh4l5/2tZH0GFCmu4jdiFonUtY6KZylxiEoJZrSJjrdfEU
- dnwRFQ==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
+Content-Language: en-US
+To:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+ <50f03895-816f-be8d-d956-d237fb13f5a0@linaro.org>
+ <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
+ <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
+ <858a8925-f11b-652d-3f02-f5ceea7d11fa@linaro.org>
+ <74c0c724-b6a9-3755-7f56-9f421cece1a3@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <74c0c724-b6a9-3755-7f56-9f421cece1a3@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is exactly the fix I proposed. Thank you for testing and properly
-submitting it.
 
-Regards,
-Philipp Jungkamp
 
-On Fri, 2023-03-10 at 15:54 -0800, Todd Brandt wrote:
-> Philipp Jungkamp created this fix, I'm simply submitting it. I've
-> verified it fixes bugzilla issue 217169.
->=20
-> Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217169
-> Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
+On 11.03.2023 01:16, Bryan O'Donoghue wrote:
+> On 10/03/2023 18:05, Konrad Dybcio wrote:
+>>> I think you could use assigned-clocks for that ..
+>>>
+>>> So its not part of your series but then presumably you have a follow-on patch for the 8998 dts that points your ->intf_clks at these then ?
+>>>
+>>> clocks = <&clock_gcc clk_aggre2_noc_clk>,
+>>>           <&clock_gcc clk_gcc_ufs_axi_clk>,
+>>>           <&clock_gcc clk_gcc_aggre2_ufs_axi_clk>;
+>>>
+>>> It seems like the right thing to do..
+>> Why so? We're passing all clock references to clocks=<> and we handle
+>> them separately. This is akin to treating the "core" clock differently
+>> to the "iface" clock on some IP block, except on a wider scale.
+> 
+> Eh, that was a question, not a statement. I mean to ask if your intf_clks are intended to be populated with some/all of the above additional gcc references ?
+Argh sorry, I'm not great at reading lately..
+
+Yes that would be the plan. All of these ones from downstream plus more
+that we discover as we go (if we choose to go this route)
+
+And the discovery process looks like:
+
+1. boot with "disabling clk %s" debug prints added
+2. do something that triggers a crash (e.g. wait for an IP block
+   to enter its suspend routine)
+3. crash horribly
+4. try to recover the last disabled clock's name or analyze WCGW
+5. try resolving the clock dependency
+6. goto 1 until you don't crash anymore
+
+> 
+>>> Still not clear why these clocks are off.. your bootchain ?
+>> Generally the issue is that icc sync_states goes over *all the possible
+>> interconnect paths on the entire SoC*. For QoS register access, you need
+>> to be able to interface them. Some of the hardware blocks live on a
+>> separate sort of "island". That' part of why clocks such as
+>> GCC_CFG_NOC_USB3_PRIM_AXI_CLK exist. They're responsible for clocking
+>> the CNoC<->USB connection, which in the bigger picture looks more or less
+>> like:
+>>
+>>
+>>      1     2-3            2-3    3-4            3-4    4-5
+>> USB<->CNoC<->CNoC_to_SNoC<->SNoC<->SNoC_to_BIMC<->BIMC<->APSS
+>>
+>> where:
+>>
+>> 1 = GCC_CFG_NOC_USB3_PRIM_AXI_CLK
+>> 2 = RPM CNOC CLK
+>> 3 = RPM SNOC CLK
+>> 4 = RPM BIMC CLK
+>> 5 = (usually internally managed) HMSS / GNOC CLK
+>>
+>> or something along these lines, the *NoC names may be in the wrong order
+>> but this is the general picture.
+>>
+>> On msm-4.x there is no such thing as sync_state. The votes are only
+>> cast from within the IP-block drivers themselves, using data gathered from
+>> qcom,msmbus-blahblah and msmbus calls from within the driver. That way,
+>> downstream ensures there's never unclocked QoS register access.
+>>
+>> After writing this entire email, I got an idea that we could consider not
+>> accessing these QoS registers from within sync_state (e.g. use sth like
+>> if(is_sync_state_done))..
+>>
+>> That would lead to this patch being mostly
+>> irrelevant (IF AND ONLY IF all the necessary clocks were handled by the
+>> end device drivers AND clk/icc voting was done in correct order - which
+>> as we can tell from the sad 8996 example, is not always the case).
+>>
+>> Not guaranteeing it (like this patch does) would make it worse from the
+>> standpoint of representing the hardware needs properly, but it could
+>> surely save some headaches. To an extent.
+> 
+> Hmm.
+> 
+> If I have understood you correctly above, then for some of the NoC QoS entries we basically need additional clocks, which is separate to the clocks the controller bus and bus_a clocks.
+Yes.
+
+(Technically we need them for all of the nodes, but for example we're not
+going to poke at DDR registers when the DDR is shut off)
+
+> 
+> We don't see the problem all the time because of sync_state,
+No, actually it's sync_state (+ improper sequencing of turning on clocks
+and regulators/power domains vs setting ICC BW in device drivers) that
+causes this. Downstream piggybacks off of the devices being already
+set up and ready to go before setting BW (and by extension QoS).
+
+so your question is should we push the clocks to the devices.
+Yes, it's either this patch and blindly finding the required clocks
+
+or skipping QoS on sync_state (I haven't tested whether it'd enough
+yet, FWIW) with this patch and less finding required clocks (as we
+could partially piggyback off of the clocks being enabled before we
+cast ICC votes as part of resume/init sequence of a driver)
+
+or being like downstream and (almost) only relying on the client devices
+
+Based on the dtsi you gave as an example, my €0.02 would say no, those are clearly additional clock dependencies for NoC.
+Yes, definitely. The question is how should be go about handling them
+that would:
+
+- scale for all the IP blocks and nodes
+- not be overly complex
+- preferably doesn't just rely on trial-and-error and educated guesses
+- be hard to mess up on the programmer's side
+
+> 
+> Going by the name, you'd expect the UFS controller could own these two clocks
+> 
+> "clk-gcc-ufs-axi-clk",
+> "clk-aggre2-ufs-axi-clk-no-rate"
+> 
+> but even then by the same logic the NoC should own "clk-aggre2-noc-clk-no-rate" I wouldn't much fancy splitting them apart.
+Yeah, it seems to be a common pattern: whichever on-die block is mentioned
+first in the name (or first after the clock controller's prefix), actually
+"owns" the clock
+
+> 
+> So - I'd say the commit log doesn't really explain to me what we have discussed here.
+> 
+> Suggest rewording it a little bit "non-scaling clock" is accurate but for me on the first read doesn't really tell me that these are node-specific clock dependencies or that there is an expectation that the intf_clks should be tied to node-specific clocks.
+> 
+> So two asks
+> 
+> - Update the commit log and potentially the structure comments
+I'm probably just very biased because I authored these commits, but I can't
+see which part is not clear.. Could I (and this is not passive-aggressive or
+anything) ask for a pointer there?
+
+> - Can you split the devm_kzalloc() into a seperate patch ?
+>   I don't see why this needs to be done but if it does need to be
+>   done it could as far as I read it be done before this patch
+bus_clks[] is no longer a trailing empty array (a.k.a "struct hack"),
+so we shouldn't be using struct_size anymore. This sort of needs to
+be done together, as e.g. 8996 (without this commit) expects >2 bus
+clocks which are in reality these "interface clocks", or "node access
+dependencies", so splitting that out would introduce unnecessary churn
+or break bisecting.
+
+Konrad
+> 
 > ---
-> =C2=A0drivers/hid/hid-sensor-custom.c | 2 +-
-> =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
->=20
-> diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-
-> sensor-custom.c
-> index 3e3f89e01d81..d85398721659 100644
-> --- a/drivers/hid/hid-sensor-custom.c
-> +++ b/drivers/hid/hid-sensor-custom.c
-> @@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct
-> platform_device *pdev,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct hid_=
-sensor_hub_device
-> *hsdev,
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const struc=
-t
-> hid_sensor_custom_match *match)
-> =C2=A0{
-> -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char real_usage[HID_SENSOR_USA=
-GE_LENGTH];
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char real_usage[HID_SENSOR_USA=
-GE_LENGTH] =3D { 0 };
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct platform_device *c=
-ustom_pdev;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char *dev_name;
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char *c;
-
+> bod
