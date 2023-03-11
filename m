@@ -2,237 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E7B36B5947
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:26:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA2F6B594B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:27:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229729AbjCKH0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:26:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
+        id S230188AbjCKH1U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:27:20 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229801AbjCKH0J (ORCPT
+        with ESMTP id S229801AbjCKH1R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:26:09 -0500
-Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5781DBA7
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:26:07 -0800 (PST)
-Received: by mail-ua1-x92f.google.com with SMTP id n4so5041138ual.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:26:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678519567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M/SU9KXz28yYtXWuLaqhgFaPmS02wHA+in6Lz/rDrPw=;
-        b=pUFvUEZU1CIEKCF7HVOGu+/AQTCIsfxxhvCRSBmDepf+LHH3bDw05HpUjJ+AzxOs2s
-         VcQfFe3EL7fcCCCt+b79BuIrbSeUuWSp19UXwtomvUVOlGEpOz/WijtU87Qmdu/u6TOW
-         pkDsLWqqFawl1dvLiKXq+Qm77qFThTQ4gAs3gt9KvnEU8BPQcMcQxThRCjm/RreiKzBt
-         s6B/2OjRIIemSWhnJumv3eYn6MT1ao4a4LVRzW8968nHvtzEgiSZqbokVQZU/wS6Qemo
-         MxD0//YDn8aQAVeLCE4E2ISIFftgeD+r7u1m64cTjkZlZc2eye8azmh1vcpLcHlo+7az
-         dsWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678519567;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M/SU9KXz28yYtXWuLaqhgFaPmS02wHA+in6Lz/rDrPw=;
-        b=AjyACLPfTcryd1S8+j+4/2i1NwX/G0blBVzqcQnOo+SQgJFhfUUFoXwoJaa7ByMJ3d
-         feaMQDuvezsofyY8H5A/5uzhfvgYHqGx8L7nPV4vpE44NrTlq993egi5Cm/5IibblnXQ
-         AA/69iYQk0hqNXgIf0EALV7/BuTvE+Tri9YUIOazSTP1L7VZlS40wrUmQkrgIuN722/A
-         P9jQXqbAJ3RcVOUhmH65IDTAuGk+gxn3V6AP66bu1fwCPNT+uGi5Yu6fREXUxH/IA19r
-         7igGp6QCKZ/fXmFvAfs6lxZmVR7hbZAqp95SW7n0m0DaP28GiyAz6JX6tfU9oPEqHkQY
-         /IeA==
-X-Gm-Message-State: AO0yUKXHBfrHmRglXkZLgRdRUbTnBFJqAf+N2uVES11Y+c9iQS4dtB1P
-        SlWIumi13rX9l17a0nY0uGyU4uRAPao7mqhYWGRSeQ==
-X-Google-Smtp-Source: AK7set9wZXev+nm4e9+wm7LFHDw0bPVI3Sr5I5hpMA1Tr//IJ5EDiirQZEiwdrkR43R69XAxFOWloyEo9B6pDwHJr00=
-X-Received: by 2002:a1f:4542:0:b0:401:1c83:fba3 with SMTP id
- s63-20020a1f4542000000b004011c83fba3mr17674290vka.3.1678519566631; Fri, 10
- Mar 2023 23:26:06 -0800 (PST)
+        Sat, 11 Mar 2023 02:27:17 -0500
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D6951340E8;
+        Fri, 10 Mar 2023 23:27:16 -0800 (PST)
+Received: from dggpemm500001.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PYZDP3g9JznWTZ;
+        Sat, 11 Mar 2023 15:24:21 +0800 (CST)
+Received: from localhost.localdomain.localdomain (10.175.113.25) by
+ dggpemm500001.china.huawei.com (7.185.36.107) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sat, 11 Mar 2023 15:27:13 +0800
+From:   Kefeng Wang <wangkefeng.wang@huawei.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <muchun.song@linux.dev>
+CC:     Andrew Morton <akpm@linux-foundation.org>, <linux-mm@kvack.org>,
+        <linux-kernel@vger.kernel.org>, <linux-fsdevel@vger.kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>,
+        Kefeng Wang <wangkefeng.wang@huawei.com>,
+        Muchun Song <songmuchun@bytedance.com>
+Subject: [PATCH v2] mm: hugetlb: move hugeltb sysctls to its own file
+Date:   Sat, 11 Mar 2023 15:47:34 +0800
+Message-ID: <20230311074734.123269-1-wangkefeng.wang@huawei.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-References: <20230310133710.926811681@linuxfoundation.org>
-In-Reply-To: <20230310133710.926811681@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 11 Mar 2023 12:55:55 +0530
-Message-ID: <CA+G9fYuyMYnzNLgvyQwjnnVY4=QjOK6kKoTJ_guJ+z0LDn5uMA@mail.gmail.com>
-Subject: Re: [PATCH 4.14 000/193] 4.14.308-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.113.25]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 19:16, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.308 release.
-> There are 193 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
-4.14.308-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+This moves all hugetlb sysctls to its own file, also kill an
+useless hugetlb_treat_movable_handler() since commit d6cb41cc44c6
+("mm, hugetlb: remove hugepages_treat_as_movable sysctl").
 
-Results from Linaro=E2=80=99s test farm.
+Signed-off-by: Kefeng Wang <wangkefeng.wang@huawei.com>
+Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+---
+v2:
+- add __init to hugetlb_sysfs_init
+- update commit and add RBs
 
-As others reported, s390 builds regressions are noticed.
+ include/linux/hugetlb.h |  8 -------
+ kernel/sysctl.c         | 32 --------------------------
+ mm/hugetlb.c            | 51 ++++++++++++++++++++++++++++++++++++++---
+ 3 files changed, 48 insertions(+), 43 deletions(-)
 
-* s390, build failed
-  - gcc-8-defconfig-fe40093d
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 7c977d234aba..4056b05d81ed 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -124,14 +124,6 @@ void hugepage_put_subpool(struct hugepage_subpool *spool);
+ 
+ void hugetlb_dup_vma_private(struct vm_area_struct *vma);
+ void clear_vma_resv_huge_pages(struct vm_area_struct *vma);
+-int hugetlb_sysctl_handler(struct ctl_table *, int, void *, size_t *, loff_t *);
+-int hugetlb_overcommit_handler(struct ctl_table *, int, void *, size_t *,
+-		loff_t *);
+-int hugetlb_treat_movable_handler(struct ctl_table *, int, void *, size_t *,
+-		loff_t *);
+-int hugetlb_mempolicy_sysctl_handler(struct ctl_table *, int, void *, size_t *,
+-		loff_t *);
+-
+ int move_hugetlb_page_tables(struct vm_area_struct *vma,
+ 			     struct vm_area_struct *new_vma,
+ 			     unsigned long old_addr, unsigned long new_addr,
+diff --git a/kernel/sysctl.c b/kernel/sysctl.c
+index c14552a662ae..ce0297acf97c 100644
+--- a/kernel/sysctl.c
++++ b/kernel/sysctl.c
+@@ -2140,38 +2140,6 @@ static struct ctl_table vm_table[] = {
+ 		.extra1		= SYSCTL_ZERO,
+ 		.extra2		= SYSCTL_ONE,
+ 	},
+-#endif
+-#ifdef CONFIG_HUGETLB_PAGE
+-	{
+-		.procname	= "nr_hugepages",
+-		.data		= NULL,
+-		.maxlen		= sizeof(unsigned long),
+-		.mode		= 0644,
+-		.proc_handler	= hugetlb_sysctl_handler,
+-	},
+-#ifdef CONFIG_NUMA
+-	{
+-		.procname       = "nr_hugepages_mempolicy",
+-		.data           = NULL,
+-		.maxlen         = sizeof(unsigned long),
+-		.mode           = 0644,
+-		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
+-	},
+-#endif
+-	 {
+-		.procname	= "hugetlb_shm_group",
+-		.data		= &sysctl_hugetlb_shm_group,
+-		.maxlen		= sizeof(gid_t),
+-		.mode		= 0644,
+-		.proc_handler	= proc_dointvec,
+-	 },
+-	{
+-		.procname	= "nr_overcommit_hugepages",
+-		.data		= NULL,
+-		.maxlen		= sizeof(unsigned long),
+-		.mode		= 0644,
+-		.proc_handler	= hugetlb_overcommit_handler,
+-	},
+ #endif
+ 	{
+ 		.procname	= "lowmem_reserve_ratio",
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 712e32b38295..6f3c5f587c66 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4202,6 +4202,12 @@ static void __init hugetlb_sysfs_init(void)
+ 	hugetlb_register_all_nodes();
+ }
+ 
++#ifdef CONFIG_SYSCTL
++static void __init hugetlb_sysctl_init(void);
++#else
++static void __init hugetlb_sysctl_init(void) { }
++#endif
++
+ static int __init hugetlb_init(void)
+ {
+ 	int i;
+@@ -4257,6 +4263,7 @@ static int __init hugetlb_init(void)
+ 
+ 	hugetlb_sysfs_init();
+ 	hugetlb_cgroup_file_init();
++	hugetlb_sysctl_init();
+ 
+ #ifdef CONFIG_SMP
+ 	num_fault_mutexes = roundup_pow_of_two(8 * num_possible_cpus());
+@@ -4588,7 +4595,7 @@ static int hugetlb_sysctl_handler_common(bool obey_mempolicy,
+ 	return ret;
+ }
+ 
+-int hugetlb_sysctl_handler(struct ctl_table *table, int write,
++static int hugetlb_sysctl_handler(struct ctl_table *table, int write,
+ 			  void *buffer, size_t *length, loff_t *ppos)
+ {
+ 
+@@ -4597,7 +4604,7 @@ int hugetlb_sysctl_handler(struct ctl_table *table, int write,
+ }
+ 
+ #ifdef CONFIG_NUMA
+-int hugetlb_mempolicy_sysctl_handler(struct ctl_table *table, int write,
++static int hugetlb_mempolicy_sysctl_handler(struct ctl_table *table, int write,
+ 			  void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	return hugetlb_sysctl_handler_common(true, table, write,
+@@ -4605,7 +4612,7 @@ int hugetlb_mempolicy_sysctl_handler(struct ctl_table *table, int write,
+ }
+ #endif /* CONFIG_NUMA */
+ 
+-int hugetlb_overcommit_handler(struct ctl_table *table, int write,
++static int hugetlb_overcommit_handler(struct ctl_table *table, int write,
+ 		void *buffer, size_t *length, loff_t *ppos)
+ {
+ 	struct hstate *h = &default_hstate;
+@@ -4634,6 +4641,44 @@ int hugetlb_overcommit_handler(struct ctl_table *table, int write,
+ 	return ret;
+ }
+ 
++static struct ctl_table hugetlb_table[] = {
++	{
++		.procname	= "nr_hugepages",
++		.data		= NULL,
++		.maxlen		= sizeof(unsigned long),
++		.mode		= 0644,
++		.proc_handler	= hugetlb_sysctl_handler,
++	},
++#ifdef CONFIG_NUMA
++	{
++		.procname       = "nr_hugepages_mempolicy",
++		.data           = NULL,
++		.maxlen         = sizeof(unsigned long),
++		.mode           = 0644,
++		.proc_handler   = &hugetlb_mempolicy_sysctl_handler,
++	},
++#endif
++	{
++		.procname	= "hugetlb_shm_group",
++		.data		= &sysctl_hugetlb_shm_group,
++		.maxlen		= sizeof(gid_t),
++		.mode		= 0644,
++		.proc_handler	= proc_dointvec,
++	},
++	{
++		.procname	= "nr_overcommit_hugepages",
++		.data		= NULL,
++		.maxlen		= sizeof(unsigned long),
++		.mode		= 0644,
++		.proc_handler	= hugetlb_overcommit_handler,
++	},
++	{ }
++};
++
++static void __init hugetlb_sysctl_init(void)
++{
++	register_sysctl_init("vm", hugetlb_table);
++}
+ #endif /* CONFIG_SYSCTL */
+ 
+ void hugetlb_report_meminfo(struct seq_file *m)
+-- 
+2.35.3
 
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 4.14.308-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: 6eaf98b65d621aefe9304aeb2903e2e16e7e376e
-* git describe: v4.14.307-194-g6eaf98b65d62
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
-.307-194-g6eaf98b65d62
-
-## Test Regressions (compared to v4.14.307)
-* s390, build
-  - gcc-8-defconfig-fe40093d
-
-## Metric Regressions (compared to v4.14.307)
-
-## Test Fixes (compared to v4.14.307)
-
-## Metric Fixes (compared to v4.14.307)
-
-## Test result summary
-total: 55304, pass: 48088, fail: 1943, skip: 5214, xfail: 59
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 199 total, 197 passed, 2 failed
-* arm64: 37 total, 35 passed, 2 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 41 total, 41 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 20 total, 19 passed, 1 failed
-* s390: 15 total, 10 passed, 5 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 34 total, 33 passed, 1 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
