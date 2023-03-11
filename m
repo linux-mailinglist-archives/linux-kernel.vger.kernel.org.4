@@ -2,147 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76C8C6B574A
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 02:14:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CEE16B574E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 02:16:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbjCKBOb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 20:14:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58900 "EHLO
+        id S230176AbjCKBQW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 20:16:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbjCKBO0 (ORCPT
+        with ESMTP id S229770AbjCKBQS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 20:14:26 -0500
-Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E45612DC27;
-        Fri, 10 Mar 2023 17:14:25 -0800 (PST)
-Received: by mail-pl1-x635.google.com with SMTP id y11so7468179plg.1;
-        Fri, 10 Mar 2023 17:14:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678497265;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rh7oDZ2wH8OxNXYeRmxDps+pFhJvkYtrO5SAgqEl724=;
-        b=iLXJ+8i7ZJHN+1fIKRoEzbeDSCB6SFWr0rbtzFMRW63cEG8sjqOjReUSSOTyVbkrrh
-         s/feFZkpMwQGwF/e3T1CxKOKtMwxKd/gdqPBO16gDrdGNMspugRV4e+InoZ+cypr2REg
-         DATA+01g+kPwenAiWdZbb49TuDRopFh+AIIWqiHaOzrTsZniZ87xgh+LH7Bl031qCTSd
-         7IjTvMq5d2Es9NGmjPp40ZAIy2bfJgMkX4JSXfajPhlTNEqPQyX4CPDhipaM0gzi/RDA
-         Zd81epkX7Kg23H2MsYEJNVpAzYL67iJBOS/HiSpo82/CDp4BmpqBxuO0VLLymwyFuy3L
-         IgOw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678497265;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rh7oDZ2wH8OxNXYeRmxDps+pFhJvkYtrO5SAgqEl724=;
-        b=f0GmcImSVmdgMQvMQiP7JW2INJLIaIceNrBbDgR+6Pn+sR28GBAhVqUG/SEJvnxEC2
-         rPtnbYYi/gbxElrZtT17VlpVoUApcu/A0dMHOK+0bs4lbdF57SyI9Yibezj0lDpSD3At
-         fe09s0uRZI0W5CTizK3xwxTqwcsqeIP03UOIp52nivTil8LTx3Kprnfb35OVwLzUgT9O
-         epNG7tCjJiVwNTLsHlrKXCErcQcXn7gOwjJ0CGzdxR6MBjkiv2UcsspNWcg62zmCZon7
-         wDHPYxhrKNPcoOO5ImaX3PGpadx7mF/qH0v+1WZUNW+TPhNokNdhzcNV8dxtQpnXtoEc
-         1YBA==
-X-Gm-Message-State: AO0yUKUwFcH1XaT+zcd6AzCZIZpE6HLMDzWqtCLP2NgB6kY91UI0yB5C
-        SMWfJZeekir75LxepHIjWjg=
-X-Google-Smtp-Source: AK7set+9UTvGbB9wlgUIPHEmDL2PHFkebYxlGCjJD3HnunYUU257fn+NuaCmmdq9Dzvnt4hGugeLkg==
-X-Received: by 2002:a17:90a:ae83:b0:237:ae98:a484 with SMTP id u3-20020a17090aae8300b00237ae98a484mr4150329pjq.7.1678497264677;
-        Fri, 10 Mar 2023 17:14:24 -0800 (PST)
-Received: from ryan-ThinkPad-T470.. (c-24-6-63-212.hsd1.ca.comcast.net. [24.6.63.212])
-        by smtp.gmail.com with ESMTPSA id r20-20020a17090b051400b002376d85844dsm475323pjz.51.2023.03.10.17.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 17:14:24 -0800 (PST)
-From:   =?UTF-8?q?=E2=80=9CRyan?= <ryan.lee.analog@gmail.com>
-To:     lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, krzysztof.kozlowski@linaro.org,
-        rf@opensource.cirrus.com, ckeepax@opensource.cirrus.com,
-        pierre-louis.bossart@linux.intel.com, herve.codina@bootlin.com,
-        wangweidong.a@awinic.com, james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-Subject: [PATCH V2 2/2] ASoC: dt-bindings: max98363: add soundwire amplifier
-Date:   Fri, 10 Mar 2023 17:14:09 -0800
-Message-Id: <20230311011409.210014-2-ryan.lee.analog@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230311011409.210014-1-ryan.lee.analog@gmail.com>
-References: <20230311011409.210014-1-ryan.lee.analog@gmail.com>
+        Fri, 10 Mar 2023 20:16:18 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DDE712EAD4
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:16:17 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 09601B82400
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 01:16:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B45B7C433EF
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 01:16:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678497374;
+        bh=fdYt0/TQ3Aj7zgCLO05X233RmzS5yLIi4fZ0RFj4xi4=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=AJZDpvF1/nJL6fn+w60DzREvk7JdbwK7usj70zmvUeeIkfwJ/h5nBiOGtAiEKW22N
+         qevp6/k0yD1k5nwg7BRbhP57xUiPgJmA/UPRlpA61g2cSOLvoNrp6ce4Rnl2LkhcUg
+         v8/dNGPsJcsRbzIJfjVfxwUoXgZ5qchKVGJ3MiAWNEB3XdKQPc+eEZyy7+iwU5ZQ+q
+         ZPOZWvayvSI0QiDzy0myd+3ey69QF3a7ZPWrkPjGh57angYCXRmmNhnrdi/jbNgtc3
+         DjDTGDdzIujkQbWXBw87wT5iPP9UUuLaD7eFbaGmLWvbNDIp153rRFs3zwc0QqT2Gk
+         0q5wJqKcgGefw==
+Received: by mail-ed1-f54.google.com with SMTP id r15so425449edq.11
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:16:14 -0800 (PST)
+X-Gm-Message-State: AO0yUKUBpxefNgMfiPYow+yGyqhsAGjv1+koSxxuXkxtk9xX2o+puesL
+        FaqfeJEFEVZ7uJQJx9vYUntcCoPitpXdlhZ+onw=
+X-Google-Smtp-Source: AK7set95P8vTUn/vE+XOvQiPznq/YJRKwfAlP4aHLONiOGqtz0BUNiG2VToRziHiGlpilYu+etTewxEp7ojGtT/YLwY=
+X-Received: by 2002:a17:906:f47:b0:8b0:e909:9136 with SMTP id
+ h7-20020a1709060f4700b008b0e9099136mr14396117ejj.1.1678497372982; Fri, 10 Mar
+ 2023 17:16:12 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <1678173001-16852-1-git-send-email-yangtiezhu@loongson.cn>
+ <fb573603-edc1-9c87-5739-a33e5e1db6e1@loongson.cn> <20230311002221.721ef2d91e7defb65dd77b36@kernel.org>
+In-Reply-To: <20230311002221.721ef2d91e7defb65dd77b36@kernel.org>
+From:   Huacai Chen <chenhuacai@kernel.org>
+Date:   Sat, 11 Mar 2023 09:15:59 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4wQyam2YoGZFnw8Z-tLZJvEHrdfNu1+Yb6Cbs1aKi=bQ@mail.gmail.com>
+Message-ID: <CAAhV-H4wQyam2YoGZFnw8Z-tLZJvEHrdfNu1+Yb6Cbs1aKi=bQ@mail.gmail.com>
+Subject: Re: [PATCH] LoongArch: Add support for function error injection
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     Tiezhu Yang <yangtiezhu@loongson.cn>,
+        WANG Xuerui <kernel@xen0n.name>, loongarch@lists.linux.dev,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ryan Lee <ryans.lee@analog.com>
+Queued for loongarch-next, thanks.
 
-This patch adds dt-bindings information for Analog Devices MAX98363
-SoundWire Amplifier.
+Huacai
 
-Signed-off-by: Ryan Lee <ryans.lee@analog.com>
----
-Changes from v1:
-  Fixed a syntax error for the 'dt_binding_check' build.
-  Removed unnecessary properties.
-  Added description about SoundWire device ID of MAX98363
-
- .../bindings/sound/adi,max98363.yaml          | 42 +++++++++++++++++++
- 1 file changed, 42 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/sound/adi,max98363.yaml
-
-diff --git a/Documentation/devicetree/bindings/sound/adi,max98363.yaml b/Documentation/devicetree/bindings/sound/adi,max98363.yaml
-new file mode 100644
-index 000000000000..0e71b6c84007
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/adi,max98363.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/adi,max98363.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Analog Devices MAX98363 SoundWire Amplifier
-+
-+maintainers:
-+  - Ryan Lee <ryans.lee@analog.com>
-+
-+description:
-+  The MAX98363 is a SoundWire input Class D mono amplifier that
-+  supports MIPI SoundWire v1.2-compatible digital interface for
-+  audio and control data.
-+  SoundWire peripheral device ID of MAX98363 is 0x3X019F836300
-+  where X is the peripheral device unique ID decoded from pin.
-+  It supports up to 10 peripheral devices(0x0 to 0x9).
-+
-+properties:
-+  compatible:
-+    enum:
-+      - adi,max98363
-+  reg:
-+    maxItems: 1
-+    description: Peripheral-device unique ID decoded from pin.
-+
-+required:
-+  - compatible
-+  - reg
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    soundwire {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+        amplifier@3 {
-+            compatible = "adi,max98363";
-+            reg = <0x3>;
-+        };
-+    };
--- 
-2.34.1
-
+On Fri, Mar 10, 2023 at 11:22=E2=80=AFPM Masami Hiramatsu <mhiramat@kernel.=
+org> wrote:
+>
+> On Fri, 10 Mar 2023 10:07:09 +0800
+> Tiezhu Yang <yangtiezhu@loongson.cn> wrote:
+>
+> > This feature is related with kprobes, add Masami to CC.
+> >
+> > On 03/07/2023 03:10 PM, Tiezhu Yang wrote:
+> > > Inspired by the commit 42d038c4fb00 ("arm64: Add support for function=
+ error
+> > > injection") and commit ee55ff803b38 ("riscv: Add support for function=
+ error
+> > > injection"), support function error injection for LoongArch.
+> > >
+> > > Mainly implement two functions:
+> > > (1) regs_set_return_value() which is used to overwrite the return val=
+ue,
+> > > (2) override_function_with_return() which is used to override the pro=
+bed
+> > > function returning and jump to its caller.
+> > >
+> > > Here is a simple test under CONFIG_FUNCTION_ERROR_INJECTION and
+> > > CONFIG_FAIL_FUNCTION:
+> > >
+> > >   # echo sys_clone > /sys/kernel/debug/fail_function/inject
+> > >   # echo 100 > /sys/kernel/debug/fail_function/probability
+> > >   # dmesg
+> > >   bash: fork: Invalid argument
+> > >   # dmesg
+> > >   ...
+> > >   FAULT_INJECTION: forcing a failure.
+> > >   name fail_function, interval 1, probability 100, space 0, times 1
+> > >   ...
+> > >   Call Trace:
+> > >   [<90000000002238f4>] show_stack+0x5c/0x180
+> > >   [<90000000012e384c>] dump_stack_lvl+0x60/0x88
+> > >   [<9000000000b1879c>] should_fail_ex+0x1b0/0x1f4
+> > >   [<900000000032ead4>] fei_kprobe_handler+0x28/0x6c
+> > >   [<9000000000230970>] kprobe_breakpoint_handler+0xf0/0x118
+> > >   [<90000000012e3e60>] do_bp+0x2c4/0x358
+> > >   [<9000000002241924>] exception_handlers+0x1924/0x10000
+> > >   [<900000000023b7d0>] sys_clone+0x0/0x4
+> > >   [<90000000012e4744>] do_syscall+0x7c/0x94
+> > >   [<9000000000221e44>] handle_syscall+0xc4/0x160
+> > >
+> > > Signed-off-by: Tiezhu Yang <yangtiezhu@loongson.cn>
+>
+> Thanks for porting! This looks good to me.
+>
+> Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+>
+> Thanks!
+>
+> > > ---
+> > >  arch/loongarch/Kconfig              |  1 +
+> > >  arch/loongarch/include/asm/ptrace.h |  6 ++++++
+> > >  arch/loongarch/lib/Makefile         |  2 ++
+> > >  arch/loongarch/lib/error-inject.c   | 10 ++++++++++
+> > >  4 files changed, 19 insertions(+)
+> > >  create mode 100644 arch/loongarch/lib/error-inject.c
+> > >
+> > > diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> > > index 7fd5125..b16ff7e 100644
+> > > --- a/arch/loongarch/Kconfig
+> > > +++ b/arch/loongarch/Kconfig
+> > > @@ -99,6 +99,7 @@ config LOONGARCH
+> > >     select HAVE_FAST_GUP
+> > >     select HAVE_FTRACE_MCOUNT_RECORD
+> > >     select HAVE_FUNCTION_ARG_ACCESS_API
+> > > +   select HAVE_FUNCTION_ERROR_INJECTION
+> > >     select HAVE_FUNCTION_GRAPH_TRACER
+> > >     select HAVE_FUNCTION_TRACER
+> > >     select HAVE_GENERIC_VDSO
+> > > diff --git a/arch/loongarch/include/asm/ptrace.h b/arch/loongarch/inc=
+lude/asm/ptrace.h
+> > > index d761db9..db7332a 100644
+> > > --- a/arch/loongarch/include/asm/ptrace.h
+> > > +++ b/arch/loongarch/include/asm/ptrace.h
+> > > @@ -154,6 +154,12 @@ static inline long regs_return_value(struct pt_r=
+egs *regs)
+> > >     return regs->regs[4];
+> > >  }
+> > >
+> > > +static inline void regs_set_return_value(struct pt_regs *regs,
+> > > +                                    unsigned long val)
+> > > +{
+> > > +   regs->regs[4] =3D val;
+> > > +}
+> > > +
+> > >  #define instruction_pointer(regs) ((regs)->csr_era)
+> > >  #define profile_pc(regs) instruction_pointer(regs)
+> > >
+> > > diff --git a/arch/loongarch/lib/Makefile b/arch/loongarch/lib/Makefil=
+e
+> > > index 40bde63..30b1595 100644
+> > > --- a/arch/loongarch/lib/Makefile
+> > > +++ b/arch/loongarch/lib/Makefile
+> > > @@ -5,3 +5,5 @@
+> > >
+> > >  lib-y      +=3D delay.o memset.o memcpy.o memmove.o \
+> > >        clear_user.o copy_user.o dump_tlb.o unaligned.o
+> > > +
+> > > +obj-$(CONFIG_FUNCTION_ERROR_INJECTION) +=3D error-inject.o
+> > > diff --git a/arch/loongarch/lib/error-inject.c b/arch/loongarch/lib/e=
+rror-inject.c
+> > > new file mode 100644
+> > > index 0000000..afc9e1c
+> > > --- /dev/null
+> > > +++ b/arch/loongarch/lib/error-inject.c
+> > > @@ -0,0 +1,10 @@
+> > > +// SPDX-License-Identifier: GPL-2.0
+> > > +
+> > > +#include <linux/error-injection.h>
+> > > +#include <linux/kprobes.h>
+> > > +
+> > > +void override_function_with_return(struct pt_regs *regs)
+> > > +{
+> > > +   instruction_pointer_set(regs, regs->regs[1]);
+> > > +}
+> > > +NOKPROBE_SYMBOL(override_function_with_return);
+> > >
+> >
+>
+>
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
