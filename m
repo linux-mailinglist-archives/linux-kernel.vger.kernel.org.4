@@ -2,190 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B7A6B590D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:42:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC13E6B590E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCKGmm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 01:42:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50124 "EHLO
+        id S229744AbjCKGqY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 01:46:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55988 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229541AbjCKGmk (ORCPT
+        with ESMTP id S229541AbjCKGqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:42:40 -0500
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC3311CD61
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:42:38 -0800 (PST)
-Received: by mail-wm1-x330.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso7577090wmb.0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:42:38 -0800 (PST)
+        Sat, 11 Mar 2023 01:46:22 -0500
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CC831E1CB
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:46:21 -0800 (PST)
+Received: by mail-ed1-x529.google.com with SMTP id x3so29201607edb.10
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:46:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678516956;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rLCDgBE2CpEpsYEH2GzNb2mRA3Ov/LpZ5EV9ph3pyrE=;
-        b=GJw9guvyr0s5eebXuJrA9NOkpl95WPNpiig/eTGB5Oom88V/Zp6f+dhqK5P/TXiP9I
-         +lME1MquTJSG6dt2pPa57FLIAwj/biU0Qf962U4moIZrFm+oWItD8o5l+Y34iS4LOMOj
-         Dljq872LDn+dRGWMQtNJuQE+g+5Is0J8POfj2Gl0v+5e1j5IJ4rbjOzgMWHRGEgZhsNE
-         3RL/kxG3uz2rxtrTqxJwBzbtg4LSrZ/ZL9Mg/las7shVi1Poyt9Yz6xxm/+04xdFR1jG
-         IrkPMxmJ5nttDheyrDkTehYfgNS+FJF4Ruv0PMXdmNsYgh1gpy9TOUQ9fl6wHqu01k3y
-         HK0g==
+        d=gmail.com; s=20210112; t=1678517179;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ecFiLM2NOIcmzrMEnFX3qID1W2x+qNart8iHS9x3+NY=;
+        b=jlyIVZeyrcS2IlBV31rw0plRZrWDMwbR5ancg1fckRmpLSHoHFa39MKkQPBvBelJ3o
+         VI5/dJCcqkSHlaihGlwe4N9ejnBce02gri3z5OHVPlm2QNLh6RZIAravfMDFAnXHOQ7E
+         7h0vs1AAzmM04Zg0d4PUzMLfsV9W7Ky8a7SgC2J72Ysp0N5JNriF2MYQ/E7sPw5OkNFB
+         zZ1ENjQHv+h72Q3f5+U07cp1Z1nZ6xI4Si6Wp/jeZ67fpFmr7nCK1o8ByR4vpHZk4Pmb
+         V6fRdLb1UR6N+uZjN/1rKoWUrBu27d+n7UlfsVPI757OFNgYeumL3fR9ElaYfFjGNPZX
+         7K7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678516956;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rLCDgBE2CpEpsYEH2GzNb2mRA3Ov/LpZ5EV9ph3pyrE=;
-        b=6QAvpAlqlzK9mKQ+mznJEd+dGWF54FDk3ndfwfkucvhpYo9TmLhFqRj8bZj3wIKyFt
-         g7N0PeGDyv+bP8ahttFPC1IjfSiUOXW4bIWG0Utu/czblxuZxXb7UJJuQOnhj5Om8YuI
-         9gNQj/gY4hwHHGw7inr4MmPXWHJVPdu8fuCduYkn7Xp4ShggiAAI7x2N2r/bFOQLM/GN
-         Uf2lVw4Se4waCyHHamiYkhLmOkkxMpmxWSAZTDu/vQSok0xYWq1/USZiOnZawgFr6/Yd
-         ypIs8F2L4CpyoLYVdQ7Rfm9YbCgrHsxGBaEbRa1xCkxCj3YRubKcwahPTuCeXygbhyRd
-         mDGg==
-X-Gm-Message-State: AO0yUKUR7I81TMvfYatBVMfEiCPdYXcJCmlqSsmPRaBMys0a2FGdz14T
-        SlXlkOlcsvmvH6/FUSx8hSiHUP1Vw1YU2vg4Zd24dw==
-X-Google-Smtp-Source: AK7set9wYQn7im6e0NM13fx/mhFULhLhun1pudfxqWhKunmEGg+fxkJOhN9RKEAuwsiPqa/qDohJi4l7xBDedI9OZmU=
-X-Received: by 2002:a05:600c:a382:b0:3eb:2e68:5c76 with SMTP id
- hn2-20020a05600ca38200b003eb2e685c76mr1461577wmb.3.1678516956022; Fri, 10 Mar
- 2023 22:42:36 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678517179;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ecFiLM2NOIcmzrMEnFX3qID1W2x+qNart8iHS9x3+NY=;
+        b=AxmnKe2XfO00FoQF4aK+ehvLi+wbAaztjp9SyZL6J+dnTEeo5b7KjCJGrHr6AvT74w
+         sT1u8lvs6D6NJFigqMrnnjQg+yzOjlommDG8tlNWmy55S8sQBY3IpcOJoXiUu2lirTFs
+         H9euBRBrjgLPBw+ZXqOwQtamcSyiLOQGGrL1WLJeywdR2HQOzFK4PlL5tG0W1Ufb+tsa
+         vL/kDG6HT0NLAJDXZgb01AzqkPVFZkeOD/rZjjDPOPXQU86fuA4kDU2rTEAF6GhSWYlt
+         ZPrPuZNwbizy0ZzYXQ8ww+cREIkOokFKC2iQkrhT+lfPyvIrw9/rugbdaOwwjKvCh/Zn
+         BZYA==
+X-Gm-Message-State: AO0yUKU9Ss5YSmGDXrN8K1FzWS4QEdwIDgRK4W3c8hjKoutP6Ke5fOrk
+        ItXzni1MCx8iioxWwdDHzrA=
+X-Google-Smtp-Source: AK7set91MWvVpLbTHsjGIj4gqdvNh5aeBIpo4n4HWR3bKEPO1ZoBMVZW1PTUMUJo7TUgTJGt2xsCZg==
+X-Received: by 2002:a17:906:518e:b0:882:bffc:f2d2 with SMTP id y14-20020a170906518e00b00882bffcf2d2mr8489802ejk.2.1678517179517;
+        Fri, 10 Mar 2023 22:46:19 -0800 (PST)
+Received: from [192.168.10.15] ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id ot7-20020a170906ccc700b008ef13127b5fsm771602ejb.29.2023.03.10.22.46.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 10 Mar 2023 22:46:19 -0800 (PST)
+Message-ID: <0059d07f-97ce-724a-39ec-2a640ba82ef5@gmail.com>
+Date:   Sat, 11 Mar 2023 10:46:16 +0400
 MIME-Version: 1.0
-References: <20230302013822.1808711-1-sboyd@kernel.org> <20230302013822.1808711-3-sboyd@kernel.org>
- <CABVgOSkomwwgKZ9N0_0YMDL--QaZiTV7ONgSRABU2Ph1Z0CG-g@mail.gmail.com>
- <a97c9bb3a5addfb34af8ccabaa513026.sboyd@kernel.org> <CABVgOSkJ4mw_DtFzn5EwcsuYixWY_j13YotxEYqWhO+ZCL1KPg@mail.gmail.com>
- <d64a086ddcb7c5ca5abecab0ca654259.sboyd@kernel.org>
-In-Reply-To: <d64a086ddcb7c5ca5abecab0ca654259.sboyd@kernel.org>
-From:   David Gow <davidgow@google.com>
-Date:   Sat, 11 Mar 2023 14:42:24 +0800
-Message-ID: <CABVgOSk9gqRe_5yQZweBA2Qg2aGx8rUJtOHywGeT4x7TEyBH0A@mail.gmail.com>
-Subject: Re: [PATCH 2/8] of: Enable DTB loading on UML for KUnit tests
-To:     Stephen Boyd <sboyd@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Vincent Whitchurch <vincent.whitchurch@axis.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-um@lists.infradead.org,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] 9P FS: Fix wild-memory-access write in v9fs_get_acl
+Content-Language: en-US
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com
+Cc:     v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, himadrispandya@gmail.com,
+        syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+References: <20230311063411.7884-1-ivan.orlov0322@gmail.com>
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+In-Reply-To: <20230311063411.7884-1-ivan.orlov0322@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 at 07:34, Stephen Boyd <sboyd@kernel.org> wrote:
->
-> Quoting David Gow (2023-03-10 00:09:48)
-> > On Fri, 10 Mar 2023 at 07:19, Stephen Boyd <sboyd@kernel.org> wrote:
-> > >
-> > >
-> > > Hmm. I think you're suggesting that the unit test data be loaded
-> > > whenever CONFIG_OF=y and CONFIG_KUNIT=y. Then tests can check for
-> > > CONFIG_OF and skip if it isn't enabled?
-> > >
-> >
-> > More of the opposite: that we should have some way of supporting tests
-> > which might want to use a DTB other than the built-in one. Mostly for
-> > non-UML situations where an actual devicetree is needed to even boot
-> > far enough to get test output (so we wouldn't be able to override it
-> > with a compiled-in test one).
->
-> Ok, got it.
->
-> >
-> > I think moving to overlays probably will render this idea obsolete:
-> > but the thought was to give test code a way to check for the required
-> > devicetree nodes at runtime, and skip the test if they weren't found.
-> > That way, the failure mode for trying to boot this on something which
-> > required another device tree for, e.g., serial, would be "these tests
-> > are skipped because the wrong device tree is loaded", not "I get no
-> > output because serial isn't working".
-> >
-> > Again, though, it's only really needed for non-UML, and just loading
-> > overlays as needed should be much more sensible anyway.
->
-> I still have one niggle here. Loading overlays requires
-> CONFIG_OF_OVERLAY, and the overlay loading API returns -ENOTSUPP when
-> CONFIG_OF_OVERLAY=n. For now I'm checking for the config being enabled
-> in each test, but I'm thinking it may be better to simply call
-> kunit_skip() from the overlay loading function if the config is
-> disabled. This way tests can simply call the overlay loading function
-> and we'll halt the test immediately if the config isn't enabled.
->
+On 3/11/23 10:34, Ivan Orlov wrote:
+> KASAN reported the following issue:
+> [   36.825817][ T5923] BUG: KASAN: wild-memory-access in v9fs_get_acl+0x1a4/0x390
+> [   36.827479][ T5923] Write of size 4 at addr 9fffeb37f97f1c00 by task syz-executor798/5923
+> [   36.829303][ T5923]
+> [   36.829846][ T5923] CPU: 0 PID: 5923 Comm: syz-executor798 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
+> [   36.832110][ T5923] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+> [   36.834464][ T5923] Call trace:
+> [   36.835196][ T5923]  dump_backtrace+0x1c8/0x1f4
+> [   36.836229][ T5923]  show_stack+0x2c/0x3c
+> [   36.837100][ T5923]  dump_stack_lvl+0xd0/0x124
+> [   36.838103][ T5923]  print_report+0xe4/0x4c0
+> [   36.839068][ T5923]  kasan_report+0xd4/0x130
+> [   36.840052][ T5923]  kasan_check_range+0x264/0x2a4
+> [   36.841199][ T5923]  __kasan_check_write+0x2c/0x3c
+> [   36.842216][ T5923]  v9fs_get_acl+0x1a4/0x390
+> [   36.843232][ T5923]  v9fs_mount+0x77c/0xa5c
+> [   36.844163][ T5923]  legacy_get_tree+0xd4/0x16c
+> [   36.845173][ T5923]  vfs_get_tree+0x90/0x274
+> [   36.846137][ T5923]  do_new_mount+0x25c/0x8c8
+> [   36.847066][ T5923]  path_mount+0x590/0xe58
+> [   36.848147][ T5923]  __arm64_sys_mount+0x45c/0x594
+> [   36.849273][ T5923]  invoke_syscall+0x98/0x2c0
+> [   36.850421][ T5923]  el0_svc_common+0x138/0x258
+> [   36.851397][ T5923]  do_el0_svc+0x64/0x198
+> [   36.852398][ T5923]  el0_svc+0x58/0x168
+> [   36.853224][ T5923]  el0t_64_sync_handler+0x84/0xf0
+> [   36.854293][ T5923]  el0t_64_sync+0x190/0x194
+> 
+> Calling '__v9fs_get_acl' method in 'v9fs_get_acl' creates the
+> following chain of function calls:
+> 
+> __v9fs_get_acl
+> 	v9fs_fid_get_acl
+> 		v9fs_fid_xattr_get
+> 			p9_client_xattrwalk
+> 
+> Function p9_client_xattrwalk accepts a pointer to u64-typed
+> variable attr_size and puts some u64 value into it. However,
+> after the executing the p9_client_xattrwalk, in some circumstances
+> we assign the value of u64-typed variable 'attr_size' to the
+> variable 'retval', which we will return. However, the type of
+> 'retval' is ssize_t, and if the value of attr_size is larger
+> than SSIZE_MAX, we will face the signed type overflow. If the
+> overflow occurs, the result of v9fs_fid_xattr_get may be
+> negative, but not classified as an error. When we try to allocate
+> an acl with 'broken' size we receive an error, but don't process
+> it. When we try to free this acl, we face the 'wild-memory-access'
+> error (because it wasn't allocated).
+> 
+> This patch will add new condition to the 'v9fs_fid_xattr_get'
+> function, so it will return an EOVERFLOW error if the 'attr_size'
+> is larger than SSIZE_MAX.
+> 
+> In this version of the patch I removed explicit type conversion and
+> added separate condition to check the possible overflow and return
+> an error (in v1 version I've just modified the existing condition).
+> 
+> Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+> Link: https://syzkaller.appspot.com/bug?id=fbbef66d9e4d096242f3617de5d14d12705b4659
+> Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+> ---
+>   fs/9p/xattr.c | 10 +++++++---
+>   1 file changed, 7 insertions(+), 3 deletions(-)
+> 
+> diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
+> index 50f7f3f6b55e..6affd6b3f5e6 100644
+> --- a/fs/9p/xattr.c
+> +++ b/fs/9p/xattr.c
+> @@ -35,10 +35,14 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
+>   		return retval;
+>   	}
+>   	if (attr_size > buffer_size) {
+> -		if (!buffer_size) /* request to get the attr_size */
+> -			retval = attr_size;
+> -		else
+> +		if (!buffer_size) {/* request to get the attr_size */
+> +			if (attr_size > SSIZE_MAX)
+> +				retval = -EOVERFLOW;
+> +			else
+> +				retval = attr_size;
+> +		} else {
+>   			retval = -ERANGE;
+> +		}
+>   	} else {
+>   		iov_iter_truncate(&to, attr_size);
+>   		retval = p9_client_read(attr_fid, 0, &to, &err);
 
-That sounds sensible, though there is a potential pitfall. If
-kunit_skip() is called directly from overlay code, might introduce a
-dependency on kunit.ko from the DT overlay, which we might not want.
-The solution there is either to have a kunit wrapper function (so the
-call is already in kunit.ko), or to have a hook to skip the current
-test (which probably makes sense to do anyway, but I think the wrapper
-is the better option).
-
-
-> >
-> > > >
-> > > > That being said, I do think that there's probably some sense in
-> > > > supporting the compiled-in DTB as well (it's definitely simpler than
-> > > > patching kunit.py to always pass the extra command-line option in, for
-> > > > example).
-> > > > But maybe it'd be nice to have the command-line option override the
-> > > > built-in one if present.
-> > >
-> > > Got it. I need to test loading another DTB on the commandline still, but
-> > > I think this won't be a problem. We'll load the unittest-data DTB even
-> > > with KUnit on UML, so assuming that works on UML right now it should be
-> > > unchanged by this series once I resend.
-> >
-> > Again, moving to overlays should render this mostly obsolete, no? Or
-> > am I misunderstanding how the overlay stuff will work?
->
-> Right, overlays make it largely a moot issue. The way the OF unit tests
-> work today is by grafting a DTB onto the live tree. I'm reusing that
-> logic to graft a container node target for kunit tests to add their
-> overlays too. It will be clearer once I post v2.
->
-> >
-> > One possible future advantage of being able to test with custom DTs at
-> > boot time would be for fuzzing (provide random DT properties, see what
-> > happens in the test). We've got some vague plans to support a way of
-> > passing custom data to tests to support this kind of case (though, if
-> > we're using overlays, maybe the test could just patch those if we
-> > wanted to do that).
->
-> Ah ok. I can see someone making a fuzzer that modifies devicetree
-> properties randomly, e.g. using different strings for clock-names.
->
-> This reminds me of another issue I ran into. I wanted to test adding the
-> same platform device to the platform bus twice to confirm that the
-> second device can't be added. That prints a warning, which makes
-> kunit.py think that the test has failed because it printed a warning. Is
-> there some way to avoid that? I want something like
->
->         KUNIT_EXPECT_WARNING(test, <call some function>)
->
-> so I can test error cases.
-
-Hmm... I'd've thought that shouldn't be a problem: kunit.py should
-ignore most messages during a test, unless it can't find a valid
-result line. What does the raw KTAP output look like? (You can get it
-from kunit.py by passing the --raw_output option).
-
-That being said, a KUNIT_EXPECT_LOG_MESSAGE() or similar is something
-we've wanted for a while. I think that the KASAN folks have been
-working on something similar using console tracepoints:
-https://lore.kernel.org/all/ebf96ea600050f00ed567e80505ae8f242633640.1666113393.git.andreyknvl@google.com/
-
-Cheers,
--- David
+#syz test 
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
