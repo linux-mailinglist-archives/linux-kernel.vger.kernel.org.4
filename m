@@ -2,163 +2,276 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22456B592D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B2626B5936
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230203AbjCKHBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:01:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49936 "EHLO
+        id S229887AbjCKHKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:10:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbjCKHAZ (ORCPT
+        with ESMTP id S230104AbjCKHKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:00:25 -0500
-Received: from mail-yb1-xb4a.google.com (mail-yb1-xb4a.google.com [IPv6:2607:f8b0:4864:20::b4a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECDC144977
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:59:56 -0800 (PST)
-Received: by mail-yb1-xb4a.google.com with SMTP id e20-20020a25d314000000b00b33355abd3dso2704141ybf.14
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:59:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678517995;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=suA+bwgJNWM1ViYRwliFKAa9dMDLpk9Qwp1WJkMdxcc=;
-        b=CQZt3tWjAs16t6INtGV8MfbsFPXnxShEd3XQr0Eg2M1Lq8aK2hi5j69UBZR4nZvzQk
-         s70YdoH35sqKBKPjWDpSYMFsqUFh0N/2F4nVGpQMSCBVJcFiDIavD87dGD04hX8KnzQO
-         872HqHIhAoE6Y39RvB4exu295r38ilJ6XdN22SVd+X4CzDldEZzpLwiDUDuJgFIXo2JB
-         DQ0r3g7RnmpHwriEWOT1iX4UDptqU27wyA0chat1UyI4L+vzaMegrBm+fA9mCexnzQb/
-         ProMYdMUTJIItTVUbMrA9mEo6o7msjnB11hVk/pqvLYWAGyciPvgRwd37MCBKBNz7Hbl
-         l1Pw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517995;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=suA+bwgJNWM1ViYRwliFKAa9dMDLpk9Qwp1WJkMdxcc=;
-        b=cH1gtR1izGnB4mdBbSu8eA92pzOIUNedDv8CcAIBz7mzcDY/neeD3r6YdUtZsHh7gJ
-         0+cnzrhUPdmD954Qqb0atUn21I2pkrfRgFUF5NJjQxUbNsiYqsGgXNDgG81MDl6FWvNk
-         OUEyn8roLNxP0MORI1v0bt4zK9J6D7qLGGVQej6Ng97oEInppkl76Eqi46io2dHcBkFT
-         6+4hPTluHXOhhI9G6MhW8ZAfBGU53G8bmYXv4syJRvv8BNmpbGSzx6bh9P8flCKCl8/T
-         y2q7JGFPEQvbLcIHx4rA3zdpHjCaqjr70MhB8Qnj+qDf/CNYUxocN7j4GufwX+549V43
-         2mfQ==
-X-Gm-Message-State: AO0yUKW2jisOEgwDGCkAsllt1tNozntRs2EsqvkV5JhN4XTSc5iHaqj2
-        3ENDkmk3QrpLp2AlKP4OQaImgdOI9ek1
-X-Google-Smtp-Source: AK7set9XTSaarIquORnK+0yBheQDbBcFerJD4i+/DeqYN6jDbj3frYgSC1/aA5aOMWmcLWCqwpOpNALBFmcU
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a11d:a763:a328:f2d6])
- (user=irogers job=sendgmr) by 2002:a81:a983:0:b0:52e:e095:d840 with SMTP id
- g125-20020a81a983000000b0052ee095d840mr18667452ywh.0.1678517995660; Fri, 10
- Mar 2023 22:59:55 -0800 (PST)
-Date:   Fri, 10 Mar 2023 22:57:53 -0800
-In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
-Message-Id: <20230311065753.3012826-14-irogers@google.com>
-Mime-Version: 1.0
-References: <20230311065753.3012826-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v1 13/13] perf build: Remove redundant NO_NEWT build option
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "=?UTF-8?q?Martin=20Li=C5=A1ka?=" <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sat, 11 Mar 2023 02:10:05 -0500
+X-Greylist: delayed 1108 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Fri, 10 Mar 2023 23:10:03 PST
+Received: from smtpq3.tb.mail.iss.as9143.net (smtpq3.tb.mail.iss.as9143.net [212.54.42.166])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 942D5125D8B
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:10:03 -0800 (PST)
+Received: from [212.54.42.107] (helo=smtp3.tb.mail.iss.as9143.net)
+        by smtpq3.tb.mail.iss.as9143.net with esmtps (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.90_1)
+        (envelope-from <dick@mrns.nl>)
+        id 1pat4n-0004fz-Bu
+        for linux-kernel@vger.kernel.org; Sat, 11 Mar 2023 07:51:33 +0100
+Received: from routi.mrns.nl ([213.93.239.227])
+        by smtp3.tb.mail.iss.as9143.net with ESMTPA
+        id at4lpceQktg8eat4mp5zov; Sat, 11 Mar 2023 07:51:33 +0100
+X-Env-Mailfrom: dick@mrns.nl
+X-Env-Rcptto: linux-kernel@vger.kernel.org
+X-SourceIP: 213.93.239.227
+X-CNFS-Analysis: v=2.4 cv=bZetEsDB c=1 sm=1 tr=0 ts=640c24f5 cx=a_exe
+ a=JHrq6bmmrihZf+Bww3MhDg==:117 a=JHrq6bmmrihZf+Bww3MhDg==:17
+ a=k__wU0fu6RkA:10 a=oxU5Xt4QAAAA:8 a=H1w7Dpf3J3Y2f7KK384A:9
+ a=jKdzr7yA372qb7_9lzlF:22
+X-Authenticated-Sender: boeierlaan60@ziggo.nl
+Received: by routi.mrns.nl (sSMTP sendmail emulation); Sat, 11 Mar 2023 07:51:31 +0100
+From:   Dick Marinus <dick@mrns.nl>
+To:     jikos@kernel.org, benjamin.tissoires@redhat.com,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org
+Cc:     Dick Marinus <dick@mrns.nl>
+Subject: [PATCH] Use HID descriptor for razer devices
+Date:   Sat, 11 Mar 2023 07:51:05 +0100
+Message-Id: <20230311065105.2789549-1-dick@mrns.nl>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-CMAE-Envelope: MS4xfAphZi6dGL5HLTWgpj9F6rN1+rMPfA0C8QU057KnGwYzYGB9VZVvH0Eu6WqCsCjMT85TGuZuh3UN6YT/54gVtV9a1G+ossITH+yk5Ix26lMKHRO4layB
+ XPPwJF7PAWiUZmile+17sX1pRPj8gofQIkkSiI9SwCAyMC14zJ21VVsxs+yfxfrvoMqArITs4KvFLb8ejDcUu5QeEzCELR4g8cdZz7qBXleOLvzxZh25q6SL
+ okfmN/OTFeme15mamaSU2gLOFnaQBuY/f+behECStdheVcIGdh9Zo3c2QKUXWx86U+iL0PNZCfoexn+cp5C57VMLAirF/sP/waTHTQbZsQE=
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The option controlled nothing and no code depends, conditional or
-otherwise, on libnewt.
+hid-razer currently makes some guesses which device should be used to
+send control messages and the size of it.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+This patch derives this information from the HID descriptors, the
+Windows Drivers from Razer also do this.
+
+The crc in the blackwidow_init packet is now calculated (copied from
+openrazer GPL code).
+
+Signed-off-by: Dick Marinus <dick@mrns.nl>
 ---
- tools/perf/Makefile.config | 4 ----
- tools/perf/Makefile.perf   | 2 --
- tools/perf/tests/make      | 6 ++----
- 3 files changed, 2 insertions(+), 10 deletions(-)
+ drivers/hid/hid-razer.c | 141 ++++++++++++++++++++++++++++++----------
+ drivers/hid/hid-razer.h |   7 ++
+ 2 files changed, 115 insertions(+), 33 deletions(-)
+ create mode 100644 drivers/hid/hid-razer.h
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index 1b598c5e68eb..b7a9cb4a3526 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -752,10 +752,6 @@ ifndef NO_LIBCRYPTO
-   endif
- endif
+diff --git a/drivers/hid/hid-razer.c b/drivers/hid/hid-razer.c
+index 740df148b0..0c83269d66 100644
+--- a/drivers/hid/hid-razer.c
++++ b/drivers/hid/hid-razer.c
+@@ -15,31 +15,15 @@
+ #include <linux/wait.h>
  
--ifdef NO_NEWT
--  NO_SLANG=1
--endif
+ #include "hid-ids.h"
++#include "hid-razer.h"
+ 
+ #define map_key_clear(c) hid_map_usage_clear(hi, usage, bit, max, EV_KEY, (c))
+ 
+-#define RAZER_BLACKWIDOW_TRANSFER_BUF_SIZE	91
 -
- ifndef NO_SLANG
-   ifneq ($(feature-libslang), 1)
-     ifneq ($(feature-libslang-include-subdir), 1)
-diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-index 3e06915f6bd0..dc9dda09b076 100644
---- a/tools/perf/Makefile.perf
-+++ b/tools/perf/Makefile.perf
-@@ -44,8 +44,6 @@ include ../scripts/utilities.mak
- #
- # Define WERROR=0 to disable treating any warnings as errors.
- #
--# Define NO_NEWT if you do not want TUI support. (deprecated)
--#
- # Define NO_SLANG if you do not want TUI support.
- #
- # Define GTK2 if you want GTK+ GUI support.
-diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-index 47c665659022..a74b4be446c6 100644
---- a/tools/perf/tests/make
-+++ b/tools/perf/tests/make
-@@ -72,10 +72,9 @@ make_nondistro      := BUILD_NONDISTRO=1
- make_no_libperl     := NO_LIBPERL=1
- make_no_libpython   := NO_LIBPYTHON=1
- make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
--make_no_newt        := NO_NEWT=1
- make_no_slang       := NO_SLANG=1
- make_no_gtk2        := NO_GTK2=1
--make_no_ui          := NO_NEWT=1 NO_SLANG=1 NO_GTK2=1
-+make_no_ui          := NO_SLANG=1 NO_GTK2=1
- make_no_demangle    := NO_DEMANGLE=1
- make_no_libelf      := NO_LIBELF=1
- make_no_libunwind   := NO_LIBUNWIND=1
-@@ -115,7 +114,7 @@ make_install_prefix_slash := install prefix=/tmp/krava/
- make_static         := LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1
+ static bool macro_key_remapping = 1;
+ module_param(macro_key_remapping, bool, 0644);
+ MODULE_PARM_DESC(macro_key_remapping, " on (Y) off (N)");
  
- # all the NO_* variable combined
--make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_NEWT=1 NO_GTK2=1
-+make_minimal        := NO_LIBPERL=1 NO_LIBPYTHON=1 NO_GTK2=1
- make_minimal        += NO_DEMANGLE=1 NO_LIBELF=1 NO_LIBUNWIND=1 NO_BACKTRACE=1
- make_minimal        += NO_LIBNUMA=1 NO_LIBAUDIT=1 NO_LIBBIONIC=1
- make_minimal        += NO_LIBDW_DWARF_UNWIND=1 NO_AUXTRACE=1 NO_LIBBPF=1
-@@ -139,7 +138,6 @@ run += make_nondistro
- run += make_no_libperl
- run += make_no_libpython
- run += make_no_scripts
--run += make_no_newt
- run += make_no_slang
- run += make_no_gtk2
- run += make_no_ui
+-
+-static unsigned char blackwidow_init[RAZER_BLACKWIDOW_TRANSFER_BUF_SIZE] = {
+-	0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0x00, 0x04,
+-	0x02, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
+-	0x04, 0x00
+-};
++static unsigned char set_device_mode[] = {0x00, 0x04, 0x02, 0x00};
+ 
+ static int razer_input_mapping(struct hid_device *hdev,
+ 		struct hid_input *hi, struct hid_field *field,
+@@ -73,35 +57,125 @@ static int razer_input_mapping(struct hid_device *hdev,
+ 	return 0;
+ }
+ 
++static bool razer_check_control_interface(struct hid_device *hdev)
++{
++	int i;
++	unsigned int hid;
++	struct hid_report *report;
++	struct hid_razer *hid_razer_drvdata;
++
++	hid_razer_drvdata = hid_get_drvdata(hdev);
++
++	list_for_each_entry(report, &hdev->report_enum[HID_FEATURE_REPORT].report_list, list) {
++		for (i = 0; i < report->maxfield; i++) {
++			hid = report->field[i]->usage->hid;
++
++			if ((hid & HID_USAGE_PAGE) == HID_UP_MSVENDOR && (hid & HID_USAGE) == 0x2) {
++				hid_razer_drvdata->report_count = report->field[i]->report_count;
++				return true;
++			}
++		}
++	}
++
++	return false;
++}
++
++static int razer_control_message(struct hid_device *hdev, unsigned char data_len,
++	unsigned char *data)
++{
++	struct hid_razer *hid_razer_drvdata;
++	unsigned char *full_control_message;
++	unsigned char crc = 0;
++	unsigned int i;
++	unsigned int report_count;
++	int ret;
++
++	if (data_len < 2) {
++		ret = -EINVAL;
++		goto cleanup_and_exit;
++	}
++
++	hid_razer_drvdata = hid_get_drvdata(hdev);
++
++	report_count = hid_razer_drvdata->report_count;
++
++	if (report_count < 2) {
++		ret = -EINVAL;
++		goto cleanup_and_exit;
++	}
++
++	full_control_message = kzalloc(report_count + 1, GFP_KERNEL);
++
++	if (full_control_message == NULL) {
++		ret = -ENOMEM;
++		goto cleanup_and_exit;
++	}
++
++	full_control_message[6] = data_len - 2;
++	memcpy(full_control_message + 7, data, data_len);
++
++	for (i = 2; i < report_count - 2; i++)
++		crc ^= full_control_message[i];
++
++	full_control_message[report_count - 1] = crc;
++
++	ret = hid_hw_raw_request(
++		hdev,
++		0,
++		full_control_message,
++		report_count + 1,
++		HID_FEATURE_REPORT,
++		HID_REQ_SET_REPORT
++	);
++
++	if (ret != report_count + 1) {
++		ret = -EIO;
++		goto cleanup_and_exit;
++	}
++
++cleanup_and_exit:
++	kfree(full_control_message);
++
++	return 0;
++}
++
++
+ static int razer_probe(struct hid_device *hdev, const struct hid_device_id *id)
+ {
+-	char *buf;
+ 	int ret = 0;
++	struct hid_razer *hid_razer_drvdata;
++
++	hid_razer_drvdata = kzalloc(sizeof(struct hid_razer), GFP_KERNEL);
++	if (hid_razer_drvdata == NULL)
++		return -ENOMEM;
++
++	hid_set_drvdata(hdev, hid_razer_drvdata);
+ 
+ 	ret = hid_parse(hdev);
++
+ 	if (ret)
+ 		return ret;
+ 
+-	/*
+-	 * Only send the enable macro keys command for the third device
+-	 * identified as mouse input.
+-	 */
+-	if (hdev->type == HID_TYPE_USBMOUSE) {
+-		buf = kmemdup(blackwidow_init, RAZER_BLACKWIDOW_TRANSFER_BUF_SIZE, GFP_KERNEL);
+-		if (buf == NULL)
+-			return -ENOMEM;
+-
+-		ret = hid_hw_raw_request(hdev, 0, buf, RAZER_BLACKWIDOW_TRANSFER_BUF_SIZE,
+-				HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
+-		if (ret != RAZER_BLACKWIDOW_TRANSFER_BUF_SIZE)
++	if (razer_check_control_interface(hdev)) {
++		ret = razer_control_message(hdev, sizeof(set_device_mode), set_device_mode);
++		if (ret) {
+ 			hid_err(hdev, "failed to enable macro keys: %d\n", ret);
+-
+-		kfree(buf);
++			return ret;
++		}
+ 	}
+ 
+ 	return hid_hw_start(hdev, HID_CONNECT_DEFAULT);
+ }
+ 
++static void razer_remove(struct hid_device *hdev)
++{
++	struct hid_razer *hid_razer_drvdata;
++
++	hid_razer_drvdata = hid_get_drvdata(hdev);
++
++	kfree(hid_razer_drvdata);
++}
++
+ static const struct hid_device_id razer_devices[] = {
+ 	{ HID_USB_DEVICE(USB_VENDOR_ID_RAZER,
+ 		USB_DEVICE_ID_RAZER_BLACKWIDOW) },
+@@ -118,6 +192,7 @@ static struct hid_driver razer_driver = {
+ 	.id_table = razer_devices,
+ 	.input_mapping = razer_input_mapping,
+ 	.probe = razer_probe,
++	.remove = razer_remove,
+ };
+ module_hid_driver(razer_driver);
+ 
+diff --git a/drivers/hid/hid-razer.h b/drivers/hid/hid-razer.h
+new file mode 100644
+index 0000000000..d8214ca54b
+--- /dev/null
++++ b/drivers/hid/hid-razer.h
+@@ -0,0 +1,7 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __HID_RAZER_H
++#define __HID_RAZER_H
++struct hid_razer {
++	unsigned int report_count;
++};
++#endif
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.39.2
 
