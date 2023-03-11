@@ -2,159 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A3886B57CF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 03:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8FE146B57DA
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 03:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbjCKCXo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 21:23:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47418 "EHLO
+        id S229846AbjCKCiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 21:38:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229489AbjCKCXl (ORCPT
+        with ESMTP id S229767AbjCKCiM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 21:23:41 -0500
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297FC11CD75;
-        Fri, 10 Mar 2023 18:23:39 -0800 (PST)
-Received: by mail-lf1-x132.google.com with SMTP id n2so9015032lfb.12;
-        Fri, 10 Mar 2023 18:23:39 -0800 (PST)
+        Fri, 10 Mar 2023 21:38:12 -0500
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77D3C1A675
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 18:38:08 -0800 (PST)
+Received: by mail-il1-x135.google.com with SMTP id l9so977709iln.1
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 18:38:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678501417;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6D0xGz1yRgOqNxWPNQKfR3PLp4ljt7A3malbHARYKc=;
-        b=fc1dwEqXyBWxW5fhadWQv814GFXDvw1ZFlPLAGaAsp+0yIY4/fcU5d8m2CQRSY6u7B
-         tR0jIXDZSMND/3Nj1H7XWGZsk0xf04LX6VU8z/w7nEW48GTMzhnEn9VKSKYFk1Kes5dg
-         cJ5fM5sFVUahy0xZCYp54JiOnmlRHAqwsh7u0OAJd/wKB5to0NG+hIWKk0ulVLEQNX2+
-         0QYksx2t0hkIxgvOq/dSx+NJv8KGn0wMNwLDo6dVb5i281YkwyeA2phZZddQERxOUQEq
-         Bjgk/wq44wcmGVEHZjWIdux1Iv8DVzfqhmsY0sH6MkG+HMMd9T8wSiyKXIudrGn0vr/m
-         828g==
+        d=chromium.org; s=google; t=1678502287;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HqjQ8JlEQKuUyV+WIa0Lxz0sBHdD3KUkil3H4y4mo+w=;
+        b=BNvkRIMwLQVyPQE2KQBlS+AZx9fxAzS9KdyzuWbwoaZIgQd4c2jDssHRuPTy8SW77G
+         /fi9Ui412yRHrT3Oz+AGG0LaxqMXOiTDvLcmFev/cSpP/dgXX2QBwyBhIAZ7LoVcuXaS
+         wskjNf6mk96Wvg1OQ1KTpncPiHfDDZe4TQW5c=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678501417;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Y6D0xGz1yRgOqNxWPNQKfR3PLp4ljt7A3malbHARYKc=;
-        b=AcAEOon17/751LzE8lC2AKRFeBnVbqqoGRldmXJW4PHV0dG20MZick+FYdLACtRCqm
-         KOozFZ5WVhFydZ4LZJgRDRwDeQCENRmjz5kH7CEfza4ejt7wVs/dDNRzTucSE0GYMIlT
-         h/M8i/qYvzlRzg6F9XUAbUwNwMR7zjYAGskm/J093kBc7QDKZ3IsPmVFs9UJ4TPCkarz
-         uDiojMkH6pSZsCblXazbaEeTn+xEl6gcO9VUd31oD7pT4GEWDFi8TNyccb/DtQ10+0dD
-         9fI0Id7G5nAQ6rn5j4h1E4iOeGWByVb0jfoiZIv9UgnG6uDeG4q+xNMVf6hQBl5wMO+8
-         15CQ==
-X-Gm-Message-State: AO0yUKVr85A/oHffKbljtIaxy838KKEwxMA6pScAOSrWV0twRiFoOsy5
-        79d7/qW7Dox5xdxC0EG6WkA=
-X-Google-Smtp-Source: AK7set8HfjlwLcBDN909n1kCoiZ5KvSabHSjCrIGn1HLXNDleAUeSEK8NkKp248NXwp501KM76T99g==
-X-Received: by 2002:ac2:4886:0:b0:4dd:9fd8:3a36 with SMTP id x6-20020ac24886000000b004dd9fd83a36mr8148159lfc.1.1678501417193;
-        Fri, 10 Mar 2023 18:23:37 -0800 (PST)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id l14-20020ac24a8e000000b004db45ae3aa8sm159966lfp.50.2023.03.10.18.23.36
+        d=1e100.net; s=20210112; t=1678502287;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HqjQ8JlEQKuUyV+WIa0Lxz0sBHdD3KUkil3H4y4mo+w=;
+        b=xNEPDC1HD85N1kBDqCKCgxM2GLAC6B8bwzSLy6AKHwLe9msgjSudBU2AWVVcf70/Jn
+         bvd13waxK5nDmMWRTWwDtqnIkOFAyDlG8fCLrKM39EQiSkVMjNqZrGm6rfSDFdIzMmxc
+         Dgh0392S0YOXAxhCWBo4SR+1YumDcPZPXDXJPxN3MWKy1C6Gj7TEo9/7vQ0IBpupZyOw
+         U/1YWidOm5iNVtpwRptEZ3Ni4if/4/Dn3cUIA64ZyTM7Df9Hcsna1im46dRaEbB7B9Fv
+         QQ9XUBVds2slnL9lNbsk6DsXh4A02s0gCm2yQMcgoDc2V8b40ytZ0s7f+xAL/mBMt8gW
+         U6Dw==
+X-Gm-Message-State: AO0yUKXScJTfPiJUwWNYBXMMxSykoMYlJrVBsksW5LvFrVN5UM7R+B2n
+        INtNwN3ozSPS4KIza/DKMECQju5XEkFKb/jCb68=
+X-Google-Smtp-Source: AK7set8cApqMBhGRp8TbZYxrzy8LGvCw+VyO4cdmPbWYOM5NCFQcB9e98YGg2pTAX/tbrpgaXjsojA==
+X-Received: by 2002:a05:6e02:1447:b0:317:9c05:e8e8 with SMTP id p7-20020a056e02144700b003179c05e8e8mr8582538ilo.10.1678502287539;
+        Fri, 10 Mar 2023 18:38:07 -0800 (PST)
+Received: from sjg1.roam.corp.google.com (c-73-14-173-85.hsd1.co.comcast.net. [73.14.173.85])
+        by smtp.gmail.com with ESMTPSA id m6-20020a6b7c06000000b0071664d0a4d7sm409633iok.49.2023.03.10.18.37.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 18:23:36 -0800 (PST)
-Date:   Sat, 11 Mar 2023 05:23:34 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Jack Chen <zenghuchen@google.com>
-Cc:     Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Jesus Sanchez-Palencia <jesussanp@google.com>,
-        Mark Slevinsky <markslevinsky@google.com>
-Subject: Re: [PATCH] spi: dw: remove delay between write and read
-Message-ID: <20230311022334.he6ev6tswfc2xcwo@mobilestation>
-References: <20230310153151.293608-1-zenghuchen@google.com>
+        Fri, 10 Mar 2023 18:37:50 -0800 (PST)
+From:   Simon Glass <sjg@chromium.org>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     U-Boot Custodians <u-boot-custodians@lists.denx.de>,
+        Tom Rini <trini@konsulko.com>,
+        Masahiro Yamada <yamada.masahiro@socionext.com>,
+        barebox@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>,
+        U-Boot Mailing List <u-boot@lists.denx.de>,
+        Simon Glass <sjg@chromium.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Nicolas Schier <nicolas@fjasle.eu>, linux-doc@vger.kernel.org,
+        linux-kbuild@vger.kernel.org
+Subject: [RESEND PATCH] kconfig: Proposed language extension for multiple builds
+Date:   Fri, 10 Mar 2023 18:37:18 -0800
+Message-Id: <20230310183717.RESEND.1.Idaaf79c3e768b85750d5a7eb732052576c5e07e5@changeid>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310153151.293608-1-zenghuchen@google.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jack
+(I am sending this again to get more feedback)
 
-On Fri, Mar 10, 2023 at 10:31:51AM -0500, Jack Chen wrote:
-> Delay between write and read in polling mode is not necessary in dw spi
-> driver. It was added assuming that dw spi controller need the delay to
-> send data from tx fifo to spi devices. But it is not needed because
-> following reasons:
-> 1) dw spi datasheet claims transfer begins when first data word is
->    present in the transmit FIFO and a slave is enabled. So at least we
->    do not need the full fifo-size-transfer time delay.
-> 2) in practice, due to spi devices implementation, spi full-duplex
->    (write and read real data) is always split into two transfers.
+In the case of Linux, only one build is produced so there is only a
+single configuration. For other projects, such as U-Boot and Zephyr, the
+same code is used to produce multiple builds, each with related (but
+different) options enabled.
 
-In practice the delay is specifically added to minimize the dummy
-loops in the poll-based transfer. It's calculated based on the number
-of bytes pushed to the Tx FIFO and the SPI-bus clock rate (that's why
-the spi_transfer.effective_speed_hz field is initialized in the
-driver). So after all of them are transferred we get to start reading
-data from the Rx FIFO. Until then the kernel thread is supposed to
-sleep giving up the CPU for another tasks.
+This can be handled with the existing kconfig language, but it is quite
+verbose, somewhat tedious and very error-prone, since there is a lot of
+duplication. The result is hard to maintain.
 
-> Delay between spi transfers may be needed. But this can be introduced by
-> using a more formal helper function "spi_transfer_delay_exec", in which
-> the delay time is passed by users through spi_ioc_transfer.
+Describe an extension to the Kconfig language to support easier handling
+of this use case.
 
-This is wrong. spi_transfer.delay is supposed to be executed after the
-whole transfer is completed. You suggest to to do that in between some
-random data chunks pushed and pulled from the controller FIFO.
-Moreover that delay is already performed by the SPI-core:
-https://elixir.bootlin.com/linux/latest/source/drivers/spi/spi.c#L1570
+Signed-off-by: Simon Glass <sjg@chromium.org>
+---
 
--Serge(y)
+ Documentation/kbuild/kconfig-language.rst | 134 ++++++++++++++++++++++
+ 1 file changed, 134 insertions(+)
 
-> 
-> Signed-off-by: Jack Chen <zenghuchen@google.com>
-> ---
->  drivers/spi/spi-dw-core.c | 20 +++++++-------------
->  1 file changed, 7 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/spi/spi-dw-core.c b/drivers/spi/spi-dw-core.c
-> index c3bfb6c84cab..7c10fb353567 100644
-> --- a/drivers/spi/spi-dw-core.c
-> +++ b/drivers/spi/spi-dw-core.c
-> @@ -379,9 +379,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
->  
->  /*
->   * The iterative procedure of the poll-based transfer is simple: write as much
-> - * as possible to the Tx FIFO, wait until the pending to receive data is ready
-> - * to be read, read it from the Rx FIFO and check whether the performed
-> - * procedure has been successful.
-> + * as possible to the Tx FIFO, then read from the Rx FIFO and check whether the
-> + * performed procedure has been successful.
-> + *
-> + * Delay is introduced in the end of each transfer before (optionally) changing
-> + * the chipselect status, then starting the next transfer or completing the
-> + * list of @spi_message.
->   *
->   * Note this method the same way as the IRQ-based transfer won't work well for
->   * the SPI devices connected to the controller with native CS due to the
-> @@ -390,21 +393,12 @@ static void dw_spi_irq_setup(struct dw_spi *dws)
->  static int dw_spi_poll_transfer(struct dw_spi *dws,
->  				struct spi_transfer *transfer)
->  {
-> -	struct spi_delay delay;
-> -	u16 nbits;
->  	int ret;
->  
-> -	delay.unit = SPI_DELAY_UNIT_SCK;
-> -	nbits = dws->n_bytes * BITS_PER_BYTE;
-> -
->  	do {
->  		dw_writer(dws);
-> -
-> -		delay.value = nbits * (dws->rx_len - dws->tx_len);
-> -		spi_delay_exec(&delay, transfer);
-> -
->  		dw_reader(dws);
-> -
-> +		spi_transfer_delay_exec(transfer);
->  		ret = dw_spi_check_status(dws, true);
->  		if (ret)
->  			return ret;
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
-> 
+diff --git a/Documentation/kbuild/kconfig-language.rst b/Documentation/kbuild/kconfig-language.rst
+index 858ed5d80defe..73fb016a5533f 100644
+--- a/Documentation/kbuild/kconfig-language.rst
++++ b/Documentation/kbuild/kconfig-language.rst
+@@ -228,6 +228,24 @@ applicable everywhere (see syntax).
+   enables the third modular state for all config symbols.
+   At most one symbol may have the "modules" option set.
+ 
++- phase declaration: "defphase"
++  This defines a new build phase. See `Build Phases`_.
++
++- default phase: "phasedefault"
++  This indicates the default build phase. See `Build Phases`_.
++
++- add entries for phases: "addphases"
++  This creates new phase-specific entries based on a template entry and adds
++  the same attributes to it. See `Build Phases`_.
++
++- set entries for phases: "setphases"
++  This sets the phases which need an entry. This allows creating an entry that
++  only has a primary phase. See `Build Phases`_.
++
++- indicate a phase-specific attribute: "forphases"
++  This marks an attribute as being applicable only to a particular phase or
++  group of phases.  See `Build Phases`_.
++
+ Menu dependencies
+ -----------------
+ 
+@@ -319,6 +337,119 @@ MODVERSIONS directly depends on MODULES, this means it's only visible if
+ MODULES is different from 'n'. The comment on the other hand is only
+ visible when MODULES is set to 'n'.
+ 
++Build Phases
++------------
++
++Some projects use Kconfig to control multiple build phases, each phase
++resulting in a separate set of object files and executable. This is the
++case in U-Boot [12]_. Zephyr OS seems to be heading this way too [13]_.
++
++Generally the phases are related, so that enabling an entry in the primary
++phase also enables it by default in the others. But in some cases it may
++be desirable to use separate conditions for each phase.
++
++All phases have a phase name, for example `SPL`. This name is used as a
++prefix to each entry used in that phase, with an underscore in between.
++So if FOO is the primary entry, the equivalent entry for the SPL phase
++is SPL_FOO. The primary phase is marked with a "phasedefault" entry.
++
++Phases are declared like any other menu entry except that also have a
++"defphase" keyword. Phase entries are normally hidden so do not have a
++prompt::
++
++    config PPL
++        bool
++        defphase "Primary Program Loader"
++        phasedefault
++        help
++          This is the primary bootloader.
++
++    config SPL
++        bool
++        defphase "Secondary Program Loader"
++        help
++          This is used to set up memory and load the primary bootloader.
++
++The default phase (here PPL) is assumed for all entries, in the sense that
++all entries are present in PPL by default and no prefix is needed on these
++entries. So FOO means that it applies to PPL. There must be exactly one
++default phase.
++
++The resulting menu entries can be used normally throughout the Kconfig. With
++this technique, the different build phases can be fully and individually
++controlled from Kconfig.
++
++However it is not ideal. Often the secondary phases have far fewer entries than
++the primary phase, since they offer fewer features. Even so, each FOO that is
++needed in a phase must have an SPL_FOO, etc. To avoid an explosion of entries,
++it is possible to indicate which are enabled, as a shortcut for creating new
++entries::
++
++    config FOO
++        bool "Enable foo feature"
++        addphases SPL
++        depends on %BAR
++        depends on QUX
++        forphases SPL depends on FIZZ
++
++Note that "%" expands to the phase, so this is equivalent to (ignoring BAR)::
++
++    config FOO
++        bool "Enable foo feature"
++        depends on BAR
++        depends on QUX
++
++    config SPL_FOO			   # Phase is prepended
++        bool "Enable foo feature (SPL)"    # Suffix is added
++        depends on SPL_BAR                 # "%" dependency is expanded
++        depends on QUX
++        depends on FIZZ                    # Added only for SPL
++        depends on SPL                     # Added automatically
++
++Attributes declared in the primary symbol FOO (such as "depends on BAR") also
++apply to the secondary ones.
++
++An entry without any 'addphases' attribute applies to all phases. Individual
++phase entries are not available in that case. If the entry is enabled, then
++it is enabled for all phases. Only one entry appears in the resulting Kconfig.
++
++In the case where an entry should apply only to the primary phase (or a
++particular set of phases), you can uses "setphases" instead of "addphases"::
++
++    config FOO
++        bool "Enable foo feature"
++        setphases PPL
++
++This means that even if the option is enabled, it will not be active outside
++the primary-phase build, here named "PPL".
++
++Internally, phases are implemented simply by creating new entries. These
++appear in the Kconfig as per normal. It would be possible for a Kconfig
++editor to show the entries just for a particular phase, leaving out the
++entries not applicable to that phase.
++
++When phases are used, the Kconfig tool outputs separate auto.conf files for
++each phase (e.g. auto_spl.conf), so that if SPL_FOO is enabled, then
++`CONFIG_FOO=y` is present in the file. This makes it easy for the build system
++to build the correct code, use IS_ENABLED(), etc.
++
++To ensure that the correct options are enabled for each build, in addition to
++the normal CONFIG_FOO option in the file, phase symbols are added too. For
++example, if FOO is enabled in the SPL phase, then auto_spl.conf contains::
++
++    CONFIG_FOO=y
++    CONFIG_SPL_FOO=y
++
++The phase-specific line (CONFIG_SPL_FOO) is seldom needed, but it allows one
++phase to access the symbols from another phase. For example, if the primary
++phase needs to receive boot timings from SPL, then support for boot timings must
++be added in both phases. If the timings are at a fixed address, this can be in a
++shared symbol (like CONFIG_SPL_TIMING_BASE) that both phases can access.
++
++Technical note: the grammar definition of <symbol> in this documeent does not
++include the "%" prefix at present. It can be used with any attribute. It cannot
++be used with any top-level items, like "config", "menuconfig", "if" and "menu".
++
+ 
+ Kconfig syntax
+ --------------
+@@ -744,3 +875,6 @@ https://kernelnewbies.org/KernelProjects/kconfig-sat
+ .. [9] https://www4.cs.fau.de/Publications/2011/tartler_11_eurosys.pdf
+ .. [10] https://paulgazzillo.com/papers/esecfse21.pdf
+ .. [11] https://github.com/paulgazz/kmax
++
++.. [12] https://u-boot.readthedocs.io/en/latest/develop/spl.html
++.. [13] https://docs.zephyrproject.org/latest/build/sysbuild/index.html
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
