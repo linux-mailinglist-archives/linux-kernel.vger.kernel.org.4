@@ -2,120 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD7786B603C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FBDF6B6040
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:34:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCKTaS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 14:30:18 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54180 "EHLO
+        id S229754AbjCKTe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 14:34:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjCKTaP (ORCPT
+        with ESMTP id S229450AbjCKTe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:30:15 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36B57637D0;
-        Sat, 11 Mar 2023 11:30:13 -0800 (PST)
-Received: from [192.168.1.103] (31.173.84.174) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
- 2023 22:30:05 +0300
-Subject: Re: [PATCH 09/32] pata_parport-bpck6: remove struct ppc_storage
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230307224627.28011-1-linux@zary.sk>
- <20230307224627.28011-10-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <428a44be-f610-139e-d8b0-b73d590b983a@omp.ru>
-Date:   Sat, 11 Mar 2023 22:30:04 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 11 Mar 2023 14:34:26 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445706A1EF;
+        Sat, 11 Mar 2023 11:34:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E7A9FB801BB;
+        Sat, 11 Mar 2023 19:34:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84EA0C4339C;
+        Sat, 11 Mar 2023 19:34:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678563262;
+        bh=9Cg5D5P0O3sCouB1zHM/sNQWl9belH+emswCpqEHalM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=uHh2Bwh7pY+kkLC6RIVcGtCTSFB7uQ8cCDueRgC5mFc+voDdG5upuQvAVYcCRKudC
+         +f54oGBEG9+qSKYWy0k9xCthbSRxe/rovfcECrwhLmjzqo85ZB9KJclUpG3JkFn8Ja
+         V/VZS7IV3b1esGpdftMIyvdIdtWLuy3jd3UQtlor9ZTklQFQ3Lc7MfoTMSjaW6btxk
+         fGr9DbvKFlXz1jWrN5GmijI7bYgBYZwLjY1KT+QaF+LvybqEwgzyK6iYEwVAVqgfz+
+         yghPTki1zrW8vgOdxAVWXhPcAsv1FEkxZ7NtINRUvTapz447BVbs+9NEVzHxOpOLL8
+         zB3GH4r1hXPrg==
+Date:   Sat, 11 Mar 2023 19:34:26 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Svyatoslav Ryhel <clamor95@gmail.com>
+Cc:     Lars-Peter Clausen <lars@metafoo.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 1/4] dt-bindings: iio: light: add apds990x binding
+Message-ID: <20230311193426.5b1b7e53@jic23-huawei>
+In-Reply-To: <20230308090219.12710-2-clamor95@gmail.com>
+References: <20230308090219.12710-1-clamor95@gmail.com>
+        <20230308090219.12710-2-clamor95@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-In-Reply-To: <20230307224627.28011-10-linux@zary.sk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.84.174]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 19:04:58
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: 127.0.0.199:7.1.2;31.173.84.174:7.7.3,7.4.1;omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1
-X-KSE-AntiSpam-Info: {iprep_blacklist}
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.174
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/11/2023 19:08:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 5:20:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:46 AM, Ondrej Zary wrote:
+On Wed,  8 Mar 2023 11:02:16 +0200
+Svyatoslav Ryhel <clamor95@gmail.com> wrote:
 
-> Store the remaining two variables (cur_ctrl and ppc_flags) in struct
-
-   s/variables/fields/, maybe?
-
-> ppc_storage directly in pi->private and remove struct ppc_storage.
+> Add dt-binding for apds990x ALS/proximity sensor.
 > 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
-[...]
+> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> ---
+>  .../bindings/iio/light/avago,apds990x.yaml    | 76 +++++++++++++++++++
+I'm not a fan of wild cards. It breaks far too often.  Can we name this
+instead after a particular supported part - same for compatible.
+I'm not sure what parts are supported by this, but you may want multiple
+compatibles.
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
 
-> diff --git a/drivers/ata/pata_parport/ppc6lnx.c b/drivers/ata/pata_parport/ppc6lnx.c
-> index 75f9748d8de5..ee8cee6bae7c 100644
-> --- a/drivers/ata/pata_parport/ppc6lnx.c
-> +++ b/drivers/ata/pata_parport/ppc6lnx.c
-> @@ -64,10 +64,8 @@
->  
->  //***************************************************************************
->  
-> -struct ppc_storage {
-> -	u8	ppc_flags;
-> -	u8	cur_ctrl;				// current control port contents
-> -};
-> +#define CUR_CTRL	(((u8 *)&pi->private)[0])
-> +#define PPC_FLAGS	(((u8 *)&pi->private)[1])
+>  1 file changed, 76 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml b/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
+> new file mode 100644
+> index 000000000000..9b47e13f88e3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/iio/light/avago,apds990x.yaml
+> @@ -0,0 +1,76 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/iio/light/avago,apds990x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Avago APDS990x ALS and proximity sensor
+> +
+> +maintainers:
+> +  - Samu Onkalo <samu.p.onkalo@nokia.com>
+> +
+> +description: |
+> +  APDS990x is a combined ambient light and proximity sensor. ALS and
+> +  proximity functionality are highly connected. ALS measurement path
+> +  must be running while the proximity functionality is enabled.
+> +
+> +properties:
+> +  compatible:
+> +    const: avago,apds990x
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vdd-supply: true
+> +  vled-supply: true
+> +
+> +  avago,pdrive:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 32
+> +    description: |
+> +      Drive value used in configuring control register.
 
-   Hm, that's a creative abuse of *unsigned long*... :-)
+Is this something where there is a reasonable default?
+If so I'd prefer it was optional so that the device is easier to
+use without needing firmware description.
 
-[...]
+> +
+> +  avago,ppcount:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    minimum: 0
+> +    maximum: 32
+> +    description: |
+> +      Number of pulses used for proximity sensor calibration.
+Same for this - if there is a reasonable default it would be good to
+have that specified.
 
-MBR, Sergey
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupt
+It would nice to relax the need for an interrupt if the device is still useable
+with timeouts etc.  Board folk have a habit of deciding they don't need to wire
+up interrupts.  We can relax that a later date though if you prefer not to do
+it now.
+> +  - vdd-supply
+> +  - vled-supply
+
+Whilst true that the supplies need to be connected, that doesn't
+mean they need to provided in the device tree binding.  If they are
+always powered up I think we can fallback to stub regulators.
+
+> +  - avago,pdrive
+> +  - avago,ppcount
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        light-sensor@39 {
+> +            compatible = "avago,apds990x";
+> +            reg = <0x39>;
+> +
+> +            interrupt-parent = <&gpio>;
+> +            interrupts = <82 IRQ_TYPE_EDGE_RISING>;
+> +
+> +            vdd-supply = <&vdd_3v0_proxi>;
+> +            vled-supply = <&vdd_1v8_sen>;
+> +
+> +            avago,pdrive = <0x00>;
+> +            avago,ppcount = <0x03>;
+> +        };
+> +    };
+> +...
+
