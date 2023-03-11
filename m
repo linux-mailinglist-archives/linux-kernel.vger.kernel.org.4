@@ -2,123 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC0F6B5D8B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38306B5D8F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:56:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230508AbjCKPxq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:53:46 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40846 "EHLO
+        id S230202AbjCKP4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:56:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbjCKPxP (ORCPT
+        with ESMTP id S230162AbjCKPz7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 10:53:15 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F33711125A3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:51:01 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y4so2952696edo.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:51:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678549860;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FOPcjhDYKPCO/Zmz2tGgC7qcp0wJ1W217UIkJ4Y9I8g=;
-        b=exLH0pXHR2Hk2k1GxkMT8NMsFHRUn8Gh4Hi84g2CApUpajQKPndJt5y+CGjzcwO4DV
-         NjVjIYSvcYVSJYBuEH5VwTgcBhO6CTHG9zqBf3Qh/eZpM7k2AmEcbmLed4hsDVHqXKzX
-         zhpg09XUjiwP8IbNlQRuoUPUbo1DO685I0vPic9/1QSfnOzrpPtNPjYrnNsNW2nyAaSW
-         YM1pbQYnxdtaSiUjt0jH+qrgS6V5+618+VCfDMm/QFx9ldVDG970XSC5e0Vm21WzjDkC
-         zvX+tOA9MVp/TiOHI60XMFU5DX17sePwJf2kjUvi0xAy9pKzY9ERSkn6ycS/h0djU9ZC
-         zTgw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678549860;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FOPcjhDYKPCO/Zmz2tGgC7qcp0wJ1W217UIkJ4Y9I8g=;
-        b=J0gbx6coYjHIRNLs9SrHvvcGzxLltFjkmB5ZHGw/j4YARoDZzKCobWfJ3V1u+Om1dj
-         Q+FAggGQV+uVr9PKdhg/OJtWp0pTDf8SphY/xjnN7HmBUw1CY9IX/JjDXDc9QLP2ykqg
-         0PbzsG1O33nHUimV9nJXwUWAfPEKRkB4uuusyXJD1WPGlme4tPVA+tOWVl7PrKRCJE2X
-         +Fma/I5SgvMahF/M4+4RxQAXDwHGXyPwiURIJqlA9+8wYKIcT+5SMg3DfCdVl//o8Sb3
-         nv21Oe+EP9vbRt0AOlFjbOZUbCVTxpJAxQ7YK/NOg4tOF6zf5pyU0kqPDey1FtJPSUTa
-         jUQw==
-X-Gm-Message-State: AO0yUKWY0+LC6wxSQkwbq1Z/8KmDhmqNfUgL8w1wynw4NkN2ECK1r69U
-        dh8a2xdyvez9WhnLqCjr+g2JZQ==
-X-Google-Smtp-Source: AK7set/jKFNKU2NfkbcpoS9MGUQVvnrWP9c19CwbXw4TjLsty5YWBFzICJsaDHdJ1KheJ00mIggWjg==
-X-Received: by 2002:a17:906:2843:b0:8b1:15ab:f4cd with SMTP id s3-20020a170906284300b008b115abf4cdmr26060805ejc.53.1678549860208;
-        Sat, 11 Mar 2023 07:51:00 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:6927:e94d:fc63:9d6e? ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
-        by smtp.gmail.com with ESMTPSA id n7-20020a17090695c700b008e493b7bb61sm1214587ejy.153.2023.03.11.07.50.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 07:50:59 -0800 (PST)
-Message-ID: <c13993bc-9d12-f20e-de27-fa0b8a58ed33@linaro.org>
-Date:   Sat, 11 Mar 2023 16:50:58 +0100
+        Sat, 11 Mar 2023 10:55:59 -0500
+Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [IPv6:2607:fcd0:100:8a00::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57EF71B54F;
+        Sat, 11 Mar 2023 07:54:41 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1678550078;
+        bh=GpBC197sBaTbH4E1KFh6GXZELUaC7Fr36igsqPuf3u0=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=cJ4+hX4POzm3dJ99eq3ac+jX+rnWLpGYxVN0P72ZUWqQTzwii0ncsWbT33sulhdvX
+         h6KtX7MkVw5B2KnzWdDFZVdokjGTyZ9GreAkW+KrsZgmyzR4xFYE+dvyl0D5bRzhG7
+         FXqs/xDfe4iDNX2XeeI3o7f7NTJeaUvu1rdlARZQ=
+Received: from localhost (localhost [127.0.0.1])
+        by bedivere.hansenpartnership.com (Postfix) with ESMTP id 915A51285E75;
+        Sat, 11 Mar 2023 10:54:38 -0500 (EST)
+Received: from bedivere.hansenpartnership.com ([127.0.0.1])
+ by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
+ with ESMTP id K9fqviWhnVVk; Sat, 11 Mar 2023 10:54:38 -0500 (EST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+        d=hansenpartnership.com; s=20151216; t=1678550078;
+        bh=GpBC197sBaTbH4E1KFh6GXZELUaC7Fr36igsqPuf3u0=;
+        h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
+        b=cJ4+hX4POzm3dJ99eq3ac+jX+rnWLpGYxVN0P72ZUWqQTzwii0ncsWbT33sulhdvX
+         h6KtX7MkVw5B2KnzWdDFZVdokjGTyZ9GreAkW+KrsZgmyzR4xFYE+dvyl0D5bRzhG7
+         FXqs/xDfe4iDNX2XeeI3o7f7NTJeaUvu1rdlARZQ=
+Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by bedivere.hansenpartnership.com (Postfix) with ESMTPSA id C37E01285DD7;
+        Sat, 11 Mar 2023 10:54:37 -0500 (EST)
+Message-ID: <734c9a0920f293c88168f38c1245e779d03f4364.camel@HansenPartnership.com>
+Subject: Re: AUTOSEL process
+From:   James Bottomley <James.Bottomley@HansenPartnership.com>
+To:     Sasha Levin <sashal@kernel.org>, Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
+Date:   Sat, 11 Mar 2023 10:54:36 -0500
+In-Reply-To: <ZAyFFtORBosdarMr@sashalap>
+References: <Y/y70zJj4kjOVfXa@sashalap> <Y/zswi91axMN8OsA@sol.localdomain>
+         <Y/zxKOBTLXFjSVyI@sol.localdomain> <Y/0U8tpNkgePu00M@sashalap>
+         <Y/0i5pGYjrVw59Kk@gmail.com> <Y/0wMiOwoeLcFefc@sashalap>
+         <Y/1LlA5WogOAPBNv@gmail.com> <Y/1em4ygHgSjIYau@sashalap>
+         <Y/136zpJSWx96YEe@sol.localdomain> <ZAu4GE0q4jzRI+F6@sol.localdomain>
+         <ZAyFFtORBosdarMr@sashalap>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] devicetree: synopsys-dw-mshc-common: add
- "fifo-access-32bit" property
-Content-Language: en-US
-To:     Sergey Lisov <sleirsgoevy@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <1678548256.0817535-1-sleirsgoevy@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678548256.0817535-1-sleirsgoevy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 16:22, Sergey Lisov wrote:
-
-Use subject prefixes matching the subsystem (which you can get for
-example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
-your patch is touching).
-
-Missing commit msg, which should answer why you are doing this and give
-more background.
-
-> ---
->  .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml    | 6 ++++++
->  1 file changed, 6 insertions(+)
+On Sat, 2023-03-11 at 08:41 -0500, Sasha Levin wrote:
+> On Fri, Mar 10, 2023 at 03:07:04PM -0800, Eric Biggers wrote:
+> > On Mon, Feb 27, 2023 at 07:41:31PM -0800, Eric Biggers wrote:
+> > > 
+> > > Well, probably more common is that prerequisites are in the same
+> > > patchset, and the prerequisites are tagged for stable too. 
+> > > Whereas AUTOSEL often just picks patch X of N.  Also, developers
+> > > and maintainers who tag patches for stable are probably more
+> > > likely to help with the stable process in general and make sure
+> > > patches are backported correctly...
+> > > 
+> > > Anyway, the point is, AUTOSEL needs to be fixed to stop
+> > > inappropriately cherry-picking patch X of N so often.
+> > > 
+> > 
+> > ... and AUTOSEL strikes again, with the 6.1 and 6.2 kernels
+> > currently crashing whenever a block device is removed, due to
+> > patches 1 and 3 of a 3-patch series being AUTOSEL'ed (on the same
+> > day I started this discussion, no less):
+> > 
+> > https://lore.kernel.org/linux-block/CAOCAAm4reGhz400DSVrh0BetYD3Ljr2CZen7_3D4gXYYdB4SKQ@mail.gmail.com/T/#u
+> > 
+> > Oh sorry, ignore this, it's just an anecdotal example.
 > 
-> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
-> index 8dfad89c7..2bc5ac528 100644
-> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
-> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
-> @@ -57,6 +57,12 @@ properties:
->        force fifo watermark setting accordingly.
->      $ref: /schemas/types.yaml#/definitions/flag
->  
-> +  fifo-access-32bit:
+> Yes, clearly a problem with AUTOSEL and not with how sad the testing
+> story is for stable releases.
 
-Missing type boolean.
+Hey, that's a completely circular argument:  if we had perfect testing
+then, of course, it would pick up every bad patch before anything got
+released; but we don't, and everyone knows it.  Therefore, we have to
+be discriminating about what patches we put in.  And we have to
+acknowledge that zero bugs in patches isn't feasible in spite of all
+the checking we do do.  I also think we have to acknowledge that users
+play a role in the testing process because some bugs simply aren't
+picked up until they try out a release.  So discouraging users from
+running mainline -rc's means we do get bugs in the released kernel that
+we might not have had if they did.  Likewise if everyone only runs
+stable kernels, the bugs in the released kernel don't get found until
+stable.  So this blame game really isn't helping.
 
-> +    description:
-> +      Specifies that this device requires accesses to its 64-bit registers
-> +      to be done as pairs of 32-bit accesses, even on architectures where
-> +      readq is available.
+I think the one thing everyone on this thread might agree on is that
+this bug wouldn't have happened if AUTOSEL could detect and backport
+series instead of individual patches.  Sasha says that can't be done
+based on in information in Linus' tree[1] which is true but not a
+correct statement of the problem.  The correct question is given all
+the information available, including lore, could we assist AUTOSEL in
+better detecting series and possibly making better decisions generally?
 
-And why the device would require this? If it has 64-bit registers in the
-first place, they can be accessed in 64-bit. Otherwise these are not
-64-bit registers, but just lower/upper 32-bit, right?
+I think that's the challenge for anyone who actually wants to help
+rather than complain.  At least the series detection bit sounds like it
+could be a reasonable summer of code project.
 
-Also, why this cannot be implied from compatible? Why different boards
-with same SoC should have different FIFO access?
+Regards,
 
+James
 
-
-Best regards,
-Krzysztof
-
+[1] https://lore.kernel.org/linux-fsdevel/ZAyK0KM6JmVOvQWy@sashalap/
