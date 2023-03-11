@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0261E6B5B65
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:59:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFB016B5B69
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:00:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230016AbjCKL7t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 06:59:49 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41764 "EHLO
+        id S229521AbjCKMAf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:00:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCKL7q (ORCPT
+        with ESMTP id S229473AbjCKMAd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:59:46 -0500
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53E0026CC3;
-        Sat, 11 Mar 2023 03:59:45 -0800 (PST)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32BBxcS2075506;
-        Sat, 11 Mar 2023 05:59:38 -0600
+        Sat, 11 Mar 2023 07:00:33 -0500
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86AC27B4A7;
+        Sat, 11 Mar 2023 04:00:31 -0800 (PST)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32BC0QxH005888;
+        Sat, 11 Mar 2023 06:00:26 -0600
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678535978;
-        bh=p07m3atuSvIVG+9wIoxrGBnJbj/IGWcotlmFGHJJzHU=;
+        s=ti-com-17Q1; t=1678536026;
+        bh=sdMXUDHjQfwa1Ls51qZRA+q1JZ54COjDriHjJhbzBhE=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=vWXYZwXusVvLG8DK1iIkFoO12CPKKhT62Sh9rtfPP6KTkwIVE/2Gbf081hpSdu/Tl
-         zUo+Hb1Sf0tGgecDn3XACNgHxlF/J1r79EW1gmfDFTdL2yS28+ddILs8LvLyeRtGj0
-         CUGKr7rDExnV80V2Lwz1aCsro1OI40+S4scfZ77c=
-Received: from DFLE102.ent.ti.com (dfle102.ent.ti.com [10.64.6.23])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32BBxcxW020904
+        b=X4n1PrygNUhZbQhNGnE8TgoqIgJEn5fXyMbrJ56+Zp84SmC5qn41Goqa4tNq2tveQ
+         xbgv2bqUgqH3+GNU8UrcujZEz6OZJZdeE2UW84vViA6MqCJM7xcL6efNnYo1SPP6C7
+         EogQKGwt9shCD4z1CEezTb0x28zMq/5fQgSefB2I=
+Received: from DFLE103.ent.ti.com (dfle103.ent.ti.com [10.64.6.24])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32BC0Qum003295
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 11 Mar 2023 05:59:38 -0600
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+        Sat, 11 Mar 2023 06:00:26 -0600
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 11
- Mar 2023 05:59:38 -0600
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 06:00:26 -0600
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sat, 11 Mar 2023 05:59:38 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32BBxcok086357;
-        Sat, 11 Mar 2023 05:59:38 -0600
+ Frontend Transport; Sat, 11 Mar 2023 06:00:26 -0600
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32BC0Q0L088753;
+        Sat, 11 Mar 2023 06:00:26 -0600
 From:   Nishanth Menon <nm@ti.com>
-To:     <robh@kernel.org>, Santosh Shilimkar <ssantosh@kernel.org>
+To:     Santosh Shilimkar <ssantosh@kernel.org>, <robh@kernel.org>
 CC:     Nishanth Menon <nm@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>
-Subject: Re: [PATCH] soc: ti: Use of_property_present() for testing DT property presence
-Date:   Sat, 11 Mar 2023 05:59:37 -0600
-Message-ID: <167853595902.30763.3549829268692510668.b4-ty@ti.com>
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH] soc: ti: Use of_property_read_bool() for boolean properties
+Date:   Sat, 11 Mar 2023 06:00:25 -0600
+Message-ID: <167853598355.30853.2844551955010479367.b4-ty@ti.com>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230310144725.1545384-1-robh@kernel.org>
-References: <20230310144725.1545384-1-robh@kernel.org>
+In-Reply-To: <20230310144726.1545453-1-robh@kernel.org>
+References: <20230310144726.1545453-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -70,18 +70,17 @@ Hi Rob Herring,
 On Fri, 10 Mar 2023 08:47:25 -0600, Rob Herring wrote:
 > It is preferred to use typed property access functions (i.e.
 > of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
+
+                                   ^^ - I locally fixed the "to to" to "to"
 > 
-> [...]
 
 I have applied the following to branch ti-drivers-soc-next on [1].
 Thank you!
 
-[1/1] soc: ti: Use of_property_present() for testing DT property presence
-      commit: 1b1b863a8898ad8348b7dfe812cab26cea9099bf
+[1/1] soc: ti: Use of_property_read_bool() for boolean properties
+      commit: 82e46bf71780940a5e060fcb02397ecf7f55e768
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
