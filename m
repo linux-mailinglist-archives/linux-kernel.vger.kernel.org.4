@@ -2,128 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26A06B6017
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:16:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6B186B6020
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjCKTQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 14:16:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32904 "EHLO
+        id S230002AbjCKTSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 14:18:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCKTQH (ORCPT
+        with ESMTP id S229509AbjCKTSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:16:07 -0500
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632863E610
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 11:15:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678562118;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=U8Qyu+0I7e5+wByj0r24z51cw7ysaFBsNZQFvfJyvK8=;
-        b=XCTDw51e++YG+VawkzEZJMC33cOPo4VhdaLWV4xbFlOZELkE7wtRqUzQmq8FoiidB21Ma5
-        ddBZS03RE4CB0N4q7A/OMx9sZAFK5iSY4q/U1Jb7IbWJLyZ8sHfvLWuhce6nIgs2w+7SFu
-        o69Sl6TQUYd5Qu6nKmQQOWpKDm6/KwM=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-423-sbGr2e2gOom5ubDwnf-u2Q-1; Sat, 11 Mar 2023 14:15:17 -0500
-X-MC-Unique: sbGr2e2gOom5ubDwnf-u2Q-1
-Received: by mail-wm1-f69.google.com with SMTP id 4-20020a05600c024400b003eb2e295c05so2835016wmj.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 11:15:16 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678562116;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=U8Qyu+0I7e5+wByj0r24z51cw7ysaFBsNZQFvfJyvK8=;
-        b=agrLJ4zQpGMdxImLUt3DFOnJgqECTxf+WJmMA840CikqoBi3asgtCTui61WUeP2nd+
-         fkhvZKeSyB/4GctroUtwdLK03MnVpjNBnm+uUgeruuzi0Ok9NektGCJDNLZV91aFENqj
-         Co78nwsdZ8fzjmNZ5LxBN6MTHnd905Mz7BHBvoBzqQ5rruA+xtRPiclJwU2hLAANRyNv
-         7xKa430dMc+OuI0W7F3bMRycVVl+ta6w56aRPft+KgasebxdXWVQ8uy+weIkZLdai8lQ
-         CasrQ2F1BtPnzkZpeQQ8WF2/cp5VN3J4ds/JkxqXFivcjk56MrmYw1HoaKPhY0mxilYz
-         pguQ==
-X-Gm-Message-State: AO0yUKWmjpcRTK5UoxEE8wP0zrE2FoRe6oWtm9v3tDiLcKN2i4vOknxo
-        jQt+wTdpmMcIM2tqOh0v3nsJSqf353aKF95UuCLz1+2lJ9R3Duuq4ngcAVBDNkzx7b8V2PsqssM
-        4wrrwDOCegoMJq53EW5utcyw0
-X-Received: by 2002:a05:600c:5107:b0:3df:e1e9:201d with SMTP id o7-20020a05600c510700b003dfe1e9201dmr6207028wms.40.1678562115909;
-        Sat, 11 Mar 2023 11:15:15 -0800 (PST)
-X-Google-Smtp-Source: AK7set96M5dPOa2xYmlmAGYkZvOKRptdsLbtTB1fIalkMaZYMMMU2r6s84fcwBbGUwoLesMEVUOzsQ==
-X-Received: by 2002:a05:600c:5107:b0:3df:e1e9:201d with SMTP id o7-20020a05600c510700b003dfe1e9201dmr6207018wms.40.1678562115654;
-        Sat, 11 Mar 2023 11:15:15 -0800 (PST)
-Received: from redhat.com ([2.52.29.35])
-        by smtp.gmail.com with ESMTPSA id i2-20020a05600c290200b003ed1fa34bd3sm487743wmd.13.2023.03.11.11.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 11:15:15 -0800 (PST)
-Date:   Sat, 11 Mar 2023 14:15:11 -0500
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Mike Christie <michael.christie@oracle.com>, hch@infradead.org,
-        stefanha@redhat.com, jasowang@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, brauner@kernel.org,
-        ebiederm@xmission.com, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/11] Use copy_process in vhost layer
-Message-ID: <20230311141346-mutt-send-email-mst@kernel.org>
-References: <20230310220332.5309-1-michael.christie@oracle.com>
- <CAHk-=wgenic8Ba1WxNP=9YJXk78k9Sg6R7RLkhduYjtVy2gdkg@mail.gmail.com>
+        Sat, 11 Mar 2023 14:18:00 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A29B5E392;
+        Sat, 11 Mar 2023 11:17:58 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2ADB360DE3;
+        Sat, 11 Mar 2023 19:17:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4395C4339B;
+        Sat, 11 Mar 2023 19:17:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678562277;
+        bh=O7mOjm53l6IyjLyVpYPf+gqdpzVKUjs+J3yfYurbqOo=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=hPyqMTdWr8NUbpA/5AWQp9Ohif6D8ZhxQtfopKr8OilDh3hgkLt08mtzocCCtSSPe
+         Ljh0RFNxKOIWwdfu6nAwE35zDiJydv+snQR9sHXKB1Z3c7+1tjcAlyZQnEo/pBqZ6i
+         tHy16izCAj7CP35rWCV2d93kbTof3P1UOgRSsKG+1ZBF1MeTwcTrKRQpG1KI5naqBL
+         p8Fr1EBFgh3tt1raEsC1hXPlVXLw2XVqpiCwOImcdwaeKMClU19Bg+0OVkMljeGuZj
+         5UIg4xzHun8jAc3NxvK9zVcz00laGF4Swq1f/NWf3HJuH8KFJ365QHypPa5QAIMwCa
+         t8bnm4D7bRdQA==
+Date:   Sat, 11 Mar 2023 19:18:00 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     James Clark <james.clark@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux@roeck-us.net,
+        michal.simek@amd.com, Jonathan Corbet <corbet@lwn.net>,
+        Jean Delvare <jdelvare@suse.com>,
+        Anand Ashok Dumbre <anand.ashok.dumbre@xilinx.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, linux-doc@vger.kernel.org,
+        linux-hwmon@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 4/4] serial: qcom_geni: Use devm_krealloc_array
+Message-ID: <20230311191800.74ec2b84@jic23-huawei>
+In-Reply-To: <20230309150334.216760-5-james.clark@arm.com>
+References: <20230309150334.216760-1-james.clark@arm.com>
+        <20230309150334.216760-5-james.clark@arm.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wgenic8Ba1WxNP=9YJXk78k9Sg6R7RLkhduYjtVy2gdkg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 09:21:14AM -0800, Linus Torvalds wrote:
-> On Fri, Mar 10, 2023 at 2:04 PM Mike Christie
-> <michael.christie@oracle.com> wrote:
-> >
-> > The following patches were made over Linus's tree and apply over next. They
-> > allow the vhost layer to use copy_process instead of using
-> > workqueue_structs to create worker threads for VM's devices.
-> 
-> Ok, all these patches looked fine to me from a quick scan - nothing
-> that I reacted to as objectionable, and several of them looked like
-> nice cleanups.
-> 
-> The only one I went "Why do you do it that way" for was in 10/11
-> (entirely internal to vhost, so I don't feel too strongly about this)
-> how you made "struct vhost_worker" be a pointer in "struct vhost_dev".
-> 
-> It _looks_ to me like it could just have been an embedded structure
-> rather than a separate allocation.
-> 
-> IOW, why do
-> 
->    vhost_dev->worker
-> 
-> instead of doing
-> 
->   vhost_dev.worker
-> 
-> and just having it all in the same allocation?
-> 
-> Not a big deal. Maybe you wanted the 'test if worker pointer is NULL'
-> code to stay around, and basically use that pointer as a flag too. Or
-> maybe there is some other reason you want to keep that separate..
-> 
->                Linus
+On Thu,  9 Mar 2023 15:03:33 +0000
+James Clark <james.clark@arm.com> wrote:
 
-I agree with Linus here, slightly better embedded, but no huge deal.
-Which tree is this going on?
-If not mine here's my ack:
+> Now that it exists, use it instead of doing the multiplication manually.
+> 
+> Signed-off-by: James Clark <james.clark@arm.com>
 
-Acked-by: Michael S. Tsirkin <mst@redhat.com>
+Hmm. I've stared at the users of this for a bit, and it's not actually obvious
+that it's being used as an array of u32.  The only typed user of this is as
+the 2nd parameter of  
+tty_insert_flip_string() which is an unsigned char *
 
--- 
-MST
+I wonder if that sizeof(u32) isn't a 'correct' description of where the 4 is coming
+from even if it has the right value?  Perhaps the fifo depth is just a multiple of 4?
+
+Jonathan
+
+
+
+> ---
+>  drivers/tty/serial/qcom_geni_serial.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/qcom_geni_serial.c b/drivers/tty/serial/qcom_geni_serial.c
+> index d69592e5e2ec..23fc33d182ac 100644
+> --- a/drivers/tty/serial/qcom_geni_serial.c
+> +++ b/drivers/tty/serial/qcom_geni_serial.c
+> @@ -1056,9 +1056,9 @@ static int setup_fifos(struct qcom_geni_serial_port *port)
+>  		(port->tx_fifo_depth * port->tx_fifo_width) / BITS_PER_BYTE;
+>  
+>  	if (port->rx_buf && (old_rx_fifo_depth != port->rx_fifo_depth) && port->rx_fifo_depth) {
+> -		port->rx_buf = devm_krealloc(uport->dev, port->rx_buf,
+> -					     port->rx_fifo_depth * sizeof(u32),
+> -					     GFP_KERNEL);
+> +		port->rx_buf = devm_krealloc_array(uport->dev, port->rx_buf,
+> +						   port->rx_fifo_depth, sizeof(u32),
+> +						   GFP_KERNEL);
+>  		if (!port->rx_buf)
+>  			return -ENOMEM;
+>  	}
 
