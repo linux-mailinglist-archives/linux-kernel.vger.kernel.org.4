@@ -2,95 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 562956B621F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 00:39:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D33D6B6239
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 00:51:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjCKXjy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 18:39:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40614 "EHLO
+        id S229613AbjCKXuc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 18:50:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56014 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229712AbjCKXjw (ORCPT
+        with ESMTP id S229457AbjCKXua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 18:39:52 -0500
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D4AE048;
-        Sat, 11 Mar 2023 15:39:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
-        Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=IPxttaF0efk5Fm54pzICCIxRrnPQujbmO8MrMUftOtM=; b=YuJsW9/zRa8hZXyM21I5mH50Ub
-        xBMeiQI3pzkHEWi287B62QvE7AXSbwDWbniplfymgC1LTJ3HBQ690LkxbBfuSltwc6lWJp+aSksaR
-        Jlq6G9vM/D+4vMc2wJvoeaxWb/7Tsxp4sEhMDVzjZBCbCZBIhqjv2QRxTLQrzVhM+MzdVloQngRUZ
-        zTJwshebpto3XfbUAI4jvncngl/OgVlypXKFlT7pupGjpSIf/OYIFR8+VwpQwx2KoAeQL4J3Q7RZi
-        IxZRuEfFFm6rC4hF/YleaQXypNIDLBQYXuymWqmva7r/qsjM58Du6uFdWBFU1ZfGHoV2MQOLFGe5f
-        CSzOk6ag==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pb8oT-001UJq-51; Sat, 11 Mar 2023 23:39:45 +0000
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     chuck.lever@oracle.com, jlayton@kernel.org,
-        trond.myklebust@hammerspace.com, anna@kernel.org,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        kuba@kernel.org, linux-nfs@vger.kernel.org
-Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>
-Subject: [PATCH v3 5/5] sunrpc: simplify one-level sysctl registration for debug_table
-Date:   Sat, 11 Mar 2023 15:39:44 -0800
-Message-Id: <20230311233944.354858-6-mcgrof@kernel.org>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230311233944.354858-1-mcgrof@kernel.org>
-References: <20230311233944.354858-1-mcgrof@kernel.org>
+        Sat, 11 Mar 2023 18:50:30 -0500
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB806A1EB;
+        Sat, 11 Mar 2023 15:50:26 -0800 (PST)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PZ0651s8Nz4x1R;
+        Sun, 12 Mar 2023 10:50:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678578621;
+        bh=6zS9HL5+zOuldhKavorCuZk9Q4ILZQfJhOytuIRXATw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=b+OwOxWgHgGY2pZp5OAHExX8noKlzcq1GnnqCVEdeI8xJUFhcQNRLqTAEBLbVDRvl
+         hJNCsc6XoKSX1tZjUTXWkJu6L5wXOO4Ed+wVm+akFKnCBwqO2YQ8oi4sN7FiIMY8dC
+         n2RZjaHvzo1/VK7Yu5FQebXFzrKosnarTUveIJGuaMlgN+uuDAA9YMcFJLrfOCtmpf
+         u8p0hKN50JGGxq05UNWPS9nuVjAvCv6fjMANXV2qgVIO0dLdoZgFIFLCdTvBLchk5X
+         pkmkV9E6cDqFOoz3LR3oG116q/DYHuLZaRAZaSwOyYYyfRxiLQJZeATLM8q3VvdHSQ
+         r4EUhxmSQzafg==
+Date:   Sun, 12 Mar 2023 10:50:06 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Randy Dunlap <rdunlap@infradead.org>
+Cc:     Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: linux-next: Tree for Mar 10 (drivers/spi/spi-mpc512x-psc.c:)
+Message-ID: <20230312105006.6c46df35@canb.auug.org.au>
+In-Reply-To: <ed382974-1613-8a60-913c-60cfc27f8ab3@infradead.org>
+References: <20230310124850.245ba584@canb.auug.org.au>
+        <ed382974-1613-8a60-913c-60cfc27f8ab3@infradead.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/=UG9yRm=znQfNWeBT6YN1ur";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to declare an extra tables to just create directory,
-this can be easily be done with a prefix path with register_sysctl().
+--Sig_/=UG9yRm=znQfNWeBT6YN1ur
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Simplify this registration.
+Hi all,
 
-Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
----
- net/sunrpc/sysctl.c | 11 +----------
- 1 file changed, 1 insertion(+), 10 deletions(-)
+On Sat, 11 Mar 2023 15:36:10 -0800 Randy Dunlap <rdunlap@infradead.org> wro=
+te:
+>
+> On 3/9/23 17:48, Stephen Rothwell wrote:
+> > Hi all,
+> >=20
+> > Changes since 20230309:
+> >=20
+> > Non-merge commits (relative to Linus' tree): 2087
+> >  2412 files changed, 75248 insertions(+), 89600 deletions(-)
+> >=20
+> > -----------------------------------------------------------------------=
+----- =20
+>=20
+> on ppc32:
+>=20
+> drivers/spi/spi-mpc512x-psc.c: In function 'mpc512x_psc_spi_of_probe':
+> drivers/spi/spi-mpc512x-psc.c:518:17: error: label 'free_ipg_clock' used =
+but not defined
+>   518 |                 goto free_ipg_clock;
+>       |                 ^~~~
+>=20
+>=20
+> on allmodconfig.
 
-diff --git a/net/sunrpc/sysctl.c b/net/sunrpc/sysctl.c
-index afdfcc5403af..93941ab12549 100644
---- a/net/sunrpc/sysctl.c
-+++ b/net/sunrpc/sysctl.c
-@@ -163,20 +163,11 @@ static struct ctl_table debug_table[] = {
- 	{ }
- };
- 
--static struct ctl_table sunrpc_table[] = {
--	{
--		.procname	= "sunrpc",
--		.mode		= 0555,
--		.child		= debug_table
--	},
--	{ }
--};
--
- void
- rpc_register_sysctl(void)
- {
- 	if (!sunrpc_table_header)
--		sunrpc_table_header = register_sysctl_table(sunrpc_table);
-+		sunrpc_table_header = register_sysctl("sunrpc", debug_table);
- }
- 
- void
--- 
-2.39.1
+Caused by commit
 
+  9e21720a4958 ("spi: mpc5xxx-psc: use devm_clk_get_enabled() for core cloc=
+k")
+
+from the spi tree.
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/=UG9yRm=znQfNWeBT6YN1ur
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQNE64ACgkQAVBC80lX
+0GxN2Af+NmlJrOkXtoSL2eIJ8S9gKvRRSQyzncI0XlaWLVl/b05pc7Z467B8Hbdf
+qLv99bVV0fHWJFHFdjO14fjUEJ+sJspXoERFGcsjResQm3bhG6yauG2PCo2FSyBP
+2/aLAlllvUiG5XXata2/GU0yTl4GXArZAYsWm/9g5UFDLczr4apstWNc1R+tzBVJ
+135cYJ4W+uN5gxjH5JY81zNSIBSMdGw4amItwoMpO1N9TvDrmgU5GbGPaEuwXMWo
+xrS1FBToLNSWPAy3/CjzKiNJEe00jEnyAY6C3tBTw3xUBg6zY/Vvx0ohO6Gzd2/I
+vRZjsJ6tfXbTQzi0sfnmIZ/TvO8QFA==
+=ISA1
+-----END PGP SIGNATURE-----
+
+--Sig_/=UG9yRm=znQfNWeBT6YN1ur--
