@@ -2,129 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DADCA6B6028
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:24:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9BAF6B602C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:24:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCKTYF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 14:24:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44842 "EHLO
+        id S230024AbjCKTYk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 14:24:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCKTYD (ORCPT
+        with ESMTP id S230018AbjCKTYi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:24:03 -0500
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [IPv6:2001:67c:2050:0:465::201])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7D686594;
-        Sat, 11 Mar 2023 11:24:01 -0800 (PST)
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Sat, 11 Mar 2023 14:24:38 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDBA35B42C;
+        Sat, 11 Mar 2023 11:24:36 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4PYtBj2l5Hz9sZH;
-        Sat, 11 Mar 2023 20:23:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-        t=1678562637;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lH9AHHviE6C2dDnsSme3238JPMfFnJr5VLt6Dh8/1sg=;
-        b=PXtqDl57RqXJ+ohbtengAuV8GQSdKgqQ/ph0ZmS0sZSrL0fQk5xXgW/6au33OJx0r/lpM+
-        kVqDKKGHBpr32P14pd6KFP29qOUlrh4atEoWd0kgcqRaADjPKSqFxyBEWqsWqyZ/3Ms6Hg
-        3NRIi/tZfl5oi1tHV99cPITTMh1gji2GIt8K1UIF823YaKS5QmPg/vxkw+Nw5hpSMaojKn
-        z3ygW4Kcy8Wo2PtrxL3c3qoUWlmq33yKYr35Kgq48VCVZRD6mMx0EPUTfIc5ScqCd/sUWa
-        xjQ7fx109EvAoo+ov8APkCeZtsDH800KNLs2Ws2Hm2Br9YQ4r7maAk4fmqSOmw==
-Message-ID: <0b55636e-326b-a366-4346-bedddcecc6d0@mailbox.org>
-Date:   Sat, 11 Mar 2023 19:23:46 +0000
+        by ams.source.kernel.org (Postfix) with ESMTPS id 73E9CB80860;
+        Sat, 11 Mar 2023 19:24:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A88E6C4339B;
+        Sat, 11 Mar 2023 19:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678562674;
+        bh=uBUTSrl1Jqak+zfqw4l2Lz7o2To1fBCPX+EtUsLRJYo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Vl+d+exCAkahn7cttZyDuGex4VeRp5gtpwmtRvXmdXzJ8fO6WHOMaCQkvVtrMVfRe
+         EKGnUO6c1ZuiPDEpU0RSv2cqceAuAVYjsLHiHDxEICQUPq2KH7OY0IvrXsFZBhGjix
+         yPngQoevpr+qzlX5+iNR8Mflkbu7KS3201aWXiPFdBDou3fSmGQY/jpEZcOscB0Xmb
+         udr//6ovcT+agvVAx2CvaYvRHu9iOoJZIXyypSTfVVmVe4ArAzlwxl9ljA/aC7MArs
+         69c0LC4Lvk0OM74Bw19eHv9snHvatWODD8S/jl15RHnrS2JRmllfw/PrmleIwzBDYA
+         eb6Mz8Dzlm+CA==
+Date:   Sat, 11 Mar 2023 11:24:31 -0800
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZAzVbzthi8IfptFZ@sol.localdomain>
+References: <Y/y70zJj4kjOVfXa@sashalap>
+ <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
+ <20230311161644.GH860405@mit.edu>
+ <ZAy+3f1/xfl6dWpI@sol.localdomain>
+ <ZAzJltJaydwjCN6E@1wt.eu>
 MIME-Version: 1.0
-Subject: Re: [PATCH v14 00/12] Parallel CPU bringup for x86_64
-To:     Paul Menzel <pmenzel@molgen.mpg.de>
-Cc:     Usama Arif <usama.arif@bytedance.com>, dwmw2@infradead.org,
-        tglx@linutronix.de, kim.phillips@amd.com, brgerst@gmail.com,
-        piotrgorski@cachyos.org, oleksandr@natalenko.name,
-        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
-        pbonzini@redhat.com, paulmck@kernel.org,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
-        thomas.lendacky@amd.com, seanjc@google.com,
-        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
-        simon.evans@bytedance.com, liangma@liangbit.com
-References: <20230308171328.1562857-1-usama.arif@bytedance.com>
- <16d9f738-18fd-a929-e711-f2a1e757e33f@mailbox.org>
- <18ec6bf2-c19a-5fcf-3d6b-4106e2372af1@molgen.mpg.de>
-Content-Language: en-US
-From:   Tor Vic <torvic9@mailbox.org>
-In-Reply-To: <18ec6bf2-c19a-5fcf-3d6b-4106e2372af1@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-MBO-RS-ID: 7b5726b73904097e23b
-X-MBO-RS-META: n5gxo51d15qh19dt6shgw6h1fg8ci4oy
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAzJltJaydwjCN6E@1wt.eu>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 11, 2023 at 07:33:58PM +0100, Willy Tarreau wrote:
+> On Sat, Mar 11, 2023 at 09:48:13AM -0800, Eric Biggers wrote:
+> > The purpose of all these mailing list searches would be to generate a list of
+> > potential issues with backporting each commit, which would then undergo brief
+> > human review.
+> 
+> This is one big part that I suspect is underestimated. I'll speak from my
+> past experience maintaining extended LTS for 3.10. I couldn't produce as
+> many releases as I would have liked to because despite the scripts that
+> helped me figure some series, some dependencies, origin branches etc, the
+> whole process of reviewing ~600 patches to end up with ~200 at the end
+> (and adapting some of them to fit) required ~16 hours a day for a full
+> week-end, and I didn't always have that amount of time available. Any my
+> choices were far from being perfect, as during the reviews I got a number
+> of "please don't backport this there" and "if you take this one you also
+> need these ones". Also I used to intentionally drop what had nothing to
+> do on old LTS stuff so even from that perspective my work could have been
+> perceived as insufficient.
+> 
+> The reviewing process is overwhelming, really. There is a point where you
+> start to fail and make choices that are not better than a machine's. But
+> is a mistake once in a while dramatic if on the other hand it fixes 200
+> other issues ? I think not as long as it's transparent and accepted by
+> the users, because for one user that could experience a regression (one
+> that escaped all the testing in place), thousands get fixes for existing
+> problems. I'm not saying that regressions are good, I hate them, but as
+> James said, we have to accept that user are part of the quality process.
+> 
+> My approach on another project I maintain is to announce upfront my own
+> level of trust in my backport work, saying "I had a difficult week fixing
+> that problem, do not rush on it or be extra careful", or "nothing urgent,
+> no need to upgrade if you have no problem" or also "just upgrade, it's
+> almost riskless". Users love that, because they know they're part of the
+> quality assurance process, and they will either take small risks when
+> they can, or wait for others to take risks.
+> 
+> But thinking that having one person review patches affecting many
+> subsystem after pre-selection and extra info regarding discussions on
+> each individual patch could result in more reliable stable releases is
+> just an illusion IMHO, because the root of problem is that there are not
+> enough humans to fix all the problems that humans introduce in the first
+> place, and despite this we need to fix them. Just like automated scripts
+> scraping lore, AUTOSEL does bring some value if it offloads some work
+> from the available humans, even in its current state. And I hope that
+> more of the selection and review work in the future will be automated
+> and even less dependent on humans, because it does have a chance to be
+> more reliable in front of that vast amount of work.
 
+As I said in a part of my email which you did not quote, the fallback option is
+to send the list of issues to the mailing list for others to review.
 
-On 10.03.23 20:18, Paul Menzel wrote:
-> Dear Tor,
-> 
+If even that fails, then it could be cut down to the *just the most useful*
+heuristics and decisions made automatically based on those...  "Don't AUTOSEL
+patch N of a series without 1...N-1" might be a good one.
 
-Hi Paul,
+But again, this comes back to one of the core issues here which is how does one
+even build something for the stable maintainers if their requirements are
+unknown to others?
 
-> 
-> Am 10.03.23 um 20:20 schrieb Tor Vic:
->> On 08.03.23 17:13, Usama Arif wrote:
->>> The main code change over v13 is to enable parallel bringup for 
->>> SEV-ES guests.
-> 
-> […]
-> 
->>>   .../admin-guide/kernel-parameters.txt         |   3 +
->>>   arch/x86/include/asm/cpu.h                    |   1 +
->>>   arch/x86/include/asm/processor.h              |   6 +-
->>>   arch/x86/include/asm/realmode.h               |   4 +-
->>>   arch/x86/include/asm/sev-common.h             |   3 +
->>>   arch/x86/include/asm/sev.h                    |   5 +
->>>   arch/x86/include/asm/smp.h                    |  18 +-
->>>   arch/x86/include/asm/topology.h               |   2 -
->>>   arch/x86/kernel/acpi/sleep.c                  |  30 +-
->>>   arch/x86/kernel/apic/apic.c                   |   2 +-
->>>   arch/x86/kernel/apic/x2apic_cluster.c         | 126 +++---
->>>   arch/x86/kernel/asm-offsets.c                 |   1 +
->>>   arch/x86/kernel/cpu/common.c                  |   6 +-
->>>   arch/x86/kernel/cpu/topology.c                |   2 +-
->>>   arch/x86/kernel/head_64.S                     | 162 ++++++--
->>>   arch/x86/kernel/smpboot.c                     | 366 +++++++++++++-----
->>>   arch/x86/realmode/init.c                      |   3 +
->>>   arch/x86/realmode/rm/trampoline_64.S          |  27 +-
->>>   arch/x86/xen/smp_pv.c                         |   4 +-
->>>   arch/x86/xen/xen-head.S                       |   2 +-
->>>   include/linux/cpuhotplug.h                    |   2 +
->>>   include/linux/smpboot.h                       |   7 +
->>>   kernel/cpu.c                                  |  31 +-
->>>   kernel/smpboot.h                              |   2 -
->>>   24 files changed, 614 insertions(+), 201 deletions(-)
->>>
->>
->> On Linux 6.2, Zen2 and Skylake, no issues or boot problems:
->>
->> Tested-by: Tor Vic <torvic9@mailbox.org>
-> 
-> Thank you for testing this. It’d be great if you shared the exact timing 
-> numbers too. (Just to be sure, did you also test ACPI S3 suspend/resume?)
-> 
+> And in any case I've seen you use the word "trivial" several times in
+> this thread, and for having been through a little bit of this process
+> in the past, I wouldn't use that word anywhere in a description of what
+> my experience had been. You really seem to underestimate the difficulty
+> here.
 
-I have just tested suspend/resume on the Zen2 machine, it works.
-Not yet tested on the Skylake platform.
+I checked the entire email thread
+(https://lore.kernel.org/stable/?q=f%3Aebiggers+trivial).  The only place I used
+the word "trivial" was mentioning that querying lore.kernel.org from a Python
+script might be trivial, which is true.  And also in my response to Sasha's
+similar false claim that I was saying everything would be trivial.
 
-What is the best and simplest way to get these timings numbers?
+I'm not sure why you're literally just making things up; it's not a very good
+way to have a productive discussion...
 
-> 
-> Kind regards,
-> 
-> Paul
+- Eric
