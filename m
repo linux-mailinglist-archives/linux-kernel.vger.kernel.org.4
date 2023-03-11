@@ -2,102 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1E7B6B60D5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:03:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D995C6B60D8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:12:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230003AbjCKVD1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:03:27 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50094 "EHLO
+        id S229774AbjCKVMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:12:03 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229861AbjCKVDZ (ORCPT
+        with ESMTP id S229450AbjCKVMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:03:25 -0500
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603F537724;
-        Sat, 11 Mar 2023 13:03:23 -0800 (PST)
-Received: by mail-ed1-x532.google.com with SMTP id cy23so34098192edb.12;
-        Sat, 11 Mar 2023 13:03:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20210112; t=1678568602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9P7IEAkLy7BcZ65gozk6soUzL4XB53L7ciN8vl0VU/0=;
-        b=Mj3NdSmV6a2J+F31S5HW2+G4vNN8mcI76hOLn6I1zFjdXWXC/WZRnhOdQ1QHDp4//Y
-         tWsqEHcpJ0vL77yH+bJmT9dUvyUbvpvIm2aGBWddYvljUxFx37/4Ir01a2r5j3FG+Bhi
-         wAEft83BiQMHNOJfG/hyrFS3cnfWaJUrYXWxKBWLuIZ+wMhQVdU3dZMEd/Ii2PJ+Bj4v
-         w/qom/IQr+gHPL7notTLZLEK+H/qF1i0KERixOqwYAciKCbfmAwHSId9JhJeXMUMlv9w
-         TAROnkKZlozadKj+LmMDlngzBKq/PLKyjjV1jm7EnL6izYCIHRwb8tXc2U1lCqjM6lhf
-         VMzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678568602;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9P7IEAkLy7BcZ65gozk6soUzL4XB53L7ciN8vl0VU/0=;
-        b=BkyUB++mypT6/3WGDSjEgDIkVv5KtYkjvuZi+HeqaCFHZZVxS+hf5kOVkvR2saFn02
-         pYIYsPNC8mg1hjTX79ru7Nlwi1EPIj3HUOTEjWQ2frk+86eETyWORzqBpzLpa169q8mi
-         EasPDWQuIe/D1BUs1m2Ya3ZeUTugogMNCkbfGl3EqvIAtthoWOgbr3he1ojNznlN2rUF
-         +mfiilTo4vEKY8FHk+yk3eWraDaO4XBz2eFTe97GT0QJjGQNlktz4HGUC8V2YPILR6re
-         d7PPkhxQBOxtlSY6o5ZZZtFL08AS+4EEp66lNfVQGUvS86x0vbnpNVQY7IH+78mmIV/n
-         JgvA==
-X-Gm-Message-State: AO0yUKWcU58NkrBfPSk1vj/4FDVk02cGz+7vYtSXhD2C/fybjGLLRazn
-        dOcTsbgQIotADFCZgKy/QY6YNz8rPBmLE4UJqFw=
-X-Google-Smtp-Source: AK7set8br7hTajHtR5jJ8JEX+gep6ksiKRlkfXEKJA4TcVnIPNqBQgZ3QlWHqwp9ET29p8c4umTLPKrNN3dT4z5U9yA=
-X-Received: by 2002:a17:906:f47:b0:87b:db55:4887 with SMTP id
- h7-20020a1709060f4700b0087bdb554887mr14138887ejj.4.1678568601780; Sat, 11 Mar
- 2023 13:03:21 -0800 (PST)
+        Sat, 11 Mar 2023 16:12:02 -0500
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4952969074;
+        Sat, 11 Mar 2023 13:12:01 -0800 (PST)
+Received: from [192.168.0.2] (chello089173232159.chello.sk [89.173.232.159])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 7F1477A0158;
+        Sat, 11 Mar 2023 22:12:00 +0100 (CET)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Sergey Shtylyov <s.shtylyov@omp.ru>
+Subject: Re: [PATCH] pata_parport: fix possible memory leak
+Date:   Sat, 11 Mar 2023 22:11:57 +0100
+User-Agent: KMail/1.9.10
+Cc:     Sergei Shtylyov <sergei.shtylyov@gmail.com>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Dan Carpenter <error27@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <3ab89ddc-cb60-47c4-86ad-cdad94a8a3d7@kili.mountain> <e02f5626-81be-d949-d2b4-7f70820b409c@gmail.com> <2223c1dc-1869-a307-e5da-772cb27b34e5@omp.ru>
+In-Reply-To: <2223c1dc-1869-a307-e5da-772cb27b34e5@omp.ru>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org> <20230310222857.315629-4-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310222857.315629-4-krzysztof.kozlowski@linaro.org>
-From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date:   Sat, 11 Mar 2023 22:03:10 +0100
-Message-ID: <CAFBinCBG90jOdKPubEZvOFXf5B=Ra+HxH6JTTdVn-L1cbWjNYA@mail.gmail.com>
-Subject: Re: [PATCH 04/16] spi: meson-spifc: Drop of_match_ptr for ID table
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202303112211.57761.linux@zary.sk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 11:29=E2=80=AFPM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it is not relevant here).
->
->   drivers/spi/spi-meson-spifc.c:434:34: error: =E2=80=98meson_spifc_dt_ma=
-tch=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Acked-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+On Saturday 11 March 2023 21:23:25 Sergey Shtylyov wrote:
+> On 3/11/23 11:19 PM, Sergei Shtylyov wrote:
+> 
+> >> When ida_alloc() fails, "pi" is not freed although the misleading
+> >> comment says otherwise.
+> >> Move the ida_alloc() call up so we really don't have to free it.
+> 
+>    Wait, but don't we still need to call kfree() in pi_init_one()?
+
+If it fails at device_register, the dev.release is already set to pata_parport_dev_release which does the kfree(). put_device() should call it. If it fails later, device_unregister() should do it.
+ 
+> >> Reported-by: kernel test robot <lkp@intel.com>
+> >> Reported-by: Dan Carpenter <error27@gmail.com>
+> >> Link: https://lore.kernel.org/r/202303111822.IHNchbkp-lkp@intel.com/
+> >> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> > 
+> > Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+> > 
+> > [...]
+> 
+> MBR, Sergey
+> 
+
+
+-- 
+Ondrej Zary
