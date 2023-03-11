@@ -2,40 +2,40 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D862B6B588C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3028C6B588E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:18:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCKFRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:17:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46734 "EHLO
+        id S230119AbjCKFR7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:17:59 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCKFRc (ORCPT
+        with ESMTP id S229768AbjCKFRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 11 Mar 2023 00:17:32 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78806140518;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7841714050D;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
         MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
         Reply-To:Content-Type:Content-ID:Content-Description;
-        bh=0Kfz9ManWhljt3gWTtQeON0UUzOKjwUIYWv5h32VpPw=; b=MnN1/ZLHgS6/DusPEn8slWDfHS
-        2uYR5J1cw9XFTdAxvBmp0T5H3IjRvJslb+CP2mKFbo4Jx6ze3QIy9GK6ejC+7gm+vr6Rwl4BA/IF/
-        CTjsgTvrAnLnbGCRzKyc55zFZBahioLHJTb/YTef1kDF/JVtOpMFjx4uROYEG8atCZn6TnzhFzWjD
-        G1tzhbd1LDFijal17jC4m7Sg67t48rBywMqQ1jREijt4+mGhqmXEvbw7gIYFxzDYKk2gxMspbqVyV
-        GNN8wTC/YOp+zEc5RWU2NOAfs2TdO3hT7vBt0jWaBKenj7UII01CdlQ+2ZNZowVyyiEEVP5WuXKbs
-        yAAe/NIw==;
+        bh=WsfRRtm6UalI9L41GZ3NbpGQ5o56fXzEWOq/MZtycqM=; b=TYZmpPogBKWjK0SvC5ljLiPSLg
+        avytpGS9084TZtpFLSKLx6XDeAES3WmNrEQY+rsGV06rM43+H1p5XC/W+K+nRI9lbPWL00Qx3G8Pe
+        oDDjmDFBO8KWYJGQJf976ZCM4Cskip1Q6xIEO7mY1wKndTC1c27BQMBHXewTUJYnhHWISm1HOcrM7
+        c/ULk9O6absN+9pj6GHXjw6bGZSYna0sqnj2Hl+XQHYy3ydHZPSchsgJ+GfewDpdsHHIvg84hcHhX
+        MR5SxEegoEK/qnkVUJlvy1HigaYMynjguVQWf28GX7JIjz6ObqcF+oj4JL7c+/xv6gszjcuOHpLVY
+        dcardj8A==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBN4-Bs; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBN9-Dj; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 08/12] module: move finished_loading()
-Date:   Fri, 10 Mar 2023 21:17:08 -0800
-Message-Id: <20230311051712.4095040-9-mcgrof@kernel.org>
+Subject: [RFC 09/12] module: extract patient module check into helper
+Date:   Fri, 10 Mar 2023 21:17:09 -0800
+Message-Id: <20230311051712.4095040-10-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
 In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
 References: <20230311051712.4095040-1-mcgrof@kernel.org>
@@ -52,74 +52,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This has no functional change, just moves a routine earlier
-as we'll make use of it next.
+The patient module check inside add_unformed_module() is large
+enough as we need it. It is a bit hard to read too, so just
+move it to a helper and do the inverse checks first to help
+shift the code and make it easier to read. The new helper then
+is module_patient_check_exists().
 
 Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 ---
- kernel/module/main.c | 42 +++++++++++++++++++++---------------------
- 1 file changed, 21 insertions(+), 21 deletions(-)
+ kernel/module/main.c | 71 +++++++++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
 diff --git a/kernel/module/main.c b/kernel/module/main.c
-index e9c7eb827f0d..c3e5076c0436 100644
+index c3e5076c0436..e24323e2c499 100644
 --- a/kernel/module/main.c
 +++ b/kernel/module/main.c
-@@ -2370,27 +2370,6 @@ static int post_relocation(struct module *mod, const struct load_info *info)
- 	return module_finalize(info->hdr, info->sechdrs, mod);
+@@ -2554,6 +2554,43 @@ static bool finished_loading(const char *name)
+ 	return ret;
  }
  
--/* Is this module of this name done loading?  No locks held. */
--static bool finished_loading(const char *name)
--{
--	struct module *mod;
--	bool ret;
--
--	/*
--	 * The module_mutex should not be a heavily contended lock;
--	 * if we get the occasional sleep here, we'll go an extra iteration
--	 * in the wait_event_interruptible(), which is harmless.
--	 */
--	sched_annotate_sleep();
--	mutex_lock(&module_mutex);
--	mod = find_module_all(name, strlen(name), true);
--	ret = !mod || mod->state == MODULE_STATE_LIVE
--		|| mod->state == MODULE_STATE_GOING;
--	mutex_unlock(&module_mutex);
--
--	return ret;
--}
--
- /* Call module constructors. */
- static void do_mod_ctors(struct module *mod)
- {
-@@ -2554,6 +2533,27 @@ static int may_init_module(void)
- 	return 0;
- }
- 
-+/* Is this module of this name done loading?  No locks held. */
-+static bool finished_loading(const char *name)
++/* Must be called with module_mutex held */
++static int module_patient_check_exists(const char *name)
 +{
-+	struct module *mod;
-+	bool ret;
++	struct module *old;
++	int err = 0;
++
++	old = find_module_all(name, strlen(name), true);
++	if (old == NULL)
++		return 0;
++
++	if (old->state == MODULE_STATE_COMING
++	    || old->state == MODULE_STATE_UNFORMED) {
++		/* Wait in case it fails to load. */
++		mutex_unlock(&module_mutex);
++		err = wait_event_interruptible(module_wq,
++				       finished_loading(name));
++		if (err)
++			return err;
++
++		/* The module might have gone in the meantime. */
++		mutex_lock(&module_mutex);
++		old = find_module_all(name, strlen(name), true);
++	}
 +
 +	/*
-+	 * The module_mutex should not be a heavily contended lock;
-+	 * if we get the occasional sleep here, we'll go an extra iteration
-+	 * in the wait_event_interruptible(), which is harmless.
++	 * We are here only when the same module was being loaded. Do
++	 * not try to load it again right now. It prevents long delays
++	 * caused by serialized module load failures. It might happen
++	 * when more devices of the same type trigger load of
++	 * a particular module.
 +	 */
-+	sched_annotate_sleep();
-+	mutex_lock(&module_mutex);
-+	mod = find_module_all(name, strlen(name), true);
-+	ret = !mod || mod->state == MODULE_STATE_LIVE
-+		|| mod->state == MODULE_STATE_GOING;
-+	mutex_unlock(&module_mutex);
-+
-+	return ret;
++	if (old && old->state == MODULE_STATE_LIVE)
++		return -EEXIST;
++	else
++		return -EBUSY;
 +}
 +
  /*
   * We try to place it in the list now to make sure it's unique before
   * we dedicate too many resources.  In particular, temporary percpu
+@@ -2562,41 +2599,14 @@ static bool finished_loading(const char *name)
+ static int add_unformed_module(struct module *mod)
+ {
+ 	int err;
+-	struct module *old;
+ 
+ 	mod->state = MODULE_STATE_UNFORMED;
+ 
+ 	mutex_lock(&module_mutex);
+-	old = find_module_all(mod->name, strlen(mod->name), true);
+-	if (old != NULL) {
+-		if (old->state == MODULE_STATE_COMING
+-		    || old->state == MODULE_STATE_UNFORMED) {
+-			/* Wait in case it fails to load. */
+-			mutex_unlock(&module_mutex);
+-			err = wait_event_interruptible(module_wq,
+-					       finished_loading(mod->name));
+-			if (err)
+-				goto out_unlocked;
+-
+-			/* The module might have gone in the meantime. */
+-			mutex_lock(&module_mutex);
+-			old = find_module_all(mod->name, strlen(mod->name),
+-					      true);
+-		}
+-
+-		/*
+-		 * We are here only when the same module was being loaded. Do
+-		 * not try to load it again right now. It prevents long delays
+-		 * caused by serialized module load failures. It might happen
+-		 * when more devices of the same type trigger load of
+-		 * a particular module.
+-		 */
+-		if (old && old->state == MODULE_STATE_LIVE)
+-			err = -EEXIST;
+-		else
+-			err = -EBUSY;
++	err = module_patient_check_exists(mod->name);
++	if (err)
+ 		goto out;
+-	}
++
+ 	mod_update_bounds(mod);
+ 	list_add_rcu(&mod->list, &modules);
+ 	mod_tree_insert(mod);
+@@ -2604,7 +2614,6 @@ static int add_unformed_module(struct module *mod)
+ 
+ out:
+ 	mutex_unlock(&module_mutex);
+-out_unlocked:
+ 	return err;
+ }
+ 
 -- 
 2.39.1
 
