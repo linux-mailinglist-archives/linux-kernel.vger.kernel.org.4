@@ -2,83 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A9D6A6B5DA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:07:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9A9E6B5DA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:09:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjCKQHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:07:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
+        id S230432AbjCKQJr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:09:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbjCKQHE (ORCPT
+        with ESMTP id S229601AbjCKQJp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:07:04 -0500
-Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A198B1166E;
-        Sat, 11 Mar 2023 08:07:02 -0800 (PST)
-Received: from [127.0.0.1] (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: marcan@marcan.st)
-        by mail.marcansoft.com (Postfix) with ESMTPSA id 1BFAB425FF;
-        Sat, 11 Mar 2023 16:06:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
-        t=1678550820; bh=6O+1q5pkxO0hFhdxV2lPUXqo/slkZFfMLidN5m0Bq/g=;
-        h=Date:Subject:To:References:From:In-Reply-To;
-        b=oOTEu1WhKRnigtIrEsPcluvbRjy/hPgtEteiZF7lZOJJD5XgGAttXBSGsUVVJSPs5
-         Klh/DO9Y4XK1PehVI8KOU7tX56wWWHB1E+OQVaUK/qbd3JMcN+Fv3gGyjYiWIeJ7MG
-         iPEPB/98o7hPzezmKUs3FAT1piIm1+BQbQfLeMJLqJv9Girc6khGpmhtOEAeORNkSV
-         7NUk4N13ldA6pt7391qkyGQ4TRVYmkxRhbeBr3ROVl2M0jXPFZsvrR0uSiiJQLa1nv
-         v51m/d2oFwYVavmd66/BcES3JK75eO3+yBFdEFwXs/EnSjhMo02gPFvJF95uzo0sTs
-         G6tQw8RhIxvkQ==
-Message-ID: <e5d36d19-624e-ad0e-cd90-8b188771e41d@marcan.st>
-Date:   Sun, 12 Mar 2023 01:06:54 +0900
+        Sat, 11 Mar 2023 11:09:45 -0500
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 559AEF6927
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:09:43 -0800 (PST)
+Received: by mail-yb1-xb32.google.com with SMTP id y144so8023456yby.12
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:09:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678550982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fzWZK/2DOJOXsvG+XJAqxVL+3bPwefI5Iyt8l7pygUU=;
+        b=NEU+nw8LaiuwdyVp2yAz91CWBZNF3qBVdmKv6heVA54lqDYYTkQrItkE9diE+ifQvu
+         JvEPZtVIR0BDGlJwIrgrBc7d2s6maquNDE8jtzghRqbxKRpUVOdpMfOby2LbDLTkQM9I
+         nhAsUBIxRZ1zNOu529mfMDU1amVxwVhKh3u8EvhIS2FqswVJB4uYyDfQGcMUoTguAgj6
+         fwP5UaRMUCK8TTDU1bS0mmVSCxZVRjVXI9NBr51EZ6g+91OBMQZshXNjyXxCbmVTQWBG
+         jAhwLRB5tfqbjvCqVcvBLfPwrkizvdEYZcD/7Lw/+NG4spsuOWY2d9moj1xd8BzIAC+E
+         bxCQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678550982;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fzWZK/2DOJOXsvG+XJAqxVL+3bPwefI5Iyt8l7pygUU=;
+        b=DEB8gwG/Wqds12GBgcEM7Z38U7g94f0eFXvNgF7vVb+DT1+Fbc7mAHjDtAGGB0texE
+         Bs4wnVaHJhV9GGWwQJ4c6nqCcjs2xiGGLfjPhYualBNhel+KcvH+JzWk4URloszCLAHL
+         PdYD71nohkK+lyQlQNszPsXwsJ2DFnlR1ISGKJQ7SprvYemEU/vLgeCHDLTh5aCxp6ut
+         QqlGg/OUecGA1TcSzDlLD+fh/4cFm9mjEOn4LvMbgRMtph31ocWmOpyBlSqNvEQt9ccY
+         1EFk42Nude8BP2hM/0/jQrYvRlvHejyQRBj+MHrqTYOcXHlYxJhToo0M6A02h2ZxG+Z4
+         yOOA==
+X-Gm-Message-State: AO0yUKW1H6p9dmPpQC0B0HNvREJ61ygOsOkDruwdl3i/w2EONosjQjZr
+        vMKvmX/y4M/AUD6aS0TEWMU6M29y+DcvsPKRq1Z+nA==
+X-Google-Smtp-Source: AK7set/M/rmOrpL0L838CFr6LBaCI08Xy5jWKITiGoAakJxe2vY4+K5X0NVyMqq5eu3mW3qdOhSXtUFtnmiWfHsmpwQ=
+X-Received: by 2002:a25:8d8e:0:b0:b30:2539:a2b0 with SMTP id
+ o14-20020a258d8e000000b00b302539a2b0mr3437066ybl.9.1678550982435; Sat, 11 Mar
+ 2023 08:09:42 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.9.1
-Subject: Re: [REGRESSION] Unable to connect to Internet since kernel 6.2.3 on
- T2 Macs
-Content-Language: en-US
-To:     Aditya Garg <gargaditya08@live.com>,
-        Arend van Spriel <aspriel@gmail.com>,
-        Arend van Spriel <arend.vanspriel@broadcom.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "brcm80211-dev-list.pdl@broadcom.com" 
-        <brcm80211-dev-list.pdl@broadcom.com>,
-        "brcm80211-dev-list@broadcom.com" <brcm80211-dev-list@broadcom.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Orlando Chamberlain <orlandoch.dev@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-References: <MA0P287MB02178C2B6AFC2E96F261FB2CB8BB9@MA0P287MB0217.INDP287.PROD.OUTLOOK.COM>
-From:   Hector Martin <marcan@marcan.st>
-In-Reply-To: <MA0P287MB02178C2B6AFC2E96F261FB2CB8BB9@MA0P287MB0217.INDP287.PROD.OUTLOOK.COM>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org> <20230311111658.251951-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111658.251951-4-krzysztof.kozlowski@linaro.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Sat, 11 Mar 2023 08:09:31 -0800
+Message-ID: <CABXOdTero=NcfJRmyOCWrt8aOVWsyEUWy0h1Y1msTmDL0VS6ew@mail.gmail.com>
+Subject: Re: [PATCH 4/5] i2c: cros-ec-tunnel: Mark ACPI and OF related data as
+ maybe unused
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-i2c@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-actions@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 00.56, Aditya Garg wrote:
-> A weird regression has been affecting the T2 Macs since kernel 6.2.3. The users are unable to connect to both wireless as well as wired Internet. As far as wireless is concerned, the patches for T2 Macs that have been upstreamed in kernel 6.3 have been working well till 6.2.2, but after that the network has stopped working.
-> 
-> Interesting, the driver shows no errors in journalctl. The wifi firmware loads well and the networks even appear on scan list. But, the connection to a network fails. Ethernet/USB tethering has also stopped working.
-> 
-> If I you need some logs from me, please do ask.
-> 
-> Also, Hector, I’d like to know whether this affects the M1/2 Macs as well or not.
+On Sat, Mar 11, 2023 at 3:17=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+> certain data unused:
+>
+>   drivers/i2c/busses/i2c-cros-ec-tunnel.c:295:34: error: =E2=80=98cros_ec=
+_i2c_of_match=E2=80=99 defined but not used [-Werror=3Dunused-const-variabl=
+e=3D]
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-This is already reported, identified, and a patch submitted.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-https://lore.kernel.org/linux-wireless/20230124141856.356646-1-alexander@wetzel-home.de/
-
-- Hector
+> ---
+>  drivers/i2c/busses/i2c-cros-ec-tunnel.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-cros-ec-tunnel.c b/drivers/i2c/busses=
+/i2c-cros-ec-tunnel.c
+> index 4e787dc709f9..8b3ff5bb14d8 100644
+> --- a/drivers/i2c/busses/i2c-cros-ec-tunnel.c
+> +++ b/drivers/i2c/busses/i2c-cros-ec-tunnel.c
+> @@ -292,13 +292,13 @@ static int ec_i2c_remove(struct platform_device *de=
+v)
+>         return 0;
+>  }
+>
+> -static const struct of_device_id cros_ec_i2c_of_match[] =3D {
+> +static const struct of_device_id cros_ec_i2c_of_match[] __maybe_unused =
+=3D {
+>         { .compatible =3D "google,cros-ec-i2c-tunnel" },
+>         {},
+>  };
+>  MODULE_DEVICE_TABLE(of, cros_ec_i2c_of_match);
+>
+> -static const struct acpi_device_id cros_ec_i2c_tunnel_acpi_id[] =3D {
+> +static const struct acpi_device_id cros_ec_i2c_tunnel_acpi_id[] __maybe_=
+unused =3D {
+>         { "GOOG0012", 0 },
+>         { }
+>  };
+> --
+> 2.34.1
+>
