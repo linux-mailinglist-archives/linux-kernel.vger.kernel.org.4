@@ -2,110 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 163F56B5BA5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:28:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8478F6B5BA7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:28:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCKM23 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:28:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58158 "EHLO
+        id S230243AbjCKM2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:28:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCKM2Z (ORCPT
+        with ESMTP id S230245AbjCKM2c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:28:25 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F067F23A58
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:28:20 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id g10so2274349eda.1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:28:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678537699;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pPEaqI1ON+Jn2Wz34fKyoAxqC6NH3Zw3zwW0rrLUejU=;
-        b=DT9pmfkyGwFe5IJRHANvFYu9IPa2zOsae76eWOLZB+huoYm6JF72C5GZQ3SHXAa/3o
-         JLZAZKYKpM11n1bltWGzYOPxAaGHb3/BKHMDAzgsjpv8lSCiwsL6EX2x94+kxttLVtuh
-         TUzcruCBRjtQY9RW+MmN5GeQ/R8zofYqTvWAPRvoraIK2Cc7UWVwAgeaHp6V0F/TYo24
-         o8GiF9JVGzPHF8d1jEjr9q0P1Nm4MB9p8I0f/FuopCGhK2mX76jUccfZYwzg+UPNBu9w
-         R0Uvu7vyk/gr8rJxKN91ZERA1Dh4ug9MM2CbyPO0fYYVtKti8J+LX97obxWur0nZFR7j
-         AI2Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678537699;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pPEaqI1ON+Jn2Wz34fKyoAxqC6NH3Zw3zwW0rrLUejU=;
-        b=zn5na6qo66Y6AaaCsPtgHxSuCDkP7CmkH7u3JAFkglFEKMX7fuqqVVyL1x9xY5kHg/
-         aZG4hzyGUVcoe/sm9Qcf99jQh2vQ9jhgcHq4mq7ECRyh8sPAmpb31I0k2Ex0ULeTp6oE
-         BmI29aUuR42t5GQNNBDlKU2WZONCqdN04PYy/UJ2rVusJVe0ZLC36R0IibZLp2gTR5GV
-         g9+rRhavxatobpw7oMF0kRwTWqccF7KmhCtq6/9EsgqWLgrijcSs5IPmsZHhgc4Imw/0
-         X8PReItJS8qFPfuKTmQ5oXDsEYvI52wcTakrYfibr4PDKAJI+suf6r1seI/XhCOhbKcj
-         S4GQ==
-X-Gm-Message-State: AO0yUKViETHGHuDfoEtb8qhs0BEAMuhzXhcbt2dNi3Fvhw5iPYWcklba
-        4Mm7tLWc/0hKzyI40tDAdldej0us5n/DFyuu82o=
-X-Google-Smtp-Source: AK7set+Ub83gAFtPrDgwfkko5f/le16ZoQ2PtQzI56nDp9q2GDkj1c02utyeGUOBflEUvCTY7dtK6Q==
-X-Received: by 2002:a05:6402:150f:b0:4af:6a7e:9145 with SMTP id f15-20020a056402150f00b004af6a7e9145mr25916119edw.14.1678537699148;
-        Sat, 11 Mar 2023 04:28:19 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b? ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
-        by smtp.gmail.com with ESMTPSA id g2-20020a1709062da200b008cf377e8795sm1032372eji.199.2023.03.11.04.28.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 04:28:18 -0800 (PST)
-Message-ID: <8f448bc9-2f2b-77cb-ffe2-895593a6047e@linaro.org>
-Date:   Sat, 11 Mar 2023 13:28:17 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/4] iio: light: max44009: add missing OF device matching
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
+        Sat, 11 Mar 2023 07:28:32 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2714E6A04A;
+        Sat, 11 Mar 2023 04:28:31 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6FC9660B2B;
+        Sat, 11 Mar 2023 12:28:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62EA7C433D2;
+        Sat, 11 Mar 2023 12:28:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678537709;
+        bh=D2mybpZz5PmhmuGyRejIVsx4IMdbFcJrqX+NzKNLRUw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gxu3+BwOTGlxGxV/ITtRawojP2nR0EylrWZhmXQ6d9YLzFkRtslnIoaMxL/KZF9Rk
+         3H1n1oUepJ0jGq4alM84577NfDBP7yilf5Sw4LjiXAviRUNrqYgVy+7GZc9fGQYOMB
+         W9Gq35q+BH6gsT4z+dAtgp4PDiN+9Pgypah6C0PAJH1ocR8HJEjsqoa1/9uSI67Pa2
+         lMQ3oawkSaRaGtdNHitktgvvIw8W9gyGez5tS0dfCR6QNYqGOI6vs05abE1NS35V0G
+         WNIdNkk7dSbodqcVwsBC+GjZafHt+oNVNeNCsKnIBFGhmyvtp5dnbiwHTVHPcME/hY
+         eN4Wv+JljuLwQ==
+Date:   Sat, 11 Mar 2023 12:28:33 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Marek Vasut <marek.vasut@gmail.com>,
         Lars-Peter Clausen <lars@metafoo.de>,
         Michael Hennerich <Michael.Hennerich@analog.com>,
         Robert Eshleman <bobbyeshleman@gmail.com>,
         linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 4/4] iio: proximity: sx9500: Mark ACPI and OF related
+ data as maybe unused
+Message-ID: <20230311122833.03b5a3d7@jic23-huawei>
+In-Reply-To: <20230311111457.251475-4-krzysztof.kozlowski@linaro.org>
 References: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
- <20230311111457.251475-3-krzysztof.kozlowski@linaro.org>
- <20230311122619.2d8bfaf5@jic23-huawei>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311122619.2d8bfaf5@jic23-huawei>
+        <20230311111457.251475-4-krzysztof.kozlowski@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 13:26, Jonathan Cameron wrote:
-> On Sat, 11 Mar 2023 12:14:56 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> The driver currently matches only via i2c_device_id, but also has
->> of_device_id table:
->>
->>   drivers/iio/light/max44009.c:545:34: error: ‘max44009_of_match’ defined but not used [-Werror=unused-const-variable=]
->>
->> Fixes: 6aef699a7d7e ("iio: light: add driver for MAX44009")
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Don't use of_match_ptr() unless you are absolutely sure no other firmware
-> route will make use of the of_match_table.
-> 
-> In this particular case ACPI using PRP0001 is broken by that macro.
+On Sat, 11 Mar 2023 12:14:57 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-It's not broken because there was no matching via PRP0001 due to missing
-table.
+> The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+> certain data unused:
+>=20
+>   drivers/iio/proximity/sx9500.c:1039:34: error: =E2=80=98sx9500_of_match=
+=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> 
-> So good to set the of_match_table, but make sure to always set it
-> and hence you don't need the __maybe_unused.
+Hi Krysztof
 
-So you want to add PRP0001? We can, the fix is for different issue, though.
+Thanks for looking at these warnings.=20
 
-Best regards,
-Krzysztof
+Drop the protection macros instead.  The tables are trivial in size and
+the of_match_ptr() breaks some ways this driver can be used.
+ACPI_PTR() isn't as bad, but is pretty much pointless given this size of
+the array.=20
+
+Jonathan
+
+
+> ---
+>  drivers/iio/proximity/sx9500.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/iio/proximity/sx9500.c b/drivers/iio/proximity/sx950=
+0.c
+> index 8794e75e5bf9..840db1953998 100644
+> --- a/drivers/iio/proximity/sx9500.c
+> +++ b/drivers/iio/proximity/sx9500.c
+> @@ -1036,13 +1036,13 @@ static const struct acpi_device_id sx9500_acpi_ma=
+tch[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(acpi, sx9500_acpi_match);
+> =20
+> -static const struct of_device_id sx9500_of_match[] =3D {
+> +static const struct of_device_id sx9500_of_match[] __maybe_unused =3D {
+>  	{ .compatible =3D "semtech,sx9500", },
+>  	{ }
+>  };
+>  MODULE_DEVICE_TABLE(of, sx9500_of_match);
+> =20
+> -static const struct i2c_device_id sx9500_id[] =3D {
+> +static const struct i2c_device_id sx9500_id[] __maybe_unused =3D {
+>  	{"sx9500", 0},
+>  	{ },
+>  };
 
