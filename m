@@ -2,157 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C926D6B5D26
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214766B5D27
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 16:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCKPGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 10:06:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59130 "EHLO
+        id S230263AbjCKPGR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 10:06:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59132 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCKPGK (ORCPT
+        with ESMTP id S229754AbjCKPGK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sat, 11 Mar 2023 10:06:10 -0500
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 984D9311C3;
+Received: from mail-oo1-xc2c.google.com (mail-oo1-xc2c.google.com [IPv6:2607:f8b0:4864:20::c2c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5601111E6CA
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:06:09 -0800 (PST)
+Received: by mail-oo1-xc2c.google.com with SMTP id u3-20020a4ad0c3000000b0052541ef0bafso1229723oor.5
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:06:09 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678547168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=QSjJSFKnSJ9NNZL9oVyJv4eP2OOu2hx/+ygM+UpA2Gk=;
+        b=R5gi8dNiXcO8VhEzWnGZ+j1QDnktS/fNhHnRz5EIzqAsQko/NXeD4amguP6U5pRbxT
+         YaU8ljLavK2ZKjct/VC7ZlN25yDbjQgGe5z7dkIq0kLgClkbAmYGhS8NgFEl2vPg34gx
+         ux8BPoH5tDkhwGPVFHk1ZXql3lXwxXtJEcvLfXmW/cFI1sOcWyNksw7992x7Y85bLAC9
+         w19g0q9RR54pHTdoaizS3hbet8DLhnbgeQT07H9c41LKRveLqVo93h1A93WbpIoJOUPq
+         9bMDZktPQ4y6Umct1tGpd6Hed7X6DeCsknMu+iAogSMkPzwTJ/megjUy/aHcK5TTJUjm
+         hgYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678547168;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QSjJSFKnSJ9NNZL9oVyJv4eP2OOu2hx/+ygM+UpA2Gk=;
+        b=rvzyPaolmkqhwoJxQPdM/TMrHaB/wpBrhxRiGOZah+/bfT9PCPkiAUsBamGXBYseQo
+         ht17m+gMJyII7YRQq9CihxKMlfWlFhGG/5P3/vMYVIiAjRDoXw6qtznr4g2Q64eA5CCq
+         wN6DKO8BCdL5NTHVYsiIoZVem8XGi4iNKqSFCGSkCjH7D3LE67QgX7EUsvWGIT3qkkGl
+         PCRztY2l5e+O8LoKdxE2G5b5v4t/f4wN/B4QufnwsUfk6Yf+zZ3QZScs4ryK1Cd6E/zC
+         WhTBcSxuN92snixbbzSB6wC/GtHtBraG6SNpueOeh4gb/3lgI/ioRKmtJSUN0G8Nkh+G
+         Np9w==
+X-Gm-Message-State: AO0yUKVbu7E6Fx1za3GxZQR5exOvhIYXAF9M3o63anlxv9AFbu//Xp8T
+        840iVBYCMmvCezkKFllQBcCo1A==
+X-Google-Smtp-Source: AK7set8wgUqiaZeZ2snB6JPbJ/8K6anS+l6yd/zrihTWdRMWzgZwMR96bH6fkwKpnWCc1kTMEiavnw==
+X-Received: by 2002:a4a:c183:0:b0:51f:fa7e:3804 with SMTP id w3-20020a4ac183000000b0051ffa7e3804mr12287503oop.8.1678547168626;
         Sat, 11 Mar 2023 07:06:08 -0800 (PST)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 250D91EC0501;
-        Sat, 11 Mar 2023 16:06:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678547167;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=i83jfo39n7QMWxUoY3tEAV03lUsmodN+NDXkdxSgb/8=;
-        b=SggQnHUgQJgx3LqZReMr0kMmCymGL3wmgRsic7eHnZ0lKfbKfBbtV3o/gIij9K4QAzCZI/
-        ewqsr3IuyHt2IdnynzYStZidsPtO5oYVJBw6cX88UZd5t5g5YELH+rP2ZHr4CKEb2PaLr+
-        DZUyBLy+vG75cHJywPqFlYmuMf3DEuQ=
-Date:   Sat, 11 Mar 2023 16:06:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Rick Edgecombe <rick.p.edgecombe@intel.com>
-Cc:     x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-mm@kvack.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        Arnd Bergmann <arnd@arndb.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Balbir Singh <bsingharora@gmail.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Eugene Syromiatnikov <esyr@redhat.com>,
-        Florian Weimer <fweimer@redhat.com>,
-        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Kees Cook <keescook@chromium.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Weijiang Yang <weijiang.yang@intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        John Allen <john.allen@amd.com>, kcc@google.com,
-        eranian@google.com, rppt@kernel.org, jamorris@linux.microsoft.com,
-        dethoma@microsoft.com, akpm@linux-foundation.org,
-        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
-        david@redhat.com, debug@rivosinc.com,
-        Yu-cheng Yu <yu-cheng.yu@intel.com>
-Subject: Re: [PATCH v7 39/41] x86: Add PTRACE interface for shadow stack
-Message-ID: <ZAyY2mor+HJAO1ht@zn.tnic>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-40-rick.p.edgecombe@intel.com>
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id x67-20020a4a4146000000b00525240c6149sm1092732ooa.31.2023.03.11.07.06.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 07:06:07 -0800 (PST)
+Date:   Sat, 11 Mar 2023 10:06:05 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     wim@linux-watchdog.org, linux-watchdog@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Demetrotion <pdemetrotion@winsystems.com>,
+        techsupport@winsystems.com
+Subject: Re: [PATCH] watchdog: ebc-c384_wdt: Migrate to the regmap API
+Message-ID: <ZAyY3VGlo4N4SLZQ@fedora>
+References: <20230311004404.62980-1-william.gray@linaro.org>
+ <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="b+Kv2GvGpypcTEIM"
 Content-Disposition: inline
-In-Reply-To: <20230227222957.24501-40-rick.p.edgecombe@intel.com>
+In-Reply-To: <b65233f4-c8e2-435d-8321-03cc5f6b1c3d@roeck-us.net>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 02:29:55PM -0800, Rick Edgecombe wrote:
-> The only downside to not having a generic supervisor xfeature regset,
-> is that apps need to be enlightened of any new supervisor xfeature
-> exposed this way (i.e. they can't try to have generic save/restore
-> logic). But maybe that is a good thing, because they have to think
-> through each new xfeature instead of encountering issues when new a new
 
-Remove the first "new".
+--b+Kv2GvGpypcTEIM
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> supervisor xfeature was added.
-> 
-> By adding a shadow stack regset, it also has the effect of including the
-> shadow stack state in a core dump, which could be useful for debugging.
-> 
-> The shadow stack specific xstate includes the SSP, and the shadow stack
-> and WRSS enablement status. Enabling shadow stack or wrss in the kernel
-						       ^^^^
+On Sat, Mar 11, 2023 at 06:04:08AM -0800, Guenter Roeck wrote:
+> On Fri, Mar 10, 2023 at 07:44:04PM -0500, William Breathitt Gray wrote:
+> > The regmap API supports IO port accessors so we can take advantage of
+> > regmap abstractions rather than handling access to the device registers
+> > directly in the driver.
+> >=20
+> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> > Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+>=20
+> I assume you did, but just to be sure: Did you test this on hardware ?
 
-"WRSS"
+I've only done a build test; I no longer have access to a WINSYSTEMS
+EBC-C384 motherboard to test this on real hardware. I've CC'd Paul
+Demetrotion and the WINSYSTEMS tech support list to this thread as
+hopefully one of the WINSYSTEMS engineers may help us test this.
 
-> involves more than just flipping the bit. The kernel is made aware that
-> it has to do extra things when cloning or handling signals. That logic
-> is triggered off of separate feature enablement state kept in the task
-> struct. So the flipping on HW shadow stack enforcement without notifying
-> the kernel to change its behavior would severely limit what an application
-> could do without crashing, and the results would depend on kernel
-> internal implementation details. There is also no known use for controlling
-> this state via prtace today. So only expose the SSP, which is something
+> > @@ -37,43 +40,54 @@ module_param(timeout, uint, 0);
+> >  MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default=3D"
+> >  	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
+> > =20
+> > +static const struct regmap_range ebc_c384_wdt_wr_ranges[] =3D {
+> > +	regmap_reg_range(0x1, 0x2),
+>=20
+> Any reasons for not using defines ?
 
-Unknown word [prtace] in commit message.
-Suggestions: ['ptrace'
+I feel direct addresses are somewhat clearer in this context. Regmap
+configurations describe the address range of valid read and write
+operations. Although the range for this device is simple, other devices
+might have multiple ranges with gaps of invalid addresses.
 
-> that userspace already has indirect control over.
-> 
-> Tested-by: Pengfei Xu <pengfei.xu@intel.com>
-> Tested-by: John Allen <john.allen@amd.com>
-> Tested-by: Kees Cook <keescook@chromium.org>
-> Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-> Reviewed-by: Kees Cook <keescook@chromium.org>
-> Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-> Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
+For example, our valid write address range is 0x1-0x2 here:
 
-I think your SOB should come last:
+    regmap_reg_range(0x1, 0x2)
 
-...
-Signed-off-by: Yu-cheng Yu <yu-cheng.yu@intel.com>
-Co-developed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Which is much clearer than trying to match these to register defines:
 
-Pls check whole set.
+    regmap_reg_range(CFG_REG, PET_REG)
 
+Because it's not immediately clear that CFG_REG to PET_REG is a
+contiguous address range.
 
-> +#ifdef CONFIG_X86_USER_SHADOW_STACK
-> +int ssp_active(struct task_struct *target, const struct user_regset *regset)
-> +{
-> +	if (target->thread.features & ARCH_SHSTK_SHSTK)
-> +		return regset->n;
-> +
-> +	return 0;
-> +}
-> +
-> +int ssp_get(struct task_struct *target, const struct user_regset *regset,
-> +	    struct membuf to)
-> +{
-> +	struct fpu *fpu = &target->thread.fpu;
-> +	struct cet_user_state *cetregs;
-> +
-> +	if (!boot_cpu_has(X86_FEATURE_USER_SHSTK))
+> > +};
+> > +static const struct regmap_access_table ebc_c384_wdt_wr_table =3D {
+> > +	.yes_ranges =3D ebc_c384_wdt_wr_ranges,
+> > +	.n_yes_ranges =3D ARRAY_SIZE(ebc_c384_wdt_wr_ranges),
+> > +};
+> > +static const struct regmap_config ebc_c384_wdt_regmap_config =3D {
+> > +	.reg_bits =3D 8,
+> > +	.reg_stride =3D 1,
+> > +	.val_bits =3D 8,
+> > +	.io_port =3D true,
+> > +	.max_register =3D 0x2,
+>=20
+> Any reason for not using a define ?
 
-check_for_deprecated_apis: WARNING: arch/x86/kernel/fpu/regset.c:193: Do not use boot_cpu_has() - use cpu_feature_enabled() instead.
+Same reason as above: `max_register =3D 0x2` is already clear enough and
+`max_register =3D EBC_C384_MAX_REGISTER` wouldn't add any substantial
+clarity.
 
-Check your whole set pls.
+> > +	.wr_table =3D &ebc_c384_wdt_wr_table,
+> > +};
+> > +
+> >  static int ebc_c384_wdt_start(struct watchdog_device *wdev)
+> >  {
+> > +	struct regmap *const map =3D wdev->driver_data;
+>=20
+> Please use watchdog_get_drvdata() and watchdog_set_drvdata() when accessi=
+ng
+> or setting watchdog driver data.
+>=20
+> Guenter
 
--- 
-Regards/Gruss,
-    Boris.
+I'll adjust the driver_data interactions in my v2 submission to utilize
+watchdog_get_drvdata() and watchdog_set_drvdata().
 
-https://people.kernel.org/tglx/notes-about-netiquette
+William Breathitt Gray
+
+--b+Kv2GvGpypcTEIM
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAyY3QAKCRC1SFbKvhIj
+K7ZYAP0ame//zn/G+yvSJeRUMTvZqJhg5hNgtPG5kKZDam+8mgEA2zNrGImNqwNe
+bjBGtRFEADurS58TbPdwdjn8yZ+9QAE=
+=zCZs
+-----END PGP SIGNATURE-----
+
+--b+Kv2GvGpypcTEIM--
