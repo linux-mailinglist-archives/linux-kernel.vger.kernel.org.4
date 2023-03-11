@@ -2,118 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B1366B5BF5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:47:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC7806B5BF6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:50:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230509AbjCKMra (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:47:30 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37956 "EHLO
+        id S229821AbjCKMuk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:50:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229757AbjCKMr3 (ORCPT
+        with ESMTP id S229541AbjCKMui (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:47:29 -0500
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96DF611CBC1;
-        Sat, 11 Mar 2023 04:47:27 -0800 (PST)
-Received: by mail-wm1-x335.google.com with SMTP id l7-20020a05600c1d0700b003eb5e6d906bso5063442wms.5;
-        Sat, 11 Mar 2023 04:47:27 -0800 (PST)
+        Sat, 11 Mar 2023 07:50:38 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2380CC362C
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:50:36 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id r15so4082524edq.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:50:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678538846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=JG+XDDsuS0ZSnVTC9Y0KL7M1HHk6RFW1/rF+Zc3EvoU=;
-        b=Lk25gEEq+pGPmf7NgSfolMBtNmooCjRuWdWhl8XJOARRdE2hr/HJFxxnYIB4INAFJm
-         +ZJfXopXL6VX21ZjBVvPOU1vJqQbpP6BNw98OSrnx5BKdsdCWMaWVaUaiSeiEEwjpEmC
-         AIRPFl8MP8xgm/fCnZeowKYtzfahh8hLbi1WFRHzcxxBWFk3MvqViNhjVO5wi6XL32M9
-         ZezRt+arpjqEKvnw7JKOOWFGmXBAQxkolWn7PwfdYQg2uMLlmPnFivWHdaTUUcEuGM68
-         IJbOqED71Gt+wMZ5gS2n+GtYJ0k1N7B4eb+4Oqe4ePvIJnyTFB/o+dG9+i9ZYuOW6NNO
-         iuoQ==
+        d=gmail.com; s=20210112; t=1678539034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=SBjZYb5OoxKrZVN1LuY9aWsQyO7jN0oF5M/Ac3rt8Aw=;
+        b=KOKA1oHwHelUWVx1tvFJPO3xRp1FrKSu0qgOUbg3Cm5CBweajMR5S9kytIrx1s9HHN
+         H3lNGGUmh/qxyT9GV6ssLIjDrASksCMShLpitZtRgIv9Ic9P+lG0lKTOmM1V0WRVKWPl
+         RgHn9KuzkPLHmYzzgOn8vzUIzfqTpDp+iWnWSpDM40PAQqCchKoQpbJfpbbsgdqbwRmJ
+         sRWRqoe3imxdgibqbfMXKHxANvSBOdyU3pisTGXXL4ouy/1H+4GAlx4tLtuPiVeCdr7b
+         oyM4tz9Wp4dpofoRxG2OTanXnBf9nK7pSfMvnL3t9rCJ/GiD+S3waWy/PpsuHyNjiJmZ
+         26hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678538846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JG+XDDsuS0ZSnVTC9Y0KL7M1HHk6RFW1/rF+Zc3EvoU=;
-        b=E+KCGUswRlTac/J4nnaAynt4t/NoyMhB2oj+AjL3LqT+xE/Hzl+Cnerc4Qm9JEq3U9
-         aTN8Oqhwued9b1tGHyhzb6jb5odZPlYPR0AnaNvIfzYPLKa6OvoQF0ipS+7DrgOIUfZO
-         IGTtC9cSbIjarngoxLFkawVxbuKhSDTqLgKlL26iSgWehyaEBN9kY5yIPq51/xatxkd7
-         cZoyJ4y11k9PLLqYD8oaZJeGF1xA8CftOOBvJd5kB4LOaqDyO31t+HLeoTeETgYo7N70
-         i/jdlHYMd6Xv3dIUlzS+7VwRyawH9cSGj42rVcnBVcuDZoJBLVYyIBw0lBwEOr5JzPpi
-         gT2A==
-X-Gm-Message-State: AO0yUKVggnxS6FRwfuYm5KnmiSeFsKZz/dSmOyC3nIYDQ4zmDkad8EN0
-        mdyfneAoTINijqmj44D9XoI=
-X-Google-Smtp-Source: AK7set9JSjHy6wHUEUe39Ir6qYIqFyQG3TiAh/Chj112lk3wx1xNetuk+R2dS8eYeGVyrF6BUVSkPA==
-X-Received: by 2002:a05:600c:35c4:b0:3df:9858:c039 with SMTP id r4-20020a05600c35c400b003df9858c039mr3596885wmq.14.1678538846080;
-        Sat, 11 Mar 2023 04:47:26 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id d12-20020a05600c3acc00b003e2052bad94sm2711439wms.33.2023.03.11.04.47.25
+        d=1e100.net; s=20210112; t=1678539034;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SBjZYb5OoxKrZVN1LuY9aWsQyO7jN0oF5M/Ac3rt8Aw=;
+        b=RlXQW0TUojZIvSZDnqqNNnj+sc/dOBU4KQbXd9k5HEEJDaAuQSaxl4maHX4lbTmEfJ
+         l/kHiiqOD7HMTwNCoZOsIJYbyVRjNFmR388GGG17nhhpx7ajK0ift8otHhHjcymo/Vf0
+         LBja/ZTlj3CSLP9fBck7tc3iK9MShdeM7bB3qapan+O0mtuJ/6sP3HufrXNSD71SHwkv
+         35RIzAaTCNck16ojG+tGnbWrKXBYxq4SAa9LHhJ9cz2hAnni0YFRVxgo3MNkiUUj3v/o
+         bNtnHOyCLJtrIQf5fF7i4sBxRwA55rieQaTG2sy5iMEDiKbhICmpTuUeoR/HpR/tB9ro
+         rW3w==
+X-Gm-Message-State: AO0yUKVNgyNN8TLSfzh1vMp4YBWWVpsNMwQAJH851MgUwBCSYrYswAZO
+        3lNc27VfPRx4cHC04R0AfAI=
+X-Google-Smtp-Source: AK7set8Bjo77NnsV6VY0w/OqDBdQ5H+daGC5HzeMtg4lHsEzcw5++12ulnluQB5/V5mh/4tRX6BxIw==
+X-Received: by 2002:a05:6402:5187:b0:4ad:6f56:a362 with SMTP id q7-20020a056402518700b004ad6f56a362mr6558536edd.4.1678539034534;
+        Sat, 11 Mar 2023 04:50:34 -0800 (PST)
+Received: from ivan-HLYL-WXX9.. ([37.252.81.68])
+        by smtp.gmail.com with ESMTPSA id d11-20020a056402400b00b004fadc041e13sm369557eda.42.2023.03.11.04.50.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 04:47:25 -0800 (PST)
-Date:   Sat, 11 Mar 2023 12:47:24 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 5.15 000/136] 5.15.100-rc1 review
-Message-ID: <ZAx4XI1QOYyHPA2K@debian>
-References: <20230310133706.811226272@linuxfoundation.org>
+        Sat, 11 Mar 2023 04:50:34 -0800 (PST)
+From:   Ivan Orlov <ivan.orlov0322@gmail.com>
+To:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
+        linux_oss@crudebyte.com
+Cc:     Ivan Orlov <ivan.orlov0322@gmail.com>,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org,
+        skhan@linuxfoundation.org, himadrispandya@gmail.com,
+        syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+Subject: [PATCH v3] 9P FS: Fix wild-memory-access write in v9fs_get_acl
+Date:   Sat, 11 Mar 2023 16:50:25 +0400
+Message-Id: <20230311125025.24605-1-ivan.orlov0322@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310133706.811226272@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+KASAN reported the following issue:
+[   36.825817][ T5923] BUG: KASAN: wild-memory-access in v9fs_get_acl+0x1a4/0x390
+[   36.827479][ T5923] Write of size 4 at addr 9fffeb37f97f1c00 by task syz-executor798/5923
+[   36.829303][ T5923]
+[   36.829846][ T5923] CPU: 0 PID: 5923 Comm: syz-executor798 Not tainted 6.2.0-syzkaller-18302-g596b6b709632 #0
+[   36.832110][ T5923] Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 01/21/2023
+[   36.834464][ T5923] Call trace:
+[   36.835196][ T5923]  dump_backtrace+0x1c8/0x1f4
+[   36.836229][ T5923]  show_stack+0x2c/0x3c
+[   36.837100][ T5923]  dump_stack_lvl+0xd0/0x124
+[   36.838103][ T5923]  print_report+0xe4/0x4c0
+[   36.839068][ T5923]  kasan_report+0xd4/0x130
+[   36.840052][ T5923]  kasan_check_range+0x264/0x2a4
+[   36.841199][ T5923]  __kasan_check_write+0x2c/0x3c
+[   36.842216][ T5923]  v9fs_get_acl+0x1a4/0x390
+[   36.843232][ T5923]  v9fs_mount+0x77c/0xa5c
+[   36.844163][ T5923]  legacy_get_tree+0xd4/0x16c
+[   36.845173][ T5923]  vfs_get_tree+0x90/0x274
+[   36.846137][ T5923]  do_new_mount+0x25c/0x8c8
+[   36.847066][ T5923]  path_mount+0x590/0xe58
+[   36.848147][ T5923]  __arm64_sys_mount+0x45c/0x594
+[   36.849273][ T5923]  invoke_syscall+0x98/0x2c0
+[   36.850421][ T5923]  el0_svc_common+0x138/0x258
+[   36.851397][ T5923]  do_el0_svc+0x64/0x198
+[   36.852398][ T5923]  el0_svc+0x58/0x168
+[   36.853224][ T5923]  el0t_64_sync_handler+0x84/0xf0
+[   36.854293][ T5923]  el0t_64_sync+0x190/0x194
 
-On Fri, Mar 10, 2023 at 02:42:02PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.100 release.
-> There are 136 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
+Calling '__v9fs_get_acl' method in 'v9fs_get_acl' creates the
+following chain of function calls:
 
-Build test (gcc version 12.2.1 20230210):
-mips: 62 configs -> no failure
-arm: 99 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+__v9fs_get_acl
+	v9fs_fid_get_acl
+		v9fs_fid_xattr_get
+			p9_client_xattrwalk
 
-Boot test:
-x86_64: Failed to boot on my test laptop.
-x86_64: Booted on qemu. No regression. [1]
-arm64: Booted on rpi4b (4GB model). No regression. [2]
+Function p9_client_xattrwalk accepts a pointer to u64-typed
+variable attr_size and puts some u64 value into it. However,
+after the executing the p9_client_xattrwalk, in some circumstances
+we assign the value of u64-typed variable 'attr_size' to the
+variable 'retval', which we will return. However, the type of
+'retval' is ssize_t, and if the value of attr_size is larger
+than SSIZE_MAX, we will face the signed type overflow. If the
+overflow occurs, the result of v9fs_fid_xattr_get may be
+negative, but not classified as an error. When we try to allocate
+an acl with 'broken' size we receive an error, but don't process
+it. When we try to free this acl, we face the 'wild-memory-access'
+error (because it wasn't allocated).
 
-Note:
-Failed to boot on my test laptop, just black screen.
-Bisect pointed to 4eb6789f9177 ("drm/i915: Don't use BAR mappings for ring buffers with LLC")
-which was added in v5.15.99. I failed to test v5.15.99 due to lack of time. :(
+This patch will add new condition to the 'v9fs_fid_xattr_get'
+function, so it will return an EOVERFLOW error if the 'attr_size'
+is larger than SSIZE_MAX.
 
+In this version of the patch I simplified the condition.
 
-[1]. https://openqa.qa.codethink.co.uk/tests/3075
-[2]. https://openqa.qa.codethink.co.uk/tests/3084
+In previous (v2) version of the patch I removed explicit type conversion
+and added separate condition to check the possible overflow and return
+an error (in v1 version I've just modified the existing condition).
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+Tested via syzkaller.
 
+Suggested-by: Christian Schoenebeck <linux_oss@crudebyte.com>
+Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
+Link: https://syzkaller.appspot.com/bug?id=fbbef66d9e4d096242f3617de5d14d12705b4659
+Signed-off-by: Ivan Orlov <ivan.orlov0322@gmail.com>
+---
+ fs/9p/xattr.c | 8 +++++---
+ 1 file changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
+index 50f7f3f6b55e..1974a38bce20 100644
+--- a/fs/9p/xattr.c
++++ b/fs/9p/xattr.c
+@@ -35,10 +35,12 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
+ 		return retval;
+ 	}
+ 	if (attr_size > buffer_size) {
+-		if (!buffer_size) /* request to get the attr_size */
+-			retval = attr_size;
+-		else
++		if (buffer_size)
+ 			retval = -ERANGE;
++		else if (attr_size > SSIZE_MAX)
++			retval = -EOVERFLOW;
++		else /* request to get the attr_size */
++			retval = attr_size;
+ 	} else {
+ 		iov_iter_truncate(&to, attr_size);
+ 		retval = p9_client_read(attr_fid, 0, &to, &err);
 -- 
-Regards
-Sudip
+2.34.1
+
