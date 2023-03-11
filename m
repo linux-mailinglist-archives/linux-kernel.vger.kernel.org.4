@@ -2,102 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B35C6B58BD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:48:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3A2056B58C7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229654AbjCKFsE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:48:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34474 "EHLO
+        id S229907AbjCKFua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:50:30 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229455AbjCKFsB (ORCPT
+        with ESMTP id S229636AbjCKFuZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 00:48:01 -0500
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAB1193C3;
-        Fri, 10 Mar 2023 21:47:59 -0800 (PST)
-Received: by mail-pl1-x62e.google.com with SMTP id ix20so1297683plb.3;
-        Fri, 10 Mar 2023 21:47:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678513679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0VxGy4Glt2OF0QcpI3muqQxjIyFPMSXr0lZgr8KZ/Ro=;
-        b=qs4M8oUz5kFNHDWGNy/BGsWt4U31ZoSE620q21saLBWCyVrZ5Y+Q4MozGsX4BJmoXd
-         dWWj9uowCd/ywPYT1UFDcLsW/680mCFMv1qFZTsDqV9mf2ILcxkJPTGfP/cxk/qeJBQM
-         GQ32HqwtPOj4RksKHjvdHlrNUEB3QBKcSAvpZ+B4dXoUYa5RADNTS5/PA4SmlGfwq6bp
-         CQQdjGtL8GIBmD1wmOVekjLeC9IA29AzSOY0yCzLyls2v5xnKgMcYSHbashA+bxcLbwr
-         M8MPHgZq4tsZ7OL13FeLql0xIETgVBqtkn9D5UPPxi6OxR7jYQ2St+x5rFuZ0C7Q1qLq
-         bdxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678513679;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0VxGy4Glt2OF0QcpI3muqQxjIyFPMSXr0lZgr8KZ/Ro=;
-        b=qeTjhNBtuMch/3bPNzyH2mr5dtemSx/tsi+y0LrpxipR+DaArykuuaGn0PMEWh8TkU
-         2t2DFoDfijpq93D4fMk6iriZ92XgG/Y7t/8k+cmsjhtYU6cQ9v3rq5tVH/3JKc7GLlzS
-         Vi3x1PBaa4lxRd3q7SSmBMr1seFa8aldzhfHHEQab53x2cF/kLcSeECD0syY3le0f2T0
-         FQZ+K6fpsUFmS84iCvNRwXiicLwHem3FC0jHsF2/YT/ioTRZ80zoKOsk1gMRJyL4CUvD
-         AiDYE5NDNjoKtzXxor6M9IPTA89zisEQSZ6939aPt8blZf0FuyVXpHDk/6krm0pO17Wi
-         5Ytw==
-X-Gm-Message-State: AO0yUKWx3lHUBL5x3GclmH8VuhxNNc7hceuLK45jJk0fed44YkYejHCy
-        sH2ONl4PNL1sdy4Ijq16Ef+OM7lRmJxSmD9hHxCO1WkW6tvmRw==
-X-Google-Smtp-Source: AK7set91eKztEbHw235fJwsfpaZOTiapoa2WTLhMBSufJ7hiRdDTdOAVWb0fQw2n4H5se1LkeXRqCgkQdYqnpi7ighE=
-X-Received: by 2002:a17:90a:4109:b0:234:889e:d88d with SMTP id
- u9-20020a17090a410900b00234889ed88dmr10377045pjf.5.1678513679139; Fri, 10 Mar
- 2023 21:47:59 -0800 (PST)
+        Sat, 11 Mar 2023 00:50:25 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12270659F;
+        Fri, 10 Mar 2023 21:50:25 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BC03CB824BC;
+        Sat, 11 Mar 2023 05:50:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 58D9CC433D2;
+        Sat, 11 Mar 2023 05:50:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678513822;
+        bh=2vUgG6NICV1m4O/p0F0xew9DlmJEngCgIlpFHNCYXUY=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=m6o0aLHFdjKjU7VaoHXPrclCH+s8Wen43kmwO/BGC+C69QVSIufzsrBkuNNpfLLv9
+         2brDFCYLqCIpl4+OrDUmBQKuOOZm1Pwr6clK1UwLRhSiw0PtrwryGk+/95CNhF3297
+         lDr+TCZf5zqv/dfI5A8C4/mDLP0lKIfp8AstP/e4czD3SgyinpeGTqcHIK91TT2aYq
+         WzgVXDUT08jCNN6MopEbL/llZ7VQUHCOdK4iIrLkHMe4o7QTjpKXj9DaGZc0tDQBZ1
+         yc/ZERATpw1i0ctv6Y99ME9fdTRNwSVeZLNgEWJpmcTnN4FKDQccn4RYAe8XoFrRAE
+         UACulKWxF4dsg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 3F570E61B65;
+        Sat, 11 Mar 2023 05:50:22 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-References: <20230207043318.23842-1-mmyangfl@gmail.com> <nycvar.YFH.7.76.2303101506030.1142@cbobk.fhfr.pm>
-In-Reply-To: <nycvar.YFH.7.76.2303101506030.1142@cbobk.fhfr.pm>
-From:   Yangfl <mmyangfl@gmail.com>
-Date:   Sat, 11 Mar 2023 13:47:22 +0800
-Message-ID: <CAAXyoMPMbYCV7br9DJn_KCq68RLnimockqU0uvsO8maT3ROxTA@mail.gmail.com>
-Subject: Re: [PATCH v4 0/4] HID: kye: Add support for all kye tablets
-To:     Jiri Kosina <jikos@kernel.org>
-Cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net v2 0/8] mptcp: fixes for 6.3
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167851382225.22535.4511360531108483772.git-patchwork-notify@kernel.org>
+Date:   Sat, 11 Mar 2023 05:50:22 +0000
+References: <20230227-upstream-net-20230227-mptcp-fixes-v2-0-47c2e95eada9@tessares.net>
+In-Reply-To: <20230227-upstream-net-20230227-mptcp-fixes-v2-0-47c2e95eada9@tessares.net>
+To:     Matthieu Baerts <matthieu.baerts@tessares.net>
+Cc:     mptcp@lists.linux.dev, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, martineau@kernel.org,
+        benbjiang@tencent.com, imagedong@tencent.com,
+        mengensun@tencent.com, shuah@kernel.org, fw@strlen.de,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, cpaasch@apple.com,
+        stable@vger.kernel.org, geliang.tang@suse.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jiri Kosina <jikos@kernel.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8810=E6=97=A5=
-=E5=91=A8=E4=BA=94 22:06=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Tue, 7 Feb 2023, David Yang wrote:
->
-> > This series refactor kye tablet descriptor fixup routine, by using a
-> > template and filling parameters on the fly, and add support for all
-> > possible kye tablets.
-> > ---
-> > v2: fix missing rsize assignment
-> > v3: fix geometry
-> > v4: split patches
-> >
-> > David Yang (4):
-> >   HID: kye: Rewrite tablet descriptor fixup routine
-> >   HID: kye: Generate tablet fixup descriptors on the fly
-> >   HID: kye: Sort kye devices
-> >   HID: kye: Add support for all kye tablets
-> >
-> >  drivers/hid/hid-ids.h    |   9 +-
-> >  drivers/hid/hid-kye.c    | 917 +++++++++++++++++----------------------
-> >  drivers/hid/hid-quirks.c |  14 +-
-> >  3 files changed, 414 insertions(+), 526 deletions(-)
->
-> Now queued in hid.git#for-6.4/kye, thanks David.
->
-> --
-> Jiri Kosina
-> SUSE Labs
->
+Hello:
 
-Thanks. But seems you missed the last patch.
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu, 09 Mar 2023 15:49:56 +0100 you wrote:
+> Patch 1 fixes a possible deadlock in subflow_error_report() reported by
+> lockdep. The report was in fact a false positive but the modification
+> makes sense and silences lockdep to allow syzkaller to find real issues.
+> The regression has been introduced in v5.12.
+> 
+> Patch 2 is a refactoring needed to be able to fix the two next issues.
+> It improves the situation and can be backported up to v6.0.
+> 
+> [...]
+
+Here is the summary with links:
+  - [net,v2,1/8] mptcp: fix possible deadlock in subflow_error_report
+    https://git.kernel.org/netdev/net/c/b7a679ba7c65
+  - [net,v2,2/8] mptcp: refactor passive socket initialization
+    https://git.kernel.org/netdev/net/c/3a236aef280e
+  - [net,v2,3/8] mptcp: use the workqueue to destroy unaccepted sockets
+    https://git.kernel.org/netdev/net/c/b6985b9b8295
+  - [net,v2,4/8] mptcp: fix UaF in listener shutdown
+    https://git.kernel.org/netdev/net/c/0a3f4f1f9c27
+  - [net,v2,5/8] selftests: mptcp: userspace pm: fix printed values
+    https://git.kernel.org/netdev/net/c/840742b7ed0e
+  - [net,v2,6/8] mptcp: add ro_after_init for tcp{,v6}_prot_override
+    https://git.kernel.org/netdev/net/c/822467a48e93
+  - [net,v2,7/8] mptcp: avoid setting TCP_CLOSE state twice
+    https://git.kernel.org/netdev/net/c/3ba14528684f
+  - [net,v2,8/8] mptcp: fix lockdep false positive in mptcp_pm_nl_create_listen_socket()
+    https://git.kernel.org/netdev/net/c/cee4034a3db1
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
