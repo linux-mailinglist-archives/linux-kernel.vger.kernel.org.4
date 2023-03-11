@@ -2,88 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87ACC6B57EA
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:00:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 641226B57EE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbjCKDAj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 22:00:39 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
+        id S229637AbjCKDBf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 22:01:35 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37282 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbjCKDAg (ORCPT
+        with ESMTP id S229471AbjCKDBb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 22:00:36 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEB4E1151D2;
-        Fri, 10 Mar 2023 19:00:35 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 8B4C5B8248E;
-        Sat, 11 Mar 2023 03:00:34 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C661C433EF;
-        Sat, 11 Mar 2023 03:00:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678503633;
-        bh=rUdvhWn70PfTjrZiWuFzfL6i0ilNZGpzMShdJagugC8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=shgZQjHCKg4hSudPSRbA25wDHiEpyAe0nesRMePgXkjDR8z9kOxgHBGpQTgO3AMka
-         sjl/QAN1M5suHktsHHcJ8rZWaEnj+c+by5E5HThBQnpHAjKwFVns7evS6Yi4QRsr4D
-         AWTUFgLGEP4CGEveIkTdriix9/oA110VnSyG7xC2HF++iNS2qa8w0qMhS+x5C64Fxt
-         xIgLXyRgT+sgEUXcwjza/Jx2BnZ4U7zVM12qiPbnoTPz+bXW8ySpsx1v/RO77tdQPh
-         O9ltFz1OHJQUphrKXuWJnPigoGSUoWYkryciPMK1l47OKvnY4Y3saQHt3PnkUniuBm
-         SctwoSqIjvpcg==
-Received: by mail-ua1-f49.google.com with SMTP id l24so4813317uac.12;
-        Fri, 10 Mar 2023 19:00:33 -0800 (PST)
-X-Gm-Message-State: AO0yUKWePQMfs0ZXcGnc2+L/PtBIEs1Bm2fC1LOTYZfDrhZW9SOZ+aiS
-        fRXOeXri0avv21xaCCSt8m4aYRlDIQEPCiBCvw==
-X-Google-Smtp-Source: AK7set8xgX8DtsrAL+iBoo8IO5Ld3oM1dW73gRD2fp0NVF/t5kL088eW3IC5QV8kdWJ7Ht4S+A/RIs7rb2s/5lO77Pc=
-X-Received: by 2002:a1f:b44c:0:b0:41d:acb5:6c1c with SMTP id
- d73-20020a1fb44c000000b0041dacb56c1cmr17481409vkf.2.1678503632076; Fri, 10
- Mar 2023 19:00:32 -0800 (PST)
+        Fri, 10 Mar 2023 22:01:31 -0500
+Received: from mail-oa1-f53.google.com (mail-oa1-f53.google.com [209.85.160.53])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159F71151F7;
+        Fri, 10 Mar 2023 19:01:30 -0800 (PST)
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-1755e639b65so8050844fac.3;
+        Fri, 10 Mar 2023 19:01:30 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678503689;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gU48w4BkL35qUGYQMDtLAo6zqXNIWKSjZ0txcGbB0lA=;
+        b=LrSoj0SWiWDchLT296fHBtU6gVV/I9AOhPWHfqn4O9iT2qFvharrdtFt/hH3ILQaHc
+         gmuQxiJCLn9RSYRB4J6hsmcqangyigBXBjBPsbMGyojv6JRFnEsTc5QfmZiifvsq/gDB
+         covsrSHcT/y8VLbQXxkh7YYK28bZfwPl2es5OgEUOnV1AYfbH3sludwz++NUj2qcTHO5
+         NLwFgKiXKuwTx/D8CXK8dosl+TNMscEmNrLjqVZKPu2/MxRWpfPs1Kdt/YLm0Ye3CBkN
+         eq2z2179b9sUcKktxHRi2u50Bp2JUdjWwzPYwUqqLR6GXX21BSurpA4lLUUxt/CQ970K
+         ikLg==
+X-Gm-Message-State: AO0yUKWTnUSvgg3dbpxIjL5v9+vk6DmsEmnh5ARVsaW9tMRI25tp2N95
+        R0L/jQci25iLlshP1wfiaVrpStPSYQ==
+X-Google-Smtp-Source: AK7set/cI+Eb97yyPps2W9b1GQ4PDnq8XbG2/ZD9c3srZRFWb6wnhcuYJen8/EjWfNsdNt/L8dZKgA==
+X-Received: by 2002:a05:6871:607:b0:176:1df2:4ed2 with SMTP id w7-20020a056871060700b001761df24ed2mr18870123oan.58.1678503689223;
+        Fri, 10 Mar 2023 19:01:29 -0800 (PST)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id e3-20020a056870c34300b0017280f7d653sm730261oak.35.2023.03.10.19.01.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 19:01:28 -0800 (PST)
+Received: (nullmailer pid 3263022 invoked by uid 1000);
+        Sat, 11 Mar 2023 03:01:27 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20230310144704.1542114-1-robh@kernel.org> <CACRpkda+aEUD7A2e-TfY3=yJG4L+P+Zh8G9U1K0xHHA-DxnJiA@mail.gmail.com>
-In-Reply-To: <CACRpkda+aEUD7A2e-TfY3=yJG4L+P+Zh8G9U1K0xHHA-DxnJiA@mail.gmail.com>
 From:   Rob Herring <robh@kernel.org>
-Date:   Fri, 10 Mar 2023 21:00:20 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqKSJXwJ20Mn=wua_7YwJ9nU4Xqq+b29mYvEw+JaoHEuhg@mail.gmail.com>
-Message-ID: <CAL_JsqKSJXwJ20Mn=wua_7YwJ9nU4Xqq+b29mYvEw+JaoHEuhg@mail.gmail.com>
-Subject: Re: [PATCH] gpio: Use of_property_read_bool() for boolean properties
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Bartosz Golaszewski <brgl@bgdev.pl>, devicetree@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Krishna Kurapati <quic_kriskura@quicinc.com>
+Cc:     ahalaney@redhat.com, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        linux-kernel@vger.kernel.org, Felipe Balbi <balbi@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, quic_ppratap@quicinc.com,
+        quic_shazhuss@quicinc.com, Andy Gross <agross@kernel.org>,
+        quic_wcheng@quicinc.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        quic_harshq@quicinc.com, linux-arm-msm@vger.kernel.org,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        quic_jackp@quicinc.com, quic_pkondeti@quicinc.com
+In-Reply-To: <20230310163420.7582-2-quic_kriskura@quicinc.com>
+References: <20230310163420.7582-1-quic_kriskura@quicinc.com>
+ <20230310163420.7582-2-quic_kriskura@quicinc.com>
+Message-Id: <167850338309.3256287.16131101568389793313.robh@kernel.org>
+Subject: Re: [PATCH 1/8] dt-bindings: usb: Add bindings for multiport
+ properties on DWC3 controller
+Date:   Fri, 10 Mar 2023 21:01:27 -0600
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 4:41=E2=80=AFPM Linus Walleij <linus.walleij@linaro=
-.org> wrote:
->
-> On Fri, Mar 10, 2023 at 3:47=E2=80=AFPM Rob Herring <robh@kernel.org> wro=
-te:
->
-> > It is preferred to use typed property access functions (i.e.
-> > of_property_read_<type> functions) rather than low-level
-> > of_get_property/of_find_property functions for reading properties.
-> > Convert reading boolean properties to to of_property_read_bool().
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
->
-> You are using of_property_present() rather than of_property_read_bool()
-> but I'm not picky about commit message details.
 
-ugg, well, it's the commit message that's correct. I missed updating
-this one to use of_property_read_bool().
+On Fri, 10 Mar 2023 22:04:13 +0530, Krishna Kurapati wrote:
+> Add bindings to indicate properties required to support multiport
+> on Snps Dwc3 controller.
+> 
+> Suggested-by: Bjorn Andersson <quic_bjorande@quicinc.com>
+> Signed-off-by: Krishna Kurapati <quic_kriskura@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++------
+>  1 file changed, 7 insertions(+), 6 deletions(-)
+> 
 
-Rob
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> Yours,
-> Linus Walleij
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/usb/snps,dwc3.yaml:90:5: [warning] wrong indentation: expected 6 but found 4 (indentation)
+
+dtschema/dtc warnings/errors:
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230310163420.7582-2-quic_kriskura@quicinc.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
