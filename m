@@ -2,124 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA2666B580F
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:27:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5146B5811
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:28:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229804AbjCKD1x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 22:27:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45156 "EHLO
+        id S229894AbjCKD2G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 22:28:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCKD1u (ORCPT
+        with ESMTP id S229827AbjCKD2D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 22:27:50 -0500
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B14712A4D3
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 19:27:49 -0800 (PST)
-Received: by mail-il1-f199.google.com with SMTP id d3-20020a056e02050300b00317999dcfb1so3706349ils.4
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 19:27:49 -0800 (PST)
+        Fri, 10 Mar 2023 22:28:03 -0500
+Received: from mail-oo1-xc36.google.com (mail-oo1-xc36.google.com [IPv6:2607:f8b0:4864:20::c36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68E7D1167C;
+        Fri, 10 Mar 2023 19:27:59 -0800 (PST)
+Received: by mail-oo1-xc36.google.com with SMTP id e12-20020a4ae0cc000000b00525034ca5e9so1094215oot.0;
+        Fri, 10 Mar 2023 19:27:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678505278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=73ltC76ja99SXS0x3lMZJ2kFcQpVMIC8+o6DWphx0as=;
+        b=WAE1M2osG3fr3u4cGgm8Cir0jz9AXvwKp9V6C24VF9BjrIjP50T/2Y8KVzjT6kaDFc
+         0cpyud3g2DeCqmMLz3LeitTcOcUTJJ0hzeZyiiPN06eRtQoxlfptZemulqtESlCWs+q+
+         /Fxyyy8Hb+ksitfSS7CRrFVm04+zE2lkWK3nXXcbBYULLmMWsATyvoRfCAhG2QMvhGFk
+         NQiHPJ6z9AHW3VvQOGlH+RUnt16otESpgeDdfBi5Xv+xZe/GjtkeJ4RGkVlYHN0is/Cy
+         jU35Q4ywXngSzLQYxIG8H5/SgyOqKCbltZl7ogJ+0iWCu04Ntvw7f4zB6ASMbSM/fj5E
+         eawg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678505268;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wtqOT6CzflWo8NFA8wG8H31OfirdzkEX/EGftTEZpNg=;
-        b=Hx4SBTDcEk+5kU2WJjWP/nLuyk8tgNaXzaflamVdpbnfU6enyknrbCPjJ7acH8kHKK
-         1GLcY3w/ZkQw4A8b1xbyoybEHRWeE2H07GJapzTpO5ouEdp17NbsZrcq2v4NNq5nxE2p
-         xIfSyuyti+wcIbZFAtO9iWdbZtMGwC8oMGQKUN30vLA1m7lXBZISggaXz+wsMXqDiddh
-         69qlMKlEC2mmNT3i0i9x8Z1Zik5Olu3+DRyuU8nDXrNM5vXay4Bu5mMdZHdejXVwdFdN
-         XFLmFlNemN1TpAGPL6RTt1hkuM6fRjbRoUykPAlUDsojgKiLQNAP8NkcyNUtCphzHD+0
-         avTw==
-X-Gm-Message-State: AO0yUKViMc5XF++jtafa77xNJzS6McmqR5W5Eri+yOOStIbfT3+qAd7F
-        Clu1D/JTmXvXvt3yHxt114JZRXVAgAFT6+qb5R+nu4+hXsBx
-X-Google-Smtp-Source: AK7set+4D5Nw+EclJocwfNOA8Kqg37WbZUpkaY1C3RDpU+kD5YQFWXAIFO9HzqJpX3OdbtVwZbhNeNchHqZsCFu2qTtIP4q6sPmE
+        d=1e100.net; s=20210112; t=1678505278;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=73ltC76ja99SXS0x3lMZJ2kFcQpVMIC8+o6DWphx0as=;
+        b=QVm197XB/hM0QylSS6l1SZ4bMzBYYjki48XzWnTz5a3pVjKNU74ca/kT9KVVupywJL
+         TXjQBqFMGfQWfdBGdO8WFnNHPiuT2u4ytmRSBAoWCg1n2OsYOvtIMVA6HQ5ukQKwsOLR
+         P0QkzLASQfXNQOG61yyfSu/P2aISqcter3f49OCYMBQgE9woO4Q46zcZT7jeFm84M3eL
+         vNLHfiHawra5eHvaaIHpa4pwG0A99AU4r8Od39rqk46SgrcwSnnBQoEOjNN/XdPEo4Ym
+         /Xa+kd7+9uDYLt9YwMvJ+JfpZGn2AZ97wopsOF/Zx3nw0aLTAS+iPtpOnA4Kb7mi0LeJ
+         P2nw==
+X-Gm-Message-State: AO0yUKWXYcQ0dCy/sRV4uUy9iePbghZF1Rwn5HXypP9crkrqG1E15vup
+        QLpNR6ZScgMuwVnQr8+Frrc=
+X-Google-Smtp-Source: AK7set9c3q+RzEuGRYuQANxke5HaEFi5TpCYYva6K2yjPctqBNX063vhkn+p6ncwehZezLQ/lkCfdg==
+X-Received: by 2002:a05:6820:1048:b0:525:d9c:b1bb with SMTP id x8-20020a056820104800b005250d9cb1bbmr12535468oot.2.1678505278347;
+        Fri, 10 Mar 2023 19:27:58 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id r28-20020a056830081c00b00690d0daa17esm779242ots.3.2023.03.10.19.27.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 19:27:58 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 19:27:56 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 5.10 000/529] 5.10.173-rc1 review
+Message-ID: <4dbaeddd-65c8-4646-96f0-581f48386639@roeck-us.net>
+References: <20230310133804.978589368@linuxfoundation.org>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c04b:0:b0:315:7a34:224 with SMTP id
- o11-20020a92c04b000000b003157a340224mr2154493ilf.3.1678505268351; Fri, 10 Mar
- 2023 19:27:48 -0800 (PST)
-Date:   Fri, 10 Mar 2023 19:27:48 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000046238c05f69776ab@google.com>
-Subject: [syzbot] [ntfs?] kernel BUG in ntfs_end_buffer_async_read
-From:   syzbot <syzbot+72ba5fe5556d82ad118b@syzkaller.appspotmail.com>
-To:     anton@tuxera.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-ntfs-dev@lists.sourceforge.net,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310133804.978589368@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Fri, Mar 10, 2023 at 02:32:23PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.173 release.
+> There are 529 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
+> 
 
-syzbot found the following issue on:
+Build results:
+	total: 162 pass: 160 fail: 2
+Failed builds:
+	s390:defconfig
+	s390:allmodconfig
+Qemu test results:
+	total: 485 pass: 480 fail: 5
+Failed tests:
+	s390:defconfig:nolocktests:smp2:net,default:initrd
+	s390:defconfig:nolocktests:smp2:virtio-blk-ccw:net,virtio-net-pci:rootfs
+	s390:defconfig:nolocktests:smp2:scsi[virtio-ccw]:net,default:rootfs
+	s390:defconfig:nolocktests:virtio-pci:net,virtio-net-pci:rootfs
+	s390:defconfig:nolocktests:scsi[virtio-pci]:net,default:rootfs
 
-HEAD commit:    fe15c26ee26e Linux 6.3-rc1
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=12feadbcc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
-dashboard link: https://syzkaller.appspot.com/bug?extid=72ba5fe5556d82ad118b
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+Failures as already reported.
 
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+72ba5fe5556d82ad118b@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/ntfs/aops.c:130!
-Internal error: Oops - BUG: 00000000f2000800 [#1] PREEMPT SMP
-Modules linked in:
-CPU: 1 PID: 21 Comm: ksoftirqd/1 Not tainted 6.3.0-rc1-syzkaller-gfe15c26ee26e #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-pstate: 00400005 (nzcv daif +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
-pc : ntfs_end_buffer_async_read+0xa28/0xb78 fs/ntfs/aops.c:130
-lr : ntfs_end_buffer_async_read+0xa28/0xb78 fs/ntfs/aops.c:130
-sp : ffff80001a477a30
-x29: ffff80001a477a50 x28: ffff0001416534a0 x27: 0000000000000019
-x26: dfff800000000000 x25: 0000000000001000 x24: ffff00013f9ed3a0
-x23: 0000000000000000 x22: ffff00013f9ed6c0 x21: 0000000000000001
-x20: 0000000000020211 x19: 0000000000000330 x18: 1fffe000368995b6
-x17: ffff800015cdd000 x16: ffff80000826e470 x15: 0000000000000000
-x14: 1ffff00002b9c0b2 x13: dfff800000000000 x12: 0000000000000003
-x11: ff8080000965190c x10: 0000000000000000 x9 : ffff80000965190c
-x8 : ffff0000c0af1b40 x7 : ffff800009651140 x6 : 0000000000000000
-x5 : 0000000000000001 x4 : 0000000000000001 x3 : 0000000000000000
-x2 : ffff80001a477940 x1 : 0000000000020211 x0 : 0000000000001000
-Call trace:
- ntfs_end_buffer_async_read+0xa28/0xb78 fs/ntfs/aops.c:130
- end_bio_bh_io_sync+0xb0/0x194 fs/buffer.c:2703
- bio_endio+0x940/0x984 block/bio.c:1607
- req_bio_endio block/blk-mq.c:795 [inline]
- blk_update_request+0x444/0xdc0 block/blk-mq.c:927
- blk_mq_end_request+0x54/0x88 block/blk-mq.c:1054
- lo_complete_rq+0x140/0x258 drivers/block/loop.c:370
- blk_complete_reqs block/blk-mq.c:1132 [inline]
- blk_done_softirq+0x11c/0x168 block/blk-mq.c:1137
- __do_softirq+0x378/0xfbc kernel/softirq.c:571
- run_ksoftirqd+0x6c/0x148 kernel/softirq.c:934
- smpboot_thread_fn+0x4b0/0x96c kernel/smpboot.c:164
- kthread+0x24c/0x2d4 kernel/kthread.c:376
- ret_from_fork+0x10/0x20 arch/arm64/kernel/entry.S:870
-Code: c8097e88 35ffffa9 17fffdb3 97bafdea (d4210000) 
----[ end trace 0000000000000000 ]---
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Guenter
