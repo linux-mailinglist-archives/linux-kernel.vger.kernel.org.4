@@ -2,118 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 872006B5930
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:03:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 19E526B5934
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbjCKHDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:03:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S230075AbjCKHGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:06:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjCKHC7 (ORCPT
+        with ESMTP id S229522AbjCKHGR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:02:59 -0500
-Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABED0145B25
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:02:39 -0800 (PST)
-Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
-        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 3BDDC1004740A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:02:34 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id atFSpAEVDoCvYatFSpZV1D; Sat, 11 Mar 2023 07:02:34 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=Q9cXX66a c=1 sm=1 tr=0 ts=640c278a
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=k__wU0fu6RkA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=RcU_vbUwN4TypZ277zIA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=9pW2PTpaY8uKVeOLUHytoDI6mRSjrFlwRuxMM7C0hmU=; b=pcQC+0a1rLD0biSaX4qdvJ5Mh1
-        TOPXh8HUIZ6YDhjZQ0bkVssoU0K2tjoIpmUFloXLcy7AEjniEbpNR/E66ixwigPoGgj9HV5g/v/n9
-        ccyZ5rlp2CItbukWc/PXDA9KlxOC29d0bJnszje7TXoq/dPc35wy8TAcQljypA2L/TmWR076uLpFn
-        xDdCbKpJRZVQUjfvcZn8Qv6Y6XEHzRA0wcz7lnxQVG98Oc1EOQFrmEEi/xJH7mrgWQPHkdcdvUZLx
-        d7p0tm0yx/ZWXGJxNWb9eaowTEpzkt4lTVSZWNlJUds/v22fI2RIIKPSIt9dq2nhdEOLze4G0UoG7
-        J9O/uncg==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:59916 helo=[10.0.1.47])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1patFR-002YNR-6v;
-        Sat, 11 Mar 2023 00:02:33 -0700
-Subject: Re: [PATCH 6.2 000/211] 6.2.4-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230310133718.689332661@linuxfoundation.org>
-In-Reply-To: <20230310133718.689332661@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <f7c8bb0a-1c77-b4c6-07ba-ae2e45ce4ff1@w6rz.net>
-Date:   Fri, 10 Mar 2023 23:02:27 -0800
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Sat, 11 Mar 2023 02:06:17 -0500
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA23D12FD2F
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:06:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1678518356; bh=6RXXEmOqhalKafvrtSgWBo3rDrx3ENS3jdn0iCV/as8=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=K5Y9jjc3b8kbOnXpYcQnXQUYDpYhq0wVuwWnk8G1j6v/4oat254lhC/3vyChzPtN2
+         XAK6a+e9LiC9JSK48ObCsqimOqw1GiwwQE1ik/1MAtOBV3Wuq9yCJl1zFweK5qI/QK
+         yRKtmMSyZ33cMenqJs2pwRQvh+ITLyZ6zecwWmZg=
+Received: by b221-2.in.mailobj.net [192.168.90.22] with ESMTP
+        via ip-20.mailobj.net [213.182.54.20]
+        Sat, 11 Mar 2023 08:05:56 +0100 (CET)
+X-EA-Auth: 6KHaK3MakurOvyfDc6WzzKHmlWaG4pVZ9jwDoJme9TCa3byNOtXeoCwBMtK2bh3pWF3I2eBQW4qOu+CD5c5gR6AP/GEVuvrF
+Date:   Sat, 11 Mar 2023 12:35:49 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+Cc:     Dan Carpenter <error27@gmail.com>, outreachy@lists.linux.dev,
+        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: greybus: remove tabs to fix line length and
+ merge lines
+Message-ID: <ZAwoTVeMDGu/44Ln@ubun2204.myguest.virtualbox.org>
+References: <ZAusnKYVTGvO5zoi@khadija-virtual-machine>
+ <6e9fd119-6566-4778-899e-bc5a7ee7830c@kili.mountain>
+ <ZAwelPOv45zThK6j@khadija-virtual-machine>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1patFR-002YNR-6v
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:59916
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZAwelPOv45zThK6j@khadija-virtual-machine>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 5:36 AM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.2.4 release.
-> There are 211 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.4-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Sat, Mar 11, 2023 at 11:24:20AM +0500, Khadija Kamran wrote:
+> On Sat, Mar 11, 2023 at 07:16:19AM +0300, Dan Carpenter wrote:
+> > On Sat, Mar 11, 2023 at 03:18:04AM +0500, Khadija Kamran wrote:
+> > > In file drivers/staging/greybus/arche-platform.c,
+> > > - Length of line 181 exceeds 100 columns, fix by removing tabs from the
+> > >   line.
+> > > - If condition and spin_unlock_...() call is split into two lines, join
+> > > them to form a single line.
+> > > 
+> > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > > ---
+> > > Changes in v2:
+> > >  - Change the subject and log message
+> > >  - Merge if condition and spin_unlock...() from two lines to one 
+> > 
+> > Apply your patch and then re-run checkpatch.pl -f on the file.  You will
+> > see the problem.
+> 
+> Hey Dan!
+> When I run checkpatch.pl on my file, I can see that my old CHECK no
+> longer exists instead a new CHECK is mentioned saying 'Alignment should
+> match open parenthesis'. I understand this from your previous email.
+> Should I stop working on this file and leave it as is?
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi Dan,
+Not trying to speak for you, so please override my message if this is
+inaccurate.
 
-Tested-by: Ron Economos <re@w6rz.net>
+Hi Khadija,
+Yes. It is not useful to resolve one warning and introduce another. Tomorrow
+someone else is going to try and revert it. So do not make the "remove tab"
+change. I still like the merging of the split lines. It appears to improve code
+readability. You can send in a v3 with just that merge change and wait for
+feedback.
+
+Also, remember to check your change with checkpatch. There is a section about
+post-commit hooks on the tutorials page. This will allow you to integrate
+checkpatch as part of your git commit step and do the job for you.
+
+And also, always build your change locally on your machine. No new warnings or
+errors should arise.
+
+Hope that helps.
+Deepak.
+
+
+> Thank you!
+> >
+> > regards,
+> > dan carpenter
+> 
+
 
