@@ -2,53 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 78F066B5E5E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:09:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 136F36B5E63
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCKRJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:09:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
+        id S229846AbjCKRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:11:11 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKRJe (ORCPT
+        with ESMTP id S229469AbjCKRLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:09:34 -0500
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E356EC5D;
-        Sat, 11 Mar 2023 09:09:32 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=39auS
-        PKZnuBFBnPRBUd+UqjHniwggSni0+AncM3Q90Q=; b=MgFxzSOphnh2TvTOZcyXM
-        /0HLGVK9wyERR9QjaAT6qbabX1S47rSnXpoubTvXMmmPy5PhhNWpBvIVwrxKxy8T
-        P+J4sO7HqQRSUFEoKulAk5Lwim1iFpKLS6jj9sq1dp6M+yeTyjbqGeQZj6HsDyl7
-        VI7gsS6Ks4jt3xoN5WZ8pU=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wAnnhaVtQxkNp8CDA--.24226S2;
-        Sun, 12 Mar 2023 01:08:37 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     davem@davemloft.net
-Cc:     simon.horman@corigine.com, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, petrm@nvidia.com, thomas.lendacky@amd.com,
-        wsa+renesas@sang-engineering.com, leon@kernel.org,
-        shayagr@amazon.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v2] xirc2ps_cs: Fix use after free bug in xirc2ps_detach
-Date:   Sun, 12 Mar 2023 01:08:36 +0800
-Message-Id: <20230311170836.3919005-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sat, 11 Mar 2023 12:11:10 -0500
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F0ED7615F;
+        Sat, 11 Mar 2023 09:11:05 -0800 (PST)
+Received: by mail-wm1-x336.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso5322701wmp.4;
+        Sat, 11 Mar 2023 09:11:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678554664;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fKflYvA8UcraGyQwNuSBGmcqYYys5oOu9Tv+Rn3Pb4o=;
+        b=f/p5keK0gDn+cn95qsnKc0uFP6yb5Tk64quQhjr14E486Qy1YPmwmMTNQphBA3+QTP
+         pq8W94gj33ApebuATbwCcG68CQ6UsIy7PwKktFVrcsFx/VJpFNIGa0J0RIDfFHVMUKKT
+         hjwBSUhR5Ii+fW0n+sQ5SWdi27pQ1/C0jfBWhsrGNu9DFRfqaHIMMPAuIEfH1E5FYvwT
+         0rN/XP7KXMfDl+zddqVQNZkG154PzxCssVUbPXVrREP0g7iWbjV+miirvzOOTTC1R4bJ
+         mUNBHC3gVW/WsT/qOzM8iY32akDeA6IFnIqDUSnxP03VJ1M3wA6qYEcqcDEU05wHynIS
+         ch/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678554664;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fKflYvA8UcraGyQwNuSBGmcqYYys5oOu9Tv+Rn3Pb4o=;
+        b=3K8ArE0jalojEQkqriHGqD5gQvK3zvse1t+xfWQdVh81fPUROA2kd4+LEytDIvqye3
+         puaUyt2YdWtjklJpns0N1Vqw8EMJlAIBYHZfu4SSyVS2FoUGXV+O2yiab5hmcUre/j21
+         7DA3/1YdRQorht/yTm/SzLBC7glBSeZZ19EtQEzrLtqtKM/i7St/arI+z8y39P2xq0Zd
+         L5m4k4qShddo40B31KmDQnBUvIzrLlacCD/ZGYPhS1NHGk+14Gix5P77OqesfHxCu5cE
+         ugWH+xcO5tWBf1qSA0uYnD6a+6zxWrluPJdYtCfrst4u39GYE5uTbmNRQ4wqsbfN2LHZ
+         Pruw==
+X-Gm-Message-State: AO0yUKUJ0mmJ7lvXitLSY2H60nfpDOFlH5SZE9g7vwQ4krh96eJbpr1f
+        qmxTOcC64qe86y6NNoexlwM=
+X-Google-Smtp-Source: AK7set9tx1wziatWCHhFmDDnM59Wz2TGCwApXBxtfLl3LbxbORM1FoSASnFQfNU78qdcxolkmGHk6w==
+X-Received: by 2002:a05:600c:4453:b0:3de:a525:1d05 with SMTP id v19-20020a05600c445300b003dea5251d05mr4729209wmn.8.1678554663709;
+        Sat, 11 Mar 2023 09:11:03 -0800 (PST)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003e204fdb160sm3630719wmn.3.2023.03.11.09.11.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 09:11:03 -0800 (PST)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [git pull] common helper for kmap_local_page() users in local filesystems
+Date:   Sat, 11 Mar 2023 18:11:01 +0100
+Message-ID: <8232398.NyiUUSuA9g@suse>
+In-Reply-To: <20230310204431.GW3390869@ZenIV>
+References: <20230310204431.GW3390869@ZenIV>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wAnnhaVtQxkNp8CDA--.24226S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7WrWxuF4xKrW5Aw4UCr48WFg_yoW8GFyUpr
-        WDJay5Zr4kXwsIvw4xJrWUJF15Was3Kayjgr93C3yFgrn8ArWqgr1rKayjgFyxArWkZF13
-        Arn09ryxWF1DAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziYLv_UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzhkvU2I0XmjvDwAAsr
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,54 +72,82 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xirc2ps_probe, the local->tx_timeout_task was bounded
-with xirc2ps_tx_timeout_task. When timeout occurs,
-it will call xirc_tx_timeout->schedule_work to start the
-work.
+On venerd=EC 10 marzo 2023 21:44:31 CET Al Viro wrote:
+> 	kmap_local_page() conversions in local filesystems keep running into
+> kunmap_local_page()+put_page() combinations; we can keep inventing names
+> for identical inline helpers, but it's getting rather inconvenient.  I've
+> added a trivial helper to linux/highmem.h instead.
 
-When we call xirc2ps_detach to remove the driver, there
-may be a sequence as follows:
+Yeah, "put_and_unmap_page()". Nice helper :-)
 
-Stop responding to timeout tasks and complete scheduled
-tasks before cleanup in xirc2ps_detach, which will fix
-the problem.
+Today I decided to prepare a series to convert all the functions of all the=
+=20
+filesystems where I had found the above-mentioned pattern but I stopped=20
+immediately after converting dir_put_page() in fs/sysv.
 
-CPU0                  CPU1
+Why? Just because I realized that I do not understand the reasons behind th=
+e=20
+choice of the name of the helper... =20
 
-                    |xirc2ps_tx_timeout_task
-xirc2ps_detach      |
-  free_netdev       |
-    kfree(dev);     |
-                    |
-                    | do_reset
-                    |   //use dev
+Why did you name it "put_and_unmap_page()" instead of "unmap_and_put_page()=
+",=20
+for we always unmap first _and_ put the page immediately the unmapping?
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- fix indentation error suggested by Simon Horman,
-and stop the timeout tasks  suggested by Yunsheng Lin
----
- drivers/net/ethernet/xircom/xirc2ps_cs.c | 5 +++++
- 1 file changed, 5 insertions(+)
+It seems it want to imply that instead we put first and unmap later (which=
+=20
+would be wrong). That name sounds misleading to me and not sound (logically=
+=20
+speaking).
 
-diff --git a/drivers/net/ethernet/xircom/xirc2ps_cs.c b/drivers/net/ethernet/xircom/xirc2ps_cs.c
-index 894e92ef415b..c77ca11d9497 100644
---- a/drivers/net/ethernet/xircom/xirc2ps_cs.c
-+++ b/drivers/net/ethernet/xircom/xirc2ps_cs.c
-@@ -503,6 +503,11 @@ static void
- xirc2ps_detach(struct pcmcia_device *link)
- {
-     struct net_device *dev = link->priv;
-+		struct local_info *local = netdev_priv(dev);
-+
-+		netif_carrier_off(dev);
-+		netif_tx_disable(dev);
-+		cancel_work_sync(&local->tx_timeout_task);
- 
-     dev_dbg(&link->dev, "detach\n");
- 
--- 
-2.25.1
+Am I missing some obscure convention behind your choice of that name for th=
+e=20
+helper?
+
+If not, can you please change it from "put_and_unmap_page()" to=20
+"unmap_and_put_page()"?=20
+
+Thanks,
+
+=46abio
+
+>=20
+> 	I would've held that back until the merge window, if not for the
+> mess it causes in tree topology - I've several branches merging from that
+> one, and it's only going to get worse if e.g. ext2 stuff gets picked by
+> Jan.
+>=20
+> 	The helper is trivial and it's early in the cycle.  It would=20
+simplify
+> the things if you could pull it - then I'd simply rebase the affected=20
+branches
+> to -rc2...
+>=20
+> The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4c=
+c6:
+>=20
+>   Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+>=20
+> are available in the Git repository at:
+>=20
+>   git://git.kernel.org/pub/scm/linux/kernel/git/viro/vfs.git tags/pull-
+highmem
+>=20
+> for you to fetch changes up to 849ad04cf562ac63b0371a825eed473d84de9c6d:
+>=20
+>   new helper: put_and_unmap_page() (2023-03-07 01:50:53 -0500)
+>=20
+> ----------------------------------------------------------------
+> put_and_unmap_page() helper
+>=20
+> Signed-off-by: Al Viro <viro@zeniv.linux.org.uk>
+>=20
+> ----------------------------------------------------------------
+> Al Viro (1):
+>       new helper: put_and_unmap_page()
+>=20
+>  include/linux/highmem.h | 6 ++++++
+>  1 file changed, 6 insertions(+)
+
+
+
 
