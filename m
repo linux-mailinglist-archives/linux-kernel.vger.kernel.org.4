@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B63246B6123
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:48:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1DF66B6125
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:48:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229788AbjCKVsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:48:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56592 "EHLO
+        id S229749AbjCKVs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:48:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjCKVsJ (ORCPT
+        with ESMTP id S229835AbjCKVs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:48:09 -0500
-Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B46810406
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:48:03 -0800 (PST)
-Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-536bbef1c5eso169399287b3.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:48:03 -0800 (PST)
+        Sat, 11 Mar 2023 16:48:27 -0500
+Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 691DE25952
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:48:25 -0800 (PST)
+Received: by mail-yb1-xb34.google.com with SMTP id g27so4676556ybe.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:48:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678571282;
+        d=linaro.org; s=google; t=1678571304;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=mGcFJ5ZxlDi9b/UdZuLc5OKiysEmLsLLWteNS6EE4s8=;
-        b=slvilrR7hL2U+x5tjSLa8nfAo4reE3kTOTus1wS3FCOIF51shwNRrueWrFqCO2sfQp
-         y3ay+nZQTaboeL4nzyyx2zUHRkxrbOthRtbNASa9nFaYDv9O6q0GGBZE67CYn2vX5tKT
-         rBOg5+rhD3wCrI+vhRg7bt3ar5tJyU5Bnn1bUFshqNAsz5442iG82RC/Vy10EliokxKD
-         LtzvXMqHAOlRFleox9BSlZr5OpeU/OKtREjvs8Cyq9CAHtSPldFxGZBSRWp2iacjsN/i
-         Qm6Fyfz55wA3murhe8oaS5jG5mq37BhDPTuz3cy4ia+qNX1GrYqDMIExz6iRZj1OEMfA
-         l0wg==
+        bh=jF4jSS4OasbZk4U9XuZ/wAPD2HfWZvgc6z7TV94mIo0=;
+        b=xGxTaeZQGxhou3gJGzNPPC0r1ZSbKzbb96fonKZLFMczDO62qIJwLSfk0Cw5yNgxdo
+         e7wKPTskfPixT0ahvxJmEo7SmBqfYaohdVVIwKQhcWzR8COHFQKthSnm2IZOLchQA9Ko
+         OEOc3cq1q6BslwpN/Qvxg0dIT52GOUFjMRE41dBs5YsfovcrtQ6TlWGV58Ht5Lgo2aAW
+         fbo2AS08fJuj3QeMXXy6Ap03fBMmF2uHvjna4pD4Wx3VmA5N1O+2TTZsvXWo/ugORIgc
+         Vzy3jaNfuarZ3Na+WOD1V8EIaJt47Quk/lNRTlOe86A++aXXRe161nyhrAlujgfJGm3r
+         0/1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678571282;
+        d=1e100.net; s=20210112; t=1678571304;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=mGcFJ5ZxlDi9b/UdZuLc5OKiysEmLsLLWteNS6EE4s8=;
-        b=4SjA+RUzeStD7FFsQviZ5smmrOHxlXmxMz2dTo8IIP52TO18Qhso67nox7n9qbBujf
-         1NBtGMnS6EaFuRFsjwFPsadABPTe23gdpXCweAN7RDwmc4itoynHrJVR3Kj3oVe8F/ZE
-         +H/ICSwGlT5Pdca4V+TG99BmSxMkRfAY+tGRAcf91RXrZUnZjVfFbWcvAYVIRJ9mUwu6
-         ia3yMPyt6m/YD5Ru4tnIanr0IzcMvxPcCSTm01d26QtTJhpGYfga/YoJr5yKCg4JUM+H
-         pt8ZWWiufrKfHTOzoX2rI2GNpoEcpxv4nVn9s82RgtaRHknGBCdpxxBhXXs2jItB7CoG
-         erIQ==
-X-Gm-Message-State: AO0yUKXY8i/VVgLEtJd8sA7Hn0zI+9ppM+8cSPYmRWT/qu3/2A2wOBSI
-        TRmz0QGI6p4Ys3KTdRY2k7HCnuAiWHbxCRY4g4R7RA==
-X-Google-Smtp-Source: AK7set+YWOvwKMA1dPUxLsgUB6Fr01943IW1At9zwSR197k6yZtnzlsy0wbTdNADDF+fKXrTt/C9WEZ0kzk2Zcjd2Vk=
-X-Received: by 2002:a81:ae61:0:b0:541:822f:af40 with SMTP id
- g33-20020a81ae61000000b00541822faf40mr966072ywk.10.1678571282495; Sat, 11 Mar
- 2023 13:48:02 -0800 (PST)
+        bh=jF4jSS4OasbZk4U9XuZ/wAPD2HfWZvgc6z7TV94mIo0=;
+        b=w/sglp5Qe2F/ni5JB+idSDUDdzrUuxulwpILbT9UaErQEjfwSHRTac9eKAfMNZ+opo
+         YKVojltosdiLj2cZ7UJPGhlkbL2CQMxtGrKfkkRcyrwH3w0yG/LeuL+7oSlD8b0XcaDj
+         ufMXiiVn2w0++hhU9GdjftyoQXPMNBh/GqUnUuCzWcoVFF/ux26AS3i+TWWV861grlol
+         fZDJl9zr1bXvQBU40zJ/LVSgi/ff3IVr87/11kKui1SEGtCVtLF0XtgiewcIeGUr6K0P
+         Ob1qyqyankR1Fk9erpwBZOTbs6U5EsjQWUpSeFl1uK3RUNFtGOBa0sQJy4uqrNHZ2qF+
+         AP+w==
+X-Gm-Message-State: AO0yUKWV/xjSDhh1M8AX1VSGCVFkmq7iQVzJoZAsUUNjej1apg3EGqXW
+        h981AncOHIGWy9FKHJScBzViBwbp1KXvSXnOQiysug==
+X-Google-Smtp-Source: AK7set+RBXbsTa+ZxAOTcuKBxqKu2MRGa2ZBNeMZvsqp53WuxZEYmcTvI047DvIsyfSBCmdCVtl5FogFQtNmQitOTGo=
+X-Received: by 2002:a25:f904:0:b0:b27:65ca:f35d with SMTP id
+ q4-20020a25f904000000b00b2765caf35dmr6534892ybe.5.1678571304594; Sat, 11 Mar
+ 2023 13:48:24 -0800 (PST)
 MIME-Version: 1.0
-References: <20230311111307.251123-1-krzysztof.kozlowski@linaro.org> <20230311111307.251123-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111307.251123-3-krzysztof.kozlowski@linaro.org>
+References: <20230311111307.251123-1-krzysztof.kozlowski@linaro.org> <20230311111307.251123-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111307.251123-4-krzysztof.kozlowski@linaro.org>
 From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Sat, 11 Mar 2023 22:47:51 +0100
-Message-ID: <CACRpkdacHi7J1rjaFyxK7uNkKGmVpno71pVmPrAkrCvDc5_KFQ@mail.gmail.com>
-Subject: Re: [PATCH 3/8] gpio: rcar: drop of_match_ptr for ID table
+Date:   Sat, 11 Mar 2023 22:48:11 +0100
+Message-ID: <CACRpkdY6Dyq8VHLDqBxfiU6spLdNXOScja7JSe3-hwXqW1je6g@mail.gmail.com>
+Subject: Re: [PATCH 4/8] gpio: visconti: drop of_match_ptr for ID table
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Mun Yew Tham <mun.yew.tham@intel.com>,
         Bartosz Golaszewski <brgl@bgdev.pl>,
@@ -88,8 +88,8 @@ On Sat, Mar 11, 2023 at 12:13=E2=80=AFPM Krzysztof Kozlowski
 > used and the of_match_ptr does not have any sense (this also allows ACPI
 > matching via PRP0001, even though it might not be relevant here).
 >
->   drivers/gpio/gpio-rcar.c:435:34: error: =E2=80=98gpio_rcar_of_table=E2=
-=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>   drivers/gpio/gpio-visconti.c:187:34: error: =E2=80=98visconti_gpio_of_m=
+atch=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
