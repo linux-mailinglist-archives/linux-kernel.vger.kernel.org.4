@@ -2,72 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EAE576B5BAC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:29:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C93B96B5BAE
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCKM3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:29:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34232 "EHLO
+        id S229981AbjCKMaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:30:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230284AbjCKM32 (ORCPT
+        with ESMTP id S230300AbjCKMaN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:29:28 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E72512DDF1;
-        Sat, 11 Mar 2023 04:29:25 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id j2so7382612wrh.9;
-        Sat, 11 Mar 2023 04:29:25 -0800 (PST)
+        Sat, 11 Mar 2023 07:30:13 -0500
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4F2112DDCD
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:30:03 -0800 (PST)
+Received: by mail-ed1-x530.google.com with SMTP id k10so31059952edk.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678537764;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EGHz0fJPRD+mfnBHrFBegYlbXI3MqDWp40pyWHsBvyI=;
-        b=JH7LJfYFhu+kfjWdlaQw3jlJ0NdbosD4h8yGasaNuOdCOwiVmX1bGHAiwI9NFNa+zB
-         9hv0JTYJ0ab+MRp/9QG6QTMupQOKxlCzYIEy3HKDYHMV4eqA4WPwHyJ2spgM0WUv7ETb
-         mcc4mhvZuq6eafbU/rbRSY7pUnGmfM9mU/8wAZ0D9zDi1EQoG2tVtq84bMnwpuuLP12f
-         P/j5PhQ+yR3lRmgh9zLn9gR8F407KWjZ1zamf96yEemUsLCD+0C34RZtAIMmbpcFObxT
-         Xq2vkyskYDL94o1YAGPqXzeULOUHKopOIiV+K1DYrHRxY/BX5465gvyyzml1LAwVYChF
-         PuoQ==
+        d=linaro.org; s=google; t=1678537802;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=yjUhnHyDUJ5wg8HgLp7R2j6/UQh7qFkqjXC6cud7wFA=;
+        b=NaF5Ipx6n2Sl2HxZZipEbRVnt/v/6N6IYCoCCu4OCVg0HDbVKNyh59h6wCsPqL84/Z
+         lN1aKk4uVw2tADThdJierZuVSbNSkZmwQ4Fc8CcGB+xPoJACaROQCXFFAWlVa9Q88zfQ
+         lv82QDWfIUpvDa+GftxlBRqJ93GQeO+RQUsMSc5i7hBHnTgcCJ3EzrvCKRHHTc4IceXP
+         ViCn1Jldd51NbX2laUXcbEkeuQZHP9G1oo0KmKAFObwmozQG219jMaP0S3bBj6oJ3lHo
+         wD9Bnp29yZJAj1HcDhDDtNI0VWtMxsgLPzNXS0xjHWsn3PTOnV/e72eCa3tB3qmuodMz
+         HqAA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678537764;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EGHz0fJPRD+mfnBHrFBegYlbXI3MqDWp40pyWHsBvyI=;
-        b=v8+w94aITUgbfzWDGV4oyRNPELk9SDM28sWAthmTwtWlnw9dXYy7Z9eOSrG4FMrO5B
-         Er+NRuwk6vlWYe49JL8a0WUTIJSCMXpIgox72393cuOu6DVKrZegcSi5g84hsRVhbIbm
-         3NyX8Or7HCgfLQAcDdKHG6v6W/ZIIF2eXP4nWkzOBxQqiqwatY7OKb4cdDU0toICO7hH
-         9MoDsv7P9XOVBWFe8ws2vLgwkm3lwK50RSh4it+kTw+bjfyme0/UhvwAttDNAk7My7v7
-         2EiSBUr83L069sHjmS1+B7dTTclsuG5r46aSlbyFEFUcCftafcQu7NVHBgG+N9XDsQfn
-         U7iA==
-X-Gm-Message-State: AO0yUKXgw9LjthazW1KuEu3ZmyCRk5toxa17JEaRtl1s3S6X4OLqxKxx
-        pqUlPmatlVjQS022jY60NB8=
-X-Google-Smtp-Source: AK7set/o3qJv+B4hk928bHCUA80aFE28ZVQmxmKijrzikeVPeKa1eZxlsCw693E3pL9SxV2iLUd1qA==
-X-Received: by 2002:a5d:46c8:0:b0:2c7:df1:a09d with SMTP id g8-20020a5d46c8000000b002c70df1a09dmr18447655wrs.4.1678537763884;
-        Sat, 11 Mar 2023 04:29:23 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id q6-20020a5d5746000000b002ca864b807csm2503494wrw.0.2023.03.11.04.29.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 04:29:23 -0800 (PST)
-Date:   Sat, 11 Mar 2023 12:29:22 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 6.1 000/200] 6.1.17-rc1 review
-Message-ID: <ZAx0Ig8kLHwnndcA@debian>
-References: <20230310133717.050159289@linuxfoundation.org>
+        d=1e100.net; s=20210112; t=1678537802;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yjUhnHyDUJ5wg8HgLp7R2j6/UQh7qFkqjXC6cud7wFA=;
+        b=NM8JAmA4TQnyVjRtkKGjY6ZU9y/swcBiuECCEe2NfCZzYT8Qt06wV89Smxn1HTmhl3
+         mX7v5or5my/BmL315evWkkN5LjRJ2Fn74z1M0yw6faVD0kmPOvjNyR6PAInNrk/VadWc
+         vcnTwnEcSD2U/QEMaJ7i8Qw5ydGsOMMalIhLxpcunAxU6NfQ+o3VfrNl3LGcEQoT/HMl
+         d/jHMZoLlJG+B59XAJUo5bL8TjdOikGgvuOAxB19q+cTTl1Vji7WF3Oh4pxayBWqfzrC
+         NZTIpzavyxRKOOwOwJGCrEkceqZRsLhntz1/c3JOgvi3m6NAAaXh/uw5djo2NNrDIYdn
+         nsbQ==
+X-Gm-Message-State: AO0yUKUh1syEpWHTvdP1q5v+8uEESSOoGA/v57sMtNbxSuVbXhB2xrdo
+        MJeuI0qTKmwsJrVwstG6zWR0Gg==
+X-Google-Smtp-Source: AK7set/2o8ivcKMwc0mQHra9eJumNEYv6mhH+0exAy0texGLIvUhlh2ftWQaJ8F01uSG1mo/Mr5EtA==
+X-Received: by 2002:a17:907:ca85:b0:922:3a53:46f8 with SMTP id ul5-20020a170907ca8500b009223a5346f8mr882715ejc.64.1678537802201;
+        Sat, 11 Mar 2023 04:30:02 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b? ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
+        by smtp.gmail.com with ESMTPSA id jg30-20020a170907971e00b0091ec885e016sm1030730ejc.54.2023.03.11.04.30.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 04:30:01 -0800 (PST)
+Message-ID: <c66c3f92-fa33-5af1-6f19-79b6d3530862@linaro.org>
+Date:   Sat, 11 Mar 2023 13:30:01 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310133717.050159289@linuxfoundation.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 4/4] iio: proximity: sx9500: Mark ACPI and OF related data
+ as maybe unused
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Robert Eshleman <bobbyeshleman@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
+ <20230311111457.251475-4-krzysztof.kozlowski@linaro.org>
+ <20230311122833.03b5a3d7@jic23-huawei>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311122833.03b5a3d7@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,37 +81,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
-
-On Fri, Mar 10, 2023 at 02:36:47PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.1.17 release.
-> There are 200 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 11/03/2023 13:28, Jonathan Cameron wrote:
+> On Sat, 11 Mar 2023 12:14:57 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
+>> The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+>> certain data unused:
+>>
+>>   drivers/iio/proximity/sx9500.c:1039:34: error: ‘sx9500_of_match’ defined but not used [-Werror=unused-const-variable=]
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Hi Krysztof
+> 
+> Thanks for looking at these warnings. 
+> 
+> Drop the protection macros instead.  The tables are trivial in size and
+> the of_match_ptr() breaks some ways this driver can be used.
+> ACPI_PTR() isn't as bad, but is pretty much pointless given this size of
+> the array. 
+> 
 
-Build test (gcc version 12.2.1 20230210):
-mips: 52 configs -> no failure
-arm: 100 configs -> no failure
-arm64: 3 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-csky allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
+For ACPI platform, ACPI table is used, so nothing for PRP0001. For OF
+platform, OF table is used.
 
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
+What usage exactly is broken here? What ways?
 
-[1]. https://openqa.qa.codethink.co.uk/tests/3076
+Best regards,
+Krzysztof
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
