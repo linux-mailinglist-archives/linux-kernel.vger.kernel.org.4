@@ -2,50 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39E766B5F98
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8098B6B5FB8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:22:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjCKSPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:15:40 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
+        id S229933AbjCKSWc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:22:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36380 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCKSPh (ORCPT
+        with ESMTP id S229809AbjCKSW3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:15:37 -0500
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B244637EA
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:15:35 -0800 (PST)
+        Sat, 11 Mar 2023 13:22:29 -0500
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E179C59E7C
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:21:48 -0800 (PST)
+Received: by mail-lf1-x135.google.com with SMTP id bi9so10767552lfb.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:21:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=3rR5OQ3sQVLhWBUYWdY6yHLdxX91kXaMtSzohwuA2Pk=;
-  b=T+hAK6PHgMt5hYr8fSfAUi/kToM3unyYNFIksHQ85NP6E5Ps81uZ3oof
-   +3JwFvgiY1WX1/mhAxx0bzH5VEmgeCuU84ZTUWbdO1bpnNOEp8URdlpnf
-   vkg4rcqJlumaoAiOirXBtlXZcpJfDD+fIux/DZb1F88830qM7UwM7zZ1U
-   k=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,253,1673910000"; 
-   d="scan'208";a="49892577"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 19:15:34 +0100
-Date:   Sat, 11 Mar 2023 19:15:33 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        d=gmail.com; s=20210112; t=1678558903;
+        h=cc:to:subject:date:from:in-reply-to:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=zgZZFa9GT3KgzmxYSLg5VRVJ2/WUIFA9QnWnNW5nD4w=;
+        b=cv8Tww7Hl739LopzBthOGhZy4VlB2lYgMNEJ49Af7R8DnMDgc3eQyxpawmtQGGbnJe
+         25M5PIR2XqPtsEqsMskeyVnSx6yY2J/bMmEO7Ur24ZGeUPehvNgDWHnrcaKCBnG1sc1O
+         iMwgKaDW1uJuSG7fArGJ+u2X4RWggw5RzIy81LlKRvNjIBC+2S46UpmqZv6WywqWP1Wu
+         nmMt1sS6+skpibAwG5HveoUvKXHXhXIjh0+6ditULRjkO68/MCxHUN+ASOm++biOljZ9
+         r8+4Pd9a9jfXKPpZ39ihqiP9PQpc55/bC10Q3lzP7xHTRd2vzEz0dvEvwz24rgMYpB+h
+         w2Sg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678558903;
+        h=cc:to:subject:date:from:in-reply-to:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zgZZFa9GT3KgzmxYSLg5VRVJ2/WUIFA9QnWnNW5nD4w=;
+        b=qpnGbVC3qUQmc8IwHC97KbnvZazWW9k/1eKvj2VOQDoWOO1yeC2kIg/U6z4iEl4c5m
+         xX5dsLFALqHFIQpolp42KZRNVcWfFBM8MMhMiM7BtY/U4n9XCurTiyMaPBXt1O55lMD3
+         WuLuG13CpMhJeIGJRd2HIN8e+ouu3F1oElWGkk3uOzktnFe8nzrVM9kS1R2rmzrmoADw
+         cjIZlpoaeF6oQ/c7wCgmr1kkkneCL58oP9ZM5GmWMJvtUTDz87NJBQIR1Rpo+oPYCKFP
+         75w6rwN97b5xudonLeqmLfmP4Ld1rklT5gn+vscK5jDfGNdYkKvoXiyqAHV8Sl7SWTJe
+         lNVw==
+X-Gm-Message-State: AO0yUKU5yzDbDx2oPFyttxb8Foe8LYUBQxY7XDZsP2g1Xn9ZrIHD9cCt
+        sxa/es/tW+tIqn1SqyLhsQp1iZb9uMDRt02L1rc=
+X-Google-Smtp-Source: AK7set+IdgFrYxey9LQTQHJF5c9vczy+XT0K28uYXRK0qnHbMOYdzDbTIGUYhAnWf+Id39ZczlRudA==
+X-Received: by 2002:a05:6512:24b:b0:4e1:46e9:ec3e with SMTP id b11-20020a056512024b00b004e146e9ec3emr8784984lfo.61.1678558903223;
+        Sat, 11 Mar 2023 10:21:43 -0800 (PST)
+Received: from 0001-dt-bindings-synopsys-dw-mshc-common-add-fifo-access-.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id w25-20020ac25999000000b004e811e3554dsm386680lfn.185.2023.03.11.10.21.42
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 10:21:43 -0800 (PST)
+Message-Id: <1678558770.495747-1-sleirsgoevy@gmail.com>
+In-Reply-To: <1678558770.495747-0-sleirsgoevy@gmail.com>
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+Date:   Sat, 11 Mar 2023 21:15:37 +0300
+Subject: [PATCH v2 1/2] dt-bindings: synopsys-dw-mshc-common: add
+ "fifo-access-32bit" property
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] staging: axis-fifo: remove tabs to align arguments
-In-Reply-To: <ZAy69T5sYZiyL4TJ@khadija-virtual-machine>
-Message-ID: <alpine.DEB.2.22.394.2303111914050.2802@hadrien>
-References: <ZAxsyX8n7G92nlJh@khadija-virtual-machine> <ZAxzfiOoW0SfW5qD@kroah.com> <ZAy69T5sYZiyL4TJ@khadija-virtual-machine>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,86 +71,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Some Samsung Exynos boards using the arm64 architecture have DW MMC
+controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
+systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
+---
+ .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml   | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+index 8dfad89c7..d025b38ca 100644
+--- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
++++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
+@@ -57,6 +57,13 @@ properties:
+       force fifo watermark setting accordingly.
+     $ref: /schemas/types.yaml#/definitions/flag
+ 
++  fifo-access-32bit:
++    description:
++      Specifies that this device requires accesses to its 64-bit registers
++      to be done as pairs of 32-bit accesses, even on architectures where
++      readq is available.
++    $ref: /schemas/types.yaml#/definitions/flag
++
+   dmas:
+     maxItems: 1
+ 
+-- 
+2.38.3
 
 
-On Sat, 11 Mar 2023, Khadija Kamran wrote:
-
-> On Sat, Mar 11, 2023 at 01:26:38PM +0100, Greg Kroah-Hartman wrote:
-> > On Sat, Mar 11, 2023 at 04:58:01PM +0500, Khadija Kamran wrote:
-> > > In file drivers/staging/axis-fifo/axis-fifo.c, in line 386 and 529, the
-> > > last argument is indented as if it were an argument of the second
-> > > argument. Remove tabs to align the arguments.
-> > >
-> > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
-> > > ---
-> > > Changes in v3:
-> > >  - Do not align the line 530 since it is not part of the last argument.
-> > >
-> > >  drivers/staging/axis-fifo/axis-fifo.c | 12 ++++++------
-> > >  1 file changed, 6 insertions(+), 6 deletions(-)
-> > >
-> > > diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-> > > index dfd2b357f484..b119cec25a60 100644
-> > > --- a/drivers/staging/axis-fifo/axis-fifo.c
-> > > +++ b/drivers/staging/axis-fifo/axis-fifo.c
-> > > @@ -384,9 +384,9 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
-> > >  		mutex_lock(&fifo->read_lock);
-> > >  		ret = wait_event_interruptible_timeout(fifo->read_queue,
-> > >  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
-> > > -				 (read_timeout >= 0) ?
-> > > -				  msecs_to_jiffies(read_timeout) :
-> > > -				  MAX_SCHEDULE_TIMEOUT);
-> > > +			(read_timeout >= 0) ?
-> > > +			msecs_to_jiffies(read_timeout) :
-> > > +			MAX_SCHEDULE_TIMEOUT);
-> >
-> > People have been trying to "polish" this mess for a long time, and I
-> > think it's better to step back and see what is really needed here.
-> >
-> > There is a module parameter, read_timeout, that can only be set at
-> > loading time.  As it can only be modified once, why are we doing an if
-> > statement each and every time it is read from?
-> >
-> > Instead, in the module probe function, how about doing something like:
-> > 	if (read_timeout >= 0)
-> > 		read_timeout = msecs_to_jiffies(read_timeout);
-> > 	else
-> > 		read_timeout = MAX_SCHEDULE_TIMEOUT;
-> >
->
->
-> Hi Greg!
-> Thank you for the reply. Before sending the patch I just wanted to
-> confirm if I have understood this right. Should I write the above
-> mentioned code before the wait_event_interruptible_timeout() call, and
-> pass read_timeout as the last argument to wait_event_interruptible()?
-> And same for write_timeout.
-
-Greg suggests to do the initialization of read_timeout only once in the
-probe function.  That is the function in which the driver figures out some
-information about the environment in which it is running. It is only
-called once, at startup time.  Then there will not be this if on every
-wait_event_interruptible_timeout call.
-
-julia
-
-
->
->
-> > and then only ever use "read_timeout" here in the
-> > wait_event_interruptiable() call?  That should simplify this much more
-> > overall, and hopefully allow us to just get rid of the module parameter
-> > eventually as that's not how drivers should be working at all anymore.
-> >
-> > Same goes for write_timeout.
-> >
-> > Overall the code should be much simpler and easier to understand, which
-> > is the end goal here.
-> >
-> > Can you try doing that instead?
-> >
-> > thanks,
-> >
-> > greg k-h
->
->
