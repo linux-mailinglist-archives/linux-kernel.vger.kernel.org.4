@@ -2,73 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5566B60C1
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D10E6B60BF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:56:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjCKU5c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 15:57:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39472 "EHLO
+        id S229932AbjCKU4r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 15:56:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjCKU5a (ORCPT
+        with ESMTP id S229694AbjCKU4q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 15:57:30 -0500
-Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1A6065C73;
-        Sat, 11 Mar 2023 12:57:18 -0800 (PST)
-Received: by mail-wr1-x433.google.com with SMTP id v16so8101802wrn.0;
-        Sat, 11 Mar 2023 12:57:18 -0800 (PST)
+        Sat, 11 Mar 2023 15:56:46 -0500
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7FC44C6F6;
+        Sat, 11 Mar 2023 12:56:44 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id fd5so274443edb.7;
+        Sat, 11 Mar 2023 12:56:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678568237;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8YvT7mGTykzHxDGiJlJKvQFfC0q2gGOitUi56P8Lu7g=;
-        b=eGhGvUyRkh4USjMDXXEMntvv69BwvCjop85Dsf0okBUEbtqz4hFQ6Sn6r2/rnWcwJw
-         a2DG1SwraA8YuDBdOVcrj3QoxztRtlIwOOz4MTs4D9uEulV/wguAABoGVAqcPUxPewvb
-         0DyD+pJ3osZCHhhYY9ErcDwJN1bKCikMTqvAW0ZDjxhMDZnP3flQQXCQgHeR99eHZn2y
-         6qY+hbc3uI38n+Na4iKHJIpYsyoHonANZ5d2znXdDZl5x/NycYhpfxloiuP/BgkJO21+
-         9g+BJH9vKJACcZvwYWH4ETBy5jrZsBOR1mzGbUPG39gr2SFF3J91QZO+0qtkyKYxjvZH
-         fpxA==
+        d=googlemail.com; s=20210112; t=1678568203;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wG89qGDC53apMqtBOHTRtgFqgYqAhyr7mdrOysqyOUk=;
+        b=ZKfWGHw6RRcpr6YKONN9XeUHZ5IAiAD2mfB6TNmsxLwfetbah0ZXY5eTWMcljMaP27
+         8IV61+03NE4F+X5MHzGWo+j/mNpAPg07OGJSBhKEAdZ3rXI6Z0xH0EhQROvX3X/L1Myl
+         IwsnuHDdvzIIs25yvEvBhTkOxrmlOCh+6yDnexHlkSCBkQwyq9Psp8uqXBecjM7/2n8M
+         56OkJE9FmrtDA6xTYyJqlV52uDW9cqkJOClmmBp62w8fWKUccuOk7u+33f+sCsVQ0HyM
+         rsUnx0VtNY0pOio4j9i07+NmuuYgJnfUGpmAWDwMQPAu2g7OJA0hTDeV5ZJFynzq01Oz
+         jqNw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678568237;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8YvT7mGTykzHxDGiJlJKvQFfC0q2gGOitUi56P8Lu7g=;
-        b=Yt5FAN57S1A9Fe2g2urQyOZC/6yhEiruFgKjAZs0Ae1uF6YZt0lHvlkrhyhXVX7To1
-         FV1RXlrDmbvb4E6FYeQfjWOf3VzQHvPp/cFDNYf/8mjA1o2b/mYf8/fd3u/XCm1ZSork
-         ILnhE0JgJsJR8qJmMtTFTIu1MjrTeMlFBFijPu/RFhoE6dNDPnHynGds181RLjYSU1wq
-         ykcGZ1Nk7tMCPwDj3yJwoqW5MC0Ubgscq72gyRCbSoT2JvGCMf1MZLjmJ+VIDV5C/Vv7
-         EdCZtU4l9Yk2RB39iX/PY28attZIGf1j2ZH0J7SoI9+anV/Fxo9Y5G4IRpHkq8scQ/Op
-         5Vyw==
-X-Gm-Message-State: AO0yUKWffWCc2IvWz+OWy9w8xGgULWYmgsvMzyvRvuSw5zL0JdgvRVxK
-        CunGeVh8+KtiFSx1pX7r04s=
-X-Google-Smtp-Source: AK7set9uhUUd22EMnqGoqZWlPJKltvF0fyM67G/d/Trple9uMgIv+MqHrlmssbTNbQ99rJEOKXV20A==
-X-Received: by 2002:a05:6000:c3:b0:2c5:c4c9:515a with SMTP id q3-20020a05600000c300b002c5c4c9515amr18498163wrx.51.1678568237271;
-        Sat, 11 Mar 2023 12:57:17 -0800 (PST)
-Received: from [192.168.8.100] (188.30.129.33.threembb.co.uk. [188.30.129.33])
-        by smtp.gmail.com with ESMTPSA id w10-20020a5d608a000000b002c5493a17efsm3330637wrt.25.2023.03.11.12.57.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 12:57:17 -0800 (PST)
-Message-ID: <94795ed1-f7ac-3d1c-9bd6-fcaaaf5f1fd4@gmail.com>
-Date:   Sat, 11 Mar 2023 20:56:16 +0000
+        d=1e100.net; s=20210112; t=1678568203;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wG89qGDC53apMqtBOHTRtgFqgYqAhyr7mdrOysqyOUk=;
+        b=5y2tSvNU4H11Run4AdFe4OOun1dmMyQ4N/2L1pEmRck0KlUOZO3iAsULwwHEdF+wYP
+         Cg+o1XUcoHbhnIUrVgj0DsC3mXZmiAr/uNYOgF3w98lrpqX7DYwSMUsfagF9vXW39ebF
+         UiCh9uim5piSok/26ewZ1OAEWYv/S9L53TCj7GizjzCu2+WPF5Y5zN3g2BJ/PnYPof8g
+         dVawhIPxtegUsvQoPBwIpspLr8WKVCzp+asydg6ZMqouzLGF3D+VPubLbysQUfiWGRxG
+         UVWX+rbBoWxcJgJ7wIV+lgR1Sy9H59vuyL1BmziqQ8lgDiJQZt95zf2RRaJ3j9hh+MZs
+         o5Xg==
+X-Gm-Message-State: AO0yUKURr62jkHsqPAvTR7h28JSM8/LKicXToRJ6dYP0fHXE7mTTRb3K
+        Za+ii6zu0BBP+IQNUwkQ/HIpfnC2RGYIf6mDumk=
+X-Google-Smtp-Source: AK7set+fjGgwpMDd9lM1+8OU+R3Kaa85CmMo0pVrMx2+MYZcrTHwZ7KlV4WOukKoD1BbZY72PNg6s9uocAsnrptj7XE=
+X-Received: by 2002:a17:906:3002:b0:8dc:6674:5bac with SMTP id
+ 2-20020a170906300200b008dc66745bacmr15580598ejz.4.1678568203082; Sat, 11 Mar
+ 2023 12:56:43 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [PATCH] io_uring: One wqe per wq
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, Breno Leitao <leitao@debian.org>,
-        io-uring@vger.kernel.org
-Cc:     leit@fb.com, linux-kernel@vger.kernel.org
-References: <20230310201107.4020580-1-leitao@debian.org>
- <ac6a2da7-aa88-b119-6a44-01d2f2ec9b6d@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <ac6a2da7-aa88-b119-6a44-01d2f2ec9b6d@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com> <174f91fc-7629-e380-4ca1-56eb39ea24ea@lwfinger.net>
+In-Reply-To: <174f91fc-7629-e380-4ca1-56eb39ea24ea@lwfinger.net>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Sat, 11 Mar 2023 21:56:32 +0100
+Message-ID: <CAFBinCAn7zD-sF+5B1OHztaijt6OHFZWHM-ayxYY0=z0zkaJCg@mail.gmail.com>
+Subject: Re: [PATCH v2 RFC 0/9] rtw88: Add SDIO support
+To:     Larry Finger <Larry.Finger@lwfinger.net>
+Cc:     linux-wireless@vger.kernel.org,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-mmc@vger.kernel.org, Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>, Pkshih <pkshih@realtek.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,27 +76,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 20:38, Jens Axboe wrote:
-> On 3/10/23 1:11 PM, Breno Leitao wrote:
->> Right now io_wq allocates one io_wqe per NUMA node.  As io_wq is now
->> bound to a task, the task basically uses only the NUMA local io_wqe, and
->> almost never changes NUMA nodes, thus, the other wqes are mostly
->> unused.
-> 
-> What if the task gets migrated to a different node? Unless the task
-> is pinned to a node/cpumask that is local to that node, it will move
-> around freely.
+Hello Larry,
 
-In which case we're screwed anyway and not only for the slow io-wq
-path but also with the hot path as rings and all io_uring ctx and
-requests won't be migrated locally.
+On Sat, Mar 11, 2023 at 3:16=E2=80=AFAM Larry Finger <Larry.Finger@lwfinger=
+.net> wrote:
+[...]
+> I am not qualified to review the code, but I am integrating this version =
+into my
+> rtw88 repo at GitHub.com.
+>
+> It is essential that a successful build is possible after every patch is =
+applied
+> so that an arbitrary bisection will not fail to build. This patch series =
+fails
+> after #2 is committed. File mac.c needs symbol SDIO_LOCAL_OFFSET, which w=
+as
+> moved from mac.h to sdio.h. I resolved this be including sdio.h in mac.c.=
+ This
+> breaks #3, where you add the include to mac.c. It needs to happen one pat=
+ch earlier.
+Thank you for spotting and reporting this issue! You are right with
+this, I'll add the sdio.h include to mac.c with patch 2 to resolve
+this issue as you suggested.
 
-It's also curious whether io-wq workers will get migrated
-automatically as they are a part of the thread group.
+> The other problem for my repo is that it cannot modify
+> include/linux/mmc/sdio_ids.h, thus I have to create a local sdio_ids.h to
+> contain the new definitions. Once your patches are in the kernel, I will =
+be able
+> to eliminate this work around.
+You can also modify the three SDIO driver files (rtw8821cs.c,
+rtw8822bs.c, rtw8822cs.c) and use the literal IDs there if you have to
+patch those files anyways.
 
-> I'm not a huge fan of the per-node setup, but I think the reasonings
-> given in this patch are a bit too vague and we need to go a bit
-> deeper on what a better setup would look like.
+> I do not have any rtw88 SDIO devices, thus I will not be able to test, bu=
+t I
+> will pass any information that I get from my users.
+That sounds great - thank you!
 
--- 
-Pavel Begunkov
+
+Best regards,
+Martin
