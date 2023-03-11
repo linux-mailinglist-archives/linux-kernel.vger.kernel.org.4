@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96C0A6B5716
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E5366B571B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:51:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCKAsw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:48:52 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37974 "EHLO
+        id S230037AbjCKAtF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:49:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231240AbjCKAr5 (ORCPT
+        with ESMTP id S230415AbjCKAsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:47:57 -0500
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEF813D1F0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:10 -0800 (PST)
-Received: by mail-pl1-x64a.google.com with SMTP id bh9-20020a170902a98900b0019e506b80d0so3672475plb.13
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:10 -0800 (PST)
+        Fri, 10 Mar 2023 19:48:07 -0500
+Received: from mail-pl1-x649.google.com (mail-pl1-x649.google.com [IPv6:2607:f8b0:4864:20::649])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF79913EB92
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:16 -0800 (PST)
+Received: by mail-pl1-x649.google.com with SMTP id a9-20020a170902b58900b0019e2eafafddso3625078pls.7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:47:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678495610;
+        d=google.com; s=20210112; t=1678495611;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=8shLf2BD8j5DUhNgoX3o6+mHtMqyjRCN50sfLrkOnl0=;
-        b=DzIJin/sBdxZML/E6j9IbyfB58NFBLF8eEspI/Uquf+oD2qtETdUnzoBF8auHpny27
-         eq4mIh7mZVBqBL4IbIGn3vzTT89YOInoNUdQ818qbYezkIF6meu5kKIHs5NNGfjoArOR
-         5RY8ukjOIZuBheNV8jAjVASnihu20OUr6XnsgyLMS8YijC6PWVblx7nCnVCQYx2BkMsP
-         FSnbbBNIRJf4AVS61IuFyKhfISIENSJngu4fMeFZQ/v1sKDc1Qi//ZGM03eOl5DNQQOz
-         AcJSuM6stNsMShoHvhJGiXzM47AEALKEVeeyZPA3GxgrQiX2QvMvbXfSD/n+snhXjafJ
-         gSrQ==
+        bh=IhTBia6bsmV3yZc9hMtuCJ7+iIO3gStCyZPlx0VMvQQ=;
+        b=Gvu/bH0wLcYdNxbtY2pIVUnwdv5diml4fm36b2o7zImi6GqKbDgWBNLkjS6TOYB0rW
+         Kd6UijLo1FAp0KYUbGLQn3/3nXbBu5K1L+Uh75ozfpJCSu3tw3PS4q7BHxcpOQ3pEj/7
+         1ju2iac7nsa5DhCdFGjlIFAo/Hndm/HTw/1VN667M51a2tGSZYktQp87TnLCzy3YnUcZ
+         JeqVy7LmSj/zOM79hXzJjqsIjoIoHg7F7ltFynS7AA0/mD+HSLBGQk/D+34VWb42TNJr
+         aMR8mhVhyUsUK32gscNSeEGxG6faDkskat7GMJ9ZbqtQuz9tDnJdByQ3u0wQ+BMfRMSB
+         zkGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678495610;
+        d=1e100.net; s=20210112; t=1678495611;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8shLf2BD8j5DUhNgoX3o6+mHtMqyjRCN50sfLrkOnl0=;
-        b=khLyabsDWQlApbeX7os8rFs3CVZxf8pHQ347HlIA81MKeRZB7eYArMMph2gaP7CPyN
-         NAEr92kkcrb8ppiNII5YTij75aLYfYzhzv4F+z3g3vN4QOrnak4kx0cXNhgldUIrN3+s
-         lxpd0y4NrT6kDfPHYR7FZThywxAS4ePgdFJZYDCaXLpGUk6zn+cFChp7FOn/LprotqDQ
-         WGS71bB6xsZ6WpwuAvJqbVd5bbD4aVyZzr93tR0D5Xbno5R7S0ToeEks5FcRFYl63Tby
-         xJIj/TbzN4oRJFsQlMW1waZOQKMWSaPVzK0ciQ+zAGJkQVTN7VZWQpNrI687BjewXOU9
-         ln4Q==
-X-Gm-Message-State: AO0yUKW3+Z4ctN3SpM6jjYkkIMD04bT3ZZFaWftQrOrZ3//VTA098FEx
-        CJYzxBfnDgKepCcOSzGPPClYj5K/HUs=
-X-Google-Smtp-Source: AK7set8ji35GdrABX70264YHSZ0clvQ2YZjx7+nYdKp881dNrsJ0rPofQeE7MR1tL9gsOH2keLIq4C2Ktd8=
+        bh=IhTBia6bsmV3yZc9hMtuCJ7+iIO3gStCyZPlx0VMvQQ=;
+        b=662JgemML6FWflwpxMMKw7ZAEsKDVcInxQS7tBjlim1Lum/oKTxRiKTIhBFvvJUysW
+         WgFLsDPhLqExxMh+Oms+xYL3txtoVIYKf/HHmJHPnBuls+T0cgaTRHc5ZZPccipUVm9H
+         QnXgRCJmwxMurFBq3x2qe+AElriClW5K+qxPlxFiOFchEChoksJG5aVz6tZWXc29bJtL
+         mjMeP8z5u5Cfw4RUMd2NAPPxbWbDqk+7ZQ1kwAkXz9yBHw5lAqacm6bS07rXjG4Da9FF
+         58wWB/N2YBMPI6nXXzn0SSy7HIl7mjOw5n4tXihr9wNLbdXlampdpVSGCTpTmsw2mNrt
+         CHlA==
+X-Gm-Message-State: AO0yUKUMS+97t+WaFD3tXV50MM11g+rab0n9zO/5mDo52TFoKHDUiSlG
+        xBGDTuA5QguSA4FDTVQegj9Ax5V4T7w=
+X-Google-Smtp-Source: AK7set9LcE4ENH9TQQNFoUglKcHLo4MbBBqYi2LpFazCMV3msaC/jCEvQ4EJN1xOYa/P2cAIO5AIfagl5T0=
 X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:a512:0:b0:593:fcfb:208b with SMTP id
- v18-20020a62a512000000b00593fcfb208bmr11074485pfm.3.1678495609926; Fri, 10
- Mar 2023 16:46:49 -0800 (PST)
+ (user=seanjc job=sendgmr) by 2002:a63:f705:0:b0:503:7cc9:3f8d with SMTP id
+ x5-20020a63f705000000b005037cc93f8dmr9669146pgh.9.1678495611683; Fri, 10 Mar
+ 2023 16:46:51 -0800 (PST)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date:   Fri, 10 Mar 2023 16:46:12 -0800
+Date:   Fri, 10 Mar 2023 16:46:13 -0800
 In-Reply-To: <20230311004618.920745-1-seanjc@google.com>
 Mime-Version: 1.0
 References: <20230311004618.920745-1-seanjc@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230311004618.920745-16-seanjc@google.com>
-Subject: [PATCH v3 15/21] KVM: selftests: Test all immutable non-format bits
- in PERF_CAPABILITIES
+Message-ID: <20230311004618.920745-17-seanjc@google.com>
+Subject: [PATCH v3 16/21] KVM: selftests: Expand negative testing of guest
+ writes to PERF_CAPABILITIES
 From:   Sean Christopherson <seanjc@google.com>
 To:     Sean Christopherson <seanjc@google.com>,
         Paolo Bonzini <pbonzini@redhat.com>
@@ -66,7 +66,7 @@ Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,80 +74,109 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add negative testing of all immutable bits in PERF_CAPABILITIES, i.e.
-single bits that are reserved-0 or are effectively reserved-1 by KVM.
-
-Omit LBR and PEBS format bits from the test as it's easier to test them
-manually than it is to add safeguards to the comment path, e.g. toggling
-a single bit can yield a format of '0', which is legal as a "disable"
-value.
+Test that the guest can't write 0 to PERF_CAPABILITIES, can't write the
+current value, and can't toggle _any_ bits.  There is no reason to special
+case the LBR format.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  | 30 +++++++++++++++++--
- 1 file changed, 27 insertions(+), 3 deletions(-)
+ .../selftests/kvm/x86_64/vmx_pmu_caps_test.c  | 61 ++++++++++++++++---
+ 1 file changed, 54 insertions(+), 7 deletions(-)
 
 diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index 2647282ff380..d91bf44a2e39 100644
+index d91bf44a2e39..44fc6101a547 100644
 --- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
 +++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -49,6 +49,11 @@ static const union perf_capabilities immutable_caps = {
- 	.pebs_baseline = 1,
+@@ -54,9 +54,59 @@ static const union perf_capabilities format_caps = {
+ 	.pebs_format = -1,
  };
  
-+static const union perf_capabilities format_caps = {
-+	.lbr_format = -1,
-+	.pebs_format = -1,
-+};
-+
- static void guest_code(void)
+-static void guest_code(void)
++static void guest_code(uint64_t current_val)
  {
- 	wrmsr(MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
-@@ -91,12 +96,30 @@ static void test_fungible_perf_capabilities(union perf_capabilities host_cap)
- 	kvm_vm_free(vm);
- }
- 
-+/*
-+ * Verify KVM rejects attempts to set unsupported and/or immutable features in
-+ * PERF_CAPABILITIES.  Note, LBR format and PEBS format need to be validated
-+ * separately as they are multi-bit values, e.g. toggling or setting a single
-+ * bit can generate a false positive without dedicated safeguards.
-+ */
- static void test_immutable_perf_capabilities(union perf_capabilities host_cap)
- {
-+	const uint64_t reserved_caps = (~host_cap.capabilities |
-+					immutable_caps.capabilities) &
-+				       ~format_caps.capabilities;
+-	wrmsr(MSR_IA32_PERF_CAPABILITIES, PMU_CAP_LBR_FMT);
++	uint8_t vector;
++	int i;
 +
- 	struct kvm_vcpu *vcpu;
- 	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, NULL);
- 	uint64_t val;
--	int ret;
-+	int r, bit;
++	vector = wrmsr_safe(MSR_IA32_PERF_CAPABILITIES, current_val);
++	GUEST_ASSERT_2(vector == GP_VECTOR, current_val, vector);
 +
-+	for_each_set_bit(bit, &reserved_caps, 64) {
-+		r = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES,
-+				  host_cap.capabilities ^ BIT_ULL(bit));
-+		TEST_ASSERT(!r, "%s immutable feature 0x%llx (bit %d) didn't fail",
-+			    host_cap.capabilities & BIT_ULL(bit) ? "Setting" : "Clearing",
-+			    BIT_ULL(bit), bit);
++	vector = wrmsr_safe(MSR_IA32_PERF_CAPABILITIES, 0);
++	GUEST_ASSERT_2(vector == GP_VECTOR, 0, vector);
++
++	for (i = 0; i < 64; i++) {
++		vector = wrmsr_safe(MSR_IA32_PERF_CAPABILITIES,
++				    current_val ^ BIT_ULL(i));
++		GUEST_ASSERT_2(vector == GP_VECTOR,
++			       current_val ^ BIT_ULL(i), vector);
 +	}
- 
- 	/*
- 	 * KVM only supports the host's native LBR format, as well as '0' (to
-@@ -106,9 +129,10 @@ static void test_immutable_perf_capabilities(union perf_capabilities host_cap)
- 		if (val == (host_cap.capabilities & PMU_CAP_LBR_FMT))
- 			continue;
- 
--		ret = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, val);
--		TEST_ASSERT(!ret, "Bad LBR FMT = 0x%lx didn't fail", val);
-+		r = _vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, val);
-+		TEST_ASSERT(!r, "Bad LBR FMT = 0x%lx didn't fail", val);
- 	}
 +
++	GUEST_DONE();
++}
++
++/*
++ * Verify that guest WRMSRs to PERF_CAPABILITIES #GP regardless of the value
++ * written, that the guest always sees the userspace controlled value, and that
++ * PERF_CAPABILITIES is immutable after KVM_RUN.
++ */
++static void test_guest_wrmsr_perf_capabilities(union perf_capabilities host_cap)
++{
++	struct kvm_vcpu *vcpu;
++	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	struct ucall uc;
++
++	vm_init_descriptor_tables(vm);
++	vcpu_init_descriptor_tables(vcpu);
++
++	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.capabilities);
++
++	vcpu_args_set(vcpu, 1, host_cap.capabilities);
++	vcpu_run(vcpu);
++
++	switch (get_ucall(vcpu, &uc)) {
++	case UCALL_ABORT:
++		REPORT_GUEST_ASSERT_2(uc, "val = 0x%lx, vector = %lu");
++		break;
++	case UCALL_DONE:
++		break;
++	default:
++		TEST_FAIL("Unexpected ucall: %lu", uc.cmd);
++	}
++
++	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), host_cap.capabilities);
++
++	kvm_vm_free(vm);
+ }
+ 
+ /*
+@@ -79,7 +129,7 @@ static void test_fungible_perf_capabilities(union perf_capabilities host_cap)
+ 	const uint64_t fungible_caps = host_cap.capabilities & ~immutable_caps.capabilities;
+ 
+ 	struct kvm_vcpu *vcpu;
+-	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, guest_code);
++	struct kvm_vm *vm = vm_create_with_one_vcpu(&vcpu, NULL);
+ 	int bit;
+ 
+ 	for_each_set_bit(bit, &fungible_caps, 64) {
+@@ -89,10 +139,6 @@ static void test_fungible_perf_capabilities(union perf_capabilities host_cap)
+ 	}
+ 	vcpu_set_msr(vcpu, MSR_IA32_PERF_CAPABILITIES, host_cap.capabilities);
+ 
+-	/* check whatever we write with KVM_SET_MSR is _not_ modified */
+-	vcpu_run(vcpu);
+-	ASSERT_EQ(vcpu_get_msr(vcpu, MSR_IA32_PERF_CAPABILITIES), host_cap.capabilities);
+-
  	kvm_vm_free(vm);
  }
  
+@@ -153,6 +199,7 @@ int main(int argc, char *argv[])
+ 	test_basic_perf_capabilities(host_cap);
+ 	test_fungible_perf_capabilities(host_cap);
+ 	test_immutable_perf_capabilities(host_cap);
++	test_guest_wrmsr_perf_capabilities(host_cap);
+ 
+ 	printf("Completed perf capability tests.\n");
+ }
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
