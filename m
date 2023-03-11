@@ -2,76 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33FA76B5C8D
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E7976B5CA2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229806AbjCKOBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:01:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39096 "EHLO
+        id S230094AbjCKOMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCKOB3 (ORCPT
+        with ESMTP id S229956AbjCKOMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:01:29 -0500
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9B21128027
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:01:27 -0800 (PST)
-Received: by mail-lf1-x12a.google.com with SMTP id s22so10234196lfi.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:01:27 -0800 (PST)
+        Sat, 11 Mar 2023 09:12:18 -0500
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFA1F12EACB
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:12:16 -0800 (PST)
+Received: by mail-qt1-x82d.google.com with SMTP id l13so8831889qtv.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:12:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678543286;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gN0iKz6tUQsU3sGbg8zYOt79JfksqemrudWethrYNb4=;
-        b=pNybIBwNINYBdE9ZP7uM7/Ilkg1nSC/XPRDRCIPVIi/zyJdbrVoMVhN7OqyfuItMzd
-         yoFFtHaHlrNg9349uD3pyTO/OU05Ke2fX4faFi2TvCMEq+ujZwxGGz2dYOuCnkIy+bfG
-         yb0YI5CmL2gzZ6PFx4uwNFrKKNiz/gUtuxiGsGkayDlI61Ri7abH/lmcaVJTlcndgsfx
-         IiN1JiXtTTVhEmRMCcvUZFGRAK0Tk1ETGZXt6SyR2o+oErUR4s/l8MT5/M86VvT41JRb
-         ugwmZd8hKpZbK4iFfQ/48wQ0qLfMR7jXBAQHeg62baxiSdtviYfI4RqN1xEe2dK2Z7wB
-         3Icw==
+        d=linaro.org; s=google; t=1678543936;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xCOdnUIlYRCljoP0jvOuSQYBn7IV6NgBdnHZL4+pu3w=;
+        b=LXMFDdhtuKA40vu2SEAhMVBhs8oZwu/drmX6hNyIt8+awHmKaZgNMzdNQXdMvp9FxT
+         OU/4o6Rkh9Er1seWekbvMKWyHSfSq/NdKVoUvyF04ycTc+jooxe2jOXsifRswkv7x/Dt
+         G3BgTHxoiSK9iBru9//uDq8MTXsTLD3UfekmH3lhzE9vvGqvDHKx8Z7P/Fh8sR+9zGFC
+         FmFGDqEp80QQIrSAhOgeqRlRX4gFW13YB6JhPTZlGBLuK9PlEfYmMPvE+gGlcNDssPfc
+         lVJeKWE9OEsk92oBnC+JVtUlDy0f4ArZafnvpY0fy5GV6+SBzXvwaH46u1VZ5fQowQL2
+         RYDw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678543286;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gN0iKz6tUQsU3sGbg8zYOt79JfksqemrudWethrYNb4=;
-        b=3lffbYj8ATeCwE33xlqU55RNtbu/+IXg+hQ4Hc27AOuLpemyo0XjzOwkCptb1mw1OU
-         WXtUQAAJZCURtVT5fizS7G3o9ibVqfx5XUjaWyD8UBjpkvLZQTQ3g53EHk4LiRQjfjl8
-         eUqbJtdLPIFwq1QfdrtsV9/LrzwC+kWuwKjyrnB0iYk09ew7tGOImW/PkUBAAGD0N5mb
-         9T3Hs26sCc2xifSqkOwEPgue7pYA0+6EKa+7TGy1P5atB7Dv2tvSzvG5PhO5Va1CWpJh
-         UEIq2HQanitUH6xa+1gA8/y8JSWgP41b26S/XuvtERLoUk4iUV4JcXcS6Mzp5Bvb6eH+
-         gysw==
-X-Gm-Message-State: AO0yUKVFHX1BZ9hN15kPexDo0vG3g0DDAVHxigLRCmBYo599+Sr7zLvA
-        tdvuqFEtp5ZPl7MXDM/3lnLaUw==
-X-Google-Smtp-Source: AK7set/tQaqRMJnP92PVb+Fnj9PUPhIzFPQcusi9dylfhfwduZzBDvt4jyysbaphwlTNkCIiAyj9dw==
-X-Received: by 2002:ac2:5142:0:b0:4dd:afb4:26b3 with SMTP id q2-20020ac25142000000b004ddafb426b3mr9504036lfd.16.1678543286066;
-        Sat, 11 Mar 2023 06:01:26 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id w7-20020a05651204c700b004d8540b947asm329996lfq.56.2023.03.11.06.01.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 06:01:25 -0800 (PST)
-Message-ID: <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
-Date:   Sat, 11 Mar 2023 16:01:24 +0200
+        d=1e100.net; s=20210112; t=1678543936;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xCOdnUIlYRCljoP0jvOuSQYBn7IV6NgBdnHZL4+pu3w=;
+        b=P/rZoXu8hrFTJqmKvgUdMxaEwstVygB9cvsabb4VeRfTMoh2jtzPVo93SB+KL8TRtx
+         JSghv1x25HwQUxg9W3zbPs/1g4zjSteJP/NflR+5jxIOv1LijRdj1sAK+HZ+VvMmLy5F
+         enOGfJXWrqNshaIXqTexL8ukV8rP4VSe/YhmfxOmg0l6M7FxmZFKul4ME/VI567JdgCq
+         aJKIGwlkfXQ5euf2O0su3ozZ0lQSN2OxDhOB4TNGiUOgQBLVjifMpU/820AqIw9VaI1+
+         bApbNf/tQrEPJUp25s721WxixkQTi3wC18JUxjip3qhy5m+M7Q+84oADsv8LSHjnN5ob
+         j7fg==
+X-Gm-Message-State: AO0yUKUtstHdPTzxZfrLqYPZNx81WOy2B2NrWDbpCQJcaFmXA7UJ5QJf
+        YKtFieXcUWJ2MFeELjVOK5FL5w==
+X-Google-Smtp-Source: AK7set//Oy9vO2UCidiKi98LPXBRGR+lR9kXA6z7ARs80qDWyasfS+VW4Fo6A/M7zVe7dcFVJlx8Ug==
+X-Received: by 2002:ac8:7e83:0:b0:3b8:2e36:9d24 with SMTP id w3-20020ac87e83000000b003b82e369d24mr48358766qtj.50.1678543935958;
+        Sat, 11 Mar 2023 06:12:15 -0800 (PST)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id q25-20020a37f719000000b0073ba92629e1sm1886615qkj.23.2023.03.11.06.12.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 06:12:15 -0800 (PST)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: [PATCH v2] iio: dac: cio-dac: Migrate to the regmap API
+Date:   Sat, 11 Mar 2023 09:02:18 -0500
+Message-Id: <20230311140218.74920-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230228-topic-qos-v7-6-815606092fff@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -80,290 +70,175 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 23:40, Konrad Dybcio wrote:
-> Some (but not all) providers (or their specific nodes) require
-> specific clocks to be turned on before they can be accessed. Failure
-> to ensure that results in a seemingly random system crash (which
-> would usually happen at boot with the interconnect driver built-in),
-> resulting in the platform not booting up properly.
-> 
-> Limit the number of bus_clocks to 2 (which is the maximum that SMD
-> RPM interconnect supports anyway) and handle non-scaling clocks
-> separately. Update MSM8996 and SDM660 drivers to make sure they do
-> not regress with this change.
-> 
-> This unfortunately has to be done in one patch to prevent either
-> compile errors or broken bisect.
+The regmap API supports IO port accessors so we can take advantage of
+regmap abstractions rather than handling access to the device registers
+directly in the driver.
 
-Can we determine somehow if the intf clocks are required for the whole 
-NoC or just for a single node? I don't think that clocks like a0noc_ufs 
-are requiered to be up for the whole aggre_noc. Instead they probably 
-have to be enabled only when UFS makes use of the NoC (in other words 
-when is has voted for the bandwidth).
+Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+Changes in v2:
+ - Remove DAC initialization to 0V in cio_dio_probe() as superfluous now
+   that the chan_out_states buffer is gone
 
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.c | 52 ++++++++++++++++++++++++++++++-------
->   drivers/interconnect/qcom/icc-rpm.h | 14 ++++++++--
->   drivers/interconnect/qcom/msm8996.c | 22 +++++++---------
->   drivers/interconnect/qcom/sdm660.c  | 16 +++++-------
->   4 files changed, 70 insertions(+), 34 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
-> index b52f788d8f3d..ca932ed720fb 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.c
-> +++ b/drivers/interconnect/qcom/icc-rpm.c
-> @@ -369,6 +369,17 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   
->   	qcom_icc_bus_aggregate(provider, agg_avg, agg_peak, &max_agg_avg);
->   
-> +	/* If we're powering on the bus, ensure the necessary clocks are on */
-> +	if (unlikely(!qp->is_on)) {
-> +		if (agg_peak[0] || agg_peak[1] || max_agg_avg) {
-> +			/* If this fails, bus accesses will crash the platform! */
-> +			ret = clk_bulk_prepare_enable(qp->num_intf_clks, qp->intf_clks);
-> +			if (ret)
-> +				return ret;
-> +			qp->is_on = true;
-> +		}
-> +	}
-> +
->   	sum_bw = icc_units_to_bps(max_agg_avg);
->   
->   	ret = __qcom_icc_set(src, src_qn, sum_bw);
-> @@ -409,6 +420,14 @@ static int qcom_icc_set(struct icc_node *src, struct icc_node *dst)
->   		qp->bus_clk_rate[i] = rate;
->   	}
->   
-> +	/* Turn off the interface clocks if the bus was shut down so as not to leak power */
-> +	if (!qp->bus_clk_rate[0] && !qp->bus_clk_rate[1]) {
-> +		if (!agg_peak[0] && !agg_peak[1] && !max_agg_avg) {
-> +			clk_bulk_disable_unprepare(qp->num_intf_clks, qp->intf_clks);
-> +			qp->is_on = false;
-> +		}
-> +	}
-> +
->   	return 0;
->   }
->   
-> @@ -441,21 +460,20 @@ int qnoc_probe(struct platform_device *pdev)
->   	qnodes = desc->nodes;
->   	num_nodes = desc->num_nodes;
->   
-> -	if (desc->num_bus_clocks) {
-> -		cds = desc->bus_clocks;
-> -		cd_num = desc->num_bus_clocks;
-> +	if (desc->num_intf_clocks) {
-> +		cds = desc->intf_clocks;
-> +		cd_num = desc->num_intf_clocks;
->   	} else {
-> -		cds = bus_clocks;
-> -		cd_num = ARRAY_SIZE(bus_clocks);
-> +		/* 0 intf clocks is perfectly fine */
-> +		cd_num = 0;
->   	}
->   
-> -	qp = devm_kzalloc(dev, struct_size(qp, bus_clks, cd_num), GFP_KERNEL);
-> +	qp = devm_kzalloc(dev, sizeof(*qp), GFP_KERNEL);
->   	if (!qp)
->   		return -ENOMEM;
->   
-> -	qp->bus_clk_rate = devm_kcalloc(dev, cd_num, sizeof(*qp->bus_clk_rate),
-> -					GFP_KERNEL);
-> -	if (!qp->bus_clk_rate)
-> +	qp->intf_clks = devm_kzalloc(dev, sizeof(qp->intf_clks), GFP_KERNEL);
-> +	if (!qp->intf_clks)
->   		return -ENOMEM;
->   
->   	data = devm_kzalloc(dev, struct_size(data, nodes, num_nodes),
-> @@ -463,6 +481,18 @@ int qnoc_probe(struct platform_device *pdev)
->   	if (!data)
->   		return -ENOMEM;
->   
-> +	qp->num_intf_clks = cd_num;
-> +	for (i = 0; i < cd_num; i++)
-> +		qp->intf_clks[i].id = cds[i];
-> +
-> +	if (desc->num_bus_clocks) {
-> +		cds = desc->bus_clocks;
-> +		cd_num = desc->num_bus_clocks;
-> +	} else {
-> +		cds = bus_clocks;
-> +		cd_num = ARRAY_SIZE(bus_clocks);
-> +	}
-> +
->   	for (i = 0; i < cd_num; i++)
->   		qp->bus_clks[i].id = cds[i];
->   	qp->num_bus_clks = cd_num;
-> @@ -503,6 +533,10 @@ int qnoc_probe(struct platform_device *pdev)
->   	if (ret)
->   		return ret;
->   
-> +	ret = devm_clk_bulk_get(dev, qp->num_intf_clks, qp->intf_clks);
-> +	if (ret)
-> +		return ret;
-> +
->   	if (desc->has_bus_pd) {
->   		ret = dev_pm_domain_attach(dev, true);
->   		goto err_disable_clks;
-> diff --git a/drivers/interconnect/qcom/icc-rpm.h b/drivers/interconnect/qcom/icc-rpm.h
-> index d4401f35f6d2..a4ef45b4a9e0 100644
-> --- a/drivers/interconnect/qcom/icc-rpm.h
-> +++ b/drivers/interconnect/qcom/icc-rpm.h
-> @@ -20,24 +20,32 @@ enum qcom_icc_type {
->   	QCOM_ICC_QNOC,
->   };
->   
-> +#define NUM_BUS_CLKS	2
-> +
->   /**
->    * struct qcom_icc_provider - Qualcomm specific interconnect provider
->    * @provider: generic interconnect provider
->    * @num_bus_clks: the total number of bus_clks clk_bulk_data entries
-> + * @num_intf_clks: the total number of intf_clks clk_bulk_data entries
->    * @type: the ICC provider type
->    * @regmap: regmap for QoS registers read/write access
->    * @qos_offset: offset to QoS registers
->    * @bus_clk_rate: bus clock rate in Hz
->    * @bus_clks: the clk_bulk_data table of bus clocks
-> + * @intf_clks: a clk_bulk_data array of interface clocks
-> + * @is_on: whether the bus is powered on
->    */
->   struct qcom_icc_provider {
->   	struct icc_provider provider;
->   	int num_bus_clks;
-> +	int num_intf_clks;
->   	enum qcom_icc_type type;
->   	struct regmap *regmap;
->   	unsigned int qos_offset;
-> -	u64 *bus_clk_rate;
-> -	struct clk_bulk_data bus_clks[];
-> +	u64 bus_clk_rate[NUM_BUS_CLKS];
-> +	struct clk_bulk_data bus_clks[NUM_BUS_CLKS];
-> +	struct clk_bulk_data *intf_clks;
-> +	bool is_on;
->   };
->   
->   /**
-> @@ -93,6 +101,8 @@ struct qcom_icc_desc {
->   	size_t num_nodes;
->   	const char * const *bus_clocks;
->   	size_t num_bus_clocks;
-> +	const char * const *intf_clocks;
-> +	size_t num_intf_clocks;
->   	bool has_bus_pd;
->   	enum qcom_icc_type type;
->   	const struct regmap_config *regmap_cfg;
-> diff --git a/drivers/interconnect/qcom/msm8996.c b/drivers/interconnect/qcom/msm8996.c
-> index 69fc50a6fa5c..1a5e0ad36cc4 100644
-> --- a/drivers/interconnect/qcom/msm8996.c
-> +++ b/drivers/interconnect/qcom/msm8996.c
-> @@ -21,21 +21,17 @@
->   #include "smd-rpm.h"
->   #include "msm8996.h"
->   
-> -static const char * const bus_mm_clocks[] = {
-> -	"bus",
-> -	"bus_a",
-> +static const char * const mm_intf_clocks[] = {
->   	"iface"
->   };
->   
-> -static const char * const bus_a0noc_clocks[] = {
-> +static const char * const a0noc_intf_clocks[] = {
->   	"aggre0_snoc_axi",
->   	"aggre0_cnoc_ahb",
->   	"aggre0_noc_mpu_cfg"
->   };
->   
-> -static const char * const bus_a2noc_clocks[] = {
-> -	"bus",
-> -	"bus_a",
-> +static const char * const a2noc_intf_clocks[] = {
->   	"aggre2_ufs_axi",
->   	"ufs_axi"
->   };
-> @@ -1821,8 +1817,8 @@ static const struct qcom_icc_desc msm8996_a0noc = {
->   	.type = QCOM_ICC_NOC,
->   	.nodes = a0noc_nodes,
->   	.num_nodes = ARRAY_SIZE(a0noc_nodes),
-> -	.bus_clocks = bus_a0noc_clocks,
-> -	.num_bus_clocks = ARRAY_SIZE(bus_a0noc_clocks),
-> +	.intf_clocks = a0noc_intf_clocks,
-> +	.num_intf_clocks = ARRAY_SIZE(a0noc_intf_clocks),
->   	.has_bus_pd = true,
->   	.regmap_cfg = &msm8996_a0noc_regmap_config
->   };
-> @@ -1866,8 +1862,8 @@ static const struct qcom_icc_desc msm8996_a2noc = {
->   	.type = QCOM_ICC_NOC,
->   	.nodes = a2noc_nodes,
->   	.num_nodes = ARRAY_SIZE(a2noc_nodes),
-> -	.bus_clocks = bus_a2noc_clocks,
-> -	.num_bus_clocks = ARRAY_SIZE(bus_a2noc_clocks),
-> +	.intf_clocks = a2noc_intf_clocks,
-> +	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
->   	.regmap_cfg = &msm8996_a2noc_regmap_config
->   };
->   
-> @@ -2005,8 +2001,8 @@ static const struct qcom_icc_desc msm8996_mnoc = {
->   	.type = QCOM_ICC_NOC,
->   	.nodes = mnoc_nodes,
->   	.num_nodes = ARRAY_SIZE(mnoc_nodes),
-> -	.bus_clocks = bus_mm_clocks,
-> -	.num_bus_clocks = ARRAY_SIZE(bus_mm_clocks),
-> +	.intf_clocks = mm_intf_clocks,
-> +	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
->   	.regmap_cfg = &msm8996_mnoc_regmap_config
->   };
->   
-> diff --git a/drivers/interconnect/qcom/sdm660.c b/drivers/interconnect/qcom/sdm660.c
-> index a22ba821efbf..0e8a96f4ce90 100644
-> --- a/drivers/interconnect/qcom/sdm660.c
-> +++ b/drivers/interconnect/qcom/sdm660.c
-> @@ -127,15 +127,11 @@ enum {
->   	SDM660_SNOC,
->   };
->   
-> -static const char * const bus_mm_clocks[] = {
-> -	"bus",
-> -	"bus_a",
-> +static const char * const mm_intf_clocks[] = {
->   	"iface",
->   };
->   
-> -static const char * const bus_a2noc_clocks[] = {
-> -	"bus",
-> -	"bus_a",
-> +static const char * const a2noc_intf_clocks[] = {
->   	"ipa",
->   	"ufs_axi",
->   	"aggre2_ufs_axi",
-> @@ -1516,8 +1512,8 @@ static const struct qcom_icc_desc sdm660_a2noc = {
->   	.type = QCOM_ICC_NOC,
->   	.nodes = sdm660_a2noc_nodes,
->   	.num_nodes = ARRAY_SIZE(sdm660_a2noc_nodes),
-> -	.bus_clocks = bus_a2noc_clocks,
-> -	.num_bus_clocks = ARRAY_SIZE(bus_a2noc_clocks),
-> +	.intf_clocks = a2noc_intf_clocks,
-> +	.num_intf_clocks = ARRAY_SIZE(a2noc_intf_clocks),
->   	.regmap_cfg = &sdm660_a2noc_regmap_config,
->   };
->   
-> @@ -1659,8 +1655,8 @@ static const struct qcom_icc_desc sdm660_mnoc = {
->   	.type = QCOM_ICC_NOC,
->   	.nodes = sdm660_mnoc_nodes,
->   	.num_nodes = ARRAY_SIZE(sdm660_mnoc_nodes),
-> -	.bus_clocks = bus_mm_clocks,
-> -	.num_bus_clocks = ARRAY_SIZE(bus_mm_clocks),
-> +	.intf_clocks = mm_intf_clocks,
-> +	.num_intf_clocks = ARRAY_SIZE(mm_intf_clocks),
->   	.regmap_cfg = &sdm660_mnoc_regmap_config,
->   };
->   
-> 
+ drivers/iio/dac/Kconfig   |  1 +
+ drivers/iio/dac/cio-dac.c | 66 ++++++++++++++++++++++++++-------------
+ 2 files changed, 46 insertions(+), 21 deletions(-)
 
+diff --git a/drivers/iio/dac/Kconfig b/drivers/iio/dac/Kconfig
+index d3f90cf86143..3acd9c3f388e 100644
+--- a/drivers/iio/dac/Kconfig
++++ b/drivers/iio/dac/Kconfig
+@@ -277,6 +277,7 @@ config CIO_DAC
+ 	tristate "Measurement Computing CIO-DAC IIO driver"
+ 	depends on X86 && (ISA_BUS || PC104)
+ 	select ISA_BUS_API
++	select REGMAP_MMIO
+ 	help
+ 	  Say yes here to build support for the Measurement Computing CIO-DAC
+ 	  analog output device family (CIO-DAC16, CIO-DAC08, PC104-DAC06). The
+diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
+index 791dd999cf29..759833a6bd29 100644
+--- a/drivers/iio/dac/cio-dac.c
++++ b/drivers/iio/dac/cio-dac.c
+@@ -6,16 +6,15 @@
+  * This driver supports the following Measurement Computing devices: CIO-DAC16,
+  * CIO-DAC06, and PC104-DAC06.
+  */
+-#include <linux/bitops.h>
++#include <linux/bits.h>
+ #include <linux/device.h>
+-#include <linux/errno.h>
++#include <linux/err.h>
+ #include <linux/iio/iio.h>
+ #include <linux/iio/types.h>
+-#include <linux/io.h>
+-#include <linux/ioport.h>
+ #include <linux/isa.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
++#include <linux/regmap.h>
+ #include <linux/types.h>
+ 
+ #define CIO_DAC_NUM_CHAN 16
+@@ -35,25 +34,51 @@ static unsigned int num_cio_dac;
+ module_param_hw_array(base, uint, ioport, &num_cio_dac, 0);
+ MODULE_PARM_DESC(base, "Measurement Computing CIO-DAC base addresses");
+ 
++#define CIO_DAC_BASE 0x00
++#define CIO_DAC_CHANNEL_STRIDE 2
++
++static bool cio_dac_precious_reg(struct device *dev, unsigned int reg)
++{
++	/*
++	 * All registers are considered precious; if the XFER jumper is set on
++	 * the device, then no update occurs until a DAC register is read.
++	 */
++	return true;
++}
++
++static const struct regmap_config cio_dac_regmap_config = {
++	.reg_bits = 16,
++	.reg_stride = 2,
++	.val_bits = 16,
++	.io_port = true,
++	.max_register = 0x1F,
++	.precious_reg = cio_dac_precious_reg,
++};
++
+ /**
+  * struct cio_dac_iio - IIO device private data structure
+- * @chan_out_states:	channels' output states
+- * @base:		base memory address of the DAC device
++ * @map: Regmap for the device
+  */
+ struct cio_dac_iio {
+-	int chan_out_states[CIO_DAC_NUM_CHAN];
+-	u16 __iomem *base;
++	struct regmap *map;
+ };
+ 
+ static int cio_dac_read_raw(struct iio_dev *indio_dev,
+ 	struct iio_chan_spec const *chan, int *val, int *val2, long mask)
+ {
+ 	struct cio_dac_iio *const priv = iio_priv(indio_dev);
++	const unsigned int offset = chan->channel * CIO_DAC_CHANNEL_STRIDE;
++	int err;
++	unsigned int dac_val;
+ 
+ 	if (mask != IIO_CHAN_INFO_RAW)
+ 		return -EINVAL;
+ 
+-	*val = priv->chan_out_states[chan->channel];
++	err = regmap_read(priv->map, CIO_DAC_BASE + offset, &dac_val);
++	if (err)
++		return err;
++
++	*val = dac_val;
+ 
+ 	return IIO_VAL_INT;
+ }
+@@ -62,6 +87,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+ 	struct iio_chan_spec const *chan, int val, int val2, long mask)
+ {
+ 	struct cio_dac_iio *const priv = iio_priv(indio_dev);
++	const unsigned int offset = chan->channel * CIO_DAC_CHANNEL_STRIDE;
+ 
+ 	if (mask != IIO_CHAN_INFO_RAW)
+ 		return -EINVAL;
+@@ -70,10 +96,7 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
+ 	if ((unsigned int)val > 65535)
+ 		return -EINVAL;
+ 
+-	priv->chan_out_states[chan->channel] = val;
+-	iowrite16(val, priv->base + chan->channel);
+-
+-	return 0;
++	return regmap_write(priv->map, CIO_DAC_BASE + offset, val);
+ }
+ 
+ static const struct iio_info cio_dac_info = {
+@@ -92,7 +115,7 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
+ {
+ 	struct iio_dev *indio_dev;
+ 	struct cio_dac_iio *priv;
+-	unsigned int i;
++	void __iomem *regs;
+ 
+ 	indio_dev = devm_iio_device_alloc(dev, sizeof(*priv));
+ 	if (!indio_dev)
+@@ -105,21 +128,22 @@ static int cio_dac_probe(struct device *dev, unsigned int id)
+ 		return -EBUSY;
+ 	}
+ 
+-	priv = iio_priv(indio_dev);
+-	priv->base = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
+-	if (!priv->base)
++	regs = devm_ioport_map(dev, base[id], CIO_DAC_EXTENT);
++	if (!regs)
+ 		return -ENOMEM;
+ 
++	priv = iio_priv(indio_dev);
++	priv->map = devm_regmap_init_mmio(dev, regs, &cio_dac_regmap_config);
++	if (IS_ERR(priv->map))
++		return dev_err_probe(dev, PTR_ERR(priv->map),
++				     "Unable to initialize register map\n");
++
+ 	indio_dev->info = &cio_dac_info;
+ 	indio_dev->modes = INDIO_DIRECT_MODE;
+ 	indio_dev->channels = cio_dac_channels;
+ 	indio_dev->num_channels = CIO_DAC_NUM_CHAN;
+ 	indio_dev->name = dev_name(dev);
+ 
+-	/* initialize DAC outputs to 0V */
+-	for (i = 0; i < CIO_DAC_NUM_CHAN; i++)
+-		iowrite16(0, priv->base + i);
+-
+ 	return devm_iio_device_register(dev, indio_dev);
+ }
+ 
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
 -- 
-With best wishes
-Dmitry
+2.39.2
 
