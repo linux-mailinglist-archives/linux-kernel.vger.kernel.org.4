@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA7586B6037
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:28:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2263C6B6039
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCKT2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 14:28:08 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49414 "EHLO
+        id S229589AbjCKTaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 14:30:09 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCKT2F (ORCPT
+        with ESMTP id S229450AbjCKTaG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:28:05 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58A53EF90;
-        Sat, 11 Mar 2023 11:28:02 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D30A60DE5;
-        Sat, 11 Mar 2023 19:28:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA88FC433EF;
-        Sat, 11 Mar 2023 19:27:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678562881;
-        bh=VFKDknYpU98shV0cokL9ytozmlENE2BZsbsJV5R4Ig4=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=eb6MLAMM/QwHcgi1PATGqkNkcr+gtCPM7/hS4j6lsScWPK+vswMrC7yfWe9BSVPI1
-         84yRR82try4ZWFmFt+LKvA+lttnnFv6uNcchhwJxFtkyaiDgh8M5VIEIocDsOvVfBS
-         DUeJA+6I7AMgECijA3v3aaEzfrK4f/7z64j7FMqIggImRBdhFcuVhx2ERitzVKlyau
-         cmiHxRYZVAuoi0p6HaY/LsqK41OTRUaCe80FpJbL8BvjqbNtQ23IuCrQa99geWXjbg
-         jK13emjOmW2ebonhX+RrOVREOmD36Kzp18OdGGB8hXSZAxOqOZDV/Eb2lTSIPWsnzZ
-         xll+wy2klIe+w==
-Date:   Sat, 11 Mar 2023 19:28:05 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Svyatoslav Ryhel <clamor95@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 2/4] misc: adps990x: convert to OF
-Message-ID: <20230311192805.2c24f974@jic23-huawei>
-In-Reply-To: <20230308090219.12710-3-clamor95@gmail.com>
-References: <20230308090219.12710-1-clamor95@gmail.com>
-        <20230308090219.12710-3-clamor95@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 11 Mar 2023 14:30:06 -0500
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51FCB62DAF
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 11:30:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678563003; x=1710099003;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=thUqKDv8/SJdaZqSV9mz+uhrAj488PPLdQpV0XaqzZo=;
+  b=UPCC5ltwq7j/bDcOnvPnoPYoknPFAmmz2HdTDy0CEiyJ/IoQBc7vc414
+   aTJZL+8R8fDItHeeorBpllP/soJwSLjQlDfF04rH+Xiaus/yihTvwJKNJ
+   Sa6oAsS0RWPO9zKL+MbSsvlXqKrfULeU7dnUphmzpjzUZaUGfCQ+1al7E
+   QvJDE0U+wCKmFH6P/Qtl1i5paltlUlEOkoxVXqlBQlqHzrPJG8eprqi66
+   KeKe8RCbJbEI+X27EJykgDJ40X5O+vRPzl6qpOQK3fSTpeeqKg917vi9w
+   ovt9QQZ39FbTGCpZwu6+c31dDZld7N2+1cLPwz1Vdv5L1tcukMHgdmkR0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339301287"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="339301287"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 11:30:02 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="680552939"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="680552939"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga007.fm.intel.com with ESMTP; 11 Mar 2023 11:30:00 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pb4um-0004lp-0S;
+        Sat, 11 Mar 2023 19:30:00 +0000
+Date:   Sun, 12 Mar 2023 03:29:25 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Subject: arch/arm/mm/copypage-fa.c:38:6: warning: no previous prototype for
+ function 'fa_copy_user_highpage'
+Message-ID: <202303120327.m6pfGEGi-lkp@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,177 +64,104 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed,  8 Mar 2023 11:02:17 +0200
-Svyatoslav Ryhel <clamor95@gmail.com> wrote:
+Hi Nathan,
 
-> Add ability to get essential values from device tree.
-> 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+FYI, the error/warning was bisected to this commit, please ignore it if it's irrelevant.
 
-Hi,
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git master
+head:   ef5f68cc1f829b492b19cd4df5af4454aa816b93
+commit: 5eb6e280432ddc9b755193552f3a070da8d7455c ARM: 9289/1: Allow pre-ARMv5 builds with ld.lld 16.0.0 and newer
+date:   6 weeks ago
+config: arm-randconfig-r014-20230312 (https://download.01.org/0day-ci/archive/20230312/202303120327.m6pfGEGi-lkp@intel.com/config)
+compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # install arm cross compiling tool for clang build
+        # apt-get install binutils-arm-linux-gnueabi
+        # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=5eb6e280432ddc9b755193552f3a070da8d7455c
+        git remote add linus https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git
+        git fetch --no-tags linus master
+        git checkout 5eb6e280432ddc9b755193552f3a070da8d7455c
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash arch/arm/mm/
 
-Some comments inline.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303120327.m6pfGEGi-lkp@intel.com/
 
-> ---
->  drivers/misc/apds990x.c | 56 +++++++++++++++++++++++++++++++----------
->  1 file changed, 43 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/misc/apds990x.c b/drivers/misc/apds990x.c
-> index 0024503ea6db..c53ead5a575d 100644
-> --- a/drivers/misc/apds990x.c
-> +++ b/drivers/misc/apds990x.c
-> @@ -180,8 +180,8 @@ static const u16 arates_hz[] = {10, 5, 2, 1};
->  static const u8 apersis[] = {1, 2, 4, 5};
->  
->  /* Regulators */
-> -static const char reg_vcc[] = "Vdd";
-> -static const char reg_vled[] = "Vled";
-> +static const char reg_vcc[] = "vdd";
-> +static const char reg_vled[] = "vled";
+All warnings (new ones prefixed by >>):
 
-Doesn't this break existing users?  That's fine if we are dropping platform
-data support, but this patch doesn't do that.
-
->  
->  static int apds990x_read_byte(struct apds990x_chip *chip, u8 reg, u8 *data)
->  {
-> @@ -1048,9 +1048,38 @@ static struct attribute *sysfs_attrs_ctrl[] = {
->  };
->  
->  static const struct attribute_group apds990x_attribute_group[] = {
-> -	{.attrs = sysfs_attrs_ctrl },
-> +	{ .attrs = sysfs_attrs_ctrl },
-
-As below - white space changes are fine, but not in the same patch as
-functional stuff.  Just makes ti harder to read.
-
->  };
->  
-> +static int apds990x_of_probe(struct i2c_client *client,
-> +			     struct apds990x_chip *chip)
-> +{
-> +	struct apds990x_platform_data *pdata;
-> +	u32 ret, val;
-> +
-> +	pdata = devm_kzalloc(&client->dev, sizeof(*pdata), GFP_KERNEL);
-> +	if (!pdata)
-> +		return -ENOMEM;
-> +
-> +	ret = device_property_read_u32(&client->dev, "avago,pdrive", &val);
-> +	if (ret) {
-> +		dev_info(&client->dev, "pdrive property is missing: ret %d\n", ret);
-
-Is this required to work?  If so dev_err_probe() is neater and make sure to handle the
-error return at the caller.
-
-> +		return ret;
-> +	}
-> +	pdata->pdrive = val;
-> +
-> +	ret = device_property_read_u32(&client->dev, "avago,ppcount", &val);
-> +	if (ret) {
-> +		dev_info(&client->dev, "ppcount property is missing: ret %d\n", ret);
-> +		return ret;
-
-As above.
-
-> +	}
-> +	pdata->ppcount = val;
-> +
-> +	chip->pdata = pdata;
-> +
-> +	return 0;
-> +}
-> +
->  static int apds990x_probe(struct i2c_client *client)
->  {
->  	struct apds990x_chip *chip;
-> @@ -1065,13 +1094,10 @@ static int apds990x_probe(struct i2c_client *client)
->  
->  	init_waitqueue_head(&chip->wait);
->  	mutex_init(&chip->mutex);
-> -	chip->pdata	= client->dev.platform_data;
->  
-> -	if (chip->pdata == NULL) {
-> -		dev_err(&client->dev, "platform data is mandatory\n");
-> -		err = -EINVAL;
-> -		goto fail1;
-> -	}
-> +	chip->pdata = client->dev.platform_data;
-
-Are there known users of the platform data?  If not can we drop that whilst
-doing this conversion?
-
-> +	if (!chip->pdata)
-> +		apds990x_of_probe(client, chip);
-
-For a modern driver, don't make it of specific. There are other firmware
-types that can use the of table you've added. Look for PRP0001 ACPI
-bindings for example that use this.  So name this
-apds990x_fw_probe() instead.  You have done all the stuff correctly
-with the generic accessors so the actual function looks good to me.
-
-Needs error handling as you can end up without pdata being set.
+>> arch/arm/mm/copypage-fa.c:38:6: warning: no previous prototype for function 'fa_copy_user_highpage' [-Wmissing-prototypes]
+   void fa_copy_user_highpage(struct page *to, struct page *from,
+        ^
+   arch/arm/mm/copypage-fa.c:38:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void fa_copy_user_highpage(struct page *to, struct page *from,
+   ^
+   static 
+>> arch/arm/mm/copypage-fa.c:55:6: warning: no previous prototype for function 'fa_clear_user_highpage' [-Wmissing-prototypes]
+   void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
+        ^
+   arch/arm/mm/copypage-fa.c:55:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+   void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
+   ^
+   static 
+   2 warnings generated.
 
 
->  
->  	if (chip->pdata->cf.ga == 0) {
->  		/* set uncovered sensor default parameters */
-> @@ -1160,8 +1186,7 @@ static int apds990x_probe(struct i2c_client *client)
->  
->  	err = request_threaded_irq(client->irq, NULL,
->  				apds990x_irq,
-> -				IRQF_TRIGGER_FALLING | IRQF_TRIGGER_LOW |
-> -				IRQF_ONESHOT,
-> +				IRQF_TRIGGER_FALLING | IRQF_ONESHOT,
+vim +/fa_copy_user_highpage +38 arch/arm/mm/copypage-fa.c
 
-Ideally the irq type is a problem for device tree, not the driver
-(that lets the DT deal with describing the affect of inverters etc in
-the signal path).
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  37  
+28853ac8fe5221 Paulius Zaleckas 2009-03-25 @38  void fa_copy_user_highpage(struct page *to, struct page *from,
+a3be6327163c22 Hans Ulli Kroll  2010-04-27  39  	unsigned long vaddr, struct vm_area_struct *vma)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  40  {
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  41  	void *kto, *kfrom;
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  42  
+5472e862de2bc4 Cong Wang        2011-11-25  43  	kto = kmap_atomic(to);
+5472e862de2bc4 Cong Wang        2011-11-25  44  	kfrom = kmap_atomic(from);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  45  	fa_copy_user_page(kto, kfrom);
+5472e862de2bc4 Cong Wang        2011-11-25  46  	kunmap_atomic(kfrom);
+5472e862de2bc4 Cong Wang        2011-11-25  47  	kunmap_atomic(kto);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  48  }
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  49  
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  50  /*
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  51   * Faraday optimised clear_user_page
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  52   *
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  53   * Same story as above.
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  54   */
+28853ac8fe5221 Paulius Zaleckas 2009-03-25 @55  void fa_clear_user_highpage(struct page *page, unsigned long vaddr)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  56  {
+5472e862de2bc4 Cong Wang        2011-11-25  57  	void *ptr, *kaddr = kmap_atomic(page);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  58  	asm volatile("\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  59  	mov	r1, %2				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  60  	mov	r2, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  61  	mov	r3, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  62  	mov	ip, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  63  	mov	lr, #0				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  64  1:	stmia	%0, {r2, r3, ip, lr}		@ 4\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  65  	mcr	p15, 0, %0, c7, c14, 1		@ 1   clean and invalidate D line\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  66  	add	%0, %0, #16			@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  67  	stmia	%0, {r2, r3, ip, lr}		@ 4\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  68  	mcr	p15, 0, %0, c7, c14, 1		@ 1   clean and invalidate D line\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  69  	add	%0, %0, #16			@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  70  	subs	r1, r1, #1			@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  71  	bne	1b				@ 1\n\
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  72  	mcr	p15, 0, r1, c7, c10, 4		@ 1   drain WB"
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  73  	: "=r" (ptr)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  74  	: "0" (kaddr), "I" (PAGE_SIZE / 32)
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  75  	: "r1", "r2", "r3", "ip", "lr");
+5472e862de2bc4 Cong Wang        2011-11-25  76  	kunmap_atomic(kaddr);
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  77  }
+28853ac8fe5221 Paulius Zaleckas 2009-03-25  78  
 
-That causes problems for old DT that assumes the driver is doing it.
-I'd like to see a clear description of why this change is here in
-the patch description (even better to pull it out to a separate patch
-as not obviously connected to of conversion).
+:::::: The code at line 38 was first introduced by commit
+:::::: 28853ac8fe5221de74a14f1182d7b2b383dfd85c ARM: Add support for FA526 v2
 
+:::::: TO: Paulius Zaleckas <paulius.zaleckas@teltonika.lt>
+:::::: CC: Paulius Zaleckas <paulius.zaleckas@teltonika.lt>
 
->  				"apds990x", chip);
->  	if (err) {
->  		dev_err(&client->dev, "could not get IRQ %d\n",
-> @@ -1252,11 +1277,16 @@ static int apds990x_runtime_resume(struct device *dev)
->  
->  #endif
->  
-> +static const struct of_device_id apds990x_match_table[] = {
-> +	{ .compatible = "avago,apds990x" },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, apds990x_match_table);
-> +
->  static const struct i2c_device_id apds990x_id[] = {
->  	{"apds990x", 0 },
->  	{}
->  };
-> -
->  MODULE_DEVICE_TABLE(i2c, apds990x_id);
->  
->  static const struct dev_pm_ops apds990x_pm_ops = {
-> @@ -1270,12 +1300,12 @@ static struct i2c_driver apds990x_driver = {
->  	.driver	 = {
->  		.name	= "apds990x",
->  		.pm	= &apds990x_pm_ops,
-> +		.of_match_table = apds990x_match_table,
->  	},
->  	.probe_new = apds990x_probe,
->  	.remove	  = apds990x_remove,
->  	.id_table = apds990x_id,
->  };
-> -
-
-Try to avoid unrelated white space changes in a patch that does something else.
-Fine to tidy them all up in a separate patch though!
-
->  module_i2c_driver(apds990x_driver);
->  
->  MODULE_DESCRIPTION("APDS990X combined ALS and proximity sensor");
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
