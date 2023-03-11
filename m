@@ -2,113 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 28DEF6B5B46
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:43:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4BB6B5B49
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCKLn0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 06:43:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S229636AbjCKLpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 06:45:17 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48262 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbjCKLnM (ORCPT
+        with ESMTP id S229437AbjCKLpO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:43:12 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 059C2199D3;
-        Sat, 11 Mar 2023 03:43:09 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id y4so1429950edo.2;
-        Sat, 11 Mar 2023 03:43:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678534987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1D71/O6XT3CiIUnyuH8xQ8ENUScY89MVb0jVzlc2a7Q=;
-        b=q4K6gdMDvO5YUhohxfUi17YD9TvFxUUWGJq9bqgCJNtOY6oYHHS2bf42UYD/m3TqB7
-         0JUwCPSojAxODI2JfzW8Q0WRb4qcNqIvA7E2YZHaNolsOXheJLX3Amwtaqk6DSrcL2YC
-         UFjhVqEwyYetn9V56R+uvdSuzGKWJtkGwyXQboBb3HInjxG6mNiraXY73dNe7nna3YYY
-         o20aKA/S4bvieCykYVN8uOb5I0suwOPRwnn2LELqoCsudJp/yr9M9ZjzVXX/OP6mVXQw
-         HEpGRt1kXlRwbAuD+Twe5SJNKNRB7oqrmf4ff7gq6+3ZGaVvnOCE6Qzfa++d8st8ubQb
-         recQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678534987;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1D71/O6XT3CiIUnyuH8xQ8ENUScY89MVb0jVzlc2a7Q=;
-        b=PrHXinztmv1dYBrqldiP31o2SPlRHTfwMEL6MybF++AVJ4FJybcpW9lG78DJRFMB+x
-         fkW6FPXUpNs1mn3FkVXOqMrKZukHbeAmtBW1YQJvipGPrcz99l4m3Dgy3q//xXkgq5fV
-         bAVj/fCp09gZmu0lWc2cV311ErlvuQdv+FmIL+SJ3SE59M1wt0aPnInZn8r1/22JLj20
-         wbYs0uWz3+6iLbaE7xtebb2sVqDOq+KIhfDrD+fT1ujUjmu8P4S0XBozmSfCAC5ctgUD
-         UV9RNguh37HP9BHtnr6UO48rHrcViiOhLEL4K0x4b9gU/NxErrwKwotuPL+nc1mMQDRY
-         JPUQ==
-X-Gm-Message-State: AO0yUKWpHiFDwJM63C2Ykn5UqOMdd6Rsz94TnfhWRgQERoTXRMBsMBUW
-        0ySPkPHRpo4qNZwIiClYqg==
-X-Google-Smtp-Source: AK7set/MUcPdeVh55td7iQQ8Habh/syYbtLF/GCfO+hGAu8ToRvXBKqmsic6w+8D9N1xLS8fVB06TA==
-X-Received: by 2002:aa7:c1c4:0:b0:4c5:bc48:d422 with SMTP id d4-20020aa7c1c4000000b004c5bc48d422mr23184335edp.7.1678534987480;
-        Sat, 11 Mar 2023 03:43:07 -0800 (PST)
-Received: from localhost.localdomain ([46.53.248.97])
-        by smtp.gmail.com with ESMTPSA id x101-20020a50baee000000b004aeeb476c5bsm1088440ede.24.2023.03.11.03.43.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 03:43:07 -0800 (PST)
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     masahiroy@kernel.org
-Cc:     adobriyan@gmail.com, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] menuconfig: reclaim vertical space
-Date:   Sat, 11 Mar 2023 14:42:48 +0300
-Message-Id: <20230311114248.36587-3-adobriyan@gmail.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230311114248.36587-1-adobriyan@gmail.com>
-References: <20230311114248.36587-1-adobriyan@gmail.com>
+        Sat, 11 Mar 2023 06:45:14 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10939222CF;
+        Sat, 11 Mar 2023 03:45:13 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B07B8B824B9;
+        Sat, 11 Mar 2023 11:45:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF883C433EF;
+        Sat, 11 Mar 2023 11:45:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678535110;
+        bh=75mbQ2zIUa16Px+XAHlCBKsO8iebtVjeSF8AguylJ8s=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=vKcuArUhUvEGj+8PjRsrv9iWFy3ybcuDWmCSvAgrw3VQcr0KCqVMB3Yd+hSUl/rWD
+         LCu8+rzUrXPWC4LCYoUTY2xxqaJI1I1cWg8N8qp1rdNKHSNgDDZgxRZzvPhyoW7LWx
+         cWPIh8k/c6WorLch500+1DFN9R9uHtSVtIbxVzVhhl/EGrk80HN4VeTWkdSZg7T2cY
+         I/lsX4kNDEE+9FWmE5/oHplFO/6HBF3GGkSUuRHlhxTakn/zWpKqq6pOYoXGeLuKAP
+         YqoVWlEGWkGw99B/Rl8mhHUCSuukN6sdHMUKQVz7ZUSBKj+QI18qIPWpeaZMwZ4rSP
+         O64zmpd8v+XCw==
+Date:   Sat, 11 Mar 2023 12:45:07 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mark Brown <broonie@kernel.org>, Kamal Dasu <kdasu.kdev@gmail.com>,
+        Broadcom internal kernel review list 
+        <bcm-kernel-feedback-list@broadcom.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Andi Shyti <andi@etezian.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 07/16] spi: s3c64xx: Drop of_match_ptr for ID table
+Message-ID: <20230311114507.axtae3j64fbt64t3@intel.intel>
+References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
+ <20230310222857.315629-7-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230310222857.315629-7-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Menuconfig has lots of vertical space wasted: on my system there are
-17 lines of useful information about config options and 14 lines of
-useless fluff: legend, horizontal separators and shadows.
+Hi Krzysztof,
 
-Sitation is even worse on smaller terminals because fixed vertical
-lines do not go away, but config option lines do, further decreasing
-informational density. Minimum reasonable 80×24 text console has only
-10(!) lines of menus presented which is less than half of the screen.
+On Fri, Mar 10, 2023 at 11:28:48PM +0100, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table (all platforms are OF-only)
+> so the table should be always used and the of_match_ptr does not have
+> any sense (this also allows ACPI matching via PRP0001, even though it is
+> not relevant here).
+> 
+>   drivers/spi/spi-s3c64xx.c:1496:34: error: ‘s3c64xx_spi_dt_match’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
----
- scripts/kconfig/lxdialog/menubox.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
 
-diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
-index 5eb67c04821f..dc608914c636 100644
---- a/scripts/kconfig/lxdialog/menubox.c
-+++ b/scripts/kconfig/lxdialog/menubox.c
-@@ -183,14 +183,14 @@ int dialog_menu(const char *title, const char *prompt,
- 	if (height < MENUBOX_HEIGTH_MIN || width < MENUBOX_WIDTH_MIN)
- 		return -ERRDISPLAYTOOSMALL;
- 
--	height -= 4;
-+	height -= 2;
- 	menu_height = height - 10;
- 
- 	max_choice = MIN(menu_height, item_count());
- 
- 	/* center dialog box on screen */
--	x = (getmaxx(stdscr) - width) / 2;
--	y = (getmaxy(stdscr) - height) / 2;
-+	x = 0;
-+	y = 2;
- 
- 	dialog = newwin(height, width, y, x);
- 	keypad(dialog, TRUE);
--- 
-2.39.2
-
+Thanks,
+Andi
