@@ -2,111 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E45F26B5BBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:31:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BDCF6B5BC1
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:33:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230351AbjCKMb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:31:56 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S230360AbjCKMdB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:33:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjCKMbq (ORCPT
+        with ESMTP id S230373AbjCKMc5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:31:46 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4B2C12DDC7;
-        Sat, 11 Mar 2023 04:31:45 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4312760BA0;
-        Sat, 11 Mar 2023 12:31:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C60EC4339B;
-        Sat, 11 Mar 2023 12:31:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678537904;
-        bh=p5iWwHAklWT0bySItEhojZIf18mXXNFhFCDhXndKyK8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=AamS5nNCIINdQ5gPbG0tS4TRoqFwguJYVQAPQdOqT8UJOgKafXRkL45eh6CrmqzJH
-         3mSVmkZ2tsZvKuorrMmIP+YCyrxb7McFpweGnfNcVXbf9crDhcgeqV+OExB7JCMdNT
-         OqFxDd+l3/imn6lB3eH9suY82ns7sXwGbjCP5El79TRmhR7CyhoLxs43J95oKQAPrg
-         m9gw9o0Il0dzGUxaMgBVCVt7A5KnIcBtq1uC8L4t5HJx2UomOTurm1ghRFSDgPFDJX
-         HQwhgPXRqRKkri7tWvX8xPGncaijbaMKwJ7hmeCZFVW5cCTxKWO/LGsjmX4WxczRt7
-         uIRHR+Mp1vLTA==
-Date:   Sat, 11 Mar 2023 12:31:48 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Philipp Jungkamp <p.jungkamp@gmx.net>
-Cc:     Todd Brandt <todd.e.brandt@intel.com>, linux-input@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        todd.e.brandt@linux.intel.com, srinivas.pandruvada@linux.intel.com,
-        jikos@kernel.org
-Subject: Re: [PATCH] Fix buffer overrun in HID-SENSOR name.
-Message-ID: <20230311123148.0fbe1091@jic23-huawei>
-In-Reply-To: <b9dab02783e5eeaa74b291d4394150689e7c7b8a.camel@gmx.net>
-References: <20230310235414.12467-1-todd.e.brandt@intel.com>
-        <b9dab02783e5eeaa74b291d4394150689e7c7b8a.camel@gmx.net>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sat, 11 Mar 2023 07:32:57 -0500
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B765212FD05;
+        Sat, 11 Mar 2023 04:32:44 -0800 (PST)
+Received: by mail-pl1-x62e.google.com with SMTP id ix20so1788550plb.3;
+        Sat, 11 Mar 2023 04:32:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678537964;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zeBGEGBy3GzypDRtMJAMW7+H/dC0tKTZg1B8rKisPPg=;
+        b=ozYBtX+oLCLwTDq0vgGPi/UV5U3VCNOx0hgd8raVBdxqET0UET+vr6lFr+Sj5DulQv
+         yy6p1/GTWJD+/1j5mD9CPQHQs0dTjysHRI5EGelYq+hUSr39ExzUZ2iBdtdCjvPqGGM/
+         I0lB7mJzQCzIVpGLR6jbcxIAxpDavqedDI3ITFMQQXstOo/1fmcCQVwxTUPidbkTyyBw
+         i2RTCskqTCZO6LccgnhQ66HUzUgKyxZUbuBBUo5hsPEMAwSfxvlHsp3g6KtkCKfYUQc8
+         mom00/wjigb4i1JOD0fo3Y1j1TUZ8W+wtnvnmXXAimdhsINpzeeHPndz7Jed8pAu+163
+         PdtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678537964;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zeBGEGBy3GzypDRtMJAMW7+H/dC0tKTZg1B8rKisPPg=;
+        b=xd7J27TnBdpFWvWe+KVrL+Ky29jY88eLLVBVXOSZJjvZVdPhCasAarEj1UgnnGQdpz
+         5ZrQ9WEeZC+HVJenN+eKujpRX2oztNtcNNzx5ag60T6wesmLRoUvmZYOQD2oCs7ST/IJ
+         3pM8loQyR6GmbuhohRk2xwUa6Tgb/CbGb3lDoIGYqPH5n6T6wl/qMe5N0/4SFqGWpsUN
+         JJXA55PGjWbxDHmZpaLMtuuXEkd0r3uzQtMllozyOpe9Hj910WbJxA33g+6a7YoKatSt
+         Y+uXegjOQboCd6zXjcmcKJl3HrY6+IhKwHi9umP9hHgMokD61zZ62rCQmIOfltRFrrnC
+         t+Vw==
+X-Gm-Message-State: AO0yUKXtHzAGrV0FCN0fye18S4CqsRNezqScUe+Mg6luUUYzxO9uQ/w8
+        XGs9X7PZe0afWl+BsCrc8H0=
+X-Google-Smtp-Source: AK7set9M6K7Ck2qJ+kyt/yPQ4Vwm1QYaDduE/QAC7LceldmLdWyR9N7INxoglPg3eg/bykJOjTe6Pw==
+X-Received: by 2002:a05:6a20:440c:b0:ce:5c14:2838 with SMTP id ce12-20020a056a20440c00b000ce5c142838mr39315872pzb.54.1678537964189;
+        Sat, 11 Mar 2023 04:32:44 -0800 (PST)
+Received: from localhost.localdomain (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id g4-20020a62e304000000b005a8173829d5sm1406754pfh.66.2023.03.11.04.32.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 04:32:43 -0800 (PST)
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Jianhua Lu <lujianhua000@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v5 1/2] dt-bindings: display: panel: Add Novatek NT36523 bindings
+Date:   Sat, 11 Mar 2023 20:32:30 +0800
+Message-Id: <20230311123231.20771-1-lujianhua000@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 01:53:22 +0100
-Philipp Jungkamp <p.jungkamp@gmx.net> wrote:
+Novatek NT36523 is a display driver IC used to drive DSI panels.
 
-> This is exactly the fix I proposed. Thank you for testing and properly
-> submitting it.
->=20
-> Regards,
-> Philipp Jungkamp
+Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+No changes in v5
 
-Looks good to me as well.
+No changes in v4
 
-Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Changes in v3:
+  - pick up Krzysztof's R-b
+  - remove vddpos and vddneg supply
 
->=20
-> On Fri, 2023-03-10 at 15:54 -0800, Todd Brandt wrote:
-> > Philipp Jungkamp created this fix, I'm simply submitting it. I've
-> > verified it fixes bugzilla issue 217169.
-> >=20
-> > Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=3D217169
-> > Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
-> > ---
-> > =C2=A0drivers/hid/hid-sensor-custom.c | 2 +-
-> > =C2=A01 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-
-> > sensor-custom.c
-> > index 3e3f89e01d81..d85398721659 100644
-> > --- a/drivers/hid/hid-sensor-custom.c
-> > +++ b/drivers/hid/hid-sensor-custom.c
-> > @@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct
-> > platform_device *pdev,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct h=
-id_sensor_hub_device
-> > *hsdev,
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const st=
-ruct
-> > hid_sensor_custom_match *match)
-> > =C2=A0{
-> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char real_usage[HID_SENSOR_U=
-SAGE_LENGTH];
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char real_usage[HID_SENSOR_U=
-SAGE_LENGTH] =3D { 0 };
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct platform_device =
-*custom_pdev;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const char *dev_name;
-> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0char *c; =20
->=20
+Changes in v2:
+  - Drop unnecessary description
+  - dsi0 -> dsi
+  - Correct indentation
+
+ .../display/panel/novatek,nt36523.yaml        | 85 +++++++++++++++++++
+ 1 file changed, 85 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+
+diff --git a/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+new file mode 100644
+index 000000000000..0039561ef04c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+@@ -0,0 +1,85 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/display/panel/novatek,nt36523.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Novatek NT36523 based DSI display Panels
++
++maintainers:
++  - Jianhua Lu <lujianhua000@gmail.com>
++
++description: |
++  The Novatek NT36523 is a generic DSI Panel IC used to drive dsi
++  panels. Support video mode panels from China Star Optoelectronics
++  Technology (CSOT) and BOE Technology.
++
++allOf:
++  - $ref: panel-common.yaml#
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - xiaomi,elish-boe-nt36523
++          - xiaomi,elish-csot-nt36523
++      - const: novatek,nt36523
++
++  reset-gpios:
++    maxItems: 1
++    description: phandle of gpio for reset line - This should be 8mA
++
++  vddio-supply:
++    description: regulator that supplies the I/O voltage
++
++  reg: true
++  ports: true
++  backlight: true
++
++required:
++  - compatible
++  - reg
++  - vddio-supply
++  - reset-gpios
++  - ports
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/gpio/gpio.h>
++
++    dsi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        panel@0 {
++            compatible = "xiaomi,elish-csot-nt36523", "novatek,nt36523";
++            reg = <0>;
++
++            vddio-supply = <&vreg_l14a_1p88>;
++            reset-gpios = <&tlmm 75 GPIO_ACTIVE_LOW>;
++            backlight = <&backlight>;
++
++            ports {
++                #address-cells = <1>;
++                #size-cells = <0>;
++
++                port@0 {
++                    reg = <0>;
++                    panel_in_0: endpoint {
++                        remote-endpoint = <&dsi0_out>;
++                    };
++                };
++
++                port@1{
++                    reg = <1>;
++                    panel_in_1: endpoint {
++                        remote-endpoint = <&dsi1_out>;
++                    };
++                };
++            };
++        };
++    };
++
++...
+-- 
+2.39.2
 
