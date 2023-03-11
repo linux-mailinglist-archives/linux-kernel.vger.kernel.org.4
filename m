@@ -2,96 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D65546B5C85
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EF236B5C9B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229478AbjCKNyy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 08:54:54 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58754 "EHLO
+        id S229922AbjCKOHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:07:00 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230141AbjCKNyv (ORCPT
+        with ESMTP id S229977AbjCKOG5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:54:51 -0500
-Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6818D2E0EF
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:54:49 -0800 (PST)
-Received: by mail-lj1-x230.google.com with SMTP id i20so8200300lja.11
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:54:49 -0800 (PST)
+        Sat, 11 Mar 2023 09:06:57 -0500
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE2E912DC39
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:06:50 -0800 (PST)
+Received: by mail-qt1-x833.google.com with SMTP id c3so8792471qtc.8
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:06:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678542887;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=b74ndVfU9DxWFOMpu8+kEmW13oESmeqjrw0XEQibqSs=;
-        b=mxsdHMyJFU4lKAYB2IXWFoh0qn0l1tdTyHLGMMQ97W5FfXLL8Ph3kwfeQMAbtIrWmV
-         4ercVgub8nltJEux8c1cUN9+qeLzKJY2uDghIB/rPndDeVdjtKK6GAv5UWV6MfpS06mb
-         o7bm6Y6hhyoIQMSD25gdJ5TnQiB7VQ5qveUERCWvvWmoq5xCHslS3xBCk66VB9qEe/Gt
-         efzFMmpKWF7MF/XakGfjauIfkAXh69tNOYjuKtHI87i7iKMf/W1bT2cW6pp68r8QqX85
-         1IEZVHSB/temkNgM1sZ7x5qPuvtYyK4SHcNihQNsj7yTmlbXd+pSV8heJnmt41TY2gxb
-         VVng==
+        d=linaro.org; s=google; t=1678543610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3jr4lYUE4LbhKnqlf9KsV9sgPswlPNrF5JvpcjFIiws=;
+        b=efew17kBKesrHCtgPKacE9tv9x5k9D6/aVivtmVfC33CxWRbighjnL4ScqzyTiREvH
+         B5OfLtmgmIMhpaMiBUkTSSZWSuY5v9NSYVNStNRzb+/fXrwYMaHcOdbmy60EkJulaI+U
+         hLSAm9AChR9v/FxmKTczURztQl21LhyAQ9SpiJfEyN5Kay2GhlyYWTVw8/onpeSGZ6V2
+         DMVyPIYduyWwuayiVVMBo+ow6Y/2OF2YA4/ZfcL+zPTNIiSrI+DYLFP1EWTE5uUcCBTM
+         9705XMcbloVI7uIfAb8dOdTw0ivy3oSnbgqXJyZyiBarklCN03im771s18fd9lbthMXq
+         uL2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678542887;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=b74ndVfU9DxWFOMpu8+kEmW13oESmeqjrw0XEQibqSs=;
-        b=wyETQgN2pQaFCvj/M+OlWHiEqYdMpC+QYjNhjtMzM0OvXu7CoAWHguUNGeF1VPLoHf
-         xiFQZCx0a4rilwEG1udMETxXe1ouJbzmiymitnbb+9CBfI0NPjqd8/TdZQDl5bSx/vuF
-         VsMef/pQ6GbhUB6FzbwDmOrzbJjvgJ5sytKnGt7oCP6/NtSY3L/5C20GIsXx5Yb2qmYN
-         bCRNc9zoElW9aDRRpynSludOkts2I5b70ogq/pEu/oUzEE2eUjZpkSO9I+oK+s9u1JgE
-         L6k3WlUAX4FCjRwOzPdArGM8An6sYZ+4VQY7ZAh8gaKj2kaIUvO7ZwA6P5MFxakfpwQM
-         Z5aw==
-X-Gm-Message-State: AO0yUKWAC8fRGK8Qmzu1EOyaP3yylNb4KyoF36fy+KLnSxjuxdyUTJtl
-        b14hlm2l8SfonCGl/FpdeuuXK/cMhk3sd8uxG2s=
-X-Google-Smtp-Source: AK7set+vKmwJa5xd+nWrAm+JcbVzMQkVa+4ozTRLniSiTb6/ZKSKjSKxAG9bZrq80QkDUpksWolPig==
-X-Received: by 2002:a2e:8558:0:b0:295:965e:8506 with SMTP id u24-20020a2e8558000000b00295965e8506mr8330224ljj.41.1678542887665;
-        Sat, 11 Mar 2023 05:54:47 -0800 (PST)
-Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
-        by smtp.gmail.com with ESMTPSA id t23-20020a2e9557000000b00298798f7e38sm334406ljh.77.2023.03.11.05.54.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 05:54:47 -0800 (PST)
-Message-ID: <aec560f9-2a77-9e9a-ac09-8250d28299d4@linaro.org>
-Date:   Sat, 11 Mar 2023 15:54:46 +0200
+        d=1e100.net; s=20210112; t=1678543610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jr4lYUE4LbhKnqlf9KsV9sgPswlPNrF5JvpcjFIiws=;
+        b=x9pgneN/rmc5mjvaIr7Sokk3rLMsS/0HeZ1WOqFECe824DNWmpetT9W4fGWPJH6eV6
+         JhF0qZfS/BZxoL/cNG+VY/VaQpzsJ36sIGU0PX79uwK0YC7GGLIZMI/ZEVcIczI6tQYg
+         e/4BntYA1WEM4ds9dYsphiU9b9zqWf4FnNk3wWVSRSb4pY0yc6QSUfjqvieZgHSFCUCi
+         iFPcegua/V1gnXj2CflNepVqTiZCymyBZ+sICDFDA0z1xaukLqrgtlupcR4GzZBMYLKw
+         /oOOdnrFxV+Pqx0LRo0tCKVlBFMiOhKcJUIDMurSKMBmDHUPB4YeVTWBKdI6q5hPlGen
+         JEVw==
+X-Gm-Message-State: AO0yUKU3VXf08Rt8hutGoA3YFzqqyhfz2q0pZiJ4N2ADS0jrnJZox2L4
+        iRTD6kbufiNVzK7iH/wvUpGsOw==
+X-Google-Smtp-Source: AK7set/UIRTG09WzBMk7wO+Lb/OIZ7rFPpLWper7l1UdVQLZnr7HkB4ITdvRNJIXWNz8gLzEII479g==
+X-Received: by 2002:ac8:5dce:0:b0:3bf:e2ff:4c35 with SMTP id e14-20020ac85dce000000b003bfe2ff4c35mr20068022qtx.1.1678543609806;
+        Sat, 11 Mar 2023 06:06:49 -0800 (PST)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id 140-20020a370792000000b0073b69922cfesm1824928qkh.85.2023.03.11.06.06.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 06:06:49 -0800 (PST)
+Date:   Sat, 11 Mar 2023 08:57:02 -0500
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     jic23@kernel.org, lars@metafoo.de
+Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Subject: Re: [PATCH] iio: dac: cio-dac: Migrate to the regmap API
+Message-ID: <ZAyIrrLrhmMJqq2w@fedora>
+References: <20230311134012.70822-1-william.gray@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 3/9] interconnect: qcom: Sort kerneldoc entries
-Content-Language: en-GB
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-3-815606092fff@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20230228-topic-qos-v7-3-815606092fff@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="7eaGiRj104sy96DY"
+Content-Disposition: inline
+In-Reply-To: <20230311134012.70822-1-william.gray@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 08/03/2023 23:40, Konrad Dybcio wrote:
-> Sort the kerneldoc entries the same way the struct members are
-> sorted.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->   drivers/interconnect/qcom/icc-rpm.h | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+--7eaGiRj104sy96DY
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-With best wishes
-Dmitry
+On Sat, Mar 11, 2023 at 08:40:12AM -0500, William Breathitt Gray wrote:
+> The regmap API supports IO port accessors so we can take advantage of
+> regmap abstractions rather than handling access to the device registers
+> directly in the driver.
+>=20
+> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 
+[...]
+
+> @@ -117,8 +148,12 @@ static int cio_dac_probe(struct device *dev, unsigne=
+d int id)
+>  	indio_dev->name =3D dev_name(dev);
+> =20
+>  	/* initialize DAC outputs to 0V */
+> -	for (i =3D 0; i < CIO_DAC_NUM_CHAN; i++)
+> -		iowrite16(0, priv->base + i);
+> +	for (i =3D 0; i < CIO_DAC_NUM_CHAN; i++) {
+> +		offset =3D i * CIO_DAC_CHANNEL_STRIDE;
+> +		err =3D regmap_write(priv->map, CIO_DAC_BASE + offset, 0);
+> +		if (err)
+> +			return err;
+> +	}
+> =20
+>  	return devm_iio_device_register(dev, indio_dev);
+>  }
+
+As soon as I sent this I realized this last hunk is no longer necessary
+because the chan_out_states array is gone so we don't need to match its
+initialized state. I'll remove this block as superfluous and submit a v2
+patch shortly.
+
+William Breathitt Gray
+
+--7eaGiRj104sy96DY
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZAyIrgAKCRC1SFbKvhIj
+K1z2AQCXC7YVVHrA7LJgDJsARq//xniX0yAewpIY+ix0wlp33QD9He4DCxaHI52t
+Q4te1JECKhcAK2HyQaQcA7JQMK/j+A8=
+=btlL
+-----END PGP SIGNATURE-----
+
+--7eaGiRj104sy96DY--
