@@ -2,67 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5BFBD6B5744
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 02:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9EE76B5737
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 02:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCKBKR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 20:10:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52716 "EHLO
+        id S229963AbjCKBC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 20:02:58 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbjCKBKP (ORCPT
+        with ESMTP id S230075AbjCKBCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 20:10:15 -0500
-Received: from mail-ot1-x329.google.com (mail-ot1-x329.google.com [IPv6:2607:f8b0:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54786EFB8
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:10:14 -0800 (PST)
-Received: by mail-ot1-x329.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so3897169otv.10
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:10:14 -0800 (PST)
+        Fri, 10 Mar 2023 20:02:47 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEEF12BAC2
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:02:45 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id s11so27526717edy.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 17:02:45 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678497013;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pg/Y8NVSABbLKTXUhLPi9eY9pyjP+zU6j4r9Umj6pZE=;
-        b=wNlqk2crlfmDE/+WKjF3sPjUDnrZnsI4AXVpg3LoQi7GQbBHgTgQOrgWBAQbaFNnb5
-         5EuGdrkZFN2UnTvIwHy7i3AGLoxBIiW05MFxULOfVXldsGhqNtY0s6ZGEM8iembyIkD0
-         noD96zWNkKk25QZ1FlAMz6B+31qBIUeyxlKxtpNSTbPHWpNtpWpuFoT5iAWe+aYAou+F
-         v6nvEGvgZdLsfNZVaIiq3qiGAsP8AS6ztr1IJ1liVR9bDk5fSmAyzhGpTAPbvujABLy5
-         meWDOC++e7cCztgwRVoOjh/wiUJIwR3cBa4pX+yuMVEKF2KWhg8imbIUQyjSyw5YsuxB
-         SWkQ==
+        d=google.com; s=20210112; t=1678496564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BNeo4Q+YBzB6+k/1T0KBlBv8lS3nFA3RB32TXvnq+ZE=;
+        b=s2hHDqKQ+3WYWekbPQkFW5wMC1cF+w3qJjybbqezMKkv0fmC/e0ZR6YHuOHuw74Gcs
+         S7RtzxPtf3P/046EWeLTi9kmZtwb0kiXgVvc2wsribi2zCpuwgAjRMdxSoFKAN6wgahg
+         0obQ7sbHM9PC8kT9NTTcoxZhha4NpY6LLFzLZG+/f0JA6Fe5hJCwmiSqT0yv/fAsKKdt
+         LkRmy3AhDg+N9czjTx6TubG6+rSafMIvqsVpWal4g7dwhY0XfMQWmnezeMvjnGc8tkGX
+         tsWB8hkhWdJJUHKHGKgp729LUkN4+ZkOea37hvbZrkJRlQSZZ4i55PVVAPHyhk7JIVUX
+         vRzQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678497013;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pg/Y8NVSABbLKTXUhLPi9eY9pyjP+zU6j4r9Umj6pZE=;
-        b=wtpvd5fK0VClM8JhGvp7lXXUtEGA3VPQvZl87z9L++T0mRMcrNynpaNx2qdrjJqtBP
-         TefY+xOBFmLbQJzNwxnkUR2GBboO+kRapZuqmsmaoYWMFhOmYU0z84JSEJy14EO/vzXz
-         GApdK4bd7pbbOughWkVnJleS4slxeXbAXFs+UZabTSm8MlA6qCt+CUxd5CNdlkPUaf3J
-         LUVxQKkzDazJoxDdHFjQ3OXuHU2EaBL5WX5O+4JlM12hsit+SNuv3BR5CTn6b6k13ebC
-         nH+jA3HdqDIWFvB13+Cu3HyHFXqQKTFfobtJ0NLgZjKq81i06XrfSrEipzLx7tvWKEol
-         14Jw==
-X-Gm-Message-State: AO0yUKXGinMNdUtzbcHoQBTAzX6biSUp0u3SVmZk2mpcismG7oMRYZxS
-        K5jUseZT/NYQ0bnrounJsR1grQ==
-X-Google-Smtp-Source: AK7set8vmev8yFYppuYdUn+w5YeFXngvf6oc27bWwdibbGy7yWXM8CE3wPtNVo5/20PO6r7OQTx4JA==
-X-Received: by 2002:a05:6830:26e0:b0:690:c284:f16c with SMTP id m32-20020a05683026e000b00690c284f16cmr1881407otu.11.1678497013637;
-        Fri, 10 Mar 2023 17:10:13 -0800 (PST)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id y30-20020a9d461e000000b00688449397d3sm694743ote.15.2023.03.10.17.10.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 17:10:13 -0800 (PST)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     wim@linux-watchdog.org, linux@roeck-us.net
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH] watchdog: ebc-c384_wdt: Migrate to the regmap API
-Date:   Fri, 10 Mar 2023 19:44:04 -0500
-Message-Id: <20230311004404.62980-1-william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678496564;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=BNeo4Q+YBzB6+k/1T0KBlBv8lS3nFA3RB32TXvnq+ZE=;
+        b=GEFtZ4Wf3UeRdkGQ7GFvKQ3MLv5lK3Ro76c8OV3XL4SWXP3v2t2wECWCmpmihxMtBi
+         /Ga2Hfv1yZPahvmXRj0XnRKCBNaz6It2Xev+U5gX0hUxxrgaNyovjbvSq2hq8WPPJQ7k
+         50ec5stJdqiH8JnQiz93IARTCZ81/70GE2NA7nkYca9kzz1wweN6RuBB7Px0dTpkLZAq
+         aP5Smh2h+dMJ7Ffo8MNszK+gzzQkUy9UjsRacyIh3wtzVNo18dcOAI2/NbdpjVOSlBx5
+         L6sVvMik3H6or5xHIoyW+N8DjVO8x4iYgTAFNKDkW//Wk1Jw4W8Bty9A69qNPKZqDG3B
+         A7oA==
+X-Gm-Message-State: AO0yUKX4t8RjcVON1GxX0tyn6Fny89wSLHYjJ4oFlIZYBMBsDuEvl7jz
+        ayFrsOxTZfhm/pfidEa3afDVht0+ey8QLgS6HlE9pUBX3IfiTG1J/XxIVQ==
+X-Google-Smtp-Source: AK7set+Gap6CiHY6IOZLSsQSxwbaC38OW1hIQ1zD+5oGW3MpLx6ATMPwJiklefK1K4P1YUsUq8pdcCYAvQb1F6CcxnI=
+X-Received: by 2002:a17:906:80c8:b0:8b1:81fa:b07a with SMTP id
+ a8-20020a17090680c800b008b181fab07amr12806858ejx.12.1678496563589; Fri, 10
+ Mar 2023 17:02:43 -0800 (PST)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+References: <000000000000226a6105f6954b47@google.com>
+In-Reply-To: <000000000000226a6105f6954b47@google.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Fri, 10 Mar 2023 17:02:06 -0800
+Message-ID: <CAAa6QmSH-c4voB2vg=ohdeQwmGDJ8X5rUw97-99cFkVaOPD5mg@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] kernel BUG in hpage_collapse_scan_file
+To:     syzbot <syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, syzkaller-bugs@googlegroups.com,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,170 +71,131 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The regmap API supports IO port accessors so we can take advantage of
-regmap abstractions rather than handling access to the device registers
-directly in the driver.
+On Fri, Mar 10, 2023 at 4:52=E2=80=AFPM syzbot
+<syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    857f1268a591 Merge tag 'objtool-core-2023-03-02' of git:/=
+/..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D168e1032c8000=
+0
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=3Df763d89e26d3d=
+4c4
+> dashboard link: https://syzkaller.appspot.com/bug?extid=3D9578faa5475acb3=
+5fa50
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Deb=
+ian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D179e4e12c80=
+000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D119cce98c8000=
+0
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/b3b7a7e333f1/dis=
+k-857f1268.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/5940be1cf171/vmlinu=
+x-857f1268.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/986015398e4a/b=
+zImage-857f1268.xz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the comm=
+it:
+> Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+>
+> ------------[ cut here ]------------
+> kernel BUG at mm/khugepaged.c:1823!
+> invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 1 PID: 5097 Comm: syz-executor220 Not tainted 6.2.0-syzkaller-13154-=
+g857f1268a591 #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS G=
+oogle 02/16/2023
+> RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
+> RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
+> Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 0f 8=
+5 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0f 1e=
+ fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
+> RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
+> RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
+> RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
+> RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
+> R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+> R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
+> FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> Call Trace:
+>  <TASK>
+>  madvise_collapse+0x721/0xf50 mm/khugepaged.c:2693
+>  madvise_vma_behavior mm/madvise.c:1086 [inline]
+>  madvise_walk_vmas mm/madvise.c:1260 [inline]
+>  do_madvise+0x9e5/0x4680 mm/madvise.c:1439
+>  __do_sys_madvise mm/madvise.c:1452 [inline]
+>  __se_sys_madvise mm/madvise.c:1450 [inline]
+>  __x64_sys_madvise+0xa5/0xb0 mm/madvise.c:1450
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7fdbae65dc39
+> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 89 f=
+7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff=
+ ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> RSP: 002b:00007fdbae5ee2f8 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+> RAX: ffffffffffffffda RBX: 00007fdbae6e64b8 RCX: 00007fdbae65dc39
+> RDX: 0000000000000019 RSI: 000000000060005f RDI: 0000000020000000
+> RBP: 00007fdbae6e64b0 R08: 0000000000000001 R09: 0000000000000033
+> R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdbae5ee300
+> R13: 0000000000000001 R14: 00007fdbae5ee400 R15: 0000000000022000
+>  </TASK>
+> Modules linked in:
+> ---[ end trace 0000000000000000 ]---
+> RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
+> RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
+> Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 0f 8=
+5 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0f 1e=
+ fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
+> RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
+> RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
+> RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
+> RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
+> R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+> R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
+> FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:0000000000000=
+000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
+> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
----
- drivers/watchdog/Kconfig        |  1 +
- drivers/watchdog/ebc-c384_wdt.c | 64 +++++++++++++++++++++++----------
- 2 files changed, 46 insertions(+), 19 deletions(-)
+I had a look at this, and the issue is stemming from failed (due to
+error injection here) xas_store() in collapse_file() (in this report,
+specifically was picking on shmem after MADV_REMOVE punch). This puts
+the xa_state into an error state (-ENOMEM) and the subsequent
+xas_next() will (a) not increment xas->xa_index (which trips the
+VM_BUG_ON), and (b) returns NULL (which is confusing, since AFAIU,
+that's a "valid" entry for a truncated page cache entry, but also
+being used to indicate error).
 
-diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-index f0872970daf9..301cfe79263c 100644
---- a/drivers/watchdog/Kconfig
-+++ b/drivers/watchdog/Kconfig
-@@ -1089,6 +1089,7 @@ config EBC_C384_WDT
- 	tristate "WinSystems EBC-C384 Watchdog Timer"
- 	depends on X86
- 	select ISA_BUS_API
-+	select REGMAP_MMIO
- 	select WATCHDOG_CORE
- 	help
- 	  Enables watchdog timer support for the watchdog timer on the
-diff --git a/drivers/watchdog/ebc-c384_wdt.c b/drivers/watchdog/ebc-c384_wdt.c
-index 8ef4b0df3855..3776d32cb863 100644
---- a/drivers/watchdog/ebc-c384_wdt.c
-+++ b/drivers/watchdog/ebc-c384_wdt.c
-@@ -3,15 +3,15 @@
-  * Watchdog timer driver for the WinSystems EBC-C384
-  * Copyright (C) 2016 William Breathitt Gray
-  */
-+#include <linux/bits.h>
- #include <linux/device.h>
- #include <linux/dmi.h>
--#include <linux/errno.h>
--#include <linux/io.h>
--#include <linux/ioport.h>
-+#include <linux/err.h>
- #include <linux/isa.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-+#include <linux/regmap.h>
- #include <linux/types.h>
- #include <linux/watchdog.h>
- 
-@@ -24,8 +24,11 @@
- #define WATCHDOG_MAX_TIMEOUT	15300
- #define BASE_ADDR		0x564
- #define ADDR_EXTENT		5
--#define CFG_ADDR		(BASE_ADDR + 1)
--#define PET_ADDR		(BASE_ADDR + 2)
-+#define CFG_REG			0x1
-+#define PET_REG			0x2
-+#define CFG_MINUTES		0x00
-+#define CFG_SECONDS		BIT(7)
-+#define PET_DISABLED		0x00
- 
- static bool nowayout = WATCHDOG_NOWAYOUT;
- module_param(nowayout, bool, 0);
-@@ -37,43 +40,54 @@ module_param(timeout, uint, 0);
- MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
- 	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
- 
-+static const struct regmap_range ebc_c384_wdt_wr_ranges[] = {
-+	regmap_reg_range(0x1, 0x2),
-+};
-+static const struct regmap_access_table ebc_c384_wdt_wr_table = {
-+	.yes_ranges = ebc_c384_wdt_wr_ranges,
-+	.n_yes_ranges = ARRAY_SIZE(ebc_c384_wdt_wr_ranges),
-+};
-+static const struct regmap_config ebc_c384_wdt_regmap_config = {
-+	.reg_bits = 8,
-+	.reg_stride = 1,
-+	.val_bits = 8,
-+	.io_port = true,
-+	.max_register = 0x2,
-+	.wr_table = &ebc_c384_wdt_wr_table,
-+};
-+
- static int ebc_c384_wdt_start(struct watchdog_device *wdev)
- {
-+	struct regmap *const map = wdev->driver_data;
- 	unsigned t = wdev->timeout;
- 
- 	/* resolution is in minutes for timeouts greater than 255 seconds */
- 	if (t > 255)
- 		t = DIV_ROUND_UP(t, 60);
- 
--	outb(t, PET_ADDR);
--
--	return 0;
-+	return regmap_write(map, PET_REG, t);
- }
- 
- static int ebc_c384_wdt_stop(struct watchdog_device *wdev)
- {
--	outb(0x00, PET_ADDR);
-+	struct regmap *const map = wdev->driver_data;
- 
--	return 0;
-+	return regmap_write(map, PET_REG, PET_DISABLED);
- }
- 
- static int ebc_c384_wdt_set_timeout(struct watchdog_device *wdev, unsigned t)
- {
-+	struct regmap *const map = wdev->driver_data;
-+
- 	/* resolution is in minutes for timeouts greater than 255 seconds */
- 	if (t > 255) {
- 		/* round second resolution up to minute granularity */
- 		wdev->timeout = roundup(t, 60);
--
--		/* set watchdog timer for minutes */
--		outb(0x00, CFG_ADDR);
--	} else {
--		wdev->timeout = t;
--
--		/* set watchdog timer for seconds */
--		outb(0x80, CFG_ADDR);
-+		return regmap_write(map, CFG_REG, CFG_MINUTES);
- 	}
- 
--	return 0;
-+	wdev->timeout = t;
-+	return regmap_write(map, CFG_REG, CFG_SECONDS);
- }
- 
- static const struct watchdog_ops ebc_c384_wdt_ops = {
-@@ -89,6 +103,8 @@ static const struct watchdog_info ebc_c384_wdt_info = {
- 
- static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
- {
-+	void __iomem *regs;
-+	struct regmap *map;
- 	struct watchdog_device *wdd;
- 
- 	if (!devm_request_region(dev, BASE_ADDR, ADDR_EXTENT, dev_name(dev))) {
-@@ -97,6 +113,15 @@ static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
- 		return -EBUSY;
- 	}
- 
-+	regs = devm_ioport_map(dev, BASE_ADDR, ADDR_EXTENT);
-+	if (!regs)
-+		return -ENOMEM;
-+
-+	map = devm_regmap_init_mmio(dev, regs, &ebc_c384_wdt_regmap_config);
-+	if (IS_ERR(map))
-+		return dev_err_probe(dev, PTR_ERR(map),
-+				     "Unable to initialize register map\n");
-+
- 	wdd = devm_kzalloc(dev, sizeof(*wdd), GFP_KERNEL);
- 	if (!wdd)
- 		return -ENOMEM;
-@@ -106,6 +131,7 @@ static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
- 	wdd->timeout = WATCHDOG_TIMEOUT;
- 	wdd->min_timeout = 1;
- 	wdd->max_timeout = WATCHDOG_MAX_TIMEOUT;
-+	wdd->driver_data = map;
- 
- 	watchdog_set_nowayout(wdd, nowayout);
- 	watchdog_init_timeout(wdd, timeout, dev);
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
--- 
-2.39.2
-
+I think the right thing to do is to check xas_invalid() at the top of
+the loop, or checking return value of all those xas_store()'s and
+taking appropriate action. There is also the possibility this never
+occurs in practice due to the "Ensure we have slots for all the pages
+in the range" check at the top of the function, and that we are only
+able to trip this from error injection.
