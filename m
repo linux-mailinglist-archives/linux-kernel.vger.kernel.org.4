@@ -2,104 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DD8E6B5647
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:23:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 383346B56A6
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbjCKAXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:23:00 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42222 "EHLO
+        id S231349AbjCKAZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:25:13 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCKAW5 (ORCPT
+        with ESMTP id S230469AbjCKAYe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:22:57 -0500
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173D31FC1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:22:55 -0800 (PST)
-Received: by mail-qv1-xf2c.google.com with SMTP id o3so4762261qvr.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:22:55 -0800 (PST)
+        Fri, 10 Mar 2023 19:24:34 -0500
+Received: from mail-pj1-x104a.google.com (mail-pj1-x104a.google.com [IPv6:2607:f8b0:4864:20::104a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D2C134AEE
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:23:51 -0800 (PST)
+Received: by mail-pj1-x104a.google.com with SMTP id q61-20020a17090a1b4300b00237d2fb8400so5067411pjq.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:23:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678494174;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HafAvVfPi40ywIy7mcLGZZ7DnFj4XpXONhSNPVRF/Bo=;
-        b=PHRlOKW8Qi27WA04xGObtWiLvK460VN8JnQa27YPrBHdgZ0syFyT2y1R2ejjSCvQGb
-         sWrm/wuP3sL7q1tnllTsutaRfXf15/KqJpyMT8h7NLddPNjOal20X5Z7MLQCH30KYoL2
-         wLqzlTTwbbsy/uS8NJq2+Wo3Dhp/W7aX1HDs8LVcjouSUJzMymTzW4HMawhYntHsEHmB
-         TTN3s+qyktPQCKtMfUXGwfK5ukKk3+MLsv7oPIsiLXJcMTflHE0Dvcvn3YPxjhfeFGzU
-         7ll1djfHv+3WauH9Y/zyomC/KcqwMfN5tP7w2+puxzgugMfqtshutfbnuTBES1JdM3B6
-         OJgw==
+        d=google.com; s=20210112; t=1678494218;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
+        bh=OMGdyparKm8+Gefw73vC5jleoqDZScQomW9SzOoSMJg=;
+        b=ajb/7CAdzoT35PUWdYahi131IY8cxIXYUmWbU3wxwnKIBxxsHK89VejSvnX9gPFXKV
+         8T8M2MQ5qLFEJwFF7065/DtXjrWK5KDid68DBsbQqdbuHpDsBapRoTQnssTg9iU7v9aO
+         W3O661JIaer2LspHtmzrEw/PzdpLM0tWNomDVlVvK3UMOXkliymk4EGDN1m1+ZzJbIjo
+         z0JXfNMR+7wnIFuzi/4ZXa9UxnYm0l+lrGMAJWIXD0F1irQaKal08+zi3JQ1zRDeUz75
+         gC+HwThfWZZ7qParKjPirjREefLcpYQcsbDTVSHvU3UunCBdpe0aH1RzH5c9Fl9Suirg
+         0Tjw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678494174;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678494218;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HafAvVfPi40ywIy7mcLGZZ7DnFj4XpXONhSNPVRF/Bo=;
-        b=Pi+JMNkv+C3Wq5xSrI9SK4ML0zm99PC9bD2o3PMrEaWu/5p5OX2GuFo5FBidZ/3+Vw
-         OL64NL9UaDxP8Yn4j+2WOwUJV03JzqgNAlWScSoqfqiL6sQ/xKTny+PhYkpD9hmSZy2S
-         SXdQZTSzJq1W0wZ5nDlnY95ae2DVDLQggw3WcoCJxvvJPjjAWPk8ICqbq9AMkAVobNmB
-         69wX6UFTqOS2G7SFqK4iq1FoOQ9pZ+X0SvoIdFo7X4zvtikh3FH1xpRJhwL4H6DiSGWf
-         laKXBYNCKksqHuKtD1x85d93nAPrq3iqabts9XOP551I8B2iav7nfVnvYpFZ+jekLdyF
-         kTwg==
-X-Gm-Message-State: AO0yUKXcPIBWtF9ZlHewNKI7xy+o+roMCTuX2gT4UIz+TD/lVapuIUHY
-        t0KBIfQOhAeBeoMQep1iN/8Qpg==
-X-Google-Smtp-Source: AK7set/0j0WVg//8nl3RrzKyyTBjZzoCztF+YRMgAJzwAqVXb6gcu+qdJCdgCq6Q5BOKGxf4OjR4jg==
-X-Received: by 2002:a05:6214:2aa7:b0:56e:ac19:a879 with SMTP id js7-20020a0562142aa700b0056eac19a879mr1592192qvb.8.1678494174079;
-        Fri, 10 Mar 2023 16:22:54 -0800 (PST)
-Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id 140-20020a370792000000b0073b69922cfesm775432qkh.85.2023.03.10.16.22.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 10 Mar 2023 16:22:53 -0800 (PST)
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     jic23@kernel.org, lars@metafoo.de
-Cc:     linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        William Breathitt Gray <william.gray@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH] iio: dac: cio-dac: Fix max DAC write value check for 12-bit
-Date:   Fri, 10 Mar 2023 19:22:48 -0500
-Message-Id: <20230311002248.8548-1-william.gray@linaro.org>
-X-Mailer: git-send-email 2.39.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        bh=OMGdyparKm8+Gefw73vC5jleoqDZScQomW9SzOoSMJg=;
+        b=p3fQmHjP74v1CKLwS5Ilsi+zwdtwCt+CBqUQSEg8PPK5EknQNAjobpFmrxbG8haufV
+         BICELa3d+Z3qX1KsiZoaU/7g+Lz3uSf8VPcRrdeaNYPl+G+E0uDvJMeUmE7sUcsxOnjo
+         46OoKuWuVEML1I4xbLCEvyHs5Xyu8g/OALPwqWr0hHKAFkdPRtcwpomzpEGzIBOLMm+i
+         OR2/XXzLKlzg5wHpvQLMr0iw/ep58AhDylu67eaT4aRd7RLBD6DyfhKPcBq1YRl49y7M
+         R2P4yyFtCw9nvia03S25mCoI+oLqxuLfw+1hjoZY7nwCiW4zyHrClE67Fq46iiglEr1A
+         3zRw==
+X-Gm-Message-State: AO0yUKUQA8UAXK46BWv/9My+PyxA4/3wOkRMVFtK3oepgI6yQSztmnXv
+        x5PpWeJgWMkQLbw6JOsL1y9hEeDnoAo=
+X-Google-Smtp-Source: AK7set88pl2QPb1K0bOmfg6auaZYvfaRkd4edAczPhcZ95QVckYZlY7Ht+z9TDRm6nMSKMQOyXp7Q1oMlgc=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a63:f543:0:b0:4fb:9902:fc4a with SMTP id
+ e3-20020a63f543000000b004fb9902fc4amr9411181pgk.10.1678494217911; Fri, 10 Mar
+ 2023 16:23:37 -0800 (PST)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date:   Fri, 10 Mar 2023 16:22:48 -0800
+In-Reply-To: <20230311002258.852397-1-seanjc@google.com>
+Mime-Version: 1.0
+References: <20230311002258.852397-1-seanjc@google.com>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
+Message-ID: <20230311002258.852397-18-seanjc@google.com>
+Subject: [PATCH v2 17/27] drm/i915/gvt: switch from ->track_flush_slot() to ->track_remove_region()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>
+Cc:     kvm@vger.kernel.org, intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        Yan Zhao <yan.y.zhao@intel.com>,
+        Ben Gardon <bgardon@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The CIO-DAC series of devices only supports DAC values up to 12-bit
-rather than 16-bit. Trying to write a 16-bit value results in only the
-lower 12 bits affecting the DAC output which is not what the user
-expects. Instead, adjust the DAC write value check to reject values
-larger than 12-bit so that they fail explicitly as invalid for the user.
+From: Yan Zhao <yan.y.zhao@intel.com>
 
-Fixes: 3b8df5fd526e ("iio: Add IIO support for the Measurement Computing CIO-DAC family")
-Cc: stable@vger.kernel.org
-Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+Switch from the poorly named and flawed ->track_flush_slot() to the newly
+introduced ->track_remove_region().  From KVMGT's perspective, the two
+hooks are functionally equivalent, the only difference being that
+->track_remove_region() is called only when KVM is 100% certain the
+memory region will be removed, i.e. is invoked slightly later in KVM's
+memslot modification flow.
+
+Cc: Zhenyu Wang <zhenyuw@linux.intel.com>
+Suggested-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
+[sean: handle name change, massage changelog, rebase]
+Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- drivers/iio/dac/cio-dac.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/gpu/drm/i915/gvt/kvmgt.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
-diff --git a/drivers/iio/dac/cio-dac.c b/drivers/iio/dac/cio-dac.c
-index 791dd999cf29..18a64f72fc18 100644
---- a/drivers/iio/dac/cio-dac.c
-+++ b/drivers/iio/dac/cio-dac.c
-@@ -66,8 +66,8 @@ static int cio_dac_write_raw(struct iio_dev *indio_dev,
- 	if (mask != IIO_CHAN_INFO_RAW)
- 		return -EINVAL;
+diff --git a/drivers/gpu/drm/i915/gvt/kvmgt.c b/drivers/gpu/drm/i915/gvt/kvmgt.c
+index 577712ea4893..9f188b6c3edf 100644
+--- a/drivers/gpu/drm/i915/gvt/kvmgt.c
++++ b/drivers/gpu/drm/i915/gvt/kvmgt.c
+@@ -108,9 +108,8 @@ struct gvt_dma {
  
--	/* DAC can only accept up to a 16-bit value */
--	if ((unsigned int)val > 65535)
-+	/* DAC can only accept up to a 12-bit value */
-+	if ((unsigned int)val > 4095)
- 		return -EINVAL;
+ static void kvmgt_page_track_write(gpa_t gpa, const u8 *val, int len,
+ 				   struct kvm_page_track_notifier_node *node);
+-static void kvmgt_page_track_flush_slot(struct kvm *kvm,
+-		struct kvm_memory_slot *slot,
+-		struct kvm_page_track_notifier_node *node);
++static void kvmgt_page_track_remove_region(gfn_t gfn, unsigned long nr_pages,
++					   struct kvm_page_track_notifier_node *node);
  
- 	priv->chan_out_states[chan->channel] = val;
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+ static ssize_t intel_vgpu_show_description(struct mdev_type *mtype, char *buf)
+ {
+@@ -680,7 +679,7 @@ static int intel_vgpu_open_device(struct vfio_device *vfio_dev)
+ 		return -EEXIST;
+ 
+ 	vgpu->track_node.track_write = kvmgt_page_track_write;
+-	vgpu->track_node.track_flush_slot = kvmgt_page_track_flush_slot;
++	vgpu->track_node.track_remove_region = kvmgt_page_track_remove_region;
+ 	kvm_get_kvm(vgpu->vfio_device.kvm);
+ 	kvm_page_track_register_notifier(vgpu->vfio_device.kvm,
+ 					 &vgpu->track_node);
+@@ -1631,22 +1630,20 @@ static void kvmgt_page_track_write(gpa_t gpa, const u8 *val, int len,
+ 	mutex_unlock(&info->vgpu_lock);
+ }
+ 
+-static void kvmgt_page_track_flush_slot(struct kvm *kvm,
+-		struct kvm_memory_slot *slot,
+-		struct kvm_page_track_notifier_node *node)
++static void kvmgt_page_track_remove_region(gfn_t gfn, unsigned long nr_pages,
++					   struct kvm_page_track_notifier_node *node)
+ {
+ 	unsigned long i;
+-	gfn_t gfn;
+ 	struct intel_vgpu *info =
+ 		container_of(node, struct intel_vgpu, track_node);
+ 
+ 	mutex_lock(&info->vgpu_lock);
+ 
+-	for (i = 0; i < slot->npages; i++) {
+-		gfn = slot->base_gfn + i;
+-		if (kvmgt_gfn_is_write_protected(info, gfn))
+-			kvmgt_protect_table_del(info, gfn);
++	for (i = 0; i < nr_pages; i++) {
++		if (kvmgt_gfn_is_write_protected(info, gfn + i))
++			kvmgt_protect_table_del(info, gfn + i);
+ 	}
++
+ 	mutex_unlock(&info->vgpu_lock);
+ }
+ 
 -- 
-2.39.2
+2.40.0.rc1.284.g88254d51c5-goog
 
