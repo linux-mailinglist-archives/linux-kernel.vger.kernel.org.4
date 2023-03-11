@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75F7E6B5B05
+	by mail.lfdr.de (Postfix) with ESMTP id CAD0D6B5B06
 	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 12:18:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230417AbjCKLSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 06:18:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
+        id S230423AbjCKLSM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 06:18:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbjCKLQx (ORCPT
+        with ESMTP id S230409AbjCKLRC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 06:16:53 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B46E23843
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:15:50 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id cn21so541316edb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:15:50 -0800 (PST)
+        Sat, 11 Mar 2023 06:17:02 -0500
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461FE3D0AE
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:16:02 -0800 (PST)
+Received: by mail-ed1-x532.google.com with SMTP id o12so30726399edb.9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 03:16:02 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678533339;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z1ivl38YE2I2SDvE1TdE0gIwBk6FF3/hABoULacrRYE=;
-        b=wMYxFquxhp0t9lKQAOER1JX7CmKUNsOOctHhvaGDOuKSS46NJgvw9/nQzmwmqLlIWo
-         KzP+wNeYjC5LgKCaIagU78wTTmhYCiXXtXgNTSix29J0trMc8t05ipD/aDur7lNZji5F
-         /z2il8ImOTmCHbGl0eKxd1Qpb+Cxthsaz2tIn0EI65oS7o43nYH8NK3NcesV6hDoTvL1
-         Me1nBTww+cvBNBSEsVyzakbj01KNMV2i1bVi7fyInug8LBrsAkqtsa2H8tcvf40mopiC
-         IWrcfWY8QGrcEpt6hjBCEDPuHrTu2csOUlzU/30u5Nryl7nqy5HmZRXtDi5yfewoOrww
-         RoLQ==
+        d=linaro.org; s=google; t=1678533353;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=rh0AaE38tztpZM2ohnPgfuHoOSFhJbbw1ifzopWRWTg=;
+        b=XoOgVoywU/dkNX1q0aTUOIShgGQRC5OxdFExXoreSYkP0YFnLNt8WLyfaT32qIaQjB
+         oJS0J0TAKEksWavBxE+5AlvUVBRtQ8jQPBo7TTwVC2lOHyn8d3gLgtpgRwH00PMJf4nk
+         Cs3x43nWKwVVFD8WVjzePRK5LljXiDZ7ocpyUweJLPbuMVUZuPkO8udraDQ1zOzS1lsk
+         3wXqx+PSa2zJLwAGzHZxYbj8ttM1m/28uYyTHtHVHSKVyrL9GPt4Wwjz0Yi0obQ0qtxw
+         ft7xIjMpnCrgRzEsttWzo4D9TQ3+lDRd/ZFJIUe4oeZ+AawCOYSBFIg0IGGBfW/4W+j8
+         ksfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678533339;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z1ivl38YE2I2SDvE1TdE0gIwBk6FF3/hABoULacrRYE=;
-        b=XFR9mYgOQurBdCDWHV88x0FTpPI9T+8cWyhs/MqUDly7c6reu2u4c1fhD2EZb5CDD+
-         Dp8CXxRj6cQv+DUeXRIlwdLW0DKdwCL246EOmzPE/5sj/Zy8YeBHvICGwcJryVJ5EK5y
-         apb8UEhluhjn0YsW3I2Du/DHQJGQ0gMCQNMi3IWiKm8QAq0gOtfkFqRBp7tCrLZV7cWV
-         ZTIiv9zc2BcNvveWwuc8aku3WdzE9ZbXuKuaWUnI7yItAL+PYyY1CH5/ljBbx34jL43b
-         tPtDyHKKGsllMOmYqFvr0/fpILDZznLg+bvoH8SgVb66xb2JCgUsUbDvJ7PZ8u9aEtJs
-         bOzw==
-X-Gm-Message-State: AO0yUKVpsLkTf7PP2npZ9cD63iQMBOXfLRzRML8WfgpRr9mfXJjmSbJT
-        z98nZkt2FPWch4jufRww3yyhjmoXoReCFbmNbpo=
-X-Google-Smtp-Source: AK7set+UBH/7lfNgSQ5TQ9eY5JIS3egl5tRPqIzcjIcnGzntH5Tf2EsKSNfoJvDIl5VjTTfL2z0d+A==
-X-Received: by 2002:a05:6402:1352:b0:4fa:3b3:c86c with SMTP id y18-20020a056402135200b004fa03b3c86cmr2059703edw.12.1678533339401;
-        Sat, 11 Mar 2023 03:15:39 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678533353;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rh0AaE38tztpZM2ohnPgfuHoOSFhJbbw1ifzopWRWTg=;
+        b=Q0jrh+xp+memDHNTqGTTiwU6FwHqEtrR1xRbvFAW/4H4XAqDy2Tvr5hdauz1P+cCsA
+         VxgbcS81mDgC9NVecFzfO4GVk/9yLc0WikH5qI4WuT/FQ5rskA/tYScAplQOK5gHhSLl
+         7pOdidiL0rdd2gVbxLWoOomw/89owjcd3/Hty3ijd46+H4sWVj4k4qoN9WsQugjvT9ue
+         uGNineRTqZy7zS5Kl8z1djyShImytTZDB8l7Jl4BTeb3XHx2bP32i5/vzkLfN4G5wLAJ
+         QpKY7mSfkJVOQU51xsADJiVidYqYCY1uuaRr6LneiRiTA13C+ZLDDO0CfYL9nm1N2qt+
+         vhww==
+X-Gm-Message-State: AO0yUKVefvlKguAKmIXErRg2rOV7QxiyKK9GD4DwmE6RG+6tJiTKnILl
+        9EV6gMlRqqp97uC4ZpxYV5In+gCFoT2cRR6GP/c=
+X-Google-Smtp-Source: AK7set+GSlHcs/+VM9aTKOQkAIk2VfsnWGS7BFmgvL5vGUzzF28rmCh8Gvha/tuzJZKekbGGKPInsA==
+X-Received: by 2002:a17:907:7244:b0:8e7:916f:193d with SMTP id ds4-20020a170907724400b008e7916f193dmr35472905ejc.28.1678533353349;
+        Sat, 11 Mar 2023 03:15:53 -0800 (PST)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:fa97:2d7c:bdd7:e1b])
-        by smtp.gmail.com with ESMTPSA id w15-20020a50c44f000000b004bf28bfc9absm1064150edf.11.2023.03.11.03.15.38
+        by smtp.gmail.com with ESMTPSA id qw30-20020a1709066a1e00b0092178941cb6sm475847ejc.39.2023.03.11.03.15.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 03:15:39 -0800 (PST)
+        Sat, 11 Mar 2023 03:15:53 -0800 (PST)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 6/6] power: supply: bq25890_charger: mark OF related data as maybe unused
-Date:   Sat, 11 Mar 2023 12:15:32 +0100
-Message-Id: <20230311111532.251604-6-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] nvmem: stm32-romem: mark OF related data as maybe unused
+Date:   Sat, 11 Mar 2023 12:15:51 +0100
+Message-Id: <20230311111551.251675-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230311111532.251604-1-krzysztof.kozlowski@linaro.org>
-References: <20230311111532.251604-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -76,26 +76,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 The driver can be compile tested with !CONFIG_OF making certain data
 unused:
 
-  drivers/power/supply/bq25890_charger.c:1625:34: error: ‘bq25890_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/nvmem/stm32-romem.c:271:34: error: ‘stm32_romem_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/power/supply/bq25890_charger.c | 2 +-
+ drivers/nvmem/stm32-romem.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/power/supply/bq25890_charger.c b/drivers/power/supply/bq25890_charger.c
-index bfe08d7bfaf3..22cde35eb144 100644
---- a/drivers/power/supply/bq25890_charger.c
-+++ b/drivers/power/supply/bq25890_charger.c
-@@ -1622,7 +1622,7 @@ static const struct i2c_device_id bq25890_i2c_ids[] = {
+diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
+index ba779e26937a..38d0bf557129 100644
+--- a/drivers/nvmem/stm32-romem.c
++++ b/drivers/nvmem/stm32-romem.c
+@@ -268,7 +268,7 @@ static const struct stm32_romem_cfg stm32mp13_bsec_cfg = {
+ 	.ta = true,
  };
- MODULE_DEVICE_TABLE(i2c, bq25890_i2c_ids);
  
--static const struct of_device_id bq25890_of_match[] = {
-+static const struct of_device_id bq25890_of_match[] __maybe_unused = {
- 	{ .compatible = "ti,bq25890", },
- 	{ .compatible = "ti,bq25892", },
- 	{ .compatible = "ti,bq25895", },
+-static const struct of_device_id stm32_romem_of_match[] = {
++static const struct of_device_id stm32_romem_of_match[] __maybe_unused = {
+ 	{ .compatible = "st,stm32f4-otp", }, {
+ 		.compatible = "st,stm32mp15-bsec",
+ 		.data = (void *)&stm32mp15_bsec_cfg,
 -- 
 2.34.1
 
