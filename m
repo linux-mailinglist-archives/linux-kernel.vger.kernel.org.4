@@ -2,104 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD4A6B5C95
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFF096B5C98
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:06:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCKOE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:04:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44820 "EHLO
+        id S229910AbjCKOGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:06:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjCKOEZ (ORCPT
+        with ESMTP id S229473AbjCKOGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:04:25 -0500
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD65BEABB6;
-        Sat, 11 Mar 2023 06:04:15 -0800 (PST)
-Received: by mail-pl1-x634.google.com with SMTP id ix20so1935476plb.3;
-        Sat, 11 Mar 2023 06:04:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678543455;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=kYqoBUUyzsIk/ss9ywgxsMkPFqWgNfKL1ixz5F8qfn8=;
-        b=KuLW6ZaIq2jIlOSyU+lDH80+1cZqTRKsURnlgH7HOJviqbyZQNCcKt29SMXa0CuYdp
-         AbvvDznDDdg3RDoiN+1yFq9o7CNi6Cse3kDjff/w8cIaFUkaeNFmtjgA7QaNDuGsXwMl
-         vLjDkubrR853/pBK4v0gi4QHUPWZ2vtg6QpJmVjpfWFK3J58iSGMfwia+4GdpAVL+ILa
-         mCBmGqwGSqdzTc+kIe1eF2eHtgYyT0MPYWxT8rn5YawwAJuRumCxq5VRsUOYn5unrwK1
-         oeda246IfeqPw63cCWokkG7iQJpEv2KnXfCuLRsJmxb8fRS+9Clb7TRIMgJaKt0TtPvs
-         fXPQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678543455;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=kYqoBUUyzsIk/ss9ywgxsMkPFqWgNfKL1ixz5F8qfn8=;
-        b=CeMUt+J7a2Dy7oCQHu3B4e+GtEIP6fGKUcLPRUKOLdIaFfefwTioI9qPW8SM62KvDv
-         BhAGmnMTgW1LILBpAe0DFs3Pm5KK35FshIUjXz/+JhBxNf49VMpS5QB3+kLfxXtL9w31
-         KulPXTS+w7VH8XiDwfpN6QULEVNPOlelM/HWol9z1tFlAemFxyer7PcNa5jMBkrCviCc
-         DNtZ9gDWAtz0YQrlk7YydksmO7iCKNWnIKV8GgwRZQUCdFToH4cop2QzIscI/ag4pufv
-         CulSblllpZ8LJIl9i+fQABLPQNFdSoQHxEyxdtgzwed3FQdiTZIRzVMAqdf9Ufgi4gMS
-         KWNg==
-X-Gm-Message-State: AO0yUKWH4fwKWPbpkPC8XSGCQEoaWAXGuRceswEMNg/JzyZ5ZhbFh8fR
-        SGQ4nkpBOp7CXRsOYhlSegUIKRsgIPPVkA==
-X-Google-Smtp-Source: AK7set+5gcskv9cOYnEoWY0Belgr0Oa8Cx7t4Z/HyjU8BwbL/Lb8ms/J+2WRyYx9/NfjFQiS/aDMAg==
-X-Received: by 2002:a05:6a20:3d26:b0:cb:c276:5879 with SMTP id y38-20020a056a203d2600b000cbc2765879mr31859030pzi.32.1678543455193;
-        Sat, 11 Mar 2023 06:04:15 -0800 (PST)
-Received: from ubuntu ([117.199.152.23])
-        by smtp.gmail.com with ESMTPSA id c4-20020a62e804000000b005a8de0f4c64sm1545649pfi.82.2023.03.11.06.04.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 06:04:14 -0800 (PST)
-Date:   Sat, 11 Mar 2023 06:04:09 -0800
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev, manishc@marvell.com,
-        GR-Linux-NIC-Dev@marvell.com, coiby.xu@gmail.com,
-        gregkh@linuxfoundation.org, netdev@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Cc:     outreachy@lists.linux.dev
-Subject: [PATCH] Staging: qlge: Remove parenthesis around single condition
-Message-ID: <20230311140409.GA22831@ubuntu>
+        Sat, 11 Mar 2023 09:06:12 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B594E9F3B;
+        Sat, 11 Mar 2023 06:06:10 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7EE3260C3D;
+        Sat, 11 Mar 2023 14:06:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B566EC433D2;
+        Sat, 11 Mar 2023 14:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678543569;
+        bh=K8EAh0QfxzkdULHNSkhCoqGD46lp5v3W4c/Rtfq8ViQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=exnwTTc6fBCxAaB3HtIEtgkhL7325m54NsIZCp8+sq9Z8NIOFUxOfVEzatH+WHnPm
+         KRsmDqAdMXt5FSPI/C5EII1SgRh+jV1y7uIKb1KgqO2WuUlTKrMYcePsqsyReVIhgN
+         7pX8RuuxTnjyGC5HyvJrSL9RbPLlYt6u03S/DeAMn1tRo99N3GOOFf+/KDSA3PSf6y
+         b2Dg49sNM+eNbaIYuvJGRnr407wn8M1xj8iR22NFs9R66K1zVNYuM7zE3ARl19zeeP
+         zNZ2QuLNOwdNK6YIzxsORzicdQN3whnX+Xifm+K7/1zarBhsPJ1BASppKO0NExRtiD
+         6d9kZOJ+wX35w==
+Date:   Sat, 11 Mar 2023 09:06:08 -0500
+From:   Sasha Levin <sashal@kernel.org>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZAyK0KM6JmVOvQWy@sashalap>
+References: <20230226034256.771769-12-sashal@kernel.org>
+ <Y/rbGxq8oAEsW28j@sol.localdomain>
+ <Y/rufenGRpoJVXZr@sol.localdomain>
+ <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+ <Y/y70zJj4kjOVfXa@sashalap>
+ <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZAwe95meyCiv6qc4@casper.infradead.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-At line #354 checkpatch.pl:
-CHECK: Unnecessary parentheses around 'i == 0x00000114'
-CHECK: Unnecessary parentheses around 'i == 0x00000118'
-CHECK: Unnecessary parenthesis around 'i == 0x00000140'
-CHECK: Unnecessary parentheses around 'i == 0x0000013c'
+On Sat, Mar 11, 2023 at 06:25:59AM +0000, Matthew Wilcox wrote:
+>On Tue, Mar 07, 2023 at 09:45:24PM +0000, Eric Biggers wrote:
+>> On Tue, Mar 07, 2023 at 10:18:35PM +0100, Pavel Machek wrote:
+>> > I believe that -stable would be more useful without AUTOSEL process.
+>>
+>> There has to be a way to ensure that security fixes that weren't properly tagged
+>> make it to stable anyway.  So, AUTOSEL is necessary, at least in some form.  I
+>> think that debating *whether it should exist* is a distraction from what's
+>> actually important, which is that the current AUTOSEL process has some specific
+>> problems, and these specific problems need to be fixed...
+>
+>I agree with you, that we need autosel and we also need autosel to
+>be better.  I actually see Pavel's mail as a datapoint (or "anecdote",
+>if you will) in support of that; the autosel process currently works
+>so badly that a long-time contributor thinks it's worse than nothing.
+>
+>Sasha, what do you need to help you make this better?
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
- drivers/staging/qlge/qlge_dbg.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+What could I do to avoid this?
 
-diff --git a/drivers/staging/qlge/qlge_dbg.c b/drivers/staging/qlge/qlge_dbg.c
-index 66d28358342f..b190a2993033 100644
---- a/drivers/staging/qlge/qlge_dbg.c
-+++ b/drivers/staging/qlge/qlge_dbg.c
-@@ -351,10 +351,10 @@ static int qlge_get_xgmac_regs(struct qlge_adapter *qdev, u32 *buf,
- 		/* We're reading 400 xgmac registers, but we filter out
- 		 * several locations that are non-responsive to reads.
- 		 */
--		if ((i == 0x00000114) ||
--		    (i == 0x00000118) ||
--			(i == 0x0000013c) ||
--			(i == 0x00000140) ||
-+		if (i == 0x00000114 ||
-+		    i == 0x00000118 ||
-+			i == 0x0000013c ||
-+			i == 0x00000140 ||
- 			(i > 0x00000150 && i < 0x000001fc) ||
- 			(i > 0x00000278 && i < 0x000002a0) ||
- 			(i > 0x000002c0 && i < 0x000002cf) ||
+I suppose that if I had a way to know if a certain a commit is part of a
+series, I could either take all of it or none of it, but I don't think I
+have a way of doing that by looking at a commit in Linus' tree
+(suggestions welcome, I'm happy to implement them).
+
+Other than that, the commit at hand:
+
+1. Describes a real problem that needs to be fixed, so while it was
+reverted for a quick fix, we'll need to go back and bring it in along
+with it's dependency.
+
+2. Soaked for over two weeks between the AUTOSEL mails and the release,
+gone through multiple rounds of reviews.
+
+3. Went through all the tests provided by all the individuals, bots,
+companies, etc who test the tree through multiple rounds of testing (we
+had to do a -rc2 for that releases).
+
+4. Went through whatever tests distros run on the kernel before they
+package and release it.
+
 -- 
-2.25.1
-
+Thanks,
+Sasha
