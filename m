@@ -2,74 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFD9E6B6080
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:29:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD6CF6B6082
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCKU3Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 15:29:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52604 "EHLO
+        id S229863AbjCKUax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 15:30:53 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCKU3W (ORCPT
+        with ESMTP id S229437AbjCKUav (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 15:29:22 -0500
-Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F18396A2F0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 12:29:20 -0800 (PST)
+        Sat, 11 Mar 2023 15:30:51 -0500
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DFFE6C883;
+        Sat, 11 Mar 2023 12:30:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=sipsolutions.net; s=mail; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:Message-ID:References:In-Reply-To:Subject:CC:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-        Resent-Cc:Resent-Message-ID; bh=J3DyTIvOV/2SVP81VtW3lO9g8GsGdpbqAk1yKC2K1qc=;
-        t=1678566561; x=1679776161; b=NBzrTIa4/+r6ffNQwBGx2mNdixsz1POrtCzZCRaqhbJdGq9
-        z0RcSuGXUn/8X0SGYzr65W193nY5do2bZybDWWf3KDbx8Db3CHWY0Td6laNxa54KNLULafah9Di/F
-        l+HxKpWGEtwy2upjna1hY0MAFYdc07685NldMpV5h8iq2k9VE4uf+0OY5rnqIbWTQF9fcQ8zuaQQO
-        AmTQOte9pxpiZIM/XWu8utBglOqP0e4rQPNNSO5FRjGusAKcLQWCvuuhK40ifZ9jM53g/lMcDhbai
-        VkcxtWrtNR4Fx4YPMp23BLkJy+dgcmwIYerjvvwYKs7IaPgzFuibOXkviPn2bfhg==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128)
-        (Exim 4.96)
-        (envelope-from <johannes@sipsolutions.net>)
-        id 1pb5q2-000TLz-1F;
-        Sat, 11 Mar 2023 21:29:10 +0100
-Date:   Sat, 11 Mar 2023 21:29:06 +0100
-From:   Johannes Berg <johannes@sipsolutions.net>
-To:     David Woodhouse <dwmw2@infradead.org>, mark.rutland@arm.com,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        linux-um@lists.infradead.org
-CC:     catalin.marinas@arm.com, dvyukov@google.com,
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=eLT0g8df7rYJKk6srMN+2cPVnZ9SiqxI4tMkh+EKbMo=; b=iUx42NHgule7LbFVNnod+IFhFa
+        3qN42IDNyqQRllsJFaRM4ky8bNMMVQqgnBPhJz6kIPfU+k3CQpqlWCKfeU5CDinu7NmKvwe+IH/X5
+        fZyWoRJ5wESuKjnkTxUvA0HzCh8hJNpPlwkdvcC4iRs2WfJRT/SYogB6eu98W5QuvWd75OLW0aaEo
+        70OHY+Clm5QYxRgY5wq6g/u+zPa9pUgcfGjpBH8bECtgJ4wBsj1JP4hriCyHVu2yLJ5YHC1pV9ngW
+        s+N0VDbxjq5HkyNVawyVcI7JqQ+WeOPtPr89/vxr5Y6hl9C5RJc8jIoGUjJbBRI5jau41He6NvnQO
+        8IvfgMZA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60470)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pb5rY-0000Pm-BR; Sat, 11 Mar 2023 20:30:44 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pb5rT-00060X-PH; Sat, 11 Mar 2023 20:30:39 +0000
+Date:   Sat, 11 Mar 2023 20:30:39 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        peterz@infradead.org, quic_qiancai@quicinc.com,
-        valentin.schneider@arm.com, will@kernel.org, woodylin@google.com
-Subject: Re: [PATCH] Reset task stack state in bringup_cpu()
-In-Reply-To: <2873ac05521c218c5a7911741e91ed073df26fc2.camel@infradead.org>
-References: <2873ac05521c218c5a7911741e91ed073df26fc2.camel@infradead.org>
-Message-ID: <11A8071B-D9FC-418A-B0B5-D2AE608F740A@sipsolutions.net>
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+References: <ZAiJqvzcUob2Aafq@shell.armlinux.org.uk>
+ <20230308134642.cdxqw4lxtlgfsl4g@skbuf>
+ <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
+ <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+ <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-malware-bazaar: not-scanned
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sat, Mar 11, 2023 at 09:21:47PM +0100, Frank Wunderlich wrote:
+> Am 11. März 2023 21:00:20 MEZ schrieb "Russell King (Oracle)" <linux@armlinux.org.uk>:
+> >On Sat, Mar 11, 2023 at 01:05:37PM +0100, Frank Wunderlich wrote:
+> 
+> >> i got the 2.5G copper sfps, and tried them...they work well with the v12 (including this patch), but not in v13... 
+> 
+> >> how can we add a quirk to support this?
+> >
+> >Why does it need a quirk?
+> 
+> To disable the inband-mode for this 2.5g copper
+> sfp. But have not found a way to set a flag which i
+> can grab in phylink.
 
+We could make sfp_parse_support() set Autoneg, Pause, and Asym_Pause
+in "modes" at the top of that function, and then use the SFP modes
+quirk to clear the Autoneg bit for this SFP. Would that work for you?
 
-
->Hm, in the !CONFIG_GENERIC_SMP_IDLE_THREAD case, idle_thread_get() will
->have returned NULL=2E Won't these then crash?
->
->Admittedly that seems to be *only* for UM, as all other architectures
->with SMP seem to set CONFIG_GENERIC_SMP_IDLE_THREAD=2E
-
-UM doesn't even have SMP, so maybe CONFIG_GENERIC_SMP_IDLE_THREAD can just=
- be removed?
-
-johannes=20
---=20
-Sent from my phone=2E 
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
