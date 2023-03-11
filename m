@@ -2,56 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63BA36B6163
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 23:10:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7E4F6B6166
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 23:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229999AbjCKWKT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 17:10:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39570 "EHLO
+        id S229998AbjCKWNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 17:13:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229839AbjCKWKP (ORCPT
+        with ESMTP id S229502AbjCKWNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 17:10:15 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3B542C657;
-        Sat, 11 Mar 2023 14:10:14 -0800 (PST)
+        Sat, 11 Mar 2023 17:13:53 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27ABE43901
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 14:13:52 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4191260E88;
-        Sat, 11 Mar 2023 22:10:14 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F8D5C433EF;
-        Sat, 11 Mar 2023 22:10:13 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8BB96B801C0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 22:13:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DD34DC433EF;
+        Sat, 11 Mar 2023 22:13:48 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678572613;
-        bh=D9dLzCfeqWuXouu3aKrlHiE1Tazt/6/b97r6ngWPJaQ=;
+        s=k20201202; t=1678572829;
+        bh=6oEMKc9rlUbLvMMd2Dwv84kkX3Dqbwq511MpE3tzLBY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IcT1ljkO4RsToJDNXqRwIOVoh9Tb36Q+04t6fC7zd0cfP8TRMGf5bMbwtfK87hzFK
-         sQm8pjQdlYqZVP1Xk6R7jqXhEcOtvME3a8cuAzgfG/v0HtPpxOnTx2AQ/cE/5+Ro3G
-         6pTPNO7m5fiMXrv3NowItD4nghj/opIfSPIE7sO/k1B7DWPYdI2efez+g2VBIRZAOc
-         YFBPZIXZbkrH4KJ/EQ/rnAG1BVFQLrd30B1w/j2GNFr/5Vc4w2GnwecKIIK48ByelG
-         WqR2W3F1vGR2IUedndTYh8iSYqzB3bff/PyXf2CUPRZMPhnG9vFWarhsTAi96BkTmG
-         vLaq+x9s2AIHQ==
-Date:   Sun, 12 Mar 2023 00:10:10 +0200
+        b=X9SbL/i8saxXr/aTHY+lKrahKja2U7ADcPLUzLE0FJUWuoNtKk1H+O6selQS/5teg
+         fMFvsLUk6/ub/oNGbTFopR9vLG5AyQoG/XFgBU58Jss4Ri2rfTEXIyFlYasBferguN
+         4n6UhQJc9vP4MHA9RV6uY8h1cmKsgvsZZNY49Kr5EIRSnKcH3FC7LwxDqyr+iXmWMO
+         kCT2VogzzAGLebgu5aKVpJN90ei38r1A/J68MN2FrhzHm+BYhp2nHOMrLUDR+BWpfu
+         1BS73V/7AwluCSc4YGiyRyIykGevLT09QgaMhKbnev4jNanC4n8ae60Vgm9vB+rLdY
+         0aYAlMrdtvqXw==
+Date:   Sun, 12 Mar 2023 00:13:46 +0200
 From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Eric Snowberg <eric.snowberg@oracle.com>
-Cc:     zohar@linux.ibm.com, dhowells@redhat.com, dwmw2@infradead.org,
-        herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Subject: Re: [PATCH v5 5/6] KEYS: CA link restriction
-Message-ID: <ZAz8QlynTSMD7kuE@kernel.org>
-References: <20230302164652.83571-1-eric.snowberg@oracle.com>
- <20230302164652.83571-6-eric.snowberg@oracle.com>
+To:     Wei Wang <wei.w.wang@intel.com>
+Cc:     arnd@arndb.de, akpm@linux-foundation.org, keescook@chromium.org,
+        herbert@gondor.apana.org.au, josh@joshtriplett.org,
+        jani.nikula@intel.com, corbet@lwn.net, jgg@mellanox.com,
+        dmatlack@google.com, mizhang@google.com, pbonzini@redhat.com,
+        seanjc@google.com, linux-kernel@vger.kernel.org,
+        James.Bottomley@hansenpartnership.com
+Subject: Re: [PATCH v1 1/3] security: keys: don't use data type as variable
+ name
+Message-ID: <ZAz9Gi/nHL8TLrRn@kernel.org>
+References: <20230304041932.847133-1-wei.w.wang@intel.com>
+ <20230304041932.847133-2-wei.w.wang@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230302164652.83571-6-eric.snowberg@oracle.com>
+In-Reply-To: <20230304041932.847133-2-wei.w.wang@intel.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,98 +59,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 02, 2023 at 11:46:51AM -0500, Eric Snowberg wrote:
-> Add a new link restriction.  Restrict the addition of keys in a keyring
-> based on the key to be added being a CA.
+On Sat, Mar 04, 2023 at 12:19:30PM +0800, Wei Wang wrote:
+> 'bool' is a specific name for the data type that is an alias for
+> the C99 _Bool type. It shoudn't be used as variable names as that causes
+> too much confusion either for the reader or the compilier.
 > 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
-> Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+> CC: James.Bottomley@HansenPartnership.com
+> CC: jarkko@kernel.org
+> Fixes: f2219745250f ("security: keys: trusted: use ASN.1 TPM2 key format for the blobs")
+> Signed-off-by: Wei Wang <wei.w.wang@intel.com>
 > ---
->  crypto/asymmetric_keys/restrict.c | 38 +++++++++++++++++++++++++++++++
->  include/crypto/public_key.h       | 15 ++++++++++++
->  2 files changed, 53 insertions(+)
+>  security/keys/trusted-keys/trusted_tpm2.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/crypto/asymmetric_keys/restrict.c b/crypto/asymmetric_keys/restrict.c
-> index 6b1ac5f5896a..48457c6f33f9 100644
-> --- a/crypto/asymmetric_keys/restrict.c
-> +++ b/crypto/asymmetric_keys/restrict.c
-> @@ -108,6 +108,44 @@ int restrict_link_by_signature(struct key *dest_keyring,
->  	return ret;
->  }
+> diff --git a/security/keys/trusted-keys/trusted_tpm2.c b/security/keys/trusted-keys/trusted_tpm2.c
+> index 2b2c8eb258d5..390d7314f5a6 100644
+> --- a/security/keys/trusted-keys/trusted_tpm2.c
+> +++ b/security/keys/trusted-keys/trusted_tpm2.c
+> @@ -54,12 +54,13 @@ static int tpm2_key_encode(struct trusted_key_payload *payload,
+>  			       asn1_oid_len(tpm2key_oid));
 >  
-> +/**
-> + * restrict_link_by_ca - Restrict additions to a ring of CA keys
-> + * @dest_keyring: Keyring being linked to.
-> + * @type: The type of key being added.
-> + * @payload: The payload of the new key.
-> + * @trust_keyring: Unused.
-> + *
-> + * Check if the new certificate is a CA. If it is a CA, then mark the new
-> + * certificate as being ok to link.
-> + *
-> + * Returns 0 if the new certificate was accepted, -ENOKEY if the
-> + * certificate is not a CA. -ENOPKG if the signature uses unsupported
-> + * crypto, or some other error if there is a matching certificate but
-> + * the signature check cannot be performed.
-> + */
-> +int restrict_link_by_ca(struct key *dest_keyring,
-> +			const struct key_type *type,
-> +			const union key_payload *payload,
-> +			struct key *trust_keyring)
-> +{
-> +	const struct public_key *pkey;
-> +
-> +	if (type != &key_type_asymmetric)
-> +		return -EOPNOTSUPP;
-> +
-> +	pkey = payload->data[asym_crypto];
-> +	if (!pkey)
-> +		return -ENOPKG;
-> +	if (!test_bit(KEY_EFLAG_CA, &pkey->key_eflags))
-> +		return -ENOKEY;
-> +	if (!test_bit(KEY_EFLAG_KEYCERTSIGN, &pkey->key_eflags))
-> +		return -ENOKEY;
-> +	if (test_bit(KEY_EFLAG_DIGITALSIG, &pkey->key_eflags))
-> +		return -ENOKEY;
-
-nit: would be more readable, if conditions were separated by
-empty lines.
-
-> +
-> +	return 0;
-> +}
-> +
->  static bool match_either_id(const struct asymmetric_key_id **pair,
->  			    const struct asymmetric_key_id *single)
->  {
-> diff --git a/include/crypto/public_key.h b/include/crypto/public_key.h
-> index 03c3fb990d59..653992a6e941 100644
-> --- a/include/crypto/public_key.h
-> +++ b/include/crypto/public_key.h
-> @@ -75,6 +75,21 @@ extern int restrict_link_by_key_or_keyring_chain(struct key *trust_keyring,
->  						 const union key_payload *payload,
->  						 struct key *trusted);
+>  	if (options->blobauth_len == 0) {
+> -		unsigned char bool[3], *w = bool;
+> +		unsigned char bool_val[3], *w = bool_val;
+>  		/* tag 0 is emptyAuth */
+>  		w = asn1_encode_boolean(w, w + sizeof(bool), true);
+>  		if (WARN(IS_ERR(w), "BUG: Boolean failed to encode"))
+>  			return PTR_ERR(w);
+> -		work = asn1_encode_tag(work, end_work, 0, bool, w - bool);
+> +		work = asn1_encode_tag(work, end_work, 0,
+> +				       bool_val, w - bool_val);
+>  	}
 >  
-> +#if IS_REACHABLE(CONFIG_ASYMMETRIC_KEY_TYPE)
-> +extern int restrict_link_by_ca(struct key *dest_keyring,
-> +			       const struct key_type *type,
-> +			       const union key_payload *payload,
-> +			       struct key *trust_keyring);
-> +#else
-> +static inline int restrict_link_by_ca(struct key *dest_keyring,
-> +				      const struct key_type *type,
-> +				      const union key_payload *payload,
-> +				      struct key *trust_keyring)
-> +{
-> +	return 0;
-> +}
-> +#endif
-> +
->  extern int query_asymmetric_key(const struct kernel_pkey_params *,
->  				struct kernel_pkey_query *);
->  
+>  	/*
 > -- 
 > 2.27.0
 > 
+
+Reviewed-by: Jarkko Sakkinen <jarkko.sakkinen@kernel.org>
 
 BR, Jarkko
