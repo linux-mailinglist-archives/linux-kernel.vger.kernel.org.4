@@ -2,114 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C32FE6B5EAF
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:21:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC836B5EB9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229827AbjCKRVg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:21:36 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38326 "EHLO
+        id S229924AbjCKRYc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:24:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKRVf (ORCPT
+        with ESMTP id S229735AbjCKRYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:21:35 -0500
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1E2D38DC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:21:34 -0800 (PST)
-Received: by mail-ed1-x535.google.com with SMTP id k10so32865688edk.13
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:21:34 -0800 (PST)
+        Sat, 11 Mar 2023 12:24:31 -0500
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055415FFD
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:24:30 -0800 (PST)
+Received: by mail-pl1-x633.google.com with SMTP id h8so8759197plf.10
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:24:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678555292;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PcyIKKidvdnUoalhAwrLa874ozqa2TDtvQ0KGDZ6tLY=;
-        b=bq0ksj/OxdNKgwNFgCnMNiOkKhkZK+jlz82BfV8zxQqpNeomWHcelcWvY9ytsvPbcj
-         OfwQNwlze5lOq2Fjoj2rsu3oOHMD76HKjE0wTbiys75WBsVoNG1r+50+ZIQQHKKQ36ep
-         rW+RyoCNK/+5q3qUsKUT6e4CiDwxlJOoze7f8=
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678555469;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=b6FwHGSQEANaeCWfH/KBmQNj8C6YpMAIejp0LKFAolI=;
+        b=mUmLasf0RmqZjsruP0d+yQMq08cI7p6QDDWCnp9x968wtntHBhMMf4wUkeJYEq2udP
+         ienaKw/hcuRbcgg8uCh+SC+uMtI83x6Rf0Fd2ZpojbesuRI6aeBbLA0qJrZZJRumZ/oc
+         z5Lrb4DvR+4t1Dh9vlKjceAkhG2QMH2DHW0tB9WMUrgvqseQlhycVEYIeLRe0cPTHh0H
+         s/x9vieC1UE2zdUY7xn5XTdEdgjcB+2Loj0MqqDUFB0oXCm+PjciJayniMjcXCsknb3/
+         t+lZhI4WKiVSusT/shj9lGeSSpV6l6uJHwMfoZd5xExiK/W9Cmyt9WkzOPBpbRNlbLPB
+         +NBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678555292;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PcyIKKidvdnUoalhAwrLa874ozqa2TDtvQ0KGDZ6tLY=;
-        b=BnO/Xsjfn1De/WzIGka9Yi+U7qy1SfbajLNzWJxWpPls+oXzap5fLOpa9HOXCBwOEK
-         7x/nco5H+n54CaF47XVJSh+DZUVOre3Zq4xfq1tzeSah+f71hDcH46V8GMe+QEuxA/55
-         V+svlDkycuKsIiJ9YQWn4VhXE+vXTE86AteVtNifOqo8vSf0jbz9bF39MTKzWMWiColg
-         4V3ChYsItz5RN94jfky0NWP1QRpsW3nkIQH3qnAw7aU/WTyB3LleGx85I3Eg0QbhKNcH
-         Ul+x95h4De/MhQTJOwEIYMPl1so7qn5WNIzCycAgs/9LSZx3LWfsfiRnEoq+8WG4UGo0
-         fgyg==
-X-Gm-Message-State: AO0yUKVETz4LSdnLAV+iW5rXPs9glKtSGeTEJZ9LguZABzED6L50zEk7
-        aTfC6tK2oMUnBafAmgP+8Qn1TUCkmXc5NFwRwnaz0Q==
-X-Google-Smtp-Source: AK7set+l7DA6IURxCZb/3J0FyKNLUPz1Muk3zuuzDcBUZI6DmtWM0aqOv2nNomN0TeNB3w5kaHFhWQ==
-X-Received: by 2002:a17:907:2bde:b0:906:2b5c:7390 with SMTP id gv30-20020a1709072bde00b009062b5c7390mr25639004ejc.16.1678555292297;
-        Sat, 11 Mar 2023 09:21:32 -0800 (PST)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id n1-20020a50c201000000b004ad61135698sm1404631edf.13.2023.03.11.09.21.31
-        for <linux-kernel@vger.kernel.org>
+        d=1e100.net; s=20210112; t=1678555469;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=b6FwHGSQEANaeCWfH/KBmQNj8C6YpMAIejp0LKFAolI=;
+        b=arVaTW0BZwlW0i/zjjKE9+onHYBs60xzKWOoutEedhSbG9BXwJt3iEkfsHToWvJz/A
+         SbhJZ7GyhVDz9oax9VFCuvSAFib7heE2DdTkAW4hMhovDlLD4yAX/3VI2P5xohYrdtgc
+         pmElsD3qCJrDJfCfH3CpYKyFiSHeN/F8pgwyMdXuD6nvvepKx/I+PLsetF5EKcgARJT4
+         ymV/tEfghN9T2wHJ1rUdoO5OzpfAtO6lkDU4QmsRj480EKr0dpWzCett6lPELsdsiDk8
+         gxDUBUwQ40/dsPW7EuOxwyaLXgdzeYS2bwnjFIXkWFjEJxc2SCKWA+Gx/FxEUPt8Y7fn
+         EZ/g==
+X-Gm-Message-State: AO0yUKXKfeMnXJ5LFNIzqjGEx0MVM+R9hN06THwYIN46WQC8VqQw7DJc
+        nDu8QcKKVE8s8ybwmAJATi3bjw==
+X-Google-Smtp-Source: AK7set9HSeT39Yrw1SF2hUonBtgvQmfrvv9eTpVya+N0eoUS1w6+c7OtLfQz/cLudQ5o3ayhDQdmTA==
+X-Received: by 2002:a17:903:6c3:b0:19a:9269:7d1 with SMTP id kj3-20020a17090306c300b0019a926907d1mr5983558plb.4.1678555468870;
+        Sat, 11 Mar 2023 09:24:28 -0800 (PST)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id kc3-20020a17090333c300b0019a7bb18f98sm1837751plb.48.2023.03.11.09.24.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 09:21:31 -0800 (PST)
-Received: by mail-ed1-f43.google.com with SMTP id er25so4825569edb.5
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:21:31 -0800 (PST)
-X-Received: by 2002:a17:906:4997:b0:877:7480:c75d with SMTP id
- p23-20020a170906499700b008777480c75dmr15142962eju.0.1678555291270; Sat, 11
- Mar 2023 09:21:31 -0800 (PST)
+        Sat, 11 Mar 2023 09:24:28 -0800 (PST)
+Message-ID: <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+Date:   Sat, 11 Mar 2023 10:24:27 -0700
 MIME-Version: 1.0
-References: <20230310220332.5309-1-michael.christie@oracle.com>
-In-Reply-To: <20230310220332.5309-1-michael.christie@oracle.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 11 Mar 2023 09:21:14 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wgenic8Ba1WxNP=9YJXk78k9Sg6R7RLkhduYjtVy2gdkg@mail.gmail.com>
-Message-ID: <CAHk-=wgenic8Ba1WxNP=9YJXk78k9Sg6R7RLkhduYjtVy2gdkg@mail.gmail.com>
-Subject: Re: [PATCH 00/11] Use copy_process in vhost layer
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, brauner@kernel.org,
-        ebiederm@xmission.com, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <cover.1678474375.git.asml.silence@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 2:04=E2=80=AFPM Mike Christie
-<michael.christie@oracle.com> wrote:
->
-> The following patches were made over Linus's tree and apply over next. Th=
-ey
-> allow the vhost layer to use copy_process instead of using
-> workqueue_structs to create worker threads for VM's devices.
+On 3/10/23 12:04?PM, Pavel Begunkov wrote:
+> io_uring extensively uses task_work, but when a task is waiting
+> for multiple CQEs it causes lots of rescheduling. This series
+> is an attempt to optimise it and be a base for future improvements.
+> 
+> For some zc network tests eventually waiting for a portion of 
+> buffers I've got 10x descrease in the number of context switches,
+> which reduced the CPU consumption more than twice (17% -> 8%).
+> It also helps storage cases, while running fio/t/io_uring against
+> a low performant drive it got 2x descrease of the number of context
+> switches for QD8 and ~4 times for QD32.
+> 
+> Not for inclusion yet, I want to add an optimisation for when
+> waiting for 1 CQE.
 
-Ok, all these patches looked fine to me from a quick scan - nothing
-that I reacted to as objectionable, and several of them looked like
-nice cleanups.
+Ran this on the usual peak benchmark, using IRQ. IOPS is around ~70M for
+that, and I see context rates of around 8.1-8.3M/sec with the current
+kernel.
 
-The only one I went "Why do you do it that way" for was in 10/11
-(entirely internal to vhost, so I don't feel too strongly about this)
-how you made "struct vhost_worker" be a pointer in "struct vhost_dev".
+Applied the two patches, but didn't see much of a change? Performance is
+about the same, and cx rate ditto. Confused... As you probably know,
+this test waits for 32 ios at the time.
 
-It _looks_ to me like it could just have been an embedded structure
-rather than a separate allocation.
+Didn't take a closer look just yet, but I grok the concept. One
+immediate thing I'd want to change is the FACILE part of it. Let's call
+it something a bit more straightforward, perhaps LIGHT? Or LIGHTWEIGHT?
+I can see this mostly being used for filling a CQE, so it could also be
+named something like that. But could also be used for light work in the
+same vein, so might not be a good idea to base the naming on that.
 
-IOW, why do
+-- 
+Jens Axboe
 
-   vhost_dev->worker
-
-instead of doing
-
-  vhost_dev.worker
-
-and just having it all in the same allocation?
-
-Not a big deal. Maybe you wanted the 'test if worker pointer is NULL'
-code to stay around, and basically use that pointer as a flag too. Or
-maybe there is some other reason you want to keep that separate..
-
-               Linus
