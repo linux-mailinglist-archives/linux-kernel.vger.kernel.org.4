@@ -2,88 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 40B616B5F97
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:14:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E766B5F98
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:15:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCKSOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:14:42 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
+        id S230200AbjCKSPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:15:40 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCKSOj (ORCPT
+        with ESMTP id S229550AbjCKSPh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:14:39 -0500
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E11F6287A;
-        Sat, 11 Mar 2023 10:14:38 -0800 (PST)
-Received: by mail-ed1-x536.google.com with SMTP id da10so33347933edb.3;
-        Sat, 11 Mar 2023 10:14:38 -0800 (PST)
+        Sat, 11 Mar 2023 13:15:37 -0500
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B244637EA
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:15:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678558477;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=z1fvfYknXX3s4BMvhdB9LJyWlF6Mhekj+R7eFWprXOE=;
-        b=ZfJAcF7uPhRJSAXwcid6/B7qfuPr/5cWlyH703KEZViuUAK8uf9OnSkBjNxK0F5/br
-         XCeoTPMn/AmpNYwlckwTGdkF+OFV2DvTBdwdtl/dbJj6vrPL7ZVqm9xO9aE7Z45s70Pc
-         TukRa+naUdtVfpFSA6wzzwmqXOGSZqK6SJsfr+NEJpACgSY37KVV3c8dedN8PY7tXk2a
-         PB0Kd8ZbH0+Yi8wB5fhEbvBSV7aw8SXL4Oll8ADCll1UgckSiFv9Qg7RbyzndBZthK3x
-         lYdGJqL1gq4DGvfWeJWoLQ/+SL13T6cjep6emnU+B4P2dOsFLJVKeAdee4nlsqj4Ozth
-         RYOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678558477;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z1fvfYknXX3s4BMvhdB9LJyWlF6Mhekj+R7eFWprXOE=;
-        b=F/5ybCybR2PVGbf43Lfc3kEkwkm4A/bfaxzAVxHbnW4hdBb39f1jlk4frkB5ltRfJF
-         vNpC4nyhzhpETwvZfsEhzeQUthPCNi5Epf2P0AcM/7sW98HCMvs3C7rO2HpvQLqfuhsW
-         Og3t8wCDmjPGEKEB1SLi4etKHrM2OKI/9CmFezOpO4sbqKkl8mXauiJA6wp1isQy4hmy
-         woVc871KHuyTzg3Bf4ZFOvg+zPMBcH8Gm+LYRnwl+ig+4RlJT9TWrnuszMpTz+3g7z4W
-         i5tqGKzpmkVbkKM1IYNsL8OV92M8R1KS7YGMfPjlZJWuhukiCE4/IiQNupYPGcyXGQnH
-         1vQA==
-X-Gm-Message-State: AO0yUKXURT7qJgWGiqtRc63WCzVyIRN1OXIyKx+cLPGJYiUqpJYuyRFB
-        MChVBKQKdRrKCnig1yohU4Y=
-X-Google-Smtp-Source: AK7set8ClX79YIet7szK6WARyHNYMAjqItBvSIAUu8NA8wuQkIeFJ591KGFOSJFGJFNIBAbX2sQp4g==
-X-Received: by 2002:a17:906:fe43:b0:88f:9c29:d232 with SMTP id wz3-20020a170906fe4300b0088f9c29d232mr39454144ejb.57.1678558476965;
-        Sat, 11 Mar 2023 10:14:36 -0800 (PST)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id m15-20020a17090607cf00b00914fec9f40esm1338874ejc.71.2023.03.11.10.14.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 10:14:36 -0800 (PST)
-Date:   Sat, 11 Mar 2023 20:14:34 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org
-Subject: Re: [PATCH 01/12] net: dsa: lantiq_gswip: mark OF related data as
- maybe unused
-Message-ID: <20230311181434.lycxr5h2f6xcmwdj@skbuf>
-References: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=3rR5OQ3sQVLhWBUYWdY6yHLdxX91kXaMtSzohwuA2Pk=;
+  b=T+hAK6PHgMt5hYr8fSfAUi/kToM3unyYNFIksHQ85NP6E5Ps81uZ3oof
+   +3JwFvgiY1WX1/mhAxx0bzH5VEmgeCuU84ZTUWbdO1bpnNOEp8URdlpnf
+   vkg4rcqJlumaoAiOirXBtlXZcpJfDD+fIux/DZb1F88830qM7UwM7zZ1U
+   k=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,253,1673910000"; 
+   d="scan'208";a="49892577"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 19:15:34 +0100
+Date:   Sat, 11 Mar 2023 19:15:33 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>
+cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] staging: axis-fifo: remove tabs to align arguments
+In-Reply-To: <ZAy69T5sYZiyL4TJ@khadija-virtual-machine>
+Message-ID: <alpine.DEB.2.22.394.2303111914050.2802@hadrien>
+References: <ZAxsyX8n7G92nlJh@khadija-virtual-machine> <ZAxzfiOoW0SfW5qD@kroah.com> <ZAy69T5sYZiyL4TJ@khadija-virtual-machine>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=US-ASCII
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -91,30 +53,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 06:32:52PM +0100, Krzysztof Kozlowski wrote:
-> The driver can be compile tested with !CONFIG_OF making certain data
-> unused:
-> 
->   drivers/net/dsa/lantiq_gswip.c:1888:34: error: ‘xway_gphy_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
 
-Do you happen to have any context as to why of_match_node() without
-CONFIG_OF is implemented as:
 
-#define of_match_node(_matches, _node)	NULL
+On Sat, 11 Mar 2023, Khadija Kamran wrote:
 
-and not as:
+> On Sat, Mar 11, 2023 at 01:26:38PM +0100, Greg Kroah-Hartman wrote:
+> > On Sat, Mar 11, 2023 at 04:58:01PM +0500, Khadija Kamran wrote:
+> > > In file drivers/staging/axis-fifo/axis-fifo.c, in line 386 and 529, the
+> > > last argument is indented as if it were an argument of the second
+> > > argument. Remove tabs to align the arguments.
+> > >
+> > > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > > ---
+> > > Changes in v3:
+> > >  - Do not align the line 530 since it is not part of the last argument.
+> > >
+> > >  drivers/staging/axis-fifo/axis-fifo.c | 12 ++++++------
+> > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
+> > > index dfd2b357f484..b119cec25a60 100644
+> > > --- a/drivers/staging/axis-fifo/axis-fifo.c
+> > > +++ b/drivers/staging/axis-fifo/axis-fifo.c
+> > > @@ -384,9 +384,9 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
+> > >  		mutex_lock(&fifo->read_lock);
+> > >  		ret = wait_event_interruptible_timeout(fifo->read_queue,
+> > >  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
+> > > -				 (read_timeout >= 0) ?
+> > > -				  msecs_to_jiffies(read_timeout) :
+> > > -				  MAX_SCHEDULE_TIMEOUT);
+> > > +			(read_timeout >= 0) ?
+> > > +			msecs_to_jiffies(read_timeout) :
+> > > +			MAX_SCHEDULE_TIMEOUT);
+> >
+> > People have been trying to "polish" this mess for a long time, and I
+> > think it's better to step back and see what is really needed here.
+> >
+> > There is a module parameter, read_timeout, that can only be set at
+> > loading time.  As it can only be modified once, why are we doing an if
+> > statement each and every time it is read from?
+> >
+> > Instead, in the module probe function, how about doing something like:
+> > 	if (read_timeout >= 0)
+> > 		read_timeout = msecs_to_jiffies(read_timeout);
+> > 	else
+> > 		read_timeout = MAX_SCHEDULE_TIMEOUT;
+> >
+>
+>
+> Hi Greg!
+> Thank you for the reply. Before sending the patch I just wanted to
+> confirm if I have understood this right. Should I write the above
+> mentioned code before the wait_event_interruptible_timeout() call, and
+> pass read_timeout as the last argument to wait_event_interruptible()?
+> And same for write_timeout.
 
-static inline const struct of_device_id *
-of_match_node(const struct of_device_id *matches,
-	      const struct device_node *node)
-{
-	return NULL;
-}
+Greg suggests to do the initialization of read_timeout only once in the
+probe function.  That is the function in which the driver figures out some
+information about the environment in which it is running. It is only
+called once, at startup time.  Then there will not be this if on every
+wait_event_interruptible_timeout call.
 
-?
+julia
 
-Generally, the static inline shim function model is nicer, because it
-allows us to not scatter __maybe_unused all around.
+
+>
+>
+> > and then only ever use "read_timeout" here in the
+> > wait_event_interruptiable() call?  That should simplify this much more
+> > overall, and hopefully allow us to just get rid of the module parameter
+> > eventually as that's not how drivers should be working at all anymore.
+> >
+> > Same goes for write_timeout.
+> >
+> > Overall the code should be much simpler and easier to understand, which
+> > is the end goal here.
+> >
+> > Can you try doing that instead?
+> >
+> > thanks,
+> >
+> > greg k-h
+>
+>
