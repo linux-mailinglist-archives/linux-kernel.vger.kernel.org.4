@@ -2,187 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E42D6B60DD
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95A866B60E7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:16:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229779AbjCKVOo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:14:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
+        id S229835AbjCKVQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:16:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCKVOn (ORCPT
+        with ESMTP id S229437AbjCKVQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:14:43 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9A941096;
-        Sat, 11 Mar 2023 13:14:41 -0800 (PST)
+        Sat, 11 Mar 2023 16:16:45 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DDCD7203C;
+        Sat, 11 Mar 2023 13:16:44 -0800 (PST)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3E917B80B37;
-        Sat, 11 Mar 2023 21:14:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B867CC433D2;
-        Sat, 11 Mar 2023 21:14:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D13460DF7;
+        Sat, 11 Mar 2023 21:16:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74CADC433EF;
+        Sat, 11 Mar 2023 21:16:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678569279;
-        bh=Usxa5LuHSmLnfgl7De23RRJX0tgoeIGUzPYdQGCkm1E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tLINkYFwV3rH6R3eqi3rIb8iZ+zkar3FpKzeVucsBPtvn8jdDbUWfLnXqjctzjH37
-         ryjgzoW3yhKTOr9lGBgqLXUxtDnMIbDxwO3n7L7xizNIqeQuQb296huMlPQXXWIDfc
-         enLwAWqNAtcphkAeXAKOVy/QRAq4NKzeklzIobppTd4f29CJeAJtyu60saTpfVUW2A
-         T+BS4JoBsT01RGKenq0FquSj6bG2v9ZbPweSn5/tyDs7Un0aAKf0i8zDgOIIyTButE
-         X9rAen323VZEyRRaIk0aJa8MjZiQAsbNTXzuBuEGPAw0GxN4vFF8gOU1w8xG0QRv0r
-         dJZ6u/Mv2+Wmw==
-Date:   Sat, 11 Mar 2023 16:14:37 -0500
-From:   Sasha Levin <sashal@kernel.org>
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZAzvPR1zev3tFJoH@sashalap>
-References: <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzH8Ve05SRLYPnR@sashalap>
- <ZAzOgw8Ui4kh1Z3D@sol.localdomain>
+        s=k20201202; t=1678569403;
+        bh=+DzB7/8CoWnkO/XRI1leyDdvUnpN9ch8MSd2GNMDJTM=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=MtiLuqbg+ewNrORM7gYuVWtDY1WITP8fnDMohaMDfvWiK44HvE3TXPL+xscranYBF
+         yf1cemIotmGqM2ROCJKFIbsDGJT3UhZqQwDXgx6UPzbcJrejJnMC8imhMQDvh/3otz
+         wQ6QvUFpmKZqwcQ0FlnWNou2FH119vYfI+6XYOoc4Eq2rGIbp0vxaPq+RgishnR9ku
+         DRAHcvNCbawn8KZYF6NlW5WDU1hyJ4TX6kHb4jQ03jf2xQJXjTCRrFF2p/607748IQ
+         RgZSHqHtQF0djp0rR09WieyymQvaZ306PNgk7wdUdd9UxHPOis6usgGrTDI1JSrbQM
+         TV9gW7JLoVEeg==
+From:   Mark Brown <broonie@kernel.org>
+To:     miquel.raynal@bootlin.com, richard@nod.at, vigneshr@ti.com,
+        jic23@kernel.org, pratyush@kernel.org, sanju.mehta@amd.com,
+        chin-ting_kuo@aspeedtech.com, clg@kaod.org, kdasu.kdev@gmail.com,
+        f.fainelli@gmail.com, rjui@broadcom.com, sbranden@broadcom.com,
+        eajames@linux.ibm.com, olteanv@gmail.com, han.xu@nxp.com,
+        john.garry@huawei.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        khilman@baylibre.com, matthias.bgg@gmail.com, haibo.chen@nxp.com,
+        linus.walleij@linaro.org, daniel@zonque.org,
+        haojian.zhuang@gmail.com, robert.jarzmik@free.fr,
+        agross@kernel.org, heiko@sntech.de, krzysztof.kozlowski@linaro.org,
+        andi@etezian.org, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, wens@csie.org,
+        jernej.skrabec@gmail.com, samuel@sholland.org,
+        masahisa.kojima@linaro.org, jaswinder.singh@linaro.org,
+        rostedt@goodmis.org, mingo@redhat.com, l.stelmach@samsung.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, alex.aring@gmail.com, stefan@datenfreihafen.org,
+        kvalo@kernel.org, james.schulman@cirrus.com,
+        david.rhodes@cirrus.com, tanureal@opensource.cirrus.com,
+        rf@opensource.cirrus.com, perex@perex.cz, tiwai@suse.com,
+        npiggin@gmail.com, christophe.leroy@csgroup.eu, mpe@ellerman.id.au,
+        oss@buserror.net, windhl@126.com, yangyingliang@huawei.com,
+        Tudor Ambarus <tudor.ambarus@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Amit Kumar Mahapatra <amit.kumar-mahapatra@amd.com>
+Cc:     git@amd.com, linux-spi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, joel@jms.id.au, andrew@aj.id.au,
+        radu_nicolae.pirea@upb.ro, nicolas.ferre@microchip.com,
+        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
+        bcm-kernel-feedback-list@broadcom.com, fancer.lancer@gmail.com,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        jbrunet@baylibre.com, martin.blumenstingl@googlemail.com,
+        avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com,
+        venture@google.com, yuenn@google.com, benjaminfair@google.com,
+        yogeshgaur.83@gmail.com, konrad.dybcio@somainline.org,
+        alim.akhtar@samsung.com, ldewangan@nvidia.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        michal.simek@amd.com, linux-aspeed@lists.ozlabs.org,
+        openbmc@lists.ozlabs.org, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org,
+        linux-amlogic@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+        netdev@vger.kernel.org, linux-wpan@vger.kernel.org,
+        libertas-dev@lists.infradead.org, linux-wireless@vger.kernel.org,
+        linux-mtd@lists.infradead.org, lars@metafoo.de,
+        Michael.Hennerich@analog.com, linux-iio@vger.kernel.org,
+        michael@walle.cc, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linuxppc-dev@lists.ozlabs.org,
+        amitrkcian2002@gmail.com
+In-Reply-To: <20230210193647.4159467-1-amit.kumar-mahapatra@amd.com>
+References: <20230210193647.4159467-1-amit.kumar-mahapatra@amd.com>
+Subject: Re: (subset) [PATCH v4 00/15] spi: Add support for
+ stacked/parallel memories
+Message-Id: <167856937606.964268.6047676283886463336.b4-ty@kernel.org>
+Date:   Sat, 11 Mar 2023 21:16:16 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <ZAzOgw8Ui4kh1Z3D@sol.localdomain>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.13-dev-2eb1a
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 10:54:59AM -0800, Eric Biggers wrote:
->On Sat, Mar 11, 2023 at 01:26:57PM -0500, Sasha Levin wrote:
->>
->> "job"? do you think I'm paid to do this work?
->
->> Why would I stonewall improvements to the process?
->>
->> I'm getting a bunch of suggestions and complaints that I'm not implementing
->> those suggestions fast enough on my spare time.
->>
->> > One of the first things I would do if I was maintaining the stable kernels is to
->> > set up a way to automatically run searches on the mailing lists, and then take
->> > advantage of that in the stable process in various ways.  Not having that is the
->> > root cause of a lot of the issues with the current process, IMO.
->>
->> "if I was maintaining the stable kernels" - why is this rellevant? give
->> us the tool you've proposed below and we'll be happy to use it. Heck,
->> don't give it to us, use it to review the patches we're sending out for
->> review and let us know if we've missed anything.
->
->It's kind of a stretch to claim that maintaining the stable kernels is not part
->of your and Greg's jobs.  But anyway, the real problem is that it's currently
->very hard for others to contribute, given the unique role the stable maintainers
->have and the lack of documentation about it.  Each of the two maintainers has
->their own scripts, and it is not clear how they use them and what processes they
->follow.  (Even just stable-kernel-rules.rst is totally incorrect these days.)
->Actually I still don't even know where your scripts are!  They are not in
->stable-queue/scripts, it seems those are only Greg's scripts?  And if I built
->something, how do I know you would even use it?  You likely have all sorts of
->requirements that I don't even know about.
+On Sat, 11 Feb 2023 01:06:31 +0530, Amit Kumar Mahapatra wrote:
+> This patch is in the continuation to the discussions which happened on
+> 'commit f89504300e94 ("spi: Stacked/parallel memories bindings")' for
+> adding dt-binding support for stacked/parallel memories.
+> 
+> This patch series updated the spi-nor, spi core and the spi drivers
+> to add stacked and parallel memories support.
+> 
+> [...]
 
-https://kernel.googlesource.com/pub/scm/linux/kernel/git/sashal/stable-tools/
+Applied to
 
-I've last updated it about two years ago, but really it's not out of
-date - it just doesn't get that many changes at this point.
+   broonie/spi.git for-next
 
-This is a mess we want to solve too: having a single repository with
-tools for "maintaining stable kernel trees" would be ideal and awesome,
-but it's quite the lift.
+Thanks!
 
-We ended up with different scripts because we started trying to solve
-different issues, and ended up converging into the same tree: even now,
-each of us handles different subsection of commits going into the kernel
-tree, we just end up pushing them into the same stable branch at the
-end.
+[01/15] spi: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: 9e264f3f85a56cc109cc2d6010a48aa89d5c1ff1
+[02/15] net: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: 25fd0550d9b9c92288a17fb7d605cdcdb4a65a64
+[03/15] iio: imu: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: 0183f81fce154ae1d4df2bb28d22ad6612317148
+[04/15] mtd: devices: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: 0817bcef53e4e3df23c023eddaa2b35b7288400e
+[05/15] staging: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: caa9d3475b1c5566f0272273c147cc9b72f2be28
+[06/15] platform/x86: serial-multi-instantiate: Replace all spi->chip_select and spi->cs_gpiod references with function call
+        commit: e20451f44ca33ec40422e9868775e117ef2da935
+[07/15] powerpc/83xx/mpc832x_rdb: Replace all spi->chip_select references with function call
+        commit: 3aba06a9fee04f6fefa9df71d3ee27dd4c464ad5
+[08/15] ALSA: hda: cs35l41: Replace all spi->chip_select references with function call
+        commit: 06b5e53c8b2b016e06a53ab6f01006ca7bbfa5df
+[09/15] spi: Add stacked and parallel memories support in SPI core
+        (no commit info)
 
->>
->> I've been playing with this in the past - I had a bot that looks at the
->> mailing lists for patches that are tagged for stable, and attempts to
->> apply/build then on the multiple trees to verify that it works and send
->> a reply back if something goes wrong, asking for a backport.
->>
->> It gets a bit tricky as there's no way to go back from a commit to the
->> initial submission, you start hitting issues like:
->>
->> - Patches get re-sent multiple times (think stuff like tip trees,
->> reviews from other maintainers, etc).
->> - Different versions of patches - for example, v1 was a single patch
->> and in v2 it became multiple patches.
->>
->> I'm not arguing against your idea, I'm just saying that it's not
->> trivial. An incomplete work here simply won't scale to the thousands of
->> patches that flow in the trees, and won't be as useful. I don't think
->> that this is trivial as you suggest.
->
->There are obviously going to be edge cases; another one is commits that show up
->in git without ever having been sent to the mailing list.  I don't think they
->actually matter very much, though.  Worst case, we miss some things, but still
->find everything else.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Consider the opposite, which I just saw earlier today with a commit that
-was tagged for stable: https://lore.kernel.org/all/20230217022200.3092987-1-yukuai1@huaweicloud.com/
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
 
-Here, commit 1/2 reverts a previously broken fix, and is not marked for
-stable. Commit 2/2 applies the proper fix, but won't apply cleanly or
-correctly unless you have patch 1/2.
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
 
-In this case you need both commits in the series, rather than none of
-them, otherwise you leave the trees broken.
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
->>
->> If you disagree, and really think it's trivial, take 5 minutes to write
->> something up? please?
->
->I never said that it's "trivial" or that it would take only 5 minutes; that's
->just silly.  Just that this is possible and it's what needs to be done.
->
->If you don't have time, you should instead be helping ensure that the work gets
->done by someone else (internship, GSoC project, etc.).
-
-My personal experience with this approach was that:
-
-1. It ends up being more effort mentoring someone who is unfamailiar
-with this work rather than doing it myself.
-
-2. There are very *very* few people who want to be doing this: to begin
-with the kernel is one of the less popular areas to get into, and on top
-of that the stable tree work is even worse because you do "maintenance"
-rather than write new shiny features.
-
->And yes, I am interested in contributing, but as I mentioned I think you need to
->first acknowledge that there is a problem, fix your attitude of immediately
->pushing back on everything, and make it easier for people to contribute.
-
-I don't think we disagree that the process is broken: this is one of the
-reasons we went away from trying to support 6 year LTS kernels.
-
-However, we are not pushing back on ideas, we are asking for a hand in
-improving the process: we've been getting drive-by comments quite often,
-but when it comes to be doing the actual work people are quite reluctant
-to help.
-
-If you want to sit down and scope out initial set of work around tooling
-to help here I'm more than happy to do that: I'm planning to be both in
-OSS and LPC if you want to do it in person, along with anyone else
-interested in helping out.
-
--- 
 Thanks,
-Sasha
+Mark
+
