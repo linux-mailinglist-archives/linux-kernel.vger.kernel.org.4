@@ -2,137 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80B1E6B5895
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:19:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE48E6B587E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:17:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjCKFTE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:19:04 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50070 "EHLO
+        id S229943AbjCKFRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:17:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbjCKFSb (ORCPT
+        with ESMTP id S229613AbjCKFRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 00:18:31 -0500
-Received: from sender-of-o51.zoho.in (sender-of-o51.zoho.in [103.117.158.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55E5B1408A1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 21:17:48 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1678511826; cv=none; 
-        d=zohomail.in; s=zohoarc; 
-        b=MAJxP/Y7VUsT1dmXNCicZJV93o5qJ8SDgA9HaeF2w7v9KKUMMdg/i+PQZQm1Q7L9GGTGRuBw2nk/NVFwWEuIAnBawoQNuUf6zXs+UeQlqew3SwY+25X8sJi8qFBJVLoEXg5wO4cOWgDmSIhOpDcyMnDd2pt/We22PaQPp4OVBnc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.in; s=zohoarc; 
-        t=1678511826; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=654fJPoPkkA2Ofkz6DC3Gzmc98pclBqXOnVUTQHbzA0=; 
-        b=GJFfUXgpRMqjveAbQW/lz0dr4Mi0CXy80LMyCXE7axJL3mmgtXGJik72b35VIQHOsZeAggF4rW9f6nUtXZg22GkyDZQxNz+7yqu+HnreM0wJOXLBwDaM+qlZ3mTN8L4ITz/8KNCFdG3ajiy6oPgMgos86znhG577qgQ+17/MZ0E=
-ARC-Authentication-Results: i=1; mx.zohomail.in;
-        dkim=pass  header.i=siddh.me;
-        spf=pass  smtp.mailfrom=code@siddh.me;
-        dmarc=pass header.from=<code@siddh.me>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678511826;
-        s=zmail; d=siddh.me; i=code@siddh.me;
-        h=Date:Date:From:From:To:To:Cc:Cc:Message-ID:In-Reply-To:References:Subject:Subject:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=654fJPoPkkA2Ofkz6DC3Gzmc98pclBqXOnVUTQHbzA0=;
-        b=UUpxXdenkeKVtU8SYlGtn2SWUiFlo1ccTlbh5Kz61WbptrGqZy3S2WQTO1qxP1ij
-        kwvlLTLm4W8FIqwy+/ZeQQOhXKgJUzPmv9e+PX2YzzRrkUfZ+g4Y7ll+ohWs7MUaCNM
-        p9s1udkWTMfCFlxEqsUON/hPjCqk8i4+JNzZ0CRU=
-Received: from mail.zoho.in by mx.zoho.in
-        with SMTP id 1678511814182525.992911523984; Sat, 11 Mar 2023 10:46:54 +0530 (IST)
-Date:   Sat, 11 Mar 2023 10:46:54 +0530
-From:   Siddh Raman Pant <code@siddh.me>
-To:     "Ivan Orlov" <ivan.orlov0322@gmail.com>
-Cc:     "ericvh" <ericvh@gmail.com>, "lucho" <lucho@ionkov.net>,
-        "asmadeus" <asmadeus@codewreck.org>,
-        "linux_oss" <linux_oss@crudebyte.com>,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        "syzbot+cb1d16facb3cc90de5fb" 
-        <syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com>,
-        "v9fs-developer" <v9fs-developer@lists.sourceforge.net>,
-        "linux-kernel-mentees" 
-        <linux-kernel-mentees@lists.linuxfoundation.org>
-Message-ID: <186cf19b619.4777c80c154603.5258165448157616593@siddh.me>
-In-Reply-To: <20230310202619.433269-1-ivan.orlov0322@gmail.com>
-References: <20230310202619.433269-1-ivan.orlov0322@gmail.com>
-Subject: Re: [PATCH] 9P FS: Fix wild-memory-access write in v9fs_get_acl
+        Sat, 11 Mar 2023 00:17:31 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737CA140507;
+        Fri, 10 Mar 2023 21:17:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=G7D4vwbmdXJTfyX+mz4IpTA/4Mn1YMJVyYwpWdRSXRc=; b=wPV2ZKbScOLTUdLYEFrmuJfSCJ
+        YYwOp0CtVE0Tkbt8LthQva2www9a40XKPaLpJjJk+YmzHt7IMLI/dJg1xJddnpW8QusXe+aFsLToh
+        W7risZHC6iYT6BZ4V2vvN4Prnz66Z1TIYrVrd4wpAjamVX0V3RME65R4kd2SAnA0FWajP2V+piOzW
+        drLAZz6cLz8XizQ9a/EeoJWWteSzgefGzad6J/xOhzmCJsaSE+ezSCr0LKMaLQxZj1h5t5SbeE8FZ
+        R5X+Na+kUxRfnFOw7N2tpVoPoshKrd5/pU12+qgBrTGcB5q8ONlRxFrSEwJOuV32ZRUhjXoQpti+t
+        R/ZlCwYQ==;
+Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1parbj-00HBMm-0G; Sat, 11 Mar 2023 05:17:27 +0000
+From:   Luis Chamberlain <mcgrof@kernel.org>
+To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
+        pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
+        prarit@redhat.com
+Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
+        torvalds@linux-foundation.org
+Subject: [RFC 00/12] module: avoid userspace pressure on unwanted allocations
+Date:   Fri, 10 Mar 2023 21:17:00 -0800
+Message-Id: <20230311051712.4095040-1-mcgrof@kernel.org>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-Importance: Medium
-User-Agent: Zoho Mail
-X-Mailer: Zoho Mail
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+Sender: Luis Chamberlain <mcgrof@infradead.org>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 01:56:19 +0530, Ivan Orlov wrote:
-> KASAN reported the following issue:
-> [...]
-> 
-> Calling '__v9fs_get_acl' method in 'v9fs_get_acl' creates the
-> following chain of function calls:
-> 
-> __v9fs_get_acl
->       v9fs_fid_get_acl
->               v9fs_fid_xattr_get
->                       p9_client_xattrwalk
-> 
-> Function p9_client_xattrwalk accepts a pointer to u64-typed
-> variable attr_size and puts some u64 value into it. However,
-> after the executing the p9_client_xattrwalk, in some circumstances
-> we assign the value of u64-typed variable 'attr_size' to the
-> variable 'retval', which we will return. However, the type of
-> 'retval' is ssize_t, and if the value of attr_size is larger
-> than SSIZE_MAX, we will face the signed type overflow. If the
-> overflow occurs, the result of v9fs_fid_xattr_get may be
-> negative, but not classified as an error. When we try to allocate
-> an acl with 'broken' size we receive an error, but don't process
-> it. When we try to free this acl, we face the 'wild-memory-access'
-> error (because it wasn't allocated).
-> 
-> This patch will modify the condition in the 'v9fs_fid_xattr_get'
-> function, so it will return an error if the 'attr_size' is larger
-> than SSIZE_MAX.
-> 
-> Reported-by: syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com
-> Link: https://syzkaller.appspot.com/bug?id=fbbef66d9e4d096242f3617de5d14d12705b4659
-> Signed-off-by: Ivan Orlov ivan.orlov0322@gmail.com>
+A long time ago we had some issues with userspace doing stupid stuff.
+Well, it turns out even the kernel and do stupid stuff too, as we're
+learning with the ACPI modules aliaes and that hammering tons of loads.
 
-You should also test with Syzkaller if it gave a reproducer.
-Check the following docs to know about it:
-https://github.com/google/syzkaller/blob/master/docs/syzbot.md#testing-patches
+So add a bit of code which gets us a bit more in the defensive about
+these situations.
 
-> ---
->  fs/9p/xattr.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/fs/9p/xattr.c b/fs/9p/xattr.c
-> index 50f7f3f6b55e..d6f7450107a8 100644
-> --- a/fs/9p/xattr.c
-> +++ b/fs/9p/xattr.c
-> @@ -35,7 +35,7 @@ ssize_t v9fs_fid_xattr_get(struct p9_fid *fid, const char *name,
->  		return retval;
->  	}
->  	if (attr_size > buffer_size) {
-> -		if (!buffer_size) /* request to get the attr_size */
-> +		if (!buffer_size && attr_size <= (u64) SSIZE_MAX) /* request to get the attr_size */
->  			retval = attr_size;
->  		else
->  			retval = -ERANGE;
+To experiment, this also adds in-kernel alias support to see if this helps
+with some larger systems.
 
-You should use EOVERFLOW for overflow error. Make a new conditional
-instead of using AND. Also, the explicit u64 cast for SSIZE_MAX can
-be dropped for better readability.
+This is all based on some old code which tried to add defensive
+mechanisms the last of which was here and I had dropped the ball:
 
-Thanks,
-Siddh
+https://lore.kernel.org/all/20171208001540.23696-1-mcgrof@kernel.org/
 
-> -- 
-> 2.34.1
-> 
-> _______________________________________________
-> Linux-kernel-mentees mailing list
-> Linux-kernel-mentees@lists.linuxfoundation.org
-> https://lists.linuxfoundation.org/mailman/listinfo/linux-kernel-mentees
+I've only compile tested this for now. Will need to stress to test
+with kmod tests 0008 and 0009 to see if there's any differences.
+I'll have to re-test and re-gnuplot stuff there. But early feedback
+is appreciated, hence the RFC.
+
+David Hildenbrand had reported a while ago issues with userspace
+doing insane things with allocations bringing a system down to
+its knees. This is part of the motivation for this series.
+
+I repeat, I only have compiled tested this so far.
+
+A few Suggested-by there linger since Linus had suggested a few of
+these ideas a long time ago and we just never picked them up.
+
+Luis Chamberlain (12):
+  module: use goto errors on check_modinfo() and layout_and_allocate()
+  module: move get_modinfo() helpers all above
+  module: rename next_string() to module_next_tag_pair()
+  module: add a for_each_modinfo_entry()
+  module: add debugging alias parsing support
+  module: move early sanity checks into a helper
+  module: move check_modinfo() early to early_mod_check()
+  module: move finished_loading()
+  module: extract patient module check into helper
+  module: avoid allocation if module is already present and ready
+  module: use list_add_tail_rcu() when adding module
+  module: use aliases to find module on find_module_all()
+
+ include/linux/module.h   |   4 +
+ kernel/module/Kconfig    |  19 +++
+ kernel/module/Makefile   |   1 +
+ kernel/module/aliases.c  | 109 +++++++++++++
+ kernel/module/internal.h |  25 +++
+ kernel/module/main.c     | 324 +++++++++++++++++++++++----------------
+ 6 files changed, 346 insertions(+), 136 deletions(-)
+ create mode 100644 kernel/module/aliases.c
+
+-- 
+2.39.1
+
