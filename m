@@ -2,244 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5CD2E6B58E6
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:19:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A5E6B58E8
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbjCKGTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 01:19:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48930 "EHLO
+        id S229874AbjCKGY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 01:24:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229743AbjCKGTG (ORCPT
+        with ESMTP id S229455AbjCKGY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:19:06 -0500
-Received: from mail-vs1-xe2b.google.com (mail-vs1-xe2b.google.com [IPv6:2607:f8b0:4864:20::e2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D188F113886
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:19:02 -0800 (PST)
-Received: by mail-vs1-xe2b.google.com with SMTP id f31so6648465vsv.1
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:19:02 -0800 (PST)
+        Sat, 11 Mar 2023 01:24:26 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDE45136FF0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:24:24 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id f11so6938109wrv.8
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:24:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678515542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=18y4gmWjYtxdBEKguCXxs9iykUU/xqvuXDDHH7ebl/I=;
-        b=Cf6OxVTQL9TsivB31sreIVq62Ph4mN2esBJe0rog9jJ+K/E5BcHRIaaT9bw3C7OdXf
-         HhfT684sKZdXdKlPXhPbhlc/5glAiL/PKiUNHsRw7mk93YqZj/23wdrAkLyoV1G/OHxh
-         Kf1suj6bvmaXv5Z3QvvyREann/hoNSBOAEm04taBiaQ6O5lOvHUZqxuV1DrYVihtNwEI
-         0ygwzspW6ur9ZXdfZEEo5J+vbi/8kcrDsHnvtJZ7+hL8ygevIAgv+D/C5vvM3BHR9NUA
-         ucrBSFcmCU4MeHxz0pSk4XagDHl53NXQenNnv05zdYQBUIcgS5Png0XH/FXC3SGhtrWu
-         OAaQ==
+        d=gmail.com; s=20210112; t=1678515863;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=KEAB5UcFKezf78Y1Bog4LTa3d4NoqJ+/Ij4qU9A9IPM=;
+        b=qRlBKCXOGW8I0xIQseEgSFEYMVA2cZq4nrO1Y1iZTSKp3cUIe/mIYsvH4wNUEvBWmQ
+         /e6Ni0ss8msM+FSMTy+7KUG7xVEHhQ6ANHjr/5uUsSonnjbb/6wa64f4XB9JJ8iZITK2
+         OHGtcjGmTnDTGMPfxXrpgLI8y+uDogS9Kpk++e4biWraJnxnbeg6QIfyrEm9huKaDCwz
+         iosk6VIuoSS6HOdACj6Sc4mdrQJriqsZySlEnpDr67EZS0klL/1DoIBRJekPh1w7V+ld
+         kfPFHb/bii2T/uF1xmZ7WisM37dxYmJrSGQopqatKWutC4Kn4ac9bvJQU7C0GyNH6jS7
+         FUag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678515542;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=18y4gmWjYtxdBEKguCXxs9iykUU/xqvuXDDHH7ebl/I=;
-        b=qieOJ+Ew8YBcSHDDwZRzpRqp9Krc20uQLXm+EEfjGqQbwACXCEuZ6tUiSS+KQ1ouTY
-         rCNO7pgzxkaiqZNcFGGxuCeSmCgONJzuQs1q8IXnnVY1JVfdRP6IWJGSBV2lB/VpGydm
-         uBrF8WMS5xs53nJnEHbWIhSOncF1zDrX+XR80Eq06ExZytQJlzuakrQlco/Vy8TP0szr
-         mwjeJBbDs6eaSaaz/CPMcp/ICTKUvaDQYGmXIbwcNPRPANTePeCUTQIr1EAQo2/cgJ6a
-         iAtbuyThbaEt2ZCMhVlooskCy1VCEZAr08fYsfyZluGYgXlqtokYZYkCwgC4QlGI27O6
-         +3/g==
-X-Gm-Message-State: AO0yUKUNb5Z79Suwy1XfOTAIMrqlyrVnYW8uRdH3Zea8KC9hsOo8wFkj
-        zstG4OZMAiDzpGYdw+2Cq+2mTsw3NRPxr5Oz9+WncA==
-X-Google-Smtp-Source: AK7set8ctushA64OKv3mc5LHpoKQwTkLOaoRWnCTKsIoTAoYuDpRknNOAD2Y6dGPa2PdJdfGl0pApWWIXvhkzXgsd4w=
-X-Received: by 2002:a67:db97:0:b0:412:2ed6:d79b with SMTP id
- f23-20020a67db97000000b004122ed6d79bmr17980456vsk.3.1678515541692; Fri, 10
- Mar 2023 22:19:01 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678515863;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KEAB5UcFKezf78Y1Bog4LTa3d4NoqJ+/Ij4qU9A9IPM=;
+        b=uPFyzGZpaLwauAXAtSxuDQmuT/KVEIMyKX4jopVmWW1E8AscoOzfw9RlM4m3WLoyh3
+         +IEy98rTBD/s9y6AuwfiYhZa/hsooKnExRVicfhfF1VWXfnfwBqgdJ1rXVxAcL55ei+/
+         3UkPMaskeE/WPUFsI2+vlrB5T/mL4XpQ/0D9K72RKgUd6QcCU1sfdIF7XlSBM06PJX82
+         j1y9HoW1sxxjQk33EdcqSJxxzDDFYYXRxtQRdao6Wj24au0TvqlJPqTSCzcDXal0kjmi
+         BxxY/Fgab75i+0DZkLKf9YKp5OTfBhZJQ1/yiQNHX9kaZEQkN8MLvINfdsAjyXNQGsdI
+         b18A==
+X-Gm-Message-State: AO0yUKXVmLLEvjloMxP4oLHiTDVRnfauh5K3Yvz0LTzRkl3gHt+Jxjjz
+        WQmZ37/Z9QHqVwzURhtpn0wJWE6HVvkObZFu
+X-Google-Smtp-Source: AK7set8Jzcnic34saMsxy6VPjJLGDWjdB3YrVpyVGMeXFbMQMcUhMKG2K1kpLHtNqeccy1biBp1AMA==
+X-Received: by 2002:a5d:67d2:0:b0:2ce:3a46:cef with SMTP id n18-20020a5d67d2000000b002ce3a460cefmr16390394wrw.3.1678515862847;
+        Fri, 10 Mar 2023 22:24:22 -0800 (PST)
+Received: from khadija-virtual-machine ([39.41.45.115])
+        by smtp.gmail.com with ESMTPSA id o7-20020a5d58c7000000b002c55521903bsm1549822wrf.51.2023.03.10.22.24.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 22:24:22 -0800 (PST)
+Date:   Sat, 11 Mar 2023 11:24:20 +0500
+From:   Khadija Kamran <kamrankhadijadj@gmail.com>
+To:     Dan Carpenter <error27@gmail.com>
+Cc:     outreachy@lists.linux.dev,
+        Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        greybus-dev@lists.linaro.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: greybus: remove tabs to fix line length and
+ merge lines
+Message-ID: <ZAwelPOv45zThK6j@khadija-virtual-machine>
+References: <ZAusnKYVTGvO5zoi@khadija-virtual-machine>
+ <6e9fd119-6566-4778-899e-bc5a7ee7830c@kili.mountain>
 MIME-Version: 1.0
-References: <20230310133706.811226272@linuxfoundation.org>
-In-Reply-To: <20230310133706.811226272@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Sat, 11 Mar 2023 11:48:50 +0530
-Message-ID: <CA+G9fYvLutRTedmb-SvOaU3LwPL7R5JoyrK+mAzfLW94cVoaiQ@mail.gmail.com>
-Subject: Re: [PATCH 5.15 000/136] 5.15.100-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6e9fd119-6566-4778-899e-bc5a7ee7830c@kili.mountain>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 at 20:42, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Sat, Mar 11, 2023 at 07:16:19AM +0300, Dan Carpenter wrote:
+> On Sat, Mar 11, 2023 at 03:18:04AM +0500, Khadija Kamran wrote:
+> > In file drivers/staging/greybus/arche-platform.c,
+> > - Length of line 181 exceeds 100 columns, fix by removing tabs from the
+> >   line.
+> > - If condition and spin_unlock_...() call is split into two lines, join
+> > them to form a single line.
+> > 
+> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > ---
+> > Changes in v2:
+> >  - Change the subject and log message
+> >  - Merge if condition and spin_unlock...() from two lines to one 
+> 
+> Apply your patch and then re-run checkpatch.pl -f on the file.  You will
+> see the problem.
+
+Hey Dan!
+When I run checkpatch.pl on my file, I can see that my old CHECK no
+longer exists instead a new CHECK is mentioned saying 'Alignment should
+match open parenthesis'. I understand this from your previous email.
+Should I stop working on this file and leave it as is?
+Thank you!
 >
-> This is the start of the stable review cycle for the 5.15.100 release.
-> There are 136 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
-5.15.100-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
--rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
-
-
-Results from Linaro=E2=80=99s test farm.
-No regressions on arm64, arm, x86_64, and i386.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build
-* kernel: 5.15.100-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.15.y
-* git commit: 7bc88ced9f274f04919e749a79e4c9c482df4d04
-* git describe: v5.15.99-137-g7bc88ced9f27
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15=
-.99-137-g7bc88ced9f27
-
-## Test Regressions (compared to v5.15.99)
-
-## Metric Regressions (compared to v5.15.99)
-
-## Test Fixes (compared to v5.15.99)
-
-## Metric Fixes (compared to v5.15.99)
-
-## Test result summary
-total: 117729, pass: 96396, fail: 3540, skip: 17626, xfail: 167
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 115 total, 114 passed, 1 failed
-* arm64: 42 total, 40 passed, 2 failed
-* i386: 33 total, 30 passed, 3 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 27 total, 26 passed, 1 failed
-* riscv: 11 total, 11 passed, 0 failed
-* s390: 12 total, 11 passed, 1 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 36 total, 34 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
---
-Linaro LKFT
-https://lkft.linaro.org
+> regards,
+> dan carpenter
