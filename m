@@ -2,127 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A03466B5F72
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:57:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59F7A6B5F75
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:58:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbjCKR5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:57:25 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
+        id S230175AbjCKR6I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:58:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229680AbjCKR5X (ORCPT
+        with ESMTP id S229998AbjCKR6E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:57:23 -0500
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D697B8568B
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:57:20 -0800 (PST)
-Received: by mail-ed1-x529.google.com with SMTP id cn21so2972553edb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:57:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678557439;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6ZzQFADWQjYXc6+XH0LPEMabA+seTwz6QtTtf51Ujcc=;
-        b=VIcpHFImgRhlLPDoAAMSYk1JItJrJb2/5qlI512iy4Ll+JGtg0KN3SokgrHV+HHxH1
-         cIgv29IiPHvP1U8Lya7ABerW7uoYjqoqWKU8ddgDPt4KFcOH9+xmnPn97Uq+IjHt5OqD
-         r5X8FEvzzXmS2QOwIJ4i84D+kftk75y+C7w5F/MxD2qoV3sTLXS+TsulF6mBgM8IbTFk
-         78zgOBEuoFmrPrmwZa3cF47If6Kl4NBC3Zoy7O8W/fYf2G5a6LIKEzQJHz46l5HJb/1M
-         x0xl9O6R6qiYTDQpycOY08QrL11HgQBM6Qe8qoT4mkSKNIO4mS4Qg7UiJs+jaElbBj2s
-         c0Nw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678557439;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6ZzQFADWQjYXc6+XH0LPEMabA+seTwz6QtTtf51Ujcc=;
-        b=QeSIkSyh5HIczddY6BFofC8JxEK1vqEchP8MDz38B0C1xDgwbJdpvQ6ztC4gooH4/C
-         b7TXZ/fP2oTIdSmDJoYzNoYv20KI68Z0h74YRlQ2E1IqWW4M7uQyK2Z/GWbi6Id6KLRE
-         pUSXrheoGjay4Xi87T5KWbjfvHpLmpirnpLQ1FlHyplTFp3DvJbR+0fnDQdzevw6Fz8J
-         I6d7Oko3nFek1a+YmZnRNeNnpgcidDokapYsOEVQag82kxO9PZPbgsjshPv/br9KdNlW
-         x1FbIBiuLNocqxg/GunwVVabcAFlx0CkWkol2RaMQtRT24i55RMNrUduYIT9D9OVCBA9
-         728w==
-X-Gm-Message-State: AO0yUKVyoNmsKjnxww/o7sseoh1nuo6Fa6jLYND/+vOiz4+K8m3lgKUz
-        6rWJKjHXc+4X2eQEt/PMMiHeDKvfWOfcOSF2jIg=
-X-Google-Smtp-Source: AK7set+aVOQ4IW3YvNK0hGqeruski1GhpuLa88OUPQx0N+Cxu+PYrmbclVVWvTknUtwz4HOeXe+RIg==
-X-Received: by 2002:a17:906:66cd:b0:8e8:602f:847a with SMTP id k13-20020a17090666cd00b008e8602f847amr27819882ejp.24.1678557439406;
-        Sat, 11 Mar 2023 09:57:19 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:6927:e94d:fc63:9d6e? ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
-        by smtp.gmail.com with ESMTPSA id ji16-20020a170907981000b008dea022f5e6sm1317076ejc.24.2023.03.11.09.57.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 09:57:19 -0800 (PST)
-Message-ID: <4de11c0b-8e09-c3ef-4180-585662386859@linaro.org>
-Date:   Sat, 11 Mar 2023 18:57:18 +0100
+        Sat, 11 Mar 2023 12:58:04 -0500
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D3006EB8;
+        Sat, 11 Mar 2023 09:58:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=0SuW2teqPrJO0c83NljG0OZlfdMMqc0MljQGQttnRBc=; b=sQgqYODQW6+hMJ349CW0h7g+VR
+        3Fe0n53zYw4LUHpulr7v4SlGWofZ+pTierKd0l12AlOJHuQ83eUj4tqvSX2kf3tIqqPt9FIaXRhD0
+        wSdBUNnELsujz4wEPv/XasLijg7mlCDwN6Ew8wMg804jluCcCj9BJ8BV77MNfamkkpo8=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1pb3TD-0074hS-FW; Sat, 11 Mar 2023 18:57:27 +0100
+Date:   Sat, 11 Mar 2023 18:57:27 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Klaus Kudielka <klaus.kudielka@gmail.com>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
+ capabilities for C22 and C45
+Message-ID: <f70aa0ea-5d8e-4cc3-bd5e-5b4a79d67281@lunn.ch>
+References: <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
+ <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
+ <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+ <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
+ <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
+ <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
+ <bff0e542b8c04980e9e3af1d3e6bf739c87eb514.camel@gmail.com>
+ <a57a216d-ff5a-46e6-9780-e53772dcefc8@lunn.ch>
+ <2f64385a350359c5755eb4d2479e2efef7a96216.camel@gmail.com>
+ <49a9154ae4e2b3e6bc85e560368f6474f97cea88.camel@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: broken subject?
-Content-Language: en-US
-To:     Sergey Lisov <sleirsgoevy@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <c13993bc-9d12-f20e-de27-fa0b8a58ed33-1-sleirsgoevy@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c13993bc-9d12-f20e-de27-fa0b8a58ed33-1-sleirsgoevy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <49a9154ae4e2b3e6bc85e560368f6474f97cea88.camel@gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 18:40, Sergey Lisov wrote:
->>> ---
->>>  .../devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml    | 6 ++++++
->>>  1 file changed, 6 insertions(+)
->>>
-
-Why did you remove the subject? Please keep the mailing process matching
-mailing lists. It messes with mailboxes, filters and reading process.
-
->>> diff --git a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
->>> index 8dfad89c7..2bc5ac528 100644
->>> --- a/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
->>> +++ b/Documentation/devicetree/bindings/mmc/synopsys-dw-mshc-common.yaml
->>> @@ -57,6 +57,12 @@ properties:
->>>        force fifo watermark setting accordingly.
->>>      $ref: /schemas/types.yaml#/definitions/flag
->>>  
->>> +  fifo-access-32bit:
->>
->> Missing type boolean.
+> Well, maybe I misunderstood the argument with DT completely, so I gave it a try:
 > 
-> Thanks, will add the same $ref as for the entry above.
+> --- a/drivers/net/dsa/mv88e6xxx/chip.c
+> +++ b/drivers/net/dsa/mv88e6xxx/chip.c
+> @@ -3797,6 +3797,7 @@ static int mv88e6xxx_mdio_register(struct mv88e6xxx_chip *chip,
+>         bus->read_c45 = mv88e6xxx_mdio_read_c45;
+>         bus->write_c45 = mv88e6xxx_mdio_write_c45;
+>         bus->parent = chip->dev;
+> +       bus->phy_mask = GENMASK(31, mv88e6xxx_num_ports(chip));
+>  
+>         if (!external) {
+>                 err = mv88e6xxx_g2_irq_mdio_setup(chip, bus);
 > 
->>> +    description:
->>> +      Specifies that this device requires accesses to its 64-bit registers
->>> +      to be done as pairs of 32-bit accesses, even on architectures where
->>> +      readq is available.
->>
->> And why the device would require this? If it has 64-bit registers in the
->> first place, they can be accessed in 64-bit. Otherwise these are not
->> 64-bit registers, but just lower/upper 32-bit, right?
->>
->> Also, why this cannot be implied from compatible? Why different boards
->> with same SoC should have different FIFO access?
+> > 
 > 
-> It probably can be implied, but I am not exactly sure on which boards it
-> affects, so I decided to go for a new devicetree option. Anyway, the same
-> argument applies to the "data-addr" property, which is already in the
-> spec, so I supposed that adding such knobs is fine.
+> Now THAT one makes a difference! With this on top, I'm back at normal boot time!
+> I hope this is what you had in mind?
 
-Yeah, Rob acked it so I will let him to judge this. To me it looks like
-unnecessary fragmentation - this looks like compatible specific, not
-board. Anyway you need to resend to fix all the mailing mess.
+Yep, that is what i meant. Please could you also submit a patch for this?
 
-Best regards,
-Krzysztof
+     Andrew
 
