@@ -2,89 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4054A6B5E81
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:14:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D6AE6B5E93
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:18:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbjCKROR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:14:17 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55014 "EHLO
+        id S229754AbjCKRSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:18:18 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58788 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229942AbjCKROO (ORCPT
+        with ESMTP id S229656AbjCKRSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:14:14 -0500
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 708E4B690F
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:14:12 -0800 (PST)
-Received: by mail-pl1-x62b.google.com with SMTP id x11so8737352pln.12
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:14:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=networkplumber-org.20210112.gappssmtp.com; s=20210112; t=1678554851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TOKGow/mO9jpNc8gyiIeqT76HvA8+ciKGvap6neQtLg=;
-        b=yJiZLQha3nB0hAHFQp9VXnUdnoUsZXC5K7tGx+JqI7BAu7IJSR1x7U7FVPH8s74TqT
-         DXt8PvA9yA+OaReqJwnXYsUWaafY8MfasdQ+hEisuk+NXAoTQ7QOQlFTIchEO2CIa3M2
-         3D5oXzqnvdXjaYdX5lxaZmVqDPbGfDvA2JCayXcm7QyfyzcHID/lpQBgqnoAvxNZgT4E
-         642nH9+0Sd+7BoY3rly6+o4UEAQ3UXJysbkIAko3GHApXkiEWy7PbFFpD6jLBLFae0XA
-         BmuT6eJPSJYSblVOzuT5ZJcpaKMrcc/3GZ6wMPUq0ry6dKtdWQwscP6tVRlF3S2kskch
-         hu3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678554851;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TOKGow/mO9jpNc8gyiIeqT76HvA8+ciKGvap6neQtLg=;
-        b=Xq591EnTMwnYz8HA2oDOjKGEz+XZ4Eztu/aFJJ/wiVaSyADFny2fcYLJuiPJgTjV4N
-         YYbmCw+jWEflWKo5NQuWEIkPeR2K8c6sKQ3LirL42GUyposFeD7TM/uT8Gh+cavGlI3r
-         BV0dWxDpVEGe/bN0H4xhyyfTEz+OY1x5UXs1GCi5hWfY/lUKUN1yE8O6eMkd5Yf6NqK9
-         JZuV/q+tYy7xeRazDzKd6HnNx7PkQjry+1oySK6NdfJlTpV5yweXUlyqX1sUvJudVgfy
-         FtMTj3hzHcU7YHypwJvJ+yL95RUH23pgxqvoreFwQGancwiZv5E2Q9FbMMKcx4fQZN5n
-         HK3A==
-X-Gm-Message-State: AO0yUKXUUckmwYHVPCDsUiUiISWsO1wv3RDow2COipBluhZsAgQU+s5G
-        zJ9g/c5KYyEPdpU1iU5QFMoCdA==
-X-Google-Smtp-Source: AK7set+P2NvIbojvM+8gOZPt4aOld2GWsyXU4p7Q06ZatC0junkHBHw7lV2yhgvk/Q9jJm+KfBHlTQ==
-X-Received: by 2002:a17:903:1c1:b0:19e:72c5:34df with SMTP id e1-20020a17090301c100b0019e72c534dfmr34384572plh.52.1678554851742;
-        Sat, 11 Mar 2023 09:14:11 -0800 (PST)
-Received: from hermes.local (204-195-120-218.wavecable.com. [204.195.120.218])
-        by smtp.gmail.com with ESMTPSA id ld14-20020a170902face00b0019f387f2dc3sm198752plb.24.2023.03.11.09.14.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 09:14:11 -0800 (PST)
-Date:   Sat, 11 Mar 2023 09:14:09 -0800
-From:   Stephen Hemminger <stephen@networkplumber.org>
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, kuniyu@amazon.com,
-        liuhangbin@gmail.com, xiangxia.m.yue@gmail.com, jiri@nvidia.com,
-        andy.ren@getcruise.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Subject: Re: [PATCH net-next] net: introduce budget_squeeze to help us tune
- rx behavior
-Message-ID: <20230311091409.4f125e53@hermes.local>
-In-Reply-To: <20230311163614.92296-1-kerneljasonxing@gmail.com>
-References: <20230311163614.92296-1-kerneljasonxing@gmail.com>
+        Sat, 11 Mar 2023 12:18:16 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8255717CCE;
+        Sat, 11 Mar 2023 09:18:14 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D72A1B803F1;
+        Sat, 11 Mar 2023 17:18:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99C74C433D2;
+        Sat, 11 Mar 2023 17:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678555091;
+        bh=OqMHq2/S6nAUuvpkSIGBYmiSX+aQtkh+hYs7nV9aLEI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=s8OT6kPJKT1xtyIsRrDQ+LjUM3V8x1e/6BqcRhy1UW1TZ9tugHrmpL+P5T2goYtne
+         FywDg5MxH00TSQDo6bEQW75lMYeQZwIwslb0vBr/bpa01GP9iNYWLKtCfMizqaGS4d
+         OyrhoigZYi1gdRueBH7bblQcBxknVBHLvbTe7PaRmZ4SWZ5H44eMJnuUkEb4Zrbz6h
+         KIB0ng9/eExMi5xTCEB1njrBBApJJx18Lx6wXebfiBFLEzOXUYXOK5ldyRBrDmVcA5
+         Y1KeTG7CqXpWz3YIPRz6JYcEPDqb3juUQwTAJDOzfwaDzObPSdmW/rHNJ6xLXww5Jp
+         IDGqDD4dYhBkw==
+Date:   Sun, 12 Mar 2023 01:18:05 +0800
+From:   Gao Xiang <xiang@kernel.org>
+To:     linux-erofs@lists.ozlabs.org
+Cc:     linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
+Subject: [ANNOUNCE] erofs-utils: release 1.6
+Message-ID: <ZAy3zaoCulNNpFSS@debian>
+Mail-Followup-To: linux-erofs@lists.ozlabs.org,
+        linux-fsdevel@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Mar 2023 00:36:14 +0800
-Jason Xing <kerneljasonxing@gmail.com> wrote:
+Hi folks,
 
-> -	for (;;) {
-> +	for (; is_continue;) {
+A new version erofs-utils 1.6 is available at:
+git://git.kernel.org/pub/scm/linux/kernel/git/xiang/erofs-utils.git tags/v1.6
 
+It mainly includes the following changes:
 
-Easier to read this as a
- 	while (is_continue) {
+  - support fragments by using `-Efragments` (Yue Hu);
+  - support compressed data deduplication by using `-Ededupe` (Ziyang Zhang);
+  - (erofsfuse) support extended attributes (Huang Jianan);
+  - (mkfs.erofs) support multiple algorithms in a single image (Gao Xiang);
+  - (mkfs.erofs) support chunk-based sparse files (Gao Xiang);
+  - (mkfs.erofs) add volume-label setting support (Naoto Yamaguchi);
+  - (mkfs.erofs) add uid/gid offsetting support (Naoto Yamaguchi);
+  - (mkfs.erofs) pack files entirely by using `-Eall-fragments` (Gao Xiang);
+  - various bugfixes and cleanups.
 
-but what is wrong with using break; instead?
+This new version supports global compressed data deduplication
+(`-Ededupe`) and fragments (`-Efragments`, `-Eall-fragments`), which
+can be used to minimize image sizes further (Linux 6.1+).  In addition,
+mkfs.erofs now supports per-file alternative algorithms, thus different
+configurations can be applied in a per-file basis (Linux 5.16+).
+
+There are also other improvements and bugfixes as always.  Kindly read
+README before trying it out.  Recently I've got many useful inputs, so
+it's time to release erofs-utils 1.6 as soon as possible and move on
+to focus on those new stuffs (e.g. negative xattr lookup improvement
+with bloom filters, shared xattr names and tarball reference) then.
+
+Finally, as a community-driven open source software, feedback and/or
+contribution is always welcomed.
+
+Thanks,
+Gao Xiang
