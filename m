@@ -2,100 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5BB86B5F81
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:06:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E7A06B5F85
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:06:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjCKSGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:06:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36986 "EHLO
+        id S229806AbjCKSGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:06:37 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229806AbjCKSGE (ORCPT
+        with ESMTP id S230311AbjCKSGe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:06:04 -0500
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88EB132DD
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:06:01 -0800 (PST)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1755e639b65so9534476fac.3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:06:01 -0800 (PST)
+        Sat, 11 Mar 2023 13:06:34 -0500
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DCC1532B1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:06:26 -0800 (PST)
+Received: by mail-ed1-x52d.google.com with SMTP id ek18so2087990edb.6
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:06:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678557961;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=WKVV2ZrNPf790WoP/iMRVMm0XP1lujLEc8exXRtowgV+iPvqqJLV62vaLL3ZxJWaLa
-         O7SFQt0ddHByQo6CfI+wv3r1EGgGFOHGOUtG0rTGmcM8ETX2DAfz1eB2ClR3luGEqZ0J
-         LF0py/pToSbNez92IPBCxfj8FAs8QATjSS93orMvl0dfkgBJwFgMttt4mk0PkJaF954P
-         5gYT2A/+ypR7oRbQDUkkHst8ArgrsNuGW6QL6Fnfs0fMUKhXa29nkCUKoGgbXe6uXLRV
-         YeXDQeeip3DD9lTQ0z/mVdvQbZ7mCKTt/2nB0wdzQG4Shs6o9LxdUnkFlKe/V3Zkht1z
-         z6KQ==
+        d=linaro.org; s=google; t=1678557985;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fMcft7wNHp8AV8X5G2NHBZb+ziZBPuC7uUWTZGa3pOs=;
+        b=HwSnmFkaLVcW4+BGIpV2BDzJDMm1EfGpX6Vdf1PcKMqXUXmgAJlmP++EBhgHwfPBF+
+         KWcq58bR+HSjEYGGO8ZxI+G3YZj1dDUjy7rN778ZTX8akugwBLXfu5YEjbyDJBiXwCw2
+         aJswcmg8jevxLsfrv1jyoK/M27Exj3bXYz+eJK7LtyWe9Q4aq7+9h6z6kWFPY8PtLWNX
+         U6KyE/V7YpO6dvsh6bBrUj82F4jtvoroYQk2pcmtuDludD+aeDvan7U2wXwJ3hit15D9
+         +QQsjUhea5WqRvLfo/BZrehQEyrGCXzLJw/cRLZZYQ3MpvKtBJsiIbamTaI1dydukT5O
+         nxBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678557961;
-        h=to:subject:message-id:date:from:reply-to:mime-version
+        d=1e100.net; s=20210112; t=1678557985;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/rL+TycpMQLfB5P4Zn9xgGfUWg8yPCNTwrE46ZNldMM=;
-        b=vw/vrg50nku98VFH0m16yzxfwTlv5SI8zeKVeWEEQImTLRJQqhJh9LSeFce7T/VIcK
-         xTwHzNPIYQUYOC8HhoEF5TFjxjHTv738M8wj4SwgJbe3G7bJdWzuhuwSFBLmJYK8aey2
-         stZqA+AmrRqmorrQeapn2y67dn4hnNxWsGySEV9G80mUXOMcGtOw7lZiKUXI7JYPyqvE
-         Cxq5P3HTRS94H3xrJc6aeKPMHGkDu/znM/Q2ftEKnzwuzzEPHKTJhsJFMMAG2Nt62DxE
-         UcQn0FPlBBVoRaIV5fCj36sQONMxHoqyRhBxn78WveyJ7Mwm5fEqlDj1iVoS4+u7bnpu
-         ZFIg==
-X-Gm-Message-State: AO0yUKXfnPuJAChei9pkyNy6g0qBRDJQBh9wPinPqzadLuvcY/Al/w73
-        twQJ/xSd/OedqG4nMWFJwcC+rDSyyea8UPZ6MB4=
-X-Google-Smtp-Source: AK7set/9PeioIVXVuPUNZqReq5lYwop4XYFvefPRktQcxn9FEvnDLRNj/h5zgaThc24n9jhEhbm1s2asY+EkCSBxYlo=
-X-Received: by 2002:a05:6870:d346:b0:176:2168:12a2 with SMTP id
- h6-20020a056870d34600b00176216812a2mr10550656oag.2.1678557960514; Sat, 11 Mar
- 2023 10:06:00 -0800 (PST)
+        bh=fMcft7wNHp8AV8X5G2NHBZb+ziZBPuC7uUWTZGa3pOs=;
+        b=4thWzNttAgOmob49o3ZbZGLxNniyI5QSQx8nY3nDE62ff7f6PvV/qXRqY7xVXTVrWE
+         M7L//VKeDLG2Ik2NHSn/UYz8GBGB/6FfH59wDQgMwaQIXA8UIEcvJvipbMqRl4H08rAe
+         fYW2Lrjx+kc/8iUBO6BvOD3Ej+rnReXZsSDIz8IYV02lARY8QeAE369zbVI/Udm1wnXO
+         6cjdM8P6kNHjJS7w2z/RkVWbVVmEYkntUpJPMaJBWqE71Ci38gyZwAFKO7r/2Y+ehkDE
+         29NNSFVX9H/L5BV/xlhK5nqorR45mc6CdLLhm/o2Ny6Nmh8Kty294Te37Xhw09C9rdiX
+         gvqA==
+X-Gm-Message-State: AO0yUKXbBiTTT3r7PnCrs7HSqVqJUhUbO6Pe9jbMRVl0va0oJuFrJ4aR
+        BQUryo1chtTz5+yg2Ygp3yG6QA==
+X-Google-Smtp-Source: AK7set/UUWVgapWVVwtEI5mFGQ2d0YYnSGqO6TLQZA6F1qQqIPCVESi/Juksfq33lwnkSCVqj2IduA==
+X-Received: by 2002:a17:906:3f5d:b0:871:178d:fc1e with SMTP id f29-20020a1709063f5d00b00871178dfc1emr28949632ejj.77.1678557984934;
+        Sat, 11 Mar 2023 10:06:24 -0800 (PST)
+Received: from ?IPV6:2a02:810d:15c0:828:6927:e94d:fc63:9d6e? ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
+        by smtp.gmail.com with ESMTPSA id e23-20020a170906081700b009234539864asm441526ejd.40.2023.03.11.10.06.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 10:06:24 -0800 (PST)
+Message-ID: <69d21d6e-decc-4060-9aa7-06a5d1cea029@linaro.org>
+Date:   Sat, 11 Mar 2023 19:06:23 +0100
 MIME-Version: 1.0
-Received: by 2002:a05:6358:b523:b0:103:d1f7:b1b5 with HTTP; Sat, 11 Mar 2023
- 10:05:59 -0800 (PST)
-Reply-To: dravasmith27@gmail.com
-From:   Dr Ava Smith <raqsacrx@gmail.com>
-Date:   Sat, 11 Mar 2023 10:05:59 -0800
-Message-ID: <CAP7=Wk57MN+CCeD8cmrfTBbrAZoMuY3kmmzPFYRkDX-imVD78Q@mail.gmail.com>
-Subject: GREETINGS FROM DR AVA SMITH
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.2 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLYTO,
-        FREEMAIL_REPLYTO_END_DIGIT,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        SUBJ_ALL_CAPS,UNDISC_FREEM autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2001:4860:4864:20:0:0:0:2e listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5030]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.5 SUBJ_ALL_CAPS Subject is all capitals
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [raqsacrx[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [dravasmith27[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] MAINTAINERS: update Andi's e-mail to @kernel.org
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>
+References: <20230311170516.178913-1-andi.shyti@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311170516.178913-1-andi.shyti@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-Hello Dear,
-how are you today?hope you are fine
-My name is Dr Ava Smith ,Am an English and French nationalities.
-I will give you pictures and more details about me as soon as i hear from you
-Thanks
-Ava
+On 11/03/2023 18:05, Andi Shyti wrote:
+> Use the kernel.org e-mail for the maintainer entry
+> 
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> ---
+>  MAINTAINERS | 2 +-
+
+FWIW:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+(should probably also go to linux-spi as you target it to Mark to pick
+it up, not to me)
+
+Best regards,
+Krzysztof
+
