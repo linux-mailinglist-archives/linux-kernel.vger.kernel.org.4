@@ -2,41 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE48E6B587E
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 731876B588B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229943AbjCKFRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:17:33 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
+        id S230013AbjCKFRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:17:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCKFRb (ORCPT
+        with ESMTP id S229764AbjCKFRc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 00:17:31 -0500
+        Sat, 11 Mar 2023 00:17:32 -0500
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737CA140507;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 788F8140520;
         Fri, 10 Mar 2023 21:17:29 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Sender:Content-Transfer-Encoding:
-        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Reply-To:Content-Type:
-        Content-ID:Content-Description:In-Reply-To:References;
-        bh=G7D4vwbmdXJTfyX+mz4IpTA/4Mn1YMJVyYwpWdRSXRc=; b=wPV2ZKbScOLTUdLYEFrmuJfSCJ
-        YYwOp0CtVE0Tkbt8LthQva2www9a40XKPaLpJjJk+YmzHt7IMLI/dJg1xJddnpW8QusXe+aFsLToh
-        W7risZHC6iYT6BZ4V2vvN4Prnz66Z1TIYrVrd4wpAjamVX0V3RME65R4kd2SAnA0FWajP2V+piOzW
-        drLAZz6cLz8XizQ9a/EeoJWWteSzgefGzad6J/xOhzmCJsaSE+ezSCr0LKMaLQxZj1h5t5SbeE8FZ
-        R5X+Na+kUxRfnFOw7N2tpVoPoshKrd5/pU12+qgBrTGcB5q8ONlRxFrSEwJOuV32ZRUhjXoQpti+t
-        R/ZlCwYQ==;
+        MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-Type:Content-ID:Content-Description;
+        bh=fgKIaEVFe3ZJ+AptWb/si2HEmzuXwtpAjqPKXFiEzog=; b=mc+03uC4v46xoHgDKwIy/jRxpa
+        VXDyh/U/I4ik/2yepzo5eX4By8jC4lxxcVTLAhquivmKGobv0wOcjEMdwLCJM4WEpcWrqeOY7O13j
+        h27DatHPMaYlZfMXrvuJSzcxKYo7uZlT3ax0I9pEJHkPwhWfaqgzKbPmVyaaquBxpVeI0b3iDMC0O
+        5tGKhUeCbVGJo+jnK8WdTpCECyDy4PgEd5SSLzlDyORHXX9wcO4QJt9APOwDWcOcJojq8AAHB4Hu8
+        b2he0Fi7jHmXy1uFF6m2sXhSDkGD7oDLrLFewiwKHerM3g7bWGdM1vOx8ZklpVcfnbHt+k+uCnZuj
+        K3/injQA==;
 Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1parbj-00HBMm-0G; Sat, 11 Mar 2023 05:17:27 +0000
+        id 1parbj-00HBMo-1Z; Sat, 11 Mar 2023 05:17:27 +0000
 From:   Luis Chamberlain <mcgrof@kernel.org>
 To:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
         pmladek@suse.com, david@redhat.com, petr.pavlu@suse.com,
         prarit@redhat.com
 Cc:     christophe.leroy@csgroup.eu, song@kernel.org, mcgrof@kernel.org,
         torvalds@linux-foundation.org
-Subject: [RFC 00/12] module: avoid userspace pressure on unwanted allocations
-Date:   Fri, 10 Mar 2023 21:17:00 -0800
-Message-Id: <20230311051712.4095040-1-mcgrof@kernel.org>
+Subject: [RFC 01/12] module: use goto errors on check_modinfo() and layout_and_allocate()
+Date:   Fri, 10 Mar 2023 21:17:01 -0800
+Message-Id: <20230311051712.4095040-2-mcgrof@kernel.org>
 X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230311051712.4095040-1-mcgrof@kernel.org>
+References: <20230311051712.4095040-1-mcgrof@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Sender: Luis Chamberlain <mcgrof@infradead.org>
@@ -50,58 +52,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-A long time ago we had some issues with userspace doing stupid stuff.
-Well, it turns out even the kernel and do stupid stuff too, as we're
-learning with the ACPI modules aliaes and that hammering tons of loads.
+Although both routines don't have much complex errors paths we
+will expand on these routine in the future, setting up error lables
+now for both will make subsequent changes easier to review. This
+changes has no functional changes.
 
-So add a bit of code which gets us a bit more in the defensive about
-these situations.
+Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+---
+ kernel/module/main.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-To experiment, this also adds in-kernel alias support to see if this helps
-with some larger systems.
-
-This is all based on some old code which tried to add defensive
-mechanisms the last of which was here and I had dropped the ball:
-
-https://lore.kernel.org/all/20171208001540.23696-1-mcgrof@kernel.org/
-
-I've only compile tested this for now. Will need to stress to test
-with kmod tests 0008 and 0009 to see if there's any differences.
-I'll have to re-test and re-gnuplot stuff there. But early feedback
-is appreciated, hence the RFC.
-
-David Hildenbrand had reported a while ago issues with userspace
-doing insane things with allocations bringing a system down to
-its knees. This is part of the motivation for this series.
-
-I repeat, I only have compiled tested this so far.
-
-A few Suggested-by there linger since Linus had suggested a few of
-these ideas a long time ago and we just never picked them up.
-
-Luis Chamberlain (12):
-  module: use goto errors on check_modinfo() and layout_and_allocate()
-  module: move get_modinfo() helpers all above
-  module: rename next_string() to module_next_tag_pair()
-  module: add a for_each_modinfo_entry()
-  module: add debugging alias parsing support
-  module: move early sanity checks into a helper
-  module: move check_modinfo() early to early_mod_check()
-  module: move finished_loading()
-  module: extract patient module check into helper
-  module: avoid allocation if module is already present and ready
-  module: use list_add_tail_rcu() when adding module
-  module: use aliases to find module on find_module_all()
-
- include/linux/module.h   |   4 +
- kernel/module/Kconfig    |  19 +++
- kernel/module/Makefile   |   1 +
- kernel/module/aliases.c  | 109 +++++++++++++
- kernel/module/internal.h |  25 +++
- kernel/module/main.c     | 324 +++++++++++++++++++++++----------------
- 6 files changed, 346 insertions(+), 136 deletions(-)
- create mode 100644 kernel/module/aliases.c
-
+diff --git a/kernel/module/main.c b/kernel/module/main.c
+index b4759f1695b7..5f1473eb34e0 100644
+--- a/kernel/module/main.c
++++ b/kernel/module/main.c
+@@ -1998,7 +1998,7 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
+ 
+ 	err = check_modinfo_livepatch(mod, info);
+ 	if (err)
+-		return err;
++		goto err_out;
+ 
+ 	/* Set up license info based on the info section */
+ 	set_license(mod, get_modinfo(info, "license"));
+@@ -2011,6 +2011,8 @@ static int check_modinfo(struct module *mod, struct load_info *info, int flags)
+ 	}
+ 
+ 	return 0;
++err_out:
++	return err;
+ }
+ 
+ static int find_module_sections(struct module *mod, struct load_info *info)
+@@ -2288,12 +2290,12 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	err = module_frob_arch_sections(info->hdr, info->sechdrs,
+ 					info->secstrings, info->mod);
+ 	if (err < 0)
+-		return ERR_PTR(err);
++		goto err_out;
+ 
+ 	err = module_enforce_rwx_sections(info->hdr, info->sechdrs,
+ 					  info->secstrings, info->mod);
+ 	if (err < 0)
+-		return ERR_PTR(err);
++		goto err_out;
+ 
+ 	/* We will do a special allocation for per-cpu sections later. */
+ 	info->sechdrs[info->index.pcpu].sh_flags &= ~(unsigned long)SHF_ALLOC;
+@@ -2327,12 +2329,14 @@ static struct module *layout_and_allocate(struct load_info *info, int flags)
+ 	/* Allocate and move to the final place */
+ 	err = move_module(info->mod, info);
+ 	if (err)
+-		return ERR_PTR(err);
++		goto err_out;
+ 
+ 	/* Module has been copied to its final place now: return it. */
+ 	mod = (void *)info->sechdrs[info->index.mod].sh_addr;
+ 	kmemleak_load_module(mod, info);
+ 	return mod;
++err_out:
++	return ERR_PTR(err);
+ }
+ 
+ /* mod is no longer valid after this! */
 -- 
 2.39.1
 
