@@ -2,176 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCBBD6B5BD5
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:38:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECE836B5BDF
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:39:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230357AbjCKMiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:38:14 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50158 "EHLO
+        id S230440AbjCKMjC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:39:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjCKMiL (ORCPT
+        with ESMTP id S230221AbjCKMi7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:38:11 -0500
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2064.outbound.protection.outlook.com [40.107.223.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4392817CE3
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:38:10 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iTG3eGNtTjRhmO/6h3MVvL/wVG9P0k7ZZAbXKwI+ptjnoOmLpQidDeo1Z7h3LK5xs7Ejr1ioPSUJAHThlFkhbB/g4ZN3QDiggQYJoTBxao3ug4TuAYg9SKo0WBelzpPs3onCN5Cf9ghiTqXosD6q/3nbRxpbHgemDUQD3UYJyy1D9zo6x1vY+OPQBM8ToPLwsVHVKfHzP23ilEW5x00j2hxXsfLWEuqibrInhi4zpUNMMSek+EMEOuNIyyZh7L0g3d74XqbsszCT/on2Xi3xF7SSIBb+zq8S3gk3R+ruVjNtiwSkiTSGwvdLfWU2u3u0x0rxz2ub9+Ro1MTJjHZE2g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=cv05Hp3tb1qfAJje9jpG0EX+ahNzopfCZF58bS6kGBA=;
- b=BHFPjeIZemq+Ybk7pzwpSQ7LXwIps3w+dZ42SkuRWLDpEPH5rxjc6RodXpKCtH6724bQ54mIUhJpdYIbCAGJDDrNVQ/4R9abw4X7vWBvGMsfUOXh2ocrF/mWfRwoHLJrXhGEjeU1purvgUjzZ+iZBQa5fpEKOiqXAAXorMIsGtzCjlQnaGQWyLq9OTQS8D1HEtWRR0cbXFa7tydbOeGGn5T7bFP9aPxF27tEUfPsUtwQc9r4InGFqGdu+vBNHoNfPO8sLLhz2MaES23SOzzcLN9R1GPn2pGWDVaUgotkm1wxWlcr1+XMuqHaAPvfYBNGrIBitEjN9704dE0nOEl3tw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.233) smtp.rcpttodomain=arm.com smtp.mailfrom=nvidia.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
- dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=cv05Hp3tb1qfAJje9jpG0EX+ahNzopfCZF58bS6kGBA=;
- b=foeQKbh9i1AfXs+7zYikDKJl0gflBR39/QhjnRvHc1EQVNnxl9JQPuJ4RB8tVFy4+XZXBTqr/6XbMrZhIMO9iBhl7NY+Vxxf2+rcaa4mu30bHIodCSMbW61PI+wckbd6yifLeRK21fLtgs/5MXP4T82OggXIH9U3Tuq6IIhjl9DV4CnpLF6oVw8KpuvMG3mDWHP9blMb7yC97gb4pTnvZ0BB6bg5zvTzgPVgHL6ZHQSKdk3N/BlP29UNr4vXEhoYsfPpy+PAhvS8jLQh3fHwu3wUs/unopwY2RHfnQ9m5BO3frxvhiqL46SXsuU7qOl80E7PxPugBA6f6shA1biDfg==
-Received: from BL0PR02CA0103.namprd02.prod.outlook.com (2603:10b6:208:51::44)
- by PH8PR12MB7302.namprd12.prod.outlook.com (2603:10b6:510:221::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.22; Sat, 11 Mar
- 2023 12:38:08 +0000
-Received: from BL02EPF000108E9.namprd05.prod.outlook.com
- (2603:10b6:208:51:cafe::90) by BL0PR02CA0103.outlook.office365.com
- (2603:10b6:208:51::44) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.23 via Frontend
- Transport; Sat, 11 Mar 2023 12:38:07 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.233)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.233 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.233; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.233) by
- BL02EPF000108E9.mail.protection.outlook.com (10.167.241.202) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.12 via Frontend Transport; Sat, 11 Mar 2023 12:38:07 +0000
-Received: from drhqmail201.nvidia.com (10.126.190.180) by mail.nvidia.com
- (10.127.129.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Sat, 11 Mar 2023
- 04:38:06 -0800
-Received: from drhqmail202.nvidia.com (10.126.190.181) by
- drhqmail201.nvidia.com (10.126.190.180) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.37; Sat, 11 Mar 2023 04:38:05 -0800
-Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.126.190.181)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Sat, 11 Mar 2023 04:38:05 -0800
-Date:   Sat, 11 Mar 2023 04:38:03 -0800
-From:   Nicolin Chen <nicolinc@nvidia.com>
-To:     Robin Murphy <robin.murphy@arm.com>
-CC:     <jgg@nvidia.com>, <will@kernel.org>, <eric.auger@redhat.com>,
-        <kevin.tian@intel.com>, <baolu.lu@linux.intel.com>,
-        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
-        <jean-philippe@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
-        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 14/14] iommu/arm-smmu-v3: Add
- arm_smmu_cache_invalidate_user
-Message-ID: <ZAx2K08L5TIm6r3y@Asurada-Nvidia>
-References: <cover.1678348754.git.nicolinc@nvidia.com>
- <aa327f9ea61e5a4771c13e53639e33955b9acde3.1678348754.git.nicolinc@nvidia.com>
- <1467e666-1b6c-c285-3f79-f8e8b088718b@arm.com>
- <ZAqpOQ+DDvEfq0Dg@Asurada-Nvidia>
- <92fdb06f-e5b1-8534-fb0e-ad47b5be9e1d@arm.com>
+        Sat, 11 Mar 2023 07:38:59 -0500
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A73CE6FE7
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:38:56 -0800 (PST)
+Received: by mail-lf1-x134.google.com with SMTP id t11so10105677lfr.1
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 04:38:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678538334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U6GNVCYsVkEJkheLQcF7W0xxKL/2eVGz8WLI2GDDBzY=;
+        b=EshV7VMlzrErX/XcoNWWXJbtghs7rdoa3iwo7hVWcBZo1UF+J7wnzK2r3ZmYX5t2am
+         BLDCFraBHKAM1lAYuCkhviOugCdsWN5r8crwSLTvJAw+QQPxG7IFkH/gDmnGmPtTKfca
+         HTL9O262PicGz+SVbhwbQn20gFugsQv3z1CH9GA1UOQuz3IhuHO0eXTrGeF8fXiuWPzb
+         vNUax4axIGRS/xVzayB5ZW2Uh7FjVuE4GwrZvFDyiFDglk08aMMgVFt21W/e4YMgtqFi
+         OGkLoPpzKOkUnXjLkePj9hK588XlRXr9z2Xi1B8vTJ7CkhpUQRoE86Ih687zGnUqdqrl
+         Ivbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678538334;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U6GNVCYsVkEJkheLQcF7W0xxKL/2eVGz8WLI2GDDBzY=;
+        b=fjn2Y/hCuDys2yyv0hzs1JI7PzXAET65Sp4gK7aoemng0hZC/CpnDUr5XBtx4K745z
+         Wao1/1iGBETBjVhxcbAKwez1l4TXVQwFf2vaMs6sgQuDf9V/puLg67FxIJ4sfBGTm+AQ
+         lScC0ZnNRLnQCxR8S4VyOUC9tdIEURrdiQbOT8YP0FIWAsMiN/7vpgwLoDAZrpnyzGrh
+         IjSvuH2wIZokTrCgDKTugxAurtKkEIuF9J/hwCAzBD3vPjQPA4VkeGvruFRK3YCJPrg7
+         wgYPqlh02V7JGjDoyb+r8l0iEkyEKslFryDsJyvFWSQ9T5DVj/kvr9kNegWKU7NAk7w+
+         1Mvw==
+X-Gm-Message-State: AO0yUKWhpMxEGWcvBjQnANrwm5CNbGqTCPY6UU2/PTOFw1P/s+VTJixr
+        kWEPrzgpRtj58qDT1OLRT9eR9g==
+X-Google-Smtp-Source: AK7set/Vf28xh6snK9V6Ywov49da2lm6HlGDCAblKmeWGvXee8O9ykMJfpxafGPhNgiqy9YtjzMgsw==
+X-Received: by 2002:ac2:5637:0:b0:4b6:e405:1027 with SMTP id b23-20020ac25637000000b004b6e4051027mr1605897lff.14.1678538334505;
+        Sat, 11 Mar 2023 04:38:54 -0800 (PST)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id r7-20020a19ac47000000b0048a982ad0a8sm308626lfc.23.2023.03.11.04.38.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 04:38:54 -0800 (PST)
+Message-ID: <904bc493-7160-32fd-9709-1dcb978ddbab@linaro.org>
+Date:   Sat, 11 Mar 2023 13:38:52 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <92fdb06f-e5b1-8534-fb0e-ad47b5be9e1d@arm.com>
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL02EPF000108E9:EE_|PH8PR12MB7302:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a89348f-c3d1-47f1-31b1-08db222d7754
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ZjXp/sRiwfUKdWTcMhKKUvfA6gT71l+LMIXnivxE1Czl+k4E+1iTVKd2011Dpkp4qQEgIbNcmC9Ohrsm7BAIfaKn84rFlDfGodfI4RwKPzfJsjaUDlvvpkwYpwK0URNKLWXfihEZguL/SmY2BjekC8ccLOfYT5Pl3pEZHaqf5vcIIiYXfpvwkoWxFiiA8dNXfyR0PmOPZgHiWntTl4THAbXd2kRBAFTF4JcIE5jDZFtkH/vlxwqrVFAR7Ovfa5EzU0n3C+J4GLvk+2jd3N/tupScRq18yQ57tB9WnmeO+QprFiF/XgywDOTcDTME459vSyQX3BdoVwEB7vIY9KqFib6LjKSkDJhqONpXRgS/rtrMyMBlSKdaQjf9VcdDh0FOxArnrGtZ6ZQQuJWQyVy+jY/KZbJ9HT3j9ddFvlrkKja+k6eYLXEPJTLU5GM+fgIgH8naCvxcvQeB29+5mbLvoy3XgVLBHOazJJx28xIxUVP1WIOxx6dsiC9uUuF6KFKuhenztQQLB0ABZXn+VYfR3uT4+mL5Hq7mRiJ+aPhAjQluO2/OAF27h30mTc8epY2XFwuZUxn7Ov0xQ/jHyOQ8pr+R4gyurIMRRDGUEUfX4xl0SbABfHSev/MHBBRW35MwdHIaVVeUCcp/JokVsxEKlPyBBC8wXYfUKSsZGo5d1PcJ9ZimkWRw3DloefSRTLvudCMVFuQalBurSwMzbv38/RnXtoMipHlpQ7teIFN8hFhHDFrB5WWUkyHoSVNId1QD
-X-Forefront-Antispam-Report: CIP:216.228.118.233;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(136003)(396003)(39860400002)(451199018)(36840700001)(40470700004)(46966006)(70586007)(70206006)(4326008)(36860700001)(6916009)(83380400001)(47076005)(426003)(33716001)(82740400003)(7636003)(336012)(41300700001)(66899018)(82310400005)(316002)(8936002)(186003)(9686003)(54906003)(26005)(356005)(8676002)(40480700001)(55016003)(478600001)(7416002)(40460700003)(2906002)(86362001)(5660300002);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2023 12:38:07.1904
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a89348f-c3d1-47f1-31b1-08db222d7754
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.233];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BL02EPF000108E9.namprd05.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7302
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 2/2] drm/panel: Add driver for Novatek NT36523
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230311123231.20771-1-lujianhua000@gmail.com>
+ <20230311123231.20771-2-lujianhua000@gmail.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230311123231.20771-2-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 05:53:46PM +0000, Robin Murphy wrote:
 
-> > > > +     case CMDQ_OP_TLBI_NH_VA:
-> > > > +             cmd.tlbi.asid = inv_info->asid;
-> > > > +             fallthrough;
-> > > > +     case CMDQ_OP_TLBI_NH_VAA:
-> > > > +             if (!granule_size || !(granule_size & smmu->pgsize_bitmap) ||
-> > > 
-> > > Non-range invalidations with TG=0 are perfectly legal, and should not be
-> > > ignored.
-> > 
-> > I assume that you are talking about the pgsize_bitmap check.
-> > 
-> > QEMU embeds a !tg case into the granule_size [1]. So it might
-> > not be straightforward to cover that case. Let me see how to
-> > untangle different cases and handle them accordingly.
+
+On 11.03.2023 13:32, Jianhua Lu wrote:
+> Add a driver for panels using the Novatek NT36523 display driver IC.
 > 
-> Oh, double-checking patch #2, that might be me misunderstanding the
-> interface. I hadn't realised that the UAPI was apparently modelled on
-> arm_smmu_tlb_inv_range_asid() rather than actual SMMU commands :)
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
+[...]
 
-Yea. In fact, most of the invalidation info in QEMU was packed
-for the previously defined general cache invalidation structure,
-and the range invalidation part is still not quite independent.
+> +
+> +static int nt36523_get_modes(struct drm_panel *panel,
+> +			       struct drm_connector *connector)
+> +{
+> +	struct panel_info *pinfo = to_panel_info(panel);
+> +	int i;
+> +
+> +	for (i = 0; i < pinfo->desc->num_modes; i++) {
+> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
+> +		struct drm_display_mode *mode;
+> +
+> +		mode = drm_mode_duplicate(connector->dev, m);
+> +		if (!mode) {
+> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
+> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
+> +			return -ENOMEM;
+> +		}
+> +
+> +		mode->type = DRM_MODE_TYPE_DRIVER;
+> +		if (pinfo->desc->num_modes == 1)
+> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+That's not quite correct, as that means "if you have more than one
+defined panel mode (say 60Hz and 120 Hz), there will be no preferred one".
 
-> I really think UAPI should reflect the hardware and encode TG and TTL
-> directly. Especially since there's technically a flaw in the current
-> driver where we assume TTL in cases where it isn't actually known, thus
-> may potentially fail to invalidate level 2 block entries when removing a
-> level 1 table, since io-pgtable passes the level 3 granule in that case.
-
-Do you mean something like hw_info forwarding pgsize_bitmap/tg
-to the guest? Or the other direction?
-
-> When range invalidation came along, the distinction between "all leaves
-> are definitely at the last level" and "use last-level granularity to
-> make sure everything at at any level is hit" started to matter, but the
-> interface never caught up. It hasn't seemed desperately urgent to fix
-> (who does 1GB+ unmaps outside of VFIO teardown anyway?), but we must
-> definitely not bake the same mistake into user ABI.
-> 
-> Of course, there might then be cases where we need to transform
-> non-range commands into range commands for the sake of workarounds, but
-> that's our own problem to deal with.
-
-Noted it down.
-
-> > > What about NSNH_ALL? That still needs to invalidate all the S1 context
-> > > that the guest *thinks* it's invalidating.
-> > 
-> > NSNH_ALL is translated to NH_ALL at the guest level. But maybe
-> > it should have been done here instead.
-> 
-> Yes. It seems the worst of both worlds to have an interface which takes
-> raw opcodes rather than an enum of supported commands, but still
-> requires userspace to know which opcodes are supported and which ones
-> don't work as expected even though they are entirely reasonable to use
-> in the context of the stage-1-only SMMU being emulated.
-
-Maybe a list of supported TLBI commands via the hw_info uAPI?
-
-Thanks
-Nic
+Konrad
+> +
+> +		drm_mode_set_name(mode);
+> +		drm_mode_probed_add(connector, mode);
+> +	}
+> +
+> +	connector->display_info.width_mm = pinfo->desc->width_mm;
+> +	connector->display_info.height_mm = pinfo->desc->height_mm;
+> +	connector->display_info.bpc = pinfo->desc->bpc;
+> +
+> +	return pinfo->desc->num_modes;
+> +}
+> +
+> +static const struct drm_panel_funcs nt36523_panel_funcs = {
+> +	.disable = nt36523_disable,
+> +	.prepare = nt36523_prepare,
+> +	.unprepare = nt36523_unprepare,
+> +	.get_modes = nt36523_get_modes,
+> +};
+> +
+> +static int nt36523_probe(struct mipi_dsi_device *dsi)
+> +{
+> +	struct device *dev = &dsi->dev;
+> +	struct device_node *dsi1;
+> +	struct mipi_dsi_host *dsi1_host;
+> +	struct panel_info *pinfo;
+> +	const struct mipi_dsi_device_info *info;
+> +	int i, ret;
+> +
+> +	pinfo = devm_kzalloc(dev, sizeof(*pinfo), GFP_KERNEL);
+> +	if (!pinfo)
+> +		return -ENOMEM;
+> +
+> +	pinfo->vddio = devm_regulator_get(dev, "vddio");
+> +	if (IS_ERR(pinfo->vddio))
+> +		return dev_err_probe(dev, PTR_ERR(pinfo->vddio), "failed to get vddio regulator\n");
+> +
+> +	pinfo->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(pinfo->reset_gpio))
+> +		return dev_err_probe(dev, PTR_ERR(pinfo->reset_gpio), "failed to get reset gpio\n");
+> +
+> +	pinfo->desc = of_device_get_match_data(dev);
+> +	if (!pinfo->desc)
+> +		return -ENODEV;
+> +
+> +	/* If the panel is dual dsi, register DSI1 */
+> +	if (pinfo->desc->is_dual_dsi) {
+> +		info = &pinfo->desc->dsi_info;
+> +
+> +		dsi1 = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
+> +		if (!dsi1) {
+> +			dev_err(dev, "cannot get secondary DSI node.\n");
+> +			return -ENODEV;
+> +		}
+> +
+> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
+> +		of_node_put(dsi1);
+> +		if (!dsi1_host)
+> +			return dev_err_probe(dev, -EPROBE_DEFER, "cannot get secondary DSI host\n");
+> +
+> +		pinfo->dsi[1] = mipi_dsi_device_register_full(dsi1_host, info);
+> +		if (!pinfo->dsi[1]) {
+> +			dev_err(dev, "cannot get secondary DSI device\n");
+> +			return -ENODEV;
+> +		}
+> +	}
+> +
+> +	pinfo->dsi[0] = dsi;
+> +	mipi_dsi_set_drvdata(dsi, pinfo);
+> +	drm_panel_init(&pinfo->panel, dev, &nt36523_panel_funcs, DRM_MODE_CONNECTOR_DSI);
+> +
+> +	ret = drm_panel_of_backlight(&pinfo->panel);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to get backlight\n");
+> +
+> +	drm_panel_add(&pinfo->panel);
+> +
+> +	for (i = 0; i < DSI_NUM_MIN + pinfo->desc->is_dual_dsi; i++) {
+> +		pinfo->dsi[i]->lanes = pinfo->desc->lanes;
+> +		pinfo->dsi[i]->format = pinfo->desc->format;
+> +		pinfo->dsi[i]->mode_flags = pinfo->desc->mode_flags;
+> +
+> +		ret = mipi_dsi_attach(pinfo->dsi[i]);
+> +		if (ret < 0)
+> +			return dev_err_probe(dev, ret, "cannot attach to DSI%d host.\n", i);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id nt36523_of_match[] = {
+> +	{
+> +		.compatible = "xiaomi,elish-boe-nt36523",
+> +		.data = &elish_boe_desc,
+> +	},
+> +	{
+> +		.compatible = "xiaomi,elish-csot-nt36523",
+> +		.data = &elish_csot_desc,
+> +	},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, nt36523_of_match);
+> +
+> +static struct mipi_dsi_driver nt36523_driver = {
+> +	.probe = nt36523_probe,
+> +	.remove = nt36523_remove,
+> +	.driver = {
+> +		.name = "panel-novatek-nt36523",
+> +		.of_match_table = nt36523_of_match,
+> +	},
+> +};
+> +module_mipi_dsi_driver(nt36523_driver);
+> +
+> +MODULE_AUTHOR("Jianhua Lu <lujianhua000@gmail.com>");
+> +MODULE_DESCRIPTION("DRM driver for Novatek NT36523 based MIPI DSI panels");
+> +MODULE_LICENSE("GPL");
