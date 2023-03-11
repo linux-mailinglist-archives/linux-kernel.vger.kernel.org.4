@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36A646B5922
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:59:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEE3C6B5923
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 07:59:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCKG7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 01:59:02 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45340 "EHLO
+        id S230061AbjCKG7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 01:59:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjCKG6s (ORCPT
+        with ESMTP id S230052AbjCKG7D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 01:58:48 -0500
+        Sat, 11 Mar 2023 01:59:03 -0500
 Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96D5D73383
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:58:35 -0800 (PST)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-541665e581cso11469667b3.14
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:58:35 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD827733B3
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:58:42 -0800 (PST)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-538116920c3so76941997b3.15
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 22:58:42 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678517914;
+        d=google.com; s=20210112; t=1678517922;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PA482r9MJe7vZyw+QOZf0rTvnugvk46HQTM8cqZhnKs=;
-        b=tldDHr30uJ+HiUcXonL+iNvGzmn8jN/lqDwYD7A6znThCex6+p0hhXyH2E22r7ju24
-         AKhEubUuV2ehF+HSJjPO2WNGupZA5GO3JpYAXJpNraNPd7wa27oEdnCM+YdBFgcv5DKJ
-         AsIoeg13+loP7lUeb/pjdh0s/uGID0gWNy3wlLtGsAkG6jn5JPbZ92vQKHkCzzWl/2Za
-         3MiqRrVtE4tceeZZ4X9S4TCY0MIHrZZCPHVUrf6aejhC2/SbfwSHLPygjhbnhP0J4LCi
-         EKXq9nuSRtoMohBRC90vWQ8ldGj5RPu0mlDlZyx4M/gBKozzjbEps+beBWrfCdTGndQV
-         SKNw==
+        bh=P5GcUUcZRN+AEu9vpTIS9W0tRqRRERda5Pu2Ht/K9Pk=;
+        b=pR13zWUd1h9CUw/T2GV0Cj+B8jhP5cn1b0sfJynxS58CMKOE3JqEuutXfxMi4Wioti
+         EFbn2mdwNoHJ/wARCIZO56BUhwpqgFZ4Bn5sPoYHugdpGrzTJmayahuR+TNP5iqQgy/x
+         CqWQeouCG3GnHU6qgt4kdZpK5XM+ljNUv0Jsdzr7g/tl9L65XCuwCndRocKy+po/BQzU
+         ruGs389OD5dZUXcUWJjPGX566lwUNDY7Xc+oEkZSRYH+PVXpT8RFXWNcEPR71t4g47Sx
+         sLTI3WeR7S1OZCkHPeDiOq26WyWmPGQPgAJqIzyXSYb0CMy3RBdWVwkUSQGv+qwnbW9q
+         VBeQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678517914;
+        d=1e100.net; s=20210112; t=1678517922;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PA482r9MJe7vZyw+QOZf0rTvnugvk46HQTM8cqZhnKs=;
-        b=1wSWUOsSLeMN25qu8Oe/NOnOQUdgOE50EaVkiFwbNZ2eO29N6r/AtX6GippRJH3d8c
-         c2ONU27xdrJWq29jpuhaYD0UC293iShLW7zbtCOjfL9mxao7gsk4HGmw+WzswWEuyVYe
-         qhurn9qvKM9mTX+FZXEbpmWbEcwWb2Qf4FLhFMufIGulWdT4OD3jNeRRX7WLEoap15dI
-         TQ0b2WNB+F4NoCXRd5v3XzbWmuXxtGtBUKTSkJgQEDgmCLqoUR8cW+EmudrZlj/PsPId
-         6iCKE+9VH+IZtq+NcMZRRh5GkaWedQbYkYQAy3hwAzA4cytOmWoGzWMKHi1UnsKE3/BD
-         SC2Q==
-X-Gm-Message-State: AO0yUKXJaWr1MqcHYYw648BgYn6VVUnXh6YcpGMNPOwi60pBcvsSodxF
-        Qx2TxfgzVXdLmsQ+yaUC3PgyykrfJZif
-X-Google-Smtp-Source: AK7set9RA8SRXgCLcrsgukIbaEmnGpzcWQbxU3olQ8XTZGn0+orP5MYTuo3BIQ/YJ5keXXYT5pRAQOa65JN9
+        bh=P5GcUUcZRN+AEu9vpTIS9W0tRqRRERda5Pu2Ht/K9Pk=;
+        b=AwzDj/HiQOaINi4xQz9Yk8ZjQa6rkFIvIRpPFHTJCmYKBDaRDEoLC0t0iLuQ8CgOF1
+         d8IfJA0zLCQjP7cpkhMbbUvLXEzCmU0pNFWIWlzSyxRum/4uVuZCf8w1IQRyc6GHZa03
+         +wWlaYd2KdMw2hiYLT1CjWXux1YE9qCn8XbrgjeWWyfHQt7s0EMQpHm5+GNjQz008JDq
+         UvVZ1MDmcUswEsCkb1HJ+wcmfXLatY1N/ftHsvGUFlp72mYG0DIqluXfZZ7ihPzqrPB+
+         1Wm6yLz9rxJ2F3izs/hVO3Ttxo7R1Ln8ySNftDdpqfJBX+syCGUl4lq7UaY8iMYegOIe
+         WKJA==
+X-Gm-Message-State: AO0yUKV/s5QjOcv8z8MVlfwvWjm5pmgSv4PM64j/omESd2A0GuT3ROHq
+        5j75e6IbsAnFLRoUNr6zJCxQzQPeYzmt
+X-Google-Smtp-Source: AK7set+6srXuJ0wtMRw7PpcSCeXW+oUgIuzrriuNVGeyYG1RPaHgSLMosGnTbUK0w+ieDCHiEIQd12hje2ew
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:a11d:a763:a328:f2d6])
- (user=irogers job=sendgmr) by 2002:a5b:ccf:0:b0:a6f:9156:5579 with SMTP id
- e15-20020a5b0ccf000000b00a6f91565579mr14131802ybr.12.1678517914694; Fri, 10
- Mar 2023 22:58:34 -0800 (PST)
-Date:   Fri, 10 Mar 2023 22:57:44 -0800
+ (user=irogers job=sendgmr) by 2002:a05:6902:208:b0:ace:1ae4:9dd2 with SMTP id
+ j8-20020a056902020800b00ace1ae49dd2mr17170987ybs.8.1678517921899; Fri, 10 Mar
+ 2023 22:58:41 -0800 (PST)
+Date:   Fri, 10 Mar 2023 22:57:45 -0800
 In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
-Message-Id: <20230311065753.3012826-5-irogers@google.com>
+Message-Id: <20230311065753.3012826-6-irogers@google.com>
 Mime-Version: 1.0
 References: <20230311065753.3012826-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v1 04/13] perf build: Error if no libelf and NO_LIBELF isn't set
+Subject: [PATCH v1 05/13] perf util: Remove weak sched_getcpu
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -88,36 +88,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building without libelf support is going disable a lot of
-functionality. Require that the NO_LIBELF=1 build option is passed if
-this is intentional.
+sched_getcpu may not be present and so a feature test and definition
+exist to workaround this in the build. The feature test is used to
+define HAVE_SCHED_GETCPU_SUPPORT and so this is sufficient to know
+whether the local sched_getcpu is needed and a weak symbol can be
+avoided.
 
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/Makefile.config | 10 +---------
- 1 file changed, 1 insertion(+), 9 deletions(-)
+ tools/perf/util/cloexec.c | 13 -------------
+ tools/perf/util/util.c    | 16 ++++++++++++++++
+ 2 files changed, 16 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-index a68a3e9b47ae..5691e2ffb1b9 100644
---- a/tools/perf/Makefile.config
-+++ b/tools/perf/Makefile.config
-@@ -426,15 +426,7 @@ else
-       LIBC_SUPPORT := 1
-     endif
-     ifeq ($(LIBC_SUPPORT),1)
--      msg := $(warning No libelf found. Disables 'probe' tool, jvmti and BPF support in 'perf record'. Please install libelf-dev, libelf-devel or elfutils-libelf-devel);
+diff --git a/tools/perf/util/cloexec.c b/tools/perf/util/cloexec.c
+index fa8248aadb59..8830604c3a8d 100644
+--- a/tools/perf/util/cloexec.c
++++ b/tools/perf/util/cloexec.c
+@@ -13,19 +13,6 @@
+ 
+ static unsigned long flag = PERF_FLAG_FD_CLOEXEC;
+ 
+-int __weak sched_getcpu(void)
+-{
+-#ifdef __NR_getcpu
+-	unsigned cpu;
+-	int err = syscall(__NR_getcpu, &cpu, NULL, NULL);
+-	if (!err)
+-		return cpu;
+-#else
+-	errno = ENOSYS;
+-#endif
+-	return -1;
+-}
 -
--      NO_LIBELF := 1
--      NO_DWARF := 1
--      NO_DEMANGLE := 1
--      NO_LIBUNWIND := 1
--      NO_LIBDW_DWARF_UNWIND := 1
--      NO_LIBBPF := 1
--      NO_JVMTI := 1
-+      msg := $(error ERROR: No libelf found. Disables 'probe' tool, jvmti and BPF support. Please install libelf-dev, libelf-devel, elfutils-libelf-devel or build with NO_LIBELF=1.)
-     else
-       ifneq ($(filter s% -fsanitize=address%,$(EXTRA_CFLAGS),),)
-         ifneq ($(shell ldconfig -p | grep libasan >/dev/null 2>&1; echo $$?), 0)
+ static int perf_flag_probe(void)
+ {
+ 	/* use 'safest' configuration as used in evsel__fallback() */
+diff --git a/tools/perf/util/util.c b/tools/perf/util/util.c
+index 391c1e928bd7..b356c9f7f0c3 100644
+--- a/tools/perf/util/util.c
++++ b/tools/perf/util/util.c
+@@ -533,3 +533,19 @@ int do_realloc_array_as_needed(void **arr, size_t *arr_sz, size_t x, size_t msz,
+ 	*arr_sz = new_sz;
+ 	return 0;
+ }
++
++#ifndef HAVE_SCHED_GETCPU_SUPPORT
++int sched_getcpu(void)
++{
++#ifdef __NR_getcpu
++	unsigned int cpu;
++	int err = syscall(__NR_getcpu, &cpu, NULL, NULL);
++
++	if (!err)
++		return cpu;
++#else
++	errno = ENOSYS;
++#endif
++	return -1;
++}
++#endif
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
