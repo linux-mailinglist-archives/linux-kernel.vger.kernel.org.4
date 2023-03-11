@@ -2,120 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B875B6B5807
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EEAD6B5809
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 04:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229589AbjCKDTH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 22:19:07 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S229637AbjCKD0K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 22:26:10 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCKDTG (ORCPT
+        with ESMTP id S229473AbjCKD0H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 22:19:06 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09C8C10E5A0
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 19:19:04 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32B3IhlV019914
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Fri, 10 Mar 2023 22:18:44 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1678504726; bh=X4SZPPPjSfymhSVu5DOfCp8XWFcI0/91jN3YaYnh/AE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=inJyC4xtFBH9CwaQZxr2uT733jlfDXRzFuOBxpU4u+x/PEmIohblrJ+8FMMZjMKka
-         VNuwM8LZRZD/xsIvyR7z6rtiC6XAhOAon/6X9GYsmJROp3I4FZQLrgLz3W7249nKCh
-         S33LO4qyQ3m3cGdWVHlueO/kKNGNFpOxgvt5rVT4HGvlyp8MrRb0nstxNNj9V3zy8C
-         eX+ZXY93IqG+UmRah8WBnYeeIjCPp2wZy+0dLCJtVXeFxRsJETOJdOA8uAmm+pOFS7
-         xbDM7LSqSMXNVaFO+pRVelDnQlNWdbZmn8A6QJEcW7pSaHEkUCDnpPO8VgAVWFmeQz
-         eywN6d83PkPew==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id A805F15C42F6; Fri, 10 Mar 2023 22:18:43 -0500 (EST)
-Date:   Fri, 10 Mar 2023 22:18:43 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Chao Yu <chao@kernel.org>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>
-Subject: Re: [PATCH] ext4: fix to report fstrim.minlen back to userspace
-Message-ID: <20230311031843.GF860405@mit.edu>
-References: <20230308011807.411478-1-chao@kernel.org>
+        Fri, 10 Mar 2023 22:26:07 -0500
+Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 11110125B2;
+        Fri, 10 Mar 2023 19:26:06 -0800 (PST)
+Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-17671fb717cso8057659fac.8;
+        Fri, 10 Mar 2023 19:26:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678505165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a1d+aTzTfWqQxMINC6x7hmYNy31/HuKFz4m7E2MSLTI=;
+        b=YFQaZQYk2EIHMOKxIa0JSHjrCX2GXQ3n0ojkOS7626CYN34/ZDgbo+qIMHebPAaRHw
+         eR6Y0FDF+gJsxTPXQ2TGYVapIudODipeXJvbV1zgP3yMx6ky65xF83n4rI225Y84JInl
+         eIRFeVDR8omY888LtXDFSeDHbI+oy7foZuvwYPL49wh2yyJwk/8Z1IUtQQYqro25oDM+
+         z3uNDV0Kicc6N3hCSuHfFVdFg62kDvEEzMPhZQm20pSi4CNoLGebS5EFetKRzatsVsCd
+         qYtHTW8f1J/Go6REo7OqRI5NZN2LpvA/Q+T1giemxrsjWRNfOVvPj4RR146QI/dRRXeb
+         trmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678505165;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a1d+aTzTfWqQxMINC6x7hmYNy31/HuKFz4m7E2MSLTI=;
+        b=QGlaEQyKkuee8kfr7DuC77gSL9lvZDvI2O7sjf2e+XOvessU5M0q5xPoYT290D2/tA
+         ITssUy8ah4AsgjubTNqdejXEnohBoO6Db+dST49BjqEWxTVGNTAza9JQWMJ8I4pvx4cx
+         eFNgqldpx5T4kgiUy28fI/KK69mjD52YY44RheCsclDL62enhqEZoO03A9t3tX34ucVv
+         GgqNc+Zvg5zHtNGCeUUf4NXQiNcQV+5wg5oj31uU9sFlHy70c65avrT5tl8FEwwxjEHg
+         uv8cjvJrXJbuBFBonUOwiojK8KMVxjiidDGn+eF7jPS/Wb9HHr7ucCXkZa2ws4ZDpo8R
+         RUrg==
+X-Gm-Message-State: AO0yUKUALrNPQ2KPpms/ptAqqa7EC8TYvHm8mOClkerHiBEghaF5Kws4
+        yuwkXelalkk0s7wu93iQvJs=
+X-Google-Smtp-Source: AK7set/Dfpz2eEs+b/bX1VAjto7NdIuHoTziayLm5r7wRYYMzuJ25E5kbLo/1N47fZrzc0xdfoheUg==
+X-Received: by 2002:a05:6870:b14c:b0:176:2145:5e21 with SMTP id a12-20020a056870b14c00b0017621455e21mr17513482oal.46.1678505165332;
+        Fri, 10 Mar 2023 19:26:05 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id zh28-20020a0568716b9c00b001777dbe75f0sm618651oab.41.2023.03.10.19.26.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 19:26:04 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Fri, 10 Mar 2023 19:26:02 -0800
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+Subject: Re: [PATCH 4.14 000/193] 4.14.308-rc1 review
+Message-ID: <d2a7679f-88d2-44ba-a8d7-a610e6e2cef2@roeck-us.net>
+References: <20230310133710.926811681@linuxfoundation.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230308011807.411478-1-chao@kernel.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+In-Reply-To: <20230310133710.926811681@linuxfoundation.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 09:18:07AM +0800, Chao Yu wrote:
-> Quoted from manual of fstrim:
+On Fri, Mar 10, 2023 at 02:36:22PM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 4.14.308 release.
+> There are 193 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> "-m, --minimum minimum-size
-> 	..., if it's smaller than the device's minimum, and report that
-> (fstrim_range.minlen) back to userspace."
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
+> 
 
-First of all, I'll note that the fstrim(8) man page, which is
-describing how the userspace fstrim application work, is a really
-weird place to put information about how the fstrim _ioctl_ works.
+Build results:
+	total: 168 pass: 165 fail: 3
+Failed builds:
+	s390:defconfig
+	s390:allmodconfig
+	s390:performance_defconfig
+Qemu test results:
+	total: 430 pass: 425 fail: 5
+Failed tests:
+	s390:defconfig:nolocktests:smp2:net,default:initrd
+	s390:defconfig:nolocktests:smp2:virtio-blk-ccw:net,virtio-net-pci:rootfs
+	s390:defconfig:nolocktests:smp2:scsi[virtio-ccw]:net,default:rootfs
+	s390:defconfig:nolocktests:virtio-pci:net,virtio-net-pci:rootfs
+	s390:defconfig:nolocktests:scsi[virtio-pci]:net,default:rootfs
 
-I've added Lukas, who is listed as one of the authors of fstrim, and
-who probably had a hand in writing the man page.  The text in that
-paragraph describing -m is extremely confusing, and probably needs to
-be rewritten, and factored out into a fstrim(8) for system
-adminsitrators, and ioctl_fitrim(2) which documents the the ioctl.
+Failures as already reported.
 
-> diff --git a/fs/ext4/mballoc.c b/fs/ext4/mballoc.c
-> index 5b2ae37a8b80..bd3ef29cf8a6 100644
-> --- a/fs/ext4/mballoc.c
-> +++ b/fs/ext4/mballoc.c
-> @@ -6491,6 +6491,9 @@ int ext4_trim_fs(struct super_block *sb, struct fstrim_range *range)
->  				discard_granularity >> sb->s_blocksize_bits);
->  		if (minlen > EXT4_CLUSTERS_PER_GROUP(sb))
->  			goto out;
-> +
-> +		/* Report adjusted minlen back to userspace */
-> +		range->minlen = minlen;
->  	}
-
-Unfortunately, this patch is not correct.  The units of struct
-fstrim_range's minlen (here, range->minlen) is bytes.
-
-However the minlen variable in ext4_trim_fs is in units of *clusters*.
-And so it gets rounded up two places.  The first time is when it is
-converted into units of a cluster:
-
-	minlen = EXT4_NUM_B2C(EXT4_SB(sb),
-			      range->minlen >> sb->s_blocksize_bits);
-
-And the second time is when it is rounded up to the block device's
-discard granularity.
-
-So after that if statement, we need to convert minlen from clusters to
-bytes, like so:
-
-	range->minlen = EXT4_C2B(EXT4_SB(sb), minlen) << sb->s_blocksize_bits);
-
-Oh, and by the way, that first conversion is not correct as currently
-written in ext4_fs_trim().   It should be
-
-	minlen = (range->minlen + EXT4_CLUSTER_SIZE(sb) - 1) >>
-		(sb->s_blocksize_bits + EXT4_CLUSTER_BITS(sb));
-
-The explanation of why
-
-	minlen = EXT4_NUM_B2C(EXT4_SB(sb),
-			      range->minlen >> sb->s_blocksize_bits);
-
-is wrong is left as an exercise to the reader.  (Hint: what is
-supposed to happen if a value of 1 byte is passed in
-fstrim_range.minlen?)
-
-Cheers,
-
-					- Ted
+Guenter
