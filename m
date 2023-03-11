@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2A366B5DF0
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:35:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252FA6B5DF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:35:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCKQfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:35:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
+        id S230494AbjCKQfr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:35:47 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbjCKQfC (ORCPT
+        with ESMTP id S230250AbjCKQfp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:35:02 -0500
-Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFB6B979
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:35:01 -0800 (PST)
-Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536bbe5f888so159452017b3.8
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:35:01 -0800 (PST)
+        Sat, 11 Mar 2023 11:35:45 -0500
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 078336B979
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:35:44 -0800 (PST)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-5416698e889so38366207b3.2
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:35:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678552501;
+        d=google.com; s=20210112; t=1678552543;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Wp9g8mvtcyPVfWU1c35OlobShpJvkPzR3H9bu0L9qxs=;
-        b=pr0lMA2mOjrGpYKtk0QVF0tgFeqsi82LWxDkBLfPrvP6SzaFt8uRCUwVlEGVXt55Pr
-         1LakAV5xZAA78BvaPzikSS3KxYsHahyc6ze80pSxeB0/399ArWjoxIhafnZA16imP8gz
-         m6EpAPvbM6L06sONkdYvql4X4jRbWL9LYlwqEehMYRC5PR4Ezzc1Hd6E1UPOG0OlUZGX
-         qjRs4XyDzd1PghVTUoOBMtSTg+n2zV8rTmOB8T0p8lcvYvlUsGTXXdfyY6R9E1SAjeNX
-         Xu4Rg7B5iRhQ8orZmaA1RemdeqsQdHWR6fBji85TlIPP1bY1xc4LJJvcHnjA1VGPVK/1
-         xHpw==
+        bh=wSYGBwvERR9paAWVm+BPfUaOdOyyaRsYjyfcyhXtVw0=;
+        b=UAQ71mkDnVkAMX0dBUZr9na7yjE4UcUPxg0d4QW9+TED0PGTdhVGRYzEOewrz4OOEA
+         VZW95uFOQsbTG7SCyL1y5/XjlKCkwxuoSglzm5bgqGtQdoAyBwCwhkFAK62n9uP4NUqX
+         5NXsW75RXvaDplRaP73qW5BIVFkYFPl2iKS9Msg4T2Kc7E85yFAsDC/o9m8oRylQFtVT
+         rieInkzI+bi92+xxSiHSVVDuTfY72Ir/LAqQza7lLPRG8X9YLCnpd98cj36uhSC5kBxV
+         bRLb63mcK+uo33HUtFca6zrhBdTTSD+/EtDXha8sz5m999IdYsA9t7xvbr2OIXH3nmUe
+         DQFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678552501;
+        d=1e100.net; s=20210112; t=1678552543;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Wp9g8mvtcyPVfWU1c35OlobShpJvkPzR3H9bu0L9qxs=;
-        b=yO1GhqSRDJ/GHuHWyHW93t1cupSVgcohqQENn0cSPOPCxhJuFMGNFRZzv7cuj365Tq
-         K4KyJQSka+LiymnRXzJbZbhkRC/qGi6hJVEFvEQ8pt6cbDSiHMlnUImOLw3IEkHM4RNW
-         Wl9svZS+YBT2dn41VpFMp+gXdnv4KCZKvi+pPGqSWE4XxN1787HWBc1Y8TDtujb18pEt
-         KUcpszqZeVFkYueL1SxdB4nhY6hjEpkY+9sqm7YN6PuJ4vsCaILHn2t7DxZkDjNHXTgr
-         Cft62VULEu3yNoQ9USNbvhnupIpVC3EDdrn7IeOs/dwNtKCofA3//qb4FCUx9dXuCDnn
-         GFbA==
-X-Gm-Message-State: AO0yUKVm6OLwRaM9nDnO/5hPKjSwPRAochfbnmAVw6zIS5YnYwMsuolM
-        npl9WoPR0JXDW/2SaOBaWKUg5hGGpg8ZLCgxFC+ByQ==
-X-Google-Smtp-Source: AK7set8DBNZWeU/lrlXBCIe5G4NDpGfK/C+Ec/pjM7HxB3XDcENfIe9cQNMXEKvMvuR3hSrHQKhqUXC0oY/5I7TPspg=
-X-Received: by 2002:a81:b142:0:b0:541:6975:2340 with SMTP id
- p63-20020a81b142000000b0054169752340mr1503406ywh.6.1678552500949; Sat, 11 Mar
- 2023 08:35:00 -0800 (PST)
+        bh=wSYGBwvERR9paAWVm+BPfUaOdOyyaRsYjyfcyhXtVw0=;
+        b=ZHF46mSKocutRF+Tza1DaGe0i8D/erUwCdwbJtyGDLpWg0rc0sOgzgnrWoUbaftHPH
+         yQ2OlX/tmSprEfJIfRJgA9cggHKPs6q2POo3GEN8zT9A0to2fIRPOq9R4pdVS1Sqj78Q
+         IYGxJXxsqOee95r8x4JE7PiboxUQKVDNxJHk9Hgd/upvXvoHr9l6szaTvPvZqhBwoa3v
+         TwuzmzB/mu/EICP+Tmx1udNydgHQxlNFLalEL3sUmscQoHuqfi61+Jb6EYn6pgh8Doa4
+         fJiTtIxq5ZdwG0k0ypmMx41QhK79gujFW4OcMffMlpQvzK1tCoqdv9EqeCr/fvyVxcpc
+         qvbg==
+X-Gm-Message-State: AO0yUKUAw6EGyZMAoEnRuH9FBw8ibLqPKQSaAm0DLAytC+NIFvUx3Y5J
+        zA2z49FCtdP0lKM7fMW6qWZDJpTD5IFQTf8gnD0omw==
+X-Google-Smtp-Source: AK7set93tV+avSHhtVAdwyX7DfN5gzCh81D4seJpwkCcmvQqrqKMSESRIYfCezkiV/oqBS7uIDZ168ZXua3DqwAa1MY=
+X-Received: by 2002:a81:ac1a:0:b0:533:cf4e:9a80 with SMTP id
+ k26-20020a81ac1a000000b00533cf4e9a80mr18506420ywh.6.1678552543118; Sat, 11
+ Mar 2023 08:35:43 -0800 (PST)
 MIME-Version: 1.0
-References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org> <20230311111658.251951-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111658.251951-3-krzysztof.kozlowski@linaro.org>
+References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org> <20230311111658.251951-5-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111658.251951-5-krzysztof.kozlowski@linaro.org>
 From:   Guenter Roeck <groeck@google.com>
-Date:   Sat, 11 Mar 2023 08:34:49 -0800
-Message-ID: <CABXOdTfGcByJaoXG5ifOdOCRWhemendQwG42RObZpc13v-BF6A@mail.gmail.com>
-Subject: Re: [PATCH 3/5] i2c: xiic: hide OF related data for COMPILE_TEST
+Date:   Sat, 11 Mar 2023 08:35:32 -0800
+Message-ID: <CABXOdTdWkX9hpJtZmgMEBvT8XS5i3cTTF868RLx3Y9o52x6QAw@mail.gmail.com>
+Subject: Re: [PATCH 5/5] i2c: synquacer: mark OF related data as maybe unused
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>,
@@ -88,36 +88,33 @@ On Sat, Mar 11, 2023 at 3:17=E2=80=AFAM Krzysztof Kozlowski
 > The driver can be compile tested with !CONFIG_OF making certain data
 > unused:
 >
->   drivers/i2c/busses/i2c-xiic.c:1202:39: error: =E2=80=98xiic_2_00=E2=80=
-=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>   drivers/i2c/busses/i2c-synquacer.c:632:34: error: =E2=80=98synquacer_i2=
+c_dt_ids=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
 >
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
 > ---
->  drivers/i2c/busses/i2c-xiic.c | 2 +-
+>  drivers/i2c/busses/i2c-synquacer.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.=
-c
-> index dbb792fc197e..806b447055fb 100644
-> --- a/drivers/i2c/busses/i2c-xiic.c
-> +++ b/drivers/i2c/busses/i2c-xiic.c
-> @@ -1199,11 +1199,11 @@ static const struct i2c_adapter xiic_adapter =3D =
-{
->         .algo =3D &xiic_algorithm,
+> diff --git a/drivers/i2c/busses/i2c-synquacer.c b/drivers/i2c/busses/i2c-=
+synquacer.c
+> index e4026c5416b1..50d19cf99a03 100644
+> --- a/drivers/i2c/busses/i2c-synquacer.c
+> +++ b/drivers/i2c/busses/i2c-synquacer.c
+> @@ -629,7 +629,7 @@ static int synquacer_i2c_remove(struct platform_devic=
+e *pdev)
+>         return 0;
 >  };
 >
-> +#if defined(CONFIG_OF)
->  static const struct xiic_version_data xiic_2_00 =3D {
->         .quirks =3D DYNAMIC_MODE_READ_BROKEN_BIT,
+> -static const struct of_device_id synquacer_i2c_dt_ids[] =3D {
+> +static const struct of_device_id synquacer_i2c_dt_ids[] __maybe_unused =
+=3D {
+>         { .compatible =3D "socionext,synquacer-i2c" },
+>         { /* sentinel */ }
 >  };
->
-> -#if defined(CONFIG_OF)
->  static const struct of_device_id xiic_of_match[] =3D {
->         { .compatible =3D "xlnx,xps-iic-2.00.a", .data =3D &xiic_2_00 },
->         { .compatible =3D "xlnx,axi-iic-2.1", },
 > --
 > 2.34.1
 >
