@@ -2,132 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9741A6B6085
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:32:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 234836B608F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:34:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229843AbjCKUb7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 15:31:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54876 "EHLO
+        id S229589AbjCKUen (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 15:34:43 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCKUb5 (ORCPT
+        with ESMTP id S229927AbjCKUek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 15:31:57 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 763B46505A;
-        Sat, 11 Mar 2023 12:31:55 -0800 (PST)
-Received: from [192.168.1.103] (31.173.84.174) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
- 2023 23:31:47 +0300
-Subject: Re: [PATCH 11/32] parport_pc: add 16-bit and 8-bit fast EPP transfer
- flags
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230307224627.28011-1-linux@zary.sk>
- <20230307224627.28011-12-linux@zary.sk>
- <460ae7d7-a12d-cef3-4343-ac633e15016f@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <6933a0fe-012d-d0e4-78e5-e651ab5f80a0@omp.ru>
-Date:   Sat, 11 Mar 2023 23:31:47 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 11 Mar 2023 15:34:40 -0500
+Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69C37AB8;
+        Sat, 11 Mar 2023 12:34:26 -0800 (PST)
+Received: from local
+        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+         (Exim 4.96)
+        (envelope-from <daniel@makrotopia.org>)
+        id 1pb5v0-0002Ly-19;
+        Sat, 11 Mar 2023 21:34:18 +0100
+Date:   Sat, 11 Mar 2023 20:34:12 +0000
+From:   Daniel Golle <daniel@makrotopia.org>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Frank Wunderlich <frank-w@public-files.de>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: Aw: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc:
+ fix 1000Base-X and 2500Base-X modes
+Message-ID: <ZAzlxF6LaMSdOdIL@makrotopia.org>
+References: <20230308134642.cdxqw4lxtlgfsl4g@skbuf>
+ <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
+ <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+ <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <trinity-a69cee2e-40c5-44b5-ac97-2cb35e1d2462-1678541173568@3c-app-gmx-bs24>
+ <ZAyVbzuKq2haFfQa@makrotopia.org>
+ <ZAzeZwT3JJK42ANn@shell.armlinux.org.uk>
 MIME-Version: 1.0
-In-Reply-To: <460ae7d7-a12d-cef3-4343-ac633e15016f@omp.ru>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [31.173.84.174]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 20:21:22
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
- dbl.spamhaus.org}
-X-KSE-AntiSpam-Info: omp.ru:7.1.1;d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.174
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/11/2023 20:23:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 6:14:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZAzeZwT3JJK42ANn@shell.armlinux.org.uk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/23 11:09 PM, Sergey Shtylyov wrote:
-
->> PARPORT_EPP_FAST flag currently uses 32-bit I/O port access for data
->> read/write (insl/outsl).
->> Add PARPORT_EPP_FAST_16 and PARPORT_EPP_FAST_8 that use insw/outsw
->> and insb/outsb (and PARPORT_EPP_FAST_32 as alias for PARPORT_EPP_FAST).
->>
->> Signed-off-by: Ondrej Zary <linux@zary.sk>
->> ---
->>  drivers/parport/parport_pc.c | 20 ++++++++++++++++----
->>  include/uapi/linux/parport.h |  3 +++
->>  2 files changed, 19 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/parport/parport_pc.c b/drivers/parport/parport_pc.c
->> index 5784dc20fb38..eda4e4e6d4e8 100644
->> --- a/drivers/parport/parport_pc.c
->> +++ b/drivers/parport/parport_pc.c
->> @@ -298,9 +298,15 @@ static size_t parport_pc_epp_read_data(struct parport *port, void *buf,
->>  		}
->>  		return got;
->>  	}
->> -	if ((flags & PARPORT_EPP_FAST) && (length > 1)) {
->> -		if (!(((long)buf | length) & 0x03))
->> +	if ((length > 1) && ((flags & PARPORT_EPP_FAST_32)
->> +			   || flags & PARPORT_EPP_FAST_16
->> +			   || flags & PARPORT_EPP_FAST_8)) {
+On Sat, Mar 11, 2023 at 08:02:47PM +0000, Russell King (Oracle) wrote:
+> On Sat, Mar 11, 2023 at 02:51:27PM +0000, Daniel Golle wrote:
+> > On Sat, Mar 11, 2023 at 02:26:13PM +0100, Frank Wunderlich wrote:
+> > > > Gesendet: Samstag, 11. März 2023 um 13:05 Uhr
+> > > > Von: "Frank Wunderlich" <frank-w@public-files.de>
+> > > > > Gesendet: Mittwoch, 08. März 2023 um 16:24 Uhr
+> > > > > Von: "Russell King (Oracle)" <linux@armlinux.org.uk>
+> > > > > > > It would be nice to add these to my database - please send me the
+> > > > > > > output of ethtool -m $iface raw on > foo.bin for each module.
+> > > > > 
+> > > > > so if you can do that for me, then I can see whether it's likely that
+> > > > > the patches that are already in mainline will do anything to solve
+> > > > > the workaround you've had to add for the hw signals.
+> > > > 
+> > > > i got the 2.5G copper sfps, and tried them...they work well with the v12 (including this patch), but not in v13...
+> > > > 
+> > > > i dumped the eeprom like you mention for your database:
+> > > > 
+> > > > $ hexdump -C 2g5_sfp.bin 
+> > > > 00000000  03 04 07 00 01 00 00 00  00 02 00 05 19 00 00 00  |................|
+> > > > 00000010  1e 14 00 00 4f 45 4d 20  20 20 20 20 20 20 20 20  |....OEM         |
+> > > > 00000020  20 20 20 20 00 00 00 00  53 46 50 2d 32 2e 35 47  |    ....SFP-2.5G|
+> > > > 00000030  2d 54 20 20 20 20 20 20  31 2e 30 20 03 52 00 19  |-T      1.0 .R..|
+> > > > 00000040  00 1a 00 00 53 4b 32 33  30 31 31 31 30 30 30 38  |....SK2301110008|
+> > > > 00000050  20 20 20 20 32 33 30 31  31 30 20 20 68 f0 01 e8  |    230110  h...|
+> > > > 00000060  00 00 11 37 4f 7a dc ff  3d c0 6e 74 9b 7c 06 ca  |...7Oz..=.nt.|..|
+> > > > 00000070  e1 d0 f9 00 00 00 00 00  00 00 00 00 08 f0 fc 64  |...............d|
+> > > > 00000080  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> > > > *
+> > > > 00000100  5f 00 ce 00 5a 00 d3 00  8c a0 75 30 88 b8 79 18  |_...Z.....u0..y.|
+> > > > 00000110  1d 4c 01 f4 19 64 03 e8  4d f0 06 30 3d e8 06 f2  |.L...d..M..0=...|
+> > > > 00000120  2b d4 00 c7 27 10 00 df  00 00 00 00 00 00 00 00  |+...'...........|
+> > > > 00000130  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> > > > 00000140  00 00 00 00 3f 80 00 00  00 00 00 00 01 00 00 00  |....?...........|
+> > > > 00000150  01 00 00 00 01 00 00 00  01 00 00 00 00 00 00 f1  |................|
+> > > > 00000160  29 1a 82 41 0b b8 13 88  0f a0 ff ff ff ff 80 ff  |)..A............|
+> > > > 00000170  00 00 ff ff 00 00 ff ff  04 ff ff ff ff ff ff 00  |................|
+> > > > 00000180  43 4e 53 38 54 55 54 41  41 43 33 30 2d 31 34 31  |CNS8TUTAAC30-141|
+> > > > 00000190  30 2d 30 34 56 30 34 20  49 fb 46 00 00 00 00 29  |0-04V04 I.F....)|
+> > > > 000001a0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> > > > 000001b0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 aa aa  |................|
+> > > > 000001c0  47 4c 43 2d 54 20 20 20  20 20 20 20 20 20 20 20  |GLC-T           |
+> > > > 000001d0  20 20 20 20 20 20 20 20  20 20 20 20 20 20 20 97  |               .|
+> > > > 000001e0  00 00 00 00 00 00 00 00  00 00 00 00 00 00 00 00  |................|
+> > > > 000001f0  00 00 00 00 00 00 00 00  00 40 00 40 00 00 00 00  |.........@.@....|
+> > > > 
+> > > > how can we add a quirk to support this?
+> > > 
+> > > tried to add the quirk like this onto v13
+> > > 
+> > > --- a/drivers/net/phy/sfp.c
+> > > +++ b/drivers/net/phy/sfp.c
+> > > @@ -403,6 +403,8 @@ static const struct sfp_quirk sfp_quirks[] = {
+> > >         SFP_QUIRK_F("OEM", "RTSFP-10G", sfp_fixup_rollball_cc),
+> > >         SFP_QUIRK_F("Turris", "RTSFP-10", sfp_fixup_rollball),
+> > >         SFP_QUIRK_F("Turris", "RTSFP-10G", sfp_fixup_rollball),
+> > > +
+> > > +       SFP_QUIRK_M("OEM", "SFP-2.5G-T", sfp_quirk_2500basex),
+> > >  };
+> > > 
+> > > but still no link...
+> > > 
+> > > how can i verify the quirk was applied? see only this in dmesg:
+> > > 
+> > > [    2.192274] sfp sfp-1: module OEM              SFP-2.5G-T       rev 1.0  sn SK2301110008     dc 230110  
+> > > 
+> > > also tried to force speed (module should support 100/1000/2500), but it seems i can set speed option only on
+> > > gmac (eth1) and not on the sfp (phy).
+> > > 
+> > > i guess between mac and sfp speed is always 2500base-X and after the phy (if there is any) the link speed is
+> > > maybe different.
+> > 
+> > As discussed in the previous iteration of the series where I suggested to
+> > add work-arounds disabling in-band AN for 1000Base-X and 2500Base-X having
+> > those will also affect fiber transceivers which transparently pass-through
+> > the electrical SerDes signal into light. Russell explained it very well
+> > and I now agree that a good solution would be to add a new SFP quirk
+> > indicating that a SFP module got a "hidden" PHY which doesn't like in-band
+> > autonegotiation.
 > 
->    Why not:
-> 
->> +		if ((flags & PARPORT_EPP_FAST_32)
->> +		    && !(((long)buf | length) & 0x03))
->>  			insl(EPPDATA(port), buf, (length >> 2));
->> +		else if ((flags & PARPORT_EPP_FAST_16)
->> +			 && !(((long)buf | length) & 0x01))
->> +			insw(EPPDATA(port), buf, length >> 1);
->>  		else
->>  			insb(EPPDATA(port), buf, length);
->
+> I do not believe that fibre SFPs have hidden PHYs that disrupt the
+> autonegotiation. What makes you think that they do?
 
-   Oopsie, s/th went wrong while editing... :-/
+This is not a fiber SFP, but rather a 2500Base-T RJ-45 module.
+Hence it quite certainly has some kind of PHY.
 
-[...]
+> Do you have
+> autonegotiation working with some fibre SFP modules but not other
+> fibre modules?
 
-MBR, Sergey
+I've tried only with one 1000Base-SX module and can confirm (like
+Frank already did in your previous discussion some weeks ago) that
+with that autonegotiation is working fine. Only those RJ-45 which
+do not expose the PHY via i2c-mdio are problematic apparently, as
+Linux/phylink *assumes* that they do in-band AN, but at least some
+of them don't.
