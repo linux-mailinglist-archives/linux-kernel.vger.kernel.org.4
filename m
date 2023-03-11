@@ -2,99 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00E886B5E55
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:07:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78F066B5E5E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCKRHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:07:23 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41824 "EHLO
+        id S229835AbjCKRJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:09:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKRHV (ORCPT
+        with ESMTP id S229469AbjCKRJe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:07:21 -0500
-Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 159B831E20;
-        Sat, 11 Mar 2023 09:07:20 -0800 (PST)
-Received: from [192.168.1.103] (178.176.77.159) by msexch01.omp.ru
- (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
- 2023 20:07:11 +0300
-Subject: Re: [PATCH 08/32] pata_parport-bpck6: remove mode from struct
- ppc_storage
-To:     Ondrej Zary <linux@zary.sk>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
-        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
-        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230307224627.28011-1-linux@zary.sk>
- <20230307224627.28011-9-linux@zary.sk>
-From:   Sergey Shtylyov <s.shtylyov@omp.ru>
-Organization: Open Mobile Platform
-Message-ID: <6747930c-697b-2f9b-0c97-4aa2d1ef9bb4@omp.ru>
-Date:   Sat, 11 Mar 2023 20:07:10 +0300
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
- Thunderbird/78.10.1
+        Sat, 11 Mar 2023 12:09:34 -0500
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6E356EC5D;
+        Sat, 11 Mar 2023 09:09:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=39auS
+        PKZnuBFBnPRBUd+UqjHniwggSni0+AncM3Q90Q=; b=MgFxzSOphnh2TvTOZcyXM
+        /0HLGVK9wyERR9QjaAT6qbabX1S47rSnXpoubTvXMmmPy5PhhNWpBvIVwrxKxy8T
+        P+J4sO7HqQRSUFEoKulAk5Lwim1iFpKLS6jj9sq1dp6M+yeTyjbqGeQZj6HsDyl7
+        VI7gsS6Ks4jt3xoN5WZ8pU=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-0 (Coremail) with SMTP id _____wAnnhaVtQxkNp8CDA--.24226S2;
+        Sun, 12 Mar 2023 01:08:37 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     davem@davemloft.net
+Cc:     simon.horman@corigine.com, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, petrm@nvidia.com, thomas.lendacky@amd.com,
+        wsa+renesas@sang-engineering.com, leon@kernel.org,
+        shayagr@amazon.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH v2] xirc2ps_cs: Fix use after free bug in xirc2ps_detach
+Date:   Sun, 12 Mar 2023 01:08:36 +0800
+Message-Id: <20230311170836.3919005-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-In-Reply-To: <20230307224627.28011-9-linux@zary.sk>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [178.176.77.159]
-X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
- (10.188.4.12)
-X-KSE-ServerInfo: msexch01.omp.ru, 9
-X-KSE-AntiSpam-Interceptor-Info: scan successful
-X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 16:42:21
-X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
-X-KSE-AntiSpam-Method: none
-X-KSE-AntiSpam-Rate: 59
-X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
-X-KSE-AntiSpam-Info: Version: 5.9.59.0
-X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
-X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
-X-KSE-AntiSpam-Info: {rep_avail}
-X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
-X-KSE-AntiSpam-Info: {relay has no DNS name}
-X-KSE-AntiSpam-Info: {SMTP from is not routable}
-X-KSE-AntiSpam-Info: {Found in DNSBL: 178.176.77.159 in (user)
- b.barracudacentral.org}
-X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2
-X-KSE-AntiSpam-Info: ApMailHostAddress: 178.176.77.159
-X-KSE-AntiSpam-Info: {DNS response errors}
-X-KSE-AntiSpam-Info: Rate: 59
-X-KSE-AntiSpam-Info: Status: not_detected
-X-KSE-AntiSpam-Info: Method: none
-X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
- smtp.mailfrom=omp.ru;dkim=none
-X-KSE-Antiphishing-Info: Clean
-X-KSE-Antiphishing-ScanningType: Heuristic
-X-KSE-Antiphishing-Method: None
-X-KSE-Antiphishing-Bases: 03/11/2023 16:45:00
-X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
-X-KSE-Antivirus-Interceptor-Info: scan successful
-X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 2:00:00 PM
-X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wAnnhaVtQxkNp8CDA--.24226S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WrWxuF4xKrW5Aw4UCr48WFg_yoW8GFyUpr
+        WDJay5Zr4kXwsIvw4xJrWUJF15Was3Kayjgr93C3yFgrn8ArWqgr1rKayjgFyxArWkZF13
+        Arn09ryxWF1DAFJanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziYLv_UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzhkvU2I0XmjvDwAAsr
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/8/23 1:46 AM, Ondrej Zary wrote:
+In xirc2ps_probe, the local->tx_timeout_task was bounded
+with xirc2ps_tx_timeout_task. When timeout occurs,
+it will call xirc_tx_timeout->schedule_work to start the
+work.
 
-> introduce mode_map[] that maps bpck6 modes to ppc6 modes and use it to
-> replace mode in ppc_storage
-> 
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
+When we call xirc2ps_detach to remove the driver, there
+may be a sequence as follows:
 
-Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
+Stop responding to timeout tasks and complete scheduled
+tasks before cleanup in xirc2ps_detach, which will fix
+the problem.
 
-[...]
+CPU0                  CPU1
+
+                    |xirc2ps_tx_timeout_task
+xirc2ps_detach      |
+  free_netdev       |
+    kfree(dev);     |
+                    |
+                    | do_reset
+                    |   //use dev
+
+Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v2:
+- fix indentation error suggested by Simon Horman,
+and stop the timeout tasks  suggested by Yunsheng Lin
+---
+ drivers/net/ethernet/xircom/xirc2ps_cs.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+diff --git a/drivers/net/ethernet/xircom/xirc2ps_cs.c b/drivers/net/ethernet/xircom/xirc2ps_cs.c
+index 894e92ef415b..c77ca11d9497 100644
+--- a/drivers/net/ethernet/xircom/xirc2ps_cs.c
++++ b/drivers/net/ethernet/xircom/xirc2ps_cs.c
+@@ -503,6 +503,11 @@ static void
+ xirc2ps_detach(struct pcmcia_device *link)
+ {
+     struct net_device *dev = link->priv;
++		struct local_info *local = netdev_priv(dev);
++
++		netif_carrier_off(dev);
++		netif_tx_disable(dev);
++		cancel_work_sync(&local->tx_timeout_task);
  
-MBR, Sergey
+     dev_dbg(&link->dev, "detach\n");
+ 
+-- 
+2.25.1
+
