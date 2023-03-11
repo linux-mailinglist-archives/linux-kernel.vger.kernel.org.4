@@ -2,117 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8AD346B5DA2
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:05:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9D6A6B5DA5
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:07:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCKQFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:05:37 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37110 "EHLO
+        id S230207AbjCKQHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:07:06 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjCKQFe (ORCPT
+        with ESMTP id S229601AbjCKQHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:05:34 -0500
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CE4F75A6A
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:05:33 -0800 (PST)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-536bbe5f888so158461767b3.8
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:05:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678550733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=K54OHgmN8fzCR8nXYTAA10aWWoOdsi0wXP2XNLDX9vc=;
-        b=h34LVM3UqmqUgwxpTXBJ/4CwnImSFFUMozqSylfyzNzIg8rEUFi/BCA/5SfPAhPXSK
-         zVyg4dkH/np2nYMcxgt34KGbvvU69/pstFffIbpXSdjTuqr7mHRcatJl8wcG+ChH9+dA
-         A5V6TTYkNmvyKGoj+SnE4wGxe2nzztZ+0cYdHj/So+YjENl4RPexyIQNksQlU5AqWmJ0
-         wlqIaTJA+4pIrmihYkk+CWZVx2geZVmmUhYo5eOPcvWV+YR6xqVFHKFMSoocJOLnX6CR
-         WwHQ52y8meSmlDKg6ykn0PXkeSs5FMhUOArFwyfH5cPvgTYIVyDHckPo68ZLvtp94miA
-         EPcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678550733;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=K54OHgmN8fzCR8nXYTAA10aWWoOdsi0wXP2XNLDX9vc=;
-        b=OcHZqewuGDomKWzyXzyin2qIK+4AmYTJwRLsI4I0qCF+1XNAJAVE/jVzQ17QEyzk1V
-         P/suEOKuEF1JfglyTd5ic3/cb/AQJNDo+K0kMswqczUqwLoE9Bz24mE3oq5PP/uUE12e
-         JEYyCO2hjnLsqWXG3Ye70LqvDjOaVrHbrYk1Zx8NBO9S61xvcuPZxQz1wa8Z4JRkRjOG
-         9bPoNEmdBTKJnFx35BcHuBjFsVNHvmtNuleAjDw8DtuOdED+fU5TWTn80gF8WV1ppHsD
-         yK+13sNAF/RRo2fNMzWGgExKDO2lMSAnAjX4Aq4OcjU6OXe5hKaRiCANFYT7ga+m0dUz
-         Ioeg==
-X-Gm-Message-State: AO0yUKXrLLnWrjrYXWldnC61zOtiEJARzCSVcQ+ZopbE23KGQHEkbvBl
-        r8LZD7lyby7Fry46IbQlawpKauqJyRkg8McjVU8YaQ==
-X-Google-Smtp-Source: AK7set9ic8NaN+kdm7NG2bG/3UThQQCFa78uyAWSZO+HX+TKv1qILKSdYFavvGkzUkH3l060xAj5J+UbUwRtinZAjtU=
-X-Received: by 2002:a81:400c:0:b0:540:62be:42b with SMTP id
- l12-20020a81400c000000b0054062be042bmr2285636ywn.6.1678550732657; Sat, 11 Mar
- 2023 08:05:32 -0800 (PST)
+        Sat, 11 Mar 2023 11:07:04 -0500
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A198B1166E;
+        Sat, 11 Mar 2023 08:07:02 -0800 (PST)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 1BFAB425FF;
+        Sat, 11 Mar 2023 16:06:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1678550820; bh=6O+1q5pkxO0hFhdxV2lPUXqo/slkZFfMLidN5m0Bq/g=;
+        h=Date:Subject:To:References:From:In-Reply-To;
+        b=oOTEu1WhKRnigtIrEsPcluvbRjy/hPgtEteiZF7lZOJJD5XgGAttXBSGsUVVJSPs5
+         Klh/DO9Y4XK1PehVI8KOU7tX56wWWHB1E+OQVaUK/qbd3JMcN+Fv3gGyjYiWIeJ7MG
+         iPEPB/98o7hPzezmKUs3FAT1piIm1+BQbQfLeMJLqJv9Girc6khGpmhtOEAeORNkSV
+         7NUk4N13ldA6pt7391qkyGQ4TRVYmkxRhbeBr3ROVl2M0jXPFZsvrR0uSiiJQLa1nv
+         v51m/d2oFwYVavmd66/BcES3JK75eO3+yBFdEFwXs/EnSjhMo02gPFvJF95uzo0sTs
+         G6tQw8RhIxvkQ==
+Message-ID: <e5d36d19-624e-ad0e-cd90-8b188771e41d@marcan.st>
+Date:   Sun, 12 Mar 2023 01:06:54 +0900
 MIME-Version: 1.0
-References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org> <20230311111658.251951-2-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111658.251951-2-krzysztof.kozlowski@linaro.org>
-From:   Guenter Roeck <groeck@google.com>
-Date:   Sat, 11 Mar 2023 08:05:21 -0800
-Message-ID: <CABXOdTePJ_gcBYcJ7fE2pX5E71oBmq41KzxiMmVJ_GcDRi7MGw@mail.gmail.com>
-Subject: Re: [PATCH 2/5] i2c: owl: drop of_match_ptr for ID table
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>,
-        Qii Wang <qii.wang@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Michal Simek <michal.simek@xilinx.com>,
-        linux-i2c@vger.kernel.org, chrome-platform@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        linux-actions@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [REGRESSION] Unable to connect to Internet since kernel 6.2.3 on
+ T2 Macs
+Content-Language: en-US
+To:     Aditya Garg <gargaditya08@live.com>,
+        Arend van Spriel <aspriel@gmail.com>,
+        Arend van Spriel <arend.vanspriel@broadcom.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        "brcm80211-dev-list.pdl@broadcom.com" 
+        <brcm80211-dev-list.pdl@broadcom.com>,
+        "brcm80211-dev-list@broadcom.com" <brcm80211-dev-list@broadcom.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Orlando Chamberlain <orlandoch.dev@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <MA0P287MB02178C2B6AFC2E96F261FB2CB8BB9@MA0P287MB0217.INDP287.PROD.OUTLOOK.COM>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <MA0P287MB02178C2B6AFC2E96F261FB2CB8BB9@MA0P287MB0217.INDP287.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 3:17=E2=80=AFAM Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).
->
->   drivers/i2c/busses/i2c-owl.c:510:34: error: =E2=80=98owl_i2c_of_match=
-=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On 12/03/2023 00.56, Aditya Garg wrote:
+> A weird regression has been affecting the T2 Macs since kernel 6.2.3. The users are unable to connect to both wireless as well as wired Internet. As far as wireless is concerned, the patches for T2 Macs that have been upstreamed in kernel 6.3 have been working well till 6.2.2, but after that the network has stopped working.
+> 
+> Interesting, the driver shows no errors in journalctl. The wifi firmware loads well and the networks even appear on scan list. But, the connection to a network fails. Ethernet/USB tethering has also stopped working.
+> 
+> If I you need some logs from me, please do ask.
+> 
+> Also, Hector, I’d like to know whether this affects the M1/2 Macs as well or not.
 
-Reviewed-by: Guenter Roeck <groeck@chromium.org>
+This is already reported, identified, and a patch submitted.
 
-> ---
->  drivers/i2c/busses/i2c-owl.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/i2c/busses/i2c-owl.c b/drivers/i2c/busses/i2c-owl.c
-> index 98882fe4e965..99ddd8894964 100644
-> --- a/drivers/i2c/busses/i2c-owl.c
-> +++ b/drivers/i2c/busses/i2c-owl.c
-> @@ -519,7 +519,7 @@ static struct platform_driver owl_i2c_driver =3D {
->         .probe          =3D owl_i2c_probe,
->         .driver         =3D {
->                 .name   =3D "owl-i2c",
-> -               .of_match_table =3D of_match_ptr(owl_i2c_of_match),
-> +               .of_match_table =3D owl_i2c_of_match,
->                 .probe_type =3D PROBE_PREFER_ASYNCHRONOUS,
->         },
->  };
-> --
-> 2.34.1
->
+https://lore.kernel.org/linux-wireless/20230124141856.356646-1-alexander@wetzel-home.de/
+
+- Hector
