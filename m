@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978066B5C79
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:54:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EB2F6B5C7B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbjCKNyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 08:54:09 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57292 "EHLO
+        id S230060AbjCKNyP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 08:54:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCKNyH (ORCPT
+        with ESMTP id S229735AbjCKNyL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:54:07 -0500
-Received: from mail-oo1-xc33.google.com (mail-oo1-xc33.google.com [IPv6:2607:f8b0:4864:20::c33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC7795BC98;
-        Sat, 11 Mar 2023 05:54:06 -0800 (PST)
-Received: by mail-oo1-xc33.google.com with SMTP id h18-20020a4abb92000000b00525397f569fso1216157oop.3;
-        Sat, 11 Mar 2023 05:54:06 -0800 (PST)
+        Sat, 11 Mar 2023 08:54:11 -0500
+Received: from mail-lf1-x12e.google.com (mail-lf1-x12e.google.com [IPv6:2a00:1450:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C7BD61328
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:54:10 -0800 (PST)
+Received: by mail-lf1-x12e.google.com with SMTP id s20so10219253lfb.11
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 05:54:10 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678542846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=JezEZK+AICOI0aCjZw5wcLy2MWny1R1bm5pTOcZP52Q=;
-        b=IWAV33oZ0R5ipeJENHaR0hu1TGcacho1kb7emu57od+tpeEKaDo61d820eI0a/8oyl
-         wepF0Xf0e8or6G8wJ8CsgD+5B48L+1QpiFgqAvoTeAqS0BN6QQRftwNUzopboFuHTpy7
-         Ik6PRxu+/WK4xV3GE0plW3F+zQ7gSLq65jHT0/eOSzdGRiPIsj+DBLRhBqHxLpL+wW9/
-         H7iaOddJ2V0AScorw1EsPaHRubnAD6leTmHyZzihfZzhBp7gcLBi17LvA39Ksb7SWxtL
-         3t7bdwr+DTuqYxcuu3DQXMZVk6JWk9m9BC6R62UEWmCfjD2AzH7pxNTqnmpcaEvetIdt
-         qBXA==
+        d=linaro.org; s=google; t=1678542848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Lyo4pWqakc9SaitF+kgsd4Bj1TksOtpn16ZnKcAkEvk=;
+        b=dJ55ymOri7tDb7SJVWfpXdH/Ac1AookzD6YZyxLMYwRheY/eHDP0EWkIqbSkog3k1d
+         oTyMTHgykP+SR1jqaNMsIL66xcZEdfQ0KAMLDyXsiM6ZHKSJLql3bIU7EpKnbqmdH3n7
+         vrFGObJyW/lBe5ZKl0yJYZDPcWhzEmiGO+yeqUII1qTJY9M34hpPN4oq3RIhI5xqgepD
+         XkDpGFNvmKo9lzLFlZTVu4cTxxpXcJuKai19S4YfXz2vgMb27KQ/9jfAb5kedQANskIm
+         KcosnvhfsvCmGYk0tpO+T8I/ADr6Pxv3y2bHdS5BWU3azGnc5RF8GMZSjroYHCXT6jjx
+         A/mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678542846;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JezEZK+AICOI0aCjZw5wcLy2MWny1R1bm5pTOcZP52Q=;
-        b=Mdh247yIcg2F+Tw++kegeslAM3rG1tn4GHCRKXUBmrdmDA02Nqpr79gnQbw25CZvKe
-         EjZwUnevaF7hSD1rL83t10Zk17i3odW9i+Qd1EXCOJJiV7rkGpwrFANbRB+BYZqGNZSx
-         ACPES4zOb+6GLdPG8TrFIiN6qo1x4HFk99uPB1pOIyCZUz3izYWMI4daBT+Mqe0FH/x7
-         9kexLiUz/uyw9S2b6df+b6RkYP+SnxHiKw/csI73GpJckJKZrfZ+lFs9ScKyfBnjy75Q
-         MxZGI8oQqBJw5wbUbxJhTB4qoZKJW7HjE+2ndZvPLDXINgICJe+H3Lfr1qnH690kjoDM
-         cbzg==
-X-Gm-Message-State: AO0yUKWeCOXv3p8USZ+tvUzyzunR6Pl1K5tuYNt44CQkpBGkZuta+bxt
-        OAfjtmwniQz/JEbJyoapBIQ=
-X-Google-Smtp-Source: AK7set/WcLHiSCysTRUjU/YKJhjf7PBNSIjZybwnHqg+QYQ1QJM00HSm+hdT/yVTcZoCLL+49bNHmg==
-X-Received: by 2002:a4a:d74f:0:b0:525:34e:1f02 with SMTP id h15-20020a4ad74f000000b00525034e1f02mr11262226oot.3.1678542846086;
-        Sat, 11 Mar 2023 05:54:06 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x16-20020a4aca90000000b00524f546997esm1104510ooq.0.2023.03.11.05.54.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 05:54:05 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sat, 11 Mar 2023 05:54:04 -0800
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/528] 5.10.173-rc2 review
-Message-ID: <b755d647-a363-46fd-9bf1-c97e68d8700a@roeck-us.net>
-References: <20230311091908.975813595@linuxfoundation.org>
+        d=1e100.net; s=20210112; t=1678542848;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Lyo4pWqakc9SaitF+kgsd4Bj1TksOtpn16ZnKcAkEvk=;
+        b=gjNeFqFXT+ILk6luYNrth9BClzZnanxQZTsvsvaFG4eAut2eFJUU50BY344sxkRu3M
+         mCKgrWd1sw2JRltxWdH2wzUU1siBhhKp2ZvPKIzjLywv1GfNHARU0+KTGCpyahzhS8pA
+         skvZm58x1IjP4gJ09f2zmOLCbAmvZzYh1OQDFWMKrSmorNseJynVGTtb02+sEnsJNicG
+         VgkkceYnIGyEQgjT6Vg0A8ciS0ZVxG9YSC2ae+bMt4bvnYs6iy7su6cSFG3tQajyPzrY
+         55P4h3DH02/kGR5+2SBOYyF77WbqgBmU/L4KFAeVhxkd+P10y4EPkS07WvAZ5QLBMVjY
+         EJpA==
+X-Gm-Message-State: AO0yUKWedapxWIaB3cboyHaxon729faDoimBWqQHB4ysy3x1a3vdRdjH
+        srv/UNU8y/9ugI4HdliUf7xTWQ==
+X-Google-Smtp-Source: AK7set+RiSMzuswrJp0VEO5cua2aCLlXzR4LAGPKa4gv6OLZ0KfEiPw/NvafxhfBswwzMSl2nfR8CA==
+X-Received: by 2002:ac2:55b4:0:b0:4d8:6540:a72f with SMTP id y20-20020ac255b4000000b004d86540a72fmr7504748lfg.46.1678542848521;
+        Sat, 11 Mar 2023 05:54:08 -0800 (PST)
+Received: from ?IPV6:2001:14ba:a085:4d00::8a5? (dzccz6yyyyyyyyyyybcwt-3.rev.dnainternet.fi. [2001:14ba:a085:4d00::8a5])
+        by smtp.gmail.com with ESMTPSA id u15-20020ac248af000000b004db2ac3a522sm324806lfg.62.2023.03.11.05.54.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 05:54:08 -0800 (PST)
+Message-ID: <a9202da2-5f17-0699-e4f6-db6dc85912e7@linaro.org>
+Date:   Sat, 11 Mar 2023 15:54:07 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230311091908.975813595@linuxfoundation.org>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 2/9] interconnect: qcom: rpm: Add support for
+ specifying channel num
+Content-Language: en-GB
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-2-815606092fff@linaro.org>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <20230228-topic-qos-v7-2-815606092fff@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 10:20:47AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.173 release.
-> There are 528 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 08/03/2023 23:40, Konrad Dybcio wrote:
+> Some nodes, like EBI0 (DDR) or L3/LLCC, may be connected over more than
+> one channel. This should be taken into account in bandwidth calcualtion,
+> as we're supposed to feed msmbus with the per-channel bandwidth. Add
+> support for specifying that and use it during bandwidth aggregation.
 > 
-> Responses should be made by Mon, 13 Mar 2023 09:17:40 +0000.
-> Anything received after that time might be too late.
-> 
+> Reviewed-by: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> ---
+>   drivers/interconnect/qcom/icc-rpm.c | 7 ++++++-
+>   drivers/interconnect/qcom/icc-rpm.h | 2 ++
+>   2 files changed, 8 insertions(+), 1 deletion(-)
 
-Build results:
-	total: 162 pass: 162 fail: 0
-Qemu test results:
-	total: 485 pass: 485 fail: 0
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+-- 
+With best wishes
+Dmitry
 
-Guenter
