@@ -2,188 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3C616B5AB7
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 11:59:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 31F7F6B59A2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:07:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229835AbjCKK70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 05:59:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53126 "EHLO
+        id S229885AbjCKJGz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 04:06:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbjCKK7Q (ORCPT
+        with ESMTP id S230184AbjCKJGs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 05:59:16 -0500
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 507CBA92D0;
-        Sat, 11 Mar 2023 02:59:15 -0800 (PST)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32BAwwm6124392;
-        Sat, 11 Mar 2023 04:58:58 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678532338;
-        bh=tqErNGN8GCxnj7ouBJQFYk0KzOZEy3ERGkSm9RoMdfQ=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=KoI8mNG5VezjAK17iHrUl5D7/Rtrx2b4sVSVPabq1BtdVctltEzpsIrNwQgenKYG4
-         /Rmdlzx8nrUW7TwIaLyr2JfpdjMeRYO30nGGUkwxrvSF8RuB27CWDDCHw0ymoYf604
-         kNdqnetHz8Z353+MR1wtt1tirJ8Hfzvt32cDtJlM=
-Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32BAwwEH102711
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Sat, 11 Mar 2023 04:58:58 -0600
-Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
- (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Sat, 11
- Mar 2023 04:58:58 -0600
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Sat, 11 Mar 2023 04:58:58 -0600
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32BAwwol028037;
-        Sat, 11 Mar 2023 04:58:58 -0600
-From:   Nishanth Menon <nm@ti.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Tero Kristo <kristo@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Nishanth Menon <nm@ti.com>, Julien Panis <jpanis@baylibre.com>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-am62: Add watchdog nodes
-Date:   Sat, 11 Mar 2023 04:58:50 -0600
-Message-ID: <20230311105850.21811-3-nm@ti.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230311105850.21811-1-nm@ti.com>
-References: <20230311105850.21811-1-nm@ti.com>
+        Sat, 11 Mar 2023 04:06:48 -0500
+Received: from dggsgout11.his.huawei.com (unknown [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6773811CBED;
+        Sat, 11 Mar 2023 01:06:45 -0800 (PST)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PYcVS56wLz4f3jLf;
+        Sat, 11 Mar 2023 17:06:40 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.124.27])
+        by APP2 (Coremail) with SMTP id Syh0CgDHu+mhRAxkx4BgFA--.7403S2;
+        Sat, 11 Mar 2023 17:06:42 +0800 (CST)
+From:   Kemeng Shi <shikemeng@huaweicloud.com>
+To:     tytso@mit.edu, adilger.kernel@dilger.ca
+Cc:     linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
+        shikemeng@huaweicloud.com
+Subject: [PATCH 0/2] two cleanups for mballoc
+Date:   Sun, 12 Mar 2023 01:09:47 +0800
+Message-Id: <20230311170949.1047958-1-shikemeng@huaweicloud.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CM-TRANSID: Syh0CgDHu+mhRAxkx4BgFA--.7403S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYz7AC8VAFwI0_Jr0_Gr1l1xkIjI8I6I8E
+        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_JF
+        v_Gryl8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AK
+        xVW7JVWDJwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14
+        v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq3wAS0I0E0xvYzxvE52x082IY
+        62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7V
+        C2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0
+        x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6rW3Jr0E3s1lIxAI
+        cVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa
+        73UjIFyTuYvjTRCApnUUUUU
+X-CM-SenderInfo: 5vklyvpphqwq5kxd4v5lfo033gof0z/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_06_12,
+        KHOP_HELO_FCRDNS,MAY_BE_FORGED,SPF_HELO_NONE,SPF_NONE autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Julien Panis <jpanis@baylibre.com>
+Hi, this series contain two cleanups to fix typo and remove unnecessary
+pointer dereference. Thanks!
 
-Add nodes for watchdogs :
-- 5 in main domain
-- 1 in MCU domain
-- 1 in wakeup domain
+Kemeng Shi (2):
+  ext4: fix typos in mballoc
+  ext4: avoid unnecessary pointer dereference in
+    ext4_mb_normalize_request
 
-Signed-off-by: Julien Panis <jpanis@baylibre.com>
-Signed-off-by: Nishanth Menon <nm@ti.com>
----
-Changes since V3:
-- Dropped the board level wdt reservation, do that with overlays based on
-  modifiable firmware dependencies.
+ fs/ext4/mballoc.c | 12 +++++-------
+ 1 file changed, 5 insertions(+), 7 deletions(-)
 
-V3: https://lore.kernel.org/all/20221109093026.103790-2-jpanis@baylibre.com/
-
- arch/arm64/boot/dts/ti/k3-am62-main.dtsi   | 45 ++++++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi    |  9 +++++
- arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi | 11 ++++++
- 3 files changed, 65 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-index ea683fd77d6a..90d5f145de4f 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-main.dtsi
-@@ -758,6 +758,51 @@ main_mcan0: can@20701000 {
- 		status = "disabled";
- 	};
- 
-+	main_rti0: watchdog@e000000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e000000 0x00 0x100>;
-+		clocks = <&k3_clks 125 0>;
-+		power-domains = <&k3_pds 125 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 125 0>;
-+		assigned-clock-parents = <&k3_clks 125 2>;
-+	};
-+
-+	main_rti1: watchdog@e010000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e010000 0x00 0x100>;
-+		clocks = <&k3_clks 126 0>;
-+		power-domains = <&k3_pds 126 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 126 0>;
-+		assigned-clock-parents = <&k3_clks 126 2>;
-+	};
-+
-+	main_rti2: watchdog@e020000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e020000 0x00 0x100>;
-+		clocks = <&k3_clks 127 0>;
-+		power-domains = <&k3_pds 127 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 127 0>;
-+		assigned-clock-parents = <&k3_clks 127 2>;
-+	};
-+
-+	main_rti3: watchdog@e030000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e030000 0x00 0x100>;
-+		clocks = <&k3_clks 128 0>;
-+		power-domains = <&k3_pds 128 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 128 0>;
-+		assigned-clock-parents = <&k3_clks 128 2>;
-+	};
-+
-+	main_rti4: watchdog@e0f0000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x0e0f0000 0x00 0x100>;
-+		clocks = <&k3_clks 130 0>;
-+		power-domains = <&k3_pds 130 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 130 0>;
-+		assigned-clock-parents = <&k3_clks 130 2>;
-+	};
-+
- 	epwm0: pwm@23000000 {
- 		compatible = "ti,am64-epwm", "ti,am3352-ehrpwm";
- 		#pwm-cells = <3>;
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-index a427231527c3..bec118921c4c 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-mcu.dtsi
-@@ -130,4 +130,13 @@ mcu_gpio0: gpio@4201000 {
- 		clocks = <&k3_clks 79 0>;
- 		clock-names = "gpio";
- 	};
-+
-+	mcu_rti0: watchdog@4880000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x04880000 0x00 0x100>;
-+		clocks = <&k3_clks 131 0>;
-+		power-domains = <&k3_pds 131 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 131 0>;
-+		assigned-clock-parents = <&k3_clks 131 2>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-index fec81546fbbd..7726ebae2539 100644
---- a/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi
-@@ -50,4 +50,15 @@ wkup_rtc0: rtc@2b1f0000 {
- 		power-domains = <&k3_pds 117 TI_SCI_PD_EXCLUSIVE>;
- 		wakeup-source;
- 	};
-+
-+	wkup_rti0: watchdog@2b000000 {
-+		compatible = "ti,j7-rti-wdt";
-+		reg = <0x00 0x2b000000 0x00 0x100>;
-+		clocks = <&k3_clks 132 0>;
-+		power-domains = <&k3_pds 132 TI_SCI_PD_EXCLUSIVE>;
-+		assigned-clocks = <&k3_clks 132 0>;
-+		assigned-clock-parents = <&k3_clks 132 2>;
-+		/* Used by DM firmware */
-+		status = "reserved";
-+	};
- };
 -- 
-2.37.2
+2.30.0
 
