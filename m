@@ -2,227 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DCB36B5CE9
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:37:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFED76B5CEC
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:38:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230050AbjCKOhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:37:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S229810AbjCKOim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:38:42 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44626 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229613AbjCKOhs (ORCPT
+        with ESMTP id S229613AbjCKOik (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:37:48 -0500
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 363322ED47;
-        Sat, 11 Mar 2023 06:37:47 -0800 (PST)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 85BF340737C1;
-        Sat, 11 Mar 2023 14:37:45 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 85BF340737C1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678545465;
-        bh=QBxkOprHzpXvFKQDjkx+tcQAOmWBSBKfrdBA2gCrL9s=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HoLdJ3S+QbJ1EF1rzfcwAyvtoAbbvUzmd0QE+P9qDitmK5PtLzT+N8Sd6K8PD70s0
-         lreGdbkIHcz+M0MbGP3TejO4hACQ4SLRIFYTSX0b2aYBmE9q4l/b9jKYfRgciZFR/V
-         zCYJQEUT4KwToVc91tWnbiBTs7WBPxas3NRbW98s=
+        Sat, 11 Mar 2023 09:38:40 -0500
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C0B437709
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:38:38 -0800 (PST)
+Received: by mail-wm1-x332.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso5215717wmo.0
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:38:38 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678545517;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=O5MrZLG1fv/oDrj8G7OK4hTcqs75NSjsiUDq6tTXX/A=;
+        b=tUJzepR1Ix0D0nJdvEWnL7/JVUQ9EThGCh03jr/kqxe1Ll9krTqBph8rLKDyX62Eis
+         lPsOajtXFKhnoXm5fVdCMk5fZMXK4z9dlK1x9IutvGaL39aoLGDYLa+KJmvV9PsRt45Z
+         zZfkUJejh0MXEuiBktz8VJdVgj1x3+YnfNyYSwCx11dyYGBLfrHP86BHP4yvCm0DSjUi
+         e7jl8C5JbLRRLi9tS3Lxz5v9XkB+W+zWqESoUWAxwYywI8/xtKmzCkX4CDRgp6cLgpvw
+         9I2mthEpjT31jmDuHYZE9C7zwUUDLgZtbUXcgpDBhZs3JaUKp8L6kSo86quDTTHPOQ96
+         G3Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678545517;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=O5MrZLG1fv/oDrj8G7OK4hTcqs75NSjsiUDq6tTXX/A=;
+        b=gYYb3wAgraeprGOg00RbUa3q3rBblhYyNlB4cukEtWeJq/7zLbSqK7jErZt+vXp9Si
+         jXoaW9l4nhXkau1cZEA+1WZEPfJxQufahCxMXa3flTltlYsa//X4oY+ZDh69TwWYOxhR
+         8j7LUptRzxl3rF0U3tuO+XQkD9WXZvNIctvCPSMu3QWUk3cglbJwhdVHG7RDmYRjH0yb
+         EifgKAmHgyshauPaq38b8Q9Pv/gVrlnloFRyn2oGCeq+k0lYvlxGrPzCbt2850u8b10h
+         vsRsHqPG3VFwbD12W48ffADN3m5bhdtlcgED42h1f6a9u7iBGySqIxF/ZvMJqU8ODNVB
+         Rqhg==
+X-Gm-Message-State: AO0yUKUfXKHw36EJrQbywqQoUSxbbld/EMiDRBeORq0HFb4DtX8TMfBE
+        jYY3H6vIph8845FsGz4Wwd/Xxg==
+X-Google-Smtp-Source: AK7set9D4WKtNwp5ftzZpljbf20TczUiOpHEKRh1CVjgoWBSvgoimsGH+LIlBWUDyb4cm8cXyTzddA==
+X-Received: by 2002:a05:600c:1d29:b0:3eb:6878:5523 with SMTP id l41-20020a05600c1d2900b003eb68785523mr6113109wms.12.1678545516843;
+        Sat, 11 Mar 2023 06:38:36 -0800 (PST)
+Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
+        by smtp.gmail.com with ESMTPSA id 14-20020a05600c228e00b003ebff290a40sm3052198wmf.21.2023.03.11.06.38.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 06:38:36 -0800 (PST)
+Message-ID: <51c41e49-5183-551e-c796-5b3d792b422f@linaro.org>
+Date:   Sat, 11 Mar 2023 14:38:35 +0000
 MIME-Version: 1.0
-Date:   Sat, 11 Mar 2023 17:37:45 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 13/26] x86/boot: Split trampoline and pt init code
-In-Reply-To: <CAMj1kXGwaX8nGJdRM3==thO=KfXb3UwbF2jJhrqiZK-RcM+QLw@mail.gmail.com>
-References: <cover.1671098103.git.baskov@ispras.ru>
- <9f951d6332eea6e46ebd46ca919ed5b1b85c0ba3.1671098103.git.baskov@ispras.ru>
- <CAMj1kXGwaX8nGJdRM3==thO=KfXb3UwbF2jJhrqiZK-RcM+QLw@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <6af9c283edb024c26242120124936a03@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
+Content-Language: en-US
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
+ <20230228-topic-qos-v7-6-815606092fff@linaro.org>
+ <68a5d81a-5de8-798a-c150-d74c8ad38cb7@linaro.org>
+ <f848061a-763e-fbf2-860c-758373e953df@linaro.org>
+ <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
+From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <CAA8EJpqh+A_YKbhSQB5sWj4EP9eQtNHeohDira9o-jrx3pPRNg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-10 17:56, Ard Biesheuvel wrote:
-> On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> When allocating trampoline from libstub trampoline allocation is
->> performed separately, so it needs to be skipped.
->> 
->> Split trampoline initialization and allocation code into two
->> functions to make them invokable separately.
->> 
->> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
->> Tested-by: Peter Jones <pjones@redhat.com>
->> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> ---
->>  arch/x86/boot/compressed/pgtable_64.c | 73 
->> +++++++++++++++++----------
->>  1 file changed, 46 insertions(+), 27 deletions(-)
->> 
->> diff --git a/arch/x86/boot/compressed/pgtable_64.c 
->> b/arch/x86/boot/compressed/pgtable_64.c
->> index c7cf5a1059a8..1f7169248612 100644
->> --- a/arch/x86/boot/compressed/pgtable_64.c
->> +++ b/arch/x86/boot/compressed/pgtable_64.c
->> @@ -106,12 +106,8 @@ static unsigned long 
->> find_trampoline_placement(void)
->>         return bios_start - TRAMPOLINE_32BIT_SIZE;
->>  }
->> 
->> -struct paging_config paging_prepare(void *rmode)
->> +bool trampoline_pgtable_init(struct boot_params *boot_params)
->>  {
->> -       struct paging_config paging_config = {};
->> -
->> -       /* Initialize boot_params. Required for 
->> cmdline_find_option_bool(). */
->> -       boot_params = rmode;
->> 
->>         /*
->>          * Check if LA57 is desired and supported.
->> @@ -125,26 +121,10 @@ struct paging_config paging_prepare(void *rmode)
->>          *
->>          * That's substitute for boot_cpu_has() in early boot code.
->>          */
->> -       if (IS_ENABLED(CONFIG_X86_5LEVEL) &&
->> -                       !cmdline_find_option_bool("no5lvl") &&
->> -                       native_cpuid_eax(0) >= 7 &&
->> -                       (native_cpuid_ecx(7) & (1 << (X86_FEATURE_LA57 
->> & 31)))) {
->> -               paging_config.l5_required = 1;
->> -       }
->> -
->> -       paging_config.trampoline_start = find_trampoline_placement();
->> -
->> -       trampoline_32bit = (unsigned long 
->> *)paging_config.trampoline_start;
->> -
->> -       /* Preserve trampoline memory */
->> -       memcpy(trampoline_save, trampoline_32bit, 
->> TRAMPOLINE_32BIT_SIZE);
->> -
->> -       /* Clear trampoline memory first */
->> -       memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
->> -
->> -       /* Copy trampoline code in place */
->> -       memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / 
->> sizeof(unsigned long),
->> -                       &trampoline_32bit_src, 
->> TRAMPOLINE_32BIT_CODE_SIZE);
->> +       bool l5_required = IS_ENABLED(CONFIG_X86_5LEVEL) &&
->> +                          !cmdline_find_option_bool("no5lvl") &&
->> +                          native_cpuid_eax(0) >= 7 &&
->> +                          (native_cpuid_ecx(7) & (1 << 
->> (X86_FEATURE_LA57 & 31)));
->> 
->>         /*
->>          * The code below prepares page table in trampoline memory.
->> @@ -160,10 +140,10 @@ struct paging_config paging_prepare(void *rmode)
->>          * We are not going to use the page table in trampoline memory 
->> if we
->>          * are already in the desired paging mode.
->>          */
->> -       if (paging_config.l5_required == !!(native_read_cr4() & 
->> X86_CR4_LA57))
->> +       if (l5_required == !!(native_read_cr4() & X86_CR4_LA57))
->>                 goto out;
->> 
->> -       if (paging_config.l5_required) {
->> +       if (l5_required) {
->>                 /*
->>                  * For 4- to 5-level paging transition, set up current 
->> CR3 as
->>                  * the first and the only entry in a new top-level 
->> page table.
->> @@ -185,6 +165,45 @@ struct paging_config paging_prepare(void *rmode)
->>                        (void *)src, PAGE_SIZE);
->>         }
->> 
->> +out:
->> +       return l5_required;
->> +}
->> +
->> +struct paging_config paging_prepare(void *rmode)
->> +{
->> +       struct paging_config paging_config = {};
->> +       bool early_trampoline_alloc = 0;
-> 
-> false
-> 
->> +
->> +       /* Initialize boot_params. Required for 
->> cmdline_find_option_bool(). */
->> +       boot_params = rmode;
->> +
->> +       /*
->> +        * We only need to find trampoline placement, if we have
->> +        * not already done it from libstub.
->> +        */
->> +
->> +       paging_config.trampoline_start = find_trampoline_placement();
->> +       trampoline_32bit = (unsigned long 
->> *)paging_config.trampoline_start;
->> +       early_trampoline_alloc = 0;
->> +
-> 
-> false again
-> 
-> And it never becomes true, nor is it used anywhere else. Can we get rid 
-> of it?
-
-Yes, probably it is just a leftover of the approach I used
-before. I'll remove that.
-> 
->> +       /*
->> +        * Preserve trampoline memory.
->> +        * When trampoline is located in memory
->> +        * owned by us, i.e. allocated in EFISTUB,
->> +        * we don't care about previous contents
->> +        * of this memory so copying can also be skipped.
-> 
-> Can you please reflow comments so they takes up fewer lines?
+On 11/03/2023 14:35, Dmitry Baryshkov wrote:
+>> Its probably worthwhile experimenting to see if the*ufs*_clk can/should
+>> be added to the UFS device list of clocks.
+> While we were doing this for some of the clocks (PCIe and USB, if I'm
+> not mistaken), I think that generally this is not fully correct. In my
+> opinion it should be in the interconnect driver, who turns
+> corresponding clocks on and off. These clocks correspond to the SoC
+> topology, rather than the end-device.
 > 
 
-Will fix.
+True enough, they are interconnect clocks.
 
->> +        */
->> +       memcpy(trampoline_save, trampoline_32bit, 
->> TRAMPOLINE_32BIT_SIZE);
->> +
->> +       /* Clear trampoline memory first */
->> +       memset(trampoline_32bit, 0, TRAMPOLINE_32BIT_SIZE);
->> +
->> +       /* Copy trampoline code in place */
->> +       memcpy(trampoline_32bit + TRAMPOLINE_32BIT_CODE_OFFSET / 
->> sizeof(unsigned long),
->> +                       &trampoline_32bit_src, 
->> TRAMPOLINE_32BIT_CODE_SIZE);
->> +
->> +       paging_config.l5_required = 
->> trampoline_pgtable_init(boot_params);
->> +
->>  out:
->>         return paging_config;
->>  }
->> --
->> 2.37.4
->> 
+The question is how to only turn them on when the device that depends on 
+them wants them.
+
+---
+bod
