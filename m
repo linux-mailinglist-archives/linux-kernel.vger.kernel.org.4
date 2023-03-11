@@ -2,62 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEC6D6B6051
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 20:46:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B6726B605B
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 21:00:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjCKTqT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 14:46:19 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47956 "EHLO
+        id S229752AbjCKUAO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 15:00:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCKTqR (ORCPT
+        with ESMTP id S229469AbjCKUAM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 14:46:17 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC4A6E6A3;
-        Sat, 11 Mar 2023 11:46:10 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ED85DB80749;
-        Sat, 11 Mar 2023 19:46:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5A767C4339C;
-        Sat, 11 Mar 2023 19:46:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678563967;
-        bh=GgFeoExWmv/QOgnHi0mtHAxH4/QAUnv3/xGE2CsTg+w=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=uoS5Jdx2Y9UaguI17Jk1QdjVwwOyHTZcL5Or4l66Tlp3nJ5wk1lOXHZ9VnU9WiqYW
-         OnRJgo7NVph67QzjW0q3E7SO6U1fHmz3NUsU/IdCwtou7tfq1LPtBDOBJljaGE4kEH
-         8+S/9Aojmr9rDlL1vWXKTexhPOM5g6dyquZkDI7JRw7jchbote5xe/o/6cbb3yvTnO
-         /BdlV7PFbs9E/4WSqpPShB2UWUkOyW4McFrQjx96wGxjwr3vMP5x87yFRSGsqy6f/B
-         GyEkfhMPz/VmyJKLAnWPPYrxny4xOzUpdTHF+FLtTQyGCheNDv+KBh0um2TUOv8Vl4
-         K6rSWfSwsk7Zg==
-Date:   Sat, 11 Mar 2023 11:46:05 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZAzafagDchRQRxWi@sol.localdomain>
-References: <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzJltJaydwjCN6E@1wt.eu>
- <ZAzVbzthi8IfptFZ@sol.localdomain>
+        Sat, 11 Mar 2023 15:00:12 -0500
+Received: from mx01.omp.ru (mx01.omp.ru [90.154.21.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7EAD6BC0C;
+        Sat, 11 Mar 2023 12:00:10 -0800 (PST)
+Received: from [192.168.1.103] (31.173.84.174) by msexch01.omp.ru
+ (10.188.4.12) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id 15.2.986.14; Sat, 11 Mar
+ 2023 23:00:02 +0300
+Subject: Re: [PATCH 00/32] pata_parport-bpck6: rework bpck6 protocol driver
+To:     Ondrej Zary <linux@zary.sk>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        Sudip Mukherjee <sudipm.mukherjee@gmail.com>
+CC:     Christoph Hellwig <hch@lst.de>, Jens Axboe <axboe@kernel.dk>,
+        Tim Waugh <tim@cyberelk.net>, <linux-block@vger.kernel.org>,
+        <linux-parport@lists.infradead.org>, <linux-ide@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230307224627.28011-1-linux@zary.sk>
+From:   Sergey Shtylyov <s.shtylyov@omp.ru>
+Organization: Open Mobile Platform
+Message-ID: <b50705b2-0176-cdef-b02b-88449b3d29f6@omp.ru>
+Date:   Sat, 11 Mar 2023 23:00:01 +0300
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:78.0) Gecko/20100101
+ Thunderbird/78.10.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAzVbzthi8IfptFZ@sol.localdomain>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <20230307224627.28011-1-linux@zary.sk>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [31.173.84.174]
+X-ClientProxiedBy: msexch01.omp.ru (10.188.4.12) To msexch01.omp.ru
+ (10.188.4.12)
+X-KSE-ServerInfo: msexch01.omp.ru, 9
+X-KSE-AntiSpam-Interceptor-Info: scan successful
+X-KSE-AntiSpam-Version: 5.9.59, Database issued on: 03/11/2023 19:35:07
+X-KSE-AntiSpam-Status: KAS_STATUS_NOT_DETECTED
+X-KSE-AntiSpam-Method: none
+X-KSE-AntiSpam-Rate: 59
+X-KSE-AntiSpam-Info: Lua profiles 176022 [Mar 10 2023]
+X-KSE-AntiSpam-Info: Version: 5.9.59.0
+X-KSE-AntiSpam-Info: Envelope from: s.shtylyov@omp.ru
+X-KSE-AntiSpam-Info: LuaCore: 507 507 08d345461d9bcca7095738422a5279ab257bb65a
+X-KSE-AntiSpam-Info: {rep_avail}
+X-KSE-AntiSpam-Info: {Tracking_from_domain_doesnt_match_to}
+X-KSE-AntiSpam-Info: {relay has no DNS name}
+X-KSE-AntiSpam-Info: {SMTP from is not routable}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
+ b.barracudacentral.org}
+X-KSE-AntiSpam-Info: {Found in DNSBL: 31.173.84.174 in (user)
+ dbl.spamhaus.org}
+X-KSE-AntiSpam-Info: d41d8cd98f00b204e9800998ecf8427e.com:7.1.1;omp.ru:7.1.1;127.0.0.199:7.1.2;31.173.84.174:7.4.1,7.7.3
+X-KSE-AntiSpam-Info: {iprep_blacklist}
+X-KSE-AntiSpam-Info: ApMailHostAddress: 31.173.84.174
+X-KSE-AntiSpam-Info: {DNS response errors}
+X-KSE-AntiSpam-Info: Rate: 59
+X-KSE-AntiSpam-Info: Status: not_detected
+X-KSE-AntiSpam-Info: Method: none
+X-KSE-AntiSpam-Info: Auth:dmarc=temperror header.from=omp.ru;spf=temperror
+ smtp.mailfrom=omp.ru;dkim=none
+X-KSE-Antiphishing-Info: Clean
+X-KSE-Antiphishing-ScanningType: Heuristic
+X-KSE-Antiphishing-Method: None
+X-KSE-Antiphishing-Bases: 03/11/2023 19:38:00
+X-KSE-AttachmentFiltering-Interceptor-Info: protection disabled
+X-KSE-Antivirus-Interceptor-Info: scan successful
+X-KSE-Antivirus-Info: Clean, bases: 3/11/2023 5:20:00 PM
+X-KSE-BulkMessagesFiltering-Scan-Result: InTheLimit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,81 +85,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 11:24:31AM -0800, Eric Biggers wrote:
-> On Sat, Mar 11, 2023 at 07:33:58PM +0100, Willy Tarreau wrote:
-> > On Sat, Mar 11, 2023 at 09:48:13AM -0800, Eric Biggers wrote:
-> > > The purpose of all these mailing list searches would be to generate a list of
-> > > potential issues with backporting each commit, which would then undergo brief
-> > > human review.
-> > 
-> > This is one big part that I suspect is underestimated. I'll speak from my
-> > past experience maintaining extended LTS for 3.10. I couldn't produce as
-> > many releases as I would have liked to because despite the scripts that
-> > helped me figure some series, some dependencies, origin branches etc, the
-> > whole process of reviewing ~600 patches to end up with ~200 at the end
-> > (and adapting some of them to fit) required ~16 hours a day for a full
-> > week-end, and I didn't always have that amount of time available. Any my
-> > choices were far from being perfect, as during the reviews I got a number
-> > of "please don't backport this there" and "if you take this one you also
-> > need these ones". Also I used to intentionally drop what had nothing to
-> > do on old LTS stuff so even from that perspective my work could have been
-> > perceived as insufficient.
-> > 
-> > The reviewing process is overwhelming, really. There is a point where you
-> > start to fail and make choices that are not better than a machine's. But
-> > is a mistake once in a while dramatic if on the other hand it fixes 200
-> > other issues ? I think not as long as it's transparent and accepted by
-> > the users, because for one user that could experience a regression (one
-> > that escaped all the testing in place), thousands get fixes for existing
-> > problems. I'm not saying that regressions are good, I hate them, but as
-> > James said, we have to accept that user are part of the quality process.
-> > 
-> > My approach on another project I maintain is to announce upfront my own
-> > level of trust in my backport work, saying "I had a difficult week fixing
-> > that problem, do not rush on it or be extra careful", or "nothing urgent,
-> > no need to upgrade if you have no problem" or also "just upgrade, it's
-> > almost riskless". Users love that, because they know they're part of the
-> > quality assurance process, and they will either take small risks when
-> > they can, or wait for others to take risks.
-> > 
-> > But thinking that having one person review patches affecting many
-> > subsystem after pre-selection and extra info regarding discussions on
-> > each individual patch could result in more reliable stable releases is
-> > just an illusion IMHO, because the root of problem is that there are not
-> > enough humans to fix all the problems that humans introduce in the first
-> > place, and despite this we need to fix them. Just like automated scripts
-> > scraping lore, AUTOSEL does bring some value if it offloads some work
-> > from the available humans, even in its current state. And I hope that
-> > more of the selection and review work in the future will be automated
-> > and even less dependent on humans, because it does have a chance to be
-> > more reliable in front of that vast amount of work.
+Hello!
+
+On 3/8/23 1:45 AM, Ondrej Zary wrote:
+
+> This patch series simplifies bpck6 code, removing ppc6lnx.c file to match
+> the simplicity of other protocol drivers. It also converts the direct
+> port I/O access to paraport access functions. This conversion revealed that
+> there's no 8-bit and 16-bit EPP support in parport_pc so patch 11 implements
+> that.
 > 
-> As I said in a part of my email which you did not quote, the fallback option is
-> to send the list of issues to the mailing list for others to review.
+> Tested with Backpack CD-RW 222011 and CD-RW 19350.
 > 
-> If even that fails, then it could be cut down to the *just the most useful*
-> heuristics and decisions made automatically based on those...  "Don't AUTOSEL
-> patch N of a series without 1...N-1" might be a good one.
-> 
-> But again, this comes back to one of the core issues here which is how does one
-> even build something for the stable maintainers if their requirements are
-> unknown to others?
-> 
+> Signed-off-by: Ondrej Zary <linux@zary.sk>
+> ---
+>  drivers/ata/pata_parport/bpck6.c   | 452 +++++++++++++++++++++++++++--------
+>  drivers/ata/pata_parport/ppc6lnx.c | 726 ---------------------------------------------------------
+>  drivers/parport/parport_pc.c       |  20 +-
+>  include/uapi/linux/parport.h       |   3 +
+>  4 files changed, 370 insertions(+), 831 deletions(-)
 
-Another issue that I'd like to reiterate is that AUTOSEL is currently turned up
-to 11.  It's simply selecting too much.
+   OK, it's finally clear I can't keep up with reviewing 32 patches posted
+at once...  Luckily, all those patches seem to be dealing with parallel port
+control), not the PATA control! Of course, when I volunteered to review the
+PATA driver patches, I didn't expect such patch volumes -- I mostly expected
+some odd fixes, not a massive driver rework... :-/
 
-It should be made less sensitive and select higher confidence commits only.
-
-That would cut down on the workload slightly.
-
-(And please note, the key word here is *confidence*.  We all agree that it's
-never possible to be absolutely 100% sure whether a commit is appropriate for
-stable or not.  That's a red herring.
-
-And I would assume, or at least hope, that the neural network thing being used
-for AUTOSEL outputs a confidence rating and not just a yes/no answer.  If it
-actually just outputs yes/no, well how is anyone supposed to know that and fix
-that, given that it does not seem to be an open source project?)
-
-- Eric
+MBR, Sergey
