@@ -2,158 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84C176B5C4C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:39:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 470FA6B5C50
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 14:40:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbjCKNjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 08:39:20 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59842 "EHLO
+        id S229612AbjCKNk1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 08:40:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229776AbjCKNjN (ORCPT
+        with ESMTP id S229515AbjCKNkY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 08:39:13 -0500
-Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3A6E120851;
-        Sat, 11 Mar 2023 05:39:08 -0800 (PST)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.nyi.internal (Postfix) with ESMTP id F30535C00F8;
-        Sat, 11 Mar 2023 08:39:07 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Sat, 11 Mar 2023 08:39:07 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
-         h=cc:cc:content-transfer-encoding:content-type:date:date:from
-        :from:in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1678541947; x=
-        1678628347; bh=4yK7FQCj5sNr0/yKnIfjlg5p1SyzkrDsZm+IWMQebB0=; b=f
-        4ojv2OkJiyTvEYCjKIIGR68r4djyuTWSBxKCcDWkDIzB/+SiEThAxzXG9hiQirkz
-        jDs2aJ+ARRON2X/V99I0w//pKhhFpei2cKMgc54AvpFyeUiCGtwfvXNVr/pnclCD
-        khRo0hgy9YovIvOtFGY5hJN2UWpPny1j9YQw46kuooKSXRaPEKcaHVmlCYifp+n/
-        yo8vg/fzjRoDkoixrbh7uOz5QIbR8ZNQ5Wx3PpaLHZFGEDl3CPp647baee2F+QRw
-        RQuB/Yix9n/J5afKWt9Gd3CvpiyxjNItpaCFdIgkY2eTWEH9Cz93e5KOLEMWxdtu
-        0EE/B+mCZcFK5POy5gVtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1678541947; x=
-        1678628347; bh=4yK7FQCj5sNr0/yKnIfjlg5p1SyzkrDsZm+IWMQebB0=; b=l
-        uxl2pT6hJmT0n13oDTEYQ7CFT+xa2vLs3h4Ejso1Q7gEpbSfvOXsq6MGZLIkgUI4
-        H4aUV1sUZeBx0oY+lEEHfCgfRMP6mBXvNoScnuYqeCOZuk+aXwcFMMQ4LBl+qItw
-        UWKSLtyEwWsQv3o0+JEDkED0QFXO6mnaUXYrpfpiiHTiwjEfJ0r2kOmlNDpiwpiW
-        nLPV93xbUMjCKTpkjjHvOjLMf0JS+q925+sHK9t0D+RowYekTk2cXGlgNPqNRmXw
-        VZax6ecrWpexhBT68wumBylQIYCqeo2KKIdi45w/9+exg5bUbZEqhM25wEedPYHX
-        XKE2Oau1/rj/bqG29t+hg==
-X-ME-Sender: <xms:e4QMZJj1-aGyJZKZM40K5Fsxc5LjTswtBogWVFs1R9z7UbL-U5yUqw>
-    <xme:e4QMZOA9KgopxXoJcs0HUqti2it4hVDPBOIM_PniOorAIitQHp9GmPy3CbAAOzbvd
-    t4ORwWkMQ69exeo6QY>
-X-ME-Received: <xmr:e4QMZJHwc4ms5XC6opF2b6oHqRSX7PKWGQkzzEPv2T8XEvkbkakxMQrSoXVZlssP7nwC5nXjWk6UeK0vx9A9ePh2h4Of9feyboVTUi6KQNZLxK8HDzn_HqHoceXCqw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvtddgfedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgjfhgggfestdekredtredttdenucfhrhhomhepufhvvghn
-    ucfrvghtvghruceoshhvvghnsehsvhgvnhhpvghtvghrrdguvghvqeenucggtffrrghtth
-    gvrhhnpeejieehheekgedvjefhveekjefguddtfefhteehtdeiffelkeeiuedufeelkeej
-    geenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehsvh
-    gvnhesshhvvghnphgvthgvrhdruggvvh
-X-ME-Proxy: <xmx:e4QMZOQfD3kT6RCxDvmQ67F-75UOgx7uIBHq8ceJC23brRWjxRJ52w>
-    <xmx:e4QMZGwwi3zhNoTRWRU4Q5zPi67_IbXDcf03qOQEJLEiBvj4dCldNA>
-    <xmx:e4QMZE5CO-ELLBGS_P1NC-4rYPpsNoDQo9AA-bkw0Qxdm_wg9EpG5Q>
-    <xmx:e4QMZI6EfjAll3euTnKidF-E0aWYN1Zqbto7k76pItYNz4jbJvb4eQ>
-Feedback-ID: i51094778:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Mar 2023 08:39:05 -0500 (EST)
-From:   Sven Peter <sven@svenpeter.dev>
-To:     Hector Martin <marcan@marcan.st>, Sven Peter <sven@svenpeter.dev>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
-        iommu@lists.linux.dev, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/3] iommu: dart: Add support for t8103 USB4 DART
-Date:   Sat, 11 Mar 2023 14:38:56 +0100
-Message-Id: <20230311133856.63840-4-sven@svenpeter.dev>
-X-Mailer: git-send-email 2.30.1 (Apple Git-130)
-In-Reply-To: <20230311133856.63840-1-sven@svenpeter.dev>
-References: <20230311133856.63840-1-sven@svenpeter.dev>
+        Sat, 11 Mar 2023 08:40:24 -0500
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35360120E83;
+        Sat, 11 Mar 2023 05:40:12 -0800 (PST)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-17671fb717cso9016076fac.8;
+        Sat, 11 Mar 2023 05:40:12 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678542011;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Vl8BZOtinMndJA6yo9kH7m4T56Q9iqXbatouPywOBOI=;
+        b=gmIsmjYkjtdeAnlT1G53m2vJ8Yho59WtJBtb5NO9Z2qUEsu57opquqZ6NEF4WnkVPD
+         ZtKgn9wBVL5sRmUEQCltMQ+RXz/x0NwWWwf+70UVCo74B7f+ltxLPaDLdtjQ4IymtzKM
+         194+wjDZLj1dW/pTXkOuClwZxxQ3k8x9xSJ0cKzYcDjZkf0MHNneRlgfSXSBiBFGNATt
+         TvGOTqG2blOV7q0sJeOzSOaHxvWa+wdxWA0obB4jGZ0SIbI4FDT74++2Bwa6uKNbDY2X
+         m+3OMk4l2gEfB9MGYa4EDha7OaZ6AbGvcG6etHx5DNUImE+HgXngajB4OrUg7BRJwZfX
+         yCYQ==
+X-Gm-Message-State: AO0yUKVUmjtgm8sA82S+ujBQM+oOpeQBOj4P0xztdtFuNKrGU8DOFiil
+        13+ndy/DBQmSrJiXWceXHSJteBhV4A==
+X-Google-Smtp-Source: AK7set+0bP5QJ7JRrLq0ugfI9tM7uV4Py+NmxD1n437OiRnbpitOV2Eigxgvk7FPXOw8cnZiagylnA==
+X-Received: by 2002:a05:6870:1f85:b0:16e:ac1:c644 with SMTP id go5-20020a0568701f8500b0016e0ac1c644mr2725591oac.21.1678542011376;
+        Sat, 11 Mar 2023 05:40:11 -0800 (PST)
+Received: from robh_at_kernel.org ([2605:ef80:80f8:ec2:d840:96d4:1bbf:55f])
+        by smtp.gmail.com with ESMTPSA id k8-20020acaba08000000b0037d7f4eb7e8sm1086404oif.31.2023.03.11.05.40.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 05:40:10 -0800 (PST)
+Received: (nullmailer pid 23618 invoked by uid 1000);
+        Sat, 11 Mar 2023 13:40:08 -0000
+Date:   Sat, 11 Mar 2023 07:40:08 -0600
+From:   Rob Herring <robh@kernel.org>
+To:     Wesley Cheng <quic_wcheng@quicinc.com>
+Cc:     srinivas.kandagatla@linaro.org, mathias.nyman@intel.com,
+        perex@perex.cz, broonie@kernel.org, lgirdwood@gmail.com,
+        krzysztof.kozlowski+dt@linaro.org, agross@kernel.org,
+        Thinh.Nguyen@synopsys.com, bgoswami@quicinc.com,
+        andersson@kernel.org, gregkh@linuxfoundation.org, tiwai@suse.com,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        alsa-devel@alsa-project.org, devicetree@vger.kernel.org,
+        linux-usb@vger.kernel.org, quic_jackp@quicinc.com,
+        quic_plai@quicinc.com
+Subject: Re: [PATCH v3 11/28] dt-bindings: usb: dwc3: Add
+ snps,num-hc-interrupters definition
+Message-ID: <20230311134008.GA20831-robh@kernel.org>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <20230308235751.495-12-quic_wcheng@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230308235751.495-12-quic_wcheng@quicinc.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This variant of the regular t8103 DART is used for the two
-USB4/Thunderbolt PCIe controllers. It supports 64 instead of 16 streams
-which requires a slightly different MMIO layout.
+On Wed, Mar 08, 2023 at 03:57:34PM -0800, Wesley Cheng wrote:
+> Add a new definition for specifying how many XHCI secondary interrupters
+> can be allocated.  XHCI in general can potentially support up to 1024
+> interrupters, which some uses may want to limit depending on how many
+> users utilize the interrupters.
+> 
+> Signed-off-by: Wesley Cheng <quic_wcheng@quicinc.com>
+> ---
+>  .../devicetree/bindings/usb/snps,dwc3.yaml          | 13 +++++++++++++
+>  1 file changed, 13 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> index be36956af53b..4e2417191f93 100644
+> --- a/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> +++ b/Documentation/devicetree/bindings/usb/snps,dwc3.yaml
+> @@ -359,6 +359,19 @@ properties:
+>      items:
+>        enum: [1, 4, 8, 16, 32, 64, 128, 256]
+>  
+> +  snps,num-hc-interrupters:
+> +    description:
+> +      Defines the maximum number of XHCI host controller interrupters that can
+> +      be supported.  The XHCI host controller has support to allocate multiple
+> +      event rings, which can be assigned to different clients/users.  The DWC3
+> +      controller has a maximum of 8 interrupters.  If this is not defined then
+> +      the value will be defaulted to 1.  This parameter is used only when
+> +      operating in host mode.
 
-Acked-by: Hector Martin <marcan@marcan.st>
-Signed-off-by: Sven Peter <sven@svenpeter.dev>
----
- drivers/iommu/apple-dart.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Is this an XHCI or DWC3 feature? The former should be added to the XHCI 
+binding.
 
-diff --git a/drivers/iommu/apple-dart.c b/drivers/iommu/apple-dart.c
-index f73d0288e133..23f79659a48b 100644
---- a/drivers/iommu/apple-dart.c
-+++ b/drivers/iommu/apple-dart.c
-@@ -81,6 +81,7 @@
- #define DART_T8020_TCR_BYPASS_DAPF      BIT(12)
- 
- #define DART_T8020_TTBR       0x200
-+#define DART_T8020_USB4_TTBR  0x400
- #define DART_T8020_TTBR_VALID BIT(31)
- #define DART_T8020_TTBR_ADDR_FIELD_SHIFT 0
- #define DART_T8020_TTBR_SHIFT 12
-@@ -1192,6 +1193,33 @@ static const struct apple_dart_hw apple_dart_hw_t8103 = {
- 	.ttbr_shift = DART_T8020_TTBR_SHIFT,
- 	.ttbr_count = 4,
- };
-+
-+static const struct apple_dart_hw apple_dart_hw_t8103_usb4 = {
-+	.type = DART_T8020,
-+	.irq_handler = apple_dart_t8020_irq,
-+	.invalidate_tlb = apple_dart_t8020_hw_invalidate_tlb,
-+	.oas = 36,
-+	.fmt = APPLE_DART,
-+	.max_sid_count = 64,
-+
-+	.enable_streams = DART_T8020_STREAMS_ENABLE,
-+	.lock = DART_T8020_CONFIG,
-+	.lock_bit = DART_T8020_CONFIG_LOCK,
-+
-+	.error = DART_T8020_ERROR,
-+
-+	.tcr = DART_T8020_TCR,
-+	.tcr_enabled = DART_T8020_TCR_TRANSLATE_ENABLE,
-+	.tcr_disabled = 0,
-+	.tcr_bypass = 0,
-+
-+	.ttbr = DART_T8020_USB4_TTBR,
-+	.ttbr_valid = DART_T8020_TTBR_VALID,
-+	.ttbr_addr_field_shift = DART_T8020_TTBR_ADDR_FIELD_SHIFT,
-+	.ttbr_shift = DART_T8020_TTBR_SHIFT,
-+	.ttbr_count = 4,
-+};
-+
- static const struct apple_dart_hw apple_dart_hw_t6000 = {
- 	.type = DART_T6000,
- 	.irq_handler = apple_dart_t8020_irq,
-@@ -1292,6 +1320,7 @@ DEFINE_SIMPLE_DEV_PM_OPS(apple_dart_pm_ops, apple_dart_suspend, apple_dart_resum
- 
- static const struct of_device_id apple_dart_of_match[] = {
- 	{ .compatible = "apple,t8103-dart", .data = &apple_dart_hw_t8103 },
-+	{ .compatible = "apple,t8103-usb4-dart", .data = &apple_dart_hw_t8103_usb4 },
- 	{ .compatible = "apple,t8110-dart", .data = &apple_dart_hw_t8110 },
- 	{ .compatible = "apple,t6000-dart", .data = &apple_dart_hw_t6000 },
- 	{},
--- 
-2.25.1
-
+> +    $ref: /schemas/types.yaml#/definitions/uint8
+> +    minimum: 1
+> +    maximum: 8
+> +    default: 1
+> +
+>    port:
+>      $ref: /schemas/graph.yaml#/properties/port
+>      description:
