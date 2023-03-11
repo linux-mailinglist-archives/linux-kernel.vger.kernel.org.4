@@ -2,119 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B7B16B5A38
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:46:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66A7D6B5A3E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 10:56:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbjCKJqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 04:46:05 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56156 "EHLO
+        id S230240AbjCKJ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 04:56:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjCKJpg (ORCPT
+        with ESMTP id S230224AbjCKJ4Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 04:45:36 -0500
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3930E14089C
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 01:44:08 -0800 (PST)
-Received: by mail-wr1-x42e.google.com with SMTP id bw19so7161000wrb.13
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 01:44:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678527846;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FV3s4pRBe/SsPDvS5hXhpiciVp3uptiHsH3lqLkU2zk=;
-        b=Uio34FAeq2YHxBhU4bvnf9HFokRxjfOB1qJ4O+FDUqpT7UFH5A3z3c2eZjy9eTp5OU
-         I6Ce+mpoMMRnfdlz4yiTDYqiolPpw0sVKhvfXxPo8YP0eMMwQreZtDnJg2p4Ap8lfImU
-         wRrrss4iuZvEFxps7e1GMS4IfgFCrWRJC5l8jvHx9T6xMP2PBS3zC52pbdfMu9YtjP4P
-         /x7sHF/bgCRjTWt+TlRFTrQ2HRF7IdrPYj17jr0LutGMiri38LjuzyOEq+85hxbwCdMb
-         ipEoKBTMWp2ha/cCVcSOzPfhE4KkGl7JvtjqBKTOEr+mq+RCZaIGt9iXxHo2ZOkYBdx1
-         e7wQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678527846;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FV3s4pRBe/SsPDvS5hXhpiciVp3uptiHsH3lqLkU2zk=;
-        b=olHMVwuzLHvL2ANzGxj3EZ2/BGA3JL2O2WrhvBjwBBvXJR9O6ZO7D3N686OyIUR+GD
-         +ONfpjvpbzawVmHFYuiZd72fqjyuTrDqZzJgVLKo33kehcuPO0Di8herHMW6TILDaFq/
-         imDKiU7xRDmsLZETRJBQet3ZWZs3bT7eKd62V4XJiezKVLvmMcIQWY2NvViqd46YhWNx
-         FDQfLAD2ov+2rMpwTNU8Z1Q3jTVjcnge6wlu01o6yRs0GLkl33+NYSL6Und9e02ffwvg
-         VcKqs1bCSZczTQuHtZZ9WgmsURTPFx+qdSYhyH691B1tIv5EbaTxN2LVldLpDXqE8SoO
-         J5cg==
-X-Gm-Message-State: AO0yUKUAFzJnTkIIMp6+NCDPK4DTpkItFu5PDE+o9b5Jy8txZoc/xwpU
-        auGSASMcbENCooXXBD7c4V7sYDLK2bm0793I
-X-Google-Smtp-Source: AK7set8pmYj4u4FDqLSBl8UQeoIicOm93KMCFaxkMKEuR8FNwIXgVOxfFt+1AVDWvaX/17Aqb2v/Nw==
-X-Received: by 2002:a5d:6641:0:b0:2ce:a825:e0a1 with SMTP id f1-20020a5d6641000000b002cea825e0a1mr253556wrw.14.1678527846108;
-        Sat, 11 Mar 2023 01:44:06 -0800 (PST)
-Received: from khadija-virtual-machine ([39.41.45.115])
-        by smtp.gmail.com with ESMTPSA id x4-20020a5d60c4000000b002c6d0462163sm1967663wrt.100.2023.03.11.01.44.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 01:44:05 -0800 (PST)
-Date:   Sat, 11 Mar 2023 14:44:03 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     outreachy@lists.linux.dev
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: axis-fifo: remove tabs to align arguments
-Message-ID: <ZAxNYw2rFQkrdtKl@khadija-virtual-machine>
+        Sat, 11 Mar 2023 04:56:25 -0500
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6116210287B;
+        Sat, 11 Mar 2023 01:56:21 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=MIME-Version:Content-Type:References:
+        In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=ZDzvDoL4XVxdTjHfPArZ9ce4Quw77R+gG8sDBkhD2Lc=; b=ePq3jIGwHQngADzRoh89TOkKhB
+        ZYAiJi+CKuZlQef4+LW7EAYkcR0igq6YUgQo97PdrmFyF9TBfZAC+fcXG/SmIOJ8p3U5bpSiZX8IC
+        vZNoIaimhGsJpDYqHMl36vtDhXhTc9lm4TlzBqyvZnMDbYBTNOtZVAFwCNAdypRsZf7bfZtULub9B
+        mqjWf6yDkDsjgy+9lVRS8F5Gn1whJDzDFCudyZgEPEz22ZO7/t/7mvvroODTYb0KWZgAUfGXH1wwL
+        i9koeDec27Tthc4pQFdD7HN8sJuh6G3iP3OU69i2eNcUBciS9w6n7M6FzdROyYiaAUnM0MQ6mzSw6
+        3z7Brs/A==;
+Received: from [2001:8b0:10b:5:b24a:df8e:af83:d500] (helo=u3832b3a9db3152.ant.amazon.com)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pavwU-00A6o4-BD; Sat, 11 Mar 2023 09:55:11 +0000
+Message-ID: <5a9d6d4aef78de6fc8a2cfc62922d06617cbe109.camel@infradead.org>
+Subject: Re: [PATCH v14 10/12] x86/smpboot: Send INIT/SIPI/SIPI to secondary
+ CPUs in parallel
+From:   David Woodhouse <dwmw2@infradead.org>
+To:     Thomas Gleixner <tglx@linutronix.de>,
+        Usama Arif <usama.arif@bytedance.com>, kim.phillips@amd.com,
+        brgerst@gmail.com
+Cc:     piotrgorski@cachyos.org, oleksandr@natalenko.name,
+        arjan@linux.intel.com, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, x86@kernel.org,
+        pbonzini@redhat.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        rcu@vger.kernel.org, mimoja@mimoja.de, hewenliang4@huawei.com,
+        thomas.lendacky@amd.com, seanjc@google.com, pmenzel@molgen.mpg.de,
+        fam.zheng@bytedance.com, punit.agrawal@bytedance.com,
+        simon.evans@bytedance.com, liangma@liangbit.com,
+        "Guilherme G . Piccoli" <gpiccoli@igalia.com>
+Date:   Sat, 11 Mar 2023 09:55:08 +0000
+In-Reply-To: <87y1o3acrh.ffs@tglx>
+References: <20230308171328.1562857-1-usama.arif@bytedance.com>
+         <20230308171328.1562857-11-usama.arif@bytedance.com> <87y1o3acrh.ffs@tglx>
+Content-Type: multipart/signed; micalg="sha-256"; protocol="application/pkcs7-signature";
+        boundary="=-lXdJ2tWl14V0vPsrUt8O"
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-SRS-Rewrite: SMTP reverse-path rewritten from <dwmw2@infradead.org> by casper.infradead.org. See http://www.infradead.org/rpr.html
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In file drivers/staging/axis-fifo/axis-fifo.c, in line 386 and 529, last
-argument is indented as it were an argument of the second argument.
-Remove tabs to align the arguments.
 
-Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
----
-Changes in v2:
- - Do not change the alignment of second argument
- - Align arguments so last argument do not look like an argument of the
-   second argument.
- - Fixed two instances of the same problem
+--=-lXdJ2tWl14V0vPsrUt8O
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
- drivers/staging/axis-fifo/axis-fifo.c | 14 +++++++-------
- 1 file changed, 7 insertions(+), 7 deletions(-)
+On Sat, 2023-03-11 at 10:54 +0200, Thomas Gleixner wrote:
+> On Wed, Mar 08 2023 at 17:13, Usama Arif wrote:
+> > =C2=A0
+> > +/* Bringup step one: Send INIT/SIPI to the target AP */
+> > +static int native_cpu_kick(unsigned int cpu)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return do_cpu_up(cpu, idle_t=
+hread_get(cpu));
+>=20
+> This idle_thread_get() is not sufficient. bringup_cpu() does:
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct task_struct *idle =
+=3D idle_thread_get(cpu);
+>=20
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0/*
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 * Reset stale stack stat=
+e from the last time this CPU was online.
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 */
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0scs_task_reset(idle);
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0kasan_unpoison_task_stack=
+(idle);
+>=20
+> But with this new model neither the shadow stack gets reset nor the
+> kasan unpoisoning happens _before_ the to be kicked CPU starts
+> executing.
+>=20
+> That needs a new function which does the get() and the above.
 
-diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-index dfd2b357f484..fbb3ff59dc7c 100644
---- a/drivers/staging/axis-fifo/axis-fifo.c
-+++ b/drivers/staging/axis-fifo/axis-fifo.c
-@@ -384,9 +384,9 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
- 		mutex_lock(&fifo->read_lock);
- 		ret = wait_event_interruptible_timeout(fifo->read_queue,
- 			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
--				 (read_timeout >= 0) ?
--				  msecs_to_jiffies(read_timeout) :
--				  MAX_SCHEDULE_TIMEOUT);
-+			(read_timeout >= 0) ?
-+			msecs_to_jiffies(read_timeout) :
-+			MAX_SCHEDULE_TIMEOUT);
- 
- 		if (ret <= 0) {
- 			if (ret == 0) {
-@@ -527,10 +527,10 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
- 		mutex_lock(&fifo->write_lock);
- 		ret = wait_event_interruptible_timeout(fifo->write_queue,
- 			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
--				 >= words_to_write,
--				 (write_timeout >= 0) ?
--				  msecs_to_jiffies(write_timeout) :
--				  MAX_SCHEDULE_TIMEOUT);
-+			>= words_to_write,
-+			(write_timeout >= 0) ?
-+			msecs_to_jiffies(write_timeout) :
-+			MAX_SCHEDULE_TIMEOUT);
- 
- 		if (ret <= 0) {
- 			if (ret == 0) {
--- 
-2.34.1
+Ah, good catch. Those were added after we started on this journey :)
 
+I think I'll do it with a 'bool unpoison' argument to
+idle_thread_get(). Or just make it unconditional; they're idempotent
+anyway and cheap enough? Kind of weird to be doing it from finish_cpu()
+though, so I'll probably stick with the argument.
+
+
+....*types*....
+
+Erm, there are circumstances (!CONFIG_GENERIC_SMP_IDLE_THREAD) when
+idle_thread_get() just unconditionally returns NULL.
+
+At first glance, it doesn't look like scs_task_reset() copes with being
+passed a NULL. Am I missing something?
+
+ $ grep -c GENERIC_SMP_IDLE_THREAD `grep -l SMP arch/*/Kconfig`
+arch/alpha/Kconfig:1
+arch/arc/Kconfig:1
+arch/arm64/Kconfig:1
+arch/arm/Kconfig:1
+arch/csky/Kconfig:1
+arch/hexagon/Kconfig:1
+arch/ia64/Kconfig:1
+arch/loongarch/Kconfig:1
+arch/mips/Kconfig:1
+arch/openrisc/Kconfig:1
+arch/parisc/Kconfig:1
+arch/powerpc/Kconfig:1
+arch/riscv/Kconfig:1
+arch/s390/Kconfig:1
+arch/sh/Kconfig:1
+arch/sparc/Kconfig:1
+arch/um/Kconfig:0
+arch/x86/Kconfig:1
+arch/xtensa/Kconfig:1
+
+Maybe just nobody but UM cares?
+
+--=-lXdJ2tWl14V0vPsrUt8O
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Transfer-Encoding: base64
+
+MIAGCSqGSIb3DQEHAqCAMIACAQExDzANBglghkgBZQMEAgEFADCABgkqhkiG9w0BBwEAAKCCEkQw
+ggYQMIID+KADAgECAhBNlCwQ1DvglAnFgS06KwZPMA0GCSqGSIb3DQEBDAUAMIGIMQswCQYDVQQG
+EwJVUzETMBEGA1UECBMKTmV3IEplcnNleTEUMBIGA1UEBxMLSmVyc2V5IENpdHkxHjAcBgNVBAoT
+FVRoZSBVU0VSVFJVU1QgTmV0d29yazEuMCwGA1UEAxMlVVNFUlRydXN0IFJTQSBDZXJ0aWZpY2F0
+aW9uIEF1dGhvcml0eTAeFw0xODExMDIwMDAwMDBaFw0zMDEyMzEyMzU5NTlaMIGWMQswCQYDVQQG
+EwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYD
+VQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50
+aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKC
+AQEAyjztlApB/975Rrno1jvm2pK/KxBOqhq8gr2+JhwpKirSzZxQgT9tlC7zl6hn1fXjSo5MqXUf
+ItMltrMaXqcESJuK8dtK56NCSrq4iDKaKq9NxOXFmqXX2zN8HHGjQ2b2Xv0v1L5Nk1MQPKA19xeW
+QcpGEGFUUd0kN+oHox+L9aV1rjfNiCj3bJk6kJaOPabPi2503nn/ITX5e8WfPnGw4VuZ79Khj1YB
+rf24k5Ee1sLTHsLtpiK9OjG4iQRBdq6Z/TlVx/hGAez5h36bBJMxqdHLpdwIUkTqT8se3ed0PewD
+ch/8kHPo5fZl5u1B0ecpq/sDN/5sCG52Ds+QU5O5EwIDAQABo4IBZDCCAWAwHwYDVR0jBBgwFoAU
+U3m/WqorSs9UgOHYm8Cd8rIDZsswHQYDVR0OBBYEFAnA8vwL2pTbX/4r36iZQs/J4K0AMA4GA1Ud
+DwEB/wQEAwIBhjASBgNVHRMBAf8ECDAGAQH/AgEAMB0GA1UdJQQWMBQGCCsGAQUFBwMCBggrBgEF
+BQcDBDARBgNVHSAECjAIMAYGBFUdIAAwUAYDVR0fBEkwRzBFoEOgQYY/aHR0cDovL2NybC51c2Vy
+dHJ1c3QuY29tL1VTRVJUcnVzdFJTQUNlcnRpZmljYXRpb25BdXRob3JpdHkuY3JsMHYGCCsGAQUF
+BwEBBGowaDA/BggrBgEFBQcwAoYzaHR0cDovL2NydC51c2VydHJ1c3QuY29tL1VTRVJUcnVzdFJT
+QUFkZFRydXN0Q0EuY3J0MCUGCCsGAQUFBzABhhlodHRwOi8vb2NzcC51c2VydHJ1c3QuY29tMA0G
+CSqGSIb3DQEBDAUAA4ICAQBBRHUAqznCFfXejpVtMnFojADdF9d6HBA4kMjjsb0XMZHztuOCtKF+
+xswhh2GqkW5JQrM8zVlU+A2VP72Ky2nlRA1GwmIPgou74TZ/XTarHG8zdMSgaDrkVYzz1g3nIVO9
+IHk96VwsacIvBF8JfqIs+8aWH2PfSUrNxP6Ys7U0sZYx4rXD6+cqFq/ZW5BUfClN/rhk2ddQXyn7
+kkmka2RQb9d90nmNHdgKrwfQ49mQ2hWQNDkJJIXwKjYA6VUR/fZUFeCUisdDe/0ABLTI+jheXUV1
+eoYV7lNwNBKpeHdNuO6Aacb533JlfeUHxvBz9OfYWUiXu09sMAviM11Q0DuMZ5760CdO2VnpsXP4
+KxaYIhvqPqUMWqRdWyn7crItNkZeroXaecG03i3mM7dkiPaCkgocBg0EBYsbZDZ8bsG3a08LwEsL
+1Ygz3SBsyECa0waq4hOf/Z85F2w2ZpXfP+w8q4ifwO90SGZZV+HR/Jh6rEaVPDRF/CEGVqR1hiuQ
+OZ1YL5ezMTX0ZSLwrymUE0pwi/KDaiYB15uswgeIAcA6JzPFf9pLkAFFWs1QNyN++niFhsM47qod
+x/PL+5jR87myx5uYdBEQkkDc+lKB1Wct6ucXqm2EmsaQ0M95QjTmy+rDWjkDYdw3Ms6mSWE3Bn7i
+5ZgtwCLXgAIe5W8mybM2JzCCBhQwggT8oAMCAQICEQDGvhmWZ0DEAx0oURL6O6l+MA0GCSqGSIb3
+DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVyMRAwDgYD
+VQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNlY3RpZ28g
+UlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBMB4XDTIyMDEwNzAw
+MDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJARYTZHdtdzJAaW5mcmFkZWFkLm9y
+ZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3GpC2bomUqk+91wLYBzDMcCj5C9m6
+oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZHh7htyAkWYVoFsFPrwHounto8xTsy
+SSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT9YgcBqKCo65pTFmOnR/VVbjJk4K2
+xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNjP+qDrh0db7PAjO1D4d5ftfrsf+kd
+RR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy2U+eITZ5LLE5s45mX2oPFknWqxBo
+bQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3BgBEmfsYWlBXO8rVXfvPgLs32VdV
+NZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/7auNVRmPB3v5SWEsH8xi4Bez2V9U
+KxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmdlFYhAflWKQ03Ufiu8t3iBE3VJbc2
+5oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9aelIl6vtbhMA+l0nfrsORMa4kobqQ5
+C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMBAAGjggHMMIIByDAfBgNVHSMEGDAW
+gBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeDMcimo0oz8o1R1Nver3ZVpSkwDgYD
+VR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYwFAYIKwYBBQUHAwQGCCsGAQUFBwMC
+MEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYBBQUHAgEWF2h0dHBzOi8vc2VjdGln
+by5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9jcmwuc2VjdGlnby5jb20vU2VjdGln
+b1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1haWxDQS5jcmwwgYoGCCsGAQUFBwEB
+BH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdvLmNvbS9TZWN0aWdvUlNBQ2xpZW50
+QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAjBggrBgEFBQcwAYYXaHR0cDovL29j
+c3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5mcmFkZWFkLm9yZzANBgkqhkiG9w0B
+AQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQvQ/fzPXmtR9t54rpmI2TfyvcKgOXp
+qa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvIlSPrzIB4Z2wyIGQpaPLlYflrrVFK
+v9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9ChWFfgSXvrWDZspnU3Gjw/rMHrGnql
+Htlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0whpBtXdyDjzBtQTaZJ7zTT/vlehc/
+tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9IzCCBhQwggT8oAMCAQICEQDGvhmW
+Z0DEAx0oURL6O6l+MA0GCSqGSIb3DQEBCwUAMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3Jl
+YXRlciBNYW5jaGVzdGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0
+ZWQxPjA8BgNVBAMTNVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJl
+IEVtYWlsIENBMB4XDTIyMDEwNzAwMDAwMFoXDTI1MDEwNjIzNTk1OVowJDEiMCAGCSqGSIb3DQEJ
+ARYTZHdtdzJAaW5mcmFkZWFkLm9yZzCCAiIwDQYJKoZIhvcNAQEBBQADggIPADCCAgoCggIBALQ3
+GpC2bomUqk+91wLYBzDMcCj5C9m6oZaHwvmIdXftOgTbCJXADo6G9T7BBAebw2JV38EINgKpy/ZH
+h7htyAkWYVoFsFPrwHounto8xTsySSePMiPlmIdQ10BcVSXMUJ3Juu16GlWOnAMJY2oYfEzmE7uT
+9YgcBqKCo65pTFmOnR/VVbjJk4K2xE34GC2nAdUQkPFuyaFisicc6HRMOYXPuF0DuwITEKnjxgNj
+P+qDrh0db7PAjO1D4d5ftfrsf+kdRR4gKVGSk8Tz2WwvtLAroJM4nXjNPIBJNT4w/FWWc/5qPHJy
+2U+eITZ5LLE5s45mX2oPFknWqxBobQZ8a9dsZ3dSPZBvE9ZrmtFLrVrN4eo1jsXgAp1+p7bkfqd3
+BgBEmfsYWlBXO8rVXfvPgLs32VdVNZxb/CDWPqBsiYv0Hv3HPsz07j5b+/cVoWqyHDKzkaVbxfq/
+7auNVRmPB3v5SWEsH8xi4Bez2V9UKxfYCnqsjp8RaC2/khxKt0A552Eaxnz/4ly/2C7wkwTQnBmd
+lFYhAflWKQ03Ufiu8t3iBE3VJbc25oMrglj7TRZrmKq3CkbFnX0fyulB+kHimrt6PIWn7kgyl9ae
+lIl6vtbhMA+l0nfrsORMa4kobqQ5C5rveVgmcIad67EDa+UqEKy/GltUwlSh6xy+TrK1tzDvAgMB
+AAGjggHMMIIByDAfBgNVHSMEGDAWgBQJwPL8C9qU21/+K9+omULPyeCtADAdBgNVHQ4EFgQUzMeD
+Mcimo0oz8o1R1Nver3ZVpSkwDgYDVR0PAQH/BAQDAgWgMAwGA1UdEwEB/wQCMAAwHQYDVR0lBBYw
+FAYIKwYBBQUHAwQGCCsGAQUFBwMCMEAGA1UdIAQ5MDcwNQYMKwYBBAGyMQECAQEBMCUwIwYIKwYB
+BQUHAgEWF2h0dHBzOi8vc2VjdGlnby5jb20vQ1BTMFoGA1UdHwRTMFEwT6BNoEuGSWh0dHA6Ly9j
+cmwuc2VjdGlnby5jb20vU2VjdGlnb1JTQUNsaWVudEF1dGhlbnRpY2F0aW9uYW5kU2VjdXJlRW1h
+aWxDQS5jcmwwgYoGCCsGAQUFBwEBBH4wfDBVBggrBgEFBQcwAoZJaHR0cDovL2NydC5zZWN0aWdv
+LmNvbS9TZWN0aWdvUlNBQ2xpZW50QXV0aGVudGljYXRpb25hbmRTZWN1cmVFbWFpbENBLmNydDAj
+BggrBgEFBQcwAYYXaHR0cDovL29jc3Auc2VjdGlnby5jb20wHgYDVR0RBBcwFYETZHdtdzJAaW5m
+cmFkZWFkLm9yZzANBgkqhkiG9w0BAQsFAAOCAQEAyW6MUir5dm495teKqAQjDJwuFCi35h4xgnQv
+Q/fzPXmtR9t54rpmI2TfyvcKgOXpqa7BGXNFfh1JsqexVkIqZP9uWB2J+uVMD+XZEs/KYNNX2PvI
+lSPrzIB4Z2wyIGQpaPLlYflrrVFKv9CjT2zdqvy2maK7HKOQRt3BiJbVG5lRiwbbygldcALEV9Ch
+WFfgSXvrWDZspnU3Gjw/rMHrGnqlHtlyebp3pf3fSS9kzQ1FVtVIDrL6eqhTwJxe+pXSMMqFiN0w
+hpBtXdyDjzBtQTaZJ7zTT/vlehc/tDuqZwGHm/YJy883Ll+GP3NvOkgaRGWEuYWJJ6hFCkXYjyR9
+IzGCBMcwggTDAgEBMIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVz
+dGVyMRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMT
+NVNlY3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEA
+xr4ZlmdAxAMdKFES+jupfjANBglghkgBZQMEAgEFAKCCAeswGAYJKoZIhvcNAQkDMQsGCSqGSIb3
+DQEHATAcBgkqhkiG9w0BCQUxDxcNMjMwMzExMDk1NTA4WjAvBgkqhkiG9w0BCQQxIgQgd7fzUkhP
+6Bp/PXjvdIjdu5FZvVFUzwLQlbnGVgcLGO8wgb0GCSsGAQQBgjcQBDGBrzCBrDCBljELMAkGA1UE
+BhMCR0IxGzAZBgNVBAgTEkdyZWF0ZXIgTWFuY2hlc3RlcjEQMA4GA1UEBxMHU2FsZm9yZDEYMBYG
+A1UEChMPU2VjdGlnbyBMaW1pdGVkMT4wPAYDVQQDEzVTZWN0aWdvIFJTQSBDbGllbnQgQXV0aGVu
+dGljYXRpb24gYW5kIFNlY3VyZSBFbWFpbCBDQQIRAMa+GZZnQMQDHShREvo7qX4wgb8GCyqGSIb3
+DQEJEAILMYGvoIGsMIGWMQswCQYDVQQGEwJHQjEbMBkGA1UECBMSR3JlYXRlciBNYW5jaGVzdGVy
+MRAwDgYDVQQHEwdTYWxmb3JkMRgwFgYDVQQKEw9TZWN0aWdvIExpbWl0ZWQxPjA8BgNVBAMTNVNl
+Y3RpZ28gUlNBIENsaWVudCBBdXRoZW50aWNhdGlvbiBhbmQgU2VjdXJlIEVtYWlsIENBAhEAxr4Z
+lmdAxAMdKFES+jupfjANBgkqhkiG9w0BAQEFAASCAgCc/AQ2ar6rKOtkjMdxcS3KG1lJOmDtgafU
+N6UBOabUEnOcFEC2VIgEqkdtJa7yEwVTwyaMNHsZ+i/3JjVCk+sUoIWChxwca2oB1wmq3ltJUiYs
+isDN6/siKfa+egJLhbibVMRqNJVIw3/DMoSozPLD1vo+vsyiMN/hIsXus+Pjm1WLP6GbvmIckogr
+xaDMalWvUUNV3BVI9bjJLma8f4TxlQsCJQkhUzFiD2EgMtEcNTW503OL53ZMgP1aZUIEbZZKUCam
+aSXiOLESULMUxgqedRPodLWSjA3omapexZABmDIj16hdrfGO8Be1Z69gsiU1HH9DlhnKHh55ytjZ
+w5JFJDYynCYHP/5xgDuV6BnRsk35tijvLdMZCOnpr0Ll0wogrzpSQ3uZIxoqaO0jXqLk28BVbL5Z
+KH70OKbS53ZUO/T3VwoEMnJmJ4mzvw1TKJFgG4LVNdcYdTiA1AsB/OW3LUoI1buq5WB/oceXU+vM
+1bU4P4wcdPJnhQxm9SyWDW2yUH94JhmBqa730PrH06RwExxB+id/KgiG6zZUDykYAP/7zcxssAdv
+UGXD6AM8biHUUfBcl19XLwYLgCQnVYokNTvCKDVfuZQb7hS9/vX/6RYwm8OenJU+YjHcuquks0wU
+35nlR5crg9ATAwHv3l12UeIdnSnoSKPct+ANHKNEFgAAAAAAAA==
+
+
+--=-lXdJ2tWl14V0vPsrUt8O--
