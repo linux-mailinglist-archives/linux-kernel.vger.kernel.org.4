@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F0DF6B613B
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:52:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 559DD6B613C
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 22:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbjCKVw3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 16:52:29 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38432 "EHLO
+        id S229987AbjCKVwc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 16:52:32 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCKVw1 (ORCPT
+        with ESMTP id S229962AbjCKVw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 16:52:27 -0500
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606AD5F6FA
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:51:57 -0800 (PST)
-Received: by mail-ed1-x52c.google.com with SMTP id r15so7266980edq.11
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:51:57 -0800 (PST)
+        Sat, 11 Mar 2023 16:52:29 -0500
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 202E46A43A
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:52:06 -0800 (PST)
+Received: by mail-ed1-x52a.google.com with SMTP id j11so34458884edq.4
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 13:52:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678571511;
+        d=gmail.com; s=20210112; t=1678571524;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=3lz0rCujQhVibf0Ri4YpJvVDSlapNGCLqwJwhuUj9iY=;
-        b=g1XROsxLntlHnDJmSTz0qt7nem4Tid9+eF8wErcrgZHZhL1eIYgs9nYN/R8tlQbXPj
-         v8Kx2VhvaP7UK2z3UI8ahK/Lgj62VHFBDaSpIZrwidgWgGxn2fPOCmhjna9aK82KBrHZ
-         YJoFx7d/mvdbbIfpcd1B6dN8oO6mQvLzqzFzR/TA3rnWP3+6A2yTonlUNfGrDBcIeA34
-         5XFKybm6Ys16llD/wpa/Le9dpfNgbUbIET9gdOZ6M2ppL/8VHXA4W/mwLNxr0UKkdCFQ
-         hEIML6UWRMCblTRLFXYP2UwlCV2QzDEWq0bCzmFTQoBUkBecP8TlkoLTeIqYNPS5MgG3
-         VDOg==
+        bh=XTTDljF28vO5H18k+KEi+7UKj1Xzue+t1xSVjk5WnDY=;
+        b=Pk/oE6M2D/waIVTAwHCuGea9qIaLSfIwfe4ngILjkk3KWDiVrIxMHgBUP0qAUjWQdc
+         Fmwp6jM6ObotUih74SJrCNcTfg8RRaaZyZ7H/80HgZE9KK0Q6pnegkYQ0AWPzpdRpxgX
+         tTh2zPWZdYvelCMlcmn9L8DGMWlh0Jli4nAPcPpW+wO+Kr8jnMo4nuaVaAa7Mo/QMM9d
+         AG9DNMUBWgAq/IH6euX+Vd1gCWbfV6otLmxXKz97ULORq4is5mxWOjJipt5LUdWNMMqr
+         366w341BVFUyebGfrgfIOKtOvDz1dWOOP3XIGiGLTEtIa1ONRRkD2J+bXS3V+CYr9Vgt
+         dH4Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678571511;
+        d=1e100.net; s=20210112; t=1678571524;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3lz0rCujQhVibf0Ri4YpJvVDSlapNGCLqwJwhuUj9iY=;
-        b=QAuEh4yH4BbIbV60YzSK/xwwYln+KfA6anP1Ha9up7T/Q1P2uwolcFIeqbkPmfEjhF
-         emUoU6Hmk9eJo8gXWAcG/qq/hTktCfnqDv+JMa2G558EuAfmTnqA9HYPf+7k9JZdyed4
-         4yEC0sZAGOqXCkvoomECXpUMfZh3a6td6qavOo/CrZvYuSZWaDOVUMQ0P9WVFyvozi2c
-         dCzpBxq6LUpZmEsqcWzRzJM+4KDa4zQ5obdpXpiH4NgHZqKjgvo9+pHRENqSodL9DvYM
-         s93YpyNgQ2lBFn+zUnunLslPg3/IqpBvwNANbSywwCiyc2VPr0i7Fv+YJksETR36kO3k
-         AM0g==
-X-Gm-Message-State: AO0yUKWGnSvUaGatsN4f1MSWHfzTRKoOJ183osMaFInH3Ll441nkbpDo
-        r9VCFFJoLdJWuwpgFN2Vt7S+DZN4EWE=
-X-Google-Smtp-Source: AK7set9AZWxbuta0wo1kYU6KhCXTkFmoJ1saYc/52/4fbe7kyUJgiPxYbrNgI/MDuhWs4ZbIZFuY0A==
-X-Received: by 2002:a17:906:d4:b0:878:5fa4:7443 with SMTP id 20-20020a17090600d400b008785fa47443mr5804894eji.3.1678571511297;
-        Sat, 11 Mar 2023 13:51:51 -0800 (PST)
+        bh=XTTDljF28vO5H18k+KEi+7UKj1Xzue+t1xSVjk5WnDY=;
+        b=EcGXzwdn0LnzSv7YeXsrGfGB3u6F0tEU6ZqfmcjRjXMUsDkFJ2xHCqbh9mrR9H910R
+         7CHcHxtnSciiLFoFTVOAZFS4k0U55WuBHX63RSAOzKVIaNlEGIWOyFOg66E2LrwnUJFg
+         MgBQRUnNcsSsx8E/qOZlkvZWYud1/PebqV5ASK6j9KNL6fa/U/h3S/q6bDN5P06aKYxP
+         053ONxPAtQ8xQPGcxZtPRUMVjoBFNbyrVgUY4NY+zPmrvQjtNoJphn+/MKqwP12KDklI
+         kCv8AuxjyhnbI88q5phULPpWpz+11XcVsV80jQTB8l6lRaCpVM16oY9jtRylbSNIxbyv
+         AnAA==
+X-Gm-Message-State: AO0yUKXelDJDJt5poku0bhEaIiFUUX1TWWaFeZuS5yhqDNUbrMbxX/ZG
+        U69wjichZpJimvnVF9SsQ/MVZDPjvWY=
+X-Google-Smtp-Source: AK7set+PHiZciZpW3dAVj9Wm59PkUQPLopsZKcnZlvywoLG/k0MX27HZwGyWlmuIlOxvJMx0zLNFTw==
+X-Received: by 2002:a17:906:15d:b0:888:346a:fb48 with SMTP id 29-20020a170906015d00b00888346afb48mr7103708ejh.0.1678571524440;
+        Sat, 11 Mar 2023 13:52:04 -0800 (PST)
 Received: from matrix-ESPRIMO-P710 (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id q21-20020a170906389500b008b907006d5dsm1522934ejd.173.2023.03.11.13.51.50
+        by smtp.gmail.com with ESMTPSA id hz11-20020a1709072ceb00b008e51a1fd7bfsm1532653ejc.172.2023.03.11.13.52.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 13:51:50 -0800 (PST)
-Date:   Sat, 11 Mar 2023 22:51:49 +0100
+        Sat, 11 Mar 2023 13:52:04 -0800 (PST)
+Date:   Sat, 11 Mar 2023 22:52:02 +0100
 From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
 To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH 07/12] staging: rtl8192e: Remove unused variable rfHSSIPara1
- and rfSwitchControl
-Message-ID: <5f13420ce5598d447aaad0fe43b807467e0a15bb.1678569965.git.philipp.g.hortmann@gmail.com>
+Subject: [PATCH 08/12] staging: rtl8192e: Remove unused variable
+ rfAGCControl1 and rfAGCControl2
+Message-ID: <0f191930597517cf88eb6effd4c20a46c99571ad.1678569965.git.philipp.g.hortmann@gmail.com>
 References: <cover.1678569965.git.philipp.g.hortmann@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
@@ -71,81 +71,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove unused variable rfHSSIPara1 and rfSwitchControl because they are
+Remove unused variable rfAGCControl1 and rfAGCControl2 because they are
 just once set and not used. Remove unused constants as well.
 
 Signed-off-by: Philipp Hortmann <philipp.g.hortmann@gmail.com>
 ---
  drivers/staging/rtl8192e/rtl8192e/r8190P_def.h    |  2 --
  drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c    | 10 ----------
- drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h |  6 ------
- 3 files changed, 18 deletions(-)
+ drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h |  4 ----
+ 3 files changed, 16 deletions(-)
 
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h b/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
-index 2236c1aaf335..d42eac4b6012 100644
+index d42eac4b6012..a5d99891688d 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8190P_def.h
-@@ -106,9 +106,7 @@ struct bb_reg_definition {
- 	u32 rfintfo;
+@@ -107,8 +107,6 @@ struct bb_reg_definition {
  	u32 rfintfe;
  	u32 rf3wireOffset;
--	u32 rfHSSIPara1;
  	u32 rfHSSIPara2;
--	u32 rfSwitchControl;
- 	u32 rfAGCControl1;
- 	u32 rfAGCControl2;
+-	u32 rfAGCControl1;
+-	u32 rfAGCControl2;
  	u32 rfRxIQImbalance;
+ 	u32 rfRxAFE;
+ 	u32 rfTxIQImbalance;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-index 87f28718e732..add3de156e09 100644
+index add3de156e09..32806bcc953a 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phy.c
-@@ -368,21 +368,11 @@ static void _rtl92e_init_bb_rf_reg_def(struct net_device *dev)
- 	priv->phy_reg_def[RF90_PATH_A].rf3wireOffset = rFPGA0_XA_LSSIParameter;
- 	priv->phy_reg_def[RF90_PATH_B].rf3wireOffset = rFPGA0_XB_LSSIParameter;
- 
--	priv->phy_reg_def[RF90_PATH_A].rfHSSIPara1 = rFPGA0_XA_HSSIParameter1;
--	priv->phy_reg_def[RF90_PATH_B].rfHSSIPara1 = rFPGA0_XB_HSSIParameter1;
--	priv->phy_reg_def[RF90_PATH_C].rfHSSIPara1 = rFPGA0_XC_HSSIParameter1;
--	priv->phy_reg_def[RF90_PATH_D].rfHSSIPara1 = rFPGA0_XD_HSSIParameter1;
--
- 	priv->phy_reg_def[RF90_PATH_A].rfHSSIPara2 = rFPGA0_XA_HSSIParameter2;
- 	priv->phy_reg_def[RF90_PATH_B].rfHSSIPara2 = rFPGA0_XB_HSSIParameter2;
+@@ -373,16 +373,6 @@ static void _rtl92e_init_bb_rf_reg_def(struct net_device *dev)
  	priv->phy_reg_def[RF90_PATH_C].rfHSSIPara2 = rFPGA0_XC_HSSIParameter2;
  	priv->phy_reg_def[RF90_PATH_D].rfHSSIPara2 = rFPGA0_XD_HSSIParameter2;
  
--	priv->phy_reg_def[RF90_PATH_A].rfSwitchControl = rFPGA0_XAB_SwitchControl;
--	priv->phy_reg_def[RF90_PATH_B].rfSwitchControl = rFPGA0_XAB_SwitchControl;
--	priv->phy_reg_def[RF90_PATH_C].rfSwitchControl = rFPGA0_XCD_SwitchControl;
--	priv->phy_reg_def[RF90_PATH_D].rfSwitchControl = rFPGA0_XCD_SwitchControl;
+-	priv->phy_reg_def[RF90_PATH_A].rfAGCControl1 = rOFDM0_XAAGCCore1;
+-	priv->phy_reg_def[RF90_PATH_B].rfAGCControl1 = rOFDM0_XBAGCCore1;
+-	priv->phy_reg_def[RF90_PATH_C].rfAGCControl1 = rOFDM0_XCAGCCore1;
+-	priv->phy_reg_def[RF90_PATH_D].rfAGCControl1 = rOFDM0_XDAGCCore1;
 -
- 	priv->phy_reg_def[RF90_PATH_A].rfAGCControl1 = rOFDM0_XAAGCCore1;
- 	priv->phy_reg_def[RF90_PATH_B].rfAGCControl1 = rOFDM0_XBAGCCore1;
- 	priv->phy_reg_def[RF90_PATH_C].rfAGCControl1 = rOFDM0_XCAGCCore1;
+-	priv->phy_reg_def[RF90_PATH_A].rfAGCControl2 = rOFDM0_XAAGCCore2;
+-	priv->phy_reg_def[RF90_PATH_B].rfAGCControl2 = rOFDM0_XBAGCCore2;
+-	priv->phy_reg_def[RF90_PATH_C].rfAGCControl2 = rOFDM0_XCAGCCore2;
+-	priv->phy_reg_def[RF90_PATH_D].rfAGCControl2 = rOFDM0_XDAGCCore2;
+-
+ 	priv->phy_reg_def[RF90_PATH_A].rfRxIQImbalance = rOFDM0_XARxIQImbalance;
+ 	priv->phy_reg_def[RF90_PATH_B].rfRxIQImbalance = rOFDM0_XBRxIQImbalance;
+ 	priv->phy_reg_def[RF90_PATH_C].rfRxIQImbalance = rOFDM0_XCRxIQImbalance;
 diff --git a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
-index b68e84dd003f..5062be507a30 100644
+index 5062be507a30..d0ea7e06f0f7 100644
 --- a/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
 +++ b/drivers/staging/rtl8192e/rtl8192e/r8192E_phyreg.h
-@@ -48,20 +48,14 @@
- #define rFPGA0_TxGainStage		0x80c
- #define rFPGA0_RFTiming1		0x810
- #define rFPGA0_RFTiming2		0x814
--#define rFPGA0_XA_HSSIParameter1	0x820
- #define rFPGA0_XA_HSSIParameter2	0x824
--#define rFPGA0_XB_HSSIParameter1	0x828
- #define rFPGA0_XB_HSSIParameter2	0x82c
--#define rFPGA0_XC_HSSIParameter1	0x830
- #define rFPGA0_XC_HSSIParameter2	0x834
--#define rFPGA0_XD_HSSIParameter1	0x838
- #define rFPGA0_XD_HSSIParameter2	0x83c
- #define rFPGA0_XA_LSSIParameter		0x840
- #define rFPGA0_XB_LSSIParameter		0x844
- #define rFPGA0_RFWakeUpParameter	0x850
- #define rFPGA0_RFSleepUpParameter	0x854
--#define rFPGA0_XAB_SwitchControl	0x858
--#define rFPGA0_XCD_SwitchControl	0x85c
- #define rFPGA0_XA_RFInterfaceOE		0x860
- #define rFPGA0_XB_RFInterfaceOE		0x864
- #define rFPGA0_XAB_RFInterfaceSW	0x870
+@@ -117,13 +117,9 @@
+ #define rOFDM0_CCADropThreshold		0xc48
+ #define rOFDM0_ECCAThreshold		0xc4c /* Energy CCA */
+ #define rOFDM0_XAAGCCore1		0xc50
+-#define rOFDM0_XAAGCCore2		0xc54
+ #define rOFDM0_XBAGCCore1		0xc58
+-#define rOFDM0_XBAGCCore2		0xc5c
+ #define rOFDM0_XCAGCCore1		0xc60
+-#define rOFDM0_XCAGCCore2		0xc64
+ #define rOFDM0_XDAGCCore1		0xc68
+-#define rOFDM0_XDAGCCore2		0xc6c
+ #define rOFDM0_AGCParameter1		0xc70
+ #define rOFDM0_AGCParameter2		0xc74
+ #define rOFDM0_AGCRSSITable		0xc78
 -- 
 2.39.2
 
