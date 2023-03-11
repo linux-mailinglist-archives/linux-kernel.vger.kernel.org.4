@@ -2,160 +2,237 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16DE6B5943
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E7B36B5947
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjCKHUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:20:45 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51670 "EHLO
+        id S229729AbjCKH0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:26:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbjCKHUn (ORCPT
+        with ESMTP id S229801AbjCKH0J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:20:43 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E67CB1CF6F;
-        Fri, 10 Mar 2023 23:20:41 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AC566069A;
-        Sat, 11 Mar 2023 07:20:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EBD0C433D2;
-        Sat, 11 Mar 2023 07:20:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678519240;
-        bh=v/Ek6knmG/RzPhqXb4VCt1/S5iAnNtLwOaxGyO3VjBQ=;
-        h=Date:From:To:Cc:Subject:From;
-        b=m+kx1KuW8I4NYiyrNDxJEVRZTBvQWX4n2LD2TJ79DXW3HF1J4OaKX7YcDtyqyDyOG
-         LPVgviIqgNYtSIvr7Hp/f+CFKBaSUa3EIv6ZB1utccnbTXnlgIz1txrrHyiyNnyHkn
-         i797Xhcywbl4ERCP/xodGNVYaAnxgeySFtijwgjkZIyvGHbSwdjsBJtlt/WzBMTtTw
-         /k+zg79+SmDIIPJiN6/nCAAqwFBxuUPJk2R5r9KEcvKeHslG81dqil+qcunfwix0Bk
-         b+EpvI+TqikraKx2VIqhjpc1onlE66urlH/kxJPJ7Bg3DQ8t6qDtKP8P2UBh6lfJqM
-         nsz8zCrlWODpg==
-Date:   Sat, 11 Mar 2023 08:20:37 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, ukl@pengutronix.de
-Subject: [PULL REQUEST] i2c-for-6.3-rc2
-Message-ID: <ZAwrxZSj84gsb7Ev@sai>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Rosin <peda@axentia.se>, Bartosz Golaszewski <brgl@bgdev.pl>,
-        ukl@pengutronix.de
+        Sat, 11 Mar 2023 02:26:09 -0500
+Received: from mail-ua1-x92f.google.com (mail-ua1-x92f.google.com [IPv6:2607:f8b0:4864:20::92f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF5781DBA7
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:26:07 -0800 (PST)
+Received: by mail-ua1-x92f.google.com with SMTP id n4so5041138ual.13
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:26:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678519567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M/SU9KXz28yYtXWuLaqhgFaPmS02wHA+in6Lz/rDrPw=;
+        b=pUFvUEZU1CIEKCF7HVOGu+/AQTCIsfxxhvCRSBmDepf+LHH3bDw05HpUjJ+AzxOs2s
+         VcQfFe3EL7fcCCCt+b79BuIrbSeUuWSp19UXwtomvUVOlGEpOz/WijtU87Qmdu/u6TOW
+         pkDsLWqqFawl1dvLiKXq+Qm77qFThTQ4gAs3gt9KvnEU8BPQcMcQxThRCjm/RreiKzBt
+         s6B/2OjRIIemSWhnJumv3eYn6MT1ao4a4LVRzW8968nHvtzEgiSZqbokVQZU/wS6Qemo
+         MxD0//YDn8aQAVeLCE4E2ISIFftgeD+r7u1m64cTjkZlZc2eye8azmh1vcpLcHlo+7az
+         dsWA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678519567;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=M/SU9KXz28yYtXWuLaqhgFaPmS02wHA+in6Lz/rDrPw=;
+        b=AjyACLPfTcryd1S8+j+4/2i1NwX/G0blBVzqcQnOo+SQgJFhfUUFoXwoJaa7ByMJ3d
+         feaMQDuvezsofyY8H5A/5uzhfvgYHqGx8L7nPV4vpE44NrTlq993egi5Cm/5IibblnXQ
+         AA/69iYQk0hqNXgIf0EALV7/BuTvE+Tri9YUIOazSTP1L7VZlS40wrUmQkrgIuN722/A
+         P9jQXqbAJ3RcVOUhmH65IDTAuGk+gxn3V6AP66bu1fwCPNT+uGi5Yu6fREXUxH/IA19r
+         7igGp6QCKZ/fXmFvAfs6lxZmVR7hbZAqp95SW7n0m0DaP28GiyAz6JX6tfU9oPEqHkQY
+         /IeA==
+X-Gm-Message-State: AO0yUKXHBfrHmRglXkZLgRdRUbTnBFJqAf+N2uVES11Y+c9iQS4dtB1P
+        SlWIumi13rX9l17a0nY0uGyU4uRAPao7mqhYWGRSeQ==
+X-Google-Smtp-Source: AK7set9wZXev+nm4e9+wm7LFHDw0bPVI3Sr5I5hpMA1Tr//IJ5EDiirQZEiwdrkR43R69XAxFOWloyEo9B6pDwHJr00=
+X-Received: by 2002:a1f:4542:0:b0:401:1c83:fba3 with SMTP id
+ s63-20020a1f4542000000b004011c83fba3mr17674290vka.3.1678519566631; Fri, 10
+ Mar 2023 23:26:06 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="nOn3No4VwGGAIx/e"
-Content-Disposition: inline
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310133710.926811681@linuxfoundation.org>
+In-Reply-To: <20230310133710.926811681@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Sat, 11 Mar 2023 12:55:55 +0530
+Message-ID: <CA+G9fYuyMYnzNLgvyQwjnnVY4=QjOK6kKoTJ_guJ+z0LDn5uMA@mail.gmail.com>
+Subject: Re: [PATCH 4.14 000/193] 4.14.308-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 10 Mar 2023 at 19:16, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.14.308 release.
+> There are 193 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.14.308-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.14.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---nOn3No4VwGGAIx/e
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Results from Linaro=E2=80=99s test farm.
 
-Linus,
+As others reported, s390 builds regressions are noticed.
 
-this PR marks the end of a transition to let I2C have the same probe
-semantics as other subsystems. Uwe took care that no drivers in the
-current tree nor in -next use the deprecated .probe call. So, it is a
-good time to switch to the new, standard semantics now. There is also a
-regression fix in here. Please pull.
+* s390, build failed
+  - gcc-8-defconfig-fe40093d
 
-   Wolfram
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
+## Build
+* kernel: 4.14.308-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.14.y
+* git commit: 6eaf98b65d621aefe9304aeb2903e2e16e7e376e
+* git describe: v4.14.307-194-g6eaf98b65d62
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14=
+.307-194-g6eaf98b65d62
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+## Test Regressions (compared to v4.14.307)
+* s390, build
+  - gcc-8-defconfig-fe40093d
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+## Metric Regressions (compared to v4.14.307)
 
-are available in the Git repository at:
+## Test Fixes (compared to v4.14.307)
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/wsa/linux.git tags/i2c-for-=
-6.3-rc2
+## Metric Fixes (compared to v4.14.307)
 
-for you to fetch changes up to 9e5f81f9a6e78ba411117146ecf324d0145ae89a:
+## Test result summary
+total: 55304, pass: 48088, fail: 1943, skip: 5214, xfail: 59
 
-  i2c: dev: Fix bus callback return values (2023-03-09 22:07:52 +0100)
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 199 total, 197 passed, 2 failed
+* arm64: 37 total, 35 passed, 2 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 41 passed, 0 failed
+* parisc: 12 total, 12 passed, 0 failed
+* powerpc: 20 total, 19 passed, 1 failed
+* s390: 15 total, 10 passed, 5 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 34 total, 33 passed, 1 failed
 
-----------------------------------------------------------------
-* regression fix for the notifier handling of the I2C core
-* final coversions of drivers away from deprecated .probe
-* make .probe_new the standard probe and convert I2C core to use it
+## Test suites summary
+* boot
+* fwts
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* rcutorture
+* v4l2-compliance
+* vdso
 
-----------------------------------------------------------------
-Geert Uytterhoeven (1):
-      i2c: dev: Fix bus callback return values
-
-Uwe Kleine-K=C3=B6nig (9):
-      misc: ad525x_dpot-i2c: Convert to i2c's .probe_new()
-      mtd: maps: pismo: Convert to i2c's .probe_new()
-      serial: sc16is7xx: Convert to i2c's .probe_new()
-      w1: ds2482: Convert to i2c's .probe_new()
-      media: i2c: ov5695: convert to i2c's .probe_new()
-      media: i2c: ov2685: convert to i2c's .probe_new()
-      i2c: Switch .probe() to not take an id parameter
-      i2c: mux: Convert all drivers to new .probe() callback
-      i2c: Convert drivers to new .probe() callback
-
-
-with much appreciated quality assurance from
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      (Rev.) i2c: dev: Fix bus callback return values
-
-Greg Kroah-Hartman (1):
-      (Rev.) serial: sc16is7xx: Convert to i2c's .probe_new()
-
-Kieran Bingham (2):
-      (Rev.) media: i2c: ov2685: convert to i2c's .probe_new()
-      (Rev.) media: i2c: ov5695: convert to i2c's .probe_new()
-
- drivers/i2c/i2c-core-base.c         | 13 +++----------
- drivers/i2c/i2c-dev.c               | 24 ++++++++++++++++++------
- drivers/i2c/i2c-slave-eeprom.c      |  2 +-
- drivers/i2c/i2c-slave-testunit.c    |  2 +-
- drivers/i2c/i2c-smbus.c             |  2 +-
- drivers/i2c/muxes/i2c-mux-ltc4306.c |  2 +-
- drivers/i2c/muxes/i2c-mux-pca9541.c |  2 +-
- drivers/i2c/muxes/i2c-mux-pca954x.c |  2 +-
- drivers/media/i2c/ov2685.c          |  5 ++---
- drivers/media/i2c/ov5695.c          |  5 ++---
- drivers/misc/ad525x_dpot-i2c.c      |  6 +++---
- drivers/mtd/maps/pismo.c            |  5 ++---
- drivers/tty/serial/sc16is7xx.c      |  6 +++---
- drivers/w1/masters/ds2482.c         |  5 ++---
- include/linux/i2c.h                 | 18 +++++++++++-------
- 15 files changed, 52 insertions(+), 47 deletions(-)
-
---nOn3No4VwGGAIx/e
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmQMK8UACgkQFA3kzBSg
-Kba18Q/6ArAkDrxyfyUPaL29Ucv1gIqAzYHIE72cwhsVujj5Oni9lly77h/x5HNK
-oXTLmcSwpTYdLLfg5Y/81hIVBCPg0NhjGFe/2c+iqOrq3FnLUJL63p58P700vFKL
-mhVhWYjEr7+fJ2N/rzk58SJJaqYaYsTKPa6jFRlrLsqctAxcpiKM7jG7UKGsNzW0
-L2UBere0EX0eOdPSznpm2djqIJhKoCaU7NTavoqA/0NXXCmylP32TPQjMgBGRT/R
-koFlFu5vgIZr17yigDPU2cCkV5IHsvCFfgwGe8TsTA4W2nVRQ7TVg8ctjYJcF2wm
-xjqyzJVek7BEYCrZ5E7ls1tFX19R09eiwsbgAsGiFeZsxWtmQd5auRHlqsURxMYf
-PvqKdoCNEnG5LBl7ettVx7dKRFKalMrbZYaFkC6xsB9czywkD6xBCMOn8GXMII7O
-bddnJIhc/VGp1F6MlNPNW5JBvnP5jOcaCEP3kRHINwu3/LY0WWPWaNVJge3trWHy
-FjK7Mrsi/AEk6LQPDzYhz9xp1CGDd9hAV32Wv77TJC/bg8RgBKhttZk+0aURwQNy
-z/kKbaeprpw0mwJdVgM960X4FouT1Vx2zHjM5TnbPMZGkA0gnCNSwHNHEHQf3Wx+
-fd1tSUZP7QnXBo2lZ9v8KVxqSI9hGm+t0MejMaYlqFQsktix9rc=
-=Kn/f
------END PGP SIGNATURE-----
-
---nOn3No4VwGGAIx/e--
+--
+Linaro LKFT
+https://lkft.linaro.org
