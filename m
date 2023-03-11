@@ -2,154 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 088186B5CEE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:39:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65ED6B5CF2
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 15:42:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229613AbjCKOjG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 09:39:06 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46252 "EHLO
+        id S230405AbjCKOmu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 09:42:50 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230101AbjCKOjD (ORCPT
+        with ESMTP id S230129AbjCKOms (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 09:39:03 -0500
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D792AEB89E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 06:39:00 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=70ULOWvNZDhIBg4vnstMVFwRyoxPMpkyu+flXX6WHg8=;
-  b=oBBDl5JEgQh2HilqASq9c6QFzZ0YysFeqdmYczgig5W3R6UZk+6Zu0Tr
-   VgTqQA6sy6p65pYgatxx5IhD9i7X0X73v/b+trvXrOHAgCHlSb+2fLZCl
-   3qhwIlkFS4Xk+qQbpqF5rusMXFbzjYj/NOrzNCNzeccJK0yxsw+Bz95jX
-   g=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,252,1673910000"; 
-   d="scan'208";a="96649566"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 15:38:59 +0100
-Date:   Sat, 11 Mar 2023 15:38:59 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
-        vireshk@kernel.org, johan@kernel.org, elder@kernel.org,
-        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] staging: greybus: Fix Alignment with parenthesis
-In-Reply-To: <27dfe880-35f7-cbc1-cf8b-7bbd7f1c7301@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303111537430.2802@hadrien>
-References: <b6521b9a75a4088d621246b436c7ec5d35365690.1678462486.git.eng.mennamahmoud.mm@gmail.com> <alpine.DEB.2.22.394.2303110958250.2802@hadrien> <71211670-60f9-11f4-1ee7-f94d4d9df4fb@gmail.com> <alpine.DEB.2.22.394.2303111354490.2802@hadrien>
- <61dab579-f10b-5538-8b61-ebe73ae5b4f1@gmail.com> <27dfe880-35f7-cbc1-cf8b-7bbd7f1c7301@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sat, 11 Mar 2023 09:42:48 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5248A13D47;
+        Sat, 11 Mar 2023 06:42:45 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EC5FC60C74;
+        Sat, 11 Mar 2023 14:42:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5015EC433A1;
+        Sat, 11 Mar 2023 14:42:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678545764;
+        bh=Urok4PcGPI2IQWfQn+1HYMcvD4HijH+RQr1qJ2Gegcw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=q3HErYPeIPvEX4wjqfrzRNR8Hy/C1Ym8cc6ePhVKIOUt5EPIVogQV2UgAOFwOlRU5
+         VwXx8wkWnD5o0jKV7OJP8Z7tiyVWbA3jpgA4cUofRVduJyJESzfK28zcyon7CCfmUz
+         30z2Yy6q0HZpPswScHiMN3mFdk60yoBJbfLrPN2ivY0ykUcGOrmS0jpAhS8pgEmhEp
+         XQ7RY0RaXG6/Il/Y0Ih0zmI04goUKTtB3M8KKuU7gikIIXU30mnQG8m7b5Rf6zbFWe
+         54fjf3+f34mATO8Gvjo1HboFidI5Fv0P/H96t1zyaJb7DP3COegYCotj0TsfL7a8bU
+         XMRRBXOEehdpg==
+Received: by mail-lj1-f171.google.com with SMTP id a32so8320852ljq.1;
+        Sat, 11 Mar 2023 06:42:44 -0800 (PST)
+X-Gm-Message-State: AO0yUKUBamZxzjD2DLUslzx4mZOGGfDUywHHGqMaveuee4kQSK5OqXHb
+        ow+VQdJB2sqmF2f+DrovjKI+g/EFzJXmHjC0sRc=
+X-Google-Smtp-Source: AK7set/V1qUONTXCzyTUfCKUCTGR7HLLg1JMnaoaWjoS1H6r6Pqb1so6aNf3GEMZ3CEyeqLIxMis8PpJv10nBja3IgI=
+X-Received: by 2002:a05:651c:11c6:b0:295:d460:5a2d with SMTP id
+ z6-20020a05651c11c600b00295d4605a2dmr8998274ljo.2.1678545762309; Sat, 11 Mar
+ 2023 06:42:42 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-72012524-1678545539=:2802"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <8211c633eb5dceeabee2996a4db91cd971cf7c77.1671098103.git.baskov@ispras.ru>
+ <CAMj1kXFPtA4f3kW1U2-LAQFEuOvLsis=Ursj40xRrg-cvtK=gA@mail.gmail.com> <1df839eccd88063485d1702d5f98d5b8@ispras.ru>
+In-Reply-To: <1df839eccd88063485d1702d5f98d5b8@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 11 Mar 2023 15:42:31 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXHBMMr+EyEQxcn-P4DT+12aeUsbfPMzJB4NWtRqtKUTaQ@mail.gmail.com>
+Message-ID: <CAMj1kXHBMMr+EyEQxcn-P4DT+12aeUsbfPMzJB4NWtRqtKUTaQ@mail.gmail.com>
+Subject: Re: [PATCH v4 01/26] x86/boot: Align vmlinuz sections on page size
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
-
---8323329-72012524-1678545539=:2802
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-
-
-
-On Sat, 11 Mar 2023, Menna Mahmoud wrote:
-
+On Sat, 11 Mar 2023 at 15:30, Evgeniy Baskov <baskov@ispras.ru> wrote:
 >
-> On ١١/٣/٢٠٢٣ ١٤:٥٧, Menna Mahmoud wrote:
+> On 2023-03-10 17:43, Ard Biesheuvel wrote:
+> > On Thu, 15 Dec 2022 at 13:38, Evgeniy Baskov <baskov@ispras.ru> wrote:
+> >>
+> >> To protect sections on page table level each section
+> >> needs to be aligned on page size (4KB).
+> >>
+> >> Set sections alignment in linker script.
+> >>
+> >> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> Tested-by: Peter Jones <pjones@redhat.com>
+> >> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> >> ---
+> >>  arch/x86/boot/compressed/vmlinux.lds.S | 6 ++++++
+> >>  1 file changed, 6 insertions(+)
+> >>
+> >> diff --git a/arch/x86/boot/compressed/vmlinux.lds.S
+> >> b/arch/x86/boot/compressed/vmlinux.lds.S
+> >> index 112b2375d021..6be90f1a1198 100644
+> >> --- a/arch/x86/boot/compressed/vmlinux.lds.S
+> >> +++ b/arch/x86/boot/compressed/vmlinux.lds.S
+> >> @@ -27,21 +27,27 @@ SECTIONS
+> >>                 HEAD_TEXT
+> >>                 _ehead = . ;
+> >>         }
+> >> +       . = ALIGN(PAGE_SIZE);
+> >>         .rodata..compressed : {
+> >> +               _compressed = .;
+> >>                 *(.rodata..compressed)
 > >
-> > On ١١/٣/٢٠٢٣ ١٤:٥٥, Julia Lawall wrote:
-> > >
-> > > On Sat, 11 Mar 2023, Menna Mahmoud wrote:
-> > >
-> > > > On ١١/٣/٢٠٢٣ ١٠:٥٩, Julia Lawall wrote:
-> > > > > On Fri, 10 Mar 2023, Menna Mahmoud wrote:
-> > > > >
-> > > > > > Fix " CHECK: Alignment should match open parenthesis "
-> > > > > > Reported by checkpath
-> > > > > See the message in the other mail about the log message.
-> > > > >
-> > > > > Also, you should not have two patches with the same subject.  Here,
-> > > > > the
-> > > > > changes are on the same file and are essentially the same, even
-> > > > > involving
-> > > > > the same function call.  So they can be together in one patch.
-> > > > >
-> > > > > julia
-> > > > okay, I will. appreciate your feedback. thanks.
-> > > Please put some blank lines around your response, so it is easier to find.
-> > >
-> > > thanks,
-> > > julia
-> >
-> >
-> > Okay, I will.
-> >
-> > thanks,
-> >
-> > Menna
+> > Can you just move this bit into the rodata section below?
 >
+> I don't think that easily possible, as the layout need
+> to stay compatible with in-place extraction for non-UEFI boot.
+> For that execution path the code in .head.text moves everything
+> behind it to the end of the extraction buffer and extraction
+> code overwrites compressed kernel blob progressively during
+> extraction. And that is why we have effectively have two code
+> sections...
 >
->
-> Hi Julia,
->
-> according to Alex feedback
->
-> " I think this type of alignment is not a major problem,
-> and alignment isn't done this way in general in this
-> driver, it's probably OK to keep it that way. - Alex "
->
->
-> ,I won't resubmit these patches, right?
 
-The existing code indeed looks better to me.  So you can skip this issue.
+A right - thanks for explaining that to me.
 
-julia
+So in the end, I think it doesn't matter in any case if we just stick
+to a single .text section with R-X attributes and a single .data
+section with RW- attributes.
 
 
+> >
+> >> +               _ecompressed = .;
+> >>         }
+> >> +       . = ALIGN(PAGE_SIZE);
+> >>         .text : {
+> >
+> > Please use
+> >
+> > .text : ALIGN(PAGE_SIZE) {
+> >
+> > which marks the section as being page aligned, rather than just being
+> > placed on a 4k boundary.
 >
->
->  -Menna
->
+> Will fix in v5.
 >
 > >
-> >
-> > > > > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> > > > > > ---
-> > > > > >    drivers/staging/greybus/fw-core.c | 2 +-
-> > > > > >    1 file changed, 1 insertion(+), 1 deletion(-)
-> > > > > >
-> > > > > > diff --git a/drivers/staging/greybus/fw-core.c
-> > > > > > b/drivers/staging/greybus/fw-core.c
-> > > > > > index 57bebf24636b..f562cb12d5ad 100644
-> > > > > > --- a/drivers/staging/greybus/fw-core.c
-> > > > > > +++ b/drivers/staging/greybus/fw-core.c
-> > > > > > @@ -89,7 +89,7 @@ static int gb_fw_core_probe(struct gb_bundle
-> > > > > > *bundle,
-> > > > > >                }
-> > > > > >
-> > > > > >                connection = gb_connection_create(bundle, cport_id,
-> > > > > > -                        gb_fw_mgmt_request_handler);
-> > > > > > +
-> > > > > > gb_fw_mgmt_request_handler);
-> > > > > >                if (IS_ERR(connection)) {
-> > > > > >                    ret = PTR_ERR(connection);
-> > > > > >                    dev_err(&bundle->dev,
-> > > > > > --
-> > > > > > 2.34.1
-> > > > > >
-> > > > > >
-> > > > > >
-> > > >
->
---8323329-72012524-1678545539=:2802--
+> >>                 _text = .;      /* Text */
+> >>                 *(.text)
+> >>                 *(.text.*)
+> >>                 _etext = . ;
+> >>         }
+> >> +       . = ALIGN(PAGE_SIZE);
+> >>         .rodata : {
+> >>                 _rodata = . ;
+> >>                 *(.rodata)       /* read-only data */
+> >>                 *(.rodata.*)
+> >>                 _erodata = . ;
+> >>         }
+> >> +       . = ALIGN(PAGE_SIZE);
+> >>         .data : {
+> >>                 _data = . ;
+> >>                 *(.data)
+> >> --
+> >> 2.37.4
+> >>
