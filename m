@@ -2,124 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E13A6B5DBC
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:17:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2A366B5DF0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:35:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230486AbjCKQRQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:17:16 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55920 "EHLO
+        id S230167AbjCKQfF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:35:05 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbjCKQRN (ORCPT
+        with ESMTP id S229819AbjCKQfC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:17:13 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 358102A6DC
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:17:12 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32BGGi06006833
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Mar 2023 11:16:45 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1678551406; bh=pk7UJBZS0pGO5djHQvl6UDLseuYPhzAM+aRfDFea3mY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=ojGDog63lbcLBbNtVq7le5fyHKms9oOWTDO4oSVK8AKNS6zOLnVgMsVwDPn9ARvHJ
-         0pezOmtlmVrjSaqLEMvjCAh4k4l5ZwMtLBlF/XhK5idJVIs3h881Ktw1OM66OVOipA
-         Ba9t2BEYTNDxEDBHhc0yH4LseE/Ej3evoXgUz1+nyQNxv5LqkfXs5Mv74ok1NSgsn9
-         HQWreuksic4PHmm+8n/2kl9cHR6zT38D8Q6w1zkB/9OA1ZEVczJw706IXrKUOTfkPj
-         WhHAbzv8fzoa1xAYxJOFrEzYEmAzI1WSXwH0KP91vz8+4j0LTQD9kAGw+5fPBn9Dry
-         6vo0GSLFaSl1g==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 5EC5315C45B9; Sat, 11 Mar 2023 11:16:44 -0500 (EST)
-Date:   Sat, 11 Mar 2023 11:16:44 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <20230311161644.GH860405@mit.edu>
-References: <Y/rbGxq8oAEsW28j@sol.localdomain>
- <Y/rufenGRpoJVXZr@sol.localdomain>
- <Y/ux9JLHQKDOzWHJ@sol.localdomain>
- <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
+        Sat, 11 Mar 2023 11:35:02 -0500
+Received: from mail-yw1-x112a.google.com (mail-yw1-x112a.google.com [IPv6:2607:f8b0:4864:20::112a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8CFB6B979
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:35:01 -0800 (PST)
+Received: by mail-yw1-x112a.google.com with SMTP id 00721157ae682-536bbe5f888so159452017b3.8
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:35:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678552501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wp9g8mvtcyPVfWU1c35OlobShpJvkPzR3H9bu0L9qxs=;
+        b=pr0lMA2mOjrGpYKtk0QVF0tgFeqsi82LWxDkBLfPrvP6SzaFt8uRCUwVlEGVXt55Pr
+         1LakAV5xZAA78BvaPzikSS3KxYsHahyc6ze80pSxeB0/399ArWjoxIhafnZA16imP8gz
+         m6EpAPvbM6L06sONkdYvql4X4jRbWL9LYlwqEehMYRC5PR4Ezzc1Hd6E1UPOG0OlUZGX
+         qjRs4XyDzd1PghVTUoOBMtSTg+n2zV8rTmOB8T0p8lcvYvlUsGTXXdfyY6R9E1SAjeNX
+         Xu4Rg7B5iRhQ8orZmaA1RemdeqsQdHWR6fBji85TlIPP1bY1xc4LJJvcHnjA1VGPVK/1
+         xHpw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678552501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wp9g8mvtcyPVfWU1c35OlobShpJvkPzR3H9bu0L9qxs=;
+        b=yO1GhqSRDJ/GHuHWyHW93t1cupSVgcohqQENn0cSPOPCxhJuFMGNFRZzv7cuj365Tq
+         K4KyJQSka+LiymnRXzJbZbhkRC/qGi6hJVEFvEQ8pt6cbDSiHMlnUImOLw3IEkHM4RNW
+         Wl9svZS+YBT2dn41VpFMp+gXdnv4KCZKvi+pPGqSWE4XxN1787HWBc1Y8TDtujb18pEt
+         KUcpszqZeVFkYueL1SxdB4nhY6hjEpkY+9sqm7YN6PuJ4vsCaILHn2t7DxZkDjNHXTgr
+         Cft62VULEu3yNoQ9USNbvhnupIpVC3EDdrn7IeOs/dwNtKCofA3//qb4FCUx9dXuCDnn
+         GFbA==
+X-Gm-Message-State: AO0yUKVm6OLwRaM9nDnO/5hPKjSwPRAochfbnmAVw6zIS5YnYwMsuolM
+        npl9WoPR0JXDW/2SaOBaWKUg5hGGpg8ZLCgxFC+ByQ==
+X-Google-Smtp-Source: AK7set8DBNZWeU/lrlXBCIe5G4NDpGfK/C+Ec/pjM7HxB3XDcENfIe9cQNMXEKvMvuR3hSrHQKhqUXC0oY/5I7TPspg=
+X-Received: by 2002:a81:b142:0:b0:541:6975:2340 with SMTP id
+ p63-20020a81b142000000b0054169752340mr1503406ywh.6.1678552500949; Sat, 11 Mar
+ 2023 08:35:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAyK0KM6JmVOvQWy@sashalap>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org> <20230311111658.251951-3-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111658.251951-3-krzysztof.kozlowski@linaro.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Sat, 11 Mar 2023 08:34:49 -0800
+Message-ID: <CABXOdTfGcByJaoXG5ifOdOCRWhemendQwG42RObZpc13v-BF6A@mail.gmail.com>
+Subject: Re: [PATCH 3/5] i2c: xiic: hide OF related data for COMPILE_TEST
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-i2c@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-actions@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 09:06:08AM -0500, Sasha Levin wrote:
-> 
-> I suppose that if I had a way to know if a certain a commit is part of a
-> series, I could either take all of it or none of it, but I don't think I
-> have a way of doing that by looking at a commit in Linus' tree
-> (suggestions welcome, I'm happy to implement them).
+On Sat, Mar 11, 2023 at 3:17=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The driver can be compile tested with !CONFIG_OF making certain data
+> unused:
+>
+>   drivers/i2c/busses/i2c-xiic.c:1202:39: error: =E2=80=98xiic_2_00=E2=80=
+=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Well, this is why I think it is a good idea to have a link to the
-patch series in lore.  I know Linus doesn't like it, claiming it
-doesn't add any value, but I have to disagree.  It adds two bits of
-value.
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-First, if there is any discussion on the review of the patch before it
-goes in, the lore link gives you access to that --- and if people have
-a back-lick in the cover letter of version N to the cover letter of
-version N-1, it allows someone doing code archeology to find all of
-the discussions around the patch series in the lore archives.
-
-Secondly, the lore link will allow you to figure out whether or not
-the patch is part of a series; b4 can figure this out by looking at
-the in-reply-to headers, and lore will chain the patch series
-together, so if the commit contains a lore link to the patch, the
-AUTOSEL script could use that to find out whether the patch is part of
-the series.
-
-And this is really easy to do.  All you need is the following in
-.git/hooks/applypatch-msg:
-
-#!/bin/sh
-# For .git/hooks/applypatch-msg
-#
-. git-sh-setup
-perl -pi -e 's|^Message-Id:\s*<?([^>]+)>?$|Link: https://lore.kernel.org/r/$1|g;' "$1"
-test -x "$GIT_DIR/hooks/commit-msg" &&
-	exec "$GIT_DIR/hooks/commit-msg" ${1+"$@"}
-:
-
-Cheers,
-
-						- Ted
-
-P.S.  There was a recent patch series where I noticed that I would be
-screwed if AUTOSEL would only take patch 2/2 and not patch 1/2.  I
-dealt with that though by adding an explicit "Cc: stable@kernel.org".
-So that's the other way to avoid breakage; if people were universally
-careful about adding "Cc: stable@kernel.org" tags, then we wouldn't
-need AUTOSEL at all.
-
-And this is another place where I break with commonly received wisdom
-about "Thou Shalt Never, Never Rewind The Git Branch".  Personally, if
-I find that I missed a Cc: stable tag, rewinding the branch to add
-edit the trailers is *far* better a tradeoff than adhering to some
-religious rule about never rewinding git branches.  Of course, I can
-get away with that since I don't have people basing their branches on
-my branch.  But I've seen people who will self-righteously proclaim
-non-rewinding git branches as the One True Way to do git, and I
-profoundly disagree with that point of view.
-
+> ---
+>  drivers/i2c/busses/i2c-xiic.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-xiic.c b/drivers/i2c/busses/i2c-xiic.=
+c
+> index dbb792fc197e..806b447055fb 100644
+> --- a/drivers/i2c/busses/i2c-xiic.c
+> +++ b/drivers/i2c/busses/i2c-xiic.c
+> @@ -1199,11 +1199,11 @@ static const struct i2c_adapter xiic_adapter =3D =
+{
+>         .algo =3D &xiic_algorithm,
+>  };
+>
+> +#if defined(CONFIG_OF)
+>  static const struct xiic_version_data xiic_2_00 =3D {
+>         .quirks =3D DYNAMIC_MODE_READ_BROKEN_BIT,
+>  };
+>
+> -#if defined(CONFIG_OF)
+>  static const struct of_device_id xiic_of_match[] =3D {
+>         { .compatible =3D "xlnx,xps-iic-2.00.a", .data =3D &xiic_2_00 },
+>         { .compatible =3D "xlnx,axi-iic-2.1", },
+> --
+> 2.34.1
+>
