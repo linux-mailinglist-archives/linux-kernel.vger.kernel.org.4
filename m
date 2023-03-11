@@ -2,77 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1406B596C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 09:11:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 982406B596F
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 09:12:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCKILB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 03:11:01 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59684 "EHLO
+        id S229923AbjCKIMV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 03:12:21 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229612AbjCKIKz (ORCPT
+        with ESMTP id S229522AbjCKIMT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 03:10:55 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDF8AA5E7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 00:10:54 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4037A609EB
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:10:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 17A59C433EF;
-        Sat, 11 Mar 2023 08:10:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678522253;
-        bh=O1RUhPN/GmioYSQfO19oEWifAQg4f/SmTr52PPhbLGE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=tqMwzf92FLs8CP4YS81Bph+YAiviE3/xpmv3s5aZJpEAnIPD/2jYPXMXxldeNyANG
-         jS9J0QJ8Y4Zp2N750LdoDkb4cxSN2NOban4BfVOL3oFI5LhYNDZYcdH3k/d9jjuDyR
-         WkYvRb50EOB9yI3swBfrlyLS9f/bYzKzQCmJ1W5E=
-Date:   Sat, 11 Mar 2023 09:10:50 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org,
-        Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-Subject: Re: [PATCH 3/4] kobject: validate ktype release function during add
-Message-ID: <ZAw3iu+EquTj4y5U@kroah.com>
-References: <20230311-kobject-warning-v1-0-1ebba4f71fb5@weissschuh.net>
- <20230311-kobject-warning-v1-3-1ebba4f71fb5@weissschuh.net>
+        Sat, 11 Mar 2023 03:12:19 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B454913F686;
+        Sat, 11 Mar 2023 00:12:17 -0800 (PST)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32B8BYKR026215;
+        Sat, 11 Mar 2023 09:11:34 +0100
+Date:   Sat, 11 Mar 2023 09:11:34 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Eric Biggers <ebiggers@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZAw3tt9xISOdb5sS@1wt.eu>
+References: <20230226034256.771769-12-sashal@kernel.org>
+ <Y/rbGxq8oAEsW28j@sol.localdomain>
+ <Y/rufenGRpoJVXZr@sol.localdomain>
+ <Y/ux9JLHQKDOzWHJ@sol.localdomain>
+ <Y/y70zJj4kjOVfXa@sashalap>
+ <Y/zswi91axMN8OsA@sol.localdomain>
+ <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311-kobject-warning-v1-3-1ebba4f71fb5@weissschuh.net>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <ZAwe95meyCiv6qc4@casper.infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 03:14:48AM +0000, Thomas Weißschuh wrote:
-> Validating the ktype during cleanup is suboptimal.
-> Many kobjects are only destroyed during shutdown which makes it hard to
-> observe the messages.
+On Sat, Mar 11, 2023 at 06:25:59AM +0000, Matthew Wilcox wrote:
+> On Tue, Mar 07, 2023 at 09:45:24PM +0000, Eric Biggers wrote:
+> > On Tue, Mar 07, 2023 at 10:18:35PM +0100, Pavel Machek wrote:
+> > > I believe that -stable would be more useful without AUTOSEL process.
+> > 
+> > There has to be a way to ensure that security fixes that weren't properly tagged
+> > make it to stable anyway.  So, AUTOSEL is necessary, at least in some form.  I
+> > think that debating *whether it should exist* is a distraction from what's
+> > actually important, which is that the current AUTOSEL process has some specific
+> > problems, and these specific problems need to be fixed...
 > 
-> Instead perform the validation when the object is added.
+> I agree with you, that we need autosel and we also need autosel to
+> be better.  I actually see Pavel's mail as a datapoint (or "anecdote",
+> if you will) in support of that; the autosel process currently works
+> so badly that a long-time contributor thinks it's worse than nothing.
+> 
+> Sasha, what do you need to help you make this better?
 
-As much as I would like to do this, it will cause way too many
-false-positives at this point in time, sorry.
+One would probably need to define "better" and "so badly". As a user
+of -stable kernels, I consider that they've got much better over the
+last years. A lot of processes have improved everywhere even before
+the release, but I do think that autosel is part of what generally
+gives a chance to some useful and desired fixed (e.g. in drivers) to
+be backported and save some users unneeded headaches.
 
-Yes, kobjects should always have a release function, but for some, they
-are static structures and so do not have them, which is why we only
-report the problem when the object is going away as that is when it
-matters.
+In fact I think that the reason for the negative perception is that
+patches that it picks are visible, and it's easy to think "WTF" when
+seeing one of them. Previously, these patches were not proposed, so
+nobody knew they were missing. It happened to plenty of us to spend
+some time trying to spot why a stable kernel would occasionally fail
+on a machine, and discovering in the process that mainline did work
+because it contained a fix that was never backported. This is
+frustrating but there's noone to blame for failing to pick that patch
+(and the patch's author should not be blamed either since for small
+compatibility stuff it's probably common to see first-timers who are
+not yet at ease with the process).
 
-So if you fix up all the in-kernel static kobjects first, then we can
-take this type of change, sorry.
+Here the patches are CCed to their authors before being merged. They
+get a chance to be reviewed and rejected. Granted, maybe sometimes they
+could be subject to a longer delay or be sent to certain lists. Maybe.
+But I do think that the complaints in fact reflect a process that's not
+as broken as some think, precisely because it allows people to complain
+when something is going wrong. The previous process didn't permit that.
+For this alone it's a progress.
 
-Your first 2 are great though, I'll go queue them up next week, thanks
-for the cleanups there.
-
-greg k-h
+Willy
