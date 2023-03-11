@@ -2,183 +2,180 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 769D16B563C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:16:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D510B6B5640
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 01:17:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229744AbjCKAQ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Fri, 10 Mar 2023 19:16:26 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32874 "EHLO
+        id S229809AbjCKARz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Fri, 10 Mar 2023 19:17:55 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCKAQY (ORCPT
+        with ESMTP id S229502AbjCKARx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Fri, 10 Mar 2023 19:16:24 -0500
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB4134AEA
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:16:22 -0800 (PST)
-Received: by mail-wm1-x32e.google.com with SMTP id j19-20020a05600c1c1300b003e9b564fae9so7264510wms.2
-        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:16:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678493780;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T+6glvn0oJh5BPh1DQwKMOx46e4Z6t8/bsFpmCRkgOk=;
-        b=wIjvTlJEo7bnc5/CP7lw89pFLbqEARl2/dv8qTQBhoNaKzgIqKT1Ntcee8SZ3K/GSn
-         RP2OCL8rraqnAq973wv0KglYSK+vV5fBAyG4xwLWia7QSSw70dYiLt/pTOAJHL9RlQKy
-         /NTsymtRtToleH0Jf4PhQFTMcnrzWQ2prYqto5851cVnCxXcaigoriGVpSYJxg9xc+0n
-         cMRdPswGQ+bo1i6uJ0Ce9bYYqhzhEbeQW50DX6H5u5K883ghkN06bVD9VM3TTLX/jKIQ
-         XQd2+mqD0bwCS7Sh8MoWTbIW8+JyA6FFwty/ho7q83YU1AnTbX10WZO2isyhaAK9LMUE
-         mGXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678493780;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T+6glvn0oJh5BPh1DQwKMOx46e4Z6t8/bsFpmCRkgOk=;
-        b=0cz11irCDp7rbn6BviuXJ58U0BNf1/t+c/qjXaO41pJtYNI+eHHEjDpHuoBo/fFjhy
-         NzakCZX3sx9pHeoxiOA04WA/bPPV0+WuXMRnV26TBJFKFrzVJO79FKXQV5hTVJbcht0r
-         l5z9VsIR0swhaeIVXLRa0WzIckQ6+Zgh6vDE17HPmubNXSDp8z1cJkOH3ewfcUMOYQns
-         ync/GnOwctMbAUOYMSMTDU8ACF66gjozs7Nj/czOkrHe7bGk9nr+lkAsG2Kw/qBn/7Ug
-         MMvfcngiZj/zoBwfDCxtIAdF+QNYVDzMbAKtxLPZYsgnfl+1L8NoF0BOBqU7wJ0013hy
-         fEEA==
-X-Gm-Message-State: AO0yUKWiuYpK+5EI4SawKjNH0O52oRqt+Hbv6/+n10SY7tMwrY9BPpBW
-        O9STVU5INn6IBBEjfTvX03SUUw==
-X-Google-Smtp-Source: AK7set8WyvvgAJ5WORz6GGVm6pLqeX/0gIzJi2MD4aMTLM+bp2TZNdbHNW2ewaGBdYKghckMWDG5kQ==
-X-Received: by 2002:a05:600c:601b:b0:3e2:153e:6940 with SMTP id az27-20020a05600c601b00b003e2153e6940mr4536935wmb.3.1678493780302;
-        Fri, 10 Mar 2023 16:16:20 -0800 (PST)
-Received: from [192.168.0.162] (188-141-3-169.dynamic.upc.ie. [188.141.3.169])
-        by smtp.gmail.com with ESMTPSA id l4-20020a05600c4f0400b003dc4a47605fsm1404324wmq.8.2023.03.10.16.16.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 10 Mar 2023 16:16:19 -0800 (PST)
-Message-ID: <74c0c724-b6a9-3755-7f56-9f421cece1a3@linaro.org>
-Date:   Sat, 11 Mar 2023 00:16:18 +0000
+        Fri, 10 Mar 2023 19:17:53 -0500
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2064.outbound.protection.outlook.com [40.107.92.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E552F135960
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 16:17:51 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nQIF25NDSGDLgiLIXN8XC7/9OjM5rJw9S/U4rEEQy4q9BgmZAQVJLKI17Pfhccg9b2Cy58rUkDzCAm10tXregMXi2rdrt9GoMBuuPAQENsqSiMCyK/EsBXqxJQxCIU35VpZp4RVOkgVrZyPOazQR5dLhuhQpfJGrQfNrfZ3mCm1LoBCyb6ooBzBbPXelVn+5r8MrnY5Sk9I+tUzNMXdmTtQDaWlwjF1P9DFw8coy3IoBkePnf8ZSH3iC7plHf4bl9BTu65BhL5XkzooOHnsY7fh14e9et+CyNeh08PvuJBGmDJJDJ5zEe7ebLwzy/C5YZSSNUDDixBs4jsjZZJ8rMg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3l9nRlxvauMZwdn5YO5yYioP7I3aDQZd7VF5cXKw1sU=;
+ b=K9NWT+SQLMjl2bHo5rRLOFROB85lRMjCT/i491BZUGCO1sHGk/g9j1jkJ924+ljBwm1C7r+qMWcdXoaR7iky+shyKLTorSd1Y6JOi/DWuwgHabehnU7VwSPMhAFKyWaKmcWhH76YESu9maDkSo1dNQ0JYNhmQdNOudx2OaieZg4ltakEK5M9ekS8AYn30O3YIb3WFspcfGFPBNR/dFWJVLhSUovtIg4dZoo/mmVPGg0pF803NLXiI7fJn0pypkmPvIzDoxIeWrsGGatBuJ2lMjDNAMcgJUvd7drKjAGTbydoG/rd/eBfxCFYVmWajwA37jp7A/3nHP7V8F70qFV/nw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=redhat.com smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3l9nRlxvauMZwdn5YO5yYioP7I3aDQZd7VF5cXKw1sU=;
+ b=IG+VQk2vJpXhB9xfdNQ3cilfWdVFsB+RpYumKoqvMBp7oGVLqxRx0JFBvagLlo5P0R9xuXp4+BCKQHbnXpQrRhrqW3eLmUZ0BNMrb9fGR6iqpVBz5uazziSKSBtEa6/ltH0YTMQI8Bc1UyssLFwyDUvkF3OaEZb6SBEd+hluYkT3D1SEAwOAUGVpDpl4jgmyzVsCpL7LmwMMHEE/Xu6RijLkJvTR9nvmUVFIRG1rcKAI2pZStwJvjsrjBW1E2ks+CMDHB3DkkZuWF0LThdBxNYK+RCjMtZ2KUUrvgi5+QBtvnLg/cE0SGbHe7jLychPOHitG4XiZ5aVHjTaBuU6oMw==
+Received: from MW4PR04CA0294.namprd04.prod.outlook.com (2603:10b6:303:89::29)
+ by CH0PR12MB8485.namprd12.prod.outlook.com (2603:10b6:610:193::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Sat, 11 Mar
+ 2023 00:17:49 +0000
+Received: from CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:89:cafe::c0) by MW4PR04CA0294.outlook.office365.com
+ (2603:10b6:303:89::29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.29 via Frontend
+ Transport; Sat, 11 Mar 2023 00:17:49 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT069.mail.protection.outlook.com (10.13.174.129) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.22 via Frontend Transport; Sat, 11 Mar 2023 00:17:49 +0000
+Received: from rnnvmail205.nvidia.com (10.129.68.10) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Fri, 10 Mar 2023
+ 16:17:42 -0800
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail205.nvidia.com
+ (10.129.68.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Fri, 10 Mar
+ 2023 16:17:41 -0800
+Received: from Asurada-Nvidia (10.127.8.9) by mail.nvidia.com (10.129.68.6)
+ with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Fri, 10 Mar 2023 16:17:40 -0800
+Date:   Fri, 10 Mar 2023 16:17:39 -0800
+From:   Nicolin Chen <nicolinc@nvidia.com>
+To:     Eric Auger <eric.auger@redhat.com>
+CC:     <jgg@nvidia.com>, <robin.murphy@arm.com>, <will@kernel.org>,
+        <kevin.tian@intel.com>, <baolu.lu@linux.intel.com>,
+        <joro@8bytes.org>, <shameerali.kolothum.thodi@huawei.com>,
+        <jean-philippe@linaro.org>, <linux-arm-kernel@lists.infradead.org>,
+        <iommu@lists.linux.dev>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 03/14] iommufd/device: Setup MSI on kernel-managed
+ domains
+Message-ID: <ZAvIo8P8SAZt9hOV@Asurada-Nvidia>
+References: <cover.1678348754.git.nicolinc@nvidia.com>
+ <5149b7e711a46e81aea8515676cf0e45608b3afd.1678348754.git.nicolinc@nvidia.com>
+ <919e32d5-26ef-7327-e25f-565967c94e6a@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v7 6/9] interconnect: qcom: rpm: Handle interface clocks
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230228-topic-qos-v7-0-815606092fff@linaro.org>
- <20230228-topic-qos-v7-6-815606092fff@linaro.org>
- <50f03895-816f-be8d-d956-d237fb13f5a0@linaro.org>
- <6d10906e-08cd-0380-5f5d-3ac0eec60276@linaro.org>
- <67590cd3-5543-59ed-6158-b272103ebd05@linaro.org>
- <858a8925-f11b-652d-3f02-f5ceea7d11fa@linaro.org>
-From:   Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <858a8925-f11b-652d-3f02-f5ceea7d11fa@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <919e32d5-26ef-7327-e25f-565967c94e6a@redhat.com>
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT069:EE_|CH0PR12MB8485:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2cce3e22-7d6f-429f-dfca-08db21c60bf9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: DDHwpRaaeVDQls/5z01pN2J8SPXR5cWzaFNPw124luFq+InbPu768XkxQNrO3kSVV208rumpuZ735WBn/s8/8d/XdrxZMZAV0TX3CwiLNAf1X+WJlsFmztMtwLtVN9qpEdlc6C+XvQIlzG/CtqUxmTYp5ZWqjO/PMANAeKDG5tMOKYfoY4andN/hWTWFmATfM6e+9MA1nI4RdI/39gb+wwE8J0kZi1F6rMmeDVqHRMCwJC0Qp04i+6yg48IqxngmWf9VjW/cdcd6m1QsMcj6GerwkQVBDxYt7942bcwScyOmJ86OyFXC7BfiZQrB4cbvNGx+4+tjWYcj4DnhyaOsOP1oVwL8/1w0344K+Htg748aIqrah/YJGwfY2rVdTBshlolm09CFBEvBKY9Vn671Jy+s4tSM4vl1X9OjE5RTNWeqxMw3gd/v/O4cey7G+7Bu8ob5OneurXl9gO4yFq5FZ8MoBgLFChMLeH3l79ouULUKHioAGJu948t2gbvOTEOoBipCdpC8HOHU7uFRF+G6gPqmA7Di9mAAFO9ND8TZfjHJcVYnCRLGC2s2SCKzJw0abUgttUt1nDTsjNVXbb7k8q+a63+UqGL8px3Qu8DYXC/FUTx7n1lKr0/+rvwlkQQE9GWJXPWTs9P44sBhCh/diKvYfXY5NTGwa6K2mA0AvURbV4w4rJPR9fmTOKFYjk5V2mIHsYadGogM2tpJuzsvZq71ROAL+7AeeVf79SjYD38=
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(376002)(346002)(39860400002)(396003)(136003)(451199018)(36840700001)(46966006)(53546011)(316002)(54906003)(478600001)(7416002)(2906002)(5660300002)(70586007)(70206006)(8676002)(4326008)(6916009)(8936002)(41300700001)(26005)(7636003)(36860700001)(55016003)(356005)(40480700001)(86362001)(33716001)(82740400003)(9686003)(186003)(82310400005)(83380400001)(47076005)(336012)(426003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Mar 2023 00:17:49.0286
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2cce3e22-7d6f-429f-dfca-08db21c60bf9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT069.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB8485
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 18:05, Konrad Dybcio wrote:
->> I think you could use assigned-clocks for that ..
->>
->> So its not part of your series but then presumably you have a follow-on patch for the 8998 dts that points your ->intf_clks at these then ?
->>
->> clocks = <&clock_gcc clk_aggre2_noc_clk>,
->>           <&clock_gcc clk_gcc_ufs_axi_clk>,
->>           <&clock_gcc clk_gcc_aggre2_ufs_axi_clk>;
->>
->> It seems like the right thing to do..
-> Why so? We're passing all clock references to clocks=<> and we handle
-> them separately. This is akin to treating the "core" clock differently
-> to the "iface" clock on some IP block, except on a wider scale.
-
-Eh, that was a question, not a statement. I mean to ask if your 
-intf_clks are intended to be populated with some/all of the above 
-additional gcc references ?
-
->> Still not clear why these clocks are off.. your bootchain ?
-> Generally the issue is that icc sync_states goes over *all the possible
-> interconnect paths on the entire SoC*. For QoS register access, you need
-> to be able to interface them. Some of the hardware blocks live on a
-> separate sort of "island". That' part of why clocks such as
-> GCC_CFG_NOC_USB3_PRIM_AXI_CLK exist. They're responsible for clocking
-> the CNoC<->USB connection, which in the bigger picture looks more or less
-> like:
+On Fri, Mar 10, 2023 at 05:45:20PM +0100, Eric Auger wrote:
+> External email: Use caution opening links or attachments
 > 
 > 
->      1     2-3            2-3    3-4            3-4    4-5
-> USB<->CNoC<->CNoC_to_SNoC<->SNoC<->SNoC_to_BIMC<->BIMC<->APSS
+> Hi Nicolin,
 > 
-> where:
-> 
-> 1 = GCC_CFG_NOC_USB3_PRIM_AXI_CLK
-> 2 = RPM CNOC CLK
-> 3 = RPM SNOC CLK
-> 4 = RPM BIMC CLK
-> 5 = (usually internally managed) HMSS / GNOC CLK
-> 
-> or something along these lines, the *NoC names may be in the wrong order
-> but this is the general picture.
-> 
-> On msm-4.x there is no such thing as sync_state. The votes are only
-> cast from within the IP-block drivers themselves, using data gathered from
-> qcom,msmbus-blahblah and msmbus calls from within the driver. That way,
-> downstream ensures there's never unclocked QoS register access.
-> 
-> After writing this entire email, I got an idea that we could consider not
-> accessing these QoS registers from within sync_state (e.g. use sth like
-> if(is_sync_state_done))..
-> 
-> That would lead to this patch being mostly
-> irrelevant (IF AND ONLY IF all the necessary clocks were handled by the
-> end device drivers AND clk/icc voting was done in correct order - which
-> as we can tell from the sad 8996 example, is not always the case).
-> 
-> Not guaranteeing it (like this patch does) would make it worse from the
-> standpoint of representing the hardware needs properly, but it could
-> surely save some headaches. To an extent.
+> On 3/9/23 11:53, Nicolin Chen wrote:
+> > The IOMMU_RESV_SW_MSI is a kernel-managed domain thing. So, it should be
+> > only setup on a kernel-managed domain only. If the attaching domain is a
+> > user-managed domain, redirect the hwpt to hwpt->parent to do it correctly.
+> >
+> > Signed-off-by: Nicolin Chen <nicolinc@nvidia.com>
+> > ---
+> >  drivers/iommu/iommufd/device.c | 5 ++++-
+> >  1 file changed, 4 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/iommu/iommufd/device.c b/drivers/iommu/iommufd/device.c
+> > index f95b558f5e95..a3e7d2889164 100644
+> > --- a/drivers/iommu/iommufd/device.c
+> > +++ b/drivers/iommu/iommufd/device.c
+> > @@ -350,7 +350,8 @@ static int iommufd_group_setup_msi(struct iommufd_group *igroup,
+> >        * call iommu_get_msi_cookie() on its behalf. This is necessary to setup
+> >        * the MSI window so iommu_dma_prepare_msi() can install pages into our
+> >        * domain after request_irq(). If it is not done interrupts will not
+> > -      * work on this domain.
+> > +      * work on this domain. And the msi_cookie should be always set into the
+> s/And the/The/
 
-Hmm.
+OK.
 
-If I have understood you correctly above, then for some of the NoC QoS 
-entries we basically need additional clocks, which is separate to the 
-clocks the controller bus and bus_a clocks.
+> > +      * kernel-managed (parent) domain.
+> >        *
+> >        * FIXME: This is conceptually broken for iommufd since we want to allow
+> >        * userspace to change the domains, eg switch from an identity IOAS to a
+> > @@ -358,6 +359,8 @@ static int iommufd_group_setup_msi(struct iommufd_group *igroup,
+> >        * matches what the IRQ layer actually expects in a newly created
+> >        * domain.
+> >        */
+> > +     if (hwpt->parent)
+> > +             hwpt = hwpt->parent;
+> I guess there is a garantee the parent hwpt is necessarily a
+> kernel-managed domain?
 
-We don't see the problem all the time because of sync_state, so your 
-question is should we push the clocks to the devices. Based on the dtsi 
-you gave as an example, my €0.02 would say no, those are clearly 
-additional clock dependencies for NoC.
+Yes. It must be.
 
-Going by the name, you'd expect the UFS controller could own these two 
-clocks
+> Is it that part of the spec that enforces it?
 
-"clk-gcc-ufs-axi-clk",
-"clk-aggre2-ufs-axi-clk-no-rate"
+The hwpt_alloc() function has a sanity to enforce that.
 
-but even then by the same logic the NoC should own 
-"clk-aggre2-noc-clk-no-rate" I wouldn't much fancy splitting them apart.
+> IOMMU_HWPT_ALLOC doc says:
+> " * A user-managed HWPT will be created from a given parent HWPT via
+> @pt_id, in
+>  * which the parent HWPT must be allocated previously via the same ioctl
+> from a
+>  * given IOAS.
+> "
+> Maybe precise that in the commit msg?
 
-So - I'd say the commit log doesn't really explain to me what we have 
-discussed here.
+There is a paragraph just above that, for kernel-managed HWPT:
 
-Suggest rewording it a little bit "non-scaling clock" is accurate but 
-for me on the first read doesn't really tell me that these are 
-node-specific clock dependencies or that there is an expectation that 
-the intf_clks should be tied to node-specific clocks.
+455  * A normal HWPT will be created with the mappings from the given IOAS.
+456  * The @data_type for its allocation can be set to IOMMU_HWPT_TYPE_DEFAULT, or
+457  * another type (being listed below) to specialize a kernel-managed HWPT.
 
-So two asks
+Perhaps we could rephrase "normal HWPT" with "kernel-managed
+HWPT", to make it more clear.
 
-- Update the commit log and potentially the structure comments
-- Can you split the devm_kzalloc() into a seperate patch ?
-   I don't see why this needs to be done but if it does need to be
-   done it could as far as I read it be done before this patch
-
----
-bod
+Thanks
+Nic
