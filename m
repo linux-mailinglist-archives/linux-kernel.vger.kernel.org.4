@@ -2,186 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C745A6B5931
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 872006B5930
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 08:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230110AbjCKHDM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 02:03:12 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52892 "EHLO
+        id S229894AbjCKHDH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 02:03:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230089AbjCKHDF (ORCPT
+        with ESMTP id S230139AbjCKHC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 02:03:05 -0500
-Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 846E65BA7;
-        Fri, 10 Mar 2023 23:02:57 -0800 (PST)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailout.west.internal (Postfix) with ESMTP id 23F71320076F;
-        Sat, 11 Mar 2023 02:01:52 -0500 (EST)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute6.internal (MEProxy); Sat, 11 Mar 2023 02:01:52 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1678518111; x=1678604511; bh=feqTz2HniZqY/yt47o/AlWtYhoQHaXGw7ql
-        1hoEkXKY=; b=BYtuz7HWC/S3Oh0s4/uNl714hq2Bu/njK8bv3IWaYhKCllp2/0C
-        Mi+prRlVDMjJoun7FFvmtcZypv0k4ZgXBq0xdWz5g89mMHLpHtghWlHqtvtt3NqP
-        Yul8D0z3W1hCzYbMA4JK7Zti2pMDjMHXgVSBbE/AVFf7CSShauBEkEk4LNlZOVkT
-        gz+io8HfZqQ1gX5au9ho12aTpcKQAM7AgKFpK/YMl/G46joM+wWtlNeCnvJJjs6F
-        cbCZDrj1mIQJOY/4L2Cy/gMD59AOJR+iellIqquGuzRuCxBMZgUF+882WN2dmdU9
-        RoBJxy9R8GmDrO7Rc7IBYyqKtjRUY3spTAA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:in-reply-to:message-id:mime-version
-        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
-        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-        1678518111; x=1678604511; bh=feqTz2HniZqY/yt47o/AlWtYhoQHaXGw7ql
-        1hoEkXKY=; b=C6COX5XoTMnu1fmW+GAFv7Jk+hkNnpaRLmmvXh0M6brkO8xUskJ
-        hQFTQylX/XL5h+RMt86497enasRzFPx60Dcfx/BpyX9onmta1/igdDjOaUFpc5Cl
-        mq4MD+e2eEQYeIvvkiu+05Oj0ZNkzPT7OFcby1doXAHSGn7ab2aXmiWn55znc1F2
-        ftwZXJz096Qax+5xfByzJrQCmUcf0aPLKApP2Idg1dlXHYr6op7euVzUpKIww/xX
-        n14ATT5ffnnG9t60AE7puYeaGEkzikwwlOR8WPpWGBZSjZ5jsoGGccmx8OWuxnzD
-        nDUJOxib2qJZyTxErqIZ6Ed6J2oNSpLTm3g==
-X-ME-Sender: <xms:XycMZGeUJfGs8LAQ5t-pFO-5-HdeIoEn7kvdHZT9RpXkcFW8yds2-A>
-    <xme:XycMZAPWPtmDf0OYSqa-TG0RGggcwFUVmEqCm0ftsHbezj1Y0StCnPAr7StyGzpap
-    ZE5qYpu5kq6>
-X-ME-Received: <xmr:XycMZHgpLNDJaZ9TPbT3f2B0NfHjW270Di5-5sVi-pc9zBUEzKSc6zbVWYEnld6DZ7WR8C5eTSuQbhYuCiZ2XcMTvGo1EzPcm3_SzfO1B4fApZoGU62i>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvdduledguddtudcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefkffggfgfuvfevfhfhjggtgfesthejredttdefjeenucfhrhhomhepkfgr
-    nhcumfgvnhhtuceorhgrvhgvnhesthhhvghmrgifrdhnvghtqeenucggtffrrghtthgvrh
-    hnpefhgeffkedtvefhjedvffffheeukedvueeigeetieelheffudeugfegieeivdehjeen
-    ucffohhmrghinhepshhpihhnihgtshdrnhgvthenucevlhhushhtvghrufhiiigvpedtne
-    curfgrrhgrmhepmhgrihhlfhhrohhmpehrrghvvghnsehthhgvmhgrfidrnhgvth
-X-ME-Proxy: <xmx:XycMZD_kkt-JdZXdBGJ2zCqlIBa4_S4Z3szcfIgtm3KHqS4zLCeXnw>
-    <xmx:XycMZCuN83KcH9vk1W0YF-lQ5PAqNMXIKxrs7gKtS4AFsEsCc2dEBA>
-    <xmx:XycMZKFZErHqT8L2aWrYeJKVKVpESCXRLwHcxggSDAp3TxG6DeNPog>
-    <xmx:XycMZGjhzA-RXEUSUE0fOnJWI5F-OvmgNKUU_tdtmC4NLW1upUVdDQ>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Mar 2023 02:01:47 -0500 (EST)
-Message-ID: <ff12aef6-b3a1-e8ab-45c4-0976673bce84@themaw.net>
-Date:   Sat, 11 Mar 2023 15:01:45 +0800
+        Sat, 11 Mar 2023 02:02:59 -0500
+Received: from progateway7-pub.mail.pro1.eigbox.com (gproxy5-pub.mail.unifiedlayer.com [67.222.38.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABED0145B25
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 23:02:39 -0800 (PST)
+Received: from cmgw14.mail.unifiedlayer.com (unknown [10.0.90.129])
+        by progateway7.mail.pro1.eigbox.com (Postfix) with ESMTP id 3BDDC1004740A
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 07:02:34 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id atFSpAEVDoCvYatFSpZV1D; Sat, 11 Mar 2023 07:02:34 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=Q9cXX66a c=1 sm=1 tr=0 ts=640c278a
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=k__wU0fu6RkA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=RcU_vbUwN4TypZ277zIA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=9pW2PTpaY8uKVeOLUHytoDI6mRSjrFlwRuxMM7C0hmU=; b=pcQC+0a1rLD0biSaX4qdvJ5Mh1
+        TOPXh8HUIZ6YDhjZQ0bkVssoU0K2tjoIpmUFloXLcy7AEjniEbpNR/E66ixwigPoGgj9HV5g/v/n9
+        ccyZ5rlp2CItbukWc/PXDA9KlxOC29d0bJnszje7TXoq/dPc35wy8TAcQljypA2L/TmWR076uLpFn
+        xDdCbKpJRZVQUjfvcZn8Qv6Y6XEHzRA0wcz7lnxQVG98Oc1EOQFrmEEi/xJH7mrgWQPHkdcdvUZLx
+        d7p0tm0yx/ZWXGJxNWb9eaowTEpzkt4lTVSZWNlJUds/v22fI2RIIKPSIt9dq2nhdEOLze4G0UoG7
+        J9O/uncg==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:59916 helo=[10.0.1.47])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1patFR-002YNR-6v;
+        Sat, 11 Mar 2023 00:02:33 -0700
+Subject: Re: [PATCH 6.2 000/211] 6.2.4-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230310133718.689332661@linuxfoundation.org>
+In-Reply-To: <20230310133718.689332661@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <f7c8bb0a-1c77-b4c6-07ba-ae2e45ce4ff1@w6rz.net>
+Date:   Fri, 10 Mar 2023 23:02:27 -0800
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 0/1] autofs: fix memory leak of waitqueues in
- autofs_catatonic_mode
-Content-Language: en-US
-To:     Fedor Pchelkin <pchelkin@ispras.ru>,
-        Al Viro <viro@ZenIV.linux.org.uk>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        Andrei Vagin <avagin@gmail.com>,
-        Takeshi Misawa <jeliantsurux@gmail.com>,
-        autofs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        lvc-project@linuxtesting.org
-References: <20230211195950.452364-1-pchelkin@ispras.ru>
- <5b86f03b-020b-1584-be8f-b7dc7277fa0a@themaw.net>
- <2f87a31c-7879-dce8-9c4b-01d2e781e22c@themaw.net>
- <20230310175627.dvmkyvgb7b3qehbx@fpc>
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <20230310175627.dvmkyvgb7b3qehbx@fpc>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1patFR-002YNR-6v
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.47]) [73.162.232.9]:59916
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 11/3/23 01:56, Fedor Pchelkin wrote:
-> On Mon, Feb 13, 2023 at 12:37:16PM +0800, Ian Kent wrote:
->> I was going to Ack the patch but I wondering if we should wait a little
->>
->> while and perhaps (probably) include the wake up call change as well.
->>
-> Hmm, those would be separate patches?
+On 3/10/23 5:36 AM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.4 release.
+> There are 211 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
-> An interesting thing is that the code itself supposes the wake up calls
-> from autofs_wait_release() and autofs_catatonic_mode() to be related in
-> some way (see autofs_wait fragment):
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
 >
-> 	/*
-> 	 * wq->name.name is NULL iff the lock is already released
-> 	 * or the mount has been made catatonic.
-> 	 */
-> 	wait_event_killable(wq->queue, wq->name.name == NULL);
-> 	status = wq->status;
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
 >
-> It seems 'the lock is already released' refers to autofs_wait_release()
-> as there is no alternative except the call to catatonic function where
-> wq->name.name is NULL. So apparently the wake up calls should be the same
-> (although I don't know if autofs_catatonic_mode has some different
-> behaviour in such case, but probably it doesn't differ here).
-
-I think that, because there are processes waiting, they will always go
-
-via the tail of autofs_wait() so the wait will be freed at that point.
-
-
-Alternately autofs_wait_release() will be called from user space daemon
-
-to tell the kernel it's done with the current notification.
-
-
-I think there was an order of execution problem at some point between
-
-autofs_wait() and autofs_wait_release() hence the code there. The same
-
-may be the case for autofs_catatonic_mode() which is what the patch
-
-implies.
-
-
-These mount points can be left mounted after the user space daemon
-
-exits with the processes still blocked so umounting the mount should
-
-trigger the freeing of the name or they may be set catatonic by the
-
-daemon at exit, again freeing the name, and in both cases unblocking
-
-the processes to free the wait.
-
-
-So I didn't think there was a memory leak here but SyZkaller says
-
-there is.
-
-
+> thanks,
 >
-> It's also strange that autofs_kill_sb() calls autofs_catatonic_mode() and
-> currently it just decrements the wait_ctr's and it is not clear to me
-> where the waitqueues are eventually freed in such case. Only if
-> autofs_wait_release() or autofs_wait() are called? I'm not sure whether
-> they are definitely called after that or not.
->
-> [1] https://www.spinics.net/lists/autofs/msg01878.html
->> In any case we need Al to accept it (cc'd).
->>
->> Hopefully Al will offer his opinion on the changes too.
->>
-> It would be very nice if probably Al would make it more clear.
->
-> At the moment I think that the leak issue should be fixed with the
-> currenly discussed patch and the wake up call issue should be fixed like
-> in [1], but perhaps I'm missing something.
+> greg k-h
 
-The question I have is, is it possible a process waiting on the wait
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-queue gets unblocked after the wait is freed in autofs_catatonic_mode?
-
-
-Ian
-
-
+Tested-by: Ron Economos <re@w6rz.net>
 
