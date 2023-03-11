@@ -2,59 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF64F6B5D9C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:01:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 976316B5DA0
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 17:04:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230407AbjCKQA7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 11:00:59 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58092 "EHLO
+        id S230139AbjCKQE4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 11:04:56 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230378AbjCKQA5 (ORCPT
+        with ESMTP id S230454AbjCKQEv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 11:00:57 -0500
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABF8E199C1
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:00:55 -0800 (PST)
-Received: by mail-ed1-x52a.google.com with SMTP id ek18so1347712edb.6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:00:55 -0800 (PST)
+        Sat, 11 Mar 2023 11:04:51 -0500
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F5A210D752
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:04:50 -0800 (PST)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-540cb2fb5b9so54047177b3.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 08:04:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678550453;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=zH3H4cxNgLOQ6PFJEhsV6rqCe5ksnzMYlcew81Qs5YU=;
-        b=PngSGwZsDShXVr2eFlFeY3I3Tx3pEZMIXHzH2KD0FPx/YRHaQFK4BHmTnrdTZUZhu9
-         EJsgCESZcnTR0HvbFH+XnfWR6n7Vnqo43C9o0+biTBKUI8RNSXsTyK0kWe+X3Xno8jmY
-         tDCl4MwDroXcXFz+l6Uz++zEVfGuqjRf06N0Rq1QV+Quh8SUcDQfg19xsfkn1V0Giumd
-         EsuZnnRxKdoKAYFjDHuc9Emk78nxs8+D0M86lo2RYxrBCmoKc14MiPtr0gugSY6onjtz
-         QH9R9mSaCVOLd3GnF4c2/DYzkxXIPP4ZJ5zPYmjSQUjMQMz7IU3bpRtUmjv0WQdkhdud
-         jPyA==
+        d=google.com; s=20210112; t=1678550689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/G/X5+IzPvIp/u0h6IkNiabirE8Y9puo1twyHDWLaMA=;
+        b=VJCB1uC5JrWowq+lL5LKURGf9F6grJOUQgJ0kSJDYl76qXzRvwoWda/HsCN3ZQfB6G
+         DSa+tDW+3NlqICRdnvqurB7WtF4geijT6FWAWjF5vYBcGOMBSO+1Q9eRCHPobKdAjwQ1
+         5IMWSXKnOoZV9qWXWjzPcRwhEtN3R1J/XMn5Camro6uha3/YC1gYfzuJD+0Bifq/2szQ
+         2yglUr8Wne8GE1Q1FEjzSeQqs8bga5ij4uo5HJrjsjP7Q+j5GYzuIbycLrUsL03VsSpA
+         FXTf1oCE4sO7FH0IIq6YUPwhvli0m6vKvVi25DbrRop6B43Y22XPpMy33rMhzYsz7vuk
+         cj+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678550453;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zH3H4cxNgLOQ6PFJEhsV6rqCe5ksnzMYlcew81Qs5YU=;
-        b=RxLcfdnCIZiUmuL4GtkcpUVTIddhhKY0vOJ55NXTNmg+Uc75AieR061adQjvhe05Vw
-         06VbGj3DA8XQAuZ08CounQmPYUjt/4sbgO0yrD93LG7RpHOHxYByvkXjgMQ5JxwtkaG7
-         JlNlC/Xwwkn5cGmjPNPoRV4g7dh2d6VOrKNkFPPyvH3cXJxMqEx4rdUJQBGdc6dcPLgJ
-         SV6dCSSlQ0xXZUCsKpVArcB55NQwIJO44KuSE3QwCwkqr8g7vsAB6/Tn3AIj00OBo4NM
-         n12vSLZupWbs1S2w7Y1B6xygEByMibe+c2N85Ve4cM2bvcijDfiadkZL1gE7ajWTrDBw
-         /g9g==
-X-Gm-Message-State: AO0yUKXbJyFiK2TAmtp8X6zziIjc4G/kydkMsLgVz+fd170Z2DViMUrX
-        MlBGzCvyew+Krd+S0cK979XBdrxFOlC7pnnFJ6pvTGYFb98=
-X-Google-Smtp-Source: AK7set+TKUXSTGTiK6vs4/Gq44oEikuQzFpxn3fDuxxc/wOcRb/CJkPOocwIsXWXzOAOPvdq60nsIDFnb5YmDd+1kI0=
-X-Received: by 2002:a50:baa6:0:b0:4ad:6052:ee90 with SMTP id
- x35-20020a50baa6000000b004ad6052ee90mr15939167ede.7.1678550453304; Sat, 11
- Mar 2023 08:00:53 -0800 (PST)
+        d=1e100.net; s=20210112; t=1678550689;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/G/X5+IzPvIp/u0h6IkNiabirE8Y9puo1twyHDWLaMA=;
+        b=fkKusy4rtMzf7C+2S/oOtpexMQVp1Wmb/Iq/sxyQC6yczhEz5/6qr3u5FGW7Zg4Kmp
+         zbtTQVr3ILSM8fo/zG68UN401hDKXoZnmDmYKVwOSlijVxjWZ2x1j7La3gOvaStgByVu
+         wXkvb+i4TXWtFCJyGU4dgYhdiTb0sM2DXsjSj0DDmbc/dWRvJwrR0oBICoxzy34raqmM
+         /ut8GvzyXtZQO1pGdQ1M4P6q58jw8jST9srFwuzDx4jarc7Imbyqj88fTdZZcsUl1tdT
+         YXBErnETS1boOVKfK1vug1W7N7U+aJ1cPsEPBZBMCZGpBAZmSx6USji7klHIjS0VecUq
+         5gUA==
+X-Gm-Message-State: AO0yUKV32CCBPw4NXzuNiGpPowKF/y7K9RnhtuV0vrhoFMhy+AL2zglN
+        sSucfG4fSlK88kNdctFVxwJENPQiiCosSmO47q54rw==
+X-Google-Smtp-Source: AK7set9c9qRxU35UmkHTgz32UHoKUY+oqyuYpi2DEgv0Gw4dOgKiDSabwSr9lVyr+LPm+IMt8NbrQV2unV0hRjZR+Y8=
+X-Received: by 2002:a81:ae4e:0:b0:52f:3399:ed08 with SMTP id
+ g14-20020a81ae4e000000b0052f3399ed08mr18340951ywk.6.1678550689567; Sat, 11
+ Mar 2023 08:04:49 -0800 (PST)
 MIME-Version: 1.0
-From:   Ajay Garg <ajaygargnsit@gmail.com>
-Date:   Sat, 11 Mar 2023 21:30:40 +0530
-Message-ID: <CAHP4M8UEnLeTbrR1fZOJ2KkRAHLJLewjT2xg78AzzoXPYcz-hA@mail.gmail.com>
-Subject: How to resolve "nptl-signals.h : no such file or directory"
-To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111658.251951-1-krzysztof.kozlowski@linaro.org>
+From:   Guenter Roeck <groeck@google.com>
+Date:   Sat, 11 Mar 2023 08:04:38 -0800
+Message-ID: <CABXOdTdm74LsShmx+Xv5W6D-Ub2q4ccU+SV4+VJUpBJmpXxLvw@mail.gmail.com>
+Subject: Re: [PATCH 1/5] i2c: mt65xx: drop of_match_ptr for ID table
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Qii Wang <qii.wang@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        linux-i2c@vger.kernel.org, chrome-platform@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-actions@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,61 +82,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi All.
+On Sat, Mar 11, 2023 at 3:17=E2=80=AFAM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).
+>
+>   drivers/i2c/busses/i2c-mt65xx.c:514:34: error: =E2=80=98mtk_i2c_of_matc=
+h=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-(Sorry had to write to this list, as the subscription to
-gdb@sourcewave.org seemingly went successful, but never got the
-confirmation email. Even sending emails get bounced).
+Reviewed-by: Guenter Roeck <groeck@chromium.org>
 
-
-I have been trying to analyze a core, but unable to receive the
-complete backtrace due to following error :
-
-#######################################
-#0  0x0088ad6c in __libc_signal_restore_set (set=0xf48f2a78) at
-../sysdeps/unix/sysv/linux/nptl-signals.h:79
-79 ../sysdeps/unix/sysv/linux/nptl-signals.h: No such file or directory.
-#######################################
-
-
-Following is the (incomplete) backtrace :
-
-#######################################
-[Current thread is 1 (LWP 7491)]
-(gdb) bt
-#0  0x0088ad6c in __libc_signal_restore_set (set=0xf48f2a78) at
-../sysdeps/unix/sysv/linux/nptl-signals.h:79
-#1  __GI_raise (sig=sig@entry=6) at ../sysdeps/unix/sysv/linux/raise.c:48
-#2  0x0088cb78 in __GI_abort () at abort.c:89
-#3  <frame with modified names> 0x049b3a54 in func_1 (ffp=<optimized
-out>, base_name=<optimized out>, max_size=<optimized out>,
-file_type=<optimized out>)  at a/b/c/d/e:58
-#4  0x00000270 in ?? ()
-(gdb)
-#######################################
-
-
-Since GDB is able to find raise.c, I did a full base-machine search
-for it, via :
-
-#######################################
-find / -name raise.c 2> /dev/null
-#######################################
-
-but could not find raise.c either on the base-machine filesystem.
-
-
-So, following are my queries :
-
-1.
-Where are raise.c, nptl-signals.h etc. supposed to reside?
-
-2.
-How can we bring back the missing nptl-signals.h file?
-
-
-Will be grateful for pointers.
-
-
-Thanks and Regards,
-Ajay
+> ---
+>  drivers/i2c/busses/i2c-mt65xx.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/i2c/busses/i2c-mt65xx.c b/drivers/i2c/busses/i2c-mt6=
+5xx.c
+> index 43dd966d5ef5..59eaefe999b1 100644
+> --- a/drivers/i2c/busses/i2c-mt65xx.c
+> +++ b/drivers/i2c/busses/i2c-mt65xx.c
+> @@ -1546,7 +1546,7 @@ static struct platform_driver mtk_i2c_driver =3D {
+>         .driver =3D {
+>                 .name =3D I2C_DRV_NAME,
+>                 .pm =3D &mtk_i2c_pm,
+> -               .of_match_table =3D of_match_ptr(mtk_i2c_of_match),
+> +               .of_match_table =3D mtk_i2c_of_match,
+>         },
+>  };
+>
+> --
+> 2.34.1
+>
