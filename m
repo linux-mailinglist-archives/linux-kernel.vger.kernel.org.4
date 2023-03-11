@@ -2,88 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6CFB6B58A3
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:30:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1DB26B58A9
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 06:37:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229798AbjCKFa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 00:30:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39244 "EHLO
+        id S229742AbjCKFhY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 00:37:24 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbjCKFaX (ORCPT
+        with ESMTP id S229757AbjCKFhV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 00:30:23 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F23BDEFBC;
-        Fri, 10 Mar 2023 21:30:21 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9E9DCB824CC;
-        Sat, 11 Mar 2023 05:30:20 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 5ADF8C433EF;
-        Sat, 11 Mar 2023 05:30:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678512619;
-        bh=umalgSWmoyakJHglttC6xJjAEMWDWWI2RaLGY5ujHEc=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=SJnLKrZZyewtU70v+YeQOWZJAekQPAqtregkY+koO/M2iE7vV88EV630b1AHVayPs
-         H8VNLtu4isD74gvqbmSNpxRiTwRMJ0HJxKRhAI3CLEd2IO7X/nCodAxnl7cXGF2mQ1
-         5R1fjfagjQWFX8dsYKsLrOeTOwNb2Z53K9CWkyvEIQLOVcL1BR95jQ+FQa6DoNP3qC
-         vmPrtLGmaQlQaE0frFcmmHkMscgKfrIhxrXTPhfBMYWL09XMHpXyBHANM0YA51++iF
-         hJyywgqq4ULjZZnGZDVD3Hqq9chh4INuYzCx5cUo4FGH4XqLWgssLkYuvCMyycRfkR
-         2tqSIbpE86wMA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 46CCFE270C7;
-        Sat, 11 Mar 2023 05:30:19 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Sat, 11 Mar 2023 00:37:21 -0500
+Received: from mail-pj1-x1044.google.com (mail-pj1-x1044.google.com [IPv6:2607:f8b0:4864:20::1044])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12667128015
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 21:37:19 -0800 (PST)
+Received: by mail-pj1-x1044.google.com with SMTP id x34so7318225pjj.0
+        for <linux-kernel@vger.kernel.org>; Fri, 10 Mar 2023 21:37:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678513038;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UnolAekGLDWRGlpmlkuW39BEHuhFi41L/amAT0YRfyw=;
+        b=kD2iJ4RItm1hDE2qqnhZNx2dBcP/CFtY3z69ujYEOZvQq6cG/56vO5Z/SByJj6BREe
+         E0tEgtFmLzLkudQz2ixvHSbBaTblYb2JdDbcBvRwoW73V4wI5fMnA22ONWCsbafdn9bN
+         ZMT2SzPLpY5E+z63+iJzbenE/D4PPrX/1QjNpzYtIj3FgIkuyB/jQBqEYGanSO4pM9D/
+         p7T6txd4njKMqfIpuUyLH1NhTwh1pEBMbg2AGrxEiXtdGsMN5Br8c3z9ieFSkEor2aWO
+         O8JS/VY04XGW+6k/2VQWsiIovCyJ3ix+NXRR+2nNroKpMhTA68ypdiSYCk5SlaiL0hgE
+         yZiA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678513038;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UnolAekGLDWRGlpmlkuW39BEHuhFi41L/amAT0YRfyw=;
+        b=mXGwb/h415ICxwlDp3BVEhEFwBa5nx19kwJ9t1t48BStJy07lXZ4DeFiCMaETMks9K
+         p5b9hNlHTqoafwD/6SRjXN1MQ0QrnkaGo1RQaoHtnZpRtm6FZZrWEH0M2OfkpRmX8FxW
+         TFkdrnz7KYd9WmhozzPbSPh3ptATuf/NpBcGLO8vKXFaSYhPm4Guk7KK19S7J+Nvftic
+         1bWcf6sy37k4d2JQAKaRtI+Gxr2VcZtvUdfT3osFU96cytzDw58lCnsqP8wsObdjnAjI
+         LbUuIzgAXP09bun4Nq2xgEUxPwc4tBFlQGPTP31aMEPPa++cxOAQofvTJL0Sai1Axz4i
+         ZjEQ==
+X-Gm-Message-State: AO0yUKWsFkvlsvcQOP2I4wXfFTPwXQjd7iYySn3MKuLWjmrcdNuJvMDm
+        Uxpg89aNnw8F6bGpKzBmbgk=
+X-Google-Smtp-Source: AK7set+iMslHMppwB36bFbWIWMet6sxjM6XD0aolUg7vy5ZigQS42wRYAGVdU1Z1FQTe/XX177Iqjg==
+X-Received: by 2002:a17:903:1d1:b0:19e:608d:6844 with SMTP id e17-20020a17090301d100b0019e608d6844mr35997626plh.10.1678513038561;
+        Fri, 10 Mar 2023 21:37:18 -0800 (PST)
+Received: from localhost.localdomain ([193.203.214.57])
+        by smtp.gmail.com with ESMTPSA id kb4-20020a170903338400b00194d14d8e54sm839958plb.96.2023.03.10.21.37.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Mar 2023 21:37:18 -0800 (PST)
+From:   xu xin <xu.xin.sc@gmail.com>
+X-Google-Original-From: xu xin <xu.xin16@zte.com.cn>
+To:     david@redhat.com
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin.sc@gmail.com,
+        xu.xin16@zte.com.cn, yang.yang29@zte.com.cn
+Subject: Re: [PATCH v5 2/6] ksm: support unsharing zero pages placed by KSM
+Date:   Sat, 11 Mar 2023 05:37:14 +0000
+Message-Id: <20230311053714.178439-1-xu.xin16@zte.com.cn>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <david@redhat.com>
+References: <david@redhat.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v3 0/2] Update CPSW bindings for Serdes PHY
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167851261928.13546.13495231311749922633.git-patchwork-notify@kernel.org>
-Date:   Sat, 11 Mar 2023 05:30:19 +0000
-References: <20230309073612.431287-1-s-vadapalli@ti.com>
-In-Reply-To: <20230309073612.431287-1-s-vadapalli@ti.com>
-To:     Siddharth Vadapalli <s-vadapalli@ti.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        linux@armlinux.org.uk, pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski@linaro.org, krzysztof.kozlowski+dt@linaro.org,
-        nsekhar@ti.com, rogerq@kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, srk@ti.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+[sorry to reply so late, on vacation too, and my mailing system has some kind of problem]
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+>[sorry, was on vacation last week]
 
-On Thu, 9 Mar 2023 13:06:10 +0530 you wrote:
-> Hello,
+>> Why use flags if they both conditions are mutually exclusive?
 > 
-> This series adds documentation for the Serdes PHY. Also, the name used to
-> refer to the Serdes PHY in the am65-cpsw driver is updated to match the
-> documented name.
+> Just to make the return value of break_ksm_pmd_entry() more expressive and
+> understandable. because break_ksm_pmd_entry have three types of returned
+> values (0, 1, 2).
+
+> It adds confusion. Just simplify it please.
+
+So I think it's good to add a enum value of 0 listed here as suggested
+by Claudio Imbrenda.
+
 > 
+>> MADV_UNMERGEABLE -> unmerge_ksm_pages() will never unshare the shared
+>> zeropage? I thought the patch description mentions that that is one of
+>> the goals?
 > 
-> [...]
+> No, MADV_UNMERGEABLE will trigger KSM to unshare the shared zeropages in the
+> context of "get_next_rmap_item() -> unshare_zero_pages(), but not directly in the
+> context of " madvise()-> unmerge_ksm_pages() ". The reason for this is to avoid
+> increasing long delays of madvise() calling on unsharing zero pages.
+> 
 
-Here is the summary with links:
-  - [net-next,v3,1/2] dt-bindings: net: ti: k3-am654-cpsw-nuss: Document Serdes PHY
-    https://git.kernel.org/netdev/net-next/c/aacaf7b3d19d
-  - [net-next,v3,2/2] net: ethernet: ti: am65-cpsw: Update name of Serdes PHY
-    https://git.kernel.org/netdev/net-next/c/bca93b20c397
+>Why do we care and make this case special?
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+Yeah, the code seems a bit special, but it is a helpless way and best choice, because the
+action of unsharing zero-pages is too complex and CPU consuming because checking whether the
+page we get is actually placed by KSM or not is not a easy thing in the context of
+unmerge_ksm_pages.
 
+In experiment, unsharing zero-pages in the context of unmerge_ksm_pages cause user' madvise()
+spend 5 times the time than the way of the current patch.
 
+So let's leave it as it is now. I will add a (short) explanation of when and why the new
+unshare_zero_page flag should be used.
+
+Sincerely.
+Xu Xin
