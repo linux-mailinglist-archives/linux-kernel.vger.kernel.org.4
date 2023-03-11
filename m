@@ -2,77 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 530956B5F90
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:08:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DA196B5F92
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 19:09:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229550AbjCKSIo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 13:08:44 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43074 "EHLO
+        id S230429AbjCKSJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 13:09:12 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjCKSIk (ORCPT
+        with ESMTP id S230422AbjCKSJG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 13:08:40 -0500
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53ECE2E0F7
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:08:38 -0800 (PST)
-Received: by mail-ed1-x530.google.com with SMTP id y4so3770907edo.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 10:08:38 -0800 (PST)
+        Sat, 11 Mar 2023 13:09:06 -0500
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D07B331E32;
+        Sat, 11 Mar 2023 10:09:04 -0800 (PST)
+Received: by mail-ed1-x534.google.com with SMTP id j11so33239905edq.4;
+        Sat, 11 Mar 2023 10:09:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678558117;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=px7FGPYfIZ94nlU1UqelVqsR2o/IJ1tQkvyb1RAfYos=;
-        b=JATAngTG2WAcY9tmjNNxLSb/WOmJ0TMUJtpLjWrgt9RK8LedCE5gxHAYo47KJq0yYp
-         Fxcn9cXJC0RUENvptu3z+Z1QSYyNWGUJq9rXYv8PBRliua2yS7yEc6B9dyYP/22gAYAX
-         86JWAzGxHM+VMCLqTULniJr6O15i0lnXc3qMz/mieTz3QEENmpvdArCPrCKCPHUDzEfY
-         DihVpUBQt/eTCe4BGrs79dtAT6HhK+tYhya4TQLzFcS3m42hi5zPKOWC88rRtQo+hRwL
-         3KiIV13GuJfuOhg9oFR8MtguMOzldRYL5lZ8TwMoU2+otOU/+XuE1JtA3gvQn9Wtx8GM
-         ACZg==
+        d=gmail.com; s=20210112; t=1678558143;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=oTuVxMONaKXsR7cffhKFyvdIsq8IF3Y+Pd3kTIZ1Ai8=;
+        b=X0VEjevd18rV4CPUNmTkiqphTtjh17sDHoeiGv4+xFM5XkZuvW56QhKXLbWCVzjNiJ
+         /qtCKaw0q3vsK/ZKhuNvV3nzrxGXPV/ATxcNYMIgOV+iL6Rw/niepUY+5w97kYG6zXFv
+         ttTrmKAwW6eNsV1k3Wsw6nZNCvehOo++d2ibzkAL0gkRKO22TeODxtvpdiCqSFabVu4c
+         trA3cbHkZIcav36ndzhVrinqQFMBgZu0aVmV0/ArQ1ox75KG89xWSFzdWkZGo34dxsuz
+         CPr9KkeITOWwc/dEVMeDRYVBq9AlqM+Xi86Vu5QN2Je1A/EL0YMVwvzyvGabrV+khJc+
+         iGFw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678558117;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=px7FGPYfIZ94nlU1UqelVqsR2o/IJ1tQkvyb1RAfYos=;
-        b=G4r0iC3ChR4/nOj3VOu/LLCM826Wdmr1LSaC9EeeBmaTxYurxYUKEChBop7RNMbBau
-         G64abM36BFr+SVeOL8Vh4LlD/62atDKrd288dN2et9J6k5O4tK+rU6UWo3WZCJlBKsfg
-         zue7+lel32FGzEIcUn4ZzvFcAw6AKf3S95ahNP67LKlgkCw0dKlHwr9sRDhcl9zJNY+f
-         8yyPO7V+WI5lq/1ba3m/7jQSYuNZtl4AgkIHsvfuvPjgwydZu/uRhSkkHmFEgJritNCZ
-         t7MHKaCur+wXPbaQvKQVVZ1OZAflrgSMliL5SJpuB6+xeXyyuzElZDJacojsxNW+ugn5
-         PE1w==
-X-Gm-Message-State: AO0yUKWs4nvHnIBib5sXN7clYna4Mf0alWEtbzAv9hepf/cUCsjUOusR
-        BWWzTCdgfULJXfH6kT0RSimt+A==
-X-Google-Smtp-Source: AK7set9OXOzqJIG07Dth/sljXDOnOfsuxMi1VLwWpjHdi47/1I5/6sZWv2qa3oiqUaRnZrduNtl/Dw==
-X-Received: by 2002:a17:906:d9c8:b0:8e1:cc38:6ab0 with SMTP id qk8-20020a170906d9c800b008e1cc386ab0mr25990433ejb.16.1678558116822;
-        Sat, 11 Mar 2023 10:08:36 -0800 (PST)
-Received: from ?IPV6:2a02:810d:15c0:828:6927:e94d:fc63:9d6e? ([2a02:810d:15c0:828:6927:e94d:fc63:9d6e])
-        by smtp.gmail.com with ESMTPSA id s13-20020a170906354d00b008caaae1f1e1sm1312972eja.110.2023.03.11.10.08.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 10:08:36 -0800 (PST)
-Message-ID: <f14e1e9d-5265-355f-943b-3b0ed96dca46@linaro.org>
-Date:   Sat, 11 Mar 2023 19:08:35 +0100
+        d=1e100.net; s=20210112; t=1678558143;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oTuVxMONaKXsR7cffhKFyvdIsq8IF3Y+Pd3kTIZ1Ai8=;
+        b=S5XQhOCrxZ7sVU/ouGwwLvX/R0L99AMvyMA+I+PigSGAXg1cebfmVUOKXZPTSkAfa9
+         e8CA6zoSO66VN16ubGBD/77e/sEQbh4I/7t+0XzTmmPvzdHpWKNwFOoVfqdDIojmEbf2
+         BxCmCuMv8AOmpqjNGw+aEVsdfqat2yARe3cx+VZG/rVCdQUQy6Br4b4fzHya66pbhnYH
+         rwaFBRB3z69fZuyPgWLHfl3NF/cEDNO6hm2S6ez9+3i9P4f7+6Oz+aQlXccc7QHRmMZ/
+         2H4iwNtvUgYpZkZsvF5vwV447gopXlWli35X5gWH6b2ZCYVSX29oQ3ssQuQcc4SsnsKy
+         nT2w==
+X-Gm-Message-State: AO0yUKVXtEW4C6Pk23nvzXrK00W+tUzOBx007RwDltJgMScBL/+XLHEn
+        5IgKLVACLTFpeuFL0o2/p70=
+X-Google-Smtp-Source: AK7set9CrV/E2VUBfpv6C+RSqIc20ASml1Txch6XNoN/PYgCMaDGZi8DjFDpjR0H11BcXXMg++Cf9w==
+X-Received: by 2002:a05:6402:70f:b0:4af:7390:b488 with SMTP id w15-20020a056402070f00b004af7390b488mr27565124edx.40.1678558143264;
+        Sat, 11 Mar 2023 10:09:03 -0800 (PST)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id i23-20020a508717000000b004bc422b58a2sm1453768edb.88.2023.03.11.10.09.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 10:09:03 -0800 (PST)
+Date:   Sat, 11 Mar 2023 20:09:01 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Klaus Kudielka <klaus.kudielka@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] net: dsa: mv88e6xxx: move call to
+ mv88e6xxx_mdios_register()
+Message-ID: <20230311180901.m45p5c26ln35cc6a@skbuf>
+References: <20230311094141.34578-1-klaus.kudielka@gmail.com>
+ <20230311094141.34578-2-klaus.kudielka@gmail.com>
+ <98767929-b401-402b-8e6b-d997cf27bfb0@lunn.ch>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] devicetree: synopsys-dw-mshc-common: add
- "fifo-access-32bit" property
-Content-Language: en-US
-To:     Sergey Lisov <sleirsgoevy@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <640cc323.050a0220.8e83b.0e60@mx.google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <640cc323.050a0220.8e83b.0e60@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <98767929-b401-402b-8e6b-d997cf27bfb0@lunn.ch>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,25 +80,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 18:57, Sergey Lisov wrote:
->> Why did you remove the subject? Please keep the mailing process matching
->> mailing lists. It messes with mailboxes, filters and reading process.
+On Sat, Mar 11, 2023 at 04:19:43PM +0100, Andrew Lunn wrote:
+> >  static int mv88e6xxx_setup(struct dsa_switch *ds)
+> > @@ -3889,6 +3892,10 @@ static int mv88e6xxx_setup(struct dsa_switch *ds)
+> >  	int err;
+> >  	int i;
+> >  
+> > +	err = mv88e6xxx_mdios_register(chip);
+> > +	if (err)
+> > +		return err;
+> > +
+> >  	chip->ds = ds;
+> >  	ds->slave_mii_bus = mv88e6xxx_default_mdio_bus(chip);
 > 
-> Sorry about this, I just wanted to get rid of those X-Something headers and
-> accidentially deleted this one.
-> 
->> Yeah, Rob acked it so I will let him to judge this. To me it looks like
->> unnecessary fragmentation - this looks like compatible specific, not
->> board. Anyway you need to resend to fix all the mailing mess.
->>
->> Best regards,
->> Krzysztof
-> 
-> Should I resend the whole patchset from scratch, as if nothing happened?
+> Other calls in mv88e6xxx_setup() can fail, so you need to extend the
+> cleanup to remove the mdio bus on failure.
 
-No, sorry, I was not specific. You need anyway v2 with all the fixes I
-pointed already. Lack of commit msg is a no-go.
-
-Best regards,
-Krzysztof
-
+FWIW, here is a snippet of how mv88e6xxx_setup() and mv88e6xxx_teardown()
+should look like, with error handling taken into consideration (but I
+was lazy and just added forward declarations, something which Klaus
+handled better with the movement preparatory patch):
+https://lore.kernel.org/lkml/20230210210804.vdyfrog5nq6hrxi5@skbuf/
