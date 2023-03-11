@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 173E16B5B8C
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:21:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFCCB6B5B8E
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 13:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbjCKMV2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 07:21:28 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S230022AbjCKMWO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 07:22:14 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCKMVZ (ORCPT
+        with ESMTP id S229450AbjCKMWL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 07:21:25 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8819525B9B;
-        Sat, 11 Mar 2023 04:21:23 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id g3so7396740wri.6;
-        Sat, 11 Mar 2023 04:21:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678537282;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=5fXIVr7gqCwmEgskozko98oirCIU7XQEToUdjHVacKo=;
-        b=FO97lzR4wBH1KOgj49mKW057+Q36xfPNbBJwqyTOxYOtHjlXqLPntTHkOJHPGT/YdR
-         kCjObndO+oiNG8W2QA0hXGCPWg5VWvvZuqaOya8rXPF+d+wVcmL6JkgtRoC5NKoOOyAO
-         T6dNMKO6I9hBFGTSLe7Al8Tk0n0WtCvcOvadxTo4s7E3AzFdJ0p7zA0XOh//+s+NXZng
-         UZuiEuLeAVvoE2zYexz/Ed2uX0p1Cjhq2Htxe+rBxXzrrpj6gl7v+6RKf1m4o5GkWM9e
-         E7zR0OnZJKqSqyNbTrwv+CGLyTPHs8TdbUw4GKH5VM+5Bv76nZGWgpuIzHEu+ass5N8A
-         3Y1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678537282;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=5fXIVr7gqCwmEgskozko98oirCIU7XQEToUdjHVacKo=;
-        b=XB5IdhK2z9p+P2LSGhAoJQhom6oRd6x6TR3Ths6RoZK9VMpgL3KhSvNu0q0dCVpmdR
-         h1gMdhxMoZPeTkA0mmgFFU0pozZK6pS1u+U1PKLacBQQ8gP2dIOFpzUsCT/wGsHpLfKX
-         wUIG8xtlFg9anV5VSLEVeg5RYTyuuEIVXxX/VpEdx0g8+VnsgaE2B9k1k07y/w3uFy4j
-         OId+DAsozL2wb16tRxCZupdw6OxCPMwN5qQJ6dkKX2TP3kHKvs7lox/sfmaoJ280cRPd
-         uKPpQP2oONTh1ozHzKOhFxayLCUvQ74V6LqGlcC1wfTo2pcIKSfWWFXJnIvX7laAiN7/
-         nJog==
-X-Gm-Message-State: AO0yUKVmMrzPySyY8k4jXPLwbH4i/IPH+sQrE1WI8OmkQ67Bq/Qo2nqX
-        3qxbZj04jTgYKucXIr5G+0Q=
-X-Google-Smtp-Source: AK7set/dquqEYqlbPkhNMYPAySOK+2Z24Ru36FgEdTd9R57dVQoFHunD+p7rKjC4XPkW2l4rwT4qOQ==
-X-Received: by 2002:a5d:4c4b:0:b0:2c9:3955:3948 with SMTP id n11-20020a5d4c4b000000b002c939553948mr18149264wrt.70.1678537281830;
-        Sat, 11 Mar 2023 04:21:21 -0800 (PST)
-Received: from debian ([63.135.72.41])
-        by smtp.gmail.com with ESMTPSA id l18-20020a5d4bd2000000b002c559def236sm2335289wrt.57.2023.03.11.04.21.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 04:21:21 -0800 (PST)
-Date:   Sat, 11 Mar 2023 12:21:19 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net,
-        rwarsow@gmx.de
-Subject: Re: [PATCH 4.19 000/252] 4.19.276-rc1 review
-Message-ID: <ZAxyP3SXvdnPh5ZK@debian>
-References: <20230310133718.803482157@linuxfoundation.org>
+        Sat, 11 Mar 2023 07:22:11 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1559116C11;
+        Sat, 11 Mar 2023 04:22:06 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 8D84BB8250B;
+        Sat, 11 Mar 2023 12:22:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDE4CC433D2;
+        Sat, 11 Mar 2023 12:22:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678537324;
+        bh=mHoVhienBnOUnlaSutDzEvYnbmT2WBB6oOBYve/vQYU=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H+5ISIOIZxY2XJKWpr3i967RjvpLaNsA3BqPyWMozGkju8eR+EypST3XxmjmkmFHR
+         MYKUbDltRMziS8oCEgcJXF6F8IA6JCRCx4IGbUSOrwCRaW7HSZo8kIpE6VBTSDXYSg
+         MXWE+gDeaM9Y1Vlw8PAvgPQ5vq78/gUIsM6c0URlZH3RyipHfGyBOY70uNDJImsz1v
+         7Chpa+6TBdFxREeW4RuW6Y5vzSc0q+fnhelaimgNwpwNo5o7QnwSPumBsVjZVlmAaC
+         NVihljzqqYYwBH0LvEVujB6hnDWYpoh8wFWUkb9mBdQg2TvkEO5zenYsntFTfKdDi5
+         /KSD1xlWqlbPQ==
+Date:   Sat, 11 Mar 2023 12:22:08 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Robert Eshleman <bobbyeshleman@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] iio: dac: ad5755: mark OF related data as maybe
+ unused
+Message-ID: <20230311122208.059a81cb@jic23-huawei>
+In-Reply-To: <20230311111457.251475-2-krzysztof.kozlowski@linaro.org>
+References: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
+        <20230311111457.251475-2-krzysztof.kozlowski@linaro.org>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310133718.803482157@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On Sat, 11 Mar 2023 12:14:55 +0100
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 
-On Fri, Mar 10, 2023 at 02:36:10PM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.276 release.
-> There are 252 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
-> Anything received after that time might be too late.
+> The driver can be compile tested with !CONFIG_OF making certain data
+> unused (of_device_id is not used for device matching):
 
-Build test (gcc version 11.3.1 20230210):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/3072
+It should be used for device matching I think, so I'd rather see
+it assigned for that purpose than hiding the issue.
 
 
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
+>=20
+>   drivers/iio/dac/ad5755.c:865:34: error: =E2=80=98ad5755_of_match=E2=80=
+=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/iio/dac/ad5755.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/iio/dac/ad5755.c b/drivers/iio/dac/ad5755.c
+> index beadfa938d2d..a6dc8a0bfc29 100644
+> --- a/drivers/iio/dac/ad5755.c
+> +++ b/drivers/iio/dac/ad5755.c
+> @@ -862,7 +862,7 @@ static const struct spi_device_id ad5755_id[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(spi, ad5755_id);
+> =20
+> -static const struct of_device_id ad5755_of_match[] =3D {
+> +static const struct of_device_id ad5755_of_match[] __maybe_unused =3D {
+>  	{ .compatible =3D "adi,ad5755" },
+>  	{ .compatible =3D "adi,ad5755-1" },
+>  	{ .compatible =3D "adi,ad5757" },
 
--- 
-Regards
-Sudip
