@@ -2,86 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE6606B5E40
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:01:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7420A6B5E4D
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:05:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCKRBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:01:47 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
+        id S229772AbjCKRFj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:05:39 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229567AbjCKRBp (ORCPT
+        with ESMTP id S229469AbjCKRFh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:01:45 -0500
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D28B16FFF6
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:01:43 -0800 (PST)
-Received: by mail-ed1-x52b.google.com with SMTP id y4so3379243edo.2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:01:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678554102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OcBBeG/GDbaNyK6Z6mOsW8TdOcvbbaTtm0OR9JM78tc=;
-        b=TruVEfCcNCj9tqbYMkbuWTQ4Su3dpCnlYBs5cOtEae7gv/6RTLuQSSzsOSPuWjQ7kA
-         GpTzm5dyaRQnJ3pKwYv3ZI0bbyN3GiPKea99MVar57P+tBCEy1bIcnHKH17+GsL3X1Hr
-         XCTgFFIHI44n7T2Flv/+rMa+LjfW6p9bUfP44=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678554102;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OcBBeG/GDbaNyK6Z6mOsW8TdOcvbbaTtm0OR9JM78tc=;
-        b=Wg1mwut170qSB6VhkfGcHVVJUNOvczgbaPhs3fO4ynt1pq2eCpgePmBCwJt+CfYj/8
-         CtM99A/wfYMR4s712jzvi59j6Cy/1oeC6xBn3RFh2qljrbDD8GrgCce7TdQ5xKYF+k9a
-         Y4JbgXPvwxBGG7T/D7sFZW9s82LYMPWA+Yo2kIWFrXfzgZsL8i9mHzrgg0HVvortAIDW
-         2nN7JhxaIYrnIcDYDrf/L+q0v9klvX1AwgZHgW6QcPKBuhu3RTQJzm5UUvTmphsIv8+N
-         kJ4Lcpet15oJhYJEOZ+eszhWiiRAhDPvCtG3+XgJlRn9AsKzNphlMV+abvbXXQFGSew6
-         mqoQ==
-X-Gm-Message-State: AO0yUKUa+mG/qPjJuNPQ6hPUi3ganKlUuw0AJCDrX9kv+Q3co7ZbUGlk
-        gOrRijB+CDYQoTyuBtJixPlsOlAdgVdP1NTDdaSWxw==
-X-Google-Smtp-Source: AK7set/InynlLwyWWF10OzNjpScJk5XrrZ0XWVrBPSbBhoz1UIKSx9564E4QKv8pIDxfRo7BDhwd1Q==
-X-Received: by 2002:a17:906:6bc1:b0:8b1:304e:58a3 with SMTP id t1-20020a1709066bc100b008b1304e58a3mr32289427ejs.52.1678554101749;
-        Sat, 11 Mar 2023 09:01:41 -0800 (PST)
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com. [209.85.208.54])
-        by smtp.gmail.com with ESMTPSA id n24-20020a5099d8000000b004af73333d6esm212124edb.53.2023.03.11.09.01.41
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 09:01:41 -0800 (PST)
-Received: by mail-ed1-f54.google.com with SMTP id cn21so2648234edb.0
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 09:01:41 -0800 (PST)
-X-Received: by 2002:a17:906:3d51:b0:8f1:4c6a:e72 with SMTP id
- q17-20020a1709063d5100b008f14c6a0e72mr14164994ejf.0.1678554100867; Sat, 11
- Mar 2023 09:01:40 -0800 (PST)
+        Sat, 11 Mar 2023 12:05:37 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8058B763F1;
+        Sat, 11 Mar 2023 09:05:35 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0F2FB60D29;
+        Sat, 11 Mar 2023 17:05:35 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F196C433D2;
+        Sat, 11 Mar 2023 17:05:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678554334;
+        bh=XwB/GrtD4QgsUuzr8rRrhVy0wwdqbWVx5IYtLaykaI4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=CMKvwDarrN0Q+uUYRkqLiVku1aIdmmGLO1Z+d7R6Fy3zYtD0KIlkkrJRaduaOq1HV
+         iSZ5LAbBuntSp7GdoKNCDX6FMvR14cKslRh5qQmUnfKFmaeFvmI5728Y8I/5Akesi6
+         JJnwDr/Uqpw2f1JyMn2u6GOOVqBCOYsr3DC1/TcWJGhlux7YwvpcXlvoy6kIr+NTfH
+         9yziGSWQSr163N7JA+Rx61KReni0dVYWj+/dRccWueoazXpaoDHIq81wXe8/JvxRCm
+         SCTPxbG1YWfD0gzMQOIwjxKB6vz8dk0cpR2NqnSJDhgKz7AcaaY1h2KCeKszw3N00i
+         SaVe3DP7KUNLg==
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     linux-kernel@vger.kernel.org, linux-samsung-soc@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH] MAINTAINERS: update Andi's e-mail to @kernel.org
+Date:   Sat, 11 Mar 2023 18:05:16 +0100
+Message-Id: <20230311170516.178913-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230311092929.2827-1-richard@nod.at>
-In-Reply-To: <20230311092929.2827-1-richard@nod.at>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Sat, 11 Mar 2023 09:01:24 -0800
-X-Gmail-Original-Message-ID: <CAHk-=wh7QzwMbkGC3yRhkqf=8BRk0KjS2pRwo3c5wTqqR4JKPA@mail.gmail.com>
-Message-ID: <CAHk-=wh7QzwMbkGC3yRhkqf=8BRk0KjS2pRwo3c5wTqqR4JKPA@mail.gmail.com>
-Subject: Re: [PATCH] ubi: block: Fix missing blk_mq_end_request
-To:     Richard Weinberger <richard@nod.at>
-Cc:     linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Daniel Palmer <daniel@0x0f.com>, Christoph Hellwig <hch@lst.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 1:29=E2=80=AFAM Richard Weinberger <richard@nod.at>=
- wrote:
->
-> Switching to BLK_MQ_F_BLOCKING wrongly removed the call to
-> blk_mq_end_request(). Add it back to have our IOs finished
+Use the kernel.org e-mail for the maintainer entry
 
-Applied,
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+---
+ MAINTAINERS | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-                 Linus
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 150ff03b42eb..fe6ef7be49a0 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -18543,7 +18543,7 @@ F:	include/linux/clk/samsung.h
+ 
+ SAMSUNG SPI DRIVERS
+ M:	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+-M:	Andi Shyti <andi@etezian.org>
++M:	Andi Shyti <andi.shyti@kernel.org>
+ L:	linux-spi@vger.kernel.org
+ L:	linux-samsung-soc@vger.kernel.org
+ S:	Maintained
+-- 
+2.39.2
+
