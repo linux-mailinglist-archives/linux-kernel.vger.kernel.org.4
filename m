@@ -2,132 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6589A6B5EBE
-	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:25:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 284646B5EC7
+	for <lists+linux-kernel@lfdr.de>; Sat, 11 Mar 2023 18:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229897AbjCKRZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 12:25:50 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45742 "EHLO
+        id S229908AbjCKR2I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 12:28:08 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbjCKRZs (ORCPT
+        with ESMTP id S229668AbjCKR2F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 12:25:48 -0500
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0CE20367E9;
-        Sat, 11 Mar 2023 09:25:47 -0800 (PST)
-Received: by mail-pg1-x529.google.com with SMTP id 16so4774163pge.11;
-        Sat, 11 Mar 2023 09:25:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678555546;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QS/175t+MbbtSL3ZqMpuuGfGkRfZIPfXDt83uLAcCo8=;
-        b=mmMeny8nknefTBsgpe/tmJD2V01bAwE0Y0HxdN301V84cphLfqInQY2dRHmk4rp+w4
-         6JE/nwT8liagmbu8fdyxLAkvy/y50fUwHwo5ZSxR1RlYUK97MkSRBpD+3n5wkAoofVkv
-         MNNDQH3Ys6gnCCG0ss19Jvq+pyYk4r+R1OmfAh1pW4GfHDbNUyZ/HeK15sNmy51z2AMZ
-         C/6LTQXCjA1SIWHP5O5/dHgAKSH49VYEyB1CO0u8zXlTv+5n4X8IDP+mnwSJn24l5ynZ
-         +QyPpSpaKzxWKLnxOSR4FuIbIbYV7aBfH9hONYKdN+RdkLCNAfw/+dFZJW9buL6bdULW
-         gExw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678555546;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QS/175t+MbbtSL3ZqMpuuGfGkRfZIPfXDt83uLAcCo8=;
-        b=WwygGQy1R5KuvtpawpQ/OwAvl+u1BBuW35h6NkKQcNa79CtS2fs19wr4C7hKr8RzrN
-         LZlhWfSN6kTBeVidsqCWMel30DRmNwqiI2EYwWOoL/lvHSWc9aSviDQ+/oFZrd9hw1X4
-         wY9KeRRziLMkMw6cJ9HMrk20SrG/ELEQKSOGJb/0xZhMc9c6e2CHkYV1joZ0fdf+rDDE
-         l4lqqOc94FydjOboChe+8dUu4F/6lHGDxmPgVi3HKaTncdu8KOigKHL4eVeeYQ3aWVjt
-         joElweMcaawPtHqQS6BfkTD11+fIrxXjqMLWQjF7cVfQfiO25OPc01ND2yXgc5CM2Jvf
-         5z5w==
-X-Gm-Message-State: AO0yUKU5ojftu6AUuen5DLdgdZ6XyPKB3Ly6m/sFLDGvuyzF4/+RBRqG
-        xMxZN/0H7EuxJJJ5NUnlj8L31Nl05RVwSw==
-X-Google-Smtp-Source: AK7set9ftsFY4ZqIdArrt2/qtu9c+hPHjyWDoZu98KDi1eGfosfEJNXcHZqgNtwJDDaXf+zwsgBtiw==
-X-Received: by 2002:aa7:9546:0:b0:5e0:c59f:b008 with SMTP id w6-20020aa79546000000b005e0c59fb008mr22132343pfq.4.1678555546323;
-        Sat, 11 Mar 2023 09:25:46 -0800 (PST)
-Received: from ubuntu ([117.199.152.23])
-        by smtp.gmail.com with ESMTPSA id j21-20020aa78015000000b00593cd0f37dcsm1711571pfi.169.2023.03.11.09.25.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Mar 2023 09:25:45 -0800 (PST)
-Date:   Sat, 11 Mar 2023 09:25:40 -0800
-From:   Sumitra Sharma <sumitraartsy@gmail.com>
-To:     outreachy@lists.linux.dev, GR-Linux-NIC-Dev@marvell.com,
-        coiby.xu@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        manishc@marvell.com, netdev@vger.kernel.org, error27@gmail.com
-Cc:     outreachy@lists.linux.dev
-Subject: [PATCH v2] Staging: qlge: Fix indentation in conditional statement
-Message-ID: <20230311172540.GA24832@ubuntu>
+        Sat, 11 Mar 2023 12:28:05 -0500
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0D7F74E;
+        Sat, 11 Mar 2023 09:28:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id EC86FB80690;
+        Sat, 11 Mar 2023 17:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8685C433A7;
+        Sat, 11 Mar 2023 17:28:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678555681;
+        bh=MgWZFw77Mq4oyTN1crwuDMPhX/uS/XNa2w3f/KUQH1s=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=d9M2olfRzTUVasTmQ53pfkalSBPnQsljd94ecPgo7/B28+RtNutaG3x1qfIFu3Uk1
+         8e4o/IHrQ5rgYRsuqSdvtCFAGFlBmNPrZrfSK1RI46bSrQUPwmywHbXz+B1YLO8ZV2
+         H2j9Wk+aRsfqrTppQmlqrGD/QUWCPAOt5zpt8WuP/c6/eWFqeBRVH4BEkkPm/DfxGe
+         Izu/rOkMxe+fO6xQKGzXXhr+/3rx05vfdZ94pmP6k4nc6ZAeTrDWYHUEJiOubANlsp
+         bIqp3cAiYEhpUOcqaoNxhoHtSZezSn5zDswCBxDydkUMEcSv+UIWo9nl0PArAFRjro
+         hlrnaaJFSZqKQ==
+Received: by mail-lf1-f51.google.com with SMTP id t11so10672359lfr.1;
+        Sat, 11 Mar 2023 09:28:01 -0800 (PST)
+X-Gm-Message-State: AO0yUKXyD1UWBynrhCvxF10K2jsQRWu8NHx55X9RVI5fFxw+zl1s/Z5m
+        q5BY0gdJTQbasfcTyeIVqktW99Scw7rQhyc6i/4=
+X-Google-Smtp-Source: AK7set/DORTs5gwcCfki/6Zgo3sscNdW6pA/sij/js5ziMvcFOJCYdnwwNmj4VEXMUd8p9ndyRAgUzDVQjJqjYjUjuM=
+X-Received: by 2002:ac2:546c:0:b0:4d5:ca42:aee7 with SMTP id
+ e12-20020ac2546c000000b004d5ca42aee7mr9081052lfn.7.1678555679698; Sat, 11 Mar
+ 2023 09:27:59 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <cover.1671098103.git.baskov@ispras.ru> <cb62472011a0c4151276b6a05b83b60b1bf6f352.1671098103.git.baskov@ispras.ru>
+ <CAMj1kXHnQZ2EDg1F_whTPHajYvqox7Ss35aqUyJuC8RLyiuCxg@mail.gmail.com> <ec07e6f7af7b901ad3ff1aa9a8c8fbcb@ispras.ru>
+In-Reply-To: <ec07e6f7af7b901ad3ff1aa9a8c8fbcb@ispras.ru>
+From:   Ard Biesheuvel <ardb@kernel.org>
+Date:   Sat, 11 Mar 2023 18:27:48 +0100
+X-Gmail-Original-Message-ID: <CAMj1kXEySE_GuNx+xLPu9pvkZoA6Sph=7BZt-gzVCi4pD1COPA@mail.gmail.com>
+Message-ID: <CAMj1kXEySE_GuNx+xLPu9pvkZoA6Sph=7BZt-gzVCi4pD1COPA@mail.gmail.com>
+Subject: Re: [PATCH v4 17/26] x86/boot: Reduce size of the DOS stub
+To:     Evgeniy Baskov <baskov@ispras.ru>
+Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Peter Jones <pjones@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        x86@kernel.org, linux-efi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tabs/spaces in conditional statements in qlge_dbg.c to fix the
-indentation.
+On Sat, 11 Mar 2023 at 15:49, Evgeniy Baskov <baskov@ispras.ru> wrote:
+>
+> On 2023-03-10 17:59, Ard Biesheuvel wrote:
+> > On Thu, 15 Dec 2022 at 13:40, Evgeniy Baskov <baskov@ispras.ru> wrote:
+> >>
+> >> This is required to fit more sections in PE section tables,
+> >> since its size is restricted by zero page located at specific offset
+> >> after the PE header.
+> >>
+> >> Tested-by: Mario Limonciello <mario.limonciello@amd.com>
+> >> Tested-by: Peter Jones <pjones@redhat.com>
+> >> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
+> >
+> > I'd prefer to rip this out altogether.
+> >
+> > https://git.kernel.org/pub/scm/linux/kernel/git/ardb/linux.git/commit/?id=9510f6f04f579b9a3f54ad762c75ab2d905e37d8
+>
+> Sounds great! Can I replace this patch with yours in v5?
+>
 
-Signed-off-by: Sumitra Sharma <sumitraartsy@gmail.com>
----
- v2: Fix indentation in conditional statement, noted by Dan Carpenter
- <error27@gmail.com>
- 
- drivers/staging/qlge/qlge_dbg.c | 35 +++++++++++++++------------------
- 1 file changed, 16 insertions(+), 19 deletions(-)
+Of course.
 
-diff --git a/drivers/staging/qlge/qlge_dbg.c b/drivers/staging/qlge/qlge_dbg.c
-index b190a2993033..c7e865f515cf 100644
---- a/drivers/staging/qlge/qlge_dbg.c
-+++ b/drivers/staging/qlge/qlge_dbg.c
-@@ -351,26 +351,23 @@ static int qlge_get_xgmac_regs(struct qlge_adapter *qdev, u32 *buf,
- 		/* We're reading 400 xgmac registers, but we filter out
- 		 * several locations that are non-responsive to reads.
- 		 */
--		if (i == 0x00000114 ||
--		    i == 0x00000118 ||
--			i == 0x0000013c ||
--			i == 0x00000140 ||
--			(i > 0x00000150 && i < 0x000001fc) ||
--			(i > 0x00000278 && i < 0x000002a0) ||
--			(i > 0x000002c0 && i < 0x000002cf) ||
--			(i > 0x000002dc && i < 0x000002f0) ||
--			(i > 0x000003c8 && i < 0x00000400) ||
--			(i > 0x00000400 && i < 0x00000410) ||
--			(i > 0x00000410 && i < 0x00000420) ||
--			(i > 0x00000420 && i < 0x00000430) ||
--			(i > 0x00000430 && i < 0x00000440) ||
--			(i > 0x00000440 && i < 0x00000450) ||
--			(i > 0x00000450 && i < 0x00000500) ||
--			(i > 0x0000054c && i < 0x00000568) ||
--			(i > 0x000005c8 && i < 0x00000600)) {
-+		if ((i == 0x00000114) || (i == 0x00000118) ||
-+		    (i == 0x0000013c) || (i == 0x00000140) ||
-+		    (i > 0x00000150 && i < 0x000001fc) ||
-+		    (i > 0x00000278 && i < 0x000002a0) ||
-+		    (i > 0x000002c0 && i < 0x000002cf) ||
-+		    (i > 0x000002dc && i < 0x000002f0) ||
-+		    (i > 0x000003c8 && i < 0x00000400) ||
-+		    (i > 0x00000400 && i < 0x00000410) ||
-+		    (i > 0x00000410 && i < 0x00000420) ||
-+		    (i > 0x00000420 && i < 0x00000430) ||
-+		    (i > 0x00000430 && i < 0x00000440) ||
-+		    (i > 0x00000440 && i < 0x00000450) ||
-+		    (i > 0x00000450 && i < 0x00000500) ||
-+		    (i > 0x0000054c && i < 0x00000568) ||
-+		    (i > 0x000005c8 && i < 0x00000600)) {
- 			if (other_function)
--				status =
--				qlge_read_other_func_xgmac_reg(qdev, i, buf);
-+				status = qlge_read_other_func_xgmac_reg(qdev, i, buf);
- 			else
- 				status = qlge_read_xgmac_reg(qdev, i, buf);
- 
--- 
-2.25.1
+> >
+> > (and refer to the other thread in linux-efi@)
+>
+> Which thread exactly? The one about the removal of
+> real-mode code?
+>
 
+Yes, this one
+
+https://lore.kernel.org/linux-efi/20230308202209.2980947-1-ardb@kernel.org/
