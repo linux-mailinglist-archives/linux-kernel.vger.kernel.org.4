@@ -2,76 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04A146B639F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 08:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3F79E6B63A3
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 08:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjCLHOv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 03:14:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35060 "EHLO
+        id S229655AbjCLHRH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 03:17:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLHOt (ORCPT
+        with ESMTP id S229437AbjCLHRF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 03:14:49 -0400
-Received: from m126.mail.126.com (m126.mail.126.com [220.181.12.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 35D94457DE
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 23:14:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=U4G7v
-        qSZcFnlDeK2LsxIplWYUEzY4kg4lUQol+no3JM=; b=YM198w7LVrTPEFLHWoGUM
-        Eg/t1fo9OCdgUK3LOp5jJDrBLibQQ2myhXElyZtQYUABGVOWG4938NjvpRXbEJQn
-        /jpydIb66SpYg1CVCqXJ4aHH9IeVxo2SYdz1D6Afv+EFum5+nq9SGJjBrDLbLiAM
-        Uq0u09Q9KIJOF1OQBjC71c=
-Received: from localhost.localdomain (unknown [119.123.34.9])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wB3b8nUew1kH0hTAA--.46303S2;
-        Sun, 12 Mar 2023 15:14:29 +0800 (CST)
-From:   Xujun Leng <lengxujun2007@126.com>
-To:     corbet@lwn.net
-Cc:     linux@leemhuis.info, lengxujun2007@126.com,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] docs: process: submitting-patches: fix typo in section "Respond to review comments"
-Date:   Sun, 12 Mar 2023 15:14:23 +0800
-Message-Id: <20230312071423.3042-1-lengxujun2007@126.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 12 Mar 2023 03:17:05 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C9204D283;
+        Sat, 11 Mar 2023 23:17:04 -0800 (PST)
+Received: by mail-pl1-x62a.google.com with SMTP id u5so9809056plq.7;
+        Sat, 11 Mar 2023 23:17:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678605424;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vJAiYidXikRagrvs8QJrX3AufqF9vXtWgvBYHZzmNh8=;
+        b=iXVjyBpy4RK3fjvyAbhHZrjwh2ex8mT6arPVKf1A6BCobz0X+Fd56fOCekj6EKp6Rn
+         HmEHrrzDyOZ82VIgvleNWWLgCi6+aCWs2p43gie8snExM+MA/SlC5f8cgIQTQRTaTRL0
+         FJDMZFKc2xHrht/odbAr25+wpSO2MPjNNskrV71+P0jalixcSdUsHv9Kc7oej6H42aoW
+         zF3hxwp0EE3ZdIZH+OPSOmF0K4M/kILQZQbKtY73nhJpu8IwLu8UKwsevtcS/wtU3QhO
+         VSWOeUqhubcYNBQOFRZ9HYzjqTjUcBjsm4xTEOzOXL2byf8MVEVbZvnmW7stw1kJ5t6v
+         3AeA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678605424;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vJAiYidXikRagrvs8QJrX3AufqF9vXtWgvBYHZzmNh8=;
+        b=owve3ZDSe9HDBrey6A6IDXhv3z2CnRFBBjFqnYapHBI1F6qHKhpEFLmcQzRDIS/tHF
+         pifLfu26CfXlQHH19Theiaf7HIgQ/5CwiLH0O5jpD1GtaSKIo2mCax2ZrNs7JYFdms8C
+         7MFbPIvXbnBxMeWlwdP3VIU+E5ZxDqPhhF0dstWzvft3pT4kD4I+vGHbGyeJ50ZJl8sP
+         hNTu6t5+swTcnzcczSDeRhYXZx5od1H4Hb8Adtmnoq88o/LB36e9vVE07UAYf9C9Fkwe
+         LOQahrDqr7PQdM5KBaNMe1boGIdwMLDa5yYp8s5OrFQ7AAeWAqiGdA+PE0GZVUcvpf58
+         cZug==
+X-Gm-Message-State: AO0yUKV42EXOng+rt0FwRZdKFnLunm9cmQzwV1FxRb42s8qYz78UmVOc
+        a8WCqromXbV4mnd3dpneMbSaQpyJcdVXUg==
+X-Google-Smtp-Source: AK7set/IHoHq5AN2YzM+IZs3vpDiPFZBI3vA7hTBwFD15l3bL5LAUB8j2fGLBCvxpt3bCf3XsM5pvg==
+X-Received: by 2002:a17:902:d4ce:b0:19a:9864:2887 with SMTP id o14-20020a170902d4ce00b0019a98642887mr8029036plg.7.1678605423792;
+        Sat, 11 Mar 2023 23:17:03 -0800 (PST)
+Received: from ubuntu ([59.89.166.125])
+        by smtp.gmail.com with ESMTPSA id le3-20020a170902fb0300b0019f3da7a632sm515115plb.146.2023.03.11.23.17.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 11 Mar 2023 23:17:03 -0800 (PST)
+Date:   Sat, 11 Mar 2023 23:17:00 -0800
+From:   Sumitra Sharma <sumitraartsy@gmail.com>
+To:     fmdefrancesco@gmail.com
+Cc:     GR-Linux-NIC-Dev@marvell.com, coiby.xu@gmail.com,
+        error27@gmail.com, gregkh@linuxfoundation.org,
+        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
+        manishc@marvell.com, netdev@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH] Staging: qlge: Remove parenthesis around single condition
+Message-ID: <20230312071700.GH14247@ubuntu>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wB3b8nUew1kH0hTAA--.46303S2
-X-Coremail-Antispam: 1Uf129KBjvdXoWrKFyUCw1DZw18XF4rWF15urg_yoWkCrb_C3
-        90yFWjkw4qyr1IqF45CFs8XrsavF4I9w18Cr1kJFsrZayYyanxXa4kG3sav3yjvrWF9F15
-        Wa98Wr4UAF129jkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRtksgUUUUUU==
-X-Originating-IP: [119.123.34.9]
-X-CM-SenderInfo: pohqw5hxmx0jqqqxqiyswou0bp/1tbiaRUwd1pEIyxcBQAAsz
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1713523.QkHrqEjB74@suse>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the second paragraph of section "Respond to review comments", there is
-a spelling mistake: "aganst" should be "against".
+Hi Fabio,
 
-Signed-off-by: Xujun Leng <lengxujun2007@126.com>
----
- Documentation/process/submitting-patches.rst | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thank you for the insights. I went to the .rst files because they are directly linked in the first-patch document. I also noticed the difference between a ".rst" file and its counter human readable ".html" file. You were right that many information is being missed when anyone will read the .rst instead of .html/.pdf. I would like to suggest that the links that redirect to the .rst source files in the first-patch document must be changed to the links that redirect to there corresponding human readable format. Let me know if I could do it under the [KERNEL NEWBIEs ACCESS]. 
 
-diff --git a/Documentation/process/submitting-patches.rst b/Documentation/process/submitting-patches.rst
-index eac7167dce83..69ce64e03c70 100644
---- a/Documentation/process/submitting-patches.rst
-+++ b/Documentation/process/submitting-patches.rst
-@@ -320,7 +320,7 @@ for their time.  Code review is a tiring and time-consuming process, and
- reviewers sometimes get grumpy.  Even in that case, though, respond
- politely and address the problems they have pointed out.  When sending a next
- version, add a ``patch changelog`` to the cover letter or to individual patches
--explaining difference aganst previous submission (see
-+explaining difference against previous submission (see
- :ref:`the_canonical_patch_format`).
- 
- See Documentation/process/email-clients.rst for recommendations on email
--- 
-2.25.1
+Apart from this I will be happy to patch the style guide after this
+contribution period.
+
+Regards,
+
+Sumitra
 
