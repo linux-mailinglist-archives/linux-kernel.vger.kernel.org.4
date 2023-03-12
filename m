@@ -2,117 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8DD6B6333
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 05:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 296506B6336
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 05:49:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbjCLElb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 23:41:31 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
+        id S229533AbjCLEt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 23:49:27 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjCLEl2 (ORCPT
+        with ESMTP id S229450AbjCLEt0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 23:41:28 -0500
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5343B20F
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 20:41:27 -0800 (PST)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32C4fG8t031509
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sat, 11 Mar 2023 23:41:17 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1678596078; bh=MUTFrTJV2TG1PRFQ5UV72VyZiWZbhttWsOcRl7qYvuo=;
-        h=Date:From:To:Cc:Subject;
-        b=fSsgTgMOLSRvblisQ50uGYd0giPA+5GY1xJ1NgtVAXyj4cguEg42JnMDD/zddz2CO
-         L4blTxMaq0zeP7LT8Vs0P7MmQycMTxmVXgYYmvmIUQJ7jioNdAA/1QDkIbvDMjAGSR
-         8G4nG0bnC5Yba141Fsu9kYts84xszbPyBoIiyf8jVnffS+yznAvCxuXnEToqrbI/J0
-         naJdF6nEVzv9wJzGW9bSImxWvLjS/YF6cfL+syMWOyxyUGFBHsbxTgQ6XY5JLWPz4I
-         2/TF7l+uCkVYaA8asQK6Mu/4uuFf8E/tcgOx1fUxDvJ4f042SRAo3jg4XbLeCzeYmc
-         uUSiJQSmqnXyw==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 3DBF215C45B9; Sat, 11 Mar 2023 23:41:16 -0500 (EST)
-Date:   Sat, 11 Mar 2023 23:41:16 -0500
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
-Subject: [GIT PULL] ext4 fixes for 6.3-rc2
-Message-ID: <20230312044116.GA2694785@mit.edu>
+        Sat, 11 Mar 2023 23:49:26 -0500
+Received: from stravinsky.debian.org (stravinsky.debian.org [IPv6:2001:41b8:202:deb::311:108])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25A774D298
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 20:49:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=debian.org;
+        s=smtpauto.stravinsky; h=X-Debian-User:Content-Transfer-Encoding:Content-Type
+        :MIME-Version:References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:
+        Reply-To:Content-ID:Content-Description;
+        bh=Tz5MdvnicuIK5Oled/YbXmo8a4UUPo0fLXYCdr9Nq2I=; b=CRmA3GcG03fq5lRifyOr4shGyT
+        3nOUV6Lt8UMM3ECiARHV1194WCvXk1pQjnxtdhZTqmTLtXKMW57IeYGuqkkVORmMbyWLLRNOnbA6Q
+        fG2uYgtwO1frv0KtDZdMDAcH6c6HM2lbVuZotElk2n4zUM6v3JYKyJtMd1aTuTbpJtkrZWoWy9G9S
+        pj15acuRf5ax6MuCDfDhInmz5wmXDXhSsCY5oMFnSHK8EJpUwT32LxT5FBiBoWA0RnljszKDOn1IH
+        ixZwRX4OvMxf8VzUoOUjMznFkdlrKuKtxJLXelZPccmLp/AK5b5FhjfdkLtuUyB+/jjkrSZkOZyA5
+        aDSWN1Dg==;
+Received: from authenticated user
+        by stravinsky.debian.org with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <anuradha@debian.org>)
+        id 1pbDdm-006vpq-Ls; Sun, 12 Mar 2023 04:49:03 +0000
+From:   Anuradha Weeraman <anuradha@debian.org>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org
+Cc:     anuradha@debian.org
+Subject: [PATCH v2] sched/rt: Fix unused-const-variable W=1 warning and style issue
+Date:   Sun, 12 Mar 2023 10:18:14 +0530
+Message-Id: <20230312044815.118970-1-anuradha@debian.org>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230124190638.124a1c7a@gandalf.local.home>
+References: <20230124190638.124a1c7a@gandalf.local.home>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1205; i=anuradha@debian.org; h=from:subject; bh=rBpOXPu4D0m0c/zpViqEbKcN4Jix1OjTWh9PHnAjvpY=; b=owEBbQKS/ZANAwAKAWNttaHZGGD9AcsmYgBkDVmPPV7a4x7/pnsmBwDBCmaCR/tpyfkbt9pZt siKeTce+f+JAjMEAAEKAB0WIQT1a48U4BTN710Ef8FjbbWh2Rhg/QUCZA1ZjwAKCRBjbbWh2Rhg /cQCD/9h3/okW00OccBnsr3eED4fOk8YD5CDQ+ZE8bgpXbtIy0TWlDm/WY4FP80iHssK++TYvty WpQqII53uBrJOsPv4H/S0BDQAF+XG2vnHqTfgZD1mLuGt0RjQaQ+3j769STFFozfm73tAc8EXBh 1y2SrVLH5KlnfeZxCLSoFRZj8YpuFcVbsjkT3WlLrEkJ7Ujnsctdq/QtmKoJQ9HmZB7MpbkvAN4 8mtH7Sv7D8P5M91+djv6NiZ3VXlpp0fbf800YL/hFmsSf/AEeP56bPTpke/SJIiASB8MMvxOPe8 ie0HAzQI5BNLbECey9dKsIlWnkP0enADQIwyZSRelREW1J90Z6T4gING4XGsJLqGkTNx/IXTNkW wuxxLlEoBRC+4vaV3gPMIxGwSkKxpSZ3n7tfI+iKr910dpz01KWmo1gZPigVA7cR9v9u5jmTbF0 w5Qhr0ROc8iAhSwb0NtD2t16cjRAi1Pgs28YQ32U6jQADgN4U+cBQ1EagSxkZCO7UHK15CPkztv upm06yfUKxSJbCqA9fwV+Xt5MOwk8umqtoPxMKB7C7RjgOg4BlgU3AWzB6yBVZ8kcFzgzTgm3Gg Ddz/NQROqr1YYckTpbJ+UOzJmc5EqOIGYJusSZIDw4Jz9roKHzcnfUrPKydMkSpcGDywNFRbtiz LBqOm24DEWjXDow==
+X-Developer-Key: i=anuradha@debian.org; a=openpgp; fpr=F56B8F14E014CDEF5D047FC1636DB5A1D91860FD
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Debian-User: anuradha
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,UNPARSEABLE_RELAY autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit e3645d72f8865ffe36f9dc811540d40aa3c848d3:
+Compiler warning with W=1 due to unused constant in
+    kernel/sched/rt.c:9:18: warning: ‘max_rt_runtime’ defined but not used
 
-  ext4: fix incorrect options show of original mount_opt and extend mount_opt2 (2023-02-25 15:39:08 -0500)
+Fix by adding __maybe_unused attribute to max_rt_runtime.
 
-are available in the Git repository at:
+Also, fix style issue for "else should follow close brace '}'".
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
+Signed-off-by: Anuradha Weeraman <anuradha@debian.org>
+---
+ kernel/sched/rt.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-for you to fetch changes up to f5361da1e60d54ec81346aee8e3d8baf1be0b762:
+diff --git a/kernel/sched/rt.c b/kernel/sched/rt.c
+index ed2a47e4ddae..8cd2e1203a81 100644
+--- a/kernel/sched/rt.c
++++ b/kernel/sched/rt.c
+@@ -6,7 +6,7 @@
+ 
+ int sched_rr_timeslice = RR_TIMESLICE;
+ /* More than 4 hours if BW_SHIFT equals 20. */
+-static const u64 max_rt_runtime = MAX_BW;
++static const u64 __maybe_unused max_rt_runtime = MAX_BW;
+ 
+ static int do_sched_rt_period_timer(struct rt_bandwidth *rt_b, int overrun);
+ 
+@@ -604,8 +604,7 @@ static void sched_rt_rq_dequeue(struct rt_rq *rt_rq)
+ 		dequeue_top_rt_rq(rt_rq, rt_rq->rt_nr_running);
+ 		/* Kick cpufreq (see the comment in kernel/sched/sched.h). */
+ 		cpufreq_update_util(rq_of_rt_rq(rt_rq), 0);
+-	}
+-	else if (on_rt_rq(rt_se))
++	} else if (on_rt_rq(rt_se))
+ 		dequeue_rt_entity(rt_se, 0);
+ }
+ 
+-- 
+2.39.0
 
-  ext4: zero i_disksize when initializing the bootloader inode (2023-03-11 00:44:24 -0500)
-
-----------------------------------------------------------------
-Bug fixes and regressions for ext4, the most serious of which is a
-potential deadlock during directory renames that was introduced during
-the merge window discovered by a combination of syzbot and lockdep.
-
-----------------------------------------------------------------
-Darrick J. Wong (1):
-      ext4: fix another off-by-one fsmap error on 1k block filesystems
-
-Eric Biggers (1):
-      ext4: fix cgroup writeback accounting with fs-layer encryption
-
-Eric Whitney (1):
-      ext4: fix RENAME_WHITEOUT handling for inline directories
-
-Jan Kara (1):
-      ext4: Fix deadlock during directory rename
-
-Theodore Ts'o (1):
-      ext4, jbd2: add an optimized bmap for the journal inode
-
-Thomas Wei�schuh (1):
-      ext4: make kobj_type structures constant
-
-Tudor Ambarus (1):
-      ext4: Fix comment about the 64BIT feature
-
-Wu Bo (1):
-      docs: ext4: modify the group desc size to 64
-
-Ye Bin (4):
-      ext4: move where set the MAY_INLINE_DATA flag is set
-      ext4: fix WARNING in ext4_update_inline_data
-      ext4: commit super block if fs record error when journal record without error
-      ext4: make sure fs error flag setted before clear journal error
-
-Zhihao Cheng (1):
-      ext4: zero i_disksize when initializing the bootloader inode
-
- Documentation/filesystems/ext4/blockgroup.rst |  6 +++---
- fs/ext4/ext4.h                                |  2 +-
- fs/ext4/fsmap.c                               |  2 ++
- fs/ext4/inline.c                              |  1 -
- fs/ext4/inode.c                               |  7 +++++-
- fs/ext4/ioctl.c                               |  1 +
- fs/ext4/namei.c                               | 39 +++++++++++++++++++++-------------
- fs/ext4/page-io.c                             | 11 +++++-----
- fs/ext4/super.c                               | 38 +++++++++++++++++++++++++++++++--
- fs/ext4/sysfs.c                               |  4 ++--
- fs/ext4/xattr.c                               |  3 +++
- fs/jbd2/journal.c                             |  9 +++++---
- include/linux/jbd2.h                          |  8 +++++++
- 13 files changed, 98 insertions(+), 33 deletions(-)
