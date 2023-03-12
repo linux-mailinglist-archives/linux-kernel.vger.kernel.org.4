@@ -2,91 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27D176B6BCD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DCC46B6BD1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:42:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231226AbjCLVlB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:41:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34384 "EHLO
+        id S231292AbjCLVmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCLVk5 (ORCPT
+        with ESMTP id S230179AbjCLVmL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:40:57 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 030F734F56;
-        Sun, 12 Mar 2023 14:40:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:Content-Type:
-        MIME-Version:References:In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Sender
-        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=6f6Y7LE26iLoc26gBiJX3yiT5sQ5r15wZSUvx/W8T2A=; b=y2xckxbzEJzBEgBXHPIVBi2S5P
-        UOXuf6LR3jI+mDoCJcROEk8+QZAVMKQMy6jcaPcTGf3P9EWu7CLbwilK71/BMlmFPGvcj/Wama3uh
-        7zuZ8IlLHOhLtlC5ehRWNaoMegk+YK9LGXZyJser799SUPp0Vc5PweubB9nEqH48aXCLT2cZPvdu+
-        MDyQeu5hHvJUnX4mVks9otMqJzxHUfjzxK+XWjsy6HFJbdtz5tiHEXLF9pSzZsOMNbdh6j1OzISfH
-        QZKi96XqBFMSUwGgent5ylrhlt31GmymF7ILDxWPyHKjFHN8GDWdhVRzXc+WTvBXucGjCknXvWqXY
-        CuGe8bOw==;
-Received: from p200300ccff059e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:9e00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pbTQk-00045m-9W; Sun, 12 Mar 2023 22:40:38 +0100
-Date:   Sun, 12 Mar 2023 22:40:36 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, marex@denx.de, max.krummenacher@toradex.com,
-        leoyang.li@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 2/2] ARM: dts: imx: Add devicetree for Tolino Vison
-Message-ID: <20230312224036.37dc4d41@aktux>
-In-Reply-To: <1346ce4e-f1fd-1a77-f38e-cd87efc59082@linaro.org>
-References: <20230312205236.2281466-1-andreas@kemnade.info>
-        <20230312205236.2281466-3-andreas@kemnade.info>
-        <1346ce4e-f1fd-1a77-f38e-cd87efc59082@linaro.org>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+        Sun, 12 Mar 2023 17:42:11 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C6F636452;
+        Sun, 12 Mar 2023 14:42:10 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id m6so13376258lfq.5;
+        Sun, 12 Mar 2023 14:42:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678657328;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=R3rijjmcd0H9JBLz+kOnyMNiTilGp+r33BtDPyjKasc=;
+        b=I++jHapzTgT8ulnNiHlEeUUovVAe1EuX7MeM98wmpamJlI0jzO9Pkbq5/aQPOhJZVR
+         834eq51o68Qkq7WLAsij7+XueV6+/LMeNzeWGoiBVD7zupVpqXz6xNxkPIeULwZPjiIM
+         uyCSdT1S5j2l7h6f4otCyn6ESaxcqy9RQGFAJsG8UKiyc6lIdkkTIDuXHPcR/eR51vAa
+         XlxZj8TsOrU/2icEw2aieDrDlpKhaCpnRdB10CSCuhlpIkVkxGQGQPsESso2OQA/VCWd
+         qlHDc0NfohNxhcv4pO4lF8zza1dj9aaTePIKaazamlW1qy403jHVl8pK1fSFE72HV7g+
+         Cy5Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678657328;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R3rijjmcd0H9JBLz+kOnyMNiTilGp+r33BtDPyjKasc=;
+        b=11DpAVmXUkvtRWJfy/yLKP8502JVWcBPkuuEZvh91FGN3ERTpHWcmAsQZTfoLwfYXv
+         K0LoAL1SJNkHWnAB9IX3QD4jJCpwKjbSR1sMcVfzPXKTwxtOSer3YlhZZlTpxyqcucVB
+         YuaNt1joScR5UUAXV+339/CRYGpXT31UNWyD71IkcqkQwJPHYYA8xWhpwlkMImypEb0Y
+         61+0arq/qhOmN4iVDIDDZO0xB0cHRA3jI3Rmc5WdmERbaXMl/srpyAPS+niRG9hI/Kr2
+         riJwxieYH+ch7thJ3BAjr/5c/iJM4ZOOZIBOO36P1tkir3D6mnxWnC9TMY0/XHUAgObY
+         I3JA==
+X-Gm-Message-State: AO0yUKUWEPYBGYD0nRECm6fpOSmD1CzbBJ5DqXCw6HeiYv+7JxD/wTAL
+        rFyrzSZUwApSYwsKRZYF1XU=
+X-Google-Smtp-Source: AK7set9xDWFn1iZwRkOPYUXEj8c4lqqoFbz9NkTxgaALsntAQ75+QHJ3xpNXMEt6Ohxe7GWyNUwIUw==
+X-Received: by 2002:a05:6512:21d:b0:4c6:4ff7:ba04 with SMTP id a29-20020a056512021d00b004c64ff7ba04mr9509778lfo.2.1678657328312;
+        Sun, 12 Mar 2023 14:42:08 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id a22-20020a2eb176000000b0029870223d23sm767676ljm.73.2023.03.12.14.42.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 14:42:07 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 00:42:04 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Brad Larson <blarson@amd.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
+        adrian.hunter@intel.com, alcooperx@gmail.com,
+        andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, skhan@linuxfoundation.org,
+        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
+        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
+        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v11 04/15] dt-bindings: spi: dw: Add AMD Pensando Elba
+ SoC SPI Controller
+Message-ID: <20230312214204.sjycq3xyk56ny2on@mobilestation>
+References: <20230312004445.15913-1-blarson@amd.com>
+ <20230312004445.15913-5-blarson@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Score: -1.0 (-)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312004445.15913-5-blarson@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Mar 2023 22:02:24 +0100
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+On Sat, Mar 11, 2023 at 04:44:34PM -0800, Brad Larson wrote:
+> The AMD Pensando Elba SoC has integrated the DW APB SPI Controller
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> 
+> v10 changes:
+> - Move definition of amd,pensando-elba-syscon into properties
+>   with a better description
+> - Add amd,pensando-elba-syscon: false for non elba designs
+> 
+> v9 changes:
+> - Define property amd,pensando-elba-syscon
+> - Move compatible amd,pensando-elba-spi ahead of baikal,bt1-ssi
+> 
+> ---
+>  .../bindings/spi/snps,dw-apb-ssi.yaml         | 19 +++++++++++++++++++
+>  1 file changed, 19 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> index a132b5fc56e0..2383d6497b1e 100644
+> --- a/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> +++ b/Documentation/devicetree/bindings/spi/snps,dw-apb-ssi.yaml
+> @@ -37,6 +37,17 @@ allOf:
+>      else:
+>        required:
+>          - interrupts
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: amd,pensando-elba-spi
+> +    then:
+> +      required:
+> +        - amd,pensando-elba-syscon
+> +    else:
+> +      properties:
+> +        amd,pensando-elba-syscon: false
+>  
+>  properties:
+>    compatible:
+> @@ -63,6 +74,8 @@ properties:
+>          const: intel,keembay-ssi
+>        - description: Intel Thunder Bay SPI Controller
+>          const: intel,thunderbay-ssi
+> +      - description: AMD Pensando Elba SoC SPI Controller
+> +        const: amd,pensando-elba-spi
+>        - description: Baikal-T1 SPI Controller
+>          const: baikal,bt1-ssi
+>        - description: Baikal-T1 System Boot SPI Controller
+> @@ -136,6 +149,12 @@ properties:
+>        of the designware controller, and the upper limit is also subject to
+>        controller configuration.
+>  
+> +  amd,pensando-elba-syscon:
+> +    $ref: /schemas/types.yaml#/definitions/phandle-array
 
-> On 12/03/2023 21:52, Andreas Kemnade wrote:
-> > This adds a devicetree for the Kobo Aura 2 Ebook reader. It is based
-> > on boards marked with "37NB-E60Q30+4A3". It is equipped with an i.MX6SL
-> > SoC.
-> >   
-> 
-> Thank you for your patch. There is something to discuss/improve.
-[...]
-> > +	pinctrl_i2c2: i2c2grp {
-> > +		fsl,pins = <
-> > +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
-> > +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
-> > +		>;
-> > +	};
-> > +
-> > +	pinctrl_i2c2_sleep: i2c2grp-sleep {  
-> 
-> Shouldn't all groups end with 'grp' suffix? Are you sure this passes
-> dtbs_check?
-> 
-> ...
-> 
-No problem with dtbs_check. But I will resend with corrected names.
+> +    description: |
+                    ^
+     +--------------+
+This + modifier is redundant.
 
-Regards,
-Andreas
+> +      Block address to control SPI chip-selects.  The Elba SoC
+> +      does not use ssi.                          ^
+                                                    |
+1. Drop one of the whitespaces ---------------------+
+2. The description is misleading. SSI means "Synchronous Serial
+Interface" which basically means SPI. If you meant SS (slave-select)
+signals then Elba SoC do use them. What would sound correctly here is
+that Elba SoC system controller provides an interface to override the
+native DWC SSI CS control.
+
+Please fix the notes above. Then feel free to add
+Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+
+-Serge(y)
+
+> +
+>  patternProperties:
+>    "^.*@[0-9a-f]+$":
+>      type: object
+> -- 
+> 2.17.1
+> 
