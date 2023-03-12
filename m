@@ -2,70 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA5EC6B6AA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:29:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D4636B6AA9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCLT27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50842 "EHLO
+        id S229671AbjCLTcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:32:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCLT26 (ORCPT
+        with ESMTP id S229437AbjCLTcX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:28:58 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 114002FCEE
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 12:28:57 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id o4so2886400pjq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 12:28:57 -0700 (PDT)
+        Sun, 12 Mar 2023 15:32:23 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E33928F;
+        Sun, 12 Mar 2023 12:32:22 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id s12so11218946qtq.11;
+        Sun, 12 Mar 2023 12:32:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678649336;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=qfhIXoQOHQJr+gGO2qxo4oT4JoKm/10nWr5b3EbxW40=;
-        b=Izm1xtXUrM5ET2LFvnd9qHyz2wuer8S4f0kqpsoe6aV2R7hdUbRk4Y5j4/bbOgGI+z
-         RvIbIb9Z697jvIbHAC5lHHo1P3s0GpO9h14HyRwX3Hp9AMJZsxF/9kMozJ0irjgwKf6v
-         M99Lkn004juVqxQRx6Rhh6p5BaSvxIVHHOHZshP/uc6XPc0BzF6qNpJgDnAp3B+5FDHZ
-         zbgiApcjam4s+U1La0LbTdLOoWnWHFGKZhCyY8VhgaeoPv2U7tsudi1EKEgC1+XMpipV
-         p0rgqf19aHsK3J1VeIAWukvmSicd3ga8IcQ6CqIidw1OgZX4XXNOGG1HxuQEq/PAXm2B
-         1u5w==
+        d=gmail.com; s=20210112; t=1678649541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=D/F2xsczBx3Mz6lJbYcDdswrH+7uW2gyDmOk9WjXdoU=;
+        b=RO6MA7V9WUH4SRKSrCkwh8Or1XwJeHpm9jcECgAC3VjukjGFUuLU4/qZHIuhs9Vyvd
+         KXvctAucqoazv4dcQaF486/YLdZ8K/8LBHbefc0D+UunSBPyAhnwG0+31kgE6xsKAA98
+         5Cze8XdXicA0M3dcrkakmETGFMiwvYZ6E7eMyrHS2CK4PzN7/Rh9GtFDpsfbMjxPEQGk
+         UsPThosK6RMwxCQ/khK+CK3Kq16LAn2BnJlVKKnBv63KZpPyC/D2CLLJJinOAWn6Yc9v
+         jlQD1yGksoNAFBEvLRIst6yeXRq13KB/hfSARzxgPJ54TY3vpvF71t35YZlVRJE8CWck
+         oVJA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678649336;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qfhIXoQOHQJr+gGO2qxo4oT4JoKm/10nWr5b3EbxW40=;
-        b=GZJKi+KHmYrXf/6cCK3Um9IXdvLsZDnbMtNcb+iOjeEGk/lIa5pZxaf5eQ50Ua8A0L
-         lL1Rq6i4pZkzFAvZ55fA8cXZxSWQQgGe4PeIvcFlgZ/gVlUckNJSYyhWMMDfYkDlaLVC
-         JVSLGygw97gYUMv4cf1zUgUvBbrMq86/d1twYWenXgZnLbBglxR0fT5Aobl0ToMnJf3Z
-         mbYfne0Zb2EsUBJ3dSEgJVmQ0l5yahUCjgT2GjnBI55DzUMBqsI0jrHpsol7viYfswWi
-         29d2PjaJDk6uyh3thatnqR/XWcsAriSROX5baV1Ou6EerSWPye/AOziUhGFQ93t827tP
-         GFGw==
-X-Gm-Message-State: AO0yUKWhRA0D2/2OMELYp+sYuzjpjswpqrSGx2wTH2x6D8BoTnGhCSOi
-        u6d40qCu+tDD4jIz3MZWTjEpxN1dHLpDQnM6jD0yyjKhT1Y=
-X-Google-Smtp-Source: AK7set+Ujk1wsgXpvSnRx5mIG+1Ilcjk1Xpo2ZGuCMkVBMpDf41SDnjqHHM8VTZ1TpnWOY3pZu/dWNZX8KpyGOJclvY=
-X-Received: by 2002:a17:903:710:b0:19f:30be:e9f6 with SMTP id
- kk16-20020a170903071000b0019f30bee9f6mr1424089plb.6.1678649336371; Sun, 12
- Mar 2023 12:28:56 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678649541;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=D/F2xsczBx3Mz6lJbYcDdswrH+7uW2gyDmOk9WjXdoU=;
+        b=UA096sjmZU8wwwMDkD+lAcLKatSzCY0xTFrBjBDgDc4lZDwlF3KTPmOK/UcpNzZgmw
+         oGP4sBkCE9l8x9aKoPjTJ4sWWlIRoduVk/v9wZPpLBzfbtVKxCqNAE8stlEzjrwQ2YLJ
+         5gy5OBr1m92Q0HYB7uezn3M7T+rNopYDNTQJnEQnUZFFTyYBgHfSJqBS/eCVBKBGIF7I
+         dL+nUbI7xfgKFmBhN2IcLoqlFK9xMyv0c1bCX2fTTqnRbiwfmeYmwTHbDyeclniybKDk
+         q4eLAk8NX2fNJPpM91Wbzz0dgWymqeRZ2Uk6G6ndn3KUO9aWD26V54eNlPuRk/vWZXYM
+         n79w==
+X-Gm-Message-State: AO0yUKV5g3I90BBI9EaKyUpTVSiYPo0dsJALYRc35E5yts7rNnT0vYpr
+        nDFPScpTu5c0RYGl0gBwTfo=
+X-Google-Smtp-Source: AK7set/ZuBIMUJX/mFp+exe1B0AR6KZfUxWkpkPX5uuvbX9rO5encbetSlF7CX+QgQupuy49Rq2sjg==
+X-Received: by 2002:ac8:5bc9:0:b0:3bf:b75a:d7a7 with SMTP id b9-20020ac85bc9000000b003bfb75ad7a7mr15267929qtb.7.1678649541367;
+        Sun, 12 Mar 2023 12:32:21 -0700 (PDT)
+Received: from localhost ([2600:1700:65a0:ab60:790c:770f:7bb1:6550])
+        by smtp.gmail.com with ESMTPSA id f68-20020a37d247000000b0074240840c25sm3930490qkj.108.2023.03.12.12.32.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 12:32:20 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 12:32:19 -0700
+From:   Cong Wang <xiyou.wangcong@gmail.com>
+To:     Hsin-Wei Hung <hsinweih@uci.edu>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Jakub Sitnicki <jakub@cloudflare.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: A potential deadlock in sockhash map
+Message-ID: <ZA4owxvldelZ6x9h@pop-os.localdomain>
+References: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
 MIME-Version: 1.0
-From:   Adam Ford <aford173@gmail.com>
-Date:   Sun, 12 Mar 2023 14:28:45 -0500
-Message-ID: <CAHCN7xJXMmwYqD=Eb2=_vJw390KAd6NgkWCpq6yCbAyaJ3xK5A@mail.gmail.com>
-Subject: MXSFB and Video PLL clock on i.MX8M Mini/Nano Question
-To:     arm-soc <linux-arm-kernel@lists.infradead.org>
-Cc:     Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        dri-devel <dri-devel@lists.freedesktop.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Jagan Teki <jagan@amarulasolutions.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,40 +76,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I am trying to work through a series that was submitted for enabling
-the DSI on the i.MX8M Mini and Nano.  I have extended this series to
-route the DSI to an HDMI bridge, and I am able to get several
-resolutions to properly sync on my monitor.  However, there are also a
- bunch that appear on the list when I run modetest that do not sync on
-my monitor.
+On Mon, Feb 20, 2023 at 07:39:59AM -0600, Hsin-Wei Hung wrote:
+> DEFINE_BPF_MAP(map_0, BPF_MAP_TYPE_SOCKHASH, 0, uint32_t, uint32_t, 1005);
+> SEC("tp/sched/sched_switch")
+> int func(__u64 *ctx) {
+>         uint32_t v0 = 0;
+>         uint64_t v1 = 0;
+>         v1 = bpf_map_delete_elem(&map_0, &v0);
+>         return 0;
+> }
 
-When running some debug code, it appears that it's related to the
-clocking of the MXSFB driver.
+It looks like we have to disable hardirq (instead of just softirq) in order to use
+sockmap safely in interrupt context like sched/sched_switch.
 
-From what I can tell, the MSXFB driver attempts to set the clock based
-on the desired resolution and refresh rate.  When the default
-VIDEO_PLL clock is set to 594MHz, many of the resolutions that cleanly
-divide from the 594MHz clock appear to sync with my monitor.  However,
-in order to get other resolutions to appear, I have to manually change
-the device tree to set VIDEO_PLL to a different clock rate so MSXFB
-can use it.  Unfortunately, that breaks the resolutions that used to
-work.
-
-I threw together a hack into the MXSFB driver which adds a new
-optional clock to the MSXFB driver.  When I pass VIDEO_PLL to this
-driver, it can automatically set the clock rate to match that of
-whatever the desired clock is, and I can get many more resolutions to
-appear.
-Another advantage of this is that the Video_PLL can be the minimum
-speed needed for a given rate instead of setting a higher rate, then
-dividing it down.
-
-I wasn't sure if that would be the best way to approach this, or if
-someone had a better suggestion.
-
-If this is the best approach, I can try to clean up my patch and
-submit it to the mailing list for review.
-
-thanks,
-
-adam
+Thanks.
