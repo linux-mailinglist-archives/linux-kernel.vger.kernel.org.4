@@ -2,72 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A18D6B6789
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:34:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1CFBC6B678C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:37:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229962AbjCLPel (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 11:34:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46532 "EHLO
+        id S229797AbjCLPg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 11:36:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229876AbjCLPeg (ORCPT
+        with ESMTP id S229585AbjCLPg4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 11:34:36 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3374109B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 08:34:35 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cn21so9071789edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 08:34:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678635274;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9kvgcMUGd07Xd3eyILFDk+DeCEWHO2H7A73K4YH9RZs=;
-        b=sckQnzxqcVD2P6n4wKlXn+PAO+hZd6wQwdAXljCJPORmWzShV8Qd5/kZDRX1renVoL
-         fnBpY7NEDz/8oI5+i4ueiTdw1ognJLr9nbZt+uEKQb5x+pW6nuNjLiYE3KT0DgH4x4cU
-         vxeZ6pzIiEtUZE0VpBj75JnCEiEhuDDZSMEQ4HRU9cY126iixAzAyPG5l+Dg3traNquP
-         0o7gY3znMx2YHGO6VTIxRSPnj6p+wYhXbVMHbiXlM4aNjbW2OJwYd/kqXSNWIOz23BEf
-         JyS9th1vnVGmxr/W6A1YNu+S3EsKc/KjNRxlGGU65YaIo7p1lk4K382W2V6eV1bAvXAf
-         AvuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678635274;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9kvgcMUGd07Xd3eyILFDk+DeCEWHO2H7A73K4YH9RZs=;
-        b=Oq5Euc7tJRB88Qs8v9dB4aOyDhbttayO7CyviWy3ZSfPu53TZ1QtGbqh8L1M6sQS1x
-         8svyuLqRLy/R4+JEMvtYmb3Xk52WlHmbcfQUKftK37NH9ebhkg1btJayrd7lBThjmHrb
-         tnYHMpR0TNvYOkxqKZaeZYFXUANOcEOjpNnJhoVizl1JR52N24brFTtm0X2EsGH1c+bt
-         Naj7YkUMaSlbYC09BJCt4eLX7GApx+Lq7rQy28T2pbrxtcgNmB5OL78nn0Gfi4HXdbUi
-         yQ/4Sv2fT2eFVWNchpRMIxlwyWX2rxxc7HaZimxT+2xAD4HSMWTNI/nRVKprZn3tbA35
-         y4nA==
-X-Gm-Message-State: AO0yUKWLt7+dDrNjdm/HoSJRhWKOwrGlmJQIxj6hRf241D7D02FdVGfo
-        oyvOaghrHmopN34sl3elSMMgRQ==
-X-Google-Smtp-Source: AK7set+LW7wkF4ML14NRWahSG6NXgm3FnETJtwxNWw/Eb52r2gCC8Ln8bspgvhbKuB5L4mMzSPF+5Q==
-X-Received: by 2002:a17:907:94ce:b0:907:183f:328a with SMTP id dn14-20020a17090794ce00b00907183f328amr39131550ejc.65.1678635273802;
-        Sun, 12 Mar 2023 08:34:33 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id z2-20020a170906668200b008e0bb004976sm2312723ejo.134.2023.03.12.08.34.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 08:34:33 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Robert Eshleman <bobbyeshleman@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 3/3] iio: proximity: sx9500: Reference ACPI and OF ID data
-Date:   Sun, 12 Mar 2023 16:34:29 +0100
-Message-Id: <20230312153429.371702-3-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230312153429.371702-1-krzysztof.kozlowski@linaro.org>
-References: <20230312153429.371702-1-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 11:36:56 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A292343441;
+        Sun, 12 Mar 2023 08:36:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3657460F2D;
+        Sun, 12 Mar 2023 15:36:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE944C433EF;
+        Sun, 12 Mar 2023 15:36:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678635410;
+        bh=bBBlxMEPLUb4VCFvvJ0V/XYfNtveGw01hltB18ML8WQ=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=CHnEGZjO+FUV0smOlfk2In/q0P64C5cm3rcy4JIYM0qL5tnqu2OH9pm7v7tzJ3Uc4
+         QCschvH+X2FSTuFahen8vgMPgdrsfKSIEiavX4Fp7uvrmIUI6tNcYq5stSHvt2qLOI
+         nVXvkuJJmrpZXKjXvUOqcdBgbQtNWimrfDJTlubO/l5MRifc2wKEzj77GGeB3Li6KQ
+         1gW2tVhaAJXnj3ndBaIrEebXM8d6RxbKT2fsfjWw3SoXAgdH6qmR68GCqQB+5x+DUs
+         UFAYYBP8zPBBxndsZJ289uDhzetB66+Bm5N5nte3LmhpNON8+D37xCnfZbrL252Do3
+         O8z3rXhdtDflg==
+Date:   Sun, 12 Mar 2023 15:36:55 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v2 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
+Message-ID: <20230312153655.052d5730@jic23-huawei>
+In-Reply-To: <c16d372f-a122-16d6-ad08-1fbffb01d9ff@gmail.com>
+References: <cover.1677750859.git.mazziesaccount@gmail.com>
+        <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
+        <20230304201720.2d554f07@jic23-huawei>
+        <c16d372f-a122-16d6-ad08-1fbffb01d9ff@gmail.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,37 +63,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Always reference acpi_device_id and of_device_id tables, as they is
-little benefit of conditional compiling and OF table could be used also
-for ACPI matching via PRP0001.  This fixes warning:
+On Sun, 5 Mar 2023 14:22:51 +0200
+Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-  drivers/iio/proximity/sx9500.c:1039:34: error: ‘sx9500_of_match’ defined but not used [-Werror=unused-const-variable=]
+> On 3/4/23 22:17, Jonathan Cameron wrote:
+> > On Thu, 2 Mar 2023 12:58:59 +0200
+> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> >   
+> >> +/*
+> >> + * The BU27034 does not have interrupt or any other mechanism of triggering
+> >> + * the data read when measurement has finished. Hence we poll the VALID bit in
+> >> + * a thread. We will try to wake the thread BU27034_MEAS_WAIT_PREMATURE_MS
+> >> + * milliseconds before the expected sampling time to prevent the drifting. Eg,
+> >> + * If we constantly wake up a bit too late we would eventually skip a sample.  
+> > 
+> > Lazier approach would be to just sent the sampling frequency at twice the
+> > expected frequency and you'll never miss a sample unless you the wake up is
+> > delayed massively for some reason.  Particularly 'fresh' data might not matter
+> > enough that half a cycle late is a problem.  
+> 
+> Hmm. Do I read this right - You suggest we drop the polling loop for 
+> valid bit and just always sleep for int_time / 2 if data was not valid?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Yes.  There are costs to both methods, but the advantage here is that the chance
+of being so late you miss becomes much less.
 
----
+> 
+> I don't know. That would probably make the time-stamps for buffered 
+> results to be jumping quite a bit - especially with the longer 
+> integration times.
 
-Changes since v1:
-1. Drop of_match_ptr and ACPI_PTR
----
- drivers/iio/proximity/sx9500.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+True enough.  They are probably fairly noisy either way but this would make them
+worse.
 
-diff --git a/drivers/iio/proximity/sx9500.c b/drivers/iio/proximity/sx9500.c
-index 8794e75e5bf9..9b2cfcade6a4 100644
---- a/drivers/iio/proximity/sx9500.c
-+++ b/drivers/iio/proximity/sx9500.c
-@@ -1051,8 +1051,8 @@ MODULE_DEVICE_TABLE(i2c, sx9500_id);
- static struct i2c_driver sx9500_driver = {
- 	.driver = {
- 		.name	= SX9500_DRIVER_NAME,
--		.acpi_match_table = ACPI_PTR(sx9500_acpi_match),
--		.of_match_table = of_match_ptr(sx9500_of_match),
-+		.acpi_match_table = sx9500_acpi_match,
-+		.of_match_table = sx9500_of_match,
- 		.pm = pm_sleep_ptr(&sx9500_pm_ops),
- 	},
- 	.probe_new	= sx9500_probe,
--- 
-2.34.1
+> 
+> >> + * And because the sleep can't wake up _exactly_ at given time this would be
+> >> + * inevitable even if the sensor clock would be perfectly phase-locked to CPU
+> >> + * clock - which we can't say is the case.
+> >> + *
+> >> + * This is still fragile. No matter how big advance do we have, we will still
+> >> + * risk of losing a sample because things can in a rainy-day skenario be
+> >> + * delayed a lot. Yet, more we reserve the time for polling, more we also lose
+> >> + * the performance by spending cycles polling the register. So, selecting this
+> >> + * value is a balancing dance between severity of wasting CPU time and severity
+> >> + * of losing samples.
+> >> + *
+> >> + * In most cases losing the samples is not _that_ crucial because light levels
+> >> + * tend to change slowly.
+> >> + */
+> >> +#define BU27034_MEAS_WAIT_PREMATURE_MS	5
+> >> +#define BU27034_DATA_WAIT_TIME_US	1000
+> >> +#define BU27034_TOTAL_DATA_WAIT_TIME_US (BU27034_MEAS_WAIT_PREMATURE_MS * 1000)  
+> >   
+> >> +static const struct iio_chan_spec bu27034_channels[] = {
+> >> +	{
+> >> +		.type = IIO_LIGHT,
+> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
+> >> +				      BIT(IIO_CHAN_INFO_SCALE),  
+> > 
+> > What is this scale for?  
+> 
+> The scale is to inform users that we return data using milli lux.
+> 
+> > Given the channel is computed from various different inputs, is there a
+> > clear definition of how it is scaled?  What does a write to it mean?  
+> 
+> Nothing. writing anything else but milli lux scale fails with -EINVAL.
+> 
+> I guess I am doing something in an unusual way here :) Do you have a 
+> suggestion for me?
+
+Return data in lux?  Or return it as INFO_RAW - thus making it clear
+that the reading is not in expected units and a conversion must be
+applied by userspace.  SCALE is not applied to PROCESSED by userspace.
+
+In the rare case where you do get SCALE and PROCESSED it's there to allow
+for changes in the underlying signal measurement that are eaten up in the
+computation needed to get to PROCESSED - that is they have no visible
+affect (beyond range changes etc).
+
+
+...
+
+> >> +
+> >> +	ret = regmap_read(regmap, BU27034_REG_SYSTEM_CONTROL, &part_id);  
+> > 
+> > As it's not all of the register I'd rename the temporary variable to
+> > val or reg or something along those lines.  
+> 
+> I still like having the variable named part_id - as it makes the check 
+> obvious. What I did was adding another temporary variable 'reg' and doing:
+> 
+> part_id = FIELD_GET(BU27034_MASK_PART_ID, reg);
+> 
+> and then using the part_id in if() and dev_warn().
+
+Looks good.
+
+
+Jonathan
 
