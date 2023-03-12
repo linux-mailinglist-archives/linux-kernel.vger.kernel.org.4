@@ -2,203 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D5526B6BBD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:16:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4C86B6BC1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:24:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCLVQj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:16:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40518 "EHLO
+        id S231378AbjCLVYE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:24:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231400AbjCLVQf (ORCPT
+        with ESMTP id S230158AbjCLVYB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:16:35 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A71F72A158;
-        Sun, 12 Mar 2023 14:16:31 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id b10so10724009ljr.0;
-        Sun, 12 Mar 2023 14:16:31 -0700 (PDT)
+        Sun, 12 Mar 2023 17:24:01 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A86012D164
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:23:59 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id l13so11431611qtv.3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:23:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678655790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WvfL5LA+JxDsCD8VVb6BVbqdfgMrfiE/5AuTtyrJsUg=;
-        b=XOe05FDdER8j6fWyWmjhrccSgTXO2w6gqsqtvL6yZk5yIsbqPHFOU+dfDMo0p41Qrd
-         z2hD7v5+OdaUrKzomdbcUtrpc4SLialkEywWzGHRwTn/7otDB1Qs9Es56A3ARDIAaAZx
-         +Z7lVpi2WR2hfR4w3tHC6lVvLhOoFlt1Mqt0kAHjn247/8OdkMNNosQqYmkGEcpzha80
-         QeejozUnbl9BDDqZJ9zKrYVbyGATQL2ahyeyjwb4TCYAI0sIQC/lfT2pzW+DMlyac1BB
-         fygT9BTgEfmWkzOn69H/Gi1LGO7h8ZHu3SZHD4vv7bmUvxUpaQP9yPuMV1hLYnLxzuE+
-         JzqA==
+        d=linaro.org; s=google; t=1678656239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZVLyQ0XiKSvnucCxXN1dJowGWmlgB/Dt3IZETGB50oM=;
+        b=NZwlJLjToy+H13MwnYz3wpVEi3eqcyI3Ky/Z95chVi1Etbb7yll674a2Y2UmTnpnmX
+         tWd2uorn3U/JuT9zzPi9GmyVOjdMmGBCP0opBRpZGY7fnpIJzGuEX2F/RvENibzPZhix
+         T3xaDhFQxPl2+HZSt7MphB9HbflbScriwBEW+c7fgfgV3KgqCKNlYtb3keBmvPRCRl4n
+         6xzHBHiHz70dAsqYR307Aee8/G/kQ6m2JPlQ7AQsItuaZabiNL7EONHNOPi/fBmb+Dey
+         EBmu2HenQPEd7+/FcfWmlOR5R9ZKizQ394fe6zjr7yjMx5Tu7Np27KHNlF0T+9XQPBsz
+         1rMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678655790;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WvfL5LA+JxDsCD8VVb6BVbqdfgMrfiE/5AuTtyrJsUg=;
-        b=u8lp5q7D/yzl6C7IXDBws2W9YtbtS5nJxWmxkqh6DiyO1Ts5+SgsAXn8SO4LrqIT9L
-         MCw0SPDeGSRRCg/ppLfNncc1sl8Yu5dxmFuqzMhES5YWxljY+568FYu3h/5s2NbibKfx
-         T6H6m4l3DPS40rHal+AH0hYpe5ivTpQxblL2F79rmo8FXpNNO2uZ2ZNsV3BhU3ZZfFue
-         BsLER24vXL6IdYtaTTW8TS59KrXrZNEdaXBM5y2AImEHO1ml5aWWPMX39Rbc7vw6C/qa
-         CEHt2vodDC5FlpVv+KhLCR/BMnLXjZ8xMxXLw+EKK8zDfDb5x3W/7W6jSQBG+PxFM6Yd
-         HOXg==
-X-Gm-Message-State: AO0yUKXO2qauofqVxzIdUxP6Jj7oraJv2LaCRm52oirvnENewtVOR1Q3
-        DhNfsAD9ZTRl/pZGTsm0QMU=
-X-Google-Smtp-Source: AK7set8AZ5yW15J55R3C8ci16efEg+FH7c7955xy/u7fX2ifb9NPdfEbIxmxsmL4MbVMXpB0gNZpFw==
-X-Received: by 2002:a2e:a984:0:b0:295:a5a6:ee4d with SMTP id x4-20020a2ea984000000b00295a5a6ee4dmr14600642ljq.8.1678655789714;
-        Sun, 12 Mar 2023 14:16:29 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id a20-20020a05651c031400b00295a96a0f6csm746936ljp.102.2023.03.12.14.16.27
+        d=1e100.net; s=20210112; t=1678656239;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZVLyQ0XiKSvnucCxXN1dJowGWmlgB/Dt3IZETGB50oM=;
+        b=OcDxAou7H2TEkP81TwPiB49vAFAoFywpeR0DbYBf8jbYpqUsKGGP4yup7qa6i+67ev
+         nE5AUDJuAR0leoXjyqnaONozM0bE5c9jEW2DqwWog4FGzK3Qa7ViYm7ilYtjZTS0Hu+8
+         rB/2vMrFEKnIoZ+8VSPVE8ncGCqh2VkWeD3gKG2m23A1PZ1t4RVAJFPsELNBP7FxsXaf
+         H14TrwJxeBm17cdLZmnLOf2Ve3JIVHDUPA2IHdkbCE8FpciVDxuTs+yXWYuMbsC7ZBxi
+         PlWcQSJXAf03qJ43IF9md22FwK22NAafPEoxnB4gDh1ow6f2UeICQyJlKoo4qk7ycjzF
+         NJ2A==
+X-Gm-Message-State: AO0yUKVG2eeZ6vKwaedQ+HIFWA1DbkBHL/UZI9xE9QiLiKwBZIaftULS
+        epgT7DgPJMMN1ZEa3ZnaGOdLFw==
+X-Google-Smtp-Source: AK7set/3JWlfc/2ZRHjNketi/SeZBKZTydDQmqOhfdBs0PJV6yIC3rVOfTjHRFuIIEip70Ig9+V9vg==
+X-Received: by 2002:a05:622a:178b:b0:3bf:daae:7f34 with SMTP id s11-20020a05622a178b00b003bfdaae7f34mr26411301qtk.41.1678656238686;
+        Sun, 12 Mar 2023 14:23:58 -0700 (PDT)
+Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id j23-20020ac85517000000b0039cc0fbdb61sm4285274qtq.53.2023.03.12.14.23.57
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 14:16:28 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 00:16:26 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Brad Larson <blarson@amd.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mmc@vger.kernel.org, linux-spi@vger.kernel.org,
-        adrian.hunter@intel.com, alcooperx@gmail.com,
-        andy.shevchenko@gmail.com, arnd@arndb.de,
-        brendan.higgins@linux.dev, briannorris@chromium.org,
-        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
-        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
-        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
-        lee.jones@linaro.org, broonie@kernel.org,
-        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
-        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
-        robh+dt@kernel.org, samuel@sholland.org, skhan@linuxfoundation.org,
-        suravee.suthikulpanit@amd.com, thomas.lendacky@amd.com,
-        tonyhuang.sunplus@gmail.com, ulf.hansson@linaro.org,
-        vaishnav.a@ti.com, will@kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v11 10/15] spi: dw: Add support for AMD Pensando Elba SoC
-Message-ID: <20230312211626.pxhkypodrdwnbozr@mobilestation>
-References: <20230312004445.15913-1-blarson@amd.com>
- <20230312004445.15913-11-blarson@amd.com>
+        Sun, 12 Mar 2023 14:23:58 -0700 (PDT)
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux-iio@vger.kernel.org
+Cc:     jic23@kernel.org, linux-kernel@vger.kernel.org,
+        William Breathitt Gray <william.gray@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v2] counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
+Date:   Sun, 12 Mar 2023 17:23:47 -0400
+Message-Id: <20230312212347.129756-1-william.gray@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230312004445.15913-11-blarson@amd.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 04:44:40PM -0800, Brad Larson wrote:
-> The AMD Pensando Elba SoC includes a DW apb_ssi v4 controller
-> with device specific chip-select control.  The Elba SoC
-> provides four chip-selects where the native DW IP supports
-> two chip-selects.  The Elba DW_SPI instance has two native
-> CS signals that are always overridden.
-> 
-> Signed-off-by: Brad Larson <blarson@amd.com>
-> ---
-> 
-> v11 changes:
-> - Simplify dw_spi_elb_init by using syscon_regmap_lookup_by_phandle()
-> 
-> v10 changes:
-> - Delete struct dw_spi_elba, use regmap directly in priv
-> 
-> v9 changes:
-> - Add use of macros GENMASK() and BIT()
-> - Change ELBA_SPICS_SHIFT() to ELBA_SPICS_OFFSET()
-> 
-> ---
->  drivers/spi/spi-dw-mmio.c | 57 +++++++++++++++++++++++++++++++++++++++
->  1 file changed, 57 insertions(+)
-> 
-> diff --git a/drivers/spi/spi-dw-mmio.c b/drivers/spi/spi-dw-mmio.c
-> index 26c40ea6dd12..5851ecc6e1e9 100644
-> --- a/drivers/spi/spi-dw-mmio.c
-> +++ b/drivers/spi/spi-dw-mmio.c
-> @@ -53,6 +53,20 @@ struct dw_spi_mscc {
->  	void __iomem        *spi_mst; /* Not sparx5 */
->  };
->  
-> +/*
-> + * Elba SoC does not use ssi, pin override is used for cs 0,1 and
-> + * gpios for cs 2,3 as defined in the device tree.
-> + *
-> + * cs:  |       1               0
-> + * bit: |---3-------2-------1-------0
-> + *      |  cs1   cs1_ovr   cs0   cs0_ovr
-> + */
-> +#define ELBA_SPICS_REG			0x2468
-> +#define ELBA_SPICS_OFFSET(cs)		((cs) << 1)
-> +#define ELBA_SPICS_MASK(cs)		(GENMASK(1, 0) << ELBA_SPICS_OFFSET(cs))
-> +#define ELBA_SPICS_SET(cs, val)		\
-> +		((((val) << 1) | BIT(0)) << ELBA_SPICS_OFFSET(cs))
-> +
->  /*
->   * The Designware SPI controller (referred to as master in the documentation)
->   * automatically deasserts chip select when the tx fifo is empty. The chip
-> @@ -237,6 +251,48 @@ static int dw_spi_canaan_k210_init(struct platform_device *pdev,
->  	return 0;
->  }
->  
-> +static void dw_spi_elba_override_cs(struct regmap *syscon, int cs, int enable)
-> +{
-> +	regmap_update_bits(syscon, ELBA_SPICS_REG, ELBA_SPICS_MASK(cs),
-> +			   ELBA_SPICS_SET(cs, enable));
-> +}
-> +
-> +static void dw_spi_elba_set_cs(struct spi_device *spi, bool enable)
-> +{
-> +	struct dw_spi *dws = spi_master_get_devdata(spi->master);
-> +	struct dw_spi_mmio *dwsmmio = container_of(dws, struct dw_spi_mmio, dws);
-> +	struct regmap *syscon = dwsmmio->priv;
-> +	u8 cs;
-> +
-> +	cs = spi->chip_select;
-> +	if (cs < 2)
-> +		dw_spi_elba_override_cs(syscon, spi->chip_select, enable);
-> +
-> +	/*
-> +	 * The DW SPI controller needs a native CS bit selected to start
-> +	 * the serial engine.
-> +	 */
-> +	spi->chip_select = 0;
-> +	dw_spi_set_cs(spi, enable);
-> +	spi->chip_select = cs;
-> +}
-> +
-> +static int dw_spi_elba_init(struct platform_device *pdev,
-> +			    struct dw_spi_mmio *dwsmmio)
-> +{
-> +	struct regmap *syscon;
-> +
-> +	syscon = syscon_regmap_lookup_by_phandle(dev_of_node(&pdev->dev),
-> +						 "amd,pensando-elba-syscon");
-> +	if (IS_ERR(syscon))
-> +		return dev_err_probe(&pdev->dev, PTR_ERR(syscon),
-> +				     "syscon regmap lookup failed\n");
-                                              <----+
-> +	dwsmmio->priv = syscon;                    |
-> +	dwsmmio->dws.set_cs = dw_spi_elba_set_cs;  |
-             +-------------------------------------+
-             |
-Newline here + would be nice. Other than that looks good.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
+The Counter (CNTR) register is 24 bits wide, but we can have an
+effective 25-bit count value by setting bit 24 to the XOR of the Borrow
+flag and Carry flag. The flags can be read from the FLAG register, but a
+race condition exists: the Borrow flag and Carry flag are instantaneous
+and could change by the time the count value is read from the CNTR
+register.
 
--Serge(y)
+Since the race condition could result in an incorrect 25-bit count
+value, remove support for 25-bit count values from this driver;
+hard-coded maximum count values are replaced by a LS7267_CNTR_MAX define
+for consistency and clarity.
 
-> +
-> +	return 0;
-> +}
-> +
->  static int dw_spi_mmio_probe(struct platform_device *pdev)
->  {
->  	int (*init_func)(struct platform_device *pdev,
-> @@ -352,6 +408,7 @@ static const struct of_device_id dw_spi_mmio_of_match[] = {
->  	{ .compatible = "intel,thunderbay-ssi", .data = dw_spi_intel_init},
->  	{ .compatible = "microchip,sparx5-spi", dw_spi_mscc_sparx5_init},
->  	{ .compatible = "canaan,k210-spi", dw_spi_canaan_k210_init},
-> +	{ .compatible = "amd,pensando-elba-spi", .data = dw_spi_elba_init},
->  	{ /* end of table */}
->  };
->  MODULE_DEVICE_TABLE(of, dw_spi_mmio_of_match);
-> -- 
-> 2.17.1
-> 
+Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-QUAD-8")
+Cc: stable@vger.kernel.org
+Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+---
+Changes in v2:
+ - Correct Fixes tag line in commit description
+ - Add Cc tag line for stable@vger.kernel.org
+
+ drivers/counter/104-quad-8.c | 29 +++++++----------------------
+ 1 file changed, 7 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
+index deed4afadb29..dba04b5e80b7 100644
+--- a/drivers/counter/104-quad-8.c
++++ b/drivers/counter/104-quad-8.c
+@@ -97,10 +97,6 @@ struct quad8 {
+ 	struct quad8_reg __iomem *reg;
+ };
+ 
+-/* Borrow Toggle flip-flop */
+-#define QUAD8_FLAG_BT BIT(0)
+-/* Carry Toggle flip-flop */
+-#define QUAD8_FLAG_CT BIT(1)
+ /* Error flag */
+ #define QUAD8_FLAG_E BIT(4)
+ /* Up/Down flag */
+@@ -133,6 +129,9 @@ struct quad8 {
+ #define QUAD8_CMR_QUADRATURE_X2 0x10
+ #define QUAD8_CMR_QUADRATURE_X4 0x18
+ 
++/* Each Counter is 24 bits wide */
++#define LS7267_CNTR_MAX GENMASK(23, 0)
++
+ static int quad8_signal_read(struct counter_device *counter,
+ 			     struct counter_signal *signal,
+ 			     enum counter_signal_level *level)
+@@ -156,19 +155,9 @@ static int quad8_count_read(struct counter_device *counter,
+ {
+ 	struct quad8 *const priv = counter_priv(counter);
+ 	struct channel_reg __iomem *const chan = priv->reg->channel + count->id;
+-	unsigned int flags;
+-	unsigned int borrow;
+-	unsigned int carry;
+ 	unsigned long irqflags;
+ 	int i;
+ 
+-	flags = ioread8(&chan->control);
+-	borrow = flags & QUAD8_FLAG_BT;
+-	carry = !!(flags & QUAD8_FLAG_CT);
+-
+-	/* Borrow XOR Carry effectively doubles count range */
+-	*val = (unsigned long)(borrow ^ carry) << 24;
+-
+ 	spin_lock_irqsave(&priv->lock, irqflags);
+ 
+ 	/* Reset Byte Pointer; transfer Counter to Output Latch */
+@@ -191,8 +180,7 @@ static int quad8_count_write(struct counter_device *counter,
+ 	unsigned long irqflags;
+ 	int i;
+ 
+-	/* Only 24-bit values are supported */
+-	if (val > 0xFFFFFF)
++	if (val > LS7267_CNTR_MAX)
+ 		return -ERANGE;
+ 
+ 	spin_lock_irqsave(&priv->lock, irqflags);
+@@ -806,8 +794,7 @@ static int quad8_count_preset_write(struct counter_device *counter,
+ 	struct quad8 *const priv = counter_priv(counter);
+ 	unsigned long irqflags;
+ 
+-	/* Only 24-bit values are supported */
+-	if (preset > 0xFFFFFF)
++	if (preset > LS7267_CNTR_MAX)
+ 		return -ERANGE;
+ 
+ 	spin_lock_irqsave(&priv->lock, irqflags);
+@@ -834,8 +821,7 @@ static int quad8_count_ceiling_read(struct counter_device *counter,
+ 		*ceiling = priv->preset[count->id];
+ 		break;
+ 	default:
+-		/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
+-		*ceiling = 0x1FFFFFF;
++		*ceiling = LS7267_CNTR_MAX;
+ 		break;
+ 	}
+ 
+@@ -850,8 +836,7 @@ static int quad8_count_ceiling_write(struct counter_device *counter,
+ 	struct quad8 *const priv = counter_priv(counter);
+ 	unsigned long irqflags;
+ 
+-	/* Only 24-bit values are supported */
+-	if (ceiling > 0xFFFFFF)
++	if (ceiling > LS7267_CNTR_MAX)
+ 		return -ERANGE;
+ 
+ 	spin_lock_irqsave(&priv->lock, irqflags);
+-- 
+2.39.2
+
