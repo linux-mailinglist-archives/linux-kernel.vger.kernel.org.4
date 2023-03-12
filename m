@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D4636B6AA9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:32:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 027216B6AAB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229671AbjCLTcZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:32:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53234 "EHLO
+        id S229713AbjCLTdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLTcX (ORCPT
+        with ESMTP id S230085AbjCLTc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:32:23 -0400
-Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 459E33928F;
-        Sun, 12 Mar 2023 12:32:22 -0700 (PDT)
-Received: by mail-qt1-x830.google.com with SMTP id s12so11218946qtq.11;
-        Sun, 12 Mar 2023 12:32:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678649541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D/F2xsczBx3Mz6lJbYcDdswrH+7uW2gyDmOk9WjXdoU=;
-        b=RO6MA7V9WUH4SRKSrCkwh8Or1XwJeHpm9jcECgAC3VjukjGFUuLU4/qZHIuhs9Vyvd
-         KXvctAucqoazv4dcQaF486/YLdZ8K/8LBHbefc0D+UunSBPyAhnwG0+31kgE6xsKAA98
-         5Cze8XdXicA0M3dcrkakmETGFMiwvYZ6E7eMyrHS2CK4PzN7/Rh9GtFDpsfbMjxPEQGk
-         UsPThosK6RMwxCQ/khK+CK3Kq16LAn2BnJlVKKnBv63KZpPyC/D2CLLJJinOAWn6Yc9v
-         jlQD1yGksoNAFBEvLRIst6yeXRq13KB/hfSARzxgPJ54TY3vpvF71t35YZlVRJE8CWck
-         oVJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678649541;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D/F2xsczBx3Mz6lJbYcDdswrH+7uW2gyDmOk9WjXdoU=;
-        b=UA096sjmZU8wwwMDkD+lAcLKatSzCY0xTFrBjBDgDc4lZDwlF3KTPmOK/UcpNzZgmw
-         oGP4sBkCE9l8x9aKoPjTJ4sWWlIRoduVk/v9wZPpLBzfbtVKxCqNAE8stlEzjrwQ2YLJ
-         5gy5OBr1m92Q0HYB7uezn3M7T+rNopYDNTQJnEQnUZFFTyYBgHfSJqBS/eCVBKBGIF7I
-         dL+nUbI7xfgKFmBhN2IcLoqlFK9xMyv0c1bCX2fTTqnRbiwfmeYmwTHbDyeclniybKDk
-         q4eLAk8NX2fNJPpM91Wbzz0dgWymqeRZ2Uk6G6ndn3KUO9aWD26V54eNlPuRk/vWZXYM
-         n79w==
-X-Gm-Message-State: AO0yUKV5g3I90BBI9EaKyUpTVSiYPo0dsJALYRc35E5yts7rNnT0vYpr
-        nDFPScpTu5c0RYGl0gBwTfo=
-X-Google-Smtp-Source: AK7set/ZuBIMUJX/mFp+exe1B0AR6KZfUxWkpkPX5uuvbX9rO5encbetSlF7CX+QgQupuy49Rq2sjg==
-X-Received: by 2002:ac8:5bc9:0:b0:3bf:b75a:d7a7 with SMTP id b9-20020ac85bc9000000b003bfb75ad7a7mr15267929qtb.7.1678649541367;
-        Sun, 12 Mar 2023 12:32:21 -0700 (PDT)
-Received: from localhost ([2600:1700:65a0:ab60:790c:770f:7bb1:6550])
-        by smtp.gmail.com with ESMTPSA id f68-20020a37d247000000b0074240840c25sm3930490qkj.108.2023.03.12.12.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 12:32:20 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 12:32:19 -0700
-From:   Cong Wang <xiyou.wangcong@gmail.com>
-To:     Hsin-Wei Hung <hsinweih@uci.edu>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Jakub Sitnicki <jakub@cloudflare.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: A potential deadlock in sockhash map
-Message-ID: <ZA4owxvldelZ6x9h@pop-os.localdomain>
-References: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
+        Sun, 12 Mar 2023 15:32:59 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01456392A3;
+        Sun, 12 Mar 2023 12:32:53 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 19:32:50 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678649571;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CKIRktVYI9ydybMvRx3yc+RM+KVutJMeX+5vggZ8T4s=;
+        b=wZ91N7yE8eLvD70UHmSspI///tlJIVrXZXYl+Uc3wVtOgKBo8djFkjCOl+zM9ViUlbyhfu
+        bTeqyzRLtpS1Z1TSYnJd5oOM+MZLBge57LvFxmRU2BJdTTqjQZFbyoKNk0p7ygAHYVvAgG
+        YyqNhQ+IQk+0XgBpqjNSXndHz1iRgcilEqlA2G+IBOpCCF/HyO8d2O/6PjKgCAmnMoyk9+
+        TZ6yNzaoKEQLT1yibJk4xDoZPnNBe52TBW19Vy6yGZvOAcyaAZ/x6nJCCa3wfnogJnz2+K
+        nYacaXRN79hWeH2Bd53FbVUwZKMpITQTZtAXRCsN7hkIANVGnKaJAxZ3rili0w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678649571;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=CKIRktVYI9ydybMvRx3yc+RM+KVutJMeX+5vggZ8T4s=;
+        b=Mk6wuFuwiz3aYg7LrVD3puyktCrXlVJeGbKKnXNlBiF7/AT6s6CBKNzTl0E52Ly3/5nBA+
+        zqhtLOAx+L+3uMBQ==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/microcode] x86/microcode/AMD: Get rid of __find_equiv_id()
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230227160352.7260-1-bp@alien8.de>
+References: <20230227160352.7260-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CABcoxUayum5oOqFMMqAeWuS8+EzojquSOSyDA3J_2omY=2EeAg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <167864957031.5837.1116812221182540208.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 20, 2023 at 07:39:59AM -0600, Hsin-Wei Hung wrote:
-> DEFINE_BPF_MAP(map_0, BPF_MAP_TYPE_SOCKHASH, 0, uint32_t, uint32_t, 1005);
-> SEC("tp/sched/sched_switch")
-> int func(__u64 *ctx) {
->         uint32_t v0 = 0;
->         uint64_t v1 = 0;
->         v1 = bpf_map_delete_elem(&map_0, &v0);
->         return 0;
-> }
+The following commit has been merged into the x86/microcode branch of tip:
 
-It looks like we have to disable hardirq (instead of just softirq) in order to use
-sockmap safely in interrupt context like sched/sched_switch.
+Commit-ID:     9652df50cd444d0e6c26906ec9dfa894f2d4d6bc
+Gitweb:        https://git.kernel.org/tip/9652df50cd444d0e6c26906ec9dfa894f2d4d6bc
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Mon, 27 Feb 2023 17:03:52 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Sun, 12 Mar 2023 20:14:38 +01:00
 
-Thanks.
+x86/microcode/AMD: Get rid of __find_equiv_id()
+
+Merge it into its only call site.
+
+No functional changes.
+
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230227160352.7260-1-bp@alien8.de
+---
+ arch/x86/kernel/cpu/microcode/amd.c |  9 +++------
+ 1 file changed, 3 insertions(+), 6 deletions(-)
+
+diff --git a/arch/x86/kernel/cpu/microcode/amd.c b/arch/x86/kernel/cpu/microcode/amd.c
+index 9eb457b..394a9e1 100644
+--- a/arch/x86/kernel/cpu/microcode/amd.c
++++ b/arch/x86/kernel/cpu/microcode/amd.c
+@@ -596,11 +596,6 @@ void reload_ucode_amd(unsigned int cpu)
+ 		}
+ 	}
+ }
+-static u16 __find_equiv_id(unsigned int cpu)
+-{
+-	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+-	return find_equiv_id(&equiv_table, uci->cpu_sig.sig);
+-}
+ 
+ /*
+  * a small, trivial cache of per-family ucode patches
+@@ -651,9 +646,11 @@ static void free_cache(void)
+ 
+ static struct ucode_patch *find_patch(unsigned int cpu)
+ {
++	struct ucode_cpu_info *uci = ucode_cpu_info + cpu;
+ 	u16 equiv_id;
+ 
+-	equiv_id = __find_equiv_id(cpu);
++
++	equiv_id = find_equiv_id(&equiv_table, uci->cpu_sig.sig);
+ 	if (!equiv_id)
+ 		return NULL;
+ 
