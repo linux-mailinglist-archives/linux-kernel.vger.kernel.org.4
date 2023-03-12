@@ -2,127 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 176516B66E0
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:44:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9354F6B66DC
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:44:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229753AbjCLNol (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:44:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47786 "EHLO
+        id S230512AbjCLNo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjCLNog (ORCPT
+        with ESMTP id S230511AbjCLNoX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:44:36 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DA04DE2E;
-        Sun, 12 Mar 2023 06:44:16 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 53AC3814;
-        Sun, 12 Mar 2023 14:44:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678628655;
-        bh=GIlRGmGTtC6jpsSZ0ba5wl6HzV35Y2nOKPuBj0K1wN0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ro3AaFbXbcLvGqlxrfAEbdIrpAAaHlAJ/6civ6dkuTzEzWQyXTWr7PnIZBkt6bcTU
-         Bf99juUP4FP/oDXeTtEcvcV23lfGAzoCHcdopubXo/QjIbuxoWEp0o3qg66f9CJjcQ
-         sALk/eWpdUshZqwnSx5GQKiESC+gm4xmH8RwMWfY=
-Date:   Sun, 12 Mar 2023 15:44:01 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 23/28] media: i2c: ov2640: drop of_match_ptr for ID table
-Message-ID: <20230312134401.GB8229@pendragon.ideasonboard.com>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-23-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 09:44:23 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80FCE2B63E
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:44:09 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id y4so9218079edo.2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:44:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678628648;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tBbTPTC2o42UH1LVv9NvXHJsa5O/FZkrhUZ0HNae1NA=;
+        b=qIR7dBgT8zJxyAagUaIMdOGaMWgd5o3eN7qxfcgr3I+x8B8LefSWIZDdOlMqs6F9BN
+         4espMC8HaUnExW4MFEZEIJhNwUXmf1VQvfB3Yl3DIh/Dq1yaQI6cmSnzLYsalnNUbPiH
+         Wfp+OiGdfa9wFCatk0m2jTAeiLgNRe/+9GLqep/nQ1PyPu+g8LRaIGT5OjXuGXmxtveG
+         i7kjwnf6t2VtV4SzAgolLtM+JfmOkXpmX2mF396i6/1BK0SMaSHRP821KGzo6KTKL05s
+         mtiVJ336+dBIyHXSkvw6C//9Q4Lt1jjr1psljdre97tQnjuoHhAsELLNipJOhZ/h8kzw
+         uYug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678628648;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=tBbTPTC2o42UH1LVv9NvXHJsa5O/FZkrhUZ0HNae1NA=;
+        b=6x+EBE3cXP9JGnbBXmFqg5c0PTmeZ0EimA5R5Guw0o9Td1sSxOCajZRutQ24qd62/u
+         1JhmYAoMI9hYaGFkuisysptIM4mVCTxk5bAI+mIbpgMUVzhiEWwPaX7fARjJjnCwmFmt
+         HQOlLOTW8XTdJOO28TlY9cPJPy8gE1HP+6n5pkWmnNjCFL7GC5ORod7vvGa7vHXrdfdD
+         fQuSXgSOawnjJDwp6yMKbPmQG/LMxVN01vACjIlT7Dm8fbsHjZP5zYoLaUHqzzIQHsWw
+         vEVJbY5F6y6OgZ/7TWjux3qgfy8UChYnfO105dzSUzBpkuC1/Vhps6y9K9HzB2PhJCRG
+         dz5Q==
+X-Gm-Message-State: AO0yUKUSjSkQhoiRdf9OUcTQ6NB8apLwX3LWUpoMRhX1ywzGsJInWiiA
+        u/j+u7reTFLxh3s19ckDFgJcgg==
+X-Google-Smtp-Source: AK7set96daCm0CO4t9fbn7pxc3mpEPLe58TuahQyDh0BgqbBPFF0YSSZU4DbQEcJWw9vRumcpLIg3g==
+X-Received: by 2002:a17:906:584:b0:8d6:626d:7e03 with SMTP id 4-20020a170906058400b008d6626d7e03mr34146795ejn.40.1678628647815;
+        Sun, 12 Mar 2023 06:44:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id ji16-20020a170907981000b008dea022f5e6sm2228652ejc.24.2023.03.12.06.44.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 06:44:07 -0700 (PDT)
+Message-ID: <4d056690-0bbd-902b-a942-d4dd701e9b1c@linaro.org>
+Date:   Sun, 12 Mar 2023 14:44:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312131318.351173-23-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] i2c: mpc: Use the i2c-scl-clk-low-timeout-ms property
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+References: <20230312131933.248715-1-andi.shyti@kernel.org>
+ <20230312131933.248715-3-andi.shyti@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312131933.248715-3-andi.shyti@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-Thank you for the patch.
-
-On Sun, Mar 12, 2023 at 02:13:13PM +0100, Krzysztof Kozlowski wrote:
-> The driver will match mostly by DT table (even thought there is regular
-> ID table) so there is little benefit in of_match_ptr (this also allows
-> ACPI matching via PRP0001, even though it might not be relevant here).
-> This also fixes !CONFIG_OF error:
+On 12/03/2023 14:19, Andi Shyti wrote:
+> Now we have the i2c-scl-clk-low-timeout-ms property defined in
+> the binding. Use it and remove the previous "fsl,timeout".
 > 
->   drivers/media/i2c/ov2640.c:1290:34: error: ‘ov2640_of_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  drivers/media/i2c/ov2640.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 12 ++++++------
+>  drivers/i2c/busses/i2c-mpc.c                       |  3 ++-
+>  2 files changed, 8 insertions(+), 7 deletions(-)
 > 
-> diff --git a/drivers/media/i2c/ov2640.c b/drivers/media/i2c/ov2640.c
-> index 39d56838a4ef..a92c091356c5 100644
-> --- a/drivers/media/i2c/ov2640.c
-> +++ b/drivers/media/i2c/ov2640.c
-> @@ -1296,7 +1296,7 @@ MODULE_DEVICE_TABLE(of, ov2640_of_match);
->  static struct i2c_driver ov2640_i2c_driver = {
->  	.driver = {
->  		.name = "ov2640",
-> -		.of_match_table = of_match_ptr(ov2640_of_match),
-> +		.of_match_table = ov2640_of_match,
->  	},
->  	.probe_new = ov2640_probe,
->  	.remove   = ov2640_remove,
+> diff --git a/Documentation/devicetree/bindings/i2c/i2c-mpc.yaml b/Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+> index 018e1b944424..c01547585456 100644
+> --- a/Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+> +++ b/Documentation/devicetree/bindings/i2c/i2c-mpc.yaml
+> @@ -41,11 +41,6 @@ properties:
+>        if defined, the clock settings from the bootloader are
+>        preserved (not touched)
+>  
+> -  fsl,timeout:
+> -    $ref: /schemas/types.yaml#/definitions/uint32
+> -    description: |
+> -      I2C bus timeout in microseconds
 
--- 
-Regards,
+Instead:
+  deprecated: true
 
-Laurent Pinchart
+> -
+>    fsl,i2c-erratum-a004447:
+>      $ref: /schemas/types.yaml#/definitions/flag
+>      description: |
+> @@ -53,6 +48,11 @@ properties:
+>        says that the standard i2c recovery scheme mechanism does
+>        not work and an alternate implementation is needed.
+>  
+> +  i2c-scl-clk-low-timeout-ms:
+> +    description:
+> +      Indicates the SCL timeouts which used to force the client
+> +      into a waiting state
+
+No need for this - will be coming from dtschema.
+
+> +
+>  required:
+>    - compatible
+>    - reg
+> @@ -95,6 +95,6 @@ examples:
+>          interrupts = <43 2>;
+>          interrupt-parent = <&mpic>;
+>          clock-frequency = <400000>;
+> -        fsl,timeout = <10000>;
+> +        i2c-scl-clk-low-timeout-ms = <10000>;
+>      };
+>  ...
+> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+> index 81ac92bb4f6f..93c484efc3f3 100644
+> --- a/drivers/i2c/busses/i2c-mpc.c
+> +++ b/drivers/i2c/busses/i2c-mpc.c
+> @@ -846,7 +846,8 @@ static int fsl_i2c_probe(struct platform_device *op)
+>  			mpc_i2c_setup_8xxx(op->dev.of_node, i2c, clock);
+>  	}
+>  
+> -	prop = of_get_property(op->dev.of_node, "fsl,timeout", &plen);
+> +	prop = of_get_property(op->dev.of_node,
+> +			       "i2c-scl-clk-low-timeout-ms", &plen);
+
+That's an ABI break. You need to keep old code as fallback.
+
+
+Best regards,
+Krzysztof
+
