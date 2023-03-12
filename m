@@ -2,102 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58B8E6B63DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 09:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A82DC6B63E1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 09:58:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCLIbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 04:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S229628AbjCLI6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 04:58:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCLIbJ (ORCPT
+        with ESMTP id S229499AbjCLI6j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 04:31:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFF7C4FA94
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 00:30:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678609820;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=cTJUAFMiKw9YXPlS9lywYBNgOfv1YiKLGXLNoVp00UQ=;
-        b=bgDzcsI60TIDbJ0Y3Gbw4FyR17xVSmXjgOn7F61iA5kI2GlF0OYPWdp0W8IS52oj9r+9vs
-        loP7ttvl+B3xfm1kHo4FlByPFOhNVC/A+HFW6Snzv/7+eji/Va+eLRXgcXagOWxCQSPiem
-        WiuaaQCrMEUFLhJlL+qECdyPtSAo0uI=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-447-p4gt3dtSOKyNLtd0XRrs6A-1; Sun, 12 Mar 2023 04:30:18 -0400
-X-MC-Unique: p4gt3dtSOKyNLtd0XRrs6A-1
-Received: by mail-ua1-f70.google.com with SMTP id n17-20020ab06031000000b0074a59cbc523so843580ual.22
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 00:30:18 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678609818;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cTJUAFMiKw9YXPlS9lywYBNgOfv1YiKLGXLNoVp00UQ=;
-        b=p45uvt9Dl2wqlzNcH3s9L85wMgs8+VBjXlFFanU5bGJHLpiakT+3yJ/o5dCkjVHcJF
-         HXp0wTwemQJNs4PmRusYaWOh7fXUaCrz10Q3rOSGtcXk9rVNeo2Ks3KKGoJwUdldauke
-         jL1tFUV5d8Ii+rn52zYKpM2BaQJjGAx8VQjuHfowq/Cq1RQLlMVF/LJgyTw1knnCHV18
-         PzUBEvYB1/t//LkOlU8WY4i0jW571esgdsTs+uhZuM2aV60gIGz+vwXBLuGS+mrIvSlN
-         XuB44UIgSrwlNCb5ZKCUyakFRrb9J8XBfGO1ZmHsif/pp9i98eddJenL52hNGm5766Gh
-         gTrw==
-X-Gm-Message-State: AO0yUKWeNY99EWhb+N2ffmVXNvG4k6HuhpsXJLQ3XiW7WQa5anzPx8rX
-        Ob+rp0DA+Nb1sA0z1wkvT6w87Yz8OwXxjuVF5i+LEzIEhRfSSU3rOFzGYOs+2BvndE9cNUfZ0P9
-        fdT+xfp1AJYrkkfoGlbV27GkHYi7zRhWBv4aDimgT
-X-Received: by 2002:a1f:5081:0:b0:418:4529:a308 with SMTP id e123-20020a1f5081000000b004184529a308mr18819941vkb.3.1678609818161;
-        Sun, 12 Mar 2023 00:30:18 -0800 (PST)
-X-Google-Smtp-Source: AK7set/XxiUHqj7uZm7+uQmpQQmAFDztF4XwTwbAWzfBXxoaAKYWNuNGHKx1WneKNKQ2hYsmxYfu0s630gn5HA+5VLg=
-X-Received: by 2002:a1f:5081:0:b0:418:4529:a308 with SMTP id
- e123-20020a1f5081000000b004184529a308mr18819935vkb.3.1678609817771; Sun, 12
- Mar 2023 00:30:17 -0800 (PST)
+        Sun, 12 Mar 2023 04:58:39 -0400
+Received: from nbd.name (nbd.name [46.4.11.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD83A25E0F;
+        Sun, 12 Mar 2023 00:58:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
+        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
+        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=T1s9MEoNJxbmqXeBcJiadA+hN4toXj4XR7QKtfAnZFI=; b=fxFTupKXuWutLJ4pxsTAGSRpgg
+        KMmnwJQvEEmzmN2WHYUHqbeeiDzW+XMPeFgStAGVDstLf+bXOJKTDW2SWcSkXXodK6iQvLJ2Ez4Pq
+        QfXn/WAg5Ttf234EJlmiIlYTlbY1yjxCTIhTie9IxHt2AnPnMCm0RNgIzJO+5J5koa8U=;
+Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
+        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.94.2)
+        (envelope-from <nbd@nbd.name>)
+        id 1pbHX6-000pSo-Do; Sun, 12 Mar 2023 09:58:24 +0100
+Message-ID: <a917ba35-bba4-9741-b7d4-c6ec4dfec4a0@nbd.name>
+Date:   Sun, 12 Mar 2023 09:58:23 +0100
 MIME-Version: 1.0
-References: <Y8lSYBU9q5fjs7jS@T590> <ZAyAdwWdw0I034IZ@pc220518.home.grep.be>
-In-Reply-To: <ZAyAdwWdw0I034IZ@pc220518.home.grep.be>
-From:   Ming Lei <ming.lei@redhat.com>
-Date:   Sun, 12 Mar 2023 16:30:06 +0800
-Message-ID: <CAFj5m9KM1xbwPobvEYBmgotrU8s2jBQGcSQafJVJM+iQMS0pjA@mail.gmail.com>
-Subject: Re: ublk-nbd: ublk-nbd is avaialbe
-To:     Wouter Verhelst <w@uter.be>
-Cc:     io-uring@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nbd@other.debian.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+To:     Alexander Wetzel <alexander@wetzel-home.de>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Thomas Mann <rauchwolke@gmx.net>,
+        Stanislaw Gruszka <stf_xl@wp.pl>,
+        Helmut Schaa <helmut.schaa@googlemail.com>,
+        Johannes Berg <johannes.berg@intel.com>
+References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
+ <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
+ <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
+ <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
+ <4a02173f-3a60-0a7e-8962-3778e6c55bf3@nbd.name>
+ <cfa5cc30-bf5a-bffd-4c2f-eec8a6522dd5@wetzel-home.de>
+ <42185fa2-4191-fcf5-9c0f-fd7098bb856b@nbd.name>
+ <b4427052-9e94-bce7-b745-2473be5686fa@wetzel-home.de>
+ <f00171a1-7f6f-d708-9587-4f176457fdfd@wetzel-home.de>
+Content-Language: en-US
+From:   Felix Fietkau <nbd@nbd.name>
+Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
+ drops
+In-Reply-To: <f00171a1-7f6f-d708-9587-4f176457fdfd@wetzel-home.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 9:58=E2=80=AFPM Wouter Verhelst <w@uter.be> wrote:
->
-> Hi,
->
-> On Thu, Jan 19, 2023 at 10:23:28PM +0800, Ming Lei wrote:
-> > The handshake implementation is borrowed from nbd project[2], so
-> > basically ublk-nbd just adds new code for implementing transmission
-> > phase, and it can be thought as moving linux block nbd driver into
-> > userspace.
-> [...]
-> > Any comments are welcome!
->
-> I see you copied nbd-client.c and modified it, but removed all the
-> author information from it (including mine).
->
-> Please don't do that. nbd-client is not public domain, it is GPLv2,
-> which means you need to keep copyright statements around somewhere. You
-> can move them into an AUTHORS file or some such if you prefer, but you
-> can't just remove them blindly.
+On 11.03.23 22:26, Alexander Wetzel wrote:
+> Serialization helps. A (crude and in multiple ways incorrect) patch
+> preventing two drv_wake_tx_queue() running for the same ac fixed the
+> issue for Thomas:
+> https://bugzilla.kernel.org/show_bug.cgi?id=217119#c20
+> 
+> So it looks like we'll now have soon a fix for the issue.
+> 
+> The driver wakes the queue for IEEE80211_AC_BE often for only a single
+> skb and then stops it again.
+> The short run time is insufficient for wake_txqs_tasklet to proper wake
+> all queues itself and from time to time a new TX operation squeezes in
+> after IEEE80211_AC_BE has been unblocked but prior of drv_wake_tx_queue
+> being called from the wake_txqs_tasklet. When this happens
+> drv_wake_tx_queue is called two times: Once from the tasklet, once from
+> the userspace.
+> 
+> ieee80211_handle_wake_tx_queue is using ieee80211_txq_schedule_start,
+> which has this documented requirement:
+> "The driver must not call multiple TXQ scheduling rounds concurrently."
+> Now I don't think that is causing the reported regression. Nevertheless
+> we should prevent concurrent calls of ieee80211_handle_wake_tx_queue for
+> that reason alone.
+> 
+> The real reason of the hangs is probably in the rt2800usb driver or
+> hardware. I don't see anything in the driver code, so probably the HW
+> itself has a problem with the two near-concurrent TX operations.
+> 
+> The real culprit of the regression should be commit a790cc3a4fad ("wifi:
+> mac80211: add wake_tx_queue callback to drivers"), which switched
+> rt2800usb over to iTXQs. But without the fix from commit 4444bc2116ae
+> ("wifi: mac80211: Proper mark iTXQs for resumption") mac80211 omitted to
+> schedule the required run of the wake_txqs_tasklet. Thus thus instead of
+> two concurrent drv_wake_tx_queue we only got one and the driver
+> continued to work.
+> 
+> I asked Thomas on bugzilla to test the "best" solution I came up with.
+> 
+> There seems to be multiple ways. But I can't find a simple, low risk and
+> complete fix. So I compromised...
+> 
+> When Thomas can confirm the fix we can soon discuss the fix on
+> linux-wireless.
 
-Thanks for finding it, and it must be one accident, and I will add the
-author info
-back soon.
+I would recommend the following approach for properly fixing this issue:
 
-thanks,
+On init if the .wake_tx_queue op is set to 
+ieee80211_handle_wake_tx_queue, create a single kthread that iterates 
+over all hw queues and schedules each one of them like 
+ieee80211_handle_wake_tx_queue does now.
+Change ieee80211_handle_wake_tx_queue to simply schedule the kthread 
+without doing anything else.
+This is how mt76 handles tx scheduling in the driver, and it works quite 
+well.
 
+- Felix
