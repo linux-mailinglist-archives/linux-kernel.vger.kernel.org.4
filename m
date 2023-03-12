@@ -2,89 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556366B687C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:59:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0EE26B6884
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:02:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjCLQ7r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 12:59:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46932 "EHLO
+        id S229749AbjCLRCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:02:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCLQ7p (ORCPT
+        with ESMTP id S229704AbjCLRCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 12:59:45 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BD20367DC
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 09:59:44 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id r15so12533749edq.11
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 09:59:44 -0700 (PDT)
+        Sun, 12 Mar 2023 13:02:18 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2DB39B98
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:02:16 -0700 (PDT)
+Received: by mail-ed1-x535.google.com with SMTP id y4so10280586edo.2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:02:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678640383;
+        d=linaro.org; s=google; t=1678640535;
         h=content-transfer-encoding:in-reply-to:from:cc:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=SfkSWA4m4vFAXt2ymWh162tAViiyki63Q+2RK+3+MZw=;
-        b=FwZgdZlG2VMoGePCPY47G78odADDfhen4NV/muzUfWciVYQLptd4It+z3v4nzVDf1o
-         +RxcI8dyyC9LuEZ7JdIDns2gPQie/I+UGiCrEtjYXLbWweRsMBq/mwUxkW5fRtwDlXQY
-         W94AKsztmAXyKuZ8WllAaHaNguGsWPLPO7t71qjowwHLwrN4AYsQyxe+6/fUqOchcr+r
-         M+3mS4Npzjziul260HLKyY0LnlipttFpDJzuxUb54wLH690kPLDuBKA+lFC0bQBD8vQs
-         UYJfTtGkPplV5lWxNq5N3rJmAJrs9zbU69AmaPSl1cAC1CFp16fro96SG4Z9YqhbQhIi
-         RThg==
+        bh=rgjKYDiNYipC88ZW3UHF+hA0Vhj0ajrnhG8vHIgnExQ=;
+        b=DC85KbIoQ6u4AzDi2wON4NIiI1EyPel3SDkQPFDj3ZjLXViprPwd5FqrRjrYF+n1GA
+         +Z9dEZNG8jUHm1il09//o99LfbprjXw79Bt8iDuVMWIJAclv3B1GBpmkunOXcs5mYcpN
+         f1MwVYAflBrLfRLObdWD2lNl/BPm7aTiT0BU6INCJ1DwyCaRF6Pp4b0QoHy+dZ787UV3
+         A9C1bSbXlruxDHzPczY9SJKuGhFHKjvpCHAdqjQhvwUVNYn6jaOz2F19lSLoUxtLKQK5
+         GDBsII6vQRdGMgNCkPoAQkJZn4AlHGKNPb0IxEah+bY67dU9M/5HGa61p0d1oqfpg5TI
+         QvPA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678640383;
+        d=1e100.net; s=20210112; t=1678640535;
         h=content-transfer-encoding:in-reply-to:from:cc:references:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SfkSWA4m4vFAXt2ymWh162tAViiyki63Q+2RK+3+MZw=;
-        b=60LraVtXvwlY+9uG4Kzx2I/z1fLp69bWNtvOi9cMZYWbsEfuznxbzo1pTLSVBbgRws
-         KrI/H4n3OvAZtg1q9WOGFvjzJcDVx85V8vCL+bY42kqoicxIX9lSk+RRNcd6nHfLhMON
-         A+P8jiKxgnAvZs3DTHKlkT6eDW1k+r1cNYgCzK6P2r6X1ds5ujU38/aMhHxAgC2Q1/p9
-         jfOUzQgJjMGezuCo8N6JzJbrAPmMz4prZv2Ozls4qi8QtLMzf9JU0K3o5gRqY1gdLhj6
-         wzLxG3vgtEQmIKjL4MMzinYRvp5N3PMaL5pUHjtAsFqFO1d+kLPrYuudna8BknshY/QX
-         gCcg==
-X-Gm-Message-State: AO0yUKWyhHCVgQWhaAfigr9ateqGB4hN0LWzJaSKwBDJno1MQtL91eBw
-        tF3MLWvaKOEG5i0fIm88fuUKdQ==
-X-Google-Smtp-Source: AK7set+nI3aCESbd8oGKsfl3taae2ALqKdzfqzM+VGWa5LNdGfepqdi2ys/KmLdkyVd1293hwFecbg==
-X-Received: by 2002:a17:906:dc8c:b0:928:3d04:c7e6 with SMTP id cs12-20020a170906dc8c00b009283d04c7e6mr1452734ejc.26.1678640382986;
-        Sun, 12 Mar 2023 09:59:42 -0700 (PDT)
+        bh=rgjKYDiNYipC88ZW3UHF+hA0Vhj0ajrnhG8vHIgnExQ=;
+        b=ogmWRCH1FFNV3ke/CiVPQSJdfhmvq+a7g7x1K/re7/IQW0aw6Lmi2d47Gdicxo+P6i
+         XzkkL0f81tpVqCgLi5G5Frw3Uahqs8JOco2SPEKUxOkSWil1IGPXMHj9fvhRUb6H9I/o
+         mqdHPxytb9RCCQfwVTb4fqcN+/JDD3NXS9CUhkN+PA4rL8D/PEKVmplwlsiEJGUf++IH
+         IbL4rcPuyfl1vtX8w2PBz/FJOQ8MLt9eyjkP//storK8+JgwVqBCTHuzIxdMGtOxmypx
+         NK4+CweeiDZ2xYS20eVPbzk2fbNUtZN6QCrjvG+w6czmmSpBNnfi+IDL32KepjJTzNl4
+         jcWA==
+X-Gm-Message-State: AO0yUKWiyjQcMo00jE4FkG034VpFpnMPyNeKBJJtpblzhNZLnJQk64Pw
+        hMzTXsSzPDdXCdQskTVTuVfkjw==
+X-Google-Smtp-Source: AK7set+lN36krujxlh4jrXFjE3RNow/G9/atgSZRPgi5PODLMISibgYei+3YocU1q34Rps87czwjTA==
+X-Received: by 2002:a17:906:885:b0:8af:5403:992d with SMTP id n5-20020a170906088500b008af5403992dmr32503532eje.28.1678640535354;
+        Sun, 12 Mar 2023 10:02:15 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id sg41-20020a170907a42900b00922f76decefsm1592861ejc.99.2023.03.12.09.59.42
+        by smtp.gmail.com with ESMTPSA id wt6-20020a170906ee8600b008f89953b761sm2385570ejb.3.2023.03.12.10.02.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 09:59:42 -0700 (PDT)
-Message-ID: <cd9d9983-3dd5-70dd-8155-1b7d856bf35f@linaro.org>
-Date:   Sun, 12 Mar 2023 17:59:41 +0100
+        Sun, 12 Mar 2023 10:02:14 -0700 (PDT)
+Message-ID: <67454eee-37af-ef38-7e06-23b4c1131468@linaro.org>
+Date:   Sun, 12 Mar 2023 18:02:14 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: tegra: drop serial clock-names and
- reset-names
+Subject: Re: [PATCH v2 1/4] media: dt-bindings: samsung-fimc: drop simple-bus
 Content-Language: en-US
-To:     Thierry Reding <thierry.reding@gmail.com>
-References: <20230123151543.369724-1-krzysztof.kozlowski@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-kernel@vger.kernel.org,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org
+To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org
+References: <20230207205834.673163-1-krzysztof.kozlowski@linaro.org>
+Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        linux-samsung-soc@vger.kernel.org,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230123151543.369724-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230207205834.673163-1-krzysztof.kozlowski@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23/01/2023 16:15, Krzysztof Kozlowski wrote:
-> The serial node does not use clock-names and reset-names:
-> 
->   tegra234-sim-vdk.dtb: serial@3100000: Unevaluated properties are not allowed ('clock-names', 'reset-names' were unexpected)
+On 07/02/2023 21:58, Krzysztof Kozlowski wrote:
+> The FIMC camera node wrapper is not a bus, so using simple-bus fallback
+> compatible just to instantiate its children nodes was never correct.
+> Drop the simple-bus compatible and expect driver to explicitly populate
+> children devices.
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Changes since v1:
+> 1. None
+> ---
 
-Thierry, any comments? Can you pick it up?
+Mauro,
+
+Any comments on the patchset? Can you pick it up?
 
 Best regards,
 Krzysztof
