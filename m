@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7053B6B6562
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:27:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 473126B655F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjCLL0l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:26:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34176 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjCLL0d (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230089AbjCLL0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Sun, 12 Mar 2023 07:26:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229493AbjCLL0a (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Sun, 12 Mar 2023 07:26:30 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257EC31E05
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:26:32 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0530EAE
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:26:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678620392; x=1710156392;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=mQHOwlRgDt6FqOy5qR8eaZ5q38UiDzAyW+c27c530ow=;
-  b=LO2YoXVl4M+0i+vJbAwCEXvUe/7Q7dNFSRMdMcPymnyc11fPdWkI/9Q/
-   9mKVOiobQdQATa31EeU0ggsHu+GbmwBBFcNY9lBrB7qAVMrEBfFMfppjr
-   25p94o4gLEDBnMEZHQ9miiQSsyGAwnqss0zlHTXFLrrvmvXrPRB6GNGVh
-   viDVJQBspzAnfJVio8X0N5+/AswzgkhsyQcqIkGV83QZzN3FkmOLaM1fC
-   /n0yf/QkqRoZs0LnAFfzT6RFZ3YOINjeYla3IhxtSm9WtOIwJ5ICFAUt3
-   ZzfFliIjcY8xU4wxfbcgMWLuXovhE6SyNfoRRy5bX+IWyp9LNBykD1Rcf
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339349937"
+  t=1678620388; x=1710156388;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=+ya4j8+hmXPftNA55cuj2jSsHwe1N+LRr5YAFmUiVLI=;
+  b=ldx6IogcnPXXQiZRIx3DrKYNuIrWAKxUgM111zIqv/UgaGk6vFwxMaDN
+   EsJQ8fR1uqAVV/NUNeltt7PU6nBW8xiwuUUInXqnu0r08U4+SNF6ipP2j
+   UjnHX3WeuPkzebSCmOpSk9pAbe/R5TJBB748cyB7lFeQJYu9buI6jnfKc
+   LVkr4Ygs4KYCL7PluMsY//TyQDnNWaxP9apGv6GQ2z1QAal21Wd7GkrO5
+   35k4I7Q2DXCGuUzg2HPcUabNoRsSCSPNtgIvCzmQbEzL0OgVFQU/FgvVP
+   UOVzXhkVdEVQN2xmWHQwPmUyVQwVXZmnyRAgZ9Fe9Lfk4q5sTOlshfFD5
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339349923"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="339349937"
+   d="scan'208";a="339349923"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:28 -0700
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="852438017"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="852438013"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="852438017"
+   d="scan'208";a="852438013"
 Received: from nmoazzen-mobl1.amr.corp.intel.com (HELO box.shutemov.name) ([10.251.219.215])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:22 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 543AF103248; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
+        id 5C6AA10D7AF; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -60,10 +60,12 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv16 00/17] Linear Address Masking enabling
-Date:   Sun, 12 Mar 2023 14:25:55 +0300
-Message-Id: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv16 01/17] x86/mm: Rework address range check in get_user() and put_user()
+Date:   Sun, 12 Mar 2023 14:25:56 +0300
+Message-Id: <20230312112612.31869-2-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
+References: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -75,173 +77,282 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linear Address Masking[1] (LAM) modifies the checking that is applied to
-64-bit linear addresses, allowing software to use of the untranslated
-address bits for metadata.
+The functions get_user() and put_user() check that the target address
+range resides in the user space portion of the virtual address space.
+In order to perform this check, the functions compare the end of the
+range against TASK_SIZE_MAX.
 
-The capability can be used for efficient address sanitizers (ASAN)
-implementation and for optimizations in JITs and virtual machines.
+For kernels compiled with CONFIG_X86_5LEVEL, this process requires some
+additional trickery using ALTERNATIVE, as TASK_SIZE_MAX depends on the
+paging mode in use.
 
-The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
-this time.
+Linus suggested that this check could be simplified for 64-bit kernels.
+It is sufficient to check bit 63 of the address to ensure that the range
+belongs to user space. Additionally, the use of branches can be avoided
+by setting the target address to all ones if bit 63 is set.
 
-Please review and consider applying.
+There's no need to check the end of the access range as there's huge
+gap between end of userspace range and start of the kernel range. The
+gap consists of canonical hole and unused ranges on both kernel and
+userspace sides.
 
-git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+If an address with bit 63 set is passed down, it will trigger a #GP
+exception. _ASM_EXTABLE_UA() complains about this. Replace it with
+plain _ASM_EXTABLE() as it is expected behaviour now.
 
-v16:
-  - Add #include <linux/mmu_context.h> into fs/proc/array.c;
-  - Whitespace fix;
-  - Add Alexander's Tested-bys;
-v15:
-  - Replace static branch in untagged_addr() with alternative;
-  - Drop unneeded READ_ONCE();
-  - Acks from Peter;
-v14:
-  - Rework address range check in get_user() and put_user();
-  - Introduce CONFIG_ADDRESS_MASKING;
-  - Cache untag masking in per-CPU variable;
-  - Reject LAM enabling via PTRACE_ARCH_PRCTL;
-  - Fix locking around untagged_addr_remote();
-  - Fix typo in MM_CONTEXT_ conversion patch;
-  - Fix selftest;
-v13:
-  - Fix race between untagged_addr() and LAM enabling:
-    + Do not allow to enable LAM after the process spawned the second thread;
-    + untagged_addr() untags the address according to rules of the current
-      process;
-    + untagged_addr_remote() can be used for untagging addresses for foreign
-      process. It requires mmap lock for the target process to be taken;
-v12:
-  - Rebased onto tip/x86/mm;
-  - Drop VM_WARN_ON() that may produce false-positive on race between context
-    switch and LAM enabling;
-  - Adjust comments explain possible race;
-  - User READ_ONCE() in mm_lam_cr3_mask();
-  - Do not assume &init_mm == mm in initialize_tlbstate_and_flush();
-  - Ack by Andy;
-v11:
-  - Move untag_mask to /proc/$PID/status;
-  - s/SVM/SVA/g;
-  - static inline arch_pgtable_dma_compat() instead of macros;
-  - Replace pasid_valid() with mm_valid_pasid();
-  - Acks from Ashok and Jacob (forgot to apply from v9);
-v10:
-  - Rebased to v6.1-rc1;
-  - Add selftest for SVM vs LAM;
-v9:
-  - Fix race between LAM enabling and check that KVM memslot address doesn't
-    have any tags;
-  - Reduce untagged_addr() overhead until the first LAM user;
-  - Clarify SVM vs. LAM semantics;
-  - Use mmap_lock to serialize LAM enabling;
-v8:
-  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
-  - Cleanup code around build_cr3();
-  - Fix commit messages;
-  - Selftests updates;
-  - Acked/Reviewed/Tested-bys from Alexander and Peter;
-v7:
-  - Drop redundant smb_mb() in prctl_enable_tagged_addr();
-  - Cleanup code around build_cr3();
-  - Fix commit message;
-  - Fix indentation;
-v6:
-  - Rebased onto v6.0-rc1
-  - LAM_U48 excluded from the patchet. Still available in the git tree;
-  - add ARCH_GET_MAX_TAG_BITS;
-  - Fix build without CONFIG_DEBUG_VM;
-  - Update comments;
-  - Reviewed/Tested-by from Alexander;
-v5:
-  - Do not use switch_mm() in enable_lam_func()
-  - Use mb()/READ_ONCE() pair on LAM enabling;
-  - Add self-test by Weihong Zhang;
-  - Add comments;
-v4:
-  - Fix untagged_addr() for LAM_U48;
-  - Remove no-threads restriction on LAM enabling;
-  - Fix mm_struct access from /proc/$PID/arch_status
-  - Fix LAM handling in initialize_tlbstate_and_flush()
-  - Pack tlb_state better;
-  - Comments and commit messages;
-v3:
-  - Rebased onto v5.19-rc1
-  - Per-process enabling;
-  - API overhaul (again);
-  - Avoid branches and costly computations in the fast path;
-  - LAM_U48 is in optional patch.
-v2:
-  - Rebased onto v5.18-rc1
-  - New arch_prctl(2)-based API
-  - Expose status of LAM (or other thread features) in
-    /proc/$PID/arch_status
+The updated get_user() and put_user() checks are also compatible with
+Linear Address Masking, which allows user space to encode metadata in
+the upper bits of pointers and eliminates the need to untag the address
+before handling it.
 
-[1] ISE, Chapter 10. https://cdrdv2.intel.com/v1/dl/getContent/671368
+Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ arch/x86/lib/getuser.S | 83 ++++++++++++++++--------------------------
+ arch/x86/lib/putuser.S | 54 ++++++++++++---------------
+ 2 files changed, 55 insertions(+), 82 deletions(-)
 
-Kirill A. Shutemov (12):
-  x86/mm: Rework address range check in get_user() and put_user()
-  x86: Allow atomic MM_CONTEXT flags setting
-  x86: CPUID and CR3/CR4 flags for Linear Address Masking
-  x86/mm: Handle LAM on context switch
-  mm: Introduce untagged_addr_remote()
-  x86/uaccess: Provide untagged_addr() and remove tags before address
-    check
-  x86/mm: Reduce untagged_addr() overhead for systems without LAM
-  x86/mm: Provide arch_prctl() interface for LAM
-  mm: Expose untagging mask in /proc/$PID/status
-  iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
-  x86/mm/iommu/sva: Make LAM and SVA mutually exclusive
-  selftests/x86/lam: Add test cases for LAM vs thread creation
-
-Weihong Zhang (5):
-  selftests/x86/lam: Add malloc and tag-bits test cases for
-    linear-address masking
-  selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address
-    masking
-  selftests/x86/lam: Add io_uring test cases for linear-address masking
-  selftests/x86/lam: Add inherit test cases for linear-address masking
-  selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for
-    linear-address masking
-
- arch/arm64/include/asm/mmu_context.h        |    6 +
- arch/sparc/include/asm/mmu_context_64.h     |    6 +
- arch/sparc/include/asm/uaccess_64.h         |    2 +
- arch/x86/Kconfig                            |   11 +
- arch/x86/entry/vsyscall/vsyscall_64.c       |    2 +-
- arch/x86/include/asm/cpufeatures.h          |    1 +
- arch/x86/include/asm/disabled-features.h    |    8 +-
- arch/x86/include/asm/mmu.h                  |   18 +-
- arch/x86/include/asm/mmu_context.h          |   49 +-
- arch/x86/include/asm/processor-flags.h      |    2 +
- arch/x86/include/asm/tlbflush.h             |   48 +-
- arch/x86/include/asm/uaccess.h              |   58 +-
- arch/x86/include/uapi/asm/prctl.h           |    5 +
- arch/x86/include/uapi/asm/processor-flags.h |    6 +
- arch/x86/kernel/process.c                   |    6 +
- arch/x86/kernel/process_64.c                |   66 +-
- arch/x86/kernel/traps.c                     |    6 +-
- arch/x86/lib/getuser.S                      |   83 +-
- arch/x86/lib/putuser.S                      |   54 +-
- arch/x86/mm/init.c                          |    5 +
- arch/x86/mm/tlb.c                           |   53 +-
- drivers/iommu/iommu-sva.c                   |    8 +-
- drivers/vfio/vfio_iommu_type1.c             |    2 +-
- fs/proc/array.c                             |    7 +
- fs/proc/task_mmu.c                          |    9 +-
- include/linux/ioasid.h                      |    9 -
- include/linux/mm.h                          |   11 -
- include/linux/mmu_context.h                 |   14 +
- include/linux/sched/mm.h                    |    8 +-
- include/linux/uaccess.h                     |   22 +
- mm/gup.c                                    |    4 +-
- mm/madvise.c                                |    5 +-
- mm/migrate.c                                |   11 +-
- tools/testing/selftests/x86/Makefile        |    2 +-
- tools/testing/selftests/x86/lam.c           | 1241 +++++++++++++++++++
- 35 files changed, 1699 insertions(+), 149 deletions(-)
- create mode 100644 tools/testing/selftests/x86/lam.c
-
+diff --git a/arch/x86/lib/getuser.S b/arch/x86/lib/getuser.S
+index b70d98d79a9d..b64a2bd1a1ef 100644
+--- a/arch/x86/lib/getuser.S
++++ b/arch/x86/lib/getuser.S
+@@ -37,22 +37,22 @@
+ 
+ #define ASM_BARRIER_NOSPEC ALTERNATIVE "", "lfence", X86_FEATURE_LFENCE_RDTSC
+ 
+-#ifdef CONFIG_X86_5LEVEL
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rdx), \
+-		    __stringify(mov $((1 << 56) - 4096 - (n)),%rdx), X86_FEATURE_LA57
+-#else
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	mov $(TASK_SIZE_MAX - (n)),%_ASM_DX
+-#endif
++.macro check_range size:req
++.if IS_ENABLED(CONFIG_X86_64)
++	mov %rax, %rdx
++	sar $63, %rdx
++	or %rdx, %rax
++.else
++	cmp $TASK_SIZE_MAX-\size+1, %eax
++	jae .Lbad_get_user
++	sbb %edx, %edx		/* array_index_mask_nospec() */
++	and %edx, %eax
++.endif
++.endm
+ 
+ 	.text
+ SYM_FUNC_START(__get_user_1)
+-	LOAD_TASK_SIZE_MINUS_N(0)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=1
+ 	ASM_STAC
+ 1:	movzbl (%_ASM_AX),%edx
+ 	xor %eax,%eax
+@@ -62,11 +62,7 @@ SYM_FUNC_END(__get_user_1)
+ EXPORT_SYMBOL(__get_user_1)
+ 
+ SYM_FUNC_START(__get_user_2)
+-	LOAD_TASK_SIZE_MINUS_N(1)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=2
+ 	ASM_STAC
+ 2:	movzwl (%_ASM_AX),%edx
+ 	xor %eax,%eax
+@@ -76,11 +72,7 @@ SYM_FUNC_END(__get_user_2)
+ EXPORT_SYMBOL(__get_user_2)
+ 
+ SYM_FUNC_START(__get_user_4)
+-	LOAD_TASK_SIZE_MINUS_N(3)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=4
+ 	ASM_STAC
+ 3:	movl (%_ASM_AX),%edx
+ 	xor %eax,%eax
+@@ -90,30 +82,17 @@ SYM_FUNC_END(__get_user_4)
+ EXPORT_SYMBOL(__get_user_4)
+ 
+ SYM_FUNC_START(__get_user_8)
+-#ifdef CONFIG_X86_64
+-	LOAD_TASK_SIZE_MINUS_N(7)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
++	check_range size=8
+ 	ASM_STAC
++#ifdef CONFIG_X86_64
+ 4:	movq (%_ASM_AX),%rdx
+-	xor %eax,%eax
+-	ASM_CLAC
+-	RET
+ #else
+-	LOAD_TASK_SIZE_MINUS_N(7)
+-	cmp %_ASM_DX,%_ASM_AX
+-	jae bad_get_user_8
+-	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
+-	and %_ASM_DX, %_ASM_AX
+-	ASM_STAC
+ 4:	movl (%_ASM_AX),%edx
+ 5:	movl 4(%_ASM_AX),%ecx
++#endif
+ 	xor %eax,%eax
+ 	ASM_CLAC
+ 	RET
+-#endif
+ SYM_FUNC_END(__get_user_8)
+ EXPORT_SYMBOL(__get_user_8)
+ 
+@@ -166,7 +145,7 @@ EXPORT_SYMBOL(__get_user_nocheck_8)
+ 
+ SYM_CODE_START_LOCAL(.Lbad_get_user_clac)
+ 	ASM_CLAC
+-bad_get_user:
++.Lbad_get_user:
+ 	xor %edx,%edx
+ 	mov $(-EFAULT),%_ASM_AX
+ 	RET
+@@ -184,23 +163,23 @@ SYM_CODE_END(.Lbad_get_user_8_clac)
+ #endif
+ 
+ /* get_user */
+-	_ASM_EXTABLE_UA(1b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(2b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(3b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(1b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(2b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(3b, .Lbad_get_user_clac)
+ #ifdef CONFIG_X86_64
+-	_ASM_EXTABLE_UA(4b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(4b, .Lbad_get_user_clac)
+ #else
+-	_ASM_EXTABLE_UA(4b, .Lbad_get_user_8_clac)
+-	_ASM_EXTABLE_UA(5b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(4b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(5b, .Lbad_get_user_8_clac)
+ #endif
+ 
+ /* __get_user */
+-	_ASM_EXTABLE_UA(6b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(7b, .Lbad_get_user_clac)
+-	_ASM_EXTABLE_UA(8b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(6b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(7b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(8b, .Lbad_get_user_clac)
+ #ifdef CONFIG_X86_64
+-	_ASM_EXTABLE_UA(9b, .Lbad_get_user_clac)
++	_ASM_EXTABLE(9b, .Lbad_get_user_clac)
+ #else
+-	_ASM_EXTABLE_UA(9b, .Lbad_get_user_8_clac)
+-	_ASM_EXTABLE_UA(10b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(9b, .Lbad_get_user_8_clac)
++	_ASM_EXTABLE(10b, .Lbad_get_user_8_clac)
+ #endif
+diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
+index 32125224fcca..3062d09a776d 100644
+--- a/arch/x86/lib/putuser.S
++++ b/arch/x86/lib/putuser.S
+@@ -33,20 +33,20 @@
+  * as they get called from within inline assembly.
+  */
+ 
+-#ifdef CONFIG_X86_5LEVEL
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rbx), \
+-		    __stringify(mov $((1 << 56) - 4096 - (n)),%rbx), X86_FEATURE_LA57
+-#else
+-#define LOAD_TASK_SIZE_MINUS_N(n) \
+-	mov $(TASK_SIZE_MAX - (n)),%_ASM_BX
+-#endif
++.macro check_range size:req
++.if IS_ENABLED(CONFIG_X86_64)
++	mov %rcx, %rbx
++	sar $63, %rbx
++	or %rbx, %rcx
++.else
++	cmp $TASK_SIZE_MAX-\size+1, %ecx
++	jae .Lbad_put_user
++.endif
++.endm
+ 
+ .text
+ SYM_FUNC_START(__put_user_1)
+-	LOAD_TASK_SIZE_MINUS_N(0)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=1
+ 	ASM_STAC
+ 1:	movb %al,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -66,9 +66,7 @@ SYM_FUNC_END(__put_user_nocheck_1)
+ EXPORT_SYMBOL(__put_user_nocheck_1)
+ 
+ SYM_FUNC_START(__put_user_2)
+-	LOAD_TASK_SIZE_MINUS_N(1)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=2
+ 	ASM_STAC
+ 3:	movw %ax,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -88,9 +86,7 @@ SYM_FUNC_END(__put_user_nocheck_2)
+ EXPORT_SYMBOL(__put_user_nocheck_2)
+ 
+ SYM_FUNC_START(__put_user_4)
+-	LOAD_TASK_SIZE_MINUS_N(3)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=4
+ 	ASM_STAC
+ 5:	movl %eax,(%_ASM_CX)
+ 	xor %ecx,%ecx
+@@ -110,9 +106,7 @@ SYM_FUNC_END(__put_user_nocheck_4)
+ EXPORT_SYMBOL(__put_user_nocheck_4)
+ 
+ SYM_FUNC_START(__put_user_8)
+-	LOAD_TASK_SIZE_MINUS_N(7)
+-	cmp %_ASM_BX,%_ASM_CX
+-	jae .Lbad_put_user
++	check_range size=8
+ 	ASM_STAC
+ 7:	mov %_ASM_AX,(%_ASM_CX)
+ #ifdef CONFIG_X86_32
+@@ -144,15 +138,15 @@ SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
+ 	RET
+ SYM_CODE_END(.Lbad_put_user_clac)
+ 
+-	_ASM_EXTABLE_UA(1b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(1b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(2b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(3b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(4b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(5b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(6b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(7b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(9b, .Lbad_put_user_clac)
+ #ifdef CONFIG_X86_32
+-	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
+-	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(8b, .Lbad_put_user_clac)
++	_ASM_EXTABLE(10b, .Lbad_put_user_clac)
+ #endif
 -- 
 2.39.2
 
