@@ -2,98 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCD726B6311
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 04:48:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DABF26B6312
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 04:51:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229618AbjCLDsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 22:48:53 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
+        id S229601AbjCLDvP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 22:51:15 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229509AbjCLDsv (ORCPT
+        with ESMTP id S229437AbjCLDvN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 22:48:51 -0500
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F065301B0;
-        Sat, 11 Mar 2023 19:48:49 -0800 (PST)
-From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-        s=mail; t=1678592927;
-        bh=+rMHRDkeP4GJtkRDL8MbsK85+v58lq+Nd+xJTUAGoUU=;
-        h=From:Date:Subject:To:Cc:From;
-        b=KU+g7t96YIFS7B2isCvvNWrFXjBfgKGm1fVErAV8xjj1k8NJ2xSJmkIBnPhzJuqli
-         xVRlXJCDKtyUfcrK2Eila0HHZ/oljLb78c3GUfvSzpUGcdG08b2jYmiOB7JkrRg0na
-         TI0am49Kx7ryRE7f453xyvPfecgwozLk+zZjsAjQ=
-Date:   Sun, 12 Mar 2023 03:47:57 +0000
-Subject: [PATCH] platform/x86: think-lmi: Properly interpret return value
- of tlmi_setting
+        Sat, 11 Mar 2023 22:51:13 -0500
+Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A5E15C9FF
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 19:51:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678593072; x=1710129072;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=DLlcw4polm8WcKopo+s/X0ibWcBip+EjHB7Xvz5+Ho0=;
+  b=ioZ7yvI4cmCBCL1njPaYNnR4tV6kgZnkolgHXA3antLzD3OSCdijE8Fm
+   5zwJOSGW6FN7i7psxwwyoIoUUIxC5mbulOZkH4webac8+YlJUJwRCUd1y
+   aasw+iU8ri7sexfhNZwqUKe+wjzAw7Nr2Bm2roLdhwphFwsbFUQbjZu+F
+   DUyJH5a/6fIWSkhaaYJ8V0NgENlUm+0xAMFxixIHEuarNlSQCdM5FU1+7
+   j/RwHJdg5kTjA1C7zhwr8BzCZZA2Ftk3zKPkbDhF/TpH2NGjcF2DlKlA/
+   Yrn1S/51YS9KxES84WcAwM+FUNhlr/7bJ43rOqy5vwjE3QZKinTLduyVM
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="317346449"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="317346449"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 19:51:11 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="767296467"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="767296467"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by FMSMGA003.fm.intel.com with ESMTP; 11 Mar 2023 19:51:10 -0800
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pbCjm-0004y7-0A;
+        Sun, 12 Mar 2023 03:51:10 +0000
+Date:   Sun, 12 Mar 2023 11:50:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 931b20a01140abce5d078d43dde393fbb0bf2c7b
+Message-ID: <640d4bf5.GH0QN6ceCyK7nKmN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20230312-think-lmi-status-v1-1-4e9f36322cc4@weissschuh.net>
-X-B4-Tracking: v=1; b=H4sIAGxLDWQC/x2NywoCMQwAf2XJ2UDbBRf9FfHQR7TBGqXpirDsv
- xs8zsAwGyh1JoXztEGnDyu/xMAfJsg1yp2QizEEF2Y3+4CjsjywPRl1xLEqurIccyKflnICy1J
- UwtSj5GqhrK2ZfHe68ff/uVz3/QfB3gYJdwAAAA==
-To:     Mark Pearson <markpearson@lenovo.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>
-Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
-        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678592925; l=1193;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=+rMHRDkeP4GJtkRDL8MbsK85+v58lq+Nd+xJTUAGoUU=;
- b=qT5CKb7vhit8yR26drfrCP1cnWOS9WR8fzTCo52CJMP0ndSGSZnKum5T+CfijDiWZMhnIs0YQ
- T2Sc6W8/jSRAeW99fLmoL0w4w/usuXyf/iHPXaFZzcZwszbdv/Q+nCU
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The return value of tlmi_settings() is an errorcode, not an acpi_status.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 931b20a01140abce5d078d43dde393fbb0bf2c7b  Merge branch into tip/master: 'x86/misc'
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
+elapsed time: 837m
 
-Note: This is only compile-tested.
----
- drivers/platform/x86/think-lmi.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+configs tested: 98
+configs skipped: 8
 
-diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
-index 86b33b74519b..c924e9e4a6a5 100644
---- a/drivers/platform/x86/think-lmi.c
-+++ b/drivers/platform/x86/think-lmi.c
-@@ -1353,7 +1353,6 @@ static struct tlmi_pwd_setting *tlmi_create_auth(const char *pwd_type,
- 
- static int tlmi_analyze(void)
- {
--	acpi_status status;
- 	int i, ret;
- 
- 	if (wmi_has_guid(LENOVO_SET_BIOS_SETTINGS_GUID) &&
-@@ -1390,8 +1389,8 @@ static int tlmi_analyze(void)
- 		char *p;
- 
- 		tlmi_priv.setting[i] = NULL;
--		status = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
--		if (ACPI_FAILURE(status))
-+		ret = tlmi_setting(i, &item, LENOVO_BIOS_SETTING_GUID);
-+		if (ret)
- 			break;
- 		if (!item)
- 			break;
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
----
-base-commit: 81ff855485a366a391dc3aed3942715e676ed132
-change-id: 20230312-think-lmi-status-0d76cbe1b7d9
+tested configs:
+alpha                            allyesconfig   gcc  
+alpha        buildonly-randconfig-r005-20230310   gcc  
+alpha                               defconfig   gcc  
+arc                              allyesconfig   gcc  
+arc                                 defconfig   gcc  
+arc                  randconfig-r036-20230312   gcc  
+arc                  randconfig-r043-20230310   gcc  
+arm                              allmodconfig   gcc  
+arm                              allyesconfig   gcc  
+arm                                 defconfig   gcc  
+arm                  randconfig-r046-20230310   clang
+arm64                            allyesconfig   gcc  
+arm64                               defconfig   gcc  
+csky                                defconfig   gcc  
+csky                 randconfig-r004-20230310   gcc  
+csky                 randconfig-r005-20230310   gcc  
+csky                 randconfig-r013-20230311   gcc  
+hexagon              randconfig-r033-20230312   clang
+hexagon              randconfig-r041-20230310   clang
+hexagon              randconfig-r045-20230310   clang
+i386                             allyesconfig   gcc  
+i386                              debian-10.3   gcc  
+i386                                defconfig   gcc  
+i386                          randconfig-a001   gcc  
+i386                          randconfig-a002   clang
+i386                          randconfig-a003   gcc  
+i386                          randconfig-a004   clang
+i386                          randconfig-a005   gcc  
+i386                          randconfig-a006   clang
+i386                          randconfig-a011   clang
+i386                          randconfig-a012   gcc  
+i386                          randconfig-a013   clang
+i386                          randconfig-a014   gcc  
+i386                          randconfig-a015   clang
+i386                          randconfig-a016   gcc  
+ia64                             allmodconfig   gcc  
+ia64                                defconfig   gcc  
+loongarch                        allmodconfig   gcc  
+loongarch                         allnoconfig   gcc  
+loongarch                           defconfig   gcc  
+m68k                             allmodconfig   gcc  
+m68k         buildonly-randconfig-r004-20230310   gcc  
+m68k                                defconfig   gcc  
+microblaze           randconfig-r011-20230311   gcc  
+mips                             allmodconfig   gcc  
+mips                             allyesconfig   gcc  
+mips                 randconfig-r016-20230311   gcc  
+nios2        buildonly-randconfig-r003-20230310   gcc  
+nios2                               defconfig   gcc  
+nios2                randconfig-r003-20230310   gcc  
+openrisc             randconfig-r023-20230310   gcc  
+parisc                              defconfig   gcc  
+parisc               randconfig-r002-20230310   gcc  
+parisc64                            defconfig   gcc  
+powerpc                          allmodconfig   gcc  
+powerpc                           allnoconfig   gcc  
+powerpc              randconfig-r014-20230311   clang
+powerpc              randconfig-r032-20230312   clang
+riscv                            allmodconfig   gcc  
+riscv                             allnoconfig   gcc  
+riscv                               defconfig   gcc  
+riscv                randconfig-r042-20230310   gcc  
+riscv                          rv32_defconfig   gcc  
+s390                             allmodconfig   gcc  
+s390                             allyesconfig   gcc  
+s390         buildonly-randconfig-r001-20230310   gcc  
+s390                                defconfig   gcc  
+s390                 randconfig-r044-20230310   gcc  
+sh                               allmodconfig   gcc  
+sh                   randconfig-r001-20230310   gcc  
+sh                   randconfig-r024-20230310   gcc  
+sh                   randconfig-r034-20230312   gcc  
+sparc                               defconfig   gcc  
+sparc                randconfig-r035-20230312   gcc  
+sparc64      buildonly-randconfig-r006-20230310   gcc  
+um                             i386_defconfig   gcc  
+um                           x86_64_defconfig   gcc  
+x86_64                            allnoconfig   gcc  
+x86_64                           allyesconfig   gcc  
+x86_64                              defconfig   gcc  
+x86_64                                  kexec   gcc  
+x86_64                        randconfig-a001   clang
+x86_64                        randconfig-a002   gcc  
+x86_64                        randconfig-a003   clang
+x86_64                        randconfig-a004   gcc  
+x86_64                        randconfig-a005   clang
+x86_64                        randconfig-a006   gcc  
+x86_64                        randconfig-a011   gcc  
+x86_64                        randconfig-a012   clang
+x86_64                        randconfig-a013   gcc  
+x86_64                        randconfig-a014   clang
+x86_64                        randconfig-a015   gcc  
+x86_64                        randconfig-a016   clang
+x86_64                               rhel-8.3   gcc  
+xtensa               randconfig-r022-20230310   gcc  
+xtensa               randconfig-r025-20230310   gcc  
+xtensa               randconfig-r026-20230310   gcc  
+xtensa               randconfig-r031-20230312   gcc  
 
-Best regards,
 -- 
-Thomas Weißschuh <linux@weissschuh.net>
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
