@@ -2,144 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 187116B66D3
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F4AD6B66D6
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:43:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbjCLNnZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:43:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44864 "EHLO
+        id S230474AbjCLNnw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:43:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbjCLNnV (ORCPT
+        with ESMTP id S229623AbjCLNno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:43:21 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5AF059DE
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:43:14 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id ek18so7547330edb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:43:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678628593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=H3iUN11DrzuzPMfFFj12OwdJMcoiZbJZcwKV+23ak0c=;
-        b=JplCRdbIE7Xoood5Q2DTakN65IsZzSGDiJFtWX9EiaZQI/K861tTqvnbDOHCo4cnSq
-         MDblVdeHDsqCLRPeo1dnLn94hPqi9n4zBJOcHeOouaSkXHKvN2qEqOwzPX2pcQywmYpm
-         KvPJxvOsb89FiiRb45WmDgw+gMzMZ6S2bxyh8GjXu2oDte00todUPSBfdVCG8DGnLaor
-         7gASl2eiCi7tFEvVPfbVPZ0ynYqOIhyBu1sLLipE8nL0WMPBQ921KD1xG/rEsCW80ZyE
-         ffe/GesRPTj2fB6krB0Vtdb7jaHRQeH451A6Ezl6DWNosBsbzMY2HYI8nxzrNQ8jUg6/
-         ZluA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678628593;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=H3iUN11DrzuzPMfFFj12OwdJMcoiZbJZcwKV+23ak0c=;
-        b=QqW5fvJeF6fg9B0nxIgJhFnRBDZtJq4wmvvvwZjgqdi3OiJIMBGWaJdc8wksny5wKa
-         TgRaARZU4xvX7gxwEUT602/JI0IxP3Qin3kZdh/+pI1PmmBzcwbeVN6gFF0UHwFkAdq5
-         jZ+z0Vv5xqwvkWV7qBZV1yb3BWnFqseZnUjYH+nqO5C3xdxNNGQymTEMpYqz691u53PB
-         q9KaTFnYZKlPhEObt979VUuWIHrEvkCxU5s9H6hanud/KwELLi2KrZTa7IrWVI/PcCvE
-         hsKPLldPdhFoKtGfOsaKzFcMTT3P00hnJu+ORPS4ZChV4hT6HJzkCueSA2GJIFiMVkCC
-         ivHQ==
-X-Gm-Message-State: AO0yUKXEa2jcm1QqUWiv70N/p7y6ineUlEWElBSNUtt8YVYUzBwEwqnP
-        QKM4b19ZtzWzdXnYjXuXX5d5SC5V7i8KwvzOJl0=
-X-Google-Smtp-Source: AK7set/kRBOjIV/XpKuBn39h8Vum09AMeyOVi2viOLHD6UWQc0sLpA/l9hklBDEpzLhZktLH1ooF/g==
-X-Received: by 2002:aa7:c1c4:0:b0:4c5:bc48:d422 with SMTP id d4-20020aa7c1c4000000b004c5bc48d422mr25727842edp.7.1678628593250;
-        Sun, 12 Mar 2023 06:43:13 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id t7-20020a50ab47000000b004cbe45d2db5sm2200108edc.37.2023.03.12.06.43.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 06:43:12 -0700 (PDT)
-Message-ID: <c3e3019c-eb93-110c-33bd-73bcc8ce53a5@linaro.org>
-Date:   Sun, 12 Mar 2023 14:43:11 +0100
+        Sun, 12 Mar 2023 09:43:44 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 046C2158A8;
+        Sun, 12 Mar 2023 06:43:35 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0F8E8D5F;
+        Sun, 12 Mar 2023 14:43:29 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678628613;
+        bh=6NSDf17QydqjSciafFDtS8WETszudk1j9lrlPeU3nBo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FOm+HYLZc7DXYKb9ZJc+xDVoozhT6dVAFFVOt89WpWfy1H9dm/Gw32CFkPJ7TQXQ5
+         WFGVJ0lbWQHTLnAtZfAClOnKd69ad1pTgGosUv6eI3z8vm6ouPRfZ+3u6YS584qboA
+         5bRXk7l4zecEsa9udBk8vuw9ls2oWy8QblqtZxfU=
+Date:   Sun, 12 Mar 2023 15:43:22 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 22/28] media: i2c: mt9m111: drop of_match_ptr for ID table
+Message-ID: <20230312134322.GA8229@pendragon.ideasonboard.com>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-22-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] dt-bindings: i2c: Add the clock stretching property
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20230312131933.248715-1-andi.shyti@kernel.org>
- <20230312131933.248715-2-andi.shyti@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230312131933.248715-2-andi.shyti@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230312131318.351173-22-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 14:19, Andi Shyti wrote:
-> The I2C specification allows for the clock line to be held low
-> for a specified timeout to force the slave device into a 'wait'
-> mode. This feature is known as 'Clock stretching' and is
-> optional.
+Hi Krzysztof,
+
+Thank you for the patch.
+
+On Sun, Mar 12, 2023 at 02:13:12PM +0100, Krzysztof Kozlowski wrote:
+> The driver will match mostly by DT table (even thought there is regular
+> ID table) so there is little benefit in of_match_ptr (this also allows
+> ACPI matching via PRP0001, even though it might not be relevant here).
+> This also fixes !CONFIG_OF error:
 > 
-> In the NXP I2C specification, clock stretching is described as
-> the process of pausing a transaction by holding the SCL line LOW.
-> The transaction can only continue when the line is released HIGH
-> again.[*] However, most target devices do not include an SCL
-> driver and are therefore unable to stretch the clock.
+>   drivers/media/i2c/mt9m111.c:1370:34: error: ‘mt9m111_of_match’ defined but not used [-Werror=unused-const-variable=]
 > 
-> Add the following properties:
-> 
->  - i2c-scl-clk-low-timeout-ms: This property specifies the
->    duration, in milliseconds, for which the clock is kept low and
->    a client needs to detect a forced waiting state.
-> 
->  - i2c-scl-has-clk-low-timeout: This property specifies whether
->     the I2C controller implements the clock stretching property.
-> 
-> It's important to note that this feature should not be confused
-> with the SMBUS clock timeout, which serves a similar function but
-> specifies a timeout of 25-35ms. The I2C specification does not
-> recommend any specific timeout.
-> 
-> [*] NXP, UM10204 - I2C-bus specification and user manual
->     Rev. 7.0, 1 October 2021, chapter 3.1.9.
-> 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
 > ---
->  Documentation/devicetree/bindings/i2c/i2c.txt | 9 +++++++++
->  1 file changed, 9 insertions(+)
+>  drivers/media/i2c/mt9m111.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/Documentation/devicetree/bindings/i2c/i2c.txt b/Documentation/devicetree/bindings/i2c/i2c.txt
-> index fc3dd7ec0445..12c311f0e831 100644
-> --- a/Documentation/devicetree/bindings/i2c/i2c.txt
-> +++ b/Documentation/devicetree/bindings/i2c/i2c.txt
+> diff --git a/drivers/media/i2c/mt9m111.c b/drivers/media/i2c/mt9m111.c
+> index f5fe272d1205..20ed87d872c8 100644
+> --- a/drivers/media/i2c/mt9m111.c
+> +++ b/drivers/media/i2c/mt9m111.c
+> @@ -1382,7 +1382,7 @@ MODULE_DEVICE_TABLE(i2c, mt9m111_id);
+>  static struct i2c_driver mt9m111_i2c_driver = {
+>  	.driver = {
+>  		.name = "mt9m111",
+> -		.of_match_table = of_match_ptr(mt9m111_of_match),
+> +		.of_match_table = mt9m111_of_match,
+>  	},
+>  	.probe_new	= mt9m111_probe,
+>  	.remove		= mt9m111_remove,
 
-Although the properties are still sometimes added here, but the bindings
-are now in dtschema, so rather this should be updated:
+-- 
+Regards,
 
-https://github.com/devicetree-org/dt-schema/blob/main/dtschema/schemas/i2c/i2c-controller.yaml
-
-> @@ -45,6 +45,15 @@ wants to support one of the below features, it should adapt these bindings.
->  	Number of nanoseconds the SCL signal takes to rise; t(r) in the I2C
->  	specification.
->  
-> +- i2c-scl-clk-low-timeout-ms
-> +	Number of miliseconds the clock line needs to be pulled down in order
-> +	to force a waiting state.
-> +
-> +- i2c-scl-has-clk-low-timeout
-> +	Boolean value that indicates whether the controller implements the
-> +	feature of wait induction through SCL low, with the timeout being
-> +	implemented internally by the controller.
-> +
->  - i2c-sda-falling-time-ns
->  	Number of nanoseconds the SDA signal takes to fall; t(f) in the I2C
->  	specification.
-
-Best regards,
-Krzysztof
-
+Laurent Pinchart
