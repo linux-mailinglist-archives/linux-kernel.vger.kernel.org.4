@@ -2,113 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E9D26B634C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 06:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9F4B56B6350
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 06:26:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjCLFWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 00:22:10 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43640 "EHLO
+        id S229613AbjCLF0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 00:26:33 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCLFWF (ORCPT
+        with ESMTP id S229450AbjCLF0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 00:22:05 -0500
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD7A63B3F9;
-        Sat, 11 Mar 2023 21:22:03 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5EF70B80A26;
-        Sun, 12 Mar 2023 05:22:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74D4FC433D2;
-        Sun, 12 Mar 2023 05:22:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678598520;
-        bh=bWzonHMaKKd6TZ8k25Z+jxTxX+g/vuQjBJ8jzeUK+NA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LBAaWVlb5rdiMemGPlLN+frtOWZ15ZB2+uN4IOkysg827MnY4jToOrmi4zV4damIp
-         C3vPIbBYqagEUviTyZCkY356ArXst/MfraDuK6Mf30v4a4URJUeEve+ygdKgrpydTV
-         kmNQk0vLvy7yr8dEigE38SpmDMgOs5v/trEFOs/8V7e3dRKu0kxXYeRMk//sbJ+GTm
-         tRT9eRl0hcNcy880kSL4WNtnp6LFTSRT95Zt1E+3Y56AMzUGOJGY67pfo3qQ/BcdbQ
-         T55bYZCL+YyEqojKFGly4Dm8sZT7jgs+OvuqP43/v8Dw8XC5e8+Hmz15cSBFmHdbL6
-         RlOFxoun3/yRA==
-Date:   Sat, 11 Mar 2023 21:21:58 -0800
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Willy Tarreau <w@1wt.eu>
-Cc:     Theodore Ts'o <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <ZA1hdkrOKLG697RG@sol.localdomain>
-References: <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzJltJaydwjCN6E@1wt.eu>
- <ZAzVbzthi8IfptFZ@sol.localdomain>
- <ZAzghyeiac3Zh8Hh@1wt.eu>
- <ZAzqSeus4iqCOf1O@sol.localdomain>
- <ZA1V4MbG6U3wP6q6@1wt.eu>
+        Sun, 12 Mar 2023 00:26:30 -0500
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E9473BD8A;
+        Sat, 11 Mar 2023 21:26:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=HTO0kFL/gXNY82LV1tHpGaf2bVH9yozHCg1ZS/+0oeI=; b=v/8mSm1wRqrfK74nfEGrwhkHXR
+        KtCrGdm/ipvoyLcvdNTOEs39ZojotwJlKrM5KEIk5RW4TXWhoTjYClXsnsdMUHYOY/nvHcF1Ho/eu
+        5ODdLvIR+2mSDPrFYJCq9CFSbgr+nyzIqMQGWLIBuO4jhmr4VKC6kDX7TnA9LorHNEkFKdO0HSTiY
+        9bVrUw4GrEBTpKHAPlCZLPRsaENgTeGc3sODEDEnh0cTgpV3UVKhzUfq4C/MOSG2htvo8quJrt1Sj
+        ZvhB1eF1HEKTHrJswoPJ8y1ulD77uuc7v35rheJrVAAvLTCbKdWy8DobAzX0LLNyYJLvdEgHlfWkU
+        ZB7AWlXw==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pbEDx-001onR-LW; Sun, 12 Mar 2023 05:26:25 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        linux-ide@vger.kernel.org, linux-um@lists.infradead.org
+Subject: [PATCH] ata: pata_cs5536: don't build on UML
+Date:   Sat, 11 Mar 2023 21:26:24 -0800
+Message-Id: <20230312052624.8402-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA1V4MbG6U3wP6q6@1wt.eu>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 05:32:32AM +0100, Willy Tarreau wrote:
-> On Sat, Mar 11, 2023 at 12:53:29PM -0800, Eric Biggers wrote:
-> > I'll try to put something together, despite all the pushback I'm getting.
-> 
-> Thanks.
-> 
-> > But
-> > by necessity it will be totally separate from the current stable scripts, as it
-> > seems there is no practical way for me to do it otherwise,
-> 
-> It's better that way anyway. Adding diversity to the process is important
-> if we want to experiment with multiple approaches. What matters is to
-> have multiple inputs on list of patches.
-> 
-> > given that the
-> > current stable process is not properly open and lacks proper leadership.
-> 
-> Please, really please, stop looping on this. I think it was already
-> explained quite a few times that the process is mostly human, and that
-> it's very difficult to document what has to be done. It's a lot of work
-> based on common sense, intuition and experience which helps solving each
-> an every individual case. The scripts that help are public, the rest is
-> just experience. It's not fair to say that some people do not follow an
-> open process while they're using their experience and intuition. They're
-> not machines.
-> 
+Similar to 22eebaa631c4 ("ata: pata_cs5535: Don't build on UML"),
+prevent pata_cs5536 from building on UML since it references
+symbols that are not present when building X86_32/i386 allmodconfig.
 
-I mean, "patches welcome" is a bit pointless when there is nothing to patch, is
-it not?  Even Sasha's stable-tools, which he finally gave a link to, does not
-include anything related to AUTOSEL.  It seems AUTOSEL is still closed source.
+ERROR: modpost: "__tracepoint_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
+ERROR: modpost: "do_trace_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
+ERROR: modpost: "__tracepoint_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
+ERROR: modpost: "do_trace_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
 
-BTW, I already did something similar "off to the side" a few years ago when I
-wrote a script to keep track of and prioritize syzbot reports from
-https://syzkaller.appspot.com/, and generate per-subsystem reminder emails.
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc: linux-ide@vger.kernel.org
+Cc: linux-um@lists.infradead.org
+---
+ drivers/ata/Kconfig |    1 +
+ 1 file changed, 1 insertion(+)
 
-I eventually ended up abandoning that, because doing something off to the side
-is not very effective and is hard to keep up with.  The right approach is to
-make improvements to the "upstream" process (which was syzbot in that case), not
-to bolt something on to the side to try to fix it after the fact.
-
-So I hope people can understand where I'm coming from, with hoping that what the
-stable maintainers are doing can just be improved directly, without first
-building something from scratch off to the side as that is just not a good way
-to do things.  But sure, if that's the only option to get anything nontrivial
-changed, I'll try to do it.
-
-- Eric
+diff -- a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+--- a/drivers/ata/Kconfig
++++ b/drivers/ata/Kconfig
+@@ -650,6 +650,7 @@ config PATA_CS5535
+ config PATA_CS5536
+ 	tristate "CS5536 PATA support"
+ 	depends on PCI && (X86_32 || MIPS || COMPILE_TEST)
++	depends on !UML
+ 	help
+ 	  This option enables support for the AMD CS5536
+ 	  companion chip used with the Geode LX processor family.
