@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBBE96B6C7D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:16:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BDAFE6B6C7E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:16:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCLXQ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 19:16:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38104 "EHLO
+        id S229835AbjCLXQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 19:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229726AbjCLXQP (ORCPT
+        with ESMTP id S229742AbjCLXQQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 19:16:15 -0400
-Received: from mail-qv1-xf2d.google.com (mail-qv1-xf2d.google.com [IPv6:2607:f8b0:4864:20::f2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21678279A3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 16:16:14 -0700 (PDT)
-Received: by mail-qv1-xf2d.google.com with SMTP id cz13so464026qvb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 16:16:14 -0700 (PDT)
+        Sun, 12 Mar 2023 19:16:16 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 139C827D59
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 16:16:15 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id ks17so7241602qvb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 16:16:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678662973;
+        d=linaro.org; s=google; t=1678662974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=bCcXjp0lmCj4QKMRCOzzdkCGwVUe3cwJnV9tyaVVNvo=;
-        b=U8pWOtImrgJIFjVZj/Xq28/NpjxPFf4vLzvZkVXzha0RwiZNbGTkVlx+8nsrFxRvrx
-         jXOd94daNGzJuQaiJoKqIAW72RfljfcnTf8SmgRtf2Yy/4jyh93POzHWWPyP3/vjmDW7
-         kNS/hwRH0mC8W2H0Dzc3U8gj9PCqhahCDy+U0JjcZpAFiEeUF/p0+moqlX1cyCQHno+h
-         thwIGBFuRVMl6uAz4UISKWlVaMCjtWgXuMoiPEFolSAkISbJJclZUEqpNEt/zWI/bVjb
-         NmL4bLI0fXg6n6khREG9g4j1pISa2iT2g4ZTjFCy3fcZqcsSVrglBeiA069Kvobtap9l
-         +ftA==
+        bh=L8b35TlVLwc8Sn7ZUBoVNCvt/IPK58Jissfx4Uxljug=;
+        b=Q3UJgXN8SqUOOQzmoWlEYuWnWxqDpR2YRmndObkq0k6jeii7ykhFyA0VXlq1Hv9B/d
+         H7srsVf7k+f1Y65foBIOs9MtLJApq1XFVNtoXGRfdyhm+BP5GXH7oEERJ378p2HsDELf
+         VZ2nW4s6A4rp8PVKTVrOPUxAxSIL2Gwj0PV4aw1VD+2MVqROmVuZh/ZT069wyz9EE4Z3
+         OmaZP2AYprOQ1Szy9sg4g6bG2Pa4kGSdyYn9GuboJeK9cqnZZyYsWYV+L9KdbqvydQmk
+         aq6V1eUpIci+hkQYskMG9GvzIRAvJSOVDq8h91jwNpsAJJIOsYUwuxpnV8uwoNlRgtKb
+         lcWg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678662973;
+        d=1e100.net; s=20210112; t=1678662974;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=bCcXjp0lmCj4QKMRCOzzdkCGwVUe3cwJnV9tyaVVNvo=;
-        b=aYiQxnk9L7Vdyb1y3TmvWkPx+Pe2Mgn/irdJhqQYxTjEWKNUhaw+mcdZiWKougmbgn
-         XS/LChW1bysAp3jx2zZPgzlhR1girJlsb54MfVsV10jiE7rxfs98fB8lkiaDpgFfIXxf
-         zm2FFLQ89Z3CpIF/KvKEBF3lw6C3uCzdCp+hbdWJBptvaGaxPkEHjpyKvUI4Uy01TSLG
-         l6MJM2Yw+sHqQfOd3ulkoRg3iJEOcsRPZgnyMTADAIK3iNVs93QgNPB+GEaNwTXlqJvC
-         twDatSGhtofqQGq6zZ5Wj80iiUMYszQaBNpa9DSgRgNn9fVjSWIJtgNlxWDA428KoAvo
-         KEhw==
-X-Gm-Message-State: AO0yUKUnAt6tuUI6NV2Cg8dkyM3lKBDIfPXANzN1+Twv8cEwGQdt+G4v
-        9hnqvrpD6nNhz77c8dORgufFHg==
-X-Google-Smtp-Source: AK7set8TQw8kYJb3ilSZLR2EUfhLXZ5VF3QVyPy8kdoT5WxN/ahhT4HfrRMD+6Pc5opZDP1IqA54Hw==
-X-Received: by 2002:a05:6214:f06:b0:56e:a96a:2bdc with SMTP id gw6-20020a0562140f0600b0056ea96a2bdcmr11438508qvb.40.1678662973185;
-        Sun, 12 Mar 2023 16:16:13 -0700 (PDT)
+        bh=L8b35TlVLwc8Sn7ZUBoVNCvt/IPK58Jissfx4Uxljug=;
+        b=HRQ7prPAcwMxax/91Lx1pEVS0Tf+VfVXimS8P47GETCVbcps2AvNBUMREuJEmEjP4a
+         0LKRw7euemXOeVEbBs+xJiS6RWEHL+RdjIx9BqhTxhlBGp1iIREuU9CAyuwL8JvA93FA
+         JvAeZ9AulDTbMOPJdj3I2ItOl1Z89aVAPZ3mHvNpd6TZU7UN/YQR6zMpdg1c+YJhi/Zh
+         x2vo0wddRnKyP5vG/QJeiACJJAD+3VkYJIO6XwAL2WOi2Y2taMlqHRU4rWizoI+Zxz/z
+         qYk0ROMq2EN/02WIr2cassRI5YdYm8kjH5CsD+mpXXvOrxAi/BHYzvfDOMHTwEAdXy48
+         ybpA==
+X-Gm-Message-State: AO0yUKWhZ+sS31BvyaiJQMinE8Jl3VbS5rjUi6DpVQ7xwGkwCgpsjC1i
+        VHN9u1hqusppmwIUY0Tqcc4oZg==
+X-Google-Smtp-Source: AK7set8qhhF7wHcTTBx/iWbo8fMfYcdSC9CXEpBiNnKBI9VNL+8RJcl/KQ7f/lK6iUda5pkecOme0Q==
+X-Received: by 2002:a05:6214:1cc9:b0:5a3:fd18:e734 with SMTP id g9-20020a0562141cc900b005a3fd18e734mr5302463qvd.35.1678662974109;
+        Sun, 12 Mar 2023 16:16:14 -0700 (PDT)
 Received: from fedora.attlocal.net (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id dm21-20020a05620a1d5500b00742f250ebc0sm4307091qkb.9.2023.03.12.16.16.12
+        by smtp.gmail.com with ESMTPSA id dm21-20020a05620a1d5500b00742f250ebc0sm4307091qkb.9.2023.03.12.16.16.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 16:16:12 -0700 (PDT)
+        Sun, 12 Mar 2023 16:16:13 -0700 (PDT)
 From:   William Breathitt Gray <william.gray@linaro.org>
 To:     linux-iio@vger.kernel.org
 Cc:     linux-kernel@vger.kernel.org, jic23@kernel.org, lars@metafoo.de,
         William Breathitt Gray <william.gray@linaro.org>,
         stable@vger.kernel.org
-Subject: [PATCH 5.4 v3 4/6] counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
-Date:   Sun, 12 Mar 2023 19:15:52 -0400
-Message-Id: <20230312231554.134858-4-william.gray@linaro.org>
+Subject: [PATCH 4.19 v3 5/6] iio: counter: 104-quad-8: Fix race condition between FLAG and CNTR reads
+Date:   Sun, 12 Mar 2023 19:15:53 -0400
+Message-Id: <20230312231554.134858-5-william.gray@linaro.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230312231554.134858-1-william.gray@linaro.org>
 References: <20230312231554.134858-1-william.gray@linaro.org>
@@ -65,8 +65,7 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -84,17 +83,17 @@ Since the race condition could result in an incorrect 25-bit count
 value, remove support for 25-bit count values from this driver.
 
 Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-QUAD-8")
-Cc: <stable@vger.kernel.org> # 5.4.x
+Cc: <stable@vger.kernel.org> # 4.19.x
 Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
 ---
- drivers/counter/104-quad-8.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+ drivers/iio/counter/104-quad-8.c | 14 +-------------
+ 1 file changed, 1 insertion(+), 13 deletions(-)
 
-diff --git a/drivers/counter/104-quad-8.c b/drivers/counter/104-quad-8.c
-index f261a57af..48de69f58 100644
---- a/drivers/counter/104-quad-8.c
-+++ b/drivers/counter/104-quad-8.c
-@@ -57,10 +57,6 @@ struct quad8_iio {
+diff --git a/drivers/iio/counter/104-quad-8.c b/drivers/iio/counter/104-quad-8.c
+index 92be8d0f7..92e68cada 100644
+--- a/drivers/iio/counter/104-quad-8.c
++++ b/drivers/iio/counter/104-quad-8.c
+@@ -61,10 +61,6 @@ struct quad8_iio {
  
  #define QUAD8_REG_CHAN_OP 0x11
  #define QUAD8_REG_INDEX_INPUT_LEVELS 0x16
@@ -105,40 +104,32 @@ index f261a57af..48de69f58 100644
  /* Error flag */
  #define QUAD8_FLAG_E BIT(4)
  /* Up/Down flag */
-@@ -639,19 +635,9 @@ static int quad8_count_read(struct counter_device *counter,
+@@ -97,9 +93,6 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
  {
- 	struct quad8_iio *const priv = counter->priv;
- 	const int base_offset = priv->base + 2 * count->id;
+ 	struct quad8_iio *const priv = iio_priv(indio_dev);
+ 	const int base_offset = priv->base + 2 * chan->channel;
 -	unsigned int flags;
 -	unsigned int borrow;
 -	unsigned int carry;
--	unsigned long position;
-+	unsigned long position = 0;
  	int i;
  
--	flags = inb(base_offset + 1);
--	borrow = flags & QUAD8_FLAG_BT;
--	carry = !!(flags & QUAD8_FLAG_CT);
+ 	switch (mask) {
+@@ -110,12 +103,7 @@ static int quad8_read_raw(struct iio_dev *indio_dev,
+ 			return IIO_VAL_INT;
+ 		}
+ 
+-		flags = inb(base_offset + 1);
+-		borrow = flags & QUAD8_FLAG_BT;
+-		carry = !!(flags & QUAD8_FLAG_CT);
 -
--	/* Borrow XOR Carry effectively doubles count range */
--	position = (unsigned long)(borrow ^ carry) << 24;
--
- 	mutex_lock(&priv->lock);
+-		/* Borrow XOR Carry effectively doubles count range */
+-		*val = (borrow ^ carry) << 24;
++		*val = 0;
  
- 	/* Reset Byte Pointer; transfer Counter to Output Latch */
-@@ -1204,8 +1190,8 @@ static ssize_t quad8_count_ceiling_read(struct counter_device *counter,
- 
- 	mutex_unlock(&priv->lock);
- 
--	/* By default 0x1FFFFFF (25 bits unsigned) is maximum count */
--	return sprintf(buf, "33554431\n");
-+	/* By default 0xFFFFFF (24 bits unsigned) is maximum count */
-+	return sprintf(buf, "16777215\n");
- }
- 
- static ssize_t quad8_count_ceiling_write(struct counter_device *counter,
+ 		/* Reset Byte Pointer; transfer Counter to Output Latch */
+ 		outb(QUAD8_CTR_RLD | QUAD8_RLD_RESET_BP | QUAD8_RLD_CNTR_OUT,
 
-base-commit: 126ee8982bfcae6111f0fd157ee5cdd0ec7f5ca5
+base-commit: 6a98afd74b4c2016fb87f5c3b7ce1c53ac215c13
 -- 
 2.39.2
 
