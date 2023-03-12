@@ -2,78 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 738AC6B64DD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:20:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9F1E6B64E0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:20:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjCLKUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:20:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56040 "EHLO
+        id S229614AbjCLKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:20:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjCLKUC (ORCPT
+        with ESMTP id S229681AbjCLKUn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:20:02 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EB7A15147
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:19:59 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id b10so9811993ljr.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:19:59 -0700 (PDT)
+        Sun, 12 Mar 2023 06:20:43 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F12943B
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:20:41 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id k10so37546874edk.13
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:20:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard.com; s=google; t=1678616396;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:subject:references:cc:to:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=1G6SdeGpQybrC3jwWPimjsXVVw9FowHr7K+FT1L/fIo=;
-        b=BYbHga1SK5lP8wbAeNYeYxfHxY9CqYGvO5326iszkNm2g1Yr89N2QvICTYCaxPVB+E
-         R9BYF8mMVgQgLY75yqrNMBlzzNSdi+6gE02irlDQLRyOXBJr2rnBp61eox0UsqKszj6d
-         1yBDiwcTwLQlZ+Lh+8onP1AdqsOBqLBogfYvrV8AduaMprqXqXPoXGWnUEVicpirZgsZ
-         00Oampq6NVLMOk6cT7RsX+GvFZF22/Xwgzdkdi0Nrs7VhMoWr6e5hwTe59TQknlt/ro0
-         H5uAui6wS2jYfLTE3Yea5JdCD0SZhq+6yJEyyTMUgPrmiD/kp7yWMxqfd8Mjlvsx2X+0
-         Iavw==
+        d=linaro.org; s=google; t=1678616440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sbAbzZV/Xdq9oZ9db4qjyR7OAM8ISoHuQdD7Lk6uW9o=;
+        b=LeLPC3EEhzxRNxvRCH+b+d4kEih+ehxEiG2rXL5qSEAcOttdU4aXULt0tsRKPuCza3
+         a4zWL1S0wbIAisSm1DpkMjY03lTS4tPihYnhk7Gm1YjQK92APvyRcC8nklG3T6yGr/eB
+         cmYfO6IiI+lSpBExN9SZvLO/BEW9t7S9V6roCvbfm71F6OeinZvpXv7YsdI2sq3n5y3S
+         naTpfbe8huSCsAPBspw/c++7JG8ovvFyJ2lQXDxaVxcosqunaSAQHdVFkePGJafuZDC5
+         vyVlxtg9tFQUmMVIORvjh8TnVayopqMNlt8dEzQ3SyBjXt+WBr/6pGANCLgwwSdGLEtV
+         M0Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678616396;
-        h=content-transfer-encoding:in-reply-to:organization:from
-         :content-language:subject:references:cc:to:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1G6SdeGpQybrC3jwWPimjsXVVw9FowHr7K+FT1L/fIo=;
-        b=mo+1Z+F7mKhALue7I9hi0Ob+JZ9FZwEn9Ayyr9Srrax1T30117EXGGD8TBJT+lM6C5
-         pudzvuzJhAqjg+SE3i/WlZbZtweHNzFZ3SB6NNMx8oYumPD52iXwMjNz2A6gbJg7DOOf
-         W9mS+PO+JFnDLTjg1w8UD2qSEXO3+eVzG4iyFis1iejh/C0L0m7E1rSKg7p65fwb0Ykp
-         /Y90DQy6scNBeBcKKjQ9pXNNrx24OSqnd1DXul2ooS6XMzQSvHPLAUhgCJg0OSAKsqjt
-         dTnk1ykwqhya8RhnJdJfdhTSsj/7pWEphNCXHiYkECr6XUvwhY9H79x+mkff3j9a1kte
-         8kwA==
-X-Gm-Message-State: AO0yUKXEMcAKMqBZC0Tl4hluY2fuYCq7TIc+XAZNKcnLF4MrUmSJ1/mg
-        HxkOpWi/3fqiPSm9h/qXTh6gDA==
-X-Google-Smtp-Source: AK7set+bv6eXHvOdAUgQP1JUX6tIPGMB4BDPWcVwAP6A0h7cOHNeAdYEd3GYBQhfVPs1tQGRNxtucg==
-X-Received: by 2002:a05:651c:221f:b0:293:4e43:c276 with SMTP id y31-20020a05651c221f00b002934e43c276mr12716592ljq.22.1678616396565;
-        Sun, 12 Mar 2023 03:19:56 -0700 (PDT)
-Received: from [192.168.1.9] ([78.109.72.44])
-        by smtp.googlemail.com with ESMTPSA id j23-20020a2e8257000000b00295da33c42dsm611369ljh.15.2023.03.12.03.19.53
+        d=1e100.net; s=20210112; t=1678616440;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sbAbzZV/Xdq9oZ9db4qjyR7OAM8ISoHuQdD7Lk6uW9o=;
+        b=BqpHJc19hggBsdq8AwIktf8JC4j8sXWqJMMqvSdksLed/PvYL4IyFT0rFwjziQpIbp
+         VvqZCHDtny+xyrze+nFGQesSU77p6SRC+z+T0AcJwXvwh+U8bmGWS5HkPXoUpi1+8L+W
+         OM6L7B0zvypiBxVizfT2MHhtZIZzusUqXL8G1s0PqKMYFUHS6IaCg7mXLotT43ZXEMs5
+         mDsaZtJVtQNqDmStDalkOg/iLoyv95atOmLNJe/H3GfdQWnhaxIPUXsKxo52+30NSD2y
+         g35YsT+UmEtovlD7O8YExCatZh97if5ffu9mjmbL9sDN63VxR8dcRpEdoQATUlnz8q4o
+         t2gg==
+X-Gm-Message-State: AO0yUKXyAYhRQ22I/sBDPs0jsBP7ch7WlK3MAX/ZD5SDWEjBOYKoyTaz
+        e/+AhE7bgorQfKlP7OkL0Xerwg==
+X-Google-Smtp-Source: AK7set+j33mKv17cplWRaB2equIU/hTxgso/6lGoUsSghTcqcj9a6GMBKe+/zu/1DFJTN0Bl7w55cw==
+X-Received: by 2002:a17:907:6ea6:b0:8b1:7dea:cc40 with SMTP id sh38-20020a1709076ea600b008b17deacc40mr37985220ejc.9.1678616440275;
+        Sun, 12 Mar 2023 03:20:40 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id u21-20020a17090657d500b008b69aa62efcsm2094661ejr.62.2023.03.12.03.20.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 03:19:55 -0700 (PDT)
-Message-ID: <4ae6feff-147e-3148-cde4-53039c96ea80@wirenboard.com>
-Date:   Sun, 12 Mar 2023 13:19:52 +0300
+        Sun, 12 Mar 2023 03:20:39 -0700 (PDT)
+Message-ID: <d9b197c8-56fe-b59d-5fca-bc863ac1e7ed@linaro.org>
+Date:   Sun, 12 Mar 2023 11:20:38 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-To:     m.zatovic1@gmail.com
-Cc:     airlied@redhat.com, andriy.shevchenko@intel.com, arnd@arndb.de,
-        axboe@kernel.dk, benjamin.tissoires@redhat.com, bvanassche@acm.org,
-        dan.j.williams@intel.com, devicetree@vger.kernel.org,
-        dipenp@nvidia.com, fmdefrancesco@gmail.com,
-        furong.zhou@linux.intel.com, gregkh@linuxfoundation.org,
-        jacek.lawrynowicz@linux.intel.com,
-        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
-        linux-kernel@vger.kernel.org, linux@zary.sk, masahiroy@kernel.org,
-        mathieu.poirier@linaro.org, mwen@igalia.com, ogabbay@kernel.org,
-        robh+dt@kernel.org, treding@nvidia.com, yangyicong@hisilicon.com
-References: <20230301142835.19614-1-m.zatovic1@gmail.com>
-Subject: Re: [PATCHv3 0/4] Wiegand bus driver and GPIO bitbanged controller
-Content-Language: en-GB
-From:   Evgeny Boger <boger@wirenboard.com>
-Organization: Wiren Board
-In-Reply-To: <20230301142835.19614-1-m.zatovic1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/12] net: dsa: lantiq_gswip: mark OF related data as
+ maybe unused
+Content-Language: en-US
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Stefan Schmidt <stefan@datenfreihafen.org>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org
+References: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
+ <20230311181434.lycxr5h2f6xcmwdj@skbuf>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311181434.lycxr5h2f6xcmwdj@skbuf>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
@@ -84,21 +93,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
+On 11/03/2023 19:14, Vladimir Oltean wrote:
+> On Sat, Mar 11, 2023 at 06:32:52PM +0100, Krzysztof Kozlowski wrote:
+>> The driver can be compile tested with !CONFIG_OF making certain data
+>> unused:
+>>
+>>   drivers/net/dsa/lantiq_gswip.c:1888:34: error: ‘xway_gphy_match’ defined but not used [-Werror=unused-const-variable=]
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+> 
+> Do you happen to have any context as to why of_match_node() without
+> CONFIG_OF is implemented as:
+> 
+> #define of_match_node(_matches, _node)	NULL
+> 
+> and not as:
+> 
+> static inline const struct of_device_id *
+> of_match_node(const struct of_device_id *matches,
+> 	      const struct device_node *node)
+> {
+> 	return NULL;
+> }
+> 
+> ?
+> 
+> Generally, the static inline shim function model is nicer, because it
+> allows us to not scatter __maybe_unused all around.
 
-Thank you for you work!  I'm currently working on Wiegand *receiver* 
-kernel driver, and hopefully we can make both sending and receiving 
-Wiegand implementation in kernel.
+Sorry, I don't follow. I don't touch that wrappers, just fix errors
+related to OF device ID tables, although in few cases it is indeed
+related to of_match_node.
 
-I tried to read all the discussion for the previous series, but still 
-don't quite understand why do we need the infrastructure to be that 
-complex. I mean Wiegand is point-to-point connection, so why do we even 
-need bus/controller/device abstractions at all? There will be always 
-just the single device per controller, right?
-
-
--- 
-Kind regards,
-Evgeny Boger
-CTO @ Wiren Board
+Best regards,
+Krzysztof
 
