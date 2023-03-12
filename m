@@ -2,152 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DEA36B6BE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EE226B6BEF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:21:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjCLV5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:57:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
+        id S230398AbjCLWVe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 18:21:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCLV5k (ORCPT
+        with ESMTP id S229713AbjCLWVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:57:40 -0400
-Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852133BD94
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:57:38 -0700 (PDT)
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev;
- q=dns/txt; s=smtp; t=1678658257; x=1678665457; h=In-Reply-To: Content-Type:
- MIME-Version: References: Message-ID: Subject: Subject: Cc: To: To: From:
- From: Date: Sender: Sender; bh=w0I+lyfV4KTpAnoXhV952nqm+Pgiow7LJPvJH10ZJ6I=;
- b=cAe6fSW4tq9JhV1uV9QICmpVPiTeEUV/EQJ7rXWCgB1C4+11zxhQkIMSOjlEw4fzyUk3mphyCByNK/4IGPq2KFsx2z1yoT02m2Ub8vdM2SgeXLIpvZN1JKnEyhMezfNEQbH00KYwIFsCWf1lm5EfZPyrS5+BFbq32c0KzLA1HkEZ9fKTG8puz8DiHuf+vJZE7oR3LgoVOCAhnAStb9TDSrcLzS+Y4k1Y/x6hIt704z2RG38wwFvlfQcjH4yeG6BzHB81crYatIByu5gTxfW/5f87F8Lt421W6KjyZ2VpXcqHSYnxgXu+YNzpJq9DkK79QG04Jw12wEcxeXSBcDISZw==
-X-Mailgun-Sending-Ip: 159.135.228.62
-X-Mailgun-Sid: WyJkNDU4NiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCJiZTljNmQiXQ==
-Received: from guidai (186-250-91-164.mhnet.com.br [186.250.91.164]) by a70f3eba752c
- with SMTP id 640e4ad1b0de3c33d3d2efd6; Sun, 12 Mar 2023 21:57:37 GMT
-Sender: codeagain@codeagain.dev
-Date:   Sun, 12 Mar 2023 18:57:27 -0300
-From:   Bru Moreira-Guedes <codeagain@codeagain.dev>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Patch Watchbox <patch-reply@codeagain.dev>
-Subject: Re: [PATCH] coding-style.rst: indentation: Clarify tabs text
-Message-ID: <20230312215727.xjs4jusdzpnfhjd3@guidai>
-References: <20230228222035.k227xb3okt2lbksn@guidai>
- <87356gpjqv.fsf@meer.lwn.net>
+        Sun, 12 Mar 2023 18:21:32 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A0CC2387A;
+        Sun, 12 Mar 2023 15:21:31 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id v10so4317733iox.8;
+        Sun, 12 Mar 2023 15:21:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678659690;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=CeAdxBrqTUyAYKttKLhS7gcvDyYqiZAsmqO7paKVPNY=;
+        b=KIL+iLyt2FWfJRmDL0R98KYV/Kg5dLh5cYWykT3tdogKEBckSjCJUpPQf4kMFaCDpD
+         k4CRERBSn7miZn7y0wI0lSnwt2UiAFcI+hPF3/Ehwv2lr7O0yaYt2YcLU+zwnPThLXDr
+         tjIbZr1J3OOXDrZYLiPSBleI6pMSsBp3ktTXBO0+IYABpueKfJQrAdlkmrS2JQ1h+TFk
+         ix1Tsl44lEMenPBVhYN6M0QMAFmTtzyhyxKxDgPmQHszdLL+9EztsDhnHHTWaNu0aeDP
+         SuJhzZv8lR0gQ0I64pnGThVZFwhexKTViyolvlR9kBzluCpyVYSYJNDZTfpGqCUX2A/H
+         rYBQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678659690;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=CeAdxBrqTUyAYKttKLhS7gcvDyYqiZAsmqO7paKVPNY=;
+        b=e4385UunZxEiNz5h0LrKoJRgH5NpJHdIVG/rhuZKC8tXc87P+4LibZnqJ/rLM4z3BI
+         PH27d6qWMecpRVQqlegFwleYUGTcL2z2Y3o/VEelL9VagNAu62bVsxPxJHZwvfRLF2Ke
+         OW13osru8a0LfZeHScoyV5QgSXcB/4bdySeP+eNeL5rrurU3BUpDcjVbfoLzgOjcxWO9
+         4XWD6cZV93SUwpYg/l9P2nIB3gwpCZiX/TMJYMS1pi8nMAWZ35vbIO2ML+36vsGgSllr
+         ZLnKTUBhc/GYJzmxjJb5u+VEHQP+kjAjzp/4DuZ8gb9IkSo6znvoLujr0KTNRLeqajSM
+         HfUw==
+X-Gm-Message-State: AO0yUKVeZZq+LO9IbAw6euf1C571q1iFwg9Cb100emdzgi4w4xusA63Y
+        WpYOvh5yQWD9Bo70AWurE3c=
+X-Google-Smtp-Source: AK7set/kri0qgJj6wF/0ehVkbW3BJXFoiVIrYztz7A/XX8/UL2inzBVww3JTYPCUlBVoAntTfbUZug==
+X-Received: by 2002:a5d:9606:0:b0:74e:8718:a174 with SMTP id w6-20020a5d9606000000b0074e8718a174mr7748324iol.1.1678659690237;
+        Sun, 12 Mar 2023 15:21:30 -0700 (PDT)
+Received: from ?IPV6:2604:2d80:4d87:cd00:9f51:32d7:1177:67d? ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
+        by smtp.gmail.com with ESMTPSA id i18-20020a02c612000000b004042607348dsm343542jan.34.2023.03.12.15.21.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 15:21:29 -0700 (PDT)
+Message-ID: <d40faca2-fe5d-5b5a-eefe-68eb3e5e8125@gmail.com>
+Date:   Sun, 12 Mar 2023 17:21:27 -0500
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="vkxuay2ar4gkqjoa"
-Content-Disposition: inline
-In-Reply-To: <87356gpjqv.fsf@meer.lwn.net>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 2/5] Input: add driver for Focaltech FTS touchscreen
+Content-Language: en-US
+To:     Markuss Broks <markuss.broks@gmail.com>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Jean Delvare <jdelvare@suse.de>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Job Noorman <job@noorman.info>,
+        Alistair Francis <alistair@alistair23.me>,
+        Chris Morgan <macromorgan@hotmail.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230312093249.1846993-1-joelselvaraj.oss@gmail.com>
+ <20230312093249.1846993-3-joelselvaraj.oss@gmail.com>
+ <68b05c43-5808-5792-9b57-aeafffe84149@gmail.com>
+From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
+In-Reply-To: <68b05c43-5808-5792-9b57-aeafffe84149@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---vkxuay2ar4gkqjoa
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Hi Markuss,
 
-Hello, Jonathan!
+Thanks for the quick review! I agree with most of your comments and will
+fix them in a v2 soon. I have a few doubts as discussed below.
 
-(Resending for I accidentally didn't copy the lists)
+On 12/03/23 15:40, Markuss Broks wrote:
 
-On Tue, Mar 07, 2023 at 10:13:44AM -0700, Jonathan Corbet wrote:
-> Bru Moreira-Guedes <codeagain@codeagain.dev> writes:
->
-> > It might be misleading, especially for some autistic readers for whom
-> > English is not the first language and whose tendency to interpret things
-> > more literally might be present (i.e., my very own self).
+> Why is the _ratelimited variant necessary?
 
-Perhaps I clearly made a poor description of the problem this patch
-solves. I'll address it in details when I respond to your points. I
-could certainly improve it for a v2.
+I assumed in case of the interrupt working, but i2c reads fail for some
+reason, it would spam a lot of error messages if the user touches the
+screen continuously, like a swipe up gesture or something.
 
-> >
-> > The present patch clarifies the tabs text on such aspects.
-> >
-> > Signed-off-by: Bru Moreira-Guedes <codeagain@codeagain.dev>
-> > ---
-> >  Documentation/process/coding-style.rst | 14 ++++++++------
-> >  1 file changed, 8 insertions(+), 6 deletions(-)
-> >
-> > diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
-> > index 007e49ef6cec..9a0205fa7ed3 100644
-> > --- a/Documentation/process/coding-style.rst
-> > +++ b/Documentation/process/coding-style.rst
-> > @@ -18,23 +18,25 @@ Anyway, here goes:
-> >  1) Indentation
-> >  --------------
-> >
-> > -Tabs are 8 characters, and thus indentations are also 8 characters.
-> > -There are heretic movements that try to make indentations 4 (or even 2!)
-> > -characters deep, and that is akin to trying to define the value of PI to
-> > -be 3.
-> > +The Linux Kernel uses the TAB character for indentation, as in the K&R
-> > +style. Tabs are meant to be viewed as 8-characters, and thus
-> > +indentations are meant to be seen as 8 characters as well. There are
-> > +heretic movements that try to use spaces for indentation, or make tabs
-> > +viewed as 4 (or even 2!) characters, and that is akin to trying to
-> > +define the value of PI to be 5.
->
-> I guess I really don't see how this kind of tweaking helps things; this
-> text has stood for a couple of decades or so without evident
-> misunderstandings.
+I referred to ad7879 touchscreen's irq handling code [1] and thought
+it's probably best to do this, to be on the safe side. I will remove
+this if it's not needed in v2.
 
-Well, there was my own misunderstanding that motivated this patch :-}
-so, there is at least one evidenced case. Anyway, I think this is more
-of an improvement to make the text accessible for everyone, including
-autistic readers who might have a tendency towards literal
-interpretation. Just like me :D
+> Overall, I think it's better to cast the data type to a struct, which
+> would make this seem with less random.
 
-I don't actually think we would have a way to find out if everyone else
-who read this text throughout all those decades got it properly.
-Historically, the linux kernel hasn't been overall a much accessible
-project in a general sense. I think this kind of change is important if
-we want to move to the right direction.
+Sorry, I am not sure I got this right. Do you mean I create an array of
+struct called say "fts_point" that stores the x, y, type, etc. info of
+all the points, then report it separately. Like similar to something
+done by the auo-pixcir touchscreen driver [2]?
 
-> ...and I'm totally mystified as to why we've redefined pi from 3 to 5?
+If I didn't get this correctly, can you show me some code in mainline,
+that does it? It would be very helpful.
 
-Ohhh, never mind this part, it shouldn't be here. At first I was
-undecided on whether to change it or not. I actually thought I had
-removed it. It just came to my mind that the value of pi is a constant,
-yet its representation is always bound to a certain precision level.
-Since the text didn't use decimal places, assuming no decimal precision
-the pi is actually near 3. Since the text appears to be trying to show
-an example of something "absurd", I think another value could be more
-appropriate. But yea, this change would not affect anyone and I think it
-shouldn't be done.
+[1]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/touchscreen/ad7879.c?h=v6.3-rc1#n250
+[2]
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/input/touchscreen/auo-pixcir-ts.c?h=v6.3-rc1#n162
 
-> >
-> > -Now, some people will claim that having 8-character indentations makes
-> > +Now, some people will claim that viewint 8-character tab indentations makes
->
-> Adding typos doesn't really help either.
-
-Sorry, I clearly had a poor review of the changed text (and I failed to
-setup spell-checking on checkpatch.pl). Yet Bagas did an excellent job
-in the other thread pointing me out all the details I missed. I'll be
-doing a v2 soon!
-
-Best,
-Bru Moreira-Guedes
-they/them
-
-
---vkxuay2ar4gkqjoa
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCZA5KxwAKCRAZtd3tyEY2
-knx6AQC4IrNGSbbmCnvUGreWoxw8zI51sGbmnP5/QW1HhysmvgEA0uRDJ1PFc8lw
-c03rv5iS2gh053jNGIjb8lvOM+2O3gM=
-=5Q7e
------END PGP SIGNATURE-----
-
---vkxuay2ar4gkqjoa--
+> - Markuss
+Thanks,
+Joel
