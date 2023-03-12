@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A82DC6B63E1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 09:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 326296B63E5
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 10:04:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCLI6k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 04:58:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
+        id S229528AbjCLJES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 05:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCLI6j (ORCPT
+        with ESMTP id S229437AbjCLJEQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 04:58:39 -0400
-Received: from nbd.name (nbd.name [46.4.11.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD83A25E0F;
-        Sun, 12 Mar 2023 00:58:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=nbd.name;
-        s=20160729; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:Subject:From
-        :References:Cc:To:MIME-Version:Date:Message-ID:Sender:Reply-To:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=T1s9MEoNJxbmqXeBcJiadA+hN4toXj4XR7QKtfAnZFI=; b=fxFTupKXuWutLJ4pxsTAGSRpgg
-        KMmnwJQvEEmzmN2WHYUHqbeeiDzW+XMPeFgStAGVDstLf+bXOJKTDW2SWcSkXXodK6iQvLJ2Ez4Pq
-        QfXn/WAg5Ttf234EJlmiIlYTlbY1yjxCTIhTie9IxHt2AnPnMCm0RNgIzJO+5J5koa8U=;
-Received: from p54ae9730.dip0.t-ipconnect.de ([84.174.151.48] helo=nf.local)
-        by ds12 with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.94.2)
-        (envelope-from <nbd@nbd.name>)
-        id 1pbHX6-000pSo-Do; Sun, 12 Mar 2023 09:58:24 +0100
-Message-ID: <a917ba35-bba4-9741-b7d4-c6ec4dfec4a0@nbd.name>
-Date:   Sun, 12 Mar 2023 09:58:23 +0100
+        Sun, 12 Mar 2023 05:04:16 -0400
+Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0044F38B67;
+        Sun, 12 Mar 2023 01:04:14 -0800 (PST)
+Received: by mail-wm1-x32d.google.com with SMTP id l7-20020a05600c1d0700b003eb5e6d906bso5975172wms.5;
+        Sun, 12 Mar 2023 01:04:14 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678611853;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=Pc80kOGlqxH4dxS+XiPVwGBzRY6XRSb/pMTBjXDBKDE=;
+        b=C3cg//7XD2AcK5g+5oCgxoHKpG4SvHhXCR6v3qVBpiEF+WUBvq8ZZ5tLZALnAauFJj
+         rEjcj8NQdRwYA4ux+JtDErrDB5Nzgzw/AjFO7u0h0p6bfBrcaoPow6njYj1Dpibayb5/
+         rgQXZOJX2QpGVTOFfuhNc4VViO3V+jQGWDutKXSO3z29+LOIX7NHJe8BgWUeV0Qk+DSk
+         mMlP6cSn2QTc59qxxyX991VOGeYMydMOolYIb9WD2htJwDY+uEmUa0Eg8folOgr2R58c
+         RDylORvHuf3pHLcGdHNCl4UQ7gXNtsoP/5FQmSl+eZlfQ7tij9W7fxrqeMU92uRl/3o4
+         YRng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678611853;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Pc80kOGlqxH4dxS+XiPVwGBzRY6XRSb/pMTBjXDBKDE=;
+        b=E5osqA3tpkPOBbBiKi9e9UEKj7Oyvb5Y0D1yPTG76rQU26E0W3elcq0JHsbkXJiFID
+         W4Ns/CqMaZYP4r7cxTfRkuF5YCjEpXZR+XMAj1I9vxY4iPRpWy21jH4tFyjnsDSNYzpb
+         SuP+o2Kcs1T7oEmqHJoMYqTy5y2vMNzCapSC/EsuTXHRQJ0HhkXy+J2Fxe9NQjxtFonY
+         b8D27lEOWlbHmd4WP3w+YypNCuzW1L2LAJv5M+TRbk+i0k76Iqeof6tnl8MYmVbzPDSH
+         w7J6t3zppfBUxEfwfoHzh3/HKAF2XD5XSDccix2WmRvfm98MAKBJygcYOiFgjhYY5wg8
+         ANKg==
+X-Gm-Message-State: AO0yUKVMpYxBRsBMMpws+Nh4EwAV4DD1v/IVyt/1yAprLz2j19eElSne
+        VE20AZYzHcBOVTyQqDYFeQA=
+X-Google-Smtp-Source: AK7set+ky1MP5G4zegthCZnFjMiOBM5971of0IvZsyf8jSOYuUK5Q1+66wGmT3hiJ3eY3UnFWhYJRw==
+X-Received: by 2002:a05:600c:1d02:b0:3e9:c2f4:8ad4 with SMTP id l2-20020a05600c1d0200b003e9c2f48ad4mr7065700wms.8.1678611853347;
+        Sun, 12 Mar 2023 01:04:13 -0800 (PST)
+Received: from ?IPv6:2a02:168:6806:0:b020:289a:731d:fbb8? ([2a02:168:6806:0:b020:289a:731d:fbb8])
+        by smtp.gmail.com with ESMTPSA id p23-20020a1c7417000000b003e11f280b8bsm5233062wmc.44.2023.03.12.01.04.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 01:04:12 -0800 (PST)
+Message-ID: <0a1ec04fe494fcd8c68d03e4f544d7162c0e4f39.camel@gmail.com>
+Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
+ capabilities for C22 and C45
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Date:   Sun, 12 Mar 2023 10:04:11 +0100
+In-Reply-To: <29ee3cc4-a1d6-4a07-8d90-4b2f26059e7d@lunn.ch>
+References: <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
+         <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
+         <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
+         <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+         <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
+         <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
+         <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
+         <bff0e542b8c04980e9e3af1d3e6bf739c87eb514.camel@gmail.com>
+         <a57a216d-ff5a-46e6-9780-e53772dcefc8@lunn.ch>
+         <2f64385a350359c5755eb4d2479e2efef7a96216.camel@gmail.com>
+         <29ee3cc4-a1d6-4a07-8d90-4b2f26059e7d@lunn.ch>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-To:     Alexander Wetzel <alexander@wetzel-home.de>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Thomas Mann <rauchwolke@gmx.net>,
-        Stanislaw Gruszka <stf_xl@wp.pl>,
-        Helmut Schaa <helmut.schaa@googlemail.com>,
-        Johannes Berg <johannes.berg@intel.com>
-References: <b8efebc6-4399-d0b8-b2a0-66843314616b@leemhuis.info>
- <5a7cd098-1d83-6297-e802-ce998c8ec116@leemhuis.info>
- <6025e17e-4c29-6d36-6b9c-2fec543b21c4@wetzel-home.de>
- <debc7fe9-204d-63a7-aa61-91b20a46f385@wetzel-home.de>
- <4a02173f-3a60-0a7e-8962-3778e6c55bf3@nbd.name>
- <cfa5cc30-bf5a-bffd-4c2f-eec8a6522dd5@wetzel-home.de>
- <42185fa2-4191-fcf5-9c0f-fd7098bb856b@nbd.name>
- <b4427052-9e94-bce7-b745-2473be5686fa@wetzel-home.de>
- <f00171a1-7f6f-d708-9587-4f176457fdfd@wetzel-home.de>
-Content-Language: en-US
-From:   Felix Fietkau <nbd@nbd.name>
-Subject: Re: [Regression] rt2800usb - Wifi performance issues and connection
- drops
-In-Reply-To: <f00171a1-7f6f-d708-9587-4f176457fdfd@wetzel-home.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11.03.23 22:26, Alexander Wetzel wrote:
-> Serialization helps. A (crude and in multiple ways incorrect) patch
-> preventing two drv_wake_tx_queue() running for the same ac fixed the
-> issue for Thomas:
-> https://bugzilla.kernel.org/show_bug.cgi?id=217119#c20
-> 
-> So it looks like we'll now have soon a fix for the issue.
-> 
-> The driver wakes the queue for IEEE80211_AC_BE often for only a single
-> skb and then stops it again.
-> The short run time is insufficient for wake_txqs_tasklet to proper wake
-> all queues itself and from time to time a new TX operation squeezes in
-> after IEEE80211_AC_BE has been unblocked but prior of drv_wake_tx_queue
-> being called from the wake_txqs_tasklet. When this happens
-> drv_wake_tx_queue is called two times: Once from the tasklet, once from
-> the userspace.
-> 
-> ieee80211_handle_wake_tx_queue is using ieee80211_txq_schedule_start,
-> which has this documented requirement:
-> "The driver must not call multiple TXQ scheduling rounds concurrently."
-> Now I don't think that is causing the reported regression. Nevertheless
-> we should prevent concurrent calls of ieee80211_handle_wake_tx_queue for
-> that reason alone.
-> 
-> The real reason of the hangs is probably in the rt2800usb driver or
-> hardware. I don't see anything in the driver code, so probably the HW
-> itself has a problem with the two near-concurrent TX operations.
-> 
-> The real culprit of the regression should be commit a790cc3a4fad ("wifi:
-> mac80211: add wake_tx_queue callback to drivers"), which switched
-> rt2800usb over to iTXQs. But without the fix from commit 4444bc2116ae
-> ("wifi: mac80211: Proper mark iTXQs for resumption") mac80211 omitted to
-> schedule the required run of the wake_txqs_tasklet. Thus thus instead of
-> two concurrent drv_wake_tx_queue we only got one and the driver
-> continued to work.
-> 
-> I asked Thomas on bugzilla to test the "best" solution I came up with.
-> 
-> There seems to be multiple ways. But I can't find a simple, low risk and
-> complete fix. So I compromised...
-> 
-> When Thomas can confirm the fix we can soon discuss the fix on
-> linux-wireless.
+On Sun, 2023-03-12 at 03:53 +0100, Andrew Lunn wrote:
+> >=20
+> > What you are proposing here would not show any improvement on the
+> > Omnia, as only the 6 ports would be scanned - right?=20
+>=20
+> Correct. But their also should not of been any noticeable slow down,
+> because there should not be any additional scanning when everything is
+> described in DT. And the move of the MDIO bus registration from probe
+> to setup should actually make it faster than before.
+>=20
 
-I would recommend the following approach for properly fixing this issue:
+But then, why *do* I see such a big difference on the Omnia?
 
-On init if the .wake_tx_queue op is set to 
-ieee80211_handle_wake_tx_queue, create a single kthread that iterates 
-over all hw queues and schedules each one of them like 
-ieee80211_handle_wake_tx_queue does now.
-Change ieee80211_handle_wake_tx_queue to simply schedule the kthread 
-without doing anything else.
-This is how mt76 handles tx scheduling in the driver, and it works quite 
-well.
+mdiobus_scan_bus_c45() takes:
+~2.7 seconds without phy_mask patch
+~0.2 seconds with phy_mask patch
 
-- Felix
+(It's not a big deal, but somehow strange)
+
+Regards, Klaus
+
+
+PS: There was another open question: How long does the first
+unsuccessful mv88e6xxx_probe() take, when calling
+mv88e6xxx_mdios_register() from mv88e6xxx_setup()?
+
+I would say "negligible":
+
+[    0.194414] mv88e6085 f1072004.mdio-mii:10: *** mv88e6xxx_probe call ***
+[    0.194739] mv88e6085 f1072004.mdio-mii:10: switch 0x1760 detected: Marv=
+ell 88E6176, revision 1
+[    0.208163] mv88e6085 f1072004.mdio-mii:10: *** mv88e6xxx_probe return -=
+517 ***
+
