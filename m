@@ -2,124 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B976B63CF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 09:07:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D12B6B63D3
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 09:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229600AbjCLIHX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 04:07:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42508 "EHLO
+        id S229609AbjCLIKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 04:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCLIHV (ORCPT
+        with ESMTP id S229469AbjCLIKy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 04:07:21 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F4785552A;
-        Sun, 12 Mar 2023 00:07:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678608439; x=1710144439;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=YmPy1TGrnZZKXeOcBlADYDdV8fSPWUUk6Ex8sYrXxqI=;
-  b=JNPg1OyKhUZ8Rb20FG9EEvlHjlCSlKaeoW+/P0+m5lt1jnO02OE8fNQJ
-   jVAF7hiDOOSnAUfUToDqTyeA+LxY3/WYYtMupl6ZdTsifNGi8bNxAnwYD
-   ewMfpx4JkbCPOiEifzcSx6Difko2P2YZLDNfamjKF3HAXw1moSBFIFyye
-   zwD3g+knCRsGn8NpavShc3FWQY3HDKKUzeJNwISg24OgHgHD+B09cUplw
-   JfGe4sJHbkHp/mq5nUsKp9MLiC+/o3iiHCnCrJZlPeUeEN97d3K+JTGrY
-   rZoE9ysoVbDIzokHPH8vgmh7DZ/FLKzQyYTwz0ClH4/C2Fs+Od1f2hi5k
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="364628158"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="364628158"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 00:07:19 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628285419"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="628285419"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 12 Mar 2023 00:07:17 -0800
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pbGjc-00057l-1E;
-        Sun, 12 Mar 2023 08:07:16 +0000
-Date:   Sun, 12 Mar 2023 16:06:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        lpieralisi@kernel.org, kw@linux.com
-Cc:     oe-kbuild-all@lists.linux.dev, kishon@kernel.org,
-        bhelgaas@google.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: Re: [PATCH v2 1/7] PCI: endpoint: Pass EPF device ID to the probe
- function
-Message-ID: <202303121526.qVIG9eBb-lkp@intel.com>
-References: <20230307151416.176595-2-manivannan.sadhasivam@linaro.org>
+        Sun, 12 Mar 2023 04:10:54 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7609457D0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 00:10:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678608604;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=wJAgYUosYoqDCfWrXcT8rQOHhqo41K/Tpr4p5XcYly8=;
+        b=JO6KubcWB0D0tpivYOZMMtMPM9L51COFsskG+MOuVpPVuDkBzO635nGTYqFfmLOxvYb8Y7
+        ev/PPHT45V+VVpcoyBwJgc5NI883KLLToXMamEGIf9df2+0yKiBMJRHq741ipPm+lPVurt
+        w1gqR8R0TVAL1DQJcAfprrORQGxqOSw=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-447-V4F0EYN3PhS2cNH4jc19xg-1; Sun, 12 Mar 2023 04:10:01 -0400
+X-MC-Unique: V4F0EYN3PhS2cNH4jc19xg-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 93498802D2A;
+        Sun, 12 Mar 2023 08:10:00 +0000 (UTC)
+Received: from ypodemsk.tlv.csb (unknown [10.39.192.10])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 6EA47140EBF4;
+        Sun, 12 Mar 2023 08:09:57 +0000 (UTC)
+From:   Yair Podemsky <ypodemsk@redhat.com>
+To:     will@kernel.org, aneesh.kumar@linux.ibm.com,
+        akpm@linux-foundation.org, npiggin@gmail.com, peterz@infradead.org,
+        arnd@arndb.de, linux-arch@vger.kernel.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, mtosatti@redhat.com,
+        ppandit@redhat.com, alougovs@redhat.com
+Cc:     ypodemsk@redhat.com, David Hildenbrand <david@redhat.com>
+Subject: [PATCH] mm/mmu_gather: send tlb_remove_table_smp_sync IPI only to MM CPUs
+Date:   Sun, 12 Mar 2023 10:09:45 +0200
+Message-Id: <20230312080945.14171-1-ypodemsk@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307151416.176595-2-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Manivannan,
+Currently the tlb_remove_table_smp_sync IPI is sent to all CPUs
+indiscriminately, this causes unnecessary work and delays notable in
+real-time use-cases and isolated cpus, this patch will limit this IPI to
+only be sent to cpus referencing the effected mm and are currently in
+kernel space.
 
-I love your patch! Yet something to improve:
+Signed-off-by: Yair Podemsky <ypodemsk@redhat.com>
+Suggested-by: David Hildenbrand <david@redhat.com>
+---
+ include/asm-generic/tlb.h |  4 ++--
+ mm/khugepaged.c           |  4 ++--
+ mm/mmu_gather.c           | 20 +++++++++++++++-----
+ 3 files changed, 19 insertions(+), 9 deletions(-)
 
-[auto build test ERROR on pci/next]
-[also build test ERROR on pci/for-linus jonmason-ntb/ntb-next linus/master v6.3-rc1 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Manivannan-Sadhasivam/PCI-endpoint-Pass-EPF-device-ID-to-the-probe-function/20230307-232050
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git next
-patch link:    https://lore.kernel.org/r/20230307151416.176595-2-manivannan.sadhasivam%40linaro.org
-patch subject: [PATCH v2 1/7] PCI: endpoint: Pass EPF device ID to the probe function
-config: x86_64-randconfig-a016-20220905 (https://download.01.org/0day-ci/archive/20230312/202303121526.qVIG9eBb-lkp@intel.com/config)
-compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-reproduce (this is a W=1 build):
-        # https://github.com/intel-lab-lkp/linux/commit/26f2c0c8a0b85aceb28bc5688851fab125a55ac6
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Manivannan-Sadhasivam/PCI-endpoint-Pass-EPF-device-ID-to-the-probe-function/20230307-232050
-        git checkout 26f2c0c8a0b85aceb28bc5688851fab125a55ac6
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        make W=1 O=build_dir ARCH=x86_64 olddefconfig
-        make W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303121526.qVIG9eBb-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/pci/endpoint/functions/pci-epf-vntb.c:1433:27: error: initialization of 'int (*)(struct pci_epf *, const struct pci_epf_device_id *)' from incompatible pointer type 'int (*)(struct pci_epf *)' [-Werror=incompatible-pointer-types]
-    1433 |         .probe          = epf_ntb_probe,
-         |                           ^~~~~~~~~~~~~
-   drivers/pci/endpoint/functions/pci-epf-vntb.c:1433:27: note: (near initialization for 'epf_ntb_driver.probe')
-   cc1: some warnings being treated as errors
-
-
-vim +1433 drivers/pci/endpoint/functions/pci-epf-vntb.c
-
-e35f56bb03304a Frank Li 2022-02-22  1430  
-e35f56bb03304a Frank Li 2022-02-22  1431  static struct pci_epf_driver epf_ntb_driver = {
-e35f56bb03304a Frank Li 2022-02-22  1432  	.driver.name    = "pci_epf_vntb",
-e35f56bb03304a Frank Li 2022-02-22 @1433  	.probe          = epf_ntb_probe,
-e35f56bb03304a Frank Li 2022-02-22  1434  	.id_table       = epf_ntb_ids,
-e35f56bb03304a Frank Li 2022-02-22  1435  	.ops            = &epf_ntb_ops,
-e35f56bb03304a Frank Li 2022-02-22  1436  	.owner          = THIS_MODULE,
-e35f56bb03304a Frank Li 2022-02-22  1437  };
-e35f56bb03304a Frank Li 2022-02-22  1438  
-
+diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+index b46617207c93..0b6ba17cc8d3 100644
+--- a/include/asm-generic/tlb.h
++++ b/include/asm-generic/tlb.h
+@@ -222,7 +222,7 @@ extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+ #define tlb_needs_table_invalidate() (true)
+ #endif
+ 
+-void tlb_remove_table_sync_one(void);
++void tlb_remove_table_sync_one(struct mm_struct *mm);
+ 
+ #else
+ 
+@@ -230,7 +230,7 @@ void tlb_remove_table_sync_one(void);
+ #error tlb_needs_table_invalidate() requires MMU_GATHER_RCU_TABLE_FREE
+ #endif
+ 
+-static inline void tlb_remove_table_sync_one(void) { }
++static inline void tlb_remove_table_sync_one(struct mm_struct *mm) { }
+ 
+ #endif /* CONFIG_MMU_GATHER_RCU_TABLE_FREE */
+ 
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index 5cb401aa2b9d..86a82c0ac41f 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -1051,7 +1051,7 @@ static int collapse_huge_page(struct mm_struct *mm, unsigned long address,
+ 	_pmd = pmdp_collapse_flush(vma, address, pmd);
+ 	spin_unlock(pmd_ptl);
+ 	mmu_notifier_invalidate_range_end(&range);
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 
+ 	spin_lock(pte_ptl);
+ 	result =  __collapse_huge_page_isolate(vma, address, pte, cc,
+@@ -1408,7 +1408,7 @@ static void collapse_and_free_pmd(struct mm_struct *mm, struct vm_area_struct *v
+ 				addr + HPAGE_PMD_SIZE);
+ 	mmu_notifier_invalidate_range_start(&range);
+ 	pmd = pmdp_collapse_flush(vma, addr, pmdp);
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 	mmu_notifier_invalidate_range_end(&range);
+ 	mm_dec_nr_ptes(mm);
+ 	page_table_check_pte_clear_range(mm, addr, pmd);
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 2b93cf6ac9ae..3b267600a5e9 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -9,6 +9,7 @@
+ #include <linux/smp.h>
+ #include <linux/swap.h>
+ #include <linux/rmap.h>
++#include <linux/context_tracking_state.h>
+ 
+ #include <asm/pgalloc.h>
+ #include <asm/tlb.h>
+@@ -191,7 +192,15 @@ static void tlb_remove_table_smp_sync(void *arg)
+ 	/* Simply deliver the interrupt */
+ }
+ 
+-void tlb_remove_table_sync_one(void)
++static bool cpu_in_kernel(int cpu, void *info)
++{
++	struct context_tracking *ct = per_cpu_ptr(&context_tracking, cpu);
++	int statue = atomic_read(&ct->state);
++	//will return true only for cpu's in kernel space
++	return !(statue & CT_STATE_MASK);
++}
++
++void tlb_remove_table_sync_one(struct mm_struct *mm)
+ {
+ 	/*
+ 	 * This isn't an RCU grace period and hence the page-tables cannot be
+@@ -200,7 +209,8 @@ void tlb_remove_table_sync_one(void)
+ 	 * It is however sufficient for software page-table walkers that rely on
+ 	 * IRQ disabling.
+ 	 */
+-	smp_call_function(tlb_remove_table_smp_sync, NULL, 1);
++	on_each_cpu_cond_mask(cpu_in_kernel, tlb_remove_table_smp_sync,
++			NULL, true, mm_cpumask(mm));
+ }
+ 
+ static void tlb_remove_table_rcu(struct rcu_head *head)
+@@ -237,9 +247,9 @@ static inline void tlb_table_invalidate(struct mmu_gather *tlb)
+ 	}
+ }
+ 
+-static void tlb_remove_table_one(void *table)
++static void tlb_remove_table_one(struct mm_struct *mm, void *table)
+ {
+-	tlb_remove_table_sync_one();
++	tlb_remove_table_sync_one(mm);
+ 	__tlb_remove_table(table);
+ }
+ 
+@@ -262,7 +272,7 @@ void tlb_remove_table(struct mmu_gather *tlb, void *table)
+ 		*batch = (struct mmu_table_batch *)__get_free_page(GFP_NOWAIT | __GFP_NOWARN);
+ 		if (*batch == NULL) {
+ 			tlb_table_invalidate(tlb);
+-			tlb_remove_table_one(table);
++			tlb_remove_table_one(tlb->mm, table);
+ 			return;
+ 		}
+ 		(*batch)->nr = 0;
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+2.31.1
+
