@@ -2,151 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41A486B6A5D
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5B516B6A17
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230188AbjCLS6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
+        id S229756AbjCLS3m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:29:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCLS6p (ORCPT
+        with ESMTP id S230238AbjCLS3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:58:45 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1505E222D1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:58:42 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        id 1pbQDU-0000Yt-Et; Sun, 12 Mar 2023 19:14:44 +0100
-From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Subject: Linux regressions report  for mainline [2023-03-12]
-Date:   Sun, 12 Mar 2023 18:14:40 +0000
-Message-Id: <167864480635.3972286.12282059674664387990@leemhuis.info>
-X-Mailer: git-send-email 2.39.2
-Content-Type: text/plain; charset="utf-8"
+        Sun, 12 Mar 2023 14:29:23 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A775BC8D
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:24:19 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53d277c1834so201663407b3.10
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:24:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678645365;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/wfw0Iou++3C7iUKYkrNdPM4+v/VqBNAAE+U9Nr7WdE=;
+        b=KMrdFqbhwHAFL5M7zKYcMTVYiyHgZlxzXMkh+h5xlV96p73JAdDc8KItdU99J73s1h
+         w24tH4UrF+0bciTf2SAbSghDfsAyhsOQOGaWu7Jdd1ODJksjNKEz7ZXYXT8u5Qg00FtV
+         hW6W5HMjQe6650mDqj+axmYvWICwKwnrYI+6obhHW5vcW1L7HUEB8Xrapc6tLjb+O1Xf
+         LU8sKhw4P338JjMOy993gq3CgEjvys0LIc8TPqm8Twnc0CDszbWWUPq5PqgSkeChoWP0
+         LYp9r/awpn1wVBwurfax8i4nnEBQmlp39OX7rVgXewAZ6JeBP36u8SuvTQ0dL70fPrp3
+         xX8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678645365;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/wfw0Iou++3C7iUKYkrNdPM4+v/VqBNAAE+U9Nr7WdE=;
+        b=BKin6YsPPADh5Jhc4dqVsQtm8/cEMyuwRDeotrWgx8DAoSlnFgF3cW2bQv+2HZqYFs
+         5LVHm2yd0/6kMzQ371NFztymNNu7JElok/ObLOUkx0bsZNjXxF1KBIv71TvrIgpJkWbk
+         EFEiLXrsGaU/WBPQdpJdZnQQlhL7aW2VITN+fYrY9p2VjFytdNsYYtwt+eVGP5MKEdHG
+         d66CZBq3eZWwLsDSbyvKAE2lnKRZvw2NCntG1kF7GHcHNnqMc46qd2I6bQG8zLyTlJT6
+         SBRhAeZtj3yWQy0pLG8JpEB3mZM8E7f/eLnOzaj890UaprVXY+/SlBXkSkIH5CTfAGEU
+         33Jg==
+X-Gm-Message-State: AO0yUKVM5mdaPQpX2BXyTZmi6k8DNhdtpbwqlqlspGZhL7jQPW8Nfn+i
+        9BpFcRetB/LxKCGQwX6TslFpd3ORU8PisgzFwzu6ogbnFmc=
+X-Google-Smtp-Source: AK7set+X75UgYxIhmzYfG/tdBM9xIWaVnEfdjrTwspuB7fkhMSTTd3VyRzSfVln6cp88PBUq2nXAlBA4xM5p/yaC6mE=
+X-Received: by 2002:a81:b646:0:b0:541:a0cf:71c9 with SMTP id
+ h6-20020a81b646000000b00541a0cf71c9mr628936ywk.7.1678645365170; Sun, 12 Mar
+ 2023 11:22:45 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678647523;36a6f97e;
-X-HE-SMSGID: 1pbQDU-0000Yt-Et
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+In-Reply-To: <ZA0FEyOtRBvpIXbi@bombadil.infradead.org>
+From:   Eric Van Hensbergen <ericvh@gmail.com>
+Date:   Sun, 12 Mar 2023 13:22:34 -0500
+Message-ID: <CAFkjPTmVbyuA0jEAjYhsOsg-SE99yXgehmjqUZb4_uWS_L-ZTQ@mail.gmail.com>
+Subject: Re: 9p caching with cache=loose and cache=fscache
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     lucho@ionkov.net, asmadeus@codewreck.org,
+        v9fs-developer@lists.sourceforge.net, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus. The list of tracked regressions is still quite short.
+I was looking at kdevops the other day - cool stuff.  Was trying to
+figure out how we could do v9fs CI with it.
 
-Seems quite a few people have run into an issue Hector reported on
-Saturday: WPA auth is entirely broken on brcmfmac in mainline and some
-stable trees, as the culprit was already backported. He submitted a
-partial revert here:
-https://lore.kernel.org/all/20230311141914.24444-1-marcan@marcan.st/
+Both cache=3Dloose and cache=3Dfscache currently don't validate via host.
+I have a patch series which adds some new cache modes (readahead and
+writeback) that give closer to the loose performance but with tighter
+consistency (open-to-close) - these patches are in my ericvh/for-next
+tree.  I've also started on some patches to add cache=3Dtight which will
+do dir caching like loose but with validation, and potentially also
+will add a new flag that will indicate how often loose should
+revalidate.  There is also some discussion of decoupling fscache from
+the revalidation policy.
 
-Fixes for two build problems Guenter reported are floating around, but
-haven't reached you yet.
+So the stuff in for-next will make it into the next kernel, there is a
+writeback fix patch that still has some bugs when cache=3Dfscache that
+I'm working through, but the base patches add the new cache modes.
+The new dir cache along with tight policy will hopefully get done in
+the next month and so should be ready for next merge window as well.
 
-The fix for the TPM regression (which made a HW/firmware issue happen
-more freqently) from the 6.1 cycle (
-https://lore.kernel.org/all/20230228024439.27156-1-mario.limonciello@amd.com/
-) is still not mainlined, but after a recent discussion (I CCed you
-recently) it should hopefully reach you soon now.
+       -eric
 
-Ciao, Thorsten
-
----
-
-Hi, this is regzbot, the Linux kernel regression tracking bot.
-
-Currently I'm aware of 3 regressions in linux-mainline. Find the
-current status below and the latest on the web:
-
-https://linux-regtracking.leemhuis.info/regzbot/mainline/
-
-Bye bye, hope to see you soon for the next report.
-   Regzbot (on behalf of Thorsten Leemhuis)
-
-
-======================================================
-current cycle (v6.2.. aka v6.3-rc), culprit identified
-======================================================
-
-
-Build failures for sparc64:allmodconfig and parisc:allmodconfig with gcc 11.x+
-------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20230222025918.GA1651385@roeck-us.net/
-https://lore.kernel.org/linux-btrfs/20230222025918.GA1651385@roeck-us.net/
-
-By Guenter Roeck; 18 days ago; 5 activities, latest 0 days ago.
-Introduced in 1ec49744ba83 (v6.3-rc1)
-
-Fix incoming:
-* btrfs: fix compilation error on sparc/parisc
-  https://lore.kernel.org/linux-btrfs/caed9824-c05d-19a9-d321-edefab17c4f0@roeck-us.net/
-
-
-Build error in drivers/media/i2c/imx290.c if PM support is disabled
--------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/20230227175245.GA3728693@roeck-us.net/
-https://lore.kernel.org/linux-media/20230227175245.GA3728693@roeck-us.net/
-
-By Guenter Roeck; 13 days ago; 4 activities, latest 0 days ago.
-Introduced in 02852c01f654 (v6.3-rc1)
-
-Fix incoming:
-* media: i2c: imx290: fix conditional function defintions
-  https://lore.kernel.org/linux-media/79488ad7-5709-235b-14b4-1518e989c7a3@leemhuis.info/
-
-
-[ *NEW* ] Patch broke WPA auth: Re: [PATCH v2] wifi: cfg80211: Fix use after free for wext
-------------------------------------------------------------------------------------------
-https://linux-regtracking.leemhuis.info/regzbot/regression/d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st/
-https://lore.kernel.org/lkml/d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st/
-
-By Hector Martin; 1 days ago; 13 activities, latest 1 days ago.
-Introduced in 015b8cc5e7c4 (v6.3-rc1)
-
-Recent activities from: Hector Martin (3), Alexander Wetzel (3), Eric
-  Curtin (1), Janne Grunau (1), Joan Bruguera (1), Greg Kroah-
-  Hartman (1), Hans de Goede (1)
-
-One patch associated with this regression:
-* [PATCH] wifi: cfg80211: Partial revert "wifi: cfg80211: Fix use after free for wext"
-  https://lore.kernel.org/lkml/20230311141914.24444-1-marcan@marcan.st/
-  1 days ago, by Hector Martin
-
-=============
-End of report
-=============
-
-All regressions marked '[ *NEW* ]' were added since the previous report,
-which can be found here:
-https://lore.kernel.org/r/167802672375.3551148.2619236429318783591@leemhuis.info
-
-Thanks for your attention, have a nice day!
-
-  Regzbot, your hard working Linux kernel regression tracking robot
-
-
-P.S.: Wanna know more about regzbot or how to use it to track regressions
-for your subsystem? Then check out the getting started guide or the
-reference documentation:
-
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
-https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
-
-The short version: if you see a regression report you want to see
-tracked, just send a reply to the report where you Cc
-regressions@lists.linux.dev with a line like this:
-
-#regzbot introduced: v5.13..v5.14-rc1
-
-If you want to fix a tracked regression, just do what is expected
-anyway: add a 'Link:' tag with the url to the report, e.g.:
-
-Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
+On Sat, Mar 11, 2023 at 4:47=E2=80=AFPM Luis Chamberlain <mcgrof@kernel.org=
+> wrote:
+>
+> We've embraced 9p on kdevops [0] for support to let a guest use a host's
+> path to install Linux. This works well except I notice that if the host
+> makes new changes the guest does not see it. This just means the guest
+> has to reboot every time before running 'make modules_install install -j =
+8'
+> and it is unexpected and not user friendly.
+>
+> I wanted to see if someone was working on fixing this yet. I've tested
+> with both cache=3Dloose and cache=3Dfscache. We use msize 131072, no
+> security and virtio-9p-pci.
+>
+> [0] https://github.com/linux-kdevops/kdevops
+>
+>   Luis
