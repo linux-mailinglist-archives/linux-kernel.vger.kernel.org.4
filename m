@@ -2,107 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 033756B67A4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:48:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AC76B67A9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:49:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCLPs3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 11:48:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S229673AbjCLPtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 11:49:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35774 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjCLPsZ (ORCPT
+        with ESMTP id S229915AbjCLPtW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 11:48:25 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69A3725BAF;
-        Sun, 12 Mar 2023 08:48:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0509B60F58;
-        Sun, 12 Mar 2023 15:48:24 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C424FC433EF;
-        Sun, 12 Mar 2023 15:48:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678636103;
-        bh=4ynmKhUuAz2hKEQnzcy3cI03Bw/bBNkKxDA10z/i6GE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=IRyP/4Fr7CG4bgXsA10QTpWdxlJ9mfNajsT/0z4fDg8zLHnJYYeS8Xbu/9rcPTyI+
-         jRtHR1lyk4O8gwyRmOvILlmQm4/Sg1K6CKci0iFpMl7kgI8btkT1adOA0YQms1FQis
-         9+g5ErTArvs+c2r4UHrsB1ql4fl71HJ8UcbD2SS85d7V74SOrrghVs7roSJE5S1j8/
-         dusOXxwx5D84Ltk3xYN0vhqUxVGhY94SMLhYSSty5og9eahgg0I0HctCYmCt+N8C+W
-         20D5bDMOWlTuMAq6plbVuf4v4JQq1RU7CWYgyuksJqJzpyAG3GY7M/HFO3nr6vJVdi
-         v9QQ75tvr80GA==
-Date:   Sun, 12 Mar 2023 15:48:28 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>
-Subject: Re: [PATCH v2 0/2] iio: ad74413r: allow setting sink current for
- digital input
-Message-ID: <20230312154828.36b8e86b@jic23-huawei>
-In-Reply-To: <20230306094301.1357543-1-linux@rasmusvillemoes.dk>
-References: <20230302134922.1120217-1-linux@rasmusvillemoes.dk>
-        <20230306094301.1357543-1-linux@rasmusvillemoes.dk>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sun, 12 Mar 2023 11:49:22 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CBE38B41
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 08:49:20 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id s11so39328031edy.8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 08:49:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678636159;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ze1sZZfvq/o3HPIuxYy3C9whN6R344n7Jno797TGzZw=;
+        b=EdYr9Y2NNVd69Fe8ci4f1VHqYC77SF2qg/Jlybb2r7i6w9HWYRoDi3prZL6yLzRE8u
+         zz4EZEEKzCvM+/kerG/cumr0hQs1hEkBBJfXfmXEHrJcbgUSf0l6lOTBudAG5Yudq1yZ
+         z8l3mKtb5w+NwMPXFKZFOUwcy5qycSIyK99s+zo53XoIsl11nUwotJQD1cnHHCMN65VX
+         mrSTQtqAhT3YNU207Oh300USWGnoSu7eIEWeCVS1XPVnZpn97/2h3MGCTOHD+NK4YV/y
+         7zlveTFIHrRgwdp8tjAsvJyuxn666YWoURqbrrKWMnipMpxHOLkh1EeqG4Mcbna4v/uz
+         5l3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678636159;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ze1sZZfvq/o3HPIuxYy3C9whN6R344n7Jno797TGzZw=;
+        b=4C8+nA40Q+VfclxpDIGi702K2PF3jQJY7P5dw6Dvld4jt48D//+FSDuASxmP0zVMj/
+         ldTHC4yDotcqYUmTJ6NEKeZRfRgcSvXwtfha9q9LcwGX/GyMSSQYXVDPwzVli6U/H2Pz
+         HS0TorfIsG7CLaKSlhfJnup8dXEQg999xrwZhrOY91gz0KmeUslBvn5eOyam2DVg/bwl
+         gNPuf+haDKNwS5eyInnxRZe7dWllojqyHh1kVLMJayd9mhUlh3SpAv9d9y547i0Lo9Ar
+         dZpytVKIPDDEojG6tRKeJIyXUWkvLA4BTVmJFR4gJr1tH9Xkah6Irk4hCdQti8I4Xcef
+         mqTg==
+X-Gm-Message-State: AO0yUKVn8vhiiJeQAaLxI4lW9UhoN9xIOwo4+87Am3avM5XRMTjxjgvw
+        JcEO7O97+TDIipj4AtMjLIfRqw==
+X-Google-Smtp-Source: AK7set8udaJr3jonmmaxfmotBUdoyBVYzuKxMre3xI0ZisJg58IQP/BbH1HtpCaF3M/edo7bzjfXEg==
+X-Received: by 2002:a17:907:2ceb:b0:88a:8e57:f063 with SMTP id hz11-20020a1709072ceb00b0088a8e57f063mr27906362ejc.62.1678636159425;
+        Sun, 12 Mar 2023 08:49:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id pk10-20020a170906d7aa00b008d1693c212csm2349659ejb.8.2023.03.12.08.49.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 08:49:19 -0700 (PDT)
+Message-ID: <be1eea98-ee16-751d-b833-72a8a667b553@linaro.org>
+Date:   Sun, 12 Mar 2023 16:49:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V3 4/6] hte: Add Tegra234 provider
+Content-Language: en-US
+To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+References: <20230310190634.5053-1-dipenp@nvidia.com>
+ <20230310190634.5053-5-dipenp@nvidia.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230310190634.5053-5-dipenp@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon,  6 Mar 2023 10:42:59 +0100
-Rasmus Villemoes <linux@rasmusvillemoes.dk> wrote:
+On 10/03/2023 20:06, Dipen Patel wrote:
+> This patch adds HTE provider support for the Tegra234 and reflects the
+> changes made in the device tree as follow.
+> - Add slices field in the SoC specific structure
+> - Remove gpio chip find by name function instead make use of the phandle
+> parsed from the DT node
+> 
+> Signed-off-by: Dipen Patel <dipenp@nvidia.com>
 
-> Depending on the actual hardware wired up to a digital input channel,
-> it may be necessary to configure the ad74413r to sink a small
-> current. For example, in the case of a simple mechanical switch, the
-> charge on the external 68 nF capacitor (cf. the data sheet's Figure
-> 34) will keep the channel as reading high even after the switch is
-> turned off again.
-> 
-> Add a DT binding and driver support for setting the desired sink current.
-> 
-> I have chosen the term "drive strength" because it matches existing
-> practice, even if this is only a sink. E.g. there's
-> 
->  * @PIN_CONFIG_DRIVE_STRENGTH_UA: the pin will sink or source at most the current
->  *      passed as argument. The argument is in uA.
-> 
-> and indeed it would be trivial to hook up that
-> PIN_CONFIG_DRIVE_STRENGTH_UA in ad74413r_gpio_set_comp_config().
-> 
-> However, unlike the debounce time, there does not appear to be any way
-> to actually tweak the drive strength from userspace, nor do I know if
-> that would actually be a good idea. For our application(s), the
-> current sink needed is a property of the attached hardware, and thus
-> can and should be defined in DT.
-> 
-> v2:
-> - remove redundant type info in binding per Rob's bot
-> - use min() instead of if() in ad74413r_set_comp_drive_strength() per Jonathan
-> 
-> Rasmus Villemoes (2):
->   dt-bindings: iio: ad74413r: allow setting sink current for digital
->     input
->   iio: ad74413r: wire up support for drive-strength-microamp property
-> 
->  .../bindings/iio/addac/adi,ad74413r.yaml      |  9 ++++++++
->  drivers/iio/addac/ad74413r.c                  | 23 +++++++++++++++++++
->  2 files changed, 32 insertions(+)
-> 
-Series applied to the togreg branch of iio.git and pushed out as testing
-for 0-day to take a first look at it.
+(...)
 
-Thanks,
+>  	hte_dev->regs = devm_platform_ioremap_resource(pdev, 0);
+>  	if (IS_ERR(hte_dev->regs))
+>  		return PTR_ERR(hte_dev->regs);
+> @@ -635,8 +750,15 @@ static int tegra_hte_probe(struct platform_device *pdev)
+>  
+>  		gc->match_from_linedata = tegra_hte_match_from_linedata;
+>  
+> -		hte_dev->c = gpiochip_find("tegra194-gpio-aon",
+> -					   tegra_get_gpiochip_from_name);
+> +		gpio_ctrl = of_parse_phandle(dev->of_node,
+> +					     "nvidia,gpio-controller", 0);
+> +		if (!gpio_ctrl) {
+> +			dev_err(dev, "gpio controller node not found\n");
+> +			return -ENODEV;
 
-Jonathan
+This is non-bisectable patchset. Remember that DTS cannot go with the
+code, thus your code should handle existing DTS (which is BTW already
+released with v6.2).
+
+Any remarks to comments that no ABI was broken back then in 2022 are not
+valid now. They were valid that time, but sorry, the time passed.
+
+Best regards,
+Krzysztof
 
