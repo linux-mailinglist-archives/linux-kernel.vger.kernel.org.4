@@ -2,87 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1EA6B6445
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 10:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF3E06B6447
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 10:51:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCLJvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 05:51:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57270 "EHLO
+        id S229814AbjCLJv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 05:51:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLJvh (ORCPT
+        with ESMTP id S229749AbjCLJvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 05:51:37 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93DB52E820;
-        Sun, 12 Mar 2023 01:51:36 -0800 (PST)
-Received: by mail-wm1-x333.google.com with SMTP id bg16-20020a05600c3c9000b003eb34e21bdfso8985304wmb.0;
-        Sun, 12 Mar 2023 01:51:36 -0800 (PST)
+        Sun, 12 Mar 2023 05:51:54 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78C735276;
+        Sun, 12 Mar 2023 01:51:50 -0800 (PST)
+Received: by mail-ed1-x533.google.com with SMTP id da10so37592239edb.3;
+        Sun, 12 Mar 2023 01:51:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678614695;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=xYJHI/EfuMD9TjucsF8nMSkY3NaUSb9pPppxfCuZDtQ=;
-        b=OiBlMquFJnyyh0cAOpI2tT1Me3j63TVo647wS6ZQswQBwnUeQ8LgvVpjlys9jG25og
-         vdv8uSLoo7AUTayhdsyH1O8dgkDZ37x328pHo08RFZ5Xuk/48Rcop4yvzh0A1gy1Txj5
-         EtIVxwohuMaInKlyst/QMyenkSXOSuVw31f7OPghF6U1B0J8u+HLKPplK7EnA0jNDZEw
-         yiUrWFpjtDT+fuQLwUaFWwQBXHuGnrpWPT266/16zOwe4Gj8iDI38YvDWqogbhEyC0f9
-         pcG7CecBK8fm/W49akwnJhN7juow123XP57SY5v3uApZwwOppBnuEImLdsoQ5sCavKSY
-         k0Tg==
+        d=gmail.com; s=20210112; t=1678614709;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=YQkKzx/kuL9LZC9IFcIW6aPhkuKQVK/swufodiKorEE=;
+        b=p9i87XK+5ihyI+SOQ5TawmLD1XGE41DRjRPvqNbKDUs1SDu89ORGc2TUwmlTGbhLj0
+         Z3EtFdI0yzZB9GPTgrSk8g6C11RgSylN7H1OQnBSC9gsXvfAukSbr2pQ/TRrl9gzWJXX
+         cF3V6JbK+eJQdLbMB61w/LEq17P73r3lZbkxXNgdwr6pYLizFoxPHth5XfTmkZzdF+Q+
+         1s//CXA3hePi73U6a1oCUZL+2QvnVo39jT/CMBZBHFXjbFmExeQsGNhPSCUbdXhpSGqj
+         zBBFaBIgjBaxHSywzPtFBqpDeZBhF9ct4lhrfKfNTRIpnZgh575xUwyjhMajlVHlxWNl
+         nESg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678614695;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYJHI/EfuMD9TjucsF8nMSkY3NaUSb9pPppxfCuZDtQ=;
-        b=AIJGNr3fKy7mv27FW+safLY55QzLiqLh8yJyiRvshXp1qFyMt4FRF4Ax8OB7PlMJp1
-         H9GQ+3pokH0aiSQlOX12sSFdMVg7Z64CJRlQVxbL1zKA4k0OR0ekiQTPeJ1X/WlnBBa+
-         4MSMNn8KKDxHRpJLASHNNB2VZCByADJlOPnH7xEzd8qlznoJ1OYqVtZzkj6rXxsS3XWb
-         yOHG2H/OfY2KFFkWY2IZXsYgpRoyt+NtWv3D6zkKI32QLF2YgrV5tcDwPi+tZ0qFonuf
-         tMzcsSCp2R86G/mQ2eBLUGcj4KqFR0te9TqqDjbAcAcuPVKIKA8F3UY1YfWHvjETYBAB
-         crkA==
-X-Gm-Message-State: AO0yUKXKXnFVP5mC7ak2XNlOnSc0LKoMy6Zgv3Q+rZhwJ9IX5IwO/a8P
-        XAX508tASAbgtTFcSmcHDXE=
-X-Google-Smtp-Source: AK7set8I3/sMJfHoJWj4ZIL2psjhEh4qxAjjoLRfwfTwFlR33kxlCpaOUoNVNDvt8zsUZAGLuExwBQ==
-X-Received: by 2002:a05:600c:45d2:b0:3ed:1fa1:73c5 with SMTP id s18-20020a05600c45d200b003ed1fa173c5mr1583270wmo.27.1678614694886;
-        Sun, 12 Mar 2023 01:51:34 -0800 (PST)
-Received: from kernel.org ([46.120.23.99])
-        by smtp.gmail.com with ESMTPSA id hn4-20020a05600ca38400b003dc1d668866sm5407218wmb.10.2023.03.12.01.51.32
+        d=1e100.net; s=20210112; t=1678614709;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YQkKzx/kuL9LZC9IFcIW6aPhkuKQVK/swufodiKorEE=;
+        b=0momoc3QlgUKNtUq1oPZan2abUk6HMg+49thxw80/Q57VKSSvasnY+CvuLLhqso/uI
+         LL4RqE8VEP4eldklb5EF03zWDIiSTj0bo9D2PBFIvJiSEEXXq1znBW/9OpgvD5S0Nxdz
+         Rbk4GgGXubfoiWPNuGp0mg7Ol+q0SJlMRnZvdhvYR3HL1JV4lf9pDBa6237WLzfXL6n7
+         AWEgZY+xClw5g0RcaWdFwL+xjQBXbA9W3n35hVPAniyRHvUFf45+in2E8lDZ4Wo6E8SU
+         xayL3OVj+MSHcZ3LOr5Mgwh6N8y0DKMggwSa8+2ZljvDI/Vtpx/143ebHxShp1itNOjr
+         zR7g==
+X-Gm-Message-State: AO0yUKXleW2MO+6Ll8k9An5BkuSMQ6arWuFlwfUeIL0G3JDODirAxxS4
+        g2JGUtqUcZQlO+fo9zl6jqM=
+X-Google-Smtp-Source: AK7set9BSyBXetZuX5WfkVc3KxfotNGe+/apFydowA4AbgXfDrB3HSg6LmiokyfU+dVJX8M+BOC9ZA==
+X-Received: by 2002:a17:906:70d:b0:923:6ffa:cf05 with SMTP id y13-20020a170906070d00b009236ffacf05mr2828950ejb.50.1678614709105;
+        Sun, 12 Mar 2023 01:51:49 -0800 (PST)
+Received: from krava (ip-94-113-247-30.net.vodafone.cz. [94.113.247.30])
+        by smtp.gmail.com with ESMTPSA id b21-20020a17090630d500b008cafeec917dsm2052954ejb.101.2023.03.12.01.51.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 01:51:34 -0800 (PST)
-Date:   Sun, 12 Mar 2023 11:51:29 +0200
-From:   Mike Rapoport <mike.rapoport@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH 0/7] remove SLOB and allow kfree() with kmem_cache_alloc()
-Message-ID: <ZA2gofYkXRcJ8cLA@kernel.org>
-References: <20230310103210.22372-1-vbabka@suse.cz>
+        Sun, 12 Mar 2023 01:51:48 -0800 (PST)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Sun, 12 Mar 2023 10:51:46 +0100
+To:     Ian Rogers <irogers@google.com>
+Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
+        Guilherme Amadio <amadio@gentoo.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Christy Lee <christylee@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
+Message-ID: <ZA2gsjqAK9465kiV@krava>
+References: <20230116010115.490713-1-irogers@google.com>
+ <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
+ <Y8mAuDvs566zwG67@kernel.org>
+ <Y8myfqy5EMit3Kr/@krava>
+ <CAP-5=fUugnKd=pGpZve7tKThhM5b0AqGMnuiELF+fZQw-xJz9w@mail.gmail.com>
+ <ZAmRjk1x4p4TrFb0@gentoo.org>
+ <CAEf4BzZJvEnWdTKVSgdBDr_KEgkW5HLHc7N-HRkmb-drCbg2uw@mail.gmail.com>
+ <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com>
+ <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
+ <CAP-5=fWRxM3pVy6YH=gAnyMXgPBx5eShcJMBiGggCdJj23tUtg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230310103210.22372-1-vbabka@suse.cz>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fWRxM3pVy6YH=gAnyMXgPBx5eShcJMBiGggCdJj23tUtg@mail.gmail.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -93,75 +99,188 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Vlastimil,
-
-On Fri, Mar 10, 2023 at 11:32:02AM +0100, Vlastimil Babka wrote:
-> Also in git:
-> https://git.kernel.org/vbabka/h/slab-remove-slob-v1r1
+On Sat, Mar 11, 2023 at 05:00:01PM -0800, Ian Rogers wrote:
+> On Fri, Mar 10, 2023 at 12:22 PM Andrii Nakryiko
+> <andrii.nakryiko@gmail.com> wrote:
+> >
+> > On Thu, Mar 9, 2023 at 7:26 PM Ian Rogers <irogers@google.com> wrote:
+> > >
+> > > On Thu, Mar 9, 2023 at 9:25 AM Andrii Nakryiko
+> > > <andrii.nakryiko@gmail.com> wrote:
+> > > >
+> > > > On Wed, Mar 8, 2023 at 11:58 PM Guilherme Amadio <amadio@gentoo.org> wrote:
+> > > > >
+> > > > > On Wed, Mar 08, 2023 at 06:13:34PM -0800, Ian Rogers wrote:
+> > > > > > On Thu, Jan 19, 2023 at 1:13 PM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > > > > > >
+> > > > > > > On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de Melo wrote:
+> > > > > > > > Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu:
+> > > > > > > > > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.com> wrote:
+> > > > > > > > > > libbpf 1.0 was a major change in API. Perf has partially supported
+> > > > > > > > > > older libbpf's but an implementation may be:
+> > > > > > > > > > ..
+> > > > > > > > > >        pr_err("%s: not support, update libbpf\n", __func__);
+> > > > > > > > > >        return -ENOTSUP;
+> > > > > > > > > > ..
+> > > > > > > > > >
+> > > > > > > > > > Rather than build a binary that would fail at runtime it is
+> > > > > > > > > > preferrential just to build libbpf statically and link against
+> > > > > > > > > > that. The static version is in the kernel tools tree and newer than
+> > > > > > > > > > 1.0.
+> > > > > > > > > >
+> > > > > > > > > > These patches change the libbpf test to only pass when at least
+> > > > > > > > > > version 1.0 is installed, then remove the conditional build and
+> > > > > > > > > > feature logic.
+> > > > > > > > > >
+> > > > > > > > > > The issue is discussed here:
+> > > > > > > > > > https://lore.kernel.org/lkml/20230106151320.619514-1-irogers@google.com/
+> > > > > > > > > > perf bpf:
+> > > > > > > > > >
+> > > > > > > > > > A variant of this fix was added to Linux 6.2 in:
+> > > > > > > > > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIBBPF_DYNAMIC=1"
+> > > > > > > > > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
+> > > > > > > > > > This change goes further in removing logic that is now no longer
+> > > > > > > > > > necessary.
+> > > > > > > > > >
+> > > > > > > > > > v2. Rebase now that breakage fix patch is in linus/master.
+> > > > > > > > >
+> > > > > > > > > I missed the:
+> > > > > > > > > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
+> > > > > > > > > I believe we are waiting for package maintainer input.
+> > > > > > > >
+> > > > > > > > Yes, as fedora:37 still is at libbpf 0.8.0 :-\
+> > > > > > >
+> > > > > > > rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd be to move
+> > > > > > > f37 to 1.x, but I had to do bulk update of like 10 other dependent packages
+> > > > > > > for f38, so not sure how bad it'd be for f37
+> > > > > > >
+> > > > > > > jirka
+> > > > > >
+> > > > > > +Guilherme
+> > > > > >
+> > > > > > We were looking for maintainer input on these changes, but there is no
+> > > > > > update in over a month. Here is the original lore link:
+> > > > > > https://lore.kernel.org/lkml/CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com/
+> > > > > > Should these changes land in perf-tools-next targeting Linux 6.4?
+> > > > >
+> > > > > Gentoo has libbpf-1.1 already available, so requiring >libbpf-1.0 is not
+> > > > > a problem. We (Gentoo) just need to make sure to stabilize libbpf-1.x before
+> > > > > stabilizing newer versions of perf, as the stable libbpf is 0.8.1 at the moment.
+> > > > >
+> > > >
+> > > > libbpf v0.8 is basically all the 1.0 APIs, except by default 1.0
+> > > > semantics is not enforced, unless libbpf_set_strict_mode() is enabled.
+> > > >
+> > > > So, if 0.8 is a restriction, perf can stay on 0.8, use all the same
+> > > > APIs that are in 1.0 (except newer one added later, but I'm not sure
+> > > > perf needs any of the newer additions), and just stick to setting
+> > > > libbpf_set_strict_mode() unconditionally.
+> > >
+> > > Thanks Andrii,
+> > >
+> >
+> > Full disclosure, I'm totally supporting the switch to v1.0+, just
+> > trying to be helpful here from the standpoint of 0.x vs 1.x libbpf
+> > transition. See below. I believe you can keep 0.8+ dependency and drop
+> > all the legacy code completely.
+> >
+> > But just take it as an information, and feel free to do whatever you
+> > think is best with it.
+> >
+> > > The default perf build is to build against tools/lib/bpf and
+> > > statically link libbpf in. This means by default we have the latest
+> > > libbpf 1.2. If any perf code has a dependency on 0.8 (we don't support
+> > > earlier) we need to #ifdef for it. Currently we have 7 feature tests
+> > > for libbpf, but perhaps there is some cruft that's carried forward.
+> > > The features are:
+> > >  - btf__load_from_kernel_by_id
+> >
+> > v0.5 API
+> >
+> > >  - bpf_prog_load
+> > >  - bpf_object__next_program
+> > >  - bpf_object__next_map
+> >
+> > all three are v0.6 APIs
+> >
+> > >  - bpf_program__set_insns
+> >
+> > v0.8 API
+> >
+> > >  - btf__raw_data
+> > >  - bpf_map_create
+> >
+> > both v0.6 API
+> >
+> > >
+> > > The not present implementations look like:
+> > > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/bpf-loader.c?h=perf-tools#n36
+> > > ```
+> > > int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> > >   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __maybe_unused)
+> > > {
+> > > pr_err("%s: not support, update libbpf\n", __func__);
+> > > return -ENOTSUP;
+> > > }
+> > >
+> > > int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> > >                                  enum bpf_prog_type prog_type __maybe_unused,
+> > >                                  enum bpf_attach_type exp_attach_type
+> > > __maybe_unused,
+> > >                                  const struct libbpf_prog_handler_opts
+> > > *opts __maybe_unused)
+> > > {
+> > > pr_err("%s: not support, update libbpf\n", __func__);
+> > > return -ENOTSUP;
+> > > }
+> > > ```
+> >
+> > both are v0.8 APIs
+> >
+> > > This will basically mean that while you dynamically linked with libbpf
+> > > 0.8 you are in all likelihood not going to get proper BPF support.
+> > > These changes up the version requirement to 1.0 and get rid entirely
+> > > of the feature tests - so no runtime failing implementations. If the
+> >
+> > 100% supportive on upgrade and dropping feature checks. My point is
+> > that you don't need those feature checks with v0.8+ requirement.
+> >
+> > The only difference between staying on v0.8+ vs going all the way to
+> > v1.0+ would be that you have to keep libbpf_set_strict() call. In
+> > v1.0+ it's a noop, so could be dropped.
+> >
+> > > build determines at build time libbpf 1.0+ isn't present then it still
+> > > executes, switching from dynamic libbpf to the default static libbpf
+> > > that is at 1.2. As mentioned in this thread, distributions like Debian
+> > > use the default static linking of libbpf.
+> > >
+> >
+> > oh, that's nice, good to know
+> >
+> > > I'm not keen to hold on to the feature tests for the complexity that
+> > > they hold and their needlessly (as you can always statically link)
+> > > broken at runtime behavior. We could but my opinion is, let's not :-)
+> >
+> > I've been consistently advocating for static linking with libbpf, so
+> > 100% support this.
 > 
-> The SLOB allocator was deprecated in 6.2 so I think we can start
-> exposing the complete removal in for-next and aim at 6.4 if there are no
-> complaints.
-> 
-> Besides code cleanup, the main immediate benefit will be allowing
-> kfree() family of function to work on kmem_cache_alloc() objects (Patch
-> 7), which was incompatible with SLOB.
-> 
-> This includes kfree_rcu() so I've updated the comment there to remove
-> the mention of potential future addition of kmem_cache_free_rcu() as
-> there should be no need for that now.
-> 
-> Otherwise it's straightforward. Patch 2 is a cleanup in net area, that I
-> can either handle in slab tree or submit in net after SLOB is removed.
-> Another cleanup in tomoyo is already in the tomoyo tree as that didn't
-> need to wait until SLOB removal.
-> 
-> Vlastimil Babka (7):
->   mm/slob: remove CONFIG_SLOB
->   net: skbuff: remove SLOB-specific ifdefs
->   mm, page_flags: remove PG_slob_free
->   mm, pagemap: remove SLOB and SLQB from comments and documentation
->   mm/slab: remove CONFIG_SLOB code from slab common code
->   mm/slob: remove slob.c
->   mm/slab: document kfree() as allowed for kmem_cache_alloc() objects
-> 
->  Documentation/admin-guide/mm/pagemap.rst     |   6 +-
->  Documentation/core-api/memory-allocation.rst |  15 +-
->  fs/proc/page.c                               |   5 +-
->  include/linux/page-flags.h                   |   4 -
->  include/linux/rcupdate.h                     |   6 +-
->  include/linux/slab.h                         |  39 -
->  init/Kconfig                                 |   2 +-
->  kernel/configs/tiny.config                   |   1 -
->  mm/Kconfig                                   |  22 -
->  mm/Makefile                                  |   1 -
->  mm/slab.h                                    |  61 --
->  mm/slab_common.c                             |   7 +-
->  mm/slob.c                                    | 757 -------------------
->  net/core/skbuff.c                            |  16 -
->  tools/mm/page-types.c                        |   6 +-
->  15 files changed, 23 insertions(+), 925 deletions(-)
->  delete mode 100644 mm/slob.c
+> Right, so I think we should move forward with these patches. We also
 
-git grep -in slob still gives a couple of matches. I've dropped the
-irrelevant ones it it left me with these:
++1
 
-CREDITS:14:D: SLOB slab allocator
-kernel/trace/ring_buffer.c:358: * Also stolen from mm/slob.c. Thanks to Mathieu Desnoyers for pointing
-mm/Kconfig:251:    SLOB allocator and is not recommended for systems with more than
-mm/Makefile:25:KCOV_INSTRUMENT_slob.o := n
- 
-Except the comment in kernel/trace/ring_buffer.c all are trivial.
+jirka
 
-As for the comment in ring_buffer.c, it looks completely irrelevant at this
-point.
-
-@Steve?
-
-> -- 
-> 2.39.2
+> have had non-API changes to support libbpf 1.0+ like:
+> https://lore.kernel.org/lkml/20221103045437.163510-4-irogers@google.com/
+> and I'm worried about the state of these with libbpf 0.8.
 > 
-
--- 
-Sincerely yours,
-Mike.
+> Thanks,
+> Ian
+> 
+> > >
+> > > Thanks,
+> > > Ian
+> > >
+> > > > > Best regards,
+> > > > > -Guilherme
+> > > > >
