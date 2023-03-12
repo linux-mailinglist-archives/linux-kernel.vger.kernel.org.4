@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0EFE6B6A1A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:32:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B80B76B6A29
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232067AbjCLSb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:31:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44328 "EHLO
+        id S230219AbjCLShp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231993AbjCLSbK (ORCPT
+        with ESMTP id S230043AbjCLShm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:31:10 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23930274BC
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:27:01 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id cn21so10019125edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:27:01 -0700 (PDT)
+        Sun, 12 Mar 2023 14:37:42 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA53EB4F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:37:05 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id p4so3172388wre.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:37:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678645526;
-        h=cc:to:subject:date:from:in-reply-to:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
+        d=gmail.com; s=20210112; t=1678646165;
+        h=cc:to:subject:date:from:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
         bh=R/ZxX3DwmCtqhIm3cqoC0hxQvGcxZ6dvB//gAmJzTdM=;
-        b=Ih5hiZZSYyjjO8GBolEjBhizcjVlLvknbzAtqIp0k0UaLQJC9A9YH+W0MlSWk0f2QX
-         VLelnTL3i+/UECAXQiV10l2hRi1kBI0QVhLNg0SdXVXn9hHcGK3QWU3jfycy7ck0Nba2
-         RtMTF8OTKSHM7x+s1iJgr+4QS6dN8OA0Tzlg/owbxDkflYb2XopMjt/Zp5WQtPc05zRM
-         +7ay85VUCFU9Jx3CiADTfTigWsSMmOphgbrnX2ccKaz+j7Yxs5gVOg8jdKofWvXRyL80
-         lfmMzvYR1Mt5iGXQwIsxVkCWHQ+jZKun3+/W6JgxczJFMvUe/CkWmg7PqwGHk0EtU3lq
-         UZeQ==
+        b=XOhmMVev/gXj3bxisF3VA04n0BST1yq32s7SHNdLkZ6Dv7MAUiXWFC474m1YvXiLvE
+         h9RP9Qs0BBCF5ptSfZt4buUSoCRCfHmsLgbIUiKNNZ8BAcrtFSeVO2COWlRy/Nx0mORE
+         ApO+kGg4UtIeZ9xct1kYfwbWkQq6V05x56E8B6t6PIpFe2gbLcbJmTPkbIn4iHiK9Nry
+         FpvqWsPYsANRVkA+mwp0RL/cfAniTdb75lIWI22NmKCL8KtAX8LlIbxvoNx2jWmbtyWZ
+         qiHsGL+nl74DIW1H/NeB2LQgr3GbZ6ymqqTeV01rmnHzNbwAQgZgxqbnl54oASUwwIXW
+         jWcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678645526;
-        h=cc:to:subject:date:from:in-reply-to:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
+        d=1e100.net; s=20210112; t=1678646165;
+        h=cc:to:subject:date:from:message-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
         bh=R/ZxX3DwmCtqhIm3cqoC0hxQvGcxZ6dvB//gAmJzTdM=;
-        b=ZAlVTe9p6LcfGpiPN1GnlwNUqNMVoGSBDsbSgx2TbsQhp4tzcnEBQwJCthwgeBudU2
-         BlQp8PtJgeD+gO+zG9vaLVCvBIV1gCy2qzlr98BTg13NTEeYC0LM5ZhZzrjYHyZsURFe
-         gbj77A/iix6h5+TG94VoNgshaSGftH1JUFatQ8nMdDMRzypDxj59qF5RJizoe4UzBdKj
-         JMwVU0et8aiVxqOoDemC22fmM1iCFqgVVGl4W6ZL0g4ivTcAktFw3/o+rgxcYAsgWoGQ
-         7sPj3D4TqDCAPeD3ANc38UvSrXdTwrGZPFB1M9CqgO35KzlBJ70gQZFWpwcMhlnaLgpI
-         gCjw==
-X-Gm-Message-State: AO0yUKWXLsDv9Vop4w2+zp7gecXyCE3EGk8gDaAgsMmvUJbQ3hgJjFX6
-        nnY+odmvs0jizxt2jqUV0lqFMjyDE8hdw1FD
-X-Google-Smtp-Source: AK7set+UN41HVXFbKR9d2zEGcu9pjsmGOBEMWBT3GFm44e7Md4tQy4TiZ1HDj9fQWFtMGahoviJjPQ==
-X-Received: by 2002:ac2:52b5:0:b0:4d1:7923:3b93 with SMTP id r21-20020ac252b5000000b004d179233b93mr8518010lfm.59.1678644677524;
-        Sun, 12 Mar 2023 11:11:17 -0700 (PDT)
+        b=SkR/8lDejuvee/wjbDrVyZajxK6wz5RMLXMjTJiACkBoTYTkKl57c1gvhWZmfU0ZgN
+         ExP+ieykP5bmwbn7M+dTfuoswchg8q3QUG5fGObLlaAt9u8WP4xSDGqITs+7ruhMtHLu
+         y4LujQYDhTJj1IfylD61SKIgdyd+529aKa4WEVwSLLRUBof5vRrBFJKDVMVD4dzEPFeT
+         jyLRWEIuf2hVKTwSlsBfcYI3VdWvgX4mvPvSqc8Ozz6PNWy8sTUgfBjSm2B6bZUjg5mQ
+         woNyupmQLltvIBfpzvlmuyPXTz8kFV2rAy1LlqjQB6bULkX/lNw7PvRcxWQCiTE1w4FR
+         imiw==
+X-Gm-Message-State: AO0yUKUj1fnUgEz2wMdPJ1gdVBU3ZAKwZLtIabcH+6ObdjKidNbItoS9
+        sXlnF1nYH1wWl4LD8vy0tAxaHKAtLMfnZwE4
+X-Google-Smtp-Source: AK7set+wkPnEt0xkV2ROcbb6EW9jCdUXi7SFV2OO/gVZqXcJwah9KyC4U+jNRWNF8PDiTdw2MqWklg==
+X-Received: by 2002:ac2:51c4:0:b0:4cc:53e3:771d with SMTP id u4-20020ac251c4000000b004cc53e3771dmr8723551lfm.64.1678644302381;
+        Sun, 12 Mar 2023 11:05:02 -0700 (PDT)
 Received: from 0002-mmc-dw_mmc-add-an-option-to-force-32-bit-access-to-6.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
-        by smtp.gmail.com with ESMTPSA id f6-20020ac25326000000b004d85f2acd8esm710065lfh.295.2023.03.12.11.11.17
+        by smtp.gmail.com with ESMTPSA id l23-20020ac24317000000b004d8584970b8sm713273lfh.226.2023.03.12.11.05.01
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 11:11:17 -0700 (PDT)
-Message-Id: <1678644516.665314-2-sleirsgoevy@gmail.com>
-In-Reply-To: <1678644516.665314-0-sleirsgoevy@gmail.com>
+        Sun, 12 Mar 2023 11:05:01 -0700 (PDT)
+Message-ID: <640e144d.c20a0220.80ed1.18ef@mx.google.com>
 From:   Sergey Lisov <sleirsgoevy@gmail.com>
 Date:   Sun, 12 Mar 2023 20:58:50 +0300
 Subject: [PATCH v5 2/3] mmc: dw_mmc: add an option to force 32-bit access to
