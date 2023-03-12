@@ -2,93 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D4296B6559
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:21:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A14B6B655C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230057AbjCLLVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:21:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55610 "EHLO
+        id S230092AbjCLLYG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:24:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjCLLVf (ORCPT
+        with ESMTP id S229723AbjCLLYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:21:35 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7607526C18
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:21:34 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id ek18so6803288edb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:21:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678620092;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=hPgK9DbotYQgvMk65BJJQwFUv5xZOuVj5AIIzlxJuXc=;
-        b=uLyW2K+RIsq257fj4pm2t9CeGgEH/S9eYiBL3G+AnxMehFmEdb8RYRfE1rikKNTepX
-         LT+Ct8API26svgkUFs4M+WTtBmsWs4ZztrfBPtWc4Kn/2r2NYcjKVtGvra+579LF4BRp
-         baQMH97dy+VEaDU2q8rtRFRjci3eFrXfDvxG2cqsex9alP4+QA3zDpkQJxBjxAVeYMkY
-         EGg/w+6A0pxR3jm24lrY4PgtZqicnHyrb7HOV+NjdbwljxpbaZiiWYeshXAhdY2QAPDi
-         GlbYqGoyHvMDitrtA2sDMSXTUuQujJYNXgbl4QwojnyC4cke7iNWQrEkN2FNveqfgs0E
-         0Gjg==
+        Sun, 12 Mar 2023 07:24:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 455EA166E4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:23:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678620192;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=MHyu4+8kPd35BCnU7In3CFdj9IYOtFD0P1pEdmm81PU=;
+        b=NQBsFjL//cvpBjVExqrxRH0h9KljgGxj2KvPnhHhENqXbn7TNN008bfzCVGyZHFi8PguLn
+        zIN9azRH3J/b7PvxKRsF/TLto+lSpJQRsWQRtIMux8x/DZJ+05ch+/ujWfSDL/hId3KCzr
+        lIOHBnB6D5Idn1QuUAWdvgVxkX5gpJk=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-192-cIL7B1IuPtqUMcyDPZ__vQ-1; Sun, 12 Mar 2023 07:23:11 -0400
+X-MC-Unique: cIL7B1IuPtqUMcyDPZ__vQ-1
+Received: by mail-qv1-f72.google.com with SMTP id dl18-20020ad44e12000000b005a4d5420bc6so666153qvb.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:23:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678620092;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hPgK9DbotYQgvMk65BJJQwFUv5xZOuVj5AIIzlxJuXc=;
-        b=KXsOzHrdevNdhkIyKMfZiHkdNSiRZp4cz0jZR6NVVTefqZX2qdap9d3z2jdLt0ZKr3
-         ZNep+BMF7VKzHwZOPYgmmpZojUmIKM2lLJ81Ve3Bv9lP7+6MuKqYzC9E3G75kghO4xxy
-         lJGAihV7/vobEHI/ujAV5qrYU4JGudrFovcOPYWk1nr3PjO7kq9Q5dIfNYHFL7tSLf2c
-         pr5vLwD5wSv45On0RS61SmQUmn1k9WR9shVwnVYRl8EB2d0f4AWEO9ylJrT+s/u+a9GO
-         cijho4oolKKgne2AtBSaQgl08ExgWtMUPJyUCqLBVtUuMc6qxAswlF62rZipDX8OhswD
-         MO/A==
-X-Gm-Message-State: AO0yUKUxGytADU/nzrtcrq7ArrmIFfoPoyGS+MFlVhEZZ0JdIgxiGK5f
-        1hsG6U1gcWXJVfIWKf9g5OJj0A==
-X-Google-Smtp-Source: AK7set+D+hLkNXjEjhGAsCWD29t27P1DggG6dhCXb3gScF7wEal1ZwREIDfrWAtxQv4vOf7Fc5QtBA==
-X-Received: by 2002:a17:907:8a0c:b0:87b:3d29:2982 with SMTP id sc12-20020a1709078a0c00b0087b3d292982mr39887619ejc.11.1678620092569;
-        Sun, 12 Mar 2023 04:21:32 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id u25-20020a1709063b9900b0092396a853bbsm1186283ejf.143.2023.03.12.04.21.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 04:21:32 -0700 (PDT)
-Message-ID: <9a9a7d52-b35c-8d90-b6ca-1fa9a5f33534@linaro.org>
-Date:   Sun, 12 Mar 2023 12:21:31 +0100
+        d=1e100.net; s=20210112; t=1678620191;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MHyu4+8kPd35BCnU7In3CFdj9IYOtFD0P1pEdmm81PU=;
+        b=A6WGoXIgqMfuztn57CqIdtXOqt5As/zvVhtdBhRIG+dDH6Sh5k5p0y81gmqAL7si9e
+         KUAzrKGgLmNh/v0dV6BhEyZlYptZo+JinXO131wTP7Ufg3+Tlq9H3zoNKkW9zGj5Cx4y
+         8tX+wa698RG2Omy9zpkj5+N5FxR22TFmj5Jn7hMTp+pXdgi+GPs6isK/ON/D6uJanwou
+         HqwYVEe9BXCQYfbOkxiTaHl8Srh80awksEwNnlqweQ7pxJmkMh4ophHihndGOwHOupyR
+         54+gwBT6UpuKZPCREDa6fjvm7aHpLo0CXah9K+lUmiFENyJrQcjDtB/d5uVgnygX2PSD
+         z6Eg==
+X-Gm-Message-State: AO0yUKWFYAijEIsc2QFWeRvK0fTctAKb0ovF3gCQsx5Soify1R65GEy6
+        SOg1TZOjYUBjouUBzEprRgPNXvlVReHF1kDNCM5NdADBe7HGgcsP7fVuqWnMEZcziXOZfBe/kZK
+        I4YLMxQwdt9ijVSByN1eLCR9b
+X-Received: by 2002:a05:622a:170b:b0:3b8:58d0:b4e4 with SMTP id h11-20020a05622a170b00b003b858d0b4e4mr21299707qtk.33.1678620191064;
+        Sun, 12 Mar 2023 04:23:11 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8rU61IoSMnz2NMxT0D++jddUTjwTZvD4aI/Ne3rhoCM5YcURCxzOjOJup/d6HqF9HM1D0JKg==
+X-Received: by 2002:a05:622a:170b:b0:3b8:58d0:b4e4 with SMTP id h11-20020a05622a170b00b003b858d0b4e4mr21299693qtk.33.1678620190755;
+        Sun, 12 Mar 2023 04:23:10 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o10-20020ac8428a000000b003b82a07c4d6sm3507928qtl.84.2023.03.12.04.23.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 04:23:10 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     bskeggs@redhat.com, kherbst@redhat.com, lyude@redhat.com,
+        airlied@gmail.com, daniel@ffwll.ch
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] drm/nouveau/mc: set ga100_mc_device storage-class-specifier to static
+Date:   Sun, 12 Mar 2023 07:23:02 -0400
+Message-Id: <20230312112302.466886-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: qcom: Add SM7150 pinctrl
- binding
-Content-Language: en-US
-To:     Danila Tikhonov <danila@jiaxyga.com>, agross@kernel.org,
-        andersson@kernel.org, konrad.dybcio@linaro.org,
-        linus.walleij@linaro.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230311212114.108870-1-danila@jiaxyga.com>
- <20230311212114.108870-2-danila@jiaxyga.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311212114.108870-2-danila@jiaxyga.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 22:21, Danila Tikhonov wrote:
-> Add device tree binding Documentation details for Qualcomm SM7150
-> TLMM device
-> 
-> Signed-off-by: Danila Tikhonov <danila@jiaxyga.com>
-> ---
+smatch reports
+drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c:51:1:
+  warning: symbol 'ga100_mc_device' was not declared. Should it be static?
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ga100_mc_device is only used in ga100.c, so it should be static
 
-Best regards,
-Krzysztof
+Signed-off-by: Tom Rix <trix@redhat.com>
+---
+ drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c b/drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c
+index 1e2eabec1a76..5d28d30d09d5 100644
+--- a/drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c
++++ b/drivers/gpu/drm/nouveau/nvkm/subdev/mc/ga100.c
+@@ -47,7 +47,7 @@ ga100_mc_device_enabled(struct nvkm_mc *mc, u32 mask)
+ 	return (nvkm_rd32(mc->subdev.device, 0x000600) & mask) == mask;
+ }
+ 
+-const struct nvkm_mc_device_func
++static const struct nvkm_mc_device_func
+ ga100_mc_device = {
+ 	.enabled = ga100_mc_device_enabled,
+ 	.enable = ga100_mc_device_enable,
+-- 
+2.27.0
 
