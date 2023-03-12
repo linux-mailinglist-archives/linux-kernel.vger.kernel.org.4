@@ -2,103 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61926B64BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:07:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B746B64BF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:11:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229743AbjCLKHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:07:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33728 "EHLO
+        id S229585AbjCLKL0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:11:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjCLKHm (ORCPT
+        with ESMTP id S229514AbjCLKLY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:07:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B4A35B8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:07:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B2BAB80B07
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:07:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9312C433EF;
-        Sun, 12 Mar 2023 10:07:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678615649;
-        bh=qV7XQ2p2izx7xHPGCQGgsgpAg5qAVwtPpQmf3Y1eAy4=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KOPtuBLrSW3/6A3z1MUphBJ0hfQTUWD6qhxTmAvb5wXtDHl+kfWY+1F3G2ODIslQU
-         IkZoXqif2UcZ2fIEtA4iVDIJTPzenoW7CliUo4Q9KB8nZm278Ricgrfn6FjigtWHfD
-         DcWANJZApu911E59cL9gyVGCDBztJS2eDIZBBjs3an5GPU8opTgV0mIyN/3C/CO5DF
-         eBj2PugdQqxaxZMPzB0AP/A1EJYwyQAepPGlvcKRVpxub5BAAzC8euMENpN0nP9eEP
-         QLw1ex9AX1u4Jnht9R9I5qtLa8r7jnOm9/tqsDdCEfmsLsakNc0YPbFAOvhmHZIUqK
-         Pbn1wPu9vW4pw==
-From:   Christian Brauner <brauner@kernel.org>
-To:     Mike Christie <michael.christie@oracle.com>
-Cc:     Christian Brauner <brauner@kernel.org>, mst@redhat.com,
-        virtualization@lists.linux-foundation.org,
-        torvalds@linux-foundation.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/11] Use copy_process in vhost layer
-Date:   Sun, 12 Mar 2023 11:07:18 +0100
-Message-Id: <167861517311.906526.10521882337920120967.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230310220332.5309-1-michael.christie@oracle.com>
-References: <20230310220332.5309-1-michael.christie@oracle.com>
+        Sun, 12 Mar 2023 06:11:24 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A4E028E80
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:11:20 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id da10so37691180edb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:11:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678615879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=j8G031avMSPK+DJWKW31cg0HGNEgLSCzSCq48aOVZWQ=;
+        b=BIbzDnAx4QSz33kamzjYWgoJ/xsBCDeD//AbIp9xpobYZZWzskR7nvllN2/f73AJ2m
+         H/94z+Gx7Ze6wHeT0INyYHDtv14EaLvSQpu2dxYlBmmi2BaKA/iT+uf6Ff0lld6IKpsU
+         WTnmyGf6VHIJaDQfP+YJ1a+oiZ2BwCJtSpMOaAK/bxjAhjS/vdKDRV5V/eUwSAmBNqcW
+         Q75G88ta2xyjhQM5Un7EU9ZjqOOZB2ss8/9acqtEWiBz/fWiQV2QGT/5isXikWzcsHiD
+         UzfmQTU4NNL8+w+zes/Zv+pa+nJWnER73SQn+lmWy+i4M+/4SvuvEbhqQapP75DToysb
+         Q2Ng==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678615879;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=j8G031avMSPK+DJWKW31cg0HGNEgLSCzSCq48aOVZWQ=;
+        b=ZoGtvOkPzke86hqcegvYmD6JZMo5DYFw/OQvqH8HJ5xuLmPPbpsfwNtOe9RIXP03t2
+         xwmFOEWrtWCBtdfDc2vQzqd1fauh2sWoZFGuWa6fTPouXPycL9ZYpWfELuviP5o+FX4y
+         iZB816SR/rHa+7DiikbnuUSlnA9rq4o5nj//OY5H9a16lQnMzMNN1mQsPls7KnEg6Hp0
+         TKJHnDlSbkkWBpIO1UtrpyWWTB2eyf/FHiPE2Ok3wbcMyR+w7ACHqKcUdSWd9Gv287eH
+         sgDbafqZMB5Q6BEEnKaeMiX35sm6OHPizYM9fE4CfVLYT54hCv+sKmL9NRnH8uaFF99n
+         zIbQ==
+X-Gm-Message-State: AO0yUKVf+ZaXV9og9P30mX5jtAjfwr4K9gQTWFp6uG/A8VMdW5LmKxnE
+        iVHH/e0hslpyTg/PNi43qnNmFg==
+X-Google-Smtp-Source: AK7set8AvzfQ4wSyspYsX+pjSkZyBPpXkfTQZR8Vo0MZMbyxvgQD4APiwUOxmrATQ5mjRiT1EFiPmQ==
+X-Received: by 2002:a17:906:2a58:b0:8b1:2614:fbf2 with SMTP id k24-20020a1709062a5800b008b12614fbf2mr29001123eje.70.1678615879062;
+        Sun, 12 Mar 2023 03:11:19 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id c1-20020a170906762100b008b17e55e8f7sm2052006ejn.186.2023.03.12.03.11.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 03:11:18 -0700 (PDT)
+Message-ID: <3dce3d36-cba5-c056-92a2-18b67711a6db@linaro.org>
+Date:   Sun, 12 Mar 2023 11:11:17 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2158; i=brauner@kernel.org; h=from:subject:message-id; bh=CgZ83KTaSC6ErC9mXI7QQblLNfxRBw7u0DY+KR5K5+4=; b=owGbwMvMwCU28Zj0gdSKO4sYT6slMaTwLgkI9bTZvi3i/WSNDN9ppS+mx6lduHe2yiNu9gKm/NsW MgFCHaUsDGJcDLJiiiwO7Sbhcst5KjYbZWrAzGFlAhnCwMUpABOJnM/IsFL5tjJ37J89szq+flE/lL pg7iSuBSXRFlXrjJbv5T+QG83wP8fogkFzXouMo6rPLxcLvSXzz32LD/411cr6x7nom5t8+AE=
-X-Developer-Key: i=brauner@kernel.org; a=openpgp; fpr=4880B8C9BD0E5106FC070F4F7B3C391EFEA93624
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/4] iio: dac: ad5755: mark OF related data as maybe
+ unused
+Content-Language: en-US
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Marek Vasut <marek.vasut@gmail.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Michael Hennerich <Michael.Hennerich@analog.com>,
+        Robert Eshleman <bobbyeshleman@gmail.com>,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
+ <20230311111457.251475-2-krzysztof.kozlowski@linaro.org>
+ <20230311122208.059a81cb@jic23-huawei>
+ <68e9c7d9-1087-0454-6122-a88c7339ab3c@linaro.org>
+ <20230311183121.577eb52b@jic23-huawei>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311183121.577eb52b@jic23-huawei>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Christian Brauner (Microsoft) <brauner@kernel.org>
-
-
-On Fri, 10 Mar 2023 16:03:21 -0600, Mike Christie wrote:
-> The following patches were made over Linus's tree and apply over next. They
-> allow the vhost layer to use copy_process instead of using
-> workqueue_structs to create worker threads for VM's devices.
+On 11/03/2023 19:31, Jonathan Cameron wrote:
+> On Sat, 11 Mar 2023 13:25:33 +0100
+> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
 > 
-> Details:
-> Qemu will create vhost devices in the kernel which perform network or SCSI,
-> IO and perform management operations from worker threads created with the
-> kthread API. Because the kthread API does a copy_process on the kthreadd
-> thread, the vhost layer has to use kthread_use_mm to access the Qemu
-> thread's memory and cgroup_attach_task_all to add itself to the Qemu
-> thread's cgroups.
+>> On 11/03/2023 13:22, Jonathan Cameron wrote:
+>>> On Sat, 11 Mar 2023 12:14:55 +0100
+>>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
+>>>   
+>>>> The driver can be compile tested with !CONFIG_OF making certain data
+>>>> unused (of_device_id is not used for device matching):  
+>>>
+>>> It should be used for device matching I think, so I'd rather see
+>>> it assigned for that purpose than hiding the issue.  
+>>
+>> That would require testing and changes. The device matching is via SPI
+>> table which has device data. Probably adding OF matching would require
+>> bigger changes to for handling the match data.
+>>
+>> This was intentional design in this driver, so we are not hiding here
+>> anything.
 > 
-> [...]
+> I doubt it was intentional. Mostly people do this because the magic
+> fallbacks to find the spi_device_id entry work.
+> 
+> If we'd noticed at review time it would not have gone in like this.
+> Note that the spi_match_id() use of_modalias_node() which has stripped the
+> vendor id off the compatible then matches against the spi_device_id
+> table.
+> 
+> So it 'should' just work.  Now ideally we'd switch to
+> spi_get_device_match_data() but that needs more significant changes.
+> Though simple enough ones that review would be enough.
+> 
+> Just need to use pointers to the ad75755_chip_info_tbl entries
+> rather than the enum in both the spi id table and the of one - this
+> avoids the issue with the enum value of 0 counting as a failed match.
 
-I've picked this up now and it should show up in -next tomorrow.
-Thanks for the patience,
+It's not that simple change... maybe you are right that adding match
+data to OF table would not break anything, but to me it is something
+substantial and requiring testing, which obviously I cannot do.
+Therefore I am going to skip this one (thus the error stays).
 
-tree: git@gitolite.kernel.org:pub/scm/linux/kernel/git/brauner/linux kernel.user_worker
+Best regards,
+Krzysztof
 
-[01/11] csky: Remove kernel_thread declaration
-        commit: e0a98139c162af9601ffa8d6db88dbe745f64b3c
-[02/11] kernel: Allow a kernel thread's name to be set in copy_process
-        commit: cf587db2ee0261c74d04f61f39783db88a0b65e4
-[03/11] kthread: Pass in the thread's name during creation
-        commit: 73e0c116594d99f807754b15e474690635a87249
-[04/11] kernel: Make io_thread and kthread bit fields
-        commit: c81cc5819faf5dd77124f5086aa654482281ac37
-[05/11] fork/vm: Move common PF_IO_WORKER behavior to new flag
-        commit: 54e6842d0775ba76db65cbe21311c3ca466e663d
-[06/11] fork: add kernel_clone_args flag to not dup/clone files
-        commit: 11f3f500ec8a75c96087f3bed87aa2b1c5de7498
-[07/11] fork: Add kernel_clone_args flag to ignore signals
-        commit: 094717586bf71ac20ae3b240d2654d826634b21e
-[08/11] fork: allow kernel code to call copy_process
-        commit: 89c8e98d8cfb0656dbeb648572df5b13e372247d
-[09/11] vhost_task: Allow vhost layer to use copy_process
-        commit: 77feab3c4156229511b378f15c0a16574d9c08ea
-[10/11] vhost: move worker thread fields to new struct
-        commit: d45e2b73ead0daec350680fbf20144a2d3670186
-[11/11] vhost: use vhost_tasks for worker threads
-        commit: 5ab18f4b061ef24a71eea9ffafebd1a82ae2f514
