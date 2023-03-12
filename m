@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F1E6B64E0
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:20:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A901C6B64E2
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:21:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229614AbjCLKUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56864 "EHLO
+        id S229957AbjCLKVV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:21:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229681AbjCLKUn (ORCPT
+        with ESMTP id S229756AbjCLKVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:20:43 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C99F12943B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:20:41 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id k10so37546874edk.13
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678616440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sbAbzZV/Xdq9oZ9db4qjyR7OAM8ISoHuQdD7Lk6uW9o=;
-        b=LeLPC3EEhzxRNxvRCH+b+d4kEih+ehxEiG2rXL5qSEAcOttdU4aXULt0tsRKPuCza3
-         a4zWL1S0wbIAisSm1DpkMjY03lTS4tPihYnhk7Gm1YjQK92APvyRcC8nklG3T6yGr/eB
-         cmYfO6IiI+lSpBExN9SZvLO/BEW9t7S9V6roCvbfm71F6OeinZvpXv7YsdI2sq3n5y3S
-         naTpfbe8huSCsAPBspw/c++7JG8ovvFyJ2lQXDxaVxcosqunaSAQHdVFkePGJafuZDC5
-         vyVlxtg9tFQUmMVIORvjh8TnVayopqMNlt8dEzQ3SyBjXt+WBr/6pGANCLgwwSdGLEtV
-         M0Yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678616440;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sbAbzZV/Xdq9oZ9db4qjyR7OAM8ISoHuQdD7Lk6uW9o=;
-        b=BqpHJc19hggBsdq8AwIktf8JC4j8sXWqJMMqvSdksLed/PvYL4IyFT0rFwjziQpIbp
-         VvqZCHDtny+xyrze+nFGQesSU77p6SRC+z+T0AcJwXvwh+U8bmGWS5HkPXoUpi1+8L+W
-         OM6L7B0zvypiBxVizfT2MHhtZIZzusUqXL8G1s0PqKMYFUHS6IaCg7mXLotT43ZXEMs5
-         mDsaZtJVtQNqDmStDalkOg/iLoyv95atOmLNJe/H3GfdQWnhaxIPUXsKxo52+30NSD2y
-         g35YsT+UmEtovlD7O8YExCatZh97if5ffu9mjmbL9sDN63VxR8dcRpEdoQATUlnz8q4o
-         t2gg==
-X-Gm-Message-State: AO0yUKXyAYhRQ22I/sBDPs0jsBP7ch7WlK3MAX/ZD5SDWEjBOYKoyTaz
-        e/+AhE7bgorQfKlP7OkL0Xerwg==
-X-Google-Smtp-Source: AK7set+j33mKv17cplWRaB2equIU/hTxgso/6lGoUsSghTcqcj9a6GMBKe+/zu/1DFJTN0Bl7w55cw==
-X-Received: by 2002:a17:907:6ea6:b0:8b1:7dea:cc40 with SMTP id sh38-20020a1709076ea600b008b17deacc40mr37985220ejc.9.1678616440275;
-        Sun, 12 Mar 2023 03:20:40 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id u21-20020a17090657d500b008b69aa62efcsm2094661ejr.62.2023.03.12.03.20.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 03:20:39 -0700 (PDT)
-Message-ID: <d9b197c8-56fe-b59d-5fca-bc863ac1e7ed@linaro.org>
-Date:   Sun, 12 Mar 2023 11:20:38 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/12] net: dsa: lantiq_gswip: mark OF related data as
- maybe unused
-Content-Language: en-US
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Hauke Mehrtens <hauke@hauke-m.de>,
-        Woojung Huh <woojung.huh@microchip.com>,
-        UNGLinuxDriver@microchip.com,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Colin Foster <colin.foster@in-advantage.com>,
-        Michael Hennerich <michael.hennerich@analog.com>,
-        Alexander Aring <alex.aring@gmail.com>,
-        Stefan Schmidt <stefan@datenfreihafen.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org
-References: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
- <20230311181434.lycxr5h2f6xcmwdj@skbuf>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311181434.lycxr5h2f6xcmwdj@skbuf>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Sun, 12 Mar 2023 06:21:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98632392A9;
+        Sun, 12 Mar 2023 03:21:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 27EF660EA5;
+        Sun, 12 Mar 2023 10:21:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D709C433D2;
+        Sun, 12 Mar 2023 10:21:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678616476;
+        bh=j/D7OCr3A6Ye/wZ/o+dAr/WEgQ5exDAy5KhgPofXXFM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=lAPfnhPBiBCNTCkuMzDEtJiee2ZP9re4OIfUEE8846ALE1YcKepPf3JlgXciXD3Se
+         5nq2eExflrWtSur1Pk5z0AG2Rquc5w1mUC/gwHFezG2M7Pl3/NCVFbp/SAl7NNwhQL
+         V2/qIpHEKMUZ1bM8fbzB3EHTum9LyxWBDt2qtENYvlL7j4kHtR7pb9GWfoQSS2BOfc
+         5eDGs33fKvoqlvUmd3W+/NerypoKsnCv2KD+pkgsD5iiYfP+EJSexqO6LLe8rzzvPF
+         k7aRVDookS4R1saZ2ZlF9bYT9jCSl8xK/pBcnk2FXMUuqNO4yeFGnoQ8iC0X5/6vgd
+         koTOfGJorq4Lg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pbIpF-00GyNO-PA;
+        Sun, 12 Mar 2023 10:21:13 +0000
+Date:   Sun, 12 Mar 2023 10:21:12 +0000
+Message-ID: <87fsaa5kyv.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>, kvmarm@lists.linux.dev,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        kvm-riscv@lists.infradead.org
+Subject: Re: [PATCH 2/2] KVM: Don't enable hardware after a restart/shutdown is initiated
+In-Reply-To: <20230310221414.811690-3-seanjc@google.com>
+References: <20230310221414.811690-1-seanjc@google.com>
+        <20230310221414.811690-3-seanjc@google.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: seanjc@google.com, pbonzini@redhat.com, kvm@vger.kernel.org, linux-kernel@vger.kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, kvmarm@lists.linux.dev, chenhuacai@kernel.org, aleksandar.qemu.devel@gmail.com, anup@brainfault.org, atishp@atishpatra.org, kvm-riscv@lists.infradead.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -93,39 +75,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 19:14, Vladimir Oltean wrote:
-> On Sat, Mar 11, 2023 at 06:32:52PM +0100, Krzysztof Kozlowski wrote:
->> The driver can be compile tested with !CONFIG_OF making certain data
->> unused:
->>
->>   drivers/net/dsa/lantiq_gswip.c:1888:34: error: ‘xway_gphy_match’ defined but not used [-Werror=unused-const-variable=]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
+On Fri, 10 Mar 2023 22:14:14 +0000,
+Sean Christopherson <seanjc@google.com> wrote:
 > 
-> Do you happen to have any context as to why of_match_node() without
-> CONFIG_OF is implemented as:
+> Reject hardware enabling, i.e. VM creation, if a restart/shutdown has
+> been initiated to avoid re-enabling hardware between kvm_reboot() and
+> machine_{halt,power_off,restart}().  The restart case is especially
+> problematic (for x86) as enabling VMX (or clearing GIF in KVM_RUN on
+> SVM) blocks INIT, which results in the restart/reboot hanging as BIOS
+> is unable to wake and rendezvous with APs.
 > 
-> #define of_match_node(_matches, _node)	NULL
+> Note, this bug, and the original issue that motivated the addition of
+> kvm_reboot(), is effectively limited to a forced reboot, e.g. `reboot -f`.
+> In a "normal" reboot, userspace will gracefully teardown userspace before
+> triggering the kernel reboot (modulo bugs, errors, etc), i.e. any process
+> that might do ioctl(KVM_CREATE_VM) is long gone.
 > 
-> and not as:
+> Fixes: 8e1c18157d87 ("KVM: VMX: Disable VMX when system shutdown")
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  virt/kvm/kvm_main.c | 17 ++++++++++++++++-
+>  1 file changed, 16 insertions(+), 1 deletion(-)
 > 
-> static inline const struct of_device_id *
-> of_match_node(const struct of_device_id *matches,
-> 	      const struct device_node *node)
-> {
-> 	return NULL;
-> }
-> 
-> ?
-> 
-> Generally, the static inline shim function model is nicer, because it
-> allows us to not scatter __maybe_unused all around.
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 6cdfbb2c641b..b2bf4c105181 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -5182,7 +5182,20 @@ static void hardware_disable_all(void)
+>  static int hardware_enable_all(void)
+>  {
+>  	atomic_t failed = ATOMIC_INIT(0);
+> -	int r = 0;
+> +	int r;
+> +
+> +	/*
+> +	 * Do not enable hardware virtualization if the system is going down.
+> +	 * If userspace initiated a forced reboot, e.g. reboot -f, then it's
+> +	 * possible for an in-flight KVM_CREATE_VM to trigger hardware enabling
+> +	 * after kvm_reboot() is called.  Note, this relies on system_state
+> +	 * being set _before_ kvm_reboot(), which is why KVM uses a syscore ops
+> +	 * hook instead of registering a dedicated reboot notifier (the latter
+> +	 * runs before system_state is updated).
+> +	 */
+> +	if (system_state == SYSTEM_HALT || system_state == SYSTEM_POWER_OFF ||
+> +	    system_state == SYSTEM_RESTART)
+> +		return -EBUSY;
 
-Sorry, I don't follow. I don't touch that wrappers, just fix errors
-related to OF device ID tables, although in few cases it is indeed
-related to of_match_node.
+Since we now seem to be relying on system_state for most things, is
+there any use for 'kvm_rebooting' other than the ease of evaluation in
+__svm_vcpu_run?
 
-Best regards,
-Krzysztof
+	M.
 
+-- 
+Without deviation from the norm, progress is not possible.
