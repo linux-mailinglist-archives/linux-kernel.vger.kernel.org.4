@@ -2,89 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4DABC6B6859
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:43:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0DAC6B685F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:45:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCLQnt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 12:43:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55672 "EHLO
+        id S230526AbjCLQpb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 12:45:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230511AbjCLQnq (ORCPT
+        with ESMTP id S229640AbjCLQp3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 12:43:46 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A25A2331E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 09:43:45 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id s22so12808167lfi.9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 09:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678639423;
-        h=subject:in-reply-to:cc:to:from:date:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=MKTinlG5kM8KUglYqEy7kn40PH2Oa+0TdD9V1KN73Hg=;
-        b=p3h0lAmkS7wOqJQv9E8w9VngaoxkqouLv6PMux/89kuFBkzpekN1JUHuY0/ZP8LF71
-         D/gXga9gSYI3N3/dASNE15A6m58R40v+1tsF/jflfS77Ai6vOp8FTaL/GkUk43BZ5CG5
-         asTKw4wmUgAvpQ2geNpZCaYPxJw2ZQq0O+QJcwAXhU8cjNXyiWA2ERyQ4IG4UWV5m6t9
-         GY9izDgrWZ3u/JanKT0cu0akEEnDpfgxm3XHKmThF7a6kMV3Rw44CFE8NjSQtGoB/s11
-         4kWEpvALZJlM2btO/ySQ66nQJbyPPSiwxoOF7eu71RbbqMpiaTi4590GER3z+qHAubA/
-         QbUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678639423;
-        h=subject:in-reply-to:cc:to:from:date:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MKTinlG5kM8KUglYqEy7kn40PH2Oa+0TdD9V1KN73Hg=;
-        b=i6wKqSCjEZypYcgGzm2lHWV2HTk0KvzN+eYqpSrV0i7dC07qbcy541lpHiGp788G14
-         R5/Ftn0LjklKYFs9d0kw/VtiLTJdzaphIJXm+FK3VI6MOWIUkdwBJqKbVNXHbUIWx8d7
-         4+ECLHQwW8eYlUALNYxmWZ9G0ViTogQcFKYmTa5qIZlIHzqB0aVX7hnSgNHHTg1mz8BD
-         6y8d0HD+DLH9MV35FE6sT9R4alBLa3rlHS0yqCbfUPRXLVtLWhl9zUbnXlQHEOgYu2nE
-         q2jZNk9l+u8wvUflQ2QE3V4Qd7iTw+0Z0M7BGZ/kNXOGsui3asU2zU6QG+0qpbGpYuww
-         VOLA==
-X-Gm-Message-State: AO0yUKXD9wGsYO/d0Nn4hnhSTf2SvJDjcJx0StNabU4QgDdaLRrZGnBZ
-        lRG0BNaZBzagSFBwB3BLlRh+7jMeLQD8H6wY
-X-Google-Smtp-Source: AK7set+v+IsLPG/5ejVJ1EHmcpPpEQ6n3/Y2wnMJwAPEK+pjHmEIHE9pHbCNT488gN035DcWIoYiqA==
-X-Received: by 2002:a19:f512:0:b0:4dd:9931:c510 with SMTP id j18-20020a19f512000000b004dd9931c510mr8856273lfb.51.1678639423624;
-        Sun, 12 Mar 2023 09:43:43 -0700 (PDT)
-Received: from letter6.txt (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
-        by smtp.gmail.com with ESMTPSA id q5-20020ac25105000000b00497a32e2576sm700473lfb.32.2023.03.12.09.43.43
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 09:43:43 -0700 (PDT)
-Message-ID: <640e013f.c20a0220.5d2c5.1904@mx.google.com>
-Date:   Sun, 12 Mar 2023 09:43:43 -0700 (PDT)
-From:   Sergey Lisov <sleirsgoevy@gmail.com>
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <c9f8d89e-7420-a049-907c-60e3fa551548@linaro.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: exynos-dw-mshc-common: add exynos78xx
- variants
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Sun, 12 Mar 2023 12:45:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0676E22028;
+        Sun, 12 Mar 2023 09:45:29 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 98C1E60F72;
+        Sun, 12 Mar 2023 16:45:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2EFDC433EF;
+        Sun, 12 Mar 2023 16:45:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678639528;
+        bh=v3YW+tOhU6NvghcU8ePtg4xxv5KLn6KJH5+dYosdrs4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=YxEhMVNmplQlUkDoURJ6/oWUfonRqx5KpBJu10rV0eLrnqHaorOkAVV7huoxYSFtb
+         Iien4gP05Tai+KoNRCuVIdfRbQcUoNZ3wow2CeDyGCOP7cfMEsn+JRMHeffimZwAyO
+         H3CRhVgMix5GRB2ngsV3TJV0rlk+PByrpf/h+7woM9fD4TSLdo/HqZyPZMrmOC3TeI
+         Fi9h502KnJo0Sf3TihbtghihzvSONAyxnCnZ6B/pV8OeIYWjpSE37gLmQ7I6dR+Kdv
+         srW0OxuoI6Ro9R6HR6Lz66p/n6iEowymBrc5id8fEBGAWMdZti8mm4I6kO6EH59o0C
+         YUKytdNb4YOrg==
+Date:   Sun, 12 Mar 2023 16:45:33 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     <Marius.Cristea@microchip.com>
+Cc:     <devicetree@vger.kernel.org>, <lars@metafoo.de>,
+        <linux-iio@vger.kernel.org>, <robh+dt@kernel.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v1 0/2] adding support for Microchip PAC193X Power
+ Monitor
+Message-ID: <20230312164533.491a7402@jic23-huawei>
+In-Reply-To: <178ee962c5fc7ee7806475cb38527b8bdbfa8d09.camel@microchip.com>
+References: <20230220123232.413029-1-marius.cristea@microchip.com>
+        <20230225171139.65238b62@jic23-huawei>
+        <178ee962c5fc7ee7806475cb38527b8bdbfa8d09.camel@microchip.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Bindings and DTS (and driver) are always separate.
+On Mon, 6 Mar 2023 14:03:52 +0000
+<Marius.Cristea@microchip.com> wrote:
 
-Okay, will split the patch.
+> Hi Jonathan,
+>=20
+>   Please, see my comments below...
+>=20
+>=20
+> On Sat, 2023-02-25 at 17:11 +0000, Jonathan Cameron wrote:
+> > EXTERNAL EMAIL: Do not click links or open attachments unless you
+> > know the content is safe
+> >=20
+> > On Mon, 20 Feb 2023 14:32:30 +0200
+> > <marius.cristea@microchip.com> wrote:
+> >  =20
+> > > From: Marius Cristea <marius.cristea@microchip.com>
+> > >=20
+> > > Adding support for Microchip PAC193X series of Power Monitor with
+> > > Accumulator chip family. =20
+> >=20
+> > This device is at the messy boundary between IIO and HWMON. Perhaps
+> > call out
+> > the reasons you think IIO is more appropriate in this cover letter.
+> > + Often a good idea for these borderline parts to cc both mailing
+> > lists and
+> > maintainers.
+> >=20
+> > Often the conclusion is that it is fine to have these in IIO because
+> > we can
+> > bridge to hwmon anyway with the iio-hwmon driver.
+> >  =20
+>=20
+> Indeed the driver (the device) is at the boundary between IIO and
+> HWMON. I was thinking to start with a simple driver (this one that is
+> more apropiate to be a HWMON) and add more functionality later (like
+> data buffering that is quite important for example if someone wants to
+> profile power consumtion of the procesor itself, or a pheriperic, or a
+> battery)
+>=20
 
-> Compatibles must be specific.
+OK. List out some of the things you want to do later as the reasoning
++CC hmwon maintainers just to be sure.  They are usually fine with this
+sort of reasoning, but it is best to check anyway.
 
-No, this way you'd have tons of identical compatibles that only differ in
-the exynosXXXX digits, and are functionally equivalent.
+Thanks,
 
-> That's non-bisectable change (also breaking other users of DTS), so you
-> need to explain in commit msg rationale - devices were never compatible
-> and using exynos7 does not work in certain cases.
+Jonathan
 
-Valid point.
+
+>=20
+> > >=20
+> > > Differences related to previous patch:
+> > >=20
+> > > v1:
+> > > - first version comitted to review
+> > >=20
+> > >=20
+> > > Marius Cristea (2):
+> > > =C2=A0 dt-bindings: iio: adc: adding dt-bindings for PAC193X
+> > > =C2=A0 iio: adc: adding support for pac193x
+> > >=20
+> > > =C2=A0.../bindings/iio/adc/microchip,pac193x.yaml=C2=A0=C2=A0 |=C2=A0=
+ 122 +
+> > > =C2=A0MAINTAINERS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0 |=C2=A0=C2=A0=C2=A0 7 +
+> > > =C2=A0drivers/iio/adc/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 12 +
+> > > =C2=A0drivers/iio/adc/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 |=C2=A0=C2=A0=C2=A0 1 +
+> > > =C2=A0drivers/iio/adc/pac193x.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 2072
+> > > +++++++++++++++++
+> > > =C2=A05 files changed, 2214 insertions(+)
+> > > =C2=A0create mode 100644
+> > > Documentation/devicetree/bindings/iio/adc/microchip,pac193x.yaml
+> > > =C2=A0create mode 100644 drivers/iio/adc/pac193x.c
+> > >  =20
+> >  =20
+>=20
+> Thanks,
+> Marius
+>=20
 
