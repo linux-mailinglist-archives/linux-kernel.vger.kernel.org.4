@@ -2,65 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A2566B67CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:01:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8D4E6B67D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:09:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229932AbjCLQA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 12:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50678 "EHLO
+        id S230072AbjCLQJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 12:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCLQAz (ORCPT
+        with ESMTP id S230050AbjCLQJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 12:00:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC184B816;
-        Sun, 12 Mar 2023 09:00:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 36F1460F3A;
-        Sun, 12 Mar 2023 16:00:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E3BCC433EF;
-        Sun, 12 Mar 2023 16:00:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678636844;
-        bh=nbxNTesKWPwebrszPu7Fl9hCJ3NJCxcSoKeuua/b7nA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nW/4G4rtDiNnjMx0trpjZChXLuJtjpMmvG0SjWDpPGmUDTVK7T+bdNqFBilrdkB2e
-         F7TGLqtfgZkiLkN5lBBCdqZAK7tqqFpQBJA0rnBYGY6z1ikrcPqZnW63lhxn7QDcCg
-         o2miQUjKSMLUhoUYUEANhV2dFtWM9LFRuKs0GP4EYHUZnXj/DA/vn+L5kjvM0c4VJR
-         r6lYhgAziH6iLzGguY5+kMTMAKA62ZDuAyIgPwgCQDDg/ZRLmE2POCw82tEhx4bjgF
-         ohiqFyZsMjvwQSH0u6o5/77lp2MHQFHT9CajZDvPG/g6DHkt+0JKywxovMFyoWlnqq
-         KVnaqDL/hHvWQ==
-Date:   Sun, 12 Mar 2023 12:00:43 -0400
-From:   Sasha Levin <sashal@kernel.org>
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Eric Biggers <ebiggers@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org,
-        Leah Rumancik <leah.rumancik@gmail.com>,
-        "Luis R. Chamberlain" <mcgrof@gmail.com>
-Subject: Re: AUTOSEL process
-Message-ID: <ZA33K0U5zcoQW7Lx@sashalap>
-References: <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain>
- <ZAzH8Ve05SRLYPnR@sashalap>
- <ZAzOgw8Ui4kh1Z3D@sol.localdomain>
- <ZAzvPR1zev3tFJoH@sashalap>
- <CAOQ4uxhgHp7Eh4HC7ceqzyWp2PyD_G7-o-DukfA90WN456gDeQ@mail.gmail.com>
+        Sun, 12 Mar 2023 12:09:15 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B23AB36454;
+        Sun, 12 Mar 2023 09:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=KI84V
+        tG+lYqaZnPKW41rtqtNaa7xafoaTjef1FxWfNk=; b=O5JbGqq+arN23HQxkzzqT
+        16DPhluNdsKhhWqNAGjvgJcToQ6opfINB3wmSN4fXeJc/1htJfJaDJWI4MSLJUqF
+        36WIXaAuxlR3igqyXLTJljNN4fM0BnlmCT2VnDZVVWeUWADVy0kLvE3FvoTNj8/G
+        Pz91ZBKEjEUzGqIb5lf2BE=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-3 (Coremail) with SMTP id _____wAXRBAG+Q1kULNrDA--.9072S2;
+        Mon, 13 Mar 2023 00:08:38 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     krzysztof.kozlowski@linaro.org
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] nfc: st-nci: Fix use after free bug in ndlc_remove due to race condition
+Date:   Mon, 13 Mar 2023 00:08:37 +0800
+Message-Id: <20230312160837.2040857-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxhgHp7Eh4HC7ceqzyWp2PyD_G7-o-DukfA90WN456gDeQ@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-CM-TRANSID: _____wAXRBAG+Q1kULNrDA--.9072S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7WFyrJFyrKw47KFy7WF18uFg_yoW8XFWkpr
+        ZxXryruFWrGF4FyFZ7WF4UGr1YkwsrtryDK3y3W343ZFnayrs0qr92yFW5uF1IqF4IyFW2
+        y3yDX3Z8Ja4kCa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziJDGrUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXQkwU1WBo4he9QAAsj
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,49 +51,61 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 10:04:23AM +0200, Amir Goldstein wrote:
->On Sat, Mar 11, 2023 at 11:25 PM Sasha Levin <sashal@kernel.org> wrote:
->>
->> On Sat, Mar 11, 2023 at 10:54:59AM -0800, Eric Biggers wrote:
->...
->> >And yes, I am interested in contributing, but as I mentioned I think you need to
->> >first acknowledge that there is a problem, fix your attitude of immediately
->> >pushing back on everything, and make it easier for people to contribute.
->>
->> I don't think we disagree that the process is broken: this is one of the
->> reasons we went away from trying to support 6 year LTS kernels.
->>
->> However, we are not pushing back on ideas, we are asking for a hand in
->> improving the process: we've been getting drive-by comments quite often,
->> but when it comes to be doing the actual work people are quite reluctant
->> to help.
->>
->> If you want to sit down and scope out initial set of work around tooling
->> to help here I'm more than happy to do that: I'm planning to be both in
->> OSS and LPC if you want to do it in person, along with anyone else
->> interested in helping out.
->>
->
->Sasha,
->
->Will you be able to attend a session on AUTOSEL on the overlap day
->of LSFMM and OSS (May 10) or earlier?
->
->We were going to discuss the topic of filesystems and stable trees [1] anyway
->and I believe the discussion can be even more productive with you around.
->
->I realize that the scope of AUTOSEL is wider than backporting filesystem fixes,
->but somehow, most of the developers on this thread are fs developers.
->
->BTW, the story of filesystem testing in stable trees has also been improving
->since your last appearance in LSFMM.
+This bug influences both st_nci_i2c_remove and st_nci_spi_remove.
+Take st_nci_i2c_remove as an example.
 
-Happy to stop by and collaborate!
+In st_nci_i2c_probe, it called ndlc_probe and bound &ndlc->sm_work
+with llt_ndlc_sm_work.
 
-I'll also be in Vancouver the whole week (though not in LSF/MM), so if
-you'd want to find time for a workshop around this topic with interested
-parties we can look into that too.
+When it calls ndlc_recv or timeout handler, it will finally call
+schedule_work to start the work.
 
+When we call st_nci_i2c_remove to remove the driver, there
+may be a sequence as follows:
+
+Fix it by finishing the work before cleanup in ndlc_remove
+
+CPU0                  CPU1
+
+                    |llt_ndlc_sm_work
+st_nci_i2c_remove   |
+  ndlc_remove       |
+     st_nci_remove  |
+     nci_free_device|
+     kfree(ndev)    |
+//free ndlc->ndev   |
+                    |llt_ndlc_rcv_queue
+                    |nci_recv_frame
+                    |//use ndlc->ndev
+
+Fixes: 35630df68d60 ("NFC: st21nfcb: Add driver for STMicroelectronics ST21NFCB NFC chip")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+ drivers/nfc/st-nci/ndlc.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/nfc/st-nci/ndlc.c b/drivers/nfc/st-nci/ndlc.c
+index 755460a73c0d..d2aa9f766738 100644
+--- a/drivers/nfc/st-nci/ndlc.c
++++ b/drivers/nfc/st-nci/ndlc.c
+@@ -282,13 +282,15 @@ EXPORT_SYMBOL(ndlc_probe);
+ 
+ void ndlc_remove(struct llt_ndlc *ndlc)
+ {
+-	st_nci_remove(ndlc->ndev);
+-
+ 	/* cancel timers */
+ 	del_timer_sync(&ndlc->t1_timer);
+ 	del_timer_sync(&ndlc->t2_timer);
+ 	ndlc->t2_active = false;
+ 	ndlc->t1_active = false;
++	/* cancel work */
++	cancel_work_sync(&ndlc->sm_work);
++
++	st_nci_remove(ndlc->ndev);
+ 
+ 	skb_queue_purge(&ndlc->rcv_q);
+ 	skb_queue_purge(&ndlc->send_q);
 -- 
-Thanks,
-Sasha
+2.25.1
+
