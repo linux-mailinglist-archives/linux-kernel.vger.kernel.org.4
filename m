@@ -2,96 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05B9E6B66FC
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:51:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76E5C6B66FE
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:51:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCLNvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:51:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
+        id S229863AbjCLNvk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:51:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCLNvc (ORCPT
+        with ESMTP id S229450AbjCLNvh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:51:32 -0400
-X-Greylist: delayed 66226 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Mar 2023 06:51:30 PDT
-Received: from smtp50.i.mail.ru (smtp50.i.mail.ru [95.163.41.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE4438028
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:51:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mail.ru; s=mail4;
-        h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:Cc:To:From:From:Subject:Content-Type:Content-Transfer-Encoding:To:Cc; bh=9e2qemlQ+qu6TtpeSILCd8YXgDshgLNwa7t+UxrGEOg=;
-        t=1678629090;x=1678719090; 
-        b=hGpJQzbEqCqCVXZUQZbMIyD28sdtfyQsA675Iq+HtmwRXsuTNnKgdDCyO0030WRRcRmgy6KhMK7A7hWEt7hyIt+K5kenzB2RE8R/IOl7f0d/3MK1opE/cfYlRE7Orqeb65wIpcMlkaLOuLOw0eoP9roftTgZQMAdOiH2Qj8xW4lOqXNdrQSDFYgAib7NAp1whzrohwE6p5M4wQxTwy6m1u9xT8wpnH5c29QrObFPJhfgB/eFYwRoFKqTx1RKadHayjKrVa39UFTOza6L+Zmh0WhhMsxFePG73UT9TMr1h1mWzovbD8F2ajz1ebUPncUibpccj9P3zoDO/y0a14YTNw==;
-Received: by smtp50.i.mail.ru with esmtpa (envelope-from <listdansp@mail.ru>)
-        id 1pbM6h-00C5Oi-7t; Sun, 12 Mar 2023 16:51:27 +0300
-From:   Danila Chernetsov <listdansp@mail.ru>
-To:     Alex Deucher <alexander.deucher@amd.com>
-Cc:     Danila Chernetsov <listdansp@mail.ru>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: [PATCH v5.10 1/1] drm/amdgpu: add error handling for drm_fb_helper_initial_config
-Date:   Sun, 12 Mar 2023 13:50:53 +0000
-Message-Id: <20230312135053.7218-1-listdansp@mail.ru>
-X-Mailer: git-send-email 2.25.1
+        Sun, 12 Mar 2023 09:51:37 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D87B38013
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:51:35 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id fd5so4836567edb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:51:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678629094;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=JDnsPd/LWUjlQN35JHFuhsEYXZwtHp7Tg6xyrNKkcx0=;
+        b=leBUfM+kGmFx3lbw8Ds4LVAFb0egI+bpB6A6mZMS/VNVxu+4LPnPL28e8VsC1XrG3i
+         2CAyg+YYxTPz5SkZ1ZbvFBj9aVsaD2i4aG2QkhlrYGx0qWrcFh4P9M9+2byWYonW5fog
+         Kc6pcOdb62onyN7rODrAxvycOm0YoDb5yby5JYkvMar5Z81FR+N/XRoNw6ZfT3TRHKyW
+         i/Sj5bY6LfKwb3+hyElcwSxDtUmDJzNRmfM8MOxfdk2LrXdUw4h4fEKzeTATAwN8zw0H
+         NVIbhrzFARIYBJphMTx+paHb47T1pTPQnIttnaGCTXh77Sxst8zvE0qF9EYk2MR1uArV
+         trWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678629094;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JDnsPd/LWUjlQN35JHFuhsEYXZwtHp7Tg6xyrNKkcx0=;
+        b=2moj826/dkqvBNcegz2X/n4CoMErbPdFeKbMHN6Z7WHrwa0FE6U5HWCMVP+cGKh1bq
+         MW62nej2kpPdhCCUMkRfnYYBu5f052wHG/Ul2t9NoPCkewmreU5Cg6p4uefXisvbb55k
+         Scb9A+1AjC+nOgd4yZgsUWeGsdecXeMvya9szP8qztjzlU3kE9BpU9T/YMeh7/0n2R4R
+         /iXNNjiu1g4S8Jdc+1cMGfpr2Z4drn3LzyJE88VXN68zs9jkKbX+shGYY/SyNur41P7T
+         /Tn98KFuBy1OwfJ9VFn3M8obe6nJ3Kb2kaHmihAMfgJ8AeXBy1W3RI+YkzgzoIhC0B1Y
+         IdWQ==
+X-Gm-Message-State: AO0yUKWCRMMMbnpt3kC2VlUdhAs68QKx0+7dFbgQJ/CmTusgJOawqpai
+        wKaYO9CftofC5US9SRGdoO1vcg==
+X-Google-Smtp-Source: AK7set8AeZI1EJibmWQqUYa4b/A/UWGiDLtXaCZSIsf/yj70h2qpSmPI1UJGcprS5rWdcrtwc7TkPQ==
+X-Received: by 2002:a17:907:980b:b0:88c:4f0d:85af with SMTP id ji11-20020a170907980b00b0088c4f0d85afmr39938981ejc.75.1678629093861;
+        Sun, 12 Mar 2023 06:51:33 -0700 (PDT)
+Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170906701400b008b17fe9ac6csm2263946ejj.178.2023.03.12.06.51.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 06:51:33 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Thierry Reding <thierry.reding@gmail.com>,
+        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/2] pwm: rcar: drop of_match_ptr for ID table
+Date:   Sun, 12 Mar 2023 14:51:19 +0100
+Message-Id: <20230312135120.357713-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Authentication-Results: smtp50.i.mail.ru; auth=pass smtp.auth=listdansp@mail.ru smtp.mailfrom=listdansp@mail.ru
-X-Mailru-Src: smtp
-X-7564579A: B8F34718100C35BD
-X-77F55803: 4F1203BC0FB41BD9BCEC41593EBD8357D61703A5C7370B1E319F7344C6651618182A05F5380850404101E7A95639D66F46B724D4AD22814152705C147E0509B9A98EC30680F39800
-X-7FA49CB5: FF5795518A3D127A4AD6D5ED66289B5278DA827A17800CE710FC7AC39A8009ECEA1F7E6F0F101C67BD4B6F7A4D31EC0BCC500DACC3FED6E28638F802B75D45FF8AA50765F7900637525B22DCF689D4638638F802B75D45FF36EB9D2243A4F8B5A6FCA7DBDB1FC311F39EFFDF887939037866D6147AF826D8A8B962F2C513871FF9C52E85DFF075466F9789CCF6C18C3F8528715B7D10C86878DA827A17800CE7F588D4452561E4D79FA2833FD35BB23D9E625A9149C048EE0AC5B80A05675ACDF6B57BC7E64490618DEB871D839B7333395957E7521B51C2DFABB839C843B9C08941B15DA834481F8AA50765F79006379BABF3D50D9A3D87389733CBF5DBD5E9B5C8C57E37DE458BD9DD9810294C998ED8FC6C240DEA76428AA50765F7900637A9329C8D8D988D4ED81D268191BDAD3DBD4B6F7A4D31EC0BEA7A3FFF5B025636D81D268191BDAD3D78DA827A17800CE72AA49236079A88D2EC76A7562686271ED91E3A1F190DE8FD2E808ACE2090B5E14AD6D5ED66289B5259CC434672EE63711DD303D21008E298D5E8D9A59859A8B6B372FE9A2E580EFC725E5C173C3A84C3443DF20DE7AF59D235872C767BF85DA2F004C90652538430E4A6367B16DE6309
-X-C1DE0DAB: 0D63561A33F958A5C7C8BD3663FA951A02515BEC82C141FC4BF0A345B7E33DD84EAF44D9B582CE87C8A4C02DF684249CC203C45FEA855C8F
-X-C8649E89: 4E36BF7865823D7055A7F0CF078B5EC49A30900B95165D34EB7BD66E9101C1008FCF4C881EC454412423020562D60783A1B62AE67F12488AE155D5A1E56565E71D7E09C32AA3244C38C2F3B520FDC88ABB7C7E14A63851DABBA718C7E6A9E04227AC49D2B05FCCD8
-X-D57D3AED: 3ZO7eAau8CL7WIMRKs4sN3D3tLDjz0dLbV79QFUyzQ2Ujvy7cMT6pYYqY16iZVKkSc3dCLJ7zSJH7+u4VD18S7Vl4ZUrpaVfd2+vE6kuoey4m4VkSEu530nj6fImhcD4MUrOEAnl0W826KZ9Q+tr5ycPtXkTV4k65bRjmOUUP8cvGozZ33TWg5HZplvhhXbhDGzqmQDTd6OAevLeAnq3Ra9uf7zvY2zzsIhlcp/Y7m53TZgf2aB4JOg4gkr2biojN3wBDQf4j7MC6g2skIIJpw==
-X-Mailru-Sender: 4CE1109FD677D2770147F6A9E21DCA7B011BF7C6691D941B53F16FEE055C45F2C79AF7ED9535CCE97E3C9C7AF06D9E7B78274A4A9E9E44FD3C3897ABF9FF211DE8284E426C7B2D9A5FEEDEB644C299C0ED14614B50AE0675
-X-Mras: Ok
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The type of return value of drm_fb_helper_initial_config is int, 
-which may return wrong result, so we add error handling for it 
-to reclaim memory resource, and return when an error occurs.          
+The driver can match only via the DT table so the table should be always
+used and the of_match_ptr does not have any sense (this also allows ACPI
+matching via PRP0001, even though it might not be relevant here).  This
+also fixes !CONFIG_OF error:
 
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
+  drivers/pwm/pwm-rcar.c:252:34: error: ‘rcar_pwm_of_table’ defined but not used [-Werror=unused-const-variable=]
 
-Fixes: d38ceaf99ed0 (drm/amdgpu: add core driver (v4))
-Signed-off-by: Danila Chernetsov <listdansp@mail.ru>
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 ---
- drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c | 13 +++++++++++--
- 1 file changed, 11 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c
-index 43f29ee0e3b0..e445a2c9f569 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_fb.c
-@@ -348,8 +348,17 @@ int amdgpu_fbdev_init(struct amdgpu_device *adev)
- 	if (!amdgpu_device_has_dc_support(adev))
- 		drm_helper_disable_unused_functions(adev_to_drm(adev));
- 
--	drm_fb_helper_initial_config(&rfbdev->helper, bpp_sel);
--	return 0;
-+	ret = drm_fb_helper_initial_config(&rfbdev->helper, bpp_sel);
-+	if (ret)
-+		goto fini;
-+
-+	return 0;
-+
-+fini:
-+	drm_fb_helper_fini(&rfbdev->helper);
-+
-+	kfree(rfbdev);
-+	return ret;
- }
- 
- void amdgpu_fbdev_fini(struct amdgpu_device *adev)
+Changes since v1:
+1. Extend commit msg.
+---
+ drivers/pwm/pwm-rcar.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/pwm/pwm-rcar.c b/drivers/pwm/pwm-rcar.c
+index 55f46d09602b..8f31f3cc93d5 100644
+--- a/drivers/pwm/pwm-rcar.c
++++ b/drivers/pwm/pwm-rcar.c
+@@ -260,7 +260,7 @@ static struct platform_driver rcar_pwm_driver = {
+ 	.remove = rcar_pwm_remove,
+ 	.driver = {
+ 		.name = "pwm-rcar",
+-		.of_match_table = of_match_ptr(rcar_pwm_of_table),
++		.of_match_table = rcar_pwm_of_table,
+ 	}
+ };
+ module_platform_driver(rcar_pwm_driver);
 -- 
-2.25.1
+2.34.1
 
