@@ -2,58 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CFBC6B678C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:37:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831716B678F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:37:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229797AbjCLPg6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 11:36:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48734 "EHLO
+        id S229945AbjCLPhs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 11:37:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49244 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229585AbjCLPg4 (ORCPT
+        with ESMTP id S229585AbjCLPhq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 11:36:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A292343441;
-        Sun, 12 Mar 2023 08:36:51 -0700 (PDT)
+        Sun, 12 Mar 2023 11:37:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C623843441;
+        Sun, 12 Mar 2023 08:37:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3657460F2D;
-        Sun, 12 Mar 2023 15:36:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CE944C433EF;
-        Sun, 12 Mar 2023 15:36:48 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 3DFC5CE0B11;
+        Sun, 12 Mar 2023 15:37:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7A7DC433EF;
+        Sun, 12 Mar 2023 15:37:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678635410;
-        bh=bBBlxMEPLUb4VCFvvJ0V/XYfNtveGw01hltB18ML8WQ=;
+        s=k20201202; t=1678635461;
+        bh=R1AumEUR0bc6e6nMbU15hmjqwiC8LvwLAyZqPz0mE0U=;
         h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=CHnEGZjO+FUV0smOlfk2In/q0P64C5cm3rcy4JIYM0qL5tnqu2OH9pm7v7tzJ3Uc4
-         QCschvH+X2FSTuFahen8vgMPgdrsfKSIEiavX4Fp7uvrmIUI6tNcYq5stSHvt2qLOI
-         nVXvkuJJmrpZXKjXvUOqcdBgbQtNWimrfDJTlubO/l5MRifc2wKEzj77GGeB3Li6KQ
-         1gW2tVhaAJXnj3ndBaIrEebXM8d6RxbKT2fsfjWw3SoXAgdH6qmR68GCqQB+5x+DUs
-         UFAYYBP8zPBBxndsZJ289uDhzetB66+Bm5N5nte3LmhpNON8+D37xCnfZbrL252Do3
-         O8z3rXhdtDflg==
-Date:   Sun, 12 Mar 2023 15:36:55 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v2 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
-Message-ID: <20230312153655.052d5730@jic23-huawei>
-In-Reply-To: <c16d372f-a122-16d6-ad08-1fbffb01d9ff@gmail.com>
-References: <cover.1677750859.git.mazziesaccount@gmail.com>
-        <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
-        <20230304201720.2d554f07@jic23-huawei>
-        <c16d372f-a122-16d6-ad08-1fbffb01d9ff@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
+        b=W/0MwonhwuYJslF0MxV5sr6QvoeUmcoCR/F03L2q1FNbcozZDvTMWPOCerg6k1Sjx
+         b2Fqd/TvWbEBvXCyVGfFGM2NWQXdSZ5E122LadxT+TTouRN2eBsZEVqJ+7kOsB97bJ
+         ekO9KUdqnhgxpvqEBYc3ZdZuJOfNxroy9CqHds5/RNUfQZu6vhFd0vOCdVOCcz1Mjz
+         hr9W4NBMFmMgEKzF3xqV5TNsRsnWCGgXtGaZE+RFZYLED7beFTvoS5bELjQaetjnog
+         +/RgQWWhsISiRg6ZQYRGHv+jrnNYGy87z9obJEiTttGVA2iZ8wAvIlIALz9RU2JNCo
+         ZbipuVX/Dcpcg==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pbNlT-00H1EO-BT;
+        Sun, 12 Mar 2023 15:37:39 +0000
+Date:   Sun, 12 Mar 2023 15:37:39 +0000
+Message-ID: <87v8j63rr0.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Add coverage of MTE system registers
+In-Reply-To: <ZA3jISc0DH+7swbI@sirena.org.uk>
+References: <20230308-kvm-arm64-test-mte-regs-v1-1-f92a377e486f@kernel.org>
+        <87edpu5klk.wl-maz@kernel.org>
+        <ZA3jISc0DH+7swbI@sirena.org.uk>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,103 +74,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 5 Mar 2023 14:22:51 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-
-> On 3/4/23 22:17, Jonathan Cameron wrote:
-> > On Thu, 2 Mar 2023 12:58:59 +0200
-> > Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> >   
-> >> +/*
-> >> + * The BU27034 does not have interrupt or any other mechanism of triggering
-> >> + * the data read when measurement has finished. Hence we poll the VALID bit in
-> >> + * a thread. We will try to wake the thread BU27034_MEAS_WAIT_PREMATURE_MS
-> >> + * milliseconds before the expected sampling time to prevent the drifting. Eg,
-> >> + * If we constantly wake up a bit too late we would eventually skip a sample.  
-> > 
-> > Lazier approach would be to just sent the sampling frequency at twice the
-> > expected frequency and you'll never miss a sample unless you the wake up is
-> > delayed massively for some reason.  Particularly 'fresh' data might not matter
-> > enough that half a cycle late is a problem.  
+On Sun, 12 Mar 2023 14:35:13 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Hmm. Do I read this right - You suggest we drop the polling loop for 
-> valid bit and just always sleep for int_time / 2 if data was not valid?
+> On Sun, Mar 12, 2023 at 10:29:11AM +0000, Marc Zyngier wrote:
+> > Mark Brown <broonie@kernel.org> wrote:
+> 
+> > >  static struct vcpu_config *vcpu_configs[] = {
+> > >  	&vregs_config,
+> > > @@ -1131,5 +1163,6 @@ static struct vcpu_config *vcpu_configs[] = {
+> > >  	&sve_pmu_config,
+> > >  	&pauth_config,
+> > >  	&pauth_pmu_config,
+> > > +	&mte_config,
+> > >  };
+> > >  static int vcpu_configs_n = ARRAY_SIZE(vcpu_configs);
+> 
+> > Is there any reason why we sidestep the combinations of MTE with PAuth
+> > and PMU? I know this leads to an exponential set growth, but this is
+> > the very purpose of this test, and we found bugs related to this in
+> > the past.
+> 
+> The test is already not bothering with the combinations of SVE
+> and pointer auth, it appeared that the intent of the test was
+> only to test specific combinations.  From what's there it looks
+> more like there's something with PMU interacting specially with
+> things (it's all X and X+PMU) that needs coverage.  I couldn't
+> see anything between it and MTE, though I nearly added a MTE+PMU
+> combination just for the sake of it.  It's one of those areas
+> where it's hard to determine if there's an intent behind the
+> implementation choices made or if they're just whatever someone
+> happened to write and not particularly important or desired.
 
-Yes.  There are costs to both methods, but the advantage here is that the chance
-of being so late you miss becomes much less.
+It *is* desired. We've had cases of flags being reset at the wrong
+time and leading to issues that would be detected by this test. The
+PMU stuff is indeed one example, but similar things could happen
+between SVE+MTE, for example.
 
 > 
-> I don't know. That would probably make the time-stamps for buffered 
-> results to be jumping quite a bit - especially with the longer 
-> integration times.
-
-True enough.  They are probably fairly noisy either way but this would make them
-worse.
-
+> > A good first step would be to be able to build these combinations
+> > dynamically, and only then add new sublists to the mix.
 > 
-> >> + * And because the sleep can't wake up _exactly_ at given time this would be
-> >> + * inevitable even if the sensor clock would be perfectly phase-locked to CPU
-> >> + * clock - which we can't say is the case.
-> >> + *
-> >> + * This is still fragile. No matter how big advance do we have, we will still
-> >> + * risk of losing a sample because things can in a rainy-day skenario be
-> >> + * delayed a lot. Yet, more we reserve the time for polling, more we also lose
-> >> + * the performance by spending cycles polling the register. So, selecting this
-> >> + * value is a balancing dance between severity of wasting CPU time and severity
-> >> + * of losing samples.
-> >> + *
-> >> + * In most cases losing the samples is not _that_ crucial because light levels
-> >> + * tend to change slowly.
-> >> + */
-> >> +#define BU27034_MEAS_WAIT_PREMATURE_MS	5
-> >> +#define BU27034_DATA_WAIT_TIME_US	1000
-> >> +#define BU27034_TOTAL_DATA_WAIT_TIME_US (BU27034_MEAS_WAIT_PREMATURE_MS * 1000)  
-> >   
-> >> +static const struct iio_chan_spec bu27034_channels[] = {
-> >> +	{
-> >> +		.type = IIO_LIGHT,
-> >> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
-> >> +				      BIT(IIO_CHAN_INFO_SCALE),  
-> > 
-> > What is this scale for?  
-> 
-> The scale is to inform users that we return data using milli lux.
-> 
-> > Given the channel is computed from various different inputs, is there a
-> > clear definition of how it is scaled?  What does a write to it mean?  
-> 
-> Nothing. writing anything else but milli lux scale fails with -EINVAL.
-> 
-> I guess I am doing something in an unusual way here :) Do you have a 
-> suggestion for me?
+> That would certainly be a good idea, if we were heading in that
+> direction I'd also expect negative tests checking that for
+> example pointer authentication registers don't appear when that's
+> not enabled.  I'm not sure that it's worth blocking all new
+> coverage for that though, there is still value in having a bit of
+> basic coverage even if not all the combinations are covered yet.
 
-Return data in lux?  Or return it as INFO_RAW - thus making it clear
-that the reading is not in expected units and a conversion must be
-applied by userspace.  SCALE is not applied to PROCESSED by userspace.
+Then where is the incentive to get it fixed? People will just keep
+piling stuff, and the coverage will increasingly become worse.
 
-In the rare case where you do get SCALE and PROCESSED it's there to allow
-for changes in the underlying signal measurement that are eaten up in the
-computation needed to get to PROCESSED - that is they have no visible
-affect (beyond range changes etc).
+We have to do it as some point, and now is as good a time as any.
 
+	M.
 
-...
-
-> >> +
-> >> +	ret = regmap_read(regmap, BU27034_REG_SYSTEM_CONTROL, &part_id);  
-> > 
-> > As it's not all of the register I'd rename the temporary variable to
-> > val or reg or something along those lines.  
-> 
-> I still like having the variable named part_id - as it makes the check 
-> obvious. What I did was adding another temporary variable 'reg' and doing:
-> 
-> part_id = FIELD_GET(BU27034_MASK_PART_ID, reg);
-> 
-> and then using the part_id in if() and dev_warn().
-
-Looks good.
-
-
-Jonathan
-
+-- 
+Without deviation from the norm, progress is not possible.
