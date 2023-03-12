@@ -2,114 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7523F6B6700
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:51:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FE8C6B6704
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCLNvo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:51:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60842 "EHLO
+        id S229738AbjCLN4G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:56:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39308 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229738AbjCLNvi (ORCPT
+        with ESMTP id S229552AbjCLN4E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:51:38 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AABD38E92
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:51:36 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id cy23so38616020edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:51:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678629095;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KkVYC+wu1aL5ZaMnE/Wfc7AXFtfPa1srDddtutZjKIg=;
-        b=PBBLFoWjxELJQdQqoNyC8b9CBEZ06P7rxyzovfxm0JB/Fbi4q/v0iFUED2KasnzcOk
-         8p0vSh2PNexacdl0rT66R1xo4xfYHBhAdvmDNLiKo2WyfMimKUWBQwoe+IHH5SR0m8Op
-         5kSdKutzy2mg7yXsS1cQJ3DIpek6WEfkWGS8pfFqcWpDJTyT6JCPMym49C0XeekjoH/H
-         yXua0nfUOtONQikxtKOV5NK3VLk1evSaoYx4DgxD0liykRfJlkOi5qXTrZXB7DmiQtUN
-         llTaSfrEGJiPYgL2KkuOorgc9z2iSasmkoeFWBqb+lg1i0TMkhRlzEbP6TS9duL2rdsY
-         AI6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678629095;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KkVYC+wu1aL5ZaMnE/Wfc7AXFtfPa1srDddtutZjKIg=;
-        b=j+Vn0bzJnIhxcNRn6KlGY74FMe0HdaYmCAocUXcrHLfkIWLEBQywqYBwE+0krC3EeV
-         YAmsX1GXebrxrNnujkPrzgoNKMURhzLc0GZ1UyHyKp0wZYXXEm5NMlgm80iz9B1dEtLt
-         Z7OBA2rjrwocwOGTuhJvzMOv4sssbicDHXBybSfPOK3yz8TfWpeCZqmv/tbl1zb1ETKn
-         JBTMTzIR2ocuuZUSHkYb4YTCh6kZA0lb6kWhMF//CSS0F+8bnfEgOR86DNFZU/ULVjnj
-         5N1my2j3L33zIc0PNKwLHUCTQWinnT0Cys17OynLLWxO9zNxvuuoLgup32HcPqU6Ll/+
-         TydQ==
-X-Gm-Message-State: AO0yUKVMdDpdTbzdyBBL4G/erxqlrbYNlzXaGI7Nz8LPcQ8fVI0zeHOw
-        DgEV42UT64Xu62wJJSTQVItxGw==
-X-Google-Smtp-Source: AK7set/IuMUxX046CBxVvW3ePmZ3nQnQZMlQCR0hcIwerZxQ/d61QF6Fl9Vbf2CQ3y4g0fuGBg7g5w==
-X-Received: by 2002:a17:907:ca85:b0:922:3a53:46f8 with SMTP id ul5-20020a170907ca8500b009223a5346f8mr3960276ejc.64.1678629094817;
-        Sun, 12 Mar 2023 06:51:34 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id n20-20020a170906701400b008b17fe9ac6csm2263946ejj.178.2023.03.12.06.51.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:51:34 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 2/2] pwm: stm32-lp: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:51:20 +0100
-Message-Id: <20230312135120.357713-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230312135120.357713-1-krzysztof.kozlowski@linaro.org>
-References: <20230312135120.357713-1-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 09:56:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7039D3B3E1;
+        Sun, 12 Mar 2023 06:56:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 07B9FB80B74;
+        Sun, 12 Mar 2023 13:56:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36929C433D2;
+        Sun, 12 Mar 2023 13:56:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678629360;
+        bh=lfa7w+q4IgMeZb8PWT7Pts03wML5wiBGvst0ZZaLWPA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=i54kGKQBKdC12Ylsx/DQZhRKp8pQO64FkShrkJMzpYbBIwNCrW9xkCDrXmN4dZa7e
+         2dBieBOqAfdJ6PMPmi5jypEdIS4bjduuer8bAsTjfu+vlRw7DUp4NoENRovQpyYUh6
+         LS4Br7Tf/KC3vOaY7wKT8SQh3qy7GrLNhNUUjnaoLLyI3NyZICqFSHX9jo87B8nfso
+         LoJQ9bMjF9KL0O8uTqXgFbm501IChQETR7J9R54I5G5kD/ekOt7oQriO0EFz1JGDJz
+         ItG2I5TmButXsgUiGpXMGo4Y3Sa4NhAySzjRDGJDjDS2sWerITMyjyroLxBxRMo73z
+         tu7JmagWoFFxg==
+Date:   Sun, 12 Mar 2023 13:55:56 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Eric Biggers <ebiggers@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+        Sasha Levin <sashal@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZA3Z7Gdigi2cBWQu@sirena.org.uk>
+References: <Y/zxKOBTLXFjSVyI@sol.localdomain>
+ <ZATC3djtr9/uPX+P@duo.ucw.cz>
+ <ZAewdAql4PBUYOG5@gmail.com>
+ <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
+ <20230311161644.GH860405@mit.edu>
+ <ZAy+3f1/xfl6dWpI@sol.localdomain>
+ <ZAzJltJaydwjCN6E@1wt.eu>
+ <ZAzVbzthi8IfptFZ@sol.localdomain>
+ <ZAzghyeiac3Zh8Hh@1wt.eu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="S55OJxiYMz3PrHQ2"
+Content-Disposition: inline
+In-Reply-To: <ZAzghyeiac3Zh8Hh@1wt.eu>
+X-Cookie: Many a family tree needs trimming.
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).  This
-also fixes !CONFIG_OF error:
 
-  drivers/pwm/pwm-stm32-lp.c:245:34: error: ‘stm32_pwm_lp_of_match’ defined but not used [-Werror=unused-const-variable=]
+--S55OJxiYMz3PrHQ2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Sat, Mar 11, 2023 at 09:11:51PM +0100, Willy Tarreau wrote:
+> On Sat, Mar 11, 2023 at 11:24:31AM -0800, Eric Biggers wrote:
 
----
+> > As I said in a part of my email which you did not quote, the fallback option is
+> > to send the list of issues to the mailing list for others to review.
 
-Changes since v1:
-1. Extend commit msg.
----
- drivers/pwm/pwm-stm32-lp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> Honestly, patches are already being delivered publicly tagged AUTOSEL,
+> then published again as part of the stable review process. Have you seen
+> the amount of feedback ? Once in a while there are responses, but aside
+> Guenter reporting build successes or failures, it's a bit quiet. What
+> makes you think that sending more detailed stuff that require even more
+> involvement and decision would trigger more participation ?
 
-diff --git a/drivers/pwm/pwm-stm32-lp.c b/drivers/pwm/pwm-stm32-lp.c
-index f315fa106be8..bb3a045a7334 100644
---- a/drivers/pwm/pwm-stm32-lp.c
-+++ b/drivers/pwm/pwm-stm32-lp.c
-@@ -252,7 +252,7 @@ static struct platform_driver stm32_pwm_lp_driver = {
- 	.probe	= stm32_pwm_lp_probe,
- 	.driver	= {
- 		.name = "stm32-pwm-lp",
--		.of_match_table = of_match_ptr(stm32_pwm_lp_of_match),
-+		.of_match_table = stm32_pwm_lp_of_match,
- 		.pm = &stm32_pwm_lp_pm_ops,
- 	},
- };
--- 
-2.34.1
+TBH as someone getting copied on the AUTOSEL mails I think if the
+volume of backports is going to say the same what I'd really like
+is something that mitigates the volume of mail, or at least makes
+the mails that are being sent more readily parseable.  Things
+that add more context to what's being sent would probably help a
+lot, right now I'm not really able to do much more than scan for
+obviously harmful things.
 
+> > But again, this comes back to one of the core issues here which is how does one
+> > even build something for the stable maintainers if their requirements are
+> > unknown to others?
+
+> Well, the description of the commit message is there for anyone to
+> consume in the first place. A commit message is an argument for a
+> patch to get adopted and resist any temptations to revert it. So
+> it must be descriptive enough and give instructions. Dependencies
+> should be clear there. When you seen github-like one-liners there's
+> no hope to get much info, and it's not a matter of requirements,
+> but of respect for a team development process where some facing your
+> patch might miss the skills required to grasp the details. With a
+> sufficiently clear commit message, even a bot can find (or suggest)
+> dependencies. And this is not specific to -stable: if one of the
+> dependencies is found to break stuff, how do you know it must not be
+> reverted without reverting the whole series if that's not described
+> anywhere ?
+
+I'd say that the most common class of missing dependency I've
+seen is on previously applied code which is much less likely to
+be apparent in the commit message and probably not noticed unless
+it causes a cherry pick or build issue.
+
+> One thing I think that could be within reach and could very slightly
+> improve the process would be to indicate in a stable announce the amount
+> of patches coming from autosel. I think that it could help either
+> refining the selection by making users more conscious about the importance
+> of this source, or encourage more developers to Cc stable to reduce that
+> ratio. Just an idea.
+
+I'm not sure if it's the ratio that's the issue here, if anything
+I'd expect that lowering the ratio would make people more
+stressed by AUTOSEL since assuming a similar volume of patches
+get picked overall it would increase the percentage of the
+AUTOSEL patches that have problems.
+
+--S55OJxiYMz3PrHQ2
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQN2ewACgkQJNaLcl1U
+h9Ajzgf/etvpD2AdbeGoKhLQG5PLwE/95pYY/RzhpmG+QRjPA7TbDPJXGmIqqOH5
+vIthE5nUw5GhMCJxQMsbRCxf/3ilaOlDs6Aky55WreJstlnGp+a6SnFPTkMgiuCy
+wMJVjlb5x7sNzERN/SzamsmagGgvwdG6JgPF/b0TDKijrIDcPZFvGVdkYnw25Bs6
+PnXwZQqjzPb/Y2yoLbx3eAteaze+oBGS5XDagtV0iFoLKWBPG5yegvA8LqrbJ0W9
+JqvGAvpay8wyY9X2C4MqHdNbhat35OmOvv/mDMfDJILlHqfAZjiEmi0OzyDBBsgz
+Xx8tKbzQN8jdgTAggRspmax2xkIHzA==
+=3oYh
+-----END PGP SIGNATURE-----
+
+--S55OJxiYMz3PrHQ2--
