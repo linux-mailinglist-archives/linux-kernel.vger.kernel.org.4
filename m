@@ -2,99 +2,294 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D24416B66AF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:27:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D26836B66B6
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230459AbjCLN1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:27:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
+        id S229928AbjCLNay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:30:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230520AbjCLN1d (ORCPT
+        with ESMTP id S230363AbjCLNar (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:27:33 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8523753724
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:27:10 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cn21so8393077edb.0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678627623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UfPqeOLW7or+4SmUILObRzf1lvCA61sFi8BYiPE3oKo=;
-        b=d7viElX6WjL8e/pjhES9zSFEvsV15OtVpWHceSNoKWMrgrfclhNLOKCzC9+ElaKXWa
-         NhkbfsSZ9MTbt67dUApI6czkTtSZ6P38S5z/qglSgzZYGt+tVyByStmw3/DkbakD0BTe
-         /Qk1sMw/wb8O9yV65W9AB3SLMiWzRAZxUjvO/pg9hVq+QTt+X+QlXWR2laQm/Yl9CiNx
-         MAoro3hWhMOeGNyoMrgJ18i/Mc9mk/dtTDvJVL6HwAmBLkaEYF3Wk6tXVf+daVvBZSNO
-         p1o0mg/aV1dH7O0C+dgWNptLBdlD7SuQoNyK+lWNl1oTUOUTlwHB6rfokIZT3ryr68/8
-         YT9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678627623;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UfPqeOLW7or+4SmUILObRzf1lvCA61sFi8BYiPE3oKo=;
-        b=4MqsvIgeHaygZKBNzyU5l1dO0ZN19gF/Sfxi8b7qiteYQsdfoZl5WcL/xoR13G6Vnt
-         wGAqLeVzZeiHbgnjz8XhMTq9SuHCO/0m0qd6HpQu6Wq3hWUZlM/bWfYJsqcY1H3sQeO7
-         X/OrxMmc7HQxmMRw+5Uv42JFSzKxMDZDV1pAPMFadUJAllCBftmibb1BzIh4HxKoanle
-         AmW0ifyZzTVv37C8thyRYSH1232Umc9zHB5GUy66dR94igU8o8qwhfDfQ9QRkyh3fFGX
-         AVMxDu0yUd1++OSn7ldwZqF2fK+JTlW3AQX0PHvAz2Y846ITuyrvAUfNzAPljSkEtPrP
-         DZvg==
-X-Gm-Message-State: AO0yUKWFcoswmcfKg2+K/Y40y8fJm0DyT+0JnkqD395IZd/7gRcKuplv
-        /jqD1iDtI6LEtkJx7qyfV6lwAA==
-X-Google-Smtp-Source: AK7set+aK4FVNfCezrbJEaLy/bClCmwbZ6D7lRIUdkDV05aFMUu1jCGuYbHorMQVRispbzKvBcvk8w==
-X-Received: by 2002:a50:ee18:0:b0:4ac:b6b2:1233 with SMTP id g24-20020a50ee18000000b004acb6b21233mr27886248eds.30.1678627623692;
-        Sun, 12 Mar 2023 06:27:03 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id d6-20020a50f686000000b004bef1187754sm586773edn.95.2023.03.12.06.27.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:27:03 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] pinctrl: sx150x: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:27:02 +0100
-Message-Id: <20230312132702.352832-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 12 Mar 2023 09:30:47 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C1903F
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:30:40 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pbLmV-0006iT-BW; Sun, 12 Mar 2023 14:30:35 +0100
+Message-ID: <0b277722-5d01-7ca2-e86a-a77a3523e589@leemhuis.info>
+Date:   Sun, 12 Mar 2023 14:30:34 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
+Content-Language: en-US, de-DE
+To:     Karol Herbst <kherbst@redhat.com>,
+        Chris Clayton <chris2553@googlemail.com>
+Cc:     Ben Skeggs <skeggsb@gmail.com>,
+        Linux regressions mailing list <regressions@lists.linux.dev>,
+        Dave Airlie <airlied@gmail.com>, bskeggs@redhat.com,
+        Lyude Paul <lyude@redhat.com>,
+        ML nouveau <nouveau@lists.freedesktop.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        ML dri-devel <dri-devel@lists.freedesktop.org>
+References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
+ <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
+ <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
+ <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
+ <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
+ <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
+ <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
+ <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
+ <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
+ <7f6ec5b3-b5c7-f564-003e-132f112b7cf4@googlemail.com>
+ <CACAvsv7Uf5=K44y8YLsiy0aMnc1zvGEQdeDe7RQF=AV+fxxzuQ@mail.gmail.com>
+ <c12aa9b8-65a1-0cdf-8948-15309f16b955@googlemail.com>
+ <CACO55tvGQdHPnZEMAGPZN3K1nUCV-ruX_QNwSqQAg_z81ab0MA@mail.gmail.com>
+ <CACAvsv53xc8dr0e5HEFcV+218WoCbGVor0HDgBw-C51fPkR9kQ@mail.gmail.com>
+ <853b7e32-f566-2a92-0f59-3490ad5d88df@googlemail.com>
+ <CACO55tub2f3HmwUU5hYb=0JuuDJM=dG-2rBMvb_oCNgp0CqSHQ@mail.gmail.com>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <CACO55tub2f3HmwUU5hYb=0JuuDJM=dG-2rBMvb_oCNgp0CqSHQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678627840;e70279a8;
+X-HE-SMSGID: 1pbLmV-0006iT-BW
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver will match mostly by DT table (even thought there is regular
-ID table) so there is little benefit in of_match_ptr (this also allows
-ACPI matching via PRP0001, even though it might not be relevant here).
-This also fixes !CONFIG_OF error:
+On 10.03.23 11:20, Karol Herbst wrote:
+> On Fri, Mar 10, 2023 at 10:26 AM Chris Clayton <chris2553@googlemail.com> wrote:
+>>
+>> Is it likely that this fix will be sumbmitted to mainline during the ongoing 6.3 development cycle?
+>>
+> 
+> yes, it's already pushed to drm-misc-fixed, which then will go into
+> the current devel cycle. I just don't know when it's the next time it
+> will be pushed upwards, but it should get there eventually. 
 
-  drivers/pinctrl/pinctrl-sx150x.c:833:34: error: ‘sx150x_of_match’ defined but not used [-Werror=unused-const-variable=]
+FWIW, the fix landed now as 1b9b4f922f96 ; sadly without a Link: tag to
+the report, hence I have to mark this manually as resolved:
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/pinctrl/pinctrl-sx150x.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+#regzbot fix: 1b9b4f922f96108da3bb5d87b2d603f5dfbc5650
 
-diff --git a/drivers/pinctrl/pinctrl-sx150x.c b/drivers/pinctrl/pinctrl-sx150x.c
-index 0b5ff99641e1..87fcbfbf49b7 100644
---- a/drivers/pinctrl/pinctrl-sx150x.c
-+++ b/drivers/pinctrl/pinctrl-sx150x.c
-@@ -1250,7 +1250,7 @@ static int sx150x_probe(struct i2c_client *client)
- static struct i2c_driver sx150x_driver = {
- 	.driver = {
- 		.name = "sx150x-pinctrl",
--		.of_match_table = of_match_ptr(sx150x_of_match),
-+		.of_match_table = sx150x_of_match,
- 	},
- 	.probe_new = sx150x_probe,
- 	.id_table = sx150x_id,
--- 
-2.34.1
+> And
+> because it also contains a Fixes tag it will be backported to older
+> branches as well.
 
+FWIW, nope, that's not enough you have to tag those explicitly to ensure
+backporting, as explained in
+Documentation/process/stable-kernel-rules.rst Greg points that out every
+few weeks, recently here for example:
+
+https://lore.kernel.org/all/Y6BWPo9S9QbnsAx6@kroah.com/
+
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+If I did something stupid, please tell me, as explained on that page.
+
+>> Chris
+>>
+>> On 20/02/2023 22:16, Ben Skeggs wrote:
+>>> On Mon, 20 Feb 2023 at 21:27, Karol Herbst <kherbst@redhat.com> wrote:
+>>>>
+>>>> On Mon, Feb 20, 2023 at 11:51 AM Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>
+>>>>>
+>>>>>
+>>>>> On 20/02/2023 05:35, Ben Skeggs wrote:
+>>>>>> On Sun, 19 Feb 2023 at 04:55, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> On 18/02/2023 15:19, Chris Clayton wrote:
+>>>>>>>>
+>>>>>>>>
+>>>>>>>> On 18/02/2023 12:25, Karol Herbst wrote:
+>>>>>>>>> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> On 15/02/2023 11:09, Karol Herbst wrote:
+>>>>>>>>>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
+>>>>>>>>>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>>>>>>>>
+>>>>>>>>>>>> On 13.02.23 10:14, Chris Clayton wrote:
+>>>>>>>>>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
+>>>>>>>>>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>>>>>>>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
+>>>>>>>>>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
+>>>>>>>>>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
+>>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
+>>>>>>>>>>>>>>>>>> time to fix it and there is one thing I wonder:
+>>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
+>>>>>>>>>>>>>>>>>> posted more than a week ago to check if they somehow help to track down
+>>>>>>>>>>>>>>>>>> the root of this problem?
+>>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>>> I did now and I can't spot anything. I think at this point it would
+>>>>>>>>>>>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
+>>>>>>>>>>>>>>>>> any is in a weird state preventing the machine from shutting down.
+>>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>> Many thx for looking into it!
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> Yes, thanks Karol.
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> Attached is the output from dmesg when this block of code:
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
+>>>>>>>>>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
+>>>>>>>>>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
+>>>>>>>>>>>>>>>         /bin/echo t > /proc/sysrq-trigger
+>>>>>>>>>>>>>>>         /bin/sleep 1
+>>>>>>>>>>>>>>>         /bin/sync
+>>>>>>>>>>>>>>>         /bin/sleep 1
+>>>>>>>>>>>>>>>         kill $(pidof dmesg)
+>>>>>>>>>>>>>>>         /bin/umount /mnt/sda7
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
+>>>>>>>>>>>>>>>
+>>>>>>>>>>>>>>> I hope this is what you were looking for, but if not, please let me know what you need
+>>>>>>>>>>>>>
+>>>>>>>>>>>>> Thanks Dave. [...]
+>>>>>>>>>>>> FWIW, in case anyone strands here in the archives: the msg was
+>>>>>>>>>>>> truncated. The full post can be found in a new thread:
+>>>>>>>>>>>>
+>>>>>>>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>>>>>>>>>>>
+>>>>>>>>>>>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
+>>>>>>>>>>>> my laptop." didn't bring us much further to a solution. :-/ I don't
+>>>>>>>>>>>> really like it, but for regression tracking I'm now putting this on the
+>>>>>>>>>>>> back-burner, as a fix is not in sight.
+>>>>>>>>>>>>
+>>>>>>>>>>>> #regzbot monitor:
+>>>>>>>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
+>>>>>>>>>>>> #regzbot backburner: hard to debug and apparently rare
+>>>>>>>>>>>> #regzbot ignore-activity
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>> yeah.. this bug looks a little annoying. Sadly the only Turing based
+>>>>>>>>>>> laptop I got doesn't work on Nouveau because of firmware related
+>>>>>>>>>>> issues and we probably need to get updated ones from Nvidia here :(
+>>>>>>>>>>>
+>>>>>>>>>>> But it's a bit weird that the kernel doesn't shutdown, because I don't
+>>>>>>>>>>> see anything in the logs which would prevent that from happening.
+>>>>>>>>>>> Unless it's waiting on one of the tasks to complete, but none of them
+>>>>>>>>>>> looked in any way nouveau related.
+>>>>>>>>>>>
+>>>>>>>>>>> If somebody else has any fancy kernel debugging tips here to figure
+>>>>>>>>>>> out why it hangs, that would be very helpful...
+>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
+>>>>>>>>>> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
+>>>>>>>>>> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
+>>>>>>>>>> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
+>>>>>>>>>>
+>>>>>>>>>> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
+>>>>>>>>>> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
+>>>>>>>>>> partition, and thus the scrubber binary, have become inaccessible.
+>>>>>>>>>>
+>>>>>>>>>> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
+>>>>>>>>>> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
+>>>>>>>>>> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
+>>>>>>>>>> permanent solution.
+>>>>>>>>>>
+>>>>>>>>>> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>>>>> Well.. nouveau shouldn't prevent the system from shutting down if the
+>>>>>>>>> firmware file isn't available. Or at least it should print a
+>>>>>>>>> warning/error. Mind messing with the code a little to see if skipping
+>>>>>>>>> it kind of works? I probably can also come up with a patch by next
+>>>>>>>>> week.
+>>>>>>>>>
+>>>>>>>> Well, I'd love to but a quick glance at the code caused me to bump into this obscenity:
+>>>>>>>>
+>>>>>>>> int
+>>>>>>>> gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
+>>>>>>>> {
+>>>>>>>>         nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
+>>>>>>>>
+>>>>>>>>         if (nvkm_msec(falcon->owner->device, 10,
+>>>>>>>>                 if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006))
+>>>>>>>>                         break;
+>>>>>>>>         ) < 0)
+>>>>>>>>                 return -ETIMEDOUT;
+>>>>>>>>
+>>>>>>>>         return 0;
+>>>>>>>> }
+>>>>>>>>
+>>>>>>>> nvkm_msec is #defined to nvkm_usec which in turn is #defined to nvkm_nsec where the loop that the break is related to
+>>>>>>>> appears
+>>>>>>>
+>>>>>>> I think someone who knows the code needs to look at this. What I can confirm is that after a freeze, I waited for 90
+>>>>>>> seconds for a timeout to occur, but it didn't.
+>>>>>> Hey,
+>>>>>>
+>>>>>> Are you able to try the attached patch for me please?
+>>>>>>
+>>>>>> Thanks,
+>>>>>> Ben.
+>>>>>>
+>>>>>
+>>>>> Thanks Ben.
+>>>>>
+>>>>> Yes, this patch fixes the lockup on reboot and poweroff that I've been seeing on my laptop. As you would expect,
+>>>>> offloaded rendering is still working and the discrete GPU is being powered on and off as required.
+>>>>>
+>>>>> Thanks.
+>>>>>
+>>>>> Reported-by: Chris Clayton <chris2553@googlemail.com>
+>>>>> Tested-by: Chris Clayton <chris2553@googlemail.com>
+>>>>>
+>>>>
+>>>> Ben, did you manage to get push rights to drm-misc by now or should I
+>>>> just pick the patch and push it through -fixes?
+>>> Feel free to pick it up!
+>>>
+>>> Thank you,
+>>> Ben.
+>>>
+>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> .> Chris
+>>>>>>>>>>
+>>>>>>>>>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+>>>>>>>>>>>> --
+>>>>>>>>>>>> Everything you wanna know about Linux kernel regression tracking:
+>>>>>>>>>>>> https://linux-regtracking.leemhuis.info/about/#tldr
+>>>>>>>>>>>> That page also explains what to do if mails like this annoy you.
+>>>>>>>>>>>>
+>>>>>>>>>>>> #regzbot ignore-activity
+>>>>>>>>>>>>
+>>>>>>>>>>>
+>>>>>>>>>>
+>>>>>>>>>
+>>>>>
+>>>>
+>>
+> 
+> 
+> 
