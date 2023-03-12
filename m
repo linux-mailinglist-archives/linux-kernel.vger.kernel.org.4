@@ -2,74 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B9276B69EB
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 959076B6A48
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:40:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232279AbjCLSM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:12:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36536 "EHLO
+        id S231855AbjCLSjX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:39:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232513AbjCLSKZ (ORCPT
+        with ESMTP id S231664AbjCLSjF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:10:25 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0266126DE;
-        Sun, 12 Mar 2023 11:03:11 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id e26-20020a9d6e1a000000b00694274b5d3aso5619498otr.5;
-        Sun, 12 Mar 2023 11:03:11 -0700 (PDT)
+        Sun, 12 Mar 2023 14:39:05 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F64A1CF49;
+        Sun, 12 Mar 2023 11:38:26 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-540cb2fb5b9so97853967b3.3;
+        Sun, 12 Mar 2023 11:38:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678644046;
+        d=gmail.com; s=20210112; t=1678646247;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=o2SB5MqmjHsntyI9PujeuGHtzIZgIeiiUVCGqP3jljc=;
-        b=Xt1UxEi9TtxboCC33klVA5yaniaBd0xOaF1fWkzjbdZO6IAC5ObFa4yUlyu1/SNjMm
-         yUDwBcm27HSJ8kXiwHVYjnPeDVM7ZBsqBXTv5HKzlzfchNpV9BvVCxJxcwyc4EHUHqg+
-         fewtJZJ5noTdfsN5C9HkU1hXu2gEd7gaOAkBC/PSS4F2VePBFpqDq0JzfRRpMFPCggnx
-         CqnHfvQZ27dZblz0FKPGJtckwh6WjnOeZU0PXXJzeKFEf3W4SSVra3KDY21TJJ4zaDFX
-         LxyKvHY+wexUB9oI4wJTpsQKLqL6aKdx8IfvwLtTSJ65Vabb/lZcogXWwp4S/a1us4xJ
-         Fu6A==
+        bh=mnb0dKcLzw28cDBfIxGuYGwFb2Xzg2MgU49yATawFzQ=;
+        b=HHuzDBI8QbcfoYyI9RNI0wtTs/aEIs8iJlVvVBORRWqBnMXgutJEEQt4+SWcE33gj4
+         Za88ajiZdHp09lBKzHCWiZRjJM+kMWeMs/uK0rK3OUh3twP3tKzdMF9vzt41JhQ3uKY+
+         4OAyz51YtLfhIdLJSKql1BRYP9oCPMGj0/vvv24WjCJgmbtPsXGvAwe5AjVOlghtiKA3
+         HteW5o707M7RFErfxK/mnvEHYig9OMyEsdWYMe1YbhjH6hZh05CEAIrb+m55bduDMxj0
+         iwJohfnfWgxuMl89mS9682mMVquFWoWnvdwhzGYiWDuJ7TfC5HQAQU6+Tikp+swHJ9yO
+         xffA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678644046;
+        d=1e100.net; s=20210112; t=1678646247;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=o2SB5MqmjHsntyI9PujeuGHtzIZgIeiiUVCGqP3jljc=;
-        b=kd4/RjsXgcB7JHLE1cWBempFIOYwO/BfXYqv3dewv1u2jX0ViJdQr6v13QZum4batB
-         6WNxbPPlYKFHANKYDJ6S/V7yfpAym8fV4ImGTuefRdTA/JACUDMWXovJ0IqujU1rkkNw
-         2kqd0fj+0CN+9gNWTZY6EcqU/Jxk/Ip/Fl1Tb0/KmnnTCNyu3BWuxzGjzdZwgGH2COgC
-         gWVX7X4a7lKr0f7YO/Xlb+7rYjXO/Ono6I521SMkXYmpldqXhxg8fZa/Ql86Ux8I/4Ng
-         CQ/B7xHMrqnr7nCvUNL4lU+15EDiSkpFrS5s2mUuVuKfyAgLSjJwJ18IKU/SUSSrCix7
-         BDmQ==
-X-Gm-Message-State: AO0yUKWjJrpCKwQx98lhcazX9cHV5zr0LmuoyFaKORV2s9YA9A3qeBWX
-        6EQewj53eQpgUuLcPgcw5B87E2xhSOg=
-X-Google-Smtp-Source: AK7set/CyZZ1GR54/Q7elEiA5smCjMJWt8AWsvn6E8f4nfcrsbBXbYD7dZmnr0+wItyQd7NZJ/d//Q==
-X-Received: by 2002:a9d:6091:0:b0:68b:baa9:cc95 with SMTP id m17-20020a9d6091000000b0068bbaa9cc95mr14622323otj.5.1678644046489;
-        Sun, 12 Mar 2023 11:00:46 -0700 (PDT)
+        bh=mnb0dKcLzw28cDBfIxGuYGwFb2Xzg2MgU49yATawFzQ=;
+        b=ono0lqabbpH6Ph9cywtDynbAbTU2J6JRP6MtSvGCjK1zWmk1lpm7Pu6vPDZjmB9l/Y
+         Qf1jyEyra2annj9c++Fo+o4iBCSVS1vDk029yEM7HEn3ctCEPwDJXT8jjfylX+39JoGV
+         mA1XSJQ6NRetxLk2S2hkGhhbVeRlk/krZgMlDwU7G7krwSn878FtVerfH55C+g0dXp21
+         vI0W5i97zKOUceO7SJmpoO8eOTrfpCbMkSHd/q63e/jqTpJabn/TOKEaPmj9UzxMFo/1
+         mh4Yp9YbMgoe5BALJlzNcjpHiNEMC9iCPJL2aToeD1XbuVbkb0RgyIbn288fpSAiAFDl
+         KEpw==
+X-Gm-Message-State: AO0yUKWziMZdsv2mkrxWEToWOxNJb/DFyiKeDDa9NdzWrpXIMoncy6Ad
+        BAQiDy41Y1Bkyyt9mGVzmBREf6jKC+o=
+X-Google-Smtp-Source: AK7set9R4SgLkHVNTLHhlrxZzXV2YNSukVDBRm4hwiOlAnyi+R2T+EF/tKGW+bUIh/OiPzHZuDv96A==
+X-Received: by 2002:a05:6870:3048:b0:177:a8a8:660 with SMTP id u8-20020a056870304800b00177a8a80660mr2434075oau.9.1678644417405;
+        Sun, 12 Mar 2023 11:06:57 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id l19-20020a4acf13000000b00524faf3d2d7sm2259190oos.41.2023.03.12.11.00.45
+        by smtp.gmail.com with ESMTPSA id r37-20020a05683044a500b0068bcd200247sm2322584otv.75.2023.03.12.11.06.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 11:00:46 -0700 (PDT)
+        Sun, 12 Mar 2023 11:06:57 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 11:00:44 -0700
+Date:   Sun, 12 Mar 2023 11:06:55 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Eric Tremblay <etremblay@distech-controls.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
-Message-ID: <49dfd706-4260-4fd5-ba08-22936ef3c2e5@roeck-us.net>
+Message-ID: <cd9067c7-0b99-4d62-9d5a-cdc028f33ba5@roeck-us.net>
 References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 In-Reply-To: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -82,13 +82,16 @@ On Sat, Mar 11, 2023 at 12:16:09PM +0100, Krzysztof Kozlowski wrote:
 > 
 >   drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Applied.
+How do you trigger that ? The driver depends on OF_GPIO which
+in turn depends on OF. Arguably that means that of_match_ptr()
+doesnot really make sense, but still I don't see how you can
+trigger the above error message.
 
 Thanks,
 Guenter
 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
 >  drivers/hwmon/gpio-fan.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
