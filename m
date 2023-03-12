@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 699426B66CB
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CCD46B66CD
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:40:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCLNkD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:40:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40616 "EHLO
+        id S230450AbjCLNkX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:40:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCLNkB (ORCPT
+        with ESMTP id S230256AbjCLNkV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:40:01 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E34C31FF1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:39:59 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id d41-20020a05600c4c2900b003e9e066550fso6235229wmp.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:39:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678628398;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pW3SYoJSfYigvun40dUyfsdJwqphbL/38YBc34ttyCo=;
-        b=YhkYASX7a74CAsFNiKpJWvIMR1ENdKDvxrtH595UKIWI4fV6J2X0y6ji3Ri0tSopvV
-         NrijF/N2W9Sh7pculPdZ1KQrU7uButTTnkkA2tJ987jNOprgTgbDRcaTDr4xZSBAiOya
-         pTdLvhARtdlxSVlBLoBKx/dyaF0/hhcn6BTqs4Rc6AMXywuNhT+yJGirNaFYEEq9hpkv
-         qZpYG43aCAsoSqpEBHnuewH0jWWYhVgnGGTOtV5puQZvS/gbqC/pedktrqrWhwucbrlf
-         fcQCH0lumhZ7306XmrubeVdBmVsL+89qWNxXR3lrxE3dQfLxx5UqfjtLRxIV79+rw0Cc
-         vGEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678628398;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pW3SYoJSfYigvun40dUyfsdJwqphbL/38YBc34ttyCo=;
-        b=UWZhTEFh/g+5jFN92Xub8QDndIFRP92O4l9jraKO9t/E7u6XPpIOZrAQvNB4m4KsuT
-         5vnh4FzflSRxwYNDR/lsdvslZuC7aODn25UOgA1eeCpxcTo4uI1jhM8cfAtrEZhptgm2
-         ZThRaIgoST1b+LD1NAT0K98NnxADCPMYbfFqMHPi3YDC2niMozUGHgySYFTjtA1PoLpq
-         zhApwECNOeIbkjGFqo3yoB8roYwVLR+gzJb0lhHgAElHWDo9CYG7/oZjw2LAF4Nw5mrH
-         hLZ3+9WrwBNJGSKPPcPuIFhOYO3wcuq8KWPOBbFhaDbKVbBtAVtmz86fYO56AmR7xXeN
-         vO5A==
-X-Gm-Message-State: AO0yUKXibZikejRaoW8NxlXaoN0Qro7bu+1vmFQUyOQ8AJDwxkwoL3ZK
-        BsHgvdUE/7VcnQvt/0SgQ7Q=
-X-Google-Smtp-Source: AK7set/Puwux94bwB+pHKftXFM9AZEJDRXkcO3uxKEjnksL/INtvCvoixKCiQSDWOhfcojHCeYlMTQ==
-X-Received: by 2002:a05:600c:1c95:b0:3eb:2b69:c3c6 with SMTP id k21-20020a05600c1c9500b003eb2b69c3c6mr8000944wms.1.1678628398284;
-        Sun, 12 Mar 2023 06:39:58 -0700 (PDT)
-Received: from [192.168.1.16] ([41.42.177.251])
-        by smtp.gmail.com with ESMTPSA id n11-20020a05600c294b00b003e21638c0edsm5957737wmd.45.2023.03.12.06.39.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 06:39:57 -0700 (PDT)
-Message-ID: <1e8d503d-decb-e662-3457-19d41c6769e0@gmail.com>
-Date:   Sun, 12 Mar 2023 15:39:55 +0200
+        Sun, 12 Mar 2023 09:40:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D00E724BCD;
+        Sun, 12 Mar 2023 06:40:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 82088B80B18;
+        Sun, 12 Mar 2023 13:40:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D155DC433D2;
+        Sun, 12 Mar 2023 13:40:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678628415;
+        bh=ke7T1l0eRGRWmebXcI69qvnIV9XLz1cUDufT5C689es=;
+        h=From:To:Cc:Subject:Date:From;
+        b=heid8DOUEl48pfy/rKb5NLhK226OaqMoL/TmdUEE+uWdBXQVmGNsuwIIoYAkjv26t
+         ZfXiLkUl2mq/+sYGdr+M68ObjtOwGvTNR0nZ7hx0Gta4axC/MrsOKg3C9LHG5+KC1Z
+         IHreXPhgRhI25BoqRRWI73rF9AUJzN+po9YD71BjvVKc+wv9Db2ta6CJ3atQsc65hb
+         uaMlhSTiRmHv3irn2ZoQfSn+2KI/98IHqMk323DMmwTI03rTdJuMA08xbw37Avb4c7
+         7lQllheSgMpt5fO589jeSKNq/0WgPnzzBRGJjGRK5eRogwOGfzWl7NP97jjbB1Xuyv
+         9zs1y8pfr2TAQ==
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH] spi: mpc5xxx-psc: Fix compile error
+Date:   Sun, 12 Mar 2023 14:39:59 +0100
+Message-Id: <20230312133959.256855-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] staging: greybus: eclose macro in a do - while loop
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     Dan Carpenter <error27@gmail.com>, outreachy@lists.linux.dev,
-        pure.logic@nexus-software.ie, johan@kernel.org, elder@kernel.org,
-        gregkh@linuxfoundation.org, greybus-dev@lists.linaro.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <20230311135919.9129-1-eng.mennamahmoud.mm@gmail.com>
- <10d2c15b-ff9f-4634-a013-7640c93435a7@kili.mountain>
- <c9ae27dc-3538-5432-6a6d-3e2ff034f467@gmail.com>
- <alpine.DEB.2.22.394.2303111600330.2802@hadrien>
-Content-Language: en-US
-From:   Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-In-Reply-To: <alpine.DEB.2.22.394.2303111600330.2802@hadrien>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Commit 9e21720a4958 ("spi: mpc5xxx-psc: use
+devm_clk_get_enabled() for core clock") has made use of the
+devm_clk_get_enabled(), but it actually forgot to remove a couple
+of goto's, triggering the following compile error:
 
-On ١١‏/٣‏/٢٠٢٣ ١٧:٠٠, Julia Lawall wrote:
->
-> On Sat, 11 Mar 2023, Menna Mahmoud wrote:
->
->> On ١١/٣/٢٠٢٣ ١٦:٠٦, Dan Carpenter wrote:
->>> On Sat, Mar 11, 2023 at 03:59:19PM +0200, Menna Mahmoud wrote:
->>>> " ERROR: Macros with multiple statements should be enclosed in a do -
->>>> while loop"
->>>>
->>>> Reported by checkpath.
->>>>
->>>> do loop with the conditional expression set to a constant
->>>> value of zero (0).This creates a loop that
->>>> will execute exactly one time.This is a coding idiom that
->>>> allows a multi-line macro to be used anywhere
->>>> that a single statement can be used.
->>>>
->>>> So, enclose `gb_loopback_stats_attrs` macro in do - while (0) to
->>>> fix checkpath error
->>>>
->>>> Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
->>>> ---
->>> This breaks the build.  You need to compile the code before sending a
->>> patch.
->>>
->>> regards,
->>> dan carpenter
->>
->> I see, I thought building the file only enough. appreciate your feedback.
-> The outreachy tutorial explains how to compile everything in a
-> subdirectory.
->
-> julia
+drivers/spi/spi-mpc512x-psc.c: In function ‘mpc512x_psc_spi_of_probe’:
+drivers/spi/spi-mpc512x-psc.c:518:17: error: label ‘free_ipg_clock’ used but not defined
+  518 |                 goto free_ipg_clock;
 
+Replace those goto's with actual returns.
 
-Thanks Julia, I will check it.
+Fixes: 9e21720a4958 ("spi: mpc5xxx-psc: use devm_clk_get_enabled() for core clock")
+Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+---
+ drivers/spi/spi-mpc512x-psc.c | 8 ++------
+ 1 file changed, 2 insertions(+), 6 deletions(-)
 
-Menna
+diff --git a/drivers/spi/spi-mpc512x-psc.c b/drivers/spi/spi-mpc512x-psc.c
+index 77a228f633d1..0b86f1804682 100644
+--- a/drivers/spi/spi-mpc512x-psc.c
++++ b/drivers/spi/spi-mpc512x-psc.c
+@@ -511,13 +511,9 @@ static int mpc512x_psc_spi_of_probe(struct platform_device *pdev)
+ 
+ 	ret = mpc512x_psc_spi_port_config(master, mps);
+ 	if (ret < 0)
+-		goto free_ipg_clock;
+-
+-	ret = devm_spi_register_master(dev, master);
+-	if (ret < 0)
+-		goto free_ipg_clock;
++		return ret;
+ 
+-	return ret;
++	return devm_spi_register_master(dev, master);
+ }
+ 
+ static const struct of_device_id mpc512x_psc_spi_of_match[] = {
+-- 
+2.39.2
 
