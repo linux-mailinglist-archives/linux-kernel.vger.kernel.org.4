@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D95F6B62D9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 03:16:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F8816B62DA
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 03:16:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229861AbjCLCQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 21:16:21 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42806 "EHLO
+        id S229742AbjCLCQg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 21:16:36 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229906AbjCLCQS (ORCPT
+        with ESMTP id S229469AbjCLCQe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 21:16:18 -0500
-Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE99538EBB
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:16:11 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id d7-20020a25adc7000000b00953ffdfbe1aso10122295ybe.23
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:16:11 -0800 (PST)
+        Sat, 11 Mar 2023 21:16:34 -0500
+Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FB546143
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:16:18 -0800 (PST)
+Received: by mail-pf1-x44a.google.com with SMTP id y35-20020a056a00182300b005e8e2c6afe2so4890315pfa.12
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:16:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678587370;
+        d=google.com; s=20210112; t=1678587378;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCy3nPTLL3BzM9vzwEu0uYJt1g84QjoxQ2scYL/5UQQ=;
-        b=GZenkIHqhn+3YGrQcHzj3aX6bW1NryTIU40Mc8cjvA/t592pE3P5uhCYyL4Ca5earh
-         clnmbwuMQ8rQv1Dg6BnNgUdXMzvNQTDjqjutrBe337/0V8IF6cTUC5r17dD1BYhuiLLP
-         AQd0elBDbJf6NJdVfACpwk3PNJD5SHq9SKQXa+LATb5QpP19SEAGk/wX3EO+kkPvRNie
-         FyOoIT2H8QXbxE3J1xHRJekv9HI/KVW28pPyZ/dQAOU/Lp7yR1jdMmXqIZTBqi7qWPTe
-         FaJcl/2uYVRXHuxWPKnnGWbE7x7JeCzcwoR26j0kL0Sn534+6/4YdbTRZ/yYiakRxvxV
-         HX/g==
+        bh=BT/x/3Eyz2BuEqpSdLzkRqcNHW14bzsOIxfh6FRlfxo=;
+        b=lHkf3zlh1pVGSdM1GC3AxnylNDGWw4m4GJlJE4wRPSdCCUFN3He51cJPy0m5AyZ/zv
+         /SzbVozvJfQqUfitexmgUsgWBFu/tkgmcX9cwlr0C6zKLYgTD7CUdX/9kFuEu8xRfD6R
+         VJ6Jh2D0oe3Fhe67mGw5s3OOOHYfh8AsbdG0Y0kRrclYNzMovnQVtBqNXwD2Iv3gKZrY
+         btWan+zTRIHcpSja+4FLQ3WkvJUYnWBExNjhJMbU5/XAOyZySYxySxWh0uVHd2Yut+VL
+         6VvsruF/H1OzxW6rUp15I4kVz8EWLI9P6ijhJqbYhapqB4RPKk89sA8NKJOlPW3vPnqx
+         HSaA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678587370;
+        d=1e100.net; s=20210112; t=1678587378;
         h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gCy3nPTLL3BzM9vzwEu0uYJt1g84QjoxQ2scYL/5UQQ=;
-        b=hY2IQiZCVTszaPTEyHVwSur1hUp6VSX3DcmtdFvuZGBX4PfX5Q0QMQG6yqD59uVuWG
-         7KWZcInuV4A5NCO3TYIbN7KvViA/U573ic/WJf1a7LpsgC/gj2kph+GFb3qFugM00xAj
-         OajcCV8Kg0OH1ICJrLZZcYDU2UD2X+ckIniPCRy6x/kRQtAINYRlXzzEv13Xn6W2QGB0
-         ZQOnDgAq7Hp6Hm7cS0IPjKh3rOjAV3eOeNXNgPOzKsQNRvcIQ68oWP7axhG3YdUUsZoT
-         l8sWCp8v+IwjL6vVZkpJh+jj9S7ltmjvdKXYTNOZHfdVl4kN5ecB5fq+aWgSm4lDsWCu
-         VL0Q==
-X-Gm-Message-State: AO0yUKVAiFUshC4q4ywedoGAfr7xGrqCfNFSeKLmBbjS5oknFo4KIG2C
-        IR9Zdumn3X5t6IAHbJveH1/UiQT00BSK
-X-Google-Smtp-Source: AK7set9WL0H7uaR8gnswB0fr2WWJ0r5ebx2D1lniuNixfKkpgOq8ZsiYhWEul//k+sv5pDlh00cx4nFb8QNV
+        bh=BT/x/3Eyz2BuEqpSdLzkRqcNHW14bzsOIxfh6FRlfxo=;
+        b=ce9RkvA2K4/nQ6rSN0JViz69vPdJOXW9fLBoKf78/cX6D47Gk0LWxwG8Oho8lsBHcF
+         BEeUJZaQIOoKK/7jmOhYviFOEnpRZ+kwo1ZmxlsCt2z7UCujf9aurEsuqUxS6cVI+SKA
+         qThZv6D2i3grbDDc+W7qJYomLFOruFNWsQAsL45QpXZG7gwNb0d3sfFNLaCv/HoOoqZt
+         bTsU43Z1Fa8pgCW/rgyFJCLAa35IvgK2xVjg0FReIcdfASROGGIGxy278oarIGihd8ba
+         i679BMR1koDu2B4CiCrbBJBXjma0NVhVvwirmNQoTqTNE/gBASZPBYTaIRtunPNyJSZq
+         ZuCA==
+X-Gm-Message-State: AO0yUKVx5hID8rwNJGEJSP7mZl/5fC4rXQSbvku0xw04eyyqnRI876iS
+        MR8UfhU5AXFAS2a6MmqNAdDjkkusP80r
+X-Google-Smtp-Source: AK7set+TQZtCja/vps9x30qK//1pOedYZ63oAHSdXRy5p5SUcpJFeG3+UZvcmc6a0VnbQm5HEOvgJz9CyaOl
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b42b:2e07:afb:877e])
- (user=irogers job=sendgmr) by 2002:a0d:df95:0:b0:506:6059:e949 with SMTP id
- i143-20020a0ddf95000000b005066059e949mr5ywe.502.1678587370183; Sat, 11 Mar
- 2023 18:16:10 -0800 (PST)
-Date:   Sat, 11 Mar 2023 18:15:34 -0800
+ (user=irogers job=sendgmr) by 2002:a17:90b:46cf:b0:23b:517d:beca with SMTP id
+ jx15-20020a17090b46cf00b0023b517dbecamr315230pjb.0.1678587378274; Sat, 11 Mar
+ 2023 18:16:18 -0800 (PST)
+Date:   Sat, 11 Mar 2023 18:15:35 -0800
 In-Reply-To: <20230312021543.3060328-1-irogers@google.com>
-Message-Id: <20230312021543.3060328-3-irogers@google.com>
+Message-Id: <20230312021543.3060328-4-irogers@google.com>
 Mime-Version: 1.0
 References: <20230312021543.3060328-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v5 02/11] perf stat: Don't remove all grouped events when CPU
- maps disagree
+Subject: [PATCH v5 03/11] perf pmu: Earlier PMU auxtrace initialization
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -88,81 +87,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If the events in an evlist's CPU map differ then the entire group is
-removed. For example:
+This allows event parsing to use the evsel__is_aux_event function,
+which is important when determining event grouping.
 
-```
-$ perf stat -e '{imc_free_running/data_read/,imc_free_running/data_write/,cs}' -a sleep 1
-WARNING: grouped events cpus do not match, disabling group:
-  anon group { imc_free_running/data_read/, imc_free_running/data_write/, cs }
-```
-
-Change the behavior so that just the events not matching the leader
-are removed. So in the example above, just 'cs' will be removed.
-
-Modify the warning so that it is produced once for each group, rather
-than once for the entire evlist. Shrink the scope and size of the
-warning text buffer.
-
+Suggested-by: Adrian Hunter <adrian.hunter@intel.com>
+Acked-by: Adrian Hunter <adrian.hunter@intel.com>
 Signed-off-by: Ian Rogers <irogers@google.com>
 ---
- tools/perf/builtin-stat.c | 24 +++++++++++++++---------
- 1 file changed, 15 insertions(+), 9 deletions(-)
+ tools/perf/arch/x86/util/auxtrace.c | 4 ----
+ tools/perf/arch/x86/util/pmu.c      | 8 ++++++--
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/tools/perf/builtin-stat.c b/tools/perf/builtin-stat.c
-index d70b1ec88594..5c12ae5efce5 100644
---- a/tools/perf/builtin-stat.c
-+++ b/tools/perf/builtin-stat.c
-@@ -181,14 +181,13 @@ static bool cpus_map_matched(struct evsel *a, struct evsel *b)
+diff --git a/tools/perf/arch/x86/util/auxtrace.c b/tools/perf/arch/x86/util/auxtrace.c
+index 3da506e13f49..330d03216b0e 100644
+--- a/tools/perf/arch/x86/util/auxtrace.c
++++ b/tools/perf/arch/x86/util/auxtrace.c
+@@ -26,11 +26,7 @@ struct auxtrace_record *auxtrace_record__init_intel(struct evlist *evlist,
+ 	bool found_bts = false;
  
- static void evlist__check_cpu_maps(struct evlist *evlist)
- {
--	struct evsel *evsel, *pos, *leader;
--	char buf[1024];
-+	struct evsel *evsel, *warned_leader = NULL;
- 
- 	if (evlist__has_hybrid(evlist))
- 		evlist__warn_hybrid_group(evlist);
+ 	intel_pt_pmu = perf_pmu__find(INTEL_PT_PMU_NAME);
+-	if (intel_pt_pmu)
+-		intel_pt_pmu->auxtrace = true;
+ 	intel_bts_pmu = perf_pmu__find(INTEL_BTS_PMU_NAME);
+-	if (intel_bts_pmu)
+-		intel_bts_pmu->auxtrace = true;
  
  	evlist__for_each_entry(evlist, evsel) {
--		leader = evsel__leader(evsel);
-+		struct evsel *leader = evsel__leader(evsel);
- 
- 		/* Check that leader matches cpus with each member. */
- 		if (leader == evsel)
-@@ -197,19 +196,26 @@ static void evlist__check_cpu_maps(struct evlist *evlist)
- 			continue;
- 
- 		/* If there's mismatch disable the group and warn user. */
--		WARN_ONCE(1, "WARNING: grouped events cpus do not match, disabling group:\n");
--		evsel__group_desc(leader, buf, sizeof(buf));
--		pr_warning("  %s\n", buf);
--
-+		if (warned_leader != leader) {
-+			char buf[200];
-+
-+			pr_warning("WARNING: grouped events cpus do not match.\n"
-+				"Events with CPUs not matching the leader will "
-+				"be removed from the group.\n");
-+			evsel__group_desc(leader, buf, sizeof(buf));
-+			pr_warning("  %s\n", buf);
-+			warned_leader = leader;
-+		}
- 		if (verbose > 0) {
-+			char buf[200];
-+
- 			cpu_map__snprint(leader->core.cpus, buf, sizeof(buf));
- 			pr_warning("     %s: %s\n", leader->name, buf);
- 			cpu_map__snprint(evsel->core.cpus, buf, sizeof(buf));
- 			pr_warning("     %s: %s\n", evsel->name, buf);
- 		}
- 
--		for_each_group_evsel(pos, leader)
--			evsel__remove_from_group(pos, leader);
-+		evsel__remove_from_group(evsel, leader);
- 	}
+ 		if (intel_pt_pmu && evsel->core.attr.type == intel_pt_pmu->type)
+diff --git a/tools/perf/arch/x86/util/pmu.c b/tools/perf/arch/x86/util/pmu.c
+index 358340b34243..f73b80dcd8bd 100644
+--- a/tools/perf/arch/x86/util/pmu.c
++++ b/tools/perf/arch/x86/util/pmu.c
+@@ -27,10 +27,14 @@ static bool cached_list;
+ struct perf_event_attr *perf_pmu__get_default_config(struct perf_pmu *pmu __maybe_unused)
+ {
+ #ifdef HAVE_AUXTRACE_SUPPORT
+-	if (!strcmp(pmu->name, INTEL_PT_PMU_NAME))
++	if (!strcmp(pmu->name, INTEL_PT_PMU_NAME)) {
++		pmu->auxtrace = true;
+ 		return intel_pt_pmu_default_config(pmu);
+-	if (!strcmp(pmu->name, INTEL_BTS_PMU_NAME))
++	}
++	if (!strcmp(pmu->name, INTEL_BTS_PMU_NAME)) {
++		pmu->auxtrace = true;
+ 		pmu->selectable = true;
++	}
+ #endif
+ 	return NULL;
  }
- 
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
