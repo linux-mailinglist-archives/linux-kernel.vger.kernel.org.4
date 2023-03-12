@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61FEE6B66EF
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:46:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B6186B66F2
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCLNqO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:46:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51096 "EHLO
+        id S229753AbjCLNrV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:47:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53904 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231139AbjCLNpm (ORCPT
+        with ESMTP id S229585AbjCLNrQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:45:42 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C26962DE71;
-        Sun, 12 Mar 2023 06:45:21 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 61583814;
-        Sun, 12 Mar 2023 14:45:17 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678628720;
-        bh=HY06FK/X1xlEQwlPSr2Kzwr8PW2ACwPKKPD5WqC75QA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=X1ehpH7fp4JbHWbhhzQPlMtiBhrLhq19IGwdA4eT5CiPYQLGfhqqE6uowTQ1cQoKN
-         o8k4c0qo4RtDpmQYspeuE8frJx2t+XdPQVIYQ/Hl0kfew9thjO6n5KNz95T474iJ/L
-         s9weY8G18+gV5eenOHxY4slRjNWsNmx9MWEzjDc4=
-Date:   Sun, 12 Mar 2023 15:45:13 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+        Sun, 12 Mar 2023 09:47:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B2A4E5D3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:46:55 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbM2F-0000uj-4v; Sun, 12 Mar 2023 14:46:51 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbM2C-003dPR-RX; Sun, 12 Mar 2023 14:46:48 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbM2C-004I1i-1y; Sun, 12 Mar 2023 14:46:48 +0100
+Date:   Sun, 12 Mar 2023 14:46:47 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 27/28] media: i2c: max9286: drop of_match_ptr for ID table
-Message-ID: <20230312134513.GD8229@pendragon.ideasonboard.com>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-27-krzysztof.kozlowski@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 1/2] pwm: rcar: drop of_match_ptr for ID table
+Message-ID: <20230312134647.kmjcbilb3puumcu6@pengutronix.de>
+References: <20230311173735.263293-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="ry4hqmtm567b2zyc"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312131318.351173-27-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230311173735.263293-1-krzysztof.kozlowski@linaro.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
 
-Thank you for the patch.
+--ry4hqmtm567b2zyc
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 12, 2023 at 02:13:17PM +0100, Krzysztof Kozlowski wrote:
+On Sat, Mar 11, 2023 at 06:37:34PM +0100, Krzysztof Kozlowski wrote:
 > The driver can match only via the DT table so the table should be always
 > used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).  This
-> also fixes !CONFIG_OF error:
-> 
->   drivers/media/i2c/max9286.c:1707:34: error: ‘max9286_dt_ids’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> matching via PRP0001, even though it might not be relevant here).
+>=20
+>   drivers/pwm/pwm-rcar.c:252:34: error: =E2=80=98rcar_pwm_of_table=E2=80=
+=99 defined but not used [-Werror=3Dunused-const-variable=3D]
 
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+The commit log text sounds like a harmless optimisation, but the error
+message here either means you're fixing a compile failure, or (and?) the
+patch was sent out before the commit log was finalized.
 
-> ---
->  drivers/media/i2c/max9286.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/max9286.c b/drivers/media/i2c/max9286.c
-> index 701038d6d19b..ed932ff9ec74 100644
-> --- a/drivers/media/i2c/max9286.c
-> +++ b/drivers/media/i2c/max9286.c
-> @@ -1713,7 +1713,7 @@ MODULE_DEVICE_TABLE(of, max9286_dt_ids);
->  static struct i2c_driver max9286_i2c_driver = {
->  	.driver	= {
->  		.name		= "max9286",
-> -		.of_match_table	= of_match_ptr(max9286_dt_ids),
-> +		.of_match_table	= max9286_dt_ids,
->  	},
->  	.probe_new	= max9286_probe,
->  	.remove		= max9286_remove,
+Looking at it this is the error message that triggers if you compile
+this driver with OF unset. I'd like to have that mentioned, then the
+patch looks fine. Ditto for the 2nd patch in this series.
 
--- 
-Regards,
+Best regards
+Uwe
 
-Laurent Pinchart
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
+   |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--ry4hqmtm567b2zyc
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQN18MACgkQwfwUeK3K
+7AkCaQf/Zcv/KYxblrH3aDeQO/6BnoG2tnTCFOREJzbHJT9wbABf71+IvleN+HI0
+he+ejf1n+gKyzTmrmSngNEXiSfT6Z8jZdVepJCpnVb2lt1f7Sd9EVZ1GqeLJ7jqj
+bgww3ZAmOQuOhADi2MJBtlhu4x7heTawGZLxknJ++xA8Wxv7LuPrTdLE4S6gCZLd
+mge7RqJdxzqs4KEj2nNR1tohpMrhketyaYuB2Qu2E9uiKEkeenTUMK5SAe9ZiHJ0
+ko1w+GMD8PVZperHjC03DhyBpHB++ouHj9TBKMdacuMH0ragPGuSj/lRGYDIOS7W
+gmntN00GFCOd4Ij1UIrW6dl+KdN6mQ==
+=kRBA
+-----END PGP SIGNATURE-----
+
+--ry4hqmtm567b2zyc--
