@@ -2,80 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33A596B623C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 00:51:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BEA866B6242
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 01:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229656AbjCKXvf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 18:51:35 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56930 "EHLO
+        id S229578AbjCLAFE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 19:05:04 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbjCKXvd (ORCPT
+        with ESMTP id S229450AbjCLAFC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 18:51:33 -0500
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E636E6A2D1;
-        Sat, 11 Mar 2023 15:51:32 -0800 (PST)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PZ07Q3LVDz4x1R;
-        Sun, 12 Mar 2023 10:51:30 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678578690;
-        bh=7e66qwPdKy4giTl7AYrBQKeWPO+uFModfiP+nT9Iwtw=;
-        h=Date:From:To:Cc:Subject:From;
-        b=o1w/8FORQcb6bfF5xDDj9ZIOXtfMiFQFQSSqy4kGzFimgZoymiA5JVQljTz1x7Xqz
-         3wJrdIZlW1sDAjeOF76m2+U4CNiC6ZuwI0HIcBbscyE/XVyZIpljdGm4h2xMSQ7yfQ
-         CJxzSuWwov7+ylSCiBBGdypSJGe7/QD/9gv3RSol/vc/K2TQqqIUm27qBUHyJFTL/P
-         /G8PxzOlvfTlNeM+PMHNqj+R+Tu2IPSU0FZmSM9OYMvMVLgOR6bSApKJIF2S1WuOh1
-         PLkNG6fjL2hanI2m9s16mkLtJd7bLLPtq9DNnTacBHVfEHIQ8L6/KdXBye7JdcpSKG
-         /jwtEn3Agvzlw==
-Date:   Sun, 12 Mar 2023 10:51:29 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Linux Next Mailing List <linux-next@vger.kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: linux-next: no release tomorrow
-Message-ID: <20230312105129.015207bc@canb.auug.org.au>
+        Sat, 11 Mar 2023 19:05:02 -0500
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03AF56168;
+        Sat, 11 Mar 2023 16:05:01 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id cy23so35003005edb.12;
+        Sat, 11 Mar 2023 16:05:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678579500;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l7P7zwDp7HMR5PUtcSmRw8AB12ZCYbb55I22hOywNM8=;
+        b=PMGn8TBesyfVr05fRjGiiu2D7RcLQmHfhpkhB8aym8raTft6/nrPUtO/h0mroIp121
+         sspWKjqoMhCbQPTIqj07R+80yOAbh4AiL37rYvUxErS/PcSDseh88gtL1SPUiM6CXp3T
+         yIwbYNJ/CJYHWYcbX1MLR75UjCdfCg0FfctPyMHWF2HyRdC6cAu+e/kooFZMUX3MVQJz
+         /QrJaw4jg3aqnz9MnakRSIbQd0rki0gDKRV6ev2roEuamBZhD9DrgS8Uxgm8ochb4AJh
+         sSrchTy7yCePBDohiKLeVgbLei9p6gIed4e8sBdb8l7N4GhOTR7Ic2YxlqxQazdcButU
+         iCxQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678579500;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l7P7zwDp7HMR5PUtcSmRw8AB12ZCYbb55I22hOywNM8=;
+        b=mm5S4mLcVVRoXziQXBy14+XJLzabb/wBptC48f5SaDRQW3fD+/d91HvCu1Cojpt0GJ
+         wZ780kvTpy/hCALDF8IQYPjAzNW1sd/BbOun44eiiD5t5c7cwQVnLNG91ssoBDCos80x
+         N7wFRFfOSLGrNNEzuAXx5Adh1bhrpn/yEGuxmgPTX2LLrsZ/1JcmTaqzigvVDNmyzxHQ
+         xrmWK/5MqLglPRiigYLa9L4Cj9llOR4iFcb1y5lMUyL1Eki133jcbwS/j6A2DB9ff9A4
+         XHR/r5W2blLqQ/1m5DcXprFOaF8oTIhR18+s6BFSqWUQsIncPOc/3eB7/RbxYSkTPvXj
+         WcWQ==
+X-Gm-Message-State: AO0yUKWYJ4ruReo6A5lx3OAUsf+E3zyMoGiuTJDsqKMs4o6/ZhekMpLx
+        4iY8fjpzACaXmszdNK2HHZBHqUk3rZwfQL6JdHY=
+X-Google-Smtp-Source: AK7set8BvyM+5fym01sUZFlbeND2YFgWPbx1VKzjrL69YplPXzzK2ysFFnGVALKXB8ad0X1vLINYmqWPImrmjvCgxNI=
+X-Received: by 2002:a17:907:7d8c:b0:8f5:2e0e:6def with SMTP id
+ oz12-20020a1709077d8c00b008f52e0e6defmr4348283ejc.0.1678579500114; Sat, 11
+ Mar 2023 16:05:00 -0800 (PST)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/jgSVScL/gvnL5JkN.vgr+yG";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,LOCALPART_IN_SUBJECT,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230311163614.92296-1-kerneljasonxing@gmail.com> <20230311091409.4f125e53@hermes.local>
+In-Reply-To: <20230311091409.4f125e53@hermes.local>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Sun, 12 Mar 2023 08:04:23 +0800
+Message-ID: <CAL+tcoAUGyDS=khx7W8V79wck2HAFa2JFsY4-182ASy5m9w+Pw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: introduce budget_squeeze to help us tune rx behavior
+To:     stephen@networkplumber.org
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com, kuniyu@amazon.com,
+        liuhangbin@gmail.com, xiangxia.m.yue@gmail.com, jiri@nvidia.com,
+        bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/jgSVScL/gvnL5JkN.vgr+yG
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Sun, Mar 12, 2023 at 1:14=E2=80=AFAM Stephen Hemminger
+<stephen@networkplumber.org> wrote:
+>
+> On Sun, 12 Mar 2023 00:36:14 +0800
+> Jason Xing <kerneljasonxing@gmail.com> wrote:
+>
+> > -     for (;;) {
+> > +     for (; is_continue;) {
+>
+>
+> Easier to read this as a
+>         while (is_continue) {
+>
+> but what is wrong with using break; instead?
 
-Hi all,
+If we hit the budget limit and 'break;' immediately, we may miss the
+collection when we also hit the time limit. That's why I would like to
+know if we hit both of them.
 
-There will be no linux-next release tomorrow (Monday).
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/jgSVScL/gvnL5JkN.vgr+yG
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQNFAEACgkQAVBC80lX
-0GxINAf/WlpTnrGHlWBbOfY8JSTtSFkxkgF4Qwr4l5usrBtFoWwHYzk+N/wuUsHZ
-/LGqDquTd6wKN917uEaujctHWoYtDaR2Zt23S+yAc8xYrOvlNhEHM4ySsquMvNOF
-/nsQcVpYdWpSb1IX6ML2maiOsnS/PMs0ceaa8S92qM8MORsoUWle08MPwO7PvBb3
-lIq61Cq2LYeM/u8MkqSPWlhypbl9gXLbIFOxkUj2ZHRBwF1x49lthcvgnkaVbFwV
-9W3+PEOaUCIdefzSN+WlyLK/6jmgSIS01O/nilXE8gynerueox3spJT2ZFpgaF4t
-2jsrBU5jnMRfJ2fSYQ09lLREKivjOw==
-=6gUs
------END PGP SIGNATURE-----
-
---Sig_/jgSVScL/gvnL5JkN.vgr+yG--
+Thank,
+Jason
