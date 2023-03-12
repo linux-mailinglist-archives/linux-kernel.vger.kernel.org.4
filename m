@@ -2,69 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24F776B6C20
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:00:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A5B6B6C64
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjCLXA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 19:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S229660AbjCLXHG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 19:07:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCLXA0 (ORCPT
+        with ESMTP id S229535AbjCLXHE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 19:00:26 -0400
-Received: from mail-qt1-x842.google.com (mail-qt1-x842.google.com [IPv6:2607:f8b0:4864:20::842])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A47D2CFE7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 16:00:24 -0700 (PDT)
-Received: by mail-qt1-x842.google.com with SMTP id y10so11567557qtj.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 16:00:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678662023;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=NFj8hwmdox2fPUWNjtNJG87t+emv14/wDoz5EyLA0s4=;
-        b=Hj1qum0FNAd0Z0FKkEyjObAX3KK2dns9Pv2Rc3Krfpn/YN9P3N08p3s6qTYAwtbZsE
-         YuK+Y69u1L/bn37azJ8xJpzGNHXZ2bd3LNi/i5gOqPNIGSAAzZIsd8vkcBYC/LhJg9Xz
-         h03ncqmnB7soRuEhBHK0buezT05OQVVZIBbvSOTGTpA4wCYmEr71s3ZkuqaU2Ra6J1YB
-         tAHtoxnQzJt+2QXf981vx4M9Vv7Mxqm8TJWLLx8fP3EfMP41Lt10U3LmL9e/DsgTwSjX
-         VrLADdLoXFr3A6a7tM+2D9oIpLqro4u1NQsVQ5dRczhClb1MnESK/o81EIXSvhLZK/TQ
-         k33g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678662023;
-        h=to:subject:message-id:date:from:sender:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NFj8hwmdox2fPUWNjtNJG87t+emv14/wDoz5EyLA0s4=;
-        b=s6/pVvymub/WBvBwejU7pjxUcTYtDTLbxQO2sB2oGO6VAp5mF5duM5QfqPPc7pQYMc
-         6ncx9SjoV8agLwwYuCXMdDPgJ4dSwq1kKiHSfX//yDZacYRomoXaVw8gU8BMVu4HAyzA
-         hDEycba+cU1eoMVH1Q6qNvrqARgNh8YjkynZLQSPTQU++y7Fz0uMdCu0sOjFc14e3CLz
-         lf3jm0v/z15ZpRu7AaJXqQZQR+BoicB9pt5x6HWpKm9wbVF8e/7vH6TtHNz65OcUWe2b
-         gndRZ3O5yAoamizHxlszrp5m/DEtjsTsqgRq5F3ZrOin5sh7+MkhpppnNEUOTllX2W/g
-         hgRA==
-X-Gm-Message-State: AO0yUKUjgGJ35UcMkJWxbsPC1mFvpyLLN2t3W9+YNrWcDLp+otYJSS3r
-        Whrbumxow4ehQtL+S+1J4uzg8FQeU2xOkgocii4=
-X-Google-Smtp-Source: AK7set/KaslS0D8+6xTT+NN2FxhS7ejvhhZvZRzstB4f3w6aLsMnxqR8/s6h0grlLEFe3fBgHsr9F7LFpuSDK5mscBE=
-X-Received: by 2002:ac8:82:0:b0:3bf:ba7f:58f8 with SMTP id c2-20020ac80082000000b003bfba7f58f8mr9083179qtg.3.1678662023531;
- Sun, 12 Mar 2023 16:00:23 -0700 (PDT)
+        Sun, 12 Mar 2023 19:07:04 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4086C17171;
+        Sun, 12 Mar 2023 16:07:03 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 23:06:58 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1678662420;
+        bh=5dEBzzp91jUe7QOaIJDo+f1xSfiM90NXcZjIcBmzSb8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dBu9n+33MZYj5fNLhH7dWNCWRVDrODRgzCxilFLbryM+kyaPoV9IMEgGINZcvZhvB
+         Ckhf4rHGZLS4GXVU/6+qypywkZ7aPXT4uaqiPeAmkToYM9d64tt5Fj4arb84Bid2ZO
+         CGsxZenH5a5pySV3bGQe7afPVw6IX4Eq9DEJV62o=
+From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To:     Willy Tarreau <w@1wt.eu>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 4/5] tools/nolibc: add support for stack protector
+Message-ID: <68b4b33d-711b-4b5d-b932-6beceffbcf28@t-8ch.de>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+ <20230223-nolibc-stackprotector-v1-4-3e74d81b3f21@weissschuh.net>
+ <ZA3MC89PEq058cdo@1wt.eu>
 MIME-Version: 1.0
-Reply-To: sgtkaylama@gmail.com
-Sender: abdoulhanantairou@gmail.com
-Received: by 2002:ac8:1244:0:0:0:0:0 with HTTP; Sun, 12 Mar 2023 16:00:23
- -0700 (PDT)
-From:   sgtkaylama <sgtkaylama@gmail.com>
-Date:   Sun, 12 Mar 2023 23:00:23 +0000
-X-Google-Sender-Auth: EEoPrdP4yGR0kNXPr0KsetGu9As
-Message-ID: <CAETTEK6Mph0b9TJqepVnxN7MSB3axcHpVLpb-zPUGQ_4bZCCKg@mail.gmail.com>
-Subject: 
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=2.8 required=5.0 tests=BAYES_95,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: **
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZA3MC89PEq058cdo@1wt.eu>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hello, did you receive my two previous messages?
+On Sun, Mar 12, 2023 at 01:56:43PM +0100, Willy Tarreau wrote:
+> Hi Thomas,
+> 
+> thanks for this patchset. I must confess it's not very clear to me which
+> class of programs using nolibc could benefit from stack protection, but
+> if you think it can improve the overall value (even if just by allowing
+> to test more combinations), I'm fine with this given that it doesn't
+> remove anything.
+
+I forgot the rationale, will add it properly to the next revision:
+
+This is useful when using nolibc for security-critical tools.
+Using nolibc has the advantage that the code is easily auditable and
+sandboxable with seccomp as no unexpected syscalls are used.
+Using compiler-assistent stack protection provides another security
+mechanism.
+
+> I'm having a few comments below:
+> 
+> On Tue, Mar 07, 2023 at 10:22:33PM +0000, Thomas Weißschuh wrote:
+> > diff --git a/tools/include/nolibc/stackprotector.h b/tools/include/nolibc/stackprotector.h
+> > new file mode 100644
+> > index 000000000000..ca1360b7afd8
+> > --- /dev/null
+> > +++ b/tools/include/nolibc/stackprotector.h
+> > @@ -0,0 +1,48 @@
+> > +/* SPDX-License-Identifier: LGPL-2.1 OR MIT */
+> > +/*
+> > + * Stack protector support for NOLIBC
+> > + * Copyright (C) 2023 Thomas Weißschuh <linux@weissschuh.net>
+> > + */
+> > +
+> > +#ifndef _NOLIBC_STACKPROTECTOR_H
+> > +#define _NOLIBC_STACKPROTECTOR_H
+> > +
+> > +#include "arch.h"
+> > +
+> > +#if defined(NOLIBC_STACKPROTECTOR)
+> > +
+> > +#if !defined(__ARCH_SUPPORTS_STACK_PROTECTOR)
+> > +#error "nolibc does not support stack protectors on this arch"
+> > +#endif
+> > +
+> > +#include "sys.h"
+> > +#include "stdlib.h"
+> > +
+> > +__attribute__((weak,noreturn,section(".text.nolibc_stack_chk")))
+> > +void __stack_chk_fail(void)
+> > +{
+> > +	write(STDERR_FILENO, "!!Stack smashing detected!!\n", 28);
+> > +	abort();
+> > +}
+> 
+> Don't you think you should call the syscall directly here like you
+> did for __stack_chk_init() and/or declare the function with the
+> no_stackprotector attribute ? I'm wondering if there could be a
+> risk that it fails again if called from a bad condition. If you're
+> certain it cannot, maybe just explain it in a 2-line comment above
+> the function so that others don't ask the same in the future.
+
+Good point. It probably works because the compiler decided to inline the
+call. But syscalls are more robust, I'll change that.
+
+> > +__attribute__((weak,no_stack_protector,section(".text.nolibc_stack_chk")))
+> > +void __stack_chk_init(void)
+> > +{
+> > +	// raw syscall assembly as calling a function would trigger the
+> > +	// stackprotector itself
+> > +	my_syscall3(__NR_getrandom, &__stack_chk_guard, sizeof(__stack_chk_guard), 0);
+> 
+> For full-line comments, the regular C-style "/* */" is preferred (and
+> please also use the multi-line format when needed). "//" tends to be
+> reserved for short ones at the end of a line.
+
+Of course, will be changed.
+
+> > +	// a bit more randomness in case getrandom() fails
+> > +	__stack_chk_guard |= (uintptr_t) &__stack_chk_guard;
+> 
+> Using |= will in fact remove randomness rather than add, because it
+> will turn some zero bits to ones but not the opposite. Maybe you'd
+> want to use "^=" or "+=" instead ?
+
+Indeed, will change that.
