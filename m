@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDDC56B6566
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:27:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4627B6B656C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:28:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbjCLL1M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:27:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34322 "EHLO
+        id S230291AbjCLL1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230180AbjCLL0h (ORCPT
+        with ESMTP id S230336AbjCLL1V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:26:37 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7D844C6F2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:26:35 -0700 (PDT)
+        Sun, 12 Mar 2023 07:27:21 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21A5B31E28
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:27:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678620395; x=1710156395;
+  t=1678620420; x=1710156420;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=jhNKWlLSFQdtM5nCCWCne2jNIxj0oFZDDW74FDfmA8g=;
-  b=FHLvCFC8vBj0bj0L3384qCGgXNGdoW8g0iM8sPO+BgKG25c4QTy83Bwc
-   P+is2c16ISXepWvN8p7NMSvJy1equOXipaROPCVApzOici9WSW+awNQIp
-   B7Xf8BYephg99tLsPYHb6g4Qcw00gaHwvZ5iz7KQjEuWEX9jYvhi+9NQz
-   nWAddN5Rxw1CL78iiX+QyCfB9kwEBG6KJx+8ucSo74HFItvsakzB9qdIi
-   +3qPWLT3dIIYhm20IKJNms9NN71hKYnhW32CLjxGkodo6N3MeODEu32fO
-   dNHppXqJFHQthF3WdhiBaBUEaTF9FPsElYefZJfZn4tuin7BBV3872eB0
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339349949"
+  bh=Tq6WtwHrazfLXD0XBMc2Q+r2SDElsHETE3zLNMxGwxY=;
+  b=k3LKUTF6yAC/ZMEGgbk4wf5VNdENVldHrIfNR3iH6YIxu0S8VEcc4Q02
+   7Msfg9r+8gs5snjHYNoP1jiHNoGZerg+qcCR+ENEyJLy5dYTmqznU7m+I
+   4lECB9g3QqFl+J3ua43dXe2W7fZOQr7f6GJ9ZaBq2vQxC+ti7cWARVjQb
+   Y+GIaJBKI7nbAyRJ7kfX2x9JYvzvjy24cWrDJvTW/J0bbdSXbNfqKAcJw
+   OtCIm/QKArBOiZfkNKfEHQDjWt3aHcp0DRgXjeN43mYbcA5bD2gi6hB8D
+   YJhzLa0vALsT8wUr3fkJfVY/O90dY2KzRHvRp9Ny0wEpgh/dt7njFF+dR
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="399577574"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="339349949"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:35 -0700
+   d="scan'208";a="399577574"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:36 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="852438029"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="671580735"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="852438029"
+   d="scan'208";a="671580735"
 Received: from nmoazzen-mobl1.amr.corp.intel.com (HELO box.shutemov.name) ([10.251.219.215])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:30 -0700
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:30 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 84A2710D7B3; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
+        id 8FAA510D7B4; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv16 05/17] mm: Introduce untagged_addr_remote()
-Date:   Sun, 12 Mar 2023 14:26:00 +0300
-Message-Id: <20230312112612.31869-6-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv16 06/17] x86/uaccess: Provide untagged_addr() and remove tags before address check
+Date:   Sun, 12 Mar 2023 14:26:01 +0300
+Message-Id: <20230312112612.31869-7-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
 References: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
@@ -77,231 +77,214 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-untagged_addr() removes tags/metadata from the address and brings it to
-the canonical form. The helper is implemented on arm64 and sparc. Both of
-them do untagging based on global rules.
+untagged_addr() is a helper used by the core-mm to strip tag bits and
+get the address to the canonical shape based on rules of the current
+thread. It only handles userspace addresses.
 
-However, Linear Address Masking (LAM) on x86 introduces per-process
-settings for untagging. As a result, untagged_addr() is now only
-suitable for untagging addresses for the current proccess.
+The untagging mask is stored in per-CPU variable and set on context
+switching to the task.
 
-The new helper untagged_addr_remote() has to be used when the address
-targets remote process. It requires the mmap lock for target mm to be
-taken.
+The tags must not be included into check whether it's okay to access the
+userspace address. Strip tags in access_ok().
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: Alexander Potapenko <glider@google.com>
 ---
- arch/sparc/include/asm/uaccess_64.h |  2 ++
- drivers/vfio/vfio_iommu_type1.c     |  2 +-
- fs/proc/task_mmu.c                  |  9 +++++++--
- include/linux/mm.h                  | 11 -----------
- include/linux/uaccess.h             | 22 ++++++++++++++++++++++
- mm/gup.c                            |  4 ++--
- mm/madvise.c                        |  5 +++--
- mm/migrate.c                        | 11 ++++++-----
- 8 files changed, 43 insertions(+), 23 deletions(-)
+ arch/x86/include/asm/mmu.h         |  3 +++
+ arch/x86/include/asm/mmu_context.h | 11 +++++++++
+ arch/x86/include/asm/tlbflush.h    | 10 ++++++++
+ arch/x86/include/asm/uaccess.h     | 39 ++++++++++++++++++++++++++++--
+ arch/x86/kernel/process.c          |  3 +++
+ arch/x86/mm/init.c                 |  5 ++++
+ 6 files changed, 69 insertions(+), 2 deletions(-)
 
-diff --git a/arch/sparc/include/asm/uaccess_64.h b/arch/sparc/include/asm/uaccess_64.h
-index 94266a5c5b04..b825a5dd0210 100644
---- a/arch/sparc/include/asm/uaccess_64.h
-+++ b/arch/sparc/include/asm/uaccess_64.h
-@@ -8,8 +8,10 @@
- 
- #include <linux/compiler.h>
- #include <linux/string.h>
-+#include <linux/mm_types.h>
- #include <asm/asi.h>
- #include <asm/spitfire.h>
-+#include <asm/pgtable.h>
- 
- #include <asm/processor.h>
- #include <asm-generic/access_ok.h>
-diff --git a/drivers/vfio/vfio_iommu_type1.c b/drivers/vfio/vfio_iommu_type1.c
-index 493c31de0edb..3d4dd9420c30 100644
---- a/drivers/vfio/vfio_iommu_type1.c
-+++ b/drivers/vfio/vfio_iommu_type1.c
-@@ -580,7 +580,7 @@ static int vaddr_get_pfns(struct mm_struct *mm, unsigned long vaddr,
- 		goto done;
- 	}
- 
--	vaddr = untagged_addr(vaddr);
-+	vaddr = untagged_addr_remote(mm, vaddr);
- 
- retry:
- 	vma = vma_lookup(mm, vaddr);
-diff --git a/fs/proc/task_mmu.c b/fs/proc/task_mmu.c
-index 6a96e1713fd5..29fd6b1f4058 100644
---- a/fs/proc/task_mmu.c
-+++ b/fs/proc/task_mmu.c
-@@ -1689,8 +1689,13 @@ static ssize_t pagemap_read(struct file *file, char __user *buf,
- 
- 	/* watch out for wraparound */
- 	start_vaddr = end_vaddr;
--	if (svpfn <= (ULONG_MAX >> PAGE_SHIFT))
--		start_vaddr = untagged_addr(svpfn << PAGE_SHIFT);
-+	if (svpfn <= (ULONG_MAX >> PAGE_SHIFT)) {
-+		ret = mmap_read_lock_killable(mm);
-+		if (ret)
-+			goto out_free;
-+		start_vaddr = untagged_addr_remote(mm, svpfn << PAGE_SHIFT);
-+		mmap_read_unlock(mm);
-+	}
- 
- 	/* Ensure the address is inside the task */
- 	if (start_vaddr > mm->task_size)
-diff --git a/include/linux/mm.h b/include/linux/mm.h
-index 1f79667824eb..289ae4caf878 100644
---- a/include/linux/mm.h
-+++ b/include/linux/mm.h
-@@ -96,17 +96,6 @@ extern int mmap_rnd_compat_bits __read_mostly;
- #include <asm/page.h>
- #include <asm/processor.h>
- 
--/*
-- * Architectures that support memory tagging (assigning tags to memory regions,
-- * embedding these tags into addresses that point to these memory regions, and
-- * checking that the memory and the pointer tags match on memory accesses)
-- * redefine this macro to strip tags from pointers.
-- * It's defined as noop for architectures that don't support memory tagging.
-- */
--#ifndef untagged_addr
--#define untagged_addr(addr) (addr)
--#endif
--
- #ifndef __pa_symbol
- #define __pa_symbol(x)  __pa(RELOC_HIDE((unsigned long)(x), 0))
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 22fc9fbf1d0a..9cac8c45a647 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -45,6 +45,9 @@ typedef struct {
+ #ifdef CONFIG_ADDRESS_MASKING
+ 	/* Active LAM mode:  X86_CR3_LAM_U48 or X86_CR3_LAM_U57 or 0 (disabled) */
+ 	unsigned long lam_cr3_mask;
++
++	/* Significant bits of the virtual address. Excludes tag bits. */
++	u64 untag_mask;
  #endif
-diff --git a/include/linux/uaccess.h b/include/linux/uaccess.h
-index ab9728138ad6..3064314f4832 100644
---- a/include/linux/uaccess.h
-+++ b/include/linux/uaccess.h
-@@ -10,6 +10,28 @@
  
- #include <asm/uaccess.h>
- 
-+/*
-+ * Architectures that support memory tagging (assigning tags to memory regions,
-+ * embedding these tags into addresses that point to these memory regions, and
-+ * checking that the memory and the pointer tags match on memory accesses)
-+ * redefine this macro to strip tags from pointers.
-+ *
-+ * Passing down mm_struct allows to define untagging rules on per-process
-+ * basis.
-+ *
-+ * It's defined as noop for architectures that don't support memory tagging.
-+ */
-+#ifndef untagged_addr
-+#define untagged_addr(addr) (addr)
-+#endif
-+
-+#ifndef untagged_addr_remote
-+#define untagged_addr_remote(mm, addr)	({		\
-+	mmap_assert_locked(mm);				\
-+	untagged_addr(addr);				\
-+})
-+#endif
-+
- /*
-  * Architectures should provide two primitives (raw_copy_{to,from}_user())
-  * and get rid of their private instances of copy_{to,from}_user() and
-diff --git a/mm/gup.c b/mm/gup.c
-index eab18ba045db..5ee8b682a0fe 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -1085,7 +1085,7 @@ static long __get_user_pages(struct mm_struct *mm,
- 	if (!nr_pages)
- 		return 0;
- 
--	start = untagged_addr(start);
-+	start = untagged_addr_remote(mm, start);
- 
- 	VM_BUG_ON(!!pages != !!(gup_flags & (FOLL_GET | FOLL_PIN)));
- 
-@@ -1259,7 +1259,7 @@ int fixup_user_fault(struct mm_struct *mm,
- 	struct vm_area_struct *vma;
- 	vm_fault_t ret;
- 
--	address = untagged_addr(address);
-+	address = untagged_addr_remote(mm, address);
- 
- 	if (unlocked)
- 		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
-diff --git a/mm/madvise.c b/mm/madvise.c
-index 340125d08c03..d4b67f36f70f 100644
---- a/mm/madvise.c
-+++ b/mm/madvise.c
-@@ -1402,8 +1402,6 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
- 	size_t len;
- 	struct blk_plug plug;
- 
--	start = untagged_addr(start);
--
- 	if (!madvise_behavior_valid(behavior))
- 		return -EINVAL;
- 
-@@ -1435,6 +1433,9 @@ int do_madvise(struct mm_struct *mm, unsigned long start, size_t len_in, int beh
- 		mmap_read_lock(mm);
- 	}
- 
-+	start = untagged_addr_remote(mm, start);
-+	end = start + len;
-+
- 	blk_start_plug(&plug);
- 	error = madvise_walk_vmas(mm, start, end, behavior,
- 			madvise_vma_behavior);
-diff --git a/mm/migrate.c b/mm/migrate.c
-index 98f1c11197a8..8cd11bc9208f 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -2097,15 +2097,18 @@ static int do_move_pages_to_node(struct mm_struct *mm,
-  *         target node
-  *     1 - when it has been queued
-  */
--static int add_page_for_migration(struct mm_struct *mm, unsigned long addr,
-+static int add_page_for_migration(struct mm_struct *mm, const void __user *p,
- 		int node, struct list_head *pagelist, bool migrate_all)
+ 	struct mutex lock;
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index 0295c3863db7..eb1387ac40fa 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -101,6 +101,12 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
+ static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
  {
- 	struct vm_area_struct *vma;
-+	unsigned long addr;
- 	struct page *page;
- 	int err;
- 	bool isolated;
- 
- 	mmap_read_lock(mm);
-+	addr = (unsigned long)untagged_addr_remote(mm, p);
+ 	mm->context.lam_cr3_mask = oldmm->context.lam_cr3_mask;
++	mm->context.untag_mask = oldmm->context.untag_mask;
++}
 +
- 	err = -EFAULT;
- 	vma = vma_lookup(mm, addr);
- 	if (!vma || !vma_migratable(vma))
-@@ -2211,7 +2214,6 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
++static inline void mm_reset_untag_mask(struct mm_struct *mm)
++{
++	mm->context.untag_mask = -1UL;
+ }
  
- 	for (i = start = 0; i < nr_pages; i++) {
- 		const void __user *p;
--		unsigned long addr;
- 		int node;
+ #else
+@@ -113,6 +119,10 @@ static inline unsigned long mm_lam_cr3_mask(struct mm_struct *mm)
+ static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
+ {
+ }
++
++static inline void mm_reset_untag_mask(struct mm_struct *mm)
++{
++}
+ #endif
  
- 		err = -EFAULT;
-@@ -2219,7 +2221,6 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 			goto out_flush;
- 		if (get_user(node, nodes + i))
- 			goto out_flush;
--		addr = (unsigned long)untagged_addr(p);
+ #define enter_lazy_tlb enter_lazy_tlb
+@@ -139,6 +149,7 @@ static inline int init_new_context(struct task_struct *tsk,
+ 		mm->context.execute_only_pkey = -1;
+ 	}
+ #endif
++	mm_reset_untag_mask(mm);
+ 	init_new_context_ldt(mm);
+ 	return 0;
+ }
+diff --git a/arch/x86/include/asm/tlbflush.h b/arch/x86/include/asm/tlbflush.h
+index e8b47f57bd4a..75bfaa421030 100644
+--- a/arch/x86/include/asm/tlbflush.h
++++ b/arch/x86/include/asm/tlbflush.h
+@@ -54,6 +54,15 @@ static inline void cr4_clear_bits(unsigned long mask)
+ 	local_irq_restore(flags);
+ }
  
- 		err = -ENODEV;
- 		if (node < 0 || node >= MAX_NUMNODES)
-@@ -2247,8 +2248,8 @@ static int do_pages_move(struct mm_struct *mm, nodemask_t task_nodes,
- 		 * Errors in the page lookup or isolation are not fatal and we simply
- 		 * report them via status
- 		 */
--		err = add_page_for_migration(mm, addr, current_node,
--				&pagelist, flags & MPOL_MF_MOVE_ALL);
-+		err = add_page_for_migration(mm, p, current_node, &pagelist,
-+					     flags & MPOL_MF_MOVE_ALL);
++#ifdef CONFIG_ADDRESS_MASKING
++DECLARE_PER_CPU(u64, tlbstate_untag_mask);
++
++static inline u64 current_untag_mask(void)
++{
++	return this_cpu_read(tlbstate_untag_mask);
++}
++#endif
++
+ #ifndef MODULE
+ /*
+  * 6 because 6 should be plenty and struct tlb_state will fit in two cache
+@@ -380,6 +389,7 @@ static inline void set_tlbstate_lam_mode(struct mm_struct *mm)
+ {
+ 	this_cpu_write(cpu_tlbstate.lam,
+ 		       mm->context.lam_cr3_mask >> X86_CR3_LAM_U57_BIT);
++	this_cpu_write(tlbstate_untag_mask, mm->context.untag_mask);
+ }
  
- 		if (err > 0) {
- 			/* The page is successfully queued for migration */
+ #else
+diff --git a/arch/x86/include/asm/uaccess.h b/arch/x86/include/asm/uaccess.h
+index 1cc756eafa44..c79ebdbd6356 100644
+--- a/arch/x86/include/asm/uaccess.h
++++ b/arch/x86/include/asm/uaccess.h
+@@ -7,11 +7,13 @@
+ #include <linux/compiler.h>
+ #include <linux/instrumented.h>
+ #include <linux/kasan-checks.h>
++#include <linux/mm_types.h>
+ #include <linux/string.h>
+ #include <asm/asm.h>
+ #include <asm/page.h>
+ #include <asm/smap.h>
+ #include <asm/extable.h>
++#include <asm/tlbflush.h>
+ 
+ #ifdef CONFIG_DEBUG_ATOMIC_SLEEP
+ static inline bool pagefault_disabled(void);
+@@ -21,6 +23,39 @@ static inline bool pagefault_disabled(void);
+ # define WARN_ON_IN_IRQ()
+ #endif
+ 
++#ifdef CONFIG_ADDRESS_MASKING
++/*
++ * Mask out tag bits from the address.
++ *
++ * Magic with the 'sign' allows to untag userspace pointer without any branches
++ * while leaving kernel addresses intact.
++ */
++static inline unsigned long __untagged_addr(unsigned long addr,
++					    unsigned long mask)
++{
++	long sign = addr >> 63;
++
++	addr &= mask | sign;
++	return addr;
++}
++
++#define untagged_addr(addr)	({					\
++	u64 __addr = (__force u64)(addr);				\
++	__addr = __untagged_addr(__addr, current_untag_mask());		\
++	(__force __typeof__(addr))__addr;				\
++})
++
++#define untagged_addr_remote(mm, addr)	({				\
++	u64 __addr = (__force u64)(addr);				\
++	mmap_assert_locked(mm);						\
++	__addr = __untagged_addr(__addr, (mm)->context.untag_mask);	\
++	(__force __typeof__(addr))__addr;				\
++})
++
++#else
++#define untagged_addr(addr)	(addr)
++#endif
++
+ /**
+  * access_ok - Checks if a user space pointer is valid
+  * @addr: User space pointer to start of block to check
+@@ -38,10 +73,10 @@ static inline bool pagefault_disabled(void);
+  * Return: true (nonzero) if the memory block may be valid, false (zero)
+  * if it is definitely invalid.
+  */
+-#define access_ok(addr, size)					\
++#define access_ok(addr, size)						\
+ ({									\
+ 	WARN_ON_IN_IRQ();						\
+-	likely(__access_ok(addr, size));				\
++	likely(__access_ok(untagged_addr(addr), size));			\
+ })
+ 
+ #include <asm-generic/access_ok.h>
+diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+index b650cde3f64d..bbc8c4c6e360 100644
+--- a/arch/x86/kernel/process.c
++++ b/arch/x86/kernel/process.c
+@@ -48,6 +48,7 @@
+ #include <asm/frame.h>
+ #include <asm/unwind.h>
+ #include <asm/tdx.h>
++#include <asm/mmu_context.h>
+ 
+ #include "process.h"
+ 
+@@ -368,6 +369,8 @@ void arch_setup_new_exec(void)
+ 		task_clear_spec_ssb_noexec(current);
+ 		speculation_ctrl_update(read_thread_flags());
+ 	}
++
++	mm_reset_untag_mask(current->mm);
+ }
+ 
+ #ifdef CONFIG_X86_IOPL_IOPERM
+diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
+index cb258f58fdc8..659b6c0f7910 100644
+--- a/arch/x86/mm/init.c
++++ b/arch/x86/mm/init.c
+@@ -1048,6 +1048,11 @@ __visible DEFINE_PER_CPU_ALIGNED(struct tlb_state, cpu_tlbstate) = {
+ 	.cr4 = ~0UL,	/* fail hard if we screw up cr4 shadow initialization */
+ };
+ 
++#ifdef CONFIG_ADDRESS_MASKING
++DEFINE_PER_CPU(u64, tlbstate_untag_mask);
++EXPORT_PER_CPU_SYMBOL(tlbstate_untag_mask);
++#endif
++
+ void update_cache_mode_entry(unsigned entry, enum page_cache_mode cache)
+ {
+ 	/* entry 0 MUST be WB (hardwired to speed up translations) */
 -- 
 2.39.2
 
