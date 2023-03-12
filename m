@@ -2,98 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D5236B64CA
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E386B64D4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:18:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCLKQJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:16:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48732 "EHLO
+        id S229853AbjCLKSS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:18:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjCLKQG (ORCPT
+        with ESMTP id S229665AbjCLKSQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:16:06 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D78E233445;
-        Sun, 12 Mar 2023 03:15:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 97A40B8074D;
-        Sun, 12 Mar 2023 10:15:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0EA6C433EF;
-        Sun, 12 Mar 2023 10:15:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678616144;
-        bh=0QoZ25WKO3KeHJjM6NGw13wdy4JSU0OnGMtI6QJDCJQ=;
-        h=Date:To:Cc:References:From:Subject:In-Reply-To:From;
-        b=kiqI9HhI+w8bSxtDQI7ueuco+IZWwUXVsdcXz2Opm9qF9y0iGi2ioixxlDUTUP/7p
-         11IJXROpXi+8n/yeG7gqCvwEE0gVv3mMJxXDbDojn/NASfpZdZbCo4arRYxFY/R7sc
-         SzHWy5DW9bz4rSvbsCC4FHsElSc+5OQeUFBJln0iy6tVuI/18qFGK4OWnWWCbG039p
-         74xRbqOfy2qN9yaM3ejP95f36faBpqOdrKYGJ3sxe4dHG56zFHUbCaU9mgLatSrt7B
-         K9SRWVkW74VrgUhEx5Ey0+eulXIvIHLYmnutC+0jylsSuDACZ4XGSBMmv3X2v9+FQy
-         IuwXGkAgf9QgA==
-Message-ID: <265f6c37-fae7-6ab2-594f-e7785aedb4e6@kernel.org>
-Date:   Sun, 12 Mar 2023 18:15:42 +0800
+        Sun, 12 Mar 2023 06:18:16 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3CA144A7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:18:15 -0700 (PDT)
+Received: from moin.white.stw.pengutronix.de ([2a0a:edc0:0:b01:1d::7b] helo=bjornoya.blackshift.org)
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <mkl@pengutronix.de>)
+        id 1pbIlX-0001NV-KV; Sun, 12 Mar 2023 11:17:23 +0100
+Received: from pengutronix.de (unknown [IPv6:2a00:20:4047:f0aa:709:fab:bab8:4a48])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        (Authenticated sender: mkl-all@blackshift.org)
+        by smtp.blackshift.org (Postfix) with ESMTPSA id 8D95418F886;
+        Sun, 12 Mar 2023 10:16:59 +0000 (UTC)
+Date:   Sun, 12 Mar 2023 11:16:56 +0100
+From:   Marc Kleine-Budde <mkl@pengutronix.de>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>,
+        Wei Fang <wei.fang@nxp.com>,
+        Shenwei Wang <shenwei.wang@nxp.com>,
+        Clark Wang <xiaoning.wang@nxp.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Grygorii Strashko <grygorii.strashko@ti.com>,
+        Francois Romieu <romieu@fr.zoreil.com>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Zhao Qiang <qiang.zhao@nxp.com>, Kalle Valo <kvalo@kernel.org>,
+        Samuel Mendoza-Jonas <sam@mendozajonas.com>,
+        devicetree@vger.kernel.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-wireless@vger.kernel.org
+Subject: Re: [PATCH] net: Use of_property_read_bool() for boolean properties
+Message-ID: <20230312101656.6vugofe3ejtovnks@pengutronix.de>
+References: <20230310144718.1544169-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-To:     Theodore Ts'o <tytso@mit.edu>
-Cc:     adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Lukas Czerner <lczerner@redhat.com>
-References: <20230308011807.411478-1-chao@kernel.org>
- <20230311031843.GF860405@mit.edu>
-Content-Language: en-US
-From:   Chao Yu <chao@kernel.org>
-Subject: Re: [PATCH] ext4: fix to report fstrim.minlen back to userspace
-In-Reply-To: <20230311031843.GF860405@mit.edu>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="56s4oxy73xinyvne"
+Content-Disposition: inline
+In-Reply-To: <20230310144718.1544169-1-robh@kernel.org>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:b01:1d::7b
+X-SA-Exim-Mail-From: mkl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/11 11:18, Theodore Ts'o wrote:
-> Unfortunately, this patch is not correct.  The units of struct
-> fstrim_range's minlen (here, range->minlen) is bytes.
 
-Oh, that's right, sorry for the mistake.
+--56s4oxy73xinyvne
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> 
-> However the minlen variable in ext4_trim_fs is in units of *clusters*.
-> And so it gets rounded up two places.  The first time is when it is
-> converted into units of a cluster:
-> 
-> 	minlen = EXT4_NUM_B2C(EXT4_SB(sb),
-> 			      range->minlen >> sb->s_blocksize_bits);
-IIUC, if range->minlen is smaller than block size of ext4, above calculation
-may return a wrong value, due to it looks EXT4_NUM_B2C() expects a non-zero
-in-parameter.
+On 10.03.2023 08:47:16, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
+>=20
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+>  drivers/net/can/cc770/cc770_platform.c          | 12 ++++++------
 
-So it needs to round up minlen to block size first and then round up block
-size to cluster size:
+Acked-by: Marc Kleine-Budde <mkl@pengutronix.de> # for net/can
 
-	minlen =  EXT4_NUM_B2C(EXT4_SB(sb),
-		EXT4_BLOCK_ALIGN(range->minlen, sb->s_blocksize_bits));
+regards,
+Marc
 
-Or do the conversion at a time as you reminded:
+--=20
+Pengutronix e.K.                 | Marc Kleine-Budde           |
+Embedded Linux                   | https://www.pengutronix.de  |
+Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
 
-	minlen = (range->minlen + EXT4_CLUSTER_SIZE(sb) - 1) >>
-		(sb->s_blocksize_bits + EXT4_CLUSTER_BITS(sb));
+--56s4oxy73xinyvne
+Content-Type: application/pgp-signature; name="signature.asc"
 
-> 
-> And the second time is when it is rounded up to the block device's
-> discard granularity.
-> 
-> So after that if statement, we need to convert minlen from clusters to
-> bytes, like so:
-> 
-> 	range->minlen = EXT4_C2B(EXT4_SB(sb), minlen) << sb->s_blocksize_bits);
+-----BEGIN PGP SIGNATURE-----
 
-Thanks for the detailed explanation and reminder. :)
+iQEzBAABCgAdFiEEDs2BvajyNKlf9TJQvlAcSiqKBOgFAmQNppYACgkQvlAcSiqK
+BOih8Af/YX2B3N5FsBIZG4yqpr++vgKc4n7OnSLKeurhmc0xDoCskNspwUZEwQMx
+qH0NpgRO8lQRNavcmnZCXsQNyaDN+MZisfJf/6ok61y5S2klIpM53ExvbwwG3bMN
+s4yVdfQC6+OXVLKbp8zOkZvkjIJ8WPXROJs7co0Vwpw+6ISlaBCr1tNOyaQ8pG1I
+okCqcVtkxS7Oq972YEV14iIgJkqaIhjVDuCQib7hRPf3AQOf4HVwSOdRmKQSpa2J
+JoiV0ENG22zhLQ10qSyttO6mLAyAfF63yU4gNr8Qr4HFfMu2GrnhlI5mhVJAsBET
+xkYmWkJD8zscCZtljlR5NmYU9uO/sA==
+=0vPJ
+-----END PGP SIGNATURE-----
 
-Thanks,
+--56s4oxy73xinyvne--
