@@ -2,74 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0666E6B6331
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 05:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B8DD6B6333
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 05:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229655AbjCLElW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 23:41:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51998 "EHLO
+        id S229738AbjCLElb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 23:41:31 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLElT (ORCPT
+        with ESMTP id S229677AbjCLEl2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 23:41:19 -0500
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 34DF33864A;
-        Sat, 11 Mar 2023 20:41:18 -0800 (PST)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32C4f7lt032752;
-        Sun, 12 Mar 2023 05:41:07 +0100
-Date:   Sun, 12 Mar 2023 05:41:07 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     "'Sasha Levin'" <sashal@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Eric Biggers <ebiggers@kernel.org>,
-        Pavel Machek <pavel@ucw.cz>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        "viro@zeniv.linux.org.uk" <viro@zeniv.linux.org.uk>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>
-Subject: Re: AUTOSEL process
-Message-ID: <ZA1X46ClAJGc/2V7@1wt.eu>
-References: <Y/rufenGRpoJVXZr@sol.localdomain>
- <Y/ux9JLHQKDOzWHJ@sol.localdomain>
- <Y/y70zJj4kjOVfXa@sashalap>
- <Y/zswi91axMN8OsA@sol.localdomain>
- <Y/zxKOBTLXFjSVyI@sol.localdomain>
- <ZATC3djtr9/uPX+P@duo.ucw.cz>
- <ZAewdAql4PBUYOG5@gmail.com>
- <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap>
- <9ff6fe2c13434512b034823112843d4f@AcuMS.aculab.com>
+        Sat, 11 Mar 2023 23:41:28 -0500
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB5343B20F
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 20:41:27 -0800 (PST)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32C4fG8t031509
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Sat, 11 Mar 2023 23:41:17 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678596078; bh=MUTFrTJV2TG1PRFQ5UV72VyZiWZbhttWsOcRl7qYvuo=;
+        h=Date:From:To:Cc:Subject;
+        b=fSsgTgMOLSRvblisQ50uGYd0giPA+5GY1xJ1NgtVAXyj4cguEg42JnMDD/zddz2CO
+         L4blTxMaq0zeP7LT8Vs0P7MmQycMTxmVXgYYmvmIUQJ7jioNdAA/1QDkIbvDMjAGSR
+         8G4nG0bnC5Yba141Fsu9kYts84xszbPyBoIiyf8jVnffS+yznAvCxuXnEToqrbI/J0
+         naJdF6nEVzv9wJzGW9bSImxWvLjS/YF6cfL+syMWOyxyUGFBHsbxTgQ6XY5JLWPz4I
+         2/TF7l+uCkVYaA8asQK6Mu/4uuFf8E/tcgOx1fUxDvJ4f042SRAo3jg4XbLeCzeYmc
+         uUSiJQSmqnXyw==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 3DBF215C45B9; Sat, 11 Mar 2023 23:41:16 -0500 (EST)
+Date:   Sat, 11 Mar 2023 23:41:16 -0500
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linux-ext4@vger.kernel.org
+Subject: [GIT PULL] ext4 fixes for 6.3-rc2
+Message-ID: <20230312044116.GA2694785@mit.edu>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <9ff6fe2c13434512b034823112843d4f@AcuMS.aculab.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 10:38:10PM +0000, David Laight wrote:
-> ...
-> > I suppose that if I had a way to know if a certain a commit is part of a
-> > series, I could either take all of it or none of it, but I don't think I
-> > have a way of doing that by looking at a commit in Linus' tree
-> > (suggestions welcome, I'm happy to implement them).
-> 
-> Could something in git (eg when patches get applied) add dependencies
-> between the patches in a series.
-> While that won't force the entire series be added, it would ensure
-> that all earlier patches are added.
+The following changes since commit e3645d72f8865ffe36f9dc811540d40aa3c848d3:
 
-I suspect that having an option to keep the message ID in the footer (a
-bit like the "cherry-picked from" tag but instead "blongs to series")
-could possibly help. And when no such info is present we could have
-one ID generated per "git am" execution since usually if you apply an
-mbox, it constitutes a series (but not always of course, though it's
-not difficult to arrange series like this).
+  ext4: fix incorrect options show of original mount_opt and extend mount_opt2 (2023-02-25 15:39:08 -0500)
 
-Willy
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/tytso/ext4.git tags/ext4_for_linus_stable
+
+for you to fetch changes up to f5361da1e60d54ec81346aee8e3d8baf1be0b762:
+
+  ext4: zero i_disksize when initializing the bootloader inode (2023-03-11 00:44:24 -0500)
+
+----------------------------------------------------------------
+Bug fixes and regressions for ext4, the most serious of which is a
+potential deadlock during directory renames that was introduced during
+the merge window discovered by a combination of syzbot and lockdep.
+
+----------------------------------------------------------------
+Darrick J. Wong (1):
+      ext4: fix another off-by-one fsmap error on 1k block filesystems
+
+Eric Biggers (1):
+      ext4: fix cgroup writeback accounting with fs-layer encryption
+
+Eric Whitney (1):
+      ext4: fix RENAME_WHITEOUT handling for inline directories
+
+Jan Kara (1):
+      ext4: Fix deadlock during directory rename
+
+Theodore Ts'o (1):
+      ext4, jbd2: add an optimized bmap for the journal inode
+
+Thomas Weiﬂschuh (1):
+      ext4: make kobj_type structures constant
+
+Tudor Ambarus (1):
+      ext4: Fix comment about the 64BIT feature
+
+Wu Bo (1):
+      docs: ext4: modify the group desc size to 64
+
+Ye Bin (4):
+      ext4: move where set the MAY_INLINE_DATA flag is set
+      ext4: fix WARNING in ext4_update_inline_data
+      ext4: commit super block if fs record error when journal record without error
+      ext4: make sure fs error flag setted before clear journal error
+
+Zhihao Cheng (1):
+      ext4: zero i_disksize when initializing the bootloader inode
+
+ Documentation/filesystems/ext4/blockgroup.rst |  6 +++---
+ fs/ext4/ext4.h                                |  2 +-
+ fs/ext4/fsmap.c                               |  2 ++
+ fs/ext4/inline.c                              |  1 -
+ fs/ext4/inode.c                               |  7 +++++-
+ fs/ext4/ioctl.c                               |  1 +
+ fs/ext4/namei.c                               | 39 +++++++++++++++++++++-------------
+ fs/ext4/page-io.c                             | 11 +++++-----
+ fs/ext4/super.c                               | 38 +++++++++++++++++++++++++++++++--
+ fs/ext4/sysfs.c                               |  4 ++--
+ fs/ext4/xattr.c                               |  3 +++
+ fs/jbd2/journal.c                             |  9 +++++---
+ include/linux/jbd2.h                          |  8 +++++++
+ 13 files changed, 98 insertions(+), 33 deletions(-)
