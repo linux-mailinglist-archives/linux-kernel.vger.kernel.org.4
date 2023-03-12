@@ -2,194 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB5576B6A8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:11:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCCA46B6A91
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:12:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbjCLTLB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:11:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58794 "EHLO
+        id S230224AbjCLTMo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:12:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbjCLTK7 (ORCPT
+        with ESMTP id S229839AbjCLTMm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:10:59 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BBB5303DB;
-        Sun, 12 Mar 2023 12:10:49 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 9E524320046E;
-        Sun, 12 Mar 2023 15:10:47 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Sun, 12 Mar 2023 15:10:47 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alyssa.is; h=cc
-        :cc:content-transfer-encoding:content-type:content-type:date
-        :date:from:from:in-reply-to:message-id:mime-version:reply-to
-        :sender:subject:subject:to:to; s=fm1; t=1678648247; x=
-        1678734647; bh=Cvh4ZiacG5VE6kcR8Gk7s5+fYYDWMIvbwr/3VYeaQZ4=; b=k
-        X+AnLqLq4MLdXHy+t+2is0PlLlD7ud3YWETgaLWAP5nQ5kVuhBCdwSpTx/S62NbI
-        7+HRx3jRkN8Y9B20bCvyDPtTtw90qRFZN/yYrGoOqmHJAFBf/vH98xKQ67lmAw/u
-        KjxdDaVXs/16cCRKyOo2k2YsI8uaS7OIHVHl07X+RFw5ioITxeDzYHDI1qPpC3OX
-        y+s/fD+64p6BgPXxh8an5lGc1fxOQnah4SCsxpkZ1qR9o/NYnBsN6eMnXFPQmZWv
-        1fE9DzScWIgzbgLGEzid6asztQno2ltg5GchMSRfbOR1tDKe+1if8zHxsC1WMBZg
-        0KFocWKYPbS3ghXDRGTHA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:content-type:date:date:feedback-id:feedback-id
-        :from:from:in-reply-to:message-id:mime-version:reply-to:sender
-        :subject:subject:to:to:x-me-proxy:x-me-proxy:x-me-sender
-        :x-me-sender:x-sasl-enc; s=fm2; t=1678648247; x=1678734647; bh=C
-        vh4ZiacG5VE6kcR8Gk7s5+fYYDWMIvbwr/3VYeaQZ4=; b=vRA11/tAGCHarmsIR
-        s2nKwyc0GCeCAKvbfF/ZhBJjEU9Ip+gCnurM6Q6qsHCjpfzv4P3zgeNGgrymWjP3
-        zdZhqeAQ74Nw7uYu/YDthOvq5OU4T7MZnOo6aqLgXNQbxGWX6RWQcoyR9Ph+dZ55
-        ikt7jS71lk2v99aigtZJPV5SBDKrM7USbnWnd/30jyiAOiqDoGMuPErUiANvXYWg
-        z4Yhn5qlMQsqxSb1pFpivhpZrpSdptpfTINywVNShyBf/uf72k+8T49MyBPVNmlJ
-        vO/2m892Am6rNSeqbV/5f5uNLXAbSoitMz88bjl870TnV0M1WHokeBraj1EnO8ep
-        FFl2g==
-X-ME-Sender: <xms:tiMOZLZNPbBlvpD6EebseWHHRnEqRjmlf5aiOIBqu63oPF5vzTQmOQ>
-    <xme:tiMOZKa2qd2vmYwvG563FWj-7y6bbJLguiPcVQWrDxfgPApc4DNXkUf3Z1Of2hbl8
-    EyWwfpGfK82CBnWig>
-X-ME-Received: <xmr:tiMOZN9AxCea0RtN7VS-V5g9W_lhgHtqZ4Z7MASgGYYz32B6Anonfxs_mZBL_t0PR3bV6SdyaN1NP50c_GJhgGz1wO4YZpuRNQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvvddguddvtdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
-    enucfjughrpefhvfevufffkffogggtgfesthekredtredtjeenucfhrhhomheptehlhihs
-    shgrucftohhsshcuoehhihesrghlhihsshgrrdhisheqnecuggftrfgrthhtvghrnhepve
-    evgfehledtieelffegvdegveeukeevhfdtteeggeejvdduveegvefftefgueffnecuffho
-    mhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrh
-    grmhepmhgrihhlfhhrohhmpehhihesrghlhihsshgrrdhish
-X-ME-Proxy: <xmx:tiMOZBplT7Ushm42rQUl_PyR8nzY1xxCu5d4WQoxjE2P6scdIaPo2A>
-    <xmx:tiMOZGos34MSyNMXe1A5gz_SZ37XCx9Oiwvn2QIp7qW4qclqABcjuQ>
-    <xmx:tiMOZHTBiwYW4eJunuRWqjo6hKX36y0tBYRLz3aB2sR8olTWfbUc1g>
-    <xmx:tyMOZN2cd5oNEs6W7sGqAtYnM0uOJhcwEfv26X93_i8j8BFExTswrw>
-Feedback-ID: i12284293:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sun,
- 12 Mar 2023 15:10:46 -0400 (EDT)
-Received: by x220.qyliss.net (Postfix, from userid 1000)
-        id 3B3C423881; Sun, 12 Mar 2023 19:10:39 +0000 (UTC)
-From:   Alyssa Ross <hi@alyssa.is>
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org, Alyssa Ross <hi@alyssa.is>,
-        Martijn Coenen <maco@android.com>, linux-block@vger.kernel.org
-Subject: [PATCH v2] loop: LOOP_CONFIGURE: send uevents for partitions
-Date:   Sun, 12 Mar 2023 19:10:31 +0000
-Message-Id: <20230312191031.551204-1-hi@alyssa.is>
-X-Mailer: git-send-email 2.37.1
+        Sun, 12 Mar 2023 15:12:42 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2111.outbound.protection.outlook.com [40.107.244.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CD7932CC8;
+        Sun, 12 Mar 2023 12:12:41 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Q8ekD5LindiVKkPvy7HN2GFMUJA2xzPu3/J1r+HY/oE/nMRDy1Y9Osk9iVsuvhhVMX9TRcdxH1XhZKEKg/WbEHQlEmiVLQ4j7YuujouSIJ/Rkuf6DAfVsEVSXSf8X+fuImckPwnysCX09UQpv+lIOHwDFtOvn02a/Jwr0p+9u6Rr3RjYfMBQbMcFhQC1EbsbgaBHQDNoVMj85Xmbk3Tse9t9Fqj8ZSOj7G4mh5TYZ/wL15AXKgd6masXeelPlXyXoeVsTfY9PYLcrzps2oDQ8g4csodkQOhCrvspvMPRfZxMnBTAWgZeOA3Kki+N+0UuG8ZPBfLoSs7UlZ2GuwbPCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=e4gaFmXahdKmhvcrbJRJgZumv3CDLanDZr61Ufxp5nY=;
+ b=Ui/Or095hsWlbKoQZwJwbgn22ZQ5+uPa3j52ZaQ2zqIWTakm/m+JevvUYT9ouj6HEsAfvsRBXLNEprn7vpnzt928mHGAPOEULBTLClfu4g4zwWRb+Ct4Pd0edlR6bLDYww/Ctho3c7jzLRBy+I6bVBCnl/M0J1IxNhw5Ak+8c4TXFHHauHJ8JD2iIVBkpKJVEish6DK7Wa+R2lYNB6RSIfUORa/zaEpTuvPNcrKZxPFiH3U0nfGZ5qA/2U0AoVcgbjKYkRSmPzEUV6JaCBU8+d3HexL7WZYxowvtZLjYD2J9WszcF1bInCG91aqsqmhaA+JC++PZqMe9WLeuzFYJtg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=e4gaFmXahdKmhvcrbJRJgZumv3CDLanDZr61Ufxp5nY=;
+ b=qzY7VDBcIydTF3qrudrww4/HiANPOn4bHfDE5cHQ2W+M4Gl10jXVuIeoWVWX35PdEBtbissTdxzx6+yNCls+T7AWcNlCAL4l0+zkp89rSWV/LdvgpaDds/8YKe6UWfKfndls0A1+F7vGcDpEkRINdsH4JljyOazm1jdp5m0/uN8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO3PR13MB5719.namprd13.prod.outlook.com (2603:10b6:303:171::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Sun, 12 Mar
+ 2023 19:12:37 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.024; Sun, 12 Mar 2023
+ 19:12:37 +0000
+Date:   Sun, 12 Mar 2023 20:12:27 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
+Cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "jirislaby@kernel.org" <jirislaby@kernel.org>,
+        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>
+Subject: Re: [PATCH v8 1/3] serdev: Add method to assert break signal over
+ tty UART port
+Message-ID: <ZA4kG1gG2qoEGZLK@corigine.com>
+References: <20230310181921.1437890-1-neeraj.sanjaykale@nxp.com>
+ <20230310181921.1437890-2-neeraj.sanjaykale@nxp.com>
+ <ZAx1JOvjgOOYCNY9@corigine.com>
+ <AM9PR04MB8603EDB41582B5B816993B12E7B89@AM9PR04MB8603.eurprd04.prod.outlook.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <AM9PR04MB8603EDB41582B5B816993B12E7B89@AM9PR04MB8603.eurprd04.prod.outlook.com>
+X-ClientProxiedBy: AS4P195CA0046.EURP195.PROD.OUTLOOK.COM
+ (2603:10a6:20b:65a::27) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO3PR13MB5719:EE_
+X-MS-Office365-Filtering-Correlation-Id: dae4faed-9f6e-454d-3504-08db232dbe28
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GbIYy3Hze0MQqf9MGcBIR/E76Jc0m7HCUXbEq7+35rUrK4PRggRFaYDbFweJhbk3/CHiI57pgNA5oxz89cMKrYhYsdvGaBcc5AAPPiOwOfT5j7e9sD4TsUhwL0JgfwKbPGw4eqO4nGLmVgDYvMMFolJfrDqBo9GV/OrGAKGNDnfK6fmg8pfO9m3Wszi/LiIo1yDOUD9PIjgFte9EOegy9l+BRO857atxOi3hWSfkR1bG7aa+QO3RwBhOzzeiCMUdfy7nOM3VI/gfdnHihrzUnL6N1N2f0NNC4iXoh9cPvDjCBnOHE+f1EoT+DgT5pBxKOz3deAdXgTkh4hDl/4PJ/JLQbU8JjABJkYxXNk+bmjD4I8ynNJIWEZCmHQFtmVX6H53qet9CavvvcXynPVVsl4Aznth2MRdFSlKXlQKPyeEOqpeppkjHA+ilDvilphxrsqYvlaXW4TeuIpTaJ9lsp0GYpToH2N04qjdsZfVOr2Vyz74QbiwCyXMJLiDYsDy6a750mWHdnECE4hqJm9hVgKQKkS8R2E3CcDZYBHgP1+utwuo2poP79Vo2fZydVSln26mzJKPaAVvHA+1XHTveGarCu6Kn6OLPkqyrdJwARdTzqL2a3S/J1731D8/yJPdRFDn2AMIc6wLDRSPLAAFQ2suHEujajjTMOEkjDidurW7KEFGC1NVBcVfSOUZ+PK4m
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(376002)(39830400003)(366004)(136003)(451199018)(6486002)(966005)(2906002)(83380400001)(6666004)(36756003)(44832011)(6512007)(6506007)(5660300002)(8936002)(186003)(86362001)(41300700001)(2616005)(6916009)(8676002)(4326008)(7416002)(66476007)(66556008)(66946007)(478600001)(38100700002)(316002)(54906003);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Wd/nhwDOENbx9Avb/zOT/Zc9OpcQzaaZHOzgjdir6zAlrWm5x8IvsXyruZIj?=
+ =?us-ascii?Q?I2e1/S5OqagPHY7EabLmP3TTSElSluAvu0tEkCPXnP2vCysEQOmE3dt+KrkC?=
+ =?us-ascii?Q?3mweETVAUfi3vvF8lNq8Fcgrhh6iAzrZEWS9Xf+EHcyd/IeaC2RvGaNm/yi3?=
+ =?us-ascii?Q?lVLbycfBwVt64KuvavMnfmqpx0ImIwIFc5c7IUrD0KfLavdw2mkPDp+DSLJ6?=
+ =?us-ascii?Q?su5ozRZzHUtLHGE5VQXUh28Y0q+89SYgxtjnrjQqAou3w6WMjFWeJQAjw0Pc?=
+ =?us-ascii?Q?Xr5PjBlq/8ukZp4LsgZOKSpb5URHZAfLm6ktEYy2hUm55JjqBjq2KuINP8jq?=
+ =?us-ascii?Q?kDcjI+JNmoSmzMQqgU88tpZuDJyRZIpoEdQrKW+adUpS4agFCFYqZ9UstHkd?=
+ =?us-ascii?Q?yvE51p7NsaZio5FlKZmIROAqhB8a0T4NLNDqSCwh61WJsdBw/CzpWYTorQKM?=
+ =?us-ascii?Q?YDtg0YU4B/+6Yus36d0bXG5Pw4q/UK9XIBgw/A4GTB1m5TQPTPf72DV09rvh?=
+ =?us-ascii?Q?bA1pN6/PPZjwynZH3JfNdMbOmP+e6HlC/KNZOhc8HaFgXF+TIr6e4ax+hF26?=
+ =?us-ascii?Q?duydL86CQBWiaD8zamhV+DPscUSwANGw5B/5uiaaGttms2TymTQNP1dxc8Wt?=
+ =?us-ascii?Q?WI1WiAS0Kn/Edgb+Ujjcf98JvMOXshSolb/TlRvX2P6VySfpulHYLnHekSzA?=
+ =?us-ascii?Q?e+bCwm7IzeimApLD0BnsWXlJ5iu6Q7VIYQX1Ds6MP1jX6yGkpL9OzqaTF+Nq?=
+ =?us-ascii?Q?Y7/lxI2N2O084ItBGPW2wi5ELHTUyslcCYKcsuj9LHYVn7KeLYLloV57f6XA?=
+ =?us-ascii?Q?Ij1apuc36Y0meqfMdQyfCYLASxfCUKUvPT/zjQDDTN19SeABo3w7DoHGbykD?=
+ =?us-ascii?Q?qOAr4oD1PLhmBtInw8/hdfS1GhEqiWTtnz8V0jlz9XaPh35zHh0eMD0TgRPI?=
+ =?us-ascii?Q?ClQkrfMW30Z+U5LIPUJm862HmWiMqSCA40uu1vLPzuzvSPlA93tRq8fkbRvd?=
+ =?us-ascii?Q?ot5ZE9ka4JmsBzMuyHt4g0JxMj8Ywl3IL7lTJ5aljUwSqpmL44E3mfkjHgtj?=
+ =?us-ascii?Q?fA2Cru6V6f03oL/NLSuR9wCtwFJpIUPj8gp5rObP978qScOEQHuBzcST38QM?=
+ =?us-ascii?Q?HkyGvOlxldZUgayn/XxO74VXTiitCPEtLi439bVk/yN3XVei55Yl//4E1k3e?=
+ =?us-ascii?Q?XXU2LINvuoUWJONhYQsrvv+vI/07cASWaK1NobEkk8reiphtk5sWFu7cye5H?=
+ =?us-ascii?Q?8iA1IXSxi4GdWbZ8+YJwyJPVfvPLZ6vwfgSQh2h9aGTz/GrHpAkpe+hUOSjL?=
+ =?us-ascii?Q?k0eBxzKofK583W8XTjEBW98xL+eXnfkQWbKF7IgjZGUtebIm0ePniL9PVrqA?=
+ =?us-ascii?Q?iGbzuvEdMXkS80hwzCpxNpdzz/Cwjnxl1sb72L59saJLcRpetYONEnkAS9fX?=
+ =?us-ascii?Q?gyZ1BTSqZPvXNbQETXBmgIM2811PseRhfTwhf1Z22pbJN48itMbsTyL8jKcR?=
+ =?us-ascii?Q?p+EuRDioFi1CpNeDlf0XMwc00GVEGhkhjXf9o5RGo42iciUJ27b8fmW/5mKX?=
+ =?us-ascii?Q?2S/cTx/h97Ea0sbw3kvD66blbA/ljiTzWzwArXqThqeWv13z3p9grnYCxI/Z?=
+ =?us-ascii?Q?fe/jUmgShcFqBC/Gv38fz7BmB74gEOBHI5F53Y0ZTinT7a1skJ+apFmVMxP2?=
+ =?us-ascii?Q?WPqAfA=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: dae4faed-9f6e-454d-3504-08db232dbe28
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2023 19:12:37.6831
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dxbe8AFEHRowhE8kLHC4iRoiXfOT3dQwGEVfq91oR/OzOISMkvSH+8XHJVDWdP5si3FEMx2vD4D0uT2S4NAYtm63jrvEOG7mDGxpIjRbl9I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO3PR13MB5719
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-LOOP_CONFIGURE is, as far as I understand it, supposed to be a way to
-combine LOOP_SET_FD and LOOP_SET_STATUS64 into a single syscall.  When
-using LOOP_SET_FD+LOOP_SET_STATUS64, a single uevent would be sent for
-each partition found on the loop device after the second ioctl(), but
-when using LOOP_CONFIGURE, no such uevent was being sent.
+On Sun, Mar 12, 2023 at 07:01:17AM +0000, Neeraj sanjay kale wrote:
+> Hi Simon
+> 
+> > 
+> > On Fri, Mar 10, 2023 at 11:49:19PM +0530, Neeraj Sanjay Kale wrote:
+> > > Adds serdev_device_break_ctl() and an implementation for ttyport.
+> > > This function simply calls the break_ctl in tty layer, which can
+> > > assert a break signal over UART-TX line, if the tty and the underlying
+> > > platform and UART peripheral supports this operation.
+> > >
+> > > Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> > > ---
+> > > v3: Add details to the commit message. (Greg KH)
+> > 
+> > ...
+> > 
+> > > diff --git a/include/linux/serdev.h b/include/linux/serdev.h index
+> > > 66f624fc618c..c065ef1c82f1 100644
+> > > --- a/include/linux/serdev.h
+> > > +++ b/include/linux/serdev.h
+> > 
+> > ...
+> > 
+> > > @@ -255,6 +257,10 @@ static inline int serdev_device_set_tiocm(struct
+> > > serdev_device *serdev, int set,  {
+> > >       return -ENOTSUPP;
+> > >  }
+> > > +static inline int serdev_device_break_ctl(struct serdev_device
+> > > +*serdev, int break_state) {
+> > > +     return -EOPNOTSUPP;
+> > 
+> > Is the use of -EOPNOTSUPP intentional here?
+> > I see -ENOTSUPP is used elsewhere in this file.
+> I was suggested to use - EOPNOTSUPP instead of - ENOTSUPP by the check patch scripts and by Leon Romanovsky.
+> https://patchwork.kernel.org/project/bluetooth/patch/20230130180504.2029440-2-neeraj.sanjaykale@nxp.com/
+> 
+> ENOTSUPP is not a standard error code and should be avoided in new patches.
+> See: https://lore.kernel.org/netdev/20200510182252.GA411829@lunn.ch/
 
-In the old setup, uevents are disabled for LOOP_SET_FD, but not for
-LOOP_SET_STATUS64.  This makes sense, as it prevents uevents being
-sent for a partially configured device during LOOP_SET_FD — they're
-only sent at the end of LOOP_SET_STATUS64.  But for LOOP_CONFIGURE,
-uevents were disabled for the entire operation, so that final
-notification was never issued.  To fix this, I've moved the
-loop_reread_partitions() call, which causes the uevents to be issued,
-to after uevents are re-enabled, matching the behaviour of the
-LOOP_SET_FD+LOOP_SET_STATUS64 combination.
+Thanks.
 
-I noticed this because Busybox's losetup program recently changed from
-using LOOP_SET_FD+LOOP_SET_STATUS64 to LOOP_CONFIGURE, and this broke
-my setup, for which I want a notification from the kernel any time a
-new partition becomes available.
-
-Signed-off-by: Alyssa Ross <hi@alyssa.is>
-Fixes: 3448914e8cc5 ("loop: Add LOOP_CONFIGURE ioctl")
----
-
-v1: https://lore.kernel.org/linux-block/20230221222847.607096-1-hi@alyssa.is/
-
-v1 was an RFC, because I was looking for advice on how to handle
-distinguishing between LOOP_SET_FD with non-zero max_part (in which
-case partscan will be true, but a uevent should not be emitted), and
-LOOP_CONFIGURE (where a uevent should be emitted).  I didn't hear
-anything, but I did some experimentation of my own, and adding a
-partscan_uevent parameter to distinguish between LOOP_SET_FD and
-LOOP_CONFIGURE feels like the least bad solution to me.
-
- drivers/block/loop.c | 22 +++++++++++++++-------
- 1 file changed, 15 insertions(+), 7 deletions(-)
-
-diff --git a/drivers/block/loop.c b/drivers/block/loop.c
-index 839373451c2b..f00a0209b522 100644
---- a/drivers/block/loop.c
-+++ b/drivers/block/loop.c
-@@ -992,7 +992,8 @@ loop_set_status_from_info(struct loop_device *lo,
- 
- static int loop_configure(struct loop_device *lo, fmode_t mode,
- 			  struct block_device *bdev,
--			  const struct loop_config *config)
-+			  const struct loop_config *config,
-+			  bool partscan_uevent)
- {
- 	struct file *file = fget(config->fd);
- 	struct inode *inode;
-@@ -1110,15 +1111,21 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
- 		clear_bit(GD_SUPPRESS_PART_SCAN, &lo->lo_disk->state);
- 
- 	loop_global_unlock(lo, is_loop);
--	if (partscan)
--		loop_reread_partitions(lo);
- 	if (!(mode & FMODE_EXCL))
- 		bd_abort_claiming(bdev, loop_configure);
- 
-+	/*
-+	 * Now that we are done, reread the partitions with uevent
-+	 * re-enabled if appropriate to let userspace know about the
-+	 * changes.
-+	 */
-+	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), !partscan_uevent);
-+	if (partscan)
-+		loop_reread_partitions(lo);
-+	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
-+
- 	error = 0;
- done:
--	/* enable and uncork uevent now that we are done */
--	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
- 	return error;
- 
- out_unlock:
-@@ -1130,6 +1136,7 @@ static int loop_configure(struct loop_device *lo, fmode_t mode,
- 	fput(file);
- 	/* This is safe: open() is still holding a reference. */
- 	module_put(THIS_MODULE);
-+	dev_set_uevent_suppress(disk_to_dev(lo->lo_disk), 0);
- 	goto done;
- }
- 
-@@ -1547,7 +1554,7 @@ static int lo_ioctl(struct block_device *bdev, fmode_t mode,
- 		memset(&config, 0, sizeof(config));
- 		config.fd = arg;
- 
--		return loop_configure(lo, mode, bdev, &config);
-+		return loop_configure(lo, mode, bdev, &config, false);
- 	}
- 	case LOOP_CONFIGURE: {
- 		struct loop_config config;
-@@ -1555,7 +1562,7 @@ static int lo_ioctl(struct block_device *bdev, fmode_t mode,
- 		if (copy_from_user(&config, argp, sizeof(config)))
- 			return -EFAULT;
- 
--		return loop_configure(lo, mode, bdev, &config);
-+		return loop_configure(lo, mode, bdev, &config, true);
- 	}
- 	case LOOP_CHANGE_FD:
- 		return loop_change_fd(lo, bdev, arg);
--- 
-2.37.1
-
+I agree that EOPNOTSUPP is preferable.
+But my question is if we chose to use it in this case,
+even if it is inconsistent with similar code in the same file/API.
+If so, then I have no objections.
