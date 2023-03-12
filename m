@@ -2,119 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B4986B6C0A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74C136B6C0F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:48:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjCLWqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 18:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38222 "EHLO
+        id S229552AbjCLWsl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 18:48:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCLWqq (ORCPT
+        with ESMTP id S229450AbjCLWsj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 18:46:46 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D389A30B2B;
-        Sun, 12 Mar 2023 15:46:45 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.169])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 882006602F13;
-        Sun, 12 Mar 2023 22:46:44 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678661204;
-        bh=MTii68UXbEJyigv+rC2VJmnMysj4S0AVTawLMJCZCS8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nsnYAxtv9e6JLpZfb5Dh6vIuxwGi6XBcOoi+cGhRpXjQGEOi4v6Na7aPxWkoeMzjq
-         +VMB3XsdTBJWlqX71AXg4hfnWbQVVyh9rftK/Q/x/s7CG72QEfgoAr1TdA7ERK88X0
-         eSC1ISYLVd/6gu/EtBrG2/Hlx5iV7OSzUUt1bcsAPl0ZXWiKL69+lMhjYjEMe3rzlH
-         jhoAIsr8235La7BGG9diUcAvZq8F6GOzo8x4JrtmfmAZUTK2nJ3Rd11geGW2ylsfAi
-         8Azn8zp40SVP/sEk85IWOfnibsk90JaQnwsMuas1EPYA8qZkzPxiiA3vhvRZYWnL/Y
-         v2efZhdtX2jOw==
-Received: by mercury (Postfix, from userid 1000)
-        id 0D2C41060FD4; Sun, 12 Mar 2023 23:46:42 +0100 (CET)
-Date:   Sun, 12 Mar 2023 23:46:41 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Bjorn Andersson <bjorn.andersson@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-pm@vger.kernel.org
-Subject: Re: drivers/power/supply/qcom_battmgr.c:357:31: sparse: sparse:
- incorrect type in initializer (different base types)
-Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
-References: <202303110050.1EF6YVC5-lkp@intel.com>
+        Sun, 12 Mar 2023 18:48:39 -0400
+Received: from mail-qv1-xf2b.google.com (mail-qv1-xf2b.google.com [IPv6:2607:f8b0:4864:20::f2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12FED32E4D;
+        Sun, 12 Mar 2023 15:48:38 -0700 (PDT)
+Received: by mail-qv1-xf2b.google.com with SMTP id ne1so7200321qvb.9;
+        Sun, 12 Mar 2023 15:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678661317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=xYIG2TIps/UChe2tmlcHWvW9bzPS2sZ9r5iw2+hEA+k=;
+        b=JPVY1ePc1a3gjwTW8x47phBxj6NqlY9yiADR1dVl/xI9bbeO/sG01Cm6cfZu9+o+fB
+         sfiTKThIMGhjo8YjUJWVefvRJQsoMhLu2eznPndD8obBGY8jcAp/A7pmnFrCbLByJUpz
+         rkGaV41VkxnPS9HnqN8EnJryCGRObKC26pKkgoD5PIyjRz66lR8/XLNiNXsntwZawZ6B
+         rBS9+6U45dACma4BCt/S1r5qfXg1L51OALkuAF9H9JyRBUemR+xBBhJvhWJS7pDPkKaa
+         RKXVQEDk3numuPfloGw0jpKh/tAvQM+N3FD0OhCS9TPHpLoFjyHVffxGaOsBwfHmG8lm
+         Sn8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678661317;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xYIG2TIps/UChe2tmlcHWvW9bzPS2sZ9r5iw2+hEA+k=;
+        b=uRPwjzwoG3bu2volrUl4Wt5UjsAbA4TfWu9lmzUNegLsGiMl5NyPr0iJcHoE5566+O
+         sONppnenk9MPGBDlnq8UG7Pe8uT/oDGFRh+zK1Dh8+4yymqar9skQ9L7zvy2vkZ2T4ay
+         OfX6qh3VAuVoYjAzoTiuxFpNEAmUiQrMjJjl5/xbTDbW4llMl2BQCdCkuL8bVQzTgJKg
+         ZuczBQgKV3yq9iHO7wjt4CFXyKd30GUM4neUFFdszjjMnEwHyE3yYHss/ccQm+zlbCwU
+         EAhyUimTCKuXI9QdxaRdkWhieTpgrNWXt0yjWXS+/LKzuGKlFzRmu4t0fMHzr6jJzCOb
+         N1oA==
+X-Gm-Message-State: AO0yUKXCeu/cmFpfuiCptHtynamfSMR8spDf37SFYl2Db+rDn45qgNFl
+        Ok9o7FPX8jwsmReW/eDmSg4=
+X-Google-Smtp-Source: AK7set9AiFeN6g8qYlrBWkb4Li+WIUQsejl/BbRGfYJiZl25n0i3OhEhEBJqL47CeGzMMJ37Kgpcow==
+X-Received: by 2002:a05:6214:238e:b0:572:5a16:51c0 with SMTP id fw14-20020a056214238e00b005725a1651c0mr10317950qvb.16.1678661317054;
+        Sun, 12 Mar 2023 15:48:37 -0700 (PDT)
+Received: from localhost ([72.138.97.66])
+        by smtp.gmail.com with ESMTPSA id m6-20020aed27c6000000b003b62bc6cd1csm4416792qtg.82.2023.03.12.15.48.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 15:48:36 -0700 (PDT)
+From:   Ruslan Bilovol <ruslan.bilovol@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        peter.chen@kernel.org
+Subject: [PATCH v3] usb: gadget: epautoconf: claim smallest endpoints first
+Date:   Sun, 12 Mar 2023 18:48:36 -0400
+Message-Id: <20230312224836.297793-1-ruslan.bilovol@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dx3tdltyysw5wcwj"
-Content-Disposition: inline
-In-Reply-To: <202303110050.1EF6YVC5-lkp@intel.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+UDC hardware may have endpoints with different maxpacket
+size. Current endpoint matching code takes first matching
+endpoint from the list.
 
---dx3tdltyysw5wcwj
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+It's always possible that gadget allocates endpoints for
+small transfers (maxpacket size) first, then larger ones.
+That works fine if all matching UDC endpoints have same
+maxpacket size or are big enough to serve that allocation.
 
-Hi Bjorn,
+However, some UDCs have first endpoints in the list with
+bigger maxpacket size, whereas last endpoints are much
+smaller. In this case endpoint allocation will fail for
+the gadget (which allocates smaller endpoints first) on
+final endpoint allocations.
 
-Can you please send a follow up patch for the sparse warnings in
-qcom_battmgr [0]? It looks like there are two issues:
+To make endpoint allocation fair, pick up smallest
+matching endpoints first, leaving bigger ones for
+heavier applications.
 
-1. qcom_battmgr_update_request.battery_id is u32 instead of __le32
+Keel old behavior when "wMaxPacketSize == 0" because
+it's a special case. In this case a gadget driver wants
+to use a whole available MaxPacketSize of claimed
+endpoint. Since it doesn't know what MaxPacketSize
+may be in a particular UDC endpoint, it just
+relies on epautoconf core and gets what's available
 
-2. qcom_battmgr_enable_worker is missing cpu_to_le32() when building
-   struct qcom_battmgr_enable_request
+Signed-off-by: Ruslan Bilovol <ruslan.bilovol@gmail.com>
+---
 
-[0] https://lore.kernel.org/all/202303110050.1EF6YVC5-lkp@intel.com/
+v3: updated commit msg, rebased onto latest gregkh/usb-next
+v2: rebased onto latest balbi/next branch
+v1: https://lore.kernel.org/lkml/20200629200551.27040-1-ruslan.bilovol@gmail.com/
 
-> sparse warnings: (new ones prefixed by >>)
-> >> drivers/power/supply/qcom_battmgr.c:357:31: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned int [usertype] battery_id @@     got restricted __le32 [usertype] @@
->    drivers/power/supply/qcom_battmgr.c:357:31: sparse:     expected unsigned int [usertype] battery_id
->    drivers/power/supply/qcom_battmgr.c:357:31: sparse:     got restricted __le32 [usertype]
->    drivers/power/supply/qcom_battmgr.c:369:31: sparse: sparse: incorrect type in initializer (different base types) @@     expected unsigned int [usertype] battery_id @@     got restricted __le32 [usertype] @@
->    drivers/power/supply/qcom_battmgr.c:369:31: sparse:     expected unsigned int [usertype] battery_id
->    drivers/power/supply/qcom_battmgr.c:369:31: sparse:     got restricted __le32 [usertype]
-> >> drivers/power/supply/qcom_battmgr.c:1285:30: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] owner @@     got int @@
->    drivers/power/supply/qcom_battmgr.c:1285:30: sparse:     expected restricted __le32 [usertype] owner
->    drivers/power/supply/qcom_battmgr.c:1285:30: sparse:     got int
-> >> drivers/power/supply/qcom_battmgr.c:1286:29: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] type @@     got int @@
->    drivers/power/supply/qcom_battmgr.c:1286:29: sparse:     expected restricted __le32 [usertype] type
->    drivers/power/supply/qcom_battmgr.c:1286:29: sparse:     got int
-> >> drivers/power/supply/qcom_battmgr.c:1287:31: sparse: sparse: incorrect type in initializer (different base types) @@     expected restricted __le32 [usertype] opcode @@     got int @@
->    drivers/power/supply/qcom_battmgr.c:1287:31: sparse:     expected restricted __le32 [usertype] opcode
->    drivers/power/supply/qcom_battmgr.c:1287:31: sparse:     got int
+ drivers/usb/gadget/epautoconf.c | 23 ++++++++++++++++++-----
+ 1 file changed, 18 insertions(+), 5 deletions(-)
 
--- Sebastian
+diff --git a/drivers/usb/gadget/epautoconf.c b/drivers/usb/gadget/epautoconf.c
+index ed5a92c474e5..086bb46e3f5a 100644
+--- a/drivers/usb/gadget/epautoconf.c
++++ b/drivers/usb/gadget/epautoconf.c
+@@ -66,7 +66,7 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 	struct usb_ss_ep_comp_descriptor *ep_comp
+ )
+ {
+-	struct usb_ep	*ep;
++	struct usb_ep	*ep, *ep_min = NULL;
+ 
+ 	if (gadget->ops->match_ep) {
+ 		ep = gadget->ops->match_ep(gadget, desc, ep_comp);
+@@ -74,14 +74,27 @@ struct usb_ep *usb_ep_autoconfig_ss(
+ 			goto found_ep;
+ 	}
+ 
+-	/* Second, look at endpoints until an unclaimed one looks usable */
++	/*
++	 * Second, look at endpoints until an unclaimed one looks usable.
++	 * Try to find one with smallest maxpacket limit, leaving larger
++	 * endpoints for heavier applications
++	 */
+ 	list_for_each_entry (ep, &gadget->ep_list, ep_list) {
+-		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp))
+-			goto found_ep;
++		if (usb_gadget_ep_match_desc(gadget, ep, desc, ep_comp)) {
++			if (desc->wMaxPacketSize == 0)
++				goto found_ep;
++			else if (!ep_min)
++				ep_min = ep;
++			else if (ep->maxpacket_limit < ep_min->maxpacket_limit)
++				ep_min = ep;
++		}
+ 	}
+ 
+ 	/* Fail */
+-	return NULL;
++	if (!ep_min)
++		return NULL;
++
++	ep = ep_min;
+ found_ep:
+ 
+ 	/*
+-- 
+2.39.2
 
---dx3tdltyysw5wcwj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOVksACgkQ2O7X88g7
-+por+A//RI7dYm0hzeTkTcP+T3pb09fz6dwlsWcoLmzi00a5gu2EhtN/UQjhAqEN
-1slZ9k3PIfBzYFERJBSeIct6r9ysd8WP2e2XrL8ItMN/aGrdh9mYkd7l6vOZkrlb
-b/aNyO1aNPVik+qZOzy3fgDLIObbQxfPzHZ9bBQNBycp4qMtLAQ2oS7FcwTlrJ18
-pHhIKQ87kpf/u3rzR6V9iQguIoTgCKBKAg2bNUVjOveKKA2cmzRoLoB5R+Fc8Oke
-VOlCKUYttwXB+zYTTSoPIxJIOy32kFNiLFt10F3BJbS2SdhmdmWz7zC/VKlJB0Eu
-oVq8IvDzjBKWpT/+UB1c8lLBj8HJ52AT0J4VoweM3P+JWPuibhSx24FvsSEjPYzg
-j5bRxr0mlHrK35hyTRGAYvOIInX7REaMYsC0Cgup5z1GmA6zQdPptsnSTURCOOxU
-o+5H6qe3/++GqWXrd8xuoiXh5bzRVoLCo/fNg32536tdwMpQ2MkxSRZCaSUzCVbc
-twP75tMqE1iI0bgybNHbgsjMxueh1WnGEdAYgs+NXIAx1FGc5oAjj8AAeuN0L/ou
-vY/q20xEeXhb444Wc6ITadByYGsa9q/SQjglklJ98aRgVaus+oQn2H+RauL2HQSi
-zzaQ5D6AB6XM5G7v5Txyh6Wq4wF7YSW+RJKj5ZyKHiNBsMfQX0o=
-=bG3l
------END PGP SIGNATURE-----
-
---dx3tdltyysw5wcwj--
