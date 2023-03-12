@@ -2,71 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6CD6B6A4F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 936376B6A55
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:48:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbjCLSmU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:42:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41774 "EHLO
+        id S230063AbjCLSsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjCLSmS (ORCPT
+        with ESMTP id S229962AbjCLSsL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:42:18 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C1502D42;
-        Sun, 12 Mar 2023 11:41:58 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id x22so1058446wmj.3;
-        Sun, 12 Mar 2023 11:41:58 -0700 (PDT)
+        Sun, 12 Mar 2023 14:48:11 -0400
+Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE17C14D;
+        Sun, 12 Mar 2023 11:48:05 -0700 (PDT)
+Received: by mail-ot1-x331.google.com with SMTP id a4-20020a056830008400b0069432af1380so5627568oto.13;
+        Sun, 12 Mar 2023 11:48:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678646513;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=sPNMgVqTpUEhuVVUGea+g39Dl62GmKAwnFbl7GgjRp8=;
-        b=adcr1AtJaW+BvWT+icAKTc/tHWmWdSkUWw63V9PkZvsp1et8CG2Ih84OYeKyKxz/z1
-         vIuBbRhtSx1lrWyDGh8ygeFGzlM+T6L12RAfFVxbeUgEs2JOndLF377Q7/qaSYoxiQiY
-         +Ksxd2lX7xzith13WNgPrYOCwZSOES1/h111Vu8KQp7JtlJimxwMf+V3aa9C8eTUC5NV
-         GXdb8YAuMVU+e0LByRjYKcEshrcZ07rcblfdNmI/wXVQs42NxUEf31ioNCwST8ILphhP
-         PyyOF03M9G7XcRWeqbEkRGu2PCUk7zUIdWrZZ2j7pvE1VHc7fpWgnr1eHvPcKX0FA4zg
-         2yGA==
+        d=gmail.com; s=20210112; t=1678646884;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gcl4oMofNIyToXKyBYFlHzkkGWWxRL1J2M6ea2UM9dY=;
+        b=Slg6rupXetqrFrwKKwYdT8uc0ry1yxUWN+TE/F1/L9+8rIgbMozDV8g2cph0Yet3Li
+         vV9Ac6kiQwO6aILjHO+hrFm91Yogoh/a9YKD2PClCjGBo5Fk46d/P0iLQQjLLSvQ7AbL
+         b6UJNYiXp/tDyxgz424LYF9Stv5qKdV0nQ2vS9ZykzkKD07NAj+xV7+m7nm95weyXWGi
+         hLwT5/i94jUpJRoXqXLxIx7AY5UNjCuic2xo+FVWISZ9yt6YCCk9ZzxDhV5R4NUXgOvj
+         9Ywy+kL8Ys19roZXqLRN75wXwlZ9Gh6Srg7AXWS4w7IbOI/3n81HZaYpZ1IS5SmGOYRW
+         LMfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678646513;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=sPNMgVqTpUEhuVVUGea+g39Dl62GmKAwnFbl7GgjRp8=;
-        b=BVIl3DTL5u8bmhkigJJb7oxybImDhb4IBZU68t3qtOTSXIAIL764y6yODupIaF0QGe
-         Y1iHlQhBvzvLSfWelFYyL+9i5YdInGv/12qItNgWOIT5YR3KHcPMYaGwvxUj0yV9r5JN
-         TmscOW/7rNedQzq9ym25ie/tFqsjU08C3jK4IJnz3ZjG19uUJoxS66wBICLNllklVS1W
-         Sb08mt3GUD06IfARPU/pIeUweQe8eh4+yWrFNaniWz2hOQDAN7Ar/VaXGtEbPmq7uX8n
-         yoPcY810fyKFUAgthCUZVnAxQtI7zlWrF++A+/2C3tEXvHKR01vYY8qUsfu/poEOpOjN
-         ujQA==
-X-Gm-Message-State: AO0yUKVp/gL7Hf45UGsm9H051+wmzlDUJxncvQxD4q80WWry/rU3encp
-        sL9z7GDn7HyJdDpUsaArAOY=
-X-Google-Smtp-Source: AK7set9MrjRJ5PVCkbZDgVmZv0n6eXl8lq4OGVulyR4mW/ZU0l9q5lXpc8EF40WADuf5XRSgB/rXjg==
-X-Received: by 2002:a7b:c050:0:b0:3e7:6a59:d9d3 with SMTP id u16-20020a7bc050000000b003e76a59d9d3mr8741551wmc.37.1678646513489;
-        Sun, 12 Mar 2023 11:41:53 -0700 (PDT)
-Received: from localhost.localdomain ([146.70.189.10])
-        by smtp.gmail.com with ESMTPSA id w19-20020a05600c475300b003eb2e33f327sm8734443wmo.2.2023.03.12.11.41.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 11:41:52 -0700 (PDT)
-From:   Jan Jasper de Kroon <jajadekroon@gmail.com>
-To:     jajadekroon@gmail.com
-Cc:     linux-input@vger.kernel.org, megi@xff.cz, hadess@hadess.net,
-        hdegoede@redhat.com, dmitry.torokhov@gmail.com,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] input: touchscreen: goodix: Hold controller in reset during suspend
-Date:   Sun, 12 Mar 2023 19:40:59 +0100
-Message-Id: <20230312184058.552305-1-jajadekroon@gmail.com>
-X-Mailer: git-send-email 2.34.3
-In-Reply-To: <20230311131534.484700-1-jajadekroon@gmail.com>
-References: <20230311131534.484700-1-jajadekroon@gmail.com>
+        d=1e100.net; s=20210112; t=1678646884;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=gcl4oMofNIyToXKyBYFlHzkkGWWxRL1J2M6ea2UM9dY=;
+        b=dJorvvZKE/C9HV3Fnb41HWYIqJ0odMyuaus685xufVtEVPAzy7V6tn+lZ33vdwGkIa
+         h9WDOlC3AuqnHJTP/8qNXxyY6fyoHqiQtwW+E5CK4SwV7tMn9ac1TuhAuQydPs0zGpNE
+         0c/meC98PKzKsCCaAhRUXzQGWph1u+1nhfZ6m3jtW0EBC/+lWsYNZ415TBVTSpE/mmTo
+         CGdagCFi6u17tzaZFuJpap/BESLAyDAEW8KcvNTYsUhP2+VWxndS8q16wc+77XOu8vIh
+         Biwrl9OcVrePspy5jE2f6g8luHTJj17QJpZKWYZId9iCRJ0FttCINZ+ox6MLWmRAGF99
+         sfKQ==
+X-Gm-Message-State: AO0yUKWHlqlneErPYZVT0DqfJyU1APAtz4adSb6hZv3v+sUCfb6lj7Rj
+        x7pfq5EkSWaf7tnecRnVnwE=
+X-Google-Smtp-Source: AK7set/Z5EfQhbLT5zJAjq+ylrQsq2jaeoqk/zZBrIoWDfsdqgmXKHrZhczR7c6MN1K855KN8levRw==
+X-Received: by 2002:a9d:705c:0:b0:68b:bf5e:492c with SMTP id x28-20020a9d705c000000b0068bbf5e492cmr19065020otj.28.1678646884416;
+        Sun, 12 Mar 2023 11:48:04 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i17-20020a9d6251000000b0069457b86060sm2417927otk.47.2023.03.12.11.48.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 11:48:03 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <9343421e-d35d-8d99-1ea7-1f81e28fbabb@roeck-us.net>
+Date:   Sun, 12 Mar 2023 11:48:02 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
+ <cd9067c7-0b99-4d62-9d5a-cdc028f33ba5@roeck-us.net>
+ <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
+In-Reply-To: <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,101 +80,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ondřej Jirman <megi@xff.cz>
+On 3/12/23 11:08, Krzysztof Kozlowski wrote:
+> On 12/03/2023 19:06, Guenter Roeck wrote:
+>> On Sat, Mar 11, 2023 at 12:16:09PM +0100, Krzysztof Kozlowski wrote:
+>>> The driver can be compile tested with !CONFIG_OF making certain data
+>>> unused:
+>>>
+>>>    drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
+>>>
+>>
+>> How do you trigger that ? The driver depends on OF_GPIO which
+>> in turn depends on OF. Arguably that means that of_match_ptr()
+>> doesnot really make sense, but still I don't see how you can
+>> trigger the above error message.
+> 
+> I can drop of_match_ptr, it's indeed in many cases not needed.
+> 
+> I just build x86_64 allyesconfig minus OF, with W=1.
+> 
 
-The Goodix touchscreen controller used in PinePhone is not properly
-suspended during system sleep, leading to high power consumption. This
-commit modifies the driver to hold the controller in reset during
-system sleep, reducing power consumption by around 40mW.
+x86_64 allyesconfig minus OF minus results in SENSORS_GPIO_FAN being
+deselected (it doesn't show up in the configuration anymore at all
+after "make olddefconfig").
 
-The original patch also disabled the regulators during system sleep, but
-this could cause issues with other peripherals attached to the same power
-supplies. Hence, this commit only holds the controller in reset during
-system sleep and does not attempt to power it off.
+$ make allyesconfig
+$ grep SENSORS_GPIO_FAN .config
+CONFIG_SENSORS_GPIO_FAN=y
+$ sed -i -e 's/CONFIG_OF=y/# CONFIG_OF is not set/' .config
+$ make olddefconfig
+#
+# configuration written to .config
+#
+$ grep SENSORS_GPIO_FAN .config
+$
 
-Separate commit adds a new device tree property "hold-in-reset-in-suspend"
-to control the hold-in-reset behavior of the controller during system
-sleep.
+I suspect what you did is to disable CONFIG_OF, and then you built
+the driver without realizing that is was deselected.
 
-Signed-off-by: Ondřej Jirman <megi@xff.cz>
-Signed-off-by: Jan Jasper de Kroon <jajadekroon@gmail.com>
----
-V1 -> V2: 
-- Rewrote the commit message and function name to better reflect it's 
-  behavior.
-v2 -> V3: Some patch style cleaning up, to confirm to submission standard.
+> Do you want to me to drop of_match_ptr?
+> 
 
- drivers/input/touchscreen/goodix.c | 23 +++++++++++++++++++++++
- drivers/input/touchscreen/goodix.h |  1 +
- 2 files changed, 24 insertions(+)
+Yes, sure, that makes more sense. The reason though is that the
+driver depends on CONFIG_OF=y, not because of the build failure.
 
-diff --git a/drivers/input/touchscreen/goodix.c b/drivers/input/touchscreen/goodix.c
-index b348172f19c3..a35a203e04bf 100644
---- a/drivers/input/touchscreen/goodix.c
-+++ b/drivers/input/touchscreen/goodix.c
-@@ -1284,6 +1284,7 @@ static void goodix_disable_regulators(void *arg)
- 
- static int goodix_ts_probe(struct i2c_client *client)
- {
-+	struct device_node *np = client->dev.of_node;
- 	struct goodix_ts_data *ts;
- 	const char *cfg_name;
- 	int error;
-@@ -1303,6 +1304,7 @@ static int goodix_ts_probe(struct i2c_client *client)
- 	i2c_set_clientdata(client, ts);
- 	init_completion(&ts->firmware_loading_complete);
- 	ts->contact_size = GOODIX_CONTACT_SIZE;
-+	ts->hold_in_reset_in_suspend = of_property_read_bool(np, "hold-in-reset-in-suspend");
- 
- 	error = goodix_get_gpio_config(ts);
- 	if (error)
-@@ -1410,6 +1412,13 @@ static int goodix_suspend(struct device *dev)
- 	if (ts->load_cfg_from_disk)
- 		wait_for_completion(&ts->firmware_loading_complete);
- 
-+	if (ts->hold_in_reset_in_suspend) {
-+		goodix_free_irq(ts);
-+		goodix_irq_direction_output(ts, 0);
-+		gpiod_direction_output(ts->gpiod_rst, 0);
-+		return 0;
-+	}
-+
- 	/* We need gpio pins to suspend/resume */
- 	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
- 		disable_irq(client->irq);
-@@ -1455,6 +1464,20 @@ static int goodix_resume(struct device *dev)
- 	u8 config_ver;
- 	int error;
- 
-+	if (ts->hold_in_reset_in_suspend) {
-+		error = goodix_reset(ts);
-+		if (error) {
-+			dev_err(dev, "Controller reset failed.\n");
-+			return error;
-+		}
-+
-+		error = goodix_request_irq(ts);
-+		if (error)
-+			return error;
-+
-+		return 0;
-+	}
-+
- 	if (ts->irq_pin_access_method == IRQ_PIN_ACCESS_NONE) {
- 		enable_irq(client->irq);
- 		return 0;
-diff --git a/drivers/input/touchscreen/goodix.h b/drivers/input/touchscreen/goodix.h
-index 87797cc88b32..c515d03b742c 100644
---- a/drivers/input/touchscreen/goodix.h
-+++ b/drivers/input/touchscreen/goodix.h
-@@ -104,6 +104,7 @@ struct goodix_ts_data {
- 	u8 main_clk[GOODIX_MAIN_CLK_LEN];
- 	int bak_ref_len;
- 	u8 *bak_ref;
-+	bool hold_in_reset_in_suspend;
- };
- 
- int goodix_i2c_read(struct i2c_client *client, u16 reg, u8 *buf, int len);
--- 
-2.34.3
+Thanks,
+Guenter
 
