@@ -2,267 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09966B6BE0
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:50:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DEA36B6BE4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:57:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231288AbjCLVuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
+        id S230240AbjCLV5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCLVt7 (ORCPT
+        with ESMTP id S229713AbjCLV5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:49:59 -0400
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC6D1043F;
-        Sun, 12 Mar 2023 14:49:57 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so6556604wms.1;
-        Sun, 12 Mar 2023 14:49:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678657796;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ciUH2K2b185BvScrtOTL0Sqk4RrdEzj1aaThj5pGCpQ=;
-        b=ulLXKlBhqwve9szSCeiUgHJNCrAcMTNAt0S8sVXsnn7kGqHI74oBO0+ugM3q24fCE3
-         E434EtN9KlcyIR8oqwFomkv/k7wOC2VH4Cg5e9MpxqqCNFSiSULQJfWyi0zSHcK71KLA
-         sjEFIO+YUm8b9WnOdZ6QXPYLPKMdXUdbdPfvBpZkU5FS6stmLBl2HLyIZl+uHgvdZccW
-         W18h+TOrr0IGv/25Z+G9LxS+PTizBBCJ8L7MFFkG9/ESQsXHQGruEmYPj8MLgqUrtSSb
-         1bgs/8SMyALyoDULiOjPUbuo8xBB4e4ERAM8aQ/P8LG8T6heCkRNnHDBFfPpeQWW5py4
-         ktdg==
-X-Gm-Message-State: AO0yUKWXGt3MbhIvDHw6Nt18NJ3PBI5ZYb5O1ZO/Sffb9vDXPa5jgk0p
-        9cm+S2QHLO5JuZeXw7e4/h0=
-X-Google-Smtp-Source: AK7set+60VDwNsXcwRYqGYHJQF5rqWFoUT8oalPGUGVfkEG556YHGFMNiSzZXPcsX2pOSUZLol9boQ==
-X-Received: by 2002:a05:600c:310e:b0:3e9:f15b:935b with SMTP id g14-20020a05600c310e00b003e9f15b935bmr9388863wmo.32.1678657796014;
-        Sun, 12 Mar 2023 14:49:56 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l5-20020a7bc445000000b003eae73f0fc1sm6903106wmi.18.2023.03.12.14.49.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 14:49:55 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 21:49:53 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
-Message-ID: <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
-References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
- <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+        Sun, 12 Mar 2023 17:57:40 -0400
+Received: from m228-62.mailgun.net (m228-62.mailgun.net [159.135.228.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 852133BD94
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:57:38 -0700 (PDT)
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=codeagain.dev;
+ q=dns/txt; s=smtp; t=1678658257; x=1678665457; h=In-Reply-To: Content-Type:
+ MIME-Version: References: Message-ID: Subject: Subject: Cc: To: To: From:
+ From: Date: Sender: Sender; bh=w0I+lyfV4KTpAnoXhV952nqm+Pgiow7LJPvJH10ZJ6I=;
+ b=cAe6fSW4tq9JhV1uV9QICmpVPiTeEUV/EQJ7rXWCgB1C4+11zxhQkIMSOjlEw4fzyUk3mphyCByNK/4IGPq2KFsx2z1yoT02m2Ub8vdM2SgeXLIpvZN1JKnEyhMezfNEQbH00KYwIFsCWf1lm5EfZPyrS5+BFbq32c0KzLA1HkEZ9fKTG8puz8DiHuf+vJZE7oR3LgoVOCAhnAStb9TDSrcLzS+Y4k1Y/x6hIt704z2RG38wwFvlfQcjH4yeG6BzHB81crYatIByu5gTxfW/5f87F8Lt421W6KjyZ2VpXcqHSYnxgXu+YNzpJq9DkK79QG04Jw12wEcxeXSBcDISZw==
+X-Mailgun-Sending-Ip: 159.135.228.62
+X-Mailgun-Sid: WyJkNDU4NiIsImxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmciLCJiZTljNmQiXQ==
+Received: from guidai (186-250-91-164.mhnet.com.br [186.250.91.164]) by a70f3eba752c
+ with SMTP id 640e4ad1b0de3c33d3d2efd6; Sun, 12 Mar 2023 21:57:37 GMT
+Sender: codeagain@codeagain.dev
+Date:   Sun, 12 Mar 2023 18:57:27 -0300
+From:   Bru Moreira-Guedes <codeagain@codeagain.dev>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Patch Watchbox <patch-reply@codeagain.dev>
+Subject: Re: [PATCH] coding-style.rst: indentation: Clarify tabs text
+Message-ID: <20230312215727.xjs4jusdzpnfhjd3@guidai>
+References: <20230228222035.k227xb3okt2lbksn@guidai>
+ <87356gpjqv.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="vkxuay2ar4gkqjoa"
 Content-Disposition: inline
-In-Reply-To: <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <87356gpjqv.fsf@meer.lwn.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,T_SPF_PERMERROR autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:35:57AM -0800, Saurabh Sengar wrote:
-> Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
-> feature. VSM is a set of hypervisor capabilities and enlightenments
-> offered to host and guest partitions which enable the creation and
-> management of new security boundaries within operating system software.
-> VSM achieves and maintains isolation through VTLs.
-> 
-> Add early initialization for Virtual Trust Levels (VTL). This includes
-> initializing the x86 platform for VTL and enabling boot support for
-> secondary CPUs to start in targeted VTL context. For now, only enable
-> the code for targeted VTL level as 2.
-> 
-> When starting an AP at a VTL other than VTL 0, the AP must start directly
-> in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
-> transition sequence that occurs after waking up an AP with SIPI whose
-> vector points to the 16-bit AP startup trampoline code.
-> 
-> This commit also moves hv_get_nmi_reason function to header file, so
-> that it can be reused by VTL.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  arch/x86/Kconfig                   |  24 +++
->  arch/x86/hyperv/Makefile           |   1 +
->  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
->  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
->  arch/x86/include/asm/mshyperv.h    |  14 ++
->  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
->  include/asm-generic/hyperv-tlfs.h  |   4 +
->  7 files changed, 346 insertions(+), 5 deletions(-)
->  create mode 100644 arch/x86/hyperv/hv_vtl.c
-> 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 453f462f6c9c..b9e52ac9c9f9 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
->  
->  if HYPERVISOR_GUEST
->  
-> +config HYPERV_VTL
-> +	bool "Enable VTL"
+--vkxuay2ar4gkqjoa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-This is not to "Enable VTL". VTL is always there with or without this
-option. This option is to enable Linux to run in VTL2.
+Hello, Jonathan!
 
-I would suggest it to be changed to HYPERV_VTL2_MODE or something more
-explicit.
+(Resending for I accidentally didn't copy the lists)
 
-HYPERV_VTL is better reserved to guard code which makes use of VTL
-related functionality -- if there is such a need in the future.
+On Tue, Mar 07, 2023 at 10:13:44AM -0700, Jonathan Corbet wrote:
+> Bru Moreira-Guedes <codeagain@codeagain.dev> writes:
+>
+> > It might be misleading, especially for some autistic readers for whom
+> > English is not the first language and whose tendency to interpret things
+> > more literally might be present (i.e., my very own self).
 
-> +	depends on X86_64 && HYPERV
-> +	default n
-> +	help
-> +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
-> +	  enlightenments offered to host and guest partitions which enables
-> +	  the creation and management of new security boundaries within
-> +	  operating system software.
-> +
-> +	  VSM achieves and maintains isolation through Virtual Trust Levels
-> +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
-> +	  being more privileged than lower levels. VTL0 is the least privileged
-> +	  level, and currently only other level supported is VTL2.
+Perhaps I clearly made a poor description of the problem this patch
+solves. I'll address it in details when I respond to your points. I
+could certainly improve it for a v2.
 
-Please be consistent as to VTL 0 vs VTL0. You use one form here and the
-other form in the next paragraph.
+> >
+> > The present patch clarifies the tabs text on such aspects.
+> >
+> > Signed-off-by: Bru Moreira-Guedes <codeagain@codeagain.dev>
+> > ---
+> >  Documentation/process/coding-style.rst | 14 ++++++++------
+> >  1 file changed, 8 insertions(+), 6 deletions(-)
+> >
+> > diff --git a/Documentation/process/coding-style.rst b/Documentation/process/coding-style.rst
+> > index 007e49ef6cec..9a0205fa7ed3 100644
+> > --- a/Documentation/process/coding-style.rst
+> > +++ b/Documentation/process/coding-style.rst
+> > @@ -18,23 +18,25 @@ Anyway, here goes:
+> >  1) Indentation
+> >  --------------
+> >
+> > -Tabs are 8 characters, and thus indentations are also 8 characters.
+> > -There are heretic movements that try to make indentations 4 (or even 2!)
+> > -characters deep, and that is akin to trying to define the value of PI to
+> > -be 3.
+> > +The Linux Kernel uses the TAB character for indentation, as in the K&R
+> > +style. Tabs are meant to be viewed as 8-characters, and thus
+> > +indentations are meant to be seen as 8 characters as well. There are
+> > +heretic movements that try to use spaces for indentation, or make tabs
+> > +viewed as 4 (or even 2!) characters, and that is akin to trying to
+> > +define the value of PI to be 5.
+>
+> I guess I really don't see how this kind of tweaking helps things; this
+> text has stood for a couple of decades or so without evident
+> misunderstandings.
 
-> +
-> +	  Select this option to build a Linux kernel to run at a VTL other than
-> +	  the normal VTL 0, which currently is only VTL 2.  This option
-> +	  initializes the x86 platform for VTL 2, and adds the ability to boot
-> +	  secondary CPUs directly into 64-bit context as required for VTLs other
-> +	  than 0.  A kernel built with this option must run at VTL 2, and will
-> +	  not run as a normal guest.
-> +
-> +	  If unsure, say N
-> +
->  config PARAVIRT
->  	bool "Enable paravirtualization code"
->  	depends on HAVE_STATIC_CALL
-> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> index 5d2de10809ae..a538df01181a 100644
-> --- a/arch/x86/hyperv/Makefile
-> +++ b/arch/x86/hyperv/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
->  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
-> +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
->  
->  ifdef CONFIG_X86_64
->  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-> new file mode 100644
-> index 000000000000..0da8b242eb8b
-> --- /dev/null
-> +++ b/arch/x86/hyperv/hv_vtl.c
-> @@ -0,0 +1,227 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023, Microsoft Corporation.
-> + *
-> + * Author:
-> + *   Saurabh Sengar <ssengar@microsoft.com>
-> + */
-> +
-> +#include <asm/apic.h>
-> +#include <asm/boot.h>
-> +#include <asm/desc.h>
-> +#include <asm/i8259.h>
-> +#include <asm/mshyperv.h>
-> +#include <asm/realmode.h>
-> +
-> +extern struct boot_params boot_params;
-> +static struct real_mode_header hv_vtl_real_mode_header;
-> +
-> +void __init hv_vtl_init_platform(void)
-> +{
-> +	pr_info("Initializing Hyper-V VTL\n");
-> +
+Well, there was my own misunderstanding that motivated this patch :-}
+so, there is at least one evidenced case. Anyway, I think this is more
+of an improvement to make the text accessible for everyone, including
+autistic readers who might have a tendency towards literal
+interpretation. Just like me :D
 
-We can be more explicit here, "Linux runs in Hyper-V Virtual Trust Level 2".
+I don't actually think we would have a way to find out if everyone else
+who read this text throughout all those decades got it properly.
+Historically, the linux kernel hasn't been overall a much accessible
+project in a general sense. I think this kind of change is important if
+we want to move to the right direction.
 
-If we go with this, this and other function names should be renamed to
-something more explicit too.
+> ...and I'm totally mystified as to why we've redefined pi from 3 to 5?
 
-> +	x86_init.irqs.pre_vector_init = x86_init_noop;
-> +	x86_init.timers.timer_init = x86_init_noop;
-> +
-> +	x86_platform.get_wallclock = get_rtc_noop;
-> +	x86_platform.set_wallclock = set_rtc_noop;
-> +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
-> +
-> +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
-> +	x86_platform.legacy.rtc = 0;
-> +	x86_platform.legacy.warm_reset = 0;
-> +	x86_platform.legacy.reserve_bios_regions = 0;
-> +	x86_platform.legacy.devices.pnpbios = 0;
-> +}
-> +
-[...]
-> +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
-> +{
-> +	u64 status;
-> +	int ret = 0;
-> +	struct hv_enable_vp_vtl *input;
-> +	unsigned long irq_flags;
-> +
-> +	struct desc_ptr gdt_ptr;
-> +	struct desc_ptr idt_ptr;
-> +
-> +	struct ldttss_desc *tss;
-> +	struct ldttss_desc *ldt;
-> +	struct desc_struct *gdt;
-> +
-> +	u64 rsp = initial_stack;
-> +	u64 rip = (u64)&hv_vtl_ap_entry;
-> +
-> +	native_store_gdt(&gdt_ptr);
-> +	store_idt(&idt_ptr);
-> +
-> +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
-> +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
-> +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
-> +
-> +	local_irq_save(irq_flags);
-> +
-> +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+Ohhh, never mind this part, it shouldn't be here. At first I was
+undecided on whether to change it or not. I actually thought I had
+removed it. It just came to my mind that the value of pi is a constant,
+yet its representation is always bound to a certain precision level.
+Since the text didn't use decimal places, assuming no decimal precision
+the pi is actually near 3. Since the text appears to be trying to show
+an example of something "absurd", I think another value could be more
+appropriate. But yea, this change would not affect anyone and I think it
+shouldn't be done.
 
-Not a big deal, but you don't actually need to cast here.
+> >
+> > -Now, some people will claim that having 8-character indentations makes
+> > +Now, some people will claim that viewint 8-character tab indentations makes
+>
+> Adding typos doesn't really help either.
 
-[...]
-> +
-> +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
-> +{
-> +	u64 control;
-> +	u64 status;
-> +	unsigned long irq_flags;
-> +	struct hv_get_vp_from_apic_id_in *input;
-> +	u32 *output, ret;
-> +
-> +	local_irq_save(irq_flags);
-> +
-> +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+Sorry, I clearly had a poor review of the changed text (and I failed to
+setup spell-checking on checkpatch.pl). Yet Bagas did an excellent job
+in the other thread pointing me out all the details I missed. I'll be
+doing a v2 soon!
 
-No need to cast here.
+Best,
+Bru Moreira-Guedes
+they/them
 
-[...]
-> +struct hv_x64_table_register {
-> +	__u16 pad[3];
-> +	__u16 limit;
-> +	__u64 base;
-> +} __packed;
-> +
-> +struct hv_init_vp_context_t {
 
-Drop the _t suffix please.
+--vkxuay2ar4gkqjoa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Thanks,
-Wei.
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQQTUrsHCxGmQ5vyKRAZtd3tyEY2kgUCZA5KxwAKCRAZtd3tyEY2
+knx6AQC4IrNGSbbmCnvUGreWoxw8zI51sGbmnP5/QW1HhysmvgEA0uRDJ1PFc8lw
+c03rv5iS2gh053jNGIjb8lvOM+2O3gM=
+=5Q7e
+-----END PGP SIGNATURE-----
+
+--vkxuay2ar4gkqjoa--
