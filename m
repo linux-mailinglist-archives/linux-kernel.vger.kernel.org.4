@@ -2,111 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02B316B6595
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:39:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F09D76B659E
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:48:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbjCLLjK convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Sun, 12 Mar 2023 07:39:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S230087AbjCLLso (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:48:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229885AbjCLLjI (ORCPT
+        with ESMTP id S229884AbjCLLsk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:39:08 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37AA34F71;
-        Sun, 12 Mar 2023 04:39:05 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id l13so10553960qtv.3;
-        Sun, 12 Mar 2023 04:39:05 -0700 (PDT)
+        Sun, 12 Mar 2023 07:48:40 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CB7B32D172
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:48:38 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id n2so12253751lfb.12
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:48:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678621717;
+        h=subject:in-reply-to:cc:to:from:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=iGGE51YjPiREb0P31xa6FciLF3LLNAYLO3pthF/8pcE=;
+        b=UkollMpMPwObTqUsmqrO3GgJrdyrRXjmhq3J+C8f2QyrhahCLGTGOAOPrpctvFiBoB
+         LnHTPwSZ/qBWvVN5djf0h/DdXRwOu3YRy2J43xPVIYkMd8t7wkm/8g+8NCcFdJP2ZrGQ
+         a33jAwdrUZwm9BcFMFYQyBSSiE9rm+VqrZlrLyWEBdo7mIrnZoZYNlJA7MThz/G/gKlA
+         2omTHiKyVYGIj2gFvNwWoZv6uGQQrM9/+j1L2S8SLutOe/p82JBy9zHpRA3wFfl4i50u
+         fTgnNd5a50BBomS+cQjvMoI51ZmzJFtTbVPrfrdqC+RZcgfQunikOCtdQG0xYSXNB1EM
+         mzSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678621144;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rHsU4w7j+rX05CyivyZKDHXiX4NthxonKHXgo0Q46rs=;
-        b=emKqODnYwHnKOUD57RO7QmcTm14N8aZwEcfM+0hVGVYoe7oa+WHI7rDjRYIH88Yykr
-         8rOuplXFi6ZOU3mc0X5Cet7Ql8bxEQBubyzHB6bSucedqsAjOXmsnyzluUJ5TmRUyBMe
-         KUg7jColsmzjZfnLYNwfsaZ2b4hR3QDGjxcS1x5ipam+I+tykmKD7D9nAvqgoEFIucgf
-         /tL2i80ad+q9FHEynljmCSOF/u08L0PvPKvNgfsDbtB12dkQVJIqYMf69V2YgtEWw0/H
-         eeZze+03xeXMuWybyogQ+18ZmwXeNk/hTZgVRgKoBD0o+2QGHBZzqSVBUMSmKlI9WhEQ
-         5NwA==
-X-Gm-Message-State: AO0yUKWAHC/kpp+Egs6kB+vMW6/3r5zDBLMls3+fvLRvVTPFORvXLR3e
-        NnTTStaSZYk9ptsPiaUmzccR+n+mZfVjfw==
-X-Google-Smtp-Source: AK7set/7L5UWtAcVWDLnA+IIS93zN0FRvyY6JkoHizMSE1SbH6T6E0vX+4/NjW5o7v8VTIX7DaaKLw==
-X-Received: by 2002:a05:622a:1a9f:b0:3bd:16cf:2f33 with SMTP id s31-20020a05622a1a9f00b003bd16cf2f33mr50537165qtc.63.1678621144612;
-        Sun, 12 Mar 2023 04:39:04 -0700 (PDT)
-Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com. [209.85.128.171])
-        by smtp.gmail.com with ESMTPSA id 74-20020a37054d000000b007456c75edbbsm1833698qkf.129.2023.03.12.04.39.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 04:39:04 -0700 (PDT)
-Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-5419d4c340aso5436507b3.11;
-        Sun, 12 Mar 2023 04:39:04 -0700 (PDT)
-X-Received: by 2002:a81:ad50:0:b0:541:8a9a:5445 with SMTP id
- l16-20020a81ad50000000b005418a9a5445mr1295851ywk.5.1678621143951; Sun, 12 Mar
- 2023 04:39:03 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230312052624.8402-1-rdunlap@infradead.org>
-In-Reply-To: <20230312052624.8402-1-rdunlap@infradead.org>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Sun, 12 Mar 2023 12:38:52 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXia3d8dV1EyNcmgA=k_osEAkHZkA4ya9xjzyEVO4YjGQ@mail.gmail.com>
-Message-ID: <CAMuHMdXia3d8dV1EyNcmgA=k_osEAkHZkA4ya9xjzyEVO4YjGQ@mail.gmail.com>
-Subject: Re: [PATCH] ata: pata_cs5536: don't build on UML
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        linux-ide@vger.kernel.org, linux-um@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678621717;
+        h=subject:in-reply-to:cc:to:from:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=iGGE51YjPiREb0P31xa6FciLF3LLNAYLO3pthF/8pcE=;
+        b=pScRxjOdUPA927J+xUZ0M2VNUTE2W2MKKDgIKfeyh3eqvt7CV1t1teHuiKcywMRM9d
+         uRvxVcRslCDmW8UdASfpXQGb8hHYopxD2vVX2o7wEbYTma5pxhIduzr5tmKRPb9v6lFe
+         gSppdHhZNV6PBeptuBXxYkjrEiF6l4ZMn6fsylCpNnyYl2aXlV8SVm0wkz4vxJhloiEP
+         VzMfaSYZqZ9Bu5PN1D7kmj4aMDJ4QHcj3pokrMtKzvIkq2Pvak2Cvz18UHKehxM90Zvh
+         Fq9ILeQXYeHCjRuHebQkpilFM2AmU5XeTPONvTc+F7U2VZONK0szmtEZKSrXhNhcJzM3
+         0KIA==
+X-Gm-Message-State: AO0yUKVmp3BmGa/TQ0FDXOd6hAmDI5v5U1MICtKUHsI6FJyPzok6re2X
+        xD5xVE2hxtZ7SMCXBhj+C/SY9ttIiu/CTWBI
+X-Google-Smtp-Source: AK7set+52MckCdJN0TZ/SRwTIsa+I9ZtxiLosdyrzdFVVwXYSrFM2GqLhJUcDygmJeho4UcQDmYZBw==
+X-Received: by 2002:a19:f011:0:b0:4db:5122:2099 with SMTP id p17-20020a19f011000000b004db51222099mr9008889lfc.32.1678621716755;
+        Sun, 12 Mar 2023 04:48:36 -0700 (PDT)
+Received: from letter5.txt (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id p19-20020ac246d3000000b004d8729d4150sm615617lfo.145.2023.03.12.04.48.36
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 04:48:36 -0700 (PDT)
+Message-ID: <640dbc14.c20a0220.9755a.1615@mx.google.com>
+Date:   Sun, 12 Mar 2023 04:48:36 -0700 (PDT)
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <951dec3a-1a3e-6d17-20fb-9e5915606c40@linaro.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: synopsys-dw-mshc-common: add
+ "fifo-access-32bit" property
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+> ... and should not be. It should come with a specific compatible
+> followed by this fallback. The specific compatible then will define
+> 32-bit access.
 
-On Sun, Mar 12, 2023 at 6:26 AM Randy Dunlap <rdunlap@infradead.org> wrote:
-> Similar to 22eebaa631c4 ("ata: pata_cs5535: Don't build on UML"),
-> prevent pata_cs5536 from building on UML since it references
-> symbols that are not present when building X86_32/i386 allmodconfig.
->
-> ERROR: modpost: "__tracepoint_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
-> ERROR: modpost: "do_trace_write_msr" [drivers/ata/pata_cs5536.ko] undefined!
-> ERROR: modpost: "__tracepoint_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
-> ERROR: modpost: "do_trace_read_msr" [drivers/ata/pata_cs5536.ko] undefined!
->
-> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+OK, I'll then make a new revision with this baked into a compatible
+string.
 
-Thanks for your patch!
-
-> --- a/drivers/ata/Kconfig
-> +++ b/drivers/ata/Kconfig
-> @@ -650,6 +650,7 @@ config PATA_CS5535
->  config PATA_CS5536
->         tristate "CS5536 PATA support"
->         depends on PCI && (X86_32 || MIPS || COMPILE_TEST)
-
-How does this work on MIPS?
-Oh, the MSR functionality inside the driver depends on CONFIG_X86_32.
-Perhaps this can be fixed better for all users inside
-arch/x86/include/asm/msr.h?
-
-> +       depends on !UML
->         help
->           This option enables support for the AMD CS5536
->           companion chip used with the Geode LX processor family.
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
