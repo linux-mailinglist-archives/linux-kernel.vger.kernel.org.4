@@ -2,85 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 074D36B629B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 02:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08A4F6B62A0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 02:07:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229649AbjCLBAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 20:00:22 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
+        id S229797AbjCLBHC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 20:07:02 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCLBAU (ORCPT
+        with ESMTP id S229493AbjCLBHA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 20:00:20 -0500
-Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905E26285E
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 17:00:17 -0800 (PST)
-Received: by mail-wr1-x42b.google.com with SMTP id j2so8276647wrh.9
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 17:00:17 -0800 (PST)
+        Sat, 11 Mar 2023 20:07:00 -0500
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E70E269CE5;
+        Sat, 11 Mar 2023 17:06:58 -0800 (PST)
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32C0xkJJ004172;
+        Sun, 12 Mar 2023 01:06:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-id : content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=qJt6sGZ/sgRU1gXjv3GFKJu7vuhX9WsWE6bIXvK6340=;
+ b=V++RoHvEvKkQ55JaN3zovJkspc8/UlmQ7LfFDi9JPPUgYU4LkCDd8SMtNQc9UcSdZ4vs
+ Cu0aCKeehrX6KGTzi3uvNNJp0ASF58TUhODtoAM+Tp5Falxau52+aumwj5bQa+iX9Rsu
+ yN6xnDic0KzUCPJ8Q125rohjrl3CCYWU5ZMuFvKtjActA4OyCYXR5gu6KnFBPqaPuqrC
+ s7YJBioPsP0P+291Xr5zrmVcZ9fYnv3PfR2U5NDQTsFbnIu5yvQWQsrv+nxW5wUlIsju
+ G97zAulDBeySIW7yCUhpob6dIkCOE9GKT+SS4AO3edBCFU7ikM3qUFyOQ9X+l1SyUx6K DQ== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p8g2dguyt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 12 Mar 2023 01:06:30 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32BLO1SI008159;
+        Sun, 12 Mar 2023 01:06:29 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2108.outbound.protection.outlook.com [104.47.55.108])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p8g336qfu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Sun, 12 Mar 2023 01:06:29 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=f6qLe4gi/jX4sZafEIj04zdIYfSdb/OyFr7cgqak59ME8+DIZRDJBbm7GQTt39aCowd5Ej/oz7CrjKHuhvApjXkeMRXjORAG1jVUaTLDAe1StKCc5UPK9ryMdYlvFderQrrTe/8Ya9tGgXbOZ01a2KX6PLiCaYk1Gbc6orXpRQnXW5m0o1j48xOZtWKKEumqVpKc1wAY6rktRhM54G78EaTtoc361SZ0XzNyy0o6GfVpjcRU+2jnnxNYHYIWxyngtI9W7/4a9aZI0HcCCbMS/ZsYBwVNyzpWcSeFkXHN9ptv+mFgIURWVgjiz2Rl/WvGTToppwnnJPMpvsq6yGFXTQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qJt6sGZ/sgRU1gXjv3GFKJu7vuhX9WsWE6bIXvK6340=;
+ b=RYaa7RCTPzvQCrVzgO9hbYumR1ZAhYpiysv5KTYEQUuPB7QbUhzi1jX7WenL9wzDlOiLffoQJhbfQ5w6/TLa7pmUgU2YvOeT4hm3W2QdT1/4KCV8HxY9NuAuKFW5q/nsWEh7L8YkRYMLawHjRek3FSaSKWQsYgxtdeNSSbs3gDc90HehYRIPfB3rFx/Vs310pHpIgdlRE8iIXrj9/aH/TadDihyUx4d+PPyLBburzdnP3hIxATw170F3XYJXFt3TWkZHtawNbbEKmXs7H+6n6bXdy/CJRDqBvY37yxOEbe/aP6MwJroS7wYRMwXQAXEJtj0viJ4QBQFjgApjW7u5QA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678582816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DVqViHKN5Yirjh+bmhLj58d+3uxBU5OraeGY1CTO3p0=;
-        b=YXV7T+jrhb/oIiO+r59EKktvaQZO116g6QgA/YTIS1RwBA9Ng3/qRalnt1KzZyWwHg
-         GltOPQDsulhChZSx8XE9pZfpvmjTx0htL98h+KTh1UiJOdcO0LD0Lzdx1qrSVYC5AHBb
-         +RQg9CVa8Ls/92haVTTZtY76yyJv+DrtC/sXhB86Ir3oc9Kf2Hu0ZZYf+LSSCVKQvDra
-         Ex5PBhy/Gdak5+UoOvVH8dXaeQEUIRgZ+kDWWbFJhzg4XbyAqR9M75ZmmBkQdZNfpb14
-         5+aVaC2ZhEon5BYTJAubMjAGMptIhw3scDnYE5tv56WylYHtK+G8pIjYiUe+vMJXB016
-         ugdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678582816;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DVqViHKN5Yirjh+bmhLj58d+3uxBU5OraeGY1CTO3p0=;
-        b=qK8iLvb1h1q/iwAtGYL9mx8bWkISzzDCk4zegxlF2PAsgD+HNYuFsW+iTbkDz7tm/V
-         AHPXVtH57Gdbglv2eq852j12dv26rrQbe8CZEPAApmD2+huVihQepf/CP7sCX8MprXmT
-         a79KrpOzqgUKzxRGlJiC86I4BX1cXmGaidwumst3TWZmERFJSheli0hEwV7009G0RtiT
-         caB4km5+GBCWqOQZByLCQf/EO9bneXsWjopeoVPIVInnjvJvF9YKNS3BcO1ZsjzEjkYX
-         9heH2z6l4YWbDJ5JHeztSkThI/HIotRotcb/OcjSSqRXGYD26GxX858Jbi4HSawmiG3G
-         LeVQ==
-X-Gm-Message-State: AO0yUKWLwcz4zWo6wglI+pzDWiiIXIHgwtj7j8/N9965LtMXfop+36uA
-        DzmTwrmkuUQtRELSVh/ErMsOYKfJd9+HNP5L+gnVyg==
-X-Google-Smtp-Source: AK7set9bmHDuF9mllRRV379UiGJDViyqO9cr5DQfcZYcJ4Q1rrezSOAo940mr19FkRZTedMUoNWupL7ppjMO7tjDHuo=
-X-Received: by 2002:a5d:46ca:0:b0:2c7:c483:9faa with SMTP id
- g10-20020a5d46ca000000b002c7c4839faamr6639805wrs.14.1678582815821; Sat, 11
- Mar 2023 17:00:15 -0800 (PST)
-MIME-Version: 1.0
-References: <20230116010115.490713-1-irogers@google.com> <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
- <Y8mAuDvs566zwG67@kernel.org> <Y8myfqy5EMit3Kr/@krava> <CAP-5=fUugnKd=pGpZve7tKThhM5b0AqGMnuiELF+fZQw-xJz9w@mail.gmail.com>
- <ZAmRjk1x4p4TrFb0@gentoo.org> <CAEf4BzZJvEnWdTKVSgdBDr_KEgkW5HLHc7N-HRkmb-drCbg2uw@mail.gmail.com>
- <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com> <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
-In-Reply-To: <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Sat, 11 Mar 2023 17:00:01 -0800
-Message-ID: <CAP-5=fWRxM3pVy6YH=gAnyMXgPBx5eShcJMBiGggCdJj23tUtg@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Guilherme Amadio <amadio@gentoo.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Content-Type: text/plain; charset="UTF-8"
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qJt6sGZ/sgRU1gXjv3GFKJu7vuhX9WsWE6bIXvK6340=;
+ b=X7jqec0u6s0TbS9taGS8XrZDEHMaIegPwxBfgUEJs7KwDqN/eZpQSgXHHp87/O/vu7DkAbH6aJzuHLdcmszzi/0TdVtHncIK732zEVR/aAyNBebjQfjyW7tOBt90T/c/dqNb3seiFI0a7WwsriG2TC2WyFm3Cb2sjUssjLX3ATY=
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com (2603:10b6:5:3a1::23)
+ by CH3PR10MB7501.namprd10.prod.outlook.com (2603:10b6:610:15d::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.19; Sun, 12 Mar
+ 2023 01:06:26 +0000
+Received: from DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::3b4a:db93:ce56:6d08]) by DS7PR10MB5134.namprd10.prod.outlook.com
+ ([fe80::3b4a:db93:ce56:6d08%6]) with mapi id 15.20.6178.024; Sun, 12 Mar 2023
+ 01:06:26 +0000
+From:   Chuck Lever III <chuck.lever@oracle.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Jeff Layton <jlayton@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Linux NFS Mailing List <linux-nfs@vger.kernel.org>,
+        "Eric W. Biederman" <ebiederm@xmission.com>,
+        coverity-bot <keescook@chromium.org>,
+        "yzaikin@google.com" <yzaikin@google.com>,
+        "j.granados@samsung.com" <j.granados@samsung.com>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        "open list:NETWORKING [GENERAL]" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH v3 1/5] sunrpc: simplify two-level sysctl registration for
+ tsvcrdma_parm_table
+Thread-Topic: [PATCH v3 1/5] sunrpc: simplify two-level sysctl registration
+ for tsvcrdma_parm_table
+Thread-Index: AQHZVHLGOAymYSEdgkSmy/EIgUHcZq72VNaA
+Date:   Sun, 12 Mar 2023 01:06:26 +0000
+Message-ID: <724097B6-49DD-437E-9273-5BE40C22C3ED@oracle.com>
+References: <20230311233944.354858-1-mcgrof@kernel.org>
+ <20230311233944.354858-2-mcgrof@kernel.org>
+In-Reply-To: <20230311233944.354858-2-mcgrof@kernel.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Apple Mail (2.3696.120.41.1.2)
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DS7PR10MB5134:EE_|CH3PR10MB7501:EE_
+x-ms-office365-filtering-correlation-id: 305783ab-45ef-46c1-0952-08db2296012e
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: bUu6TQx8pOL7GBL/AmGe6SjrfHfVobps8VuyKjCfkko7NvaWsRWTJHn9YWPGiI/3JLdxh0+1lHNfAmcikf76O99v/Ylc6ArIDQJBwqF1xF2DuRE2lRbBkEIq0ANKuT7sgQXsYybUVvX6/8jEcC8vaZdWNKD4UFiKnPwUos1FtY3Kt0E4DJh/mbUBX9TUcsOLNM2dOajWToUhGlwXY3VozUdOWrIVS8dpOpVdJKX2CB2juzHoL7No4vwACua9bEigszeECsxkQ+9OYu/NgAQdFusGTc3n+bwOE01YN07oebR5A5upi7YSWUTGcPA1+2ey0ZQUHZCZ6qmwMIn8NzNKRBBLwrobHhzGsy6UT6ehKwPGy5K+EzcPwuGugEEkgvCUZs8sxQAc/QjW3IziAiOd04KWjB79SuAjpwiuSEFTSkskdZI/JiT2W1lPTL2ekUyqH0vJ6O0QZQ21PTXP1zezRogjqpdI/dNFpayoeU957yACPa+pQPZ8YwBYHcFlx7NOroo8rSNPgqXWwfarU490Kz8ctXQBX8PZbI+Hsg8Stx0Aj9OpGn85iAhkZLlgiv1g0SZEInxU1qpHPoO7PooewiMktCKp7xsJdE4F3dFrIaVE9IHOKcV8O3ghOFglQGugW7Gz8azcvIuj3Sxb9YnDRVdn5gIUeDxoGPlmqC8gSE5t0xGKcyuz9fmlKlUCgPMsXi3rf63MU99igqCu9xxVB85AEdrGqATGHf6YfHgUWTU=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR10MB5134.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(396003)(39860400002)(346002)(366004)(451199018)(91956017)(76116006)(8676002)(6486002)(66446008)(64756008)(66946007)(6916009)(4326008)(66476007)(66556008)(41300700001)(54906003)(2616005)(316002)(71200400001)(5660300002)(2906002)(7416002)(6506007)(6512007)(26005)(53546011)(186003)(8936002)(478600001)(33656002)(36756003)(86362001)(122000001)(38070700005)(83380400001)(38100700002)(45980500001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pl4F28/EBBtOBIeGlHHznO8DTqlnvaWQNaxMjhFqa9PnqpYjwMe5+nea3MLc?=
+ =?us-ascii?Q?/e2Xnb939JczkMXgf83CI4woQpzv4z276gYwizxuLnOKHa+ew59Wr2/3ndMJ?=
+ =?us-ascii?Q?kvGz2CwUbe6l1l+tkaCceS3ID+BwSMnYPv+SRgMBhBYXGEl2kuu7ZOBY9zKn?=
+ =?us-ascii?Q?VRyXDYLKgOYszyIGjHghrpxVPWgXgegXjiicg2NfzSQC7qu2AzXI+AO4QiQX?=
+ =?us-ascii?Q?2x0wfTGtUBkeWxlBNi0bOUegDAJqlc7MN4EwvhdT+C9UfQ/u2i0IY4dqw2UL?=
+ =?us-ascii?Q?D9TZvN2LNBb+Cd1jppgR7e6jTiWPIeGtKvT22oy9qXg4adasqtF9Z6GWA/FD?=
+ =?us-ascii?Q?gGEKWRQ4EtFatVGcoE1XiWKekkmQXglSTxLEBn/dX1EeFiu39tr7yk0+aBlX?=
+ =?us-ascii?Q?yM3DNc6wT9Y/+QvVAxLKW8Y865EYKDAT2A3y+MLQTGHvi10cnkf4U7Wc5NAT?=
+ =?us-ascii?Q?b8GuL2xKX0KivVDgq96wTmz33Zx15sbc0ZLPvTY+EXAdNvjinKQcIBFu/psJ?=
+ =?us-ascii?Q?GV8QZR3f5veFMlVx/s0zKapWL96nE4a7mkrJxs6YCIX9k8fXOGaEEftjm9IA?=
+ =?us-ascii?Q?3hMq8dBVMmPe5aqaMUhT67GTWOGjDGs2La+Hdz1Puv9Z5rgbHWlIxMMrvqvN?=
+ =?us-ascii?Q?IeyJN1rnqGcxgXrYZHCqrZ0e/CKnPDYElMRF6ZoUlBUTtFEKjnenaUcvFeoe?=
+ =?us-ascii?Q?9jhv7tLQ0cmXqkz/vLk16AFS2GtuyB4lHNnk+yjDJeyp4XmDU7qP8j+D6Yhw?=
+ =?us-ascii?Q?7siwFD4McMd5T+rwLYihkFZVp8za/jXJgnmMMZm7FbrBm5ssPtmWKCK1T0YH?=
+ =?us-ascii?Q?0Xs6cXhC7/7P8LM0M2wo3IjGDCggx0V/oJHFw/0zkZ/rPof8mrsGDqsWJhgw?=
+ =?us-ascii?Q?VWgcY37ODVf7hPNyUwM8zUjh+sM6F3Jhb62TkuehwrePiPQVBNnXQt8lbMQM?=
+ =?us-ascii?Q?iLKT8DpJT0fmahSDasmEZd6shMxhi8a86mnIuBml04dlUHr7/OxcccXqs3eV?=
+ =?us-ascii?Q?Bs8aESYrhRMdi1XUOwb9YAVZ4r9jx7chsWZ77ZSAQfRAQfgmaLPPW9WiV13c?=
+ =?us-ascii?Q?kMlD91SnvPCr6Z7LnZfKPusaqZS50CA5ShBqg/7gxkcuLWe3TRMTME+MDrQR?=
+ =?us-ascii?Q?M7Tv1ifKwscgNLJ7SkIC1dl3a4wxTF8SJIp+C1RkPDmPNwHhwre4oxsyfjaX?=
+ =?us-ascii?Q?T2V1FIZvsjqY1dq/YHT+4KwN3MnSJyapBVcPEI/jZCupLfXt6PeRbQe0yzN5?=
+ =?us-ascii?Q?TpbYHEUV4psUShikIaHf/BZWWaL3XPW/+GwyMaMS2LKalFWMDP5qQwN7igsN?=
+ =?us-ascii?Q?CVY3bJBs0CAPlISCFpGfcFz2pqA/PVuD+EwT3di6zwvOIjMC7ImhUL5JdpY/?=
+ =?us-ascii?Q?BItXr3zN5hFRa1/RaRRuCn9CXbqxz/fnEv6Nd1Vax9kYSoCUJDfHuJEMvKWI?=
+ =?us-ascii?Q?/wTp/+RqNh7r+oRnDcpqc5WVSNvLo662ygjlzM5Jc8KVldbZtkoA+EwCNHMJ?=
+ =?us-ascii?Q?ttamGJerE2myguWfJKpv9ztniLpsBDO7/9SERytfKCDkMAWn79lanbL4Y6/R?=
+ =?us-ascii?Q?SGXY8n23LAtbbFV4i251qatxYAVFF4oFKMkrpKURnbifdxUiXPKW3eQmWDUB?=
+ =?us-ascii?Q?jA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-ID: <034D5BE93482F948BD66F6E4DF398501@namprd10.prod.outlook.com>
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+MIME-Version: 1.0
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?us-ascii?Q?FxT9ozANvSjmUUmCNq4BZyDEA3376G4/NClCMIFNI7Xbh1iLHnrxkmHKVj70?=
+ =?us-ascii?Q?w3SlqTpqhvVguKHN6ZF48PJu3wMYtgKdvx6rMeWFfxtmiK8xG031dCgTeUvn?=
+ =?us-ascii?Q?NjAee8BETrrshC8PdCpG7GhZ13e2FVincbsXb4hQYHbo9kILZ4kV9Oz1fx4R?=
+ =?us-ascii?Q?hZ2BIH8rQQ9M6v8vNrIRUlCUulMG0Nzyq3qTKcIHA+KpnxXdpEkdsqYSRKY9?=
+ =?us-ascii?Q?MHCTZ/TKb/Z9E+T/owuv/gjOD523f7yFGKTibUYHgnY9nazyC6qbht+69r3b?=
+ =?us-ascii?Q?1S1Ga2IhNdqKjEaIw/Ev/GxMJ4UslS4KGPkBLJBxwXPjbIF8bbKsqWt+AJC3?=
+ =?us-ascii?Q?ePvgbpQFPBC8R2XikD8r5b1Ka36+XnH1Q41gnrM72bStv1khfUW1qx8UmHo1?=
+ =?us-ascii?Q?7iSxdOmlSIZCtLPpBI6wgM5wP+/SGAuwpA5tgpGGAlBc67CRl19+vzzcpxSE?=
+ =?us-ascii?Q?rOkc4RRiNxG5zypfnEBCe/FyiE/bT25nhTB/8e67vSH/+hJQOhdIQ0NAlTm8?=
+ =?us-ascii?Q?pPjKkK1hsOtsoPxw5w3vOUrpD69Wj/ViSuUptbQVTZqzFcww6ztGy0w6K+NO?=
+ =?us-ascii?Q?53VwH0PFo9SqNmihkxRNdQ5/ItjxGvbfye0RPNnAxcZzByrJovIiF5Fob2Dp?=
+ =?us-ascii?Q?T0mDbQBskf5wQz7Cz9FKXvzw7wnKTaaBoefbcgbyQAi1Jzgw2aQ4H2Dl8us0?=
+ =?us-ascii?Q?CZAvPqoJrgu5ONHMFUASyxeFSHvcudTcPENo+jM7X5NP6tdY+98k1OoH21Ul?=
+ =?us-ascii?Q?poKV7M0Vme75WFtm3uOpWFk1x+7Uk5UeFD/P1GNwSjQVIXzDZ91JhH0/6+2S?=
+ =?us-ascii?Q?bYokVNrb1CY6MFU3ac0Urv+zmvG9YayQdYDGYEBosc3TLoJxj0WXPxIgbG3U?=
+ =?us-ascii?Q?CM34XGFcRpDCHx80fkin1VoaSsbQGmNDfcw+3TpI+AOK5wNsoUdbKQBfnwOm?=
+ =?us-ascii?Q?Ml8K8obVcAlevD8640FB1ixOMrUppPwPixC1QA8wqQ37xjvq69zwgK0uJLaY?=
+ =?us-ascii?Q?RXadJ4l1+kb7/uWgGvGEQdQupvG5m/QkmmDbkFpG7wZ2+YB3GCwLDipGcpEr?=
+ =?us-ascii?Q?bTssQJEr?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR10MB5134.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 305783ab-45ef-46c1-0952-08db2296012e
+X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Mar 2023 01:06:26.3134
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: uNH0R2cpi00/Cn+KIEEh+zHCDe0msQstfifz+WXC9iIuIBXblLxQ3G90PZRJSNPWgGhg8ez185PUQ2kNxKnEKQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB7501
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-11_04,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
+ suspectscore=0 spamscore=0 malwarescore=0 adultscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303120008
+X-Proofpoint-GUID: JGsjLRskC1sXMcgoHRDkTBp3WpcVmuCA
+X-Proofpoint-ORIG-GUID: JGsjLRskC1sXMcgoHRDkTBp3WpcVmuCA
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -88,210 +186,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 12:22=E2=80=AFPM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Thu, Mar 9, 2023 at 7:26=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
-ote:
-> >
-> > On Thu, Mar 9, 2023 at 9:25=E2=80=AFAM Andrii Nakryiko
-> > <andrii.nakryiko@gmail.com> wrote:
-> > >
-> > > On Wed, Mar 8, 2023 at 11:58=E2=80=AFPM Guilherme Amadio <amadio@gent=
-oo.org> wrote:
-> > > >
-> > > > On Wed, Mar 08, 2023 at 06:13:34PM -0800, Ian Rogers wrote:
-> > > > > On Thu, Jan 19, 2023 at 1:13=E2=80=AFPM Jiri Olsa <olsajiri@gmail=
-.com> wrote:
-> > > > > >
-> > > > > > On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de M=
-elo wrote:
-> > > > > > > Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu=
-:
-> > > > > > > > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.=
-com> wrote:
-> > > > > > > > > libbpf 1.0 was a major change in API. Perf has partially =
-supported
-> > > > > > > > > older libbpf's but an implementation may be:
-> > > > > > > > > ..
-> > > > > > > > >        pr_err("%s: not support, update libbpf\n", __func_=
-_);
-> > > > > > > > >        return -ENOTSUP;
-> > > > > > > > > ..
-> > > > > > > > >
-> > > > > > > > > Rather than build a binary that would fail at runtime it =
-is
-> > > > > > > > > preferrential just to build libbpf statically and link ag=
-ainst
-> > > > > > > > > that. The static version is in the kernel tools tree and =
-newer than
-> > > > > > > > > 1.0.
-> > > > > > > > >
-> > > > > > > > > These patches change the libbpf test to only pass when at=
- least
-> > > > > > > > > version 1.0 is installed, then remove the conditional bui=
-ld and
-> > > > > > > > > feature logic.
-> > > > > > > > >
-> > > > > > > > > The issue is discussed here:
-> > > > > > > > > https://lore.kernel.org/lkml/20230106151320.619514-1-irog=
-ers@google.com/
-> > > > > > > > > perf bpf:
-> > > > > > > > >
-> > > > > > > > > A variant of this fix was added to Linux 6.2 in:
-> > > > > > > > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIB=
-BPF_DYNAMIC=3D1"
-> > > > > > > > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
-> > > > > > > > > This change goes further in removing logic that is now no=
- longer
-> > > > > > > > > necessary.
-> > > > > > > > >
-> > > > > > > > > v2. Rebase now that breakage fix patch is in linus/master=
-.
-> > > > > > > >
-> > > > > > > > I missed the:
-> > > > > > > > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
-> > > > > > > > I believe we are waiting for package maintainer input.
-> > > > > > >
-> > > > > > > Yes, as fedora:37 still is at libbpf 0.8.0 :-\
-> > > > > >
-> > > > > > rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd b=
-e to move
-> > > > > > f37 to 1.x, but I had to do bulk update of like 10 other depend=
-ent packages
-> > > > > > for f38, so not sure how bad it'd be for f37
-> > > > > >
-> > > > > > jirka
-> > > > >
-> > > > > +Guilherme
-> > > > >
-> > > > > We were looking for maintainer input on these changes, but there =
-is no
-> > > > > update in over a month. Here is the original lore link:
-> > > > > https://lore.kernel.org/lkml/CAP-5=3DfVUgc8xtBzGi66YRUxZHyXvW2kiM=
-jGz39dywaLxrO4Hpg@mail.gmail.com/
-> > > > > Should these changes land in perf-tools-next targeting Linux 6.4?
-> > > >
-> > > > Gentoo has libbpf-1.1 already available, so requiring >libbpf-1.0 i=
-s not
-> > > > a problem. We (Gentoo) just need to make sure to stabilize libbpf-1=
-.x before
-> > > > stabilizing newer versions of perf, as the stable libbpf is 0.8.1 a=
-t the moment.
-> > > >
-> > >
-> > > libbpf v0.8 is basically all the 1.0 APIs, except by default 1.0
-> > > semantics is not enforced, unless libbpf_set_strict_mode() is enabled=
-.
-> > >
-> > > So, if 0.8 is a restriction, perf can stay on 0.8, use all the same
-> > > APIs that are in 1.0 (except newer one added later, but I'm not sure
-> > > perf needs any of the newer additions), and just stick to setting
-> > > libbpf_set_strict_mode() unconditionally.
-> >
-> > Thanks Andrii,
-> >
->
-> Full disclosure, I'm totally supporting the switch to v1.0+, just
-> trying to be helpful here from the standpoint of 0.x vs 1.x libbpf
-> transition. See below. I believe you can keep 0.8+ dependency and drop
-> all the legacy code completely.
->
-> But just take it as an information, and feel free to do whatever you
-> think is best with it.
->
-> > The default perf build is to build against tools/lib/bpf and
-> > statically link libbpf in. This means by default we have the latest
-> > libbpf 1.2. If any perf code has a dependency on 0.8 (we don't support
-> > earlier) we need to #ifdef for it. Currently we have 7 feature tests
-> > for libbpf, but perhaps there is some cruft that's carried forward.
-> > The features are:
-> >  - btf__load_from_kernel_by_id
->
-> v0.5 API
->
-> >  - bpf_prog_load
-> >  - bpf_object__next_program
-> >  - bpf_object__next_map
->
-> all three are v0.6 APIs
->
-> >  - bpf_program__set_insns
->
-> v0.8 API
->
-> >  - btf__raw_data
-> >  - bpf_map_create
->
-> both v0.6 API
->
-> >
-> > The not present implementations look like:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/too=
-ls/perf/util/bpf-loader.c?h=3Dperf-tools#n36
-> > ```
-> > int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
-> >   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __mayb=
-e_unused)
-> > {
-> > pr_err("%s: not support, update libbpf\n", __func__);
-> > return -ENOTSUP;
-> > }
-> >
-> > int libbpf_register_prog_handler(const char *sec __maybe_unused,
-> >                                  enum bpf_prog_type prog_type __maybe_u=
-nused,
-> >                                  enum bpf_attach_type exp_attach_type
-> > __maybe_unused,
-> >                                  const struct libbpf_prog_handler_opts
-> > *opts __maybe_unused)
-> > {
-> > pr_err("%s: not support, update libbpf\n", __func__);
-> > return -ENOTSUP;
-> > }
-> > ```
->
-> both are v0.8 APIs
->
-> > This will basically mean that while you dynamically linked with libbpf
-> > 0.8 you are in all likelihood not going to get proper BPF support.
-> > These changes up the version requirement to 1.0 and get rid entirely
-> > of the feature tests - so no runtime failing implementations. If the
->
-> 100% supportive on upgrade and dropping feature checks. My point is
-> that you don't need those feature checks with v0.8+ requirement.
->
-> The only difference between staying on v0.8+ vs going all the way to
-> v1.0+ would be that you have to keep libbpf_set_strict() call. In
-> v1.0+ it's a noop, so could be dropped.
->
-> > build determines at build time libbpf 1.0+ isn't present then it still
-> > executes, switching from dynamic libbpf to the default static libbpf
-> > that is at 1.2. As mentioned in this thread, distributions like Debian
-> > use the default static linking of libbpf.
-> >
->
-> oh, that's nice, good to know
->
-> > I'm not keen to hold on to the feature tests for the complexity that
-> > they hold and their needlessly (as you can always statically link)
-> > broken at runtime behavior. We could but my opinion is, let's not :-)
->
-> I've been consistently advocating for static linking with libbpf, so
-> 100% support this.
 
-Right, so I think we should move forward with these patches. We also
-have had non-API changes to support libbpf 1.0+ like:
-https://lore.kernel.org/lkml/20221103045437.163510-4-irogers@google.com/
-and I'm worried about the state of these with libbpf 0.8.
 
-Thanks,
-Ian
+> On Mar 11, 2023, at 6:39 PM, Luis Chamberlain <mcgrof@kernel.org> wrote:
+>=20
+> There is no need to declare two tables to just create directories,
+> this can be easily be done with a prefix path with register_sysctl().
+>=20
+> Simplify this registration.
+>=20
+> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
 
-> >
-> > Thanks,
-> > Ian
-> >
-> > > > Best regards,
-> > > > -Guilherme
-> > > >
+I can take this one, but I'm wondering what "tsvcrdma_parm_table"
+is (see the short description).
+
+
+> ---
+> net/sunrpc/xprtrdma/svc_rdma.c | 21 ++-------------------
+> 1 file changed, 2 insertions(+), 19 deletions(-)
+>=20
+> diff --git a/net/sunrpc/xprtrdma/svc_rdma.c b/net/sunrpc/xprtrdma/svc_rdm=
+a.c
+> index 5bc20e9d09cd..f0d5eeed4c88 100644
+> --- a/net/sunrpc/xprtrdma/svc_rdma.c
+> +++ b/net/sunrpc/xprtrdma/svc_rdma.c
+> @@ -212,24 +212,6 @@ static struct ctl_table svcrdma_parm_table[] =3D {
+> 	{ },
+> };
+>=20
+> -static struct ctl_table svcrdma_table[] =3D {
+> -	{
+> -		.procname	=3D "svc_rdma",
+> -		.mode		=3D 0555,
+> -		.child		=3D svcrdma_parm_table
+> -	},
+> -	{ },
+> -};
+> -
+> -static struct ctl_table svcrdma_root_table[] =3D {
+> -	{
+> -		.procname	=3D "sunrpc",
+> -		.mode		=3D 0555,
+> -		.child		=3D svcrdma_table
+> -	},
+> -	{ },
+> -};
+> -
+> static void svc_rdma_proc_cleanup(void)
+> {
+> 	if (!svcrdma_table_header)
+> @@ -263,7 +245,8 @@ static int svc_rdma_proc_init(void)
+> 	if (rc)
+> 		goto out_err;
+>=20
+> -	svcrdma_table_header =3D register_sysctl_table(svcrdma_root_table);
+> +	svcrdma_table_header =3D register_sysctl("sunrpc/svc_rdma",
+> +					       svcrdma_parm_table);
+> 	return 0;
+>=20
+> out_err:
+> --=20
+> 2.39.1
+>=20
+
+--
+Chuck Lever
+
+
