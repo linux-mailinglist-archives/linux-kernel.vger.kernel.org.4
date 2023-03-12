@@ -2,383 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D5CB6B66B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:31:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16CEE6B66B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:32:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229650AbjCLNbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:31:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
+        id S230094AbjCLNcG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:32:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55044 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCLNbW (ORCPT
+        with ESMTP id S230052AbjCLNcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:31:22 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF9638B76;
-        Sun, 12 Mar 2023 06:31:19 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFA51814;
-        Sun, 12 Mar 2023 14:31:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678627877;
-        bh=fxyiMGT7DkWQLqJAY/GZMEQBj54+vButKnwCQmNC+sw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p3S1pCetpnmC2oBobEFG7Nam8UW2IjLri4KxWTQTH1JyBndfNdz/UfAseT8F14fG4
-         k7KrdgisGoP+7i3nce1iPUJqdVsvXVK4Shli05e8HN0S6JYB8cKTMSc+2G6xQjjwaz
-         0as3vHBiRHJSTBGpti0WwY3POn2ziEIxKkG1eHb8=
-Date:   Sun, 12 Mar 2023 15:31:12 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Martin Kepplinger <martin.kepplinger@puri.sm>
-Cc:     slongerbeam@gmail.com, p.zabel@pengutronix.de, mchehab@kernel.org,
-        gregkh@linuxfoundation.org, shawnguo@kernel.org,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@puri.sm
-Subject: Re: [PATCH v2 1/2] media: imx: imx8mq-mipi-csi2: Use V4L2 subdev
- active state
-Message-ID: <20230312133112.GH2545@pendragon.ideasonboard.com>
-References: <20230307150047.1486186-1-martin.kepplinger@puri.sm>
- <20230307150047.1486186-2-martin.kepplinger@puri.sm>
+        Sun, 12 Mar 2023 09:32:04 -0400
+Received: from smtp49.naquadria.it (smtp49.naquadria.it [185.54.213.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30D2434024
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:31:57 -0700 (PDT)
+Received: from smtp.naquadria.it (smtp [10.0.0.237])
+        by smtp40.naquadria.it (Postfix) with ESMTP id 897204826D9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:31:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=intre.it; s=default;
+        t=1678627908; bh=TDAhlJYS/S3QF2NjrPj7530Cq6PEonKEfEgL5D1ZIX8=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=itGNp5IN5so3RECRXeKlGer7N96a3EgTQ/ffHPw0/fY4aoC/2e0fS9DzQ6k4fve1w
+         WmMm3cZJ2B6XscHoBvVIP9FXcbIHx21L3yhZQxQiaFVu4JvZQAZQLYxCUFyGYv/w5a
+         l/fnx9LWKcyYCK2Fhfr7WmpjgJG70hCw+I4CVkjQ=
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=intre.it; s=mail;
+        t=1678627904; bh=TDAhlJYS/S3QF2NjrPj7530Cq6PEonKEfEgL5D1ZIX8=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To;
+        b=UC3ZtlvkSX8pL0Y+idp/SCS70hH6wtTWN6cVeN7JFeGsRMcLwuw1DpPtW34z4V83m
+         jY0em0IEdCoXnGrasUL0iepx/X5z7dRoYpTixHdlxnTXkVWs7iax7VEntg7OFVt3Tq
+         hoCdQMIHivUTZmHcOURuJQIWM/hBIV71RncXM6Bg=
+From:   Ornaghi Davide <davide.ornaghi@intre.it>
+To:     Jere Viikari <jere.viikari@gmail.com>
+CC:     Kees Cook <kees@kernel.org>,
+        "keescook@chromium.org" <keescook@chromium.org>,
+        "paulmck@kernel.org" <paulmck@kernel.org>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "bigeasy@linutronix.de" <bigeasy@linutronix.de>,
+        "frederic@kernel.org" <frederic@kernel.org>,
+        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: R: [RFC PATCH] Introduce per-interrupt kernel-stack randomization
+Thread-Topic: [RFC PATCH] Introduce per-interrupt kernel-stack randomization
+Thread-Index: AQHZUsnUS1bJ0/NeckG7hJSc9SaMEa70GNEAgAG5L5CAAFD5AIABA1AQ
+Date:   Sun, 12 Mar 2023 13:32:04 +0000
+Message-ID: <414aee3992a54b6c933597bdbf9e0f71@intre.it>
+References: <ef2c926cf7b148028f1902279cb35a41@intre.it>
+ <906901ED-DAE3-4A36-A3E4-16DF6F251C48@kernel.org>
+ <c2d598d5a11d4a29815a4eca63606159@intre.it>
+ <CALDd4YW6_Vw=VHaxzZiLjhr9w+tqbVmCaXKGiUFMeKbWxkiRxg@mail.gmail.com>
+In-Reply-To: <CALDd4YW6_Vw=VHaxzZiLjhr9w+tqbVmCaXKGiUFMeKbWxkiRxg@mail.gmail.com>
+Accept-Language: it-IT, en-US
+Content-Language: it-IT
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [192.168.140.1]
+x-c2processedorg: 3c642b5e-0ab0-4568-9f09-fc6a11a1a8a0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20230307150047.1486186-2-martin.kepplinger@puri.sm>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Martin,
-
-Thank you for the patch.
-
-On Tue, Mar 07, 2023 at 04:00:46PM +0100, Martin Kepplinger wrote:
-> Simplify the driver by using the V4L2 subdev active state API to store
-> the active format.
-> 
-> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
-> ---
->  drivers/staging/media/imx/imx8mq-mipi-csi2.c | 118 ++++++++-----------
->  1 file changed, 46 insertions(+), 72 deletions(-)
-> 
-> diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> index c0d0bf770096..1aa8622a3bae 100644
-> --- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> +++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
-> @@ -119,9 +119,7 @@ struct csi_state {
->  
->  	struct v4l2_mbus_config_mipi_csi2 bus;
->  
-> -	struct mutex lock; /* Protect csi2_fmt, format_mbus, state, hs_settle */
-> -	const struct csi2_pix_format *csi2_fmt;
-> -	struct v4l2_mbus_framefmt format_mbus[MIPI_CSI2_PADS_NUM];
-> +	struct mutex lock; /* Protect state and hs_settle */
->  	u32 state;
->  	u32 hs_settle;
->  
-> @@ -322,16 +320,23 @@ static int imx8mq_mipi_csi_clk_get(struct csi_state *state)
->  	return devm_clk_bulk_get(state->dev, CSI2_NUM_CLKS, state->clks);
->  }
->  
-> -static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
-> +static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
-> +					  struct v4l2_subdev_state *sd_state)
->  {
->  	s64 link_freq;
->  	u32 lane_rate;
->  	unsigned long esc_clk_rate;
->  	u32 min_ths_settle, max_ths_settle, ths_settle_ns, esc_clk_period_ns;
-> +	const struct v4l2_mbus_framefmt *fmt;
-> +	const struct csi2_pix_format *csi2_fmt;
->  
->  	/* Calculate the line rate from the pixel rate. */
-> +
-> +	fmt = v4l2_subdev_get_pad_format(&state->sd, sd_state, MIPI_CSI2_PAD_SINK);
-> +	csi2_fmt = find_csi2_format(fmt->code);
-> +
->  	link_freq = v4l2_get_link_freq(state->src_sd->ctrl_handler,
-> -				       state->csi2_fmt->width,
-> +				       csi2_fmt->width,
->  				       state->bus.num_data_lanes * 2);
->  	if (link_freq < 0) {
->  		dev_err(state->dev, "Unable to obtain link frequency: %d\n",
-> @@ -380,7 +385,8 @@ static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
->  	return 0;
->  }
->  
-> -static int imx8mq_mipi_csi_start_stream(struct csi_state *state)
-> +static int imx8mq_mipi_csi_start_stream(struct csi_state *state,
-> +					struct v4l2_subdev_state *sd_state)
->  {
->  	int ret;
->  
-> @@ -389,7 +395,7 @@ static int imx8mq_mipi_csi_start_stream(struct csi_state *state)
->  		return ret;
->  
->  	imx8mq_mipi_csi_set_params(state);
-> -	ret = imx8mq_mipi_csi_calc_hs_settle(state);
-> +	ret = imx8mq_mipi_csi_calc_hs_settle(state, sd_state);
->  	if (ret)
->  		return ret;
->  
-> @@ -415,6 +421,7 @@ static struct csi_state *mipi_sd_to_csi2_state(struct v4l2_subdev *sdev)
->  static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
->  {
->  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> +	struct v4l2_subdev_state *sd_state;
->  	int ret = 0;
->  
->  	if (enable) {
-> @@ -431,7 +438,9 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
->  			goto unlock;
->  		}
->  
-> -		ret = imx8mq_mipi_csi_start_stream(state);
-> +		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-> +
-> +		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
->  		if (ret < 0)
->  			goto unlock;
-
-You're leaving the state locked here. I would write
-
-		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
-		v4l2_subdev_unlock_state(sd_state);
-
-		if (ret < 0)
-			goto unlock;
-
-and drop the v4l2_subdev_unlock_state() call below. Apart from that,
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
->  
-> @@ -440,6 +449,8 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
->  			goto unlock;
->  
->  		state->state |= ST_STREAMING;
-> +
-> +		v4l2_subdev_unlock_state(sd_state);
->  	} else {
->  		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
->  		imx8mq_mipi_csi_stop_stream(state);
-> @@ -455,29 +466,14 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
->  	return ret;
->  }
->  
-> -static struct v4l2_mbus_framefmt *
-> -imx8mq_mipi_csi_get_format(struct csi_state *state,
-> -			   struct v4l2_subdev_state *sd_state,
-> -			   enum v4l2_subdev_format_whence which,
-> -			   unsigned int pad)
-> -{
-> -	if (which == V4L2_SUBDEV_FORMAT_TRY)
-> -		return v4l2_subdev_get_try_format(&state->sd, sd_state, pad);
-> -
-> -	return &state->format_mbus[pad];
-> -}
-> -
->  static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
->  				    struct v4l2_subdev_state *sd_state)
->  {
-> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
->  	struct v4l2_mbus_framefmt *fmt_sink;
->  	struct v4l2_mbus_framefmt *fmt_source;
-> -	enum v4l2_subdev_format_whence which;
->  
-> -	which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
-> -	fmt_sink = imx8mq_mipi_csi_get_format(state, sd_state, which,
-> -					      MIPI_CSI2_PAD_SINK);
-> +	fmt_sink = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SINK);
-> +	fmt_source = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SOURCE);
->  
->  	fmt_sink->code = MEDIA_BUS_FMT_SGBRG10_1X10;
->  	fmt_sink->width = MIPI_CSI2_DEF_PIX_WIDTH;
-> @@ -491,38 +487,15 @@ static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
->  		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink->colorspace,
->  					      fmt_sink->ycbcr_enc);
->  
-> -	fmt_source = imx8mq_mipi_csi_get_format(state, sd_state, which,
-> -						MIPI_CSI2_PAD_SOURCE);
->  	*fmt_source = *fmt_sink;
->  
->  	return 0;
->  }
->  
-> -static int imx8mq_mipi_csi_get_fmt(struct v4l2_subdev *sd,
-> -				   struct v4l2_subdev_state *sd_state,
-> -				   struct v4l2_subdev_format *sdformat)
-> -{
-> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> -	struct v4l2_mbus_framefmt *fmt;
-> -
-> -	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
-> -					 sdformat->pad);
-> -
-> -	mutex_lock(&state->lock);
-> -
-> -	sdformat->format = *fmt;
-> -
-> -	mutex_unlock(&state->lock);
-> -
-> -	return 0;
-> -}
-> -
->  static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
->  					  struct v4l2_subdev_state *sd_state,
->  					  struct v4l2_subdev_mbus_code_enum *code)
->  {
-> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> -
->  	/*
->  	 * We can't transcode in any way, the source format is identical
->  	 * to the sink format.
-> @@ -533,8 +506,7 @@ static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
->  		if (code->index > 0)
->  			return -EINVAL;
->  
-> -		fmt = imx8mq_mipi_csi_get_format(state, sd_state, code->which,
-> -						 code->pad);
-> +		fmt = v4l2_subdev_get_pad_format(sd, sd_state, code->pad);
->  		code->code = fmt->code;
->  		return 0;
->  	}
-> @@ -554,8 +526,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
->  				   struct v4l2_subdev_state *sd_state,
->  				   struct v4l2_subdev_format *sdformat)
->  {
-> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> -	struct csi2_pix_format const *csi2_fmt;
-> +	const struct csi2_pix_format *csi2_fmt;
->  	struct v4l2_mbus_framefmt *fmt;
->  
->  	/*
-> @@ -563,7 +534,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
->  	 * modified.
->  	 */
->  	if (sdformat->pad == MIPI_CSI2_PAD_SOURCE)
-> -		return imx8mq_mipi_csi_get_fmt(sd, sd_state, sdformat);
-> +		return v4l2_subdev_get_fmt(sd, sd_state, sdformat);
->  
->  	if (sdformat->pad != MIPI_CSI2_PAD_SINK)
->  		return -EINVAL;
-> @@ -572,10 +543,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
->  	if (!csi2_fmt)
->  		csi2_fmt = &imx8mq_mipi_csi_formats[0];
->  
-> -	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
-> -					 sdformat->pad);
-> -
-> -	mutex_lock(&state->lock);
-> +	fmt = v4l2_subdev_get_pad_format(sd, sd_state, sdformat->pad);
->  
->  	fmt->code = csi2_fmt->code;
->  	fmt->width = sdformat->format.width;
-> @@ -584,16 +552,9 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
->  	sdformat->format = *fmt;
->  
->  	/* Propagate the format from sink to source. */
-> -	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
-> -					 MIPI_CSI2_PAD_SOURCE);
-> +	fmt = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SOURCE);
->  	*fmt = sdformat->format;
->  
-> -	/* Store the CSI2 format descriptor for active formats. */
-> -	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
-> -		state->csi2_fmt = csi2_fmt;
-> -
-> -	mutex_unlock(&state->lock);
-> -
->  	return 0;
->  }
->  
-> @@ -604,7 +565,7 @@ static const struct v4l2_subdev_video_ops imx8mq_mipi_csi_video_ops = {
->  static const struct v4l2_subdev_pad_ops imx8mq_mipi_csi_pad_ops = {
->  	.init_cfg		= imx8mq_mipi_csi_init_cfg,
->  	.enum_mbus_code		= imx8mq_mipi_csi_enum_mbus_code,
-> -	.get_fmt		= imx8mq_mipi_csi_get_fmt,
-> +	.get_fmt		= v4l2_subdev_get_fmt,
->  	.set_fmt		= imx8mq_mipi_csi_set_fmt,
->  };
->  
-> @@ -732,6 +693,7 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
->  {
->  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
->  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
-> +	struct v4l2_subdev_state *sd_state;
->  	int ret = 0;
->  
->  	mutex_lock(&state->lock);
-> @@ -741,7 +703,9 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
->  		ret = imx8mq_mipi_csi_clk_enable(state);
->  	}
->  	if (state->state & ST_STREAMING) {
-> -		ret = imx8mq_mipi_csi_start_stream(state);
-> +		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
-> +		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
-> +		v4l2_subdev_unlock_state(sd_state);
->  		if (ret)
->  			goto unlock;
->  	}
-> @@ -821,6 +785,7 @@ static const struct dev_pm_ops imx8mq_mipi_csi_pm_ops = {
->  static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
->  {
->  	struct v4l2_subdev *sd = &state->sd;
-> +	int ret;
->  
->  	v4l2_subdev_init(sd, &imx8mq_mipi_csi_subdev_ops);
->  	sd->owner = THIS_MODULE;
-> @@ -834,15 +799,22 @@ static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
->  
->  	sd->dev = state->dev;
->  
-> -	state->csi2_fmt = &imx8mq_mipi_csi_formats[0];
-> -	imx8mq_mipi_csi_init_cfg(sd, NULL);
-> -
->  	state->pads[MIPI_CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK
->  					 | MEDIA_PAD_FL_MUST_CONNECT;
->  	state->pads[MIPI_CSI2_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE
->  					   | MEDIA_PAD_FL_MUST_CONNECT;
-> -	return media_entity_pads_init(&sd->entity, MIPI_CSI2_PADS_NUM,
-> -				      state->pads);
-> +	ret = media_entity_pads_init(&sd->entity, MIPI_CSI2_PADS_NUM,
-> +				     state->pads);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = v4l2_subdev_init_finalize(sd);
-> +	if (ret) {
-> +		media_entity_cleanup(&sd->entity);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
->  }
->  
->  static void imx8mq_mipi_csi_release_icc(struct platform_device *pdev)
-> @@ -968,6 +940,7 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
->  	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
->  
->  	media_entity_cleanup(&state->sd.entity);
-> +	v4l2_subdev_cleanup(&state->sd);
->  	v4l2_async_nf_unregister(&state->notifier);
->  	v4l2_async_nf_cleanup(&state->notifier);
->  	v4l2_async_unregister_subdev(&state->sd);
-> @@ -991,6 +964,7 @@ static int imx8mq_mipi_csi_remove(struct platform_device *pdev)
->  	pm_runtime_disable(&pdev->dev);
->  	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
->  	media_entity_cleanup(&state->sd.entity);
-> +	v4l2_subdev_cleanup(&state->sd);
->  	mutex_destroy(&state->lock);
->  	pm_runtime_set_suspended(&pdev->dev);
->  	imx8mq_mipi_csi_release_icc(pdev);
-
--- 
-Regards,
-
-Laurent Pinchart
+DQoNCj4gLS0tLS1NZXNzYWdnaW8gb3JpZ2luYWxlLS0tLS0NCj4gRGE6IEplcmUgVmlpa2FyaSA8
+amVyZS52aWlrYXJpQGdtYWlsLmNvbT4NCj4gSW52aWF0bzogc2FiYXRvIDExIG1hcnpvIDIwMjMg
+MjM6NTYNCj4gQTogT3JuYWdoaSBEYXZpZGUgPGRhdmlkZS5vcm5hZ2hpQGludHJlLml0Pg0KPiBD
+YzogS2VlcyBDb29rIDxrZWVzQGtlcm5lbC5vcmc+OyBrZWVzY29va0BjaHJvbWl1bS5vcmc7DQo+
+IHBhdWxtY2tAa2VybmVsLm9yZzsgbnNhZW56anVAcmVkaGF0LmNvbTsgcGV0ZXJ6QGluZnJhZGVh
+ZC5vcmc7DQo+IGJpZ2Vhc3lAbGludXRyb25peC5kZTsgZnJlZGVyaWNAa2VybmVsLm9yZzsgbGlu
+dXgtaGFyZGVuaW5nQHZnZXIua2VybmVsLm9yZzsNCj4gbGludXgta2VybmVsQHZnZXIua2VybmVs
+Lm9yZw0KPiBPZ2dldHRvOiBSZTogW1JGQyBQQVRDSF0gSW50cm9kdWNlIHBlci1pbnRlcnJ1cHQg
+a2VybmVsLXN0YWNrIHJhbmRvbWl6YXRpb24NCj4gDQo+IEkgYW0gY29uY2VybmVkIGFib3V0IHRo
+ZSBkaXNjbGFpbWVyLiBXaGVuIEkgcmVwbGllZCwgSSBoYWQgYWxzbyB0byByZW1vdmUgYWxsDQo+
+IG90aGVyIGluZm9ybWF0aW9uIHRvIGVuc3VyZSB0aGF0IEkgZGlkIG5vdCB2aW9sYXRlIHRoZSB0
+ZXJtcy4NCj4gDQoNClNvcnJ5LCBJdGFsaWFuIHJlZ3VsYXRpb25zIHRoYXQgb2J2aW91c2x5IGRv
+bid0IGFwcGx5IHRvIHB1YmxpYyBtYWlsaW5nIGxpc3RzLi4uDQpUaGUgZGlzY2xhaW1lciBzaG91
+bGQgYmUgZ29uZSBub3csIHNvIHlvdSBjYW4gcmVwbHkgdG8gdGhpcyB0aHJlYWQgaWYgeW91IHBy
+ZWZlci4NCg0KLSBEYXZpZGUNCg0KPiA+IE5vdGEgaW5mb3JtYXRpdmE6IEluIG90dGVtcGVyYW56
+YSBkZWxsYSBMZWdnZSAxOTYvMjAwMyBlIGFsIFJlZ29sYW1lbnRvDQo+IFVFIDY3OS8yMDE2IChH
+RFBSKSBzdWxsYSB0dXRlbGEgZGVpIGRhdGkgcGVyc29uYWxpLCBsZSBpbmZvcm1hemlvbmkgY29u
+dGVudXRlDQo+IGluIHF1ZXN0byBtZXNzYWdnaW8gc29ubyBzdHJldHRhbWVudGUgcmlzZXJ2YXRl
+IGUgc29ubyBlc2NsdXNpdmFtZW50ZQ0KPiBpbmRpcml6emF0ZSBhbCBkZXN0aW5hdGFyaW8gaW5k
+aWNhdG8gKG9wcHVyZSBhbGxhIHBlcnNvbmEgcmVzcG9uc2FiaWxlIGRpDQo+IHJpbWV0dGVybG8g
+YWwgZGVzdGluYXRhcmlvKS4gTGUgaWRlZSBlIG9waW5pb25pIGVzcHJlc3NlIHNvbm8gcXVlbGxl
+IGRlbGzigJlhdXRvcmUgZSwNCj4gYSBtZW5vIGNoZSBub24gc2lhIGNoaWFyYW1lbnRlIHNjcml0
+dG8sIG5vbiByYXBwcmVzZW50YW5vIG5lY2Vzc2FyaWFtZW50ZQ0KPiBxdWVsbGUgZGkgSW50csOp
+IFMuci5sLiBRdWFsc2lhc2kgdXNvLCByaXByb2R1emlvbmUgbyBkaXZ1bGdhemlvbmUgZGkgcXVl
+c3RvDQo+IG1lc3NhZ2dpbyBlJyB2aWV0YXRhLCBhbmNoZSBhaSBzZW5zaSBkZWxs4oCZYXJ0LiA2
+MTYgYy5wLiBpdGFsaWFuby4gTmVsIGNhc28gaW4gY3VpDQo+IGF2ZXN0ZSByaWNldnV0byBxdWVz
+dGEgZS1tYWlsIHBlciBlcnJvcmUsIHZvZ2xpYXRlIGF2dmVydGlyY2kgYWwgcGl1JyBwcmVzdG8g
+YQ0KPiBtZXp6byBwb3N0YSBlbGV0dHJvbmljYSBhbGzigJlpbmRpcml6em8gcHJpdmFjeUBpbnRy
+ZS5pdCBlIGRpc3RydWdnZXJlIGlsIHByZXNlbnRlDQo+IG1lc3NhZ2dpby4NCj4gPiBQbGVhc2Ug
+bm90ZTogSW4gcmVmZXJlbmNlIHRvIEl0YWxpYW4gbGF3IDE5Ni8yMDAzIGFuZCB0byB0aGUgUmVn
+dWxhdGlvbiBFVQ0KPiA2NzkvMjAxNiAoR0RQUiksIHRoaXMgZW1haWwgdHJhbnNtaXNzaW9uIGlu
+Y2x1ZGluZyBpdHMgYXR0YWNobWVudHMsIGlzDQo+IGludGVuZGVkIG9ubHkgZm9yIHRoZSBwZXJz
+b24gb3IgZW50aXR5IHRvIHdoaWNoIGl0IGlzIGFkZHJlc3NlZCBhbmQgbWF5DQo+IGNvbnRhaW4g
+Y29uZmlkZW50aWFsIGFuZC9vciBwcml2aWxlZ2VkIG1hdGVyaWFsLiBBbnkgdmlld3Mgb3Igb3Bp
+bmlvbnMgYXJlDQo+IHNvbGVseSB0aG9zZSBvZiB0aGUgYXV0aG9yIGFuZCBkbyBub3QgbmVjZXNz
+YXJpbHkgcmVwcmVzZW50IHRob3NlIG9mIEludHLDqSBTLnIubC4sDQo+IHVubGVzcyBzcGVjaWZp
+Y2FsbHkgc3RhdGVkLiBBbnkgcmV2aWV3LCByZXRyYW5zbWlzc2lvbiwgZGlzc2VtaW5hdGlvbiBv
+ciBvdGhlcg0KPiB1c2Ugb2YsIG9yIHRha2luZyBvZiBhbnkgYWN0aW9uIGluIHJlbGlhbmNlIHVw
+b24sIHRoaXMgaW5mb3JtYXRpb24gYnkgcGVyc29ucyBvcg0KPiBlbnRpdGllcyBvdGhlciB0aGFu
+IHRoZSBpbnRlbmRlZCByZWNpcGllbnQgaXMgcHJvaGliaXRlZC4gSWYgeW91IHJlY2VpdmVkIHRo
+aXMNCj4gZW1haWwgZHVlIHRvIGFuIGVycm9yLCBwbGVhc2UgY29udGFjdCB0aGUgc2VuZGVyIHZp
+YSBlLW1haWwgdG8gdGhlIGFkZHJlc3MNCj4gcHJpdmFjeUBpbnRyZS5pdCBhbmQgZGVsZXRlIHRo
+ZSBlbWFpbCB0cmFuc21pc3Npb24gaW1tZWRpYXRlbHkuDQo+IA0KPiBHb29nbGUgdHJhbnNsYXRp
+b24gaW4gRW5nbGlzaDoNCj4gDQo+IEluZm9ybWF0aW9uIG5vdGU6IEluIGNvbXBsaWFuY2Ugd2l0
+aCBMYXcgMTk2LzIwMDMgYW5kIEVVIFJlZ3VsYXRpb24NCj4gNjc5LzIwMTYgKEdEUFIpIG9uIHRo
+ZSBwcm90ZWN0aW9uIG9mIHBlcnNvbmFsIGRhdGEsIHRoZSBpbmZvcm1hdGlvbg0KPiBjb250YWlu
+ZWQgaW4gdGhpcyBtZXNzYWdlIGlzIHN0cmljdGx5IGNvbmZpZGVudGlhbCBhbmQgaXMgZXhjbHVz
+aXZlbHkgYWRkcmVzc2VkIHRvDQo+IHRoZSBpbmRpY2F0ZWQgcmVjaXBpZW50IChvciB0byB0aGUg
+cGVyc29uIHJlc3BvbnNpYmxlIGZvciBmb3J3YXJkaW5nIGl0IHRvIHRoZQ0KPiByZWNpcGllbnQp
+LiBUaGUgaWRlYXMgYW5kIG9waW5pb25zIGV4cHJlc3NlZCBhcmUgdGhvc2Ugb2YgdGhlIGF1dGhv
+ciBhbmQsDQo+IHVubGVzcyBjbGVhcmx5IHN0YXRlZCwgZG8gbm90IG5lY2Vzc2FyaWx5IHJlcHJl
+c2VudCB0aG9zZSBvZiBJbnRyw6kgUy5yLmwuIEFueSB1c2UsDQo+IHJlcHJvZHVjdGlvbiBvciBk
+aXNjbG9zdXJlIG9mIHRoaXMgbWVzc2FnZSBpcyBwcm9oaWJpdGVkLCBhbHNvIHB1cnN1YW50IHRv
+IGFydC4NCj4gNjE2IGNyaW1pbmFsIGNvZGUgSXRhbGlhbi4gSWYgeW91IGhhdmUgcmVjZWl2ZWQg
+dGhpcyBlLW1haWwgaW4gZXJyb3IsIHBsZWFzZSBub3RpZnkNCj4gdXMgYXMgc29vbiBhcyBwb3Nz
+aWJsZSBieSBlLW1haWwgYXQgcHJpdmFjeUBpbnRyZS5pdCBhbmQgZGVzdHJveSB0aGlzIG1lc3Nh
+Z2UuDQo+IFBsZWFzZSBub3RlOiBJbiByZWZlcmVuY2UgdG8gSXRhbGlhbiBsYXcgMTk2LzIwMDMg
+YW5kIHRvIHRoZSBSZWd1bGF0aW9uIEVVDQo+IDY3OS8yMDE2IChHRFBSKSwgdGhpcyBlbWFpbCB0
+cmFuc21pc3Npb24gaW5jbHVkaW5nIGl0cyBhdHRhY2htZW50cywgaXMNCj4gaW50ZW5kZWQgb25s
+eSBmb3IgdGhlIHBlcnNvbiBvciBlbnRpdHkgdG8gd2hpY2ggaXQgaXMgYWRkcmVzc2VkIGFuZCBt
+YXkNCj4gY29udGFpbiBjb25maWRlbnRpYWwgYW5kL29yIHByaXZpbGVnZWQgbWF0ZXJpYWwuIEFu
+eSB2aWV3cyBvciBvcGluaW9ucyBhcmUNCj4gc29sZWx5IHRob3NlIG9mIHRoZSBhdXRob3IgYW5k
+IGRvIG5vdCBuZWNlc3NhcmlseSByZXByZXNlbnQgdGhvc2Ugb2YgSW50csOpIFMuci5sLiwNCj4g
+dW5sZXNzIHNwZWNpZmljYWxseSBzdGF0ZWQuIEFueSByZXZpZXcsIHJldHJhbnNtaXNzaW9uLCBk
+aXNzZW1pbmF0aW9uIG9yIG90aGVyDQo+IHVzZSBvZiwgb3IgdGFraW5nIG9mIGFueSBhY3Rpb24g
+aW4gcmVsaWFuY2UgdXBvbiwgdGhpcyBpbmZvcm1hdGlvbiBieSBwZXJzb25zIG9yDQo+IGVudGl0
+aWVzIG90aGVyIHRoYW4gdGhlIGludGVuZGVkIHJlY2lwaWVudCBpcyBwcm9oaWJpdGVkLiBJZiB5
+b3UgcmVjZWl2ZWQgdGhpcw0KPiBlbWFpbCBkdWUgdG8gYW4gZXJyb3IsIHBsZWFzZSBjb250YWN0
+IHRoZSBzZW5kZXIgdmlhIGVtYWlsIHRvIHRoZSBhZGRyZXNzDQo+IHByaXZhY3lAaW50cmUuaXQg
+YW5kIGRlbGV0ZSB0aGUgZW1haWwgdHJhbnNtaXNzaW9uIGltbWVkaWF0ZWx5Lg0KPiANCj4gLUpl
+cmUNCg==
