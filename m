@@ -2,144 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9C2B6B66CE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 428A16B66D9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230454AbjCLNkb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:40:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41328 "EHLO
+        id S230494AbjCLNn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:43:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230452AbjCLNk1 (ORCPT
+        with ESMTP id S230507AbjCLNnt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:40:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BF971FF1;
-        Sun, 12 Mar 2023 06:40:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B115B80B50;
-        Sun, 12 Mar 2023 13:40:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F08ABC433EF;
-        Sun, 12 Mar 2023 13:40:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678628423;
-        bh=Cc5SkNpX+fJG4RhyUV9lX1ru3SeON0+cWxM07x3k8gc=;
+        Sun, 12 Mar 2023 09:43:49 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8815CB6;
+        Sun, 12 Mar 2023 06:43:40 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CF8CD814;
+        Sun, 12 Mar 2023 14:43:20 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678628618;
+        bh=M3+2iadqGPWpajU73rzJOfscL/vSRK4MRXJAHhM3Vwk=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=hCXCY3gQlYG4wYh02Oq5jSSRHPDnRfzATTKm9owjSaO0LGOkx3wHIw17a0xH5za97
-         koz4zAADjjftqSv+BJbQstR4dibA7NjaNqffj/WaIeTIT6Y3Ra39bwCrgoaFzjYY1v
-         lkdv43Z+yG8e0lfh75uL8UeW0WFnYAr8QB7YlUNBvcne76sIFJn9d6D+kdOg9qo5yQ
-         oFu2thUebbZd1r9wfWPR/3ClEuzm8W8PnslQTLC8LrAdY8va5At52SYNnxvU3xIup9
-         /erOa+vf8y1VGQ3Kk0ZvJrMhc7UcKA6VjruSM3r2FA4Yzw/MFY6s8unDNAHjK4LgJZ
-         y8mXWG3kSUP+g==
-Date:   Sun, 12 Mar 2023 13:40:18 +0000
-From:   Conor Dooley <conor@kernel.org>
-To:     Paran Lee <p4ranlee@gmail.com>
-Cc:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>,
-        Anton Blanchard <anton@ozlabs.org>,
-        Daniel Axtens <dja@axtens.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org
-Subject: Re: [RESEND PATCH] perf tools riscv: Add support for riscv
- lookup_binutils_path
-Message-ID: <972fcc78-517b-40fa-b46a-ce5dd6f8e980@spud>
-References: <20230312130303.87954-1-p4ranlee@gmail.com>
+        b=S94E3bY7StoQHAgj4Ene3ZegV2UW70uJapggOmnnq5BOLviJUieoQR8vK8iwSl4mO
+         nB7/HV5FvVhNrNav/Fa7DCJ28ZI4Ge8PLvjWiSCH37yTbot58V3FwpG2xrGmlCYlzV
+         N/5h+69TBJLuAxEGxTdow4/6Ep+WKBDw4muOuYUQ=
+Date:   Sun, 12 Mar 2023 15:41:16 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Niklas =?utf-8?Q?S=C3=B6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 11/28] media: platform: ti: am437x: drop of_match_ptr for
+ ID table
+Message-ID: <20230312134116.GL2545@pendragon.ideasonboard.com>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-11-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="5/FZjlJfVq2Ptchx"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230312130303.87954-1-p4ranlee@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230312131318.351173-11-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Krzysztof,
 
---5/FZjlJfVq2Ptchx
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thank you for the patch.
 
-On Sun, Mar 12, 2023 at 10:03:05PM +0900, Paran Lee wrote:
-> Add to know RISC-V binutils path.
->=20
-> Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+On Sun, Mar 12, 2023 at 02:13:01PM +0100, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).  This
+
+"might not be relevant" is a bit of an understatement in this case :-)
+
+> also fixes !CONFIG_OF error:
+> 
+>   drivers/media/platform/ti/am437x/am437x-vpfe.c:2620:34: error: ‘vpfe_of_match’ defined but not used [-Werror=unused-const-variable=]
+
+This driver should probably depend on CONFIG_OF, but that's a separate
+issue.
+
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
 > ---
->  tools/perf/arch/common.c | 18 ++++++++++++++++++
->  1 file changed, 18 insertions(+)
->=20
-> diff --git a/tools/perf/arch/common.c b/tools/perf/arch/common.c
-> index 59dd875fd5e4..6ac7a22244c0 100644
-> --- a/tools/perf/arch/common.c
-> +++ b/tools/perf/arch/common.c
-> @@ -43,6 +43,20 @@ const char *const powerpc_triplets[] =3D {
->  	NULL
+>  drivers/media/platform/ti/am437x/am437x-vpfe.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
+> index 2dfae9bc0bba..fe89b8e250e7 100644
+> --- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
+> +++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
+> @@ -2629,7 +2629,7 @@ static struct platform_driver vpfe_driver = {
+>  	.driver = {
+>  		.name	= VPFE_MODULE_NAME,
+>  		.pm	= &vpfe_pm_ops,
+> -		.of_match_table = of_match_ptr(vpfe_of_match),
+> +		.of_match_table = vpfe_of_match,
+>  	},
 >  };
-> =20
-> +const char *const riscv32_triplets[] =3D {
-> +	"riscv32-unknown-linux-gnu-",
-> +	"riscv32-linux-android-",
-> +	"riscv32-linux-gnu-",
-> +	NULL
-> +};
-> +
-> +const char *const riscv64_triplets[] =3D {
-> +	"riscv64-unknown-linux-gnu-",
-> +	"riscv64-linux-android-",
-> +	"riscv64-linux-gnu-",
+>  
 
-I don't know anything about perf, so I could be asking a really silly
-question here, but how come riscvN-linux- has been omitted here?
-The kernel.org toolchains [1] are prefixed that way, although I noticed
-in your v1 that you'd seemingly duplicated the arm64 patterns, so I am
-curious as to whether the omission is intentional.
+-- 
+Regards,
 
-Cheers,
-Conor.
-
-[1] https://mirrors.edge.kernel.org/pub/tools/crosstool/
-
-> +	NULL
-> +};
-> +
->  const char *const s390_triplets[] =3D {
->  	"s390-ibm-linux-",
->  	"s390x-linux-gnu-",
-> @@ -168,6 +182,10 @@ static int perf_env__lookup_binutils_path(struct per=
-f_env *env,
->  		path_list =3D powerpc_triplets;
->  	else if (!strcmp(arch, "sh"))
->  		path_list =3D sh_triplets;
-> +	else if (!strcmp(arch, "riscv32"))
-> +		path_list =3D riscv32_triplets;
-> +	else if (!strcmp(arch, "riscv64"))
-> +		path_list =3D riscv64_triplets;
->  	else if (!strcmp(arch, "s390"))
->  		path_list =3D s390_triplets;
->  	else if (!strcmp(arch, "sparc"))
-> --=20
-> 2.34.1
->=20
-
---5/FZjlJfVq2Ptchx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZA3WPwAKCRB4tDGHoIJi
-0sdJAQCoa+n+1sORACKtBGf6R1h/ZsaFTKclg0mcHVus8Gc65AEA9FeWMCtsjgc+
-UDqGOtpYMTAQ6x/ALdE8HA8PFZ1T1Q8=
-=Lmym
------END PGP SIGNATURE-----
-
---5/FZjlJfVq2Ptchx--
+Laurent Pinchart
