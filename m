@@ -2,30 +2,30 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 804A76B66E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:45:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38CE56B66E8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbjCLNpC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:45:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49980 "EHLO
+        id S230223AbjCLNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:45:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjCLNow (ORCPT
+        with ESMTP id S231175AbjCLNpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:44:52 -0400
+        Sun, 12 Mar 2023 09:45:13 -0400
 Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D39B22684D;
-        Sun, 12 Mar 2023 06:44:30 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120C44ECE9;
+        Sun, 12 Mar 2023 06:44:54 -0700 (PDT)
 Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5804FD5F;
-        Sun, 12 Mar 2023 14:44:26 +0100 (CET)
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 75C1B814;
+        Sun, 12 Mar 2023 14:44:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678628669;
-        bh=7Dfo/Yq6hxk590nWb0bO05GDYAs/VIjZZbDAvt+BHk4=;
+        s=mail; t=1678628692;
+        bh=Gf4R8APgW+8d30ALT2Qx8sbhHo3cryP7NIpDmZDCrv0=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=l2+nUGi7kMBBh6pDuObk6/xjHx/XVuUPDWTCdJJ6IIUTrnWEe+kXSx9g9mey2GWjl
-         Z2uFVv5FO9nqCrnK+goSRvQpQZD0AGCcIRV3Q7DYKb7m5a6+FNt+pJFAkqVRryWw1H
-         D/142AthuG791K+eA21zVSVYA5orpB+hQWchCYIk=
-Date:   Sun, 12 Mar 2023 15:44:24 +0200
+        b=jZEACncLcJxuOrh8OeqcKJGvRW78xO4EdQ/4QZg4hjFkg1uSgSPfTqSE1EzlLDTm7
+         vrvIzzdogv5ePI0W1USX4KN6nyamrOD+mKZHARzsWogvaJJR+aFinOybXSpz4pIsd6
+         xAK6azy2RiExNid6RFBv6PJgW/R29R3vEntuWhqg=
+Date:   Sun, 12 Mar 2023 15:44:41 +0200
 From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Joe Tessler <jrt@google.com>,
@@ -70,15 +70,15 @@ Cc:     Joe Tessler <jrt@google.com>,
         linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 24/28] media: i2c: ov2680: drop of_match_ptr for ID table
-Message-ID: <20230312134424.GM2545@pendragon.ideasonboard.com>
+Subject: Re: [PATCH 25/28] media: i2c: ov7740: drop of_match_ptr for ID table
+Message-ID: <20230312134441.GC8229@pendragon.ideasonboard.com>
 References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-24-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-25-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312131318.351173-24-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312131318.351173-25-krzysztof.kozlowski@linaro.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
@@ -92,35 +92,35 @@ Hi Krzysztof,
 
 Thank you for the patch.
 
-On Sun, Mar 12, 2023 at 02:13:14PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).  This
-> also fixes !CONFIG_OF error:
+On Sun, Mar 12, 2023 at 02:13:15PM +0100, Krzysztof Kozlowski wrote:
+> The driver will match mostly by DT table (even thought there is regular
+> ID table) so there is little benefit in of_match_ptr (this also allows
+> ACPI matching via PRP0001, even though it might not be relevant here).
+> This also fixes !CONFIG_OF error:
 > 
->   drivers/media/i2c/ov2680.c:1149:34: error: ‘ov2680_dt_ids’ defined but not used [-Werror=unused-const-variable=]
+>   drivers/media/i2c/ov7740.c:1203:34: error: ‘ov7740_of_match’ defined but not used [-Werror=unused-const-variable=]
 > 
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
 > ---
->  drivers/media/i2c/ov2680.c | 2 +-
+>  drivers/media/i2c/ov7740.c | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/media/i2c/ov2680.c b/drivers/media/i2c/ov2680.c
-> index 54153bf66bdd..4d8724952c5f 100644
-> --- a/drivers/media/i2c/ov2680.c
-> +++ b/drivers/media/i2c/ov2680.c
-> @@ -1156,7 +1156,7 @@ static struct i2c_driver ov2680_i2c_driver = {
+> diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
+> index c9fd9b0bc54a..42121916d25f 100644
+> --- a/drivers/media/i2c/ov7740.c
+> +++ b/drivers/media/i2c/ov7740.c
+> @@ -1210,7 +1210,7 @@ static struct i2c_driver ov7740_i2c_driver = {
 >  	.driver = {
->  		.name  = "ov2680",
->  		.pm = &ov2680_pm_ops,
-> -		.of_match_table	= of_match_ptr(ov2680_dt_ids),
-> +		.of_match_table	= ov2680_dt_ids,
+>  		.name = "ov7740",
+>  		.pm = &ov7740_pm_ops,
+> -		.of_match_table = of_match_ptr(ov7740_of_match),
+> +		.of_match_table = ov7740_of_match,
 >  	},
->  	.probe_new	= ov2680_probe,
->  	.remove		= ov2680_remove,
+>  	.probe_new = ov7740_probe,
+>  	.remove   = ov7740_remove,
 
 -- 
 Regards,
