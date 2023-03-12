@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B62516B6662
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:15:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795886B6663
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:15:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCLNPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:15:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45222 "EHLO
+        id S230162AbjCLNP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230130AbjCLNOe (ORCPT
+        with ESMTP id S229885AbjCLNOl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:14:34 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A428879
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:59 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id k10so38405918edk.13
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:59 -0700 (PDT)
+        Sun, 12 Mar 2023 09:14:41 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7B9624135
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:14:01 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r15so11316281edq.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:14:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678626839;
+        d=linaro.org; s=google; t=1678626841;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O6y38vRZkdBS5R5uwqFpYAPV0SwqgL3Ad/RHz3KFEYg=;
-        b=F6qp4Yb8Iigoi2EWlwMSg+KfJE/41jbOR7JfTYJrgttrWACfS6ajuqUiwOO66uyPgb
-         TSDyuz5lva0OBRpoxvmaQOkSg779UZzBuqAbseB/rjiaktLeYs86i+UZ1RiiDfuwEogl
-         ImOHBGF6zWH4XHlclIsr4PBBWT2fVxOqEv7QgTlPMCwKZCTyvZvengCbdn/HQjYm1St7
-         TR1Fuiv3f3MVlOlqtTOYQ3sVaeIbG4GFsP8RvY29ZWUI9AsuszMAJwOB3kqiSewpQkFQ
-         GTId4N5+TKXJcB3/DyP8UI5FAsEArWEZwyv6MV+vzx+xd9JOXHrYMPxQGsi4uVXbREux
-         JaWA==
+        bh=bfEjbOEBC8Ag5735P/rqZiEX/nqcdTDOC9PYAPQl5HY=;
+        b=uissALC9Qm6G3yTfi85yX5AZcJ4Dc0T+ZSTTKU0wpK9U2V+VDFH343iZjKC5N4s8V8
+         Qp9COEJvlzCvWlb23mcYWEdcMc9pbjSuLJ33+tz+X+jWMZtcLKOcvkPj2fJY7WdI8v6P
+         qeowegW6LOAq8GiD1h+HIkQ+puCRyyQWHwdYCcrlPZ6Vh93gluUCiol9RzZfw0oufC3G
+         DKN/V59iphzKV7hQP5j1PbiPzW0aKpCKWusOS+ijCjSjX2qXzgzuwPhhxcj5tD8u+jqy
+         gwla21lfQPZJNhCA9eIisu6WuJeZDVUE+4YaZsUYsp+KLTLS/bKPYcuYJMrZOeTcl/iv
+         stDg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626839;
+        d=1e100.net; s=20210112; t=1678626841;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O6y38vRZkdBS5R5uwqFpYAPV0SwqgL3Ad/RHz3KFEYg=;
-        b=dkYmJGqwAwF6IYsa0KRxYPWRK/mI8m+E3v8kIEkO6RNr3JqxH9+6OCwIUQNfQiR0JW
-         4Qyvb5zT9paVS7f9SnY321O/2aw8YhtZ0IH/bUDaY5+/jHAlxg7AWae/u6cWE2uUczus
-         fp/EXfuv3XJjSPDi2BqB1en6PGFojiz24T3ubw7gT6z5huW/yPPCXJ/ho4Lirc2zF1XG
-         x3M9+QjZukawXcTARtOCwpJTBA8cx7Ow/Vf68MbnKoRamXn3ryKWEXVUfwxFprGHlq0h
-         xMg60afoBJgbVJ2L4XpH0tmgoYsD7sDWQ4ClMmokkUECPpHqvwPZpeuQyui9V1Y11/M4
-         9N1g==
-X-Gm-Message-State: AO0yUKU8aKB3a8RgMYuOWkG/sjMoADYfD+vugriI/P9uSPUUBgoWjPDr
-        1Q79oKqx0oynWvsEd60+LuicfA==
-X-Google-Smtp-Source: AK7set/WMW6RgALtAuft2GXt0JFDI5Y2R0SGD1j3uPRf3y93eii3868Nj2pM7xYCjr1WDifLt9I7Xg==
-X-Received: by 2002:a17:907:8a12:b0:88d:9cf8:2dbb with SMTP id sc18-20020a1709078a1200b0088d9cf82dbbmr37183584ejc.12.1678626839411;
-        Sun, 12 Mar 2023 06:13:59 -0700 (PDT)
+        bh=bfEjbOEBC8Ag5735P/rqZiEX/nqcdTDOC9PYAPQl5HY=;
+        b=7T9k+a5BA3D7OviJEYMg1E6F8hb4ZFiPvn4Y6Ly3SGyh6lPp2N4cp831oSEPcHDawI
+         yGb35x4mwFpYkCTCMcMBi06EF1ZJbLzMKOF64MTNeiNkLDBRd2UuqBqj6ILDxJ4OMrIw
+         hFy4XWe/+RwwufvhF0B2+yn1a5wh/jFGI8xzLvKniwc+GxJx+FxqESq37fYVhM1kABN3
+         XlWqeiQW9S57zaS8c/eGx7qVQBMIM71FJ5nB25egXlusaspB1YgAHCQPZnZyMGT7X53N
+         ctHdPfB95Ozh6TluUHpNmtCxfQm3+pMpRN4IHPTMyAdEA88bgu5aXwXowNCGhB5GVSCU
+         IYgw==
+X-Gm-Message-State: AO0yUKXE60WmQnBbEJP1quQGTNf1dfT4wNN7Oy19+U+RUpN2SKcvrp0h
+        HaKf1La2H5fLge0ACNZrV6Tc/g==
+X-Google-Smtp-Source: AK7set/qUd+AuzKeWJtvFJW5YvrmY0+P99WMaVJpgFheOKbbtpLVYddA6FcuMGTWaLuCaaa5fxGzrQ==
+X-Received: by 2002:a17:907:7e87:b0:8b2:e81:df2b with SMTP id qb7-20020a1709077e8700b008b20e81df2bmr38467057ejc.44.1678626841335;
+        Sun, 12 Mar 2023 06:14:01 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.57
+        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:13:59 -0700 (PDT)
+        Sun, 12 Mar 2023 06:14:01 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Joe Tessler <jrt@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -95,9 +95,9 @@ To:     Joe Tessler <jrt@google.com>,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 18/28] media: platform: sun8i-a83t-mipi-csi2: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:13:08 +0100
-Message-Id: <20230312131318.351173-18-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 19/28] media: platform: mdp: mark OF related data as maybe unused
+Date:   Sun, 12 Mar 2023 14:13:09 +0100
+Message-Id: <20230312131318.351173-19-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
@@ -106,38 +106,37 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver can match only via the DT table so the table should be always
-used and the of_match_ptr does not have any sense (this also allows ACPI
-matching via PRP0001, even though it might not be relevant here).  This
-also fixes !CONFIG_OF error:
+The driver can be compile tested with !CONFIG_OF making certain data
+unused:
 
-  drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c:818:34: error: ‘sun8i_a83t_mipi_csi2_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/media/platform/mediatek/mdp/mtk_mdp_core.c:31:34: error: ‘mtk_mdp_comp_dt_ids’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c  | 2 +-
+ drivers/media/platform/mediatek/mdp/mtk_mdp_core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-index cd2e92ae2293..1f0cc7b1ba47 100644
---- a/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-+++ b/drivers/media/platform/sunxi/sun8i-a83t-mipi-csi2/sun8i_a83t_mipi_csi2.c
-@@ -826,7 +826,7 @@ static struct platform_driver sun8i_a83t_mipi_csi2_platform_driver = {
- 	.remove	= sun8i_a83t_mipi_csi2_remove,
- 	.driver	= {
- 		.name		= SUN8I_A83T_MIPI_CSI2_NAME,
--		.of_match_table	= of_match_ptr(sun8i_a83t_mipi_csi2_of_match),
-+		.of_match_table	= sun8i_a83t_mipi_csi2_of_match,
- 		.pm		= &sun8i_a83t_mipi_csi2_pm_ops,
- 	},
- };
+diff --git a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+index d83c4964eaf9..37f2dd08ecec 100644
+--- a/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
++++ b/drivers/media/platform/mediatek/mdp/mtk_mdp_core.c
+@@ -28,7 +28,7 @@ EXPORT_SYMBOL(mtk_mdp_dbg_level);
+ 
+ module_param(mtk_mdp_dbg_level, int, 0644);
+ 
+-static const struct of_device_id mtk_mdp_comp_dt_ids[] = {
++static const struct of_device_id mtk_mdp_comp_dt_ids[] __maybe_unused = {
+ 	{
+ 		.compatible = "mediatek,mt8173-mdp-rdma",
+ 		.data = (void *)MTK_MDP_RDMA
 -- 
 2.34.1
 
