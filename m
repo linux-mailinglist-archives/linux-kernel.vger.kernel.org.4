@@ -2,80 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 556026B64B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:06:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E39976B64BA
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229534AbjCLKGU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:06:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59068 "EHLO
+        id S229568AbjCLKGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59142 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230092AbjCLKFx (ORCPT
+        with ESMTP id S230193AbjCLKGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:05:53 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F27ED1C7D1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:04:54 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id g10so8684641eda.1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:04:54 -0700 (PDT)
+        Sun, 12 Mar 2023 06:06:18 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132867ABD
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:06:09 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id g10so8695687eda.1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:06:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678615440;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=linaro.org; s=google; t=1678615567;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=RIqRqJQWxyWyp+7pWTYPje+scwaftD+oSHprfH2ssSw=;
-        b=LwN1zyWcU+7gQx1gHeM0LZ6sL9jJ5FX9NnYNQp0itQFk17eu372cOAIxC8z+hmFoOZ
-         ya/VO817mKfi1xinlpWmDvDFqDRjWxLg9AQjI5MFOqTEilbCmpqOEVqTj11bf62Aud0B
-         mVq87JJ2nub44hMxXTv5h5yIaR6P1JI5b20AqvZNrJxruvm+v/esiuUfxl7AbDvCfBLA
-         DkW5K+BEhitTJ0hqCQ1P1ZCGW/CG5/0J08Yp/XAOijhqa/TOIN7NzDacnWa9HmtFw/nR
-         wFWyvY1LoTDOzQvtslVG1rqmHEg8xonBKClSY8G0ssNUiZKwutVTpWFoHkivNEpbiUHD
-         PqhA==
+        bh=aV+kJBet/buNFIhXzGjSgBkhcUdA9Gm7ve97F0LmOIk=;
+        b=DTrZXm3F2Ta+pPrJURrqVVFG8NNKdZQc7cvzaJYWGDa6hl/JMpfJ7+qr6pBFNbvh8+
+         5tuLtE4J4HdVotJQaO1yIkCjvGtfmsS4llGFi88cKzRR41/2l3OK9sTmz9xjS10g3qPc
+         vWwK8Vuftk70WeWLU6elp4NcFBPhBnSbAA2NS2NT8Ae0lXw8CZA+l1cTQNTDYwoDhbo0
+         yVN8O7C9CTWD+HP14dqP133/PrZYyZt9CW3BqKEcqqv0DYLyrLShTQLQiz2yWZWDBYPz
+         PohfP9qAYziG3WYUnW5ZS30oSZjI3FoTna6ByoXkEzPZAJlBF1dU9e0hXR2lUteheFoc
+         wggQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678615440;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678615567;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIqRqJQWxyWyp+7pWTYPje+scwaftD+oSHprfH2ssSw=;
-        b=FrJU+Nt4bMMLYoKUBwflfTIouYn9eR6Y7lcBOgvM9j6ZoWX4pe+LSdBurytQXZjG13
-         TteAueREy9xsjAKR3jg44CVABRe5DTld5sd2cjdRyajTwups1plrOY+pV9/Cc6Ljs7IW
-         tEkS2Atw5RCej9RYej3/zJT3VrGCgeP8AHS38k+D5U9dnqBXfsLpTvEjm64/U7pG0dG4
-         k5koL5Idv5P5nukoGwdWOHnN9inABLT6sTo9TZDcm+pEtVeoecxOG8RhQEvcmp+XJh1x
-         QCQYZI2k4K7Loviv6le7H4G5q5AmRpbqc7rCDNDIize/yCnxDeyrVPKKFjRM0k5EU5IK
-         Mv+A==
-X-Gm-Message-State: AO0yUKWJxpEfe837xJ9Suf34PL9GTyBjc2VCcOCbGZ+GlJHybNs60npy
-        6NIxtEFFN3TlWSeF7z/DDItRldbPXnlp5MekdXM=
-X-Google-Smtp-Source: AK7set9BNyklSZqUMLmjUu0BMV2qwFcaLVPC2rn+aSkSJjZmyq8uEhBBimKQ5IDtGdQHPDcEoYS4Pg==
-X-Received: by 2002:a17:906:30c8:b0:8b1:4b6d:c57a with SMTP id b8-20020a17090630c800b008b14b6dc57amr5595353ejb.21.1678615440513;
-        Sun, 12 Mar 2023 03:04:00 -0700 (PDT)
+        bh=aV+kJBet/buNFIhXzGjSgBkhcUdA9Gm7ve97F0LmOIk=;
+        b=hRYMImi/Bex4DZgZZmI8tXuDKN7otwiL7tnImQF0wnDzn7tEpV3x8M5zryjWLJv5g0
+         W2lm5c1lEldGVRqU0yKVkfp+8AaOdDkOOEnerZahJ7P9efwQ3n4usxmDA+CnDacIKCFm
+         OwkV3WTKgESoIDRm2g5XdYw3oMIsK3BMwtvsPfYA4IvlyHAcQ5bK5Pd/m6Sv7ax7b7eQ
+         Druo6WAdVwzLyS/pGEi7O79dLAlGNEKaw/leHWBbsduiF4njqbhXaYLqN4nQ3Uy7qG7/
+         icm+7vuLe+NyYV2fpz4/Kl4umPKjqFU6rKq7kjUgFOxuacAqmywUm1JI0zsI1RI3hbOJ
+         SSTw==
+X-Gm-Message-State: AO0yUKUM1aKsW6570ERBl9XWewbkHQ+uZGAUXFm341Q+yQ4kElOzYVIp
+        wuwTj79EwPMx2c4odVa8KNGo7KXnOBSJ5aVkPYk=
+X-Google-Smtp-Source: AK7set/Ie5L873rUBadNNyZph3dFtaaab0uv6A+aA0VFB83y/tpy4le60VyqHIbg0vMwHV/xVrKH6g==
+X-Received: by 2002:a05:6402:70d:b0:4fa:c9ea:b691 with SMTP id w13-20020a056402070d00b004fac9eab691mr3319374edx.6.1678615567537;
+        Sun, 12 Mar 2023 03:06:07 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id x14-20020a1709060a4e00b008dd3956c2e3sm2057895ejf.183.2023.03.12.03.03.59
+        by smtp.gmail.com with ESMTPSA id g2-20020a1709062da200b008cf377e8795sm2049206eji.199.2023.03.12.03.06.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 03:04:00 -0700 (PDT)
-Message-ID: <b159616c-f665-42c5-6fbb-841de937d868@linaro.org>
-Date:   Sun, 12 Mar 2023 11:03:58 +0100
+        Sun, 12 Mar 2023 03:06:07 -0700 (PDT)
+Message-ID: <7fd46f69-1a38-b9a8-a82e-cb2f7c5e8686@linaro.org>
+Date:   Sun, 12 Mar 2023 11:06:06 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH 2/9] regulator: max20086: Mark OF related data as maybe
+Subject: Re: [PATCH 1/2] tpm: st33zp24: Mark ACPI and OF related data as maybe
  unused
-To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-References: <20230310214553.275450-1-krzysztof.kozlowski@linaro.org>
- <20230310214553.275450-2-krzysztof.kozlowski@linaro.org>
- <20230312094216.GC707@pendragon.ideasonboard.com>
 Content-Language: en-US
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Peter Huewe <peterhuewe@gmx.de>, Jason Gunthorpe <jgg@ziepe.ca>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230311173541.262949-1-krzysztof.kozlowski@linaro.org>
+ <ZA0wlYIh3KRV/QjW@kernel.org>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230312094216.GC707@pendragon.ideasonboard.com>
+In-Reply-To: <ZA0wlYIh3KRV/QjW@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,70 +76,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 10:42, Laurent Pinchart wrote:
-> Hi Krzysztof,
-> 
-> Thank you for the patch.
-> 
-> On Fri, Mar 10, 2023 at 10:45:46PM +0100, Krzysztof Kozlowski wrote:
->> The driver can be compile tested with !CONFIG_OF making certain data
->> unused:
+On 12/03/2023 02:53, Jarkko Sakkinen wrote:
+> On Sat, Mar 11, 2023 at 06:35:40PM +0100, Krzysztof Kozlowski wrote:
+>> The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
 >>
->>   drivers/regulator/max20086-regulator.c:289:34: error: ‘max20086_dt_ids’ defined but not used [-Werror=unused-const-variable=]
+>>   drivers/char/tpm/st33zp24/i2c.c:141:34: error: ‘of_st33zp24_i2c_match’ defined but not used [-Werror=unused-const-variable=]
+>>   drivers/char/tpm/st33zp24/spi.c:258:34: error: ‘of_st33zp24_spi_match’ defined but not used [-Werror=unused-const-variable=]
 >>
 >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> Please also briefly describe the change.
+
+I lost there piece of word. Should be:
+
+"The driver can be compile tested with !CONFIG_OF or !CONFIG_ACPI making
+unused."
+
+This is self-descriptive, I think. We allow it to be unused. Solution is
+trivial and so common, I am really not sure what's the benefit to repeat
+the code in the commit msg 100 times... The code is really obvious, thus
+the commit msg focuses on the "why".
+
+> 
 >> ---
->>  drivers/regulator/max20086-regulator.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>  drivers/char/tpm/st33zp24/i2c.c | 4 ++--
+>>  drivers/char/tpm/st33zp24/spi.c | 4 ++--
+>>  2 files changed, 4 insertions(+), 4 deletions(-)
 >>
->> diff --git a/drivers/regulator/max20086-regulator.c b/drivers/regulator/max20086-regulator.c
->> index b8bf76c170fe..c98a72f43935 100644
->> --- a/drivers/regulator/max20086-regulator.c
->> +++ b/drivers/regulator/max20086-regulator.c
->> @@ -286,7 +286,7 @@ static const struct i2c_device_id max20086_i2c_id[] = {
+>> diff --git a/drivers/char/tpm/st33zp24/i2c.c b/drivers/char/tpm/st33zp24/i2c.c
+>> index c4d0b744e3cc..2d28f55ef490 100644
+>> --- a/drivers/char/tpm/st33zp24/i2c.c
+>> +++ b/drivers/char/tpm/st33zp24/i2c.c
+>> @@ -138,13 +138,13 @@ static const struct i2c_device_id st33zp24_i2c_id[] = {
+>>  };
+>>  MODULE_DEVICE_TABLE(i2c, st33zp24_i2c_id);
 >>  
->>  MODULE_DEVICE_TABLE(i2c, max20086_i2c_id);
+>> -static const struct of_device_id of_st33zp24_i2c_match[] = {
+>> +static const struct of_device_id of_st33zp24_i2c_match[] __maybe_unused = {
+>>  	{ .compatible = "st,st33zp24-i2c", },
+>>  	{}
+>>  };
+>>  MODULE_DEVICE_TABLE(of, of_st33zp24_i2c_match);
 >>  
->> -static const struct of_device_id max20086_dt_ids[] = {
->> +static const struct of_device_id max20086_dt_ids[] __maybe_unused = {
-> 
-> The following change would also work, as the of_match_table field of
-> struct device_driver isn't conditioned by CONFIG_OF:
-> 
-> diff --git a/drivers/regulator/max20086-regulator.c b/drivers/regulator/max20086-regulator.c
-> index b8bf76c170fe..ad92f84b4abb 100644
-> --- a/drivers/regulator/max20086-regulator.c
-> +++ b/drivers/regulator/max20086-regulator.c
-> @@ -320,7 +320,7 @@ MODULE_DEVICE_TABLE(of, max20086_dt_ids);
->  static struct i2c_driver max20086_regulator_driver = {
->  	.driver = {
->  		.name = "max20086",
-> -		.of_match_table = of_match_ptr(max20086_dt_ids),
-> +		.of_match_table = max20086_dt_ids,
->  	},
->  	.probe_new = max20086_i2c_probe,
->  	.id_table = max20086_i2c_id,
-> 
-> Your patch should reduce the module size without any real drawback as
-> far as I can see, so that's probably best. I'm fine with either
-> approach, so
-
-I know it would work. If you check all my patches you see both patterns
-used depending on the needs:
-https://lore.kernel.org/all/?q=f%3Akrzysztof+of_device_id
-(~100 patches so far)
-
-The point is that here the device can actually match via ID table, so OF
-table could stay optional. I don't think PRP0001 is relevant here, thus
-I proposed to keep OF table optional. Different folks have different
-opinion on that, so if general consensus is that availability of OF ID
-table (for PRP0001) is preferred, I can rework the patch towards it.
-
-
-> 
-> Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-Thanks
+>> -static const struct acpi_device_id st33zp24_i2c_acpi_match[] = {
+>> +static const struct acpi_device_id st33zp24_i2c_acpi_match[] __maybe_unused = {
+>>  	{"SMO3324"},
+>>  	{}
 
 Best regards,
 Krzysztof
