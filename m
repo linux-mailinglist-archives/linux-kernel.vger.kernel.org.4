@@ -2,173 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A16CC6B68A1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F377E6B68A5
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjCLRIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59524 "EHLO
+        id S230508AbjCLRJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:09:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCLRIr (ORCPT
+        with ESMTP id S230259AbjCLRJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:08:47 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73F891F4A8;
-        Sun, 12 Mar 2023 10:08:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2A301B80D31;
-        Sun, 12 Mar 2023 17:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31C65C433EF;
-        Sun, 12 Mar 2023 17:08:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678640922;
-        bh=duwh/9zTtLqlNZdr0l7ww97QaqoO9L+R7VxWJcfjRzE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=plCBK5SNmF67wY0cG+dQL7w79/hvUydWNlsNI95IgXNtTsGR3ydlC+3alS7h591cg
-         6YCnx3b4T/gn0v5Fkd4dai4SRMl8DoTxfy7Au06VVzzJAV9ozT2YSDJtdVpNDaPIf+
-         9/ja2ioYEh5N4K+52RIb0Hj/iGgJ7KzywPr1Kp17k2W65YRU8Gg3wKjcZAFHGx8VY0
-         iJbOsIkWJCc1s59FyLCAFwqKcuFFS0OhZ7LMRuxS8Dm9ZYQ5KGHDtuo3NY0WCxF7TV
-         zFnoAwMIohxgRy+xCQG8bdJJ0Sq//bsrVmo2iY9+jeqV3FVfhkblsYcb2d8bXdEbN3
-         ujZfRQ0QT84SA==
-Date:   Sun, 12 Mar 2023 17:08:48 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <20230312170848.651b5b2c@jic23-huawei>
-In-Reply-To: <20230312170638.3e6807b7@jic23-huawei>
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
-        <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
-        <20230312170638.3e6807b7@jic23-huawei>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        Sun, 12 Mar 2023 13:09:15 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F160321945
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:09:12 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id da10so39871525edb.3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:09:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678640951;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ur0YRak4azgO8ER8v9X1Sisyj3A0UjrzNilpdcu+HRk=;
+        b=IIumIHOspITOgjriMp5ESfe4mr+ULnDvPBgJipm3w8unQT74U3jSJ0ZYxyJ3yA7l1w
+         wzQzBmdo48JSDwrmGI5NNHrj6qB4LwBjNcm+y4kD7txoNzXnlv6W3m54HK8X+qOL5YA0
+         IY6cyOAQZmZuL9WqiPPaoGuXb3wqfwCMSmzUPXNTQBiq1ErNXeA5UtcMRXcnh0xzlDK6
+         87eT+bj19kVx2bzZiI8RHt/APiSIdokGzw/U5ZgKxoJrWKwXnQFPWFgHdszEeIHUE9RR
+         w+1cESbv7K+k5D0KDdqDm0NdHJzG8kigScImY2DdcrNQeGzwaQwMCyLrse+TD39Ykv78
+         /P2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678640951;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ur0YRak4azgO8ER8v9X1Sisyj3A0UjrzNilpdcu+HRk=;
+        b=dyfFsMfAERUXHxYVgnTWU7fCeV5fPhZRxtaWCNzY5veTvVjbzJ9upfLSCriDeHthY2
+         fOyAoFi06vRelpr+ai+1AOll/ZwWqj627oAlhc/YfZV8sdlkoRZBZf5hHNYfuXRMOzSk
+         640hX+B6TgztyDW7zkHr8i1lZjRCHVmzoQuoecV377/8AKREE+IinuBNEBj+4f6HUeja
+         RVztmRhZEfLdFW9SBlyLfvS/SobcD55HuMWSG+yvD3RI9s6aCUZqexMNL4rN5Jj7gSwV
+         L4sMdctTKlAlm6enEgvH8CjJXcIFUPfkH/ArdegUe7vwmJFoLRPel6QfO1prIPttevLv
+         +jFA==
+X-Gm-Message-State: AO0yUKXtYQ1/C6G1kWbddxsB4FQqIyfH++7nmIpDl7xiF+WtvaC5llbv
+        QeoeR4pptEHSuqUm5U5eZg/VtA==
+X-Google-Smtp-Source: AK7set+9rjs/pkVy7AWNiNv0a34Mg1Vn463+p/9TwJdBU4BL6GlFQorb6rS66Q1i0nTHMIp1JktUoQ==
+X-Received: by 2002:a17:906:3b48:b0:921:da99:f39c with SMTP id h8-20020a1709063b4800b00921da99f39cmr5463449ejf.12.1678640951442;
+        Sun, 12 Mar 2023 10:09:11 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id i5-20020a170906850500b0091e1878bc59sm2425726ejx.68.2023.03.12.10.09.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 10:09:11 -0700 (PDT)
+Message-ID: <f34ba6e5-4a8d-0812-c334-ea47de7b1d21@linaro.org>
+Date:   Sun, 12 Mar 2023 18:09:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/2] dt-bindings: exynos-dw-mshc-common: add exynos78xx
+ variants
+Content-Language: en-US
+To:     Sergey Lisov <sleirsgoevy@gmail.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <640e0136.c20a0220.2d5bf.1959@mx.google.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <640e0136.c20a0220.2d5bf.1959@mx.google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 12 Mar 2023 17:06:38 +0000
-Jonathan Cameron <jic23@kernel.org> wrote:
+On 12/03/2023 17:43, Sergey Lisov wrote:
+>> Bindings and DTS (and driver) are always separate.
+> 
+> Okay, will split the patch.
+> 
+>> Compatibles must be specific.
+> 
+> No, this way you'd have tons of identical compatibles that only differ in
+> the exynosXXXX digits, and are functionally equivalent.
 
-> On Mon, 6 Mar 2023 11:17:15 +0200
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
-> > Some light sensors can adjust both the HW-gain and integration time.
-> > There are cases where adjusting the integration time has similar impact
-> > to the scale of the reported values as gain setting has.
-> > 
-> > IIO users do typically expect to handle scale by a single writable 'scale'
-> > entry. Driver should then adjust the gain/time accordingly.
-> > 
-> > It however is difficult for a driver to know whether it should change
-> > gain or integration time to meet the requested scale. Usually it is
-> > preferred to have longer integration time which usually improves
-> > accuracy, but there may be use-cases where long measurement times can be
-> > an issue. Thus it can be preferable to allow also changing the
-> > integration time - but mitigate the scale impact by also changing the gain
-> > underneath. Eg, if integration time change doubles the measured values,
-> > the driver can reduce the HW-gain to half.
-> > 
-> > The theory of the computations of gain-time-scale is simple. However,
-> > some people (undersigned) got that implemented wrong for more than once.
-> > 
-> > Add some gain-time-scale helpers in order to not dublicate errors in all
-> > drivers needing these computations.
-> > 
-> > Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>  
-> 
-> Trying not to duplicate what Andy has raised...
-> 
-> 
-> At some stage I want to go through the maths very carefully but it's
-> not happening today and I don't want to delay resolving other remaining comments
-> so that can wait for a later version. I'm sure it's fine but I like to be
-> paranoid :)
-> 
-> > +int iio_gts_get_total_gain(struct iio_gts *gts, int gain, int time)
-> > +{
-> > +	const struct iio_itime_sel_mul *itime;
-> > +
-> > +	if (!iio_gts_valid_gain(gts, gain))
-> > +		return -EINVAL;
-> > +
-> > +	if (!gts->num_itime)
-> > +		return gain;
-> > +
-> > +	itime = iio_gts_find_itime_by_time(gts, time);
-> > +	if (!itime)
-> > +		return -EINVAL;
-> > +
-> > +	return gain * itime->mul;
-> > +}
-> > +EXPORT_SYMBOL(iio_gts_get_total_gain);  
-> 
-> All of them want to be in the namespace.
-> 
-> 
-> 
-> > diff --git a/drivers/iio/light/iio-gts-helper.h b/drivers/iio/light/iio-gts-helper.h
-> > new file mode 100644
-> > index 000000000000..4b5a417946f4
-> > --- /dev/null
-> > +++ b/drivers/iio/light/iio-gts-helper.h  
-> 
-> ...
-> 
-> > +int iio_gts_find_new_gain_sel_by_old_gain_time(struct iio_gts *gts,
-> > +					       int old_gain, int old_time_sel,
-> > +					       int new_time_sel, int *new_gain);
-> > +int iio_gts_build_avail_tables(struct iio_gts *gts);
-> > +int devm_iio_gts_build_avail_tables(struct device *dev, struct iio_gts *gts);
-> > +int iio_gts_build_avail_scale_table(struct iio_gts *gts);
-> > +int devm_iio_gts_build_avail_scale_table(struct device *dev, struct iio_gts *gts);
-> > +int iio_gts_build_avail_time_table(struct iio_gts *gts);
-> > +int devm_iio_gts_build_avail_time_table(struct device *dev, struct iio_gts *gts);  
-> 
-> Given most modern IIO drivers use fully devm_ based probing, for now I would not
-> expose anything else.  That will reduce the interface a lot which I think
-> is probably a good thing at this stage. 
-> 
-> Keep the non devm stuff internally though as it is a nice structure to have
-> an I can see we may want some of these in non devm form in the future.
-> 
-> Similarly - for now don't expose the individual table building functions
-> as we may never need them in drivers.  We (more or less) only support interfaces
-> that are used and so far they aren't.
-> 
-> For other functions it's worth thinking about whether to not export them
-> initially. I haven't been through them all to figure out what is not currently used.
-> 
-Ah. I forgot the tests that don't have a device so can't use devm.
+Thanks for letting me know.
 
-Ah well I guess we have to keep some of the other cases.
+https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
 
+>> That's non-bisectable change (also breaking other users of DTS), so you
+>> need to explain in commit msg rationale - devices were never compatible
+>> and using exynos7 does not work in certain cases.
 
-> > +void iio_gts_purge_avail_scale_table(struct iio_gts *gts);
-> > +void iio_gts_purge_avail_time_table(struct iio_gts *gts);
-> > +void iio_gts_purge_avail_tables(struct iio_gts *gts);
-> > +int iio_gts_avail_times(struct iio_gts *gts,  const int **vals, int *type,
-> > +			int *length);
-> > +int iio_gts_all_avail_scales(struct iio_gts *gts, const int **vals, int *type,
-> > +			     int *length);
-> > +int iio_gts_avail_scales_for_time(struct iio_gts *gts, int time,
-> > +				  const int **vals, int *type, int *length);
-> > +
-> > +#endif  
-> 
+BTW, this rationale was only example - you need to come with something real.
+
+Best regards,
+Krzysztof
 
