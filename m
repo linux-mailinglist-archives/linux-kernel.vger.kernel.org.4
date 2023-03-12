@@ -2,129 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62E1B6B6360
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 06:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D45036B636C
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 06:49:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjCLFli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 00:41:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37828 "EHLO
+        id S229637AbjCLFtT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 00:49:19 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbjCLFlf (ORCPT
+        with ESMTP id S229649AbjCLFtH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 00:41:35 -0500
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 146125BCA7;
-        Sat, 11 Mar 2023 21:41:34 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9D18360EA5;
-        Sun, 12 Mar 2023 05:41:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02FE5C433D2;
-        Sun, 12 Mar 2023 05:41:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678599693;
-        bh=QaFFgd2cnWDQnuLdGTtcv3x5c/kAzwH/MKx0hlXNgZw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=Mlr0Dn55uGHe5nDjvfnHXXUxyYML1BKODykRxiKq8QhAz+4N9GuBirbVRuaJ0jPyi
-         ONcZ+XAp2r22FZZ8iu7EbywYRn+puKZ4oCJPdfVtpcMtIZFWdcKyiyxZBPmlN2ABDd
-         R8wVKOZdVoqFoo7BfyZuKozaAoMtWlRHQniGc4l+NzzWWCZj9vMXiPC95cBTh+hG3+
-         ilPjy+PvdiYaSMw+Y1T2YkxRIrIDstuM/r8CW4WZH2FgiBa7gVt7tntpvRBVL2cLCl
-         NnwSp7+tcUAOSjfH4Vr1cRWy9RH6yhuMOQa/NtmjKpD15HdRQau4/0t074HplmOLiL
-         tdzJBodg1h0BQ==
-Received: by mail-oi1-f172.google.com with SMTP id c11so7339359oiw.2;
-        Sat, 11 Mar 2023 21:41:32 -0800 (PST)
-X-Gm-Message-State: AO0yUKVOAS+g8SjMK2KhWwgfjdUpc3VJh6uOU90J3MiC88vy84qkinHf
-        jVyAHXCoidSU6+Wp3fofPpR+LTDsxk0KqSjIQEo=
-X-Google-Smtp-Source: AK7set/zcE73h0tlnIkJ11cYC/oC8mxS0fxTa2HZr8i4hr3bWbSsrxYj/MH7ble7ct6yZ7xfNwwmjGdKc0Q0HlCbGTY=
-X-Received: by 2002:aca:240d:0:b0:384:22aa:f4cf with SMTP id
- n13-20020aca240d000000b0038422aaf4cfmr8805119oic.8.1678599692283; Sat, 11 Mar
- 2023 21:41:32 -0800 (PST)
+        Sun, 12 Mar 2023 00:49:07 -0500
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 16F1C3ABC;
+        Sat, 11 Mar 2023 21:48:53 -0800 (PST)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32C5mbBh000603;
+        Sun, 12 Mar 2023 06:48:37 +0100
+Date:   Sun, 12 Mar 2023 06:48:37 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     "Theodore Ts'o" <tytso@mit.edu>, Sasha Levin <sashal@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: AUTOSEL process
+Message-ID: <ZA1ntR9zulFAZyKJ@1wt.eu>
+References: <ZAwe95meyCiv6qc4@casper.infradead.org>
+ <ZAyK0KM6JmVOvQWy@sashalap>
+ <20230311161644.GH860405@mit.edu>
+ <ZAy+3f1/xfl6dWpI@sol.localdomain>
+ <ZAzJltJaydwjCN6E@1wt.eu>
+ <ZAzVbzthi8IfptFZ@sol.localdomain>
+ <ZAzghyeiac3Zh8Hh@1wt.eu>
+ <ZAzqSeus4iqCOf1O@sol.localdomain>
+ <ZA1V4MbG6U3wP6q6@1wt.eu>
+ <ZA1hdkrOKLG697RG@sol.localdomain>
 MIME-Version: 1.0
-References: <20230306223208.6277-1-bage@linutronix.de> <20230306223208.6277-2-bage@linutronix.de>
-In-Reply-To: <20230306223208.6277-2-bage@linutronix.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 12 Mar 2023 14:40:56 +0900
-X-Gmail-Original-Message-ID: <CAK7LNASJ2FqtRGhwYkUoi1cbqsK16jaGGLiBHWb0G_Mq3kcQdA@mail.gmail.com>
-Message-ID: <CAK7LNASJ2FqtRGhwYkUoi1cbqsK16jaGGLiBHWb0G_Mq3kcQdA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] builddeb: introduce profile excluding the dbg pkg
-To:     Bastian Germann <bage@linutronix.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZA1hdkrOKLG697RG@sol.localdomain>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 7, 2023 at 7:32=E2=80=AFAM Bastian Germann <bage@linutronix.de>=
- wrote:
->
-> Enabling CONFIG_DEBUG_INFO implies building the binary linux-image-*-dbg.
-> As this increases package build time significantly, one might want to
-> exclude it from being built.
+On Sat, Mar 11, 2023 at 09:21:58PM -0800, Eric Biggers wrote:
+> I mean, "patches welcome" is a bit pointless when there is nothing to patch, is
+> it not?
 
+Maybe it's because they're used to regularly receive complaints suggesting
+to improve the process without knowing where to start from.
 
-Did you confirm if this patch saved the build time in any way?
-If so, please provide me with the steps to test it.
+> Even Sasha's stable-tools, which he finally gave a link to, does not
+> include anything related to AUTOSEL.  It seems AUTOSEL is still closed source.
 
+I don't know.
 
->
-> Add build profile pkg.$sourcename.nokerneldbg for that package
-> so it can be excluded via e.g.
-> `make DPKG_FLAGS=3D"-P=3Dpkg.linux-upstream.nokerneldbg" deb-pkg`
+> BTW, I already did something similar "off to the side" a few years ago when I
+> wrote a script to keep track of and prioritize syzbot reports from
+> https://syzkaller.appspot.com/, and generate per-subsystem reminder emails.
+> 
+> I eventually ended up abandoning that, because doing something off to the side
+> is not very effective and is hard to keep up with.  The right approach is to
+> make improvements to the "upstream" process (which was syzbot in that case), not
+> to bolt something on to the side to try to fix it after the fact.
 
-The correct command is:
+I think that improving the upstreaming process does have some value,
+of course, especially when it's done from tools that can reliably and
+durably be improved. But it's not rocket science when input comes from
+humans. We still occasionally see patches missing an s-o-b. Humans can't
+be fixed, and the more the constraints that are added on them, the higher
+the failure rate they will show. However, regardless of the detailed
+knowledge of how to format this or that tag, it should still be possible
+for any patch author to answer the question "what do you want us to do
+with that patch". If most of the patches at least contain such info, it
+already becomes possible to figure after it gets merged whether the intent
+was to get it backported or not. It's not trivial but NLP and code analysis
+definitely help on this. And there will always be some patches whose need
+for backporting will be detected after the merge. That's why I'm seeing a
+lot of value in the post-processing part, because for me trying to fix
+the input will have a very limited effect.
 
- `make DPKG_FLAGS=3D"-Ppkg.linux-upstream.nokerneldbg" deb-pkg`
+And let's face it, if a patch series gets merged, it means that at some
+point someone understood what to do with it, so all the needed information
+was already there, given a certain context. The cost is thousands of
+brains needed to decode that. But with the improvements in language
+processing, we should at some point be able to release some brains with
+more-or-less similar results and try to lower the barrier to contribution
+by relaxing patch submission rules instead of adding more. My feeling is
+that it's what we should aim for given that the number of maintainers and
+contributors doesn't seem to grow as fast as the code size and complexity.
 
+That's where I'm seeing a lot of value in the AUTOSEL work. If it can show
+the direction to something better so that in 3 or 4 years we can think
+back and say "remember the garbage it was compared to what we have now",
+I think it will have been a fantastic success.
 
--P<profile>                         (without '=3D' for the short option)
-       or
---build-profiles=3D<profile>    (with '=3D' for the long option)
+> So I hope people can understand where I'm coming from, with hoping that what the
+> stable maintainers are doing can just be improved directly, without first
+> building something from scratch off to the side as that is just not a good way
+> to do things.
 
+It's generally not good but here there's little to start from, and
+experimenting with your ideas on LKML threads or commit series can be
+a nice way to explore completely different approaches without being
+limited by what currently exists. Maybe you'll end up with something
+completely orthogonal and the combination of both of your solutions
+will already be a nice improvement. who knows.
 
+> But sure, if that's the only option to get anything nontrivial
+> changed, I'll try to do it.
 
-I will postpone this because just adding Build-Profiles does nothing.
-
-
-
-
->
-> The name is the same that is used in Debian's linux package since version
-> 5.17~rc4-1~exp1.
->
-> Link: https://wiki.debian.org/BuildProfileSpec
-> Link: https://salsa.debian.org/kernel-team/linux/-/commit/140798ec2789
-> Signed-off-by: Bastian Germann <bage@linutronix.de>
-> ---
->  scripts/package/mkdebian | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-> index f74380036bb5..8a7969926e53 100755
-> --- a/scripts/package/mkdebian
-> +++ b/scripts/package/mkdebian
-> @@ -227,6 +227,7 @@ if is_enabled CONFIG_DEBUG_INFO; then
->  cat <<EOF >> debian/control
->
->  Package: linux-image-$version-dbg
-> +Build-Profiles: <!pkg.$sourcename.nokerneldbg>
->  Section: debug
->  Architecture: $debarch
->  Description: Linux kernel debugging symbols for $version
-> --
-> 2.39.2
->
-
-
---
-Best Regards
-Masahiro Yamada
+Thanks!
+Willy
