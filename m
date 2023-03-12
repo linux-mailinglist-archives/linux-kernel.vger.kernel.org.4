@@ -2,224 +2,207 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE1716B6315
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 04:52:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B436B6316
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 04:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229612AbjCLDwe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 22:52:34 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49888 "EHLO
+        id S229601AbjCLDy2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 22:54:28 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54700 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLDwc (ORCPT
+        with ESMTP id S229437AbjCLDy1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 22:52:32 -0500
-Received: from mail-qv1-xf34.google.com (mail-qv1-xf34.google.com [IPv6:2607:f8b0:4864:20::f34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 470A85CECE;
-        Sat, 11 Mar 2023 19:52:31 -0800 (PST)
-Received: by mail-qv1-xf34.google.com with SMTP id nf5so6258399qvb.5;
-        Sat, 11 Mar 2023 19:52:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678593149;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6GxSSWG7fTQKIRuUDTT1ahYRQmQaqbN8UiIjRR5fH70=;
-        b=Ciew6JzH7o9zpzZYIIB2bwZt1hfdux+6MVNd5o6Qqczsx7uOko8ymcib/FxaqMgNZL
-         iGiEYw2zOhOvsG+FUCU0I105Gx+Wx8B++iEaUX6vg+fFDWCvm5hh0YtoMEHHvt73MzFr
-         fc+ruIO6oOZipRAO3e1w+f84pC3D0gzvUa0/otmFpCLAc5+BTAAdRQ3yi2yeqk4kGeDe
-         NngYxZtK1NsDmoakvn2dZCK8uO2Ms6RARyubFOwhsGUaEAHk4fpzJkCs6szlJsXKwG2H
-         cbYoY4bSvgD9BGCwJFoO3fGQF08SZ2T+GR6t0owIvTT25rtlP1vct5O3bJSHR29RXFMi
-         jPHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678593149;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6GxSSWG7fTQKIRuUDTT1ahYRQmQaqbN8UiIjRR5fH70=;
-        b=i7Xv5w1t4i+NSXijNBRViLCvLoRjGLITk5tqILC3eD42pIdMUIWSbpcz/grhBOSa6u
-         p2m/J3vJxGCksb2VMq5EKgJeDqNdbTv8qyyDcDgsREmWd8gEDzuh7eI0gJChqxjdjzHS
-         OM+y9fghbk04SzQ4OFn7A4Vv6N1OuZnZoZ1JThJCBzryIzn/bzs24FF7zjlSDqNtT6WN
-         p4cPTmasGopGYaY3xMOdBOsau8R+t6IAcXytj7/ieOiuFiqNk9FrL4xJFJdNZQftPFDl
-         wAoZRq1og1rVayYtG10GwJUavuiydgEnjikaI/mjg5bQROtD0uBz8spuNfbtePZ+DbQs
-         3AUg==
-X-Gm-Message-State: AO0yUKUOmXgefPx+k/YqpOhN6LhY4KDkiEIcuCT3O+wqKiYJZUp882iN
-        qdyPKouNe3UQAdxPWy8he3w=
-X-Google-Smtp-Source: AK7set/IPwXVnEZqhcnIkzhye9GTxH/oGXfVOo2vY+S+DyaHWEIi/Qzx/Gfu5Omsc38rtziaAJOKIQ==
-X-Received: by 2002:a05:6214:1c49:b0:56e:b427:819b with SMTP id if9-20020a0562141c4900b0056eb427819bmr7918409qvb.16.1678593149420;
-        Sat, 11 Mar 2023 19:52:29 -0800 (PST)
-Received: from ?IPV6:2600:1700:2442:6db0:147a:a472:2165:1ae5? ([2600:1700:2442:6db0:147a:a472:2165:1ae5])
-        by smtp.gmail.com with ESMTPSA id j6-20020ac86646000000b003bfb820f17csm2911595qtp.63.2023.03.11.19.52.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 11 Mar 2023 19:52:28 -0800 (PST)
-Message-ID: <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
-Date:   Sat, 11 Mar 2023 21:52:28 -0600
+        Sat, 11 Mar 2023 22:54:27 -0500
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2B75FEBD
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 19:54:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678593265; x=1710129265;
+  h=message-id:date:mime-version:cc:subject:to:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ACoxk4/PlDtRtWi+8jMhKo8m5Plk+RdEI+p16laYChY=;
+  b=Fl6qXV59XzHHEpEpkPucYVVRQG5lB6iQ3iDP9nSO+vhROZWPf8FNBu9D
+   TS7+A8IyQ2DjhZFD7/fR9aLXB3PISgs8gurmn5rdxveH75Fgee7HM+JIu
+   MvmZQj+zcZ1GTvsEEexN2T8oHgBvHfQ2FM7vakhNXdJpMqpcQVz36IlKq
+   zWCeTJuoBWkIoZtFM767JDsg4Vq6TIPyH+/RBctg3RwV4dRw0hV25Cch0
+   3oIdnd6/A6bxyjkL6B7Fnvgdav34C9UyO0Sv9d4YDeP3ZLDSbZkkY877K
+   qcuUhjmv290NBtT0+cyKCIhEvj5vywOaXgIPENq5A3Tu/CJ+ZAjNao8JO
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="399555390"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="399555390"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 19:54:25 -0800
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="671505664"
+X-IronPort-AV: E=Sophos;i="5.98,253,1673942400"; 
+   d="scan'208";a="671505664"
+Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
+  by orsmga007.jf.intel.com with ESMTP; 11 Mar 2023 19:54:22 -0800
+Message-ID: <dd70b106-5235-7b39-157c-9952f1068bc0@linux.intel.com>
+Date:   Sun, 12 Mar 2023 11:53:20 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.7.1
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
+Cc:     baolu.lu@linux.intel.com, Joerg Roedel <joro@8bytes.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/6] ARM/dma-mapping: Add arm_iommu_release_device()
 Content-Language: en-US
-To:     Rae Moar <rmoar@google.com>, davidgow@google.com,
-        skhan@linuxfoundation.org, keescook@chromium.org,
-        Tim.Bird@sony.com, brendanhiggins@google.com
-Cc:     corbet@lwn.net, guillaume.tucker@collabora.com,
-        dlatypov@google.com, kernelci@groups.io,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230310222002.3633162-1-rmoar@google.com>
-From:   Frank Rowand <frowand.list@gmail.com>
-In-Reply-To: <20230310222002.3633162-1-rmoar@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+To:     Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev
+References: <20230306025804.13912-1-baolu.lu@linux.intel.com>
+ <20230306025804.13912-2-baolu.lu@linux.intel.com>
+ <7b248ba1-3967-5cd8-82e9-0268c706d320@arm.com>
+From:   Baolu Lu <baolu.lu@linux.intel.com>
+In-Reply-To: <7b248ba1-3967-5cd8-82e9-0268c706d320@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 16:20, Rae Moar wrote:
-> Add the test result "skip" to KTAP version 2 as an alternative way to
-> indicate a test was skipped.
+On 3/11/23 6:04 AM, Robin Murphy wrote:
+> On 2023-03-06 02:57, Lu Baolu wrote:
+>> It is like arm_iommu_detach_device() except it handles the special case
+>> of being called under an iommu driver's release operation. In this case
+>> the driver must have already detached the device from any attached
+>> domain before calling this function.
+>>
+>> Replace arm_iommu_detach_device() with arm_iommu_release_device() in the
+>> release path of the ipmmu-vmsa driver.
+>>
+>> The bonus is that it also removes a obstacle of arm_iommu_detach_device()
+>> re-entering the iommu core during release_device. With this removed, the
+>> iommu core code could be simplified a lot.
+>>
+>> Signed-off-by: Jason Gunthorpe <jgg@nvidia.com>
+>> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
+>> ---
+>>   arch/arm/include/asm/dma-iommu.h |  1 +
+>>   arch/arm/mm/dma-mapping.c        | 25 +++++++++++++++++++++++++
+>>   drivers/iommu/ipmmu-vmsa.c       | 15 +++++++++++++--
+>>   3 files changed, 39 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/arch/arm/include/asm/dma-iommu.h 
+>> b/arch/arm/include/asm/dma-iommu.h
+>> index fe9ef6f79e9c..ea7198a17861 100644
+>> --- a/arch/arm/include/asm/dma-iommu.h
+>> +++ b/arch/arm/include/asm/dma-iommu.h
+>> @@ -31,6 +31,7 @@ void arm_iommu_release_mapping(struct 
+>> dma_iommu_mapping *mapping);
+>>   int arm_iommu_attach_device(struct device *dev,
+>>                       struct dma_iommu_mapping *mapping);
+>>   void arm_iommu_detach_device(struct device *dev);
+>> +void arm_iommu_release_device(struct device *dev);
+>>   #endif /* __KERNEL__ */
+>>   #endif
+>> diff --git a/arch/arm/mm/dma-mapping.c b/arch/arm/mm/dma-mapping.c
+>> index 8bc01071474a..96fa27f4a164 100644
+>> --- a/arch/arm/mm/dma-mapping.c
+>> +++ b/arch/arm/mm/dma-mapping.c
+>> @@ -1682,6 +1682,31 @@ int arm_iommu_attach_device(struct device *dev,
+>>   }
+>>   EXPORT_SYMBOL_GPL(arm_iommu_attach_device);
+>> +/**
+>> + * arm_iommu_release_device
+>> + * @dev: valid struct device pointer
+>> + *
+>> + * This is like arm_iommu_detach_device() except it handles the special
+>> + * case of being called under an iommu driver's release operation. In 
+>> this
+>> + * case the driver must have already detached the device from any 
+>> attached
+>> + * domain before calling this function.
+>> + */
+>> +void arm_iommu_release_device(struct device *dev)
+>> +{
+>> +    struct dma_iommu_mapping *mapping;
+>> +
+>> +    mapping = to_dma_iommu_mapping(dev);
+>> +    if (!mapping) {
+>> +        dev_warn(dev, "Not attached\n");
+>> +        return;
+>> +    }
+>> +
+>> +    kref_put(&mapping->kref, release_iommu_mapping);
+>> +    to_dma_iommu_mapping(dev) = NULL;
+>> +    set_dma_ops(dev, NULL);
+>> +}
+>> +EXPORT_SYMBOL_GPL(arm_iommu_release_device);
+>> +
+>>   /**
+>>    * arm_iommu_detach_device
+>>    * @dev: valid struct device pointer
+>> diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
+>> index bdf1a4e5eae0..de9c74cf61a4 100644
+>> --- a/drivers/iommu/ipmmu-vmsa.c
+>> +++ b/drivers/iommu/ipmmu-vmsa.c
+>> @@ -30,7 +30,7 @@
+>>   #define arm_iommu_create_mapping(...)    NULL
+>>   #define arm_iommu_attach_device(...)    -ENODEV
+>>   #define arm_iommu_release_mapping(...)    do {} while (0)
+>> -#define arm_iommu_detach_device(...)    do {} while (0)
+>> +#define arm_iommu_release_device(...)    do {} while (0)
+>>   #endif
+>>   #define IPMMU_CTX_MAX        16U
+>> @@ -820,7 +820,18 @@ static void ipmmu_probe_finalize(struct device *dev)
+>>   static void ipmmu_release_device(struct device *dev)
+>>   {
+>> -    arm_iommu_detach_device(dev);
+>> +    struct iommu_fwspec *fwspec = dev_iommu_fwspec_get(dev);
+>> +    struct ipmmu_vmsa_device *mmu = to_ipmmu(dev);
+>> +    unsigned int i;
+>> +
+>> +    for (i = 0; i < fwspec->num_ids; ++i) {
+>> +        unsigned int utlb = fwspec->ids[i];
+>> +
+>> +        ipmmu_imuctr_write(mmu, utlb, 0);
+>> +        mmu->utlb_ctx[utlb] = IPMMU_CTX_INVALID;
+>> +    }
+>> +
+>> +    arm_iommu_release_device(dev);
 > 
-> The current spec uses the "#SKIP" directive to indicate that a test was
-> skipped. However, the "#SKIP" directive is not always evident when quickly
-> skimming through KTAP results.
-> 
-> The "skip" result would provide an alternative that could make it clearer
-> that a test has not successfully passed because it was skipped.
-> 
-> Before:
-> 
->  KTAP version 1
->  1..1
->    KTAP version 1
->    1..2
->    ok 1 case_1
->    ok 2 case_2 #SKIP
->  ok 1 suite
-> 
-> After:
-> 
->  KTAP version 2
->  1..1
->    KTAP version 2
->    1..2
->    ok 1 case_1
->    skip 2 case_2
->  ok 1 suite
-> 
-> Here is a link to a version of the KUnit parser that is able to parse
-> the skip test result for KTAP version 2. Note this parser is still able
-> to parse the "#SKIP" directive.
-> 
-> Link: https://kunit-review.googlesource.com/c/linux/+/5689
-> 
-> Signed-off-by: Rae Moar <rmoar@google.com>
-> ---> 
-> Note: this patch is based on Frank's ktap_spec_version_2 branch.
-> 
->  Documentation/dev-tools/ktap.rst | 27 ++++++++++++++++++---------
->  1 file changed, 18 insertions(+), 9 deletions(-)
-> 
-> diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools/ktap.rst
-> index ff77f4aaa6ef..f48aa00db8f0 100644
-> --- a/Documentation/dev-tools/ktap.rst
-> +++ b/Documentation/dev-tools/ktap.rst
-> @@ -74,7 +74,8 @@ They are required and must have the format:
->  	<result> <number> [<description>][ # [<directive>] [<diagnostic data>]]
->  
->  The result can be either "ok", which indicates the test case passed,
-> -or "not ok", which indicates that the test case failed.
-> +"not ok", which indicates that the test case failed, or "skip", which indicates
-> +the test case did not run.
->  
->  <number> represents the number of the test being performed. The first test must
->  have the number 1 and the number then must increase by 1 for each additional
-> @@ -91,12 +92,13 @@ A directive is a keyword that indicates a different outcome for a test other
->  than passed and failed. The directive is optional, and consists of a single
->  keyword preceding the diagnostic data. In the event that a parser encounters
->  a directive it doesn't support, it should fall back to the "ok" / "not ok"
-> -result.
-> +/ "skip" result.
->  
->  Currently accepted directives are:
->  
-> -- "SKIP", which indicates a test was skipped (note the result of the test case
-> -  result line can be either "ok" or "not ok" if the SKIP directive is used)
+> Just call the existing arm_iommu_release_mapping(). Look at where the 
+> BUS_NOTIFY_REMOVED_DEVICE point is in device_del(); this device is not 
+> coming back. Zeroing out pointers and testing for a condition which 
+> cannot be true by construction is simply a waste of time and code.
 
-> +- "SKIP", which indicates a test was skipped (note this is an alternative to
-> +  the "skip" result type and if the SKIP directive is used, the
-> +  result can be any type - "ok", "not ok", or "skip")
+Fair enough. But the driver seems to have done things wrong.
 
-For the "SKIP" directive, result type of either "ok", or "not ok" reflects the
-current real world usage, which is mixed.  I agree is makes sense to also
-allow the result type of "skip" with the "SKIP directive.
+It creates arm mappings in iommu probe path, but release it in the
+driver's .remove path (see ipmmu_remove()). So perhaps we should move
+calling arm_iommu_release_mapping() from ipmmu_remove() to
+ipmmu_release_device()?
 
-I think it would be good to deprecate the "SKIP" directive, with a scheduled
-removal in the V3 specification - that would allow plenty of time for test
-parsers to process both V1 and V2 data, before removing processing of V1 data.
+diff --git a/drivers/iommu/ipmmu-vmsa.c b/drivers/iommu/ipmmu-vmsa.c
+index de9c74cf61a4..057050c28360 100644
+--- a/drivers/iommu/ipmmu-vmsa.c
++++ b/drivers/iommu/ipmmu-vmsa.c
+@@ -831,7 +831,7 @@ static void ipmmu_release_device(struct device *dev)
+                 mmu->utlb_ctx[utlb] = IPMMU_CTX_INVALID;
+         }
 
-If so, the deprecation plan should be documented.
+-       arm_iommu_release_device(dev);
++       arm_iommu_release_mapping(mmu->mapping);
+  }
 
->  - "TODO", which indicates that a test is not expected to pass at the moment,
->    e.g. because the feature it is testing is known to be broken. While this>    directive is inherited from TAP, its use in the kernel is discouraged.
-> @@ -110,7 +112,7 @@ Currently accepted directives are:
->  
->  The diagnostic data is a plain-text field which contains any additional details
->  about why this result was produced. This is typically an error message for ERROR
-> -or failed tests, or a description of missing dependencies for a SKIP result.
-> +or failed tests, or a description of missing dependencies for a skipped test.
->  
->  The diagnostic data field is optional, and results which have neither a
->  directive nor any diagnostic data do not need to include the "#" field
-> @@ -130,11 +132,18 @@ The test "test_case_name" failed.
->  
->  ::
->  
-> -	ok 1 test # SKIP necessary dependency unavailable
-> +	skip 1 test # necessary dependency unavailable
+  static struct iommu_group *ipmmu_find_group(struct device *dev)
+@@ -1091,8 +1091,6 @@ static int ipmmu_remove(struct platform_device *pdev)
+         iommu_device_sysfs_remove(&mmu->iommu);
+         iommu_device_unregister(&mmu->iommu);
 
-Maybe add a note that the "skip" result method is preferred over the below
-"ok ... # SKIP..." example below.
+-       arm_iommu_release_mapping(mmu->mapping);
+-
+         ipmmu_device_reset(mmu);
 
->  
-> -The test "test" was SKIPPED with the diagnostic message "necessary dependency
-> +The test "test" was skipped with the diagnostic message "necessary dependency
->  unavailable".
->  
-> +::
-> +
-> +	ok 1 test_2 # SKIP this test should not run
-> +
-> +The test "test_2" was skipped with the diagnostic message "this test
-> +should not run".
+         return 0;
 
-Maybe add a deprecation note here.
-
-> +
->  ::
->  
->  	not ok 1 test # TIMEOUT 30 seconds
-> @@ -225,7 +234,7 @@ An example format with multiple levels of nested testing:
->  	    not ok 1 test_1
->  	    ok 2 test_2
->  	  not ok 1 test_3
-> -	  ok 2 test_4 # SKIP
-> +	  skip 2 test_4
->  	not ok 1 example_test_1
->  	ok 2 example_test_2
->  
-> @@ -262,7 +271,7 @@ Example KTAP output
->  	  ok 1 example_test_1
->  	    KTAP version 2
->  	    1..2
-> -	    ok 1 test_1 # SKIP test_1 skipped
-> +	    skip 1 test_1 # test_1 skipped
->  	    ok 2 test_2
->  	  ok 2 example_test_2
->  	    KTAP version 2
-> 
-> base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
-
+Best regards,
+baolu
