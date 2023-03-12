@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 069D36B656E
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:28:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 955966B6568
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:27:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230310AbjCLL1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:27:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
+        id S230289AbjCLL1Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:27:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230416AbjCLL1g (ORCPT
+        with ESMTP id S230249AbjCLL0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:27:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99FFB52F78
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:27:15 -0700 (PDT)
+        Sun, 12 Mar 2023 07:26:42 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A326052F4C
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:26:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678620435; x=1710156435;
+  t=1678620398; x=1710156398;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=dORBfkbxhzi1hEEMwZ37gZ5mNHOdLznvEXqItjRFy7I=;
-  b=eww8sX4S44/68TdF8QPGmaDF3L4OCHtSSV8foOx0eVm8KatkwFcXRkRw
-   MO0s5BTHvo/R8SInWBqkUvJWGzQjmT1XHEbn5Vtbq2gauld1B288bTu9+
-   mdy9xKhc4K1IHdWiZx00hg+w00a/9mKA+O+0pD3nGh5XkR2XjaIvUnePf
-   v6oM9fGykTKM0MOeKvnWLNdiHfWX+IqX1DYK6iJxfwKmNq51xSFEaGoAN
-   exlw/nZP1Z/bAK2Z2pDNnWEZ35BZU8+voT4hQrjfTaVNCicGyo9w03LTo
-   gDaLHoh7tKdITz7oo7HIBwre6L/nTYxb+CK9zvH7/8TRjVukGKL/fxWqU
+  bh=+iKOETahP1WXZi4zcV24NixONYfrth/yIw9MG3r4KgU=;
+  b=DL+rX3xjk6tEfmSRwiunsyVURZjWenxeK7sMdQo4J1oORiDy+4U2ddOh
+   HOOtQ0gnEylf18KGXU6z6CeCRoKfVjOiVNKAE6wYBXqlLcy3P2akh1FUM
+   pIUqc32EJnABdymrusQMjpaCGaBVXrKPUxE2E9WiaIGKHiZv0pWkb24o9
+   MRuD2ObWP9x6oaUKUM40k5l3rWDjEBVyDdo5MptUdQAZ3eA4XVqM6Sg/E
+   lA8xdCJGrSprFeCUzMOhAKH2zOZbxnYSRsjye8MFRbOe90yS6+ODnsSe7
+   rczCTgMeZWm8cNxE00Fnw/HeD7NQisTbGlxMX9vQradhbTuf/f+4A7gLF
    w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="399577585"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339349973"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="399577585"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:36 -0700
+   d="scan'208";a="339349973"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:35 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="671580737"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="852438035"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="671580737"
+   d="scan'208";a="852438035"
 Received: from nmoazzen-mobl1.amr.corp.intel.com (HELO box.shutemov.name) ([10.251.219.215])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:30 -0700
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:30 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id AF00310D7B7; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
+        id B979A10D7B8; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -59,11 +59,10 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Ashok Raj <ashok.raj@intel.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        Catalin Marinas <catalin.marinas@arm.com>
-Subject: [PATCHv16 09/17] mm: Expose untagging mask in /proc/$PID/status
-Date:   Sun, 12 Mar 2023 14:26:04 +0300
-Message-Id: <20230312112612.31869-10-kirill.shutemov@linux.intel.com>
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Subject: [PATCHv16 10/17] iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
+Date:   Sun, 12 Mar 2023 14:26:05 +0300
+Message-Id: <20230312112612.31869-11-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
 References: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
@@ -78,120 +77,126 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a line in /proc/$PID/status to report untag_mask. It can be
-used to find out LAM status of the process from the outside. It is
-useful for debuggers.
+Kernel has few users of pasid_valid() and all but one checks if the
+process has PASID allocated. The helper takes ioasid_t as the input.
+
+Replace the helper with mm_valid_pasid() that takes mm_struct as the
+argument. The only call that checks PASID that is not tied to mm_struct
+is open-codded now.
+
+This is preparatory patch. It helps avoid ifdeffery: no need to
+dereference mm->pasid in generic code to check if the process has PASID.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Alexander Potapenko <glider@google.com>
 ---
- arch/arm64/include/asm/mmu_context.h    | 6 ++++++
- arch/sparc/include/asm/mmu_context_64.h | 6 ++++++
- arch/x86/include/asm/mmu_context.h      | 6 ++++++
- fs/proc/array.c                         | 7 +++++++
- include/linux/mmu_context.h             | 7 +++++++
- 5 files changed, 32 insertions(+)
+ arch/x86/kernel/traps.c   | 6 +++---
+ drivers/iommu/iommu-sva.c | 4 ++--
+ include/linux/ioasid.h    | 9 ---------
+ include/linux/sched/mm.h  | 8 +++++++-
+ 4 files changed, 12 insertions(+), 15 deletions(-)
 
-diff --git a/arch/arm64/include/asm/mmu_context.h b/arch/arm64/include/asm/mmu_context.h
-index 72dbd6400549..56911691bef0 100644
---- a/arch/arm64/include/asm/mmu_context.h
-+++ b/arch/arm64/include/asm/mmu_context.h
-@@ -288,6 +288,12 @@ void post_ttbr_update_workaround(void);
- unsigned long arm64_mm_context_get(struct mm_struct *mm);
- void arm64_mm_context_put(struct mm_struct *mm);
+diff --git a/arch/x86/kernel/traps.c b/arch/x86/kernel/traps.c
+index d317dc3d06a3..8b83d8fbce71 100644
+--- a/arch/x86/kernel/traps.c
++++ b/arch/x86/kernel/traps.c
+@@ -671,15 +671,15 @@ static bool try_fixup_enqcmd_gp(void)
+ 	if (!cpu_feature_enabled(X86_FEATURE_ENQCMD))
+ 		return false;
  
-+#define mm_untag_mask mm_untag_mask
-+static inline unsigned long mm_untag_mask(struct mm_struct *mm)
+-	pasid = current->mm->pasid;
+-
+ 	/*
+ 	 * If the mm has not been allocated a
+ 	 * PASID, the #GP can not be fixed up.
+ 	 */
+-	if (!pasid_valid(pasid))
++	if (!mm_valid_pasid(current->mm))
+ 		return false;
+ 
++	pasid = current->mm->pasid;
++
+ 	/*
+ 	 * Did this thread already have its PASID activated?
+ 	 * If so, the #GP must be from something else.
+diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
+index 24bf9b2b58aa..4ee2929f0d7a 100644
+--- a/drivers/iommu/iommu-sva.c
++++ b/drivers/iommu/iommu-sva.c
+@@ -34,14 +34,14 @@ int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
+ 
+ 	mutex_lock(&iommu_sva_lock);
+ 	/* Is a PASID already associated with this mm? */
+-	if (pasid_valid(mm->pasid)) {
++	if (mm_valid_pasid(mm)) {
+ 		if (mm->pasid < min || mm->pasid >= max)
+ 			ret = -EOVERFLOW;
+ 		goto out;
+ 	}
+ 
+ 	pasid = ioasid_alloc(&iommu_sva_pasid, min, max, mm);
+-	if (!pasid_valid(pasid))
++	if (pasid == INVALID_IOASID)
+ 		ret = -ENOMEM;
+ 	else
+ 		mm_pasid_set(mm, pasid);
+diff --git a/include/linux/ioasid.h b/include/linux/ioasid.h
+index af1c9d62e642..836ae09e92c2 100644
+--- a/include/linux/ioasid.h
++++ b/include/linux/ioasid.h
+@@ -40,10 +40,6 @@ void *ioasid_find(struct ioasid_set *set, ioasid_t ioasid,
+ int ioasid_register_allocator(struct ioasid_allocator_ops *allocator);
+ void ioasid_unregister_allocator(struct ioasid_allocator_ops *allocator);
+ int ioasid_set_data(ioasid_t ioasid, void *data);
+-static inline bool pasid_valid(ioasid_t ioasid)
+-{
+-	return ioasid != INVALID_IOASID;
+-}
+ 
+ #else /* !CONFIG_IOASID */
+ static inline ioasid_t ioasid_alloc(struct ioasid_set *set, ioasid_t min,
+@@ -74,10 +70,5 @@ static inline int ioasid_set_data(ioasid_t ioasid, void *data)
+ 	return -ENOTSUPP;
+ }
+ 
+-static inline bool pasid_valid(ioasid_t ioasid)
+-{
+-	return false;
+-}
+-
+ #endif /* CONFIG_IOASID */
+ #endif /* __LINUX_IOASID_H */
+diff --git a/include/linux/sched/mm.h b/include/linux/sched/mm.h
+index 2a243616f222..b69fe7e8c0ac 100644
+--- a/include/linux/sched/mm.h
++++ b/include/linux/sched/mm.h
+@@ -457,6 +457,11 @@ static inline void mm_pasid_init(struct mm_struct *mm)
+ 	mm->pasid = INVALID_IOASID;
+ }
+ 
++static inline bool mm_valid_pasid(struct mm_struct *mm)
 +{
-+	return -1UL >> 8;
++	return mm->pasid != INVALID_IOASID;
 +}
 +
- #include <asm-generic/mmu_context.h>
+ /* Associate a PASID with an mm_struct: */
+ static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
+ {
+@@ -465,13 +470,14 @@ static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid)
  
- #endif /* !__ASSEMBLY__ */
-diff --git a/arch/sparc/include/asm/mmu_context_64.h b/arch/sparc/include/asm/mmu_context_64.h
-index 7a8380c63aab..799e797c5cdd 100644
---- a/arch/sparc/include/asm/mmu_context_64.h
-+++ b/arch/sparc/include/asm/mmu_context_64.h
-@@ -185,6 +185,12 @@ static inline void finish_arch_post_lock_switch(void)
+ static inline void mm_pasid_drop(struct mm_struct *mm)
+ {
+-	if (pasid_valid(mm->pasid)) {
++	if (mm_valid_pasid(mm)) {
+ 		ioasid_free(mm->pasid);
+ 		mm->pasid = INVALID_IOASID;
  	}
  }
- 
-+#define mm_untag_mask mm_untag_mask
-+static inline unsigned long mm_untag_mask(struct mm_struct *mm)
-+{
-+       return -1UL >> adi_nbits();
-+}
-+
- #include <asm-generic/mmu_context.h>
- 
- #endif /* !(__ASSEMBLY__) */
-diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
-index eb1387ac40fa..06eaaf75d572 100644
---- a/arch/x86/include/asm/mmu_context.h
-+++ b/arch/x86/include/asm/mmu_context.h
-@@ -104,6 +104,12 @@ static inline void dup_lam(struct mm_struct *oldmm, struct mm_struct *mm)
- 	mm->context.untag_mask = oldmm->context.untag_mask;
- }
- 
-+#define mm_untag_mask mm_untag_mask
-+static inline unsigned long mm_untag_mask(struct mm_struct *mm)
-+{
-+	return mm->context.untag_mask;
-+}
-+
- static inline void mm_reset_untag_mask(struct mm_struct *mm)
- {
- 	mm->context.untag_mask = -1UL;
-diff --git a/fs/proc/array.c b/fs/proc/array.c
-index 9b0315d34c58..6daea628bc76 100644
---- a/fs/proc/array.c
-+++ b/fs/proc/array.c
-@@ -91,6 +91,7 @@
- #include <linux/user_namespace.h>
- #include <linux/fs_struct.h>
- #include <linux/kthread.h>
-+#include <linux/mmu_context.h>
- 
- #include <asm/processor.h>
- #include "internal.h"
-@@ -423,6 +424,11 @@ static inline void task_thp_status(struct seq_file *m, struct mm_struct *mm)
- 	seq_printf(m, "THP_enabled:\t%d\n", thp_enabled);
- }
- 
-+static inline void task_untag_mask(struct seq_file *m, struct mm_struct *mm)
-+{
-+	seq_printf(m, "untag_mask:\t%#lx\n", mm_untag_mask(mm));
-+}
-+
- int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
- 			struct pid *pid, struct task_struct *task)
- {
-@@ -438,6 +444,7 @@ int proc_pid_status(struct seq_file *m, struct pid_namespace *ns,
- 		task_mem(m, mm);
- 		task_core_dumping(m, task);
- 		task_thp_status(m, mm);
-+		task_untag_mask(m, mm);
- 		mmput(mm);
- 	}
- 	task_sig(m, task);
-diff --git a/include/linux/mmu_context.h b/include/linux/mmu_context.h
-index b9b970f7ab45..14b9c1fa05c4 100644
---- a/include/linux/mmu_context.h
-+++ b/include/linux/mmu_context.h
-@@ -28,4 +28,11 @@ static inline void leave_mm(int cpu) { }
- # define task_cpu_possible(cpu, p)	cpumask_test_cpu((cpu), task_cpu_possible_mask(p))
- #endif
- 
-+#ifndef mm_untag_mask
-+static inline unsigned long mm_untag_mask(struct mm_struct *mm)
-+{
-+	return -1UL;
-+}
-+#endif
-+
+ #else
+ static inline void mm_pasid_init(struct mm_struct *mm) {}
++static inline bool mm_valid_pasid(struct mm_struct *mm) { return false; }
+ static inline void mm_pasid_set(struct mm_struct *mm, u32 pasid) {}
+ static inline void mm_pasid_drop(struct mm_struct *mm) {}
  #endif
 -- 
 2.39.2
