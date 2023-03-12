@@ -2,101 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E151A6B6B22
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:41:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D90086B6B30
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCLUl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:41:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49714 "EHLO
+        id S231300AbjCLUmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCLUlZ (ORCPT
+        with ESMTP id S231290AbjCLUm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:41:25 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3277D36444
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:41:24 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id t2-20020a922c02000000b003230219cf1eso1069201ile.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:41:24 -0700 (PDT)
+        Sun, 12 Mar 2023 16:42:28 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8235E39B88;
+        Sun, 12 Mar 2023 13:42:23 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id y11so10869986plg.1;
+        Sun, 12 Mar 2023 13:42:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678653743;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=eS81Bbeb7DUO+iRkvmtrK0oB4SfcOjiUFR0rKW60MA0=;
+        b=G2a3X2goAyICa7qoVr4TjJ4/OOQ1EmoCBXmcNPEVfAKqhAEIho/AfxQDCMbOYQNb6/
+         VsK86lLGHo82G880+GfCwnB7NZj1LH0T7klN9abmbKa3C8/6ysyzwU7sxSjjzz/XL6oO
+         vAuH1AamSgl6MUBggR0tNxojaYXKDM1IjIEcV5GY0MN5QC8uZEjZMKvOttvLv58I+FHt
+         xQm7dqeB+g/b7H6pg95qji23VUNrDetgUorQn2HxhlXGTz3ne2burkaHbyZqOA/jKSNX
+         WdnpofFPER2tIU2FTgT2WccI6i5Vl7jnW7WFD3EdyaZysEXME+eXg3NnWksiH0E54H0O
+         oM1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678653683;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e16q7Pec4NoczsUqyQiywgB/gDgFOxGt1xv1NL41NUU=;
-        b=0Q2mgWXwm69jvx7cMbvXfNCaJ+BxOyzYo6/Yg3+vIvg90Voh16gTYMw8Q8KgR1UtY3
-         zwTnvMebCA0ZcdxkJUk+YBflu9zl+eB0uYGTS9pRSU3b0Z6Vld9rjYSTLXsCx93keRpz
-         zKA2ija5kMMiSLLxMgmNRZgkj5ml4ZodcxpT2Zn93fgSICf+vNaC8b000XgizcLf0yiy
-         aLYY1w7ELG5IqyAxMnV48FrV0WR10tDyPEhVpp50i5DBp4K9aMNh03AcByRmLDgS9nLb
-         xQkrHJucKlAk8MS+sgUa05zcdNKdy6LmDSLg9Xhh/dpE1XeAQhdVQIreLGr2ZGjFUaXc
-         4dEw==
-X-Gm-Message-State: AO0yUKXBHi7MKwkRWS+is8xlhwlb7/MN/+tvNLgc998DXxQJ2FdJxKth
-        QAvxl5cxRmlC7ptkeVIxSjyn9iW/ZnjNT+URUECPqwhqRRct
-X-Google-Smtp-Source: AK7set9d8h5mRbFqs99i//BjL+cfQofE16ThAde+4LfLDIw8AJO53VqKI87+NtQtTYIAWbnOrtCEIOqtWvQaXwuqkbtGYIp29mhP
+        d=1e100.net; s=20210112; t=1678653743;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eS81Bbeb7DUO+iRkvmtrK0oB4SfcOjiUFR0rKW60MA0=;
+        b=al7rG2oF9jCcyyXEB+stLJRMzOK6Ld4g1teJn8yYbFv4sTkLW0QGSp6Y4DAV1P6AQw
+         n8sT+5UV8Aahz+QOBLgjYnn4RfNEoihmZe7dH43P75JkYC/M6cMkLE1ghIbvnaUG2Al7
+         QBvwDNWiEs358RnrrNK9dzDdHxqvgWlf+XG/G4hK4K+81lXcXu+St5Mu5Ky/Oh8bG/7f
+         xwxLQngQFKfWv8AWJpq34WiVnJmoDGXXJqjv5X+nbLToVIrhw8Pg69A/CPwh9NaceUzx
+         NSarYgWZNCMdIOUxoShzn2bY5sJ7+nGO1o0KwHCxKXZBNgvuUpPojY7EUyDB/Kzl80RV
+         ImwQ==
+X-Gm-Message-State: AO0yUKUfUQgwW2DpSEilzUqd3H1KU4ryLcPK9R+lkm/jnRYoIll1aWmx
+        LDB6Tvv8yeWdoF4lkkDfkeyakLMd5wc=
+X-Google-Smtp-Source: AK7set+UpZ1DihZTdG/FUvyuXyzqzkkjcn3UiFdPutNdqCaUQZDans3Wexm2twEh9BfXyHomUFqSlQ==
+X-Received: by 2002:a17:902:a9cb:b0:19a:df76:ddd2 with SMTP id b11-20020a170902a9cb00b0019adf76ddd2mr27656409plr.36.1678653742882;
+        Sun, 12 Mar 2023 13:42:22 -0700 (PDT)
+Received: from localhost ([2601:1c0:5080:d9fa:9b45:95de:f47d:f85e])
+        by smtp.gmail.com with ESMTPSA id u6-20020a170902e5c600b001a049441fc8sm472317plf.193.2023.03.12.13.42.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 13:42:22 -0700 (PDT)
+From:   Rob Clark <robdclark@gmail.com>
+To:     dri-devel@lists.freedesktop.org
+Cc:     linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        freedreno@lists.freedesktop.org (open list:DRM DRIVER FOR MSM ADRENO
+        GPU), Geert Uytterhoeven <geert@linux-m68k.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Gustavo Padovan <gustavo@padovan.org>,
+        "Joel Fernandes (Google)" <joel@joelfernandes.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linaro-mm-sig@lists.linaro.org (moderated list:DMA BUFFER SHARING
+        FRAMEWORK), linux-kernel@vger.kernel.org (open list),
+        linux-media@vger.kernel.org (open list:DMA BUFFER SHARING FRAMEWORK),
+        linux-pm@vger.kernel.org (open list:DEVICE FREQUENCY (DEVFREQ)),
+        Luca Weiss <luca@z3ntu.xyz>,
+        Maximilian Luz <luzmaximilian@gmail.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Sean Paul <sean@poorly.run>
+Subject: [PATCH 00/13] drm/msm+PM+icc: Make job_run() reclaim-safe
+Date:   Sun, 12 Mar 2023 13:41:28 -0700
+Message-Id: <20230312204150.1353517-1-robdclark@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:10e5:b0:402:aa02:6a6b with SMTP id
- g5-20020a05663810e500b00402aa026a6bmr976633jae.6.1678653683487; Sun, 12 Mar
- 2023 13:41:23 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 13:41:23 -0700
-In-Reply-To: <20230312202027.46brae36wrbypwge@fpc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000081589c05f6ba0468@google.com>
-Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
-From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-kernel@vger.kernel.org,
-        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+From: Rob Clark <robdclark@chromium.org>
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KMSAN: uninit-value in ath9k_hw_init
+Inspired by https://lore.kernel.org/dri-devel/20200604081224.863494-10-daniel.vetter@ffwll.ch/
+it seemed like a good idea to get rid of memory allocation in job_run()
+and use lockdep annotations to yell at us about anything that could
+deadlock against shrinker/reclaim.  Anything that can trigger reclaim,
+or block on any other thread that has triggered reclaim, can block the
+GPU shrinker from releasing memory if it is waiting the job to complete,
+causing deadlock.
 
-ath9k_htc 3-1:1.0: ath9k_htc: HTC initialized with 33 credits
-=====================================================
-BUG: KMSAN: uninit-value in ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
-BUG: KMSAN: uninit-value in __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
-BUG: KMSAN: uninit-value in ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
- ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
- __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
- ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
- ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
- ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
- ath9k_htc_probe_device+0xf48/0x3b60 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
- ath9k_htc_hw_init+0x4f/0x100 drivers/net/wireless/ath/ath9k/htc_hst.c:523
- ath9k_hif_usb_firmware_cb+0x2eb/0x800 drivers/net/wireless/ath/ath9k/hif_usb.c:1256
- request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
- kthread+0x31f/0x430 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+The first two patches avoid memory allocation for the hw_fence by
+embedding it in the already allocated submit object.  The next three
+decouple various allocations that were done in the hw_init path, but
+only the first time, to let lockdep see that they won't happen in the
+job_run() path.  (The hw_init() path re-initializes the GPU after runpm
+resume, etc, which can happen in the job_run() path.)
 
-Local variable val created at:
- ath9k_regread+0x62/0x1b0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:239
- ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
- __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
- ath9k_hw_init+0x5c4/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+The remaining patches clean up locking issues in various corners of PM
+and interconnect which happen in the runpm path.  These fixes can be
+picked up independently by the various maintainers.  In all cases I've
+added lockdep annotations to help keep the runpm resume path deadlock-
+free vs reclaim, but I've broken those out into their own patches.. it
+is possible that these might find issues in other code-paths not hit on
+the hw I have.  (It is a bit tricky because of locks held across call-
+backs, such as devfreq->lock held across devfreq_dev_profile callbacks.
+I've audited these and other callbacks in icc, etc, to look for problems
+and fixed one I found in smd-rpm.  But that took me through a number of
+drivers and subsystems that I am not familiar with so it is entirely
+possible that I overlooked some problematic allocations.)
 
-CPU: 0 PID: 5569 Comm: kworker/0:4 Not tainted 6.3.0-rc1-syzkaller-00010-ge61893130d87-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Workqueue: events request_firmware_work_func
-=====================================================
+There is one remaining issue to resolve before we can enable the job_run
+annotations, but it is entirely self contained in drm/msm/gem.  So it
+should not block review of these patches.  So I figured it best to send
+out what I have so far.
 
+Rob Clark (13):
+  dma-buf/dma-fence: Add dma_fence_init_noref()
+  drm/msm: Embed the hw_fence in msm_gem_submit
+  drm/msm/gpu: Move fw loading out of hw_init() path
+  drm/msm/gpu: Move BO allocation out of hw_init
+  drm/msm/a6xx: Move ioremap out of hw_init path
+  PM / devfreq: Drop unneed locking to appease lockdep
+  PM / devfreq: Teach lockdep about locking order
+  PM / QoS: Fix constraints alloc vs reclaim locking
+  PM / QoS: Decouple request alloc from dev_pm_qos_mtx
+  PM / QoS: Teach lockdep about dev_pm_qos_mtx locking order
+  soc: qcom: smd-rpm: Use GFP_ATOMIC in write path
+  interconnect: Fix locking for runpm vs reclaim
+  interconnect: Teach lockdep about icc_bw_lock order
 
-Tested on:
+ drivers/base/power/qos.c                   | 83 ++++++++++++++++------
+ drivers/devfreq/devfreq.c                  | 52 +++++++-------
+ drivers/dma-buf/dma-fence.c                | 43 ++++++++---
+ drivers/gpu/drm/msm/adreno/a5xx_gpu.c      | 48 ++++++-------
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c      | 18 +++--
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c      | 46 ++++++------
+ drivers/gpu/drm/msm/adreno/adreno_device.c |  6 ++
+ drivers/gpu/drm/msm/adreno/adreno_gpu.c    |  9 +--
+ drivers/gpu/drm/msm/msm_fence.c            | 43 +++++------
+ drivers/gpu/drm/msm/msm_fence.h            |  2 +-
+ drivers/gpu/drm/msm/msm_gem.h              | 10 +--
+ drivers/gpu/drm/msm/msm_gem_submit.c       |  8 +--
+ drivers/gpu/drm/msm/msm_gpu.c              |  4 +-
+ drivers/gpu/drm/msm/msm_gpu.h              |  6 ++
+ drivers/gpu/drm/msm/msm_ringbuffer.c       |  4 +-
+ drivers/interconnect/core.c                | 18 ++++-
+ drivers/soc/qcom/smd-rpm.c                 |  2 +-
+ include/linux/dma-fence.h                  |  2 +
+ 18 files changed, 237 insertions(+), 167 deletions(-)
 
-commit:         e6189313 kmsan: add test_stackdepot_roundtrip
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1508f12ac80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=ef8f90a9dd9b8eae
-dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=10cabf24c80000
+-- 
+2.39.2
 
