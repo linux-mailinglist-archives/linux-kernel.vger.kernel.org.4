@@ -2,151 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5077D6B6BB1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:11:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BB606B6BB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:12:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbjCLVLc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:11:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
+        id S231282AbjCLVMn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:12:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjCLVL1 (ORCPT
+        with ESMTP id S229828AbjCLVMl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:11:27 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E245923A42
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:11:25 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id o12so41144803edb.9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:11:25 -0700 (PDT)
+        Sun, 12 Mar 2023 17:12:41 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23E8E2A6FA;
+        Sun, 12 Mar 2023 14:12:40 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-1767a208b30so11912832fac.2;
+        Sun, 12 Mar 2023 14:12:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1678655484;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hil+65mTmc3AMUxw5xsQhzsU9a1qRH1xSyrgVLUlwPg=;
-        b=Iul58Gg6AFjhXB28onIUV6+BhaUNvY5osJG0aAOvsD4ewgu5tI8prqouao+qF7phjA
-         CIlxQwWiHhwFYKYzgD6dOLbWmTXMw9olJyELFNTATT7YWGGifMpa6hW36OV53+Is0wIU
-         Q9DA8r/HoxNKyfBO7RBoRNUE3297pJWCD41I2SQRlDZY7CSYHLDauiXix+j8JfxDdpDd
-         LJUgiMBeeRDGRShbOVCIXzYex9sDZwdBOAF2qBgpxi+Jt8CFz6q4OwbJ2BBNDnoH3mtt
-         XMhxqoeCuCI5MMqlkA+/CyX47dVL4OTw/65T7mGYz05UxyNx0c8tYOTltEHnOrKrwp4R
-         E5aw==
+        d=gmail.com; s=20210112; t=1678655559;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=DRf3mLCzUA4+4MpWno3pfPgTTCi05J8JG/5CDX3VFTI=;
+        b=i4BAQuAPVu7dAMV2dkuNDHgb/GzIKm2xM1JTx4phUScgO9Gh8snxDw6ki2Ls68Qe58
+         9nIuZgGe9QAOUkv6+GMc+DROYulHUCD6/Zva0VOJs/80FAg1xDOLx4sBossQsZFXjwZg
+         iiQuxUu4IIpUlHJf71Pgz4qFfq/983Og37rAzmGmy2hEooA7/FWXGUy7SlfhauMVfmCT
+         RD0/4zvwfIa0j4vTMn1RLUBHSNwGs5yfvNrf1gjj1+uRCr8w1Fz1fy+hnC81TH2aw6Va
+         2Gy/h4HkWP30kSLhU5eJ2p7Onz4JT2xbZ+hnS56XpAaT2xh5ul5nZs70zt68ZmXfa2hv
+         olWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678655484;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hil+65mTmc3AMUxw5xsQhzsU9a1qRH1xSyrgVLUlwPg=;
-        b=6ATMyrSU6hfowy/TpdUCr818ofcDRT+CJo4wMlVv+yGMlFjjX/ZG5hEjs7SuNHGwaa
-         G1LClyguqkSH81H+iaTX4EcrR5X4pON1mxvJSUczse+lMlTTTpJn59KNbnZsOFMFA5FG
-         Ju+cQU2JAdDxHNkElHIbjYf/oXtVSI7Qtu8EBE0HGoQujeCB4Uf4vcah+A1YjSNWDIjV
-         RBfskYFHXv5lxgFnOgwjpVx6oP8BrglY8hBfNC8g6kFpVk/0JUYtBUtbAEgVrTcPbW4A
-         9kHpETFihUIm2Fk9hdhoCJ5z5NyvMsnmu/o2eL/t0ioltq2h3W7J/GsF7nuq9v4gUjj8
-         fC5Q==
-X-Gm-Message-State: AO0yUKVE6nlhHHuq6Ck9F9DMjTgEmTLCw2XQcCHaYKzABC6PQA+iN9cv
-        L+lhoiSqkFRzg70hnKKYZkHcB1eQVK2JxGv53jhnvg==
-X-Google-Smtp-Source: AK7set/w8y0erJsgMhQLRjt/vwMLCi5VNIOvczMJfE/dOPuQHDrYrNarInk51vZANGevW35ePpBXWfNfcYodIKSZlKY=
-X-Received: by 2002:a17:906:174a:b0:8ae:b14b:4b9e with SMTP id
- d10-20020a170906174a00b008aeb14b4b9emr15045042eje.9.1678655484388; Sun, 12
- Mar 2023 14:11:24 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678655559;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=DRf3mLCzUA4+4MpWno3pfPgTTCi05J8JG/5CDX3VFTI=;
+        b=M602exba0w0Jrdj/EAy3XGK6SvkSY0soBBxTmU/z52QmCGzvx3u3zWiaNd51koFDt1
+         L4CVkN1yDhZujjOdqnvEDLPFsugYYdtd9vmBsvFygD3UAJ+PDj/Z2cypZbFLf1cT+N2d
+         0mvPSpy6E+4nFbG3C9VDILOTylZA5HoLVIrlJ+LzkVz4Um8uaSbZvm7ODgLb6LpvmDnL
+         2KA5VapgHIUXhvREg5BpGZfa9tb8ETytehaH9oenoGf/mfUNO20kj1bwC93ibjRbYfw0
+         k7xs68MNnQRzveuH4eNKwxCHsOxWnOzCqeCW4p7sjnqiDk4Xdvt8zq/33C2h95IdYTI8
+         4aDA==
+X-Gm-Message-State: AO0yUKW6tVG+B2d1ers6EuaojTOPWV48U7xuOHehdQB+oBnnIOnPKYtw
+        geZMwIe08YgBWS0C8S7vH2AA2uyCujA=
+X-Google-Smtp-Source: AK7set+2IC9ptJ7WwM5o2em2AVoBodj0+QxVVIyuDh3OTB4i4NE22LzuyPEnGeBLizMJaM8B9ayWdA==
+X-Received: by 2002:a05:6870:4393:b0:16d:c094:2743 with SMTP id r19-20020a056870439300b0016dc0942743mr26346697oah.27.1678655559284;
+        Sun, 12 Mar 2023 14:12:39 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id i83-20020acaea56000000b00383e0c1f6cdsm2417863oih.27.2023.03.12.14.12.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 14:12:38 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 12 Mar 2023 14:12:37 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] hwmon: gpio-fan: drop of_match_ptr for ID table
+Message-ID: <ec48188f-0978-431c-9771-7bda97210c81@roeck-us.net>
+References: <20230312193723.478032-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <20230312201712.367545-1-joe@isovalent.com> <875yb5wwed.fsf@meer.lwn.net>
-In-Reply-To: <875yb5wwed.fsf@meer.lwn.net>
-From:   Joe Stringer <joe@isovalent.com>
-Date:   Sun, 12 Mar 2023 14:11:13 -0700
-Message-ID: <CADa=RyzQmTEFnpKehGoKihmz+EniibjWQ0P12XMwqgqQ8UcO-w@mail.gmail.com>
-Subject: Re: [PATCH linux-doc] docs/doc-guide: Clarify how to write tables
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230312193723.478032-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 1:24=E2=80=AFPM Jonathan Corbet <corbet@lwn.net> wr=
-ote:
->
-> Joe Stringer <joe@isovalent.com> writes:
->
-> Thanks for working to improve the docs...I have a couple of questions,
-> though.
->
-> > Prior to this commit, the kernel docs writing guide spent over a page
-> > describing exactly how *not* to write tables into the kernel docs,
-> > without providing a example about the desired format.
-> >
-> > This patch provides a positive example first in the guide so that it's
-> > harder to miss, then leaves the existing less desirable approach below
-> > for contributors to follow if they have some stronger justification for
-> > why to use that approach.
->
-> There's all kinds of things you can do in RST, but we've deliberately
-> not tried to create a new RST guide in the kernel docs.  I'm not sure
-> that tables merit an exception to that?  If people really need help,
-> perhaps a link to (say)
->
->   https://docutils.sourceforge.io/docs/user/rst/quickref.html#tables
->
-> would suffice?
+On Sun, Mar 12, 2023 at 08:37:22PM +0100, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).  This
+> also fixes !CONFIG_OF error:
+> 
+>   drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks for the review! A link with a clear recommendation would make
-sense to me.
+Applied, though I added a note describing that the above build error can
+only be seen if the OF -> GPIO_OF dependency is broken.
 
-> > Signed-off-by: Joe Stringer <joe@isovalent.com>
-> > ---
-> >  Documentation/doc-guide/sphinx.rst | 18 +++++++++++++++++-
-> >  1 file changed, 17 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-gui=
-de/sphinx.rst
-> > index 23edb427e76f..9c2210b6ea3f 100644
-> > --- a/Documentation/doc-guide/sphinx.rst
-> > +++ b/Documentation/doc-guide/sphinx.rst
-> > @@ -313,9 +313,25 @@ the documentation build system will automatically =
-turn a reference to
-> >  function name exists.  If you see ``c:func:`` use in a kernel document=
-,
-> >  please feel free to remove it.
-> >
-> > +Tables
-> > +------
-> > +
-> > +Tables should be written in cell grid form unless there is a strong
-> > +justification for using an alternate format:
-> > +
-> > +.. code-block:: rst
-> > +
-> > +   +------------------------+------------+----------+----------+
-> > +   | Header row, column 1   | Header 2   | Header 3 | Header 4 |
-> > +   | (header rows optional) |            |          |          |
-> > +   +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D+
-> > +   | body row 1, column 1   | column 2   | column 3 | column 4 |
-> > +   +------------------------+------------+----------+----------+
-> > +   | body row 2             | ...        | ...      |          |
-> > +   +------------------------+------------+----------+----------+
->
-> ...and if they do merit an exception, why would we prefer the full grid
-> format (which is harder to create and maintain) than the simple table
-> format?  Most of the time, the simple format can do what's needed, and I
-> don't think it's less readable.
+Thanks,
+Guenter
 
-I'm not opinionated about grid format, I just picked one. But this is
-interesting - If simple table is the preferred format, then that
-sounds like the sort of detail that this docs page should communicate.
-For example:
-
-ReStructured text provides several formats to define tables. Kernel
-style for tables is to use:
-- Simple table format wherever possible
-- Grid format if the table requires row spans
-- Other formats if there is a specific justification (see list tables
-for an example below).
-
-See the Quick reStructured Text cheat for examples:
-https://docutils.sourceforge.io/docs/user/rst/quickref.html#tables
+> ---
+> 
+> Changes since v1:
+> 1. Rework patch and commit msg - drop of_match_ptr.
+> ---
+>  drivers/hwmon/gpio-fan.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/gpio-fan.c b/drivers/hwmon/gpio-fan.c
+> index e75db6f64e8c..d92c536be9af 100644
+> --- a/drivers/hwmon/gpio-fan.c
+> +++ b/drivers/hwmon/gpio-fan.c
+> @@ -586,7 +586,7 @@ static struct platform_driver gpio_fan_driver = {
+>  	.driver	= {
+>  		.name	= "gpio-fan",
+>  		.pm	= pm_sleep_ptr(&gpio_fan_pm),
+> -		.of_match_table = of_match_ptr(of_gpio_fan_match),
+> +		.of_match_table = of_gpio_fan_match,
+>  	},
+>  };
+>  
