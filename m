@@ -2,77 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 936376B6A55
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B75B86B6A5A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:50:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCLSsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
+        id S229983AbjCLSuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbjCLSsL (ORCPT
+        with ESMTP id S229713AbjCLSud (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:48:11 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EE17C14D;
-        Sun, 12 Mar 2023 11:48:05 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id a4-20020a056830008400b0069432af1380so5627568oto.13;
-        Sun, 12 Mar 2023 11:48:05 -0700 (PDT)
+        Sun, 12 Mar 2023 14:50:33 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02279A5F3;
+        Sun, 12 Mar 2023 11:50:31 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-54195ef155aso23873217b3.9;
+        Sun, 12 Mar 2023 11:50:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678646884;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gcl4oMofNIyToXKyBYFlHzkkGWWxRL1J2M6ea2UM9dY=;
-        b=Slg6rupXetqrFrwKKwYdT8uc0ry1yxUWN+TE/F1/L9+8rIgbMozDV8g2cph0Yet3Li
-         vV9Ac6kiQwO6aILjHO+hrFm91Yogoh/a9YKD2PClCjGBo5Fk46d/P0iLQQjLLSvQ7AbL
-         b6UJNYiXp/tDyxgz424LYF9Stv5qKdV0nQ2vS9ZykzkKD07NAj+xV7+m7nm95weyXWGi
-         hLwT5/i94jUpJRoXqXLxIx7AY5UNjCuic2xo+FVWISZ9yt6YCCk9ZzxDhV5R4NUXgOvj
-         9Ywy+kL8Ys19roZXqLRN75wXwlZ9Gh6Srg7AXWS4w7IbOI/3n81HZaYpZ1IS5SmGOYRW
-         LMfg==
+        d=gmail.com; s=20210112; t=1678647031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8SMY4oZjyMosp//FFeB6JTYYtB6TEFJQndZ+r4hyQts=;
+        b=npMZ4Pu0VwtksmwbussC0Ln7Mb2cUuaZySfKejxQcjyl4qQQhrgiS2QlLms9ATBh9E
+         ukwiial8/Iqvz58V0GBv9U2Yc6cR8mfjOyTDgdyVyEjCTYndEZWiz8h+GEnCG0qfllG+
+         jRAoMsUoHd8sjLwhrnrLAaht6AvmZaOCxTDI2q3NorQmlAhTjPqSj+03Z7kcy0nQHOKt
+         adfW7rpk8QWUnTPJOuD3KiNv/8rb8+2EJ4DGChItFmdeUQnD3HZ7O79g3j7VXrFq96VQ
+         A4+1BJyi7yr5p7yYltP6TEsrMssaCFjaTCeNpJS8g+yQrgwGl3/ixAsB+bquzP5HWRld
+         BfyQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678646884;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gcl4oMofNIyToXKyBYFlHzkkGWWxRL1J2M6ea2UM9dY=;
-        b=dJorvvZKE/C9HV3Fnb41HWYIqJ0odMyuaus685xufVtEVPAzy7V6tn+lZ33vdwGkIa
-         h9WDOlC3AuqnHJTP/8qNXxyY6fyoHqiQtwW+E5CK4SwV7tMn9ac1TuhAuQydPs0zGpNE
-         0c/meC98PKzKsCCaAhRUXzQGWph1u+1nhfZ6m3jtW0EBC/+lWsYNZ415TBVTSpE/mmTo
-         CGdagCFi6u17tzaZFuJpap/BESLAyDAEW8KcvNTYsUhP2+VWxndS8q16wc+77XOu8vIh
-         Biwrl9OcVrePspy5jE2f6g8luHTJj17QJpZKWYZId9iCRJ0FttCINZ+ox6MLWmRAGF99
-         sfKQ==
-X-Gm-Message-State: AO0yUKWHlqlneErPYZVT0DqfJyU1APAtz4adSb6hZv3v+sUCfb6lj7Rj
-        x7pfq5EkSWaf7tnecRnVnwE=
-X-Google-Smtp-Source: AK7set/Z5EfQhbLT5zJAjq+ylrQsq2jaeoqk/zZBrIoWDfsdqgmXKHrZhczR7c6MN1K855KN8levRw==
-X-Received: by 2002:a9d:705c:0:b0:68b:bf5e:492c with SMTP id x28-20020a9d705c000000b0068bbf5e492cmr19065020otj.28.1678646884416;
-        Sun, 12 Mar 2023 11:48:04 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id i17-20020a9d6251000000b0069457b86060sm2417927otk.47.2023.03.12.11.48.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 11:48:03 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <9343421e-d35d-8d99-1ea7-1f81e28fbabb@roeck-us.net>
-Date:   Sun, 12 Mar 2023 11:48:02 -0700
+        d=1e100.net; s=20210112; t=1678647031;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8SMY4oZjyMosp//FFeB6JTYYtB6TEFJQndZ+r4hyQts=;
+        b=kc6/uSzZgiHwhButh9StA+dHwuAnS18Mw+xmnxSLIBAaNiqeoo7UZFSTBjYJFFOaVF
+         xXOCH2yIHN9ZezhhvAuxxvuABocOXokMgKmgcyNQop0I8rXLemENvoE6o7dTBwpLg5h9
+         gxG/4uBelMSrebMQJWcwNW+huoPMVM8Nwl3gL8YcwJVKocltTrmaKiLRXVynif4qlwGO
+         jFPXDJoFrwdTa7OWLx5dQ1U1E5kqXJg2eEVHRl+VQMiHPbysP4b1KgrcbwMrN1c5emon
+         dSOm55uhHKZcu1QH2wmlJROLxtqbSfBwze6W2AQctZoMIMzVE0ug203w2UiVwKmhaoDf
+         JUGA==
+X-Gm-Message-State: AO0yUKWHBGxxadO5isdz/3U07BVrkL80V36S1p2xBWigurW6C0ibE7FQ
+        U3H5zRJysFlbWqOE/+boNEAyvbt0RtmCg6sftiOJErCxjciu1w==
+X-Google-Smtp-Source: AK7set8ztXvwHWNQ/jyUrucYDtnsDOoBtna8oll5l80E1G6O8I7TKzddND0zw+v7T3huIiBj1LLSN/+5yE8KBY62rNM=
+X-Received: by 2002:a81:a782:0:b0:541:6763:3ce1 with SMTP id
+ e124-20020a81a782000000b0054167633ce1mr3355861ywh.2.1678647030944; Sun, 12
+ Mar 2023 11:50:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
- <cd9067c7-0b99-4d62-9d5a-cdc028f33ba5@roeck-us.net>
- <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
-In-Reply-To: <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230310121306.4632-1-noltari@gmail.com> <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
+ <CAOiHx=njCvfVju9BAe7gTzMq0vybQF-gy4SRZrhEJFULGLhC7w@mail.gmail.com>
+ <5b4d3eef-ff80-29e8-9be0-d487aee5e4e2@broadcom.com> <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
+In-Reply-To: <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
+From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
+Date:   Sun, 12 Mar 2023 19:50:20 +0100
+Message-ID: <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com>
+Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
+To:     Florian Fainelli <f.fainelli@gmail.com>
+Cc:     William Zhang <william.zhang@broadcom.com>,
+        Jonas Gorski <jonas.gorski@gmail.com>,
+        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
+        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,LOTS_OF_MONEY,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,49 +73,146 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/23 11:08, Krzysztof Kozlowski wrote:
-> On 12/03/2023 19:06, Guenter Roeck wrote:
->> On Sat, Mar 11, 2023 at 12:16:09PM +0100, Krzysztof Kozlowski wrote:
->>> The driver can be compile tested with !CONFIG_OF making certain data
->>> unused:
->>>
->>>    drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
->>>
->>
->> How do you trigger that ? The driver depends on OF_GPIO which
->> in turn depends on OF. Arguably that means that of_match_ptr()
->> doesnot really make sense, but still I don't see how you can
->> trigger the above error message.
-> 
-> I can drop of_match_ptr, it's indeed in many cases not needed.
-> 
-> I just build x86_64 allyesconfig minus OF, with W=1.
-> 
+Hi Florian,
 
-x86_64 allyesconfig minus OF minus results in SENSORS_GPIO_FAN being
-deselected (it doesn't show up in the configuration anymore at all
-after "make olddefconfig").
+I tried what you suggested but it stil panics on EHCI:
 
-$ make allyesconfig
-$ grep SENSORS_GPIO_FAN .config
-CONFIG_SENSORS_GPIO_FAN=y
-$ sed -i -e 's/CONFIG_OF=y/# CONFIG_OF is not set/' .config
-$ make olddefconfig
-#
-# configuration written to .config
-#
-$ grep SENSORS_GPIO_FAN .config
-$
+[    0.000000] Linux version 5.15.98 (noltari@atlantis)
+(mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
+12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
+[    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
+[    0.000000] bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x3c1b8041
+[    0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
 
-I suspect what you did is to disable CONFIG_OF, and then you built
-the driver without realizing that is was deselected.
+It looks like bit 29 is set so RAC should be present.
+And RAC_I seems to be set, but not RAC_D...
 
-> Do you want to me to drop of_match_ptr?
-> 
+BTW, this is what I added to bmips_cpu_setup:
 
-Yes, sure, that makes more sense. The reason though is that the
-driver depends on CONFIG_OF=y, not because of the build failure.
+case CPU_BMIPS4350:
+cfg =3D read_c0_brcm_config_0();
+pr_info("bmips_cpu_setup: read_c0_brcm_config_0() =3D 0x%x\n", cfg);
 
-Thanks,
-Guenter
+cfg =3D __raw_readl(cbr + BMIPS_RAC_CONFIG);
+pr_info("bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x%x\n", cfg);
+__raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
+__raw_readl(cbr + BMIPS_RAC_CONFIG);
+break;
 
+Best regards,
+=C3=81lvaro.
+
+
+El dom, 12 mar 2023 a las 17:16, Florian Fainelli
+(<f.fainelli@gmail.com>) escribi=C3=B3:
+>
+>
+>
+> On 3/11/2023 11:31 PM, William Zhang wrote:
+> >
+> >
+> > On 03/11/2023 11:44 AM, Jonas Gorski wrote:
+> >> On Sat, 11 Mar 2023 at 18:32, Florian Fainelli <f.fainelli@gmail.com>
+> >> wrote:
+> >>>
+> >>>
+> >>>
+> >>> On 3/10/2023 4:13 AM, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
+> >>>> arch_sync_dma_for_cpu_all() causes kernel panics on BCM6358 with
+> >>>> EHCI/OHCI:
+> >>>> [    3.881739] usb 1-1: new high-speed USB device number 2 using
+> >>>> ehci-platform
+> >>>> [    3.895011] Reserved instruction in kernel code[#1]:
+> >>>> [    3.900113] CPU: 0 PID: 1 Comm: init Not tainted 5.10.16 #0
+> >>>> [    3.905829] $ 0   : 00000000 10008700 00000000 77d94060
+> >>>> [    3.911238] $ 4   : 7fd1f088 00000000 81431cac 81431ca0
+> >>>> [    3.916641] $ 8   : 00000000 ffffefff 8075cd34 00000000
+> >>>> [    3.922043] $12   : 806f8d40 f3e812b7 00000000 000d9aaa
+> >>>> [    3.927446] $16   : 7fd1f068 7fd1f080 7ff559b8 81428470
+> >>>> [    3.932848] $20   : 00000000 00000000 55590000 77d70000
+> >>>> [    3.938251] $24   : 00000018 00000010
+> >>>> [    3.943655] $28   : 81430000 81431e60 81431f28 800157fc
+> >>>> [    3.949058] Hi    : 00000000
+> >>>> [    3.952013] Lo    : 00000000
+> >>>> [    3.955019] epc   : 80015808 setup_sigcontext+0x54/0x24c
+> >>>> [    3.960464] ra    : 800157fc setup_sigcontext+0x48/0x24c
+> >>>> [    3.965913] Status: 10008703       KERNEL EXL IE
+> >>>> [    3.970216] Cause : 00800028 (ExcCode 0a)
+> >>>> [    3.974340] PrId  : 0002a010 (Broadcom BMIPS4350)
+> >>>> [    3.979170] Modules linked in: ohci_platform ohci_hcd
+> >>>> fsl_mph_dr_of ehci_platform ehci_fsl ehci_hcd gpio_button_hotplug
+> >>>> usbcore nls_base usb_common
+> >>>> [    3.992907] Process init (pid: 1, threadinfo=3D(ptrval),
+> >>>> task=3D(ptrval), tls=3D77e22ec8)
+> >>>> [    4.000776] Stack : 81431ef4 7fd1f080 81431f28 81428470 7fd1f068
+> >>>> 81431edc 7ff559b8 81428470
+> >>>> [    4.009467]         81431f28 7fd1f080 55590000 77d70000 77d5498c
+> >>>> 80015c70 806f0000 8063ae74
+> >>>> [    4.018149]         08100002 81431f28 0000000a 08100002 81431f28
+> >>>> 0000000a 77d6b418 00000003
+> >>>> [    4.026831]         ffffffff 80016414 80080734 81431ecc 81431ecc
+> >>>> 00000001 00000000 04000000
+> >>>> [    4.035512]         77d54874 00000000 00000000 00000000 00000000
+> >>>> 00000012 00000002 00000000
+> >>>> [    4.044196]         ...
+> >>>> [    4.046706] Call Trace:
+> >>>> [    4.049238] [<80015808>] setup_sigcontext+0x54/0x24c
+> >>>> [    4.054356] [<80015c70>] setup_frame+0xdc/0x124
+> >>>> [    4.059015] [<80016414>] do_notify_resume+0x1dc/0x288
+> >>>> [    4.064207] [<80011b50>] work_notifysig+0x10/0x18
+> >>>> [    4.069036]
+> >>>> [    4.070538] Code: 8fc300b4  00001025  26240008 <ac820000>
+> >>>> ac830004  3c048063  0c0228aa  24846a00  26240010
+> >>>> [    4.080686]
+> >>>> [    4.082517] ---[ end trace 22a8edb41f5f983b ]---
+> >>>> [    4.087374] Kernel panic - not syncing: Fatal exception
+> >>>> [    4.092753] Rebooting in 1 seconds..
+> >>>
+> >>> Did you pinpoint which specific instruction within
+> >>> arch_sync_dma_for_cpu_all() is causing the reserved instruction
+> >>> exception?
+> >>
+> >> It's setup_sigcontext(), not arch_sync_dma_for_cpu_all() that's
+> >> causing the exception ;-)
+> >>
+> >> Hand decoding the Code gives me
+> >>
+> >> lw $1, 0xb4($fp)
+> >> or $v0, 0, 0
+> >> addiu $a0, $s1, 8
+> >> sw $v0, 0($a0) <- the code in brackets, so I guess EPC?
+> >> sw $v1, 4($a0)
+> >>
+> >> which I assume is this part:
+> >>
+> >> err |=3D __put_user(regs->cp0_epc, &sc->sc_pc);
+> >>
+> >> (0xb4 is the offset of cp0_epc, 0x8 the offset of sc_pc)
+> >>
+> >> One thing I see is that we do the RAC flush for BMIPS3300, 4350 and
+> >> 4380, but only initialize it for 3300 [1], but leave it at whatever
+> >> state the bootloader did for the other ones. Maybe it has some invalid
+> >> config in (that particuar?) 6358 that triggers issues later on after a
+> >> flush? E.g. the flush puts it in an error state, and the next time
+> >> something triggers a prefetch(write?) (by trying to access userspace)
+> >> it generates an error exception.
+> >>
+> > Depending on the bootloader but likely bootloader does not use RAC at
+> > all.  So agree that RAC may not be properly initialized when the flush
+> > function is called and push the stale data to corrupt memory and cause
+> > problem later on the userspace.
+>
+> Alvaro, could you do the following and let us know the results, at boot
+> time in bcm6358_quirks():
+>
+> - issue a read_c0_brcm_config_0() and look whether bit 29 (RAC present)
+> is set, if it is not set, then we should forcibly disable the use of the
+> RAC using a flag
+>
+> - issue a __raw_readl(cbr + BMIPS_RAC_CONFIG) and check whether bits 0
+> (RAC_I) or 1 (RAC_D) are set, if not, try to set them and see whether it
+> works
+>
+> Thanks!
+> --
+> Florian
