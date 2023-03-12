@@ -2,134 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 095036B6862
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B8FD6B6865
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 17:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbjCLQrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 12:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59352 "EHLO
+        id S231151AbjCLQsd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 12:48:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbjCLQrm (ORCPT
+        with ESMTP id S229561AbjCLQsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 12:47:42 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 021813E08E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 09:47:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678639621;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=aq3TEq6gMO/54SF3iFz3GDnLmsdqOfZlgKAyUVosWkE=;
-        b=B4vD4I0tGKhNvvrgmQo9fs10GjTI/L5/nxbuXLVEO4m/U6fHTNjJMH+sZlXZRx3/nyepJ2
-        C7wUujh5P784pN0tef3XMNHqkuaSggET2CT0SMNyT65K79PkY4cDhe+pNLt9ORTpAgXoO5
-        RgglVhm4Y7o87V300PaRTS2CmL9hG6w=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-342-cLM3dsyJNWOEtsuUZdb2Ug-1; Sun, 12 Mar 2023 12:46:54 -0400
-X-MC-Unique: cLM3dsyJNWOEtsuUZdb2Ug-1
-Received: by mail-qt1-f198.google.com with SMTP id k13-20020ac8074d000000b003bfd04a3cbcso5695857qth.16
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 09:46:54 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678639613;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aq3TEq6gMO/54SF3iFz3GDnLmsdqOfZlgKAyUVosWkE=;
-        b=Ogac5XfWqrHdbCWxRAJsnlXnX1CZuf27dvvpd/jYI5uTntKe0r+5UQp6cxoc7qsGc1
-         akqiZwdtk/aB/D3z3iOWiCO9NG/RUBUFH0Vxzbus7aldTMWSQ4lLtBCMghzKbfNAebeD
-         lgoFlZsVaXwR+u/hwGpNM48IlaA82mjxJKdEpGGuIDAUrMdjLGHNdJhTf8Ju4oLJuqnJ
-         Lv+SmW19Hygx5TpeYRBHpYC/8PUVyzuFJ7R4I+NfICFknynKcFrA0NWxc739JiDis1dw
-         ZfDJcV3V83mgsBjZEJ1nfnk0gxs6rfiw8zdgDmd4eHHnnC+2gk38UsnuTRqQI45b3/Jy
-         +bpg==
-X-Gm-Message-State: AO0yUKV0C7Iegq+993D0syMXCYlrn/BH8S9FMRO3k7HUd5MoVa9O/IJI
-        wZuLET/79pTggW7lXNCy5H+SjAryJCN6wP3ranNiFWkJIPxGnMIxCXDQuswQ8GTz81UGlFS/bRT
-        LL8LR5IOKEtO/tENvVLcZY0lm
-X-Received: by 2002:ac8:7c4f:0:b0:3bf:d974:8ad5 with SMTP id o15-20020ac87c4f000000b003bfd9748ad5mr20090974qtv.61.1678639613537;
-        Sun, 12 Mar 2023 09:46:53 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+E2G5ifKW1D7prnPEIp+831ufaDl25jApEazP+eWPPhM9XjPq++iVYXn6q1WGwCWsYEYOehA==
-X-Received: by 2002:ac8:7c4f:0:b0:3bf:d974:8ad5 with SMTP id o15-20020ac87c4f000000b003bfd9748ad5mr20090956qtv.61.1678639613309;
-        Sun, 12 Mar 2023 09:46:53 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id m15-20020a05620a13af00b0073917fae4f8sm3751948qki.25.2023.03.12.09.46.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 09:46:53 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     pmladek@suse.com, akpm@linux-foundation.org, peterz@infradead.org,
-        rafael.j.wysocki@intel.com, john.ogness@linutronix.de,
-        linux@rasmusvillemoes.dk, ben.dooks@sifive.com,
-        fuyuanli@didiglobal.com
-Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
-Subject: [PATCH] kernel/hung_task.c: set some hung_task.c variables storage-class-specifier to static
-Date:   Sun, 12 Mar 2023 12:46:45 -0400
-Message-Id: <20230312164645.471259-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        Sun, 12 Mar 2023 12:48:31 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 3DE402200E;
+        Sun, 12 Mar 2023 09:48:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=N4jp8
+        xAkv6nJvns9rj2xzYaBjm242kwG0b+7YqJ0+cc=; b=d071C3qxmpqpF+KJF9YpO
+        m9SEjmPqRNt1HO5i9TEjrNXpcIJ++HSZU4HdTeE/3mOwq8Pv0aq5ceO00OYhrsMg
+        gIhHYoiOhYgLypp7ASZz1USmM36j+XYcBZJbE/lDGbYmQ6QtQHWET9CfMjUlkzEK
+        AeJbOPrELz/BHFMBaaT6Jo=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g0-4 (Coremail) with SMTP id _____wD31E5IAg5k_rGRDA--.2593S2;
+        Mon, 13 Mar 2023 00:48:08 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     don.brace@microchip.com
+Cc:     jejb@linux.ibm.com, martin.petersen@oracle.com,
+        storagedev@microchip.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com,
+        Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH] scsi: smartpqi: Fix use after free bug in pqi_pci_remove due to race condition
+Date:   Mon, 13 Mar 2023 00:48:06 +0800
+Message-Id: <20230312164806.2104140-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-CM-TRANSID: _____wD31E5IAg5k_rGRDA--.2593S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7Aw1xCr1rXr1kXw4fGrWkXrb_yoW8Xr18pF
+        4fJ3sxCr45tryY9w1DA3W0yFy3Cay5KrW3Cwsrt343XF13CryjqryUCa1qvr43XFsYkr4Y
+        yF1Fy3W5WFy7JFUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-J55UUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXBAwU1Xl55jdsgAAsP
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports several warnings
-kernel/hung_task.c:31:19: warning:
-  symbol 'sysctl_hung_task_check_count' was not declared. Should it be static?
-kernel/hung_task.c:50:29: warning:
-  symbol 'sysctl_hung_task_check_interval_secs' was not declared. Should it be static?
-kernel/hung_task.c:52:19: warning:
-  symbol 'sysctl_hung_task_warnings' was not declared. Should it be static?
-kernel/hung_task.c:75:28: warning:
-  symbol 'sysctl_hung_task_panic' was not declared. Should it be static?
+In pqi_pci_probe, it calls pqi_alloc_ctrl_info and bound
+&ctrl_info->event_work with pqi_event_worker.
 
-These variables are only used in hung_task.c, so they should be static
+When it calls pqi_irq_handler to handle IRQ, 
+it will finally call schedule_work to start the work.
 
-Signed-off-by: Tom Rix <trix@redhat.com>
+When we call pqi_pci_remove to remove the driver, there
+may be a sequence as follows:
+
+Fix it by finishing the work before cleanup in pqi_remove_ctrl.
+
+CPU0                  CPU1
+
+                    |pqi_event_worker
+pqi_pci_remove      |
+  pqi_remove_ctrl   |
+pqi_free_ctrl_resources|
+pqi_free_ctrl_info|
+     kfree(ctrl_info)  |
+//free ctrl_info   |
+                    |pqi_ctrl_busy
+                    |//use ctrl_info
+
+Fixes: 6c223761eb54 ("smartpqi: initial commit of Microsemi smartpqi driver")
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 ---
- kernel/hung_task.c | 10 +++++-----
- 1 file changed, 5 insertions(+), 5 deletions(-)
+ drivers/scsi/smartpqi/smartpqi_init.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/kernel/hung_task.c b/kernel/hung_task.c
-index 322813366c6c..9a24574988d2 100644
---- a/kernel/hung_task.c
-+++ b/kernel/hung_task.c
-@@ -28,7 +28,7 @@
- /*
-  * The number of tasks checked:
-  */
--int __read_mostly sysctl_hung_task_check_count = PID_MAX_LIMIT;
-+static int __read_mostly sysctl_hung_task_check_count = PID_MAX_LIMIT;
- 
- /*
-  * Limit number of tasks checked in a batch.
-@@ -47,9 +47,9 @@ unsigned long __read_mostly sysctl_hung_task_timeout_secs = CONFIG_DEFAULT_HUNG_
- /*
-  * Zero (default value) means use sysctl_hung_task_timeout_secs:
-  */
--unsigned long __read_mostly sysctl_hung_task_check_interval_secs;
-+static unsigned long __read_mostly sysctl_hung_task_check_interval_secs;
- 
--int __read_mostly sysctl_hung_task_warnings = 10;
-+static int __read_mostly sysctl_hung_task_warnings = 10;
- 
- static int __read_mostly did_panic;
- static bool hung_task_show_lock;
-@@ -72,8 +72,8 @@ static unsigned int __read_mostly sysctl_hung_task_all_cpu_backtrace;
-  * Should we panic (and reboot, if panic_timeout= is set) when a
-  * hung task is detected:
-  */
--unsigned int __read_mostly sysctl_hung_task_panic =
--				IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
-+static unsigned int __read_mostly sysctl_hung_task_panic =
-+	IS_ENABLED(CONFIG_BOOTPARAM_HUNG_TASK_PANIC);
- 
- static int
- hung_task_panic(struct notifier_block *this, unsigned long event, void *ptr)
+diff --git a/drivers/scsi/smartpqi/smartpqi_init.c b/drivers/scsi/smartpqi/smartpqi_init.c
+index 49a8f91810b6..555f1af38f38 100644
+--- a/drivers/scsi/smartpqi/smartpqi_init.c
++++ b/drivers/scsi/smartpqi/smartpqi_init.c
+@@ -8939,6 +8939,7 @@ static void pqi_take_ctrl_offline_deferred(struct pqi_ctrl_info *ctrl_info)
+ 	pqi_perform_lockup_action();
+ 	pqi_stop_heartbeat_timer(ctrl_info);
+ 	pqi_free_interrupts(ctrl_info);
++	cancel_work_sync(&ctrl_info->event_work);
+ 	pqi_cancel_rescan_worker(ctrl_info);
+ 	pqi_cancel_update_time_worker(ctrl_info);
+ 	pqi_ctrl_wait_until_quiesced(ctrl_info);
 -- 
-2.27.0
+2.25.1
 
