@@ -2,212 +2,640 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96D3E6B6C66
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E625B6B6C69
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCLXI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 19:08:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59954 "EHLO
+        id S229694AbjCLXLU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 19:11:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCLXI4 (ORCPT
+        with ESMTP id S229534AbjCLXLR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 19:08:56 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2FF523D9F;
-        Sun, 12 Mar 2023 16:08:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678662534; x=1710198534;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=dXBs14YlwO7ommmfLZxAVc0RZvTbfLU4Gp2AxHeIMBA=;
-  b=UsfTrLgakErJw92TvzfryuPMrbgypcfY5Lf1/NyNdbXPKtZOSPTRiUQR
-   e+1idPdUHwK1HCiwMRG/wNYcUxG2jChi3v8US47WtfFp7k04PAKwjtH5r
-   +cVMmOp6vEHj0gIOpc28LBBVX2FR2tPkYJs3SG00zPQIGvuZUsUROOvDs
-   g+Ak/ry32YVu1+q3pmGXy8m1/CR3QfgMKbR+o9gBUogYHsWx2iGi4g3dd
-   Q2OjWxAm3wry2GBD2I3cIPKBtrE6naSSm1QsetWtcLkmjt5Y/4qTbrmLd
-   Jixz6mEBDOpQidLJvos1rHsX12l0n7rzspT7hIjIKoAiVSx1Ixch1RbDI
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="335725372"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="335725372"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 16:08:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="671698346"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="671698346"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga007.jf.intel.com with ESMTP; 12 Mar 2023 16:08:53 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 12 Mar 2023 16:08:53 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 12 Mar 2023 16:08:53 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Sun, 12 Mar 2023 16:08:53 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.40) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Sun, 12 Mar 2023 16:08:52 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=fxs7wn8Lq9+7M4x+aSrPJN9wniwRwN25BtTodOgTWDrH7LkCnKssUjnz8//Uc/DyUc1DEWAFJX/Lv8M0SjOOGRQnExkGgdD7Y4aZ4T0FLNXwZh1mRy24+eVQCaG1vKpv6nAJhlyYSXX5ZrwyJSdmwAxXz57/Zz/Z6zPTEUHrH8RTP63R2j4qI8gBOXVRIC937zpkuvW87OQFqB+toiCT918jHXhTD3ELsQZUVImyAwLNvJzkl+DzTaifdeAEY72FJEQAGJKHEUt9fxR0HYy5ivj3x/EPSdujxmbyLk9fzwXfT8E/MVkx6GXgUTJ0EUNK8lya/Y4EDsj7M+o6kfAhgA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=dXBs14YlwO7ommmfLZxAVc0RZvTbfLU4Gp2AxHeIMBA=;
- b=jawIytS0W9yeh6oQv/Bbmxc20halmXklXGNX9pDevyurgHVW4IApJctu/J8+SQHGVqnv2BSWT5jfwLYqoKfAOZ0gq9qQVtdvTeaEBoW8uxg4Yrl/3MFT6DEdifpgIFbpA8oLWlSvdUgCExXAexvXk4CLoKLwaOPXZ4yJvnw2HIokaQNM6gFVxps2Hce4N2aTcVOSK61XqjdAohQUoMkyqDyNAxYxRzjO2RqoCTg/ifsvYthnha0C61O/ZPOBXfEhCcs2q+ijP4UV6sJJwqfO2PiL63MY/P1lvdlLJzWM9zViafnhN8e6myWHC8anoe4Jy976I+18Wb8BxMH9hKmrXA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com (2603:10b6:208:385::18)
- by SA1PR11MB6568.namprd11.prod.outlook.com (2603:10b6:806:253::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Sun, 12 Mar
- 2023 23:08:44 +0000
-Received: from BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::f403:a0a2:e468:c1e9]) by BL1PR11MB5978.namprd11.prod.outlook.com
- ([fe80::f403:a0a2:e468:c1e9%5]) with mapi id 15.20.6178.024; Sun, 12 Mar 2023
- 23:08:44 +0000
-From:   "Huang, Kai" <kai.huang@intel.com>
-To:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>
-CC:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Thread-Topic: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Thread-Index: AQHZUDU50M/RwoyayES+lzw7MeI2g67xefUAgAZUzQA=
-Date:   Sun, 12 Mar 2023 23:08:44 +0000
-Message-ID: <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
-References: <cover.1678111292.git.kai.huang@intel.com>
-         <f150316b975b5ca22c6c4016ffd90db79d657bbf.1678111292.git.kai.huang@intel.com>
-         <20230308222738.GA3419702@ls.amr.corp.intel.com>
-In-Reply-To: <20230308222738.GA3419702@ls.amr.corp.intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BL1PR11MB5978:EE_|SA1PR11MB6568:EE_
-x-ms-office365-filtering-correlation-id: e7018212-45dc-4159-0248-08db234eba2a
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: Mt3tacxwgo6ZBCBP8HGW/CsB0IqJ6qhu+71zyqSfQEhks6kJQQWPA+sV0bhXMkFQ6dFXuqrcn0pCdo94CiPah/Ngjr53PndtuFR9ZJhFkI98LB4x13T7hdsXbczE4jwG068wDofmEwABnay93weZXyJ8+hVP1rubZ0CbRWS9pWPlvSAMMNMK3zWzRMzneyuEz+3lnRAbETlm7PuqQTxkldsHSdAeIpKNhulghvyVKxM2emLout0W5WScswLf3H7ZR1LxdfUp2cETMHjNYxD3G00tatF6YecVOdNt65lBc1KaftQmQwsvRDAQFVZPfmiUX1ttaTEjNzgfPMrCVdas/k9C36bVjP4qy2GvUFh6wsBeGvEKXpntBvh4aalMjFklcNgvBXnh5tva0/rdQQOTRgnMTXXTCs5zcVSCwaDpeXRPhOh1PIAt7MECLKVrYBN4CJmMw5/NzAve7V/m5bm3+HN/6VyUTW1ewQgZoPfWv3AH2vVRhyykrVgBJbbqImOry33gt1GgUKwxJMRO8yVMJJ7/RKaPziZ8Z142oiUCiD3svqQFHL+jCLf8W3kgCGgzM4VVt4CgGXaOnAOqftM1f5uiWiUZYVGRkvehVzgM62bbflvnyANK3JpDdvsGdt+ad3d36DG8JcmxaFbSA9yz30zajDx5jlj8hxeCNGm6+/XiS7rnxhxemEu+h8b712FK
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR11MB5978.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(39860400002)(396003)(366004)(376002)(136003)(451199018)(2616005)(7416002)(186003)(6512007)(6506007)(26005)(8936002)(83380400001)(38070700005)(82960400001)(38100700002)(5660300002)(6486002)(8676002)(66446008)(66476007)(66556008)(64756008)(91956017)(4326008)(71200400001)(2906002)(76116006)(66946007)(41300700001)(122000001)(316002)(478600001)(36756003)(54906003)(6916009)(86362001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?WjQrai82VVhDbVE2OVdPaXJ1LzR2T3JqMzI1SGxiVFBIOGhaTWsvY0tIZ0c5?=
- =?utf-8?B?clVZbU1qZkJlM3BLWU82b0FGTjV0cFZXMVM4SGJva2RYNGhxdlZDdUgyZjFC?=
- =?utf-8?B?OTVrMjVKZTkyMWhmYW5qdkFWOUdHMWhXbzhENU1ZQVdXN094RkdzOHNFcUs3?=
- =?utf-8?B?T3ZLT2FVbi80S2JuaTVJTENkLzVEOXZxSVREMWREOFY4dVlZY2xydFVDQklm?=
- =?utf-8?B?Vk5YaDVBbEtFQ1owNkVBMktqbTNvRm9UUXZzUmdZVVg2cDlLQnZWSDhGKzJV?=
- =?utf-8?B?aE5tNGFKc1FqTzl5MTJVRU51Nkl4bHJxdFRrN3hBbTFWb0ZUaW5OZlZla3k2?=
- =?utf-8?B?dHlOSTVZa1BvN1V6N3JtOFBjU3pUcURPdTltdUVqa0d3MEkxWVdyYkdEcDNt?=
- =?utf-8?B?QXRaUWJPUjVNcjB6Rm9iU3pUaDRwenM2bXFSZjNJeGJSS0hiR1A1bHRQVXJO?=
- =?utf-8?B?Q2p4NVFRblFDTGVYTFVGdkdCSjdRODdCN05ZYVRBOFlMUDNyTjlQQmxpN3hL?=
- =?utf-8?B?RHlvU2lLM0RoeEM4eExESXZtVUgrKzZwUDBGdkZoSFVxZzdUS2hZZkVyM3Zp?=
- =?utf-8?B?d1FEcGkvczVjVzhQbGRDaDI4ZzRyVUtYeUVVL1ZTSVQ3T1pqZ0t6dlhROHBw?=
- =?utf-8?B?OU0zemRzVk5DMUdheGRGeCtsQjV4RGlXV1Y0cWpFWmZqbGhHVjErbXVIVkVU?=
- =?utf-8?B?eDRZeEVXQlVUZytVckNkazFzNUp5NjhHSDVtd0NIamR2RGh6QVFZd2lqSWdk?=
- =?utf-8?B?QzlMTVlIcnpkcTNUV2l6ajNISGFXYkJzcHJYNzcwYWs4cFV3NXd2eW5RYWov?=
- =?utf-8?B?NGQrY0EyQmpMdDZBL3p2dUtWQmdmSTlvTHl1T3dNdzR0ZkpDeUpvZzZzQU1M?=
- =?utf-8?B?T0dYZExlSFp2UEFDRzMzMDNGOE9Jd1hwUVBOVmM1L0ltZWxlRmlwREk5S0FT?=
- =?utf-8?B?c1E2ZUhlQnNidVk0MnhRSWZpbmNvRzF0Wk9QOUtLWnpTWDRvRnQxNG9EVW9K?=
- =?utf-8?B?akVJcEVkLzZHOWYvNmpaQ0lRdjdJL2pFc0dmNU1pY2JuYjkwa29nOThuNmt6?=
- =?utf-8?B?KzdxeldyVFVOTXpzQ1d3M0tJY1NXZVA1SitzMzJvZExtOStFT3RWUU54Y1N3?=
- =?utf-8?B?S0l2WE84ZE5ES0pEWHM0V0NNdUpVdENXOVFubWM4MFJJWjgzWmpMRTJ5QnV2?=
- =?utf-8?B?a0VvMEYvQm41MC9VMGxscFRUaXd6ejR5N2hkYWFjTFN2dW1XZklnU0tZYW9J?=
- =?utf-8?B?WUdzT3lSUUlhdzZsaVo0VDNHa2p2L3NRSGkyZ0dzdE9DbitnQjZiNzVCN1p2?=
- =?utf-8?B?UU4xbE1qaVJGUStXYS90RURsVVpYSGpmeGlKTVFPU1F2RDI0R3podGpHL3dl?=
- =?utf-8?B?MVFlelE3SXFjVjZCb1oyNWk2Uzd2dmRMM25ETE51QzlmZEcrV2Y5dW1xL0E1?=
- =?utf-8?B?QzRTWU5qVEhyQmRyTXlkVklDeFlLNXoyY0V0em5ObzBrbmZyYmtNZXVxYTNN?=
- =?utf-8?B?dEVGNlhwV0NKWFZweDR4NjdxUkx5RVcyVGJkNjZUM1h3RmVsQzA0VDlZaWgr?=
- =?utf-8?B?c24zRG5GR3lscEU5ZDBsZGlHYUcwLys4SUN3aldHbDNBM3E4UzV6SVFoT3ds?=
- =?utf-8?B?UGlCV0xDbWNFaExWNkdqemdZTXJjQlhJY1RBbTJwUVk1NVhuQk0reHB2TUJx?=
- =?utf-8?B?cWpNRDdiZy9tQnZJNjRIRDVKd01QcHIwMWN4UFU5emY4Tm5WQ3pYRmd2dGVv?=
- =?utf-8?B?WUJLNU9vMkV5YU0xMG51N3psOVBLYy8vOC9JZDVlWXVZeVpFSENNODdnYlNt?=
- =?utf-8?B?S3Jlc2ZYWVJkRXdnNU12VHhzOGMyOTAwQ09KR3BPWW85QUZRdjZCeGFqNjN3?=
- =?utf-8?B?bkIwZisyTHNCNHNjN0VicitBbUxZcVROUWZleW1jdmVQVjNPTTdIUnlnT2Iv?=
- =?utf-8?B?eDFUdDVTQnpGWm9zUHhEbUd2eW9QSEg5eExZN3BjRGhwYTJSaTh1Y3FPbjlP?=
- =?utf-8?B?S3lReEJHd3NyVzgrZ3l3MDVLL3VuNk5EbnNiNzJ4cjEySTN3TWYxK2dkeWVn?=
- =?utf-8?B?MUdiSTRKUUZodTJhb2FYajlOMTBiUGgyZDFINDJEYk85K055ZGwydno5aWVO?=
- =?utf-8?B?ZVNlT1dsL2cvQkJtS0JqVEhzTnFlUUpmUzhyekhLcVZ5cElEVXl4ajBuYzhp?=
- =?utf-8?B?bnc9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <20CFD5A7ABDE014392DDD561D9141D0E@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Sun, 12 Mar 2023 19:11:17 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B42A29E20;
+        Sun, 12 Mar 2023 16:11:15 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id by8so10839877ljb.7;
+        Sun, 12 Mar 2023 16:11:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678662673;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=96rKO465udLznJ4LJvjHS/kJFzWh2sBChncbHNeQsGQ=;
+        b=L0szPIKTtmmczs9wNPyG1caXAMrDew/hcwK1NX0I34sedOlf/yhpIKuTVBo4VGqBa7
+         sFvwo8+m6HDNtlzmoCTaZeRyHdAHbYRgyrnbPTuFO738rRK1+mdXlljXVUaPjoVEknIs
+         VBCuh+GUK8DH5qhSx0jzv74tPSOiKoflRs2JAMW2g6MixZdPzZI7mG0s705LlhFq20DU
+         EDiPaLzZQCLsObblV0VLCmkq4eyOWs253ogJounXfxqTEx1j9BcUzoOw/S/UGCYORS/m
+         5Iu4645Cs4L9Ob2zW/HXXn/o6xZ1zsWeBgxD+pkV6JcbB88UgWjJcGJEh3bsgC2otEN8
+         kcaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678662673;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=96rKO465udLznJ4LJvjHS/kJFzWh2sBChncbHNeQsGQ=;
+        b=gHgYivxv+ssCtsqWUoeata4+BCcoEz9TVPZ3ohBkIc49X1MiDbFKkVr3TlU6nnPNV6
+         qb0GeHBbBOal2VCEmGcIJ3L7uP2KuuWhDIWCC8EoIwECoNitXt4GweJRYngvfWL6CPTu
+         aqJSzS8R0kq5fthHGSlMELdL0tARcsXOidPjTxJq9pvKGkd0gwJXo5S9dj7x96l93VDr
+         /zzzuVAkSGw7gIXKdmmTlB2WsDMkrNKRx2XMoRv8JKiSyf/j78JJi2z/awuc6nR5qYFY
+         AKd1soVAdWALyBy7SGgDKTDUovgRkMeL6M2ryr5hMgnE/8URjgBAk0sqd5HwOM8wSujC
+         O/vA==
+X-Gm-Message-State: AO0yUKUCYZqdKBn4oWS61aBgdDErrUHWKmPEFv8qYKCyLMwmEuEJN1Hs
+        3twQ7bjxa/TEOZs41fmWPAc=
+X-Google-Smtp-Source: AK7set/7rEOCF29u1TzD2ApGFqL3Nozazv9s4wq7N4cnc5RGcGTjHGVDvtZr4ICV6W/nNwlg3Bl0Dg==
+X-Received: by 2002:a05:651c:1694:b0:295:a33f:5ede with SMTP id bd20-20020a05651c169400b00295a33f5edemr9619885ljb.33.1678662673334;
+        Sun, 12 Mar 2023 16:11:13 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id t11-20020a2e9d0b000000b0029576ff3908sm789206lji.1.2023.03.12.16.11.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 16:11:12 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 02:11:10 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Rob Herring <robh@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: [PATCH v6 3/5] dmaengine: dw-edma: Add support for native HDMA
+Message-ID: <20230312231110.2py6gph4xrqxish7@mobilestation>
+References: <20230310032342.17395-1-cai.huoqing@linux.dev>
+ <20230310032342.17395-4-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR11MB5978.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7018212-45dc-4159-0248-08db234eba2a
-X-MS-Exchange-CrossTenant-originalarrivaltime: 12 Mar 2023 23:08:44.0324
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: kMMG4YBl/lmKvuf1pWvRtiIzP67vk/LqBJJfH1NGQYHJKVALWrOEEsKuSLv1AEFl6Fhxty1NytbWg1v7THVccg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR11MB6568
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310032342.17395-4-cai.huoqing@linux.dev>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gV2VkLCAyMDIzLTAzLTA4IGF0IDE0OjI3IC0wODAwLCBJc2FrdSBZYW1haGF0YSB3cm90ZToN
-Cj4gPiArDQo+ID4gK3N0YXRpYyBpbnQgdHJ5X2luaXRfbW9kdWxlX2dsb2JhbCh2b2lkKQ0KPiA+
-ICt7DQo+ID4gKwlpbnQgcmV0Ow0KPiA+ICsNCj4gPiArCS8qDQo+ID4gKwkgKiBUaGUgVERYIG1v
-ZHVsZSBnbG9iYWwgaW5pdGlhbGl6YXRpb24gb25seSBuZWVkcyB0byBiZSBkb25lDQo+ID4gKwkg
-KiBvbmNlIG9uIGFueSBjcHUuDQo+ID4gKwkgKi8NCj4gPiArCXNwaW5fbG9jaygmdGR4X2dsb2Jh
-bF9pbml0X2xvY2spOw0KPiA+ICsNCj4gPiArCWlmICh0ZHhfZ2xvYmFsX2luaXRfc3RhdHVzICYg
-VERYX0dMT0JBTF9JTklUX0RPTkUpIHsNCj4gPiArCQlyZXQgPSB0ZHhfZ2xvYmFsX2luaXRfc3Rh
-dHVzICYgVERYX0dMT0JBTF9JTklUX0ZBSUxFRCA/DQo+ID4gKwkJCS1FSU5WQUwgOiAwOw0KPiA+
-ICsJCWdvdG8gb3V0Ow0KPiA+ICsJfQ0KPiA+ICsNCj4gPiArCS8qIEFsbCAnMCdzIGFyZSBqdXN0
-IHVudXNlZCBwYXJhbWV0ZXJzLiAqLw0KPiA+ICsJcmV0ID0gc2VhbWNhbGwoVERIX1NZU19JTklU
-LCAwLCAwLCAwLCAwLCBOVUxMLCBOVUxMKTsNCj4gPiArDQo+ID4gKwl0ZHhfZ2xvYmFsX2luaXRf
-c3RhdHVzID0gVERYX0dMT0JBTF9JTklUX0RPTkU7DQo+ID4gKwlpZiAocmV0KQ0KPiA+ICsJCXRk
-eF9nbG9iYWxfaW5pdF9zdGF0dXMgfD0gVERYX0dMT0JBTF9JTklUX0ZBSUxFRDsNCj4gDQo+IElm
-IGVudHJvcHkgaXMgbGFja2luZyAocmRyYW5kIGZhaWx1cmUpLCBUREhfU1lTX0lOSVQgY2FuIHJl
-dHVybiBURFhfU1lTX0JVU1kuDQo+IEluIHN1Y2ggY2FzZSwgd2Ugc2hvdWxkIGFsbG93IHRoZSBj
-YWxsZXIgdG8gcmV0cnkgb3IgbWFrZSB0aGlzIGZ1bmN0aW9uIHJldHJ5DQo+IGluc3RlYWQgb2Yg
-bWFya2luZyBlcnJvciBzdGlja2lseS4NCg0KVGhlIHNwZWMgc2F5czoNCg0KVERYX1NZU19CVVNZ
-CVRoZSBvcGVyYXRpb24gd2FzIGludm9rZWQgd2hlbiBhbm90aGVyIFREWCBtb2R1bGUNCgkJb3Bl
-cmF0aW9uIHdhcyBpbiBwcm9ncmVzcy4gVGhlIG9wZXJhdGlvbiBtYXkgYmUgcmV0cmllZC4NCg0K
-U28gSSBkb24ndCBzZWUgaG93IGVudHJvcHkgaXMgbGFja2luZyBpcyByZWxhdGVkIHRvIHRoaXMg
-ZXJyb3IuICBQZXJoYXBzIHlvdQ0Kd2VyZSBtaXhpbmcgdXAgd2l0aCBLRVkuQ09ORklHPw0KDQo=
+On Fri, Mar 10, 2023 at 11:23:36AM +0800, Cai Huoqing wrote:
+> Add support for HDMA NATIVE, as long the IP design has set
+> the compatible register map parameter-HDMA_NATIVE,
+> which allows compatibility for native HDMA register configuration.
+> 
+> The HDMA Hyper-DMA IP is an enhancement of the eDMA embedded-DMA IP.
+> And the native HDMA registers are different from eDMA, so this patch
+> add support for HDMA NATIVE mode.
+> 
+> HDMA write and read channels operate independently to maximize
+> the performance of the HDMA read and write data transfer over
+> the link When you configure the HDMA with multiple read channels,
+> then it uses a round robin (RR) arbitration scheme to select
+> the next read channel to be serviced.The same applies when you
+> have multiple write channels.
+> 
+> The native HDMA driver also supports a maximum of 16 independent
+> channels (8 write + 8 read), which can run simultaneously.
+> Both SAR (Source Address Register) and DAR (Destination Address Register)
+> are aligned to byte.
+> 
+> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+> ---
+> v5->v6:
+>   6.Remove some unnecessary wrapper function.
+>   7.Using one loop instead two in dw_hdma_v0_core_handle_int.
+>   8.Fix the method to returning the actual IRQ-handling status.
+> 
+> v5 link:
+> 	https://lore.kernel.org/lkml/20230303124642.5519-4-cai.huoqing@linux.dev/
+> 
+>  drivers/dma/dw-edma/Makefile          |   5 +-
+>  drivers/dma/dw-edma/dw-edma-core.c    |   6 +-
+>  drivers/dma/dw-edma/dw-hdma-v0-core.c | 275 ++++++++++++++++++++++++++
+>  drivers/dma/dw-edma/dw-hdma-v0-core.h |  17 ++
+>  drivers/dma/dw-edma/dw-hdma-v0-regs.h | 129 ++++++++++++
+>  include/linux/dma/edma.h              |   3 +-
+>  6 files changed, 431 insertions(+), 4 deletions(-)
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.c
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-core.h
+>  create mode 100644 drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> 
+> diff --git a/drivers/dma/dw-edma/Makefile b/drivers/dma/dw-edma/Makefile
+> index 8d45c0d5689d..b1c91ef2c63d 100644
+> --- a/drivers/dma/dw-edma/Makefile
+> +++ b/drivers/dma/dw-edma/Makefile
+> @@ -2,6 +2,7 @@
+>  
+>  obj-$(CONFIG_DW_EDMA)		+= dw-edma.o
+>  dw-edma-$(CONFIG_DEBUG_FS)	:= dw-edma-v0-debugfs.o
+> -dw-edma-objs			:= dw-edma-core.o \
+> -					dw-edma-v0-core.o $(dw-edma-y)
+> +dw-edma-objs			:= dw-edma-core.o	\
+> +				   dw-edma-v0-core.o	\
+> +				   dw-hdma-v0-core.o $(dw-edma-y)
+>  obj-$(CONFIG_DW_EDMA_PCIE)	+= dw-edma-pcie.o
+> diff --git a/drivers/dma/dw-edma/dw-edma-core.c b/drivers/dma/dw-edma/dw-edma-core.c
+> index dc2908b66493..05c98b803a85 100644
+> --- a/drivers/dma/dw-edma/dw-edma-core.c
+> +++ b/drivers/dma/dw-edma/dw-edma-core.c
+> @@ -18,6 +18,7 @@
+>  
+>  #include "dw-edma-core.h"
+>  #include "dw-edma-v0-core.h"
+> +#include "dw-hdma-v0-core.h"
+>  #include "../dmaengine.h"
+>  #include "../virt-dma.h"
+>  
+> @@ -923,7 +924,10 @@ int dw_edma_probe(struct dw_edma_chip *chip)
+>  
+>  	dw->chip = chip;
+>  
+> -	dw_edma_v0_core_register(dw);
+> +	if (dw->chip->mf == EDMA_MF_HDMA_NATIVE)
+> +		dw_hdma_v0_core_register(dw);
+> +	else
+> +		dw_edma_v0_core_register(dw);
+>  
+>  	raw_spin_lock_init(&dw->lock);
+>  
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.c b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> new file mode 100644
+> index 000000000000..5446e9f38d65
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.c
+> @@ -0,0 +1,275 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 core
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/irqreturn.h>
+> +#include <linux/io-64-nonatomic-lo-hi.h>
+> +
+> +#include "dw-edma-core.h"
+> +#include "dw-hdma-v0-core.h"
+> +#include "dw-hdma-v0-regs.h"
+> +
+> +enum dw_hdma_control {
+> +	DW_HDMA_V0_CB					= BIT(0),
+> +	DW_HDMA_V0_TCB					= BIT(1),
+> +	DW_HDMA_V0_LLP					= BIT(2),
+> +	DW_HDMA_V0_LIE					= BIT(3),
+> +	DW_HDMA_V0_RIE					= BIT(4),
+> +	DW_HDMA_V0_CCS					= BIT(8),
+> +	DW_HDMA_V0_LLE					= BIT(9),
+> +};
+> +
+> +static inline struct dw_hdma_v0_regs __iomem *__dw_regs(struct dw_edma *dw)
+> +{
+> +	return dw->chip->reg_base;
+> +}
+> +
+> +static inline struct dw_hdma_v0_ch_regs __iomem *
+> +__dw_ch_regs(struct dw_edma *dw, enum dw_edma_dir dir, u16 ch)
+> +{
+> +	if (dir == EDMA_DIR_WRITE)
+> +		return &(__dw_regs(dw)->ch[ch].wr);
+> +	else
+> +		return &(__dw_regs(dw)->ch[ch].rd);
+> +}
+> +
+> +#define SET_CH_32(dw, dir, ch, name, value) \
+> +	writel(value, &(__dw_ch_regs(dw, dir, ch)->name))
+> +
+> +#define GET_CH_32(dw, dir, ch, name) \
+> +	readl(&(__dw_ch_regs(dw, dir, ch)->name))
+> +
+> +#define SET_BOTH_CH_32(dw, ch, name, value) \
+> +	do {					\
+> +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_WRITE, ch)->name));	\
+> +		writel(value, &(__dw_ch_regs(dw, EDMA_DIR_READ, ch)->name));	\
+> +	} while (0)
+> +
+> +/* HDMA management callbacks */
+> +static void dw_hdma_v0_core_off(struct dw_edma *dw)
+> +{
+> +	int id;
+> +
+> +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> +		SET_BOTH_CH_32(dw, id, int_setup,
+> +			       HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
+> +		SET_BOTH_CH_32(dw, id, int_clear,
+> +			       HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK);
+> +		SET_BOTH_CH_32(dw, id, ch_en, 0);
+> +	}
+> +}
+> +
+> +static u16 dw_hdma_v0_core_ch_count(struct dw_edma *dw, enum dw_edma_dir dir)
+> +{
+> +	u32 num_ch = 0;
+> +	int id;
+> +
+> +	for (id = 0; id < HDMA_V0_MAX_NR_CH; id++) {
+> +		if (GET_CH_32(dw, id, dir, ch_en) & BIT(0))
+> +			num_ch++;
+> +	}
+> +
+> +	if (num_ch > HDMA_V0_MAX_NR_CH)
+> +		num_ch = HDMA_V0_MAX_NR_CH;
+> +
+> +	return (u16)num_ch;
+> +}
+> +
+> +static enum dma_status dw_hdma_v0_core_ch_status(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +	u32 tmp;
+> +
+> +	tmp = FIELD_GET(HDMA_V0_CH_STATUS_MASK,
+> +			GET_CH_32(dw, chan->id, chan->dir, ch_stat));
+> +
+> +	if (tmp == 1)
+> +		return DMA_IN_PROGRESS;
+> +	else if (tmp == 3)
+> +		return DMA_COMPLETE;
+> +	else
+> +		return DMA_ERROR;
+> +}
+> +
+
+> +static
+> +irqreturn_t dw_hdma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir,
+> +				       dw_edma_handler_t done, dw_edma_handler_t abort)
+
+Please place the return value together with the modifier too:
++static irqreturn_t
++dw_hdma_v0_core_handle_int(struct dw_edma_irq *dw_irq, enum dw_edma_dir dir,
++			    dw_edma_handler_t done, dw_edma_handler_t abort)
+
+as it's normally done in the driver for the non-inline methods.
+
+> +{
+> +	struct dw_edma *dw = dw_irq->dw;
+> +	unsigned long total, pos, val;
+> +	irqreturn_t ret = IRQ_NONE;
+> +	struct dw_edma_chan *chan;
+> +	unsigned long off, mask;
+> +
+> +	if (dir == EDMA_DIR_WRITE) {
+> +		total = dw->wr_ch_cnt;
+> +		off = 0;
+> +		mask = dw_irq->wr_mask;
+> +	} else {
+> +		total = dw->rd_ch_cnt;
+> +		off = dw->wr_ch_cnt;
+> +		mask = dw_irq->rd_mask;
+> +	}
+> +
+> +	for_each_set_bit(pos, &mask, total) {
+> +		chan = &dw->chan[pos + off];
+> +
+
+> +		val = GET_CH_32(dw, chan->dir, chan->id, int_stat);
+> +		if (FIELD_GET(HDMA_V0_STOP_INT_MASK, val)) {
+> +			SET_CH_32(dw, chan->dir, chan->id,
+> +				  int_clear, HDMA_V0_STOP_INT_MASK);
+> +			done(chan);
+> +
+> +			ret = IRQ_HANDLED;
+> +		}
+> +
+> +		if (FIELD_GET(HDMA_V0_ABORT_INT_MASK, val)) {
+> +			SET_CH_32(dw, chan->dir, chan->id,
+> +				  int_clear, HDMA_V0_ABORT_INT_MASK);
+
+In v5 I was talking about the dw_hdma_v0_core_check_done_int() and
+dw_hdma_v0_core_check_abort_int() methods only. They didn't imply any
+CSR access but merely returned a field of the passed value. So
+creating a separate function just for that seemed redundant. The rest
+of the inliners (dw_hdma_v0_core_clear_done_int(),
+dw_hdma_v0_core_clear_abort_int() and dw_hdma_v0_core_status_int())
+looked ok to me.
+
+> +			abort(&dw->chan[pos + off]);
+
+em, why not "abort(chan);" here?
+
+-Serge(y)
+
+> +
+> +			ret = IRQ_HANDLED;
+> +		}
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static void dw_hdma_v0_write_ll_data(struct dw_edma_chunk *chunk, int i,
+> +				     u32 control, u32 size, u64 sar, u64 dar)
+> +{
+> +	ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
+> +
+> +	if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		struct dw_hdma_v0_lli *lli = chunk->ll_region.vaddr.mem + ofs;
+> +
+> +		lli->control = control;
+> +		lli->transfer_size = size;
+> +		lli->sar.reg = sar;
+> +		lli->dar.reg = dar;
+> +	} else {
+> +		struct dw_hdma_v0_lli __iomem *lli = chunk->ll_region.vaddr.io + ofs;
+> +
+> +		writel(control, &lli->control);
+> +		writel(size, &lli->transfer_size);
+> +		writeq(sar, &lli->sar.reg);
+> +		writeq(dar, &lli->dar.reg);
+> +	}
+> +}
+> +
+> +static void dw_hdma_v0_write_ll_link(struct dw_edma_chunk *chunk,
+> +				     int i, u32 control, u64 pointer)
+> +{
+> +	ptrdiff_t ofs = i * sizeof(struct dw_hdma_v0_lli);
+> +
+> +	if (chunk->chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL) {
+> +		struct dw_hdma_v0_llp *llp = chunk->ll_region.vaddr.mem + ofs;
+> +
+> +		llp->control = control;
+> +		llp->llp.reg = pointer;
+> +	} else {
+> +		struct dw_hdma_v0_llp __iomem *llp = chunk->ll_region.vaddr.io + ofs;
+> +
+> +		writel(control, &llp->control);
+> +		writeq(pointer, &llp->llp.reg);
+> +	}
+> +}
+> +
+> +static void dw_hdma_v0_core_write_chunk(struct dw_edma_chunk *chunk)
+> +{
+> +	struct dw_edma_burst *child;
+> +	struct dw_edma_chan *chan = chunk->chan;
+> +	u32 control = 0, i = 0;
+> +	int j;
+> +
+> +	if (chunk->cb)
+> +		control = DW_HDMA_V0_CB;
+> +
+> +	j = chunk->bursts_alloc;
+> +	list_for_each_entry(child, &chunk->burst->list, list) {
+> +		j--;
+> +		if (!j) {
+> +			control |= DW_HDMA_V0_LIE;
+> +			if (!(chan->dw->chip->flags & DW_EDMA_CHIP_LOCAL))
+> +				control |= DW_HDMA_V0_RIE;
+> +		}
+> +
+> +		dw_hdma_v0_write_ll_data(chunk, i++, control, child->sz,
+> +					 child->sar, child->dar);
+> +	}
+> +
+> +	control = DW_HDMA_V0_LLP | DW_HDMA_V0_TCB;
+> +	if (!chunk->cb)
+> +		control |= DW_HDMA_V0_CB;
+> +
+> +	dw_hdma_v0_write_ll_link(chunk, i, control, chunk->ll_region.paddr);
+> +}
+> +
+> +static void dw_hdma_v0_core_start(struct dw_edma_chunk *chunk, bool first)
+> +{
+> +	struct dw_edma_chan *chan = chunk->chan;
+> +	struct dw_edma *dw = chan->dw;
+> +	u32 tmp;
+> +
+> +	dw_hdma_v0_core_write_chunk(chunk);
+> +
+> +	if (first) {
+> +		/* Enable engine */
+> +		SET_CH_32(dw, chan->dir, chan->id, ch_en, BIT(0));
+> +		/* Interrupt enable&unmask - done, abort */
+> +		tmp = GET_CH_32(dw, chan->dir, chan->id, int_setup) |
+> +		      HDMA_V0_STOP_INT_MASK | HDMA_V0_ABORT_INT_MASK |
+> +		      HDMA_V0_LOCAL_STOP_INT_EN | HDMA_V0_LOCAL_STOP_INT_EN;
+> +		SET_CH_32(dw, chan->dir, chan->id, int_setup, tmp);
+> +		/* Channel control */
+> +		SET_CH_32(dw, chan->dir, chan->id, control1, HDMA_V0_LINKLIST_EN);
+> +		/* Linked list */
+> +		/* llp is not aligned on 64bit -> keep 32bit accesses */
+> +		SET_CH_32(dw, chan->dir, chan->id, llp.lsb,
+> +			  lower_32_bits(chunk->ll_region.paddr));
+> +		SET_CH_32(dw, chan->dir, chan->id, llp.msb,
+> +			  upper_32_bits(chunk->ll_region.paddr));
+> +	}
+> +	/* Set consumer cycle */
+> +	SET_CH_32(dw, chan->dir, chan->id, cycle_sync,
+> +		  HDMA_V0_CONSUMER_CYCLE_STAT | HDMA_V0_CONSUMER_CYCLE_BIT);
+> +	/* Doorbell */
+> +	SET_CH_32(dw, chan->dir, chan->id, doorbell, HDMA_V0_DOORBELL_START);
+> +}
+> +
+> +static void dw_hdma_v0_core_ch_config(struct dw_edma_chan *chan)
+> +{
+> +	struct dw_edma *dw = chan->dw;
+> +
+> +	/* MSI done addr - low, high */
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.lsb, chan->msi.address_lo);
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_stop.msb, chan->msi.address_hi);
+> +	/* MSI abort addr - low, high */
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.lsb, chan->msi.address_lo);
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_abort.msb, chan->msi.address_hi);
+> +	/* config MSI data */
+> +	SET_CH_32(dw, chan->dir, chan->id, msi_msgdata, chan->msi.data);
+> +}
+> +
+> +/* HDMA debugfs callbacks */
+> +static void dw_hdma_v0_core_debugfs_on(struct dw_edma *dw)
+> +{
+> +}
+> +
+> +static const struct dw_edma_core_ops dw_hdma_v0_core = {
+> +	.off = dw_hdma_v0_core_off,
+> +	.ch_count = dw_hdma_v0_core_ch_count,
+> +	.ch_status = dw_hdma_v0_core_ch_status,
+> +	.handle_int = dw_hdma_v0_core_handle_int,
+> +	.start = dw_hdma_v0_core_start,
+> +	.ch_config = dw_hdma_v0_core_ch_config,
+> +	.debugfs_on = dw_hdma_v0_core_debugfs_on,
+> +};
+> +
+> +void dw_hdma_v0_core_register(struct dw_edma *dw)
+> +{
+> +	dw->core = &dw_hdma_v0_core;
+> +}
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-core.h b/drivers/dma/dw-edma/dw-hdma-v0-core.h
+> new file mode 100644
+> index 000000000000..c373b4f0bd8a
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-core.h
+> @@ -0,0 +1,17 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 core
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_CORE_H
+> +#define _DW_HDMA_V0_CORE_H
+> +
+> +#include <linux/dma/edma.h>
+> +
+> +/* HDMA core register */
+> +void dw_hdma_v0_core_register(struct dw_edma *dw);
+> +
+> +#endif /* _DW_HDMA_V0_CORE_H */
+> diff --git a/drivers/dma/dw-edma/dw-hdma-v0-regs.h b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> new file mode 100644
+> index 000000000000..1106f56280c0
+> --- /dev/null
+> +++ b/drivers/dma/dw-edma/dw-hdma-v0-regs.h
+> @@ -0,0 +1,129 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Copyright (c) 2023 Cai Huoqing
+> + * Synopsys DesignWare HDMA v0 reg
+> + *
+> + * Author: Cai Huoqing <cai.huoqing@linux.dev>
+> + */
+> +
+> +#ifndef _DW_HDMA_V0_REGS_H
+> +#define _DW_HDMA_V0_REGS_H
+> +
+> +#include <linux/dmaengine.h>
+> +
+> +#define HDMA_V0_MAX_NR_CH			8
+> +#define HDMA_V0_LOCAL_ABORT_INT_EN		BIT(6)
+> +#define HDMA_V0_REMOTE_ABORT_INT_EN		BIT(5)
+> +#define HDMA_V0_LOCAL_STOP_INT_EN		BIT(4)
+> +#define HDMA_V0_REMOTEL_STOP_INT_EN		BIT(3)
+> +#define HDMA_V0_ABORT_INT_MASK			BIT(2)
+> +#define HDMA_V0_STOP_INT_MASK			BIT(0)
+> +#define HDMA_V0_LINKLIST_EN			BIT(0)
+> +#define HDMA_V0_CONSUMER_CYCLE_STAT		BIT(1)
+> +#define HDMA_V0_CONSUMER_CYCLE_BIT		BIT(0)
+> +#define HDMA_V0_DOORBELL_START			BIT(0)
+> +#define HDMA_V0_CH_STATUS_MASK			GENMASK(1, 0)
+> +
+> +struct dw_hdma_v0_ch_regs {
+> +	u32 ch_en;				/* 0x0000 */
+> +	u32 doorbell;				/* 0x0004 */
+> +	u32 prefetch;				/* 0x0008 */
+> +	u32 handshake;				/* 0x000c */
+> +	union {
+> +		u64 reg;			/* 0x0010..0x0014 */
+> +		struct {
+> +			u32 lsb;		/* 0x0010 */
+> +			u32 msb;		/* 0x0014 */
+> +		};
+> +	} llp;
+> +	u32 cycle_sync;				/* 0x0018 */
+> +	u32 transfer_size;			/* 0x001c */
+> +	union {
+> +		u64 reg;			/* 0x0020..0x0024 */
+> +		struct {
+> +			u32 lsb;		/* 0x0020 */
+> +			u32 msb;		/* 0x0024 */
+> +		};
+> +	} sar;
+> +	union {
+> +		u64 reg;			/* 0x0028..0x002c */
+> +		struct {
+> +			u32 lsb;		/* 0x0028 */
+> +			u32 msb;		/* 0x002c */
+> +		};
+> +	} dar;
+> +
+> +	u32 watermark_en;			/* 0x0030 */
+> +	u32 control1;				/* 0x0034 */
+> +	u32 func_num;				/* 0x0038 */
+> +	u32 qos;				/* 0x003c */
+> +	u64 reserved[8];			/* 0x0040..0x0078 */
+> +	u32 ch_stat;				/* 0x0080 */
+> +	u32 int_stat;				/* 0x0084 */
+> +	u32 int_setup;				/* 0x0088 */
+> +	u32 int_clear;				/* 0x008c */
+> +	union {
+> +		u64 reg;			/* 0x0090..0x0094 */
+> +		struct {
+> +			u32 lsb;		/* 0x0090 */
+> +			u32 msb;		/* 0x0094 */
+> +		};
+> +	} msi_stop;
+> +	union {
+> +		u64 reg;			/* 0x0098..0x009c */
+> +		struct {
+> +			u32 lsb;		/* 0x0098 */
+> +			u32 msb;		/* 0x009c */
+> +		};
+> +	} msi_watermark;
+> +	union {
+> +		u64 reg;			/* 0x00a0..0x00a4 */
+> +		struct {
+> +			u32 lsb;		/* 0x00a0 */
+> +			u32 msb;		/* 0x00a4 */
+> +		};
+> +	} msi_abort;
+> +	u32 msi_msgdata;			/* 0x00a8 */
+> +} __packed;
+> +
+> +struct dw_hdma_v0_ch {
+> +	struct dw_hdma_v0_ch_regs wr;		/* 0x0000 */
+> +	struct dw_hdma_v0_ch_regs rd;		/* 0x0100 */
+> +} __packed;
+> +
+> +struct dw_hdma_v0_regs {
+> +	struct dw_hdma_v0_ch ch[HDMA_V0_MAX_NR_CH];	/* 0x0000..0x0fa8 */
+> +} __packed;
+> +
+> +struct dw_hdma_v0_lli {
+> +	u32 control;
+> +	u32 transfer_size;
+> +	union {
+> +		u64 reg;
+> +		struct {
+> +			u32 lsb;
+> +			u32 msb;
+> +		};
+> +	} sar;
+> +	union {
+> +		u64 reg;
+> +		struct {
+> +			u32 lsb;
+> +			u32 msb;
+> +		};
+> +	} dar;
+> +} __packed;
+> +
+> +struct dw_hdma_v0_llp {
+> +	u32 control;
+> +	u32 reserved;
+> +	union {
+> +		u64 reg;
+> +		struct {
+> +			u32 lsb;
+> +			u32 msb;
+> +		};
+> +	} llp;
+> +} __packed;
+> +
+> +#endif /* _DW_HDMA_V0_REGS_H */
+> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
+> index ed401c965a87..3080747689f6 100644
+> --- a/include/linux/dma/edma.h
+> +++ b/include/linux/dma/edma.h
+> @@ -48,7 +48,8 @@ struct dw_edma_plat_ops {
+>  enum dw_edma_map_format {
+>  	EDMA_MF_EDMA_LEGACY = 0x0,
+>  	EDMA_MF_EDMA_UNROLL = 0x1,
+> -	EDMA_MF_HDMA_COMPAT = 0x5
+> +	EDMA_MF_HDMA_COMPAT = 0x5,
+> +	EDMA_MF_HDMA_NATIVE = 0x7,
+>  };
+>  
+>  /**
+> -- 
+> 2.34.1
+> 
