@@ -2,55 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEC086B62D6
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 03:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37BCB6B62D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 03:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjCLCP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 21:15:58 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42114 "EHLO
+        id S229897AbjCLCQH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 21:16:07 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCLCP4 (ORCPT
+        with ESMTP id S229836AbjCLCQE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 21:15:56 -0500
+        Sat, 11 Mar 2023 21:16:04 -0500
 Received: from mail-yb1-xb49.google.com (mail-yb1-xb49.google.com [IPv6:2607:f8b0:4864:20::b49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B99B138B61
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:15:55 -0800 (PST)
-Received: by mail-yb1-xb49.google.com with SMTP id e20-20020a25d314000000b00b33355abd3dso4564872ybf.14
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:15:55 -0800 (PST)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844563C7BB
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:16:03 -0800 (PST)
+Received: by mail-yb1-xb49.google.com with SMTP id t25-20020a252d19000000b00b341ad1b626so4128614ybt.19
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:16:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678587355;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=DiqHA2sh2qjdCAr0BvIE9FBHTrsJoQpwQKJS30o1Ors=;
-        b=oKgHsOgp/LJThxtOOD0BmOMUoxa9vj7/aLhUxYKjIbC+sQBspp+SbeZUjwaK3aR3xQ
-         iPRiDp6PNbENy8fnbsYvJHvXSRmsGNHrqrAr0eoVzSJwV+u8ylib2UySB1/nQbERcSeO
-         AXXpfYnOm6YaoCLJkjprvjW2+nDkYnfgxFd8P8H1msyGG/RMe1yAw/jxxD2Q5Sxh5TNU
-         L54mIw6mL/cbafd4xoXpi22zf73afZwjVnTd3MFxqqMMGhi07pOnHvykYR0vK9VuI+wR
-         3H94gjSUI05Prvb3SJOJ0LC4Zl6VmJ3mkzkKAyewdx6b54rbDayKDYE51zlD7gzw0wOc
-         +ffg==
+        d=google.com; s=20210112; t=1678587362;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkP3cjlyFBuY4lwBhuPasBEAZ8EXgvKaf+XTugs0ORk=;
+        b=dl6rB5hFHv9SCNUubl2rtwaN/dDMjOatwZ3MmZLo5IRBFOs7mnSBoXwIjFci/ORyq7
+         5RQDqJSUEQtUyt43HW3aGm/afwWgmb9tIv1ebmxPD92DsCu+t1Lru/Mc9sQ7wVk6Mulk
+         wW/FmCvesK1PQRyVj6vqPrK3lUB3IvkDYwYN9iZthvBapK8LsBFRQ3YM/UJflOZGpTZj
+         8kT0qzU063vz5qPgqwQvW25/25DUN6fImshKtoY1/uXNE9slZ/+IOO42iNSaBzxzcyYL
+         xV46aDRjr2Hi4tp6bOxFo7QUpVxrATRB32IpvrhXbR+Ic+JzsSKRtbIVp+Kk3DCYptdN
+         wwUg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678587355;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DiqHA2sh2qjdCAr0BvIE9FBHTrsJoQpwQKJS30o1Ors=;
-        b=bUgIU8CwZ3ogK8Qp+lyabLJpEmTOGYbu5z5GghUW2k3dEW7KR/FOabq2jccTW4oNju
-         R8lDGsPHlJz/xWxkB0VQox+qi1LdrCQlnPFKzfEAWaYjFDOeZC2HAdl9Nj36ULsQiHTz
-         z0kjVA8PE+mQVulX2m0lf59GeS0Tu7/sR1hgGRitF9Wx/oc8i5Il2r7ID+L85mkbLgrc
-         /vmpWnterERAlQIos7CeaTSlR8LrJiKDstm74O8qeAECdo8AX6yZB5pnZp43WPxcfKmH
-         taCyuaClxdQB6h/btYtTDV5AZzTSSndbTQIOYsuqsrHAQRupoi5xa0zg95diysgtUkqn
-         1FQA==
-X-Gm-Message-State: AO0yUKUZDtRVxqOJ8TnfB7jR4rHkRiQZCp8UtReX82kVq3zxxBwWz05u
-        6c7y6S8obewikggC/ggISwDGvDiZGHdJ
-X-Google-Smtp-Source: AK7set9NvAk7wdlKpPiZi5gsiSFQeqThHIKtHvjJxz+x9tnLa1bWROIho+Z0sdoVs9Tg4jwmqE/Ybr3gQMHD
+        d=1e100.net; s=20210112; t=1678587362;
+        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkP3cjlyFBuY4lwBhuPasBEAZ8EXgvKaf+XTugs0ORk=;
+        b=Aueqzb0y/MzBnUuOXgmgEaEqfiCRtbrgvbsj21DMprQqbyach0UNcrvyAZg4f5D/8f
+         OFkT63S5yGOX6yAByWoPmRVEiQs0Opdzc+gkGH2UomE4tioZeIeJhb/7eZY+DpSeNKyh
+         woOPC9emR6SUPBdrQ4k/VaXMJ7QHnFW7UpbRSD8d82Nm+Lr3TMQShOa0Ur/woKKHm48g
+         a+kFQv6tmcEKqvFjkHPVEnn0r+WYvLjPmeOplbiDzTyKCBP81QW4fUdo1FPjrBXLjHOj
+         uumeNrAO5s2anBJJbS8ta1O27bTEYjy3IsD7qdng/QmAJM/7MXhE4kIN1nugHD+nnak0
+         k/zg==
+X-Gm-Message-State: AO0yUKXFabGhNVMmTsiqopPtvgC9cisI1C837sprDG3y/40acjDY2asb
+        m58kpvLmkVP5ZzQGVFeNyyN5Qte7J+z5
+X-Google-Smtp-Source: AK7set/kJBuEV+mbqnhAi0kuxu/g23f1XpN6oLJWkygemzlOuHhNBjhSuYPUA/SjPgoLxUZazwSQajtgf15R
 X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b42b:2e07:afb:877e])
- (user=irogers job=sendgmr) by 2002:a81:7bd5:0:b0:52e:f77a:c3c with SMTP id
- w204-20020a817bd5000000b0052ef77a0c3cmr7ywc.454.1678587354723; Sat, 11 Mar
- 2023 18:15:54 -0800 (PST)
-Date:   Sat, 11 Mar 2023 18:15:32 -0800
-Message-Id: <20230312021543.3060328-1-irogers@google.com>
+ (user=irogers job=sendgmr) by 2002:a81:b286:0:b0:533:9185:fc2c with SMTP id
+ q128-20020a81b286000000b005339185fc2cmr20162639ywh.7.1678587362660; Sat, 11
+ Mar 2023 18:16:02 -0800 (PST)
+Date:   Sat, 11 Mar 2023 18:15:33 -0800
+In-Reply-To: <20230312021543.3060328-1-irogers@google.com>
+Message-Id: <20230312021543.3060328-2-irogers@google.com>
 Mime-Version: 1.0
+References: <20230312021543.3060328-1-irogers@google.com>
 X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v5 00/11] Better fixes for  grouping of events
+Subject: [PATCH v5 01/11] libperf evlist: Avoid a use of evsel idx
 From:   Ian Rogers <irogers@google.com>
 To:     Peter Zijlstra <peterz@infradead.org>,
         Ingo Molnar <mingo@redhat.com>,
@@ -85,78 +87,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The rules for grouping events have grown more complex. Topdown events
-must be grouped, but flags like --metric-no-group and flags on metrics
-don't respect this. Uncore events may be expanded using wild cards for
-PMU names, but then the events need reordering so the group members
-are adjacent. Rather than fixing metrics, this change fixes the main
-event parsing code to first sort and then regroup evsels.
+Setting the leader iterates the list, so rather than use idx (which
+may be changed through list reordering) just count the elements and
+set afterwards.
 
-As this is shared functionality changes to it should cause
-concern. The change is done with the intent of simplifying and making
-more robust the grouping logic, examples are given. If additional
-changes are necessary, they are most likely necessary to the
-evsel__group_pmu_name logic as the code avoids breaking groups that
-are on the same "group" PMU. The group_pmu_name is a variant of the
-pmu_name tweaked in the case of software and aux events, that use
-groups in a slightly different manner to conventional events.
+Signed-off-by: Ian Rogers <irogers@google.com>
+---
+ tools/lib/perf/evlist.c | 13 ++++++-------
+ 1 file changed, 6 insertions(+), 7 deletions(-)
 
-The code was manually tested as well as passing perf test on a Intel
-tigerlake CPU with intel-pt.
-
-v5. Add Adrian's Acked-by on patch 3, add a fix to the warning logic
-    for multiple event groups as reported by Adrian.
-v4. Move the Intel pmu->auxtrace initialization to the existing
-    perf_pmu__get_default_config as suggested by Adrian Hunter.
-v3. Rename pmu_name to group_pmu_name and add patch to warn when
-    events are regrouped as requested by Namhyung.
-v2. Fix up the commit message on 4/10 (thanks Arnaldo). Drop
-    unnecessary v1 5/10 (thanks Kan). evlist->core.nr_groups wasn't
-    being correctly maintained after the sort/regrouping and so the
-    new patch 10/10 removes that variable and computes it from the
-    evlist when necessary, generally just tests.
-
-Ian Rogers (11):
-  libperf evlist: Avoid a use of evsel idx
-  perf stat: Don't remove all grouped events when CPU maps disagree
-  perf pmu: Earlier PMU auxtrace initialization
-  perf stat: Modify the group test
-  perf evsel: Allow const evsel for certain accesses
-  perf evsel: Add function to compute group PMU name
-  perf parse-events: Pass ownership of the group name
-  perf parse-events: Sort and group parsed events
-  perf evsel: Remove use_uncore_alias
-  perf evlist: Remove nr_groups
-  perf parse-events: Warn when events are regrouped
-
- tools/lib/perf/evlist.c                  |  31 ++-
- tools/lib/perf/include/internal/evlist.h |   1 -
- tools/lib/perf/include/perf/evlist.h     |   1 +
- tools/perf/arch/x86/util/auxtrace.c      |   4 -
- tools/perf/arch/x86/util/evlist.c        |  39 ++--
- tools/perf/arch/x86/util/pmu.c           |   8 +-
- tools/perf/builtin-record.c              |   2 +-
- tools/perf/builtin-report.c              |   2 +-
- tools/perf/builtin-stat.c                |  24 +-
- tools/perf/tests/bpf.c                   |   1 -
- tools/perf/tests/parse-events.c          |  24 +-
- tools/perf/tests/pfm.c                   |  12 +-
- tools/perf/tests/pmu-events.c            |   2 +-
- tools/perf/util/evlist.c                 |   2 +-
- tools/perf/util/evlist.h                 |   8 +-
- tools/perf/util/evsel.c                  |  27 ++-
- tools/perf/util/evsel.h                  |   8 +-
- tools/perf/util/header.c                 |   3 +-
- tools/perf/util/metricgroup.c            |   3 +-
- tools/perf/util/parse-events.c           | 275 ++++++++++++-----------
- tools/perf/util/parse-events.h           |  14 +-
- tools/perf/util/parse-events.y           |  28 +--
- tools/perf/util/pfm.c                    |   1 -
- tools/perf/util/pmu.c                    |   6 +-
- tools/perf/util/python.c                 |   2 +-
- tools/perf/util/stat-shadow.c            |   2 +-
- 26 files changed, 284 insertions(+), 246 deletions(-)
-
+diff --git a/tools/lib/perf/evlist.c b/tools/lib/perf/evlist.c
+index 61b637f29b82..2d6121e89ccb 100644
+--- a/tools/lib/perf/evlist.c
++++ b/tools/lib/perf/evlist.c
+@@ -687,15 +687,14 @@ perf_evlist__next_mmap(struct perf_evlist *evlist, struct perf_mmap *map,
+ 
+ void __perf_evlist__set_leader(struct list_head *list, struct perf_evsel *leader)
+ {
+-	struct perf_evsel *first, *last, *evsel;
+-
+-	first = list_first_entry(list, struct perf_evsel, node);
+-	last = list_last_entry(list, struct perf_evsel, node);
+-
+-	leader->nr_members = last->idx - first->idx + 1;
++	struct perf_evsel *evsel;
++	int n = 0;
+ 
+-	__perf_evlist__for_each_entry(list, evsel)
++	__perf_evlist__for_each_entry(list, evsel) {
+ 		evsel->leader = leader;
++		n++;
++	}
++	leader->nr_members = n;
+ }
+ 
+ void perf_evlist__set_leader(struct perf_evlist *evlist)
 -- 
 2.40.0.rc1.284.g88254d51c5-goog
 
