@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D6726B6ADC
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:07:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C60D76B6ADE
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:07:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbjCLUHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
+        id S230418AbjCLUHp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:07:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCLUHh (ORCPT
+        with ESMTP id S229552AbjCLUHl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:07:37 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23D302B2AE;
-        Sun, 12 Mar 2023 13:07:37 -0700 (PDT)
+        Sun, 12 Mar 2023 16:07:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E806C2B2AE;
+        Sun, 12 Mar 2023 13:07:38 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B11D60F24;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 7094B60F24;
+        Sun, 12 Mar 2023 20:07:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FF8AC4339E;
         Sun, 12 Mar 2023 20:07:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22128C433D2;
-        Sun, 12 Mar 2023 20:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678651655;
-        bh=2Fm44MKxxUElyQkYSM0Gxd7QugXbe3Dels56fjEj7bI=;
-        h=From:To:Cc:Subject:Date:From;
-        b=aCLdaSgZNwWLM9UShXKP1yLhMvaKjrBz676cMxuynB8mKrmrV7Z0IOq4rvwKK7Y/e
-         Y9rAb+NEWZBshJRc9WmIRXeBPiLQOXkL18lLMeXwCxRJxzFWshOCzslxXDf3iQ3VyQ
-         YDeKBgtpDiK9fXa9NTF0RBZEYzN40Bw97Y/SfMqvJhNL3w/RXGqrp7zZ4hsWGlxqqH
-         NEg5q0oL4ErkUYZGDxUBCzL9kzBGhQCIAzqc7D0HXdwAPd8odhe8320o5+WnB2UZx/
-         Z063eN+Ks5UWGAwZs87EJrccoweVIb/SZq/9VkU0V2eM2rLsJEk55v7HBdaNHe7olN
-         KOu7XEnCKyhxQ==
+        s=k20201202; t=1678651657;
+        bh=EWFebzRJB5EaxVLme/XjbtAAgfIoo8j3Er0mUNianiQ=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=T0dH1LT2PXEwchZ/rueoW/DQqvaJDkllGUZkdXIixOGajbaD5SCS4qUhncrdQvbtY
+         SPARZCTRL+1SssomEofLmBctMBryXtmNv3wkX/oWOcr8HVgKcZxrZtRra00UFlnkil
+         Nj6RUU2MPoJ+PE+WLUkp3Dy2BohBROntjHN0wejGNArsHb02jxq+lYK0lVt7cPRXlD
+         9PHJorZD87nhzNpZMYJYmrhJYDOFBzco6FuaKDG9EeZMcrZ1+RnEx3Kunr8ATIVQxT
+         /SowIYZ3D3Q31xX29Gnwr0bDb3l6FNe5NQNsQCF0iThAPN6Y4xYpW706vZq3ijEJHC
+         xNR/E0irVu7Zw==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -39,17 +39,17 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Masahiro Yamada <masahiroy@kernel.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
         Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH 0/6] kbuild: fix some packaging issues, and use git-archive for source package
-Date:   Mon, 13 Mar 2023 05:07:25 +0900
-Message-Id: <20230312200731.599706-1-masahiroy@kernel.org>
+Subject: [PATCH 1/6] kbuild: deb-pkg: make debian source package working again
+Date:   Mon, 13 Mar 2023 05:07:26 +0900
+Message-Id: <20230312200731.599706-2-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230312200731.599706-1-masahiroy@kernel.org>
+References: <20230312200731.599706-1-masahiroy@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,38 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series fixes some bugs, then switch to 'git archive'
-for source package creation as suggested by Linus.
+Since commit c5bf2efb058d ("kbuild: deb-pkg: fix binary-arch and clean
+in debian/rules"), the source package generated by 'make deb-pkg' fails
+to build.
 
+I terribly missed the fact that the intdeb-pkg target may regenerate
+include/config/kernel.release due to the following in the top Makefile:
 
+  %pkg: include/config/kernel.release FORCE
 
-Masahiro Yamada (6):
-  kbuild: deb-pkg: make debian source package working again
-  kbuild: deb-pkg: do not take KERNELRELEASE from the source version
-  kbuild: deb-pkg: set CROSS_COMPILE only when undefined
-  kbuild: deb-pkg: split image and debug objects staging out into
-    functions
-  kbuild: deb-pkg: use dh_listpackages to know enabled packages
-  kbuild: use git-archive for source package creation
+Restore KERNELRELEASE= option to avoid the kernel.release disagreement
+between build-arch and binary-arch.
 
- .gitignore                       |    1 +
- Makefile                         |    9 +-
- scripts/.gitignore               |    1 -
- scripts/Makefile                 |    2 +-
- scripts/Makefile.package         |  113 ++--
- scripts/check-git                |   14 +
- scripts/list-gitignored.c        | 1057 ------------------------------
- scripts/package/builddeb         |  269 ++++----
- scripts/package/deb-build-option |   14 +-
- scripts/package/gen-diff-patch   |   44 ++
- scripts/package/mkdebian         |   24 +-
- scripts/package/mkspec           |   17 +-
- scripts/setlocalversion          |   45 +-
- 13 files changed, 335 insertions(+), 1275 deletions(-)
- create mode 100755 scripts/check-git
- delete mode 100644 scripts/list-gitignored.c
- create mode 100755 scripts/package/gen-diff-patch
+Fixes: c5bf2efb058d ("kbuild: deb-pkg: fix binary-arch and clean in debian/rules")
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
+ scripts/package/mkdebian | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
+index f74380036bb5..c6fbfb9f74ba 100755
+--- a/scripts/package/mkdebian
++++ b/scripts/package/mkdebian
+@@ -239,6 +239,7 @@ cat <<EOF > debian/rules
+ #!$(command -v $MAKE) -f
+ 
+ srctree ?= .
++KERNELRELEASE = ${KERNELRELEASE}
+ 
+ build-indep:
+ build-arch:
+@@ -250,7 +251,9 @@ build: build-arch
+ 
+ binary-indep:
+ binary-arch: build-arch
+-	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} intdeb-pkg
++	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} \
++	KERNELRELEASE=\$(KERNELRELEASE) intdeb-pkg
++
+ clean:
+ 	rm -rf debian/files debian/linux-*
+ 	\$(MAKE) -f \$(srctree)/Makefile ARCH=${ARCH} clean
 -- 
 2.34.1
 
