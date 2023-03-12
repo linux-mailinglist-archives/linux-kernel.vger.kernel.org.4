@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 473126B655F
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBBC56B6560
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:26:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCLL0d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:26:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34140 "EHLO
+        id S229922AbjCLL0f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:26:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCLL0a (ORCPT
+        with ESMTP id S229502AbjCLL0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:26:30 -0400
+        Sun, 12 Mar 2023 07:26:32 -0400
 Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E0530EAE
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:26:28 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FDF3311F9
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:26:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678620388; x=1710156388;
+  t=1678620390; x=1710156390;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=+ya4j8+hmXPftNA55cuj2jSsHwe1N+LRr5YAFmUiVLI=;
-  b=ldx6IogcnPXXQiZRIx3DrKYNuIrWAKxUgM111zIqv/UgaGk6vFwxMaDN
-   EsJQ8fR1uqAVV/NUNeltt7PU6nBW8xiwuUUInXqnu0r08U4+SNF6ipP2j
-   UjnHX3WeuPkzebSCmOpSk9pAbe/R5TJBB748cyB7lFeQJYu9buI6jnfKc
-   LVkr4Ygs4KYCL7PluMsY//TyQDnNWaxP9apGv6GQ2z1QAal21Wd7GkrO5
-   35k4I7Q2DXCGuUzg2HPcUabNoRsSCSPNtgIvCzmQbEzL0OgVFQU/FgvVP
-   UOVzXhkVdEVQN2xmWHQwPmUyVQwVXZmnyRAgZ9Fe9Lfk4q5sTOlshfFD5
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339349923"
+  bh=tV3JtlGM60BECBxuCA+QuZaWNCs779YV6vXF0y1DbTc=;
+  b=kRkElrl/fgyh1CaTLusht2vr3WZocR+/mg3gY1ktpPBIKLhArbfxF3F1
+   mZfYXpUBsw8ToHzUs1YOjg3yD1+2zg6mNfl+sxzeeI5P+iZZHIo1OD+V3
+   aWh8+vM913A2iY5pMcyQdYYnTa0M83nCXKbQwO7JlVRx1IvrNLrvNTyQo
+   AOIl7BWGLrSdIg/Ztm+9wbghM8EOdBb5OPIt9SKsRSCnL3RNkrOC2wOPH
+   WKp5s7s5YCz6sxLhpnpkYbNtnbW++FqQmqOv4Bm04fo93C3aWbaQ1fa1D
+   1WyLchopSDK0ZlFMIajD8f/YsqB9xiYThdg1rnJBxaI9mNYAEcBLfKEK+
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="339349931"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="339349923"
+   d="scan'208";a="339349931"
 Received: from orsmga005.jf.intel.com ([10.7.209.41])
   by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="852438013"
+X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="852438015"
 X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="852438013"
+   d="scan'208";a="852438015"
 Received: from nmoazzen-mobl1.amr.corp.intel.com (HELO box.shutemov.name) ([10.251.219.215])
   by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 04:26:22 -0700
 Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5C6AA10D7AF; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
+        id 6695310D7B0; Sun, 12 Mar 2023 14:26:19 +0300 (+03)
 From:   "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
 To:     Dave Hansen <dave.hansen@linux.intel.com>,
         Andy Lutomirski <luto@kernel.org>,
@@ -60,9 +60,9 @@ Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
         Linus Torvalds <torvalds@linux-foundation.org>,
         linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
-Subject: [PATCHv16 01/17] x86/mm: Rework address range check in get_user() and put_user()
-Date:   Sun, 12 Mar 2023 14:25:56 +0300
-Message-Id: <20230312112612.31869-2-kirill.shutemov@linux.intel.com>
+Subject: [PATCHv16 02/17] x86: Allow atomic MM_CONTEXT flags setting
+Date:   Sun, 12 Mar 2023 14:25:57 +0300
+Message-Id: <20230312112612.31869-3-kirill.shutemov@linux.intel.com>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
 References: <20230312112612.31869-1-kirill.shutemov@linux.intel.com>
@@ -77,282 +77,102 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The functions get_user() and put_user() check that the target address
-range resides in the user space portion of the virtual address space.
-In order to perform this check, the functions compare the end of the
-range against TASK_SIZE_MAX.
+So far there's no need in atomic setting of MM context flags in
+mm_context_t::flags. The flags set early in exec and never change
+after that.
 
-For kernels compiled with CONFIG_X86_5LEVEL, this process requires some
-additional trickery using ALTERNATIVE, as TASK_SIZE_MAX depends on the
-paging mode in use.
+LAM enabling requires atomic flag setting. The upcoming flag
+MM_CONTEXT_FORCE_TAGGED_SVA can be set much later in the process
+lifetime where multiple threads exist.
 
-Linus suggested that this check could be simplified for 64-bit kernels.
-It is sufficient to check bit 63 of the address to ensure that the range
-belongs to user space. Additionally, the use of branches can be avoided
-by setting the target address to all ones if bit 63 is set.
+Convert the field to unsigned long and do MM_CONTEXT_* accesses with
+__set_bit() and test_bit().
 
-There's no need to check the end of the access range as there's huge
-gap between end of userspace range and start of the kernel range. The
-gap consists of canonical hole and unused ranges on both kernel and
-userspace sides.
-
-If an address with bit 63 set is passed down, it will trigger a #GP
-exception. _ASM_EXTABLE_UA() complains about this. Replace it with
-plain _ASM_EXTABLE() as it is expected behaviour now.
-
-The updated get_user() and put_user() checks are also compatible with
-Linear Address Masking, which allows user space to encode metadata in
-the upper bits of pointers and eliminates the need to untag the address
-before handling it.
+No functional changes.
 
 Signed-off-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
 Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Tested-by: Alexander Potapenko <glider@google.com>
 ---
- arch/x86/lib/getuser.S | 83 ++++++++++++++++--------------------------
- arch/x86/lib/putuser.S | 54 ++++++++++++---------------
- 2 files changed, 55 insertions(+), 82 deletions(-)
+ arch/x86/entry/vsyscall/vsyscall_64.c | 2 +-
+ arch/x86/include/asm/mmu.h            | 6 +++---
+ arch/x86/include/asm/mmu_context.h    | 2 +-
+ arch/x86/kernel/process_64.c          | 4 ++--
+ 4 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/arch/x86/lib/getuser.S b/arch/x86/lib/getuser.S
-index b70d98d79a9d..b64a2bd1a1ef 100644
---- a/arch/x86/lib/getuser.S
-+++ b/arch/x86/lib/getuser.S
-@@ -37,22 +37,22 @@
+diff --git a/arch/x86/entry/vsyscall/vsyscall_64.c b/arch/x86/entry/vsyscall/vsyscall_64.c
+index d234ca797e4a..e0ca8120aea8 100644
+--- a/arch/x86/entry/vsyscall/vsyscall_64.c
++++ b/arch/x86/entry/vsyscall/vsyscall_64.c
+@@ -317,7 +317,7 @@ static struct vm_area_struct gate_vma __ro_after_init = {
+ struct vm_area_struct *get_gate_vma(struct mm_struct *mm)
+ {
+ #ifdef CONFIG_COMPAT
+-	if (!mm || !(mm->context.flags & MM_CONTEXT_HAS_VSYSCALL))
++	if (!mm || !test_bit(MM_CONTEXT_HAS_VSYSCALL, &mm->context.flags))
+ 		return NULL;
+ #endif
+ 	if (vsyscall_mode == NONE)
+diff --git a/arch/x86/include/asm/mmu.h b/arch/x86/include/asm/mmu.h
+index 5d7494631ea9..efa3eaee522c 100644
+--- a/arch/x86/include/asm/mmu.h
++++ b/arch/x86/include/asm/mmu.h
+@@ -9,9 +9,9 @@
+ #include <linux/bits.h>
  
- #define ASM_BARRIER_NOSPEC ALTERNATIVE "", "lfence", X86_FEATURE_LFENCE_RDTSC
+ /* Uprobes on this MM assume 32-bit code */
+-#define MM_CONTEXT_UPROBE_IA32	BIT(0)
++#define MM_CONTEXT_UPROBE_IA32		0
+ /* vsyscall page is accessible on this MM */
+-#define MM_CONTEXT_HAS_VSYSCALL	BIT(1)
++#define MM_CONTEXT_HAS_VSYSCALL		1
  
--#ifdef CONFIG_X86_5LEVEL
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rdx), \
--		    __stringify(mov $((1 << 56) - 4096 - (n)),%rdx), X86_FEATURE_LA57
--#else
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	mov $(TASK_SIZE_MAX - (n)),%_ASM_DX
--#endif
-+.macro check_range size:req
-+.if IS_ENABLED(CONFIG_X86_64)
-+	mov %rax, %rdx
-+	sar $63, %rdx
-+	or %rdx, %rax
-+.else
-+	cmp $TASK_SIZE_MAX-\size+1, %eax
-+	jae .Lbad_get_user
-+	sbb %edx, %edx		/* array_index_mask_nospec() */
-+	and %edx, %eax
-+.endif
-+.endm
- 
- 	.text
- SYM_FUNC_START(__get_user_1)
--	LOAD_TASK_SIZE_MINUS_N(0)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=1
- 	ASM_STAC
- 1:	movzbl (%_ASM_AX),%edx
- 	xor %eax,%eax
-@@ -62,11 +62,7 @@ SYM_FUNC_END(__get_user_1)
- EXPORT_SYMBOL(__get_user_1)
- 
- SYM_FUNC_START(__get_user_2)
--	LOAD_TASK_SIZE_MINUS_N(1)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=2
- 	ASM_STAC
- 2:	movzwl (%_ASM_AX),%edx
- 	xor %eax,%eax
-@@ -76,11 +72,7 @@ SYM_FUNC_END(__get_user_2)
- EXPORT_SYMBOL(__get_user_2)
- 
- SYM_FUNC_START(__get_user_4)
--	LOAD_TASK_SIZE_MINUS_N(3)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=4
- 	ASM_STAC
- 3:	movl (%_ASM_AX),%edx
- 	xor %eax,%eax
-@@ -90,30 +82,17 @@ SYM_FUNC_END(__get_user_4)
- EXPORT_SYMBOL(__get_user_4)
- 
- SYM_FUNC_START(__get_user_8)
--#ifdef CONFIG_X86_64
--	LOAD_TASK_SIZE_MINUS_N(7)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
-+	check_range size=8
- 	ASM_STAC
-+#ifdef CONFIG_X86_64
- 4:	movq (%_ASM_AX),%rdx
--	xor %eax,%eax
--	ASM_CLAC
--	RET
- #else
--	LOAD_TASK_SIZE_MINUS_N(7)
--	cmp %_ASM_DX,%_ASM_AX
--	jae bad_get_user_8
--	sbb %_ASM_DX, %_ASM_DX		/* array_index_mask_nospec() */
--	and %_ASM_DX, %_ASM_AX
--	ASM_STAC
- 4:	movl (%_ASM_AX),%edx
- 5:	movl 4(%_ASM_AX),%ecx
-+#endif
- 	xor %eax,%eax
- 	ASM_CLAC
- 	RET
--#endif
- SYM_FUNC_END(__get_user_8)
- EXPORT_SYMBOL(__get_user_8)
- 
-@@ -166,7 +145,7 @@ EXPORT_SYMBOL(__get_user_nocheck_8)
- 
- SYM_CODE_START_LOCAL(.Lbad_get_user_clac)
- 	ASM_CLAC
--bad_get_user:
-+.Lbad_get_user:
- 	xor %edx,%edx
- 	mov $(-EFAULT),%_ASM_AX
- 	RET
-@@ -184,23 +163,23 @@ SYM_CODE_END(.Lbad_get_user_8_clac)
+ /*
+  * x86 has arch-specific MMU state beyond what lives in mm_struct.
+@@ -39,7 +39,7 @@ typedef struct {
  #endif
  
- /* get_user */
--	_ASM_EXTABLE_UA(1b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(2b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(3b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(1b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(2b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(3b, .Lbad_get_user_clac)
  #ifdef CONFIG_X86_64
--	_ASM_EXTABLE_UA(4b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(4b, .Lbad_get_user_clac)
+-	unsigned short flags;
++	unsigned long flags;
+ #endif
+ 
+ 	struct mutex lock;
+diff --git a/arch/x86/include/asm/mmu_context.h b/arch/x86/include/asm/mmu_context.h
+index e01aa74a6de7..b4e4a0c04304 100644
+--- a/arch/x86/include/asm/mmu_context.h
++++ b/arch/x86/include/asm/mmu_context.h
+@@ -182,7 +182,7 @@ static inline void arch_exit_mmap(struct mm_struct *mm)
+ static inline bool is_64bit_mm(struct mm_struct *mm)
+ {
+ 	return	!IS_ENABLED(CONFIG_IA32_EMULATION) ||
+-		!(mm->context.flags & MM_CONTEXT_UPROBE_IA32);
++		!test_bit(MM_CONTEXT_UPROBE_IA32, &mm->context.flags);
+ }
  #else
--	_ASM_EXTABLE_UA(4b, .Lbad_get_user_8_clac)
--	_ASM_EXTABLE_UA(5b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(4b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(5b, .Lbad_get_user_8_clac)
- #endif
+ static inline bool is_64bit_mm(struct mm_struct *mm)
+diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
+index 4e34b3b68ebd..8b06034e8c70 100644
+--- a/arch/x86/kernel/process_64.c
++++ b/arch/x86/kernel/process_64.c
+@@ -671,7 +671,7 @@ void set_personality_64bit(void)
+ 	task_pt_regs(current)->orig_ax = __NR_execve;
+ 	current_thread_info()->status &= ~TS_COMPAT;
+ 	if (current->mm)
+-		current->mm->context.flags = MM_CONTEXT_HAS_VSYSCALL;
++		__set_bit(MM_CONTEXT_HAS_VSYSCALL, &current->mm->context.flags);
  
- /* __get_user */
--	_ASM_EXTABLE_UA(6b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(7b, .Lbad_get_user_clac)
--	_ASM_EXTABLE_UA(8b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(6b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(7b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(8b, .Lbad_get_user_clac)
- #ifdef CONFIG_X86_64
--	_ASM_EXTABLE_UA(9b, .Lbad_get_user_clac)
-+	_ASM_EXTABLE(9b, .Lbad_get_user_clac)
- #else
--	_ASM_EXTABLE_UA(9b, .Lbad_get_user_8_clac)
--	_ASM_EXTABLE_UA(10b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(9b, .Lbad_get_user_8_clac)
-+	_ASM_EXTABLE(10b, .Lbad_get_user_8_clac)
- #endif
-diff --git a/arch/x86/lib/putuser.S b/arch/x86/lib/putuser.S
-index 32125224fcca..3062d09a776d 100644
---- a/arch/x86/lib/putuser.S
-+++ b/arch/x86/lib/putuser.S
-@@ -33,20 +33,20 @@
-  * as they get called from within inline assembly.
-  */
+ 	/* TBD: overwrites user setup. Should have two bits.
+ 	   But 64bit processes have always behaved this way,
+@@ -708,7 +708,7 @@ static void __set_personality_ia32(void)
+ 		 * uprobes applied to this MM need to know this and
+ 		 * cannot use user_64bit_mode() at that time.
+ 		 */
+-		current->mm->context.flags = MM_CONTEXT_UPROBE_IA32;
++		__set_bit(MM_CONTEXT_UPROBE_IA32, &current->mm->context.flags);
+ 	}
  
--#ifdef CONFIG_X86_5LEVEL
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	ALTERNATIVE __stringify(mov $((1 << 47) - 4096 - (n)),%rbx), \
--		    __stringify(mov $((1 << 56) - 4096 - (n)),%rbx), X86_FEATURE_LA57
--#else
--#define LOAD_TASK_SIZE_MINUS_N(n) \
--	mov $(TASK_SIZE_MAX - (n)),%_ASM_BX
--#endif
-+.macro check_range size:req
-+.if IS_ENABLED(CONFIG_X86_64)
-+	mov %rcx, %rbx
-+	sar $63, %rbx
-+	or %rbx, %rcx
-+.else
-+	cmp $TASK_SIZE_MAX-\size+1, %ecx
-+	jae .Lbad_put_user
-+.endif
-+.endm
- 
- .text
- SYM_FUNC_START(__put_user_1)
--	LOAD_TASK_SIZE_MINUS_N(0)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=1
- 	ASM_STAC
- 1:	movb %al,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -66,9 +66,7 @@ SYM_FUNC_END(__put_user_nocheck_1)
- EXPORT_SYMBOL(__put_user_nocheck_1)
- 
- SYM_FUNC_START(__put_user_2)
--	LOAD_TASK_SIZE_MINUS_N(1)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=2
- 	ASM_STAC
- 3:	movw %ax,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -88,9 +86,7 @@ SYM_FUNC_END(__put_user_nocheck_2)
- EXPORT_SYMBOL(__put_user_nocheck_2)
- 
- SYM_FUNC_START(__put_user_4)
--	LOAD_TASK_SIZE_MINUS_N(3)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=4
- 	ASM_STAC
- 5:	movl %eax,(%_ASM_CX)
- 	xor %ecx,%ecx
-@@ -110,9 +106,7 @@ SYM_FUNC_END(__put_user_nocheck_4)
- EXPORT_SYMBOL(__put_user_nocheck_4)
- 
- SYM_FUNC_START(__put_user_8)
--	LOAD_TASK_SIZE_MINUS_N(7)
--	cmp %_ASM_BX,%_ASM_CX
--	jae .Lbad_put_user
-+	check_range size=8
- 	ASM_STAC
- 7:	mov %_ASM_AX,(%_ASM_CX)
- #ifdef CONFIG_X86_32
-@@ -144,15 +138,15 @@ SYM_CODE_START_LOCAL(.Lbad_put_user_clac)
- 	RET
- SYM_CODE_END(.Lbad_put_user_clac)
- 
--	_ASM_EXTABLE_UA(1b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(2b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(3b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(4b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(5b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(6b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(7b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(9b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(1b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(2b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(3b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(4b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(5b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(6b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(7b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(9b, .Lbad_put_user_clac)
- #ifdef CONFIG_X86_32
--	_ASM_EXTABLE_UA(8b, .Lbad_put_user_clac)
--	_ASM_EXTABLE_UA(10b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(8b, .Lbad_put_user_clac)
-+	_ASM_EXTABLE(10b, .Lbad_put_user_clac)
- #endif
+ 	current->personality |= force_personality32;
 -- 
 2.39.2
 
