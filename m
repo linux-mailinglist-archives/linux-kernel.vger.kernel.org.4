@@ -2,115 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6988F6B6624
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D52C46B6619
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229710AbjCLNK1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:10:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S229568AbjCLNH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCLNKY (ORCPT
+        with ESMTP id S229450AbjCLNHX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:10:24 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6FE546143
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:10:22 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id j11so12402098lfg.13
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:10:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678626621;
-        h=cc:to:subject:date:from:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l2tChENWyDZGQKa5Zk1lhzLBop14+1J962hBMY2G3xM=;
-        b=c9teDkYV9vZJtIrT75kg/CtINZNaIWkOdPiDnrWus0BcQSelYgwkEgBhEGM32B6hre
-         TThdYQGKyRJzxth8zP+5CSWAof5a7Scqcfprh7Dlrc688dy8N65oJyaRIKayelxaoRmo
-         UlzhtjR1u3mrPyQjJDNUv2aj3pS6BxRANoBUA6oggx1aV+tDS5QAqXlFc/xnMygg3vbL
-         qK5yXDX9zDHgrJCxZUii2SrHmuNFKpB8f+7tev4cVQsCs7zgv+jznKDKYDxmpLlRUjdr
-         /dSHkWyyKCCb8VcIkKSB6U+Mpg8FrPlpi+dnmPznPzVmesl3dYjKrVDw1iV6svNeLmBv
-         I0pA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626621;
-        h=cc:to:subject:date:from:message-id:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l2tChENWyDZGQKa5Zk1lhzLBop14+1J962hBMY2G3xM=;
-        b=WMBRS8/QKh2TrhqDfjl3TvHHXzEbyq/gtL8LVFIWd1IfWn31s4dKibDZZd2ymUkkUL
-         UXN2MALscsx0Yhrw7q6utJBOnzqI+tgK4kX7h/7C8h4SbBx1KB7yyUd4kUp+o4CHUeXj
-         GTd/rUsLliF+FtKuIUXH3ZmZ9on/VIJYTpnPEwGk1SqBu0w469ifTaKmVP8AqAuUyLUb
-         n+OehCDTa/BVzRlo90qm4VqFtQfwbdN3agcPThaSc8GqFJLbat/lR7Pj+L7QXTgNcpFE
-         My8yRm2hJpUMzvJlallJ6rm00mkaudCo1XItxmAHWH4FHAgo26RD/JkR8Vxp0J+tPmOw
-         D8oQ==
-X-Gm-Message-State: AO0yUKVgzj4ITZsUaTXy4bF9zuQf5ngvEIRAFtaZFmGpxyyO2G5sdJyx
-        1uGyAxrIFsqqSHTyOmjMesdoLUapBR1V4v4G
-X-Google-Smtp-Source: AK7set8y9gAEfFlHbH+347ZfF9qAWfWBb6qMTBn1iIO0wKTx8lVtCSyYl2t8hz8TBFdVAVaDkr82nw==
-X-Received: by 2002:ac2:4c06:0:b0:4e0:6e01:7d28 with SMTP id t6-20020ac24c06000000b004e06e017d28mr8288988lfq.60.1678626620827;
-        Sun, 12 Mar 2023 06:10:20 -0700 (PDT)
-Received: from 0000-cover-letter.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
-        by smtp.gmail.com with ESMTPSA id f13-20020a19ae0d000000b004db45096c99sm647651lfc.85.2023.03.12.06.10.20
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:10:20 -0700 (PDT)
-Message-Id: <1678626510.1783316-0-sleirsgoevy@gmail.com>
-From:   Sergey Lisov <sleirsgoevy@gmail.com>
-Date:   Sun, 12 Mar 2023 16:03:15 +0300
-Subject: [PATCH v3 0/2] mmc: dw_mmc: fix DW MMC cores with 32-bit bus on 64-bit Linux systems 
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Sun, 12 Mar 2023 09:07:23 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 946AC28840;
+        Sun, 12 Mar 2023 06:07:22 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32CD7G9i002236;
+        Sun, 12 Mar 2023 14:07:16 +0100
+Date:   Sun, 12 Mar 2023 14:07:16 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
+ -fstack-protector
+Message-ID: <ZA3OhLBmUz3fui+f@1wt.eu>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+ <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DesignWare MMC cores have a configurable data bus width of either 16, 32, or 64
-bytes. It is possible, and some vendors actually do it, to ship a DW MMC core
-configured for 32-bit data bus within a 64-bit SoC. In this case the kernel
-will attempt 64-bit (readq) accesses to certain 64-bit MMIO registers, while
-the core will expect pairs of 32-bit accesses.
+On Tue, Mar 07, 2023 at 10:22:34PM +0000, Thomas Weiﬂschuh wrote:
+> Test the previously introduce stack protector functionality in nolibc.
 
-It seems that currently the only register for which the kernel performs 64-bit
-accesses is the FIFO. The symptom is that the DW MMC core never receives a read
-on the second half of the register, does not register the datum as being read,
-and thus not advancing its internal FIFO pointer, breaking further reads. It
-also seems that this FIFO is only used for small (less than 16 bytes)
-transfers, which probably means that only some SDIO cards are affected.
+s/introduce/introduced/
 
-Changelog:
+(I can adjust it myself when merging to avoid a respin if you want).
 
-v3:
-- removed "fifo-access-32bit" devicetree property
-- added "samsung,exynos78xx-dw-mshc" compatible string
-- added "samsung,exynos78xx-dw-mshc-smu" compatible string
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+>  tools/testing/selftests/nolibc/nolibc-test.c | 74 +++++++++++++++++++++++++++-
+>  1 file changed, 72 insertions(+), 2 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/nolibc/nolibc-test.c b/tools/testing/selftests/nolibc/nolibc-test.c
+> index fb2d4872fac9..4990b2750279 100644
+> --- a/tools/testing/selftests/nolibc/nolibc-test.c
+> +++ b/tools/testing/selftests/nolibc/nolibc-test.c
+> @@ -45,6 +45,7 @@ char **environ;
+>  struct test {
+>  	const char *name;              // test name
+>  	int (*func)(int min, int max); // handler
+> +	char skip_by_default;         // don't run by default
 
-v2:
-- added commit messages
+Just a tiny detail but that comment is misaligned by one char on the left.
 
-v1:
-- added "fifo-access-32bit" devicetree property
-- added DW_MMC_QUIRK_FIFO64_32
-- added new dw_mci_{pull,push}_data* variants (...-data64_32)
+>  };
+>  
+>  #ifndef _NOLIBC_STDLIB_H
+> @@ -667,6 +668,70 @@ int run_stdlib(int min, int max)
+>  	return ret;
+>  }
+>  
+> +#if defined(__clang__)
+> +__attribute__((optnone))
+> +#elif defined(__GNUC__)
+> +__attribute__((optimize("O0")))
+> +#endif
+> +static int run_smash_stack(int min, int max)
+> +{
+> +	char buf[100];
+> +
+> +	for (size_t i = 0; i < 200; i++)
+> +		buf[i] = 15;
 
-Sergey Lisov (2):
-  dt-bindings: exynos-dw-mshc-common: add exynos78xx variants
-  mmc: dw_mmc: add an option to force 32-bit access to 64-bit FIFO
+If the goal is to make it easy to spot in a crash dump, I suggest
+that you use a readable ASCII letter that's easy to recognize. 0xF
+will usually not be printed in hex dumps, making it less evident
+when scrolling quickly. For example I often use 'P' when poisoning
+memory but you get the idea.
 
- .../bindings/mmc/samsung,exynos-dw-mshc.yaml  |   2 +
- arch/arm64/boot/dts/exynos/exynos7885.dtsi    |   2 +-
- drivers/mmc/host/dw_mmc-exynos.c              |  41 +++++-
- drivers/mmc/host/dw_mmc.c                     | 122 +++++++++++++++++-
- drivers/mmc/host/dw_mmc.h                     |   2 +
- 5 files changed, 165 insertions(+), 4 deletions(-)
+> +int run_stackprotector(int min, int max)
+> +{
+> +	int llen = 0;
+> +
+> +	llen += printf("0 ");
+> +
+> +#if !defined(NOLIBC_STACKPROTECTOR)
+> +	llen += printf("stack smashing detection not supported");
+> +	pad_spc(llen, 64, "[SKIPPED]\n");
+> +	return 0;
+> +#endif
 
--- 
-2.38.3
+Shouldn't the whole function be enclosed instead ? I know it's more of
+a matter of taste, but avoiding to build and link it for archs that
+will not use it may be better.
 
+> +
+> +	pid_t pid = fork();
 
+Please avoid variable declarations after statements, for me these
+are really horrible to deal with when editing the code later, because
+instead of having to look up only the beginning of each containing
+block (i.e. in O(log(N))) you have to visually parse every single line
+(i.e. O(N)).
+
+> +	switch (pid) {
+> +	case -1:
+> +		llen += printf("fork()");
+> +		pad_spc(llen, 64, "[FAIL]\n");
+> +		return 1;
+> +
+> +	case 0:
+> +		close(STDOUT_FILENO);
+> +		close(STDERR_FILENO);
+> +
+> +		char *const argv[] = {
+> +			"/proc/self/exe",
+> +			"_smash_stack",
+> +			NULL,
+> +		};
+
+Same here.
+
+> +		execve("/proc/self/exe", argv, NULL);
+> +		return 1;
+> +
+> +	default: {
+> +		int status;
+
+And here by moving "status" upper in the function you can even
+get rid of the braces.
+
+> +		pid = waitpid(pid, &status, 0);
+> +
+> +		if (pid == -1 || !WIFSIGNALED(status) || WTERMSIG(status) != SIGABRT) {
+> +			llen += printf("waitpid()");
+> +			pad_spc(llen, 64, "[FAIL]\n");
+> +			return 1;
+> +		}
+> +		llen += printf("stack smashing detected");
+> +		pad_spc(llen, 64, " [OK]\n");
+> +		return 0;
+> +	}
+> +	}
+> +}
+> +
+>  /* prepare what needs to be prepared for pid 1 (stdio, /dev, /proc, etc) */
+>  int prepare(void)
+>  {
+> @@ -719,8 +784,11 @@ int prepare(void)
+>  /* This is the definition of known test names, with their functions */
+>  static const struct test test_names[] = {
+>  	/* add new tests here */
+> -	{ .name = "syscall",   .func = run_syscall  },
+> -	{ .name = "stdlib",    .func = run_stdlib   },
+> +	{ .name = "syscall",        .func = run_syscall         },
+> +	{ .name = "stdlib",         .func = run_stdlib          },
+> +	{ .name = "stackprotector", .func = run_stackprotector, },
+> +	{ .name = "_smash_stack",   .func = run_smash_stack,
+
+I think it would be better to keep the number of categories low
+and probably you should add just one called "protection" or so,
+and implement your various tests in it as is done for other
+categories. The goal is to help developers quickly spot and select
+the few activities they're interested in at a given moment. 
+
+Thanks,
+Willy
