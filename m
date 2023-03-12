@@ -2,140 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2AF436B6799
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:42:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5ED726B67B0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbjCLPmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 11:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54932 "EHLO
+        id S229996AbjCLPx1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 11:53:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCLPmX (ORCPT
+        with ESMTP id S229543AbjCLPxZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 11:42:23 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FA4A457C8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 08:42:22 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pbNpx-0004iu-Dx; Sun, 12 Mar 2023 16:42:17 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pbNpv-003eWq-3a; Sun, 12 Mar 2023 16:42:15 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pbNpu-004Jch-3M; Sun, 12 Mar 2023 16:42:14 +0100
-Date:   Sun, 12 Mar 2023 16:42:10 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Thierry Reding <thierry.reding@gmail.com>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        linux-pwm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 1/2] pwm: rcar: drop of_match_ptr for ID table
-Message-ID: <20230312154210.ovm54x2qtcv7fp7r@pengutronix.de>
-References: <20230312135120.357713-1-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 11:53:25 -0400
+X-Greylist: delayed 377 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Mar 2023 08:53:23 PDT
+Received: from mail.manjaro.org (mail.manjaro.org [IPv6:2a01:4f8:c0c:51f3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B195426588;
+        Sun, 12 Mar 2023 08:53:23 -0700 (PDT)
+Message-ID: <de40d404-63ef-6561-f321-ffbe16ac7d5f@manjaro.org>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manjaro.org; s=2021;
+        t=1678636021;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=YTnBYqy2JF+F2J796Km5GkcVKX0bGpttXtvOUqBezl8=;
+        b=LPz0TF+kRpxZoZIFzwdba4yWMWatb5lF4eX8KDdybt2+GC7q37xebw0WnnnnzS6oFR93CH
+        0N5KQt2Z0eesSW6zDSLFSFTl7l175Axye//yUNsQDLrijy5PMUsQ8OxBA8eJzJ6C6NuxVx
+        kT9WaAzcXdMRktov9sOhC1u2vw+Y9ucDLf5dCIPjcbecdBwky7BXKWLzG7KxLuv4858QwE
+        b3XfoCmJz/mwICW6skI/4UEbf9pXyVJJ/LqXsVPWPq2IPERIaQ705QLx7IvXQeiOwLws9R
+        JaerhB/M5lgoD2jNCpUlQCmeJbplUefKu17iI7NeOUlWQjwTTs4UvNlYI3P5rg==
+Date:   Sun, 12 Mar 2023 22:46:53 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="dzhk73rozkcsmxbj"
-Content-Disposition: inline
-In-Reply-To: <20230312135120.357713-1-krzysztof.kozlowski@linaro.org>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [REGRESSION] Patch broke WPA auth: Re: [PATCH v2] wifi: cfg80211:
+ Fix use after free for wext
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     "support@manjaro.org" <support@manjaro.org>,
+        Hector Martin <marcan@marcan.st>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <1b393dfc-76be-9404-e7c9-a2f9fff215a8@manjaro.org>
+ <ZA3m5s7yfTGMVthu@kroah.com>
+ <5dc06a75-9913-8f47-a79e-38b0879808bb@manjaro.org>
+ <ZA3xjPWtCHtE9pAQ@kroah.com>
+From:   =?UTF-8?Q?Philip_M=c3=bcller?= <philm@manjaro.org>
+Organization: Manjaro Community
+In-Reply-To: <ZA3xjPWtCHtE9pAQ@kroah.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+Authentication-Results: ORIGINATING;
+        auth=pass smtp.auth=philm@manjaro.org smtp.mailfrom=philm@manjaro.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Ok, sorry forgot to add some CCs. Beside the reported affected kernels 
+by Hector, who also provided the fix, it seems the appointed patch 
+affects all stable releases as shown below.
 
---dzhk73rozkcsmxbj
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On 12.03.23 22:36, Greg Kroah-Hartman wrote:
+> On Sun, Mar 12, 2023 at 10:11:29PM +0700, Philip Müller wrote:
+>> I see,
+>>
+>> however, seems we have a full house here:
+>>
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/4.14.308/wifi-cfg80211-fix-use-after-free-for-wext.patch
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/4.19.276/wifi-cfg80211-fix-use-after-free-for-wext.patch
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/5.4.235/wifi-cfg80211-fix-use-after-free-for-wext.patch
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/5.10.173/wifi-cfg80211-fix-use-after-free-for-wext.patch
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/5.15.99/wifi-cfg80211-fix-use-after-free-for-wext.patch
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/6.1.16/wifi-cfg80211-fix-use-after-free-for-wext.patch
+>> https://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git/tree/releases/6.2.3/wifi-cfg80211-fix-use-after-free-for-wext.patch
+> 
+> I do not understand, sorry.
+> 
+> Also, why is this a private message?  Kernel development is done in
+> public please.
+> 
+> thanks,
+> 
+> greg k-h
 
-Hello,
+-- 
+Best, Philip
 
-On Sun, Mar 12, 2023 at 02:51:19PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).  This
-> also fixes !CONFIG_OF error:
->=20
->   drivers/pwm/pwm-rcar.c:252:34: error: =E2=80=98rcar_pwm_of_table=E2=80=
-=99 defined but not used [-Werror=3Dunused-const-variable=3D]
->=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Hmm, I wonder what else is required here to trigger that warning. On
-amd64 I also disabled CONFIG_MODULES as otherwise rcar_pwm_of_table is
-used by
-
-	MODULE_DEVICE_TABLE(of, rcar_pwm_of_table);
-
-With that I have:
-
-	uwe@taurus:~/work/kbuild/amd64$ make drivers/pwm/pwm-rcar.o=20
-	  GEN     Makefile
-	  CALL    /home/uwe/gsrc/linux/scripts/checksyscalls.sh
-	  DESCEND objtool
-	  INSTALL libsubcmd_headers
-	  CC      drivers/pwm/pwm-rcar.o
-	uwe@taurus:~/work/kbuild/amd64$ make drivers/pwm/pwm-rcar.i
-	  GEN     Makefile
-	  CALL    /home/uwe/gsrc/linux/scripts/checksyscalls.sh
-	  DESCEND objtool
-	  INSTALL libsubcmd_headers
-	  CPP     drivers/pwm/pwm-rcar.i
-	uwe@taurus:~/work/kbuild/amd64$ grep rcar_pwm_of_table drivers/pwm/pwm-rca=
-r.i
-	static const struct of_device_id rcar_pwm_of_table[] =3D {
-
-=2E.. some time later ...
-
-ah, you also need W=3D1 to get that warning because of
-
-	# These warnings generated too much noise in a regular build.
-	# Use make W=3D1 to enable them (see scripts/Makefile.extrawarn)
-	KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-but-set-variable)
-	KBUILD_CFLAGS +=3D $(call cc-disable-warning, unused-const-variable)
-
-in the toplevel Makefile.
-
-I guess that explains why there is no previous report by one of the
-build bots about this issue.
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=C3=B6nig         =
-   |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---dzhk73rozkcsmxbj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQN8s4ACgkQwfwUeK3K
-7AmBVgf7BWzGBbyB5eY9U2UaqiiAl/c9xENIkpkw2tYuoglHWE09cMrY/hlqK09q
-vcHFteBiC+YSGAU7zSFi32vQlMtsKfryHrjIviXMzpBIFoILcElV2F+YsLz9hjj7
-eq1q3DWTzmpQRGSi931BW1CnCTuVg63WwxEUPXyN25CijA/jnsiiiZUIMmxqcCso
-KAai0pDUEn+K2KCxU3Tl89cghJu3Ov7J5teDsbqwlmkpywi3Uc7EblFTnjI5Cb6x
-6GHENVTVp2R6Tignc+6O8V8ne1DEdBkMmZp19Cf+g1bdWNWBjvYOFmcaJdYHqPTX
-bfpswuOSYEJEHycPG8AcCJls5KbKpg==
-=7TYH
------END PGP SIGNATURE-----
-
---dzhk73rozkcsmxbj--
