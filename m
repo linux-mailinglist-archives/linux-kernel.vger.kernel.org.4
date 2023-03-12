@@ -2,194 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47A426B6BDD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:48:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09966B6BE0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:50:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbjCLVsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:48:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40650 "EHLO
+        id S231288AbjCLVuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbjCLVsF (ORCPT
+        with ESMTP id S230179AbjCLVt7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:48:05 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD37876B7;
-        Sun, 12 Mar 2023 14:48:02 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id n2so13330969lfb.12;
-        Sun, 12 Mar 2023 14:48:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678657681;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=y5y4jRO3tvVEIPg+bJu5nAZMjU2RPtX65wVjqo5C+Lo=;
-        b=CP8bFj64K+DtQdYb4okIlrNP0nzhMCGnx7StzsM2nNPS+oZhfuu67dbiticE7wTAjg
-         57HxjqwwuBEpc4J5GrpocXs2RtQNxmuBU3eyNgtWCxfb+S48E2eQTJ0Ep0AVQD2gtnyk
-         UaqHeB5G/1XI1XDU15tCEZMW8YJJwdq7i/nrqPQ0zG/EIBLUDTI6lu4HkyZ7TggACmaX
-         ppwVDHtHZHgD7j1ghf60Avj63gXZeDFebYnNXI9zavhqsf4P9rwZmP4Uwrqs/045jxOO
-         IGr/7RWav/r7kuNRj+yjIWrj+EmId2TGBExLfrxcHJE+2CGhiAa+6xvM/UADAKzNGHDp
-         HZsA==
+        Sun, 12 Mar 2023 17:49:59 -0400
+Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC6D1043F;
+        Sun, 12 Mar 2023 14:49:57 -0700 (PDT)
+Received: by mail-wm1-f50.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so6556604wms.1;
+        Sun, 12 Mar 2023 14:49:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678657681;
+        d=1e100.net; s=20210112; t=1678657796;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=y5y4jRO3tvVEIPg+bJu5nAZMjU2RPtX65wVjqo5C+Lo=;
-        b=EJ6RiQVZxawfYCYjpu53IlWkpy1MofvZYMAmbu102C0j2Uq1cpOHVtg6fmEarM/rge
-         bguwOPqDka87lFDAs4AcVhXZlrzSnRZ/Wf10jlE/regCvDKSMmDXsEnnypoc/b0VhR7x
-         HoGe9NFndUckuZCvxvY+Ui+umxDtkccNb2A6ie7RU/RSKZgceGvRTzn3Chz38/v+Lr0V
-         79WUBlxVihqZruEjlLk0VJ6o+VzRl/eyekeZ6XVUP2BSzDXOwgg7HCJTvfVEgIGF0OIe
-         rDUaTrL5ppLPCS1wWwkiN881ApM8Q9ApLT1HWQx7PQvUvILAPSRY/r4pyuuFxNRkQAvN
-         tjnQ==
-X-Gm-Message-State: AO0yUKUJlKaya+Tav9DJPOiozSHENw4cBWgQnqR2hDW7um4G1mglm1y8
-        MkzM4Uhlk0Eeoddc/usvI5s=
-X-Google-Smtp-Source: AK7set8V8uz3tGUo7Fyp2Dbk0KDBJduMR7t8w0zfqzjPWhvVc973B2Sz5O5lhERxkbt2qLb5gxLaAA==
-X-Received: by 2002:a05:6512:38c6:b0:4db:387f:a3af with SMTP id p6-20020a05651238c600b004db387fa3afmr8165964lft.4.1678657680821;
-        Sun, 12 Mar 2023 14:48:00 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id j6-20020a19f506000000b004d2199ea23dsm766039lfb.0.2023.03.12.14.47.59
+        bh=ciUH2K2b185BvScrtOTL0Sqk4RrdEzj1aaThj5pGCpQ=;
+        b=ulLXKlBhqwve9szSCeiUgHJNCrAcMTNAt0S8sVXsnn7kGqHI74oBO0+ugM3q24fCE3
+         E434EtN9KlcyIR8oqwFomkv/k7wOC2VH4Cg5e9MpxqqCNFSiSULQJfWyi0zSHcK71KLA
+         sjEFIO+YUm8b9WnOdZ6QXPYLPKMdXUdbdPfvBpZkU5FS6stmLBl2HLyIZl+uHgvdZccW
+         W18h+TOrr0IGv/25Z+G9LxS+PTizBBCJ8L7MFFkG9/ESQsXHQGruEmYPj8MLgqUrtSSb
+         1bgs/8SMyALyoDULiOjPUbuo8xBB4e4ERAM8aQ/P8LG8T6heCkRNnHDBFfPpeQWW5py4
+         ktdg==
+X-Gm-Message-State: AO0yUKWXGt3MbhIvDHw6Nt18NJ3PBI5ZYb5O1ZO/Sffb9vDXPa5jgk0p
+        9cm+S2QHLO5JuZeXw7e4/h0=
+X-Google-Smtp-Source: AK7set+60VDwNsXcwRYqGYHJQF5rqWFoUT8oalPGUGVfkEG556YHGFMNiSzZXPcsX2pOSUZLol9boQ==
+X-Received: by 2002:a05:600c:310e:b0:3e9:f15b:935b with SMTP id g14-20020a05600c310e00b003e9f15b935bmr9388863wmo.32.1678657796014;
+        Sun, 12 Mar 2023 14:49:56 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id l5-20020a7bc445000000b003eae73f0fc1sm6903106wmi.18.2023.03.12.14.49.55
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 14:47:59 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 00:47:57 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>
-Cc:     Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Rob Herring <robh@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        linux-kernel@vger.kernel.org, dmaengine@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Subject: Re: [PATCH v6 1/5] dmaengine: dw-edma: Rename dw_edma_core_ops
- structure to dw_edma_plat_ops
-Message-ID: <20230312214757.i2nzjgxfm3jvvrbb@mobilestation>
-References: <20230310032342.17395-1-cai.huoqing@linux.dev>
- <20230310032342.17395-2-cai.huoqing@linux.dev>
+        Sun, 12 Mar 2023 14:49:55 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 21:49:53 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
+Message-ID: <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
+References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
+ <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230310032342.17395-2-cai.huoqing@linux.dev>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 11:23:34AM +0800, Cai Huoqing wrote:
-> From: Cai huoqing <cai.huoqing@linux.dev>
+On Thu, Mar 09, 2023 at 10:35:57AM -0800, Saurabh Sengar wrote:
+> Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
+> feature. VSM is a set of hypervisor capabilities and enlightenments
+> offered to host and guest partitions which enable the creation and
+> management of new security boundaries within operating system software.
+> VSM achieves and maintains isolation through VTLs.
 > 
-
-> Rename dw_edma_core_ops structure to dw_edma_plat_ops, the ops is platform
-> specific operations: the DMA device environment configs like IRQs,
-> address translation, etc.
-
-Drop this
-
+> Add early initialization for Virtual Trust Levels (VTL). This includes
+> initializing the x86 platform for VTL and enabling boot support for
+> secondary CPUs to start in targeted VTL context. For now, only enable
+> the code for targeted VTL level as 2.
 > 
-> The dw_edma_core_ops structure contains a set of the operations:
-> device IRQ numbers getter, CPU/PCI address translation. Based on the
-> functions semantics the structure name "dw_edma_plat_ops" looks more
-> descriptive since indeed the operations are platform-specific. The
-> "dw_edma_core_ops" name shall be used for a structure with the IP-core
-> specific set of callbacks in order to abstract out DW eDMA and DW HDMA
-> setups. Such structure will be added in one of the next commit in the
-> framework of the set of changes adding the DW HDMA device support.
+> When starting an AP at a VTL other than VTL 0, the AP must start directly
+> in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
+> transition sequence that occurs after waking up an AP with SIPI whose
+> vector points to the 16-bit AP startup trampoline code.
 > 
-
-> Anyway the renaming was necessary to distinguish two types of
-> the implementation callbacks:
-> 1. DW eDMA/hDMA IP-core specific operations: device-specific CSR
-> setups in one or another aspect of the DMA-engine initialization.
-> 2. DW eDMA/hDMA platform specific operations: the DMA device
-> environment configs like IRQs, address translation, etc.
+> This commit also moves hv_get_nmi_reason function to header file, so
+> that it can be reused by VTL.
 > 
-> dw_edma_core_ops is supposed to be used for the case 1, and
-> dw_edma_plat_ops - for the case 2.
-
-Drop this
-
-Other than that looks good.
-Reviewed-by: Serge Semin <fancer.lancer@gmail.com>
-
--Serge(y)
-
-> 
-> Signed-off-by: Cai huoqing <cai.huoqing@linux.dev>
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
 > ---
-> v5->v6:
->   1.Change the commit log to explain dw_edma_core_ops structure.
->   2.Revert the instance dw_edma_pcie_plat_ops.
+>  arch/x86/Kconfig                   |  24 +++
+>  arch/x86/hyperv/Makefile           |   1 +
+>  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
+>  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
+>  arch/x86/include/asm/mshyperv.h    |  14 ++
+>  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+>  include/asm-generic/hyperv-tlfs.h  |   4 +
+>  7 files changed, 346 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/x86/hyperv/hv_vtl.c
 > 
-> v5 link:
-> 	https://lore.kernel.org/lkml/20230303124642.5519-2-cai.huoqing@linux.dev/
-> 
->  drivers/dma/dw-edma/dw-edma-pcie.c           | 4 ++--
->  drivers/pci/controller/dwc/pcie-designware.c | 2 +-
->  include/linux/dma/edma.h                     | 4 ++--
->  3 files changed, 5 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/dma/dw-edma/dw-edma-pcie.c b/drivers/dma/dw-edma/dw-edma-pcie.c
-> index 2b40f2b44f5e..1c6043751dc9 100644
-> --- a/drivers/dma/dw-edma/dw-edma-pcie.c
-> +++ b/drivers/dma/dw-edma/dw-edma-pcie.c
-> @@ -109,7 +109,7 @@ static u64 dw_edma_pcie_address(struct device *dev, phys_addr_t cpu_addr)
->  	return region.start;
->  }
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 453f462f6c9c..b9e52ac9c9f9 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
 >  
-> -static const struct dw_edma_core_ops dw_edma_pcie_core_ops = {
-> +static const struct dw_edma_plat_ops dw_edma_pcie_plat_ops = {
->  	.irq_vector = dw_edma_pcie_irq_vector,
->  	.pci_address = dw_edma_pcie_address,
->  };
-> @@ -225,7 +225,7 @@ static int dw_edma_pcie_probe(struct pci_dev *pdev,
+>  if HYPERVISOR_GUEST
 >  
->  	chip->mf = vsec_data.mf;
->  	chip->nr_irqs = nr_irqs;
-> -	chip->ops = &dw_edma_pcie_core_ops;
-> +	chip->ops = &dw_edma_pcie_plat_ops;
+> +config HYPERV_VTL
+> +	bool "Enable VTL"
+
+This is not to "Enable VTL". VTL is always there with or without this
+option. This option is to enable Linux to run in VTL2.
+
+I would suggest it to be changed to HYPERV_VTL2_MODE or something more
+explicit.
+
+HYPERV_VTL is better reserved to guard code which makes use of VTL
+related functionality -- if there is such a need in the future.
+
+> +	depends on X86_64 && HYPERV
+> +	default n
+> +	help
+> +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+> +	  enlightenments offered to host and guest partitions which enables
+> +	  the creation and management of new security boundaries within
+> +	  operating system software.
+> +
+> +	  VSM achieves and maintains isolation through Virtual Trust Levels
+> +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+> +	  being more privileged than lower levels. VTL0 is the least privileged
+> +	  level, and currently only other level supported is VTL2.
+
+Please be consistent as to VTL 0 vs VTL0. You use one form here and the
+other form in the next paragraph.
+
+> +
+> +	  Select this option to build a Linux kernel to run at a VTL other than
+> +	  the normal VTL 0, which currently is only VTL 2.  This option
+> +	  initializes the x86 platform for VTL 2, and adds the ability to boot
+> +	  secondary CPUs directly into 64-bit context as required for VTLs other
+> +	  than 0.  A kernel built with this option must run at VTL 2, and will
+> +	  not run as a normal guest.
+> +
+> +	  If unsure, say N
+> +
+>  config PARAVIRT
+>  	bool "Enable paravirtualization code"
+>  	depends on HAVE_STATIC_CALL
+> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
+> index 5d2de10809ae..a538df01181a 100644
+> --- a/arch/x86/hyperv/Makefile
+> +++ b/arch/x86/hyperv/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
+>  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
+> +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
 >  
->  	chip->ll_wr_cnt = vsec_data.wr_ch_cnt;
->  	chip->ll_rd_cnt = vsec_data.rd_ch_cnt;
-> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
-> index 53a16b8b6ac2..44e90b71d429 100644
-> --- a/drivers/pci/controller/dwc/pcie-designware.c
-> +++ b/drivers/pci/controller/dwc/pcie-designware.c
-> @@ -828,7 +828,7 @@ static int dw_pcie_edma_irq_vector(struct device *dev, unsigned int nr)
->  	return platform_get_irq_byname_optional(pdev, name);
->  }
->  
-> -static struct dw_edma_core_ops dw_pcie_edma_ops = {
-> +static struct dw_edma_plat_ops dw_pcie_edma_ops = {
->  	.irq_vector = dw_pcie_edma_irq_vector,
->  };
->  
-> diff --git a/include/linux/dma/edma.h b/include/linux/dma/edma.h
-> index d2638d9259dc..ed401c965a87 100644
-> --- a/include/linux/dma/edma.h
-> +++ b/include/linux/dma/edma.h
-> @@ -40,7 +40,7 @@ struct dw_edma_region {
->   *			iATU windows. That will be done by the controller
->   *			automatically.
->   */
-> -struct dw_edma_core_ops {
-> +struct dw_edma_plat_ops {
->  	int (*irq_vector)(struct device *dev, unsigned int nr);
->  	u64 (*pci_address)(struct device *dev, phys_addr_t cpu_addr);
->  };
-> @@ -80,7 +80,7 @@ enum dw_edma_chip_flags {
->  struct dw_edma_chip {
->  	struct device		*dev;
->  	int			nr_irqs;
-> -	const struct dw_edma_core_ops   *ops;
-> +	const struct dw_edma_plat_ops	*ops;
->  	u32			flags;
->  
->  	void __iomem		*reg_base;
-> -- 
-> 2.34.1
-> 
+>  ifdef CONFIG_X86_64
+>  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
+> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> new file mode 100644
+> index 000000000000..0da8b242eb8b
+> --- /dev/null
+> +++ b/arch/x86/hyperv/hv_vtl.c
+> @@ -0,0 +1,227 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023, Microsoft Corporation.
+> + *
+> + * Author:
+> + *   Saurabh Sengar <ssengar@microsoft.com>
+> + */
+> +
+> +#include <asm/apic.h>
+> +#include <asm/boot.h>
+> +#include <asm/desc.h>
+> +#include <asm/i8259.h>
+> +#include <asm/mshyperv.h>
+> +#include <asm/realmode.h>
+> +
+> +extern struct boot_params boot_params;
+> +static struct real_mode_header hv_vtl_real_mode_header;
+> +
+> +void __init hv_vtl_init_platform(void)
+> +{
+> +	pr_info("Initializing Hyper-V VTL\n");
+> +
+
+We can be more explicit here, "Linux runs in Hyper-V Virtual Trust Level 2".
+
+If we go with this, this and other function names should be renamed to
+something more explicit too.
+
+> +	x86_init.irqs.pre_vector_init = x86_init_noop;
+> +	x86_init.timers.timer_init = x86_init_noop;
+> +
+> +	x86_platform.get_wallclock = get_rtc_noop;
+> +	x86_platform.set_wallclock = set_rtc_noop;
+> +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
+> +
+> +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
+> +	x86_platform.legacy.rtc = 0;
+> +	x86_platform.legacy.warm_reset = 0;
+> +	x86_platform.legacy.reserve_bios_regions = 0;
+> +	x86_platform.legacy.devices.pnpbios = 0;
+> +}
+> +
+[...]
+> +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
+> +{
+> +	u64 status;
+> +	int ret = 0;
+> +	struct hv_enable_vp_vtl *input;
+> +	unsigned long irq_flags;
+> +
+> +	struct desc_ptr gdt_ptr;
+> +	struct desc_ptr idt_ptr;
+> +
+> +	struct ldttss_desc *tss;
+> +	struct ldttss_desc *ldt;
+> +	struct desc_struct *gdt;
+> +
+> +	u64 rsp = initial_stack;
+> +	u64 rip = (u64)&hv_vtl_ap_entry;
+> +
+> +	native_store_gdt(&gdt_ptr);
+> +	store_idt(&idt_ptr);
+> +
+> +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
+> +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
+> +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
+> +
+> +	local_irq_save(irq_flags);
+> +
+> +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+
+Not a big deal, but you don't actually need to cast here.
+
+[...]
+> +
+> +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
+> +{
+> +	u64 control;
+> +	u64 status;
+> +	unsigned long irq_flags;
+> +	struct hv_get_vp_from_apic_id_in *input;
+> +	u32 *output, ret;
+> +
+> +	local_irq_save(irq_flags);
+> +
+> +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+
+No need to cast here.
+
+[...]
+> +struct hv_x64_table_register {
+> +	__u16 pad[3];
+> +	__u16 limit;
+> +	__u64 base;
+> +} __packed;
+> +
+> +struct hv_init_vp_context_t {
+
+Drop the _t suffix please.
+
+Thanks,
+Wei.
