@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36EB16B6737
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 15:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A4CD6B673B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 15:41:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjCLOlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 10:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
+        id S229960AbjCLOlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 10:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCLOlR (ORCPT
+        with ESMTP id S229819AbjCLOlR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 12 Mar 2023 10:41:17 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2330D43927;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B16F457CB;
         Sun, 12 Mar 2023 07:41:16 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 14:41:13 -0000
+Date:   Sun, 12 Mar 2023 14:41:14 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678632073;
+        s=2020; t=1678632074;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XFEybelJ9loE0Nupy89Z06wvn5RgHE9M3FshmrNfoEg=;
-        b=iBSKYR6tfeXGG4Q5owQf8Y7yDmbz1YxTy7mdFsmO4DU3PeGvkZf7BI9mlrO3FpscfWdF84
-        9KG0aeMWMJDF0g9Rb66DLU8CBdmnseWd98tlyX4qSuVl1FnlAsF7EsmUvEyU+Qyx+iRuHJ
-        QBPQiYR66nKRBJA0Ivwp1UsPwR8KcOpsInrkWd8Y406TdXqhA5k3Fi/PdByvYq1dD4AzIq
-        zM2QoBuUfA+jW96GdT/SYD9lK8Sspz1RaDvR13YPeGYg2YI6BB14s54+cLg+OAnvW8oQtc
-        eOshsyJaDQ9yqTtzPk7RnKuvIh/Fz4Gbb18ObMrowJXya/6CmarIzY0AjIRlYw==
+        bh=qNiI+K/uDME8lIOLd0254ouP3TSGpYvgkL8w+k81abs=;
+        b=SBt074EYKLdmcaOnKqzJVYZB4dmbOKcA10P0kvEoHVqhhTswhEVmYjPXqTwM6l9cMx6K9E
+        rOksGxiZpH4ydr0tS4MIJjkHJnRG5kEfwmj+R71hGTU7znyOKuIT2RzLTSH2zbynpYr1fT
+        Aexl59uxTuQqRoFALHFM2FOtVv0b3NknITOzIgZqE9lTMu62wSMcDhjQtvmVx2Ogr7XLi9
+        uXgrNpzLWJiO1qDzsbTymY0kptalLu4uygN8JDFdKL8foZmByLa2Pz7SU8JYCcJgCVASGg
+        tPAPmXNowYsI7nISL+R6sQUiJm3rklY2L2P+pMTQhS76GaTFBL4eAJrTqxTziw==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678632073;
+        s=2020e; t=1678632074;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=XFEybelJ9loE0Nupy89Z06wvn5RgHE9M3FshmrNfoEg=;
-        b=mDMdfjAKLvXwx0Hb0StL0ZAy5QcTEdHkYofGzVkMapNFN3EGJs2XWAce/9nwVTREtLitNz
-        uJphoAqfxtqGusDg==
+        bh=qNiI+K/uDME8lIOLd0254ouP3TSGpYvgkL8w+k81abs=;
+        b=Jv8GwNd3c1+X/Xxe3CgbL72oHaRQj8At3Wll9q/yFamMnCjB4rrhfbbiqfTnTEMl0oAeca
+        J0YBrAbURDzBW+Dg==
 From:   "tip-bot2 for Andrzej Hajda" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: locking/core] qed: use __xchg if possible
+Subject: [tip: locking/core] llist: simplify __llist_del_all
 Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Andi Shyti <andi.shyti@linux.intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20230118154450.73842-6-andrzej.hajda@intel.com>
-References: <20230118154450.73842-6-andrzej.hajda@intel.com>
+In-Reply-To: <20230118154450.73842-4-andrzej.hajda@intel.com>
+References: <20230118154450.73842-4-andrzej.hajda@intel.com>
 MIME-Version: 1.0
-Message-ID: <167863207321.5837.328011126625602425.tip-bot2@tip-bot2>
+Message-ID: <167863207410.5837.11889564974236848879.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -67,80 +67,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the locking/core branch of tip:
 
-Commit-ID:     9b579a841f9032a231e9b14a23dc6699cbe6d311
-Gitweb:        https://git.kernel.org/tip/9b579a841f9032a231e9b14a23dc6699cbe6d311
+Commit-ID:     ce27b24cbf7f62b74c4cbf807a06f42a14ccf981
+Gitweb:        https://git.kernel.org/tip/ce27b24cbf7f62b74c4cbf807a06f42a14ccf981
 Author:        Andrzej Hajda <andrzej.hajda@intel.com>
-AuthorDate:    Wed, 18 Jan 2023 16:44:49 +01:00
+AuthorDate:    Wed, 18 Jan 2023 16:44:47 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Sat, 11 Mar 2023 14:03:59 +01:00
 
-qed: use __xchg if possible
+llist: simplify __llist_del_all
 
-Recently introduced helper simplifies the code.
+llist_del_all uses xchg, let's use __xchg here.
 
 Signed-off-by: Andrzej Hajda <andrzej.hajda@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Reviewed-by: Andi Shyti <andi.shyti@linux.intel.com>
-Link: https://lore.kernel.org/r/20230118154450.73842-6-andrzej.hajda@intel.com
+Link: https://lore.kernel.org/r/20230118154450.73842-4-andrzej.hajda@intel.com
 ---
- include/linux/qed/qed_chain.h | 19 +++++++------------
- 1 file changed, 7 insertions(+), 12 deletions(-)
+ include/linux/llist.h | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/qed/qed_chain.h b/include/linux/qed/qed_chain.h
-index a840634..6355d55 100644
---- a/include/linux/qed/qed_chain.h
-+++ b/include/linux/qed/qed_chain.h
-@@ -11,6 +11,7 @@
- #include <asm/byteorder.h>
- #include <linux/kernel.h>
- #include <linux/list.h>
+diff --git a/include/linux/llist.h b/include/linux/llist.h
+index 85bda2d..4dc1d18 100644
+--- a/include/linux/llist.h
++++ b/include/linux/llist.h
+@@ -50,6 +50,7 @@
+ 
+ #include <linux/atomic.h>
+ #include <linux/container_of.h>
 +#include <linux/non-atomic/xchg.h>
- #include <linux/sizes.h>
- #include <linux/slab.h>
- #include <linux/qed/common_hsi.h>
-@@ -368,7 +369,7 @@ static inline void qed_chain_return_produced(struct qed_chain *p_chain)
-  */
- static inline void *qed_chain_produce(struct qed_chain *p_chain)
+ #include <linux/stddef.h>
+ #include <linux/types.h>
+ 
+@@ -241,10 +242,7 @@ static inline struct llist_node *llist_del_all(struct llist_head *head)
+ 
+ static inline struct llist_node *__llist_del_all(struct llist_head *head)
  {
--	void *p_ret = NULL, *p_prod_idx, *p_prod_page_idx;
-+	void *p_prod_idx, *p_prod_page_idx;
- 
- 	if (is_chain_u16(p_chain)) {
- 		if ((p_chain->u.chain16.prod_idx &
-@@ -390,11 +391,8 @@ static inline void *qed_chain_produce(struct qed_chain *p_chain)
- 		p_chain->u.chain32.prod_idx++;
- 	}
- 
--	p_ret = p_chain->p_prod_elem;
--	p_chain->p_prod_elem = (void *)(((u8 *)p_chain->p_prod_elem) +
--					p_chain->elem_size);
+-	struct llist_node *first = head->first;
 -
--	return p_ret;
-+	return __xchg(&p_chain->p_prod_elem,
-+		      (u8 *)p_chain->p_prod_elem + p_chain->elem_size);
+-	head->first = NULL;
+-	return first;
++	return __xchg(&head->first, NULL);
  }
  
- /**
-@@ -439,7 +437,7 @@ static inline void qed_chain_recycle_consumed(struct qed_chain *p_chain)
-  */
- static inline void *qed_chain_consume(struct qed_chain *p_chain)
- {
--	void *p_ret = NULL, *p_cons_idx, *p_cons_page_idx;
-+	void *p_cons_idx, *p_cons_page_idx;
- 
- 	if (is_chain_u16(p_chain)) {
- 		if ((p_chain->u.chain16.cons_idx &
-@@ -461,11 +459,8 @@ static inline void *qed_chain_consume(struct qed_chain *p_chain)
- 		p_chain->u.chain32.cons_idx++;
- 	}
- 
--	p_ret = p_chain->p_cons_elem;
--	p_chain->p_cons_elem = (void *)(((u8 *)p_chain->p_cons_elem) +
--					p_chain->elem_size);
--
--	return p_ret;
-+	return __xchg(&p_chain->p_cons_elem,
-+		      (u8 *)p_chain->p_cons_elem + p_chain->elem_size);
- }
- 
- /**
+ extern struct llist_node *llist_del_first(struct llist_head *head);
