@@ -2,102 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0EE26B6884
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:02:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F27E26B6889
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:03:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCLRCW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:02:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48722 "EHLO
+        id S231228AbjCLRDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCLRCS (ORCPT
+        with ESMTP id S231224AbjCLRDA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:02:18 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE2DB39B98
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:02:16 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y4so10280586edo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:02:16 -0700 (PDT)
+        Sun, 12 Mar 2023 13:03:00 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF2339BBC
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:02:44 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id d36so12842131lfv.8
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:02:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678640535;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rgjKYDiNYipC88ZW3UHF+hA0Vhj0ajrnhG8vHIgnExQ=;
-        b=DC85KbIoQ6u4AzDi2wON4NIiI1EyPel3SDkQPFDj3ZjLXViprPwd5FqrRjrYF+n1GA
-         +Z9dEZNG8jUHm1il09//o99LfbprjXw79Bt8iDuVMWIJAclv3B1GBpmkunOXcs5mYcpN
-         f1MwVYAflBrLfRLObdWD2lNl/BPm7aTiT0BU6INCJ1DwyCaRF6Pp4b0QoHy+dZ787UV3
-         A9C1bSbXlruxDHzPczY9SJKuGhFHKjvpCHAdqjQhvwUVNYn6jaOz2F19lSLoUxtLKQK5
-         GDBsII6vQRdGMgNCkPoAQkJZn4AlHGKNPb0IxEah+bY67dU9M/5HGa61p0d1oqfpg5TI
-         QvPA==
+        d=gmail.com; s=20210112; t=1678640562;
+        h=cc:to:subject:date:from:in-reply-to:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=bMzb4+f+2BylShTzIH+kD9h/2l/yJ2pk3VVMD+904ak=;
+        b=UcgQEUTeekUE+yO0Pfm+bm9izAiSVibcvIffL015exUwnHDJuG8iZEHRC3h2DRu4A8
+         j6rMpg6coJh4Z8X1Dj/PxIdUxERGROjPj959rb9YoDLajnVivD5BCvErNAS4Bjf/zgyq
+         HElDaIT9e3SNBbFFYtIAXh19eeBdPY7qU/vBaHAiIfq03AhSHyzkiD8TZcckk/nsr5jp
+         0/fWjXXg2p8+Uk160ywZD/cwDQfZS+o9Bc2Xw2xoWaVAbie9eDuoXrGz8NxXbyI+JRDN
+         W1ZeGeLyx1sVMXgB1PLHnAkJXJQaVrM1RVzqkNghlM2ngaH/mbOcNzaAfOMfUw5feOif
+         o3Gw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678640535;
-        h=content-transfer-encoding:in-reply-to:from:cc:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rgjKYDiNYipC88ZW3UHF+hA0Vhj0ajrnhG8vHIgnExQ=;
-        b=ogmWRCH1FFNV3ke/CiVPQSJdfhmvq+a7g7x1K/re7/IQW0aw6Lmi2d47Gdicxo+P6i
-         XzkkL0f81tpVqCgLi5G5Frw3Uahqs8JOco2SPEKUxOkSWil1IGPXMHj9fvhRUb6H9I/o
-         mqdHPxytb9RCCQfwVTb4fqcN+/JDD3NXS9CUhkN+PA4rL8D/PEKVmplwlsiEJGUf++IH
-         IbL4rcPuyfl1vtX8w2PBz/FJOQ8MLt9eyjkP//storK8+JgwVqBCTHuzIxdMGtOxmypx
-         NK4+CweeiDZ2xYS20eVPbzk2fbNUtZN6QCrjvG+w6czmmSpBNnfi+IDL32KepjJTzNl4
-         jcWA==
-X-Gm-Message-State: AO0yUKWiyjQcMo00jE4FkG034VpFpnMPyNeKBJJtpblzhNZLnJQk64Pw
-        hMzTXsSzPDdXCdQskTVTuVfkjw==
-X-Google-Smtp-Source: AK7set+lN36krujxlh4jrXFjE3RNow/G9/atgSZRPgi5PODLMISibgYei+3YocU1q34Rps87czwjTA==
-X-Received: by 2002:a17:906:885:b0:8af:5403:992d with SMTP id n5-20020a170906088500b008af5403992dmr32503532eje.28.1678640535354;
-        Sun, 12 Mar 2023 10:02:15 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id wt6-20020a170906ee8600b008f89953b761sm2385570ejb.3.2023.03.12.10.02.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 10:02:14 -0700 (PDT)
-Message-ID: <67454eee-37af-ef38-7e06-23b4c1131468@linaro.org>
-Date:   Sun, 12 Mar 2023 18:02:14 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/4] media: dt-bindings: samsung-fimc: drop simple-bus
-Content-Language: en-US
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        d=1e100.net; s=20210112; t=1678640562;
+        h=cc:to:subject:date:from:in-reply-to:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=bMzb4+f+2BylShTzIH+kD9h/2l/yJ2pk3VVMD+904ak=;
+        b=w9eWGQCy7VnHHZ7wSvIcRwLAUwXBYLYtfykn6eDYOfNXMThqm3z2f4V9ev2b49DqHe
+         rxs2oW0nM97EVx8xU++M8nK8WAOfakzG7DOSUKhm04VWDtoIQC68XbwvQijUtUR2Q8si
+         XZ1JkwcGNMwjV9uBQ4ufMacdBD7tdpNCternRKgNHDC9uFke9c4jMs2KBUuUifv2Hl8m
+         Q1r/w/7qTiQn4zSwgViI+1VKxEpo4cRJVxOFNDBtl0/xSCi0t5wyOAQip3Rsm3Gy5hUw
+         Ckacj2z+JMK55mN2EY8fTChIq1X9piUrc3JNa2CSVQZCf8qawFnumD8t+6zvGoZEmBcY
+         ds1Q==
+X-Gm-Message-State: AO0yUKUX8/BxOnxmVLYYOb+cyxh6Mk9aG9vTggRJNBFMA7LxLa6utkAH
+        TcMOQeyf3bLmynX4PT+0cmLeqFYpnOdRUah6
+X-Google-Smtp-Source: AK7set9ZlTH17G0FnW+z13Pb1s3HaUJEmtKLrWEW5BIxE79NrmbvApt2Nmyr1n9kVAWtfq5kdkDqkA==
+X-Received: by 2002:ac2:563a:0:b0:4de:290:1c0a with SMTP id b26-20020ac2563a000000b004de02901c0amr9292769lff.57.1678640562189;
+        Sun, 12 Mar 2023 10:02:42 -0700 (PDT)
+Received: from 0001-dt-bindings-exynos-dw-mshc-common-add-exynos78xx-var.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id b9-20020ac25e89000000b0047f7722b73csm693942lfq.142.2023.03.12.10.02.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 10:02:41 -0700 (PDT)
+Message-Id: <1678640497.9030156-1-sleirsgoevy@gmail.com>
+In-Reply-To: <1678640497.9030156-0-sleirsgoevy@gmail.com>
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+Date:   Sun, 12 Mar 2023 19:59:29 +0300
+Subject: [PATCH v4 1/3] dt-bindings: exynos-dw-mshc-common: add exynos78xx
+ variants
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org
-References: <20230207205834.673163-1-krzysztof.kozlowski@linaro.org>
-Cc:     devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        linux-samsung-soc@vger.kernel.org,
         Alim Akhtar <alim.akhtar@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230207205834.673163-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/02/2023 21:58, Krzysztof Kozlowski wrote:
-> The FIMC camera node wrapper is not a bus, so using simple-bus fallback
-> compatible just to instantiate its children nodes was never correct.
-> Drop the simple-bus compatible and expect driver to explicitly populate
-> children devices.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ---
-> 
-> Changes since v1:
-> 1. None
-> ---
+Some Samsung Exynos boards using the arm64 architecture have DW MMC
+controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
+systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
 
-Mauro,
+Add two new compatible strings, "samsung,exynos78xx-dw-mshc" and
+"samsung,exynos78xx-dw-mshc-smu" respectively, to denote exynos78xx
+boards that need this quirk. But it's very possible that all
+"samsung,exynos7-dw-mshc" boards are actually affected.
+---
+ .../devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Any comments on the patchset? Can you pick it up?
+diff --git a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+index fdaa18481..a72a67792 100644
+--- a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
++++ b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+@@ -22,6 +22,8 @@ properties:
+       - samsung,exynos5420-dw-mshc-smu
+       - samsung,exynos7-dw-mshc
+       - samsung,exynos7-dw-mshc-smu
++      - samsung,exynos78xx-dw-mshc
++      - samsung,exynos78xx-dw-mshc-smu
+       - axis,artpec8-dw-mshc
+ 
+   reg:
+-- 
+2.38.3
 
-Best regards,
-Krzysztof
 
