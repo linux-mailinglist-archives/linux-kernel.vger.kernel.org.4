@@ -2,219 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015AA6B637A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 07:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 506C26B6382
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 07:28:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229568AbjCLGZY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 01:25:24 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60904 "EHLO
+        id S229499AbjCLG2B (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 01:28:01 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCLGZW (ORCPT
+        with ESMTP id S229437AbjCLG16 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 01:25:22 -0500
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 503E95C135;
-        Sat, 11 Mar 2023 22:25:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678602321; x=1710138321;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=VWMzIApxpQG7L0/y7Q/dzUr/hxOQUuNKYSyppwI2xAY=;
-  b=kwR0L8i0j7eHwd31ity+QYgD0Kxmzfy0reqnMcv8sC9Awbt5UPpgFVaq
-   uNNGsR/OEv2ui1oFWcFpNLN6TVrqxaxDsybW5J4vnQ99yT7ZWd88DNLdb
-   2bXOE6oatMGuziimBJEicl3J+6z5W7z8L0z/en+xnSpm0/l+LBTSxlnzp
-   luMmuWfRO10KZaQVKOSg+qlVOgm/xjR41nYWVJDEl+kL6EddUKLwcLU/q
-   uwA3w2dbCLtGzJ45z9+6s0dWX9FXsTGp4VRaNE3FwsgfkBcLncSa7Rtfp
-   XbySrHwDqef2zNHApYOn/jxuDHy46fSqo6UrWGIVVL6yzmbdgtQQi6niO
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="399560491"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="399560491"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2023 22:25:20 -0800
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10646"; a="628267925"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="628267925"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by orsmga003.jf.intel.com with ESMTP; 11 Mar 2023 22:25:20 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 11 Mar 2023 22:25:20 -0800
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sat, 11 Mar 2023 22:25:19 -0800
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Sat, 11 Mar 2023 22:25:19 -0800
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (104.47.55.104)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Sat, 11 Mar 2023 22:25:17 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ClYh3mpSBstu4CWvM8lLElUrQJRRMyz4g6iLYyD/DweNXGiUT5u65BBlNMcNFvkrwUdLuDMVxwD9CerOhoYVNFtGWVnFkVqb1G7y8jS1S3RLs63xU8IktRxQz0PGO+pfnNBK/f/j1EXBbX7hZdsmdiPq6k3T64vWgwpg/0Ia0ygh1g8X7SHWBfbOY2Shjn5qmXBsku64Ofz1kIWZlF/wrANE/Z2Q4Fjcox7rgDvxArINUX0KKay8eeOebJj2hWiGcnwLaMvvB4XNPeKeZes3PzPViN/MAT0aF8E3Hilw6F+qEa3caGVKWwMpmWmswhA7+i3+FsRWnP2H+f2p2wbesg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=jdHrJqTevLKDXI5S+992BO+H0zCxTd11KPGIzddJ+Xs=;
- b=Y3uycHxRk8DRqCwye/eUz186hp6mBS+O/g0V9JpnDofvjQESV8/TRDSHUyUwElXlNNaN6NgHY5RGku4rQ51Al6ANGR/GsotksCR1MyDGoUCXpp4om/4ugyVPkRnhMRqjBUpFZFxV3xu5E6k2igng8qNQg03HutyuxMFL6EUMf+GXIHvdqC4HZ9GnYvfiPzBPckuLghGpMuvbQtPAGN3Bn81slp0qkyLsfKmtvj7qjCzpBWNsS44Kxrfo/fisykhe/iGl1vm8Szpnt3Oj3DxWeB/4YbqLrP43cZhmE9GaeOYPDj+4zJhkU8SToCXZxR5MiLrcRk3TquPJuz0tVa6hsw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com (2603:10b6:930:29::17)
- by DS7PR11MB7860.namprd11.prod.outlook.com (2603:10b6:8:da::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.22; Sun, 12 Mar
- 2023 06:25:08 +0000
-Received: from CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::2629:fb12:6221:3745]) by CY5PR11MB6139.namprd11.prod.outlook.com
- ([fe80::2629:fb12:6221:3745%4]) with mapi id 15.20.6178.017; Sun, 12 Mar 2023
- 06:25:08 +0000
-Date:   Sat, 11 Mar 2023 22:25:05 -0800
-From:   Lucas De Marchi <lucas.demarchi@intel.com>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-CC:     Petr Mladek <pmladek@suse.com>, Petr Pavlu <petr.pavlu@suse.com>,
-        "Prarit Bhargava" <prarit@redhat.com>,
-        Vegard Nossum <vegard.nossum@oracle.com>,
-        Borislav Petkov <bp@alien8.de>, NeilBrown <neilb@suse.de>,
-        Goldwyn Rodrigues <rgoldwyn@suse.com>, <david@redhat.com>,
-        <mwilck@suse.com>, <linux-modules@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <stable@vger.kernel.org>,
-        Lucas De Marchi <lucas.de.marchi@gmail.com>,
-        "Ben Hutchings" <benh@debian.org>,
-        Adam Manzanares <a.manzanares@samsung.com>
-Subject: Re: [PATCH v2] module: Don't wait for GOING modules
-Message-ID: <20230312062505.man5h4oo6mjbiov6@ldmartin-desk2.lan>
-References: <20221205103557.18363-1-petr.pavlu@suse.com>
- <Y5gI/3crANzRv22J@bombadil.infradead.org>
- <Y5hRRnBGYaPby/RS@alley>
- <Y8c3hgVwKiVrKJM1@bombadil.infradead.org>
- <79aad139-5305-1081-8a84-42ef3763d4f4@suse.com>
- <Y8ll+eP+fb0TzFUh@alley>
- <Y8nljyOJ5/y9Pp72@bombadil.infradead.org>
- <Y8nnTXi1Jqy1YARi@bombadil.infradead.org>
- <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
-Content-Type: text/plain; charset="us-ascii"; format=flowed
-Content-Disposition: inline
-In-Reply-To: <Y8xp1HReo+ayHU8G@bombadil.infradead.org>
-X-ClientProxiedBy: BYAPR11CA0061.namprd11.prod.outlook.com
- (2603:10b6:a03:80::38) To CY5PR11MB6139.namprd11.prod.outlook.com
- (2603:10b6:930:29::17)
+        Sun, 12 Mar 2023 01:27:58 -0500
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED72E269A
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 22:27:54 -0800 (PST)
+Received: by mail-wr1-x434.google.com with SMTP id r29so542890wra.13
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 22:27:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678602473;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wtv29KZX+XREe9cWzAMxT6V39t/L1NQeIC8ivHVuqS4=;
+        b=o0/NYospeBO1+8cuP+NfwBHbLPcnYfw49cgYl3XTC5Ix9P6eV9x6V1BRXB92AePhzQ
+         Xda0Eq54Oegsxn//6fhRY9YjbX9yCJ7g6vef56+Zl7ua5XAV+e3b/aWVTtgZZik5bBEc
+         MXON0IdN9LwL9sevao0AitDnR2cTNtRkdOqYwR42RhK1GZiqOF4ZqSL01Mv42QaWl0P0
+         1ypy2zSoVNkALt0IXZOgIVRVklSOQxbgNlaVpqIypfh9HkMv2mz8gxas5DaNrXMPgmnR
+         QpeCZRPN9apuoktC8SI4zqi4UO15X+smd7H9PBd23iPa9w4keLmPvSImc9cB4t5DJDVs
+         UU/g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678602473;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wtv29KZX+XREe9cWzAMxT6V39t/L1NQeIC8ivHVuqS4=;
+        b=2lRYVxO5rhb4cc60ZWhH8/VOX7QSQM1K+/5VkeuS8pbijq0K1SWs0jvK+PE96SuBTG
+         uUTrYnto2AGEjwNqZFKIT/hY/P39r3qm3521InxqzTBa+stmidvAE4KunycFLaTnI2Ih
+         W+cE+xzGco9qzFyezOcO0ggeS3NZWzx5R8YQtTwVHvgKnNeCG0kiYOMG8SGa56Pevxr/
+         lOiZZImrrgPIKPfyNb6EeT1kLsdD+vsyeuBhFLAcd0QsbqeS1r5B2N90SbC8dAzZNwAi
+         veaf5x21T44kVDDw5UhQToee/9HW9oBgLqj3xdc5FA0GBI3iAIYe8wQIMcYFyQMAHHZj
+         PVRA==
+X-Gm-Message-State: AO0yUKVPa372D2Pm8Q3EyFavEv011YNmaTemRNL15RSlIIzIwtt3+4bC
+        URYLE0NLFVU9awh1eKjZ2IpOkCXU3rtE5jhOY/lrEA==
+X-Google-Smtp-Source: AK7set/W089nZRtqvQkaqo5MGXF43OWcIyaszLy3QrT1jn4BQxabvW3adNuV27z4WnO5yFKbt6/MdgsapvUuEkuPeEM=
+X-Received: by 2002:adf:f189:0:b0:2ce:aaff:2a8c with SMTP id
+ h9-20020adff189000000b002ceaaff2a8cmr151156wro.14.1678602473299; Sat, 11 Mar
+ 2023 22:27:53 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CY5PR11MB6139:EE_|DS7PR11MB7860:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8a9ab6c5-3d5e-4043-f0e8-08db22c2868e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9gRaswfHknctbAwyJGTn3i/nNKyk6/IQvOqLYqBKTvfXb/ERyo1Dy1XqjcPevuA4q7GfzDvcJeUJQgGgoLi9EY/l5bvlCf36wXOSXkHP1UkrPk70G0iLf91bnP2iC+JIjOfw/ZvWoyxtYci2F+CM1aFaogqnTMESgNZ0qIyehgOHtp4uFhYDG04e0m0TotS2xWnLhnabQFO6hZ9Wp1Ah5V8vm1Gb2ZykRuv0bZmdbZpps81BOcPp1B0HAoeitTsjxvjArw37lDpg2T1xaIqEQeOKig/IyfkurzNmEgq07jmDu8UogFGLVAwjX0dJFQyXDLT95T7d4CRVZjthk98ePBDgp+wjCPse6fJtuLGCxeRwuR72/0vHrmM3uJyoQXW0ssvnfT1c9eRfbvhIWeDtxRAJ4LpXqq+8V+HLsqxMUX7HFq5EK75vUBY4pbZEXDdnT/SjzT/z//GPztkbv8brLKQ1Rz6HDMnhe231MD84z7kNeqMDliIN/gk97QtnAJWlJlVE06Gz5iQ1gBJEcxdRvrpX5Ku1Ub3d79tUxSQd907rQ9kHlpfDUyMOQG3yZDuKGh5Ojpbmyy4UCNsezAh0t+ev7+VLO/OoV+HZZcthuCs/N7IwI3ngC6mmKIa/MQ5i0/LD2B3j+zDG79YAWBXF/g==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR11MB6139.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(376002)(136003)(366004)(346002)(451199018)(8676002)(4326008)(6916009)(66476007)(66946007)(66556008)(83380400001)(5660300002)(41300700001)(316002)(54906003)(8936002)(82960400001)(2906002)(36756003)(478600001)(7416002)(38100700002)(6486002)(6666004)(186003)(6506007)(6512007)(86362001)(9686003)(26005)(1076003);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?y2EeJZOMCWDkQK2MKzVFvGzIUKEqZBrsDrXXF5dLjS4UcQHneUqQ6r8/ZoaR?=
- =?us-ascii?Q?v8XDm80fgWcP/VS5rIXNsWtf+WfMpymIPGfjFYed1FPgPOk3ZXcTKiy3PvMh?=
- =?us-ascii?Q?Cr54nsm7609dbeH6tugiyJbOuVQVz48PqxMhMxpRSsAFOeUSOK5E1Wq8pE3A?=
- =?us-ascii?Q?FfVjM9+W2hBEl0hlYle+po9/zlSYBx3FGLXcKT3Nrf4qKQUm6paF/WXpSfJc?=
- =?us-ascii?Q?L7/2u9z1NNJPO8/5BuIrfcMWm/2whfr0sjFdwUpa77Elk/HOARh8PJyWsh/e?=
- =?us-ascii?Q?H+bvGASvxal2RW+s+gLSE54u9MUOIMTqM62pjgCVo8Kx5R6PpVd5lHe//dfD?=
- =?us-ascii?Q?GNI9acuHbw40NvG+BgQyd7rm7f7Qrflb/GY4wNpj5NeSbI2BGRIiKyfcuqMy?=
- =?us-ascii?Q?cS3PZyZwPblCT0x329fJRLQ8teuMLWAunRULeFDTf1DfzEEFaWM7WTfbXz+Y?=
- =?us-ascii?Q?8Sbn8qM46pbTrULXbR8paSEjy3Aev3skjztqUrozjGJuhlC0mSAxhIGzHc3J?=
- =?us-ascii?Q?dCG+Hgbe8fXebm4sIl2w7I/20f8U/OTXDgfwQwW6KYeyaqDWG9E0LmAHdbP5?=
- =?us-ascii?Q?+xniUj8QBVKviOeJdIFRAykVZ50UmPRFbd44emsWxSOo5zqOlmnn0egRnHW1?=
- =?us-ascii?Q?EAv0HorfYB0HJoXu5Foq/ZPEWdP+nwMDC3DlyvNuzVUxRegfrpJXKA5pGDYU?=
- =?us-ascii?Q?bWlo3ZyboQTQ0tNAUCo4+kj06ZUHVsaWN5poEFZsEKJmLAlL80YqYEc+WY3x?=
- =?us-ascii?Q?JkkxqWL8xGICw7TFCnPL5fUTYPUJBHJxNi4Jj8bXvtJDFm4vLlJLIaljjqQf?=
- =?us-ascii?Q?6Xh0uJOT987ODmdkU3ycJmg7wNNzhB0iJvVnMs66+jT/8FFoO9MJTajcK4V+?=
- =?us-ascii?Q?ZnVXsQ1h1yUQsObKw++gj9PGQMXcMlsJ21RLxshZ02dJLx+ZmD9xsZTbPO17?=
- =?us-ascii?Q?RRhlERHbb7FNUc1El8Gk5MsuN8XKhAsr7pao+BEbqNPb0yghqVVZb3w8JZ2Q?=
- =?us-ascii?Q?OChswC/ktrKgd+aBf1StMs1pTgaycjb9t3Z0unfQ8LvZsqa56shF1xXtDHoc?=
- =?us-ascii?Q?7W9kQM7FUmaBltMBgvyez8spxPMGaSqY6roj8a08KxPm5ZPeitRHKgPbGlBZ?=
- =?us-ascii?Q?fvJcpxE6/CKSnZWO7TXZgEj6jGkuDSbO25Gd3m9ovLSRG+vt3gN/QDW5d4RS?=
- =?us-ascii?Q?E+8hpxqPkrEYgdTfbyews8GLSdUz5AYPTx3ysLD9P6sDnionBObBte89YaCu?=
- =?us-ascii?Q?BSepGsHZ5CmiU2GDy9CPnRwSM2WM/QSR7R/XaULsopE+3M5iXCXuSKGBYkWn?=
- =?us-ascii?Q?IubuiZUa36CIDOtXKAoVM+OHb8cjktGOizGZml8e4yaWc6VL8d58OwX5g0wA?=
- =?us-ascii?Q?24VuU84ezZ9YOloJI6489bL7Hj2B/LcKOPptsLV3XWmIngrnsp/veICUKYQS?=
- =?us-ascii?Q?tedaTv8vCUylwGIHu91sN8P/lafDV4h3nejVLheQLZB1OF5c7ewiyYbefiQM?=
- =?us-ascii?Q?JzRjUVUADpArO2R8YRxxzHDcriEvaqP76Ho0rut6r7A32sdrnDlffOJbfueb?=
- =?us-ascii?Q?rv2+vP7/o5EbZY1/v36wskYvlQrpgQeJafHp5jBEcfyOCuauIo1GPzzIWxiZ?=
- =?us-ascii?Q?+Q=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8a9ab6c5-3d5e-4043-f0e8-08db22c2868e
-X-MS-Exchange-CrossTenant-AuthSource: CY5PR11MB6139.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2023 06:25:08.5195
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: wNt68I/Rhz/QY2XtjYgKw3IRYYP15il76JItP+3lS9mrhdEYuRA8JA+tzBRScvGzb9v6A8euqZAH1xyqVnMv4I+WR6j+Kvvu8HRxSf33RNQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR11MB7860
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311112122.28894-1-p4ranlee@gmail.com>
+In-Reply-To: <20230311112122.28894-1-p4ranlee@gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 11 Mar 2023 22:27:41 -0800
+Message-ID: <CAP-5=fWkAqX+Uy_XhXHjEx6sj-wpOJ+WQf=vMtRzRBS-0Kj32Q@mail.gmail.com>
+Subject: Re: [PATCH] perf tools riscv: Add support for riscv lookup_binutils_path
+To:     paranlee <p4ranlee@gmail.com>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Arnaldo Carvalho de Melo <acme@redhat.com>,
+        Ananth N Mavinakayanahalli <ananth@in.ibm.com>,
+        Anton Blanchard <anton@ozlabs.org>,
+        Daniel Axtens <dja@axtens.net>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Jan 21, 2023 at 02:40:20PM -0800, Luis Chamberlain wrote:
->On Thu, Jan 19, 2023 at 04:58:53PM -0800, Luis Chamberlain wrote:
->> On Thu, Jan 19, 2023 at 04:51:27PM -0800, Luis Chamberlain wrote:
->> > On Thu, Jan 19, 2023 at 04:47:05PM +0100, Petr Mladek wrote:
->> > > Yes, the -EINVAL error is strange. It is returned also in
->> > > kernel/module/main.c on few locations. But neither of them
->> > > looks like a good candidate.
->> >
->> > OK I updated to next-20230119 and I don't see the issue now.
->> > Odd. It could have been an issue with next-20221207 which I was
->> > on before.
->> >
->> > I'll run some more test and if nothing fails I'll send the fix
->> > to Linux for rc5.
->>
->> Jeesh it just occured to me the difference, which I'll have to
->> test next, for next-20221207 I had enabled module compression
->> on kdevops with zstd.
->>
->> You can see the issues on kdevops git log with that... and I finally
->> disabled it and the kmod test issue is gone. So it could be that
->> but I just am ending my day so will check tomorrow if that was it.
->> But if someone else beats me then great.
->>
->> With kdevops it should be a matter of just enabling zstd as I
->> just bumped support for next-20230119 and that has module decompression
->> disabled.
+On Sat, Mar 11, 2023 at 3:22=E2=80=AFAM paranlee <p4ranlee@gmail.com> wrote=
+:
 >
->So indeed, my suspcions were correct. There is one bug with
->compression on debian:
+> Add to know RISC-V binutils path.
+> Secondarily, edit the code block with alphabetical order.
 >
-> - gzip compressed modules don't end up in the initramfs
+> Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+> ---
+>  tools/perf/arch/common.c | 51 +++++++++++++++++++++++++++-------------
+>  1 file changed, 35 insertions(+), 16 deletions(-)
 >
->There is a generic upstream kmod bug:
+> diff --git a/tools/perf/arch/common.c b/tools/perf/arch/common.c
+> index 59dd875fd5e4..058527ededdd 100644
+> --- a/tools/perf/arch/common.c
+> +++ b/tools/perf/arch/common.c
+> @@ -29,11 +29,23 @@ const char *const arm_triplets[] =3D {
+>  };
 >
->  - modprobe --show-depends won't grok compressed modules so initramfs
->    tools that use this as Debian likely are not getting module dependencies
->    installed in their initramfs
+>  const char *const arm64_triplets[] =3D {
+> +       "aarch64-unknown-linux-",
 
-are you sure you have the relevant compression setting enabled
-in kmod?
+Modifying ARM64 behavior should be a separate change.
 
-$ kmod --version
-kmod version 30
-+ZSTD +XZ +ZLIB +LIBCRYPTO -EXPERIMENTAL
-$ modprobe --show-depends ext4
-insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/jbd2/jbd2.ko.zst 
-insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/mbcache.ko.zst 
-insmod /lib/modules/6.1.12-1-MANJARO/kernel/lib/crc16.ko.zst 
-insmod /lib/modules/6.1.12-1-MANJARO/kernel/arch/x86/crypto/crc32c-intel.ko.zst 
-insmod /lib/modules/6.1.12-1-MANJARO/kernel/crypto/crc32c_generic.ko.zst 
-insmod /lib/modules/6.1.12-1-MANJARO/kernel/fs/ext4/ext4.ko.zst 
+>         "aarch64-linux-android-",
+>         "aarch64-linux-gnu-",
+>         NULL
+>  };
+>
+> +const char *const mips_triplets[] =3D {
+> +       "mips-unknown-linux-gnu-",
+> +       "mipsel-linux-android-",
+> +       "mips-linux-gnu-",
+> +       "mips64-linux-gnu-",
+> +       "mips64el-linux-gnuabi64-",
+> +       "mips64-linux-gnuabi64-",
+> +       "mipsel-linux-gnu-",
+> +       NULL
+> +};
+> +
 
-Lucas De Marchi
+This will affect the blame history. It should probably be its own change to=
+o.
+
+>  const char *const powerpc_triplets[] =3D {
+>         "powerpc-unknown-linux-gnu-",
+>         "powerpc-linux-gnu-",
+> @@ -43,6 +55,20 @@ const char *const powerpc_triplets[] =3D {
+>         NULL
+>  };
+>
+> +const char *const riscv32_triplets[] =3D {
+> +       "riscv32-unknown-linux-gnu-",
+> +       "riscv32-linux-android-",
+> +       "riscv32-linux-gnu-",
+> +       NULL
+> +};
+> +
+> +const char *const riscv64_triplets[] =3D {
+> +       "riscv64-unknown-linux-gnu-",
+> +       "riscv64-linux-android-",
+> +       "riscv64-linux-gnu-",
+> +       NULL
+> +};
+> +
+>  const char *const s390_triplets[] =3D {
+>         "s390-ibm-linux-",
+>         "s390x-linux-gnu-",
+> @@ -78,17 +104,6 @@ const char *const x86_triplets[] =3D {
+>         NULL
+>  };
+>
+> -const char *const mips_triplets[] =3D {
+> -       "mips-unknown-linux-gnu-",
+> -       "mipsel-linux-android-",
+> -       "mips-linux-gnu-",
+> -       "mips64-linux-gnu-",
+> -       "mips64el-linux-gnuabi64-",
+> -       "mips64-linux-gnuabi64-",
+> -       "mipsel-linux-gnu-",
+> -       NULL
+> -};
+> -
+>  static bool lookup_path(char *name)
+>  {
+>         bool found =3D false;
+> @@ -164,18 +179,22 @@ static int perf_env__lookup_binutils_path(struct pe=
+rf_env *env,
+>                 path_list =3D arm_triplets;
+>         else if (!strcmp(arch, "arm64"))
+>                 path_list =3D arm64_triplets;
+> +       else if (!strcmp(arch, "mips"))
+> +               path_list =3D mips_triplets;
+>         else if (!strcmp(arch, "powerpc"))
+>                 path_list =3D powerpc_triplets;
+> -       else if (!strcmp(arch, "sh"))
+> -               path_list =3D sh_triplets;
+> +       else if (!strcmp(arch, "riscv32"))
+> +               path_list =3D riscv32_triplets;
+> +       else if (!strcmp(arch, "riscv64"))
+> +               path_list =3D riscv64_triplets;
+>         else if (!strcmp(arch, "s390"))
+> -               path_list =3D s390_triplets;
+> +               path_list =3D s390_triplets;
+
+whitespace issue?
+
+> +       else if (!strcmp(arch, "sh"))
+> +               path_list =3D sh_triplets;
+>         else if (!strcmp(arch, "sparc"))
+>                 path_list =3D sparc_triplets;
+>         else if (!strcmp(arch, "x86"))
+>                 path_list =3D x86_triplets;
+> -       else if (!strcmp(arch, "mips"))
+> -               path_list =3D mips_triplets;
+>         else {
+>                 ui__error("binutils for %s not supported.\n", arch);
+>                 goto out_error;
+
+I think in general we need to revamp this code. Two things that I see
+that are missing are (1) support for perf config and (2) addr2line
+should be configurable, you may want llvm-addr2line. Adding RISC-V is
+of course important too :-)
+
+Thanks,
+Ian
+
+> --
+> 2.34.1
+>
