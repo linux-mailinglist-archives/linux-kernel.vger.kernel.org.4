@@ -2,116 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9816D6B6AFA
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C97D66B6AFD
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbjCLURY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:17:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49758 "EHLO
+        id S230435AbjCLUUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53450 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229829AbjCLURW (ORCPT
+        with ESMTP id S229829AbjCLUUL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:17:22 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278801CF69
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:17:21 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so9698163pjg.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:17:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent.com; s=google; t=1678652240;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ci1g5tAeDNBEuhH1jXrQ1uQStWKKV42Sr6cMMYRU68c=;
-        b=Te7Sj25L1Xre20HX7AR3yNOJBn+TmyS/B8aNWc3DC3+6WChcR747mbVq0AFAXsftx1
-         Md9JZM/7IiSc3gxOn7PsExubTw65bvGF4FKnStN23TaegwMI4XqKbGjxjHlOntc9WP+V
-         E4owFYDhSzmhvgNqx3M84PM6SIAzOjJLViN0bnIhOuH6JfxfRgqfP4gf/XYa/55ahRGV
-         7aQw6Z47A/0WyN2ZK4JsU4dIqgZAuD33cF2R5wQmhZnZZ9kGSHiRaJkT6Y1I/JqA4I/y
-         WCoKb0pHlNlweTncqqRHSvAQ/eIcbi5Ilw9vRdocasujmJtqIOidhFWRsehAtNkDTt5v
-         ZXFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678652240;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Ci1g5tAeDNBEuhH1jXrQ1uQStWKKV42Sr6cMMYRU68c=;
-        b=N8WGgMhf/fcLp6aAt0IRHnvZF1YZNaFb2Lm9i+GdxCh1uGojfd5twkUxFw0hsRgrUp
-         +2m9Z0wBS97Sskq9sufj9MzXGObzzhfvaHfPBFipzELYiJ+qkUin+7Zvxl5pGs1CJ7rf
-         P4fSpfmEITlhsWPGe1M58d69LsxkHoyUfQA5i4bKO3h+/vMoLmTFFIA9gGOixeAgNoL0
-         c+vqIb3xZxSHhsQByIHFGL8u20VKigwseZYbW6Stxrm4YHd3yvU4MdCF1KwOh+J7HKtV
-         qmETXMpysm4AvhhHPFcZLlLrNADAFf3vriN5RWa87dI4mNgn+Oiih2zaCG74dND9tGfg
-         Dvhg==
-X-Gm-Message-State: AO0yUKXVRJ10AGpRbgGcx4L06k/vToIAaENY97O9lb4bjWFfZCO+2QDB
-        wuP+N+bnAl24w6fiiE168+Ttn4N5vYz3HRMLGqY=
-X-Google-Smtp-Source: AK7set8GjlcdQO5S1OxAnbzhhK5X8rI+o7c5CpDo1J8OPfyVicnGyoPMHzTstbZh5hv9/iOAdRhDmg==
-X-Received: by 2002:a17:903:244f:b0:1a0:450d:a45a with SMTP id l15-20020a170903244f00b001a0450da45amr1742213pls.31.1678652240593;
-        Sun, 12 Mar 2023 13:17:20 -0700 (PDT)
-Received: from carnotaurus.. (c-73-231-147-44.hsd1.ca.comcast.net. [73.231.147.44])
-        by smtp.gmail.com with ESMTPSA id t15-20020a1709028c8f00b0019aa4c00ff4sm3187594plo.206.2023.03.12.13.17.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 13:17:20 -0700 (PDT)
-From:   Joe Stringer <joe@isovalent.com>
-To:     linux-doc@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, corbet@lwn.net
-Subject: [PATCH linux-doc] docs/doc-guide: Clarify how to write tables
-Date:   Sun, 12 Mar 2023 13:17:12 -0700
-Message-Id: <20230312201712.367545-1-joe@isovalent.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 12 Mar 2023 16:20:11 -0400
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1982F781
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:20:10 -0700 (PDT)
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 9AA9A2C05FE;
+        Mon, 13 Mar 2023 09:20:08 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+        s=mail181024; t=1678652408;
+        bh=uUF/1pble7F539MwsUkR85V+kpulh5teeVs3SK26iik=;
+        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+        b=mVnwgfh5mEStD1ms6N9kGxK+/yGTGYoF6LJqR94FRC7Kg72d3O1bWKVX+Fy+ioBIi
+         d7kE08Y5e/IDtzyECe22/dwFDfaxKOdpnrayB5/28O4f99/5aQVmxgO51O4THRbLM0
+         d+19sUTjlFYOC65AHpcyiTCtixKbzgSHx2oCYEog4c7BGIrVUTNa5SAI20IqfNfyC/
+         qSvy1S/JeQUvaW2avgm3Q3fGIk9lr2ulyYtd2kvgsNaPqCBHbBhWl5+q/oa9Fz9gJz
+         Z6Fkcdkh/jB72fxEZRK2R/FNvEyjKGL6qcEcTH2W4EITlj/HRShiTDVAqokvgD580i
+         /w5A7Ii50gNhQ==
+Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+        id <B640e33f80001>; Mon, 13 Mar 2023 09:20:08 +1300
+Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
+ svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
+ (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 09:20:08 +1300
+Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
+ svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
+ 15.00.1497.047; Mon, 13 Mar 2023 09:20:08 +1300
+From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH v2 2/2] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
+ property
+Thread-Topic: [PATCH v2 2/2] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
+ property
+Thread-Index: AQHZVPLSDhbvKPyNJUy5rboXnTrOMK72vD+A
+Date:   Sun, 12 Mar 2023 20:20:07 +0000
+Message-ID: <5c90f0d3-3085-e71a-3277-99ab2d694fcd@alliedtelesis.co.nz>
+References: <20230312145546.262492-1-andi.shyti@kernel.org>
+ <20230312145546.262492-3-andi.shyti@kernel.org>
+In-Reply-To: <20230312145546.262492-3-andi.shyti@kernel.org>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-messagesentrepresentingtype: 1
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.32.1.11]
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <915834EA617A70429216594E14688EA4@atlnz.lc>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=VwQbUJbxAAAA:8 a=qz-aMfjk3hbnPCHNPXAA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
+X-SEG-SpamProfiler-Score: 0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Prior to this commit, the kernel docs writing guide spent over a page
-describing exactly how *not* to write tables into the kernel docs,
-without providing a example about the desired format.
-
-This patch provides a positive example first in the guide so that it's
-harder to miss, then leaves the existing less desirable approach below
-for contributors to follow if they have some stronger justification for
-why to use that approach.
-
-Signed-off-by: Joe Stringer <joe@isovalent.com>
----
- Documentation/doc-guide/sphinx.rst | 18 +++++++++++++++++-
- 1 file changed, 17 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/doc-guide/sphinx.rst b/Documentation/doc-guide/sphinx.rst
-index 23edb427e76f..9c2210b6ea3f 100644
---- a/Documentation/doc-guide/sphinx.rst
-+++ b/Documentation/doc-guide/sphinx.rst
-@@ -313,9 +313,25 @@ the documentation build system will automatically turn a reference to
- function name exists.  If you see ``c:func:`` use in a kernel document,
- please feel free to remove it.
- 
-+Tables
-+------
-+
-+Tables should be written in cell grid form unless there is a strong
-+justification for using an alternate format:
-+
-+.. code-block:: rst
-+
-+   +------------------------+------------+----------+----------+
-+   | Header row, column 1   | Header 2   | Header 3 | Header 4 |
-+   | (header rows optional) |            |          |          |
-+   +========================+============+==========+==========+
-+   | body row 1, column 1   | column 2   | column 3 | column 4 |
-+   +------------------------+------------+----------+----------+
-+   | body row 2             | ...        | ...      |          |
-+   +------------------------+------------+----------+----------+
- 
- list tables
-------------
-+~~~~~~~~~~~
- 
- The list-table formats can be useful for tables that are not easily laid
- out in the usual Sphinx ASCII-art formats.  These formats are nearly
--- 
-2.34.1
-
+DQpPbiAxMy8wMy8yMyAwMzo1NSwgQW5kaSBTaHl0aSB3cm90ZToNCj4gImZzbCx0aW1lb3V0IiBp
+cyBtYXJrZWQgYXMgZGVwcmVjYXRlZCBhbmQgcmVwbGFjZWQgYnkgdGhlDQo+ICJpMmMtc2NsLWNs
+ay1sb3ctdGltZW91dC1tcyIgaTJjIHByb3BlcnR5Lg0KPg0KPiBVc2UgdGhpcyBsYXR0ZXIgYW5k
+LCBpbiBjYXNlIGl0IGlzIG1pc3NpbmcsIGZvciBiYWNrDQo+IGNvbXBhdGliaWxpdHksIGNoZWNr
+IHdoZXRoZXIgd2Ugc3RpbGwgaGF2ZSAiZnNsLHRpbWVvdXQiIGRlZmluZWQuDQo+DQo+IFNpZ25l
+ZC1vZmYtYnk6IEFuZGkgU2h5dGkgPGFuZGkuc2h5dGlAa2VybmVsLm9yZz4NCj4gLS0tDQo+ICAg
+ZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tcGMuYyB8IDExICsrKysrKysrKystDQo+ICAgMSBmaWxl
+IGNoYW5nZWQsIDEwIGluc2VydGlvbnMoKyksIDEgZGVsZXRpb24oLSkNCj4NCj4gZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXBjLmMgYi9kcml2ZXJzL2kyYy9idXNzZXMvaTJj
+LW1wYy5jDQo+IGluZGV4IDgxYWM5MmJiNGY2Zi4uZmU2Mjc5YTM1M2M2IDEwMDY0NA0KPiAtLS0g
+YS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1wYy5jDQo+ICsrKyBiL2RyaXZlcnMvaTJjL2J1c3Nl
+cy9pMmMtbXBjLmMNCj4gQEAgLTg0Niw3ICs4NDYsMTYgQEAgc3RhdGljIGludCBmc2xfaTJjX3By
+b2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKm9wKQ0KPiAgIAkJCW1wY19pMmNfc2V0dXBfOHh4
+eChvcC0+ZGV2Lm9mX25vZGUsIGkyYywgY2xvY2spOw0KPiAgIAl9DQo+ICAgDQo+IC0JcHJvcCA9
+IG9mX2dldF9wcm9wZXJ0eShvcC0+ZGV2Lm9mX25vZGUsICJmc2wsdGltZW91dCIsICZwbGVuKTsN
+Cj4gKwlwcm9wID0gb2ZfZ2V0X3Byb3BlcnR5KG9wLT5kZXYub2Zfbm9kZSwNCj4gKwkJCSAgICAg
+ICAiaTJjLXNjbC1jbGstbG93LXRpbWVvdXQtbXMiLCAmcGxlbik7DQo+ICsNCj4gKwkvKg0KPiAr
+CSAqIGVuc3VyaW5nIGJhY2sgY29tcGF0aWJpbGl0eSBhcw0KPiArCSAqICJmc2wsdGltZW91dCIg
+aXMgbWFya2VkIGFzIGRlcHJlY2F0ZWQNCj4gKwkgKi8NCj4gKwlpZiAoIXByb3ApDQo+ICsJCXBy
+b3AgPSBvZl9nZXRfcHJvcGVydHkob3AtPmRldi5vZl9ub2RlLCAiZnNsLHRpbWVvdXQiLCAmcGxl
+bik7DQo+ICsNCj4gICAJaWYgKHByb3AgJiYgcGxlbiA9PSBzaXplb2YodTMyKSkgew0KPiAgIAkJ
+bXBjX29wcy50aW1lb3V0ID0gKnByb3AgKiBIWiAvIDEwMDAwMDA7DQo+ICAgCQlpZiAobXBjX29w
+cy50aW1lb3V0IDwgNSkNCg0KV2hpbGUgeW91J3JlIGhlcmUgaXQgbWlnaHQgbWFrZSBzZW5zZSB0
+byBjbGVhbiB0aGlzIHVwIHRvIHVzZSANCm9mX3Byb3BlcnR5X3JlYWRfdTMyKCkuDQoNCldpdGgg
+b3Igd2l0aG91dCB0aGF0IGFkZGl0aW9uYWwgY2xlYW51cDoNCg0KUmV2aWV3ZWQtYnk6IENocmlz
+IFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCg==
