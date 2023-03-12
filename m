@@ -2,134 +2,489 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428A16B66D9
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FB1A6B66D0
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:43:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbjCLNn5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:43:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46776 "EHLO
+        id S230240AbjCLNnN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:43:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230507AbjCLNnt (ORCPT
+        with ESMTP id S230005AbjCLNnJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:43:49 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C8815CB6;
-        Sun, 12 Mar 2023 06:43:40 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CF8CD814;
-        Sun, 12 Mar 2023 14:43:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678628618;
-        bh=M3+2iadqGPWpajU73rzJOfscL/vSRK4MRXJAHhM3Vwk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=S94E3bY7StoQHAgj4Ene3ZegV2UW70uJapggOmnnq5BOLviJUieoQR8vK8iwSl4mO
-         nB7/HV5FvVhNrNav/Fa7DCJ28ZI4Ge8PLvjWiSCH37yTbot58V3FwpG2xrGmlCYlzV
-         N/5h+69TBJLuAxEGxTdow4/6Ep+WKBDw4muOuYUQ=
-Date:   Sun, 12 Mar 2023 15:41:16 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 11/28] media: platform: ti: am437x: drop of_match_ptr for
- ID table
-Message-ID: <20230312134116.GL2545@pendragon.ideasonboard.com>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-11-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312131318.351173-11-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Mar 2023 09:43:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74F16E194;
+        Sun, 12 Mar 2023 06:43:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 0E293B80B18;
+        Sun, 12 Mar 2023 13:43:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F152C433EF;
+        Sun, 12 Mar 2023 13:43:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678628584;
+        bh=vDEgDUkCZKLY0m+VHb7pWQzdDkv5gUAKV17vHxBs8Q8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=H6nY7deQ9Pjx9+kTq0NiGacQKFsN2DkSBG+GCZZR+dkEdDvKVduSH8Pte+VEDP3cG
+         hiaVXECa0jdKoQsKXnYsEb6Jzh41cE53QHU4U/12tyBz0NsVhvirwykdPwHMOHUozW
+         Ja76YH+230fXv6z2sByHWJqFOPFIA8nWDd4wCKuhVwe0L61iPuMWTer8fXb8jekdB3
+         W3/RWSKXClfBp6wQ6jsIhDu6eRgZ4STigm0UXZZHb+HyrvaLk7i94DAqdfGiFZTMzc
+         jViTYtCh85FGRlAQgaij1vXITYbOrKeMOygG29GcQgcjzn4GvkRbShamhDJH71PNSf
+         OQOUIkn04r50A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pbLyY-00H0CV-3P;
+        Sun, 12 Mar 2023 13:43:02 +0000
+Date:   Sun, 12 Mar 2023 13:43:01 +0000
+Message-ID: <871qlu5bmi.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Shanker Donthineni <sdonthineni@nvidia.com>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Vikram Sethi <vsethi@nvidia.com>,
+        Thierry Reding <treding@nvidia.com>
+Subject: Re: [PATCH] irqchip/gicv3: Workaround for NVIDIA erratum T241-FABRIC-4
+In-Reply-To: <ff5306c3-c72e-87a3-f21f-13cdf11e1df5@nvidia.com>
+References: <20230306013148.3483335-1-sdonthineni@nvidia.com>
+        <87ilfdgdx9.wl-maz@kernel.org>
+        <ff5306c3-c72e-87a3-f21f-13cdf11e1df5@nvidia.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: sdonthineni@nvidia.com, tglx@linutronix.de, catalin.marinas@arm.com, will@kernel.org, corbet@lwn.net, linux-arm-kernel@lists.infradead.org, linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org, vsethi@nvidia.com, treding@nvidia.com
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-Thank you for the patch.
-
-On Sun, Mar 12, 2023 at 02:13:01PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).  This
-
-"might not be relevant" is a bit of an understatement in this case :-)
-
-> also fixes !CONFIG_OF error:
+On Fri, 10 Mar 2023 14:16:34 +0000,
+Shanker Donthineni <sdonthineni@nvidia.com> wrote:
 > 
->   drivers/media/platform/ti/am437x/am437x-vpfe.c:2620:34: error: ‘vpfe_of_match’ defined but not used [-Werror=unused-const-variable=]
-
-This driver should probably depend on CONFIG_OF, but that's a separate
-issue.
-
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
-> ---
->  drivers/media/platform/ti/am437x/am437x-vpfe.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Hi Marc,
 > 
-> diff --git a/drivers/media/platform/ti/am437x/am437x-vpfe.c b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-> index 2dfae9bc0bba..fe89b8e250e7 100644
-> --- a/drivers/media/platform/ti/am437x/am437x-vpfe.c
-> +++ b/drivers/media/platform/ti/am437x/am437x-vpfe.c
-> @@ -2629,7 +2629,7 @@ static struct platform_driver vpfe_driver = {
->  	.driver = {
->  		.name	= VPFE_MODULE_NAME,
->  		.pm	= &vpfe_pm_ops,
-> -		.of_match_table = of_match_ptr(vpfe_of_match),
-> +		.of_match_table = vpfe_of_match,
->  	},
->  };
+> On 3/7/23 02:32, Marc Zyngier wrote:
+> > External email: Use caution opening links or attachments
+> > 
+> > 
+> > On Mon, 06 Mar 2023 01:31:48 +0000,
+> > Shanker Donthineni <sdonthineni@nvidia.com> wrote:
+> >> 
+> >> The purpose of this patch is to address the T241 erratum T241-FABRIC-4,
+> >> which causes unexpected behavior in the GIC when multiple transactions
+> > 
+> > nit: "The purpose of this patch" is superfluous. Instead, write
+> > something like:
+> > 
+> > "The T241 platform suffers from the T241-FABRIC-4 erratum which
+> > causes..."
+> > 
+> I'll fix in v2 patch.
+> 
+> >> are received simultaneously from different sources. This hardware issue
+> >> impacts NVIDIA server platforms that use more than two T241 chips
+> >> interconnected. Each chip has support for 320 {E}SPIs.
+> >> 
+> >> This issue occurs when multiple packets from different GICs are
+> >> incorrectly interleaved at the target chip. The erratum text below
+> >> specifies exactly what can cause multiple transfer packets susceptible
+> >> to interleaving and GIC state corruption. GIC state corruption can
+> >> lead to a range of problems, including kernel panics, and unexpected
+> >> behavior.
+> >> 
+> >>  From the erratum text:
+> >>    "In some cases, inter-socket AXI4 Stream packets with multiple
+> >>    transfers, may be interleaved by the fabric when presented to ARM
+> >>    Generic Interrupt Controller. GIC expects all transfers of a packet
+> >>    to be delivered without any interleaving.
+> >> 
+> >>    The following GICv3 commands may result in multiple transfer packets
+> >>    over inter-socket AXI4 Stream interface:
+> >>     - Register reads from GICD_I* and GICD_N*
+> >>     - Register writes to 64-bit GICD registers other than GICD_IROUTERn*
+> >>     - ITS command MOVALL
+> > 
+> > Does is also affect cross-chip traffic such as SPI deactivation?
+> > 
+> No, it is not impacted.
+> 
+> >> 
+> >>    Multiple commands in GICv4+ utilize multiple transfer packets,
+> >>    including VMOVP, VMOVI and VMAPP.
+> >> 
+> >>    This issue impacts system configurations with more than 2 sockets,
+> >>    that require multi-transfer packets to be sent over inter-socket
+> >>    AXI4 Stream interface between GIC instances on different sockets.
+> >>    GICv4 cannot be supported. GICv3 SW model can only be supported
+> >>    with the workaround. Single and Dual socket configurations are not
+> >>    impacted by this issue and support GICv3 and GICv4."
+> > 
+> > Do you have a public link to this erratum? This is really something
+> > that we should be go back to when changing things in the GIC code
+> > (should we ever use MOVALL, for example).
+> > 
+> https://developer.nvidia.com/docs/t241-fabric-4/nvidia-t241-fabric-4-errata.pdf
+
+Great. Please add this to the commit message and a comment next to the
+workaround code.
+
+[...]
+
+> >> +static inline void __iomem *gic_dist_base_read_alias(irq_hw_number_t intid)
+> >> +{
+> >> +     struct dist_base_alias *base_alias;
+> >> +     int i;
+> >> +
+> >> +     if (static_branch_unlikely(&gic_nvidia_t241_erratum)) {
+> >> +             base_alias = gic_data.base_read_aliases;
+> >> +             for (i = 0; i < gic_data.nr_dist_base_aliases; i++) {
+> >> +                     if (base_alias->base &&
+> >> +                        (intid >= base_alias->intid_start) &&
+> >> +                        (intid <= base_alias->intid_end)) {
+> >> +                             return base_alias->base;
+> >> +                     }
+> >> +                     base_alias++;
+> >> +             }
+> >> +     }
+> > 
+> > Each distributor has the exact same number of SPIs. So why isn't this
+> > just a division that gives you a distributor number?
+> > 
+> 
+> I considered creating a generic function that could potentially be
+> utilized in the future for other Workarounds (WARs).
+> 
+> I'll change to this in v2.
+> 
+> static inline void __iomem *gic_dist_base_alias(irq_hw_number_t intid)
+> {
+>         u32 chip;
+> 
+>         if (static_branch_unlikely(&gic_nvidia_t241_erratum)) {
+>                 /**
+>                  *  {E}SPI mappings for all 4 chips
+>                  *    Chip0 = 32-351
+>                  *    Chip1 = 52-671
+
+s/52/352/, right?
+
+>                  *    Chip2 = 672-991
+>                  *    Chip3 = 4096-4415
+>                  */
+>                 switch (__get_intid_range(intid)) {
+>                 case SPI_RANGE:
+>                         chip = (intid - 32) / 320;
+>                         break;
+>                 case ESPI_RANGE:
+>                         chip = 3;
+>                         break;
+>                 default:
+>                         unreachable();
+>                 }
+>                 BUG_ON(!t241_dist_base_alias[chip]);
+
+You can drop this BUG_ON(), and replace it with on at probe time.
+
+>                 return t241_dist_base_alias[chip];
+>         }
+> 
+>         return gic_data.dist_base;
+> }
+
+Yup, that's much better.
+
+> 
+> >> +
+> >> +     return gic_data.dist_base;
+> >> +}
+> >> +
+> >>   static inline void __iomem *gic_dist_base(struct irq_data *d)
+> >>   {
+> >>        switch (get_intid_range(d)) {
+> >> @@ -346,7 +377,7 @@ static int gic_peek_irq(struct irq_data *d, u32 offset)
+> >>        if (gic_irq_in_rdist(d))
+> >>                base = gic_data_rdist_sgi_base();
+> >>        else
+> >> -             base = gic_data.dist_base;
+> >> +             base = gic_dist_base_read_alias(irqd_to_hwirq(d));
+> >> 
+> >>        return !!(readl_relaxed(base + offset + (index / 32) * 4) & mask);
+> >>   }
+> >> @@ -580,6 +611,7 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
+> >>        enum gic_intid_range range;
+> >>        unsigned int irq = gic_irq(d);
+> >>        void __iomem *base;
+> >> +     void __iomem *base_read_alias;
+> >>        u32 offset, index;
+> >>        int ret;
+> >> 
+> >> @@ -594,14 +626,17 @@ static int gic_set_type(struct irq_data *d, unsigned int type)
+> >>            type != IRQ_TYPE_LEVEL_HIGH && type != IRQ_TYPE_EDGE_RISING)
+> >>                return -EINVAL;
+> >> 
+> >> -     if (gic_irq_in_rdist(d))
+> >> +     if (gic_irq_in_rdist(d)) {
+> >>                base = gic_data_rdist_sgi_base();
+> >> -     else
+> >> +             base_read_alias = base;
+> >> +     } else {
+> >>                base = gic_data.dist_base;
+> >> +             base_read_alias = gic_dist_base_read_alias(irqd_to_hwirq(d));
+> >> +     }
+> >> 
+> >>        offset = convert_offset_index(d, GICD_ICFGR, &index);
+> >> -
+> >> -     ret = gic_configure_irq(index, type, base + offset, NULL);
+> >> +     ret = gic_configure_irq(index, type, base + offset, NULL,
+> >> +                             base_read_alias + offset);
+> >>        if (ret && (range == PPI_RANGE || range == EPPI_RANGE)) {
+> >>                /* Misconfigured PPIs are usually not fatal */
+> >>                pr_warn("GIC: PPI INTID%d is secure or misconfigured\n", irq);
+> >> @@ -1719,6 +1754,70 @@ static bool gic_enable_quirk_hip06_07(void *data)
+> >>        return false;
+> >>   }
+> >> 
+> >> +static bool gic_enable_quirk_nvidia_t241(void *data)
+> >> +{
+> >> +#ifdef CONFIG_ACPI
+> >> +     struct dist_base_alias *base_alias;
+> >> +     struct acpi_table_header *madt;
+> >> +     int i, intid, nchips = 0;
+> >> +     acpi_status status;
+> >> +     phys_addr_t phys;
+> >> +
+> >> +     status = acpi_get_table(ACPI_SIG_MADT, 0, &madt);
+> >> +     if (ACPI_FAILURE(status))
+> >> +             return false;
+> >> +
+> >> +     /* Check NVIDIA OEM ID */
+> >> +     if (memcmp(madt->oem_id, "NVIDIA", 6)) {
+> > 
+> > What guarantees do we have that this string will always be present?
+> > "oem_id" is usually updated to reflect the integrator, not the
+> > silicon vendor.
+> > 
+> 
+> Our company provides UEFI firmware porting guidelines to OEMs that
+> ensure the MADT table generation, along with the ACPI header, remains
+> unaltered. Thanks to your input, we are now looking into alternative
+> approaches for identifying platform types and removing our dependence
+> on ACPI. Specifically, we are interested in utilizing the SMCCC API
+> to detect the CHIP. Determine whether the individual chips are present
+> by referring to the GICR regions described in MADT.
+
+Seems like a reasonable alternative.
+
+> 
+> 
+> >> +             acpi_put_table(madt);
+> >> +             return false;
+> >> +     }
+> >> +
+> >> +     /* Find the number of chips based on OEM_TABLE_ID */
+> >> +     if ((!memcmp(madt->oem_table_id, "T241x3", 6)) ||
+> >> +         (!memcmp(madt->oem_table_id, "T241c3", 6))) {
+> >> +             nchips = 3;
+> >> +     } else if ((!memcmp(madt->oem_table_id, "T241x4", 6)) ||
+> >> +                (!memcmp(madt->oem_table_id, "T241c4", 6))) {
+> >> +             nchips = 4;
+> >> +     }
+> > 
+> > Same question for these. This seems pretty fragile.
+> > 
+> This can be avoid for the SMCCC based platform detection.
+> 
+> >> +
+> >> +     acpi_put_table(madt);
+> >> +     if (nchips < 3)
+> >> +             return false;
+> >> +
+> >> +     base_alias = kmalloc_array(nchips, sizeof(*base_alias),
+> >> +                                GFP_KERNEL | __GFP_ZERO);
+> > 
+> > You are fully initialising the structures, right? So why the
+> > __GFP_ZERO?
+> Yes, not needed. will use the staic array since size is small after
+> removing INTID_start/end feilds.
+> 
+> > 
+> >> +     if (!base_alias)
+> >> +             return false;
+> >> +
+> >> +     gic_data.base_read_aliases = base_alias;
+> >> +     gic_data.nr_dist_base_aliases = nchips;
+> >> +
+> >> +     /**
+> >> +      * Setup GICD alias and {E}SPIs range for each chip
+> >> +      * {E}SPI blocks mappings:
+> >> +      *    Chip0 = 00-09
+> >> +      *    Chip1 = 10-19
+> >> +      *    Chip2 = 20-29
+> >> +      *    Chip3 = 30-39
+> > 
+> > What are these ranges? From the code below, I can (sort of) guess that
+> > each chip has 10 registers in the SPI/ESPI range, with chips 0-1
+> > dealing with SPIs, and chips 2-3 dealing with ESPIs.
+> > 
+> > It would be a lot clearer if you indicated the actual INTID ranges.
+> Agree.
+> 
+> > 
+> >> +      */
+> >> +     for (i = 0; i < nchips; i++, base_alias++) {
+> >> +             phys = ((1ULL << 44) * i) | 0x23580000;
+> > 
+> > Where is this address coming from? Can it be inferred from the MADT?
+> > It would also be a lot more readable if written as:
+> > 
+> > #define CHIP_MASK       GENMASK_ULL(45, 44)
+> > #define CHIP_ALIAS_BASE 0x23580000
+> > 
+> I'll define macros for constants. Use the offset, global GICD-PHYS,
+> and CHIP number to get the alias addressses.
+> 
+> #define T241_CHIPN_MASK                 GENMASK_ULL(45, 44)
+> #define T241_CHIP_GICDA_OFFSET          0x1580000
+> 
+>      phys = gic_data.dist_phys_base + T241_CHIP_GICDA_OFFSET;
+>      phys |= FIELD_PREP(T241_CHIPN_MASK, i);
+> 
+> 
+> >                  phys = CHIP_ALIAS_BASE;
+> >                  phys |= FIELD_PREP(CHIP_MASK, i);
+> > 
+> >> +             base_alias->base = ioremap(phys, SZ_64K);
+> >> +             WARN_ON(!base_alias->base);
+> >> +
+> >> +             intid = i < 3 ? 32 + i * 10 * 32 : ESPI_BASE_INTID;
+> >> +             base_alias->intid_start = intid;
+> >> +             base_alias->intid_end = intid + 10 * 32 - 1;
+> > 
+> > This really is obfuscated. And it also shows that we really don't need
+> > the INTID ranges in the data structure. You can easily get to the chip
+> > number with something like:
+> ACK
+> 
+> > 
+> >          switch (__get_intid_range(intid)) {
+> >          case SPI_RANGE:
+> >                  chip = (intid - 32) / 320;
+> >                  break;
+> >          case ESPI_RANGE:
+> >                  chip = (intid - ESPI_BASE_INTID) / 320;
+> >                  break;
+> >          }
+> > 
+> >          alias = base_alias[chip];
+> > 
+> > Bonus point if you add a #define for the magic numbers.
+> > 
+> ACK
+> 
+> >> +     }
+> >> +     static_branch_enable(&gic_nvidia_t241_erratum);
+> >> +     return true;
+> >> +#else
+> >> +     return false;
+> >> +#endif
+> >> +}
+> > 
+> > How about moving the whole function under #ifdef CONFIG_ACPI?
+> > 
 >  
+> If you're not satisfied with SMCCC-based platform detection, I'll
+> make the necessary changes. We value your input and would appreciate
+> your opinion on whether we should use SMCCC or ACPI-OEM-ID based
+> platform detection. Our preference is to go with SMC if that's
+> agreeable to you.
+
+If you can guarantee that this FW-based discovery will always be
+available, then this is a more robust way of doing it.
+
+> 
+> 
+> #define SMCCC_JEP106_BANK_ID(v)         FIELD_GET(GENMASK(30, 24), (v))
+> #define SMCCC_JEP106_ID_CODE(v)         FIELD_GET(GENMASK(22, 16), (v))
+> #define SMCCC_JEP106_SOC_ID(v)          FIELD_GET(GENMASK(15, 0), (v))
+> 
+> #define JEP106_NVIDIA_BANK_ID           0x3
+> #define JEP106_NVIDIA_ID_CODE           0x6b
+> #define T241_CHIPN_MASK                 GENMASK_ULL(45, 44)
+> #define T241_CHIP_GICDA_OFFSET          0x1580000
+> #define T241_CHIP_ID                    0x241
+> 
+> static bool gic_enable_quirk_nvidia_t241(void *data)
+> {
+>         unsigned long chip_bmask = 0;
+>         struct arm_smccc_res res;
+>         phys_addr_t phys;
+>         u32 i;
+> 
+>         if ((arm_smccc_get_version() < ARM_SMCCC_VERSION_1_2) ||
+>             (arm_smccc_1_1_get_conduit() == SMCCC_CONDUIT_NONE)) {
+>                 return false;
+>         }
+> 
+>         arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_FEATURES_FUNC_ID,
+>                              ARM_SMCCC_ARCH_SOC_ID, &res);
+>         if ((s32)res.a0 < 0)
+>                 return false;
+> 
+>         arm_smccc_1_1_invoke(ARM_SMCCC_ARCH_SOC_ID, 0, &res);
+>         if ((s32)res.a0 < 0)
+>                 return false;
+
+Most of this should probably directly come from the soc_id
+infrastructure.  It would need to probe early and expose the low-level
+data.
+
+> 
+>         /* Check JEP106 code for NVIDIA T241 chip (036b:0241) */
+>         if ((SMCCC_JEP106_BANK_ID(res.a0) != JEP106_NVIDIA_BANK_ID) ||
+>             (SMCCC_JEP106_ID_CODE(res.a0) != JEP106_NVIDIA_ID_CODE) ||
+>             (SMCCC_JEP106_SOC_ID(res.a0) != T241_CHIP_ID)) {
+>                 return false;
+>         }
+> 
+>         /* Find the chips based on GICR regions PHYS addr */
+>         for (i = 0; i < gic_data.nr_redist_regions; i++) {
+>                 chip_bmask |= BIT(FIELD_GET(T241_CHIPN_MASK,
+>                                   gic_data.redist_regions[i].phys_base));
+>         }
+> 
+>         if (hweight32(chip_bmask) < 3)
+>                 return false;
+> 
+>         /* Setup GICD alias regions */
+>         for (i = 0; i < ARRAY_SIZE(t241_dist_base_alias); i++) {
+>                 if (chip_bmask & BIT(i)) {
+>                         phys = gic_data.dist_phys_base + T241_CHIP_GICDA_OFFSET;
+>                         phys |= FIELD_PREP(T241_CHIPN_MASK, i);
+>                         t241_dist_base_alias[i] = ioremap(phys, SZ_64K);
+>                         WARN_ON(!t241_dist_base_alias[i]);
+>                 }
+>         }
+>         static_branch_enable(&gic_nvidia_t241_erratum);
+>         return true;
+> }
+
+Thanks,
+
+	M.
 
 -- 
-Regards,
-
-Laurent Pinchart
+Without deviation from the norm, progress is not possible.
