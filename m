@@ -2,102 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BC456B6BB7
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:14:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01C3F6B6BB9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:15:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231332AbjCLVOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38654 "EHLO
+        id S230158AbjCLVPB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:15:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjCLVOu (ORCPT
+        with ESMTP id S231626AbjCLVOz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:14:50 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2EF6827D63
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:14:47 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id x3so41108138edb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:14:47 -0700 (PDT)
+        Sun, 12 Mar 2023 17:14:55 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4979527D63;
+        Sun, 12 Mar 2023 14:14:55 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id l16-20020a9d4c10000000b006944b17058cso5750281otf.2;
+        Sun, 12 Mar 2023 14:14:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678655685;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112; t=1678655694;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=IZ9la0oJabKkUlhSJxtNntN3YhdmaYBpeFktFP6comw=;
-        b=er8yjZT3F0TproMMvT5neGO/8GGMj5B/j+UedSbizxTiSobBvTodRRpjtfJfvhcF/M
-         RGEnf6PcvQ9GHP2Cin7rpoiboQFoTV22ytKbN0BbcSKhc+N3aOIQIIWZy+0Et+1UXdrY
-         nu5EVLbKd9HZVJUIA0vR927m2z7yzUHWYEmJNRvpd0EMCtY9D14dXSdxx4Gg8JeQX/hM
-         N2XTBpPJHHD5vRLglTVSrQ4fVXd4+MISTEow4N67dNe1j+jV8ZY9cJLkNG5t4oAa9UeV
-         WaFLYuWbgbmRCGOqjvRoIP2KECZ2v/jnd64wrXMvZh3ARQEe7RzYywlqjfmGcloGDmyA
-         OLMA==
+        bh=b3VsWDPFaczsDfXU7WZPX8lGz1bl2jblkgzkg70JA3I=;
+        b=gJpGxB9/cF15wBrFzEtW0fT9ajVGGu/rA5cz23vyfk5ynNj9DXTY5DeFFM3rn165SF
+         DbNOenNYxuysw7kK+fXFeZY4SyelkZqQGeBLYsBasAIL3U0qOPRt5yAIi90pBWSCSpTQ
+         /RSUSGw+6oBOG0UfSDYfsjN5eWkjXiSqoEcLcHNHdzrH+VNL/cB83BCc3bJDHVzU8TEU
+         FH8VKaSsf+eX2dGPPQJBS5hhIggeRtAi9+1/2OZFk2vfjmqY/WX85+4mgVbcOLWnkeH0
+         lLYUdxwe2zK+5BFYietyHO1v6/69cszw2IFaLHqYv8WJ0IWXoduAb+1d1I1U8XovBKIO
+         r+Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678655685;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678655694;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:sender
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IZ9la0oJabKkUlhSJxtNntN3YhdmaYBpeFktFP6comw=;
-        b=NOSyBHwRC/438R+3h1srY5gr9XeFlyT8zhaIAdnb67YiQARMY8bUUskGEadeGOTgNR
-         sOJjBcODUY7260t/kAWSP9S1Yoyyn98pXvTvDJczsy0ciq5A0Oyi1ncbHQb7CNyPReRd
-         6BU3IS2+1My4R3KzynyY7lJeooaOMARm3+DLLbqre5+68I4VrpAIpK8+DZVNi0Lh7AV8
-         m/UguvoGMW3sRmVF56ncvKjpqiF6sSLgvcarOs7olwOQZ/dD+Wbu4ck1dSrPd9v+yrNX
-         OE+iG31L9xjKZIlrBAwPRZNrUORFBzpI4zIts+bJfZwVre4wwKJlt5X9K401WGpDqshS
-         bxlw==
-X-Gm-Message-State: AO0yUKUFQA6Vofr7RKeLi9ydUJl1y+udhXlSCEZxeiakWuQLxzeHSy7V
-        Qvtp84EQJtFBzlvECwkVNAKbi13DUQw22DhNGzE=
-X-Google-Smtp-Source: AK7set9ytvmNobGpn73pug7++tcIsIHe4WoiUMx0M0HAOOZhwv4JmCaJcoKsZI69syXavyfi0TYfrA==
-X-Received: by 2002:a17:907:6d91:b0:878:58e6:f1eb with SMTP id sb17-20020a1709076d9100b0087858e6f1ebmr39217301ejc.23.1678655685671;
-        Sun, 12 Mar 2023 14:14:45 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id sk15-20020a170906630f00b009079442dd11sm2596867ejc.154.2023.03.12.14.14.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 14:14:45 -0700 (PDT)
-Message-ID: <92fc2b5e-05fe-4f69-916c-82795b0d0db2@linaro.org>
-Date:   Sun, 12 Mar 2023 22:14:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>
+        bh=b3VsWDPFaczsDfXU7WZPX8lGz1bl2jblkgzkg70JA3I=;
+        b=rsA5PWSSl/W7+SZKGSOdjookIXFl28YnwH7+eXTAt0NB6he5X6ALjXp8HLimgBSidA
+         3Rnxj4f+HoIewZUnaHNiI7Q4aH4bTu4ggVZRWpVLiNQtK2FudT+4ALbuhol6mbVBD6nE
+         OKlZecabXJPZf9FbbBWBsPoS+Df6b31s/icBGZzQaHYLCAfh7Ci6vJNeofGxThMApdg+
+         4/CiH/o20WbJHBRfa0lWqoDaQlp0eivFshvYG4FwNPlonxXMKE+Tz8bzfqeKR4mkkU8Q
+         inN6e4xtbzrlDY3T0YRvsVZ4V+ItvwEbT6J2Bjkj88r8epmXZHsT0jFtFa4nv7HIwjsj
+         rxhg==
+X-Gm-Message-State: AO0yUKUROGWddE2Eyo15ni0CoYEuU+uA+gs4PdWR1L433xKcNKYAeefF
+        +qYsqZv+q05KZkgZ8I6r5HI=
+X-Google-Smtp-Source: AK7set+qz301ZhwVwfixwZorR/wkxy/EPudT49twzvbYcAaz6swzV2u3fDRxUpFCxwUxSI5z1XGyKQ==
+X-Received: by 2002:a9d:128a:0:b0:68b:e4d7:b8d with SMTP id g10-20020a9d128a000000b0068be4d70b8dmr14529258otg.35.1678655694595;
+        Sun, 12 Mar 2023 14:14:54 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id z27-20020a9d71db000000b00690e6d56670sm2501997otj.25.2023.03.12.14.14.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 14:14:54 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 12 Mar 2023 14:14:53 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Jean Delvare <jdelvare@suse.com>,
         Eric Tremblay <etremblay@distech-controls.com>,
         linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
- <cd9067c7-0b99-4d62-9d5a-cdc028f33ba5@roeck-us.net>
- <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
- <9343421e-d35d-8d99-1ea7-1f81e28fbabb@roeck-us.net>
- <688b6817-9d57-6c92-1ce0-6f97cb8c4cc2@linaro.org>
- <062a2834-ece9-49ed-0e15-30730b65ef50@roeck-us.net>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <062a2834-ece9-49ed-0e15-30730b65ef50@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Subject: Re: [PATCH v2 2/2] hwmon: tmp512: drop of_match_ptr for ID table
+Message-ID: <e3a8bf6a-fecd-4eb9-826f-0f5f974d36fa@roeck-us.net>
+References: <20230312193723.478032-1-krzysztof.kozlowski@linaro.org>
+ <20230312193723.478032-2-krzysztof.kozlowski@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230312193723.478032-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 22:03, Guenter Roeck wrote:
->>
->> The driver would not built. I mean, I did not cheat here to built it
->> with incorrect config.
->>
->> I rather suspect that config is broken due to:
->> WARNING: unmet direct dependencies detected for OF_GPIO
->> WARNING: unmet direct dependencies detected for GPIO_SYSCON
->> WARNING: unmet direct dependencies detected for MFD_STMFX
->>
->> This was next-20230308
->>
-> Interesting. That has been fixed in next-20230310, where
-> SENSORS_GPIO_FAN is again deselected if CONFIG_OF is disabled.
+On Sun, Mar 12, 2023 at 08:37:23PM +0100, Krzysztof Kozlowski wrote:
+> The driver will match mostly by DT table (even thought there is regular
+> ID table) so there is little benefit in of_match_ptr (this also allows
+> ACPI matching via PRP0001, even though it might not be relevant here).
+> This also fixes !CONFIG_OF error:
+> 
+>   drivers/hwmon/tmp513.c:610:34: error: ‘tmp51x_of_match’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Nice, I picked by coincidence lucky base :)
+Applied.
 
-Best regards,
-Krzysztof
+Thanks,
+Guenter
 
+> ---
+> 
+> Changes since v1:
+> 1. Rework patch and commit msg - drop of_match_ptr.
+> ---
+>  drivers/hwmon/tmp513.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hwmon/tmp513.c b/drivers/hwmon/tmp513.c
+> index 47bbe47e062f..7d5f7441aceb 100644
+> --- a/drivers/hwmon/tmp513.c
+> +++ b/drivers/hwmon/tmp513.c
+> @@ -758,7 +758,7 @@ static int tmp51x_probe(struct i2c_client *client)
+>  static struct i2c_driver tmp51x_driver = {
+>  	.driver = {
+>  		.name	= "tmp51x",
+> -		.of_match_table = of_match_ptr(tmp51x_of_match),
+> +		.of_match_table = tmp51x_of_match,
+>  	},
+>  	.probe_new	= tmp51x_probe,
+>  	.id_table	= tmp51x_id,
