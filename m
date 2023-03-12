@@ -2,99 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AC66B68D1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:35:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E83696B68D8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:39:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCLRfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35168 "EHLO
+        id S229945AbjCLRjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCLRfD (ORCPT
+        with ESMTP id S229550AbjCLRjh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:35:03 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022EA28D1B
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:35:02 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id da10so40015311edb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:35:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678642500;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=RIh/Hblag8cnzqz8rq/TySc8lZL2yglYjsKAKBrZYCw=;
-        b=IRsEk2tXUNyanAOhekWvhn/Ivkd3YJJ+NiMXDXeX3r5R4y4bUFdb3QpkMz+lZ0KhbH
-         wz9kxBqFkmEDhkTW7lnsXmC7t76Mvvj+FzPchqByvkk8c0NbqrpBKKXZ8kEnt4neGsQ9
-         LXxCjpGgv+v+e6Ir+4DYZvzfVO/r2pXLlS34IXODn3B0xcN57VmzfrflYQLyxxq9RJgA
-         cz0KDjTMXf6/7gRsJmqzrvLRQkepi361VkiTj5/n5KICQhBxJObBTgSdkR+UmTwtgDaP
-         zJ2Vas/noZSbCsOBpM7qW5guKjA9vU7kQ+nEl0i7ySTA1VOM3vdzRSP43plPIgL3B4Qy
-         cWdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678642500;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RIh/Hblag8cnzqz8rq/TySc8lZL2yglYjsKAKBrZYCw=;
-        b=Q/X6klsHfnGI4Ccp3QcjJ52yjvkrlTWTy2lgsYaV/5D5YCFMc0R8ZVyUHh9mcZNpEk
-         ncGuMer9saxDyvZ+8IGL6TCby963ZNPnHWn/jhhuHnEguuX26cP4MwN84weVts7V+XUR
-         /NPwSMKF+oPFvZdYLbYGtR4xF6rTPohKGyUHfwUjVUEomaDYrp5wf0YM4I48c21qEWmK
-         CPbU4e6wjUNAqkRJnJ6732K96Ia9oIe12h31h4fnCGMGGQIVikC4Ld14GQKEZgu7KK9w
-         /eqKlKKLfeGX0q9la7uo52ImTZTtD51L49pQbZXSIHX5+r0pORm8N9OZeddXnHTxjAai
-         RJEA==
-X-Gm-Message-State: AO0yUKVj2gAaJGgn7p4IGyE6u/UHL0D2NIrW6WyhqBnZNRxrFqFCQPJN
-        lhpWdtT1B0bP3bNQggitSEwilw==
-X-Google-Smtp-Source: AK7set83spFsROfXcIe51agJSTsKdkPWKtewV2Jait57w3xtwEp6nGsWYr6UiyuBcVt6a9I6Ypx//A==
-X-Received: by 2002:a17:907:3fa6:b0:877:a9d2:e5e9 with SMTP id hr38-20020a1709073fa600b00877a9d2e5e9mr41061683ejc.42.1678642500415;
-        Sun, 12 Mar 2023 10:35:00 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id rn2-20020a170906d92200b00921c608b737sm1849904ejb.126.2023.03.12.10.34.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:35:00 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] arm64: dts: qcom: sda660-inforce: correct key node name
-Date:   Sun, 12 Mar 2023 18:34:58 +0100
-Message-Id: <20230312173458.411231-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        Sun, 12 Mar 2023 13:39:37 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D565D3A98;
+        Sun, 12 Mar 2023 10:39:35 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id EB31D20C56BB; Sun, 12 Mar 2023 10:39:34 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com EB31D20C56BB
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678642774;
+        bh=Tgiw+sidUqBaEVObKi6x2FEJj/MiSGaWlJc+aPcKHhY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=C2t6SkW9varvhF8aHA0IDcgMe9SNSJsGevu+rssAyDtVxTvBbQlLVSSqb7ZuuVlI8
+         9E7BbvnvZXsC3E21ngMkovLUaSVqjrow12S7DvrcVF0BdJ+rNxKipqMGMSOnLrhtNI
+         FC7fswKNpPfWa29Osx5fbk7uMVOGIxtgxX2xPkc8=
+Date:   Sun, 12 Mar 2023 10:39:34 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     Wei Liu <wei.liu@kernel.org>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Dexuan Cui <decui@microsoft.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] Driver: VMBus: Add Devicetree support
+Message-ID: <20230312173934.GA32212@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1677151745-16521-1-git-send-email-ssengar@linux.microsoft.com>
+ <1677151745-16521-6-git-send-email-ssengar@linux.microsoft.com>
+ <ZApMqWPWgWXIju/g@liuwe-devbox-debian-v2>
+ <20230310053451.GA9705@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <BYAPR21MB1688FD8EA30E876F22560645D7B89@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB1688FD8EA30E876F22560645D7B89@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-gpio-key bindings expect children to be named with generic prefix:
+On Sun, Mar 12, 2023 at 01:08:02PM +0000, Michael Kelley (LINUX) wrote:
+> From: Saurabh Singh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, March 9, 2023 9:35 PM
+> > 
+> > On Thu, Mar 09, 2023 at 09:16:25PM +0000, Wei Liu wrote:
+> > > On Thu, Feb 23, 2023 at 03:29:05AM -0800, Saurabh Sengar wrote:
+> 
+> [snip]
+> 
+> > > >
+> > > >  static int vmbus_platform_driver_probe(struct platform_device *pdev)
+> > > >  {
+> > > > +#ifdef CONFIG_ACPI
+> > > >  	return vmbus_acpi_add(pdev);
+> > > > +#endif
+> > >
+> > > Please use #else here.
+> > >
+> > > > +	return vmbus_device_add(pdev);
+> > >
+> > > Is there going to be a configuration that ACPI and OF are available at
+> > > the same time? I don't see they are marked as mutually exclusive in the
+> > > proposed KConfig.
+> > 
+> > Initially, the device tree functions was included in "#else" section after
+> > the "#ifdef CONFIG_ACPI" section. However, it was subsequently removed to
+> > increase the coverage for CI builds.
+> > 
+> > Ref: https://lkml.org/lkml/2023/2/7/910
+> > 
+> 
+> I think the point here is that it is possible (and even likely on ARM64?) to
+> build a kernel where CONFIG_ACPI and CONFIG_OF are both "Y".   So the
+> code for ACPI and OF is compiled and present in the kernel image.  However,
+> for a particular Linux boot on a particular hardware or virtual platform,
+> only one of the two will be enabled.   I specifically mention a particular Linux
+> kernel boot because there's a kernel boot line option that can force disabling
+> ACPI.  Ideally, the VMBus code should work if both CONFIG_ACPI and
+> CONFIG_OF are enabled in the kernel image, and it would determine at
+> runtime which to use. This approach meets the goals Rob spells out.
+> 
+> There's an exported global variable "acpi_disabled" that is set correctly
+> depending on CONFIG_ACPI and the kernel boot line option (and perhaps if
+> ACPI is not detected at runtime during boot -- I didn't check all the details).
+> So the above could be written as:
+> 
+> 	if (!acpi_disabled)
+> 		return vmbus_acpi_add(pdev); 
+> 	else
+> 		return vmbus_device_add(pdev);
+> 
+> This avoids the weird "two return statements in a row" while preferring
+> ACPI over OF if ACPI is enabled for a particular boot of Linux.
+> 
+> I'm not sure if you'll need a stub for vmbus_acpi_add() when CONFIG_ACPI=n.
+> In that case, acpi_disabled is #defined to be 1, so the compiler should just
+> drop the call to vmbus_acpi_add() entirely and no stub will be needed.  But
+> you'll need to confirm.
 
-  sda660-inforce-ifc6560.dtb: gpio-keys: 'volup' does not match any of the regexes: ...
+Thanks for suggesting acpi_disabled, definitely this looks better. However,
+we need a dummy stub for vmbus_acpi_add in case of CONFIG_ACPI=n, as compiler
+doesn't take out vmbus_acpi_add reference completely for CONFIG_ACPI=n.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> Also just confirming, it looks like vmbus_device_add() compiles correctly if
+> CONFIG_OF=n.  There are enough stubs in places so that you don't need an
+> #ifdef CONFIG_OF around vmbus_device_add() like is needed for
+> vmbus_acpi_add().
 
-diff --git a/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts b/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts
-index 7c81918eee66..7459525d9982 100644
---- a/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts
-+++ b/arch/arm64/boot/dts/qcom/sda660-inforce-ifc6560.dts
-@@ -29,7 +29,7 @@ chosen {
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 
--		volup {
-+		key-volup {
- 			label = "Volume Up";
- 			gpios = <&pm660l_gpios 7 GPIO_ACTIVE_LOW>;
- 			linux,code = <KEY_VOLUMEUP>;
--- 
-2.34.1
+Yes, I tested this scenario.
 
+> 
+> > > >
+> > > > +static const __maybe_unused struct of_device_id vmbus_of_match[] = {
+> > > > +	{
+> > > > +		.compatible = "microsoft,vmbus",
+> > > > +	},
+> > > > +	{
+> > > > +		/* sentinel */
+> > > > +	},
+> > > > +};
+> > > > +MODULE_DEVICE_TABLE(of, vmbus_of_match);
+> > > > +
+> > > > +#ifdef CONFIG_ACPI
+> > > >  static const struct acpi_device_id vmbus_acpi_device_ids[] = {
+> > > >  	{"VMBUS", 0},
+> > > >  	{"VMBus", 0},
+> > > >  	{"", 0},
+> > > >  };
+> > > >  MODULE_DEVICE_TABLE(acpi, vmbus_acpi_device_ids);
+> > > > +#endif
+> 
+> Couldn't the bracketing #ifdef be dropped and add __maybe_unused, just
+> as you've done with vmbus_of_match?   ACPI_PTR() is defined to return NULL
+> if CONFIG_ACPI=n, just like with of_match_ptr() and CONFIG_OF.
+
+I kept #ifdef so that all the acpi code is treated equally. However, I am
+fine to use __maybe_unused, will fix this in next version.
+
+Regards,
+Saurabh
+
+> 
+> > > >
+> > > >  /*
+> > > >   * Note: we must use the "no_irq" ops, otherwise hibernation can not work with
+> > > > @@ -2677,6 +2729,7 @@ static struct platform_driver vmbus_platform_driver = {
+> > > >  	.driver = {
+> > > >  		.name = "vmbus",
+> > > >  		.acpi_match_table = ACPI_PTR(vmbus_acpi_device_ids),
+> > > > +		.of_match_table = of_match_ptr(vmbus_of_match),
+> > > >  		.pm = &vmbus_bus_pm,
+> > > >  		.probe_type = PROBE_FORCE_SYNCHRONOUS,
+> > > >  	}
+> > > > --
+> > > > 2.34.1
+> > > >
