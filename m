@@ -2,120 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13C4E6B6ACE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0451D6B6AD6
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:06:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230339AbjCLTzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51596 "EHLO
+        id S230336AbjCLUGL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:06:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCLTzq (ORCPT
+        with ESMTP id S230021AbjCLUGJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:55:46 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC078298C0
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 12:55:43 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 1E5802C05F6;
-        Mon, 13 Mar 2023 08:55:40 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1678650940;
-        bh=D+CUjM6MWQg2jgZFYfQzXO9KbaVOzahqlxdZ2q8+aa8=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=AGVVjeA/Zsw+suniN9qZ+9jQ73DLjExGZY0Ii3qE/7bSROcSjOaEaSKvJVEd9C5s2
-         30OyQhqMaNbVLXoJlNXb3O2BYe5EC7yEZwabKQ1gjtjFshW/BdtaOrx0QtF+P9laCU
-         iB8KoCetPcS/meYqTJ87vv/pqgFrf4FGBCybQAKwCoBiUq2bBzfF+Wp1NyDrQOodjj
-         yDf2RB5f27qIFjPbI4gY1ITQrpgeWlnmjz+8KvvH8ARTbOLzUUJFKQg9X4CfCmHojA
-         ENYLfet0DsrMj9gV9iIU2o/SjVEu2PpptxCzIpE/mGCINTm5+RHrEP5z7GPnebKSPx
-         vTWe/sbA/o4Qg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B640e2e3c0000>; Mon, 13 Mar 2023 08:55:40 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) by
- svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8::77) with Microsoft SMTP Server
- (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 08:55:39 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.047; Mon, 13 Mar 2023 08:55:39 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Rob Herring <robh@kernel.org>, Wolfram Sang <wsa@kernel.org>
-CC:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] i2c: Use of_property_read_bool() for boolean properties
-Thread-Topic: [PATCH] i2c: Use of_property_read_bool() for boolean properties
-Thread-Index: AQHZU184+9ZDm1nkmkaAFtLn1iMzBq72uJCA
-Date:   Sun, 12 Mar 2023 19:55:39 +0000
-Message-ID: <4621ec34-8778-26c6-ca97-ce72c81d7f77@alliedtelesis.co.nz>
-References: <20230310144707.1542595-1-robh@kernel.org>
-In-Reply-To: <20230310144707.1542595-1-robh@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <04295ECB1AD3C5409E3E2C2A3E0466FE@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Sun, 12 Mar 2023 16:06:09 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13692A9B2;
+        Sun, 12 Mar 2023 13:06:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=n5Btrknv2DSijXGinr7S2coEOTj1hSjKvflFzggiJJQ=; b=hjStjPPgBBKEVZz+cuK8T85rq8
+        SnRaNJRpF3ISCSv7GkpLK+dDd86+5z4Zvf21rdLPb/yr+4G9ETxbtztShtoxNDPr+zBnvBOpVwaov
+        7JfG18X2wQDmJZZ6Xvcfz+bKqs+Uhr5U3xtePPakpjIzO7SwoT3nL4pMQBC2WAnzgGeR1F58ahc98
+        pqCwzOEAGY+UMHKLWRFl/Xnbp+JZ+VLwgl4bNflJcL2OByDZ4XbMOlutEX0tsYzHpe4kgO3+65eIi
+        OFzvqnQqdH3WhPKOYGaVgrlPBEj9/1wMVHKxHqsbxFGk2goQ6zsSS78fNVB+8Bqr/ExM4y9JiNpPd
+        b9rp6GNg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57098)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pbRwz-0001r2-MI; Sun, 12 Mar 2023 20:05:49 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pbRwr-0006zg-A6; Sun, 12 Mar 2023 20:05:41 +0000
+Date:   Sun, 12 Mar 2023 20:05:41 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc:
+ fix 1000Base-X and 2500Base-X modes
+Message-ID: <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
+References: <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk>
+ <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+ <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=VwQbUJbxAAAA:8 a=62ntRvTiAAAA:8 a=dzFhf6wxAAAA:8 a=a5x3eAS3YDbR8-jfFowA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22 a=pToNdpNmrtiFLRE6bQ9Z:22 a=FELKlmNgCOxk8-i40lfh:22
-X-SEG-SpamProfiler-Score: 0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxMS8wMy8yMyAwMzo0NywgUm9iIEhlcnJpbmcgd3JvdGU6DQo+IEl0IGlzIHByZWZlcnJl
-ZCB0byB1c2UgdHlwZWQgcHJvcGVydHkgYWNjZXNzIGZ1bmN0aW9ucyAoaS5lLg0KPiBvZl9wcm9w
-ZXJ0eV9yZWFkXzx0eXBlPiBmdW5jdGlvbnMpIHJhdGhlciB0aGFuIGxvdy1sZXZlbA0KPiBvZl9n
-ZXRfcHJvcGVydHkvb2ZfZmluZF9wcm9wZXJ0eSBmdW5jdGlvbnMgZm9yIHJlYWRpbmcgcHJvcGVy
-dGllcy4NCj4gQ29udmVydCByZWFkaW5nIGJvb2xlYW4gcHJvcGVydGllcyB0byB0byBvZl9wcm9w
-ZXJ0eV9yZWFkX2Jvb2woKS4NCj4NCj4gU2lnbmVkLW9mZi1ieTogUm9iIEhlcnJpbmcgPHJvYmhA
-a2VybmVsLm9yZz4NCg0KRm9yIGkyYy1tcGMuYw0KDQpSZXZpZXdlZC1ieTogQ2hyaXMgUGFja2hh
-bSA8Y2hyaXMucGFja2hhbUBhbGxpZWR0ZWxlc2lzLmNvLm56Pg0KDQo+IC0tLQ0KPiAgIGRyaXZl
-cnMvaTJjL2J1c3Nlcy9pMmMtbXBjLmMgfCAyICstDQo+ICAgZHJpdmVycy9pMmMvYnVzc2VzL2ky
-Yy1weGEuYyB8IDYgKystLS0tDQo+ICAgZHJpdmVycy9pMmMvaTJjLWNvcmUtb2YuYyAgICB8IDIg
-Ky0NCj4gICAzIGZpbGVzIGNoYW5nZWQsIDQgaW5zZXJ0aW9ucygrKSwgNiBkZWxldGlvbnMoLSkN
-Cj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXBjLmMgYi9kcml2ZXJz
-L2kyYy9idXNzZXMvaTJjLW1wYy5jDQo+IGluZGV4IDgxYWM5MmJiNGY2Zi4uYmVjMGM1ZGMyMGQx
-IDEwMDY0NA0KPiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1wYy5jDQo+ICsrKyBiL2Ry
-aXZlcnMvaTJjL2J1c3Nlcy9pMmMtbXBjLmMNCj4gQEAgLTg0Miw3ICs4NDIsNyBAQCBzdGF0aWMg
-aW50IGZzbF9pMmNfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqb3ApDQo+ICAgCQlkYXRh
-LT5zZXR1cChvcC0+ZGV2Lm9mX25vZGUsIGkyYywgY2xvY2spOw0KPiAgIAl9IGVsc2Ugew0KPiAg
-IAkJLyogQmFja3dhcmRzIGNvbXBhdGliaWxpdHkgKi8NCj4gLQkJaWYgKG9mX2dldF9wcm9wZXJ0
-eShvcC0+ZGV2Lm9mX25vZGUsICJkZnNyciIsIE5VTEwpKQ0KPiArCQlpZiAob2ZfcHJvcGVydHlf
-cmVhZF9ib29sKG9wLT5kZXYub2Zfbm9kZSwgImRmc3JyIikpDQo+ICAgCQkJbXBjX2kyY19zZXR1
-cF84eHh4KG9wLT5kZXYub2Zfbm9kZSwgaTJjLCBjbG9jayk7DQo+ICAgCX0NCj4gICANCj4gZGlm
-ZiAtLWdpdCBhL2RyaXZlcnMvaTJjL2J1c3Nlcy9pMmMtcHhhLmMgYi9kcml2ZXJzL2kyYy9idXNz
-ZXMvaTJjLXB4YS5jDQo+IGluZGV4IGI2MDViNmU0M2NiOS4uZjlmYTUzMDg1NTZiIDEwMDY0NA0K
-PiAtLS0gYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLXB4YS5jDQo+ICsrKyBiL2RyaXZlcnMvaTJj
-L2J1c3Nlcy9pMmMtcHhhLmMNCj4gQEAgLTEyNjEsMTAgKzEyNjEsOCBAQCBzdGF0aWMgaW50IGky
-Y19weGFfcHJvYmVfZHQoc3RydWN0IHBsYXRmb3JtX2RldmljZSAqcGRldiwgc3RydWN0IHB4YV9p
-MmMgKmkyYywNCj4gICAJLyogRm9yIGRldmljZSB0cmVlIHdlIGFsd2F5cyB1c2UgdGhlIGR5bmFt
-aWMgb3IgYWxpYXMtYXNzaWduZWQgSUQgKi8NCj4gICAJaTJjLT5odHRwOi8vc2Nhbm1haWwudHJ1
-c3R3YXZlLmNvbS8/Yz0yMDk4OCZkPS1jS0w1RGg4UU1LMFAyS1BVTWhKeFVXSUhHeHJ3RXoyZ2dV
-dEluWV9KQSZ1PWh0dHAlM2ElMmYlMmZhZGFwJTJlbnIgPSAtMTsNCj4gICANCj4gLQlpZiAob2Zf
-Z2V0X3Byb3BlcnR5KG5wLCAibXJ2bCxpMmMtcG9sbGluZyIsIE5VTEwpKQ0KPiAtCQlpMmMtPnVz
-ZV9waW8gPSAxOw0KPiAtCWlmIChvZl9nZXRfcHJvcGVydHkobnAsICJtcnZsLGkyYy1mYXN0LW1v
-ZGUiLCBOVUxMKSkNCj4gLQkJaTJjLT5mYXN0X21vZGUgPSAxOw0KPiArCWkyYy0+dXNlX3BpbyA9
-IG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgIm1ydmwsaTJjLXBvbGxpbmciKTsNCj4gKwlpMmMt
-PmZhc3RfbW9kZSA9IG9mX3Byb3BlcnR5X3JlYWRfYm9vbChucCwgIm1ydmwsaTJjLWZhc3QtbW9k
-ZSIpOw0KPiAgIA0KPiAgIAkqaTJjX3R5cGVzID0gKGVudW0gcHhhX2kyY190eXBlcykob2ZfaWQt
-PmRhdGEpOw0KPiAgIA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9pMmMvaTJjLWNvcmUtb2YuYyBi
-L2RyaXZlcnMvaTJjL2kyYy1jb3JlLW9mLmMNCj4gaW5kZXggYmNlNmI3OTZlMDRjLi5hYTkzNDY3
-Nzg0YzIgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvaTJjL2kyYy1jb3JlLW9mLmMNCj4gKysrIGIv
-ZHJpdmVycy9pMmMvaTJjLWNvcmUtb2YuYw0KPiBAQCAtNTUsNyArNTUsNyBAQCBpbnQgb2ZfaTJj
-X2dldF9ib2FyZF9pbmZvKHN0cnVjdCBkZXZpY2UgKmRldiwgc3RydWN0IGRldmljZV9ub2RlICpu
-b2RlLA0KPiAgIAlpZiAob2ZfcHJvcGVydHlfcmVhZF9ib29sKG5vZGUsICJob3N0LW5vdGlmeSIp
-KQ0KPiAgIAkJaW5mby0+ZmxhZ3MgfD0gSTJDX0NMSUVOVF9IT1NUX05PVElGWTsNCj4gICANCj4g
-LQlpZiAob2ZfZ2V0X3Byb3BlcnR5KG5vZGUsICJ3YWtldXAtc291cmNlIiwgTlVMTCkpDQo+ICsJ
-aWYgKG9mX3Byb3BlcnR5X3JlYWRfYm9vbChub2RlLCAid2FrZXVwLXNvdXJjZSIpKQ0KPiAgIAkJ
-aW5mby0+ZmxhZ3MgfD0gSTJDX0NMSUVOVF9XQUtFOw0KPiAgIA0KPiAgIAlyZXR1cm4gMDs=
+On Sun, Mar 12, 2023 at 01:40:36PM +0100, Frank Wunderlich wrote:
+> > Gesendet: Samstag, 11. März 2023 um 21:30 Uhr
+> > Von: "Russell King (Oracle)" <linux@armlinux.org.uk>
+> 
+> > On Sat, Mar 11, 2023 at 09:21:47PM +0100, Frank Wunderlich wrote:
+> > > Am 11. März 2023 21:00:20 MEZ schrieb "Russell King (Oracle)" <linux@armlinux.org.uk>:
+> > > >On Sat, Mar 11, 2023 at 01:05:37PM +0100, Frank Wunderlich wrote:
+> > > 
+> > > >> i got the 2.5G copper sfps, and tried them...they work well with the v12 (including this patch), but not in v13... 
+> > > 
+> > > >> how can we add a quirk to support this?
+> > > >
+> > > >Why does it need a quirk?
+> > > 
+> > > To disable the inband-mode for this 2.5g copper
+> > > sfp. But have not found a way to set a flag which i
+> > > can grab in phylink.
+> > 
+> > We could make sfp_parse_support() set Autoneg, Pause, and Asym_Pause
+> > in "modes" at the top of that function, and then use the SFP modes
+> > quirk to clear the Autoneg bit for this SFP. Would that work for you?
+> 
+> i already tried this (without moving the autoneg/pause to sfp_parse_support):
+> 
+> static void sfp_quirk_disable_autoneg(const struct sfp_eeprom_id *id,
+> 				unsigned long *modes,
+> 				unsigned long *interfaces)
+> {
+> 	linkmode_clear_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, modes);
+> }
+> 
+> quirk was executed, but no change (no link on 2g5 sfp).
+
+It won't have any effect on its own - because sfp_parse_support() does
+this:
+
+        if (bus->sfp_quirk && bus->sfp_quirk->modes)
+                bus->sfp_quirk->modes(id, modes, interfaces);
+
+        linkmode_or(support, support, modes);
+
+        phylink_set(support, Autoneg);
+        phylink_set(support, Pause);
+        phylink_set(support, Asym_Pause);
+
+Which means clearing Autoneg in "modes" via the modes SFP quirk will
+have *absolutely* *no* *effect* what so ever.
+
+The fact that you replied having *not* followed my suggestion and then
+itimiating that it doesn't work is very frustrating.
+
+> i guess you mean moving code handling the dt-property for inband-mode in phylink_parse_mode (phylink.c) to the sfp-function (drivers/net/phy/sfp-bus.c)
+
+No.
+
+[rest of email cut because I can't be bothered to read it after this]
+
+Please try what I suggested. You might find that it works.
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
