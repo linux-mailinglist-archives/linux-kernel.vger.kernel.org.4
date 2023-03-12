@@ -2,150 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A6806B6B8B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:55:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B1196B6B68
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:47:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231484AbjCLUz1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:55:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44912 "EHLO
+        id S230465AbjCLUrm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:47:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229731AbjCLUzZ (ORCPT
+        with ESMTP id S229437AbjCLUrj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:55:25 -0400
-X-Greylist: delayed 501 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Sun, 12 Mar 2023 13:55:23 PDT
-Received: from vps.xff.cz (vps.xff.cz [195.181.215.36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D89426CE4;
-        Sun, 12 Mar 2023 13:55:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xff.cz; s=mail;
-        t=1678654018; bh=4pAmK4fjzhlvGfLZZeoG0S8kt9yvbPZjFMDbTBvuG5c=;
-        h=Date:From:To:Cc:Subject:X-My-GPG-KeyId:References:From;
-        b=hz7WEffQeoM0FZrUA3yvItW06R8I5igc8EssiUE1F6jhHOu60ao66v/+fzWBsbrWa
-         17ty6RaNGsyeTedg4Pekjj9NLeZpwrOWNLfgRuCuKw1SYH5YuFI/bPpRZ3d9ISs8od
-         ws8cP160dVEJR3rfp+g8A+wlHA+i0OM1darR1GYI=
-Date:   Sun, 12 Mar 2023 21:46:58 +0100
-From:   =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>
-To:     Mark Kettenis <mark.kettenis@xs4all.nl>
-Cc:     Robin Murphy <robin.murphy@arm.com>, pgwipeout@gmail.com,
-        heiko@sntech.de, linux-rockchip@lists.infradead.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michael.riesch@wolfvision.net, frattaroli.nicolas@gmail.com,
-        s.hauer@pengutronix.de, frank-w@public-files.de,
-        ezequiel@vanguardiasur.com.ar, yifeng.zhao@rock-chips.com,
-        jbx6244@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] arm64: dts: rockchip: rk356x: Fix PCIe register map
- and ranges
-Message-ID: <20230312204658.qibiabohxwv2mn5i@core>
-Mail-Followup-To: =?utf-8?Q?Ond=C5=99ej?= Jirman <megi@xff.cz>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>,
-        Robin Murphy <robin.murphy@arm.com>, pgwipeout@gmail.com,
-        heiko@sntech.de, linux-rockchip@lists.infradead.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        michael.riesch@wolfvision.net, frattaroli.nicolas@gmail.com,
-        s.hauer@pengutronix.de, frank-w@public-files.de,
-        ezequiel@vanguardiasur.com.ar, yifeng.zhao@rock-chips.com,
-        jbx6244@gmail.com, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-X-My-GPG-KeyId: EBFBDDE11FB918D44D1F56C1F9F0A873BE9777ED
- <https://xff.cz/key.txt>
-References: <20221021153913.l5ry6v4mcnzcmj2v@core>
- <CAMdYzYpYC6ME_ZYE65UWq__i+rit6_os-+do+JLmEL7y-jKr9g@mail.gmail.com>
- <20221021193248.2he6amnj7knk4biu@core>
- <87edv0sxup.fsf@bloch.sibelius.xs4all.nl>
- <CAMdYzYp6ShLqKxdiAjaRFiRF5i+wzfKiQvwPMzyQLAutWZbApg@mail.gmail.com>
- <875ygbsrf3.fsf@bloch.sibelius.xs4all.nl>
- <5a8f9934-1959-7962-d575-e3c2f5bc6ade@arm.com>
- <CAMdYzYrXp1kgdRpBmnfiFrXcdkk6_oWozpywgCYbNo_MU+8+=A@mail.gmail.com>
- <34c3daf3-88f8-0dc2-026b-95ca075195b4@arm.com>
- <87y1o1buef.fsf@bloch.sibelius.xs4all.nl>
+        Sun, 12 Mar 2023 16:47:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723C12D4D;
+        Sun, 12 Mar 2023 13:47:38 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 20:47:36 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678654056;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WmDYs33+VDMIv1F2Mo+7be4m4EhaoKcu+WQiAIsIjEQ=;
+        b=SdCOnOhqbgIqbng3JzNS3oilYUS3u+szQG3od6asYq3RLQGdPIxJqzqDyL1Uz1vuB6GTwN
+        PebQnfLISjOcSUjyZ9sS6biohn2+Sbq/ycWkchwEMU4UPIVGSyoP7W4WZJYm8/NDtwnD1j
+        dDwqgTlEj8Oac+xEgSCSfySXrGRu/X0ndwkX1gDu0c7AuWxm5ohFntt9F5+xiWLxJnHbEs
+        A9ChplF6n9HIoAca+li9WRjBmLsEaCFffyL6yCJd6P4OGQwkE4ElnLOvZeztmJwN/XJr+b
+        vMzdCYUDpxpz89weR5mtrcdJ1Rt+dc1UA+HNA4sraa88HZLGrn9xD0SvKkXFNQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678654056;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WmDYs33+VDMIv1F2Mo+7be4m4EhaoKcu+WQiAIsIjEQ=;
+        b=7NwMpEXknhVoKmKYkmBpgAdbPe36ronJY1PGWneUq9aKO43ZTu/zcMrpEIdlSAbul1h589
+        7zSxbL2BlA3qmxBg==
+From:   "tip-bot2 for Borislav Petkov (AMD)" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/microcode] x86/microcode: Do not taint when late loading on AMD
+Cc:     "Borislav Petkov (AMD)" <bp@alien8.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20230303114649.18552-1-bp@alien8.de>
+References: <20230303114649.18552-1-bp@alien8.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87y1o1buef.fsf@bloch.sibelius.xs4all.nl>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <167865405614.5837.13144930108431641081.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+The following commit has been merged into the x86/microcode branch of tip:
 
-On Sun, Mar 12, 2023 at 09:13:12PM +0100, Mark Kettenis wrote:
-> [...]
->
-> It seems translation isn't actually broken.  At least I got it to work
-> with a slight twist.  What seems to be happening is that reads (and
-> writes?) to the first 64 MB of the PCIe memory address space
-> (0x00000000-0x03ffffff) don't make it out to the PCIe device.  I
-> suspect they are somehow claimed by the RC, maybe because the BAR for
-> the root complex isn't properly disabled.
-> 
-> If I change the PCIe bus addess of the mmio window from 0x00000000 to
-> 0x40000000 like so:
-> 
->     ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
->               0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x3ef00000>;
-> 
-> my NVMe drive seems to work just fine.  I picked 0x40000000 here
-> because it is nicely aligned on a 1GB boundary, which matches the size
-> of the region.  Diff against a recent linux-next at the end of this
-> mail.
-> 
-> So what I think is happening is that Linux is allocating resources
-> from the top of the region.  So only if you have a more complicated
-> PCIe hierarchy it ends up allocating from the low 64 MB and runs into
-> the issue.  OpenBSD on the other hand allocates from the bottom, which
-> pretty much guarantees that I hit the issue.
-> 
-> Now this could be a driver bug.  As far as I can tell BAR0/1 is
-> properly disabled, but maybe there is some additional bit that we need
-> to set.  But I don't think there are any downsides of my workaround.
-> We can still provide a ~1GB mmio range; it just starts at 0x40000000
-> instead of 0x00000000.
-> 
-> Maybe somebody can test this on Linux?
+Commit-ID:     09b951476df9eadf15f2acba7568fa35e4b2313b
+Gitweb:        https://git.kernel.org/tip/09b951476df9eadf15f2acba7568fa35e4b2313b
+Author:        Borislav Petkov (AMD) <bp@alien8.de>
+AuthorDate:    Fri, 03 Mar 2023 12:46:49 +01:00
+Committer:     Borislav Petkov (AMD) <bp@alien8.de>
+CommitterDate: Sun, 12 Mar 2023 21:32:51 +01:00
 
-There were other discussions and patches posted, and further testing happened
-since this discussion (just by looking at the dates...).
+x86/microcode: Do not taint when late loading on AMD
 
-The result was: 
-https://lore.kernel.org/lkml/20221112114125.1637543-1-aholmes@omnom.net/
-https://lore.kernel.org/lkml/20221112114125.1637543-2-aholmes@omnom.net/
+Describe why the concurrency issues which late loading poses are not
+affecting AMD hardware, after discussing it with hw folks. Thus, do not
+taint when late loading on it.
 
-The changes for pcie2x1 in that patch make PCIe work on Linux under many
-different device combinations, incl. with various combinations of devices
-behind PCIe switch, etc.
+Signed-off-by: Borislav Petkov (AMD) <bp@alien8.de>
+Link: https://lore.kernel.org/r/20230303114649.18552-1-bp@alien8.de
+---
+ Documentation/x86/microcode.rst      | 10 ++++++++++
+ arch/x86/kernel/cpu/microcode/core.c |  3 ++-
+ 2 files changed, 12 insertions(+), 1 deletion(-)
 
-That patch includes your change, too.
-
-(The patch is not correct for pcie3, see discussion.)
-
-kind regards,
-	o.
-
-> > > b. We do in fact require IO and Config to be 32 bit addressable to be
-> > > fully compatible.
-> > > 
-> > > These issues are compounded in rk3588 where we have much smaller
-> > > regions in the 32bit space for PCIe, so a definite answer on the true
-> > > requirements and limitations would be quite helpful.
-> > > 
-> > > As always, thank you for your time,
-> > > Peter
-> 
-> diff --git a/arch/arm64/boot/dts/rockchip/rk356x.dtsi b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> index eed0059a68b8..218e51f41852 100644
-> --- a/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> +++ b/arch/arm64/boot/dts/rockchip/rk356x.dtsi
-> @@ -983,7 +983,7 @@ pcie2x1: pcie@fe260000 {
->  		phy-names = "pcie-phy";
->  		power-domains = <&power RK3568_PD_PIPE>;
->  		ranges = <0x01000000 0x0 0x3ef00000 0x3 0x3ef00000 0x0 0x00100000
-> -			  0x02000000 0x0 0x00000000 0x3 0x00000000 0x0 0x3ef00000>;
-> +			  0x02000000 0x0 0x40000000 0x3 0x00000000 0x0 0x3ef00000>;
->  		resets = <&cru SRST_PCIE20_POWERUP>;
->  		reset-names = "pipe";
->  		#address-cells = <3>;
+diff --git a/Documentation/x86/microcode.rst b/Documentation/x86/microcode.rst
+index b627c6f..15b52e2 100644
+--- a/Documentation/x86/microcode.rst
++++ b/Documentation/x86/microcode.rst
+@@ -208,6 +208,16 @@ Basically there is no way to declare a new microcode update suitable
+ for late-loading. This is another one of the problems that caused late
+ loading to be not enabled by default.
+ 
++AMD
++---
++
++Late loading on AMD does not have the concurrency issues described
++above: when loading is attempted on T0, the T1 is quiesced and does not
++execute instructions. Therefore, even if a higher priority interrupt or
++a fault happens, the whole core will see it either before the microcode
++patch has been applied or after. In either case, T0 and T1 will have the
++same microcode revision and nothing intermediate.
++
+ Builtin microcode
+ =================
+ 
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 7a329e5..779f705 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -498,7 +498,8 @@ put:
+ 	if (ret == 0)
+ 		ret = size;
+ 
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++	if (boot_cpu_data.x86_vendor != X86_VENDOR_AMD)
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+ 
+ 	return ret;
+ }
