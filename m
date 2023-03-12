@@ -2,133 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CFE6B6AEE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:09:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D2216B6AF1
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:10:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229764AbjCLUJS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:09:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39046 "EHLO
+        id S230173AbjCLUKi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:10:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230021AbjCLUJP (ORCPT
+        with ESMTP id S229783AbjCLUKe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:09:15 -0400
-Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C4B21350C;
-        Sun, 12 Mar 2023 13:08:48 -0700 (PDT)
-Received: by mail-yb1-xb32.google.com with SMTP id v196so2431388ybe.9;
-        Sun, 12 Mar 2023 13:08:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678651727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mmi+J++OGCebvXG2OuteACsXG7VG8WEMmH0VAhRv8oA=;
-        b=qSqjIZy125h3FNoRcrriOFeNadFlctDcytOGs+PrwpqMpRKmZZgQQcobiIcwzcmcUe
-         oNeZLvnbL7M7wddMHg3nedL2yHXhT3/Fi+f5/X/yCxPtszsPbJo5ffbGgRq06/C/gJNg
-         w9ZxFvYKON/0jDT0k2UB9gMj3+sSkSAVfwXZiG3+BYWFy2QqVMtsEkBZZOMx/ml1UsZy
-         8VZDUiduKT52X1hvS8BNtVAUtWUGAb7W5yw8UKeb0i493JF/CzHgo7P6GUi7Ql+Pkhh5
-         mMQuJgXmWSHF+v4AkkkRXxVA4ihmcbkTSy27mwjOlAvHnTkG04eqLvITKYU7EXwo/JKt
-         m5Rg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678651727;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mmi+J++OGCebvXG2OuteACsXG7VG8WEMmH0VAhRv8oA=;
-        b=skY4Gm654uWp56U6hjgOGDZFfcbEGGVqhsSTZkNyvJVkpZik7DNI32xMXnt+OTaibL
-         z/V6Ya3epp942Yu/Um3dxV7wNKloYPj8bmmnEihL97miiZhQ+CjwsnLFi+JMvRL25LRL
-         3ZpJSH6/6MYjL+jBu8C3VSDrX5NgJlN9zYuQAj1TomRkvRf8rhzWLu7eIBE6fl6Y1ZFZ
-         XHT+f4vhhxVBmHySOtEiA+uOxMDRfGC6CRiWiKmGCFzO3p4Cc7unZFM4WKdRNzs2BZjG
-         2grEzSPtGYNSLDO6x5CZpeaXr2xkIkKozBRm5NaNnyC7/k6kOYp3zEIDTd7z/RT5OVcI
-         sh+g==
-X-Gm-Message-State: AO0yUKXUMVVUsfT6/vofj+2CPHkTkMgoEkfhmdSSnhmhQep+VDTjiXrz
-        qs5kLsfc1pWHkg4pxSWQoFX7nNPZF+DkGjlpQxs=
-X-Google-Smtp-Source: AK7set+6kHalpwaiIcd3v7fpFSrd6c7dAP8piuDmYsjqoY/hPg2fu8i7tGskRB1bAa2poI7EYmOdjFdiPyRigEoQq24=
-X-Received: by 2002:a25:9109:0:b0:b13:7a6:f462 with SMTP id
- v9-20020a259109000000b00b1307a6f462mr5610638ybl.3.1678651726777; Sun, 12 Mar
- 2023 13:08:46 -0700 (PDT)
+        Sun, 12 Mar 2023 16:10:34 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 012A12B9C5;
+        Sun, 12 Mar 2023 13:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=EEa+VzyXGmMo8k+OhfFO6nrKKSd1RKBu+PutBDnuaPU=; b=j1nEDkOjxpnnRy0axAW7EmHNun
+        n/36i/yQUnBRvy76G6quvVhPn5cPmeG/cbz8OPkzyOIEqlaJ3MYL4REE5sCCWL7NTFBwAVDLrRvUP
+        FKH6+T+ohBePyo/iNMIMD9WIFjj75Mrbqpuga9DiME6TLk/uqYJBShxNmqlCsVFMPI1RRA/jW6PuM
+        YUCXE+bmzbqsc/gsu3PgZMtILlofxWv+dngPHLlRhGORoQC/p3sws097Kvik2mfU8wk+kU7b+d80O
+        /7W5eYyUmcAF2QPu4inYwlpcMcSYSN6qGD92AYRcyev6BuY6lfKNFtBNru70O4HJ2lvLsoh7JncEM
+        YVN8npjw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49170)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pbS14-0001rj-JQ; Sun, 12 Mar 2023 20:10:02 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pbS13-00070e-4S; Sun, 12 Mar 2023 20:10:01 +0000
+Date:   Sun, 12 Mar 2023 20:10:01 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc:
+ fix 1000Base-X and 2500Base-X modes
+Message-ID: <ZA4xmRTTm0vjHmMN@shell.armlinux.org.uk>
+References: <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+ <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+ <trinity-27a405f3-fece-4500-82ef-4082af428a7a-1678631183133@3c-app-gmx-bap51>
+ <trinity-eb5bbb4a-b96f-4436-ae9f-8ee5f4b8fe9b-1678639848562@3c-app-gmx-bap51>
 MIME-Version: 1.0
-References: <20230217185225.43310-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20230217185225.43310-4-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdU=mCAWQNFCkkCxBkDyYTLM87QdrYMYE9hpOv1fuS=bWw@mail.gmail.com>
-In-Reply-To: <CAMuHMdU=mCAWQNFCkkCxBkDyYTLM87QdrYMYE9hpOv1fuS=bWw@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Sun, 12 Mar 2023 20:08:20 +0000
-Message-ID: <CA+V-a8u4ovdBjdijGCJ3cfoQ-p=G55YwNCY-14DVfsLjCeVGcQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] arm64: dts: renesas: r9a07g044: Update IRQ numbers
- for SSI channels
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <trinity-eb5bbb4a-b96f-4436-ae9f-8ee5f4b8fe9b-1678639848562@3c-app-gmx-bap51>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Sun, Mar 12, 2023 at 05:50:48PM +0100, Frank Wunderlich wrote:
+> Just to make it clear...the issue with the copper-sfps is no regression of this series it exists before.
+> i only had none of them to test for until this weekend....my 1g fibre-sfp were working fine with the inband-flag.
+> 
+> this patch tries to fix it in mtk driver, this was rejected (as far as i understand it should be handled in phylink core instead of pcs driver).
+> and no more in the v13, so we try to fix it another way.
+> 
+> whatever i do in phylink_parse_mode the link is always inband...i tried to add a new state to have the configuration not FIXED or PHY or INBAND
+> 
+> drivers/net/phy/phylink.c
+> @@ -151,6 +151,7 @@ static const char *phylink_an_mode_str(unsigned int mode)
+>                 [MLO_AN_PHY] = "phy",
+>                 [MLO_AN_FIXED] = "fixed",
+>                 [MLO_AN_INBAND] = "inband",
+> +               [MLO_AN_INBAND_DISABLED] = "inband disabled",
+>         };
+> 
+> include/linux/phylink.h
+> @@ -20,6 +20,7 @@ enum {
+>         MLO_AN_PHY = 0, /* Conventional PHY */
+>         MLO_AN_FIXED,   /* Fixed-link mode */
+>         MLO_AN_INBAND,  /* In-band protocol */
+> +       MLO_AN_INBAND_DISABLED
+> 
+> is my start the right way?
 
-On Fri, Mar 10, 2023 at 12:05=E2=80=AFPM Geert Uytterhoeven
-<geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Fri, Feb 17, 2023 at 7:53=E2=80=AFPM Prabhakar <prabhakar.csengg@gmail=
-.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > From R01UH0914EJ0120 Rev.1.20 HW manual the interrupt numbers for SSI
-> > channels have been updated,
-> >
-> > SPI 329 - SSIF0 is now marked as reserved
-> > SPI 333 - SSIF1 is now marked as reserved
-> > SPI 335 - SSIF2 is now marked as reserved
-> > SPI 336 - SSIF2 is now marked as reserved
-> > SPI 341 - SSIF3 is now marked as reserved
-> >
-> > This patch drops the above IRQs from SoC DTSI.
-> >
-> > Fixes: 92a341315afc9 ("arm64: dts: renesas: r9a07g044: Add SSI support"=
-)
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > Reviewed-by: Biju Das <biju.das.jz@bp.renesas.com>
->
-> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> i.e. will queue in renesas-devel for v6.4.
->
-> > As this is is a fixes patch and we are still waiting for [0] to be merg=
-ed
-> > shall do the same for V2L SoC?
-> >
-> > [0] https://patchwork.kernel.org/project/linux-renesas-soc/cover/202301=
-31223529.11905-1-prabhakar.mahadev-lad.rj@bp.renesas.com/
->
-> No need to send, I cloned the above with
->     s/G2L/V2L/
->     s/g044/g054/
->     s/G044/G054/
->     s/R01UH0914EJ0120/R01UH0936EJ0120/
->
-> and
-> Fixes: cd0339ec25895c0b ("arm64: dts: renesas: r9a07g054: Add
-> SSI{1,2,3} nodes and fillup the SSI0 stub node")
->
-Thank you for taking care of this.
+Oh ffs.
 
-Cheers,
-Prabhakar
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
