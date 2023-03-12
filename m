@@ -2,96 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF3E06B6447
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 10:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4126B649B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCLJv5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 05:51:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57780 "EHLO
+        id S230038AbjCLKAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229749AbjCLJvy (ORCPT
+        with ESMTP id S230493AbjCLKAE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 05:51:54 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78C735276;
-        Sun, 12 Mar 2023 01:51:50 -0800 (PST)
-Received: by mail-ed1-x533.google.com with SMTP id da10so37592239edb.3;
-        Sun, 12 Mar 2023 01:51:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678614709;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=YQkKzx/kuL9LZC9IFcIW6aPhkuKQVK/swufodiKorEE=;
-        b=p9i87XK+5ihyI+SOQ5TawmLD1XGE41DRjRPvqNbKDUs1SDu89ORGc2TUwmlTGbhLj0
-         Z3EtFdI0yzZB9GPTgrSk8g6C11RgSylN7H1OQnBSC9gsXvfAukSbr2pQ/TRrl9gzWJXX
-         cF3V6JbK+eJQdLbMB61w/LEq17P73r3lZbkxXNgdwr6pYLizFoxPHth5XfTmkZzdF+Q+
-         1s//CXA3hePi73U6a1oCUZL+2QvnVo39jT/CMBZBHFXjbFmExeQsGNhPSCUbdXhpSGqj
-         zBBFaBIgjBaxHSywzPtFBqpDeZBhF9ct4lhrfKfNTRIpnZgh575xUwyjhMajlVHlxWNl
-         nESg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678614709;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=YQkKzx/kuL9LZC9IFcIW6aPhkuKQVK/swufodiKorEE=;
-        b=0momoc3QlgUKNtUq1oPZan2abUk6HMg+49thxw80/Q57VKSSvasnY+CvuLLhqso/uI
-         LL4RqE8VEP4eldklb5EF03zWDIiSTj0bo9D2PBFIvJiSEEXXq1znBW/9OpgvD5S0Nxdz
-         Rbk4GgGXubfoiWPNuGp0mg7Ol+q0SJlMRnZvdhvYR3HL1JV4lf9pDBa6237WLzfXL6n7
-         AWEgZY+xClw5g0RcaWdFwL+xjQBXbA9W3n35hVPAniyRHvUFf45+in2E8lDZ4Wo6E8SU
-         xayL3OVj+MSHcZ3LOr5Mgwh6N8y0DKMggwSa8+2ZljvDI/Vtpx/143ebHxShp1itNOjr
-         zR7g==
-X-Gm-Message-State: AO0yUKXleW2MO+6Ll8k9An5BkuSMQ6arWuFlwfUeIL0G3JDODirAxxS4
-        g2JGUtqUcZQlO+fo9zl6jqM=
-X-Google-Smtp-Source: AK7set9BSyBXetZuX5WfkVc3KxfotNGe+/apFydowA4AbgXfDrB3HSg6LmiokyfU+dVJX8M+BOC9ZA==
-X-Received: by 2002:a17:906:70d:b0:923:6ffa:cf05 with SMTP id y13-20020a170906070d00b009236ffacf05mr2828950ejb.50.1678614709105;
-        Sun, 12 Mar 2023 01:51:49 -0800 (PST)
-Received: from krava (ip-94-113-247-30.net.vodafone.cz. [94.113.247.30])
-        by smtp.gmail.com with ESMTPSA id b21-20020a17090630d500b008cafeec917dsm2052954ejb.101.2023.03.12.01.51.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 01:51:48 -0800 (PST)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Sun, 12 Mar 2023 10:51:46 +0100
-To:     Ian Rogers <irogers@google.com>
-Cc:     Andrii Nakryiko <andrii.nakryiko@gmail.com>,
-        Guilherme Amadio <amadio@gentoo.org>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
-        Ben Hutchings <ben@decadent.org.uk>
-Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
-Message-ID: <ZA2gsjqAK9465kiV@krava>
-References: <20230116010115.490713-1-irogers@google.com>
- <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
- <Y8mAuDvs566zwG67@kernel.org>
- <Y8myfqy5EMit3Kr/@krava>
- <CAP-5=fUugnKd=pGpZve7tKThhM5b0AqGMnuiELF+fZQw-xJz9w@mail.gmail.com>
- <ZAmRjk1x4p4TrFb0@gentoo.org>
- <CAEf4BzZJvEnWdTKVSgdBDr_KEgkW5HLHc7N-HRkmb-drCbg2uw@mail.gmail.com>
- <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com>
- <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
- <CAP-5=fWRxM3pVy6YH=gAnyMXgPBx5eShcJMBiGggCdJj23tUtg@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fWRxM3pVy6YH=gAnyMXgPBx5eShcJMBiGggCdJj23tUtg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 12 Mar 2023 06:00:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A4257D2E;
+        Sun, 12 Mar 2023 01:59:04 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 144BAB80A1F;
+        Sun, 12 Mar 2023 09:59:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7107C433EF;
+        Sun, 12 Mar 2023 09:58:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678615138;
+        bh=ygoYvdiGg9WNb7yZxh5PCQJLNdmqvau0NDCGlvy8krs=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=EcOpod9N54/R3Ipty0JBOsQalcqnnSH86nZOd8wSzygc9/ZWpMRjQyVUe6Sms2FJS
+         pOGNbDwHYkkNH9hyet88mU5EzH7ATxCfORKextxTm9QKXLKA0969ExpuAqORNEY2gD
+         WvScyLOwNhe5hy1lkBIBOPInfBPUS9a63yKAXrZw9hMyoJHeQcaJOs6zjSy4KdUKBc
+         pE7URxZMWEL4GiZKKhuCWKbvN/1eH2LP5KETgjYXAPBQpYp+bSwamOgG544fY3uLE7
+         4CIFtECuDilukimxS15TxlRVLfM2C2KHvutsS0xfbbs4XBchFIUO/pLP7uAOLGa6HC
+         jDU8UIRbbQBog==
+Date:   Sun, 12 Mar 2023 18:58:53 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Donglin Peng <pengdonglin@sangfor.com.cn>
+Cc:     rostedt@goodmis.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
+        huangcun@sangfor.com.cn, linux-trace-kernel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC v2] function_graph: Support recording and outputing the
+ return value of function
+Message-Id: <20230312185853.1b85d63cfda11824fc609e18@kernel.org>
+In-Reply-To: <20230312022826.10367-1-pengdonglin@sangfor.com.cn>
+References: <20230312022826.10367-1-pengdonglin@sangfor.com.cn>
+X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,188 +57,363 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 05:00:01PM -0800, Ian Rogers wrote:
-> On Fri, Mar 10, 2023 at 12:22 PM Andrii Nakryiko
-> <andrii.nakryiko@gmail.com> wrote:
-> >
-> > On Thu, Mar 9, 2023 at 7:26 PM Ian Rogers <irogers@google.com> wrote:
-> > >
-> > > On Thu, Mar 9, 2023 at 9:25 AM Andrii Nakryiko
-> > > <andrii.nakryiko@gmail.com> wrote:
-> > > >
-> > > > On Wed, Mar 8, 2023 at 11:58 PM Guilherme Amadio <amadio@gentoo.org> wrote:
-> > > > >
-> > > > > On Wed, Mar 08, 2023 at 06:13:34PM -0800, Ian Rogers wrote:
-> > > > > > On Thu, Jan 19, 2023 at 1:13 PM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > > > > >
-> > > > > > > On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de Melo wrote:
-> > > > > > > > Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu:
-> > > > > > > > > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.com> wrote:
-> > > > > > > > > > libbpf 1.0 was a major change in API. Perf has partially supported
-> > > > > > > > > > older libbpf's but an implementation may be:
-> > > > > > > > > > ..
-> > > > > > > > > >        pr_err("%s: not support, update libbpf\n", __func__);
-> > > > > > > > > >        return -ENOTSUP;
-> > > > > > > > > > ..
-> > > > > > > > > >
-> > > > > > > > > > Rather than build a binary that would fail at runtime it is
-> > > > > > > > > > preferrential just to build libbpf statically and link against
-> > > > > > > > > > that. The static version is in the kernel tools tree and newer than
-> > > > > > > > > > 1.0.
-> > > > > > > > > >
-> > > > > > > > > > These patches change the libbpf test to only pass when at least
-> > > > > > > > > > version 1.0 is installed, then remove the conditional build and
-> > > > > > > > > > feature logic.
-> > > > > > > > > >
-> > > > > > > > > > The issue is discussed here:
-> > > > > > > > > > https://lore.kernel.org/lkml/20230106151320.619514-1-irogers@google.com/
-> > > > > > > > > > perf bpf:
-> > > > > > > > > >
-> > > > > > > > > > A variant of this fix was added to Linux 6.2 in:
-> > > > > > > > > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIBBPF_DYNAMIC=1"
-> > > > > > > > > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
-> > > > > > > > > > This change goes further in removing logic that is now no longer
-> > > > > > > > > > necessary.
-> > > > > > > > > >
-> > > > > > > > > > v2. Rebase now that breakage fix patch is in linus/master.
-> > > > > > > > >
-> > > > > > > > > I missed the:
-> > > > > > > > > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
-> > > > > > > > > I believe we are waiting for package maintainer input.
-> > > > > > > >
-> > > > > > > > Yes, as fedora:37 still is at libbpf 0.8.0 :-\
-> > > > > > >
-> > > > > > > rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd be to move
-> > > > > > > f37 to 1.x, but I had to do bulk update of like 10 other dependent packages
-> > > > > > > for f38, so not sure how bad it'd be for f37
-> > > > > > >
-> > > > > > > jirka
-> > > > > >
-> > > > > > +Guilherme
-> > > > > >
-> > > > > > We were looking for maintainer input on these changes, but there is no
-> > > > > > update in over a month. Here is the original lore link:
-> > > > > > https://lore.kernel.org/lkml/CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com/
-> > > > > > Should these changes land in perf-tools-next targeting Linux 6.4?
-> > > > >
-> > > > > Gentoo has libbpf-1.1 already available, so requiring >libbpf-1.0 is not
-> > > > > a problem. We (Gentoo) just need to make sure to stabilize libbpf-1.x before
-> > > > > stabilizing newer versions of perf, as the stable libbpf is 0.8.1 at the moment.
-> > > > >
-> > > >
-> > > > libbpf v0.8 is basically all the 1.0 APIs, except by default 1.0
-> > > > semantics is not enforced, unless libbpf_set_strict_mode() is enabled.
-> > > >
-> > > > So, if 0.8 is a restriction, perf can stay on 0.8, use all the same
-> > > > APIs that are in 1.0 (except newer one added later, but I'm not sure
-> > > > perf needs any of the newer additions), and just stick to setting
-> > > > libbpf_set_strict_mode() unconditionally.
-> > >
-> > > Thanks Andrii,
-> > >
-> >
-> > Full disclosure, I'm totally supporting the switch to v1.0+, just
-> > trying to be helpful here from the standpoint of 0.x vs 1.x libbpf
-> > transition. See below. I believe you can keep 0.8+ dependency and drop
-> > all the legacy code completely.
-> >
-> > But just take it as an information, and feel free to do whatever you
-> > think is best with it.
-> >
-> > > The default perf build is to build against tools/lib/bpf and
-> > > statically link libbpf in. This means by default we have the latest
-> > > libbpf 1.2. If any perf code has a dependency on 0.8 (we don't support
-> > > earlier) we need to #ifdef for it. Currently we have 7 feature tests
-> > > for libbpf, but perhaps there is some cruft that's carried forward.
-> > > The features are:
-> > >  - btf__load_from_kernel_by_id
-> >
-> > v0.5 API
-> >
-> > >  - bpf_prog_load
-> > >  - bpf_object__next_program
-> > >  - bpf_object__next_map
-> >
-> > all three are v0.6 APIs
-> >
-> > >  - bpf_program__set_insns
-> >
-> > v0.8 API
-> >
-> > >  - btf__raw_data
-> > >  - bpf_map_create
-> >
-> > both v0.6 API
-> >
-> > >
-> > > The not present implementations look like:
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/perf/util/bpf-loader.c?h=perf-tools#n36
-> > > ```
-> > > int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
-> > >   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __maybe_unused)
-> > > {
-> > > pr_err("%s: not support, update libbpf\n", __func__);
-> > > return -ENOTSUP;
-> > > }
-> > >
-> > > int libbpf_register_prog_handler(const char *sec __maybe_unused,
-> > >                                  enum bpf_prog_type prog_type __maybe_unused,
-> > >                                  enum bpf_attach_type exp_attach_type
-> > > __maybe_unused,
-> > >                                  const struct libbpf_prog_handler_opts
-> > > *opts __maybe_unused)
-> > > {
-> > > pr_err("%s: not support, update libbpf\n", __func__);
-> > > return -ENOTSUP;
-> > > }
-> > > ```
-> >
-> > both are v0.8 APIs
-> >
-> > > This will basically mean that while you dynamically linked with libbpf
-> > > 0.8 you are in all likelihood not going to get proper BPF support.
-> > > These changes up the version requirement to 1.0 and get rid entirely
-> > > of the feature tests - so no runtime failing implementations. If the
-> >
-> > 100% supportive on upgrade and dropping feature checks. My point is
-> > that you don't need those feature checks with v0.8+ requirement.
-> >
-> > The only difference between staying on v0.8+ vs going all the way to
-> > v1.0+ would be that you have to keep libbpf_set_strict() call. In
-> > v1.0+ it's a noop, so could be dropped.
-> >
-> > > build determines at build time libbpf 1.0+ isn't present then it still
-> > > executes, switching from dynamic libbpf to the default static libbpf
-> > > that is at 1.2. As mentioned in this thread, distributions like Debian
-> > > use the default static linking of libbpf.
-> > >
-> >
-> > oh, that's nice, good to know
-> >
-> > > I'm not keen to hold on to the feature tests for the complexity that
-> > > they hold and their needlessly (as you can always statically link)
-> > > broken at runtime behavior. We could but my opinion is, let's not :-)
-> >
-> > I've been consistently advocating for static linking with libbpf, so
-> > 100% support this.
-> 
-> Right, so I think we should move forward with these patches. We also
+Hi Donglin,
 
-+1
+This looks really interesting. There is fprobe and I'm trying introduce the
+fprobe event, but that is an event trace. So this is another way to trace
+the return values.
 
-jirka
+On Sat, 11 Mar 2023 18:28:26 -0800
+Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
 
-> have had non-API changes to support libbpf 1.0+ like:
-> https://lore.kernel.org/lkml/20221103045437.163510-4-irogers@google.com/
-> and I'm worried about the state of these with libbpf 0.8.
+> When using function_graph to analyze the reasons for system call failures,
+> we need to spend a considerable amount of time analyzing the logs and
+> cannot quickly locate the error. This modification aims to make this
+> process easier by recording the return values of each traced function.
+> When outputting trace logs, the tracing option funcgraph-retval can be
+> used to control whether to display the return values. If the return value
+> looks like an error code, it will be output in both hexadecimal and signed
+> decimal, otherwise only hexadecimal.
+
+Hm, this will confuse the output parser. The output should be human readable
+but also machine readable. I think you can introduce an option (tracefs/options/*)
+to show "smart" output or hexadecimal output always.
+
+treacefs/options/graph_retval_hex
+
+If this is 1, the return value is printed always in hexadecimal. If it is 0,
+when the IS_ERR(retval) is true, it will show it in signed decimal, or
+hexadecimal (with "0x" prefix).
+
+> Currently, this modification supports the following commonly used processor
+> architectures: x64, x86, arm64, arm, riscv.
+
+This may also need to be reviewed by each arch maintainer. So we need
+CONFIG_HAVE_FUNCTION_GRAPH_RETVAL which indicates that this architecture
+support ftrace-graph retval and CONFIG_FUNCTION_GRAPH_RETVAL which
+switches this retval is printed or not.
+
 > 
-> Thanks,
-> Ian
+> One drawback is that even if a function's return type is void, the value
+> stored in the return value register will still be recorded and output.
+
+Yeah, but I think that is no problem. We can notify user that this retval
+is always be shown even if the function return type is void.
+
+> I think the BTF files can be used to obtain the return type of kernel
+> functions, but the search cost is a bit high. Therefore, we can
+> implement a tool to process trace logs based on BTF information.
+
+Agreed. Anyway for some specific functions, we can use fprobe events.
+
+Thank you.
+
 > 
-> > >
-> > > Thanks,
-> > > Ian
-> > >
-> > > > > Best regards,
-> > > > > -Guilherme
-> > > > >
+> For example:
+> 
+> I want to attach the demo process to a cpu cgroup, but it failed:
+> 
+> echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
+> -bash: echo: write error: Invalid argument
+> 
+> The strace logs tells that the write system call returned -EINVAL(-22):
+> ...
+> write(1, "273\n", 4)                    = -1 EINVAL (Invalid argument)
+> ...
+> 
+> Use the following commands to capture trace logs when calling the write
+> system call:
+> 
+> cd /sys/kernel/debug/tracing/
+> echo 0 > tracing_on
+> echo > trace
+> echo *sys_write > set_graph_function
+> echo *spin* > set_graph_notrace
+> echo *rcu* >> set_graph_notrace
+> echo *alloc* >> set_graph_notrace
+> echo preempt* >> set_graph_notrace
+> echo kfree* >> set_graph_notrace
+> echo $$ > set_ftrace_pid
+> echo function_graph > current_tracer
+> echo 1 > tracing_on
+> echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
+> echo 0 > tracing_on
+> echo 1 > options/funcgraph-retval
+> cat trace > ~/trace.log
+> 
+> Search -22 directly in the trace.log and find that the function
+> cpu_cgroup_can_attach returned -22 first, then read the code of this
+> function to get the root cause.
+> 
+> ...
+>  0)            |  cgroup_migrate() {
+>  0)  0.521 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+>  0)  0.500 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+>  0)  0.441 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+>  0)  0.521 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+>  0)  0.421 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+>  0)  0.431 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+>  0)            |    cgroup_migrate_execute() {
+>  0)            |      cpu_cgroup_can_attach() {
+>  0)            |        cgroup_taskset_first() {
+>  0)  0.221 us  |          cgroup_taskset_next(); /* => ffff88800e13c000 */
+>  0)  0.641 us  |        } /* cgroup_taskset_first => ffff88800e13c000 */
+>  0)  0.320 us  |        sched_rt_can_attach(); /* => 0 */
+>  0)  1.713 us  |      } /* cpu_cgroup_can_attach => ffffffea -22 */
+>  0)  3.717 us  |    } /* cgroup_migrate_execute => ffffffea -22 */
+>  0)  9.959 us  |  } /* cgroup_migrate => ffffffea -22 */
+> ...
+> 
+> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+> ---
+>  arch/arm/kernel/entry-ftrace.S       |  1 +
+>  arch/arm64/kernel/entry-ftrace.S     |  1 +
+>  arch/riscv/kernel/mcount.S           |  2 +
+>  arch/x86/kernel/ftrace_32.S          |  1 +
+>  arch/x86/kernel/ftrace_64.S          |  2 +
+>  include/linux/ftrace.h               |  1 +
+>  kernel/trace/fgraph.c                |  3 +-
+>  kernel/trace/trace.h                 |  1 +
+>  kernel/trace/trace_entries.h         |  5 +-
+>  kernel/trace/trace_functions_graph.c | 70 ++++++++++++++++++++++++----
+>  10 files changed, 74 insertions(+), 13 deletions(-)
+> 
+> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+> index 3e7bcaca5e07..c6666c0d909c 100644
+> --- a/arch/arm/kernel/entry-ftrace.S
+> +++ b/arch/arm/kernel/entry-ftrace.S
+> @@ -258,6 +258,7 @@ ENDPROC(ftrace_graph_regs_caller)
+>  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+>  ENTRY(return_to_handler)
+>  	stmdb	sp!, {r0-r3}
+> +	mov	r1, r0			@ pass the return value
+>  	add	r0, sp, #16		@ sp at exit of instrumented routine
+>  	bl	ftrace_return_to_handler
+>  	mov	lr, r0			@ r0 has real ret addr
+> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+> index 350ed81324ac..0eb9a0e3ba3d 100644
+> --- a/arch/arm64/kernel/entry-ftrace.S
+> +++ b/arch/arm64/kernel/entry-ftrace.S
+> @@ -276,6 +276,7 @@ SYM_CODE_START(return_to_handler)
+>  	stp x4, x5, [sp, #32]
+>  	stp x6, x7, [sp, #48]
+>  
+> +	mov	x1, x0			// pass the return value
+>  	mov	x0, x29			//     parent's fp
+>  	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(fp);
+>  	mov	x30, x0			// restore the original return address
+> diff --git a/arch/riscv/kernel/mcount.S b/arch/riscv/kernel/mcount.S
+> index 30102aadc4d7..afce5abcbcd2 100644
+> --- a/arch/riscv/kernel/mcount.S
+> +++ b/arch/riscv/kernel/mcount.S
+> @@ -69,6 +69,8 @@ ENTRY(return_to_handler)
+>  	mv	t6, s0
+>  #endif
+>  	SAVE_RET_ABI_STATE
+> +	/* pass the return value to ftrace_return_to_handler */
+> +	mv	a1, a0
+>  #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+>  	mv	a0, t6
+>  #endif
+> diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
+> index a0ed0e4a2c0c..7611374ccce8 100644
+> --- a/arch/x86/kernel/ftrace_32.S
+> +++ b/arch/x86/kernel/ftrace_32.S
+> @@ -184,6 +184,7 @@ SYM_CODE_END(ftrace_graph_caller)
+>  return_to_handler:
+>  	pushl	%eax
+>  	pushl	%edx
+> +	movl	%eax, %edx	#  2nd argument: the return value
+>  	movl	$0, %eax
+>  	call	ftrace_return_to_handler
+>  	movl	%eax, %ecx
+> diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+> index 1265ad519249..d685b773e7ad 100644
+> --- a/arch/x86/kernel/ftrace_64.S
+> +++ b/arch/x86/kernel/ftrace_64.S
+> @@ -348,6 +348,8 @@ SYM_CODE_START(return_to_handler)
+>  	movq %rax, (%rsp)
+>  	movq %rdx, 8(%rsp)
+>  	movq %rbp, %rdi
+> +	/* Pass the return value to ftrace_return_to_handler */
+> +	movq %rax, %rsi
+>  
+>  	call ftrace_return_to_handler
+>  
+> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+> index 366c730beaa3..157fd25be2b7 100644
+> --- a/include/linux/ftrace.h
+> +++ b/include/linux/ftrace.h
+> @@ -1032,6 +1032,7 @@ struct ftrace_graph_ent {
+>   */
+>  struct ftrace_graph_ret {
+>  	unsigned long func; /* Current function */
+> +	unsigned long retval;
+>  	int depth;
+>  	/* Number of functions that overran the depth limit for current task */
+>  	unsigned int overrun;
+> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+> index 218cd95bf8e4..006b39a98dc3 100644
+> --- a/kernel/trace/fgraph.c
+> +++ b/kernel/trace/fgraph.c
+> @@ -240,12 +240,13 @@ static struct notifier_block ftrace_suspend_notifier = {
+>   * Send the trace to the ring-buffer.
+>   * @return the original return address.
+>   */
+> -unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
+> +unsigned long ftrace_return_to_handler(unsigned long frame_pointer, unsigned long retval)
+>  {
+>  	struct ftrace_graph_ret trace;
+>  	unsigned long ret;
+>  
+>  	ftrace_pop_return_trace(&trace, &ret, frame_pointer);
+> +	trace.retval = retval;
+>  	trace.rettime = trace_clock_local();
+>  	ftrace_graph_return(&trace);
+>  	/*
+> diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+> index 616e1aa1c4da..5ef32c6e1d45 100644
+> --- a/kernel/trace/trace.h
+> +++ b/kernel/trace/trace.h
+> @@ -831,6 +831,7 @@ static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)
+>  #define TRACE_GRAPH_PRINT_TAIL          0x100
+>  #define TRACE_GRAPH_SLEEP_TIME          0x200
+>  #define TRACE_GRAPH_GRAPH_TIME          0x400
+> +#define TRACE_GRAPH_PRINT_RETVAL        0x800
+>  #define TRACE_GRAPH_PRINT_FILL_SHIFT	28
+>  #define TRACE_GRAPH_PRINT_FILL_MASK	(0x3 << TRACE_GRAPH_PRINT_FILL_SHIFT)
+>  
+> diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+> index cd41e863b51c..d798cb17546f 100644
+> --- a/kernel/trace/trace_entries.h
+> +++ b/kernel/trace/trace_entries.h
+> @@ -93,16 +93,17 @@ FTRACE_ENTRY_PACKED(funcgraph_exit, ftrace_graph_ret_entry,
+>  	F_STRUCT(
+>  		__field_struct(	struct ftrace_graph_ret,	ret	)
+>  		__field_packed(	unsigned long,	ret,		func	)
+> +		__field_packed(	unsigned long,	ret,		retval	)
+>  		__field_packed(	int,		ret,		depth	)
+>  		__field_packed(	unsigned int,	ret,		overrun	)
+>  		__field_packed(	unsigned long long, ret,	calltime)
+>  		__field_packed(	unsigned long long, ret,	rettime	)
+>  	),
+>  
+> -	F_printk("<-- %ps (%d) (start: %llx  end: %llx) over: %d",
+> +	F_printk("<-- %ps (%d) (start: %llx  end: %llx) over: %d retval: %lx",
+>  		 (void *)__entry->func, __entry->depth,
+>  		 __entry->calltime, __entry->rettime,
+> -		 __entry->depth)
+> +		 __entry->depth, __entry->retval)
+>  );
+>  
+>  /*
+> diff --git a/kernel/trace/trace_functions_graph.c b/kernel/trace/trace_functions_graph.c
+> index 203204cadf92..706d3e5c2156 100644
+> --- a/kernel/trace/trace_functions_graph.c
+> +++ b/kernel/trace/trace_functions_graph.c
+> @@ -58,6 +58,8 @@ static struct tracer_opt trace_opts[] = {
+>  	{ TRACER_OPT(funcgraph-irqs, TRACE_GRAPH_PRINT_IRQS) },
+>  	/* Display function name after trailing } */
+>  	{ TRACER_OPT(funcgraph-tail, TRACE_GRAPH_PRINT_TAIL) },
+> +	/* Display function return value */
+> +	{ TRACER_OPT(funcgraph-retval, TRACE_GRAPH_PRINT_RETVAL) },
+>  	/* Include sleep time (scheduled out) between entry and return */
+>  	{ TRACER_OPT(sleep-time, TRACE_GRAPH_SLEEP_TIME) },
+>  
+> @@ -619,6 +621,43 @@ print_graph_duration(struct trace_array *tr, unsigned long long duration,
+>  	trace_seq_puts(s, "|  ");
+>  }
+>  
+> +static void print_graph_retval(struct trace_seq *s, unsigned long retval,
+> +				bool leaf, void *func)
+> +{
+> +	unsigned long err_code = 0;
+> +
+> +	if (retval == 0)
+> +		goto done;
+> +
+> +	/* Guess whether the retval looks like an error code */
+> +	if ((retval & BIT(7)) && (retval >> 8) == 0)
+> +		err_code = (unsigned long)(s8)retval;
+> +	else if ((retval & BIT(15)) && (retval >> 16) == 0)
+> +		err_code = (unsigned long)(s16)retval;
+> +	else if ((retval & BIT(31)) && (((u64)retval) >> 32) == 0)
+> +		err_code = (unsigned long)(s32)retval;
+> +	else
+> +		err_code = retval;
+> +
+> +	if (!IS_ERR_VALUE(err_code))
+> +		err_code = 0;
+> +
+> +done:
+> +	if (leaf) {
+> +		if (err_code != 0)
+> +			trace_seq_printf(s, "%ps(); /* => %lx %ld */\n",
+> +				func, retval, err_code);
+> +		else
+> +			trace_seq_printf(s, "%ps(); /* => %lx */\n", func, retval);
+> +	} else {
+> +		if (err_code != 0)
+> +			trace_seq_printf(s, "} /* %ps => %lx %ld */\n",
+> +				func, retval, err_code);
+> +		else
+> +			trace_seq_printf(s, "} /* %ps => %lx */\n", func, retval);
+> +	}
+> +}
+> +
+>  /* Case of a leaf function on its call entry */
+>  static enum print_line_t
+>  print_graph_entry_leaf(struct trace_iterator *iter,
+> @@ -663,7 +702,10 @@ print_graph_entry_leaf(struct trace_iterator *iter,
+>  	for (i = 0; i < call->depth * TRACE_GRAPH_INDENT; i++)
+>  		trace_seq_putc(s, ' ');
+>  
+> -	trace_seq_printf(s, "%ps();\n", (void *)call->func);
+> +	if (flags & TRACE_GRAPH_PRINT_RETVAL)
+> +		print_graph_retval(s, graph_ret->retval, true, (void *)call->func);
+> +	else
+> +		trace_seq_printf(s, "%ps();\n", (void *)call->func);
+>  
+>  	print_graph_irq(iter, graph_ret->func, TRACE_GRAPH_RET,
+>  			cpu, iter->ent->pid, flags);
+> @@ -942,16 +984,24 @@ print_graph_return(struct ftrace_graph_ret *trace, struct trace_seq *s,
+>  		trace_seq_putc(s, ' ');
+>  
+>  	/*
+> -	 * If the return function does not have a matching entry,
+> -	 * then the entry was lost. Instead of just printing
+> -	 * the '}' and letting the user guess what function this
+> -	 * belongs to, write out the function name. Always do
+> -	 * that if the funcgraph-tail option is enabled.
+> +	 * Always write out the function name and its return value if the
+> +	 * function-retval option is enabled.
+>  	 */
+> -	if (func_match && !(flags & TRACE_GRAPH_PRINT_TAIL))
+> -		trace_seq_puts(s, "}\n");
+> -	else
+> -		trace_seq_printf(s, "} /* %ps */\n", (void *)trace->func);
+> +	if (flags & TRACE_GRAPH_PRINT_RETVAL) {
+> +		print_graph_retval(s, trace->retval, false, (void *)trace->func);
+> +	} else {
+> +		/*
+> +		 * If the return function does not have a matching entry,
+> +		 * then the entry was lost. Instead of just printing
+> +		 * the '}' and letting the user guess what function this
+> +		 * belongs to, write out the function name. Always do
+> +		 * that if the funcgraph-tail option is enabled.
+> +		 */
+> +		if (func_match && !(flags & TRACE_GRAPH_PRINT_TAIL))
+> +			trace_seq_puts(s, "}\n");
+> +		else
+> +			trace_seq_printf(s, "} /* %ps */\n", (void *)trace->func);
+> +	}
+>  
+>  	/* Overrun */
+>  	if (flags & TRACE_GRAPH_PRINT_OVERRUN)
+> -- 
+> 2.25.1
+> 
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
