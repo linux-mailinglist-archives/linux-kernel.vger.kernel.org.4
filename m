@@ -2,52 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4113D6B6726
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 15:25:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12E096B6728
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 15:27:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCLOZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 10:25:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
+        id S230048AbjCLO1L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 10:27:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCLOZl (ORCPT
+        with ESMTP id S229490AbjCLO1I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 10:25:41 -0400
-Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830204617C;
-        Sun, 12 Mar 2023 07:25:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=OHbediLC+v3sB2oFfyvI7wEyP9TeOQGxdPxK8a2esRg=;
-  b=UCDM2s/qi9A3S/EQxRny/aR1glDkkQdIkSliYzHRtk+/o8aM05R3qtRL
-   tqMPhsMDehpn2+3djcRR5JX2mP3EpwkIPcVkkDEgWulkn9WpqParYaiCh
-   fzmyzq86h6rY+rvIR+ldcCQBANuUJ4a2UNTlHWxpU3mAE6yOz7HxiICP1
-   s=;
-Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.98,254,1673910000"; 
-   d="scan'208";a="49927824"
-Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
-  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 15:25:37 +0100
-Date:   Sun, 12 Mar 2023 15:25:37 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-X-X-Sender: jll@hadrien
-To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
-        lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
-        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: iio: meter: enclose Macros with complex values
- in parentheses
-In-Reply-To: <174e4d14-8b3e-67f7-d901-bd77b054f7c3@gmail.com>
-Message-ID: <alpine.DEB.2.22.394.2303121525270.2865@hadrien>
-References: <20230312133347.120944-1-eng.mennamahmoud.mm@gmail.com> <alpine.DEB.2.22.394.2303121507450.2865@hadrien> <174e4d14-8b3e-67f7-d901-bd77b054f7c3@gmail.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Sun, 12 Mar 2023 10:27:08 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A5104ECF3;
+        Sun, 12 Mar 2023 07:27:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678631183; i=frank-w@public-files.de;
+        bh=8gKmDff4fx4P4y7WV2067v+MtnzHHo6PoNVb2ypzQEc=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=bz5/DNvoIUvR6IGhiyPE5jf27AC799hRswTuQ1aX1LaEJna929zlhnh56cHb/wuu9
+         uwxmiI3r5YWe1Spyk5GaLeJLp2AXeRmGVee7YICvXlJIYD72dOe5CsxjvClnvXRnt+
+         iQn2ir5fPbWQ9uHCDUurisFv0zOn0Io5q1Xlp+VrGdhaR3ioqHvc1JBRQzFCEs7a/K
+         22W0zrVN0X+6+WLPP6auapLT/Yv5fjg9hf4ibwagjMHjJY96WxtM6eS8AhLkSe6fWh
+         tQTfG7oCz1bCryl+pon/whdu9SY6FEZygNbyiaR643TTMh5Lh1kLHOr7pnYhWy+5iq
+         2jcLoFm5yKJaQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.155.253] ([217.61.155.253]) by web-mail.gmx.net
+ (3c-app-gmx-bap51.server.lan [172.19.172.121]) (via HTTP); Sun, 12 Mar 2023
+ 15:26:23 +0100
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1402912152-1678631138=:2865"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <trinity-27a405f3-fece-4500-82ef-4082af428a7a-1678631183133@3c-app-gmx-bap51>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     "Russell King (Oracle)" <linux@armlinux.org.uk>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Aw: Re: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc:
+ fix 1000Base-X and 2500Base-X modes
+Content-Type: text/plain; charset=UTF-8
+Date:   Sun, 12 Mar 2023 15:26:23 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+References: <ZAiJqvzcUob2Aafq@shell.armlinux.org.uk>
+ <20230308134642.cdxqw4lxtlgfsl4g@skbuf>
+ <ZAiXvNT8EzHTmFPh@shell.armlinux.org.uk> <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk> <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:8Dr+JbZAG9ReX8C7mk7Vo758aZ6vkIpxnCQlU/ppmzdxB2U5/9GlsHVagRkJvrGo9uIgc
+ 9kl4wlKNJpMQKnmQaEtUkHWqAceUpdRm+N0KFLg/L1d5pm7cpM+kFeufcr3Wn43GTR6trmyxY2VX
+ 7ZUwB8/Z/9xqErQbbFfJDUTMg15NQ7FwVrYMLLzqA5HubC++Eamx4f1Fnxeln0kXORT6lHCzquKk
+ paMHjUYsZbxeTFeodfKTXw2IGYQAjwXGXvKMZJ+wnIZ9Yvk8NmOfH3JlQpCqt/e2B9pf/Xs0+8k/
+ QQ=
+UI-OutboundReport: notjunk:1;M01:P0:a1KgfutJ3bA=;+wMz+CmGCfod2DAgCSEq7Q8DBpJ
+ jAR0XkWMzx9WEzb959bifW4ZCFZ8mP0ktv0wY6q8PiKxIrVMTXgkhuHrtiZFiUeMrMVnjcqhe
+ +05OZs/8ZxrckwscPZqYpBWPgM6wLDd624Z8K8eD2JoHP5RWavscb6m4ke0wVPsXfA5ZH8dju
+ KkQVR4zeGJbnbKRbbdpWx7NC8/fytZ95CSGkRAKz0AQU3LwRI7Alwy35FJGxm639DzvkN1hxX
+ Qq2OeR3gcp9BwLVcY/SCMCIsznnKu4hw5ACWQ/obVHSESiZGkNCkEbW4DnOvF1jt9fZ4EDd0z
+ AN1/0OKMOGpqIyxXBfcjofUn7COi96P7uFprUg/uK8vFDNnuTkeXdDvhdfWWT3cmdeL9uIFPW
+ wBmCMAYzke6Nyybwye5Jf9265wVS2N+B0SgNZt5tiF4HiQ2JybySjXBReNCTaW1zg971znHHf
+ I8BgG/QhzuMKvwFTs+RYuJwAk0mTy41VFzfMuyZljbM44V/RsoHtH8keUbPm3O1llsigEQCFp
+ Jp5cv3mA7q0DZ6zCTUj9IQuWnGc4Sx7302wY144wpT30Wcg+AK5DihZ+Q9Z2wu7nw4tn1yi6Q
+ MQEUA6nrNYjLGfvanWsyoRjOLC8dpl8Lrs8soj0905NgQKfTbfSBHIo78Pw/+IXoXDMYWgwHX
+ UgF8nX8rDb4g5u5QRwlRgTN8tBVCEb4vl0BIP1WyautDSWneM9hjTRh6oreN4LzyhT603qals
+ FfGLNGhjFJ3lSKKohz7I87zaP9w2OMcdHbOlBT4jsxlX31v1JzGzpAHUW55cQQdSzQzVBp6Y6
+ FcXy5ihg4kQplw7SpPz+C2Fg==
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,102 +106,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+and i can confirm that disabling autoneg on userspace brings up link on th=
+e 2.5g rj45 sfp
 
---8323329-1402912152-1678631138=:2865
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
+root@bpi-r3:~# ip link set eth1 up
+[   73.433869] mtk_soc_eth 15100000.ethernet eth1: configuring for inband/=
+2500base-x link mode
+root@bpi-r3:~# ip link show eth1
+3: eth1: <NO-CARRIER,BROADCAST,MULTICAST,UP> mtu 1500 qdisc fq_codel state=
+ DOWN mode DEFAULT group default qlen 1000
+    link/ether 92:2f:d3:16:6f:94 brd ff:ff:ff:ff:ff:ff
+root@bpi-r3:~# ethtool -s eth1 autoneg off
+root@bpi-r3:~# [  147.190136] mtk_soc_eth 15100000.ethernet eth1: Link is =
+Up - 2.5Gbps/Full - flow control off
+[  147.198600] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+root@bpi-r3:~#
 
+wonder which flags this changes compared to the original state...these i h=
+ave to set in code when the sfp is recognized.
 
+setting these flags in the phylink_parse_mode (or skipping set AN-flags) s=
+eem to break it completely
 
-On Sun, 12 Mar 2023, Menna Mahmoud wrote:
-
->
-> On ١٢/٣/٢٠٢٣ ١٦:١٢, Julia Lawall wrote:
-> >
-> > On Sun, 12 Mar 2023, Menna Mahmoud wrote:
-> >
-> > > enclose Macros with complex values in parentheses is especially useful
-> > > in making macro definitions “safe” (so that they
-> > > evaluate each operand exactly once).
-> > enclose -> Enclose, and Macros -> macros
-> >
-> > I don't understand the above comment though.  How does adding parentheses
-> > around the body of a macro cause the operands to be evaluated only once?
-> > And the macros that you have changed don't have any operands.
-> >
-> > The value of adding parentheses is normally to ensure that the body of the
-> > macro doesn't interact with the context in a weird way.  For example, you
-> > could have
-> >
-> > #define ADD 3 + 4
-> >
-> > Then if you use your macro as 6 * ADD, you will end up evaluating
-> > 6 * 3 + 4, ie 18 + 4, when you might have expected 6 * 7.  The issue is
-> > that * has higher precedence than +.
->
->
-> yes, I mean that but i couldn't explain it well, thanks for your feedback.
->
->
-> >
-> > But I don't think that such a problem can arise with a cast expression, so
-> > parentheses around it should not be necessary.
->
->
-> So, no need for this patch?
-
-No, I don't think so.
-
-julia
-
->
->
-> > > this error reported by chechpatch.pl
-> > this error is reported by checkpatch.
-> >
-> > > "ERROR: Macros with complex values should be enclosed in parentheses"
-> > >
-> > > for ADE7854_SPI_SLOW, ADE7854_SPI_BURST and ADE7854_SPI_FAST
-> > > macros and this error fixed by enclose these macros in parentheses.
-> > The last two lines aren't needed.  One can easily see that from looking at
-> > the patch.
->
->
-> Got it, Thank you.
->
-> Menna
->
-> > julia
-> >
-> > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
-> > > ---
-> > >   drivers/staging/iio/meter/ade7854.h | 6 +++---
-> > >   1 file changed, 3 insertions(+), 3 deletions(-)
-> > >
-> > > diff --git a/drivers/staging/iio/meter/ade7854.h
-> > > b/drivers/staging/iio/meter/ade7854.h
-> > > index 7a49f8f1016f..41eeedef569b 100644
-> > > --- a/drivers/staging/iio/meter/ade7854.h
-> > > +++ b/drivers/staging/iio/meter/ade7854.h
-> > > @@ -139,9 +139,9 @@
-> > >   #define ADE7854_MAX_RX    7
-> > >   #define ADE7854_STARTUP_DELAY 1000
-> > >
-> > > -#define ADE7854_SPI_SLOW	(u32)(300 * 1000)
-> > > -#define ADE7854_SPI_BURST	(u32)(1000 * 1000)
-> > > -#define ADE7854_SPI_FAST	(u32)(2000 * 1000)
-> > > +#define ADE7854_SPI_SLOW	((u32)(300 * 1000))
-> > > +#define ADE7854_SPI_BURST	((u32)(1000 * 1000))
-> > > +#define ADE7854_SPI_FAST	((u32)(2000 * 1000))
-> > >
-> > >   /**
-> > >    * struct ade7854_state - device instance specific data
-> > > --
-> > > 2.34.1
-> > >
-> > >
-> > >
->
---8323329-1402912152-1678631138=:2865--
+regards Frank
