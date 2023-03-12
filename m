@@ -2,106 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377746B6A65
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 03C266B6A6A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230359AbjCLTDx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:03:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48036 "EHLO
+        id S230250AbjCLTEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjCLTDu (ORCPT
+        with ESMTP id S229713AbjCLTEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:03:50 -0400
-Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30B0023A56
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 12:03:49 -0700 (PDT)
-Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
-        (authenticated bits=0)
-        (User authenticated as tytso@ATHENA.MIT.EDU)
-        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32CJ3SUf029215
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Sun, 12 Mar 2023 15:03:30 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
-        t=1678647811; bh=OJuYO4tozYlkTKxvUkr6Yt6qnK4hR1f0ZSLZY8hmY1k=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=V5dwUF81CQBKvYHsSZ5QfTvJo2k6iAiGtbtI49IZ1D3c9Vka5ZK75s4p9w3nXlAcZ
-         fEBlUgU6QCLp/uztFdbpriJpK7O6aTyc92cmjPfzW//IZXFd1eWe+G+dmlB/Mq+TMf
-         A3PDHuCM304ko64acUuToofb1zfLX9Va1Zkw7JrXmMoo3VDDhAn+NFLjXCX3GPE5yg
-         rPhN7vl7/fTtjtBrVnMzpiW0ad0P5YzDhLuhcqaUjQ30pzNXAQWMGKqMw5PsVe9M7x
-         tFdzlMsFOkSBOfrwZYqDs0dRZbdmErQZp8JbRhUp99AxG0L1B9nVLUIgdUSLye1FcQ
-         t7yw4GBVuGRMA==
-Received: by cwcc.thunk.org (Postfix, from userid 15806)
-        id 8ADC315C45B9; Sun, 12 Mar 2023 15:03:28 -0400 (EDT)
-Date:   Sun, 12 Mar 2023 15:03:28 -0400
-From:   "Theodore Ts'o" <tytso@mit.edu>
-To:     Sasha Levin <sashal@kernel.org>
-Cc:     James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Eric Biggers <ebiggers@kernel.org>,
-        linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        viro@zeniv.linux.org.uk, linux-fsdevel@vger.kernel.org
-Subject: Re: AUTOSEL process
-Message-ID: <20230312190328.GL860405@mit.edu>
-References: <Y/0U8tpNkgePu00M@sashalap>
- <Y/0i5pGYjrVw59Kk@gmail.com>
- <Y/0wMiOwoeLcFefc@sashalap>
- <Y/1LlA5WogOAPBNv@gmail.com>
- <Y/1em4ygHgSjIYau@sashalap>
- <Y/136zpJSWx96YEe@sol.localdomain>
- <ZAu4GE0q4jzRI+F6@sol.localdomain>
- <ZAyFFtORBosdarMr@sashalap>
- <734c9a0920f293c88168f38c1245e779d03f4364.camel@HansenPartnership.com>
- <ZAzDTVluocRvZ8W8@sashalap>
+        Sun, 12 Mar 2023 15:04:33 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78A8C172A;
+        Sun, 12 Mar 2023 12:04:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678647872; x=1710183872;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=TSnwn0TySxJCCKYtlGkoxoE5mTRoz3cqkkbx1mBjmF0=;
+  b=emWN2z1PQmhs+dYifm/n5DwDi3aEZp3+Lgkv+STAY2ohDvj2c6KZdCfc
+   Irl2oAhW06KXrZU78clqGf1DWybtFkn9tcvseqwGp70o6FrV5Dg73tSjY
+   SOM+vuoTwsa9tVlffp44yNRo8mGBw3Pvl7J6xt13cYRdG2ZoXXG0sKco8
+   T6yiTYPo5OwP+Mj6N283nyMOOnrWUXm6GLXNhv1RQ3L/Nt+9KxjobwmtW
+   aNtF8qiESQL3l4YWcETXPB6PjCU2aabDHjQYOwgvr26EleANk3Zhnuavi
+   EZtMlboGnvSMWjrwP0ayeD1I3kpfMzrk/Hzw3QQMBWmeqm4FHGmaSjGbg
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338568291"
+X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
+   d="scan'208";a="338568291"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 12:04:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655749326"
+X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
+   d="scan'208";a="655749326"
+Received: from ye-nuc7i7dnhe.sh.intel.com ([10.239.154.52])
+  by orsmga006.jf.intel.com with ESMTP; 12 Mar 2023 12:04:27 -0700
+From:   Ye Xiang <xiang.ye@intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        Lee Jones <lee@kernel.org>, Wolfram Sang <wsa@kernel.org>,
+        Tyrone Ting <kfting@nuvoton.com>,
+        Mark Brown <broonie@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org
+Cc:     srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
+        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
+        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com,
+        Ye Xiang <xiang.ye@intel.com>
+Subject: [PATCH v5 0/5] Add Intel LJCA device driver
+Date:   Mon, 13 Mar 2023 03:04:30 +0800
+Message-Id: <20230312190435.3568212-1-xiang.ye@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZAzDTVluocRvZ8W8@sashalap>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
-        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 01:07:09PM -0500, Sasha Levin wrote:
-> > I think the one thing everyone on this thread might agree on is that
-> > this bug wouldn't have happened if AUTOSEL could detect and backport
-> > series instead of individual patches.  Sasha says that can't be done
-> > based on in information in Linus' tree[1] which is true but not a
-> > correct statement of the problem.  The correct question is given all
-> > the information available, including lore, could we assist AUTOSEL in
-> > better detecting series and possibly making better decisions generally?
-> 
-> My argument was that this type of issue is no AUTOSEL specific, and we
-> saw it happening multiple times with stable tagged patches as well.
+Add driver for Intel La Jolla Cove Adapter (LJCA) device.
+This is a USB-GPIO, USB-I2C and USB-SPI device. We add 4
+drivers to support this device: a USB driver, a GPIO chip
+driver, a I2C controller driver and a SPI controller driver.
 
-I suspect that it happens *less* with Greg's patches, since the people
-who add (and it's almost always remove) the Cc: tags have the
-dependency information fresh in their brains' caches, and are more
-likely to correctly tag which patches should and shouldn't have Cc:
-stable tags.
+---
+v5:
+ - move ljca.h from drivers/include/mfd to drivers/include/usb.
+ - ljca: fix a potential memory leak issue.
+ - add a blank line before return to adust to kernel code style.
+ - ljca: sysfs: split "cmd" to "ljca_dfu" and "ljca_trace_level".
 
-Now, if after I've carefully annotated a patch series, some with Cc:
-stable tags, and some without, and AUTOSEL were to override my work
-and take some extra patches, that I had deliberately not tagged with
-Cc: stable, I can (and have) gotten mildly annoyed, but in general, it
-means that something which probably shouldn't and didn't need to go
-into an LTS kernel ended up going into an LTS kernel, and TBH, when
-this has happened, I don't worry about it *too* much.  It probably has
-made LTS less sstable when this happens, but it's generally not a
-disaster.
+v4:
+ - move ljca.c from drivers/mfd to drivers/usb/misc folder.
+ - fix index warning in sysfs-bus-devices-ljca.
 
-In any case, I think the problem of missing dependencies when they are
-in a patch series is *primarily* an AUTOSEL problem, and as I said,
-probably can be fixed by using the information in lore.
+v3:
+ - spi: make ljca_spi_transfer inline and fix an endian issue.
 
-I'll note that we can probably make the "was this part of the patch
-series" work even better by encouraging contributors not to take
-unrelated patches and put them unnecessarily into a patch series.  So
-if I knew that the stable bots were taking patch series into account,
-or were about to start taking advantage of this signal, I'd be happy
-to push back on contributors to break up patch series that should be
-glommed together.
+v2:
+ - ljca: remove reset command.
+ - gpio/spi/i2c: add `default MFD_LJCA` in Kconfig.
+ - gpio: add "select GPIOLIB_IRQCHIP" in Kconfig.
 
-						- Ted
+Ye Xiang (5):
+  usb: Add support for Intel LJCA device
+  gpio: Add support for Intel LJCA USB GPIO driver
+  i2c: Add support for Intel LJCA USB I2C driver
+  spi: Add support for Intel LJCA USB SPI driver
+  Documentation: Add ABI doc for attributes of LJCA device
+
+ .../ABI/testing/sysfs-bus-usb-devices-ljca    |  36 +
+ drivers/gpio/Kconfig                          |  12 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-ljca.c                      | 459 ++++++++
+ drivers/i2c/busses/Kconfig                    |  11 +
+ drivers/i2c/busses/Makefile                   |   1 +
+ drivers/i2c/busses/i2c-ljca.c                 | 355 +++++++
+ drivers/spi/Kconfig                           |  11 +
+ drivers/spi/Makefile                          |   1 +
+ drivers/spi/spi-ljca.c                        | 293 +++++
+ drivers/usb/misc/Kconfig                      |  13 +
+ drivers/usb/misc/Makefile                     |   1 +
+ drivers/usb/misc/ljca.c                       | 998 ++++++++++++++++++
+ include/linux/usb/ljca.h                      |  95 ++
+ 14 files changed, 2287 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-bus-usb-devices-ljca
+ create mode 100644 drivers/gpio/gpio-ljca.c
+ create mode 100644 drivers/i2c/busses/i2c-ljca.c
+ create mode 100644 drivers/spi/spi-ljca.c
+ create mode 100644 drivers/usb/misc/ljca.c
+ create mode 100644 include/linux/usb/ljca.h
+
+-- 
+2.34.1
+
