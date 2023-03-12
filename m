@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 443C86B68E7
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:43:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B7C6B68EA
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCLRni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45306 "EHLO
+        id S230104AbjCLRoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:44:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCLRnf (ORCPT
+        with ESMTP id S229534AbjCLRoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:43:35 -0400
-Received: from mail-oo1-xc2f.google.com (mail-oo1-xc2f.google.com [IPv6:2607:f8b0:4864:20::c2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43F8E7DB7;
-        Sun, 12 Mar 2023 10:43:34 -0700 (PDT)
-Received: by mail-oo1-xc2f.google.com with SMTP id bd3-20020a4aee03000000b00517affa07c0so1525522oob.7;
-        Sun, 12 Mar 2023 10:43:34 -0700 (PDT)
+        Sun, 12 Mar 2023 13:44:44 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995DA3646B;
+        Sun, 12 Mar 2023 10:44:43 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-176b90e14a9so11535551fac.9;
+        Sun, 12 Mar 2023 10:44:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678643013;
+        d=gmail.com; s=20210112; t=1678643083;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=GqdbbfsYH3A0BwuMoZ160BBHfFhhZcuHQkbZCTYU1CM=;
-        b=CJF1DL9whe79abZrXnMG/HdulhdMMsXNPQmtSvXfm7l8jVjJ6CCIOUHWbdjIAQmVXS
-         UispGyWavtU9mql1vboLZpsWSjZczEdbtJoYJHFvkzmta0EkGeaIy5YXmmK7vdu1GsvH
-         BqOXU+pUPjRmEozBBCNysms97UeesOpnlAZKZfWHLklkosmBiHdG6r3MnIauWDgGStrQ
-         3LZlU1Fc3+FpDlbD75F9PrQ0zMp7y7S0GPXpCeM3xVpStp4kJJYu/pPbgwqqtEd+XkGs
-         yfM6LPmXa2SnORc1Mk+b+7aQioLxednRYtub7yNaSGS2YY8bamQdwHG3/BtdLAIBImF2
-         iVEg==
+        bh=SKG1lI+0STMCFJtaydoqd1RU3Z9cyR3Jq7a+wFOPE4o=;
+        b=K4KWVy6lbc3GDVhrSGILzEHZAE3YTv/Rtr1GNdpe4aA2ZpC3yipMyV7ZM/gPvlM1Gr
+         wQiX/+dinF6I4Ijk1XnMHut/w9Cg5ZF5udEUS1NmvpA5pU0DjfzXZmLwQhuBCiF88yzT
+         91zFHtQX3DKMYvsOf/IpwQwZmxrnhtdFSt008O/T5uhi2IQpCEglLX1i1WyAiMWEjpvP
+         lFsqCEOdIvRDL1U5v4xzrlSq5bOxi+nUR1Cxm/8QQsqhNvw2c/BuraZ63SYMepMVW81y
+         T9IMkbfCYnJiW/LIrspnNqHhnBbI6gvPrEC4f8DOGzxnbLJrH05EAO2jNg8kq60x/BmL
+         a1tg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678643013;
+        d=1e100.net; s=20210112; t=1678643083;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=GqdbbfsYH3A0BwuMoZ160BBHfFhhZcuHQkbZCTYU1CM=;
-        b=FYi81t8JTbD32ipe0upV9mvTznVb+JH7ox70gOAAIHpXsRbw0aRc9tDAi9tSQk0hdq
-         3xUywL6OmqJ1uL19HiPYCPZzo0tqQzAsE0WcsJpECTSYayj0wgHSGdr1+BObUe0lsuWI
-         Ei/IzBQucz6G/hg7snaRnBw0bEoL273QnBXtj/wl0BxHK+BPjIowTT7gCbHsm9x3db5T
-         R8FzLUPtD1/jwZ2e+PvGU6DnkK1PCJHDeZiZ/WTjDpMhvGGO4g9mzZo7K1P11g7k2qMH
-         G2pdcmaHk5GwdaYdnWfevIH7ENK40zUDZaMmiHT0rE2ZfYfKj5QaA1d/TFZOVC1rThf3
-         1u5g==
-X-Gm-Message-State: AO0yUKUW0DWW5BnkETihN0JgXp5jH4L2z02B8eX1l0Mey29R6mFzg9W+
-        BArAM7MGyw8UwrDQcP3HGmw=
-X-Google-Smtp-Source: AK7set9sNtnfZCx+NPgAMKMwxo7sXzK5H6QNpB8kVlp3tNOCqVtteceMPBdEZzLOzi5eIFWKhoVpRQ==
-X-Received: by 2002:a4a:6f03:0:b0:525:58f7:cbef with SMTP id h3-20020a4a6f03000000b0052558f7cbefmr15652779ooc.2.1678643013475;
-        Sun, 12 Mar 2023 10:43:33 -0700 (PDT)
+        bh=SKG1lI+0STMCFJtaydoqd1RU3Z9cyR3Jq7a+wFOPE4o=;
+        b=sF6E4JnyGQASktAdzPRxN2yE77w4TgJDX+lwkSiBqJjaqGrLZuPZLRl0VThP4ERJ+2
+         xlgE3mt3X9mkmPS/ZQImGa+EBISC9mq626iwIJt6HMKYCHLmmsm8BYiYSHdN4Lu1PRYA
+         4H1/8Em+JrP3E8jwBGXDCYyYi8hsF2cgRtqwlYjB2oGD1t7SQHfCNk0X+Ukhseqjcemc
+         GPSZgxEXPoO0bMdpqgTIFh+GB7nddVQo0krg/lqiTauniyhpMz/VtLiSZeUiZzwh/vJQ
+         +zktaMk7w2lNdMVnT6dVEEu1W33ehL0g9fnk4cYAquVLbeyGc//aVF0cYlyupeXUd8XV
+         LyKA==
+X-Gm-Message-State: AO0yUKVXxZOA37h5itM3sinIpCfpW9VLbjuBx2R+NAo5XGBoUfHc8m3n
+        jqVKP3ecY+McV+MWMCDsgtk=
+X-Google-Smtp-Source: AK7set+Y/5JDt+MN0WDjWCCFX/9iLelnILZ/WEnZ9pvrKa/IcoDk1bcmk33RN1dmFhO7RFUKAn49Iw==
+X-Received: by 2002:a05:6870:414e:b0:16d:ccf9:bb4d with SMTP id r14-20020a056870414e00b0016dccf9bb4dmr18984287oad.39.1678643082970;
+        Sun, 12 Mar 2023 10:44:42 -0700 (PDT)
 Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x67-20020a4a4146000000b00525240c6149sm2251265ooa.31.2023.03.12.10.43.32
+        by smtp.gmail.com with ESMTPSA id bf17-20020a0568700a1100b0017197629658sm2212862oac.56.2023.03.12.10.44.42
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:43:33 -0700 (PDT)
+        Sun, 12 Mar 2023 10:44:42 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 10:43:32 -0700
+Date:   Sun, 12 Mar 2023 10:44:41 -0700
 From:   Guenter Roeck <linux@roeck-us.net>
 To:     Leonard Anderweit <leonard.anderweit@gmail.com>
 Cc:     linux-hwmon@vger.kernel.org,
@@ -59,15 +59,15 @@ Cc:     linux-hwmon@vger.kernel.org,
         Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
         Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 3/6] hwmon: (aquacomputer_d5next) Device dependent
- control report settings
-Message-ID: <450cf27e-358b-4f26-ae7d-7216e1681ad3@roeck-us.net>
+Subject: Re: [PATCH v2 4/6] hwmon: (aquacomputer_d5next) Add infrastructure
+ for Aquaero control reports
+Message-ID: <210eddaf-cbd1-473e-920d-1c76c2923ee3@roeck-us.net>
 References: <20230214220221.15003-1-leonard.anderweit@gmail.com>
- <20230214220221.15003-4-leonard.anderweit@gmail.com>
+ <20230214220221.15003-5-leonard.anderweit@gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230214220221.15003-4-leonard.anderweit@gmail.com>
+In-Reply-To: <20230214220221.15003-5-leonard.anderweit@gmail.com>
 X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
         FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
@@ -79,76 +79,103 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:02:18PM +0100, Leonard Anderweit wrote:
-> Add device dependent control report id, secondary control report id, secondary
-> control report size and secondary control report for devices which need
-> different control report settings. All currently supported devices use the same
-> values.
+On Tue, Feb 14, 2023 at 11:02:19PM +0100, Leonard Anderweit wrote:
+> Add information on the Aquacomputer Aquaero control report and disable the
+> control report checksum for Aquaero. The Aquaero does not use the checksum so
+> it must be disabled to avoid overwriting the last two bytes of the control
+> report.
 > 
 > Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
 
-Applied. Same comment as before - please check line length in description.
+Applied. And again:
 
-Thanks,
+WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
+#85:
+control report checksum for Aquaero. The Aquaero does not use the checksum so
+
+Please keep in mind that you are causing extra work for me.
+
 Guenter
 
 > ---
->  drivers/hwmon/aquacomputer_d5next.c | 19 ++++++++++++++-----
->  1 file changed, 14 insertions(+), 5 deletions(-)
+>  drivers/hwmon/aquacomputer_d5next.c | 31 ++++++++++++++++++++++++-----
+>  1 file changed, 26 insertions(+), 5 deletions(-)
 > 
 > diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index f0c036d38e91..535d2fc0e55c 100644
+> index 535d2fc0e55c..eb185318098a 100644
 > --- a/drivers/hwmon/aquacomputer_d5next.c
 > +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -441,6 +441,10 @@ struct aqc_data {
->  	const char *name;
+> @@ -56,6 +56,7 @@ static const char *const aqc_device_names[] = {
+>  #define SERIAL_PART_OFFSET		2
 >  
->  	int status_report_id;	/* Used for legacy devices, report is stored in buffer */
-> +	int ctrl_report_id;
-> +	int secondary_ctrl_report_id;
-> +	int secondary_ctrl_report_size;
-> +	u8 *secondary_ctrl_report;
+>  #define CTRL_REPORT_ID			0x03
+> +#define AQUAERO_CTRL_REPORT_ID		0x0b
 >  
->  	int buffer_size;
->  	u8 *buffer;
-> @@ -513,7 +517,7 @@ static int aqc_get_ctrl_data(struct aqc_data *priv)
+>  /* The HID report that the official software always sends
+>   * after writing values, currently same for all devices
+> @@ -67,6 +68,14 @@ static u8 secondary_ctrl_report[] = {
+>  	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
+>  };
+>  
+> +/* Secondary HID report values for Aquaero */
+> +#define AQUAERO_SECONDARY_CTRL_REPORT_ID	0x06
+> +#define AQUAERO_SECONDARY_CTRL_REPORT_SIZE	0x07
+> +
+> +static u8 aquaero_secondary_ctrl_report[] = {
+> +	0x06, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00
+> +};
+> +
+>  /* Report IDs for legacy devices */
+>  #define POWERADJUST3_STATUS_REPORT_ID	0x03
+>  
+> @@ -94,6 +103,7 @@ static u8 secondary_ctrl_report[] = {
+>  #define AQUAERO_NUM_VIRTUAL_SENSORS		8
+>  #define AQUAERO_NUM_CALC_VIRTUAL_SENSORS	4
+>  #define AQUAERO_NUM_FLOW_SENSORS		2
+> +#define AQUAERO_CTRL_REPORT_SIZE		0xa93
+>  
+>  /* Sensor report offsets for Aquaero fan controllers */
+>  #define AQUAERO_SENSOR_START			0x65
+> @@ -531,12 +541,16 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
 >  	int ret;
+>  	u16 checksum;
 >  
->  	memset(priv->buffer, 0x00, priv->buffer_size);
-> -	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
-> +	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
->  				 HID_FEATURE_REPORT, HID_REQ_GET_REPORT);
->  	if (ret < 0)
->  		ret = -ENODATA;
-> @@ -535,15 +539,15 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
->  	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
+> -	/* Init and xorout value for CRC-16/USB is 0xffff */
+> -	checksum = crc16(0xffff, priv->buffer + priv->checksum_start, priv->checksum_length);
+> -	checksum ^= 0xffff;
+> +	/* Checksum is not needed for Aquaero */
+> +	if (priv->kind != aquaero) {
+> +		/* Init and xorout value for CRC-16/USB is 0xffff */
+> +		checksum = crc16(0xffff, priv->buffer + priv->checksum_start,
+> +				 priv->checksum_length);
+> +		checksum ^= 0xffff;
+>  
+> -	/* Place the new checksum at the end of the report */
+> -	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
+> +		/* Place the new checksum at the end of the report */
+> +		put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
+> +	}
 >  
 >  	/* Send the patched up report back to the device */
-> -	ret = hid_hw_raw_request(priv->hdev, CTRL_REPORT_ID, priv->buffer, priv->buffer_size,
-> +	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
->  				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
->  	if (ret < 0)
->  		return ret;
+>  	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
+> @@ -1280,6 +1294,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->num_flow_sensors = AQUAERO_NUM_FLOW_SENSORS;
+>  		priv->flow_sensors_start_offset = AQUAERO_FLOW_SENSORS_START;
 >  
->  	/* The official software sends this report after every change, so do it here as well */
-> -	ret = hid_hw_raw_request(priv->hdev, SECONDARY_CTRL_REPORT_ID, secondary_ctrl_report,
-> -				 SECONDARY_CTRL_REPORT_SIZE, HID_FEATURE_REPORT,
-> -				 HID_REQ_SET_REPORT);
-> +	ret = hid_hw_raw_request(priv->hdev, priv->secondary_ctrl_report_id,
-> +				 priv->secondary_ctrl_report, priv->secondary_ctrl_report_size,
-> +				 HID_FEATURE_REPORT, HID_REQ_SET_REPORT);
->  	return ret;
->  }
->  
-> @@ -1447,6 +1451,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->serial_number_start_offset = AQC_SERIAL_START;
->  		priv->firmware_version_offset = AQC_FIRMWARE_VERSION;
->  
-> +		priv->ctrl_report_id = CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_id = SECONDARY_CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_size = SECONDARY_CTRL_REPORT_SIZE;
-> +		priv->secondary_ctrl_report = secondary_ctrl_report;
+> +		priv->buffer_size = AQUAERO_CTRL_REPORT_SIZE;
 > +
->  		if (priv->kind == aquastreamult)
->  			priv->fan_structure = &aqc_aquastreamult_fan_structure;
->  		else
+>  		priv->temp_label = label_temp_sensors;
+>  		priv->virtual_temp_label = label_virtual_temp_sensors;
+>  		priv->calc_virt_temp_label = label_aquaero_calc_temp_sensors;
+> @@ -1443,6 +1459,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
+>  		priv->firmware_version_offset = AQUAERO_FIRMWARE_VERSION;
+>  
+>  		priv->fan_structure = &aqc_aquaero_fan_structure;
+> +
+> +		priv->ctrl_report_id = AQUAERO_CTRL_REPORT_ID;
+> +		priv->secondary_ctrl_report_id = AQUAERO_SECONDARY_CTRL_REPORT_ID;
+> +		priv->secondary_ctrl_report_size = AQUAERO_SECONDARY_CTRL_REPORT_SIZE;
+> +		priv->secondary_ctrl_report = aquaero_secondary_ctrl_report;
+>  		break;
+>  	case poweradjust3:
+>  		priv->status_report_id = POWERADJUST3_STATUS_REPORT_ID;
