@@ -2,87 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C9F86B65D2
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 13:05:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 738196B65D7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 13:06:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbjCLMFk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 08:05:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39414 "EHLO
+        id S229814AbjCLMGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 08:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbjCLMFi (ORCPT
+        with ESMTP id S229623AbjCLMGG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 08:05:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9DF52212A;
-        Sun, 12 Mar 2023 05:05:37 -0700 (PDT)
+        Sun, 12 Mar 2023 08:06:06 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA12C212A;
+        Sun, 12 Mar 2023 05:06:04 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4219960E9F;
-        Sun, 12 Mar 2023 12:05:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5791CC433D2;
-        Sun, 12 Mar 2023 12:05:36 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 89D6BB80B01;
+        Sun, 12 Mar 2023 12:06:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D05E7C433EF;
+        Sun, 12 Mar 2023 12:06:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678622736;
-        bh=oKN5Z54f3+6zfJE+zzdxA36xTB8hfAgEC5GmVv/2Fio=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=G+ptG7hhF2cM4XdL71UNPqRg5QphSUdpf7i1tL0rW2wpRkNNrcCygSh65w8YRBlOG
-         cCKsBf8VELb4SPkiME+N/AmH1C82fADgoTpwsZPkjJoLcA8TXsfybxzE5IosfOqru7
-         FQosJNtJs0fOZuJkn79nbG6MvTOPobyQHjwD3ggI=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        torvalds@linux-foundation.org, stable@vger.kernel.org
-Cc:     lwn@lwn.net, jslaby@suse.cz,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: Re: Linux 5.15.101
-Date:   Sun, 12 Mar 2023 13:05:25 +0100
-Message-Id: <1678622725100147@kroah.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <167862272511368@kroah.com>
-References: <167862272511368@kroah.com>
+        s=korg; t=1678622762;
+        bh=Q/ldCMrCGfGTco0Sl12AyoNJlMKJhtt2MH6rp55F/O8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LdrGpE3p+t39oWdprpiQz8WAZamifCnf75WCojmAK2r/Cflzo6wLv4gIl0mCsg60a
+         sY08BCscRinAmL5/GXx5SoAbPOJ1Cipi2PAoHXp5P8wSLp+tP+a6aCpVEFJfke32jI
+         +g/0rgaZDemPNShCUfckoMst9aZ+rppcsPh65GwI=
+Date:   Sun, 12 Mar 2023 13:05:59 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     "A.P. Jo." <apjo@tuta.io>
+Cc:     Stable <stable@vger.kernel.org>,
+        Linux Kernel <linux-kernel@vger.kernel.org>
+Subject: Re: Bricked LTS Kernel: Questionable i915 Commit
+Message-ID: <ZA3AJ+dZgYOEkHSt@kroah.com>
+References: <NQJqG8n--3-9@tuta.io>
+ <ZA2zkz8J6fuJsisw@kroah.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZA2zkz8J6fuJsisw@kroah.com>
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-diff --git a/Makefile b/Makefile
-index ef2defa6bce2..2db3f373b81e 100644
---- a/Makefile
-+++ b/Makefile
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- VERSION = 5
- PATCHLEVEL = 15
--SUBLEVEL = 100
-+SUBLEVEL = 101
- EXTRAVERSION =
- NAME = Trick or Treat
- 
-diff --git a/drivers/gpu/drm/i915/gt/intel_ring.c b/drivers/gpu/drm/i915/gt/intel_ring.c
-index 6499f8ba953a..7c4d5158e03b 100644
---- a/drivers/gpu/drm/i915/gt/intel_ring.c
-+++ b/drivers/gpu/drm/i915/gt/intel_ring.c
-@@ -51,7 +51,7 @@ int intel_ring_pin(struct intel_ring *ring, struct i915_gem_ww_ctx *ww)
- 	if (unlikely(ret))
- 		goto err_unpin;
- 
--	if (i915_vma_is_map_and_fenceable(vma) && !HAS_LLC(vma->vm->i915)) {
-+	if (i915_vma_is_map_and_fenceable(vma)) {
- 		addr = (void __force *)i915_vma_pin_iomap(vma);
- 	} else {
- 		int type = i915_coherent_map_type(vma->vm->i915, vma->obj, false);
-@@ -96,7 +96,7 @@ void intel_ring_unpin(struct intel_ring *ring)
- 		return;
- 
- 	i915_vma_unset_ggtt_write(vma);
--	if (i915_vma_is_map_and_fenceable(vma) && !HAS_LLC(vma->vm->i915))
-+	if (i915_vma_is_map_and_fenceable(vma))
- 		i915_vma_unpin_iomap(vma);
- 	else
- 		i915_gem_object_unpin_map(vma->obj);
+On Sun, Mar 12, 2023 at 12:12:19PM +0100, Greg KH wrote:
+> On Sun, Mar 12, 2023 at 09:04:01AM +0100, A.P. Jo. wrote:
+> > Dear Linux dev community,
+> > 
+> > 5.15.99 LTS and higher can't boot on many laptops using Intel graphics.
+> > 
+> > Originally spotted using Alpine Linux, see: https://gitlab.alpinelinux.org/alpine/aports/-/issues/14704.
+> > Seems to have been traced to commit 4eb6789f9177a5fdb90e1b7cdd4b069d1fb9ce45, see i915 git issue: https://gitlab.freedesktop.org/drm/intel/-/issues/8284.
+> > 
+> > Suggest releasing with patch undone or fixed.
+> 
+> There's a second report of this here:
+> 	https://lore.kernel.org/r/d955327b-cb1c-4646-76b9-b0499c0c64c6@manjaro.org
+> I'll go revert this and push out a new release in an hour or so, thanks!
+
+Should be fixed in 5.15.101.  If not, please let us know.
+
+thanks,
+
+greg k-h
