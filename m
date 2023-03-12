@@ -2,182 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66FB26B64F1
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE8066B64F4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:36:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCLKe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47860 "EHLO
+        id S229996AbjCLKgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:36:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCLKe4 (ORCPT
+        with ESMTP id S229473AbjCLKgK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:34:56 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2646B38021
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:34:55 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id y15so2665880lfa.7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:34:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=wirenboard.com; s=google; t=1678617293;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5NjeFdwlyNeSLCFXY+XpjZWno9lnlrc/1OmtKHyQfQ=;
-        b=b+IxIOrtxlSRaT2Tdxzvl7iucWQz+o+YdTNpv7ySD284AzTsfoOYfuy/M58yHAhSHN
-         vjueTRrSEW4PxamcGl+xKeGP8knABaG7m2la4FkNn8mIL9b9uzi8zDe2fdwY53xPDHJu
-         XBZhdfx6ZgMu7rphPT2SSFmvxDh2VeJTzhqx7WCZNDhAbwqKtOMYxdhpf8WF20SMBZzS
-         NITOhOsb7eh0PJ4KHiKxTNU/Ub0wMqEjJdw1fyAmr3PkAr016+UvQhOMjX4oFVCDDRGw
-         SXtoYo5ABjZzOtZ+ug3TrjiFo5H8/4uuYBnVDDQe/+Yq1RFS9Ab7l9/wlfWw+WBfLEq+
-         S1FA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678617293;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+5NjeFdwlyNeSLCFXY+XpjZWno9lnlrc/1OmtKHyQfQ=;
-        b=SGfVKpXLC33FOWH5ljCHrIn+JDPo1BxqPOwJVKWqo9PSgYgSuWNnDOG4BajU/EJbim
-         ElkABB+ry4w+RRGhE5NtUpgk1xgrAd0v6/1HZiSRiPUW6/1iTLFBkHPfPqQvxGb5iBBR
-         JD72jYBhpkmPiyE9RirgODkcnuiI2doQ1/LMK9lFVOtktlcrpG1+ET85m8fcvNAc4gyG
-         8EV2TPg1R2oE1ajkwvBvQKyGV0BkK5n4ynzF1IAgnBMYGY3a/1sSymr+qeQwiixFA+rZ
-         UckcHCh1O18Sw363WUddN3ruHMVBDSW21SQYHSXtq6+EjxX5V6+39+MOgbX63wPxITj1
-         1IBA==
-X-Gm-Message-State: AO0yUKVku+Rb8zES4kpP3CpZlMmVwAIlXYVUH1k9QNDCEEAmcNZYgKG4
-        gXMrVaxFSOoreGfPESR7K4AOiQ==
-X-Google-Smtp-Source: AK7set+bWpKE1JVSk+k/Kfxq9TW5LJUYzgbfVe3UJsr8ox7SC3pzNIE44qA/3RKXbFNx3X80mp8ySg==
-X-Received: by 2002:a05:6512:118d:b0:4dc:75c3:9a90 with SMTP id g13-20020a056512118d00b004dc75c39a90mr2099908lfr.11.1678617293367;
-        Sun, 12 Mar 2023 03:34:53 -0700 (PDT)
-Received: from [192.168.1.9] ([78.109.72.44])
-        by smtp.googlemail.com with ESMTPSA id w6-20020a05651203c600b004cc7acfbd2bsm606884lfp.287.2023.03.12.03.34.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 03:34:52 -0700 (PDT)
-Message-ID: <4821b498-ceff-ca61-db94-29839cf5e0be@wirenboard.com>
-Date:   Sun, 12 Mar 2023 13:34:50 +0300
+        Sun, 12 Mar 2023 06:36:10 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E63C38021;
+        Sun, 12 Mar 2023 03:36:07 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pbJ3W-0002pE-Bm; Sun, 12 Mar 2023 11:35:58 +0100
+Message-ID: <6a916781-7b84-924f-bdc6-0f284610bead@leemhuis.info>
+Date:   Sun, 12 Mar 2023 11:35:57 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCHv3 3/4] dt-bindings: wiegand: add GPIO bitbanged Wiegand
- controller
-Content-Language: en-GB
-To:     =?UTF-8?Q?Martin_Za=c5=a5ovi=c4=8d?= <m.zatovic1@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        gregkh@linuxfoundation.org, airlied@redhat.com, dipenp@nvidia.com,
-        treding@nvidia.com, mwen@igalia.com, fmdefrancesco@gmail.com,
-        arnd@arndb.de, bvanassche@acm.org, ogabbay@kernel.org,
-        axboe@kernel.dk, mathieu.poirier@linaro.org, linux@zary.sk,
-        masahiroy@kernel.org, yangyicong@hisilicon.com,
-        dan.j.williams@intel.com, jacek.lawrynowicz@linux.intel.com,
-        benjamin.tissoires@redhat.com, devicetree@vger.kernel.org,
-        furong.zhou@linux.intel.com, andriy.shevchenko@intel.com,
-        linus.walleij@linaro.org
-References: <20230301142835.19614-1-m.zatovic1@gmail.com>
- <20230301142835.19614-4-m.zatovic1@gmail.com>
-From:   Evgeny Boger <boger@wirenboard.com>
-Organization: Wiren Board
-In-Reply-To: <20230301142835.19614-4-m.zatovic1@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
+Content-Language: en-US, de-DE
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        reach622@mailcuk.com, Bell <1138267643@qq.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <20230228024439.27156-1-mario.limonciello@amd.com>
+ <Y/1wuXbaPcG9olkt@kernel.org>
+ <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
+ <85df6dda-c1c9-f08e-9e64-2007d44f6683@leemhuis.info>
+ <ZA0sScO47IMKPhtG@kernel.org>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <ZA0sScO47IMKPhtG@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678617367;4439cfe8;
+X-HE-SMSGID: 1pbJ3W-0002pE-Bm
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/1/23 17:28, Martin Zaťovič wrote:
-> GPIO bitbanged Wiegand controller requires definitions of GPIO
-> lines to be used on top of the common Wiegand properties. Wiegand
-> utilizes two such lines - D0(low data line) and D1(high data line).
->
-> Acked-by: Linus Walleij <linus.walleij@linaro.org>
-> Signed-off-by: Martin Zaťovič <m.zatovic1@gmail.com>
-> ---
->   .../bindings/wiegand/wiegand-gpio.yaml        | 51 +++++++++++++++++++
->   MAINTAINERS                                   |  5 ++
->   2 files changed, 56 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml
->
-> diff --git a/Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml b/Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml
-> new file mode 100644
-> index 000000000000..df28929f6dae
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml
-> @@ -0,0 +1,51 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/wiegand/wiegand-gpio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: GPIO bitbanged Wiegand interface devicetree bindings
-> +
-> +maintainers:
-> +  - Martin Zaťovič <m.zatovic1@gmail.com>
-> +
-> +description:
-> +  This represents the GPIO lines used for bit-banged Wiegand on dedicated GPIO
-> +  lines.
-> +
-> +allOf:
-> +  - $ref: /schemas/wiegand/wiegand-controller.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: wiegand-gpio
-> +
-> +  data-hi-gpios:
-> +    description: GPIO used as Wiegands data-hi line.
-> +    maxItems: 1
-> +
-> +  data-lo-gpios:
-> +    description: GPIO used as Wiegands data-lo line.
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - data-hi-gpios
-> +  - data-lo-gpios
-In my experience, the data lines are usually labeled D0/D1, sometimes 
-DATA0/DATA1. Data high/data low marking is very rare.
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    wiegand@f00 {
-> +        compatible = "wiegand-gpio";
-> +        pulse-len-us = <50>;
-> +        interval-len-us = <2000>;
-> +        frame-gap-us = <2000>;
-> +        data-lo-gpios = <&gpio2 6 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> +        data-hi-gpios = <&gpio2 7 (GPIO_ACTIVE_HIGH|GPIO_OPEN_DRAIN)>;
-> +
-> +        /* devices */
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 23a67b32f095..91e573466d6b 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22519,6 +22519,11 @@ F:	Documentation/devicetree/bindings/wiegand/wiegand-controller.yaml
->   F:	drivers/wiegand/wiegand.c
->   F:	include/linux/wiegand.h
->   
-> +WIEGAND GPIO BITBANG DRIVER
-> +M:	Martin Zaťovič <m.zatovic1@gmail.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/wiegand/wiegand-gpio.yaml
-> +
->   WIIMOTE HID DRIVER
->   M:	David Rheinsberg <david.rheinsberg@gmail.com>
->   L:	linux-input@vger.kernel.org
+On 12.03.23 02:35, Jarkko Sakkinen wrote:
+> On Fri, Mar 10, 2023 at 06:43:47PM +0100, Thorsten Leemhuis wrote:
+>> [adding Linux to the list of recipients]
+>>
+>> On 08.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+>>> for once, to make this easily accessible to everyone.
+>>>
+>>> Jarkko, thx for reviewing and picking below fix up. Are you planning to
+>>> send this to Linus anytime soon, now that the patch was a few days in
+>>> next? It would be good to get this 6.1 regression finally fixed, it
+>>> already took way longer then the time frame
+>>> Documentation/process/handling-regressions.rst outlines for a case like
+>>> this. But well, that's how it is sometimes...
+>>
+>> Linus, would you consider picking this fix up directly from here or from
+>> linux-next (8699d5244e37)? It's been in the latter for 9 days now
+>> afaics. And the issue seems to bug more than just one or two users, so
+>> it IMHO would be good to get this finally resolved.
+>>
+>> Jarkko didn't reply to my inquiry, guess something else keeps him busy.
+> 
+> That's a bit arrogant. You emailed only 4 days ago.
 
--- 
-Kind regards,
-Evgeny Boger
-CTO @ Wiren Board
+My deepest apologies if that "guess something else keeps him busy"
+triggered your response, what I wanted to say is "I don't consider the
+lack of a response a problem, that's how it is for all of us sometimes".
+Sorry, that might not have been the best way to express that.
 
+If my prodding itself was the cause: well, I think that's what I should
+do in this case. That stance developed quickly when I started doing
+regression tracking, as I noticed one thing:
+
+Image a regression caused by a commit merged for 5.11-rc1 is reported a
+day or two after 5.11-rc7 is released. Imagine further a fix is posted
+for review two or three days after 5.11-rc8 is out. From what I noticed
+quite a few of those fixes (not all of course) make it to mainline in
+time for the release of 5.11. But the picture looked totally different
+when the fix was posted for review shortly *after* 5.11 was out, as I
+noticed quite a few of those were only mainlined 9 or 10 weeks later for
+5.13-rc1 (and only then can be backported to 5.11.y and 5.12.y).
+
+[above was just a hypothetical example with the worst timing to
+illustrate the core problem, the timelines are different in case of the
+fTPM issue]
+
+From my understanding of things that's not how it should be (unless
+there are strong reasons in the individual case). That's why I'm working
+against that. Still working on optimizing when/how I ask, as I'm not yet
+happy with how I do that.
+
+Don't worry, I use my best judgment in that process; if the fix is
+complex and the next merge window is near, I might let it slip – OTOH if
+it's something that apparently bugs quite a few people, I prod
+developers and maintainers more quickly & often, like I did in this case.
+
+In the end situations like the one outlined above lead me to writing the
+section "Prioritize work on fixing regressions" in
+Documentation/process/handling-regressions.rst (
+https://docs.kernel.org/process/handling-regressions.html ). Greg acked
+it; Linus never commented on it, not sure if he looked at it when he
+merged that. But I have no idea how developers actually have seen it
+and/or take it seriously. But from what I saw it already helped somewhat.
+
+> I'm open to do PR for rc3 with the fix, if it cannot wait to v6.4 pr.
+
+From later in this thread I see that you plan to do that now, thus:
+
+many thx!
+
+Ciao, Thorsten
