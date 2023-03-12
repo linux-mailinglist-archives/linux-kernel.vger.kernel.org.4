@@ -2,141 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A66A06B6AAD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24A126B6AB3
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:36:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCLTdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54438 "EHLO
+        id S230217AbjCLTgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCLTdD (ORCPT
+        with ESMTP id S229671AbjCLTgA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:33:03 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D011FD7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 12:33:01 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id cy23so40470335edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 12:33:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678649580;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZB/LIIyZjPl2nWkKXjfWGUMD4MI6EoT8Bzwl9SY7KhY=;
-        b=MrPKoI+RZmJUmxugnHn1C6zBsclcPIRqSQIpFdvDQWFc8ty5HTRo5iYLH/d5UG/gyb
-         kPyjpY78j2w720EMkpoB6I7ZWVP+IzYBN9vp4dUuGk0/o7vwfiBdk1dTF3U3V2bhszQd
-         VEHo2WLlfWKiqLDrIca3XhW3Su3FUcyWDZ7EAzvJc+NeMTmMYFqpbQz6VbdkTtBYlN52
-         iGJZC7f5mMXM1vq+r9bb8bTDxsdQvAefTlz8QpMLdbEWtDl51Fi6tILaN07dQ05LE9Ul
-         yg/CS4awsTAVTiyYZUdzLrTb7Y1g1A71IDIFdG8mFKAHas8q5kPUbdEtTLECk+DnVgoX
-         inmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678649580;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZB/LIIyZjPl2nWkKXjfWGUMD4MI6EoT8Bzwl9SY7KhY=;
-        b=axcZ3RsqhE6rBfMbGtdbgVbX1GfiMFHJFEVFLq0CGpM7mfYwa7cnsquZ8Azxr+G/f9
-         XY3RxL3R9HdNXrdCk+c8HfSRdNsVZcxb0Aj09l/xkrdyJYho+3J8AWt5Lbe9uienaX5q
-         OGrXXnRlpPv9bIbjNUem43UWlsoaO6jJblh8RW2p3Mod1OvmWPT6ny3sDbav9cjvRgjY
-         8a9RI7HE/8UZAujBhNF3Yelhj/qr5azqFW5st+UYJoKk0IYVokuEpOY5wJMUpMQKv0MT
-         uGky6q/YVtp1KUNYwSmSppTburXxdk+bWPWujiDVUBdGbxzAMXS+iDsLuzu0NoGENXzs
-         a7wg==
-X-Gm-Message-State: AO0yUKVnasyl8p3tY02+aKXO8hVBNENjeYPFyhBwIoe/wDfGZ0SSoSyg
-        c0+VeK/aejX8P1mNNeCmOzAsLg==
-X-Google-Smtp-Source: AK7set8K8Oraek/eD3gW5AGcq/GufMiREyTE9pJ/+3gLzsteBCdvKG+cej39DT2gi6LwAK12DzD5DA==
-X-Received: by 2002:a05:6402:1207:b0:4aa:a4dd:9746 with SMTP id c7-20020a056402120700b004aaa4dd9746mr27477650edw.39.1678649579976;
-        Sun, 12 Mar 2023 12:32:59 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id g26-20020a50d5da000000b004fc86fcc4b3sm325013edj.80.2023.03.12.12.32.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 12:32:59 -0700 (PDT)
-Message-ID: <688b6817-9d57-6c92-1ce0-6f97cb8c4cc2@linaro.org>
-Date:   Sun, 12 Mar 2023 20:32:58 +0100
+        Sun, 12 Mar 2023 15:36:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491A339CC8;
+        Sun, 12 Mar 2023 12:35:59 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E0BA0B80D5C;
+        Sun, 12 Mar 2023 19:35:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0355C433EF;
+        Sun, 12 Mar 2023 19:35:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678649756;
+        bh=Vu0VeFs97BU4JOALMNRa8KqBt7uKbnwhF5S6J/1/OWE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Uqv0EmQCw4I3C/NFaXEfT/hc2siUGMJ1+LD/xcOUd+yXZFZ+m82sfLtjyyFQmPlm5
+         oW3+4Ud+od6haim1YSvtXAmwY6GvjzhtXH+AwYnL7nNfSbrwbUGjKBH4QC1sG6tSKp
+         6VRsfoi6oLlx3ngPHC8kh0TpFY2AOWiv/MoQHnEzXRG+Nd1MOgBZ7n051q4wfjhBFi
+         NfoZ2EqC5Vu4Mi3mP5+6PjHpMUVAzMwi8T5RrpZQ8OjetoFXVq/m3n7/EubU9OuGUa
+         Obas5GcM6iPq0bmHYopSHF5vCC2Cqn7K17+9xn+p319OTx5Jfok/gs2fwIeul/4rPD
+         69qWaoUkrbKdQ==
+Date:   Sun, 12 Mar 2023 19:35:53 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: selftests: Add coverage of MTE system registers
+Message-ID: <ZA4pmVALRVr0NuIU@sirena.org.uk>
+References: <20230308-kvm-arm64-test-mte-regs-v1-1-f92a377e486f@kernel.org>
+ <87edpu5klk.wl-maz@kernel.org>
+ <ZA3jISc0DH+7swbI@sirena.org.uk>
+ <87v8j63rr0.wl-maz@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Jean Delvare <jdelvare@suse.com>,
-        Eric Tremblay <etremblay@distech-controls.com>,
-        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
- <cd9067c7-0b99-4d62-9d5a-cdc028f33ba5@roeck-us.net>
- <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
- <9343421e-d35d-8d99-1ea7-1f81e28fbabb@roeck-us.net>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <9343421e-d35d-8d99-1ea7-1f81e28fbabb@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="WJHcUvzHOCQ+71Jf"
+Content-Disposition: inline
+In-Reply-To: <87v8j63rr0.wl-maz@kernel.org>
+X-Cookie: Single tasking: Just Say No.
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 19:48, Guenter Roeck wrote:
-> On 3/12/23 11:08, Krzysztof Kozlowski wrote:
->> On 12/03/2023 19:06, Guenter Roeck wrote:
->>> On Sat, Mar 11, 2023 at 12:16:09PM +0100, Krzysztof Kozlowski wrote:
->>>> The driver can be compile tested with !CONFIG_OF making certain data
->>>> unused:
->>>>
->>>>    drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
->>>>
->>>
->>> How do you trigger that ? The driver depends on OF_GPIO which
->>> in turn depends on OF. Arguably that means that of_match_ptr()
->>> doesnot really make sense, but still I don't see how you can
->>> trigger the above error message.
->>
->> I can drop of_match_ptr, it's indeed in many cases not needed.
->>
->> I just build x86_64 allyesconfig minus OF, with W=1.
->>
-> 
-> x86_64 allyesconfig minus OF minus results in SENSORS_GPIO_FAN being
-> deselected (it doesn't show up in the configuration anymore at all
-> after "make olddefconfig").
-> 
-> $ make allyesconfig
-> $ grep SENSORS_GPIO_FAN .config
-> CONFIG_SENSORS_GPIO_FAN=y
-> $ sed -i -e 's/CONFIG_OF=y/# CONFIG_OF is not set/' .config
-> $ make olddefconfig
-> #
-> # configuration written to .config
-> #
-> $ grep SENSORS_GPIO_FAN .config
-> $
-> 
-> I suspect what you did is to disable CONFIG_OF, and then you built
-> the driver without realizing that is was deselected.
 
-The driver would not built. I mean, I did not cheat here to built it
-with incorrect config.
+--WJHcUvzHOCQ+71Jf
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-I rather suspect that config is broken due to:
-WARNING: unmet direct dependencies detected for OF_GPIO
-WARNING: unmet direct dependencies detected for GPIO_SYSCON
-WARNING: unmet direct dependencies detected for MFD_STMFX
+On Sun, Mar 12, 2023 at 03:37:39PM +0000, Marc Zyngier wrote:
+> Mark Brown <broonie@kernel.org> wrote:
+> > On Sun, Mar 12, 2023 at 10:29:11AM +0000, Marc Zyngier wrote:
+> > > Mark Brown <broonie@kernel.org> wrote:
 
-This was next-20230308
+> > combination just for the sake of it.  It's one of those areas
+> > where it's hard to determine if there's an intent behind the
+> > implementation choices made or if they're just whatever someone
+> > happened to write and not particularly important or desired.
 
-> 
->> Do you want to me to drop of_match_ptr?
->>
-> 
-> Yes, sure, that makes more sense. The reason though is that the
-> driver depends on CONFIG_OF=y, not because of the build failure.
+> It *is* desired. We've had cases of flags being reset at the wrong
+> time and leading to issues that would be detected by this test. The
+> PMU stuff is indeed one example, but similar things could happen
+> between SVE+MTE, for example.
 
-I'll send v2 of both patches because anyway dropping of_match_ptr is
-preferred.
+I take it you mean that the current situation where it's only
+covering X and X+PMU cases is not desired and wasn't intentional?
 
-Best regards,
-Krzysztof
+> > > A good first step would be to be able to build these combinations
+> > > dynamically, and only then add new sublists to the mix.
 
+> > That would certainly be a good idea, if we were heading in that
+> > direction I'd also expect negative tests checking that for
+> > example pointer authentication registers don't appear when that's
+> > not enabled.  I'm not sure that it's worth blocking all new
+> > coverage for that though, there is still value in having a bit of
+> > basic coverage even if not all the combinations are covered yet.
+
+> Then where is the incentive to get it fixed? People will just keep
+> piling stuff, and the coverage will increasingly become worse.
+
+It's always possible someone will be interested and keep plugging
+away at improving things over the longer term even without having
+other work blocked.  Sometimes someone will come along explicitly
+trying to improve whatever the thing is, or someone other than
+the person submitting a given patch might see the idea being
+mentioned and be inspired to implement it (that process is how we
+ended up with the ALSA pcm-test program).
+
+The flip side of this approach is that it's encouraging people to
+do the minimum possible in order to reduce the chances that out
+of scope cleanup work gets added on to whatever they were
+originally trying to do, and to avoid doing smaller cleanups if
+they notice anything else that could be improved (especially if
+those things might resuling in something that'd tie up something
+more urgent).  It's not a big deal if it's a small bit of extra
+work, but the more work it is than the original thing the more of
+an impact it can have.
+
+It's a balancing thing - sometimes things do need some push to
+get things done, but on the other hand if it's the only approach
+taken then it can become a bit of a self fulfilling prophecy.
+
+> We have to do it as some point, and now is as good a time as any.
+
+Well, I was just doing a drive by patch here because I noticed
+that MTE wasn't covered, it's not like I'm even looking at MTE.
+Realistically I'm not sure how long it'll be before I have the
+bandwidth for reworking this.  There is some other work where I'd
+get blocked on it, but it's not going to be this release cycle.
+
+--WJHcUvzHOCQ+71Jf
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQOKZYACgkQJNaLcl1U
+h9Bx0Af+MhNB5JQvjPLOVR3tG0fmoNBj4n8e6CcKQBWTemQQkp4z2DGozdSNTHvi
+xw1L/yMB5t+FAsAliuqLbgzjekR+SIo96YtTa0KO8l55TZwjQyYud5+G9lFZPhK1
+eSmfyVY2uTTNdDNWlh7fdL1XTQepdhMpl0k11VJLzi4XoNJ3CEdTWLuoWrfu1mNE
+Jd/qJgkmfmPX2NU2+kRy7vNyhtegDtboo/2Gw61tJGnfHmo1xc5F/Gdgq9e9Dnq3
+sT7mqsORU2J4Mi5pye94xwVuHR7cNqmrxM23LomwbQJBwnnNilcD/rYN1Frp+hHk
+Q9mSQpAOQ8QMOl9F+7WFak13mID1yw==
+=AhwS
+-----END PGP SIGNATURE-----
+
+--WJHcUvzHOCQ+71Jf--
