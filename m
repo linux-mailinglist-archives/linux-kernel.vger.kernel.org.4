@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F8F56B6648
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25FA6B664B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:14:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbjCLNOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
+        id S230052AbjCLNOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCLNOA (ORCPT
+        with ESMTP id S229830AbjCLNOG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:14:00 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3E43474D1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:41 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id y4so9042835edo.2
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:41 -0700 (PDT)
+        Sun, 12 Mar 2023 09:14:06 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75EF250992
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:45 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id fd5so4618012edb.7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678626821;
+        d=linaro.org; s=google; t=1678626823;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Sj4f7lJPyQLZUYqaER8NG8pmeutfonQX6OO2yd6udaw=;
-        b=haj+KB/z1L8vJsua2o1vxxCHMhlVmbnayBqVzvMfHTJAHqgBLjuc/m6H8B4mzyAIUc
-         62++ksMk1muzp7U2CtB7D9P7OT9ysYz5szaVXEfN0VUDh7fKa3EjKwvqTewvN6LY1vAq
-         uKTmvbqcscSxRnCGfJgPFBVKO1QsrON6N8UYL/HmXesYNb1v6+H+yFTBF0epod9JGCNQ
-         sopNnojKfIUzWOI7GKiySLHrr51LfhfDQYqJ93VkkJkXadH8VzeSa2sdUn6eUFC1W+Gu
-         SmuQmjfkoayusufLq8/6NhHZyZBJHob0DzV+rM0eAmzL5eNCUGhmohmS7ijIcVRPEuYc
-         oUVg==
+        bh=htfDeYfzO9faOo04zE1zbbujaGC8tJVc0LLIWYl/0E0=;
+        b=tWY5RRrl1f9P7YtLpyoXwinY0arcCPoS91VIZamWggOmJA3famcby5+OZgSd6D+3Kd
+         eCD1W8dLgS+FdEzVc+bFFH/FHIRuGvvJD4r5wyOs9K3SqnlcXv2Pyztgd4ay1djF+lM+
+         a8t+bz5kIbyuWGHoN4lV0N1gIwWkDD5MJJKQvznugy0sbFLCTV1ZL6gVO+8oOav3hUya
+         khEHKs6qBFkXPUX+JbMR5N7HurufkoAZ9eGkLnCr88gbiFg1n3dRqmAlnsPFAD8f20Uw
+         /KWfOLBYYz6YW1zCZ2igu5mQ5/plPLyE2zQRCvIhjOFZXsYHGYEV4R7EwsQjMFRUaukp
+         k9RQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626821;
+        d=1e100.net; s=20210112; t=1678626823;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Sj4f7lJPyQLZUYqaER8NG8pmeutfonQX6OO2yd6udaw=;
-        b=tMAv5DcPWQopq+JEe07hjbZjC6Qr9bv9rfi2+yHjvlNjHVB/nv223wpQSv/PLfu9ZE
-         GqXkOpJb93CaIqupRnnQgvGw6uRcnF+YGqq2zvW78MAwbrP/cf70+GoB6psL5fVpk9tz
-         esr4HJaxoO5sD9QbiCSEDcSEJ6B4qFC+hb1Kn0rodlgd/8kvPcz6bMtG4F+nIv68GHp9
-         NICLpyiRrA4+AvtKLtEAz50i4csjlgcswfnXXHE+f2BYztZybRsHo/BJx+jxcDb8rdij
-         v4tcUQDNHmWAsAPTF3ZyuomrZ6ge36Kij+2S1bDttWbsAKsLol657m1LIceL1KCa3iQR
-         DNpA==
-X-Gm-Message-State: AO0yUKUNuCcGwBoflmAMnedEFblJarKinFEUj+QXvWMAKvWBDX69cXOJ
-        NsbMvoZ+PBiA9mTsco9LKdsUMA==
-X-Google-Smtp-Source: AK7set/ermG5mPokgNtP87IO4WUZSbcbchCeAghNXlc5QJFzLjHi45cBPkYMiVQWjmGVImmiqhDubQ==
-X-Received: by 2002:a17:906:4c8e:b0:8af:447a:ff8e with SMTP id q14-20020a1709064c8e00b008af447aff8emr28369686eju.20.1678626821501;
-        Sun, 12 Mar 2023 06:13:41 -0700 (PDT)
+        bh=htfDeYfzO9faOo04zE1zbbujaGC8tJVc0LLIWYl/0E0=;
+        b=6IHKRQWvFF+ZO9yPmyvKbN4kQ54/Xh5D+my5gn+P0sGUsfvKAphagMJvOqcv6fsVpw
+         l3MgiZROOWb4Fq2eXWgPo7ClAeqSXsA0LVjW5cE/absUXS5O8DXD3nb8yNLlgYzfNhKJ
+         43aSKf3qxPJe/mC23XZrCBR2BLAoGeiM7F9+SSimigNST0H95hj+HIuyBoT3XLkoIy4o
+         U0momUJVDAENiJTcHY5nTGOI0QdjwCpS7aUuoCdM1KJzFgKQRxVxhh6KnLP7yTQ7BHMo
+         9wafnn9q/Pk3hus+EGcTmC68h318bylT9X1qnBdYCXE0BCsOiLreW5gcqhguO1m3GeMD
+         UBXw==
+X-Gm-Message-State: AO0yUKXbA8Ebw8ZO/dTgZZgV0ROj8ENcEv+YuPKheAZ9iYDZ3sJ2MOu9
+        reNmBuAuLuu2DB9aFMZ97GnsQg==
+X-Google-Smtp-Source: AK7set8sFYEVlwjj96yBoYEcUC6q6umvvTijNA5/w5cBj5OSXSMnBWa3ubt3+oomwUIh2AE5fhzWng==
+X-Received: by 2002:a17:906:d28c:b0:8e5:88ca:ebac with SMTP id ay12-20020a170906d28c00b008e588caebacmr31563524ejb.40.1678626823445;
+        Sun, 12 Mar 2023 06:13:43 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.39
+        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:13:41 -0700 (PDT)
+        Sun, 12 Mar 2023 06:13:43 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Joe Tessler <jrt@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -95,9 +95,9 @@ To:     Joe Tessler <jrt@google.com>,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 09/28] media: platform: samsung: s5p-jpeg: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:12:59 +0100
-Message-Id: <20230312131318.351173-9-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 10/28] media: platform: sti: drop of_match_ptr for ID table
+Date:   Sun, 12 Mar 2023 14:13:00 +0100
+Message-Id: <20230312131318.351173-10-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
@@ -106,7 +106,8 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -118,26 +119,26 @@ used and the of_match_ptr does not have any sense (this also allows ACPI
 matching via PRP0001, even though it might not be relevant here).  This
 also fixes !CONFIG_OF error:
 
-  drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c:3124:34: error: ‘samsung_jpeg_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c:1169:34: error: ‘c8sectpfe_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c | 2 +-
+ drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-index 55814041b8d8..8be8e3596e07 100644
---- a/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-+++ b/drivers/media/platform/samsung/s5p-jpeg/jpeg-core.c
-@@ -3166,7 +3166,7 @@ static struct platform_driver s5p_jpeg_driver = {
- 	.probe = s5p_jpeg_probe,
- 	.remove = s5p_jpeg_remove,
+diff --git a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+index c38b62d4f1ae..67d4db0abd8a 100644
+--- a/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
++++ b/drivers/media/platform/st/sti/c8sectpfe/c8sectpfe-core.c
+@@ -1175,7 +1175,7 @@ MODULE_DEVICE_TABLE(of, c8sectpfe_match);
+ static struct platform_driver c8sectpfe_driver = {
  	.driver = {
--		.of_match_table	= of_match_ptr(samsung_jpeg_match),
-+		.of_match_table	= samsung_jpeg_match,
- 		.name		= S5P_JPEG_M2M_NAME,
- 		.pm		= &s5p_jpeg_pm_ops,
+ 		.name = "c8sectpfe",
+-		.of_match_table = of_match_ptr(c8sectpfe_match),
++		.of_match_table = c8sectpfe_match,
  	},
+ 	.probe	= c8sectpfe_probe,
+ 	.remove	= c8sectpfe_remove,
 -- 
 2.34.1
 
