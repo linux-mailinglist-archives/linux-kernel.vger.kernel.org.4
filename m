@@ -2,90 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2556E6B6A9E
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:23:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C5B6B6AA2
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjCLTXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44414 "EHLO
+        id S230045AbjCLT1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229671AbjCLTXX (ORCPT
+        with ESMTP id S229671AbjCLT1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:23:23 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236272BEED;
-        Sun, 12 Mar 2023 12:23:21 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 547DA1C0AAC; Sun, 12 Mar 2023 20:23:19 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ucw.cz; s=gen1;
-        t=1678648999;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+        Sun, 12 Mar 2023 15:27:14 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16EF83801E;
+        Sun, 12 Mar 2023 12:27:12 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A0F5E22AD4;
+        Sun, 12 Mar 2023 19:27:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678649231;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=ENrYoXUniiIN6iqHVHzqmbQlYLhcvk9pC7sZN0QGjck=;
-        b=OcXwkaUt+n+woOVLMpF6z9ayLdx6dk62EUuISJEF+i3OQR7PW2xKa5mvn6ffgvM+EpU+OP
-        SBieXc0KspIUqyoIdboTyeo2xK+0oZO1E2Dy6wrN5NAAzP+cnIU6/OFN5e/KnVPzwuJNT+
-        N/JcqD6MNU6RWBFZrGNc0H/cV2X68go=
-Date:   Sun, 12 Mar 2023 20:23:18 +0100
-From:   Pavel Machek <pavel@ucw.cz>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        bh=qUrtsf7E1uS5r3l73oow/fqBplYDsc0FAxkqV6bSIM4=;
+        b=B9EPjU4Opsi9Fdb8YbjafTartBRCu68Kfm6kIeht/b8XQ1goQhKHfm2RC3uLOCclUre7cs
+        l/OWj0oc1X9JuBKCG2PhJbxUwQOiXgB0RSiSMzYM9HOoaE0BuI8+uDla5R9QXQxiddR3nW
+        ylgcHejpix4h/oIs7gDGi5BSnlb4hoo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678649231;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qUrtsf7E1uS5r3l73oow/fqBplYDsc0FAxkqV6bSIM4=;
+        b=lI/0GgRXTwhS4mOgsVJrk4Sz9QsSZhoubyXIuBw/Dbk0NigBOXHIqc31ypyDj2N+IJBl9p
+        fG7A8cVVF3uVR9Aw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 0EE871325E;
+        Sun, 12 Mar 2023 19:27:11 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id eoGkAI8nDmS8UwAAMHmgww
+        (envelope-from <pvorel@suse.cz>); Sun, 12 Mar 2023 19:27:11 +0000
+Date:   Sun, 12 Mar 2023 20:27:04 +0100
+From:   Petr Vorel <pvorel@suse.cz>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+Cc:     akpm@linux-foundation.org, gregkh@linuxfoundation.org,
+        keescook@chromium.org, Jason@zx2c4.com, ebiederm@xmission.com,
+        yzaikin@google.com, j.granados@samsung.com,
+        patches@lists.linux.dev, linux-fsdevel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] leds: tlc591xx: Mark OF related data as maybe unused
-Message-ID: <ZA4mps2jUpqWIfcJ@duo.ucw.cz>
-References: <20230311111717.252019-1-krzysztof.kozlowski@linaro.org>
- <ZAxnl9zn/IrHMx9S@duo.ucw.cz>
- <e62cfcf5-e43a-ee14-f290-9004818df839@linaro.org>
+Subject: Re: [PATCH] utsname: simplify one-level sysctl registration for
+ uts_kern_table
+Message-ID: <20230312192704.GA510320@pevik>
+Reply-To: Petr Vorel <pvorel@suse.cz>
+References: <20230310231656.3955051-1-mcgrof@kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="5ef3/Sw9JpJTKfqY"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <e62cfcf5-e43a-ee14-f290-9004818df839@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230310231656.3955051-1-mcgrof@kernel.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Luis,
 
---5ef3/Sw9JpJTKfqY
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Reviewed-by: Petr Vorel <pvorel@suse.cz>
 
-On Sun 2023-03-12 11:21:44, Krzysztof Kozlowski wrote:
-> On 11/03/2023 12:35, Pavel Machek wrote:
-> > On Sat 2023-03-11 12:17:17, Krzysztof Kozlowski wrote:
-> >> The driver can be compile tested with !CONFIG_OF making certain data
-> >> unused:
-> >>
-> >>   drivers/leds/leds-tlc591xx.c:138:34: error: =E2=80=98of_tlc591xx_led=
-s_match=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
-> >>
-> >> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> >=20
-> > Acked-by: Pavel Machek <pavel@ucw.cz>
->=20
-> I was thinking you will take it... or the Ack is for Lee then?
-
-Me or Lee will take it, depending on workload.
-
-Best regards,
-								Pavel
---=20
-People of Russia, stop Putin before his war on Ukraine escalates.
-
---5ef3/Sw9JpJTKfqY
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZA4mpgAKCRAw5/Bqldv6
-8h32AJ9VHhifB/G0F5tfaf56463zAfQZMQCfbj7GTUlVADfv83F8Wm0sOUtTYio=
-=tlO1
------END PGP SIGNATURE-----
-
---5ef3/Sw9JpJTKfqY--
+Kind regards,
+Petr
