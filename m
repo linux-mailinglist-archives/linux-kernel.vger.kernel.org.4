@@ -2,143 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDC4E6B676A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:06:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17AF56B6774
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 16:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229822AbjCLPGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 11:06:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44698 "EHLO
+        id S229810AbjCLPPv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 11:15:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCLPGq (ORCPT
+        with ESMTP id S229499AbjCLPPt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 11:06:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB9CD39BAE;
-        Sun, 12 Mar 2023 08:06:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 93C30B80C92;
-        Sun, 12 Mar 2023 15:06:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99EA1C433D2;
-        Sun, 12 Mar 2023 15:06:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678633602;
-        bh=dQ4INd4LkPkMY+DVoLoy/dQlXlQQMT+9up2+uloKNMg=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QZFoUULHHAGAsCWI4G/Az4VU+W6SLgAMqaWwkpSYhJktZpK5f+V+Pm5uaiUFWQH6B
-         BRy18v1XHCE8Cwc504dbHgnGUCoeOliArVMqH/5xMHB9zQIvcqZTUYB3fnKuMnU69s
-         38DqJO1BtwXAt+H8zBVnn/SSU59dnITNyvJ3rjpg=
-Date:   Sun, 12 Mar 2023 16:06:39 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Vegard Nossum <vegard.nossum@oracle.com>
-Cc:     Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        Jiri Kosina <jkosina@suse.cz>,
-        Solar Designer <solar@openwall.com>,
-        Will Deacon <will@kernel.org>, Willy Tarreau <w@1wt.eu>,
-        linux-kernel@vger.kernel.org, Amit Shah <aams@amazon.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        "Gustavo A. R. Silva" <gustavoars@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Laura Abbott <labbott@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thorsten Leemhuis <linux@leemhuis.info>,
-        Tyler Hicks <tyhicks@linux.microsoft.com>
-Subject: Re: [PATCH v3 2/7] Documentation/security-bugs: misc. improvements
-Message-ID: <ZA3qfwrmtQihkfTy@kroah.com>
-References: <20230305220010.20895-1-vegard.nossum@oracle.com>
- <20230305220010.20895-3-vegard.nossum@oracle.com>
+        Sun, 12 Mar 2023 11:15:49 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2888634339;
+        Sun, 12 Mar 2023 08:15:45 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so920591wmb.3;
+        Sun, 12 Mar 2023 08:15:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678634143;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HKhPGEn48aizwdQtbeZiRqDsuVUTk1YIcEaDe2udzRA=;
+        b=gEuJTs8rAj1FCry+rF1CeDbSIJK4LxGMUnOjarG4/VP8KKgqsJUS97hWWDm/LLbiLW
+         DNQ0Lgv+r71NlgTtrHCdRkFUVfk67F+DDREcWS4aUT+4VSSOCJmJZsO8W0QkU9rwf7Pt
+         Cn53G5xe1ZmguLXX7D5vjKUUiGAvx0jMMHBtIGc0xb6cQC0pyqgYzQq/5exWq7S2NgAw
+         puJNDQ7cMwLtW2DmEDwPz2M617RtRbHrqK+okSwZHzrkzpQJMYdHvGJ3PJY/Qo8cR4bp
+         uGPv8bwajsDGqCgW0wzlKakgzcPmmU6xg/kmQMWn5STGhVY0qNHM1t9MX50d2RvaCpBy
+         MmyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678634143;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HKhPGEn48aizwdQtbeZiRqDsuVUTk1YIcEaDe2udzRA=;
+        b=d3j/NQgOVFtSKNl9uIpAW3NHgNUa4qxG3bFfqpvOcnKHoQbWzyXFCe7LLdBOm/5W0r
+         R6qaCWam3JmtfA6kaAL+In1FyTt6DrLNF1HrfkenW8Mkedu3h6Y+HyoTQmRoOtW54Vm0
+         1LP5BQAZtGkTec2h/kAjO7U8r/w3gFD+w+aHizl5cM4jFSVsGYim68BdmSlwkq8usbr/
+         bAky7fXt0uF80Ynds0K2q96Zc4+U5JeU1y2/ITV/9sPGvFUe7bkUKQnxiD6B2kyZpt/c
+         UEOK7QSklP/W3TPoeS6qPFx3HlegdXffuyEaEEM/iAe3Vht7qpWr7d3rGmGxhiT/GYbF
+         QHKg==
+X-Gm-Message-State: AO0yUKU4AWnY4MOYz2Mt4NYA9EWu6FkK+y/H0USxsQDx91Xaniqw1+sw
+        jEKnC8BmmrG9zbHYljR2cRc=
+X-Google-Smtp-Source: AK7set/bjPBg/zjhzM6DAttzOabIYrkqkkyVgJDWMpQSEhOR00TB9rrFvoFv2QmmclSj+Zkfo4wXvg==
+X-Received: by 2002:a05:600c:46cc:b0:3ed:1f9c:aeff with SMTP id q12-20020a05600c46cc00b003ed1f9caeffmr2414620wmo.36.1678634143542;
+        Sun, 12 Mar 2023 08:15:43 -0700 (PDT)
+Received: from ?IPv6:2a02:168:6806:0:1606:cc8d:640:3d4d? ([2a02:168:6806:0:1606:cc8d:640:3d4d])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003e204fdb160sm6741547wmn.3.2023.03.12.08.15.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 08:15:42 -0700 (PDT)
+Message-ID: <024b696003d8403d62c45411c813058684e0418c.camel@gmail.com>
+Subject: Re: [PATCH net-next v2 4/6] net: mdio: scan bus based on bus
+ capabilities for C22 and C45
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Michael Walle <michael@walle.cc>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Felix Fietkau <nbd@nbd.name>,
+        John Crispin <john@phrozen.org>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Bryan Whitehead <bryan.whitehead@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Joel Stanley <joel@jms.id.au>,
+        Andrew Jeffery <andrew@aj.id.au>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-aspeed@lists.ozlabs.org,
+        Jesse Brandeburg <jesse.brandeburg@intel.com>
+Date:   Sun, 12 Mar 2023 16:15:41 +0100
+In-Reply-To: <0a1ec04fe494fcd8c68d03e4f544d7162c0e4f39.camel@gmail.com>
+References: <db6b8a09-b680-4baa-8963-d355ad29eb09@lunn.ch>
+         <0e10aa8492eadb587949d8744b56fccaabbd183b.camel@gmail.com>
+         <72530e86-9ba9-4a01-9cd2-68835ecae7a0@lunn.ch>
+         <09d65e1ee0679e1e74b4f3a5a4c55bd48332f043.camel@gmail.com>
+         <70f5bca0-322c-4bae-b880-742e56365abe@lunn.ch>
+         <10da10caea22a8f5da8f1779df3e13b948e8a363.camel@gmail.com>
+         <4abd56aa-5b9f-4e16-b0ca-11989bb8c764@lunn.ch>
+         <bff0e542b8c04980e9e3af1d3e6bf739c87eb514.camel@gmail.com>
+         <a57a216d-ff5a-46e6-9780-e53772dcefc8@lunn.ch>
+         <2f64385a350359c5755eb4d2479e2efef7a96216.camel@gmail.com>
+         <29ee3cc4-a1d6-4a07-8d90-4b2f26059e7d@lunn.ch>
+         <0a1ec04fe494fcd8c68d03e4f544d7162c0e4f39.camel@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230305220010.20895-3-vegard.nossum@oracle.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 05, 2023 at 11:00:05PM +0100, Vegard Nossum wrote:
-> This mostly just clarifies things and moves a few things around in
-> preparation for the subsequent changes.
-> 
-> Most notably, pull the "security@kernel.org" address up into the first
-> paragraph as this the most vital piece of information in the whole
-> document.
-> 
-> Also fix a few markup issues.
+On Sun, 2023-03-12 at 10:04 +0100, Klaus Kudielka wrote:
+> On Sun, 2023-03-12 at 03:53 +0100, Andrew Lunn wrote:
+> >=20
+> > Correct. But their also should not of been any noticeable slow down,
+> > because there should not be any additional scanning when everything is
+> > described in DT. And the move of the MDIO bus registration from probe
+> > to setup should actually make it faster than before.
+> >=20
+>=20
+> But then, why *do* I see such a big difference on the Omnia?
+>=20
+> mdiobus_scan_bus_c45() takes:
+> ~2.7 seconds without phy_mask patch
+> ~0.2 seconds with phy_mask patch
 
-When you have "also" in a patch changelog, that usually means this
-should be a separate patch.  Can you just fix up the markup issues first
-please?
+Following up myself, the answer is in the call path
+mv88e6xxx_mdios_register()
+	 -> mv88e6xxx_mdio_register()
+		-> of_mdiobus_register()
 
-Also, a few minor comments below:
+A child node "mdio" would be needed for the scan to be limited by
+the device tree. And this one is *not* in armada-385-turris-omnia.dts.
 
-> 
-> Signed-off-by: Vegard Nossum <vegard.nossum@oracle.com>
-> ---
->  Documentation/process/security-bugs.rst | 37 ++++++++++++++-----------
->  1 file changed, 21 insertions(+), 16 deletions(-)
-> 
-> diff --git a/Documentation/process/security-bugs.rst b/Documentation/process/security-bugs.rst
-> index 82e29837d589..f1326d4e9718 100644
-> --- a/Documentation/process/security-bugs.rst
-> +++ b/Documentation/process/security-bugs.rst
-> @@ -1,36 +1,41 @@
->  .. _securitybugs:
->  
-> -Security bugs
-> -=============
-> +Reporting security bugs
-> +=======================
->  
->  Linux kernel developers take security very seriously.  As such, we'd
->  like to know when a security bug is found so that it can be fixed and
->  disclosed as quickly as possible.  Please report security bugs to the
-> -Linux kernel security team.
-> +Linux kernel security team at security@kernel.org, henceforth
-> +"the security list".  This is a closed list of trusted developers who
-> +will help verify the bug report and develop a patch in case none was
-> +already proposed.
->  
-> -Contact
-> --------
-> +While the security list is closed, the security team may bring in extra
-> +help from the relevant maintainers to understand and fix the security
-> +vulnerability.
->  
-> -The Linux kernel security team can be contacted by email at
-> -<security@kernel.org>.  This is a private list of security officers
-> -who will help verify the bug report and develop and release a fix.
-> -If you already have a fix, please include it with your report, as
-> -that can speed up the process considerably.  It is possible that the
-> -security team will bring in extra help from area maintainers to
-> -understand and fix the security vulnerability.
-> +Note that the main interest of the kernel security list is in getting
-> +bugs fixed and getting patches reviewed, tested, and merged; CVE
+My (incorrect) understanding was, the child node "ports" would trigger
+that behaviour.
 
-It's not "main interest", it is the "only task" of it.  That's all the
-list does, nothing else.
+Best regards, Klaus
 
-> +assignment, disclosure to distributions, and public disclosure happen on
-> +different lists with different people.
-
-How about this rephrasing:
-
-	The only tasks of the kernel security list are to triage
-	reported potential security bugs, generate and test a fix, and
-	get the fix merged into Linus's and the stable kernel trees.
-	The security list does not deal with CVE assignment or any sort
-	of disclosure at all.
-
-thanks,
-
-greg k-h
