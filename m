@@ -2,162 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35AB46B6297
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 01:56:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 074D36B629B
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 02:00:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229700AbjCLA4c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 19:56:32 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57448 "EHLO
+        id S229649AbjCLBAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 20:00:22 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCLA4a (ORCPT
+        with ESMTP id S229493AbjCLBAU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 19:56:30 -0500
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A029650987
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 16:56:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1678582589; x=1710118589;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pOlTIWs8Pc37VFuKgoNPhQMANn3Yi6ON1BgiCZV6s5U=;
-  b=TLGFT15VQ0k4S4H6YeTSFDrwRWGFpjNk4FyHXIVvFg8qQEZuP4EQ+5YE
-   0cly2/10prdg0/vloxG39QwK+QZ7ZNN/ieWVruMVvjq5UX9QkpHBhmg/v
-   klfxl+wwOMu2hwNq5hP86lBieI0xeFep2DqY5GFJC/u0sSnQhqyLyAINm
-   SjrT6l3UXC6IZszq+zaiHkHa0izdmhYsYt1jT1CPg++v50/mhtfcw7Fip
-   sNyhc4c14CXdkqlHUqU6tfPSDe7YWCNwm8LqwpBz3sZwiblhgwQF4AT2T
-   XFvYiJfV28KusCbYhgAQ4p3CK35k5qpLY5udFXv3+wKcgI1cEdAKsirnW
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,253,1673884800"; 
-   d="scan'208";a="329776408"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 12 Mar 2023 08:56:28 +0800
-IronPort-SDR: XBKBzC7dF77Dnz9n1/NGTz489N5czyJLvcz3974x0NUcc95fZZ1ivTI6N9562PfgQIJ6P+hkB6
- 2ZT9KvnX40UOzHGbfUe6DjFaz0/sDW1Z5G98aGQMvEyIMR41WvnGukqA4k3cWulN6HEPy/45X4
- /GW8CVZJww5whtEPiSU9Mn7kPZE+72UVFlCvyQzYsPCj+gYkzuTbGrAL2eFa7f+ZMcJAjvct9E
- XE/k30C88o2HJUYwur1JNaEvT0+//1jyfSA78ByBJlV1QsdC/06/sDrEYoPq7ojO7Wa7z4OFwq
- SOM=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Mar 2023 16:12:59 -0800
-IronPort-SDR: dmmZoy7hoQ/Gdvc4AqTLrmE+NTr5kLnFj8Yv5sb9Ov7LYXb8ArF+uZWnFzcb/r1a8QeKns6fdc
- WfcM7TGnFuORCTu4pT/unxJoAgWlfxnEdVs00Hwdm+sZ2/ApJQ43UwpnF5RSB7tdCyA5rcEGYM
- xMOHQnlgu2b+wV43W6NSH7BfyzPEH331IpjqOe1lII4CajNV7S+adUQHOgiPaz5yqYtwseTVSP
- XLfFesOSlLktO9kmRvPBjdJ57LNLmQqAl0y8s+VQzISSgqYQ7m3lk5JrKtLLQ0Gxf+TBXRphT/
- Fw8=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 11 Mar 2023 16:56:28 -0800
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PZ1ZN4h61z1RvTr
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 16:56:28 -0800 (PST)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:content-language:references:to
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1678582588; x=1681174589; bh=pOlTIWs8Pc37VFuKgoNPhQMANn3Yi6ON1Bg
-        iCZV6s5U=; b=tPIzIDDEcGoPcR890IKk0hS564DmRoxa8hJj/qbNEUUTY3evxHy
-        t1OkpdPANN1eHQ6QIDBuSJ6JNIpMVpbTa8XRtoWTvhyAj5FbY6satskhX3SOZlsp
-        GFSb7+IXDCYcSJbvnhlA43uZTI+3EiL8fXbjXdzHB2nrpEX7R8g0E1WDtawj6MoH
-        aCkVdGOp+B4rXI2bYC4ooRvX423f4ZiviwPcBoCskxM4dwcpIacaZZaiGnlmlovt
-        cvjQqJMVmdZS6zXkNodN1MQ9IpGCQnPzSgmPkw36+qYVxD2v5PV2+ZRuGWPJ1zb5
-        Ql5/6kGXcq1/gsnbl6vifY+09uUBOETRSxQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id 42O_prGfWxEQ for <linux-kernel@vger.kernel.org>;
-        Sat, 11 Mar 2023 16:56:28 -0800 (PST)
-Received: from [10.225.163.78] (unknown [10.225.163.78])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PZ1ZM1CqSz1RvLy;
-        Sat, 11 Mar 2023 16:56:26 -0800 (PST)
-Message-ID: <8b0eb4d0-ca10-35a5-a74c-fd0f7d11713c@opensource.wdc.com>
-Date:   Sun, 12 Mar 2023 09:56:25 +0900
+        Sat, 11 Mar 2023 20:00:20 -0500
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 905E26285E
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 17:00:17 -0800 (PST)
+Received: by mail-wr1-x42b.google.com with SMTP id j2so8276647wrh.9
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 17:00:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678582816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DVqViHKN5Yirjh+bmhLj58d+3uxBU5OraeGY1CTO3p0=;
+        b=YXV7T+jrhb/oIiO+r59EKktvaQZO116g6QgA/YTIS1RwBA9Ng3/qRalnt1KzZyWwHg
+         GltOPQDsulhChZSx8XE9pZfpvmjTx0htL98h+KTh1UiJOdcO0LD0Lzdx1qrSVYC5AHBb
+         +RQg9CVa8Ls/92haVTTZtY76yyJv+DrtC/sXhB86Ir3oc9Kf2Hu0ZZYf+LSSCVKQvDra
+         Ex5PBhy/Gdak5+UoOvVH8dXaeQEUIRgZ+kDWWbFJhzg4XbyAqR9M75ZmmBkQdZNfpb14
+         5+aVaC2ZhEon5BYTJAubMjAGMptIhw3scDnYE5tv56WylYHtK+G8pIjYiUe+vMJXB016
+         ugdw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678582816;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=DVqViHKN5Yirjh+bmhLj58d+3uxBU5OraeGY1CTO3p0=;
+        b=qK8iLvb1h1q/iwAtGYL9mx8bWkISzzDCk4zegxlF2PAsgD+HNYuFsW+iTbkDz7tm/V
+         AHPXVtH57Gdbglv2eq852j12dv26rrQbe8CZEPAApmD2+huVihQepf/CP7sCX8MprXmT
+         a79KrpOzqgUKzxRGlJiC86I4BX1cXmGaidwumst3TWZmERFJSheli0hEwV7009G0RtiT
+         caB4km5+GBCWqOQZByLCQf/EO9bneXsWjopeoVPIVInnjvJvF9YKNS3BcO1ZsjzEjkYX
+         9heH2z6l4YWbDJ5JHeztSkThI/HIotRotcb/OcjSSqRXGYD26GxX858Jbi4HSawmiG3G
+         LeVQ==
+X-Gm-Message-State: AO0yUKWLwcz4zWo6wglI+pzDWiiIXIHgwtj7j8/N9965LtMXfop+36uA
+        DzmTwrmkuUQtRELSVh/ErMsOYKfJd9+HNP5L+gnVyg==
+X-Google-Smtp-Source: AK7set9bmHDuF9mllRRV379UiGJDViyqO9cr5DQfcZYcJ4Q1rrezSOAo940mr19FkRZTedMUoNWupL7ppjMO7tjDHuo=
+X-Received: by 2002:a5d:46ca:0:b0:2c7:c483:9faa with SMTP id
+ g10-20020a5d46ca000000b002c7c4839faamr6639805wrs.14.1678582815821; Sat, 11
+ Mar 2023 17:00:15 -0800 (PST)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] pata_parport: fix possible memory leak
-To:     Ondrej Zary <linux@zary.sk>
-Cc:     Christoph Hellwig <hch@lst.de>,
-        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <202303112239.21234.linux@zary.sk>
- <20230311214447.7359-1-linux@zary.sk>
-Content-Language: en-US
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230311214447.7359-1-linux@zary.sk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230116010115.490713-1-irogers@google.com> <CAP-5=fVUgc8xtBzGi66YRUxZHyXvW2kiMjGz39dywaLxrO4Hpg@mail.gmail.com>
+ <Y8mAuDvs566zwG67@kernel.org> <Y8myfqy5EMit3Kr/@krava> <CAP-5=fUugnKd=pGpZve7tKThhM5b0AqGMnuiELF+fZQw-xJz9w@mail.gmail.com>
+ <ZAmRjk1x4p4TrFb0@gentoo.org> <CAEf4BzZJvEnWdTKVSgdBDr_KEgkW5HLHc7N-HRkmb-drCbg2uw@mail.gmail.com>
+ <CAP-5=fWvMFXOaKA0bKaKdzYjqOxTCXGapJy-4x34hJyZxqD-Dw@mail.gmail.com> <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
+In-Reply-To: <CAEf4BzZyxyqC1KB3zou46ckf3UvDY9PwgrKdofnPfbhXrN3=XQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Sat, 11 Mar 2023 17:00:01 -0800
+Message-ID: <CAP-5=fWRxM3pVy6YH=gAnyMXgPBx5eShcJMBiGggCdJj23tUtg@mail.gmail.com>
+Subject: Re: [PATCH v2 0/3] Assume libbpf 1.0+
+To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Cc:     Guilherme Amadio <amadio@gentoo.org>,
+        Jiri Olsa <olsajiri@gmail.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Andres Freund <andres@anarazel.de>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Christy Lee <christylee@fb.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        bpf@vger.kernel.org, Michael Petlan <mpetlan@redhat.com>,
+        Ben Hutchings <ben@decadent.org.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/23 06:44, Ondrej Zary wrote:
-> When ida_alloc() fails, "pi" is not freed although the misleading
-> comment says otherwise.
-> Move the ida_alloc() call up so we really don't have to free it.
+On Fri, Mar 10, 2023 at 12:22=E2=80=AFPM Andrii Nakryiko
+<andrii.nakryiko@gmail.com> wrote:
+>
+> On Thu, Mar 9, 2023 at 7:26=E2=80=AFPM Ian Rogers <irogers@google.com> wr=
+ote:
+> >
+> > On Thu, Mar 9, 2023 at 9:25=E2=80=AFAM Andrii Nakryiko
+> > <andrii.nakryiko@gmail.com> wrote:
+> > >
+> > > On Wed, Mar 8, 2023 at 11:58=E2=80=AFPM Guilherme Amadio <amadio@gent=
+oo.org> wrote:
+> > > >
+> > > > On Wed, Mar 08, 2023 at 06:13:34PM -0800, Ian Rogers wrote:
+> > > > > On Thu, Jan 19, 2023 at 1:13=E2=80=AFPM Jiri Olsa <olsajiri@gmail=
+.com> wrote:
+> > > > > >
+> > > > > > On Thu, Jan 19, 2023 at 02:41:12PM -0300, Arnaldo Carvalho de M=
+elo wrote:
+> > > > > > > Em Thu, Jan 19, 2023 at 09:11:03AM -0800, Ian Rogers escreveu=
+:
+> > > > > > > > On Sun, Jan 15, 2023 at 5:01 PM Ian Rogers <irogers@google.=
+com> wrote:
+> > > > > > > > > libbpf 1.0 was a major change in API. Perf has partially =
+supported
+> > > > > > > > > older libbpf's but an implementation may be:
+> > > > > > > > > ..
+> > > > > > > > >        pr_err("%s: not support, update libbpf\n", __func_=
+_);
+> > > > > > > > >        return -ENOTSUP;
+> > > > > > > > > ..
+> > > > > > > > >
+> > > > > > > > > Rather than build a binary that would fail at runtime it =
+is
+> > > > > > > > > preferrential just to build libbpf statically and link ag=
+ainst
+> > > > > > > > > that. The static version is in the kernel tools tree and =
+newer than
+> > > > > > > > > 1.0.
+> > > > > > > > >
+> > > > > > > > > These patches change the libbpf test to only pass when at=
+ least
+> > > > > > > > > version 1.0 is installed, then remove the conditional bui=
+ld and
+> > > > > > > > > feature logic.
+> > > > > > > > >
+> > > > > > > > > The issue is discussed here:
+> > > > > > > > > https://lore.kernel.org/lkml/20230106151320.619514-1-irog=
+ers@google.com/
+> > > > > > > > > perf bpf:
+> > > > > > > > >
+> > > > > > > > > A variant of this fix was added to Linux 6.2 in:
+> > > > > > > > > "perf bpf: Avoid build breakage with libbpf < 0.8.0 + LIB=
+BPF_DYNAMIC=3D1"
+> > > > > > > > > https://lore.kernel.org/lkml/Y71+eh00Ju7WeEFX@kernel.org/
+> > > > > > > > > This change goes further in removing logic that is now no=
+ longer
+> > > > > > > > > necessary.
+> > > > > > > > >
+> > > > > > > > > v2. Rebase now that breakage fix patch is in linus/master=
+.
+> > > > > > > >
+> > > > > > > > I missed the:
+> > > > > > > > Acked/Tested-by: Jiri Olsa <jolsa@kernel.org>
+> > > > > > > > I believe we are waiting for package maintainer input.
+> > > > > > >
+> > > > > > > Yes, as fedora:37 still is at libbpf 0.8.0 :-\
+> > > > > >
+> > > > > > rawhide (f38) is already on 1.1.0 ... I'll check how bad it'd b=
+e to move
+> > > > > > f37 to 1.x, but I had to do bulk update of like 10 other depend=
+ent packages
+> > > > > > for f38, so not sure how bad it'd be for f37
+> > > > > >
+> > > > > > jirka
+> > > > >
+> > > > > +Guilherme
+> > > > >
+> > > > > We were looking for maintainer input on these changes, but there =
+is no
+> > > > > update in over a month. Here is the original lore link:
+> > > > > https://lore.kernel.org/lkml/CAP-5=3DfVUgc8xtBzGi66YRUxZHyXvW2kiM=
+jGz39dywaLxrO4Hpg@mail.gmail.com/
+> > > > > Should these changes land in perf-tools-next targeting Linux 6.4?
+> > > >
+> > > > Gentoo has libbpf-1.1 already available, so requiring >libbpf-1.0 i=
+s not
+> > > > a problem. We (Gentoo) just need to make sure to stabilize libbpf-1=
+.x before
+> > > > stabilizing newer versions of perf, as the stable libbpf is 0.8.1 a=
+t the moment.
+> > > >
+> > >
+> > > libbpf v0.8 is basically all the 1.0 APIs, except by default 1.0
+> > > semantics is not enforced, unless libbpf_set_strict_mode() is enabled=
+.
+> > >
+> > > So, if 0.8 is a restriction, perf can stay on 0.8, use all the same
+> > > APIs that are in 1.0 (except newer one added later, but I'm not sure
+> > > perf needs any of the newer additions), and just stick to setting
+> > > libbpf_set_strict_mode() unconditionally.
+> >
+> > Thanks Andrii,
+> >
+>
+> Full disclosure, I'm totally supporting the switch to v1.0+, just
+> trying to be helpful here from the standpoint of 0.x vs 1.x libbpf
+> transition. See below. I believe you can keep 0.8+ dependency and drop
+> all the legacy code completely.
+>
+> But just take it as an information, and feel free to do whatever you
+> think is best with it.
+>
+> > The default perf build is to build against tools/lib/bpf and
+> > statically link libbpf in. This means by default we have the latest
+> > libbpf 1.2. If any perf code has a dependency on 0.8 (we don't support
+> > earlier) we need to #ifdef for it. Currently we have 7 feature tests
+> > for libbpf, but perhaps there is some cruft that's carried forward.
+> > The features are:
+> >  - btf__load_from_kernel_by_id
+>
+> v0.5 API
+>
+> >  - bpf_prog_load
+> >  - bpf_object__next_program
+> >  - bpf_object__next_map
+>
+> all three are v0.6 APIs
+>
+> >  - bpf_program__set_insns
+>
+> v0.8 API
+>
+> >  - btf__raw_data
+> >  - bpf_map_create
+>
+> both v0.6 API
+>
+> >
+> > The not present implementations look like:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/too=
+ls/perf/util/bpf-loader.c?h=3Dperf-tools#n36
+> > ```
+> > int bpf_program__set_insns(struct bpf_program *prog __maybe_unused,
+> >   struct bpf_insn *new_insns __maybe_unused, size_t new_insn_cnt __mayb=
+e_unused)
+> > {
+> > pr_err("%s: not support, update libbpf\n", __func__);
+> > return -ENOTSUP;
+> > }
+> >
+> > int libbpf_register_prog_handler(const char *sec __maybe_unused,
+> >                                  enum bpf_prog_type prog_type __maybe_u=
+nused,
+> >                                  enum bpf_attach_type exp_attach_type
+> > __maybe_unused,
+> >                                  const struct libbpf_prog_handler_opts
+> > *opts __maybe_unused)
+> > {
+> > pr_err("%s: not support, update libbpf\n", __func__);
+> > return -ENOTSUP;
+> > }
+> > ```
+>
+> both are v0.8 APIs
+>
+> > This will basically mean that while you dynamically linked with libbpf
+> > 0.8 you are in all likelihood not going to get proper BPF support.
+> > These changes up the version requirement to 1.0 and get rid entirely
+> > of the feature tests - so no runtime failing implementations. If the
+>
+> 100% supportive on upgrade and dropping feature checks. My point is
+> that you don't need those feature checks with v0.8+ requirement.
+>
+> The only difference between staying on v0.8+ vs going all the way to
+> v1.0+ would be that you have to keep libbpf_set_strict() call. In
+> v1.0+ it's a noop, so could be dropped.
+>
+> > build determines at build time libbpf 1.0+ isn't present then it still
+> > executes, switching from dynamic libbpf to the default static libbpf
+> > that is at 1.2. As mentioned in this thread, distributions like Debian
+> > use the default static linking of libbpf.
+> >
+>
+> oh, that's nice, good to know
+>
+> > I'm not keen to hold on to the feature tests for the complexity that
+> > they hold and their needlessly (as you can always statically link)
+> > broken at runtime behavior. We could but my opinion is, let's not :-)
+>
+> I've been consistently advocating for static linking with libbpf, so
+> 100% support this.
 
-Certainly you meant: "so we really do free it in case of error.", no ?
+Right, so I think we should move forward with these patches. We also
+have had non-API changes to support libbpf 1.0+ like:
+https://lore.kernel.org/lkml/20221103045437.163510-4-irogers@google.com/
+and I'm worried about the state of these with libbpf 0.8.
 
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Link: https://lore.kernel.org/r/202303111822.IHNchbkp-lkp@intel.com/
-> Signed-off-by: Ondrej Zary <linux@zary.sk>
-> ---
->  drivers/ata/pata_parport/pata_parport.c | 11 ++++++-----
->  1 file changed, 6 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/ata/pata_parport/pata_parport.c b/drivers/ata/pata_parport/pata_parport.c
-> index 6165ee9aa7da..a9eff6003098 100644
-> --- a/drivers/ata/pata_parport/pata_parport.c
-> +++ b/drivers/ata/pata_parport/pata_parport.c
-> @@ -503,18 +503,19 @@ static struct pi_adapter *pi_init_one(struct parport *parport,
->  	if (bus_for_each_dev(&pata_parport_bus_type, NULL, &match, pi_find_dev))
->  		return NULL;
->  
-> +	id = ida_alloc(&pata_parport_bus_dev_ids, GFP_KERNEL);
-> +	if (id < 0)
-> +		return NULL;
-> +
->  	pi = kzalloc(sizeof(struct pi_adapter), GFP_KERNEL);
->  	if (!pi)
-> -		return NULL;
-> +		goto out_ida_free;
->  
->  	/* set up pi->dev before pi_probe_unit() so it can use dev_printk() */
->  	pi->dev.parent = &pata_parport_bus;
->  	pi->dev.bus = &pata_parport_bus_type;
->  	pi->dev.driver = &pr->driver;
->  	pi->dev.release = pata_parport_dev_release;
-> -	id = ida_alloc(&pata_parport_bus_dev_ids, GFP_KERNEL);
-> -	if (id < 0)
-> -		return NULL; /* pata_parport_dev_release will do kfree(pi) */
->  	pi->dev.id = id;
->  	dev_set_name(&pi->dev, "pata_parport.%u", pi->dev.id);
->  	if (device_register(&pi->dev)) {
-> @@ -571,7 +572,7 @@ static struct pi_adapter *pi_init_one(struct parport *parport,
->  out_unreg_dev:
->  	device_unregister(&pi->dev);
+Thanks,
+Ian
 
-Same comment as Sergey: isn't this going to do the ida free ? So shouldn't you
-return here ?
-
->  out_ida_free:
-> -	ida_free(&pata_parport_bus_dev_ids, pi->dev.id);
-> +	ida_free(&pata_parport_bus_dev_ids, id);
->  	return NULL;
->  }
->  
-
--- 
-Damien Le Moal
-Western Digital Research
-
+> >
+> > Thanks,
+> > Ian
+> >
+> > > > Best regards,
+> > > > -Guilherme
+> > > >
