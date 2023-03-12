@@ -2,277 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3971E6B6BA5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:02:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9489F6B6BA9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 22:03:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCLVCb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 17:02:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53192 "EHLO
+        id S231432AbjCLVDm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 17:03:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229828AbjCLVC3 (ORCPT
+        with ESMTP id S229828AbjCLVDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 17:02:29 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF29D3B3F9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:02:27 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id fd5so7200251edb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 14:02:27 -0700 (PDT)
+        Sun, 12 Mar 2023 17:03:38 -0400
+Received: from mail-oo1-xc2b.google.com (mail-oo1-xc2b.google.com [IPv6:2607:f8b0:4864:20::c2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 710D123DBB;
+        Sun, 12 Mar 2023 14:03:37 -0700 (PDT)
+Received: by mail-oo1-xc2b.google.com with SMTP id a23-20020a4ad5d7000000b005250867d3d9so1561210oot.10;
+        Sun, 12 Mar 2023 14:03:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678654946;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=gmail.com; s=20210112; t=1678655016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Qj1cXXqLyWgdPfJI5vrHGJXiCzlKmBf4u+Esl1s34b8=;
-        b=T1OZkXIBCs09tAfYSkatz+1Mz2Ikbdu8dhgkALbsDPtxy0ZsMa2o2phIJvAuCHG0tS
-         KAxemf+GOfyP97Ws1Zjsp6elR476GQFXhXzfQyONzRsdEQ4KuB+NTMFUhCGLpGDE93iH
-         l7heYL65QyTwYW36ZZl6ca17hUtwkCckPEIsmbg92gals1GvlTUrEoJfk8ZPkhLg+r4a
-         EyKy4JBJesuzbGBHYJGYOH1LJSRwRfntFtwRL7k6BdF2pSnjsp/xpnWVGaQZgReVLf6y
-         TPtUeQBm1M8H49k77eODeQap+iIWJNul9SynRQG9yFBiZdnCjdRPLTtQwHMgzbI2YLcB
-         RUMw==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZLdtVQcLFMkKKieblSnLcBuNgLLD1qkCuhFst+Po+Jk=;
+        b=DwxGvS+SFoc8/Zc/T780x7ZNiS1SGdRCixQ0v6b1ocprhfHzDwX3WQGXvvBVfKx2m9
+         XmmTay7XllhbFstFIycRotHgYPhrh9U1EFl1oA6J1rEosI60dVJPMHr8czViSKtdfO7m
+         3Rx2+QKOkEpoLCFgwmt+RsEZecD4YbUwRV0KwUu8svq4VR1OXLUK12uuLEKUEmIX/yME
+         JefUUJLwSOV5PxfBMUw6Jw7zJHJSj0XaoOr1Kw81/KQ2ABrvIN9bzpVWKmxzjMlScAUL
+         wP45HbcuMCvCrxoHNwqM9V8GFQgQZNY9bWdg1IKNs9v8lurL9lmCtAf7PE/nIjRh83X3
+         UJNQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678654946;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=1e100.net; s=20210112; t=1678655016;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qj1cXXqLyWgdPfJI5vrHGJXiCzlKmBf4u+Esl1s34b8=;
-        b=z2QuMbUA5ttNykFZJZwutDj478af+5FWZ3TMBFrwjKeL8X0ayeJhUUaY+6ppQNa81U
-         Ln4IFB761of1PgE4gihcXpe55ChK49jY++YE+EE9lPlZ30PdjT12ygPEUjCAp9BfexRn
-         XIA+cX9oCl8xAfg9/wazYsy6HjTg0oXgnY+33bshY9ePPHKXb6RwarQPjJUlYiwiZifW
-         rk5YQwQoiPFWKfkA5W3Ft2l2EjqPcznV55UHDQyRU6lrGB518Ybws0bYPc2c2nNiT0PU
-         JZkhcUy1IHiKNRWllmHBw6Ket18lALbneAse+twWLfCoy67PZ3DouteF3+nTfR36zFCs
-         VaAQ==
-X-Gm-Message-State: AO0yUKX4DO3V64UtLyUSFnzjWwaUhMoEBn2EDpSOkHX0zsSuYTB4CzB4
-        HjiQb6F+BCp9ApNOTe1Ut7dDhA==
-X-Google-Smtp-Source: AK7set96PFCqqF1MKJuHdirnlZrt7ztdx50WnXYftY1biggqu8CPFxeJo84vWtfKtF9PWzj6YOCVBQ==
-X-Received: by 2002:a17:907:6289:b0:91d:9745:407e with SMTP id nd9-20020a170907628900b0091d9745407emr9747007ejc.18.1678654946126;
-        Sun, 12 Mar 2023 14:02:26 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id sg42-20020a170907a42a00b009202ce3c8adsm2322785ejc.27.2023.03.12.14.02.25
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZLdtVQcLFMkKKieblSnLcBuNgLLD1qkCuhFst+Po+Jk=;
+        b=Zbkx5d24YUuNZm18FfC7Jq+LiuUVFieMwOmWh0ZdkF/HZ6021YS9LCOQNHli9DLu4g
+         zQzqTQdeqLpNOF12l4ZzJifE2Ji84MIUiFZSeJB1zaQT9BtstRafAqJdneDv+vVGpGUH
+         OoD2qtCYxdQD3KIORSvPdP9s7TB0cEI59gxvK1e+O06MhCV+c9YzTM59bTyeS1/8cbC8
+         DXL4OvUOdocb7d9l0d521/IIF85skBPeZts8EGm8qBCejWoIc2U5zh72HMpOLG24TnbN
+         OjQBtfSAFSA2sq7dF5hmZsLzdZsaynsujfZ0l0F6FU9s6LXNuueCS7Mi52k3/TevGasF
+         W2XA==
+X-Gm-Message-State: AO0yUKWT2WAT5n5vE6uITCvxoSnRNwA7U4dcgSFoOGqW1wHqy9L2N2wU
+        Ifrq/Vm0ebwJOzGNdyQkMNk=
+X-Google-Smtp-Source: AK7set8c2TifFtZL2+w8ZDqwVi646qn40ZMZOkyHsQAgXFl8zPcbWipxym0Xl/vRiTyNYt8X25bEDw==
+X-Received: by 2002:a05:6820:61f:b0:525:456f:b96f with SMTP id e31-20020a056820061f00b00525456fb96fmr18700214oow.2.1678655016757;
+        Sun, 12 Mar 2023 14:03:36 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id g27-20020a4a755b000000b0051a6cb524b6sm2411226oof.2.2023.03.12.14.03.35
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 14:02:25 -0700 (PDT)
-Message-ID: <1346ce4e-f1fd-1a77-f38e-cd87efc59082@linaro.org>
-Date:   Sun, 12 Mar 2023 22:02:24 +0100
+        Sun, 12 Mar 2023 14:03:36 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <062a2834-ece9-49ed-0e15-30730b65ef50@roeck-us.net>
+Date:   Sun, 12 Mar 2023 14:03:34 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/2] ARM: dts: imx: Add devicetree for Tolino Vison
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 1/2] hwmon: gpio-fan: mark OF related data as maybe unused
 Content-Language: en-US
-To:     Andreas Kemnade <andreas@kemnade.info>, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, arnd@arndb.de, olof@lixom.net,
-        soc@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        marex@denx.de, max.krummenacher@toradex.com, leoyang.li@nxp.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230312205236.2281466-1-andreas@kemnade.info>
- <20230312205236.2281466-3-andreas@kemnade.info>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230312205236.2281466-3-andreas@kemnade.info>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Jean Delvare <jdelvare@suse.com>,
+        Eric Tremblay <etremblay@distech-controls.com>,
+        linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230311111610.251774-1-krzysztof.kozlowski@linaro.org>
+ <cd9067c7-0b99-4d62-9d5a-cdc028f33ba5@roeck-us.net>
+ <48b6689e-f045-5e24-ead7-f6da5b8fe454@linaro.org>
+ <9343421e-d35d-8d99-1ea7-1f81e28fbabb@roeck-us.net>
+ <688b6817-9d57-6c92-1ce0-6f97cb8c4cc2@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <688b6817-9d57-6c92-1ce0-6f97cb8c4cc2@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 21:52, Andreas Kemnade wrote:
-> This adds a devicetree for the Kobo Aura 2 Ebook reader. It is based
-> on boards marked with "37NB-E60Q30+4A3". It is equipped with an i.MX6SL
-> SoC.
+On 3/12/23 12:32, Krzysztof Kozlowski wrote:
+> On 12/03/2023 19:48, Guenter Roeck wrote:
+>> On 3/12/23 11:08, Krzysztof Kozlowski wrote:
+>>> On 12/03/2023 19:06, Guenter Roeck wrote:
+>>>> On Sat, Mar 11, 2023 at 12:16:09PM +0100, Krzysztof Kozlowski wrote:
+>>>>> The driver can be compile tested with !CONFIG_OF making certain data
+>>>>> unused:
+>>>>>
+>>>>>     drivers/hwmon/gpio-fan.c:484:34: error: ‘of_gpio_fan_match’ defined but not used [-Werror=unused-const-variable=]
+>>>>>
+>>>>
+>>>> How do you trigger that ? The driver depends on OF_GPIO which
+>>>> in turn depends on OF. Arguably that means that of_match_ptr()
+>>>> doesnot really make sense, but still I don't see how you can
+>>>> trigger the above error message.
+>>>
+>>> I can drop of_match_ptr, it's indeed in many cases not needed.
+>>>
+>>> I just build x86_64 allyesconfig minus OF, with W=1.
+>>>
+>>
+>> x86_64 allyesconfig minus OF minus results in SENSORS_GPIO_FAN being
+>> deselected (it doesn't show up in the configuration anymore at all
+>> after "make olddefconfig").
+>>
+>> $ make allyesconfig
+>> $ grep SENSORS_GPIO_FAN .config
+>> CONFIG_SENSORS_GPIO_FAN=y
+>> $ sed -i -e 's/CONFIG_OF=y/# CONFIG_OF is not set/' .config
+>> $ make olddefconfig
+>> #
+>> # configuration written to .config
+>> #
+>> $ grep SENSORS_GPIO_FAN .config
+>> $
+>>
+>> I suspect what you did is to disable CONFIG_OF, and then you built
+>> the driver without realizing that is was deselected.
 > 
+> The driver would not built. I mean, I did not cheat here to built it
+> with incorrect config.
+> 
+> I rather suspect that config is broken due to:
+> WARNING: unmet direct dependencies detected for OF_GPIO
+> WARNING: unmet direct dependencies detected for GPIO_SYSCON
+> WARNING: unmet direct dependencies detected for MFD_STMFX
+> 
+> This was next-20230308
+> 
+Interesting. That has been fixed in next-20230310, where
+SENSORS_GPIO_FAN is again deselected if CONFIG_OF is disabled.
 
-Thank you for your patch. There is something to discuss/improve.
+>>
+>>> Do you want to me to drop of_match_ptr?
+>>>
+>>
+>> Yes, sure, that makes more sense. The reason though is that the
+>> driver depends on CONFIG_OF=y, not because of the build failure.
+> 
+> I'll send v2 of both patches because anyway dropping of_match_ptr is
+> preferred.
+> 
+Ok.
 
-> +	wifi_pwrseq: wifi_pwrseq {
-> +		compatible = "mmc-pwrseq-simple";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_wifi_reset>;
-> +		post-power-on-delay-ms = <20>;
-> +		reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-> +	};
-> +};
-> +
-> +&i2c1 {
-> +	pinctrl-names = "default","sleep";
-> +	pinctrl-0 = <&pinctrl_i2c1>;
-> +	pinctrl-1 = <&pinctrl_i2c1_sleep>;
-> +	status = "okay";
-> +
-> +	touchscreen@15 {
-> +		reg = <0x15>;
-> +		compatible = "elan,ektf2132";
-
-compatible first, then reg.
-
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_ts>;
-> +		power-gpios = <&gpio5 13 GPIO_ACTIVE_HIGH>;
-> +		interrupts-extended = <&gpio5 6 IRQ_TYPE_EDGE_FALLING>;
-> +	};
-> +
-> +	accelerometer@1d {
-> +		reg = <0x1d>;
-> +		compatible = "fsl,mma8652";
-> +	};
-> +};
-> +
-> +&i2c2 {
-> +	pinctrl-names = "default","sleep";
-> +	pinctrl-0 = <&pinctrl_i2c2>;
-> +	pinctrl-1 = <&pinctrl_i2c2_sleep>;
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +};
-> +
-> +&i2c3 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_i2c3>;
-> +	clock-frequency = <100000>;
-> +	status = "okay";
-> +
-> +	ec: embedded-controller@43 {
-> +		compatible = "netronix,ntxec";
-> +		reg = <0x43>;
-> +		#pwm-cells = <2>;
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_ec>;
-> +		interrupts-extended = <&gpio5 11 IRQ_TYPE_EDGE_FALLING>;
-> +		system-power-controller;
-> +	};
-> +};
-> +
-> +&snvs_rtc {
-> +	/*
-> +	 * We are using the RTC in the PMIC, but this one is not disabled
-> +	 * in imx6sl.dtsi.
-> +	 */
-> +	status = "disabled";
-> +};
-> +
-> +&uart1 {
-> +	/* J4 */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart1>;
-> +	status = "okay";
-> +};
-> +
-> +&uart4 {
-> +	/* J9 */
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&pinctrl_uart4>;
-> +	status = "okay";
-> +};
-> +
-> +&usdhc2 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc2>;
-> +	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc2_sleep>;
-> +	cd-gpios = <&gpio5 2 GPIO_ACTIVE_LOW>;
-> +	status = "okay";
-> +
-> +	/* removable uSD card */
-> +};
-> +
-> +&usdhc3 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc3>;
-> +	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
-> +	vmmc-supply = <&reg_wifi>;
-> +	mmc-pwrseq = <&wifi_pwrseq>;
-> +	cap-power-off-card;
-> +	non-removable;
-> +	status = "okay";
-> +
-> +	/* CyberTan WC121 (BCM43362) SDIO WiFi */
-> +};
-> +
-> +&usdhc4 {
-> +	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-> +	pinctrl-0 = <&pinctrl_usdhc4>;
-> +	pinctrl-1 = <&pinctrl_usdhc4_100mhz>;
-> +	pinctrl-2 = <&pinctrl_usdhc4_200mhz>;
-> +	pinctrl-3 = <&pinctrl_usdhc4_sleep>;
-> +	bus-width = <8>;
-> +	no-1-8-v;
-> +	non-removable;
-> +	status = "okay";
-> +
-> +	/* internal eMMC */
-> +};
-> +
-> +&usbotg1 {
-> +	pinctrl-names = "default";
-> +	disable-over-current;
-> +	srp-disable;
-> +	hnp-disable;
-> +	adp-disable;
-> +	status = "okay";
-> +};
-> +
-> +&iomuxc {
-> +	pinctrl_backlight_power: backlight-powergrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10 0x10059
-> +		>;
-> +	};
-> +
-> +	pinctrl_ec: ecgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT0__GPIO5_IO11  0x17000
-> +		>;
-> +	};
-> +
-> +	pinctrl_gpio_keys: gpio-keysgrp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_SD1_DAT1__GPIO5_IO08  0x110B0
-> +			MX6SL_PAD_SD1_DAT4__GPIO5_IO12  0x110B0
-> +			MX6SL_PAD_KEY_COL1__GPIO3_IO26  0x11030
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1: i2c1grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
-> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c1_sleep: i2c1grp-sleep {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
-> +			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2: i2c2grp {
-> +		fsl,pins = <
-> +			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
-> +			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
-> +		>;
-> +	};
-> +
-> +	pinctrl_i2c2_sleep: i2c2grp-sleep {
-
-Shouldn't all groups end with 'grp' suffix? Are you sure this passes
-dtbs_check?
-
-...
-
-> +
-> +	pinctrl_usdhc2_100mhz: usdhc2grp-100mhz {
-
-Name looks wrong. Same in other places further.
-
-
-
-Best regards,
-Krzysztof
+Thanks,
+Guenter
 
