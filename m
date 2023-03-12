@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F1986B6670
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C89E46B667E
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:16:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbjCLNPy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:15:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45100 "EHLO
+        id S230402AbjCLNQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230085AbjCLNO6 (ORCPT
+        with ESMTP id S230192AbjCLNPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:14:58 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59B8B497D1
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:14:13 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id s11so38495558edy.8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:14:13 -0700 (PDT)
+        Sun, 12 Mar 2023 09:15:44 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D30E279B7
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:14:36 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id r15so11317805edq.11
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:14:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678626853;
+        d=linaro.org; s=google; t=1678626854;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=m+WYHU/SqewTwrfZuCdGJulxf+5ECuJ2svWptTLYXIE=;
-        b=qa63Qo9fSC+Ap6jq8NDE2/EKVxm+oVWK3PFoPnwE4yBlATkz7TLk5YW9j1Aus6jlO4
-         6yc4oApxJj/EDKros+pMJB38lQNWN1egudsvqOCBUzYW64WGkXUr4UF5uvMAhzPeK5rn
-         MFPFUDZQfSOayCcp9U5gDPkJDFkGju6UWmsy9KCRljegOCC7go6mgN7GfCuyf/VdVbFD
-         RI2fxqf3sl093J1Dwc5Jpz0d+PVkRtuxgBckuhSs48nPfSE/o9nrnsQU4Mp4x4rkVe1u
-         GMHKWSQnkdmVR/BpH9WvboP+5QMDYLm5XUHxVqEXRB/RgiCPMXI3gOvVA9FVBVyWZXAk
-         RPlA==
+        bh=k/JwivpSWSUp7SGgg579h7vvWa7gXoSaXDjfT9QxQC0=;
+        b=CXU5Sft4Qo94NqQz3mPSkb9P2d9WUUzBRab27MBYfCDp4zAJtkVa4U2gt8ruuAK2fx
+         bYmi5lZFbKvFh7jAiwga20LHYuPZuLJ6WwFDw37JcecknQr1EZ6tbXpKsSHrRFM6dH42
+         G9jmlFKCdF2j0PJTIZv91TvmWvYmxJetJ5eGnZpcumSgmaLtlgm4+ONduSKLc+F6aFmS
+         2wbtsxeM7XjreClsKD102rjyRJhh1sgoZRixqozGJ4sff/5C87OVnI8gkQkfEaJBXzHN
+         PLG7p5dhHufbK/Jk1Kg16Rh8G+p1NrvtMOVierX90bJ5vpXVZA5+RMdYqOUEGm66DbRf
+         t+sQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626853;
+        d=1e100.net; s=20210112; t=1678626854;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=m+WYHU/SqewTwrfZuCdGJulxf+5ECuJ2svWptTLYXIE=;
-        b=U/q8A/MYLvNM/FCbmbhQkhEl52gunvwpUhir5I5srpffvOyW7q3qeYIbEXvQRxoo8z
-         uAxzVHjuXkzr7MCKUTPt2/DssFBddz5xUiSiIuIR4+kHQmUZhGb1kuPWqjR/hbL+vhNo
-         f/tKWo23yLyuyP/f22HsNasY+qvHUZ2Jebpl+5Z7csVSJQUO1Iy3cpTroWjjs5X1qlA5
-         YeEZKDgXaLEPM6AZLtuj638jZg0qxm7LzVzesuxyaAM87ePEocmmVO82wAFLbB4GYeHu
-         xupObjsCd/aSSQ4htPNk4BOrc+1r3tfCv5elBIemkqXTQjOrhG5LeWng89l4+7PzkE1v
-         YSzg==
-X-Gm-Message-State: AO0yUKUskHdLyQfqPWywwk+FGxnQCaTmtHlPig9XfYkfCgI0MSC+7p/Q
-        bjPsjEy7augb2Q48ZJzKKaoH6g==
-X-Google-Smtp-Source: AK7set+ykF8LuOJPvpEW6vSvb+7ovcB0VmDW/wPOL+5hsoHHErX+DX/e38bZbR9JDZSOpCTKdXlvqQ==
-X-Received: by 2002:a17:907:72c7:b0:889:d156:616d with SMTP id du7-20020a17090772c700b00889d156616dmr37155221ejc.27.1678626852856;
-        Sun, 12 Mar 2023 06:14:12 -0700 (PDT)
+        bh=k/JwivpSWSUp7SGgg579h7vvWa7gXoSaXDjfT9QxQC0=;
+        b=6LZDWiWesH3lSeb8Tur4EcVhkezRYZ/+cWH2N1PjZGJV1CUf/MKtppiVHNHjBYoqri
+         Gzf8K0ys0Og5T3XKtxSefD8BCTcT1uYzsnjvkDdca+RUBqNfQ9cfacEbpU0aAAqR8vOa
+         UKliAZduD1ILOS5q+Q6n5PkJSUYkT/hVOPqLzZL9eLPO1q3oe99BYlSBHZ8SIcWLKJjz
+         FbeMiNWsAhvHvAwyF8XDPkvvV8DMBw5tx0BZyZnVcZf/GEvN6JIwshewCQyhJJXivFSI
+         +/OLYDorpY30ML5CpAWxGB7pYk7veoPWpN6pHT71twmrPko4/zglbK7P5NYcyvA3hQY8
+         Lmzw==
+X-Gm-Message-State: AO0yUKXPmhyFrdHPxA6zcVlCgZv8odaZCcac/526nHhkFraVY9d+aKYp
+        YvTxRX3Gjy570QnOJIEXwv/8hg==
+X-Google-Smtp-Source: AK7set9d5tKP82Jz7WZKOjVJ2kxKgLrUjVcq5llmdVffKX9VOgz87qa4igqTtbGBsn15XQe1Xo+erA==
+X-Received: by 2002:a17:906:5ca:b0:8f6:ad32:cd51 with SMTP id t10-20020a17090605ca00b008f6ad32cd51mr35131755ejt.62.1678626854759;
+        Sun, 12 Mar 2023 06:14:14 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.14.11
+        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.14.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:14:12 -0700 (PDT)
+        Sun, 12 Mar 2023 06:14:14 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Joe Tessler <jrt@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -95,9 +95,9 @@ To:     Joe Tessler <jrt@google.com>,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 25/28] media: i2c: ov7740: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:13:15 +0100
-Message-Id: <20230312131318.351173-25-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 26/28] media: i2c: imx290: drop of_match_ptr for ID table
+Date:   Sun, 12 Mar 2023 14:13:16 +0100
+Message-Id: <20230312131318.351173-26-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
@@ -106,38 +106,39 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver will match mostly by DT table (even thought there is regular
-ID table) so there is little benefit in of_match_ptr (this also allows
-ACPI matching via PRP0001, even though it might not be relevant here).
-This also fixes !CONFIG_OF error:
+The driver can match only via the DT table so the table should be always
+used and the of_match_ptr does not have any sense (this also allows ACPI
+matching via PRP0001, even though it might not be relevant here).  This
+also fixes !CONFIG_OF error:
 
-  drivers/media/i2c/ov7740.c:1203:34: error: ‘ov7740_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/media/i2c/imx290.c:1354:34: error: ‘imx290_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/i2c/ov7740.c | 2 +-
+ drivers/media/i2c/imx290.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-index c9fd9b0bc54a..42121916d25f 100644
---- a/drivers/media/i2c/ov7740.c
-+++ b/drivers/media/i2c/ov7740.c
-@@ -1210,7 +1210,7 @@ static struct i2c_driver ov7740_i2c_driver = {
+diff --git a/drivers/media/i2c/imx290.c b/drivers/media/i2c/imx290.c
+index 49d6c8bdec41..3c9470fbfd53 100644
+--- a/drivers/media/i2c/imx290.c
++++ b/drivers/media/i2c/imx290.c
+@@ -1363,7 +1363,7 @@ static struct i2c_driver imx290_i2c_driver = {
  	.driver = {
- 		.name = "ov7740",
- 		.pm = &ov7740_pm_ops,
--		.of_match_table = of_match_ptr(ov7740_of_match),
-+		.of_match_table = ov7740_of_match,
+ 		.name  = "imx290",
+ 		.pm = &imx290_pm_ops,
+-		.of_match_table = of_match_ptr(imx290_of_match),
++		.of_match_table = imx290_of_match,
  	},
- 	.probe_new = ov7740_probe,
- 	.remove   = ov7740_remove,
+ };
+ 
 -- 
 2.34.1
 
