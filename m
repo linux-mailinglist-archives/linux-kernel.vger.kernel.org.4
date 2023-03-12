@@ -2,56 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A996B689C
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A4A6B689F
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:07:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbjCLRGj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:06:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55892 "EHLO
+        id S229998AbjCLRHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCLRGh (ORCPT
+        with ESMTP id S229516AbjCLRHt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:06:37 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5D1410A7;
-        Sun, 12 Mar 2023 10:06:36 -0700 (PDT)
+        Sun, 12 Mar 2023 13:07:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06F052330B;
+        Sun, 12 Mar 2023 10:07:47 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1A5DCB80D17;
-        Sun, 12 Mar 2023 17:06:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EE5F7C433EF;
-        Sun, 12 Mar 2023 17:06:31 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 81FE660F64;
+        Sun, 12 Mar 2023 17:07:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAFCFC433D2;
+        Sun, 12 Mar 2023 17:07:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678640793;
-        bh=PyzYRS0ls4ILE+hD0pkd/YVTfhoqLZM/cvnCV4lSPrY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=MHwlfP0cweWalrF6xXdAoED9oZiW8B66o5aABsaYlBWYUfVQzTJ0ocea0erWvXyV8
-         gH5E9fw8Jy0bysQoHpy7q46XaexEUhq60iWp/yxcRVnotoHavXAxQlfujQ6n1HjK0B
-         c5wxDjbWJ3u/vB4MZCB9/fZ49wOJRw+yLu7V20eQ6Nhz1OCpUF98BW0fZrt+WTJ/qs
-         C7oYVLlWfetMfW1uB9ed3QW28gsJTKvOIYFcc/9MspcutnfgK9QM+sCtdkY1EB0Bei
-         1lxpWwGLsahbszvKhvajJZwkKQ8J3dhI6In0LjFGDSl3T095mtyqH1S3I8C6Dm95dj
-         FGZtab8v7t3kA==
-Date:   Sun, 12 Mar 2023 17:06:38 +0000
-From:   Jonathan Cameron <jic23@kernel.org>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <20230312170638.3e6807b7@jic23-huawei>
-In-Reply-To: <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
-        <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
+        s=k20201202; t=1678640866;
+        bh=D+mLpwz4VKHHeNXrNwruBX6RwwU/I9bGtXKO/ptBcO4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aZYDUfULOZNPPa/uIob9DJM3A0HKjbdA37qLGXlsgB2VC0ID6o3TNiIjdAcmLQBtX
+         sgET5c9Sckix6JiuqKkQoBFVYhDUmOlvu7GgUd3f04/5OAUcUvhOOXzP3kFgeON2zU
+         J+nfOqVTtRBYEqbtTQmp1GYE/7drLBKzxqR4p7oKGxLgUt3E0ba10UiZIlKPmunGIB
+         wMinw8AYbeAlY3Vac5hKZON9e0IMZqqOApEa2My3kxDDqhS/IAeG8zmQyvU4EeoRSn
+         AaMgm1m+gTr8bDuBpH3XnMO5itiLKNp2KIDgDwQQPgkBBgcFmo2wQGagbeyaj/1ij0
+         +fvrGs5ygbjMQ==
+Received: by mercury (Postfix, from userid 1000)
+        id 014751060FD4; Sun, 12 Mar 2023 18:07:42 +0100 (CET)
+Date:   Sun, 12 Mar 2023 18:07:42 +0100
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: Re: [PATCHv1 02/11] power: supply: core: auto-exposure of
+ simple-battery data
+Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+References: <20230309225041.477440-1-sre@kernel.org>
+ <20230309225041.477440-3-sre@kernel.org>
+ <CACRpkdZofL-cuYcyNAwMAshoQAr3z7-boJoHftVnjt80YQmAOQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="q46upqfjfsur6qqf"
+Content-Disposition: inline
+In-Reply-To: <CACRpkdZofL-cuYcyNAwMAshoQAr3z7-boJoHftVnjt80YQmAOQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,104 +62,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 6 Mar 2023 11:17:15 +0200
-Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 
-> Some light sensors can adjust both the HW-gain and integration time.
-> There are cases where adjusting the integration time has similar impact
-> to the scale of the reported values as gain setting has.
-> 
-> IIO users do typically expect to handle scale by a single writable 'scale'
-> entry. Driver should then adjust the gain/time accordingly.
-> 
-> It however is difficult for a driver to know whether it should change
-> gain or integration time to meet the requested scale. Usually it is
-> preferred to have longer integration time which usually improves
-> accuracy, but there may be use-cases where long measurement times can be
-> an issue. Thus it can be preferable to allow also changing the
-> integration time - but mitigate the scale impact by also changing the gain
-> underneath. Eg, if integration time change doubles the measured values,
-> the driver can reduce the HW-gain to half.
-> 
-> The theory of the computations of gain-time-scale is simple. However,
-> some people (undersigned) got that implemented wrong for more than once.
-> 
-> Add some gain-time-scale helpers in order to not dublicate errors in all
-> drivers needing these computations.
-> 
-> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
+--q46upqfjfsur6qqf
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Trying not to duplicate what Andy has raised...
+Hi,
 
+On Fri, Mar 10, 2023 at 09:20:09AM +0100, Linus Walleij wrote:
+> On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org=
+> wrote:
+>=20
+> > +       /*
+> > +        * Set if constant battery information from firmware should be
+> > +        * exposed automatically. No driver specific code is required
+> > +        * in that case. If the driver also handles a property provided
+> > +        * by constant firmware data, the driver's handler is preferred.
+> > +        */
+> > +       bool expose_battery_info;
+>=20
+> Playing it safe with opt-in I see! But I would probably invert it and
+> add a hide_battery_info for those that don't wanna expose it. It seems
+> pretty useful to just expose this in general.
 
-At some stage I want to go through the maths very carefully but it's
-not happening today and I don't want to delay resolving other remaining comments
-so that can wait for a later version. I'm sure it's fine but I like to be
-paranoid :)
+I just did not yet spend the time to understand if there are any
+issues. I guess I can do it now and then remove the opt-in part.
 
-> +int iio_gts_get_total_gain(struct iio_gts *gts, int gain, int time)
-> +{
-> +	const struct iio_itime_sel_mul *itime;
-> +
-> +	if (!iio_gts_valid_gain(gts, gain))
-> +		return -EINVAL;
-> +
-> +	if (!gts->num_itime)
-> +		return gain;
-> +
-> +	itime = iio_gts_find_itime_by_time(gts, time);
-> +	if (!itime)
-> +		return -EINVAL;
-> +
-> +	return gain * itime->mul;
-> +}
-> +EXPORT_SYMBOL(iio_gts_get_total_gain);
+> However I have no insight in what happens on laptops etc for this
+> so I guess you have your reasons, either way:
 
-All of them want to be in the namespace.
+ACPI based systems should be fine, since battery info does not
+yet support ACPI and thus nothing changes for them.
 
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>=20
+> > +extern bool power_supply_battery_info_has_prop(struct power_supply_bat=
+tery_info *info,
+> > +                                              enum power_supply_proper=
+ty psp);
+> > +extern int power_supply_battery_info_get_prop(struct power_supply_batt=
+ery_info *info,
+> > +                                             enum power_supply_propert=
+y psp,
+> > +                                             union power_supply_propva=
+l *val);
+>=20
+> I think the build robots complain because you need to add some stubs
+> for the not enabled case.
 
+I don't think so. They are only used from code needing POWER_SUPPLY
+being enabled.
 
-> diff --git a/drivers/iio/light/iio-gts-helper.h b/drivers/iio/light/iio-gts-helper.h
-> new file mode 100644
-> index 000000000000..4b5a417946f4
-> --- /dev/null
-> +++ b/drivers/iio/light/iio-gts-helper.h
+One reported error is about the array of battery_info properties not
+being used when POWER_SUPPLY is disabled. I will move that array to a
+better place.
 
-...
+The other error is about power_supply_get_property(), because I
+accidently removed the EXPORT_SYMBOL_GPL(power_supply_get_property).
+I did not notice myself, because I compiled a monolithic kernel for
+the thermal camera for easy deployment.
 
-> +int iio_gts_find_new_gain_sel_by_old_gain_time(struct iio_gts *gts,
-> +					       int old_gain, int old_time_sel,
-> +					       int new_time_sel, int *new_gain);
-> +int iio_gts_build_avail_tables(struct iio_gts *gts);
-> +int devm_iio_gts_build_avail_tables(struct device *dev, struct iio_gts *gts);
-> +int iio_gts_build_avail_scale_table(struct iio_gts *gts);
-> +int devm_iio_gts_build_avail_scale_table(struct device *dev, struct iio_gts *gts);
-> +int iio_gts_build_avail_time_table(struct iio_gts *gts);
-> +int devm_iio_gts_build_avail_time_table(struct device *dev, struct iio_gts *gts);
+Thanks for the review, much appreciated!
 
-Given most modern IIO drivers use fully devm_ based probing, for now I would not
-expose anything else.  That will reduce the interface a lot which I think
-is probably a good thing at this stage. 
+-- Sebastian
 
-Keep the non devm stuff internally though as it is a nice structure to have
-an I can see we may want some of these in non devm form in the future.
+--q46upqfjfsur6qqf
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Similarly - for now don't expose the individual table building functions
-as we may never need them in drivers.  We (more or less) only support interfaces
-that are used and so far they aren't.
+-----BEGIN PGP SIGNATURE-----
 
-For other functions it's worth thinking about whether to not export them
-initially. I haven't been through them all to figure out what is not currently used.
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOBtgACgkQ2O7X88g7
++pqBWQ/9FFIeo0ooLJOsidujg3C8gFt9suZlyAeFA1fcubvUY4C7WdXHJDxSy/t9
+cfXlwdScebDwapJ2arOY3nJHfHTtwx1Fk3Ubjgt6xPBV6KZQlZXE6O+WsIitlJKt
+PrtlT+cdcYITxbrYvZsJGWGDIEACn3ewB9w4WUZiBHYBHWswtrP5KLoSyp1mZQLD
+l6VlUB/1awtKqjoh/+AES/67Zvv9BYbYrLdh/HBW+E/mdw0hKYu3jBCvyxOLpWFR
+YUuRIdBWmt7I0F0fjarWw5j3Ze/TtS6hieAkXtdIOREqYQABFFMQQc6nZliUOjC3
+B2SHJPtJNQ7fNlar5zFbpFFsVWAm7VBcGRDGGoGsMu2pTCnAHjx7p74qS2ny4I4V
++GF/oH2VpLnUfraw3yrZ4B4dia50unYBrBYZTc4gVC2CMGjPDzmS29DpWbcbyYHY
+RMnPb6xB3OmfHB7VfY3NubbxBEwkXX8Omb7pjvJHH0PDc2QhvMEpkJoJa92UWbpn
+Du2J5dnkwGWWr5aQgjGBuF28L0fj1/AKpXTzONYoTDaavBFKXNNQKpWQicWnCvdy
+hxG6piP3iA/kNpOGPGQxiNngSPoOnZp4RI/XwPzs/hoGHuv8aDxPSNiDpIg1Q65V
+ZbuPDI2a+bQfp6ZkiXQz19aWlyvveW6x2YxREbQ5/z6s6e78b88=
+=kmXQ
+-----END PGP SIGNATURE-----
 
-> +void iio_gts_purge_avail_scale_table(struct iio_gts *gts);
-> +void iio_gts_purge_avail_time_table(struct iio_gts *gts);
-> +void iio_gts_purge_avail_tables(struct iio_gts *gts);
-> +int iio_gts_avail_times(struct iio_gts *gts,  const int **vals, int *type,
-> +			int *length);
-> +int iio_gts_all_avail_scales(struct iio_gts *gts, const int **vals, int *type,
-> +			     int *length);
-> +int iio_gts_avail_scales_for_time(struct iio_gts *gts, int time,
-> +				  const int **vals, int *type, int *length);
-> +
-> +#endif
-
+--q46upqfjfsur6qqf--
