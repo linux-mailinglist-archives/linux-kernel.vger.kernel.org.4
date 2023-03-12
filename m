@@ -2,105 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D5006B658A
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:35:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84DEE6B6591
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:36:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjCLLfW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:35:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53850 "EHLO
+        id S230351AbjCLLgb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:36:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbjCLLfQ (ORCPT
+        with ESMTP id S229933AbjCLLg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:35:16 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAEA659E3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:34:34 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id x3so37924300edb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:34:34 -0700 (PDT)
+        Sun, 12 Mar 2023 07:36:29 -0400
+Received: from mail-ot1-x334.google.com (mail-ot1-x334.google.com [IPv6:2607:f8b0:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B18713B845
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:35:56 -0700 (PDT)
+Received: by mail-ot1-x334.google.com with SMTP id 32-20020a9d0323000000b0069426a71d79so5328465otv.10
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 04:35:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678620867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lGAGgYNdE6Pd2X6RBk1rI1o424GOh4uqi1Rdj97RA5U=;
-        b=WGzbJVbbiux67OAymm0FAyqyIpewzK50jKPRHmsc2oj7+Rd+/3sGFhkM5PTqSHAf3V
-         HV57exi/IoVOZzXbQzMCF1xWL2uFSn07S6uoRAvfnpOQUC2u2RO8kngM0nyNFs4ZjcJG
-         2/aW8XBhH91umkIG1GrwsZeIKxi13K6pfuCdXQlkoQaxW0TlXz0oLEBdrFN+poqsiy5H
-         FddT8EMgCbdjVTWAaW7JdlSmxGC2iBlTqfO1IE/UgFbz63Vw4u/Y4B48cv7InaQdMSuv
-         7gXGhJFLf5eJNHEKYSZk6BwzJs5Qvky0Q63Rpuv+TY7AU29/JxajT7qR6wgNLW/pErrF
-         gQmg==
+        d=gmail.com; s=20210112; t=1678620955;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=XjcDtI1pwVRGAPewN/AuluWv6QfCVbMYyve36OMm9hg=;
+        b=DZ8UYMYu2A2XNCP2bQxf5x8jGFANuCSbG53PLbpCzLLhHfYAjDjJOygzlkKDqeBQSL
+         ri+T67xJAD67wejY4f+/oQZHNCc7/xCmdRW1qkOm0kcSSxZ05i4mCzsFMiKQaaQDdF5w
+         E9wR8VscaC4E/rgpz7E3UaYkxJdUGr3hYWNYNPwFjfefTsKHDnCY26O4m3QoX01W3DaB
+         vZ6zVqJ2gjMhl4pYQH92/lr/jMmLdp9r8MkFaLSMrxztAHoFIptHyP2etDleFWbHV/FW
+         b3EAAZmhzGdWHUHzVpb1hjv0LXt0eGXzBhGRWunfUR+tpfp2mAWwj1EasyTmvEV4/uAq
+         B6hQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678620867;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678620955;
+        h=to:subject:message-id:date:from:sender:reply-to:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lGAGgYNdE6Pd2X6RBk1rI1o424GOh4uqi1Rdj97RA5U=;
-        b=sBABb92tQuISXsE0UMBg6SFa3RvZOiVjqBvhF3S6tRUuygrEj0wHDb+wRT05YbZYgk
-         KrYhSy26ke0phqo/QandQadQC/ZZ42uINMnSHDxneM1ri1tOWWbCj0qIsl9c/SbkHD9T
-         o4ZUO7UPMcMhPhru00u7AoEpv83j29COs7g20nzpjetqgsKzctC0B28EmkVvt3FYaZ/m
-         rjuJ5egTvoTlIxRycURVUw3hIaNBdImgKPCOHLNoaE6jbBJt4b8P5cErps+mddAITAjj
-         3vREGOxe/W/LEex4wHkBA0U+ajd8ypJe8qhJmq94rE2Kl8EdlriApJGjKCQMeAU0elUH
-         ja9Q==
-X-Gm-Message-State: AO0yUKUW07Arduj5S6jVT6ifp66aRHDylsf7naoMb7JjOaaOpvThTtt6
-        r4CQgMYa7qraew0bzhnX8aVjGXmDJ8/XKbTKSUI=
-X-Google-Smtp-Source: AK7set+rQR/TdHRnzgr3x3hfLsnoGtW+bJ0oFdDa1SCVGt2GQP//drZfE7QpY4BGi1h/ByHibY/Vjw==
-X-Received: by 2002:a05:6402:1a52:b0:4fb:3ab9:fe81 with SMTP id bf18-20020a0564021a5200b004fb3ab9fe81mr2552339edb.30.1678620867559;
-        Sun, 12 Mar 2023 04:34:27 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id u18-20020a50c052000000b004fa794ac0d0sm1575303edd.54.2023.03.12.04.34.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 04:34:27 -0700 (PDT)
-Message-ID: <951dec3a-1a3e-6d17-20fb-9e5915606c40@linaro.org>
-Date:   Sun, 12 Mar 2023 12:34:26 +0100
+        bh=XjcDtI1pwVRGAPewN/AuluWv6QfCVbMYyve36OMm9hg=;
+        b=lCYEzw4PxEopOahtMpq/+wWe1zRWWMsrYuTvue/6K5OtMpGNlR6EI5Z8zMh+8x9zlE
+         zux1HuaNVgrRAjB9Ee37wbOU95qXOTXXSWcqKXms6wRC7e0ng0rcSdE98oHVnjnTRvkA
+         TMnla5T4KUh5ktZs+1u8eMJ+x3xkpJ//b6W1WWxJB1QqK99Bu1gutJr1yqykNXP3bm5c
+         uc/7MnqXJNDA/lJ167SMoV4uZ7vMzfpFMIHPYwZyb/Nstc+rqBYif8lEl/5Ay9Ijyjws
+         p68R+pOrXQlvT5G01U3Bf5m6ohETHELi/hkAdH3dAk2T8AIdql9h8Xn3RCv/REnNqNXh
+         slfQ==
+X-Gm-Message-State: AO0yUKVY5EmTjk0uh1uiibSA5q82OsiI80oIfIRhHM36h8ius9G7eApi
+        YrHtY1CQpdLVo1bxnH6c7tXYOtZ0JPfj3xel+y4=
+X-Google-Smtp-Source: AK7set91gtUee3OP+0Fcx5HjxJkbSvih8i57U/TQLXUvmuRm97QnX5Z1OWr6uP/6Cqjabwfo9i5h/6OmwObkRMrWQWQ=
+X-Received: by 2002:a05:6830:6210:b0:690:eb8c:bae0 with SMTP id
+ cd16-20020a056830621000b00690eb8cbae0mr10565257otb.6.1678620954820; Sun, 12
+ Mar 2023 04:35:54 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 1/2] dt-bindings: synopsys-dw-mshc-common: add
- "fifo-access-32bit" property
-Content-Language: en-US
-To:     Sergey Lisov <sleirsgoevy@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <640db6ef.2e0a0220.9d4ba.1500@mx.google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <640db6ef.2e0a0220.9d4ba.1500@mx.google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Reply-To: eng.kelly103@gmail.com
+Sender: peterfuller301@gmail.com
+Received: by 2002:a05:6359:4b93:b0:f6:58a2:343a with HTTP; Sun, 12 Mar 2023
+ 04:35:54 -0700 (PDT)
+From:   "Eng. Kelly Williams" <eng.kelly103@gmail.com>
+Date:   Sun, 12 Mar 2023 04:35:54 -0700
+X-Google-Sender-Auth: -ioJQZJCqGsjjqCveOdz9GmkL2M
+Message-ID: <CACzHKnfmjCO71FRb0-7Xmzg9ctL99taC5wz-JBksbM-dL1d21Q@mail.gmail.com>
+Subject: Hello Dear
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_99,BAYES_999,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FROM,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,RISK_FREE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:334 listed in]
+        [list.dnswl.org]
+        *  0.2 BAYES_999 BODY: Bayes spam probability is 99.9 to 100%
+        *      [score: 1.0000]
+        *  3.5 BAYES_99 BODY: Bayes spam probability is 99 to 100%
+        *      [score: 1.0000]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [peterfuller301[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [peterfuller301[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [eng.kelly103[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  1.0 RISK_FREE No risk!
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 12:26, Sergey Lisov wrote:
->> There is no way this is board specific. This is SoC specific. I
->> mentioned it last time.
-> 
-> The same compatible string ("samsung,exynos7-dw-mshc{,-smu}") is used by
-> several devices on different Exynos SoCs.
+Hello
 
-... and should not be. It should come with a specific compatible
-followed by this fallback. The specific compatible then will define
-32-bit access.
 
-> And I was only able to find
-> a vendor kernel fork for one of them (exynos7885-jackpotlte, it has the
-> workaround, but it depends on a configuration option and I don't have the
-> config file for that device).
+My name is Eng. Kelly Williams I work with Texas oil and gas
+Association USA. I need your honest cooperation to partner with me to
+invest in your company or in any other viable business opportunity in
+your country under mutual interest benefits. Our partnership will be
+absolutely risk free, please I will also like to know the laws as it
+concerns foreign investors like me.
 
-Vendor kernel have configs, I think that's requirement of GPL.
+I look forward to your cordial response
 
-See jackpotlte_00_defconfig in my
-samsung/galaxy-a8-2018-jackpotlte-sm-a530f-exynos7885-dump branch of
-vendor-backup repo.
 
-Best regards,
-Krzysztof
 
+My Regards
+Eng. Kelly Williams
