@@ -2,180 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B7C6B68EA
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBC46B68ED
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:45:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCLRoq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:44:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47506 "EHLO
+        id S230123AbjCLRpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCLRoo (ORCPT
+        with ESMTP id S230111AbjCLRpW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:44:44 -0400
-Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 995DA3646B;
-        Sun, 12 Mar 2023 10:44:43 -0700 (PDT)
-Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-176b90e14a9so11535551fac.9;
-        Sun, 12 Mar 2023 10:44:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678643083;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=SKG1lI+0STMCFJtaydoqd1RU3Z9cyR3Jq7a+wFOPE4o=;
-        b=K4KWVy6lbc3GDVhrSGILzEHZAE3YTv/Rtr1GNdpe4aA2ZpC3yipMyV7ZM/gPvlM1Gr
-         wQiX/+dinF6I4Ijk1XnMHut/w9Cg5ZF5udEUS1NmvpA5pU0DjfzXZmLwQhuBCiF88yzT
-         91zFHtQX3DKMYvsOf/IpwQwZmxrnhtdFSt008O/T5uhi2IQpCEglLX1i1WyAiMWEjpvP
-         lFsqCEOdIvRDL1U5v4xzrlSq5bOxi+nUR1Cxm/8QQsqhNvw2c/BuraZ63SYMepMVW81y
-         T9IMkbfCYnJiW/LIrspnNqHhnBbI6gvPrEC4f8DOGzxnbLJrH05EAO2jNg8kq60x/BmL
-         a1tg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678643083;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SKG1lI+0STMCFJtaydoqd1RU3Z9cyR3Jq7a+wFOPE4o=;
-        b=sF6E4JnyGQASktAdzPRxN2yE77w4TgJDX+lwkSiBqJjaqGrLZuPZLRl0VThP4ERJ+2
-         xlgE3mt3X9mkmPS/ZQImGa+EBISC9mq626iwIJt6HMKYCHLmmsm8BYiYSHdN4Lu1PRYA
-         4H1/8Em+JrP3E8jwBGXDCYyYi8hsF2cgRtqwlYjB2oGD1t7SQHfCNk0X+Ukhseqjcemc
-         GPSZgxEXPoO0bMdpqgTIFh+GB7nddVQo0krg/lqiTauniyhpMz/VtLiSZeUiZzwh/vJQ
-         +zktaMk7w2lNdMVnT6dVEEu1W33ehL0g9fnk4cYAquVLbeyGc//aVF0cYlyupeXUd8XV
-         LyKA==
-X-Gm-Message-State: AO0yUKVXxZOA37h5itM3sinIpCfpW9VLbjuBx2R+NAo5XGBoUfHc8m3n
-        jqVKP3ecY+McV+MWMCDsgtk=
-X-Google-Smtp-Source: AK7set+Y/5JDt+MN0WDjWCCFX/9iLelnILZ/WEnZ9pvrKa/IcoDk1bcmk33RN1dmFhO7RFUKAn49Iw==
-X-Received: by 2002:a05:6870:414e:b0:16d:ccf9:bb4d with SMTP id r14-20020a056870414e00b0016dccf9bb4dmr18984287oad.39.1678643082970;
-        Sun, 12 Mar 2023 10:44:42 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bf17-20020a0568700a1100b0017197629658sm2212862oac.56.2023.03.12.10.44.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:44:42 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Sun, 12 Mar 2023 10:44:41 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Leonard Anderweit <leonard.anderweit@gmail.com>
-Cc:     linux-hwmon@vger.kernel.org,
-        Aleksa Savic <savicaleksa83@gmail.com>,
-        Jack Doan <me@jackdoan.com>, Jean Delvare <jdelvare@suse.com>,
-        Jonathan Corbet <corbet@lwn.net>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 4/6] hwmon: (aquacomputer_d5next) Add infrastructure
- for Aquaero control reports
-Message-ID: <210eddaf-cbd1-473e-920d-1c76c2923ee3@roeck-us.net>
-References: <20230214220221.15003-1-leonard.anderweit@gmail.com>
- <20230214220221.15003-5-leonard.anderweit@gmail.com>
+        Sun, 12 Mar 2023 13:45:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6113755E;
+        Sun, 12 Mar 2023 10:45:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC0A460F91;
+        Sun, 12 Mar 2023 17:45:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF26EC433D2;
+        Sun, 12 Mar 2023 17:45:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678643120;
+        bh=YEdUsPYrGcfGa+1Q3JmQqtfsYE5Mu9KqGWmOkv1vGKI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Gk98wvfrmLxkM4Ks+krsYRFLGE6WEwv7U2tXorF44jRdMofBAiXmSqqZqI8CTSiN2
+         OgYYzaj5Cg7CUn+r2S31ClA460gZ4dkvHFwjpfLEIwb/WVf2kAMpUMAWsi+5Tydj4x
+         Nh/TtzDfdK55WHLLxNY+O5tjarroB1CDdJpU1S9WGISW3I9RL333LCPHFgGb29fqHF
+         dbWgYQaZBogboZDqgiH/0x+FSQyLXOBV/AlJL26RUht6XZnCGDQTedFM3+BpUqPXG6
+         KeYEMLYqX/DYy+62AH9YvN+vLPMlbW3iGngYV2AIXN6lary3MvfQVvBgOvlaVBBLTo
+         k3rVFg2kAIvbw==
+Date:   Sun, 12 Mar 2023 17:45:24 +0000
+From:   Jonathan Cameron <jic23@kernel.org>
+To:     Tom Rix <trix@redhat.com>
+Cc:     lars@metafoo.de, mcoquelin.stm32@gmail.com,
+        alexandre.torgue@foss.st.com, fabrice.gasnier@foss.st.com,
+        olivier.moysan@foss.st.com, andy.shevchenko@gmail.com,
+        yannick.brosseau@gmail.com, nuno.sa@analog.com,
+        linux-iio@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] iio: adc: stm32-adc: set some stm32-adc.c variables
+ storage-class-specifier to static
+Message-ID: <20230312174524.75e55ce8@jic23-huawei>
+In-Reply-To: <20230312161733.470617-1-trix@redhat.com>
+References: <20230312161733.470617-1-trix@redhat.com>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230214220221.15003-5-leonard.anderweit@gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 14, 2023 at 11:02:19PM +0100, Leonard Anderweit wrote:
-> Add information on the Aquacomputer Aquaero control report and disable the
-> control report checksum for Aquaero. The Aquaero does not use the checksum so
-> it must be disabled to avoid overwriting the last two bytes of the control
-> report.
+On Sun, 12 Mar 2023 12:17:33 -0400
+Tom Rix <trix@redhat.com> wrote:
+
+> smatch reports several warnings
+> drivers/iio/adc/stm32-adc.c:2591:20: warning:
+>   symbol 'stm32_adc_min_ts_h7' was not declared. Should it be static?
+> drivers/iio/adc/stm32-adc.c:2610:20: warning:
+>   symbol 'stm32_adc_min_ts_mp1' was not declared. Should it be static?
+> drivers/iio/adc/stm32-adc.c:2630:20: warning:
+>   symbol 'stm32_adc_min_ts_mp13' was not declared. Should it be static?
 > 
-> Signed-off-by: Leonard Anderweit <leonard.anderweit@gmail.com>
+> These variables are only used in stm32-adc.c, so they should be static
+> 
+> Signed-off-by: Tom Rix <trix@redhat.com>
 
-Applied. And again:
+Thanks Tom,
 
-WARNING: Possible unwrapped commit description (prefer a maximum 75 chars per line)
-#85:
-control report checksum for Aquaero. The Aquaero does not use the checksum so
+I wonder why these didn't show up in earlier build reports?
+Ah well.
 
-Please keep in mind that you are causing extra work for me.
+Applied to the togreg branch of iio.git and pushed out as testing for
+0-day to take a look at it.
 
-Guenter
+Thanks,
+
+Jonathan
 
 > ---
->  drivers/hwmon/aquacomputer_d5next.c | 31 ++++++++++++++++++++++++-----
->  1 file changed, 26 insertions(+), 5 deletions(-)
+>  drivers/iio/adc/stm32-adc.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
 > 
-> diff --git a/drivers/hwmon/aquacomputer_d5next.c b/drivers/hwmon/aquacomputer_d5next.c
-> index 535d2fc0e55c..eb185318098a 100644
-> --- a/drivers/hwmon/aquacomputer_d5next.c
-> +++ b/drivers/hwmon/aquacomputer_d5next.c
-> @@ -56,6 +56,7 @@ static const char *const aqc_device_names[] = {
->  #define SERIAL_PART_OFFSET		2
->  
->  #define CTRL_REPORT_ID			0x03
-> +#define AQUAERO_CTRL_REPORT_ID		0x0b
->  
->  /* The HID report that the official software always sends
->   * after writing values, currently same for all devices
-> @@ -67,6 +68,14 @@ static u8 secondary_ctrl_report[] = {
->  	0x02, 0x00, 0x00, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00, 0x34, 0xC6
+> diff --git a/drivers/iio/adc/stm32-adc.c b/drivers/iio/adc/stm32-adc.c
+> index 45d4e79f8e55..1aadb2ad2cab 100644
+> --- a/drivers/iio/adc/stm32-adc.c
+> +++ b/drivers/iio/adc/stm32-adc.c
+> @@ -2588,7 +2588,7 @@ static const struct stm32_adc_cfg stm32f4_adc_cfg = {
+>  	.irq_clear = stm32f4_adc_irq_clear,
 >  };
 >  
-> +/* Secondary HID report values for Aquaero */
-> +#define AQUAERO_SECONDARY_CTRL_REPORT_ID	0x06
-> +#define AQUAERO_SECONDARY_CTRL_REPORT_SIZE	0x07
-> +
-> +static u8 aquaero_secondary_ctrl_report[] = {
-> +	0x06, 0x00, 0x02, 0x00, 0x00, 0x00, 0x00
-> +};
-> +
->  /* Report IDs for legacy devices */
->  #define POWERADJUST3_STATUS_REPORT_ID	0x03
+> -const unsigned int stm32_adc_min_ts_h7[] = { 0, 0, 0, 4300, 9000 };
+> +static const unsigned int stm32_adc_min_ts_h7[] = { 0, 0, 0, 4300, 9000 };
+>  static_assert(ARRAY_SIZE(stm32_adc_min_ts_h7) == STM32_ADC_INT_CH_NB);
 >  
-> @@ -94,6 +103,7 @@ static u8 secondary_ctrl_report[] = {
->  #define AQUAERO_NUM_VIRTUAL_SENSORS		8
->  #define AQUAERO_NUM_CALC_VIRTUAL_SENSORS	4
->  #define AQUAERO_NUM_FLOW_SENSORS		2
-> +#define AQUAERO_CTRL_REPORT_SIZE		0xa93
+>  static const struct stm32_adc_cfg stm32h7_adc_cfg = {
+> @@ -2607,7 +2607,7 @@ static const struct stm32_adc_cfg stm32h7_adc_cfg = {
+>  	.ts_int_ch = stm32_adc_min_ts_h7,
+>  };
 >  
->  /* Sensor report offsets for Aquaero fan controllers */
->  #define AQUAERO_SENSOR_START			0x65
-> @@ -531,12 +541,16 @@ static int aqc_send_ctrl_data(struct aqc_data *priv)
->  	int ret;
->  	u16 checksum;
+> -const unsigned int stm32_adc_min_ts_mp1[] = { 100, 100, 100, 4300, 9800 };
+> +static const unsigned int stm32_adc_min_ts_mp1[] = { 100, 100, 100, 4300, 9800 };
+>  static_assert(ARRAY_SIZE(stm32_adc_min_ts_mp1) == STM32_ADC_INT_CH_NB);
 >  
-> -	/* Init and xorout value for CRC-16/USB is 0xffff */
-> -	checksum = crc16(0xffff, priv->buffer + priv->checksum_start, priv->checksum_length);
-> -	checksum ^= 0xffff;
-> +	/* Checksum is not needed for Aquaero */
-> +	if (priv->kind != aquaero) {
-> +		/* Init and xorout value for CRC-16/USB is 0xffff */
-> +		checksum = crc16(0xffff, priv->buffer + priv->checksum_start,
-> +				 priv->checksum_length);
-> +		checksum ^= 0xffff;
+>  static const struct stm32_adc_cfg stm32mp1_adc_cfg = {
+> @@ -2627,7 +2627,7 @@ static const struct stm32_adc_cfg stm32mp1_adc_cfg = {
+>  	.ts_int_ch = stm32_adc_min_ts_mp1,
+>  };
 >  
-> -	/* Place the new checksum at the end of the report */
-> -	put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-> +		/* Place the new checksum at the end of the report */
-> +		put_unaligned_be16(checksum, priv->buffer + priv->checksum_offset);
-> +	}
+> -const unsigned int stm32_adc_min_ts_mp13[] = { 100, 0, 0, 4300, 9800 };
+> +static const unsigned int stm32_adc_min_ts_mp13[] = { 100, 0, 0, 4300, 9800 };
+>  static_assert(ARRAY_SIZE(stm32_adc_min_ts_mp13) == STM32_ADC_INT_CH_NB);
 >  
->  	/* Send the patched up report back to the device */
->  	ret = hid_hw_raw_request(priv->hdev, priv->ctrl_report_id, priv->buffer, priv->buffer_size,
-> @@ -1280,6 +1294,8 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->num_flow_sensors = AQUAERO_NUM_FLOW_SENSORS;
->  		priv->flow_sensors_start_offset = AQUAERO_FLOW_SENSORS_START;
->  
-> +		priv->buffer_size = AQUAERO_CTRL_REPORT_SIZE;
-> +
->  		priv->temp_label = label_temp_sensors;
->  		priv->virtual_temp_label = label_virtual_temp_sensors;
->  		priv->calc_virt_temp_label = label_aquaero_calc_temp_sensors;
-> @@ -1443,6 +1459,11 @@ static int aqc_probe(struct hid_device *hdev, const struct hid_device_id *id)
->  		priv->firmware_version_offset = AQUAERO_FIRMWARE_VERSION;
->  
->  		priv->fan_structure = &aqc_aquaero_fan_structure;
-> +
-> +		priv->ctrl_report_id = AQUAERO_CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_id = AQUAERO_SECONDARY_CTRL_REPORT_ID;
-> +		priv->secondary_ctrl_report_size = AQUAERO_SECONDARY_CTRL_REPORT_SIZE;
-> +		priv->secondary_ctrl_report = aquaero_secondary_ctrl_report;
->  		break;
->  	case poweradjust3:
->  		priv->status_report_id = POWERADJUST3_STATUS_REPORT_ID;
+>  static const struct stm32_adc_cfg stm32mp13_adc_cfg = {
+
