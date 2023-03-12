@@ -2,69 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80B76B6A29
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2202B6B6A07
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230219AbjCLShp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60190 "EHLO
+        id S231953AbjCLSXM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:23:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230043AbjCLShm (ORCPT
+        with ESMTP id S231895AbjCLSW4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:37:42 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DA53EB4F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:37:05 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id p4so3172388wre.11
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:37:05 -0700 (PDT)
+        Sun, 12 Mar 2023 14:22:56 -0400
+Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA85062DB0;
+        Sun, 12 Mar 2023 11:15:35 -0700 (PDT)
+Received: by mail-il1-x135.google.com with SMTP id j6so1460493ilr.7;
+        Sun, 12 Mar 2023 11:15:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678646165;
-        h=cc:to:subject:date:from:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=R/ZxX3DwmCtqhIm3cqoC0hxQvGcxZ6dvB//gAmJzTdM=;
-        b=XOhmMVev/gXj3bxisF3VA04n0BST1yq32s7SHNdLkZ6Dv7MAUiXWFC474m1YvXiLvE
-         h9RP9Qs0BBCF5ptSfZt4buUSoCRCfHmsLgbIUiKNNZ8BAcrtFSeVO2COWlRy/Nx0mORE
-         ApO+kGg4UtIeZ9xct1kYfwbWkQq6V05x56E8B6t6PIpFe2gbLcbJmTPkbIn4iHiK9Nry
-         FpvqWsPYsANRVkA+mwp0RL/cfAniTdb75lIWI22NmKCL8KtAX8LlIbxvoNx2jWmbtyWZ
-         qiHsGL+nl74DIW1H/NeB2LQgr3GbZ6ymqqTeV01rmnHzNbwAQgZgxqbnl54oASUwwIXW
-         jWcw==
+        d=gmail.com; s=20210112; t=1678644828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FBhKFNngoMDbvwNSzDNWcaqW697xKA6lIAPdNAaMhoc=;
+        b=kI4NParOZ+lhNFAKR9Lep/1F+OTIJ3v6HotVPYQuM4JoQIAB04A76/fY7UTPklNHHb
+         Go7AdPhDzXG1rUa1+qjsAGAoeGo4vTrDPhWfLTGRgpCJFwd5tGyU1VjwE869/x8H/BGF
+         Vzpe0oCB57UCM9icLk4TmB22T+FG9T62OQLiW7wHcSoXOR6Lx/roASCJ1fdGox0+GJhZ
+         9XBZ5rRKKkwW1RdEGBQhw0Q4ituU4w+wpntOaXIsBBLhQXNTBQyKqsg7VF8olrFXImrw
+         yJomMoyCeUyisHOV7HyLdpmkaZZp3AMbdzs4GZYjOLnp8vMa+3sdBcdf4Vg1EnHHRlNH
+         XUog==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678646165;
-        h=cc:to:subject:date:from:message-id:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678644828;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=R/ZxX3DwmCtqhIm3cqoC0hxQvGcxZ6dvB//gAmJzTdM=;
-        b=SkR/8lDejuvee/wjbDrVyZajxK6wz5RMLXMjTJiACkBoTYTkKl57c1gvhWZmfU0ZgN
-         ExP+ieykP5bmwbn7M+dTfuoswchg8q3QUG5fGObLlaAt9u8WP4xSDGqITs+7ruhMtHLu
-         y4LujQYDhTJj1IfylD61SKIgdyd+529aKa4WEVwSLLRUBof5vRrBFJKDVMVD4dzEPFeT
-         jyLRWEIuf2hVKTwSlsBfcYI3VdWvgX4mvPvSqc8Ozz6PNWy8sTUgfBjSm2B6bZUjg5mQ
-         woNyupmQLltvIBfpzvlmuyPXTz8kFV2rAy1LlqjQB6bULkX/lNw7PvRcxWQCiTE1w4FR
-         imiw==
-X-Gm-Message-State: AO0yUKUj1fnUgEz2wMdPJ1gdVBU3ZAKwZLtIabcH+6ObdjKidNbItoS9
-        sXlnF1nYH1wWl4LD8vy0tAxaHKAtLMfnZwE4
-X-Google-Smtp-Source: AK7set+wkPnEt0xkV2ROcbb6EW9jCdUXi7SFV2OO/gVZqXcJwah9KyC4U+jNRWNF8PDiTdw2MqWklg==
-X-Received: by 2002:ac2:51c4:0:b0:4cc:53e3:771d with SMTP id u4-20020ac251c4000000b004cc53e3771dmr8723551lfm.64.1678644302381;
-        Sun, 12 Mar 2023 11:05:02 -0700 (PDT)
-Received: from 0002-mmc-dw_mmc-add-an-option-to-force-32-bit-access-to-6.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
-        by smtp.gmail.com with ESMTPSA id l23-20020ac24317000000b004d8584970b8sm713273lfh.226.2023.03.12.11.05.01
-        for <linux-kernel@vger.kernel.org>
+        bh=FBhKFNngoMDbvwNSzDNWcaqW697xKA6lIAPdNAaMhoc=;
+        b=gaz5qi0UNwBgrOiX5CEbwEERUy7nGoFTfbW3wYAT/BRPnBooUJuUA4WtQ9QN798wp3
+         wIExh3LtQxCwiUKN6lOcFrk2HLAY6IZMA/M8sAUrFUXhic/WEi5ekRWfbKKhLA0Wwitq
+         r+uCJFV5lJNui9IpHRw2H2pw7/bxEBE2RcRrJ1N1zg9B1M17d6as2OWB6M9BDgiN3XRG
+         t8wrcj2M+XkYDgoEfjuk9O5FQubECRlL0MuXIL/KS9pD4FrXiURtv+0RspESh7tWdHJu
+         IfHFWK9GKXe5DHe6Wp/WkN/amapznemaMABYxWlqHKj0E/eJKpsxzl9MBOemsvf+qwOD
+         Zm+w==
+X-Gm-Message-State: AO0yUKXFudSbLq/Atr6IFoadCpJ/lZfU76oI0luQq9FHS4FZ/afewCwR
+        dxIiJu0eAVOBqUw+l0qRxboLaVZTpN0=
+X-Google-Smtp-Source: AK7set99eaB/tOAx9oetZS2Nd1lbb9Y4DcLSn1B/yluPn08tKQ8xgbuLL+TQoffPZDaHwu8q1LlAOA==
+X-Received: by 2002:aca:220a:0:b0:384:8b17:3796 with SMTP id b10-20020aca220a000000b003848b173796mr13893632oic.11.1678643998867;
+        Sun, 12 Mar 2023 10:59:58 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j65-20020acab944000000b0037d74967ef6sm2278346oif.44.2023.03.12.10.59.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 11:05:01 -0700 (PDT)
-Message-ID: <640e144d.c20a0220.80ed1.18ef@mx.google.com>
-From:   Sergey Lisov <sleirsgoevy@gmail.com>
-Date:   Sun, 12 Mar 2023 20:58:50 +0300
-Subject: [PATCH v5 2/3] mmc: dw_mmc: add an option to force 32-bit access to
- 64-bit FIFO
-To:     Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        Sun, 12 Mar 2023 10:59:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Sun, 12 Mar 2023 10:59:57 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Stefan Wahren <stefan.wahren@i2se.com>
+Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
+        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] docs: hwmon: sysfs-interface: Fix stray colon
+Message-ID: <e12555cc-1816-4a31-b4b4-4d07c7db4960@roeck-us.net>
+References: <20230312155714.17290-1-stefan.wahren@i2se.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312155714.17290-1-stefan.wahren@i2se.com>
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,321 +77,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some Samsung Exynos boards using the arm64 architecture have DW MMC
-controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
-systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
----
- drivers/mmc/host/dw_mmc-exynos.c |  43 ++++++++++-
- drivers/mmc/host/dw_mmc.c        | 122 ++++++++++++++++++++++++++++++-
- drivers/mmc/host/dw_mmc.h        |   2 +
- 3 files changed, 164 insertions(+), 3 deletions(-)
+On Sun, Mar 12, 2023 at 04:57:14PM +0100, Stefan Wahren wrote:
+> The commit 036d6a4e75c9 ("ABI: sysfs-class-hwmon: add ABI documentation
+> for it") moved all ABI attributes to the usual ABI documentation. But this
+> change left a stray colon for the fan speed control method. Fix this
+> to avoid a confusion of readers.
+> 
+> Fixes: 036d6a4e75c9 ("ABI: sysfs-class-hwmon: add ABI documentation for it")
+> Signed-off-by: Stefan Wahren <stefan.wahren@i2se.com>
 
-diff --git a/drivers/mmc/host/dw_mmc-exynos.c b/drivers/mmc/host/dw_mmc-exynos.c
-index 9f20ac524..b4c0ba2eb 100644
---- a/drivers/mmc/host/dw_mmc-exynos.c
-+++ b/drivers/mmc/host/dw_mmc-exynos.c
-@@ -28,6 +28,8 @@ enum dw_mci_exynos_type {
- 	DW_MCI_TYPE_EXYNOS5420_SMU,
- 	DW_MCI_TYPE_EXYNOS7,
- 	DW_MCI_TYPE_EXYNOS7_SMU,
-+	DW_MCI_TYPE_EXYNOS78XX,
-+	DW_MCI_TYPE_EXYNOS78XX_SMU,
- 	DW_MCI_TYPE_ARTPEC8,
- };
- 
-@@ -70,6 +72,12 @@ static struct dw_mci_exynos_compatible {
- 	}, {
- 		.compatible	= "samsung,exynos7-dw-mshc-smu",
- 		.ctrl_type	= DW_MCI_TYPE_EXYNOS7_SMU,
-+	}, {
-+		.compatible	= "samsung,exynos7885-dw-mshc",
-+		.ctrl_type	= DW_MCI_TYPE_EXYNOS78XX,
-+	}, {
-+		.compatible	= "samsung,exynos7885-dw-mshc-smu",
-+		.ctrl_type	= DW_MCI_TYPE_EXYNOS78XX_SMU,
- 	}, {
- 		.compatible	= "axis,artpec8-dw-mshc",
- 		.ctrl_type	= DW_MCI_TYPE_ARTPEC8,
-@@ -86,6 +94,8 @@ static inline u8 dw_mci_exynos_get_ciu_div(struct dw_mci *host)
- 		return EXYNOS4210_FIXED_CIU_CLK_DIV;
- 	else if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 			priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+			priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+			priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 			priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		return SDMMC_CLKSEL_GET_DIV(mci_readl(host, CLKSEL64)) + 1;
- 	else
-@@ -101,7 +111,8 @@ static void dw_mci_exynos_config_smu(struct dw_mci *host)
- 	 * set for non-ecryption mode at this time.
- 	 */
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS5420_SMU ||
--		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU) {
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU) {
- 		mci_writel(host, MPSBEGIN0, 0);
- 		mci_writel(host, MPSEND0, SDMMC_ENDING_SEC_NR_MAX);
- 		mci_writel(host, MPSCTRL0, SDMMC_MPSCTRL_SECURE_WRITE_BIT |
-@@ -127,6 +138,12 @@ static int dw_mci_exynos_priv_init(struct dw_mci *host)
- 				DQS_CTRL_GET_RD_DELAY(priv->saved_strobe_ctrl);
- 	}
- 
-+	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU) {
-+		/* Quirk needed for certain Exynos SoCs */
-+		host->quirks |= DW_MMC_QUIRK_FIFO64_32;
-+	}
-+
- 	if (priv->ctrl_type == DW_MCI_TYPE_ARTPEC8) {
- 		/* Quirk needed for the ARTPEC-8 SoC */
- 		host->quirks |= DW_MMC_QUIRK_EXTENDED_TMOUT;
-@@ -144,6 +161,8 @@ static void dw_mci_exynos_set_clksel_timing(struct dw_mci *host, u32 timing)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		clksel = mci_readl(host, CLKSEL64);
- 	else
-@@ -153,6 +172,8 @@ static void dw_mci_exynos_set_clksel_timing(struct dw_mci *host, u32 timing)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		mci_writel(host, CLKSEL64, clksel);
- 	else
-@@ -223,6 +244,8 @@ static int dw_mci_exynos_resume_noirq(struct device *dev)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		clksel = mci_readl(host, CLKSEL64);
- 	else
-@@ -231,6 +254,8 @@ static int dw_mci_exynos_resume_noirq(struct device *dev)
- 	if (clksel & SDMMC_CLKSEL_WAKEUP_INT) {
- 		if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 			priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+			priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+			priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 			priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 			mci_writel(host, CLKSEL64, clksel);
- 		else
-@@ -410,6 +435,8 @@ static inline u8 dw_mci_exynos_get_clksmpl(struct dw_mci *host)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		return SDMMC_CLKSEL_CCLK_SAMPLE(mci_readl(host, CLKSEL64));
- 	else
-@@ -423,6 +450,8 @@ static inline void dw_mci_exynos_set_clksmpl(struct dw_mci *host, u8 sample)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		clksel = mci_readl(host, CLKSEL64);
- 	else
-@@ -430,6 +459,8 @@ static inline void dw_mci_exynos_set_clksmpl(struct dw_mci *host, u8 sample)
- 	clksel = SDMMC_CLKSEL_UP_SAMPLE(clksel, sample);
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		mci_writel(host, CLKSEL64, clksel);
- 	else
-@@ -444,6 +475,8 @@ static inline u8 dw_mci_exynos_move_next_clksmpl(struct dw_mci *host)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		clksel = mci_readl(host, CLKSEL64);
- 	else
-@@ -454,6 +487,8 @@ static inline u8 dw_mci_exynos_move_next_clksmpl(struct dw_mci *host)
- 
- 	if (priv->ctrl_type == DW_MCI_TYPE_EXYNOS7 ||
- 		priv->ctrl_type == DW_MCI_TYPE_EXYNOS7_SMU ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX ||
-+		priv->ctrl_type == DW_MCI_TYPE_EXYNOS78XX_SMU ||
- 		priv->ctrl_type == DW_MCI_TYPE_ARTPEC8)
- 		mci_writel(host, CLKSEL64, clksel);
- 	else
-@@ -633,6 +668,12 @@ static const struct of_device_id dw_mci_exynos_match[] = {
- 			.data = &exynos_drv_data, },
- 	{ .compatible = "samsung,exynos7-dw-mshc-smu",
- 			.data = &exynos_drv_data, },
-+	/* XXX: more SoCs probably have the same quirk,
-+		the compatible should be something more generic */
-+	{ .compatible = "samsung,exynos7885-dw-mshc",
-+			.data = &exynos_drv_data, },
-+	{ .compatible = "samsung,exynos7885-dw-mshc-smu",
-+			.data = &exynos_drv_data, },
- 	{ .compatible = "axis,artpec8-dw-mshc",
- 			.data = &artpec_drv_data, },
- 	{},
-diff --git a/drivers/mmc/host/dw_mmc.c b/drivers/mmc/host/dw_mmc.c
-index 581614196..9fe816c61 100644
---- a/drivers/mmc/host/dw_mmc.c
-+++ b/drivers/mmc/host/dw_mmc.c
-@@ -2575,6 +2575,119 @@ static void dw_mci_pull_data64(struct dw_mci *host, void *buf, int cnt)
- 	}
- }
- 
-+/*
-+  Some dw_mmc devices have 64-bit FIFOs, but expect them to be
-+  accessed using two 32-bit accesses. If such controller is used
-+  with a 64-bit kernel, this has to be done explicitly.
-+
-+  XXX: Is this issue specific to Exynos7?
-+*/
-+
-+static inline uint64_t mci_fifo_readq_32(void __iomem *addr)
-+{
-+	uint64_t ans;
-+	uint32_t proxy[2];
-+
-+	proxy[0] = mci_fifo_readl(addr);
-+	proxy[1] = mci_fifo_readl(addr+4);
-+	memcpy(&ans, proxy, 8);
-+	return ans;
-+}
-+
-+static inline void mci_fifo_writeq_32(void __iomem *addr, uint64_t value)
-+{
-+	uint32_t proxy[2];
-+
-+	memcpy(proxy, &value, 8);
-+	mci_fifo_writel(addr, proxy[0]);
-+	mci_fifo_writel(addr+4, proxy[1]);
-+}
-+
-+static void dw_mci_push_data64_32(struct dw_mci *host, void *buf, int cnt)
-+{
-+	struct mmc_data *data = host->data;
-+	int init_cnt = cnt;
-+
-+	/* try and push anything in the part_buf */
-+	if (unlikely(host->part_buf_count)) {
-+		int len = dw_mci_push_part_bytes(host, buf, cnt);
-+
-+		buf += len;
-+		cnt -= len;
-+
-+		if (host->part_buf_count == 8) {
-+			mci_fifo_writeq_32(host->fifo_reg, host->part_buf);
-+			host->part_buf_count = 0;
-+		}
-+	}
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-+	if (unlikely((unsigned long)buf & 0x7)) {
-+		while (cnt >= 8) {
-+			u64 aligned_buf[16];
-+			int len = min(cnt & -8, (int)sizeof(aligned_buf));
-+			int items = len >> 3;
-+			int i;
-+			/* memcpy from input buffer into aligned buffer */
-+			memcpy(aligned_buf, buf, len);
-+			buf += len;
-+			cnt -= len;
-+			/* push data from aligned buffer into fifo */
-+			for (i = 0; i < items; ++i)
-+				mci_fifo_writeq_32(host->fifo_reg, aligned_buf[i]);
-+		}
-+	} else
-+#endif
-+	{
-+		u64 *pdata = buf;
-+
-+		for (; cnt >= 8; cnt -= 8)
-+			mci_fifo_writeq_32(host->fifo_reg, *pdata++);
-+		buf = pdata;
-+	}
-+	/* put anything remaining in the part_buf */
-+	if (cnt) {
-+		dw_mci_set_part_bytes(host, buf, cnt);
-+		/* Push data if we have reached the expected data length */
-+		if ((data->bytes_xfered + init_cnt) ==
-+		    (data->blksz * data->blocks))
-+			mci_fifo_writeq_32(host->fifo_reg, host->part_buf);
-+	}
-+}
-+
-+static void dw_mci_pull_data64_32(struct dw_mci *host, void *buf, int cnt)
-+{
-+#ifndef CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS
-+	if (unlikely((unsigned long)buf & 0x7)) {
-+		while (cnt >= 8) {
-+			/* pull data from fifo into aligned buffer */
-+			u64 aligned_buf[16];
-+			int len = min(cnt & -8, (int)sizeof(aligned_buf));
-+			int items = len >> 3;
-+			int i;
-+
-+			for (i = 0; i < items; ++i)
-+				aligned_buf[i] = mci_fifo_readq_32(host->fifo_reg);
-+
-+			/* memcpy from aligned buffer into output buffer */
-+			memcpy(buf, aligned_buf, len);
-+			buf += len;
-+			cnt -= len;
-+		}
-+	} else
-+#endif
-+	{
-+		u64 *pdata = buf;
-+
-+		for (; cnt >= 8; cnt -= 8)
-+			*pdata++ = mci_fifo_readq_32(host->fifo_reg);
-+		buf = pdata;
-+	}
-+	if (cnt) {
-+		host->part_buf = mci_fifo_readq_32(host->fifo_reg);
-+		dw_mci_pull_final_bytes(host, buf, cnt);
-+	}
-+}
-+
- static void dw_mci_pull_data(struct dw_mci *host, void *buf, int cnt)
- {
- 	int len;
-@@ -3367,8 +3480,13 @@ int dw_mci_probe(struct dw_mci *host)
- 		width = 16;
- 		host->data_shift = 1;
- 	} else if (i == 2) {
--		host->push_data = dw_mci_push_data64;
--		host->pull_data = dw_mci_pull_data64;
-+		if ((host->quirks & DW_MMC_QUIRK_FIFO64_32)) {
-+			host->push_data = dw_mci_push_data64_32;
-+			host->pull_data = dw_mci_pull_data64_32;
-+		} else {
-+			host->push_data = dw_mci_push_data64;
-+			host->pull_data = dw_mci_pull_data64;
-+		}
- 		width = 64;
- 		host->data_shift = 3;
- 	} else {
-diff --git a/drivers/mmc/host/dw_mmc.h b/drivers/mmc/host/dw_mmc.h
-index 4ed81f94f..edd642b92 100644
---- a/drivers/mmc/host/dw_mmc.h
-+++ b/drivers/mmc/host/dw_mmc.h
-@@ -280,6 +280,8 @@ struct dw_mci_board {
- 
- /* Support for longer data read timeout */
- #define DW_MMC_QUIRK_EXTENDED_TMOUT            BIT(0)
-+/* Force 32-bit access to the FIFO */
-+#define DW_MMC_QUIRK_FIFO64_32                 BIT(1)
- 
- #define DW_MMC_240A		0x240a
- #define DW_MMC_280A		0x280a
--- 
-2.38.3
+Applied.
 
+Thanks,
+Guenter
 
+> ---
+>  Documentation/hwmon/sysfs-interface.rst | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/hwmon/sysfs-interface.rst b/Documentation/hwmon/sysfs-interface.rst
+> index 209626fb2405..f76e9f8cc1ad 100644
+> --- a/Documentation/hwmon/sysfs-interface.rst
+> +++ b/Documentation/hwmon/sysfs-interface.rst
+> @@ -201,7 +201,7 @@ PWM
+>  		Pulse width modulation fan control.
+>  
+>  `pwm[1-*]_enable`
+> -		Fan speed control method:
+> +		Fan speed control method.
+>  
+>  `pwm[1-*]_mode`
+>  		direct current or pulse-width modulation.
