@@ -2,62 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B80D36B6C92
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:34:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 833566B6C96
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 00:36:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCLXeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 19:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59400 "EHLO
+        id S229668AbjCLXgr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 19:36:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCLXeA (ORCPT
+        with ESMTP id S229437AbjCLXgp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 19:34:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49933F770;
-        Sun, 12 Mar 2023 16:33:59 -0700 (PDT)
+        Sun, 12 Mar 2023 19:36:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 38337298F1;
+        Sun, 12 Mar 2023 16:36:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D60E060F84;
-        Sun, 12 Mar 2023 23:33:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 40203C433D2;
-        Sun, 12 Mar 2023 23:33:58 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA88EB80D65;
+        Sun, 12 Mar 2023 23:36:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2F45C433EF;
+        Sun, 12 Mar 2023 23:36:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678664038;
-        bh=9hQ64muwXIXfO9NNRhHxBVK0eY6fJamQWVhPBL5Esck=;
-        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-        b=RwOactAP1ueypWL0A9z34kwqCd0d0BeZQaOuIZkXlgsEqOhup490NAAhRMmw0aWTU
-         wV6f790mruKHNJrf32HycCvT6t9vOFoZJLO3FgZ+DNckqbW6CeqQIeEhQl4Em2sck3
-         2bL5QBOkyYwFBybW92VJh31VQ741npxK/BlV8NyDgUkGNmhgPe5++/JNtJOvvafV9k
-         HAFpubrdfUTHvRpLisCDfnvGsNHJE5pMmpThCe0zq4rSXkH4fO89K1UT3wWP9ji7CX
-         v6sNZf6nyp4gRi7USkA9j++HOn1WuajCqhueyqkTxImjcd+IMZ+sJD57Y7aBbCzVUx
-         AN569amIu6keA==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2CD34E61B75;
-        Sun, 12 Mar 2023 23:33:58 +0000 (UTC)
-Subject: Re: [GIT PULL] tpm: changes for v6.3-rc3
-From:   pr-tracker-bot@kernel.org
-In-Reply-To: <698049d487a816fe3579200b2e02648d8d60b2be.camel@kernel.org>
-References: <698049d487a816fe3579200b2e02648d8d60b2be.camel@kernel.org>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <698049d487a816fe3579200b2e02648d8d60b2be.camel@kernel.org>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc3
-X-PR-Tracked-Commit-Id: f1324bbc4011ed8aef3f4552210fc429bcd616da
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: c4ecd87f75ec4d5ac3006ef21ce07e812982e46e
-Message-Id: <167866403817.1417.646090000604786585.pr-tracker-bot@kernel.org>
-Date:   Sun, 12 Mar 2023 23:33:58 +0000
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Matthew Garrett <mgarrett@aurora.tech>,
-        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        s=k20201202; t=1678664201;
+        bh=AfguMXV3wShDapxuddDUc/QN7LO/Tpvnjh3XCp7WNHA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=LCKOaW0VKSlJsBj2xi4Mvq4DfO1euPd1SddYnfYB68ETOSYnh/FV+twiGUJoM2Via
+         ynf5QVNZZbAE+7fXy08tCa52TrvvrBScw+bg7ZIde7Yp7KOGRgD3tDeJJOwmatk1l0
+         Dh3BnF20/iu87Y+pMDbVCh6sAY/18tDlzPWTwR7R5OiAKS3mSGJCg6GrRQ+4p9G4fm
+         7x/9Ep/PNBAxazQ4krCCf+yuaaevvo95w2sC3qOKwto+B083EysXNXNPg5CqhNdtVn
+         c9i02/u69JVKyz40oVq5Sb6Og91srpX/hFY7jhHjzAhtXOGLM9m0HiKutchOo1qbWB
+         zSb95utvcYneg==
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Ryan Chen <ryan_chen@aspeedtech.com>,
+        Andi Shyti <andi.shyti@kernel.org>
+Subject: [PATCH v3 0/3] Add the clock stretching i2c property
+Date:   Mon, 13 Mar 2023 00:36:10 +0100
+Message-Id: <20230312233613.303408-1-andi.shyti@kernel.org>
+X-Mailer: git-send-email 2.39.2
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,15 +55,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pull request you sent on Sun, 12 Mar 2023 23:34:33 +0200:
+Hello,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/jarkko/linux-tpmdd.git tags/tpm-v6.3-rc3
+fter a discussion between Krzysztof and Ryan[1], it has become
+apparent that the i2c binding is lacking the definition of a
+property that needs to be added at a more generic level. This
+property is also used by the mpc i2c controller, which has been
+updated in the second patch.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/c4ecd87f75ec4d5ac3006ef21ce07e812982e46e
+The DTS schema change has been sent as github pull reqest[2].
 
-Thank you!
+Thanks Krzysztof and Chris for the reviews.
+
+Thank you,
+Andi
+
+[1] https://lore.kernel.org/all/c41ee6b5-ddb4-1253-de54-a295b3bab2cc@linaro.org/
+[2] https://github.com/devicetree-org/dt-schema/pull/102
+
+Changelog
+=========
+v2 -> v3:
+ - Chris recommended to use of_property_read_u32() instead of
+   of_get_property(). Because there were two use of it I added
+   the suggested cleanup in a separate patch.
+ - Added Chris r-b in patch 3.
+
+v1 -> v2:
+ - Removed the binding patch and send through a different channel
+ - To ensure back compatibility, which was broken in v1, the
+   legacy "fsl,timeout" has not been removed and marked as
+   deprecated. In the driver the that property is checked anyway
+   as a fallback in case the main i2c-scl-clk-low-timeout-ms is
+   missing.
+
+Andi Shyti (3):
+  dt-bindings: i2c: mpc: Mark "fsl,timeout" as deprecated
+  i2c: mpc: Use of_property_read_u32 instead of of_get_property
+  i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c property
+
+ .../devicetree/bindings/i2c/i2c-mpc.yaml      |  3 +-
+ drivers/i2c/busses/i2c-mpc.c                  | 35 ++++++++++++-------
+ 2 files changed, 25 insertions(+), 13 deletions(-)
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+2.39.2
+
