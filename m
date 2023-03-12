@@ -2,54 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4126B649B
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:00:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 43FF96B64B4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:02:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjCLKAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:00:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36780 "EHLO
+        id S230419AbjCLKBj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:01:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230493AbjCLKAE (ORCPT
+        with ESMTP id S230365AbjCLKA6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:00:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36A4257D2E;
-        Sun, 12 Mar 2023 01:59:04 -0800 (PST)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 144BAB80A1F;
-        Sun, 12 Mar 2023 09:59:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7107C433EF;
-        Sun, 12 Mar 2023 09:58:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678615138;
-        bh=ygoYvdiGg9WNb7yZxh5PCQJLNdmqvau0NDCGlvy8krs=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=EcOpod9N54/R3Ipty0JBOsQalcqnnSH86nZOd8wSzygc9/ZWpMRjQyVUe6Sms2FJS
-         pOGNbDwHYkkNH9hyet88mU5EzH7ATxCfORKextxTm9QKXLKA0969ExpuAqORNEY2gD
-         WvScyLOwNhe5hy1lkBIBOPInfBPUS9a63yKAXrZw9hMyoJHeQcaJOs6zjSy4KdUKBc
-         pE7URxZMWEL4GiZKKhuCWKbvN/1eH2LP5KETgjYXAPBQpYp+bSwamOgG544fY3uLE7
-         4CIFtECuDilukimxS15TxlRVLfM2C2KHvutsS0xfbbs4XBchFIUO/pLP7uAOLGa6HC
-         jDU8UIRbbQBog==
-Date:   Sun, 12 Mar 2023 18:58:53 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Donglin Peng <pengdonglin@sangfor.com.cn>
-Cc:     rostedt@goodmis.org, xiehuan09@gmail.com, dinghui@sangfor.com.cn,
-        huangcun@sangfor.com.cn, linux-trace-kernel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC v2] function_graph: Support recording and outputing the
- return value of function
-Message-Id: <20230312185853.1b85d63cfda11824fc609e18@kernel.org>
-In-Reply-To: <20230312022826.10367-1-pengdonglin@sangfor.com.cn>
-References: <20230312022826.10367-1-pengdonglin@sangfor.com.cn>
-X-Mailer: Sylpheed 3.7.0 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        Sun, 12 Mar 2023 06:00:58 -0400
+Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594E73757D;
+        Sun, 12 Mar 2023 03:00:04 -0700 (PDT)
+Received: by mail-wr1-x42d.google.com with SMTP id l12so485984wrm.10;
+        Sun, 12 Mar 2023 03:00:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678615160;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=F/eUf+U6VJsU72zpkAHAR/G+9W+06JthKevGiP5LF44=;
+        b=mQjD7qOx7ex1pHGWyQeUg0YqTmCHy1WTTDhdvfcblgD/O1BEmOllQOhb+WykNhIjZJ
+         8fABaAKSlHCX8WjL7ecmWEiu0afJm49LiQgrU5P3uvtEvjGEpPvoO7j8dghtH9yB888L
+         HCvBJoyz+jBZK/OH4h0rkBdLpQgxskFHjLxJKzZvU/LYcoYJYRGamZUo6R8rp+kaw/P5
+         9Sr9zUgOhCFMx8UDPSwTM1pnHDgf60/Et0uMd8VCzatob3+VhJvJcfqal/9xtFZQM0C+
+         ptVF/C9NDptX9W5XaKpi5Qjssag5XtJADn60tuPiS9xen4hjcQy9fJnpldX5GgdwflXP
+         3vAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678615160;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=F/eUf+U6VJsU72zpkAHAR/G+9W+06JthKevGiP5LF44=;
+        b=VlH8iKieHIF7LUQvK/CGxgCg9ArV6GYNL8PHGyuxkQ1advI5CNuy8BFubSamajuhca
+         Iem7H13gKp+TqeL5CIwsv7KUlf3HLodLO6eFsvleuPkazkWe0WuoruKeS5EppxeNS04i
+         h3WMzRlPt8f9/kw4+c921B1hKtf77nYuNvBINPi1Surino5WqnKIQ5Hp8nDkMpEjYpS7
+         g1XKNQxZ9sCV7bB0OJMoi0s/25OoTyDCgNMeHO9xzpbFSku3B5C5/nE+rmTKUimNnqDH
+         sqBSxHZYs1qvM6JKhfNJNZI6CSZDMVpkoyAuflcrxom1jtkU5RCqJiBTsslx793AGaQt
+         nH5A==
+X-Gm-Message-State: AO0yUKXiUXe47csHxy1Gde/KpVseUZYFB/c8l7aatigt4sXc+ADc69xH
+        /dlJy7jfUObtqNaNYExcccEIdyCIxcVvcQ==
+X-Google-Smtp-Source: AK7set8l8/lXKE5CTcpAn0qTvK8Gp5PAdyHglSBceQJL8ZQLKfrUOQl3w3Kww9Ks9mqp+kEuNQe/1Q==
+X-Received: by 2002:a05:6000:181:b0:2ce:aa2e:b864 with SMTP id p1-20020a056000018100b002ceaa2eb864mr1211615wrx.27.1678615159553;
+        Sun, 12 Mar 2023 01:59:19 -0800 (PST)
+Received: from kernel.org ([46.120.23.99])
+        by smtp.gmail.com with ESMTPSA id z10-20020a5d654a000000b002ceaa0e6aa5sm1753461wrv.73.2023.03.12.01.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 01:59:19 -0800 (PST)
+Date:   Sun, 12 Mar 2023 11:59:15 +0200
+From:   Mike Rapoport <mike.rapoport@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        Mike Rapoport <rppt@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH 7/7] mm/slab: document kfree() as allowed for
+ kmem_cache_alloc() objects
+Message-ID: <ZA2ic9JYXGVzps1+@kernel.org>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <20230310103210.22372-8-vbabka@suse.cz>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310103210.22372-8-vbabka@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,363 +91,111 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Donglin,
-
-This looks really interesting. There is fprobe and I'm trying introduce the
-fprobe event, but that is an event trace. So this is another way to trace
-the return values.
-
-On Sat, 11 Mar 2023 18:28:26 -0800
-Donglin Peng <pengdonglin@sangfor.com.cn> wrote:
-
-> When using function_graph to analyze the reasons for system call failures,
-> we need to spend a considerable amount of time analyzing the logs and
-> cannot quickly locate the error. This modification aims to make this
-> process easier by recording the return values of each traced function.
-> When outputting trace logs, the tracing option funcgraph-retval can be
-> used to control whether to display the return values. If the return value
-> looks like an error code, it will be output in both hexadecimal and signed
-> decimal, otherwise only hexadecimal.
-
-Hm, this will confuse the output parser. The output should be human readable
-but also machine readable. I think you can introduce an option (tracefs/options/*)
-to show "smart" output or hexadecimal output always.
-
-treacefs/options/graph_retval_hex
-
-If this is 1, the return value is printed always in hexadecimal. If it is 0,
-when the IS_ERR(retval) is true, it will show it in signed decimal, or
-hexadecimal (with "0x" prefix).
-
-> Currently, this modification supports the following commonly used processor
-> architectures: x64, x86, arm64, arm, riscv.
-
-This may also need to be reviewed by each arch maintainer. So we need
-CONFIG_HAVE_FUNCTION_GRAPH_RETVAL which indicates that this architecture
-support ftrace-graph retval and CONFIG_FUNCTION_GRAPH_RETVAL which
-switches this retval is printed or not.
-
+On Fri, Mar 10, 2023 at 11:32:09AM +0100, Vlastimil Babka wrote:
+> This will make it easier to free objects in situations when they can
+> come from either kmalloc() or kmem_cache_alloc(), and also allow
+> kfree_rcu() for freeing objects from kmem_cache_alloc().
 > 
-> One drawback is that even if a function's return type is void, the value
-> stored in the return value register will still be recorded and output.
-
-Yeah, but I think that is no problem. We can notify user that this retval
-is always be shown even if the function return type is void.
-
-> I think the BTF files can be used to obtain the return type of kernel
-> functions, but the search cost is a bit high. Therefore, we can
-> implement a tool to process trace logs based on BTF information.
-
-Agreed. Anyway for some specific functions, we can use fprobe events.
-
-Thank you.
-
+> For the SLAB and SLUB allocators this was always possible so with SLOB
+> gone, we can document it as supported.
 > 
-> For example:
-> 
-> I want to attach the demo process to a cpu cgroup, but it failed:
-> 
-> echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
-> -bash: echo: write error: Invalid argument
-> 
-> The strace logs tells that the write system call returned -EINVAL(-22):
-> ...
-> write(1, "273\n", 4)                    = -1 EINVAL (Invalid argument)
-> ...
-> 
-> Use the following commands to capture trace logs when calling the write
-> system call:
-> 
-> cd /sys/kernel/debug/tracing/
-> echo 0 > tracing_on
-> echo > trace
-> echo *sys_write > set_graph_function
-> echo *spin* > set_graph_notrace
-> echo *rcu* >> set_graph_notrace
-> echo *alloc* >> set_graph_notrace
-> echo preempt* >> set_graph_notrace
-> echo kfree* >> set_graph_notrace
-> echo $$ > set_ftrace_pid
-> echo function_graph > current_tracer
-> echo 1 > tracing_on
-> echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
-> echo 0 > tracing_on
-> echo 1 > options/funcgraph-retval
-> cat trace > ~/trace.log
-> 
-> Search -22 directly in the trace.log and find that the function
-> cpu_cgroup_can_attach returned -22 first, then read the code of this
-> function to get the root cause.
-> 
-> ...
->  0)            |  cgroup_migrate() {
->  0)  0.521 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
->  0)  0.500 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
->  0)  0.441 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
->  0)  0.521 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
->  0)  0.421 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
->  0)  0.431 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
->  0)            |    cgroup_migrate_execute() {
->  0)            |      cpu_cgroup_can_attach() {
->  0)            |        cgroup_taskset_first() {
->  0)  0.221 us  |          cgroup_taskset_next(); /* => ffff88800e13c000 */
->  0)  0.641 us  |        } /* cgroup_taskset_first => ffff88800e13c000 */
->  0)  0.320 us  |        sched_rt_can_attach(); /* => 0 */
->  0)  1.713 us  |      } /* cpu_cgroup_can_attach => ffffffea -22 */
->  0)  3.717 us  |    } /* cgroup_migrate_execute => ffffffea -22 */
->  0)  9.959 us  |  } /* cgroup_migrate => ffffffea -22 */
-> ...
-> 
-> Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> Cc: Mike Rapoport <rppt@kernel.org>
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Frederic Weisbecker <frederic@kernel.org>
+> Cc: Neeraj Upadhyay <quic_neeraju@quicinc.com>
+> Cc: Josh Triplett <josh@joshtriplett.org>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Lai Jiangshan <jiangshanlai@gmail.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
 > ---
->  arch/arm/kernel/entry-ftrace.S       |  1 +
->  arch/arm64/kernel/entry-ftrace.S     |  1 +
->  arch/riscv/kernel/mcount.S           |  2 +
->  arch/x86/kernel/ftrace_32.S          |  1 +
->  arch/x86/kernel/ftrace_64.S          |  2 +
->  include/linux/ftrace.h               |  1 +
->  kernel/trace/fgraph.c                |  3 +-
->  kernel/trace/trace.h                 |  1 +
->  kernel/trace/trace_entries.h         |  5 +-
->  kernel/trace/trace_functions_graph.c | 70 ++++++++++++++++++++++++----
->  10 files changed, 74 insertions(+), 13 deletions(-)
+>  Documentation/core-api/memory-allocation.rst | 15 +++++++++++----
+>  include/linux/rcupdate.h                     |  6 ++++--
+>  mm/slab_common.c                             |  5 +----
+>  3 files changed, 16 insertions(+), 10 deletions(-)
 > 
-> diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
-> index 3e7bcaca5e07..c6666c0d909c 100644
-> --- a/arch/arm/kernel/entry-ftrace.S
-> +++ b/arch/arm/kernel/entry-ftrace.S
-> @@ -258,6 +258,7 @@ ENDPROC(ftrace_graph_regs_caller)
->  #ifdef CONFIG_FUNCTION_GRAPH_TRACER
->  ENTRY(return_to_handler)
->  	stmdb	sp!, {r0-r3}
-> +	mov	r1, r0			@ pass the return value
->  	add	r0, sp, #16		@ sp at exit of instrumented routine
->  	bl	ftrace_return_to_handler
->  	mov	lr, r0			@ r0 has real ret addr
-> diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
-> index 350ed81324ac..0eb9a0e3ba3d 100644
-> --- a/arch/arm64/kernel/entry-ftrace.S
-> +++ b/arch/arm64/kernel/entry-ftrace.S
-> @@ -276,6 +276,7 @@ SYM_CODE_START(return_to_handler)
->  	stp x4, x5, [sp, #32]
->  	stp x6, x7, [sp, #48]
+> diff --git a/Documentation/core-api/memory-allocation.rst b/Documentation/core-api/memory-allocation.rst
+> index 5954ddf6ee13..f9e8d352ed67 100644
+> --- a/Documentation/core-api/memory-allocation.rst
+> +++ b/Documentation/core-api/memory-allocation.rst
+> @@ -170,7 +170,14 @@ should be used if a part of the cache might be copied to the userspace.
+>  After the cache is created kmem_cache_alloc() and its convenience
+>  wrappers can allocate memory from that cache.
 >  
-> +	mov	x1, x0			// pass the return value
->  	mov	x0, x29			//     parent's fp
->  	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(fp);
->  	mov	x30, x0			// restore the original return address
-> diff --git a/arch/riscv/kernel/mcount.S b/arch/riscv/kernel/mcount.S
-> index 30102aadc4d7..afce5abcbcd2 100644
-> --- a/arch/riscv/kernel/mcount.S
-> +++ b/arch/riscv/kernel/mcount.S
-> @@ -69,6 +69,8 @@ ENTRY(return_to_handler)
->  	mv	t6, s0
->  #endif
->  	SAVE_RET_ABI_STATE
-> +	/* pass the return value to ftrace_return_to_handler */
-> +	mv	a1, a0
->  #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
->  	mv	a0, t6
->  #endif
-> diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
-> index a0ed0e4a2c0c..7611374ccce8 100644
-> --- a/arch/x86/kernel/ftrace_32.S
-> +++ b/arch/x86/kernel/ftrace_32.S
-> @@ -184,6 +184,7 @@ SYM_CODE_END(ftrace_graph_caller)
->  return_to_handler:
->  	pushl	%eax
->  	pushl	%edx
-> +	movl	%eax, %edx	#  2nd argument: the return value
->  	movl	$0, %eax
->  	call	ftrace_return_to_handler
->  	movl	%eax, %ecx
-> diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
-> index 1265ad519249..d685b773e7ad 100644
-> --- a/arch/x86/kernel/ftrace_64.S
-> +++ b/arch/x86/kernel/ftrace_64.S
-> @@ -348,6 +348,8 @@ SYM_CODE_START(return_to_handler)
->  	movq %rax, (%rsp)
->  	movq %rdx, 8(%rsp)
->  	movq %rbp, %rdi
-> +	/* Pass the return value to ftrace_return_to_handler */
-> +	movq %rax, %rsi
->  
->  	call ftrace_return_to_handler
->  
-> diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
-> index 366c730beaa3..157fd25be2b7 100644
-> --- a/include/linux/ftrace.h
-> +++ b/include/linux/ftrace.h
-> @@ -1032,6 +1032,7 @@ struct ftrace_graph_ent {
->   */
->  struct ftrace_graph_ret {
->  	unsigned long func; /* Current function */
-> +	unsigned long retval;
->  	int depth;
->  	/* Number of functions that overran the depth limit for current task */
->  	unsigned int overrun;
-> diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
-> index 218cd95bf8e4..006b39a98dc3 100644
-> --- a/kernel/trace/fgraph.c
-> +++ b/kernel/trace/fgraph.c
-> @@ -240,12 +240,13 @@ static struct notifier_block ftrace_suspend_notifier = {
->   * Send the trace to the ring-buffer.
->   * @return the original return address.
->   */
-> -unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
-> +unsigned long ftrace_return_to_handler(unsigned long frame_pointer, unsigned long retval)
->  {
->  	struct ftrace_graph_ret trace;
->  	unsigned long ret;
->  
->  	ftrace_pop_return_trace(&trace, &ret, frame_pointer);
-> +	trace.retval = retval;
->  	trace.rettime = trace_clock_local();
->  	ftrace_graph_return(&trace);
->  	/*
-> diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
-> index 616e1aa1c4da..5ef32c6e1d45 100644
-> --- a/kernel/trace/trace.h
-> +++ b/kernel/trace/trace.h
-> @@ -831,6 +831,7 @@ static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)
->  #define TRACE_GRAPH_PRINT_TAIL          0x100
->  #define TRACE_GRAPH_SLEEP_TIME          0x200
->  #define TRACE_GRAPH_GRAPH_TIME          0x400
-> +#define TRACE_GRAPH_PRINT_RETVAL        0x800
->  #define TRACE_GRAPH_PRINT_FILL_SHIFT	28
->  #define TRACE_GRAPH_PRINT_FILL_MASK	(0x3 << TRACE_GRAPH_PRINT_FILL_SHIFT)
->  
-> diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
-> index cd41e863b51c..d798cb17546f 100644
-> --- a/kernel/trace/trace_entries.h
-> +++ b/kernel/trace/trace_entries.h
-> @@ -93,16 +93,17 @@ FTRACE_ENTRY_PACKED(funcgraph_exit, ftrace_graph_ret_entry,
->  	F_STRUCT(
->  		__field_struct(	struct ftrace_graph_ret,	ret	)
->  		__field_packed(	unsigned long,	ret,		func	)
-> +		__field_packed(	unsigned long,	ret,		retval	)
->  		__field_packed(	int,		ret,		depth	)
->  		__field_packed(	unsigned int,	ret,		overrun	)
->  		__field_packed(	unsigned long long, ret,	calltime)
->  		__field_packed(	unsigned long long, ret,	rettime	)
->  	),
->  
-> -	F_printk("<-- %ps (%d) (start: %llx  end: %llx) over: %d",
-> +	F_printk("<-- %ps (%d) (start: %llx  end: %llx) over: %d retval: %lx",
->  		 (void *)__entry->func, __entry->depth,
->  		 __entry->calltime, __entry->rettime,
-> -		 __entry->depth)
-> +		 __entry->depth, __entry->retval)
->  );
->  
->  /*
-> diff --git a/kernel/trace/trace_functions_graph.c b/kernel/trace/trace_functions_graph.c
-> index 203204cadf92..706d3e5c2156 100644
-> --- a/kernel/trace/trace_functions_graph.c
-> +++ b/kernel/trace/trace_functions_graph.c
-> @@ -58,6 +58,8 @@ static struct tracer_opt trace_opts[] = {
->  	{ TRACER_OPT(funcgraph-irqs, TRACE_GRAPH_PRINT_IRQS) },
->  	/* Display function name after trailing } */
->  	{ TRACER_OPT(funcgraph-tail, TRACE_GRAPH_PRINT_TAIL) },
-> +	/* Display function return value */
-> +	{ TRACER_OPT(funcgraph-retval, TRACE_GRAPH_PRINT_RETVAL) },
->  	/* Include sleep time (scheduled out) between entry and return */
->  	{ TRACER_OPT(sleep-time, TRACE_GRAPH_SLEEP_TIME) },
->  
-> @@ -619,6 +621,43 @@ print_graph_duration(struct trace_array *tr, unsigned long long duration,
->  	trace_seq_puts(s, "|  ");
->  }
->  
-> +static void print_graph_retval(struct trace_seq *s, unsigned long retval,
-> +				bool leaf, void *func)
-> +{
-> +	unsigned long err_code = 0;
-> +
-> +	if (retval == 0)
-> +		goto done;
-> +
-> +	/* Guess whether the retval looks like an error code */
-> +	if ((retval & BIT(7)) && (retval >> 8) == 0)
-> +		err_code = (unsigned long)(s8)retval;
-> +	else if ((retval & BIT(15)) && (retval >> 16) == 0)
-> +		err_code = (unsigned long)(s16)retval;
-> +	else if ((retval & BIT(31)) && (((u64)retval) >> 32) == 0)
-> +		err_code = (unsigned long)(s32)retval;
-> +	else
-> +		err_code = retval;
-> +
-> +	if (!IS_ERR_VALUE(err_code))
-> +		err_code = 0;
-> +
-> +done:
-> +	if (leaf) {
-> +		if (err_code != 0)
-> +			trace_seq_printf(s, "%ps(); /* => %lx %ld */\n",
-> +				func, retval, err_code);
-> +		else
-> +			trace_seq_printf(s, "%ps(); /* => %lx */\n", func, retval);
-> +	} else {
-> +		if (err_code != 0)
-> +			trace_seq_printf(s, "} /* %ps => %lx %ld */\n",
-> +				func, retval, err_code);
-> +		else
-> +			trace_seq_printf(s, "} /* %ps => %lx */\n", func, retval);
-> +	}
-> +}
-> +
->  /* Case of a leaf function on its call entry */
->  static enum print_line_t
->  print_graph_entry_leaf(struct trace_iterator *iter,
-> @@ -663,7 +702,10 @@ print_graph_entry_leaf(struct trace_iterator *iter,
->  	for (i = 0; i < call->depth * TRACE_GRAPH_INDENT; i++)
->  		trace_seq_putc(s, ' ');
->  
-> -	trace_seq_printf(s, "%ps();\n", (void *)call->func);
-> +	if (flags & TRACE_GRAPH_PRINT_RETVAL)
-> +		print_graph_retval(s, graph_ret->retval, true, (void *)call->func);
-> +	else
-> +		trace_seq_printf(s, "%ps();\n", (void *)call->func);
->  
->  	print_graph_irq(iter, graph_ret->func, TRACE_GRAPH_RET,
->  			cpu, iter->ent->pid, flags);
-> @@ -942,16 +984,24 @@ print_graph_return(struct ftrace_graph_ret *trace, struct trace_seq *s,
->  		trace_seq_putc(s, ' ');
->  
->  	/*
-> -	 * If the return function does not have a matching entry,
-> -	 * then the entry was lost. Instead of just printing
-> -	 * the '}' and letting the user guess what function this
-> -	 * belongs to, write out the function name. Always do
-> -	 * that if the funcgraph-tail option is enabled.
-> +	 * Always write out the function name and its return value if the
-> +	 * function-retval option is enabled.
->  	 */
-> -	if (func_match && !(flags & TRACE_GRAPH_PRINT_TAIL))
-> -		trace_seq_puts(s, "}\n");
-> -	else
-> -		trace_seq_printf(s, "} /* %ps */\n", (void *)trace->func);
-> +	if (flags & TRACE_GRAPH_PRINT_RETVAL) {
-> +		print_graph_retval(s, trace->retval, false, (void *)trace->func);
-> +	} else {
-> +		/*
-> +		 * If the return function does not have a matching entry,
-> +		 * then the entry was lost. Instead of just printing
-> +		 * the '}' and letting the user guess what function this
-> +		 * belongs to, write out the function name. Always do
-> +		 * that if the funcgraph-tail option is enabled.
-> +		 */
-> +		if (func_match && !(flags & TRACE_GRAPH_PRINT_TAIL))
-> +			trace_seq_puts(s, "}\n");
-> +		else
-> +			trace_seq_printf(s, "} /* %ps */\n", (void *)trace->func);
-> +	}
->  
->  	/* Overrun */
->  	if (flags & TRACE_GRAPH_PRINT_OVERRUN)
-> -- 
-> 2.25.1
-> 
+> -When the allocated memory is no longer needed it must be freed. You can
+> -use kvfree() for the memory allocated with `kmalloc`, `vmalloc` and
+> -`kvmalloc`. The slab caches should be freed with kmem_cache_free(). And
+> -don't forget to destroy the cache with kmem_cache_destroy().
+> +When the allocated memory is no longer needed it must be freed. Objects
 
+I'd add a line break before Objects                               ^
+
+> +allocated by `kmalloc` can be freed by `kfree` or `kvfree`.
+> +Objects allocated by `kmem_cache_alloc` can be freed with `kmem_cache_free`
+> +or also by `kfree` or `kvfree`, which can be more convenient as it does
+
+Maybe replace 'or also by' with a coma:
+
+Objects allocated by `kmem_cache_alloc` can be freed with `kmem_cache_free`,
+`kfree` or `kvfree`, which can be more convenient as it does
+
+
+> +not require the kmem_cache pointed.
+
+                             ^ pointer.
+
+> +The rules for _bulk and _rcu flavors of freeing functions are analogical.
+
+Maybe 
+
+The same rules apply to _bulk and _rcu flavors of freeing functions.
+
+> +
+> +Memory allocated by `vmalloc` can be freed with `vfree` or `kvfree`.
+> +Memory allocated by `kvmalloc` can be freed with `kvfree`.
+> +Caches created by `kmem_cache_create` should be freed with
+> +`kmem_cache_destroy` only after freeing all the allocated objects first.
+> diff --git a/include/linux/rcupdate.h b/include/linux/rcupdate.h
+> index 094321c17e48..dcd2cf1e8326 100644
+> --- a/include/linux/rcupdate.h
+> +++ b/include/linux/rcupdate.h
+> @@ -976,8 +976,10 @@ static inline notrace void rcu_read_unlock_sched_notrace(void)
+>   * either fall back to use of call_rcu() or rearrange the structure to
+>   * position the rcu_head structure into the first 4096 bytes.
+>   *
+> - * Note that the allowable offset might decrease in the future, for example,
+> - * to allow something like kmem_cache_free_rcu().
+> + * The object to be freed can be allocated either by kmalloc() or
+> + * kmem_cache_alloc().
+> + *
+> + * Note that the allowable offset might decrease in the future.
+>   *
+>   * The BUILD_BUG_ON check must not involve any function calls, hence the
+>   * checks are done in macros here.
+> diff --git a/mm/slab_common.c b/mm/slab_common.c
+> index 1522693295f5..607249785c07 100644
+> --- a/mm/slab_common.c
+> +++ b/mm/slab_common.c
+> @@ -989,12 +989,9 @@ EXPORT_SYMBOL(__kmalloc_node_track_caller);
+>  
+>  /**
+>   * kfree - free previously allocated memory
+> - * @object: pointer returned by kmalloc.
+> + * @object: pointer returned by kmalloc() or kmem_cache_alloc()
+>   *
+>   * If @object is NULL, no operation is performed.
+> - *
+> - * Don't free memory not originally allocated by kmalloc()
+> - * or you will run into trouble.
+>   */
+>  void kfree(const void *object)
+>  {
+> -- 
+> 2.39.2
+> 
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+Sincerely yours,
+Mike.
