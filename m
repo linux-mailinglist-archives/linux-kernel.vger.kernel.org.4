@@ -2,57 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 875DC6B6BFE
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CC416B6C01
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:35:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbjCLWdM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 18:33:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52682 "EHLO
+        id S231253AbjCLWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 18:35:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230319AbjCLWdJ (ORCPT
+        with ESMTP id S231161AbjCLWf0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 18:33:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A4C2E195;
-        Sun, 12 Mar 2023 15:33:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ABA3F61015;
-        Sun, 12 Mar 2023 22:33:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1E16C433D2;
-        Sun, 12 Mar 2023 22:33:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678660387;
-        bh=nBc93sXiAYACx3pnXIOgQiKft2dOHkoo3DbtvkGwrhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VLunBXe9caBebWSZsNdpGBdxw9FDt8RDwFx+3LLZZYdgRhf7yrxVwLreCV63Uktwa
-         GrlzrdCFnTa3CHvPt2nAzRRcqPyYi4F9eo4QpilzTvdRhnyTUKBJBuQ2qZZWFBiwZu
-         J1xFbemJyogYZf1ooclZSoItUdjzgS19i2FllucOEmEuDPjhdtKGq6lzunyvJaKiaX
-         3c3zwFH7UPuAz7g1U4MOFDMGamFwxpLSaw7mvf0tEtHgu2h+WvEvdOrmcK2MFLjgNX
-         hAEbN2JCXoFx46vOq5jtFb3tYmOa+4SYeRZCAPQZpSgL9MbK+EmOpWD+AsnlV3EJTC
-         iACg0W264zEIg==
-Received: by mercury (Postfix, from userid 1000)
-        id 45E5D1060FD4; Sun, 12 Mar 2023 23:33:04 +0100 (CET)
-Date:   Sun, 12 Mar 2023 23:33:04 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] power: reset: qcom-pon: drop of_match_ptr for ID table
-Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
-References: <20230310200652.19926-1-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 18:35:26 -0400
+Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC202CFDB
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 15:35:19 -0700 (PDT)
+Received: by mail-qv1-xf2f.google.com with SMTP id ks17so7206359qvb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 15:35:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678660518;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PkExPuFUCCT2ZLn9o1HBYqlIGVStqDHCO2raPRbE9Lk=;
+        b=z7vuQ8nDPQsO6U5FQM1Lpt0LGWiKJ+TNR+d1v0RJNb3Y06rOVK5aNvAc3zbFF7e3i8
+         h4wgiGz6XpgvUmFedppx2h73U42c+Id5RjNXCNKXgaMBIQWVjvluNPzKDoZHyCiSK0Dk
+         YT21k/TGsEtJB+9daf/LeIo+hqT0Ok4BQhvwtZvO1jU9n+VuCZxqOeZ5x66jBuCW249v
+         ce4tKFSV3NHoMbzuVQp2wFOTMm5fpF1XMOX74lM0/ZGpehPCJotkN6v5Gs4kvW2NDqGx
+         0N7LHcknrQcm9Wj3Y/iCggf71mrJ788IUwGV1Zd+fcrdV7oq9g76KXsr6lSLLgg0yXSf
+         hoBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678660518;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=PkExPuFUCCT2ZLn9o1HBYqlIGVStqDHCO2raPRbE9Lk=;
+        b=54sD27ncm0XmM61nD66Wa/uoJk0npHyKeW/JJO9vsWOOiMYOfPf5xvYXGtAtncl5uU
+         LOM+9/Vj5ptcoTG6IXZN93H0Y+QJcCo4LVfde2BOTTDDP2gi+LYwTlLUZ/bYn6zQNJDe
+         VU8v+8gBthHQyIiOZ1moDGapzSHysewoZ54Pqeb9824K7OF7xP+GA70dB2FH/rDKT+un
+         vcPvUkp2ctQEF62JuNohEluEHU3Yp++SmBrQNdXsM0mL6gmwOjlCNXJo3STBw4ro1SOo
+         F3rFihrtgKMLyyot/iU+giNHYNC6QfjBCqWOxd700aFlBlsNUaDGTJzp7cBbFUW7AEfn
+         kBFA==
+X-Gm-Message-State: AO0yUKWoZFVzhqI1nsni85oU7Qoy1raqBkbe+VM+ZUSXQ/4Z0p7emS0Z
+        zLALk/IEXeuCIS0hi67INRrONg==
+X-Google-Smtp-Source: AK7set9ujlJiFJFaoLeEWvtb6YT8kCXF7TqnTvXGC5DLjy79SFJbaPpyM3/4VM3sIDCkSuTNc8rfog==
+X-Received: by 2002:a05:6214:f06:b0:56b:eb9d:4342 with SMTP id gw6-20020a0562140f0600b0056beb9d4342mr10042568qvb.49.1678660518323;
+        Sun, 12 Mar 2023 15:35:18 -0700 (PDT)
+Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
+        by smtp.gmail.com with ESMTPSA id g28-20020a05620a109c00b00742e61999a3sm4205901qkk.64.2023.03.12.15.35.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 15:35:17 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 18:35:15 -0400
+From:   William Breathitt Gray <william.gray@linaro.org>
+To:     linux-iio@vger.kernel.org
+Cc:     jic23@kernel.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH v2] counter: 104-quad-8: Fix race condition between FLAG
+ and CNTR reads
+Message-ID: <ZA5To4HGxrM0qoYP@fedora>
+References: <20230312212347.129756-1-william.gray@linaro.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="rwm4btwbb7qrunf7"
+        protocol="application/pgp-signature"; boundary="Ohg1rDHLUsdZDA0r"
 Content-Disposition: inline
-In-Reply-To: <20230310200652.19926-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230312212347.129756-1-william.gray@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,64 +74,62 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---rwm4btwbb7qrunf7
+--Ohg1rDHLUsdZDA0r
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Fri, Mar 10, 2023 at 09:06:52PM +0100, Krzysztof Kozlowski wrote:
-> The Qualcomm SoC power-on driver is specific to ARCH_QCOM which depends
-> on OF thus the driver is OF-only.  It's of_device_id table is built
-> unconditionally, thus of_match_ptr() for ID table does not make sense.
+On Sun, Mar 12, 2023 at 05:23:47PM -0400, William Breathitt Gray wrote:
+> The Counter (CNTR) register is 24 bits wide, but we can have an
+> effective 25-bit count value by setting bit 24 to the XOR of the Borrow
+> flag and Carry flag. The flags can be read from the FLAG register, but a
+> race condition exists: the Borrow flag and Carry flag are instantaneous
+> and could change by the time the count value is read from the CNTR
+> register.
 >=20
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-
-Thanks, queued to power-supply's for next branch.
-
--- Sebastian
-
->  drivers/power/reset/qcom-pon.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Since the race condition could result in an incorrect 25-bit count
+> value, remove support for 25-bit count values from this driver;
+> hard-coded maximum count values are replaced by a LS7267_CNTR_MAX define
+> for consistency and clarity.
 >=20
-> diff --git a/drivers/power/reset/qcom-pon.c b/drivers/power/reset/qcom-po=
-n.c
-> index 16bc01738be9..ebdcfb28c4a0 100644
-> --- a/drivers/power/reset/qcom-pon.c
-> +++ b/drivers/power/reset/qcom-pon.c
-> @@ -91,7 +91,7 @@ static struct platform_driver pm8916_pon_driver =3D {
->  	.probe =3D pm8916_pon_probe,
->  	.driver =3D {
->  		.name =3D "pm8916-pon",
-> -		.of_match_table =3D of_match_ptr(pm8916_pon_id_table),
-> +		.of_match_table =3D pm8916_pon_id_table,
->  	},
->  };
->  module_platform_driver(pm8916_pon_driver);
-> --=20
-> 2.34.1
->=20
+> Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-=
+QUAD-8")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+> @@ -156,19 +155,9 @@ static int quad8_count_read(struct counter_device *c=
+ounter,
+>  {
+>  	struct quad8 *const priv =3D counter_priv(counter);
+>  	struct channel_reg __iomem *const chan =3D priv->reg->channel + count->=
+id;
+> -	unsigned int flags;
+> -	unsigned int borrow;
+> -	unsigned int carry;
+>  	unsigned long irqflags;
+>  	int i;
+> =20
+> -	flags =3D ioread8(&chan->control);
+> -	borrow =3D flags & QUAD8_FLAG_BT;
+> -	carry =3D !!(flags & QUAD8_FLAG_CT);
+> -
+> -	/* Borrow XOR Carry effectively doubles count range */
+> -	*val =3D (unsigned long)(borrow ^ carry) << 24;
 
---rwm4btwbb7qrunf7
+The count value is used later on so it should be initialized here; I'll
+submit a v3 along with some backports as well for the other stable
+kernels.
+
+William Breathitt Gray
+
+--Ohg1rDHLUsdZDA0r
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOUx8ACgkQ2O7X88g7
-+pp8Qg/9G1xja6Ebkw+FSgJqDaWl6nsDyIYfZU9jLtyj3lQ6jUcSBmcj/qDcaJNr
-7HcVLK3foFmDrwPzU+ETv18OBnKRn2yZ+WNZoWO9MjUoNiYs/4mevKzgdKmsqwdn
-nSGU9zOG4IHlVKBUkiPQUVPu+k0gxRX8r9aMuCMcdnhDPDpy3h4e2WqG5N5JwnEE
-jXhVFHM/y6qSdpVvyI4iHluMy+Ws5jnCO7aIuQltbzwVyHWyAdSMU/gAsfF1HivM
-UaBd523CxX0GtNz48QdrY7NgzsUKA1DvSez/z90maxzE9Wem3rOXgpq/i86GbDhB
-JB0junRCZgitQp6hsWL/e0nUPxWTWoC7NMvblniMts9NUAkHA/IWMkGkaO6wrwPG
-q1ZxiOloJxYgW5penPyJNFYZhLdAuYF8FC3ovV2raA0vsXC+0Hu+rroEDG3UbUqV
-xBa4SclUQm3lspe6+1ItYc51h9MUYyR8W90Qc1m2JuX6iLCHmswYfU2ICNjNqpC2
-2cp2Aiqw3cjQHfxvuVBiQQ2t2r+UXuU+pen0LwLUJGT909V3RvGbuNJGhahyDuBD
-6HKBHI5CBOJv2/J5HCg6Tc4ojIiBsq4RBhFXgazXB/QfnfwfAW8PcALAv2/ASr8n
-8ku4E3Fuc0xbL1Bg+O5xL+Abijf+l7oSq7c3HIQ3CR50OsEA9PI=
-=Vt6K
+iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZA5TowAKCRC1SFbKvhIj
+K1McAQC0qlj/pFqJOdBNrAtOL3qyWM5zS5XN+cuwgfn5lHf4cwEAyHBzBklZFy3x
+5sE7fT8R3oi88bMByhaLs4GGeZRAFAI=
+=mTRD
 -----END PGP SIGNATURE-----
 
---rwm4btwbb7qrunf7--
+--Ohg1rDHLUsdZDA0r--
