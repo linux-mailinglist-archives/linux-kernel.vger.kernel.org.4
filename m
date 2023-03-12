@@ -2,75 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2FDF6B63B8
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 08:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B1766B63B9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 08:43:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229672AbjCLHnP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 03:43:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41384 "EHLO
+        id S229685AbjCLHns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 03:43:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229499AbjCLHnN (ORCPT
+        with ESMTP id S229694AbjCLHnq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 03:43:13 -0400
-Received: from mail-ua1-x933.google.com (mail-ua1-x933.google.com [IPv6:2607:f8b0:4864:20::933])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA7731B325;
-        Sat, 11 Mar 2023 23:43:11 -0800 (PST)
-Received: by mail-ua1-x933.google.com with SMTP id d12so6270716uak.10;
-        Sat, 11 Mar 2023 23:43:11 -0800 (PST)
+        Sun, 12 Mar 2023 03:43:46 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4693A20049
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 23:43:44 -0800 (PST)
+Received: by mail-ed1-x536.google.com with SMTP id x3so36849554edb.10
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 23:43:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678606991;
+        d=linux-foundation.org; s=google; t=1678607022;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ldlqQsfUkVWJcbMHgo5HY4HoalKFezeXB+mixEzm1zc=;
-        b=V50Ek/RXMCYNKO8MVapt5fILhfALLOGGNXH0Pg4jDk3wVSZ7Y+yiOV3B5VNsRk+yhL
-         l2vpKI4bRqbXOcZ4sm19s8DSX7ybHuGKPrCc9ZsxLzZYgARSimhH+OHoIHgcm1GPkvRa
-         WyvcDbKXIcqHddqdLLUKsDmNzI135Y896piIpXs2KNf+ZNsrFNsxI9yvdhZkpqTGQc+f
-         s6egUzwBm7nMk6cGi/85fY08mqCx0WGY6WhdXTBZBS9H4jWZ534KH3u2107T5pz55Ijq
-         imuFIe64DzjflKrdbuoMRF4NDTSRPotQi3SDpWXWWXeSpHWrc/SIadroiz+F/oL0kihP
-         URYg==
+        bh=nY2hX/bXPNidr53rzPJsAwgBRXUnTGPsx6iMAq55oAE=;
+        b=PlmQIJBdxeQOriWHNDlIb4wjfKDKbVWvG37PmrW4JZ33dXmoS8hRuMVhgq0CsckhWq
+         Sgq8iG9spmLXuF6tXmjIYi1VhyKsP1g0gZX9pgqt19HABi4nfXKoWWzY3Jpovwz0MPuo
+         I9HH32DSZeajQU+aVbXuYCgtFd4W7AnEwkgo0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678606991;
+        d=1e100.net; s=20210112; t=1678607022;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ldlqQsfUkVWJcbMHgo5HY4HoalKFezeXB+mixEzm1zc=;
-        b=5EX4gndpYXQQPUqpmn80wETAfS/NcQILZselIkHPEp2RN5AlaVwW9NNhG0VqUFEvOI
-         3gW5PbKl3CxQ4mRa+5Tle3/jA4SoPmBYHfM58NYcUKwvpkwzLOtLN6fsAHkL1WzveX9P
-         UfkcTDYd4/QndWLSF0yCGIoMeSe+LhdTzvw9Va0PBbOIpcTKNw9Xt+A0mgNZGKfTmxeq
-         4iJG5/6NULD4LVvgW+KDzjsv02hKgo6n5HVUziNgHywd6kAfTVnXnjh/q88fW4V1kcIJ
-         kqA7vtCR6Ybaxh4iMsBmuesy6DpolG0sqvI/a/1Rdfxmr9icyCd+04GpxY6miUHYR8jg
-         Qxog==
-X-Gm-Message-State: AO0yUKUMfsfuRJzCKv4VEP2cijRrLkbDunMOAuOHsoA+TQe5BmZDornb
-        J0uncYK3a5OFt9TOp8LU+cTWZpcfe5Pl15XRdZHiejckBZU=
-X-Google-Smtp-Source: AK7set/L21PQb0E11CyNXhRQBYZPqqDRUs6VaZSWYoZ0/R2GNrOrxk5DpfzjIxDIKgmma6+poBRfmfEGWfq1VtM/wEw=
-X-Received: by 2002:a1f:4542:0:b0:401:1c83:fba3 with SMTP id
- s63-20020a1f4542000000b004011c83fba3mr19014655vka.3.1678606990738; Sat, 11
- Mar 2023 23:43:10 -0800 (PST)
+        bh=nY2hX/bXPNidr53rzPJsAwgBRXUnTGPsx6iMAq55oAE=;
+        b=qYXjDFuqOSkhIwGiMA2I5XMbQTKcQFwsZNtELxyVBP72T8YbtuZsOS9UfeNUNZnJqi
+         AMKiJWEmDZBNmryK5T4ci3vsvhwS66SQELuPefSLAD+I9f9eUM74kQK6hrP/4S69XAO5
+         AiEFs8UBmMjbNgn74WrCFBQZ3osalsjtwGOaUu+YJCngZRUfvZHqi2CRVHxvjzgrhIqk
+         F9i2N5TMSQRt1FfXnPx7+iOtGW4zLiUpXJUozz9QvmbE+objViSB+xYW/kbwEbBXKBxe
+         nGR90GpnitKphE6UikAELunpxw6mo2kzwXJZ05Sc+AGZqds3bXqo8yPxkcCfRpuyVfT+
+         AL4Q==
+X-Gm-Message-State: AO0yUKX4b5dCP6hviaJD+N4VrADlKbzyQfbag9lkx2zlKfvN/nCMbcKl
+        9YyqCerA3sLLpuJ9OJx8xz9yH4qMlSJ7pGiHrVHg0g==
+X-Google-Smtp-Source: AK7set95biwJq8/sZNI+pKgYAe+vkuna1uoETaTdlbG8INXGvjn/EzvVNt5PJ8okF1IOC1a+vdwktw==
+X-Received: by 2002:a17:906:9f0d:b0:8af:7b80:82c5 with SMTP id fy13-20020a1709069f0d00b008af7b8082c5mr35067683ejc.75.1678607022526;
+        Sat, 11 Mar 2023 23:43:42 -0800 (PST)
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
+        by smtp.gmail.com with ESMTPSA id jt18-20020a170906ca1200b008c9b44b7851sm1941211ejb.182.2023.03.11.23.43.41
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 11 Mar 2023 23:43:41 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id da10so37011532edb.3
+        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 23:43:41 -0800 (PST)
+X-Received: by 2002:a17:906:b281:b0:8b8:aef3:f2a9 with SMTP id
+ q1-20020a170906b28100b008b8aef3f2a9mr14172315ejz.0.1678607021168; Sat, 11 Mar
+ 2023 23:43:41 -0800 (PST)
 MIME-Version: 1.0
-References: <ZAewdAql4PBUYOG5@gmail.com> <ZAwe95meyCiv6qc4@casper.infradead.org>
- <ZAyK0KM6JmVOvQWy@sashalap> <20230311161644.GH860405@mit.edu>
- <ZAy+3f1/xfl6dWpI@sol.localdomain> <ZAzJltJaydwjCN6E@1wt.eu>
- <ZAzVbzthi8IfptFZ@sol.localdomain> <ZAzghyeiac3Zh8Hh@1wt.eu>
- <ZAzqSeus4iqCOf1O@sol.localdomain> <ZA1V4MbG6U3wP6q6@1wt.eu> <ZA1hdkrOKLG697RG@sol.localdomain>
-In-Reply-To: <ZA1hdkrOKLG697RG@sol.localdomain>
-From:   Amir Goldstein <amir73il@gmail.com>
-Date:   Sun, 12 Mar 2023 09:42:59 +0200
-Message-ID: <CAOQ4uxiJPvKh5VzoP=9xamFfU78r3J25pwW6GQyAUN7YPJk=dQ@mail.gmail.com>
-Subject: Re: AUTOSEL process
-To:     Eric Biggers <ebiggers@kernel.org>
-Cc:     Willy Tarreau <w@1wt.eu>, "Theodore Ts'o" <tytso@mit.edu>,
-        Sasha Levin <sashal@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pavel Machek <pavel@ucw.cz>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org, viro@zeniv.linux.org.uk,
-        linux-fsdevel@vger.kernel.org,
-        Konstantin Ryabitsev <konstantin@linuxfoundation.org>
+References: <0000000000004d318a05f6810a9f@google.com> <c1f4cc16-feea-b83c-82cf-1a1f007b7eb9@I-love.SAKURA.ne.jp>
+In-Reply-To: <c1f4cc16-feea-b83c-82cf-1a1f007b7eb9@I-love.SAKURA.ne.jp>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Sat, 11 Mar 2023 23:43:23 -0800
+X-Gmail-Original-Message-ID: <CAHk-=wgMMYE+vs-ZhxnAC_7NMw601xMOZOBqL1NR4kQYDDcK_A@mail.gmail.com>
+Message-ID: <CAHk-=wgMMYE+vs-ZhxnAC_7NMw601xMOZOBqL1NR4kQYDDcK_A@mail.gmail.com>
+Subject: Re: [syzbot] [kernel?] WARNING in c_start (2)
+To:     Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>
+Cc:     syzbot <syzbot+96cae094d90877641f32@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,70 +76,88 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 7:41=E2=80=AFAM Eric Biggers <ebiggers@kernel.org> =
-wrote:
+On Sat, Mar 11, 2023 at 6:57=E2=80=AFPM Tetsuo Handa
+<penguin-kernel@i-love.sakura.ne.jp> wrote:
 >
-...
-> I mean, "patches welcome" is a bit pointless when there is nothing to pat=
-ch, is
-> it not?  Even Sasha's stable-tools, which he finally gave a link to, does=
- not
-> include anything related to AUTOSEL.  It seems AUTOSEL is still closed so=
-urce.
+> syzbot is unable to test kernels due to hitting WARN_ON_ONCE(cpu >=3D bit=
+s) upon
+> "cat /proc/cpuinfo" request.
 >
-> BTW, I already did something similar "off to the side" a few years ago wh=
-en I
-> wrote a script to keep track of and prioritize syzbot reports from
-> https://syzkaller.appspot.com/, and generate per-subsystem reminder email=
-s.
->
-> I eventually ended up abandoning that, because doing something off to the=
- side
-> is not very effective and is hard to keep up with.  The right approach is=
- to
-> make improvements to the "upstream" process (which was syzbot in that cas=
-e), not
-> to bolt something on to the side to try to fix it after the fact.
->
-> So I hope people can understand where I'm coming from, with hoping that w=
-hat the
-> stable maintainers are doing can just be improved directly, without first
-> building something from scratch off to the side as that is just not a goo=
-d way
-> to do things.  But sure, if that's the only option to get anything nontri=
-vial
-> changed, I'll try to do it.
->
+> Since commit 596ff4a09b898179 ("cpumask: re-introduce constant-sized cpum=
+ask optimizations")
+> changed to pass "small_cpumask_bits" instead of "nr_cpumask_bits" to find=
+_next_bit(),
+> find_next_bit() returning small_cpumask_bits causes c_next() to go beyond=
+ nr_cpumask_bits.
+> I think that we need to make sure that cpumask_next() and friends would n=
+ot return cpu id
+> beyond nr_cpumask_bits.
 
-Eric,
+Ahh. yes.
 
-Did you consider working to improve or add functionality to b4?
+It's the same old "cpumask scanning should be testing >=3D nr_cpu_ids"
+thing, but c_start() does
 
-Some of the things that you proposed sound like a natural extension of
-b4 that stable maintainers could use if they turn out to be useful.
+        *pos =3D cpumask_next(*pos - 1, cpu_online_mask);
 
-Some of the things in your wish list, b4 already does - it has a local
-cache of messages from query results, it can find the latest submission
-of a patch series.
+and basically assumes that it is "=3D=3D nr_cpu_ids" for the end
+condition, and uses the value next time around.
 
-When working on backporting xfs patches to LTS, I ended up trying to
-improve and extend b4 [1].
+And if it is *exactly* nr_cpu_ids, then the next time it gets called,
+the "*pos - 1" means that it's all ok.
 
-My motivation was to retrieve the information provided in the pull request
-and cover letters which often have much better context to understand
-whether patches are stable material.
+But if it's > nr_cpu_ids, then next time the "-1" doesn't do anything
+useful and the input is still larger than the number of CPU ids.
 
-My motivation was NOT to improve automatic scripts, but I did make
-some improvement to b4 that could benefit automatic scripts as well.
+The core *works* correctly, but it triggers that warning because it is
+not doing that test properly.
 
-Alas, despite sending a pull request via github and advertising my work
-and its benefits on several occasions, I got no feedback from Konstantin
-nor from any other developers, so I did not pursue upstreaming.
+That c_start() function is ugly, but the simplest patch is probably
+this one-liner (whitespace-damaged but hopefully really obvious):
 
-If you find any part of this work relevant, I can try to rebase and
-post my b4 patches.
+  --- a/arch/x86/kernel/cpu/proc.c
+  +++ b/arch/x86/kernel/cpu/proc.c
+  @@ -156,6 +156,7 @@
+        *pos =3D cpumask_next(*pos - 1, cpu_online_mask);
+        if ((*pos) < nr_cpu_ids)
+                return &cpu_data(*pos);
+  +     *pos =3D nr_cpu_ids;
+        return NULL;
+   }
 
-Thanks,
-Amir.
 
-[1] https://github.com/mricon/b4/pull/1
+which just caps that ">=3D nr_cpu_ids" case down to nr_cpu_ids.
+
+Does that fix your test-case for you?
+
+I'm not entirely convinced we shouldn't clean stuff up with a slightly
+bigger patch, though. Instead of capping the 'pos', just testing it
+seems the kind of more obvious thing. This code had similar problems
+before. So an alternative patch (still whitespace-damaged) would be
+something like
+
+  --- a/arch/x86/kernel/cpu/proc.c
+  +++ b/arch/x86/kernel/cpu/proc.c
+  @@ -153,8 +153,12 @@
+
+   static void *c_start(struct seq_file *m, loff_t *pos)
+   {
+  -     *pos =3D cpumask_next(*pos - 1, cpu_online_mask);
+  -     if ((*pos) < nr_cpu_ids)
+  +     loff_t prev =3D *pos;
+  +
+  +     if (prev >=3D nr_cpu_ids)
+  +             return NULL;
+  +     *pos =3D cpumask_next(prev - 1, cpu_online_mask);
+  +     if (*pos < nr_cpu_ids)
+                return &cpu_data(*pos);
+        return NULL;
+   }
+
+which is a few lines more of patch, but stops depending on that "pos
+has to end up exactly at nr_cpu_ids" thing.
+
+Either patch should result in the same thing and hopefully fix your
+warning, so I guess it's just a matter of taste.
+
+                Linus
