@@ -2,182 +2,425 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 970886B6533
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84446B653A
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 12:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjCLLG3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 07:06:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34276 "EHLO
+        id S230160AbjCLLJp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 07:09:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39554 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjCLLG1 (ORCPT
+        with ESMTP id S229925AbjCLLJn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 07:06:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20814D618;
-        Sun, 12 Mar 2023 04:06:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5F2F2B8074D;
-        Sun, 12 Mar 2023 11:06:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA58DC433EF;
-        Sun, 12 Mar 2023 11:06:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678619183;
-        bh=GhXxQ3LGqBwu1PDYIRUrHFHxvh4REo5L/XF+09XJtA8=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=UXEr1Gv/oTDMY7Vm7pkDh9fTv9KlV34UHz9IPWS6o0qb6h037dPedNzxigMD+cHES
-         8Zd9Swd1k75o1+RSblngXhEYO82KmetXLplpd3giDrkLYAxwLDU+UYu+3+yXMMNCHW
-         RV6Oh6d9lSw6z++ZdjWQWrGT5hNhAbia7XzNjTHa+4lNFCrcrMi3igT2oTqhMiM4Xq
-         CU9orID0wj8hCCjwvOOfAAXEMth0R3CVrx4zpVD8LyedqKIalnJg/TD36hAy+ITHGj
-         IQ4Q9M1dRck5G6vLhoCOs9DqLo1dpqbPBVebpCFtJay5cuzoNYecv6fTU1iyX972Kq
-         +oIm6I9XNx9Dg==
-Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-17683b570b8so10910037fac.13;
-        Sun, 12 Mar 2023 04:06:23 -0700 (PDT)
-X-Gm-Message-State: AO0yUKUe6SfJ4BiBqpyg7cInAhhSjO5o0pZidkxfGQ+V/TsXC+z1Yu5x
-        XurjeEbsNzXhtIlzqpGoAQf1rZmbgwyhyhn1Kw8=
-X-Google-Smtp-Source: AK7set8N/yTqs/8oLs98VVUCh2i/kT0xhMJy8fcAHCei2tSBTmzoBxO7UBLop8YToq1+IztNPBywlwqoUZb9vHGB+b8=
-X-Received: by 2002:a05:6870:b00a:b0:176:50be:85b4 with SMTP id
- y10-20020a056870b00a00b0017650be85b4mr11293648oae.8.1678619183114; Sun, 12
- Mar 2023 04:06:23 -0700 (PDT)
+        Sun, 12 Mar 2023 07:09:43 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD4884FA81;
+        Sun, 12 Mar 2023 04:09:40 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-69-167-nat.elisa-mobile.fi [85.76.69.167])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B77AA814;
+        Sun, 12 Mar 2023 12:09:37 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678619378;
+        bh=zYHH0Y9q1DBa806tLDb25eU4/3jht7eXfaqqNYyFeRs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L2yIi9fZNGmd+SKzybgEwT7XSGA4BoNVNdWYwkUm7Chuqa/5McGdKlC3eB0uwt3+d
+         9u4lPZZLFuXPzqiAM5peG2IfQj67xni1WGGy4rIC7q8Ur9sVNGQf+SjNXC728AxlBL
+         M45TSF9Jw7ogfNA1/SaukDPY3LBE6DoKtV1gT8dA=
+Date:   Sun, 12 Mar 2023 13:09:38 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Jack Zhu <jack.zhu@starfivetech.com>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Maxime Ripard <mripard@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Todor Tomov <todor.too@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Eugen Hristev <eugen.hristev@collabora.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, changhuang.liang@starfivetech.com
+Subject: Re: [PATCH v2 2/6] media: dt-bindings: cadence-csi2rx: Convert to DT
+ schema
+Message-ID: <20230312100057.GE707@pendragon.ideasonboard.com>
+References: <20230310120553.60586-1-jack.zhu@starfivetech.com>
+ <20230310120553.60586-3-jack.zhu@starfivetech.com>
 MIME-Version: 1.0
-References: <20230310183717.RESEND.1.Idaaf79c3e768b85750d5a7eb732052576c5e07e5@changeid>
- <bae2702e-3570-f461-b86f-e56ce82a636e@infradead.org> <20230311165507.GN3041508@bill-the-cat>
-In-Reply-To: <20230311165507.GN3041508@bill-the-cat>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Sun, 12 Mar 2023 20:05:46 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARQ-PgxiCh+gm2efpfXmNBkdTp18OTk3sHtqNsk6by5-Q@mail.gmail.com>
-Message-ID: <CAK7LNARQ-PgxiCh+gm2efpfXmNBkdTp18OTk3sHtqNsk6by5-Q@mail.gmail.com>
-Subject: Re: [RESEND PATCH] kconfig: Proposed language extension for multiple builds
-To:     Tom Rini <trini@konsulko.com>
-Cc:     Randy Dunlap <rdunlap@infradead.org>,
-        Simon Glass <sjg@chromium.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        U-Boot Custodians <u-boot-custodians@lists.denx.de>,
-        barebox@lists.infradead.org, Sascha Hauer <s.hauer@pengutronix.de>,
-        U-Boot Mailing List <u-boot@lists.denx.de>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nicolas Schier <nicolas@fjasle.eu>, linux-doc@vger.kernel.org,
-        linux-kbuild@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230310120553.60586-3-jack.zhu@starfivetech.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 1:55=E2=80=AFAM Tom Rini <trini@konsulko.com> wrote=
-:
->
-> On Fri, Mar 10, 2023 at 09:39:15PM -0800, Randy Dunlap wrote:
-> > Hi--
-> >
-> > On 3/10/23 18:37, Simon Glass wrote:
-> > > (I am sending this again to get more feedback)
-> > >
-> > > In the case of Linux, only one build is produced so there is only a
-> > > single configuration. For other projects, such as U-Boot and Zephyr, =
-the
-> > > same code is used to produce multiple builds, each with related (but
-> > > different) options enabled.
-> > >
-> > > This can be handled with the existing kconfig language, but it is qui=
-te
-> > > verbose, somewhat tedious and very error-prone, since there is a lot =
-of
-> > > duplication. The result is hard to maintain.
-> > >
-> > > Describe an extension to the Kconfig language to support easier handl=
-ing
-> > > of this use case.
-> > >
-> > > Signed-off-by: Simon Glass <sjg@chromium.org>
-> >
-> > IMO Masahiro has already answered this multiple times and I agree with =
-his answers.
-> >
-> > For others, the full previous thread is at
-> >   https://lore.kernel.org/all/20230219145453.1.Idaaf79c3e768b85750d5a7e=
-b732052576c5e07e5@changeid/
->
-> Well, I think what was unclear, or maybe we just wanted to confirm the
-> answer was "none at all", was this. As good community neighbors, we see
-> a generic issue in the Kconfig language, a tool used frequently outside
-> of just the Linux kernel, and would like to contribute back. Ideally
-> without having first gone off, designed and implemented something, and
-> then been told it's all wrong and to rewrite it first. So what level of
-> interest is there in this?
+Hi Jack,
 
-Sorry, no interest.
-If you want to get a clear answer, NACK.
+Thank you for the patch.
 
->
-> As I pointed out in that thread, I believe barebox has examples where
-> some keyword like we're proposing here would help them (and yes, there's
-> only a dozen or so symbols so it's also manageable without anything
-> special),
+On Fri, Mar 10, 2023 at 08:05:49PM +0800, Jack Zhu wrote:
+> Convert DT bindings document for Cadence MIPI-CSI2 RX controller
+> to DT schema format and add new properties.
 
-Barebox keeps PBL in very limited, ad-hoc implementation.
-PBL has no more than 10 user-configurable options.
-Sascha Hauer designed it this way.
+This would have been easier to review if the patch had been split in
+two, with conversion to YAML first, and then addition of new properties.
+Generally speaking, one patch should contain a single logical change.
 
+> Signed-off-by: Jack Zhu <jack.zhu@starfivetech.com>
+> ---
+>  .../devicetree/bindings/media/cdns,csi2rx.txt | 100 -----------
+>  .../bindings/media/cdns,csi2rx.yaml           | 163 ++++++++++++++++++
+>  MAINTAINERS                                   |   1 +
+>  3 files changed, 164 insertions(+), 100 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+>  create mode 100644 Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt b/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+> deleted file mode 100644
+> index 6b02a0657ad9..000000000000
+> --- a/Documentation/devicetree/bindings/media/cdns,csi2rx.txt
+> +++ /dev/null
+> @@ -1,100 +0,0 @@
+> -Cadence MIPI-CSI2 RX controller
+> -===============================
+> -
+> -The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
+> -lanes in input, and 4 different pixel streams in output.
+> -
+> -Required properties:
+> -  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
+> -  - reg: base address and size of the memory mapped region
+> -  - clocks: phandles to the clocks driving the controller
+> -  - clock-names: must contain:
+> -    * sys_clk: main clock
+> -    * p_clk: register bank clock
+> -    * pixel_if[0-3]_clk: pixel stream output clock, one for each stream
+> -                         implemented in hardware, between 0 and 3
+> -
+> -Optional properties:
+> -  - phys: phandle to the external D-PHY, phy-names must be provided
+> -  - phy-names: must contain "dphy", if the implementation uses an
+> -               external D-PHY
+> -
+> -Required subnodes:
+> -  - ports: A ports node with one port child node per device input and output
+> -           port, in accordance with the video interface bindings defined in
+> -           Documentation/devicetree/bindings/media/video-interfaces.txt. The
+> -           port nodes are numbered as follows:
+> -
+> -           Port Description
+> -           -----------------------------
+> -           0    CSI-2 input
+> -           1    Stream 0 output
+> -           2    Stream 1 output
+> -           3    Stream 2 output
+> -           4    Stream 3 output
+> -
+> -           The stream output port nodes are optional if they are not
+> -           connected to anything at the hardware level or implemented
+> -           in the design.Since there is only one endpoint per port,
+> -           the endpoints are not numbered.
+> -
+> -
+> -Example:
+> -
+> -csi2rx: csi-bridge@0d060000 {
+> -	compatible = "cdns,csi2rx";
+> -	reg = <0x0d060000 0x1000>;
+> -	clocks = <&byteclock>, <&byteclock>
+> -		 <&coreclock>, <&coreclock>,
+> -		 <&coreclock>, <&coreclock>;
+> -	clock-names = "sys_clk", "p_clk",
+> -		      "pixel_if0_clk", "pixel_if1_clk",
+> -		      "pixel_if2_clk", "pixel_if3_clk";
+> -
+> -	ports {
+> -		#address-cells = <1>;
+> -		#size-cells = <0>;
+> -
+> -		port@0 {
+> -			reg = <0>;
+> -
+> -			csi2rx_in_sensor: endpoint {
+> -				remote-endpoint = <&sensor_out_csi2rx>;
+> -				clock-lanes = <0>;
+> -				data-lanes = <1 2>;
+> -			};
+> -		};
+> -
+> -		port@1 {
+> -			reg = <1>;
+> -
+> -			csi2rx_out_grabber0: endpoint {
+> -				remote-endpoint = <&grabber0_in_csi2rx>;
+> -			};
+> -		};
+> -
+> -		port@2 {
+> -			reg = <2>;
+> -
+> -			csi2rx_out_grabber1: endpoint {
+> -				remote-endpoint = <&grabber1_in_csi2rx>;
+> -			};
+> -		};
+> -
+> -		port@3 {
+> -			reg = <3>;
+> -
+> -			csi2rx_out_grabber2: endpoint {
+> -				remote-endpoint = <&grabber2_in_csi2rx>;
+> -			};
+> -		};
+> -
+> -		port@4 {
+> -			reg = <4>;
+> -
+> -			csi2rx_out_grabber3: endpoint {
+> -				remote-endpoint = <&grabber3_in_csi2rx>;
+> -			};
+> -		};
+> -	};
+> -};
+> diff --git a/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+> new file mode 100644
+> index 000000000000..ed573a67f93e
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+> @@ -0,0 +1,163 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/cdns,csi2rx.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cadence MIPI-CSI2 RX controller
+> +
+> +maintainers:
+> +  - Maxime Ripard <mripard@kernel.org>
+> +
+> +description:
+> +  The Cadence MIPI-CSI2 RX controller is a CSI-2 bridge supporting up to 4 CSI
+> +  lanes in input, and 4 different pixel streams in output.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - cdns,csi2rx
 
+The existing bindings state
 
-Linux kernel also has a small loader (a.k.a decompressor) in
-arch/*/boot/decompress/.
+  - compatible: must be set to "cdns,csi2rx" and an SoC-specific compatible
 
-For example, CONFIG_KERNEL_GZIP is a CONFIG option
-for the decompressor instead of the main kernel.
+This should thus be
 
-In this sense, you could apply your theory,
-"Linux kernel is also multi build-phases, so Kconfig should have this
-extension to move CONFIG_KERNEL_GZIP to another build phase".
-No, no. The main kernel and the decompressor are well separated
-and the latter is small and simple.
+  compatible:
+    items:
+      - enum:
+          - vendor1,device1
+	  - ...
+      - const: cdns,csi2rx
 
-Barebox is the same - the main Barebox and PBL are well separated
-and PBL is really small and simple.
+The trouble is that the existing bindings are not used in mainline and
+don't specify any SoC-specific compatible string, so I don't know what
+to indicate for vendor1,device1. One option would be to add the StarFive
+compatible string already:
 
-The problems you are suffering from do not exist in Barebox.
+  compatible:
+    items:
+      - enum:
+          - starfive,jh7110-csi2rx
+      - const: cdns,csi2rx
 
+The example below should be updated accordingly.
 
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    items:
+> +      - description: CSI2Rx system clock
+> +      - description: Gated Register bank clock for APB interface
+> +      - description: pixel Clock for Stream interface 0
+> +      - description: pixel Clock for Stream interface 1
+> +      - description: pixel Clock for Stream interface 2
+> +      - description: pixel Clock for Stream interface 3
+> +
+> +  clock-names:
+> +    items:
+> +      - const: sys
+> +      - const: reg_bank
+> +      - const: pixel_if0
+> +      - const: pixel_if1
+> +      - const: pixel_if2
+> +      - const: pixel_if3
 
-> and Simon believes Zephyr will be in a similar situation soon
-> enough (which doesn't use the kernel's implementation of the language).
+This changes the clock names and breaks compatibility with the driver.
+The existing names must be preserved.
 
-Zephyr does not share any Kconfig code with Linux.
-They use Python implementation, a.k.a. Kconfiglib.
-It is up to the Zephyr community, but this requires extra effort.
+> +
+> +  resets:
+> +    items:
+> +      - description: CSI2Rx system reset
+> +      - description: Gated Register bank reset for APB interface
+> +      - description: pixel reset for Stream interface 0
+> +      - description: pixel reset for Stream interface 1
+> +      - description: pixel reset for Stream interface 2
+> +      - description: pixel reset for Stream interface 3
+> +
+> +  reset-names:
+> +    items:
+> +      - const: sys
+> +      - const: reg_bank
+> +      - const: pixel_if0
+> +      - const: pixel_if1
+> +      - const: pixel_if2
+> +      - const: pixel_if3
 
-> Frankly, I keep going back to "tristate" is just the original example of
-> what we're talking about here (CONFIG_FOO=3Dn, CONFIG_FOO_MODULE=3Dy), no=
-t
-> that I'm suggesting we would remove the tristate word.
-> So we would really like to make sure as many people and projects are
-> aware, as possible.
+Let's move the addition of the resets and reset-names properties to a
+patch separate from the YAML conversion to make it easier to review them
+independently.
 
-This is on the boundary.
-We can make the tristate optional if it does not make the code too ugly.
+> +
+> +  phys:
+> +    maxItems: 1
+> +    description: MIPI D-PHY
+> +
+> +  phy-names:
+> +    items:
+> +      - const: dphy
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        unevaluatedProperties: false
+> +        description:
+> +          Input port node, single endpoint describing the CSI-2 transmitter.
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: video-interfaces.yaml#
+> +            unevaluatedProperties: false
+> +
+> +            properties:
+> +              bus-type:
+> +                enum:
+> +                  - 4
 
-But, if you do not add CONFIG_MODULES in your Kconfig file,
-users will not see 'm' in the first place.
+You can simplify this to
 
-I know some help messages still mention 'm', but is this the problem
-you want to solve?
+              bus-type:
+	        const: 4
 
+> +
+> +              clock-lanes:
+> +                maximum: 4
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +                items:
+> +                  maximum: 4
 
-> And as Simon asked in the thread, what about code refactoring that makes
-> further maintenance easier? Clearly, such patches would need to be
-> against the current appropriate tree.
+Does the IP core support clock and data lanes remapping ?
 
-If such patches clean up the code, they will be appreciated.
+> +
+> +            required:
+> +              - clock-lanes
+> +              - data-lanes
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/properties/port
+> +        description:
+> +          Output port node
 
---=20
-Best Regards
-Masahiro Yamada
+This is also a change compared to the existing bindings, and it will
+break backward compatibility. You should have four output ports.
+
+> +
+> +    required:
+> +      - port@0
+> +      - port@1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    csi2rx: csi@0d060000 {
+
+The csi2rx label is never referenced, you can drop it.
+
+> +        compatible = "cdns,csi2rx";
+> +        reg = <0x0d060000 0x1000>;
+> +        clocks = <&byteclock 7>, <&byteclock 6>,
+> +                 <&coreclock 8>, <&coreclock 9>,
+> +                 <&coreclock 10>, <&coreclock 11>;
+> +        clock-names = "sys", "reg_bank",
+> +                      "pixel_if0", "pixel_if1",
+> +                      "pixel_if2", "pixel_if3";
+> +        resets = <&bytereset 9>, <&bytereset 4>,
+> +                 <&corereset 5>, <&corereset 6>,
+> +                 <&corereset 7>, <&corereset 8>;
+> +        reset-names = "sys", "reg_bank",
+> +                      "pixel_if0", "pixel_if1",
+> +                      "pixel_if2", "pixel_if3";
+> +        phys = <&csi_phy>;
+> +        phy-names = "dphy";
+> +
+> +        ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                    reg = <0>;
+> +
+> +                    csi2rx_in_sensor: endpoint {
+> +                        remote-endpoint = <&sensor_out_csi2rx>;
+> +                        clock-lanes = <0>;
+> +                        data-lanes = <1 2>;
+> +                    };
+> +                };
+> +
+> +                port@1 {
+> +                    reg = <1>;
+> +
+> +                    csi2rx_out_grabber0: endpoint {
+> +                        remote-endpoint = <&grabber0_in_csi2rx>;
+> +                    };
+> +                };
+> +        };
+> +    };
+> +
+> +...
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 8ddef8669efb..b2e7ca5603c3 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -4632,6 +4632,7 @@ M:	Maxime Ripard <mripard@kernel.org>
+>  L:	linux-media@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/media/cdns,*.txt
+> +F:	Documentation/devicetree/bindings/media/cdns,csi2rx.yaml
+>  F:	drivers/media/platform/cadence/cdns-csi2*
+>  
+>  CADENCE NAND DRIVER
+
+-- 
+Regards,
+
+Laurent Pinchart
