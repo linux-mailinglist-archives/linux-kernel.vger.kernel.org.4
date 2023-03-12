@@ -2,83 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 939246B6AC5
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:45:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373186B6AC9
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 20:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbjCLTp3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 15:45:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41936 "EHLO
+        id S230294AbjCLTw2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 15:52:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjCLTp1 (ORCPT
+        with ESMTP id S229713AbjCLTw1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 15:45:27 -0400
-Received: from jabberwock.ucw.cz (jabberwock.ucw.cz [46.255.230.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6C2025949;
-        Sun, 12 Mar 2023 12:45:25 -0700 (PDT)
-Received: by jabberwock.ucw.cz (Postfix, from userid 1017)
-        id 82C0D1C0AAC; Sun, 12 Mar 2023 20:45:24 +0100 (CET)
-Date:   Sun, 12 Mar 2023 20:45:23 +0100
-From:   Pavel Machek <pavel@denx.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
-Subject: Re: [PATCH 5.10 000/528] 5.10.173-rc2 review
-Message-ID: <ZA4r03fWsS3KOQ5O@duo.ucw.cz>
-References: <20230311091908.975813595@linuxfoundation.org>
+        Sun, 12 Mar 2023 15:52:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47DFA29421;
+        Sun, 12 Mar 2023 12:52:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678650745; x=1710186745;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=XtUA5eX+ffo8r5wc07ADNwYbe4UtkP11Oc3TihCP3HY=;
+  b=DXWjrbHAu+XBpvJWeTJEUWhLm8oYD92Zv7LxtsMufNbKiCBfXyut1JPJ
+   A+E2cO6jvTSqx8jq7rpgNx/yKcJPqhHJhfQLYwqJj6CBR82J/ao1w0U2A
+   vbIp9o/XyQftQG1nvYDkgIVZHrkP+r3gbLY71ua9dv/jTBn0KtMIDNwM4
+   pheP5V3DXDMGHcfodSJFH7+uo59Prpjw5kdwYEitsFvoNzpFgV6Y5FKS5
+   uwtyMcy5zRTO1newOSs1bvn1dJT/z0s99i/neVGlNuVMFDw8f4MdPoili
+   LHtvBIuP+KmfeYHWM4cJUdwjuJGv0NCb1q5quk5YWsKfc+JKW97CylIPA
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,254,1673938800"; 
+   d="scan'208";a="215943146"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa1.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Mar 2023 12:52:22 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sun, 12 Mar 2023 12:52:22 -0700
+Received: from soft-dev3-1.microsemi.net (10.10.115.15) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.21 via Frontend Transport; Sun, 12 Mar 2023 12:52:20 -0700
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, Horatiu Vultur <horatiu.vultur@microchip.com>
+Subject: [PATCH net-next] net: lan966x: Change lan966x_police_del return type
+Date:   Sun, 12 Mar 2023 20:51:55 +0100
+Message-ID: <20230312195155.1492881-1-horatiu.vultur@microchip.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha1;
-        protocol="application/pgp-signature"; boundary="qe/Jjd6815Vh63SM"
-Content-Disposition: inline
-In-Reply-To: <20230311091908.975813595@linuxfoundation.org>
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_NEUTRAL autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As the function always returns 0 change the return type to be
+void instead of int. In this way also remove a wrong message
+in case of error which would never happen.
 
---qe/Jjd6815Vh63SM
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Signed-off-by: Horatiu Vultur <horatiu.vultur@microchip.com>
+---
+ .../net/ethernet/microchip/lan966x/lan966x_police.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-Hi!
+diff --git a/drivers/net/ethernet/microchip/lan966x/lan966x_police.c b/drivers/net/ethernet/microchip/lan966x/lan966x_police.c
+index 7d66fe75cd3bf..7302df2300fd2 100644
+--- a/drivers/net/ethernet/microchip/lan966x/lan966x_police.c
++++ b/drivers/net/ethernet/microchip/lan966x/lan966x_police.c
+@@ -49,8 +49,7 @@ static int lan966x_police_add(struct lan966x_port *port,
+ 	return 0;
+ }
+ 
+-static int lan966x_police_del(struct lan966x_port *port,
+-			      u16 pol_idx)
++static void lan966x_police_del(struct lan966x_port *port, u16 pol_idx)
+ {
+ 	struct lan966x *lan966x = port->lan966x;
+ 
+@@ -67,8 +66,6 @@ static int lan966x_police_del(struct lan966x_port *port,
+ 	lan_wr(ANA_POL_PIR_CFG_PIR_RATE_SET(GENMASK(14, 0)) |
+ 	       ANA_POL_PIR_CFG_PIR_BURST_SET(0),
+ 	       lan966x, ANA_POL_PIR_CFG(pol_idx));
+-
+-	return 0;
+ }
+ 
+ static int lan966x_police_validate(struct lan966x_port *port,
+@@ -186,7 +183,6 @@ int lan966x_police_port_del(struct lan966x_port *port,
+ 			    struct netlink_ext_ack *extack)
+ {
+ 	struct lan966x *lan966x = port->lan966x;
+-	int err;
+ 
+ 	if (port->tc.police_id != police_id) {
+ 		NL_SET_ERR_MSG_MOD(extack,
+@@ -194,12 +190,7 @@ int lan966x_police_port_del(struct lan966x_port *port,
+ 		return -EINVAL;
+ 	}
+ 
+-	err = lan966x_police_del(port, POL_IDX_PORT + port->chip_port);
+-	if (err) {
+-		NL_SET_ERR_MSG_MOD(extack,
+-				   "Failed to add policer to port");
+-		return err;
+-	}
++	lan966x_police_del(port, POL_IDX_PORT + port->chip_port);
+ 
+ 	lan_rmw(ANA_POL_CFG_PORT_POL_ENA_SET(0) |
+ 		ANA_POL_CFG_POL_ORDER_SET(POL_ORDER),
+-- 
+2.38.0
 
-> This is the start of the stable review cycle for the 5.10.173 release.
-> There are 528 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-
-CIP testing did not find any problems here:
-
-(We tested Linux 5.10.173 (e5f315b55f8e) and 6.1, 4.19 and 4.14 seem
-ok, too).
-
-https://gitlab.com/cip-project/cip-testing/linux-stable-rc-ci/-/tree/linux-=
-5.10.y
-
-Tested-by: Pavel Machek (CIP) <pavel@denx.de>
-
-Best regards,
-                                                                Pavel
---=20
-DENX Software Engineering GmbH,      Managing Director: Wolfgang Denk
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-
---qe/Jjd6815Vh63SM
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iF0EABECAB0WIQRPfPO7r0eAhk010v0w5/Bqldv68gUCZA4r0wAKCRAw5/Bqldv6
-8iTNAKC7+b+W5w6QYC+TEzNeGZ1QJ0t0DACbB7Q3h2YJWvSVKeRTXupGsyjAl6A=
-=5/u7
------END PGP SIGNATURE-----
-
---qe/Jjd6815Vh63SM--
