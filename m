@@ -2,71 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CC416B6C01
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9EEF6B6C04
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:36:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbjCLWfa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 18:35:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
+        id S230502AbjCLWgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 18:36:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjCLWf0 (ORCPT
+        with ESMTP id S230179AbjCLWgO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 18:35:26 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6DC202CFDB
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 15:35:19 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id ks17so7206359qvb.6
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 15:35:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678660518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PkExPuFUCCT2ZLn9o1HBYqlIGVStqDHCO2raPRbE9Lk=;
-        b=z7vuQ8nDPQsO6U5FQM1Lpt0LGWiKJ+TNR+d1v0RJNb3Y06rOVK5aNvAc3zbFF7e3i8
-         h4wgiGz6XpgvUmFedppx2h73U42c+Id5RjNXCNKXgaMBIQWVjvluNPzKDoZHyCiSK0Dk
-         YT21k/TGsEtJB+9daf/LeIo+hqT0Ok4BQhvwtZvO1jU9n+VuCZxqOeZ5x66jBuCW249v
-         ce4tKFSV3NHoMbzuVQp2wFOTMm5fpF1XMOX74lM0/ZGpehPCJotkN6v5Gs4kvW2NDqGx
-         0N7LHcknrQcm9Wj3Y/iCggf71mrJ788IUwGV1Zd+fcrdV7oq9g76KXsr6lSLLgg0yXSf
-         hoBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678660518;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PkExPuFUCCT2ZLn9o1HBYqlIGVStqDHCO2raPRbE9Lk=;
-        b=54sD27ncm0XmM61nD66Wa/uoJk0npHyKeW/JJO9vsWOOiMYOfPf5xvYXGtAtncl5uU
-         LOM+9/Vj5ptcoTG6IXZN93H0Y+QJcCo4LVfde2BOTTDDP2gi+LYwTlLUZ/bYn6zQNJDe
-         VU8v+8gBthHQyIiOZ1moDGapzSHysewoZ54Pqeb9824K7OF7xP+GA70dB2FH/rDKT+un
-         vcPvUkp2ctQEF62JuNohEluEHU3Yp++SmBrQNdXsM0mL6gmwOjlCNXJo3STBw4ro1SOo
-         F3rFihrtgKMLyyot/iU+giNHYNC6QfjBCqWOxd700aFlBlsNUaDGTJzp7cBbFUW7AEfn
-         kBFA==
-X-Gm-Message-State: AO0yUKWoZFVzhqI1nsni85oU7Qoy1raqBkbe+VM+ZUSXQ/4Z0p7emS0Z
-        zLALk/IEXeuCIS0hi67INRrONg==
-X-Google-Smtp-Source: AK7set9ujlJiFJFaoLeEWvtb6YT8kCXF7TqnTvXGC5DLjy79SFJbaPpyM3/4VM3sIDCkSuTNc8rfog==
-X-Received: by 2002:a05:6214:f06:b0:56b:eb9d:4342 with SMTP id gw6-20020a0562140f0600b0056beb9d4342mr10042568qvb.49.1678660518323;
-        Sun, 12 Mar 2023 15:35:18 -0700 (PDT)
-Received: from fedora (69-109-179-158.lightspeed.dybhfl.sbcglobal.net. [69.109.179.158])
-        by smtp.gmail.com with ESMTPSA id g28-20020a05620a109c00b00742e61999a3sm4205901qkk.64.2023.03.12.15.35.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 15:35:17 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 18:35:15 -0400
-From:   William Breathitt Gray <william.gray@linaro.org>
-To:     linux-iio@vger.kernel.org
-Cc:     jic23@kernel.org, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Subject: Re: [PATCH v2] counter: 104-quad-8: Fix race condition between FLAG
- and CNTR reads
-Message-ID: <ZA5To4HGxrM0qoYP@fedora>
-References: <20230312212347.129756-1-william.gray@linaro.org>
+        Sun, 12 Mar 2023 18:36:14 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80D89132C0;
+        Sun, 12 Mar 2023 15:36:13 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 479106602F13;
+        Sun, 12 Mar 2023 22:36:12 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678660572;
+        bh=SJfzew+2aNS9FiIgtBkSq0NhB8lkWhj5GA46wF1nmm8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=N59x72DP9HqD2W0GdgZTY4vqUlG4/JKai02N39lSD4QHHyBoXGr9RIVKk2hMorMwn
+         d9GBeNPUeqOuVzxhWfjIzmRQDMtGO0nE/qOkP8d/XT7sD716x1nw1ksPbHqkyWpuaW
+         AOfR9z8477Z7z4WXubmF5iLWwUOQQeRxxwJas36YItznPwqU3pnO6loPXBlAyfBy21
+         BOnP22jwEn5jD9cbT+GA07GVMC4uSdbboP8Z4hgJVhc9RKhypmbAnm5YeXeRx/iuIb
+         2m9udTzJz8bQzQM0sttQchSW7IMyAURcerMT2kl0SEaCti/CIsTXICRvqfuztHRdig
+         nbhw+UD7XXKOg==
+Received: by mercury (Postfix, from userid 1000)
+        id D3E081060FD4; Sun, 12 Mar 2023 23:36:09 +0100 (CET)
+Date:   Sun, 12 Mar 2023 23:36:09 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] power: supply: charger-manager: Use
+ of_property_read_bool() for boolean properties
+Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+References: <20230310144735.1546888-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Ohg1rDHLUsdZDA0r"
+        protocol="application/pgp-signature"; boundary="esdwyao7whnqopbb"
 Content-Disposition: inline
-In-Reply-To: <20230312212347.129756-1-william.gray@linaro.org>
+In-Reply-To: <20230310144735.1546888-1-robh@kernel.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -74,62 +58,66 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---Ohg1rDHLUsdZDA0r
+--esdwyao7whnqopbb
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Sun, Mar 12, 2023 at 05:23:47PM -0400, William Breathitt Gray wrote:
-> The Counter (CNTR) register is 24 bits wide, but we can have an
-> effective 25-bit count value by setting bit 24 to the XOR of the Borrow
-> flag and Carry flag. The flags can be read from the FLAG register, but a
-> race condition exists: the Borrow flag and Carry flag are instantaneous
-> and could change by the time the count value is read from the CNTR
-> register.
+Hi,
+
+On Fri, Mar 10, 2023 at 08:47:35AM -0600, Rob Herring wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties.
+> Convert reading boolean properties to to of_property_read_bool().
 >=20
-> Since the race condition could result in an incorrect 25-bit count
-> value, remove support for 25-bit count values from this driver;
-> hard-coded maximum count values are replaced by a LS7267_CNTR_MAX define
-> for consistency and clarity.
+> Signed-off-by: Rob Herring <robh@kernel.org>
+> ---
+
+Thanks, queued.
+
+-- Sebastian
+
+>  drivers/power/supply/charger-manager.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >=20
-> Fixes: 28e5d3bb0325 ("iio: 104-quad-8: Add IIO support for the ACCES 104-=
-QUAD-8")
-> Cc: stable@vger.kernel.org
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
-> @@ -156,19 +155,9 @@ static int quad8_count_read(struct counter_device *c=
-ounter,
->  {
->  	struct quad8 *const priv =3D counter_priv(counter);
->  	struct channel_reg __iomem *const chan =3D priv->reg->channel + count->=
-id;
-> -	unsigned int flags;
-> -	unsigned int borrow;
-> -	unsigned int carry;
->  	unsigned long irqflags;
->  	int i;
+> diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/suppl=
+y/charger-manager.c
+> index c9e8450c646f..5fa6ba7f41e1 100644
+> --- a/drivers/power/supply/charger-manager.c
+> +++ b/drivers/power/supply/charger-manager.c
+> @@ -1331,7 +1331,7 @@ static struct charger_desc *of_cm_parse_desc(struct=
+ device *dev)
+>  	of_property_read_string(np, "cm-thermal-zone", &desc->thermal_zone);
 > =20
-> -	flags =3D ioread8(&chan->control);
-> -	borrow =3D flags & QUAD8_FLAG_BT;
-> -	carry =3D !!(flags & QUAD8_FLAG_CT);
-> -
-> -	/* Borrow XOR Carry effectively doubles count range */
-> -	*val =3D (unsigned long)(borrow ^ carry) << 24;
+>  	of_property_read_u32(np, "cm-battery-cold", &desc->temp_min);
+> -	if (of_get_property(np, "cm-battery-cold-in-minus", NULL))
+> +	if (of_property_read_bool(np, "cm-battery-cold-in-minus"))
+>  		desc->temp_min *=3D -1;
+>  	of_property_read_u32(np, "cm-battery-hot", &desc->temp_max);
+>  	of_property_read_u32(np, "cm-battery-temp-diff", &desc->temp_diff);
+> --=20
+> 2.39.2
+>=20
 
-The count value is used later on so it should be initialized here; I'll
-submit a v3 along with some backports as well for the other stable
-kernels.
-
-William Breathitt Gray
-
---Ohg1rDHLUsdZDA0r
+--esdwyao7whnqopbb
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iHUEARYKAB0WIQSNN83d4NIlKPjon7a1SFbKvhIjKwUCZA5TowAKCRC1SFbKvhIj
-K1McAQC0qlj/pFqJOdBNrAtOL3qyWM5zS5XN+cuwgfn5lHf4cwEAyHBzBklZFy3x
-5sE7fT8R3oi88bMByhaLs4GGeZRAFAI=
-=mTRD
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOU9kACgkQ2O7X88g7
++pqlDg//Z2CepETxVSTBcXjJs98lElws+51NmKJOfFNnoUvbIw/+lMANJ4AYp+32
+yMlk+QIlgng9aRunNPYGXDAkjB3grwZ4sbw3DelADFpDrnz4Q9oPujJJTTbocxVe
+Brxk5h0fnBcZevhz8cGP+/mX9iB04eXjLaPwaNsTIi3X0cfNTnZ9g0ghr5OZqMUB
+I2QSleKatJRp4XuPzE1sKE+ZJN9IFuD7A0twngv4MOwhbh6ysQYc+PTam1l0Up0J
+UcMB/s5NIb/xEbeP96ESsQ4QLXfCtYRMxITVzpMTn0BacuX6fjNOJhmeQCuehBtG
+K62CbJjhGPMs1/CLyYw4WcJa+1o0lwr1UA/i0wjBAkSgrkEbWMSrNZYpjWLpRO6y
+EjdZwMxMSbWy6GWTjl6FkNnmX+R47MNZflwOFVXkNbbnDsu//xhU63gbavdzM86K
+1PaZSIBP8keA+LQwySnLiJuqy/LO6G7HztuaBqvlh/DH/3hIPliEbA8knJFPNMRI
+JvCQYX3rb3/V1/g+//nZruUlolQ1zcIVxLzXFMaFWgi6vRp/UhgE8saAu29CdeMA
+2q9JAZx8md0+G7UG02qUUZtExeFr06uF9TJ5MWk+hBueI8MrQ+S815WSBd5I8a3F
+kQEbjZ2WWk+vHnY9DK09mjpXg39dSsd//pjHv/Gpt68TuVtHk+Q=
+=Vnoq
 -----END PGP SIGNATURE-----
 
---Ohg1rDHLUsdZDA0r--
+--esdwyao7whnqopbb--
