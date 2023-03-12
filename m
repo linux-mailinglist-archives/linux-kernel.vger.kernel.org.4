@@ -2,56 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8066B64F4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:36:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBE56B64F7
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:38:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229996AbjCLKgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48940 "EHLO
+        id S229863AbjCLKij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:38:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCLKgK (ORCPT
+        with ESMTP id S229473AbjCLKig (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:36:10 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E63C38021;
-        Sun, 12 Mar 2023 03:36:07 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pbJ3W-0002pE-Bm; Sun, 12 Mar 2023 11:35:58 +0100
-Message-ID: <6a916781-7b84-924f-bdc6-0f284610bead@leemhuis.info>
-Date:   Sun, 12 Mar 2023 11:35:57 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
-Content-Language: en-US, de-DE
-To:     Jarkko Sakkinen <jarkko@kernel.org>,
-        Linux regressions mailing list <regressions@lists.linux.dev>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        stable@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        reach622@mailcuk.com, Bell <1138267643@qq.com>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Mario Limonciello <mario.limonciello@amd.com>
-References: <20230228024439.27156-1-mario.limonciello@amd.com>
- <Y/1wuXbaPcG9olkt@kernel.org>
- <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
- <85df6dda-c1c9-f08e-9e64-2007d44f6683@leemhuis.info>
- <ZA0sScO47IMKPhtG@kernel.org>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <ZA0sScO47IMKPhtG@kernel.org>
+        Sun, 12 Mar 2023 06:38:36 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 347742387A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:38:35 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso9001722wmq.1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:38:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678617513;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CnXUvgY/lQbEIAhlEWITjQxBBwr5ulB+Ngn573yt/HI=;
+        b=K++Sac4QXPb78WLLWM02GJThSsUv3qZfeOODf7zH2AwS8i+TW91re2iyfOp4znFqDY
+         TMEl/CMOR7T2VBIorTE3Xek4DUJTXGc7BjiRMhyjzDYJGtR7WiAFr9KeZQAhqKvzw0+O
+         XR7t72kD2BUjBfkXY+23K89GdgTeejTKGFXZ53eY1CHCq9smOQ5p/GnuvrQWqtdkB0U3
+         XfOrilDJxT25DU71vQAGXZLOpr3TI1J9WWz+840jqH2M1k9QHf5jddOexbBqPyScmBK4
+         msOJUElVhOnaM1UNc6NKJX6etPi5h6KOTUfap7ygMt/Xrk88z4nYWjrrhAiO3d1Drs9H
+         X8qg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678617513;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=CnXUvgY/lQbEIAhlEWITjQxBBwr5ulB+Ngn573yt/HI=;
+        b=0FdTnxgKzs/6wRFQGC7tZJGLRSFJxSGh3/in5mY1tjTXSH9iKyvxCklovVX8PG1rBn
+         bfqLO/gZRXmKCbtWpLjBn0FclrO7C9EDSY7+8JKMjFt2o/LlzQ9ivNUb+TKY750ePElg
+         r9s55dz2UKyYX8Y3lCcRooaR5INjMBXMX0IjPBsnRqbm9sNbSKv+/POK61Rbir5zNMTW
+         dwm1hji3QDjnmBGfuxNmJhWGga9jFuyK3qMJKcOXDlWr+XA4ul2LAv0MEfGNbrAB0gOR
+         wVMT5tb3I5RXuFbIdiQsrdfKDVRRdxQeRvgk+lTC3CrNNB3blxc8+2ALTiNuj8+Ygw/I
+         8Lew==
+X-Gm-Message-State: AO0yUKV3Fgh3nGW61Oc5IiLH4tpN35/1TkhCzanXBryhsNHEFS7UK018
+        a6j+XvhH/iQ9rTnLgvbyMJc=
+X-Google-Smtp-Source: AK7set8k890tWSm3x1zwHHcZ1fsnkgG8rK7caIZ4MvxJ1EDFfxtQOcnNYywc1mPxSE+XJ778iw+qJg==
+X-Received: by 2002:a05:600c:314c:b0:3eb:2f06:c989 with SMTP id h12-20020a05600c314c00b003eb2f06c989mr7758660wmo.22.1678617513487;
+        Sun, 12 Mar 2023 03:38:33 -0700 (PDT)
+Received: from localhost ([2001:b07:5d37:537d:5e25:9ef5:7977:d60c])
+        by smtp.gmail.com with ESMTPSA id f18-20020a7bcc12000000b003dc47d458cdsm5650478wmh.15.2023.03.12.03.38.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 03:38:33 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678617367;4439cfe8;
-X-HE-SMSGID: 1pbJ3W-0002pE-Bm
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+Date:   Sun, 12 Mar 2023 11:38:31 +0100
+Message-Id: <CR4C8V5T7751.HT9WYT9LB7X1@vincent-arch>
+From:   "Vincenzo Palazzo" <vincenzopalazzodev@gmail.com>
+To:     "Ivan Orlov" <ivan.orlov0322@gmail.com>,
+        "David Kahurani" <k.kahurani@gmail.com>
+Cc:     <lucho@ionkov.net>, <ericvh@gmail.com>, <asmadeus@codewreck.org>,
+        <linux_oss@crudebyte.com>, <linux-kernel@vger.kernel.org>,
+        <syzbot+cb1d16facb3cc90de5fb@syzkaller.appspotmail.com>,
+        <v9fs-developer@lists.sourceforge.net>,
+        <linux-kernel-mentees@lists.linuxfoundation.org>
+Subject: Re: [PATCH] 9P FS: Fix wild-memory-access write in v9fs_get_acl
+X-Mailer: aerc 0.14.0
+References: <20230310202619.433269-1-ivan.orlov0322@gmail.com>
+ <CAAZOf24yhpSBd1926v7T=qDwqvFfLsWMJeMKTafeZ=69hJ4rdw@mail.gmail.com>
+ <d5bb5ff0-1102-c7cd-c21b-c3a7f4f31717@gmail.com>
+In-Reply-To: <d5bb5ff0-1102-c7cd-c21b-c3a7f4f31717@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -60,74 +79,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12.03.23 02:35, Jarkko Sakkinen wrote:
-> On Fri, Mar 10, 2023 at 06:43:47PM +0100, Thorsten Leemhuis wrote:
->> [adding Linux to the list of recipients]
->>
->> On 08.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
->>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
->>> for once, to make this easily accessible to everyone.
->>>
->>> Jarkko, thx for reviewing and picking below fix up. Are you planning to
->>> send this to Linus anytime soon, now that the patch was a few days in
->>> next? It would be good to get this 6.1 regression finally fixed, it
->>> already took way longer then the time frame
->>> Documentation/process/handling-regressions.rst outlines for a case like
->>> this. But well, that's how it is sometimes...
->>
->> Linus, would you consider picking this fix up directly from here or from
->> linux-next (8699d5244e37)? It's been in the latter for 9 days now
->> afaics. And the issue seems to bug more than just one or two users, so
->> it IMHO would be good to get this finally resolved.
->>
->> Jarkko didn't reply to my inquiry, guess something else keeps him busy.
-> 
-> That's a bit arrogant. You emailed only 4 days ago.
+On Sat Mar 11, 2023 at 6:35 PM CET, Ivan Orlov wrote:
+>
+> > I'm not sure what are the rules around here but I prefer to use bracket=
+s=20
+> > more generously.
+>
+> I think in this particular case they can just make the code less=20
+> readable (considering they will not change the behavior in any way).=20
+> However, this is eternal discussion and I saw examples of both in the=20
+> kernel sources.
+Maybe this can be a good reading [1], I think it is more a kernel rule?
 
-My deepest apologies if that "guess something else keeps him busy"
-triggered your response, what I wanted to say is "I don't consider the
-lack of a response a problem, that's how it is for all of us sometimes".
-Sorry, that might not have been the best way to express that.
+[1] https://www.kernel.org/doc/html/latest/process/coding-style.html
 
-If my prodding itself was the cause: well, I think that's what I should
-do in this case. That stance developed quickly when I started doing
-regression tracking, as I noticed one thing:
+Cheers
 
-Image a regression caused by a commit merged for 5.11-rc1 is reported a
-day or two after 5.11-rc7 is released. Imagine further a fix is posted
-for review two or three days after 5.11-rc8 is out. From what I noticed
-quite a few of those fixes (not all of course) make it to mainline in
-time for the release of 5.11. But the picture looked totally different
-when the fix was posted for review shortly *after* 5.11 was out, as I
-noticed quite a few of those were only mainlined 9 or 10 weeks later for
-5.13-rc1 (and only then can be backported to 5.11.y and 5.12.y).
+Vincent.
 
-[above was just a hypothetical example with the worst timing to
-illustrate the core problem, the timelines are different in case of the
-fTPM issue]
+> _______________________________________________
+> Linux-kernel-mentees mailing list
+> Linux-kernel-mentees@lists.linuxfoundation.org
+> https://lists.linuxfoundation.org/mailman/listinfo/linux-kernel-mentees
 
-From my understanding of things that's not how it should be (unless
-there are strong reasons in the individual case). That's why I'm working
-against that. Still working on optimizing when/how I ask, as I'm not yet
-happy with how I do that.
-
-Don't worry, I use my best judgment in that process; if the fix is
-complex and the next merge window is near, I might let it slip – OTOH if
-it's something that apparently bugs quite a few people, I prod
-developers and maintainers more quickly & often, like I did in this case.
-
-In the end situations like the one outlined above lead me to writing the
-section "Prioritize work on fixing regressions" in
-Documentation/process/handling-regressions.rst (
-https://docs.kernel.org/process/handling-regressions.html ). Greg acked
-it; Linus never commented on it, not sure if he looked at it when he
-merged that. But I have no idea how developers actually have seen it
-and/or take it seriously. But from what I saw it already helped somewhat.
-
-> I'm open to do PR for rc3 with the fix, if it cannot wait to v6.4 pr.
-
-From later in this thread I see that you plan to do that now, thus:
-
-many thx!
-
-Ciao, Thorsten
