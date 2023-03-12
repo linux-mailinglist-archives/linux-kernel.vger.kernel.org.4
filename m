@@ -2,294 +2,383 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D26836B66B6
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:30:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D5CB6B66B8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:31:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCLNay (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:30:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53352 "EHLO
+        id S229650AbjCLNbZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:31:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230363AbjCLNar (ORCPT
+        with ESMTP id S229473AbjCLNbW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:30:47 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C46C1903F
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:30:40 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pbLmV-0006iT-BW; Sun, 12 Mar 2023 14:30:35 +0100
-Message-ID: <0b277722-5d01-7ca2-e86a-a77a3523e589@leemhuis.info>
-Date:   Sun, 12 Mar 2023 14:30:34 +0100
+        Sun, 12 Mar 2023 09:31:22 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AF9638B76;
+        Sun, 12 Mar 2023 06:31:19 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id CFA51814;
+        Sun, 12 Mar 2023 14:31:14 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678627877;
+        bh=fxyiMGT7DkWQLqJAY/GZMEQBj54+vButKnwCQmNC+sw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p3S1pCetpnmC2oBobEFG7Nam8UW2IjLri4KxWTQTH1JyBndfNdz/UfAseT8F14fG4
+         k7KrdgisGoP+7i3nce1iPUJqdVsvXVK4Shli05e8HN0S6JYB8cKTMSc+2G6xQjjwaz
+         0as3vHBiRHJSTBGpti0WwY3POn2ziEIxKkG1eHb8=
+Date:   Sun, 12 Mar 2023 15:31:12 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Martin Kepplinger <martin.kepplinger@puri.sm>
+Cc:     slongerbeam@gmail.com, p.zabel@pengutronix.de, mchehab@kernel.org,
+        gregkh@linuxfoundation.org, shawnguo@kernel.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        kernel@puri.sm
+Subject: Re: [PATCH v2 1/2] media: imx: imx8mq-mipi-csi2: Use V4L2 subdev
+ active state
+Message-ID: <20230312133112.GH2545@pendragon.ideasonboard.com>
+References: <20230307150047.1486186-1-martin.kepplinger@puri.sm>
+ <20230307150047.1486186-2-martin.kepplinger@puri.sm>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: linux-6.2-rc4+ hangs on poweroff/reboot: Bisected
-Content-Language: en-US, de-DE
-To:     Karol Herbst <kherbst@redhat.com>,
-        Chris Clayton <chris2553@googlemail.com>
-Cc:     Ben Skeggs <skeggsb@gmail.com>,
-        Linux regressions mailing list <regressions@lists.linux.dev>,
-        Dave Airlie <airlied@gmail.com>, bskeggs@redhat.com,
-        Lyude Paul <lyude@redhat.com>,
-        ML nouveau <nouveau@lists.freedesktop.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        ML dri-devel <dri-devel@lists.freedesktop.org>
-References: <b64705e3-2e63-a466-f829-f9568b06766a@googlemail.com>
- <d031f0a5-8d5e-af51-6db6-11844de3eeba@googlemail.com>
- <CAPM=9tz+wksJTvMi_4Ef7XWezfH0ReN2se189s8Q=obJjHC+Fw@mail.gmail.com>
- <4e786e22-f17a-da76-5129-8fef0c7c825a@googlemail.com>
- <b829633e-ccc4-7a54-1cad-f29254de1251@leemhuis.info>
- <CACO55tsvM07_6mGU3dCgeji0a6B4JJKSDOOBuCHv2Mw3rYbCHg@mail.gmail.com>
- <181bea6a-e501-f5bd-b002-de7a244a921a@googlemail.com>
- <CACO55tsGXfy9-a-nexvcn7pnDGoEWXMqhiQEBwCDkGyOeT1sXQ@mail.gmail.com>
- <dbfc1f77-29f3-7690-c231-55f906a4e7e5@googlemail.com>
- <7f6ec5b3-b5c7-f564-003e-132f112b7cf4@googlemail.com>
- <CACAvsv7Uf5=K44y8YLsiy0aMnc1zvGEQdeDe7RQF=AV+fxxzuQ@mail.gmail.com>
- <c12aa9b8-65a1-0cdf-8948-15309f16b955@googlemail.com>
- <CACO55tvGQdHPnZEMAGPZN3K1nUCV-ruX_QNwSqQAg_z81ab0MA@mail.gmail.com>
- <CACAvsv53xc8dr0e5HEFcV+218WoCbGVor0HDgBw-C51fPkR9kQ@mail.gmail.com>
- <853b7e32-f566-2a92-0f59-3490ad5d88df@googlemail.com>
- <CACO55tub2f3HmwUU5hYb=0JuuDJM=dG-2rBMvb_oCNgp0CqSHQ@mail.gmail.com>
-From:   "Linux regression tracking (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <CACO55tub2f3HmwUU5hYb=0JuuDJM=dG-2rBMvb_oCNgp0CqSHQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678627840;e70279a8;
-X-HE-SMSGID: 1pbLmV-0006iT-BW
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230307150047.1486186-2-martin.kepplinger@puri.sm>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10.03.23 11:20, Karol Herbst wrote:
-> On Fri, Mar 10, 2023 at 10:26 AM Chris Clayton <chris2553@googlemail.com> wrote:
->>
->> Is it likely that this fix will be sumbmitted to mainline during the ongoing 6.3 development cycle?
->>
+Hi Martin,
+
+Thank you for the patch.
+
+On Tue, Mar 07, 2023 at 04:00:46PM +0100, Martin Kepplinger wrote:
+> Simplify the driver by using the V4L2 subdev active state API to store
+> the active format.
 > 
-> yes, it's already pushed to drm-misc-fixed, which then will go into
-> the current devel cycle. I just don't know when it's the next time it
-> will be pushed upwards, but it should get there eventually. 
-
-FWIW, the fix landed now as 1b9b4f922f96 ; sadly without a Link: tag to
-the report, hence I have to mark this manually as resolved:
-
-#regzbot fix: 1b9b4f922f96108da3bb5d87b2d603f5dfbc5650
-
-> And
-> because it also contains a Fixes tag it will be backported to older
-> branches as well.
-
-FWIW, nope, that's not enough you have to tag those explicitly to ensure
-backporting, as explained in
-Documentation/process/stable-kernel-rules.rst Greg points that out every
-few weeks, recently here for example:
-
-https://lore.kernel.org/all/Y6BWPo9S9QbnsAx6@kroah.com/
-
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-If I did something stupid, please tell me, as explained on that page.
-
->> Chris
->>
->> On 20/02/2023 22:16, Ben Skeggs wrote:
->>> On Mon, 20 Feb 2023 at 21:27, Karol Herbst <kherbst@redhat.com> wrote:
->>>>
->>>> On Mon, Feb 20, 2023 at 11:51 AM Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>
->>>>>
->>>>>
->>>>> On 20/02/2023 05:35, Ben Skeggs wrote:
->>>>>> On Sun, 19 Feb 2023 at 04:55, Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>>>
->>>>>>>
->>>>>>>
->>>>>>> On 18/02/2023 15:19, Chris Clayton wrote:
->>>>>>>>
->>>>>>>>
->>>>>>>> On 18/02/2023 12:25, Karol Herbst wrote:
->>>>>>>>> On Sat, Feb 18, 2023 at 1:22 PM Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> On 15/02/2023 11:09, Karol Herbst wrote:
->>>>>>>>>>> On Wed, Feb 15, 2023 at 11:36 AM Linux regression tracking #update
->>>>>>>>>>> (Thorsten Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>>>>>>>>
->>>>>>>>>>>> On 13.02.23 10:14, Chris Clayton wrote:
->>>>>>>>>>>>> On 13/02/2023 02:57, Dave Airlie wrote:
->>>>>>>>>>>>>> On Sun, 12 Feb 2023 at 00:43, Chris Clayton <chris2553@googlemail.com> wrote:
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> On 10/02/2023 19:33, Linux regression tracking (Thorsten Leemhuis) wrote:
->>>>>>>>>>>>>>>> On 10.02.23 20:01, Karol Herbst wrote:
->>>>>>>>>>>>>>>>> On Fri, Feb 10, 2023 at 7:35 PM Linux regression tracking (Thorsten
->>>>>>>>>>>>>>>>> Leemhuis) <regressions@leemhuis.info> wrote:
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> On 08.02.23 09:48, Chris Clayton wrote:
->>>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>>> I'm assuming  that we are not going to see a fix for this regression before 6.2 is released.
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> Yeah, looks like it. That's unfortunate, but happens. But there is still
->>>>>>>>>>>>>>>>>> time to fix it and there is one thing I wonder:
->>>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>>> Did any of the nouveau developers look at the netconsole captures Chris
->>>>>>>>>>>>>>>>>> posted more than a week ago to check if they somehow help to track down
->>>>>>>>>>>>>>>>>> the root of this problem?
->>>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>>> I did now and I can't spot anything. I think at this point it would
->>>>>>>>>>>>>>>>> make sense to dump the active tasks/threads via sqsrq keys to see if
->>>>>>>>>>>>>>>>> any is in a weird state preventing the machine from shutting down.
->>>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>> Many thx for looking into it!
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> Yes, thanks Karol.
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> Attached is the output from dmesg when this block of code:
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>>         /bin/mount /dev/sda7 /mnt/sda7
->>>>>>>>>>>>>>>         /bin/mountpoint /proc || /bin/mount /proc
->>>>>>>>>>>>>>>         /bin/dmesg -w > /mnt/sda7/sysrq.dmesg.log &
->>>>>>>>>>>>>>>         /bin/echo t > /proc/sysrq-trigger
->>>>>>>>>>>>>>>         /bin/sleep 1
->>>>>>>>>>>>>>>         /bin/sync
->>>>>>>>>>>>>>>         /bin/sleep 1
->>>>>>>>>>>>>>>         kill $(pidof dmesg)
->>>>>>>>>>>>>>>         /bin/umount /mnt/sda7
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> is executed immediately before /sbin/reboot is called as the final step of rebooting my system.
->>>>>>>>>>>>>>>
->>>>>>>>>>>>>>> I hope this is what you were looking for, but if not, please let me know what you need
->>>>>>>>>>>>>
->>>>>>>>>>>>> Thanks Dave. [...]
->>>>>>>>>>>> FWIW, in case anyone strands here in the archives: the msg was
->>>>>>>>>>>> truncated. The full post can be found in a new thread:
->>>>>>>>>>>>
->>>>>>>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
->>>>>>>>>>>>
->>>>>>>>>>>> Sadly it seems the info "With runpm=0, both reboot and poweroff work on
->>>>>>>>>>>> my laptop." didn't bring us much further to a solution. :-/ I don't
->>>>>>>>>>>> really like it, but for regression tracking I'm now putting this on the
->>>>>>>>>>>> back-burner, as a fix is not in sight.
->>>>>>>>>>>>
->>>>>>>>>>>> #regzbot monitor:
->>>>>>>>>>>> https://lore.kernel.org/lkml/e0b80506-b3cf-315b-4327-1b988d86031e@googlemail.com/
->>>>>>>>>>>> #regzbot backburner: hard to debug and apparently rare
->>>>>>>>>>>> #regzbot ignore-activity
->>>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>> yeah.. this bug looks a little annoying. Sadly the only Turing based
->>>>>>>>>>> laptop I got doesn't work on Nouveau because of firmware related
->>>>>>>>>>> issues and we probably need to get updated ones from Nvidia here :(
->>>>>>>>>>>
->>>>>>>>>>> But it's a bit weird that the kernel doesn't shutdown, because I don't
->>>>>>>>>>> see anything in the logs which would prevent that from happening.
->>>>>>>>>>> Unless it's waiting on one of the tasks to complete, but none of them
->>>>>>>>>>> looked in any way nouveau related.
->>>>>>>>>>>
->>>>>>>>>>> If somebody else has any fancy kernel debugging tips here to figure
->>>>>>>>>>> out why it hangs, that would be very helpful...
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> I think I've figured this out. It's to do with how my system is configured. I do have an initrd, but the only thing on
->>>>>>>>>> it is the cpu microcode which, it is recommended, should be loaded early. The absence of the NVidia firmare from an
->>>>>>>>>> initrd doesn't matter because the drivers for the hardware that need to load firmware are all built as modules, So, by
->>>>>>>>>> the time the devices are configured via udev, the root partition is mounted and the drivers can get at the firmware.
->>>>>>>>>>
->>>>>>>>>> I've found, by turning on nouveau debug and taking a video of the screen as the system shuts down, that nouveau seems to
->>>>>>>>>> be trying to run the scrubber very very late in the shutdown process. The problem is that by this time, I think the root
->>>>>>>>>> partition, and thus the scrubber binary, have become inaccessible.
->>>>>>>>>>
->>>>>>>>>> I seem to have two choices - either make the firmware accessible on an initrd or unload the module in a shutdown script
->>>>>>>>>> before the scrubber binary becomes inaccessible. The latter of these is the workaround I have implemented whilst the
->>>>>>>>>> problem I reported has been under investigation. For simplicity, I think I'll promote my workaround to being the
->>>>>>>>>> permanent solution.
->>>>>>>>>>
->>>>>>>>>> So, apologies (and thanks) to everyone whose time I have taken up with this non-bug.
->>>>>>>>>>
->>>>>>>>>
->>>>>>>>> Well.. nouveau shouldn't prevent the system from shutting down if the
->>>>>>>>> firmware file isn't available. Or at least it should print a
->>>>>>>>> warning/error. Mind messing with the code a little to see if skipping
->>>>>>>>> it kind of works? I probably can also come up with a patch by next
->>>>>>>>> week.
->>>>>>>>>
->>>>>>>> Well, I'd love to but a quick glance at the code caused me to bump into this obscenity:
->>>>>>>>
->>>>>>>> int
->>>>>>>> gm200_flcn_reset_wait_mem_scrubbing(struct nvkm_falcon *falcon)
->>>>>>>> {
->>>>>>>>         nvkm_falcon_mask(falcon, 0x040, 0x00000000, 0x00000000);
->>>>>>>>
->>>>>>>>         if (nvkm_msec(falcon->owner->device, 10,
->>>>>>>>                 if (!(nvkm_falcon_rd32(falcon, 0x10c) & 0x00000006))
->>>>>>>>                         break;
->>>>>>>>         ) < 0)
->>>>>>>>                 return -ETIMEDOUT;
->>>>>>>>
->>>>>>>>         return 0;
->>>>>>>> }
->>>>>>>>
->>>>>>>> nvkm_msec is #defined to nvkm_usec which in turn is #defined to nvkm_nsec where the loop that the break is related to
->>>>>>>> appears
->>>>>>>
->>>>>>> I think someone who knows the code needs to look at this. What I can confirm is that after a freeze, I waited for 90
->>>>>>> seconds for a timeout to occur, but it didn't.
->>>>>> Hey,
->>>>>>
->>>>>> Are you able to try the attached patch for me please?
->>>>>>
->>>>>> Thanks,
->>>>>> Ben.
->>>>>>
->>>>>
->>>>> Thanks Ben.
->>>>>
->>>>> Yes, this patch fixes the lockup on reboot and poweroff that I've been seeing on my laptop. As you would expect,
->>>>> offloaded rendering is still working and the discrete GPU is being powered on and off as required.
->>>>>
->>>>> Thanks.
->>>>>
->>>>> Reported-by: Chris Clayton <chris2553@googlemail.com>
->>>>> Tested-by: Chris Clayton <chris2553@googlemail.com>
->>>>>
->>>>
->>>> Ben, did you manage to get push rights to drm-misc by now or should I
->>>> just pick the patch and push it through -fixes?
->>> Feel free to pick it up!
->>>
->>> Thank you,
->>> Ben.
->>>
->>>>
->>>>>>>
->>>>>>>
->>>>>>> .> Chris
->>>>>>>>>>
->>>>>>>>>>>> Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
->>>>>>>>>>>> --
->>>>>>>>>>>> Everything you wanna know about Linux kernel regression tracking:
->>>>>>>>>>>> https://linux-regtracking.leemhuis.info/about/#tldr
->>>>>>>>>>>> That page also explains what to do if mails like this annoy you.
->>>>>>>>>>>>
->>>>>>>>>>>> #regzbot ignore-activity
->>>>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>
->>>>>
->>>>
->>
+> Signed-off-by: Martin Kepplinger <martin.kepplinger@puri.sm>
+> ---
+>  drivers/staging/media/imx/imx8mq-mipi-csi2.c | 118 ++++++++-----------
+>  1 file changed, 46 insertions(+), 72 deletions(-)
 > 
-> 
-> 
+> diff --git a/drivers/staging/media/imx/imx8mq-mipi-csi2.c b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+> index c0d0bf770096..1aa8622a3bae 100644
+> --- a/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+> +++ b/drivers/staging/media/imx/imx8mq-mipi-csi2.c
+> @@ -119,9 +119,7 @@ struct csi_state {
+>  
+>  	struct v4l2_mbus_config_mipi_csi2 bus;
+>  
+> -	struct mutex lock; /* Protect csi2_fmt, format_mbus, state, hs_settle */
+> -	const struct csi2_pix_format *csi2_fmt;
+> -	struct v4l2_mbus_framefmt format_mbus[MIPI_CSI2_PADS_NUM];
+> +	struct mutex lock; /* Protect state and hs_settle */
+>  	u32 state;
+>  	u32 hs_settle;
+>  
+> @@ -322,16 +320,23 @@ static int imx8mq_mipi_csi_clk_get(struct csi_state *state)
+>  	return devm_clk_bulk_get(state->dev, CSI2_NUM_CLKS, state->clks);
+>  }
+>  
+> -static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
+> +static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state,
+> +					  struct v4l2_subdev_state *sd_state)
+>  {
+>  	s64 link_freq;
+>  	u32 lane_rate;
+>  	unsigned long esc_clk_rate;
+>  	u32 min_ths_settle, max_ths_settle, ths_settle_ns, esc_clk_period_ns;
+> +	const struct v4l2_mbus_framefmt *fmt;
+> +	const struct csi2_pix_format *csi2_fmt;
+>  
+>  	/* Calculate the line rate from the pixel rate. */
+> +
+> +	fmt = v4l2_subdev_get_pad_format(&state->sd, sd_state, MIPI_CSI2_PAD_SINK);
+> +	csi2_fmt = find_csi2_format(fmt->code);
+> +
+>  	link_freq = v4l2_get_link_freq(state->src_sd->ctrl_handler,
+> -				       state->csi2_fmt->width,
+> +				       csi2_fmt->width,
+>  				       state->bus.num_data_lanes * 2);
+>  	if (link_freq < 0) {
+>  		dev_err(state->dev, "Unable to obtain link frequency: %d\n",
+> @@ -380,7 +385,8 @@ static int imx8mq_mipi_csi_calc_hs_settle(struct csi_state *state)
+>  	return 0;
+>  }
+>  
+> -static int imx8mq_mipi_csi_start_stream(struct csi_state *state)
+> +static int imx8mq_mipi_csi_start_stream(struct csi_state *state,
+> +					struct v4l2_subdev_state *sd_state)
+>  {
+>  	int ret;
+>  
+> @@ -389,7 +395,7 @@ static int imx8mq_mipi_csi_start_stream(struct csi_state *state)
+>  		return ret;
+>  
+>  	imx8mq_mipi_csi_set_params(state);
+> -	ret = imx8mq_mipi_csi_calc_hs_settle(state);
+> +	ret = imx8mq_mipi_csi_calc_hs_settle(state, sd_state);
+>  	if (ret)
+>  		return ret;
+>  
+> @@ -415,6 +421,7 @@ static struct csi_state *mipi_sd_to_csi2_state(struct v4l2_subdev *sdev)
+>  static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
+>  {
+>  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+> +	struct v4l2_subdev_state *sd_state;
+>  	int ret = 0;
+>  
+>  	if (enable) {
+> @@ -431,7 +438,9 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
+>  			goto unlock;
+>  		}
+>  
+> -		ret = imx8mq_mipi_csi_start_stream(state);
+> +		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+> +
+> +		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
+>  		if (ret < 0)
+>  			goto unlock;
+
+You're leaving the state locked here. I would write
+
+		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
+		v4l2_subdev_unlock_state(sd_state);
+
+		if (ret < 0)
+			goto unlock;
+
+and drop the v4l2_subdev_unlock_state() call below. Apart from that,
+
+Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+
+>  
+> @@ -440,6 +449,8 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
+>  			goto unlock;
+>  
+>  		state->state |= ST_STREAMING;
+> +
+> +		v4l2_subdev_unlock_state(sd_state);
+>  	} else {
+>  		v4l2_subdev_call(state->src_sd, video, s_stream, 0);
+>  		imx8mq_mipi_csi_stop_stream(state);
+> @@ -455,29 +466,14 @@ static int imx8mq_mipi_csi_s_stream(struct v4l2_subdev *sd, int enable)
+>  	return ret;
+>  }
+>  
+> -static struct v4l2_mbus_framefmt *
+> -imx8mq_mipi_csi_get_format(struct csi_state *state,
+> -			   struct v4l2_subdev_state *sd_state,
+> -			   enum v4l2_subdev_format_whence which,
+> -			   unsigned int pad)
+> -{
+> -	if (which == V4L2_SUBDEV_FORMAT_TRY)
+> -		return v4l2_subdev_get_try_format(&state->sd, sd_state, pad);
+> -
+> -	return &state->format_mbus[pad];
+> -}
+> -
+>  static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
+>  				    struct v4l2_subdev_state *sd_state)
+>  {
+> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+>  	struct v4l2_mbus_framefmt *fmt_sink;
+>  	struct v4l2_mbus_framefmt *fmt_source;
+> -	enum v4l2_subdev_format_whence which;
+>  
+> -	which = sd_state ? V4L2_SUBDEV_FORMAT_TRY : V4L2_SUBDEV_FORMAT_ACTIVE;
+> -	fmt_sink = imx8mq_mipi_csi_get_format(state, sd_state, which,
+> -					      MIPI_CSI2_PAD_SINK);
+> +	fmt_sink = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SINK);
+> +	fmt_source = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SOURCE);
+>  
+>  	fmt_sink->code = MEDIA_BUS_FMT_SGBRG10_1X10;
+>  	fmt_sink->width = MIPI_CSI2_DEF_PIX_WIDTH;
+> @@ -491,38 +487,15 @@ static int imx8mq_mipi_csi_init_cfg(struct v4l2_subdev *sd,
+>  		V4L2_MAP_QUANTIZATION_DEFAULT(false, fmt_sink->colorspace,
+>  					      fmt_sink->ycbcr_enc);
+>  
+> -	fmt_source = imx8mq_mipi_csi_get_format(state, sd_state, which,
+> -						MIPI_CSI2_PAD_SOURCE);
+>  	*fmt_source = *fmt_sink;
+>  
+>  	return 0;
+>  }
+>  
+> -static int imx8mq_mipi_csi_get_fmt(struct v4l2_subdev *sd,
+> -				   struct v4l2_subdev_state *sd_state,
+> -				   struct v4l2_subdev_format *sdformat)
+> -{
+> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+> -	struct v4l2_mbus_framefmt *fmt;
+> -
+> -	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
+> -					 sdformat->pad);
+> -
+> -	mutex_lock(&state->lock);
+> -
+> -	sdformat->format = *fmt;
+> -
+> -	mutex_unlock(&state->lock);
+> -
+> -	return 0;
+> -}
+> -
+>  static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
+>  					  struct v4l2_subdev_state *sd_state,
+>  					  struct v4l2_subdev_mbus_code_enum *code)
+>  {
+> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+> -
+>  	/*
+>  	 * We can't transcode in any way, the source format is identical
+>  	 * to the sink format.
+> @@ -533,8 +506,7 @@ static int imx8mq_mipi_csi_enum_mbus_code(struct v4l2_subdev *sd,
+>  		if (code->index > 0)
+>  			return -EINVAL;
+>  
+> -		fmt = imx8mq_mipi_csi_get_format(state, sd_state, code->which,
+> -						 code->pad);
+> +		fmt = v4l2_subdev_get_pad_format(sd, sd_state, code->pad);
+>  		code->code = fmt->code;
+>  		return 0;
+>  	}
+> @@ -554,8 +526,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
+>  				   struct v4l2_subdev_state *sd_state,
+>  				   struct v4l2_subdev_format *sdformat)
+>  {
+> -	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+> -	struct csi2_pix_format const *csi2_fmt;
+> +	const struct csi2_pix_format *csi2_fmt;
+>  	struct v4l2_mbus_framefmt *fmt;
+>  
+>  	/*
+> @@ -563,7 +534,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
+>  	 * modified.
+>  	 */
+>  	if (sdformat->pad == MIPI_CSI2_PAD_SOURCE)
+> -		return imx8mq_mipi_csi_get_fmt(sd, sd_state, sdformat);
+> +		return v4l2_subdev_get_fmt(sd, sd_state, sdformat);
+>  
+>  	if (sdformat->pad != MIPI_CSI2_PAD_SINK)
+>  		return -EINVAL;
+> @@ -572,10 +543,7 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
+>  	if (!csi2_fmt)
+>  		csi2_fmt = &imx8mq_mipi_csi_formats[0];
+>  
+> -	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
+> -					 sdformat->pad);
+> -
+> -	mutex_lock(&state->lock);
+> +	fmt = v4l2_subdev_get_pad_format(sd, sd_state, sdformat->pad);
+>  
+>  	fmt->code = csi2_fmt->code;
+>  	fmt->width = sdformat->format.width;
+> @@ -584,16 +552,9 @@ static int imx8mq_mipi_csi_set_fmt(struct v4l2_subdev *sd,
+>  	sdformat->format = *fmt;
+>  
+>  	/* Propagate the format from sink to source. */
+> -	fmt = imx8mq_mipi_csi_get_format(state, sd_state, sdformat->which,
+> -					 MIPI_CSI2_PAD_SOURCE);
+> +	fmt = v4l2_subdev_get_pad_format(sd, sd_state, MIPI_CSI2_PAD_SOURCE);
+>  	*fmt = sdformat->format;
+>  
+> -	/* Store the CSI2 format descriptor for active formats. */
+> -	if (sdformat->which == V4L2_SUBDEV_FORMAT_ACTIVE)
+> -		state->csi2_fmt = csi2_fmt;
+> -
+> -	mutex_unlock(&state->lock);
+> -
+>  	return 0;
+>  }
+>  
+> @@ -604,7 +565,7 @@ static const struct v4l2_subdev_video_ops imx8mq_mipi_csi_video_ops = {
+>  static const struct v4l2_subdev_pad_ops imx8mq_mipi_csi_pad_ops = {
+>  	.init_cfg		= imx8mq_mipi_csi_init_cfg,
+>  	.enum_mbus_code		= imx8mq_mipi_csi_enum_mbus_code,
+> -	.get_fmt		= imx8mq_mipi_csi_get_fmt,
+> +	.get_fmt		= v4l2_subdev_get_fmt,
+>  	.set_fmt		= imx8mq_mipi_csi_set_fmt,
+>  };
+>  
+> @@ -732,6 +693,7 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
+>  {
+>  	struct v4l2_subdev *sd = dev_get_drvdata(dev);
+>  	struct csi_state *state = mipi_sd_to_csi2_state(sd);
+> +	struct v4l2_subdev_state *sd_state;
+>  	int ret = 0;
+>  
+>  	mutex_lock(&state->lock);
+> @@ -741,7 +703,9 @@ static int imx8mq_mipi_csi_pm_resume(struct device *dev)
+>  		ret = imx8mq_mipi_csi_clk_enable(state);
+>  	}
+>  	if (state->state & ST_STREAMING) {
+> -		ret = imx8mq_mipi_csi_start_stream(state);
+> +		sd_state = v4l2_subdev_lock_and_get_active_state(sd);
+> +		ret = imx8mq_mipi_csi_start_stream(state, sd_state);
+> +		v4l2_subdev_unlock_state(sd_state);
+>  		if (ret)
+>  			goto unlock;
+>  	}
+> @@ -821,6 +785,7 @@ static const struct dev_pm_ops imx8mq_mipi_csi_pm_ops = {
+>  static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
+>  {
+>  	struct v4l2_subdev *sd = &state->sd;
+> +	int ret;
+>  
+>  	v4l2_subdev_init(sd, &imx8mq_mipi_csi_subdev_ops);
+>  	sd->owner = THIS_MODULE;
+> @@ -834,15 +799,22 @@ static int imx8mq_mipi_csi_subdev_init(struct csi_state *state)
+>  
+>  	sd->dev = state->dev;
+>  
+> -	state->csi2_fmt = &imx8mq_mipi_csi_formats[0];
+> -	imx8mq_mipi_csi_init_cfg(sd, NULL);
+> -
+>  	state->pads[MIPI_CSI2_PAD_SINK].flags = MEDIA_PAD_FL_SINK
+>  					 | MEDIA_PAD_FL_MUST_CONNECT;
+>  	state->pads[MIPI_CSI2_PAD_SOURCE].flags = MEDIA_PAD_FL_SOURCE
+>  					   | MEDIA_PAD_FL_MUST_CONNECT;
+> -	return media_entity_pads_init(&sd->entity, MIPI_CSI2_PADS_NUM,
+> -				      state->pads);
+> +	ret = media_entity_pads_init(&sd->entity, MIPI_CSI2_PADS_NUM,
+> +				     state->pads);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = v4l2_subdev_init_finalize(sd);
+> +	if (ret) {
+> +		media_entity_cleanup(&sd->entity);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+>  }
+>  
+>  static void imx8mq_mipi_csi_release_icc(struct platform_device *pdev)
+> @@ -968,6 +940,7 @@ static int imx8mq_mipi_csi_probe(struct platform_device *pdev)
+>  	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
+>  
+>  	media_entity_cleanup(&state->sd.entity);
+> +	v4l2_subdev_cleanup(&state->sd);
+>  	v4l2_async_nf_unregister(&state->notifier);
+>  	v4l2_async_nf_cleanup(&state->notifier);
+>  	v4l2_async_unregister_subdev(&state->sd);
+> @@ -991,6 +964,7 @@ static int imx8mq_mipi_csi_remove(struct platform_device *pdev)
+>  	pm_runtime_disable(&pdev->dev);
+>  	imx8mq_mipi_csi_runtime_suspend(&pdev->dev);
+>  	media_entity_cleanup(&state->sd.entity);
+> +	v4l2_subdev_cleanup(&state->sd);
+>  	mutex_destroy(&state->lock);
+>  	pm_runtime_set_suspended(&pdev->dev);
+>  	imx8mq_mipi_csi_release_icc(pdev);
+
+-- 
+Regards,
+
+Laurent Pinchart
