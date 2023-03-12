@@ -2,129 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 942CA6B69DA
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:07:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF4A26B69FD
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:20:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232145AbjCLSH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:07:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51542 "EHLO
+        id S230489AbjCLST7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:19:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232323AbjCLSFg (ORCPT
+        with ESMTP id S230256AbjCLSTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:05:36 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 325DB521CD;
-        Sun, 12 Mar 2023 11:01:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678644080; x=1710180080;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jHMqhN9ugEGh0NufyWtBJEiXKjl22/YZnuAcWnYx9WU=;
-  b=bFO4DTGlAKvEuL20S8pCVOL4/26nHpF7Qtj728GtzW4gJAm6SUQCnM+F
-   8J1UTeeZD/tvWX5D+AN/nBLKRMPlWc/jC2lIgwz3//3vbMo0YJ6PzKGi7
-   oVuLGB09HLOdE+jspmxfzHrhc43QHp+lka4hXIeTZqOn+j9J6gVf1z9ZE
-   xs3NTdbhkcQeU+PGc2JY+JPUwchjuz3VLlw7hCGz0p5/W+IJuBktLfMT2
-   IqSIQMhMGukowx9U8HAThZuWbrCXglunWEyMDc73njU+xmrYtz46DmMgq
-   91q19AmT6fKKD4pR4xASo0k3m8+H94tiR8X20xwNv20i6POib9LEB6lfr
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="316660156"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="316660156"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 10:58:19 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="742596878"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="742596878"
-Received: from ls.sc.intel.com (HELO localhost) ([143.183.96.54])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 10:58:18 -0700
-From:   isaku.yamahata@intel.com
-To:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@intel.com, isaku.yamahata@gmail.com,
-        Paolo Bonzini <pbonzini@redhat.com>, erdemaktas@google.com,
-        Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Zhi Wang <zhi.wang.linux@gmail.com>
-Subject: [PATCH v13 113/113] [MARKER] the end of (the first phase of) TDX KVM patch series
-Date:   Sun, 12 Mar 2023 10:57:17 -0700
-Message-Id: <af455bd9233d89034be3007550c0209df72914f1.1678643052.git.isaku.yamahata@intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1678643051.git.isaku.yamahata@intel.com>
-References: <cover.1678643051.git.isaku.yamahata@intel.com>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Sun, 12 Mar 2023 14:19:31 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A425BCA5
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:12:33 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id h3so10389075lja.12
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:12:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678644650;
+        h=cc:to:subject:date:from:in-reply-to:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=THHnNubc2+UuqNjcDLN8j6le5gzsAvvJJbRATCHsptA=;
+        b=ccKQLWr93RGmfubqUbqId0AfsjKGIWsmNmOtAct8evWFaaGC1sS0rwruRbRA1mZYhG
+         6vyaqykBtOSPHEmQgq8QkJv9E1xPJ39eHzM01arkGgexNszZljEFrhPPcumRMFoIrFw1
+         /mKC7wGWEhVKDIIU83xjltWs4W+dwF4QuaI5eY7K+xuNf3AQFidvq5MLbr6Z5cw+RGCo
+         YjU39WN9VzPQV72shLSMwMwAl6MhZILcNAzWdLYG3L7zoQwlkQoTf/r1tIFC+b2ufPqC
+         TPTa9w2X1bBSNJ42X+zJ0K5Y0v/q/xZtpPS4FleghA0rJuour0zwRsIdxx2zpv0WltDs
+         YpGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678644650;
+        h=cc:to:subject:date:from:in-reply-to:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=THHnNubc2+UuqNjcDLN8j6le5gzsAvvJJbRATCHsptA=;
+        b=GqHjA2J7wodwKp57d55afJ6y/QZHpm4Pt5M95VC58FVaQUu/sdbwmfQsq7ptGE3jiV
+         M6fmzY6Xk+Y7RLR1Aj1dwo59lrhneUHrvt3UXtQElQM1Q7byo2QwMCZTx4jgzFNBgzO3
+         DyQQMybkULeJlOOR8SIF0m3oAawZiDo2PgFeLm6RRurGMtl2+k8+v9njwbsXCNe+Anhm
+         cUby8IdY2n/w6fjN0FR+zhc+FsixmL6HMth3nNVQ2zitmVjLIjvGLqOCDiVCHejVIasK
+         TIE4uJ17OwHPN1RCW2AdOGBTck/J/T7wgU8/8yWmNNMqTjWwhVRTdq7YKLl5f9b4s8YY
+         XYig==
+X-Gm-Message-State: AO0yUKV9EMgbaklW+/YNHhE/RKixeRcQ97J3XBW3Te1WfwO9qzkvDkSS
+        VCstNt9OTPiHfUWkI+FgKZ7RUVdHEhTw1JGW
+X-Google-Smtp-Source: AK7set8eGYF5qmFsidkRuu7YaFndZOYl4nAShVPyrc9czFhErwRDah6/bDBns0+6znvwQm/Er5Jkhg==
+X-Received: by 2002:a2e:b70e:0:b0:28f:265d:11da with SMTP id j14-20020a2eb70e000000b0028f265d11damr2545828ljo.13.1678644650269;
+        Sun, 12 Mar 2023 11:10:50 -0700 (PDT)
+Received: from 0001-dt-bindings-exynos-dw-mshc-common-add-exynos7885-var.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id z14-20020a2eb52e000000b002945bbb83b9sm721350ljm.89.2023.03.12.11.10.49
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 11:10:50 -0700 (PDT)
+Message-Id: <1678644516.665314-1-sleirsgoevy@gmail.com>
+In-Reply-To: <1678644516.665314-0-sleirsgoevy@gmail.com>
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+Date:   Sun, 12 Mar 2023 20:58:50 +0300
+Subject: [PATCH v5 1/3] dt-bindings: exynos-dw-mshc-common: add exynos7885
+ variants
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Isaku Yamahata <isaku.yamahata@intel.com>
+Some Samsung Exynos boards using the arm64 architecture have DW MMC
+controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
+systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
 
-This empty commit is to mark the end of (the first phase of) patch series
-of TDX KVM support.
-
-Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+Add two new compatible strings, "samsung,exynos7885-dw-mshc" and
+"samsung,exynos7885-dw-mshc-smu" respectively, to denote exynos7885
+boards that need this quirk. But it's very possible that all
+"samsung,exynos7-dw-mshc" boards are actually affected.
 ---
- Documentation/virt/kvm/index.rst              |  1 -
- .../virt/kvm/intel-tdx-layer-status.rst       | 33 -------------------
- 2 files changed, 34 deletions(-)
- delete mode 100644 Documentation/virt/kvm/intel-tdx-layer-status.rst
+ .../devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml         | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/index.rst
-index 40ffc25f3cd1..eafacbff1f4e 100644
---- a/Documentation/virt/kvm/index.rst
-+++ b/Documentation/virt/kvm/index.rst
-@@ -22,4 +22,3 @@ KVM
+diff --git a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+index fdaa18481..3eebaed2c 100644
+--- a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
++++ b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+@@ -22,6 +22,8 @@ properties:
+       - samsung,exynos5420-dw-mshc-smu
+       - samsung,exynos7-dw-mshc
+       - samsung,exynos7-dw-mshc-smu
++      - samsung,exynos7885-dw-mshc
++      - samsung,exynos7885-dw-mshc-smu
+       - axis,artpec8-dw-mshc
  
-    intel-tdx
-    tdx-tdp-mmu
--   intel-tdx-layer-status.rst
-diff --git a/Documentation/virt/kvm/intel-tdx-layer-status.rst b/Documentation/virt/kvm/intel-tdx-layer-status.rst
-deleted file mode 100644
-index 7a16fa284b6f..000000000000
---- a/Documentation/virt/kvm/intel-tdx-layer-status.rst
-+++ /dev/null
-@@ -1,33 +0,0 @@
--.. SPDX-License-Identifier: GPL-2.0
--
--===================================
--Intel Trust Dodmain Extensions(TDX)
--===================================
--
--Layer status
--============
--What qemu can do
------------------
--- TDX VM TYPE is exposed to Qemu.
--- Qemu can create/destroy guest of TDX vm type.
--- Qemu can create/destroy vcpu of TDX vm type.
--- Qemu can populate initial guest memory image.
--- Qemu can finalize guest TD.
--- Qemu can start to run vcpu. But vcpu can not make progress yet.
--
--Patch Layer status
--------------------
--  Patch layer                          Status
--
--* TDX, VMX coexistence:                 Applied
--* TDX architectural definitions:        Applied
--* TD VM creation/destruction:           Applied
--* TD vcpu creation/destruction:         Applied
--* TDX EPT violation:                    Applied
--* TD finalization:                      Applied
--* TD vcpu enter/exit:                   Applied
--* TD vcpu interrupts/exit/hypercall:    Not yet
--
--* KVM MMU GPA shared bits:              Applied
--* KVM TDP refactoring for TDX:          Applied
--* KVM TDP MMU hooks:                    Applied
+   reg:
 -- 
-2.25.1
+2.38.3
+
 
