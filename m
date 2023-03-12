@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97DB96B6B86
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 633D16B6B85
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231532AbjCLUxF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:53:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40626 "EHLO
+        id S231490AbjCLUxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231310AbjCLUw6 (ORCPT
+        with ESMTP id S231382AbjCLUw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 12 Mar 2023 16:52:58 -0400
 Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7850E9B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71D6CF7;
         Sun, 12 Mar 2023 13:52:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-        :Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=+ldZ+8Y1rRQahQ2rqeJ1K3l4pEYAY36FZ6Kt71VwB08=; b=bErJ4xytITMHvocg7k/1BzwyS5
-        Q3hCMGTCFDWMqkCflu45Gb9atVBamo+jauCHIXj6ukcqvuU65ejGRJ4rXksCN25py/6EDCw/F34Wm
-        kIcEt4ZEyyot2VGvu8yuZkLFmHNhh/QjsuJKkwsQ1NLbvaknp0iFbW+KivUE4wE971oooMMga7hrl
-        DMdwgiGEs5LJvbF9G1YWrXn+g0Hv+/EaGchyzVUefKUvWhHLwpHrx21abOjcVsGqZadkOiBxpxHVj
-        wY5bmu/4tkz/LkA2RKY+KMhwiBhk4RPlZOwiVEgMJoyJyJn8MKZiFjH+VwYlqAO2be8/PQZLUFEQw
-        QwTJEizg==;
+        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
+        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
+        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=vlevqCiURsW178TvumjMuvflR7nEe2fWIJW6Lvp0uPM=; b=nzaloXY0q23xB6ECeTuRpLKrcr
+        UkKwTSloXjKQuQcDtxfvj11lCzJGBR7CCSDcbvh7MIVjTYvMZY79pIHLF61qwnBUA+ChF9wAKaKnB
+        5skwgYj9x10pDn4lld0xqbrV5iWDn7T0RmFHBs8u3PAGSQCeqN2TqWnWtMMoFK1V4xjotjwpFOElp
+        XAe/tmFpNombd+b3BSI9v9voEn/VcShxrNqOqGAtSyGxRjGHxsvx3htn+oHwj8tq44/T8s4hKTpDr
+        2eNlr3Jemj/6grgD8YG4wnjMuGScA9pZn2mgKtGiXfx5m48jB6gqfv/48xrnxGz5X3Gj4G/n5Hgb5
+        N3SbPWEw==;
 Received: from p200300ccff059e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:9e00:1a3d:a2ff:febf:d33a] helo=aktux)
         by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.89)
         (envelope-from <andreas@kemnade.info>)
-        id 1pbSgL-0003yt-DV; Sun, 12 Mar 2023 21:52:41 +0100
+        id 1pbSgL-0003yw-Uh; Sun, 12 Mar 2023 21:52:42 +0100
 Received: from andi by aktux with local (Exim 4.94.2)
         (envelope-from <andreas@kemnade.info>)
-        id 1pbSgK-009ZWh-Ph; Sun, 12 Mar 2023 21:52:40 +0100
+        id 1pbSgL-009ZWk-ES; Sun, 12 Mar 2023 21:52:41 +0100
 From:   Andreas Kemnade <andreas@kemnade.info>
 To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         arnd@arndb.de, olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
@@ -43,10 +43,12 @@ To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
         leoyang.li@nxp.com, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
 Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 0/2] ARM: dts: Add Tolino Vision
-Date:   Sun, 12 Mar 2023 21:52:34 +0100
-Message-Id: <20230312205236.2281466-1-andreas@kemnade.info>
+Subject: [PATCH 1/2] dt-bindings: arm: fsl: add compatible string for Tolino Vision
+Date:   Sun, 12 Mar 2023 21:52:35 +0100
+Message-Id: <20230312205236.2281466-2-andreas@kemnade.info>
 X-Mailer: git-send-email 2.30.2
+In-Reply-To: <20230312205236.2281466-1-andreas@kemnade.info>
+References: <20230312205236.2281466-1-andreas@kemnade.info>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Score: -1.0 (-)
@@ -59,19 +61,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a basic device tree for the Tolino Vision Ebook reader.
-It is equipped with an i.MX6SL SoC.
+This adds a compatible string for the Tolino Vision eBook reader.
 
-Andreas Kemnade (2):
-  dt-bindings: arm: fsl: add compatible string for Tolino Vision
-  ARM: dts: imx: Add devicetree for Tolino Vison
+Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+---
+ Documentation/devicetree/bindings/arm/fsl.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
- .../devicetree/bindings/arm/fsl.yaml          |   1 +
- arch/arm/boot/dts/Makefile                    |   1 +
- arch/arm/boot/dts/imx6sl-tolino-vision.dts    | 490 ++++++++++++++++++
- 3 files changed, 492 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6sl-tolino-vision.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 442ce8f4d675..b78b7fc285e6 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -581,6 +581,7 @@ properties:
+               - kobo,aura2
+               - kobo,tolino-shine2hd
+               - kobo,tolino-shine3
++              - kobo,tolino-vision
+               - kobo,tolino-vision5
+               - revotics,imx6sl-warp      # Revotics WaRP Board
+           - const: fsl,imx6sl
 -- 
 2.30.2
 
