@@ -2,71 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7A66B64FB
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:39:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0242C6B64FE
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:40:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjCLKjZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:39:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54590 "EHLO
+        id S230038AbjCLKko (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:40:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55742 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCLKjW (ORCPT
+        with ESMTP id S229473AbjCLKkn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:39:22 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C4F2DE50;
-        Sun, 12 Mar 2023 03:39:21 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so8990855wmb.5;
-        Sun, 12 Mar 2023 03:39:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678617560;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BMdTgmpU8RaTXA//vhJdqgYfI33DbAxolT01iaaMnF8=;
-        b=pCGswXdFmHJH+dr8+szeLEHwQNYX8ET2a3OHSS/G8oF/8qbP8mKwzsgnsxtBayCsjc
-         BBZOIoyTvqp5gi/IypPEhxQ9OGZZtEa/K7cJuHQNI7PAPgW55TUWGXAlqjJOARvN+Z6z
-         tt3A8VKAgHTTDynuN+3iA90bXpIeymj3WhXsm/+anVfXbAM7ygr8iMfcg87Syw/ctlRe
-         08IhRSREHuYU9Qg25DKm4Jh0j9mkmrLa0jUbnHMtzEbwc/qpDDzUJcJe5YlvHHyzUKvh
-         1otXzINKim+g1sGZwIK5jnZcgpj/KGNNAS/vGSs0CySNZoDUAJVS7jE8IW4FBe+YV20x
-         HfCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678617560;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BMdTgmpU8RaTXA//vhJdqgYfI33DbAxolT01iaaMnF8=;
-        b=KYTZn8S9EIsIkhQiH9514SrxeBUFlSSZH5W+OCZkna28NFamSmp6SfrqIHvT/18mFx
-         GNYJSTKFhv3uqPxejKdxqiNFn3y1nL8IjuDa0ush+hGBt9Ub+mjM8I6OnHWvvnpyb9EK
-         DowVoMTRLUB79A864TQewlzL0a4CMVn3iSYYW1fuI/VGIckvWm6aqkdGiByCfxazt1od
-         H4NZDOyymVJXKj1S/rVgkMwtBu0psXkTmbK4idvT0xMyyxi5oGJuGVPn7Om7ey3ykIuU
-         za8vP5N97Icx8SJ2Tmk0XtEjkLl31PlB/o8dP4Z5zWXByNjZkGQZdR8dINGi8lknY7nW
-         ZSWw==
-X-Gm-Message-State: AO0yUKWSn1e8pE/tu39pZRAJrl1c4Ajg3POoMC0ApIYKHNBbWY0ByayP
-        v2YmX2GWpaYXG4vd13qLEIQ=
-X-Google-Smtp-Source: AK7set9IoxJPNhRQ5r3XdnH3a/Nu6R/fpnkyVf5q9ZINBmzJZV10lkgST376i0Rd/NNGLPb0pFnBGw==
-X-Received: by 2002:a05:600c:4e4f:b0:3eb:2de8:b74e with SMTP id e15-20020a05600c4e4f00b003eb2de8b74emr7751723wmq.27.1678617559501;
-        Sun, 12 Mar 2023 03:39:19 -0700 (PDT)
-Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
-        by smtp.gmail.com with ESMTPSA id h6-20020a1ccc06000000b003e22508a343sm5757893wmb.12.2023.03.12.03.39.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 03:39:18 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Sumitra Sharma <sumitraartsy@gmail.com>
-Cc:     GR-Linux-NIC-Dev@marvell.com, coiby.xu@gmail.com,
-        error27@gmail.com, gregkh@linuxfoundation.org,
-        linux-kernel@vger.kernel.org, linux-staging@lists.linux.dev,
-        manishc@marvell.com, netdev@vger.kernel.org,
-        outreachy@lists.linux.dev, julia.lawall@inria.fr
-Subject: Re: [PATCH] Staging: qlge: Remove parenthesis around single condition
-Date:   Sun, 12 Mar 2023 11:39:17 +0100
-Message-ID: <5367184.29KlJPOoH8@suse>
-In-Reply-To: <20230312071700.GH14247@ubuntu>
-References: <20230312071700.GH14247@ubuntu>
+        Sun, 12 Mar 2023 06:40:43 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 844062B2A5;
+        Sun, 12 Mar 2023 03:40:42 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pbJ81-0003if-4E; Sun, 12 Mar 2023 11:40:37 +0100
+Message-ID: <a685eb86-ca78-6dd2-5c61-b6a217fe784a@leemhuis.info>
+Date:   Sun, 12 Mar 2023 11:40:36 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
+Content-Language: en-US, de-DE
+To:     Jarkko Sakkinen <jarkko@kernel.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        reach622@mailcuk.com, Bell <1138267643@qq.com>,
+        "Jason A . Donenfeld" <Jason@zx2c4.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+References: <20230228024439.27156-1-mario.limonciello@amd.com>
+ <Y/1wuXbaPcG9olkt@kernel.org>
+ <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
+ <85df6dda-c1c9-f08e-9e64-2007d44f6683@leemhuis.info>
+ <ZA0sScO47IMKPhtG@kernel.org> <ZA0t/8Tz1Lbz25BZ@kernel.org>
+From:   "Linux regression tracking (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <ZA0t/8Tz1Lbz25BZ@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678617642;9e6e5250;
+X-HE-SMSGID: 1pbJ81-0003if-4E
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,75 +60,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On domenica 12 marzo 2023 08:17:00 CET Sumitra Sharma wrote:
-> Hi Fabio,
+On 12.03.23 02:42, Jarkko Sakkinen wrote:
+> On Sun, Mar 12, 2023 at 03:35:08AM +0200, Jarkko Sakkinen wrote:
+>> On Fri, Mar 10, 2023 at 06:43:47PM +0100, Thorsten Leemhuis wrote:
+>>> [adding Linux to the list of recipients]
+>>>
+>>> On 08.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
+>>>> Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+>>>> for once, to make this easily accessible to everyone.
+>>>>
+>>>> Jarkko, thx for reviewing and picking below fix up. Are you planning to
+>>>> send this to Linus anytime soon, now that the patch was a few days in
+>>>> next? It would be good to get this 6.1 regression finally fixed, it
+>>>> already took way longer then the time frame
+>>>> Documentation/process/handling-regressions.rst outlines for a case like
+>>>> this. But well, that's how it is sometimes...
+>>>
+>>> Linus, would you consider picking this fix up directly from here or from
+>>> linux-next (8699d5244e37)? It's been in the latter for 9 days now
+>>> afaics. And the issue seems to bug more than just one or two users, so
+>>> it IMHO would be good to get this finally resolved.
+>>>
+>>> Jarkko didn't reply to my inquiry, guess something else keeps him busy.
+>>
+>> That's a bit arrogant. You emailed only 4 days ago.
+>>
+>> I'm open to do PR for rc3 with the fix, if it cannot wait to v6.4 pr.
 > 
-> Thank you for the insights.
+> If this is about slow response with kernel bugzilla: [...]
 
-Hi Sumitra,
+Not at all, I don't care if developers use bugzilla or ignore it, as
+long as the regression itself it dealt with.
 
-Please pay attention to the suggestions that Julia kindly provides to you.
+Fun fact: I actually wanted to get rid of bugzilla for developers/
+subsystems that didn't opt-in, but then another plan came up. See
+https://lwn.net/Articles/910740/
 
-A moment ago I read these other words from her to you: "Sorry to press the 
-point, but you should be doing it now, not promising to do it in the future.".
-
-She is sorry to press because of her special attitudes. I've been helped 
-uncountable times by Julia who, despite her major role and commitments, is so 
-kind to spend time here in a Sunday morning. 
-
-I think that it's you who should be sorry for pushing her that way... 
-
-You are doing it again and again: in your last message you did not provide the 
-necessary context. You are asking me to recall which "insights" you are 
-talking about. I know for sure that here there is someone who read hundreds of 
-emails per day.
-
-> I went to the .rst files because they are directly
-> linked in the first-patch document. I also noticed the difference between a
-> ".rst" file and its counter human readable ".html" file. You were right that
-> many information is being missed when anyone will read the .rst instead of
-> .html/.pdf.
-
-Don't summarize my own words in order to make me understand what question you 
-are answering. Just put my question/objection/comment inline while replying.
-
-Most mentors here read several tens of emails per day. You should not expect 
-them to skim the whole thread. Just reply inline, so they find all the 
-necessary context in one place and so there is no need to traverse the thread 
-to understand what you are referring to. 
-
-You have been told so several times. You risk that someone starts to ignore 
-your messages in order to save time for other applicants.
-
-> I would like to suggest that the links that redirect to the .rst
-> source files in the first-patch document must be changed to the links that
-> redirect to there corresponding human readable format. Let me know if I 
-could
-> do it under the [KERNEL NEWBIEs ACCESS].
-
-This is a great idea and I fully agree with you.
-Please ask Alison to grant access to change that documentation (it's not 
-something I can do myself).
-
-> Apart from this I will be happy to patch the style guide after this
-> contribution period.
-
-Best applicants go on with further contributions after the end of these 
-period. This fact has been observed several times in the other rounds.
-I'd like to see more people who are seriously willing to be part of this 
-Community, regardless of the Outreachy project's deadlines. 
-
-> Regards,
-> 
-> Sumitra
-
-Thanks,
-
-Fabio
-
-P.S.: I probably went a bit too far in the first part of this email. I am 
-sorry about it. However, please demonstrate that you finally got it, not with 
-further promises but with actual changes in the way you communicate :-)
-
-
-
+Ciao, Thorsten
