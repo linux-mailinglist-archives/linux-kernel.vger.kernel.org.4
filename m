@@ -2,184 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEC636B62BD
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 02:49:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AEEF6B62BF
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 02:49:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCLBsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 20:48:38 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35246 "EHLO
+        id S229912AbjCLBt3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 20:49:29 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229502AbjCLBsg (ORCPT
+        with ESMTP id S229601AbjCLBt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 20:48:36 -0500
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D1B2A9BF
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 17:48:34 -0800 (PST)
-Received: from pps.filterd (m0246629.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32C0vOwN031898;
-        Sun, 12 Mar 2023 01:48:20 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
- subject : from : to : cc : references : in-reply-to : content-type :
- content-transfer-encoding : mime-version; s=corp-2022-7-12;
- bh=1j0mGnrnfj+dP5n5Za/CRBYPjLylxRlO98Wu+O9UJog=;
- b=2N6tjDpBHHKvZlgCBPejRXfXNgistdQR12wtK5cuJCWxaVV/VBMJmKiHncRA1j1Nr6+O
- f4Y/FASSbatXc9jjIqW9fxStT2C2cL+iPBCGM6t+RwN1Qlf2oU9QTvCzAbpHoTY/WqCv
- CkI+Qttzgl3bAnmoW0D/F9/KpqzmXp5DkyAm1Ui5I13rXXRCvDdxwVrqiZKh3SrpU2i2
- R4hpF9+e9vseavW+aLEUTU1UPJ1DXLd/Qwbae7Q9SFmel7/YHL6yHHZ8+nrGkp6a1t3n
- N7gh2bmcfYae34454mfh9begzhrOVfuJENA6MAVXspMzV8VNXJTd2Rx96KQZJUf4dv5G Gw== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3p8hha8t60-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 12 Mar 2023 01:48:19 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 32BLA4Vl008160;
-        Sun, 12 Mar 2023 01:48:19 GMT
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2168.outbound.protection.outlook.com [104.47.59.168])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3p8g337bh5-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Sun, 12 Mar 2023 01:48:19 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Nx2OVvXShOXPazvP5ctttMyXwxkucJaJJ6zBMg+3jjAlodwDGvFB+E7s6ObPT3Z3vlTBk8niBJJluO3Uum9QKTxK+1cQIERAXaStt+w8nMl09J2AWGiCK5wmiZ1eUy0TvWAB4HO8ZjTOAk+iZSxlZ2lsoVe5i+eRx/k/lTlW4fCJ3JX3VoBcTwW+trCnOxaAlGchgC0F959moRSe/QT3zLRmV/N7d6WmL1AGcqJ8DKa8Y0LhJ0t5MgW9n2g/t+InOu9QHI4igy1qM9BTsTwkSHLlnQqxJCyGFfjpjtJoy0A4mdpVuuQXn/98wRgaPXipfeL+gtK2f/rk6YdUJPhV1A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1j0mGnrnfj+dP5n5Za/CRBYPjLylxRlO98Wu+O9UJog=;
- b=Tuevks7fQ/8/6RDCv16s9KZsjLFGVXCmaQJ+S6uEEV1tffjkI798u/97MvSY6ANwFVBgSTXT5GHodPStc+swt+eaYO4PJn+497nLRdS3LuF8efnBKQ1r2o6deV4rIz8l2ZpGs55BNJNkNe5dLHQqz30wcU3ssqPBl2n9UkjYPtjqVys6o8GU8jikLw1Eb7NFXRA1doFw5Uh2FOZUuA9OV2dhEzilajA8bzIIKWXQBwTEMkuj8s9VGU+RkJVstvXKrUcVxz+wVpJ+Q8xmRzZkeyOUmqcJvuc9TEXm49BRwnUvIZZ69M+G++3gpLmthZCp6hlYGNELKIbtYs1PjaHumw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1j0mGnrnfj+dP5n5Za/CRBYPjLylxRlO98Wu+O9UJog=;
- b=LUsFflbvnDlxgiqME3QBi1YzldRWzqpENtGV1f2uBbr+5N8BSW/HlJTHbvRl2EVt2ffanwbkOb2IhDlcooFleW3gu/ReImpgJ8SL+R53qzJBSAFkHGxTeSnjA1k4fhNZu3AvM7SLx5arA4OvSAbvY0A/mV4gUt/EupAmd14aSfs=
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com (2603:10b6:3:b::7) by
- SA2PR10MB4507.namprd10.prod.outlook.com (2603:10b6:806:119::22) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.18; Sun, 12 Mar
- 2023 01:48:04 +0000
-Received: from DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::7dd7:8d22:104:8d64]) by DM5PR10MB1466.namprd10.prod.outlook.com
- ([fe80::7dd7:8d22:104:8d64%7]) with mapi id 15.20.6178.024; Sun, 12 Mar 2023
- 01:48:04 +0000
-Message-ID: <253eda66-b866-c233-335f-ff820e7ad2b2@oracle.com>
-Date:   Sat, 11 Mar 2023 19:48:02 -0600
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 03/11] kthread: Pass in the thread's name during creation
-From:   Mike Christie <michael.christie@oracle.com>
-To:     Christian Brauner <brauner@kernel.org>
-Cc:     hch@infradead.org, stefanha@redhat.com, jasowang@redhat.com,
-        mst@redhat.com, sgarzare@redhat.com,
-        virtualization@lists.linux-foundation.org, ebiederm@xmission.com,
-        torvalds@linux-foundation.org, konrad.wilk@oracle.com,
-        linux-kernel@vger.kernel.org
-References: <20230310220332.5309-1-michael.christie@oracle.com>
- <20230310220332.5309-4-michael.christie@oracle.com>
- <20230311085326.m7aub5duy76hnnam@wittgenstein>
- <74a17cb6-9dcd-749b-5d06-b2c364d36ae2@oracle.com>
-Content-Language: en-US
-In-Reply-To: <74a17cb6-9dcd-749b-5d06-b2c364d36ae2@oracle.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH0P221CA0026.NAMP221.PROD.OUTLOOK.COM
- (2603:10b6:610:11d::6) To DM5PR10MB1466.namprd10.prod.outlook.com
- (2603:10b6:3:b::7)
+        Sat, 11 Mar 2023 20:49:27 -0500
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 748D0311F0;
+        Sat, 11 Mar 2023 17:49:26 -0800 (PST)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A7BAB60EAC;
+        Sun, 12 Mar 2023 01:49:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 973BEC433EF;
+        Sun, 12 Mar 2023 01:49:24 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="nYxfMu0z"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1678585760;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=m28671DtSvMZSay0Sf/f7djYwOu1rgOjKaltAmvlzQw=;
+        b=nYxfMu0zJ0nZgDOiPbJVLOC+yveAZkKI3aZQ2y0bF4yjW2C/NiHVS6t6RhKsDPJN7bcKDD
+        5pQDnNbmsiW8kHG5HL4ZHWX4q+q6EUjT89P4qWJShzsdCN4ww1Z6moDL6qQrcxeFGVMKQi
+        LASV9tlF+/fXC78oFgzV1PwbE8jMkxc=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 41ee9bcd (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Sun, 12 Mar 2023 01:49:20 +0000 (UTC)
+Received: by mail-yb1-f169.google.com with SMTP id v196so1313164ybe.9;
+        Sat, 11 Mar 2023 17:49:18 -0800 (PST)
+X-Gm-Message-State: AO0yUKX6BuPVF2Lyc/nLoWGkP9lcVKTnyaKI9QBHCvnZ/7z5leDWUXHl
+        9e2e0p3HRxmtvfjhrSWPUIYW9NwEf+f3UyAfleY=
+X-Google-Smtp-Source: AK7set99T0ABWq7i2uJH1UClARGOA0vXeSrOU+23b42AvBvR0fidQnqBT/Auc/RrhIDA2u4+Bek3tITsGCRbnJSs6Fk=
+X-Received: by 2002:a25:9702:0:b0:a36:3875:56be with SMTP id
+ d2-20020a259702000000b00a36387556bemr18518887ybo.10.1678585758213; Sat, 11
+ Mar 2023 17:49:18 -0800 (PST)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM5PR10MB1466:EE_|SA2PR10MB4507:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5fa02a63-7df2-4b71-fd70-08db229bd1de
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: LW1IcU2qZ/HGT5VprT/762mAfcxq1FLrPjE3QqmVS2U3ZoeaOKFMqKN31j0OaMobIX/d5vlCC71yUCbnUgz00b7H2Aa6fhxtQwTKUkPm3m/JyeTn/F6sBmenr1AT33rbo5rmT7bEhVMmkJLfQpNVKkmKfIwG+Q9st/JfSs+JNXrJy1FGTRuP0GXTxR0RM6JS/mUFuXuAvy6+zBWbeNErVwfcNnvMycksAd4DPnSoQN3uYlZr78LbhhnP1neoJ+FaWAbPq/dF0qwmfRVWSok+QrayKoCmOJsAiQAHTA4SFo5wrSNbR7WBKwoSwUgIkAQOIMqn13N8+sIJGslM0Wn5gQ0cVzgZPhAW+FwkDGTLzS3WRfOdNy1G2cJ2waw3qW5YYCPmOSXxtv0W/ycg4QawOqy8jvdDqlj6Eht1VyuDq8ejhocpVWixR7KruZ/Q941NGU4nj0Gg/i7lCzht5WIPc0o5mWWVNldX77Cz4b93WstZW7oP14pV3/8hdgtNWVqsYBCyT5HQ7vZwmE4NVZO0smAk4UZ6TzrnQHdpZxFuqWlqZqf1jRvH1my6h9uviKSNYm6kJOh+rpOt0I8JqbI6ztHi9hGCP4951H1r0bC1GcR0zU6p8Hn4QxxHUiXcH1Y0mjQC9ecx86/J22Y9iXHQ8bhNd8y+Tt18eHozYB3zXv1DzejbXNn5ygk6AH/jWYGKfUJXWOeL7QmgSgCo7Uu77YfIFGYIsjw2AlPI2BmnBPw=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR10MB1466.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(136003)(346002)(396003)(39860400002)(451199018)(66946007)(31696002)(6916009)(2616005)(66556008)(31686004)(8676002)(66476007)(4326008)(41300700001)(316002)(38100700002)(6486002)(86362001)(8936002)(36756003)(5660300002)(478600001)(7416002)(83380400001)(53546011)(6506007)(186003)(6512007)(2906002)(26005)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U21CMlhnTitwMUN6TEl4NkZjZnRFNlFpUUJORG84ODhzUmQ0dDBVM0hjWDEw?=
- =?utf-8?B?bzVwOXJZV1FyV3dtWS9ZSTlacmpBWk1GcGVLUytPR0c5SUdlT3pxNnBmaXBw?=
- =?utf-8?B?bTRFUng0MVRJRjViajlZUHNiL0hnRE40ZXlRQ0MycHB6SVFpbmdzUkxPZGhP?=
- =?utf-8?B?dlVWTXVJVGtoc3Byb05ObVFOeUVJbjFrQm9FYjZ5enZraVJBV3dLM3kvL1BX?=
- =?utf-8?B?QlQ0UW8zYzQ3UVVmbytaTkY0UTlIUWFEQ3BrMzljR0IydVNYek1PQytrU0tL?=
- =?utf-8?B?enJvRGl6TUpUeThJUDhvMGR3Vy8vdng3Mmpxd0dGaEJZZ3JCcFE2US9VNUxQ?=
- =?utf-8?B?TGlBYjZwWUl3NGdnYlVEeGNHOFFkZ1lLR1UzN2lRTTNpb1lzcTFFS3ZJaktT?=
- =?utf-8?B?bmxRZDdWcXp6Rm9JOHNpcWhFZkI0emcvU1dJNVRGNUQ5bTB0cjg4L1ZIR3M2?=
- =?utf-8?B?cFpYZUNwOGFYdTgzQ2xLTVhmNDNheFNWVjQwRTA2WHVZT0ZDM2dScUxoUnBt?=
- =?utf-8?B?QlpBeVF6bytqYlJXRFlNeEFkc3J6ejlsYVc5YXludkZyWTFwNjR5YmxoZ3hP?=
- =?utf-8?B?RGNORG56Z3g4b25QZWs1SkRIaFdmOXpUL0tqZGtsM3JtZENpenBLQ2c2RDAx?=
- =?utf-8?B?Z0VhSWQyZE8vRUZsS3hHRjZ4ZHBabGZSZkdKVzhPN3czQ0dJNFpsbTFhZ1Rv?=
- =?utf-8?B?VFM5MTlKU2IxeityaVdNVnpzK09nVDVzQUV5cENnOUlnTzJhVmNXYlNPVGU2?=
- =?utf-8?B?eSttTDlZVitUQ3VOR0hKcW5ETDJwS0ZxUEk5Sm1qSU9pS09uRzJORjdsMENs?=
- =?utf-8?B?clgybjRFQnU2YjRKcWowYVJtUExFWWc5K2g3bHdLNnArdlh1SzRVRnhna1VG?=
- =?utf-8?B?b2lqZWd2ai9lSDFaTnA1U01SUld0d2g1M3BJb3dmekpGVXE2OVJMOFEzWktZ?=
- =?utf-8?B?NzhCcmtNcTExQllFb3A2ZzAwc2s2SDFaTkNIdWRlOUdMQVBmWTJnUWt3OXE2?=
- =?utf-8?B?NVRSZ2MwVTczTFVxWmNjQk9aK0pIUFNCVVhRd05RaUJYSUZHbGdyOUlKYk5r?=
- =?utf-8?B?UnVCNGdPY3d3bnNHTm9paDlHdjdQMWRCT2M3ZjlWeFd4UHZ3SDhlV2EybHY4?=
- =?utf-8?B?RGU4N0pDbVlrcGVoa3VQejFoeGdKOFptakluNlREUElub1p3Y3ppelVuc1Ra?=
- =?utf-8?B?a2FmSmptTVd0MUUzR01adzNuaUJJZVN2L3BhK2RkcG9qMlVPYWFsa2RKU3Fn?=
- =?utf-8?B?MlRGSWJjWk5XTzB1UnhmbkFLWnE5WmhRbmYxa25CeE95QmJlbGFYU1NUYktC?=
- =?utf-8?B?M0F4T1lMKzU5YWsrTmhJbjlQbXBFSXRvS29aS0xtblVKa2pqaFl4c1h2M2k1?=
- =?utf-8?B?a3FtbGhnRHNSV2d4aEVrRUEvMXI2dkZOMC81anlPS3JZK1oxS1lPSXFWeit6?=
- =?utf-8?B?N2xUZ3hVa1c2ekFGS1NXc0hnN0hRTGtKSktocFJxNkNrdlRDL2NvV29CblR6?=
- =?utf-8?B?T0VobEJQelErU2VROUpqUE1VbEhyWEt6bE9mVWNRL0Y4R3pZTkxMUVEzY05a?=
- =?utf-8?B?S1lIS25UYnMyeXM0WVhCQlVVOVFTUkVFU2Q4Sk12aVlsUDYvUC9EL3BiTGVr?=
- =?utf-8?B?NE1Oa0txMzIxZjBLV04rTU9vbU5MSEdXRFRFUFlpVGlhYVNHcjlSZG01WVNI?=
- =?utf-8?B?QkJpekIzVzFtanU2YlAreGs2MmVhckpFcXZ6cFl6a0xMVCtSaGFjeGNHVHRV?=
- =?utf-8?B?ZExBaUdyazNVaG5vVTFoZkpJZlF0bnF4TE9uUW5vQ083TkVqWmdjcjFLN0th?=
- =?utf-8?B?UnhUR3QxOTUxMHlJSFcycVhyc2VialVBYlpsU2VGQjJvYmZNZExhTW85Sk9F?=
- =?utf-8?B?Mk1EbzhMZy85Z0MxZXd0S25teHJoRnZXK293T0xiT1hqOW5FS2YzZ2krQk1H?=
- =?utf-8?B?ZzdmVS9hZDlxNTFEUDNLenRHdWppQXpzSFhnMDN0NE5PWjE0RlFCSzhDUGpn?=
- =?utf-8?B?UmRaS1ZvOFNOMzhEeXRzeHFuUkU0K2NtdzJVUjNnWlNuT1U2YWVqVGVqa0JG?=
- =?utf-8?B?MmtndEtQY1dVWVdCdHNqSkJIaHRGMlJmT1BZQTFIR2FaUGxLYmo1TXVIQWtt?=
- =?utf-8?B?QXZhZnBFQzhteDc2WGxxOFh4ajlYQzZLRVg2UEhIZEpJdFhxWS92NlNzNnEy?=
- =?utf-8?B?a2c9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0: =?utf-8?B?YW5qSXB2UXM2ZEl1ZFN0RGVaM01OKysrMjAyVTZ2VDhPejVDM2hKdDVEU2lQ?=
- =?utf-8?B?MTVtUEVuOTk4ZjFHWnFZL0FpeUxDTUNDNlRaU3hOVDFBRWhkODVUNkF2L1hv?=
- =?utf-8?B?a3JVQnd4U2ZiMHpRWlhvaUJBSjhhY2k1TXI1SFoyUll0d1JHSStmMkQwdEZN?=
- =?utf-8?B?ancvZVVEdnZnVmFQQjFnYzd0cS9NRVJveVdsK0wwRG5pbVV2bi83QzZtRmdu?=
- =?utf-8?B?QktFaVZCVU56aGlaUDUvditnQWp1bU1EZUg1SmhZWVQvcXkyc3NIeEpreE52?=
- =?utf-8?B?UHduT1NjZUxwdzlOYkdZaUFlV2tLR3JUeXdZbDlTZlZpbStXRzZ4Z2ErSUMv?=
- =?utf-8?B?V2tuZExrMk1TVlhHaXBQcEMyS1dxYTBKUEVpcWhlR3UrK0EvUmFYZGZDVVZu?=
- =?utf-8?B?RzFrS2Y4SXFNTk5zdm5sWnE4MENHUXVQam1zYk1RSTlLRU8xZ0Rpa0dpSS9Y?=
- =?utf-8?B?QVMwNmVZVFNuMWhJVGYyYk83QjRUdTFmKytqOFFsakloY0liQ2dUUU9QMWta?=
- =?utf-8?B?TGk4WWZJbTZOS0Z3QWFXUzRyc29IOHg2NjZpTUpkeHJkOHZ0bktKcW5tcGdN?=
- =?utf-8?B?cWVFUjFZaUhReTBXZTkvTk5IRklPYU4xQk9OcXZIbllkMWZCdWNURy84MDlw?=
- =?utf-8?B?dTJIUTlLMlg2c1FFYTdwVkF1RUU4NjVZeGNySTl6Qy9kSThnKzF0L2JHbjFQ?=
- =?utf-8?B?cDhOWitPdkRIdENwZFJwajZLejV1SHp4bFpFSmtUUHVsRlhacU1TRjNtK0p0?=
- =?utf-8?B?RUp4OWNFMlIybE54eDZ3dE8yK2pIeTlxVlBTZWpQTnVyYVRvSlZLR041dnlH?=
- =?utf-8?B?aGxBWVdFcWttVTNZMFhKR2pHVHRRNGtSdzRnZnVxdmVRQ055eHZwejJUQ1kx?=
- =?utf-8?B?dWpJUnVUOC9ZK0d1RXk3VXVUM1ZYWGo0bXI3ZlYvQ0xnQW5vZms2cmk5dlRR?=
- =?utf-8?B?aXgvdy9pNmpzQVVHNGlVNjVtTDNodmI0KzdLSjZqekdla1loTnR3UENScGhu?=
- =?utf-8?B?eWlha0dzdzdEajNoUkVSMEx2T0tJRVVJSmh0WlNhdFNjRThwQ2VWd2hyWjJC?=
- =?utf-8?B?Mmw0YytJQVRCYjJNaUM4THBkV3piNUN3SlBnUnRJQXIxWlpJYmF1K1pIM3BV?=
- =?utf-8?B?Rk1pSHg3YlhyQkNsU3BzU0IzOFVHdC9CYnByeDU5b1FheUhUL0VjWklqazVE?=
- =?utf-8?B?Sk5xKzQ5REJSOFVWWHJRZHdGRm0zVkZ3U0htWTUyZWI3U0FnSVJOTU4vR21h?=
- =?utf-8?B?YzhmckZVRDh4U204RUpwS2Q1Q09NLzNWRVd4c1QrdjZ5VGlyQWV2a0VCZElr?=
- =?utf-8?B?SEltVTJLMUpRWjlxUWU1UDhNbFdqOWJCK3BWWC9VeTM4MGZLRWVRRzNJU1Ex?=
- =?utf-8?B?Q1A4cFM3OVdKSkE9PQ==?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5fa02a63-7df2-4b71-fd70-08db229bd1de
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR10MB1466.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2023 01:48:04.3134
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /3mraN96qZ1THxsAWl8OQXAB3SgoQNyAUTT6admD1ddesGBmtsexSRqu1Nm1XHp/bGtvO83uGUc/FWGpsAl87RN3QQU3l0pZEAJFlZPfS00=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4507
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-11_04,2023-03-10_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 phishscore=0
- suspectscore=0 spamscore=0 malwarescore=0 adultscore=0 mlxscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303120014
-X-Proofpoint-GUID: 4frQvg8Pg4WyeB1SetTZhWej0dczfXUq
-X-Proofpoint-ORIG-GUID: 4frQvg8Pg4WyeB1SetTZhWej0dczfXUq
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Received: by 2002:a05:7110:bc9:b0:1ee:5602:53a7 with HTTP; Sat, 11 Mar 2023
+ 17:49:17 -0800 (PST)
+In-Reply-To: <ZA0t/8Tz1Lbz25BZ@kernel.org>
+References: <20230228024439.27156-1-mario.limonciello@amd.com>
+ <Y/1wuXbaPcG9olkt@kernel.org> <5e535bf9-c662-c133-7837-308d67dfac94@leemhuis.info>
+ <85df6dda-c1c9-f08e-9e64-2007d44f6683@leemhuis.info> <ZA0sScO47IMKPhtG@kernel.org>
+ <ZA0t/8Tz1Lbz25BZ@kernel.org>
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+Date:   Sun, 12 Mar 2023 02:49:17 +0100
+X-Gmail-Original-Message-ID: <CAHmME9pudxP07Jx77yUecDLqm2xku3cPJFtk=bY6ACmfL1j5xw@mail.gmail.com>
+Message-ID: <CAHmME9pudxP07Jx77yUecDLqm2xku3cPJFtk=bY6ACmfL1j5xw@mail.gmail.com>
+Subject: Re: [PATCH v3] tpm: disable hwrng for fTPM on some AMD designs
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Linux regressions mailing list <regressions@lists.linux.dev>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        stable@vger.kernel.org,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        reach622@mailcuk.com, Bell <1138267643@qq.com>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Mario Limonciello <mario.limonciello@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DIET_1,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -187,76 +79,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/23 10:11 AM, michael.christie@oracle.com wrote:
-> On 3/11/23 2:53 AM, Christian Brauner wrote:
->> On Fri, Mar 10, 2023 at 04:03:24PM -0600, Mike Christie wrote:
->>> This has us pass in the thread's name during creation in kernel_thread.
->>>
->>> Signed-off-by: Mike Christie <michael.christie@oracle.com>
->>> ---
->>>  kernel/kthread.c | 35 ++++++++++++++---------------------
->>>  1 file changed, 14 insertions(+), 21 deletions(-)
->>>
->>> diff --git a/kernel/kthread.c b/kernel/kthread.c
->>> index 63574cee925e..831a55b406d8 100644
->>> --- a/kernel/kthread.c
->>> +++ b/kernel/kthread.c
->>> @@ -38,6 +38,7 @@ struct task_struct *kthreadd_task;
->>>  struct kthread_create_info
->>>  {
->>>  	/* Information passed to kthread() from kthreadd. */
->>> +	char *full_name;
->>>  	int (*threadfn)(void *data);
->>>  	void *data;
->>>  	int node;
->>> @@ -343,10 +344,15 @@ static int kthread(void *_create)
->>>  	/* Release the structure when caller killed by a fatal signal. */
->>>  	done = xchg(&create->done, NULL);
->>>  	if (!done) {
->>> +		kfree(create->full_name);
->>>  		kfree(create);
->>>  		kthread_exit(-EINTR);
->>>  	}
->>>  
->>> +	if (strlen(create->full_name) >= TASK_COMM_LEN)
->>> +		self->full_name = create->full_name;
->>> +	else
->>> +		kfree(create->full_name);
+On 3/12/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> On Sun, Mar 12, 2023 at 03:35:08AM +0200, Jarkko Sakkinen wrote:
+>> On Fri, Mar 10, 2023 at 06:43:47PM +0100, Thorsten Leemhuis wrote:
+>> > [adding Linux to the list of recipients]
+>> >
+>> > On 08.03.23 10:42, Linux regression tracking (Thorsten Leemhuis) wrote:
+>> > > Hi, Thorsten here, the Linux kernel's regression tracker. Top-posting
+>> > > for once, to make this easily accessible to everyone.
+>> > >
+>> > > Jarkko, thx for reviewing and picking below fix up. Are you planning
+>> > > to
+>> > > send this to Linus anytime soon, now that the patch was a few days in
+>> > > next? It would be good to get this 6.1 regression finally fixed, it
+>> > > already took way longer then the time frame
+>> > > Documentation/process/handling-regressions.rst outlines for a case
+>> > > like
+>> > > this. But well, that's how it is sometimes...
+>> >
+>> > Linus, would you consider picking this fix up directly from here or
+>> > from
+>> > linux-next (8699d5244e37)? It's been in the latter for 9 days now
+>> > afaics. And the issue seems to bug more than just one or two users, so
+>> > it IMHO would be good to get this finally resolved.
+>> >
+>> > Jarkko didn't reply to my inquiry, guess something else keeps him busy.
 >>
->> This is monir but wwiw, this looks suspicious when reading it without
->> more context. It took me a while to see that kthread->full_name is
->> intended to store the untruncated name only if truncation actually needs
->> to happen. So either we should always initialize this or we should add a
->> comment. You can just send a tiny patch that I can fold into this one so
->> you don't have to resend the whole series...
+>> That's a bit arrogant. You emailed only 4 days ago.
+>>
+>> I'm open to do PR for rc3 with the fix, if it cannot wait to v6.4 pr.
+>
+> If this is about slow response with kernel bugzilla: it is not *enforced*
+> part of the process. If it was, I would use it. Since it isn't, I don't
+> really want to add any extra weight to my workflow.
+>
+> It's not only extra time but also it is not documented how exactly and in
+> detail you would use it. For email we have all that documented. And when
+> you don't have guidelines, then it is too flakky to use properly.
 
-Hey Christian, here is a patch you can fold into the original. Thanks
-for your help.
-
-
-From ac82986ec4e7faae245ec48cb9213a4ca1c1d4d6 Mon Sep 17 00:00:00 2001
-From: Mike Christie <michael.christie@oracle.com>
-Date: Sat, 11 Mar 2023 16:14:24 -0600
-Subject: [PATCH] kthread: Always save the full_name
-
-Simplify the kthread name handling by always using the full_name.
----
- kernel/kthread.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/kernel/kthread.c b/kernel/kthread.c
-index 831a55b406d8..5596ec3f75cf 100644
---- a/kernel/kthread.c
-+++ b/kernel/kthread.c
-@@ -349,10 +349,7 @@ static int kthread(void *_create)
- 		kthread_exit(-EINTR);
- 	}
- 
--	if (strlen(create->full_name) >= TASK_COMM_LEN)
--		self->full_name = create->full_name;
--	else
--		kfree(create->full_name);
-+	self->full_name = create->full_name;
- 	self->threadfn = threadfn;
- 	self->data = data;
- 
+No interest in wading into a process argument. But if you're able to
+send this for rc3, please please do so. Users keep getting hit by
+this, some email me directly, and I keep replying saying the fix
+should be released any day now. So let's make that happen.
