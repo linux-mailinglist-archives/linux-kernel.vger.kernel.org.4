@@ -2,84 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46A366B62E3
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 03:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7AE76B62E4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 03:28:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230061AbjCLCSD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sat, 11 Mar 2023 21:18:03 -0500
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45382 "EHLO
+        id S229950AbjCLC2l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sat, 11 Mar 2023 21:28:41 -0500
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjCLCRr (ORCPT
+        with ESMTP id S229685AbjCLC2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sat, 11 Mar 2023 21:17:47 -0500
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24299570B2
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:17:22 -0800 (PST)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-5416a07498dso26787727b3.13
-        for <linux-kernel@vger.kernel.org>; Sat, 11 Mar 2023 18:17:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678587440;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XftaVtT6DBaR6TmU1BfUjZFS2j5Dv53zloyEU1YN4Tc=;
-        b=EBIRD4BvBs5N1uLmenNLq6Q0KHywSkUXNiV9JBr63KlvUkcScAgxamWWEGYgAqoQX8
-         btnNSUTDtI5NTTsA6iuLtocZEOduFAA3ruNB1i5rHpdgYgz5FHADZx0r3qzCPciO9R1x
-         YJGYVNIgh5VF/CnlfHmpxRweCFdfZwRudW5TUAcxFgi2tq0W6OVONJBiwP39ga3Pt3Qo
-         HYB+p+B00hHpG2OF65oRzgnqeflOeLhCY9/KLKkwoVtnXKqaEFl5jxtL0mlvO5Ozr14I
-         BXNSMFUiszBDbYbZtm06mweCd+UkxkM9rVQYprDrdx9CqvR5suuisKwR+wNrs2DCxsDb
-         NXtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678587440;
-        h=cc:to:from:subject:references:mime-version:message-id:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XftaVtT6DBaR6TmU1BfUjZFS2j5Dv53zloyEU1YN4Tc=;
-        b=3EYHaOQgbQCbjNKjhR2Mvd6MqYtt4dKgCe8p40/PhqlP01WumrqqG2EOApdXbPJFDH
-         vHlgyr+WRjDcNmcyglRtIi0LgzafYzxD1xtxkHj+5iAcErho6Ek9lXongl3RaKyY70jT
-         bBxOL/VfxoEKoeWDHUHmwvgEXY8TGdUNXU750mzVjJMKWeh25sV5BzFpMS4VjZC0O6fP
-         WVdiM6ToUpnBnUKBjdKzojt7+GuM2wW9osAel2g2fipI1kt9kdUOvYf/uxVAIEG3cK/h
-         EDNcjU+eiK6aG8+Htx5LR+8I130BulFsQvH4fC533TjxXOimR1DbWtZ52oJdFroNy+l3
-         6N6g==
-X-Gm-Message-State: AO0yUKVTRqNsJsg2bL9WqpmFTjPlzM7TRWKWA/Q43G30oLRvTGk75M1W
-        8BKvNawZq7qCVCfurUaUN3yuRADhUcpS
-X-Google-Smtp-Source: AK7set8mDjxcyITu3npZkWCgchptcXmCcdHmOK3V6cpZLYMuIA1g+7UeIT8WVkaT9+MW0Q1jvz2rE0VAZIjn
-X-Received: from irogers.svl.corp.google.com ([2620:15c:2d4:203:b42b:2e07:afb:877e])
- (user=irogers job=sendgmr) by 2002:a81:ac67:0:b0:541:753d:32f9 with SMTP id
- z39-20020a81ac67000000b00541753d32f9mr1633136ywj.9.1678587440627; Sat, 11 Mar
- 2023 18:17:20 -0800 (PST)
-Date:   Sat, 11 Mar 2023 18:15:43 -0800
-In-Reply-To: <20230312021543.3060328-1-irogers@google.com>
-Message-Id: <20230312021543.3060328-12-irogers@google.com>
-Mime-Version: 1.0
-References: <20230312021543.3060328-1-irogers@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Subject: [PATCH v5 11/11] perf parse-events: Warn when events are regrouped
-From:   Ian Rogers <irogers@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Stephane Eranian <eranian@google.com>,
-        Ian Rogers <irogers@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        Sat, 11 Mar 2023 21:28:38 -0500
+Received: from mail-m118111.qiye.163.com (mail-m118111.qiye.163.com [115.236.118.111])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23620305F0;
+        Sat, 11 Mar 2023 18:28:35 -0800 (PST)
+Received: from ubuntu.localdomain (unknown [113.87.239.236])
+        by mail-m118111.qiye.163.com (Hmail) with ESMTPA id 6089458016B;
+        Sun, 12 Mar 2023 10:28:30 +0800 (CST)
+From:   Donglin Peng <pengdonglin@sangfor.com.cn>
+To:     rostedt@goodmis.org, mhiramat@kernel.org, xiehuan09@gmail.com
+Cc:     dinghui@sangfor.com.cn, huangcun@sangfor.com.cn,
+        linux-trace-kernel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Donglin Peng <pengdonglin@sangfor.com.cn>
+Subject: [RFC v2] function_graph: Support recording and outputing the return value of function
+Date:   Sat, 11 Mar 2023 18:28:26 -0800
+Message-Id: <20230312022826.10367-1-pengdonglin@sangfor.com.cn>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVkZTE1DVklJGBhDHUIYSkJNGFUTARMWGhIXJBQOD1
+        lXWRgSC1lBWUpKSFVDTFVJSEJVSUhNWVdZFhoPEhUdFFlBWU9LSFVKSktPSEhVSktLVUtZBg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Mio6Sgw6ET0QFygqODVKFy00
+        NElPCR1VSlVKTUxDTkNDSkpKSkJOVTMWGhIXVQseFRwfFBUcFxIVOwgaFRwdFAlVGBQWVRgVRVlX
+        WRILWUFZSkpIVUNMVUlIQlVJSE1ZV1kIAVlBSkhOS0M3Bg++
+X-HM-Tid: 0a86d3a5e7442eb7kusn6089458016b
+X-HM-MType: 1
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,190 +46,326 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use if an event is reordered or the number of groups increases to
-signal that regrouping has happened and warn about it. Disable the
-warning in the case wild card PMU names are used and for metrics.
+When using function_graph to analyze the reasons for system call failures,
+we need to spend a considerable amount of time analyzing the logs and
+cannot quickly locate the error. This modification aims to make this
+process easier by recording the return values of each traced function.
+When outputting trace logs, the tracing option funcgraph-retval can be
+used to control whether to display the return values. If the return value
+looks like an error code, it will be output in both hexadecimal and signed
+decimal, otherwise only hexadecimal.
 
-Signed-off-by: Ian Rogers <irogers@google.com>
+Currently, this modification supports the following commonly used processor
+architectures: x64, x86, arm64, arm, riscv.
+
+One drawback is that even if a function's return type is void, the value
+stored in the return value register will still be recorded and output.
+
+I think the BTF files can be used to obtain the return type of kernel
+functions, but the search cost is a bit high. Therefore, we can
+implement a tool to process trace logs based on BTF information.
+
+For example:
+
+I want to attach the demo process to a cpu cgroup, but it failed:
+
+echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
+-bash: echo: write error: Invalid argument
+
+The strace logs tells that the write system call returned -EINVAL(-22):
+...
+write(1, "273\n", 4)                    = -1 EINVAL (Invalid argument)
+...
+
+Use the following commands to capture trace logs when calling the write
+system call:
+
+cd /sys/kernel/debug/tracing/
+echo 0 > tracing_on
+echo > trace
+echo *sys_write > set_graph_function
+echo *spin* > set_graph_notrace
+echo *rcu* >> set_graph_notrace
+echo *alloc* >> set_graph_notrace
+echo preempt* >> set_graph_notrace
+echo kfree* >> set_graph_notrace
+echo $$ > set_ftrace_pid
+echo function_graph > current_tracer
+echo 1 > tracing_on
+echo `pidof demo` > /sys/fs/cgroup/cpu/test/tasks
+echo 0 > tracing_on
+echo 1 > options/funcgraph-retval
+cat trace > ~/trace.log
+
+Search -22 directly in the trace.log and find that the function
+cpu_cgroup_can_attach returned -22 first, then read the code of this
+function to get the root cause.
+
+...
+ 0)            |  cgroup_migrate() {
+ 0)  0.521 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+ 0)  0.500 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+ 0)  0.441 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+ 0)  0.521 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+ 0)  0.421 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+ 0)  0.431 us  |    cgroup_migrate_add_task(); /* => ffff88800cbaa000 */
+ 0)            |    cgroup_migrate_execute() {
+ 0)            |      cpu_cgroup_can_attach() {
+ 0)            |        cgroup_taskset_first() {
+ 0)  0.221 us  |          cgroup_taskset_next(); /* => ffff88800e13c000 */
+ 0)  0.641 us  |        } /* cgroup_taskset_first => ffff88800e13c000 */
+ 0)  0.320 us  |        sched_rt_can_attach(); /* => 0 */
+ 0)  1.713 us  |      } /* cpu_cgroup_can_attach => ffffffea -22 */
+ 0)  3.717 us  |    } /* cgroup_migrate_execute => ffffffea -22 */
+ 0)  9.959 us  |  } /* cgroup_migrate => ffffffea -22 */
+...
+
+Signed-off-by: Donglin Peng <pengdonglin@sangfor.com.cn>
 ---
- tools/perf/tests/parse-events.c |  2 +-
- tools/perf/tests/pmu-events.c   |  2 +-
- tools/perf/util/metricgroup.c   |  3 ++-
- tools/perf/util/parse-events.c  | 39 ++++++++++++++++++++++++---------
- tools/perf/util/parse-events.h  |  7 +++---
- tools/perf/util/parse-events.y  |  1 +
- 6 files changed, 38 insertions(+), 16 deletions(-)
+ arch/arm/kernel/entry-ftrace.S       |  1 +
+ arch/arm64/kernel/entry-ftrace.S     |  1 +
+ arch/riscv/kernel/mcount.S           |  2 +
+ arch/x86/kernel/ftrace_32.S          |  1 +
+ arch/x86/kernel/ftrace_64.S          |  2 +
+ include/linux/ftrace.h               |  1 +
+ kernel/trace/fgraph.c                |  3 +-
+ kernel/trace/trace.h                 |  1 +
+ kernel/trace/trace_entries.h         |  5 +-
+ kernel/trace/trace_functions_graph.c | 70 ++++++++++++++++++++++++----
+ 10 files changed, 74 insertions(+), 13 deletions(-)
 
-diff --git a/tools/perf/tests/parse-events.c b/tools/perf/tests/parse-events.c
-index ffa6f0a90741..b1c2f0a20306 100644
---- a/tools/perf/tests/parse-events.c
-+++ b/tools/perf/tests/parse-events.c
-@@ -2103,7 +2103,7 @@ static int test_event_fake_pmu(const char *str)
+diff --git a/arch/arm/kernel/entry-ftrace.S b/arch/arm/kernel/entry-ftrace.S
+index 3e7bcaca5e07..c6666c0d909c 100644
+--- a/arch/arm/kernel/entry-ftrace.S
++++ b/arch/arm/kernel/entry-ftrace.S
+@@ -258,6 +258,7 @@ ENDPROC(ftrace_graph_regs_caller)
+ #ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ ENTRY(return_to_handler)
+ 	stmdb	sp!, {r0-r3}
++	mov	r1, r0			@ pass the return value
+ 	add	r0, sp, #16		@ sp at exit of instrumented routine
+ 	bl	ftrace_return_to_handler
+ 	mov	lr, r0			@ r0 has real ret addr
+diff --git a/arch/arm64/kernel/entry-ftrace.S b/arch/arm64/kernel/entry-ftrace.S
+index 350ed81324ac..0eb9a0e3ba3d 100644
+--- a/arch/arm64/kernel/entry-ftrace.S
++++ b/arch/arm64/kernel/entry-ftrace.S
+@@ -276,6 +276,7 @@ SYM_CODE_START(return_to_handler)
+ 	stp x4, x5, [sp, #32]
+ 	stp x6, x7, [sp, #48]
  
- 	parse_events_error__init(&err);
- 	perf_pmu__test_parse_init();
--	ret = __parse_events(evlist, str, &err, &perf_pmu__fake);
-+	ret = __parse_events(evlist, str, &err, &perf_pmu__fake, /*warn_if_reordered=*/true);
- 	if (ret) {
- 		pr_debug("failed to parse event '%s', err %d, str '%s'\n",
- 			 str, ret, err.str);
-diff --git a/tools/perf/tests/pmu-events.c b/tools/perf/tests/pmu-events.c
-index 6ccd413b5983..7f8e86452527 100644
---- a/tools/perf/tests/pmu-events.c
-+++ b/tools/perf/tests/pmu-events.c
-@@ -785,7 +785,7 @@ static int check_parse_id(const char *id, struct parse_events_error *error,
- 		 */
- 		perf_pmu__test_parse_init();
- 	}
--	ret = __parse_events(evlist, dup, error, fake_pmu);
-+	ret = __parse_events(evlist, dup, error, fake_pmu, /*warn_if_reordered=*/true);
- 	free(dup);
++	mov	x1, x0			// pass the return value
+ 	mov	x0, x29			//     parent's fp
+ 	bl	ftrace_return_to_handler// addr = ftrace_return_to_hander(fp);
+ 	mov	x30, x0			// restore the original return address
+diff --git a/arch/riscv/kernel/mcount.S b/arch/riscv/kernel/mcount.S
+index 30102aadc4d7..afce5abcbcd2 100644
+--- a/arch/riscv/kernel/mcount.S
++++ b/arch/riscv/kernel/mcount.S
+@@ -69,6 +69,8 @@ ENTRY(return_to_handler)
+ 	mv	t6, s0
+ #endif
+ 	SAVE_RET_ABI_STATE
++	/* pass the return value to ftrace_return_to_handler */
++	mv	a1, a0
+ #ifdef HAVE_FUNCTION_GRAPH_FP_TEST
+ 	mv	a0, t6
+ #endif
+diff --git a/arch/x86/kernel/ftrace_32.S b/arch/x86/kernel/ftrace_32.S
+index a0ed0e4a2c0c..7611374ccce8 100644
+--- a/arch/x86/kernel/ftrace_32.S
++++ b/arch/x86/kernel/ftrace_32.S
+@@ -184,6 +184,7 @@ SYM_CODE_END(ftrace_graph_caller)
+ return_to_handler:
+ 	pushl	%eax
+ 	pushl	%edx
++	movl	%eax, %edx	#  2nd argument: the return value
+ 	movl	$0, %eax
+ 	call	ftrace_return_to_handler
+ 	movl	%eax, %ecx
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 1265ad519249..d685b773e7ad 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -348,6 +348,8 @@ SYM_CODE_START(return_to_handler)
+ 	movq %rax, (%rsp)
+ 	movq %rdx, 8(%rsp)
+ 	movq %rbp, %rdi
++	/* Pass the return value to ftrace_return_to_handler */
++	movq %rax, %rsi
  
- 	evlist__delete(evlist);
-diff --git a/tools/perf/util/metricgroup.c b/tools/perf/util/metricgroup.c
-index de6dd527a2ba..5783f4c2d1ef 100644
---- a/tools/perf/util/metricgroup.c
-+++ b/tools/perf/util/metricgroup.c
-@@ -1441,7 +1441,8 @@ static int parse_ids(bool metric_no_merge, struct perf_pmu *fake_pmu,
- 	}
- 	pr_debug("Parsing metric events '%s'\n", events.buf);
- 	parse_events_error__init(&parse_error);
--	ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu);
-+	ret = __parse_events(parsed_evlist, events.buf, &parse_error, fake_pmu,
-+			     /*warn_if_reordered=*/false);
- 	if (ret) {
- 		parse_events_error__print(&parse_error, events.buf);
- 		goto err_out;
-diff --git a/tools/perf/util/parse-events.c b/tools/perf/util/parse-events.c
-index 9ec3c1dc81e0..3b2e5bb3e852 100644
---- a/tools/perf/util/parse-events.c
-+++ b/tools/perf/util/parse-events.c
-@@ -2157,11 +2157,13 @@ static int evlist__cmp(void *state, const struct list_head *l, const struct list
- 	return arch_evlist__cmp(lhs, rhs);
+ 	call ftrace_return_to_handler
+ 
+diff --git a/include/linux/ftrace.h b/include/linux/ftrace.h
+index 366c730beaa3..157fd25be2b7 100644
+--- a/include/linux/ftrace.h
++++ b/include/linux/ftrace.h
+@@ -1032,6 +1032,7 @@ struct ftrace_graph_ent {
+  */
+ struct ftrace_graph_ret {
+ 	unsigned long func; /* Current function */
++	unsigned long retval;
+ 	int depth;
+ 	/* Number of functions that overran the depth limit for current task */
+ 	unsigned int overrun;
+diff --git a/kernel/trace/fgraph.c b/kernel/trace/fgraph.c
+index 218cd95bf8e4..006b39a98dc3 100644
+--- a/kernel/trace/fgraph.c
++++ b/kernel/trace/fgraph.c
+@@ -240,12 +240,13 @@ static struct notifier_block ftrace_suspend_notifier = {
+  * Send the trace to the ring-buffer.
+  * @return the original return address.
+  */
+-unsigned long ftrace_return_to_handler(unsigned long frame_pointer)
++unsigned long ftrace_return_to_handler(unsigned long frame_pointer, unsigned long retval)
+ {
+ 	struct ftrace_graph_ret trace;
+ 	unsigned long ret;
+ 
+ 	ftrace_pop_return_trace(&trace, &ret, frame_pointer);
++	trace.retval = retval;
+ 	trace.rettime = trace_clock_local();
+ 	ftrace_graph_return(&trace);
+ 	/*
+diff --git a/kernel/trace/trace.h b/kernel/trace/trace.h
+index 616e1aa1c4da..5ef32c6e1d45 100644
+--- a/kernel/trace/trace.h
++++ b/kernel/trace/trace.h
+@@ -831,6 +831,7 @@ static __always_inline bool ftrace_hash_empty(struct ftrace_hash *hash)
+ #define TRACE_GRAPH_PRINT_TAIL          0x100
+ #define TRACE_GRAPH_SLEEP_TIME          0x200
+ #define TRACE_GRAPH_GRAPH_TIME          0x400
++#define TRACE_GRAPH_PRINT_RETVAL        0x800
+ #define TRACE_GRAPH_PRINT_FILL_SHIFT	28
+ #define TRACE_GRAPH_PRINT_FILL_MASK	(0x3 << TRACE_GRAPH_PRINT_FILL_SHIFT)
+ 
+diff --git a/kernel/trace/trace_entries.h b/kernel/trace/trace_entries.h
+index cd41e863b51c..d798cb17546f 100644
+--- a/kernel/trace/trace_entries.h
++++ b/kernel/trace/trace_entries.h
+@@ -93,16 +93,17 @@ FTRACE_ENTRY_PACKED(funcgraph_exit, ftrace_graph_ret_entry,
+ 	F_STRUCT(
+ 		__field_struct(	struct ftrace_graph_ret,	ret	)
+ 		__field_packed(	unsigned long,	ret,		func	)
++		__field_packed(	unsigned long,	ret,		retval	)
+ 		__field_packed(	int,		ret,		depth	)
+ 		__field_packed(	unsigned int,	ret,		overrun	)
+ 		__field_packed(	unsigned long long, ret,	calltime)
+ 		__field_packed(	unsigned long long, ret,	rettime	)
+ 	),
+ 
+-	F_printk("<-- %ps (%d) (start: %llx  end: %llx) over: %d",
++	F_printk("<-- %ps (%d) (start: %llx  end: %llx) over: %d retval: %lx",
+ 		 (void *)__entry->func, __entry->depth,
+ 		 __entry->calltime, __entry->rettime,
+-		 __entry->depth)
++		 __entry->depth, __entry->retval)
+ );
+ 
+ /*
+diff --git a/kernel/trace/trace_functions_graph.c b/kernel/trace/trace_functions_graph.c
+index 203204cadf92..706d3e5c2156 100644
+--- a/kernel/trace/trace_functions_graph.c
++++ b/kernel/trace/trace_functions_graph.c
+@@ -58,6 +58,8 @@ static struct tracer_opt trace_opts[] = {
+ 	{ TRACER_OPT(funcgraph-irqs, TRACE_GRAPH_PRINT_IRQS) },
+ 	/* Display function name after trailing } */
+ 	{ TRACER_OPT(funcgraph-tail, TRACE_GRAPH_PRINT_TAIL) },
++	/* Display function return value */
++	{ TRACER_OPT(funcgraph-retval, TRACE_GRAPH_PRINT_RETVAL) },
+ 	/* Include sleep time (scheduled out) between entry and return */
+ 	{ TRACER_OPT(sleep-time, TRACE_GRAPH_SLEEP_TIME) },
+ 
+@@ -619,6 +621,43 @@ print_graph_duration(struct trace_array *tr, unsigned long long duration,
+ 	trace_seq_puts(s, "|  ");
  }
  
--static void parse_events__sort_events_and_fix_groups(struct list_head *list)
-+static bool parse_events__sort_events_and_fix_groups(struct list_head *list)
- {
--	int idx = -1;
-+	int idx = 0, unsorted_idx = -1;
- 	struct evsel *pos, *cur_leader = NULL;
- 	struct perf_evsel *cur_leaders_grp = NULL;
-+	bool idx_changed = false;
-+	int orig_num_leaders = 0, num_leaders = 0;
++static void print_graph_retval(struct trace_seq *s, unsigned long retval,
++				bool leaf, void *func)
++{
++	unsigned long err_code = 0;
++
++	if (retval == 0)
++		goto done;
++
++	/* Guess whether the retval looks like an error code */
++	if ((retval & BIT(7)) && (retval >> 8) == 0)
++		err_code = (unsigned long)(s8)retval;
++	else if ((retval & BIT(15)) && (retval >> 16) == 0)
++		err_code = (unsigned long)(s16)retval;
++	else if ((retval & BIT(31)) && (((u64)retval) >> 32) == 0)
++		err_code = (unsigned long)(s32)retval;
++	else
++		err_code = retval;
++
++	if (!IS_ERR_VALUE(err_code))
++		err_code = 0;
++
++done:
++	if (leaf) {
++		if (err_code != 0)
++			trace_seq_printf(s, "%ps(); /* => %lx %ld */\n",
++				func, retval, err_code);
++		else
++			trace_seq_printf(s, "%ps(); /* => %lx */\n", func, retval);
++	} else {
++		if (err_code != 0)
++			trace_seq_printf(s, "} /* %ps => %lx %ld */\n",
++				func, retval, err_code);
++		else
++			trace_seq_printf(s, "} /* %ps => %lx */\n", func, retval);
++	}
++}
++
+ /* Case of a leaf function on its call entry */
+ static enum print_line_t
+ print_graph_entry_leaf(struct trace_iterator *iter,
+@@ -663,7 +702,10 @@ print_graph_entry_leaf(struct trace_iterator *iter,
+ 	for (i = 0; i < call->depth * TRACE_GRAPH_INDENT; i++)
+ 		trace_seq_putc(s, ' ');
+ 
+-	trace_seq_printf(s, "%ps();\n", (void *)call->func);
++	if (flags & TRACE_GRAPH_PRINT_RETVAL)
++		print_graph_retval(s, graph_ret->retval, true, (void *)call->func);
++	else
++		trace_seq_printf(s, "%ps();\n", (void *)call->func);
+ 
+ 	print_graph_irq(iter, graph_ret->func, TRACE_GRAPH_RET,
+ 			cpu, iter->ent->pid, flags);
+@@ -942,16 +984,24 @@ print_graph_return(struct ftrace_graph_ret *trace, struct trace_seq *s,
+ 		trace_seq_putc(s, ' ');
  
  	/*
- 	 * Compute index to insert ungrouped events at. Place them where the
-@@ -2170,15 +2172,22 @@ static void parse_events__sort_events_and_fix_groups(struct list_head *list)
- 	list_for_each_entry(pos, list, core.node) {
- 		const struct evsel *pos_leader = evsel__leader(pos);
- 
--		if (pos != pos_leader || pos->core.nr_members > 1)
--			continue;
-+		if (pos == pos_leader)
-+			orig_num_leaders++;
- 
--		idx = pos->core.idx;
--		break;
+-	 * If the return function does not have a matching entry,
+-	 * then the entry was lost. Instead of just printing
+-	 * the '}' and letting the user guess what function this
+-	 * belongs to, write out the function name. Always do
+-	 * that if the funcgraph-tail option is enabled.
++	 * Always write out the function name and its return value if the
++	 * function-retval option is enabled.
+ 	 */
+-	if (func_match && !(flags & TRACE_GRAPH_PRINT_TAIL))
+-		trace_seq_puts(s, "}\n");
+-	else
+-		trace_seq_printf(s, "} /* %ps */\n", (void *)trace->func);
++	if (flags & TRACE_GRAPH_PRINT_RETVAL) {
++		print_graph_retval(s, trace->retval, false, (void *)trace->func);
++	} else {
 +		/*
-+		 * Ensure indexes are sequential, in particular for multiple
-+		 * event lists being merged. The indexes are used to detect when
-+		 * the user order is modified.
++		 * If the return function does not have a matching entry,
++		 * then the entry was lost. Instead of just printing
++		 * the '}' and letting the user guess what function this
++		 * belongs to, write out the function name. Always do
++		 * that if the funcgraph-tail option is enabled.
 +		 */
-+		pos->core.idx = idx++;
-+
-+		if (unsorted_idx == -1 && pos == pos_leader && pos->core.nr_members < 2)
-+			unsorted_idx = pos->core.idx;
- 	}
++		if (func_match && !(flags & TRACE_GRAPH_PRINT_TAIL))
++			trace_seq_puts(s, "}\n");
++		else
++			trace_seq_printf(s, "} /* %ps */\n", (void *)trace->func);
++	}
  
- 	/* Sort events. */
--	list_sort(&idx, list, evlist__cmp);
-+	list_sort(&unsorted_idx, list, evlist__cmp);
- 
- 	/*
- 	 * Recompute groups, splitting for PMUs and adding groups for events
-@@ -2192,6 +2201,8 @@ static void parse_events__sort_events_and_fix_groups(struct list_head *list)
- 		bool force_grouped = arch_evsel__must_be_in_group(pos);
- 
- 		/* Reset index and nr_members. */
-+		if (pos->core.idx != idx)
-+			idx_changed = true;
- 		pos->core.idx = idx++;
- 		pos->core.nr_members = 0;
- 
-@@ -2225,12 +2236,18 @@ static void parse_events__sort_events_and_fix_groups(struct list_head *list)
- 		}
- 	}
- 	list_for_each_entry(pos, list, core.node) {
--		pos->core.leader->nr_members++;
-+		struct evsel *pos_leader = evsel__leader(pos);
-+
-+		if (pos == pos_leader)
-+			num_leaders++;
-+		pos_leader->core.nr_members++;
- 	}
-+	return idx_changed || num_leaders != orig_num_leaders;
- }
- 
- int __parse_events(struct evlist *evlist, const char *str,
--		   struct parse_events_error *err, struct perf_pmu *fake_pmu)
-+		   struct parse_events_error *err, struct perf_pmu *fake_pmu,
-+		   bool warn_if_reordered)
- {
- 	struct parse_events_state parse_state = {
- 		.list	  = LIST_HEAD_INIT(parse_state.list),
-@@ -2250,7 +2267,9 @@ int __parse_events(struct evlist *evlist, const char *str,
- 		return -1;
- 	}
- 
--	parse_events__sort_events_and_fix_groups(&parse_state.list);
-+	if (parse_events__sort_events_and_fix_groups(&parse_state.list) &&
-+	    warn_if_reordered && !parse_state.wild_card_pmus)
-+		pr_warning("WARNING: events were regrouped to match PMUs\n");
- 
- 	/*
- 	 * Add list to the evlist even with errors to allow callers to clean up.
-diff --git a/tools/perf/util/parse-events.h b/tools/perf/util/parse-events.h
-index 767ad1729228..46204c1a7916 100644
---- a/tools/perf/util/parse-events.h
-+++ b/tools/perf/util/parse-events.h
-@@ -26,13 +26,13 @@ int parse_events_option(const struct option *opt, const char *str, int unset);
- int parse_events_option_new_evlist(const struct option *opt, const char *str, int unset);
- __attribute__((nonnull(1, 2, 3)))
- int __parse_events(struct evlist *evlist, const char *str, struct parse_events_error *error,
--		   struct perf_pmu *fake_pmu);
-+		   struct perf_pmu *fake_pmu, bool warn_if_reordered);
- 
--__attribute__((nonnull))
-+__attribute__((nonnull(1, 2, 3)))
- static inline int parse_events(struct evlist *evlist, const char *str,
- 			       struct parse_events_error *err)
- {
--	return __parse_events(evlist, str, err, NULL);
-+	return __parse_events(evlist, str, err, /*fake_pmu=*/NULL, /*warn_if_reordered=*/true);
- }
- 
- int parse_event(struct evlist *evlist, const char *str);
-@@ -128,6 +128,7 @@ struct parse_events_state {
- 	int			   stoken;
- 	struct perf_pmu		  *fake_pmu;
- 	char			  *hybrid_pmu_name;
-+	bool			   wild_card_pmus;
- };
- 
- void parse_events__shrink_config_terms(void);
-diff --git a/tools/perf/util/parse-events.y b/tools/perf/util/parse-events.y
-index 3a04602d2982..4488443e506e 100644
---- a/tools/perf/util/parse-events.y
-+++ b/tools/perf/util/parse-events.y
-@@ -323,6 +323,7 @@ event_pmu_name opt_pmu_config
- 				if (!parse_events_add_pmu(_parse_state, list, pmu->name, terms,
- 							  /*auto_merge_stats=*/true)) {
- 					ok++;
-+					parse_state->wild_card_pmus = true;
- 				}
- 				parse_events_terms__delete(terms);
- 			}
+ 	/* Overrun */
+ 	if (flags & TRACE_GRAPH_PRINT_OVERRUN)
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.25.1
 
