@@ -2,98 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21B416B6724
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 15:24:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4113D6B6726
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 15:25:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230040AbjCLOYj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 10:24:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49140 "EHLO
+        id S230043AbjCLOZn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 10:25:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCLOYg (ORCPT
+        with ESMTP id S229494AbjCLOZl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 10:24:36 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.216])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C031D46170;
-        Sun, 12 Mar 2023 07:24:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=4Zscu
-        iQPwnHKfbAbpvcHFmQ/w/W3FQBM8Le/KlBVmX8=; b=YQklslgIvM7mi1Co4Qh5c
-        3etl9t3wkCXV3MV5Sw1sG0m35C4r7TC8TPu9ytBAePYuB2hYV8nda1AcjVzlmhV1
-        MyXmzggw5wRXI/ZsglyTyx6AGK8l6JSqwnJDmLNUmFfRQRdZZwXbsYcTpAOQ+BH2
-        eiEZxIfCTe/8Iu0+Egtp3U=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-2 (Coremail) with SMTP id _____wC3g3x84A1kSDt1DA--.34606S2;
-        Sun, 12 Mar 2023 22:23:56 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     sathya.prakash@broadcom.com
-Cc:     sreekanth.reddy@broadcom.com,
-        suganath-prabu.subramani@broadcom.com,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH] scsi: message: mptlan: Fix use after free bug in mptlan_remove due to race condition
-Date:   Sun, 12 Mar 2023 22:23:54 +0800
-Message-Id: <20230312142354.1857371-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Sun, 12 Mar 2023 10:25:41 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 830204617C;
+        Sun, 12 Mar 2023 07:25:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=OHbediLC+v3sB2oFfyvI7wEyP9TeOQGxdPxK8a2esRg=;
+  b=UCDM2s/qi9A3S/EQxRny/aR1glDkkQdIkSliYzHRtk+/o8aM05R3qtRL
+   tqMPhsMDehpn2+3djcRR5JX2mP3EpwkIPcVkkDEgWulkn9WpqParYaiCh
+   fzmyzq86h6rY+rvIR+ldcCQBANuUJ4a2UNTlHWxpU3mAE6yOz7HxiICP1
+   s=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.98,254,1673910000"; 
+   d="scan'208";a="49927824"
+Received: from 231.85.89.92.rev.sfr.net (HELO hadrien) ([92.89.85.231])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 15:25:37 +0100
+Date:   Sun, 12 Mar 2023 15:25:37 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+cc:     Julia Lawall <julia.lawall@inria.fr>, outreachy@lists.linux.dev,
+        lars@metafoo.de, Michael.Hennerich@analog.com, jic23@kernel.org,
+        gregkh@linuxfoundation.org, linux-iio@vger.kernel.org,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: iio: meter: enclose Macros with complex values
+ in parentheses
+In-Reply-To: <174e4d14-8b3e-67f7-d901-bd77b054f7c3@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2303121525270.2865@hadrien>
+References: <20230312133347.120944-1-eng.mennamahmoud.mm@gmail.com> <alpine.DEB.2.22.394.2303121507450.2865@hadrien> <174e4d14-8b3e-67f7-d901-bd77b054f7c3@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wC3g3x84A1kSDt1DA--.34606S2
-X-Coremail-Antispam: 1Uf129KBjvJXoWrurykGF4Dur1fWry5Wr13CFg_yoW8Jry7pr
-        ZFka48CrZ5Jw1Iy3WDtFy8AFyrC3WIgrWkKrWSg342vr1FkFyYq340kFy2kw1xXFs5Ga13
-        Zr4DJFs7GayDKFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zi-eOJUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/xtbBzg0wU2I0Xm+hTwABso
+Content-Type: multipart/mixed; boundary="8323329-1402912152-1678631138=:2865"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In mptlan_probe, it called mpt_register_lan_device and bound 
-&priv->post_buckets_task with mpt_lan_post_receive_buckets_work.
-When it calls lan_reply, it will finally call 
-mpt_lan_wake_post_buckets_task to start the work.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-When we call mptlan_remove to remove the driver, there
-may be a sequence as follows:
+--8323329-1402912152-1678631138=:2865
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-Fix it by finishing the work before cleanup in mptlan_remove
 
-CPU0                  CPU1
 
-                    |mpt_lan_post_receive_buckets_work
-mptlan_remove       |
-  free_netdev       |
-    kfree(dev);     |
-                    |
-                    | dev->mtu
-                    |   //use
+On Sun, 12 Mar 2023, Menna Mahmoud wrote:
 
-Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
- drivers/message/fusion/mptlan.c | 2 ++
- 1 file changed, 2 insertions(+)
+>
+> On ١٢/٣/٢٠٢٣ ١٦:١٢, Julia Lawall wrote:
+> >
+> > On Sun, 12 Mar 2023, Menna Mahmoud wrote:
+> >
+> > > enclose Macros with complex values in parentheses is especially useful
+> > > in making macro definitions “safe” (so that they
+> > > evaluate each operand exactly once).
+> > enclose -> Enclose, and Macros -> macros
+> >
+> > I don't understand the above comment though.  How does adding parentheses
+> > around the body of a macro cause the operands to be evaluated only once?
+> > And the macros that you have changed don't have any operands.
+> >
+> > The value of adding parentheses is normally to ensure that the body of the
+> > macro doesn't interact with the context in a weird way.  For example, you
+> > could have
+> >
+> > #define ADD 3 + 4
+> >
+> > Then if you use your macro as 6 * ADD, you will end up evaluating
+> > 6 * 3 + 4, ie 18 + 4, when you might have expected 6 * 7.  The issue is
+> > that * has higher precedence than +.
+>
+>
+> yes, I mean that but i couldn't explain it well, thanks for your feedback.
+>
+>
+> >
+> > But I don't think that such a problem can arise with a cast expression, so
+> > parentheses around it should not be necessary.
+>
+>
+> So, no need for this patch?
 
-diff --git a/drivers/message/fusion/mptlan.c b/drivers/message/fusion/mptlan.c
-index 142eb5d5d9df..de2e7bcf4784 100644
---- a/drivers/message/fusion/mptlan.c
-+++ b/drivers/message/fusion/mptlan.c
-@@ -1433,7 +1433,9 @@ mptlan_remove(struct pci_dev *pdev)
- {
- 	MPT_ADAPTER 		*ioc = pci_get_drvdata(pdev);
- 	struct net_device	*dev = ioc->netdev;
-+	struct mpt_lan_priv *priv = netdev_priv(dev);
- 
-+	cancel_delayed_work_sync(&priv->post_buckets_task);
- 	if(dev != NULL) {
- 		unregister_netdev(dev);
- 		free_netdev(dev);
--- 
-2.25.1
+No, I don't think so.
 
+julia
+
+>
+>
+> > > this error reported by chechpatch.pl
+> > this error is reported by checkpatch.
+> >
+> > > "ERROR: Macros with complex values should be enclosed in parentheses"
+> > >
+> > > for ADE7854_SPI_SLOW, ADE7854_SPI_BURST and ADE7854_SPI_FAST
+> > > macros and this error fixed by enclose these macros in parentheses.
+> > The last two lines aren't needed.  One can easily see that from looking at
+> > the patch.
+>
+>
+> Got it, Thank you.
+>
+> Menna
+>
+> > julia
+> >
+> > > Signed-off-by: Menna Mahmoud <eng.mennamahmoud.mm@gmail.com>
+> > > ---
+> > >   drivers/staging/iio/meter/ade7854.h | 6 +++---
+> > >   1 file changed, 3 insertions(+), 3 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/iio/meter/ade7854.h
+> > > b/drivers/staging/iio/meter/ade7854.h
+> > > index 7a49f8f1016f..41eeedef569b 100644
+> > > --- a/drivers/staging/iio/meter/ade7854.h
+> > > +++ b/drivers/staging/iio/meter/ade7854.h
+> > > @@ -139,9 +139,9 @@
+> > >   #define ADE7854_MAX_RX    7
+> > >   #define ADE7854_STARTUP_DELAY 1000
+> > >
+> > > -#define ADE7854_SPI_SLOW	(u32)(300 * 1000)
+> > > -#define ADE7854_SPI_BURST	(u32)(1000 * 1000)
+> > > -#define ADE7854_SPI_FAST	(u32)(2000 * 1000)
+> > > +#define ADE7854_SPI_SLOW	((u32)(300 * 1000))
+> > > +#define ADE7854_SPI_BURST	((u32)(1000 * 1000))
+> > > +#define ADE7854_SPI_FAST	((u32)(2000 * 1000))
+> > >
+> > >   /**
+> > >    * struct ade7854_state - device instance specific data
+> > > --
+> > > 2.34.1
+> > >
+> > >
+> > >
+>
+--8323329-1402912152-1678631138=:2865--
