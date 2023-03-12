@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0060E6B6AE4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:07:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B796B6AE5
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:07:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230503AbjCLUHw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:07:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34536 "EHLO
+        id S231130AbjCLUHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:07:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229552AbjCLUHq (ORCPT
+        with ESMTP id S230465AbjCLUHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:07:46 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B892BEEE;
-        Sun, 12 Mar 2023 13:07:43 -0700 (PDT)
+        Sun, 12 Mar 2023 16:07:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8076B2C645;
+        Sun, 12 Mar 2023 13:07:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B4FF7B80C63;
-        Sun, 12 Mar 2023 20:07:42 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42B51C433A0;
-        Sun, 12 Mar 2023 20:07:40 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0554E60FB8;
+        Sun, 12 Mar 2023 20:07:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8147C4339B;
+        Sun, 12 Mar 2023 20:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678651661;
-        bh=eb6XlOAtcwsmZEKl2YAULQA72a4PFBl0XG4e86AOG7E=;
+        s=k20201202; t=1678651663;
+        bh=7GkS17GKl3ZNTSvkKca585P/2hq5bbCvfZPAnQXncoE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ICqCjNzlG7BWQLdlKpX31emGfOIsOxMXT6zT8FxpAHcTHChHGk0bYhF7OmPqOuw2D
-         2DyHUx7FZSQUNOUCXpCahhEGayoWM1xj87lExVQTn3tSkaGQSIH8Hn6aTG1F/fcWKq
-         e7pE0cI5aErc9gg5AvEW6rBZ36cqmoc0dX7YvuBNp6T2YsOQyqyuYG31063hO2fqlS
-         dgNPxn7QGynCuOUARe0F5qqKCChLundrYQ564n5WW+8112tkYIC7l+5pbcahPc7Bn7
-         n7zjuBzgIP33jBSLtNR3MUeuF4auXvgn8sc2vhyHJ3DC7YASAdPxeKZNWQ0B0f28cV
-         uAfScRKIPDnHQ==
+        b=YCjMvfW9dYEoxWjXpcJfSb5m8XT2UYoAZQmu4xJNfqkg2qYD4b6AkH0CVULZsSyvM
+         wngTq1IEnZK7wOyjmH1739oHUSphgSTLwG2lrmrCLHsWQncsaSJvyEbftczpbjn3Zv
+         j5slAF4km3GbLTn5Y2Shl2M8So+WBDgql9RLsFahIg4RsDVNwTnHivQCWDlEhzX5uW
+         PImJGbSrw+Z6Uki8Hnd+bsinwqE1CMd88kAMK41xUcEZQIn7LGOlVjxiQ/xfhe6ImY
+         COxxaK04Je7w1m2DMJirsYvi9CRsDOHp79/lvyu/Zzu7W3oYATId4YDmM9bgig6mw+
+         sPkb54lHvRGZw==
 From:   Masahiro Yamada <masahiroy@kernel.org>
 To:     linux-kbuild@vger.kernel.org
 Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
@@ -40,9 +40,9 @@ Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
         Nathan Chancellor <nathan@kernel.org>,
         Nick Desaulniers <ndesaulniers@google.com>,
         Nicolas Schier <nicolas@fjasle.eu>
-Subject: [PATCH 3/6] kbuild: deb-pkg: set CROSS_COMPILE only when undefined
-Date:   Mon, 13 Mar 2023 05:07:28 +0900
-Message-Id: <20230312200731.599706-4-masahiroy@kernel.org>
+Subject: [PATCH 4/6] kbuild: deb-pkg: split image and debug objects staging out into functions
+Date:   Mon, 13 Mar 2023 05:07:29 +0900
+Message-Id: <20230312200731.599706-5-masahiroy@kernel.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230312200731.599706-1-masahiroy@kernel.org>
 References: <20230312200731.599706-1-masahiroy@kernel.org>
@@ -57,57 +57,269 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Commit 3ab18a625ce4 ("kbuild: deb-pkg: improve the usability of source
-package") set needless CROSS_COMPILE.
+Prepare for the refactoring in the next commit.
 
-For example, 'make allnoconfig bindeb-pkg' on a x86_64 system will set
-CROSS_COMPILE=i686-linux-gnu-, where the biarch compiler 'gcc' should
-work for building the i386 kernel.
-
-  $ uname -m
-  x86_64
-  $ make allnoconfig bindeb-pkg >/dev/null
-  dpkg-architecture: warning: specified GNU system type i686-linux-gnu does not match CC system type x86_64-linux-gnu, try setting a correct CC environment variable
-   dpkg-source --before-build .
-   debian/rules binary
-  scripts/Kconfig.include:39: C compiler 'i686-linux-gnu-gcc' not found
-  make[6]: *** [scripts/kconfig/Makefile:77: olddefconfig] Error 1
-  make[5]: *** [Makefile:693: olddefconfig] Error 2
-  make[4]: *** [Makefile:358: __build_one_by_one] Error 2
-  make[3]: *** [debian/rules:7: build-arch] Error 2
-  dpkg-buildpackage: error: debian/rules binary subprocess returned exit status 2
-  make[2]: *** [scripts/Makefile.package:127: bindeb-pkg] Error 2
-  make[1]: *** [Makefile:1657: bindeb-pkg] Error 2
-  make: *** [Makefile:358: __build_one_by_one] Error 2
-
-Check whether CROSS_COMPILE is defined, instead of whether it is non-empty.
-
-If you invoke debian/rules via Kbuild, CROSS_COMPILE is always defined
-in the top Makefile.
-
-Fixes: 3ab18a625ce4 ("kbuild: deb-pkg: improve the usability of source package")
 Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 ---
 
- scripts/package/deb-build-option | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ scripts/package/builddeb | 222 ++++++++++++++++++++-------------------
+ 1 file changed, 116 insertions(+), 106 deletions(-)
 
-diff --git a/scripts/package/deb-build-option b/scripts/package/deb-build-option
-index bd53624318f2..7950eff01781 100755
---- a/scripts/package/deb-build-option
-+++ b/scripts/package/deb-build-option
-@@ -1,9 +1,8 @@
- #!/bin/sh
- # SPDX-License-Identifier: GPL-2.0-only
+diff --git a/scripts/package/builddeb b/scripts/package/builddeb
+index ff5e7d8e380b..906889b304a4 100755
+--- a/scripts/package/builddeb
++++ b/scripts/package/builddeb
+@@ -51,6 +51,115 @@ create_package() {
+ 	dpkg-deb $dpkg_deb_opts ${KDEB_COMPRESS:+-Z$KDEB_COMPRESS} --build "$pdir" ..
+ }
  
--# Set up CROSS_COMPILE if we are cross-compiling, but not called from the
--# kernel toplevel Makefile
--if [ -z "${CROSS_COMPILE}${cross_compiling}" -a "${DEB_HOST_ARCH}" != "${DEB_BUILD_ARCH}" ]; then
-+# Set up CROSS_COMPILE if not defined yet
-+if [ "${CROSS_COMPILE+set}" != "set" -a "${DEB_HOST_ARCH}" != "${DEB_BUILD_ARCH}" ]; then
- 	echo CROSS_COMPILE=${DEB_HOST_GNU_TYPE}-
++install_linux_image () {
++	pdir=$1
++	pname=$2
++
++	rm -rf ${pdir}
++
++	# Only some architectures with OF support have this target
++	if is_enabled CONFIG_OF_EARLY_FLATTREE && [ -d "${srctree}/arch/${SRCARCH}/boot/dts" ]; then
++		${MAKE} -f ${srctree}/Makefile INSTALL_DTBS_PATH="${pdir}/usr/lib/linux-image-${KERNELRELEASE}" dtbs_install
++	fi
++
++	if is_enabled CONFIG_MODULES; then
++		${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH="${pdir}" modules_install
++		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/build"
++		rm -f "${pdir}/lib/modules/${KERNELRELEASE}/source"
++		if [ "${SRCARCH}" = um ] ; then
++			mkdir -p "${pdir}/usr/lib/uml/modules"
++			mv "${pdir}/lib/modules/${KERNELRELEASE}" "${pdir}/usr/lib/uml/modules/${KERNELRELEASE}"
++		fi
++	fi
++
++	# Install the kernel
++	if [ "${ARCH}" = um ] ; then
++		mkdir -p "${pdir}/usr/bin" "${pdir}/usr/share/doc/${pname}"
++		cp System.map "${pdir}/usr/lib/uml/modules/${KERNELRELEASE}/System.map"
++		cp ${KCONFIG_CONFIG} "${pdir}/usr/share/doc/${pname}/config"
++		gzip "${pdir}/usr/share/doc/${pname}/config"
++	else
++		mkdir -p "${pdir}/boot"
++		cp System.map "${pdir}/boot/System.map-${KERNELRELEASE}"
++		cp ${KCONFIG_CONFIG} "${pdir}/boot/config-${KERNELRELEASE}"
++	fi
++
++	# Not all arches have the same installed path in debian
++	# XXX: have each arch Makefile export a variable of the canonical image install
++	# path instead
++	case "${SRCARCH}" in
++	um)
++		installed_image_path="usr/bin/linux-${KERNELRELEASE}";;
++	parisc|mips|powerpc)
++		installed_image_path="boot/vmlinux-${KERNELRELEASE}";;
++	*)
++		installed_image_path="boot/vmlinuz-${KERNELRELEASE}";;
++	esac
++	cp "$(${MAKE} -s -f ${srctree}/Makefile image_name)" "${pdir}/${installed_image_path}"
++
++	# Install the maintainer scripts
++	# Note: hook scripts under /etc/kernel are also executed by official Debian
++	# kernel packages, as well as kernel packages built using make-kpkg.
++	# make-kpkg sets $INITRD to indicate whether an initramfs is wanted, and
++	# so do we; recent versions of dracut and initramfs-tools will obey this.
++	debhookdir=${KDEB_HOOKDIR:-/etc/kernel}
++	for script in postinst postrm preinst prerm; do
++		mkdir -p "${pdir}${debhookdir}/${script}.d"
++
++		mkdir -p "${pdir}/DEBIAN"
++		cat <<-EOF > "${pdir}/DEBIAN/${script}"
++
++		#!/bin/sh
++
++		set -e
++
++		# Pass maintainer script parameters to hook scripts
++		export DEB_MAINT_PARAMS="\$*"
++
++		# Tell initramfs builder whether it's wanted
++		export INITRD=$(if_enabled_echo CONFIG_BLK_DEV_INITRD Yes No)
++
++		test -d ${debhookdir}/${script}.d && run-parts --arg="${KERNELRELEASE}" --arg="/${installed_image_path}" ${debhookdir}/${script}.d
++		exit 0
++		EOF
++		chmod 755 "${pdir}/DEBIAN/${script}"
++	done
++}
++
++install_linux_image_dbg () {
++	pdir=$1
++	image_pdir=$2
++
++	rm -rf ${pdir}
++
++	for module in $(find ${image_pdir}/lib/modules/ -name *.ko -printf '%P\n'); do
++		module=lib/modules/${module}
++		mkdir -p $(dirname ${pdir}/usr/lib/debug/${module})
++		# only keep debug symbols in the debug file
++		${OBJCOPY} --only-keep-debug ${image_pdir}/${module} ${pdir}/usr/lib/debug/${module}
++		# strip original module from debug symbols
++		${OBJCOPY} --strip-debug ${image_pdir}/${module}
++		# then add a link to those
++		${OBJCOPY} --add-gnu-debuglink=${pdir}/usr/lib/debug/${module} ${image_pdir}/${module}
++	done
++
++	# re-sign stripped modules
++	if is_enabled CONFIG_MODULE_SIG_ALL; then
++		${MAKE} -f ${srctree}/Makefile INSTALL_MOD_PATH="${image_pdir}" modules_sign
++	fi
++
++	# Build debug package
++	# Different tools want the image in different locations
++	# perf
++	mkdir -p ${pdir}/usr/lib/debug/lib/modules/${KERNELRELEASE}/
++	cp vmlinux ${pdir}/usr/lib/debug/lib/modules/${KERNELRELEASE}/
++	# systemtap
++	mkdir -p ${pdir}/usr/lib/debug/boot/
++	ln -s ../lib/modules/${KERNELRELEASE}/vmlinux ${pdir}/usr/lib/debug/boot/vmlinux-${KERNELRELEASE}
++	# kdump-tools
++	ln -s lib/modules/${KERNELRELEASE}/vmlinux ${pdir}/usr/lib/debug/vmlinux-${KERNELRELEASE}
++}
++
+ deploy_kernel_headers () {
+ 	pdir=$1
+ 
+@@ -105,8 +214,6 @@ deploy_libc_headers () {
+ }
+ 
+ version=$KERNELRELEASE
+-tmpdir=debian/linux-image
+-dbg_dir=debian/linux-image-dbg
+ packagename=linux-image-$version
+ dbg_packagename=$packagename-dbg
+ 
+@@ -114,97 +221,7 @@ if [ "$ARCH" = "um" ] ; then
+ 	packagename=user-mode-linux-$version
  fi
  
+-# Not all arches have the same installed path in debian
+-# XXX: have each arch Makefile export a variable of the canonical image install
+-# path instead
+-case $ARCH in
+-um)
+-	installed_image_path="usr/bin/linux-$version"
+-	;;
+-parisc|mips|powerpc)
+-	installed_image_path="boot/vmlinux-$version"
+-	;;
+-*)
+-	installed_image_path="boot/vmlinuz-$version"
+-esac
+-
+-BUILD_DEBUG=$(if_enabled_echo CONFIG_DEBUG_INFO Yes)
+-
+-# Setup the directory structure
+-rm -rf "$tmpdir" "$dbg_dir" debian/files
+-mkdir -m 755 -p "$tmpdir/DEBIAN"
+-mkdir -p "$tmpdir/lib" "$tmpdir/boot"
+-
+-# Install the kernel
+-if [ "$ARCH" = "um" ] ; then
+-	mkdir -p "$tmpdir/usr/lib/uml/modules/$version" "$tmpdir/usr/bin" "$tmpdir/usr/share/doc/$packagename"
+-	cp System.map "$tmpdir/usr/lib/uml/modules/$version/System.map"
+-	cp $KCONFIG_CONFIG "$tmpdir/usr/share/doc/$packagename/config"
+-	gzip "$tmpdir/usr/share/doc/$packagename/config"
+-else
+-	cp System.map "$tmpdir/boot/System.map-$version"
+-	cp $KCONFIG_CONFIG "$tmpdir/boot/config-$version"
+-fi
+-cp "$($MAKE -s -f $srctree/Makefile image_name)" "$tmpdir/$installed_image_path"
+-
+-if is_enabled CONFIG_OF_EARLY_FLATTREE; then
+-	# Only some architectures with OF support have this target
+-	if [ -d "${srctree}/arch/$SRCARCH/boot/dts" ]; then
+-		$MAKE -f $srctree/Makefile INSTALL_DTBS_PATH="$tmpdir/usr/lib/$packagename" dtbs_install
+-	fi
+-fi
+-
+-if is_enabled CONFIG_MODULES; then
+-	INSTALL_MOD_PATH="$tmpdir" $MAKE -f $srctree/Makefile modules_install
+-	rm -f "$tmpdir/lib/modules/$version/build"
+-	rm -f "$tmpdir/lib/modules/$version/source"
+-	if [ "$ARCH" = "um" ] ; then
+-		mv "$tmpdir/lib/modules/$version"/* "$tmpdir/usr/lib/uml/modules/$version/"
+-		rmdir "$tmpdir/lib/modules/$version"
+-	fi
+-	if [ -n "$BUILD_DEBUG" ] ; then
+-		for module in $(find $tmpdir/lib/modules/ -name *.ko -printf '%P\n'); do
+-			module=lib/modules/$module
+-			mkdir -p $(dirname $dbg_dir/usr/lib/debug/$module)
+-			# only keep debug symbols in the debug file
+-			$OBJCOPY --only-keep-debug $tmpdir/$module $dbg_dir/usr/lib/debug/$module
+-			# strip original module from debug symbols
+-			$OBJCOPY --strip-debug $tmpdir/$module
+-			# then add a link to those
+-			$OBJCOPY --add-gnu-debuglink=$dbg_dir/usr/lib/debug/$module $tmpdir/$module
+-		done
+-
+-		# resign stripped modules
+-		if is_enabled CONFIG_MODULE_SIG_ALL; then
+-			INSTALL_MOD_PATH="$tmpdir" $MAKE -f $srctree/Makefile modules_sign
+-		fi
+-	fi
+-fi
+-
+-# Install the maintainer scripts
+-# Note: hook scripts under /etc/kernel are also executed by official Debian
+-# kernel packages, as well as kernel packages built using make-kpkg.
+-# make-kpkg sets $INITRD to indicate whether an initramfs is wanted, and
+-# so do we; recent versions of dracut and initramfs-tools will obey this.
+-debhookdir=${KDEB_HOOKDIR:-/etc/kernel}
+-for script in postinst postrm preinst prerm ; do
+-	mkdir -p "$tmpdir$debhookdir/$script.d"
+-	cat <<EOF > "$tmpdir/DEBIAN/$script"
+-#!/bin/sh
+-
+-set -e
+-
+-# Pass maintainer script parameters to hook scripts
+-export DEB_MAINT_PARAMS="\$*"
+-
+-# Tell initramfs builder whether it's wanted
+-export INITRD=$(if_enabled_echo CONFIG_BLK_DEV_INITRD Yes No)
+-
+-test -d $debhookdir/$script.d && run-parts --arg="$version" --arg="/$installed_image_path" $debhookdir/$script.d
+-exit 0
+-EOF
+-	chmod 755 "$tmpdir/DEBIAN/$script"
+-done
++rm -f debian/files
+ 
+ if [ "$ARCH" != "um" ]; then
+ 	if is_enabled CONFIG_MODULES; then
+@@ -216,20 +233,13 @@ if [ "$ARCH" != "um" ]; then
+ 	create_package linux-libc-dev debian/linux-libc-dev
+ fi
+ 
+-create_package "$packagename" "$tmpdir"
++install_linux_image debian/linux-image "$packagename"
+ 
+-if [ -n "$BUILD_DEBUG" ] ; then
+-	# Build debug package
+-	# Different tools want the image in different locations
+-	# perf
+-	mkdir -p $dbg_dir/usr/lib/debug/lib/modules/$version/
+-	cp vmlinux $dbg_dir/usr/lib/debug/lib/modules/$version/
+-	# systemtap
+-	mkdir -p $dbg_dir/usr/lib/debug/boot/
+-	ln -s ../lib/modules/$version/vmlinux $dbg_dir/usr/lib/debug/boot/vmlinux-$version
+-	# kdump-tools
+-	ln -s lib/modules/$version/vmlinux $dbg_dir/usr/lib/debug/vmlinux-$version
+-	create_package "$dbg_packagename" "$dbg_dir"
++if is_enabled CONFIG_DEBUG_INFO; then
++	install_linux_image_dbg debian/linux-image-dbg debian/linux-image
++	create_package "$dbg_packagename" debian/linux-image-dbg
+ fi
+ 
++create_package "$packagename" debian/linux-image
++
+ exit 0
 -- 
 2.34.1
 
