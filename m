@@ -2,72 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B6326B64E4
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:21:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2270B6B64EB
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:29:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229737AbjCLKVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58356 "EHLO
+        id S229964AbjCLK3X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:29:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229723AbjCLKVv (ORCPT
+        with ESMTP id S229614AbjCLK3U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:21:51 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D65B639B8E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:21:46 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id x3so37579098edb.10
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:21:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678616505;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1h/w0HfIp0xEemsSqF/agYlc0ey54oyjIBslB0ucKas=;
-        b=quXzSnG3FdZOEbXWkvQR9NNCJ4zfohuEgbZ0YJJbsAJm5F1bVEszvCM0KXoxJZa0V3
-         Bsst+7x5iYiwY8d6JNS1hP5fy5HVQwVo0fv73AdX/OSCP3xHpbydVHWVNgG45I9ohGqb
-         aDtNJQIOEWja5fW+/VpO6q5OzDVUswz6PbXIOuWDvXCrcjN/DhrM4wCLl10paIHdZdil
-         tiuc703Gz/WWnnZXBHq0WWy30zqF8O6Sf9UwTHBpNEIyTVi0+/fI1zSN/ptrHITt6bzQ
-         4RF9WoRJ/9YWeJOiEjOyBMDv+OGUgYIWbXaeeLCpRrq3SO2irMrIZt5stDBO50Qk27KA
-         JIRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678616505;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1h/w0HfIp0xEemsSqF/agYlc0ey54oyjIBslB0ucKas=;
-        b=jIOuC3C1RAwYtfxNjQ82AvR/z/1wcuHr6dSy18xtqbG4W4IyMilLsFjMzt9hc/0K+Y
-         /yXpH0fIMQ4SdWqA0yqNHsxj5Zimw15iCWLK6h4DWTE7/KKG4BuP3UzRYFsxZacPSpxs
-         kSAbdpZH6+ZNc+1XfwD0fTaPPNNmjSwWQZ6eU52TfNB9guevRxnWPjzS9D7XoRSQ278r
-         goX56hlbWtgkDeh/t3rmIyJL5Q2BFQ9PK9Z8sTY/1PCHzhOXKZvRvxYsD9CVbo6dP+ar
-         O/9fMOGMn/SkQSKLjOUcR/Ri7wOS3MOLJfzMALiqlhlk/xkMnpkbc0RbPSWOa9k7fKzK
-         etcg==
-X-Gm-Message-State: AO0yUKUAHjkVupLNDdhGOxUigVdpArq8XWkNKdJ8c468nQGoZal9f8ju
-        3Hg1ajmd4Fy59WmduQOPHHqVWA==
-X-Google-Smtp-Source: AK7set86eqo6coYB8MEUcm4PlbowNWUch+/+yYuw9VDE2pQH7ILN4t3SPyWQR5JG7VowXLLBcknOlA==
-X-Received: by 2002:a17:906:99c9:b0:8b2:5262:562c with SMTP id s9-20020a17090699c900b008b25262562cmr30315587ejn.34.1678616505285;
-        Sun, 12 Mar 2023 03:21:45 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id t29-20020a50d71d000000b004fb419921e2sm875760edi.57.2023.03.12.03.21.44
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 03:21:44 -0700 (PDT)
-Message-ID: <e62cfcf5-e43a-ee14-f290-9004818df839@linaro.org>
-Date:   Sun, 12 Mar 2023 11:21:44 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] leds: tlc591xx: Mark OF related data as maybe unused
-Content-Language: en-US
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     Lee Jones <lee@kernel.org>, linux-leds@vger.kernel.org,
+        Sun, 12 Mar 2023 06:29:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97FA837577;
+        Sun, 12 Mar 2023 03:29:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49D13B8074D;
+        Sun, 12 Mar 2023 10:29:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D83A3C433D2;
+        Sun, 12 Mar 2023 10:29:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678616956;
+        bh=aSQAHnGftmgjvVgaTHrVDh6VUtyePFdAf7NI0ZkUpFE=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=A1hM2L72FEiLsJdNdKRTCnVOURRRH/9zZF9irtqvQpEkX01wEH+6If3trtpJu7+Hl
+         Pe4gW2xNJk2bLCWr05319WycfTg5fY7SphFt3vgqXsFm+ozWSipiw46UBxfix4JAev
+         YVMkryuxVlI2A3K+g8L8wqzEQMVYiBIEPRw+jVJctfQc/4Ek5kslu/o3A4M0o7pqR0
+         pGcq2Kg3VqE2GYAcZswKhXP/NTX3wv/A787HUJ9VMR126zJRAkX4VOiptOV3odEhO5
+         VeY2ANQesQ8N7ZQYdp0t+uBg3A2hDeFEk/13/NkFd/HqoIf07IVXWhc6jpNDCr1o15
+         NUjUpolPf4FrA==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=wait-a-minute.misterjones.org)
+        by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.95)
+        (envelope-from <maz@kernel.org>)
+        id 1pbIwy-00GyR2-D6;
+        Sun, 12 Mar 2023 10:29:14 +0000
+Date:   Sun, 12 Mar 2023 10:29:11 +0000
+Message-ID: <87edpu5klk.wl-maz@kernel.org>
+From:   Marc Zyngier <maz@kernel.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Oliver Upton <oliver.upton@linux.dev>,
+        James Morse <james.morse@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, linux-kselftest@vger.kernel.org,
         linux-kernel@vger.kernel.org
-References: <20230311111717.252019-1-krzysztof.kozlowski@linaro.org>
- <ZAxnl9zn/IrHMx9S@duo.ucw.cz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZAxnl9zn/IrHMx9S@duo.ucw.cz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] KVM: selftests: Add coverage of MTE system registers
+In-Reply-To: <20230308-kvm-arm64-test-mte-regs-v1-1-f92a377e486f@kernel.org>
+References: <20230308-kvm-arm64-test-mte-regs-v1-1-f92a377e486f@kernel.org>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/27.1
+ (x86_64-pc-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: broonie@kernel.org, oliver.upton@linux.dev, james.morse@arm.com, suzuki.poulose@arm.com, yuzenghui@huawei.com, pbonzini@redhat.com, shuah@kernel.org, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,19 +72,116 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 12:35, Pavel Machek wrote:
-> On Sat 2023-03-11 12:17:17, Krzysztof Kozlowski wrote:
->> The driver can be compile tested with !CONFIG_OF making certain data
->> unused:
->>
->>   drivers/leds/leds-tlc591xx.c:138:34: error: ‘of_tlc591xx_leds_match’ defined but not used [-Werror=unused-const-variable=]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Wed, 08 Mar 2023 17:12:26 +0000,
+Mark Brown <broonie@kernel.org> wrote:
 > 
-> Acked-by: Pavel Machek <pavel@ucw.cz>
+> Verify that a guest with MTE has access to the MTE registers. Since MTE is
+> enabled as a VM wide capability we need to add support for doing that in
+> the process.
+> 
+> Signed-off-by: Mark Brown <broonie@kernel.org>
+> ---
+>  tools/testing/selftests/kvm/aarch64/get-reg-list.c | 33 ++++++++++++++++++++++
+>  1 file changed, 33 insertions(+)
+> 
+> diff --git a/tools/testing/selftests/kvm/aarch64/get-reg-list.c b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> index d287dd2cac0a..63d6a9046702 100644
+> --- a/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> +++ b/tools/testing/selftests/kvm/aarch64/get-reg-list.c
+> @@ -42,6 +42,7 @@ struct reg_sublist {
+>  	long capability;
+>  	int feature;
+>  	bool finalize;
+> +	bool enable_capability;
+>  	__u64 *regs;
+>  	__u64 regs_n;
+>  	__u64 *rejects_set;
+> @@ -404,6 +405,18 @@ static void check_supported(struct vcpu_config *c)
+>  	}
+>  }
+>  
+> +static void enable_capabilities(struct kvm_vm *vm, struct vcpu_config *c)
+> +{
+> +	struct reg_sublist *s;
+> +
+> +	for_each_sublist(c, s) {
+> +		if (!s->enable_capability)
+> +			continue;
+> +
+> +		vm_enable_cap(vm, s->capability, 1);
+> +	}
+> +}
+> +
+>  static bool print_list;
+>  static bool print_filtered;
+>  static bool fixup_core_regs;
+> @@ -420,6 +433,7 @@ static void run_test(struct vcpu_config *c)
+>  	check_supported(c);
+>  
+>  	vm = vm_create_barebones();
+> +	enable_capabilities(vm, c);
+>  	prepare_vcpu_init(c, &init);
+>  	vcpu = __vm_vcpu_add(vm, 0);
+>  	aarch64_vcpu_setup(vcpu, &init);
+> @@ -1049,6 +1063,13 @@ static __u64 pauth_generic_regs[] = {
+>  	ARM64_SYS_REG(3, 0, 2, 3, 1),	/* APGAKEYHI_EL1 */
+>  };
+>  
+> +static __u64 mte_regs[] = {
+> +	ARM64_SYS_REG(3, 0, 1, 0, 5),	/* RGSR_EL1 */
+> +	ARM64_SYS_REG(3, 0, 1, 0, 6),	/* GCR_EL1 */
+> +	ARM64_SYS_REG(3, 0, 5, 6, 0),	/* TFSR_EL1 */
+> +	ARM64_SYS_REG(3, 0, 5, 6, 1),	/* TFSRE0_EL1 */
+> +};
+> +
+>  #define BASE_SUBLIST \
+>  	{ "base", .regs = base_regs, .regs_n = ARRAY_SIZE(base_regs), }
+>  #define VREGS_SUBLIST \
+> @@ -1075,6 +1096,9 @@ static __u64 pauth_generic_regs[] = {
+>  		.regs		= pauth_generic_regs,			\
+>  		.regs_n		= ARRAY_SIZE(pauth_generic_regs),	\
+>  	}
+> +#define MTE_SUBLIST \
+> +	{ "mte", .capability = KVM_CAP_ARM_MTE, .enable_capability = true,  \
+> +	  .regs = mte_regs, .regs_n = ARRAY_SIZE(mte_regs), }
+>  
+>  static struct vcpu_config vregs_config = {
+>  	.sublists = {
+> @@ -1123,6 +1147,14 @@ static struct vcpu_config pauth_pmu_config = {
+>  	{0},
+>  	},
+>  };
+> +static struct vcpu_config mte_config = {
+> +	.sublists = {
+> +	BASE_SUBLIST,
+> +	VREGS_SUBLIST,
+> +	MTE_SUBLIST,
+> +	{0},
+> +	},
+> +};
+>  
+>  static struct vcpu_config *vcpu_configs[] = {
+>  	&vregs_config,
+> @@ -1131,5 +1163,6 @@ static struct vcpu_config *vcpu_configs[] = {
+>  	&sve_pmu_config,
+>  	&pauth_config,
+>  	&pauth_pmu_config,
+> +	&mte_config,
+>  };
+>  static int vcpu_configs_n = ARRAY_SIZE(vcpu_configs);
+> 
 
-I was thinking you will take it... or the Ack is for Lee then?
+Is there any reason why we sidestep the combinations of MTE with PAuth
+and PMU? I know this leads to an exponential set growth, but this is
+the very purpose of this test, and we found bugs related to this in
+the past.
 
-Best regards,
-Krzysztof
+A good first step would be to be able to build these combinations
+dynamically, and only then add new sublists to the mix.
 
+Thanks,
+
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
