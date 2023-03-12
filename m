@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2C7E6B6615
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 363F36B6628
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:11:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCLNE3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:04:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57974 "EHLO
+        id S229740AbjCLNK6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:10:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCLNE1 (ORCPT
+        with ESMTP id S229509AbjCLNKz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:04:27 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADE7E3D911;
-        Sun, 12 Mar 2023 06:04:26 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id v21so53534ple.9;
-        Sun, 12 Mar 2023 06:04:26 -0700 (PDT)
+        Sun, 12 Mar 2023 09:10:55 -0400
+Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4AB84614A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:10:52 -0700 (PDT)
+Received: by mail-lf1-x12b.google.com with SMTP id g17so12449119lfv.4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:10:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678626266;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=C88fNbpNNCW2fZzaHvdAaN4smyngfaWHvN+4TC6Vu/U=;
-        b=kFCMPQc2sYve/lVbIe5ls9dYN2LyCmd5x8+hMcazTbYR9xurnuNhzQ2Y0slbv7wd5L
-         6EJ35TorXe63WI+WssUbGxjKRnBrkU6QRY3UBAj5J1lIiBi/tRoukyeoCwPWfn1FcSvj
-         7jvxgwdBXFP9aK2Us1XOkOrchnH9yg3XQPcs0jb79r7z/CEAu5/ArcttodT4NZJWXYtT
-         iuaR+o8uWnaKHWr2IgkrHLNHzzJk+yL4wPBd0xRsRM9kQnuEe+DzsiYsnGs6ArTW3PhK
-         +DK04Jia/RfxHevH3+rAut53e67/N0RfN8QIgoamVaODHsYHaa7m7dVqnAed1JiMSAUl
-         8WHw==
+        d=gmail.com; s=20210112; t=1678626650;
+        h=cc:to:subject:date:from:in-reply-to:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=tDIef+aPGuB5wQknGJ7abVMxEUnE+NE/6MUxxwCrbfI=;
+        b=NMdrxhVttGmcRNAsGiInCqSOxvErRHAm7Ww0QEvoQulpE8GIZZmdUI6Qc8Bar5z5iO
+         XKZ8HNJwJG6TmE8bGZW5D/Am6Uj4VNukG0U/N0ts2NEWCJtgWV8Rc+/PNQIg0p6Dl8Zk
+         L+xSPXHyeoRAsOamDZ0bsYg9iPod2caaCBGSpht57kYSTpF6NK+6ikirzMyCQq2OsX0b
+         nUYDf4sopMYkRHd6L8Zs7tSQPmaORyXkXePnFGlX+alkIVTuKbOHyTDyaZtXLZmOnffm
+         c+GAaXydNZbd1A402ZN/wSeIkMMIgVn1bMdm9OdvGG/lI64E45a3wdpEf/eOu95e6iPk
+         +psA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626266;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C88fNbpNNCW2fZzaHvdAaN4smyngfaWHvN+4TC6Vu/U=;
-        b=ltars5YyvvPbFLaqfjtwQ/Kq/5xADuysAr+n9tSxR56kvV9gPFbS+W5aSnHJuKH+L0
-         OjEk6oB6/JXqGucTsI1ZeZecO0Rx71518G85TJ2vWYGM2h7HDG4cqUJgHVNJf8UwBxDt
-         rsEKPjD3/6ifB9zPC9EXb7kjmPvfH/OP5wE0PwpCAPGp85bR7SYy+UmuvOYJKqBT1Am+
-         lDbjMFtxe0jPd6zmXi3ZJwAsm1WbHhrq2lQMjIOo4/Bigz6adP48wy13RdaX1C+Ptuuv
-         RDSqJJ8S+x6w8SKL0rNDDSFH76Oq9gDKgWDqOqhN5Fy66lf7mwXzurFQ4j28grvsEXc6
-         8vHQ==
-X-Gm-Message-State: AO0yUKWHB2Lip4oEIFQ/FNXPpU/XTedwR07epJx2vaoBLiuBzIFdlzdE
-        4SGusTBwhpN1ySOHbHQ7EsqclwFuH6JHWL8j
-X-Google-Smtp-Source: AK7set99HL/INURs2FdURDjFPoChaZAtIVfwXX188EPMfu1XBIsb0kvse3VwuBAqN+9DXJPqMewUBw==
-X-Received: by 2002:a17:902:c404:b0:19f:e9e7:4cb with SMTP id k4-20020a170902c40400b0019fe9e704cbmr1677531plk.45.1678626266013;
-        Sun, 12 Mar 2023 06:04:26 -0700 (PDT)
-Received: from kim-GL702ZC.. ([118.32.98.101])
-        by smtp.gmail.com with ESMTPSA id kp15-20020a170903280f00b0019926c77577sm2858624plb.90.2023.03.12.06.04.22
+        d=1e100.net; s=20210112; t=1678626650;
+        h=cc:to:subject:date:from:in-reply-to:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=tDIef+aPGuB5wQknGJ7abVMxEUnE+NE/6MUxxwCrbfI=;
+        b=FJTP/k2eQvDYpQbMo0is+/jl1WTR9lJRPq/3yIKgzUEbV4OL83QYIqPZmyfxeV56hg
+         0JHMam/NAb2F/IS6T741Ui8J1wiw3KMsVV+xZO8J6KnsRSV2hQqsFyrOLn0DO9WWRpUv
+         jKGbYArIerl+DbLnejA9b7BYXpdO/SayFGVb/0ETYft0Ok5pAiKoNlqG0RZs7AfWPz1q
+         FEyjF4v1G6De4yUSwHEdNeHSa9uk7W9mKq3b8AYqtOB2y4fW8WVRn6kjHSnDqJvWip3M
+         rZpU5my1pXUmERU0OFn+vfSP3jlxYP0FBQTF1so7SazQiVeuxpsWb7LBikqX6qOpxowQ
+         yWwg==
+X-Gm-Message-State: AO0yUKXIUOYcpjHbAjP+G3Cw4Yv96jFNC3yDcvqcCxpb6F9esnQtl+qb
+        ab0kAd58siVLRio0oLPcGE9k1UXxHKv1adDX
+X-Google-Smtp-Source: AK7set/ZuhOlFPVW8Ud3ll9chVvSzx40ZBlSOIUr5smic+z5WIGbrzDYvp/9sDRqVhSJvYVnDiSZ5A==
+X-Received: by 2002:ac2:539a:0:b0:4cc:b784:c47e with SMTP id g26-20020ac2539a000000b004ccb784c47emr8446381lfh.62.1678626650658;
+        Sun, 12 Mar 2023 06:10:50 -0700 (PDT)
+Received: from 0001-dt-bindings-exynos-dw-mshc-common-add-exynos78xx-var.patch (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id c24-20020a2e6818000000b00290716d65dcsm644822lja.136.2023.03.12.06.10.49
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:04:25 -0700 (PDT)
-From:   Paran Lee <p4ranlee@gmail.com>
-To:     Jiri Olsa <jolsa@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Arnaldo Carvalho de Melo <acme@redhat.com>
-Cc:     Anton Blanchard <anton@ozlabs.org>, Daniel Axtens <dja@axtens.net>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, Paran Lee <p4ranlee@gmail.com>
-Subject: [RESEND PATCH] perf tools riscv: Add support for riscv lookup_binutils_path
-Date:   Sun, 12 Mar 2023 22:03:05 +0900
-Message-Id: <20230312130303.87954-1-p4ranlee@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        Sun, 12 Mar 2023 06:10:50 -0700 (PDT)
+Message-Id: <1678626510.1783316-1-sleirsgoevy@gmail.com>
+In-Reply-To: <1678626510.1783316-0-sleirsgoevy@gmail.com>
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+Date:   Sun, 12 Mar 2023 16:03:15 +0300
+Subject: [PATCH v3 1/2] dt-bindings: exynos-dw-mshc-common: add exynos78xx
+ variants
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,49 +73,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add to know RISC-V binutils path.
+Some Samsung Exynos boards using the arm64 architecture have DW MMC
+controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
+systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
 
-Signed-off-by: Paran Lee <p4ranlee@gmail.com>
+Add two new compatible strings, "samsung,exynos78xx-dw-mshc" and
+"samsung,exynos78xx-dw-mshc-smu" respectively, to denote exynos78xx
+boards that need this quirk. But it's very possible that all
+"samsung,exynos7-dw-mshc" boards are actually affected.
 ---
- tools/perf/arch/common.c | 18 ++++++++++++++++++
- 1 file changed, 18 insertions(+)
+ .../devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml         | 2 ++
+ arch/arm64/boot/dts/exynos/exynos7885.dtsi                      | 2 +-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/tools/perf/arch/common.c b/tools/perf/arch/common.c
-index 59dd875fd5e4..6ac7a22244c0 100644
---- a/tools/perf/arch/common.c
-+++ b/tools/perf/arch/common.c
-@@ -43,6 +43,20 @@ const char *const powerpc_triplets[] = {
- 	NULL
- };
+diff --git a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+index fdaa18481..a72a67792 100644
+--- a/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
++++ b/Documentation/devicetree/bindings/mmc/samsung,exynos-dw-mshc.yaml
+@@ -22,6 +22,8 @@ properties:
+       - samsung,exynos5420-dw-mshc-smu
+       - samsung,exynos7-dw-mshc
+       - samsung,exynos7-dw-mshc-smu
++      - samsung,exynos78xx-dw-mshc
++      - samsung,exynos78xx-dw-mshc-smu
+       - axis,artpec8-dw-mshc
  
-+const char *const riscv32_triplets[] = {
-+	"riscv32-unknown-linux-gnu-",
-+	"riscv32-linux-android-",
-+	"riscv32-linux-gnu-",
-+	NULL
-+};
-+
-+const char *const riscv64_triplets[] = {
-+	"riscv64-unknown-linux-gnu-",
-+	"riscv64-linux-android-",
-+	"riscv64-linux-gnu-",
-+	NULL
-+};
-+
- const char *const s390_triplets[] = {
- 	"s390-ibm-linux-",
- 	"s390x-linux-gnu-",
-@@ -168,6 +182,10 @@ static int perf_env__lookup_binutils_path(struct perf_env *env,
- 		path_list = powerpc_triplets;
- 	else if (!strcmp(arch, "sh"))
- 		path_list = sh_triplets;
-+	else if (!strcmp(arch, "riscv32"))
-+		path_list = riscv32_triplets;
-+	else if (!strcmp(arch, "riscv64"))
-+		path_list = riscv64_triplets;
- 	else if (!strcmp(arch, "s390"))
- 		path_list = s390_triplets;
- 	else if (!strcmp(arch, "sparc"))
+   reg:
+diff --git a/arch/arm64/boot/dts/exynos/exynos7885.dtsi b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+index 23c2e0bb0..4b94ac9da 100644
+--- a/arch/arm64/boot/dts/exynos/exynos7885.dtsi
++++ b/arch/arm64/boot/dts/exynos/exynos7885.dtsi
+@@ -294,7 +294,7 @@ pmu_system_controller: system-controller@11c80000 {
+ 		};
+ 
+ 		mmc_0: mmc@13500000 {
+-			compatible = "samsung,exynos7-dw-mshc-smu";
++			compatible = "samsung,exynos78xx-dw-mshc-smu";
+ 			reg = <0x13500000 0x2000>;
+ 			interrupts = <GIC_SPI 146 IRQ_TYPE_LEVEL_HIGH>;
+ 			#address-cells = <1>;
 -- 
-2.34.1
+2.38.3
+
 
