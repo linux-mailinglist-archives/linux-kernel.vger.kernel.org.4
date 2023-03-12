@@ -2,132 +2,266 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D935A6B64C6
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E02D6B64C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 11:15:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbjCLKPJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 06:15:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47360 "EHLO
+        id S229797AbjCLKPY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 06:15:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbjCLKPF (ORCPT
+        with ESMTP id S229742AbjCLKPV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 06:15:05 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F06D31E3D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:15:04 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id j11so37625347edq.4
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 03:15:04 -0700 (PDT)
+        Sun, 12 Mar 2023 06:15:21 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7780034312;
+        Sun, 12 Mar 2023 03:15:18 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id ay8so825121wmb.1;
+        Sun, 12 Mar 2023 03:15:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678616103;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ftc13AeA8t3IcoWqIEgQomy23Jg//eoNjxchphe7r3I=;
-        b=l/meP0wxj9w0bsD+ThNVSfLh5pGTg/z+vP+YRSv3oTJYPVJs/+jxnlh1+TtYpi3kGY
-         /BLqnmxL18mS66/LI4FmlrMhL7Ax24bOkGoFcbkn/rFy8BrBO8Ida42AikCbAILZZxZg
-         /burAHCQv9W/PQlhEE8ZuWYX7OO5/42/sYNr4QhU+faxig3gxqIwjkUWwadc6zr4ikee
-         GSt7v1sd93k1vKdUVdOyQDdRUJdU4rwHjzam8CCdNrWJEf7SeytYhuzL86+d1AZa0ZPE
-         u8TgMtxhOJzsFwkBWZ+xid6XFXTFF7JFTF5KY/GpXx6ZpdqAK43ChcBVeYIu1vwYZRLk
-         7Big==
+        d=gmail.com; s=20210112; t=1678616117;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=asmlxdEeQZ+Mzc1CEzEJPScCCH3k/Xqn1dljqOOaOoM=;
+        b=BG0WwH/QzxV8pCZWgfH4TcyopcMKDNdAyhA7DaO0nN4RPcl0FOaTM6XRmUT76px4G2
+         CJZjRlLu3slHntSBAtO1Bbb3fUaijW3bh0bWaFsK1Y8W0bmCE7EPedWUCteoYqgKDvIK
+         8Q9R6YP1uZ3Pec9TsRtU5EuJKAwC4DmhYHvxtU9BxHYWQjMJ91LMQixEIAmJ4qT61d+f
+         gmaP85ZtV2KiMjmR6LiZ+tSkt4AXMHFUIyxwkf1GjS/1REMvLH0nrtitr+XoEqs2iTFy
+         iD150bV26WOty/lxBhPYSF5i3kCJihnoA+rmlgq1AR4ctFGOcCkyIWc0URUmDXF0AdwK
+         aHDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678616103;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ftc13AeA8t3IcoWqIEgQomy23Jg//eoNjxchphe7r3I=;
-        b=xsEbELOa3ShuJvVr8trQPCTa9speHGVNfAdr4BN8VObUNgnlJ9Lp1RuJNglwvTyfhe
-         /8gGulqmO4okMZknGjNwz498vccBuOipfG2Wz4JC7vtmT7QRTaM3AKh6NUsZOZq6JVrs
-         et/xKS1Mtz7RpU+qqEx+D+6/TBcgIuW3jHVHkjy/dOzGWqETR3oMbeDQn8sT1SWhikXk
-         svIi1uroQHUT/Q/v4JYr1olqDC/uC3Cvq1Hrqug6JTbqdMpdaVTEBPIHUrM0VDQa3IcQ
-         bsTuZAmOgzitmazpNiXh7CExWW3HVDrplXGq0sQ/qoyUzeOKB/VHVVCGn1McOnjS0Ei/
-         nN+w==
-X-Gm-Message-State: AO0yUKU+dW799QFZPWMBRPILtkXcNtFQe1BGqyATIcBCuwGBZ9NWkdJY
-        Z+2Jo0QlSUHWUQCNZfRltqeNog==
-X-Google-Smtp-Source: AK7set9WdVZa20JlEqtArNMIKQ5FZKuBp1LV9C2WDdyLc338ZZE68jaOQGXKPpuWy3VNvq1nUtHJxg==
-X-Received: by 2002:a05:6402:1adc:b0:4ac:bcf9:6d6c with SMTP id ba28-20020a0564021adc00b004acbcf96d6cmr27232017edb.36.1678616102722;
-        Sun, 12 Mar 2023 03:15:02 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id n13-20020a50934d000000b004c13fe8fabfsm2023066eda.84.2023.03.12.03.15.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 03:15:02 -0700 (PDT)
-Message-ID: <c9cfb54e-1418-ac98-9021-0c27a8bc3c20@linaro.org>
-Date:   Sun, 12 Mar 2023 11:15:01 +0100
+        d=1e100.net; s=20210112; t=1678616117;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=asmlxdEeQZ+Mzc1CEzEJPScCCH3k/Xqn1dljqOOaOoM=;
+        b=Er8hgIqEk+QjidxeyPONgANP5RuDqryNAcAiylN8vFnbZXRUBlc+77/xB7/PSjT2H/
+         pE8zFRGjASQpUZ2K4wHoR2b4eOWwqi8y9FLsxOgH280gWpeZCOEKzTu9gTBWOfp/D6w2
+         jqY29wYInAmnK2Mu57DC6umB0GPXawucbGxo0vcV5RNbOV72ZnpujLUhq4hs1GEPjoM5
+         DVEyuK4dWxoJKpRpTjmtwiHgXsjvw2mZLN+//LuZgblgMoPNxdAN3q0Bu9Pv+uLN6T8l
+         LzGxvkAVj1HSoBfX2kZTgWnsRO7SJQ6Sa9iC+opx2EV+nGGyNZFtF0xyl4dojWM41Kpz
+         YzNg==
+X-Gm-Message-State: AO0yUKUGZLuxBMOcmQ1mhL03uYCOJC80gfEvNVkfU55+NIQciB78Nkr/
+        5n740418Bzhxc6eOLQXBoHi0tQYcCcwTlw==
+X-Google-Smtp-Source: AK7set9Q7C0M0F/2khN7TsfVBk1tDeUhkCWefT9qCjg3jY9arTNZIJCvUpTGJrvVrVcS4kn9L3cudQ==
+X-Received: by 2002:a05:600c:35d2:b0:3eb:1d0c:ad71 with SMTP id r18-20020a05600c35d200b003eb1d0cad71mr8007524wmq.23.1678616116776;
+        Sun, 12 Mar 2023 03:15:16 -0700 (PDT)
+Received: from ?IPv6:2a02:168:6806:0:b020:289a:731d:fbb8? ([2a02:168:6806:0:b020:289a:731d:fbb8])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003e204fdb160sm5940830wmn.3.2023.03.12.03.15.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 03:15:16 -0700 (PDT)
+Message-ID: <98315424312f6f6abca771d27a78b2e41dcb6d6a.camel@gmail.com>
+Subject: Re: [PATCH net-next v2 2/3] net: dsa: mv88e6xxx: move call to
+ mv88e6xxx_mdios_register()
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Vladimir Oltean <olteanv@gmail.com>
+Cc:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Sun, 12 Mar 2023 11:15:15 +0100
+In-Reply-To: <20230311224951.kqcihlralwehfvaj@skbuf>
+References: <20230311203132.156467-1-klaus.kudielka@gmail.com>
+         <20230311203132.156467-3-klaus.kudielka@gmail.com>
+         <20230311224951.kqcihlralwehfvaj@skbuf>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-1 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 3/4] iio: light: max44009: add missing OF device matching
-Content-Language: en-US
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Marek Vasut <marek.vasut@gmail.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Robert Eshleman <bobbyeshleman@gmail.com>,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230311111457.251475-1-krzysztof.kozlowski@linaro.org>
- <20230311111457.251475-3-krzysztof.kozlowski@linaro.org>
- <20230311122619.2d8bfaf5@jic23-huawei>
- <8f448bc9-2f2b-77cb-ffe2-895593a6047e@linaro.org>
- <20230311183534.1d0dfd64@jic23-huawei>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311183534.1d0dfd64@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/2023 19:35, Jonathan Cameron wrote:
-> On Sat, 11 Mar 2023 13:28:17 +0100
-> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
-> 
->> On 11/03/2023 13:26, Jonathan Cameron wrote:
->>> On Sat, 11 Mar 2023 12:14:56 +0100
->>> Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org> wrote:
->>>   
->>>> The driver currently matches only via i2c_device_id, but also has
->>>> of_device_id table:
->>>>
->>>>   drivers/iio/light/max44009.c:545:34: error: ‘max44009_of_match’ defined but not used [-Werror=unused-const-variable=]
->>>>
->>>> Fixes: 6aef699a7d7e ("iio: light: add driver for MAX44009")
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>  
->>>
->>> Don't use of_match_ptr() unless you are absolutely sure no other firmware
->>> route will make use of the of_match_table.
->>>
->>> In this particular case ACPI using PRP0001 is broken by that macro.  
->>
->> It's not broken because there was no matching via PRP0001 due to missing
->> table.
->>
->>>
->>> So good to set the of_match_table, but make sure to always set it
->>> and hence you don't need the __maybe_unused.  
->>
->> So you want to add PRP0001? We can, the fix is for different issue, though.
-> 
-> There is nothing to add.  You need to do less than you have done in this patch.
-> Drop the of_match_ptr() and the __maybe_unused and PRP0001 based matching will just
-> work. The PRP0001 path just uses the of_device_id table and needs no
+On Sun, 2023-03-12 at 00:49 +0200, Vladimir Oltean wrote:
+> While testing this, I've noticed the following behavior change:
+>=20
+> Before:
+>=20
+> [root@mox:~] # echo d0032004.mdio-mii:10 > /sys/bus/mdio_bus/drivers/mv88=
+e6085/unbind
+...
+> [root@mox:~] # echo d0032004.mdio-mii:10 > /sys/bus/mdio_bus/drivers/mv88=
+e6085/bind
+> [=C2=A0=C2=A0 45.726662] mv88e6085 d0032004.mdio-mii:10: switch 0x3900 de=
+tected: Marvell 88E6390, revision 1
+...
+> [=C2=A0=C2=A0 55.068103] DSA: tree 0 setup
+>=20
+> After:
+>=20
+> [root@mox:~] # echo d0032004.mdio-mii:10 > /sys/bus/mdio_bus/drivers/mv88=
+e6085/unbind
+...
+> [root@mox:~] # echo d0032004.mdio-mii:10 > /sys/bus/mdio_bus/drivers/mv88=
+e6085/bind
+> [=C2=A0=C2=A0 46.422669] mv88e6085 d0032004.mdio-mii:10: switch 0x3900 de=
+tected: Marvell 88E6390, revision 1
+...
+> [=C2=A0=C2=A0 51.351383] mv88e6085 d0032004.mdio-mii:11 lan9 (uninitializ=
+ed): PHY [!soc!internal-regs@d0000000!mdio@32004!switch1@11!mdio:01] driver=
+ [Marvell 88E6390 Family] (irq=3D0)
+> [=C2=A0=C2=A0 51.366620] Marvell 88E6390 Family !soc!internal-regs@d00000=
+00!mdio@32004!switch1@11!mdio:01: Error -22 requesting IRQ 0, falling back =
+to polling
+...
+> [=C2=A0=C2=A0 56.197980] DSA: tree 0 setup
+>=20
+> instead I am noticing that the internal PHYs of switch d0032004.mdio-mii:=
+11 and
+> d0032004.mdio-mii:12 are failing in phy_request_interrupt() - request_thr=
+eaded_irq()
+> returns -EINVAL.
+>=20
+> I haven't studied yet why that is. This happens with arch/arm64/boot/dts/=
+marvell/armada-3720-turris-mox.dts,
+> which doesn't describe the switch PHY interrupts in the DTS. I don't know=
+ more yet.
+>=20
+> There's nothing worth mentioning in the boot log prior to my unbind/bind =
+commands.
 
-Sure, but that's *adding a feature*. You said that "ACPI using PRP0001
-is broken", but it was never here in the first place. PRP0001 *was*
-already broken here, not *is*. The patch does not decrease the
-functionality.
+Just trying to reproduce this on the Omnia (with the whole series applied, =
+plus some
+*** debug *** messages concerning timing). But all seems to be good here:
 
-> specific support in a driver - it doesn't need an ACPI id table or anything like
-> that.
-> 
-> It's a long story, but hindsight says that of_match_ptr() should never have
-> existed as it only serves to stop things working that otherwise work for free.
+root@spare:/sys/bus/mdio_bus/drivers/mv88e6085# echo f1072004.mdio-mii:10 >=
+unbind
+[ 3735.983144] mvneta f1030000.ethernet eth1: Link is Down
+[ 3735.987548] mvneta f1030000.ethernet eth1: configuring for fixed/rgmii l=
+ink mode
+[ 3735.988464] mvneta f1070000.ethernet eth0: left promiscuous mode
+[ 3735.988544] mvneta f1030000.ethernet eth1: Link is Up - 1Gbps/Full - flo=
+w control off
+[ 3735.990900] br0: port 5(lan0) entered disabled state
+[ 3735.992379] mv88e6085 f1072004.mdio-mii:10 lan0 (unregistering): left al=
+lmulticast mode
+[ 3735.992392] mv88e6085 f1072004.mdio-mii:10 lan0 (unregistering): left pr=
+omiscuous mode
+[ 3735.992438] br0: port 5(lan0) entered disabled state
+[ 3736.054036] br0: port 4(lan1) entered disabled state
+[ 3736.054239] mv88e6085 f1072004.mdio-mii:10 lan1 (unregistering): left al=
+lmulticast mode
+[ 3736.054248] mv88e6085 f1072004.mdio-mii:10 lan1 (unregistering): left pr=
+omiscuous mode
+[ 3736.054275] br0: port 4(lan1) entered disabled state
+[ 3736.107691] br0: port 3(lan2) entered disabled state
+[ 3736.107894] mv88e6085 f1072004.mdio-mii:10 lan2 (unregistering): left al=
+lmulticast mode
+[ 3736.107903] mv88e6085 f1072004.mdio-mii:10 lan2 (unregistering): left pr=
+omiscuous mode
+[ 3736.107929] br0: port 3(lan2) entered disabled state
+[ 3736.155780] br0: port 2(lan3) entered disabled state
+[ 3736.155974] mv88e6085 f1072004.mdio-mii:10 lan3 (unregistering): left al=
+lmulticast mode
+[ 3736.155983] mv88e6085 f1072004.mdio-mii:10 lan3 (unregistering): left pr=
+omiscuous mode
+[ 3736.156011] br0: port 2(lan3) entered disabled state
+[ 3736.211477] br0: port 1(lan4) entered disabled state
+[ 3736.211787] mv88e6085 f1072004.mdio-mii:10 lan4 (unregistering): left al=
+lmulticast mode
+[ 3736.211797] mvneta f1030000.ethernet eth1: left allmulticast mode
+[ 3736.211811] mv88e6085 f1072004.mdio-mii:10 lan4 (unregistering): left pr=
+omiscuous mode
+[ 3736.211816] mvneta f1030000.ethernet eth1: left promiscuous mode
+[ 3736.211865] br0: port 1(lan4) entered disabled state
+[ 3736.282416] mv88e6085 f1072004.mdio-mii:10: Link is Down
+[ 3736.283704] mv88e6085 f1072004.mdio-mii:10: Link is Down
+[ 3736.284864] DSA: tree 0 torn down
 
-Sure, I can go with ID table always present.
 
-Best regards,
-Krzysztof
+root@spare:/sys/bus/mdio_bus/drivers/mv88e6085# echo f1072004.mdio-mii:10 >=
+bind
+[ 3812.564891] mv88e6085 f1072004.mdio-mii:10: *** mv88e6xxx_probe call ***
+[ 3812.565234] mv88e6085 f1072004.mdio-mii:10: switch 0x1760 detected: Marv=
+ell 88E6176, revision 1
+[ 3812.587468] mdio_bus mv88e6xxx-1: *** mdiobus_scan_bus_c22 call ***
+[ 3812.685412] mdio_bus mv88e6xxx-1: *** mdiobus_scan_bus_c22 return ***
+[ 3812.685424] mdio_bus mv88e6xxx-1: *** mdiobus_scan_bus_c45 call ***
+[ 3812.877792] mdio_bus mv88e6xxx-1: *** mdiobus_scan_bus_c45 return ***
+[ 3813.539320] mv88e6085 f1072004.mdio-mii:10: configuring for fixed/rgmii-=
+id link mode
+[ 3813.541571] mv88e6085 f1072004.mdio-mii:10: configuring for fixed/rgmii-=
+id link mode
+[ 3813.542825] mv88e6085 f1072004.mdio-mii:10: Link is Up - 1Gbps/Full - fl=
+ow control off
+[ 3813.547546] mv88e6085 f1072004.mdio-mii:10: Link is Up - 1Gbps/Full - fl=
+ow control off
+[ 3813.588899] mv88e6085 f1072004.mdio-mii:10 lan0 (uninitialized): PHY [mv=
+88e6xxx-1:00] driver [Marvell 88E1540] (irq=3D68)
+[ 3813.593875] mvneta f1030000.ethernet eth1: Link is Down
+[ 3813.598298] mvneta f1030000.ethernet eth1: configuring for fixed/rgmii l=
+ink mode
+[ 3813.598402] mvneta f1030000.ethernet eth1: Link is Up - 1Gbps/Full - flo=
+w control off
+[ 3813.642980] br0: port 1(lan0) entered blocking state
+[ 3813.642996] br0: port 1(lan0) entered disabled state
+[ 3813.643022] mv88e6085 f1072004.mdio-mii:10 lan0: entered allmulticast mo=
+de
+[ 3813.643031] mvneta f1030000.ethernet eth1: entered allmulticast mode
+[ 3813.694319] mv88e6085 f1072004.mdio-mii:10 lan0: entered promiscuous mod=
+e
+[ 3813.694329] mvneta f1030000.ethernet eth1: entered promiscuous mode
+[ 3813.695964] mv88e6085 f1072004.mdio-mii:10 lan1 (uninitialized): PHY [mv=
+88e6xxx-1:01] driver [Marvell 88E1540] (irq=3D69)
+[ 3813.704931] mv88e6085 f1072004.mdio-mii:10 lan0: configuring for phy/gmi=
+i link mode
+[ 3813.756527] br0: port 2(lan1) entered blocking state
+[ 3813.756539] br0: port 2(lan1) entered disabled state
+[ 3813.756560] mv88e6085 f1072004.mdio-mii:10 lan1: entered allmulticast mo=
+de
+[ 3813.763061] mv88e6085 f1072004.mdio-mii:10 lan2 (uninitialized): PHY [mv=
+88e6xxx-1:02] driver [Marvell 88E1540] (irq=3D70)
+[ 3813.791552] mv88e6085 f1072004.mdio-mii:10 lan1: entered promiscuous mod=
+e
+[ 3813.797391] mv88e6085 f1072004.mdio-mii:10 lan1: configuring for phy/gmi=
+i link mode
+[ 3813.839969] br0: port 3(lan2) entered blocking state
+[ 3813.839982] br0: port 3(lan2) entered disabled state
+[ 3813.840003] mv88e6085 f1072004.mdio-mii:10 lan2: entered allmulticast mo=
+de
+[ 3813.870495] mv88e6085 f1072004.mdio-mii:10 lan2: entered promiscuous mod=
+e
+[ 3813.871911] mv88e6085 f1072004.mdio-mii:10 lan2: configuring for phy/gmi=
+i link mode
+[ 3813.889652] mv88e6085 f1072004.mdio-mii:10 lan3 (uninitialized): PHY [mv=
+88e6xxx-1:03] driver [Marvell 88E1540] (irq=3D71)
+[ 3813.940164] br0: port 4(lan3) entered blocking state
+[ 3813.940176] br0: port 4(lan3) entered disabled state
+[ 3813.940198] mv88e6085 f1072004.mdio-mii:10 lan3: entered allmulticast mo=
+de
+[ 3813.971126] mv88e6085 f1072004.mdio-mii:10 lan3: entered promiscuous mod=
+e
+[ 3813.972540] mv88e6085 f1072004.mdio-mii:10 lan3: configuring for phy/gmi=
+i link mode
+[ 3813.989835] mv88e6085 f1072004.mdio-mii:10 lan4 (uninitialized): PHY [mv=
+88e6xxx-1:04] driver [Marvell 88E1540] (irq=3D72)
+[ 3813.999680] mvneta f1070000.ethernet eth0: entered promiscuous mode
+[ 3813.999719] DSA: tree 0 setup
+[ 3813.999727] mv88e6085 f1072004.mdio-mii:10: *** mv88e6xxx_probe return 0=
+ ***
+[ 3814.043574] br0: port 5(lan4) entered blocking state
+[ 3814.043587] br0: port 5(lan4) entered disabled state
+[ 3814.043610] mv88e6085 f1072004.mdio-mii:10 lan4: entered allmulticast mo=
+de
+[ 3814.073902] mv88e6085 f1072004.mdio-mii:10 lan4: entered promiscuous mod=
+e
+[ 3814.075319] mv88e6085 f1072004.mdio-mii:10 lan4: configuring for phy/gmi=
+i link mode
+[ 3817.139771] mv88e6085 f1072004.mdio-mii:10 lan3: Link is Up - 1Gbps/Full=
+ - flow control rx/tx
+[ 3817.139793] IPv6: ADDRCONF(NETDEV_CHANGE): lan3: link becomes ready
+[ 3817.139854] br0: port 4(lan3) entered blocking state
+[ 3817.139862] br0: port 4(lan3) entered forwarding state
+
+Best regards, Klaus
 
