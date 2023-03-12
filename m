@@ -2,79 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5A146B6BF3
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AFA46B6BF5
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 23:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCLW13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 18:27:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
+        id S231139AbjCLW1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 18:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229713AbjCLW11 (ORCPT
+        with ESMTP id S230274AbjCLW1i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 18:27:27 -0400
-Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F8E52B9E9
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 15:27:23 -0700 (PDT)
-Received: by mail-il1-f197.google.com with SMTP id i14-20020a056e0212ce00b0031d17f33e9aso5504520ilm.7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 15:27:23 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678660043;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B5fqhJIjpirLrsA3xG4o21nLBL/g/rnnNghPQIsHEss=;
-        b=dYsDVw+E/Z+fsT3CBInSstB0PdpViKpphWOxgaQzo/6yPWeCMkpxZ8eaK1oLoXxbdA
-         ZwN0kjQ6xlZSYvxjTWRlulTEXRHRHD061hcx2FjfjkhR7ygv2C/1niUQr3uEZDl2xmN0
-         7HCwj/EKPjh3MEbQq0RKz1hbPO2qrIkfZc7oyC3utwi+UhyqR5CCNGZuU9sSmNyVD9vb
-         A/DACy0ZLt+zSjpZrVSX48EUQIqzTLro2BuN9/Hs8ZYlnA12tCr7ZcmLP8Y/qDp4mwDm
-         4iuNYDHnpuvt2/NHJBpnhzMnj38/hbN+C5MItI+ZNMV05Zca7oBPUomOlp6XJudFlrOj
-         JKWQ==
-X-Gm-Message-State: AO0yUKUKFA84IduDepQwQpL7g0EFMUpXoIH3WEIXpQ2DtdaswdyGpa5W
-        b5JNNbjglNEgdkEhHJXPp/W8Vcl/r2hRvseSVo01Ke4YLD1M
-X-Google-Smtp-Source: AK7set8RxLuX+r2WrfitVnbkOx83kJ8KZ5ejK4b9706CYKAUI3x7/QchSBcyPABxjAwH8lZan3Cy80i9r6cBgLW5xqLjJhOXbqqH
+        Sun, 12 Mar 2023 18:27:38 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35823A84D;
+        Sun, 12 Mar 2023 15:27:36 -0700 (PDT)
+Received: from mercury (unknown [185.254.75.29])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 0C1B56602F13;
+        Sun, 12 Mar 2023 22:27:35 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678660055;
+        bh=pfSGgC1MHC1inDZRNev1szq2shFsVqcF8UF6pcGKhUM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AjsgF9lblP2BLTyRiButy2m/pvm7GNUjAFPKYGUVGvyD/T83X40zKRXr2FKqEO6e+
+         +z9cBGXRiX7oak+40rfB+0pnJ1/RXXa3LUpvetumR6wvYRi/hvpkxYlT6bdS8u9dsR
+         J8ib9RO55B/4330/PtrWzwFqFQBAsy/ksBuMEydCLcBlWgZBWmdj6VdWeurbLWxTUi
+         hkKhcGlOKMzBgr/thE34WT1Oo3+3ohmm/QfAz/G4ODllaAFgX1YV5m83adimHyOMST
+         tJUXhJosmxwb7FPwqUEALS+ZcM1uIg1B+wX8dstLTUyRubBizdVLSqCjMAKK/slT3c
+         O4qnJ27t2/yeg==
+Received: by mercury (Postfix, from userid 1000)
+        id 556501060FD4; Sun, 12 Mar 2023 23:27:32 +0100 (CET)
+Date:   Sun, 12 Mar 2023 23:27:32 +0100
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/6] power: supply: rt9455_charger: mark OF related data
+ as maybe unused
+Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
+References: <20230311111532.251604-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-X-Received: by 2002:a5e:8e49:0:b0:745:a851:1619 with SMTP id
- r9-20020a5e8e49000000b00745a8511619mr14614913ioo.3.1678660042917; Sun, 12 Mar
- 2023 15:27:22 -0700 (PDT)
-Date:   Sun, 12 Mar 2023 15:27:22 -0700
-In-Reply-To: <000000000000a798f305ef2aeed9@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000008e918105f6bb7ff2@google.com>
-Subject: Re: [syzbot] [net?] KASAN: use-after-free Write in
- l2tp_tunnel_del_work (2)
-From:   syzbot <syzbot+57d48d64daabde805330@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, hdanton@sina.com,
-        jakub@cloudflare.com, jiri@nvidia.com, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="syfqm4melu6qgcjv"
+Content-Disposition: inline
+In-Reply-To: <20230311111532.251604-1-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot suspects this issue was fixed by commit:
 
-commit d772781964415c63759572b917e21c4f7ec08d9f
-Author: Jakub Kicinski <kuba@kernel.org>
-Date:   Fri Jan 6 06:33:54 2023 +0000
+--syfqm4melu6qgcjv
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-    devlink: bump the instance index directly when iterating
+Hi,
 
-bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=12e69652c80000
-start commit:   355479c70a48 Merge tag 'efi-fixes-for-v6.1-4' of git://git..
-git tree:       upstream
-kernel config:  https://syzkaller.appspot.com/x/.config?x=cc4b2e0a8e8a8366
-dashboard link: https://syzkaller.appspot.com/bug?extid=57d48d64daabde805330
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1731caf3880000
+Thanks, I queued all 6 patches to power-supply's for-next queue.
 
-If the result looks correct, please mark the issue as fixed by replying with:
+-- Sebastian
 
-#syz fix: devlink: bump the instance index directly when iterating
+On Sat, Mar 11, 2023 at 12:15:27PM +0100, Krzysztof Kozlowski wrote:
+> The driver can be compile tested with !CONFIG_OF making certain data
+> unused:
+>=20
+>   drivers/power/supply/rt9455_charger.c:1725:34: error: =E2=80=98rt9455_o=
+f_match=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/power/supply/rt9455_charger.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/power/supply/rt9455_charger.c b/drivers/power/supply=
+/rt9455_charger.c
+> index 31fb6526a1fd..0149e00f2bf8 100644
+> --- a/drivers/power/supply/rt9455_charger.c
+> +++ b/drivers/power/supply/rt9455_charger.c
+> @@ -1722,7 +1722,7 @@ static const struct i2c_device_id rt9455_i2c_id_tab=
+le[] =3D {
+>  };
+>  MODULE_DEVICE_TABLE(i2c, rt9455_i2c_id_table);
+> =20
+> -static const struct of_device_id rt9455_of_match[] =3D {
+> +static const struct of_device_id rt9455_of_match[] __maybe_unused =3D {
+>  	{ .compatible =3D "richtek,rt9455", },
+>  	{ },
+>  };
+> --=20
+> 2.34.1
+>=20
 
-For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+--syfqm4melu6qgcjv
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQOUc0ACgkQ2O7X88g7
++ppodRAApys6iqD/+L5Vsetj/LOFNu6sm2+lG+3lWY49uhOmNJ4zZBi1hJynH637
+pZFPkyWqLpiJ0XziJCSAgjj0IvkF++6T6PUjGuWU5HIUAKTplqI9ET1D3+WEh8z3
+AZYBcAfxSXC6JH9ipfHHevF4a92r5fQ214nUDvfXDTxysirmsV3mmxrGe3N2N9v8
+GGq53BkkaaiaDXrWYIIKXa4cYUQ3TXn+baQnTstUHSxKnWRRSgbRTrfaHL1yi2YF
+D3C/gaQlfYSgAkKQgL5WOKViX7SiolTid65kM2UXaFF1Dv/SGuvIz0qX/SV8Rhfp
+PMfcXRQdgtBQnJnPEA4owfv/iV5JjdXqcrX6ybNMyS7l9gj4ui9V/SfDnKxqlrN2
+ykl5QGZRbnf/Oxt3QYoZPR/uXnKI7uvRTG5FK4C227Swc3/p2k1kh/Xgbo+Qfw7l
+Iq1ou7e3Ons8GW54zJSC2B/jS6WEfpkbj3f89yPqIZcdL9+l8enRWTR1jKINocUN
+3cGIbGNOk67JTzJFhiES7f0LwH3x9LM0U5s9v9gKZ/K+3zyRdcjL/wIIfO6EV9oQ
+QfgMSFp9vUFoMIb9BKFwgPwKjx3Puz6l+QvHM7psee4VXR2dfobti+wdsC0QQpqq
+y9k3gCaCldPF56xW1zwN/0lN0wGv6IYLDpL94IF+kBJ/VDR6x/g=
+=OgAo
+-----END PGP SIGNATURE-----
+
+--syfqm4melu6qgcjv--
