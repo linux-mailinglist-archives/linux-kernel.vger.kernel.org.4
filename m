@@ -2,93 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A46946B68C2
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:21:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A1ED6B68C8
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 18:26:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjCLRVm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 13:21:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S229754AbjCLR0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 13:26:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229898AbjCLRVc (ORCPT
+        with ESMTP id S229764AbjCLR0Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 13:21:32 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3802E36095
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:21:31 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id fd5so5967888edb.7
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:21:31 -0700 (PDT)
+        Sun, 12 Mar 2023 13:26:16 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FEA366A0
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:26:14 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id g17so12913786lfv.4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 10:26:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678641689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3rvl2+raF1VE9ZzZN/isKLzxMu95bS20jrPGDIvTdQ8=;
-        b=SkNGmn6eN4WFwp5BSyxLvHrjVKhcPG7qJ0BxzbSwC8bkjGWmC4tr9YnkcC6ibAjE+T
-         3xdQ3tZX90pKpGWOy7y6M1Jq49x/28OhLfToIgfZux521kSRr6ZSa0m2gMh7iVsj53v4
-         YOTy6H8ibSrd4hOA9TIYRqxQGDAiXmNdRc0QsSWcLRf6Qo5T1oNiQ+GqYM+8jG0k7+sT
-         HZ4RUpaWXBKACGFmMJeFtp/TWbEz1yb97ozuGcu8zkb1MQsPIbrC5c8J9Dv28cfgsse4
-         QpiS68PRPSYl5U4rduDa40NUSn9fkMBWb4FjQNJlstGHs9EpbDg/VAZmr30lC1+3gLtm
-         R+hg==
+        d=gmail.com; s=20210112; t=1678641974;
+        h=subject:in-reply-to:cc:to:from:date:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=JtCwiValjsr2h1P8SRv71t+eIe5q6n+42gVTAnSj95M=;
+        b=BZlXc5TTIHdFq+jyFOtq1eQfmMuC7wVue+MHQHKrD0lz7CK9+bBibOic1ztD3oGNfB
+         v9c0UZGB0GE3G6rhQyAKqhieLFwAJT2TXVRQuG/YLKr5K6+hx86q+6Pu+otW8oGj7or4
+         F+nSW1Ay3GSG9zBeNZjhurI0cS2E8VP8MoVtp68WT0sDtgv/G55Nvv7VeeMeQDUEw9YU
+         o3ECKiyeMll1IeiMQsKCCCcZwS+54fY7Gz+JPQtvmnEwZYqLnaKBFC4UGspaGf3klk8P
+         fQXfPNcwbPZ9+rb+H6oj96ODGmnRlefysyYcfL9j2lqfSQ6MwtFimsvRzzM5WwQMdJbd
+         rwkg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678641689;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3rvl2+raF1VE9ZzZN/isKLzxMu95bS20jrPGDIvTdQ8=;
-        b=h2APrYgBfi2IG0sU6FLgNwtkt+9drgzYG045M3pvYbwsTf4k1EOexxrVTDQr/gcXHF
-         Tj21hDA/AQmcMEjqTpm6U/1gd7SXp6tCqPNlQXM42Sis9pcMNRKpvAY5WXf6eCgSB6XL
-         QHZkWOF2U1LFI5Xo7gorvt6cfdkR1ccqZKHg+XdYANCcSTgBw3oWShl1G1EI5JmqtopS
-         uyG2aQe7XfAQ3sRbsM+kmhanG3oh9VABg2XImPMj111aJgWf6EQJQPRXOBfVU4BXOPTE
-         J4Zt2xAHgonqDPm+PhT9Xr5uNOTGdt+a5b6sHrkc9kZlDTp1zIrIxjd1xbgJEs10VUwJ
-         UM6w==
-X-Gm-Message-State: AO0yUKW4DcmYa7Fwa/oK6S12Mj3SFQRWEcN+7Jwermm/iDkoZoOWX8YS
-        weOJlPd+HiviNqDRrT/6XHsLlA==
-X-Google-Smtp-Source: AK7set9LFVPJ2dhVlnw2yeUCkRxmvPoUNkNZGXgYlqVFeyncSypQLv4J8WsjipbWcJx60OGboFy4uw==
-X-Received: by 2002:a05:6402:12ce:b0:4fc:709f:7abd with SMTP id k14-20020a05640212ce00b004fc709f7abdmr943678edx.2.1678641689636;
-        Sun, 12 Mar 2023 10:21:29 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id y13-20020a50ce0d000000b004fa380a14e7sm2055395edi.77.2023.03.12.10.21.28
+        d=1e100.net; s=20210112; t=1678641974;
+        h=subject:in-reply-to:cc:to:from:date:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=JtCwiValjsr2h1P8SRv71t+eIe5q6n+42gVTAnSj95M=;
+        b=YiwN+i8+fTSpb6PnCm3DNkwmT3DsmHKLcL1C8J5A48Nf9hNVtpbMp+hsEnxnEqVw62
+         Yd5fQTFftENJqcLZPgDRWSb6A1t7sr8e+bPdgFT0ntfsAerXwz44TBbMzEWRnL0w5e7G
+         yFQEX/7tmk0aaf/iGDhQNauSSHYyi6YQ8qPTkdL0VIgrPbeXRHnnrPIWGK0/5nAfC8rr
+         is5rn/cFNvsc91f3HlZ6I7Yws5J6aUJ8ORp86CVzNh2XikFiSN+I1rpV6A/AztYpEkpm
+         dMCVMTrtco2F/FSvw3MG/HM3rbumCXLRQ9urXNNMROojY8eo1YXxGJXHc6/7Kdywnk9j
+         ciMQ==
+X-Gm-Message-State: AO0yUKULLUwh4EW99XzowyNCKNL6UMnLnv7+8T+KLU1ZTCIaL76KQ0zU
+        rdaEr+Wb403NkcmGJFdD1n54p7VLIwzoxcqC
+X-Google-Smtp-Source: AK7set9fwXB18RQrTwwyt3q3TDTvrC9U1L4Sp+xb5Bup1aVkDliCVL6Sgo+06w+x7ZPpep2pc/i1Uw==
+X-Received: by 2002:a05:6512:3b20:b0:4de:56a6:236b with SMTP id f32-20020a0565123b2000b004de56a6236bmr2434418lfv.28.1678641974177;
+        Sun, 12 Mar 2023 10:26:14 -0700 (PDT)
+Received: from letter7.txt (46-138-144-249.dynamic.spd-mgts.ru. [46.138.144.249])
+        by smtp.gmail.com with ESMTPSA id o12-20020a056512050c00b004dd7ddc696esm701353lfb.293.2023.03.12.10.26.13
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 10:21:29 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Sun, 12 Mar 2023 10:26:13 -0700 (PDT)
+Message-ID: <640e0b35.050a0220.628c.19cb@mx.google.com>
+Date:   Sun, 12 Mar 2023 10:26:13 -0700 (PDT)
+From:   Sergey Lisov <sleirsgoevy@gmail.com>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Santosh Shilimkar <ssantosh@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Nishanth Menon <nm@ti.com>, Rob Herring <robh+dt@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: ti: use "okay" for status
-Date:   Sun, 12 Mar 2023 18:21:23 +0100
-Message-Id: <167864162128.395859.14700084165667327132.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230127101836.93845-1-krzysztof.kozlowski@linaro.org>
-References: <20230127101836.93845-1-krzysztof.kozlowski@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Jaehoon Chung <jh80.chung@samsung.com>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <f34ba6e5-4a8d-0812-c334-ea47de7b1d21@linaro.org>
+Subject: Re: [PATCH v3 1/2] dt-bindings: exynos-dw-mshc-common: add exynos78xx
+ variants
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 27 Jan 2023 11:18:36 +0100, Krzysztof Kozlowski wrote:
-> "okay" over "ok" is preferred for status property.
+> Thanks for letting me know.
 > 
-> 
+> https://elixir.bootlin.com/linux/v6.1-rc1/source/Documentation/devicetree/bindings/writing-bindings.rst#L42
 
-Applied, thanks!
-(Patch was waiting for quite a long on the lists, let me know if anyone wants
-to pick it up instead)
+OK, at least its codified somewhere. Still, this results in the opposite
+effect: DTBs written for one SoC, using compatibles from other SoCs just
+because "they are the same anyway". And doing this properly, well, results
+in essentially duplicate compatibles.
 
-[1/1] ARM: dts: ti: use "okay" for status
-      https://git.kernel.org/krzk/linux-dt/c/1792375be092b4d9da34b43240319264363540dc
+And "fallback compatibles" won't solve this case anyway, as there is no
+common compatible that denotes "Exynos7 DW-MMC that has the bug".
 
-Best regards,
--- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>> That's non-bisectable change (also breaking other users of DTS), so you
+>>> need to explain in commit msg rationale - devices were never compatible
+>>> and using exynos7 does not work in certain cases.
+
+Probably it makes sense to put this patch after the actual implementation,
+so that git bisect always gives a working setup.
+
+> BTW, this rationale was only example - you need to come with something real.
+
+Pretty much the only thing that is broken are SDIO cards, because they run
+very short transfers (below the DMA threshold) over the data lines. That's
+exactly what I stated.
+
