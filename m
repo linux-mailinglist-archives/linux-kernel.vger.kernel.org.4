@@ -2,98 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D46E26B6A56
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:48:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41A486B6A5D
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 19:59:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230395AbjCLSsf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 14:48:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54882 "EHLO
+        id S230188AbjCLS6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 14:58:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230313AbjCLSs0 (ORCPT
+        with ESMTP id S229713AbjCLS6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 14:48:26 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4671C18B34
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:48:22 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id da10so40417173edb.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:48:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678646900;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uklOMUJVS+u74q2lNQ2L3Oa76MwPD6cKkPZXD0PzvOk=;
-        b=svKsHNyMXagddsb4ZzAWmX2zcAIp0zVSsyZng3nX5FZgR0Fojt5NcyvJeKEvZbdiZq
-         VpwT/97PGGZHbzLS2vQd2fRrgrDIqAmYiPgFwM1vv9JPe1LSDpYhVJKG9OdEFW1DU6fi
-         +8UXQcfy/zjYp2jMD0pe9MA4jrM13ASK7QpFRkmlJeZEU3BiKimfG4OnWmQx9zJcIhHI
-         vgE7/x1IXpiP0DbMmjRowE/t8vr5Ch2/jIA+ZZZxYoeI/IO0wTjn+bWj4xEjKjyuOpC2
-         mR0uYCTT9VUC1MO9QT3Nirk6/TREnSVFv8Ns+MfHZFSpOOTAYJ+BJeex6scKi9ur75Tv
-         +BiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678646900;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uklOMUJVS+u74q2lNQ2L3Oa76MwPD6cKkPZXD0PzvOk=;
-        b=cItM7kQ6+OgbwovySHcGe6l86aKsxBvmNuRJe/OsYN4C84XCgw/i8d4BPn5S3y/dPO
-         wV9etXHKaSY3IctS9m73wrtKsYBJ6ZYGhbOlTJ5dPb2cJitHo0zLV4AbU42fuAeeKii6
-         R+v13l7JfSVdvHBOclJauhPqZMYWJc/VrTKIKJnznC7csAuED/DDrtOZTQaCrVoUi3jY
-         LMwW8Rv+ewRItQ6+6JRhCw0DUmFmCYGm9RhlWUd7F6WZ/Xoq1mP4B5Yk++vpZp+KfbMD
-         PLLRcHrWkxBKJKdVQ38eXnskZ7lMhMOhkfiHqiQiizARmv2ifgmkYW87li+gRaMnZF5s
-         4vhg==
-X-Gm-Message-State: AO0yUKXOuWrf6j379kZ8rwADemZGOK6Ck30+EeInJ/J5rM/VnXH0t2fC
-        w9Lv+VdiDukwllSfSdnSn1yYO85lFyZhPclzywc=
-X-Google-Smtp-Source: AK7set+wLPwfiYTBJKHeb6798JXdZToZ1wN8CLYiuEE03LcKlvgRWrhC81BlP33K3TpRYzt56OBfGQ==
-X-Received: by 2002:a17:906:1604:b0:8af:7b80:82ba with SMTP id m4-20020a170906160400b008af7b8082bamr30601317ejd.20.1678644712043;
-        Sun, 12 Mar 2023 11:11:52 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id b18-20020a17090636d200b008d0dbf15b8bsm2441348ejc.212.2023.03.12.11.11.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 11:11:51 -0700 (PDT)
-Message-ID: <f0f6d714-f35c-fa53-f9bf-44cd4baa4aea@linaro.org>
-Date:   Sun, 12 Mar 2023 19:11:50 +0100
+        Sun, 12 Mar 2023 14:58:45 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1505E222D1
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 11:58:42 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:5054:ff:feb3:8f48] (helo=regzbot.fritz.box); authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        id 1pbQDU-0000Yt-Et; Sun, 12 Mar 2023 19:14:44 +0100
+From:   "Regzbot (on behalf of Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Linux regressions mailing list <regressions@lists.linux.dev>
+Subject: Linux regressions report  for mainline [2023-03-12]
+Date:   Sun, 12 Mar 2023 18:14:40 +0000
+Message-Id: <167864480635.3972286.12282059674664387990@leemhuis.info>
+X-Mailer: git-send-email 2.39.2
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 1/3] dt-bindings: exynos-dw-mshc-common: add exynos7885
- variants
-Content-Language: en-US
-To:     Sergey Lisov <sleirsgoevy@gmail.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Jaehoon Chung <jh80.chung@samsung.com>
-Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1678644516.665314-1-sleirsgoevy@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <1678644516.665314-1-sleirsgoevy@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678647523;36a6f97e;
+X-HE-SMSGID: 1pbQDU-0000Yt-Et
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12/03/2023 18:58, Sergey Lisov wrote:
-> Some Samsung Exynos boards using the arm64 architecture have DW MMC
-> controllers configured for a 32-bit data bus but a 64-bit FIFO. On these
-> systems the 64-bit FIFO registers must be accessed in two 32-bit halves.
-> 
-> Add two new compatible strings, "samsung,exynos7885-dw-mshc" and
-> "samsung,exynos7885-dw-mshc-smu" respectively, to denote exynos7885
-> boards that need this quirk. But it's very possible that all
-> "samsung,exynos7-dw-mshc" boards are actually affected.
+Hi Linus. The list of tracked regressions is still quite short.
 
-And now this is third copy of the same email. This is not acceptable.
+Seems quite a few people have run into an issue Hector reported on
+Saturday: WPA auth is entirely broken on brcmfmac in mainline and some
+stable trees, as the culprit was already backported. He submitted a
+partial revert here:
+https://lore.kernel.org/all/20230311141914.24444-1-marcan@marcan.st/
 
-Best regards,
-Krzysztof
+Fixes for two build problems Guenter reported are floating around, but
+haven't reached you yet.
 
+The fix for the TPM regression (which made a HW/firmware issue happen
+more freqently) from the 6.1 cycle (
+https://lore.kernel.org/all/20230228024439.27156-1-mario.limonciello@amd.com/
+) is still not mainlined, but after a recent discussion (I CCed you
+recently) it should hopefully reach you soon now.
+
+Ciao, Thorsten
+
+---
+
+Hi, this is regzbot, the Linux kernel regression tracking bot.
+
+Currently I'm aware of 3 regressions in linux-mainline. Find the
+current status below and the latest on the web:
+
+https://linux-regtracking.leemhuis.info/regzbot/mainline/
+
+Bye bye, hope to see you soon for the next report.
+   Regzbot (on behalf of Thorsten Leemhuis)
+
+
+======================================================
+current cycle (v6.2.. aka v6.3-rc), culprit identified
+======================================================
+
+
+Build failures for sparc64:allmodconfig and parisc:allmodconfig with gcc 11.x+
+------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20230222025918.GA1651385@roeck-us.net/
+https://lore.kernel.org/linux-btrfs/20230222025918.GA1651385@roeck-us.net/
+
+By Guenter Roeck; 18 days ago; 5 activities, latest 0 days ago.
+Introduced in 1ec49744ba83 (v6.3-rc1)
+
+Fix incoming:
+* btrfs: fix compilation error on sparc/parisc
+  https://lore.kernel.org/linux-btrfs/caed9824-c05d-19a9-d321-edefab17c4f0@roeck-us.net/
+
+
+Build error in drivers/media/i2c/imx290.c if PM support is disabled
+-------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/20230227175245.GA3728693@roeck-us.net/
+https://lore.kernel.org/linux-media/20230227175245.GA3728693@roeck-us.net/
+
+By Guenter Roeck; 13 days ago; 4 activities, latest 0 days ago.
+Introduced in 02852c01f654 (v6.3-rc1)
+
+Fix incoming:
+* media: i2c: imx290: fix conditional function defintions
+  https://lore.kernel.org/linux-media/79488ad7-5709-235b-14b4-1518e989c7a3@leemhuis.info/
+
+
+[ *NEW* ] Patch broke WPA auth: Re: [PATCH v2] wifi: cfg80211: Fix use after free for wext
+------------------------------------------------------------------------------------------
+https://linux-regtracking.leemhuis.info/regzbot/regression/d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st/
+https://lore.kernel.org/lkml/d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st/
+
+By Hector Martin; 1 days ago; 13 activities, latest 1 days ago.
+Introduced in 015b8cc5e7c4 (v6.3-rc1)
+
+Recent activities from: Hector Martin (3), Alexander Wetzel (3), Eric
+  Curtin (1), Janne Grunau (1), Joan Bruguera (1), Greg Kroah-
+  Hartman (1), Hans de Goede (1)
+
+One patch associated with this regression:
+* [PATCH] wifi: cfg80211: Partial revert "wifi: cfg80211: Fix use after free for wext"
+  https://lore.kernel.org/lkml/20230311141914.24444-1-marcan@marcan.st/
+  1 days ago, by Hector Martin
+
+=============
+End of report
+=============
+
+All regressions marked '[ *NEW* ]' were added since the previous report,
+which can be found here:
+https://lore.kernel.org/r/167802672375.3551148.2619236429318783591@leemhuis.info
+
+Thanks for your attention, have a nice day!
+
+  Regzbot, your hard working Linux kernel regression tracking robot
+
+
+P.S.: Wanna know more about regzbot or how to use it to track regressions
+for your subsystem? Then check out the getting started guide or the
+reference documentation:
+
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/getting_started.md
+https://gitlab.com/knurd42/regzbot/-/blob/main/docs/reference.md
+
+The short version: if you see a regression report you want to see
+tracked, just send a reply to the report where you Cc
+regressions@lists.linux.dev with a line like this:
+
+#regzbot introduced: v5.13..v5.14-rc1
+
+If you want to fix a tracked regression, just do what is expected
+anyway: add a 'Link:' tag with the url to the report, e.g.:
+
+Link: https://lore.kernel.org/all/30th.anniversary.repost@klaava.Helsinki.FI/
