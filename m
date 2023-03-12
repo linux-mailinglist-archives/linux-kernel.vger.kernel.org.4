@@ -2,60 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 035E26B65A8
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 13:02:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1FC06B65C4
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 13:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230043AbjCLMCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 08:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59596 "EHLO
+        id S230252AbjCLMCl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 08:02:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCLMB7 (ORCPT
+        with ESMTP id S230081AbjCLMCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 08:01:59 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5D331ABC7;
-        Sun, 12 Mar 2023 05:01:56 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 95EEF44C100F;
-        Sun, 12 Mar 2023 12:01:53 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 95EEF44C100F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678622513;
-        bh=YQ/KPBa3imZVjPC7T6FodEbR+OnkZJA2A+cOn9tXZGo=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=s2llQEZ0DbgMNZG2NdGQAbEn3KQWNd8WfDVYQDULzih1QMjDzfHyNEPu8FykRcBAf
-         wkk/573ixqFeQkq4sCsuhrAOScHAiWlzviC6Wm22UpJUfcGGxUaNNhbn0qGf0sTnNU
-         YkfqrvQhMyMHby2Kz1+VVXNglmHuLc2DKcIY4Oss=
+        Sun, 12 Mar 2023 08:02:34 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2043.outbound.protection.outlook.com [40.107.243.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5A8F474D2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 05:02:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mLcG1DCf0wfu/lrin0oRaqN6QBNtywb+IplYk9O4zik25QQgD30bnT5J4gjZWzvYBeLG49mPrz1LTj0f0RQa84KkzSfkB+tSel4fFySSbClAr0nebZ6zoPY//DsoOU5Nv7LnrE+tcAH6wqq5rn+rHBZsjLfXpS8uR7EZ0/NnvccV2sqsFwOt0cY1IwXZUaB3qwLUvLGHbuWEU0DJNEDCcyxLt1o9uaECxJZuFXizlCHc9UtKQBwxPNVDcM+NtEOza92oxHxW1YGrqMA6bGjciChqBrZ/iFp4+osnHEpZ3f1mrawA9TwZzg31/LcvgGObBePO2mTTtwtqoVCtRPCOKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vERtBQZO4btnLGfti3VSOefpivXiYTBUA9KHiM91onM=;
+ b=mRUHowUkoibA+y3yuIucX9n/NuJ61VNiLm0wYNyJR2ZstnGN+xH/115+zj7Gh2v6/kZIWpMIM5osniFHhpBYjrLs+/JHaUR2oRtrE8K/wo6o8lLBqYthnTSXB2q6fxxocrVAPPy+F9ezhPml37Ct/KC5Ht2xupOUy77TjwR0jvosLlty9FYbm3ByTPNJ3sYNOS9RYG7O45WB0GSrG1aEOFlBoExDrYkES4qOgQ3YyIJrIWjgVMIMBwruQCqTVqMQb6RCO8jdQ+ix86Lcqb6lIjOgVrz0li+U/KmzINg4110ROG9cfMT36A8Npp7CkZRteWCKRIwOGuTciE8atv8SCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=suse.com smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vERtBQZO4btnLGfti3VSOefpivXiYTBUA9KHiM91onM=;
+ b=N1lgjq+qSA9Yor7xsm25sk5Z8A/clJPGoqZlmFyeipAjMwDXYwSn801X6o4aPVbaOJktX2/YmshQiRYrVztTtsqV2awjhsDfuAiktu4KAOjS9N9S565afWn8i0rN/ual76G2k2b74WsocP+TLTZehvc/OxSLsd4l5YgiawBmhUg=
+Received: from MWH0EPF00056D0B.namprd21.prod.outlook.com
+ (2603:10b6:30f:fff2:0:1:0:b) by IA1PR12MB6484.namprd12.prod.outlook.com
+ (2603:10b6:208:3a7::13) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Sun, 12 Mar
+ 2023 12:02:29 +0000
+Received: from CO1NAM11FT106.eop-nam11.prod.protection.outlook.com
+ (2a01:111:f400:7eab::208) by MWH0EPF00056D0B.outlook.office365.com
+ (2603:1036:d20::b) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.23 via Frontend
+ Transport; Sun, 12 Mar 2023 12:02:28 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT106.mail.protection.outlook.com (10.13.175.44) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.6178.24 via Frontend Transport; Sun, 12 Mar 2023 12:02:28 +0000
+Received: from hr-amd.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.34; Sun, 12 Mar
+ 2023 07:02:23 -0500
+From:   Huang Rui <ray.huang@amd.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
+        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
+        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>,
+        <xen-devel@lists.xenproject.org>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <amd-gfx@lists.freedesktop.org>
+CC:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Stewart Hildebrand" <Stewart.Hildebrand@amd.com>,
+        Xenia Ragiadakou <burzalodowa@gmail.com>,
+        Honglei Huang <honglei1.huang@amd.com>,
+        Julia Zhang <julia.zhang@amd.com>,
+        Chen Jiqian <Jiqian.Chen@amd.com>,
+        Huang Rui <ray.huang@amd.com>
+Subject: [RFC PATCH 2/5] xen/grants: update initialization order of xen grant table
+Date:   Sun, 12 Mar 2023 20:01:54 +0800
+Message-ID: <20230312120157.452859-3-ray.huang@amd.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230312120157.452859-1-ray.huang@amd.com>
+References: <20230312120157.452859-1-ray.huang@amd.com>
 MIME-Version: 1.0
-Date:   Sun, 12 Mar 2023 15:01:53 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 20/26] x86/build: Make generated PE more spec compliant
-In-Reply-To: <CAMj1kXFFsxUWRjLzWpz5qWWA4VaVnC0hYodLOxBoR_kDf=x8=Q@mail.gmail.com>
-References: <cover.1671098103.git.baskov@ispras.ru>
- <2dd706f95dd4fbb24de534b5fdedf7b740d1bac0.1671098103.git.baskov@ispras.ru>
- <CAMj1kXGu0uFynyt=MostXo58A4f4Zu6cFFiSShFZChU5LWt1ZQ@mail.gmail.com>
- <f5aaddbe13211c3a3d6d879675ebcaf8@ispras.ru>
- <CAMj1kXFFsxUWRjLzWpz5qWWA4VaVnC0hYodLOxBoR_kDf=x8=Q@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <b649071c0a919c284de79b74201e4438@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT106:EE_|IA1PR12MB6484:EE_
+X-MS-Office365-Filtering-Correlation-Id: 41a5f9d5-9c4d-4d38-5abb-08db22f1a6cb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: aMux3Bv4HXWKFfc1LCihWGJ726Lphqqk3roevqlcSWm466fAZx9I8APnJQi2dTwz2Y3WAj21pkO9JQwG/1kMmON8R3ybiXGy12FD98jNT3WdXXzobMHHoaxWBcE8O6WjpS0HKPkrzVkmNKvcV/9X2fcQ7tj9q99Cc8INvQJmWykQx6myPm/ylU8H40TAuqS+3GI0lEostDtgh6akAk/iUR3sQohLV6CYIRRx4YH3PaaTFR+YXfCOS9nRazoWQTxmEEmiL25+BcKRCkDfPHhl+NqBVLyvdl41Emq8WBobOZeSrn31xlucmNtQu//wkYXI40qtr/+iX/K/OtbSL6TUCcu75QEodfj+dZ9JIJ/5y3Rql8lrM9ZK4ErE5pQ2Zq2tinsrTcPXtxxSimckcH1mIh6GHRPfsr7B49P68rg1ksIbaLUxmr3iqbhIWVSV8k1EQezSDTa8qqGxReJy2M5wCiGzpH8IxUxOvbZV10PNjNPeUjKxnahOc86QNSwaNraIudjZyNFfnCXBNtVAqC+JDUEtjaRpFCHJ5PimMhPX1UlFSzNd+lLAQjH/ucRHDis4kHJEMhT3ztf6cOCpxg2CgJ+Tek4z7EFky27/MsjhxO9kKWkf5wk2GRcQlFwo6xnHuARBu1/BH/Yxc96IZuiuQyOPfFjhz1D4SkrZv3WJDR/FoYn7ac/CX05AhawvD0ygvPW7EQwLMTw9zyxyTxv0krdhj74w1fZe3ZoAXF/KKls=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199018)(46966006)(40470700004)(36840700001)(7696005)(426003)(478600001)(83380400001)(36860700001)(6666004)(82310400005)(36756003)(356005)(82740400003)(110136005)(47076005)(54906003)(1076003)(336012)(316002)(186003)(26005)(16526019)(7416002)(86362001)(40480700001)(81166007)(40460700003)(2906002)(2616005)(70206006)(41300700001)(8676002)(8936002)(4326008)(5660300002)(70586007)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Mar 2023 12:02:28.2302
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 41a5f9d5-9c4d-4d38-5abb-08db22f1a6cb
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT106.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6484
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,105 +111,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-11 20:31, Ard Biesheuvel wrote:
-> On Sat, 11 Mar 2023 at 16:02, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> On 2023-03-10 18:17, Ard Biesheuvel wrote:
->> > On Thu, 15 Dec 2022 at 13:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> >>
->> >> Currently kernel image is not fully compliant PE image, so it may
->> >> fail to boot with stricter implementations of UEFI PE loaders.
->> >>
->> >> Set minimal alignments and sizes specified by PE documentation [1]
->> >> referenced by UEFI specification [2]. Align PE header to 8 bytes.
->> >>
->> >> Generate PE sections dynamically. This simplifies code, since with
->> >> current implementation all of the sections needs to be defined in
->> >> header.S, where most section header fields do not hold valid values,
->> >> except for their names. Before the change, it also held flags,
->> >> but now flags depend on kernel configuration and it is simpler
->> >> to set them from build.c too.
->> >>
->> >> Setup sections protection. Since we cannot fit every needed section,
->> >> set a part of protection flags dynamically during initialization.
->> >> This step is omitted if CONFIG_EFI_DXE_MEM_ATTRIBUTES is not set.
->> >>
->> >> [1]
->> >> https://download.microsoft.com/download/9/c/5/9c5b2167-8017-4bae-9fde-d599bac8184a/pecoff_v83.docx
->> >> [2]
->> >> https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf
->> >>
->> >> Tested-by: Peter Jones <pjones@redhat.com>
->> >> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> >
->> > I would prefer it if we didn't rewrite the build tool this way.
->> >
->> > Having the sections in header.S in the order they appear in the binary
->> > is rather useful, and I don't think we should manipulate the section
->> > flags based on whether CONFIG_DXE_MEM_ATTRIBUTES is set. I also don't
->> > think we need more than .text / .,data (as discussed in the other
->> > thread on linux-efi@)
->> >
->> > Furthermore, I had a look at the audk PE loader [0], and I think it is
->> > being overly pedantic.
->> >
->> > The PE/COFF spec does not require that all sections are virtually
->> > contiguous, and it does not require that the file content is
->> > completely covered by either the header or by a section.
->> >
->> > So what I would prefer to do is the following:
->> >
->> > Sections:
->> > Idx Name          Size     VMA              Type
->> >   0 .reloc        00000200 0000000000002000 DATA
->> >   1 .compat       00000200 0000000000003000 DATA
->> >   2 .text         00bee000 0000000000004000 TEXT
->> >   3 .data         00002200 0000000000bf2000 DATA
->> >
->> > using 4k section alignment and 512 byte file alignment, and a header
->> > size of 0x200 as before (This requires my patch that allows the setup
->> > header to remain unmapped when running the stub [1])
->> >
->> > The reloc and compat payloads are placed at the end of the setup data
->> > as before, but increased in size to 512 bytes each, and then mapped
->> > non-1:1 into the RVA space.
->> >
->> > This works happily with both the existing PE loader as well as the
->> > audk one, but with the pedantic flags disabled.
->> >
->> 
->> This makes sense. I'll change this patch to use this layout and
->> to keep sections in headers.S before sending v5. (and I guess I'll
->> make the compressed kernel a part of .text). I have a few questions
->> though:
->> 
->> This layout assumes having the local copy of the bootparams as
->> in your RFC patches, right?
->> 
-> 
-> Indeed. Otherwise, the setup header may not have been copied to memory
-> by the loader.
-> 
->> Can I keep the .rodata -- 5th section fits in the section table
->> without much work?
->> 
-> 
-> You could, but at least the current PE/COFF loader in EDK2 will map it
-> read/write, as it only distinguishes between executable sections and
-> non-executable sections.
-> 
+The xen grant table will be initialied before parsing the PCI resources,
+so xen_alloc_unpopulated_pages() ends up using a range from the PCI
+window because Linux hasn't parsed the PCI information yet.
 
-At least it will slightly improve security for some implementations
-(e.g. audk, while being overly strict support RO sections)
+So modify the initialization order to make sure the real PCI resources
+are parsed before.
 
->> Also, why .reloc is at offset 0x2000 and not just 0x1000, is there
->> anything important I am missing? I understand that is cannot be 0
->> and should be aligned on page size, but nothing else comes to my
->> mind...
->> 
-> 
-> That was just arbitrary, because the raw allocations of reloc and
-> compat are also allocated towards the end. But I guess starting at
-> 0x1000 for .reloc makes more sense so feel free to change that.
+Signed-off-by: Huang Rui <ray.huang@amd.com>
+---
+ arch/x86/xen/grant-table.c | 2 +-
+ drivers/xen/grant-table.c  | 2 +-
+ 2 files changed, 2 insertions(+), 2 deletions(-)
 
-Thanks for clarifications!
+diff --git a/arch/x86/xen/grant-table.c b/arch/x86/xen/grant-table.c
+index 1e681bf62561..64a04d1e70f5 100644
+--- a/arch/x86/xen/grant-table.c
++++ b/arch/x86/xen/grant-table.c
+@@ -165,5 +165,5 @@ static int __init xen_pvh_gnttab_setup(void)
+ }
+ /* Call it _before_ __gnttab_init as we need to initialize the
+  * xen_auto_xlat_grant_frames first. */
+-core_initcall(xen_pvh_gnttab_setup);
++fs_initcall_sync(xen_pvh_gnttab_setup);
+ #endif
+diff --git a/drivers/xen/grant-table.c b/drivers/xen/grant-table.c
+index e1ec725c2819..6382112f3473 100644
+--- a/drivers/xen/grant-table.c
++++ b/drivers/xen/grant-table.c
+@@ -1680,4 +1680,4 @@ static int __gnttab_init(void)
+ }
+ /* Starts after core_initcall so that xen_pvh_gnttab_setup can be called
+  * beforehand to initialize xen_auto_xlat_grant_frames. */
+-core_initcall_sync(__gnttab_init);
++rootfs_initcall(__gnttab_init);
+-- 
+2.25.1
+
