@@ -2,127 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38CE56B66E8
+	by mail.lfdr.de (Postfix) with ESMTP id 83C846B66E9
 	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:46:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230223AbjCLNpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50630 "EHLO
+        id S231144AbjCLNpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231175AbjCLNpN (ORCPT
+        with ESMTP id S231159AbjCLNpK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:45:13 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 120C44ECE9;
-        Sun, 12 Mar 2023 06:44:54 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (85-76-21-162-nat.elisa-mobile.fi [85.76.21.162])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 75C1B814;
-        Sun, 12 Mar 2023 14:44:50 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1678628692;
-        bh=Gf4R8APgW+8d30ALT2Qx8sbhHo3cryP7NIpDmZDCrv0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jZEACncLcJxuOrh8OeqcKJGvRW78xO4EdQ/4QZg4hjFkg1uSgSPfTqSE1EzlLDTm7
-         vrvIzzdogv5ePI0W1USX4KN6nyamrOD+mKZHARzsWogvaJJR+aFinOybXSpz4pIsd6
-         xAK6azy2RiExNid6RFBv6PJgW/R29R3vEntuWhqg=
-Date:   Sun, 12 Mar 2023 15:44:41 +0200
-From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joe Tessler <jrt@google.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Niklas =?utf-8?Q?S=C3=B6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH 25/28] media: i2c: ov7740: drop of_match_ptr for ID table
-Message-ID: <20230312134441.GC8229@pendragon.ideasonboard.com>
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <20230312131318.351173-25-krzysztof.kozlowski@linaro.org>
+        Sun, 12 Mar 2023 09:45:10 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB1E44E5CC
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:44:50 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so38612469edb.10
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:44:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678628689;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=KbMZJnirmlCKS4zMh68O2ig0pYgKhtCGTM1+G1KObrg=;
+        b=DXgHIAoSCsCuHyVLIkbS6zSi5sWkNBLlFp2PIqt/AT9osywqWWeTfWYAEW8npGZjyG
+         WZ9TEqCqJEg3hhVuPiTJ2+K25lDEgQc12SvaOgiGKTksJtu/cCV5H0P4ruOFM7zZ2iv4
+         MGbdUGf/f6F77bntbmobCBcgoAUrfKrBBOqEYVJ9nkvsH9c212Msw+Ckj8rm1sxs3vD+
+         EQpkxDWdH2Doc5YvD85RU7C8wDsyzIy/TxxJTh9sqW/ba5fZ1Md+skA2N7tsirlgAmeo
+         7+tZHku8CJDdXh2+5+t3W7J6kQWnzHdOYGaFnha9dfsecm3BFAh9XaFPnEqdIxbjoYNj
+         zRMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678628689;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KbMZJnirmlCKS4zMh68O2ig0pYgKhtCGTM1+G1KObrg=;
+        b=OPKIf2lebO6sGaK62cpW24izQ7ZrsXLLa17czHlorRqA92f6uoCFMk1MHtdy0CblUz
+         1lIZ55FXO3bwZxhp+tgmZSWo/YkLPwqsorwQpWwc8phNb3Sw3k3S9G4eVEEOR4Xq/eMx
+         bC7lIspqJAV7HZuTXUG6n16dt7uLvp89MUuf7ZIxLExfTbYtg26mg+p92YCdwJn1DB0Z
+         fprHZpkWPGbxjbOWaV3pBC0flgN7DbcpjZ3/BPMrmxFE9m8ZQcVCICIbOOmTPDjQGprk
+         biZktv9XvrZvYezBrGvVWF3P/fqvHL+J/1X5mLxM0Qgsi1GDsrawwrNE0PdLFYQwGVvO
+         2hDg==
+X-Gm-Message-State: AO0yUKVBJVrAe9WSm3MOEvy+P3xb8FFJDItsTrkGxhaq9ObRvL2QxZMr
+        GefgdNWioLIa9rjBwQNBwNwhZQ==
+X-Google-Smtp-Source: AK7set+dmT1UNk8s4QIA5xdiGzs2ee3MFK8ZRRn8Dx1L8PUc3w+S94rzWwTf+3LP/3gEjgHBc/p6Fw==
+X-Received: by 2002:a17:906:4783:b0:8f6:dc49:337f with SMTP id cw3-20020a170906478300b008f6dc49337fmr41183414ejc.43.1678628689144;
+        Sun, 12 Mar 2023 06:44:49 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id wu5-20020a170906eec500b00927b85e48b0sm397962ejb.111.2023.03.12.06.44.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 06:44:48 -0700 (PDT)
+Message-ID: <e83ccb7d-cc08-181b-e354-af6b1de34ff3@linaro.org>
+Date:   Sun, 12 Mar 2023 14:44:47 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312131318.351173-25-krzysztof.kozlowski@linaro.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] i2c: mpc: Use the i2c-scl-clk-low-timeout-ms property
+Content-Language: en-US
+To:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+References: <20230312131933.248715-1-andi.shyti@kernel.org>
+ <20230312131933.248715-3-andi.shyti@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312131933.248715-3-andi.shyti@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Krzysztof,
-
-Thank you for the patch.
-
-On Sun, Mar 12, 2023 at 02:13:15PM +0100, Krzysztof Kozlowski wrote:
-> The driver will match mostly by DT table (even thought there is regular
-> ID table) so there is little benefit in of_match_ptr (this also allows
-> ACPI matching via PRP0001, even though it might not be relevant here).
-> This also fixes !CONFIG_OF error:
+On 12/03/2023 14:19, Andi Shyti wrote:
+> Now we have the i2c-scl-clk-low-timeout-ms property defined in
+> the binding. Use it and remove the previous "fsl,timeout".
 > 
->   drivers/media/i2c/ov7740.c:1203:34: error: ‘ov7740_of_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-
+> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
->  drivers/media/i2c/ov7740.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/media/i2c/ov7740.c b/drivers/media/i2c/ov7740.c
-> index c9fd9b0bc54a..42121916d25f 100644
-> --- a/drivers/media/i2c/ov7740.c
-> +++ b/drivers/media/i2c/ov7740.c
-> @@ -1210,7 +1210,7 @@ static struct i2c_driver ov7740_i2c_driver = {
->  	.driver = {
->  		.name = "ov7740",
->  		.pm = &ov7740_pm_ops,
-> -		.of_match_table = of_match_ptr(ov7740_of_match),
-> +		.of_match_table = ov7740_of_match,
->  	},
->  	.probe_new = ov7740_probe,
->  	.remove   = ov7740_remove,
+>  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 12 ++++++------
 
--- 
-Regards,
+Ah, and I forgot: bindings are always separate patches from driver
+changes. Cannot be mixed.
 
-Laurent Pinchart
+Best regards,
+Krzysztof
+
