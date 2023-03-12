@@ -2,595 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 947E06B6B87
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:53:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B81D36B6B91
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 21:57:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231561AbjCLUxK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 16:53:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40686 "EHLO
+        id S229731AbjCLU5L (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 16:57:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231423AbjCLUw6 (ORCPT
+        with ESMTP id S231544AbjCLU5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 16:52:58 -0400
-Received: from mail.andi.de1.cc (mail.andi.de1.cc [IPv6:2a01:238:4321:8900:456f:ecd6:43e:202c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7388497;
-        Sun, 12 Mar 2023 13:52:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=kemnade.info; s=20220719; h=Content-Transfer-Encoding:MIME-Version:
-        References:In-Reply-To:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:
-        Content-Type:Content-ID:Content-Description:Resent-Date:Resent-From:
-        Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-        List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=5QdP4auCq59pDyR5SWmIByL/GD1jLq3+zp4ygb1zUq4=; b=C+EzYrvNcmjua5Zu5V3CsHqg+B
-        ytKWCgn15a8jHxxYNQ+KfHc4O8CV8VrP3tmgQU2BI5jXm/5jiB9Mb7HLP+73u0SU4ZI0Yx1JeW4XX
-        SPBj79wQCpGDIefwHBA4e3YjZw8H8ZD0I1gDlUlERC//j+d1gIWMqiXhIw3bH7ZsYFy4XqEw71212
-        5J8t44tJ/fQNeK2/yKA5ex4aPVWG/PmjlE/aOhv/nBUCHHFXw8FqVHVSzofB7JmZKe0NeFmbGs4zr
-        lIH/SklTBWr9m4P0rA+ttC4rMSBgVnHqUGSKeuXDy91DGnDIX9XCDyepLuk2oLEW/TMhXWXukdW/g
-        OFcCU28A==;
-Received: from p200300ccff059e001a3da2fffebfd33a.dip0.t-ipconnect.de ([2003:cc:ff05:9e00:1a3d:a2ff:febf:d33a] helo=aktux)
-        by mail.andi.de1.cc with esmtpsa (TLS1.2:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.89)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pbSgM-0003yz-Bo; Sun, 12 Mar 2023 21:52:42 +0100
-Received: from andi by aktux with local (Exim 4.94.2)
-        (envelope-from <andreas@kemnade.info>)
-        id 1pbSgL-009ZWo-RM; Sun, 12 Mar 2023 21:52:41 +0100
-From:   Andreas Kemnade <andreas@kemnade.info>
-To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        arnd@arndb.de, olof@lixom.net, soc@kernel.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, marex@denx.de, max.krummenacher@toradex.com,
-        leoyang.li@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     Andreas Kemnade <andreas@kemnade.info>
-Subject: [PATCH 2/2] ARM: dts: imx: Add devicetree for Tolino Vison
-Date:   Sun, 12 Mar 2023 21:52:36 +0100
-Message-Id: <20230312205236.2281466-3-andreas@kemnade.info>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20230312205236.2281466-1-andreas@kemnade.info>
-References: <20230312205236.2281466-1-andreas@kemnade.info>
+        Sun, 12 Mar 2023 16:57:08 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF7B428D38
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:57:06 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id y4so11588123edo.2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 13:57:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678654625;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=U/BYuAhpT1ImLYYppOi6bO5xFNSIeIPiH8VsW85cixU=;
+        b=ud/9lsVqnNiML2sSeRl1HRB7vyDYcqZsOgxGYOopUuAK04W81tMInIMSS61+Y8V4qq
+         W3D0fOHng3D1mxN9b8Jjp6bRkaRIMtRfgvz9rLoTSFDptnSkUxTZVZ0k38s7z77mcUIj
+         6hbLX40iyXZ1YSMsRwbrpHlAHKNENlVtgcL1haeKV15skD9niLbWRcJxSXJIW4NCED8N
+         8ruKKsYc/7c2/uXVZjy2Lyl/NAVQKJ60Gg1Xfs/SjkHrCFGRYQa9IP65UhktpNPBHk+b
+         Ei6e0yvsWYTLn6GrWHDiG8u/B0Qwt1jEyQnI0cMSPCyr1QMfwyvI4UJkN0L+1HzLL+bF
+         z+nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678654625;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=U/BYuAhpT1ImLYYppOi6bO5xFNSIeIPiH8VsW85cixU=;
+        b=OyrRt6td6pdFq+O2gTagTvNdmFY6G5wEOU9XKpLd4mYMoYhLh+ZH3aYTDsE6JjmnBY
+         rTAD09Mz2ioCUO3cWGM6364DEWqJfDUOr9adRbM8NAr2Ynb/WrErsdFXpuW+5nGEZQls
+         5pwGPzLLbHQyaeM0GPYgbrzjyJQu+1nlf1tiii8xvqenOsEe03cyonPLY1kQXw7VUd6P
+         QFvc2GlziVTPRYdaUJYJkfUYJa+UnlfcS7oJT6rOOu+6rJcQCKm094kfkuQku8dEuHLx
+         pTQDYs79QDmGtYgeVY1h9ijzWr7xtOmVWk9XhnyRHVnDXkDCu/PkST+EIhBBpJPf09uM
+         yg4Q==
+X-Gm-Message-State: AO0yUKXtndMIKr/4gL2/Fch2NJxUcSvOYqrPAWjrhOdyEAxa1YLQ1Wze
+        fa4D8wiW+Y4b4hSXe4xV/AUcfw==
+X-Google-Smtp-Source: AK7set+zY4WfV4JPUy9KG6Q/TUK4N0pd8ygY5c0mzm1YQfsNtCrzgJ1NegaMkj3Q3Jyp6GpNsvwo3Q==
+X-Received: by 2002:a05:6402:383:b0:4ac:bd84:43d8 with SMTP id o3-20020a056402038300b004acbd8443d8mr30431879edv.8.1678654625483;
+        Sun, 12 Mar 2023 13:57:05 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:d9f6:3e61:beeb:295a? ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
+        by smtp.gmail.com with ESMTPSA id ia9-20020a170907a06900b0092499bb0324sm1430956ejc.12.2023.03.12.13.57.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 13:57:05 -0700 (PDT)
+Message-ID: <7747168a-1b4a-9c79-d447-020a7de7bd89@linaro.org>
+Date:   Sun, 12 Mar 2023 21:57:03 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -1.0 (-)
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v11 02/15] dt-bindings: mmc: cdns: Add AMD Pensando Elba
+ SoC
+Content-Language: en-US
+To:     Brad Larson <blarson@amd.com>, linux-arm-kernel@lists.infradead.org
+Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
+        linux-spi@vger.kernel.org, adrian.hunter@intel.com,
+        alcooperx@gmail.com, andy.shevchenko@gmail.com, arnd@arndb.de,
+        brendan.higgins@linux.dev, briannorris@chromium.org,
+        brijeshkumar.singh@amd.com, catalin.marinas@arm.com,
+        davidgow@google.com, gsomlo@gmail.com, gerg@linux-m68k.org,
+        krzk@kernel.org, krzysztof.kozlowski+dt@linaro.org, lee@kernel.org,
+        lee.jones@linaro.org, broonie@kernel.org,
+        yamada.masahiro@socionext.com, p.zabel@pengutronix.de,
+        piotrs@cadence.com, p.yadav@ti.com, rdunlap@infradead.org,
+        robh+dt@kernel.org, samuel@sholland.org, fancer.lancer@gmail.com,
+        skhan@linuxfoundation.org, suravee.suthikulpanit@amd.com,
+        thomas.lendacky@amd.com, tonyhuang.sunplus@gmail.com,
+        ulf.hansson@linaro.org, vaishnav.a@ti.com, will@kernel.org,
+        devicetree@vger.kernel.org
+References: <20230312004445.15913-1-blarson@amd.com>
+ <20230312004445.15913-3-blarson@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312004445.15913-3-blarson@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This adds a devicetree for the Kobo Aura 2 Ebook reader. It is based
-on boards marked with "37NB-E60Q30+4A3". It is equipped with an i.MX6SL
-SoC.
+On 12/03/2023 01:44, Brad Larson wrote:
+> AMD Pensando Elba ARM 64-bit SoC is integrated with this IP and
+> explicitly controls byte-lane enables.
+> 
+> Signed-off-by: Brad Larson <blarson@amd.com>
 
-Expected to work:
- - Buttons
- - Wifi
- - LEDs
- - uSD
- - eMMC
- - USB
- - RTC
- - Touchscreen
- - Backlight
+Thank you for your patch. There is something to discuss/improve.
 
-Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
----
- arch/arm/boot/dts/Makefile                 |   1 +
- arch/arm/boot/dts/imx6sl-tolino-vision.dts | 490 +++++++++++++++++++++
- 2 files changed, 491 insertions(+)
- create mode 100644 arch/arm/boot/dts/imx6sl-tolino-vision.dts
+>    interrupts:
+>      maxItems: 1
+> @@ -120,6 +119,27 @@ required:
+>    - interrupts
+>    - clocks
+>  
+> +allOf:
+> +  - $ref: mmc-controller.yaml
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: amd,pensando-elba-sd4hc
+> +    then:
+> +      properties:
+> +        reg:
+> +          items:
+> +            - description: Host controller registers
+> +            - description: Elba byte-lane enable register for writes
+> +      required:
+> +        - resets
+> +    else:
+> +      properties:
+> +        resets: false
 
-diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
-index efe4152e5846..159363f46522 100644
---- a/arch/arm/boot/dts/Makefile
-+++ b/arch/arm/boot/dts/Makefile
-@@ -690,6 +690,7 @@ dtb-$(CONFIG_SOC_IMX6SL) += \
- 	imx6sl-kobo-aura2.dtb \
- 	imx6sl-tolino-shine2hd.dtb \
- 	imx6sl-tolino-shine3.dtb \
-+	imx6sl-tolino-vision.dtb \
- 	imx6sl-tolino-vision5.dtb \
- 	imx6sl-warp.dtb
- dtb-$(CONFIG_SOC_IMX6SLL) += \
-diff --git a/arch/arm/boot/dts/imx6sl-tolino-vision.dts b/arch/arm/boot/dts/imx6sl-tolino-vision.dts
-new file mode 100644
-index 000000000000..ee6e66218e49
---- /dev/null
-+++ b/arch/arm/boot/dts/imx6sl-tolino-vision.dts
-@@ -0,0 +1,490 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Device tree for the Tolino Vison ebook reader
-+ *
-+ * Name on mainboard is: 37NB-E60Q30+4A3
-+ * Serials start with: 6032
-+ *
-+ * Copyright 2023 Andreas Kemnade
-+ */
-+
-+/dts-v1/;
-+
-+#include <dt-bindings/leds/common.h>
-+#include <dt-bindings/input/input.h>
-+#include <dt-bindings/gpio/gpio.h>
-+#include "imx6sl.dtsi"
-+
-+/ {
-+	model = "Tolino Vision";
-+	compatible = "kobo,tolino-vision", "fsl,imx6sl";
-+
-+	aliases {
-+		mmc0 = &usdhc4;
-+		mmc1 = &usdhc2;
-+	};
-+
-+	backlight {
-+		compatible = "pwm-backlight";
-+		pwms = <&ec 0 50000>;
-+		power-supply = <&backlight_regulator>;
-+	};
-+
-+	backlight_regulator: regulator-backlight {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_backlight_power>;
-+		regulator-name = "backlight";
-+		gpio = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-+		enable-active-high;
-+	};
-+
-+	chosen {
-+		stdout-path = &uart1;
-+	};
-+
-+	gpio_keys: gpio-keys {
-+		compatible = "gpio-keys";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_gpio_keys>;
-+
-+		key-cover {
-+			/* magnetic sensor in the corner next to the uSD slot */
-+			label = "Cover";
-+			gpios = <&gpio5 12 GPIO_ACTIVE_LOW>;
-+			linux,code = <SW_LID>;
-+			linux,input-type = <EV_SW>;
-+			wakeup-source;
-+		};
-+
-+		key-fl {
-+			label = "Frontlight";
-+			gpios = <&gpio3 26 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_BRIGHTNESS_CYCLE>;
-+		};
-+
-+		key-power {
-+			label = "Power";
-+			gpios = <&gpio5 8 GPIO_ACTIVE_LOW>;
-+			linux,code = <KEY_POWER>;
-+			wakeup-source;
-+		};
-+	};
-+
-+	leds: leds {
-+		compatible = "gpio-leds";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_leds>;
-+
-+		led-0 {
-+			/* LED on home button */
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_STATUS;
-+			gpios = <&gpio5 10 GPIO_ACTIVE_LOW>;
-+		};
-+
-+		led-1 {
-+			/* LED on power button */
-+			color = <LED_COLOR_ID_WHITE>;
-+			function = LED_FUNCTION_POWER;
-+			gpios = <&gpio5 7 GPIO_ACTIVE_LOW>;
-+			linux,default-trigger = "timer";
-+		};
-+	};
-+
-+	memory@80000000 {
-+		device_type = "memory";
-+		reg = <0x80000000 0x20000000>;
-+	};
-+
-+	reg_wifi: regulator-wifi {
-+		compatible = "regulator-fixed";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_wifi_power>;
-+		regulator-name = "SD3_SPWR";
-+		regulator-min-microvolt = <3000000>;
-+		regulator-max-microvolt = <3000000>;
-+		gpio = <&gpio4 29 GPIO_ACTIVE_LOW>;
-+	};
-+
-+
-+	wifi_pwrseq: wifi_pwrseq {
-+		compatible = "mmc-pwrseq-simple";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_wifi_reset>;
-+		post-power-on-delay-ms = <20>;
-+		reset-gpios = <&gpio5 0 GPIO_ACTIVE_LOW>;
-+	};
-+};
-+
-+&i2c1 {
-+	pinctrl-names = "default","sleep";
-+	pinctrl-0 = <&pinctrl_i2c1>;
-+	pinctrl-1 = <&pinctrl_i2c1_sleep>;
-+	status = "okay";
-+
-+	touchscreen@15 {
-+		reg = <0x15>;
-+		compatible = "elan,ektf2132";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_ts>;
-+		power-gpios = <&gpio5 13 GPIO_ACTIVE_HIGH>;
-+		interrupts-extended = <&gpio5 6 IRQ_TYPE_EDGE_FALLING>;
-+	};
-+
-+	accelerometer@1d {
-+		reg = <0x1d>;
-+		compatible = "fsl,mma8652";
-+	};
-+};
-+
-+&i2c2 {
-+	pinctrl-names = "default","sleep";
-+	pinctrl-0 = <&pinctrl_i2c2>;
-+	pinctrl-1 = <&pinctrl_i2c2_sleep>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+};
-+
-+&i2c3 {
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_i2c3>;
-+	clock-frequency = <100000>;
-+	status = "okay";
-+
-+	ec: embedded-controller@43 {
-+		compatible = "netronix,ntxec";
-+		reg = <0x43>;
-+		#pwm-cells = <2>;
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_ec>;
-+		interrupts-extended = <&gpio5 11 IRQ_TYPE_EDGE_FALLING>;
-+		system-power-controller;
-+	};
-+};
-+
-+&snvs_rtc {
-+	/*
-+	 * We are using the RTC in the PMIC, but this one is not disabled
-+	 * in imx6sl.dtsi.
-+	 */
-+	status = "disabled";
-+};
-+
-+&uart1 {
-+	/* J4 */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart1>;
-+	status = "okay";
-+};
-+
-+&uart4 {
-+	/* J9 */
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pinctrl_uart4>;
-+	status = "okay";
-+};
-+
-+&usdhc2 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc2>;
-+	pinctrl-1 = <&pinctrl_usdhc2_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc2_200mhz>;
-+	pinctrl-3 = <&pinctrl_usdhc2_sleep>;
-+	cd-gpios = <&gpio5 2 GPIO_ACTIVE_LOW>;
-+	status = "okay";
-+
-+	/* removable uSD card */
-+};
-+
-+&usdhc3 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc3>;
-+	pinctrl-1 = <&pinctrl_usdhc3_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc3_200mhz>;
-+	pinctrl-3 = <&pinctrl_usdhc3_sleep>;
-+	vmmc-supply = <&reg_wifi>;
-+	mmc-pwrseq = <&wifi_pwrseq>;
-+	cap-power-off-card;
-+	non-removable;
-+	status = "okay";
-+
-+	/* CyberTan WC121 (BCM43362) SDIO WiFi */
-+};
-+
-+&usdhc4 {
-+	pinctrl-names = "default", "state_100mhz", "state_200mhz", "sleep";
-+	pinctrl-0 = <&pinctrl_usdhc4>;
-+	pinctrl-1 = <&pinctrl_usdhc4_100mhz>;
-+	pinctrl-2 = <&pinctrl_usdhc4_200mhz>;
-+	pinctrl-3 = <&pinctrl_usdhc4_sleep>;
-+	bus-width = <8>;
-+	no-1-8-v;
-+	non-removable;
-+	status = "okay";
-+
-+	/* internal eMMC */
-+};
-+
-+&usbotg1 {
-+	pinctrl-names = "default";
-+	disable-over-current;
-+	srp-disable;
-+	hnp-disable;
-+	adp-disable;
-+	status = "okay";
-+};
-+
-+&iomuxc {
-+	pinctrl_backlight_power: backlight-powergrp {
-+		fsl,pins = <
-+			MX6SL_PAD_EPDC_PWRCTRL3__GPIO2_IO10 0x10059
-+		>;
-+	};
-+
-+	pinctrl_ec: ecgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_DAT0__GPIO5_IO11  0x17000
-+		>;
-+	};
-+
-+	pinctrl_gpio_keys: gpio-keysgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_DAT1__GPIO5_IO08  0x110B0
-+			MX6SL_PAD_SD1_DAT4__GPIO5_IO12  0x110B0
-+			MX6SL_PAD_KEY_COL1__GPIO3_IO26  0x11030
-+		>;
-+	};
-+
-+	pinctrl_i2c1: i2c1grp {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x4001f8b1
-+			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x4001f8b1
-+		>;
-+	};
-+
-+	pinctrl_i2c1_sleep: i2c1grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C1_SCL__I2C1_SCL	 0x400108b1
-+			MX6SL_PAD_I2C1_SDA__I2C1_SDA	 0x400108b1
-+		>;
-+	};
-+
-+	pinctrl_i2c2: i2c2grp {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x4001f8b1
-+			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x4001f8b1
-+		>;
-+	};
-+
-+	pinctrl_i2c2_sleep: i2c2grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_I2C2_SCL__I2C2_SCL	 0x400108b1
-+			MX6SL_PAD_I2C2_SDA__I2C2_SDA	 0x400108b1
-+		>;
-+	};
-+
-+	pinctrl_i2c3: i2c3grp {
-+		fsl,pins = <
-+			MX6SL_PAD_REF_CLK_24M__I2C3_SCL  0x4001f8b1
-+			MX6SL_PAD_REF_CLK_32K__I2C3_SDA  0x4001f8b1
-+		>;
-+	};
-+
-+	pinctrl_leds: ledsgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_DAT6__GPIO5_IO07    0x17059
-+			MX6SL_PAD_SD1_DAT7__GPIO5_IO10    0x17059
-+			MX6SL_PAD_EPDC_SDCE2__GPIO1_IO29  0x17059
-+		>;
-+	};
-+
-+	pinctrl_ts: tsgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD1_DAT2__GPIO5_IO13	0x110B0
-+			MX6SL_PAD_SD1_DAT3__GPIO5_IO06	0x1B0B1
-+		>;
-+	};
-+
-+	pinctrl_uart1: uart1grp {
-+		fsl,pins = <
-+			MX6SL_PAD_UART1_TXD__UART1_TX_DATA 0x1b0b1
-+			MX6SL_PAD_UART1_RXD__UART1_RX_DATA 0x1b0b1
-+		>;
-+	};
-+
-+	pinctrl_uart4: uart4grp {
-+		fsl,pins = <
-+			MX6SL_PAD_KEY_ROW6__UART4_TX_DATA 0x1b0b1
-+			MX6SL_PAD_KEY_COL6__UART4_RX_DATA 0x1b0b1
-+		>;
-+	};
-+
-+	pinctrl_usbotg1: usbotg1grp {
-+		fsl,pins = <
-+			MX6SL_PAD_EPDC_PWRCOM__USB_OTG1_ID 0x17059
-+		>;
-+	};
-+
-+	pinctrl_usdhc2: usdhc2grp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__SD2_CMD		0x17059
-+			MX6SL_PAD_SD2_CLK__SD2_CLK		0x13059
-+			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x17059
-+			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x17059
-+			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x17059
-+			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x17059
-+			MX6SL_PAD_SD2_DAT4__GPIO5_IO02		0x1b0b1
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_100mhz: usdhc2grp-100mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170b9
-+			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130b9
-+			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170b9
-+			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170b9
-+			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170b9
-+			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170b9
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_200mhz: usdhc2grp-200mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__SD2_CMD		0x170f9
-+			MX6SL_PAD_SD2_CLK__SD2_CLK		0x130f9
-+			MX6SL_PAD_SD2_DAT0__SD2_DATA0		0x170f9
-+			MX6SL_PAD_SD2_DAT1__SD2_DATA1		0x170f9
-+			MX6SL_PAD_SD2_DAT2__SD2_DATA2		0x170f9
-+			MX6SL_PAD_SD2_DAT3__SD2_DATA3		0x170f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc2_sleep: usdhc2grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_CMD__GPIO5_IO04		0x100f9
-+			MX6SL_PAD_SD2_CLK__GPIO5_IO05		0x100f9
-+			MX6SL_PAD_SD2_DAT0__GPIO5_IO01		0x100f9
-+			MX6SL_PAD_SD2_DAT1__GPIO4_IO30		0x100f9
-+			MX6SL_PAD_SD2_DAT2__GPIO5_IO03		0x100f9
-+			MX6SL_PAD_SD2_DAT3__GPIO4_IO28		0x100f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc3: usdhc3grp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__SD3_CMD	0x11059
-+			MX6SL_PAD_SD3_CLK__SD3_CLK	0x11059
-+			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x11059
-+			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x11059
-+			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x11059
-+			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x11059
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_100mhz: usdhc3grp-100mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170b9
-+			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170b9
-+			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170b9
-+			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170b9
-+			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170b9
-+			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170b9
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_200mhz: usdhc3grp-200mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__SD3_CMD	0x170f9
-+			MX6SL_PAD_SD3_CLK__SD3_CLK	0x170f9
-+			MX6SL_PAD_SD3_DAT0__SD3_DATA0	0x170f9
-+			MX6SL_PAD_SD3_DAT1__SD3_DATA1	0x170f9
-+			MX6SL_PAD_SD3_DAT2__SD3_DATA2	0x170f9
-+			MX6SL_PAD_SD3_DAT3__SD3_DATA3	0x170f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc3_sleep: usdhc3grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_SD3_CMD__GPIO5_IO21	0x100c1
-+			MX6SL_PAD_SD3_CLK__GPIO5_IO18	0x100c1
-+			MX6SL_PAD_SD3_DAT0__GPIO5_IO19	0x100c1
-+			MX6SL_PAD_SD3_DAT1__GPIO5_IO20	0x100c1
-+			MX6SL_PAD_SD3_DAT2__GPIO5_IO16	0x100c1
-+			MX6SL_PAD_SD3_DAT3__GPIO5_IO17	0x100c1
-+		>;
-+	};
-+
-+	pinctrl_usdhc4: usdhc4grp {
-+		fsl,pins = <
-+			MX6SL_PAD_FEC_TX_CLK__SD4_CMD		0x17059
-+			MX6SL_PAD_FEC_MDIO__SD4_CLK		0x13059
-+			MX6SL_PAD_FEC_RX_ER__SD4_DATA0		0x17059
-+			MX6SL_PAD_FEC_CRS_DV__SD4_DATA1		0x17059
-+			MX6SL_PAD_FEC_RXD1__SD4_DATA2		0x17059
-+			MX6SL_PAD_FEC_TXD0__SD4_DATA3		0x17059
-+			MX6SL_PAD_FEC_MDC__SD4_DATA4		0x17059
-+			MX6SL_PAD_FEC_RXD0__SD4_DATA5		0x17059
-+			MX6SL_PAD_FEC_TX_EN__SD4_DATA6		0x17059
-+			MX6SL_PAD_FEC_TXD1__SD4_DATA7		0x17059
-+			MX6SL_PAD_FEC_REF_CLK__SD4_RESET	0x17068
-+		>;
-+	};
-+
-+	pinctrl_usdhc4_100mhz: usdhc4grp-100mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_FEC_TX_CLK__SD4_CMD		0x170b9
-+			MX6SL_PAD_FEC_MDIO__SD4_CLK		0x130b9
-+			MX6SL_PAD_FEC_RX_ER__SD4_DATA0		0x170b9
-+			MX6SL_PAD_FEC_CRS_DV__SD4_DATA1		0x170b9
-+			MX6SL_PAD_FEC_RXD1__SD4_DATA2		0x170b9
-+			MX6SL_PAD_FEC_TXD0__SD4_DATA3		0x170b9
-+			MX6SL_PAD_FEC_MDC__SD4_DATA4		0x170b9
-+			MX6SL_PAD_FEC_RXD0__SD4_DATA5		0x170b9
-+			MX6SL_PAD_FEC_TX_EN__SD4_DATA6		0x170b9
-+			MX6SL_PAD_FEC_TXD1__SD4_DATA7		0x170b9
-+		>;
-+	};
-+
-+	pinctrl_usdhc4_200mhz: usdhc4grp-200mhz {
-+		fsl,pins = <
-+			MX6SL_PAD_FEC_TX_CLK__SD4_CMD		0x170f9
-+			MX6SL_PAD_FEC_MDIO__SD4_CLK		0x130f9
-+			MX6SL_PAD_FEC_RX_ER__SD4_DATA0		0x170f9
-+			MX6SL_PAD_FEC_CRS_DV__SD4_DATA1		0x170f9
-+			MX6SL_PAD_FEC_RXD1__SD4_DATA2		0x170f9
-+			MX6SL_PAD_FEC_TXD0__SD4_DATA3		0x170f9
-+			MX6SL_PAD_FEC_MDC__SD4_DATA4		0x170f9
-+			MX6SL_PAD_FEC_RXD0__SD4_DATA5		0x170f9
-+			MX6SL_PAD_FEC_TX_EN__SD4_DATA6		0x170f9
-+			MX6SL_PAD_FEC_TXD1__SD4_DATA7		0x170f9
-+		>;
-+	};
-+
-+	pinctrl_usdhc4_sleep: usdhc4grp-sleep {
-+		fsl,pins = <
-+			MX6SL_PAD_FEC_TX_CLK__GPIO4_IO21	0x100c1
-+			MX6SL_PAD_FEC_MDIO__GPIO4_IO20		0x100c1
-+			MX6SL_PAD_FEC_RX_ER__GPIO4_IO19		0x100c1
-+			MX6SL_PAD_FEC_CRS_DV__GPIO4_IO25	0x100c1
-+			MX6SL_PAD_FEC_RXD1__GPIO4_IO18		0x100c1
-+			MX6SL_PAD_FEC_TXD0__GPIO4_IO24		0x100c1
-+			MX6SL_PAD_FEC_MDC__GPIO4_IO23		0x100c1
-+			MX6SL_PAD_FEC_RXD0__GPIO4_IO17		0x100c1
-+			MX6SL_PAD_FEC_TX_EN__GPIO4_IO22		0x100c1
-+			MX6SL_PAD_FEC_TXD1__GPIO4_IO16		0x100c1
-+		>;
-+	};
-+
-+	pinctrl_wifi_power: wifi-powergrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_DAT6__GPIO4_IO29	0x10059	/* WIFI_3V3_ON */
-+		>;
-+	};
-+
-+	pinctrl_wifi_reset: wifi-resetgrp {
-+		fsl,pins = <
-+			MX6SL_PAD_SD2_DAT7__GPIO5_IO00	0x10059	/* WIFI_RST */
-+		>;
-+	};
-+};
--- 
-2.30.2
+I don't think this passed the tests... You disallow resets for everyone
+else. Why? Drop this line.
+
+> +        reg:
+> +          maxItems: 1
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+
+Best regards,
+Krzysztof
 
