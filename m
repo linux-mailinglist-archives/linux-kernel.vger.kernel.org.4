@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8E1896B6631
-	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B5DED6B6635
+	for <lists+linux-kernel@lfdr.de>; Sun, 12 Mar 2023 14:13:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229782AbjCLNNb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 09:13:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41994 "EHLO
+        id S229822AbjCLNNe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 09:13:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCLNN2 (ORCPT
+        with ESMTP id S229757AbjCLNNa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 09:13:28 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 424971F93D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:27 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id cy23so38394667edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:27 -0700 (PDT)
+        Sun, 12 Mar 2023 09:13:30 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 251E51F4A2
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:29 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id ek18so7373111edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 06:13:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678626806;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=mjvZGlI9gqxKHJb6Zb5Fkc5S1/fsh/NgaCfi/T9v11Y=;
-        b=lKlYxxhYCKn0JxPwkYKx3vASmrkH+srcYSRHily2tzLUxFl3QklS8Q4NAB9udLBZho
-         dDGPZTBINPga+76lbL33R0Ue0ftkVUUQLxJzi4w9KwBDni2xOXZwaZzbSux02prlPDHP
-         vJ7nGGelocPKxiZAPsodErx2JPF3u6mnEqcDFc2Wm/P0mWtV1EylhbCj0fTAm6z6v6t4
-         CdJ8Mm8qbbJwTOuhYW9bDTdnFKTImZMFdRSyvSmbjiOQG5UwzZqJrRtqjTlrTWLJdknY
-         zHGpr1crUtQGblfLv3akSTMscNClIduQLP5C6mBhyVCwurXuWWNgdYQ93BE30x0tKpwz
-         Z2KA==
+        d=linaro.org; s=google; t=1678626807;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bkWfjOYJTJDW62JPb9CPt+q+UFtZ1H1u4ouIUZRGvZ4=;
+        b=dufU2ZEVvJS9S3PuzmfWSiaKt/e7oKmEif/HcTwiDm1Y71Lj42dFTktHXvA2w4XjAm
+         z6CgADU73/O+QVxdKfCgfzGdd8q4LJXRA1NAMkyp64omDj5lG0pyjwGLSEUy3YRLQw1F
+         jbhPrxxPiruJ9AwZDeljYbj05SqYwHoEeRai4CpSh/z6WTebeg/5Vrjbf2NIr5CzrKuM
+         9qiaMAOz27bLtb+MQWNr6IPfIJ9u+UOg7hONEIKoQXcti8nfWdHn2vaNqLwCT+mhFL13
+         lxBRmxlvU7xnCcaMng+7C4zdz2s2yxnEIqvlx2C5sHF3menjlKTG6uQs3n0MQ+fjsU1a
+         kNjQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678626806;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mjvZGlI9gqxKHJb6Zb5Fkc5S1/fsh/NgaCfi/T9v11Y=;
-        b=UtmZLR7+w45kwKuMNl8lmyDO4VmDQJ0vFmrumJoxkDnvlItjtBVQj8pdfEt6P5zZ9j
-         L6f2cKog99kPJdgOSm5mMkTmi945wivkHmP99Jc5B/emA5JJJ3+GVMuxleJ0JUfxS0PF
-         oppveVn6YBcRC1iaNWIkXzTi9sKm6I6qNauCmJFWweYjMTya5Xn6GBDGdNMclhrvRy5S
-         ULCvvvF6zIgIVyE3lTQc8HDxk76yQ4xcSeWAYdwZMGFURRB2Q7hMUtJGdrq9hehekzaT
-         AXLqUF6HmpOspeLLBygCz+bhL9zGKLBHlRqtgZxk2/yD55uaWsDYAbj4jwWKqHF2xGhJ
-         OP2Q==
-X-Gm-Message-State: AO0yUKUe/kejOsFEKDqYVSv/HTfDUjykLLnYIe0uz6xFxNFHsEwIGBLL
-        pgBTDMnktYt/QRObiqpZFjarDA==
-X-Google-Smtp-Source: AK7set+EVWjyvBDbBmHCcExD0NtojGt3goUEamDttcbYP3oPo0KNy0WQIuIA/C83vuguDS3t+796Xw==
-X-Received: by 2002:a17:907:98e6:b0:929:43b5:8e69 with SMTP id ke6-20020a17090798e600b0092943b58e69mr166365ejc.40.1678626805682;
-        Sun, 12 Mar 2023 06:13:25 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678626807;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bkWfjOYJTJDW62JPb9CPt+q+UFtZ1H1u4ouIUZRGvZ4=;
+        b=h1FRor0yzJYbB16HCgf6sjjzANE7jfLQUFXy1oBsdtWDqM0QCoYVeJUBVkPz0BvI5m
+         1KrTAqoWSkFmSecHaNbINa5YadQFaRy3KiaYa/ykI0HEfCR5Ev6Cw4v6dDbTzAzyY9bH
+         j1fXj0Akrn2rJP7AgwTX0EOlphSvlEFRO2XtUvpbZ9gZg0KOWh0w26IVCOxZMts9syKg
+         Uf92UeNoN0gwdJOvlfsaN0cwWh9iTgNirEAtVuJK9nJ7MR3TZXiHSANSTEojxP7rOY1m
+         dtq20y1QCkKc0MA4bzQOglMzLM6lKX/MSlm3pJLcKqZY3+DGXQ7QFGirbTMLMmSwr5bF
+         eCsA==
+X-Gm-Message-State: AO0yUKU6TuG9DURpqw8L/lTVwCbZr9rThr3Th4XaHOJohbdFqVxwSR6O
+        0rVl1WKfNWA60dUJqsbAxVonHw==
+X-Google-Smtp-Source: AK7set+ziiDk/Iecc5/4CJWrBGIg9OTBhTAoqLcBDI9ZAK6SPp7SnqnL3CHjfonNxYjxcPQIpQfdww==
+X-Received: by 2002:a17:906:f6cc:b0:925:5705:b5b8 with SMTP id jo12-20020a170906f6cc00b009255705b5b8mr2100962ejb.58.1678626807629;
+        Sun, 12 Mar 2023 06:13:27 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:d9f6:3e61:beeb:295a])
-        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.23
+        by smtp.gmail.com with ESMTPSA id r19-20020a1709067fd300b008eddbd46d7esm2213279ejs.31.2023.03.12.06.13.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 06:13:25 -0700 (PDT)
+        Sun, 12 Mar 2023 06:13:27 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Joe Tessler <jrt@google.com>,
         Hans Verkuil <hverkuil-cisco@xs4all.nl>,
@@ -94,10 +95,12 @@ To:     Joe Tessler <jrt@google.com>,
         linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
         linux-rockchip@lists.infradead.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
-Date:   Sun, 12 Mar 2023 14:12:51 +0100
-Message-Id: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH 02/28] media: cec: meson: drop of_match_ptr for ID table
+Date:   Sun, 12 Mar 2023 14:12:52 +0100
+Message-Id: <20230312131318.351173-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -115,26 +118,26 @@ The driver can match only via the DT table so the table should be always
 used and the of_match_ptr does not have any sense (this also allows ACPI
 matching via PRP0001, even though it might not be relevant here).
 
-  drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
+  drivers/media/cec/platform/meson/ao-cec.c:711:34: error: ‘meson_ao_cec_of_match’ defined but not used [-Werror=unused-const-variable=]
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/media/cec/i2c/ch7322.c | 2 +-
+ drivers/media/cec/platform/meson/ao-cec.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/media/cec/i2c/ch7322.c b/drivers/media/cec/i2c/ch7322.c
-index 34fad7123704..3c6e6496a001 100644
---- a/drivers/media/cec/i2c/ch7322.c
-+++ b/drivers/media/cec/i2c/ch7322.c
-@@ -589,7 +589,7 @@ MODULE_DEVICE_TABLE(of, ch7322_of_match);
- static struct i2c_driver ch7322_i2c_driver = {
- 	.driver = {
- 		.name = "ch7322",
--		.of_match_table = of_match_ptr(ch7322_of_match),
-+		.of_match_table = ch7322_of_match,
+diff --git a/drivers/media/cec/platform/meson/ao-cec.c b/drivers/media/cec/platform/meson/ao-cec.c
+index 6b440f0635d9..223c092dbb6a 100644
+--- a/drivers/media/cec/platform/meson/ao-cec.c
++++ b/drivers/media/cec/platform/meson/ao-cec.c
+@@ -719,7 +719,7 @@ static struct platform_driver meson_ao_cec_driver = {
+ 	.remove  = meson_ao_cec_remove,
+ 	.driver  = {
+ 		.name = "meson-ao-cec",
+-		.of_match_table = of_match_ptr(meson_ao_cec_of_match),
++		.of_match_table = meson_ao_cec_of_match,
  	},
- 	.probe_new	= ch7322_probe,
- 	.remove		= ch7322_remove,
+ };
+ 
 -- 
 2.34.1
 
