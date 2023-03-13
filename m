@@ -2,215 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 258346B8022
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:12:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A26D86B802B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:15:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjCMSMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53078 "EHLO
+        id S229664AbjCMSPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:15:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230240AbjCMSMU (ORCPT
+        with ESMTP id S229608AbjCMSPO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:12:20 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3155763CB;
-        Mon, 13 Mar 2023 11:12:11 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id i28so16887226lfv.0;
-        Mon, 13 Mar 2023 11:12:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678731130;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=OdSLYKJUtA9E/9SjNjQ3vieqKbkcB4VMy9EGsn81FmA=;
-        b=K0jnPl/IyZgiJlspsVHAGnS/5Dpzjy+mVOArxl/DIebTzSzMi8yz2qrhTNiaqJBmW4
-         UUwusbBtf5Roa/PG4eKjLLfFks1L736OKWnwyHlnqASN3n6YHdW1gQ6sx+EvzlGpC+ZZ
-         u/RWiQIH62jzlalF2ADHS2c8iPUuczQ6VY8UJ74FEg1TT532QbbbuqeQbWQfsT8sx6FC
-         C10QYTJ87yF++QjJp3JwBG3iyZco5XBnvDeHZSTewhLqp43NSOfwlOFyjaElozKw3zeS
-         o/PO8YZ4AFVAcuLwdCAGiMJUp3L0htqB44XIvPIX6hiDwCltceNwR6kVSB48T1QVC3Vp
-         VXCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678731130;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OdSLYKJUtA9E/9SjNjQ3vieqKbkcB4VMy9EGsn81FmA=;
-        b=CNCqW+dTAkVrMMRlUniHZZjuOculpEfJpbMTLZY7+QYSra5xNe1PbdFYo16xX7QOvo
-         LcjBHZFfG/1lvRmDEz/oh12FSUhMztzqoUaRvNEviQnWRAEPPBoHjAQCyxYg4vxQxzkq
-         10YpEOtaVrcgOUvITDZJ1Yfz6LRrkjrAZxFX1wTaRl3UG0jFkGLt/PwDnEOR3hXhDTyw
-         yma/OZkEpuDW4966scRjbnSTSb2maCavbGOdSpOe/+mPiNXAE5gbkRqon6YaPCy/jZIo
-         d1PWj/yy6BnOQVEMtk86dFFcFmF6KKZHnontBoz8c3UASBByhB/OUKnO91nOHs+QoyRd
-         x6TQ==
-X-Gm-Message-State: AO0yUKXR9R5E4dw/ur1g0V93nH6uWfbFHYYY2MQwxmNGqPRSS410tvHF
-        meRW2B3JZUKR+X017n3dJY0=
-X-Google-Smtp-Source: AK7set/XqDN+hrpMLKpXbwMTX5f+dRPWjcW7ch1ebUuwAZtpRYZR3FFxnQovew/TnqVWob4cNvScdQ==
-X-Received: by 2002:ac2:54bb:0:b0:4b4:f9df:c6ab with SMTP id w27-20020ac254bb000000b004b4f9dfc6abmr8867089lfk.60.1678731129952;
-        Mon, 13 Mar 2023 11:12:09 -0700 (PDT)
-Received: from pc636 (host-78-79-233-41.mobileonline.telia.com. [78.79.233.41])
-        by smtp.gmail.com with ESMTPSA id t10-20020a19ad0a000000b004e7a0f67490sm46062lfc.110.2023.03.13.11.12.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 11:12:09 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 13 Mar 2023 19:12:07 +0100
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <ZA9nd8LN4+qO5Sdn@pc636>
-References: <ZA7yK6iznHqiBu5i@pc636>
- <01559085-EB77-4962-B5EF-FF767F5A7353@joelfernandes.org>
- <ZA9B+sgrlK5yommJ@pc636>
- <CAEXW_YTgDM+47rfz0XNjeV8MMPnhyfCcXX+o74SqONvwd4wfzA@mail.gmail.com>
+        Mon, 13 Mar 2023 14:15:14 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAA15D254;
+        Mon, 13 Mar 2023 11:15:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678731313; x=1710267313;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=Vk7h//99+6xtLiIUT2OMHoWe7+NGPgyQECZ4uPfbSyk=;
+  b=ctJqKI26TX3AYo404voYQLS51colisUbEC77zbUh18LRO1Wyiu/j2+Np
+   p/tMt/1lzLup4ee7oJsAL5Z49WW5XhU/x3AwQwl/aAjivDUAO+8PGcksx
+   3scaQX7/nClCqEWiu5Rzrv8/rAiXTydQz3rCW4IAlgwUimoXeS1XJOP9B
+   p017qpecRlXgcdadIjg2sJpBe5XKY7J90uEFhanNstXse038FlDzq4wGr
+   qVVo8D/2vb/fEH+ujvIbKoLjiwnZpDnwwc+YEk4k5yerN8iJ+4myMMyWg
+   5bn9LHEILjUOjXbiU1yYcOTNIGDywJ6930nVEL/gx6cj/D1EOztkx7Q/d
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="335920182"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="335920182"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 11:15:10 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="852868181"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="852868181"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2023 11:14:15 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 13 Mar 2023 11:14:15 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 13 Mar 2023 11:14:15 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 11:14:15 -0700
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.40) by
+ edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 13 Mar 2023 11:14:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LrwY3QUcl0aTp9uaYc20Gq/+k1pr38tnyZsKiUNvYK92zfi0GhbsPkUzTdj7G8CDzWdX8Z9x8aAUUThoYsO85fUQHNX431gYtI/sCmH4fC1MCNkmsVqA1+cohl5eZc8S+ym9kE6KzRPP9Zwq/maBclQ/wwK0rHn3Qbai/dG00PghX0wnIUKSxjGZ9XFkjVGreiNc7GWXT1gzpZzbrZ7SmzfFK5riBnBZfEROH1ND/EVUO6OULSEO6gksUpBHqZ55BwhKHs3EgnQ7uTb4VBYxvQLrrbg2A4JuoFkmR7+wTdGDsoQh0jbW+rRNj53eWIjRxvVcSLChq2TAmPnyyRALLA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Vk7h//99+6xtLiIUT2OMHoWe7+NGPgyQECZ4uPfbSyk=;
+ b=oHwtpVGy1GQ4E34iocfI1frroqC24Hqq6WH/a9yswK3IsgUyUIY2IGY64b0MNVmx+Hix+4ZmvPyTm76y7RQ8rWLUrQWB/lD0jo4rUD8hkG/9IoA4OZtXgWvEKmSged6gSnHmeKiBewAT+UX5PBGv4aMagBCfgb6iSG4PdnGr+FOCGFnyFJpVRWh/QxAiO0Y/nSN8OMI2t79iUH++YoAcX7w6Q1IwilHb382aIfdmULo7S2w3rj8u1Fk7IHxnV7PmbnX8j2CLghBIUIQQWwvBeN72rk5nZWoK+HoVm/RpGcqNSRD4CEqSyAGBSMzloTCb7n2WEblVjLnAesnozEtkmA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by IA1PR11MB7920.namprd11.prod.outlook.com (2603:10b6:208:3fc::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 18:14:12 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a47:481:d644:a8b5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a47:481:d644:a8b5%7]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 18:14:12 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
+CC:     Borislav Petkov <bp@alien8.de>, Aristeu Rozanski <aris@redhat.com>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Xu, Feng F" <feng.f.xu@intel.com>,
+        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 1/1] EDAC/skx: Fix overflows on the DRAM row address
+ mapping arrays
+Thread-Topic: [PATCH v2 1/1] EDAC/skx: Fix overflows on the DRAM row address
+ mapping arrays
+Thread-Index: AQHZPba5S/dNBvIlPkKlTpOjG4MtAK75LI5Q
+Date:   Mon, 13 Mar 2023 18:14:12 +0000
+Message-ID: <SJ1PR11MB60836A58BB3131EE480A4ACDFCB99@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <IA1PR11MB61710A47690BD5DA2826F29389DF9@IA1PR11MB6171.namprd11.prod.outlook.com>
+ <20230211011728.71764-1-qiuxu.zhuo@intel.com>
+In-Reply-To: <20230211011728.71764-1-qiuxu.zhuo@intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|IA1PR11MB7920:EE_
+x-ms-office365-filtering-correlation-id: 60bfa63c-5a16-4cc5-c6c6-08db23eebf41
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: qwsyCgYLBpsFnJcQiAniyBl4QwasJbV4i3WoYq8Vi9poRLGORJVnjJICVADPwNUodCA9jvLiVYaAIPusZ9esXucsQgYxuanUk5YrS+fhqUzgJrKi7B+xrVE3lVoS7K6SHrlCadx691hf44UboXp0Rs9phY2m6ecqkaqJ3MpnkA2HM0ZwrlZQ/p9bX6hWhA4uYkRBr+9A8Kxe4OQPNtRImZzQceqWJy3XuqdVpMYHQ9qXka/umGDn5j4dy0jQ/ZvqaDwAsUBeZiu1laUu0lqSM5HTljxO6RBchf7HfGd5zrsQi62+6+bLZbfHcvqKsULlzpiN1C/KyOuWmIpjQmNv8QAMUj78PjPyfkzu9X6td3oGCRp1jFw+0ilHwEARu8g7h9UrXR+n3y4C0xuYTkEseGCdzt2+tBSHeORM/UB5ClXw2VEo1pFmZuI7IxEDgMSZReF6OA9Jf3d+x6qm6f1lYiO33L179FppFytjgeYrxDVnBEahxMrOrKJ68Sf8tkQ/1xeFyA95FsdckSL6dhrCillOIautzDA6D1u9RKMaS/uDzLPDKJFsEwXcwEWYqzgNtD9geKNxwnNbCGTc79+fDu4mCnAiiKa2Sysg3tm6P8Ko4HIvzFtbqdXERt2mvShyGEESFLPUr45ckt3b/yeM03vcQ+Laiozp69s4/QEXr4+0PGJt0G7FXXJGfQJmW2w05GL/wU23ynlWGzZwmMpMNQ==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(136003)(366004)(346002)(396003)(451199018)(2906002)(122000001)(82960400001)(5660300002)(8936002)(64756008)(52536014)(33656002)(558084003)(66946007)(55016003)(66556008)(8676002)(76116006)(66446008)(41300700001)(6862004)(38070700005)(4326008)(66476007)(316002)(38100700002)(54906003)(86362001)(6636002)(478600001)(9686003)(186003)(26005)(71200400001)(6506007)(7696005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9aj9dFnnrazEhgJwlIF+TxACoD+o4ShjFI3a0EwIu6GbO6+hDR3wXdVoqCZE?=
+ =?us-ascii?Q?mEVp4ztDywfzu/B8JSMgC5xNTUkAxN3NaIU6yT037rxhaH5w8XbTNArQhF+y?=
+ =?us-ascii?Q?4bhVK8sJKTJfRhD1Eo9WwR5Vyd0Znpe2tM61ePq4C2djzQzhv8jbXs5rq7ss?=
+ =?us-ascii?Q?u05jBQpnGQLDEt5rrJmNrDGZxh3IdAOb06/7fZMWFqPSDc9hYUYWb9jKlwSY?=
+ =?us-ascii?Q?E53T1C9sV9xw/ej8xpcLiDR2GFmHdcPAkHnsuhaYs43taRDrC+9tB+EmTOD9?=
+ =?us-ascii?Q?dqsxz0thiD6IaKLPESVses/fZsYTs+Txp0mq4NJ85zxTYvY3W8sfhbRtLmf5?=
+ =?us-ascii?Q?RXSYpuEbtnzVgsRP9XqGd9XWMIbLWzM6HR0VfbgQCPNL6wRiIwvhlLFfz0LQ?=
+ =?us-ascii?Q?o6zS6Gyz7+YE0XqidUbduuiKtbINXRXe7Au74vHyjTsLfimtbGRVoRcpe9hg?=
+ =?us-ascii?Q?R4ktiFmM2SavV1pXhNJ6dHbMPXs0uTcPxHvSuIOpZnfoKz1cC4neM6YrAEsb?=
+ =?us-ascii?Q?TWHS8qVH8hhKvA9l4aujmj/lMmR8bBeSXAK+IswjcBmUhCWvuts1NgpDN7PB?=
+ =?us-ascii?Q?HKrsaYeiHr0uOvtkzYHo5HZcTbq+QWgHhgnNLSF2xHPJ9eHqW3a3K651cmQH?=
+ =?us-ascii?Q?mVlT1/J9Umv6uLtKx78bwwoCN5BvE7YCdwF/dqNNkEGIepTZdhnBWgkolfIF?=
+ =?us-ascii?Q?GEmu06pdembbN7ehecBLxQUmyXPVqa9RiWN00bZ+wygnBgx+/+ECv8KecEDk?=
+ =?us-ascii?Q?wRrX1BU54u6a/5V+nBopE5P8bgNTnlBtttby/h+pmGGQCqvDma1XH92jY3ho?=
+ =?us-ascii?Q?BfpC2BIcpji3mr6eSuNu1h6vv5sXPtAlO7Yj2gwiBBY+u/Qt1wW2IIHSiJHn?=
+ =?us-ascii?Q?pYiO28Gw29iLZglb4Gy1TIjHTFu5UFOWsdQOoB/hnhvPtWdH60ClO3HzMePQ?=
+ =?us-ascii?Q?2+G26fl/Ax/q3vACrFFBsymJkW1YR92sQ77TYU0unioQxexAg5ENL3gVzuJX?=
+ =?us-ascii?Q?qgJxXXiTxs1rQM994lxW1M+cUd1l3VNFEFJsqYeagLDzwf8gPj2eVOADvDRp?=
+ =?us-ascii?Q?FACdPsRxWnbKc0CfR2CGSsoPTvjbgcr1JD8lMLiV/CpiDKPnJh08P7HpJp36?=
+ =?us-ascii?Q?IndJWM3NengTTQ8xJsAGicuwWEYSkqaUugTDU9notzaOSournjyzWR2wPU1S?=
+ =?us-ascii?Q?xhpHmvn08opWQT0szwCHbrcFpNHPL/ufVMbpoo4GCOeI042OcA94mjWqzoox?=
+ =?us-ascii?Q?PnQRdxYSmyV1aW5qVqMmlfmPz0Nb0i1c7xI0Pu6RGLC5iSa+o5kpQSxYoAMC?=
+ =?us-ascii?Q?3S5q08WuHpAVbtN+Rmxqx0GcS96B+JPFkN83ebsP/vfwyUKd0W5neFC/xqgl?=
+ =?us-ascii?Q?GMqSupmeFTvk7DXAF5JPHA7A3OjKE4CBm6JuACTrPgfjExaBbz3UO6N4qdwm?=
+ =?us-ascii?Q?y7SQkl6ahUONz3EPzIKYBH3V+9w9BUKgXbFBbRU7lAi8HppXKF7g/uIfOagX?=
+ =?us-ascii?Q?wTQ54ihIcFVV5kekywkfKqN0MLU83tFk0RuB9ymGO8BrlmXvgC0nbUiDnhC7?=
+ =?us-ascii?Q?Lr0EshmJmH3Hd4CtQJM=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAEXW_YTgDM+47rfz0XNjeV8MMPnhyfCcXX+o74SqONvwd4wfzA@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 60bfa63c-5a16-4cc5-c6c6-08db23eebf41
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 18:14:12.0692
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 3rzaDXyjVR8ozlmK/jU7rL8i3wECiYaP3r8lGscATy81kXtUtIhomTM9Xujfa3tv762xmuIFW4pkyqx9h9fPrA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7920
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:49:58AM -0400, Joel Fernandes wrote:
-> On Mon, Mar 13, 2023 at 11:32 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> >
-> > On Mon, Mar 13, 2023 at 06:58:30AM -0700, Joel Fernandes wrote:
-> > >
-> > >
-> > > > On Mar 13, 2023, at 2:51 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
-> > > >
-> > > > ﻿On Fri, Mar 10, 2023 at 10:24:34PM -0800, Paul E. McKenney wrote:
-> > > >>> On Fri, Mar 10, 2023 at 09:55:02AM +0100, Uladzislau Rezki wrote:
-> > > >>> On Thu, Mar 09, 2023 at 10:10:56PM +0000, Joel Fernandes wrote:
-> > > >>>> On Thu, Mar 09, 2023 at 01:57:42PM +0100, Uladzislau Rezki wrote:
-> > > >>>> [..]
-> > > >>>>>>>>>> See this commit:
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> 3705b88db0d7cc ("rcu: Add a module parameter to force use of
-> > > >>>>>>>>>> expedited RCU primitives")
-> > > >>>>>>>>>>
-> > > >>>>>>>>>> Antti provided this commit precisely in order to allow Android
-> > > >>>>>>>>>> devices to expedite the boot process and to shut off the
-> > > >>>>>>>>>> expediting at a time of Android userspace's choosing.  So Android
-> > > >>>>>>>>>> has been making this work for about ten years, which strikes me
-> > > >>>>>>>>>> as an adequate proof of concept.  ;-)
-> > > >>>>>>>>>
-> > > >>>>>>>>> Thanks for the pointer. That's true. Looking at Android sources, I
-> > > >>>>>>>>> find that Android Mediatek devices at least are setting
-> > > >>>>>>>>> rcu_expedited to 1 at late stage of their userspace boot (which is
-> > > >>>>>>>>> weird, it should be set to 1 as early as possible), and
-> > > >>>>>>>>> interestingly I cannot find them resetting it back to 0!.  Maybe
-> > > >>>>>>>>> they set rcu_normal to 1? But I cannot find that either. Vlad? :P
-> > > >>>>>>>>
-> > > >>>>>>>> Interesting.  Though this is consistent with Antti's commit log,
-> > > >>>>>>>> where he talks about expediting grace periods but not unexpediting
-> > > >>>>>>>> them.
-> > > >>>>>>>>
-> > > >>>>>>> Do you think we need to unexpedite it? :))))
-> > > >>>>>>
-> > > >>>>>> Android runs on smallish systems, so quite possibly not!
-> > > >>>>>>
-> > > >>>>> We keep it enabled and never unexpedite it. The reason is a performance.  I
-> > > >>>>> have done some app-launch time analysis with enabling and disabling of it.
-> > > >>>>>
-> > > >>>>> An expedited case is much better when it comes to app launch time. It
-> > > >>>>> requires ~25% less time to run an app comparing with unexpedited variant.
-> > > >>>>> So we have a big gain here.
-> > > >>>>
-> > > >>>> Wow, that's huge. I wonder if you can dig deeper and find out why that is so
-> > > >>>> as the callbacks may need to be synchronize_rcu_expedited() then, as it could
-> > > >>>> be slowing down other usecases! I find it hard to believe, real-time
-> > > >>>> workloads will run better without those callbacks being always-expedited if
-> > > >>>> it actually gives back 25% in performance!
-> > > >>>>
-> > > >>> I can dig further, but on a high level i think there are some spots
-> > > >>> which show better performance if expedited is set. I mean synchronize_rcu()
-> > > >>> becomes as "less blocking a context" from a time point of view.
-> > > >>>
-> > > >>> The problem of a regular synchronize_rcu() is - it can trigger a big latency
-> > > >>> delays for a caller. For example for nocb case we do not know where in a list
-> > > >>> our callback is located and when it is invoked to unblock a caller.
-> > > >>
-> > > >> True, expedited RCU grace periods do not have this callback-invocation
-> > > >> delay that normal RCU does.
-> > > >>
-> > > >>> I have already mentioned somewhere. Probably it makes sense to directly wake-up
-> > > >>> callers from the GP kthread instead and not via nocb-kthread that invokes our callbacks
-> > > >>> one by one.
-> > > >>
-> > > >> Makes sense, but it is necessary to be careful.  Wakeups are not fast,
-> > > >> so making the RCU grace-period kthread do them all sequentially is not
-> > > >> a strategy to win.  For example, note that the next expedited grace
-> > > >> period can start before the previous expedited grace period has finished
-> > > >> its wakeups.
-> > > >>
-> > > > I hove done a small and quick prototype:
-> > > >
-> > > > <snip>
-> > > > diff --git a/include/linux/rcupdate_wait.h b/include/linux/rcupdate_wait.h
-> > > > index 699b938358bf..e1a4cca9a208 100644
-> > > > --- a/include/linux/rcupdate_wait.h
-> > > > +++ b/include/linux/rcupdate_wait.h
-> > > > @@ -9,6 +9,8 @@
-> > > > #include <linux/rcupdate.h>
-> > > > #include <linux/completion.h>
-> > > >
-> > > > +extern struct llist_head gp_wait_llist;
-> > > > +
-> > > > /*
-> > > >  * Structure allowing asynchronous waiting on RCU.
-> > > >  */
-> > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> > > > index ee27a03d7576..50b81ca54104 100644
-> > > > --- a/kernel/rcu/tree.c
-> > > > +++ b/kernel/rcu/tree.c
-> > > > @@ -113,6 +113,9 @@ int rcu_num_lvls __read_mostly = RCU_NUM_LVLS;
-> > > > int num_rcu_lvl[] = NUM_RCU_LVL_INIT;
-> > > > int rcu_num_nodes __read_mostly = NUM_RCU_NODES; /* Total # rcu_nodes in use. */
-> > > >
-> > > > +/* Waiters for a GP kthread. */
-> > > > +LLIST_HEAD(gp_wait_llist);
-> > > > +
-> > > > /*
-> > > >  * The rcu_scheduler_active variable is initialized to the value
-> > > >  * RCU_SCHEDULER_INACTIVE and transitions RCU_SCHEDULER_INIT just before the
-> > > > @@ -1776,6 +1779,14 @@ static noinline void rcu_gp_cleanup(void)
-> > > >                on_each_cpu(rcu_strict_gp_boundary, NULL, 0);
-> > > > }
-> > > >
-> > > > +static void rcu_notify_gp_end(struct llist_node *llist)
-> > > > +{
-> > > > +       struct llist_node *rcu, *next;
-> > > > +
-> > > > +       llist_for_each_safe(rcu, next, llist)
-> > > > +               complete(&((struct rcu_synchronize *) rcu)->completion);
-> > >
-> > > This looks broken to me, so the synchronize will complete even
-> > > if it was called in the middle of an ongoing GP?
-> > >
-> > Do you mean before replacing the list(and after rcu_gp_cleanup()) a new
-> > GP sequence can be initiated?
-> 
-> I guess I mean rcu_notify_gp_end() is called at the end of the current
-> grace period, which might be the grace period which started _before_
-> the synchronize_rcu() was called. So the callback needs to be invoked
-> after the end of the next grace period, not the current one.
-> 
-> Did I miss some part of your patch that is handling this?
-> 
-No, you did not! That was my fault in placing llist_del_all() into
-inappropriate place. We have to guarantee a full grace period. But
-this is a prototype and kind of kick off :)
+> For a 32G rank, the most significant DRAM row address bit (the
+> bit17) is mapped from the bit34 of the rank address. Add this new
+> mapping item to both arrays to fix the overflow issue.
 
---
-Uladzislau Rezki
+Applied to edac-drivers branch of the RAS tree.
+
+Thanks
+
+-Tony
