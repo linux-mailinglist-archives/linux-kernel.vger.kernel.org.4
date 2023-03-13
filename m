@@ -2,96 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6DA26B7FB4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:49:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0A096B7F55
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:22:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCMRt5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:49:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44238 "EHLO
+        id S229805AbjCMRWQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:22:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230481AbjCMRts (ORCPT
+        with ESMTP id S231526AbjCMRVp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:49:48 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C84D17203A;
-        Mon, 13 Mar 2023 10:49:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678729784; x=1710265784;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=k1jfQWwUrLRiIUyKxmnw1YYQ/KfXv2xO0bIFnvUL4Dk=;
-  b=nn3k8sWsiIVvipHtNAGG5N1VWkXxoQ35Ns+YEJ5ymnD3Wwu7Ru9xdHVl
-   /+gwbBP243SyOJQCXgu2AxuNcAI9XydFffRugChvJO+64w3Lxdn2tNkRW
-   8x3CdtyvKpZIpLBeaAUIJSZ0Zq9tl2wQOYoFJOun+YyN6+zY7UX1IDoqI
-   M+BT1c7DFSo4+KrW9KzHTrgQkWekrnVNFiiPZdBdWT+/YnLo99HMzQzSO
-   u/L7lxuqGMK8RyNJR7LkPFRD0Qd+cfYjQQh71V1nFsCrXv3ngmCMA//8S
-   Dtp+CPP/h5DesKZqh7rBdY7yQbzrXOYKmgoz2bLENzB5kn2LJFSQTsVrF
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="321069344"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="321069344"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:49:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="852860027"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="852860027"
-Received: from jlewis8x-mobl.amr.corp.intel.com (HELO [10.255.34.75]) ([10.255.34.75])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:49:10 -0700
-Message-ID: <6fbd4471-9f72-c87c-3803-90f7224abce0@linux.intel.com>
-Date:   Mon, 13 Mar 2023 09:46:31 -0500
+        Mon, 13 Mar 2023 13:21:45 -0400
+Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.214])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 92E9E7EA2D;
+        Mon, 13 Mar 2023 10:20:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=eLJUV
+        6sjqfvqr0F03Ruwnu9Zfyv3B41EL3cm8DE360Q=; b=Rq7/INmZhRuUz7zMSWFOv
+        FpClKUpVM8om0Z91hkaERbkX7bqlunG0xfvS3YvbEzHSu/itud0cFhGYWUe46OnN
+        FhdneKlDi+SzZYW7HCCIk3sNbxpzMjzsAQz9rA/JX2S3N9A1fxoT86KI9WtgHPi9
+        ztHBjLTScGPtjDGhmevdl0=
+Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
+        by zwqz-smtp-mta-g4-3 (Coremail) with SMTP id _____wD3UUyAVg9kwRISAA--.11282S2;
+        Tue, 14 Mar 2023 00:59:45 +0800 (CST)
+From:   Zheng Wang <zyytlz.wz@163.com>
+To:     ericvh@gmail.com
+Cc:     michal.swiatkowski@linux.intel.com, lucho@ionkov.net,
+        asmadeus@codewreck.org, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
+Subject: [PATCH net v3] 9p/xen : Fix use after free bug in xen_9pfs_front_remove  due  to race condition
+Date:   Tue, 14 Mar 2023 00:59:41 +0800
+Message-Id: <20230313165941.3772964-1-zyytlz.wz@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.7.1
-Subject: Re: [PATCH V2 1/2] ASoC: max98363: add soundwire amplifier driver
-Content-Language: en-US
-To:     =?UTF-8?B?4oCcUnlhbg==?= <ryan.lee.analog@gmail.com>,
-        lgirdwood@gmail.com, broonie@kernel.org, perex@perex.cz,
-        tiwai@suse.com, krzysztof.kozlowski@linaro.org,
-        rf@opensource.cirrus.com, ckeepax@opensource.cirrus.com,
-        herve.codina@bootlin.com, wangweidong.a@awinic.com,
-        james.schulman@cirrus.com,
-        ajye_huang@compal.corp-partner.google.com, shumingf@realtek.com,
-        povik+lin@cutebit.org, flatmax@flatmax.com,
-        linux-kernel@vger.kernel.org, alsa-devel@alsa-project.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        ryans.lee@analog.com
-References: <20230311011409.210014-1-ryan.lee.analog@gmail.com>
-From:   Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-In-Reply-To: <20230311011409.210014-1-ryan.lee.analog@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.4 required=5.0 tests=BAYES_00,DATE_IN_PAST_03_06,
-        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: _____wD3UUyAVg9kwRISAA--.11282S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7tF15Cw48JFy5Kr1kWF4DJwb_yoW8Xw43pa
+        naka15CFy8AF10yFsYy3WxJ3WFkw48Gr1Iga12kw4fJr98Zry8XFZ5t34Yga4UArs0qF4r
+        Cw1jgFWDGFWDA3DanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0zE2YLtUUUUU=
+X-Originating-IP: [111.206.145.21]
+X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRQxU1WBo5PgAwABst
+X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
+        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In xen_9pfs_front_probe, it calls xen_9pfs_front_alloc_dataring
+to init priv->rings and bound &ring->work with p9_xen_response.
 
-> +	ret = sdw_stream_add_slave(max98363->slave, &stream_config,
-> +				   &port_config, 1, stream);
-> +	if (ret) {
-> +		dev_err(dai->dev, "Unable to configure port\n");
-> +		return ret;
-> +	}
-> +
-> +	if (params_channels(params) > 16) {
-> +		dev_err(component->dev, "Unsupported channels %d\n",
-> +			params_channels(params));
-> +		return -EINVAL;
-> +	}
+When it calls xen_9pfs_front_event_handler to handle IRQ requests,
+it will finally call schedule_work to start the work.
 
-Do you actually support more than 8 channels?
+When we call xen_9pfs_front_remove to remove the driver, there
+may be a sequence as follows:
 
-The data port DPnPrepareCtl and DPn_ChannelEn registers expose 8
-channels max. It's always possible to 'cheat' by packing two channels in
-the same sample, but that would require custom signaling between manager
-and peripheral that isn't present.
+Fix it by finishing the work before cleanup in xen_9pfs_front_free.
 
-Could it be a left-over from a TDM implementation?
+Note that, this bug is found by static analysis, which might be
+false positive.
 
-The rest of the patch looks fine.
+CPU0                  CPU1
+
+                     |p9_xen_response
+xen_9pfs_front_remove|
+  xen_9pfs_front_free|
+kfree(priv)          |
+//free priv          |
+                     |p9_tag_lookup
+                     |//use priv->client
+
+Fixes: 71ebd71921e4 ("xen/9pfs: connect to the backend")
+Reviewed-by: Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+---
+v3:
+- remove unnecessary comment and move definition to the
+for loop suggested by Michal Swiatkowski
+
+v2:
+- fix type error of ring found by kernel test robot
+---
+ net/9p/trans_xen.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
+index c64050e839ac..df467ffb52d0 100644
+--- a/net/9p/trans_xen.c
++++ b/net/9p/trans_xen.c
+@@ -280,6 +280,10 @@ static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
+ 	write_unlock(&xen_9pfs_lock);
+ 
+ 	for (i = 0; i < priv->num_rings; i++) {
++		struct xen_9pfs_dataring *ring = &priv->rings[i];
++
++		cancel_work_sync(&ring->work);
++
+ 		if (!priv->rings[i].intf)
+ 			break;
+ 		if (priv->rings[i].irq > 0)
+-- 
+2.25.1
+
