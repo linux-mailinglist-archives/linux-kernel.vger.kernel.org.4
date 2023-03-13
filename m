@@ -2,147 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE1956B7923
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 503396B7929
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231139AbjCMNiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:38:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59378 "EHLO
+        id S230167AbjCMNiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230502AbjCMNiJ (ORCPT
+        with ESMTP id S229548AbjCMNiw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:38:09 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2065.outbound.protection.outlook.com [40.107.223.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35FEE9021;
-        Mon, 13 Mar 2023 06:38:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Ye9OiXMRNNJKXEPufdXRZ3nLxerodOs5vj2g4VYHnKVekADT7q5dJ/7Rr97VccIlNL+A334kCXBp3MbiiN+CSaTQ6SA4KSeSLpc2/x2icEMoLWes/IR3V+cgOICvkaBODEWHjrmzE7CKwBDAPq+j0MVsXkgi8BzmEwDORM0HIGXLCjoOibdDYN7BQO2SLSEtSOwzH8fBIYaul9kWXk9ofkcvali3llWfI5SzuGBQU/2psBsp28GDh6pBjuman1M5U3fDNwnwfvz3uJn5BHAgZ+/4xq/ceouqe1CWb9EC4pptJCK+hgmckKv2/C+sCCVsywNRuXFJrhHuHEYzSI4A9Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fIb7Jszuv6bw3LKTu1u2ysRnF5fbOYFAb2Byb8TE+zM=;
- b=bPKGNYslNJIE3c9XL9Ug45TKDFiIhVx61nnP2SR4Onmc2yP9VL61Id1j3ySgH0HJkrfOY4mUx0L9Re8veYb7wKE5vGKaAGoyINuQHt0R0ewCXKMdmXQfDoLW1PpHjO2Oe0om4D4BP2cq73GzhKjq7f1uTyhrjxcF+7cfcEsR7uQ1YGu8xYIS3ThKAlO3iLfJiqMYdaZunJwMPjcCMx7/qIGKESnNriP2dMJzXC0gIWXblIEGS96ElbuiaCDKkEBsZCeStnKhpsdOts3K5IRhRcXpnZ8D3LGxKUwJjjwSdAlWyEDj4Mi2o7jIynRbIIJ9xKXkkzLKYEQeBHsRGOzweg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=fIb7Jszuv6bw3LKTu1u2ysRnF5fbOYFAb2Byb8TE+zM=;
- b=OX2KZDsI3lKwAOQY90TEMc2tzDPyfr8IkRUl+j7iN/ArEySbr7xxoE/hYKkeYS5qXKys9zz2ZKM2fE8tb41a4KPfvgyjKc1E27XZu2MqOWTyo/M8mx+thMPFkG7T4PjPSZ35LF833Rw+QPJSDraxNa6YHbYH6gKNootK5+nAqX8M4RePlFn5vkoDT7tn1uc9kjj0FksTvP+x1CUdZ+Fra4eunzuqJ+4uRXfQqoiahnPLNgN+vqL1XVq8NYGijntUr103FMQUdHV5ZsFWGj7pBN+0LMBzNXFF5fJ79BO85s4T/jFdS6usFecSGxfZZGCAavM3VNdy6Kc+wUnnDJvC2Q==
-Received: from BN9PR03CA0436.namprd03.prod.outlook.com (2603:10b6:408:113::21)
- by DS7PR12MB5864.namprd12.prod.outlook.com (2603:10b6:8:7b::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 13:38:04 +0000
-Received: from BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:113:cafe::ca) by BN9PR03CA0436.outlook.office365.com
- (2603:10b6:408:113::21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.25 via Frontend
- Transport; Mon, 13 Mar 2023 13:38:03 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.161) by
- BN8NAM11FT066.mail.protection.outlook.com (10.13.177.138) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.24 via Frontend Transport; Mon, 13 Mar 2023 13:38:03 +0000
-Received: from rnnvmail204.nvidia.com (10.129.68.6) by mail.nvidia.com
- (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 13 Mar 2023
- 06:37:51 -0700
-Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail204.nvidia.com
- (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 13 Mar
- 2023 06:37:51 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
- Transport; Mon, 13 Mar 2023 06:37:51 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.4 000/356] 5.4.235-rc2 review
-In-Reply-To: <20230311091806.500513126@linuxfoundation.org>
-References: <20230311091806.500513126@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Mon, 13 Mar 2023 09:38:52 -0400
+Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19AEE181;
+        Mon, 13 Mar 2023 06:38:29 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D3101240002;
+        Mon, 13 Mar 2023 13:38:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678714707;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=9P09iremWXOid0qmunSiTxvo86djuYD/ctGTwvv+eB4=;
+        b=OxDcKC2EByCRqP2D9Bj0URPAghXjN+ukTKEQWket54PTBeS6p5OxQv4PNmo8ZpDesgwt2V
+        iJhC5EFTV+c/FFAJen5PwufprbcSzEITmOF0SfwjtvE3xueJhDLUluLEM+kl3V34WoziXz
+        ajev2Jh9mTCjG+zJcdfIbitLUEo5yo16Kw2QFhOtziz+P0Rs8E4ahdJOey2HwB2c0AHroo
+        NowNIvffACpOXTK0b2p+wwogetlfj0QNs6doXs9Boqmo94hP6OQuCYu7G/MeL4GCOo4hYz
+        voFQKv3vuKoNS4TfsJnY8SIrP55iHyRa8eZKVUGx2+xF2WH5Jxg/fmV9qL0Jiw==
+Date:   Mon, 13 Mar 2023 14:38:26 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Esteban Blanc <eblanc@baylibre.com>
+Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
+        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
+        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
+        jpanis@baylibre.com, jneanne@baylibre.com
+Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
+ PMIC RTC
+Message-ID: <20230313133826fe761785@mail.local>
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-2-eblanc@baylibre.com>
+ <ZAcbJxrNtWTTTSjR@mail.local>
+ <CR556BV2M4I4.2L3LLJ8V1I352@burritosblues>
+ <20230313110158f5c27b63@mail.local>
+ <CR58TXDRGAUA.3CSML8HXRI97S@burritosblues>
 MIME-Version: 1.0
-Message-ID: <0d8649fe-0c30-430c-8104-97dd1ccc0e20@rnnvmail203.nvidia.com>
-Date:   Mon, 13 Mar 2023 06:37:51 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT066:EE_|DS7PR12MB5864:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a825568-0995-4a82-bdb9-08db23c82bdf
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: qDNz0nYbTlXguhZr82sqGUGsx1MNh06UjS2QMi/691dFsMWLgP7uF51C+G22AEEo6JXdTp7SUwOyowvSWMfrWiI0d6lWptVMlPVcHFmgkJ7GixODeefz9aTQfq+VV1Z41XeI+no4T/Rdvhff2R3IEILmJHDFD8pautSrQG5lrvGq5M6H5jMBLvPcsEIbQsqi4v8P29x7hPMUn3FXtDZOUhrhIQY/cDwpqD54YXvlVY2DR+5qDso9uE6DKLcm33EM/r39vF9sP7DBJ0YCY+TiQvrnon98zORW4lfqgGhyRicesmLPmcsI4vfkLZiVZltE+kURvY8cr0Da9W5B7lb0HRbeDZRQlqCUcj64nUic+QVXmvPUP4DENGsGLU7y5GW+LkrBsddVK+RkSAH67rBnIqN7Nvwc1fHHOpuFEOqdwOFh2zy+xdWg19JoDlvQezD7F/HpH4Pum7hVILFdJbkVTduYvARmLsF++qAax83jMSDMzEIL97ijsmq36VLfFjjjo1DqcrbvU4CYEH5CBteuT1d4bqqqBVzXECU54zCJ+pf6eHjImGPGIeOJQzwfd5gb/RFGski0/s75OAPMXq8av2PDSX0PXk2a7hWG6fWCZPwUczkx+bH/whKOwJOUZG0vSjRZJOuiJ1XF1Hy/3wBIlPsNnFpnGc5RnI3BezogVJnOyUWqB7UTKV5DSvvwgF44pGGYGeXrNi4QfKI3FF2lbWx3QH1FEUN8TURT6lMos79CwleQS6498APVS2eEL/G+2T2TdxbRhWZ812o0TCgP/bZtAPZsP9rfmsib2ndslh8=
-X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(136003)(39860400002)(346002)(451199018)(36840700001)(40470700004)(46966006)(2906002)(7636003)(82740400003)(31686004)(41300700001)(40460700003)(7416002)(5660300002)(8676002)(70586007)(8936002)(356005)(4326008)(6916009)(70206006)(316002)(40480700001)(36860700001)(54906003)(86362001)(31696002)(82310400005)(478600001)(426003)(47076005)(186003)(336012)(26005)(966005);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 13:38:03.7540
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a825568-0995-4a82-bdb9-08db23c82bdf
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT066.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5864
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CR58TXDRGAUA.3CSML8HXRI97S@burritosblues>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 10:20:37 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.235 release.
-> There are 356 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 13/03/2023 13:10:37+0100, Esteban Blanc wrote:
+> On Mon Mar 13, 2023 at 12:01 PM CET, Alexandre Belloni wrote:
+> > On 13/03/2023 10:18:45+0100, Esteban Blanc wrote:
+> > > On Tue Mar 7, 2023 at 12:08 PM CET, Alexandre Belloni wrote:
+> > > > On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
+> > > > > +/*
+> > > > > + * Gets current tps6594 RTC time and date parameters.
+> > > > > + *
+> > > > > + * The RTC's time/alarm representation is not what gmtime(3) requires
+> > > > > + * Linux to use:
+> > > > > + *
+> > > > > + *  - Months are 1..12 vs Linux 0-11
+> > > > > + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
+> > > > > + */
+> > > >
+> > > > I don't find this comment to be particularly useful.
+> > > 
+> > > Ok. I propose that I add 2 constants for the -1 and +100 in the month and year
+> > > calculation. This way, without the comment the computation would be a
+> > > bit more self explanatory.
+> > > What do you think?
+> >
+> > I don't think this is necessary, keep -1 for the month and +100 for the
+> > year, those are very common operations in the subsystem and don't really
+> > need any explanation
 > 
-> Responses should be made by Mon, 13 Mar 2023 09:17:07 +0000.
-> Anything received after that time might be too late.
+> Ok. I will just remove the comment then.
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.235-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> > > > > +static int tps6594_rtc_probe(struct platform_device *pdev)
+> > > > > +{
+> > > > > +   struct tps6594 *tps6594;
+> > > > > +   struct tps6594_rtc *tps_rtc;
+> > > > > +   int irq;
+> > > > > +   int ret;
+> > > > > +
+> > > > > +   tps6594 = dev_get_drvdata(pdev->dev.parent);
+> > > > > +
+> > > > > +   tps_rtc = devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
+> > > > > +                          GFP_KERNEL);
+> > > > > +   if (!tps_rtc)
+> > > > > +           return -ENOMEM;
+> > > > > +
+> > > > > +   tps_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
+> > > > > +   if (IS_ERR(tps_rtc->rtc))
+> > > > > +           return PTR_ERR(tps_rtc->rtc);
+> > > > > +
+> > > > > +   /* Enable crystal oscillator */
+> > > > > +   ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
+> > > > > +                         TPS6594_BIT_XTAL_EN);
+> > > > > +   if (ret < 0)
+> > > > > +           return ret;
+> > > > > +
+> > > > > +   /* Start rtc */
+> > > > > +   ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
+> > > > > +                         TPS6594_BIT_STOP_RTC);
+> > > > > +   if (ret < 0)
+> > > > > +           return ret;
+> > > >
+> > > > Do that (XTAL_EN and clearing STOP) only once the time is known to be
+> > > > set to a correct value so read_time doesn't have a chance to return a
+> > > > bogus value.
+> > > >
+> > > 
+> > > (...)
+> > > 
+> > > I understand your point, however I'm not sure of the canonical way to do
+> > > this. Simply calling `tps6594_rtc_set_time` is enough?
+> >
+> > Yeah, let userspace set the time and start the rtc at that point.
 > 
-> thanks,
+> The problem with that is we might have some RTCs that will just not be
+> usable. We have boards with multiple TP6594 PMICs where only one of them
+> has a crystal oscillator. The way to detect this is to start the RTC
+> then checked if the STOP_RTC bit is still 0. By doing this in the probe,
+> I'm able to not register an RTC device that doesn't work.
 > 
-> greg k-h
+> If I just start the RTC on the first call to `tps6594_rtc_set_time`, it
+> will work for the RTC with the crystal and fails for all the others 
+> 
+> I can stop the RTC at the end of the probe, after the check to rule out
+> unusable devices. If I add the check you proposed in
+> `tps6594_rtc_read_time` it will fail until a successful call to
+> `tps6594_rtc_set_time`. Would that be a suitable solution?
+> 
 
-All tests passing for Tegra ...
+That would work, yes
 
-Test results for stable-v5.4:
-    10 builds:	10 pass, 0 fail
-    26 boots:	26 pass, 0 fail
-    59 tests:	59 pass, 0 fail
 
-Linux version:	5.4.235-rc2-gca95bdb3ada0
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra20-ventana,
-                tegra210-p2371-2180, tegra210-p3450-0000,
-                tegra30-cardhu-a04
-
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
-
-Jon
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
