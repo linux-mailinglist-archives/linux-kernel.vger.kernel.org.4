@@ -2,56 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0AC4E6B83FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F1566B8403
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:35:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCMVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:31:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
+        id S229664AbjCMVdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCMVa7 (ORCPT
+        with ESMTP id S229449AbjCMVdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:30:59 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A23DBCB;
-        Mon, 13 Mar 2023 14:30:58 -0700 (PDT)
+        Mon, 13 Mar 2023 17:33:14 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03A79A267;
+        Mon, 13 Mar 2023 14:33:13 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 52B29B8136B;
-        Mon, 13 Mar 2023 21:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 968C2C433EF;
-        Mon, 13 Mar 2023 21:30:55 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA1B9B81183;
+        Mon, 13 Mar 2023 21:33:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67221C433EF;
+        Mon, 13 Mar 2023 21:33:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678743056;
-        bh=R+WwqoKh0zISD9Xarl/rtQ2nfnBou/E1Hvs+a5wGQK8=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=ek1s+QMFPSxstNjHuSAf7o9BoIcjKgs5XDMvqzEzyL0xU12gtqkUh3qcKt0k/alG8
-         ZRyttzce25fyEKBTbtxN9wWweFxLRVZl+VaPRF4QjkURQthDTBOZidy0sly29/tWWw
-         zcR1ZSQLJFGtS0EDx1YebEXzP9FGAuu34zX0QlEPnCsSGNTtQHQttEA0awmF8X9sc9
-         78Pe/+HLEx/7hQDm9Q7rYHJERcC8Y2jpX5kXOIwQtapoz1tTVADyaDPMZqIQaHLXpo
-         fdxPP3EJndSemVi7QoqKN2yyVL4qUFt4eKz1C2GP2wmetfkLSPCe3ws1G0u+656llD
-         yh3kT9QC7bAnw==
-Date:   Mon, 13 Mar 2023 14:30:54 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, ericvh@gmail.com, lucho@ionkov.net,
-        asmadeus@codewreck.org, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com
-Subject: Re: [PATCH net v2] 9p/xen : Fix use after free bug in
- xen_9pfs_front_remove due  to race condition
-Message-ID: <20230313143054.538565ac@kernel.org>
-In-Reply-To: <ZA8rDCw+mJmyETEx@localhost.localdomain>
-References: <20230313090002.3308025-1-zyytlz.wz@163.com>
-        <ZA8rDCw+mJmyETEx@localhost.localdomain>
+        s=k20201202; t=1678743190;
+        bh=8GDsEPUkb2oYCRACO29tFTGDdvsmez/Pz9Oado/urNM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=EneHO/FR6uxWKRJRxzL9scK8DLMAjLGZwkMbOBEPEe+n/zKcE73hLjOsYM5LewZLx
+         Pbx30PnrQ9q6Xm+mJW3n4o9SWMSzILtRgSE5WoRV7920wyMMEwOW2uYhurffE7efup
+         snajRLVH2xK1EzQ5pQQxQME41I5dWrzGsYGjgiTLGhapMpIVjwO2NN4zYwlZgX7L1m
+         XCnFG26g0toy3f94F/Bop4erY7uhOAPJQ1Zerb06GQL0kb01ZtFioGK8WwgiCoUNsL
+         icwTVhQ6D36Vm188V81hCaj436NNOKMe6eIN1PHnD+45CsJq22QZ7SIW55dwds7ga5
+         PT4qMgjRXNFdg==
+Received: by mail-lj1-f181.google.com with SMTP id h9so14080955ljq.2;
+        Mon, 13 Mar 2023 14:33:10 -0700 (PDT)
+X-Gm-Message-State: AO0yUKU71ngxhmgblwJhtRH55dDVOImzd7fBjqBegv3QSa6mcRcUExAL
+        p5RB30qTUlWmOeruObSH3OU68Ib6bquheYxTHYY=
+X-Google-Smtp-Source: AK7set90gBIECOkwgQdFhkCUzCWUDrAAoRI3NTCam3HqVfn1ccHds6eQYiRHG5a/Frdlyos9lYGFKm13bAp/AXO93kI=
+X-Received: by 2002:a2e:a4ab:0:b0:296:a59d:c969 with SMTP id
+ g11-20020a2ea4ab000000b00296a59dc969mr4727042ljm.5.1678743188423; Mon, 13 Mar
+ 2023 14:33:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230214064013.2373851-1-yijiangshan@kylinos.cn>
+In-Reply-To: <20230214064013.2373851-1-yijiangshan@kylinos.cn>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 13 Mar 2023 14:32:56 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW6dhx6WSNBgAzh1u3wx16rb9Ayv_OkOWJ3Xqq0dD+5AxA@mail.gmail.com>
+Message-ID: <CAPhsuW6dhx6WSNBgAzh1u3wx16rb9Ayv_OkOWJ3Xqq0dD+5AxA@mail.gmail.com>
+Subject: Re: [PATCH] md/raid10: Fix typo in comment (replacment -> replacement)
+To:     Jiangshan Yi <yijiangshan@kylinos.cn>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
+        13667453960@163.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,23 +62,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Mar 2023 14:54:20 +0100 Michal Swiatkowski wrote:
-> > @@ -274,12 +274,17 @@ static const struct xenbus_device_id xen_9pfs_front_ids[] = {
-> >  static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
-> >  {
-> >  	int i, j;
-> > +	struct xen_9pfs_dataring *ring = NULL;  
-> Move it before int i, j to have RCT.
-> 
-> >  
-> >  	write_lock(&xen_9pfs_lock);
-> >  	list_del(&priv->list);
-> >  	write_unlock(&xen_9pfs_lock);
-> >  
-> >  	for (i = 0; i < priv->num_rings; i++) {
-> > +		/*cancel work*/  
-> It isn't needed I think, the function cancel_work_sync() tells everything
-> here.
+On Mon, Feb 13, 2023 at 10:41=E2=80=AFPM Jiangshan Yi <yijiangshan@kylinos.=
+cn> wrote:
+>
+> Replace replacment with replacement.
+>
+> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
 
-Note that 9p is more storage than networking, so this patch is likely
-to go via a different tree than us.
+To be honest, I see very little value from typo fixes in comments.
+
+I will apply this one, but I may start rejecting them in the future.
+
+Thanks,
+Song
+
+> ---
+>  drivers/md/raid10.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/md/raid10.c b/drivers/md/raid10.c
+> index 6c66357f92f5..7b264add0d52 100644
+> --- a/drivers/md/raid10.c
+> +++ b/drivers/md/raid10.c
+> @@ -1626,7 +1626,7 @@ static void raid10_end_discard_request(struct bio *=
+bio)
+>                 /*
+>                  * raid10_remove_disk uses smp_mb to make sure rdev is se=
+t to
+>                  * replacement before setting replacement to NULL. It can=
+ read
+> -                * rdev first without barrier protect even replacment is =
+NULL
+> +                * rdev first without barrier protect even replacement is=
+ NULL
+>                  */
+>                 smp_rmb();
+>                 rdev =3D conf->mirrors[dev].rdev;
+> --
+> 2.27.0
+>
