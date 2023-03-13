@@ -2,34 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42BE96B7E45
+	by mail.lfdr.de (Postfix) with ESMTP id 988056B7E46
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:57:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231299AbjCMQ4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:56:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51318 "EHLO
+        id S231236AbjCMQ45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230053AbjCMQ4r (ORCPT
+        with ESMTP id S230325AbjCMQ4r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Mar 2023 12:56:47 -0400
 Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60FD56159;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7AF070402;
         Mon, 13 Mar 2023 09:56:28 -0700 (PDT)
 Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id B874921E29;
-        Mon, 13 Mar 2023 17:50:44 +0100 (CET)
+        by mail11.truemail.it (Postfix) with ESMTPA id 23A2F21E2A;
+        Mon, 13 Mar 2023 17:50:45 +0100 (CET)
 From:   Francesco Dolcini <francesco@dolcini.it>
-To:     linux-usb@vger.kernel.org, devicetree@vger.kernel.org
+To:     linux-usb@vger.kernel.org
 Cc:     Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
         linux-kernel@vger.kernel.org,
         Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Dongjin Kim <tobetter@gmail.com>,
         Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v1 1/3] dt-bindings: usb: smsc,usb3503: Add usb3803
-Date:   Mon, 13 Mar 2023 17:50:37 +0100
-Message-Id: <20230313165039.255579-2-francesco@dolcini.it>
+Subject: [PATCH v1 2/3] usb: misc: usb3503: refactor code to prepare for usb3803 addition
+Date:   Mon, 13 Mar 2023 17:50:38 +0100
+Message-Id: <20230313165039.255579-3-francesco@dolcini.it>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230313165039.255579-1-francesco@dolcini.it>
 References: <20230313165039.255579-1-francesco@dolcini.it>
@@ -46,113 +43,102 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
 
-Add support for usb3803, compared to usb3503 it uses a regular USB
-connection to upstream instead of HSIC, it has an additional
-low power mode (bypass) and an additional control signal (BYPASS_N).
+Refactor code to simplify adding support for USB3803 and bypass mode.
 
-In bypass mode the downstream port 3 is connected to the upstream port
-with low switch resistance R_on.
+Remove static usb3503_reset() and move it to usb3503_switch_mode(),
+with the addition of the bypass mode we need to drive the various
+control signals to the expected configuration, not just to
+assert/release the reset.
+
+In addition to that the usb3503_connect() needs to be called only
+for HUB mode.
+
+No functional changes expected nor intended because of this change.
 
 Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
 Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
 ---
- .../devicetree/bindings/usb/smsc,usb3503.yaml | 54 ++++++++++++++++++-
- 1 file changed, 52 insertions(+), 2 deletions(-)
+ drivers/usb/misc/usb3503.c | 44 ++++++++++++++++----------------------
+ 1 file changed, 19 insertions(+), 25 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml b/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
-index a09f4528aea3..6156dc26e65c 100644
---- a/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
-+++ b/Documentation/devicetree/bindings/usb/smsc,usb3503.yaml
-@@ -14,6 +14,7 @@ properties:
-     enum:
-       - smsc,usb3503
-       - smsc,usb3503a
-+      - smsc,usb3803
+diff --git a/drivers/usb/misc/usb3503.c b/drivers/usb/misc/usb3503.c
+index bd47c4437ca4..3044db9fd8aa 100644
+--- a/drivers/usb/misc/usb3503.c
++++ b/drivers/usb/misc/usb3503.c
+@@ -52,28 +52,11 @@ struct usb3503 {
+ 	bool	secondary_ref_clk;
+ };
  
-   reg:
-     maxItems: 1
-@@ -33,6 +34,12 @@ properties:
-     description: >
-       GPIO for reset
+-static int usb3503_reset(struct usb3503 *hub, int state)
+-{
+-	if (!state && hub->connect)
+-		gpiod_set_value_cansleep(hub->connect, 0);
+-
+-	if (hub->reset)
+-		gpiod_set_value_cansleep(hub->reset, !state);
+-
+-	/* Wait T_HUBINIT == 4ms for hub logic to stabilize */
+-	if (state)
+-		usleep_range(4000, 10000);
+-
+-	return 0;
+-}
+-
+ static int usb3503_connect(struct usb3503 *hub)
+ {
+ 	struct device *dev = hub->dev;
+ 	int err;
  
-+  bypass-gpios:
-+    maxItems: 1
-+    description: >
-+      GPIO for bypass.
-+      Control signal to select between HUB MODE and BYPASS MODE.
+-	usb3503_reset(hub, 1);
+-
+ 	if (hub->regmap) {
+ 		/* SP_ILOCK: set connect_n, config_n for config */
+ 		err = regmap_write(hub->regmap, USB3503_SP_ILOCK,
+@@ -126,25 +109,36 @@ static int usb3503_connect(struct usb3503 *hub)
+ static int usb3503_switch_mode(struct usb3503 *hub, enum usb3503_mode mode)
+ {
+ 	struct device *dev = hub->dev;
+-	int err = 0;
++	int rst, conn;
+ 
+ 	switch (mode) {
+ 	case USB3503_MODE_HUB:
+-		err = usb3503_connect(hub);
++		conn = 1;
++		rst = 0;
+ 		break;
+-
+ 	case USB3503_MODE_STANDBY:
+-		usb3503_reset(hub, 0);
++		conn = 0;
++		rst = 1;
+ 		dev_info(dev, "switched to STANDBY mode\n");
+ 		break;
+-
+ 	default:
+ 		dev_err(dev, "unknown mode is requested\n");
+-		err = -EINVAL;
+-		break;
++		return -EINVAL;
+ 	}
+ 
+-	return err;
++	if (!conn && hub->connect)
++		gpiod_set_value_cansleep(hub->connect, 0);
 +
-   disabled-ports:
-     $ref: /schemas/types.yaml#/definitions/uint32-array
-     minItems: 1
-@@ -46,9 +53,10 @@ properties:
- 
-   initial-mode:
-     $ref: /schemas/types.yaml#/definitions/uint32
--    enum: [1, 2]
-     description: >
--      Specifies initial mode. 1 for Hub mode, 2 for standby mode.
-+      Specifies initial mode. 1 for Hub mode, 2 for standby mode and 3 for bypass mode.
-+      In bypass mode the downstream port 3 is connected to the upstream port with low
-+      switch resistance R_on.
- 
-   clocks:
-     maxItems: 1
-@@ -71,6 +79,29 @@ properties:
- required:
-   - compatible
- 
-+allOf:
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            enum:
-+              - smsc,usb3803
-+    then:
-+      properties:
-+        bypass-gpios: false
++	if (hub->reset)
++		gpiod_set_value_cansleep(hub->reset, rst);
 +
-+  - if:
-+      required:
-+        - bypass-gpios
-+    then:
-+      properties:
-+        initial-mode:
-+          enum: [1, 2, 3]
-+    else:
-+      properties:
-+        initial-mode:
-+          enum: [1, 2]
++	if (conn) {
++		/* Wait T_HUBINIT == 4ms for hub logic to stabilize */
++		usleep_range(4000, 10000);
++		return usb3503_connect(hub);
++	}
 +
- additionalProperties: false
++	return 0;
+ }
  
- examples:
-@@ -92,6 +123,25 @@ examples:
-           };
-       };
- 
-+  - |
-+      i2c {
-+          #address-cells = <1>;
-+          #size-cells = <0>;
-+
-+          usb-hub@8 {
-+              compatible = "smsc,usb3803";
-+              reg = <0x08>;
-+              connect-gpios = <&gpx3 0 1>;
-+              disabled-ports = <2 3>;
-+              intn-gpios = <&gpx3 4 1>;
-+              reset-gpios = <&gpx3 5 1>;
-+              bypass-gpios = <&gpx3 6 1>;
-+              initial-mode = <3>;
-+              clocks = <&clks 80>;
-+              clock-names = "refclk";
-+          };
-+      };
-+
-   - |
-       #include <dt-bindings/gpio/gpio.h>
- 
+ static const struct regmap_config usb3503_regmap_config = {
 -- 
 2.25.1
 
