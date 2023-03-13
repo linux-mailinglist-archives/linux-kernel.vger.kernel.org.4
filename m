@@ -2,533 +2,430 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB6696B7DDB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B55BB6B7DE4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:43:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230081AbjCMQm2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:42:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52048 "EHLO
+        id S229757AbjCMQno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbjCMQm1 (ORCPT
+        with ESMTP id S230481AbjCMQnk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:42:27 -0400
-Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D64829E0B;
-        Mon, 13 Mar 2023 09:42:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-        s=20160406-ysoft-com; t=1678725741;
-        bh=wt7iUzJTKN3AxLs39WMRr+BQIVPXOku2SH0wkSYlUPI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=JcZBTYLXN2U/SIWvpb9EEgIHjxJ4Fe5ZHE9a9VeUJh+sYDzbgzWyRGAcN9qgUh91Y
-         AM1kL0ngLmq3qVLCKC8ml4ZbBIt+pFiBHyaqMSpEX3pEC2kEn1AXQiFzpd5WstnuQO
-         7hev1m73vYXY8Ug1MdlVALBxZHQc0IP6anwpC3hs=
-Received: from [10.0.29.154] (unknown [10.0.29.154])
-        by uho.ysoft.cz (Postfix) with ESMTP id 46502A0430;
-        Mon, 13 Mar 2023 17:42:21 +0100 (CET)
-Message-ID: <6a942ff5-4bf4-ae23-fe78-900d1965e821@ysoft.com>
-Date:   Mon, 13 Mar 2023 17:42:21 +0100
+        Mon, 13 Mar 2023 12:43:40 -0400
+Received: from mail-oa1-x2e.google.com (mail-oa1-x2e.google.com [IPv6:2001:4860:4864:20::2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAC37144B6;
+        Mon, 13 Mar 2023 09:43:30 -0700 (PDT)
+Received: by mail-oa1-x2e.google.com with SMTP id 586e51a60fabf-177ca271cb8so1820363fac.2;
+        Mon, 13 Mar 2023 09:43:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678725809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VgyR+Thhbr0FuHdIQhF7qy2mK/AxSo/8SviTeetvkXs=;
+        b=lt9JUNwdkNIT+5dzth4QSsZAjt7rMEDZ3VoenOeB6O9nqKZCJ4Pf/3ADgQnoEBD0Zc
+         9AYHfS1hLYo7ke0USbPmz+xacz0/0ZCv6A5cZAcfFvbBm1jzh1kIdNcA+waD1Uq/tEXI
+         SlD9v5Ky57powOfnhgb/+knvkKbBFF/nb/vcSulLF1fJoGMwlpmivq4aVhznIVaJA3//
+         EDf+TuYSYVoFgWNxFbgVOcKQfFimtGrN9xviAvo2FgsY4EF4pNWwkkSrTxwHopHXazk9
+         md1jc9fnDACGlZ1c4/u5kYM+9Zoi6MFRtlEuhsXJhMQhpvHHeSHVDYOoM9P0ZHdSuQ+K
+         3uJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678725809;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VgyR+Thhbr0FuHdIQhF7qy2mK/AxSo/8SviTeetvkXs=;
+        b=h6JsMp4h30SmJaLelhCbBpwvPZxQ9pUmdAZciPahLWSF/fPqE1V6UxoKZugEMWGK/G
+         Omwg2ilYsODMNYpJHWtln2q8YEEDvHyt/uPJOe4u3LeoV8sA2xmx4qWbFA0S05sHoCB9
+         azW34r8Hjf9tW4rKPkeLUVCRLVhg7MmR8QOlH6bRV8jZRh3AOayW98/7FMovarQMuzgH
+         U1b15tg+IGvlu5IFh+NaKECemQ7w0U9PMRyYzpfWzxXHwF8zp2Zj4weCVabBpprOwKjl
+         BR7Xs9j99pP17yZ23oqqpMZP51nhlgG9ipJk//kiCyPhYbq45CnQWdKBFkzcKBsSfcgk
+         lwIw==
+X-Gm-Message-State: AO0yUKW1HtBo4KG95l7YXv5wuFKYjzUaJ9hPQWLbKkVd2/zKZIEsCob9
+        9PSaviSiSeHKgvyRKloL6epAhM6OcCpsoWQn+S/OxHPI
+X-Google-Smtp-Source: AK7set8mCms2PgaT0OYxKYOKQQqd9uWLZT2sc7yo+IZrY4bA1gnTHpI8HOLFt/Fq8VxwfYM8AjtucX2HgTO1i53z+TI=
+X-Received: by 2002:a05:6870:7729:b0:176:3897:6928 with SMTP id
+ dw41-20020a056870772900b0017638976928mr12623541oab.5.1678725809280; Mon, 13
+ Mar 2023 09:43:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: =?UTF-8?Q?Re=3a_=5bPATCH_5/6=5d_ARM=3a_dts=3a_imx6dl-yapp43=3a_Add_?=
- =?UTF-8?Q?support_for_new_HW_revision_of_the_IOTA=c2=a0board?=
-Content-Language: en-US
-To:     Shawn Guo <shawnguo@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230210154855.3086900-1-michal.vokac@ysoft.com>
- <20230210154855.3086900-6-michal.vokac@ysoft.com>
- <20230313082348.GM143566@dragon>
-From:   =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
-In-Reply-To: <20230313082348.GM143566@dragon>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20230311173513.1080397-1-robdclark@gmail.com> <20230311173513.1080397-3-robdclark@gmail.com>
+ <b846101c-e6ef-2d3e-9db9-077003b72e57@amd.com> <CAF6AEGvH==PPLpdxim4Pi=Q7RA8Ou4NYxvYBW=N8sh9amEqQVQ@mail.gmail.com>
+ <0bc78dea-72cb-cadf-5708-39c765f2b7a8@amd.com>
+In-Reply-To: <0bc78dea-72cb-cadf-5708-39c765f2b7a8@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 13 Mar 2023 09:43:17 -0700
+Message-ID: <CAF6AEGv_UVPLpH4H5083FaQYTEkRz4AbyMq9441ZXZjVbuwH7w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm/msm: Embed the hw_fence in msm_gem_submit
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13. 03. 23 9:23, Shawn Guo wrote:
-> On Fri, Feb 10, 2023 at 04:48:54PM +0100, Michal Vokáč wrote:
->> The PCB used for all the current boards (Ursa, Draco, Hydra, Orion, Crux)
->> was slightly redesigned and delivers some new features while some unused
->> components were removed.
->>
->> - External RTC chip with supercap added.
->> - Secure element added.
->> - LCD display power supply enable/disable signal added.
->> - Touch keyboard reset and interrupt signals added.
->> - Factory reset GPIO button added.
->> - Audio codec LM49350 (EoL) removed and replaced by PWM audio output.
->> - QCA8334 switch was replaced by Marvell 88E6141.
->> - PCIe completely removed.
->> - uSD card removed and replaced by board-to-board expansion connector.
->>
->> There are four configuration variants of the new board:
->>
->> 1. Pegasus
->> The board configuration is based on Orion with the following major changes:
->>
->> - Quad core SoC
->> - 4GB of RAM
->> - RTC with supercap added
->> - Secure element added
->>
->> 2. Pegasus+
->> This is the very same board as Pegasus but uses the i.MX6QuadPlus SoC.
->>
->> 3. Lynx
->> The board configuration is based on Draco with the following major changes:
->>
->> - DualLite SoC
->> - 1GB of RAM
->> - RTC with supercap added
->> - Secure element added
->>
->> 4. Phoenix
->> The board configuration is based on Ursa with the following major changes:
->>
->> - DualLite Soc
->> - 1GB of RAM
->> - RTC with supercap added
->> - Secure element added
->> - LCD display support removed
->> - UART2 removed
->> - Factory reset GPIO button added
->>
->> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
->> ---
->>   arch/arm/boot/dts/Makefile                    |   4 +
->>   arch/arm/boot/dts/imx6dl-yapp4-lynx.dts       |  58 ++
->>   arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts    |  42 ++
->>   arch/arm/boot/dts/imx6dl-yapp43-common.dtsi   | 619 ++++++++++++++++++
->>   arch/arm/boot/dts/imx6q-yapp4-pegasus.dts     |  58 ++
->>   .../boot/dts/imx6qp-yapp4-pegasus-plus.dts    |  58 ++
->>   6 files changed, 839 insertions(+)
->>   create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-lynx.dts
->>   create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts
->>   create mode 100644 arch/arm/boot/dts/imx6dl-yapp43-common.dtsi
->>   create mode 100644 arch/arm/boot/dts/imx6q-yapp4-pegasus.dts
->>   create mode 100644 arch/arm/boot/dts/imx6qp-yapp4-pegasus-plus.dts
->>
->> diff --git a/arch/arm/boot/dts/Makefile b/arch/arm/boot/dts/Makefile
->> index d08a3c450ce7..9a60d3fc0483 100644
->> --- a/arch/arm/boot/dts/Makefile
->> +++ b/arch/arm/boot/dts/Makefile
->> @@ -558,7 +558,9 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
->>   	imx6dl-wandboard-revd1.dtb \
->>   	imx6dl-yapp4-draco.dtb \
->>   	imx6dl-yapp4-hydra.dtb \
->> +	imx6dl-yapp4-lynx.dtb \
->>   	imx6dl-yapp4-orion.dtb \
->> +	imx6dl-yapp4-phoenix.dtb \
->>   	imx6dl-yapp4-ursa.dtb \
->>   	imx6q-apalis-eval.dtb \
->>   	imx6q-apalis-ixora.dtb \
->> @@ -625,6 +627,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
->>   	imx6q-nitrogen6_max.dtb \
->>   	imx6q-nitrogen6_som2.dtb \
->>   	imx6q-novena.dtb \
->> +	imx6q-yapp4-pegasus.dtb \
->>   	imx6q-phytec-mira-rdk-emmc.dtb \
-> 
-> Break the alphabetic order?
+On Mon, Mar 13, 2023 at 9:15=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
+>
+> Am 13.03.23 um 15:45 schrieb Rob Clark:
+> > On Mon, Mar 13, 2023 at 12:19=E2=80=AFAM Christian K=C3=B6nig
+> > <christian.koenig@amd.com> wrote:
+> >> Am 11.03.23 um 18:35 schrieb Rob Clark:
+> >>> From: Rob Clark <robdclark@chromium.org>
+> >>>
+> >>> Avoid allocating memory in job_run() by embedding the fence in the
+> >>> submit object.  Since msm gpu fences are always 1:1 with msm_gem_subm=
+it
+> >>> we can just use the fence's refcnt to track the submit.  And since we
+> >>> can get the fence ctx from the submit we can just drop the msm_fence
+> >>> struct altogether.  This uses the new dma_fence_init_noref() to deal
+> >>> with the fact that the fence's refcnt is initialized when the submit =
+is
+> >>> created, long before job_run().
+> >> Well this is a very very bad idea, we made the same mistake with amdgp=
+u
+> >> as well.
+> >>
+> >> It's true that you should not have any memory allocation in your run_j=
+ob
+> >> callback, but you could also just allocate the hw fence during job
+> >> creation and initializing it later on.
+> >>
+> >> I've suggested to embed the fence into the job for amdgpu because some
+> >> people insisted of re-submitting jobs during timeout and GPU reset. Th=
+is
+> >> turned into a nightmare with tons of bug fixes on top of bug fixes on
+> >> top of bug fixes because it messes up the job and fence lifetime as
+> >> defined by the DRM scheduler and DMA-buf framework.
+> >>
+> >> Luben is currently working on cleaning all this up.
+> > This actually shouldn't be a problem with msm, as the fence doesn't
+> > change if there is a gpu reset.  We simply signal the fence for the
+> > offending job, reset the GPU, and re-play the remaining in-flight jobs
+> > (ie. things that already had their job_run() called) with the original
+> > fences.  (We don't use gpu sched's reset/timeout handling.. when I
+> > migrated to gpu sched I kept our existing hangcheck/recovery
+> > mechanism.)
+>
+> That sounds much saner than what we did.
+>
+> So you basically need the dma_fence reference counting separate to
+> initializing the other dma_fence fields?
 
-Sorry, for some reason I missed that line. Will be fixed in v2.
-> 
->>   	imx6q-phytec-mira-rdk-nand.dtb \
->>   	imx6q-phytec-pbab01.dtb \
->> @@ -680,6 +683,7 @@ dtb-$(CONFIG_SOC_IMX6Q) += \
->>   	imx6qp-vicutp.dtb \
->>   	imx6qp-wandboard-revd1.dtb \
->>   	imx6qp-yapp4-crux-plus.dtb \
->> +	imx6qp-yapp4-pegasus-plus.dtb \
->>   	imx6qp-zii-rdu2.dtb \
->>   	imx6s-dhcom-drc02.dtb
->>   dtb-$(CONFIG_SOC_IMX6SL) += \
+yeah, that was the idea
 
-[...snip...]
+> What would happen if a dma_fence which is not completely initialized
+> gets freed? E.g. because of an error?
 
->> diff --git a/arch/arm/boot/dts/imx6dl-yapp43-common.dtsi b/arch/arm/boot/dts/imx6dl-yapp43-common.dtsi
->> new file mode 100644
->> index 000000000000..30f354195e01
->> --- /dev/null
->> +++ b/arch/arm/boot/dts/imx6dl-yapp43-common.dtsi
->> @@ -0,0 +1,619 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +//
->> +// Copyright (C) 2021 Y Soft Corporation, a.s.
->> +
->> +#include <dt-bindings/gpio/gpio.h>
->> +#include <dt-bindings/interrupt-controller/irq.h>
->> +#include <dt-bindings/input/input.h>
->> +#include <dt-bindings/leds/common.h>
->> +#include <dt-bindings/pwm/pwm.h>
->> +
->> +/ {
->> +	aliases: aliases {
->> +		ethernet1 = &eth1;
->> +		ethernet2 = &eth2;
->> +		mmc0 = &usdhc3;
->> +		mmc1 = &usdhc4;
->> +	};
->> +
->> +	backlight: backlight {
->> +		compatible = "pwm-backlight";
->> +		pwms = <&pwm1 0 500000 PWM_POLARITY_INVERTED>;
->> +		brightness-levels = <0 32 64 128 255>;
->> +		default-brightness-level = <32>;
->> +		num-interpolated-steps = <8>;
->> +		power-supply = <&sw2_reg>;
->> +		status = "disabled";
->> +	};
->> +
->> +	gpio_keys: gpio-keys {
->> +		compatible = "gpio-keys";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_gpio_keys>;
->> +		status = "disabled";
->> +
->> +		button {
->> +			label = "Factory RESET";
->> +			linux,code = <BTN_0>;
->> +			gpios = <&gpio1 0 GPIO_ACTIVE_LOW>;
->> +		};
->> +	};
->> +
->> +	lcd_display: display {
->> +		compatible = "fsl,imx-parallel-display";
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +		interface-pix-fmt = "rgb24";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_ipu1>;
->> +		status = "disabled";
->> +
->> +		port@0 {
->> +			reg = <0>;
->> +
->> +			lcd_display_in: endpoint {
->> +				remote-endpoint = <&ipu1_di0_disp0>;
->> +			};
->> +		};
->> +
->> +		port@1 {
->> +			reg = <1>;
->> +
->> +			lcd_display_out: endpoint {
->> +				remote-endpoint = <&lcd_panel_in>;
->> +			};
->> +		};
->> +	};
->> +
->> +	panel: panel {
->> +		compatible = "dataimage,scf0700c48ggu18";
->> +		power-supply = <&sw2_reg>;
->> +		backlight = <&backlight>;
->> +		enable-gpios = <&gpio3 7 GPIO_ACTIVE_HIGH>;
->> +		status = "disabled";
->> +
->> +		port {
->> +			lcd_panel_in: endpoint {
->> +				remote-endpoint = <&lcd_display_out>;
->> +			};
->> +		};
->> +	};
->> +
->> +	reg_usb_h1_vbus: regulator-usb-h1-vbus {
->> +		compatible = "regulator-fixed";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_usbh1_vbus>;
->> +		regulator-name = "usb_h1_vbus";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		gpio = <&gpio1 29 GPIO_ACTIVE_HIGH>;
->> +		enable-active-high;
->> +		status = "disabled";
->> +	};
->> +
->> +	reg_usb_otg_vbus: regulator-usb-otg-vbus {
->> +		compatible = "regulator-fixed";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_usbotg_vbus>;
->> +		regulator-name = "usb_otg_vbus";
->> +		regulator-min-microvolt = <5000000>;
->> +		regulator-max-microvolt = <5000000>;
->> +		gpio = <&gpio3 22 GPIO_ACTIVE_HIGH>;
->> +		enable-active-high;
->> +		status = "okay";
->> +	};
->> +};
->> +
->> +&fec {
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_enet>;
->> +	phy-mode = "rgmii-id";
->> +	phy-reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
->> +	phy-reset-duration = <20>;
-> 
-> Deprecated.  Check Documentation/devicetree/bindings/net/fsl,fec.yaml.
+hmm, yes, this would be a problem since ops->release is not set yet..
+and I'm relying on that to free the submit
 
-OK, I will remove the reset-duration property and move
-the reset-gpios property under the mdio switch subnode.
+> Would it be to much to just keep the handling as it is today and only
+> allocate the dma_fence without initializing it? If necessary we could
+> easily add a dma_fence_is_initialized() function which checks the
+> fence_ops for NULL.
 
->> +	phy-supply = <&sw2_reg>;
->> +	status = "okay";
->> +
->> +	fixed-link {
->> +		speed = <1000>;
->> +		full-duplex;
->> +	};
->> +
->> +	mdio {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		switch@0 {
->> +			compatible = "marvell,mv88e6085";
->> +			reg = <0>;
->> +
->> +			switch_ports: ports {
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +
->> +				ethphy0: port@0 {
->> +					reg = <0>;
->> +					label = "cpu";
->> +					phy-mode = "rgmii-id";
->> +					ethernet = <&fec>;
->> +
->> +					fixed-link {
->> +						speed = <1000>;
->> +						full-duplex;
->> +					};
->> +				};
->> +
->> +				eth2: port@1 {
->> +					reg = <1>;
->> +					label = "eth2";
->> +					phy-handle = <&phy_port1>;
->> +				};
->> +
->> +				eth1: port@2 {
->> +					reg = <2>;
->> +					label = "eth1";
->> +					phy-handle = <&phy_port2>;
->> +				};
->> +			};
->> +
->> +			mdio {
->> +				#address-cells = <1>;
->> +				#size-cells = <0>;
->> +
->> +				phy_port1: switchphy@11 {
->> +					reg = <0x11>;
->> +				};
->> +
->> +				phy_port2: switchphy@12 {
->> +					reg = <0x12>;
->> +				};
->> +			};
->> +		};
->> +	};
->> +};
->> +
->> +&i2c2 {
->> +	clock-frequency = <100000>;
->> +	pinctrl-names = "default";
->> +	pinctrl-0 = <&pinctrl_i2c2>;
->> +	status = "okay";
->> +
->> +	pmic@8 {
->> +		compatible = "fsl,pfuze200";
->> +		pinctrl-names = "default";
->> +		pinctrl-0 = <&pinctrl_pmic>;
->> +		reg = <0x8>;
->> +
->> +		regulators {
->> +			sw1a_reg: sw1ab {
->> +				regulator-min-microvolt = <300000>;
->> +				regulator-max-microvolt = <1875000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +				regulator-ramp-delay = <6250>;
->> +			};
->> +
->> +			sw2_reg: sw2 {
->> +				regulator-min-microvolt = <800000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			sw3a_reg: sw3a {
->> +				regulator-min-microvolt = <400000>;
->> +				regulator-max-microvolt = <1975000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			sw3b_reg: sw3b {
->> +				regulator-min-microvolt = <400000>;
->> +				regulator-max-microvolt = <1975000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			swbst_reg: swbst {
->> +				regulator-min-microvolt = <5000000>;
->> +				regulator-max-microvolt = <5150000>;
->> +			};
->> +
->> +			vgen1_reg: vgen1 {
->> +				regulator-min-microvolt = <800000>;
->> +				regulator-max-microvolt = <1550000>;
->> +			};
->> +
->> +			vgen2_reg: vgen2 {
->> +				regulator-min-microvolt = <800000>;
->> +				regulator-max-microvolt = <1550000>;
->> +			};
->> +
->> +			vgen3_reg: vgen3 {
->> +				regulator-min-microvolt = <1800000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-always-on;
->> +			};
->> +
->> +			vgen4_reg: vgen4 {
->> +				regulator-min-microvolt = <1800000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-always-on;
->> +			};
->> +
->> +			vgen5_reg: vgen5 {
->> +				regulator-min-microvolt = <1800000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-always-on;
->> +			};
->> +
->> +			vgen6_reg: vgen6 {
->> +				regulator-min-microvolt = <1800000>;
->> +				regulator-max-microvolt = <3300000>;
->> +				regulator-always-on;
->> +			};
->> +
->> +			vref_reg: vrefddr {
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +
->> +			vsnvs_reg: vsnvs {
->> +				regulator-min-microvolt = <1000000>;
->> +				regulator-max-microvolt = <3000000>;
->> +				regulator-boot-on;
->> +				regulator-always-on;
->> +			};
->> +		};
->> +	};
->> +
->> +	leds: led-controller@30 {
->> +		compatible = "ti,lp5562";
->> +		reg = <0x30>;
->> +		clock-mode = /bits/ 8 <1>;
->> +		status = "disabled";
-> 
-> Move 'status' to the end of property list.
+Yeah, that would also be possible
 
-Hmm, I am little bit surprised it is sorted like that.
-I always put the status to the end. I am going to blame
-author of the commit: b86d3d21cd4c (ARM: dts: imx6dl-yapp4:
-Add reg property to the lp5562 channel node, 2020-08-12).
+I guess we could split creation of the fence (initializing ops,
+refcount) and "arming" it later when the seqno is known?  But maybe
+that is going to too many lengths to avoid a separate allocation..
 
-I will fix that in v2.
+BR,
+-R
 
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		led@0 {
->> +			chan-name = "R";
->> +			led-cur = /bits/ 8 <0x20>;
->> +			max-cur = /bits/ 8 <0x60>;
->> +			reg = <0>;
->> +			color = <LED_COLOR_ID_RED>;
->> +		};
->> +
->> +		led@1 {
->> +			chan-name = "G";
->> +			led-cur = /bits/ 8 <0x20>;
->> +			max-cur = /bits/ 8 <0x60>;
->> +			reg = <1>;
->> +			color = <LED_COLOR_ID_GREEN>;
->> +		};
->> +
->> +		led@2 {
->> +			chan-name = "B";
->> +			led-cur = /bits/ 8 <0x20>;
->> +			max-cur = /bits/ 8 <0x60>;
->> +			reg = <2>;
->> +			color = <LED_COLOR_ID_BLUE>;
->> +		};
->> +	};
->> +
->> +	eeprom@57 {
->> +		compatible = "atmel,24c128";
->> +		reg = <0x57>;
->> +		pagesize = <64>;
->> +		status = "okay";
-> 
-> The "okay" status is only needed to flip a "disabled" one.
-
-OK, I will remove the status "okay" from all device nodes defined
-by this dtsi that should be enabled by default.
-
-I assume that using status "okay" (or "disabled") for referenced
-nodes coming from included SoC dtsi files is fine even if these
-nodes already have the required status at the moment.
-
-Otherwise I see no guarantee that the node will have my required
-status in the future as well. The status in the included files
-may be changed by someone else for whatever reason.
-
->> +	};
->> +
->> +	touchscreen: touchscreen@5c {
->> +		compatible = "pixcir,pixcir_tangoc";
->> +		reg = <0x5c>;
->> +		pinctrl-0 = <&pinctrl_touch>;
->> +		interrupt-parent = <&gpio4>;
->> +		interrupts = <5 IRQ_TYPE_EDGE_FALLING>;
->> +		attb-gpio = <&gpio4 5 GPIO_ACTIVE_HIGH>;
->> +		reset-gpios = <&gpio1 2 GPIO_ACTIVE_HIGH>;
->> +		touchscreen-size-x = <800>;
->> +		touchscreen-size-y = <480>;
->> +		status = "disabled";
->> +	};
->> +
->> +	rtc: rtc@68 {
->> +		compatible = "dallas,ds1341";
->> +		reg = <0x68>;
->> +		status = "okay";
-> 
-> Ditto
-> 
-> Shawn
-
-ACK, will remove it in v2.
-Thank you for the review.
-
-Michal
-
-[...snip...]
+>
+> Thanks,
+> Christian.
+>
+> >
+> > BR,
+> > -R
+> >
+> >> Regards,
+> >> Christian.
+> >>
+> >>> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> >>> ---
+> >>> Note that this applies on top of https://patchwork.freedesktop.org/se=
+ries/93035/
+> >>> out of convenience for myself, but I can re-work it to go before
+> >>> depending on the order that things land.
+> >>>
+> >>>    drivers/gpu/drm/msm/msm_fence.c      | 45 +++++++++++-------------=
+----
+> >>>    drivers/gpu/drm/msm/msm_fence.h      |  2 +-
+> >>>    drivers/gpu/drm/msm/msm_gem.h        | 10 +++----
+> >>>    drivers/gpu/drm/msm/msm_gem_submit.c |  8 ++---
+> >>>    drivers/gpu/drm/msm/msm_gpu.c        |  4 +--
+> >>>    drivers/gpu/drm/msm/msm_ringbuffer.c |  4 +--
+> >>>    6 files changed, 31 insertions(+), 42 deletions(-)
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/ms=
+m_fence.c
+> >>> index 51b461f32103..51f9f1f0cb66 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_fence.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_fence.c
+> >>> @@ -103,14 +103,9 @@ void msm_update_fence(struct msm_fence_context *=
+fctx, uint32_t fence)
+> >>>        spin_unlock_irqrestore(&fctx->spinlock, flags);
+> >>>    }
+> >>>
+> >>> -struct msm_fence {
+> >>> -     struct dma_fence base;
+> >>> -     struct msm_fence_context *fctx;
+> >>> -};
+> >>> -
+> >>> -static inline struct msm_fence *to_msm_fence(struct dma_fence *fence=
+)
+> >>> +static inline struct msm_gem_submit *fence_to_submit(struct dma_fenc=
+e *fence)
+> >>>    {
+> >>> -     return container_of(fence, struct msm_fence, base);
+> >>> +     return container_of(fence, struct msm_gem_submit, hw_fence);
+> >>>    }
+> >>>
+> >>>    static const char *msm_fence_get_driver_name(struct dma_fence *fen=
+ce)
+> >>> @@ -120,20 +115,20 @@ static const char *msm_fence_get_driver_name(st=
+ruct dma_fence *fence)
+> >>>
+> >>>    static const char *msm_fence_get_timeline_name(struct dma_fence *f=
+ence)
+> >>>    {
+> >>> -     struct msm_fence *f =3D to_msm_fence(fence);
+> >>> -     return f->fctx->name;
+> >>> +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
+> >>> +     return submit->ring->fctx->name;
+> >>>    }
+> >>>
+> >>>    static bool msm_fence_signaled(struct dma_fence *fence)
+> >>>    {
+> >>> -     struct msm_fence *f =3D to_msm_fence(fence);
+> >>> -     return msm_fence_completed(f->fctx, f->base.seqno);
+> >>> +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
+> >>> +     return msm_fence_completed(submit->ring->fctx, fence->seqno);
+> >>>    }
+> >>>
+> >>>    static void msm_fence_set_deadline(struct dma_fence *fence, ktime_=
+t deadline)
+> >>>    {
+> >>> -     struct msm_fence *f =3D to_msm_fence(fence);
+> >>> -     struct msm_fence_context *fctx =3D f->fctx;
+> >>> +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
+> >>> +     struct msm_fence_context *fctx =3D submit->ring->fctx;
+> >>>        unsigned long flags;
+> >>>        ktime_t now;
+> >>>
+> >>> @@ -165,26 +160,22 @@ static void msm_fence_set_deadline(struct dma_f=
+ence *fence, ktime_t deadline)
+> >>>        spin_unlock_irqrestore(&fctx->spinlock, flags);
+> >>>    }
+> >>>
+> >>> +static void msm_fence_release(struct dma_fence *fence)
+> >>> +{
+> >>> +     __msm_gem_submit_destroy(fence_to_submit(fence));
+> >>> +}
+> >>> +
+> >>>    static const struct dma_fence_ops msm_fence_ops =3D {
+> >>>        .get_driver_name =3D msm_fence_get_driver_name,
+> >>>        .get_timeline_name =3D msm_fence_get_timeline_name,
+> >>>        .signaled =3D msm_fence_signaled,
+> >>>        .set_deadline =3D msm_fence_set_deadline,
+> >>> +     .release =3D msm_fence_release,
+> >>>    };
+> >>>
+> >>> -struct dma_fence *
+> >>> -msm_fence_alloc(struct msm_fence_context *fctx)
+> >>> +void
+> >>> +msm_fence_init(struct msm_fence_context *fctx, struct dma_fence *f)
+> >>>    {
+> >>> -     struct msm_fence *f;
+> >>> -
+> >>> -     f =3D kzalloc(sizeof(*f), GFP_KERNEL);
+> >>> -     if (!f)
+> >>> -             return ERR_PTR(-ENOMEM);
+> >>> -
+> >>> -     f->fctx =3D fctx;
+> >>> -
+> >>> -     dma_fence_init(&f->base, &msm_fence_ops, &fctx->spinlock,
+> >>> -                    fctx->context, ++fctx->last_fence);
+> >>> -
+> >>> -     return &f->base;
+> >>> +     dma_fence_init_noref(f, &msm_fence_ops, &fctx->spinlock,
+> >>> +                          fctx->context, ++fctx->last_fence);
+> >>>    }
+> >>> diff --git a/drivers/gpu/drm/msm/msm_fence.h b/drivers/gpu/drm/msm/ms=
+m_fence.h
+> >>> index cdaebfb94f5c..8fca37e9773b 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_fence.h
+> >>> +++ b/drivers/gpu/drm/msm/msm_fence.h
+> >>> @@ -81,7 +81,7 @@ void msm_fence_context_free(struct msm_fence_contex=
+t *fctx);
+> >>>    bool msm_fence_completed(struct msm_fence_context *fctx, uint32_t =
+fence);
+> >>>    void msm_update_fence(struct msm_fence_context *fctx, uint32_t fen=
+ce);
+> >>>
+> >>> -struct dma_fence * msm_fence_alloc(struct msm_fence_context *fctx);
+> >>> +void msm_fence_init(struct msm_fence_context *fctx, struct dma_fence=
+ *f);
+> >>>
+> >>>    static inline bool
+> >>>    fence_before(uint32_t a, uint32_t b)
+> >>> diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_=
+gem.h
+> >>> index c4844cf3a585..e06afed99d5b 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_gem.h
+> >>> +++ b/drivers/gpu/drm/msm/msm_gem.h
+> >>> @@ -259,10 +259,10 @@ struct msm_gem_submit {
+> >>>        struct ww_acquire_ctx ticket;
+> >>>        uint32_t seqno;         /* Sequence number of the submit on th=
+e ring */
+> >>>
+> >>> -     /* Hw fence, which is created when the scheduler executes the j=
+ob, and
+> >>> +     /* Hw fence, which is initialized when the scheduler executes t=
+he job, and
+> >>>         * is signaled when the hw finishes (via seqno write from cmds=
+tream)
+> >>>         */
+> >>> -     struct dma_fence *hw_fence;
+> >>> +     struct dma_fence hw_fence;
+> >>>
+> >>>        /* Userspace visible fence, which is signaled by the scheduler=
+ after
+> >>>         * the hw_fence is signaled.
+> >>> @@ -309,16 +309,16 @@ static inline struct msm_gem_submit *to_msm_sub=
+mit(struct drm_sched_job *job)
+> >>>        return container_of(job, struct msm_gem_submit, base);
+> >>>    }
+> >>>
+> >>> -void __msm_gem_submit_destroy(struct kref *kref);
+> >>> +void __msm_gem_submit_destroy(struct msm_gem_submit *submit);
+> >>>
+> >>>    static inline void msm_gem_submit_get(struct msm_gem_submit *submi=
+t)
+> >>>    {
+> >>> -     kref_get(&submit->ref);
+> >>> +     dma_fence_get(&submit->hw_fence);
+> >>>    }
+> >>>
+> >>>    static inline void msm_gem_submit_put(struct msm_gem_submit *submi=
+t)
+> >>>    {
+> >>> -     kref_put(&submit->ref, __msm_gem_submit_destroy);
+> >>> +     dma_fence_put(&submit->hw_fence);
+> >>>    }
+> >>>
+> >>>    void msm_submit_retire(struct msm_gem_submit *submit);
+> >>> diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/m=
+sm/msm_gem_submit.c
+> >>> index be4bf77103cd..522c8c82e827 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> >>> @@ -47,7 +47,7 @@ static struct msm_gem_submit *submit_create(struct =
+drm_device *dev,
+> >>>                return ERR_PTR(ret);
+> >>>        }
+> >>>
+> >>> -     kref_init(&submit->ref);
+> >>> +     kref_init(&submit->hw_fence.refcount);
+> >>>        submit->dev =3D dev;
+> >>>        submit->aspace =3D queue->ctx->aspace;
+> >>>        submit->gpu =3D gpu;
+> >>> @@ -65,10 +65,9 @@ static struct msm_gem_submit *submit_create(struct=
+ drm_device *dev,
+> >>>        return submit;
+> >>>    }
+> >>>
+> >>> -void __msm_gem_submit_destroy(struct kref *kref)
+> >>> +/* Called when the hw_fence is destroyed: */
+> >>> +void __msm_gem_submit_destroy(struct msm_gem_submit *submit)
+> >>>    {
+> >>> -     struct msm_gem_submit *submit =3D
+> >>> -                     container_of(kref, struct msm_gem_submit, ref);
+> >>>        unsigned i;
+> >>>
+> >>>        if (submit->fence_id) {
+> >>> @@ -78,7 +77,6 @@ void __msm_gem_submit_destroy(struct kref *kref)
+> >>>        }
+> >>>
+> >>>        dma_fence_put(submit->user_fence);
+> >>> -     dma_fence_put(submit->hw_fence);
+> >>>
+> >>>        put_pid(submit->pid);
+> >>>        msm_submitqueue_put(submit->queue);
+> >>> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_=
+gpu.c
+> >>> index 380249500325..a82d11dd5fcf 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_gpu.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> >>> @@ -716,7 +716,7 @@ static void retire_submits(struct msm_gpu *gpu)
+> >>>                         * been signalled, then later submits are not =
+signalled
+> >>>                         * either, so we are also done.
+> >>>                         */
+> >>> -                     if (submit && dma_fence_is_signaled(submit->hw_=
+fence)) {
+> >>> +                     if (submit && dma_fence_is_signaled(&submit->hw=
+_fence)) {
+> >>>                                retire_submit(gpu, ring, submit);
+> >>>                        } else {
+> >>>                                break;
+> >>> @@ -760,7 +760,7 @@ void msm_gpu_submit(struct msm_gpu *gpu, struct m=
+sm_gem_submit *submit)
+> >>>
+> >>>        msm_gpu_hw_init(gpu);
+> >>>
+> >>> -     submit->seqno =3D submit->hw_fence->seqno;
+> >>> +     submit->seqno =3D submit->hw_fence.seqno;
+> >>>
+> >>>        msm_rd_dump_submit(priv->rd, submit, NULL);
+> >>>
+> >>> diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/m=
+sm/msm_ringbuffer.c
+> >>> index 57a8e9564540..5c54befa2427 100644
+> >>> --- a/drivers/gpu/drm/msm/msm_ringbuffer.c
+> >>> +++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
+> >>> @@ -18,7 +18,7 @@ static struct dma_fence *msm_job_run(struct drm_sch=
+ed_job *job)
+> >>>        struct msm_gpu *gpu =3D submit->gpu;
+> >>>        int i;
+> >>>
+> >>> -     submit->hw_fence =3D msm_fence_alloc(fctx);
+> >>> +     msm_fence_init(fctx, &submit->hw_fence);
+> >>>
+> >>>        for (i =3D 0; i < submit->nr_bos; i++) {
+> >>>                struct drm_gem_object *obj =3D &submit->bos[i].obj->ba=
+se;
+> >>> @@ -37,7 +37,7 @@ static struct dma_fence *msm_job_run(struct drm_sch=
+ed_job *job)
+> >>>
+> >>>        mutex_unlock(&gpu->lock);
+> >>>
+> >>> -     return dma_fence_get(submit->hw_fence);
+> >>> +     return dma_fence_get(&submit->hw_fence);
+> >>>    }
+> >>>
+> >>>    static void msm_job_free(struct drm_sched_job *job)
+>
