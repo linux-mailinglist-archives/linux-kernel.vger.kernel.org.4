@@ -2,77 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF0FD6B7AC7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:46:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 538846B7ABE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:45:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjCMOq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:46:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
+        id S230187AbjCMOpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:45:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjCMOqR (ORCPT
+        with ESMTP id S230400AbjCMOpj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:46:17 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B131BAF8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:45:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678718709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JeyU3OkLDADoHVbv9XEBjFeFQD0XfzUZG7MtTMRbF+Y=;
-        b=Y4l6jlcqBuxS1/u+N+G+tlLqYjRqrXo6OFw1CcB0FMTWjPWkxh03YG9ZcS+7qmR9+aoDyX
-        esvcUkJ36jfyHGfJx6cuNULiKazbarEQdoVDstlTcEuEh1XeyQ1pFZBI7D4hwM6Hlg4lVh
-        AcYo6fvfmM0dR+5WMOO7mK4wOIeUCeM=
-Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
- [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-652-wpuXGVqRMKKGRJ8NisjN9w-1; Mon, 13 Mar 2023 10:45:08 -0400
-X-MC-Unique: wpuXGVqRMKKGRJ8NisjN9w-1
-Received: by mail-qv1-f69.google.com with SMTP id ge13-20020a05621427cd00b005739f5f9d7cso7110427qvb.22
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:45:08 -0700 (PDT)
+        Mon, 13 Mar 2023 10:45:39 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71E5279A8;
+        Mon, 13 Mar 2023 07:45:17 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id q15so9556311oiw.11;
+        Mon, 13 Mar 2023 07:45:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678718717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a+CV2SifknfjhIyuWjTUWiSmqHONl4lWciVnfKStENI=;
+        b=i2SilUaV3bWr54dJkta8nQzXHC3ldAO2CIGhbaD4W2v+7zFai9h4s8d7ydJi9vnydm
+         Rmxl312JsKwfTHbOQLjbx4ktE/y8WN+0Ln9BrXobMgsxonH4DFHkVFZGtGLQwkktvLcn
+         itJSuVzIf/F02deRU7nI6BeVfpriCFR4EcK582FgWJjppl9SIKcmwheYjcDbIg8zeJQJ
+         EqcgvRMfQTswHXsnOv6HitRObCa9s28QUTIkupuGHf7aMdDZJ+yoECnuZ7K1ra/bLFsM
+         w/LkdVBqGREcJJxbxVtzcDHoNH7OJXB6MFwr8ln2do2Ocvm9ns+3WsrN9mjLPqHcnqb5
+         ykcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718707;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JeyU3OkLDADoHVbv9XEBjFeFQD0XfzUZG7MtTMRbF+Y=;
-        b=EwpBDrojZfJhM9rER+JiSDAOvMcxmBa0pQWCYAUGKvvmq7nzEOmGc0mBnZNSAePsJG
-         2w35Dp2iPflIkf1gN99rNmqEn/5DG+ot5TwhPpj2tLljDf7H9ctH07HRc9dci4TgdAGo
-         3UzM3mMYVMMVUQkzTZo9yWbpT1yA9UYiE4xpJMnlr9Msm8QhCpjizPVso76iJ1eKAUjG
-         t1AplJmb4b4m3j8l0jP05Ki+b278HGVH8wbgGrKsEbIiAMcUGW3fGNr0zKc+jX0rlIT3
-         QzVlaxIJRh3OiSC6PQO+NTa0KTCCUFsh0UgnuBUdShEn5hIFUadgZZkncvzM+lKAZChR
-         pLKg==
-X-Gm-Message-State: AO0yUKU2D+REcZVtYlRlla0G6OR7e6pngtdPDNBuHetLszaOnd9JJ3FJ
-        b0SmWpfFyh4rZFl5Otv8wVdwU9np9tKoLXssrKBacxXknNxGWgbcLRk7etfxwedoCg3NZWBKRma
-        ZqIR9n41T1+pfuna52XblidOV
-X-Received: by 2002:ac8:5c4a:0:b0:3bf:d0ac:5ba9 with SMTP id j10-20020ac85c4a000000b003bfd0ac5ba9mr59575492qtj.7.1678718707309;
-        Mon, 13 Mar 2023 07:45:07 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+xVVdLvypUTU5W6069rWSQDyaqnOfkHMnUQHFXczkJCYRzTya4McHW9Ee9xZkS47ts22J8wA==
-X-Received: by 2002:ac8:5c4a:0:b0:3bf:d0ac:5ba9 with SMTP id j10-20020ac85c4a000000b003bfd0ac5ba9mr59575427qtj.7.1678718706871;
-        Mon, 13 Mar 2023 07:45:06 -0700 (PDT)
-Received: from fedora (g2.ign.cz. [91.219.240.8])
-        by smtp.gmail.com with ESMTPSA id e20-20020a05622a111400b003bfb1416c2bsm5567518qty.96.2023.03.13.07.45.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 07:45:06 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
-        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
-        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
-In-Reply-To: <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
-References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
- <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
-Date:   Mon, 13 Mar 2023 15:45:02 +0100
-Message-ID: <87a60gww0h.fsf@redhat.com>
+        d=1e100.net; s=20210112; t=1678718717;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a+CV2SifknfjhIyuWjTUWiSmqHONl4lWciVnfKStENI=;
+        b=oEGHP6JLZD1kj6R01iRQ9G4YoNOVsGmwK39E/ikDznwoKNWmDXKU9KQ+gratODi5aW
+         8ZmaqBHtNbR9DQEQbGa1a6hyF+8EHZRPuDUHs/GjNzDCjcq45BIvsDv1fZSFtqEHFOZN
+         IrrZLeBMlbcgUwAO1McHSv/drl2apbCYuzF3ks1/cYQQhDzfr1o7T2XZzwleXJ+Dy8Zk
+         mdeX/OoRHqBOQyMw2OF3SJmNE7qv8hSGy98gW6OeJBa6JvieTXKV75UYkoTcKihjoOw+
+         4g6hnECTn3gnqIdA5Kzp5isGBZbhiaS12yiBXSNrAZhz2QtQVxtq/zRUVudyur+TbHDF
+         TaiA==
+X-Gm-Message-State: AO0yUKWTFR8CAcwIRIrfSicbiohxzWBPdQ1heubohENKH5EJXDWU6D9S
+        sxsIlD3KPk8H4RXfDy8QmPc5Mt85k/odAP6VNYc=
+X-Google-Smtp-Source: AK7set8Ti1T85pfZ3x3mojTmAFJI+E2j4PltKQSmP4vh2+nZAmydeBWLtDIItpnDphn3KDx5PrbNv0r21XjWrzrB7RA=
+X-Received: by 2002:a05:6808:220a:b0:383:db64:65 with SMTP id
+ bd10-20020a056808220a00b00383db640065mr5424701oib.4.1678718716877; Mon, 13
+ Mar 2023 07:45:16 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20230311173513.1080397-1-robdclark@gmail.com> <20230311173513.1080397-3-robdclark@gmail.com>
+ <b846101c-e6ef-2d3e-9db9-077003b72e57@amd.com>
+In-Reply-To: <b846101c-e6ef-2d3e-9db9-077003b72e57@amd.com>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Mon, 13 Mar 2023 07:45:05 -0700
+Message-ID: <CAF6AEGvH==PPLpdxim4Pi=Q7RA8Ou4NYxvYBW=N8sh9amEqQVQ@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm/msm: Embed the hw_fence in msm_gem_submit
+To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        Rob Clark <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:DMA BUFFER SHARING FRAMEWORK" 
+        <linux-media@vger.kernel.org>,
+        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
+        <linaro-mm-sig@lists.linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,516 +82,307 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Saurabh Sengar <ssengar@linux.microsoft.com> writes:
-
-> Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
-> feature. VSM is a set of hypervisor capabilities and enlightenments
-> offered to host and guest partitions which enable the creation and
-> management of new security boundaries within operating system software.
-> VSM achieves and maintains isolation through VTLs.
+On Mon, Mar 13, 2023 at 12:19=E2=80=AFAM Christian K=C3=B6nig
+<christian.koenig@amd.com> wrote:
 >
-> Add early initialization for Virtual Trust Levels (VTL). This includes
-> initializing the x86 platform for VTL and enabling boot support for
-> secondary CPUs to start in targeted VTL context. For now, only enable
-> the code for targeted VTL level as 2.
+> Am 11.03.23 um 18:35 schrieb Rob Clark:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > Avoid allocating memory in job_run() by embedding the fence in the
+> > submit object.  Since msm gpu fences are always 1:1 with msm_gem_submit
+> > we can just use the fence's refcnt to track the submit.  And since we
+> > can get the fence ctx from the submit we can just drop the msm_fence
+> > struct altogether.  This uses the new dma_fence_init_noref() to deal
+> > with the fact that the fence's refcnt is initialized when the submit is
+> > created, long before job_run().
 >
-> When starting an AP at a VTL other than VTL 0, the AP must start directly
-> in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
-> transition sequence that occurs after waking up an AP with SIPI whose
-> vector points to the 16-bit AP startup trampoline code.
+> Well this is a very very bad idea, we made the same mistake with amdgpu
+> as well.
 >
-> This commit also moves hv_get_nmi_reason function to header file, so
-> that it can be reused by VTL.
+> It's true that you should not have any memory allocation in your run_job
+> callback, but you could also just allocate the hw fence during job
+> creation and initializing it later on.
 >
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> ---
->  arch/x86/Kconfig                   |  24 +++
->  arch/x86/hyperv/Makefile           |   1 +
->  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
->  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
->  arch/x86/include/asm/mshyperv.h    |  14 ++
->  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
->  include/asm-generic/hyperv-tlfs.h  |   4 +
-
-This patch is quite big, I'd suggest you split it up. E.g. TLFS definitions
-can easily be a separate patch. Moving hv_get_nmi_reason() can be a
-separate patch. Secondary CPU bringup can be a separate patch. The new
-config option to enable the feature (assuming it is really needed) can
-be the last separate patch.
-
->  7 files changed, 346 insertions(+), 5 deletions(-)
->  create mode 100644 arch/x86/hyperv/hv_vtl.c
+> I've suggested to embed the fence into the job for amdgpu because some
+> people insisted of re-submitting jobs during timeout and GPU reset. This
+> turned into a nightmare with tons of bug fixes on top of bug fixes on
+> top of bug fixes because it messes up the job and fence lifetime as
+> defined by the DRM scheduler and DMA-buf framework.
 >
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 453f462f6c9c..b9e52ac9c9f9 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
->  
->  if HYPERVISOR_GUEST
->  
-> +config HYPERV_VTL
-> +	bool "Enable VTL"
-> +	depends on X86_64 && HYPERV
-> +	default n
-> +	help
-> +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
-> +	  enlightenments offered to host and guest partitions which enables
-> +	  the creation and management of new security boundaries within
-> +	  operating system software.
-> +
-> +	  VSM achieves and maintains isolation through Virtual Trust Levels
-> +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
-> +	  being more privileged than lower levels. VTL0 is the least privileged
-> +	  level, and currently only other level supported is VTL2.
-> +
-> +	  Select this option to build a Linux kernel to run at a VTL other than
-> +	  the normal VTL 0, which currently is only VTL 2.  This option
-> +	  initializes the x86 platform for VTL 2, and adds the ability to boot
-> +	  secondary CPUs directly into 64-bit context as required for VTLs other
-> +	  than 0.  A kernel built with this option must run at VTL 2, and will
-> +	  not run as a normal guest.
+> Luben is currently working on cleaning all this up.
 
-This is quite unfortunate, is there a way to detect which VTL the guest
-is running at and change the behavior dynamically?
+This actually shouldn't be a problem with msm, as the fence doesn't
+change if there is a gpu reset.  We simply signal the fence for the
+offending job, reset the GPU, and re-play the remaining in-flight jobs
+(ie. things that already had their job_run() called) with the original
+fences.  (We don't use gpu sched's reset/timeout handling.. when I
+migrated to gpu sched I kept our existing hangcheck/recovery
+mechanism.)
 
-> +
-> +	  If unsure, say N
-> +
->  config PARAVIRT
->  	bool "Enable paravirtualization code"
->  	depends on HAVE_STATIC_CALL
-> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> index 5d2de10809ae..a538df01181a 100644
-> --- a/arch/x86/hyperv/Makefile
-> +++ b/arch/x86/hyperv/Makefile
-> @@ -1,6 +1,7 @@
->  # SPDX-License-Identifier: GPL-2.0-only
->  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
->  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
-> +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
->  
->  ifdef CONFIG_X86_64
->  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-> new file mode 100644
-> index 000000000000..0da8b242eb8b
-> --- /dev/null
-> +++ b/arch/x86/hyperv/hv_vtl.c
-> @@ -0,0 +1,227 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2023, Microsoft Corporation.
-> + *
-> + * Author:
-> + *   Saurabh Sengar <ssengar@microsoft.com>
-> + */
-> +
-> +#include <asm/apic.h>
-> +#include <asm/boot.h>
-> +#include <asm/desc.h>
-> +#include <asm/i8259.h>
-> +#include <asm/mshyperv.h>
-> +#include <asm/realmode.h>
-> +
-> +extern struct boot_params boot_params;
-> +static struct real_mode_header hv_vtl_real_mode_header;
-> +
-> +void __init hv_vtl_init_platform(void)
-> +{
-> +	pr_info("Initializing Hyper-V VTL\n");
-> +
-> +	x86_init.irqs.pre_vector_init = x86_init_noop;
-> +	x86_init.timers.timer_init = x86_init_noop;
-> +
-> +	x86_platform.get_wallclock = get_rtc_noop;
-> +	x86_platform.set_wallclock = set_rtc_noop;
-> +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
-> +
-> +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
-> +	x86_platform.legacy.rtc = 0;
-> +	x86_platform.legacy.warm_reset = 0;
-> +	x86_platform.legacy.reserve_bios_regions = 0;
-> +	x86_platform.legacy.devices.pnpbios = 0;
-> +}
-> +
-> +static inline u64 hv_vtl_system_desc_base(struct ldttss_desc *desc)
-> +{
-> +	return ((u64)desc->base3 << 32) | ((u64)desc->base2 << 24) |
-> +		(desc->base1 << 16) | desc->base0;
-> +}
-> +
-> +static inline u32 hv_vtl_system_desc_limit(struct ldttss_desc *desc)
-> +{
-> +	return ((u32)desc->limit1 << 16) | (u32)desc->limit0;
-> +}
-> +
-> +typedef void (*secondary_startup_64_fn)(void*, void*);
-> +static void hv_vtl_ap_entry(void)
-> +{
-> +	((secondary_startup_64_fn)secondary_startup_64)(&boot_params, &boot_params);
-> +}
-> +
-> +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
-> +{
-> +	u64 status;
-> +	int ret = 0;
-> +	struct hv_enable_vp_vtl *input;
-> +	unsigned long irq_flags;
-> +
-> +	struct desc_ptr gdt_ptr;
-> +	struct desc_ptr idt_ptr;
-> +
-> +	struct ldttss_desc *tss;
-> +	struct ldttss_desc *ldt;
-> +	struct desc_struct *gdt;
-> +
-> +	u64 rsp = initial_stack;
-> +	u64 rip = (u64)&hv_vtl_ap_entry;
-> +
-> +	native_store_gdt(&gdt_ptr);
-> +	store_idt(&idt_ptr);
-> +
-> +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
-> +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
-> +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
-> +
-> +	local_irq_save(irq_flags);
-> +
-> +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
-> +	memset(input, 0, sizeof(*input));
-> +
-> +	input->partition_id = HV_PARTITION_ID_SELF;
-> +	input->vp_index = target_vp_index;
-> +	input->target_vtl.target_vtl = HV_VTL_MGMT;
-> +
-> +	/*
-> +	 * The x86_64 Linux kernel follows the 16-bit -> 32-bit -> 64-bit
-> +	 * mode transition sequence after waking up an AP with SIPI whose
-> +	 * vector points to the 16-bit AP startup trampoline code. Here in
-> +	 * VTL2, we can't perform that sequence as the AP has to start in
-> +	 * the 64-bit mode.
-> +	 *
-> +	 * To make this happen, we tell the hypervisor to load a valid 64-bit
-> +	 * context (most of which is just magic numbers from the CPU manual)
-> +	 * so that AP jumps right to the 64-bit entry of the kernel, and the
-> +	 * control registers are loaded with values that let the AP fetch the
-> +	 * code and data and carry on with work it gets assigned.
-> +	 */
-> +
-> +	input->vp_context.rip = rip;
-> +	input->vp_context.rsp = rsp;
-> +	input->vp_context.rflags = 0x0000000000000002;
-> +	input->vp_context.efer = __rdmsr(MSR_EFER);
-> +	input->vp_context.cr0 = native_read_cr0();
-> +	input->vp_context.cr3 = __native_read_cr3();
-> +	input->vp_context.cr4 = native_read_cr4();
-> +	input->vp_context.msr_cr_pat = __rdmsr(MSR_IA32_CR_PAT);
-> +	input->vp_context.idtr.limit = idt_ptr.size;
-> +	input->vp_context.idtr.base = idt_ptr.address;
-> +	input->vp_context.gdtr.limit = gdt_ptr.size;
-> +	input->vp_context.gdtr.base = gdt_ptr.address;
-> +
-> +	/* Non-system desc (64bit), long, code, present */
-> +	input->vp_context.cs.selector = __KERNEL_CS;
-> +	input->vp_context.cs.base = 0;
-> +	input->vp_context.cs.limit = 0xffffffff;
-> +	input->vp_context.cs.attributes = 0xa09b;
-> +	/* Non-system desc (64bit), data, present, granularity, default */
-> +	input->vp_context.ss.selector = __KERNEL_DS;
-> +	input->vp_context.ss.base = 0;
-> +	input->vp_context.ss.limit = 0xffffffff;
-> +	input->vp_context.ss.attributes = 0xc093;
-> +
-> +	/* System desc (128bit), present, LDT */
-> +	input->vp_context.ldtr.selector = GDT_ENTRY_LDT * 8;
-> +	input->vp_context.ldtr.base = hv_vtl_system_desc_base(ldt);
-> +	input->vp_context.ldtr.limit = hv_vtl_system_desc_limit(ldt);
-> +	input->vp_context.ldtr.attributes = 0x82;
-> +
-> +	/* System desc (128bit), present, TSS, 0x8b - busy, 0x89 -- default */
-> +	input->vp_context.tr.selector = GDT_ENTRY_TSS * 8;
-> +	input->vp_context.tr.base = hv_vtl_system_desc_base(tss);
-> +	input->vp_context.tr.limit = hv_vtl_system_desc_limit(tss);
-> +	input->vp_context.tr.attributes = 0x8b;
-> +
-> +	status = hv_do_hypercall(HVCALL_ENABLE_VP_VTL, input, NULL);
-> +
-> +	if (!hv_result_success(status) &&
-> +	    hv_result(status) != HV_STATUS_VTL_ALREADY_ENABLED) {
-> +		pr_err("HVCALL_ENABLE_VP_VTL failed for VP : %d ! [Err: %#llx\n]",
-> +		       target_vp_index, status);
-> +		ret = -EINVAL;
-> +		goto free_lock;
-> +	}
-> +
-> +	status = hv_do_hypercall(HVCALL_START_VP, input, NULL);
-> +
-> +	if (!hv_result_success(status)) {
-> +		pr_err("HVCALL_START_VP failed for VP : %d ! [Err: %#llx]\n",
-> +		       target_vp_index, status);
-> +		ret = -EINVAL;
-> +	}
-> +
-> +free_lock:
-> +	local_irq_restore(irq_flags);
-> +
-> +	return ret;
-> +}
-> +
-> +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
-> +{
-> +	u64 control;
-> +	u64 status;
-> +	unsigned long irq_flags;
-> +	struct hv_get_vp_from_apic_id_in *input;
-> +	u32 *output, ret;
-> +
-> +	local_irq_save(irq_flags);
-> +
-> +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
-> +	memset(input, 0, sizeof(*input));
-> +	input->partition_id = HV_PARTITION_ID_SELF;
-> +	input->apic_ids[0] = apic_id;
-> +
-> +	output = (u32 *)input;
-> +
-> +	control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_ID_FROM_APIC_ID;
-> +	status = hv_do_hypercall(control, input, output);
-> +	ret = output[0];
-> +
-> +	local_irq_restore(irq_flags);
-> +
-> +	if (!hv_result_success(status)) {
-> +		pr_err("failed to get vp id from apic id %d, status %#llx\n",
-> +		       apic_id, status);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +static int hv_vtl_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
-> +{
-> +	int vp_id;
-> +
-> +	pr_debug("Bringing up CPU with APIC ID %d in VTL2...\n", apicid);
-> +	vp_id = hv_vtl_apicid_to_vp_id(apicid);
-> +
-> +	if (vp_id < 0) {
-> +		pr_err("Couldn't find CPU with APIC ID %d\n", apicid);
-> +		return -EINVAL;
-> +	}
-> +	if (vp_id > ms_hyperv.max_vp_index) {
-> +		pr_err("Invalid CPU id %d for APIC ID %d\n", vp_id, apicid);
-> +		return -EINVAL;
-> +	}
-> +
-> +	return hv_vtl_bringup_vcpu(vp_id, start_eip);
-> +}
-> +
-> +static int __init hv_vtl_early_init(void)
-> +{
-> +	/*
-> +	 * `boot_cpu_has` returns the runtime feature support,
-> +	 * and here is the earliest it can be used.
-> +	 */
-> +	if (cpu_feature_enabled(X86_FEATURE_XSAVE))
-> +		panic("XSAVE has to be disabled as it is not supported by this module.\n"
-> +			  "Please add 'noxsave' to the kernel command line.\n");
+BR,
+-R
 
-Can't we just suppress the feature early instead?
-
-> +
-> +	real_mode_header = &hv_vtl_real_mode_header;
-> +	apic->wakeup_secondary_cpu_64 = hv_vtl_wakeup_secondary_cpu;
-> +
-> +	return 0;
-> +}
-> +early_initcall(hv_vtl_early_init);
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> index 0b73a809e9e1..08a6845a233d 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -713,6 +713,81 @@ union hv_msi_entry {
->  	} __packed;
->  };
->  
-> +struct hv_x64_segment_register {
-> +	__u64 base;
-> +	__u32 limit;
-> +	__u16 selector;
-> +	union {
-> +		struct {
-> +			__u16 segment_type : 4;
-> +			__u16 non_system_segment : 1;
-> +			__u16 descriptor_privilege_level : 2;
-> +			__u16 present : 1;
-> +			__u16 reserved : 4;
-> +			__u16 available : 1;
-> +			__u16 _long : 1;
-> +			__u16 _default : 1;
-> +			__u16 granularity : 1;
-> +		} __packed;
-> +		__u16 attributes;
-> +	};
-> +} __packed;
-> +
-> +struct hv_x64_table_register {
-> +	__u16 pad[3];
-> +	__u16 limit;
-> +	__u64 base;
-> +} __packed;
-> +
-> +struct hv_init_vp_context_t {
-> +	u64 rip;
-> +	u64 rsp;
-> +	u64 rflags;
-> +
-> +	struct hv_x64_segment_register cs;
-> +	struct hv_x64_segment_register ds;
-> +	struct hv_x64_segment_register es;
-> +	struct hv_x64_segment_register fs;
-> +	struct hv_x64_segment_register gs;
-> +	struct hv_x64_segment_register ss;
-> +	struct hv_x64_segment_register tr;
-> +	struct hv_x64_segment_register ldtr;
-> +
-> +	struct hv_x64_table_register idtr;
-> +	struct hv_x64_table_register gdtr;
-> +
-> +	u64 efer;
-> +	u64 cr0;
-> +	u64 cr3;
-> +	u64 cr4;
-> +	u64 msr_cr_pat;
-> +} __packed;
-> +
-> +union hv_input_vtl {
-> +	u8 as_uint8;
-> +	struct {
-> +		u8 target_vtl: 4;
-> +		u8 use_target_vtl: 1;
-> +		u8 reserved_z: 3;
-> +	};
-> +} __packed;
-> +
-> +struct hv_enable_vp_vtl {
-> +	u64				partition_id;
-> +	u32				vp_index;
-> +	union hv_input_vtl		target_vtl;
-> +	u8				mbz0;
-> +	u16				mbz1;
-> +	struct hv_init_vp_context_t	vp_context;
-> +} __packed;
-> +
-> +struct hv_get_vp_from_apic_id_in {
-> +	u64 partition_id;
-> +	union hv_input_vtl target_vtl;
-> +	u8 res[7];
-> +	u32 apic_ids[];
-> +} __packed;
-> +
->  #include <asm-generic/hyperv-tlfs.h>
->  
->  #endif
-> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-> index 4c4c0ec3b62e..4ff549dcd49a 100644
-> --- a/arch/x86/include/asm/mshyperv.h
-> +++ b/arch/x86/include/asm/mshyperv.h
-> @@ -11,6 +11,10 @@
->  #include <asm/paravirt.h>
->  #include <asm/mshyperv.h>
->  
-> +#define HV_VTL_NORMAL 0x0
-> +#define HV_VTL_SECURE 0x1
-> +#define HV_VTL_MGMT   0x2
-
-Don't these belong to hyperv-tlfs.h too (even if they're not directly
-described in Hyper-V TLFS)?
-
-> +
->  union hv_ghcb;
->  
->  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
-> @@ -181,6 +185,11 @@ static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
->  	return hv_vp_assist_page[cpu];
->  }
->  
-> +static inline unsigned char hv_get_nmi_reason(void)
-> +{
-> +	return 0;
-> +}
-> +
->  void __init hyperv_init(void);
->  void hyperv_setup_mmu_ops(void);
->  void set_hv_tscchange_cb(void (*cb)(void));
-> @@ -266,6 +275,11 @@ static inline int hv_set_mem_host_visibility(unsigned long addr, int numpages,
->  }
->  #endif /* CONFIG_HYPERV */
->  
-> +#ifdef CONFIG_HYPERV_VTL
-> +void __init hv_vtl_init_platform(void);
-> +#else
-> +static inline void __init hv_vtl_init_platform(void) {}
-> +#endif
->  
->  #include <asm-generic/mshyperv.h>
->  
-> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-> index f36dc2f796c5..da5d13d29c4e 100644
-> --- a/arch/x86/kernel/cpu/mshyperv.c
-> +++ b/arch/x86/kernel/cpu/mshyperv.c
-> @@ -250,11 +250,6 @@ static uint32_t  __init ms_hyperv_platform(void)
->  	return HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS;
->  }
->  
-> -static unsigned char hv_get_nmi_reason(void)
-> -{
-> -	return 0;
-> -}
-> -
->  #ifdef CONFIG_X86_LOCAL_APIC
->  /*
->   * Prior to WS2016 Debug-VM sends NMIs to all CPUs which makes
-> @@ -521,6 +516,7 @@ static void __init ms_hyperv_init_platform(void)
->  
->  	/* Register Hyper-V specific clocksource */
->  	hv_init_clocksource();
-> +	hv_vtl_init_platform();
->  #endif
->  	/*
->  	 * TSC should be marked as unstable only after Hyper-V
-> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-> index b870983596b9..87258341fd7c 100644
-> --- a/include/asm-generic/hyperv-tlfs.h
-> +++ b/include/asm-generic/hyperv-tlfs.h
-> @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
->  /* Declare the various hypercall operations. */
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
-> +#define HVCALL_ENABLE_VP_VTL			0x000f
->  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
->  #define HVCALL_SEND_IPI				0x000b
->  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
-> @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
->  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
->  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
->  #define HVCALL_RETARGET_INTERRUPT		0x007e
-> +#define HVCALL_START_VP				0x0099
-> +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
->  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
->  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
-> @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
->  #define HV_STATUS_INVALID_PORT_ID		17
->  #define HV_STATUS_INVALID_CONNECTION_ID		18
->  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
-> +#define HV_STATUS_VTL_ALREADY_ENABLED		134
->  
->  /*
->   * The Hyper-V TimeRefCount register and the TSC
-
--- 
-Vitaly
-
+> Regards,
+> Christian.
+>
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > ---
+> > Note that this applies on top of https://patchwork.freedesktop.org/seri=
+es/93035/
+> > out of convenience for myself, but I can re-work it to go before
+> > depending on the order that things land.
+> >
+> >   drivers/gpu/drm/msm/msm_fence.c      | 45 +++++++++++----------------=
+-
+> >   drivers/gpu/drm/msm/msm_fence.h      |  2 +-
+> >   drivers/gpu/drm/msm/msm_gem.h        | 10 +++----
+> >   drivers/gpu/drm/msm/msm_gem_submit.c |  8 ++---
+> >   drivers/gpu/drm/msm/msm_gpu.c        |  4 +--
+> >   drivers/gpu/drm/msm/msm_ringbuffer.c |  4 +--
+> >   6 files changed, 31 insertions(+), 42 deletions(-)
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/msm_=
+fence.c
+> > index 51b461f32103..51f9f1f0cb66 100644
+> > --- a/drivers/gpu/drm/msm/msm_fence.c
+> > +++ b/drivers/gpu/drm/msm/msm_fence.c
+> > @@ -103,14 +103,9 @@ void msm_update_fence(struct msm_fence_context *fc=
+tx, uint32_t fence)
+> >       spin_unlock_irqrestore(&fctx->spinlock, flags);
+> >   }
+> >
+> > -struct msm_fence {
+> > -     struct dma_fence base;
+> > -     struct msm_fence_context *fctx;
+> > -};
+> > -
+> > -static inline struct msm_fence *to_msm_fence(struct dma_fence *fence)
+> > +static inline struct msm_gem_submit *fence_to_submit(struct dma_fence =
+*fence)
+> >   {
+> > -     return container_of(fence, struct msm_fence, base);
+> > +     return container_of(fence, struct msm_gem_submit, hw_fence);
+> >   }
+> >
+> >   static const char *msm_fence_get_driver_name(struct dma_fence *fence)
+> > @@ -120,20 +115,20 @@ static const char *msm_fence_get_driver_name(stru=
+ct dma_fence *fence)
+> >
+> >   static const char *msm_fence_get_timeline_name(struct dma_fence *fenc=
+e)
+> >   {
+> > -     struct msm_fence *f =3D to_msm_fence(fence);
+> > -     return f->fctx->name;
+> > +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
+> > +     return submit->ring->fctx->name;
+> >   }
+> >
+> >   static bool msm_fence_signaled(struct dma_fence *fence)
+> >   {
+> > -     struct msm_fence *f =3D to_msm_fence(fence);
+> > -     return msm_fence_completed(f->fctx, f->base.seqno);
+> > +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
+> > +     return msm_fence_completed(submit->ring->fctx, fence->seqno);
+> >   }
+> >
+> >   static void msm_fence_set_deadline(struct dma_fence *fence, ktime_t d=
+eadline)
+> >   {
+> > -     struct msm_fence *f =3D to_msm_fence(fence);
+> > -     struct msm_fence_context *fctx =3D f->fctx;
+> > +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
+> > +     struct msm_fence_context *fctx =3D submit->ring->fctx;
+> >       unsigned long flags;
+> >       ktime_t now;
+> >
+> > @@ -165,26 +160,22 @@ static void msm_fence_set_deadline(struct dma_fen=
+ce *fence, ktime_t deadline)
+> >       spin_unlock_irqrestore(&fctx->spinlock, flags);
+> >   }
+> >
+> > +static void msm_fence_release(struct dma_fence *fence)
+> > +{
+> > +     __msm_gem_submit_destroy(fence_to_submit(fence));
+> > +}
+> > +
+> >   static const struct dma_fence_ops msm_fence_ops =3D {
+> >       .get_driver_name =3D msm_fence_get_driver_name,
+> >       .get_timeline_name =3D msm_fence_get_timeline_name,
+> >       .signaled =3D msm_fence_signaled,
+> >       .set_deadline =3D msm_fence_set_deadline,
+> > +     .release =3D msm_fence_release,
+> >   };
+> >
+> > -struct dma_fence *
+> > -msm_fence_alloc(struct msm_fence_context *fctx)
+> > +void
+> > +msm_fence_init(struct msm_fence_context *fctx, struct dma_fence *f)
+> >   {
+> > -     struct msm_fence *f;
+> > -
+> > -     f =3D kzalloc(sizeof(*f), GFP_KERNEL);
+> > -     if (!f)
+> > -             return ERR_PTR(-ENOMEM);
+> > -
+> > -     f->fctx =3D fctx;
+> > -
+> > -     dma_fence_init(&f->base, &msm_fence_ops, &fctx->spinlock,
+> > -                    fctx->context, ++fctx->last_fence);
+> > -
+> > -     return &f->base;
+> > +     dma_fence_init_noref(f, &msm_fence_ops, &fctx->spinlock,
+> > +                          fctx->context, ++fctx->last_fence);
+> >   }
+> > diff --git a/drivers/gpu/drm/msm/msm_fence.h b/drivers/gpu/drm/msm/msm_=
+fence.h
+> > index cdaebfb94f5c..8fca37e9773b 100644
+> > --- a/drivers/gpu/drm/msm/msm_fence.h
+> > +++ b/drivers/gpu/drm/msm/msm_fence.h
+> > @@ -81,7 +81,7 @@ void msm_fence_context_free(struct msm_fence_context =
+*fctx);
+> >   bool msm_fence_completed(struct msm_fence_context *fctx, uint32_t fen=
+ce);
+> >   void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence)=
+;
+> >
+> > -struct dma_fence * msm_fence_alloc(struct msm_fence_context *fctx);
+> > +void msm_fence_init(struct msm_fence_context *fctx, struct dma_fence *=
+f);
+> >
+> >   static inline bool
+> >   fence_before(uint32_t a, uint32_t b)
+> > diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_ge=
+m.h
+> > index c4844cf3a585..e06afed99d5b 100644
+> > --- a/drivers/gpu/drm/msm/msm_gem.h
+> > +++ b/drivers/gpu/drm/msm/msm_gem.h
+> > @@ -259,10 +259,10 @@ struct msm_gem_submit {
+> >       struct ww_acquire_ctx ticket;
+> >       uint32_t seqno;         /* Sequence number of the submit on the r=
+ing */
+> >
+> > -     /* Hw fence, which is created when the scheduler executes the job=
+, and
+> > +     /* Hw fence, which is initialized when the scheduler executes the=
+ job, and
+> >        * is signaled when the hw finishes (via seqno write from cmdstre=
+am)
+> >        */
+> > -     struct dma_fence *hw_fence;
+> > +     struct dma_fence hw_fence;
+> >
+> >       /* Userspace visible fence, which is signaled by the scheduler af=
+ter
+> >        * the hw_fence is signaled.
+> > @@ -309,16 +309,16 @@ static inline struct msm_gem_submit *to_msm_submi=
+t(struct drm_sched_job *job)
+> >       return container_of(job, struct msm_gem_submit, base);
+> >   }
+> >
+> > -void __msm_gem_submit_destroy(struct kref *kref);
+> > +void __msm_gem_submit_destroy(struct msm_gem_submit *submit);
+> >
+> >   static inline void msm_gem_submit_get(struct msm_gem_submit *submit)
+> >   {
+> > -     kref_get(&submit->ref);
+> > +     dma_fence_get(&submit->hw_fence);
+> >   }
+> >
+> >   static inline void msm_gem_submit_put(struct msm_gem_submit *submit)
+> >   {
+> > -     kref_put(&submit->ref, __msm_gem_submit_destroy);
+> > +     dma_fence_put(&submit->hw_fence);
+> >   }
+> >
+> >   void msm_submit_retire(struct msm_gem_submit *submit);
+> > diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm=
+/msm_gem_submit.c
+> > index be4bf77103cd..522c8c82e827 100644
+> > --- a/drivers/gpu/drm/msm/msm_gem_submit.c
+> > +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
+> > @@ -47,7 +47,7 @@ static struct msm_gem_submit *submit_create(struct dr=
+m_device *dev,
+> >               return ERR_PTR(ret);
+> >       }
+> >
+> > -     kref_init(&submit->ref);
+> > +     kref_init(&submit->hw_fence.refcount);
+> >       submit->dev =3D dev;
+> >       submit->aspace =3D queue->ctx->aspace;
+> >       submit->gpu =3D gpu;
+> > @@ -65,10 +65,9 @@ static struct msm_gem_submit *submit_create(struct d=
+rm_device *dev,
+> >       return submit;
+> >   }
+> >
+> > -void __msm_gem_submit_destroy(struct kref *kref)
+> > +/* Called when the hw_fence is destroyed: */
+> > +void __msm_gem_submit_destroy(struct msm_gem_submit *submit)
+> >   {
+> > -     struct msm_gem_submit *submit =3D
+> > -                     container_of(kref, struct msm_gem_submit, ref);
+> >       unsigned i;
+> >
+> >       if (submit->fence_id) {
+> > @@ -78,7 +77,6 @@ void __msm_gem_submit_destroy(struct kref *kref)
+> >       }
+> >
+> >       dma_fence_put(submit->user_fence);
+> > -     dma_fence_put(submit->hw_fence);
+> >
+> >       put_pid(submit->pid);
+> >       msm_submitqueue_put(submit->queue);
+> > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gp=
+u.c
+> > index 380249500325..a82d11dd5fcf 100644
+> > --- a/drivers/gpu/drm/msm/msm_gpu.c
+> > +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> > @@ -716,7 +716,7 @@ static void retire_submits(struct msm_gpu *gpu)
+> >                        * been signalled, then later submits are not sig=
+nalled
+> >                        * either, so we are also done.
+> >                        */
+> > -                     if (submit && dma_fence_is_signaled(submit->hw_fe=
+nce)) {
+> > +                     if (submit && dma_fence_is_signaled(&submit->hw_f=
+ence)) {
+> >                               retire_submit(gpu, ring, submit);
+> >                       } else {
+> >                               break;
+> > @@ -760,7 +760,7 @@ void msm_gpu_submit(struct msm_gpu *gpu, struct msm=
+_gem_submit *submit)
+> >
+> >       msm_gpu_hw_init(gpu);
+> >
+> > -     submit->seqno =3D submit->hw_fence->seqno;
+> > +     submit->seqno =3D submit->hw_fence.seqno;
+> >
+> >       msm_rd_dump_submit(priv->rd, submit, NULL);
+> >
+> > diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm=
+/msm_ringbuffer.c
+> > index 57a8e9564540..5c54befa2427 100644
+> > --- a/drivers/gpu/drm/msm/msm_ringbuffer.c
+> > +++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
+> > @@ -18,7 +18,7 @@ static struct dma_fence *msm_job_run(struct drm_sched=
+_job *job)
+> >       struct msm_gpu *gpu =3D submit->gpu;
+> >       int i;
+> >
+> > -     submit->hw_fence =3D msm_fence_alloc(fctx);
+> > +     msm_fence_init(fctx, &submit->hw_fence);
+> >
+> >       for (i =3D 0; i < submit->nr_bos; i++) {
+> >               struct drm_gem_object *obj =3D &submit->bos[i].obj->base;
+> > @@ -37,7 +37,7 @@ static struct dma_fence *msm_job_run(struct drm_sched=
+_job *job)
+> >
+> >       mutex_unlock(&gpu->lock);
+> >
+> > -     return dma_fence_get(submit->hw_fence);
+> > +     return dma_fence_get(&submit->hw_fence);
+> >   }
+> >
+> >   static void msm_job_free(struct drm_sched_job *job)
+>
