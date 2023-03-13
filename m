@@ -2,140 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D81A6B70DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A95F26B70DE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:08:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230401AbjCMIHd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 04:07:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49808 "EHLO
+        id S230406AbjCMIIz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:08:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229796AbjCMIHA (ORCPT
+        with ESMTP id S229688AbjCMIIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 04:07:00 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D6932726;
-        Mon, 13 Mar 2023 01:04:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678694682; x=1710230682;
-  h=from:to:cc:subject:date:message-id;
-  bh=gDIv4qJwZoJtfa0NlmSgzOfssIbCR1lN3aQEVECdGbc=;
-  b=Xdz1IslvmvmSeBFCow1Z1C8RwiNWoLArogskr9YJTzNfuqOLa7YQziEU
-   bfMEN2+1bFe+RQeWc+++1IoHfZ0JoItyJbPfXXRTpS0qWsXUrTQXWIEos
-   8cYiZOmtHeOSMocjC1s1c+r8ETAPR9K01L3iXW32a9KMKJXRNhNeziEqB
-   /Px9ZwkoS4DBGQsOPu1+I7JkiOR6lYVweVFwcp/cwr+fS8y/VlaBBTbY8
-   y/MICqH9qE4IL5zEuOp/mAIZijjbwovwznb6eGO3f38MGN1VS3V/Vd1UV
-   Qv3ESVojcv7xgz+Za0bslJ6zvT7NN7M0XuOpJvffOyaXVrB/eqhZ6JLGd
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="399682281"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="399682281"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 01:04:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="708784876"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="708784876"
-Received: from qiuxu-clx.sh.intel.com ([10.239.53.105])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 01:04:34 -0700
-From:   Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Davidlohr Bueso <dave@stgolabs.net>
-Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH 1/1] rcu/rcuscale: Stop kfree_scale_thread thread(s) after unloading rcuscale
-Date:   Mon, 13 Mar 2023 16:04:03 +0800
-Message-Id: <20230313080403.89290-1-qiuxu.zhuo@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 04:08:40 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F56915172
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:06:57 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id o7so996814wrg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:06:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678694812;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=9T+gkmJSh/A2WDenopQxXDLhV/ur6paK/JrT18X4nWg=;
+        b=Iv2G+78gmnXK8UQXnG5coj7nchQy0urUJWA33kXXuQCkEHq0M8FyQVkN9fuD3d/Lxz
+         oz7w8I4FDjvTlXPGpV0pu6GAyV/JtBXyAUEHwpZgC7TPrI5W7CpKUwPifVBWfzulZMvt
+         UseUIx6NL6dsyRGuyYmqz7d5kuC0by3WjL4QimOraxJXHBUh/Lct2FtU1RjVjMs/HVhx
+         Jx6QteCrEAMRnK0UfN63xCVZCW55Xgq97f1A1sLzcTqvyJZrL/95+ChN8oZPJbVkiEpp
+         bKA5wN1wvxvLWFKFT7TYp6wyxS5wSZ+dW0R+ZkUAQFO7B2ftfkgxFoP5Gtc8Pffkt0Iq
+         wjYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678694812;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9T+gkmJSh/A2WDenopQxXDLhV/ur6paK/JrT18X4nWg=;
+        b=ZSM5gwwrkuKT0TqsYCNdf7WhxJ5DsrdMuqZzpOXG+GE7NZqZEtdrKIlX3dIqUsttgf
+         /2vNOG6PWL/AZFcaRkngGVmyC0V5uS3xCu+Qu2HUGfD0d1vG6tftqyKUbRtYW5o/JYEG
+         pI1NrwFWaEVgVA7WPHkPe/HVXbKloVyQjDGdxLd/dxFo2HJZpijLJRuZg34eaReoWTML
+         G1dU1/wcoaUBZLqRvmk2+7Fh9Q0wcWpcgZvxOYIVawwQ4sY2L7FlMLaojhh1MLa1Qoxj
+         3PcpUMBzEjwUCK9nFLKArodVFbeKPjQjeQ2DbnMj5fLIlbzUIohuYNbNI5a4lODmG1au
+         TTbQ==
+X-Gm-Message-State: AO0yUKUQrGPPuBqb7JnBNg/wiAB9hxzzp4Ey8mvwAcJ5op98xOXXMm1a
+        ynQfHNeyBl+D7dR3qv2CT3R/dQ==
+X-Google-Smtp-Source: AK7set+szlV9cCWtDnSfEmND682iNy8nj0kpvAQc7fC4DpuzG1k9PBJAPBfXxESaTRweKTfRFyKB6Q==
+X-Received: by 2002:adf:ee90:0:b0:2c8:9cfe:9e29 with SMTP id b16-20020adfee90000000b002c89cfe9e29mr20978010wro.38.1678694812121;
+        Mon, 13 Mar 2023 01:06:52 -0700 (PDT)
+Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
+        by smtp.gmail.com with ESMTPSA id x1-20020adff641000000b002c70c99db74sm7124861wrp.86.2023.03.13.01.06.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 01:06:51 -0700 (PDT)
+Message-ID: <6c02557d-372d-05b1-2998-7c2cde99fac7@linaro.org>
+Date:   Mon, 13 Mar 2023 09:06:50 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v5 2/2] drm/panel: Add driver for Novatek NT36523
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230311123231.20771-1-lujianhua000@gmail.com>
+ <20230311123231.20771-2-lujianhua000@gmail.com>
+ <904bc493-7160-32fd-9709-1dcb978ddbab@linaro.org> <ZAx4KqXw+an555d4@Gentoo>
+Organization: Linaro Developer Services
+In-Reply-To: <ZAx4KqXw+an555d4@Gentoo>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When running the 'kfree_rcu_test' test case with commands [1] the call
-trace [2] was thrown. This was because the kfree_scale_thread thread(s)
-still run after unloading rcuscale and torture modules. Fix the call
-trace by invoking kfree_scale_cleanup() when removing the rcuscale module.
+On 11/03/2023 13:46, Jianhua Lu wrote:
+> On Sat, Mar 11, 2023 at 01:38:52PM +0100, Konrad Dybcio wrote:
+>>
+>>
+>> On 11.03.2023 13:32, Jianhua Lu wrote:
+>>> Add a driver for panels using the Novatek NT36523 display driver IC.
+>>>
+>>> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+>>> ---
+>> [...]
+>>
+>>> +
+>>> +static int nt36523_get_modes(struct drm_panel *panel,
+>>> +			       struct drm_connector *connector)
+>>> +{
+>>> +	struct panel_info *pinfo = to_panel_info(panel);
+>>> +	int i;
+>>> +
+>>> +	for (i = 0; i < pinfo->desc->num_modes; i++) {
+>>> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
+>>> +		struct drm_display_mode *mode;
+>>> +
+>>> +		mode = drm_mode_duplicate(connector->dev, m);
+>>> +		if (!mode) {
+>>> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
+>>> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
+>>> +			return -ENOMEM;
+>>> +		}
+>>> +
+>>> +		mode->type = DRM_MODE_TYPE_DRIVER;
+>>> +		if (pinfo->desc->num_modes == 1)
+>>> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+>> That's not quite correct, as that means "if you have more than one
+>> defined panel mode (say 60Hz and 120 Hz), there will be no preferred one".
+> This piece of code I see in the other panels, so I'm not sure if it is
+> correct. Should
+> if (pinfo->desc->num_modes > 1)
+> 			mode->type |= DRM_MODE_TYPE_PREFERRED;
+> is correct?
 
-[1] modprobe torture
-    modprobe rcuscale kfree_rcu_test=1
-    // After some time
-    rmmod rcuscale
-    rmmod torture
+I think only a single mode with DRM_MODE_TYPE_PREFERRED is preferred,
+so:
+if (i == 0)
+	mode->type |= DRM_MODE_TYPE_PREFERRED;		
 
-[2] BUG: unable to handle page fault for address: ffffffffc0601a87
-    #PF: supervisor instruction fetch in kernel mode
-    #PF: error_code(0x0010) - not-present page
-    PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
-    Oops: 0010 [#1] PREEMPT SMP NOPTI
-    CPU: 1 PID: 1798 Comm: kfree_scale_thr Not tainted 6.3.0-rc1-rcu+ #1
-    Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-    RIP: 0010:0xffffffffc0601a87
-    Code: Unable to access opcode bytes at 0xffffffffc0601a5d.
-    RSP: 0018:ffffb25bc2e57e18 EFLAGS: 00010297
-    RAX: 0000000000000000 RBX: ffffffffc061f0b6 RCX: 0000000000000000
-    RDX: 0000000000000000 RSI: ffffffff962fd0de RDI: ffffffff962fd0de
-    RBP: ffffb25bc2e57ea8 R08: 0000000000000000 R09: 0000000000000000
-    R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
-    R13: 0000000000000000 R14: 000000000000000a R15: 00000000001c1dbe
-    FS:  0000000000000000(0000) GS:ffff921fa2200000(0000) knlGS:0000000000000000
-    CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-    CR2: ffffffffc0601a5d CR3: 000000011de4c006 CR4: 0000000000370ee0
-    DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-    DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-    Call Trace:
-     <TASK>
-     ? kvfree_call_rcu+0xf0/0x3a0
-     ? kthread+0xf3/0x120
-     ? kthread_complete_and_exit+0x20/0x20
-     ? ret_from_fork+0x1f/0x30
-     </TASK>
-    Modules linked in: rfkill sunrpc ... [last unloaded: torture]
-    CR2: ffffffffc0601a87
-    ---[ end trace 0000000000000000 ]---
+would be the right thing to do.
 
-Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
-Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
----
- kernel/rcu/rcuscale.c | 7 +++++++
- 1 file changed, 7 insertions(+)
 
-diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-index 91fb5905a008..5e580cd08c58 100644
---- a/kernel/rcu/rcuscale.c
-+++ b/kernel/rcu/rcuscale.c
-@@ -522,6 +522,8 @@ rcu_scale_print_module_parms(struct rcu_scale_ops *cur_ops, const char *tag)
- 		 scale_type, tag, nrealreaders, nrealwriters, verbose, shutdown);
- }
- 
-+static void kfree_scale_cleanup(void);
-+
- static void
- rcu_scale_cleanup(void)
- {
-@@ -542,6 +544,11 @@ rcu_scale_cleanup(void)
- 	if (gp_exp && gp_async)
- 		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
- 
-+	if (kfree_rcu_test) {
-+		kfree_scale_cleanup();
-+		return;
-+	}
-+
- 	if (torture_cleanup_begin())
- 		return;
- 	if (!cur_ops) {
--- 
-2.17.1
+Neil
+>>
+>> Konrad
+>>>
 
