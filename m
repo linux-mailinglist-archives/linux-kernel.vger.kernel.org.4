@@ -2,208 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A06E6B8304
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEBAB6B8308
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:44:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229707AbjCMUny (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:43:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S230222AbjCMUoG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:44:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCMUnw (ORCPT
+        with ESMTP id S229482AbjCMUn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:43:52 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF3E7B9A9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:43:23 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id cn6so680330pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:43:23 -0700 (PDT)
+        Mon, 13 Mar 2023 16:43:56 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F285E2069B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:43:46 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id v196so5976732ybe.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:43:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678740203;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=mXNyoC5arQMWtEnkrxAYqtf8v6fk65HvAH7Ge8NW0Ls=;
-        b=aivckMtAvfk9rnr+NDQFEbNkV2snhcv1sf6FN6hSWIbLc20VA2uy1pAXllcRKSl/De
-         Ao2ri32AEGLMRDxGmkY3d9I7m9sraaLJVJw/+HbkbJN8zVkoTyusV757GrMfgv6j7Ozv
-         kRP13MJDgdQQP3MNqyGErUw88D7hGfi6+BbLizs0b8dGP5pRehyOOGtpUYLmfSsVx1Bb
-         Upc5mcCHYkoxzTfpxo5DhcHMDbzf70XcRFLAJ0lJrpKdej3b+Zb6+MTH+bVnznGPAbrI
-         A3V6Pxa5iyQfsBU9tqIMu4wyCVfHeyrABgymcJWL0nWKuhYQNJw5TeZzV0pUKaL1CQUP
-         cOKg==
+        d=paul-moore.com; s=google; t=1678740226;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bpallsyVWp4X08BRu3LzaIlUbB9qVedyIOW4XaLO78U=;
+        b=Dx4W9y+4xxpBpOolAKWkBObbAUSIOoX15XjrVmudQUQkcarwJO9dT/EhcKvnmhM3Fr
+         WXwSkHhcaxuCM8SBlGj3oE7APCuTCpfnnSPWk0SK9EhPd7iT/tXv6ypU0poAJsArJqO7
+         AqRRPpbQGwNgk1m8W70qIQMEvH5luiJiLd2PknArRGQ9VMCcXARtSbEJatx2hSRZC7bs
+         4g/tYhfdljmFC6S+XSmvmE+k8gZSo7lHoynQbkq8/TFcj7GlC5RLe4RPqFBXWvIIaVG4
+         NA9QjSkSBh1tnKXNzk0gbJ+nkoadadzD9J+lx5jzzgwpkkbpE6A2YfTyNjs0o7M5+rNT
+         2xfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678740203;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mXNyoC5arQMWtEnkrxAYqtf8v6fk65HvAH7Ge8NW0Ls=;
-        b=TDM0RjKENmhAK+IqTAfo8Kuw30ipRJWK8cONU2O0scfyiyI5HzrBbRI26I2ZMVZLQp
-         YZmi2qxYfSrWjE3AUlL4SV+NWaI+a0mmWj6Mx2DCfKHW73ig5SxfESlR5JufHO2RvzhP
-         5yVjlfGrM5bgrv8ykInXkR8dX7n0Yw0i5i1rwljgarZ9cEAC0XBd0rOMudVYEVaC4rJY
-         Ooy2ZOgAwF2qhw1/puvt2WSGFEQNN7pqcMZ5W1KwDzND/GUzOkJVJtiIXaa2/ek4Xagz
-         /6qQ1kjODuNeI41oCsKQ7ySyb19/U583pGFfQ9m3qx2s0xwD+Ezo5WULSuBgaqkc81+c
-         5wwA==
-X-Gm-Message-State: AO0yUKUzlIR3SlzQLR0b6fhSSTk+IRRKYYzb1FJl94xUCjYeFBEr+2Sw
-        dtxcUP+j02ZRMe9SyNFQ6MjHiemsFU7bB9nc
-X-Google-Smtp-Source: AK7set+AwAUBkbBSMXgInsDpsiW/Q6+WMMeD9QVpKujfjrdOhX2yAtowqcnvLRwifK2mPGfG4j4LNw==
-X-Received: by 2002:a17:902:ea0c:b0:19f:3aff:dcfd with SMTP id s12-20020a170902ea0c00b0019f3affdcfdmr6174185plg.6.1678740203271;
-        Mon, 13 Mar 2023 13:43:23 -0700 (PDT)
-Received: from CloudiRingWorld ([115.227.138.102])
-        by smtp.gmail.com with ESMTPSA id l15-20020a17090a4d4f00b00232cf6186fdsm275421pjh.30.2023.03.13.13.43.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 13:43:23 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 04:43:20 +0800
-From:   Kloudifold <cloudifold.3125@gmail.com>
-To:     teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: sm750: Rename function to avoid CamelCase
-Message-ID: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
+        d=1e100.net; s=20210112; t=1678740226;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bpallsyVWp4X08BRu3LzaIlUbB9qVedyIOW4XaLO78U=;
+        b=YJJKcS9TzGqvJxMPoXWf91DTxT2avq/Xm+mShXosn3a8cIE+7xMpObCm1a3sXtW8dQ
+         tbIOXwyQFy1rVltWrQ4vgEwLRUVdWuoBL0x4zO0NBmrrDBK1qwPFsSXKXvWz+uW88pqi
+         Ar7xUL14POfhqpMtsKXrNuxkzr13J3Uvw86Q0w5H0v5G4ZO9dnZa2pOd9fugMs/ZSFvH
+         bMOoLR7edJT3sMBvkKi0HZhlTeLAUpTavVMxzi4EEq+MNDGJQgi/46dGO3IoSYJNTHwi
+         ZogRIy/zAiopNLynN99oJ0xCvQkFeW78I8S3qYHF8C6GzyqkUC1PM/nFPq3eVNT5fSFQ
+         UoMQ==
+X-Gm-Message-State: AO0yUKVbqhMuEwGAOSrT3FoM5a7BuMtfYH5l9grjmwGt5kKR9nCpabWJ
+        LLTgFSgQiGEAxVF7hzZJe2Y6ucC1U4M8gCbEUE4Y
+X-Google-Smtp-Source: AK7set/1ypMPSZDs4sjqyzXZkstT0dQPtsqkKvXnonoSsgmW2pediUdIt/g4UY9GajMI7WUokHtC6jGZjJ9LMqdP+SU=
+X-Received: by 2002:a05:6902:4f0:b0:ab8:1ed9:cfc1 with SMTP id
+ w16-20020a05690204f000b00ab81ed9cfc1mr19911211ybs.3.1678740226073; Mon, 13
+ Mar 2023 13:43:46 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230313113211.178010-1-aleksandr.mikhalitsyn@canonical.com> <CAEivzxf630y_kjVLNM4m1vfQxnwyOBK+0wiCLW1T+8miPVC5Fg@mail.gmail.com>
+In-Reply-To: <CAEivzxf630y_kjVLNM4m1vfQxnwyOBK+0wiCLW1T+8miPVC5Fg@mail.gmail.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Mon, 13 Mar 2023 16:43:35 -0400
+Message-ID: <CAHC9VhT2-QJ6yRoAvbicg5n_NUZLpJ5YjNer4TcHwiaW2hq6FQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v2] scm: fix MSG_CTRUNC setting condition for SO_PASSSEC
+To:     Aleksandr Mikhalitsyn <aleksandr.mikhalitsyn@canonical.com>
+Cc:     davem@davemloft.net, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Leon Romanovsky <leon@kernel.org>, jmorris@namei.org,
+        serge@hallyn.com, linux-security-module@vger.kernel.org,
+        selinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The sm750 driver had some functions named in CamelCase,
-which violates the kernel's naming convention.
-In this patch, I rename these functions to snake case,
-which is the expected style.
+On Mon, Mar 13, 2023 at 7:40=E2=80=AFAM Aleksandr Mikhalitsyn
+<aleksandr.mikhalitsyn@canonical.com> wrote:
+>
+> +CC security subsystem folks
+>
+> On Mon, Mar 13, 2023 at 12:32=E2=80=AFPM Alexander Mikhalitsyn
+> <aleksandr.mikhalitsyn@canonical.com> wrote:
+> >
+> > Currently, kernel would set MSG_CTRUNC flag if msg_control buffer
+> > wasn't provided and SO_PASSCRED was set or if there was pending SCM_RIG=
+HTS.
+> >
+> > For some reason we have no corresponding check for SO_PASSSEC.
+> >
+> > In the recvmsg(2) doc we have:
+> >        MSG_CTRUNC
+> >               indicates that some control data was discarded due to lac=
+k
+> >               of space in the buffer for ancillary data.
+> >
+> > So, we need to set MSG_CTRUNC flag for all types of SCM.
+> >
+> > This change can break applications those don't check MSG_CTRUNC flag.
 
-This v2 patch was prompted by an error reported by the
-Linux test robot, which detected the compile error.
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+Unless I'm missing something I don't think this will actually result
+in a userspace visible change as put_cmsg() already has a number of
+checks which set the MSG_CTRUNC flag if necessary (including if no
+control buffer is passed, e.g. msg_control =3D=3D NULL).
 
-Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
----
- drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
- drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
- drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
- 3 files changed, 24 insertions(+), 24 deletions(-)
+Regardless, it looks fine to me.
 
-diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-index effc7fcc3..9ddcd7b7d 100644
---- a/drivers/staging/sm750fb/sm750.c
-+++ b/drivers/staging/sm750fb/sm750.c
-@@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 
- 	sm750_hw_cursor_disable(cursor);
- 	if (fbcursor->set & FB_CUR_SETSIZE)
--		sm750_hw_cursor_setSize(cursor,
--					fbcursor->image.width,
--					fbcursor->image.height);
-+		sm750_hw_cursor_set_size(cursor,
-+					 fbcursor->image.width,
-+					 fbcursor->image.height);
- 
- 	if (fbcursor->set & FB_CUR_SETPOS)
--		sm750_hw_cursor_setPos(cursor,
--				       fbcursor->image.dx - info->var.xoffset,
--				       fbcursor->image.dy - info->var.yoffset);
-+		sm750_hw_cursor_set_pos(cursor,
-+				        fbcursor->image.dx - info->var.xoffset,
-+				        fbcursor->image.dy - info->var.yoffset);
- 
- 	if (fbcursor->set & FB_CUR_SETCMAP) {
- 		/* get the 16bit color of kernel means */
-@@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
- 		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
- 		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
- 
--		sm750_hw_cursor_setColor(cursor, fg, bg);
-+		sm750_hw_cursor_set_color(cursor, fg, bg);
- 	}
- 
- 	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
--		sm750_hw_cursor_setData(cursor,
--					fbcursor->rop,
--					fbcursor->image.data,
--					fbcursor->mask);
-+		sm750_hw_cursor_set_data(cursor,
-+					 fbcursor->rop,
-+					 fbcursor->image.data,
-+					 fbcursor->mask);
- 	}
- 
- 	if (fbcursor->enable)
-diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-index 43e6f52c2..ff643e33f 100644
---- a/drivers/staging/sm750fb/sm750_cursor.c
-+++ b/drivers/staging/sm750fb/sm750_cursor.c
-@@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
- 	poke32(HWC_ADDRESS, 0);
- }
- 
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
- {
- 	cursor->w = w;
- 	cursor->h = h;
- }
- 
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
- {
- 	u32 reg;
- 
-@@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
- 	poke32(HWC_LOCATION, reg);
- }
- 
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
- {
- 	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
- 		HWC_COLOR_12_2_RGB565_MASK;
-@@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
- 	poke32(HWC_COLOR_3, 0xffe0);
- }
- 
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-+			      const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask, opr;
-@@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
- 	}
- }
- 
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
--			      const u8 *pcol, const u8 *pmsk)
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *pcol, const u8 *pmsk)
- {
- 	int i, j, count, pitch, offset;
- 	u8 color, mask;
-diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-index b59643dd6..88fa02f63 100644
---- a/drivers/staging/sm750fb/sm750_cursor.h
-+++ b/drivers/staging/sm750fb/sm750_cursor.h
-@@ -5,11 +5,11 @@
- /* hw_cursor_xxx works for voyager,718 and 750 */
- void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
- void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
--void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
--void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
--void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
--void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
--			     const u8 *data, const u8 *mask);
--void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-+void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-+void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-+void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-+void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
- 			      const u8 *data, const u8 *mask);
-+void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-+			       const u8 *data, const u8 *mask);
- #endif
--- 
-2.39.2
+Acked-by: Paul Moore <paul@paul-moore.com>
 
+> > Cc: "David S. Miller" <davem@davemloft.net>
+> > Cc: Eric Dumazet <edumazet@google.com>
+> > Cc: Jakub Kicinski <kuba@kernel.org>
+> > Cc: Paolo Abeni <pabeni@redhat.com>
+> > Cc: Leon Romanovsky <leon@kernel.org>
+> > Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+> > Signed-off-by: Alexander Mikhalitsyn <aleksandr.mikhalitsyn@canonical.c=
+om>
+> >
+> > v2:
+> > - commit message was rewritten according to Eric's suggestion
+> > ---
+> >  include/net/scm.h | 13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/include/net/scm.h b/include/net/scm.h
+> > index 1ce365f4c256..585adc1346bd 100644
+> > --- a/include/net/scm.h
+> > +++ b/include/net/scm.h
+> > @@ -105,16 +105,27 @@ static inline void scm_passec(struct socket *sock=
+, struct msghdr *msg, struct sc
+> >                 }
+> >         }
+> >  }
+> > +
+> > +static inline bool scm_has_secdata(struct socket *sock)
+> > +{
+> > +       return test_bit(SOCK_PASSSEC, &sock->flags);
+> > +}
+> >  #else
+> >  static inline void scm_passec(struct socket *sock, struct msghdr *msg,=
+ struct scm_cookie *scm)
+> >  { }
+> > +
+> > +static inline bool scm_has_secdata(struct socket *sock)
+> > +{
+> > +       return false;
+> > +}
+> >  #endif /* CONFIG_SECURITY_NETWORK */
+> >
+> >  static __inline__ void scm_recv(struct socket *sock, struct msghdr *ms=
+g,
+> >                                 struct scm_cookie *scm, int flags)
+> >  {
+> >         if (!msg->msg_control) {
+> > -               if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp)
+> > +               if (test_bit(SOCK_PASSCRED, &sock->flags) || scm->fp ||
+> > +                   scm_has_secdata(sock))
+> >                         msg->msg_flags |=3D MSG_CTRUNC;
+> >                 scm_destroy(scm);
+> >                 return;
+> > --
+> > 2.34.1
+
+--=20
+paul-moore.com
