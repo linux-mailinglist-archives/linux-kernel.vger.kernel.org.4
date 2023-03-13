@@ -2,322 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25C696B7FCD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 646AC6B7FD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:55:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCMRzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
+        id S229998AbjCMRz5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:55:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54670 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229524AbjCMRzo (ORCPT
+        with ESMTP id S229922AbjCMRzv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:55:44 -0400
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B49D929162;
-        Mon, 13 Mar 2023 10:55:40 -0700 (PDT)
-Received: from uucp (helo=alpha)
-        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
-        id 1pbmOT-0002OB-00; Mon, 13 Mar 2023 18:55:33 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-        id ABE78C1252; Mon, 13 Mar 2023 18:55:21 +0100 (CET)
-Date:   Mon, 13 Mar 2023 18:55:21 +0100
-From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To:     Baoquan He <bhe@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
-        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <20230313175521.GA14404@alpha.franken.de>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
+        Mon, 13 Mar 2023 13:55:51 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F66A3802A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:55:48 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id cy23so51984211edb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:55:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678730146;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=JlcrnhxuRd6rV69CEfffZDmaaf6zxlWaBbyK92fytus=;
+        b=zrT7N+L4i1OOmHooCUtuKQxSOa3Hl/v/al9JW1jb/ccugW//3tZctpe8h8XqOLPVPd
+         28FTmDGBe/txValWJ4yjwNiFKkBvn1KymKVGg/ybUJgLljp//aUkiRZ50xC7kl4Tbbbj
+         aiXj4BhUOmS+nYtWQ9V3TMbGRJDLU9OTqUWEyvNLqXpbcdsbGJnsYaHtBcEbR1NxYFSh
+         3TPQAbpAovUx1vfywwYojF4mNL5fHu7ax1zJ99q/wW1LOwJM2pkmAOPuzXjU+QLl044f
+         3i19gjqQNSucPGQdcdgsl+/fuoVl0xUvb3nM2+ZYkuy0CI5+fnQwDijoTSmIFrC58wP+
+         1Png==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678730146;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JlcrnhxuRd6rV69CEfffZDmaaf6zxlWaBbyK92fytus=;
+        b=pkFSzlKO6/cgugJkhl4w5lo4xgA+8tdjbzwE6P4NpsS+x5dRZf97N6R2MHSYu30Hs+
+         TVH5JHyKLO805Eog2KWR9XixoWjjhzkA3EdpUq9Hh4nCVNdFqJaxCt34vmwrDg4P0tP5
+         ZTnOzKLFOqM9X6UwuUaX48VJH925FwBSIlkhFP5BypKuyk+WLSKr0zSRvO76IMG5Lecp
+         /OC6/x3Jxylh+23IMdD5mxTnEgC5ae9abPnEn0DePvDdvcm8FGUxgiZcmcvSpgauMTkx
+         FvyHvYHyKdbVpUGLn8ktkl1QeGtPLvQTmJQqj+NLW5iXl4mtzFNFeUmjqJnHpl/XU+jk
+         sONw==
+X-Gm-Message-State: AO0yUKXRgGDsobLo7HNJjJeoIypS6xN4AYEmim1Vl07sNvQJuw0BiR+G
+        +p3KpuCkvWk1N34flyAPlqTg+g==
+X-Google-Smtp-Source: AK7set+F+T0O61QUAlFi1WKTG8LwavM0EbkptZ54DncABKfzh7oDSD7DKJnsUeNG6kb6uO0yUhNKyQ==
+X-Received: by 2002:a17:906:2843:b0:8b1:15ab:f4cd with SMTP id s3-20020a170906284300b008b115abf4cdmr31342450ejc.53.1678730146574;
+        Mon, 13 Mar 2023 10:55:46 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:69db:4882:d071:27c4? ([2a02:810d:15c0:828:69db:4882:d071:27c4])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170906718700b009289de993e2sm65306ejk.216.2023.03.13.10.55.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 10:55:46 -0700 (PDT)
+Message-ID: <6c5045d9-4f4a-5018-3f3f-7746b08ab2b5@linaro.org>
+Date:   Mon, 13 Mar 2023 18:55:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308130710.368085-3-bhe@redhat.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH V3 2/6] dt-bindings: timestamp: Add Tegra234 support
+To:     Dipen Patel <dipenp@nvidia.com>, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, linux-kernel@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linus.walleij@linaro.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+References: <20230310190634.5053-1-dipenp@nvidia.com>
+ <20230310190634.5053-3-dipenp@nvidia.com>
+ <f6d9c84a-1c75-d9b4-59ed-39d6c5b310a9@linaro.org>
+ <b4195142-6cfe-df3c-6edf-0c40b64ad02a@nvidia.com>
+Content-Language: en-US
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <b4195142-6cfe-df3c-6edf-0c40b64ad02a@nvidia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 08, 2023 at 09:07:08PM +0800, Baoquan He wrote:
-> With the adding, some default ioremap_xx methods defined in
-> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
-> NULL.
+On 13/03/2023 18:05, Dipen Patel wrote:
+> On 3/12/23 8:47 AM, Krzysztof Kozlowski wrote:
+>> On 10/03/2023 20:06, Dipen Patel wrote:
+>>> Added timestamp provider support for the Tegra234 in devicetree
+>>> bindings. In addition, it addresses review comments from the
+>>> previous review round as follows:
+>>> - Removes nvidia,slices property. This was not necessary as it
+>>> is a constant value and can be hardcoded inside the driver code.
+>>> - Adds nvidia,gpio-controller property. This simplifies how GTE driver
+>>> retrieves GPIO controller instance, see below explanation.
+>>>
+>>> Without this property code would look like:
+>>> if (of_device_is_compatible(dev->of_node, "nvidia,tegra194-gte-aon"))
+>>> 	hte_dev->c = gpiochip_find("tegra194-gpio-aon",
+>>> 				   tegra_get_gpiochip_from_name);
+>>> else if (of_device_is_compatible(dev->of_node, "nvidia,tegra234-gte-aon"))
+>>> 	hte_dev->c = gpiochip_find("tegra234-gpio-aon",
+>>> 				   tegra_get_gpiochip_from_name);
+>>> else
+>>> 	return -ENODEV;
+>>>
+>>> This means for every future addition of the compatible string, if else
+>>> condition statements have to be expanded.
+>>>
+>>> With the property:
+>>> gpio_ctrl = of_parse_phandle(dev->of_node, "nvidia,gpio-controller", 0);
+>>> ....
+>>> hte_dev->c = gpiochip_find(gpio_ctrl, tegra_get_gpiochip_from_of_node);
+>>>
+>>> We haven't technically started making use of these bindings, so
+>>> backwards-compatibility shouldn't be an issue yet.
+>>
+>> Unfortunately, I don't understand this statement. The
+>> nvidia,tegra194-gte-aon with removed property is in a released kernel
+>> v6.2. What does it mean "technically"? It's a released kernel thus it is
+>> a released ABI.
 > 
-> Signed-off-by: Baoquan He <bhe@redhat.com>
-> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
-> Cc: Helge Deller <deller@gmx.de>
-> Cc: Serge Semin <fancer.lancer@gmail.com>
-> Cc: Florian Fainelli <f.fainelli@gmail.com>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: linux-mips@vger.kernel.org
-> ---
->  arch/mips/include/asm/io.h | 78 ++++++++++++++++++++++++++++++++++----
->  1 file changed, 70 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
-> index cec8347f0b85..6756baadba6c 100644
-> --- a/arch/mips/include/asm/io.h
-> +++ b/arch/mips/include/asm/io.h
-> @@ -126,6 +126,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
->   *     almost all conceivable cases a device driver should not be using
->   *     this function
->   */
-> +#define phys_to_virt phys_to_virt
->  static inline void * phys_to_virt(unsigned long address)
->  {
->  	return __va(address);
-> @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
->  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
->  #endif
->  
-> +#define readb readb
-> +#define readw readw
-> +#define readl readl
-> +#define writeb writeb
-> +#define writew writew
-> +#define writel writel
-> +
-> +#ifdef CONFIG_64BIT
-> +#define readq readq
-> +#define writeq writeq
-> +#define __raw_readq __raw_readq
-> +#define __raw_writeq __raw_writeq
-> +#endif
-> +
-> +#define __raw_readb __raw_readb
-> +#define __raw_readw __raw_readw
-> +#define __raw_readl __raw_readl
-> +#define __raw_writeb __raw_writeb
-> +#define __raw_writew __raw_writew
-> +#define __raw_writel __raw_writel
-> +
->  #define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
->  	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
->  	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
-> @@ -374,6 +396,27 @@ BUILDIO_IOPORT(l, u32)
->  BUILDIO_IOPORT(q, u64)
->  #endif
->  
-> +#define inb inb
-> +#define inw inw
-> +#define inl inl
-> +#define inb_p inb_p
-> +#define inw_p inw_p
-> +#define inl_p inl_p
-> +
-> +#define outb outb
-> +#define outw outw
-> +#define outl outl
-> +#define outb_p outb_p
-> +#define outw_p outw_p
-> +#define outl_p outl_p
-> +
-> +#ifdef CONFIG_64BIT
-> +#define inq inq
-> +#define outq outq
-> +#define inq_p inq_p
-> +#define outq_p outq_p
-> +#endif
-> +
->  #define __BUILDIO(bwlq, type)						\
->  									\
->  __BUILD_MEMORY_SINGLE(____raw_, bwlq, type, 1, 0, 0)
-> @@ -412,14 +455,6 @@ __BUILDIO(q, u64)
->  #define writeq_be(val, addr)						\
->  	__raw_writeq(cpu_to_be64((val)), (__force unsigned *)(addr))
->  
-> -/*
-> - * Some code tests for these symbols
-> - */
-> -#ifdef CONFIG_64BIT
-> -#define readq				readq
-> -#define writeq				writeq
-> -#endif
-> -
->  #define __BUILD_MEMORY_STRING(bwlq, type)				\
->  									\
->  static inline void writes##bwlq(volatile void __iomem *mem,		\
-> @@ -480,14 +515,39 @@ BUILDSTRING(l, u32)
->  BUILDSTRING(q, u64)
->  #endif
->  
-> +#define insb insb
-> +#define insw insw
-> +#define insl insl
-> +#define outsb outsb
-> +#define outsw outsw
-> +#define outsl outsl
-> +
-> +#define readsb readsb
-> +#define readsw readsw
-> +#define readsl readsl
-> +#define writesb writesb
-> +#define writesw writesw
-> +#define writesl writesl
-> +
-> +#ifdef CONFIG_64BIT
-> +#define insq insq
-> +#define readsq readsq
-> +#define readsq readsq
-> +#define writesq writesq
-> +#endif
-> +
-> +
-> +#define memset_io memset_io
->  static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
->  {
->  	memset((void __force *) addr, val, count);
->  }
-> +#define memcpy_fromio memcpy_fromio
->  static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
->  {
->  	memcpy(dst, (void __force *) src, count);
->  }
-> +#define memcpy_toio memcpy_toio
->  static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
->  {
->  	memcpy((void __force *) dst, src, count);
-> @@ -556,4 +616,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
->  
->  void __ioread64_copy(void *to, const void __iomem *from, size_t count);
->  
-> +#include <asm-generic/io.h>
+> There is no active user of that driver, so even if it breaks 6.2, it is fine
+> as there is no one to complain about it.
 
-this #include blows up builds with:
+How do you know? It's a released kernel, thus how can you ask millions
+of people if they use it or not?
 
-  GEN     Makefile
-  Checking missing-syscalls for N32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CC      init/version.o
-In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-   ^~~~~~~~~~~~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-                     ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-                    ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
-  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-  ^~~~~~~~~~~~~~
-  GEN     Makefile
-  Checking missing-syscalls for N32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CC      init/version.o
-In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-   ^~~~~~~~~~~~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-                     ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-                    ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
-  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-  ^~~~~~~~~~~~~~
-  GEN     Makefile
-  Checking missing-syscalls for N32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  Checking missing-syscalls for O32
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
-  CC      init/version.o
-In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
-                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
-                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
-                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
-                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
-                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
-                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
-                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
-                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
-                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
-                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-   ^~~~~~~~~~~~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
-                     ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
-  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
-                    ^~
-/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
-  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
-  ^~~~~~~~~~~~~~
-[...]
+Best regards,
+Krzysztof
 
-I've cut the compiler output. Removing the asm-generic doesn't show this
-problem, but so far I fail to see the reason...
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
