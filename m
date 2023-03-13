@@ -2,152 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5BE66B7973
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CACE6B7978
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:51:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231191AbjCMNuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54514 "EHLO
+        id S231207AbjCMNvK convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 09:51:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCMNud (ORCPT
+        with ESMTP id S230209AbjCMNvI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:50:33 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E08BD23640;
-        Mon, 13 Mar 2023 06:50:32 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id z10so6920840pgr.8;
-        Mon, 13 Mar 2023 06:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678715432;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z0slDHNN8/BdrMbgc+7zqjHjOG9tY+7Xd79Alajn/RY=;
-        b=C27H9R8cDGjOHixrgjQosdjLQ877J/bqG9ewVDIDhsHMafRjDF5uYlFkEhT2nxwGU0
-         aVWHAH2M4t2LpUQ5guTQeFsJErOP7IQ1IY/qAwP3kyMRbRCZupghoobCiLhIMy4Ysjjd
-         RdTE25wfHscCr1JlUyCK8JiiWZkKwQeI3Wm6z7RlemHlegslZw/y8sJhNDoyM14VZ7gN
-         /2saryYRozRBktVUAa9elvO8ryrRr/jvhROVzbwvg+/9cSMUhb32Gv9CyGi/5OfbqsyZ
-         H9eYeAjAq1/3325Y2n+2qudEIFHzUhbi0lXPMZzA0QqroKwErEwwyRPIc7Oj9UatK7Qn
-         9Udg==
+        Mon, 13 Mar 2023 09:51:08 -0400
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79E452384C;
+        Mon, 13 Mar 2023 06:51:07 -0700 (PDT)
+Received: by mail-ed1-f42.google.com with SMTP id j11so49002964edq.4;
+        Mon, 13 Mar 2023 06:51:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678715432;
+        d=1e100.net; s=20210112; t=1678715466;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Z0slDHNN8/BdrMbgc+7zqjHjOG9tY+7Xd79Alajn/RY=;
-        b=W6Gn3+m51mS2C8xIvcQ6+eOfF3T3YZHPG0QEAWFtJIjO/pSwb17sNhRWmqzHA9DtNx
-         VlqdppniIdKD5q0/3aeJzpQpTuxuIZI5S3Fu5hi4ssi6MeAl+MQ9JDufUj6vGlwR6keR
-         iKsCWR0iPPj6wg59qmp7sFpgs894mrxeeAgcTt29D1DpT2Mcl5z6wgWabycJtPGULPls
-         Kbi/Dphr4BP0zprcVQL67aeg6CupUiTnNt9EUPq8Z1+/vJXTkmNd2Dd8d+L3g8ZJZCn/
-         hjaQSCh8Rwe66+y/tUq/TA05AgqCKo9XVFgdhAVpXUEKOr6YnOXEMqNvQsthhJm4NXV9
-         4V+Q==
-X-Gm-Message-State: AO0yUKUOEeFPNaKZ6146sUnNzufb/SlJXCdd2sdHhSsgEZm6CSCNupDr
-        FBdM6jJiZvv4d5Omc/keO23V6zyttRvI7L3ttTY=
-X-Google-Smtp-Source: AK7set+3M2xZK/+NAChWKcLBX5k1lbxHO0uJw/7dcLEvcXDmIiCru+rRuyQLZI4q0I87/8eF1BfnAB51dLDgL2JIT+8=
-X-Received: by 2002:a62:8643:0:b0:590:3182:9339 with SMTP id
- x64-20020a628643000000b0059031829339mr13311542pfd.0.1678715432287; Mon, 13
- Mar 2023 06:50:32 -0700 (PDT)
+        bh=g1hTnZU4cvdt47U5xnDD3Ay69C4uLQZXNpsW2S+4FWE=;
+        b=C57W/ix/Qotkyq657nbKVD0DVfPtj3gUxIx4GapbohxJzRK8uOboTBfpOVsZrmZnXN
+         VLj4/SmC0v65v4oa8qU5vEO666O6IEn1DUVLBT1CKswFbCTaXztfVqfPwi9z8+MrDkI5
+         H51izzISw3Oi5zS3+0pB/xWcPyqeYXiAL11pVgD3E1S/sYlgEyOJk+kDCwAaEQE/D+tt
+         EPuVno5ulT9tC79M0SNnw3XgON1TKa0OHcES7jVXRO/623sqs4EVTfy8d//RGDSikvhf
+         aywvS6qsKfVfrARgudsy/7bWBtHVPpRAuFS1dPvpeu/aF7gBGN3WQ/6Be9ajqe9Z3XcO
+         sF8g==
+X-Gm-Message-State: AO0yUKVb/aVR6qlYtJgmaY1Rp9cZreHJRORD12q1RwZA8zoS898CS4kg
+        Rw1YQtMO5WxPPJq3Qg7pibprUlUvRqFhGbeSkig5yFQiWjA=
+X-Google-Smtp-Source: AK7set8hwQHTFjvhuQeoG+olLyCmW0wqrl7IMkgOQIN+zOJPPCDgZ9CZnfgzmAaK2M7IZKPujn63mvdyI7FI/t43gBo=
+X-Received: by 2002:a50:d59a:0:b0:4fb:f19:881 with SMTP id v26-20020a50d59a000000b004fb0f190881mr3027368edi.3.1678715465878;
+ Mon, 13 Mar 2023 06:51:05 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230307153542.1178065-1-zyytlz.wz@163.com> <7f9796d2-1885-a6f2-b9e3-d6ea58524033@xs4all.nl>
- <CAJedcCwnvNK8Gbcxz2V5+ebRJFrEYjpoJsKTKZ7DOSETr_7LEQ@mail.gmail.com> <1c1e4e60-3b90-f268-8012-3193e1de4769@xs4all.nl>
-In-Reply-To: <1c1e4e60-3b90-f268-8012-3193e1de4769@xs4all.nl>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 13 Mar 2023 21:50:19 +0800
-Message-ID: <CAJedcCwm_2Z3stAtzAeJFgj88BsZrQ5kk7Wt4+gW=mL-p0oLrw@mail.gmail.com>
-Subject: Re: [PATCH] media: hantro: fix use after free bug in hantro_release
- due to race condition
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
+References: <2148907.irdbgypaU6@kreacher> <1936685.PYKUYFuaPT@kreacher>
+ <f8c87ea7a1fd8f763ff4ccf3c43706ae43f81ede.camel@intel.com>
+ <CAJZ5v0i=EL_1ZFyqH4C3cWEVtagL4BB2gg7Xdj4Li1iRjMyM6A@mail.gmail.com> <8d1441fb730cb1ead3316fb5eb8651c2ce991dd8.camel@intel.com>
+In-Reply-To: <8d1441fb730cb1ead3316fb5eb8651c2ce991dd8.camel@intel.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Mar 2023 14:50:54 +0100
+Message-ID: <CAJZ5v0hMRsGZdYVhY_n3ePbpGbj-qeWtKUi20sShjCQ-qN5DVw@mail.gmail.com>
+Subject: Re: [PATCH v1 4/4] ACPI: processor: thermal: Update CPU cooling
+ devices on cpufreq policy changes
+To:     "Zhang, Rui" <rui.zhang@intel.com>
+Cc:     "rafael@kernel.org" <rafael@kernel.org>,
+        "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "Wang, Quanxian" <quanxian.wang@intel.com>,
+        "rjw@rjwysocki.net" <rjw@rjwysocki.net>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hans Verkuil <hverkuil@xs4all.nl> =E4=BA=8E2023=E5=B9=B43=E6=9C=8813=E6=97=
-=A5=E5=91=A8=E4=B8=80 21:47=E5=86=99=E9=81=93=EF=BC=9A
+On Sun, Mar 12, 2023 at 3:44 PM Zhang, Rui <rui.zhang@intel.com> wrote:
 >
-> On 13/03/2023 14:45, Zheng Hacker wrote:
-> > Hans Verkuil <hverkuil@xs4all.nl> =E4=BA=8E2023=E5=B9=B43=E6=9C=8813=E6=
-=97=A5=E5=91=A8=E4=B8=80 21:17=E5=86=99=E9=81=93=EF=BC=9A
-> >>
-> >> On 07/03/2023 16:35, Zheng Wang wrote:
-> >>> In hantro_probe, vpu->watchdog_work is bound with
-> >>> hantro_watchdog. Then hantro_end_prepare_run may
-> >>> be called to start the work.
-> >>>
-> >>> If we close the file or remove the module which will
-> >>> call hantro_release and hantro_remove to make cleanup,
-> >>> there may be a unfinished work. The possible sequence
-> >>> is as follows, which will cause a typical UAF bug.
-> >>>
-> >>> The same thing will happen in hantro_release, and use
-> >>> ctx after freeing it.
-> >>>
-> >>> Fix it by canceling the work before cleanup in hantro_release.
-> >>>
-> >>> CPU0                  CPU1
-> >>>
-> >>>                     |hantro_watchdog
-> >>> hantro_remove     |
-> >>>   v4l2_m2m_release  |
-> >>>     kfree(m2m_dev); |
-> >>>                     |
-> >>>                     | v4l2_m2m_get_curr_priv
-> >>>                     |   m2m_dev->curr_ctx //use
-> >>>
-> >>> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> >>> ---
-> >>>  drivers/media/platform/verisilicon/hantro_drv.c | 1 +
-> >>>  1 file changed, 1 insertion(+)
-> >>>
-> >>> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/driver=
-s/media/platform/verisilicon/hantro_drv.c
-> >>> index b0aeedae7b65..cf00ccaa7829 100644
-> >>> --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> >>> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> >>> @@ -601,6 +601,7 @@ static int hantro_release(struct file *filp)
-> >>>        * No need for extra locking because this was the last referenc=
-e
-> >>>        * to this file.
-> >>>        */
-> >>> +     cancel_delayed_work(&vpu->watchdog_work);
-> >>>       v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-> >>>       v4l2_fh_del(&ctx->fh);
-> >>>       v4l2_fh_exit(&ctx->fh);
-> >>
-> >> drivers/media/platform/verisilicon/hantro_drv.c: In function =E2=80=98=
-hantro_release=E2=80=99:
-> >> drivers/media/platform/verisilicon/hantro_drv.c:604:30: error: =E2=80=
-=98vpu=E2=80=99 undeclared (first use in this function); did you mean =E2=
-=80=98fpu=E2=80=99?
-> >>   604 |         cancel_delayed_work(&vpu->watchdog_work);
-> >>       |                              ^~~
-> >>       |                              fpu
-> >> drivers/media/platform/verisilicon/hantro_drv.c:604:30: note: each und=
-eclared identifier is reported only once for each function it appears in
-> >>
-> >> You clearly didn't compile this patch!
-> >>
-> > Sorry for my mistake. I was hurried to report the issue and discuss
-> > with developer to confirm it . I'll complete it and test it locally.
+> On Fri, 2023-03-10 at 19:29 +0100, Rafael J. Wysocki wrote:
+> > On Tue, Mar 7, 2023 at 5:47 PM Zhang, Rui <rui.zhang@intel.com>
+> > wrote:
+> > > On Fri, 2023-03-03 at 20:23 +0100, Rafael J. Wysocki wrote:
+> > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >
+> > > > When a cpufreq policy appears or goes away, the CPU cooling
+> > > > devices
+> > > > for
+> > > > the CPUs covered by that policy need to be updated so that the
+> > > > new
+> > > > processor_get_max_state() value is stored as max_state and the
+> > > > statistics in sysfs are rearranged for each of them.
+> > > >
+> > > > Do that accordingly in acpi_thermal_cpufreq_init() and
+> > > > acpi_thermal_cpufreq_exit().
+> > > >
+> > > > Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
+> > > > Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
+> > > > Link:
+> > > > https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
+> > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > ---
+> > > >  drivers/acpi/processor_thermal.c |   16 +++++++++++++---
+> > > >  1 file changed, 13 insertions(+), 3 deletions(-)
+> > > >
+> > > > Index: linux-pm/drivers/acpi/processor_thermal.c
+> > > > =================================================================
+> > > > ==
+> > > > --- linux-pm.orig/drivers/acpi/processor_thermal.c
+> > > > +++ linux-pm/drivers/acpi/processor_thermal.c
+> > > > @@ -140,9 +140,14 @@ void acpi_thermal_cpufreq_init(struct cp
+> > > >               ret = freq_qos_add_request(&policy->constraints,
+> > > >                                          &pr->thermal_req,
+> > > >                                          FREQ_QOS_MAX, INT_MAX);
+> > > > -             if (ret < 0)
+> > > > +             if (ret < 0) {
+> > > >                       pr_err("Failed to add freq constraint for
+> > > > CPU%d
+> > > > (%d)\n",
+> > > >                              cpu, ret);
+> > > > +                     continue;
+> > > > +             }
+> > > > +
+> > > > +             if (!IS_ERR(pr->cdev))
+> > > > +                     thermal_cooling_device_update(pr->cdev);
+> > >
+> > > Although thermal_cooling_device_update() handles "pr->cdev == NULL"
+> > > case, I think it is better to use !IS_ERR_OR_NULL() here.
+> >
+> > Why is it?
+> >
+> > I was thinking about doing that, but then I realized that the NULL
+> > case had been covered and that's why I went for the change above.  If
+> > there is a particular reason to check for NULL here, I can do that,
+> > but I'm not sure what it is.
 >
-> Was this UAF actually observed, or is it theoretical?
+> I don't have a strong objection here.
 >
+> I thought this was a code bug at first glance, until I double checked t
+> hermal_cooling_device_update().
+>
+> So I think the latter would be more straight forward without
+> introducing code complexity.
 
-This is a bug identified during a static audit and referenced to other
-similar issues. There's no PoC but some work has proven that the race
-time window can be enlarge which make the UAF practical.
-
-Best regards,
-Zheng
+Alternatively, thermal_cooling_device_update() can be made to do the
+full check instead.
