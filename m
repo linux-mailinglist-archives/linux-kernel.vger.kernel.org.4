@@ -2,91 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE5276B6FA5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:53:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F41386B6FA9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229814AbjCMGxL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:53:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53040 "EHLO
+        id S229864AbjCMGxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 02:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53356 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229821AbjCMGxI (ORCPT
+        with ESMTP id S229828AbjCMGxO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:53:08 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81A231B331
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:53:06 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id cy23so44290610edb.12
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:53:06 -0700 (PDT)
+        Mon, 13 Mar 2023 02:53:14 -0400
+Received: from mail-io1-xd29.google.com (mail-io1-xd29.google.com [IPv6:2607:f8b0:4864:20::d29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3C2F23312;
+        Sun, 12 Mar 2023 23:53:12 -0700 (PDT)
+Received: by mail-io1-xd29.google.com with SMTP id f14so4616410iow.5;
+        Sun, 12 Mar 2023 23:53:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678690385;
+        d=gmail.com; s=20210112; t=1678690392;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=355JmduZ4uMlUlIQ31cjHCMpZLn8xNHuHmgWguAmylE=;
-        b=TKjYqz1a7T+SiMwBF2JBJQPhKxdCD0KdLlVhd39vwq2sigDRgokhrf/t9vQpGvto0v
-         t4xshEKPSwSIdtWFW1TtLbUN2AVRzF3wSKpfjXgJwTRTmkLz4nv4N0UhAgpoM15/PTZw
-         xABnZW6YJKyyo054gMKJBy0WhvqPEQiZiVQnuQzgZ1QVjxRfi1AL/ZhfBQXvZ4KzLrp7
-         qKkcreWxgtBdBx5B1i9MnXLNm9yoP+U3FLCZrblg9hHjIYXZVe4W0pQt/9Uxx0QfAUsT
-         JQrBs7kQeRKFi9k/iSbmMy2fY/4X5B9Y+yfGAHB8qWyotCgAfQt4z6K+EHRge6M4YkjV
-         zkpw==
+        bh=DrhDq8EK0QZScFTe+Abz54ar9UkGFsTVlaBdo7wkZXc=;
+        b=WRwIkO0MaPLsECMaML4XbPTHS1bhW6oO2l/OsPvAvFOjED+0XjcubuOI+plZ7fXcDL
+         ePGK+TdSHWPEGjU+IaWlAIc8HAlYak9u028f49uPBepmcgG4fLh272L/gL5sUyQnqwMB
+         6BG1zd3ilQc6cNWex8SjYLrhvw6XK/izVj3kKnKjpiTnyBn2DfKgjzRROXAsvq0e8jCb
+         neMqreTyGhN2g4grphBnNlhxVWoThx1wr1eZ0FHin8gBmr/CnFxw6wr7q4aRqFgiQ4k+
+         Dvw3fFmz4tUm04AqxM56N4/2q/WZWoS8PV87kxBckH2ZNTMpBgebsbTtPzP9QQSGWKww
+         xEIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678690385;
+        d=1e100.net; s=20210112; t=1678690392;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=355JmduZ4uMlUlIQ31cjHCMpZLn8xNHuHmgWguAmylE=;
-        b=TNKxPD89gddhe+rt92lUvAoSPxwQGsjz+wuwYunTHvK//1pLce6LRqqU2F4NvwLsUL
-         Is/VLQ8PDwvo4A6YlMzWBt5IVLOUYVTUHsHE49anWecw42fweaRNM8tsH06vh2kW40zZ
-         kUKWVXJzVGZXhe+kZxT0HTGaGlHMPoDQycvZK5VNAhKFXQKQeXiA4nhmj4Pxhcz+g8gl
-         sFlE+yGdlBJeJDCoYbWeZDcUQXX98SNJBnXhF3ptra36IPVn7dV3NytcpN306DVhpMqA
-         RQr7S59u5ZKzN50O70DB5FlykW9hEKIZWO9jgkBvolg5R93ferhgoDhuJXM8/noN7aFz
-         ejmg==
-X-Gm-Message-State: AO0yUKXoqgYwdqCWmXSReZ61ztwPm3ZGn43a8CAre3hVttsvhpkIkl0I
-        FbVUOCZDOCEdKT0/eua86yf7bQJQYikVzj6z5lk=
-X-Google-Smtp-Source: AK7set/JMEPJnNNs6jZniy5n06ov3Zsbv7uBujwS7EQrGGb8c4AMOdbWK4NwlzQf72j2A/zb37R0dw==
-X-Received: by 2002:a17:907:a686:b0:902:874:9c31 with SMTP id vv6-20020a170907a68600b0090208749c31mr8600156ejc.35.1678690385052;
-        Sun, 12 Mar 2023 23:53:05 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:f052:f15:3f90:fcb3? ([2a02:810d:15c0:828:f052:f15:3f90:fcb3])
-        by smtp.gmail.com with ESMTPSA id h17-20020a170906261100b00921278f4980sm2603195ejc.34.2023.03.12.23.53.04
+        bh=DrhDq8EK0QZScFTe+Abz54ar9UkGFsTVlaBdo7wkZXc=;
+        b=jbJLy5W8zgTO5EBtKv75NCmSk59QwqbnMXjgc/arMNOSWe/ZTa9TGc/4hxUTNFYXB6
+         o/wxYLoDdvb6pFxwIrN/GvDNM5ZkTwDKL9KFQfRCGuZcDkx0JD+qLxFry7Zl6xuIbAGh
+         UA84UTkAoDdbxtP0B+8rqCJ33vj0cqdgAWC8USUe5O0PKuq8PT/curRJ//1AhunzXZMW
+         k//aiPu+yzhdbKqKBVqKVAUgX+pUH7UDZBJu6W3GLLVwJNJM2vJmi1LSnDYhmCsGcJW4
+         5iuB1BkopABh+irGwTo/PMYhJzoumkXtesxG8L2UoL9pzbyEd4esdHJibpd/rXUD3BOK
+         hDbw==
+X-Gm-Message-State: AO0yUKXOasMIZZRxBu++GMLd+qwyLC7Bvq5fCra4Hzho8A4Lve0DHHhK
+        v/F1en7da5u6C8CUwcyG9Go=
+X-Google-Smtp-Source: AK7set+lFi9QRrFZ2RoTcyUWlu0L2z5H2HHDSr4cvK42G+ygiV2hrykZP+e+PUjZjeiitYvirYCOPg==
+X-Received: by 2002:a6b:dd04:0:b0:74c:c1ba:91fa with SMTP id f4-20020a6bdd04000000b0074cc1ba91famr6487829ioc.0.1678690392055;
+        Sun, 12 Mar 2023 23:53:12 -0700 (PDT)
+Received: from ?IPV6:2604:2d80:4d87:cd00:9f51:32d7:1177:67d? ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
+        by smtp.gmail.com with ESMTPSA id c25-20020a5d9399000000b0074c8295db0csm2328468iol.6.2023.03.12.23.53.10
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 23:53:04 -0700 (PDT)
-Message-ID: <1f10e6f7-1ef7-f16f-8a88-48cbf47ab448@linaro.org>
-Date:   Mon, 13 Mar 2023 07:53:04 +0100
+        Sun, 12 Mar 2023 23:53:11 -0700 (PDT)
+Message-ID: <3f4efaa3-75cf-1cc3-faaa-e687ee051617@gmail.com>
+Date:   Mon, 13 Mar 2023 01:53:09 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] nfc: mrvl: Use of_property_read_bool() for boolean
- properties
+ Thunderbird/102.1.2
+Subject: Re: [PATCH 1/5] dt-bindings: input: touchscreen: add bindings for
+ focaltech,fts
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230310144718.1544283-1-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230310144718.1544283-1-robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Caleb Connolly <caleb@connolly.tech>,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Henrik Rydberg <rydberg@bitmath.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Jeff LaBundy <jeff@labundy.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Markuss Broks <markuss.broks@gmail.com>,
+        Jean Delvare <jdelvare@suse.de>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        Job Noorman <job@noorman.info>,
+        Alistair Francis <alistair@alistair23.me>,
+        Chris Morgan <macromorgan@hotmail.com>
+Cc:     linux-input@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230312093249.1846993-1-joelselvaraj.oss@gmail.com>
+ <20230312093249.1846993-2-joelselvaraj.oss@gmail.com>
+ <c9db83e8-f87d-b94d-0c23-8114adb312e1@linaro.org>
+ <02012975-8b4c-58ba-b002-d2983c0e1500@gmail.com>
+ <4f864115-ef66-6940-c1c3-6b296de4cab5@linaro.org>
+From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
+In-Reply-To: <4f864115-ef66-6940-c1c3-6b296de4cab5@linaro.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 15:47, Rob Herring wrote:
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties.
-> Convert reading boolean properties to to of_property_read_bool().
+Hi Krzysztof,
+
+On 13/03/23 01:42, Krzysztof Kozlowski wrote:
+> Downstream DTS is never a guideline on design of upstream bindings. They
+> violate DT binding rules so many times so much, that I don't treat it as
+> argument.
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
+> The property does not look board but device specific, so you should
+> infer it from compatible.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Understood. Will do so in v2.
 
-Best regards,
-Krzysztof
-
+Thanks,
+Joel
