@@ -2,199 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 368336B74AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:52:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553506B74B0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230221AbjCMKwF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:52:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42536 "EHLO
+        id S229514AbjCMKwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43280 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCMKwD (ORCPT
+        with ESMTP id S229583AbjCMKwt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:52:03 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AAD136098;
-        Mon, 13 Mar 2023 03:52:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id CE7C722A45;
-        Mon, 13 Mar 2023 10:51:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678704719; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WXT5bOKDI1On4YwL16iXq87G5h5z/0nU/e/zlL7PG2I=;
-        b=HQRI0no5IDpFfQvgXHNnrWyzJm9mULHecwmB+g+WcZNyD+lvWSxbreSprAE86CP9WmG5nI
-        2ME8NEXMLN0Py5H6mN+6w9j+o4SZ3lxRhzE5x0sMYO/V64QBNQncq6UM/7RxECGQJg9EJV
-        J/ywD0iJ3bytcjLk7VUQPNAdlwLC/yY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678704719;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=WXT5bOKDI1On4YwL16iXq87G5h5z/0nU/e/zlL7PG2I=;
-        b=QH3+LwTm4ZcCPb4+MEDjLHFcc3XaIVN4oTu/2AFkHqD3nuCsBdIZ9vK3RpxNpC7IUcchT+
-        jjs+kO6gkH0zeeBg==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BF56813582;
-        Mon, 13 Mar 2023 10:51:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id o/GnLk8AD2S6TAAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 13 Mar 2023 10:51:59 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 4EC4FA06FD; Mon, 13 Mar 2023 11:51:59 +0100 (CET)
-Date:   Mon, 13 Mar 2023 11:51:59 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Zhihao Cheng <chengzhihao1@huawei.com>
-Cc:     tytso@mit.edu, adilger.kernel@dilger.ca, jack@suse.com,
-        linux-ext4@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yi.zhang@huawei.com
-Subject: Re: [PATCH 1/5] ext4: Fix reusing stale buffer heads from last
- failed mounting
-Message-ID: <20230313105159.4y3ddscjj6zykflk@quack3>
-References: <20230310125206.2867822-1-chengzhihao1@huawei.com>
- <20230310125206.2867822-2-chengzhihao1@huawei.com>
+        Mon, 13 Mar 2023 06:52:49 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3A1F36098
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:52:47 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id x3so46794375edb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:52:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=blackwall-org.20210112.gappssmtp.com; s=20210112; t=1678704766;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=a9L5C11Sw9bIHqmk7RYsTOno8/sluS1+0CyCq3POQ0M=;
+        b=0AglgEMexqm6E156DEN4Qa4jyoykz5XuhUZ0ytMDX68sH+rnJY7hHcqw4t5bB3vNKj
+         yJPg6Pgzoc84GKqNWsSRgiScNOuy2c5mub+ZMoS7P4scoRyMFsPGcx+2csMkwaYB5dzt
+         ZzqnFdLqNTmxJ/5BR/Weh/WmMlkTLi62zX6T4YwmQGr46yvOtxtkWM9vEqvZh1hdPn2t
+         P5ABDuu2w9KZcXOiysFdCrYi5Tcpg/QAy1KThLSZ+kwCoDTnd8irRIjEQyQPfpLRiUxa
+         zF16bot6S5Vy4TYeg2twu/mJ778QFeOpQ2M4Eau6/lmRZjYHLTxgH5TFu/c3NdWDKF9b
+         qX6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678704766;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=a9L5C11Sw9bIHqmk7RYsTOno8/sluS1+0CyCq3POQ0M=;
+        b=a3Y0Qa4ridrylppipRAxMDVn2UT+WWnCDIcVqz/bsQDABWQeg8sw9+T7pAPZLN8xq6
+         eErewy4uhhOE59iT3ASyT6MoJXRUuExp/9m0lxGB6k7/lRDQt3E3HH/8qPzV1Y71lgCM
+         7osgMl1sNMo2HWJbLj0h7P99F+r4r3Hxl2/uz0hXff5PmWr7F6/wYxQKb79QzXkauWGw
+         K+6aD1SscTL0YOsEgULsS4aIKdX6gvAPlsZXgtxFrep17NKcGx0VRYB02F0AqFaA9OaQ
+         yhVLplLxAtrjGw99H6uPz9saD0+BUJaABcSlq4COt+ptl9kS3u8xOp/Q9hXt/PPIqPuX
+         Yt/w==
+X-Gm-Message-State: AO0yUKWti6AhJWr6eU2HxQQ0v9KmQ5ALNXHOQt9TkxhBfwVTkp2ibLs6
+        G9eRNM5mbHGg/iE81YXrnM2BcA==
+X-Google-Smtp-Source: AK7set/8dDJjJEqZ2S0YFmzS1sFgfPoHjF+MbyrAUp81PZ0trhB3npHFUidCia72yC4qkIoUTax2WA==
+X-Received: by 2002:a17:906:bcc2:b0:923:5f10:affa with SMTP id lw2-20020a170906bcc200b009235f10affamr5327319ejb.69.1678704766105;
+        Mon, 13 Mar 2023 03:52:46 -0700 (PDT)
+Received: from [192.168.0.161] (62-73-72-43.ip.btc-net.bg. [62.73.72.43])
+        by smtp.gmail.com with ESMTPSA id hj20-20020a170906875400b0091fdc2b4fa2sm3131405ejb.145.2023.03.13.03.52.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 03:52:45 -0700 (PDT)
+Message-ID: <45fc873b-9b71-adf2-8f2f-17134344e490@blackwall.org>
+Date:   Mon, 13 Mar 2023 12:52:44 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310125206.2867822-2-chengzhihao1@huawei.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net] bonding: Fix warning in default_device_exit_batch()
+Content-Language: en-US
+To:     Shigeru Yoshida <syoshida@redhat.com>
+Cc:     j.vosburgh@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
+        syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
+References: <20230312152158.995043-1-syoshida@redhat.com>
+ <d7a740f1-99e9-6947-06ef-3139198730f7@blackwall.org>
+ <ZA7uTL2/IkBEIRD7@kernel-devel>
+From:   Nikolay Aleksandrov <razor@blackwall.org>
+In-Reply-To: <ZA7uTL2/IkBEIRD7@kernel-devel>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
+        SPF_HELO_NONE,SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 10-03-23 20:52:02, Zhihao Cheng wrote:
-> Following process makes ext4 load stale buffer heads from last failed
-> mounting in a new mounting operation:
-> mount_bdev
->  ext4_fill_super
->  | ext4_load_and_init_journal
->  |  ext4_load_journal
->  |   jbd2_journal_load
->  |    load_superblock
->  |     journal_get_superblock
->  |      set_buffer_verified(bh) // buffer head is verified
->  |   jbd2_journal_recover // failed caused by EIO
->  | goto failed_mount3a // skip 'sb->s_root' initialization
->  deactivate_locked_super
->   kill_block_super
->    generic_shutdown_super
->     if (sb->s_root)
->     // false, skip ext4_put_super->invalidate_bdev->
->     // invalidate_mapping_pages->mapping_evict_folio->
->     // filemap_release_folio->try_to_free_buffers, which
->     // cannot drop buffer head.
->    blkdev_put
->     blkdev_put_whole
->      if (atomic_dec_and_test(&bdev->bd_openers))
->      // false, systemd-udev happens to open the device. Then
->      // blkdev_flush_mapping->kill_bdev->truncate_inode_pages->
->      // truncate_inode_folio->truncate_cleanup_folio->
->      // folio_invalidate->block_invalidate_folio->
->      // filemap_release_folio->try_to_free_buffers will be skipped,
->      // dropping buffer head is missed again.
+On 13/03/2023 11:35, Shigeru Yoshida wrote:
+> Hi Nik,
 > 
-> Second mount:
-> ext4_fill_super
->  ext4_load_and_init_journal
->   ext4_load_journal
->    ext4_get_journal
->     jbd2_journal_init_inode
->      journal_init_common
->       bh = getblk_unmovable
->        bh = __find_get_block // Found stale bh in last failed mounting
->       journal->j_sb_buffer = bh
->    jbd2_journal_load
->     load_superblock
->      journal_get_superblock
->       if (buffer_verified(bh))
->       // true, skip journal->j_format_version = 2, value is 0
->     jbd2_journal_recover
->      do_one_pass
->       next_log_block += count_tags(journal, bh)
->       // According to journal_tag_bytes(), 'tag_bytes' calculating is
->       // affected by jbd2_has_feature_csum3(), jbd2_has_feature_csum3()
->       // returns false because 'j->j_format_version >= 2' is not true,
->       // then we get wrong next_log_block. The do_one_pass may exit
->       // early whenoccuring non JBD2_MAGIC_NUMBER in 'next_log_block'.
+> On Sun, Mar 12, 2023 at 10:58:18PM +0200, Nikolay Aleksandrov wrote:
+>> On 12/03/2023 17:21, Shigeru Yoshida wrote:
+>>> syzbot reported warning in default_device_exit_batch() like below [1]:
+>>>
+>>> WARNING: CPU: 1 PID: 56 at net/core/dev.c:10867 unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
+>>> ...
+>>> Call Trace:
+>>>  <TASK>
+>>>  unregister_netdevice_many net/core/dev.c:10897 [inline]
+>>>  default_device_exit_batch+0x451/0x5b0 net/core/dev.c:11350
+>>>  ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
+>>>  cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
+>>>  process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
+>>>  worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+>>>  kthread+0x2e8/0x3a0 kernel/kthread.c:376
+>>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+>>>  </TASK>
+>>>
+>>> For bond devices which also has a master device, IFF_SLAVE flag is
+>>> cleared at err_undo_flags label in bond_enslave() if it is not
+>>> ARPHRD_ETHER type.  In this case, __bond_release_one() is not called
+>>> when bond_netdev_event() received NETDEV_UNREGISTER event.  This
+>>> causes the above warning.
+>>>
+>>> This patch fixes this issue by setting IFF_SLAVE flag at
+>>> err_undo_flags label in bond_enslave() if the bond device has a master
+>>> device.
+>>>
+>>
+>> The proper way is to check if the bond device had the IFF_SLAVE flag before the
+>> ether_setup() call which clears it, and restore it after.
+>>
+>>> Fixes: 7d5cd2ce5292 ("bonding: correctly handle bonding type change on enslave failure")
+>>> Cc: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
+>>> Link: https://syzkaller.appspot.com/bug?id=391c7b1f6522182899efba27d891f1743e8eb3ef [1]
+>>> Reported-by: syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
+>>> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+>>> ---
+>>>  drivers/net/bonding/bond_main.c | 2 ++
+>>>  include/net/bonding.h           | 5 +++++
+>>>  2 files changed, 7 insertions(+)
+>>>
+>>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+>>> index 00646aa315c3..1a8b59e1468d 100644
+>>> --- a/drivers/net/bonding/bond_main.c
+>>> +++ b/drivers/net/bonding/bond_main.c
+>>> @@ -2291,6 +2291,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+>>>  			dev_close(bond_dev);
+>>>  			ether_setup(bond_dev);
+>>>  			bond_dev->flags |= IFF_MASTER;
+>>> +			if (bond_has_master(bond))
+>>> +				bond_dev->flags |= IFF_SLAVE;
+>>>  			bond_dev->priv_flags &= ~IFF_TX_SKB_SHARING;
+>>>  		}
+>>>  	}
+>>> diff --git a/include/net/bonding.h b/include/net/bonding.h
+>>> index ea36ab7f9e72..ed0b49501fad 100644
+>>> --- a/include/net/bonding.h
+>>> +++ b/include/net/bonding.h
+>>> @@ -57,6 +57,11 @@
+>>>  
+>>>  #define bond_has_slaves(bond) !list_empty(bond_slave_list(bond))
+>>>  
+>>> +/* master list primitives */
+>>> +#define bond_master_list(bond) (&(bond)->dev->adj_list.upper)
+>>> +
+>>> +#define bond_has_master(bond) !list_empty(bond_master_list(bond))
+>>> +
+>>
+>> This is not the proper way to check for a master device.
+>>
+>>>  /* IMPORTANT: bond_first/last_slave can return NULL in case of an empty list */
+>>>  #define bond_first_slave(bond) \
+>>>  	(bond_has_slaves(bond) ? \
+>>
+>> The device flags are wrong because of ether_setup() which clears IFF_SLAVE, we should
+>> just check if it was present before and restore it after the ether_setup() call.
 > 
-> The filesystem is corrupted here, journal is partially replayed, and
-> new journal sequence number actually is already used by last mounting.
+> Thank you so much for your comment!  I understand your point, and
+> agree that your approach must resolve the issue.
 > 
-> The invalidate_bdev() can drop all buffer heads even racing with bare
-> reading block device(eg. systemd-udev), so we can fix it by invalidating
-> bdev in error handling path in __ext4_fill_super().
+> BTW, do you mean there is a case where a device has IFF_SLAVE flag but
+> the upper list is empty?  I thought a device with IFF_SLAVE flag has a
+> master device in the upper list (that is why I took the above way.)
 > 
-> Fetch a reproducer in [Link].
-> 
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217171
-> Cc: <stable@kernel.org>
-> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
 
-The fix looks good to me. Feel free to add:
+Hi Shigeru,
+No, that's not what I meant. It's the opposite actually, you may have an upper list
+but you don't have a "master" device or slave flag set. Yes, you can say that if
+a device has IFF_SLAVE set, then it must have a master upper device but that's not
+what you're checking for, you've reversed that logic to check for an upper device instead
+and assume there's a IFF_SLAVE flag set (which may not be true).
+For an upper device to be considered a "master" device, it must have the master bool set to
+true in its netdev_adjacent structure. We already have helpers to check for master devices
+and to retrieve them, e.g. check netdev_master_upper_dev_get* in net/core/dev.c
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+The most robust way to fix it is to check if the flag was there prior to the ether_setup() call
+and restore it after, also to leave a nice comment about all of this. :)
 
-								Honza
-
-> ---
->  fs/ext4/super.c | 15 ++++++++-------
->  1 file changed, 8 insertions(+), 7 deletions(-)
+> Thanks,
+> Shigeru
 > 
-> diff --git a/fs/ext4/super.c b/fs/ext4/super.c
-> index 88f7b8a88c76..7e990637bc48 100644
-> --- a/fs/ext4/super.c
-> +++ b/fs/ext4/super.c
-> @@ -1126,6 +1126,12 @@ static void ext4_blkdev_remove(struct ext4_sb_info *sbi)
->  	struct block_device *bdev;
->  	bdev = sbi->s_journal_bdev;
->  	if (bdev) {
-> +		/*
-> +		 * Invalidate the journal device's buffers.  We don't want them
-> +		 * floating about in memory - the physical journal device may
-> +		 * hotswapped, and it breaks the `ro-after' testing code.
-> +		 */
-> +		invalidate_bdev(bdev);
->  		ext4_blkdev_put(bdev);
->  		sbi->s_journal_bdev = NULL;
->  	}
-> @@ -1271,14 +1277,8 @@ static void ext4_put_super(struct super_block *sb)
->  
->  	sync_blockdev(sb->s_bdev);
->  	invalidate_bdev(sb->s_bdev);
-> -	if (sbi->s_journal_bdev && sbi->s_journal_bdev != sb->s_bdev) {
-> -		/*
-> -		 * Invalidate the journal device's buffers.  We don't want them
-> -		 * floating about in memory - the physical journal device may
-> -		 * hotswapped, and it breaks the `ro-after' testing code.
-> -		 */
-> +	if (sbi->s_journal_bdev) {
->  		sync_blockdev(sbi->s_journal_bdev);
-> -		invalidate_bdev(sbi->s_journal_bdev);
->  		ext4_blkdev_remove(sbi);
->  	}
->  
-> @@ -5610,6 +5610,7 @@ static int __ext4_fill_super(struct fs_context *fc, struct super_block *sb)
->  	brelse(sbi->s_sbh);
->  	ext4_blkdev_remove(sbi);
->  out_fail:
-> +	invalidate_bdev(sb->s_bdev);
->  	sb->s_fs_info = NULL;
->  	return err ? err : ret;
->  }
-> -- 
-> 2.31.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+
+Cheers,
+ Nik
