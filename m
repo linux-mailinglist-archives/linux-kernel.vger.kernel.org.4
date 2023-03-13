@@ -2,120 +2,216 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAE26B74FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 42A996B74FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjCMLAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:00:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59096 "EHLO
+        id S229573AbjCMLAC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:00:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229831AbjCMK7y (ORCPT
+        with ESMTP id S230146AbjCMK76 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:59:54 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2BA34C35;
-        Mon, 13 Mar 2023 03:59:25 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id y189so2459178pgb.10;
-        Mon, 13 Mar 2023 03:59:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678705158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Vsy2LwxeFUk+ZOJmYzV0ZLx3OS9N/i1hwSUV0kkdxCM=;
-        b=bGuZD/VLxXcb3aGciJIohMPcL7qBZxHLur9yZGiHL7e3FcGESx3W0w2U5CH+lOz7ql
-         GAVxl5ckJKkz/aumySGqDDs9kVdMaaB0zOCwdCegFhftcGvXO9qCWZ9A49/IHaDAOr5u
-         7A8kkbvZHC/PSNJO7y7lMZTNqhimTZs3O2su+S3EjmqtaUwSTmxCuLWtaKrWQRXW+e5d
-         pBh0vrjTfreRS/p5qO5eqfNbLc+B74PqNv2sPBE2f2xP1xTL4bPfHB2rQL1I14u9Uf6A
-         guQ027QE7frLarMNqZk1eFV/6Zs1S/9M2Sp3t8oafiY4BG3c+2mWQp7mlgkpnkbUVc3i
-         pQVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678705158;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Vsy2LwxeFUk+ZOJmYzV0ZLx3OS9N/i1hwSUV0kkdxCM=;
-        b=qx9lAnHEqlvgxpmzEHUvey7Uoctp30INvZvJZWtfX4dmFda53k16Ny4HMGLNVC7ymd
-         AsEmbxn4hmXR8tvs3s6rkGsMUYNf76ZhsYkKc2fvGhm7EVHyb1Zt9XosL+C69Es2odZB
-         lhijNi8HyDkE1fA7kOgGByzWMObAgs5mNoDpik4PgCW44KAu84ffPHRUMgVHMLMzTH56
-         YLSu0k/1bKwkfs/j/qEBBkQivPZT4Xt2OBTnUnWTtnTcBE/ygVgaXgIHQPkU0/VUD1h7
-         hlJ2MNG/DjsBqitYioBQ+xtWz19ZgOemfELNZ08yuB4OYwkgtCU09FB6xuQvzpeBqQ3Y
-         UEfw==
-X-Gm-Message-State: AO0yUKXA8DFo9neqRkb/Nm+uGH1WIZ6oPjNikK9D9HpQto86qp8O7oj2
-        qEA38iDxW9EOHTlM1fkoEl18i28PKp0W6vqqqZA=
-X-Google-Smtp-Source: AK7set9Ehv9CzLEw3Sa0anMtfKyS2uQ3vqf1+BmUiwQX01+JeYZP96vMT79fOk02aIOJdh8qCoKrQCbVt6qSSsI447k=
-X-Received: by 2002:a05:6a00:14d6:b0:5aa:310c:e65b with SMTP id
- w22-20020a056a0014d600b005aa310ce65bmr14168933pfu.2.1678705158151; Mon, 13
- Mar 2023 03:59:18 -0700 (PDT)
+        Mon, 13 Mar 2023 06:59:58 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5DA3646C;
+        Mon, 13 Mar 2023 03:59:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=O3FD0vzHt3JrLF9veBne7WsgoaPrHJaK9x+MbUdxVfM=; b=UEyD6dAm73IB1ECkQrVap24JDu
+        hTrdEpEMZaOMIZ+mxsredAZNENAmujF3Z2ZfAgdR9IvDWJMYGoBXNnRyFWbcU4Jr2gl50uQ83oY3q
+        VdlBi5yEs36XmA4RLG6dvhPdWVyVrABO4oxnkpawfgHVeaEpYOQNc/dAnEnQx9LjRNqPKIVq7UPr3
+        /9Kd3Cu5Vw+40McdcT0GFTreMLN6S43oKcJ/PdsSJ9GyrrG9PqS0jnXh9G56tj5FfKeqCNXujuUnm
+        J+eHz6Dh/O0hpdlAVYBfFWf7QRnTStpOn22HYd/SNAYxsgpBIOav5nfTz9OOad5E+BvYRN2G5scKM
+        cBtrJOLg==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:49632)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pbftf-0002mf-1t; Mon, 13 Mar 2023 10:59:19 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pbftW-0007g1-GX; Mon, 13 Mar 2023 10:59:10 +0000
+Date:   Mon, 13 Mar 2023 10:59:10 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc:
+ fix 1000Base-X and 2500Base-X modes
+Message-ID: <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
+References: <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk>
+ <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+ <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
 MIME-Version: 1.0
-References: <20230310144656.1540950-1-robh@kernel.org> <c2191745-714c-7cdc-ba2d-a254245bbdac@linaro.org>
-In-Reply-To: <c2191745-714c-7cdc-ba2d-a254245bbdac@linaro.org>
-From:   Jonas Gorski <jonas.gorski@gmail.com>
-Date:   Mon, 13 Mar 2023 11:59:06 +0100
-Message-ID: <CAOiHx=m+q8ALpESkudkTPL3XKWz2O0-JGGVD0CqWbq3xQ-6dng@mail.gmail.com>
-Subject: Re: [PATCH] mips: Use of_property_read_bool() for boolean properties
-To:     =?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Cc:     Rob Herring <robh@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Mar 12, 2023 at 08:05:41PM +0000, Russell King (Oracle) wrote:
+> On Sun, Mar 12, 2023 at 01:40:36PM +0100, Frank Wunderlich wrote:
+> > > Gesendet: Samstag, 11. März 2023 um 21:30 Uhr
+> > > Von: "Russell King (Oracle)" <linux@armlinux.org.uk>
+> > 
+> > > On Sat, Mar 11, 2023 at 09:21:47PM +0100, Frank Wunderlich wrote:
+> > > > Am 11. März 2023 21:00:20 MEZ schrieb "Russell King (Oracle)" <linux@armlinux.org.uk>:
+> > > > >On Sat, Mar 11, 2023 at 01:05:37PM +0100, Frank Wunderlich wrote:
+> > > > 
+> > > > >> i got the 2.5G copper sfps, and tried them...they work well with the v12 (including this patch), but not in v13... 
+> > > > 
+> > > > >> how can we add a quirk to support this?
+> > > > >
+> > > > >Why does it need a quirk?
+> > > > 
+> > > > To disable the inband-mode for this 2.5g copper
+> > > > sfp. But have not found a way to set a flag which i
+> > > > can grab in phylink.
+> > > 
+> > > We could make sfp_parse_support() set Autoneg, Pause, and Asym_Pause
+> > > in "modes" at the top of that function, and then use the SFP modes
+> > > quirk to clear the Autoneg bit for this SFP. Would that work for you?
+> > 
+> > i already tried this (without moving the autoneg/pause to sfp_parse_support):
+> > 
+> > static void sfp_quirk_disable_autoneg(const struct sfp_eeprom_id *id,
+> > 				unsigned long *modes,
+> > 				unsigned long *interfaces)
+> > {
+> > 	linkmode_clear_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, modes);
+> > }
+> > 
+> > quirk was executed, but no change (no link on 2g5 sfp).
+> 
+> It won't have any effect on its own - because sfp_parse_support() does
+> this:
+> 
+>         if (bus->sfp_quirk && bus->sfp_quirk->modes)
+>                 bus->sfp_quirk->modes(id, modes, interfaces);
+> 
+>         linkmode_or(support, support, modes);
+> 
+>         phylink_set(support, Autoneg);
+>         phylink_set(support, Pause);
+>         phylink_set(support, Asym_Pause);
+> 
+> Which means clearing Autoneg in "modes" via the modes SFP quirk will
+> have *absolutely* *no* *effect* what so ever.
+> 
+> The fact that you replied having *not* followed my suggestion and then
+> itimiating that it doesn't work is very frustrating.
+> 
+> > i guess you mean moving code handling the dt-property for inband-mode in phylink_parse_mode (phylink.c) to the sfp-function (drivers/net/phy/sfp-bus.c)
+> 
+> No.
+> 
+> [rest of email cut because I can't be bothered to read it after this]
+> 
+> Please try what I suggested. You might find that it works.
 
-On Mon, 13 Mar 2023 at 09:31, Philippe Mathieu-Daud=C3=A9 <philmd@linaro.or=
-g> wrote:
->
-> Hi Rob,
->
-> On 10/3/23 15:46, Rob Herring wrote:
-> > It is preferred to use typed property access functions (i.e.
-> > of_property_read_<type> functions) rather than low-level
-> > of_get_property/of_find_property functions for reading properties.
-> > Convert reading boolean properties to to of_property_read_bool().
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   arch/mips/pci/pci-lantiq.c | 2 +-
-> >   arch/mips/pci/pci-rt3883.c | 2 +-
-> >   2 files changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/arch/mips/pci/pci-lantiq.c b/arch/mips/pci/pci-lantiq.c
-> > index d967e4c0cf24..79e29bf42a24 100644
-> > --- a/arch/mips/pci/pci-lantiq.c
-> > +++ b/arch/mips/pci/pci-lantiq.c
-> > @@ -118,7 +118,7 @@ static int ltq_pci_startup(struct platform_device *=
-pdev)
-> >
-> >       /* and enable the clocks */
-> >       clk_enable(clk_pci);
-> > -     if (of_find_property(node, "lantiq,external-clock", NULL))
-> > +     if (of_property_read_bool(node, "lantiq,external-clock"))
->
-> Just curious, is this property correct? I can't find it and wonder if
-> this is dead code (always disabling the clock)... I'm probably missing
-> something obvious :/
->
-> >               clk_enable(clk_external);
-> >       else
-> >               clk_disable(clk_external);
+Since describing what I wanted you to test didn't work, here's a patch
+instead, based upon the quirk that you provided (which is what I'd have
+written anyway). Add a "#define DEBUG" to the top of
+drivers/net/phy/phylink.c in addition to applying this patch, and please
+test the resulting kernel, sending me the resulting kernel messages, and
+also reporting whether this works or not.
 
-The (whole) binding does seem to be undocumented, at least a quick
-grep didn't find anything for "lantiq,pci-xway" in bindings :-/
+Thanks.
 
-The property itself is used in OpenWrt though, e.g.
-https://github.com/openwrt/openwrt/blob/master/target/linux/lantiq/files/ar=
-ch/mips/boot/dts/lantiq/danube_arcadyan_arv7518pw.dts#L209
+diff --git a/drivers/net/phy/sfp-bus.c b/drivers/net/phy/sfp-bus.c
+index daac293e8ede..1dd50f2ca05d 100644
+--- a/drivers/net/phy/sfp-bus.c
++++ b/drivers/net/phy/sfp-bus.c
+@@ -151,6 +151,10 @@ void sfp_parse_support(struct sfp_bus *bus, const struct sfp_eeprom_id *id,
+ 	unsigned int br_min, br_nom, br_max;
+ 	__ETHTOOL_DECLARE_LINK_MODE_MASK(modes) = { 0, };
+ 
++	phylink_set(modes, Autoneg);
++	phylink_set(modes, Pause);
++	phylink_set(modes, Asym_Pause);
++
+ 	/* Decode the bitrate information to MBd */
+ 	br_min = br_nom = br_max = 0;
+ 	if (id->base.br_nominal) {
+@@ -329,10 +333,6 @@ void sfp_parse_support(struct sfp_bus *bus, const struct sfp_eeprom_id *id,
+ 		bus->sfp_quirk->modes(id, modes, interfaces);
+ 
+ 	linkmode_or(support, support, modes);
+-
+-	phylink_set(support, Autoneg);
+-	phylink_set(support, Pause);
+-	phylink_set(support, Asym_Pause);
+ }
+ EXPORT_SYMBOL_GPL(sfp_parse_support);
+ 
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 39e3095796d0..b054360bf636 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -360,6 +360,13 @@ static void sfp_quirk_2500basex(const struct sfp_eeprom_id *id,
+ 	__set_bit(PHY_INTERFACE_MODE_2500BASEX, interfaces);
+ }
+ 
++static void sfp_quirk_disable_autoneg(const struct sfp_eeprom_id *id,
++				      unsigned long *modes,
++				      unsigned long *interfaces)
++{
++	linkmode_clear_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, modes);
++}
++
+ static void sfp_quirk_ubnt_uf_instant(const struct sfp_eeprom_id *id,
+ 				      unsigned long *modes,
+ 				      unsigned long *interfaces)
+@@ -401,6 +408,7 @@ static const struct sfp_quirk sfp_quirks[] = {
+ 	SFP_QUIRK_M("UBNT", "UF-INSTANT", sfp_quirk_ubnt_uf_instant),
+ 
+ 	SFP_QUIRK_F("OEM", "SFP-10G-T", sfp_fixup_rollball_cc),
++	SFP_QUIRK_M("OEM", "SFP-2.5G-T", sfp_quirk_disable_autoneg),
+ 	SFP_QUIRK_F("OEM", "RTSFP-10", sfp_fixup_rollball_cc),
+ 	SFP_QUIRK_F("OEM", "RTSFP-10G", sfp_fixup_rollball_cc),
+ 	SFP_QUIRK_F("Turris", "RTSFP-10", sfp_fixup_rollball),
 
-Regards
-Jonas
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
