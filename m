@@ -2,51 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB8E26B7E2A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:52:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F224B6B7E25
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:52:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229985AbjCMQwr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:52:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43730 "EHLO
+        id S230156AbjCMQw1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:52:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCMQwk (ORCPT
+        with ESMTP id S230139AbjCMQwX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:52:40 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 725267B9A7;
-        Mon, 13 Mar 2023 09:52:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=2yqG3
-        Kr7Cl9HIQ+InYzhFymxRJDXG2QuIzgYGnQnHiE=; b=Tyzw6sHWWKFwf2WW3wQ/j
-        zOuN/sMru+RtSc6vLr9gnUSgp+DonJU7/4WfRJGi+W3S+bYGT+R+gCD/sy7ydllW
-        FLyE/qOarNnCbQ2+GxhzGc/AdotVvs0HTpuQCBpHyj3vZV25Tq8sUWzj0diXkLvk
-        OWLv7oWjNvxLBIboXdpm0o=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g3-2 (Coremail) with SMTP id _____wAHk4CSVA9kolEUAA--.15536S2;
-        Tue, 14 Mar 2023 00:51:30 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     gregkh@linuxfoundation.org
-Cc:     p.zabel@pengutronix.de, biju.das.jz@bp.renesas.com,
-        phil.edworthy@renesas.com, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com,
-        yoshihiro.shimoda.uh@renesas.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH v3] usb: gadget: udc: renesas_usb3: Fix use after free bug in  renesas_usb3_remove due to race condition
-Date:   Tue, 14 Mar 2023 00:51:28 +0800
-Message-Id: <20230313165128.3763626-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 13 Mar 2023 12:52:23 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBF275BBA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:51:51 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-5416698e889so132173337b3.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678726311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KZ05Z67fmkeCIKN3rlGn8s6ITfRrSiu2jOUyiAMkfsI=;
+        b=e0afJLHUAo9zc1qU6RM2W6pR23dnpzrc9FFdh3E34g+t7L1p9uzVurHddguodajSjO
+         l1vYUOtKTd3VYkINB/h6ZMUUnMMW/Nnej42pSlpm+MNklBe09vIQKc3OwGVYOIv/pdl3
+         XiWTFERJfgNUfWnSm6Zd50EpQY9Inf022Z0VDDdOFhfoykGxJhFfi6BZBqmuv9SrB/85
+         q5rEPHKwm5DnWn19rKcTt1ayqNDWgnE7s+k6PKJjguKNxMIir7Bq9ZjWWbI+eogUwMwh
+         d+qzpOw2bPuxvNjGkXR49W/qhva4SdiC4jmRxR0xc/DVb5feUzJwyxB8qz4HITGK7cU8
+         lW+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678726311;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=KZ05Z67fmkeCIKN3rlGn8s6ITfRrSiu2jOUyiAMkfsI=;
+        b=sUZ7H4IW/Tb0HBrDh5a57JEsD0e8b3mpHBpXb76sKti/Gd8R1bZLPofncFo53aIlm/
+         0/jCG018LcZybpIRywmMTMHs7Xgmn7e6sPL6gmeiiDek/bNkSgwh4bdMHxm29eQz9siC
+         LLrmo7/FiEEHbFo92CEzMpI0Y1Mda8k3yA1t1htKFj5Lvbjaprxoouiwt5Bn//tq2JdX
+         ihgK6rF3uFGyH0rF/pmxXRp3eD0ZRwdw4LSK6Gn5WUj9zZ6zIH3+f2MXMCfqqLkhDKQ+
+         2wDAuSpdRDcg+bQQ8WsaNjuP/0yfpL4mjwTztT/Zr+e9xSC4KOc1Hf06erUggxYASEFm
+         ACbQ==
+X-Gm-Message-State: AO0yUKXrMgDFvowi0P7pBWpqg7HMd/8Fg5uCVjZwiPgU8hNAKhV5NADg
+        BP7D5rx1oR+3HDW74ctrsauBDatg2iei7itI/mXdyQ==
+X-Google-Smtp-Source: AK7set+tp9t9wsLUMP6VoJYyrtoWRA0Md183jAXL9mKimO4GfbxxA8nQLNGIbkZnfWsdV5u5WHhul7aFx/n+hnSAz14=
+X-Received: by 2002:a81:a9c8:0:b0:533:9c5b:7278 with SMTP id
+ g191-20020a81a9c8000000b005339c5b7278mr22629557ywh.0.1678726310872; Mon, 13
+ Mar 2023 09:51:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wAHk4CSVA9kolEUAA--.15536S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF1DGryfJr47ArWxZFyDAwb_yoW8WF1fpF
-        WDGFW5Ar4rGFWjq3y7GFykZFyrCF9rKry7ZFW7tw4xuF1rG3y0qryIqa1jkF1xJFZayr4F
-        q3WDu340qa47u37anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziID73UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiGgMxU1aEEjd7pgACsT
-X-Spam-Status: No, score=-0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_MSPIKE_H2,
-        RCVD_IN_VALIDITY_RPBL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20230313162520.GA17199@debian> <20230313164541.GA17394@debian>
+In-Reply-To: <20230313164541.GA17394@debian>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 13 Mar 2023 09:51:39 -0700
+Message-ID: <CANn89i+a-d6e3_6PpKckC149_O87GWeUAhe6ztOh62b1fcvBbw@mail.gmail.com>
+Subject: Re: [PATCH v3 2/2] gro: optimise redundant parsing of packets
+To:     Richard Gobert <richardbgobert@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        dsahern@kernel.org, alexanderduyck@fb.com, lucien.xin@gmail.com,
+        lixiaoyan@google.com, iwienand@redhat.com, leon@kernel.org,
+        ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,50 +73,66 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In renesas_usb3_probe, &usb3->role_work is bound with
-renesas_usb3_role_work. renesas_usb3_start will be called
-to start the work.
+On Mon, Mar 13, 2023 at 9:46=E2=80=AFAM Richard Gobert <richardbgobert@gmai=
+l.com> wrote:
+>
+> Currently the IPv6 extension headers are parsed twice: first in
+> ipv6_gro_receive, and then again in ipv6_gro_complete.
+>
+> By using the new ->transport_proto field, and also storing the size of th=
+e
+> network header, we can avoid parsing extension headers a second time in
+> ipv6_gro_complete (which saves multiple memory dereferences and condition=
+al
+> checks inside ipv6_exthdrs_len for a varying amount of extension headers =
+in
+> IPv6 packets).
+>
+> The implementation had to handle both inner and outer layers in case of
+> encapsulation (as they can't use the same field). I've applied a similar
+> optimisation to Ethernet.
+>
+> Performance tests for TCP stream over IPv6 with a varying amount of
+> extension headers demonstrate throughput improvement of ~0.7%.
+>
+> In addition, I fixed a potential future problem:
 
-If we remove the driver which will call usbhs_remove, there may be
-an unfinished work. The possible sequence is as follows:
+I would remove all this block.
 
-Fix it by canceling the work before cleanup in the renesas_usb3_remove
+We fix current problems, not future hypothetical ones.
 
-CPU0                  CPU1
+>  - The call to skb_set_inner_network_header at the beginning of
+>    ipv6_gro_complete calculates inner_network_header based on skb->data b=
+y
+>    calling skb_set_inner_network_header, and setting it to point to the
+>    beginning of the ip header.
+>  - If a packet is going to be handled by BIG TCP, the following code bloc=
+k
+>    is going to shift the packet header, and skb->data is going to be
+>    changed as well.
+>
+> When the two flows are combined, inner_network_header will point to the
+> wrong place - which might happen if encapsulation of BIG TCP will be
+> supported in the future.
+>
+> The fix is to place the whole encapsulation branch after the BIG TCP code
+> block. This way, if encapsulation of BIG TCP will be supported,
+> inner_network_header will still be calculated with the correct value of
+> skb->data.
 
-                    |renesas_usb3_role_work
-renesas_usb3_remove |
-usb_role_switch_unregister  |
-device_unregister   |
-kfree(sw)  	     |
-free usb3->role_sw  |
-                    |   usb_role_switch_set_role
-                    |   //use usb3->role_sw
+We do not support encapsulated BIG TCP yet.
+We will do this later, and whoever does it will make sure to also support G=
+RO.
 
-Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of usb role switch")
-Reviewed-by: Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v3:
-- modify the commit message to make it clearer suggested by Yoshihiro Shimoda
-v2:
-- fix typo, use clearer commit message and only cancel the UAF-related work suggested by Yoshihiro Shimoda
----
- drivers/usb/gadget/udc/renesas_usb3.c | 1 +
- 1 file changed, 1 insertion(+)
+> Also, by arranging the code that way, the optimisation does not
+> add an additional branch.
+>
+> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+> ---
+>
 
-diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget/udc/renesas_usb3.c
-index bee6bceafc4f..a301af66bd91 100644
---- a/drivers/usb/gadget/udc/renesas_usb3.c
-+++ b/drivers/usb/gadget/udc/renesas_usb3.c
-@@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_device *pdev)
- 	debugfs_remove_recursive(usb3->dentry);
- 	device_remove_file(&pdev->dev, &dev_attr_role);
- 
-+	cancel_work_sync(&usb3->role_work);
- 	usb_role_switch_unregister(usb3->role_sw);
- 
- 	usb_del_gadget_udc(&usb3->gadget);
--- 
-2.25.1
+Can you give us a good explanation of why extension headers are used exactl=
+y ?
 
+I am not sure we want to add code to GRO for something that 99.99% of
+us do not use.
