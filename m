@@ -2,169 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B37116B7804
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F28FA6B7812
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjCMMu0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:50:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36248 "EHLO
+        id S230040AbjCMMwv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:52:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230250AbjCMMuU (ORCPT
+        with ESMTP id S229664AbjCMMwu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:50:20 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2077.outbound.protection.outlook.com [40.107.92.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F13C62D9D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:49:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=hub/aGc4OE4pKL0BLErTSj7jzQZ4QQU1mByY8+0ktTtZbdsGKuDwkKqK5xI3juIPwe67mU6/4NK4t5OIsrSXFeOIMAbn7UdjKzsQsagn+lEIGWNaabzjSP9xwGWKi40MCFLE0B7k8fY1ffhAShF9F6qa/iK2aRYpIAYJw9fAxt9wbiRKKpPuGUBa+EB4uqPokaPYKkI+oPZrO806hImMNj+70EvbTqaGxBXuyJwguwQ8sJp82yGPWLXFpoygSwIxRh9C4IO/cXhJsT8zxzhnqYAunYBlOIiBVfX7CWbJKuwf6B1C0d24aB88wCF8Y97rp0UPg4/ugvaEKbf963vaFw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=3DQwqJHtPAdtpmQmG1xY3Py0BxoT4RPpTE2kky5amp0=;
- b=IfEF8EHnN/SXZT1q6Z9Zza3HShn5/v79oS6xL5R9q+G3KhufCxF+PjpOxFUzKh787pC0jZzW3uleozZMq2LtKI5uYZg1A9un+iUQQsEiuBeG1OfuD1qN6nKSvLh07v59Z0fvkdUK4nXgaN1SY2ezj5ELljPEY0d6at/+Q7c1Y3hzqQeIzhvRvOo7UmgRL2yhdmB7xsqOGvCjzJcHoNhhh9siVgLWfptJa7Oq76fQeqgrJRBfk2MvD8pGkyPUmm4YoKqxqWrQ/T9l23eei3WzLLPAS45RgPbIlF92LTOanKl1S7+1ScWbux7RyuWZG1Os7G9QEOO/GW2Xmx9w+g7yXg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=3DQwqJHtPAdtpmQmG1xY3Py0BxoT4RPpTE2kky5amp0=;
- b=tZnG30E2tdSI8TTL6tXUq6yjyOpcFDO0y4iuinMFBkxljfFbC1ZhQ708SgqS/1y8O5h0TAkGUDUL/i3t6OXyZDTFYD6m5QNAm/8UgiaWWPx5HoC2XtJv7iPL0hYH171pbT7ddLD7lrTHFc0WlwvvalCsm8uaEG3B5ZPE0wlikJE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com (2603:10b6:5:398::12)
- by SJ0PR12MB8113.namprd12.prod.outlook.com (2603:10b6:a03:4e0::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 12:49:39 +0000
-Received: from DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::5b56:bf13:70be:ea60]) by DM4PR12MB5229.namprd12.prod.outlook.com
- ([fe80::5b56:bf13:70be:ea60%7]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 12:49:39 +0000
-Message-ID: <4741f088-82dd-3bca-626f-37cb70621f34@amd.com>
-Date:   Mon, 13 Mar 2023 07:49:36 -0500
+        Mon, 13 Mar 2023 08:52:50 -0400
+Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4698857095;
+        Mon, 13 Mar 2023 05:52:48 -0700 (PDT)
+Received: by mail-lf1-x12f.google.com with SMTP id r27so15550615lfe.10;
+        Mon, 13 Mar 2023 05:52:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678711966;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hXDQnsFmBpDrK5iiFWtfvH+xdXHDrrJVrU+nT5wLFy0=;
+        b=o98vSzAWUGX1iqJ4KGGZOAF+ZmWjPqcMg5+wOev1CIbp4cO7eNQ3gYreTGkn47Ajor
+         mJL/lyvmp/Jh5bAkCMLzVKrgxBDym6v/R7leF8zWE1sNi77q15Bnsf70fsFCv2XFbZhu
+         wqW334jMAxnf6v6KzKpTgpGIqe/IiciMpvLvcc1KSWdzXqiwT0XbxfgnaH31uSYWhjZi
+         XWvX5LwxIzzhfW5SPBQ80V8quEvkBB7uX+emnT0ORLOwVSQVuqLplR7h7cCXt1wULywq
+         nodz60da0hnQofqU35LINsuQu7Uh1KKM9au5ECXqQcmAskddsWxn52sPsUwHAFC7iXwk
+         fgiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678711966;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hXDQnsFmBpDrK5iiFWtfvH+xdXHDrrJVrU+nT5wLFy0=;
+        b=t9rn5PWSiJ3kS8OLbzfTppBp/yIPrEOY+481rKzfLmTk7UgEZnXMua1/bd1ZG6Na/w
+         kPU3NXizQvODcKVnv14/3zVpeRGslYTs8FwNB/R5UhFas6ia+OluX/YX2TJ+BN41SzFw
+         NBMZhHxy1SLCDyApUiIr+ZXgz/j+cj1lIGE80zSrWbSaA2Ezog1doQ7lX6DktNTVl1SL
+         4XE/d/dKyQ5CO1da0SHfDhIHhVUwJuxKkOK/dZHyNmIUgqS5jUId1xxGin93AzhG4KOL
+         EFMnqxPVqnXOowTcVAdHidjMGPAe5Bd4MzyFwTLtzezOEmfFy2joFsVMQuI2ISoPil8W
+         r+EQ==
+X-Gm-Message-State: AO0yUKWEkPAz+CU1ks5XwNnHj54v9TLvNiUEQ7DfHz2W4IKEiF7uV8bs
+        UtnxSb37PQa+CCpJ7HzLkvVceubjGeI=
+X-Google-Smtp-Source: AK7set/qWNMC5XOTIfkhbOKCbNxPAenU/K1sQSJHPWYbyFskDvPPTtuNkf0/V0BU9RBN5N0lPEOsoA==
+X-Received: by 2002:ac2:5283:0:b0:4de:21c9:8a37 with SMTP id q3-20020ac25283000000b004de21c98a37mr10979718lfm.1.1678711966514;
+        Mon, 13 Mar 2023 05:52:46 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id m1-20020ac24241000000b004d1dbacdc93sm950103lfl.299.2023.03.13.05.52.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 05:52:46 -0700 (PDT)
+Message-ID: <d6a3fbb8-d51d-b1cf-444c-f9422c22927c@gmail.com>
+Date:   Mon, 13 Mar 2023 14:52:45 +0200
+MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] x86/mm: Fix use of uninitialized buffer in
- sme_enable()
-To:     Nikita Zhandarovich <n.zhandarovich@fintech.ru>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-References: <20230306160656.14844-1-n.zhandarovich@fintech.ru>
-Content-Language: en-US
-From:   Tom Lendacky <thomas.lendacky@amd.com>
-In-Reply-To: <20230306160656.14844-1-n.zhandarovich@fintech.ru>
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
+Content-Language: en-US, en-GB
+To:     Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+References: <cover.1678093787.git.mazziesaccount@gmail.com>
+ <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
+ <20230312170638.3e6807b7@jic23-huawei>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230312170638.3e6807b7@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR19CA0029.namprd19.prod.outlook.com
- (2603:10b6:610:4d::39) To DM4PR12MB5229.namprd12.prod.outlook.com
- (2603:10b6:5:398::12)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR12MB5229:EE_|SJ0PR12MB8113:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1af71c5a-30c3-4cf6-ce74-08db23c1686b
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /1gy6J3uLKXgeC073tqsU+VYVKLka4WeP2zrlJBl2xe7sP2ERG30o/yJdB5EbXYKDjmakBkJt6eeGsqbjmQCfWpsbJkpxU7NwS7a8keQHM+ONLUnPIVpIDwVz+b1HH03gug8tGVDs0iaiqWIuR2rN0Ex/kLC6KJlqzJ+Qma0tc6BiEnvRXnIoSPYrlVsHHjph1EKFVzMZ8olC41Mjxlw845ItF+toU+UgGPaWGyp1N7hd368IHSI7hipadjLeNho6BlROG36hiYihcsUgiMzcdoYZf5pFXJvc0CTos5pVtyG4muTFXFUu8/F6PFOiBKxACjVkj8G450kyuqBQj74V0+AUAHB5Y8JMvzWUGvJp8N9kcRdNKaJyQEX3y0q8T6uqc3FQ2LDFfqofKjK6Lw/1pZ00sZKNndpLvClIXSiCBQrTVk4e6DgZAY5ZuQCkQEeFwtTRqSbaIBJ2FZ3FdcvZZpuN+fVb9DsoEe7nyrlNnwiud1Wz0TEMpoAlOVAIQXBMV8HxiMSdTj3GQ9Yx6xDuulyMbUJstjj3Zmnb784E2xfsLzedb4/h2iSgisI4ym/fF0VQxqXFem6ZQkkCYa05qTaJ1926VW/wbX98Pwooo9r21Kh/rU6iKPaJc/s5nnIcZBDcngx+IWwBzBJAAOplpmrTLMODnkpwZgy411SQ0b2GiKFnX0ZpiGNwweakQT/4l9n3BgPLNIYeb9+yYAy7TzK+xo01Xc87IBVSmbZGZ0=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB5229.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(39860400002)(376002)(346002)(136003)(451199018)(36756003)(86362001)(31696002)(41300700001)(186003)(26005)(6506007)(6512007)(53546011)(5660300002)(7416002)(4326008)(2616005)(8936002)(316002)(54906003)(478600001)(66946007)(110136005)(8676002)(66556008)(66476007)(6666004)(6486002)(38100700002)(83380400001)(2906002)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dHFuaWJ2TGp6WUxCMFFHNjJUcGl1dDB4UWFZYzN5Y1dyUENmQTJmR09ZdU11?=
- =?utf-8?B?K3QvZnpwMWszeFJ0cmN4eE9QMlJZNURYUVhZekNEc1NQSUJnYksraWtsdEN1?=
- =?utf-8?B?SFA2aUZTS3JYV1lFdVF4ZU5PbEdWL1l3aXllaUU0TFV6RTROQWlNWGVlNkU4?=
- =?utf-8?B?RTk2QlNCcnBtVkRNTU1DTGkwd1U1MEdVYmszK0ZUN2c1T1JXdlNPSEQ5YWpR?=
- =?utf-8?B?Sm5LdFYrbjZ3RlFUek9zYmhMMjZTUVFrS1M0QTBwMTZwMEVsWUtvblRrRXRE?=
- =?utf-8?B?MlRTL09IVjFnT0c1NjdFT0JlTlBRT1orb1gvM3dIcmp6M1hkUFR1MkhQWVpT?=
- =?utf-8?B?VVVHTlpUVkw3QTZrS3MrZGZBSkdDa2ZiKzl3aC9qSy9OWHVsNjlxckR5cStu?=
- =?utf-8?B?M2IyR1dwbUZYNU40THZlZmEzNlZSWTNyalo3TVRwWTRFZmdTMEs5ZGNLSExI?=
- =?utf-8?B?QWpCZHJhYng0VnlZT2sxL3lFcE9uY1I1K1BqQnNiamNaMlRnTGdFMnFpL0xU?=
- =?utf-8?B?OW1KYjNYTEU5bzc3anU0NHJDUGZQM3lYUGMzOUQwR1lXZWtla3pnUFFQRnVJ?=
- =?utf-8?B?ZjVENndjVi9jbVpYTGI5aU5ySnZWODlsSUdMNGs5SlN6M2ZwbGZRNVBMeFlP?=
- =?utf-8?B?WjV5Nk4yS2JQYjZJNVBySnhqZ2JWRG1jelhTKytHbUZxbjJtbXpKaTJDTVJn?=
- =?utf-8?B?UHI0YkJJa3pST05EeU1maGR5c1VVTmVWVy9vRER0amlYYXhHaCtZSUp1YTJP?=
- =?utf-8?B?empBb2REWWVXMHdZOUVwMENEV0dtMlA4UUpaZXAxWGhqYmlEbnhoeHppNW1m?=
- =?utf-8?B?T0pBeHhyTjdaOUIrZGl5ZGhoaVVkTkRaaEE2am1iN0hqVkczRGhub1VrNnU4?=
- =?utf-8?B?NzBGcWYwN0FsS0JndDZpOE9TaUErdjUvZE9zRGVSL29VVVR6dkZKU1pHVkZr?=
- =?utf-8?B?bnZGUmpQc2czbFRmek0yVHJobDRtMjZCMFQ4N3JUdDZPdlUxUUMyUFlaOVc5?=
- =?utf-8?B?YU9jT2d6MWVtaVg4YXpNOFJ5U283L0E0dWJGOWMyOC9UYk5nWEpRNzFoMXls?=
- =?utf-8?B?dkNhZlBERjJzbSttMXBESXZReWM4WVBzdlByRmtqMFp6b2FYaVAybEpWdmQ4?=
- =?utf-8?B?SitzT1lxRDBZc09DakY0TDQxUEo2c1hsR2Y5a3ZtekoxczVmeUdJQ1RobGRt?=
- =?utf-8?B?K1pLcDZQSWt0U1hEVjZ1SVBrMVNERTZFVEluM1JhbENjVTNJRUszQnNIZ0lC?=
- =?utf-8?B?NFc1SWw0NW9JZFh3Z1J2aEdvT3FHTlFWSVFwcTBSQTlSTjFORkdHdHlTajR1?=
- =?utf-8?B?VzY3cXlWWFZ2b002anUzeGR6K2hkSExOSjlQRlQ3Ukl5bndZUVgxY0ZPdEp4?=
- =?utf-8?B?d1owZnEzVWdBVEdSekgrR2ZyOXNwdXNIV0FEb3YwOGs4Vk0zZ1dVaWVucUVt?=
- =?utf-8?B?N05CQkJvaW90OHN3MkxFbFhDL3ZtVklYRG1XOU16Sk5xMm1ONTZ6WlIwZnYw?=
- =?utf-8?B?bzlDWUV6Ri8zUTlST3MwR2Q5QkZSWm81UlIvUmRPOFF5MncwRUZWWnk4MStn?=
- =?utf-8?B?a2pEZlB1YXltdEp4Nnl4eXdWM0xZemRpUVJTQ0s0SDA4am12Qnh0MXZWUDYr?=
- =?utf-8?B?b0tUUXJYOHNERnVuQWd0akFYNGdPK2dPZ3Jnb3BLQ1h6c1NiMEFrbmRhUE5Q?=
- =?utf-8?B?WmJQaFFtaWxCSjg0RTd4SXJBVmZ2eXJ4RHZZQmljSFpyWUgwOHlsQ05VcDBM?=
- =?utf-8?B?cm5Oa2hWM1krMUlrUnptT0pBZzdTdWk0UDRUMytDQjVaOGZUQzBPc2srcndT?=
- =?utf-8?B?VWtkK2RwNjlZVEE1UTdVb3F3cHRSK1NZNnEzUVZhcnZKSjdUeDJXdW1BK3lN?=
- =?utf-8?B?TGpRQ0FsZzNjOUExNHRlUzdUVW9XM3ZLOExiQ0ZuUjRKRnlraFR4R1JkaGJz?=
- =?utf-8?B?L2xrT1FLWHNHYitEOHdwS2M3V3BIUTFqRFh4RXROaEpxQkFsK28veVkrSDA2?=
- =?utf-8?B?c0ZWRWszd1hRYnUvU2d3M2Z0bk5YUExaM1h3eHpUQkZ4SWVycWhmU28ybjJL?=
- =?utf-8?B?aWNlT2FzRi9LcGZBNmthOFVjVnBXR1QrNFAvYWpRbmx4NG0wZ2t2UkxMbEQ3?=
- =?utf-8?Q?ds7EJ0AuvH/OeJuoxPJ41Wbzu?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1af71c5a-30c3-4cf6-ce74-08db23c1686b
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB5229.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 12:49:39.2331
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 5IJuVlG3xFr+RVD7cAiSC8e76OVt1DDpxMMzpSPe+GkiNVWghdplRoEyKsL5FmKToQC89lXK9iNKd8wGKzAM8w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB8113
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/23 10:06, Nikita Zhandarovich wrote:
-> cmdline_find_option() may fail before doing any initialization of
-> buffer array. This may lead to unpredictable results when the same
-> buffer is used later in calls to strncmp() function.
-> Fix the issue by returning early if cmdline_find_option() returns -1.
+On 3/12/23 19:06, Jonathan Cameron wrote:
+> On Mon, 6 Mar 2023 11:17:15 +0200
+> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
 > 
-> Found by Linux Verification Center (linuxtesting.org) with static analysis
-> tool SVACE.
+>> Some light sensors can adjust both the HW-gain and integration time.
+>> There are cases where adjusting the integration time has similar impact
+>> to the scale of the reported values as gain setting has.
+>>
+>> IIO users do typically expect to handle scale by a single writable 'scale'
+>> entry. Driver should then adjust the gain/time accordingly.
+>>
+>> It however is difficult for a driver to know whether it should change
+>> gain or integration time to meet the requested scale. Usually it is
+>> preferred to have longer integration time which usually improves
+>> accuracy, but there may be use-cases where long measurement times can be
+>> an issue. Thus it can be preferable to allow also changing the
+>> integration time - but mitigate the scale impact by also changing the gain
+>> underneath. Eg, if integration time change doubles the measured values,
+>> the driver can reduce the HW-gain to half.
+>>
+>> The theory of the computations of gain-time-scale is simple. However,
+>> some people (undersigned) got that implemented wrong for more than once.
+>>
+>> Add some gain-time-scale helpers in order to not dublicate errors in all
+>> drivers needing these computations.
+>>
+>> Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
 > 
-> Fixes: aca20d546214 ("x86/mm: Add support to make use of Secure Memory Encryption")
-> Signed-off-by: Nikita Zhandarovich <n.zhandarovich@fintech.ru>
+> Trying not to duplicate what Andy has raised...
+> 
+> 
+> At some stage I want to go through the maths very carefully but it's
+> not happening today and I don't want to delay resolving other remaining comments
+> so that can wait for a later version. I'm sure it's fine but I like to be
+> paranoid :)
+> 
 
-Acked-by: Tom Lendacky <thomas.lendacky@amd.com>
+This is more than welcome! I tried to add some test cases for verifying 
+some parts - but extra pair of eyes is always more than appreciated! 
+I've written and read way too many bugs to not appreciate a healthy 
+amount of paranoia :)
 
-> ---
-> v2: per Borislav Petkov's <bp@alien8.de> remarks:
-> - return early if cmdline_find_options() fails with -1 instead of zeroing out
-> buffer;
-> - use correct Fixes: commit hash
+>> +int iio_gts_get_total_gain(struct iio_gts *gts, int gain, int time)
+>> +{
+>> +	const struct iio_itime_sel_mul *itime;
+>> +
+>> +	if (!iio_gts_valid_gain(gts, gain))
+>> +		return -EINVAL;
+>> +
+>> +	if (!gts->num_itime)
+>> +		return gain;
+>> +
+>> +	itime = iio_gts_find_itime_by_time(gts, time);
+>> +	if (!itime)
+>> +		return -EINVAL;
+>> +
+>> +	return gain * itime->mul;
+>> +}
+>> +EXPORT_SYMBOL(iio_gts_get_total_gain);
 > 
->   arch/x86/mm/mem_encrypt_identity.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
+> All of them want to be in the namespace.
+
+Seems like I accidentally did not use the EXPORT_SYMBOL_GPL for this 
+one. It must thus have evaded my conversion to name space one. Thanks!
+
 > 
-> diff --git a/arch/x86/mm/mem_encrypt_identity.c b/arch/x86/mm/mem_encrypt_identity.c
-> index 88cccd65029d..c6efcf559d88 100644
-> --- a/arch/x86/mm/mem_encrypt_identity.c
-> +++ b/arch/x86/mm/mem_encrypt_identity.c
-> @@ -600,7 +600,8 @@ void __init sme_enable(struct boot_params *bp)
->   	cmdline_ptr = (const char *)((u64)bp->hdr.cmd_line_ptr |
->   				     ((u64)bp->ext_cmd_line_ptr << 32));
->   
-> -	cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer));
-> +	if (cmdline_find_option(cmdline_ptr, cmdline_arg, buffer, sizeof(buffer)) < 0)
-> +		return;
->   
->   	if (!strncmp(buffer, cmdline_on, sizeof(buffer)))
->   		sme_me_mask = me_mask;
+> 
+>> diff --git a/drivers/iio/light/iio-gts-helper.h b/drivers/iio/light/iio-gts-helper.h
+>> new file mode 100644
+>> index 000000000000..4b5a417946f4
+>> --- /dev/null
+>> +++ b/drivers/iio/light/iio-gts-helper.h
+> 
+> ...
+> 
+>> +int iio_gts_find_new_gain_sel_by_old_gain_time(struct iio_gts *gts,
+>> +					       int old_gain, int old_time_sel,
+>> +					       int new_time_sel, int *new_gain);
+>> +int iio_gts_build_avail_tables(struct iio_gts *gts);
+>> +int devm_iio_gts_build_avail_tables(struct device *dev, struct iio_gts *gts);
+>> +int iio_gts_build_avail_scale_table(struct iio_gts *gts);
+>> +int devm_iio_gts_build_avail_scale_table(struct device *dev, struct iio_gts *gts);
+>> +int iio_gts_build_avail_time_table(struct iio_gts *gts);
+>> +int devm_iio_gts_build_avail_time_table(struct device *dev, struct iio_gts *gts);
+> 
+> Given most modern IIO drivers use fully devm_ based probing, for now I would not
+> expose anything else.  That will reduce the interface a lot which I think
+> is probably a good thing at this stage.
+> 
+> Keep the non devm stuff internally though as it is a nice structure to have
+> an I can see we may want some of these in non devm form in the future.
+> 
+> Similarly - for now don't expose the individual table building functions
+> as we may never need them in drivers.  We (more or less) only support interfaces
+> that are used and so far they aren't.
+> 
+> For other functions it's worth thinking about whether to not export them
+> initially. I haven't been through them all to figure out what is not currently used.
+> 
+>> +void iio_gts_purge_avail_scale_table(struct iio_gts *gts);
+>> +void iio_gts_purge_avail_time_table(struct iio_gts *gts);
+>> +void iio_gts_purge_avail_tables(struct iio_gts *gts);
+>> +int iio_gts_avail_times(struct iio_gts *gts,  const int **vals, int *type,
+>> +			int *length);
+>> +int iio_gts_all_avail_scales(struct iio_gts *gts, const int **vals, int *type,
+>> +			     int *length);
+>> +int iio_gts_avail_scales_for_time(struct iio_gts *gts, int time,
+>> +				  const int **vals, int *type, int *length);
+>> +
+>> +#endif
+> 
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
