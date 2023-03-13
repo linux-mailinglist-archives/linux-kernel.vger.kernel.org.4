@@ -2,202 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 551FB6B7D33
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:15:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2DE6B7D0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:11:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231222AbjCMQPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:15:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S230223AbjCMQLS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:11:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52464 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229754AbjCMQPd (ORCPT
+        with ESMTP id S229505AbjCMQLQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:15:33 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15F6570A0;
-        Mon, 13 Mar 2023 09:15:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678724130; x=1710260130;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=xbyIRyOPRwgMQ6+VGNyTHFXmR2By6+UJNs8MEd95ld0=;
-  b=H5z0BavZt1gHhGSRrFmg9sHuXmOZDjsks4agtAEwqmQhBg0ee38Keqvs
-   DIUTs8/YHEMnYNA+A9PhmNSUGf/jAwq053z5H/hTue2NiWfTB2CMyKrGM
-   0pORGPxK79c8wu/Rl9XOYPJrQ7zXbGIc+nglTffKtLcml59so9Kea/Pqw
-   votF7h714CAZXGpUmViS0X2RWS92P5HnOlGZNb9/agvgoyJw2J80Supch
-   O9/5rozgDxSSgtYcoc4FSX+ZUD03k3RQ3EfLIcx3PEtSFIw2V99R2Zac6
-   /3ChxJm2fC+eM2uLXv7TPtpEx+s2F4jI13gnzhFusUwJ0tEjxQRoWIOeR
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325552297"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="325552297"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:11:15 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="788986763"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="788986763"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by fmsmga002.fm.intel.com with ESMTP; 13 Mar 2023 09:11:13 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 09:11:10 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 09:10:34 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 09:10:34 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.174)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 13 Mar 2023 09:10:20 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=WLShmqSR8s6S3j6gEVLM41T9WL+sIwLyRt/oNaKYdSqDXEJYN8xFwNRTsbrNqHuXim7zE37v8NseUq+IZq+mF9sJxViWCpT++XRh6wgyWO58JifR7J1v43AWQd7ybAPetYR4acMqOjerp++xuA8r7kS0D2PPRnCfoBtgfPpnr8uz0q9gnjhBwBvP6W01XmA7tICLiMi+LTUC4jtF9W+anTgCchMKLw2vTJaEtGKMsWgVn0MBpqwt66Mc1joaxPk3ADwS+wM/YrBJeFRYf9+MZ9lcro2kCXO26qtBfmEe54vntndiwj/mPrcjieYSWR7PjWtG/bQYYtHhW986YFVXVw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xbyIRyOPRwgMQ6+VGNyTHFXmR2By6+UJNs8MEd95ld0=;
- b=i15Ww1vy1LZlmqMTXgLpX86l0AmX1mA/+Ezp80rB9xKME1LCxh93oIv3i9HW2aFcEDaRgYkr8MkRvJ1lZTL2jZpbvODDXIo7uvfpaJ9sTvgJ3s06qmZebvrUQDnPT0hEMuqtfd7kE0CFXotk1qc3B2IwHVP3DgSpEICkDFmpiN8WxrbP3mc3FgNviDxrESlK88ghOoV96FqOG5JhMbl3zbsMwSpl/Wm7f3bEXsuU+lFTIDug1yv9tZz8VZchld6dhbaC57UdNdj+NyOlDR5bCMA2QNHtLTpXvp59SDMo4uhqDS8+IYJdSMFnxBHj+Tfb4MXuUdLP789MhEy5dDmmiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com (2603:10b6:300:24::14)
- by CO6PR11MB5586.namprd11.prod.outlook.com (2603:10b6:5:35d::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 16:10:15 +0000
-Received: from MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536]) by MWHPR11MB1392.namprd11.prod.outlook.com
- ([fe80::d41f:9f07:ed56:a536%3]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 16:10:15 +0000
-From:   "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-To:     "bp@alien8.de" <bp@alien8.de>
-CC:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 38/41] x86/fpu: Add helper for initing features
-Thread-Topic: [PATCH v7 38/41] x86/fpu: Add helper for initing features
-Thread-Index: AQHZSvtH//l8GkMHSEuT277fH1R14q71m1QAgAJ6WACAAItGgIAAVasA
-Date:   Mon, 13 Mar 2023 16:10:14 +0000
-Message-ID: <04f821e6d4a8a736e6df2eb73ce811022cd42537.camel@intel.com>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
-         <20230227222957.24501-39-rick.p.edgecombe@intel.com>
-         <ZAx6Egh6U5SCZEby@zn.tnic>
-         <3385eaf888f4178607ce4621ae2103d08ba79994.camel@intel.com>
-         <20230313110335.GAZA8DB6PNSMGOGHpw@fat_crate.local>
-In-Reply-To: <20230313110335.GAZA8DB6PNSMGOGHpw@fat_crate.local>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MWHPR11MB1392:EE_|CO6PR11MB5586:EE_
-x-ms-office365-filtering-correlation-id: cc5d0c87-bec2-4438-8046-08db23dd6e5b
-x-ld-processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: YeTQKM515azt8rVV0S4JIlxlTvv8gQdwBlvrKkehJL6J3RT84crL0wPaa3R5f4nHg8Q0Hf90zkA5YBmKNYt9xH8u9Q+gH/DSj4PAlbWS6/39enTLztzbNjVA4A4In9PQ2y9E/o89714ndZ3z1rY0sUmehpFCiXwgNHmHX/ZLxtTY6QR/C+pjVPG4+HxFfpAhjzQYGuwKVnq5yfbtEg6yRSO5zwxkma8wKKbRp8hZFTzJctgYzSseof4EmXExra3zNEdZw0FRCMPYTdLo+iA5hP/dN7n37qkl2DQqfLJK8b+omJ07tVRK71m8NyW1NsizNBeynkd6Kj3Y+7/D8i1aYdwyKys9hUexdSZbUQenKavjtgpHgU6Mn+JT4Z3xtTvqcYOnpk6ZDov8vS52Yta4Nzcouvq8V3IhtMRqOMZ7hA2upzt8hEOoVeVGpYaSUvUwd3Nho77cYk2PM1VO5rJJN/dfSDb/u3ylzBhAxGdjPDRca9rdqcayA5UPhnuARbW3k+AB4KBs3vm9SpWmAX2e61Ps7dM2Qxiy6bWrR0aedyUlqnexMFxFAdEuLh2HEK+ygbEvQbpe79cC1jia4foBFWYvDa9nJJLSSpQ+dG+g2ZvY6Nb0F3uHSIU65a8UMldeeGwtkjbEdx9cVAOWuGWD4mKu2KdfOA4tERkyjaHHN3MHPI+AdBEfK5xrlZYJ3COT1sS8Z+JDUb6s+bagtIgBKIQp2t2Hgg7xT9gldSLwASI=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MWHPR11MB1392.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(376002)(366004)(346002)(39860400002)(396003)(451199018)(38070700005)(86362001)(36756003)(38100700002)(82960400001)(122000001)(66476007)(66556008)(66946007)(4326008)(6916009)(76116006)(66446008)(64756008)(8676002)(41300700001)(54906003)(478600001)(8936002)(7406005)(5660300002)(7416002)(2906002)(2616005)(6486002)(71200400001)(6512007)(26005)(186003)(6506007)(316002)(99106002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?SmdDSzBKK3Rpb0tTRDhDMTA5SEUzK0VFN3l3azY5Ull1dlRCQjRwRTJUR1ZN?=
- =?utf-8?B?ZkRQTWFpbnVFdnFUUjcwR1ozWGNwdHYxMkQwWTBROTJEeUJQOHFYWWN4cjlz?=
- =?utf-8?B?Y05aaTg1dnl4SGZneHNPaEpzNWNHc2NpZUszYVlLU3BkZEw3czRKWWNuMGhO?=
- =?utf-8?B?bjNkM0REY3V1TGF2NitlQWZ0ekUvUnlSa2t1aXh2bDRRSFQ0SWhKVUZCMjFU?=
- =?utf-8?B?MGIzRzFVK1FGMGFyYjM2cVU3aUhOYzg0MTQ2RE9hNi9yNUhscTZ4WXhjVVBQ?=
- =?utf-8?B?ZS9OdE9WdVpmVXp0d3IySXNXeWEvVXhqd2ZoWllCVy9MS1JXNk1kZ3lGeXBn?=
- =?utf-8?B?bmI4SnllZU5yeHlWYkMrSHJGOFZmTXZpRnFJU05lM2p6NGxUeVFwdmxnK1h5?=
- =?utf-8?B?RzV5dFVhTjhza1FEcTlhL1cwN1RDNU1WOERydEx2Z0lpTXlyUUFEcTJVdU1V?=
- =?utf-8?B?RkZKTFVadEU0czRBUmswWGFTS0xmbmJnc3IxaC9uMXNyc2NmTFNYZ2FKd2tS?=
- =?utf-8?B?TCtYNHRpL29YL1pJRFdtZ25DOE1XVXFQL2pVSXl1VS9JV0Yva2VEckdVQjkz?=
- =?utf-8?B?QVdYMW1rQ3NVUU5yY0ppeVNJMGdyT0xtMG9FL2pvQTRGTUc1Syt5am9aQXQx?=
- =?utf-8?B?TnFpT0FFWFBXT29PREpHanRrekErQ2ZVVTIyeUF4OXBLZ21SQ0lOYjlNWlZm?=
- =?utf-8?B?ZU1qcmRRUEh1ckorQ3hxSHR3djJWK0Q5OW9zOHkyQ05ZUEN1QTZXUkkxOG9M?=
- =?utf-8?B?Q0tEb0h3MkpSemtadkdjSm12dm40dUk1VFpQaFBrVUVyOVpSUnd1VXdYZEVY?=
- =?utf-8?B?eW42MHFNcnR0RnlYSTFBMzdoNjFtU0ZnMEFuTFp0Zk1BNVhFNVowd2UxY2Fu?=
- =?utf-8?B?dmR1NThSbEJuRVFxN3E2dWdHS1ArOVRoZGlrM2RYT3JXcW95UWdIUmF2RXl5?=
- =?utf-8?B?Ri81bkswaWQ0ckhBNVNLdXhXR0NVMlVzNlhlN2ZFVldxbldGUUE0ZnEyL0Fq?=
- =?utf-8?B?TVJqN0FoeE4va2tDSysrcUtIYWk5NjNabkdKM0pUZ3RQQTFwb2dGeFZPWmNm?=
- =?utf-8?B?K1FZZGIzSFpZMWgvS2ZiMHN6VnJDcUtxTHlRK2E2MzdaZnZNelNpdE9XL3Z2?=
- =?utf-8?B?K1NrMTlWOVV4ZEg0bHdZR0h0S1VzKzVBRmRxbkl2alI1SGhFUFkycmRua3Zo?=
- =?utf-8?B?a0pLU1JLQ0F6SDRkWHhYaHNKczlnZDFDaVpVYzYxZHpnK0kvRERhNHFBZUta?=
- =?utf-8?B?OUYzWVVwRnZKOStWZXg5SU8zU05SdEhlYUpkdllabVBXZVBmVEZjc0E3emc3?=
- =?utf-8?B?dHJKdHJhZTRmTXQrZEdVKy9sNXJYL3F0WXU3NWVzSVFmRDlVS2l2dzgrc0Jq?=
- =?utf-8?B?TGhVNFZuWW53RlFZUzFyTFNUeTE3MnltaEFCeHlXOFJWMmFtbEpGMVNheGl3?=
- =?utf-8?B?SUFUVzFxZm40TTVVMzNHL2tCTjBxYkVlTklHdkRSdjNTMGZRVnBNMDBFdlhr?=
- =?utf-8?B?b1A0YU1mcm42bHRhclZ1N1VaV3F0RjNnSXJlQnV4NHBNYWh6UUNMS0tUSmo3?=
- =?utf-8?B?UTZyamdpNlVhQXZhL1B4cDZDN1JKODM2Z1hUUlplNEVnQXBEMGFsNWdUNWEz?=
- =?utf-8?B?cXNVeTdtNXNrby9Eb2lmeERDYUJLd0theGZCY2RENzlCYTA1WkR2UElOTzJS?=
- =?utf-8?B?Sk1IM2RoQW9ERkorVHZBVFVQejA4dmx5QnhsdlcvcjFMd0gvL1BPclhmeDZp?=
- =?utf-8?B?dVJ1c3J3UzlsbGl5QlJvVXJ4algwRFVYTmdDL0p4TWhhR2QvZDJlRVRLVU91?=
- =?utf-8?B?MzV6VVBPYmd0a1VRRnVzVVlBUVN1TmJZOEVuWTJOTmVyb2VxRjNFWTRKNXln?=
- =?utf-8?B?UCs3Rkp6VmJpOEczempnRHRPbzI4ZnNGS1FwNXFWbzRJY3l1dytweS9pcjFj?=
- =?utf-8?B?RUtJWW83V2pEL3Z4WEx2N0R1NEtPRUNEc2EvU2gvMUVRMUZiUVA3QnBYbW5s?=
- =?utf-8?B?VWlacmR4VzdSTXFvNTdndVFDOXY0Y0daQjh4cm5QdUdWRUZMOXcrOTlPOXF0?=
- =?utf-8?B?eEtIaC94Sk9PV1dZYVhvNVkzZEZvNUxxcUlTQlV1SS80ZUN6Z1BnNEJERDkz?=
- =?utf-8?B?RnJKQWVZWjJGclEwTTVmaVFiZWdlTDhOQmhzdW5TUUdYZXkzL1dnMnlKMjUr?=
- =?utf-8?Q?CLd9vtv3UhxmfSlocE8xOSs=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <502F7F5861171447ACC9017BDE752B47@namprd11.prod.outlook.com>
-Content-Transfer-Encoding: base64
+        Mon, 13 Mar 2023 12:11:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1C93174304
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:10:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678723830;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=Od6/H639PYAwrqiiKkC/+gT3zZNHjYxP+NHFrRa3plo=;
+        b=AymGYGu2rzH5OnLnkwJBuLBMxD21cIoYqIUllufPLgTTPE034z0YomV4q2wxiHqCyG9a+l
+        txYqN5Cv0JThhYHNSpoBLCjje2nLzSnpFc0WcOM35LVczNB1KPmHAaMHHP3Ym2bB0DQuj6
+        5tEIB4tHIbBZi7FaiEhAnTKtew1/RBU=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-490-LOVb-zubMPKPVaXeaKjAzg-1; Mon, 13 Mar 2023 12:10:28 -0400
+X-MC-Unique: LOVb-zubMPKPVaXeaKjAzg-1
+Received: by mail-ed1-f70.google.com with SMTP id w7-20020a056402268700b004bbcdf3751bso17521846edd.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:10:28 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678723827;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Od6/H639PYAwrqiiKkC/+gT3zZNHjYxP+NHFrRa3plo=;
+        b=G65MHyUhKy9dme/1/bqewJPAxxO+pfRDIeM+CvM5GV1IWA3Y7/6XbBkjdQCID5AaEW
+         cz5xIhDI7aLIyq06tdeAiwWXhfuaKOShjkoa10ScrJDYAgAfZx5jf/14KVZEXzYGLrrg
+         ddY5gB+kyag4lQ9R0m+KWBpLbrzQSilj0YUm4ROrovhyU5go5Y3wdcL/KLwJ537XsAg7
+         ZGbAFJRgud3TVTvQnFEvvsjfGFdwbWajVZIIw8Sq+GaMo8VDvWcdcP47kJEwkLJtAXe4
+         W7SugaL0NSHjXXolG2D7CkcqmEEnx5ZEvmjwSQzyzkN02NqSVBFy4K/iqi/j9mpmJA1l
+         76aA==
+X-Gm-Message-State: AO0yUKWVy6sN2XjM3ONe5Y1uwZE9SsIohh/hzuQ41DQO1V08v31M1AAI
+        MlhrIDbNV9FEHA+gQ5kv6Ad4cN9As3mRZC0ohsa9+BNpqq6cH7jJmgIx3eRnH2VGTJF7KBcq0S8
+        dI4zynZnrKuw4rtUIze8vgIwe
+X-Received: by 2002:a17:907:6eab:b0:86f:64bb:47eb with SMTP id sh43-20020a1709076eab00b0086f64bb47ebmr40242818ejc.3.1678723827650;
+        Mon, 13 Mar 2023 09:10:27 -0700 (PDT)
+X-Google-Smtp-Source: AK7set824KFDb82qxno6QuOMylDaFSeEjfD0D+kLd+4F9tgRNO68SWM0PRGf6gRU/Kr7BuF4WseHJg==
+X-Received: by 2002:a17:907:6eab:b0:86f:64bb:47eb with SMTP id sh43-20020a1709076eab00b0086f64bb47ebmr40242785ejc.3.1678723827310;
+        Mon, 13 Mar 2023 09:10:27 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id ox29-20020a170907101d00b008e53874f8d8sm3560405ejb.180.2023.03.13.09.10.26
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 09:10:26 -0700 (PDT)
+Message-ID: <7f82f241-39ee-15e0-1ae7-e98e50730c95@redhat.com>
+Date:   Mon, 13 Mar 2023 17:10:25 +0100
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MWHPR11MB1392.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cc5d0c87-bec2-4438-8046-08db23dd6e5b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 16:10:14.8823
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: AVKCKEcCMNik/oi4Z170ysCwfpZvSEvusg2K0WNRNM93EPRa7aVDZ5ekp+LB5EfRPVbYr9QnvcIB/ArKCGTtiA9qvQrNEwBTIUGTIi/oAQE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR11MB5586
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 4/8] platform/x86/intel/ifs: Introduce Array Scan test
+ to IFS
+Content-Language: en-US
+To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, rostedt@goodmis.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+References: <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230301015942.462799-1-jithu.joseph@intel.com>
+ <20230301015942.462799-5-jithu.joseph@intel.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <20230301015942.462799-5-jithu.joseph@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -205,40 +90,224 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIzLTAzLTEzIGF0IDEyOjAzICswMTAwLCBCb3Jpc2xhdiBQZXRrb3Ygd3JvdGU6
-DQo+IE9uIE1vbiwgTWFyIDEzLCAyMDIzIGF0IDAyOjQ1OjA4QU0gKzAwMDAsIEVkZ2Vjb21iZSwg
-UmljayBQIHdyb3RlOg0KPiA+IFRoZXNlIHR3byBhcmUgZnJvbSB0aGUgZXhpc3RpbmcgY29kZS4g
-QmFzaWNhbGx5IHRoZXkgZ2V0IGV4dHJhY3RlZA0KPiA+IGludG8NCj4gPiBhIG5ldyBmdW5jdGlv
-bi4NCj4gDQo+IEkga25vdyBidXQgeW91IGNhbiBmaXggdGhlbSB3aGlsZSBhdCBpdC4NCg0KT2su
-DQoNCj4gDQo+ID4gSSBkaWQgaXQgdXAsIGFuZCBpdCBtYWtlcyB0aGUgY2FsbGVyIGNvZGUgY2xl
-YW5lci4gQnV0IEknbSBub3Qgc3VyZQ0KPiA+IHdoYXQgdG8gdGhpbmsgb2YgaXQuIElzIHRoaXMg
-bm90IG1peGluZyB0d28gb3BlcmF0aW9ucyB0b2dldGhlcj8NCj4gPiBUb2RheQ0KPiA+IGdldF94
-c2F2ZV9hZGRyKCkgcHJldHR5IG11Y2gganVzdCBnZXRzIGEgYnVmZmVyIG9mZnNldCB3aXRoIHNv
-bWUNCj4gPiBjaGVja3MuIE5vdyBpdCB3b3VsZCBjb21wdXRlIHRoZSBvZmZzZXQgYW5kIGFsc28g
-c2lsZW50bHkgZ28gb2ZmDQo+ID4gYW5kDQo+ID4gY2hhbmdlcyB0aGUgYnVmZmVyLg0KPiANCj4g
-T2ssIHNvIHdoeSBkb24ndCB5b3Ugd3JpdGUgdGhlIGNhbGwgc2l0ZSB0aGlzIHdheSBpbnN0ZWFk
-Og0KPiANCj4gICAgICAgICBjZXRyZWdzID0gZ2V0X3hzYXZlX2FkZHIoeHNhdmUsIFhGRUFUVVJF
-X0NFVF9VU0VSKTsNCj4gICAgICAgICBpZiAoIWNldHJlZ3MpIHsNCj4gICAgICAgICAgICAgICAg
-IGlmICh4ZmVhdHVyZV9zYXZlZCh4c2F2ZSwgWEZFQVRVUkVfQ0VUX1VTRVIpKSB7DQo+ICAgICAg
-ICAgICAgICAgICAgICAgICAgIFdBUk4oInNvbWV0aGluZydzIHdyb25nIHdpdGggdGhpcyBidWZm
-ZXIiKQ0KPiAgICAgICAgICAgICAgICAgICAgICAgICByZXR1cm4gLi4uOw0KPiAgICAgICAgICAg
-ICAgICAgfQ0KPiANCj4gICAgICAgICAgICAgICAgIC8qIE5vdCBzYXZlZCwgaW5pdGlhbGl6ZSBp
-dCAqLw0KPiAgICAgICAgICAgICAgICAgaW5pdF94ZmVhdHVyZSh4c2F2ZSwgWEZFQVRVUkVfQ0VU
-X1VTRVIpKTsNCj4gICAgICAgICB9DQo+IA0KPiAgICAgICAgIGNldHJlZ3MgPSBnZXRfeHNhdmVf
-YWRkcih4c2F2ZSwgWEZFQVRVUkVfQ0VUX1VTRVIpOw0KPiAgICAgICAgIGlmICghY2V0cmVncykg
-ew0KPiAgICAgICAgICAgICAgICAgV0FSTl9PTigiV1RGIikNCj4gICAgICAgICAgICAgICAgIHJl
-dHVybiAtRU5PREVWOw0KPiAgICAgICAgIH0NCj4gDQo+IE5vdyBpdCBpcyBjbGVhciB3aGF0IGhh
-cHBlbnMgYW5kIGl0IGlzIGEgY29tbW9uIGNvZGUgcGF0dGVybiBvZg0KPiB0cnlpbmcNCj4gdG8g
-Z2V0IHNvbWV0aGluZyBhbmQgaW5pdGlhbGl6aW5nIGl0IGlmIGl0IHdhc24ndCBpbml0aWFsaXpl
-ZCB5ZXQsDQo+IGFuZA0KPiB0aGVuIHJldHJ5aW5nLi4uDQo+IA0KPiBIbW0/DQoNClRoaXMgc2Vl
-bXMgbW9yZSBjbGVhci4gSSdtIHNvcnJ5IGZvciB0aGUgbm9pc2UgaGVyZSB0aG91Z2gsIGJlY2F1
-c2UNCnRoaXMgaGFzIG1hZGUgbWUgcmVhbGl6ZSB0aGF0IHRoZSBpbml0aW5nIGxvZ2ljIHNob3Vs
-ZCBuZXZlciBiZSBoaXQuIFdlDQp1c2VkIHRvIHN1cHBvcnQgdGhlIGZ1bGwgQ0VUX1Ugc3RhdGUg
-aW4gcHRyYWNlLCBidXQgdGhlbiBkcm9wcGVkIGl0IHRvDQpqdXN0IHRoZSBTU1AgYW5kIG9ubHkg
-YWxsb3dlZCBpdCB3aGVuIHNoYWRvdyBzdGFjayBpcyBhY3RpdmUuIFRoaXMNCm1lYW5zIHRoYXQg
-Q0VUX1Ugd2lsbCBhbHdheXMgaGF2ZSBhdCBsZWFzdCB0aGUgQ0VUX1NIU1RLX0VOIGJpdCBzZXQg
-YW5kDQpzbyBub3QgYmUgaW4gdGhlIGluaXQgc3RhdGUuIFNvIHRoaXMgY2FuIHByb2JhYmx5IGp1
-c3Qgd2FybiBhbmQgYmFpbCBpZg0KaXQgc2VlcyBhbiBpbml0IHN0YXRlLg0KDQpVbmxlc3MgdGhl
-IGV4dHJhIGxvZ2ljIHNlZW1zIG1vcmUgcm9idXN0PyBCdXQgaXQgaXMgYWx3YXlzIG5pY2Ugd2hl
-bg0KdGhlIGNoYW5jZSBjb21lcyB0byBkcm9wIGEgcGF0Y2ggb3V0IG9mIHRoaXMgdGhpbmcuLi4N
-Cg==
+Hi,
+
+On 3/1/23 02:59, Jithu Joseph wrote:
+> Array BIST is a new type of core test introduced under the Intel Infield
+> Scan (IFS) suite of tests.
+> 
+> Emerald Rapids (EMR) is the first CPU to support Array BIST.
+> Array BIST performs tests on some portions of the core logic such as
+> caches and register files. These are different portions of the silicon
+> compared to the parts tested by the first test type
+> i.e Scan at Field (SAF).
+> 
+> Make changes in the device driver init flow to register this new test
+> type with the device driver framework. Each test will have its own
+> sysfs directory (intel_ifs_0 , intel_ifs_1) under misc hierarchy to
+> accommodate for the differences in test type and how they are initiated.
+> 
+> Upcoming patches will add actual support.
+> 
+> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+> Reviewed-by: Tony Luck <tony.luck@intel.com>
+> ---
+>  drivers/platform/x86/intel/ifs/ifs.h  |  3 +
+>  drivers/platform/x86/intel/ifs/core.c | 85 +++++++++++++++++++--------
+>  2 files changed, 62 insertions(+), 26 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
+> index ab168ddf28f1..b8b956e29653 100644
+> --- a/drivers/platform/x86/intel/ifs/ifs.h
+> +++ b/drivers/platform/x86/intel/ifs/ifs.h
+> @@ -137,6 +137,9 @@
+>  #define SCAN_TEST_PASS				1
+>  #define SCAN_TEST_FAIL				2
+>  
+> +#define IFS_TYPE_SAF			0
+> +#define IFS_TYPE_ARRAY_BIST		1
+> +
+>  /* MSR_SCAN_HASHES_STATUS bit fields */
+>  union ifs_scan_hashes_status {
+>  	u64	data;
+> diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
+> index 62c44dbae757..2237aaba7078 100644
+> --- a/drivers/platform/x86/intel/ifs/core.c
+> +++ b/drivers/platform/x86/intel/ifs/core.c
+> @@ -16,6 +16,7 @@
+>  
+>  static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
+>  	X86_MATCH(SAPPHIRERAPIDS_X),
+> +	X86_MATCH(EMERALDRAPIDS_X),
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
+
+Note you can add driver_data to a match table like this. What you should
+do here is use the driver data to point to the const ifs_hw_caps discussed
+before, so what you get here is:
+
+#define X86_MATCH(model, data)                          \
+        X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,    \
+                INTEL_FAM6_##model, X86_FEATURE_CORE_CAPABILITIES, (unsigned long)(data))
+
+static const struct ifs_hw_caps saphire_rapids_caps = {
+	.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+	.test_num = 0,
+};
+
+static const struct ifs_hw_caps emerald_rapids_caps = {
+	.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+	.test_num = 0,
+};
+
+static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
+	X86_MATCH(SAPPHIRERAPIDS_X, &saphire_rapids_caps),
+	X86_MATCH(EMERALDRAPIDS_X, &emerald_rapids_caps),
+	{}
+};
+MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
+
+and then drop all the code related to having an array of ifs_device structs
+(of which only 1 will ever get used) and instead at the beginning of
+ifs_init(void), after:
+
+        m = x86_match_cpu(ifs_cpu_ids);
+        if (!m)
+                return -ENODEV;
+
+add:
+
+	ifs_device.hwcaps = (const struct ifs_hw_caps *)m->driver_data;
+
+And then you can pretty much drop all the rest of this patch and we
+end up with much nicer code for differentiating between the models :)
+
+Regards,
+
+Hans
+
+
+
+
+
+
+> @@ -24,23 +25,51 @@ ATTRIBUTE_GROUPS(plat_ifs);
+>  
+>  bool *ifs_pkg_auth;
+>  
+> -static struct ifs_device ifs_device = {
+> -	.ro_data = {
+> -		.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+> -		.test_num = 0,
+> +static struct ifs_device ifs_devices[] = {
+> +	[IFS_TYPE_SAF] = {
+> +		.ro_data = {
+> +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+> +			.test_num = IFS_TYPE_SAF,
+> +		},
+> +		.misc = {
+> +			.name = "intel_ifs_0",
+> +			.minor = MISC_DYNAMIC_MINOR,
+> +			.groups = plat_ifs_groups,
+> +		},
+>  	},
+> -	.misc = {
+> -		.name = "intel_ifs_0",
+> -		.minor = MISC_DYNAMIC_MINOR,
+> -		.groups = plat_ifs_groups,
+> +	[IFS_TYPE_ARRAY_BIST] = {
+> +		.ro_data = {
+> +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_ARRAY_BIST_BIT,
+> +			.test_num = IFS_TYPE_ARRAY_BIST,
+> +		},
+> +		.misc = {
+> +			.name = "intel_ifs_1",
+> +			.minor = MISC_DYNAMIC_MINOR,
+> +		},
+>  	},
+>  };
+>  
+> +#define IFS_NUMTESTS ARRAY_SIZE(ifs_devices)
+> +
+> +static void ifs_cleanup(void)
+> +{
+> +	int i;
+> +
+> +	for (i = 0; i < IFS_NUMTESTS; i++) {
+> +		if (ifs_devices[i].misc.this_device) {
+> +			misc_deregister(&ifs_devices[i].misc);
+> +			kfree(ifs_devices[i].rw_data);
+> +		}
+> +	}
+> +	kfree(ifs_pkg_auth);
+> +}
+> +
+>  static int __init ifs_init(void)
+>  {
+>  	const struct x86_cpu_id *m;
+>  	struct ifs_data *ifsd;
+>  	u64 msrval;
+> +	int i, ret;
+>  
+>  	m = x86_match_cpu(ifs_cpu_ids);
+>  	if (!m)
+> @@ -55,35 +84,39 @@ static int __init ifs_init(void)
+>  	if (rdmsrl_safe(MSR_INTEGRITY_CAPS, &msrval))
+>  		return -ENODEV;
+>  
+> -	if (!(msrval & BIT(ifs_device.ro_data.integrity_cap_bit)))
+> -		return -ENODEV;
+> -
+>  	ifs_pkg_auth = kmalloc_array(topology_max_packages(), sizeof(bool), GFP_KERNEL);
+>  	if (!ifs_pkg_auth)
+>  		return -ENOMEM;
+>  
+> -	ifsd = kzalloc(sizeof(*ifsd), GFP_KERNEL);
+> -	if (!ifsd)
+> -		return -ENOMEM;
+> -
+> -	ifsd->ro_info = &ifs_device.ro_data;
+> -	ifs_device.rw_data = ifsd;
+> -
+> -	if (misc_register(&ifs_device.misc)) {
+> -		kfree(ifsd);
+> -		kfree(ifs_pkg_auth);
+> -		return -ENODEV;
+> +	for (i = 0; i < IFS_NUMTESTS; i++) {
+> +		ifsd = NULL;
+> +		if (!(msrval & BIT(ifs_devices[i].ro_data.integrity_cap_bit)))
+> +			continue;
+> +
+> +		ifsd = kzalloc(sizeof(*ifsd), GFP_KERNEL);
+> +		if (!ifsd) {
+> +			ret = -ENOMEM;
+> +			goto err_exit;
+> +		}
+> +		ifsd->ro_info = &ifs_devices[i].ro_data;
+> +		ifs_devices[i].rw_data = ifsd;
+> +
+> +		if (misc_register(&ifs_devices[i].misc)) {
+> +			ret = -ENODEV;
+> +			kfree(ifsd);
+> +			goto err_exit;
+> +		}
+>  	}
+> -
+>  	return 0;
+>  
+> +err_exit:
+> +	ifs_cleanup();
+> +	return ret;
+>  }
+>  
+>  static void __exit ifs_exit(void)
+>  {
+> -	misc_deregister(&ifs_device.misc);
+> -	kfree(ifs_device.rw_data);
+> -	kfree(ifs_pkg_auth);
+> +	ifs_cleanup();
+>  }
+>  
+>  module_init(ifs_init);
+
