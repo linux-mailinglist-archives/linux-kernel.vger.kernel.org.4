@@ -2,163 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 378336B71E7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D526A6B71EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:02:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjCMJCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:02:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44576 "EHLO
+        id S229636AbjCMJCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229568AbjCMJBl (ORCPT
+        with ESMTP id S230453AbjCMJBy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:01:41 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3126F5F226;
+        Mon, 13 Mar 2023 05:01:54 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF30F5F50D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:57:54 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id s20so14687747lfb.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:57:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678697868;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=vG2hIsjaOd4MbHUHiVXsu6+98QpgUAMpZAz1HLFBAYw=;
+        b=rLCKnc6LXfF/l+vowgqu+45yxJxvQS6zrLssUXcoNGQL2pM7GLKBgql42hlynGkkZD
+         vGj+6eWu2GmxH0MMpcwK+UE9oKSrPf2LI1UEyyxvkC0XhffB9aBqLKpkTEBb1iHhXrY2
+         OudZZhiB7R8UDeGNreLdHlhVoZVj+Gnj0lD1svZYYO214PcEiS+9Il4OvPwTyHcW2KyY
+         o+engJreIQHPFMxna9ytRVoIaRSGbOI57HIpkAKNT6VYPlsESMypkyb0J6z+pRcEy+fr
+         KrAc/iJ0QVkA/uQj8Gn/mG/zttCfzWQ/QB6BBXILWjVFf6Gg5zcXSPTRIs7n1W8TYmU2
+         JbhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678697868;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vG2hIsjaOd4MbHUHiVXsu6+98QpgUAMpZAz1HLFBAYw=;
+        b=cMebF4DyCs5rTcuNHB/ZYIZeTWFSdoQJuB1OZjgkrNx3+LnwABXGUC/CxVzGzIhecH
+         4OkUdTkq5fohpTDTBwmixdX4LBD/ijCDvfmQ4sVNMDvqLrTH94+OoaldzTDNIrSv9rw6
+         QIB/lngtOiX+nCBtbL1IGqvpYlL7ANWWzNr7G4Lxe3/nZB/KM+TLTZERknRZgw0rxxyp
+         KXRZ9wxu+RexzRsU3lLoVS3u+3k4IR/52fvwcBDHM2Mt/uoDglYnZU+mJB3lzuhclGvY
+         nSsEpz9RR8IHESl4GiSrfboVohpUuqq0AmA6ci0MR6829YOcLfiFk9aWDFxG3E9MDT2b
+         duOg==
+X-Gm-Message-State: AO0yUKXwN6r7Ir+8jkYulRxU9DXRsM0MPHFvMCJ45R5yNS+1989R/5bl
+        1sH7iR1xaAX6j9GhAMaKhp+HSQ==
+X-Google-Smtp-Source: AK7set9EtBcxmlEICRY/EI2PNnRVRF2HUoh341r7FSr8bbFAZ81faYrNhqlaWpezNQf9esZ6fqJUFA==
+X-Received: by 2002:ac2:5fef:0:b0:4db:38aa:a2f4 with SMTP id s15-20020ac25fef000000b004db38aaa2f4mr9423816lfg.14.1678697868197;
+        Mon, 13 Mar 2023 01:57:48 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id z2-20020a056512376200b004d783b0d310sm892550lft.307.2023.03.13.01.57.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
         Mon, 13 Mar 2023 01:57:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A13A6B80E63;
-        Mon, 13 Mar 2023 08:57:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9392C433EF;
-        Mon, 13 Mar 2023 08:57:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678697864;
-        bh=bAgSafl+YS0IHZeCPHn+gGobAbOyUjtbi8a+ReztEEQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=KPewxC17XfHmWrbxIvL0bK7PRx0+7nsnfopEfNb4yBVp0t+clPkB/ysY0Q46E32SY
-         P+s7O4M8r3GcWeHd+LlRR7x/OvG30oB0AYVzsdkKRfe/R/QfMw/TZzhg3MZVCK9jqu
-         PxIvLGa656ps93FGxYsWfO2bS5cj9wEek2Fq4GXI=
-Date:   Mon, 13 Mar 2023 09:57:41 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
-        Derek Kiernan <derek.kiernan@xilinx.com>,
-        Dragan Cvetic <dragan.cvetic@xilinx.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "garnermic@fb.com" <garnermic@fb.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stanislav Jakubek <stano.jakubek@gmail.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Samuel Holland <samuel@sholland.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v1 3/3] misc: Add meta cld driver
-Message-ID: <ZA7lhcfxzhS5Waz/@kroah.com>
-References: <20230117094425.19004-1-Delphine_CC_Chiu@Wiwynn.com>
- <20230117094425.19004-4-Delphine_CC_Chiu@Wiwynn.com>
- <Y8Z1JxsLA6UKi805@kroah.com>
- <TY2PR04MB40321968150DC2E6FC2F307683B99@TY2PR04MB4032.apcprd04.prod.outlook.com>
+Message-ID: <39ada68d-e294-9602-f3f6-506b9a6645d8@linaro.org>
+Date:   Mon, 13 Mar 2023 09:57:46 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <TY2PR04MB40321968150DC2E6FC2F307683B99@TY2PR04MB4032.apcprd04.prod.outlook.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/2] interconnect: qcom: rpm: fix msm8996 interconnect
+ registration
+Content-Language: en-US
+To:     Johan Hovold <johan+linaro@kernel.org>,
+        Georgi Djakov <djakov@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Yassine Oudjana <y.oudjana@protonmail.com>,
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+References: <20230313084953.24088-1-johan+linaro@kernel.org>
+ <20230313084953.24088-2-johan+linaro@kernel.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230313084953.24088-2-johan+linaro@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 08:47:45AM +0000, Delphine_CC_Chiu/WYHQ/Wiwynn wrote:
-> Hi Greg,
-> 
-> Thanks for your comment!
-> 
-> > -----Original Message-----
-> > From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> > Sent: Tuesday, January 17, 2023 6:15 PM
-> > To: Delphine_CC_Chiu/WYHQ/Wiwynn <Delphine_CC_Chiu@wiwynn.com>
-> > Cc: patrick@stwcx.xyz; Derek Kiernan <derek.kiernan@xilinx.com>; Dragan
-> > Cvetic <dragan.cvetic@xilinx.com>; Arnd Bergmann <arnd@arndb.de>;
-> > garnermic@fb.com; Rob Herring <robh+dt@kernel.org>; Krzysztof Kozlowski
-> > <krzysztof.kozlowski+dt@linaro.org>; Stanislav Jakubek
-> > <stano.jakubek@gmail.com>; Linus Walleij <linus.walleij@linaro.org>; Samuel
-> > Holland <samuel@sholland.org>; linux-i2c@vger.kernel.org;
-> > devicetree@vger.kernel.org; linux-kernel@vger.kernel.org
-> > Subject: Re: [PATCH v1 3/3] misc: Add meta cld driver
-> > 
-> >   Security Reminder: Please be aware that this email is sent by an external
-> > sender.
-> > 
-> > On Tue, Jan 17, 2023 at 05:44:22PM +0800, Delphine CC Chiu wrote:
-> > > Add support for meta control-logic-device driver. The CLD manages the
-> > > server system power squence and other state such as host-power-state,
-> > > uart-selection and presense-slots. The baseboard management controller
-> > > (BMC) can access the CLD through I2C.
-> > >
-> > > The version 1 of CLD driver is supported. The registers number, name
-> > > and mode of CLD can be defined in dts file for version 1. The driver
-> > > exports the filesystem following the dts setting.
-> > >
-> > > Signed-off-by: Delphine CC Chiu <Delphine_CC_Chiu@Wiwynn.com>
-> > > Tested-by: Bonnie Lo <Bonnie_Lo@Wiwynn.com>
-> > > ---
-> > >  MAINTAINERS                         |   6 +
-> > >  drivers/misc/Kconfig                |   9 +
-> > >  drivers/misc/Makefile               |   1 +
-> > >  drivers/misc/control-logic-device.c | 443
-> > > ++++++++++++++++++++++++++++
-> > 
-> > That is a very generic name for a very specific driver.  Please make it more
-> > hardware-specific.
-> 
-> In server project, there is a component (control-logic-device). This component manages the server status including whole system power sequence, status and other devices presence status. And baseboard management controller (BMC) on server can acquire the information from CLD device through I2C.
-> Currently, our customer plan to follow the spec to design the computing server. 
-> We would like to change the naming from CLD to "compute CPLD".
-> Do you have any suggestion?
 
-Make it something hardware/vendor specific please.  As is, this is very
-generic.  Remember, this is a name you will be using to refer to for the
-next 20+ years.
 
-> > Also, you add a bunch of undocumented sysfs files here, which require a
-> > Documentation/ABI/ entries so that we can review the code to verify it does
-> > what you all think it does.
+On 13.03.2023 09:49, Johan Hovold wrote:
+> A recent commit broke interconnect provider registration for the msm8996
+> platform by accidentally removing a conditional when adding the missing
+> clock disable in the power-domain lookup error path.
 > 
-> We will add the document in Documentation/ABI/testing folder.
+> Fixes: b6edcc7570b2 ("interconnect: qcom: rpm: fix probe PM domain error handling")
+The hash seems to be different:
+
+https://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git/commit/?h=icc-next&id=9038710161f0f028e36ef383fca59080f48420ee
+
+> Reported-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> Link: https://lore.kernel.org/r/641d04a3-9236-fe76-a20f-11466a01460e@wanadoo.fr
+> Cc: stable@vger.kernel.org      # 5.17
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/interconnect/qcom/icc-rpm.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> > 
-> > And finally, why is this needed to be a kernel driver at all?  Why can't you
-> > control this all through the userspace i2c api?
-> 
-> After discussing with our customer, they prefer the userspace access the physical device through driver not I2C API.
-> There is an example on the OpenBMC Gerrit.
-> https://gerrit.openbmc.org/c/openbmc/phosphor-buttons/+/60807
+> diff --git a/drivers/interconnect/qcom/icc-rpm.c b/drivers/interconnect/qcom/icc-rpm.c
+> index 4d0997b210f7..3b055cd893ea 100644
+> --- a/drivers/interconnect/qcom/icc-rpm.c
+> +++ b/drivers/interconnect/qcom/icc-rpm.c
+> @@ -498,7 +498,8 @@ int qnoc_probe(struct platform_device *pdev)
+>  
+>  	if (desc->has_bus_pd) {
+>  		ret = dev_pm_domain_attach(dev, true);
+> -		goto err_disable_clks;
+> +		if (ret)
+> +			goto err_disable_clks;
+*wipes glasses*.. right..
 
-I do not understand, if functionalty can be done in userspace, it should
-be done there, UNLESS you have a generic way of handling multiple
-hardware devices as the same type (i.e. keyboard, sensor, etc.)  There
-does not seem to be any generic interface here, so again, why can't you
-just do it all in userspace?  What is forcing a kernel driver for this?
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-> > One review comment:
-> > 
-> > > +static int cld_remove(struct i2c_client *client) {
-> > > +     struct device *dev = &client->dev;
-> > > +     struct cld_client *cld = dev_get_drvdata(dev);
-> > > +
-> > > +     if (cld->task) {
-> > > +             kthread_stop(cld->task);
-> > > +             cld->task = NULL;
-> > > +     }
-> > > +
-> > > +     devm_kfree(dev, cld);
-> > 
-> > Whenever you see this line in code, it's almost always a huge red flag that
-> > someone is not using the devm_* api properly.  I think that is most certainly
-> > the case here.
-> 
-> Do you mean the dev_free function is no need in this remove function?
-
-Why do you think it is needed here?  If it is needed, please document it
-with a comment explaining why this is required as it is not how the api
-is designed to be used at all.
-
-thanks,
-
-greg k-h
+Konrad
+>  	}
+>  
+>  	provider = &qp->provider;
