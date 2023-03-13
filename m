@@ -2,127 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C7656B7136
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:33:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38EA96B713A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:35:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjCMIdi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 04:33:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
+        id S230038AbjCMIf1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:35:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbjCMIdc (ORCPT
+        with ESMTP id S229845AbjCMIfZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 04:33:32 -0400
-Received: from mail-yb1-xb31.google.com (mail-yb1-xb31.google.com [IPv6:2607:f8b0:4864:20::b31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF22619F34
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:33:28 -0700 (PDT)
-Received: by mail-yb1-xb31.google.com with SMTP id e65so2173941ybh.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:33:28 -0700 (PDT)
+        Mon, 13 Mar 2023 04:35:25 -0400
+Received: from mail-lj1-x22f.google.com (mail-lj1-x22f.google.com [IPv6:2a00:1450:4864:20::22f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 294EA22DCF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:35:23 -0700 (PDT)
+Received: by mail-lj1-x22f.google.com with SMTP id by8so11732888ljb.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:35:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678696408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7ya0xeR3EOwIf2SQwBchOfop6EHpJp/mskrRR9QbQKU=;
-        b=ulacoDZkaeqpJxaGwNgh41bzF3Mu0/3b4OqyAvKgxKFWQYsb8nRc5fcQ0riYXDY8yt
-         smy4lCoCdN6Rtwj791c+Ib8RAkUysTZAguLKWGAOPk9qq67kF1IgeCFVQTEQfcZlE7t+
-         wbyllsVuvw0dIx5r/r9Uy8290CTjwUdZNicO6KKs6wQOd5AhoR+NQ633EQBiaqA4qUqq
-         leXmeMVZACMGHsRj9I/ZnRnNXLmhsMeD/6UJ/Jr+i6FHYkll0S9SYNXaYmlsBUfdeZHg
-         bhhom6zFIomkoS9E/fCJUM8zWU+lVxzQCAYwqludjFQ+N02O5pXSjVd2NrS2+tVFaCPs
-         V0tA==
+        d=linaro.org; s=google; t=1678696521;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9fOLfxr2tFyZ8Ujjcq3AaWQ606AZSrOlGsdgzotzics=;
+        b=f8pXlW+uVXMvaG9QzGJMVHB6JxGFKjOa6DqBgJHwdOmqSEifTIhY8qUmfM19EMX3Ax
+         uIysXmEHF5zyK76o8c04GEbA3xQ0KaHLHT3u5E2ibcCMyKmrgKLGpFrOBHxsRPli3tNL
+         y6947MIvBIWTjfoIdypXd+pzNycq5SGEMX1nQAda803kni60npYzL+98+Uy5wg/mtNZF
+         bA/AKiioMsB+DbWQ+IQhhxtQkIED0pmuw/er0YvGvbySwfQP4IzAfWKzil1kaWC0fJXS
+         fh9EcuBKi0qU7S69l2Mxhcahe0zc4zMpq++yailgIZfRl13YLQhySsunCwG8j9EMXoK7
+         qWyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678696408;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7ya0xeR3EOwIf2SQwBchOfop6EHpJp/mskrRR9QbQKU=;
-        b=I7LNucPVWeXLq8wb3MrlfLZgmqAy/0UxEX6Zhl/9hpJM0smmYBH8wbdPnKD3pTKVaR
-         VjNj8H2gom8oPPoN0yk8q83ZGYAFPPP9J3Ls7S7C7CQF5n8LxjgkjP1sOfedTJK1cLsF
-         7n+UVA7lOV62f5I6CzQ6KWJAvdfI4Vq4eChL4pXx7hFbimGmPDWknHvMvEJEgRtMTpuC
-         Ll2/BBFEQMrDbfPoyEk2rYklkMYMS8NxH7lKJcb8BGrlkd8bKyIJsvRjshcJF5VY2wxq
-         ky3UXzXTWmp9lTbuoAOnx72nph9FkqPvzzYqctP1vhTVKxZfCkkI17mLgCmSa7aa3gxu
-         h4zA==
-X-Gm-Message-State: AO0yUKV14Bh3O+SJFn467j4Wa05VHVdWLm2X2oeNnQLtpLbeVFLWN+Gk
-        0LEJjba93lekgJKNIHvnRttR+C8VHRwR/Xl8aIuzbA==
-X-Google-Smtp-Source: AK7set/R4BiH/PF2hRbxzLizFVyNAKs4lvl4ii9te26TFCwaA12bbjRzIKdishRkQRMWInaP7gjjosZtyDFj/LVkRns=
-X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
- k10-20020a5b038a000000b00ac9cb97bd0emr16155629ybp.5.1678696408073; Mon, 13
- Mar 2023 01:33:28 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678696521;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9fOLfxr2tFyZ8Ujjcq3AaWQ606AZSrOlGsdgzotzics=;
+        b=0OqTZR7mR9Z73lXiBzIZ8JEjtGLQEh5mb/sLAbv/0aRrjuTH26GZPJZlbpr9+iPDvI
+         Gw+GW4h9k97wKLnLDPn0mggBjIGQfqtfLB8w4UV1txqEepkIXyPgofI4sX0FYCyVoqu2
+         Ll91KU3y2bSwvFAABEY7wUmOcQ/ykiYHYm+qsTAxXd0J7AjGgZGRIhs0vpQ1NT4y9JMu
+         jRIAMspSj/hm67tpBVCN5khChzOZn1Zk6oMTcSP7mXSSzcQQi9XwsfgXTnUAKCp4/WyJ
+         jj5rCfdlSKQUmiWpO/NgSLIfk7OWYBKQJBYNonTnIYHXJhv3wK/P3VZ09HlqU/PdSJne
+         4AIA==
+X-Gm-Message-State: AO0yUKWy5BNHMkO2x5yt3Y2FgHaGFg9CIoVJW3mJKXKP97DNL00v7Dcm
+        WhpRb0cuQIU+FP81aKhoyASHyg==
+X-Google-Smtp-Source: AK7set8gtwxVhuFnjOOT7P0gdtdrNECEDslg2x9ZHbr2yW275L0xatkFwKFoYS4LoiRV4QoyNE0GXg==
+X-Received: by 2002:a05:651c:84:b0:293:4b96:1b6b with SMTP id 4-20020a05651c008400b002934b961b6bmr10530413ljq.25.1678696521382;
+        Mon, 13 Mar 2023 01:35:21 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id a21-20020a05651c011500b00298704f1324sm923271ljb.33.2023.03.13.01.35.20
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 01:35:20 -0700 (PDT)
+Message-ID: <1bae0e50-7d56-986b-7e07-36a8aab31082@linaro.org>
+Date:   Mon, 13 Mar 2023 09:35:19 +0100
 MIME-Version: 1.0
-References: <20230309225041.477440-1-sre@kernel.org> <20230309225041.477440-7-sre@kernel.org>
- <CACRpkdYTD3OZ-44N0oRD93gToxR_DoFSkLhvNjrRpCms2TX5nw@mail.gmail.com> <eaa72600-b85a-fa97-45ff-6412696682b6@gmail.com>
-In-Reply-To: <eaa72600-b85a-fa97-45ff-6412696682b6@gmail.com>
-From:   Linus Walleij <linus.walleij@linaro.org>
-Date:   Mon, 13 Mar 2023 09:33:16 +0100
-Message-ID: <CACRpkdaHKZjkvZYM6GAnzXeRgfqFWE1aGMEqkN1HQ-3TX-DjtA@mail.gmail.com>
-Subject: Re: [PATCHv1 06/11] power: supply: generic-adc-battery: drop charge
- now support
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Sebastian Reichel <sre@kernel.org>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 3/3] arm64: dts: qcom: msm8916-yiming-uz801v3: Add initial
+ device tree
+Content-Language: en-US
+To:     Yang Xiwen <forbidden405@foxmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Nikita Travkin <nikita@trvn.ru>
+References: <20230310143330.9485-1-forbidden405@foxmail.com>
+ <tencent_62395CA0D608DD0078DD3D889F6E4E22BA05@qq.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <tencent_62395CA0D608DD0078DD3D889F6E4E22BA05@qq.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 8:49=E2=80=AFAM Matti Vaittinen
-<mazziesaccount@gmail.com> wrote:
-> On 3/10/23 10:29, Linus Walleij wrote:
-> > On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.o=
-rg> wrote:
-> >
-> >> Drop CHARGE_NOW support, which requires a platform specific
-> >> calculation method.
-> >>
-> >> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-> >
-> > I agree. If we want to support this, we should use the generic
-> > methods with interpolation tables defined in DT as well, and it also
-> > ideally requires load compensated resistance calculation to figure
-> > out Ri so this can bring any kind of reasonable precision.
->
-> I guess you have your reasons, besides you have far better insight to
-> things than I do - hence I am not really objecting this - just asking a
-> question ;)
->
-> Do we have generic facilities of computing this based on the DT tables /
-> Ri in place(?)
 
-Not yet, for the Samsung batteries I used a static look-up table
-derived from the compatible string for calculating Ri from VBAT
-and from that calculate the capacity from estimated open
-circuit voltage, see
-drivers/power/supply/samsung-sdi-battery.c
 
-> I guess that we do need/see platform specific
-> implementations as long as there is no generic "de-facto" way of doing
-> this available...
+On 10.03.2023 15:33, Yang Xiwen wrote:
+> This commit adds support for the uz801 v3.0 WiFi/LTE dongle made by
+> Henan Yiming Technology Co., Ltd. based on MSM8916.
+> 
+> Note: The original firmware does not support 64-bit OS. It is necessary
+> to flash 64-bit TZ firmware to boot arm64.
+> 
+> Currently supported:
+> - All CPU cores
+> - Buttons
+> - LEDs
+> - Modem
+> - SDHC
+> - USB Device Mode
+> - UART
+> 
+> Signed-off-by: Yang Xiwen <forbidden405@foxmail.com>
+> ---
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
-The method I used with Samsung batteries is fine as long as all you
-need to know to know everything about a battery is the compatible
-string. Pretty much any Lion battery with a clearly defined product
-name can be done this way.
-
-The only reason to put the interpolation tables into the device
-tree would be to support any random battery, such as one
-that you do not know the model or this can change.
-
-I am however mildly sceptic about adding that: if you know the
-VBAT-to-Ri and OCV-to-capacity tables, you must have a
-datasheet, and then you know the name of the battery product
-and hence you know the right compatible string...
-
-I think the right way to handle any capacity curves for any battery
-would be to create static data like I did for the Samsung batteries.
-
-Yours,
-Linus Walleij
+Konrad
+>  arch/arm64/boot/dts/qcom/Makefile             |  1 +
+>  .../boot/dts/qcom/msm8916-yiming-uz801v3.dts  | 35 +++++++++++++++++++
+>  2 files changed, 36 insertions(+)
+>  create mode 100644 arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index 31aa54f0428c3..0c4c71d6277b7 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -28,6 +28,7 @@ dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-samsung-serranove.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-uf896.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-thwc-ufi001c.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-wingtech-wt88047.dtb
+> +dtb-$(CONFIG_ARCH_QCOM)	+= msm8916-yiming-uz801v3.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-motorola-potter.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-daisy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= msm8953-xiaomi-mido.dtb
+> diff --git a/arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts b/arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts
+> new file mode 100644
+> index 0000000000000..74ce6563be183
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/qcom/msm8916-yiming-uz801v3.dts
+> @@ -0,0 +1,35 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +
+> +/dts-v1/;
+> +
+> +#include "msm8916-ufi.dtsi"
+> +
+> +/ {
+> +	model = "uz801 v3.0 4G Modem Stick";
+> +	compatible = "yiming,uz801-v3", "qcom,msm8916";
+> +};
+> +
+> +&button_restart {
+> +	gpios = <&msmgpio 23 GPIO_ACTIVE_LOW>;
+> +};
+> +
+> +&led_r {
+> +	gpios = <&msmgpio 7 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&led_g {
+> +	gpios = <&msmgpio 8 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&led_b {
+> +	gpios = <&msmgpio 6 GPIO_ACTIVE_HIGH>;
+> +};
+> +
+> +&button_default {
+> +	pins = "gpio23";
+> +	bias-pull-up;
+> +};
+> +
+> +&gpio_leds_default {
+> +	pins = "gpio6", "gpio7", "gpio8";
+> +};
