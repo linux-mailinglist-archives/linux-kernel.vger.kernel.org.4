@@ -2,149 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE9116B6E1B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:46:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F5F16B6E24
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:47:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCMDqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
+        id S230039AbjCMDrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbjCMDqs (ORCPT
+        with ESMTP id S229997AbjCMDqv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:46:48 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15E93B87E;
-        Sun, 12 Mar 2023 20:46:44 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id ek18so12201718edb.6;
-        Sun, 12 Mar 2023 20:46:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678679203;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=m3ivdNPo81WizlSI2L9KYGriSsBblsDqaVgcFRLFTQc=;
-        b=W4HvhwtVmo0incxQ/cFP3ekS5DgUrZ5eu95UrLEEDra5tQxQH2U+5Jgf4c0ZonLvjt
-         1kroHTpQcPau7Reof0gUcp+tVrLPznVx+IvEWGpYtcTuKwUD95ywdKm3VSsYSvhbIyig
-         K8r6q8JFrhKZ+744RfsngvSOJb4iK8Q0MdEBMdQ9xRghTTuNwO0kDkAZchT7tm4DA02G
-         Z3BWNefV+S2bgGzLrabNQJ4Aig2UiwhAWDqpNIQFL+TchePDq/n7n8kbVOLQObWQLauI
-         y0a6KOQm3Z2+7Xlvy8y8Wk2ml7cLskCqMChMQihd9TLM0NVXjNkFomYextj4H9xG34rX
-         QPQQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678679203;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=m3ivdNPo81WizlSI2L9KYGriSsBblsDqaVgcFRLFTQc=;
-        b=LnaFDM0dzh24bLZBnQuZ/9GfYjBOABQVIduzElub1tGzUEuRLES1scFIF1d5wQFuUB
-         HQswJ03r3cl4pULJBa0rxjHu4nhHQZ25lGviO47s6TFWr2I7gQUQXWtt3AkmDzyala8d
-         1Qh8vPAteaQ+E92fGR93ekJumt6zkrrXliFrE5pc3phJ1371Xsdt5IFX3dfk98X1/dDS
-         Pcwk7ws/t5+DKhMLP188dZVWaF3oIZpCxjmVP3LVllUpPjgv+q+TlueLuvRGnHItnFDP
-         3CFoZ3JAB9MIPsM9Rfrxh5gsJ/wD3we9YRkgfE3+tNjBqMkTMxJvE1wODYoMWC+ObkYX
-         Fqrw==
-X-Gm-Message-State: AO0yUKUyIlGXWXA4xYu4+H7PiVxyv9lg+TIMZG4I3bSnjeobfRxPrTgE
-        41/09NtlyGudd3M09eXwsHML7QpUwCo=
-X-Google-Smtp-Source: AK7set9ykTjacRqKV2JevFqRqTl7ARyu2wNpAiWVd48XAeTSZ66uVdneDWw5XAloCag1YKSgYpv5eQ==
-X-Received: by 2002:a17:907:7d9f:b0:8b1:781d:f9a4 with SMTP id oz31-20020a1709077d9f00b008b1781df9a4mr40752415ejc.21.1678679203045;
-        Sun, 12 Mar 2023 20:46:43 -0700 (PDT)
-Received: from [192.168.8.100] (188.30.129.33.threembb.co.uk. [188.30.129.33])
-        by smtp.gmail.com with ESMTPSA id c26-20020a170906695a00b00914001c91fcsm2903986ejs.86.2023.03.12.20.46.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 20:46:42 -0700 (PDT)
-Message-ID: <4ed9ee1e-db0f-b164-4558-f3afa279dd4f@gmail.com>
-Date:   Mon, 13 Mar 2023 03:45:43 +0000
+        Sun, 12 Mar 2023 23:46:51 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 90C563B232;
+        Sun, 12 Mar 2023 20:46:48 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 5280D24E1BD;
+        Mon, 13 Mar 2023 11:46:47 +0800 (CST)
+Received: from EXMBX162.cuchost.com (172.16.6.72) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
+ 2023 11:46:47 +0800
+Received: from starfive-sdk.starfivetech.com (171.223.208.138) by
+ EXMBX162.cuchost.com (172.16.6.72) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.42; Mon, 13 Mar 2023 11:46:46 +0800
+From:   Samin Guo <samin.guo@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <netdev@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Yanhong Wang <yanhong.wang@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>
+Subject: [PATCH v6 0/8] Add Ethernet driver for StarFive JH7110 SoC
+Date:   Mon, 13 Mar 2023 11:46:37 +0800
+Message-ID: <20230313034645.5469-1-samin.guo@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-Subject: Re: [RFC 0/2] optimise local-tw task resheduling
-Content-Language: en-US
-To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org
-References: <cover.1678474375.git.asml.silence@gmail.com>
- <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
- <ee962f58-1074-0480-333b-67b360ea8b87@gmail.com>
- <9322c9ab-6bf5-b717-9f25-f5e55954db7b@kernel.dk>
-From:   Pavel Begunkov <asml.silence@gmail.com>
-In-Reply-To: <9322c9ab-6bf5-b717-9f25-f5e55954db7b@kernel.dk>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [171.223.208.138]
+X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX162.cuchost.com
+ (172.16.6.72)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/23 15:30, Jens Axboe wrote:
-> On 3/11/23 1:45?PM, Pavel Begunkov wrote:
->> On 3/11/23 17:24, Jens Axboe wrote:
->>> On 3/10/23 12:04?PM, Pavel Begunkov wrote:
->>>> io_uring extensively uses task_work, but when a task is waiting
->>>> for multiple CQEs it causes lots of rescheduling. This series
->>>> is an attempt to optimise it and be a base for future improvements.
->>>>
->>>> For some zc network tests eventually waiting for a portion of
->>>> buffers I've got 10x descrease in the number of context switches,
->>>> which reduced the CPU consumption more than twice (17% -> 8%).
->>>> It also helps storage cases, while running fio/t/io_uring against
->>>> a low performant drive it got 2x descrease of the number of context
->>>> switches for QD8 and ~4 times for QD32.
->>>>
->>>> Not for inclusion yet, I want to add an optimisation for when
->>>> waiting for 1 CQE.
->>>
->>> Ran this on the usual peak benchmark, using IRQ. IOPS is around ~70M for
->>> that, and I see context rates of around 8.1-8.3M/sec with the current
->>> kernel.
->>>
->>> Applied the two patches, but didn't see much of a change? Performance is
->>> about the same, and cx rate ditto. Confused... As you probably know,
->>> this test waits for 32 ios at the time.
->>
->> If I'd to guess it already has perfect batching, for which case
->> the patch does nothing. Maybe it's due to SSD coalescing +
->> small ro I/O + consistency and small latencies of Optanes,
->> or might be on the scheduling and the kernel side to be slow
->> to react.
->>
->> I was looking at trace_io_uring_local_work_run() while testing,
->> It's always should be @loop=QD (i.e. 32) for the patch, but
->> the guess is it's also 32 with that setup but without patches.
-> 
-> It very well could be that it's just loaded enough that we get perfect
-> batching anyway. I'd need to reuse some of your tracing to know for
-> sure.
+This series adds ethernet support for the StarFive JH7110 RISC-V SoC.
+The series includes MAC driver. The MAC version is dwmac-5.20 (from
+Synopsys DesignWare). For more information and support, you can visit
+RVspace wiki[1].
 
-I used existing trace points. If you see a pattern
+You can simply review or test the patches at the link [2].
 
-trace_io_uring_local_work_run()
-trace_io_uring_cqring_wait(@count=32)
+This patchset should be applied after the patchset [3] [4].
+[1]: https://wiki.rvspace.org/
+[2]: https://github.com/SaminGuo/linux/tree/vf2-6.3rc1-gmac
+[3]: https://patchwork.kernel.org/project/linux-riscv/cover/20230311090733.56918-1-hal.feng@starfivetech.com
+[4]: https://github.com/SaminGuo/linux/commit/fa57aaedb3c195bab99ac351a8e44664ae819bf2
 
-trace_io_uring_local_work_run()
-trace_io_uring_cqring_wait(@count=32)
+Changes since v5:
+- Droped "depends on STMMAC_ETH" and compiled DWMAC_STARFIVE to m by default (by Emil)
+- Removed clk_gtx in struct starfive_dwmac due to this pointer is only set, but never read. (by Emil)
+- Only setting the plat_dat->fix_mac_speed callback when it is needed (by Emil)
+- Moved mdio/phy nodes from SOC .dtsi into board .dtsi (by Andrew)
+- Modified the parameters passed by starfive,syscon (by Andrew && Emil)
+    <syscon, offset, mask>  ==>  <syscon, offset, shift>
+- Optimized the patchs(Fewer patches from 12 to 8)
+    1)merged patch-7 into patch-4 (by Rob)
+    2)merged patch-9 into patch-5
+    2)merged patch-11,12 into patch-10
+    3)Adjusted the patchs order
+- Fixed the unevaluatedProperties property from true to false (by Rob)
+- Replaced contains:enum with items:const for reset-names in snps,dwmac.yaml (by Rob)
+- Tested-by: Tommaso Merciai <tomm.merciai@gmail.com>
+- Rebased on tag v6.3-rc1
 
-...
+Changes history:
 
-that would mean a perfect batching. Even more so
-if @loops=1
+Changes since v4:
+- Supported both visionfive 2 v1.2A and visionfive 2 v1.3B.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
+- Suggested by Emil, dropped the _PLAT/_plat from the config/function/struct/file names.
+- Suggested by Emil, added MODULE_DEVICE_TABLE().
+- Suggested by Emil, dropped clk_gtxclk and use clk_tx_inv to set the clock frequency.
+- Added phy interface mode configuration function.
+- Rebased on tag v6.2.
+
+Changes since v3:
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'
+- Removed the unused code in 'dwmac-starfive-plat.c'.
+- Reworded the return statement in 'starfive_eth_plat_fix_mac_speed' function.
+
+Changes since v2:
+- Renamed the dt-bindings 'starfive,jh71x0-dwmac.yaml' to 'starfive,jh7110-dwmac.yaml'.
+- Reworded the commit messages.
+- Reworded the example context in the dt-binding 'starfive,jh7110-dwmac.yaml'.
+- Removed "starfive,jh7100-dwmac" compatible string and special initialization of jh7100.
+- Removed the parts of YT8531,so dropped patch 5 and 6.
+- Reworded the maxitems number of resets property in 'snps,dwmac.yaml'.
+
+Changes since v1:
+- Recovered the author of the 1st and 3rd patches back to Emil Renner Berthing.
+- Added a new patch to update maxitems number of resets property in 'snps,dwmac.yaml'.
+- Fixed the check errors reported by "make dt_binding_check".
+- Renamed the dt-binding 'starfive,dwmac-plat.yaml' to 'starfive,jh71x0-dwmac.yaml'.
+- Updated the example context in the dt-binding 'starfive,jh71x0-dwmac.yaml'.
+- Added new dt-binding 'motorcomm,yt8531.yaml' to describe details of phy clock
+  delay configuration parameters.
+- Added more comments for PHY driver setting. For more details, see
+  'motorcomm,yt8531.yaml'.
+- Moved mdio device tree node from 'jh7110-starfive-visionfive-v2.dts' to 'jh7110.dtsi'.
+- Re-worded the commit message of several patches.
+- Renamed all the functions with starfive_eth_plat prefix in 'dwmac-starfive-plat.c'.
+- Added "starfive,jh7100-dwmac" compatible string and special init to support JH7100.
+
+Previous versions:
+v1 - https://patchwork.kernel.org/project/linux-riscv/cover/20221201090242.2381-1-yanhong.wang@starfivetech.com/
+v2 - https://patchwork.kernel.org/project/linux-riscv/cover/20221216070632.11444-1-yanhong.wang@starfivetech.com/
+v3 - https://patchwork.kernel.org/project/linux-riscv/cover/20230106030001.1952-1-yanhong.wang@starfivetech.com/
+v4 - https://patchwork.kernel.org/project/linux-riscv/cover/20230118061701.30047-1-yanhong.wang@starfivetech.com/
+v5 - https://patchwork.kernel.org/project/netdevbpf/cover/20230303085928.4535-1-samin.guo@starfivetech.com/
 
 
->>> Didn't take a closer look just yet, but I grok the concept. One
->>> immediate thing I'd want to change is the FACILE part of it. Let's call
->>> it something a bit more straightforward, perhaps LIGHT? Or LIGHTWEIGHT?
->>
->> I don't really care, will change, but let me also ask why?
->> They're more or less synonyms, though facile is much less
->> popular. Is that your reasoning?
-> 
-> Yep, it's not very common and the name should be self-explanatory
-> immediately for most people.
+Emil Renner Berthing (2):
+  dt-bindings: net: snps,dwmac: Add dwmac-5.20 version
+  net: stmmac: platform: Add snps,dwmac-5.20 IP compatible string
 
-That's exactly the problem. Someone will think that it's
-like normal tw but "better" and blindly apply it. Same happened
-before with priority tw lists.
+Samin Guo (5):
+  dt-bindings: net: snps,dwmac: Add 'ahb' reset/reset-name
+  net: stmmac: Add glue layer for StarFive JH7110 SoC
+  net: stmmac: starfive_dmac: Add phy interface settings
+  riscv: dts: starfive: jh7110: Add ethernet device nodes
+  riscv: dts: starfive: visionfive 2: Add configuration of gmac and phy
 
--- 
-Pavel Begunkov
+Yanhong Wang (1):
+  dt-bindings: net: Add support StarFive dwmac
+
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  17 +-
+ .../bindings/net/starfive,jh7110-dwmac.yaml   | 130 ++++++++++++++
+ MAINTAINERS                                   |   7 +
+ .../jh7110-starfive-visionfive-2-v1.2a.dts    |  13 ++
+ .../jh7110-starfive-visionfive-2-v1.3b.dts    |  27 +++
+ .../jh7110-starfive-visionfive-2.dtsi         |  32 ++++
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |  69 +++++++
+ drivers/net/ethernet/stmicro/stmmac/Kconfig   |  12 ++
+ drivers/net/ethernet/stmicro/stmmac/Makefile  |   1 +
+ .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 168 ++++++++++++++++++
+ .../ethernet/stmicro/stmmac/stmmac_platform.c |   3 +-
+ 11 files changed, 474 insertions(+), 5 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/starfive,jh7110-dwmac.yaml
+ create mode 100644 drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
+
+
+base-commit: 8ca09d5fa3549d142c2080a72a4c70ce389163cd
+prerequisite-patch-id: 46cc850aa0e9e03ccf5ed23d8458babfca3d71af
+prerequisite-patch-id: a6975e61ee5803fbd74b1c21ab925fd81c3c0eab
+prerequisite-patch-id: ac150a8c622e858e088df8121093d448df49c245
+prerequisite-patch-id: 044263ef2fb9f1e5a586edbf85d5f67814a28430
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 9f3dbc9073eee89134e68977e941e457593c2757
+prerequisite-patch-id: 8600b156a235be2b3db53be3f834e7a370e2cfb9
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 4c12d958e3a3d629d86dddb1e4f099d8909393e0
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 8f5c66dfb14403424044192f6fa05b347ad356a7
+prerequisite-patch-id: fd93763b95469912bde9bdfa4cd827c8d5dba9c6
+prerequisite-patch-id: 6987950c2eb4b3773b2df8f7934eff434244aeab
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: e7773c977a7b37692e9792b21cc4f17fa58f9215
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 1be0fb49e0fbe293ca8fa94601e191b13c8c67d9
+prerequisite-patch-id: a8340aa3403658e8275d0da0038c2d49bc79843a
+--
+2.17.1
+
