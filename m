@@ -2,56 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A8BE6B80B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:32:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC6416B80CF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:33:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjCMScX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:32:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
+        id S231526AbjCMSdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:33:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231349AbjCMSbe (ORCPT
+        with ESMTP id S231489AbjCMSdT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:31:34 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C643280932
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:30:55 -0700 (PDT)
+        Mon, 13 Mar 2023 14:33:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF9E85B21;
+        Mon, 13 Mar 2023 11:31:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 67CA9B811E0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:30:55 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1439C433D2;
-        Mon, 13 Mar 2023 18:30:53 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 60BC661484;
+        Mon, 13 Mar 2023 18:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA3AC433EF;
+        Mon, 13 Mar 2023 18:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678732254;
-        bh=xXfHOtpB42Nc5WnZyQQpmBHFWLUExBdm6jawq0Jm084=;
+        s=korg; t=1678732256;
+        bh=sdMhGh/v0S4uLhhMgXoZcxTftjLcVbQ0JldvEDTZ1yE=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=0FMXy6Knts0+zZgypoJ0GS2NVaLO5tLbDYgKvXx7LMo+bv1jhAWytcutb/BiI1vmD
-         yBEXUeCTIezUvb7qFu7X1zL/BBLS5n8X+R2ydR39/TuRmUuIlR6blTMiIf1xBYy5xQ
-         19+sdyeK0HrYZKr/HzYzLfOdhn58D730PvNR5Cdo=
+        b=h/hI9tL/g1oKZX9SamcN3M5/Phk2olRLoatPJFm31YFAUcAsHgxSUO3k5HrcUFBGR
+         oTFlhpdu5AzaDPUsg8JPv2FLzqxqaON2iQZQPmb/f7IuSBmUXQAln9+7wnXBsgdkfo
+         ujvYCBIj/MpDkfXQafdJ925ZIXxw9Js6vvSnB+k8=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
-        Alan Previn <alan.previn.teres.alexis@intel.com>,
-        John Harrison <John.C.Harrison@Intel.com>,
-        Tony Ye <tony.ye@intel.com>,
-        Vitaly Lubart <vitaly.lubart@intel.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 30/36] drm/i915/huc: use const struct bus_type pointers
-Date:   Mon, 13 Mar 2023 19:29:12 +0100
-Message-Id: <20230313182918.1312597-30-gregkh@linuxfoundation.org>
+        "Michael S. Tsirkin" <mst@redhat.com>,
+        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
+Subject: [PATCH 31/36] vhost-vdpa: vhost_vdpa_alloc_domain() should be using a const struct bus_type *
+Date:   Mon, 13 Mar 2023 19:29:13 +0100
+Message-Id: <20230313182918.1312597-31-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
 References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3256; i=gregkh@linuxfoundation.org; h=from:subject; bh=xXfHOtpB42Nc5WnZyQQpmBHFWLUExBdm6jawq0Jm084=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82dUOV8LkZs1rW1FbEZ2+du0D7wfbfUpebF2pHn7h+ 5lpjir1HbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjARsTcM82y+VjUWN7TzOscl xYtl2WzK7ZLcwbDg8GWOaEHppcYb97/63/6QcaXxlcd/AA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1408; i=gregkh@linuxfoundation.org; h=from:subject; bh=sdMhGh/v0S4uLhhMgXoZcxTftjLcVbQ0JldvEDTZ1yE=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82TUvbDoStjD0i/1v+vmN+6FAU3bEc8GDO0VEeJmnK n3uEcvoiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIlE/mOYp+sx9Tebv8y3yUbr ta71fL9koRnIzzDfQ/VD509tq8Db9tk3zRNct9fM6dcHAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -63,26 +54,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct bus_type pointers in the functions
-intel_huc_register_gsc_notifier() and
-intel_huc_unregister_gsc_notifier() should be a const pointer, as the
-structure is not modified anywhere in the functions, and the pointer
-they are passed will be a const * in the near future.
+The function, vhost_vdpa_alloc_domain(), has a pointer to a struct
+bus_type, but it should be constant as the function it passes it to
+expects it to be const, and the vhost code does not modify it in any
+way.
 
-Cc: Jani Nikula <jani.nikula@linux.intel.com>
-Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
-Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
-Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-Cc: David Airlie <airlied@gmail.com>
-Cc: Daniel Vetter <daniel@ffwll.ch>
-Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
-Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
-Cc: John Harrison <John.C.Harrison@Intel.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Tony Ye <tony.ye@intel.com>
-Cc: Vitaly Lubart <vitaly.lubart@intel.com>
-Cc: intel-gfx@lists.freedesktop.org
-Cc: dri-devel@lists.freedesktop.org
+Cc: "Michael S. Tsirkin" <mst@redhat.com>
+Cc: Jason Wang <jasowang@redhat.com>
+Cc: kvm@vger.kernel.org
+Cc: virtualization@lists.linux-foundation.org
+Cc: netdev@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
 Note, this is a patch that is a prepatory cleanup as part of a larger
@@ -91,47 +72,22 @@ design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
 its own, but I'd prefer if I could take it through my driver-core tree
 so that the driver core changes can be taken through there for 6.4-rc1.
 
- drivers/gpu/drm/i915/gt/uc/intel_huc.c | 4 ++--
- drivers/gpu/drm/i915/gt/uc/intel_huc.h | 4 ++--
- 2 files changed, 4 insertions(+), 4 deletions(-)
+ drivers/vhost/vdpa.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-index 410905da8e97..8b453bd7c953 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
-@@ -183,7 +183,7 @@ static int gsc_notifier(struct notifier_block *nb, unsigned long action, void *d
- 	return 0;
- }
- 
--void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
-+void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
- {
+diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
+index dc12dbd5b43b..08c7cb3399fc 100644
+--- a/drivers/vhost/vdpa.c
++++ b/drivers/vhost/vdpa.c
+@@ -1140,7 +1140,7 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
+ 	struct vdpa_device *vdpa = v->vdpa;
+ 	const struct vdpa_config_ops *ops = vdpa->config;
+ 	struct device *dma_dev = vdpa_get_dma_dev(vdpa);
+-	struct bus_type *bus;
++	const struct bus_type *bus;
  	int ret;
  
-@@ -200,7 +200,7 @@ void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus
- 	}
- }
- 
--void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
-+void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
- {
- 	if (!huc->delayed_load.nb.notifier_call)
- 		return;
-diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.h b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
-index 52db03620c60..05d4832f8461 100644
---- a/drivers/gpu/drm/i915/gt/uc/intel_huc.h
-+++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
-@@ -51,8 +51,8 @@ int intel_huc_check_status(struct intel_huc *huc);
- void intel_huc_update_auth_status(struct intel_huc *huc);
- bool intel_huc_is_authenticated(struct intel_huc *huc);
- 
--void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
--void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
-+void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
-+void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
- 
- static inline int intel_huc_sanitize(struct intel_huc *huc)
- {
+ 	/* Device want to do DMA by itself */
 -- 
 2.39.2
 
