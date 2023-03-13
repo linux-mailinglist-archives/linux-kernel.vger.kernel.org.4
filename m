@@ -2,79 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 538846B7ABE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:45:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AB946B7AC4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:46:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCMOpp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:45:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41980 "EHLO
+        id S231535AbjCMOqF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:46:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjCMOpj (ORCPT
+        with ESMTP id S230410AbjCMOp4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:45:39 -0400
-Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B71E5279A8;
-        Mon, 13 Mar 2023 07:45:17 -0700 (PDT)
-Received: by mail-oi1-x22a.google.com with SMTP id q15so9556311oiw.11;
-        Mon, 13 Mar 2023 07:45:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678718717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=a+CV2SifknfjhIyuWjTUWiSmqHONl4lWciVnfKStENI=;
-        b=i2SilUaV3bWr54dJkta8nQzXHC3ldAO2CIGhbaD4W2v+7zFai9h4s8d7ydJi9vnydm
-         Rmxl312JsKwfTHbOQLjbx4ktE/y8WN+0Ln9BrXobMgsxonH4DFHkVFZGtGLQwkktvLcn
-         itJSuVzIf/F02deRU7nI6BeVfpriCFR4EcK582FgWJjppl9SIKcmwheYjcDbIg8zeJQJ
-         EqcgvRMfQTswHXsnOv6HitRObCa9s28QUTIkupuGHf7aMdDZJ+yoECnuZ7K1ra/bLFsM
-         w/LkdVBqGREcJJxbxVtzcDHoNH7OJXB6MFwr8ln2do2Ocvm9ns+3WsrN9mjLPqHcnqb5
-         ykcw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718717;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a+CV2SifknfjhIyuWjTUWiSmqHONl4lWciVnfKStENI=;
-        b=oEGHP6JLZD1kj6R01iRQ9G4YoNOVsGmwK39E/ikDznwoKNWmDXKU9KQ+gratODi5aW
-         8ZmaqBHtNbR9DQEQbGa1a6hyF+8EHZRPuDUHs/GjNzDCjcq45BIvsDv1fZSFtqEHFOZN
-         IrrZLeBMlbcgUwAO1McHSv/drl2apbCYuzF3ks1/cYQQhDzfr1o7T2XZzwleXJ+Dy8Zk
-         mdeX/OoRHqBOQyMw2OF3SJmNE7qv8hSGy98gW6OeJBa6JvieTXKV75UYkoTcKihjoOw+
-         4g6hnECTn3gnqIdA5Kzp5isGBZbhiaS12yiBXSNrAZhz2QtQVxtq/zRUVudyur+TbHDF
-         TaiA==
-X-Gm-Message-State: AO0yUKWTFR8CAcwIRIrfSicbiohxzWBPdQ1heubohENKH5EJXDWU6D9S
-        sxsIlD3KPk8H4RXfDy8QmPc5Mt85k/odAP6VNYc=
-X-Google-Smtp-Source: AK7set8Ti1T85pfZ3x3mojTmAFJI+E2j4PltKQSmP4vh2+nZAmydeBWLtDIItpnDphn3KDx5PrbNv0r21XjWrzrB7RA=
-X-Received: by 2002:a05:6808:220a:b0:383:db64:65 with SMTP id
- bd10-20020a056808220a00b00383db640065mr5424701oib.4.1678718716877; Mon, 13
- Mar 2023 07:45:16 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230311173513.1080397-1-robdclark@gmail.com> <20230311173513.1080397-3-robdclark@gmail.com>
- <b846101c-e6ef-2d3e-9db9-077003b72e57@amd.com>
-In-Reply-To: <b846101c-e6ef-2d3e-9db9-077003b72e57@amd.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 13 Mar 2023 07:45:05 -0700
-Message-ID: <CAF6AEGvH==PPLpdxim4Pi=Q7RA8Ou4NYxvYBW=N8sh9amEqQVQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/msm: Embed the hw_fence in msm_gem_submit
-To:     =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     dri-devel@lists.freedesktop.org,
-        "Tuikov, Luben" <Luben.Tuikov@amd.com>,
-        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:DMA BUFFER SHARING FRAMEWORK" 
-        <linux-media@vger.kernel.org>,
-        "moderated list:DMA BUFFER SHARING FRAMEWORK" 
-        <linaro-mm-sig@lists.linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+        Mon, 13 Mar 2023 10:45:56 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-he1eur04on2049.outbound.protection.outlook.com [40.107.7.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CAF62885D;
+        Mon, 13 Mar 2023 07:45:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HRK03Oglksn3X2LsaznDStG5vhWuxwyQ6re3OfSDGUnRfZmxgttdoeF32kHybBIooNbA2szc+T4+7VVKigeH/IOTmzRkkKkrYUMPE7NAwUVAG2VeRC8hpsJ5Bk0Jc89LM6Gt8I6/aTBOpCFUL1A3K8bX0W23ChNbzOH7vq5V2m9++ChqQ8PEcQtHCmhktT2Vxcjp4+ksyjXZ7Fed8jt0mxN8TilSLh/70qEXGHJq0AtvmxzHkFYoeyBZOoBBVgXHNWbgWNpkzAmed86LLSRTnRE8nV68xjhzZFXUj6k2sff2JlHQhq3t9D3d6JALNN/XzGfUc9zwbFyDdGGu480g6A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ozjg4yXyLE07OEBwpz6SBdmGxJOPaC/5fpB6IuKlwk0=;
+ b=OmBu3bwRX4ySqGcaU8QtC30kMN+4ekUsE4kmw+CVbwMfvO2AY12Ti3UesKNT2A04x2a6rV+Ln5fRVmAM3mFTlWrb0GKdvbYrHvEgK1Jy0sX8NiA4e1RRmwLDEQ43S8Y+0yV8X7xzl0R4pFg7W9b7XrQivldJVbM7x5lr8rLKSriTAPYhs735S4/qniPYSavckvU3ROs3lkvuVBLu6rZuJ/w+Lfn9lmwMvobWIxzWFPvt92jUC5TcKK+7pI10aBNBlpM21j1zQmFcTA6ATrxCNLlJj0BsDKtnzyiylpFQ3tKnGUYmNvGyxNHcU3993g6ht9JJ/ZbZRslZEDgopsUUFA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ozjg4yXyLE07OEBwpz6SBdmGxJOPaC/5fpB6IuKlwk0=;
+ b=QV+zbztkvPbljQjkc5DrNtezpJuLe1m98j3Boxb233T0VUP8SAnZHKnMqB51rwWkdTHDwu1VR0KnMA5z8CgjuLvEdEixnKLn6aGFFjTdlLj/YEUOh+Z8+KefPi9TG14ZVO/Qf4j29umtytw4irQ9rN8k1wVcO3Bu6taaK+ycBn4=
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com (2603:10a6:20b:43a::10)
+ by AM7PR04MB6885.eurprd04.prod.outlook.com (2603:10a6:20b:10d::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 14:45:42 +0000
+Received: from AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::45d2:ce51:a1c4:8762]) by AM9PR04MB8603.eurprd04.prod.outlook.com
+ ([fe80::45d2:ce51:a1c4:8762%5]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 14:45:42 +0000
+From:   Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
+To:     =?iso-8859-1?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        "simon.horman@corigine.com" <simon.horman@corigine.com>,
+        Netdev <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>
+Subject: Re: [PATCH v9 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+Thread-Topic: [PATCH v9 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+Thread-Index: AQHZVbp8EpKNG6z3K0e4xkOkfV1R1w==
+Date:   Mon, 13 Mar 2023 14:45:42 +0000
+Message-ID: <AM9PR04MB8603ABA9129A080BA5CDECF2E7B99@AM9PR04MB8603.eurprd04.prod.outlook.com>
+References: <20230313140924.3104691-1-neeraj.sanjaykale@nxp.com>
+ <20230313140924.3104691-4-neeraj.sanjaykale@nxp.com>
+ <b28d1e39-f036-c260-4452-ac1332efca0@linux.intel.com>
+ <AM9PR04MB8603EB5DA53821B12E049649E7B99@AM9PR04MB8603.eurprd04.prod.outlook.com>
+ <17a9ffd1-342c-2cf1-2a57-7fabe1fce8b8@linux.intel.com>
+In-Reply-To: <17a9ffd1-342c-2cf1-2a57-7fabe1fce8b8@linux.intel.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM9PR04MB8603:EE_|AM7PR04MB6885:EE_
+x-ms-office365-filtering-correlation-id: bfbaa42a-ef2c-4616-6f70-08db23d19eef
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kyyYKP8amm1F59bI8j7g26+RbHqgAVXHoujwJseXP7yhkr/Py0W72ca/pw1Pzy5/Uco07fIlti8scQw195kxq8jve+umpgVIL6ucUvQea3w9zh2zNAiOub1s9QHwQV55FHf5vo9GK2xkrsz04i2j8rtJYX60bAUduPW7DO1w2ffinaHVdO6HgBqBUW4N4RdUYeJ0tqmo/YZKFILW+GRs+45v43up75KQasahcI/prF1hF5m4pIMLKeGdL54S1x0vE1CpbBMmmWu/D0kWykrkiRwn9cYN2MHdnAIVn4VgcqsuNOu0NjWbKhicWx6k+tsVli7BuZJ/vUUNa2FOLg6ezfY2EjufpuLnAwZfYbhljNhvadpmRMuYey3Gjl8TE6Ep3uIenAsb+Q0f5o0OM8YWANgxIO1uYPoWajB9CHz31Xu7yRVFnigkH9+awu3NqQjDWMWl5Hnx5nKfV9r3W/MPl0eREE9+nOAbrGC7it1pI9N+3ahq4WzZ/CITVAXurlnXU/GXPt6Dq9qoO1sPdXilCh8YzlaULQ+ruHzEwpDNauc4DZq7nQH34a3zfHQm2qRQqQHNuVEMWF9YeVw9bfh5AooWGfcDnwUsuERXuTuEdMsJRhuoBmAWg2N+4/zBI1LwlQ0W8DUfDM+w/rQ0S19uXQWo+2ecC+rzLP+fLvVEVrpiCkGXe1JixOfrpff+Qjxm8/gqN47R2R+TpJ/vktushA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM9PR04MB8603.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(346002)(39860400002)(136003)(376002)(451199018)(86362001)(33656002)(558084003)(186003)(41300700001)(26005)(6506007)(55236004)(9686003)(7416002)(5660300002)(4326008)(52536014)(6916009)(8936002)(55016003)(7696005)(316002)(478600001)(54906003)(66446008)(71200400001)(76116006)(8676002)(66556008)(66946007)(64756008)(66476007)(38100700002)(122000001)(38070700005)(2906002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-1?Q?aV/vc1uCKwEHpky3rH+zi1JMS2rBurYl/cbF6amqG7JEow/oDHUBTnYstX?=
+ =?iso-8859-1?Q?rv3yJkWmpGo3eHawxaKsQEXmisWUHa7RfBOQO8HmYs8e0PLQeCr+4sDeVb?=
+ =?iso-8859-1?Q?/kyTJ25rI7ygNYpAVrJp7Vy4YsykmBdfmjJx/xNp8+vWlUjc6WCULX7Ouw?=
+ =?iso-8859-1?Q?NKiqRrXJKTBEbWczkXFQXaqO7TzTWw8kOoyylPIgmD0N0pwr/bxrJhcGtk?=
+ =?iso-8859-1?Q?tjkF778+xHsZeOQq/ZXs09KLkfjw3BxkHL4XeWDDXvpp7XInki0jjcrB9d?=
+ =?iso-8859-1?Q?Rkut1ln/YDvjQLdM3lZQsziudICmektmq1ngjFhUWARPbcrXLspmu2TtSU?=
+ =?iso-8859-1?Q?0ELq5Y30U9jpico/PaIlVCFhgAm5RITfBJ5GzryhbEyw7Im1UkVyvDUzGe?=
+ =?iso-8859-1?Q?8HdSxveP+8uTDrroBtnYLLwg74jMZEcxY3VlDXj7ko2mI6w7BPTlFDToFu?=
+ =?iso-8859-1?Q?VPCKSePrfswNhd+N8jcjSk/AW71EJ55yXr5Lz/7V0B59D3klSyPGrAWebj?=
+ =?iso-8859-1?Q?HuXEAAP6yyfYscQNFPpB/TXlupgX4dnGu5noTbSG6/dEe6ifRBx9QEITgB?=
+ =?iso-8859-1?Q?FZIusAq1AMcrsOwy9D3hjSHYp5uAzVgXpcd7AfBJg0LP4uQu0qa0o+Xrxr?=
+ =?iso-8859-1?Q?UabgAYVfhjILsAl/P7EZXUKc0WDOH/D7ppTacvdNR6J9ZXUnCXk2QZX2T4?=
+ =?iso-8859-1?Q?mF+CvRqWyYguA82gAu3zKZhQLi+Zau1Wq74p+yCiR2/eTsX8eHRE+59RPE?=
+ =?iso-8859-1?Q?q6ldRy4HpWWw9iByg5/tcqKgO8N3wggkXSawi5vCL485hlCJ+YMbiJXf7r?=
+ =?iso-8859-1?Q?SdaBxBwmEJJ8P7Ez7FKk1iIRRH39THiq0O2SjSFXScu+74RTHqZRDOx2EJ?=
+ =?iso-8859-1?Q?S16sBREfWEoiZNlRkub9QIbFOemI3AMbVtXcqaztiIgV3x4uohlywZmmM2?=
+ =?iso-8859-1?Q?zm29w6vT+yDfiQkx7+h5PBZ1FIvNNRQefnlF+QJoKcVpv/9NuGIq/TpCnz?=
+ =?iso-8859-1?Q?vsiWO+fjqMmNjTWGFSOL2OBT+ctsdeFDETTK7ssylrHKCfi+cKMkk0p7tu?=
+ =?iso-8859-1?Q?8c4UPCYp4oUhsVYZuQw5HctVOJdj69Hy2ltH4/nvs0CjDo7byUdr/Qx8n/?=
+ =?iso-8859-1?Q?hen9yTmQsgN2WM5pMB/4CKXXbDLqrvkvn3oQAZuKmj8GieEF4YHd9944eB?=
+ =?iso-8859-1?Q?ItUM4Q+3csYIjbum54OkEbMBO9NS6FBHMLLfIIt7MVMM1l6AIAzmy+MTkl?=
+ =?iso-8859-1?Q?+I55cnJ80Kd83/fT2td4DtE4KxcLHMmgUF6tjBBDznBBga0yR14nlNWl0J?=
+ =?iso-8859-1?Q?SUcR1fv5hHXXBhZ89Y4UoYaI/xCy+yNpAC2ZBdHs6wzH7II0zBagwLPFi5?=
+ =?iso-8859-1?Q?hvnH/KE0a34+vvKPzbxQKndnz0j39Vq9mppNd2fSG/2vggfKcVdQBQ81oa?=
+ =?iso-8859-1?Q?wPpWOoyWDBCIqGgspin3XFPZT7KLDsCATINu16ixwULjEhyJil6agUO2IO?=
+ =?iso-8859-1?Q?kJ1kXYwKlm3rgj/0jBDEeCpqCFyTEtXFJQHsKFwXcFXppjp3evE9/6d8rg?=
+ =?iso-8859-1?Q?tVh6AhbeuKfd5+HGRHX+o3kUrdF5QkSDnjalnVhORiV7IjzM8zf8j4Z3ow?=
+ =?iso-8859-1?Q?Hl2UzgzDnF+jpif3blwTrL6Jn2BAqv5PSHkGmq+hfb3Zca1FnqlZuYog?=
+ =?iso-8859-1?Q?=3D=3D?=
+Content-Type: text/plain; charset="iso-8859-1"
 Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM9PR04MB8603.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: bfbaa42a-ef2c-4616-6f70-08db23d19eef
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 14:45:42.4061
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: IvE5vbemWsqZKNLF1A3Q/bAiNJ+IdV3yj6PxzZW49bpLv7LVQGDbHqC6iw1p9lIldK1/JDx1euPXoMj/bjXpjRBpKsEAKaiW5ZHqm+sC+Nc=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR04MB6885
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,307 +145,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 12:19=E2=80=AFAM Christian K=C3=B6nig
-<christian.koenig@amd.com> wrote:
->
-> Am 11.03.23 um 18:35 schrieb Rob Clark:
-> > From: Rob Clark <robdclark@chromium.org>
 > >
-> > Avoid allocating memory in job_run() by embedding the fence in the
-> > submit object.  Since msm gpu fences are always 1:1 with msm_gem_submit
-> > we can just use the fence's refcnt to track the submit.  And since we
-> > can get the fence ctx from the submit we can just drop the msm_fence
-> > struct altogether.  This uses the new dma_fence_init_noref() to deal
-> > with the fact that the fence's refcnt is initialized when the submit is
-> > created, long before job_run().
->
-> Well this is a very very bad idea, we made the same mistake with amdgpu
-> as well.
->
-> It's true that you should not have any memory allocation in your run_job
-> callback, but you could also just allocate the hw fence during job
-> creation and initializing it later on.
->
-> I've suggested to embed the fence into the job for amdgpu because some
-> people insisted of re-submitting jobs during timeout and GPU reset. This
-> turned into a nightmare with tons of bug fixes on top of bug fixes on
-> top of bug fixes because it messes up the job and fence lifetime as
-> defined by the DRM scheduler and DMA-buf framework.
->
-> Luben is currently working on cleaning all this up.
+> > Please suggest me the right way to put the version string in this drive=
+r.
+>=20
+> I think Leon meant you should just drop the version altogether (since thi=
+s is
+> new code).
+I mis-interpreted it as we should not be using MODULE_VERSION() from now on=
+.
+V10 looks good now!
 
-This actually shouldn't be a problem with msm, as the fence doesn't
-change if there is a gpu reset.  We simply signal the fence for the
-offending job, reset the GPU, and re-play the remaining in-flight jobs
-(ie. things that already had their job_run() called) with the original
-fences.  (We don't use gpu sched's reset/timeout handling.. when I
-migrated to gpu sched I kept our existing hangcheck/recovery
-mechanism.)
-
-BR,
--R
-
-> Regards,
-> Christian.
->
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> > Note that this applies on top of https://patchwork.freedesktop.org/seri=
-es/93035/
-> > out of convenience for myself, but I can re-work it to go before
-> > depending on the order that things land.
-> >
-> >   drivers/gpu/drm/msm/msm_fence.c      | 45 +++++++++++----------------=
--
-> >   drivers/gpu/drm/msm/msm_fence.h      |  2 +-
-> >   drivers/gpu/drm/msm/msm_gem.h        | 10 +++----
-> >   drivers/gpu/drm/msm/msm_gem_submit.c |  8 ++---
-> >   drivers/gpu/drm/msm/msm_gpu.c        |  4 +--
-> >   drivers/gpu/drm/msm/msm_ringbuffer.c |  4 +--
-> >   6 files changed, 31 insertions(+), 42 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_fence.c b/drivers/gpu/drm/msm/msm_=
-fence.c
-> > index 51b461f32103..51f9f1f0cb66 100644
-> > --- a/drivers/gpu/drm/msm/msm_fence.c
-> > +++ b/drivers/gpu/drm/msm/msm_fence.c
-> > @@ -103,14 +103,9 @@ void msm_update_fence(struct msm_fence_context *fc=
-tx, uint32_t fence)
-> >       spin_unlock_irqrestore(&fctx->spinlock, flags);
-> >   }
-> >
-> > -struct msm_fence {
-> > -     struct dma_fence base;
-> > -     struct msm_fence_context *fctx;
-> > -};
-> > -
-> > -static inline struct msm_fence *to_msm_fence(struct dma_fence *fence)
-> > +static inline struct msm_gem_submit *fence_to_submit(struct dma_fence =
-*fence)
-> >   {
-> > -     return container_of(fence, struct msm_fence, base);
-> > +     return container_of(fence, struct msm_gem_submit, hw_fence);
-> >   }
-> >
-> >   static const char *msm_fence_get_driver_name(struct dma_fence *fence)
-> > @@ -120,20 +115,20 @@ static const char *msm_fence_get_driver_name(stru=
-ct dma_fence *fence)
-> >
-> >   static const char *msm_fence_get_timeline_name(struct dma_fence *fenc=
-e)
-> >   {
-> > -     struct msm_fence *f =3D to_msm_fence(fence);
-> > -     return f->fctx->name;
-> > +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
-> > +     return submit->ring->fctx->name;
-> >   }
-> >
-> >   static bool msm_fence_signaled(struct dma_fence *fence)
-> >   {
-> > -     struct msm_fence *f =3D to_msm_fence(fence);
-> > -     return msm_fence_completed(f->fctx, f->base.seqno);
-> > +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
-> > +     return msm_fence_completed(submit->ring->fctx, fence->seqno);
-> >   }
-> >
-> >   static void msm_fence_set_deadline(struct dma_fence *fence, ktime_t d=
-eadline)
-> >   {
-> > -     struct msm_fence *f =3D to_msm_fence(fence);
-> > -     struct msm_fence_context *fctx =3D f->fctx;
-> > +     struct msm_gem_submit *submit =3D fence_to_submit(fence);
-> > +     struct msm_fence_context *fctx =3D submit->ring->fctx;
-> >       unsigned long flags;
-> >       ktime_t now;
-> >
-> > @@ -165,26 +160,22 @@ static void msm_fence_set_deadline(struct dma_fen=
-ce *fence, ktime_t deadline)
-> >       spin_unlock_irqrestore(&fctx->spinlock, flags);
-> >   }
-> >
-> > +static void msm_fence_release(struct dma_fence *fence)
-> > +{
-> > +     __msm_gem_submit_destroy(fence_to_submit(fence));
-> > +}
-> > +
-> >   static const struct dma_fence_ops msm_fence_ops =3D {
-> >       .get_driver_name =3D msm_fence_get_driver_name,
-> >       .get_timeline_name =3D msm_fence_get_timeline_name,
-> >       .signaled =3D msm_fence_signaled,
-> >       .set_deadline =3D msm_fence_set_deadline,
-> > +     .release =3D msm_fence_release,
-> >   };
-> >
-> > -struct dma_fence *
-> > -msm_fence_alloc(struct msm_fence_context *fctx)
-> > +void
-> > +msm_fence_init(struct msm_fence_context *fctx, struct dma_fence *f)
-> >   {
-> > -     struct msm_fence *f;
-> > -
-> > -     f =3D kzalloc(sizeof(*f), GFP_KERNEL);
-> > -     if (!f)
-> > -             return ERR_PTR(-ENOMEM);
-> > -
-> > -     f->fctx =3D fctx;
-> > -
-> > -     dma_fence_init(&f->base, &msm_fence_ops, &fctx->spinlock,
-> > -                    fctx->context, ++fctx->last_fence);
-> > -
-> > -     return &f->base;
-> > +     dma_fence_init_noref(f, &msm_fence_ops, &fctx->spinlock,
-> > +                          fctx->context, ++fctx->last_fence);
-> >   }
-> > diff --git a/drivers/gpu/drm/msm/msm_fence.h b/drivers/gpu/drm/msm/msm_=
-fence.h
-> > index cdaebfb94f5c..8fca37e9773b 100644
-> > --- a/drivers/gpu/drm/msm/msm_fence.h
-> > +++ b/drivers/gpu/drm/msm/msm_fence.h
-> > @@ -81,7 +81,7 @@ void msm_fence_context_free(struct msm_fence_context =
-*fctx);
-> >   bool msm_fence_completed(struct msm_fence_context *fctx, uint32_t fen=
-ce);
-> >   void msm_update_fence(struct msm_fence_context *fctx, uint32_t fence)=
-;
-> >
-> > -struct dma_fence * msm_fence_alloc(struct msm_fence_context *fctx);
-> > +void msm_fence_init(struct msm_fence_context *fctx, struct dma_fence *=
-f);
-> >
-> >   static inline bool
-> >   fence_before(uint32_t a, uint32_t b)
-> > diff --git a/drivers/gpu/drm/msm/msm_gem.h b/drivers/gpu/drm/msm/msm_ge=
-m.h
-> > index c4844cf3a585..e06afed99d5b 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem.h
-> > +++ b/drivers/gpu/drm/msm/msm_gem.h
-> > @@ -259,10 +259,10 @@ struct msm_gem_submit {
-> >       struct ww_acquire_ctx ticket;
-> >       uint32_t seqno;         /* Sequence number of the submit on the r=
-ing */
-> >
-> > -     /* Hw fence, which is created when the scheduler executes the job=
-, and
-> > +     /* Hw fence, which is initialized when the scheduler executes the=
- job, and
-> >        * is signaled when the hw finishes (via seqno write from cmdstre=
-am)
-> >        */
-> > -     struct dma_fence *hw_fence;
-> > +     struct dma_fence hw_fence;
-> >
-> >       /* Userspace visible fence, which is signaled by the scheduler af=
-ter
-> >        * the hw_fence is signaled.
-> > @@ -309,16 +309,16 @@ static inline struct msm_gem_submit *to_msm_submi=
-t(struct drm_sched_job *job)
-> >       return container_of(job, struct msm_gem_submit, base);
-> >   }
-> >
-> > -void __msm_gem_submit_destroy(struct kref *kref);
-> > +void __msm_gem_submit_destroy(struct msm_gem_submit *submit);
-> >
-> >   static inline void msm_gem_submit_get(struct msm_gem_submit *submit)
-> >   {
-> > -     kref_get(&submit->ref);
-> > +     dma_fence_get(&submit->hw_fence);
-> >   }
-> >
-> >   static inline void msm_gem_submit_put(struct msm_gem_submit *submit)
-> >   {
-> > -     kref_put(&submit->ref, __msm_gem_submit_destroy);
-> > +     dma_fence_put(&submit->hw_fence);
-> >   }
-> >
-> >   void msm_submit_retire(struct msm_gem_submit *submit);
-> > diff --git a/drivers/gpu/drm/msm/msm_gem_submit.c b/drivers/gpu/drm/msm=
-/msm_gem_submit.c
-> > index be4bf77103cd..522c8c82e827 100644
-> > --- a/drivers/gpu/drm/msm/msm_gem_submit.c
-> > +++ b/drivers/gpu/drm/msm/msm_gem_submit.c
-> > @@ -47,7 +47,7 @@ static struct msm_gem_submit *submit_create(struct dr=
-m_device *dev,
-> >               return ERR_PTR(ret);
-> >       }
-> >
-> > -     kref_init(&submit->ref);
-> > +     kref_init(&submit->hw_fence.refcount);
-> >       submit->dev =3D dev;
-> >       submit->aspace =3D queue->ctx->aspace;
-> >       submit->gpu =3D gpu;
-> > @@ -65,10 +65,9 @@ static struct msm_gem_submit *submit_create(struct d=
-rm_device *dev,
-> >       return submit;
-> >   }
-> >
-> > -void __msm_gem_submit_destroy(struct kref *kref)
-> > +/* Called when the hw_fence is destroyed: */
-> > +void __msm_gem_submit_destroy(struct msm_gem_submit *submit)
-> >   {
-> > -     struct msm_gem_submit *submit =3D
-> > -                     container_of(kref, struct msm_gem_submit, ref);
-> >       unsigned i;
-> >
-> >       if (submit->fence_id) {
-> > @@ -78,7 +77,6 @@ void __msm_gem_submit_destroy(struct kref *kref)
-> >       }
-> >
-> >       dma_fence_put(submit->user_fence);
-> > -     dma_fence_put(submit->hw_fence);
-> >
-> >       put_pid(submit->pid);
-> >       msm_submitqueue_put(submit->queue);
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gp=
-u.c
-> > index 380249500325..a82d11dd5fcf 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu.c
-> > +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> > @@ -716,7 +716,7 @@ static void retire_submits(struct msm_gpu *gpu)
-> >                        * been signalled, then later submits are not sig=
-nalled
-> >                        * either, so we are also done.
-> >                        */
-> > -                     if (submit && dma_fence_is_signaled(submit->hw_fe=
-nce)) {
-> > +                     if (submit && dma_fence_is_signaled(&submit->hw_f=
-ence)) {
-> >                               retire_submit(gpu, ring, submit);
-> >                       } else {
-> >                               break;
-> > @@ -760,7 +760,7 @@ void msm_gpu_submit(struct msm_gpu *gpu, struct msm=
-_gem_submit *submit)
-> >
-> >       msm_gpu_hw_init(gpu);
-> >
-> > -     submit->seqno =3D submit->hw_fence->seqno;
-> > +     submit->seqno =3D submit->hw_fence.seqno;
-> >
-> >       msm_rd_dump_submit(priv->rd, submit, NULL);
-> >
-> > diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.c b/drivers/gpu/drm/msm=
-/msm_ringbuffer.c
-> > index 57a8e9564540..5c54befa2427 100644
-> > --- a/drivers/gpu/drm/msm/msm_ringbuffer.c
-> > +++ b/drivers/gpu/drm/msm/msm_ringbuffer.c
-> > @@ -18,7 +18,7 @@ static struct dma_fence *msm_job_run(struct drm_sched=
-_job *job)
-> >       struct msm_gpu *gpu =3D submit->gpu;
-> >       int i;
-> >
-> > -     submit->hw_fence =3D msm_fence_alloc(fctx);
-> > +     msm_fence_init(fctx, &submit->hw_fence);
-> >
-> >       for (i =3D 0; i < submit->nr_bos; i++) {
-> >               struct drm_gem_object *obj =3D &submit->bos[i].obj->base;
-> > @@ -37,7 +37,7 @@ static struct dma_fence *msm_job_run(struct drm_sched=
-_job *job)
-> >
-> >       mutex_unlock(&gpu->lock);
-> >
-> > -     return dma_fence_get(submit->hw_fence);
-> > +     return dma_fence_get(&submit->hw_fence);
-> >   }
-> >
-> >   static void msm_job_free(struct drm_sched_job *job)
->
+-Neeraj
