@@ -2,142 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29C8A6B721F
+	by mail.lfdr.de (Postfix) with ESMTP id 75E8C6B7220
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230308AbjCMJKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:10:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
+        id S230151AbjCMJKH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:10:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230479AbjCMJJr (ORCPT
+        with ESMTP id S230481AbjCMJJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Mar 2023 05:09:47 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16D156159;
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EA745614C;
         Mon, 13 Mar 2023 02:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678698521; x=1710234521;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=cq6QdrMcR3tA5ptzjJyzksVlZ4tZ93rLnwQheu8e54Q=;
-  b=Ulprt4xM1tdMpTmsVc/JhnJCDDu7xcaQMYLK1tFy8h5QObEKk8Lxi81d
-   ZDEZ6fkxzRuarFY14o47BFptora5h9+uCnjKRcYSMXrecuyY9eKqEma0a
-   hNapvJEs6r2nzS8tLtDENtOkS0qHPk1KQoNX3/qBxL6IOuSrDGIEWXxro
-   lph5kq0QGotjl8zs/2JmnMUrdnxzERCPjxILAMGLjvnf4Wa8p281ksCjj
-   /DnX/56pB5fmD7vvvu/R/jjjs8kxtTczOUBWssSl4VszH4AHWN93cCuIq
-   f8R7TLuusmleCJikVnQNq53Kg0JDdoCu6UlzaZPzAa+J1aQiP5l7Y6FDE
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="423363959"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="423363959"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:08:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="680950602"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="680950602"
-Received: from etsykuno-mobl2.ccr.corp.intel.com ([10.252.47.211])
-  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:08:35 -0700
-Date:   Mon, 13 Mar 2023 11:08:33 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
-        "hdanton@sina.com" <hdanton@sina.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        Netdev <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>
-Subject: Re: [PATCH v6 3/3] Bluetooth: NXP: Add protocol support for NXP
- Bluetooth chipsets
-In-Reply-To: <AM9PR04MB8603D2F3E3CDC714BDACECC0E7BA9@AM9PR04MB8603.eurprd04.prod.outlook.com>
-Message-ID: <11c7e098-19c8-6961-5369-214bc948bc37@linux.intel.com>
-References: <20230301154514.3292154-1-neeraj.sanjaykale@nxp.com> <20230301154514.3292154-4-neeraj.sanjaykale@nxp.com> <73527cb7-6546-6c47-768c-5f4648b6d477@linux.intel.com> <AM9PR04MB86037CDF6A032963405AF0CEE7B69@AM9PR04MB8603.eurprd04.prod.outlook.com>
- <48e776a1-7526-5b77-568b-322d4555a138@linux.intel.com> <AM9PR04MB8603D2F3E3CDC714BDACECC0E7BA9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D7B9DB80E46;
+        Mon, 13 Mar 2023 09:08:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFB4DC433EF;
+        Mon, 13 Mar 2023 09:08:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678698518;
+        bh=D68iX5XocJ4Nym6PlfJ0HZhOyF9bNMkuEXEB0RJBxo4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=JZ9UQQElklAlEpj5e5qSxeSP6EbOmLXbeQHAACtZnxGxD9AkBv+maO3tontzNNQea
+         FRHQyHtD8PtQ01Um3pzRg6MMpH89J2wjz5dG018RzT7+nTQuKXcfQ2tySv9IjF1WrC
+         IC/FvxKbDQrwtUviCFVJN6OdgmJobKmxdu0sKTdGgA5o3hmRzm6p9ZATq/Jht02eHL
+         utHAY6z7gw167nspOE7LIt+kKgwIEkilQy5mkaKhbVb6RV6NgdNS7qCiQ2u/6pJExd
+         0ytAJBUydv9xAvI8a9N8UGUKCJ353PS9ZQuic8GbLqrioosKqsZGEg5jklNq0iYpQz
+         XoZKH0rDAlm3w==
+Date:   Mon, 13 Mar 2023 09:08:34 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     stable@vger.kernel.org
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: HID: Stable backport request (all viable versions)
+Message-ID: <20230313090834.GA1217438@google.com>
+References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023, Neeraj sanjay kale wrote:
+Dear Stable,
 
-> Hi Ilpo,
-> 
-> I have resolved most of your comments in v8 patch, and I have few things to discuss regarding the v6 patch.
-> 
-> > > > > +static bool nxp_fw_change_baudrate(struct hci_dev *hdev, u16
-> > > > > +req_len) {
-> > > > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
-> > > > > +     struct nxp_bootloader_cmd nxp_cmd5;
-> > > > > +     struct uart_config uart_config;
-> > > > > +
-> > > > > +     if (req_len == sizeof(nxp_cmd5)) {
-> > > > > +             nxp_cmd5.header = __cpu_to_le32(5);
-> > > > > +             nxp_cmd5.arg = 0;
-> > > > > +             nxp_cmd5.payload_len = __cpu_to_le32(sizeof(uart_config));
-> > > > > +             nxp_cmd5.crc = swab32(crc32_be(0UL, (char *)&nxp_cmd5,
-> > > > > +                                            sizeof(nxp_cmd5) -
-> > > > > + 4));
-> > > >
-> > > > swab32(crc32_be(...)) seems and odd construct instead of
-> > __cpu_to_le32().
-> > > Earlier I had tried using __cpu_to_le32() but that did not work. The
-> > > FW expects a swapped CRC value for it's header and payload data.
-> > 
-> > So the .crc member should be __be32 then?
-> > 
-> I disagree with using __be32.
-> I have simplified this part of the code in v8 patch, please do check it out.
-> So the CRC part of the data structure will remain __le32, and will be sent over UART to the chip in Little Endian format.
-> It's just that the FW expects the CRC to be byte-swapped. 
-> Technically it is big endian format, but you may think of it as a "+1 level" of encryption (although it isn't).
-> So defining this structure member as __be32 can create more questions 
-> than answers, leading to more confusion. 
-> If it helps, I have also added a small comment in there to signify that 
-> the FW  expects CRC in byte swapped method.
+On Sun, 12 Mar 2023, Linus Torvalds wrote:
 
-I'd have still put the member as __be32 and commented the swap expectation 
-there. But it's not an end of the world even in the current form.
+> It's another Sunday afternoon. which must mean another rc release.
+>
+> This one looks fairly normal, although if you look at the diffs, they
+> are dominated by the removal of a staging driver (r8188eu) that has
+> been superceded by a proper driver. That removal itself is 90% of the
+> diffs.
+>
+> But if you filter that out, it all looks normal. Still more than two
+> thirds in drivers, but hey, that's pretty normal. It's mostly gpu and
+> networking as usual, but there's various other driver fixes in there
+> too.
+>
+> Outside of that regular driver noise (and the unusual driver removal
+> noise) it's a little bit of everything: core networking, arch fixes,
+> documentation, filesystems (btrfs, xfs, and ext4, but also some core
+> vfs fixes). And io_uring and some tooling.
+>
+> The full shortlog is appended, for the adventurous souls that want to
+> get that kind of details. The release feels fairly normal so far, but
+> it's early days. Please keep testing and reporting any issues,
+>
+>                  Linus
+>
+> ---
 
-> > > > > +     serdev_device_write_buf(nxpdev->serdev, (u8 *)&nxp_cmd7,
-> > > > > + req_len);
-> > > >
-> > > > Is it safe to assume req_len is small enough to not leak stack content?
-> > > The chip requests chunk of FW data which is never more than 2048 bytes
-> > > at a time.
-> > 
-> > Eh, sizeof(*nxp_cmd7) is 16 bytes!?! Are you sure that req_len given to
-> > serdev_device_write_buf() is not larger than 16 bytes?
-> > 
-> I have now replaced req_len with sizeof(<struct>).
-> There is also a check in the beginning of the function to return if req_len is not 16 bytes.
+> Lee Jones (2):
+>       HID: core: Provide new max_buffer_size attribute to over-ride the default
+>       HID: uhid: Over-ride the default maximum data buffer value with our own
 
-Ah, I'd missed that check for some reason.
+These 2 are now in Mainline:
 
+  b1a37ed00d790 HID: core: Provide new max_buffer_size attribute to over-ride the default
+  1c5d4221240a2 HID: uhid: Over-ride the default maximum data buffer value with our own
 
--- 
- i.
+Please could you add them to Stable, as far bask as they'll go please.
 
+I'll take a look at any conflicts.
+
+--
+Lee Jones [李琼斯]
