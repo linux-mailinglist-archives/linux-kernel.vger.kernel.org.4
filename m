@@ -2,67 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B4F16B6DD9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:10:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58BEE6B6DDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:15:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229987AbjCMDKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S229933AbjCMDPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229835AbjCMDJ7 (ORCPT
+        with ESMTP id S229437AbjCMDOt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:09:59 -0400
-Received: from mail-vs1-xe2c.google.com (mail-vs1-xe2c.google.com [IPv6:2607:f8b0:4864:20::e2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A7FAC28856
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:09:57 -0700 (PDT)
-Received: by mail-vs1-xe2c.google.com with SMTP id d20so9789380vsf.11
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:09:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678676997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+psd8R+vmD5RvwTYlxJi1wP8fKpHP1Zmc7TIxsJKEsY=;
-        b=N53/ggGiWuPqPDdRDrleVmQHpqQDjdpIzClBdpOvnrvQCwLuZaZKJ+rhC0c2rVybLY
-         tbzZgnnkJoKcVeHk7Lzixl0Bug8WOYjc1nbrgHt8BDumgI8aUN00G38xUUo7O9MGXQ4d
-         Y/LnnhrXgdv0XCwEhGgzvxX5Y1E+22diMyFyV9nxpWiV8qWSUQgAc2SzSEw9EqrMt0mo
-         p/eLJ01lDu5Gcpgv+efW2pkArDOJJe1lncaTHJqauycAbQJG1BtQixYkYgJTknm/tTpE
-         v7UFcQmW9bmd1QO5Ouj/iZNYQ/rdkugE/68wW+fOFkI2D9Tuyc6kCgykGK3IBwlrRQEh
-         aWsw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678676997;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+psd8R+vmD5RvwTYlxJi1wP8fKpHP1Zmc7TIxsJKEsY=;
-        b=fOwpnCaM9ot40tSOjpRBqH233FR0hbsTnWspUv6rWAWIJYTvhPjTIEE0Fhw0a1Mwy1
-         YD+PS4N8+lgbkYHkn5XP+CElSXKGdT4mFAPSjuyEC8Io+a4IyUN5EBSMXENUAoItVKjH
-         i6piNEha755/MgPkz3Pi057AXGv9K+8YhfTzfBmWzGwB2/Fb0CJg/n8qDFtIoh57a5oB
-         1skIT/AXRXkS0KE2PltjqD73d4sV2BaFQzZzphKJSxdwjrC9IDs9NjrIqFsyN5WJrO77
-         cZjY6Xg04bDucAKeE5ol486100bjX1hKsP+7zEo7Fpido4hhUvNo/96Qq/SZjmx3J3kG
-         sEhw==
-X-Gm-Message-State: AO0yUKWUyar3hZhd8TKkJ+iVmWUZKVXuxmy1AAvKPOmEq18edelc/Ys9
-        UKwmB8Wqgz/8yFAMUGzkJ+/3QSGIArkJn7NkMe8=
-X-Google-Smtp-Source: AK7set+Mgs0Wzj9y04plk97b2hXgIXMfAcRVkPbSLMt3jPbr/TY3cmzFA9SDaxnbZoHhfZwO5l3ePrcLDSxwAToxsfA=
-X-Received: by 2002:a67:fe54:0:b0:412:2d80:b0a3 with SMTP id
- m20-20020a67fe54000000b004122d80b0a3mr21468291vsr.4.1678676996739; Sun, 12
- Mar 2023 20:09:56 -0700 (PDT)
+        Sun, 12 Mar 2023 23:14:49 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D56542A17A
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:14:47 -0700 (PDT)
+Received: from kwepemi500014.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PZhWp2WmTzSkfF;
+        Mon, 13 Mar 2023 11:11:34 +0800 (CST)
+Received: from [10.35.19.253] (10.35.19.253) by kwepemi500014.china.huawei.com
+ (7.221.188.232) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 13 Mar
+ 2023 11:13:17 +0800
+Message-ID: <e02fdfce-4574-8e7e-ec96-8e8eaa4067bc@huawei.com>
+Date:   Mon, 13 Mar 2023 11:13:17 +0800
 MIME-Version: 1.0
-References: <20230312233052.21095-1-nunes.erico@gmail.com>
-In-Reply-To: <20230312233052.21095-1-nunes.erico@gmail.com>
-From:   Qiang Yu <yuq825@gmail.com>
-Date:   Mon, 13 Mar 2023 11:09:45 +0800
-Message-ID: <CAKGbVbs2ZRGyYOy9yYUMJ+apQm=NaXXb58C-97CaoTe5KPNqgw@mail.gmail.com>
-Subject: Re: [PATCH 0/3] drm/lima: expose usage statistics via fdinfo
-To:     Erico Nunes <nunes.erico@gmail.com>
-Cc:     dri-devel@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, lima@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH] riscv: relocate R_RISCV_CALL_PLT in kexec_file
+To:     Torsten Duwe <duwe@lst.de>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>
+CC:     Albert Ou <aou@eecs.berkeley.edu>,
+        Li Huafei <lihuafei1@huawei.com>,
+        Liao Chang <liaochang1@huawei.com>,
+        <linux-riscv@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <liubao918@huawei.com>
+References: <20230310182726.GA25154@lst.de>
+From:   Li Zhengyu <lizhengyu3@huawei.com>
+In-Reply-To: <20230310182726.GA25154@lst.de>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.35.19.253]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500014.china.huawei.com (7.221.188.232)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,67 +55,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Patch set is:
-Reviewed-by: Qiang Yu <yuq825@gmail.com>
+On Fri, 10 Mar 2023 19:27:03 +0100, Torsten Duwe <duwe@lst.de> wrote:
+> Depending on the toolchain (here: gcc-12, binutils-2.40) the
+> relocation entries for function calls are no longer R_RISCV_CALL, but
+> R_RISCV_CALL_PLT. When trying kexec_load_file on such kernels, it will
+> fail with
+>
+>   kexec_image: Unknown rela relocation: 19
+>   kexec_image: Error loading purgatory ret=-8
+>
+> The binary code at the call site remains the same, so tell
+> arch_kexec_apply_relocations_add() to handle _PLT alike.
 
-Looks like drm-misc-next does not contain "df622729ddbf drm/scheduler:
-track GPU active time per entity" yet.
-Will apply later.
+R_RISCV_CALL has already been deprecated, and replaced by R_RISCV_CALL_PLT.
 
-Regards,
-Qiang
+See Enum 18-19 in Table 3. Relocation types from 
+https://github.com/riscv-non-isa/riscv-elf-psabi-doc/blob/master/riscv-elf.adoc 
+.
 
-On Mon, Mar 13, 2023 at 7:31=E2=80=AFAM Erico Nunes <nunes.erico@gmail.com>=
- wrote:
+It was deprecated in ("Deprecated R_RISCV_CALL, prefer 
+R_RISCV_CALL_PLT") 
+https://github.com/riscv-non-isa/riscv-elf-psabi-doc/commit/a0dced85018d7a0ec17023c9389cbd70b1dbc1b0
+
 >
-> Expose lima gp and pp usage stats through fdinfo, following
-> Documentation/gpu/drm-usage-stats.rst.
-> Borrowed from these previous implementations:
+> fixes: 838b3e28488f702 ("Load purgatory in kexec_file")
+> Signed-off-by: Torsten Duwe <duwe@suse.de>
+> Cc: stable@vger.kernel.org
 >
-> "df622729ddbf drm/scheduler: track GPU active time per entity" added
-> usage time accounting to drm scheduler, which is where the data used
-> here comes from.
+> ---
+> --- a/arch/riscv/kernel/elf_kexec.c
+> +++ b/arch/riscv/kernel/elf_kexec.c
+> @@ -425,6 +425,7 @@ int arch_kexec_apply_relocations_add(struct purgatory_info *pi,
+>   		 * sym, instead of searching the whole relsec.
+>   		 */
+>   		case R_RISCV_PCREL_HI20:
+> +		case R_RISCV_CALL_PLT:
+>   		case R_RISCV_CALL:
+>   			*(u64 *)loc = CLEAN_IMM(UITYPE, *(u64 *)loc) |
+>   				 ENCODE_UJTYPE_IMM(val - addr);
 >
-> Then the main implementation is based on these etnaviv commits:
-> "d306788b6e1b drm/etnaviv: allocate unique ID per drm_file" and
-> "97804a133c68 drm/etnaviv: export client GPU usage statistics via
-> fdinfo"
->
-> Also "874442541133 drm/amdgpu: Add show_fdinfo() interface" since lima
-> has a context manager very similar to amdgpu and all contexts created
-> (and released) at the ctx_mgr level need to be accounted for.
->
-> Tested with the generic "gputop" tool currently available as patches to
-> igt, a sample run with this patchset looks like this:
->
-> DRM minor 128
->     PID               NAME             gp                        pp
->     4322   glmark2-es2-way |=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88=
-=E2=96=8A                  ||=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88=
-=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88=E2=
-=96=88=E2=96=88=E2=96=88=E2=96=88=E2=96=88      |
->     3561            weston |=E2=96=8E                       ||=E2=96=88=
-=E2=96=88=E2=96=88=E2=96=8C                    |
->     4159          Xwayland |=E2=96=8F                       ||=E2=96=89  =
-                     |
->     4154          glxgears |=E2=96=8F                       ||=E2=96=8E  =
-                     |
->     3661           firefox |=E2=96=8F                       ||=E2=96=8F  =
-                     |
->
->
-> Erico Nunes (3):
->   drm/lima: add usage counting method to ctx_mgr
->   drm/lima: allocate unique id per drm_file
->   drm/lima: add show_fdinfo for drm usage stats
->
->  drivers/gpu/drm/lima/lima_ctx.c    | 30 ++++++++++++++++++++-
->  drivers/gpu/drm/lima/lima_ctx.h    |  3 +++
->  drivers/gpu/drm/lima/lima_device.h |  3 +++
->  drivers/gpu/drm/lima/lima_drv.c    | 43 +++++++++++++++++++++++++++++-
->  drivers/gpu/drm/lima/lima_drv.h    |  1 +
->  5 files changed, 78 insertions(+), 2 deletions(-)
->
-> --
-> 2.39.2
->
+> .
+
+Palmer, please apply these references to the commit message.
+
+Reviewed-by: Li Zhengyu <lizhengyu3@huawei.com>
+
