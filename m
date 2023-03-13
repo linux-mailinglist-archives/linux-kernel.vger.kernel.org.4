@@ -2,118 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B540C6B8054
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 796E46B8056
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:22:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjCMSVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39970 "EHLO
+        id S229587AbjCMSWs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:22:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjCMSVc (ORCPT
+        with ESMTP id S229571AbjCMSWo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:21:32 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DC57E8B7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:20:59 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id i6-20020a170902c94600b0019d16e4ac0bso7501634pla.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:20:59 -0700 (PDT)
+        Mon, 13 Mar 2023 14:22:44 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCAD78092C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:22:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id k10so52253764edk.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:22:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678731646;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PM1IiLzVG/B4LJKhOIh/ybnm8AKBtKs/8CdHZzs7DFU=;
-        b=d/+teK+i7sS+d/usRhN+9F8Qr9EAR7PhlfIz/9vpEC4zt1uYTptLwKRiv1xzN/x3lN
-         u2jsV4wAIzZrot0B3jOgcAvXuX9g8yVAIJDfMXNotToHsK5F2F8zm9QTDEWD0Wo/kv3x
-         a5Kzc13vXRazuPTgrMqulzB7AVAeqeXojiBB/QiWjOQM9NmOXyZh8hdyGSMttoU4/cqa
-         BewXEX3IZy6wxhZmNPZCmcH8eiVpBcfl16rAZiYitY4pm2P7S4IcVlwB+4ZQk3/7xgWy
-         +OY804v081fe6O/NB5ssSYUNHu98BUlKGgNBrmFxP1OpldLSBGlNPhs7FzMyZnQUg1d3
-         S4tw==
+        d=linux-foundation.org; s=google; t=1678731722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=iqn/Obws/mvOXsirsuPduJgSRZ2tDsmdmCKpoj+0Jvg=;
+        b=M5j7IdC55FRJSAuH7unc6HEH6Id1gYzCYt6KOAuwp74OcmSkJmGXP0fvqe9OojSt53
+         bxBr2gwO+yY3MhnBrpbJw/UEGzWX9+24oqiymg7of7MKdFIQ6KHjEOOboQ4rmz0X92zL
+         xJWe2WjnlcM2B13RuYh9K+QPoesU7yqDKp/+M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678731646;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PM1IiLzVG/B4LJKhOIh/ybnm8AKBtKs/8CdHZzs7DFU=;
-        b=tlPE95SkIOKhXo07ZHeZ1F8VeJ1zbYvUDBfMCg8Zv3u2sR+65acc3RCURD4KgZfwcT
-         qjoLov/W/7voKEQ7oajbpU/mFUd/2rtHTedwDcTJ8xoTu48ov1FThf8ZR3nf+MOMteQ4
-         2YkAh0WKt7NmLBydJGLyyG53rKLiPiFJcuvtIiNWnxDhUYcv1pj6ZU0PnkHMkeQx3vEH
-         w8A4KNHxH+ob/dBcNxT2f8qXCib6OwmCea9j7H7th8ebNH33oBgTV2HFLDGVhYBjO1xg
-         BFZKR5K/SVsg7U3FvOMnwvzh6DfY4/v5pXzbg3qYrRp2IxCEAHc32KuDXTptGWELZqm9
-         qSdw==
-X-Gm-Message-State: AO0yUKXP9DXvAaFMMxJD3spPDBpfxNjxg4hv2sSCwyQFyW+4f7BxhOVQ
-        bIpOkCHsfHdxPsOITbehNfCkCe5zYkM=
-X-Google-Smtp-Source: AK7set/qMjcNp7uU3kUB/Z9T5GwUkXhBd0BbVLbVayOtobwc51czDDEXl0I7nwE5t5UL3rZ9Rcx8zaNApc0=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a62:1d04:0:b0:623:8a88:1bba with SMTP id
- d4-20020a621d04000000b006238a881bbamr2020291pfd.2.1678731646573; Mon, 13 Mar
- 2023 11:20:46 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 11:20:45 -0700
-In-Reply-To: <ZA9eHzE5vhnXh+TA@linux.dev>
-Mime-Version: 1.0
-References: <20230309010336.519123-1-seanjc@google.com> <20230309010336.519123-3-seanjc@google.com>
- <ZAlGeYAmvhPmVmGe@debian.me> <ZAmWefGcsBwcODxW@linux.dev> <ZAoWogdeET5N0mug@google.com>
- <ZA9eHzE5vhnXh+TA@linux.dev>
-Message-ID: <ZA9pfbhypRNPhdN8@google.com>
-Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
- for KVM x86
-From:   Sean Christopherson <seanjc@google.com>
-To:     Oliver Upton <oliver.upton@linux.dev>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=unavailable
+        d=1e100.net; s=20210112; t=1678731722;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iqn/Obws/mvOXsirsuPduJgSRZ2tDsmdmCKpoj+0Jvg=;
+        b=aWZq8mLas4GPyAA2vLQ9sSU7oigO8MQ33mFzMfSWW9n3+EJyQiAwXWz0qZMhrbRZt8
+         rbIcsZwvqlliUyjYgxK7pUjIsUBJxn2b8F7SfqZw2AicCjDGvZbT+stbzBphmA32wbIZ
+         JxX49wUoZW1e/HCa3gzsN+V7Um7EYIGSsfGoVW4g9uYghRoCfmn+vhtG9ZRADn0JhMZz
+         A4iLYawhZYcJ1LI+Ir4RKAdDaFBEOfmYUX5Ot2/FRa0u72ZADNlNIhHJIXKilHpw9/d1
+         QIlt9v4ajL8g18cr7+ehYYwTk/D+q+oUnET46X4etiWLMk2NN++bS8EC413aJCk6oHXi
+         q3/A==
+X-Gm-Message-State: AO0yUKXeaRkrgYTAViLey3XaFsTSOA9HJAwGCHQEPMWRaDLiqg+vKf+T
+        2eoOuq95On4TXWQvfKq7r1s97sayzjjzdwzMyQoFuQ==
+X-Google-Smtp-Source: AK7set/InrORxt8fBWO44OxJb9OMFP1GS+kji0EXmxXzcT5kWohPyABDqBN1jVhuWPXU2XBedoVgXQ==
+X-Received: by 2002:a05:6402:1613:b0:4fa:c17d:8fdd with SMTP id f19-20020a056402161300b004fac17d8fddmr7311454edv.34.1678731722589;
+        Mon, 13 Mar 2023 11:22:02 -0700 (PDT)
+Received: from mail-ed1-f41.google.com (mail-ed1-f41.google.com. [209.85.208.41])
+        by smtp.gmail.com with ESMTPSA id h3-20020a056402280300b004d8287c775fsm116484ede.8.2023.03.13.11.22.01
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 11:22:02 -0700 (PDT)
+Received: by mail-ed1-f41.google.com with SMTP id r11so749768edd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:22:01 -0700 (PDT)
+X-Received: by 2002:a50:d543:0:b0:4af:6e08:30c with SMTP id
+ f3-20020a50d543000000b004af6e08030cmr6164365edj.4.1678731721582; Mon, 13 Mar
+ 2023 11:22:01 -0700 (PDT)
+MIME-Version: 1.0
+References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
+ <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
+In-Reply-To: <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 13 Mar 2023 11:21:44 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
+Message-ID: <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
+Subject: Re: Linux 6.3-rc2
+To:     Guenter Roeck <linux@roeck-us.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -121,72 +79,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023, Oliver Upton wrote:
-> On Thu, Mar 09, 2023 at 09:25:54AM -0800, Sean Christopherson wrote:
-> > On Thu, Mar 09, 2023, Oliver Upton wrote:
-> > > On Thu, Mar 09, 2023 at 09:37:45AM +0700, Bagas Sanjaya wrote:
-> > > > On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
-> > > > > +As a general guideline, use ``kvm-x86/next`` even if a patch/series touches
-> > > > > +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of the
-> > > > > +branches from the main KVM tree is usually a less good option as they likely
-> > > > > +won't have many, if any, changes for the next release, i.e. using the main KVM
-> > > > > +tree as a base is more likely to yield conflicts.  And if there are non-trivial
-> > > > > +conflicts with multiple architectures, coordination between maintainers will be
-> > > > > +required no matter what base is used.  Note, this is far from a hard rule, i.e.
-> > > > > +use a different base for multi-arch series if that makes the most sense.
-> > > 
-> > > I don't think this is the best way to coordinate with other architectures.
-> > > Regardless of whether you intended this to be prescriptive, I'm worried most
-> > > folks will follow along and just base patches on kvm-x86/next anyway.
-> > 
-> > Probably, but for the target audience (KVM x86 contributors), that's likely the
-> > least awful base 99% of the time.
-> 
-> Sorry, I follow this reasoning at all.
-> 
-> If folks are aiming to make a multi-arch contribution then the architecture
-> they regularly contribute to has absolutely zero relevance on the series
-> itself.
+On Mon, Mar 13, 2023 at 8:53=E2=80=AFAM Guenter Roeck <linux@roeck-us.net> =
+wrote:
+>
+> Warning backtraces in calls from ct_nmi_enter(),
+> seen randomly.
 
-There's disconnect between what my brain is thinking and what I wrote.
+Hmm.
 
-The intent of the "use kvm-x86/next" guideline is aimed to address series that
-are almost entirely x86 specific, and only superficially touch common KVM and/or
-other architectures.  In my experience, the vast, vast majority of "multi-arch"
-contributions from x86 fall into this category, i.e. aren't truly multi-arch in
-nature.
+I suspect this one is a bug in the warning, not in the kernel,
+although I have no idea why it would have started happening now.
 
-If I replace the above paragraph with this, does that address (or at least mitigate
-to an acceptable level) your concerns?  Inevitably there will still be series that
-are wrongly based on kvm-x86, but I am more than happy to do the policing.  I
-obviously can't guarantee that I will be the first to run afoul of a "bad" series,
-but I do think I can be quick enough to avoid shifting the burden to other
-maintainers.  And if I'm wrong on either front, you get to say "told you so" and
-make me submit a patch of shame ;-)
+This happens from an irq event, but that check is not *supposed* to
+happen at all from interrupts:
 
-  The only exception to using ``kvm-x86/next`` as the base is if a patch/series
-  is a multi-arch series, i.e. has non-trivial modifications to common KVM code
-  and/or has more than superficial changes to other architectures's code.  Multi-
-  arch patch/series should instead be based on a common, stable point in KVM's
-  history, e.g. the release candidate upon which ``kvm-x86 next`` is based.  If
-  you're unsure whether a patch/series is truly multi-arch, err on the side of
-  caution and treat it as multi-arch, i.e. use a common base.
+         * We dont accurately track softirq state in e.g.
+         * hardirq contexts (such as on 4KSTACKS), so only
+         * check if not in hardirq contexts:
 
-> > > > That means patches that primarily kvm ARM changes should be based on
-> > > > kvm-x86/next, right?
-> > > 
-> > > No, don't do that.
-> > 
-> > +<infinity symbol>
-> > 
-> > This doc is specifically for KVM x86.
-> 
-> You've also made some suggestions about cross-arch development that do not fit
-> the development model of other architectures. I have no desire to nitpick
-> about the x86 process but want the multiarch language to actually set folks up
-> for success working outside of the KVM/x86 tree.
+but I think that the ct_nmi_enter() function was called before the
+hardirq count had even been incremented.
 
-Ah, I see where y'all are coming from.  Yeah, I didn't intend for that type of
-blanket rule, e.g. my comment about this being specifically for KVM x86 was
-intended to clarify that this doc should NOT be used to determine how to handle
-non-x86 code.
+> Sample decoded stack trace:
+
+Hmm. That WARNING backtrace doesn't actually seem to follow the stack
+chain, so it only shows the irq stack, not where the irq happened.
+
+> Seen if CONFIG_DEBUG_LOCK_ALLOC=3Dy and CONFIG_CONTEXT_TRACKING_IDLE=3Dy.
+> It seems that rcu_read_lock_sched_held() can be true when entering an int=
+errupt.
+>
+> The problem is not seen in v6.2, but occurs randomly on ToT with various
+> arm emulations.
+
+Strange. I must be wrong about this being a race on the warning
+itself, because that warning has been there for a long long time.
+
+Adding in some people who might have more of a clue. I'm thinking
+Frederic and Paul might know what's up with the context tracking, but
+I don't see why this would be arm-related or have started recently.
+But I do note that PeterZ did some rcuidle tracing cleanups that do
+end up affecting arm too.
+
+So adding PeterZ too.
+
+Original email with full details at
+
+   https://lore.kernel.org/lkml/d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-=
+us.net/
+
+for added peeps.
+
+Anybody?
+
+                     Linus
