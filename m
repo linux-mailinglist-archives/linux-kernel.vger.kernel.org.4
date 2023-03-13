@@ -2,121 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4223B6B7D90
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:30:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49DF16B7D9B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:32:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbjCMQaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:30:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53632 "EHLO
+        id S229922AbjCMQcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:32:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231449AbjCMQ3k (ORCPT
+        with ESMTP id S229921AbjCMQcn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:29:40 -0400
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (mail-bn1nam02on2098.outbound.protection.outlook.com [40.107.212.98])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8BBB5C107;
-        Mon, 13 Mar 2023 09:29:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k/vh+uhXsdf1xV4Ca2l5NtU/0XjfctsRJR51vfOhcgaGUaplTLc4Ej89AVBWWM9l8m1ur+GbnMHTG51Nm0LIT5/hn5rdZV1ypft2ZA4POwCoITv4A+7VpRFwCeqZyhd3mzMXWZINtP58tb19+eAjUFZv/X3co0LT+u7mr1vTQxCGPdSINVT1GDS3SymEOiOtrjxJv8iKY49Mt4pp+28p0B1Km/Qb5x4WwJh6KnZMHSYqxOWk3i23X+jtmrnTSt6hmulyiTx3hufKkjR7ec2IBal7bF2lonLIk8c7m9b+Sv6y0IwkL0mPaLkd9ofUVqZmaS9TcXuPyp1byoqOEV7hAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=JwTatwS4Z7C0EjmBH88xmJi7GfLQ64+rn3hWJg6ftcU=;
- b=UqcaDs/GSMT/jkGCv3vSvL3ldtFgy5v7ntQYVKL9Msnzq12iBgQm815diAk+xAu8l3MxVdeQwXthMdJMvQWqx/+wMniUVrC+NNzidiWP9QmJHfyGOHvrjroTPet62W+zFtwrRNf863qHg/mI6iHbAQPIc4D19t3zarPz6ey7YlfMnwGdgpdoRIioqrWjbHxBIB+AUeTdF5jJJt8kFF9n5ZErARmlGXIVWsI8ebUDOI7HhP1/3PMWL99k9x5EF2gja0wgCaTr+TKzpvDb01/yrbFO6FTdE/YyCedkbZI6nXKkasc1744XIYaZRt/yx85uF2lvVbhJqV6hDz7Xv2Y0Jw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=JwTatwS4Z7C0EjmBH88xmJi7GfLQ64+rn3hWJg6ftcU=;
- b=hzjxkIRgwzVZZBisHTSUuhSFpHVSV56tJq986WFZzEWKzTqEy66QTXClfVGZ9q8SlZn09ER2dDo4zbHvPn8k88CZ5dg3CQs2ti3HaBKvbjPZWWzPJDq/rjj1xmx1R1kSXiR9+zbAE7qZoUvUGVpVJrk0u9qJJBOvnDOYRF8WHqE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DM6PR13MB4147.namprd13.prod.outlook.com (2603:10b6:5:2a0::11) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 16:28:49 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 16:28:49 +0000
-Date:   Mon, 13 Mar 2023 17:28:43 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Richard Cochran <richardcochran@gmail.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ptp: ines: drop of_match_ptr for ID table
-Message-ID: <ZA9PO82L1Adwtd7A@corigine.com>
-References: <20230312132637.352755-1-krzysztof.kozlowski@linaro.org>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312132637.352755-1-krzysztof.kozlowski@linaro.org>
-X-ClientProxiedBy: AS4P190CA0064.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:656::16) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        Mon, 13 Mar 2023 12:32:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0630A5C117
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:31:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678724997;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HOm3guk3Pbgw64RxprbmHoVswDtw90OzL9pI+grILUI=;
+        b=WuMOll3tYdtx+cUY+oR3lMrexuil7qS6b7+kyvipbr2msYH02dr5CkAewSh97mMXfvlBIm
+        AGLqIOvrIkuZWZNJVyfv6ie4BpID9/YgYykNrutwI8Vb0A5ckXFI49VlVVBPe2htSyJrXW
+        qQzdoe3c8swwHqsOEvEs6s8z26+5WB8=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-549-tjZCzPkZMfG1Azk5n9zKoQ-1; Mon, 13 Mar 2023 12:29:56 -0400
+X-MC-Unique: tjZCzPkZMfG1Azk5n9zKoQ-1
+Received: by mail-ed1-f72.google.com with SMTP id r9-20020a05640251c900b004d4257341c2so17722590edd.19
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:29:56 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678724995;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HOm3guk3Pbgw64RxprbmHoVswDtw90OzL9pI+grILUI=;
+        b=qkUDTf1AfZjYNBVQ2wvSFt94SZ6Nv90gAh+l4eDSftj/jUgpVNMmeMoBk8YGA3hUq4
+         EP/hzj9eeLKlWsgrSkyMinn3nce1g65U6kQco1PyGlvFxbX8uwXCMZgeVTTPt85AZqdH
+         AZXqCU13NWiGE69Go5n6M1Gr3ywlWgE2M7FQo3akI3AlNl4PLjWQgsRovW8tFKXzzP0L
+         mpw8e4FXcYO/HWf+oq1kzE1RUDzxLc49HusNuGkiR7V4U0GBOD8hecB4x9oPCXiWk0ra
+         s93s6gAbb/IERP6KRQjcHOfLH1MucNRkWGxfJEDVI6NJ5Tdp/y0iPOZN6fA5Bzviml/j
+         1JeA==
+X-Gm-Message-State: AO0yUKXvMgltTxhmnkIYHCTvSsj5M6B0seirRBX58hCMB22RDWWFm1AN
+        M7dd4fipLIvvdySdMgFOlYRFnjnUtgp81PBzNOerhuZL2MGPz9aGZV3fMgBbkciy52nt7Dv7Rdz
+        HARnSFz5N0bDae1lJr9e0oo25
+X-Received: by 2002:a17:907:c084:b0:92b:dff5:42b1 with SMTP id st4-20020a170907c08400b0092bdff542b1mr1516913ejc.66.1678724995146;
+        Mon, 13 Mar 2023 09:29:55 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+VS+Y85uZk6qp9b2gAOcQLH+Dtwf4zqrCKuPrFVBSiIGCAFRUYpJLEk1mf1rOhsezT1N2Biw==
+X-Received: by 2002:a17:907:c084:b0:92b:dff5:42b1 with SMTP id st4-20020a170907c08400b0092bdff542b1mr1516882ejc.66.1678724994855;
+        Mon, 13 Mar 2023 09:29:54 -0700 (PDT)
+Received: from [10.40.98.142] ([78.108.130.194])
+        by smtp.gmail.com with ESMTPSA id re2-20020a170906d8c200b00926d614b890sm1941649ejb.204.2023.03.13.09.29.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 09:29:54 -0700 (PDT)
+Message-ID: <275d2f04-782f-2c9d-187a-7a510bf34f41@redhat.com>
+Date:   Mon, 13 Mar 2023 17:29:53 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB4147:EE_
-X-MS-Office365-Filtering-Correlation-Id: 38a12820-794e-4ef5-211f-08db23e006a9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: V5mHub3E7zRt567U4gKDuGo1osMW1VHavehyR0XtMnFlfAvr15mvfQyDZ3SIagKKO3Ifr7l49gA+1oMaA6PrYGZaMQ6vo75yondX4RTPZ6QZVfYhS+iCi6QkOWKGAFYVlCPLHyLPIE15QA43YqT/qdR8NkhosgEaUbd1fub3tJ/lqOwyvJ/mmlk7Gac9gHJV57oYCCd/Ou4baJid5Uk/dJxtVUImEmPT5DpzyHLjsDpJTc6UdyUtXRiTvWT71w0+g7CRbK4p85i5W/JpdgDQlpG9o7z310S4N2NWGHTif6zNH3NKGddrv88CzKBGPb6wt8wFAdTnnKNrl1KRaNfX+S2Kzm/7blQeUMypEFw5qVTbVsLx+cGr+XYekHAVDGtblj5hMBflWuJH8L4g5wr551KfC27L8G8QjtkCdyJhBzciXq4MXneJjA9o3pvvrGYoabAgAHug4SfrlE7NLCTeeINKEwUvKZWqO2Yq/RcuHHN5ouX0tYyQPDuvxsFTrMHgTzZbMN4RV3N78oWWJbVdbaW/VVbZQ/UOWCrNC0GHqYrvg1syfmVj6ENIlpil6lGepDAG/sM8cpLrmFDyS9cczeiBPRUXLJ9EBPBaVzf/PUlJgYM3MgMOBdgia0tu3Hkjh7vmtH0NRboC87F2cBzkLk+SuH0FgisWOEtFKtYRMsapbn36DRkYc7qDUZu6Qg51
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39840400004)(346002)(396003)(376002)(136003)(451199018)(41300700001)(478600001)(8676002)(4326008)(66556008)(66476007)(66946007)(8936002)(6916009)(36756003)(86362001)(38100700002)(6512007)(6486002)(6666004)(186003)(44832011)(5660300002)(4744005)(2906002)(316002)(6506007)(2616005);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?a1o4MTdnNHZzTDNUK2YzKyt4NUZSWk1xaXR1Wi9Pb1kzYTlLbDVrdEZBS2sz?=
- =?utf-8?B?cHpRaDlvamZKVDhGMnRaalN2NDg2bXRrZDhGL1d1d2p1b2p1S3NlYWFCMXNQ?=
- =?utf-8?B?T09RZzQ5TGdPbGphKzZqMnpRTUZ4ZDZOWEh5c0o3OGU0MHRhY2xDcmNhZWZr?=
- =?utf-8?B?RHcvRjJCUGFPLzVGa1ZsNVltUXl0M0o2R2I4MUZocWE5Uno1M2YrUXVRUGo2?=
- =?utf-8?B?YW5Zbm40MWxvVzVua1dINzJmaFpHSlBKbENxd0dMWTdpb1Bkb2RJNVpZdm5T?=
- =?utf-8?B?RXZCVVJOajZyTnBNVHNOZzg0YTNDSjB6RnA4NzNWeEJBQ2d4RURCbmNkZnk0?=
- =?utf-8?B?emlJbHdaUjFScndJaHVCbG0rbFoydVRzNm12QkVyMUV3ZnN0UDR5bGFLRWlF?=
- =?utf-8?B?Ykx2SkVHUWpHczlvMThGMndkbzRvMWl3K0FjWkxIc25jU1Ercy9vV3p5VFcv?=
- =?utf-8?B?K01zWWxkT3kwTWJCVWJzQUc1QU1OeHNWTUdEQisrYXpVczEwT1V3Z2xSSzdE?=
- =?utf-8?B?TkRuTVFmaUQ1ZExiVTArQnlQSFZjZ1VmTnpnSXpvY3FjdmxHTjd1blp4UWV4?=
- =?utf-8?B?NnFCd3pPeGZkVXBQV0dGdjFXbm9Ma1lRZU5ZUmNLZUlaMlkydFdQM0ptWlBJ?=
- =?utf-8?B?dmRtVFNZZk9uTTN4UVhSYkV3L1BpZks2YVkvcXplM3ZhaDdyTWZXZEFoUjA5?=
- =?utf-8?B?bzdjbTZwS3ZkMWpYNFJibzhzOXhtWmpTRXAzYnQwQ1VtSDJleHV5c0FvMjE2?=
- =?utf-8?B?OUFJZkVBcjZHUXlrV3FoZ2ZBYWx2Nkw5MGpmMnExZmN6bUJ6by9ZUG9mSlMx?=
- =?utf-8?B?UDJWQ0w0TnJXbVVjYkFQRmVjbjZ4MFgvSDlIUGhJYm1lWlZ6dDEvUFUzM09p?=
- =?utf-8?B?NHF2aU5abDRobHNqM2t4aEdoOGJlUDNrWjA4N21sQ3M4cEVRRWRaSTVxNGFJ?=
- =?utf-8?B?MFFOQm1GenFqa2tTbWJESXhvRVpTWTdpYlZia3NIWEViMjZuSzhPQmpyaFNQ?=
- =?utf-8?B?bnIyMXV4Q1JkRkdIN2w2ckNTaEloWUoyWElrYW5sWmNvZDY0Z1Z0OUVVT2JQ?=
- =?utf-8?B?NDlkTkY1cXdkRUVlNHp6VFpSaGxvMUYvbW11RDd3TlJDOW1sakRHVXpwQnJl?=
- =?utf-8?B?ZnBIYkEwcGZiYzZZZ2E0TllCc0pjYTJmMkVRYUFaSWVHTVhUY29tYkszdFJI?=
- =?utf-8?B?V0oxR0ZPR2ozRGpZczh5Sy9OQTZ2L0xyV2pESG44VGZ3K1ViNm1FZUN5TUs2?=
- =?utf-8?B?WldHck5QdWdyc2NUbW5JR3ZBQUljYzg4VlNnbW5OSzltUUU5REU4MlRyYmRn?=
- =?utf-8?B?ejV3OURNUC90cXRIOHlOZE9TQjRYcU4rSjZDMlVCbFpTVmhCNG56QUxhdUJq?=
- =?utf-8?B?NTR3SVNFUjNGeVl5THJGTzBpWE5zb3cwaVZ6MGN5ZFdLUER6R0xVaVdJekh4?=
- =?utf-8?B?WEZNQTNlL2NkelNhYVM4c21EMG9zSlh3TCs2a0RITlZXMHB3QTZGc3VQYm9I?=
- =?utf-8?B?MnBVUk9YdU94dEZxSzRHb0kwT0dxK0hFSWJOZ09PRzRzNitpSHhQNGlINkZ6?=
- =?utf-8?B?dmNMWjZlY2NBazY1VFM2WUFWdnh6NmdXMDNNUXBSNm5xOFdkQ2EwYmJVU0VI?=
- =?utf-8?B?M2c3Vm1VS0dkaHF4V1BFa1lqUzV3cDJsTURRU0V6U1lYMHcvSkVqRTBjSUpo?=
- =?utf-8?B?aFM3WFROMHJSbHlmcVV5Y2F5Q3crUWJVMEVFZFhXK2VKTmw4cmVwUXV4Ny9V?=
- =?utf-8?B?TVZWMnZ2ZkxERUJCTFFUa0pvaDNUUFZCMXF6MUdxcUYvWkpSVWUwcmR1cG5x?=
- =?utf-8?B?TFArWkdBSUVXaExEN3phNmVtWkFnaWdMRGViSDdrUlRDempNQUxHWnBkOTN0?=
- =?utf-8?B?TTFwQnZYSmRBeWlpbjFVK2dORy85b2VTYTZubzFyTi9lajR0RzNjTVJ1QUpk?=
- =?utf-8?B?NDdVekpsd1RXQzI3TkVlck5FSzBIbTR2Qi9BaTJwdHZSQ1BKcjJsUms1Y2R3?=
- =?utf-8?B?VjdKL2NXblczNlRvT1ZMbi8xUm9wR2J2M1pRR091em02Y2pGeDRxalpaMEF2?=
- =?utf-8?B?cUV6cjNiYkZXb2l5Zk8zOHRhNkZZTTNKSVlveXNubXJJa3g0VStmWjlYK3Fv?=
- =?utf-8?B?VVgySHJ6VE1kQzA5bnpWTVBEWFFwSXFMVTU1YnZ3bHR5MGhYbitKT0ZSb0J5?=
- =?utf-8?B?WUVyRFJhd2piU2wvZlJtUWhCalhxRWZWR3ZwMlF6dXA5RXlMQlJtRnFYdWkr?=
- =?utf-8?B?cXlKNExFcXVGcWFoTFJYcTFWY0JRPT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 38a12820-794e-4ef5-211f-08db23e006a9
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 16:28:49.5856
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: UxfQmq+5DIKW/58u9OwhjFCQVn/JKg7jQ0HDyLRNl+WrDNrtTTSQQIMWnq8lGSk6bf+XX9FbsHhkGMBtg6OnAyZ7h04uwvXQrhKag0rdDn4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB4147
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v3 4/8] platform/x86/intel/ifs: Introduce Array Scan test
+ to IFS
+Content-Language: en-US
+From:   Hans de Goede <hdegoede@redhat.com>
+To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        gregkh@linuxfoundation.org, rostedt@goodmis.org,
+        ashok.raj@intel.com, tony.luck@intel.com,
+        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+        patches@lists.linux.dev, ravi.v.shankar@intel.com,
+        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
+        sohil.mehta@intel.com
+References: <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230301015942.462799-1-jithu.joseph@intel.com>
+ <20230301015942.462799-5-jithu.joseph@intel.com>
+ <7f82f241-39ee-15e0-1ae7-e98e50730c95@redhat.com>
+In-Reply-To: <7f82f241-39ee-15e0-1ae7-e98e50730c95@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -124,15 +91,239 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 02:26:37PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).  This
-> also fixes !CONFIG_OF error:
-> 
->   drivers/ptp/ptp_ines.c:783:34: error: ‘ines_ptp_ctrl_of_match’ defined but not used [-Werror=unused-const-variable=]
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Hi,
 
-Reviewed-by: Simon Horman <simon.horman@corigine.com>
+On 3/13/23 17:10, Hans de Goede wrote:
+> Hi,
+> 
+> On 3/1/23 02:59, Jithu Joseph wrote:
+>> Array BIST is a new type of core test introduced under the Intel Infield
+>> Scan (IFS) suite of tests.
+>>
+>> Emerald Rapids (EMR) is the first CPU to support Array BIST.
+>> Array BIST performs tests on some portions of the core logic such as
+>> caches and register files. These are different portions of the silicon
+>> compared to the parts tested by the first test type
+>> i.e Scan at Field (SAF).
+>>
+>> Make changes in the device driver init flow to register this new test
+>> type with the device driver framework. Each test will have its own
+>> sysfs directory (intel_ifs_0 , intel_ifs_1) under misc hierarchy to
+>> accommodate for the differences in test type and how they are initiated.
+>>
+>> Upcoming patches will add actual support.
+>>
+>> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
+>> Reviewed-by: Tony Luck <tony.luck@intel.com>
+>> ---
+>>  drivers/platform/x86/intel/ifs/ifs.h  |  3 +
+>>  drivers/platform/x86/intel/ifs/core.c | 85 +++++++++++++++++++--------
+>>  2 files changed, 62 insertions(+), 26 deletions(-)
+>>
+>> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
+>> index ab168ddf28f1..b8b956e29653 100644
+>> --- a/drivers/platform/x86/intel/ifs/ifs.h
+>> +++ b/drivers/platform/x86/intel/ifs/ifs.h
+>> @@ -137,6 +137,9 @@
+>>  #define SCAN_TEST_PASS				1
+>>  #define SCAN_TEST_FAIL				2
+>>  
+>> +#define IFS_TYPE_SAF			0
+>> +#define IFS_TYPE_ARRAY_BIST		1
+>> +
+>>  /* MSR_SCAN_HASHES_STATUS bit fields */
+>>  union ifs_scan_hashes_status {
+>>  	u64	data;
+>> diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
+>> index 62c44dbae757..2237aaba7078 100644
+>> --- a/drivers/platform/x86/intel/ifs/core.c
+>> +++ b/drivers/platform/x86/intel/ifs/core.c
+>> @@ -16,6 +16,7 @@
+>>  
+>>  static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
+>>  	X86_MATCH(SAPPHIRERAPIDS_X),
+>> +	X86_MATCH(EMERALDRAPIDS_X),
+>>  	{}
+>>  };
+>>  MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
+> 
+> Note you can add driver_data to a match table like this. What you should
+> do here is use the driver data to point to the const ifs_hw_caps discussed
+> before, so what you get here is:
+> 
+> #define X86_MATCH(model, data)                          \
+>         X86_MATCH_VENDOR_FAM_MODEL_FEATURE(INTEL, 6,    \
+>                 INTEL_FAM6_##model, X86_FEATURE_CORE_CAPABILITIES, (unsigned long)(data))
+> 
+> static const struct ifs_hw_caps saphire_rapids_caps = {
+> 	.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+> 	.test_num = 0,
+> };
+> 
+> static const struct ifs_hw_caps emerald_rapids_caps = {
+> 	.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+> 	.test_num = 0,
+> };
+> 
+> static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
+> 	X86_MATCH(SAPPHIRERAPIDS_X, &saphire_rapids_caps),
+> 	X86_MATCH(EMERALDRAPIDS_X, &emerald_rapids_caps),
+> 	{}
+> };
+> MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
+> 
+> and then drop all the code related to having an array of ifs_device structs
+> (of which only 1 will ever get used) and instead at the beginning of
+> ifs_init(void), after:
+> 
+>         m = x86_match_cpu(ifs_cpu_ids);
+>         if (!m)
+>                 return -ENODEV;
+> 
+> add:
+> 
+> 	ifs_device.hwcaps = (const struct ifs_hw_caps *)m->driver_data;
+> 
+> And then you can pretty much drop all the rest of this patch and we
+> end up with much nicer code for differentiating between the models :)
+
+Upon reading the rest of the series, I think the above might be based
+on me misunderstanding this bit.
+
+If I understand things correctly then what is new with emerald_rapids
+is support for a second set/type of tests called " Array Scan test"
+and the old test method / test-type is also still supported.
+
+And you have chosen to register 2 misc-devices , one per supported
+test type ?
+
+Have I understood that correcty?
+
+May I ask why use 1 misc device per test-type. Why not just add
+a single new sysfs_attr to the existing misc device to trigger
+the new test-type ?
+
+Regards,
+
+Hans
+
+
+>> @@ -24,23 +25,51 @@ ATTRIBUTE_GROUPS(plat_ifs);
+>>  
+>>  bool *ifs_pkg_auth;
+>>  
+>> -static struct ifs_device ifs_device = {
+>> -	.ro_data = {
+>> -		.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+>> -		.test_num = 0,
+>> +static struct ifs_device ifs_devices[] = {
+>> +	[IFS_TYPE_SAF] = {
+>> +		.ro_data = {
+>> +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_PERIODIC_BIST_BIT,
+>> +			.test_num = IFS_TYPE_SAF,
+>> +		},
+>> +		.misc = {
+>> +			.name = "intel_ifs_0",
+>> +			.minor = MISC_DYNAMIC_MINOR,
+>> +			.groups = plat_ifs_groups,
+>> +		},
+>>  	},
+>> -	.misc = {
+>> -		.name = "intel_ifs_0",
+>> -		.minor = MISC_DYNAMIC_MINOR,
+>> -		.groups = plat_ifs_groups,
+>> +	[IFS_TYPE_ARRAY_BIST] = {
+>> +		.ro_data = {
+>> +			.integrity_cap_bit = MSR_INTEGRITY_CAPS_ARRAY_BIST_BIT,
+>> +			.test_num = IFS_TYPE_ARRAY_BIST,
+>> +		},
+>> +		.misc = {
+>> +			.name = "intel_ifs_1",
+>> +			.minor = MISC_DYNAMIC_MINOR,
+>> +		},
+>>  	},
+>>  };
+>>  
+>> +#define IFS_NUMTESTS ARRAY_SIZE(ifs_devices)
+>> +
+>> +static void ifs_cleanup(void)
+>> +{
+>> +	int i;
+>> +
+>> +	for (i = 0; i < IFS_NUMTESTS; i++) {
+>> +		if (ifs_devices[i].misc.this_device) {
+>> +			misc_deregister(&ifs_devices[i].misc);
+>> +			kfree(ifs_devices[i].rw_data);
+>> +		}
+>> +	}
+>> +	kfree(ifs_pkg_auth);
+>> +}
+>> +
+>>  static int __init ifs_init(void)
+>>  {
+>>  	const struct x86_cpu_id *m;
+>>  	struct ifs_data *ifsd;
+>>  	u64 msrval;
+>> +	int i, ret;
+>>  
+>>  	m = x86_match_cpu(ifs_cpu_ids);
+>>  	if (!m)
+>> @@ -55,35 +84,39 @@ static int __init ifs_init(void)
+>>  	if (rdmsrl_safe(MSR_INTEGRITY_CAPS, &msrval))
+>>  		return -ENODEV;
+>>  
+>> -	if (!(msrval & BIT(ifs_device.ro_data.integrity_cap_bit)))
+>> -		return -ENODEV;
+>> -
+>>  	ifs_pkg_auth = kmalloc_array(topology_max_packages(), sizeof(bool), GFP_KERNEL);
+>>  	if (!ifs_pkg_auth)
+>>  		return -ENOMEM;
+>>  
+>> -	ifsd = kzalloc(sizeof(*ifsd), GFP_KERNEL);
+>> -	if (!ifsd)
+>> -		return -ENOMEM;
+>> -
+>> -	ifsd->ro_info = &ifs_device.ro_data;
+>> -	ifs_device.rw_data = ifsd;
+>> -
+>> -	if (misc_register(&ifs_device.misc)) {
+>> -		kfree(ifsd);
+>> -		kfree(ifs_pkg_auth);
+>> -		return -ENODEV;
+>> +	for (i = 0; i < IFS_NUMTESTS; i++) {
+>> +		ifsd = NULL;
+>> +		if (!(msrval & BIT(ifs_devices[i].ro_data.integrity_cap_bit)))
+>> +			continue;
+>> +
+>> +		ifsd = kzalloc(sizeof(*ifsd), GFP_KERNEL);
+>> +		if (!ifsd) {
+>> +			ret = -ENOMEM;
+>> +			goto err_exit;
+>> +		}
+>> +		ifsd->ro_info = &ifs_devices[i].ro_data;
+>> +		ifs_devices[i].rw_data = ifsd;
+>> +
+>> +		if (misc_register(&ifs_devices[i].misc)) {
+>> +			ret = -ENODEV;
+>> +			kfree(ifsd);
+>> +			goto err_exit;
+>> +		}
+>>  	}
+>> -
+>>  	return 0;
+>>  
+>> +err_exit:
+>> +	ifs_cleanup();
+>> +	return ret;
+>>  }
+>>  
+>>  static void __exit ifs_exit(void)
+>>  {
+>> -	misc_deregister(&ifs_device.misc);
+>> -	kfree(ifs_device.rw_data);
+>> -	kfree(ifs_pkg_auth);
+>> +	ifs_cleanup();
+>>  }
+>>  
+>>  module_init(ifs_init);
 
