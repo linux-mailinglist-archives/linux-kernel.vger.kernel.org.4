@@ -2,100 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0709D6B84A1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:16:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A48206B84A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:17:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCMWQd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 18:16:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55616 "EHLO
+        id S229889AbjCMWRx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 18:17:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCMWQc (ORCPT
+        with ESMTP id S229482AbjCMWRw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 18:16:32 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020378B079
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:16:30 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id h8so10921070ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:16:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678745789;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MzuY5XzSCC9BatT9usUBHz1ejcIp3clfPSLT8vnz+po=;
-        b=TIH/X0Eu+85xfxdVcnFxDvOLme7eyfQuQc/yq9rftgg9f/j28873G3/Srfm+DkTpXD
-         7lHGtF6G9gQvlj4mIW8BDHQma0fCc6EOV1XyTMRNiaJlWrAEAPVLNBYDlhDj+D8bIYaK
-         +RCWzG4n5s1mqkWxAgTk1LsYFGXqM8bd5X3Qs=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678745789;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MzuY5XzSCC9BatT9usUBHz1ejcIp3clfPSLT8vnz+po=;
-        b=BYwXsfNtJgMjfdDcuUdbKvBA+CvrlxHFxG0oqDKqK2NJo+2v3UBSY7CL3qJSGSNhzL
-         e4QHuYjZw57WfYgKmut7nAY8bHkevUulWjG29RBY4uoRompUNinFV1rt/MgwwpCMc1Tb
-         UK9wmjG4JKRkZaXTjPgc5Eo/Ij/KGAqnlJ6365o0sib8dz22Nxc4dP5KpTsvCE+Xypnd
-         0sq0NL8j9KO9RfdOfAKnsEV7HMl6MDf+ERi6h7bto/QfQpKguWiINApmr5+o6T6Y0prc
-         rQFeHVqXuR/IKAf0xF4hLGujx4Q3fGPRc/wBMEV8nMGPQ1w+c7aZRBgn+5yQPgGrfALS
-         vkLg==
-X-Gm-Message-State: AO0yUKWHXg3+7SNXoXyDGWy4214TROc0EWUa0fIl35HK4n8pGb2TLlOa
-        WatU1hQVgE/mf4evnsIsrILW+NFk1bFd3P04aYhz0w==
-X-Google-Smtp-Source: AK7set+BIjl4yx7HDDa5owy5vqsTjsfYE+8x3y3iw2x5WW+DtFb9ooKx3mfFJ02hsYsQqUQunS6UWQ==
-X-Received: by 2002:a17:906:c2cb:b0:923:6958:edf7 with SMTP id ch11-20020a170906c2cb00b009236958edf7mr102855ejb.23.1678745789075;
-        Mon, 13 Mar 2023 15:16:29 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id yz6-20020a170906dc4600b00882f9130eafsm298405ejb.26.2023.03.13.15.16.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 15:16:28 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id r11so3064523edd.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:16:28 -0700 (PDT)
-X-Received: by 2002:a17:906:6d49:b0:88d:64e7:a2be with SMTP id
- a9-20020a1709066d4900b0088d64e7a2bemr38955ejt.15.1678745788062; Mon, 13 Mar
- 2023 15:16:28 -0700 (PDT)
+        Mon, 13 Mar 2023 18:17:52 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBAD8C822;
+        Mon, 13 Mar 2023 15:17:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 988A5614F1;
+        Mon, 13 Mar 2023 22:17:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B3EE5C433EF;
+        Mon, 13 Mar 2023 22:17:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678745870;
+        bh=INaHVbl7ixdOi1NsOn+7HYfFqqNPUGFYQtn80pPPDKM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lE/NADRFUTKbkwWVHMD+KKs4k9J+dIrxKta06me0F/R2gzq8UK3j5fVIP789xIt31
+         aHzMy3KqQgrkw39E1lZ3z1wJdh/1M4SLMRMgw5cHC0cPq6vMCkYVrvSFyv237XvJbz
+         C81mfqgbYoJp/Z3oiP1Y4q6Q/20Ki9TBPH5I1oJiv6md00RW5gvxUhSXjC+TnbjZHH
+         elq2sLypxZfiwpuwye3y4ik61DU+p+HBbMkbjMdBnn9539L1nGIQFq/0MfTvzAtrZ/
+         jr/uBFkYBoErAJeAzH6k6Mmp2VkgQBMCnaI/1WFCpqXP+kku6ihzwklCM4warNfkSd
+         Wdj/jMDYTbTQw==
+Date:   Mon, 13 Mar 2023 15:17:48 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     syzbot <syzbot+93e495f6a4f748827c88@syzkaller.appspotmail.com>
+Cc:     jaegeuk@kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, tytso@mit.edu
+Subject: Re: [syzbot] [fscrypt?] WARNING in fscrypt_destroy_keyring
+Message-ID: <ZA+hDI+bIx2H7QYz@sol.localdomain>
+References: <00000000000044651705f6ca1e30@google.com>
 MIME-Version: 1.0
-References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
- <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net> <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
- <fce02d50-65a7-4aa7-8949-6a82321da292@roeck-us.net>
-In-Reply-To: <fce02d50-65a7-4aa7-8949-6a82321da292@roeck-us.net>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Mar 2023 15:16:11 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wgVCTJTQPwoLrscmOa+n9X8+bc5ieCD+7PXw35Ke7i6ng@mail.gmail.com>
-Message-ID: <CAHk-=wgVCTJTQPwoLrscmOa+n9X8+bc5ieCD+7PXw35Ke7i6ng@mail.gmail.com>
-Subject: Re: Linux 6.3-rc2
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00000000000044651705f6ca1e30@google.com>
+X-Spam-Status: No, score=-4.6 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 1:30=E2=80=AFPM Guenter Roeck <linux@roeck-us.net> =
-wrote:
->
-> It gets weird. Bisect log below. Reverting the identified patch does
-> indeed seem to fix the problem, only I have no clue why this might
-> be the case. The patch looks completely innocent to me. Yet, I can
-> reliably reproduce the problem with v6.3-rc2, but at least so far I
-> have not been able to reproduce it with commit f3dd0c53370 reverted
-> (and I am trying on five different servers in parallel).
+On Mon, Mar 13, 2023 at 08:53:55AM -0700, syzbot wrote:
+> Hello,
+> 
+> syzbot found the following issue on:
+> 
+> HEAD commit:    fe15c26ee26e Linux 6.3-rc1
+> git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+> console output: https://syzkaller.appspot.com/x/log.txt?x=14e2d88ac80000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=7573cbcd881a88c9
+> dashboard link: https://syzkaller.appspot.com/bug?extid=93e495f6a4f748827c88
+> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+> userspace arch: arm64
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=16171188c80000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=15ac08dac80000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/89d41abd07bd/disk-fe15c26e.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/fa75f5030ade/vmlinux-fe15c26e.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/590d0f5903ee/Image-fe15c26e.gz.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/bf3b409baf10/mount_0.gz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+93e495f6a4f748827c88@syzkaller.appspotmail.com
+> 
+> EXT4-fs (loop0): mounted filesystem 76b65be2-f6da-4727-8c75-0525a5b65a09 without journal. Quota mode: writeback.
+> fscrypt: AES-256-CTS-CBC using implementation "cts-cbc-aes-ce"
+> ------------[ cut here ]------------
+> WARNING: CPU: 1 PID: 5945 at fs/crypto/keyring.c:237 fscrypt_destroy_keyring+0x164/0x240 fs/crypto/keyring.c:237
 
-Yeah, that commit looks very innocuous. I'm surprised it would even
-change any code generation, but it's very possible that it ends up
-affecting some code layout or something almost by mistake.
+Very impressive find by syzbot!  fscrypt_destroy_keyring() needs to be called
+after security_sb_delete(), not before.  Fix is
+https://lore.kernel.org/linux-fscrypt/20230313221231.272498-2-ebiggers@kernel.org
 
-I'd be inclined to think that the problem is very timing-sensitive,
-and has probably been there for a while, and some random moon phase
-just made it happen now.
-
-               Linus
+- Eric
