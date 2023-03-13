@@ -2,107 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E0146B8118
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C832E6B80E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:41:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231539AbjCMSsP convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 14:48:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44218 "EHLO
+        id S231244AbjCMSlf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:41:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58818 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbjCMSsG (ORCPT
+        with ESMTP id S230380AbjCMSlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:48:06 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EE5386178;
-        Mon, 13 Mar 2023 11:47:43 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pbn3b-001n3P-9h; Mon, 13 Mar 2023 19:38:03 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pbn3b-001k6k-2d; Mon, 13 Mar 2023 19:38:03 +0100
-Message-ID: <0343d84733bcda9a36bb7329165ae03f0d8ba759.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 16/36] sh: dma-sysfs: move to use bus_get_dev_root()
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Mon, 13 Mar 2023 14:41:32 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 392F4BDED;
+        Mon, 13 Mar 2023 11:40:52 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 27EC2C0004;
+        Mon, 13 Mar 2023 18:38:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678732717;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=k1+MjdmXNuTv59ueGFw6eLAhE82WHrOY9UQ4cRVrTxE=;
+        b=U11sgBJ84Y3UqG8M+uI5dRdBBgItHWoEyPo/yvkqBz7/hJxhN5lSqulrBPGw6foGEdCeOW
+        tnt7mJPOoxeiSDcaqHO9j1cu/XSCBwwElyuIaloDg3Oi1dQn+Hm7VKTbEPYd0I0kwdOcZ6
+        R8zNcbAvgoo/1utb5R+VtZqPCygFwSe+XcvcmOEmJazKFvlHcgKBSPnSsAFrC92s+3F1MG
+        ja1+oDf2YWU6DJb1J4TYtBlRMjUaaOamsXER5iEYUXCeTEsIaSGqnsyx9SRd/FpSDQaFNv
+        K/GwKkhQN4K4RSKhwcdRgKvRyDCw7A/wiN+ehqdTzLCOCOG4/hz6XM2iVIVx7A==
+Date:   Mon, 13 Mar 2023 19:38:36 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Sean Anderson <sean.anderson@seco.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>, linux-rtc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Date:   Mon, 13 Mar 2023 19:38:02 +0100
-In-Reply-To: <20230313182918.1312597-16-gregkh@linuxfoundation.org>
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
-         <20230313182918.1312597-16-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+Subject: Re: [PATCH v4] rtc: abx80x: Add nvmem support
+Message-ID: <20230313183836e276d826@mail.local>
+References: <20221222214532.1873718-1-sean.anderson@seco.com>
+ <e029e39b-196d-ee4b-318d-6dc950b2b26c@seco.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e029e39b-196d-ee4b-318d-6dc950b2b26c@seco.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-13 at 19:28 +0100, Greg Kroah-Hartman wrote:
-> Direct access to the struct bus_type dev_root pointer is going away soon
-> so replace that with a call to bus_get_dev_root() instead, which is what
-> it is there for.
+On 13/03/2023 11:28:30-0400, Sean Anderson wrote:
+> On 12/22/22 16:45, Sean Anderson wrote:
+> > This adds support for the 256-byte internal RAM. There are two windows
+> > which can be used to access this RAM: 64 bytes at 0x40 (the "standard"
+> > address space) and 128 bytes at 0x80 (the "alternate" address space). We
+> > use the standard address space because it is also accessible over SPI
+> > (if such a port is ever done). We are limited to 32-byte reads for SMBus
+> > compatibility, so there's no advantage to using the alternate address
+> > space.
+> > 
+> > There are some reserved bits in the EXTRAM register, and the datasheet
+> > doesn't say what to do with them. I've opted to skip a read/modify/write
+> > and just write the whole thing. If this driver is ever converted to
+> > regmap, this would be a good place to use regmap_update_bits.
+> > 
+> > Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+> > ---
+> > 
+> > Changes in v4:
+> > - Remove unused variable
+> > 
+> > Changes in v3:
+> > - Use devm_rtc_nvmem_register
+> > - Remove ifdefs
+> > 
+> > Changes in v2:
+> > - Fix building on non-arm platforms
+> > 
+> >  drivers/rtc/rtc-abx80x.c | 77 ++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 77 insertions(+)
+> > 
+> > diff --git a/drivers/rtc/rtc-abx80x.c b/drivers/rtc/rtc-abx80x.c
+> > index 9b0138d07232..74ff820f5481 100644
+> > --- a/drivers/rtc/rtc-abx80x.c
+> > +++ b/drivers/rtc/rtc-abx80x.c
+> > @@ -11,6 +11,7 @@
+> >   */
+> >  
+> >  #include <linux/bcd.h>
+> > +#include <linux/bitfield.h>
+> >  #include <linux/i2c.h>
+> >  #include <linux/module.h>
+> >  #include <linux/of_device.h>
+> > @@ -87,6 +88,16 @@
+> >  #define ABX8XX_TRICKLE_STANDARD_DIODE	0x8
+> >  #define ABX8XX_TRICKLE_SCHOTTKY_DIODE	0x4
+> >  
+> > +#define ABX8XX_REG_EXTRAM	0x3f
+> > +#define ABX8XX_EXTRAM_XADS	GENMASK(1, 0)
+> > +
+> > +#define ABX8XX_SRAM_BASE	0x40
+> > +#define ABX8XX_SRAM_WIN_SIZE	0x40
+> > +#define ABX8XX_RAM_SIZE		256
+> > +
+> > +#define NVMEM_ADDR_LOWER	GENMASK(5, 0)
+> > +#define NVMEM_ADDR_UPPER	GENMASK(7, 6)
+> > +
+> >  static u8 trickle_resistors[] = {0, 3, 6, 11};
+> >  
+> >  enum abx80x_chip {AB0801, AB0803, AB0804, AB0805,
+> > @@ -673,6 +684,68 @@ static int abx80x_setup_watchdog(struct abx80x_priv *priv)
+> >  }
+> >  #endif
+> >  
+> > +static int abx80x_nvmem_xfer(struct abx80x_priv *priv, unsigned int offset,
+> > +			     void *val, size_t bytes, bool write)
+> > +{
+> > +	int ret;
+> > +
+> > +	while (bytes) {
+> > +		u8 extram, reg, len, lower, upper;
+> > +
+> > +		lower = FIELD_GET(NVMEM_ADDR_LOWER, offset);
+> > +		upper = FIELD_GET(NVMEM_ADDR_UPPER, offset);
+> > +		extram = FIELD_PREP(ABX8XX_EXTRAM_XADS, upper);
+> > +		reg = ABX8XX_SRAM_BASE + lower;
+> > +		len = min(lower + bytes, (size_t)ABX8XX_SRAM_WIN_SIZE) - lower;
+> > +		len = min_t(u8, len, I2C_SMBUS_BLOCK_MAX);
+> > +
+> > +		ret = i2c_smbus_write_byte_data(priv->client, ABX8XX_REG_EXTRAM,
+> > +						extram);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		if (write)
+> > +			ret = i2c_smbus_write_i2c_block_data(priv->client, reg,
+> > +							     len, val);
+> > +		else
+> > +			ret = i2c_smbus_read_i2c_block_data(priv->client, reg,
+> > +							    len, val);
+> > +		if (ret)
+> > +			return ret;
+> > +
+> > +		offset += len;
+> > +		val += len;
+> > +		bytes -= len;
+> > +	}
+> > +
+> > +	return 0;
+> > +}
+> > +
+> > +static int abx80x_nvmem_read(void *priv, unsigned int offset, void *val,
+> > +			     size_t bytes)
+> > +{
+> > +	return abx80x_nvmem_xfer(priv, offset, val, bytes, false);
+> > +}
+> > +
+> > +static int abx80x_nvmem_write(void *priv, unsigned int offset, void *val,
+> > +			      size_t bytes)
+> > +{
+> > +	return abx80x_nvmem_xfer(priv, offset, val, bytes, true);
+> > +}
+> > +
+> > +static int abx80x_setup_nvmem(struct abx80x_priv *priv)
+> > +{
+> > +	struct nvmem_config config = {
+> > +		.type = NVMEM_TYPE_BATTERY_BACKED,
+> > +		.reg_read = abx80x_nvmem_read,
+> > +		.reg_write = abx80x_nvmem_write,
+> > +		.size = ABX8XX_RAM_SIZE,
+> > +		.priv = priv,
+> > +	};
+> > +
+> > +	return devm_rtc_nvmem_register(priv->rtc, &config);
+> > +}
+> > +
+> >  static int abx80x_probe(struct i2c_client *client,
+> >  			const struct i2c_device_id *id)
+> >  {
+> > @@ -824,6 +897,10 @@ static int abx80x_probe(struct i2c_client *client,
+> >  			return err;
+> >  	}
+> >  
+> > +	err = abx80x_setup_nvmem(priv);
+> > +	if (err)
+> > +		return err;
+> > +
+> >  	if (client->irq > 0) {
+> >  		dev_info(&client->dev, "IRQ %d supplied\n", client->irq);
+> >  		err = devm_request_threaded_irq(&client->dev, client->irq, NULL,
 > 
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: linux-sh@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, this is a patch that is a prepatory cleanup as part of a larger
-> series of patches that is working on resolving some old driver core
-> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
-> its own, but I'd prefer if I could take it through my driver-core tree
-> so that the driver core changes can be taken through there for 6.4-rc1.
-> 
->  arch/sh/drivers/dma/dma-sysfs.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/sh/drivers/dma/dma-sysfs.c b/arch/sh/drivers/dma/dma-sysfs.c
-> index 8ef318150f84..431bc18f0a41 100644
-> --- a/arch/sh/drivers/dma/dma-sysfs.c
-> +++ b/arch/sh/drivers/dma/dma-sysfs.c
-> @@ -45,13 +45,19 @@ static DEVICE_ATTR(devices, S_IRUGO, dma_show_devices, NULL);
->  
->  static int __init dma_subsys_init(void)
->  {
-> +	struct device *dev_root;
->  	int ret;
->  
->  	ret = subsys_system_register(&dma_subsys, NULL);
->  	if (unlikely(ret))
->  		return ret;
->  
-> -	return device_create_file(dma_subsys.dev_root, &dev_attr_devices);
-> +	dev_root = bus_get_dev_root(&dma_subsys);
-> +	if (dev_root) {
-> +		ret = device_create_file(dev_root, &dev_attr_devices);
-> +		put_device(dev_root);
-> +	}
-> +	return ret;
->  }
->  postcore_initcall(dma_subsys_init);
->  
+> ping?
 
-Acked-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/rtc/rtc-abx80x.c?id=e90ff8ede777b98b44611b416b1ae6be94258335
 
 -- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
