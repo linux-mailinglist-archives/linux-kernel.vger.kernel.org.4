@@ -2,76 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A8256B85E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:09:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D1136B85EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:11:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjCMXJR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:09:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
+        id S229743AbjCMXLz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:11:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjCMXJD (ORCPT
+        with ESMTP id S229619AbjCMXLy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:09:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB73580E35;
-        Mon, 13 Mar 2023 16:08:49 -0700 (PDT)
+        Mon, 13 Mar 2023 19:11:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7679128E51
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 16:11:53 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E6CB7B81644;
-        Mon, 13 Mar 2023 23:08:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D29FC433D2;
-        Mon, 13 Mar 2023 23:08:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E9B461547
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 23:11:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F951C433EF;
+        Mon, 13 Mar 2023 23:11:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678748919;
-        bh=sX1ACa8gZtf3/q/1WhrJLcKXpRal2/Mfj8Av3ufc8ns=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Xq2keRQghnMwbefmaBZ6xsMXuSwSa74vY/KqoUPNTulknCK+0G3emZRmqK08+JfQz
-         Wmq5qkpWG3uCeLD9ZJhv0nSjFHXhxM7u7UN4+rPq15yDjUIPdX7y7GjfxAySEV6PzG
-         fU4e/ytmllN6e7nNlxktChKsNno30AqCsbjfYYkkVYtuvLeto49+T9mdv0CjYR6brK
-         hfOY06by5ZFfohpilacFLnv0vrfNxghjWd4mde3IPriMs4PzCKf8OMJRqCk1vb4aJx
-         njMVGgCahhwrPovtJ+/7vMwuXq8nSc3uJtWGB+JeVZqXNHeOp89I70C7XTJxTs3Hq4
-         jwRcs1litggVw==
-Date:   Mon, 13 Mar 2023 16:08:37 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     <haozhe.chang@mediatek.com>
-Cc:     M Chetan Kumar <m.chetan.kumar@intel.com>,
-        Intel Corporation <linuxwwan@intel.com>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Sergey Ryazanov <ryazanov.s.a@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Chandrashekar Devegowda <chandrashekar.devegowda@intel.com>,
-        Chiranjeevi Rapolu <chiranjeevi.rapolu@linux.intel.com>,
-        Liu Haijun <haijun.liu@mediatek.com>,
-        Ricardo Martinez <ricardo.martinez@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Oliver Neukum <oneukum@suse.com>,
-        Shang XiaoJing <shangxiaojing@huawei.com>,
-        "open list:INTEL WWAN IOSM DRIVER" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        "open list:REMOTE PROCESSOR MESSAGING (RPMSG) WWAN CONTROL..." 
-        <linux-remoteproc@vger.kernel.org>,
-        "open list:USB SUBSYSTEM" <linux-usb@vger.kernel.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "moderated list:ARM/Mediatek SoC support" 
-        <linux-mediatek@lists.infradead.org>, <lambert.wang@mediatek.com>,
-        <xiayu.zhang@mediatek.com>, <hua.yang@mediatek.com>
-Subject: Re: [PATCH RESEND net-next v7] wwan: core: Support slicing in port
- TX flow of WWAN subsystem
-Message-ID: <20230313160837.77f4ced0@kernel.org>
-In-Reply-To: <20230308081939.5512-1-haozhe.chang@mediatek.com>
-References: <20230308081939.5512-1-haozhe.chang@mediatek.com>
+        s=k20201202; t=1678749112;
+        bh=9NHRvmhtPUz+5vpXWJk461ltzBS6zXAulxvWTFWZMes=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uzV8zQ1UiE7II665/IZ0NrvonIRqktGBH3aQdT2wkG4ShppnKQS7wUui3zYuw5RMy
+         VimMA+rFcdWSLCtX2g8hgsdC6v+GfeX3roDADxjhzBdr1LiTep1KP1Xo1EE6m7uDEA
+         1paTlQmGKYRW90MgdR1ZkoZRyiw2tKZPH7GAFOTCMlKll5ainF60ts7+euXnYrLeoY
+         TuurtHTGU2vZK3ot26yREO3xR10NIpHfQxyOIu1Jfkb0ZIXDxtPpydOYhxe831aWEq
+         FBpHpmVjvCIjJDt5bDcPR43DcU+oBUBJWEA6QZVoaqQj9Y/j7O5eNRinO8utzkF+Q/
+         dqHLS1t7J3QrQ==
+Date:   Tue, 14 Mar 2023 00:11:49 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.3-rc2
+Message-ID: <ZA+ttVOPBvNOYHoC@lothringen>
+References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
+ <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
+ <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -81,37 +58,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 8 Mar 2023 16:19:35 +0800 haozhe.chang@mediatek.com wrote:
->  /**
->   * wwan_create_port - Add a new WWAN port
->   * @parent: Device to use as parent and shared by all WWAN ports
->   * @type: WWAN port type
->   * @ops: WWAN port operations
-> + * @frag_len: WWAN port TX fragments length, if WWAN_NO_FRAGMENT is set,
-> + *            the WWAN core don't fragment control packages.
-> + * @headroom_len: WWAN port TX fragments reserved headroom length, if WWAN_NO_HEADROOM
-> + *                is set, the WWAN core don't reserve headroom in control packages.
->   * @drvdata: Pointer to caller driver data
->   *
->   * Allocate and register a new WWAN port. The port will be automatically exposed
-> @@ -86,6 +100,8 @@ struct wwan_port_ops {
->  struct wwan_port *wwan_create_port(struct device *parent,
->  				   enum wwan_port_type type,
->  				   const struct wwan_port_ops *ops,
-> +				   size_t frag_len,
-> +				   unsigned int headroom_len,
->  				   void *drvdata);
->  
+On Mon, Mar 13, 2023 at 11:21:44AM -0700, Linus Torvalds wrote:
+> On Mon, Mar 13, 2023 at 8:53 AM Guenter Roeck <linux@roeck-us.net> wrote:
+> >
+> > Warning backtraces in calls from ct_nmi_enter(),
+> > seen randomly.
+> 
+> Hmm.
+> 
+> I suspect this one is a bug in the warning, not in the kernel,
+> although I have no idea why it would have started happening now.
+> 
+> This happens from an irq event, but that check is not *supposed* to
+> happen at all from interrupts:
+> 
+>          * We dont accurately track softirq state in e.g.
+>          * hardirq contexts (such as on 4KSTACKS), so only
+>          * check if not in hardirq contexts:
+> 
+> but I think that the ct_nmi_enter() function was called before the
+> hardirq count had even been incremented.
 
-Too many arguments, and poor extensibility.
-Please wrap the new params into a capability struct:
+Indeed, ct_nmi_enter() is called very early on irq_enter(), before
+HARDIRQ_OFFSET is added and the warning triggers at:
 
-struct wwan_port_caps {
-	unsigned int frag_len;
-	unsigned int headroom_len;
-};
+	if (!hardirq_count()) {
+		if (softirq_count()) {
+			/* like the above, but with softirqs */
+			DEBUG_LOCKS_WARN_ON(current->softirqs_enabled); <---- HERE
+		}
 
-pass a pointer to this kind of structure in.
+So the hardirq interrupted some code that has softirqs disabled (or
+servicing) from the preempt mask POV but not from lockdep POV.
 
-Next time someone needs to add a quirk they can just add a field and
-won't need to change all the drivers.
+It says softirqs were last enabled/disabled at some random point, but the
+function looks ok:
+
+	 [   28.765386] softirqs last  enabled at (6328): [<c0103814>] vfp_sync_hwstate+0x48/0x8c
+	 [   28.765575] softirqs last disabled at (6326): [<c01037cc>] vfp_sync_hwstate+0x0/0x8c
+
+It would be interesting to see what the IRQ is interrupting. For example does it
+happen while softirqs are serviced or just disabled? Or are we even outside any
+of that? Any chance we can have a deeper stack trace? If not at least a print of
+preempt_count() would be helpful.
+
+Both would be awesome.
+
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 50d4863974e7..a7d1a65e5425 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -5523,6 +5523,7 @@ static noinstr void check_flags(unsigned long flags)
+ 	 */
+ 	if (!hardirq_count()) {
+ 		if (softirq_count()) {
++			printk("preempt_count(): %x", preempt_count());
+ 			/* like the above, but with softirqs */
+ 			DEBUG_LOCKS_WARN_ON(current->softirqs_enabled);
+ 		} else {
+
+
+Thanks.
