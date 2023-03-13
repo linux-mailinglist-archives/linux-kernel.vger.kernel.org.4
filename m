@@ -2,80 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BC686B7714
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:00:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DBBE6B770A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjCMMAu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:00:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S229790AbjCML7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60586 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230097AbjCMMAg (ORCPT
+        with ESMTP id S229810AbjCML7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:00:36 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B51F34C21;
-        Mon, 13 Mar 2023 05:00:20 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PZwFq54HJz4f3k5Z;
-        Mon, 13 Mar 2023 20:00:15 +0800 (CST)
-Received: from [10.174.179.247] (unknown [10.174.179.247])
-        by APP4 (Coremail) with SMTP id gCh0CgD3X7NQEA9kSqIsFQ--.25647S3;
-        Mon, 13 Mar 2023 20:00:17 +0800 (CST)
-Message-ID: <66c29a8a-9888-8ebc-d4cc-9cfea750a0fc@huaweicloud.com>
-Date:   Mon, 13 Mar 2023 20:00:16 +0800
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.10.0
-Subject: Re: [PATCH 0/2] md/raid10: random bugfix
-To:     song@kernel.org, ncroxon@redhat.com, vmayatskikh@digitalocean.com
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org,
-        yukuai3@huawei.com, yi.zhang@huawei.com, neilb@suse.de,
-        linan666@huaweicloud.com
-References: <20230222041000.3341651-1-linan666@huaweicloud.com>
-From:   Li Nan <linan666@huaweicloud.com>
-In-Reply-To: <20230222041000.3341651-1-linan666@huaweicloud.com>
+        Mon, 13 Mar 2023 07:59:18 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2060.outbound.protection.outlook.com [40.107.101.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4848E31E31
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:59:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=EBWnIyWzkjFUeDhIYlOM+Td/KEp88yGG1I5kPwTEsV2tnf6hJJXbJfd3wNT4OAmin5ZjRtvjM5kuZrXPlx0KL6bEJ+Mci799YO35ALIeaRmBCFdOXlFg4ima+4uAURjfK7XdZoX7mNyingm+jC62C2w3eRJcFfOaRocqPHy4NE88RI21TFyRGnqhveFIOS0NnUtF3jQYvZRHZQUztnrfWVo5jep9vlausgRRqvr0owCFd2cgA9GqKgjUgQK/RwFy7Av/SmnhicrS+oYRaGKssy7Wwr1IQ0u6JSthWH/9y7vJEAYugmqiW7vL6qbxvbwWYyBiCF5tGZrLLlVYZmgsfA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=VzRv/33KCA14Lw+8fBBn/9yd5J8oTFavghjVZdMQU1M=;
+ b=Dl0qRyRx4Z1nDtkFnQqzAVDSktuKm4PrY4lP22rwEX8EBzvFaWAsM+ZwtzU6eIdPMJRphLv9+XGN2Odc347M4HtZsKlw+QLs0isvbJyTtJPfiObYPaJbVeEKAgDUtW8HWPm0YyNodyYTneNORF417zGnWgf40ToMpTaW9iCDYeb0fW/9qH1syAEFzSs4vR2Cx3Ngb0FzbKGqEeA6G4+74Hsfy4jUAqre+viFl1Bgny4hE/iXmHQqcvlpPklQ+gCbis0qQ8b+O4CsucQ0LnDqvEJW5s0ewsnnEL8MIvmzWnJhkbJCxQkEJQG5z+BKmyogB92krzUCijYpABa1RFZl9A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=VzRv/33KCA14Lw+8fBBn/9yd5J8oTFavghjVZdMQU1M=;
+ b=nBtdvRYJDrojVj1Z41BCR6pM58yzccJ6nhwwjl+T2yBplk5NLPddITOy2EDsS7mEC1V4+HGGBXCD/pQGku5XQ6hsVFxnHJLFqJoyYvsTMASzADjt3CySM17JyxD55ozocCxWvxVnJqdrINxmwbkCp3ixXmfbMIUqOS3Rz8HJm3E=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com (2603:10b6:8:a2::11) by
+ SJ2PR12MB7964.namprd12.prod.outlook.com (2603:10b6:a03:4cf::7) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.24; Mon, 13 Mar 2023 11:59:13 +0000
+Received: from DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f]) by DM4PR12MB6280.namprd12.prod.outlook.com
+ ([fe80::cdcb:a816:4bc3:a83f%9]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 11:59:13 +0000
+Message-ID: <6f9453d7-d7c0-62ff-c7e9-42067a9fb207@amd.com>
+Date:   Mon, 13 Mar 2023 08:00:29 -0400
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] drm/amd/display: Write to correct dirty_rect
+To:     Benjamin Cheng <ben@bcheng.me>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+References: <20230313004739.3110719-1-ben@bcheng.me>
+Content-Language: en-US
+From:   Hamza Mahfooz <hamza.mahfooz@amd.com>
+In-Reply-To: <20230313004739.3110719-1-ben@bcheng.me>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: gCh0CgD3X7NQEA9kSqIsFQ--.25647S3
-X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
-        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYh7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E
-        6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28Cjx
-        kF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVW7JVWDJwA2z4x0Y4vE2Ix0cI8I
-        cVCY1x0267AKxVWxJVW8Jr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2js
-        IEc7CjxVAFwI0_GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAa
-        Y2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4
-        A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACjI8F5VA0
-        II8E6IAqYI8I648v4I1lc7I2V7IY0VAS07AlzVAYIcxG8wCF04k20xvY0x0EwIxGrwCFx2
-        IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v2
-        6r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67
-        AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IY
-        s7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxV
-        WUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUFYFADUUUU
-X-CM-SenderInfo: polqt0awwwqx5xdzvxpfor3voofrz/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: YQBPR0101CA0224.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:c01:66::23) To DM4PR12MB6280.namprd12.prod.outlook.com
+ (2603:10b6:8:a2::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM4PR12MB6280:EE_|SJ2PR12MB7964:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7242c861-9bc6-4adb-4577-08db23ba5cc7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: tKXO9WD3pJRx00pL+52+U1odlCkY+bF8mGaQuaLLGssi1HM5lCIM3xzlGtQOHlBTUSvhRLrsHx4g8hRq0mkBSMdDNl0bi9r1r2m8wVxg648g1IK6RjPyA4mIebfGxwUXU9rtuYv4MTHFWHKuKMB4P7GlsrPmr/nUFpIc17edQye3LSJqXPgy1VVXCrVRqKUj0hJJZHqvLs8kUNm4rtmYyND8Bu4o+cJFw+iuJVdooXlwMhvEFmzHVbvomhWI/pFBmLlp3nueXB+kfjlMw2Lp5aiM8H1+mnVbNIUqixynFaeSiSH5OGjOmmdPrOSNAZMLtYQnCNemo1uZxqCJsdLY/9RMCWYphqyVf4g4V4Zr5mLU38KAcPXlLPaw1ze8lC7zQc8Xe9XeQO4h8YQtVTLQ/WrI6aYZ1UWu9FRjDfYSL5wsY+ey4LFphj3Vca7Z1CIVUJe01HThIBPCmdn082FGolL9dxYKDrZkP6DwKWDYoqChVoU3uvKiPicynHTPyjd3/iJ2ze5FQwR6cMWxgnOKDiaIQlMU9xRUmjXCTNe1Vg8blHa/Cbys1r/ymt6yqQOH1492etYGQiVNSMZl2YAOv5Q6CBmKUfCbqnGf6ZZFWP/iCLAOz3oeS/KMqQeh33QYl18t1aZ0VKv8eUgKT7nYw6jCssgL27qY1BNMZKdIuZQmkdNu3lgktQ7SU4k6ceQDhRfyf/OxncKwrVcELPCyLwsG4I1DFVQXOQJp3qWV42w=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR12MB6280.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(396003)(376002)(346002)(366004)(451199018)(53546011)(66556008)(41300700001)(8676002)(66946007)(4326008)(66476007)(5660300002)(83380400001)(44832011)(26005)(186003)(6486002)(8936002)(966005)(6512007)(110136005)(6506007)(6666004)(2616005)(478600001)(316002)(921005)(36756003)(86362001)(31696002)(38100700002)(2906002)(31686004)(14143004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dlB3QStCZ1BtMkxBOERFVEVTenFXT0VtUWxxZ3lDMU9kckNXa2FFT01JcU0y?=
+ =?utf-8?B?enovT2Z6N2JsTkxpQ21zMWNQSkNWbkhtUTZiQ2QxKzhMNjJnczh2ZE4xVVV1?=
+ =?utf-8?B?d3dKRHdUa2xzZStvQTZ3T0N2eVF0N2l3MHdSWmVDYWd6ZVQySkdoakljZ1lo?=
+ =?utf-8?B?QlNFc3pSMjhCdzVzQlQyWWUvVG9rcFBYU3kwNFJzYnF6cnNzTFJIb2RjMUUv?=
+ =?utf-8?B?SnoxZFZwMTA1N3NLcXNlaHFOendtQm90UWtlSW94TWNoY2RCTzRxRjRBbkZE?=
+ =?utf-8?B?S2s5QUlNenFvTnp4TWMwT1RmS1R1WnZKZkYxY1BYbExkdld1Nk9DUWNWdDJi?=
+ =?utf-8?B?bGVreWhZVmgrTEEzdm56YW1YQmpOdlZuRFpjSEVoRW94V3A2VSttaTkzQTJu?=
+ =?utf-8?B?ampQL0szaitYVjNVMmgvSEhNVC9LalcwZEV0dzZPVGVGUi9GdTdUS1c2aFYr?=
+ =?utf-8?B?SEVOTUJUY2hjVlJnNitXTlpFbG1xRDg2M1JORlBlZHgwalVINENuVllQY0pI?=
+ =?utf-8?B?VHpzOG5kQzhqQUNBNTMvc3Q2NDhJZjRsTUszSTN0RWpQQ1pZY3VrbzdXQXBz?=
+ =?utf-8?B?SGtNS0JOYjZRaklZSkFOQ0EyQmM2bU1id2hEeFJpLy92K1lYYmMzMFBWcEE4?=
+ =?utf-8?B?ZjAvVVVyNlUzREZXNHJxcGhoUURlZzgwY29uYlhRWXVkTFIwQThENlpJK3Bx?=
+ =?utf-8?B?bzdUVmhSSmc1U1ZZbm81dVJNMTdsZ0pTeDJkWTEzWTNvSnh5czV2M2Q1YnQr?=
+ =?utf-8?B?Yk15NnZIaFJDdVpPNGliWEVxblZKSjY3TEpXaW1ZY1FUczVIa2JHdFJFOEJV?=
+ =?utf-8?B?Ly9EU0tmRyt3Wk54K0FhSDJ2YmNhRXlTRndrV2wvN3VKNTJCWkJOZnI4czFk?=
+ =?utf-8?B?T29pbm0waWVIK2xMQk81cm12TWtwK01pbElhR2lhN1VzNE9nL0hqcEdWbDNN?=
+ =?utf-8?B?UkVmNFlhZzR6NFN2UnFNbU43M3ViTENKaHR6OTFvWmwrRGhrRWJWSnVFOFJ0?=
+ =?utf-8?B?bVE2TTRJUHhYalcwQU5tbjZzVHZTcnJXcVJ6L2xwQzBjdjRzdG9ya3B2T3hj?=
+ =?utf-8?B?KzV5Vy9BZ3laa2h2dkN0d2wzZGhKVnJvRzNhSWtxcUErY3BNVzd6Zy81bTBi?=
+ =?utf-8?B?UmNPcVBHaFdWVDBVaXpMTDlLa2ZVUlZueHA0cmdkT2VNU2JFREZYaTQ3NW1i?=
+ =?utf-8?B?dmIycWpmNVRlOXRzZUU4QkhEbW1lMmtwTkRzSDB3SHFlK0MvdWUrdlBBRDRO?=
+ =?utf-8?B?b0dvTTZWRDRLMjYrNUdUT3Z3bmt2NWVIZEhNaHkxNThLVlFkMkZCemxqSHhZ?=
+ =?utf-8?B?VHltOXNRWFBnb0dvMzV4Q0RPcEFxZzVmUndtejZXYkYxNWlENk51bGF1Kytz?=
+ =?utf-8?B?RzYyeGMwbFBuYzF0bVl3UXZvZXZYM3RiVlJGa1JhZWVueUszWE1XN2kxS0t1?=
+ =?utf-8?B?eEpjb09EZHg4N0VncnNTR2ZramdDTlFxMUFVd2JoTWNzNzRsVm9mNkxuSnNJ?=
+ =?utf-8?B?azZJQXk4Q3NYSVlYY1E0SEwxUS9LNlRwMVIxSjNFdVBOVVVjZlBFZjRHaitt?=
+ =?utf-8?B?QUNraUlOUm5yVWc0d1FRU1pYNGRwREl5Yzl2Z3VGVGhRRWdpMnJodEtoTXRo?=
+ =?utf-8?B?c1d3SUExVTQxMVVuT2VFa09yNFg5Qm1tYWhXRU1TczUyVUd0Z1Mycml0UDAy?=
+ =?utf-8?B?OEs1eWx6YWxPRm1wRjRRRGlHSkxjcmFNNmxFM3hFbUZ6b2NoMjlrNVVEbkxT?=
+ =?utf-8?B?SVpScTB4WmEwcXA0Z2dVa3BmMXRJajkwdWY3cURqc2NqSEFNbkozWVpwTVFa?=
+ =?utf-8?B?T0IwM2NHL3BiZHFNdnJ4YXQrdStMY1hDVjNLcjlmbnRCdEhCQ0MxKzRXZnNa?=
+ =?utf-8?B?QjEwYzUvRWxKTFppRW9ma2laRU0ycE5DNjRESG5NdlFEZVEzT3pkcktNZ0Uv?=
+ =?utf-8?B?K280eDUrSHZFSzZ2b0EvQlEzRWJraW1QMCtqWmZYYXlLejIwN2d3Tm1UbWFD?=
+ =?utf-8?B?Ujd2VmIwTGp3NnZ6N0RNem5rUnM4cUE2SjV2VkVha1pvTURwSG9Qd1dPYlJP?=
+ =?utf-8?B?Tk9uYkJCKzI2M3pHZHB2Yk1xc1RtcTdiOEIzWSsvcXAxbmtTU2xiWk8rV2x6?=
+ =?utf-8?Q?JZLqrBG2emlHNQ4ko7BeA5mTY?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7242c861-9bc6-4adb-4577-08db23ba5cc7
+X-MS-Exchange-CrossTenant-AuthSource: DM4PR12MB6280.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 11:59:13.2072
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rrna/HB16s7X/MMjQBJtTHpPaIKpUScbzjc0sSu/A79YDyKo4kVbSFPE/YgR7ng9SoKFmI3EIJHGxnSqbDn0tg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB7964
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-friendly ping ...
-
-Thanks,
-Nan
-
-在 2023/2/22 12:09, linan666@huaweicloud.com 写道:
-> From: Li Nan <linan122@huawei.com>
+On 3/12/23 20:47, Benjamin Cheng wrote:
+> When FB_DAMAGE_CLIPS are provided in a non-MPO scenario, the loop does
+> not use the counter i. This causes the fill_dc_dity_rect() to always
+> fill dirty_rects[0], causing graphical artifacts when a damage clip
+> aware DRM client sends more than 1 damage clip.
 > 
-> Li Nan (2):
->    md/raid10: fix taks hung in raid10d
->    md/raid10: fix null-ptr-deref in raid10_sync_request
+> Instead, use the flip_addrs->dirty_rect_count which is incremented by
+> fill_dc_dirty_rect() on a successful fill.
 > 
->   drivers/md/raid10.c | 26 +++++++++++++++++---------
->   1 file changed, 17 insertions(+), 9 deletions(-)
+> Fixes: 30ebe41582d1 ("drm/amd/display: add FB_DAMAGE_CLIPS support")
+> Bug: https://gitlab.freedesktop.org/drm/amd/-/issues/2453
+> Signed-off-by: Benjamin Cheng <ben@bcheng.me>
+
+Applied, thanks for catching this!
+
+> ---
+>   drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 6 +++---
+>   1 file changed, 3 insertions(+), 3 deletions(-)
 > 
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index 8af58bba503f..a89ec2cc4ffc 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -5130,9 +5130,9 @@ static void fill_dc_dirty_rects(struct drm_plane *plane,
+>   
+>   		for (; flip_addrs->dirty_rect_count < num_clips; clips++)
+>   			fill_dc_dirty_rect(new_plane_state->plane,
+> -					   &dirty_rects[i], clips->x1,
+> -					   clips->y1, clips->x2 - clips->x1,
+> -					   clips->y2 - clips->y1,
+> +					   &dirty_rects[flip_addrs->dirty_rect_count],
+> +					   clips->x1, clips->y1,
+> +					   clips->x2 - clips->x1, clips->y2 - clips->y1,
+>   					   &flip_addrs->dirty_rect_count,
+>   					   false);
+>   		return;
+
+-- 
+Hamza
 
