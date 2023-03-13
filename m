@@ -2,105 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B50CB6B7209
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:07:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A33466B7234
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:11:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230107AbjCMJHD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:07:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55650 "EHLO
+        id S231268AbjCMJLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:11:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35250 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229822AbjCMJG3 (ORCPT
+        with ESMTP id S230229AbjCMJLW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:06:29 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEF0C474FF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:03:49 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id g18so11843475ljl.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:03:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678698227;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Iu174ytUrTrCTEP4Asg2x55uLRT0uwJo4VNezGSxNOg=;
-        b=AAcqzUyag82ddZqSchFoJY+B+X7N+YaZVsCOk3YCjNgercK0HJ6Q5kh6fg0cecFJBP
-         wJuJNYz+bl2ip8B8OwU7ED3BFpNjwWFC6EOiFdHIKX1bVk6jJMxpIksoHl/wz38aQxSe
-         8kpNSVGjZ8AdgxMDjQaGgHTAl5ikhC74jDbD9aRiI8MuhiuA+LkoabRjbunKFmtjgmEI
-         2EtENRfZ2T/JT6wDgiftNFlR9I5tRcB2eXSNmUyvDLNgQU+FaqVjkcMdhseE59ybw1xL
-         EG7D+U5z0FchLN70tm/pX+/U0MLF5KyILBYdkAVUGwIgArBKjFRAGcL2sQ3Q+uyD2gvW
-         C6LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678698227;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Iu174ytUrTrCTEP4Asg2x55uLRT0uwJo4VNezGSxNOg=;
-        b=v9DeST2rGgUQ5OzJJusvMdNkTguReHd7h4gnwQYmXkr98evjELvYCWd9+LPDHj0aIv
-         HWMyLcGg0VPwRhf2a+i2h+6BVWOmzDrA7vTCvUJUNSkx3MEmQLVpBfSsPAlmUIoL8oZG
-         FCUb/D2Z983dG5RZrCMtXdCLgLPEpt0NYOIJr8oVB28JRg8QhuFSZFn1RlwrVOomdt4z
-         ncHZ1h1wt2PXbB3tXIq0pCUSJLg5mnv64yIziG7tdD9gj+YQGQDcGttOV/tfQKatGUnO
-         3Ff+HNjmU54yoixVLrlq679CpKphPOMx8zBhNh7SQ51BRONDuWjr0lgvgrs1Jvb7D5+l
-         JCcQ==
-X-Gm-Message-State: AO0yUKXCccpECEhdf3pjJbqTT4fsNlQ9xE+O2XBxxGd7wJXvfJEc/Hk7
-        xNLzRAo33OMzVB3M7SDXQbu8wg==
-X-Google-Smtp-Source: AK7set8JdgYIMjhUu8MM/2F6YXBVJHA9y6vIZBap4DG76qGnHcXgoTNJrKBzfoyhgYmENoj5sU4NlQ==
-X-Received: by 2002:a2e:544c:0:b0:293:5cce:56eb with SMTP id y12-20020a2e544c000000b002935cce56ebmr9124489ljd.43.1678698227436;
-        Mon, 13 Mar 2023 02:03:47 -0700 (PDT)
-Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id y7-20020a2e7d07000000b00293d7c95df1sm926182ljc.78.2023.03.13.02.03.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 02:03:47 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rajendra Nayak <quic_rjendra@quicinc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Qais Yousef <qyousef@layalina.io>,
-        Stephen Hemminger <stephen@networkplumber.org>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Vasily Averin <vasily.averin@linux.dev>,
-        Colin Ian King <colin.i.king@gmail.com>,
-        Kirill Tkhai <tkhai@ya.ru>, linux-kernel@vger.kernel.org
-Subject: [PATCH] mailmap: map Rajendra Nayak's old address to his current one
-Date:   Mon, 13 Mar 2023 10:03:43 +0100
-Message-Id: <20230313090343.2148346-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Mon, 13 Mar 2023 05:11:22 -0400
+X-Greylist: delayed 401 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Mar 2023 02:10:56 PDT
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BB2B6EB8;
+        Mon, 13 Mar 2023 02:10:55 -0700 (PDT)
+Received: from localhost.localdomain (unknown [124.16.138.125])
+        by APP-03 (Coremail) with SMTP id rQCowACXnx_95g5kIV2jDg--.57156S2;
+        Mon, 13 Mar 2023 17:03:57 +0800 (CST)
+From:   Jiasheng Jiang <jiasheng@iscas.ac.cn>
+To:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jiasheng Jiang <jiasheng@iscas.ac.cn>
+Subject: [PATCH] Bluetooth: 6LoWPAN: Add missing check for skb_clone
+Date:   Mon, 13 Mar 2023 17:03:46 +0800
+Message-Id: <20230313090346.48778-1-jiasheng@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-CM-TRANSID: rQCowACXnx_95g5kIV2jDg--.57156S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrZw1kWryUJrW5CFWfWrWDtwb_yoW3urX_GF
+        97Z3yUuw1jyFyxtFsFka1Skr9xAwn3XFyxWwsaqFW5X34DGayxur1vvr15Jr4IgasFgr17
+        ZF90ya4kuw4xCjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbV8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+        Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s
+        0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xII
+        jxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr
+        1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxa
+        n2IY04v7MxkIecxEwVAFwVW8uwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJV
+        W8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF
+        1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6x
+        IIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvE
+        x4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvj
+        DU0xZFpf9x0JUDkucUUUUU=
+X-Originating-IP: [124.16.138.125]
+X-CM-SenderInfo: pmld2xxhqjqxpvfd2hldfou0/
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rajendra's old email is still picked up by the likes of get_maintainer.pl
-and keeps bouncing like all other @codeaurora.org addresses. Map it to
-his current one.
+Add the check for the return value of skb_clone since it may return NULL
+pointer and cause NULL pointer dereference in send_pkt.
 
-Cc: Rajendra Nayak <quic_rjendra@quicinc.com>
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Fixes: 18722c247023 ("Bluetooth: Enable 6LoWPAN support for BT LE devices")
+Signed-off-by: Jiasheng Jiang <jiasheng@iscas.ac.cn>
 ---
- .mailmap | 1 +
- 1 file changed, 1 insertion(+)
+ net/bluetooth/6lowpan.c | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/.mailmap b/.mailmap
-index 94a4d32ccdf6..a7182bd90879 100644
---- a/.mailmap
-+++ b/.mailmap
-@@ -373,6 +373,7 @@ Quentin Monnet <quentin@isovalent.com> <quentin.monnet@netronome.com>
- Quentin Perret <qperret@qperret.net> <quentin.perret@arm.com>
- Rafael J. Wysocki <rjw@rjwysocki.net> <rjw@sisk.pl>
- Rajeev Nandan <quic_rajeevny@quicinc.com> <rajeevny@codeaurora.org>
-+Rajendra Nayak <quic_rjendra@quicinc.com> <rnayak@codeaurora.org>
- Rajesh Shah <rajesh.shah@intel.com>
- Ralf Baechle <ralf@linux-mips.org>
- Ralf Wildenhues <Ralf.Wildenhues@gmx.de>
+diff --git a/net/bluetooth/6lowpan.c b/net/bluetooth/6lowpan.c
+index 4eb1b3ced0d2..bf42a0b03e20 100644
+--- a/net/bluetooth/6lowpan.c
++++ b/net/bluetooth/6lowpan.c
+@@ -477,6 +477,10 @@ static int send_mcast_pkt(struct sk_buff *skb, struct net_device *netdev)
+ 			int ret;
+ 
+ 			local_skb = skb_clone(skb, GFP_ATOMIC);
++			if (!local_skb) {
++				rcu_read_unlock();
++				return -ENOMEM;
++			}
+ 
+ 			BT_DBG("xmit %s to %pMR type %u IP %pI6c chan %p",
+ 			       netdev->name,
 -- 
-2.39.2
+2.25.1
 
