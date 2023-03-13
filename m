@@ -2,80 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F3EC6B6F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1774B6B6F94
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCMGnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39560 "EHLO
+        id S229694AbjCMGon (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 02:44:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229642AbjCMGm7 (ORCPT
+        with ESMTP id S229638AbjCMGom (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:42:59 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FA152D71
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:42:55 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id k10so44216750edk.13
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:42:55 -0700 (PDT)
+        Mon, 13 Mar 2023 02:44:42 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 406E234002
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:44:40 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id ek18so13213735edb.6
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:44:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678689774;
+        d=linaro.org; s=google; t=1678689879;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct3fbY7RVEKB9YRXgDHYdKGpI1hyfFOcZ+mEvPScFNw=;
-        b=CSHSDudwYP7AsHbyClAvWnm3t5hhLx9PcYp7yd1rS6Y4FNABLARXs8qtx42oUW3czp
-         7yuootjZD8mNkRSc6zZuExApEMA8t2bJR5yQmpeWC5Pq52xCb7lMvVVr1FXf16K/loj8
-         3ZeUCapZT6oZCumAmO5/NPdBOcSw4UIINH/iL9BGSB6LjC2DSTnf8LHIhr/ybYLoLP5G
-         xMPE1zysB/et9Uz46sdllTWVyOIOOEHToK+CQjWVBfI7MQmBdelk2158YhqzIdyd0hSZ
-         j5sp5yHTDPE1QHVFQQJ5nitlaPSXaXyQb+UOiuK24r4vtsrg3e7YmR8Z+xXNiK8SX6Zu
-         C0+w==
+        bh=AQbMIvuYRw2k1RIiNkeO4I7jGAvRPvwf6HrYCDn6EqE=;
+        b=N3VsugGVx7u15+HcGPueog998EhT/wYdrZEZvKkZ3hdu8Pt90aVGZdkT5j33Nvy8xs
+         hBIpMZfS0Tfd2P5tZ9q0Q2ZU2VmhYga5Vuz0pS8TAMJavWzNOoOSykHfjl5ywDe0TIIx
+         58RetBNGVqhlvWy4AOPM7PhU9IB7Q3y8CLpyBPuxJZW6LimANI0HjoghLf5z59CYW6rv
+         gGe+ke/7YbjR7OCZOtWmgZkfd5qURtQa6OAxVgYiajf5RhAVuIAzWetI3bxUyjw71sg7
+         om7H6yqj2YPEsxHeq4hyhqD5h4rVQLQYaYlMfU5AIes6JOi7LG90bhOs4067sqqmx+qo
+         6MEQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678689774;
+        d=1e100.net; s=20210112; t=1678689879;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ct3fbY7RVEKB9YRXgDHYdKGpI1hyfFOcZ+mEvPScFNw=;
-        b=viETYPU2pJgz1FpBHbxztPUEZs6BmBfixIdCbPG5quRDb6sfjhG5h7NTc+ChMWNH93
-         pPhf6QuLKOSFObH3RitO0rJ9yBCUCq6qbBuMjkSZFWavRvBiy5mMQ820SqEJ7P2DIhuF
-         RaGZbulwt7pANxoYfsjbVbFNPx4AsWdKJ5vBI6RptI4Y6pcOSEjH6QpC7nIxR+6/ubMy
-         zd2ZqE452Ww03Zux20GLczzQUMOYy5sL33nZAiizAbbXUWvJBL646xfd65W5ciSlSfWD
-         1pCRtcl0fVSgjQSaDCELtq2ojl3PinaeGFvPnbj5HUM43xhgflmD1vOaZA2hrepff7/7
-         B2dQ==
-X-Gm-Message-State: AO0yUKVOmu5BVKijQeVK52FiBWYcKiWGJUs8H8NSz/wibZ8+R3kW/xn0
-        waa9IsXZsXXhRbyKmMGuMqzH/g==
-X-Google-Smtp-Source: AK7set8BOVZLBV0Vjn5uzvQJAYs2AWPASTtYs1zyPvWJ/7yY4iX5x4DALEaseEbwtC+lNjy6+Gx6PA==
-X-Received: by 2002:a17:906:5387:b0:8b1:7857:2331 with SMTP id g7-20020a170906538700b008b178572331mr29766278ejo.65.1678689773789;
-        Sun, 12 Mar 2023 23:42:53 -0700 (PDT)
+        bh=AQbMIvuYRw2k1RIiNkeO4I7jGAvRPvwf6HrYCDn6EqE=;
+        b=W3ModAuJIWuvx3Ss0AIBpWjPvzDscYwKIWQX7sjPuwTyTgznzSgWlaAHnCXPWx/KxB
+         U6NEW8AC+fkgDjplIFPaE53oyHfJS1mcn8TQtGFtJ9ABD+X+geWl78d5skdisN/R8Oog
+         1rgRax4Wr3Hrn5WI4p810eojLBkqvyy9e5csWN7IgTZ2qEpLTAcRPi8yqaLxgNV5pYg2
+         BZvokCP6vVatAIz/nLT+/488FBFbkgOrKka1ACi2hE6kgBpqoxgeMx7BPyqBokyYSbO4
+         76M8JKhwY81vUIIsOD0Z3DUox/xEV35qAASQIEAKi089RlC6gEXisOX85+0rJkJZRXkq
+         ARxQ==
+X-Gm-Message-State: AO0yUKVP9bx6/x10GAnnkkaRScOVAJIAU8/KyLTQQ1gmvDh9QqiL5XyI
+        tdi3z7AEW45/GsP5tOfde4A5qw==
+X-Google-Smtp-Source: AK7set/keJih8O/WxmIJ8nCvWOTD5UO/SgBGnepYzgvNBKU/BNqqQHqef1u5/b/TIpYbKeLm1e5k3w==
+X-Received: by 2002:a17:906:30d3:b0:8b1:3d04:c2da with SMTP id b19-20020a17090630d300b008b13d04c2damr36058580ejb.45.1678689878761;
+        Sun, 12 Mar 2023 23:44:38 -0700 (PDT)
 Received: from ?IPV6:2a02:810d:15c0:828:f052:f15:3f90:fcb3? ([2a02:810d:15c0:828:f052:f15:3f90:fcb3])
-        by smtp.gmail.com with ESMTPSA id s3-20020a170906bc4300b008c1952b63d8sm3054372ejv.137.2023.03.12.23.42.52
+        by smtp.gmail.com with ESMTPSA id i11-20020a170906090b00b008edc39530fbsm3017685ejd.219.2023.03.12.23.44.37
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 23:42:53 -0700 (PDT)
-Message-ID: <b43463d7-032a-93be-889f-4bb6a2a7377a@linaro.org>
-Date:   Mon, 13 Mar 2023 07:42:52 +0100
+        Sun, 12 Mar 2023 23:44:38 -0700 (PDT)
+Message-ID: <27a92399-e99b-018c-16a3-cbfb8a303b43@linaro.org>
+Date:   Mon, 13 Mar 2023 07:44:37 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v1 1/2] dt-bindings: spi: add loongson spi
+Subject: Re: [Patch v6] dt-bindings: media: s5p-mfc: convert bindings to
+ json-schema
 Content-Language: en-US
-To:     zhuyinbo <zhuyinbo@loongson.cn>, Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-spi@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Jianmin Lv <lvjianmin@loongson.cn>, wanghongliang@loongson.cn,
-        Liu Peibao <liupeibao@loongson.cn>,
-        loongson-kernel@lists.loongnix.cn
-References: <20230308025908.21491-1-zhuyinbo@loongson.cn>
- <20230308025908.21491-2-zhuyinbo@loongson.cn>
- <8d20dcfb-480b-3f1a-02b0-294a05a566f7@linaro.org>
- <dd2e6c68-7460-caa1-0d54-53aeb5619a18@loongson.cn>
- <ecd867a1-207d-774f-882b-22f0973286ae@linaro.org>
- <9bfeef4b-f498-12d1-6f21-97289a3127bd@loongson.cn>
- <29b2a024-8b5a-70ff-17b6-0fb46d871925@loongson.cn>
+To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com
+References: <CGME20230301035153epcas5p40f576188a9a69835c1050135219a3720@epcas5p4.samsung.com>
+ <20230301035144.8645-1-aakarsh.jain@samsung.com>
+ <8b5bea40-6f7b-1d00-ac23-83a28c7dacbc@linaro.org>
+ <046b01d94d1a$418146a0$c483d3e0$@samsung.com>
+ <9b93849d-d4a4-67ba-e8a0-ee6c7209bd65@linaro.org>
+ <000701d95257$e97ebd50$bc7c37f0$@samsung.com>
+ <81e78cf6-b8b3-0cab-d190-aa22abbc5c2d@linaro.org>
+ <001901d95263$eac4b460$c04e1d20$@samsung.com>
+ <49106943-450a-11c0-99ce-159d40471bf2@linaro.org>
+ <010601d9555f$bde202a0$39a607e0$@samsung.com>
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <29b2a024-8b5a-70ff-17b6-0fb46d871925@loongson.cn>
+In-Reply-To: <010601d9555f$bde202a0$39a607e0$@samsung.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
@@ -86,94 +94,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 03:09, zhuyinbo wrote:
-> 
-> 在 2023/3/9 下午3:22, zhuyinbo 写道:
->>
->> 在 2023/3/9 下午2:23, Krzysztof Kozlowski 写道:
->>> On 09/03/2023 03:08, zhuyinbo wrote:
->>>> 在 2023/3/8 下午7:30, Krzysztof Kozlowski 写道:
->>>>> On 08/03/2023 03:59, Yinbo Zhu wrote:
->>>>>> Add the Loongson platform spi binding with DT schema format using
->>>>>> json-schema.
->>>>>>
->>>>>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>>>>> ---
->>>>>>    .../bindings/spi/loongson,ls-spi.yaml         | 47 
->>>>>> +++++++++++++++++++
->>>>>>    MAINTAINERS                                   |  6 +++
->>>>>>    2 files changed, 53 insertions(+)
->>>>>>    create mode 100644 
->>>>>> Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>> Filename matching the compatible.
->>>> loongson,ls-spi.yaml is for ls2k-spi and ls7a-spi, I will add following
->>>> desription:
->>>>
->>>>
->>>> properties:
->>>>     compatible:
->>>>       enum:
->>>>         - loongson,ls2k-spi
->>>>         - loongson,ls7a-spi
->>> OK then.
->>
->> I was to explain why that yaml was name as "loongson,ls-spi.yaml" 
->> rather than "loongson,ls2k-spi.yaml"
->>
->> because that need consider about  yaml filename to match 
->> "loongson,ls2k-spi" and "loongson,ls7a-spi".
->>
->>>
->>>>>> diff --git 
->>>>>> a/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml 
->>>>>> b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>>> new file mode 100644
->>>>>> index 000000000000..8a13a96b3818
->>>>>> --- /dev/null
->>>>>> +++ b/Documentation/devicetree/bindings/spi/loongson,ls-spi.yaml
->>>>>> @@ -0,0 +1,47 @@
->>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
->>>>>> +
->>>>>> +%YAML 1.2
->>>>>> +---
->>>>>> +$id: "http://devicetree.org/schemas/spi/loongson,ls-spi.yaml#"
->>>>>> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->>>>> Drop the quotes. What was the base of your code here?
->>>> okay, I will drop the quotes.    and I don't got it  about the code 
->>>> base
->>>> that you said.
->>>>
->>>> you meaning is advice me add a line  as follows ?
->>> I meant, from which other file did you copy it?
->> okay,  but I maybe forgot it,  I should be refer other spi yaml file.
->>>
->>>>>> +
->>>>>> +  clock-names:
->>>>>> +    const: boot
->>>>> Drop clock-names, not needed for single entry.
->>>> if drop the clock-names entry, the yaml file will compile fail.
->>> Obviously you have to also drop it from DTS and driver...
->>
->> drop clock-names should be not  affect my driver,  but I notice other 
->> lots of arm64 platform dts
->>
->> was keep clock-names and clock in dts when use grep search "clock-names".
->>
->> [zhuyinbo@localhost www.kernel.org]$ grep -rns "clock-names" arch/arm64/
->>
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:280:            clock-names = 
->> "apb_pclk";
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:305:            clock-names = 
->> "apb_pclk";
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:330:            clock-names = 
->> "apb_pclk";
->> arch/arm64/boot/dts/sprd/sc9863a.dtsi:367:            clock-names = 
->> "apb_pclk";
-> 
-> so , if you think it is okay I will keep clock-names and clock in yaml 
-> file like other platform.
+On 13/03/2023 04:56, Aakarsh Jain wrote:
 
-No, it's not ok.
+> Also, "samsung,mfc-v7" compatible is used for both SOCs Exynos 5420 & Exynos 3250.
+> And for both SOCs, clock and IOMMUs properties are different. So in order to differentiate that, will keep it in this way.
+>   - if:
+>       properties:
+>         compatible:
+>           contains:
+>             enum:
+>               - samsung,mfc-v7
+>     then:
+>       properties:
+>         clocks:
+>           minItems: 1
+>           maxItems: 2
+>         iommus:
+>           minItems: 1
+>           maxItems: 2
+> 
+> I hope that will be fine?
+
+Yes. We should use as some point SoC specific compatibles everywhere,
+but it can be added later.
 
 Best regards,
 Krzysztof
