@@ -2,244 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C56F6B79B9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C75F56B79CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:00:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjCMN7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:59:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
+        id S230360AbjCMOAK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:00:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231151AbjCMN7c (ORCPT
+        with ESMTP id S230261AbjCMN7s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:59:32 -0400
-Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18BF11E94;
-        Mon, 13 Mar 2023 06:59:06 -0700 (PDT)
-Received: by mail-lj1-x235.google.com with SMTP id z5so12707803ljc.8;
-        Mon, 13 Mar 2023 06:59:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678715945;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Br9dbZsECDN6znzio7e4ndSZQRXJUPgWqvgP0KX2jNs=;
-        b=OLlTHv0I0+9OnNHoHLNUQmgBnSgLPuYOuJEBBhb0vpNO7dnSIRIG0GKws9xu55voGE
-         vCID6Ka4c/6zDPuvWAQkJisw6z5YjwKoM8vfu2ACKH7KSFvjSo4HtNNN2x86lrHeCrDz
-         6PstVrVaq5Bcgo16Sn1bltxXscsd2+8mEhiTsxgyqFjQg8Edwy/lRVo9oCnR+HhRPO0F
-         20FJiJ302YzmI1ZBxlHh4d43v/RHlcsw5VOkX/yF7n2jagzjyTFBXWi4+MQJ2dvDvbHK
-         MEQBtMFDtf8KiPRh/o3WFPWecPBaonWsaaSTeTgj4Nd/ohOr99rO9AuRlpdNpKXlZT2w
-         qfmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678715945;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Br9dbZsECDN6znzio7e4ndSZQRXJUPgWqvgP0KX2jNs=;
-        b=R5PtxiGX0Q6kQkZqTLJ5rhuF278lbfNCs2xT5DH+rRi1Cc+uT7DViBnlwmMd3jkDXq
-         QbsavxIRQnvrx/b88RIDkc0CQa6yWx1kTHpI0/F0aM19TlNbiDhAv8JbhoDh2RKF6Fww
-         MzJB2FBNYk6pDWOUp22kdsXaJ4Gr4+/9QeuG+C+yjAm4bckJ3MJgzzci/ERpck9vw7Ph
-         RLj2vkov0xd1+GfNMSUedPSJT0wzKdnjnHRlRS3st3fyZc5X6l6P6TgOr8tE2SX06NEL
-         fxoCzJeuRdywJmPgczCFt8b37SQebt+rIM/5grR2M4z9NruPhO2GWfxIJtT1FVQ4Mn0C
-         zq2Q==
-X-Gm-Message-State: AO0yUKVJNg8ngaAi0lAuibNpjus2E+H28Of9XwpBNZnZOP0ulmm9tiGE
-        fMtbjczRbCZlH2x34NDrlO4A37EA8js=
-X-Google-Smtp-Source: AK7set+AeBlk3MeVeF61/R37ov8TRcwJgzWhbOa4eNw9bTXtWV8m6SYaD2RFMz/rn7785U4IsvGZgg==
-X-Received: by 2002:a05:651c:2122:b0:293:40ce:b08e with SMTP id a34-20020a05651c212200b0029340ceb08emr15833898ljq.16.1678715944850;
-        Mon, 13 Mar 2023 06:59:04 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id y3-20020a197503000000b0049c29389b98sm982887lfe.151.2023.03.13.06.59.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 06:59:04 -0700 (PDT)
-Message-ID: <b4bf8587-d3cd-ff88-0276-7e394c110757@gmail.com>
-Date:   Mon, 13 Mar 2023 15:59:03 +0200
+        Mon, 13 Mar 2023 09:59:48 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A6E56F637;
+        Mon, 13 Mar 2023 06:59:26 -0700 (PDT)
+Received: from benjamin-XPS-13-9310.. (unknown [IPv6:2a01:e0a:120:3210:7a7b:d0cc:67e9:4297])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: benjamin.gaignard)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 00FCA66020C5;
+        Mon, 13 Mar 2023 13:59:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678715964;
+        bh=+om2k2KNQgvylarO49oxczzpR8UPvFV3qo3tlidzUT0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=PrYrPAJYVyfuCF96dRZ7vSuoHhW31z3DNMLGXKHKxNJ5+8BrNiFh7mbqFGAx0OqBO
+         NvGy3gsxpPKrIIMBzj5lUVYTClXrcY37rGoWf6rP3MdTJz9wX9DRHYrLA6KYQoi7wY
+         wvnat1Fk21LZfIhnWlxld5uB4r+UkL3IDLPgpXvXDsgxrA+b9e35HVltnR9g9raRK8
+         qwEqAPTVRXFzYKqnoGWSv4kkndvcrT8IFvJpHd4HM17YA/VxE0cZfBeUgujBnw/ro/
+         uI/iSkUSL9F3+O2nYWT5VwcSqzwUTHxlAR80dJNRRXaZs3ZFr0JBnYHiMZJuetByFw
+         ZM8TAlLUsvTvw==
+From:   Benjamin Gaignard <benjamin.gaignard@collabora.com>
+To:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
+        laurent.pinchart@ideasonboard.com, jerbel@kernel.org
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Subject: [RFC 0/4] Allow more than 32 vb2 buffers per queue
+Date:   Mon, 13 Mar 2023 14:59:12 +0100
+Message-Id: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
- <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
- <ZAXiKfRbsXpHhwAJ@smile.fi.intel.com>
- <e507c171-bebc-84f6-c326-ff129b42fb7f@gmail.com>
- <ZA8kTx4exvGwUfNn@smile.fi.intel.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
-In-Reply-To: <ZA8kTx4exvGwUfNn@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 15:25, Andy Shevchenko wrote:
-> On Mon, Mar 13, 2023 at 02:47:45PM +0200, Matti Vaittinen wrote:
->> On 3/6/23 14:52, Andy Shevchenko wrote:
->>> On Mon, Mar 06, 2023 at 11:17:15AM +0200, Matti Vaittinen wrote:
-> 
-> ...
-> 
->>>> +/*
->>>
->>> If it's deliberately not a kernel doc, why to bother to have it looking as one?
->>> It's really a provocative to some people who will come with a patches to "fix"
->>> this...
->>
->> I just liked the kernel-doc format. It's a standard way of explaining the
->> parameters and returned value. Function however is intended to be internal
->> and thus I don't see a need to make this "official kernel doc".
-> 
-> The problem as I pointed out with your approach it's unmaintainable. And
-> I even explained why I consider it this way.
+Queues can only store up to VB2_MAX_FRAME (32) vb2 buffers.
+Some use cases like VP9 dynamic resolution change may require
+to have more than 32 buffers in use at the same time.
+The goal of this series is to prepare queues for these use
+cases by replacing bufs array by a list a vb2 buffers.
 
-Yes. You told me that it asks for people to turn it to kernel doc. If 
-that happens, apply the patch and it is kernel doc. I don't see how 
-unmaintainable it is. I think this is just creating a problem we may 
-never face - and if we do, we can solve it by applying the 'problem' then.
+For the same VP9 use case we will need to be able to delete
+buffers from the queue to limit memory usage so this series
+add a bitmap to manage buffer indexes. This should permit to
+avoid creating holes in vb2 index range.
 
-> 
->>>> +		sort(gains[i], gts->num_hwgain, sizeof(int), iio_gts_gain_cmp,
->>>> +		     NULL);
->>>
->>> One line reads better?
->>
->> I try mostly to keep the good old 80 chars as I often have 3 terminal
->> windows fitted on my laptop screen. It works best with the short lines.
-> 
-> With it on one line
-> 
-> 		sort(gains[i], gts->num_hwgain, sizeof(int), iio_gts_gain_cmp, NULL);
-> 
-> You have N at the last column which quite likely suggests that it's NULL.
-> So, I don't think it's a big issue to put on a single line.
+I test these patches with Fluster test suite on Hantro video
+decoder (VP9 and HEVC). I notice no performances issues and 
+no regressions.
 
-Trusting suggestions like this in a kernel code would be a big problem 
-to me. I would ask myself - "do you feel lucky"?
+Despite carefully checking if removing bufs array doesn't break
+the compilation of any media driver, I may have miss some so
+one of the goal of this RFC is also to trig compilation robots.
+ 
+Benjamin Gaignard (4):
+  media: videobuf2: Use vb2_get_buffer() as helper everywhere
+  media: videobuf2: Replace bufs array by a list
+  media: videobuf2: Use bitmap to manage vb2 index
+  media: videobuf2: Stop define VB2_MAX_FRAME as global
 
-Well, my favourite editor would wrap the line - so I would see the NULL 
-at the next row. Not indented properly causing it to be harder to read 
-than the code which is properly manually split and indented. It is much 
-less of a problem for me to "waste" a row here and see the line properly 
-split.
-
->>>> +	if (ret && gts->avail_all_scales_table)
->>>
->>> In one case you commented that free(NULL) is okay, in the other, you add
->>> a duplicative check. Why?
->>
->> Sorry but what do you mean by dublicative check?
->>
->> Usually I avoid the kfree(NULL). That's why I commented on it in that
->> another case where it was not explicitly disallowed. I'll change that for v4
->> to avoid kfree(NULL) as you suggested.
-> 
-> So, and with it you put now a double check for NULL, do you think it's okay?
-> I don't.
-
-I don't see the double check. I see only one check just above the 
-kfree()? Where is the other check?
-
-> 
->>>> +		kfree(gts->avail_all_scales_table);
-> 
-> ...
-> 
->>>> +	per_time_gains = kcalloc(gts->num_itime, sizeof(int *), GFP_KERNEL);
->>>
->>> sizeof(type) is error prone in comparison to sizeof(*var).
->>
->> Yes and no. In majority of cases where we see sizeof(*var) - the *var is no
->> longer a pointer as having pointers to pointers is not _that_ common. When
->> we see sizeof(type *) - we instantly know it is a size of a pointer and not
->> a size of some other type.
->>
->> So yes, while having sizeof(*var) makes us tolerant to errors caused by
->> variable type changes - it makes us prone to human reader errors. Also, if
->> someone changes type of *var from pointer to some other type - then he/she
->> is likely to in any case need to revise the array alloactions too.
->>
->> While I in general agree with you that the sizeof(variable) is better than
->> sizeof(type) - I see that in cases like this the sizeof(type *) is clearer.
-> 
-> Still get a fundamental disagreement on this. I would insist, but I'm not
-> a maintainer, so you are lucky :-) if Jonathan will not force you to follow
-> my way.
-
-In a code you are maintaining it is good to have it in your way as 
-you're responsible for it. This is also why I insist on having things in 
-a way I can read best for a code I plan to maintain - unless the 
-subsystem maintainers see it hard to maintain for them. So, let's see if 
-Jonathan has strong opinions on this one :)
-
-> ...
-> 
->>>> +	for (i = gts->num_itime - 1; i >= 0; i--) {
->>>
->>> 	while (i--) {
->>>
->>> makes it easier to parse.
->>
->> This is also something I replied for v2. I think we have a fundamental
->> disagreement on this one :/
-> 
-> Yes, and I will continue insisting on while (foo--).
-> That why I won't give you my tags :-)
-
-Well, I am planning to keep reading this code when/if it is being 
-patched. Hence I am so reluctant to change it to something that makes it 
-harder for me to follow. Meanwhile, I understand that you don't want to 
-tag something you don't agree with.
-
-> ...
-> 
->>>> +		if (!min)
->>>> +			min = gts->hwgain_table[i].gain;
->>>> +		else
->>>> +			min = min(min, gts->hwgain_table[i].gain);
->>>
->>> I was staring at this and have got no clue why it's not a dead code.
->>
->> Nor can I. It seems obvious to me that the one who wrote this had no idea
->> what he was doing XD
->>
->> Well, I must have had some initial idea of using the minimum value to
->> something - but I can't remember what would've been the use. Maybe I was
->> initially thinking that I'll return the smallest value in-range if the gain
->> given as a parameter was smaller than any of the supported ones.
->>
->> Thank you for reading this carefully and pointing it out! Well spotted!
-> 
-> Hint: run always `make W=1` when building kernel.
-
-Ah. I thought I had that and sparse enabled. It seems I disabled all 
-extra checks from my build scripts a while ago to speed-up compilation 
-when I was bisecting...
-
-> It will show defined but not used cases and combined with nowadays
-> default -Werror won't be compilable.
-> 
-
-Thanks for the review.
-
---Matti
+ .../media/common/videobuf2/videobuf2-core.c   | 107 +++++++++++-------
+ .../media/common/videobuf2/videobuf2-v4l2.c   |  17 +--
+ drivers/media/platform/amphion/vdec.c         |   1 +
+ drivers/media/platform/amphion/vpu_dbg.c      |   4 +-
+ .../platform/mediatek/jpeg/mtk_jpeg_core.c    |   2 +-
+ .../vcodec/vdec/vdec_vp9_req_lat_if.c         |   4 +-
+ drivers/media/platform/qcom/venus/hfi.h       |   2 +
+ .../media/platform/verisilicon/hantro_hw.h    |   2 +
+ drivers/media/test-drivers/visl/visl-dec.c    |  16 +--
+ include/media/videobuf2-core.h                |  42 ++++++-
+ include/media/videobuf2-v4l2.h                |   4 -
+ 11 files changed, 130 insertions(+), 71 deletions(-)
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.34.1
 
