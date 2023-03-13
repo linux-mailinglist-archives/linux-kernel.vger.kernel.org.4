@@ -2,115 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13EEF6B6DD4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:09:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CB156B6DD7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:10:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbjCMDI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:08:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
+        id S229800AbjCMDJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjCMDI2 (ORCPT
+        with ESMTP id S229552AbjCMDJo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:08:28 -0400
-Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 819DEC14C;
-        Sun, 12 Mar 2023 20:08:17 -0700 (PDT)
-Received: (from willy@localhost)
-        by mail.home.local (8.17.1/8.17.1/Submit) id 32D38AAT006824;
-        Mon, 13 Mar 2023 04:08:10 +0100
-Date:   Mon, 13 Mar 2023 04:08:10 +0100
-From:   Willy Tarreau <w@1wt.eu>
-To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org
-Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
- -fstack-protector
-Message-ID: <ZA6TmjtAJ5lvFCeF@1wt.eu>
-References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
- <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
- <ZA3OhLBmUz3fui+f@1wt.eu>
- <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
+        Sun, 12 Mar 2023 23:09:44 -0400
+Received: from mail-qv1-f47.google.com (mail-qv1-f47.google.com [209.85.219.47])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B12CE3B5;
+        Sun, 12 Mar 2023 20:09:42 -0700 (PDT)
+Received: by mail-qv1-f47.google.com with SMTP id y3so7445226qvn.4;
+        Sun, 12 Mar 2023 20:09:42 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678676981;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GeCN+vGycPjjiXBhDFbMeoBozzcJZj5zCfhIwuUjQhI=;
+        b=Xd3uq3Hjj1b9OI8uJJyiWjuSMKpxAyXrPUUWMpwMVc94hsVaOOG6cbwKzX7oOyd6DJ
+         0X1phmKksmIB/Bo+T79G5LRBVRarvckBQsGWPLd4M6t5JOuUq/PtKjfeQazWVPED9xBV
+         hLZgiZGSqrpdvxCKd6acuWd1bVen8CqJxXxhDrgdqeQlgdH4d3CpRMo/KkheymXnkAu8
+         6SLfxz1bmXqk64tc3zVlqHeM7HJBKv23KLOtH1rloB0g/6HBGh7+pqjpKkcZVjveJzgB
+         kO+bOWOBcdRs3JhogTarqazc5PjotfDJEQXnUaJq4+iczeZskif2nJO2nzNyKAfgrggR
+         k33w==
+X-Gm-Message-State: AO0yUKXuopAY5H8QYSmvMTUo6T92LlKemopF1AI9fPfDUXB0tUFMqgwn
+        mriu7qKF/ZHoT0ZVsuJIfdY=
+X-Google-Smtp-Source: AK7set9wsQ9bQ+JAqGmb/so+XDS0N2/uDMVI8T4aFvpoZye1cUH71dNog5QN1KTcuY/RRctUDDtEww==
+X-Received: by 2002:ad4:574a:0:b0:56e:b16d:ec93 with SMTP id q10-20020ad4574a000000b0056eb16dec93mr12626237qvx.4.1678676981447;
+        Sun, 12 Mar 2023 20:09:41 -0700 (PDT)
+Received: from maniforge ([2620:10d:c091:400::5:bf74])
+        by smtp.gmail.com with ESMTPSA id a195-20020ae9e8cc000000b007425dade624sm4605515qkg.41.2023.03.12.20.09.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 20:09:40 -0700 (PDT)
+Date:   Sun, 12 Mar 2023 22:09:38 -0500
+From:   David Vernet <void@manifault.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Tobin C. Harding" <me@tobin.cc>
+Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
+ netdev FAQ
+Message-ID: <20230313030938.GA152792@maniforge>
+References: <20230313025119.17430-1-bagasdotme@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230313025119.17430-1-bagasdotme@gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
-> FYI there is also another patch to make nolibc-test buildable with
-> compilers that enable -fstack-protector by default.
-> Maybe this can be picked up until the proper stack-protector support is
-> hashed out.
-> Maybe even for 6.3:
+On Mon, Mar 13, 2023 at 09:51:19AM +0700, Bagas Sanjaya wrote:
+> Commit d56b0c461d19da ("bpf, docs: Fix link to netdev-FAQ target") fixes
+> link to netdev FAQ documentation introduced in <blurb> introduced in
+> 287f4fa99a5281 ("docs: Update references to netdev-FAQ"), although the
+> former commit doesn't mention Fixes: to the latter. However, the former
+> changes the link to external link to docs.kernel.org, in contrast to the
+> internal linking employed by the latter.
 > 
-> https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
-
-Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
-
-> > > +int run_stackprotector(int min, int max)
-> > > +{
-> > > +	int llen = 0;
-> > > +
-> > > +	llen += printf("0 ");
-> > > +
-> > > +#if !defined(NOLIBC_STACKPROTECTOR)
-> > > +	llen += printf("stack smashing detection not supported");
-> > > +	pad_spc(llen, 64, "[SKIPPED]\n");
-> > > +	return 0;
-> > > +#endif
-> > 
-> > Shouldn't the whole function be enclosed instead ? I know it's more of
-> > a matter of taste, but avoiding to build and link it for archs that
-> > will not use it may be better.
+> Use :doc: directive for linking to netdev FAQ doc, while keeping the
+> anchor text intact and consistency with intention of 287f4fa99a5281.
 > 
-> The goal was to print a [SKIPPED] message if it's not supported.
+> Fixes: d56b0c461d19da ("bpf, docs: Fix link to netdev-FAQ target")
+> Fixes: 287f4fa99a5281 ("docs: Update references to netdev-FAQ")
+> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
 
-Ah indeed makes sense.
+This regresses all of the warnings I fixed in d56b0c461d19da ("bpf,
+docs: Fix link to netdev-FAQ target"):
 
-> The overhead of doing this should be neglectable.
+[void@maniforge bpf-next]$ make -j SPHINXDIRS="bpf" htmldocs
+make[2]: Nothing to be done for 'html'.
+Using alabaster theme
+source directory: bpf
+/home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:125: WARNING: unknown document: '/process/maintainer-netdev'
+/home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:150: WARNING: unknown document: '/process/maintainer-netdev'
+/home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:207: WARNING: unknown document: '/process/maintainer-netdev'
+/home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:232: WARNING: unknown document: '/process/maintainer-netdev'
+/home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:398: WARNING: unknown document: '/process/maintainer-netdev'
+/home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:414: WARNING: unknown document: '/process/maintainer-netdev'
 
-It was not the overhead (that's only a regtest program after all), I
-was more thinking about the difficulty to maintain this function over
-time for other archs if it starts to rely on optional support. But for
-now it's not a problem, it it would ever become one we could simply
-change that to have a function just print SKIPPED. So I'm fine with
-your option.
+And it also causes the netdev-FAQ links to once again be broken and not
+actually point to anything.
 
-> > > @@ -719,8 +784,11 @@ int prepare(void)
-> > >  /* This is the definition of known test names, with their functions */
-> > >  static const struct test test_names[] = {
-> > >  	/* add new tests here */
-> > > -	{ .name = "syscall",   .func = run_syscall  },
-> > > -	{ .name = "stdlib",    .func = run_stdlib   },
-> > > +	{ .name = "syscall",        .func = run_syscall         },
-> > > +	{ .name = "stdlib",         .func = run_stdlib          },
-> > > +	{ .name = "stackprotector", .func = run_stackprotector, },
-> > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
-> > 
-> > I think it would be better to keep the number of categories low
-> > and probably you should add just one called "protection" or so,
-> > and implement your various tests in it as is done for other
-> > categories. The goal is to help developers quickly spot and select
-> > the few activities they're interested in at a given moment. 
+> ---
+>  Indeed, this internal linking fix should have been made against bpf
+>  tree, since the problematic original linking in 287f4fa99a5281 is also
+>  seen in bpf tree. If that is the case, I will rebase on that tree.
 > 
-> I'm not sure how this would be done. The goal here is that
-> "stackprotector" is the user-visible category. It can be changed to
-> "protection".
-> "_smash_stack" however is just an entrypoint that is used by the forked
-> process to call the crashing code.
-
-Ah I didn't realize that, I now understand how that can be useful,
-indeed. Then maybe just rename your .skip_by_default field to .hidden
-so that it becomes more generic (i.e. if one day we permit enumeration
-we don't want such tests to be listed either), and assign the field on
-the same line so that it's easily visible with a grep.
-
-Thanks,
-Willy
+>  Documentation/bpf/bpf_devel_QA.rst | 17 +++++++++--------
+>  1 file changed, 9 insertions(+), 8 deletions(-)
+> 
+> diff --git a/Documentation/bpf/bpf_devel_QA.rst b/Documentation/bpf/bpf_devel_QA.rst
+> index 5f5f9ccc3862b4..e523991da9e0ce 100644
+> --- a/Documentation/bpf/bpf_devel_QA.rst
+> +++ b/Documentation/bpf/bpf_devel_QA.rst
+> @@ -128,7 +128,7 @@ into the bpf-next tree will make their way into net-next tree. net and
+>  net-next are both run by David S. Miller. From there, they will go
+>  into the kernel mainline tree run by Linus Torvalds. To read up on the
+>  process of net and net-next being merged into the mainline tree, see
+> -the `netdev-FAQ`_.
+> +the :doc:`netdev-FAQ </process/maintainer-netdev>`.
+>  
+>  
+>  
+> @@ -147,7 +147,8 @@ request)::
+>  Q: How do I indicate which tree (bpf vs. bpf-next) my patch should be applied to?
+>  ---------------------------------------------------------------------------------
+>  
+> -A: The process is the very same as described in the `netdev-FAQ`_,
+> +A: The process is the very same as described in the
+> +:doc:`netdev-FAQ </process/maintainer-netdev>`,
+>  so please read up on it. The subject line must indicate whether the
+>  patch is a fix or rather "next-like" content in order to let the
+>  maintainers know whether it is targeted at bpf or bpf-next.
+> @@ -206,8 +207,8 @@ ii) run extensive BPF test suite and
+>  Once the BPF pull request was accepted by David S. Miller, then
+>  the patches end up in net or net-next tree, respectively, and
+>  make their way from there further into mainline. Again, see the
+> -`netdev-FAQ`_ for additional information e.g. on how often they are
+> -merged to mainline.
+> +:doc:`netdev-FAQ </process/maintainer-netdev>` for additional
+> +information e.g. on how often they are merged to mainline.
+>  
+>  Q: How long do I need to wait for feedback on my BPF patches?
+>  -------------------------------------------------------------
+> @@ -230,7 +231,8 @@ Q: Are patches applied to bpf-next when the merge window is open?
+>  -----------------------------------------------------------------
+>  A: For the time when the merge window is open, bpf-next will not be
+>  processed. This is roughly analogous to net-next patch processing,
+> -so feel free to read up on the `netdev-FAQ`_ about further details.
+> +so feel free to read up on the
+> +:doc:`netdev-FAQ </process/maintainer-netdev>` about further details.
+>  
+>  During those two weeks of merge window, we might ask you to resend
+>  your patch series once bpf-next is open again. Once Linus released
+> @@ -394,7 +396,7 @@ netdev kernel mailing list in Cc and ask for the fix to be queued up:
+>    netdev@vger.kernel.org
+>  
+>  The process in general is the same as on netdev itself, see also the
+> -`netdev-FAQ`_.
+> +:doc:`netdev-FAQ </process/maintainer-netdev>`.
+>  
+>  Q: Do you also backport to kernels not currently maintained as stable?
+>  ----------------------------------------------------------------------
+> @@ -410,7 +412,7 @@ Q: The BPF patch I am about to submit needs to go to stable as well
+>  What should I do?
+>  
+>  A: The same rules apply as with netdev patch submissions in general, see
+> -the `netdev-FAQ`_.
+> +the :doc:`netdev-FAQ </process/maintainer-netdev>`.
+>  
+>  Never add "``Cc: stable@vger.kernel.org``" to the patch description, but
+>  ask the BPF maintainers to queue the patches instead. This can be done
+> @@ -685,7 +687,6 @@ when:
+>  
+>  .. Links
+>  .. _Documentation/process/: https://www.kernel.org/doc/html/latest/process/
+> -.. _netdev-FAQ: https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+>  .. _selftests:
+>     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/tools/testing/selftests/bpf/
+>  .. _Documentation/dev-tools/kselftest.rst:
+> 
+> base-commit: 49b5300f1f8f2b542b31d63043c2febd13edbe3a
+> -- 
+> An old man doll... just what I always wanted! - Clara
+> 
