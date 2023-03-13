@@ -2,262 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8466D6B7755
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:20:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5543A6B7759
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:20:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229668AbjCMMUI convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 08:20:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
+        id S229749AbjCMMUi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:20:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCMMUG (ORCPT
+        with ESMTP id S229748AbjCMMUd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:20:06 -0400
-Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DA65072D;
-        Mon, 13 Mar 2023 05:20:03 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id 6928B1863CD5;
-        Mon, 13 Mar 2023 15:19:59 +0300 (MSK)
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
-        with ESMTP id Y7GYg_myE7ai; Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.astralinux.ru (Postfix) with ESMTP id ABACE1863CCF;
-        Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
-X-Virus-Scanned: amavisd-new at astralinux.ru
-Received: from mail.astralinux.ru ([127.0.0.1])
-        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id ZmlpE9MgWsBK; Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
-Received: from [10.177.20.58] (unknown [10.177.20.58])
-        by mail.astralinux.ru (Postfix) with ESMTPSA id 29DC41863D04;
-        Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
-Message-ID: <ddfab307-d471-ee08-6804-5f903adb1770@astralinux.ru>
-Date:   Mon, 13 Mar 2023 15:19:50 +0300
+        Mon, 13 Mar 2023 08:20:33 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3E4B52F72;
+        Mon, 13 Mar 2023 05:20:31 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id j11so47901447edq.4;
+        Mon, 13 Mar 2023 05:20:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678710030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=U9QeXAHeMugQluXQmQ0vDaleIoBtKB5Ww7MDNzTXkTs=;
+        b=aNQgexFo/zLOjD/VvwQqH0QucmBFS3mLE36uRYn2rNfW6ikWMyBB9lxb/MEQ7E/rEX
+         Lv2urpDe5MELhQqne/Pnvo9lj911dX+owC8PbleYhKMTCvSbDTy6zV2u35ywbeEr84zT
+         LL7lXVekdfbCGe1ssZTGOkkuqJjfZhsI1m/DUxaFxc5kNfqMBD7bfI66DAjueQ3gVvpi
+         bvknJbkHGMvtNCNtQ/RuZinjXgVa98B/xhLVUd8FWkKtpcbfDF+JjOWBQtCYKDn7qF4H
+         8VXKzJdbBW5eLwRNFxiNJFwwP6w6xwoTtZ/PFms0E20vM7VqEgDrIfZdX/07rs+Z8FlA
+         XrgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678710030;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=U9QeXAHeMugQluXQmQ0vDaleIoBtKB5Ww7MDNzTXkTs=;
+        b=GW8kfuMGRxGeEiK6YhoUGcdjCsOk5vLz08NrP65rxIvZduPPHHn5DcVVHeMrkxU6cm
+         QlmXU09Vy1QcCHpP6Ma6g4XNrTxNiCtY9eSHKCL7dPMfWT6+MbzZB5JmzOxie/NHAfdm
+         59ik0JsuS8PNS8w68p/r5egM+K3E9V6rs+aUF+4fY+gKuxrSX79srYmcmIza9NtO9hne
+         DZCsVZj6nT71d5iEx0afgqP/5Pa1MjRegOhYrnVUi45fTvsvxV8UNAmdsPJzHpBTFiCk
+         5zXXa2gViHOoafUCX2nD9L1HS4ZpFC2k/DY1m+0vzgjKABn5PYJ60kOopLSQte5KMBXV
+         9R9w==
+X-Gm-Message-State: AO0yUKV+jYba/fcvjKwXZEcCFP1C/EJmVL1tLI3tq6lG/BXIU3gd5R7n
+        lhmGCg4NxUw0a0GNo+jjMS7TZQrmC+RFPnpRljg=
+X-Google-Smtp-Source: AK7set8o+aFFFn6E49sD+TH2pPUAA1oNe7C77j1nrEz47+vNPIxudd7nb7GNX3PO/mlB2+SlIqLS5Fmck2j5jvCYhe4=
+X-Received: by 2002:a17:906:6d5a:b0:922:26ae:c68c with SMTP id
+ a26-20020a1709066d5a00b0092226aec68cmr3781992ejt.5.1678710030117; Mon, 13 Mar
+ 2023 05:20:30 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.0
-Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
-Content-Language: en-US
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <20230203101828.14799-1-abelova@astralinux.ru>
- <Y9zly1vrj9z4c1qT@kroah.com>
- <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
- <Y+zivah57216KcuB@kroah.com>
- <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
-From:   Anastasia Belova <abelova@astralinux.ru>
-In-Reply-To: <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311151756.83302-1-kerneljasonxing@gmail.com>
+ <ZA4huzYKK/tdT3Ep@corigine.com> <CAL+tcoDi5fVWjyTX6wjJGKrszqL6JWkEgDBajhZchYSW7kyhGQ@mail.gmail.com>
+ <ZA8S14QtdBduQEVq@corigine.com>
+In-Reply-To: <ZA8S14QtdBduQEVq@corigine.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 13 Mar 2023 20:19:53 +0800
+Message-ID: <CAL+tcoAmWU0w5dJ6_fL9yp1sMOF3px-n=H=kqaWwosHuzvijqA@mail.gmail.com>
+Subject: Re: [PATCH net-next] net-sysfs: display two backlog queue len separately
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 13, 2023 at 8:11=E2=80=AFPM Simon Horman <simon.horman@corigine=
+.com> wrote:
+>
+> On Mon, Mar 13, 2023 at 09:55:37AM +0800, Jason Xing wrote:
+> > On Mon, Mar 13, 2023 at 3:02=E2=80=AFAM Simon Horman <simon.horman@cori=
+gine.com> wrote:
+> > >
+> > > On Sat, Mar 11, 2023 at 11:17:56PM +0800, Jason Xing wrote:
+> > > > From: Jason Xing <kernelxing@tencent.com>
+> > > >
+> > > > Sometimes we need to know which one of backlog queue can be exactly
+> > > > long enough to cause some latency when debugging this part is neede=
+d.
+> > > > Thus, we can then separate the display of both.
+> > > >
+> > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > > > ---
+> > > >  net/core/net-procfs.c | 17 ++++++++++++-----
+> > > >  1 file changed, 12 insertions(+), 5 deletions(-)
+> > > >
+> > > > diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
+> > > > index 1ec23bf8b05c..97a304e1957a 100644
+> > > > --- a/net/core/net-procfs.c
+> > > > +++ b/net/core/net-procfs.c
+> > > > @@ -115,10 +115,14 @@ static int dev_seq_show(struct seq_file *seq,=
+ void *v)
+> > > >       return 0;
+> > > >  }
+> > > >
+> > > > -static u32 softnet_backlog_len(struct softnet_data *sd)
+> > > > +static u32 softnet_input_pkt_queue_len(struct softnet_data *sd)
+> > > >  {
+> > > > -     return skb_queue_len_lockless(&sd->input_pkt_queue) +
+> > > > -            skb_queue_len_lockless(&sd->process_queue);
+> > > > +     return skb_queue_len_lockless(&sd->input_pkt_queue);
+> > > > +}
+> > > > +
+> > > > +static u32 softnet_process_queue_len(struct softnet_data *sd)
+> > > > +{
+> > > > +     return skb_queue_len_lockless(&sd->process_queue);
+> > > >  }
+> > > >
+> > > >  static struct softnet_data *softnet_get_online(loff_t *pos)
+> > > > @@ -169,12 +173,15 @@ static int softnet_seq_show(struct seq_file *=
+seq, void *v)
+> > > >        * mapping the data a specific CPU
+> > > >        */
+> > > >       seq_printf(seq,
+> > > > -                "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x=
+ %08x %08x %08x\n",
+> > > > +                "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x=
+ %08x %08x %08x "
+> > > > +                "%08x %08x\n",
+> > > >                  sd->processed, sd->dropped, sd->time_squeeze, 0,
+> > > >                  0, 0, 0, 0, /* was fastroute */
+> > > >                  0,   /* was cpu_collision */
+> > > >                  sd->received_rps, flow_limit_count,
+> > > > -                softnet_backlog_len(sd), (int)seq->index);
+> > > > +                0,   /* was len of two backlog queues */
+> > > > +                (int)seq->index,
+> > >
+> > > nit: I think you could avoid this cast by using %llx as the format sp=
+ecifier.
+> >
+> > I'm not sure if I should change this format since the above line is
+> > introduced in commit 7d58e6555870d ('net-sysfs: add backlog len and
+> > CPU id to softnet data').
+> > The seq->index here manifests which cpu it uses, so it can be
+> > displayed in 'int' format. Meanwhile, using %8x to output is much
+> > cleaner if the user executes 'cat /proc/net/softnet_stat'.
+> >
+> > What do you think about this?
+>
+> I think %08llx might be a good way to go.
+> But perhaps I'm missing something wrt to changing user-facing output.
+>
+> In any case, this is more a suggestion than a request for a change.
 
-11.03.2023 06:29, Mirsad Goran Todorovac пишет:
-> On 15. 02. 2023. 14:48, Greg Kroah-Hartman wrote:
->> On Wed, Feb 15, 2023 at 04:39:56PM +0300, Анастасия Белова wrote:
->>> 03.02.2023 13:45, Greg Kroah-Hartman пишет:
->>>> On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
->>>>> Before dereferencing dev->driver check it for NULL.
->>>>>
->>>>> If an interrupt handler is called after assigning
->>>>> NULL to dev->driver, but before resetting dev->int_enable,
->>>>> NULL-pointer will be dereferenced.
->>>>>
->>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
->>>>>
->>>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
->>>>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
->>>>> ---
->>>>>    drivers/usb/gadget/udc/goku_udc.c | 5 +++--
->>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
->>>>>
->>>>> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
->>>>> index bdc56b24b5c9..896bba8b47f1 100644
->>>>> --- a/drivers/usb/gadget/udc/goku_udc.c
->>>>> +++ b/drivers/usb/gadget/udc/goku_udc.c
->>>>> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
->>>>>    pm_next:
->>>>>    		if (stat & INT_USBRESET) {		/* hub reset done */
->>>>>    			ACK(INT_USBRESET);
->>>>> -			INFO(dev, "USB reset done, gadget %s\n",
->>>>> -				dev->driver->driver.name);
->>>>> +			if (dev->driver)
->>>>> +				INFO(dev, "USB reset done, gadget %s\n",
->>>>> +					dev->driver->driver.name);
->>>> How can this ever happen?  Can you trigger this somehow?  If not, I
->>>> don't think this is going to be possible (also what's up with printk
->>>> from an irq handler???)
->>> Unfortunately, I can't find the way to trigger this at the moment.
->> Then the change should not be made.
->>
->>> What about printk, should trace_printk be used instead?
->> Why?
->>
->>>> Odds are, no one actually has this hardware anymore, right?
->>> Despite of this, such vulnerability should be fixed because
->>> there is a possibility to exploit it.
->> How can this be "exploited" if it can not ever be triggered?
->>
->> Also, this would cause a NULL dereference in an irq handler, how can you
->> "exploit" that?
->>
->> Please only submit patches that actually do something.  It is getting
->> very hard to want to even review patches from this "project" based on
->> the recent submissions.
->>
->> thanks,
->>
->> greg k-h
-> Hi Greg, Anastasia,
+Ah, now I see. Thanks again for your review and suggestion :)
 
-Hi Misrad,
-
-> Without any pros or cons, or taking sides, there appears to be a similar check
-> when using dev->driver->driver.name in
->
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1158
->
-> 	seq_printf(m,
-> 		   "%s - %s\n"
-> 		   "%s version: %s %s\n"
-> 		   "Gadget driver: %s\n"
-> 		   "Host %s, %s\n"
-> 		   "\n",
-> 		   pci_name(dev->pdev), driver_desc,
-> 		   driver_name, DRIVER_VERSION, dmastr(),
-> 		   dev->driver ? dev->driver->driver.name : "(none)",
-> 		   is_usb_connected
-> 			   ? ((tmp & PW_PULLUP) ? "full speed" : "powered")
-> 			   : "disconnected",
-> 		   udc_ep_state(dev->ep0state));
->
-> On the other hand, where could dev->drivre be reset without resetting dev->int_enable?
->
-> dev->driver = NULL appears here:
->
-> static int goku_udc_stop(struct usb_gadget *g)
-> {
-> 	struct goku_udc	*dev = to_goku_udc(g);
-> 	unsigned long	flags;
->
-> 	spin_lock_irqsave(&dev->lock, flags);
-> 	dev->driver = NULL;
-> 	stop_activity(dev);
-> 	spin_unlock_irqrestore(&dev->lock, flags);
->
-> 	return 0;
-> }
->
-> it is followed by stop_activity() calling udc_reset():
->
-> static void udc_reset(struct goku_udc *dev)
-> {
-> 	struct goku_udc_regs __iomem	*regs = dev->regs;
->
-> 	writel(0, &regs->power_detect);
-> 	writel(0, &regs->int_enable);
-> 	readl(&regs->int_enable);
-> 	dev->int_enable = 0;
-> .
-> .
-> .
->
-> ... but this happens in between spin_lock_irqsave() and spin_unlock_irqsave(),
-> which appears like a correct way to do it.
-
-Are you sure that spin_lock_irqsave makes the code safe? This function 
-disables interrupts on
-
-local processor only (Linux Device Drivers, Third Edition). So it 
-doesn't seem to be
-
-absolutely safe on multiprocessor systems.
-
-> But second appearance is here:
->
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1559
->
-> 	spin_lock(&dev->lock);
->
-> rescan:
-> 	stat = readl(&regs->int_status) & dev->int_enable;
->          if (!stat)
-> 		goto done;
-> 	dev->irqs++;
->
-> 	/* device-wide irqs */
-> 	if (unlikely(stat & INT_DEVWIDE)) {
-> 		if (stat & INT_SYSERROR) {
-> 			ERROR(dev, "system error\n");
-> 			stop_activity(dev);
-> 			stat = 0;
-> 			handled = 1;
-> 			// FIXME have a neater way to prevent re-enumeration
-> 			dev->driver = NULL;
-> 			goto done;
-> 		}
->
-> goto done leads to:
->
-> done:
-> 	(void)readl(&regs->int_enable);
-> 	spin_unlock(&dev->lock);
->
-> This unlocks dev->lock before setting dev->int_enable to zero, or calling writel(0, &regs->int_enable);
-> which could be problematic. Unless it called stop_activity(dev) four lines earlier. Which does
-> bot of:
->
-> 	writel(0, &regs->int_enable);
-> 	dev->int_enable = 0;
->
-> So, FWIW, we seem to be safe. Yet, there might be no harm in printing "(null)" rather
-> than having an NULL pointer dereference, it seems.
->
-> Yet, there is another unprotected dereference of dev->driver:
->
-> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1513
->
-> 	spin_unlock (&dev->lock);
-> 	tmp = dev->driver->setup(&dev->gadget, &ctrl);
-> 	spin_lock (&dev->lock);
->
-> All others (in goku_udc.c, at least) have triple safeguards like:
->
-> 				if (dev->gadget.speed != USB_SPEED_UNKNOWN
-> 						&& dev->driver
-> 						&& dev->driver->suspend) {
-> 					spin_unlock(&dev->lock);
-> 					dev->driver->suspend(&dev->gadget);
-> 					spin_lock(&dev->lock);
-> 				}
->
-> So the above should maybe put to:
->
-> 	if (dev->driver && dev->driver->setup) {
-> 		spin_unlock (&dev->lock);
-> 		tmp = dev->driver->setup(&dev->gadget, &ctrl);
-> 		spin_lock (&dev->lock);
-> 	}
->
-> instead to be completely certain.
->
-> Forgive me for this uninspired rant. Thank you if you've read this far.
-> I hope this helps.
->
-> My $0.02.
->
-> Regards,
-> Mirsad
->
 Thanks,
-
-Anastasia
-
+Jason
