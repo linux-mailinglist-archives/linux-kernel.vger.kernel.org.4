@@ -2,172 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0219D6B80C2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:33:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F5556B80D2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:35:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCMSdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34228 "EHLO
+        id S231219AbjCMSfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231248AbjCMScd (ORCPT
+        with ESMTP id S230047AbjCMSel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:32:33 -0400
-Received: from mail-pl1-x64a.google.com (mail-pl1-x64a.google.com [IPv6:2607:f8b0:4864:20::64a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BBBDD8568A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:31:26 -0700 (PDT)
-Received: by mail-pl1-x64a.google.com with SMTP id ju20-20020a170903429400b0019ea5ea044aso7666823plb.21
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:31:26 -0700 (PDT)
+        Mon, 13 Mar 2023 14:34:41 -0400
+Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681DB8737A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:32:53 -0700 (PDT)
+Received: by mail-vs1-xe29.google.com with SMTP id x14so11853856vso.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:32:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678732264;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=eH/yGFM7lophCaErSsS6qkaStiVBMUZG+SlmSnRtnLo=;
-        b=kjW5HuVbS9hb3YNrUpO/PRw/CP778kbREXjjZmvTOI/nvHNDji68QpMHNQAry+6jkB
-         dB9TzMA3uuyyhuE33ljhJs1Uza/C+jCQ2CBjQwr2hW1JTviZIgt9n4nmvFbAwBrzRIAf
-         5Mrg9GKSNbnN/uoyXA8eE9Cf13578wopbjc71alN9VXQWCYTW8YODYxZEfOya1+A/uMg
-         N4vDi0kbGoNd+dyS1PaXHq0jiuvslu5NhoBogINd8uh2KW/UL09khIT8lKVC43XzJGAy
-         rUVdcoMoynQQQYqI2P81mGGNseJgn1iC18uUso0TP2pL3zuecVTbJapqf/JvjDzQPVP/
-         huIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678732264;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+        d=gmail.com; s=20210112; t=1678732348;
+        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=eH/yGFM7lophCaErSsS6qkaStiVBMUZG+SlmSnRtnLo=;
-        b=kdJNUayjOornCDkoFDpUCvLnIQ7/HGSZH2+C8iwehDEh4VC0qI5Qawj3P2sackMDYY
-         U48qXIQvemxyJBuJ4DjbGFEDJafye2aS/kEl1X7geuJSYFVKYsWHYXyjSoeeHChu+YSF
-         rOeD0w6S3xxXks8BfFdFuwsrPnep2IGXjGsrnB8Xuk9BFqB1dXb42BSEEOgRiCZD2ntr
-         1PgspE8r5kTWRiw9LFb8ZKrXWjFPbDTwSp9/hsM3vz6IsqxS8tov/fVbDhl5RANPmELh
-         qmj3tP9wwJgc+drx+26sToFOWOhM4ffFcPTQOqrCjBQ5qFKz/DmAO+nyCIY51YC2kQ5q
-         EV/A==
-X-Gm-Message-State: AO0yUKV2txUiw+055xFc5XlgAZziOu4AYyvFgDGk/k1N5g14u3xO7vuL
-        e/HfdcZdJzwwaGwevOi4nZjKwHmkS8U=
-X-Google-Smtp-Source: AK7set/VbSpElqSzWWeBBuvouqfYrImDwqs9dxkO5uUj2PkDYNlB6Z2CA0iJ1rWQE85qAqqnE4EFfLLS2Tw=
-X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
- (user=seanjc job=sendgmr) by 2002:a17:90a:1b0c:b0:23d:bd2:ab35 with SMTP id
- q12-20020a17090a1b0c00b0023d0bd2ab35mr1401323pjq.3.1678732263794; Mon, 13 Mar
- 2023 11:31:03 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 11:31:02 -0700
-In-Reply-To: <a3e58e90a6b26019633afeef9162720ef39c5e03.camel@intel.com>
-Mime-Version: 1.0
-References: <20230310214232.806108-1-seanjc@google.com> <20230310214232.806108-3-seanjc@google.com>
- <a3e58e90a6b26019633afeef9162720ef39c5e03.camel@intel.com>
-Message-ID: <ZA9rl1sp0l9oPoBm@google.com>
-Subject: Re: [PATCH v2 02/18] x86/reboot: Expose VMCS crash hooks if and only
- if KVM_INTEL is enabled
-From:   Sean Christopherson <seanjc@google.com>
-To:     Kai Huang <kai.huang@intel.com>
-Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "bp@alien8.de" <bp@alien8.de>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Chao Gao <chao.gao@intel.com>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        bh=gK68d71BdAuxvyUvoGgRfRqMNS5Snq3vUvWzE6JJ78U=;
+        b=NouBiGMrk0eotnhDhu5zgb6PRXUMNBWr+m7MtVGpbxPzEGExQaECwfPTbWSujo1ag/
+         jVfqWdGq3q23mj6nqVkcu5yqY9GUsVSJ/km/dNczupHIjXaGtVVmyi5oTT6OUBTUNFmz
+         B9GaM7bH8AI4tSld/CKsh7B+o2sXpcIBizxsfQw6oTNAUTM2NtDD6wdvPbQhMiOSI5pp
+         /Y7a6NAgKkCxPIi5Id8EtgnGvN2QEN/kaVlO8ummlm+9jfdidb+CGB3IifZK+1i9x/IR
+         L2VewHy5so+QzAtjLdsPoBjOV1WsmSDkxfWdZ0A/RPEABV0NGpc/4q26xHTxCiCdU6WN
+         ssAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678732348;
+        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=gK68d71BdAuxvyUvoGgRfRqMNS5Snq3vUvWzE6JJ78U=;
+        b=B9XxkMswcQkzNGwnILc9Di0N2zqiz/M1PRmn3sGi6LcvmtqyoAcX0hKQnNFEVCgsH/
+         4AWLI5K/RFbbG6kVXzVmGWnXB3Nf9Ki02ssRjGbgLrXoGwUoLvVzCTKC/KgOlCzVN/s3
+         N5UfT+4fsMdETUUYl3P5JKQGgxF00Rn6uThllzWsmy4JrvyiPicWhtEKhgE8+ih4eX5z
+         ywnQimoVRTcvH/7am5o8mNqaNTxTHwknm/vi5OeLxL+atvQAek0HnIgb35bfYo8wH1xb
+         ezhOLEHI7pQRVPWYHfvCjlLZcSL9KXjFTzXP6b9CCfACAtnC9RLertdLqJMX3Ka4f3IL
+         wQ7w==
+X-Gm-Message-State: AO0yUKUeh6ch3JVjWUH9YuB5Ov26p/D3uzvPJPpwlc/2IoIIcz1toabU
+        iMsvo8JKzHbvG8J7nnuFzYD6P/t9qv0aJsJ3jxk=
+X-Google-Smtp-Source: AK7set/VkPji6U19UgDaeNL7MB1/wtMTmIeyHoSSyi8sxyUkpz40vrh9glTUfCbe/ZDDweNHXOy1xWh0W3pENrp+F3U=
+X-Received: by 2002:a05:6102:304f:b0:421:c4a3:b607 with SMTP id
+ w15-20020a056102304f00b00421c4a3b607mr8408101vsa.3.1678732348434; Mon, 13 Mar
+ 2023 11:32:28 -0700 (PDT)
+MIME-Version: 1.0
+Received: by 2002:a59:a5e1:0:b0:3ad:f687:ace5 with HTTP; Mon, 13 Mar 2023
+ 11:32:28 -0700 (PDT)
+From:   wisdom raymond <wisdomraymond0667@gmail.com>
+Date:   Mon, 13 Mar 2023 18:32:28 +0000
+Message-ID: <CAM1J=0u+Xh=LN_ohcO8A4k=kTrXv9G_Y-__f7pfk5_gxLNQyOQ@mail.gmail.com>
+Subject: Hello
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLY,HK_SCAM,LOTS_OF_MONEY,LOTTO_DEPT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
         autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:e29 listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.9492]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [wisdomraymond0667[at]gmail.com]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [wisdomraymond0667[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  2.0 HK_SCAM No description available.
+        *  0.0 LOTS_OF_MONEY Huge... sums of money
+        *  1.0 FREEMAIL_REPLY From and body contain different freemails
+        *  0.0 LOTTO_DEPT Claims Department
+        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
+X-Spam-Level: *******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023, Huang, Kai wrote:
-> Hi Sean,
->=20
-> Thanks for copying me.
->=20
-> On Fri, 2023-03-10 at 13:42 -0800, Sean Christopherson wrote:
-> > Expose the crash/reboot hooks used by KVM to do VMCLEAR+VMXOFF if and
-> > only if there's a potential in-tree user, KVM_INTEL.
-> >=20
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
+SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED
+NATION: Your compensation fund of 5.2million euro. is ready for
+payment. contact me for more details.     ( david.harden.chantal09@gmail.com )
 
-...
-
-> > diff --git a/arch/x86/kernel/reboot.c b/arch/x86/kernel/reboot.c
-> > index 299b970e5f82..6c0b1634b884 100644
-> > --- a/arch/x86/kernel/reboot.c
-> > +++ b/arch/x86/kernel/reboot.c
-> > @@ -787,6 +787,7 @@ void machine_crash_shutdown(struct pt_regs *regs)
-> >  }
-> >  #endif
-> > =20
-> > +#if IS_ENABLED(CONFIG_KVM_INTEL)
-> >  /*
-> >   * This is used to VMCLEAR all VMCSs loaded on the
-> >   * processor. And when loading kvm_intel module, the
-> > @@ -807,6 +808,7 @@ static inline void cpu_crash_vmclear_loaded_vmcss(v=
-oid)
-> >  		do_vmclear_operation();
-> >  	rcu_read_unlock();
-> >  }
-> > +#endif
-> > =20
-> >  /* This is the CPU performing the emergency shutdown work. */
-> >  int crashing_cpu =3D -1;
-> > @@ -818,7 +820,9 @@ int crashing_cpu =3D -1;
-> >   */
-> >  void cpu_emergency_disable_virtualization(void)
-> >  {
-> > +#if IS_ENABLED(CONFIG_KVM_INTEL)
-> >  	cpu_crash_vmclear_loaded_vmcss();
-> > +#endif
-> > =20
-> >  	cpu_emergency_vmxoff();
->=20
-> In the changelog you mentioned to expose the *hooks* (plural) used to do
-> "VMCLEAR+VMXOFF" only when KVM_INTEL is on, but here only "VMCLEAR" is em=
-braced
-> with CONFIG_KVM_INTEL.  So either the changelog needs improvement, or the=
- code
-> should be adjusted?
-
-I'll reword the changelog, "hooks" in my head was referring to the regsiter=
- and
-unregister "hooks", not the callback itself.
-
-> Personally, I think it's better to move VMXOFF part within CONFIG_KVM_INT=
-EL too,
-> if you want to do this.
-
-That happens eventually in the final third of this series.
-
-> But I am not sure whether we want to do this (having CONFIG_KVM_INTEL aro=
-und the
-> relevant code).  In later patches, you mentioned the case of out-of-tree
-> hypervisor, for instance, below in the changelog of patch 04:
->=20
-> 	There's no need to attempt VMXOFF if KVM (or some other out-of-tree=EF=
-=BF=BD
-> 	hypervisor) isn't loaded/active...
->=20
-> This means we want to do handle VMCLEAR+VMXOFF in case of out-of-tree hyp=
-ervisor
-> too.  So, shouldn't the hooks always exist but not only available when KV=
-M_INTEL
-> or KVM_AMD is on, so the out-of-tree hypervisor can register their callba=
-cks?
-
-Ah, I see how I confused things with that statement.  My intent was only to=
- call
-out that, technically, a non-NULL callback doesn't mean KVM is loaded.  I d=
-idn't
-intend to sign the kernel up for going out of its way to support out-of-tre=
-e hypervisors.
-
-Does it read better if I add a "that piggybacked the callback" qualifier?
-
-  There's no need to attempt VMXOFF if KVM (or some other out-of-tree hyper=
-visor
-  that piggybacked the callback) isn't loaded/active, i.e. if the CPU can't
-  possibly be post-VMXON.=20
+thanks
