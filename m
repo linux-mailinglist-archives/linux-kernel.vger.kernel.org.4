@@ -2,162 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 919166B8646
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:49:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3FDA6B864D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCMXtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37326 "EHLO
+        id S229823AbjCMXuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCMXtV (ORCPT
+        with ESMTP id S229528AbjCMXuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:49:21 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63796C8A4;
-        Mon, 13 Mar 2023 16:49:19 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id k18-20020a17090a591200b0023d36e30cb5so517048pji.1;
-        Mon, 13 Mar 2023 16:49:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678751359;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=veCb5kgkwpfOZhFg24jGViGOhj9MBZ2C2UnSqiBHm5U=;
-        b=UE0h6mJiXvamxHNE9tkWOS7zJojTVeX594dwceoemH58pbPY1cL6zsQskb2Sq3BGFN
-         c0BMpsgqcUN3OEPjySpUoHlr9Hc6wr3dcAlBiNoq+S0s4vaRR4ypnbF63vIUJiWU+EG2
-         LMEC7PqO5YQwQfj+bPzlI9Aa2RTdbzbN60C+X44jb5p1QFQHEy8H6MutxlnKLO79VaJE
-         1FlnLx+q7S+XAxZ1VhxCoC6bOoUWZs6ts/hV5w1A2XC2MwTPmohk1O7+1jEq/RprGERi
-         vKbWGaFO+8vB7049HOCholwiEph8d+3W3/bdon6H11FxVTuultkrRP7AXuCkoBndvPHx
-         g90Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678751359;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=veCb5kgkwpfOZhFg24jGViGOhj9MBZ2C2UnSqiBHm5U=;
-        b=WFxmoWVazH807OKFE5eU/fkour6OlV5wH0WJCwx0PpdIUY3WeAIKFMrCrVNAy0cnPT
-         pOhM7vW3F7eyuYtn00/WemS95fFxafaBRnOTHnC2UWYlhK1RIPT6xP4vyx3/9TDPP+Pn
-         fzgJwwHY2obK6GqZtgqHjwka3xy5cv1ePMdDmyVmRskMMdPEhJyQMAavM69ZzrxcrSly
-         H3KH05P2m8Ed9jM2dQ5se7B/c+sqlrMo5FIevfws6TOnD73ZLjoVBqAJzTTjPDQAWpnM
-         VcP7pqNIR8fs5lbSnu94qpWzZMiY4bLFGti7XAskIAIpOLILS6YCY81E2BHOt9h12gdt
-         iZlA==
-X-Gm-Message-State: AO0yUKVPVEibhTcTqjUMyy8V7xo+WyTqGlEZeinnyeOkveJ16SkcSU28
-        3p2egueYdDZ0hW8R+EBv9Eg=
-X-Google-Smtp-Source: AK7set/CjZAHSn9j/7nDCvM2png4vRlpqlSVmsRAnTLnb7O4nhF+5i2H43foXW1osOGQjAuc8KVIMQ==
-X-Received: by 2002:a17:90b:2318:b0:23b:3662:11ef with SMTP id mt24-20020a17090b231800b0023b366211efmr9334283pjb.36.1678751359156;
-        Mon, 13 Mar 2023 16:49:19 -0700 (PDT)
-Received: from localhost ([192.55.54.55])
-        by smtp.gmail.com with ESMTPSA id v11-20020a17090a458b00b0023d0c2f39f2sm412835pjg.19.2023.03.13.16.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 16:49:18 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 16:49:16 -0700
-From:   Isaku Yamahata <isaku.yamahata@gmail.com>
-To:     "Huang, Kai" <kai.huang@intel.com>
-Cc:     "isaku.yamahata@gmail.com" <isaku.yamahata@gmail.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "david@redhat.com" <david@redhat.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-Subject: Re: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Message-ID: <20230313234916.GC3922605@ls.amr.corp.intel.com>
-References: <cover.1678111292.git.kai.huang@intel.com>
- <f150316b975b5ca22c6c4016ffd90db79d657bbf.1678111292.git.kai.huang@intel.com>
- <20230308222738.GA3419702@ls.amr.corp.intel.com>
- <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
+        Mon, 13 Mar 2023 19:50:01 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2043.outbound.protection.outlook.com [40.107.220.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADDAB6F4B0;
+        Mon, 13 Mar 2023 16:49:56 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XxxihRhs7AD7N7NVMSbfovw04c22yOsMVfkTK8D+nFg5FWt2RYZDK0Y78HrgE+UwfO1J2HRmPhn7MockDCtoY19N5cN3WstgAgqC9l83BPinMu3ygYYNrhIMnqPWti3ZT79fpA7D0R+NXdOt4R2s0c2FHEbGhQ8PUA+KWR1xBw9sRk7nFAACEhBjAgFUn8cO0ieh70OWrvpt3XjOitsWr/Hgc4LGK9p4ZwQGb7Dyl2JgU2P7vQIILxZJifR0V5ip3Fjdfm5As+WsVeVL2L0Mfvl0FL1cRW5d5TRWSF6szt/Eegx03EGExW4DXXDtiEBaU8W7eh+o4QMnfEwn0xayKQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Zpp9c+iJbShAA3cacuEpbbk/yHfd+Rzb3/AceYdY538=;
+ b=FWEtZRV1np/vUXzow3gUdTzB7o3b/oA2TpgI58d7TFz3k3qoand5wlqEhlHVuWqbQKB/jKdxxis5QU3DmVemPzhudliBSQmjkqYQxQRUO/eDvlUZCgcWvILXTYe5EA+9B2ZkfYdojnTeKOOYUD7m/C8xN1Xm/4dYWiXTrUBYkHDTcQt3fo4LgC1ZCg10mGWRzYWnCBSsRNf9THsA4pD+dNndjUAldfidyp917dQ5x33uTfW5FIdUUV4/ELw33f7Ri2YeWgWFKwY9ESCYs0MlBFZ5FBo96uq+/PzdRYadJfYP2ecNJ2NmJSBp23SJx+eUwuDp13pNpbxxz/xQz1m22A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Zpp9c+iJbShAA3cacuEpbbk/yHfd+Rzb3/AceYdY538=;
+ b=jFdcqZOfmCcQLEtE3fENvVdmZqj7XC2scY8WTGxRtL17HZm2RZ2D2pnz0vxAssW5thNdYxgLYGQtrZ+5oYDdQg9yXiaU+il+uffSxGL7TqHgydO92ij0Jma1OPKDICpsnfzctVZOuNQH8iKg3tv6bgYlnE+c/naR8e5hmB3e7R62fMFYGa49o+3ctw/XbvQzpc60hCuOb90e+AXSRwMR2eT9mfcQ5fxR56F+Ry3E/Xkj61ERknHaMy3m2xCC916ShlS10akIhIdf6HwNAed0fgez3qRGMev6gFALVWSo6oXOhwcDzLXWNnp7sZmtISe+31NxzVIxnceaohMxwbknYg==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
+ by DM4PR12MB6496.namprd12.prod.outlook.com (2603:10b6:8:bd::14) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6156.27; Mon, 13 Mar
+ 2023 23:49:54 +0000
+Received: from IA1PR12MB6604.namprd12.prod.outlook.com
+ ([fe80::735c:fa9:2043:279a]) by IA1PR12MB6604.namprd12.prod.outlook.com
+ ([fe80::735c:fa9:2043:279a%6]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 23:49:52 +0000
+Message-ID: <798dd219-f4aa-39b3-2368-7a6d072b6de2@nvidia.com>
+Date:   Mon, 13 Mar 2023 16:49:48 -0700
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH V3 2/6] dt-bindings: timestamp: Add Tegra234 support
+Content-Language: en-US
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
+        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, robh+dt@kernel.org,
+        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
+        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
+References: <20230310190634.5053-1-dipenp@nvidia.com>
+ <20230310190634.5053-3-dipenp@nvidia.com>
+ <CACRpkdYmC=eLiWPPPRG7DYBmQfPNCN4pcDhzTCO=hkQDx2HoGw@mail.gmail.com>
+X-Nvconfidentiality: public
+From:   Dipen Patel <dipenp@nvidia.com>
+In-Reply-To: <CACRpkdYmC=eLiWPPPRG7DYBmQfPNCN4pcDhzTCO=hkQDx2HoGw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: SJ0PR05CA0168.namprd05.prod.outlook.com
+ (2603:10b6:a03:339::23) To IA1PR12MB6604.namprd12.prod.outlook.com
+ (2603:10b6:208:3a0::7)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|DM4PR12MB6496:EE_
+X-MS-Office365-Filtering-Correlation-Id: 90c6a1df-ff2a-498e-9aae-08db241da3d3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: qXQ6duuCBs/fERTlCBOMQwsMLE8N3ZsCA0qn58oLWSrte9JEh6Yfm9URrsklmJWEr5/tWjRlN9ZuTLL4HI5O28CT6P/+OsJTh8sFhSEg+mAbHkNx1WeyboDeZ7TJnUzPdTscrOTOtrUwto8UFvJp66o+Bt5LZndgc6hHq719ayiZqUHO5VtLQQfJzRY7Ap3BzmIAQE6sN6JuhE/+dBkvq8KQ2egXJEF07iUtv71NUcQpXMNryM21JyGI6Pt8kPeaC1DhNDJ4wZpE8apSH6lm8C+vk8o7/bPx/+M4gI2f2f/0NycSZzFbxdNTYFNjTk9kygmCpixL1MPO6FYpb3+AfooFEDEUiR23E2zz0v2DxdMZIs+Oe5oOBYZcsf0pQGPowntisBnBrSGIi+ozlKhkZaHmzb74eLR1qW0Ec78IUHl1X9Nva2GX0FtMhudyTpgUMdmcrJ5Je+4bOzEYC46XDnh2cboQ7q5eN7KI9lCGxbrj2lmP62//tVUxWZKwMfuKcL3SxdZKHABChO6Tc672enQPo12gL9Gj2KQ3TryQ1zFIA2lDZfqfQblWv7RIj7fqTcglXMdUTLWWOtIHP7PYRUrTZ3g6h0cvMjrChSKm7jpAdGFn+cidOGbkbf2ZiYgokPTkXr6p25LW0npLYniK8czndMRuHHtjeyALWP0oGlTPnm54aWnpUKlIrL/oCm63jePPsrB3Et116LK81Hi+Ebh+J00nE7SwoZHWz4A2+tI=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(136003)(396003)(366004)(451199018)(31686004)(316002)(478600001)(6486002)(6666004)(83380400001)(36756003)(26005)(53546011)(7416002)(31696002)(6512007)(38100700002)(2616005)(186003)(5660300002)(4326008)(4744005)(6506007)(6916009)(66476007)(8936002)(86362001)(8676002)(41300700001)(66946007)(66556008)(2906002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?U25qN0ZnS1ZPdmRRMjdFbEtWUGVpdXVrT2k3TUJkRDdNV2lFczRVcjRLWmdv?=
+ =?utf-8?B?Vmt4SHp3T1FseTVrRm50ajJwRTJBMStZbHczMmk1SDYxUkJNUHNnZXhDZFpw?=
+ =?utf-8?B?ZHNkSzlmaUV0S3luanQ4dDBTWSsvOVN6WkEwaTNQUkNZMmw2VzFJV2F3RGlO?=
+ =?utf-8?B?S3oxUEhremljeExRcEp3SnIrRE5ZbE90UW1rZlFITDQxZytmWEVEdUdSSDly?=
+ =?utf-8?B?eVZlWmhGTHhxTWJDR3JsZGw3NTVRaUlYZktxTVQ3aFhsR2ZqZS9zMXBIYnBW?=
+ =?utf-8?B?Vk1Hd1FiY0Zpc0k1NUJZMnM3YWFzRGp4Mk1zaEtaZFc1Zi81bHF6dXhIVFpR?=
+ =?utf-8?B?YXByd0s2eDJOUE9teWNuR282ZnVHeWQ1a0dGTjB2a09SdjJrdmdXVVAwQWIw?=
+ =?utf-8?B?RmozU2VDZGQrU1pJYXdXUmpza0JKNjVJNW5UYlcrL3o3N2xXOG56akNSemRW?=
+ =?utf-8?B?Y282NXZ5ajVvbzJ3TTNqWldNMUw2eUhsdS96cXJPdVRRZFc3bEx4aG9pWnc5?=
+ =?utf-8?B?b1FNV2w0SmtQZXJrL29MTnlocXcvZFhLRG9VR1NHb0RLQVZwdjh0c21uQVo5?=
+ =?utf-8?B?MlpYVXJ0NUtVZkhzK0thcE5PQkNNZGt4bnJjVjBMcGQzTnk2NDgrSEMwWitD?=
+ =?utf-8?B?cjZRZEZ3cXVXVFo4Z08rMzdGYkt5UE1YUTRuck1GeWNiZkR5UWpsamh1ZWRz?=
+ =?utf-8?B?SThobXVYUWQ2MDNzL1RMa3V5UFFXekF4S0kxbVNOL1FQbDE0OG9SRllyc1ds?=
+ =?utf-8?B?aElJQ2xwSHUvUmFaVHgyY09CRXpzWnJyYmpZU2lJYTFYYWhWcDhVS3BYQmRI?=
+ =?utf-8?B?UFFHQTZYL01tM3p5MWhjc2JNeXRWSHZPRm91SDdqSnV3cGx5b2dyYWN3RUxV?=
+ =?utf-8?B?ZVBRcy9EejE0T3Zta1hOVzZIUnlLVU5tSlhhazh5VzQ0QVRGZFBteXIrMVV0?=
+ =?utf-8?B?bkV1Q2krL1N6cU9RMkN2YmRuUTY5U3BSQjQvNWtqTUJkZ1pKVUdudmlMREkw?=
+ =?utf-8?B?RlFKZGsvTG52MXJOR05HVkNaZGtZTGZwODJ0U0krUUpDZ05IMWdOVUdzZGRU?=
+ =?utf-8?B?cmF6b1pnUjFYWW5wR2JyS0hvQWlOTTNxV3laTWRZb2EwdHQ3b1BQUitEOHlI?=
+ =?utf-8?B?NTB6Vk82YzE2S1MrSXdNdENxL1Frcm52UHkwRUx1SEJsMWhmdDAyeXNrMVJU?=
+ =?utf-8?B?R0s3TG1zNmM4U2IxU0NmUjlKTm5jOXg5UzdFakhicGZqSHNIUVdSbkM2L3I0?=
+ =?utf-8?B?U2hmT1Bpcy91SGg3UjJvZXBSR2R6aDV4MXovMVpZRUNLcFg2WmRxQWxhNTVM?=
+ =?utf-8?B?RXpyVzEwZUIvdDNmUzRpZTFwR1g5KzArRlNxdGhtemppeHhmVmxDSDZwMTgy?=
+ =?utf-8?B?ZlZGNEptRjZjODVsbG5wcTNRbE51U1pZRmtWaGRUbVpsRmNzWTFiOEprVVE4?=
+ =?utf-8?B?dnhzWXRnUHg3VFlCQjVOaUFlYWhaZTZERmplUmloc2w0UDRmT2l4OHFVU2g3?=
+ =?utf-8?B?K3A5S1Q3V2JBZStieVlEOFVHVE9rTEZIUkg0SnFuTU9PVFBjM3lneUx0Skt4?=
+ =?utf-8?B?WnBEdkJ4MW5taEtSb0xwaHFJUDBLYVZTYkVXTm5wN2NMTXJXVFYxZ3RUS1VE?=
+ =?utf-8?B?TnZGOWo3c2RCOHdHaHpzdS9hOXFlYW1wYzdCLzRFdEM3QWJuSzlBK3pBRGRq?=
+ =?utf-8?B?OXI5aVV1ZmpVdE5xamxMc2U5S0MrdEFwaXdLL1FYNmI2bFhVVFRNbkR6eS9S?=
+ =?utf-8?B?MFhZb2psNG92c1Jzcmo4em5GdFdmc2tKbVh3cjZZLytNejg3L3R0SHhFZW9N?=
+ =?utf-8?B?LzNNbGtPeWt5Rnh0QUNqZWxLRm9NUXl2RGF3MU11TThIUTJPclZXV1FVNTRZ?=
+ =?utf-8?B?VmZGM01oR1R6dDRQdTFUSGdwa2Z2QStWTDczOXQ2TldRUCswcTU5NUN6bkZR?=
+ =?utf-8?B?WXhNZWJqL3h2MHR0RHlXR3Faa0x4Mzl0Y2phdSs2Vyt2M2NHWEVNNlpSaEUx?=
+ =?utf-8?B?REkvUXNhbVhDVDg0UW5TTHRVVko4TXJSUzBtbVZBT3RUbVpqMEhVZUhaaStZ?=
+ =?utf-8?B?WU54TFNQTTJSWmJ0TFhoRWNaenhzakdmT0VoSFphcFRBSVNjZFNJeVRuOGdw?=
+ =?utf-8?Q?qSj8JZEV7Oeh9+ydb/w4N7c53?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 90c6a1df-ff2a-498e-9aae-08db241da3d3
+X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 23:49:52.8949
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Zsqv0oYHytIWJoLRG8GQp/PwjrlXdOiiSnp99jzoP3f1X6NRukKhX6ExdlOKnIUVKLFgREISWlSrz+nmxNAuUg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6496
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 11:08:44PM +0000,
-"Huang, Kai" <kai.huang@intel.com> wrote:
-
-> On Wed, 2023-03-08 at 14:27 -0800, Isaku Yamahata wrote:
-> > > +
-> > > +static int try_init_module_global(void)
-> > > +{
-> > > +	int ret;
-> > > +
-> > > +	/*
-> > > +	 * The TDX module global initialization only needs to be done
-> > > +	 * once on any cpu.
-> > > +	 */
-> > > +	spin_lock(&tdx_global_init_lock);
-> > > +
-> > > +	if (tdx_global_init_status & TDX_GLOBAL_INIT_DONE) {
-> > > +		ret = tdx_global_init_status & TDX_GLOBAL_INIT_FAILED ?
-> > > +			-EINVAL : 0;
-> > > +		goto out;
-> > > +	}
-> > > +
-> > > +	/* All '0's are just unused parameters. */
-> > > +	ret = seamcall(TDH_SYS_INIT, 0, 0, 0, 0, NULL, NULL);
-> > > +
-> > > +	tdx_global_init_status = TDX_GLOBAL_INIT_DONE;
-> > > +	if (ret)
-> > > +		tdx_global_init_status |= TDX_GLOBAL_INIT_FAILED;
-> > 
-> > If entropy is lacking (rdrand failure), TDH_SYS_INIT can return TDX_SYS_BUSY.
-> > In such case, we should allow the caller to retry or make this function retry
-> > instead of marking error stickily.
+On 3/13/23 2:57 PM, Linus Walleij wrote:
+> Hi Dipen,
 > 
-> The spec says:
+> thanks for maintaining HTE!
 > 
-> TDX_SYS_BUSY	The operation was invoked when another TDX module
-> 		operation was in progress. The operation may be retried.
+> On Fri, Mar 10, 2023 at 8:06 PM Dipen Patel <dipenp@nvidia.com> wrote:
 > 
-> So I don't see how entropy is lacking is related to this error.  Perhaps you
-> were mixing up with KEY.CONFIG?
+>> -  nvidia,slices:
+>> -     $ref: /schemas/types.yaml#/definitions/uint32
+> 
+> I would not delete this, just mark it deprecated.
+> 
+> nvidia,slices:
+>     $ref: /schemas/types.yaml#/definitions/uint32
+>     deprecated: true
+> 
+> (And remove it from required, of course)
+> 
+> This way you do not need to explain about why it was
+> deleted, it's just deprecated, which is fine.
 
-TDH.SYS.INIT() initializes global canary value.  TDX module is compiled with
-strong stack protector enabled by clang and canary value needs to be
-initialized.  By default, the canary value is stored at
-%fsbase:<STACK_CANARY_OFFSET 0x28>
+Great suggestion, thanks, will make changes in the next patch.
+> 
+> Yours,
+> Linus Walleij
 
-Although this is a job for libc or language runtime, TDX modules has to do it
-itself because it's stand alone.
-
-From tdh_sys_init.c
-_STATIC_INLINE_ api_error_type tdx_init_stack_canary(void)
-{
-    ia32_rflags_t rflags = {.raw = 0};
-    uint64_t canary;
-    if (!ia32_rdrand(&rflags, &canary))
-    {
-        return TDX_SYS_BUSY;
-    }
-...
-    last_page_ptr->stack_canary.canary = canary;
-
-
--- 
-Isaku Yamahata <isaku.yamahata@gmail.com>
