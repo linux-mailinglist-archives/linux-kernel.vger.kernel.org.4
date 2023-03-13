@@ -2,328 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF6B16B7CB5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:52:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3BD96B7CC0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:53:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230117AbjCMPwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47468 "EHLO
+        id S230388AbjCMPxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbjCMPwh (ORCPT
+        with ESMTP id S230229AbjCMPw7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:52:37 -0400
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8964777E13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:52:00 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20230313155118euoutp0276dacf348718b52b43b06b679b707944~MBWG43kdT3273332733euoutp02i
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:51:18 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20230313155118euoutp0276dacf348718b52b43b06b679b707944~MBWG43kdT3273332733euoutp02i
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1678722678;
-        bh=idBYdNhVWG1lAl/DSsWHGmi6Mxp52JxM2Xrj0My8wl8=;
-        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-        b=Epw1cIFc96W8DfNC22mbt1Akzwe9sMR7I/ntFaUkIZ6erCAt7hBcYgMkEfQL3KZZe
-         Ifs3IJ1MgQgZTjQ7/pnjllxZuTaw44iJ0xDKH0uCr3+9kE4urd/CqKBIsA8d4PkiqG
-         joawophi5m39MCc0YxvOIJmm4weGB7ZjCMcu2oxk=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-        20230313155117eucas1p25c793851df8978d362ae3e8bcd04dfd2~MBWGhwRGf0784407844eucas1p2P;
-        Mon, 13 Mar 2023 15:51:17 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-        eusmges2new.samsung.com (EUCPMTA) with SMTP id 5A.8A.09966.5764F046; Mon, 13
-        Mar 2023 15:51:17 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-        20230313155117eucas1p2f6a1e1073dfb4c30275d85c8ddd55a04~MBWFwvcPn0785807858eucas1p2t;
-        Mon, 13 Mar 2023 15:51:17 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20230313155117eusmtrp2625f602c9dc7573e965f1b16445152b3~MBWFwDLqq1314813148eusmtrp2L;
-        Mon, 13 Mar 2023 15:51:17 +0000 (GMT)
-X-AuditID: cbfec7f4-d39ff700000026ee-e1-640f4675ed47
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 2E.EA.09583.5764F046; Mon, 13
-        Mar 2023 15:51:17 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20230313155116eusmtip2f0cab9a54cc5285c2fe3b59863b1c6ca~MBWE3rDzb1543715437eusmtip2J;
-        Mon, 13 Mar 2023 15:51:16 +0000 (GMT)
-Message-ID: <18d8e595-837d-5f6c-2a7a-09a47cf18d2e@samsung.com>
-Date:   Mon, 13 Mar 2023 16:51:16 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
-        Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v2 0/6] iommu/exynos: Convert to a module
+        Mon, 13 Mar 2023 11:52:59 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2060.outbound.protection.outlook.com [40.107.220.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA55577C8E;
+        Mon, 13 Mar 2023 08:52:21 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=J4H0yxs3nrBNtKP0YcGudzXA+lGlXDODRqJDtm/o8yfScP8/+BtEN1IlaEkpm2jd21KqsYA1alquEKmUM2saol9quK4mJ6UV3sBp/O6LUQ2chrftZb2z1s//GNkzl5Sqzi6w7swxTHGb/zqSyYq7OuGqZPEGeLGPxYxfAwIThjhkxowG9VZrwWB/7XaHzvbLn/frBP4+FzvcgGYCvIUr2506M8VeaQ1fhc0et7XCGa8JiWQCUXNWpS+ROGXNiQxYZ7zEUINWhXymxjVDq9726PPnIW9BIbfM802MyiWbQjTxQfec72E9k3bA8xeoyaH8mjBL7eVW4rbYEhtW7jEBuA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=adlrGznXuZpeHcklbVG4UdNDuImzefKq+HtruUCKIPM=;
+ b=DRWtxVsSamIiNHC/47kghO/pnA7qA5EMyjq8jePiYETdqwedEcYVmI1RCREjN8SwTslNdn4NwSoCSeJ5BVyK3+zENnH6XbpkyCpfV1Y2oCB+1y/HV4K+iXnJHzMicXwvvQzoxeXaCk003+psblZTvq/XURZgeJI3+vO5QFGfcSRXH3bh9/EMcKQbx6rmVIr25NOxB81gLFxSsBXpFivxG6MQfxL4BM71htSkuCHXRiPhLlvD+tWEdwMKx7vkasjxfjYCeS4xAfZ6fFs23lgpT0lLyUsL4mvrsqrNIBvGZUwoY1pxu9WjManagr499zNoiixzGxSp6qQYwZ9UyjzHZg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=adlrGznXuZpeHcklbVG4UdNDuImzefKq+HtruUCKIPM=;
+ b=GNqYPP8nIQvSLYJow62166XaL2wo9CN9FK2T3pT2hPM1in4g1X4jDjsa1F1OUb1RC0oIvaP4qn6Xcojd+oWE/ws3/I/axO3GK32v4LhGvlGiyg/8LFex4FtVUdTiTBIMkn1ObGyetJLsfHDBgUoRfuZiINmADbZoHrxATBQpBUA=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by CYYPR12MB8990.namprd12.prod.outlook.com (2603:10b6:930:ba::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 15:51:46 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::d8e6:76b5:2c23:1247]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::d8e6:76b5:2c23:1247%4]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 15:51:46 +0000
+Message-ID: <479da7ad-66ba-870e-a2ac-c1378e2f452b@amd.com>
+Date:   Mon, 13 Mar 2023 21:21:33 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [RFC/PATCHSET 0/9] perf record: Implement BPF sample filter (v4)
 Content-Language: en-US
-To:     Saravana Kannan <saravanak@google.com>,
-        Sam Protsenko <semen.protsenko@linaro.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, Rob Herring <robh@kernel.org>
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <CAGETcx9ApZFvKjEaxvvgsoHDzOq06ZiROZ5npYt+suNdE4KWDg@mail.gmail.com>
+To:     Namhyung Kim <namhyung@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Song Liu <song@kernel.org>,
+        Stephane Eranian <eranian@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230307233309.3546160-1-namhyung@kernel.org>
+ <9f692bd9-94e4-ee60-2174-561685b9b39a@amd.com> <ZAumkq2L2bo8wDCk@google.com>
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <ZAumkq2L2bo8wDCk@google.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrCKsWRmVeSWpSXmKPExsWy7djPc7qlbvwpBidWGlk8mLeNzWJCRyuT
-        xa8vFhab5xRbdM7ewG6x9/VWdotNj6+xWlzeNYfNYsb5fUwW/3oPMlr837OD3eLghyesFl2H
-        /rJZPO8DSpy6+5nd4vj7x4wWLXdMHQQ9nhycx+SxZt4aRo+ds+6yeyzYVOqxaVUnm8eda3vY
-        PDYvqfd4sXkmo0ffllWMHp83yQVwRXHZpKTmZJalFunbJXBl7Dm9krVgvV/F/RnHmRoYW+y7
-        GDk5JARMJO63PmYCsYUEVjBK9N2X7mLkArK/MEpMvdLLBOF8ZpTofvaGDabjwMozrBCJ5YwS
-        q9dNZIFwPjJKbFnwjx2kilfATuJr1y0wm0VAVaKt/QYjRFxQ4uTMJywgtqhAisSO87vBaoQF
-        bCVa55wAs5kFxCVuPZkPdpOIQITE+6OrmUEWMAtsY5F4sOct2BlsAoYSXW+7gGwODk6BQIlr
-        V7UgeuUltr+dA1YvIXCYU+Lcs3YWiLNdJP7u2Q9lC0u8Or6FHcKWkfi/cz4TREM7o8SC3/eh
-        nAmMEg3PbzFCVFlL3Dn3C2wbs4CmxPpd+hBhR4kH144ygoQlBPgkbrwVhDiCT2LStunMEGFe
-        iY42IYhqNYlZx9fBrT144RLzBEalWUjBMgvJ+7OQvDMLYe8CRpZVjOKppcW56anFRnmp5XrF
-        ibnFpXnpesn5uZsYgQnx9L/jX3YwLn/1Ue8QIxMH4yFGCQ5mJRHeLfw8KUK8KYmVValF+fFF
-        pTmpxYcYpTlYlMR5tW1PJgsJpCeWpGanphakFsFkmTg4pRqY1lie3+Yu4Rsd2bZT2vv7BYtv
-        3AEHC+Y89T4rt/Jc9qzrV39mNMceTS50F8i8MpcpU/jsxK1R/+Zkb/nPnffe/0xOz/y3yxqm
-        zV74pzLzbWPxZPOJqyaoHP3wQzj9zIMdv3+f1UhZ93vzC8HvbbMeVsw+5cb0Ta/GzqJboPK9
-        SUajW+r87JjMjecinu9UWqFTp2x+qHjON1GOpo+flj/q8c/dbjH/ocO+9Y6twQeKOmW6xCxk
-        A1zaVsttYRCd+3HiAfML/vKmkirmlv4r3mye4av+SdqrNDbeeXUtT+zMfXuamhWC3a/u6be4
-        rqK6ZMqdf7Me5Pt5yum1Od92nle1aqGU/WLFq7NnLsvvOxsyT4mlOCPRUIu5qDgRAFJeNQn3
-        AwAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrKIsWRmVeSWpSXmKPExsVy+t/xe7qlbvwpBvOOs1o8mLeNzWJCRyuT
-        xa8vFhab5xRbdM7ewG6x9/VWdotNj6+xWlzeNYfNYsb5fUwW/3oPMlr837OD3eLghyesFl2H
-        /rJZPO8DSpy6+5nd4vj7x4wWLXdMHQQ9nhycx+SxZt4aRo+ds+6yeyzYVOqxaVUnm8eda3vY
-        PDYvqfd4sXkmo0ffllWMHp83yQVwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8da
-        GZkq6dvZpKTmZJalFunbJehl7Dm9krVgvV/F/RnHmRoYW+y7GDk5JARMJA6sPMPaxcjFISSw
-        lFFi3qF7jBAJGYmT0xpYIWxhiT/Xutggit4zSjw4c5YFJMErYCfxtesWO4jNIqAq0dZ+gxEi
-        LihxcuYToBoODlGBFInZXTogYWEBW4nWOSfAypkFxCVuPZnPBFIiIhAh8XmHAsh4ZoEdLBI7
-        F/+G2tXNLNF6dRYTSAObgKFE11uQIzg4OAUCJa5d1YKYYybRtbWLEcKWl9j+dg7zBEahWUiu
-        mIVk3SwkLbOQtCxgZFnFKJJaWpybnltspFecmFtcmpeul5yfu4kRGP/bjv3csoNx5auPeocY
-        mTgYDzFKcDArifBu4edJEeJNSaysSi3Kjy8qzUktPsRoCgyKicxSosn5wASUVxJvaGZgamhi
-        ZmlgamlmrCTO61nQkSgkkJ5YkpqdmlqQWgTTx8TBKdXAlMgsvWTRYk5x6YdCPs0b936qDzQL
-        2ffTcvFZ5uKEb0yzc2VfHhH+8d0vcfOqpnTl7bNv8enlcSSe1FA59HKu2FeH7adqNlvfrKm0
-        tQjsm7zCXWrWtqQ7HSof3eVXnH7lqt8hoLz6ZlBEd0FEjbrDqsB7YitYTq/iMOCIPKLGcWyP
-        37XgR0cP5h49JBt08JbrpncaeQvZqt0/rqrJdPxwmG/b7MzNNqaJ5bN8DF4pP/oTaWU4zcPj
-        tEY0O+v/1gvhVaaq6deq6y/0WASpFHY/kTqwf/m2l/V/Vuo2z/7w6NvEQI3K3D2REVJ7J+oW
-        3Vk4fe2TtrJ9u8xzd9vzT5QMap3Ko9i8e3/st8qmJsVpSizFGYmGWsxFxYkAjz7NR4gDAAA=
-X-CMS-MailID: 20230313155117eucas1p2f6a1e1073dfb4c30275d85c8ddd55a04
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221103195201eucas1p2a6ec2df41ebac3d9ccbb0b252c2cad34
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221103195201eucas1p2a6ec2df41ebac3d9ccbb0b252c2cad34
-References: <CGME20221103195201eucas1p2a6ec2df41ebac3d9ccbb0b252c2cad34@eucas1p2.samsung.com>
-        <20221103195154.21495-1-semen.protsenko@linaro.org>
-        <a7d9cd18-a328-209c-c89f-afdcb7db3eb0@samsung.com>
-        <b7ad6444-e7d2-1150-6134-3dae8129dcdb@samsung.com>
-        <CAPLW+4=Y6qZG2XjJR_BkX-ar4GWdETKO1tteJjfbxVc664e4Kg@mail.gmail.com>
-        <CAGETcx9ApZFvKjEaxvvgsoHDzOq06ZiROZ5npYt+suNdE4KWDg@mail.gmail.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: PN3PR01CA0183.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:be::8) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|CYYPR12MB8990:EE_
+X-MS-Office365-Filtering-Correlation-Id: 29d6ae51-7fd2-4ce2-207d-08db23dad92e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZLdl5Y821loT9sJVXe6ePad+sSTc9JudWa++OnAEMgs6jwiX15liujqxQyn/EwZJ2u4Vg9GpW8jh3/oVLuOBtLFfcCxex8bRH765RbxqHEQXlLEdYkhkfpy9SexKG2rYMWguWJP3Z0EVGrVyc6PJ1ABZ2y0TZ/4teRxMlBJgtM2aim/+zdD56uB1iiZupdn7HLau45xPuiK1PtrvqExKxvTEHxMj7rJSscJlRYItwQt1mLtwGxDVLfbpIRnNP+eQtfnFNdQZFlUuUk1734i3syyoMANHqDau0my/FNYnRM1GLf2kN0BS23Z9ppCuoh8m17QSeYeWuUtFSELka+1aZdvBhcg/OiktyA8+UVXjwa6hInlycyzyCDDlSZavTngEf4TyNZhs1UrqPOMKdP74HBbD4pgYbds4PIMJevMTB24GU5ZUnGKu6ZPEh5v/Gjw/ulXrSznsltcNM+MFKBo77iFE4C1iatY4YMz/d7AwTEmD0ISgsdSfj289/ziSEGt1S1/6KmscyOe7Tlpn9va3H4TpyqdOI//iGSmxiIgxAZo1azRcNGa7kRNLBX8noLC8WQFVuRnUweDAtG4NYHVNOU3NLqRf4/UaGFKimIlXjkHTsf4vKQ+DzaeypNk1Ue8t2LR9zQx1CHb7jCHl/mLKISNVh9p2piJQFHF9rYAiVFfi/enWeRSmJaNC8EW9kv6eo7wZnBdD4J9ug0D8v+RWQrrW4iFcte5+1p1eOmojXbE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(396003)(346002)(136003)(39860400002)(376002)(451199018)(478600001)(83380400001)(2906002)(38100700002)(86362001)(8936002)(7416002)(5660300002)(44832011)(31696002)(36756003)(8676002)(6916009)(66556008)(66476007)(66946007)(4326008)(54906003)(41300700001)(316002)(26005)(6666004)(186003)(2616005)(6512007)(6506007)(31686004)(6486002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?OWI4NFNmdDJRTDUvVmZQUGRkajhQMFRGYW9JUXY1c1pJTHBZSk9uanhQdXV0?=
+ =?utf-8?B?NE1GNGRBM2wyZlAyaVZuSUtqcFdZWlNnZDlqamZlYWFOSi9UUkNlUkIvK3VW?=
+ =?utf-8?B?TS9Hc2F4N1J5ZkQ2ZlBRbXAzYjlqNllUdmVSQ0Rac0kzVGtKN25wblQ3WU5M?=
+ =?utf-8?B?aEt1R05xem12eGhlS0lScWpBdmFLaThEelJqam5TSTJJbXh3MStFSVI3UlZV?=
+ =?utf-8?B?V1NPU0hHbkdCYWp1TmEvZTVNSzFjNXBpTUZOWlFTM3VZdTRLTGtNdEgvQVdn?=
+ =?utf-8?B?Z0RsRVpPQk9iTkRxc0N5UGNYaHBFdHdCVnBDZjJmVjl6OFpoNHZHVWRnMW9O?=
+ =?utf-8?B?OHlIUDR2UUV3K0NMdUpEdlB4cVVTVFk1WFpKSmFaMnFuTkRtZmNCQVM0OFJp?=
+ =?utf-8?B?Wnp1MTllVklHVTZIQ2lXcGM0NjErT1UvUnVsTVBHNzBUSmFIYUE5ZHI0aTlo?=
+ =?utf-8?B?SGlCYXBMblUyUm91c3EwaW43eC9PVVR2dTQ1ZkZsR2QxT2xRZVVzT2dETU9G?=
+ =?utf-8?B?V1lRdVhiZ2w4eklyV0FKamJmbk8zdENhMGZTYW1tRDd2SjVlUmFuZ1F2VGZs?=
+ =?utf-8?B?V0NhMzJWQmNjdGZ4dXZCSWRCd2dHaWtiNy92QVNBVGRta2JZZ1BJMFZOUW5H?=
+ =?utf-8?B?VU5RZVFDN2g4WWM2K1VzTFlmaEpaMUMwMllKb1lJV3A5RjJhb1hBcno1bW83?=
+ =?utf-8?B?S0ZmYjFDY290NzVvemZxM1BOMEVFSCtuZnNuVVV1a3VrZXhoZGxSRGd2ZG50?=
+ =?utf-8?B?cVlJNldtemlBK3N6d0p3bDVrQWJtbHF5WitDbmczZzVMNjBCTGY4QUgxekdB?=
+ =?utf-8?B?cmR2YUd3VXhUZzhoSVVNNHduQ010eTFxRGNVWE5STENRbUVpRDh0QXVrODND?=
+ =?utf-8?B?TjZNZis0d2pYbXhJVGtwZFpzb3YrcllIb21KSzJSNjNiY0g4ektPcTVDamVq?=
+ =?utf-8?B?eWdrcXJjNmJoTWpMZXgrK2wycTFFY05oQ1dUNWdHTlZuUlR0eFp0OEVQSVRD?=
+ =?utf-8?B?NXorR3VnRjA4MmNFU0JNSG9sNVNDOUhkNWJTQU5CbGVGZ2tvRjZ4RHc5YUdH?=
+ =?utf-8?B?Z3o3RTlRQXJpNkNJK0x5QWY1NDJPa1RFblVjUTFxME9IMkZYb2I1SkVJUGRx?=
+ =?utf-8?B?cEJ1YXBKZG5uQU9ISE1UdXB6RFZnRzhTeUsrb0NaMTRIbHFQcnFBemFDb3Iy?=
+ =?utf-8?B?eXlhdkVrb0xuMENIdWN5ZE8xOFNuajducXlMeXd0WHFKNmRsNnUwTThjVWRm?=
+ =?utf-8?B?VzVpcEw4eTFNQmR2N3Z1V2Y0YVdEaXh3ZC8vekwvY2FSSFBZWi9BMFd0VnRC?=
+ =?utf-8?B?bDFNUnViSTE0NWJYYVhWZldDUVZaOFRlVWdGdkcrSkxkakMrajNKK095OXRo?=
+ =?utf-8?B?VU52c1ZXNjFGdEtEd3VLdUJmbThCUHZIVzVzaHptL0RvTFg3a2d3MUk1R0NC?=
+ =?utf-8?B?MEIrd0VadmJIbEx6WjhLZkNiTU8ydFgrTmw4bW96aTZSSWFwZzY5RVlHV1JF?=
+ =?utf-8?B?MVRMNzVHWVZxK09FaVNWNVdpTXkxMk1nL3d0WlJOeG5rTFVpMWtvVW1DRVVW?=
+ =?utf-8?B?SXh3UGtPcmlxYlk4YWxyU0J2N0Q4KzFVcGNOais5dWZ3Sk5UOVlnWWEvQXVm?=
+ =?utf-8?B?VXJBaElrOVZiVmZUVDNOWlVHZ2ovVnB3Qm5RV0tVQnFWRGNxRHJsVnE1dFhI?=
+ =?utf-8?B?WUtPc3lEQ20rY2k1SUtKUkdVYmVXeVFvdWlTOTZQYkZLMmEzVFAvRERlOUlQ?=
+ =?utf-8?B?V1ZaVmtHc2JCTjNiTG1UUjJua0RVMStLblIrTzZjSnBrdkR1cEpuSU9nRW52?=
+ =?utf-8?B?OUY2Uk9ZU1NYc0QveXNaWHFKT2FaWUE1bHk2a3N5cUpITTl5UHJsWFpRMloy?=
+ =?utf-8?B?T3lTTkQ5S2FEakZVcm9sMkl0blBOaVRhdklUOVNUZDZRQ3N5TjdWM2hneng3?=
+ =?utf-8?B?SzBkYjN3Q003N1ZIK1NicHFXRjN1Rmg4eVFibnMyVEtzL01Ec2VqbjY1c0Jk?=
+ =?utf-8?B?ZXdlVFBreUZ3WGpnNFB0ZmpyOTJGaVBCT05sY2hPSEpMMzErRzc1Q091MElm?=
+ =?utf-8?B?VGVGYVJYK0p0VXVjemRJN2sxS0ZqakZJdFlKOWwwc01JSWdzL1d3dEpyNUln?=
+ =?utf-8?Q?mtuxh5jglUcv5os4uaRN2XQM7?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 29d6ae51-7fd2-4ce2-207d-08db23dad92e
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 15:51:46.0547
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aiIWf9xQj0vcaJYanjBk7m0UaE4PBm0e4m4hxaP4opkHWvXtJIxA8yCGPEO7+hh/XJ3t8JBcPKqgacILUYC4qQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CYYPR12MB8990
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Saravana,
-
-I'm sorry for the delay again, but finally I managed to get back to this 
-topic.
-
-On 07.02.2023 04:32, Saravana Kannan wrote:
-> On Fri, Nov 11, 2022 at 5:30 AM Sam Protsenko
-> <semen.protsenko@linaro.org> wrote:
->> On Thu, 10 Nov 2022 at 15:36, Marek Szyprowski <m.szyprowski@samsung.com> wrote:
+>> However, if I add "mem_lvl == l1" (or l2 / ram) in the filter, I see mostly
+>> all samples are getting lost:
 >>
->> [snip]
-> Hi Marek and Sam,
->
-> I'm replying to both of your comments in this email.
->
->>> I've finally made Exynos IOMMU working as a module on Exynos5433 based
->>> TM2e board. It looks that this will be a bit longer journey that I've
->>> initially thought. I've posted a simple update of the fix for the driver
->>> initialization sequence, but the real problem is in the platform driver
->>> framework and OF helpers.
->>>
->>> Basically to get it working as a module I had to apply the following
->>> changes:
->>>
->>> diff --git a/drivers/base/dd.c b/drivers/base/dd.c
->>> index 3dda62503102..f6921f5fcab6 100644
->>> --- a/drivers/base/dd.c
->>> +++ b/drivers/base/dd.c
->>> @@ -257,7 +257,7 @@ static int deferred_devs_show(struct seq_file *s,
->>> void *data)
->>>    DEFINE_SHOW_ATTRIBUTE(deferred_devs);
->>>
->>>    #ifdef CONFIG_MODULES
->>> -int driver_deferred_probe_timeout = 10;
->>> +int driver_deferred_probe_timeout = 30;
->>>    #else
->>>    int driver_deferred_probe_timeout;
->>>    #endif
->>> diff --git a/drivers/of/property.c b/drivers/of/property.c
->>> index 967f79b59016..e5df6672fee6 100644
->>> --- a/drivers/of/property.c
->>> +++ b/drivers/of/property.c
->>> @@ -1384,7 +1384,7 @@ static struct device_node *parse_interrupts(struct
->>> device_node *np,
->>>    static const struct supplier_bindings of_supplier_bindings[] = {
->>>           { .parse_prop = parse_clocks, },
->>>           { .parse_prop = parse_interconnects, },
->>> -       { .parse_prop = parse_iommus, .optional = true, },
->>> +       { .parse_prop = parse_iommus, },
->>>           { .parse_prop = parse_iommu_maps, .optional = true, },
->>>           { .parse_prop = parse_mboxes, },
->>>           { .parse_prop = parse_io_channels, },
->>>
->>> Without that a really nasty things happened.
-> I have a command line option to do this without code changes. Use
-> fw_devlink.strict=1. That makes all optional properties into mandatory
-> ones.
->
-> I sent out a series[1] that tried to make fw_devlink.strict=1 the
-> default and then use the timeout behavior (more details) to handle
-> cases where iommu and dmas (or any other supplier) are optional on a
-> specific board. The cover letter of [1] should give some more context.
-
-I'm for removing the optional properties or making them dependent on the 
-whole subsystem availability (see my next comments).
-
-
->>> Initialization of the built-in drivers and loading modules takes time,
->>> so the default 10s deferred probe timeout is not enough to ensure that
->>> the built-in driver won't be probed before the Exynos IOMMU driver is
->>> loaded.
-> The 10 second is the minimum delay from the time we hit late_initcall.
-> If a driver is registered before the 10s expires, then the timer will
-> be extended by another 10s. This behavior landed sometime around the
-> end of May 2022. So it should have been in your tree when you tested
-> this. I'm surprised this isn't sufficient for your case. Is there
-> really a 10s gap in your boot sequence where no module is being loaded
-> and then IOMMU modules get loaded later on? I'm kinda surprised by
-> this. Is it this long because some serial UART is enabled and it's
-> slowing down boot? Or something else?
->
-> I'm not saying your case isn't valid or we shouldn't extend the
-> timeout. I'm just trying to understand why the current timer behavior
-> wasn't able to cover your case.
-
-
-Well, I have almost all possible CONFIG_DEBUG_* options enabled in 
-exynos_defconfig, as well as kernel messages routed to UART console, so 
-all my test system are really slow, but I do this intentionally. I 
-suspect that over half of the issues I've reported were found because of 
-such 'unusual' config. Loading modules also takes time in such case, so 
-maybe the timeout should be extended also by each loaded module?
-
-
->> Yeah, the whole time-based sync looks nasty... I remember coming
->> across the slides by Andrzej Hajda called "Deferred Problem" [1], but
->> I guess the proposed solution was never applied. Just hope that
->> increasing the timeout is upstreamable solution.
+>>   $ sudo ./perf record -d -e ibs_op//p --filter 'mem_op == load, mem_lvl == l1' -c 100000 ~/test
+>>   [ perf record: Woken up 1 times to write data ]
+>>   [ perf record: Captured and wrote 0.019 MB perf.data ]
 >>
->> [1] https://events19.linuxfoundation.org/wp-content/uploads/2017/12/Deferred-Problem-Issues-With-Complex-Dependencies-Between-Devices-in-Linux-Kernel-Andrzej-Hajda-Samsung.pdf
-> Sam, I kinda skimmed the slides right now. Looks like it talks about
-> device links and why they aren't sufficient and makes an alternate
-> proposal. fw_devlink is a solution that uses device links and I think
-> addresses a lot of the issues that were raised about device links.
-> There's still a bunch of TODOs left, but I think the end goal is the
-> same. I'm hoping to keep chipping away at it. For now, I've tried to
-> make the timer a bit more smart about detecting when modules are
-> getting loaded and extending the timer. fw_devlink also enables
-> something called sync_state() that's invaluable on a fully modular
-> system (search lore for references to that to get some idea).
->
-> The slides talk about a solution that will allow devices to probe with
-> limited functionality with whatever suppliers are available and then
-> reprobe as more suppliers are available. I'm not sure how well that'll
-> work across the board. It's going to be a bit weird if your phone
-> display goes off and then comes on again because an IOMMU driver got
-> loaded (and it can now do DRM playback). For now, I'm not going to
-> focus on that option because there are enough existing issues/TODOs to
-> work on for fw_devlink.
->
->>> The second change fixes the problem that driver core probes Exynos IOMMU
->>> controllers in parallel to probing the master devices, what results in
->>> calling exynos_iommu_of_xlate() and exynos_iommu_probe_device() even on
->>> the partially initialized IOMMU controllers or initializing the dma_ops
->>> under the already probed and working master device. This was easy to
->>> observe especially on the master devices with multiple IOMMU
->>> controllers. I wasn't able to solve this concurrency/race issues inside
->>> the Exynos IOMMU driver.
->>>
->>> Frankly speaking I don't know what is the rationale for making the
->>> 'iommus' property optional, but this simply doesn't work well with IOMMU
->>> driver being a module. CCed Saravana and Rob for this.
->>>
->> The patch which makes 'iommus' optional doesn't provide much of
->> insight on reasons in commit message either.
-> This was the commit text:
->
->      Not all DT bindings are mandatory bindings. Add support for optional DT
->      bindings and mark iommus, iommu-map, dmas as optional DT bindings.
->
-> I thought it was obvious enough, but I guess I could have done better.
-> Geert convinced me that iommu's aren't always necessary and devices
-> could work perfectly well without them or dmas. And he has a bunch of
-> boards like that. So I went with adding optional and then introducing
-> fw_devlink.strict.
+>>   $ sudo ./perf report --stat | grep SAMPLE
+>>     LOST_SAMPLES events:          1  ( 0.8%)
+>>     LOST_SAMPLES events:     136332
+>>
+>> What am I missing?
+> 
+> It seems IBS PMU doesn't set the mem_lvlnum field in the data source.
+> As I said in the patch 7, 'mem_lvl' actually uses mem_lvlnum fields
+> instead of mem_lvl because it's preferred according to the comment in
+> the UAPI header.
+> 
+> /*
+>  * PERF_MEM_LVL_* namespace being depricated to some extent in the
+>  * favour of newer composite PERF_MEM_{LVLNUM_,REMOTE_,SNOOPX_} fields.
+>  * Supporting this namespace inorder to not break defined ABIs.
+>  *
+>  * memory hierarchy (memory level, hit or miss)
+>  */
+> 
+> I'll post a patch to set it separately.
 
-Well, that depends heavily on the kernel config and the intentions 
-behind it. Indeed one might have IOMMU driver not selected in the config 
-(for various reasons, like forcing drivers to use contiguous memory 
-buffers for max performance) and system should boot fine. That time one 
-didn't consider the IOMMUs being compiled as modules. The main problem 
-is how to distinguish between the first case (intentionally no IOMMU 
-driver or even no IOMMU support) and the modularized case (driver not 
-yet loaded). I assume that one can skip waiting for IOMMUs only if the 
-whole IOMMU subsystem is not compiled in, otherwise the IOMMU driver can 
-still come in and it cannot properly start operating if client device 
-drivers already started their operation.
+Got it. I saw your patch, will review it.
 
-DMAs, although similar a bit, are imho a bit different. Drivers usually 
-have some kind of fallback if DMA is not yet available, but usually 
-drivers can switch their operation on-fly between PIO and DMA (and some 
-even do that intentionally and use PIO for very small transfers).
-
-> However, at this point in time, I believe none of them should be
-> marked as optional because technically any property can be optional
-> depending on what the firmware has set up and what the driver does. We
-> should figure this out at runtime on a board level -- which is what
-> [1] is trying to do. Yeah, not very pretty, but there hasn't been a
-> better solution that's not "have userspace tell us it's done loading
-> modules" (that's a "kernel depends on userspace to work correctly"
-> thing that no one likes). I've fixed some of the issues raised in [1]
-> in a fw_devlink improvement series[2] and I plan on continuing to work
-> on this until hopefully [1] can land.
->
->>> Without fixing the above issues, I would add a warning that compiling
->>> the driver as a module leads to serious issues.
->>>
->> Nice catch! It doesn't reproduce on my platform, alas. Can I expect
->> you to submit those patches? If so, I'll probably just wait for those
->> to be applied, and then re-send my modularization series on top of it.
->> Does that sounds reasonable?
-> For now, maybe we could add a config to enable fw_devlink.strict=1 by
-> default and then select it if you make specific iommu drivers into
-> modules? And then Geert won't set it for his driver, but you can set
-> it for your driver?
-
-I think the best we can do now is to either add a kconfig option to 
-force strict fw_devlinks (so Exynos IOMMU can be selected as a module 
-only if that one is selected) or do a runtime check during the Exynos 
-IOMMU initalization - and fail with appropriate error message if 
-fw_devlink.strict!=1. What do you think?
-
-
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
-
+Thanks,
+Ravi
