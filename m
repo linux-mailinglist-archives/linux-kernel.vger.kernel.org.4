@@ -2,116 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CD93E6B71CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:57:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB6B76B71C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:56:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCMI5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 04:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
+        id S230432AbjCMI4y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCMI44 (ORCPT
+        with ESMTP id S230151AbjCMI40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 04:56:56 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95B1E1F93B;
-        Mon, 13 Mar 2023 01:53:43 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so10897192pjg.4;
-        Mon, 13 Mar 2023 01:53:43 -0700 (PDT)
+        Mon, 13 Mar 2023 04:56:26 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9061B15CA7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:53:19 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id n2so14642399lfb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:53:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678697619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IR/pZ3SxRjS6UwRu99EOH7560cmZiqvK25YsL+XfyKo=;
-        b=SpYpGTZRvn85NG9r8n+lAfl/rJ8ggf9VdySJ/DvkwFbYb9nrM2eJ9nmb5f1ZWF1y3/
-         2tUOTVGwHrjdkWNCax5Uoja2omVEkM2ncJ0RArXlu2XLBEsH3/p2ZyvGM2HD1c7GrLRr
-         bX5oWHkBqhG+9H4olNg6iDADJnNQ6IFJ14xCk+67QGwSco74bPZuEPWQwbdtG9xv4Bte
-         tt97h+xX4v1p3aDAZTEHdGIwZv/quQ/m7nHHhNZP98eFrJLSDenzyAFo2fqAIAMxkVJt
-         L1kNXqY5BlJTJA2xbtTEV2+PWSrwUnUfKj5J5TwhOnlyyZbx3pP1WWFIuPj6I8GjGFBW
-         t/Ow==
+        d=linaro.org; s=google; t=1678697594;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9V26fOm4rtnnmc+zZXf336MT9Ik0qJ0WPgWAmIixGvM=;
+        b=XH/HA/86C9j8tga4qxdSFBaFHjS/TgeC7Htrljy5hxViPm4jdXSYnnk/5YhpsXWQlc
+         PBWhOKUsz17gWvJFIUuqNWmFmA1Nz8uSVXFyfFzLl1iiPrFBVSJ8zQjGTqBVGkcS2dWZ
+         F2I+Ood5D1RCvu58vEI6bBxiwZ2QCxlh+C2gPV4gjEbKf7Qzvs53VkHrcwVwHKP8WBJ5
+         2uWryUu1PZnJOGq9GWpj8VqfOAMgnPRAAGDvJsDdbx2QSqgAiRMNrsRWUDORCKrX0G77
+         LJGSGkUYl78yA0tdRH8/IoqwRT9kLsqhIHK5M0OSy0Jf2d72qbEpX1/NoHQkGZhdRYi0
+         bsIA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678697619;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IR/pZ3SxRjS6UwRu99EOH7560cmZiqvK25YsL+XfyKo=;
-        b=DpXIQC4y0hEpfP1+zlrXgRgVm33H/aeay1/gN2OzC1WXMkZxxUV5TdnFaiFbmdtl+l
-         9amiRs3oPq8jrDqRzVfkrahlOg/mYgybqxN5EFCbA53unXsD+9A3i1Pdu/htX49q6wiJ
-         LhYyH0H9ctZ5hlxFQI3incGvfg5jXv4YEjTplbzGycIzCcwsS5P12PnKQrelJV78aq/D
-         pgjDMmiiBMIC2gi8C/UzD2jjxfXu+vzjkGaAoUHF+mkeMs8GMOeYo3s2axxzwyj7n6Kw
-         HvsM8eGCd63LwYsbfrbO8qgjr6/wo3QeLrv4QDqy4RiFGCAxprWl87snDrCBVl2WbQpc
-         u/sw==
-X-Gm-Message-State: AO0yUKXwRFY1L3EDL76dM07VD71Z+IXs0HqhtVSjeSO0wgYCOm1WZAzK
-        rDQ9HSGUM1OHadfRgIdEApyKDK5Hz19nzw==
-X-Google-Smtp-Source: AK7set/Dgu1lrJP03RIrrG0IDqGHsJmCUfoB1AIXJpyU65D41ESFRP6U915I0LdxMKFUIGrN2PSo7Q==
-X-Received: by 2002:a17:902:a512:b0:19d:1674:c04d with SMTP id s18-20020a170902a51200b0019d1674c04dmr27567274plq.61.1678697619116;
-        Mon, 13 Mar 2023 01:53:39 -0700 (PDT)
-Received: from localhost.localdomain ([103.7.29.32])
-        by smtp.gmail.com with ESMTPSA id c6-20020a170902d48600b0019ee045a2b3sm4155059plg.308.2023.03.13.01.53.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 01:53:38 -0700 (PDT)
-From:   Like Xu <like.xu.linux@gmail.com>
-X-Google-Original-From: Like Xu <likexu@tencent.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] KVM: selftests: Report enable_pmu module value when test is skipped
-Date:   Mon, 13 Mar 2023 16:53:11 +0800
-Message-Id: <20230313085311.25327-3-likexu@tencent.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313085311.25327-1-likexu@tencent.com>
-References: <20230313085311.25327-1-likexu@tencent.com>
+        d=1e100.net; s=20210112; t=1678697594;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9V26fOm4rtnnmc+zZXf336MT9Ik0qJ0WPgWAmIixGvM=;
+        b=AeiA6ocgEynv4SYzMTm5VtABKD3XBnlyiznoRySUud1vr9nLJ5ASDkmzDbcbJd4g9e
+         KBy9CKEWL0LfOMuCNouST0RqM/uN21IvQ3oQKSIeHMu268rYRcsH2Q8/kKO1Mw0y7XL5
+         nIlQLnxMqmj7XZgkAi9vDCmp614St1aCcGCK8ZqKNj9KCLzoIjRVH1z+oLabPggq5Kk3
+         2ybGb+IOmraN3iHj4Yb1vRvWrna4coHPpPFq8jhWoEfLUV4ZeA52Ql2o19tM+Lxmhd6V
+         C3OfLruhHl06WFp34jleqG/eCcaaWGe3WmY3g4U2fjnxfQlHAnmj/+UOl1XLNMorAhC7
+         sBwQ==
+X-Gm-Message-State: AO0yUKX2aphtws/gYr6zQDo6bCh8LMS1IbdnlH39Br2iqs+b86zV/f7b
+        DkXD/ic+hpFLkuUeRivMudRzEQ==
+X-Google-Smtp-Source: AK7set9nHMSXn2a7pG1HL5sv/TQpRHqIHvfDL4QoZL1YNBR2aZrjl/5GeEjNcLNorzdVdw+ZDh5WlA==
+X-Received: by 2002:ac2:5286:0:b0:4e8:4001:122 with SMTP id q6-20020ac25286000000b004e840010122mr1237506lfm.24.1678697594163;
+        Mon, 13 Mar 2023 01:53:14 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id a17-20020a056512391100b004b55ddeb7e3sm893814lfu.309.2023.03.13.01.53.12
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 01:53:13 -0700 (PDT)
+Message-ID: <4fac213e-0561-a496-f9b4-739d35f21330@linaro.org>
+Date:   Mon, 13 Mar 2023 09:53:12 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 6/8] arm64: dts: qcom: msm8994-kitakami: drop unit address
+ from PMI8994 regulator
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Douglas Anderson <dianders@chromium.org>,
+        Stephen Boyd <swboyd@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        "Joseph S. Barrera III" <joebar@chromium.org>,
+        Gustave Monce <gustave.monce@outlook.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rajendra Nayak <rnayak@codeaurora.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230312183622.460488-1-krzysztof.kozlowski@linaro.org>
+ <20230312183622.460488-6-krzysztof.kozlowski@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230312183622.460488-6-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Like Xu <likexu@tencent.com>
 
-Running x86_64/pmu_event_filter_test or x86_64/vmx_pmu_caps_test
-with enable_pmu globally disabled will report the following into:
-	1..0 # SKIP - Requirement not met: use_intel_pmu() || use_amd_pmu()
-or
-	1..0 # SKIP - Requirement not met: kvm_cpu_has(X86_FEATURE_PDCM)
-this can be confusing, so add a check on kvm.enable_pmu.
 
-Signed-off-by: Like Xu <likexu@tencent.com>
----
- tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c | 1 +
- tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c     | 1 +
- 2 files changed, 2 insertions(+)
+On 12.03.2023 19:36, Krzysztof Kozlowski wrote:
+> The PMIC regulators are not supposed to have unit addresses.
+> 
+> Fixes: e9783584c9b7 ("arm64: dts: qcom: msm8994-kitakami: Add VDD_GFX regulator")
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+AFAICS the code doesn't use it, so
 
-diff --git a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-index 253e4304bbe3..3cd5fc60717f 100644
---- a/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/pmu_event_filter_test.c
-@@ -768,6 +768,7 @@ int main(int argc, char *argv[])
- 	struct kvm_vcpu *vcpu, *vcpu2 = NULL;
- 	struct kvm_vm *vm;
- 
-+	TEST_REQUIRE(get_kvm_param_bool("enable_pmu"));
- 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_PMU_EVENT_FILTER));
- 	TEST_REQUIRE(kvm_has_cap(KVM_CAP_PMU_EVENT_MASKED_EVENTS));
- 
-diff --git a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-index c280ba1e6572..2933b1bd754e 100644
---- a/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-+++ b/tools/testing/selftests/kvm/x86_64/vmx_pmu_caps_test.c
-@@ -55,6 +55,7 @@ int main(int argc, char *argv[])
- 	/* Create VM */
- 	vm = vm_create_with_one_vcpu(&vcpu, guest_code);
- 
-+	TEST_REQUIRE(get_kvm_param_bool("enable_pmu"));
- 	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_PDCM));
- 
- 	TEST_REQUIRE(kvm_cpu_has_p(X86_PROPERTY_PMU_VERSION));
--- 
-2.39.2
+Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 
+Konrad
+>  arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> index 3ceb86b06209..26059f861250 100644
+> --- a/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/msm8994-sony-xperia-kitakami.dtsi
+> @@ -173,8 +173,7 @@ &pmi8994_spmi_regulators {
+>  	 * power domain.. which still isn't enough and forces us to bind
+>  	 * OXILI_CX and OXILI_GX together!
+>  	 */
+> -	vdd_gfx: s2@1700 {
+> -		reg = <0x1700 0x100>;
+> +	vdd_gfx: s2 {
+>  		regulator-name = "VDD_GFX";
+>  		regulator-min-microvolt = <980000>;
+>  		regulator-max-microvolt = <980000>;
