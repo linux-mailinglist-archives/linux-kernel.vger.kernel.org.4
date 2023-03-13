@@ -2,65 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E565F6B791E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671D16B791C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbjCMNhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:37:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58186 "EHLO
+        id S230415AbjCMNha (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:37:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbjCMNh3 (ORCPT
+        with ESMTP id S229791AbjCMNh2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:37:29 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D419618B4;
-        Mon, 13 Mar 2023 06:37:26 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id 7331344A;
-        Mon, 13 Mar 2023 13:37:26 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 7331344A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1678714646; bh=Ln4hPU22u2IyXOmWwQJeCluL6l9PhBQP9wv6XXjbGR8=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=S/cRnPNHzznTXixzHt9TuGwGy8nUuRUdtUOtugauCOhrH0Mh/cU0v/6eXLJ2wPM5C
-         ZaHPkt2ACZgUuPwgNfxFpcwQo/h19PyekS+Olzl/iC6rmEUmYR4mCjdAI7ARn7XoFb
-         CXQ5J9hP/xTCL7K4Mk00TvK2zZgWrvsSXWq8PZtgOw/3s5FPy6AAQ6K2kYZwScwev2
-         wmY30Q/2ZrEW7juvbtQvFEqxFzKwOFqtydHqFin95nAFs2vyP9lbVCnWTGFVdRqrUq
-         JEAI7OiKULB629D2ioy0+kpY5zo1irnbfvbgv/7oRstFsiH8PU4Tj2ga51ZqLafJRr
-         0uCwPZz5T044Q==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     David Vernet <void@manifault.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     Linux BPF <bpf@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Tobin C. Harding" <me@tobin.cc>
-Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
- netdev FAQ
-In-Reply-To: <20230313123602.GA2392@maniforge>
-References: <20230313025119.17430-1-bagasdotme@gmail.com>
- <20230313030938.GA152792@maniforge> <ZA6knaEQcddfTCyS@debian.me>
- <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
- <4653cfd1-7209-6e49-4f01-fcc3f82f16ce@gmail.com>
- <20230313123602.GA2392@maniforge>
-Date:   Mon, 13 Mar 2023 07:37:25 -0600
-Message-ID: <87wn3kvkkq.fsf@meer.lwn.net>
+        Mon, 13 Mar 2023 09:37:28 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8BE85618B6;
+        Mon, 13 Mar 2023 06:37:27 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 05B2D204DE9D; Mon, 13 Mar 2023 06:37:27 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 05B2D204DE9D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678714647;
+        bh=mu87N414716r7lGE+91jVsaK9HmE6dXBcZU9c+oht9A=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=aba7oqVGnjYnYppobv7WDRrE6mLzhXvx4Oqhb4+K0C7ncTNJMa+PJSK/Ay37fLVNx
+         UjC0tWAQN978AhfSAWWcDK1mZ8ALQYRpZ2xAuzsH+OE1LjWJJGKEcB8lThPpdMI3vB
+         VRTgEq6JOfa4nkI5VHqd7bQcf9jwn1dM5bjWy5k0=
+Date:   Mon, 13 Mar 2023 06:37:26 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Cc:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: Re: [PATCH v7 5/5] Driver: VMBus: Add Devicetree support
+Message-ID: <20230313133726.GA10298@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1677151745-16521-1-git-send-email-ssengar@linux.microsoft.com>
+ <1677151745-16521-6-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB1688B84E25DD2173B6023737D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230313061603.GA8934@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+ <BYAPR21MB16888AD9A473CF15250B59C7D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <BYAPR21MB16888AD9A473CF15250B59C7D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,38 +65,108 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Vernet <void@manifault.com> writes:
+On Mon, Mar 13, 2023 at 12:26:56PM +0000, Michael Kelley (LINUX) wrote:
+> From: Saurabh Singh Sengar <ssengar@linux.microsoft.com> Sent: Sunday, March 12, 2023 11:16 PM
+> > 
+> > On Mon, Mar 13, 2023 at 02:33:53AM +0000, Michael Kelley (LINUX) wrote:
+> > > From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, February 23,
+> > 2023 3:29 AM
+> > > >
+> > > > Update the driver to support Devicetree boot as well along with ACPI.
+> > > > At present the Devicetree parsing only provides the mmio region info
+> > > > and is not the exact copy of ACPI parsing. This is sufficient to cater
+> > > > all the current Devicetree usecases for VMBus.
+> > > >
+> > > > Currently Devicetree is supported only for x86 systems.
+> > > >
+> > > > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > > > ---
+> > > > [V7]
+> > > > - Use cpu_addr instead of bus_addr
+> > > >
+> > > >  drivers/hv/Kconfig     |  6 +++--
+> > > >  drivers/hv/vmbus_drv.c | 57 ++++++++++++++++++++++++++++++++++++++++--
+> > > >  2 files changed, 59 insertions(+), 4 deletions(-)
+> > > >
+> > > > diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+> > > > index 0747a8f1fcee..1a55bf32d195 100644
+> > > > --- a/drivers/hv/Kconfig
+> > > > +++ b/drivers/hv/Kconfig
+> > > > @@ -4,11 +4,13 @@ menu "Microsoft Hyper-V guest support"
+> > > >
+> > > >  config HYPERV
+> > > >  	tristate "Microsoft Hyper-V client drivers"
+> > > > -	depends on ACPI && ((X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
+> > > > -		|| (ARM64 && !CPU_BIG_ENDIAN))
+> > > > +	depends on (X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
+> > > > +		|| (ACPI && ARM64 && !CPU_BIG_ENDIAN)
+> > > >  	select PARAVIRT
+> > > >  	select X86_HV_CALLBACK_VECTOR if X86
+> > > >  	select VMAP_PFN
+> > > > +	select OF if !ACPI
+> > > > +	select OF_EARLY_FLATTREE if !ACPI
+> > > >  	help
+> > > >  	  Select this option to run Linux as a Hyper-V client operating
+> > > >  	  system.
+> > >
+> > > One further thing occurred to me.  OF_EARLY_FLATTREE really depends
+> > > on OF instead of ACPI.   The ACPI dependency is indirect through OF.  So
+> > > I'd suggest doing
+> > >
+> > > 	select OF_EARLY_FLATTRE if OF
+> > >
+> > > to express the direct dependency.
+> > 
+> > As you pointed out OF_EARLY_FLATTRE is anyway dependent on OF, and thus I
+> > feel this check is redundant. I see all the Kconfig options which enables
+> > both of these flags don't explicitly mention this dependency.
+> > 
+> > >
+> > > Separately, I wonder if the "select OF if !ACPI" is even needed.  It doesn't
+> > > hurt anything to leave it, but it seems like any config that doesn't
+> > > independently select either ACPI or OF is broken for reasons unrelated
+> > > to Hyper-V.  I'm OK with leaving the select of OF if you want, so I'm
+> > > more just wondering than asserting it should be removed.   I didn't
+> > > see "select OF if !ACPI" anywhere else in the Kconfig files, and it
+> > > seems like Hyper-V would not be the only environment where this
+> > > is the expectation.
+> > 
+> > Ok I can remove the !ACPI dependency. Hope kernel size increase due to both
+> > the code compiled in shouldn't be problem for ACPI systems.
+> > And here if config doesn't select ACPI or OF it will assume OF, which is
+> > better then selecting none of them.
+> > 
+> > 
+> > To address both of your comments I feel below will be sufficient:
+> > select OF
+> > select OF_EARLY_FLATTRE
+> 
+> Actually, that's not what I was thinking. :-)   I was thinking for the Hyper-V
+> Kconfig to be silent on selecting OF, just like it is silent on selecting ACPI.
+> Whoever is configuring the kernel build would separately be selecting
+> ACPI, or OF, or both, depending on their needs.   I don't think the Hyper-V
+> Kconfig should always be selecting OF, because of the reason you noted --
+> it drags in code that is not needed for normal VTL 0 usage.  If you take
+> that approach, then
+> 
+> 	select OF_EARLY_FLATTREE if OF
+> 
+> is appropriate.
 
-> Sure, but there are practicalities to consider here. It takes O(minutes)
-> to do a full docs build, as opposed to O(seconds). I've done reviews of
-> docs patches where the engineer tried to build the docs tree, but
-> thought it was hung and ended up cancelling it. Full docs builds also
-> unfortunately spew quite a few warnings in other subtrees. You have to
-> carefully wade through the warnings in those other subtrees to ensure
-> you haven't added any new ones.
->
-> It's hard enough to get people to write documentation. It's also hard
-> enough to get them to test building their documentation before
-> submitting it. I think there is a lot of value in being able to build
-> the documentation for the subtree you're contributing to, and be able to
-> have some expectation that it builds cleanly. Let's not make it more
-> difficult for the people who are actually adding substantive
-> documentation.
+Thanks for clarifying, I will fix this in next vesrion.
 
-I get your point, but that is essentially saying that there should be no
-linkages between our documentation subtrees, which defeats much of the
-purpose of using a system like Sphinx.
+Regards,
+Saurabh
 
-In this specific case, though, there is a better solution.  Text like:
-
-  see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
-
-will add links in the built docs, and also tells readers of the
-plain-text files where they should be looking.  Without adding warnings.
-
-For the bigger problem, the right answer is to start using intersphinx.
-I guess I need to get serious about playing with that.
-
-Thanks,
-
-jon
+> 
+> Michael
+> 
+> 
+> 
+> > 
+> > 
+> > Regards,
+> > Saurabh
+> > 
+> > >
+> > > Michael
