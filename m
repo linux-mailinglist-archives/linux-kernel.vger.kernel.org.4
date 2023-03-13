@@ -2,81 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBD7D6B736A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:08:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6395B6B7372
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:10:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCMKIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59824 "EHLO
+        id S229787AbjCMKKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229669AbjCMKIt (ORCPT
+        with ESMTP id S229553AbjCMKKF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:08:49 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 486D91CF44
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:08:46 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i7-20020a056e021b0700b0031dc4cdc47cso6373556ilv.23
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:08:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678702125;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HHBorJxtb8OOdvReJ/cspDu7cb80E+hJP4zqgvf9eJU=;
-        b=Uu3O6AwHZXuQ9smljHEO9VvFLwfwTb3IrOdvkSZ8BcQWdFZA6I2EaUXdBqB/JHVxCW
-         AKmVF2ulVMRaI9Drtj7UKwLlgKn5Xc10+0pOzwnYIBRnOgNIn+8xcWEMIRa+wPQY9WWD
-         em9vXRciFy6bzoD4MIXqaHeEbbuaEnl3xIH5SdxjvsllYu8bqZImo2UeGtbawH3XYuLj
-         /m1C4HYrsYe28drzVaTtOCfJ8/jvwDrdi7pPPKQhVPxZnNQDpSkxiG7wT/XWkUP3GcmX
-         d6OMWYEcm1vRtQ5NtmUALZkk9NczxroYnQFD65xPtYySVnqezifCTrpaJGWEV40rRJlI
-         7o5w==
-X-Gm-Message-State: AO0yUKX6bF7YHje8ci6s78c8D2bq2U5SDJmwnpUpr5XiNDEB1isKz+gd
-        ON+53NCuejzzcUVr7UwAl23bNG7iPQ0cXq6CKkBdJfOT6+jf
-X-Google-Smtp-Source: AK7set+QLDBL3HM2GBIs0e2NeRlDnUS0rfKdZOzo9gAKT9ZVnKKI1esGDLvqOQF/cRIKXfYMHsRJd9ExkoVPPoGSDD/SkQXWcfvo
+        Mon, 13 Mar 2023 06:10:05 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DF55B58C28
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:10:03 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E200C2F4;
+        Mon, 13 Mar 2023 03:10:46 -0700 (PDT)
+Received: from e120937-lin (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 228E03F71A;
+        Mon, 13 Mar 2023 03:10:02 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 10:09:55 +0000
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Oliver Upton <oliver.upton@linux.dev>
+Cc:     Jeremy Linton <jeremy.linton@arm.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Marc Zyngier <marc.zyngier@arm.com>
+Subject: Re: Circular lockdep in kvm_reset_vcpu() ?
+Message-ID: <ZA72c+TT9epTcvX4@e120937-lin>
+References: <f6452cdd-65ff-34b8-bab0-5c06416da5f6@arm.com>
+ <Y+bnybGEkMpZzm/y@linux.dev>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:10c3:b0:315:34c0:d463 with SMTP id
- s3-20020a056e0210c300b0031534c0d463mr15438778ilj.3.1678702125656; Mon, 13 Mar
- 2023 03:08:45 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 03:08:45 -0700
-In-Reply-To: <000000000000b960c00594598949@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000e231fc05f6c54bf3@google.com>
-Subject: Re: KASAN: use-after-free Read in tc_chain_fill_node
-From:   syzbot <syzbot+5f229e48cccc804062c0@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, gregkh@linuxfoundation.org, jiri@mellanox.com,
-        lee.jones@linaro.org, linux-kernel@vger.kernel.org,
-        stable-commits@vger.kernel.org, stable@vger.kernel.org,
-        syzkaller-lts-bugs@googlegroups.com, vladbu@mellanox.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y+bnybGEkMpZzm/y@linux.dev>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This bug is marked as fixed by commit:
-net: core: netlink: add helper refcount dec and lock function
-net: sched: add helper function to take reference to Qdisc
-net: sched: extend Qdisc with rcu
-net: sched: rename qdisc_destroy() to qdisc_put()
-net: sched: use Qdisc rcu API instead of relying on rtnl lock
+On Sat, Feb 11, 2023 at 12:56:41AM +0000, Oliver Upton wrote:
+> Hi Jeremy,
+> 
 
-But I can't find it in the tested trees[1] for more than 90 days.
-Is it a correct commit? Please update it by replying:
+Hi,
 
-#syz fix: exact-commit-title
+> On Fri, Feb 10, 2023 at 11:46:36AM -0600, Jeremy Linton wrote:
+> > Hi,
+> > 
+> > I saw this pop yesterday:
+> 
+> You and me both actually! Shame on me, I spoke off-list about this with
+> Marc in passing. Thanks for sending along the report.
+> 
+> > [   78.333360] ======================================================
+> > [   78.339541] WARNING: possible circular locking dependency detected
+> > [   78.345721] 6.2.0-rc7+ #19 Not tainted
+> > [   78.349470] ------------------------------------------------------
+> > [   78.355647] qemu-system-aar/859 is trying to acquire lock:
+> > [   78.361130] ffff5aa69269eba0 (&host_kvm->lock){+.+.}-{3:3}, at:
+> > kvm_reset_vcpu+0x34/0x274
+> > [   78.369344]
+> > [   78.369344] but task is already holding lock:
+> > [   78.375182] ffff5aa68768c0b8 (&vcpu->mutex){+.+.}-{3:3}, at:
+> > kvm_vcpu_ioctl+0x8c/0xba0
+> 
+> [...]
+> 
+> > It appears to be triggered by the new commit 42a90008f890a ('KVM: Ensure
+> > lockdep knows about kvm->lock vs. vcpu->mutex ordering rule') which is
+> > detecting the vcpu lock grabbed by kvm_vcpu_ioctl() and then the kvm mutext
+> > grabbed by kvm_reset_vcpu().
+> 
+> Right, this commit gave lockdep what it needed to smack us on the head
+> for getting the locking wrong in the arm64 side.
+> 
+> As gross as it might be, the right direction is likely to have our own
+> lock in kvm_arch that we can acquire while holding the vcpu mutex. I'll
+> throw a patch at the list once I get done testing it.
+> 
 
-Until then the bug is still considered open and new crashes with
-the same signature are ignored.
+I just hit this using a v6.3-rc2 and a mainline kvmtool.
 
-Kernel: Linux 4.19
-Dashboard link: https://syzkaller.appspot.com/bug?extid=5f229e48cccc804062c0
+In my case, though, the guest does not even boot if I use more than 1 vcpu, which
+I suppose triggers effectively the reported possible deadlock, i.e.:
 
----
-[1] I expect the commit to be present in:
+root/lkvm_master run -c 4 -m 4096 -k /root/Image_guest -d /root/disk_debian_buster_guest.img -p "loglevel=8"
+  # lkvm run -k /root/Image_guest -m 4096 -c 4 --name guest-288
+....<HANGS FOREVER>
 
-1. linux-4.19.y branch of
-git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git
+Thanks,
+Cristian
+
