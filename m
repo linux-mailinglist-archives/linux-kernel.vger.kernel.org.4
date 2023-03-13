@@ -2,152 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 512766B7E31
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:55:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5715C6B7E38
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjCMQzC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:55:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48826 "EHLO
+        id S230234AbjCMQ4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjCMQzA (ORCPT
+        with ESMTP id S229636AbjCMQ4P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:55:00 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5974CBDC4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:54:59 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id x17so425409lfu.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:54:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678726497;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=95CYDuHHvTAJVFqvju6CvM9KhyIATAcbysxvdP4sDhM=;
-        b=wBEx51nsMBegO5s4qogT8bwRqa33i8wzg6GbmIXP6YR9I7bd2uJYqWS/SoAkdesKrn
-         Ees4bJeqBinRcVxUrPYBH0feAqpe8vsWzQ0MbtkLz9nYVJYpDuVBjXxTU1KMfcR4hIp0
-         L3NZ3GQpwvtFxJN1QdZoAkKgi9eCqS/ozmItpVPu5zK9zkMJOnaEFMdMD7mIWoKbsOSg
-         kdjnRLAoI20YN6R858Tyej0Rnlh/3cmz5TCXQ4EM6AUi6nvhPb0RVSpHi4areeD/rDnH
-         LZ8dacWB/3AmOe4Mjw5E+7IQ9O3GA8hgB9qV3ToaHENr0yC5T2eATyeRs1NA7RsSoj6K
-         d3Fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678726497;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=95CYDuHHvTAJVFqvju6CvM9KhyIATAcbysxvdP4sDhM=;
-        b=Pg6UTPRIkLHxfmqnH3W4FSxWGfMcB1pOnQBEQyajBeNEAKHT4KRS04WMvTdj6ihnok
-         g6CwJ/rxRDaRAVkJo6zH74CXvi41qjfkPfzJ2XLBVFGN297hjNYzHPvpWO4VKTENdTOm
-         NSXPJGSEyvE08l/RnqNkqRoT1M9X5rhZ53v5S+VBKtZCDLLExFKC1QijdouCIO2wodXk
-         Bj8DlOHPeyLAZmsuvdjt1ELibARuENEX/BsL87HENWtzwSeL6Vqup2V60U06CBFjmcsl
-         2jVFtERlbsNOapHk5SIOnqajOt+fNWlJkK4vAe+Cv9g2D0x5A2ZkVKnbRE1QWPrCiN3M
-         ixew==
-X-Gm-Message-State: AO0yUKU3RPb3SOLFyrxkYLKHwas5aQmLLoJsTxZk0S1FTkEtYz8AV8Hh
-        1+WHbkky1BYTIsYz9OkPxCHJSg==
-X-Google-Smtp-Source: AK7set8TlLYFmTIqQsaFFyNmY7OCBJjH5uOIca39HAAucj+bcBCxhSYcL5RbfiRlpUG9u+LjMVejaQ==
-X-Received: by 2002:ac2:4306:0:b0:4e8:41fc:b37 with SMTP id l6-20020ac24306000000b004e841fc0b37mr1536039lfh.10.1678726497648;
-        Mon, 13 Mar 2023 09:54:57 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id q27-20020ac2529b000000b004da8168eba2sm18917lfm.237.2023.03.13.09.54.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 09:54:57 -0700 (PDT)
-Message-ID: <8e9fc1c0-f74f-ba82-fade-31212637d6bb@linaro.org>
-Date:   Mon, 13 Mar 2023 17:54:55 +0100
+        Mon, 13 Mar 2023 12:56:15 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23A420541;
+        Mon, 13 Mar 2023 09:56:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678726573; x=1710262573;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=35jKFnRN3WFewle4kyuMtbuyLqVRQ727HOwYCxRN3Zc=;
+  b=AFPxQ0FTfewebpblIPaWR9MRzO9iVtLh5DHX90KHYLE+sMHAlFPHRrnA
+   jGf6noBg4sTRElCJ4+C8wuILTmxa6WGcin4KfG1RNad7W3IUScLez/S01
+   F2o+flkGi5BDgfAfrTiKriny5/KuOi4rD5Yo/FtCBTrmtfqR3+Oh6jjCD
+   D9MA6lTaF5XAm9JxQy5SLaIZb0OWslCmg+gMNWp2aNdmbbbcxleNG/WCr
+   G3ifPEbsnmQv6jATMrLyyMMsmse0uMbaVKpOqEKDDKUuPlTc+svVtYhio
+   gbMxftmxaPbX+5kTBqkI9ziGwLOMDjie2z5LauQZ+o0hnU+0LN6FvEKTo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325564349"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="325564349"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="678772058"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="678772058"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.33.115])
+  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:10 -0700
+Message-ID: <3effa855-1668-db9f-7d38-2c3352ea6ef1@intel.com>
+Date:   Mon, 13 Mar 2023 18:56:07 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Freedreno] [PATCH v3 4/7] drm/msm/a2xx: Implement .gpu_busy
-To:     Jonathan Marek <jonathan@marek.ca>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230223-topic-opp-v3-0-5f22163cd1df@linaro.org>
- <20230223-topic-opp-v3-4-5f22163cd1df@linaro.org>
- <2f2467d1-f5f3-86dd-edba-fc26e60d142f@marek.ca>
+ Firefox/102.0 Thunderbird/102.8.0
+Subject: Re: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
+ internal cache
 Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <2f2467d1-f5f3-86dd-edba-fc26e60d142f@marek.ca>
+To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Jens Axboe <axboe@kernel.dk>,
+        Wenchao Chen <wenchao.chen666@gmail.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20230302144330.274947-1-ulf.hansson@linaro.org>
+ <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com>
+ <CAPDyKFq-qToEX+qiuHirNbcuedii_f0KKuHiPAv7+tydrUTpqQ@mail.gmail.com>
+ <4a2c5b752968496ca72966f80e148d47@hyperstone.com>
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <4a2c5b752968496ca72966f80e148d47@hyperstone.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 24.02.2023 16:04, Jonathan Marek wrote:
-> This won't work because a2xx freedreno userspace expects to own all the perfcounters.
+On 10/03/23 19:06, Christian Löhle wrote:
 > 
-> This will break perfcounters for userspace, and when userspace isn't using perfcounters, this won't count correctly because userspace writes 0 to CP_PERFMON_CNTL at the start of every submit.
-
-Rob, would you be willing to take this without the a2xx bits? It
-should still be fine, except without devfreq. Not that we had
-any significant sort of scaling on a2xx before.
-
-Konrad
+>>>
+>>> I have benchmarked the FUA/Cache behavior a bit.
+>>> I don't have an actual filesystem benchmark that does what I wanted and is easy to port to the target so I used:
+>>>
+>>> # call with
+>>> # for loop in {1..3}; do sudo dd if=/dev/urandom bs=1M 
+>>> of=/dev/mmcblk2; done; for loop in {1..5}; do time 
+>>> ./filesystembenchmark.sh; umount /mnt; done
+>>> mkfs.ext4 -F /dev/mmcblk2
+>>> mount /dev/mmcblk2 /mnt
+>>> for i in {1..3}
+>>> do
+>>> cp -r linux-6.2.2 /mnt/$i
+>>> done
+>>> for i in {1..3}
+>>> do
+>>> rm -r /mnt/$i
+>>> done
+>>> for i in {1..3}
+>>> do
+>>> cp -r linux-6.2.2 /mnt/$i
+>>> done
+>>>
+>>>
+>>> I found a couple of DUTs that I can link, I also tested one industrial card.
+>>>
+>>> DUT1: blue PCB Foresee eMMC
+>>> https://pine64.com/product/32gb-emmc-module/
+>>> DUT2: green PCB SiliconGo eMMC
+>>> Couldn't find that one online anymore unfortunately
+>>> DUT3: orange hardkernel PCB 8GB
+>>> https://www.hardkernel.com/shop/8gb-emmc-module-c2-android/
+>>> DUT4: orange hardkernel PCB white dot
+>>> https://rlx.sk/en/odroid/3198-16gb-emmc-50-module-xu3-android-for-odro
+>>> id-xu3.html
+>>> DUT5: Industrial card
+>>
+>> Thanks a lot for helping out with testing! Much appreciated!
 > 
-> On 2/23/23 5:52 AM, Konrad Dybcio wrote:
->> Implement gpu_busy based on the downstream msm-3.4 code [1]. This
->> allows us to use devfreq on this old old old hardware!
+> No problem, glad to be of help.
+> 
 >>
->> [1] https://github.com/LineageOS/android_kernel_sony_apq8064/blob/lineage-16.0/drivers/gpu/msm/adreno_a2xx.c#L1975
+>>>
+>>>
+>>> The test issued 461 DO_REL_WR during one of the iterations for DUT5
+>>>
+>>> DUT1:
+>>> Cache, no FUA:
+>>> 13:04.49
+>>> 13:13.82
+>>> 13:30.59
+>>> 13:28:13
+>>> 13:20:64
+>>> FUA:
+>>> 13:30.32
+>>> 13:36.26
+>>> 13:10.86
+>>> 13:32.52
+>>> 13:48.59
+>>>
+>>> DUT2:
+>>> FUA:
+>>> 8:11.24
+>>> 7:47.73
+>>> 7:48.00
+>>> 7:48.18
+>>> 7:47.38
+>>> Cache, no FUA:
+>>> 8:10.30
+>>> 7:48.97
+>>> 7:48.47
+>>> 7:47.93
+>>> 7:44.18
+>>>
+>>> DUT3:
+>>> Cache, no FUA:
+>>> 7:02.82
+>>> 6:58.94
+>>> 7:03.20
+>>> 7:00.27
+>>> 7:00.88
+>>> FUA:
+>>> 7:05.43
+>>> 7:03.44
+>>> 7:04.82
+>>> 7:03.26
+>>> 7:04.74
+>>>
+>>> DUT4:
+>>> FUA:
+>>> 7:23.92
+>>> 7:20.15
+>>> 7:20.52
+>>> 7:19.10
+>>> 7:20.71
+>>> Cache, no FUA:
+>>> 7:20.23
+>>> 7:20.48
+>>> 7:19.94
+>>> 7:18.90
+>>> 7:19.88
 >>
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
->> ---
->>   drivers/gpu/drm/msm/adreno/a2xx_gpu.c | 26 ++++++++++++++++++++++++++
->>   1 file changed, 26 insertions(+)
+>> Without going into the details of the above, it seems like for DUT1, DUT2, DUT3 and DUT4 there a good reasons to why we should move forward with $subject patch.
 >>
->> diff --git a/drivers/gpu/drm/msm/adreno/a2xx_gpu.c b/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
->> index c67089a7ebc1..104bdf28cdaf 100644
->> --- a/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
->> +++ b/drivers/gpu/drm/msm/adreno/a2xx_gpu.c
->> @@ -481,6 +481,31 @@ a2xx_create_address_space(struct msm_gpu *gpu, struct platform_device *pdev)
->>       return aspace;
->>   }
->>   +/* While the precise size of this field is unknown, it holds at least these three values.. */
->> +static u64 a2xx_gpu_busy(struct msm_gpu *gpu, unsigned long *out_sample_rate)
->> +{
->> +    u64 busy_cycles;
->> +
->> +    /* Freeze the counter */
->> +    gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_FREEZE);
->> +
->> +    busy_cycles = gpu_read64(gpu, REG_A2XX_RBBM_PERFCOUNTER1_LO);
->> +
->> +    /* Reset the counter */
->> +    gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_RESET);
->> +
->> +    /* Re-enable the performance monitors */
->> +    gpu_rmw(gpu, REG_A2XX_RBBM_PM_OVERRIDE2,
->> +        A2XX_RBBM_PM_OVERRIDE2_DEBUG_PERF_SCLK_PM_OVERRIDE,
->> +        A2XX_RBBM_PM_OVERRIDE2_DEBUG_PERF_SCLK_PM_OVERRIDE);
->> +    gpu_write(gpu, REG_A2XX_RBBM_PERFCOUNTER1_SELECT, 1);
->> +    gpu_write(gpu, REG_A2XX_CP_PERFMON_CNTL, PERF_STATE_ENABLE);
->> +
->> +    *out_sample_rate = clk_get_rate(gpu->core_clk);
->> +
->> +    return busy_cycles;
->> +}
->> +
->>   static u32 a2xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
->>   {
->>       ring->memptrs->rptr = gpu_read(gpu, REG_AXXX_CP_RB_RPTR);
->> @@ -502,6 +527,7 @@ static const struct adreno_gpu_funcs funcs = {
->>   #if defined(CONFIG_DEBUG_FS) || defined(CONFIG_DEV_COREDUMP)
->>           .show = adreno_show,
->>   #endif
->> +        .gpu_busy = a2xx_gpu_busy,
->>           .gpu_state_get = a2xx_gpu_state_get,
->>           .gpu_state_put = adreno_gpu_state_put,
->>           .create_address_space = a2xx_create_address_space,
+>> Do you agree?
+> 
+> That is a good question, that's why I just posted the data without further comment from my side.
+> I was honestly expecting the difference to be much higher, given the original patch.
+> If this is representative for most cards, you would require quite an unusual workload to actually notice the difference IMO.
+> If there are cards where the difference is much more significant then of course a quirk would be nicer.
+> On the other side I don't see why not and any improvement is a good one?
+> 
 >>
+>>>
+>>> Cache, no FUA:
+>>> 7:19.36
+>>> 7:02.11
+>>> 7:01.53
+>>> 7:01.35
+>>> 7:00.37
+>>> Cache, no FUA CQE:
+>>> 7:17.55
+>>> 7:00.73
+>>> 6:59.25
+>>> 6:58.44
+>>> 6:58.60
+>>> FUA:
+>>> 7:15.10
+>>> 6:58.99
+>>> 6:58.94
+>>> 6:59.17
+>>> 6:60.00
+>>> FUA CQE:
+>>> 7:11.03
+>>> 6:58.04
+>>> 6:56.89
+>>> 6:56.43
+>>> 6:56:28
+>>>
+>>> If anyone has any comments or disagrees with the benchmark, or has a specific eMMC to test, let me know.
+>>
+>> If I understand correctly, for DUT5, it seems like using FUA may be slightly better than just cache-flushing, right?
+> 
+> That is correct, I specifically tested with this card as under the assumption that reliable write is without much additional cost, the DCMD would be slightly worse for performance and SYNC a bit worse.
+> 
+>>
+>> For CQE, it seems like FUA could be slightly even better, at least for DUT5.  Do you know if REQ_OP_FLUSH translates into MMC_ISSUE_DCMD or MMC_ISSUE_SYNC for your case? See mmc_cqe_issue_type().
+> It is SYNC (this is sdhci-of-arasan on rk3399, no DCMD), but even SYNC is not too bad here it seems, could of course be worse if the workload was less sequential.
+> 
+>>
+>> When it comes to CQE, maybe Adrian have some additional thoughts around this? Perhaps we should keep using REQ_FUA, if we have CQE?
+> Sure, I'm also interested in Adrian's take on this.
+
+Testing an arbitrary system and looking only at individual I/Os,
+which may not be representative of any use-case, resulted in
+FUA always winning, see below.
+
+All values are approximate and in microseconds.
+
+		With FUA		Without FUA
+
+With CQE	Reliable Write	350	Write	125
+					Flush	300
+		Total		350		425
+
+Without CQE	Reliable Write	350	Write	125
+		CMD13		100	CMD13	100
+					Flush	300
+					CMD13	100
+		Total		450		625
+
+FYI the test I was doing was:
+
+  # cat test.sh
+	#!/bin/sh
+
+	echo "hi" > /mnt/mmc/hi.txt
+
+	sync
+
+
+  # perf record --no-bpf-event -e mmc:* -a -- ./test.sh
+  # perf script --ns --deltatime
+
+
+The conclusion in this case would seem to be that CQE
+makes the case for removing FUA less bad.
+
+Perhaps CQE is more common in newer eMMCs which in turn
+have better FUA implementations.
+
