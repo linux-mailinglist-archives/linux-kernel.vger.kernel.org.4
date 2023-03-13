@@ -2,165 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C5EE66B7747
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:14:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2EF6B7749
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:15:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229593AbjCMMO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:14:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58520 "EHLO
+        id S229784AbjCMMPo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:15:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229668AbjCMMO2 (ORCPT
+        with ESMTP id S229753AbjCMMPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:14:28 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4930F2B2A4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:14:27 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id h31so6758422pgl.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:14:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678709666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NEQoyNriMJeJ4EU4gkSZqe8loY1NyZvw+jZ3N5Z4ois=;
-        b=aO/CuDa1fBgcy2czOWarVp5KtBVJq/f/rsOQZy36Wyc4SxvXh6rOiTn7Nlwb2sfshn
-         9zyvPQfMY6VcUIlFML/YIqLdEs6J+TB+5lgKWOn7csBxGl76t+l5QbgOFhEvjKU0b3b8
-         nqVaTFMFeHEsBJkm0FFLk2qts3erFUzfPs4zQrR61wzbEubtymhrVhomn0eHbfVDqSiO
-         qnTN0gdDU0RMjhwUabaYAR0CDMh2aYGu1KBSHG/MHetybJHZQW2tJHdZKuh6QW6dbLHf
-         D9xeymY6ZlGbGHtRuyUeMkY42rT24QED5KxfhqkJghuexa2oeali14/bM4XwmaTtb5J2
-         xSBw==
+        Mon, 13 Mar 2023 08:15:41 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318D928E46
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:14:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678709689;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=dE2wMx+vOCRMCJzU8QhzPuFSW9hg2epgPnZ1mTuHG5s=;
+        b=Pkodg2Ayp4xSj5zyy/mlIVMUjZtzgOSy6SSol8HuBe6sOx/571xwWRJMH5D3ZF+qqkykzU
+        fqsQqfW2O/CGBOktqkUXWF5vO/zjEmJL/ZPTCeE2A+7VA1hvVby4Prl1IzmiFSUchRCEJO
+        tABbhSjy4oes9BASp556qlEzViZ+uUg=
+Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
+ [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-658-6NNVD1FrO4O60oHQky1O6A-1; Mon, 13 Mar 2023 08:14:48 -0400
+X-MC-Unique: 6NNVD1FrO4O60oHQky1O6A-1
+Received: by mail-wr1-f70.google.com with SMTP id y11-20020a056000168b00b002ce179d1b90so2080262wrd.23
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:14:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678709666;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NEQoyNriMJeJ4EU4gkSZqe8loY1NyZvw+jZ3N5Z4ois=;
-        b=PjLY6LX9QAAH+pn4Dzb8j7J1TcEZrKFOQyznOfWEIbjrDgOPL+FhF0Ia4RP0bt7egO
-         nnRoKTax6EXj9wLTz29J3eEsljSWwsdBindenVJSYL9qZVpSguRoR06yyYiEb7QRa6V6
-         vnp2IuP5+K8ZVWEzPXO0bkieYYHiguOMBCHQWsgAuRkL/Ez/0mBvN/F2eDGEM5HQJMK8
-         WbHBJ1uVsTOytr3MENMJrXhFg8sKn1K/9kFJZTXxluk/2QHnV0beL8ckR1hKjglBX0o6
-         KacKUh0Q3LUYLnHR4GMVEbW2b+8v8U+Y2DScqfpD6YiToJvE37GSEbe4IvoLfnaePO9j
-         Y16w==
-X-Gm-Message-State: AO0yUKUpiJk6N/rBsLs7ZS7b5Z+MmjTih/FywsBF8V/ZY9ImwgiQ13B9
-        HdF/Jsg5T7isb/k1VHeinuz0Bb2Y5bVfKmOu5X0eNpwx
-X-Google-Smtp-Source: AK7set8ukf6Y64neOmLwbgEC/yWtUHBdc4ykr/rEJ4KBI22fzl5FtG0Zpq+5XqwHlnoEaLKpn3L2+Q==
-X-Received: by 2002:a62:1b13:0:b0:622:944f:ccb0 with SMTP id b19-20020a621b13000000b00622944fccb0mr5242013pfb.34.1678709666359;
-        Mon, 13 Mar 2023 05:14:26 -0700 (PDT)
-Received: from leoy-yangtze.lan ([156.59.236.112])
-        by smtp.gmail.com with ESMTPSA id b14-20020aa7870e000000b005a8f1187112sm2544738pfo.58.2023.03.13.05.14.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 05:14:25 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 20:14:20 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
-        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
-        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
-        suzuki.poulose@arm.com
-Subject: Re: [BUG] perf: No samples found when using kcore + coresight
-Message-ID: <20230313121420.GB2426758@leoy-yangtze.lan>
-References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
- <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
- <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
- <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
- <20230309113851.GF19253@leoy-yangtze.lan>
- <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678709687;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=dE2wMx+vOCRMCJzU8QhzPuFSW9hg2epgPnZ1mTuHG5s=;
+        b=f51KYWUm2GM+tBmHajrxng+XPvVJ3y0F0FCwqDf2u3rfVGJ+Mvp9Po9ZLF+YA5GHxV
+         oBgZkmMjYy2eHaCwe7t9zWI/276eqKtMzVdNFf+r2mybE8aXQaeYqljSMxYrPG8v3Jqa
+         +ChkIRiRrpta4whBVJqkBVa7i15CTGWwNVUJ8MilHOJBql3dMk/OlbFJ4ynXjxLleZo9
+         qJPQtAR/yuP5Tf+QpGwgULRp6z2SPnZTC2v4juZhYVqV7vKurzJ2KX2pSP4iUQE67tlO
+         gyDiHxMp1guXFpJl/apsGnBTOCDMhvs6EgSGJb1CnrktOSXmQU7VQ5RGDL+NnHOeY4Ll
+         TA3A==
+X-Gm-Message-State: AO0yUKUyA+5dIX9rI4nXrklHNjuqr0b8C5qN4ZHcnn0c1dxBKIZEsxDm
+        Qy6V31XB6144zeAcsEfYKxwQJQux8zy5XgQS/LNy5Z5z5d3PV/xb0Dp3hmj15Ybs1OAMUQ9WuXH
+        sb13jt88aujmo9sDDwsrKksyF
+X-Received: by 2002:a05:600c:a46:b0:3ed:276d:81a4 with SMTP id c6-20020a05600c0a4600b003ed276d81a4mr1675615wmq.32.1678709687283;
+        Mon, 13 Mar 2023 05:14:47 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8lzXeR+ODY2orSeSnL+3trKbHmDkj5bzj07VpDCsFskMxLnm9fmRcrxbhJil+xgOtDy8/COw==
+X-Received: by 2002:a05:600c:a46:b0:3ed:276d:81a4 with SMTP id c6-20020a05600c0a4600b003ed276d81a4mr1675591wmq.32.1678709686897;
+        Mon, 13 Mar 2023 05:14:46 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c701:7500:9d5c:56ee:46c3:8593? (p200300cbc70175009d5c56ee46c38593.dip0.t-ipconnect.de. [2003:cb:c701:7500:9d5c:56ee:46c3:8593])
+        by smtp.gmail.com with ESMTPSA id l7-20020a05600c1d0700b003e209186c07sm9975728wms.19.2023.03.13.05.14.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 05:14:46 -0700 (PDT)
+Message-ID: <50dd030c-95a5-7bd0-bd93-1a5777923669@redhat.com>
+Date:   Mon, 13 Mar 2023 13:14:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v5 2/6] ksm: support unsharing zero pages placed by KSM
+Content-Language: en-US
+To:     xu xin <xu.xin.sc@gmail.com>
+Cc:     akpm@linux-foundation.org, imbrenda@linux.ibm.com,
+        jiang.xuexin@zte.com.cn, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, ran.xiaokai@zte.com.cn, xu.xin16@zte.com.cn,
+        yang.yang29@zte.com.cn
+References: <david@redhat.com> <20230311053714.178439-1-xu.xin16@zte.com.cn>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <20230311053714.178439-1-xu.xin16@zte.com.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Mar 09, 2023 at 10:06:41AM -0800, Yang Shi wrote:
-
-[...]
-
-> > I reviewed your shared dump, the bad and good perf data both contain the
-> > dummy event with 'text_poke = 1'.  Could you confirm the shared dump in
-> > your previous email is correct or not?
+On 11.03.23 06:37, xu xin wrote:
+> [sorry to reply so late, on vacation too, and my mailing system has some kind of problem]
 > 
-> Oops, sorry. I pasted the wrong log. The good one looks like
-> (generated by v5.19):
+>> [sorry, was on vacation last week]
 > 
-> # captured on    : Wed Mar  8 18:02:58 2023
-> # header version : 1
-> # data offset    : 408
-> # data size      : 22640
-> # feat offset    : 23048
-> # hostname : fedora
-> # os release : 6.2.0-coresight+
-> # perf version : 5.19.g3d7cb6b04c3f
-> # arch : aarch64
-> # nrcpus online : 128
-> # nrcpus avail : 128
-> # cpuid : 0x00000000c00fac30
-> # total memory : 2108862504 kB
-> # cmdline : /home/yshi/linux/tools/perf/perf record -e
-> cs_etm/@tmc_etf63/k --kcore --per-thread -- taskset --cpu-list 1 uname
-> # event : name = cs_etm/@tmc_etf63/k, , id = { 3832 }, type = 9, size
-> = 128, { sample_period, sample_freq } = 1, sample_type =
-> IP|TID|IDENTIFIER, read_format = ID, d
-> isabled = 1, exclude_user = 1, exclude_hv = 1, enable_on_exec = 1,
-> sample_id_all = 1, { bp_len, config2 } = 0x12792918
-> # event : name = dummy:u, , id = { 3833 }, type = 1, size = 128,
-> config = 0x9, { sample_period, sample_freq } = 1, sample_type =
-> IP|TID|IDENTIFIER, read_format = ID,
->  disabled = 1, exclude_kernel = 1, exclude_hv = 1, mmap = 1, comm = 1,
-> enable_on_exec = 1, task = 1, sample_id_all = 1, exclude_guest = 1,
-> mmap2 = 1, comm_exec = 1,
-> context_switch = 1, ksymbol = 1, bpf_event = 1
-> # CPU_TOPOLOGY info available, use -I to display
-> # NUMA_TOPOLOGY info available, use -I to display
-> # pmu mappings: armv8_pmuv3_0 = 8, software = 1, arm_cmn_0 = 10,
-> uprobe = 7, cs_etm = 9, breakpoint = 5, tracepoint = 2, arm_cmn_1 =
-> 11, kprobe = 6
-> # contains AUX area data (e.g. instruction trace)
-> # CACHE info available, use -I to display
-> # time of first sample : 18446744073.709551
-> # time of last sample : 18446744073.709551
-> # sample duration :      0.000 ms
-> # MEM_TOPOLOGY info available, use -I to display
-> # missing features: TRACING_DATA CPUDESC BRANCH_STACK GROUP_DESC STAT
-> CLOCKID DIR_FORMAT COMPRESSED CPU_PMU_CAPS CLOCK_DATA HYBRID_TOPOLOGY
-> HYBRID_CPU_PMU_CAPS
-
-Thanks for confirmation.
-
-Just a quick summary, here we have two issues:
-
-- With command:
-  perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
-  -- taskset --cpu-list 1 uname",
-
-  perf doesn't enable "text poke" attribution.
-
-- With command:
-  perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
-  -- taskset --cpu-list 1 true (in your previous email), or ...
-  perf record --kcore -e cs_etm/@tmc_etf63/k --per-thread \
-  -- taskset --cpu-list 1 uname (in your shared perf data file),
-
-  perf enables "text poke" attribution, in this case, perf fails to decode
-  Arm CoreSight trace data.
-
-[...]
-
-> > Do you mind to share the bad perf.data file with James and me?
+>>> Why use flags if they both conditions are mutually exclusive?
+>>
+>> Just to make the return value of break_ksm_pmd_entry() more expressive and
+>> understandable. because break_ksm_pmd_entry have three types of returned
+>> values (0, 1, 2).
 > 
-> Please check the attachment out. Thanks for looking into this problem.
+>> It adds confusion. Just simplify it please.
+> 
+> So I think it's good to add a enum value of 0 listed here as suggested
+> by Claudio Imbrenda.
+> 
 
-Thank you for sharing the data.  We will look into it.
+Please keep it simple.
 
-Leo
+>>
+>>> MADV_UNMERGEABLE -> unmerge_ksm_pages() will never unshare the shared
+>>> zeropage? I thought the patch description mentions that that is one of
+>>> the goals?
+>>
+>> No, MADV_UNMERGEABLE will trigger KSM to unshare the shared zeropages in the
+>> context of "get_next_rmap_item() -> unshare_zero_pages(), but not directly in the
+>> context of " madvise()-> unmerge_ksm_pages() ". The reason for this is to avoid
+>> increasing long delays of madvise() calling on unsharing zero pages.
+>>
+> 
+>> Why do we care and make this case special?
+> 
+> Yeah, the code seems a bit special, but it is a helpless way and best choice, because the
+> action of unsharing zero-pages is too complex and CPU consuming because checking whether the
+> page we get is actually placed by KSM or not is not a easy thing in the context of
+> unmerge_ksm_pages.
+> 
+> In experiment, unsharing zero-pages in the context of unmerge_ksm_pages cause user' madvise()
+> spend 5 times the time than the way of the current patch.
+
+Who exactly cares  and why?
+
+> 
+> So let's leave it as it is now. I will add a (short) explanation of when and why the new
+> unshare_zero_page flag should be used.
+
+I vote to keep it as simple as possible in the initial version.
+
+-- 
+Thanks,
+
+David / dhildenb
+
