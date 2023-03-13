@@ -2,47 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD3C6B6FC9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E216B6FD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:06:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjCMHA5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:00:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38110 "EHLO
+        id S229672AbjCMHF6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:05:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCMHA4 (ORCPT
+        with ESMTP id S229543AbjCMHF5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:00:56 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC708301BF;
-        Mon, 13 Mar 2023 00:00:54 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 648A1610D5;
-        Mon, 13 Mar 2023 07:00:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BEB3C433D2;
-        Mon, 13 Mar 2023 07:00:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678690853;
-        bh=FxS5IHspm1OkbSmYpHUiXGtbPx/YcLDxwASMa9Lkqwk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BfeNqGuPVQHGmLQuRWKJpI2jTQnmqDcsmyudu8jV3Z3jjsa0ZU3nOeBg9U6qevJMn
-         P5k2CJcQdlN+1ls0Xda2lJvssrzLYlls6Bf0kBRWtpQTyRujIvu1UcQrghOQ1AkmHa
-         46U9DiZKkzBD7UOH9FayMMvLS2GhpBI2/qAhNdfM=
-Date:   Mon, 13 Mar 2023 08:00:50 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <ZA7KIs2jA/acpN9n@kroah.com>
-References: <20230313010416.845252-1-kasper@iki.fi>
+        Mon, 13 Mar 2023 03:05:57 -0400
+Received: from mail-vs1-xe32.google.com (mail-vs1-xe32.google.com [IPv6:2607:f8b0:4864:20::e32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C1BEC4DE16
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:05:52 -0700 (PDT)
+Received: by mail-vs1-xe32.google.com with SMTP id f31so10119395vsv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:05:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678691152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OHE01/3tgA1nAt03cXd+lN8IWHSdq0jQSdwx4eqGdpw=;
+        b=abP2bBAwNBSfgd0V6SSIh0qDHUOwiK3VKrkFpakyjDGyKhqJag+TxCiZjCWCJdHryj
+         7rbBXjoYT39kKxL/UkAvc4uZ4aKKuTdrLCojKCCn+MKukHeK8Hh4s70tLkXK9tmq+gel
+         imWMOT25OgG9yDDl+T+0iRnLV2Ex/i+dUUveMte9UFVVQLGEqV+47rfhhfwjTC1srl7d
+         3PFR5AZkghgcHivrkyF4Ngg+cARJ0UIMWgmyzcHzV6ya3VIKPK6X9VoiE44sUWlwyD2R
+         Vxp+DZULOX+R5nnTqvbTD0UJ54CUt+iufXbG/h24ddL5RtKd+5VXbNihhp41alCCn7kH
+         2Egg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678691152;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OHE01/3tgA1nAt03cXd+lN8IWHSdq0jQSdwx4eqGdpw=;
+        b=U10VefO96QcTzkajopAq30Oye64L+suuCFECxxiaZFNtZwM1T+QfJbBrlE585ownGv
+         uvlXV4ZyMZo5LxkW5XGQMBj7rwHi7eC8NbJiXNWWUAgXzNDOS2ANBeZBWh/mr/od27pt
+         yFkcfelPcnaGjyHFviho+d+7k0HCSZE/IEnfB3TsLoZlaD2VlzxGyPxov5biJZY2TK8y
+         yddr/XmWYvyPZaxsgXoRhLtl3WI9h8/S3FElQ4KHmTBm5lsEeQIMIXPY0P7YU/G4sB9D
+         C5FBw53/UIHn50SZ87fNkOQxZJZsFLc5LkhGD9DW/YpPj4BtbEcVpAnVMcroPoP4pY9/
+         6rKA==
+X-Gm-Message-State: AO0yUKVnSnR6CmbYrf5bWY5KuMjtuYL7uCCenjDrVIxUNBAZ4RsRNWj6
+        soTZO7c2zthajdNC37Fp0VqynKDwbHhmjpX5VO2daw==
+X-Google-Smtp-Source: AK7set9x4Emhcs/V+eedyuFq7xYtTaQ1TWUeAYtMC8cCh6ilFqFMqZBzhk4F9tiNlZ0iHCI9LrIjfoxg0IqPeOLLsak=
+X-Received: by 2002:a05:6102:3210:b0:425:87ab:c386 with SMTP id
+ r16-20020a056102321000b0042587abc386mr1232533vsf.3.1678691151710; Mon, 13 Mar
+ 2023 00:05:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313010416.845252-1-kasper@iki.fi>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+References: <20230311091806.500513126@linuxfoundation.org>
+In-Reply-To: <20230311091806.500513126@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 13 Mar 2023 12:35:40 +0530
+Message-ID: <CA+G9fYvEQTVfqvCD=umPFC4KTdEjafC5bN=MO9Fm5X76kmNOPw@mail.gmail.com>
+Subject: Re: [PATCH 5.4 000/356] 5.4.235-rc2 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,142 +72,168 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Nit, your "To:" line was corrupted :(
+On Sat, 11 Mar 2023 at 14:50, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.4.235 release.
+> There are 356 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Mon, 13 Mar 2023 09:17:07 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-=
+5.4.235-rc2.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-5.4.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-On Mon, Mar 13, 2023 at 03:04:16AM +0200, Jarkko Sonninen wrote:
-> Add support for RS-485 in Exar USB adapters.
-> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
-> Gpio mode register is set to enable RS-485.
-> 
-> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
-> ---
->  drivers/usb/serial/xr_serial.c | 72 +++++++++++++++++++++++++++++++++-
->  1 file changed, 71 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/usb/serial/xr_serial.c b/drivers/usb/serial/xr_serial.c
-> index fdb0aae546c3..edbb6add087c 100644
-> --- a/drivers/usb/serial/xr_serial.c
-> +++ b/drivers/usb/serial/xr_serial.c
-> @@ -93,6 +93,7 @@ struct xr_txrx_clk_mask {
->  #define XR_GPIO_MODE_SEL_DTR_DSR	0x2
->  #define XR_GPIO_MODE_SEL_RS485		0x3
->  #define XR_GPIO_MODE_SEL_RS485_ADDR	0x4
-> +#define XR_GPIO_MODE_RS485_TX_H		0x8
->  #define XR_GPIO_MODE_TX_TOGGLE		0x100
->  #define XR_GPIO_MODE_RX_TOGGLE		0x200
->  
-> @@ -237,6 +238,8 @@ static const struct xr_type xr_types[] = {
->  struct xr_data {
->  	const struct xr_type *type;
->  	u8 channel;			/* zero-based index or interface number */
-> +	struct serial_rs485 rs485;
-> +	spinlock_t lock;
->  };
->  
->  static int xr_set_reg(struct usb_serial_port *port, u8 channel, u16 reg, u16 val)
-> @@ -629,6 +632,7 @@ static void xr_set_flow_mode(struct tty_struct *tty,
->  	struct xr_data *data = usb_get_serial_port_data(port);
->  	const struct xr_type *type = data->type;
->  	u16 flow, gpio_mode;
-> +	unsigned long flags, rs485_flags;
->  	int ret;
->  
->  	ret = xr_get_reg_uart(port, type->gpio_mode, &gpio_mode);
-> @@ -645,9 +649,16 @@ static void xr_set_flow_mode(struct tty_struct *tty,
->  	/* Set GPIO mode for controlling the pins manually by default. */
->  	gpio_mode &= ~XR_GPIO_MODE_SEL_MASK;
->  
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	rs485_flags = data->rs485.flags;
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +	if (rs485_flags & SER_RS485_ENABLED)
-> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485 | XR_GPIO_MODE_RS485_TX_H;
-> +	else if (C_CRTSCTS(tty) && C_BAUD(tty) != B0)
-> +		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
-> +
->  	if (C_CRTSCTS(tty) && C_BAUD(tty) != B0) {
->  		dev_dbg(&port->dev, "Enabling hardware flow ctrl\n");
-> -		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
->  		flow = XR_UART_FLOW_MODE_HW;
->  	} else if (I_IXON(tty)) {
->  		u8 start_char = START_CHAR(tty);
-> @@ -827,6 +838,64 @@ static void xr_set_termios(struct tty_struct *tty,
->  	xr_set_flow_mode(tty, port, old_termios);
->  }
->  
-> +static int xr_get_rs485_config(struct tty_struct *tty,
-> +			 unsigned int __user *argp)
-> +{
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct xr_data *data = usb_get_serial_port_data(port);
-> +	unsigned long flags;
-> +	struct serial_rs485 rs485;
-> +
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	memcpy(&rs485, &data->rs485, sizeof(rs485));
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-Why are you using the stack for this?  Why not directly access the real
-structure instead?  And are you sure you need a lock?  If so, why?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +	dev_dbg(tty->dev, "%s flags %02x\n", __func__, rs485.flags);
+## Build
+* kernel: 5.4.235-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.4.y
+* git commit: ca95bdb3ada07ed988b0bcf95a489479b6a3e800
+* git describe: v5.4.234-357-gca95bdb3ada0
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.4.y/build/v5.4.2=
+34-357-gca95bdb3ada0
 
-dev_dbg() provides __func__ for free, so you never need to provide it
-again.  Just use the +f flag when enabling it from userspace.
+## Test Regressions (compared to v5.4.235)
 
-> +
-> +	if (copy_to_user(argp, &rs485, sizeof(rs485)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +static int xr_set_rs485_config(struct tty_struct *tty,
-> +			 unsigned long __user *argp)
-> +{
-> +	struct usb_serial_port *port = tty->driver_data;
-> +	struct xr_data *data = usb_get_serial_port_data(port);
-> +	struct serial_rs485 rs485;
-> +	unsigned long flags;
-> +
-> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
-> +		return -EFAULT;
-> +
-> +	dev_dbg(tty->dev, "%s flags %02x\n", __func__, rs485.flags);
+## Metric Regressions (compared to v5.4.235)
 
-Again, no need for __func__.
+## Test Fixes (compared to v5.4.235)
 
-> +	rs485.flags &= SER_RS485_ENABLED;
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	memcpy(&data->rs485, &rs485, sizeof(rs485));
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +	xr_set_flow_mode(tty, port, 0);
-> +
-> +	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485)))
-> +		return -EFAULT;
-> +
-> +	return 0;
-> +}
-> +
-> +
-> +static int xr_ioctl(struct tty_struct *tty,
-> +					unsigned int cmd, unsigned long arg)
+## Metric Fixes (compared to v5.4.235)
 
-Very odd indentation, please fix up.
+## Test result summary
+total: 124626, pass: 101269, fail: 3329, skip: 19651, xfail: 377
 
-> +{
-> +	void __user *argp = (void __user *)arg;
-> +
-> +	switch (cmd) {
-> +	case TIOCGRS485:
-> +		return xr_get_rs485_config(tty, argp);
-> +	case TIOCSRS485:
-> +		return xr_set_rs485_config(tty, argp);
-> +	}
-> +	return -ENOIOCTLCMD;
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 146 total, 145 passed, 1 failed
+* arm64: 46 total, 42 passed, 4 failed
+* i386: 28 total, 22 passed, 6 failed
+* mips: 30 total, 29 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 33 total, 32 passed, 1 failed
+* riscv: 15 total, 12 passed, 3 failed
+* s390: 8 total, 8 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 39 total, 37 passed, 2 failed
 
-Wrong ioctl return value :(
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-bre[
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
 
-thanks,
-
-greg k-h
+--
+Linaro LKFT
+https://lkft.linaro.org
