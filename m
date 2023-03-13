@@ -2,120 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B2266B7A73
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:35:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 511C96B7A4B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231459AbjCMOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:34:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
+        id S231349AbjCMO1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:27:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231450AbjCMOel (ORCPT
+        with ESMTP id S230333AbjCMO1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:34:41 -0400
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D655E24BE7;
-        Mon, 13 Mar 2023 07:34:39 -0700 (PDT)
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
- id 16fd6ca9926dc160; Mon, 13 Mar 2023 15:34:38 +0100
-Received: from kreacher.localnet (unknown [213.134.189.11])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Mon, 13 Mar 2023 10:27:14 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7191FFF21;
+        Mon, 13 Mar 2023 07:27:13 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by v370.home.net.pl (Postfix) with ESMTPSA id 71A469C5854;
-        Mon, 13 Mar 2023 15:34:37 +0100 (CET)
-From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To:     Linux PM <linux-pm@vger.kernel.org>
-Cc:     Zhang Rui <rui.zhang@intel.com>,
-        Linux ACPI <linux-acpi@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Quanxian Wang <quanxian.wang@intel.com>
-Subject: [PATCH v2 1/4] ACPI: processor: Reorder acpi_processor_driver_init()
-Date:   Mon, 13 Mar 2023 15:27:03 +0100
-Message-ID: <5934791.lOV4Wx5bFT@kreacher>
-In-Reply-To: <2692681.mvXUDI8C0e@kreacher>
-References: <2692681.mvXUDI8C0e@kreacher>
+        by ms.lwn.net (Postfix) with ESMTPSA id ADD6C378;
+        Mon, 13 Mar 2023 14:27:12 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net ADD6C378
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1678717632; bh=we1dOyh2dtdOcF4wGKKVNAnTN7oZ4JTOZZ2/z75YBYY=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=gBEYFFGXY6FN/xfn5GN6z1RIvDKDZLE2Jy03LTN5SDP74r8RmlO1nZ5kDagcHEpgk
+         /SS8JYmVjaX7bcVgA7AKtcFDk6osdrrHEy97vnWOTYcmoXTDtaOVXTQcjdwrwjcOEM
+         FAonGDMWicA64t3bGXbxpAC4R5/aWL8FgFqv+KRG+dEb38oiSHtbJzjCTQwf/VH+RJ
+         FclxWKR56bmLxRS14Ie0rWLKsE8sx7PQmstlOWXg0qv3HW/dHZABlM4cM20kXBrfF6
+         zbG2p/Qc7ouAOFinatBTKNrBXrJdX/sEV0vWUiZAkkiSP/ScRkc1LxcnGKPn8yNxeL
+         6tLOVCeuKZkYA==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     David Vernet <void@manifault.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Tobin C. Harding" <me@tobin.cc>
+Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
+ netdev FAQ
+In-Reply-To: <20230313135638.GD2392@maniforge>
+References: <20230313025119.17430-1-bagasdotme@gmail.com>
+ <20230313030938.GA152792@maniforge> <ZA6knaEQcddfTCyS@debian.me>
+ <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
+ <4653cfd1-7209-6e49-4f01-fcc3f82f16ce@gmail.com>
+ <20230313123602.GA2392@maniforge> <87wn3kvkkq.fsf@meer.lwn.net>
+ <20230313135638.GD2392@maniforge>
+Date:   Mon, 13 Mar 2023 08:27:11 -0600
+Message-ID: <87sfe8vi9s.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 213.134.189.11
-X-CLIENT-HOSTNAME: 213.134.189.11
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekledruddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledruddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
- rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+David Vernet <void@manifault.com> writes:
 
-The cpufreq policy notifier in the ACPI processor driver may as
-well be registered before the driver itself, which causes
-acpi_processor_cpufreq_init to be true (unless the notifier
-registration fails, which is unlikely at that point) when the
-ACPI CPU thermal cooling devices are registered, so the
-processor_get_max_state() result does not change while
-acpi_processor_driver_init() is running.
+>> In this specific case, though, there is a better solution.  Text like:
+>> 
+>>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
+>> 
+>> will add links in the built docs, and also tells readers of the
+>> plain-text files where they should be looking.  Without adding warnings.
+>
+> Nice, seems like the best of both worlds. A syntax clarification
+> question: are you saying that this would work?
+>
+>> see the `netdev-FAQ`_.
+>>
+>>   <snip>
+>>
+>> .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
+>
+> Or is it required to have the full path inline in the text, as in your
+> example:
+>
+>>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
+>
+> The benefit of the former is of course that you only have to specify the
+> link in one place.
 
-Change the ordering in acpi_processor_driver_init() accordingly
-to prevent the max_state value from remaining 0 permanently for all
-ACPI CPU cooling devices due to setting acpi_processor_cpufreq_init
-too late.  [Note that processor_get_max_state() may still return
-different values at different times after this change, depending on
-the cpufreq driver registration time, but that issue needs to be
-addressed separately.]
+Yeah, but the latter is what we actually have.
 
-Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
-Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
-Link: https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+Thanks,
 
-v1 -> v2: Expand changelog to explain that this particular patch addresses
-          part of the issue.
-
----
- drivers/acpi/processor_driver.c |   12 ++++++------
- 1 file changed, 6 insertions(+), 6 deletions(-)
-
-Index: linux-pm/drivers/acpi/processor_driver.c
-===================================================================
---- linux-pm.orig/drivers/acpi/processor_driver.c
-+++ linux-pm/drivers/acpi/processor_driver.c
-@@ -263,6 +263,12 @@ static int __init acpi_processor_driver_
- 	if (acpi_disabled)
- 		return 0;
- 
-+	if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
-+				       CPUFREQ_POLICY_NOTIFIER)) {
-+		acpi_processor_cpufreq_init = true;
-+		acpi_processor_ignore_ppc_init();
-+	}
-+
- 	result = driver_register(&acpi_processor_driver);
- 	if (result < 0)
- 		return result;
-@@ -276,12 +282,6 @@ static int __init acpi_processor_driver_
- 	cpuhp_setup_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD, "acpi/cpu-drv:dead",
- 				  NULL, acpi_soft_cpu_dead);
- 
--	if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
--				       CPUFREQ_POLICY_NOTIFIER)) {
--		acpi_processor_cpufreq_init = true;
--		acpi_processor_ignore_ppc_init();
--	}
--
- 	acpi_processor_throttling_init();
- 	return 0;
- err:
-
-
-
+jon
