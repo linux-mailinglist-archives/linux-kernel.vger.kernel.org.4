@@ -2,115 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 015D66B84E5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 86DD66B84E8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjCMWmA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 18:42:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35770 "EHLO
+        id S230045AbjCMWmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 18:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbjCMWl6 (ORCPT
+        with ESMTP id S230039AbjCMWm2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 18:41:58 -0400
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F07935A910
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:41:56 -0700 (PDT)
-Received: by mail-wm1-f45.google.com with SMTP id o38-20020a05600c512600b003e8320d1c11so21350wms.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:41:56 -0700 (PDT)
+        Mon, 13 Mar 2023 18:42:28 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304FF8ABD9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:42:20 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id d6-20020a92d786000000b00316f1737173so7463719iln.16
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:42:20 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678747315;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=q0prISumv60O78Q0W09lVk3OVYBserufQK67bum629w=;
-        b=GdH/lyByxkM/uL+ZfmYzkHJY0FrWWi5agkp84uXw8qm0PxItdS9/RRhXHcE8iL79B9
-         M3eq8jVqNszKcY0burp6LOqAWKeg5nlXYsZrD+hLG5gLOTIDINd+QHKH8dQpxYOV2S+E
-         o/9Meo573iFmkoLV5e+nU8ybaRYVaFC2zzJdypSdY2RGFiId8y6dOgSabFM+hYsFJZT7
-         XXUSIe8gDbzi0KCrSOMO9FapnSwIZHsuf5CCgW2uMt7+ar/Fxo21nCZS/5dxJGWRhbVP
-         3+ATMFuGfOnwG4Ii+HdLfe/91voOH2d2I5evTBVVnWWkKkNSCTY9/ScIFKX3+xoVLcXh
-         NjOg==
-X-Gm-Message-State: AO0yUKUms8+6nXDtcgubJj12apF6bZAgwZIwVKs7CEJpUNh3g1VxRnAp
-        bcRwLEjWOoqR2Zp1c21gVo4=
-X-Google-Smtp-Source: AK7set+w5FNyuszjQ7bQi3fgWWAE9UWyu3nq8KmzXf7svgRUqhegsM4GIKSId+OkM1dhp+rIOzpe4w==
-X-Received: by 2002:a05:600c:1d24:b0:3da:1f6a:7b36 with SMTP id l36-20020a05600c1d2400b003da1f6a7b36mr11868089wms.0.1678747315316;
-        Mon, 13 Mar 2023 15:41:55 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id l8-20020a05600c4f0800b003db01178b62sm1024178wmq.40.2023.03.13.15.41.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 15:41:54 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 22:41:50 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, rafael@kernel.org,
-        "David S. Miller" <davem@davemloft.net>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Alex Shi <alexs@kernel.org>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Alexandre Bounine <alex.bou9@gmail.com>,
-        Alison Schofield <alison.schofield@intel.com>,
-        Ben Widawsky <bwidawsk@kernel.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dexuan Cui <decui@microsoft.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Hannes Reinecke <hare@suse.de>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Hu Haowen <src.res@email.cn>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        Ira Weiny <ira.weiny@intel.com>,
-        Iwona Winiarska <iwona.winiarska@intel.com>,
-        Jakub Kicinski <kuba@kernel.org>, Jens Axboe <axboe@kernel.dk>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Laurentiu Tudor <laurentiu.tudor@nxp.com>,
-        Matt Porter <mporter@kernel.crashing.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Stuart Yoder <stuyoder@gmail.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Wei Liu <wei.liu@kernel.org>,
-        Yanteng Si <siyanteng@loongson.cn>
-Subject: Re: [PATCH 23/36] driver core: bus: mark the struct bus_type for
- sysfs callbacks as constant
-Message-ID: <ZA+mroPKki9/iUkT@liuwe-devbox-debian-v2>
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
- <20230313182918.1312597-23-gregkh@linuxfoundation.org>
+        d=1e100.net; s=20210112; t=1678747339;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eByn0hcpMeptzqeE5fW4i3qazh2DBAhZRn02bjUF1dw=;
+        b=HoTXa5nEKUmgwvijX6fItU9dCx027FjqkCctU2MFQfnVCyQLK8McHgH6NW8Gz9PXJP
+         fn+TNocbumhkneJ5Mutk/bozk5fYX6FuO0CLHta5E3CXf5rfXDojTA2HQw25dx45B0/2
+         4F3xReX5fZ6/xLNFGnazQIEJ92eJwAO3fbMWLcfs+Eyw0KHwPnjW7NuONFbs5QzHbNSy
+         s6o6FBPw46gp0GE8OR6dukLSvV4sINcJx5zl11BeWshguN50bJ95dPXK2Pf/+/fHHYf2
+         A6w6rxoINMn71sat88BQQAiWZIjgbOSGzpxN2Qe2k9pad3FWAGc6QKyt5Y3WoiMpOtKG
+         1R4w==
+X-Gm-Message-State: AO0yUKWKfJdcvnqiKMpJIsmyDKAJRYkni8+fCrVRSdDGBWFIZ7pA5bxS
+        6unSMlZp4UViq717GoiEbRUXn6rp4utIPY68YzBIOVsBl3Qm
+X-Google-Smtp-Source: AK7set+fnk55krITt4nQ7dp/jxaceUY4R+J29wFnbO5f0kTTIE+CiL6hu7x9nP551hGsq4nMawWE93qeRydgkCVUG8z6POugriqz
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313182918.1312597-23-gregkh@linuxfoundation.org>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:54f:b0:319:34bf:dbef with SMTP id
+ i15-20020a056e02054f00b0031934bfdbefmr648931ils.0.1678747339558; Mon, 13 Mar
+ 2023 15:42:19 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 15:42:19 -0700
+In-Reply-To: <000000000000e3af1a05eec2e287@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000d7988d05f6cfd256@google.com>
+Subject: Re: [syzbot] [reiserfs?] KASAN: use-after-free Read in leaf_paste_in_buffer
+From:   syzbot <syzbot+55b82aea13452e3d128f@syzkaller.appspotmail.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@kernel.org, peterz@infradead.org,
+        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 07:29:05PM +0100, Greg Kroah-Hartman wrote:
-> struct bus_type should never be modified in a sysfs callback as there is
-> nothing in the structure to modify, and frankly, the structure is almost
-> never used in a sysfs callback, so mark it as constant to allow struct
-> bus_type to be moved to read-only memory.
-[...]
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index d24dd65b33d4..513adba09f56 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -684,7 +684,7 @@ static const struct attribute_group vmbus_dev_group = {
->  __ATTRIBUTE_GROUPS(vmbus_dev);
->  
->  /* Set up the attribute for /sys/bus/vmbus/hibernation */
-> -static ssize_t hibernation_show(struct bus_type *bus, char *buf)
-> +static ssize_t hibernation_show(const struct bus_type *bus, char *buf)
->  {
->  	return sprintf(buf, "%d\n", !!hv_is_hibernation_supported());
->  }
+syzbot suspects this issue was fixed by commit:
 
-Acked-by: Wei Liu <wei.liu@kernel.org>
+commit 26388a7c353f7b1d3fd8a6df6452fa9773193155
+Author: Peter Zijlstra <peterz@infradead.org>
+Date:   Thu Jan 12 19:44:03 2023 +0000
+
+    cpuidle,arch: Mark all regular cpuidle_state:: Enter methods __cpuidle
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=16fc20aac80000
+start commit:   420b2d431d18 Merge tag 'clk-fixes-for-linus' of git://git...
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=6bb1911ff9919df0
+dashboard link: https://syzkaller.appspot.com/bug?extid=55b82aea13452e3d128f
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17249347480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14281c1b480000
+
+If the result looks correct, please mark the issue as fixed by replying with:
+
+#syz fix: cpuidle,arch: Mark all regular cpuidle_state:: Enter methods __cpuidle
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
