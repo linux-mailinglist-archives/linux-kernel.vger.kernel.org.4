@@ -2,54 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E66B06B83D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9976A6B83D3
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:13:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230033AbjCMVM4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:12:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43626 "EHLO
+        id S230129AbjCMVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:13:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjCMVMx (ORCPT
+        with ESMTP id S230139AbjCMVNC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:12:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2528FBC5;
-        Mon, 13 Mar 2023 14:12:09 -0700 (PDT)
+        Mon, 13 Mar 2023 17:13:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEB88E3C0;
+        Mon, 13 Mar 2023 14:12:18 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D1290614BF;
-        Mon, 13 Mar 2023 21:12:03 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1479CC433EF;
-        Mon, 13 Mar 2023 21:12:02 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D9D92B8149C;
+        Mon, 13 Mar 2023 21:12:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BFEC433EF;
+        Mon, 13 Mar 2023 21:12:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678741923;
-        bh=7pHDCwjSyYBjKIi2jo6gMrexeoQMQqclXq25JlRTSmY=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=lqRGtSSkhrLPviO5u1/rX8UCXuASgHZYa4Ot5CmDnIbo2h6U05jVO5TOsLEOX0X4F
-         ILta0kAvAsz3A/5rwEVpxSj2K45MaOFyZ9N24Mtnya98h/66TcdiAdckBoW1IKamxf
-         KCiVGf29KkF9gTr/04XDBbVpUdW6OUdH3TFI6lOg04D4OmokRjvA3xKHGHgEB+FAmj
-         H3amMTwhX3bBhcuhROtFmFwHu4XmbXFMYOEkQzdVBMhWtsk9b/vdQBA6ZAcMnzLkvW
-         fNVEfKy41c5T2ef4rr6w9xcggcnNEczfxU8doBZ+F3npBDgXxwzMNSr480fPJQeE9U
-         9XmU8Q6wVNjcQ==
-Date:   Mon, 13 Mar 2023 16:12:01 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-Cc:     linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
-        will@kernel.org, jean-philippe@linaro.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        darren@os.amperecomputing.com, scott@os.amperecomputing.com
-Subject: Re: [PATCH v2 1/2] PCI/ATS: Add a helper function to configure ATS
- STU of a PF
-Message-ID: <20230313211201.GA1540091@bhelgaas>
+        s=k20201202; t=1678741935;
+        bh=zYJBShYkwWSVXL8WyRJR97m9GVSH3Xk1/B+RUVJG3cQ=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=JH9S+RlT/DdfAYGtquoWHeApkus/ituRl3F76d67/bmm+2TIYoq11R3N+ZsINz5sP
+         Qw/mya8wO6vSqrR6VOLvR0dg67GkB1PoZTmqtD9A7nSoeTDRwgC0b4znGUHUnDt90t
+         ihgIlqEhh1oUbQ5OJ0LaRPtSircIA3B7oIfftIeV0j82TPELDYuoGvpjD0HVEbFYUu
+         rXeuuzEI+C3iLrtPCfu6FCNam6Me1DM4jL1qzUNSSbBcHHoY6oqE4dGvYrVTOQx//S
+         ztZ0Zi11M+tFVDGDbuLGe2mrQZd85GKmkbgKSeX+CvNnBba00ZFPWj6cKNAEMMfg1n
+         DI3Je75lf9HdA==
+Received: by mail-lf1-f50.google.com with SMTP id x17so1306459lfu.5;
+        Mon, 13 Mar 2023 14:12:15 -0700 (PDT)
+X-Gm-Message-State: AO0yUKUtYTUvqaUfr3DO8MN9eCdEzzoNq42eNlHltb8e9Y4sQ42o/8un
+        HhkkYcRqawS9i0YiCI3BK+4qvNfT5DUiJXKE+cM=
+X-Google-Smtp-Source: AK7set+DjQ1xvcDa5hV1VdH/Pr6Am7QIxL7TaTlkKoBpFB2dZDT/hkUK+3eGTF4IGCtolqIuEmueTFud7NHOOva8TTQ=
+X-Received: by 2002:ac2:5927:0:b0:4db:1a0d:f261 with SMTP id
+ v7-20020ac25927000000b004db1a0df261mr10797689lfi.3.1678741933628; Mon, 13 Mar
+ 2023 14:12:13 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230228042137.1941024-2-gankulkarni@os.amperecomputing.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20230214-kobj_type-md-v1-1-d6853f707f11@weissschuh.net>
+In-Reply-To: <20230214-kobj_type-md-v1-1-d6853f707f11@weissschuh.net>
+From:   Song Liu <song@kernel.org>
+Date:   Mon, 13 Mar 2023 14:12:01 -0700
+X-Gmail-Original-Message-ID: <CAPhsuW5atxr8iFS-=scHjhXo19We4Rnms+XU80c9aKANQL1k1g@mail.gmail.com>
+Message-ID: <CAPhsuW5atxr8iFS-=scHjhXo19We4Rnms+XU80c9aKANQL1k1g@mail.gmail.com>
+Subject: Re: [PATCH] md: make kobj_type structures constant
+To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,127 +61,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 27, 2023 at 08:21:36PM -0800, Ganapatrao Kulkarni wrote:
-> As per PCI specification (PCI Express Base Specification Revision
-> 6.0, Section 10.5) both PF and VFs of a PCI EP are permitted to be enabled
-> independently for ATS capability, however the STU(Smallest Translation
-> Unit) is shared between PF and VFs. For VFs, it is hardwired to Zero and
-> the associated PF's value applies to VFs.
-> 
-> In the current code, the STU is being configured while enabling the PF ATS.
-> Hence, it is not able to enable ATS for VFs, if it is not enabled on the
-> associated PF already.
-> 
-> Adding a function pci_ats_stu_configure(), which can be called to
-> configure the STU during PF enumeration.
-> Latter enumerations of VFs can successfully enable ATS independently.
+On Mon, Feb 13, 2023 at 7:19=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
+chuh.net> wrote:
+>
+> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
+> the driver core allows the usage of const struct kobj_type.
+>
+> Take advantage of this to constify the structure definitions to prevent
+> modification at runtime.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
 
-s/STU(Smallest/STU (Smallest/ (add space before paren)
-s/Adding a function pci_ats_stu_configure()/Add pci_ats_stu_configure()/
-s/Latter/Subsequent/
+Applied to md-next. Thanks!
 
-Add blank line between paragraphs (it looks like "Latter enumerations"
-is intended to start a new paragraph).
-
-> Signed-off-by: Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>
-
-Acked-by: Bjorn Helgaas <bhelgaas@google.com>
-
-Given an ack for the IOMMU patch, I'd be happy to merge both (and I
-can do the commit log tweaks); just let me know.
-
-One comment/question below.
+Song
 
 > ---
->  drivers/pci/ats.c       | 33 +++++++++++++++++++++++++++++++--
->  include/linux/pci-ats.h |  3 +++
->  2 files changed, 34 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
-> index f9cc2e10b676..1611bfa1d5da 100644
-> --- a/drivers/pci/ats.c
-> +++ b/drivers/pci/ats.c
-> @@ -46,6 +46,35 @@ bool pci_ats_supported(struct pci_dev *dev)
->  }
->  EXPORT_SYMBOL_GPL(pci_ats_supported);
->  
-> +/**
-> + * pci_ats_stu_configure - Configure STU of a PF.
-> + * @dev: the PCI device
-> + * @ps: the IOMMU page shift
-> + *
-> + * Returns 0 on success, or negative on failure.
-> + */
-> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
-> +{
-> +	u16 ctrl;
-> +
-> +	if (dev->ats_enabled || dev->is_virtfn)
-> +		return 0;
-
-I might return an error for the VF case on the assumption that it's
-likely an error in the caller.  I guess one could argue that it
-simplifies the caller if it doesn't have to check for PF vs VF.  But
-the fact that STU is shared between PF and VFs is an important part of
-understanding how ATS works, so the caller should be aware of the
-distinction anyway.
-
-> +
-> +	if (!pci_ats_supported(dev))
-> +		return -EINVAL;
-> +
-> +	if (ps < PCI_ATS_MIN_STU)
-> +		return -EINVAL;
-> +
-> +	dev->ats_stu = ps;
-> +	pci_read_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, &ctrl);
-> +	ctrl |= PCI_ATS_CTRL_STU(dev->ats_stu - PCI_ATS_MIN_STU);
-> +	pci_write_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, ctrl);
-> +
-> +	return 0;
-> +}
-> +EXPORT_SYMBOL_GPL(pci_ats_stu_configure);
-> +
->  /**
->   * pci_enable_ats - enable the ATS capability
->   * @dev: the PCI device
-> @@ -68,8 +97,8 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
->  		return -EINVAL;
->  
->  	/*
-> -	 * Note that enabling ATS on a VF fails unless it's already enabled
-> -	 * with the same STU on the PF.
-> +	 * Note that enabling ATS on a VF fails unless it's already
-> +	 * configured with the same STU on the PF.
->  	 */
->  	ctrl = PCI_ATS_CTRL_ENABLE;
->  	if (dev->is_virtfn) {
-> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
-> index df54cd5b15db..7d62a92aaf23 100644
-> --- a/include/linux/pci-ats.h
-> +++ b/include/linux/pci-ats.h
-> @@ -8,6 +8,7 @@
->  /* Address Translation Service */
->  bool pci_ats_supported(struct pci_dev *dev);
->  int pci_enable_ats(struct pci_dev *dev, int ps);
-> +int pci_ats_stu_configure(struct pci_dev *dev, int ps);
->  void pci_disable_ats(struct pci_dev *dev);
->  int pci_ats_queue_depth(struct pci_dev *dev);
->  int pci_ats_page_aligned(struct pci_dev *dev);
-> @@ -16,6 +17,8 @@ static inline bool pci_ats_supported(struct pci_dev *d)
->  { return false; }
->  static inline int pci_enable_ats(struct pci_dev *d, int ps)
->  { return -ENODEV; }
-> +static inline int pci_ats_stu_configure(struct pci_dev *d, int ps)
-> +{ return -ENODEV; }
->  static inline void pci_disable_ats(struct pci_dev *d) { }
->  static inline int pci_ats_queue_depth(struct pci_dev *d)
->  { return -ENODEV; }
-> -- 
-> 2.38.1
-> 
-> 
-> _______________________________________________
-> linux-arm-kernel mailing list
-> linux-arm-kernel@lists.infradead.org
-> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
+>  drivers/md/md.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index 02b0240e7c71..091c1d6f0b87 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -78,7 +78,7 @@
+>  static LIST_HEAD(pers_list);
+>  static DEFINE_SPINLOCK(pers_lock);
+>
+> -static struct kobj_type md_ktype;
+> +static const struct kobj_type md_ktype;
+>
+>  struct md_cluster_operations *md_cluster_ops;
+>  EXPORT_SYMBOL(md_cluster_ops);
+> @@ -3600,7 +3600,7 @@ static const struct sysfs_ops rdev_sysfs_ops =3D {
+>         .show           =3D rdev_attr_show,
+>         .store          =3D rdev_attr_store,
+>  };
+> -static struct kobj_type rdev_ktype =3D {
+> +static const struct kobj_type rdev_ktype =3D {
+>         .release        =3D rdev_free,
+>         .sysfs_ops      =3D &rdev_sysfs_ops,
+>         .default_groups =3D rdev_default_groups,
+> @@ -5558,7 +5558,7 @@ static const struct sysfs_ops md_sysfs_ops =3D {
+>         .show   =3D md_attr_show,
+>         .store  =3D md_attr_store,
+>  };
+> -static struct kobj_type md_ktype =3D {
+> +static const struct kobj_type md_ktype =3D {
+>         .release        =3D md_kobj_release,
+>         .sysfs_ops      =3D &md_sysfs_ops,
+>         .default_groups =3D md_attr_groups,
+>
+> ---
+> base-commit: f6feea56f66d34259c4222fa02e8171c4f2673d1
+> change-id: 20230214-kobj_type-md-a3c7773574cf
+>
+> Best regards,
+> --
+> Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+>
