@@ -2,128 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 680786B70B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:59:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DE76B70C6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:02:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCMH7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:59:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60950 "EHLO
+        id S230259AbjCMICU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:02:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCMH6O (ORCPT
+        with ESMTP id S230247AbjCMIBh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:58:14 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93831570AC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:55:57 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id r15so17727842edq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:55:57 -0700 (PDT)
+        Mon, 13 Mar 2023 04:01:37 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50E9B3BDA5;
+        Mon, 13 Mar 2023 00:58:47 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso604893pjb.0;
+        Mon, 13 Mar 2023 00:58:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678694155;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=8w5VDTJefrQL5CEvASX0IO0ZHVw+Up+XulFlBqPg140=;
-        b=YUygzuoIl4+mbnorOoZwcJlNJ+waXHrYMKZbIO0F6cxQQrwUtL52vInbWoa4DeKkzz
-         MCCHMaKBB0UjSzrD7dMv/ycuiulPFJwL9+CYikog06VBb1kfGN+BpXJan/DII5uKiedc
-         5hQmRVV10AyxQR3E6OCGKHPwlf8GPKwXDMHaFDN1Tb7TbXNKCx7NVdw8Du6XP/OL6Qum
-         JPR7g3ciRMWRbQHFsYnppXbCeWLkFtp8EVbMe8Bp85KtlaiBC8XmOYcH4XmPF/uT5sqe
-         2EFxkktp+I15IDTivhbj/ZAYQC+VCR3Vm0o3hd2m99scYjElkceDNbHbfo+Jg42gwZob
-         6ENA==
+        d=gmail.com; s=20210112; t=1678694287;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Hat8ABt+aIhJHmkgJ54scd67JOhwFtz9Gg2oapIINaM=;
+        b=kFmY22yZpquTAvlpQDx2jQBWU5fSGyo6DISTzAE6GWo2HPcvUO/pVxjyeP/NsOYtNX
+         g4rpW/OCvHnX9c2QqkCjafRzHKcFKbVycja/5ft3L3TcfhjKPgHoJdXCzTS7CCfNqh8Q
+         Dxy/KCFbk1s3Fee2UfMIxsrk1KkojzEjrvid4xmlV+1+av21WLTr4fLWInCzJcT5hK5g
+         qb+Ff7s6ek3GGsIYxJryfLNzIepo0u6dHgU8MlPeBmNXKdrW49C4QuawDf7XW9Y3bZhq
+         OZUnTIi33H6hDA2IyiI3FbLBjJMvvFJmaexISKBzSvjcGKqXouf4rqwU4ltyjTdMW2MI
+         uoZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678694155;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8w5VDTJefrQL5CEvASX0IO0ZHVw+Up+XulFlBqPg140=;
-        b=XRzg7IcDHl6ADVdZNDrHuYyP+PGrJr4gqaa6aNNMK6E0/x5TySFJE6nSgwnFkP1KJE
-         dOwc49hIohNkvMrnTLo8HKbLCD/TD05R/wSkAoJQK6NkWzPUgo1B2wQi/QatLv62yJhH
-         u9s1/USFN9LNGbHsFTmmTZSjrADNBJJhAI2anp2MIKkxRdQ3sI+s97GduueT3C1Wto01
-         bwT52B57DtSqS4nRu3aStZDXwFeIG9AjbIgpaAwsSlde1W7OukmqRjCm5E/cYhvHez0n
-         U1RsUsbeo4o1OMZauSZs2qhiCnm97BDrxeNAHxv/uY1LZmTrvqfzWGmYx0DV/ujXHaeZ
-         YBvQ==
-X-Gm-Message-State: AO0yUKUBw4tVMpzde1V0AtO3XZ02hUB/9O4W9ftixglUrc6s8kAle+fm
-        fC/HO3UN6ep0PaAcufLoL8u1rQ==
-X-Google-Smtp-Source: AK7set8CeifPZKO2i7zODdjAgScxJot/p0i/tkeosN0wjbuu/cqMnyxmXc2u3iHqpoMP42NXB7HECw==
-X-Received: by 2002:a17:906:9c84:b0:877:8ae7:2e44 with SMTP id fj4-20020a1709069c8400b008778ae72e44mr42843027ejc.5.1678694155650;
-        Mon, 13 Mar 2023 00:55:55 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:f052:f15:3f90:fcb3])
-        by smtp.gmail.com with ESMTPSA id bg15-20020a170906a04f00b008e09deb6610sm3100113ejb.200.2023.03.13.00.55.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 00:55:55 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Banajit Goswami <bgoswami@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 0/9] ASoC: add audio digital codecs for Qualcomm SM8550
-Date:   Mon, 13 Mar 2023 08:55:51 +0100
-Message-Id: <20230313075551.17290-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230313075445.17160-1-krzysztof.kozlowski@linaro.org>
-References: <20230313075445.17160-1-krzysztof.kozlowski@linaro.org>
+        d=1e100.net; s=20210112; t=1678694287;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Hat8ABt+aIhJHmkgJ54scd67JOhwFtz9Gg2oapIINaM=;
+        b=So3kIzEncpfFp3Klf8ooW7pZh3qSif3JAPI1g3VDwy9jiJcHiiX8NbYMRiH05Ckr5T
+         RrCHHz9hw953d3iSepHTZ9K61WpgdA5p2G+vqESTpeM8Io9aVpmp+AeM9wHA9FbR2Q8i
+         3spSr/StL3ZyQmr9ARX0pXTQ4FnRBPB8j/cTM2tsTZoXm7bLH2Teknvkhvk4WKkxpFUF
+         PwSeMRtxBy0FQQHlYI0hndIvQGogFxBRfeM/3ol6C+EEuAeOGmEipBH0oE7yve0AhvIZ
+         TUZx+QGaXw7UYADEO9d1yx/PZSagNDws17YD7DfxJhiVmy1WuODzwaRy4dBcSvfAHXIv
+         LgXw==
+X-Gm-Message-State: AO0yUKXCN32FHGdKLsQ3U3dc3shwiRzDfeTOf2NyBrRaw9VKOjQmimQ/
+        z2G2NJ7ybSwcjEQsqoDfWUo=
+X-Google-Smtp-Source: AK7set+iRq23u8hMYMCXBM+T4tOxHpw2sNBM6ytHUEdT61AtXh8oAny7LUXb5iWPuPvsIocSFUGKIA==
+X-Received: by 2002:a17:902:e54a:b0:19e:8bfe:7d79 with SMTP id n10-20020a170902e54a00b0019e8bfe7d79mr37424033plf.1.1678694286928;
+        Mon, 13 Mar 2023 00:58:06 -0700 (PDT)
+Received: from [192.168.43.80] (subs28-116-206-12-36.three.co.id. [116.206.12.36])
+        by smtp.gmail.com with ESMTPSA id jz16-20020a170903431000b0019cbd37a335sm4103268plb.93.2023.03.13.00.58.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 00:58:06 -0700 (PDT)
+Message-ID: <4653cfd1-7209-6e49-4f01-fcc3f82f16ce@gmail.com>
+Date:   Mon, 13 Mar 2023 14:57:59 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
+ netdev FAQ
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     David Vernet <void@manifault.com>
+Cc:     Linux BPF <bpf@vger.kernel.org>,
+        Linux Documentation <linux-doc@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Tobin C. Harding" <me@tobin.cc>
+References: <20230313025119.17430-1-bagasdotme@gmail.com>
+ <20230313030938.GA152792@maniforge> <ZA6knaEQcddfTCyS@debian.me>
+ <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
+Content-Language: en-US
+In-Reply-To: <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 3/13/23 11:42, Bagas Sanjaya wrote:
+> On 3/13/23 11:20, Bagas Sanjaya wrote:
+>> On Sun, Mar 12, 2023 at 10:09:38PM -0500, David Vernet wrote:
+>>> This regresses all of the warnings I fixed in d56b0c461d19da ("bpf,
+>>> docs: Fix link to netdev-FAQ target"):
+>>>
+>>> [void@maniforge bpf-next]$ make -j SPHINXDIRS="bpf" htmldocs
+>>> make[2]: Nothing to be done for 'html'.
+>>> Using alabaster theme
+>>> source directory: bpf
+>>> /home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:125: WARNING: unknown document: '/process/maintainer-netdev'
+>>> /home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:150: WARNING: unknown document: '/process/maintainer-netdev'
+>>> /home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:207: WARNING: unknown document: '/process/maintainer-netdev'
+>>> /home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:232: WARNING: unknown document: '/process/maintainer-netdev'
+>>> /home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:398: WARNING: unknown document: '/process/maintainer-netdev'
+>>> /home/void/upstream/bpf-next/Documentation/bpf/bpf_devel_QA.rst:414: WARNING: unknown document: '/process/maintainer-netdev'
+>>>
+>>> And it also causes the netdev-FAQ links to once again be broken and not
+>>> actually point to anything.
+>>
+>> Hi,
+>>
+>> I don't see these warnings in my builds. I'm using Sphinx 2.4.4
+>> (virtualenv, install with pip3 install -r
+>> Documentation/sphinx/requirements.txt). I guess your Sphinx version
+>> doesn't support :doc: directive.
+>>
+>> Also, did you enable CONFIG_COMPILE_TEST, CONFIG_WARN_MISSING_DOCUMENTS,
+>> and CONFIG_WARN_ABI_ERRORS?
+>>
+>> Thanks.
+>>
+> 
+> Oops, I didn't see the context.
+> 
+> When I rebuild the docs, I always omit SPHINXDIRS as you mentioned.
+> For :doc: links to work, you need to just do ``make htmldocs`` and
+> DO NOT specify that variable.
+> 
+> Anyway, these warnings make sense since the target is absolute
+> (rather than relative).
+> 
 
-Dependencies
-============
-For va-macro bindings:
-https://lore.kernel.org/r/20221118071849.25506-2-srinivas.kandagatla@linaro.org
+Hi again,
 
-NOT a dependency
-================
-The patchset can be applied independently of my previous fix:
-https://lore.kernel.org/linux-arm-msm/20230310100937.32485-1-krzysztof.kozlowski@linaro.org/T/#u
+I think SPHINXDIRS specifies the subdir as root directory when
+resolving references, so when there are references to docs
+outside SPHINXDIRS, nonexistent doc warnings will occur. For normal
+(full) htmldocs builds though, these will go away (see [1]).
 
-Logically, better if they were together, but code will work fine other way.
+Thanks.
 
-Changes since v1
-================
-1. Move the flag define to common header.
-
-Best regards,
-Krzysztof
-
-Krzysztof Kozlowski (9):
-  ASoC: dt-bindings: qcom,lpass-rx-macro: narrow clocks per variants
-  ASoC: dt-bindings: qcom,lpass-rx-macro: Add SM8550 RX macro
-  ASoC: codecs: lpass-rx-macro: add support for SM8550
-  ASoC: dt-bindings: qcom,lpass-tx-macro: narrow clocks per variants
-  ASoC: dt-bindings: qcom,lpass-tx-macro: Add SM8550 TX macro
-  ASoC: codecs: lpass-tx-macro: add support for SM8550
-  ASoC: dt-bindings: qcom,lpass-va-macro: Add SM8550 VA macro
-  ASoC: dt-bindings: qcom,lpass-wsa-macro: Add SM8550 WSA macro
-  ASoC: codecs: lpass-wsa-macro: add support for SM8550
-
- .../bindings/sound/qcom,lpass-rx-macro.yaml   | 76 +++++++++++++----
- .../bindings/sound/qcom,lpass-tx-macro.yaml   | 81 +++++++++++++++----
- .../bindings/sound/qcom,lpass-va-macro.yaml   | 18 +++++
- .../bindings/sound/qcom,lpass-wsa-macro.yaml  | 23 +++++-
- sound/soc/codecs/lpass-macro-common.h         |  3 +
- sound/soc/codecs/lpass-rx-macro.c             | 36 +++++++--
- sound/soc/codecs/lpass-tx-macro.c             | 35 ++++++--
- sound/soc/codecs/lpass-wsa-macro.c            | 37 +++++++--
- 8 files changed, 252 insertions(+), 57 deletions(-)
+[1]: https://lore.kernel.org/all/f4d40da6-756b-9e75-b867-cc9eedc4b232@gmail.com/
 
 -- 
-2.34.1
+An old man doll... just what I always wanted! - Clara
 
