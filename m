@@ -2,74 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7855C6B8078
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:27:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF73B6B8087
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjCMS1a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:27:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S230115AbjCMS3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbjCMS1M (ORCPT
+        with ESMTP id S229919AbjCMS3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:27:12 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33672838A7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:26:13 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id h8so8649469ede.8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:26:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678731966;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZNpONYyMLc+O1cKJ44IbWyBUFtwAAv8E60RL7W04AJs=;
-        b=TvMwO/eRVJjtB5Li/d+OdXqri6XouTMznM1hLlNq+N1QlMcq5ib4hDjeR8W2r/Bu6F
-         husjX1IJLLGago3Ee0Sxi1ZJZVDJjno//1cZPO3pABr5lUDq6gvx0o3YtbRNXwLJgoFD
-         f+tDflU1C3bidWnVdF9zqqx43WogpaF4CTL7czigncnO0AZquvqjQ4kXZayjWteAKO2+
-         YZORJe3tr6kTIM3ubTaK4YxnRRZDhb7VxW5/WdqHRagLtCnyy8XVEUd62ma/1EY9TYVb
-         6SAb6wY9mbbdLKi4xh8mDrDyY3BlN3tiJo1GshOnl46swXN+oHEFrQqd324xuJKNAfUD
-         AAKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678731966;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZNpONYyMLc+O1cKJ44IbWyBUFtwAAv8E60RL7W04AJs=;
-        b=AbXjGV5apDumytTg8BjAqN0JCkHOkE4zUpLoP/wd25Kqba2SbDG2TmHJTGvXfSYYB9
-         Do2w8qhXv3IszvFRnThewBmggtmC8l0GsnjIbGb2KonxgG3t0S/hBXtg7HlryPCfVEWN
-         oCnzIn4AN3L4FuyZN+00YUZSDsXZ3Plvk4OFeH3S5YgMm31Cs/S6Bg3zv9pVSlpbOVD3
-         jTQt1/0tqfj8N/oXVEtfOZyG3PYBaxKRW8v7PQ8k2ezMANTGvkryhfBxKv2ZOZ5O02sP
-         6snrUixdSbLLiXnaVAO/nyEcfp+ZSbpiBCrcByx7KZ/gepvZDjz6/epkd1OXsfOCe2IC
-         CR7A==
-X-Gm-Message-State: AO0yUKUBW07vgZnFejxuBKKZUA26VB8+DigxJSYzr/hvNwrg6MiEJW3b
-        wWaVjnv9gfllkXYJMUoI/sboI/HGQQnJBJer
-X-Google-Smtp-Source: AK7set+Z8ronD1GN+O2t9fXb5cb2hJc2oxsGuVi0IlG9McCgm+whf9GReA9jIB1G/rvu3znojVY/3A==
-X-Received: by 2002:a17:907:3186:b0:92b:dff4:f8e9 with SMTP id xe6-20020a170907318600b0092bdff4f8e9mr1804273ejb.8.1678731965814;
-        Mon, 13 Mar 2023 11:26:05 -0700 (PDT)
-Received: from khadija-virtual-machine ([39.41.45.115])
-        by smtp.gmail.com with ESMTPSA id x5-20020a1709064a8500b008e7916f0bdesm102538eju.138.2023.03.13.11.26.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 11:26:05 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 23:26:03 +0500
-From:   Khadija Kamran <kamrankhadijadj@gmail.com>
-To:     Alison Schofield <alison.schofield@intel.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] staging: axis-fifo: initialize read_timeout and
- write_timeout once in probe function
-Message-ID: <ZA9qu+E/gPZ68mw4@khadija-virtual-machine>
-References: <ZA4M3+ZeB1Rl2fbs@khadija-virtual-machine>
- <9938109.ZD9C4EEAuf@suse>
- <ZA83yzPTq+nQF9Dd@khadija-virtual-machine>
- <ZA9ZY91K8iQtn0ev@aschofie-mobl2>
+        Mon, 13 Mar 2023 14:29:32 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC201420A;
+        Mon, 13 Mar 2023 11:28:50 -0700 (PDT)
+Received: from [172.18.236.247] (unknown [46.183.103.17])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E9CF361CC457B;
+        Mon, 13 Mar 2023 19:27:01 +0100 (CET)
+Message-ID: <12d1ab7d-c4fd-44b5-7e53-e80cd4b00a21@molgen.mpg.de>
+Date:   Mon, 13 Mar 2023 19:26:57 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA9ZY91K8iQtn0ev@aschofie-mobl2>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [Intel-wired-lan] [PATCH net] ice: fix invalid check for empty
+ list in ice_sched_assoc_vsi_to_agg()
+Content-Language: en-US
+To:     Jakob Koschel <jkl820.git@gmail.com>
+Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
+        Tony Nguyen <anthony.l.nguyen@intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        linux-kernel@vger.kernel.org, "Bos, H.J." <h.j.bos@vu.nl>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        intel-wired-lan@lists.osuosl.org
+References: <20230301-ice-fix-invalid-iterator-found-check-v1-1-87c26deed999@gmail.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230301-ice-fix-invalid-iterator-found-check-v1-1-87c26deed999@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,53 +55,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:12:03AM -0700, Alison Schofield wrote:
+Dear Jakob,
+
+
+Thank you for the patch.
+
+Am 13.03.23 um 17:31 schrieb Jakob Koschel:
+> The code implicitly assumes that the list iterator finds a correct
+> handle. If 'vsi_handle' is not found the 'old_agg_vsi_info' was
+> pointing to an bogus memory location. For safety a separate list
+> iterator variable should be used to make the != NULL check on
+> 'old_agg_vsi_info' correct under any circumstances.
 > 
-> It sounds like the git commit hook for checkpatch, suggested in
-> the tutorial, would have saved you here. Please look that up.
->
+> Additionally Linus proposed to avoid any use of the list iterator
+> variable after the loop, in the attempt to move the list iterator
+> variable declaration into the macro to avoid any potential misuse after
+> the loop. Using it in a pointer comparision after the loop is undefined
 
-Hey Alison!
-I had set up git post-commit hook following the tutorial. The script
-showed the errors, but I ignored them before. I have submitted another
-patch. I had 'trailing white spaces' errors in my code and removed them
-in the new patch after consultation from 'coding-style.rst' file.
+compar*i*son
 
-> Also see the section "Following the Driver commit style"
-> And, there are sections on revising patchsets too.
+> behavior and should be omitted if possible [1].
+
+(It took me a short time to find the reference number at the end of the 
+URL.)
+
+> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+> ---
+>   drivers/net/ethernet/intel/ice/ice_sched.c | 8 +++++---
+>   1 file changed, 5 insertions(+), 3 deletions(-)
 > 
-> Much of the info in the tutorial doesn't make sense until you
-> need it. So, keep reviewing it to catch more useful info.
->
+> diff --git a/drivers/net/ethernet/intel/ice/ice_sched.c b/drivers/net/ethernet/intel/ice/ice_sched.c
+> index 4eca8d195ef0..b7682de0ae05 100644
+> --- a/drivers/net/ethernet/intel/ice/ice_sched.c
+> +++ b/drivers/net/ethernet/intel/ice/ice_sched.c
+> @@ -2788,7 +2788,7 @@ static int
+>   ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
+>   			   u16 vsi_handle, unsigned long *tc_bitmap)
+>   {
+> -	struct ice_sched_agg_vsi_info *agg_vsi_info, *old_agg_vsi_info = NULL;
+> +	struct ice_sched_agg_vsi_info *agg_vsi_info, *iter, *old_agg_vsi_info = NULL;
+>   	struct ice_sched_agg_info *agg_info, *old_agg_info;
+>   	struct ice_hw *hw = pi->hw;
+>   	int status = 0;
+> @@ -2806,11 +2806,13 @@ ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
+>   	if (old_agg_info && old_agg_info != agg_info) {
+>   		struct ice_sched_agg_vsi_info *vtmp;
+>   
+> -		list_for_each_entry_safe(old_agg_vsi_info, vtmp,
+> +		list_for_each_entry_safe(iter, vtmp,
+>   					 &old_agg_info->agg_vsi_list,
+>   					 list_entry)
+> -			if (old_agg_vsi_info->vsi_handle == vsi_handle)
+> +			if (iter->vsi_handle == vsi_handle) {
+> +				old_agg_vsi_info = iter;
+>   				break;
+> +			}
+>   	}
+>   
+>   	/* check if entry already exist */
 
-Yes!! No matter how many times I read the tutorial, I still end up
-getting back to it! :)
-Thank you!
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
 
-Regards,
-Khadija
 
-> More on running checkpatch:
-> - Add that git commmit hook.
-> - The final checkpatch run can be on the formatted patches.
->   After you've done git format-patch and have a .patch file you
->   are thinking of sending, run it again. 
-> 
-> Something like this:
-> scripts/checkpatch.pl --no-tree --strict --codespellfile=/usr/bin/codespell ~/my_patches/*.patch
-> 
-> > 
-> > Also, I had one question. Is it okay to write a long subject as I have
-> > used in this patch? 
-> This is in the tutorial. section "Following the Driver commit style"
->
-> > 
-> > Regards,
-> > Khadija
-> > 
-> > > >  drivers/staging/axis-fifo/axis-fifo.c | 18 ++++++++++++------
-> > > >  1 file changed, 12 insertions(+), 6 deletions(-)
-> > > 
-> > > 
-> > > 
-> > 
+Kind regards,
+
+Paul
