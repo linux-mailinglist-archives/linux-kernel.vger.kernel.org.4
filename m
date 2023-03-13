@@ -2,115 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67A0A6B81BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08E796B81BD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCMT1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33384 "EHLO
+        id S229801AbjCMTaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38864 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCMT1G (ORCPT
+        with ESMTP id S229540AbjCMTat (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 15:27:06 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DF97B48D;
-        Mon, 13 Mar 2023 12:27:04 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id r15so25870158edq.11;
-        Mon, 13 Mar 2023 12:27:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678735623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fskuyX6dGFWefRxPFqS8/6jtOJXTxSop5LICOFSjoko=;
-        b=pEgxH0csy4TCha8z49vvNLTGFTR2dkPXCh/2UsS1WNAnHCpW0WPoeNIeLwE6ANttyy
-         Jp/B7KgamuzqDNU9kwdBkrO5tqjdTHrM0+yi2EJFGzDw6iH4FpTrFWeobt1o8arHuizo
-         MBMWPVDlb1UB3ZD3Dlg+eRR1Y4xLgssrb/P19QMJWpAYPs6a+MA9n9cG2iK4ySpEY8PG
-         r1NBP2i5+ZijFkpqCL7vtez6MymcNroQM5KuE+xTwaTN7DJ4oGY3DI/NobBqjsrJl/Yg
-         D4lWdChEdEFnbiVRNkWjKk0nAA8APGdMZRpcVwDCJ04OTnLGVAfyJ9oMfKBLNaku5NYl
-         9lUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678735623;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fskuyX6dGFWefRxPFqS8/6jtOJXTxSop5LICOFSjoko=;
-        b=wRpyiBYN14MRm4tMGM1ofmt2FZxa4Gao7tDyZz/woKo3MghWJgzSvL8Zj1Lzt/QwiP
-         B1/PDrxJ7zV35gUODowidC1gNnLFQsysdTct9O4yhyzLUnapOIiAMkJ8ellD5kQqxJX/
-         Ba/TpqM7Efb2Swp/B0DmBKdNcmyOTYBi+pF2uHEITAVEGIp9/YC3VbHc2j1K0UTAZ2F8
-         Ezl3YlaGvwtn5Tdnzvr+t/2v27Na8kcO3gDOfC/JShkwzpkObW2QfQZRLN0uYur/233F
-         KV37xLTFQShz0E8WirGc3ZqtpT4s1n+RuCqfiLX09wCEEwrwPHeoIrzTQoKPMyILM6Zk
-         dgVw==
-X-Gm-Message-State: AO0yUKU1Xg99o+hfrIOhCk243ubJQiWY3l+XIAg+BzZ9ysiH0miVf5Q4
-        1egn1MEVRgkrTU7GnCXmZ4fTaxoMTQ==
-X-Google-Smtp-Source: AK7set9MtL4jDO4Lg6s0yzNdJyD4Q25nOg0yRFbxJSV31dbpRpwdARYwzWTHGLW5H5V7bwNxWM9zMQ==
-X-Received: by 2002:a17:906:2dd8:b0:92a:3b19:9991 with SMTP id h24-20020a1709062dd800b0092a3b199991mr3839897eji.69.1678735623296;
-        Mon, 13 Mar 2023 12:27:03 -0700 (PDT)
-Received: from p183 ([46.53.254.249])
-        by smtp.gmail.com with ESMTPSA id op1-20020a170906bce100b009222a7192b4sm164630ejb.30.2023.03.13.12.27.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 12:27:02 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 22:27:01 +0300
-From:   Alexey Dobriyan <adobriyan@gmail.com>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     masahiroy@kernel.org, linux-kbuild@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] menuconfig: reclaim horizontal space
-Message-ID: <1f228646-0cce-4183-a4cc-6982b69e887d@p183>
-References: <20230311114248.36587-1-adobriyan@gmail.com>
- <20230311114248.36587-2-adobriyan@gmail.com>
- <26a291d8-49c0-e5af-846b-1e29f8266ba9@infradead.org>
+        Mon, 13 Mar 2023 15:30:49 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D58D78CBC;
+        Mon, 13 Mar 2023 12:30:48 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DJUcJP106602;
+        Mon, 13 Mar 2023 14:30:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678735838;
+        bh=rr7Jwc4bBK2fTMy+2qtETid9QUJOQqt1I/IMuW1FPAQ=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=XxTqR8gcDqgNZYnHtWbEa9daym8O2EUCwJGQ6ci5epKX48LujrnaXYrhbCdGXBvUS
+         xiAzqXohfNBBMpHN/GVsOrxIqnLw3pHLq+zmv0td13rhrSckEJBEFqecLyR9c8hDMF
+         Fs7Lk6/ju6e+OD/Cy+lEX6GvkQnIRDNH9HHxP98Y=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DJUceg062484
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Mar 2023 14:30:38 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
+ Mar 2023 14:30:38 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 13 Mar 2023 14:30:38 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DJUcPo028642;
+        Mon, 13 Mar 2023 14:30:38 -0500
+Date:   Mon, 13 Mar 2023 14:30:37 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Andrew Davis <afd@ti.com>
+CC:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Julien Panis <jpanis@baylibre.com>, Bryan Brattlof <bb@ti.com>,
+        Jason Kridner <jkridner@gmail.com>,
+        Robert Nelson <robertcnelson@gmail.com>
+Subject: Re: [PATCH 2/3] arm64: dts: ti: Add k3-am625-beagleplay
+Message-ID: <20230313193037.55l5sj3htr3mcnsn@spinner>
+References: <20230311111022.23717-1-nm@ti.com>
+ <20230311111022.23717-3-nm@ti.com>
+ <da7555ae-b56a-f895-96cc-447bfd1c772d@ti.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <26a291d8-49c0-e5af-846b-1e29f8266ba9@infradead.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <da7555ae-b56a-f895-96cc-447bfd1c772d@ti.com>
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 05:29:24PM -0700, Randy Dunlap wrote:
-> On 3/11/23 03:42, Alexey Dobriyan wrote:
-> > Draw the menu box from position (0, 2) so that there is less unused
-> > space available. Horizontal is not _really_ important but on small
-> > terminals maybe it is.
-> 
-> ISTM that the first sentence goes with patch 3/3. ??
-> 
-> > Signed-off-by: Alexey Dobriyan <adobriyan@gmail.com>
-> > ---
-> >  scripts/kconfig/lxdialog/menubox.c | 1 -
-> >  1 file changed, 1 deletion(-)
+On 12:50-20230313, Andrew Davis wrote:
+> On 3/11/23 5:10 AM, Nishanth Menon wrote:
+> > From: Robert Nelson <robertcnelson@gmail.com>
 > > 
-> > diff --git a/scripts/kconfig/lxdialog/menubox.c b/scripts/kconfig/lxdialog/menubox.c
-> > index 5c3addad89b0..5eb67c04821f 100644
-> > --- a/scripts/kconfig/lxdialog/menubox.c
-> > +++ b/scripts/kconfig/lxdialog/menubox.c
-> > @@ -184,7 +184,6 @@ int dialog_menu(const char *title, const char *prompt,
-> >  		return -ERRDISPLAYTOOSMALL;
-> >  
-> >  	height -= 4;
-> > -	width  -= 5;
-> 
-> How does this work?  In my test patch, I changed 5 to 4 to recover/reclaim the
-> shadow line.  To my surprise, I don't see any negative issue with this change,
-> but I am perplexed by it.
+[...]
 
-Ehh? It is calculated as (getmaxx - width) / 2, so both 5 or 4 do
-the same thing.
+> > +		serial1 = &mcu_uart0;
+> > +		serial2 = &main_uart0;
+> > +		serial3 = &main_uart5;
+> 
+> What are we using main_uart5 for, and why does it need to be serial3?
 
-> Anyway, it worked in my testing.
+As provided in the documentation (referred to in the dts and commit
+message), Mikrobus, serial3 since that is the 3rd of the uart
+interfaces exposed on the platform.
+
+[...]
+
+> > +		secure_tfa_ddr: tfa@9e780000 {
+> > +			reg = <0x00 0x9e780000 0x00 0x80000>;
+> > +			alignment = <0x1000>;
 > 
-> Tested-by: Randy Dunlap <rdunlap@infradead.org>
+> "alignment" not needed since we cannot allocate from "no-map" regions anyway. Same
+> for OP-TEE mem below.
+
+Aargh.. yes... I missed it again.
 > 
-> >  	menu_height = height - 10;
-> >  
-> >  	max_choice = MIN(menu_height, item_count());
+> > +			no-map;
+> > +		};
+> > +
+> > +		secure_ddr: optee@9e800000 {
+> > +			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
 > 
-> Thanks.
-> -- 
-> ~Randy
+> "for OP-TEE" comment is probably extra now that the node is named "optee".
+
+Will drop.
+
+[...]
+> > +&a53_opp_table {
+> > +		/* Requires VDD_CORE to be at 0.85V */
+> > +		opp-1400000000 {
+> > +			opp-hz = /bits/ 64 <1400000000>;
+> > +			opp-supported-hw = <0x01 0x0004>;
+> > +		};
+> 
+> Seems tabed out too far.
+
+Uggh.. will check and fix.
+
+> 
+> > +};
+> > +
+> > +&wkup_i2c0 {
+> > +	pinctrl-names = "default";
+> > +	pinctrl-0 = <&i2c_csi_pins_default>;
+> > +	clock-frequency = <400000>;
+> > +	/* Enable with overlay for camera sensor */
+> 
+> If we don't want to enable it here, why not move all this to the overlay?
+
+Makes no sense in duplicating (and would be error prone). The pinmux
+is always constant, no matter which sensor overlay one uses. So,
+maintaining the common configuration in the board dts itself.
+
+[...]
+
+> > +&cpsw3g_mdio {
+> > +	/* Workaround for errata i2329 - Use mdio bitbang */
+> > +	status = "disabled";
+> 
+> Should already be disabled, but the comment is nice to have so
+> probably okay to keep IMHO.
+
+Yeah - wanted to be a bit explicit here.
+
+Thanks for reviewing..
+
+-- 
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
