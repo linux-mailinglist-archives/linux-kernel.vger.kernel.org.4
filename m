@@ -2,116 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4EBC6B7244
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:14:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 18FC86B7258
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:18:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229928AbjCMJOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50948 "EHLO
+        id S230070AbjCMJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbjCMJOe (ORCPT
+        with ESMTP id S229689AbjCMJST (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:14:34 -0400
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2085.outbound.protection.outlook.com [40.107.21.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 930255FFA;
-        Mon, 13 Mar 2023 02:14:32 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=nMDwXAAePH17SwSSxHImJREizTls1Dytp7hiPgJX6LHbPlEqrFgofX+AYEeMYA47wwePW9TA1bDCcPT7C8EGrIwm0g6fDG8jmuet95HAtP/pax6Pspahf7z7cG6IlX+W4PPam4b/5dBT4DPo9ReMuu2gApjnfq49qpmdZLpAv/vZnNMnCzDwGWmPx3HVvSm6b3JPiKOL07QeVYp5Lj2yAvkCjVIh8vE/IMb1Pv55bi8lEY/NswTDi/bZ3BrBSLG3nLZL9NomcAsVgFDKEf7OneNRh0VxjMobKr7nbQQenGozu+9hKrcN2kRuMx3fHmTlmuFDqzhaNlytHAY6mYwVvg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=M+lDFJC04MWM1aBeWfpGs/RJfvG5yFS6RGEY2rV2bHw=;
- b=l9OfxEQvFMLiFNyP9suJ5jjiOeHrpaHOtjBK4AFQmT62Wz46dQJvn7aS2BqUbdmfdgCPVWlmPQxT/kWaKp4kKLxM6/QT7Ze0YuEAbCmZ1PtxSqcBQDjwLOy4vY0QVia0ZCajlHJ9ycpbSyj/k6lg4EEDNi+pCbceUfSYYAr1hFaANda9n+vKjun5iRUYZL3tMF9lvW989t4QN3MPF3M8Za8ySGXwNTKnUVObedhqOWr1I7SYrfwE/KMHo9hKh61Ona6IJdULZWIOhclN9km6QynxnWE3AGk8+bxSdFOiGdfb4r3uy7OrblC7Vas5B15nzDSjYW3if04AJUZn8RTLnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=M+lDFJC04MWM1aBeWfpGs/RJfvG5yFS6RGEY2rV2bHw=;
- b=IPhDt5yVAO+JodGsnnTT69QM8j63snVh9qu34ceiBrSdU7vXC/Qmwdg9tN1StIUep68TnIPUVUVpuT3dF4LLr2QOREKC2LsyaNoZZNUfZtIPrT2PSAmj+EUcSnyLXsyZMPsbn/gN/aJTWpjMRrjn/SHTIhCRWindoj5nQ/X0y6g=
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com (2603:10a6:10:314::7)
- by PAXPR04MB9445.eurprd04.prod.outlook.com (2603:10a6:102:2b4::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 09:14:30 +0000
-Received: from DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e]) by DU0PR04MB9563.eurprd04.prod.outlook.com
- ([fe80::a518:512c:4af1:276e%5]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 09:14:29 +0000
-From:   Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-To:     Varun Sethi <V.Sethi@nxp.com>, Pankaj Gupta <pankaj.gupta@nxp.com>,
-        Gaurav Jain <gaurav.jain@nxp.com>,
-        "herbert@gondor.apana.org.au" <herbert@gondor.apana.org.au>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] crypto: tls - Use data directly in completion function
-Thread-Topic: [PATCH] crypto: tls - Use data directly in completion function
-Thread-Index: AQHZUzs1GrLLqVso40eqVqf5w6Qskq74ccXw
-Date:   Mon, 13 Mar 2023 09:14:29 +0000
-Message-ID: <DU0PR04MB95639B763B060C2AEFC3F64D8EB99@DU0PR04MB9563.eurprd04.prod.outlook.com>
-References: <20230310102912.1966201-1-meenakshi.aggarwal@nxp.com>
-In-Reply-To: <20230310102912.1966201-1-meenakshi.aggarwal@nxp.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DU0PR04MB9563:EE_|PAXPR04MB9445:EE_
-x-ms-office365-filtering-correlation-id: 6010b8ed-af92-4c8c-5b80-08db23a359d9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: pVD4QKcD6GWpMJYRVFPHWql9D/C6VqWVD6FOi9LofSXI8gSVETZtp8P64I6vQQpPHMSoBDxAPaaoQw/ia20ne7YrtqSZNmGdqGgodMJPf6Abgsk2Hq6JSYmIwhdYJhEtPF+TqMUb7C0bXUFzZQt063H99BXmjHFEUOAtSoY0HlXm1lNgrCgiZtVVSYnMgktm2/q4oU+mnwaYtWnQlpqgynqPvGx/y7WOnXjqrJ9AYenYNG9IgxZtmKsinEuiI+tiSHBv9QDBtbz192ITp9FOZu2g+Gl5qK3z2DeUIl3VLuKMhcgKIM9qY1AtHJgKoFNDbbw599B+j8jyrmGJnk1GYv4oWW4c/JMBpWGvMf7cUx3ngIc7iXaBLYtDc4vfArBOtzNAbV6qP6ifaUcFCMb5yOQ4EDzhi92+QlyVUpYl82spp+ew8oIHHzYPEHKobahLGWtgoaDKPDMbRU0xP4+bMNl3DUGg59A9pRaghZ97yNQWvEH1goGXO6zttbORGBirRMNvQbMJSpVNOJjLC9acOPrkUDUCdJVUP9lWhfcjjn+0EVXNZczNM3AUrHK44rHP+9vXuOw6U6eRhp1DEttAUottJlNOPYYH/yPC1GUFjHjmfPCG4xLrdg+3Ziqth8RMqa2EaDv7xUjkV6e2QHO1MmqVqTxi11wtNNqBezgJ3pZbSRvq1c2RQPITUNx8urBOIUnMhfncvLH8VKMhUjCbsu9qnkEVXcsGGM6UJoIunlA=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9563.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(366004)(136003)(451199018)(86362001)(38070700005)(33656002)(122000001)(55016003)(38100700002)(66476007)(66446008)(8676002)(76116006)(66946007)(66556008)(64756008)(52536014)(41300700001)(8936002)(110136005)(478600001)(316002)(5660300002)(2906002)(44832011)(83380400001)(7696005)(9686003)(186003)(53546011)(6506007)(26005)(71200400001)(2004002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?j5fPXU2wlayudV8QmXkJPERXYxb9qG30a2WsRy5h60VeN8IhAtd0szD0Sf7k?=
- =?us-ascii?Q?ZW2LgR7VshKtpHN6RoU0eJ5X01vKwJ0+iK3rZjfuqybFNM3S89G5EZa5hnA8?=
- =?us-ascii?Q?rGZPHio1UkzrU/fbDkJfSFaBzor+ulM4k0FfTwanl+d5cQaDmJF416qZlmQI?=
- =?us-ascii?Q?wIzLV0mBOuk313LGpcBQdPij6ctQJ+Kmp+BSJ3UhfSNtG3nQh8l8nHEsKoDd?=
- =?us-ascii?Q?7Mzx5hKIjGKC7y9qgR1cM/D5bNx3HMlSUIFhGHr5ONsJfTuGeQ+lOKRHcEr9?=
- =?us-ascii?Q?ryw37Re5wQVq1cXZNT1+6YjDNqpW6Wz+G3i2cTXrzPg6+TvXm1PnEFbgeBLc?=
- =?us-ascii?Q?Zc2aP2hwfeyP3w56wkR1WG7K7KIscJTrAbahmi/v5mHumH/WXGT8pPwwyoQr?=
- =?us-ascii?Q?HCTrkCFYceQASK0grj1EDe5x1wJEkK47W/FnBtEBnhIRoVPr3YYXmeHUs20G?=
- =?us-ascii?Q?lfyEZ/Zdeu0PJv07VIHP0lvCC89d7puYq50DqLUsYboW018aiaUF3sCVQWs+?=
- =?us-ascii?Q?+8vXY+IAMqe4i2SZ2nbm7zI9+38OIEoi7e/cUci0DxJnWs5pr46fhWGFHMB8?=
- =?us-ascii?Q?XnHLPHNRQz5omt9ZrxuArI5TiGv96bEAEwj/eeiYS6ipHZc/Sp7buj5PMrzd?=
- =?us-ascii?Q?qbd638NKf2L/w3UhmVc4J0yed23Z2BK2JGM+7pq6lPA8UV4TpkB8RHkHyfxy?=
- =?us-ascii?Q?WVljAtn73m6GqDfVeO33UQ4oWTb0utGPiMqf4aKiKipZDLAUvXsEoZYvaDcn?=
- =?us-ascii?Q?C9DajhYlf7TsGxjynsNCw1S7MjNTt44qFoVEwKn0WfMVsn12XikZpmv3uige?=
- =?us-ascii?Q?NG+CGtBxd+8aQ9/aCxILa8m4g6AWn1yRz7NX0FKbdWfAU9ZFCptXx8HIgTu8?=
- =?us-ascii?Q?B+VF80RkwiHhCqBvCdKLRLEoHROqFVzhbHHQ4fsrULpX6gwf4Lyc18chSomv?=
- =?us-ascii?Q?fXoMlvselZoD0zO8vwiydLlnkBTgnN4RCOnmcy4HBwdh20PXnuHW/QnZloot?=
- =?us-ascii?Q?x8Cc9OxqfnAjJW17TCyyK43idmUEaFmgqgvTIqBT9pl+9Gg+YXykAAjD4Spd?=
- =?us-ascii?Q?ebXRex7TP8k5nxnuPSONtp1YVLC1E95QnWi8A41XrKp9knHDdVJBsf17nXOB?=
- =?us-ascii?Q?ochxtM/Qne2+jBrjJFOinSdev4X1YDHz98vCMX7ECAIiH46psOgHoxcTyA3W?=
- =?us-ascii?Q?OGLnu8fNVzXwA/p5DbVgSCy55RvrIJnoZU5vzZ57WnjRFKWX3MkpbICTFPf8?=
- =?us-ascii?Q?d4fJVRuSMqzM5AEmnu2FklJgn+Ai+Tu6muOLVejY/USxJIhDGeJJBy5kuV2k?=
- =?us-ascii?Q?+jc2h0Q5twTls6IZrhuMW0igDa0cp93SNUi5oZGH6/ZSLj4vek2O5GIRJ9ss?=
- =?us-ascii?Q?x24JWBNnBjTqwmiDzWKcGypQzxrskab5+aezZN3CHLOI3X9HnFMDMWg0lgsk?=
- =?us-ascii?Q?swLDuXFkQN/t8b+KUQ590us+LMyIhkd2br/GxoqDXA1D2dBvUeUjFhBt8xcG?=
- =?us-ascii?Q?L+ts3p1K+pscKoRhVQnsNw2I4aGQ3ncnMB7/ibUWCpmncescGOX1AVO9J+Ia?=
- =?us-ascii?Q?5+zb9WWbOqQuiACr8uSU8Fae12lav5GAVBH6ywsEztj/FMzt5zG97Sa7gGyV?=
- =?us-ascii?Q?bQ=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9563.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 6010b8ed-af92-4c8c-5b80-08db23a359d9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 09:14:29.3678
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 0Nzhd+qopwQzD9pjdHxRERxhaYrjTV+jgyTgPGrn9l86l1K6fcg78DcXdXAznLLIhdyEV8AVomAIJlRYOIf+RpiXepwOecBSuwgjLpe8fv4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9445
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Mon, 13 Mar 2023 05:18:19 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41772113D1;
+        Mon, 13 Mar 2023 02:18:15 -0700 (PDT)
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32D7SK8Y029779;
+        Mon, 13 Mar 2023 09:17:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id; s=qcppdkim1;
+ bh=0H7NGg+no3R1jEB+A9Rmw3VAqYB+CcMABuXkv6FUM3M=;
+ b=IJGkpibQB0zxFhT75OVyywJa+YjNJ9yQIucR44IntJHC5EvhyGKhuXJtHbErgH2Dn9Vk
+ 9ubwtOJ0Rq6F/EJjXekaiXq3VAtiuHfc1ERZhpcsk7I8G+oXSF1d5MjsQskhFjZagYDj
+ CGvE2cSCuet71H6w32qjYnY07j4R9Z2ucsP5jv/2aHtzEaVG7zdUsS+/4QhYSztfZPXj
+ ewDgbdzdx51zBYZtwbrLfZ6AuHgSzpPLSnUwzDHXCSp0bRcCEzHt/0xcu1Vyl3A57dPM
+ IHIWfxPLuwAowPdzxJk9IXXUVM/hoNxPdqMCQkyFGezOVHeX7G0dV9aRDUobu6JzzGum RQ== 
+Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p9yew08hq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 09:17:50 +0000
+Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32D9HlAc009088;
+        Mon, 13 Mar 2023 09:17:47 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqm9tbk-1;
+        Mon, 13 Mar 2023 09:17:47 +0000
+Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32D9HlVU009083;
+        Mon, 13 Mar 2023 09:17:47 GMT
+Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
+        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32D9HkiP009082;
+        Mon, 13 Mar 2023 09:17:47 +0000
+Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
+        id 97CFD452E; Mon, 13 Mar 2023 17:17:45 +0800 (CST)
+From:   Ziqi Chen <quic_ziqichen@quicinc.com>
+To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
+        quic_nguyenb@quicinc.com, bvanassche@acm.org, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
+        martin.petersen@oracle.com, quic_ziqichen@quicinc.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        linux-kernel@vger.kernel.org (open list),
+        linux-trace-kernel@vger.kernel.org (open list:TRACING)
+Subject: [PATCH v5] scsi: ufs: core: Add trace event for MCQ
+Date:   Mon, 13 Mar 2023 17:16:05 +0800
+Message-Id: <1678699023-6645-1-git-send-email-quic_ziqichen@quicinc.com>
+X-Mailer: git-send-email 2.7.4
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: zMmCpXuZLgWsQLgS0pZELvB1skl3au7W
+X-Proofpoint-ORIG-GUID: zMmCpXuZLgWsQLgS0pZELvB1skl3au7W
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_02,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 adultscore=0
+ priorityscore=1501 bulkscore=0 lowpriorityscore=0 phishscore=0 spamscore=0
+ clxscore=1015 mlxscore=0 suspectscore=0 malwarescore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303130075
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -119,67 +84,124 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Please don't review the patch, sent by mistake.
+Added a new trace event to record MCQ relevant information
+for each request in MCQ mode, include hardware queue ID,
+SQ tail slot, CQ head slot and CQ tail slot.
 
-Thanks,
-Meenakshi
+Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
 
-> -----Original Message-----
-> From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-> Sent: Friday, March 10, 2023 3:59 PM
-> To: Varun Sethi <V.Sethi@nxp.com>; Pankaj Gupta <pankaj.gupta@nxp.com>;
-> Gaurav Jain <gaurav.jain@nxp.com>; herbert@gondor.apana.org.au;
-> davem@davemloft.net; linux-crypto@vger.kernel.org; linux-
-> kernel@vger.kernel.org
-> Cc: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-> Subject: [PATCH] crypto: tls - Use data directly in completion function
->=20
-> From: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
->=20
-> Facing build error in building tls
-> error: passing argument 3 of ?ahash_request_set_callback?
-> from incompatible pointer type [-Werror=3Dincompatible-pointer-types]
->=20
-> Issue introduced after changing prototype of "crypto_completion_t"
-> function pointer in include/linux/crypto.h, conversion of completion func=
-tion of
-> tls was missed.
->=20
-> Changes are done to use data directly in completion function of tls.
->=20
-> Fixes: 255e48eb1768 ("crypto: api - Use data directly in completion funct=
-ion")
-> Signed-off-by: Meenakshi Aggarwal <meenakshi.aggarwal@nxp.com>
-> ---
->  crypto/tls.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->=20
-> diff --git a/crypto/tls.c b/crypto/tls.c index e04f3b450b43..f16810238d1a
-> 100644
-> --- a/crypto/tls.c
-> +++ b/crypto/tls.c
-> @@ -1,6 +1,6 @@
->  /*
->   * Copyright 2013 Freescale
-> - * Copyright 2017 NXP
-> + * Copyright 2017, 2023 NXP
->   *
->   * This program is free software; you can redistribute it and/or modify =
-it
->   * under the terms of the GNU General Public License as published by the=
- Free
-> @@ -50,9 +50,9 @@ struct async_op {
->  	int err;
->  };
->=20
-> -static void tls_async_op_done(struct crypto_async_request *req, int err)
-> +static void tls_async_op_done(void *data, int err)
->  {
-> -	struct async_op *areq =3D req->data;
-> +	struct async_op *areq =3D data;
->=20
->  	if (err =3D=3D -EINPROGRESS)
->  		return;
-> --
-> 2.25.1
+---
+Changes to v4:
+- Merged MCQ and SDB trace event as one.
+
+Changes to v3:
+- Free trace_ufshcd_command_mcq() from dependency on trace_ufshcd_command().
+
+Changes to v2:
+- Shorten printing strings.
+
+Changes to v1:
+- Adjust the order of fileds to keep them aligned.
+---
+ drivers/ufs/core/ufshcd.c  | 15 ++++++++++++---
+ include/trace/events/ufs.h | 24 +++++++++++++-----------
+ 2 files changed, 25 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index 3b3cf78..53a7287 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -422,10 +422,12 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ {
+ 	u64 lba = 0;
+ 	u8 opcode = 0, group_id = 0;
+-	u32 intr, doorbell;
++	u32 doorbell = 0, hwq_id = 0;
++	u32 intr;
+ 	struct ufshcd_lrb *lrbp = &hba->lrb[tag];
+ 	struct scsi_cmnd *cmd = lrbp->cmd;
+ 	struct request *rq = scsi_cmd_to_rq(cmd);
++	struct ufs_hw_queue *hwq = NULL;
+ 	int transfer_len = -1;
+ 
+ 	if (!cmd)
+@@ -456,9 +458,16 @@ static void ufshcd_add_command_trace(struct ufs_hba *hba, unsigned int tag,
+ 	}
+ 
+ 	intr = ufshcd_readl(hba, REG_INTERRUPT_STATUS);
+-	doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
++
++	if (is_mcq_enabled(hba)) {
++		hwq = ufshcd_mcq_req_to_hwq(hba, rq);
++		hwq_id = hwq->id;
++	} else {
++		doorbell = ufshcd_readl(hba, REG_UTP_TRANSFER_REQ_DOOR_BELL);
++		hwq_id = -1;
++	}
+ 	trace_ufshcd_command(dev_name(hba->dev), str_t, tag,
+-			doorbell, transfer_len, intr, lba, opcode, group_id);
++			doorbell, hwq_id, transfer_len, intr, lba, opcode, group_id);
+ }
+ 
+ static void ufshcd_print_clk_freqs(struct ufs_hba *hba)
+diff --git a/include/trace/events/ufs.h b/include/trace/events/ufs.h
+index 599739e..37637ff 100644
+--- a/include/trace/events/ufs.h
++++ b/include/trace/events/ufs.h
+@@ -268,20 +268,21 @@ DEFINE_EVENT(ufshcd_template, ufshcd_wl_runtime_resume,
+ 
+ TRACE_EVENT(ufshcd_command,
+ 	TP_PROTO(const char *dev_name, enum ufs_trace_str_t str_t,
+-		 unsigned int tag, u32 doorbell, int transfer_len, u32 intr,
+-		 u64 lba, u8 opcode, u8 group_id),
++		 unsigned int tag, u32 doorbell, u32 hwq_id, int transfer_len,
++		 u32 intr, u64 lba, u8 opcode, u8 group_id),
+ 
+-	TP_ARGS(dev_name, str_t, tag, doorbell, transfer_len,
+-				intr, lba, opcode, group_id),
++	TP_ARGS(dev_name, str_t, tag, doorbell, hwq_id, transfer_len,
++			intr, lba, opcode, group_id),
+ 
+ 	TP_STRUCT__entry(
+ 		__string(dev_name, dev_name)
+ 		__field(enum ufs_trace_str_t, str_t)
+ 		__field(unsigned int, tag)
+ 		__field(u32, doorbell)
+-		__field(int, transfer_len)
++		__field(u32, hwq_id)
+ 		__field(u32, intr)
+ 		__field(u64, lba)
++		__field(int, transfer_len)
+ 		__field(u8, opcode)
+ 		__field(u8, group_id)
+ 	),
+@@ -291,19 +292,20 @@ TRACE_EVENT(ufshcd_command,
+ 		__entry->str_t = str_t;
+ 		__entry->tag = tag;
+ 		__entry->doorbell = doorbell;
+-		__entry->transfer_len = transfer_len;
++		__entry->hwq_id = hwq_id;
+ 		__entry->intr = intr;
+ 		__entry->lba = lba;
++		__entry->transfer_len = transfer_len;
+ 		__entry->opcode = opcode;
+ 		__entry->group_id = group_id;
+ 	),
+ 
+ 	TP_printk(
+-		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x",
+-		show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
+-		__entry->tag, __entry->doorbell, __entry->transfer_len,
+-		__entry->intr, __entry->lba, (u32)__entry->opcode,
+-		str_opcode(__entry->opcode), (u32)__entry->group_id
++		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, hqid: %d",
++		 show_ufs_cmd_trace_str(__entry->str_t), __get_str(dev_name),
++		 __entry->tag, __entry->doorbell, __entry->transfer_len, __entry->intr,
++		 __entry->lba, (u32)__entry->opcode, str_opcode(__entry->opcode),
++		 (u32)__entry->group_id, __entry->hwq_id
+ 	)
+ );
+ 
+-- 
+2.7.4
 
