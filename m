@@ -2,134 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F7936B774D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8466D6B7755
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCMMQp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:16:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60248 "EHLO
+        id S229668AbjCMMUI convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 08:20:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCMMQn (ORCPT
+        with ESMTP id S229622AbjCMMUG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:16:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01BF830EB1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:15:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678709753;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=lXPYbBYCTYiMKrYNBmUMEnReGM9kweVlcHiDWAi6CGI=;
-        b=HxS66h+BPtg2BhseHmqSDL6w/vu/OtZMTQm3aGkMD18sY7e2B93Oiku0doGTF9TMnhTRkB
-        MDvyCXAwbet9BcbfTxJYPM85rYC4kTb5gnH631oepeRivR9GlxZGCWVqp3CEJhfM6WYi/4
-        ywtIyPQexS/GKL3ApjlVwBetPgDhv6Q=
-Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
- [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-436-UEvJZi_uMReevQpPxmO9bA-1; Mon, 13 Mar 2023 08:15:52 -0400
-X-MC-Unique: UEvJZi_uMReevQpPxmO9bA-1
-Received: by mail-ed1-f72.google.com with SMTP id y24-20020aa7ccd8000000b004be3955a42eso16863461edt.22
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:15:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678709750;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXPYbBYCTYiMKrYNBmUMEnReGM9kweVlcHiDWAi6CGI=;
-        b=kEHJqoXzprwWnAmtWgvt9wJshn+DnynOcyBUNgptDUhCAm0WB6affMbN/va0kw/YjM
-         dkLCq84udn6v1GJt2AlyenzC2NxDiMrLbU+bx2IeRbzdEZX5+fTsrOu2Mcb0K6yEpCqT
-         x+BtFfmNTdlcXBhHamrkcq0XVSlG/h5o11RmT24s1SHZVq9ZAxTJ6rczFTMBLAZgLFF1
-         LJ9SX+FeYTtS1j0gbaCRQGmpd8ysBV+onWBkNAZx4GT8SuKTXtEXcCH0K3x+6kB9KEv+
-         BudjGN5PR22ofdxhBzsc28Tktfn9okExk6cdYnp7M1liJKJqHJ7sn4tZinY+7IAlVMMJ
-         aX9g==
-X-Gm-Message-State: AO0yUKWXwUwInnIB9QH94KwtILFlKOsNlkMRZN4lWlcwVJASkjZt1ZFI
-        BSYuV/tYhmEGELx64S1FEi7ZEQ7z4EQrqHvzfE/+3lZBlo+hAhGelo3GWDyI0mcyNrGhcBgyQxw
-        XtGE1ik8ItarB3WczQWWhzSKRyojwbsa4
-X-Received: by 2002:a17:906:5857:b0:878:81d7:9f77 with SMTP id h23-20020a170906585700b0087881d79f77mr30905947ejs.34.1678709750509;
-        Mon, 13 Mar 2023 05:15:50 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9Z5b6MLUkGKVg3T2p+PspkIBkQYBJ2aBl5xrk9I6UV7xAL0Qnjp/YptrZXGlySHUMvNN+nNA==
-X-Received: by 2002:a17:906:5857:b0:878:81d7:9f77 with SMTP id h23-20020a170906585700b0087881d79f77mr30905930ejs.34.1678709750285;
-        Mon, 13 Mar 2023 05:15:50 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id ho20-20020a1709070e9400b00927e0fb3e50sm1506984ejc.100.2023.03.13.05.15.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 05:15:49 -0700 (PDT)
-Message-ID: <a3a87570-5885-6954-4b20-b7a5201c0a07@redhat.com>
-Date:   Mon, 13 Mar 2023 13:15:49 +0100
+        Mon, 13 Mar 2023 08:20:06 -0400
+Received: from mail.astralinux.ru (mail.astralinux.ru [217.74.38.119])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6DA65072D;
+        Mon, 13 Mar 2023 05:20:03 -0700 (PDT)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id 6928B1863CD5;
+        Mon, 13 Mar 2023 15:19:59 +0300 (MSK)
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10032)
+        with ESMTP id Y7GYg_myE7ai; Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
+Received: from localhost (localhost.localdomain [127.0.0.1])
+        by mail.astralinux.ru (Postfix) with ESMTP id ABACE1863CCF;
+        Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
+X-Virus-Scanned: amavisd-new at astralinux.ru
+Received: from mail.astralinux.ru ([127.0.0.1])
+        by localhost (rbta-msk-vsrv-mail01.astralinux.ru [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id ZmlpE9MgWsBK; Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
+Received: from [10.177.20.58] (unknown [10.177.20.58])
+        by mail.astralinux.ru (Postfix) with ESMTPSA id 29DC41863D04;
+        Mon, 13 Mar 2023 15:19:58 +0300 (MSK)
+Message-ID: <ddfab307-d471-ee08-6804-5f903adb1770@astralinux.ru>
+Date:   Mon, 13 Mar 2023 15:19:50 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] backlight: apple_bl: Use acpi_video_get_backlight_type()
+ Thunderbird/102.1.0
+Subject: Re: [PATCH] goku_udc: Add check for NULL in goku_irq
 Content-Language: en-US
-To:     Daniel Thompson <daniel.thompson@linaro.org>
-Cc:     Mark Gross <markgross@kernel.org>,
-        Andy Shevchenko <andy@kernel.org>, Lee Jones <lee@kernel.org>,
-        Jingoo Han <jingoohan1@gmail.com>,
-        Aditya Garg <gargaditya08@live.com>,
-        platform-driver-x86@vger.kernel.org,
-        Matthew Garrett <mjg59@srcf.ucam.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-References: <20230307120540.389920-1-hdegoede@redhat.com>
- <20230309170911.GC96419@aspen.lan>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230309170911.GC96419@aspen.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+Cc:     Jakob Koschel <jakobkoschel@gmail.com>, linux-usb@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <20230203101828.14799-1-abelova@astralinux.ru>
+ <Y9zly1vrj9z4c1qT@kroah.com>
+ <39993564-7310-a2e0-8139-14ccb9a03ba9@astralinux.ru>
+ <Y+zivah57216KcuB@kroah.com>
+ <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
+From:   Anastasia Belova <abelova@astralinux.ru>
+In-Reply-To: <a5f90434-f3e5-f25e-76e2-b03e79cc16fe@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On 3/9/23 18:09, Daniel Thompson wrote:
-> On Tue, Mar 07, 2023 at 01:05:40PM +0100, Hans de Goede wrote:
->> On some MacBooks both the apple_bl and the apple-gmux backlight drivers
->> may be able to export a /sys/class/backlight device.
+11.03.2023 06:29, Mirsad Goran Todorovac пишет:
+> On 15. 02. 2023. 14:48, Greg Kroah-Hartman wrote:
+>> On Wed, Feb 15, 2023 at 04:39:56PM +0300, Анастасия Белова wrote:
+>>> 03.02.2023 13:45, Greg Kroah-Hartman пишет:
+>>>> On Fri, Feb 03, 2023 at 01:18:28PM +0300, Anastasia Belova wrote:
+>>>>> Before dereferencing dev->driver check it for NULL.
+>>>>>
+>>>>> If an interrupt handler is called after assigning
+>>>>> NULL to dev->driver, but before resetting dev->int_enable,
+>>>>> NULL-pointer will be dereferenced.
+>>>>>
+>>>>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>>>>
+>>>>> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
+>>>>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+>>>>> ---
+>>>>>    drivers/usb/gadget/udc/goku_udc.c | 5 +++--
+>>>>>    1 file changed, 3 insertions(+), 2 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/usb/gadget/udc/goku_udc.c b/drivers/usb/gadget/udc/goku_udc.c
+>>>>> index bdc56b24b5c9..896bba8b47f1 100644
+>>>>> --- a/drivers/usb/gadget/udc/goku_udc.c
+>>>>> +++ b/drivers/usb/gadget/udc/goku_udc.c
+>>>>> @@ -1616,8 +1616,9 @@ static irqreturn_t goku_irq(int irq, void *_dev)
+>>>>>    pm_next:
+>>>>>    		if (stat & INT_USBRESET) {		/* hub reset done */
+>>>>>    			ACK(INT_USBRESET);
+>>>>> -			INFO(dev, "USB reset done, gadget %s\n",
+>>>>> -				dev->driver->driver.name);
+>>>>> +			if (dev->driver)
+>>>>> +				INFO(dev, "USB reset done, gadget %s\n",
+>>>>> +					dev->driver->driver.name);
+>>>> How can this ever happen?  Can you trigger this somehow?  If not, I
+>>>> don't think this is going to be possible (also what's up with printk
+>>>> from an irq handler???)
+>>> Unfortunately, I can't find the way to trigger this at the moment.
+>> Then the change should not be made.
 >>
->> To avoid having 2 backlight devices for one LCD panel until now
->> the apple-gmux driver has been calling apple_bl_unregister() to move
->> the apple_bl backlight device out of the way when it loads.
+>>> What about printk, should trace_printk be used instead?
+>> Why?
 >>
->> Similar problems exist on other x86 laptops and all backlight drivers
->> which may be used on x86 laptops have moved to using
->> acpi_video_get_backlight_type() to determine whether they should load
->> or not.
+>>>> Odds are, no one actually has this hardware anymore, right?
+>>> Despite of this, such vulnerability should be fixed because
+>>> there is a possibility to exploit it.
+>> How can this be "exploited" if it can not ever be triggered?
 >>
->> Switch apple_bl to this model too, so that it is consistent with all
->> the other x86 backlight drivers.
->> [snip]
->> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> 
-> Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
-> 
-> but...
-
-Thank you.
-
->> ---
->> A note to the backlight class / subsystem maintainers, this change
->> applies on top of a similar patch for drivers/platform/x86/apple-gmux.c
->> which makes that driver use acpi_video_get_backlight_type(). See:
->> https://git.kernel.org/pub/scm/linux/kernel/git/pdx86/platform-drivers-x86.git/log/?h=review-hans
+>> Also, this would cause a NULL dereference in an irq handler, how can you
+>> "exploit" that?
 >>
->> I believe it is easiest to also merge this patch through
->> the platform-drivers-x86 tree, may I please have your Ack for this ?
->> ---
-> 
-> ... please don't treat above as an ack. Lee Jones will hopefully be
-> along shortly to discuss that!
+>> Please only submit patches that actually do something.  It is getting
+>> very hard to want to even review patches from this "project" based on
+>> the recent submissions.
+>>
+>> thanks,
+>>
+>> greg k-h
+> Hi Greg, Anastasia,
 
-Understood.
+Hi Misrad,
 
-Regards,
+> Without any pros or cons, or taking sides, there appears to be a similar check
+> when using dev->driver->driver.name in
+>
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1158
+>
+> 	seq_printf(m,
+> 		   "%s - %s\n"
+> 		   "%s version: %s %s\n"
+> 		   "Gadget driver: %s\n"
+> 		   "Host %s, %s\n"
+> 		   "\n",
+> 		   pci_name(dev->pdev), driver_desc,
+> 		   driver_name, DRIVER_VERSION, dmastr(),
+> 		   dev->driver ? dev->driver->driver.name : "(none)",
+> 		   is_usb_connected
+> 			   ? ((tmp & PW_PULLUP) ? "full speed" : "powered")
+> 			   : "disconnected",
+> 		   udc_ep_state(dev->ep0state));
+>
+> On the other hand, where could dev->drivre be reset without resetting dev->int_enable?
+>
+> dev->driver = NULL appears here:
+>
+> static int goku_udc_stop(struct usb_gadget *g)
+> {
+> 	struct goku_udc	*dev = to_goku_udc(g);
+> 	unsigned long	flags;
+>
+> 	spin_lock_irqsave(&dev->lock, flags);
+> 	dev->driver = NULL;
+> 	stop_activity(dev);
+> 	spin_unlock_irqrestore(&dev->lock, flags);
+>
+> 	return 0;
+> }
+>
+> it is followed by stop_activity() calling udc_reset():
+>
+> static void udc_reset(struct goku_udc *dev)
+> {
+> 	struct goku_udc_regs __iomem	*regs = dev->regs;
+>
+> 	writel(0, &regs->power_detect);
+> 	writel(0, &regs->int_enable);
+> 	readl(&regs->int_enable);
+> 	dev->int_enable = 0;
+> .
+> .
+> .
+>
+> ... but this happens in between spin_lock_irqsave() and spin_unlock_irqsave(),
+> which appears like a correct way to do it.
 
-Hans
+Are you sure that spin_lock_irqsave makes the code safe? This function 
+disables interrupts on
+
+local processor only (Linux Device Drivers, Third Edition). So it 
+doesn't seem to be
+
+absolutely safe on multiprocessor systems.
+
+> But second appearance is here:
+>
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1559
+>
+> 	spin_lock(&dev->lock);
+>
+> rescan:
+> 	stat = readl(&regs->int_status) & dev->int_enable;
+>          if (!stat)
+> 		goto done;
+> 	dev->irqs++;
+>
+> 	/* device-wide irqs */
+> 	if (unlikely(stat & INT_DEVWIDE)) {
+> 		if (stat & INT_SYSERROR) {
+> 			ERROR(dev, "system error\n");
+> 			stop_activity(dev);
+> 			stat = 0;
+> 			handled = 1;
+> 			// FIXME have a neater way to prevent re-enumeration
+> 			dev->driver = NULL;
+> 			goto done;
+> 		}
+>
+> goto done leads to:
+>
+> done:
+> 	(void)readl(&regs->int_enable);
+> 	spin_unlock(&dev->lock);
+>
+> This unlocks dev->lock before setting dev->int_enable to zero, or calling writel(0, &regs->int_enable);
+> which could be problematic. Unless it called stop_activity(dev) four lines earlier. Which does
+> bot of:
+>
+> 	writel(0, &regs->int_enable);
+> 	dev->int_enable = 0;
+>
+> So, FWIW, we seem to be safe. Yet, there might be no harm in printing "(null)" rather
+> than having an NULL pointer dereference, it seems.
+>
+> Yet, there is another unprotected dereference of dev->driver:
+>
+> https://elixir.bootlin.com/linux/latest/source/drivers/usb/gadget/udc/goku_udc.c#L1513
+>
+> 	spin_unlock (&dev->lock);
+> 	tmp = dev->driver->setup(&dev->gadget, &ctrl);
+> 	spin_lock (&dev->lock);
+>
+> All others (in goku_udc.c, at least) have triple safeguards like:
+>
+> 				if (dev->gadget.speed != USB_SPEED_UNKNOWN
+> 						&& dev->driver
+> 						&& dev->driver->suspend) {
+> 					spin_unlock(&dev->lock);
+> 					dev->driver->suspend(&dev->gadget);
+> 					spin_lock(&dev->lock);
+> 				}
+>
+> So the above should maybe put to:
+>
+> 	if (dev->driver && dev->driver->setup) {
+> 		spin_unlock (&dev->lock);
+> 		tmp = dev->driver->setup(&dev->gadget, &ctrl);
+> 		spin_lock (&dev->lock);
+> 	}
+>
+> instead to be completely certain.
+>
+> Forgive me for this uninspired rant. Thank you if you've read this far.
+> I hope this helps.
+>
+> My $0.02.
+>
+> Regards,
+> Mirsad
+>
+Thanks,
+
+Anastasia
 
