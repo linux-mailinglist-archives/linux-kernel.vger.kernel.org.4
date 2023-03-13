@@ -2,116 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3F726B7051
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 157A76B706A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:52:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229927AbjCMHuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
+        id S229994AbjCMHwg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:52:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjCMHuq (ORCPT
+        with ESMTP id S229960AbjCMHv5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:50:46 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8C28EBA;
-        Mon, 13 Mar 2023 00:50:44 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m4so1488608lfj.2;
-        Mon, 13 Mar 2023 00:50:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678693843;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HHVFhtI+WXf+TBj10nSr3LhfstrJCEyqqp0nJVtIGAI=;
-        b=VVZESDY+oTzxvnvslJHVZjQSe5DUbdpK43nfxg2WnlNfG0M+gT0Gjl08wmwh5cQ49/
-         JQ3wfc5d/UvLsYAf9JfeMndoXE9pyJ7yGCFstuNbTB9RvTB+qZl1ylD8JGktY5Ri7FoL
-         7jzT9qXP/n0/UUT9dIy2P6Lg3LmvQAV9pdLGDJIQjXqVLsyg0p0vFE+tMvWAElf0IOuC
-         +GWmp9ieI/IyGets07dkU1CRexebvgGdK5Ciy6ppXiQWrnp56LNDO98XbErBT4jRwiwJ
-         wjfrnDbsjwi2gCOQQO282QQJeE0ru7HQ7Az/BzNzkxEQpNHAjM8JafCouafLWGl/U5IJ
-         VIIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678693843;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HHVFhtI+WXf+TBj10nSr3LhfstrJCEyqqp0nJVtIGAI=;
-        b=eUpumf1WXVDnuIXr84HqTg1bu6I1HZJottEuWWjvsbQ6uP2RXHoacJ8Iwx3OWObVew
-         lS0XtL/KIypkpAoID9j+BMCfwcXY81XRFC9jHFtvBO0fg//WUBRbpM0CjMH67EacUh40
-         FxBP0AGQErhoMZilw3Cb0NQzbzMuKjJ6JuZdfxNSUB9ocnexqq+MJjI1HGfqcCrntPsQ
-         YuObtjxRcg7PqCGTG5Q6oehZYWDjgNup7XvZwkjluiXbBMJMWPdNWRL76rAnJw91UZUI
-         ly0iaX/uZJa+VLpYV8IBU+ha/PD2iTXy2oBzWUAe/9+TjyGC5YDUXcQsTU2QFN1zhvgq
-         kO+w==
-X-Gm-Message-State: AO0yUKXLOVP5IuJlgzCXYBCQZrLa/XeIckFjROUv2u+kOeiGapBNaWJF
-        EC0fUaT7SubOQNHDh5A6DS4=
-X-Google-Smtp-Source: AK7set+a/ehVNgVfh6mj22qz9e7j+xFSeNhlbdsU/N6rBb/9ab+vAMThy59TeGCu7cwhl4xkVxs05Q==
-X-Received: by 2002:ac2:4a90:0:b0:4dd:ac8d:671f with SMTP id l16-20020ac24a90000000b004ddac8d671fmr8196362lfp.34.1678693843053;
-        Mon, 13 Mar 2023 00:50:43 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id x2-20020ac259c2000000b004db3d57c3a8sm895354lfn.96.2023.03.13.00.50.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 00:50:42 -0700 (PDT)
-Message-ID: <f30f2b92-e4ba-a5a4-54e1-926495338009@gmail.com>
-Date:   Mon, 13 Mar 2023 09:50:41 +0200
+        Mon, 13 Mar 2023 03:51:57 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6CB5292B;
+        Mon, 13 Mar 2023 00:51:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=faej2pH/5OOddGX1r+x7nD/jt/94OWHX8DdECzlCTJKqb/xmyENsOOgzNYstDTMf5EqzZyT/i9ZEnzSHAcWktJCNbcEYx80V3fRjpxn09lcC1qQHzlFukEp2/9s9Ym+uekj56Ik7KKmKiuk3OQRG/7dJcok/qcbGmBh+cm5AifgsqW5R+jQjY8Sa8fLyGcqe/h/HIQORGwtZVHkLEwXZeeikO2/TnInP8oOSSjNilY1rqk+6/Ie/kJctxPpag8zdj3l5hiFIZF737VDyd0Yjd6dgpuPA1yqIIaK6sKxQ3tEcFo0pBXljFavEYjhmaH7dKF06nvm3NJLiK7Tq9qYQug==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SWHHFXqHBql+rgmdDa0uDyvW/6Anct7/ZBkfPOJ8Q1E=;
+ b=Ri4fmiNvHV7XEbxBbLUiUlqLzNlflKj3/g4fqwx0zjhTiciiEdp1r32PwS2Doa7blZJbzlxK9r+evxvl99cON3iNT3X+Orx9bbFYpJtzLOTkraJDx/ufu6i4AMXRnF+ewAXSwO7bKoPbS2vsvisUav4fDa5v0fG82yOk/g+dlV+Ezp9PZrLECiowjeBed/PDuhYUro9TRrQMO6hlX4SWXlo1rv3TyeqTAf6CkF8SMgisynkAXeonxNWZBm5BGnI5/+ah1TAWaWREs0165CiWYXrFlSN3IavwF39Yoeio36XqzewTiYxVTFow4FCikiVRNn6flTvuQS7PxSSZ8TKmVw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=davemloft.net smtp.mailfrom=nvidia.com;
+ dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=SWHHFXqHBql+rgmdDa0uDyvW/6Anct7/ZBkfPOJ8Q1E=;
+ b=aijKPlvHDNMj7jKg+7LAmyCC8OVNGb1W9xPtHMYT+sMfqpn1yQvk6N0hRMr5TSFqjMYk7WpSuZ6t+lpmr4XWKq4E/bqvOEWT7VCfZRWtWoRC02N76INl59uNu+y06hqUB+h9GxylUK/Dc2YQrYW8jHbXGFtdcK+k9R5NjsEcUYVVYbCxt04aQngbnBRpk3+IEPrV47qhzUIq/9osdkoJnOFuiPh0vdvEfT9VyY8Qvk9OqjQOHaJkaAEgee6DQIizUHImAqU3GfsWMpjGpQHrzArEVhUkfbyHvQoaff4jtXsmsjmb1NrlUz/M6X24ThhrR+QrMBFt33AG03co33ty/A==
+Received: from CYZPR20CA0001.namprd20.prod.outlook.com (2603:10b6:930:a2::26)
+ by MW6PR12MB8733.namprd12.prod.outlook.com (2603:10b6:303:24c::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 07:51:38 +0000
+Received: from CY4PEPF0000C964.namprd02.prod.outlook.com
+ (2603:10b6:930:a2:cafe::8a) by CYZPR20CA0001.outlook.office365.com
+ (2603:10b6:930:a2::26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.25 via Frontend
+ Transport; Mon, 13 Mar 2023 07:51:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ CY4PEPF0000C964.mail.protection.outlook.com (10.167.241.68) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.13 via Frontend Transport; Mon, 13 Mar 2023 07:51:37 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 13 Mar 2023
+ 00:51:32 -0700
+Received: from nvidia.com (10.126.231.37) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 13 Mar
+ 2023 00:51:28 -0700
+From:   Gavin Li <gavinl@nvidia.com>
+To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <roopa@nvidia.com>,
+        <eng.alaamohamedsoliman.am@gmail.com>, <bigeasy@linutronix.de>
+CC:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <gavi@nvidia.com>, <roid@nvidia.com>, <maord@nvidia.com>,
+        <saeedm@nvidia.com>
+Subject: [PATCH net-next v7 0/5] net/mlx5e: Add GBP VxLAN HW offload support
+Date:   Mon, 13 Mar 2023 09:51:02 +0200
+Message-ID: <20230313075107.376898-1-gavinl@nvidia.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv1 07/11] power: supply: generic-adc-battery: drop memory
- alloc error message
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-8-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230309225041.477440-8-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.126.231.37]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000C964:EE_|MW6PR12MB8733:EE_
+X-MS-Office365-Filtering-Correlation-Id: aab46414-b7cb-4d7d-baeb-08db2397c632
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: GDUda69cog9gl3X0Z0D6LSICvNwHtbbB1g0GWwcHMliVDV7wX7rZC4Y5yiYoiHMXvJFCns9gvsrqzyCmz0K6NZoplzwwdMZ+fhn7r1jrKCLrlQegSidY+Hl3c1Oc6sx5nxczN8b9tPsfX6Ix7F5ncQXi+jkn5bRxFk4mIunePtXf8pVyqZ2pDn1nL1ujbi/w3AKv8V5xCa9N4E3FyS2R5LLIR9mzOf5T0QcxJPUmzoCafLfCETD6Jb4gVZSz659MiA95dDcoSYGte1YCVXF82SrTjPgAqjHGOnHcNRnh5vNKaBVbZQcc/Bv7dWHCq44K0G+e9xN0+Bn4gSUFvoS4QdbVaTfXYuEIfgMM/5+IdtFHEONv8cmZmZ005LRJEA1uiQLHnQjgJJzK0Fbclj+60y/Dweurla6DA5iMlX4hu9IUpvaG+a+0+CEnaNKp+qhElAfOO1h9EPiuR+pEfXxjzg3fdVl/8Pyf7LvC9biGzayesJz6xbj+K5Pt7jd+EPWCxN961qOcoZYS8JL6yAOtAAKQ3EZaxZnDr92h+8hns7YvR2kEfY1wlakle5nNsY8Yh0qAXrjbpg9C/k7WqZkMmtTraCaQvcA+vWcrxHhhTdpR2Ciq61tL55uaiC28hzPS/e38oWKoHRqcoCk8FhdBbxfy1ZNUYRV47AaiXbuSqpjArB+uD5BL31Pas3vbbFOSr4lED4rJv8sv78lKDrgwRj2+/f5R78GwppaJ5u5NDFSJlZyQBE6ZR+U7Kd7KTn1A
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(396003)(346002)(376002)(136003)(451199018)(46966006)(40470700004)(36840700001)(86362001)(82310400005)(356005)(36756003)(7636003)(36860700001)(82740400003)(55016003)(40480700001)(40460700003)(4326008)(8676002)(70586007)(70206006)(41300700001)(8936002)(54906003)(110136005)(478600001)(316002)(5660300002)(2906002)(426003)(47076005)(336012)(2616005)(83380400001)(7696005)(16526019)(186003)(107886003)(6666004)(6286002)(1076003)(26005);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 07:51:37.3741
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: aab46414-b7cb-4d7d-baeb-08db2397c632
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000C964.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8733
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> Error printing happens automatically for memory allocation problems.
-> 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
+Patch-1: Remove unused argument from functions.
+Patch-2: Expose helper function vxlan_build_gbp_hdr.
+Patch-3: Add helper function for encap_info_equal for tunnels with options.
+Patch-4: Preserving the const-ness of the pointer in ip_tunnel_info_opts.
+Patch-5: Add HW offloading support for TC flows with VxLAN GBP encap/decap
+        in mlx ethernet driver.
 
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+Gavin Li (5):
+  vxlan: Remove unused argument from vxlan_build_gbp_hdr( ) and
+    vxlan_build_gpe_hdr( )
+---
+changelog:
+v2->v3
+- Addressed comments from Paolo Abeni
+- Add new patch
+---
+  vxlan: Expose helper vxlan_build_gbp_hdr
+---
+changelog:
+v1->v2
+- Addressed comments from Alexander Lobakin
+- Use const to annotate read-only the pointer parameter
+---
+  net/mlx5e: Add helper for encap_info_equal for tunnels with options
+---
+changelog:
+v3->v4
+- Addressed comments from Alexander Lobakin
+- Fix vertical alignment issue
+v1->v2
+- Addressed comments from Alexander Lobakin
+- Replace confusing pointer arithmetic with function call
+- Use boolean operator NOT to check if the function return value is not zero
+---
+  ip_tunnel: Preserve pointer const in ip_tunnel_info_opts
+---
+changelog:
+v6->v7
+- Addressed comments from Eric Dumazet and Simon Horman
+- Fix type safety issues
+v5->v6
+- Addressed comments from Alexander Lobakin and Simon Horman
+- Add new patch
+- Change ip_tunnel_info_opts to macro and preserve pointer const
+---
+  net/mlx5e: TC, Add support for VxLAN GBP encap/decap flows offload
+---
+changelog:
+v5->v6
+- Addressed comments from Alexander Lobakin and Simon Horman
+- Don't use cast in driver code
+v4->v5
+- Addressed comments from Simon Horman
+- Remove Simon Horman from Reviewed-by list
+v3->v4
+- Addressed comments from Simon Horman
+- Using cast in place instead of changing API
+v2->v3
+- Addressed comments from Alexander Lobakin
+- Remove the WA by casting away
+v1->v2
+- Addressed comments from Alexander Lobakin
+- Add a separate pair of braces around bitops
+- Remove the WA by casting away
+- Fit all log messages into one line
+- Use NL_SET_ERR_MSG_FMT_MOD to print the invalid value on error
+---
 
-> ---
->   drivers/power/supply/generic-adc-battery.c | 4 +---
->   1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index d07eeb7d46d3..771e5cfc49c3 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -243,10 +243,8 @@ static int gab_probe(struct platform_device *pdev)
->   	bool any = false;
->   
->   	adc_bat = devm_kzalloc(&pdev->dev, sizeof(*adc_bat), GFP_KERNEL);
-> -	if (!adc_bat) {
-> -		dev_err(&pdev->dev, "failed to allocate memory\n");
-> +	if (!adc_bat)
->   		return -ENOMEM;
-> -	}
->   
->   	psy_cfg.drv_data = adc_bat;
->   	psy_desc = &adc_bat->psy_desc;
+ .../ethernet/mellanox/mlx5/core/en/tc_tun.h   |  3 +
+ .../mellanox/mlx5/core/en/tc_tun_encap.c      | 32 ++++++++
+ .../mellanox/mlx5/core/en/tc_tun_geneve.c     | 24 +-----
+ .../mellanox/mlx5/core/en/tc_tun_vxlan.c      | 76 ++++++++++++++++++-
+ drivers/net/vxlan/vxlan_core.c                | 27 +------
+ include/linux/mlx5/device.h                   |  6 ++
+ include/linux/mlx5/mlx5_ifc.h                 | 13 +++-
+ include/net/ip_tunnels.h                      | 11 +--
+ include/net/vxlan.h                           | 19 +++++
+ 9 files changed, 155 insertions(+), 56 deletions(-)
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.31.1
 
