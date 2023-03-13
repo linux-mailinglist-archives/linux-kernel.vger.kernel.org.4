@@ -2,120 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 736136B7E3D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:56:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32346B7E72
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:01:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbjCMQ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:56:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
+        id S231320AbjCMRAe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:00:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230325AbjCMQ4W (ORCPT
+        with ESMTP id S231695AbjCMRAG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:56:22 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDBF559CE;
-        Mon, 13 Mar 2023 09:56:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678726581; x=1710262581;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=YG8ab328VKxI7RnIDAuiIqCFxzEn9D3+VAvNv07H3HI=;
-  b=XLCfz/4iVdIs3Dv7xSiO35CbI/4CoqllW6xoCjoy9wocdqczL6euqNB1
-   GnXCeQR++rDGKarzddzun4dK1/ICrP2hCtbXI5v74LSgvnV8dh32f5VcK
-   NXptKHNgWR9pDgHSxgZPvZrel8W62u/aZTYbVITD9zlUFcn/Xz5aXxQRL
-   asvbmnQcJRTodrTxKWJZYFlgdz9Ie5IwI6ZTexGBPpFbRTACuS+qkYsJX
-   moBKuMX/vR9gEJHVZnheUR4ObSHHnYNKOSebGMaxGb2delKMVvZWUFEiZ
-   0U8Takcu1n2jmgGKEHZ0TQ/D2E8Gq/kev4BhIKt96FqmxP1tgCFaGm4ft
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="321053880"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="321053880"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:20 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822034540"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="822034540"
-Received: from igodinez-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.87.244])
-  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:19 -0700
-Message-ID: <39f2b66cca60d8f0bd4ff6b691b864dff3e449b9.camel@linux.intel.com>
-Subject: Re: [PATCH] Fix buffer overrun in HID-SENSOR name.
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     Todd Brandt <todd.e.brandt@intel.com>, linux-input@vger.kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     todd.e.brandt@linux.intel.com, jic23@kernel.org, jikos@kernel.org,
-        p.jungkamp@gmx.net
-Date:   Mon, 13 Mar 2023 09:56:18 -0700
-In-Reply-To: <20230310235414.12467-1-todd.e.brandt@intel.com>
-References: <20230310235414.12467-1-todd.e.brandt@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 13 Mar 2023 13:00:06 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A827C3F8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:58:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678726693;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=froEIgd/jTK8vMet67sF4Svy58nAbygAJuDZdwZXRoo=;
+        b=bUXgj8S8YumsAln3yZzgCEgIc9ixPEjmLDbxyT1T+pE/MNCqP0R5eW0GO1Ia04Ija7rR39
+        7Q55D/ANfaJLg5g7zHnRTYxtsUzAqrdO/LMqoWYdj0jPnT5jjXzAQ8N2h0inVjVArqBZIg
+        AfiVK7a27CXARRZZ1GgR5cJp6IztJK0=
+Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
+ [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-107-ghklsQMvOZufFERA1Dsbmg-1; Mon, 13 Mar 2023 12:58:12 -0400
+X-MC-Unique: ghklsQMvOZufFERA1Dsbmg-1
+Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-17268e44df1so7500639fac.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:58:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678726691;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=froEIgd/jTK8vMet67sF4Svy58nAbygAJuDZdwZXRoo=;
+        b=yUKbA3VKaJ/6aaRDhoh39PMseRwizVn0tlChT32e0gd9zdjRVw8Z5hc2FspDuTmpMG
+         o7BEjjBwGVynnQwFX/YrkP0f+4BbQUapC1o83LOzoD9150k4l0SNuTcRCKRn7JildbZx
+         e69hdKRDKuasiN0GytdaWzo0W0cYhDVWZf/SLPc+pl9XDr7gmdNx18LkgH80P7jbZ0EP
+         /Mi57K+id0Qtd/YE55m/g6lE0aUWQKl05N808AT4OI6sWRz7vY+gBscYilhZxx5yYxvX
+         6Yr7ltjcr8/upKo+ZetSyTv8CVpqM3j+RmuI5VwwAOj91BnVJrqngTh/Pt+7BZsmXRXN
+         BxlQ==
+X-Gm-Message-State: AO0yUKUQx73oShNetwBudMVGglif4ew6vOw0v2pb7tge7BVOy5JGw9eG
+        XWzcxaFuyFZQTQ7+bFoaNk8d++DV+bL5SRoNTz6r+Tp/KWMYoPXK3QWInG7q9VtHYbGuJxl+0hA
+        e0hmWOo2ylBMAcGwcHny2QNpIfZUHCQe6WKtMYFXDQqZzw27NpTeUTCvxGiPUpeEEhLOdbppBTx
+        h3zFYHCG5g1f8=
+X-Received: by 2002:a54:4581:0:b0:378:2e00:6059 with SMTP id z1-20020a544581000000b003782e006059mr15770446oib.1.1678726690991;
+        Mon, 13 Mar 2023 09:58:10 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8X44l7dingJY4lbAaZ9yFhn0nDh44RPwEhNJsvKqOkTtMVNPiHzSyxK0fYFUg/FLZGJbjJZw==
+X-Received: by 2002:a54:4581:0:b0:378:2e00:6059 with SMTP id z1-20020a544581000000b003782e006059mr15770404oib.1.1678726690652;
+        Mon, 13 Mar 2023 09:58:10 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id o2-20020acad702000000b00384d3003fa3sm3365273oig.26.2023.03.13.09.58.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 09:58:10 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH net-next 10/11] net: ethernet: stmmac: dwmac-qcom-ethqos: Use loopback_en for all speeds
+Date:   Mon, 13 Mar 2023 11:56:19 -0500
+Message-Id: <20230313165620.128463-11-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.2
+In-Reply-To: <20230313165620.128463-1-ahalaney@redhat.com>
+References: <20230313165620.128463-1-ahalaney@redhat.com>
 MIME-Version: 1.0
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-10 at 15:54 -0800, Todd Brandt wrote:
-> Philipp Jungkamp created this fix, I'm simply submitting it. I've
-> verified it fixes bugzilla issue 217169.
-> 
-Not the correct change log. Something like below:
+It seems that this variable should be used for all speeds, not just
+1000/100.
 
-On some platforms there are some platform device is created with
-invalid name. For example:
-"HID-SENSOR-INT-020b?.39.auto" instead of "HID-SENSOR-INT-020b.39.auto"
+While at it refactor it slightly to be more readable, including fixing
+the typo in the variable name.
 
-This string include some invalid character, hence it will fail to
-properly load the driver which will handle this custom sensor. Also
-it is a problem for some user space tools, which parses the device
-names.
+Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+---
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 36 +++++++++----------
+ 1 file changed, 17 insertions(+), 19 deletions(-)
 
-This is because the string real_usage is not NULL terminated and
-printed with %s to form device name.
-
-To address this initialize the real_usage string with 0s.
-
-> Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
-
-
-
-Fixes: 98c062e82451 ("HID: hid-sensor-custom: Allow more custom iio
-sensors")
-
-Suggest-by: Philipp Jungkamp p.jungkamp@gmx.net
-
-> Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
-
-Thanks,
-Srinivas
-
-> ---
->  drivers/hid/hid-sensor-custom.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-
-> sensor-custom.c
-> index 3e3f89e01d81..d85398721659 100644
-> --- a/drivers/hid/hid-sensor-custom.c
-> +++ b/drivers/hid/hid-sensor-custom.c
-> @@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct
-> platform_device *pdev,
->                                     struct hid_sensor_hub_device
-> *hsdev,
->                                     const struct
-> hid_sensor_custom_match *match)
->  {
-> -       char real_usage[HID_SENSOR_USAGE_LENGTH];
-> +       char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
->         struct platform_device *custom_pdev;
->         const char *dev_name;
->         char *c;
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+index 6f272cae330d..778852934e36 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
+@@ -78,7 +78,7 @@ struct ethqos_emac_por {
+ struct ethqos_emac_driver_data {
+ 	const struct ethqos_emac_por *por;
+ 	unsigned int num_por;
+-	bool rgmii_config_looback_en;
++	bool rgmii_config_loopback_en;
+ };
+ 
+ struct qcom_ethqos {
+@@ -91,7 +91,7 @@ struct qcom_ethqos {
+ 
+ 	const struct ethqos_emac_por *por;
+ 	unsigned int num_por;
+-	bool rgmii_config_looback_en;
++	bool rgmii_config_loopback_en;
+ };
+ 
+ static int rgmii_readl(struct qcom_ethqos *ethqos, unsigned int offset)
+@@ -183,7 +183,7 @@ static const struct ethqos_emac_por emac_v2_3_0_por[] = {
+ static const struct ethqos_emac_driver_data emac_v2_3_0_data = {
+ 	.por = emac_v2_3_0_por,
+ 	.num_por = ARRAY_SIZE(emac_v2_3_0_por),
+-	.rgmii_config_looback_en = true,
++	.rgmii_config_loopback_en = true,
+ };
+ 
+ static const struct ethqos_emac_por emac_v2_1_0_por[] = {
+@@ -198,7 +198,7 @@ static const struct ethqos_emac_por emac_v2_1_0_por[] = {
+ static const struct ethqos_emac_driver_data emac_v2_1_0_data = {
+ 	.por = emac_v2_1_0_por,
+ 	.num_por = ARRAY_SIZE(emac_v2_1_0_por),
+-	.rgmii_config_looback_en = false,
++	.rgmii_config_loopback_en = false,
+ };
+ 
+ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
+@@ -281,6 +281,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ {
+ 	int phy_mode;
+ 	int phase_shift;
++	int loopback;
+ 
+ 	/* Determine if the PHY adds a 2 ns TX delay or the MAC handles it */
+ 	phy_mode = device_get_phy_mode(&ethqos->pdev->dev);
+@@ -293,6 +294,12 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 	rgmii_updatel(ethqos, RGMII_CONFIG2_TX_TO_RX_LOOPBACK_EN,
+ 		      0, RGMII_IO_MACRO_CONFIG2);
+ 
++	/* Determine if this platform wants loopback enabled after programming */
++	if (ethqos->rgmii_config_loopback_en)
++		loopback = RGMII_CONFIG_LOOPBACK_EN;
++	else
++		loopback = 0;
++
+ 	/* Select RGMII, write 0 to interface select */
+ 	rgmii_updatel(ethqos, RGMII_CONFIG_INTF_SEL,
+ 		      0, RGMII_IO_MACRO_CONFIG);
+@@ -325,12 +332,8 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_PRG_DLY_EN,
+ 			      SDCC_DDR_CONFIG_PRG_DLY_EN,
+ 			      SDCC_HC_REG_DDR_CONFIG);
+-		if (ethqos->rgmii_config_looback_en)
+-			rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
+-				      RGMII_CONFIG_LOOPBACK_EN, RGMII_IO_MACRO_CONFIG);
+-		else
+-			rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
+-				      0, RGMII_IO_MACRO_CONFIG);
++		rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
++			      loopback, RGMII_IO_MACRO_CONFIG);
+ 		break;
+ 
+ 	case SPEED_100:
+@@ -362,13 +365,8 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 		rgmii_updatel(ethqos, SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_EN,
+ 			      SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_EN,
+ 			      SDCC_HC_REG_DDR_CONFIG);
+-		if (ethqos->rgmii_config_looback_en)
+-			rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
+-				      RGMII_CONFIG_LOOPBACK_EN, RGMII_IO_MACRO_CONFIG);
+-		else
+-			rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
+-				      0, RGMII_IO_MACRO_CONFIG);
+-
++		rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
++			      loopback, RGMII_IO_MACRO_CONFIG);
+ 		break;
+ 
+ 	case SPEED_10:
+@@ -402,7 +400,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
+ 			      SDCC_DDR_CONFIG_EXT_PRG_RCLK_DLY_EN,
+ 			      SDCC_HC_REG_DDR_CONFIG);
+ 		rgmii_updatel(ethqos, RGMII_CONFIG_LOOPBACK_EN,
+-			      RGMII_CONFIG_LOOPBACK_EN, RGMII_IO_MACRO_CONFIG);
++			      loopback, RGMII_IO_MACRO_CONFIG);
+ 		break;
+ 	default:
+ 		dev_err(&ethqos->pdev->dev,
+@@ -547,7 +545,7 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
+ 	data = of_device_get_match_data(&pdev->dev);
+ 	ethqos->por = data->por;
+ 	ethqos->num_por = data->num_por;
+-	ethqos->rgmii_config_looback_en = data->rgmii_config_looback_en;
++	ethqos->rgmii_config_loopback_en = data->rgmii_config_loopback_en;
+ 
+ 	ethqos->rgmii_clk = devm_clk_get(&pdev->dev, "rgmii");
+ 	if (IS_ERR(ethqos->rgmii_clk)) {
+-- 
+2.39.2
 
