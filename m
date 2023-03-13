@@ -2,127 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2A26B7AD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:48:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7A866B7B2E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCMOsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:48:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S231587AbjCMOzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229987AbjCMOr7 (ORCPT
+        with ESMTP id S231236AbjCMOzl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:47:59 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03FE73AE0;
-        Mon, 13 Mar 2023 07:47:23 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 4AF273200754;
-        Mon, 13 Mar 2023 10:47:07 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute4.internal (MEProxy); Mon, 13 Mar 2023 10:47:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:from:from:in-reply-to:message-id
-        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
-        1678718826; x=1678805226; bh=1Tl9Nr3VhFjj5+5e3yKZreEBB/EH+2rar2/
-        gd2lLpXA=; b=d2rPMRNTIeokJyFEBrVmTqwi3gtFTmPCpy53c8Fc7o7S8tQyOSc
-        s6o0rKPt7Jhy0+XLmYDo7s9dj9yqgEQbk5uECyYwupqcliA5OfoxJExFOEIWVjT1
-        xEDfmgoyHiJANuD+7hBwYV7QoLyqhbTjJ+eHCFXwdQIzfQoC3ewfgkPihIqkCJ1t
-        AIyrZ5EpA1QPzL6FmgpLpssPsrxULiixiUHLmfVKD0kCj4qb/L81soJqBNOS/te1
-        uS+6sqknTV9EjL35fbCOKEyHTx3QAMsssjb9M5Nsq+kX4dKCuUQwSF2nscg5Y/Ro
-        P0WwyOO8iNnlWxL2mK/96sHTdTMgJqlT+Pw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:message-id:mime-version:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678718826; x=1678805226; bh=1Tl9Nr3VhFjj5
-        +5e3yKZreEBB/EH+2rar2/gd2lLpXA=; b=Qe9NUyfii0X8qGtpIJdfZ+WAJGDAX
-        B5bwPvBfoVRMzlVshV+oR4H9JDhoxGRKA4cf4+A3Elf6TKzXH1pyihqTICnqDBi/
-        FXhPSbQw9NRvbz6qkQUiGDq8m5qEdaUUd11hkqRph1tJjWtLoFhD8aVjbkElYHRq
-        k4/rdxhKRZtNhsKa7M1NaXMsCh0XIriJrGS8iviblCa+T2TFEWVBAElnODwhXxV+
-        VlHSTPI44Y8dwD4s/igl4E0ZLnkogUX3btnMa1HyqCWsK6zQZQcWEi/F7fksF3Gs
-        X/E+YH8MK6Rmu2CEvtZOIA4s4DUGDe0+sL4jqwtiuEM6mduGj/JXZxe+w==
-X-ME-Sender: <xms:ajcPZCeqDmW82XO-1poX6vs7pPT0rlEyV1qCkj1M75Nr1dKYIjKQwQ>
-    <xme:ajcPZMOYByqTQ7-8S6M17rf_6IhvY0eBiL6CadCCiCfM8QorPygU-3jjfCdhnY2Gg
-    sZuBYV3u7IhGo8>
-X-ME-Received: <xmr:ajcPZDiVn51LSkzhwCm2fBfR__o3pitHNtBZ26fJxfqXhdc29ICoqriv7qwBLrMMUI1aMXbvfCh07fzy9RzWXR8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieejucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhimhhonhcu
-    ifgrihhsvghruceoshhimhhonhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeeuveehgedtfeegfeduvdefudeuudffffffjeevueeg
-    fedufeeiudegudegvedugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
-    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhimhhonhesihhn
-    vhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
-X-ME-Proxy: <xmx:ajcPZP9EhuGuGV7mv2jtWDuOweifcNLk4PAFlXUB9t9YvVIgPH2iEg>
-    <xmx:ajcPZOs-gKH6FcHu3xLvXh0Zk8W0rnPNNa6rBBqvCL8PWO5UmhlYQQ>
-    <xmx:ajcPZGGIrEdI5jHYE3WzFVrth9GFLj3AVHZ91N1TBugNPRLWwjm5NQ>
-    <xmx:ajcPZH4eXkJoSDXs4hl2C7u3CyNeuJ7pAya71KX6ic4jMYjPnom4xQ>
-Feedback-ID: idc5945a3:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 13 Mar 2023 10:47:04 -0400 (EDT)
-From:   Simon Gaiser <simon@invisiblethingslab.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Simon Gaiser <simon@invisiblethingslab.com>
-Subject: [PATCH v2] ACPI: s2idle: Log when enabling wakeup IRQ fails
-Date:   Mon, 13 Mar 2023 15:47:10 +0100
-Message-Id: <20230313144710.3516-1-simon@invisiblethingslab.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 13 Mar 2023 10:55:41 -0400
+X-Greylist: delayed 453 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Mar 2023 07:55:01 PDT
+Received: from gofer.mess.org (gofer.mess.org [IPv6:2a02:8011:d000:212::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 712A964841;
+        Mon, 13 Mar 2023 07:55:01 -0700 (PDT)
+Received: by gofer.mess.org (Postfix, from userid 1000)
+        id E2BC91000C4; Mon, 13 Mar 2023 14:47:22 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mess.org; s=2020;
+        t=1678718842; bh=A6Y556DDngnyfZDUq/i6s59n3p9QlOwB9TuI5IIX23Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jNI+nhi92YA9jFcloGjP836tOzSltRSbge0kglWgPUauPoC2ishEnQ0Kc1PR1zJZo
+         ewgi/8Ut0X/20A7nTgRdHl3cVFthlrQuS7tWmfUigtx8xLOQg1KQInwxcH44RviUVB
+         uyKKQYO4hPgDNNiYI0jkqe1E9jPfMH1faIY2wq61mYL3CKqve5XFRU1mUQGtI50Y5c
+         6gAYsn20KWM7YaEo1BTe2CtYkzoBrOLYCJdTGisNUZO9LPKtKl4uajSrf9nO38oVFN
+         1TXC+CnzivmXncSSohEL9g4v5HA6z74H/uPZfcd2zYIAwm2AGo66gBH3EC9so5avm3
+         WYXc/5jd2q4Dg==
+Date:   Mon, 13 Mar 2023 14:47:22 +0000
+From:   Sean Young <sean@mess.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?iso-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 06/28] media: rc: ir-rx51: drop of_match_ptr for ID table
+Message-ID: <ZA83eipHUk5/vsRp@gofer.mess.org>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-6-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230312131318.351173-6-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-enable_irq_wake() can fail. Previously acpi_s2idle_prepare() silently
-ignored it's return code. Based on [1] we should try to continue even in
-case of an error, so just log a warning for now.
+On Sun, Mar 12, 2023 at 02:12:56PM +0100, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).  This
+> also fixes !CONFIG_OF error:
+> 
+>   drivers/media/rc/ir-rx51.c:264:34: error: ‘ir_rx51_match’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Discovered when trying to go into s2idle under Xen. This leads to a
-system that can't be woken, since xen-pirq currently doesn't support
-setting wakeup IRQs [2]. With this you get at least some helpful log
-message if you have access to console messages.
+Reviewed-by: Sean Young <sean@mess.org>
 
-Link: https://lore.kernel.org/linux-acpi/20230313125344.2893-1-simon@invisiblethingslab.com/ # v1
-Link: https://lore.kernel.org/linux-acpi/CAJZ5v0jahjt58nP6P5+xRdtD_ndYPvq4ecMVz6nfGu9tf5iaUw@mail.gmail.com/ # [1]
-Link: https://lore.kernel.org/xen-devel/20230313134102.3157-1-simon@invisiblethingslab.com/ # [2]
-Signed-off-by: Simon Gaiser <simon@invisiblethingslab.com>
----
-v2:
- - Based on feedback switched to only logging a warning instead of
-   returning an error.
----
- drivers/acpi/sleep.c | 8 +++++++-
- 1 file changed, 7 insertions(+), 1 deletion(-)
+Thanks
+Sean
 
-diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
-index 4ca667251272..6b30dea94fae 100644
---- a/drivers/acpi/sleep.c
-+++ b/drivers/acpi/sleep.c
-@@ -714,7 +714,13 @@ int acpi_s2idle_begin(void)
- int acpi_s2idle_prepare(void)
- {
- 	if (acpi_sci_irq_valid()) {
--		enable_irq_wake(acpi_sci_irq);
-+		int error;
-+
-+		error = enable_irq_wake(acpi_sci_irq);
-+		if (error)
-+			pr_warn("Warning: Failed to enable wakeup from IRQ %d: %d\n",
-+				acpi_sci_irq,
-+				error);
- 		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
- 	}
- 
--- 
-2.39.2
-
+> ---
+>  drivers/media/rc/ir-rx51.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/rc/ir-rx51.c b/drivers/media/rc/ir-rx51.c
+> index adbbe639a261..13e81bf8005d 100644
+> --- a/drivers/media/rc/ir-rx51.c
+> +++ b/drivers/media/rc/ir-rx51.c
+> @@ -275,7 +275,7 @@ static struct platform_driver ir_rx51_platform_driver = {
+>  	.resume		= ir_rx51_resume,
+>  	.driver		= {
+>  		.name	= KBUILD_MODNAME,
+> -		.of_match_table = of_match_ptr(ir_rx51_match),
+> +		.of_match_table = ir_rx51_match,
+>  	},
+>  };
+>  module_platform_driver(ir_rx51_platform_driver);
+> -- 
+> 2.34.1
