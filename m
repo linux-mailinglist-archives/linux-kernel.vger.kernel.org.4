@@ -2,320 +2,241 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6AC36B7766
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:26:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229496B776A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:27:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjCMM0o convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 08:26:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47502 "EHLO
+        id S229552AbjCMM1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:27:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCMM0m (ORCPT
+        with ESMTP id S229505AbjCMM1H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:26:42 -0400
-Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 213B560AB2;
-        Mon, 13 Mar 2023 05:26:40 -0700 (PDT)
-Received: by mail-ed1-f46.google.com with SMTP id h8so4200650ede.8;
-        Mon, 13 Mar 2023 05:26:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678710398;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rW2NyArCHI5O/3Aynk3ZRxx0RBAoXvO77UJQiS4WXkQ=;
-        b=Sc/x0yPaU/inAuzgE5ZzghZvQFKVUpjz6SflgIn/WJsGz2ut3WkCVlItJ4HozpZ2m0
-         DjhUhjWJ5iM2yRB5pWN5XwtWmltYd6ECSxIAWnmON4pwj8/NV1S42Oap1U+s+IYm6eUZ
-         +q2Th/+UQKq2mp/XmbtlE60IC/rsHo3IZAgq9OSipQCXfEDhdR/gstTiWali5Y3BAYrb
-         dDLPr//i6xsbEF7igpQyPDRWKSfi20Rnj+Yar4yKDpk+XaTGISn/eX7RnsJmxxTCIusS
-         h5+YHjOEkZIIfBsy8JjED0IHZZDiOaKSHQKxy9x1h+is7GTGT+vinRmTbrSreVSt8NwQ
-         i0Qw==
-X-Gm-Message-State: AO0yUKVY6zI57XjNING4f264+9z463lGNomWQY5kzpQjs6PO+kxrM8i8
-        51sPxSNTiV+Y18lbhLBM47wyCex2sPgSTvutvOg=
-X-Google-Smtp-Source: AK7set+s/h6Aq2mWeFnkrebDLY5fyFC6Lh9k8JSdRrtwsWAbV4rsN1P6IADalrpRCWvVhF9oKfp3F082arUH0QlS7uM=
-X-Received: by 2002:a50:ce1c:0:b0:4fb:2593:846 with SMTP id
- y28-20020a50ce1c000000b004fb25930846mr2739928edi.3.1678710398424; Mon, 13 Mar
- 2023 05:26:38 -0700 (PDT)
+        Mon, 13 Mar 2023 08:27:07 -0400
+Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020015.outbound.protection.outlook.com [52.101.61.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EF162B5B;
+        Mon, 13 Mar 2023 05:26:59 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=LsgilusxzhFl9lwtREjvmZ1TKNAgwkc6NXfL+rhFIjFz2pTwKrgXHSs5Gmw6B4EgB6symFdktrRlZRyPTmy5fnahmv0oa8o44z+ghQZY9yurCcSf7Mwt0u6WI/yL5vmXZWg+M4Xiqh/LyUo1FGNsO9HwV0N4uzavQvsv9bYnolupWPyPKy95rZhHU77Dl8Yz70deT56uo/0EbmuHBVijFgxZQO/2otargefofbQiOOtPW/ajaU+PoHHFrWEb8XcVedM2f/2ZGhT3xuRQe/B2c5yAJDJzKmcJ/I1BpEPBMrnSc0BuT7BCHziPTFwWsJByTFy4/8RQbY+8ezALp9xE3Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ak8lwkLMIvBHnoABPvlYF2ckWXhkrReT9z/PxyXty84=;
+ b=dujjbKUbHXxXp2rBHZCgOQaL+JgYgQm2AIEy7Iv2c7c43aL4NplKV7C6DLGn0JzzLaCuKBpGnP4LGNLzgpb+X+2wd/0Up+sFynk/qqQ+FwqI7hpOUJCzcCB8Zxgw5vYZdHwmoG9SGoBalA240ajZ1gBXEcSBeugWp6BYcvP0zMQi7K/1I2xuw/6FFhd+GtWDt7gdj70TSJJUM+nJ5toGxqiMeXuqN5cUT1LzZtZ7Ayha+JrH48ysNU2JSgU+xKBQT/jerpfJhFkIhsN1Yz1yKFE5LDagDDhtw7EmTzlwrCXWZ6VyPWk3qnlXL8OdP7xMjSgDJqeZZ0Hqpa68Fr/yKw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ak8lwkLMIvBHnoABPvlYF2ckWXhkrReT9z/PxyXty84=;
+ b=AUp9Hl3U8YnLw9dFvqbPOsgq/9Okji34uL8MZX4PvskBa14t1JHaSAarXJftP1mirqC4p7Ztv1EGtY7tamJmJ2y1dvj67lmb3jP/aLizrEaVDvCuB+Le/qF+rMkenxm+5iI5Jh9AsW81sPO7fgeWa0CEd8uyD7ueHlT8yXvyRsU=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by MN0PR21MB3049.namprd21.prod.outlook.com (2603:10b6:208:371::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.3; Mon, 13 Mar
+ 2023 12:26:56 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::629a:b75a:482e:2d4a%4]) with mapi id 15.20.6222.003; Mon, 13 Mar 2023
+ 12:26:56 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "lenb@kernel.org" <lenb@kernel.org>,
+        "rafael@kernel.org" <rafael@kernel.org>,
+        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
+Subject: RE: [PATCH v7 5/5] Driver: VMBus: Add Devicetree support
+Thread-Topic: [PATCH v7 5/5] Driver: VMBus: Add Devicetree support
+Thread-Index: AQHZR3oO8XCRAJVOTEyd9eleCYLxd674F9KAgAA/zYCAAGYrcA==
+Date:   Mon, 13 Mar 2023 12:26:56 +0000
+Message-ID: <BYAPR21MB16888AD9A473CF15250B59C7D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <1677151745-16521-1-git-send-email-ssengar@linux.microsoft.com>
+ <1677151745-16521-6-git-send-email-ssengar@linux.microsoft.com>
+ <BYAPR21MB1688B84E25DD2173B6023737D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <20230313061603.GA8934@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+In-Reply-To: <20230313061603.GA8934@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=61f91c06-2473-4543-af2e-e09a225b35f9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-13T12:21:43Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3049:EE_
+x-ms-office365-filtering-correlation-id: c5b3defa-c491-4a4f-38a5-08db23be3c5b
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: nY2gUfwzVaaP/qKEK0odu7CrW697PyIf5R1+8ApPDVk+2vGSuoad3XeFAGB4Eg7aw1mPAVshC4aq340KcS+yIh3h3wcQp+UNrxWyrZZBV2NW+WAMW+0XsnvZy4fkCfFF14ZFvdwv5LKvVkGEfIIBgUHy2STIAAJIjOabaDls4QqwRvVGs4l6GAG/lX5UyppoV9bQN36Y+5Wot6cVU3G9YdppUVxN8ogNTG6tiGLsBlFu3Mpfar//zNmidXWbXMn4sQcuQefZSydU0XOQ6kvAFuVccnNRduNAobGBxBQzIa970EFtTGJON5v9oZFz2pOagYaKoPycR0IgtZUPaDMi1DJYFmlR6LZY/PrYe5bYwWVhPEyIXXKE41yCDRksKEbGRhcjViBf1SNSlxgYfE/0EjclrBoLuQ3ymWWSdimUqW99H08P4AjXHQ6EYNH8+z5nH4Ytn3kamQfz4ALh02DFxeDsGeUHzFWl4PMv9sFONW2YGvfxBsCDms2ZomP2uq3m+dffVR03vOmoa3XI4ADVXrSTuIax3sYXY55o1NNf/stv6ezPNrV1brAhDW4wrJ5JpFGl8m84Zy/D+BLJKswroN7inw8MgitgRF1quBHQgN1mF5+Xu+LoCZ5j/q0jgNo7MWRfmdfMVyWL44EtI/BqLlZlOGIcoDEg2V5JD06GGVeUYprsNERdacEsjyYpuPenRMhWMYQS10EhLOYO2t1nln9zfzgy+PUOUTWFXXw+JWUzO6x17Dna+zEJT4LLhT5G
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199018)(5660300002)(7416002)(41300700001)(6862004)(52536014)(55016003)(33656002)(86362001)(38070700005)(122000001)(82960400001)(82950400001)(8936002)(38100700002)(2906002)(478600001)(8990500004)(26005)(6506007)(9686003)(10290500003)(83380400001)(7696005)(71200400001)(66556008)(76116006)(66946007)(66446008)(4326008)(66476007)(64756008)(54906003)(316002)(186003)(8676002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pCqWnRZ8ojtKBArdX+OmgEiz5T7/BIopH1sghelPKBLJVa6YaEn0/GyF3gtY?=
+ =?us-ascii?Q?zHKMhBE9VtRavMbuE7gEbvQbXKeU/ysjgz0A+cTPgF/ucoroEM2wnyuySeEb?=
+ =?us-ascii?Q?jhWbeMLmghTISzgJW4YHfPSibe6Btqg1zsH7VGCq/bJIgCTBGrj+Ae6wRggz?=
+ =?us-ascii?Q?javcwHHOFPdmR75x2kuGJEPOVRgXDpw3Zc9+t0CRAkALSDJ3HX33bGs9iFq2?=
+ =?us-ascii?Q?6SqaVE5wiHNVPUYx+UsMdZWKyOdTqn9sqA8XSWIx5JtQcF0OO2UaxYhSnlwW?=
+ =?us-ascii?Q?HvBYOwrOOAXlsplfuqI4f/0BMBRblAVkPRZlC6JNSxCB4SyNMhdo2uTKsB6W?=
+ =?us-ascii?Q?SHfztuMpLKgR5eLMWuH/oiE+WFSVMBpNrKWHe2mzbKnM16ptroKVZPIsK3vl?=
+ =?us-ascii?Q?XP0o/MkYzd9Bi9M0LdglpgwE7MNELjx5dbA9KnQ6hcS8Ww06DWyXO6rnRrpt?=
+ =?us-ascii?Q?teV8djrhJEPjbx+D7j7HM2IR9whFSlh1l0zXCnTLdynSaPX5p0ILBRBLCdOD?=
+ =?us-ascii?Q?WogbvReAVF4CpOoSd4tHBanWdx9Se3VhKI+4/9FDtjWb1365GoUMAK4RnMNf?=
+ =?us-ascii?Q?0BV1Hp1AgS87melG10udxBPItZtpC7ohub+yc6cbY7z8HsYy7etuJwSVcNkR?=
+ =?us-ascii?Q?teDgYMbrrygyWeLEdrjefDY/HG2rn51g+4TryPquZ8Sg6brHsDNa/SypGrt0?=
+ =?us-ascii?Q?vrJFoQjxDWELTcSYy3n05Ar6qf+jf1RonF/HSEpceF5AmOdeLXViU4+44nME?=
+ =?us-ascii?Q?KCig04soN8KvvuHvsMZPsHEoVu4OitiMrrmJpj8ojeXa/kpUE4vBvFvCx6dF?=
+ =?us-ascii?Q?OAijKE4woFk8yZ98l3474L0UiTShw2TQREFIBagWG9O5eYAm7xM56Pi0VQFK?=
+ =?us-ascii?Q?teh6Xd1mzCo8g9ohq2x4PBDNsXdJDRBqMXqryPK1FuWRzitCfvgt/auHBPzt?=
+ =?us-ascii?Q?aqJQ9e//In9y6Q4a5PVL6eXJ5XFbV/mR/YGpvi2I19/NrkypEJ3cni2QrYPV?=
+ =?us-ascii?Q?obekdQvOgGw7gR1zZx0r57K7BMyYmDrR2Z5ClvMoY4uUGXoozkalw9rcsxBc?=
+ =?us-ascii?Q?6TBUrpxKn97Ci7AgMYG+4lEjFZ/H+GkbEK9BNyuhFaMqNK567Wpgb043S/wP?=
+ =?us-ascii?Q?ZYMtCaFBrsXzIOZTS6fzjJajzCbEh24CkFMFY1Sjc+FV9JVdlmIgovvoFxKQ?=
+ =?us-ascii?Q?dfCx8ktpxXlB2ReNCm3inV80HY69UiPNdo0sJL/AdFWHPW1bN4mjqVw8C3f5?=
+ =?us-ascii?Q?5tpxFuly07lZs4wnLmuMxakcKsuYqoaiMaWHqz9jk+7LkD0155UonZX3eQfo?=
+ =?us-ascii?Q?igoLnXrqAfNjcThxB+5uTX6d8+8ySqPlWcUAjxCOqn39dYNM/t2B7pqQyX54?=
+ =?us-ascii?Q?aQoGPfD00FbskXxtHg2ZVQkxQX3qYfXnpaZ9/fY9hg7z/YuHZr4dnEj93wrB?=
+ =?us-ascii?Q?2YWyh3Gn96b8kyT8rZNIpsrrwltpsHPUP8pkLR51RhIUyyf5YUdmUG+0KlMk?=
+ =?us-ascii?Q?us5IulDtNbtp6eemhZ7vHjLS0HIlWO/Uso4qxo5IYiUr5qf/pa7gTonxr1vU?=
+ =?us-ascii?Q?TFLvE+rbDyZ4oauISinRSkL797KKJylhASMjZR7IoCbyUtgYtzA2ppFpdpyV?=
+ =?us-ascii?Q?sA=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
- <20230307133735.90772-4-daniel.lezcano@linaro.org> <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
-In-Reply-To: <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Mon, 13 Mar 2023 13:26:23 +0100
-Message-ID: <CAJZ5v0iYk7mC0K7Tsv7Dh9N=dQW151YhVcphvLm7T2vEY10tMA@mail.gmail.com>
-Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove add_one_attribute
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     rafael@kernel.org, rui.zhang@intel.com, amitk@kernel.org,
-        Sujith Thomas <sujith.thomas@intel.com>,
-        "open list:INTEL MENLOW THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c5b3defa-c491-4a4f-38a5-08db23be3c5b
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 12:26:56.6096
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iuGh/VIR1qN843yz5kBSMfffAl4QbjDI0YLNBolTUpJEwxbQPobPDv1tENFu6dcK/rxosfVDpA34Sv5ckHEyOAnOgyP/8EDoiDu2G/qBXoU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3049
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:55 AM Daniel Lezcano
-<daniel.lezcano@linaro.org> wrote:
->
->
-> Hi,
->
-> is this code removal acceptable ?
+From: Saurabh Singh Sengar <ssengar@linux.microsoft.com> Sent: Sunday, Marc=
+h 12, 2023 11:16 PM
+>=20
+> On Mon, Mar 13, 2023 at 02:33:53AM +0000, Michael Kelley (LINUX) wrote:
+> > From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, Febr=
+uary 23,
+> 2023 3:29 AM
+> > >
+> > > Update the driver to support Devicetree boot as well along with ACPI.
+> > > At present the Devicetree parsing only provides the mmio region info
+> > > and is not the exact copy of ACPI parsing. This is sufficient to cate=
+r
+> > > all the current Devicetree usecases for VMBus.
+> > >
+> > > Currently Devicetree is supported only for x86 systems.
+> > >
+> > > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > > ---
+> > > [V7]
+> > > - Use cpu_addr instead of bus_addr
+> > >
+> > >  drivers/hv/Kconfig     |  6 +++--
+> > >  drivers/hv/vmbus_drv.c | 57 ++++++++++++++++++++++++++++++++++++++++=
+--
+> > >  2 files changed, 59 insertions(+), 4 deletions(-)
+> > >
+> > > diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
+> > > index 0747a8f1fcee..1a55bf32d195 100644
+> > > --- a/drivers/hv/Kconfig
+> > > +++ b/drivers/hv/Kconfig
+> > > @@ -4,11 +4,13 @@ menu "Microsoft Hyper-V guest support"
+> > >
+> > >  config HYPERV
+> > >  	tristate "Microsoft Hyper-V client drivers"
+> > > -	depends on ACPI && ((X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
+> > > -		|| (ARM64 && !CPU_BIG_ENDIAN))
+> > > +	depends on (X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
+> > > +		|| (ACPI && ARM64 && !CPU_BIG_ENDIAN)
+> > >  	select PARAVIRT
+> > >  	select X86_HV_CALLBACK_VECTOR if X86
+> > >  	select VMAP_PFN
+> > > +	select OF if !ACPI
+> > > +	select OF_EARLY_FLATTREE if !ACPI
+> > >  	help
+> > >  	  Select this option to run Linux as a Hyper-V client operating
+> > >  	  system.
+> >
+> > One further thing occurred to me.  OF_EARLY_FLATTREE really depends
+> > on OF instead of ACPI.   The ACPI dependency is indirect through OF.  S=
+o
+> > I'd suggest doing
+> >
+> > 	select OF_EARLY_FLATTRE if OF
+> >
+> > to express the direct dependency.
+>=20
+> As you pointed out OF_EARLY_FLATTRE is anyway dependent on OF, and thus I
+> feel this check is redundant. I see all the Kconfig options which enables
+> both of these flags don't explicitly mention this dependency.
+>=20
+> >
+> > Separately, I wonder if the "select OF if !ACPI" is even needed.  It do=
+esn't
+> > hurt anything to leave it, but it seems like any config that doesn't
+> > independently select either ACPI or OF is broken for reasons unrelated
+> > to Hyper-V.  I'm OK with leaving the select of OF if you want, so I'm
+> > more just wondering than asserting it should be removed.   I didn't
+> > see "select OF if !ACPI" anywhere else in the Kconfig files, and it
+> > seems like Hyper-V would not be the only environment where this
+> > is the expectation.
+>=20
+> Ok I can remove the !ACPI dependency. Hope kernel size increase due to bo=
+th
+> the code compiled in shouldn't be problem for ACPI systems.
+> And here if config doesn't select ACPI or OF it will assume OF, which is
+> better then selecting none of them.
+>=20
+>=20
+> To address both of your comments I feel below will be sufficient:
+> select OF
+> select OF_EARLY_FLATTRE
 
-I'll let you know later this week.
+Actually, that's not what I was thinking. :-)   I was thinking for the Hype=
+r-V
+Kconfig to be silent on selecting OF, just like it is silent on selecting A=
+CPI.
+Whoever is configuring the kernel build would separately be selecting
+ACPI, or OF, or both, depending on their needs.   I don't think the Hyper-V
+Kconfig should always be selecting OF, because of the reason you noted --
+it drags in code that is not needed for normal VTL 0 usage.  If you take
+that approach, then
 
-> On 07/03/2023 14:37, Daniel Lezcano wrote:
-> > The driver hooks the thermal framework sysfs to add some driver
-> > specific information. A debatable approach as that may belong the
-> > device sysfs directory, not the thermal zone directory.
+	select OF_EARLY_FLATTREE if OF
+
+is appropriate.
+
+Michael
+
+
+
+>=20
+>=20
+> Regards,
+> Saurabh
+>=20
 > >
-> > As the driver is accessing the thermal internals, we should provide at
-> > least an API to the thermal framework to add an attribute to the
-> > existing sysfs thermal zone entry.
-> >
-> > Before doing that and given the age of the driver (2008) may be it is
-> > worth to double check if these attributes are really needed. So my
-> > first proposal is to remove them if that does not hurt.
-> >
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
->
->
->
-> > ---
-> >   drivers/thermal/intel/intel_menlow.c | 193 ---------------------------
-> >   1 file changed, 193 deletions(-)
-> >
-> > diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-> > index 5a6ad0552311..5a9738a93083 100644
-> > --- a/drivers/thermal/intel/intel_menlow.c
-> > +++ b/drivers/thermal/intel/intel_menlow.c
-> > @@ -230,174 +230,8 @@ struct intel_menlow_attribute {
-> >   static LIST_HEAD(intel_menlow_attr_list);
-> >   static DEFINE_MUTEX(intel_menlow_attr_lock);
-> >
-> > -/*
-> > - * sensor_get_auxtrip - get the current auxtrip value from sensor
-> > - * @handle: Object handle
-> > - * @index : GET_AUX1/GET_AUX0
-> > - * @value : The address will be fill by the value
-> > - */
-> > -static int sensor_get_auxtrip(acpi_handle handle, int index,
-> > -                                                     unsigned long long *value)
-> > -{
-> > -     acpi_status status;
-> > -
-> > -     if ((index != 0 && index != 1) || !value)
-> > -             return -EINVAL;
-> > -
-> > -     status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
-> > -                                    NULL, value);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -/*
-> > - * sensor_set_auxtrip - set the new auxtrip value to sensor
-> > - * @handle: Object handle
-> > - * @index : GET_AUX1/GET_AUX0
-> > - * @value : The value will be set
-> > - */
-> > -static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
-> > -{
-> > -     acpi_status status;
-> > -     union acpi_object arg = {
-> > -             ACPI_TYPE_INTEGER
-> > -     };
-> > -     struct acpi_object_list args = {
-> > -             1, &arg
-> > -     };
-> > -     unsigned long long temp;
-> > -
-> > -     if (index != 0 && index != 1)
-> > -             return -EINVAL;
-> > -
-> > -     status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
-> > -                                    NULL, &temp);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -     if ((index && value < temp) || (!index && value > temp))
-> > -             return -EINVAL;
-> > -
-> > -     arg.integer.value = value;
-> > -     status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
-> > -                                    &args, &temp);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -EIO;
-> > -
-> > -     /* do we need to check the return value of SAX0/SAX1 ? */
-> > -
-> > -     return 0;
-> > -}
-> > -
-> > -#define to_intel_menlow_attr(_attr)  \
-> > -     container_of(_attr, struct intel_menlow_attribute, attr)
-> > -
-> > -static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
-> > -                     char *buf, int idx)
-> > -{
-> > -     struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
-> > -     unsigned long long value;
-> > -     int result;
-> > -
-> > -     result = sensor_get_auxtrip(attr->handle, idx, &value);
-> > -     if (result)
-> > -             return result;
-> > -
-> > -     return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
-> > -}
-> > -
-> > -static ssize_t aux0_show(struct device *dev,
-> > -                      struct device_attribute *dev_attr, char *buf)
-> > -{
-> > -     return aux_show(dev, dev_attr, buf, 0);
-> > -}
-> > -
-> > -static ssize_t aux1_show(struct device *dev,
-> > -                      struct device_attribute *dev_attr, char *buf)
-> > -{
-> > -     return aux_show(dev, dev_attr, buf, 1);
-> > -}
-> > -
-> > -static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
-> > -                      const char *buf, size_t count, int idx)
-> > -{
-> > -     struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
-> > -     int value;
-> > -     int result;
-> > -
-> > -     /*Sanity check; should be a positive integer */
-> > -     if (!sscanf(buf, "%d", &value))
-> > -             return -EINVAL;
-> > -
-> > -     if (value < 0)
-> > -             return -EINVAL;
-> > -
-> > -     result = sensor_set_auxtrip(attr->handle, idx,
-> > -                                 celsius_to_deci_kelvin(value));
-> > -     return result ? result : count;
-> > -}
-> > -
-> > -static ssize_t aux0_store(struct device *dev,
-> > -                       struct device_attribute *dev_attr,
-> > -                       const char *buf, size_t count)
-> > -{
-> > -     return aux_store(dev, dev_attr, buf, count, 0);
-> > -}
-> > -
-> > -static ssize_t aux1_store(struct device *dev,
-> > -                       struct device_attribute *dev_attr,
-> > -                       const char *buf, size_t count)
-> > -{
-> > -     return aux_store(dev, dev_attr, buf, count, 1);
-> > -}
-> > -
-> >   /* BIOS can enable/disable the thermal user application in dabney platform */
-> >   #define BIOS_ENABLED "\\_TZ.GSTS"
-> > -static ssize_t bios_enabled_show(struct device *dev,
-> > -                              struct device_attribute *attr, char *buf)
-> > -{
-> > -     acpi_status status;
-> > -     unsigned long long bios_enabled;
-> > -
-> > -     status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
-> > -     if (ACPI_FAILURE(status))
-> > -             return -ENODEV;
-> > -
-> > -     return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
-> > -}
-> > -
-> > -static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
-> > -                                       void *store, struct device *dev,
-> > -                                       acpi_handle handle)
-> > -{
-> > -     struct intel_menlow_attribute *attr;
-> > -     int result;
-> > -
-> > -     attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
-> > -     if (!attr)
-> > -             return -ENOMEM;
-> > -
-> > -     sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
-> > -     attr->attr.attr.name = name;
-> > -     attr->attr.attr.mode = mode;
-> > -     attr->attr.show = show;
-> > -     attr->attr.store = store;
-> > -     attr->device = dev;
-> > -     attr->handle = handle;
-> > -
-> > -     result = device_create_file(dev, &attr->attr);
-> > -     if (result) {
-> > -             kfree(attr);
-> > -             return result;
-> > -     }
-> > -
-> > -     mutex_lock(&intel_menlow_attr_lock);
-> > -     list_add_tail(&attr->node, &intel_menlow_attr_list);
-> > -     mutex_unlock(&intel_menlow_attr_lock);
-> > -
-> > -     return 0;
-> > -}
-> >
-> >   static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
-> >                                               void *context, void **rv)
-> > @@ -420,12 +254,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
-> >       if (ACPI_FAILURE(status))
-> >               return (status == AE_NOT_FOUND) ? AE_OK : status;
-> >
-> > -     result = intel_menlow_add_one_attribute("aux0", 0644,
-> > -                                             aux0_show, aux0_store,
-> > -                                             &thermal->device, handle);
-> > -     if (result)
-> > -             return AE_ERROR;
-> > -
-> >       status = acpi_get_handle(handle, GET_AUX1, &dummy);
-> >       if (ACPI_FAILURE(status))
-> >               goto aux1_not_found;
-> > @@ -434,27 +262,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
-> >       if (ACPI_FAILURE(status))
-> >               goto aux1_not_found;
-> >
-> > -     result = intel_menlow_add_one_attribute("aux1", 0644,
-> > -                                             aux1_show, aux1_store,
-> > -                                             &thermal->device, handle);
-> > -     if (result) {
-> > -             intel_menlow_unregister_sensor();
-> > -             return AE_ERROR;
-> > -     }
-> > -
-> > -     /*
-> > -      * create the "dabney_enabled" attribute which means the user app
-> > -      * should be loaded or not
-> > -      */
-> > -
-> > -     result = intel_menlow_add_one_attribute("bios_enabled", 0444,
-> > -                                             bios_enabled_show, NULL,
-> > -                                             &thermal->device, handle);
-> > -     if (result) {
-> > -             intel_menlow_unregister_sensor();
-> > -             return AE_ERROR;
-> > -     }
-> > -
-> >       return AE_OK;
-> >
-> >    aux1_not_found:
->
-> --
-> <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
->
-> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-> <http://twitter.com/#!/linaroorg> Twitter |
-> <http://www.linaro.org/linaro-blog/> Blog
->
+> > Michael
