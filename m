@@ -2,113 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 863386B8127
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:50:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B4E86B8125
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230230AbjCMSuN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 14:50:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
+        id S231192AbjCMStb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:49:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231614AbjCMSuB (ORCPT
+        with ESMTP id S230481AbjCMStZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:50:01 -0400
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9466C182;
-        Mon, 13 Mar 2023 11:49:30 -0700 (PDT)
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.95)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1pbnDx-001rD4-AJ; Mon, 13 Mar 2023 19:48:45 +0100
-Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=suse-laptop.fritz.box)
-          by inpost2.zedat.fu-berlin.de (Exim 4.95)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1pbnDx-001lj0-2N; Mon, 13 Mar 2023 19:48:45 +0100
-Message-ID: <ecf27b8c33d10b2816413b25c463ecf5d8298ea5.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 16/36] sh: dma-sysfs: move to use bus_get_dev_root()
-From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org
-Cc:     rafael@kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
-Date:   Mon, 13 Mar 2023 19:48:44 +0100
-In-Reply-To: <20230313182918.1312597-16-gregkh@linuxfoundation.org>
-References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
-         <20230313182918.1312597-16-gregkh@linuxfoundation.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-User-Agent: Evolution 3.46.4 
+        Mon, 13 Mar 2023 14:49:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8AEC174A51;
+        Mon, 13 Mar 2023 11:49:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0408661280;
+        Mon, 13 Mar 2023 18:49:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06E42C433EF;
+        Mon, 13 Mar 2023 18:48:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678733339;
+        bh=jXIjkDDartMlz/yDiXSz631XNKJ8bcgA14a26q41U3w=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=iazjSAE6/IeK3sRWP+E+3TPqCohGcUbbv3Hd03aU9RTbgKTNPwTD3XPE1wI5oBRPf
+         id9/Nq82GCWdGAj2U7bLotSp061BHbijRrHGH8gcMdILEAeTsiRHd8DvDDi1PiFW/O
+         8LbtH+QXWt60tf3qBNl+GXRPZa7wSvJTutrdYSwrCabyL1MXMhZga4gX9g/WpnKv4E
+         Sxs/T7RoqBvnRrs3ODhcyYXjn/jrGuGjnPoYpzj6s5zIeYzXVETL2FAzSQx8b88vUB
+         TUuvkerX7UD/vra8P9JZWAZ2QYUim/iaFjD8/luq03teFzS5KU1CyMH1qx32JwXnKD
+         gyGgQK05TqgZQ==
+Date:   Mon, 13 Mar 2023 11:48:58 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     "Jonas Suhr Christensen" <jsc@umbraculum.org>,
+        "Harini Katakam" <harini.katakam@amd.com>
+Cc:     "Paolo Abeni" <pabeni@redhat.com>, netdev@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Michal Simek" <michal.simek@xilinx.com>,
+        "Haoyue Xu" <xuhaoyue1@hisilicon.com>,
+        huangjunxian <huangjunxian6@hisilicon.com>,
+        "Wang Qing" <wangqing@vivo.com>,
+        "Yang Yingliang" <yangyingliang@huawei.com>,
+        "Esben Haabendal" <esben@geanix.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net v2 1/2] net: ll_temac: Fix DMA resources leak
+Message-ID: <20230313114858.54828dda@kernel.org>
+In-Reply-To: <bd639016-8a9c-4479-83b4-32306ad734ac@app.fastmail.com>
+References: <20230205201130.11303-1-jsc@umbraculum.org>
+        <20230205201130.11303-2-jsc@umbraculum.org>
+        <5314e0ba3a728787299ca46a60b0a2da5e8ab23a.camel@redhat.com>
+        <135b671b1b76978fb147d5fee1e1b922e2c61f26.camel@redhat.com>
+        <20230207104204.200da48a@kernel.org>
+        <bd639016-8a9c-4479-83b4-32306ad734ac@app.fastmail.com>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-Originating-IP: 87.189.155.194
-X-ZEDAT-Hint: PO
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg!
-
-On Mon, 2023-03-13 at 19:28 +0100, Greg Kroah-Hartman wrote:
-> Direct access to the struct bus_type dev_root pointer is going away soon
-> so replace that with a call to bus_get_dev_root() instead, which is what
-> it is there for.
+On Mon, 13 Mar 2023 19:37:00 +0100 Jonas Suhr Christensen wrote:
+> On Tue, Feb 7, 2023, at 19:42, Jakub Kicinski wrote:
+> > On Tue, 07 Feb 2023 12:36:11 +0100 Paolo Abeni wrote:  
+> >> You can either try change to phys type to __be32 (likely not suitable
+> >> for -net and possibly can introduce even more warnings elsewhere)  
+> >
+> > FWIW that seems like the best option to me as well. Let's ignore the
+> > sparse warning for v3 and try to switch phys to __be32 in a separate
+> > patch for net-next. No point adding force casts just to have to remove
+> > them a week later, given how prevalent the problem is.
+> >  
+> >> or explicitly cast the argument.  
 > 
-> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
-> Cc: Rich Felker <dalias@libc.org>
-> Cc: linux-sh@vger.kernel.org
-> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> ---
-> Note, this is a patch that is a prepatory cleanup as part of a larger
-> series of patches that is working on resolving some old driver core
-> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
-> its own, but I'd prefer if I could take it through my driver-core tree
-> so that the driver core changes can be taken through there for 6.4-rc1.
-> 
->  arch/sh/drivers/dma/dma-sysfs.c | 8 +++++++-
->  1 file changed, 7 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/sh/drivers/dma/dma-sysfs.c b/arch/sh/drivers/dma/dma-sysfs.c
-> index 8ef318150f84..431bc18f0a41 100644
-> --- a/arch/sh/drivers/dma/dma-sysfs.c
-> +++ b/arch/sh/drivers/dma/dma-sysfs.c
-> @@ -45,13 +45,19 @@ static DEVICE_ATTR(devices, S_IRUGO, dma_show_devices, NULL);
->  
->  static int __init dma_subsys_init(void)
->  {
-> +	struct device *dev_root;
->  	int ret;
->  
->  	ret = subsys_system_register(&dma_subsys, NULL);
->  	if (unlikely(ret))
->  		return ret;
->  
-> -	return device_create_file(dma_subsys.dev_root, &dev_attr_devices);
-> +	dev_root = bus_get_dev_root(&dma_subsys);
-> +	if (dev_root) {
-> +		ret = device_create_file(dev_root, &dev_attr_devices);
-> +		put_device(dev_root);
-> +	}
-> +	return ret;
->  }
->  postcore_initcall(dma_subsys_init);
->  
+> I no longer have access to the hardware, so I'm not rewriting the
+> batch. Feel free to take ownership of it and fix what's needed.
 
-After acking this, I noticed that if bus_get_dev_root() fails, "ret" remains
-set to the value by subsys_system_register() which might confuse the caller
-thinking that dma_subsys_init() succeeded unless I am missing something?
+Ack.
 
-Adrian
-
--- 
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Harini, are you the designated maintainer for this driver? Could you
+add a MAINTAINERS entry for it? I don't see one right now.
+And possibly pick up these patches / fix the problem, if you have 
+the cycles?
