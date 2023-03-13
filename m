@@ -2,89 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B8216B861E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:34:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 535B16B8625
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCMXek (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:34:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46044 "EHLO
+        id S230051AbjCMXhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCMXei (ORCPT
+        with ESMTP id S229684AbjCMXhT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:34:38 -0400
-Received: from relay04.th.seeweb.it (relay04.th.seeweb.it [IPv6:2001:4b7a:2000:18::165])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 624FB32E54
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 16:34:35 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 742002010E;
-        Tue, 14 Mar 2023 00:34:33 +0100 (CET)
-Date:   Tue, 14 Mar 2023 00:34:32 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 01/10] dt-bindings: display/msm: dsi-controller-main:
- Fix deprecated QCM2290 compatible
-Message-ID: <20230313233432.blfd2agv33bz7awg@SoMainline.org>
-References: <20230307-topic-dsi_qcm-v3-0-8bd7e1add38a@linaro.org>
- <20230307-topic-dsi_qcm-v3-1-8bd7e1add38a@linaro.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307-topic-dsi_qcm-v3-1-8bd7e1add38a@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 19:37:19 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDF3B6A2F6;
+        Mon, 13 Mar 2023 16:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678750638; x=1710286638;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=zu+DHst9j7pl3e5sS9axS5eHMyPoWj1GoWfHZ60PNC4=;
+  b=Q4wZV0bWgwVgPxc0jeSNezro7W5x2wsajyk+sUWYI9GKOAQXyRwAF2xm
+   zFFySTibifufnP0bv2PBy9iMyvWTBXXwcCLKZQFWx8/5PYQ03IuD3TPG3
+   s4GZTDWlEoIDpIjszpZBwvAIy0szAznERoqknWYYhdxCXmxDHzMysHSSH
+   m3Mt8wBoP5nedG1Nx5xBsg5f0u3h9NHgEoSQw5mVgrOE6gZLnMdbWHCbc
+   6do9BbyKiucAFx7o8uIKrUfnnEONA0lzZNSV/CNG/hYKbAHy/QypgzeSn
+   qRF9TajD5andyXmtLZCOvaUumVZ/ERBi4UeO0ATwQx8bTM4kgsdFtVkOo
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334762382"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="334762382"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 16:37:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="924695871"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="924695871"
+Received: from wopr.jf.intel.com ([10.54.75.136])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 16:37:17 -0700
+Message-ID: <c5f67e5c49aee0ce48545a79b7295c7af779347f.camel@linux.intel.com>
+Subject: Re: [PATCH v2] Fix buffer overrun in HID-SENSOR name string
+From:   Todd Brandt <todd.e.brandt@linux.intel.com>
+Reply-To: todd.e.brandt@linux.intel.com
+To:     Andi Shyti <andi.shyti@kernel.org>,
+        Todd Brandt <todd.e.brandt@intel.com>
+Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, srinivas.pandruvada@linux.intel.com,
+        jic23@kernel.org, jikos@kernel.org, p.jungkamp@gmx.net
+Date:   Mon, 13 Mar 2023 16:37:17 -0700
+In-Reply-To: <20230313230712.6xboy3w5ocrvj3vn@intel.intel>
+References: <20230313220653.3996-1-todd.e.brandt@intel.com>
+         <20230313230712.6xboy3w5ocrvj3vn@intel.intel>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-07 14:01:39, Konrad Dybcio wrote:
-> The qcom, prefix was missed previously. Fix it.
+On Tue, 2023-03-14 at 00:07 +0100, Andi Shyti wrote:
+> Hi Todd,
 > 
-> Fixes: 0c0f65c6dd44 ("dt-bindings: msm: dsi-controller-main: Add compatible strings for every current SoC")
-> Acked-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> On Mon, Mar 13, 2023 at 03:06:53PM -0700, Todd Brandt wrote:
+> > On some platforms there are some platform devices created with
+> > invalid names. For example: "HID-SENSOR-INT-020b?.39.auto" instead
+> > of "HID-SENSOR-INT-020b.39.auto"
+> > 
+> > This string include some invalid characters, hence it will fail to
+> > properly load the driver which will handle this custom sensor. Also
+> > it is a problem for some user space tools, which parse the device
+> > names from ftrace and dmesg.
+> > 
+> > This is because the string, real_usage, is not NULL terminated and
+> > printed with %s to form device name.
+> > 
+> > To address this, we initialize the real_usage string with 0s.
+> > 
+> > Philipp Jungkamp created this fix, I'm simply submitting it. I've
+> > verified it fixes bugzilla issue 217169
+> > 
+> > Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
+> > Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
+> 
+> Why is not Philip in the SoB list?
+> 
+Oh, sorry, I got feedback and assumed it needed more work on the
+changelog. I also forgot to copy over Phillip's SoB line so this one is
+probably worse than the original. The original was just fine, please
+ignore this one.
 
-Turns out I got booted from your CC list in b4 and ended up reviewing v2
-without being aware of a v3 with previous comments already resolved:
+> Anyway the original patch made it to stable, so:
+> 
+> Fixes: 98c062e82451 ("HID: hid-sensor-custom: Allow more custom iio
+> sensors")
+> Cc: stable@vger.kernel.org
+> 
+> and with those you can add:
+> 
+> Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+> 
+> Andi
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-
-> ---
->  Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> index e75a3efe4dac..2494817c1bd6 100644
-> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
-> @@ -33,7 +33,7 @@ properties:
->            - const: qcom,mdss-dsi-ctrl
->        - items:
->            - enum:
-> -              - dsi-ctrl-6g-qcm2290
-> +              - qcom,dsi-ctrl-6g-qcm2290
->            - const: qcom,mdss-dsi-ctrl
->          deprecated: true
->  
-> 
-> -- 
-> 2.39.2
-> 
