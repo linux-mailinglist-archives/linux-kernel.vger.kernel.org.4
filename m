@@ -2,116 +2,289 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19AEF6B6E8F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 05:55:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 962F66B6E9C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 05:57:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbjCMEzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 00:55:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36224 "EHLO
+        id S230005AbjCME5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 00:57:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCMEzp (ORCPT
+        with ESMTP id S229609AbjCME5b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 00:55:45 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C9F835265;
-        Sun, 12 Mar 2023 21:55:44 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id q6so4546427iot.2;
-        Sun, 12 Mar 2023 21:55:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678683343;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Gpq6X/4WS7nrx/ihZzLk1eGxqJisJrm0b1Z3C7/sHiY=;
-        b=VVJP0l+6wl3D4HQv8BZkNIroI5pwpa4btEYlyh1dWdwJrRgSzBwymmZ0eYHTIsT0uC
-         1wXM9lAu6tdWZg95ImZJYtWcZXqIOpvrARhycSSc0qHfBVHo85z3Vags9SU+B84+UvjI
-         VIVtZhqdUtgWUVsCvR9JxXMdrDN19b6LWqFqYNPhwSPQNguFeTZk8gSDdpzypnvsY4j2
-         g5BH3sCifCfWtulQ1X3O/a/2Rnh1BluOpnXcIOy9EQllsGS/HEpp0xKM8V79MFTST5+v
-         wMuc6hr47oyGpPqhYZ2z8XFAU/zYkarF71TgwhkXbR41G3ipAmERaqnaScWDFnvFNUDE
-         HVdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678683343;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Gpq6X/4WS7nrx/ihZzLk1eGxqJisJrm0b1Z3C7/sHiY=;
-        b=oJFEKQgDB1CmWkkf2NFXa19+YS5+bzsWx4hylM/TPK3b5UN3vpGHc9EAAxVgDnziM/
-         4dJwsPWklSmer+3hK7VDrbNvE11lkitoUq2NkGT4WP87L3QlLNnh4mtsS/BfsA4zNuVZ
-         +/H8Zfc2A6krPNATFX9tw+0VfWMVqJ5EcX794mS0lg9YdvxmV4Rp1Mh2Cn6Apg2hvFzG
-         0tnj3rVZDfp98W0blUBoOItvuBps5jznBUmIxlaFwoT2kH4xL67you4vq0QdNFLtYx/8
-         YaXJxLB2ReNcNSh3MDrjWHwLB1PVVLEt6njEiOcM61735wyO3gLArjkuDcV6uBG+u+f7
-         EULA==
-X-Gm-Message-State: AO0yUKUANOwLQwRisidOxUky2Nlk+MrMlwmblLdjW01hWaTSZJp8mz5l
-        J7iDRAQa74bPI+lDRmgRX6g=
-X-Google-Smtp-Source: AK7set/vaKhV5BybX29gbzgA7KfHXdksLjbCadOAxjzAmtTlZgN6liZnpTLpc/44YL0k3TVPX3dPVg==
-X-Received: by 2002:a6b:b7c3:0:b0:746:190a:138f with SMTP id h186-20020a6bb7c3000000b00746190a138fmr6388871iof.2.1678683343597;
-        Sun, 12 Mar 2023 21:55:43 -0700 (PDT)
-Received: from JOEL-DESKTOP.. ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
-        by smtp.gmail.com with ESMTPSA id p19-20020a0566380e9300b003eac69029e5sm2175085jas.79.2023.03.12.21.55.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 21:55:43 -0700 (PDT)
-From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Subject: [PATCH] arch: arm64: qcom: sdm845-xiaomi-beryllium: add notification LED
-Date:   Sun, 12 Mar 2023 23:55:39 -0500
-Message-Id: <20230313045539.47538-1-joelselvaraj.oss@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 13 Mar 2023 00:57:31 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A78073B877;
+        Sun, 12 Mar 2023 21:57:30 -0700 (PDT)
+Received: by linux.microsoft.com (Postfix, from userid 1127)
+        id 19C0E204778C; Sun, 12 Mar 2023 21:57:30 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19C0E204778C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1678683450;
+        bh=9aLl/BvNmqEEf3Eln7g8qpek3FbNIeMRD0Ya6P8HIrc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VwpvAFouSf69voKUGyg9brlqv6dO49K9bBxDilrgJFfPsHxpBnrpGctyR9HKwd8Ya
+         vd7gZbsTLj67WSxbL8WMEcAI3tQ9mUEFxWZBnBuu1ImcPNFvqj67PQimxhpOTS4h4u
+         jI912CeX5cv3iI/ujtzAy5D6/9WQczgoprTIlsOk=
+Date:   Sun, 12 Mar 2023 21:57:30 -0700
+From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
+To:     Wei Liu <wei.liu@kernel.org>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
+        arnd@arndb.de, tiala@microsoft.com, mikelley@microsoft.com,
+        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
+Message-ID: <20230313045730.GA31503@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
+References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
+ <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+ <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
+User-Agent: Mutt/1.5.21 (2010-09-15)
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enable the Qualcomm Light Pulse Generator (LPG) driver based
-notification LED.
+Thanks for your review, please find my comments inline.
 
-Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
----
- .../boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+On Sun, Mar 12, 2023 at 09:49:53PM +0000, Wei Liu wrote:
+> On Thu, Mar 09, 2023 at 10:35:57AM -0800, Saurabh Sengar wrote:
+> > Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
+> > feature. VSM is a set of hypervisor capabilities and enlightenments
+> > offered to host and guest partitions which enable the creation and
+> > management of new security boundaries within operating system software.
+> > VSM achieves and maintains isolation through VTLs.
+> > 
+> > Add early initialization for Virtual Trust Levels (VTL). This includes
+> > initializing the x86 platform for VTL and enabling boot support for
+> > secondary CPUs to start in targeted VTL context. For now, only enable
+> > the code for targeted VTL level as 2.
+> > 
+> > When starting an AP at a VTL other than VTL 0, the AP must start directly
+> > in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
+> > transition sequence that occurs after waking up an AP with SIPI whose
+> > vector points to the 16-bit AP startup trampoline code.
+> > 
+> > This commit also moves hv_get_nmi_reason function to header file, so
+> > that it can be reused by VTL.
+> > 
+> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> > ---
+> >  arch/x86/Kconfig                   |  24 +++
+> >  arch/x86/hyperv/Makefile           |   1 +
+> >  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
+> >  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
+> >  arch/x86/include/asm/mshyperv.h    |  14 ++
+> >  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+> >  include/asm-generic/hyperv-tlfs.h  |   4 +
+> >  7 files changed, 346 insertions(+), 5 deletions(-)
+> >  create mode 100644 arch/x86/hyperv/hv_vtl.c
+> > 
+> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> > index 453f462f6c9c..b9e52ac9c9f9 100644
+> > --- a/arch/x86/Kconfig
+> > +++ b/arch/x86/Kconfig
+> > @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
+> >  
+> >  if HYPERVISOR_GUEST
+> >  
+> > +config HYPERV_VTL
+> > +	bool "Enable VTL"
+> 
+> This is not to "Enable VTL". VTL is always there with or without this
+> option. This option is to enable Linux to run in VTL2.
+> 
+> I would suggest it to be changed to HYPERV_VTL2_MODE or something more
+> explicit.
+> 
+> HYPERV_VTL is better reserved to guard code which makes use of VTL
+> related functionality -- if there is such a need in the future.
 
-diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-index e0fda4d754fe..9d11502e5e0e 100644
---- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-@@ -2,6 +2,7 @@
- 
- /dts-v1/;
- 
-+#include <dt-bindings/leds/common.h>
- #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
- #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
- #include <dt-bindings/sound/qcom,q6afe.h>
-@@ -322,6 +323,16 @@ vol_up_pin_a: vol-up-active-state {
- 	};
- };
- 
-+&pmi8998_lpg {
-+	status = "okay";
-+
-+	led@5 {
-+		reg = <5>;
-+		color = <LED_COLOR_ID_WHITE>;
-+		function = LED_FUNCTION_STATUS;
-+	};
-+};
-+
- &pmi8998_wled {
- 	status = "okay";
- 	qcom,current-boost-limit = <970>;
--- 
-2.39.2
+Thanks, I am fine to change the description. However I named it as HYPERV_VTL
+so as this is generic and in future it can be extended to other VTLs. I see it
+as generic VTL code with current support only for VTL2, others will be added
+when need arises.
 
+As per my understanding apart from setting the target VTL, rest of the code
+can be reused for any VTL. Once we have the other VTLs support we might think
+of tweaking the target vtl whereas the flag name and other code remains same.
+Please let me know your opinion on this.
+
+> 
+> > +	depends on X86_64 && HYPERV
+> > +	default n
+> > +	help
+> > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+> > +	  enlightenments offered to host and guest partitions which enables
+> > +	  the creation and management of new security boundaries within
+> > +	  operating system software.
+> > +
+> > +	  VSM achieves and maintains isolation through Virtual Trust Levels
+> > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+> > +	  being more privileged than lower levels. VTL0 is the least privileged
+> > +	  level, and currently only other level supported is VTL2.
+> 
+> Please be consistent as to VTL 0 vs VTL0. You use one form here and the
+> other form in the next paragraph.
+
+Sure will fix this in next version.
+
+> 
+> > +
+> > +	  Select this option to build a Linux kernel to run at a VTL other than
+> > +	  the normal VTL 0, which currently is only VTL 2.  This option
+> > +	  initializes the x86 platform for VTL 2, and adds the ability to boot
+> > +	  secondary CPUs directly into 64-bit context as required for VTLs other
+> > +	  than 0.  A kernel built with this option must run at VTL 2, and will
+> > +	  not run as a normal guest.
+> > +
+> > +	  If unsure, say N
+> > +
+> >  config PARAVIRT
+> >  	bool "Enable paravirtualization code"
+> >  	depends on HAVE_STATIC_CALL
+> > diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
+> > index 5d2de10809ae..a538df01181a 100644
+> > --- a/arch/x86/hyperv/Makefile
+> > +++ b/arch/x86/hyperv/Makefile
+> > @@ -1,6 +1,7 @@
+> >  # SPDX-License-Identifier: GPL-2.0-only
+> >  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
+> >  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
+> > +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
+> >  
+> >  ifdef CONFIG_X86_64
+> >  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
+> > diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> > new file mode 100644
+> > index 000000000000..0da8b242eb8b
+> > --- /dev/null
+> > +++ b/arch/x86/hyperv/hv_vtl.c
+> > @@ -0,0 +1,227 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (c) 2023, Microsoft Corporation.
+> > + *
+> > + * Author:
+> > + *   Saurabh Sengar <ssengar@microsoft.com>
+> > + */
+> > +
+> > +#include <asm/apic.h>
+> > +#include <asm/boot.h>
+> > +#include <asm/desc.h>
+> > +#include <asm/i8259.h>
+> > +#include <asm/mshyperv.h>
+> > +#include <asm/realmode.h>
+> > +
+> > +extern struct boot_params boot_params;
+> > +static struct real_mode_header hv_vtl_real_mode_header;
+> > +
+> > +void __init hv_vtl_init_platform(void)
+> > +{
+> > +	pr_info("Initializing Hyper-V VTL\n");
+> > +
+> 
+> We can be more explicit here, "Linux runs in Hyper-V Virtual Trust Level 2".
+> 
+> If we go with this, this and other function names should be renamed to
+> something more explicit too.
+
+Sure I can do this. However I will like to put it as generic VTL not specific
+to VTL 2 only. Please let me know your opinion.
+
+> 
+> > +	x86_init.irqs.pre_vector_init = x86_init_noop;
+> > +	x86_init.timers.timer_init = x86_init_noop;
+> > +
+> > +	x86_platform.get_wallclock = get_rtc_noop;
+> > +	x86_platform.set_wallclock = set_rtc_noop;
+> > +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
+> > +
+> > +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
+> > +	x86_platform.legacy.rtc = 0;
+> > +	x86_platform.legacy.warm_reset = 0;
+> > +	x86_platform.legacy.reserve_bios_regions = 0;
+> > +	x86_platform.legacy.devices.pnpbios = 0;
+> > +}
+> > +
+> [...]
+> > +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
+> > +{
+> > +	u64 status;
+> > +	int ret = 0;
+> > +	struct hv_enable_vp_vtl *input;
+> > +	unsigned long irq_flags;
+> > +
+> > +	struct desc_ptr gdt_ptr;
+> > +	struct desc_ptr idt_ptr;
+> > +
+> > +	struct ldttss_desc *tss;
+> > +	struct ldttss_desc *ldt;
+> > +	struct desc_struct *gdt;
+> > +
+> > +	u64 rsp = initial_stack;
+> > +	u64 rip = (u64)&hv_vtl_ap_entry;
+> > +
+> > +	native_store_gdt(&gdt_ptr);
+> > +	store_idt(&idt_ptr);
+> > +
+> > +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
+> > +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
+> > +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
+> > +
+> > +	local_irq_save(irq_flags);
+> > +
+> > +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+> 
+> Not a big deal, but you don't actually need to cast here.
+
+Ok, will fix.
+
+> 
+> [...]
+> > +
+> > +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
+> > +{
+> > +	u64 control;
+> > +	u64 status;
+> > +	unsigned long irq_flags;
+> > +	struct hv_get_vp_from_apic_id_in *input;
+> > +	u32 *output, ret;
+> > +
+> > +	local_irq_save(irq_flags);
+> > +
+> > +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+> 
+> No need to cast here.
+
+Sure.
+
+> 
+> [...]
+> > +struct hv_x64_table_register {
+> > +	__u16 pad[3];
+> > +	__u16 limit;
+> > +	__u64 base;
+> > +} __packed;
+> > +
+> > +struct hv_init_vp_context_t {
+> 
+> Drop the _t suffix please.
+
+OK
+
+Regards,
+Saurabh
+
+> 
+> Thanks,
+> Wei.
