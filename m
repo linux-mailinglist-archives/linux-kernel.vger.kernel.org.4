@@ -2,49 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B09086B80BB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:32:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A8BE6B80B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:32:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjCMScn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34610 "EHLO
+        id S230286AbjCMScX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231164AbjCMScD (ORCPT
+        with ESMTP id S231349AbjCMSbe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:32:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF97280E2C;
-        Mon, 13 Mar 2023 11:31:11 -0700 (PDT)
+        Mon, 13 Mar 2023 14:31:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C643280932
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:30:55 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 28AB661365;
-        Mon, 13 Mar 2023 18:30:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38018C433D2;
-        Mon, 13 Mar 2023 18:30:51 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 67CA9B811E0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:30:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1439C433D2;
+        Mon, 13 Mar 2023 18:30:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678732251;
-        bh=akchBNDul5kGQ4bbsIzqd3Wkn40724BLCL8j8t0kerc=;
+        s=korg; t=1678732254;
+        bh=xXfHOtpB42Nc5WnZyQQpmBHFWLUExBdm6jawq0Jm084=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=2SJ8103HKr4PjUlRjoNwdWxY4QSChA0Dk/7hva88/LA8GHYXMB8IgF/YEsYBqr+vs
-         gCkkVmofymj5bAKAEru2Vmoo+ZVILdNd8f3XVaOVgXwXnz+xAa9cj9TGJ1FMgAsRq8
-         fwX+Gz8OgKIeU7d53oSMYt7MCRVpkyQGNP0GlA7Q=
+        b=0FMXy6Knts0+zZgypoJ0GS2NVaLO5tLbDYgKvXx7LMo+bv1jhAWytcutb/BiI1vmD
+         yBEXUeCTIezUvb7qFu7X1zL/BBLS5n8X+R2ydR39/TuRmUuIlR6blTMiIf1xBYy5xQ
+         19+sdyeK0HrYZKr/HzYzLfOdhn58D730PvNR5Cdo=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Weili Qian <qianweili@huawei.com>,
-        Zhou Wang <wangzhou1@hisilicon.com>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        linux-crypto@vger.kernel.org
-Subject: [PATCH 29/36] crypto: hisilicon/qm - make struct bus_type * const
-Date:   Mon, 13 Mar 2023 19:29:11 +0100
-Message-Id: <20230313182918.1312597-29-gregkh@linuxfoundation.org>
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>,
+        Alan Previn <alan.previn.teres.alexis@intel.com>,
+        John Harrison <John.C.Harrison@Intel.com>,
+        Tony Ye <tony.ye@intel.com>,
+        Vitaly Lubart <vitaly.lubart@intel.com>,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Subject: [PATCH 30/36] drm/i915/huc: use const struct bus_type pointers
+Date:   Mon, 13 Mar 2023 19:29:12 +0100
+Message-Id: <20230313182918.1312597-30-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
 References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1534; i=gregkh@linuxfoundation.org; h=from:subject; bh=akchBNDul5kGQ4bbsIzqd3Wkn40724BLCL8j8t0kerc=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82dXSruqi1/y0HkotvSXhxmX3ft6cbz25eoLbzpoxH 69heZrYEcvCIMjEICumyPJlG8/R/RWHFL0MbU/DzGFlAhnCwMUpABNR280wz/zjnVbzmU4HznI9 bXQ9/edf9BXehwwL1gstPiSTGlNWepzxOtuTnxffXLDbDAA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3256; i=gregkh@linuxfoundation.org; h=from:subject; bh=xXfHOtpB42Nc5WnZyQQpmBHFWLUExBdm6jawq0Jm084=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82dUOV8LkZs1rW1FbEZ2+du0D7wfbfUpebF2pHn7h+ 5lpjir1HbEsDIJMDLJiiixftvEc3V9xSNHL0PY0zBxWJpAhDFycAjARsTcM82y+VjUWN7TzOscl xYtl2WzK7ZLcwbDg8GWOaEHppcYb97/63/6QcaXxlcd/AA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -56,16 +63,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In the function, qm_get_qos_value(), a struct bus_type * is used, but it
-really should be a const pointer as it is not modified anywhere in the
-function, and the driver core function it is used in expects a constant
-pointer.
+The struct bus_type pointers in the functions
+intel_huc_register_gsc_notifier() and
+intel_huc_unregister_gsc_notifier() should be a const pointer, as the
+structure is not modified anywhere in the functions, and the pointer
+they are passed will be a const * in the near future.
 
-Cc: Weili Qian <qianweili@huawei.com>
-Cc: Zhou Wang <wangzhou1@hisilicon.com>
-Cc: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: linux-crypto@vger.kernel.org
+Cc: Jani Nikula <jani.nikula@linux.intel.com>
+Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+Cc: Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+Cc: David Airlie <airlied@gmail.com>
+Cc: Daniel Vetter <daniel@ffwll.ch>
+Cc: Daniele Ceraolo Spurio <daniele.ceraolospurio@intel.com>
+Cc: Alan Previn <alan.previn.teres.alexis@intel.com>
+Cc: John Harrison <John.C.Harrison@Intel.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Tony Ye <tony.ye@intel.com>
+Cc: Vitaly Lubart <vitaly.lubart@intel.com>
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
 Note, this is a patch that is a prepatory cleanup as part of a larger
@@ -74,22 +91,47 @@ design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
 its own, but I'd prefer if I could take it through my driver-core tree
 so that the driver core changes can be taken through there for 6.4-rc1.
 
- drivers/crypto/hisilicon/qm.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/i915/gt/uc/intel_huc.c | 4 ++--
+ drivers/gpu/drm/i915/gt/uc/intel_huc.h | 4 ++--
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/crypto/hisilicon/qm.c b/drivers/crypto/hisilicon/qm.c
-index e4c84433a88a..fd1a38ee55f8 100644
---- a/drivers/crypto/hisilicon/qm.c
-+++ b/drivers/crypto/hisilicon/qm.c
-@@ -3691,7 +3691,7 @@ static ssize_t qm_get_qos_value(struct hisi_qm *qm, const char *buf,
- 			       unsigned long *val,
- 			       unsigned int *fun_index)
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.c b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+index 410905da8e97..8b453bd7c953 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_huc.c
++++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.c
+@@ -183,7 +183,7 @@ static int gsc_notifier(struct notifier_block *nb, unsigned long action, void *d
+ 	return 0;
+ }
+ 
+-void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
++void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
  {
--	struct bus_type *bus_type = qm->pdev->dev.bus;
-+	const struct bus_type *bus_type = qm->pdev->dev.bus;
- 	char tbuf_bdf[QM_DBG_READ_LEN] = {0};
- 	char val_buf[QM_DBG_READ_LEN] = {0};
- 	struct pci_dev *pdev;
+ 	int ret;
+ 
+@@ -200,7 +200,7 @@ void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus
+ 	}
+ }
+ 
+-void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus)
++void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus)
+ {
+ 	if (!huc->delayed_load.nb.notifier_call)
+ 		return;
+diff --git a/drivers/gpu/drm/i915/gt/uc/intel_huc.h b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
+index 52db03620c60..05d4832f8461 100644
+--- a/drivers/gpu/drm/i915/gt/uc/intel_huc.h
++++ b/drivers/gpu/drm/i915/gt/uc/intel_huc.h
+@@ -51,8 +51,8 @@ int intel_huc_check_status(struct intel_huc *huc);
+ void intel_huc_update_auth_status(struct intel_huc *huc);
+ bool intel_huc_is_authenticated(struct intel_huc *huc);
+ 
+-void intel_huc_register_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
+-void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, struct bus_type *bus);
++void intel_huc_register_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
++void intel_huc_unregister_gsc_notifier(struct intel_huc *huc, const struct bus_type *bus);
+ 
+ static inline int intel_huc_sanitize(struct intel_huc *huc)
+ {
 -- 
 2.39.2
 
