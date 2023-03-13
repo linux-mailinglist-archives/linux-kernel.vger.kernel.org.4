@@ -2,46 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E31656B7B8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:09:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C59BB6B7B91
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:09:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230140AbjCMPJM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:09:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34856 "EHLO
+        id S230154AbjCMPJo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:09:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229624AbjCMPJD (ORCPT
+        with ESMTP id S229622AbjCMPJl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:09:03 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6F82CC48;
-        Mon, 13 Mar 2023 08:08:46 -0700 (PDT)
+        Mon, 13 Mar 2023 11:09:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1F6376F49F;
+        Mon, 13 Mar 2023 08:09:25 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C0168B8117E;
-        Mon, 13 Mar 2023 15:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B71DDC433D2;
-        Mon, 13 Mar 2023 15:08:41 +0000 (UTC)
-Message-ID: <43b48f87-2343-5855-e6c2-8f30319687c5@xs4all.nl>
-Date:   Mon, 13 Mar 2023 16:08:40 +0100
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AFC1D6133F;
+        Mon, 13 Mar 2023 15:09:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 202E5C433AA;
+        Mon, 13 Mar 2023 15:09:24 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678720164;
+        bh=ABGxWlMLqbyavyMKxfAJ8Yv5/bIE4zdXAaxBqDMvysU=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UOK8+pPJnG1oG72RthJEFWUXiwBteXj9z7goUmZjJyuoFCrla1DIG+1l38K+v+H2C
+         ZLWLbIx+PyRlzubEWGyr9Ebmo8yjjbnNRL0RvToc+qH/zjQvesaeLam1r3juwHdYR6
+         thokqpK3Sk9e43sXmeOi3zbKTNwz5CxQ4guel8dojAC+6PmvpihPTqSSSmrsu0Bu/+
+         bhu7gsGexK949o6DN5v4cWzQZWE7mEndUFGWjgesPyhLS7GfpETnNBfQs1Ucv2tZft
+         aYUaFPdHLdT8xWfI2Ex2YSTxIUbmt3BTjvonCoM+omnx87EyJSGKZUCIcDLrE8di4N
+         xGNeS1cDCcv3w==
+Received: by mail-lj1-f170.google.com with SMTP id g18so12983962ljl.3;
+        Mon, 13 Mar 2023 08:09:24 -0700 (PDT)
+X-Gm-Message-State: AO0yUKX8vo3ATECEX4En4Ky2VHck6jEFklGL7slRM/vBNbkP0TlgQ60K
+        hL5s7misekW4aNxveY0VBMdKYZXU9TYbsbE46w==
+X-Google-Smtp-Source: AK7set87aBjxPKP90yGcSHiuYgmixt1jWtk6mNAEmALcrl1Kxtk5Rvp1SIvV36Rvbv2XbdaMPVz/gU4SP9I5l+DwFNU=
+X-Received: by 2002:a2e:aa1c:0:b0:298:7998:4e36 with SMTP id
+ bf28-20020a2eaa1c000000b0029879984e36mr4244033ljb.10.1678720162162; Mon, 13
+ Mar 2023 08:09:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] media: hantro: fix use after free bug in hantro_remove
- due to race condition
-Content-Language: en-US
-To:     Zheng Wang <zyytlz.wz@163.com>, ezequiel@vanguardiasur.com.ar
-Cc:     p.zabel@pengutronix.de, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com
-References: <20230307154157.1184826-1-zyytlz.wz@163.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230307154157.1184826-1-zyytlz.wz@163.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20230220-display-v1-0-45cbc68e188b@baylibre.com> <20230220-display-v1-10-45cbc68e188b@baylibre.com>
+In-Reply-To: <20230220-display-v1-10-45cbc68e188b@baylibre.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 13 Mar 2023 23:09:10 +0800
+X-Gmail-Original-Message-ID: <CAAOTY__oYGD4KwK8enhy4WGiyJ_aoAPm2yTVY4vZodkAkaVdDQ@mail.gmail.com>
+Message-ID: <CAAOTY__oYGD4KwK8enhy4WGiyJ_aoAPm2yTVY4vZodkAkaVdDQ@mail.gmail.com>
+Subject: Re: [PATCH 10/21] dt-bindings: display: mediatek: rdma: add binding
+ for MT8365 SoC
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
+        Jitao Shi <jitao.shi@mediatek.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Xinlei Lee <xinlei.lee@mediatek.com>,
+        Guillaume La Roque <glaroque@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org,
+        Fabien Parent <fparent@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,56 +82,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 16:41, Zheng Wang wrote:
-> In hantro_probe, vpu->watchdog_work is bound with
-> hantro_watchdog. Then hantro_end_prepare_run may
-> be called to start the work.
-> 
-> If we close the file or remove the module which will
-> call hantro_release and hantro_remove to make cleanup,
-> there may be a unfinished work. The possible sequence
-> is as follows, which will cause a typical UAF bug.
-> 
-> The same thing will happen in hantro_release, and use
-> ctx after freeing it.
-> 
-> Fix it by canceling the work before cleanup in hantro_release.
-> 
-> CPU0                  CPU1
-> 
->                     |hantro_watchdog
-> hantro_remove     |
->   v4l2_m2m_release  |
->     kfree(m2m_dev); |
->                     |
->                     | v4l2_m2m_get_curr_priv
->                     |   m2m_dev->curr_ctx //use
-> 
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Hi, Alexandre:
+
+Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
+9=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:23=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> Display Data Path Read DMA for MT8365 is compatible with another SoC.
+> Then, add MT8365 binding along with MT8183 SoC.
+
+Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+
+>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
 > ---
->  drivers/media/platform/verisilicon/hantro_drv.c | 1 +
+>  Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.yaml | =
+1 +
 >  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/media/platform/verisilicon/hantro_drv.c
-> index b0aeedae7b65..80bd856a4da9 100644
-> --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> @@ -1099,6 +1099,7 @@ static int hantro_remove(struct platform_device *pdev)
->  
->  	v4l2_info(&vpu->v4l2_dev, "Removing %s\n", pdev->name);
->  
-> +	cancel_delayed_work(&vpu->watchdog_work);
-
-Use cancel_delayed_work_sync(): that ensures the code waits for a running
-watchdog function to finish.
-
-Ditto for the other patch.
-
-Regards,
-
-	Hans
-
->  	media_device_unregister(&vpu->mdev);
->  	hantro_remove_dec_func(vpu);
->  	hantro_remove_enc_func(vpu);
-
+>
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
+rdma.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdm=
+a.yaml
+> index 0882ae86e6c4..3bc914785976 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya=
+ml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,rdma.ya=
+ml
+> @@ -40,6 +40,7 @@ properties:
+>            - enum:
+>                - mediatek,mt8186-disp-rdma
+>                - mediatek,mt8192-disp-rdma
+> +              - mediatek,mt8365-disp-rdma
+>            - const: mediatek,mt8183-disp-rdma
+>
+>    reg:
+>
+> --
+> b4 0.10.1
