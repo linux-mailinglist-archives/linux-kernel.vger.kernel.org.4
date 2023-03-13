@@ -2,50 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1CB76B8420
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D4A96B8423
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjCMVmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
+        id S229853AbjCMVnQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:43:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCMVmV (ORCPT
+        with ESMTP id S229548AbjCMVnN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:42:21 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDF88ABF4;
-        Mon, 13 Mar 2023 14:42:17 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pb99L6T25z4whr;
-        Tue, 14 Mar 2023 08:42:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678743735;
-        bh=17d+EcKlY/En8UZdp52sksh6GRy/ocvPXgStvvw3rJ0=;
-        h=Date:From:To:Cc:Subject:From;
-        b=jixGxLlLUz3SLOEsHfBLB1bAZ3vS4cSSIgN0l0WC95kCg425TPzkTp5TGa9dRKMcj
-         VvnoXxSpOuU/KPkZPGMe8P9Kek9Tx9chvK9VFzGJbkBr6+zmAvA4AqnFR+rFywICWo
-         ZvU8fdDf1mejt34n63C2P9o5f/w++cVNW0yn/5UGIzFhvrdSOFm1z5IqfjYF3Cb0TN
-         kCXmu7EYk4PbBg5b2wd/maXYJpp/AZx4h1bwBTcgonvUWRQjRa2eQeGQxz5fDTPwOm
-         2BBa15wF60MtlGWf9zng43A0tkafI2hGjesw5Cv2M/tKXM133qfwdVzr03vvfbFAVP
-         4+PLsgJRZ/Zfw==
-Date:   Tue, 14 Mar 2023 08:42:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
-        Uwe =?UTF-8?B?S2xl?= =?UTF-8?B?aW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the crypto tree
-Message-ID: <20230314084214.113e74dc@canb.auug.org.au>
+        Mon, 13 Mar 2023 17:43:13 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD0CEEB67
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:43:11 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DLE0AC002745
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date : to :
+ from : subject : content-type : content-transfer-encoding : mime-version;
+ s=pp1; bh=1e7xSsLbQplYJGkDFpxrlHRXdlKoqX1vhxiMrXvLSgQ=;
+ b=Hwu02Ecbd7K1grye/9S4C24rWlNh+7Q3AB0N30gBxtIf3L0UTDxyYHOzLfxkEL3d9LNT
+ HGb7Zl4EooCr8x8a8rya7giWMTq0S4fPABr0Zip9sgA7OyhUsMFhk8UQWr8VVR+KSnBf
+ oA5nAK07n4pZ/vUkjx3JFMSHxR/G4fMTnqQvj905lC2KD6g2Rukws7GzBdRmiyYypYMj
+ AoahrgSecHAfzjvy3jrn1ptO9Kny9+HcHF0MedO43HV0ErQjy6rR4RNXxskMW0HuFQoX
+ XaKSZYY2u+W3z6o18h8TBhoMhjNI5vVjje4kWW6XCDQXavMmRf3BPzJtDcYx/GWRGz8r bw== 
+Received: from ppma03dal.us.ibm.com (b.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.11])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pabjggn9s-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:10 +0000
+Received: from pps.filterd (ppma03dal.us.ibm.com [127.0.0.1])
+        by ppma03dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32DJJGi2006299
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:10 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
+        by ppma03dal.us.ibm.com (PPS) with ESMTPS id 3p8h97c4nc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:10 +0000
+Received: from smtpav05.dal12v.mail.ibm.com (smtpav05.dal12v.mail.ibm.com [10.241.53.104])
+        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32DLh8qA61604138
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK)
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:08 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 62C8558056
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:08 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 2416458052
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:08 +0000 (GMT)
+Received: from [9.65.198.39] (unknown [9.65.198.39])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:43:08 +0000 (GMT)
+Message-ID: <7c91820d-0153-e4db-1c60-38b6f650ed20@linux.ibm.com>
+Date:   Mon, 13 Mar 2023 17:43:08 -0400
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+To:     linux-kernel@vger.kernel.org
+Content-Language: en-US
+From:   Ken Goldman <kgold@linux.ibm.com>
+Subject: Documentation on IMA for Linux Kernel Documentation
+Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: QwKttDXsnblwfmLV6iHVfoVSpBGefYNV
+X-Proofpoint-ORIG-GUID: QwKttDXsnblwfmLV6iHVfoVSpBGefYNV
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/yuUr.7MdmN_.eaT8M0Qqkc/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_11,2023-03-13_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 impostorscore=0 suspectscore=0
+ mlxlogscore=283 spamscore=0 adultscore=0 phishscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303130166
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,37 +82,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/yuUr.7MdmN_.eaT8M0Qqkc/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+I'm writing documentation on IMA targeting users (not kernel 
+developers).  It includes concepts, details on writing policies, the IMA 
+event log format, utilities, and more.  It aggregates existing scattered 
+documentation, but adds much more.  It's maybe 1/2 done.
 
-Hi all,
+Questions:
 
-Commit
+1. Are there people who could look at it and see if I'm on the right path?
 
-  b4fb7f4afa5d ("hwrng: xgene - Improve error reporting for problems during=
- .remove()")
+It's a lot of work.  I'd like to know that it has some chance of acceptance.
 
-is missing a Signed-off-by from its author.
+2. What is the process for getting a block of documentation added to 
+https://www.kernel.org/doc/html?
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/yuUr.7MdmN_.eaT8M0Qqkc/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPmLYACgkQAVBC80lX
-0GzlxAgAhKeWO6dELwmRH1XAyqaQzS35NS4CYTtJz5Hqt+nY0Qi/hbj+80mic5T/
-dtlhpw1A24/XK3jV+2LZRnswaBzsNqcbfP/dHG2wmZ9F/bEDWKqq8K3yuZVMuz7Z
-tLbJQcT+UuI2luwrhyVHGooECvhAr7WoLeh1v1q0wxVFe/2+ttsz+vX5hqJqakmz
-4uMwZ4WhLKAdA84gHYYVxkgBYE2/KzzuSR9ltb1mGJKxVne2NgQLBa3z4pguTcjK
-TVUQK8+TLrMdV2Mynh34xO+HzikpJTN3l0YkDgAHQr+8vJlfe1+4mSD7JSRjdswK
-O98W1W6C1nDXXkuBPLoBuSrDO6D37w==
-=Yf9r
------END PGP SIGNATURE-----
-
---Sig_/yuUr.7MdmN_.eaT8M0Qqkc/--
