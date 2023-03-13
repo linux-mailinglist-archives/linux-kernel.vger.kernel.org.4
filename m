@@ -2,123 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8098A6B6FC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:58:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 719076B6FCE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:02:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229677AbjCMG6i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:58:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35126 "EHLO
+        id S229628AbjCMHB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCMG6f (ORCPT
+        with ESMTP id S229768AbjCMHBx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:58:35 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D13D627D50
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:58:28 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PZnTv0GLCzSkd4;
-        Mon, 13 Mar 2023 14:55:15 +0800 (CST)
-Received: from localhost.localdomain (10.50.163.32) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 14:58:26 +0800
-From:   Yicong Yang <yangyicong@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>,
-        <linux-kernel@vger.kernel.org>
-CC:     <dietmar.eggemann@arm.com>, <rostedt@goodmis.org>,
-        <bsegall@google.com>, <mgorman@suse.de>, <bristot@redhat.com>,
-        <vschneid@redhat.com>, <linuxarm@huawei.com>,
-        <prime.zeng@huawei.com>, <wangjie125@huawei.com>,
-        <yangyicong@hisilicon.com>
-Subject: [PATCH] sched/fair: Don't balance migration disabled tasks
-Date:   Mon, 13 Mar 2023 14:57:59 +0800
-Message-ID: <20230313065759.39698-1-yangyicong@huawei.com>
-X-Mailer: git-send-email 2.31.0
+        Mon, 13 Mar 2023 03:01:53 -0400
+Received: from hust.edu.cn (unknown [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56AED302A4;
+        Mon, 13 Mar 2023 00:01:52 -0700 (PDT)
+Received: from localhost.localdomain ([172.16.0.254])
+        (user=dzm91@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32D7107A005037-32D7107D005037
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Mon, 13 Mar 2023 15:01:05 +0800
+From:   Dongliang Mu <dzm91@hust.edu.cn>
+To:     Kalle Valo <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Dongliang Mu <dzm91@hust.edu.cn>, linux-wireless@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] wifi: ray_cs: remove one redundant del_timer
+Date:   Mon, 13 Mar 2023 14:58:22 +0800
+Message-Id: <20230313065823.256731-1-dzm91@hust.edu.cn>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.50.163.32]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: dzm91@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yicong Yang <yangyicong@hisilicon.com>
+In ray_detach, it and its child function ray_release both call
+del_timer(_sync) on the same timer.
 
-On load balance we didn't check whether the candidate task is migration
-disabled or not, this may hit the WARN_ON in set_task_cpu() since the
-migration disabled tasks are expected to run on their current CPU.
-We've run into this case several times on our server:
+Fix this by removing the del_timer_sync in the ray_detach, and revising
+the del_timer to del_timer_sync.
 
- ------------[ cut here ]------------
- WARNING: CPU: 7 PID: 0 at kernel/sched/core.c:3115 set_task_cpu+0x188/0x240
- Modules linked in: hclgevf xt_CHECKSUM ipt_REJECT nf_reject_ipv4 <...snip>
- CPU: 7 PID: 0 Comm: swapper/7 Kdump: loaded Tainted: G           O       6.1.0-rc4+ #1
- Hardware name: Huawei TaiShan 2280 V2/BC82AMDC, BIOS 2280-V2 CS V5.B221.01 12/09/2021
- pstate: 604000c9 (nZCv daIF +PAN -UAO -TCO -DIT -SSBS BTYPE=--)
- pc : set_task_cpu+0x188/0x240
- lr : load_balance+0x5d0/0xc60
- sp : ffff80000803bc70
- x29: ffff80000803bc70 x28: ffff004089e190e8 x27: ffff004089e19040
- x26: ffff007effcabc38 x25: 0000000000000000 x24: 0000000000000001
- x23: ffff80000803be84 x22: 000000000000000c x21: ffffb093e79e2a78
- x20: 000000000000000c x19: ffff004089e19040 x18: 0000000000000000
- x17: 0000000000001fad x16: 0000000000000030 x15: 0000000000000000
- x14: 0000000000000003 x13: 0000000000000000 x12: 0000000000000000
- x11: 0000000000000001 x10: 0000000000000400 x9 : ffffb093e4cee530
- x8 : 00000000fffffffe x7 : 0000000000ce168a x6 : 000000000000013e
- x5 : 00000000ffffffe1 x4 : 0000000000000001 x3 : 0000000000000b2a
- x2 : 0000000000000b2a x1 : ffffb093e6d6c510 x0 : 0000000000000001
- Call trace:
-  set_task_cpu+0x188/0x240
-  load_balance+0x5d0/0xc60
-  rebalance_domains+0x26c/0x380
-  _nohz_idle_balance.isra.0+0x1e0/0x370
-  run_rebalance_domains+0x6c/0x80
-  __do_softirq+0x128/0x3d8
-  ____do_softirq+0x18/0x24
-  call_on_irq_stack+0x2c/0x38
-  do_softirq_own_stack+0x24/0x3c
-  __irq_exit_rcu+0xcc/0xf4
-  irq_exit_rcu+0x18/0x24
-  el1_interrupt+0x4c/0xe4
-  el1h_64_irq_handler+0x18/0x2c
-  el1h_64_irq+0x74/0x78
-  arch_cpu_idle+0x18/0x4c
-  default_idle_call+0x58/0x194
-  do_idle+0x244/0x2b0
-  cpu_startup_entry+0x30/0x3c
-  secondary_start_kernel+0x14c/0x190
-  __secondary_switched+0xb0/0xb4
- ---[ end trace 0000000000000000 ]---
-
-Signed-off-by: Yicong Yang <yangyicong@hisilicon.com>
+Signed-off-by: Dongliang Mu <dzm91@hust.edu.cn>
 ---
- kernel/sched/fair.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/net/wireless/ray_cs.c | 5 +----
+ 1 file changed, 1 insertion(+), 4 deletions(-)
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7a1b1f855b96..8fe767362d22 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -8433,6 +8433,10 @@ int can_migrate_task(struct task_struct *p, struct lb_env *env)
- 	if (kthread_is_per_cpu(p))
- 		return 0;
+diff --git a/drivers/net/wireless/ray_cs.c b/drivers/net/wireless/ray_cs.c
+index 1f57a0055bbd..785a5be72b2b 100644
+--- a/drivers/net/wireless/ray_cs.c
++++ b/drivers/net/wireless/ray_cs.c
+@@ -331,9 +331,6 @@ static void ray_detach(struct pcmcia_device *link)
  
-+	/* Migration disabled tasks need to be kept on their running CPU. */
-+	if (is_migration_disabled(p))
-+		return 0;
-+
- 	if (!cpumask_test_cpu(env->dst_cpu, p->cpus_ptr)) {
- 		int cpu;
+ 	ray_release(link);
  
+-	local = netdev_priv(dev);
+-	del_timer_sync(&local->timer);
+-
+ 	if (link->priv) {
+ 		unregister_netdev(dev);
+ 		free_netdev(dev);
+@@ -734,7 +731,7 @@ static void ray_release(struct pcmcia_device *link)
+ 
+ 	dev_dbg(&link->dev, "ray_release\n");
+ 
+-	del_timer(&local->timer);
++	del_timer_sync(&local->timer);
+ 
+ 	iounmap(local->sram);
+ 	iounmap(local->rmem);
 -- 
-2.24.0
+2.39.2
 
