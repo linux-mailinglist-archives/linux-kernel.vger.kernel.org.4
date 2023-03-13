@@ -2,101 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF2176B6FE2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 659276B6FFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:18:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCMHOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55096 "EHLO
+        id S229641AbjCMHSL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:18:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229550AbjCMHOJ (ORCPT
+        with ESMTP id S229535AbjCMHSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:14:09 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E8BD34C12;
-        Mon, 13 Mar 2023 00:14:08 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id h9so11556796ljq.2;
-        Mon, 13 Mar 2023 00:14:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678691647;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NAcFtKYc9siQS5A9dmQhcxRKsW53bmsCdA8lYrf/LRQ=;
-        b=A9p+3Rj/SXsVX4aggaFlxvVDjDrz8CllxRoRT8UUjj5VOgWmiE8lGIUNoWf4eL70HP
-         v19HVP6G6S2wu7PSg7qJD13y7aY+SrWdQMbpXVNPSeICyW6WkKN3aYawtFThjwg4Il52
-         kpNdO6bA9jfq29cfOvP/S9CVnjgqNUctkGCDUI/GO0Asa42hLB0PC4KX3GXRKDFmcBAa
-         TEsditN2wl4v1Jr3D/9mVFglJHgc0UtLEON9z5nWwvVjstbPM+hj9H+oddRm3EXLNSRF
-         b3qPQsOuTKc2cYBWD3aNK2q9cyJs6faHq01pto0Z8920Hj0vq2QQz5N5OdzqABD+4enw
-         FCMA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678691647;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NAcFtKYc9siQS5A9dmQhcxRKsW53bmsCdA8lYrf/LRQ=;
-        b=me6o+2ah4CMShNDYXR7GF776QBJGmKs6rSuk/fddAFhTQtCLBk4M8NlF/rsy4ArD3C
-         0JNqx3Lj8HhexTiPBShHaofLNEQwjb6oNRfv/trQt8zLzey+gSsHqzw5hhW8ICv+SJSu
-         w32y7RPmpTFQD9GAih614fazCL+eoaeubhhqmGwcF+w7aoi5ikehdHPKw30n6jhcM5N3
-         GlSHbcBg8+mxs2sBGIW5ydB/EmIQpFhA+vMgNHe/ZKr+9T1RBT38i79+JXVYgUrmwWO7
-         SQ6NDCa9JnXlRpM41ThkuW0cxbGcBE2s4//nDL3l8hyyNYf0ewGeECRcCEjcbPjZPhbR
-         E8Rw==
-X-Gm-Message-State: AO0yUKWHboiBxsYyT1HDaWGZexyvvVC2neRO9j0HqoEAdAB/SLSzEl0S
-        sAjXvxSKH9zRTHvbVmgXy98=
-X-Google-Smtp-Source: AK7set9v2UPU9b2G4if8z3XNz+Jt/KSUwjPPiVjsjpUoRP85qztXl+UPUnam/vqe2fcwEIaXaLH/SQ==
-X-Received: by 2002:a2e:b8cb:0:b0:298:592e:113a with SMTP id s11-20020a2eb8cb000000b00298592e113amr9597537ljp.6.1678691646808;
-        Mon, 13 Mar 2023 00:14:06 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id u1-20020a2eb801000000b00295965f7495sm906020ljo.0.2023.03.13.00.14.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 00:14:06 -0700 (PDT)
-Message-ID: <a43c984f-2471-334b-094b-d51c77dea783@gmail.com>
-Date:   Mon, 13 Mar 2023 09:14:05 +0200
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Mon, 13 Mar 2023 03:18:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281ADA27B;
+        Mon, 13 Mar 2023 00:18:08 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32D2xMwQ027854;
+        Mon, 13 Mar 2023 07:18:05 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=qcppdkim1; bh=nArh0NQh1TsaLTW8jIsifogT51yJv/pml3b0qmRRGAU=;
+ b=j1MCt1nMjlIqciSZ+KV5MWF+L/HUaDmuKsQUIcbZWgm14S5PHYP8AE+fcGkOAKQMTXlE
+ j2Frw6yE/oQWtVGcIoCoxkqAWDzoRAxAbUYNdPbas4fynxUwx86aUnHmEiT7rfKYaUWJ
+ ncldFQJ7q70qB2FTjLqpL/ONvaWhvxxwr8zfi9/X/k+yfU+M+cKyfa0UjyYA2Jd2Nd/h
+ u6H96Y6pjMsdoRUO3dV3c8qP+vbyZDg7B8TXOw0lbrXedqGZV6hix09HirarkIRSdnDc
+ DoDxkyBQ2ywqzwy+9kriMZF/SqsnqjsbY7Qt/w/lDm+r4E4jAXse6EEGZBtHqXOvmybr iw== 
+Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3p8gysuyvj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 07:18:04 +0000
+Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32D7I1WF016606;
+        Mon, 13 Mar 2023 07:18:01 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqkeyw9-1;
+        Mon, 13 Mar 2023 07:18:01 +0000
+Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32D7I0Df016599;
+        Mon, 13 Mar 2023 07:18:00 GMT
+Received: from kbajaj-linux.qualcomm.com (kbajaj-linux.qualcomm.com [10.214.66.129])
+        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 32D7I08Z016598;
+        Mon, 13 Mar 2023 07:18:00 +0000
+Received: from kbajaj-linux.qualcomm.com (localhost [127.0.0.1])
+        by kbajaj-linux.qualcomm.com (Postfix) with ESMTP id E2257252;
+        Mon, 13 Mar 2023 12:47:59 +0530 (IST)
+From:   Komal Bajaj <quic_kbajaj@quicinc.com>
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-4-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCHv1 03/11] power: supply: generic-adc-battery: convert to
- managed resources
-In-Reply-To: <20230309225041.477440-4-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Komal Bajaj <quic_kbajaj@quicinc.com>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] arm64: dts: qcom: qdu1000: Add LLCC/system-cache-controller node
+Date:   Mon, 13 Mar 2023 12:47:57 +0530
+Message-Id: <20230313071757.31533-1-quic_kbajaj@quicinc.com>
+X-Mailer: git-send-email 2.39.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-QCInternal: smtphost
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: 9dyy_A4dA22nUz8yYlasHGnG-qw15OPC
+X-Proofpoint-ORIG-GUID: 9dyy_A4dA22nUz8yYlasHGnG-qw15OPC
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-12_10,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 mlxscore=0
+ impostorscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 adultscore=0 phishscore=0 priorityscore=1501 clxscore=1015
+ mlxlogscore=769 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303130058
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian, All
+Add a DT node for Last level cache (aka. system cache) controller
+which provides control over the last level cache present on QDU1000
+and QRU1000 SoCs.
 
-To me this does look like a great simplification :)
+Signed-off-by: Komal Bajaj <quic_kbajaj@quicinc.com>
+---
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> Convert driver to use managed resources to simplify driver code.
-> 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-
-
+diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+index 801f090335a3..a4816a862344 100644
+--- a/arch/arm64/boot/dts/qcom/qdu1000.dtsi
++++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
+@@ -1321,6 +1321,16 @@ gem_noc: interconnect@19100000 {
+ 			qcom,bcm-voters = <&apps_bcm_voter>;
+ 			#interconnect-cells = <2>;
+ 		};
++
++		system-cache-controller@19200000 {
++			compatible = "qcom,qdu1000-llcc";
++			reg = <0 0x19200000 0 0xd80000>,
++			      <0 0x1a200000 0 0x80000>,
++			      <0 0x221c8128 0 0x4>;
++			reg-names = "llcc_base", "llcc_broadcast_base", "multi_channel_register";
++			multi-ch-bit-off = <24 2>;
++			interrupts = <GIC_SPI 266 IRQ_TYPE_LEVEL_HIGH>;
++		};
+ 	};
+ 
+ 	arch_timer: timer {
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
+2.39.1
 
