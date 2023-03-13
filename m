@@ -2,84 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8913E6B7F85
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:30:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1E366B7F87
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:30:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbjCMR3t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:29:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38226 "EHLO
+        id S229968AbjCMRab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:30:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjCMR3q (ORCPT
+        with ESMTP id S230337AbjCMRaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:29:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD88024139
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:28:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678728489;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=0evT8Vtbk81R/TosIabCJgTCcIOpvJ7DhYFh1FtAtkk=;
-        b=eLKhDUJtKo0wW9+oQOUjmDlNaHEUsXLP2o2AbbHxOjGF3FPbUWVtpd/0G6lx9gfkiEQPcc
-        q8R6Brl0N8ip/d69pwLvJsKT/NajMsKFJY6WODSqXjHllyRCW4toK6T7o6ZY+pSe9LjmGc
-        5jltgq/Ld5YiBCLJEGj2Vzqp2wUj6xA=
-Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
- [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-193-XhUdX-MXP7ye3tomj4rmBA-1; Mon, 13 Mar 2023 13:28:07 -0400
-X-MC-Unique: XhUdX-MXP7ye3tomj4rmBA-1
-Received: by mail-wm1-f72.google.com with SMTP id az39-20020a05600c602700b003e97eb80524so8090156wmb.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:28:04 -0700 (PDT)
+        Mon, 13 Mar 2023 13:30:23 -0400
+Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6374B5B435
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:30:02 -0700 (PDT)
+Received: by mail-pj1-x1049.google.com with SMTP id n33-20020a17090a5aa400b0023b4f444476so1473619pji.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678728600;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e2N3C5v1hA4Itf/iKfJ9OnL6mk8vTK1105rfJQS18k4=;
+        b=LNQXO0/s0QEkvrDKU1ezfv1NoVomkjz54L/tOU6jf+FgW/+IqxJmv8Sv15StRHn0c1
+         SC72qHv6JfHXJBHDOfmwu+AL90h+z9+ez5ycWcNyT71CqhmZH02GXNkKmUWKm+2ZR4lG
+         F/L+pCxWEq6w1HSt/BfyX/PmXE1FpZYXtzzg9+QBi9xd8ekLi7eQWvgtX/YUG8h0PAFs
+         Dn/WyFLYxqUzgZ+JAx32XBxp0irCmLM87+1vCOeHhiKqTt45P/aKBpchSR1lsbrPW0Bf
+         E5TKJODRDIQH3+Rnug66MgJAPNcnNZDf52bCj5DyzDGMaf7IRxzPaEpUd6CvauVr2x9D
+         Igtg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678728483;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=0evT8Vtbk81R/TosIabCJgTCcIOpvJ7DhYFh1FtAtkk=;
-        b=UzBm2SatG2YzcWkMsWCuDhhUn3/BhWjP4vJGvycVyYhW1XrvClsj2SGusbnWK4axWo
-         MP7l6PSqH2JLtE5mUd9RPgawuxydgX1CXRfyfhSvzDha4OgFDb1O/yWv6zxpomyaefQp
-         XT7pF7b9vKb1I+O6ciymwXqzKVaxE0fveL2paJdvRU3a4msxF+qXdWWzEwinyQV8Mtfk
-         b/FADFcXaM3GuY+QSeZtR/GcrdEooLOLMQLa2ortQTeF2rA6BTDHXKSdvTacBn/o68oU
-         XdQOQHf4ztV1Lo6KZLo45nxkg8g2pVZSNMHKnQf4vHWVT2Go2L5DdT1CC7m3pfkdUxia
-         4Cqg==
-X-Gm-Message-State: AO0yUKXVuNglriqhOf/whBu+8JL0HhoBGAAX3lr7DdHyOkf6jmHFXVNz
-        kcgy0tbbrQs1+kAVa0XQzCn+/yIVYTiwr7nJZ3bcwFA/9DdYPomfYcVKX2zM83662J+8w3LEpr+
-        bvRuMiXI6NWsdXFkkFA1zm57FeeB6NvfdDqRr/fnnGJHFOkghh8tmAqUkpoI7WHR0XjNEjF8MKz
-        7KwqH7LTgn
-X-Received: by 2002:a5d:67c5:0:b0:2cf:a4a4:4990 with SMTP id n5-20020a5d67c5000000b002cfa4a44990mr2719460wrw.12.1678728483530;
-        Mon, 13 Mar 2023 10:28:03 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/7GgtuVqfDGuMBUhrVNWrlcKe6Ov6XP2yqoEXeAWGzA4mJRnXO1p4TuJbvR1Qp74HfmtJO/Q==
-X-Received: by 2002:a5d:67c5:0:b0:2cf:a4a4:4990 with SMTP id n5-20020a5d67c5000000b002cfa4a44990mr2719430wrw.12.1678728483226;
-        Mon, 13 Mar 2023 10:28:03 -0700 (PDT)
-Received: from localhost (205.pool92-176-231.dynamic.orange.es. [92.176.231.205])
-        by smtp.gmail.com with ESMTPSA id a16-20020a5d4570000000b002c5539171d1sm35268wrc.41.2023.03.13.10.28.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 10:28:03 -0700 (PDT)
-From:   Javier Martinez Canillas <javierm@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Bilal Elmoussaoui <belmouss@redhat.com>,
-        Jocelyn Falempe <jfalempe@redhat.com>,
-        Enric Balletbo i Serra <eballetb@redhat.com>,
-        Christian Hergert <chergert@redhat.com>,
-        Albert Esteve <aesteve@redhat.com>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        David Airlie <airlied@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        dri-devel@lists.freedesktop.org,
-        virtualization@lists.linux-foundation.org
-Subject: Re: [PATCH] drm/virtio: Enable fb damage clips property for the
- primary plane
-In-Reply-To: <20230310125943.912514-1-javierm@redhat.com>
-References: <20230310125943.912514-1-javierm@redhat.com>
-Date:   Mon, 13 Mar 2023 18:28:02 +0100
-Message-ID: <87ilf4lfx9.fsf@minerva.mail-host-address-is-not-set>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        d=1e100.net; s=20210112; t=1678728600;
+        h=content-transfer-encoding:cc:to:from:subject:message-id:references
+         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=e2N3C5v1hA4Itf/iKfJ9OnL6mk8vTK1105rfJQS18k4=;
+        b=ZJ/50oZVwwcW0lO2FGyb+qJ7ykSxtCGsnbpRHamiWm4KEjVK/Smi9mwJAijbmpWyZy
+         PqxslPRL9i7A76i1pufSyzB4UdQ8MFY5qWj7+xyud5kg8QvTpuCSB4fH2S7T8yLoTiXq
+         CwvPOP5t+dI24DktXbDqQ9flMCzICVKDCOOXw0SkCA1RQH44Nd1nvf3stz9T7CkVWlYO
+         bj6JzSk8/i1FHSmKhGXTxv0QOgPu3Nux8h7wx8ykIYKtL8H/0siPopQRyBV9DmkizWRY
+         bsSg4CFrVJnsXKOy2QjGPbQ7mOWJxnS2aDpqhcCuE5NHaRvvBQY0QHkfqqesfQrHB+Ze
+         dxeQ==
+X-Gm-Message-State: AO0yUKWB3K6WsKgJhK2buckkfWVLLgiV15+8wS0Zhy4hsB4R93rkreDo
+        PtJEOsMPGrdYYIKgXhWqcAOZU77YB8I=
+X-Google-Smtp-Source: AK7set9hke37NS5y7R3bUhoeJbJdJL3tPZo0/ltvugmlHxD9z7YUr6kKm5ot+Cs0riclCm2FIptpMzQf/vw=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a17:903:746:b0:19f:3b0f:4d97 with SMTP id
+ kl6-20020a170903074600b0019f3b0f4d97mr2222941plb.6.1678728600462; Mon, 13 Mar
+ 2023 10:30:00 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 10:29:58 -0700
+In-Reply-To: <eb7ccc4f362ce833600f0096710003188571e4b2.camel@intel.com>
+Mime-Version: 1.0
+References: <20230310214232.806108-1-seanjc@google.com> <20230310214232.806108-15-seanjc@google.com>
+ <eb7ccc4f362ce833600f0096710003188571e4b2.camel@intel.com>
+Message-ID: <ZA9dbo2ZufqLdHNg@google.com>
+Subject: Re: [PATCH v2 14/18] KVM: SVM: Check that the current CPU supports
+ SVM in kvm_is_svm_supported()
+From:   Sean Christopherson <seanjc@google.com>
+To:     Kai Huang <kai.huang@intel.com>
+Cc:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "x86@kernel.org" <x86@kernel.org>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Chao Gao <chao.gao@intel.com>,
+        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>
+Content-Type: text/plain; charset="iso-8859-1"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,25 +80,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Javier Martinez Canillas <javierm@redhat.com> writes:
+On Mon, Mar 13, 2023, Huang, Kai wrote:
+> On Fri, 2023-03-10 at 13:42 -0800, Sean Christopherson wrote:
+> > Check "this" CPU instead of the boot CPU when querying SVM support so t=
+hat
+> > the per-CPU checks done during hardware enabling actually function as
+> > intended, i.e. will detect issues where SVM isn't support on all CPUs.
+> >=20
+> > Disable migration for the use from svm_init() mostly so that the standa=
+rd
+> > accessors for the per-CPU data can be used without getting yelled at by
+> > CONFIG_DEBUG_PREEMPT=3Dy sanity checks.  Preventing the "disabled by BI=
+OS"
+> > error message from reporting the wrong CPU is largely a bonus, as ensur=
+ing
+> > a stable CPU during module load is a non-goal for KVM.
+> >=20
+> > Link: https://lore.kernel.org/all/ZAdxNgv0M6P63odE@google.com
+> > Cc: Kai Huang <kai.huang@intel.com>
+> > Cc: Chao Gao <chao.gao@intel.com>
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+>=20
+> Should we add:
+>=20
+> Fixes: c82a5c5c53c5 ("KVM: x86: Do compatibility checks when onlining CPU=
+")
+>=20
+> As that commit introduced using raw_smp_processor_id() to get CPU id in
+> kvm_is_svm_supported() and print the CPU id out in error message?
 
-> Christian Hergert reports that the driver doesn't enable the property and
-> that leads to always doing a full plane update, even when the driver does
-> support damage clipping for the primary plane.
->
-> Don't enable it for the cursor plane, because its .atomic_update callback
-> doesn't handle damage clips.
->
-> Reported-by: Christian Hergert <chergert@redhat.com>
-> Signed-off-by: Javier Martinez Canillas <javierm@redhat.com>
-> ---
+My vote is to not to add a Fixes because using raw_smp_processor_id() and n=
+ot disabling
+migration for module probe case was deliberate and is safe.  I don't want t=
+o give the
+impression that the existing code is functionally broken.  The only quirk i=
+s that
+the reporting could be misleading.
 
-Pushed to drm-misc (drm-misc-next). Thanks!
+That said, I'm not against adding a Fixes tag, because I certainly can't ar=
+gue
+against the reporting being flawed.
 
--- 
-Best regards,
+> > ---
+> >  arch/x86/kvm/svm/svm.c | 25 +++++++++++++++++++------
+> >  1 file changed, 19 insertions(+), 6 deletions(-)
+> >=20
+> > diff --git a/arch/x86/kvm/svm/svm.c b/arch/x86/kvm/svm/svm.c
+> > index 2934f185960d..f04b61c3d9d8 100644
+> > --- a/arch/x86/kvm/svm/svm.c
+> > +++ b/arch/x86/kvm/svm/svm.c
+> > @@ -520,18 +520,20 @@ static void svm_init_osvw(struct kvm_vcpu *vcpu)
+> >  		vcpu->arch.osvw.status |=3D 1;
+> >  }
+> > =20
+> > -static bool kvm_is_svm_supported(void)
+> > +static bool __kvm_is_svm_supported(void)
+> >  {
+> > -	int cpu =3D raw_smp_processor_id();
+> > +	int cpu =3D smp_processor_id();
+>=20
+> Since we have made sure __kvm_is_svm_supported() is always performed on a=
+ stable
+> cpu, should we keep using raw_smp_processor_id()? =EF=BF=BD
+>=20
+> It is faster than smp_processor_id() when CONFIG_DEBUG_PREEMPT=3Dy, but y=
+es the
+> latter can help to catch bug.
 
-Javier Martinez Canillas
-Core Platforms
-Red Hat
-
+Most kernels with any amount of CONFIG_DEBUG_* options enabled are comicall=
+y slow
+anyways, I much prefer having the sanity checks than the performance.
