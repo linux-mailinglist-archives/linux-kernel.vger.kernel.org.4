@@ -2,241 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 229496B776A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:27:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F49A6B7774
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjCMM1O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:27:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47980 "EHLO
+        id S229622AbjCMM3a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:29:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbjCMM1H (ORCPT
+        with ESMTP id S229535AbjCMM33 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:27:07 -0400
-Received: from DM6FTOPR00CU001.outbound.protection.outlook.com (mail-cusazon11020015.outbound.protection.outlook.com [52.101.61.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2EF162B5B;
-        Mon, 13 Mar 2023 05:26:59 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LsgilusxzhFl9lwtREjvmZ1TKNAgwkc6NXfL+rhFIjFz2pTwKrgXHSs5Gmw6B4EgB6symFdktrRlZRyPTmy5fnahmv0oa8o44z+ghQZY9yurCcSf7Mwt0u6WI/yL5vmXZWg+M4Xiqh/LyUo1FGNsO9HwV0N4uzavQvsv9bYnolupWPyPKy95rZhHU77Dl8Yz70deT56uo/0EbmuHBVijFgxZQO/2otargefofbQiOOtPW/ajaU+PoHHFrWEb8XcVedM2f/2ZGhT3xuRQe/B2c5yAJDJzKmcJ/I1BpEPBMrnSc0BuT7BCHziPTFwWsJByTFy4/8RQbY+8ezALp9xE3Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ak8lwkLMIvBHnoABPvlYF2ckWXhkrReT9z/PxyXty84=;
- b=dujjbKUbHXxXp2rBHZCgOQaL+JgYgQm2AIEy7Iv2c7c43aL4NplKV7C6DLGn0JzzLaCuKBpGnP4LGNLzgpb+X+2wd/0Up+sFynk/qqQ+FwqI7hpOUJCzcCB8Zxgw5vYZdHwmoG9SGoBalA240ajZ1gBXEcSBeugWp6BYcvP0zMQi7K/1I2xuw/6FFhd+GtWDt7gdj70TSJJUM+nJ5toGxqiMeXuqN5cUT1LzZtZ7Ayha+JrH48ysNU2JSgU+xKBQT/jerpfJhFkIhsN1Yz1yKFE5LDagDDhtw7EmTzlwrCXWZ6VyPWk3qnlXL8OdP7xMjSgDJqeZZ0Hqpa68Fr/yKw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ak8lwkLMIvBHnoABPvlYF2ckWXhkrReT9z/PxyXty84=;
- b=AUp9Hl3U8YnLw9dFvqbPOsgq/9Okji34uL8MZX4PvskBa14t1JHaSAarXJftP1mirqC4p7Ztv1EGtY7tamJmJ2y1dvj67lmb3jP/aLizrEaVDvCuB+Le/qF+rMkenxm+5iI5Jh9AsW81sPO7fgeWa0CEd8uyD7ueHlT8yXvyRsU=
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
- by MN0PR21MB3049.namprd21.prod.outlook.com (2603:10b6:208:371::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6222.3; Mon, 13 Mar
- 2023 12:26:56 +0000
-Received: from BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a]) by BYAPR21MB1688.namprd21.prod.outlook.com
- ([fe80::629a:b75a:482e:2d4a%4]) with mapi id 15.20.6222.003; Mon, 13 Mar 2023
- 12:26:56 +0000
-From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-To:     Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-CC:     "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        "wei.liu@kernel.org" <wei.liu@kernel.org>,
-        Dexuan Cui <decui@microsoft.com>,
-        "daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "lenb@kernel.org" <lenb@kernel.org>,
-        "rafael@kernel.org" <rafael@kernel.org>,
-        "linux-acpi@vger.kernel.org" <linux-acpi@vger.kernel.org>
-Subject: RE: [PATCH v7 5/5] Driver: VMBus: Add Devicetree support
-Thread-Topic: [PATCH v7 5/5] Driver: VMBus: Add Devicetree support
-Thread-Index: AQHZR3oO8XCRAJVOTEyd9eleCYLxd674F9KAgAA/zYCAAGYrcA==
-Date:   Mon, 13 Mar 2023 12:26:56 +0000
-Message-ID: <BYAPR21MB16888AD9A473CF15250B59C7D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
-References: <1677151745-16521-1-git-send-email-ssengar@linux.microsoft.com>
- <1677151745-16521-6-git-send-email-ssengar@linux.microsoft.com>
- <BYAPR21MB1688B84E25DD2173B6023737D7B99@BYAPR21MB1688.namprd21.prod.outlook.com>
- <20230313061603.GA8934@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-In-Reply-To: <20230313061603.GA8934@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=61f91c06-2473-4543-af2e-e09a225b35f9;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-13T12:21:43Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3049:EE_
-x-ms-office365-filtering-correlation-id: c5b3defa-c491-4a4f-38a5-08db23be3c5b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: nY2gUfwzVaaP/qKEK0odu7CrW697PyIf5R1+8ApPDVk+2vGSuoad3XeFAGB4Eg7aw1mPAVshC4aq340KcS+yIh3h3wcQp+UNrxWyrZZBV2NW+WAMW+0XsnvZy4fkCfFF14ZFvdwv5LKvVkGEfIIBgUHy2STIAAJIjOabaDls4QqwRvVGs4l6GAG/lX5UyppoV9bQN36Y+5Wot6cVU3G9YdppUVxN8ogNTG6tiGLsBlFu3Mpfar//zNmidXWbXMn4sQcuQefZSydU0XOQ6kvAFuVccnNRduNAobGBxBQzIa970EFtTGJON5v9oZFz2pOagYaKoPycR0IgtZUPaDMi1DJYFmlR6LZY/PrYe5bYwWVhPEyIXXKE41yCDRksKEbGRhcjViBf1SNSlxgYfE/0EjclrBoLuQ3ymWWSdimUqW99H08P4AjXHQ6EYNH8+z5nH4Ytn3kamQfz4ALh02DFxeDsGeUHzFWl4PMv9sFONW2YGvfxBsCDms2ZomP2uq3m+dffVR03vOmoa3XI4ADVXrSTuIax3sYXY55o1NNf/stv6ezPNrV1brAhDW4wrJ5JpFGl8m84Zy/D+BLJKswroN7inw8MgitgRF1quBHQgN1mF5+Xu+LoCZ5j/q0jgNo7MWRfmdfMVyWL44EtI/BqLlZlOGIcoDEg2V5JD06GGVeUYprsNERdacEsjyYpuPenRMhWMYQS10EhLOYO2t1nln9zfzgy+PUOUTWFXXw+JWUzO6x17Dna+zEJT4LLhT5G
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199018)(5660300002)(7416002)(41300700001)(6862004)(52536014)(55016003)(33656002)(86362001)(38070700005)(122000001)(82960400001)(82950400001)(8936002)(38100700002)(2906002)(478600001)(8990500004)(26005)(6506007)(9686003)(10290500003)(83380400001)(7696005)(71200400001)(66556008)(76116006)(66946007)(66446008)(4326008)(66476007)(64756008)(54906003)(316002)(186003)(8676002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?pCqWnRZ8ojtKBArdX+OmgEiz5T7/BIopH1sghelPKBLJVa6YaEn0/GyF3gtY?=
- =?us-ascii?Q?zHKMhBE9VtRavMbuE7gEbvQbXKeU/ysjgz0A+cTPgF/ucoroEM2wnyuySeEb?=
- =?us-ascii?Q?jhWbeMLmghTISzgJW4YHfPSibe6Btqg1zsH7VGCq/bJIgCTBGrj+Ae6wRggz?=
- =?us-ascii?Q?javcwHHOFPdmR75x2kuGJEPOVRgXDpw3Zc9+t0CRAkALSDJ3HX33bGs9iFq2?=
- =?us-ascii?Q?6SqaVE5wiHNVPUYx+UsMdZWKyOdTqn9sqA8XSWIx5JtQcF0OO2UaxYhSnlwW?=
- =?us-ascii?Q?HvBYOwrOOAXlsplfuqI4f/0BMBRblAVkPRZlC6JNSxCB4SyNMhdo2uTKsB6W?=
- =?us-ascii?Q?SHfztuMpLKgR5eLMWuH/oiE+WFSVMBpNrKWHe2mzbKnM16ptroKVZPIsK3vl?=
- =?us-ascii?Q?XP0o/MkYzd9Bi9M0LdglpgwE7MNELjx5dbA9KnQ6hcS8Ww06DWyXO6rnRrpt?=
- =?us-ascii?Q?teV8djrhJEPjbx+D7j7HM2IR9whFSlh1l0zXCnTLdynSaPX5p0ILBRBLCdOD?=
- =?us-ascii?Q?WogbvReAVF4CpOoSd4tHBanWdx9Se3VhKI+4/9FDtjWb1365GoUMAK4RnMNf?=
- =?us-ascii?Q?0BV1Hp1AgS87melG10udxBPItZtpC7ohub+yc6cbY7z8HsYy7etuJwSVcNkR?=
- =?us-ascii?Q?teDgYMbrrygyWeLEdrjefDY/HG2rn51g+4TryPquZ8Sg6brHsDNa/SypGrt0?=
- =?us-ascii?Q?vrJFoQjxDWELTcSYy3n05Ar6qf+jf1RonF/HSEpceF5AmOdeLXViU4+44nME?=
- =?us-ascii?Q?KCig04soN8KvvuHvsMZPsHEoVu4OitiMrrmJpj8ojeXa/kpUE4vBvFvCx6dF?=
- =?us-ascii?Q?OAijKE4woFk8yZ98l3474L0UiTShw2TQREFIBagWG9O5eYAm7xM56Pi0VQFK?=
- =?us-ascii?Q?teh6Xd1mzCo8g9ohq2x4PBDNsXdJDRBqMXqryPK1FuWRzitCfvgt/auHBPzt?=
- =?us-ascii?Q?aqJQ9e//In9y6Q4a5PVL6eXJ5XFbV/mR/YGpvi2I19/NrkypEJ3cni2QrYPV?=
- =?us-ascii?Q?obekdQvOgGw7gR1zZx0r57K7BMyYmDrR2Z5ClvMoY4uUGXoozkalw9rcsxBc?=
- =?us-ascii?Q?6TBUrpxKn97Ci7AgMYG+4lEjFZ/H+GkbEK9BNyuhFaMqNK567Wpgb043S/wP?=
- =?us-ascii?Q?ZYMtCaFBrsXzIOZTS6fzjJajzCbEh24CkFMFY1Sjc+FV9JVdlmIgovvoFxKQ?=
- =?us-ascii?Q?dfCx8ktpxXlB2ReNCm3inV80HY69UiPNdo0sJL/AdFWHPW1bN4mjqVw8C3f5?=
- =?us-ascii?Q?5tpxFuly07lZs4wnLmuMxakcKsuYqoaiMaWHqz9jk+7LkD0155UonZX3eQfo?=
- =?us-ascii?Q?igoLnXrqAfNjcThxB+5uTX6d8+8ySqPlWcUAjxCOqn39dYNM/t2B7pqQyX54?=
- =?us-ascii?Q?aQoGPfD00FbskXxtHg2ZVQkxQX3qYfXnpaZ9/fY9hg7z/YuHZr4dnEj93wrB?=
- =?us-ascii?Q?2YWyh3Gn96b8kyT8rZNIpsrrwltpsHPUP8pkLR51RhIUyyf5YUdmUG+0KlMk?=
- =?us-ascii?Q?us5IulDtNbtp6eemhZ7vHjLS0HIlWO/Uso4qxo5IYiUr5qf/pa7gTonxr1vU?=
- =?us-ascii?Q?TFLvE+rbDyZ4oauISinRSkL797KKJylhASMjZR7IoCbyUtgYtzA2ppFpdpyV?=
- =?us-ascii?Q?sA=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 13 Mar 2023 08:29:29 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BAA37559
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:29:27 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id o5-20020a05600c510500b003ec0e4ec6deso4731385wms.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:29:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678710566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=h4VVQpoDamLm4iSGgyTcxUJbskifYCP8YkUsAdfGEbg=;
+        b=ilW4Issw6poGCbNjTVwFmlU0lWsgBygyLFZDLIyAyzoED7YxH86wCNwJyFwB/D6xUU
+         i43HaZVbGctnUi7RkD3A+4ljGakIHdDb/lJavivGXLYBKSjvhHTpgvqe5yV74BIYhh3O
+         DwiEgpvhf3nuo5LNAzMzgCNXtKey5v8xYZ7EKExLGhzaK78bhsck0/p/U2GHElcMM7fi
+         vQSnAUhXntO+8kUsUlRZKjHaYdM3fvHpX3DgdLfZp94I9x/c5lXOe1wFduWc74TdVOJm
+         4lP56ZLBt+uh1R6XgySYJ/T9QCE9qSFUn8JUa7/0LJefGPEyluBfp7SPdKEvEXGUMaVF
+         sOHg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678710566;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h4VVQpoDamLm4iSGgyTcxUJbskifYCP8YkUsAdfGEbg=;
+        b=n5tMkr4uYqGauUB1/dyuXKpxxOyflVqnCaH5L5Svlf+bdFLTRvReYgN8hs3R+YcQ8B
+         WXsR0Htu6+9R5B6wSSo4CilvK9ep24vSkftTrZwSVK6yw47yH+10EvUkcB52pzrBtlEs
+         n+f1Nks/xJvCLexGS4BunJxywekKqcH4ihdZ7Awuh0kFmrP0sMg4vFNAvDb196oN6rmm
+         AspeAbU4wwbOZqBL5b3aqzIdzSke9lYHpz+TS+0DjU8BViEfYN+tFiHEOuhI48D68OY7
+         g2RxXn0c0crq42yDQZUMDGVEJz+A6wD3EMleepihJABk8EIv3U2hWGRyOUwtDGnh87I5
+         aZAA==
+X-Gm-Message-State: AO0yUKV/+rFfyRwT/AeytIh0umBc7P7wpcZy2FYj5KorwDBJFr6oSBXa
+        H3Wr07+IWCVAjMZyFkrUAbLozctak6I=
+X-Google-Smtp-Source: AK7set/gaQp/O/t0O7Ep564CIWvNM8VYVfB7hjofaZjtq9xS+1OFwnb37Wvi1GwJby9ax+AWtLf3bQ==
+X-Received: by 2002:a05:600c:3107:b0:3dc:55d9:ec8 with SMTP id g7-20020a05600c310700b003dc55d90ec8mr9958755wmo.41.1678710566134;
+        Mon, 13 Mar 2023 05:29:26 -0700 (PDT)
+Received: from lucifer.home (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.googlemail.com with ESMTPSA id p9-20020a05600c23c900b003ed23e9e03bsm3512317wmb.46.2023.03.13.05.29.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 05:29:25 -0700 (PDT)
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        David Hildenbrand <david@redhat.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Mel Gorman <mgorman@techsingularity.net>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Lorenzo Stoakes <lstoakes@gmail.com>
+Subject: [PATCH] mm: prefer xxx_page() alloc/free functions for order-0 pages
+Date:   Mon, 13 Mar 2023 12:27:14 +0000
+Message-Id: <50c48ca4789f1da2a65795f2346f5ae3eff7d665.1678710232.git.lstoakes@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c5b3defa-c491-4a4f-38a5-08db23be3c5b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 12:26:56.6096
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iuGh/VIR1qN843yz5kBSMfffAl4QbjDI0YLNBolTUpJEwxbQPobPDv1tENFu6dcK/rxosfVDpA34Sv5ckHEyOAnOgyP/8EDoiDu2G/qBXoU=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3049
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Saurabh Singh Sengar <ssengar@linux.microsoft.com> Sent: Sunday, Marc=
-h 12, 2023 11:16 PM
->=20
-> On Mon, Mar 13, 2023 at 02:33:53AM +0000, Michael Kelley (LINUX) wrote:
-> > From: Saurabh Sengar <ssengar@linux.microsoft.com> Sent: Thursday, Febr=
-uary 23,
-> 2023 3:29 AM
-> > >
-> > > Update the driver to support Devicetree boot as well along with ACPI.
-> > > At present the Devicetree parsing only provides the mmio region info
-> > > and is not the exact copy of ACPI parsing. This is sufficient to cate=
-r
-> > > all the current Devicetree usecases for VMBus.
-> > >
-> > > Currently Devicetree is supported only for x86 systems.
-> > >
-> > > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > > ---
-> > > [V7]
-> > > - Use cpu_addr instead of bus_addr
-> > >
-> > >  drivers/hv/Kconfig     |  6 +++--
-> > >  drivers/hv/vmbus_drv.c | 57 ++++++++++++++++++++++++++++++++++++++++=
+Update instances of alloc_pages(..., 0), __get_free_pages(..., 0) and
+__free_pages(..., 0) to use alloc_page(), __get_free_page() and
+__free_page() respectively in core code.
+
+Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
+---
+ include/asm-generic/pgalloc.h | 4 ++--
+ mm/debug_vm_pgtable.c         | 4 ++--
+ mm/hugetlb_vmemmap.c          | 2 +-
+ mm/mmu_gather.c               | 2 +-
+ mm/page_alloc.c               | 2 +-
+ mm/vmalloc.c                  | 2 +-
+ 6 files changed, 8 insertions(+), 8 deletions(-)
+
+diff --git a/include/asm-generic/pgalloc.h b/include/asm-generic/pgalloc.h
+index 977bea16cf1b..a7cf825befae 100644
+--- a/include/asm-generic/pgalloc.h
++++ b/include/asm-generic/pgalloc.h
+@@ -123,11 +123,11 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long addr)
+
+ 	if (mm == &init_mm)
+ 		gfp = GFP_PGTABLE_KERNEL;
+-	page = alloc_pages(gfp, 0);
++	page = alloc_page(gfp);
+ 	if (!page)
+ 		return NULL;
+ 	if (!pgtable_pmd_page_ctor(page)) {
+-		__free_pages(page, 0);
++		__free_page(page);
+ 		return NULL;
+ 	}
+ 	return (pmd_t *)page_address(page);
+diff --git a/mm/debug_vm_pgtable.c b/mm/debug_vm_pgtable.c
+index 7887cc2b75bf..4362021b1ce7 100644
+--- a/mm/debug_vm_pgtable.c
++++ b/mm/debug_vm_pgtable.c
+@@ -1048,7 +1048,7 @@ static void __init destroy_args(struct pgtable_debug_args *args)
+
+ 	if (args->pte_pfn != ULONG_MAX) {
+ 		page = pfn_to_page(args->pte_pfn);
+-		__free_pages(page, 0);
++		__free_page(page);
+
+ 		args->pte_pfn = ULONG_MAX;
+ 	}
+@@ -1290,7 +1290,7 @@ static int __init init_args(struct pgtable_debug_args *args)
+ 		}
+ 	}
+
+-	page = alloc_pages(GFP_KERNEL, 0);
++	page = alloc_page(GFP_KERNEL);
+ 	if (page)
+ 		args->pte_pfn = page_to_pfn(page);
+
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index a15cc56cf70a..1198064f80eb 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -400,7 +400,7 @@ static int alloc_vmemmap_page_list(unsigned long start, unsigned long end,
+ 	return 0;
+ out:
+ 	list_for_each_entry_safe(page, next, list, lru)
+-		__free_pages(page, 0);
++		__free_page(page);
+ 	return -ENOMEM;
+ }
+
+diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+index 2b93cf6ac9ae..ea9683e12936 100644
+--- a/mm/mmu_gather.c
++++ b/mm/mmu_gather.c
+@@ -32,7 +32,7 @@ static bool tlb_next_batch(struct mmu_gather *tlb)
+ 	if (tlb->batch_count == MAX_GATHER_BATCH_COUNT)
+ 		return false;
+
+-	batch = (void *)__get_free_pages(GFP_NOWAIT | __GFP_NOWARN, 0);
++	batch = (void *)__get_free_page(GFP_NOWAIT | __GFP_NOWARN);
+ 	if (!batch)
+ 		return false;
+
+diff --git a/mm/page_alloc.c b/mm/page_alloc.c
+index 680a4d76460e..256e8d3c8742 100644
+--- a/mm/page_alloc.c
++++ b/mm/page_alloc.c
+@@ -5538,7 +5538,7 @@ EXPORT_SYMBOL(__get_free_pages);
+
+ unsigned long get_zeroed_page(gfp_t gfp_mask)
+ {
+-	return __get_free_pages(gfp_mask | __GFP_ZERO, 0);
++	return __get_free_page(gfp_mask | __GFP_ZERO);
+ }
+ EXPORT_SYMBOL(get_zeroed_page);
+
+diff --git a/mm/vmalloc.c b/mm/vmalloc.c
+index 5e60e9792cbf..978194dc2bb8 100644
+--- a/mm/vmalloc.c
++++ b/mm/vmalloc.c
+@@ -2739,7 +2739,7 @@ void vfree(const void *addr)
+ 		 * High-order allocs for huge vmallocs are split, so
+ 		 * can be freed as an array of order-0 allocations
+ 		 */
+-		__free_pages(page, 0);
++		__free_page(page);
+ 		cond_resched();
+ 	}
+ 	atomic_long_sub(vm->nr_pages, &nr_vmalloc_pages);
 --
-> > >  2 files changed, 59 insertions(+), 4 deletions(-)
-> > >
-> > > diff --git a/drivers/hv/Kconfig b/drivers/hv/Kconfig
-> > > index 0747a8f1fcee..1a55bf32d195 100644
-> > > --- a/drivers/hv/Kconfig
-> > > +++ b/drivers/hv/Kconfig
-> > > @@ -4,11 +4,13 @@ menu "Microsoft Hyper-V guest support"
-> > >
-> > >  config HYPERV
-> > >  	tristate "Microsoft Hyper-V client drivers"
-> > > -	depends on ACPI && ((X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
-> > > -		|| (ARM64 && !CPU_BIG_ENDIAN))
-> > > +	depends on (X86 && X86_LOCAL_APIC && HYPERVISOR_GUEST) \
-> > > +		|| (ACPI && ARM64 && !CPU_BIG_ENDIAN)
-> > >  	select PARAVIRT
-> > >  	select X86_HV_CALLBACK_VECTOR if X86
-> > >  	select VMAP_PFN
-> > > +	select OF if !ACPI
-> > > +	select OF_EARLY_FLATTREE if !ACPI
-> > >  	help
-> > >  	  Select this option to run Linux as a Hyper-V client operating
-> > >  	  system.
-> >
-> > One further thing occurred to me.  OF_EARLY_FLATTREE really depends
-> > on OF instead of ACPI.   The ACPI dependency is indirect through OF.  S=
-o
-> > I'd suggest doing
-> >
-> > 	select OF_EARLY_FLATTRE if OF
-> >
-> > to express the direct dependency.
->=20
-> As you pointed out OF_EARLY_FLATTRE is anyway dependent on OF, and thus I
-> feel this check is redundant. I see all the Kconfig options which enables
-> both of these flags don't explicitly mention this dependency.
->=20
-> >
-> > Separately, I wonder if the "select OF if !ACPI" is even needed.  It do=
-esn't
-> > hurt anything to leave it, but it seems like any config that doesn't
-> > independently select either ACPI or OF is broken for reasons unrelated
-> > to Hyper-V.  I'm OK with leaving the select of OF if you want, so I'm
-> > more just wondering than asserting it should be removed.   I didn't
-> > see "select OF if !ACPI" anywhere else in the Kconfig files, and it
-> > seems like Hyper-V would not be the only environment where this
-> > is the expectation.
->=20
-> Ok I can remove the !ACPI dependency. Hope kernel size increase due to bo=
-th
-> the code compiled in shouldn't be problem for ACPI systems.
-> And here if config doesn't select ACPI or OF it will assume OF, which is
-> better then selecting none of them.
->=20
->=20
-> To address both of your comments I feel below will be sufficient:
-> select OF
-> select OF_EARLY_FLATTRE
-
-Actually, that's not what I was thinking. :-)   I was thinking for the Hype=
-r-V
-Kconfig to be silent on selecting OF, just like it is silent on selecting A=
-CPI.
-Whoever is configuring the kernel build would separately be selecting
-ACPI, or OF, or both, depending on their needs.   I don't think the Hyper-V
-Kconfig should always be selecting OF, because of the reason you noted --
-it drags in code that is not needed for normal VTL 0 usage.  If you take
-that approach, then
-
-	select OF_EARLY_FLATTREE if OF
-
-is appropriate.
-
-Michael
-
-
-
->=20
->=20
-> Regards,
-> Saurabh
->=20
-> >
-> > Michael
+2.39.2
