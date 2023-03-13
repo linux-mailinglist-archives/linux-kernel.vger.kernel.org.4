@@ -2,59 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35C826B7F1C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:15:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D74B86B7EAC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCMRPf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:15:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36640 "EHLO
+        id S229750AbjCMRFU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:05:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCMRPX (ORCPT
+        with ESMTP id S229792AbjCMREq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:15:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C865977E1F;
-        Mon, 13 Mar 2023 10:14:56 -0700 (PDT)
+        Mon, 13 Mar 2023 13:04:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1B66A7C;
+        Mon, 13 Mar 2023 10:04:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B0D0FB810D8;
-        Mon, 13 Mar 2023 17:13:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F7D2C433A4;
-        Mon, 13 Mar 2023 17:13:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678727633;
-        bh=waygJoMsmEuzShbrfLKTmYsjXJJABs/ZjxmcAXxJrFo=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=MzHKXiczApY5CW+k510wfPoijOe94MAfIi9QUFi6zkEn4hI/btbZ9sLGreVlnKLeR
-         bcpn7r6Kbv1A15fq6RMXqCj57/YTzz1VxBTzjijTyos35t5U4w2C3Hfe0CKPZxB5K4
-         IdRpfyr0xXHVSbQpqvMCLcMtQ8NFC/FLXCNK0PJkqeyybsMU7nOa0ibkMtJMOrLILJ
-         4rd+3N8Y2i196SbGbk/+aXTt003pva4/qKcLDo9FKe1GGvV48IS8yz23oY/JZLcDu2
-         A5NglNk2j5ouel+0hhQBzTq3AdpdF14O09x0v72BqY2pNuTklScLo/DhHHemSSAr15
-         kaAULm8lzRayQ==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Lars-Peter Clausen <lars@metafoo.de>,
-        Vinod Koul <vkoul@kernel.org>,
-        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Sinan Kaya <okaya@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Orson Zhai <orsonzhai@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Chunyan Zhang <zhang.lyra@gmail.com>
-Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org
-Subject: [PATCH 5/5] dmaengine: sprd: Don't set chancnt
-Date:   Tue, 14 Mar 2023 01:02:50 +0800
-Message-Id: <20230313170250.815-6-jszhang@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313170250.815-1-jszhang@kernel.org>
-References: <20230313170250.815-1-jszhang@kernel.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C39461381;
+        Mon, 13 Mar 2023 17:02:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F1D8C433D2;
+        Mon, 13 Mar 2023 17:02:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678726978;
+        bh=xB+JXJkfRoMTJReSFxcyBf5NrKfkYEDZMDzq4QLgzOc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gdx1cZJArXlLNfUys6mf2viumj5jcQzZWFv/2wuM5JbcOHfi6Sha4u605uTeom2px
+         chAtdg2hiRMYPnor8OPjp7L/eoOgDjT8yT0TQJAZh+odMBlyOIwv585v2vISXEv/v6
+         xtq//Mne1GiJ4Cr/d+kcY5vG0zAhfMp97l5CMVko=
+Date:   Mon, 13 Mar 2023 18:02:55 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jorge Merlino <jorge.merlino@canonical.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] Add symlink in /sys/class/net for interface altnames
+Message-ID: <ZA9XPysDlEV/KXu7@kroah.com>
+References: <20230313164903.839-1-jorge.merlino@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313164903.839-1-jorge.merlino@canonical.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -62,26 +54,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The dma framework will calculate the dma channels chancnt, setting it
-outself is wrong.
+On Mon, Mar 13, 2023 at 01:49:03PM -0300, Jorge Merlino wrote:
+> Currently interface altnames behave almost the same as the interface
+> principal name. One difference is that the not have a symlink in
+> /sys/class/net as the principal has.
+> This was mentioned as a TODO item in the original commit:
+> https://lore.kernel.org/netdev/20190719110029.29466-1-jiri@resnulli.us
+> This patch adds that symlink when an altname is created and removes it
+> when the altname is deleted.
+> 
+> Signed-off-by: Jorge Merlino <jorge.merlino@canonical.com>
+> ---
+>  drivers/base/core.c    | 22 ++++++++++++++++++++++
+>  include/linux/device.h |  3 +++
+>  net/core/dev.c         | 11 +++++++++++
+>  3 files changed, 36 insertions(+)
+> 
 
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- drivers/dma/sprd-dma.c | 1 -
- 1 file changed, 1 deletion(-)
-
-diff --git a/drivers/dma/sprd-dma.c b/drivers/dma/sprd-dma.c
-index 474d3ba8ec9f..2b639adb48ba 100644
---- a/drivers/dma/sprd-dma.c
-+++ b/drivers/dma/sprd-dma.c
-@@ -1169,7 +1169,6 @@ static int sprd_dma_probe(struct platform_device *pdev)
- 
- 	dma_cap_set(DMA_MEMCPY, sdev->dma_dev.cap_mask);
- 	sdev->total_chns = chn_count;
--	sdev->dma_dev.chancnt = chn_count;
- 	INIT_LIST_HEAD(&sdev->dma_dev.channels);
- 	INIT_LIST_HEAD(&sdev->dma_dev.global_node);
- 	sdev->dma_dev.dev = &pdev->dev;
--- 
-2.39.2
-
+You also forgot the Documentation/ABI/ update for the new symlink :(
