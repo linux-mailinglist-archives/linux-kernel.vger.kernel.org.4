@@ -2,100 +2,244 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 990E86B79B7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:59:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C56F6B79B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230146AbjCMN7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:59:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
+        id S230469AbjCMN7p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:59:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230522AbjCMN7O (ORCPT
+        with ESMTP id S231151AbjCMN7c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:59:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80B8923C79;
-        Mon, 13 Mar 2023 06:58:59 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 15AD4612D2;
-        Mon, 13 Mar 2023 13:58:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A34BC4339B;
-        Mon, 13 Mar 2023 13:58:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678715938;
-        bh=zEcQUdMeBfoETlPddkKFkjIDDgvirbomXMlkHaajWe4=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=IEu82KsPAFa2JlJsPns2YbDSdht0+ESoS/nkVvjQMhJ1+EuOY4YHHM8jWXmlw6Lue
-         0ItydL57xtY29cHzYD2+xqk/RhZeL5oSCE9u/1egMtP9XV6c8vVFiFEqIUGV8CYwwK
-         Koj58JUag+J1f3sa/euBpe6mLKnlzUFG2Mvmj9b1UsFZGX2Sc5coWWsMu7SEB3LdOg
-         O8k/H5TIKsy5cE5yTptmqNF5/QR0lunWpjQe03UOiFJDofqUsgNbULnvlCc9q80x6d
-         4ou8QmxC4uyk59dTfcR6SgleKnp3ByCSCI7/xRYh0qpy8GOSRIRsnTxOBzKiE2f9AU
-         xtmfugXQY012g==
-Date:   Mon, 13 Mar 2023 13:58:52 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Tony Lindgren <tony@atomide.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-omap@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 1/9] regulator: lp872x: Mark OF related data as maybe
- unused
-Message-ID: <a3c886f2-571e-4b66-827a-2b0fade61c61@sirena.org.uk>
-References: <20230310214553.275450-1-krzysztof.kozlowski@linaro.org>
+        Mon, 13 Mar 2023 09:59:32 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C18BF11E94;
+        Mon, 13 Mar 2023 06:59:06 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id z5so12707803ljc.8;
+        Mon, 13 Mar 2023 06:59:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678715945;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Br9dbZsECDN6znzio7e4ndSZQRXJUPgWqvgP0KX2jNs=;
+        b=OLlTHv0I0+9OnNHoHLNUQmgBnSgLPuYOuJEBBhb0vpNO7dnSIRIG0GKws9xu55voGE
+         vCID6Ka4c/6zDPuvWAQkJisw6z5YjwKoM8vfu2ACKH7KSFvjSo4HtNNN2x86lrHeCrDz
+         6PstVrVaq5Bcgo16Sn1bltxXscsd2+8mEhiTsxgyqFjQg8Edwy/lRVo9oCnR+HhRPO0F
+         20FJiJ302YzmI1ZBxlHh4d43v/RHlcsw5VOkX/yF7n2jagzjyTFBXWi4+MQJ2dvDvbHK
+         MEQBtMFDtf8KiPRh/o3WFPWecPBaonWsaaSTeTgj4Nd/ohOr99rO9AuRlpdNpKXlZT2w
+         qfmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678715945;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Br9dbZsECDN6znzio7e4ndSZQRXJUPgWqvgP0KX2jNs=;
+        b=R5PtxiGX0Q6kQkZqTLJ5rhuF278lbfNCs2xT5DH+rRi1Cc+uT7DViBnlwmMd3jkDXq
+         QbsavxIRQnvrx/b88RIDkc0CQa6yWx1kTHpI0/F0aM19TlNbiDhAv8JbhoDh2RKF6Fww
+         MzJB2FBNYk6pDWOUp22kdsXaJ4Gr4+/9QeuG+C+yjAm4bckJ3MJgzzci/ERpck9vw7Ph
+         RLj2vkov0xd1+GfNMSUedPSJT0wzKdnjnHRlRS3st3fyZc5X6l6P6TgOr8tE2SX06NEL
+         fxoCzJeuRdywJmPgczCFt8b37SQebt+rIM/5grR2M4z9NruPhO2GWfxIJtT1FVQ4Mn0C
+         zq2Q==
+X-Gm-Message-State: AO0yUKVJNg8ngaAi0lAuibNpjus2E+H28Of9XwpBNZnZOP0ulmm9tiGE
+        fMtbjczRbCZlH2x34NDrlO4A37EA8js=
+X-Google-Smtp-Source: AK7set+AeBlk3MeVeF61/R37ov8TRcwJgzWhbOa4eNw9bTXtWV8m6SYaD2RFMz/rn7785U4IsvGZgg==
+X-Received: by 2002:a05:651c:2122:b0:293:40ce:b08e with SMTP id a34-20020a05651c212200b0029340ceb08emr15833898ljq.16.1678715944850;
+        Mon, 13 Mar 2023 06:59:04 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id y3-20020a197503000000b0049c29389b98sm982887lfe.151.2023.03.13.06.59.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 06:59:04 -0700 (PDT)
+Message-ID: <b4bf8587-d3cd-ff88-0276-7e394c110757@gmail.com>
+Date:   Mon, 13 Mar 2023 15:59:03 +0200
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="5sz95mK51+KCvPTd"
-Content-Disposition: inline
-In-Reply-To: <20230310214553.275450-1-krzysztof.kozlowski@linaro.org>
-X-Cookie: Type louder, please.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+References: <cover.1678093787.git.mazziesaccount@gmail.com>
+ <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
+ <ZAXiKfRbsXpHhwAJ@smile.fi.intel.com>
+ <e507c171-bebc-84f6-c326-ff129b42fb7f@gmail.com>
+ <ZA8kTx4exvGwUfNn@smile.fi.intel.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
+In-Reply-To: <ZA8kTx4exvGwUfNn@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 3/13/23 15:25, Andy Shevchenko wrote:
+> On Mon, Mar 13, 2023 at 02:47:45PM +0200, Matti Vaittinen wrote:
+>> On 3/6/23 14:52, Andy Shevchenko wrote:
+>>> On Mon, Mar 06, 2023 at 11:17:15AM +0200, Matti Vaittinen wrote:
+> 
+> ...
+> 
+>>>> +/*
+>>>
+>>> If it's deliberately not a kernel doc, why to bother to have it looking as one?
+>>> It's really a provocative to some people who will come with a patches to "fix"
+>>> this...
+>>
+>> I just liked the kernel-doc format. It's a standard way of explaining the
+>> parameters and returned value. Function however is intended to be internal
+>> and thus I don't see a need to make this "official kernel doc".
+> 
+> The problem as I pointed out with your approach it's unmaintainable. And
+> I even explained why I consider it this way.
 
---5sz95mK51+KCvPTd
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Yes. You told me that it asks for people to turn it to kernel doc. If 
+that happens, apply the patch and it is kernel doc. I don't see how 
+unmaintainable it is. I think this is just creating a problem we may 
+never face - and if we do, we can solve it by applying the 'problem' then.
 
-On Fri, Mar 10, 2023 at 10:45:45PM +0100, Krzysztof Kozlowski wrote:
-> The driver can be compile tested with !CONFIG_OF making certain data
-> unused:
->=20
->   drivers/regulator/lp872x.c:931:34: error: =E2=80=98lp872x_dt_ids=E2=80=
-=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+> 
+>>>> +		sort(gains[i], gts->num_hwgain, sizeof(int), iio_gts_gain_cmp,
+>>>> +		     NULL);
+>>>
+>>> One line reads better?
+>>
+>> I try mostly to keep the good old 80 chars as I often have 3 terminal
+>> windows fitted on my laptop screen. It works best with the short lines.
+> 
+> With it on one line
+> 
+> 		sort(gains[i], gts->num_hwgain, sizeof(int), iio_gts_gain_cmp, NULL);
+> 
+> You have N at the last column which quite likely suggests that it's NULL.
+> So, I don't think it's a big issue to put on a single line.
 
-Here you're using maybe unused instead of removing the of_match_ptr()
-(which does seem like a better approach).  This really feels very
-random, there's obviously a usability problem here.
+Trusting suggestions like this in a kernel code would be a big problem 
+to me. I would ask myself - "do you feel lucky"?
 
---5sz95mK51+KCvPTd
-Content-Type: application/pgp-signature; name="signature.asc"
+Well, my favourite editor would wrap the line - so I would see the NULL 
+at the next row. Not indented properly causing it to be harder to read 
+than the code which is properly manually split and indented. It is much 
+less of a problem for me to "waste" a row here and see the line properly 
+split.
 
------BEGIN PGP SIGNATURE-----
+>>>> +	if (ret && gts->avail_all_scales_table)
+>>>
+>>> In one case you commented that free(NULL) is okay, in the other, you add
+>>> a duplicative check. Why?
+>>
+>> Sorry but what do you mean by dublicative check?
+>>
+>> Usually I avoid the kfree(NULL). That's why I commented on it in that
+>> another case where it was not explicitly disallowed. I'll change that for v4
+>> to avoid kfree(NULL) as you suggested.
+> 
+> So, and with it you put now a double check for NULL, do you think it's okay?
+> I don't.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQPLBsACgkQJNaLcl1U
-h9CyJwf/WqKJPKC6kh2mubKAh8kZ595kuWjjTRVC3nIoN7SeXxKElHC+EAekIWW2
-N2CKvSu+0/rnDO1xXVlzwlxocljHthQoB3llq8k8ffUdsKdk5a56cG+31hklnuPs
-CydA9CgZmqBiLG5nj5h7FteJjO39HdZa5iwWO2AHodjF7RECQCfsiBcjjz9vyiZg
-ckx9xRTNsQSKzG0GPMSwugJd8zRvv2nbbTTdIZkd45K3E1FqNL4LhRC73QJByH9E
-vTxR1ustr/UVD3gR1P22DKLOJH2egLgVZfdInAbbL5fmtrCXWfPYefZCMJ1puXwJ
-DYamtgQhghBCKuguwjidqjAVkjwMxw==
-=GokI
------END PGP SIGNATURE-----
+I don't see the double check. I see only one check just above the 
+kfree()? Where is the other check?
 
---5sz95mK51+KCvPTd--
+> 
+>>>> +		kfree(gts->avail_all_scales_table);
+> 
+> ...
+> 
+>>>> +	per_time_gains = kcalloc(gts->num_itime, sizeof(int *), GFP_KERNEL);
+>>>
+>>> sizeof(type) is error prone in comparison to sizeof(*var).
+>>
+>> Yes and no. In majority of cases where we see sizeof(*var) - the *var is no
+>> longer a pointer as having pointers to pointers is not _that_ common. When
+>> we see sizeof(type *) - we instantly know it is a size of a pointer and not
+>> a size of some other type.
+>>
+>> So yes, while having sizeof(*var) makes us tolerant to errors caused by
+>> variable type changes - it makes us prone to human reader errors. Also, if
+>> someone changes type of *var from pointer to some other type - then he/she
+>> is likely to in any case need to revise the array alloactions too.
+>>
+>> While I in general agree with you that the sizeof(variable) is better than
+>> sizeof(type) - I see that in cases like this the sizeof(type *) is clearer.
+> 
+> Still get a fundamental disagreement on this. I would insist, but I'm not
+> a maintainer, so you are lucky :-) if Jonathan will not force you to follow
+> my way.
+
+In a code you are maintaining it is good to have it in your way as 
+you're responsible for it. This is also why I insist on having things in 
+a way I can read best for a code I plan to maintain - unless the 
+subsystem maintainers see it hard to maintain for them. So, let's see if 
+Jonathan has strong opinions on this one :)
+
+> ...
+> 
+>>>> +	for (i = gts->num_itime - 1; i >= 0; i--) {
+>>>
+>>> 	while (i--) {
+>>>
+>>> makes it easier to parse.
+>>
+>> This is also something I replied for v2. I think we have a fundamental
+>> disagreement on this one :/
+> 
+> Yes, and I will continue insisting on while (foo--).
+> That why I won't give you my tags :-)
+
+Well, I am planning to keep reading this code when/if it is being 
+patched. Hence I am so reluctant to change it to something that makes it 
+harder for me to follow. Meanwhile, I understand that you don't want to 
+tag something you don't agree with.
+
+> ...
+> 
+>>>> +		if (!min)
+>>>> +			min = gts->hwgain_table[i].gain;
+>>>> +		else
+>>>> +			min = min(min, gts->hwgain_table[i].gain);
+>>>
+>>> I was staring at this and have got no clue why it's not a dead code.
+>>
+>> Nor can I. It seems obvious to me that the one who wrote this had no idea
+>> what he was doing XD
+>>
+>> Well, I must have had some initial idea of using the minimum value to
+>> something - but I can't remember what would've been the use. Maybe I was
+>> initially thinking that I'll return the smallest value in-range if the gain
+>> given as a parameter was smaller than any of the supported ones.
+>>
+>> Thank you for reading this carefully and pointing it out! Well spotted!
+> 
+> Hint: run always `make W=1` when building kernel.
+
+Ah. I thought I had that and sparse enabled. It seems I disabled all 
+extra checks from my build scripts a while ago to speed-up compilation 
+when I was bisecting...
+
+> It will show defined but not used cases and combined with nowadays
+> default -Werror won't be compilable.
+> 
+
+Thanks for the review.
+
+--Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
+
