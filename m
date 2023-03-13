@@ -2,90 +2,958 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BAF346B7B76
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:05:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E7526B7B7D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:07:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjCMPFX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:05:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55378 "EHLO
+        id S229826AbjCMPHT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:07:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjCMPFV (ORCPT
+        with ESMTP id S229820AbjCMPHL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:05:21 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE4381EBCB
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:04:55 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id r18so11644752wrx.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:04:55 -0700 (PDT)
+        Mon, 13 Mar 2023 11:07:11 -0400
+Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B7FB67014
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:07:06 -0700 (PDT)
+Received: by mail-wr1-x432.google.com with SMTP id r18so11652119wrx.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:07:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678719890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ntw4NswkvkQ8h4CSwsdP0fvCQYzjvQ4rhoDvE1FRNiA=;
-        b=j10p2JFxLeoHLyUKBSeFyBDKP8szefabaernl+MIsCTI4EsJ0TjMK7xKZ1W5wUwk6T
-         51ojoE0tgrdxgXvREnMJPWzo0iGFEV7FmeEYmlLSKRIyJaBlUkyWFlE4cKtLLhxfMgKs
-         PY54x3NkgVGUvTMxZ+jaEjEakk2abQv78cLmqNkxfVWOPk33HKjrWeQv0x0lSt6nBpWx
-         ATG74d+DjAzGBWQ0Fa6qquq0FLm46glGf2mSuSfiXP1Y6erKo1R6lVqcCiZCe/QPXYRO
-         AYku9cgirKzxb5QvocIfW2hcaXjH4f1x3An32WVACgIMC+ilsYW/BtbNDqmDROTXquKq
-         mM/g==
+        d=linaro.org; s=google; t=1678720024;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=rL0BVB8yVy8g/X8namDJv2PpxvDd9rucVVAjV+eFu6o=;
+        b=QdvONbThyVV+DBa82xY+qATxzVRSdW19SJKlN6Hz5DnjXIrQSONJHbdAgw8bcTlcrZ
+         +PvrjWsDdOFx58QY7Nmx2df0YyG4ZlmxJTuqI3dhz+TYsHhm+yDdvut1LHUJ6sav/+i9
+         3FFo5zRuipP46qVwAo4bHbqv+U/Uh8JhVyrVTXFcuR20coGS8o0oR+ic4hpVUUrtEZsZ
+         YZruecmIwGhqq63FGTDY7cOgub538/mhLNO0UN9SlVbdse4/oBqyQ1jO8aVhyoWy/ELA
+         WRnJeIcgWKvTsWHMLcN/QDwto/dvGM5quM5sm//pY0lGHqClmp+G/1W6NpjcyAjiHVke
+         bktA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678719890;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ntw4NswkvkQ8h4CSwsdP0fvCQYzjvQ4rhoDvE1FRNiA=;
-        b=GRva+X+Rm2FRgA+R49CEd/Kl/NKCyvfuKRqx804Seinu2KbtkR6INH8QAkX74a5gtS
-         MkbGEvCZzFVtGqnrO8MXn8h8C6QdyTOOfi0EUoTUF7QSE6k9fIjdegDMpAlE1pQD2oJx
-         4jilrQe9GAH8mW1I76L7xDZiSIukBlgoquJChp4CGCGf6cXOFpguKNnx7chfjJdzYnlc
-         3X8qMi0hqm4EfaPL2nbRoL5/9tQHOSK/x3jb//fvvrF+Swk0Ns5Bv3uhgL7gUHQwZqJ4
-         yVtU4hj/JQCud5FF6YHUVGtUbdwMw6eIC/IpmKYfCyL8JIFajo70ayq3HklOxxgCEUGs
-         ZMhA==
-X-Gm-Message-State: AO0yUKUCwxMEVkSEBZ2ppGjNMC6XWCVwpPZgsjafRtFCHfSa3lidFmmE
-        7YnrpZGtHHsXtC4NrIswDUM=
-X-Google-Smtp-Source: AK7set/gCQvm68a5pe7NSAw/Kg7jjyn4kTIWaXE6wPFgiLpBwBQ8F+KtE0HSFSLXBouSVD6vahFiPg==
-X-Received: by 2002:a5d:684d:0:b0:2cf:e739:9fbb with SMTP id o13-20020a5d684d000000b002cfe7399fbbmr482116wrw.22.1678719890408;
-        Mon, 13 Mar 2023 08:04:50 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id s16-20020a5d4250000000b002c56179d39esm4438264wrr.44.2023.03.13.08.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 08:04:49 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 18:04:45 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>,
-        outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4] staging: axis-fifo: initialize read_timeout and
- write_timeout once in probe function
-Message-ID: <f545dc88-717b-4fa0-851a-733dd5fc2eff@kili.mountain>
-References: <ZA4M3+ZeB1Rl2fbs@khadija-virtual-machine>
- <9938109.ZD9C4EEAuf@suse>
- <ZA83yzPTq+nQF9Dd@khadija-virtual-machine>
+        d=1e100.net; s=20210112; t=1678720024;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=rL0BVB8yVy8g/X8namDJv2PpxvDd9rucVVAjV+eFu6o=;
+        b=8OPN8elY9t0eYbIl7KVyPQ5t57z5kyTdwy47H8zrhtb1zaRiP8mHxVLuxop93du/Ea
+         unF1XsNDCYium9WsQPoGadv68rvKc0VP8+a9K4pCbazGdpqDpc7yVKdYwPOxLuB5IEuR
+         RAOiDKK1y4XjCEIQUWfqfUtBMhTiBtVykGM/NeBtsnkEBvXG7UCdiTLT4uGIVoGWkga6
+         47k7mjdxQ3I6ynANGnwK7QjuICMe+glRYGrd0L8JIeDZdfCG3nyNKGVny1UF6jfs5pSm
+         kJQUJcoZ9/XMUIdTbGwbTyk9tS4AWN1igJbg+6KsHpnbhmarkurlBjg8cKJNxxv8DfPT
+         FyFA==
+X-Gm-Message-State: AO0yUKW4gLqxkLTCOHyf91EktFC2/REPDWBp/fuBc0cadZa6vIRlG4Sz
+        KgJFnUbq3Sjbq1l3NNYzbPd4SzPwdzyTXrs36V8hIg==
+X-Google-Smtp-Source: AK7set/f7u+i1UBCcCechI+MsKU/Gzy0aH7VNngoqD0zLJHy0+QcWOtz7jNei/9qeKH0bDndP+/mQw==
+X-Received: by 2002:a05:6000:1c2:b0:2ce:a944:1d9b with SMTP id t2-20020a05600001c200b002cea9441d9bmr4056571wrx.58.1678720024276;
+        Mon, 13 Mar 2023 08:07:04 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:5c08:f9:c8f6:bc87? ([2a01:e0a:982:cbb0:5c08:f9:c8f6:bc87])
+        by smtp.gmail.com with ESMTPSA id e3-20020adfdbc3000000b002c55efa9cbesm8394912wrj.39.2023.03.13.08.07.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 08:07:03 -0700 (PDT)
+Message-ID: <598f95a4-5379-ce03-09fe-9b68dbada0fc@linaro.org>
+Date:   Mon, 13 Mar 2023 16:07:02 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA83yzPTq+nQF9Dd@khadija-virtual-machine>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v6 2/2] drm/panel: Add driver for Novatek NT36523
+Content-Language: en-US
+To:     Jianhua Lu <lujianhua000@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+References: <20230313101858.14611-1-lujianhua000@gmail.com>
+ <20230313101858.14611-2-lujianhua000@gmail.com>
+Organization: Linaro Developer Services
+In-Reply-To: <20230313101858.14611-2-lujianhua000@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 07:48:43PM +0500, Khadija Kamran wrote:
-> Also, I had one question. Is it okay to write a long subject as I have
-> used in this patch?
+On 13/03/2023 11:18, Jianhua Lu wrote:
+> Add a driver for panels using the Novatek NT36523 display driver IC.
+> 
+> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> ---
+> Changes in v6:
+>    - Make the first mode to be DRM_MODE_TYPE_PREFERRED.
+> 
+> Changes in v5:
+>    - use lowercase hex for init sequence
+>    - fix code style
+>    - enable DRM_MODE_TYPE_PREFERRED if where is only one mode.
+> 
+> Changes in v4:
+>    - add multiple modes support
+>    - use dev_err_probe helper
+>    - fix dsi_info type string
+>    - reimplement mipi_dsi_dual_dcs_write_seq() macro
+> 
+> Changes in v3:
+>    - Refactor source code
+> 
+> Changes in v2:
+>    - Refactor and clean up source code
+> 
+>   MAINTAINERS                                   |   7 +
+>   drivers/gpu/drm/panel/Kconfig                 |  10 +
+>   drivers/gpu/drm/panel/Makefile                |   1 +
+>   drivers/gpu/drm/panel/panel-novatek-nt36523.c | 777 ++++++++++++++++++
+>   4 files changed, 795 insertions(+)
+>   create mode 100644 drivers/gpu/drm/panel/panel-novatek-nt36523.c
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 5383af5d3b45..3586248bb05d 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6537,6 +6537,13 @@ T:	git git://anongit.freedesktop.org/drm/drm-misc
+>   F:	Documentation/devicetree/bindings/display/panel/sony,acx424akp.yaml
+>   F:	drivers/gpu/drm/panel/panel-novatek-nt35560.c
+>   
+> +DRM DRIVER FOR NOVATEK NT36523 PANELS
+> +M:	Jianhua Lu <lujianhua000@gmail.com>
+> +S:	Maintained
+> +T:	git git://anongit.freedesktop.org/drm/drm-misc
+> +F:	Documentation/devicetree/bindings/display/panel/novatek,nt36523.yaml
+> +F:	drivers/gpu/drm/panel/panel-novatek-nt36523.c
+> +
+>   DRM DRIVER FOR NOVATEK NT36672A PANELS
+>   M:	Sumit Semwal <sumit.semwal@linaro.org>
+>   S:	Maintained
+> diff --git a/drivers/gpu/drm/panel/Kconfig b/drivers/gpu/drm/panel/Kconfig
+> index 8eeee71c0000..268508743b5c 100644
+> --- a/drivers/gpu/drm/panel/Kconfig
+> +++ b/drivers/gpu/drm/panel/Kconfig
+> @@ -377,6 +377,16 @@ config DRM_PANEL_NOVATEK_NT35950
+>   	  Sharp panels used in Sony Xperia Z5 Premium and XZ Premium
+>   	  mobile phones.
+>   
+> +config DRM_PANEL_NOVATEK_NT36523
+> +	tristate "Novatek NT36523 panel driver"
+> +	depends on OF
+> +	depends on DRM_MIPI_DSI
+> +	depends on BACKLIGHT_CLASS_DEVICE
+> +	help
+> +	  Say Y here if you want to enable support for the panels built
+> +	  around the Novatek NT36523 display controller, such as some
+> +	  Boe panels used in Xiaomi Mi Pad 5 and 5 Pro tablets.
+> +
+>   config DRM_PANEL_NOVATEK_NT36672A
+>   	tristate "Novatek NT36672A DSI panel"
+>   	depends on OF
+> diff --git a/drivers/gpu/drm/panel/Makefile b/drivers/gpu/drm/panel/Makefile
+> index c05aa9e23907..570eab8bf2b2 100644
+> --- a/drivers/gpu/drm/panel/Makefile
+> +++ b/drivers/gpu/drm/panel/Makefile
+> @@ -35,6 +35,7 @@ obj-$(CONFIG_DRM_PANEL_NEWVISION_NV3052C) += panel-newvision-nv3052c.o
+>   obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35510) += panel-novatek-nt35510.o
+>   obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35560) += panel-novatek-nt35560.o
+>   obj-$(CONFIG_DRM_PANEL_NOVATEK_NT35950) += panel-novatek-nt35950.o
+> +obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36523) += panel-novatek-nt36523.o
+>   obj-$(CONFIG_DRM_PANEL_NOVATEK_NT36672A) += panel-novatek-nt36672a.o
+>   obj-$(CONFIG_DRM_PANEL_NOVATEK_NT39016) += panel-novatek-nt39016.o
+>   obj-$(CONFIG_DRM_PANEL_MANTIX_MLAF057WE51) += panel-mantix-mlaf057we51.o
+> diff --git a/drivers/gpu/drm/panel/panel-novatek-nt36523.c b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
+> new file mode 100644
+> index 000000000000..d30dbbfb67b1
+> --- /dev/null
+> +++ b/drivers/gpu/drm/panel/panel-novatek-nt36523.c
+> @@ -0,0 +1,777 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Novatek NT36523 DriverIC panels driver
+> + *
+> + * Copyright (c) 2022, 2023 Jianhua Lu <lujianhua000@gmail.com>
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/gpio/consumer.h>
+> +#include <linux/module.h>
+> +#include <linux/of_device.h>
+> +#include <linux/of_graph.h>
+> +#include <linux/regulator/consumer.h>
+> +
+> +#include <drm/drm_connector.h>
+> +#include <drm/drm_crtc.h>
+> +#include <drm/drm_mipi_dsi.h>
+> +#include <drm/drm_modes.h>
+> +#include <drm/drm_panel.h>
+> +
+> +#define DSI_NUM_MIN 1
+> +
+> +#define mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, cmd, seq...)        \
+> +		do {                                                 \
+> +			mipi_dsi_dcs_write_seq(dsi0, cmd, seq);      \
+> +			mipi_dsi_dcs_write_seq(dsi1, cmd, seq);      \
+> +		} while (0)
+> +
+> +struct panel_info {
+> +	struct drm_panel panel;
+> +	struct mipi_dsi_device *dsi[2];
+> +	const struct panel_desc *desc;
+> +
+> +	struct gpio_desc *reset_gpio;
+> +	struct backlight_device *backlight;
+> +	struct regulator *vddio;
+> +
+> +	bool prepared;
+> +};
+> +
+> +struct panel_desc {
+> +	unsigned int width_mm;
+> +	unsigned int height_mm;
+> +
+> +	unsigned int bpc;
+> +	unsigned int lanes;
+> +	unsigned long mode_flags;
+> +	enum mipi_dsi_pixel_format format;
+> +
+> +	const struct drm_display_mode *modes;
+> +	unsigned int num_modes;
+> +	const struct mipi_dsi_device_info dsi_info;
+> +	int (*init_sequence)(struct panel_info *pinfo);
+> +
+> +	bool is_dual_dsi;
+> +};
+> +
+> +static inline struct panel_info *to_panel_info(struct drm_panel *panel)
+> +{
+> +	return container_of(panel, struct panel_info, panel);
+> +}
+> +
+> +static int elish_boe_init_sequence(struct panel_info *pinfo)
+> +{
+> +	struct mipi_dsi_device *dsi0 = pinfo->dsi[0];
+> +	struct mipi_dsi_device *dsi1 = pinfo->dsi[1];
+> +	/* No datasheet, so write magic init sequence directly */
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb9, 0x05);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x18, 0x40);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb9, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x23);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x00, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x01, 0x84);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x05, 0x2d);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x06, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x07, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x08, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x09, 0x45);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x11, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x12, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x15, 0x83);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x16, 0x0c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x29, 0x0a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x30, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x31, 0xfe);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x32, 0xfd);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x33, 0xfb);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x34, 0xf8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x35, 0xf5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x36, 0xf3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x37, 0xf2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x38, 0xf2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x39, 0xf2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3a, 0xef);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3b, 0xec);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3d, 0xe9);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3f, 0xe5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x40, 0xe5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x41, 0xe5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2a, 0x13);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x45, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x46, 0xf4);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x47, 0xe7);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x48, 0xda);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x49, 0xcd);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4a, 0xc0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4b, 0xb3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4c, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4d, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4e, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4f, 0x99);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x50, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x51, 0x68);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x52, 0x66);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x53, 0x66);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x54, 0x66);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2b, 0x0e);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x58, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x59, 0xfb);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5a, 0xf7);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5b, 0xf3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5c, 0xef);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5d, 0xe3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5e, 0xda);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5f, 0xd8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x60, 0xd8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x61, 0xd8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x62, 0xcb);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x63, 0xbf);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x64, 0xb3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x65, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x66, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x67, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x2a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x25, 0x47);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x30, 0x47);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x39, 0x47);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x26);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x19, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1a, 0xe0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1b, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1c, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2a, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2b, 0xe0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xf0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x84, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x85, 0x0c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x51, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x25);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x91, 0x1f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x92, 0x0f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x93, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x94, 0x18);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x95, 0x03);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x96, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb0, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x25);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x19, 0x1f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1b, 0x1b);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x24);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb8, 0x28);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x27);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd0, 0x31);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd1, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd2, 0x30);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd4, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xde, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xdf, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x26);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x00, 0x81);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x01, 0xb0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x22);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9f, 0x50);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x6f, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x70, 0x11);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x73, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x74, 0x49);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x76, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x77, 0x49);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xa0, 0x3f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xa9, 0x50);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xaa, 0x28);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xab, 0x28);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xad, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb8, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb9, 0x49);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xba, 0x49);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbb, 0x49);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbe, 0x04);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbf, 0x49);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc0, 0x04);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc1, 0x59);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc2, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc5, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc6, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc7, 0x48);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xca, 0x43);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xcb, 0x3c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xce, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xcf, 0x43);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd0, 0x3c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd3, 0x43);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd4, 0x3c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd7, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xdc, 0x43);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xdd, 0x3c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xe1, 0x43);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xe2, 0x3c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xf2, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xf3, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xf4, 0x48);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x25);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x13, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x14, 0x23);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbc, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbd, 0x23);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x2a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x97, 0x3c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x98, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x99, 0x95);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9a, 0x03);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9b, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9c, 0x0b);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9d, 0x0a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9e, 0x90);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x22);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9f, 0x50);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x23);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xa3, 0x50);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xe0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x14, 0x60);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x16, 0xc0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4f, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xf0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3a, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xd0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x02, 0xaf);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x09, 0xee);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1c, 0x99);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1d, 0x09);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x51, 0x0f, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x53, 0x2c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x35, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbb, 0x13);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3b, 0x03, 0xac, 0x1a, 0x04, 0x04);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x11);
+> +	msleep(70);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x29);
+> +
+> +	return 0;
+> +}
+> +
+> +static int elish_csot_init_sequence(struct panel_info *pinfo)
+> +{
+> +	struct mipi_dsi_device *dsi0 = pinfo->dsi[0];
+> +	struct mipi_dsi_device *dsi1 = pinfo->dsi[1];
+> +	/* No datasheet, so write magic init sequence directly */
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb9, 0x05);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x18, 0x40);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb9, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xd0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x02, 0xaf);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x00, 0x30);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x09, 0xee);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1c, 0x99);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1d, 0x09);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xf0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3a, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xe0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4f, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x58, 0x40);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x35, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x23);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x00, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x01, 0x84);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x05, 0x2d);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x06, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x07, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x08, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x09, 0x45);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x11, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x12, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x15, 0x83);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x16, 0x0c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x29, 0x0a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x30, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x31, 0xfe);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x32, 0xfd);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x33, 0xfb);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x34, 0xf8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x35, 0xf5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x36, 0xf3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x37, 0xf2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x38, 0xf2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x39, 0xf2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3a, 0xef);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3b, 0xec);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3d, 0xe9);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3f, 0xe5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x40, 0xe5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x41, 0xe5);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2a, 0x13);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x45, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x46, 0xf4);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x47, 0xe7);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x48, 0xda);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x49, 0xcd);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4a, 0xc0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4b, 0xb3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4c, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4d, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4e, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x4f, 0x99);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x50, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x51, 0x68);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x52, 0x66);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x53, 0x66);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x54, 0x66);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2b, 0x0e);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x58, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x59, 0xfb);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5a, 0xf7);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5b, 0xf3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5c, 0xef);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5d, 0xe3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5e, 0xda);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x5f, 0xd8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x60, 0xd8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x61, 0xd8);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x62, 0xcb);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x63, 0xbf);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x64, 0xb3);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x65, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x66, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x67, 0xb2);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x51, 0x0f, 0xff);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x53, 0x2c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x55, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbb, 0x13);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x3b, 0x03, 0xac, 0x1a, 0x04, 0x04);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x2a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x25, 0x46);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x30, 0x46);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x39, 0x46);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x26);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x01, 0xb0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x19, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1a, 0xe0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1b, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1c, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2a, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x2b, 0xe0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0xf0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x84, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x85, 0x0c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x51, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x25);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x91, 0x1f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x92, 0x0f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x93, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x94, 0x18);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x95, 0x03);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x96, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb0, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x25);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x19, 0x1f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x1b, 0x1b);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x24);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb8, 0x28);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x27);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd0, 0x31);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd1, 0x20);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd4, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xde, 0x80);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xdf, 0x02);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x26);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x00, 0x81);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x01, 0xb0);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x22);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x6f, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x70, 0x11);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x73, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x74, 0x4d);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xa0, 0x3f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xa9, 0x50);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xaa, 0x28);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xab, 0x28);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xad, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb8, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xb9, 0x4b);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xba, 0x96);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbb, 0x4b);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbe, 0x07);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbf, 0x4b);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc0, 0x07);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc1, 0x5c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc2, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc5, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc6, 0x3f);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xc7, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xca, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xcb, 0x40);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xce, 0x00);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xcf, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd0, 0x40);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd3, 0x08);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xd4, 0x40);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x25);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbc, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xbd, 0x1c);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x2a);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xfb, 0x01);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x9a, 0x03);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0xff, 0x10);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x11);
+> +	msleep(70);
+> +	mipi_dsi_dual_dcs_write_seq(dsi0, dsi1, 0x29);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct drm_display_mode elish_boe_modes[] = {
+> +	{
+> +		/* There is only one 120 Hz timing, but it doesn't work perfectly, 104 Hz preferred */
+> +		.clock = (1600 + 60 + 8 + 60) * (2560 + 26 + 4 + 168) * 104 / 1000,
+> +		.hdisplay = 1600,
+> +		.hsync_start = 1600 + 60,
+> +		.hsync_end = 1600 + 60 + 8,
+> +		.htotal = 1600 + 60 + 8 + 60,
+> +		.vdisplay = 2560,
+> +		.vsync_start = 2560 + 26,
+> +		.vsync_end = 2560 + 26 + 4,
+> +		.vtotal = 2560 + 26 + 4 + 168,
+> +	},
+> +};
+> +
+> +static const struct drm_display_mode elish_csot_modes[] = {
+> +	{
+> +		/* There is only one 120 Hz timing, but it doesn't work perfectly, 104 Hz preferred */
+> +		.clock = (1600 + 200 + 40 + 52) * (2560 + 26 + 4 + 168) * 104 / 1000,
+> +		.hdisplay = 1600,
+> +		.hsync_start = 1600 + 200,
+> +		.hsync_end = 1600 + 200 + 40,
+> +		.htotal = 1600 + 200 + 40 + 52,
+> +		.vdisplay = 2560,
+> +		.vsync_start = 2560 + 26,
+> +		.vsync_end = 2560 + 26 + 4,
+> +		.vtotal = 2560 + 26 + 4 + 168,
+> +	},
+> +};
+> +
+> +static const struct panel_desc elish_boe_desc = {
+> +	.modes = elish_boe_modes,
+> +	.num_modes = ARRAY_SIZE(elish_boe_modes),
+> +	.dsi_info = {
+> +		.type = "BOE-elish",
+> +		.channel = 0,
+> +		.node = NULL,
+> +	},
+> +	.width_mm = 127,
+> +	.height_mm = 203,
+> +	.bpc = 8,
+> +	.lanes = 3,
+> +	.format = MIPI_DSI_FMT_RGB888,
+> +	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
+> +	.init_sequence = elish_boe_init_sequence,
+> +	.is_dual_dsi = true,
+> +};
+> +
+> +static const struct panel_desc elish_csot_desc = {
+> +	.modes = elish_csot_modes,
+> +	.num_modes = ARRAY_SIZE(elish_csot_modes),
+> +	.dsi_info = {
+> +		.type = "CSOT-elish",
+> +		.channel = 0,
+> +		.node = NULL,
+> +	},
+> +	.width_mm = 127,
+> +	.height_mm = 203,
+> +	.bpc = 8,
+> +	.lanes = 3,
+> +	.format = MIPI_DSI_FMT_RGB888,
+> +	.mode_flags = MIPI_DSI_MODE_VIDEO | MIPI_DSI_CLOCK_NON_CONTINUOUS | MIPI_DSI_MODE_LPM,
+> +	.init_sequence = elish_csot_init_sequence,
+> +	.is_dual_dsi = true,
+> +};
+> +
+> +static void nt36523_reset(struct panel_info *pinfo)
+> +{
+> +	gpiod_set_value_cansleep(pinfo->reset_gpio, 1);
+> +	usleep_range(12000, 13000);
+> +	gpiod_set_value_cansleep(pinfo->reset_gpio, 0);
+> +	usleep_range(12000, 13000);
+> +	gpiod_set_value_cansleep(pinfo->reset_gpio, 1);
+> +	usleep_range(12000, 13000);
+> +	gpiod_set_value_cansleep(pinfo->reset_gpio, 0);
+> +	usleep_range(12000, 13000);
+> +}
+> +
+> +static int nt36523_prepare(struct drm_panel *panel)
+> +{
+> +	struct panel_info *pinfo = to_panel_info(panel);
+> +	int ret;
+> +
+> +	if (pinfo->prepared)
+> +		return 0;
+> +
+> +	ret = regulator_enable(pinfo->vddio);
+> +	if (ret) {
+> +		dev_err(panel->dev, "failed to enable vddio regulator: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	nt36523_reset(pinfo);
+> +
+> +	ret = pinfo->desc->init_sequence(pinfo);
+> +	if (ret < 0) {
+> +		regulator_disable(pinfo->vddio);
+> +		dev_err(panel->dev, "failed to initialize panel: %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	pinfo->prepared = true;
+> +
+> +	return 0;
+> +}
+> +
+> +static int nt36523_disable(struct drm_panel *panel)
+> +{
+> +	struct panel_info *pinfo = to_panel_info(panel);
+> +	int i, ret;
+> +
+> +	for (i = 0; i < DSI_NUM_MIN + pinfo->desc->is_dual_dsi; i++) {
+> +		ret = mipi_dsi_dcs_set_display_off(pinfo->dsi[i]);
+> +		if (ret < 0)
+> +			dev_err(&pinfo->dsi[i]->dev, "failed to set display off: %d\n", ret);
+> +	}
+> +
+> +	for (i = 0; i < DSI_NUM_MIN + pinfo->desc->is_dual_dsi; i++) {
+> +		ret = mipi_dsi_dcs_enter_sleep_mode(pinfo->dsi[i]);
+> +		if (ret < 0)
+> +			dev_err(&pinfo->dsi[i]->dev, "failed to enter sleep mode: %d\n", ret);
+> +	}
+> +
+> +	msleep(70);
+> +
+> +	return 0;
+> +}
+> +
+> +static int nt36523_unprepare(struct drm_panel *panel)
+> +{
+> +	struct panel_info *pinfo = to_panel_info(panel);
+> +
+> +	if (!pinfo->prepared)
+> +		return 0;
+> +
+> +	gpiod_set_value_cansleep(pinfo->reset_gpio, 1);
+> +	regulator_disable(pinfo->vddio);
+> +
+> +	pinfo->prepared = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static void nt36523_remove(struct mipi_dsi_device *dsi)
+> +{
+> +	struct panel_info *pinfo = mipi_dsi_get_drvdata(dsi);
+> +	int ret;
+> +
+> +	ret = mipi_dsi_detach(pinfo->dsi[0]);
+> +	if (ret < 0)
+> +		dev_err(&dsi->dev, "failed to detach from DSI0 host: %d\n", ret);
+> +
+> +	if (pinfo->desc->is_dual_dsi) {
+> +		ret = mipi_dsi_detach(pinfo->dsi[1]);
+> +		if (ret < 0)
+> +			dev_err(&pinfo->dsi[1]->dev, "failed to detach from DSI1 host: %d\n", ret);
+> +		mipi_dsi_device_unregister(pinfo->dsi[1]);
+> +	}
+> +
+> +	drm_panel_remove(&pinfo->panel);
+> +}
+> +
+> +static int nt36523_get_modes(struct drm_panel *panel,
+> +			       struct drm_connector *connector)
+> +{
+> +	struct panel_info *pinfo = to_panel_info(panel);
+> +	int i;
+> +
+> +	for (i = 0; i < pinfo->desc->num_modes; i++) {
+> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
+> +		struct drm_display_mode *mode;
+> +
+> +		mode = drm_mode_duplicate(connector->dev, m);
+> +		if (!mode) {
+> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
+> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
+> +			return -ENOMEM;
+> +		}
+> +
+> +		mode->type = DRM_MODE_TYPE_DRIVER;
+> +		if (i == 0)
+> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+> +
+> +		drm_mode_set_name(mode);
+> +		drm_mode_probed_add(connector, mode);
+> +	}
+> +
+> +	connector->display_info.width_mm = pinfo->desc->width_mm;
+> +	connector->display_info.height_mm = pinfo->desc->height_mm;
+> +	connector->display_info.bpc = pinfo->desc->bpc;
+> +
+> +	return pinfo->desc->num_modes;
+> +}
+> +
+> +static const struct drm_panel_funcs nt36523_panel_funcs = {
+> +	.disable = nt36523_disable,
+> +	.prepare = nt36523_prepare,
+> +	.unprepare = nt36523_unprepare,
+> +	.get_modes = nt36523_get_modes,
+> +};
+> +
+> +static int nt36523_probe(struct mipi_dsi_device *dsi)
+> +{
+> +	struct device *dev = &dsi->dev;
+> +	struct device_node *dsi1;
+> +	struct mipi_dsi_host *dsi1_host;
+> +	struct panel_info *pinfo;
+> +	const struct mipi_dsi_device_info *info;
+> +	int i, ret;
+> +
+> +	pinfo = devm_kzalloc(dev, sizeof(*pinfo), GFP_KERNEL);
+> +	if (!pinfo)
+> +		return -ENOMEM;
+> +
+> +	pinfo->vddio = devm_regulator_get(dev, "vddio");
+> +	if (IS_ERR(pinfo->vddio))
+> +		return dev_err_probe(dev, PTR_ERR(pinfo->vddio), "failed to get vddio regulator\n");
+> +
+> +	pinfo->reset_gpio = devm_gpiod_get(dev, "reset", GPIOD_OUT_HIGH);
+> +	if (IS_ERR(pinfo->reset_gpio))
+> +		return dev_err_probe(dev, PTR_ERR(pinfo->reset_gpio), "failed to get reset gpio\n");
+> +
+> +	pinfo->desc = of_device_get_match_data(dev);
+> +	if (!pinfo->desc)
+> +		return -ENODEV;
+> +
+> +	/* If the panel is dual dsi, register DSI1 */
+> +	if (pinfo->desc->is_dual_dsi) {
+> +		info = &pinfo->desc->dsi_info;
+> +
+> +		dsi1 = of_graph_get_remote_node(dsi->dev.of_node, 1, -1);
+> +		if (!dsi1) {
+> +			dev_err(dev, "cannot get secondary DSI node.\n");
+> +			return -ENODEV;
+> +		}
+> +
+> +		dsi1_host = of_find_mipi_dsi_host_by_node(dsi1);
+> +		of_node_put(dsi1);
+> +		if (!dsi1_host)
+> +			return dev_err_probe(dev, -EPROBE_DEFER, "cannot get secondary DSI host\n");
+> +
+> +		pinfo->dsi[1] = mipi_dsi_device_register_full(dsi1_host, info);
+> +		if (!pinfo->dsi[1]) {
+> +			dev_err(dev, "cannot get secondary DSI device\n");
+> +			return -ENODEV;
+> +		}
+> +	}
+> +
+> +	pinfo->dsi[0] = dsi;
+> +	mipi_dsi_set_drvdata(dsi, pinfo);
+> +	drm_panel_init(&pinfo->panel, dev, &nt36523_panel_funcs, DRM_MODE_CONNECTOR_DSI);
+> +
+> +	ret = drm_panel_of_backlight(&pinfo->panel);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "failed to get backlight\n");
+> +
+> +	drm_panel_add(&pinfo->panel);
+> +
+> +	for (i = 0; i < DSI_NUM_MIN + pinfo->desc->is_dual_dsi; i++) {
+> +		pinfo->dsi[i]->lanes = pinfo->desc->lanes;
+> +		pinfo->dsi[i]->format = pinfo->desc->format;
+> +		pinfo->dsi[i]->mode_flags = pinfo->desc->mode_flags;
+> +
+> +		ret = mipi_dsi_attach(pinfo->dsi[i]);
+> +		if (ret < 0)
+> +			return dev_err_probe(dev, ret, "cannot attach to DSI%d host.\n", i);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id nt36523_of_match[] = {
+> +	{
+> +		.compatible = "xiaomi,elish-boe-nt36523",
+> +		.data = &elish_boe_desc,
+> +	},
+> +	{
+> +		.compatible = "xiaomi,elish-csot-nt36523",
+> +		.data = &elish_csot_desc,
+> +	},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, nt36523_of_match);
+> +
+> +static struct mipi_dsi_driver nt36523_driver = {
+> +	.probe = nt36523_probe,
+> +	.remove = nt36523_remove,
+> +	.driver = {
+> +		.name = "panel-novatek-nt36523",
+> +		.of_match_table = nt36523_of_match,
+> +	},
+> +};
+> +module_mipi_dsi_driver(nt36523_driver);
+> +
+> +MODULE_AUTHOR("Jianhua Lu <lujianhua000@gmail.com>");
+> +MODULE_DESCRIPTION("DRM driver for Novatek NT36523 based MIPI DSI panels");
+> +MODULE_LICENSE("GPL");
 
-People say subject should be 50 chars (I forget the exact limit) but
-there is a little bit of flexibility.  This subject is too long though.
-Perhaps I would use something like:
 
-[PATCH v5] staging: axis-fifo: initialize timeouts in probe only
-
-regards,
-dan carpenter
-
+Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
