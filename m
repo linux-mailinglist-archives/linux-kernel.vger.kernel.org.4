@@ -2,55 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BED46B8631
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:40:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAD3F6B8639
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:43:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbjCMXkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:40:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52672 "EHLO
+        id S230140AbjCMXnu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:43:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229700AbjCMXkT (ORCPT
+        with ESMTP id S229528AbjCMXnr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:40:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 457253B206;
-        Mon, 13 Mar 2023 16:40:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D0E6E61540;
-        Mon, 13 Mar 2023 23:40:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 35ECAC4339B;
-        Mon, 13 Mar 2023 23:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678750817;
-        bh=BWJpo5Yx95YbIqYpWbjuzEmNkFYrx8DMntUSrU0h6Es=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=AphEpNggaO4M++PQwRigDyn6y+7PhHJAs3L6vkIPKMT+1Zf4U2jwxGafCBJrD/nzH
-         7DYf4NmvWAmxt5PeMUcRUNIS6+cpLf62h+SeuSlJbe24ZZsqH6FkWdVeHLUiBVj5vF
-         UOmE7JOGM8QuqTm7BFuhN/flw0e6lTDepM8TuEPMZsMQyDKiCNmoTsC35IIBKG1m4K
-         RQ0W1jTNv0oP8E1PqWpvryC9yZ+1q9677Qswf8yBFco54cXh14NVs9LxXO7ZwmkjIK
-         dfQBe5OpFBUQEm+N8xGQhVBNPceAu1IxvkQPSkuA7bzxSPgRIgQst5Zsva8H2yeHdz
-         n/PhVYKgX1n5w==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C2A4C59A4C;
-        Mon, 13 Mar 2023 23:40:17 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Mar 2023 19:43:47 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D5DA1ABD7;
+        Mon, 13 Mar 2023 16:43:44 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DL6KeD031757;
+        Mon, 13 Mar 2023 23:43:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=CBoOxpzINwgVRVD68GBKhXdxVlkYGDPyGdEJQHpE0PI=;
+ b=Qp9N/pZaYPdePCTE9fmcwfP007tbJDG3TErZPCCOrfOunX4NJcQZ0FV6zOr6R/Asb6xI
+ F8UiMi13YN/ZMtUa7DyABELF98CWpwKsLgPSvHvAP0vu+Fnpjrd78jzzeHCufb2/xTdj
+ asBRzgWjc9bzQda4h3flHaYpQrK8cC9yNSVRR2MJE//OZv5udO9D+OVpGb7IUQ0VqDdf
+ jbQKHc1UpQlXdOeMSZP4zWfMBxAlEMRjL+SKsxw2XLt1px3AHrFhgzlpFEb39CzuMS3F
+ KMsqd1ct+4kSSvk1Zd+XzH5ZtI1Fo/pVXvt8rQqjUXLSZ47qknvHfircK6wU2ePLd/7J BQ== 
+Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa44bshht-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 23:43:13 +0000
+Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
+        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32DNhCoE000821
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 23:43:12 GMT
+Received: from [10.110.94.159] (10.80.80.8) by nalasex01b.na.qualcomm.com
+ (10.47.209.197) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
+ 2023 16:43:11 -0700
+Message-ID: <684daf86-6c3f-7310-eebf-4ebfc3c480ca@quicinc.com>
+Date:   Mon, 13 Mar 2023 16:43:10 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3 00/28] Introduce QC USB SND audio offloading support
+Content-Language: en-US
+To:     Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
+        <srinivas.kandagatla@linaro.org>, <mathias.nyman@intel.com>,
+        <perex@perex.cz>, <broonie@kernel.org>, <lgirdwood@gmail.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <agross@kernel.org>,
+        <Thinh.Nguyen@synopsys.com>, <bgoswami@quicinc.com>,
+        <andersson@kernel.org>, <robh+dt@kernel.org>,
+        <gregkh@linuxfoundation.org>, <tiwai@suse.com>
+CC:     <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <alsa-devel@alsa-project.org>, <devicetree@vger.kernel.org>,
+        <linux-usb@vger.kernel.org>, <quic_jackp@quicinc.com>,
+        <quic_plai@quicinc.com>
+References: <20230308235751.495-1-quic_wcheng@quicinc.com>
+ <4f8a66c0-398f-5655-3aa7-a59bc9ba56cc@linux.intel.com>
+ <8b2f3ce7-3e0c-bdf0-8d9f-9aeabba09a15@quicinc.com>
+ <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
+From:   Wesley Cheng <quic_wcheng@quicinc.com>
+In-Reply-To: <a211f26d-a045-0729-871f-248d5fce3f3f@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH next-next] bnxt: avoid overflow in bnxt_get_nvram_directory()
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <167875081711.805.4783713735950503185.git-patchwork-notify@kernel.org>
-Date:   Mon, 13 Mar 2023 23:40:17 +0000
-References: <20230309174347.3515-1-korotkov.maxim.s@gmail.com>
-In-Reply-To: <20230309174347.3515-1-korotkov.maxim.s@gmail.com>
-To:     Maxim Korotkov <korotkov.maxim.s@gmail.com>
-Cc:     michael.chan@broadcom.com, pavan.chebbi@broadcom.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01b.na.qualcomm.com (10.47.209.197)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: P6fygNRWuNlfNovaiLokHClcD5DKCRRm
+X-Proofpoint-ORIG-GUID: P6fygNRWuNlfNovaiLokHClcD5DKCRRm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_11,2023-03-13_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=999 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303130187
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,29 +89,298 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+Hi Pierre,
 
-This patch was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Thu,  9 Mar 2023 20:43:47 +0300 you wrote:
-> The value of an arithmetic expression is subject
-> of possible overflow due to a failure to cast operands to a larger data
-> type before performing arithmetic. Used macro for multiplication instead
-> operator for avoiding overflow.
+On 3/9/2023 4:37 PM, Pierre-Louis Bossart wrote:
 > 
-> Found by Security Code and Linux Verification
-> Center (linuxtesting.org) with SVACE.
+>>>> Create vendor ops for the USB SND driver:
+>>>> qc_audio_offload: This particular driver has several components
+>>>> associated
+>>>> with it:
+>>>> - QMI stream request handler
+>>>> - XHCI interrupter and resource management
+>>>> - audio DSP memory management
+>>>
+>>> so how does this 'qc_audio_offload' interface with 'q6usb' described
+>>> above? how are the roles different or complementary?
+>>>
+>> So in general you can think that the qc_audio_offload is a complement to
+>> the USB SND USB class driver, while q6usb is to ASoC.  Since the ASoC
 > 
-> [...]
+> Humm, that is far from clear. I don't get how a something that interacts
+> with the USB class driver can also be in charge of the audio DSP memory
+> management.
+> 
 
-Here is the summary with links:
-  - [next-next] bnxt: avoid overflow in bnxt_get_nvram_directory()
-    https://git.kernel.org/netdev/net-next/c/7c6dddc239ab
+This is because the USB class driver is the entity which is going to 
+work with the USB HCD (XHCI) in this case to fetch the required 
+addresses, and map that into memory accessible by the audio DSP.  It 
+would be odd to be doing that from the q6usb end, which is part of the 
+ASoC layer.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+>> framework doesn't have any communication with USB SND, the ASoC DPCM USB
+>> backend (q6usb) will have to be the entity that maintains what is going
+>> on in USB SND.  That way, sessions initiated through the ASoC managed
+>> sound card can evaluate what is available based on information reported
+>> by q6usb.
+>>
+>> qc_audio_offload and q6usb will have some interaction between each
+>> other.  The majority of communication between qc_audio_offload and q6usb
+>> is reporting the device connection events.
+> 
+> It's already complicated to figure out how the DSP and USB class driver
+> might interact and probe/timing dependencies, but with two additional
+> drivers in the mix it's really hard to understand.
+> 
+
+I did test some cases based on existence of both these drivers 
+(qc_audio_offload and q6usb).  If either one doesn't exist in the 
+system, then the offload path would not work.  I did improve some of 
+these potential sequences in the latest revision, such as patch#28. This 
+would address scenarios where the q6usb ASoC DPCM backend wasn't probed, 
+while the USB SND (and qc_audio_offload) were still detecting device 
+connections.
+
+Once the Q6USB driver is probed, then the offload snd kcontrols would be 
+created, and devices would be properly identified with the rediscover api.
+
+> Maybe ascii-art would help describe the concepts and types of
+> information exchanged. Maintaining a consistent state across multiple
+> drivers is not an easy task.
+> 
+
+Hopefully this might help?  I know its a lot to read through.
+
+      USB                          |            ASoC
+--------------------------------------------------------------------
+                                   |  _________________________
+                                   | |sm8250 platform card     |
+                                   | |_________________________|
+                                   |         |           |
+                                   |      ___V____   ____V____
+                                   |     |Q6USB   | |Q6AFE    |  #5
+                                   |     |"codec" | |"cpu"    |
+                                   |     |________| |_________|
+                                   |         ^
+                                   |         |  #6
+                                   |      ___V____
+                                   |     |SOC-USB |
+   ________   #1  ________         #7    |        |
+  |USB SND |<--->|QC offld|<------------>|________|
+  |(card.c)|     |        |<----------       ^
+  |________|     |________|___ #4  | |       |
+      ^               ^       |    | |    ___V__________________
+      | #2            |  #2   |    | |   |APR/GLINK             |
+   __ V_______________V_____  |    | |   |______________________|
+  |USB SND (endpoint.c)     | |    | |              ^
+  |_________________________| |    | | #8           |
+              ^               |    | |   ___________V___________
+              | #3            |    | |->|audio DSP              |
+   ___________V_____________  |    |    |_______________________|
+  |XHCI HCD                 |<-    |
+  |_________________________|      |
 
 
+#1 - USB SND and QC offload:
+Initialization:
+- Register platform operations, to receive connect/disconnect events
+   from USB SND.
+- QC offload creates a QMI handle, in order to receive QMI requests
+   from the audio DSP.
+
+Runtime:
+- USB SND passes along "struct snd_usb_audio" in order for QC offload
+   to reference USB UAC desc parsing/USB SND helper APIs.
+- USB device disconnection events will result in clearing of the chip
+   entry.
+
+#2 - USB SND and QC offload endpoints:
+Runtime:
+- In the non-offloaded path, USB snd will utilize functions exposed by
+   USB SND endpoint, to help with fetching USB EP references and queuing
+   URBs.
+- In the offload path, qc offload will utilize the functions to fetch
+   USB EP references, so that it can use that information to query the
+   XHCI HCD.
+- Likewise, both will clean up endpoints when audio stream is not in use.
+
+#3 - XHCI HCD:
+Initialization:
+- During XHCI probe timing, when the USB HCD is added to the system, it
+   will also initialize the secondary event rings.
+
+Runtime:
+- During USB device plug ins/outs, allocates device slot, assigns eps,
+   and initializes transfer rings.
+
+#4 - QC offload and XHCI:
+Runtime:
+- QC offload needs to reference the transfer ring and secondary event ring
+   addresses by executing XHCI offload management APIs.
+- This happens when audio DSP receives a USB QMI stream request.
+
+#5 - ASoC components:
+Initialization:
+- The SM8250 platform sound card driver fetches DT node entries defining
+   the ASoC links. This chain/link has the components involved for a
+   particular Q6AFE path. (not only USB offload)
+     - "cpu" - this is the ASoC CPU DAI that handles interaction with the
+               Q6 DSP's audio protocol. (AFE ports)
+     - "codec" - the ASoC codec (backend) DAI defined
+- Registers ASoC platform sound card based on links defined in the DT node.
+   - Probes DAI components involved, ie Q6USB and Q6AFE
+
+Runtime:
+- Q6AFE has the bulk of the interaction w/ the audio DSP to start an audio
+   session, such as issuing AFE port start commands (part of the protocol
+   used to communicate the audio session info)
+- Q6USB will be there to now check for if format requested is supported by
+   the device, and maintain offloading status.
+
+#6 - Q6USB and SOC-USB:
+Initialization:
+- Q6USB will query QC offload for USB device connection states. (through
+   soc-usb)
+- Creates a SOC USB entry, that carries information about resources,
+   such as audio DSP memory information and requested XHCI event ring
+   index.
+
+Runtime:
+- SOC-USB will receive connect/disconnect events and propagate to Q6USB.
+   - Q6USB makes devices available for offloading based on these events.
+- Sets Q6AFE port configurations to select the USB SND card# and PCM#.
+
+#7 - SOC-USB and QC offload:
+Initialization:
+- Rediscover USB SND devices when the SOC-USB entry is created (if needed)
+     - For situations where the Q6USB DAI hasn't been probed.
+
+Runtime:
+- Propagate connect/disconnect events.
+
+#8 - audio DSP and QC offload:
+Runtime:
+- Handle QMI requests coming from audio DSP.  These requests come AFTER
+   the Q6AFE port is opened by the Q6AFE DAI(#6)
+- Returns memory information about resources allocated by XHCI.
+- Enables audio playback when this QMI transaction is completed.
+
+>>
+>>>> When the audio DSP wants to enable a playback stream, the request is
+>>>> first
+>>>> received by the ASoC platform sound card.  Depending on the selected
+>>>> route,
+>>>> ASoC will bring up the individual DAIs in the path.  The Q6USB
+>>>> backend DAI
+>>>> will send an AFE port start command (with enabling the USB playback
+>>>> path), and
+>>>> the audio DSP will handle the request accordingly.
+>>>>
+>>>> Part of the AFE USB port start handling will have an exchange of control
+>>>> messages using the QMI protocol.  The qc_audio_offload driver will
+>>>> populate the
+>>>> buffer information:
+>>>> - Event ring base address
+>>>> - EP transfer ring base address
+>>>>
+>>>> and pass it along to the audio DSP.  All endpoint management will now
+>>>> be handed
+>>>> over to the DSP, and the main processor is not involved in transfers.
+>>>>
+>>>> Overall, implementing this feature will still expose separate sound
+>>>> card and PCM
+>>>> devices for both the platorm card and USB audio device:
+>>>>    0 [SM8250MTPWCD938]: sm8250 - SM8250-MTP-WCD9380-WSA8810-VA-D
+>>>>                         SM8250-MTP-WCD9380-WSA8810-VA-DMIC
+>>>>    1 [Audio          ]: USB-Audio - USB Audio
+>>>>                         Generic USB Audio at usb-xhci-hcd.1.auto-1.4,
+>>>> high speed
+>>>>
+>>>> This is to ensure that userspace ALSA entities can decide which route
+>>>> to take
+>>>> when executing the audio playback.  In the above, if card#1 is
+>>>> selected, then
+>>>> USB audio data will take the legacy path over the USB PCM drivers,
+>>>> etc...
+>>>
+>>> I already voiced my concerns about exposing two cards, each with their
+>>> own set of volume controls with the same device. It would be much better
+>>> to have an additional offloaded PCM device for card0...
+>>>
+>>> But if the consensus is to have two cards, it's still not clear how the
+>>> routing would be selected. In the case where there are two USB audio
+>>> devices attached, the offloaded path would only support one of the two.
+>>> How would userspace know which of the two is selected?
+>>>
+>>
+>> With patch#24:
+>> https://lore.kernel.org/linux-usb/20230308235751.495-25-quic_wcheng@quicinc.com/T/#u
+>>
+>> Now, userspace can at least choose which device it wants to offload.
+>> Part of doing that would mean userspace knows what USB SND card devices
+>> are available, so it is aware of which devices are shared (between the
+>> offload and USB SND path)
+>>
+>>> And how would userspace know the difference anyways between two physical
+>>> devices attached to the platform with no offload, and one physical
+>>> device with one additional offload path? The names you selected can't be
+>>> used to identify that card1 is the optimized version of card0.
+>>>
+>>
+>> Is userspace currently able to differentiate between cards that are
+>> created by USB SND versus ASoC?  How complex can the userspace card
+>> discovery be?  Can it query kcontrols at this point in time?  If so,
+>> maybe we can change the names of the newly added ones to reflect that it
+>> is an offload device?
+>>
+>> SND kcontrol names are currently:
+>> Q6USB offload status
+>> Q6USB offload SND device select
+> 
+> I must admit I've never seen kcontrols being used to identify what the
+> card is, and in this case it's a pretend-card that's just an improved
+> version of another. It might be easier to use something else, such as
+> the component strings.
+
+Its not exactly a pretend card, right?  This is part of the overall 
+platform sound card we have in the system.  At the moment, I'm only 
+testing by adding the USB audio routing, but there can be several ASoC 
+links defined in the overall platform card.
+
+The Q6AFE CPU DAI has multiple audio AFE "ports" they can handle.  USB 
+is only one of those.
+
+>>
+>>> Before we review low-level kernel plumbing, it would be good to give a
+>>> better overview of how userspace applications are supposed to interact
+>>> with the cards and identify the offloaded path. Testing with
+>>> tinyplay/tinymix is fine, but that's a developer-level or CI unit test.
+>>> we've got to see the broader picture of how a sound server would use
+>>> this USB offload capability.
+>>
+>> Sure, I think that is fine.  I was hoping that at least adding some of
+>> the new kcontrols would help userspace make use of this path in general,
+>> but we can add more information if required.
+> 
+> Can I ask if this solution has been used with a complete userspace stack
+> already? I could see how this might be used with a relatively fixed
+
+Its been used only with the Android HAL.
+
+> Android HAL, where the platform and routing are relatively controlled. I
+> don't see how a more generic audio server would deal with the discovery
+> and routing.
+> 
+
+This is why your input is helpful, since it provides another use case 
+that wasn't considered.  I think in our previous discussions the tagging 
+possibility was a good idea, and was hoping that it could help.  Could 
+tag all USB SND cards to the platform sound card as well, and if the 
+power saving path is chosen, it would issue the playback on the platform 
+sound card. (if not in use)
+
+In this case, the offload path wouldn't be the default routing, and only 
+enabled for power optimized path.
+
+Thanks
+Wesley Cheng
