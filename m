@@ -2,107 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1EF36B6E38
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:52:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF46D6B6E3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:54:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCMDwB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:52:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
+        id S229844AbjCMDyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:54:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjCMDv3 (ORCPT
+        with ESMTP id S229524AbjCMDxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:51:29 -0400
-Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 515892311A
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:50:09 -0700 (PDT)
-Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
-        by Atcsqr.andestech.com with ESMTP id 32D3nEa1053318;
-        Mon, 13 Mar 2023 11:49:14 +0800 (+08)
-        (envelope-from dylan@andestech.com)
-Received: from atctrx.andestech.com (10.0.15.173) by ATCPCS16.andestech.com
- (10.0.1.222) with Microsoft SMTP Server id 14.3.498.0; Mon, 13 Mar 2023
- 11:49:15 +0800
-From:   Dylan Jhong <dylan@andestech.com>
-To:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-CC:     <guoren@kernel.org>, <sergey.matyukevich@syntacore.com>,
-        <aou@eecs.berkeley.edu>, <palmer@dabbelt.com>,
-        <paul.walmsley@sifive.com>, <x5710999x@gmail.com>,
-        <tim609@andestech.com>, <peterlin@andestech.com>,
-        <ycliang@andestech.com>, Dylan Jhong <dylan@andestech.com>
-Subject: [PATCH v2] riscv: mm: Fix incorrect ASID argument when flushing TLB
-Date:   Mon, 13 Mar 2023 11:49:06 +0800
-Message-ID: <20230313034906.2401730-1-dylan@andestech.com>
-X-Mailer: git-send-email 2.34.1
+        Sun, 12 Mar 2023 23:53:32 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19D74484;
+        Sun, 12 Mar 2023 20:53:03 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id x3so43291144edb.10;
+        Sun, 12 Mar 2023 20:53:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678679582;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SAXACzuXwy+nTr2NR5Tr4Og9P7p6FIxBdXhCQML9Ats=;
+        b=IZ5TDNMfqKdo++UkwAeAVgXMHyVDG/OU7Sy/NumRPF7wYgTPJsdHSchETDTTyYqBZx
+         Hn/B1KWoNSFKS8m6kw0cQfdgeeFYDnOId9ujYeWoN06TB0Vp/k/tnYJy2X45PMk1YIra
+         YgaywJ+UNXNP0S0WZWwHwcsIKzDww1eJigQxFw4iMOsRlFfIdxlxIyzBBxaqPsBlBIjz
+         4gugeFyvlI42iGb4jYaGYzGKzxaTm4FXXdWtGBbrnRc9Wb8osaQkSRtikE6wSB+jl0QN
+         LDfWFHJCBx6kQhi0//ieVAraoN3tZLCJpPQLIPtq/tqJ7xlSfD7YDiOczJNxkGF69g96
+         H6mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678679582;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=SAXACzuXwy+nTr2NR5Tr4Og9P7p6FIxBdXhCQML9Ats=;
+        b=r8sFDs3/Y33PbY2Y8Qevw9VFRxXaoqr/YAeUXUifLQP314MLaAmknaSa3SwwXpN9D5
+         C8HvmT0AQPh3CPUcIo4yix8G1KBj94+ij8Rge8BJBXeqvlzwt7XOuJCBhUNpN6M2TQw6
+         CSC2U5feQN6VXMDTCRjM61fM+nYaxwKkcTToYCV7uJmNMMvU6V4jOgHNDrvtXqq7HNJX
+         bmQV85tfsT4qesdyfbDK4EfatH2J5tKpKc/lqvEIlAyi+CLNCccnr4JUyvCJ9ZfgGk9+
+         vSxpkNp6WWesMOUhrtnKGAJWj4ygo0ICVLVXuL3yJD5/+2wHji3b480VLLlf/NPmlFcD
+         OyXg==
+X-Gm-Message-State: AO0yUKWeFyyd6qaZaUkd+TUosrWG3rzr3m2oExEAuPkqcNIZzevj8qbl
+        QL2cQoVuq/NE1cgDCFhHh99W51ZRnvU=
+X-Google-Smtp-Source: AK7set+CEh0S8M23BbeXWSO273z1dJWLETtWbu6S3OvSRUnt1jl4bo3ZuA3auGLKBOU7Z5lPrM4/mg==
+X-Received: by 2002:a17:907:94ce:b0:907:183f:328a with SMTP id dn14-20020a17090794ce00b00907183f328amr40902309ejc.65.1678679582442;
+        Sun, 12 Mar 2023 20:53:02 -0700 (PDT)
+Received: from [192.168.8.100] (188.30.129.33.threembb.co.uk. [188.30.129.33])
+        by smtp.gmail.com with ESMTPSA id n20-20020a170906701400b008b17fe9ac6csm2930574ejj.178.2023.03.12.20.53.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 20:53:02 -0700 (PDT)
+Message-ID: <e60ac354-76d6-7073-7b75-0a8ad04b3435@gmail.com>
+Date:   Mon, 13 Mar 2023 03:52:03 +0000
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.0.15.173]
-X-DNSRBL: 
-X-SPAM-SOURCE-CHECK: pass
-X-MAIL: Atcsqr.andestech.com 32D3nEa1053318
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+ <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+ <ee962f58-1074-0480-333b-67b360ea8b87@gmail.com>
+ <c81c971e-3e00-0767-3158-d712208f15e9@gmail.com>
+ <7bceab46-f4cd-3064-ff9e-1e64b18a901b@kernel.dk>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <7bceab46-f4cd-3064-ff9e-1e64b18a901b@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently, we pass the CONTEXTID instead of the ASID to the TLB flush
-function. We should only take the ASID field to prevent from touching
-the reserved bit field.
+On 3/12/23 15:31, Jens Axboe wrote:
+> On 3/11/23 1:53?PM, Pavel Begunkov wrote:
+>> On 3/11/23 20:45, Pavel Begunkov wrote:
+>>> On 3/11/23 17:24, Jens Axboe wrote:
+>>>> On 3/10/23 12:04?PM, Pavel Begunkov wrote:
+>>>>> io_uring extensively uses task_work, but when a task is waiting
+>>>>> for multiple CQEs it causes lots of rescheduling. This series
+>>>>> is an attempt to optimise it and be a base for future improvements.
+>>>>>
+>>>>> For some zc network tests eventually waiting for a portion of
+>>>>> buffers I've got 10x descrease in the number of context switches,
+>>>>> which reduced the CPU consumption more than twice (17% -> 8%).
+>>>>> It also helps storage cases, while running fio/t/io_uring against
+>>>>> a low performant drive it got 2x descrease of the number of context
+>>>>> switches for QD8 and ~4 times for QD32.
+>>>>>
+>>>>> Not for inclusion yet, I want to add an optimisation for when
+>>>>> waiting for 1 CQE.
+>>>>
+>>>> Ran this on the usual peak benchmark, using IRQ. IOPS is around ~70M for
+>>>> that, and I see context rates of around 8.1-8.3M/sec with the current
+>>>> kernel.
+>>>>
+>>>> Applied the two patches, but didn't see much of a change? Performance is
+>>>> about the same, and cx rate ditto. Confused... As you probably know,
+>>>> this test waits for 32 ios at the time.
+>>>
+>>> If I'd to guess it already has perfect batching, for which case
+>>> the patch does nothing. Maybe it's due to SSD coalescing +
+>>> small ro I/O + consistency and small latencies of Optanes,
+>>> or might be on the scheduling and the kernel side to be slow
+>>> to react.
+>>
+>> And if that's that, I have to note that it's quite a sterile
+>> case, the last time I asked the usual batching we're currently
+>> getting for networking cases is 1-2.
+> 
+> I can definitely see this being very useful for the more
+> non-deterministic cases where "completions" come in more sporadically.
+> But for the networking case, if this is eg receives, you'd trigger the
+> wakeup anyway to do the actual receive? And then the cqe posting doesn't
+> trigger another wakeup.
 
-Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
-Signed-off-by: Dylan Jhong <dylan@andestech.com>
----
-Changes from v2:
-- Remove unsued EXPORT_SYMBOL()
----
- arch/riscv/include/asm/tlbflush.h | 2 ++
- arch/riscv/mm/context.c           | 2 +-
- arch/riscv/mm/tlbflush.c          | 2 +-
- 3 files changed, 4 insertions(+), 2 deletions(-)
+True, In my case zc send notifications were the culprit.
 
-diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
-index 907b9efd39a8..597d6d8aec28 100644
---- a/arch/riscv/include/asm/tlbflush.h
-+++ b/arch/riscv/include/asm/tlbflush.h
-@@ -12,6 +12,8 @@
- #include <asm/errata_list.h>
- 
- #ifdef CONFIG_MMU
-+extern unsigned long asid_mask;
-+
- static inline void local_flush_tlb_all(void)
- {
- 	__asm__ __volatile__ ("sfence.vma" : : : "memory");
-diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
-index 80ce9caba8d2..6d1aeb063e81 100644
---- a/arch/riscv/mm/context.c
-+++ b/arch/riscv/mm/context.c
-@@ -22,7 +22,7 @@ DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
- 
- static unsigned long asid_bits;
- static unsigned long num_asids;
--static unsigned long asid_mask;
-+unsigned long asid_mask;
- 
- static atomic_long_t current_version;
- 
-diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
-index ce7dfc81bb3f..ba4c27187c95 100644
---- a/arch/riscv/mm/tlbflush.c
-+++ b/arch/riscv/mm/tlbflush.c
-@@ -27,7 +27,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
- 	/* check if the tlbflush needs to be sent to other CPUs */
- 	broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
- 	if (static_branch_unlikely(&use_asid_allocator)) {
--		unsigned long asid = atomic_long_read(&mm->context.id);
-+		unsigned long asid = atomic_long_read(&mm->context.id) & asid_mask;
- 
- 		/*
- 		 * TLB will be immediately flushed on harts concurrently
+It's not in the series, it might be better to not wake eagerly recv
+poll tw, it'll give time to accumulate more data. I'm a bit afraid
+of exhausting recv queues this way, so I don't think it's applicable
+by default.
+
 -- 
-2.34.1
-
+Pavel Begunkov
