@@ -2,39 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80EDE6B81C0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 93E206B81C7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:38:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229627AbjCMTft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44932 "EHLO
+        id S229666AbjCMTiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:38:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbjCMTfr (ORCPT
+        with ESMTP id S229496AbjCMTiC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 15:35:47 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C144F746FC;
-        Mon, 13 Mar 2023 12:35:45 -0700 (PDT)
+        Mon, 13 Mar 2023 15:38:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CA2EFAD;
+        Mon, 13 Mar 2023 12:38:01 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5B59F6149D;
-        Mon, 13 Mar 2023 19:35:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57CCAC433EF;
-        Mon, 13 Mar 2023 19:35:44 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AB201B811E1;
+        Mon, 13 Mar 2023 19:37:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D36C433EF;
+        Mon, 13 Mar 2023 19:37:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678736144;
-        bh=pb3jqIowhbh7iEOOz6VvRnBRFRPGyvH7UTXrxnizsak=;
+        s=k20201202; t=1678736278;
+        bh=jQi+PcG9SAfmGUTaLTv603Vpq8uAn+L4RzhgHyvuiig=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=piMJkaptslG6cNRNg1uhcgBYPi1ZhcJoBzh/OpYd29e4SekP6qIu1/hhwrFUP/rKy
-         8S+dj0o5E7P9kgUFG2WtdN/phvZr/c/IV0JS1LZt1+bCSMYUIDWTECz3M9fGNiSWsy
-         4YyDkE4unpn6m7bMJ3LOrUdi77D6XvjgW5sc1U1AQwORLU0Gfypq6MMdTP+pDKDR5v
-         zl6KroNDU0PO2l+NEk5iVloIVFBkB+uq+BkuJK+kO/LxHRIne05gZUr7jgxhLpN+gm
-         WMV6BQfAc2V9il2oEtDOgsfUHOK409qyfYglWT9/I4XNueHsIV1UNmJU3AAD+UJxQw
-         RlM3S27uTqAAA==
+        b=d2SFcGprrSjv0cTpRZfKeQdx7abce/yNw5R+ZVX+rWeuJ8cXml22yTmTdYTt/f98d
+         uPu6Gz6PTVoqEC3ODp3SPKsebrenq2+tTNQ70T7u93my7rltHaKhEYv7koQYPQnyhK
+         jT5N4Vy8GA5plz95q9lOI6VtAus6U0cCRHLtx4o4TAtzMRYwYpSBbM8T3qUYKdpawm
+         3ERoghniuFKnwI4HZHbHJGBfs+/sfXhlhjsJYJ9Q9l23DGH489UG7kmilJ/ZTMLbEW
+         lVqa5aR2Kmky7rJbUVdTDVracaKWPVhs+vaC4IkYDbPNZ0VWF/jtfZv2sqFUZhCAoO
+         k4XBI0gYA2lSw==
 Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 0F2134049F; Mon, 13 Mar 2023 16:35:42 -0300 (-03)
-Date:   Mon, 13 Mar 2023 16:35:42 -0300
+        id EA6BE4049F; Mon, 13 Mar 2023 16:37:55 -0300 (-03)
+Date:   Mon, 13 Mar 2023 16:37:55 -0300
 From:   Arnaldo Carvalho de Melo <acme@kernel.org>
 To:     Ian Rogers <irogers@google.com>
 Cc:     Peter Zijlstra <peterz@infradead.org>,
@@ -57,15 +57,15 @@ Cc:     Peter Zijlstra <peterz@infradead.org>,
         Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
         linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
         llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 12/13] tools headers: Make the difference output
- easier to read
-Message-ID: <ZA97DiLTzFyFpKVE@kernel.org>
+Subject: Re: [PATCH v1 07/13] perf build: Make binutil libraries opt in
+Message-ID: <ZA97k8ZP4lAC0tia@kernel.org>
 References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-13-irogers@google.com>
+ <20230311065753.3012826-8-irogers@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230311065753.3012826-13-irogers@google.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230311065753.3012826-8-irogers@google.com>
 X-Url:  http://acmel.wordpress.com
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -76,323 +76,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 10:57:52PM -0800, Ian Rogers escreveu:
-> Add failures to an array and display it before exiting. Before:
-> 
-> ```
-> Warning: Kernel ABI header at 'tools/include/uapi/linux/fcntl.h' differs from latest version at 'include/uapi/linux/fcntl.h'
-> diff -u tools/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
-> Warning: Kernel ABI header at 'tools/include/uapi/linux/kvm.h' differs from latest version at 'include/uapi/linux/kvm.h'
-> diff -u tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
-> ...
-> ```
-> 
-> After:
-> ```
-> Warning: Kernel ABI header differences:
->   tools/include/uapi/linux/fcntl.h include/uapi/linux/fcntl.h
->   tools/include/uapi/linux/kvm.h include/uapi/linux/kvm.h
+Em Fri, Mar 10, 2023 at 10:57:47PM -0800, Ian Rogers escreveu:
+> binutils is GPLv3 so distributions cannot ship perf linked against
+> libbfd and libiberty as the licenses are incompatible. Rather than
+> defaulting the build to opting in to libbfd and libiberty support and
+> opting out via NO_LIBBFD=1 and NO_DEMANGLE=1, make building against
+> the libraries optional and enabled with BUILD_NONDISTRO=1.
 
-I use that diff line to cut and paste, check the errors, etc.
+So now I get this:
+
+⬢[acme@toolbox perf-tools-next]$ perf -vv
+perf version 6.3.rc1.gace4d44d094c
+                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
+    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
+         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
+                libbfd: [ OFF ]  # HAVE_LIBBFD_SUPPORT
+            debuginfod: [ on  ]  # HAVE_DEBUGINFOD_SUPPORT
+                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
+               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
+               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
+             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
+              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
+             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
+             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
+    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
+                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
+                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
+             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
+                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
+                   aio: [ on  ]  # HAVE_AIO_SUPPORT
+                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
+               libpfm4: [ on  ]  # HAVE_LIBPFM
+         libtraceevent: [ on  ]  # HAVE_LIBTRACEEVENT
+         BPF skeletons: [ on  ]  # HAVE_BPF_SKEL
+⬢[acme@toolbox perf-tools-next]$
+
+Shouldn't we have, right next to libbpf that libstdc++ feature status?
 
 - Arnaldo
-
-> ...
-> ```
-> 
+ 
 > Signed-off-by: Ian Rogers <irogers@google.com>
 > ---
->  tools/perf/check-headers.sh | 229 ++++++++++++++++++++----------------
->  1 file changed, 125 insertions(+), 104 deletions(-)
+>  tools/perf/Makefile.config | 25 ++++++++++---------------
+>  tools/perf/Makefile.perf   |  2 ++
+>  tools/perf/tests/make      |  2 ++
+>  3 files changed, 14 insertions(+), 15 deletions(-)
 > 
-> diff --git a/tools/perf/check-headers.sh b/tools/perf/check-headers.sh
-> index eacca9a874e2..f848b425d936 100755
-> --- a/tools/perf/check-headers.sh
-> +++ b/tools/perf/check-headers.sh
-> @@ -1,113 +1,121 @@
-> -#!/bin/sh
-> +#!/bin/bash
->  # SPDX-License-Identifier: GPL-2.0
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index 2557654d8e29..5756498248e0 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -882,7 +882,7 @@ ifneq ($(NO_JEVENTS),1)
+>    endif
+>  endif
 >  
-> -FILES='
-> -include/uapi/linux/const.h
-> -include/uapi/drm/drm.h
-> -include/uapi/drm/i915_drm.h
-> -include/uapi/linux/fadvise.h
-> -include/uapi/linux/fcntl.h
-> -include/uapi/linux/fs.h
-> -include/uapi/linux/fscrypt.h
-> -include/uapi/linux/kcmp.h
-> -include/uapi/linux/kvm.h
-> -include/uapi/linux/in.h
-> -include/uapi/linux/mount.h
-> -include/uapi/linux/openat2.h
-> -include/uapi/linux/perf_event.h
-> -include/uapi/linux/prctl.h
-> -include/uapi/linux/sched.h
-> -include/uapi/linux/stat.h
-> -include/uapi/linux/usbdevice_fs.h
-> -include/uapi/linux/vhost.h
-> -include/uapi/sound/asound.h
-> -include/linux/bits.h
-> -include/vdso/bits.h
-> -include/linux/const.h
-> -include/vdso/const.h
-> -include/linux/hash.h
-> -include/linux/list-sort.h
-> -include/uapi/linux/hw_breakpoint.h
-> -arch/x86/include/asm/disabled-features.h
-> -arch/x86/include/asm/required-features.h
-> -arch/x86/include/asm/cpufeatures.h
-> -arch/x86/include/asm/inat_types.h
-> -arch/x86/include/asm/emulate_prefix.h
-> -arch/x86/include/asm/irq_vectors.h
-> -arch/x86/include/asm/msr-index.h
-> -arch/x86/include/uapi/asm/prctl.h
-> -arch/x86/lib/x86-opcode-map.txt
-> -arch/x86/tools/gen-insn-attr-x86.awk
-> -arch/arm/include/uapi/asm/perf_regs.h
-> -arch/arm64/include/uapi/asm/perf_regs.h
-> -arch/mips/include/uapi/asm/perf_regs.h
-> -arch/powerpc/include/uapi/asm/perf_regs.h
-> -arch/s390/include/uapi/asm/perf_regs.h
-> -arch/x86/include/uapi/asm/perf_regs.h
-> -arch/x86/include/uapi/asm/kvm.h
-> -arch/x86/include/uapi/asm/kvm_perf.h
-> -arch/x86/include/uapi/asm/svm.h
-> -arch/x86/include/uapi/asm/unistd.h
-> -arch/x86/include/uapi/asm/vmx.h
-> -arch/powerpc/include/uapi/asm/kvm.h
-> -arch/s390/include/uapi/asm/kvm.h
-> -arch/s390/include/uapi/asm/kvm_perf.h
-> -arch/s390/include/uapi/asm/ptrace.h
-> -arch/s390/include/uapi/asm/sie.h
-> -arch/arm/include/uapi/asm/kvm.h
-> -arch/arm64/include/uapi/asm/kvm.h
-> -arch/arm64/include/uapi/asm/unistd.h
-> -arch/alpha/include/uapi/asm/errno.h
-> -arch/mips/include/asm/errno.h
-> -arch/mips/include/uapi/asm/errno.h
-> -arch/parisc/include/uapi/asm/errno.h
-> -arch/powerpc/include/uapi/asm/errno.h
-> -arch/sparc/include/uapi/asm/errno.h
-> -arch/x86/include/uapi/asm/errno.h
-> -include/asm-generic/bitops/arch_hweight.h
-> -include/asm-generic/bitops/const_hweight.h
-> -include/asm-generic/bitops/__fls.h
-> -include/asm-generic/bitops/fls.h
-> -include/asm-generic/bitops/fls64.h
-> -include/linux/coresight-pmu.h
-> -include/uapi/asm-generic/errno.h
-> -include/uapi/asm-generic/errno-base.h
-> -include/uapi/asm-generic/ioctls.h
-> -include/uapi/asm-generic/mman-common.h
-> -include/uapi/asm-generic/unistd.h
-> -'
+> -ifndef NO_LIBBFD
+> +ifdef BUILD_NONDISTRO
+>    ifeq ($(feature-libbfd), 1)
+>      EXTLIBS += -lbfd -lopcodes
+>    else
+> @@ -905,6 +905,7 @@ ifndef NO_LIBBFD
+>      $(call feature_check,disassembler-init-styled)
+>    endif
+>  
+> +  CFLAGS += -DHAVE_LIBBFD_SUPPORT
+>    ifeq ($(feature-libbfd-buildid), 1)
+>      CFLAGS += -DHAVE_LIBBFD_BUILDID_SUPPORT
+>    else
+> @@ -915,32 +916,26 @@ endif
+>  ifdef NO_DEMANGLE
+>    CFLAGS += -DNO_DEMANGLE
+>  else
+> -  ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
+> -    EXTLIBS += -liberty
+> -  else
+> +  ifdef BUILD_NONDISTRO
+>      ifeq ($(filter -liberty,$(EXTLIBS)),)
+> -      $(call feature_check,cplus-demangle)
 > -
-> -SYNC_CHECK_FILES='
-> -arch/x86/include/asm/inat.h
-> -arch/x86/include/asm/insn.h
-> -arch/x86/lib/inat.c
-> -arch/x86/lib/insn.c
-> -'
-> +YELLOW='\033[0;33m'
-> +NC='\033[0m' # No Color
-> +
-> +declare -a FILES
-> +FILES=(
-> +  "include/uapi/linux/const.h"
-> +  "include/uapi/drm/drm.h"
-> +  "include/uapi/drm/i915_drm.h"
-> +  "include/uapi/linux/fadvise.h"
-> +  "include/uapi/linux/fcntl.h"
-> +  "include/uapi/linux/fs.h"
-> +  "include/uapi/linux/fscrypt.h"
-> +  "include/uapi/linux/kcmp.h"
-> +  "include/uapi/linux/kvm.h"
-> +  "include/uapi/linux/in.h"
-> +  "include/uapi/linux/mount.h"
-> +  "include/uapi/linux/openat2.h"
-> +  "include/uapi/linux/perf_event.h"
-> +  "include/uapi/linux/prctl.h"
-> +  "include/uapi/linux/sched.h"
-> +  "include/uapi/linux/stat.h"
-> +  "include/uapi/linux/usbdevice_fs.h"
-> +  "include/uapi/linux/vhost.h"
-> +  "include/uapi/sound/asound.h"
-> +  "include/linux/bits.h"
-> +  "include/vdso/bits.h"
-> +  "include/linux/const.h"
-> +  "include/vdso/const.h"
-> +  "include/linux/hash.h"
-> +  "include/linux/list-sort.h"
-> +  "include/uapi/linux/hw_breakpoint.h"
-> +  "arch/x86/include/asm/disabled-features.h"
-> +  "arch/x86/include/asm/required-features.h"
-> +  "arch/x86/include/asm/cpufeatures.h"
-> +  "arch/x86/include/asm/inat_types.h"
-> +  "arch/x86/include/asm/emulate_prefix.h"
-> +  "arch/x86/include/asm/irq_vectors.h"
-> +  "arch/x86/include/asm/msr-index.h"
-> +  "arch/x86/include/uapi/asm/prctl.h"
-> +  "arch/x86/lib/x86-opcode-map.txt"
-> +  "arch/x86/tools/gen-insn-attr-x86.awk"
-> +  "arch/arm/include/uapi/asm/perf_regs.h"
-> +  "arch/arm64/include/uapi/asm/perf_regs.h"
-> +  "arch/mips/include/uapi/asm/perf_regs.h"
-> +  "arch/powerpc/include/uapi/asm/perf_regs.h"
-> +  "arch/s390/include/uapi/asm/perf_regs.h"
-> +  "arch/x86/include/uapi/asm/perf_regs.h"
-> +  "arch/x86/include/uapi/asm/kvm.h"
-> +  "arch/x86/include/uapi/asm/kvm_perf.h"
-> +  "arch/x86/include/uapi/asm/svm.h"
-> +  "arch/x86/include/uapi/asm/unistd.h"
-> +  "arch/x86/include/uapi/asm/vmx.h"
-> +  "arch/powerpc/include/uapi/asm/kvm.h"
-> +  "arch/s390/include/uapi/asm/kvm.h"
-> +  "arch/s390/include/uapi/asm/kvm_perf.h"
-> +  "arch/s390/include/uapi/asm/ptrace.h"
-> +  "arch/s390/include/uapi/asm/sie.h"
-> +  "arch/arm/include/uapi/asm/kvm.h"
-> +  "arch/arm64/include/uapi/asm/kvm.h"
-> +  "arch/arm64/include/uapi/asm/unistd.h"
-> +  "arch/alpha/include/uapi/asm/errno.h"
-> +  "arch/mips/include/asm/errno.h"
-> +  "arch/mips/include/uapi/asm/errno.h"
-> +  "arch/parisc/include/uapi/asm/errno.h"
-> +  "arch/powerpc/include/uapi/asm/errno.h"
-> +  "arch/sparc/include/uapi/asm/errno.h"
-> +  "arch/x86/include/uapi/asm/errno.h"
-> +  "include/asm-generic/bitops/arch_hweight.h"
-> +  "include/asm-generic/bitops/const_hweight.h"
-> +  "include/asm-generic/bitops/__fls.h"
-> +  "include/asm-generic/bitops/fls.h"
-> +  "include/asm-generic/bitops/fls64.h"
-> +  "include/linux/coresight-pmu.h"
-> +  "include/uapi/asm-generic/errno.h"
-> +  "include/uapi/asm-generic/errno-base.h"
-> +  "include/uapi/asm-generic/ioctls.h"
-> +  "include/uapi/asm-generic/mman-common.h"
-> +  "include/uapi/asm-generic/unistd.h"
-> +)
-> +
-> +declare -a SYNC_CHECK_FILES
-> +SYNC_CHECK_FILES=(
-> +  "arch/x86/include/asm/inat.h"
-> +  "arch/x86/include/asm/insn.h"
-> +  "arch/x86/lib/inat.c"
-> +  "arch/x86/lib/insn.c"
-> +)
+> -      # we dont have neither HAVE_CPLUS_DEMANGLE_SUPPORT
+> -      # or any of 'bfd iberty z' trinity
+> -      ifeq ($(feature-cplus-demangle), 1)
+> +      ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
+>          EXTLIBS += -liberty
+>        else
+> -        msg := $(warning No bfd.h/libbfd found, please install binutils-dev[el]/zlib-static/libiberty-dev to gain symbol demangling)
+> -        CFLAGS += -DNO_DEMANGLE
+> +        $(call feature_check,cplus-demangle)
+> +        ifeq ($(feature-cplus-demangle), 1)
+> +          EXTLIBS += -liberty
+> +        endif
+>        endif
+>      endif
+>    endif
 >  
->  # These copies are under tools/perf/trace/beauty/ as they are not used to in
->  # building object files only by scripts in tools/perf/trace/beauty/ to generate
->  # tables that then gets included in .c files for things like id->string syscall
->  # tables (and the reverse lookup as well: string -> id)
+>    ifneq ($(filter -liberty,$(EXTLIBS)),)
+>      CFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
+> +  else
+> +    CFLAGS += -DNO_DEMANGLE
+>    endif
+>  endif
 >  
-> -BEAUTY_FILES='
-> -include/linux/socket.h
-> -'
-> +declare -a BEAUTY_FILES
-> +BEAUTY_FILES=(
-> +  "include/linux/socket.h"
-> +)
-> +
-> +declare -a FAILURES
+> -ifneq ($(filter -lbfd,$(EXTLIBS)),)
+> -  CFLAGS += -DHAVE_LIBBFD_SUPPORT
+> -endif
+> -
+>  ifndef NO_ZLIB
+>    ifeq ($(feature-zlib), 1)
+>      CFLAGS += -DHAVE_ZLIB_SUPPORT
+> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
+> index 283ee4f56234..a35bc995d5d8 100644
+> --- a/tools/perf/Makefile.perf
+> +++ b/tools/perf/Makefile.perf
+> @@ -128,6 +128,8 @@ include ../scripts/utilities.mak
+>  #
+>  # Define NO_BPF_SKEL to disable BPF skeletons
+>  #
+> +# Define BUILD_NONDISTRO to enable building an linking against libbfd and
+> +# libiberty distribution license incompatible libraries.
 >  
->  check_2 () {
-> -  file1=$1
-> -  file2=$2
-> +  tools_file=$1
-> +  orig_file=$2
->  
->    shift
->    shift
->  
-> -  cmd="diff $* $file1 $file2 > /dev/null"
-> +  cmd="diff $* $tools_file $orig_file > /dev/null"
->  
-> -  test -f $file2 && {
-> -    eval $cmd || {
-> -      echo "Warning: Kernel ABI header at '$file1' differs from latest version at '$file2'" >&2
-> -      echo diff -u $file1 $file2
-> -    }
-> -  }
-> +  if [ -f "$orig_file" ] && ! eval "$cmd"
-> +  then
-> +    FAILURES+=(
-> +      "$tools_file $orig_file"
-> +    )
-> +  fi
->  }
->  
->  check () {
-> @@ -115,7 +123,7 @@ check () {
->  
->    shift
->  
-> -  check_2 tools/$file $file $*
-> +  check_2 "tools/$file" "$file" $*
->  }
->  
->  beauty_check () {
-> @@ -123,23 +131,29 @@ beauty_check () {
->  
->    shift
->  
-> -  check_2 tools/perf/trace/beauty/$file $file $*
-> +  check_2 "tools/perf/trace/beauty/$file" "$file" $*
->  }
->  
->  # Check if we have the kernel headers (tools/perf/../../include), else
->  # we're probably on a detached tarball, so no point in trying to check
->  # differences.
-> -test -d ../../include || exit 0
-> +if ! [ -d ../../include ]
-> +then
-> +  echo -e "${YELLOW}Warning${NC}: Skipped check-headers due to missing ../../include"
-> +  exit 0
-> +fi
->  
->  cd ../..
->  
->  # simple diff check
-> -for i in $FILES; do
-> -  check $i -B
-> +for i in "${FILES[@]}"
-> +do
-> +  check "$i" -B
->  done
->  
-> -for i in $SYNC_CHECK_FILES; do
-> -  check $i '-I "^.*\/\*.*__ignore_sync_check__.*\*\/.*$"'
-> +for i in "${SYNC_CHECK_FILES[@]}"
-> +do
-> +  check "$i" '-I "^.*\/\*.*__ignore_sync_check__.*\*\/.*$"'
->  done
->  
->  # diff with extra ignore lines
-> @@ -160,8 +174,9 @@ check_2 tools/perf/arch/powerpc/entry/syscalls/syscall.tbl arch/powerpc/kernel/s
->  check_2 tools/perf/arch/s390/entry/syscalls/syscall.tbl arch/s390/kernel/syscalls/syscall.tbl
->  check_2 tools/perf/arch/mips/entry/syscalls/syscall_n64.tbl arch/mips/kernel/syscalls/syscall_n64.tbl
->  
-> -for i in $BEAUTY_FILES; do
-> -  beauty_check $i -B
-> +for i in "${BEAUTY_FILES[@]}"
-> +do
-> +  beauty_check "$i" -B
->  done
->  
->  # check duplicated library files
-> @@ -169,3 +184,9 @@ check_2 tools/perf/util/hashmap.h tools/lib/bpf/hashmap.h
->  check_2 tools/perf/util/hashmap.c tools/lib/bpf/hashmap.c
->  
->  cd tools/perf
-> +
-> +echo -e "${YELLOW}Warning${NC}: Kernel ABI header differences:"
-> +for i in "${FAILURES[@]}"
-> +do
-> +  echo "  $i"
-> +done
+>  # As per kernel Makefile, avoid funny character set dependencies
+>  unexport LC_ALL
+> diff --git a/tools/perf/tests/make b/tools/perf/tests/make
+> index deb37fb982e9..c2f74ed43418 100644
+> --- a/tools/perf/tests/make
+> +++ b/tools/perf/tests/make
+> @@ -68,6 +68,7 @@ python_perf_so := $(shell $(MAKE) python_perf_target|grep "Target is:"|awk '{pri
+>  make_clean_all      := clean all
+>  make_python_perf_so := $(python_perf_so)
+>  make_debug          := DEBUG=1
+> +make_nondistro      := BUILD_NONDISTRO=1
+>  make_no_libperl     := NO_LIBPERL=1
+>  make_no_libpython   := NO_LIBPYTHON=1
+>  make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
+> @@ -134,6 +135,7 @@ MAKE_F := $(MAKE) -f $(MK)
+>  endif
+>  run += make_python_perf_so
+>  run += make_debug
+> +run += make_nondistro
+>  run += make_no_libperl
+>  run += make_no_libpython
+>  run += make_no_scripts
 > -- 
 > 2.40.0.rc1.284.g88254d51c5-goog
 > 
