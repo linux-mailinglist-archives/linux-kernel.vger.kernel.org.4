@@ -2,77 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A4266B7267
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF8B86B725B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbjCMJVb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:21:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33314 "EHLO
+        id S230311AbjCMJTA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:19:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231208AbjCMJVU (ORCPT
+        with ESMTP id S230290AbjCMJSu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:21:20 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6237A498B9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:21:09 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id r19-20020a05600c459300b003eb3e2a5e7bso7352917wmo.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:21:09 -0700 (PDT)
+        Mon, 13 Mar 2023 05:18:50 -0400
+Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 709E42CC68
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:18:48 -0700 (PDT)
+Received: by mail-wr1-x42a.google.com with SMTP id r29so2546043wra.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:18:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678699268;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:from:to:cc:subject:date:message-id:reply-to;
-        bh=NyKmnb2IGGlRYKdA8v+Oi9cQGOt819vf2di9Hwq+CB0=;
-        b=mSVsf+a/ifTL56wAV9Qw2FDlsV5LEVpddsOHAnmgmNWX8ZYxk80hyF4aQqagAEUpRc
-         jDtW5tGU1a1sIXrahUuJD2t838vwVvvnj4Ixlt8aS35T1up5M9BaMB/TiJMSOI2IGuV9
-         4DpczCsw5ChdGLdIiV66BOPSrFanB1m6q32U2VqzOEmNpUIv9k55vB8EjTbMZCdowJuu
-         /SVQvLaRF7kjaEKEuU54weShdspUHgoj7wr916M1wsEnxth4j2CBMJB6SrbWvLaot6br
-         AjjW9ZVSxTuneR96w0vxXlzXrgJAt5qX1svj0H5QfW8P15XTzrOhQpO06GBAV80jJ6Q2
-         9YHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678699268;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :user-agent:references:x-gm-message-state:from:to:cc:subject:date
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678699127;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=NyKmnb2IGGlRYKdA8v+Oi9cQGOt819vf2di9Hwq+CB0=;
-        b=UnOWl6KeAMeLV6dG98XCzdzdCv1zSakc/EjFeTBgzQNQImTi/swiZGce6TfHyAW6XB
-         tYBNI3Sh9SCe/gU7Pejxfp2YrIfXpKV4jNVQwixcCLg9IeJrJeJAi/dXfVxafKMQX1Eq
-         6RFgRmy6M6Xv/1DxxO6pGQK4jV/Q9LMa+FfoH8V4pi2gy6JcriPbHyg532HxsAqx1aFK
-         ZDt7jyg/gwTcWv2DNsMhrl/NwxU6WOH+frpO3+LzqRQxWmc1ua1YQs6FkRbx1NDzTEXM
-         XKqO6LB06ZvClcb+s/xmuqmQfJtQXdLLfDbAcbeIg3EinLBLOnvtZUJk6DGVolRC/L7U
-         OvWA==
-X-Gm-Message-State: AO0yUKVhKjEEaHj6VptmC7pGTjNOCOzvLJa1Dfs3qlyGBhJq986+SBPY
-        QO1cLJpDfhrKMsiv/hshYGrKbw==
-X-Google-Smtp-Source: AK7set+ffANocDz449+nx/CU8mE/uaLR+A5C2On6Z7RmrE6Px8IYI5sqoAqzr08nkoqwgeu6K+3K2w==
-X-Received: by 2002:a05:600c:1c9a:b0:3ed:2418:6cbe with SMTP id k26-20020a05600c1c9a00b003ed24186cbemr2701778wms.39.1678699267735;
-        Mon, 13 Mar 2023 02:21:07 -0700 (PDT)
-Received: from localhost (82-65-169-74.subs.proxad.net. [82.65.169.74])
-        by smtp.gmail.com with ESMTPSA id o4-20020a05600c378400b003e215a796fasm8292361wmr.34.2023.03.13.02.21.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 02:21:07 -0700 (PDT)
-References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
- <20230301183759.16163-3-ddrokosov@sberdevices.ru>
- <1jr0u2azfi.fsf@starbuckisacylon.baylibre.com>
- <20230306200549.7iuedbl27ejfhf6b@CAB-WSD-L081021>
- <1jlek60zun.fsf@starbuckisacylon.baylibre.com>
- <20230309182857.a2fzotcejueio23w@CAB-WSD-L081021>
-User-agent: mu4e 1.8.13; emacs 28.2
-From:   Jerome Brunet <jbrunet@baylibre.com>
-To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>
-Cc:     neil.armstrong@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, khilman@baylibre.com,
-        martin.blumenstingl@googlemail.com, jian.hu@amlogic.com,
-        kernel@sberdevices.ru, rockosov@gmail.com,
-        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v9 2/5] clk: meson: a1: add Amlogic A1 PLL clock
- controller driver
-Date:   Mon, 13 Mar 2023 10:18:02 +0100
-In-reply-to: <20230309182857.a2fzotcejueio23w@CAB-WSD-L081021>
-Message-ID: <1j5yb50zxz.fsf@starbuckisacylon.baylibre.com>
-MIME-Version: 1.0
-Content-Type: text/plain
+        bh=819sPWiRDLbyXTj9lMI3wSZfzf6rbkGsUCg2JBu7bxs=;
+        b=HEuvy6TUvSYW5RtpVkz10SjI+9Ax3kWRYRPXvmBLU3VhxDaq0cDEwvydJKd+cxoUjc
+         3busOreQ9i39DHCjQqAO2/NIV7WATtltZwTZB0JclxrU9Mpjg4fs8aWnzLbVv9Ca9++g
+         Rac5GSjH8A8qS+nqaKXi9ONuQsIkX6fxpMKGfsl9EqUJvwUrRX15dQ1AxSI1TYd2ttBm
+         qUoCp3LUtxevls+mep5w0NCD4+/TQBHA3KLIF2ArkX83Kch/4drsZIexiDFywCJ178rs
+         dolm91ISx3Xf09e/BGhPyo5Xg18GyMCxYvmVvk8Mqkg3ulkeT6FF5nYuEy70HTwDSIRB
+         ZZXA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678699127;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=819sPWiRDLbyXTj9lMI3wSZfzf6rbkGsUCg2JBu7bxs=;
+        b=s54SSx6e5gy7I4nFuWBBxeaufGAFwpyFQc8AYIukOblUHuR8qtJKLc/wA+UBTCeSIe
+         xcPD+uXLC+9quGoeqzEQljqre+dP1JXPYZ3P5mWKng0uj1ZXdC9TpKsqSJWqmlj8+dh8
+         afE/onMNukTt9xqpKzQ7ss4oLhZovFKdU4Kjl7tW7FnJD0vS+ktZPnBFM4vwGIw0WS/w
+         pM3u4OcZ6+BQdbz1+zp7cRqwZ4JAaE9omi6ISXzAlnGDBAC5YP3EM5P2SMkcn1kCZmLK
+         pps6/tfEf/dYgYB8nKsyO0E03s73vHy3uxJBBB1v1414WI/YpVb8Jl/GQgCkTxTd+99x
+         gFHw==
+X-Gm-Message-State: AO0yUKXtOTFFxRJYPo8NX20/LTNf+vZGT7XXoGGzxolTyhSylmlg3Cv1
+        rxDdCKggMW7r3ded2EQnp9lIZw==
+X-Google-Smtp-Source: AK7set9TLdu1nH2qB5bjiwDrkGH1cNy+YauBVt/YbewUUWhgEQWBNzt8sbYpWdKlwBvw5FPmT3lLWw==
+X-Received: by 2002:a5d:610e:0:b0:2cb:5b58:74a with SMTP id v14-20020a5d610e000000b002cb5b58074amr22200673wrt.56.1678699126908;
+        Mon, 13 Mar 2023 02:18:46 -0700 (PDT)
+Received: from localhost ([2a01:e0a:28d:66d0:7e56:113b:5d10:d06b])
+        by smtp.gmail.com with ESMTPSA id b12-20020adff90c000000b002c71d206329sm7356587wrr.55.2023.03.13.02.18.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 02:18:46 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 13 Mar 2023 10:18:45 +0100
+Message-Id: <CR556BV2M4I4.2L3LLJ8V1I352@burritosblues>
+Cc:     <linus.walleij@linaro.org>, <lgirdwood@gmail.com>,
+        <broonie@kernel.org>, <a.zummo@towertech.it>,
+        <linux-kernel@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
+        <linux-rtc@vger.kernel.org>, <jpanis@baylibre.com>,
+        <jneanne@baylibre.com>
+Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
+ PMIC RTC
+From:   "Esteban Blanc" <eblanc@baylibre.com>
+To:     "Alexandre Belloni" <alexandre.belloni@bootlin.com>
+X-Mailer: aerc 0.14.0
+References: <20230224133129.887203-1-eblanc@baylibre.com>
+ <20230224133129.887203-2-eblanc@baylibre.com> <ZAcbJxrNtWTTTSjR@mail.local>
+In-Reply-To: <ZAcbJxrNtWTTTSjR@mail.local>
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=unavailable autolearn_force=no version=3.4.6
@@ -82,45 +77,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Thu 09 Mar 2023 at 21:28, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-
->> >> 
->> >> This last poke should not bits otherwise handled by parms.
->> >> This is a rate init in disguise.
->> >> 
->> >
->> > I believe, you are talking about hifi_pll clk_regmap conflicts with
->> > hifi_init_regs. The above init sequence shouldn't affect pll regmap setup,
->> > it doesn't touch them (we assume that default bit values are all zero):
->> >
->> >     .en = {
->> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
->> >         .shift   = 28,
->> >         .width   = 1,
->> >     },
->> >     // init_value = 0x01f18440
->> >     // en_mask    = 0x10000000
->> >
->> >     .m = {
->> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
->> >         .shift   = 0,
->> >         .width   = 8,
->> >     },
->> >     // init_value = 0x01f18440
->> >     // m_mask     = 0x0000000f
->> 
->> mask is 0xff with width 8
->> 
+On Tue Mar 7, 2023 at 12:08 PM CET, Alexandre Belloni wrote:
+> On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
+> > +struct tps6594_rtc {
+> > +   struct rtc_device *rtc;
+> > +};
 >
-> Ah, you're right. Anyway, I think this is just init value and it's okay
-> to set it during initialization and rewrite after in parameter
-> propagation stage.
+> Is the struct actually useful?
+
+Good catch, it's not. I will remove it for V2.
+
+(...)
+
+> > +/*
+> > + * Gets current tps6594 RTC time and date parameters.
+> > + *
+> > + * The RTC's time/alarm representation is not what gmtime(3) requires
+> > + * Linux to use:
+> > + *
+> > + *  - Months are 1..12 vs Linux 0-11
+> > + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
+> > + */
+>
+> I don't find this comment to be particularly useful.
+
+Ok. I propose that I add 2 constants for the -1 and +100 in the month and y=
+ear
+calculation. This way, without the comment the computation would be a
+bit more self explanatory.
+What do you think?
+
+(...)
+
+> > +static int tps6594_rtc_probe(struct platform_device *pdev)
+> > +{
+> > +   struct tps6594 *tps6594;
+> > +   struct tps6594_rtc *tps_rtc;
+> > +   int irq;
+> > +   int ret;
+> > +
+> > +   tps6594 =3D dev_get_drvdata(pdev->dev.parent);
+> > +
+> > +   tps_rtc =3D devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
+> > +                          GFP_KERNEL);
+> > +   if (!tps_rtc)
+> > +           return -ENOMEM;
+> > +
+> > +   tps_rtc->rtc =3D devm_rtc_allocate_device(&pdev->dev);
+> > +   if (IS_ERR(tps_rtc->rtc))
+> > +           return PTR_ERR(tps_rtc->rtc);
+> > +
+> > +   /* Enable crystal oscillator */
+> > +   ret =3D regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
+> > +                         TPS6594_BIT_XTAL_EN);
+> > +   if (ret < 0)
+> > +           return ret;
+> > +
+> > +   /* Start rtc */
+> > +   ret =3D regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
+> > +                         TPS6594_BIT_STOP_RTC);
+> > +   if (ret < 0)
+> > +           return ret;
+>
+> Do that (XTAL_EN and clearing STOP) only once the time is known to be
+> set to a correct value so read_time doesn't have a chance to return a
+> bogus value.
 >
 
-... But the magic pokes are there only to initialize the unmanaged part
-of the clock regs. I'd like it to be clear and stay that way.
+(...)
 
-So please, clear the managed fields from the initial poke table.
+I understand your point, however I'm not sure of the canonical way to do
+this. Simply calling `tps6594_rtc_set_time` is enough?
 
+> --=20
+> Alexandre Belloni, co-owner and COO, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+
+Thanks for your time. Best regards,
+--=20
+Esteban Blanc
+BayLibre
 
