@@ -2,124 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8DA286BC671
-	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 08:02:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D0286BC8F8
+	for <lists+linux-kernel@lfdr.de>; Thu, 16 Mar 2023 09:24:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbjCPHCg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 16 Mar 2023 03:02:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53066 "EHLO
+        id S230081AbjCPIYn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 16 Mar 2023 04:24:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229542AbjCPHCd (ORCPT
+        with ESMTP id S230232AbjCPIYj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 16 Mar 2023 03:02:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AB5B30293;
-        Thu, 16 Mar 2023 00:02:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CE00D61F2F;
-        Thu, 16 Mar 2023 07:02:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B9C8C433D2;
-        Thu, 16 Mar 2023 07:02:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678950151;
-        bh=oyu2Kf+xnN2T5vtUW9pLhUslgU39oPBN51+0UsfURbU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TNPhUyiQBTLe3keDiMxW0p2heZwA4vnfSWQXtHqxNbeyoRSzAFnJzhOYHUNbm1Evw
-         7VdQxZlbitsH9VSYqA+ANSm4J4B6VAUQphiQdFheBNAufgnq5golNODuG4Gw37Ca5+
-         kxGnpfvElDO3y/WwxvrIKmimKAFpqvzzuYkqaWLWBLewa/GeNP2ld9UbjFRXbQz2uv
-         qI7t0D6iuIs2k3TJdXDF9/wAS7a6khdqb/6z+l1NIj80z2Hdjh9QCxZI9oEiMeTFwO
-         Nt/jaVWtBwdkoX8zOUG+d8YsyEsOy81/D1OYEoBiZ7jAdHj3DyRLZDna4H3LFXBXmH
-         svsGf3H6sTuEQ==
-Date:   Thu, 16 Mar 2023 09:02:11 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Muhammad Usama Anjum <usama.anjum@collabora.com>
-Cc:     Peter Xu <peterx@redhat.com>, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        =?utf-8?B?TWljaGHFgiBNaXJvc8WCYXc=?= <emmir@google.com>,
-        Andrei Vagin <avagin@gmail.com>,
-        Danylo Mocherniuk <mdanylo@google.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Cyrill Gorcunov <gorcunov@gmail.com>,
-        Nadav Amit <namit@vmware.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Shuah Khan <shuah@kernel.org>,
-        Christian Brauner <brauner@kernel.org>,
-        Yang Shi <shy828301@gmail.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Yun Zhou <yun.zhou@windriver.com>,
-        Suren Baghdasaryan <surenb@google.com>,
-        Alex Sierra <alex.sierra@amd.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        "Gustavo A . R . Silva" <gustavoars@kernel.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Greg KH <gregkh@linuxfoundation.org>, kernel@collabora.com
-Subject: Re: [PATCH v11 2/7] userfaultfd: Define dummy uffd_wp_range()
-Message-ID: <ZBK+86eMMazwfhdx@kernel.org>
-References: <20230309135718.1490461-1-usama.anjum@collabora.com>
- <20230309135718.1490461-3-usama.anjum@collabora.com>
+        Thu, 16 Mar 2023 04:24:39 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2DE65584;
+        Thu, 16 Mar 2023 01:24:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678955077; x=1710491077;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=pLr4zyKR9mScniLFymNZ6LCQtLSp1OBPkBpafzPWR8w=;
+  b=KWZp8iROh9hHs7mGb26lzr7AaWlUzV6ncxnTziBXvu7GdrHhePoWPcSu
+   iDVRpdElIju/9OpEDJCW/2p/sovg+5BfHxMSY5NTlmwtcAhUjjhs4sqjV
+   O1SdtQBg1B/9pDbMaX8QHmeGLmnEMy6XA4zza5/iskbsuAaUeEhapkk3a
+   DF+8L3faGL4xSdWBTf6zkq7KRJAdHjF5QiwFCk3d9FsB/1M0psDT6uDDY
+   axay+5CnKW/FBKDXatG8Zkm/2Rl6ZzJpSU/GTQqDOy7+r4PNqvo9Fc6Z5
+   p/+ujZ79DR/ROe9ixtn1sCeoTPrvMmJ7WnVPlg3UY/FFkfoQvvelfcmwi
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="402794202"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="402794202"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Mar 2023 01:24:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10650"; a="823141544"
+X-IronPort-AV: E=Sophos;i="5.98,265,1673942400"; 
+   d="scan'208";a="823141544"
+Received: from irvmail002.ir.intel.com ([10.43.11.120])
+  by fmsmga001.fm.intel.com with ESMTP; 16 Mar 2023 01:24:32 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail002.ir.intel.com (Postfix) with ESMTP id CE2F17525B;
+        Mon, 13 Mar 2023 19:09:39 +0000 (GMT)
+From:   Alexander Lobakin <aleksander.lobakin@intel.com>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+Cc:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mykola Lysenko <mykolal@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH bpf-next v3 0/4] xdp: recycle Page Pool backed skbs built from XDP frames
+Date:   Mon, 13 Mar 2023 20:08:09 +0100
+Message-Id: <20230313190813.1036595-1-aleksander.lobakin@intel.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230309135718.1490461-3-usama.anjum@collabora.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Yeah, I still remember that "Who needs cpumap nowadays" (c), but anyway.
 
-On Thu, Mar 09, 2023 at 06:57:13PM +0500, Muhammad Usama Anjum wrote:
-> Define uffd_wp_range() for the cases when CONFIG_USERFAULTFD isn't set.
-> 
-> Signed-off-by: Muhammad Usama Anjum <usama.anjum@collabora.com>
-> ---
->  include/linux/userfaultfd_k.h | 8 ++++++++
->  1 file changed, 8 insertions(+)
-> 
-> diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-> index b680c0ec8b85..fd1a1ecdb5f6 100644
-> --- a/include/linux/userfaultfd_k.h
-> +++ b/include/linux/userfaultfd_k.h
-> @@ -182,6 +182,14 @@ extern int userfaultfd_wp_async(struct vm_area_struct *vma);
->  
->  #else /* CONFIG_USERFAULTFD */
->  
-> +extern inline long uffd_wp_range(struct mm_struct *dst_mm,
+__xdp_build_skb_from_frame() missed the moment when the networking stack
+became able to recycle skb pages backed by a page_pool. This was making
+e.g. cpumap redirect even less effective than simple %XDP_PASS. veth was
+also affected in some scenarios.
+A lot of drivers use skb_mark_for_recycle() already, it's been almost
+two years and seems like there are no issues in using it in the generic
+code too. {__,}xdp_release_frame() can be then removed as it losts its
+last user.
+Page Pool becomes then zero-alloc (or almost) in the abovementioned
+cases, too. Other memory type models (who needs them at this point)
+have no changes.
 
-static inline
+Some numbers on 1 Xeon Platinum core bombed with 27 Mpps of 64-byte
+IPv6 UDP, iavf w/XDP[0] (CONFIG_PAGE_POOL_STATS is enabled):
 
-> +				 struct vm_area_struct *vma,
-> +				 unsigned long start, unsigned long len,
-> +				 bool enable_wp)
-> +{
-> +	return 0;
-> +}
-> +
+Plain %XDP_PASS on baseline, Page Pool driver:
 
-I didn't see uffd_wp_range() defined in the previous patch.
-Could be a rebase issue?
+src cpu Rx     drops  dst cpu Rx
+  2.1 Mpps       N/A    2.1 Mpps
 
-In any case, the stub should be defined in the same patch as the actual
-function in order not to break bisectability.
+cpumap redirect (cross-core, w/o leaving its NUMA node) on baseline:
 
->  /* mm helpers */
->  static inline vm_fault_t handle_userfault(struct vm_fault *vmf,
->  				unsigned long reason)
-> -- 
-> 2.39.2
-> 
+  6.8 Mpps  5.0 Mpps    1.8 Mpps
 
+cpumap redirect with skb PP recycling:
+
+  7.9 Mpps  5.7 Mpps    2.2 Mpps
+                       +22% (from cpumap redir on baseline)
+
+[0] https://github.com/alobakin/linux/commits/iavf-xdp
+
+Alexander Lobakin (4):
+  selftests/bpf: robustify test_xdp_do_redirect with more payload magics
+  net: page_pool, skbuff: make skb_mark_for_recycle() always available
+  xdp: recycle Page Pool backed skbs built from XDP frames
+  xdp: remove unused {__,}xdp_release_frame()
+
+ include/linux/skbuff.h                        |  4 +--
+ include/net/xdp.h                             | 29 ---------------
+ net/core/xdp.c                                | 19 ++--------
+ .../bpf/progs/test_xdp_do_redirect.c          | 36 +++++++++++++------
+ 4 files changed, 30 insertions(+), 58 deletions(-)
+
+---
+From v2[1]:
+* fix the test_xdp_do_redirect selftest failing after the series: it was
+  relying on that %XDP_PASS frames can't be recycled on veth
+  (BPF CI, Alexei);
+* explain "w/o leaving its node" in the cover letter (Jesper).
+
+From v1[2]:
+* make skb_mark_for_recycle() always available, otherwise there are build
+  failures on non-PP systems (kbuild bot);
+* 'Page Pool' -> 'page_pool' when it's about a page_pool instance, not
+  API (Jesper);
+* expanded test system info a bit in the cover letter (Jesper).
+
+[1] https://lore.kernel.org/bpf/20230303133232.2546004-1-aleksander.lobakin@intel.com
+[2] https://lore.kernel.org/bpf/20230301160315.1022488-1-aleksander.lobakin@intel.com
 -- 
-Sincerely yours,
-Mike.
+2.39.2
+
