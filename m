@@ -2,85 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B650E6B7C60
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E2966B7C92
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230229AbjCMPuM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:50:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44970 "EHLO
+        id S231191AbjCMPv7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:51:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjCMPuJ (ORCPT
+        with ESMTP id S231314AbjCMPvm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:50:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D0E742BCE;
-        Mon, 13 Mar 2023 08:50:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2DF44B81187;
-        Mon, 13 Mar 2023 15:50:07 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57499C4339B;
-        Mon, 13 Mar 2023 15:50:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678722605;
-        bh=+lM2Exp0Wi6pVvImfiqMsymn5DzPGAVl+9+ACgFhifs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=TMpw5mHElTRB+obnoPa20FfvlUJTRTWQWBbTjI6uYrOiWGfQhml0z6iBgZ9wlspxc
-         njyCn99cl1TMBf/VVA5ZjpT/6qZy1qTxL8fLqMUCNAp5cS5fS9XMeO0I50MSRT4m/7
-         lchgulRdWKnyJ/nLIWTW/0YnKreX/DGNeeKsnT6k=
-Date:   Mon, 13 Mar 2023 16:50:03 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <ZA9GK2bPd9VhomgG@kroah.com>
-References: <20230313010416.845252-1-kasper@iki.fi>
- <ZA7KIs2jA/acpN9n@kroah.com>
- <a1ba59be-30aa-08e9-65e7-2c458cc164f9@iki.fi>
- <ZA7Wh2Z/DdKOsOYr@kroah.com>
- <71fd009b-8378-d5b0-5243-5279b2b880ee@iki.fi>
+        Mon, 13 Mar 2023 11:51:42 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6EA0878C8C;
+        Mon, 13 Mar 2023 08:51:16 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C9C932F4;
+        Mon, 13 Mar 2023 08:51:46 -0700 (PDT)
+Received: from [10.1.196.177] (eglon.cambridge.arm.com [10.1.196.177])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 74FC33F71A;
+        Mon, 13 Mar 2023 08:50:56 -0700 (PDT)
+Message-ID: <1f21673e-e5e6-a158-94a4-6ae6724c1f93@arm.com>
+Date:   Mon, 13 Mar 2023 15:50:52 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <71fd009b-8378-d5b0-5243-5279b2b880ee@iki.fi>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.0
+Subject: Re: [RFC PATCH 00/32] ACPI/arm64: add support for virtual cpuhotplug
+Content-Language: en-GB
+To:     Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+Cc:     linux-pm@vger.kernel.org, loongarch@lists.linux.dev,
+        kvmarm@lists.linux.dev, kvm@vger.kernel.org,
+        linux-acpi@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-ia64@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, x86@kernel.org,
+        Marc Zyngier <maz@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Borislav Petkov <bp@alien8.de>, H Peter Anvin <hpa@zytor.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Len Brown <lenb@kernel.org>,
+        Rafael Wysocki <rafael@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Salil Mehta <salil.mehta@huawei.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>,
+        kangkang.shen@futurewei.com
+References: <20230203135043.409192-1-james.morse@arm.com>
+ <20230307120050.000032f1@Huawei.com>
+From:   James Morse <james.morse@arm.com>
+In-Reply-To: <20230307120050.000032f1@Huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 05:07:59PM +0200, Jarkko Sonninen wrote:
-> On 3/13/23 09:53, Greg Kroah-Hartman wrote:
-> > On Mon, Mar 13, 2023 at 09:49:26AM +0200, Jarkko Sonninen wrote:
-> > > > > +{
-> > > > > +	void __user *argp = (void __user *)arg;
-> > > > > +
-> > > > > +	switch (cmd) {
-> > > > > +	case TIOCGRS485:
-> > > > > +		return xr_get_rs485_config(tty, argp);
-> > > > > +	case TIOCSRS485:
-> > > > > +		return xr_set_rs485_config(tty, argp);
-> > > > > +	}
-> > > > > +	return -ENOIOCTLCMD;
-> > > > Wrong ioctl return value :(
-> > > What is the correct ioctl error return value ?
-> > > ENOIOCTLCMD was used in most places in usb serial as an error return.
-> > ENOTTY is the correct one for when an ioctl is not handled by the ioctl
-> > call.
-> > 
-> > thanks,
-> > 
-> > greg k-h
+Hi Jonathan,
+
+On 07/03/2023 12:00, Jonathan Cameron wrote:
+> On Fri,  3 Feb 2023 13:50:11 +0000
+> James Morse <james.morse@arm.com> wrote:
+
+>> On a system that supports cpuhotplug the MADT has to describe every possible
+>> CPU at boot. Under KVM, the vGIC needs to know about every possible vCPU before
+>> the guest is started.
+>> With these constraints, virtual-cpuhotplug is really just a hypervisor/firmware
+>> policy about which CPUs can be brought online.
+>>
+>> This series adds support for virtual-cpuhotplug as exactly that: firmware
+>> policy. This may even work on a physical machine too; for a guest the part of
+>> firmware is played by the VMM. (typically Qemu).
+>>
+>> PSCI support is modified to return 'DENIED' if the CPU can't be brought
+>> online/enabled yet. The CPU object's _STA method's enabled bit is used to
+>> indicate firmware's current disposition. If the CPU has its enabled bit clear,
+>> it will not be registered with sysfs, and attempts to bring it online will
+>> fail. The notifications that _STA has changed its value then work in the same
+>> way as physical hotplug, and firmware can cause the CPU to be registered some
+>> time later, allowing it to be brought online.
+
+> As we discussed on an LOD call a while back, I think that we need some path to
+> find out if the guest supports vCPU HP or not so that info can be queried by
+> an orchestrator / libvirt etc.  In general the entity responsible for allocating
+> extra vCPUs may not know what support the VM has for this feature.
+
+I agree. For arm64 this is going to be important if/when there are machines that do
+physical hotplug of CPUs too.
+
+
+> There are various ways we could get this information into the VMM.
+> My immediate thought is to use one of the ACPI interfaces that lets us write
+> AML that can set an emulated register. A query to the VMM can check if this
+> register is set.
 > 
-> Using ENOTTY breaks all other tty ioctls.
+> So options.
+> 
+> _OSI() - Deprecated on ARM64 so lets not use that ;)
 
-What other tty ioctls?
+News to me, I've only just discovered it!
 
-confused,
 
-greg k-h
+> _OSC() - Could add a bit to Table 6.13 Platform-Wide Capabilites in ACPI 6.5 spec.
+>          Given x86 has a similar online capable bit perhaps this is the best option
+>          though it is the one that requires a formal code first proposal to ASWG.
+
+I've had a go at writing this one:
+https://gitlab.arm.com/linux-arm/linux-jm/-/commit/220b0d8b0261d7467c8705e6f614d57325798859
+
+It'll appear in the v1 of the series once the kernel and qemu bits are all lined up again.
+
+
+Thanks,
+
+James
+
+
+> _OSC() - Could add a new UUID and put it under a suitable device - maybe all CPUs?
+>          You could definitely argue this feature is an operating system property.
+> _DSM() - Similar to OSC but always under a device.
+>          Whilst can be used for this I'm not sure it really matches intended usecase.
+> 
+> Assuming everyone agrees this bit of introspection is useful,
+> Rafael / other ACPI specialists: Any suggestions on how best to do this?
