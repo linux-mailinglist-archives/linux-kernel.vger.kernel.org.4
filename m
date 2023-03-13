@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 698826B7A2F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3CC56B7A2B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231268AbjCMOSh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:18:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S230184AbjCMOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:18:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231345AbjCMOSN (ORCPT
+        with ESMTP id S231318AbjCMOSK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:18:13 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B744EF5;
-        Mon, 13 Mar 2023 07:17:59 -0700 (PDT)
-From:   Bastian Germann <bage@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678717077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJdIETnTtAzOLiF9tcbM5XRsp53hnZeWTZlPoSoLdx0=;
-        b=bEflwGLvM9qzRRu9HOAS+cDk1h/iNdlsWhWq/4Ax8YG3755yg4/wvyTouAh82f/thNXY2G
-        xduXSOrfINendSuEk7aoUi9ay9fWXr/lD7ylyneud0YsksIFZvYSK4t77z3TukV0hJVl7a
-        8+e6yH8LmC6LOiR7jIPdDwCGJ8JGhEaAwhiDDdWukKBdYuebmSiLlNDu2pPiIllz4YV3Ax
-        YCDRaUTZiAcoLhWdzZ/QfnCMA0HcsY9Un/SjJV90ahcJJC+agNQhtNyhYuB2S4+glDaG7S
-        V36SFwT8pIUzwsHe7adudJXzt9kBQGYBjct0KuJEvFQAyZanVXw0knCc/K+c2w==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678717077;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=yJdIETnTtAzOLiF9tcbM5XRsp53hnZeWTZlPoSoLdx0=;
-        b=uBB5q9bDzR4XNyTe843O9136d85NHblxcdWATbCdX5vXE2ImDSJ5ZgHbD/RfCcTCahW78L
-        fApYqDXkM1x6cZAA==
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Bastian Germann <bage@linutronix.de>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/1] builddeb: introduce profile excluding the dbg pkg
-Date:   Mon, 13 Mar 2023 15:17:51 +0100
-Message-Id: <20230313141751.186903-2-bage@linutronix.de>
-In-Reply-To: <20230313141751.186903-1-bage@linutronix.de>
-References: <20230313141751.186903-1-bage@linutronix.de>
+        Mon, 13 Mar 2023 10:18:10 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7086EBBBD;
+        Mon, 13 Mar 2023 07:17:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678717077; x=1710253077;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=vnCVt+wdWALDJ5asvXR3HRX+LKXTlmdftdrQVlu2wDw=;
+  b=jEyZw3xt5g1heQ3eiRU+N5H6UanZPziyfDhZOaG4cjJU6nb90zW6Sm+N
+   OCNxTavZKzudTY8QNblDoRxOy5YugGSBlwyStp8303qHlevM5xGUkM4Vo
+   KtlpOmXi1HfQMIFN3QjMOBtyyRwzA4xZKfX0HpnpfXe1LoIWOmezX872L
+   xx3mDkkaD5CoO+9vgAqk456rKB1Pz+xzl/eM5n+HFZGSGHsTUc+9kbrtN
+   UVIAKCPWl4C2QkJHfDZ865QVzIGDkETW+Zou6h2HtDq2doXO0FmrfmJGG
+   zY9GALTYhFDX/2jWAcbcGCxudJnJDf+5HV0zJbMnpDuT33WTje5N/AUrN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="423423944"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="423423944"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 07:17:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="821988528"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="821988528"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga001.fm.intel.com with ESMTP; 13 Mar 2023 07:17:54 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pbizo-002fW4-1b;
+        Mon, 13 Mar 2023 16:17:52 +0200
+Date:   Mon, 13 Mar 2023 16:17:52 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Matti Vaittinen <mazziesaccount@gmail.com>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
+Message-ID: <ZA8wkMhShRbyE/wm@smile.fi.intel.com>
+References: <cover.1678093787.git.mazziesaccount@gmail.com>
+ <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
+ <ZAXiKfRbsXpHhwAJ@smile.fi.intel.com>
+ <e507c171-bebc-84f6-c326-ff129b42fb7f@gmail.com>
+ <ZA8kTx4exvGwUfNn@smile.fi.intel.com>
+ <b4bf8587-d3cd-ff88-0276-7e394c110757@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b4bf8587-d3cd-ff88-0276-7e394c110757@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Enabling CONFIG_DEBUG_INFO implies building the binary linux-image-*-dbg.
-As this increases package build time significantly, one might want to
-exclude it from being built.
+On Mon, Mar 13, 2023 at 03:59:03PM +0200, Matti Vaittinen wrote:
+> On 3/13/23 15:25, Andy Shevchenko wrote:
+> > On Mon, Mar 13, 2023 at 02:47:45PM +0200, Matti Vaittinen wrote:
+> > > On 3/6/23 14:52, Andy Shevchenko wrote:
+> > > > On Mon, Mar 06, 2023 at 11:17:15AM +0200, Matti Vaittinen wrote:
 
-Add build profile pkg.$sourcename.nokerneldbg for that package
-so it can be excluded via e.g.
-`make DPKG_FLAGS=--build-profiles=pkg.linux-upstream.nokerneldbg deb-pkg`
+...
 
-The name is the same that is used in Debian's linux package since version
-5.17~rc4-1~exp1.
+> > > > > +	if (ret && gts->avail_all_scales_table)
+> > > > 
+> > > > In one case you commented that free(NULL) is okay, in the other, you add
+> > > > a duplicative check. Why?
+> > > 
+> > > Sorry but what do you mean by dublicative check?
+> > > 
+> > > Usually I avoid the kfree(NULL). That's why I commented on it in that
+> > > another case where it was not explicitly disallowed. I'll change that for v4
+> > > to avoid kfree(NULL) as you suggested.
+> > 
+> > So, and with it you put now a double check for NULL, do you think it's okay?
+> > I don't.
+> 
+> I don't see the double check. I see only one check just above the kfree()?
+> Where is the other check?
 
-Link: https://wiki.debian.org/BuildProfileSpec
-Link: https://salsa.debian.org/kernel-team/linux/-/commit/140798ec2789
-Signed-off-by: Bastian Germann <bage@linutronix.de>
----
- scripts/package/builddeb | 4 +++-
- scripts/package/mkdebian | 1 +
- 2 files changed, 4 insertions(+), 1 deletion(-)
+	if (... gts->avail_all_scales_table)
 
-diff --git a/scripts/package/builddeb b/scripts/package/builddeb
-index ff5e7d8e380b..30f3948b8c7c 100755
---- a/scripts/package/builddeb
-+++ b/scripts/package/builddeb
-@@ -128,7 +128,9 @@ parisc|mips|powerpc)
- 	installed_image_path="boot/vmlinuz-$version"
- esac
- 
--BUILD_DEBUG=$(if_enabled_echo CONFIG_DEBUG_INFO Yes)
-+if [ "${DEB_BUILD_PROFILES#*nokerneldbg}" = "$DEB_BUILD_PROFILES" ]; then
-+	BUILD_DEBUG=$(if_enabled_echo CONFIG_DEBUG_INFO Yes)
-+fi
- 
- # Setup the directory structure
- rm -rf "$tmpdir" "$dbg_dir" debian/files
-diff --git a/scripts/package/mkdebian b/scripts/package/mkdebian
-index f74380036bb5..8a7969926e53 100755
---- a/scripts/package/mkdebian
-+++ b/scripts/package/mkdebian
-@@ -227,6 +227,7 @@ if is_enabled CONFIG_DEBUG_INFO; then
- cat <<EOF >> debian/control
- 
- Package: linux-image-$version-dbg
-+Build-Profiles: <!pkg.$sourcename.nokerneldbg>
- Section: debug
- Architecture: $debarch
- Description: Linux kernel debugging symbols for $version
+is a double to one, which is inside kfree(). I.o.w. kfree() is NULL-aware
+and you know that.
+
+> > > > > +		kfree(gts->avail_all_scales_table);
+
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
