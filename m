@@ -2,146 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414856B7D9D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:33:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 601706B7DB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:34:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCMQdH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:33:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32828 "EHLO
+        id S231476AbjCMQeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230303AbjCMQdB (ORCPT
+        with ESMTP id S231286AbjCMQdu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:33:01 -0400
-Received: from mail-ed1-x541.google.com (mail-ed1-x541.google.com [IPv6:2a00:1450:4864:20::541])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 132B35D8AB;
-        Mon, 13 Mar 2023 09:32:22 -0700 (PDT)
-Received: by mail-ed1-x541.google.com with SMTP id j11so51107765edq.4;
-        Mon, 13 Mar 2023 09:32:21 -0700 (PDT)
+        Mon, 13 Mar 2023 12:33:50 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E508B211E0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:33:14 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id t14so13244879ljd.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:33:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678725117;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=izuBuxwdIPWQ5BlFBYrEudMxJy/3eKoBODl3Q7pVmOg=;
-        b=TO9SHC1L76A030IlfBQdRZXsYVblsYUnuEnrg9Jp7bigY9gICjXS9gpdz0+2hHzq9O
-         QbhwIllnbRszvTC3+1rjU+Htx/GQft05w9puK7+zIogdV/oGgv3QsuiCUe0NcZRdhg0I
-         /bvqDVSy6HcrWvfcb9Ujwz+VZw7RQbuGk/QYI3Nkgz6dJqqCy8yjzJN+bJtWx6dKr/cr
-         supZ31QqVRdXJfyvYX4dN8CA3Bm2fCEKBe3IU7ROZAi7UM3K3pXCW3RN+yacyGDFfuI/
-         1k4/G0b8NWV1tFRTySYJl0TlT2IlmKqlboe07fqOm2cPIcX1QzpQExVMKKSuzybgy4dT
-         Yv8A==
+        d=linaro.org; s=google; t=1678725184;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=IxAObhtaTCcRbG6Hmd9m0sIf05Okzjn3JGLYoGOg1TQ=;
+        b=mI2o8AsFCByJJoFOVVg+b1mlcXkoKIiF2Zq0Cw6+ZI29rpJBoLoP96hOwVfAxZ/l4E
+         i8MGj5FKWzSBCz2+O2EpFZlr+lNJrZxS3FK8Hc294Nnk69anGkqxtILoJrvx3QlzOp4V
+         rQtlYt4YbXAEQWdX2QL/w6wNuugiwlQQEkR0qcVku+IE0reekNBdF7WxkmyFpab++wQ6
+         Z0vJ5cjnPqZ6OZU3bR74ZLbIbDM/LckrH06skfv1/QrcA2NAkPVGvavg9mj6KDsb2y0a
+         FA9P9yqdxw5CWEwwjvPa4evJ/0K6KSXCN3fun8WKcHSj72Y2ueiCMJv03VhofRuJDAaX
+         aIMg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678725117;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678725184;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=izuBuxwdIPWQ5BlFBYrEudMxJy/3eKoBODl3Q7pVmOg=;
-        b=uLYaxK+8HdGR0tiNSkkQeAiQ45ZNIzhGisXKSZQtPMzfe/zz801WmF/haInCBWxhoJ
-         YGPkoSGfv7gDT+28p8VrbMPuujLdYu7GrPzs56mCJ06CZtF6Oy7zDD28UxlTdMnvQtqU
-         8YW5rF17DBMbSP+WRr1oefr66QvuvBh1angPSeQrOHpTPmW9Xk0b7T4Hbb1jJEuJJBXH
-         PrqNKUv57L4ztFr5LY0dDtJCBtiD0ho5qsN5cEcFpel57XCrgGEWBo9o1rNOztL2CQT7
-         CdwdIYK4Sop2sv8+n1MtAA1qJT27y6gj/9sCFgKNtkYwpGvbj9yn6uRzAui8i+KMcc1d
-         OlZw==
-X-Gm-Message-State: AO0yUKVCxFuFSCQnmnOY8sRuD/0KXwoAOL11bc7wurCE6QfiL254UUZb
-        JM0NZEE9tbXbca559/rJzIGwE/m2aS7WJZdH
-X-Google-Smtp-Source: AK7set/EfQ2Eu+Z0rlqqlk9uoROfYt6ba42FXHP99LpzKZ2/SvQ9MQr3forX2MDa4CtuYQQWwKeLtw==
-X-Received: by 2002:a17:906:308e:b0:8b1:3ba7:723b with SMTP id 14-20020a170906308e00b008b13ba7723bmr32930522ejv.30.1678725116892;
-        Mon, 13 Mar 2023 09:31:56 -0700 (PDT)
-Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
-        by smtp.googlemail.com with ESMTPSA id lc22-20020a170906dff600b00922b009fc79sm2816144ejc.164.2023.03.13.09.31.56
+        bh=IxAObhtaTCcRbG6Hmd9m0sIf05Okzjn3JGLYoGOg1TQ=;
+        b=fNXt3gd+bthpYlaVXaS2wKhL+wbCKjSE8FJKOS/kAZinGEEbCeLhKHevidRZ6J41IM
+         yD5h/vVlRzPZfZHOtu+fdZ8IEhXeU7wSYrlmkOklTh1HSYlw/kfFUQygZkW3kgWVQr3E
+         wdtr6d+LerqVMhs5LvX12sPirUuCmP1GyIm4SgaiT/npgOYLdT3CO/ZCIn0auHzLQM/K
+         7Mb6iH6iSkaoP1cbXANEst8Q8O48gyM3zT7sRmlFchF280CcqvSOgd+bnrqQy5UkFI0s
+         dTa9+njVs6urltC5Y+tQpsR2H5c1d4tVWfJZiAxIT/qxnu2QG30te6wrhyV8YUGEF0a2
+         9Rkg==
+X-Gm-Message-State: AO0yUKWhyBHmnlLcBJZR8RTRh2j7xmk0GTgw0RmIZEEjD9u1/dP4ftBI
+        eQpknT3/FdVAIuDm8LvMmxy6E/56d7277pr5Yhw=
+X-Google-Smtp-Source: AK7set+m/oE5niqMhke8f6ER+gWlkruhMxGnwh9/yhr3ujGuX9yQniRUZnfoINzC8OaTg3VoHIgauw==
+X-Received: by 2002:a2e:a9a2:0:b0:298:39e7:75dc with SMTP id x34-20020a2ea9a2000000b0029839e775dcmr12377505ljq.48.1678725184528;
+        Mon, 13 Mar 2023 09:33:04 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id q62-20020a2e5c41000000b00295765966d9sm57417ljb.86.2023.03.13.09.33.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:31:56 -0700 (PDT)
-From:   Jakob Koschel <jkl820.git@gmail.com>
-Date:   Mon, 13 Mar 2023 17:31:50 +0100
-Subject: [PATCH net] ice: fix invalid check for empty list in
- ice_sched_assoc_vsi_to_agg()
+        Mon, 13 Mar 2023 09:33:03 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v2 0/6] Sony SDM845 panel and remoteproc enablement
+Date:   Mon, 13 Mar 2023 17:32:35 +0100
+Message-Id: <20230313-topic-tama_disp-v2-0-37ececf43770@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230301-ice-fix-invalid-iterator-found-check-v1-1-87c26deed999@gmail.com>
-X-B4-Tracking: v=1; b=H4sIAPVPD2QC/x2NQQ7CMAwEv1L5jKW0gQtfQRycxCEW4CCnrZCq/
- p2U42i0sxs0NuEG12ED41WaVO0wngaIhfTBKKkzTG7yzrsRJTJm+aLoSi9JKDMbzdUw10UTxsL
- xiY48X8LZpxw89FSgxhiMNJYj9qbWV4f4GPfY//8GyjPc9/0H8Gx3HpQAAAA=
-To:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org,
+X-B4-Tracking: v=1; b=H4sIACNQD2QC/x2N0QrCMAwAf2Xk2cDaMhF/RUSyNnWB2ZVmE2Hs3
+ xd8vIPjdlBuwgr3bofGX1FZioG/dBAnKm9GScbgex/64AKuS5WIK33olUQr5nAj56558CmDVSM
+ p49ioxMm6ss2zydo4y++/eTyP4wS6PnhNdgAAAA==
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678725116; l=2303;
- i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
- bh=WjMjEPfty/nItSmP8wasMGB1SdFJhn1Xtbp3MghZjCI=;
- b=jGby7KQI+wBKqCv86pOj7AXtN0VEVq+RnsbhBAVivykpoAIcDyFE8MHkejVkEKHqLu2yKKv3bC2G
- 706m/EvgBNjfklWYHPdDXUUnsN/0U77WE5aZpZW+GW19dbh6e313
-X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
- pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678725183; l=1665;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=bKcRsRkpMUUvkJs8OUvRQMB6jCsTJXQ8bRahIpo2/XQ=;
+ b=qDsWTw0Vu7OuwUVVHEI9Dwe7Iqc5fFm97J1DfjlKtJVfC2VOoFTvy/gNouekhbdot/xiXkum119G
+ uXQ4efRMCwEisJg94/wQDO55AVVDpdJD66Y1m5QvnswWA3nXgWxT
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code implicitly assumes that the list iterator finds a correct
-handle. If 'vsi_handle' is not found the 'old_agg_vsi_info' was
-pointing to an bogus memory location. For safety a separate list
-iterator variable should be used to make the != NULL check on
-'old_agg_vsi_info' correct under any circumstances.
+v1 -> v2:
+- Drop akatsuki touch panel as Marijn figures out some sleep-related
+  things
+- No more dependencies, the panel driver has been merged into drm-misc
+  next
+- "*-pin" { -> "*-pins {"
+- treset-gpios -> touch-reset-gpios
+- Drop "Don't use 0x in unit address" (solved)
+- Drop IPA & modem, this keeps crashing for some reason..
 
-Additionally Linus proposed to avoid any use of the list iterator
-variable after the loop, in the attempt to move the list iterator
-variable declaration into the macro to avoid any potential misuse after
-the loop. Using it in a pointer comparision after the loop is undefined
-behavior and should be omitted if possible [1].
+2/7 is a total OF abuse and very RFC-ish..
 
-Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+v1: https://lore.kernel.org/lkml/20220930191049.123256-2-konrad.dybcio@somainline.org/
+
+This series enables display and touch panel on XZ2/XZ2c devices
+equipped with a JDI panel with a TD4353 driver IC and just
+touch panel for all XZ3 phones. It also enables the remote
+processors, GPU&GMU and GPI DMA on all Tama devices.
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- drivers/net/ethernet/intel/ice/ice_sched.c | 8 +++++---
- 1 file changed, 5 insertions(+), 3 deletions(-)
+Konrad Dybcio (6):
+      arm64: dts: qcom: sdm845-tama: Add display nodes
+      [RFC] arm64: dts: qcom: sdm845-tama: Add Synaptics Touchscreen
+      arm64: dts: qcom: sdm845-tama: Add regulator-system-load to l14a/l28a
+      arm64: dts: qcom: sdm845-tama: Enable remoteprocs
+      arm64: dts: qcom: sdm845-tama: Enable GPU
+      arm64: dts: qcom: sdm845-tama: Enable GPI_DMA0/1
 
-diff --git a/drivers/net/ethernet/intel/ice/ice_sched.c b/drivers/net/ethernet/intel/ice/ice_sched.c
-index 4eca8d195ef0..b7682de0ae05 100644
---- a/drivers/net/ethernet/intel/ice/ice_sched.c
-+++ b/drivers/net/ethernet/intel/ice/ice_sched.c
-@@ -2788,7 +2788,7 @@ static int
- ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
- 			   u16 vsi_handle, unsigned long *tc_bitmap)
- {
--	struct ice_sched_agg_vsi_info *agg_vsi_info, *old_agg_vsi_info = NULL;
-+	struct ice_sched_agg_vsi_info *agg_vsi_info, *iter, *old_agg_vsi_info = NULL;
- 	struct ice_sched_agg_info *agg_info, *old_agg_info;
- 	struct ice_hw *hw = pi->hw;
- 	int status = 0;
-@@ -2806,11 +2806,13 @@ ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
- 	if (old_agg_info && old_agg_info != agg_info) {
- 		struct ice_sched_agg_vsi_info *vtmp;
- 
--		list_for_each_entry_safe(old_agg_vsi_info, vtmp,
-+		list_for_each_entry_safe(iter, vtmp,
- 					 &old_agg_info->agg_vsi_list,
- 					 list_entry)
--			if (old_agg_vsi_info->vsi_handle == vsi_handle)
-+			if (iter->vsi_handle == vsi_handle) {
-+				old_agg_vsi_info = iter;
- 				break;
-+			}
- 	}
- 
- 	/* check if entry already exist */
-
+ .../dts/qcom/sdm845-sony-xperia-tama-akari.dts     |   4 +
+ .../dts/qcom/sdm845-sony-xperia-tama-akatsuki.dts  |  47 ++++-
+ .../dts/qcom/sdm845-sony-xperia-tama-apollo.dts    |   6 +
+ .../boot/dts/qcom/sdm845-sony-xperia-tama.dtsi     | 203 ++++++++++++++++++++-
+ 4 files changed, 257 insertions(+), 3 deletions(-)
 ---
-base-commit: eeac8ede17557680855031c6f305ece2378af326
-change-id: 20230301-ice-fix-invalid-iterator-found-check-0a3e5b43dfb3
+base-commit: 24469a0e5052ba01a35a15f104717a82b7a4798b
+change-id: 20230313-topic-tama_disp-f38a116f52df
 
 Best regards,
 -- 
-Jakob Koschel <jkl820.git@gmail.com>
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
