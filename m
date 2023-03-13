@@ -2,153 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4792A6B75F3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:28:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A5956B75F8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:30:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230014AbjCML2r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:28:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53312 "EHLO
+        id S229797AbjCML37 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:29:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229740AbjCML2o (ORCPT
+        with ESMTP id S230126AbjCML3w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:28:44 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C92C325952;
-        Mon, 13 Mar 2023 04:28:43 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DBSaVS053748;
-        Mon, 13 Mar 2023 06:28:36 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678706916;
-        bh=V1F1JvB8e0m+TPoTa8JxvlvaAtOxepF/TyIfygWQDIU=;
-        h=From:To:CC:Subject:Date;
-        b=hx9p9QY8jPpFuFeXrOR2g6eSWKdu//Iv1bBU1bVvXax6k6PW1QBdbnNfimIyc1rDU
-         aQBxDQ1Jv3RP2Ym8ZHJbcxxzTfmq8ANp9J2/EOTRkh5Q7hVm4Ij7umjtJVNGYZXpc6
-         SPdxoSdQK7rSRp/hYfBV9OyvyJCTWn1Q6pnak2Ag=
-Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DBSalm009082
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Mar 2023 06:28:36 -0500
-Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
- Mar 2023 06:28:35 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE112.ent.ti.com
- (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 13 Mar 2023 06:28:35 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DBSZnE030284;
-        Mon, 13 Mar 2023 06:28:35 -0500
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v4] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Date:   Mon, 13 Mar 2023 16:58:34 +0530
-Message-ID: <20230313112834.16156-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 13 Mar 2023 07:29:52 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F5CA50FB2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:29:49 -0700 (PDT)
+Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pbgN0-0000x8-Lt; Mon, 13 Mar 2023 12:29:38 +0100
+Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
+        (envelope-from <sha@pengutronix.de>)
+        id 1pbgMz-00081U-S4; Mon, 13 Mar 2023 12:29:37 +0100
+Date:   Mon, 13 Mar 2023 12:29:37 +0100
+From:   Sascha Hauer <s.hauer@pengutronix.de>
+To:     Adam Ford <aford173@gmail.com>
+Cc:     arm-soc <linux-arm-kernel@lists.infradead.org>,
+        Marek Vasut <marex@denx.de>, Stefan Agner <stefan@agner.ch>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        dri-devel <dri-devel@lists.freedesktop.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Jagan Teki <jagan@amarulasolutions.com>
+Subject: Re: MXSFB and Video PLL clock on i.MX8M Mini/Nano Question
+Message-ID: <20230313112937.GC7446@pengutronix.de>
+References: <CAHCN7xJXMmwYqD=Eb2=_vJw390KAd6NgkWCpq6yCbAyaJ3xK5A@mail.gmail.com>
+ <20230313085105.GB7446@pengutronix.de>
+ <CAHCN7xJxBrN5aQgvkV8LrqoTATinr0kFYKht2_YKqTF71UCoKw@mail.gmail.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAHCN7xJxBrN5aQgvkV8LrqoTATinr0kFYKht2_YKqTF71UCoKw@mail.gmail.com>
+X-Sent-From: Pengutronix Hildesheim
+X-URL:  http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
+X-SA-Exim-Mail-From: sha@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
-for both instances of 8 channel ADCs for J721s2 SoC.
+On Mon, Mar 13, 2023 at 06:08:05AM -0500, Adam Ford wrote:
+> On Mon, Mar 13, 2023 at 3:51 AM Sascha Hauer <s.hauer@pengutronix.de> wrote:
+> >
+> > On Sun, Mar 12, 2023 at 02:28:45PM -0500, Adam Ford wrote:
+> > > I am trying to work through a series that was submitted for enabling
+> > > the DSI on the i.MX8M Mini and Nano.  I have extended this series to
+> > > route the DSI to an HDMI bridge, and I am able to get several
+> > > resolutions to properly sync on my monitor.  However, there are also a
+> > >  bunch that appear on the list when I run modetest that do not sync on
+> > > my monitor.
+> > >
+> > > When running some debug code, it appears that it's related to the
+> > > clocking of the MXSFB driver.
+> > >
+> > > From what I can tell, the MSXFB driver attempts to set the clock based
+> > > on the desired resolution and refresh rate.  When the default
+> > > VIDEO_PLL clock is set to 594MHz, many of the resolutions that cleanly
+> > > divide from the 594MHz clock appear to sync with my monitor.  However,
+> > > in order to get other resolutions to appear, I have to manually change
+> > > the device tree to set VIDEO_PLL to a different clock rate so MSXFB
+> > > can use it.  Unfortunately, that breaks the resolutions that used to
+> > > work.
+> > >
+> > > I threw together a hack into the MXSFB driver which adds a new
+> > > optional clock to the MSXFB driver.  When I pass VIDEO_PLL to this
+> > > driver, it can automatically set the clock rate to match that of
+> > > whatever the desired clock is, and I can get many more resolutions to
+> > > appear.
+> > > Another advantage of this is that the Video_PLL can be the minimum
+> > > speed needed for a given rate instead of setting a higher rate, then
+> > > dividing it down.
+> >
+> > Isn't it possible to add the CLK_SET_RATE_PARENT flag to the pixel
+> > clock? That's what i.MX6sx and i.MX7 do.
+> 
+> I thought about that, but on the Nano, the video_pll is several layers up.
+> 
+> video_pll -> video_pll_bypass -> disp_pixel -> disp_pixel_clk
+> 
+> Do I just set that flag for each of these?
 
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
----
+Yes, that's what I would suggest. I don't know the i.MX8M clock tree
+very well, so I don't know which other clocks might be influenced when
+the video_pll clock changes its rate. But if you have to change the PLL
+rate anyway it shouldn't make a difference if you change it directly
+or if you let the rate change propagate up from disp_pixel_clk.
 
-Changelog v3->v4:
-- add leading zeroes to reg address to match existing convention
-- change clock names for adc to 'fck'
-- remove spaces from start of line
+Sascha
 
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
- 2 files changed, 54 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index a7aa6cf08acd..3bc4f28c809f 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -309,3 +309,17 @@ &mcu_mcan1 {
- 	pinctrl-0 = <&mcu_mcan1_pins_default>;
- 	phys = <&transceiver2>;
- };
-+
-+&tscadc0 {
-+	status = "okay";
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-+
-+&tscadc1 {
-+	status = "okay";
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index 0af242aa9816..5da5f0cf7009 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -306,4 +306,44 @@ cpts@3d000 {
- 			ti,cpts-periodic-outputs = <2>;
- 		};
- 	};
-+
-+	tscadc0: tscadc@40200000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x00 0x40200000 0x00 0x1000>;
-+		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 0 0>;
-+		assigned-clocks = <&k3_clks 0 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "fck";
-+		dmas = <&main_udmap 0x7400>,
-+			<&main_udmap 0x7401>;
-+		dma-names = "fifo0", "fifo1";
-+		status = "disabled";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
-+
-+	tscadc1: tscadc@40210000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x00 0x40210000 0x00 0x1000>;
-+		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 1 0>;
-+		assigned-clocks = <&k3_clks 1 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "fck";
-+		dmas = <&main_udmap 0x7402>,
-+			<&main_udmap 0x7403>;
-+		dma-names = "fifo0", "fifo1";
-+		status = "disabled";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
- };
 -- 
-2.34.1
-
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
