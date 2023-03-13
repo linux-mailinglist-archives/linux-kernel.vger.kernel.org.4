@@ -2,191 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A5D46B7B70
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:04:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 013326B7B72
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:04:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjCMPEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:04:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49778 "EHLO
+        id S230111AbjCMPEa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:04:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230291AbjCMPEG (ORCPT
+        with ESMTP id S229801AbjCMPE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:04:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 089F72A6C6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:02:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678719754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=ytv42m9QWKbJ/ZLfHwR9HdA9Autu6K0kWVrGy/ImdIQ=;
-        b=iOaVQVo8/GKJ2zszQETYHce6aj7YJrLCLs7oRzkWzagyHUFAtHvZU7vEKvByxbq8ox5ED4
-        TDCDXFOKBeHmjVjnPsXJpLhYo/mxNuDI3SJxW/CgpgeO/o0X7shCWiugyRCpm0yvEKY3Hp
-        evs3Fv+w34SxYHQU1b22D743+zvbQ3w=
-Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
- [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-100-VGxsFQwSP5GJINfD2VVybA-1; Mon, 13 Mar 2023 11:02:33 -0400
-X-MC-Unique: VGxsFQwSP5GJINfD2VVybA-1
-Received: by mail-ed1-f69.google.com with SMTP id h15-20020a056402280f00b004bf9e193c23so17550779ede.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:02:33 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678719752;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ytv42m9QWKbJ/ZLfHwR9HdA9Autu6K0kWVrGy/ImdIQ=;
-        b=T1q+KxqQQzeIpIq23TuAsC89xy+L2ChipoW5bkjhB8n3gSgQsjyGvuA2e2gsN6nznH
-         vE7uTABPzjxeSdn3cISYU42EdsrHa+EP2QX/7hnQ1AVF1NUiFyqvEX8zsrKxHn8AcIHO
-         y0lbgSqBx3HWzn/d9lgTWkPw0vVWales4pAxFz56eQQVRSaJYQYDhjV+9WzVU0vQpt+y
-         IR3RBjFOol8hcvVMZ14cKdZRxd/2NXhPUu2jlnBRf7OzREhXz5In+P1VdtXZYQHuWEEr
-         oMVKWsxS1fXI2PxeD9wurA4Xo1q+5aNpTb5uhTLZnlcnAhctiCKzyBlxIZQxJ9bbBmry
-         O0+w==
-X-Gm-Message-State: AO0yUKW2khIhxW+4i2wasAc5+NkH+p/5OGs4YqpRIzE76FWnfYbm5D2f
-        8es71OX5sF1DwZCD42Jl8wRbj8TDziWXMaaCVFtKgXdwYZs0Jk07sQ1qiU+hIT6VCYm1Lpdy9ZI
-        U8lgB7E+dEwNQoNsHu6KFbeEL
-X-Received: by 2002:a17:907:7f0b:b0:888:7ac8:c0f4 with SMTP id qf11-20020a1709077f0b00b008887ac8c0f4mr37301384ejc.25.1678719752541;
-        Mon, 13 Mar 2023 08:02:32 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8An3aVV4WnNT9hxgiKWhAdv46b5RvfOThjOYw5to5Y8bLq/2UctAu/n1pVa89F4tB0bReroA==
-X-Received: by 2002:a17:907:7f0b:b0:888:7ac8:c0f4 with SMTP id qf11-20020a1709077f0b00b008887ac8c0f4mr37301343ejc.25.1678719752251;
-        Mon, 13 Mar 2023 08:02:32 -0700 (PDT)
-Received: from [10.40.98.142] ([78.108.130.194])
-        by smtp.gmail.com with ESMTPSA id xb12-20020a170907070c00b00924916f9c21sm2345305ejb.87.2023.03.13.08.02.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 08:02:31 -0700 (PDT)
-Message-ID: <e4cbc603-ca16-41db-d08d-b5d5250d62b4@redhat.com>
-Date:   Mon, 13 Mar 2023 16:02:29 +0100
+        Mon, 13 Mar 2023 11:04:28 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DE8F6A1EB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:03:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678719838; x=1710255838;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=nnPVxqaWPSM62/7tvPcwit7boeqwp9uA7g0BvtONDlc=;
+  b=kQGQO1HlNu8HWrUQmXuHKDRVVscpvub4l1lwQhrnMd8LWyKnlpIArCTS
+   vrmQ/mpI30jfXQp7GsosabL9FoJspkVWBDLK1+58SccwraridOOhxVvKl
+   DQf25zZ9BghFXalhNH6FigXvg4AQ5G3/UzZMd0wJ1/FLQNEaqUgWbKtYI
+   9VUMmFXlDKabzzztw1u+k5OfqDECt3e1scu0w69/QTpAg1X8fhcB5Ccch
+   BOyHTtPhz2ab8rrZpnBq5pEZ9m9uULJFcVqmVod/hMj435bUMArwY8JdH
+   OtyEtQJE3uVNcSMu4/FCEkC4f0HfDJrxT6cf8Md/1cfpk9I/4YXYBJOcP
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="339536930"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="339536930"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 08:03:27 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="1008016668"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="1008016668"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by fmsmga005.fm.intel.com with ESMTP; 13 Mar 2023 08:03:25 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pbjhs-0005n0-1m;
+        Mon, 13 Mar 2023 15:03:24 +0000
+Date:   Mon, 13 Mar 2023 23:02:35 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Shuai <suagrfillet@gmail.com>, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        conor.dooley@microchip.com, ionela.voinescu@arm.com
+Cc:     oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Song Shuai <suagrfillet@gmail.com>
+Subject: Re: [PATCH] arch_topology: Clear LLC sibling when cacheinfo teardown
+Message-ID: <202303132209.invDMo8L-lkp@intel.com>
+References: <20230313102752.1134472-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v3 2/8] platform/x86/intel/ifs: IFS cleanup
-Content-Language: en-US
-To:     Jithu Joseph <jithu.joseph@intel.com>, markgross@kernel.org
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, rostedt@goodmis.org,
-        ashok.raj@intel.com, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com,
-        sohil.mehta@intel.com
-References: <20230214234426.344960-1-jithu.joseph@intel.com>
- <20230301015942.462799-1-jithu.joseph@intel.com>
- <20230301015942.462799-3-jithu.joseph@intel.com>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20230301015942.462799-3-jithu.joseph@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313102752.1134472-1-suagrfillet@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Hi Song,
 
-On 3/1/23 02:59, Jithu Joseph wrote:
-> Cleanup incorporating misc review comments
-> 
->  - Remove the subdirectory intel_ifs/0 for devicenode [1]
->  - Make plat_ifs_groups non static and use it directly without using a
->     function [2]
-> 
-> Link: https://lore.kernel.org/lkml/Y+4kQOtrHt5pdsSO@kroah.com/ [1]
-> Link: https://lore.kernel.org/lkml/Y9nyxNesVHCUXAcH@kroah.com/  [2]
-> 
-> Signed-off-by: Jithu Joseph <jithu.joseph@intel.com>
-> Reviewed-by: Tony Luck <tony.luck@intel.com>
+Thank you for the patch! Yet something to improve:
 
-Thanks, patch looks good to me:
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.3-rc2 next-20230310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Shuai/arch_topology-Clear-LLC-sibling-when-cacheinfo-teardown/20230313-182946
+patch link:    https://lore.kernel.org/r/20230313102752.1134472-1-suagrfillet%40gmail.com
+patch subject: [PATCH] arch_topology: Clear LLC sibling when cacheinfo teardown
+config: m68k-allyesconfig (https://download.01.org/0day-ci/archive/20230313/202303132209.invDMo8L-lkp@intel.com/config)
+compiler: m68k-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a9aca0a81b31b421e3bbfa08fd205a8bec651afe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Shuai/arch_topology-Clear-LLC-sibling-when-cacheinfo-teardown/20230313-182946
+        git checkout a9aca0a81b31b421e3bbfa08fd205a8bec651afe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=m68k SHELL=/bin/bash drivers/
 
-Please add my Reviewed-by to this patch for the next version of
-the series, so that I know which patches I have already reviewed.
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303132209.invDMo8L-lkp@intel.com/
 
-Regards,
+All errors (new ones prefixed by >>):
 
-Hans
+   drivers/base/cacheinfo.c: In function 'cacheinfo_cpu_pre_down':
+>> drivers/base/cacheinfo.c:818:9: error: implicit declaration of function 'clear_llc_topology' [-Werror=implicit-function-declaration]
+     818 |         clear_llc_topology(cpu);
+         |         ^~~~~~~~~~~~~~~~~~
+   cc1: some warnings being treated as errors
 
-> ---
->  drivers/platform/x86/intel/ifs/ifs.h   | 2 +-
->  drivers/platform/x86/intel/ifs/core.c  | 6 +++---
->  drivers/platform/x86/intel/ifs/sysfs.c | 9 +--------
->  3 files changed, 5 insertions(+), 12 deletions(-)
-> 
-> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-> index e07463c794d4..ab168ddf28f1 100644
-> --- a/drivers/platform/x86/intel/ifs/ifs.h
-> +++ b/drivers/platform/x86/intel/ifs/ifs.h
-> @@ -246,6 +246,6 @@ static inline struct ifs_data *ifs_get_data(struct device *dev)
->  extern bool *ifs_pkg_auth;
->  int ifs_load_firmware(struct device *dev);
->  int do_core_test(int cpu, struct device *dev);
-> -const struct attribute_group **ifs_get_groups(void);
-> +extern struct attribute *plat_ifs_attrs[];
->  
->  #endif
-> diff --git a/drivers/platform/x86/intel/ifs/core.c b/drivers/platform/x86/intel/ifs/core.c
-> index b518b661daf0..62c44dbae757 100644
-> --- a/drivers/platform/x86/intel/ifs/core.c
-> +++ b/drivers/platform/x86/intel/ifs/core.c
-> @@ -20,6 +20,8 @@ static const struct x86_cpu_id ifs_cpu_ids[] __initconst = {
->  };
->  MODULE_DEVICE_TABLE(x86cpu, ifs_cpu_ids);
->  
-> +ATTRIBUTE_GROUPS(plat_ifs);
-> +
->  bool *ifs_pkg_auth;
->  
->  static struct ifs_device ifs_device = {
-> @@ -29,8 +31,8 @@ static struct ifs_device ifs_device = {
->  	},
->  	.misc = {
->  		.name = "intel_ifs_0",
-> -		.nodename = "intel_ifs/0",
->  		.minor = MISC_DYNAMIC_MINOR,
-> +		.groups = plat_ifs_groups,
->  	},
->  };
->  
-> @@ -53,8 +55,6 @@ static int __init ifs_init(void)
->  	if (rdmsrl_safe(MSR_INTEGRITY_CAPS, &msrval))
->  		return -ENODEV;
->  
-> -	ifs_device.misc.groups = ifs_get_groups();
-> -
->  	if (!(msrval & BIT(ifs_device.ro_data.integrity_cap_bit)))
->  		return -ENODEV;
->  
-> diff --git a/drivers/platform/x86/intel/ifs/sysfs.c b/drivers/platform/x86/intel/ifs/sysfs.c
-> index ee636a76b083..2007d8054f04 100644
-> --- a/drivers/platform/x86/intel/ifs/sysfs.c
-> +++ b/drivers/platform/x86/intel/ifs/sysfs.c
-> @@ -141,7 +141,7 @@ static ssize_t image_version_show(struct device *dev,
->  static DEVICE_ATTR_RO(image_version);
->  
->  /* global scan sysfs attributes */
-> -static struct attribute *plat_ifs_attrs[] = {
-> +struct attribute *plat_ifs_attrs[] = {
->  	&dev_attr_details.attr,
->  	&dev_attr_status.attr,
->  	&dev_attr_run_test.attr,
-> @@ -149,10 +149,3 @@ static struct attribute *plat_ifs_attrs[] = {
->  	&dev_attr_image_version.attr,
->  	NULL
->  };
-> -
-> -ATTRIBUTE_GROUPS(plat_ifs);
-> -
-> -const struct attribute_group **ifs_get_groups(void)
-> -{
-> -	return plat_ifs_groups;
-> -}
 
+vim +/clear_llc_topology +818 drivers/base/cacheinfo.c
+
+   811	
+   812	static int cacheinfo_cpu_pre_down(unsigned int cpu)
+   813	{
+   814		if (cpumask_test_and_clear_cpu(cpu, &cache_dev_map))
+   815			cpu_cache_sysfs_exit(cpu);
+   816	
+   817		free_cache_attributes(cpu);
+ > 818		clear_llc_topology(cpu);
+   819		return 0;
+   820	}
+   821	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
