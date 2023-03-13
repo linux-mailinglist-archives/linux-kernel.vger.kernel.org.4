@@ -2,166 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A26D86B802B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F146B8029
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:14:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCMSPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S229616AbjCMSOx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:14:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCMSPO (ORCPT
+        with ESMTP id S229473AbjCMSOs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:15:14 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FAA15D254;
-        Mon, 13 Mar 2023 11:15:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678731313; x=1710267313;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Vk7h//99+6xtLiIUT2OMHoWe7+NGPgyQECZ4uPfbSyk=;
-  b=ctJqKI26TX3AYo404voYQLS51colisUbEC77zbUh18LRO1Wyiu/j2+Np
-   p/tMt/1lzLup4ee7oJsAL5Z49WW5XhU/x3AwQwl/aAjivDUAO+8PGcksx
-   3scaQX7/nClCqEWiu5Rzrv8/rAiXTydQz3rCW4IAlgwUimoXeS1XJOP9B
-   p017qpecRlXgcdadIjg2sJpBe5XKY7J90uEFhanNstXse038FlDzq4wGr
-   qVVo8D/2vb/fEH+ujvIbKoLjiwnZpDnwwc+YEk4k5yerN8iJ+4myMMyWg
-   5bn9LHEILjUOjXbiU1yYcOTNIGDywJ6930nVEL/gx6cj/D1EOztkx7Q/d
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="335920182"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="335920182"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 11:15:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="852868181"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="852868181"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by orsmga005.jf.intel.com with ESMTP; 13 Mar 2023 11:14:15 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 11:14:15 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 11:14:15 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 11:14:15 -0700
-Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.40) by
- edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 13 Mar 2023 11:14:14 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=LrwY3QUcl0aTp9uaYc20Gq/+k1pr38tnyZsKiUNvYK92zfi0GhbsPkUzTdj7G8CDzWdX8Z9x8aAUUThoYsO85fUQHNX431gYtI/sCmH4fC1MCNkmsVqA1+cohl5eZc8S+ym9kE6KzRPP9Zwq/maBclQ/wwK0rHn3Qbai/dG00PghX0wnIUKSxjGZ9XFkjVGreiNc7GWXT1gzpZzbrZ7SmzfFK5riBnBZfEROH1ND/EVUO6OULSEO6gksUpBHqZ55BwhKHs3EgnQ7uTb4VBYxvQLrrbg2A4JuoFkmR7+wTdGDsoQh0jbW+rRNj53eWIjRxvVcSLChq2TAmPnyyRALLA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Vk7h//99+6xtLiIUT2OMHoWe7+NGPgyQECZ4uPfbSyk=;
- b=oHwtpVGy1GQ4E34iocfI1frroqC24Hqq6WH/a9yswK3IsgUyUIY2IGY64b0MNVmx+Hix+4ZmvPyTm76y7RQ8rWLUrQWB/lD0jo4rUD8hkG/9IoA4OZtXgWvEKmSged6gSnHmeKiBewAT+UX5PBGv4aMagBCfgb6iSG4PdnGr+FOCGFnyFJpVRWh/QxAiO0Y/nSN8OMI2t79iUH++YoAcX7w6Q1IwilHb382aIfdmULo7S2w3rj8u1Fk7IHxnV7PmbnX8j2CLghBIUIQQWwvBeN72rk5nZWoK+HoVm/RpGcqNSRD4CEqSyAGBSMzloTCb7n2WEblVjLnAesnozEtkmA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
- by IA1PR11MB7920.namprd11.prod.outlook.com (2603:10b6:208:3fc::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 18:14:12 +0000
-Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a47:481:d644:a8b5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
- ([fe80::a47:481:d644:a8b5%7]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 18:14:12 +0000
-From:   "Luck, Tony" <tony.luck@intel.com>
-To:     "Zhuo, Qiuxu" <qiuxu.zhuo@intel.com>
-CC:     Borislav Petkov <bp@alien8.de>, Aristeu Rozanski <aris@redhat.com>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Xu, Feng F" <feng.f.xu@intel.com>,
-        "linux-edac@vger.kernel.org" <linux-edac@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2 1/1] EDAC/skx: Fix overflows on the DRAM row address
- mapping arrays
-Thread-Topic: [PATCH v2 1/1] EDAC/skx: Fix overflows on the DRAM row address
- mapping arrays
-Thread-Index: AQHZPba5S/dNBvIlPkKlTpOjG4MtAK75LI5Q
-Date:   Mon, 13 Mar 2023 18:14:12 +0000
-Message-ID: <SJ1PR11MB60836A58BB3131EE480A4ACDFCB99@SJ1PR11MB6083.namprd11.prod.outlook.com>
-References: <IA1PR11MB61710A47690BD5DA2826F29389DF9@IA1PR11MB6171.namprd11.prod.outlook.com>
- <20230211011728.71764-1-qiuxu.zhuo@intel.com>
-In-Reply-To: <20230211011728.71764-1-qiuxu.zhuo@intel.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|IA1PR11MB7920:EE_
-x-ms-office365-filtering-correlation-id: 60bfa63c-5a16-4cc5-c6c6-08db23eebf41
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: qwsyCgYLBpsFnJcQiAniyBl4QwasJbV4i3WoYq8Vi9poRLGORJVnjJICVADPwNUodCA9jvLiVYaAIPusZ9esXucsQgYxuanUk5YrS+fhqUzgJrKi7B+xrVE3lVoS7K6SHrlCadx691hf44UboXp0Rs9phY2m6ecqkaqJ3MpnkA2HM0ZwrlZQ/p9bX6hWhA4uYkRBr+9A8Kxe4OQPNtRImZzQceqWJy3XuqdVpMYHQ9qXka/umGDn5j4dy0jQ/ZvqaDwAsUBeZiu1laUu0lqSM5HTljxO6RBchf7HfGd5zrsQi62+6+bLZbfHcvqKsULlzpiN1C/KyOuWmIpjQmNv8QAMUj78PjPyfkzu9X6td3oGCRp1jFw+0ilHwEARu8g7h9UrXR+n3y4C0xuYTkEseGCdzt2+tBSHeORM/UB5ClXw2VEo1pFmZuI7IxEDgMSZReF6OA9Jf3d+x6qm6f1lYiO33L179FppFytjgeYrxDVnBEahxMrOrKJ68Sf8tkQ/1xeFyA95FsdckSL6dhrCillOIautzDA6D1u9RKMaS/uDzLPDKJFsEwXcwEWYqzgNtD9geKNxwnNbCGTc79+fDu4mCnAiiKa2Sysg3tm6P8Ko4HIvzFtbqdXERt2mvShyGEESFLPUr45ckt3b/yeM03vcQ+Laiozp69s4/QEXr4+0PGJt0G7FXXJGfQJmW2w05GL/wU23ynlWGzZwmMpMNQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(136003)(366004)(346002)(396003)(451199018)(2906002)(122000001)(82960400001)(5660300002)(8936002)(64756008)(52536014)(33656002)(558084003)(66946007)(55016003)(66556008)(8676002)(76116006)(66446008)(41300700001)(6862004)(38070700005)(4326008)(66476007)(316002)(38100700002)(54906003)(86362001)(6636002)(478600001)(9686003)(186003)(26005)(71200400001)(6506007)(7696005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?9aj9dFnnrazEhgJwlIF+TxACoD+o4ShjFI3a0EwIu6GbO6+hDR3wXdVoqCZE?=
- =?us-ascii?Q?mEVp4ztDywfzu/B8JSMgC5xNTUkAxN3NaIU6yT037rxhaH5w8XbTNArQhF+y?=
- =?us-ascii?Q?4bhVK8sJKTJfRhD1Eo9WwR5Vyd0Znpe2tM61ePq4C2djzQzhv8jbXs5rq7ss?=
- =?us-ascii?Q?u05jBQpnGQLDEt5rrJmNrDGZxh3IdAOb06/7fZMWFqPSDc9hYUYWb9jKlwSY?=
- =?us-ascii?Q?E53T1C9sV9xw/ej8xpcLiDR2GFmHdcPAkHnsuhaYs43taRDrC+9tB+EmTOD9?=
- =?us-ascii?Q?dqsxz0thiD6IaKLPESVses/fZsYTs+Txp0mq4NJ85zxTYvY3W8sfhbRtLmf5?=
- =?us-ascii?Q?RXSYpuEbtnzVgsRP9XqGd9XWMIbLWzM6HR0VfbgQCPNL6wRiIwvhlLFfz0LQ?=
- =?us-ascii?Q?o6zS6Gyz7+YE0XqidUbduuiKtbINXRXe7Au74vHyjTsLfimtbGRVoRcpe9hg?=
- =?us-ascii?Q?R4ktiFmM2SavV1pXhNJ6dHbMPXs0uTcPxHvSuIOpZnfoKz1cC4neM6YrAEsb?=
- =?us-ascii?Q?TWHS8qVH8hhKvA9l4aujmj/lMmR8bBeSXAK+IswjcBmUhCWvuts1NgpDN7PB?=
- =?us-ascii?Q?HKrsaYeiHr0uOvtkzYHo5HZcTbq+QWgHhgnNLSF2xHPJ9eHqW3a3K651cmQH?=
- =?us-ascii?Q?mVlT1/J9Umv6uLtKx78bwwoCN5BvE7YCdwF/dqNNkEGIepTZdhnBWgkolfIF?=
- =?us-ascii?Q?GEmu06pdembbN7ehecBLxQUmyXPVqa9RiWN00bZ+wygnBgx+/+ECv8KecEDk?=
- =?us-ascii?Q?wRrX1BU54u6a/5V+nBopE5P8bgNTnlBtttby/h+pmGGQCqvDma1XH92jY3ho?=
- =?us-ascii?Q?BfpC2BIcpji3mr6eSuNu1h6vv5sXPtAlO7Yj2gwiBBY+u/Qt1wW2IIHSiJHn?=
- =?us-ascii?Q?pYiO28Gw29iLZglb4Gy1TIjHTFu5UFOWsdQOoB/hnhvPtWdH60ClO3HzMePQ?=
- =?us-ascii?Q?2+G26fl/Ax/q3vACrFFBsymJkW1YR92sQ77TYU0unioQxexAg5ENL3gVzuJX?=
- =?us-ascii?Q?qgJxXXiTxs1rQM994lxW1M+cUd1l3VNFEFJsqYeagLDzwf8gPj2eVOADvDRp?=
- =?us-ascii?Q?FACdPsRxWnbKc0CfR2CGSsoPTvjbgcr1JD8lMLiV/CpiDKPnJh08P7HpJp36?=
- =?us-ascii?Q?IndJWM3NengTTQ8xJsAGicuwWEYSkqaUugTDU9notzaOSournjyzWR2wPU1S?=
- =?us-ascii?Q?xhpHmvn08opWQT0szwCHbrcFpNHPL/ufVMbpoo4GCOeI042OcA94mjWqzoox?=
- =?us-ascii?Q?PnQRdxYSmyV1aW5qVqMmlfmPz0Nb0i1c7xI0Pu6RGLC5iSa+o5kpQSxYoAMC?=
- =?us-ascii?Q?3S5q08WuHpAVbtN+Rmxqx0GcS96B+JPFkN83ebsP/vfwyUKd0W5neFC/xqgl?=
- =?us-ascii?Q?GMqSupmeFTvk7DXAF5JPHA7A3OjKE4CBm6JuACTrPgfjExaBbz3UO6N4qdwm?=
- =?us-ascii?Q?y7SQkl6ahUONz3EPzIKYBH3V+9w9BUKgXbFBbRU7lAi8HppXKF7g/uIfOagX?=
- =?us-ascii?Q?wTQ54ihIcFVV5kekywkfKqN0MLU83tFk0RuB9ymGO8BrlmXvgC0nbUiDnhC7?=
- =?us-ascii?Q?Lr0EshmJmH3Hd4CtQJM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Mon, 13 Mar 2023 14:14:48 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958275CEDE;
+        Mon, 13 Mar 2023 11:14:46 -0700 (PDT)
+Received: from pendragon.ideasonboard.com (unknown [89.244.118.114])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 5D6B16FA;
+        Mon, 13 Mar 2023 19:14:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1678731284;
+        bh=ECiuzkN+DQNQmLQ9FTJM9eiXiAf3Dhfgrx4QRUBTQag=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Hp3tT8MEY1rg0ePG1lryXVLvQL0nDEttkrDEwbh9XQRRhQxYs/wPJoW700jfDUeCF
+         qFrwMfZYGqpNq3oN/L5IQrZVh0/Sm2OnHOfg3vg1xaZFkPfRu9dY9YGq3jw/XRu87T
+         J57mJg9x30wvyFq0EAMz4gQknKoQlaikH07FFnXs=
+Date:   Mon, 13 Mar 2023 20:14:48 +0200
+From:   Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To:     Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     tfiga@chromium.org, m.szyprowski@samsung.com, mchehab@kernel.org,
+        ming.qian@nxp.com, shijie.qin@nxp.com, eagle.zhou@nxp.com,
+        bin.liu@mediatek.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, tiffany.lin@mediatek.com,
+        andrew-ct.chen@mediatek.com, yunfei.dong@mediatek.com,
+        stanimir.k.varbanov@gmail.com, quic_vgarodia@quicinc.com,
+        agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        ezequiel@vanguardiasur.com.ar, p.zabel@pengutronix.de,
+        daniel.almeida@collabora.com, hverkuil-cisco@xs4all.nl,
+        jerbel@kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, kernel@collabora.com
+Subject: Re: [RFC 3/4] media: videobuf2: Use bitmap to manage vb2 index
+Message-ID: <20230313181448.GD22646@pendragon.ideasonboard.com>
+References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
+ <20230313135916.862852-4-benjamin.gaignard@collabora.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 60bfa63c-5a16-4cc5-c6c6-08db23eebf41
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 18:14:12.0692
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 3rzaDXyjVR8ozlmK/jU7rL8i3wECiYaP3r8lGscATy81kXtUtIhomTM9Xujfa3tv762xmuIFW4pkyqx9h9fPrA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR11MB7920
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230313135916.862852-4-benjamin.gaignard@collabora.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> For a 32G rank, the most significant DRAM row address bit (the
-> bit17) is mapped from the bit34 of the rank address. Add this new
-> mapping item to both arrays to fix the overflow issue.
+Hi Benjamin,
 
-Applied to edac-drivers branch of the RAS tree.
+Thank you for the patch.
 
-Thanks
+On Mon, Mar 13, 2023 at 02:59:15PM +0100, Benjamin Gaignard wrote:
+> Using a bitmap to get vb2 index will allow to avoid holes
+> in the indexes when introducing DELETE_BUF ioctl.
+> 
+> Signed-off-by: Benjamin Gaignard <benjamin.gaignard@collabora.com>
+> ---
+>  .../media/common/videobuf2/videobuf2-core.c   | 22 ++++++++++++++++++-
+>  include/media/videobuf2-core.h                |  6 +++++
+>  2 files changed, 27 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/media/common/videobuf2/videobuf2-core.c b/drivers/media/common/videobuf2/videobuf2-core.c
+> index 96597d339a07..3554811ec06a 100644
+> --- a/drivers/media/common/videobuf2/videobuf2-core.c
+> +++ b/drivers/media/common/videobuf2/videobuf2-core.c
+> @@ -397,6 +397,22 @@ static void init_buffer_cache_hints(struct vb2_queue *q, struct vb2_buffer *vb)
+>  		vb->skip_cache_sync_on_finish = 1;
+>  }
+>  
+> +/*
+> + * __vb2_get_index() - find a free index in the queue for vb2 buffer.
+> + *
+> + * Returns an index for vb2 buffer.
+> + */
+> +static int __vb2_get_index(struct vb2_queue *q)
+> +{
+> +	unsigned long index;
+> +
+> +	index = bitmap_find_next_zero_area(q->bmap, q->idx_max, 0, 1, 0);
+> +	if (index > q->idx_max)
+> +		dprintk(q, 1, "no index available for buffer\n");
 
--Tony
+Ignoring the error is scary. If we limited the total number of buffers
+as proposed in the review of 2/4, the error wouldn't occur.
+
+I'm also wondering if it wouldn't be better to use the IDA API to
+allocate IDs, and possibly the IDR API as well to replace the list.
+
+> +
+> +	return index;
+> +}
+> +
+>  /*
+>   * __vb2_queue_alloc() - allocate vb2 buffer structures and (for MMAP type)
+>   * video buffer memory for all buffers/planes on the queue and initializes the
+> @@ -423,7 +439,7 @@ static int __vb2_queue_alloc(struct vb2_queue *q, enum vb2_memory memory,
+>  		vb->state = VB2_BUF_STATE_DEQUEUED;
+>  		vb->vb2_queue = q;
+>  		vb->num_planes = num_planes;
+> -		vb->index = q->num_buffers + buffer;
+> +		vb->index = __vb2_get_index(q);
+>  		vb->type = q->type;
+>  		vb->memory = memory;
+>  		init_buffer_cache_hints(q, vb);
+> @@ -2438,6 +2454,9 @@ int vb2_core_queue_init(struct vb2_queue *q)
+>  	mutex_init(&q->mmap_lock);
+>  	init_waitqueue_head(&q->done_wq);
+>  
+> +	q->idx_max = ALIGN(256, BITS_PER_LONG);
+> +	q->bmap = bitmap_zalloc(q->idx_max, GFP_KERNEL);
+> +
+>  	q->memory = VB2_MEMORY_UNKNOWN;
+>  
+>  	if (q->buf_struct_size == 0)
+> @@ -2465,6 +2484,7 @@ void vb2_core_queue_release(struct vb2_queue *q)
+>  	mutex_lock(&q->mmap_lock);
+>  	__vb2_queue_free(q, q->num_buffers);
+>  	mutex_unlock(&q->mmap_lock);
+> +	bitmap_free(q->bmap);
+>  }
+>  EXPORT_SYMBOL_GPL(vb2_core_queue_release);
+>  
+> diff --git a/include/media/videobuf2-core.h b/include/media/videobuf2-core.h
+> index 47f1f35eb9cb..4fddc6ae9f20 100644
+> --- a/include/media/videobuf2-core.h
+> +++ b/include/media/videobuf2-core.h
+> @@ -561,6 +561,8 @@ struct vb2_buf_ops {
+>   * @dma_dir:	DMA mapping direction.
+>   * @allocated_bufs: list of buffer allocated for the queue.
+>   * @num_buffers: number of allocated/used buffers
+> + * @bmap: Bitmap of buffers index
+> + * @idx_max: number of bits in bmap
+>   * @queued_list: list of buffers currently queued from userspace
+>   * @queued_count: number of buffers queued and ready for streaming.
+>   * @owned_by_drv_count: number of buffers owned by the driver
+> @@ -624,6 +626,8 @@ struct vb2_queue {
+>  	enum dma_data_direction		dma_dir;
+>  	struct list_head		allocated_bufs;
+>  	unsigned int			num_buffers;
+> +	unsigned long			*bmap;
+> +	int				idx_max;
+>  
+>  	struct list_head		queued_list;
+>  	unsigned int			queued_count;
+> @@ -1259,6 +1263,7 @@ static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+>  static inline void vb2_set_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+>  {
+>  	list_add_tail(&vb->allocated_entry, &q->allocated_bufs);
+> +	__set_bit(vb->index, q->bmap);
+>  }
+>  
+>  /**
+> @@ -1268,6 +1273,7 @@ static inline void vb2_set_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+>   */
+>  static inline void vb2_del_buffer(struct vb2_queue *q, struct vb2_buffer *vb)
+>  {
+> +	__clear_bit(vb->index, q->bmap);
+>  	list_del(&vb->allocated_entry);
+>  }
+>  
+
+-- 
+Regards,
+
+Laurent Pinchart
