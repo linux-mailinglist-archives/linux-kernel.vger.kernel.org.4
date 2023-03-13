@@ -2,260 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECF4D6B81CA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:39:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2E356B81C9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:38:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCMTjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:39:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
+        id S229807AbjCMTix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229673AbjCMTjJ (ORCPT
+        with ESMTP id S229673AbjCMTit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 15:39:09 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692CC7F015
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:39:04 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id y4so23743130edo.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:39:04 -0700 (PDT)
+        Mon, 13 Mar 2023 15:38:49 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ACFB7F014
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:38:48 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id a2so14196450plm.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:38:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678736343;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wS8jmXNaPLsNZEoeUl7PhMCNiH0F6PKhoHc6Y2aL034=;
-        b=FwIqdh/7GyFQK7ObRGHVo7b3jAPMcWSbjdhVYfRlWkIPqFGf3qioU2zyU7TN7p0Yp8
-         twm8bIIC4OHRfPR6lY+JxIKLe/49FncmmpWBtVcB7Kk7zsqmZAhOaQIV6INJ7Jlp7TCG
-         vTuTBZVDdho71as/b9FwH0l6j3xI2NAZpTI2pBP9+mtR9EzJLqEnflq6GjWi0LXhdIlw
-         YA0yo+bMcoQLswKdPCsNEI1lqxQ2eIrB3UU80gulhntbQvLUZckvNyB8NLEIAVXIYgXM
-         evWaH0VYwpSdjR0KvQ42RteZKWfL5+Vx6Ib3kM9qFry43U2t6Bnpb3JG3sDu/Ru40bpf
-         gJUA==
+        d=linaro.org; s=google; t=1678736327;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IVO7PEi2yUALQReAQnVtBqU4m2MDeMLRMQcMWB2PiI0=;
+        b=W5VAFVxT5KsRqtiz+5GE7fVAr/3byifsHIfF9hGkKl3m+4e/iWNinGUjiJQQcBURGm
+         BtpuoYi09J19BbcCwIARjSdPz2HTN1qUjuTiRpNlVt4j+jLtGIqF4ZNmzHXUoDw4Mw9o
+         Qjwf6fysHrAypYip+fUNdluusbd7ljMX7V+2sUtt+0IZ8A5Q34KdTzzXzf9fjkDxOzB6
+         ssgcKvdkq5QiNdsuh0sHIrguPigPq412RiDUBZdC+iJ/qpxCWgvQ2lfTTmnk2u3C5c0i
+         VJgvHUqXb0e3iKMU3aP4QVI5Jj2xZOWk/OzillHCFcQdFIXlD9h/SJo2uTGskA1/abnL
+         KPFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678736343;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wS8jmXNaPLsNZEoeUl7PhMCNiH0F6PKhoHc6Y2aL034=;
-        b=Lx7h38OITZW+MpLAjUP7zhz7Mmn237Eu86wrznf07+Pqfd4TO4R/sLhUGcENrvJRNd
-         jTr55lIGOh3y6QKuZLD0BOs+4WbnOOh67D4FgQoVKw3V6wTy0x51kXB8tOr0syBWU5gI
-         13k32R4IgJ9qfN9qhPzMjR+p7jKYwrp37XsyBTOtD8Qko3/sNpq3ItpHXJtEFkAHcrDE
-         +z80itR/AePLuJlLzcqEW0rgYXRnzcaGU7nFqjBk8RgOZ24Hv+j1Q+Ss8RvtsgLdZ2U9
-         Z8VCfHJu9xtwMG4BPFrdLFbnQUaFOrk+l0t95U1V8uo1qf4BT/fXQZhfz5HC1b6MF+Ze
-         t72g==
-X-Gm-Message-State: AO0yUKWzWyKnMf7NXdgN6q0mA4/cF0DrPyENfE6/yY9rGaOWdNU4qKSD
-        T3mm9B0Hg403Yn3TfMgWFr/ou1ois2pHINjpPO+f+g==
-X-Google-Smtp-Source: AK7set+BqYQIoFP4NPt2wScs0G+JZdXprJZpv+ov3SBz4Jdd82gtbNhfhh1eoiynPky42VawkdpV0RHJMAtKYC2vmq8=
-X-Received: by 2002:a17:906:66c9:b0:8ef:ccc8:5075 with SMTP id
- k9-20020a17090666c900b008efccc85075mr16437542ejp.11.1678736342741; Mon, 13
- Mar 2023 12:39:02 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678736327;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IVO7PEi2yUALQReAQnVtBqU4m2MDeMLRMQcMWB2PiI0=;
+        b=7N588Q2EKSQ31G/i9Vd2q14MfgkA3t6Poh0j//7sakcLDcgqf7Oc/E4J2TH4N2hgT0
+         gtC/Kf1PMId/VjPYjt7kw1ikVndlYB8jNkzAUZ/nGVnwTeMLzAMeG2kZfvLrPQsTYHIK
+         YjRWbH65Wno6fKttM7XXhWbmpyGUfkA18F5zgKECm+vGspt9+/wctGOAZ90CWrnnr1PY
+         pGH1GXaBWQqP1k5SjobwOsh+3/+Oy/RsOEFqKacXKlLS9QNW+p9N+RAXsauj6OpzRcMK
+         YUdv5dk/j7ntyVcX311X48S9qt2uQyrbYplEb44osHz2Hgrb3J+fzBOAD6eCsWg/P134
+         ZIDA==
+X-Gm-Message-State: AO0yUKUSA+9Ix8LLpom0KdQKsGxFxKGfonqF4I6vl+FfEHaRKGkpb/0w
+        u6AdPvlBa56nlTwZSgN1p8JS6A==
+X-Google-Smtp-Source: AK7set9qmdjM6JLXUsmVRUYr4chTrnyzUEowNxp6Tf8dv829z/ENOfvRbqn26nHGslbpU+eDnL2l9Q==
+X-Received: by 2002:a05:6a20:734c:b0:bf:40b:2db with SMTP id v12-20020a056a20734c00b000bf040b02dbmr43679619pzc.22.1678736327521;
+        Mon, 13 Mar 2023 12:38:47 -0700 (PDT)
+Received: from p14s ([2604:3d09:148c:c800:2c47:cef8:f9d7:c7e1])
+        by smtp.gmail.com with ESMTPSA id i11-20020aa78d8b000000b005ded4825201sm100214pfr.112.2023.03.13.12.38.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 12:38:47 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 13:38:44 -0600
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+To:     Tanmay Shah <tanmay.shah@amd.com>
+Cc:     michal.simek@amd.com, andersson@kernel.org,
+        jaswinder.singh@linaro.org, ben.levinsky@amd.com,
+        shubhrajyoti.datta@amd.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH v5 1/5] mailbox: zynqmp: fix counts of child nodes
+Message-ID: <20230313193844.GA2071975@p14s>
+References: <20230311012407.1292118-1-tanmay.shah@amd.com>
+ <20230311012407.1292118-2-tanmay.shah@amd.com>
 MIME-Version: 1.0
-References: <000000000000226a6105f6954b47@google.com> <CAAa6QmSH-c4voB2vg=ohdeQwmGDJ8X5rUw97-99cFkVaOPD5mg@mail.gmail.com>
- <20230313191557.6lm53ndvwoxtf5dz@google.com>
-In-Reply-To: <20230313191557.6lm53ndvwoxtf5dz@google.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Mon, 13 Mar 2023 12:38:25 -0700
-Message-ID: <CAAa6QmQnYYdVzESYvf6DE-nR9A-raSVpY-zVyTFHFrqpj8yd9A@mail.gmail.com>
-Subject: Re: [syzbot] [mm?] kernel BUG in hpage_collapse_scan_file
-To:     linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com,
-        Matthew Wilcox <willy@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230311012407.1292118-2-tanmay.shah@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 12:16=E2=80=AFPM Zach O'Keefe <zokeefe@google.com> =
-wrote:
->
-> On Mar 10 17:02, Zach O'Keefe wrote:
-> > On Fri, Mar 10, 2023 at 4:52=E2=80=AFPM syzbot
-> > <syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com> wrote:
-> > >
-> > > Hello,
-> > >
-> > > syzbot found the following issue on:
-> > >
-> > > HEAD commit:    857f1268a591 Merge tag 'objtool-core-2023-03-02' of g=
-it://..
-> > > git tree:       upstream
-> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D168e1032c=
-80000
-> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Df763d89e2=
-6d3d4c4
-> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D9578faa5475=
-acb35fa50
-> > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for=
- Debian) 2.35.2
-> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D179e4e1=
-2c80000
-> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D119cce98c=
-80000
-> > >
-> > > Downloadable assets:
-> > > disk image: https://storage.googleapis.com/syzbot-assets/b3b7a7e333f1=
-/disk-857f1268.raw.xz
-> > > vmlinux: https://storage.googleapis.com/syzbot-assets/5940be1cf171/vm=
-linux-857f1268.xz
-> > > kernel image: https://storage.googleapis.com/syzbot-assets/986015398e=
-4a/bzImage-857f1268.xz
-> > >
-> > > IMPORTANT: if you fix the issue, please add the following tag to the =
-commit:
-> > > Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
-> > >
-> > > ------------[ cut here ]------------
-> > > kernel BUG at mm/khugepaged.c:1823!
-> > > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-> > > CPU: 1 PID: 5097 Comm: syz-executor220 Not tainted 6.2.0-syzkaller-13=
-154-g857f1268a591 #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
-OS Google 02/16/2023
-> > > RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
-> > > RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
-> > > Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 =
-0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0=
-f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
-> > > RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
-> > > RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
-> > > RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
-> > > RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
-> > > R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
-> > > R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
-> > > FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:000000000=
-0000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  madvise_collapse+0x721/0xf50 mm/khugepaged.c:2693
-> > >  madvise_vma_behavior mm/madvise.c:1086 [inline]
-> > >  madvise_walk_vmas mm/madvise.c:1260 [inline]
-> > >  do_madvise+0x9e5/0x4680 mm/madvise.c:1439
-> > >  __do_sys_madvise mm/madvise.c:1452 [inline]
-> > >  __se_sys_madvise mm/madvise.c:1450 [inline]
-> > >  __x64_sys_madvise+0xa5/0xb0 mm/madvise.c:1450
-> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
-> > >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
-> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> > > RIP: 0033:0x7fdbae65dc39
-> > > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 =
-89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f=
-0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-> > > RSP: 002b:00007fdbae5ee2f8 EFLAGS: 00000246 ORIG_RAX: 000000000000001=
-c
-> > > RAX: ffffffffffffffda RBX: 00007fdbae6e64b8 RCX: 00007fdbae65dc39
-> > > RDX: 0000000000000019 RSI: 000000000060005f RDI: 0000000020000000
-> > > RBP: 00007fdbae6e64b0 R08: 0000000000000001 R09: 0000000000000033
-> > > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdbae5ee300
-> > > R13: 0000000000000001 R14: 00007fdbae5ee400 R15: 0000000000022000
-> > >  </TASK>
-> > > Modules linked in:
-> > > ---[ end trace 0000000000000000 ]---
-> > > RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
-> > > RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
-> > > Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 =
-0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0=
-f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
-> > > RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
-> > > RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
-> > > RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
-> > > RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
-> > > R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
-> > > R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
-> > > FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:000000000=
-0000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > >
-> > >
-> > > ---
-> > > This report is generated by a bot. It may contain errors.
-> > > See https://goo.gl/tpsmEJ for more information about syzbot.
-> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
-> > >
-> > > syzbot will keep track of this issue. See:
-> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-> > > syzbot can test patches for this issue, for details see:
-> > > https://goo.gl/tpsmEJ#testing-patches
-> >
-> > I had a look at this, and the issue is stemming from failed (due to
-> > error injection here) xas_store() in collapse_file() (in this report,
-> > specifically was picking on shmem after MADV_REMOVE punch). This puts
-> > the xa_state into an error state (-ENOMEM) and the subsequent
-> > xas_next() will (a) not increment xas->xa_index (which trips the
-> > VM_BUG_ON), and (b) returns NULL (which is confusing, since AFAIU,
-> > that's a "valid" entry for a truncated page cache entry, but also
-> > being used to indicate error).
-> >
-> > I think the right thing to do is to check xas_invalid() at the top of
-> > the loop, or checking return value of all those xas_store()'s and
-> > taking appropriate action. There is also the possibility this never
-> > occurs in practice due to the "Ensure we have slots for all the pages
-> > in the range" check at the top of the function, and that we are only
-> > able to trip this from error injection.
->
-> Right, so looking a bit more into this this morning, my last question abo=
-ut
-> whether the xas_create_range() check at the top of collapse_file() guaran=
-teeing
-> us the needed slots (and that syzbot was only able to trip this due to er=
-ror
-> injection) is plainly false: we are actually attempting to allocate memor=
-y here,
-> so clearly the slots weren't already available - duh.
->
-> Now, why isn't that well-intending pre-reservation enough? Well, we are d=
-ropping
-> the xarray lock ~ every iteration of the for-loop, then relocking it to s=
-tore
-> the hugpage at the current index. While the lock is dropped, there isn't
-> anything protecting us from racing with page_cache_delete() -- here, from
->
->         __filemap_remove_folio()
->         truncate_inode_folio()
->         shmem_undo_range()
->         shmem_truncate_range()
->         vfs_fallocate()
->         madvise_remove()
->
-> which can then remove slots out from under us:
->
->         xas_delete_node()
->         update_node()
->         xas_store()
->         page_cache_delete()
->
-> So, I think this code needs to be guarded against concurrent slot removal=
-.
->
-> I think just giving up is the best (i.e. simplest) route (vs taking some
-> additional measures to serialize vs concurrent removal). One concern is t=
-hat if
-> we've encountered ENOMEM situation where xas_store() is failing, then the
-> rollback code also won't work correctly. However, rollback xas_store() wi=
-ll
-> either replace the current hpage entry with the previous entry, or replac=
-e it
-> will a NULL entry (had it been a hole previously) -- neither of which wil=
-l
-> involve any additional allocations -- so we're safe.
->
-> Patch to fix this should be following in the next day or so.
->
->
+On Fri, Mar 10, 2023 at 05:24:04PM -0800, Tanmay Shah wrote:
+> If child mailbox node status is disabled it causes
+> crash in interrupt handler. Fix this by assigning
+> only available child node during driver probe.
+> 
+> Fixes: 4981b82ba2ff ("mailbox: ZynqMP IPI mailbox controller")
+> Signed-off-by: Tanmay Shah <tanmay.shah@amd.com>
+> ---
+> 
+> Changes in v5:
+>   - mailbox node count should not be 0 for driver to probe
+> 
+>  drivers/mailbox/zynqmp-ipi-mailbox.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/mailbox/zynqmp-ipi-mailbox.c b/drivers/mailbox/zynqmp-ipi-mailbox.c
+> index a4c8d23c76e2..ae47fbac38d2 100644
+> --- a/drivers/mailbox/zynqmp-ipi-mailbox.c
+> +++ b/drivers/mailbox/zynqmp-ipi-mailbox.c
+> @@ -634,7 +634,12 @@ static int zynqmp_ipi_probe(struct platform_device *pdev)
+>  	struct zynqmp_ipi_mbox *mbox;
+>  	int num_mboxes, ret = -EINVAL;
+>  
+> -	num_mboxes = of_get_child_count(np);
+> +	num_mboxes = of_get_available_child_count(np);
+> +	if (num_mboxes == 0) {
+> +		dev_err(dev, "mailbox nodes not available\n");
+> +		return -EINVAL;
+> +	}
+> +
 
-Also, to be clear, the concurrent removal isn't actually a problem on
-its own, it's only concurrent removal + subsequent inability to
-allocate missing xarray slot that is the issue.
+This patchset looks good now.  I'll queue it once I get an ack from Michal.
+
+Thanks,
+Mathieu
+
+>  	pdata = devm_kzalloc(dev, struct_size(pdata, ipi_mboxes, num_mboxes),
+>  			     GFP_KERNEL);
+>  	if (!pdata)
+> -- 
+> 2.25.1
+> 
