@@ -2,83 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C41886B73B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1F346B73C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:21:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCMKUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48074 "EHLO
+        id S229983AbjCMKVP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:21:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48564 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229957AbjCMKT7 (ORCPT
+        with ESMTP id S229872AbjCMKUm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:19:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E5ABA5BCBE;
-        Mon, 13 Mar 2023 03:19:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 51AC74B3;
-        Mon, 13 Mar 2023 03:20:32 -0700 (PDT)
-Received: from slackpad.lan (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 710783F71A;
-        Mon, 13 Mar 2023 03:19:47 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 10:19:41 +0000
-From:   Andre Przywara <andre.przywara@arm.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: sunxi: Use of_property_present() for testing DT
- property presence
-Message-ID: <20230313101941.366738a9@slackpad.lan>
-In-Reply-To: <20230310144724.1545223-1-robh@kernel.org>
-References: <20230310144724.1545223-1-robh@kernel.org>
-Organization: Arm Ltd.
-X-Mailer: Claws Mail 4.1.0 (GTK 3.24.31; x86_64-slackware-linux-gnu)
+        Mon, 13 Mar 2023 06:20:42 -0400
+Received: from mail-yw1-x112d.google.com (mail-yw1-x112d.google.com [IPv6:2607:f8b0:4864:20::112d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2421B5BC86
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:20:17 -0700 (PDT)
+Received: by mail-yw1-x112d.google.com with SMTP id 00721157ae682-54195ef155aso53208617b3.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678702817;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Vi6pueiiqHBEvvVToepss8ZMRBiuH3Fz6hqIlRu883Q=;
+        b=UAlREfwNnx5QhPupK/68E0wMsyhcDuoQeBqmmw+/DdoKga1nkomH0pghxq2EvXeNLu
+         h/KkILi5GWFKAwPnAa4CkI3idyD6C4cIJ3UUXTJiGnkIo/5pUJd2SE11O6e1rMKv3RER
+         II42CCIeQE6jTnPQ2SMlKoou3VgLZzqoddUPgTRzce7OEingMKjtjf7QNKHUJBquP5Rw
+         ETSJMpuUgC2C10Ij1uIQ8BXOgmKJWB17vOZnKRK1HLKQO6dwoP3vIeQGu/ePG/BITCoK
+         w3IYS946qeDKsOpou/raVQ7LBc0AiD9MYH+4V+PKF71tBq6/K9+1RSURV+7Lc2ITH7aL
+         W0xQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678702817;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Vi6pueiiqHBEvvVToepss8ZMRBiuH3Fz6hqIlRu883Q=;
+        b=M/7d92M5iWYBSi8l4tzdgroNkeRofgPQ66Jg3y52408BxQGzz4o/LFZaJ1lRdTfDMo
+         kSt0HG+HyrKzqTCVShVsqXodPqNy+a5C67mPX3j757ea5PGWDgWxH6Gs9Em8NQFipwgU
+         2Vq82eNVkN0gia4VLF56pZGTmSNGPID+Or1mDigd7OA8IdGFEj2lOAvtBddAgzPe8blw
+         uH/mGpCesEFTTgm55TLH6tXN1y0/m8VMrICG9x8BvYMlyq/nY7hi2rSdc8w3/78F9JS0
+         zT58dcyA2VT60Bezl6AxSMHhxooCEtHz+9tIfOjvO7Jn9/pfEuN15YLxlBkHLigSSLYW
+         W2EA==
+X-Gm-Message-State: AO0yUKXb3TJmjS0CxWrydPPBSEsoj7bVRLyCBK6fSmddILwHaZjHvwTL
+        s1ljIhoMCBgvZ7/GIdut4y4p5Lrn3heWtHnSzcLw/Q==
+X-Google-Smtp-Source: AK7set8lfmp/J/1rCvskjlrkeUQ7c8cyoB8IRx0GmZjoZRE30z3EHEey6yzilNIHPz2jWULQ6LBO+LHJPohkdUzRUQs=
+X-Received: by 2002:a81:ac51:0:b0:540:b6c9:66cd with SMTP id
+ z17-20020a81ac51000000b00540b6c966cdmr5502222ywj.10.1678702817069; Mon, 13
+ Mar 2023 03:20:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310140250.359147-1-arnd@kernel.org>
+In-Reply-To: <20230310140250.359147-1-arnd@kernel.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 13 Mar 2023 11:20:05 +0100
+Message-ID: <CACRpkdYQOb8dDfyYspLE974k97ZsUH+YKk_AQJbjCpVJXP5txQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: s32cc: fix !CONFIG_PM_SLEEP build error
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Chester Lin <clin@suse.com>, Phu Luu An <phu.luuan@nxp.com>,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@oss.nxp.com>,
+        Stefan-Gabriel Mirea <stefan-gabriel.mirea@nxp.com>,
+        Andrei Stefanescu <andrei.stefanescu@nxp.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        NXP S32 Linux Team <s32@nxp.com>,
+        Matthew Nunez <matthew.nunez@nxp.com>,
+        Radu Pirea <radu-nicolae.pirea@nxp.com>,
+        Larisa Grigore <larisa.grigore@nxp.com>,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 10 Mar 2023 08:47:24 -0600
-Rob Herring <robh@kernel.org> wrote:
+On Fri, Mar 10, 2023 at 3:02 PM Arnd Bergmann <arnd@kernel.org> wrote:
 
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> The declaration of s32_pinctrl_suspend/s32_pinctrl_resume is hidden
+> in an #ifdef, causing a compilation failure when CONFIG_PM_SLEEP is
+> disabled:
+>
+> drivers/pinctrl/nxp/pinctrl-s32g2.c:754:38: error: 's32_pinctrl_suspend' undeclared here (not in a function); did you mean 's32_pinctrl_probe'?
+> drivers/pinctrl/nxp/pinctrl-s32g2.c:754:9: note: in expansion of macro 'SET_LATE_SYSTEM_SLEEP_PM_OPS'
+>   754 |         SET_LATE_SYSTEM_SLEEP_PM_OPS(s32_pinctrl_suspend,
+>       |         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Remove the bogus #ifdef and __maybe_unused annation on the global
+> functions, and instead use the proper LATE_SYSTEM_SLEEP_PM_OPS()
+> macro to pick set the function pointer.
+>
+> As the function definition is still in the #ifdef block, this leads
+> to the correct code in all configurations.
+>
+> Fixes: fd84aaa8173d ("pinctrl: add NXP S32 SoC family support")
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
+Patch applied.
 
-Cheers,
-Andre
-
-> ---
->  drivers/soc/sunxi/sunxi_mbus.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/soc/sunxi/sunxi_mbus.c b/drivers/soc/sunxi/sunxi_mbus.c
-> index d90e4a264b6f..1734da357ca2 100644
-> --- a/drivers/soc/sunxi/sunxi_mbus.c
-> +++ b/drivers/soc/sunxi/sunxi_mbus.c
-> @@ -82,7 +82,7 @@ static int sunxi_mbus_notifier(struct notifier_block *nb,
->  	 * Older DTs or SoCs who are not clearly understood need to set
->  	 * that DMA offset though.
->  	 */
-> -	if (of_find_property(dev->of_node, "interconnects", NULL))
-> +	if (of_property_present(dev->of_node, "interconnects"))
->  		return NOTIFY_DONE;
->  
->  	ret = dma_direct_set_offset(dev, PHYS_OFFSET, 0, SZ_4G);
-
+Yours,
+Linus Walleij
