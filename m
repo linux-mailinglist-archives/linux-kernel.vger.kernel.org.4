@@ -2,161 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14A436B7E7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 736136B7E3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:56:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCMRA3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:00:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58216 "EHLO
+        id S230274AbjCMQ42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231666AbjCMRAE (ORCPT
+        with ESMTP id S230325AbjCMQ4W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:00:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16C207202B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:58:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678726688;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=UvT8dewLuU3QnqVEc1CXfBrmN1ZPxzVWkwUJz3YT87Y=;
-        b=b3P+dH06PwygBUVFaUNGL/Enq1w7dAm2+WqgTSt3jBYWQiUlsAcb6PybV6qvgP8kz2U4iV
-        ECC8UndJaNravCiS0oB2rnykAwtCjK0coXDhsQSEDs8YC3Obn6OT0qW7tOzlcb7u4a91r3
-        Y1D4rv3Ka7Fdizdu26RBHCaCh+5P65M=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-67-Z4Z04nNENj2zczoMRyj5eg-1; Mon, 13 Mar 2023 12:58:07 -0400
-X-MC-Unique: Z4Z04nNENj2zczoMRyj5eg-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-1779d667819so3066860fac.19
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:58:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678726686;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UvT8dewLuU3QnqVEc1CXfBrmN1ZPxzVWkwUJz3YT87Y=;
-        b=o+09grFn2hCqZq1S+pv12fHPoj1qkMQB9Kd/HEEwL09Vj5Cb+NLYPBxc8OXevGvw+5
-         8+1JXF91EGXJbLNFcd2rUKA+it2dE+WWZvCDzNDNsMAS5HIUNSuqm9Q+TokbjTRuiXl1
-         NLT6pMbfzScmZdq2hivtfBcp4OrSpjvGbdppUSs2+guakafU5LLt23Ja1Q/H+4LmeeFL
-         EFEWtCID/EbP+Nu0klgmsy9520+8Es+ppR+0DEEllqHBlJ9aO8jnk6G/YBlX7XCfqg1O
-         zXZ80RQ+C7bKyZMDodTSkgr/xpqkQzBlkdgrV1V/aBDw+P1RwwNlqnWEJBGzQCi19eLt
-         cZUA==
-X-Gm-Message-State: AO0yUKV1BU6oBWYAHb1EzvKbEgzExGG7bQxqUjGGmU5Lt9J8eRyrcgJY
-        QOGeaWS8lFJi7UlpZxigfY2jMl1Nrfip0e7se1TOoYm0kr8ZopR3z38HHbwXos7XAHZ8LqCOzv9
-        bZmxAW3r8987tRGX6hqEDV1gk7TAHvrTirsAfjPlINuMssTd41PeCfqHoJBCCpxkuOXwhJXH5Rt
-        LTfmYLECIyshs=
-X-Received: by 2002:a05:6808:a19:b0:37f:8776:7fb with SMTP id n25-20020a0568080a1900b0037f877607fbmr15913867oij.24.1678726686642;
-        Mon, 13 Mar 2023 09:58:06 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+WjxF5eMC/5GAjn7mgs0DvZdG92v2v9SNlkN9egFVAPTvhTUYGhYSYuKXbszu7ZOxcCLmAdQ==
-X-Received: by 2002:a05:6808:a19:b0:37f:8776:7fb with SMTP id n25-20020a0568080a1900b0037f877607fbmr15913817oij.24.1678726686349;
-        Mon, 13 Mar 2023 09:58:06 -0700 (PDT)
-Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::21])
-        by smtp.gmail.com with ESMTPSA id o2-20020acad702000000b00384d3003fa3sm3365273oig.26.2023.03.13.09.58.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:58:06 -0700 (PDT)
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
-        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
-        Andrew Halaney <ahalaney@redhat.com>
-Subject: [PATCH net-next 09/11] net: ethernet: stmmac: dwmac-qcom-ethqos: Respect phy-mode and TX delay
-Date:   Mon, 13 Mar 2023 11:56:18 -0500
-Message-Id: <20230313165620.128463-10-ahalaney@redhat.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313165620.128463-1-ahalaney@redhat.com>
-References: <20230313165620.128463-1-ahalaney@redhat.com>
+        Mon, 13 Mar 2023 12:56:22 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDBF559CE;
+        Mon, 13 Mar 2023 09:56:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678726581; x=1710262581;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=YG8ab328VKxI7RnIDAuiIqCFxzEn9D3+VAvNv07H3HI=;
+  b=XLCfz/4iVdIs3Dv7xSiO35CbI/4CoqllW6xoCjoy9wocdqczL6euqNB1
+   GnXCeQR++rDGKarzddzun4dK1/ICrP2hCtbXI5v74LSgvnV8dh32f5VcK
+   NXptKHNgWR9pDgHSxgZPvZrel8W62u/aZTYbVITD9zlUFcn/Xz5aXxQRL
+   asvbmnQcJRTodrTxKWJZYFlgdz9Ie5IwI6ZTexGBPpFbRTACuS+qkYsJX
+   moBKuMX/vR9gEJHVZnheUR4ObSHHnYNKOSebGMaxGb2delKMVvZWUFEiZ
+   0U8Takcu1n2jmgGKEHZ0TQ/D2E8Gq/kev4BhIKt96FqmxP1tgCFaGm4ft
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="321053880"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="321053880"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:20 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822034540"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="822034540"
+Received: from igodinez-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.87.244])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:19 -0700
+Message-ID: <39f2b66cca60d8f0bd4ff6b691b864dff3e449b9.camel@linux.intel.com>
+Subject: Re: [PATCH] Fix buffer overrun in HID-SENSOR name.
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Todd Brandt <todd.e.brandt@intel.com>, linux-input@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     todd.e.brandt@linux.intel.com, jic23@kernel.org, jikos@kernel.org,
+        p.jungkamp@gmx.net
+Date:   Mon, 13 Mar 2023 09:56:18 -0700
+In-Reply-To: <20230310235414.12467-1-todd.e.brandt@intel.com>
+References: <20230310235414.12467-1-todd.e.brandt@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The driver currently sets a MAC TX delay of 2 ns no matter what the
-phy-mode is. If the phy-mode indicates the phy is in charge of the
-TX delay (rgmii-txid, rgmii-id), don't do it in the MAC.
+On Fri, 2023-03-10 at 15:54 -0800, Todd Brandt wrote:
+> Philipp Jungkamp created this fix, I'm simply submitting it. I've
+> verified it fixes bugzilla issue 217169.
+> 
+Not the correct change log. Something like below:
 
-Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
----
- .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 19 ++++++++++++++-----
- 1 file changed, 14 insertions(+), 5 deletions(-)
+On some platforms there are some platform device is created with
+invalid name. For example:
+"HID-SENSOR-INT-020b?.39.auto" instead of "HID-SENSOR-INT-020b.39.auto"
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-index 732774645c1a..6f272cae330d 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-qcom-ethqos.c
-@@ -279,6 +279,16 @@ static int ethqos_dll_configure(struct qcom_ethqos *ethqos)
- 
- static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- {
-+	int phy_mode;
-+	int phase_shift;
-+
-+	/* Determine if the PHY adds a 2 ns TX delay or the MAC handles it */
-+	phy_mode = device_get_phy_mode(&ethqos->pdev->dev);
-+	if (phy_mode == PHY_INTERFACE_MODE_RGMII_ID || phy_mode == PHY_INTERFACE_MODE_RGMII_TXID)
-+		phase_shift = 0;
-+	else
-+		phase_shift = RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN;
-+
- 	/* Disable loopback mode */
- 	rgmii_updatel(ethqos, RGMII_CONFIG2_TX_TO_RX_LOOPBACK_EN,
- 		      0, RGMII_IO_MACRO_CONFIG2);
-@@ -300,9 +310,9 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- 			      RGMII_CONFIG_PROG_SWAP, RGMII_IO_MACRO_CONFIG);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_DATA_DIVIDE_CLK_SEL,
- 			      0, RGMII_IO_MACRO_CONFIG2);
-+
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN,
--			      RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN,
--			      RGMII_IO_MACRO_CONFIG2);
-+				  phase_shift, RGMII_IO_MACRO_CONFIG2);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
- 			      0, RGMII_IO_MACRO_CONFIG2);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_RX_PROG_SWAP,
-@@ -336,8 +346,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_DATA_DIVIDE_CLK_SEL,
- 			      0, RGMII_IO_MACRO_CONFIG2);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN,
--			      RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN,
--			      RGMII_IO_MACRO_CONFIG2);
-+				  phase_shift, RGMII_IO_MACRO_CONFIG2);
- 		rgmii_updatel(ethqos, RGMII_CONFIG_MAX_SPD_PRG_2,
- 			      BIT(6), RGMII_IO_MACRO_CONFIG);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_RSVD_CONFIG15,
-@@ -375,7 +384,7 @@ static int ethqos_rgmii_macro_init(struct qcom_ethqos *ethqos)
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_DATA_DIVIDE_CLK_SEL,
- 			      0, RGMII_IO_MACRO_CONFIG2);
- 		rgmii_updatel(ethqos, RGMII_CONFIG2_TX_CLK_PHASE_SHIFT_EN,
--			      0, RGMII_IO_MACRO_CONFIG2);
-+				  phase_shift, RGMII_IO_MACRO_CONFIG2);
- 		rgmii_updatel(ethqos, RGMII_CONFIG_MAX_SPD_PRG_9,
- 			      BIT(12) | GENMASK(9, 8),
- 			      RGMII_IO_MACRO_CONFIG);
--- 
-2.39.2
+This string include some invalid character, hence it will fail to
+properly load the driver which will handle this custom sensor. Also
+it is a problem for some user space tools, which parses the device
+names.
+
+This is because the string real_usage is not NULL terminated and
+printed with %s to form device name.
+
+To address this initialize the real_usage string with 0s.
+
+> Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
+
+
+
+Fixes: 98c062e82451 ("HID: hid-sensor-custom: Allow more custom iio
+sensors")
+
+Suggest-by: Philipp Jungkamp p.jungkamp@gmx.net
+
+> Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
+
+Thanks,
+Srinivas
+
+> ---
+>  drivers/hid/hid-sensor-custom.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-
+> sensor-custom.c
+> index 3e3f89e01d81..d85398721659 100644
+> --- a/drivers/hid/hid-sensor-custom.c
+> +++ b/drivers/hid/hid-sensor-custom.c
+> @@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct
+> platform_device *pdev,
+>                                     struct hid_sensor_hub_device
+> *hsdev,
+>                                     const struct
+> hid_sensor_custom_match *match)
+>  {
+> -       char real_usage[HID_SENSOR_USAGE_LENGTH];
+> +       char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
+>         struct platform_device *custom_pdev;
+>         const char *dev_name;
+>         char *c;
 
