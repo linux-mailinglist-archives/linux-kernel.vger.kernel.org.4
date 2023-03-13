@@ -2,125 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A330C6B7A51
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D99A26B7A54
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:29:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231378AbjCMO2Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:28:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38358 "EHLO
+        id S231396AbjCMO3w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:29:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231382AbjCMO2T (ORCPT
+        with ESMTP id S231419AbjCMO3t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:28:19 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C823CCDF7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:28:17 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id da10so49587286edb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:28:17 -0700 (PDT)
+        Mon, 13 Mar 2023 10:29:49 -0400
+Received: from mail-yw1-x1130.google.com (mail-yw1-x1130.google.com [IPv6:2607:f8b0:4864:20::1130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE75F24134
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:29:48 -0700 (PDT)
+Received: by mail-yw1-x1130.google.com with SMTP id 00721157ae682-540cb2fb5b9so140785057b3.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:29:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678717696;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtstJD3/hydqzM3cHZ+u7SVJlCO4w3i30mirExqm+ew=;
-        b=n9xc1hix4I04GYTvKHxu6HfVOfV2nhzxwWhUcptyl8ik4Pl5iD9INYXgkGi7q3swIK
-         MWzs+601qEmgn2wWf+cQZxEu2pEEFPmV1LfxjA3v2cunZGiQQwmQOUbUpm4sMGi4mjS/
-         BP0EHnQHp9Gg30gY0PFswGVvgQO3Kr0KF4eDA5WHgIubG8iMlZgqFixc6EDhCWjqKciO
-         EyUTquOGbzpWXt7TLJ5PUKCr4qx9nRXTmeOCZIJ9JACxU1QaO1vdmWN5x9lfKix909S5
-         9HCjH9+e8V2xXOZcLeM7COVGkHriqvvRuKpM1oUa2EX9rbMUcLuKVsnGf7ge0bok+T/2
-         Tm5w==
+        d=google.com; s=20210112; t=1678717788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6UKWk2lA6kcgmQW/mPXhYLF0VgpMqFYUu2eJawxBUrc=;
+        b=JsYGpUuuAx69bskMhPRqv35bAcYWS/hoIYaRo9DNZLzgl1Utp9qht4TTGAWdAQEbsf
+         5UJxIBxJssi4Lqs01bKzAvX+MoGXit5rRaXgLxkVgnN7f1AED9uIfPAzCz/xZt8tAsm9
+         mRZ3BawbmCm60zy91wZNRV3xPR1z6mLAakuqOfsEuT7clGpdo3KFgVwtliPaCU51V4qt
+         EO4UrVB21S99Syng0gy+sj3NTmwckTm9oIL4bYv+iLzA4WqxAYRLZCYJvVO/6Ns3iG2P
+         9OXop6CzXqYhlm1cmJ0ZBPc05a7i0r9lPDskicKJwOrW/LyFCtYmHaJrKqKjW0/HKsYp
+         K7sA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678717696;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZtstJD3/hydqzM3cHZ+u7SVJlCO4w3i30mirExqm+ew=;
-        b=Fk0nm4sUDAFEioueJS1/9WC1vBdGEWHsZ+jMdvEqfU/7VMP5+Ezh+hrt7zVqAoxi7J
-         CiIs2TblS33MxG0HEq4Q/KNlixvuVENpbjb2Oh1JWx9BQ9vSKJv/Ge1aZnH75HfUeode
-         M7P2G/fovrbWAafaJuWarozxehnSD3Bg80dGw3aT4VvdchBZiNu7zn4TpB+sxibgSgf4
-         4FpOLQz+cTqcmcm5eGi9lCALdQXk8lG5wnCb2aFj3p9rcbR1sd6QJCE+gukRf+JhEx2P
-         AwUK8QTxjqlKRqqNhFMGeU8AhCm/mkHn8Ut/NFkz8JvN+3gtrF9tCL3JwB+zQDcQ1B/k
-         UFgg==
-X-Gm-Message-State: AO0yUKVdcxUotGNZp60dxxQdtRBzQse7yNc1jbc24sgNWNBP4Xxx7G1e
-        UEtV6fxcTViI8DCVqnDL3mbqDQ==
-X-Google-Smtp-Source: AK7set8mc1JBzDyrckjzGNOvQdHN9mzEXYplLnbsYbsbM/TPKV8zE5W8ruSj2jhdxMG3uwk3aW8NFQ==
-X-Received: by 2002:aa7:d1d5:0:b0:4fb:5795:b7e0 with SMTP id g21-20020aa7d1d5000000b004fb5795b7e0mr5560293edp.31.1678717696370;
-        Mon, 13 Mar 2023 07:28:16 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:69db:4882:d071:27c4? ([2a02:810d:15c0:828:69db:4882:d071:27c4])
-        by smtp.gmail.com with ESMTPSA id x20-20020a170906805400b0091ee4923bb4sm3481210ejw.51.2023.03.13.07.28.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 07:28:16 -0700 (PDT)
-Message-ID: <85bbec87-992d-f9a9-2f2b-bc41457933bb@linaro.org>
-Date:   Mon, 13 Mar 2023 15:28:15 +0100
+        d=1e100.net; s=20210112; t=1678717788;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6UKWk2lA6kcgmQW/mPXhYLF0VgpMqFYUu2eJawxBUrc=;
+        b=y6snmSWD9/r1JCXNnQtrsPllSg+KbvhjpUjzQ3lIb0T9Ihth+ofIgcEO8QPKUel9fO
+         zW6xuDlzUk7PvIU9mzUEOFESVcUB9flToAxcWxEswB4w3Pr974RTgvtpXsqfNih6w3Hk
+         1wss3SStN9O8n9ItSaskAuem3aFKGYZky9wXI0CJLBM4HkRq1jNp9KC07pN1coCh5Cem
+         pL1wZDz8gij5eBierIIJKy3Y8Iw9kD0VQrue7xgSbr9khOhwtqYZbuu7Ld/3YRSR0IPN
+         Kw1UwpgAfI22tyGGNFFPQfp0pppheGE45NaDvFEcnoyZTCxwjNoBHMBfBhHdwvOS1Qru
+         +jxg==
+X-Gm-Message-State: AO0yUKV/mq/qQlUtB8nyqqzPpkMU/0jPgApxOxz6hTDd/VAnGu6PwPG0
+        OG5UE+Xd8DStkN4iwUZszJvlftyYL2pz8Rywk3xl+w==
+X-Google-Smtp-Source: AK7set9+V74KeSz36D//IGW89NODCNRrVm8ctZWGiYSP3DdxCEfiOrL/e5qwPAaaztWcNGEAHyWBdw2UyDWyJW43tQ8=
+X-Received: by 2002:a81:a989:0:b0:534:1d7:fcf0 with SMTP id
+ g131-20020a81a989000000b0053401d7fcf0mr22797541ywh.1.1678717787629; Mon, 13
+ Mar 2023 07:29:47 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 6/7] media: dt-bindings: samsung,fimc: convert to
- dtschema
-Content-Language: en-US
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-References: <20230216142204.48394-1-krzysztof.kozlowski@linaro.org>
- <20230216142204.48394-7-krzysztof.kozlowski@linaro.org>
- <ZA8YJx+NE0+89YaD@valkosipuli.retiisi.eu>
- <ZA8v98mqm4Xdt2Sl@valkosipuli.retiisi.eu>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <ZA8v98mqm4Xdt2Sl@valkosipuli.retiisi.eu>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230312224250.425727-1-vincenzopalazzodev@gmail.com>
+ <20230312175703.d8d8e0192387dfa9592ee8e5@linux-foundation.org> <CR55BD4YCDR1.22R5TLYJW6YS0@vincent-arch>
+In-Reply-To: <CR55BD4YCDR1.22R5TLYJW6YS0@vincent-arch>
+From:   Suren Baghdasaryan <surenb@google.com>
+Date:   Mon, 13 Mar 2023 07:29:35 -0700
+Message-ID: <CAJuCfpETYdLRigLTHe6HHQrC5vy5MmDc=HPsuMc6UKEzfr22ZA@mail.gmail.com>
+Subject: Re: [RFC PATCH v1 1/1] linux: mm_types: allow to modified the
+ vm_flags in vm_area_struct
+To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, jgg@ziepe.ca,
+        Liam.Howlett@oracle.com, jhubbard@nvidia.com, david@redhat.com,
+        willy@infradead.org, linux-kernel-mentees@lists.linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 15:15, Sakari Ailus wrote:
-> On Mon, Mar 13, 2023 at 02:33:43PM +0200, Sakari Ailus wrote:
->> Hi Krzysztof,
->>
->> On Thu, Feb 16, 2023 at 03:22:03PM +0100, Krzysztof Kozlowski wrote:
->>> Convert the Samsung S5P/Exynos Camera Subsystem (FIMC) bindings to DT
->>> schema.  Changes during conversion - adjust to existing DTS and Linux
->>> driver: add iommus and power-domains.
->>>
->>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> Reviewed-by: Rob Herring <robh@kernel.org>
->>
->> This does not apply on top of -rc1.
->>
->> ...
->>
->>> -- compatible: must be "samsung,fimc"
->>
->> I guess you have another patch removing "simple-bus" here and another
->> location in your tree?
-> 
-> Ah, what's missing seems to be this set:
-> 
-> <URL:https://patchwork.linuxtv.org/project/linux-media/list/?series=9839>
+On Mon, Mar 13, 2023 at 2:25=E2=80=AFAM Vincenzo Palazzo
+<vincenzopalazzodev@gmail.com> wrote:
+>
+> On Mon Mar 13, 2023 at 1:57 AM CET, Andrew Morton wrote:
+> > On Sun, 12 Mar 2023 23:42:50 +0100 Vincenzo Palazzo <vincenzopalazzodev=
+@gmail.com> wrote:
+> >
+> > > With 6.3-rc1 is not possible to build the following drivers
+> >
+> > Well, let's cc Suren who actually wrote bc292ab00f6c ("mm: introduce
+> > vma->vm_flags wrapper functions").
+> >
+> > > - nvidia, that the compilation returns the following errors
+> > >
+> > > - vboxhost/7.0.6_OSE where the build fails with the following errors
+> > >
+> > > ...
+> > >
+> > > --- a/include/linux/mm_types.h
+> > > +++ b/include/linux/mm_types.h
+> > > @@ -497,7 +497,7 @@ struct vm_area_struct {
+> > >      * To modify use vm_flags_{init|reset|set|clear|mod} functions.
+> > >      */
+> > >     union {
+> > > -           const vm_flags_t vm_flags;
+> > > +           vm_flags_t vm_flags;
+> > >             vm_flags_t __private __vm_flags;
+> > >     };
+> >
+> > These out-of-tree drivers should be converted to use the wrappers which
+> > bc292ab00f6c added.  Their maintainers have a couple of months to do
+> > this before bc292ab00f6c is released in 6.3.
+>
+> Yeah I thought about that! nvidia update as soon as the 6.3 is out, not s=
+ure
+> about vboxhost. But let the driver update to this new feature make sense.
+>
+> >
+> > It's unfortunate.  I guess it would be better if we were to find a way
+> > to permit these drivers to compile OK but to generate warnings, as an
+> > interim thing for six months or so.  Perhaps there's some clever way.
+>
+> Yeah it is! Regarding giving the possiblity to compile ok (and
+> preserving the previous behavior) look like an interesting thought for
+> kernel API, but am I think that it this is difficult to do?
+>
+> The real things that I'm missing with the new wrapper API
+> is the meaning of the new `vm_flags_t vm_flags`, before the
+> field was only one and it was getting modified, but now the real
+> value is the private one `__vm_flags`, so what is the meaning of
+> the new `vm_flags`?
 
-Yeah, dependency is mention in cover letter.
+Sorry for the delay. I'm on vacation until Wednesday and have limited
+network access.
+vm_flags is used as a read-only property so that readers of the flags
+don't have to change, however flag modifiers should be using new
+wrapper functions. Fixing the errors in this report should be trivial.
+For example:
+vma->vm_flags |=3D VM_IO | VM_PFNMAP | VM_DONTEXPAND;
+should be replaced with
+vm_flags_set(vma, VM_IO | VM_PFNMAP | VM_DONTEXPAND);
+and
+vma->vm_flags &=3D ~VM_MAYWRITE;
+with
+vm_flags_clear(vma, VM_MAYWRITE);
 
-> 
-> But also the second patch of that set doesn't seem to apply. :-(
+Thanks,
+Suren.
 
-Yep, I forgot I already sent same patch two months earlier. Let me merge
-two patches, rebase and resent, so everything will be easier for you
-(hopefully). Sorry for the mess.
-
-
-Best regards,
-Krzysztof
-
+>
+> I feel that this question is stupid but I can not avoid do it, otherwise
+> my mind think about it till I will not find an answer :)
+>
+> P.S: regaring the warning at compile time the __deprecated looks a good
+> fit to generate error message, but to me in this particular case do not.
+>
+> Thanks,
+>
+> Vincent.
+>
