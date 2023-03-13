@@ -2,103 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 723676B7DD2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:39:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CA636B7DCC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:38:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjCMQjb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:39:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44494 "EHLO
+        id S231533AbjCMQiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:38:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbjCMQjF (ORCPT
+        with ESMTP id S229922AbjCMQib (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:39:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C360311652
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:38:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678725487;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=78igvgOk38uDPKDzMiKif9HvbOkagL1dDGYolpUI3FE=;
-        b=XL2TGEhzANpTqAQQx977FE4ClAJq95MxWhUoFDxKXLe0JNEYTIgFBqDmETfc3gHbt5RoYq
-        292bFudNsu653XBb5kOkb6EOwk3Dcf7zcv0LaW5dCDy/y4dY+fzUauV2XB+xcTyDDy2dDz
-        7vPQzL7tzOr+Kn7TaxQPDqFbKe0s+ns=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-154-BdQbnH6IN-a1jMsoIxZ3Ng-1; Mon, 13 Mar 2023 12:38:05 -0400
-X-MC-Unique: BdQbnH6IN-a1jMsoIxZ3Ng-1
-Received: by mail-qk1-f199.google.com with SMTP id l27-20020a05620a211b00b00745b3e62004so491355qkl.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:38:05 -0700 (PDT)
+        Mon, 13 Mar 2023 12:38:31 -0400
+Received: from mail-il1-x130.google.com (mail-il1-x130.google.com [IPv6:2607:f8b0:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53532231DB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:38:23 -0700 (PDT)
+Received: by mail-il1-x130.google.com with SMTP id r4so1248846ilt.8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:38:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678725502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FUBPIHS7V4Q1J3EDjJkhS4iBtdM7mneCmDYx2gD8EE4=;
+        b=EYLuGvnXzray12IPhIFwaWr41OwuQ8LHrNB4RFiJKBMZw7DKHMGdZoqPQGab93b2My
+         uGsYP2d1YF449FVNq4ipp9zwWu2qYiAyqcd/y9FuiRNkc/lBvi5tpFHe5B7pOuPPM0EN
+         lDP8ajZc/RZ+S9p6NMA8xVr3LE3bmqAYeykLsCE56E7ujqa2QipVZJSK2rBEpmLWIdl5
+         Ab+n56fZynvLZjtKjHMTMOdRH4DICNkPDN7ENMtpjGeeVWnWkcOx01n+jv3EsU8x0zHR
+         NQ4KRnwW+mwl3ytV6fYEcTfseVL8BwgAO7RRBxOHCNaNAGkvi0TUvoU82TOYcQjfVqGl
+         p1xQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678725485;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=78igvgOk38uDPKDzMiKif9HvbOkagL1dDGYolpUI3FE=;
-        b=0qqjHnpc8foQhnAy9Lf223Cd2SbJTkb1H9Ti80fpJX//e0gIs6TVXzmLS7YkROxxLI
-         xMzeWnfzB4uNBeg0BnDwmsSN2piDeavhT+cR6VOIc0u3gVc6hd9JO/FMwpR+LMnXiqdJ
-         HMcKzSmDnI2JZI9WJEUuJcBahtc+PubU2FyzBsFGHZKobgUf0gTKdRO7TZnYlxDfVX0t
-         b/j8RJv9K14on1cInOY9VAvvi4yDGjoq9AIrQ7kUxXv2h7MusN77e9mYqNnH94u6mOaI
-         PMBpmFxGxfGxRBPf/OCR9+2yZXs4MM3U7F8F5kyyQCVxs5MRCQQHlpDhsGENlWGaelCo
-         CQlQ==
-X-Gm-Message-State: AO0yUKXkUp7L+w8ARPS+VB3IDioW2Z/rJ3Skn6DoXhbH2dusotsvEcjH
-        NVQvIlabASrUKilbjsHYY8ZuvAQiwdcTBsgxUQeI901Rrs7sxqQ3PdNtsmO7BIGu6hMqTjqo8lz
-        GHlBmXRsxgoAjB9hCWAvDrDrE
-X-Received: by 2002:a05:622a:24a:b0:3bf:d00e:9908 with SMTP id c10-20020a05622a024a00b003bfd00e9908mr63989575qtx.44.1678725485145;
-        Mon, 13 Mar 2023 09:38:05 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9VJ2Dyt1o3ORTCoZCC+0TvSho4td2XplM1YX/gdaLeHFmXpjWvJXdAErLgTsskCJtyIRRl7g==
-X-Received: by 2002:a05:622a:24a:b0:3bf:d00e:9908 with SMTP id c10-20020a05622a024a00b003bfd00e9908mr63989534qtx.44.1678725484782;
-        Mon, 13 Mar 2023 09:38:04 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:23c6:4a21:6f01:ac73:9611:643a:5397])
-        by smtp.gmail.com with ESMTPSA id f15-20020ac8470f000000b003bfc0cca1b7sm131557qtp.49.2023.03.13.09.38.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:38:04 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 16:37:59 +0000
-From:   Juri Lelli <juri.lelli@redhat.com>
-To:     Qais Yousef <qyousef@layalina.io>
-Cc:     Hao Luo <haoluo@google.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Steven Rostedt <rostedt@goodmis.org>, tj@kernel.org,
-        linux-kernel@vger.kernel.org, luca.abeni@santannapisa.it,
-        claudio@evidence.eu.com, tommaso.cucinotta@santannapisa.it,
-        bristot@redhat.com, mathieu.poirier@linaro.org,
-        cgroups@vger.kernel.org,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Wei Wang <wvw@google.com>, Rick Yiu <rickyiu@google.com>,
-        Quentin Perret <qperret@google.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Zefan Li <lizefan.x@bytedance.com>, linux-s390@vger.kernel.org,
-        x86@kernel.org
-Subject: Re: [PATCH v3] sched: cpuset: Don't rebuild root domains on
- suspend-resume
-Message-ID: <ZA9RZ3VvGXKp+1L6@localhost.localdomain>
-References: <20230228174627.vja5aejq27dsta2u@airbuntu>
- <Y/7/SLzvK8LfB29z@localhost.localdomain>
- <20230301122852.zgzreby42lh2zf6w@airbuntu>
- <Y/9gmDRlGOChIwpf@localhost.localdomain>
- <20230301170322.xthlso7jfkixlyex@airbuntu>
- <ZAhhGi55BkYkc3ss@localhost.localdomain>
- <CA+khW7hmE0tECG2qfKW1HN9yLVOLUn5Zzx4Rz-wHYDtSUPYotw@mail.gmail.com>
- <ZAmCzJQZl7j/m2oN@localhost.localdomain>
- <CA+khW7iAeTALH5b6upHXs1RotFBohVeZCcAp5H+r-=L05kqnww@mail.gmail.com>
- <20230311185150.stvtcbdkoofgn3wd@airbuntu>
+        d=1e100.net; s=20210112; t=1678725502;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FUBPIHS7V4Q1J3EDjJkhS4iBtdM7mneCmDYx2gD8EE4=;
+        b=40pyL6g9eeLbIvTx8WNWwq5+ZvL/8jLoZXbRHg5B7+sC/cfQBNp6i3Z1mtPNtrioNx
+         wimnYVjYc4Jn0eghYg76JpFefVoeeIvHqWQwUQ+n798oli/LWmXFq3KETLykIZ5gNmPJ
+         YxaxG9l/+q9Q8SyxvDVJuljJBpiT7C5xmrVOxMilpJhiLAhxvaDWiYzDyV9SFhgSzJXJ
+         N/C4C3GEf5C0/AT4wHaxApsBzWXdx0X//DekA7223hmfGG3IED9q7Q+KBNI5THSHP1FP
+         d81jY7F/PCwUL6awn8+X0QQCa5NCTUawYG49bjYND69X2Kbdlq/4UwT6pUGQ1BRIoEGP
+         ncew==
+X-Gm-Message-State: AO0yUKVD9kW/fYE3Bnid0PD2xB5XanW4U6muLwkJ5xlk5FtUfghkMwMG
+        uwwlMStIZWgUzquK9z3jUE6M2nNPKE9E1dG0DVkynQaXE97DCPhbJam5sQ==
+X-Google-Smtp-Source: AK7set//MiSR1y0fInfR6CmYoF+xGcuyeneWkLRWCEDxxFJo+xHqYWalC5eD2RviS7mBu1Ae0FMF4LD2qwwBmOhU5OE=
+X-Received: by 2002:a92:cb49:0:b0:313:fa72:d9aa with SMTP id
+ f9-20020a92cb49000000b00313fa72d9aamr193949ilq.0.1678725501894; Mon, 13 Mar
+ 2023 09:38:21 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311185150.stvtcbdkoofgn3wd@airbuntu>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <CAP-5=fWxF6in4vQyGuh=0kpAYEXAYZN_KobXCY=TX2oxssZ+HQ@mail.gmail.com>
+ <Y7w2qshoCEjKKVlz@kernel.org> <CAP-5=fUeC2nhUhFN69+sL687csSsoi5=ZEkRH70vUy+kTiF52g@mail.gmail.com>
+ <CAP-5=fVaH0p4NkKiQSxaxZnT5zR=hbwSArO2n0L7tCNZwBumKQ@mail.gmail.com>
+In-Reply-To: <CAP-5=fVaH0p4NkKiQSxaxZnT5zR=hbwSArO2n0L7tCNZwBumKQ@mail.gmail.com>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 13 Mar 2023 09:38:10 -0700
+Message-ID: <CAP-5=fXWDPzuFrrY+uKnfoa5gO9eEfGUsbCyXB8AS7Tz0ZX=jw@mail.gmail.com>
+Subject: Re: Google Summer-of-Code 2023
+To:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-perf-users <linux-perf-users@vger.kernel.org>
+Cc:     Namhyung Kim <namhyung@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        paranlee <p4ranlee@gmail.com>,
+        Madhu patel <patelmadhu06@gmail.com>,
+        Anup Sharma <anupnewsmail@gmail.com>,
+        Lukas Molleman <lukas.molleman@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -106,115 +77,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/03/23 18:51, Qais Yousef wrote:
-> On 03/09/23 14:23, Hao Luo wrote:
-> > On Wed, Mar 8, 2023 at 10:55 PM Juri Lelli <juri.lelli@redhat.com> wrote:
-> > >
-> > > On 08/03/23 10:01, Hao Luo wrote:
-> > > > On Wed, Mar 8, 2023 at 2:20 AM Juri Lelli <juri.lelli@redhat.com> wrote:
-> > > > >
-> > > > > On 01/03/23 17:03, Qais Yousef wrote:
-> > > > > > On 03/01/23 15:26, Juri Lelli wrote:
-> > > > <...>
-> > > > > > > BTW, do you have a repro script of some sort handy I might play with?
-> > > > > >
-> > > > > > Sorry no. You'll just need to suspend to ram. I had a simple patch to measure
-> > > > > > the time around the call and trace_printk'ed the result.
-> > > > > >
-> > > > > > I was working on a android phone which just suspends to ram if you turn the
-> > > > > > screen off and disconnect the usb.
-> > > > >
-> > > > > Looks like I could come up with the following
-> > > > >
-> > > > > https://github.com/jlelli/linux.git deadline/rework-cpusets
-> > > > > https://github.com/jlelli/linux/tree/deadline/rework-cpusets
-> > > > >
-> > > > > which I don't think it's at a point that I feel comfortable to propose
-> > > > > as an RFC (not even sure if it actually makes sense), but it survived my
-> > > > > very light testing.
-> > > > >
-> > > > > Could you please take a look and, if it makes some sense in theory, give
-> > > > > it a try on your end?
-> > > > >
-> > > >
-> > > > Hi Juri,
-> > > >
-> > > > Thanks for coming up with the RFC. I can test your changes in the
-> > > > server environment. I observed the same issue on my side and I can
-> > > > reproduce.
-> > > >
-> > > > I sync'ed up with Qais offline earlier yesterday, and was preparing a
-> > > > couple of patches that optimize the cpuset.cpus writes. Tracking dl
-> > > > tasks in cpusets is one of them. But I am happy to take your patches
-> > > > and do the testing. Note that I won't be able to test the dl part of
-> > > > the patch, only the latency impact on rebuild_root_domains(), as we
-> > > > don't have dl tasks in our system.
-> > > >
-> > > > The other patch is fixing cpuset_rwsem. I see you switched it back to
-> > > > mutex. I did observe performance issues with cpuset_rwsem. Basically,
-> > > > using percpu_rwsem generates very very long latency tails for writers,
-> > > > but mutex doesn't. After some debugging, I found it was because
-> > > > percpu_rwsem requires every writer to call a synchronize_rcu() for
-> > > > acquiring the lock. So in my patches, I disabled the fastpath of
-> > > > readers for cpuset_rwsem. This has been done before[1]. But mutex also
-> > > > worked.
-> > > >
-> > > > Anyway, I'm happy to test your patches and ack once they are sent out.
-> > >
-> > > Do you strictly need a proper RFC or could you please test the above for
-> > > now? If you could please do the latter, and if tests look ok, I could
-> > > then put together proper changelogs etc. and propose an RFC (it would
-> > > save me some time not to do that if the above doesn't work, apologies
-> > > for not going the proper route from the start). Guess this question
-> > > applies to Qais as well. Hummm, or maybe you are actually saying that
-> > > you are indeed going to test them already, just wanted to make sure
-> > > then. :)
-> > 
-> > Juri, I ported your patches to a 5.10 kernel, because my workload can
-> > only run on 5.10. But unfortunately the kernel crashed at
-> > cpuset_can_attach(). I'll put a few comments in your github branch.
-> 
-> Yeah I am working on 5.10 too (this will need to be backported to 5.10 and 5.15
-> ultimately) and had the same crash because task is NULL.
-> 
-> Fixed it this way which I think what you intended to do Juri? It moves the
-> check for dl_task(task) inside cgroup_taskset_for_each() loop.
-> 
-> 	diff --git a/kernel/cgroup/cpuset.c b/kernel/cgroup/cpuset.c
-> 	index 83a8943467fb..06d6bb68d86b 100644
-> 	--- a/kernel/cgroup/cpuset.c
-> 	+++ b/kernel/cgroup/cpuset.c
-> 	@@ -2495,11 +2495,11 @@ static int cpuset_can_attach(struct cgroup_taskset *tset)
-> 			ret = security_task_setscheduler(task);
-> 			if (ret)
-> 				goto out_unlock;
-> 	-       }
-> 	 
-> 	-       if (dl_task(task)) {
-> 	-               cs->deadline_tasks++;
-> 	-               cpuset_attach_old_cs->deadline_tasks--;
-> 	+               if (dl_task(task)) {
-> 	+                       cs->deadline_tasks++;
-> 	+                       cpuset_attach_old_cs->deadline_tasks--;
-> 	+               }
-> 		}
-> 	 
-> 		/*
+On Wed, Feb 22, 2023 at 7:58=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
+te:
+>
+> The Linux Foundation was selected as a GSoC organization for 2023!
+> https://summerofcode.withgoogle.com/programs/2023/organizations/the-linux=
+-foundation
+>
+> This means we're looking for contributors until March 19th:
+> https://developers.google.com/open-source/gsoc/timeline
 
-Duh, indeed.
+A reminder of the GSoC timeline. Applications open in a week;
 
-> Like Hao I don't have any deadline tasks in the system. With the fix above
-> I don't notice the delay on suspend resume using your patches.
+* February 22 - March 19
+Potential GSoC contributors discuss application ideas with mentoring
+organizations
 
-OK, cool.
+* March 20 - 18:00 UTC
+GSoC contributor application period begins
 
-> If you want any debug; please feel free to add them into your branch so I can
-> run with that and give you the log.
-
-Will need to find time to run some tests with DEADLINE tasks, yeah.
-Maybe Dietmar, since you reported as well the issue above with your
-testing, you could help with testing DEADLINE?
+* April 4 - 18:00 UTC
+GSoC contributor application deadline
 
 Thanks,
-Juri
+Ian
 
+> Some project ideas are listed here:
+> https://wiki.linuxfoundation.org/gsoc/2023-gsoc-perf
+>
+> Please help to share!
+>
+> Thanks,
+> Ian
+>
+> (Resend in plain text because of LKML's HTML filters)
