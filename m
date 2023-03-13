@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38B766B807F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:28:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39BC46B8085
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:29:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjCMS2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:28:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
+        id S229571AbjCMS3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:29:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCMS2m (ORCPT
+        with ESMTP id S229712AbjCMS32 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:28:42 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBD072B4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:27:58 -0700 (PDT)
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pbmtS-0001kx-KQ; Mon, 13 Mar 2023 19:27:34 +0100
-Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
-        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pbmtQ-003uMr-GO; Mon, 13 Mar 2023 19:27:32 +0100
-Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
-        (envelope-from <ukl@pengutronix.de>)
-        id 1pbmtP-004cQD-2V; Mon, 13 Mar 2023 19:27:31 +0100
-Date:   Mon, 13 Mar 2023 19:27:30 +0100
-From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        linux-clk@vger.kernel.org, kernel@pengutronix.de,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v3] clk: expand clk_ignore_unused mechanism to keep only
- a few clks on
-Message-ID: <20230313182730.cx4n7lvhbtcs4hpn@pengutronix.de>
-References: <20221026151812.1042052-1-u.kleine-koenig@pengutronix.de>
+        Mon, 13 Mar 2023 14:29:28 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F37B882A92;
+        Mon, 13 Mar 2023 11:28:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3D13661468;
+        Mon, 13 Mar 2023 18:27:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01344C433D2;
+        Mon, 13 Mar 2023 18:27:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678732060;
+        bh=/UptELta1fbfIVlSU3lW1JfbEsBBjNSMIYGDMc0a6Bc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=VvvKyry0IHRmRY/4zqVRDhYa1hlwWP5XO8DPtmSV86lG3jJNM7uxAeqCM3/hMjEnS
+         /4fGZINOj3BbOFj7VtuSn5/zADgew9/AhucSrWiCDWCAvWqK46vpsQ6ipb+6neCHzX
+         D26bSYYK00ZZp7wS/PyFzdSBom5Fc1YvU4I2sz/4csGzme6PYNmreJ9TJMdSLn2pJ3
+         cgxXHKzmvZ0aDqUoSafiMpZKQIjdbzRSu92/wVYzEbmBwzFm5rb1KpTZ9Ix5kcdW8E
+         IH7F21aKBHvZjZ0vyXFvDpM4UNcMSFajBrFy3LzzWeznIYwqpqWY/2y3YL9Y5Kytyi
+         kj7t2/qKpgCbw==
+Date:   Mon, 13 Mar 2023 11:27:38 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Abel Vesa <abel.vesa@linaro.org>
+Cc:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: Re: [RFC PATCH v3 2/7] dt-bindings: mmc: sdhci-msm: Add ICE phandle
+ and drop core clock
+Message-ID: <ZA9rGihWeLhUYMdA@sol.localdomain>
+References: <20230313115202.3960700-1-abel.vesa@linaro.org>
+ <20230313115202.3960700-3-abel.vesa@linaro.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="xgfwba3jlkbdegto"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221026151812.1042052-1-u.kleine-koenig@pengutronix.de>
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: ukl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20230313115202.3960700-3-abel.vesa@linaro.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,53 +72,11 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 13, 2023 at 01:51:57PM +0200, Abel Vesa wrote:
+> Subject: Re: [RFC PATCH v3 2/7] dt-bindings: mmc: sdhci-msm: Add ICE phandle
+> and drop core clock
 
---xgfwba3jlkbdegto
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+"and drop core clock" should be removed from the subject now, right?  Same for
+patch 3.
 
-Hello,
-
-On Wed, Oct 26, 2022 at 05:18:12PM +0200, Uwe Kleine-K=F6nig wrote:
-> Allow to pass an integer n that results in only keeping n unused clocks
-> enabled.
->=20
-> This helps to debug the problem if you only know that clk_ignore_unused
-> helps but you have no clue yet which clock is the culprit.
->=20
-> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
-> ---
-> Hello,
->=20
-> compared to v2 sent in August 2021 this is a trivial rebase on top of
-> v6.1-rc1. I pinged that one repeatedly, I'm now trying with resending
-> and calling the rebased patch v3 to maybe get some feedback. :-\
-
-I didn't get any feedback on this patch and still consider it useful.
-
-Any insights from your side?
-
-Best regards
-Uwe
-
---=20
-Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
-Industrial Linux Solutions                 | https://www.pengutronix.de/ |
-
---xgfwba3jlkbdegto
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQPaw8ACgkQwfwUeK3K
-7Al3PAf8DpEgu09BjbaLoin1vOdceJBfVEzZVAdzpCgLxVciSav2Hy2QfZAxtsuM
-J07SVb+T06jMVy1Nd/xPUvr1R/+PkBcXKeKA1ZRc5AXUoY3IMuAx6FdcV2r2K9+X
-sV4ysQfTGq0GT2UDAgpexKwyKBrE4TwrPArjh42v7RMmUX5OVOTN82NrXGrGVFYH
-BQ8rOmE1up9v5K/wZ79s7flc0ZB3hmzTso7uHJc68bnRs2tukvCzeHNGMXh5q88e
-FmQ7zPpRZd42zwN8wlfx98algYFa+O/+Qkx3ryCrHweojJx5xNDgJj+iHHnUUx2A
-UARE4pBbsGXlsIjwFS8hy3M7fcpfqw==
-=PdGy
------END PGP SIGNATURE-----
-
---xgfwba3jlkbdegto--
+- Eric
