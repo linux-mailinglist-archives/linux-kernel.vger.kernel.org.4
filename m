@@ -2,151 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 503396B7929
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:38:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D9F96B7932
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230167AbjCMNiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
+        id S229726AbjCMNkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:40:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbjCMNiw (ORCPT
+        with ESMTP id S229543AbjCMNki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:38:52 -0400
-Received: from relay10.mail.gandi.net (relay10.mail.gandi.net [IPv6:2001:4b98:dc4:8::230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F19AEE181;
-        Mon, 13 Mar 2023 06:38:29 -0700 (PDT)
-Received: (Authenticated sender: alexandre.belloni@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id D3101240002;
-        Mon, 13 Mar 2023 13:38:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678714707;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=9P09iremWXOid0qmunSiTxvo86djuYD/ctGTwvv+eB4=;
-        b=OxDcKC2EByCRqP2D9Bj0URPAghXjN+ukTKEQWket54PTBeS6p5OxQv4PNmo8ZpDesgwt2V
-        iJhC5EFTV+c/FFAJen5PwufprbcSzEITmOF0SfwjtvE3xueJhDLUluLEM+kl3V34WoziXz
-        ajev2Jh9mTCjG+zJcdfIbitLUEo5yo16Kw2QFhOtziz+P0Rs8E4ahdJOey2HwB2c0AHroo
-        NowNIvffACpOXTK0b2p+wwogetlfj0QNs6doXs9Boqmo94hP6OQuCYu7G/MeL4GCOo4hYz
-        voFQKv3vuKoNS4TfsJnY8SIrP55iHyRa8eZKVUGx2+xF2WH5Jxg/fmV9qL0Jiw==
-Date:   Mon, 13 Mar 2023 14:38:26 +0100
-From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
-To:     Esteban Blanc <eblanc@baylibre.com>
-Cc:     linus.walleij@linaro.org, lgirdwood@gmail.com, broonie@kernel.org,
-        a.zummo@towertech.it, linux-kernel@vger.kernel.org,
-        linux-gpio@vger.kernel.org, linux-rtc@vger.kernel.org,
-        jpanis@baylibre.com, jneanne@baylibre.com
-Subject: Re: [PATCH INTERNAL v1 1/3] rtc: tps6594: add driver for TPS6594
- PMIC RTC
-Message-ID: <20230313133826fe761785@mail.local>
-References: <20230224133129.887203-1-eblanc@baylibre.com>
- <20230224133129.887203-2-eblanc@baylibre.com>
- <ZAcbJxrNtWTTTSjR@mail.local>
- <CR556BV2M4I4.2L3LLJ8V1I352@burritosblues>
- <20230313110158f5c27b63@mail.local>
- <CR58TXDRGAUA.3CSML8HXRI97S@burritosblues>
+        Mon, 13 Mar 2023 09:40:38 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F6961888
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:40:35 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so7535625wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678714834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=31bIBBam0f6kecXsPhvAYb/shqew87ztMsMZCGP7Fyo=;
+        b=a+yJWnElquqYbn/oICWpaQlm3ZZ3bFqIHFfXnnVVEa7PuDT6nvnm5tUmj0B5XQx2J2
+         7yIj/RF7qe5wgEcR308v22xh0zJKvU6amW9qlKg2YVHfAyHo234WjE9FS1ebEstAVAhM
+         iBuQ62jrO/cN2z55419ssAQRkeKMiy+g8QmEpLd6lJzSOLID0zxrREz/9TGqUGQepiw0
+         t0Z3yDIKjGaO7VDgg390oZKuIJa2Kt/7KQdcpd/nBWSXA2zsSTd1Aj8mPN7yBeVO7hLI
+         e7Tk04dscKAFXDTceu6VtfIwb2IlUGTwmpE8UIODGS9Zt5QxTPhy8LVEMSz4I+TM2hNZ
+         VQqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678714834;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=31bIBBam0f6kecXsPhvAYb/shqew87ztMsMZCGP7Fyo=;
+        b=rA2QZi3e2q5+AmdPv0/1s4IPJjLgTaw1xYrZv5bAHsV1S4K6SrlmwWVtLJCX4o42Ww
+         OdlSb4DXAfI/MV7PBJwDNfwvpXq6o82PMbPz9e6h20JqfufNhjfuKq/FRkGgD9SVbDZW
+         fqlHaxAviEkC2XS3KA1/QA+htLty8a5skiz7xKY35bSQLyat1+2MiqATXfCNL1W81sb9
+         DwK9g6DGkakPVu4Oai/AmD7BRieiqrdWX4heufCAcekNbVTKiPOvI1J9nMfvp8YYckAi
+         hpwoi725yTj6JvB1Kdb8kqPefHKsa4I5BWd1Bjiu2qYMZp9Ah7TiPVCsYjg6tPHZ0LzV
+         Em8A==
+X-Gm-Message-State: AO0yUKVcYO/tKjThbgJw1pfrDFOqe/CRIxcbhpymMo7yuNpU/tQuxUi3
+        M8LBLa/Gd1FFFLPDl9za0fvNeIM062UHUZNTMCuakZ0Lb5M=
+X-Google-Smtp-Source: AK7set9lDqU39yypMAy0cjQ86QYU+3Njby8QG8Rj7JOvcecnYCcaHA2RVLNH73dyVErvidwPxpTbbVV6dFsNZEyZee4=
+X-Received: by 2002:a7b:c843:0:b0:3eb:3e75:5db2 with SMTP id
+ c3-20020a7bc843000000b003eb3e755db2mr2468540wml.2.1678714834218; Mon, 13 Mar
+ 2023 06:40:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CR58TXDRGAUA.3CSML8HXRI97S@burritosblues>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <299fbb80-e3ab-3b7c-3491-e85cac107930@intel.com>
+ <CAPAsAGyG2_sUfb7aPSPuMatMraDbPCFKxhv2kSDkrV1XxQ8_bw@mail.gmail.com> <20230313094127.3cqsnmngbdegbe6o@blackpad>
+In-Reply-To: <20230313094127.3cqsnmngbdegbe6o@blackpad>
+From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
+Date:   Mon, 13 Mar 2023 14:40:33 +0100
+Message-ID: <CAPAsAGzYSi_mCy64rFH=o+m8eT-A9ffttsFO9Wx94=nsj+Q8Jg@mail.gmail.com>
+Subject: Re: KASLR vs. KASAN on x86
+To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
+Cc:     Dave Hansen <dave.hansen@intel.com>,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Alexander Potapenko <glider@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        kasan-dev@googlegroups.com, Kees Cook <keescook@chromium.org>,
+        Thomas Garnier <thgarnie@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 13:10:37+0100, Esteban Blanc wrote:
-> On Mon Mar 13, 2023 at 12:01 PM CET, Alexandre Belloni wrote:
-> > On 13/03/2023 10:18:45+0100, Esteban Blanc wrote:
-> > > On Tue Mar 7, 2023 at 12:08 PM CET, Alexandre Belloni wrote:
-> > > > On 24/02/2023 14:31:27+0100, Esteban Blanc wrote:
-> > > > > +/*
-> > > > > + * Gets current tps6594 RTC time and date parameters.
-> > > > > + *
-> > > > > + * The RTC's time/alarm representation is not what gmtime(3) requires
-> > > > > + * Linux to use:
-> > > > > + *
-> > > > > + *  - Months are 1..12 vs Linux 0-11
-> > > > > + *  - Years are 0..99 vs Linux 1900..N (we assume 21st century)
-> > > > > + */
-> > > >
-> > > > I don't find this comment to be particularly useful.
-> > > 
-> > > Ok. I propose that I add 2 constants for the -1 and +100 in the month and year
-> > > calculation. This way, without the comment the computation would be a
-> > > bit more self explanatory.
-> > > What do you think?
-> >
-> > I don't think this is necessary, keep -1 for the month and +100 for the
-> > year, those are very common operations in the subsystem and don't really
-> > need any explanation
-> 
-> Ok. I will just remove the comment then.
-> 
-> > > > > +static int tps6594_rtc_probe(struct platform_device *pdev)
-> > > > > +{
-> > > > > +   struct tps6594 *tps6594;
-> > > > > +   struct tps6594_rtc *tps_rtc;
-> > > > > +   int irq;
-> > > > > +   int ret;
-> > > > > +
-> > > > > +   tps6594 = dev_get_drvdata(pdev->dev.parent);
-> > > > > +
-> > > > > +   tps_rtc = devm_kzalloc(&pdev->dev, sizeof(struct tps6594_rtc),
-> > > > > +                          GFP_KERNEL);
-> > > > > +   if (!tps_rtc)
-> > > > > +           return -ENOMEM;
-> > > > > +
-> > > > > +   tps_rtc->rtc = devm_rtc_allocate_device(&pdev->dev);
-> > > > > +   if (IS_ERR(tps_rtc->rtc))
-> > > > > +           return PTR_ERR(tps_rtc->rtc);
-> > > > > +
-> > > > > +   /* Enable crystal oscillator */
-> > > > > +   ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_2,
-> > > > > +                         TPS6594_BIT_XTAL_EN);
-> > > > > +   if (ret < 0)
-> > > > > +           return ret;
-> > > > > +
-> > > > > +   /* Start rtc */
-> > > > > +   ret = regmap_set_bits(tps6594->regmap, TPS6594_REG_RTC_CTRL_1,
-> > > > > +                         TPS6594_BIT_STOP_RTC);
-> > > > > +   if (ret < 0)
-> > > > > +           return ret;
-> > > >
-> > > > Do that (XTAL_EN and clearing STOP) only once the time is known to be
-> > > > set to a correct value so read_time doesn't have a chance to return a
-> > > > bogus value.
-> > > >
-> > > 
-> > > (...)
-> > > 
-> > > I understand your point, however I'm not sure of the canonical way to do
-> > > this. Simply calling `tps6594_rtc_set_time` is enough?
-> >
-> > Yeah, let userspace set the time and start the rtc at that point.
-> 
-> The problem with that is we might have some RTCs that will just not be
-> usable. We have boards with multiple TP6594 PMICs where only one of them
-> has a crystal oscillator. The way to detect this is to start the RTC
-> then checked if the STOP_RTC bit is still 0. By doing this in the probe,
-> I'm able to not register an RTC device that doesn't work.
-> 
-> If I just start the RTC on the first call to `tps6594_rtc_set_time`, it
-> will work for the RTC with the crystal and fails for all the others 
-> 
-> I can stop the RTC at the end of the probe, after the check to rule out
-> unusable devices. If I add the check you proposed in
-> `tps6594_rtc_read_time` it will fail until a successful call to
-> `tps6594_rtc_set_time`. Would that be a suitable solution?
-> 
+On Mon, Mar 13, 2023 at 10:41=E2=80=AFAM Michal Koutn=C3=BD <mkoutny@suse.c=
+om> wrote:
+>
+> On Wed, Mar 08, 2023 at 06:24:05PM +0100, Andrey Ryabinin <ryabinin.a.a@g=
+mail.com> wrote:
+> > So the vmemmap_base and probably some part of vmalloc could easily end
+> > up in KASAN shadow.
+>
+> Would it help to (conditionally) reduce vaddr_end to the beginning of
+> KASAN shadow memory?
+> (I'm not that familiar with KASAN, so IOW, would KASAN handle
+> randomized: linear mapping (__PAGE_OFFSET), vmalloc (VMALLOC_START) and
+> vmemmap (VMEMMAP_START) in that smaller range.)
+>
 
-That would work, yes
+Yes, with the vaddr_end =3D KASAN_SHADOW_START  it should work,
+ kaslr_memory_enabled() can be removed in favor of just the kaslr_enabled()
 
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+> Thanks,
+> Michal
