@@ -2,100 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F7816B8470
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:02:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AFEA6B846A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:02:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230154AbjCMWCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 18:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34116 "EHLO
+        id S229885AbjCMWCP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 18:02:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjCMWCq (ORCPT
+        with ESMTP id S229701AbjCMWCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 18:02:46 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 055AA8E3CE;
-        Mon, 13 Mar 2023 15:02:09 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id fd5so20685870edb.7;
-        Mon, 13 Mar 2023 15:02:09 -0700 (PDT)
+        Mon, 13 Mar 2023 18:02:12 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B4545FA4F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:01:37 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id h8so14527263plf.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:01:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678744927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mw1oEi8x/spO3700iwhP/jHnat9etEwB+9anearFVJA=;
-        b=fj6u1aQxH9kGPaKnJutlfly8rY6Tc8nh4BcbFxBESqOMta+tzIkiA5zoCXjdXgjgrh
-         RhjB8Zbz0MIKzFYb3UcWnBzLY9jnAQRfQ/iIIrjXUBw95GbuDE8LUe6vc+aMMb1dwMrT
-         kVgRGTMxzSKVE7KkrImNiO4BoRkxC2o3n+CB1ewOwUyZKGlB3t1S06M4J7zblQD3GG3n
-         +7lweClsM+xNdXyg7+EvaK/bP2EXFYBBXnyKR119TuWkdu3VZQLwbG/xHWj8ZmjNHYXB
-         duSPTTPMu1EWShnpnuKMEqGakpHY+tOHrFZH62nxjYuGwqNTA/2GHrCT+GnWoyzkFb35
-         LwwQ==
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678744897;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aoryjymo1oElOGINN9cU4eLvQOu+fBsC3uXzTaes3Mc=;
+        b=MYy7GeuncwawvsYj6On0bCx0hNboUyy8iUNqupWdKOkwdx1DDgtBxc8wmA+6sUw8de
+         4Sm1uRIELAl/MdVJX1yiFDi7sQ87p7BteCp7tBl296Lw/YCyHTe78shGIrj2LnHD05oQ
+         n9SgLZEYXPy/DhcEBmUVWMD2cQSPCuiivL6mx8RHLUCRy2x4PoNTFEpSJWrvmJ/FFXRT
+         6wLANodOiaSU2jK85nWxSs0hliKxSkjD2hgPKOFywCLRRMXi6Qx9apUPelXxLyjff2dW
+         J1DZXVZGR6S/0ahoCUujE6IjbNzxAx3ctvUwnOphuccaWQwrA8TtU0dDHLEwrhz4211c
+         2ECw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678744927;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mw1oEi8x/spO3700iwhP/jHnat9etEwB+9anearFVJA=;
-        b=rzEpM6OjeCTwvSyUEhn6g5RHNXR4roH8GuQPhgHt8oyet4yMYd/2cXs6ro0kmAQJ8t
-         X2Yz8lfTUbNzlT1I3iDULGcHTjpa3EAPeTCy5WFZ+bHhGFdEpNtX33hxsanWgXPtGkbq
-         dYwV8iSw3CMjCoh6R2K6KwnY1kgY6ilXhwNIdAbvs9uDR1pU2+2Z3EsAXirKMDxv3vW6
-         59oEMr5Lbcc3LD3hWct7qy+TrG80jqsTLO5SI7mHv3A2TtkbqHPruCiSylogN5oq9MEm
-         GbtIaIYtHJ1JsL9o4IV1KZbftTSGRQTdK2tbnksakVfq6pBFWVXYW4uOa/Fq43fOPMI2
-         j7Vw==
-X-Gm-Message-State: AO0yUKXtU3LGx4EDFi/mjr3QvOyzXRfnXyvjkco4/Golcoc6pdN9ttqe
-        J1YPzKlz6BAnU1KBQ3zwgGM=
-X-Google-Smtp-Source: AK7set9x1DX7dDQFEd4i4rUbnBF0FHxshk+8AZoqwn1xBH6Tcg/UJhbAVYe8kIgUcX7lZc5W+uhfcA==
-X-Received: by 2002:a05:6402:188:b0:4a3:43c1:8430 with SMTP id r8-20020a056402018800b004a343c18430mr13073923edv.4.1678744927024;
-        Mon, 13 Mar 2023 15:02:07 -0700 (PDT)
-Received: from localhost.localdomain (077222238142.warszawa.vectranet.pl. [77.222.238.142])
-        by smtp.googlemail.com with ESMTPSA id r9-20020a50c009000000b004c13fe8fabfsm246146edb.84.2023.03.13.15.02.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 15:02:06 -0700 (PDT)
-From:   Szymon Heidrich <szymon.heidrich@gmail.com>
-To:     steve.glendinning@shawell.net, UNGLinuxDriver@microchip.com,
-        davem@davemloft.net, edumazet@google.com
-Cc:     kuba@kernel.org, pabeni@redhat.com, szymon.heidrich@gmail.com,
-        linux-usb@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] net: usb: smsc95xx: Limit packet length to skb->len
-Date:   Mon, 13 Mar 2023 23:01:24 +0100
-Message-Id: <20230313220124.52437-1-szymon.heidrich@gmail.com>
-X-Mailer: git-send-email 2.39.2
+        d=1e100.net; s=20210112; t=1678744897;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aoryjymo1oElOGINN9cU4eLvQOu+fBsC3uXzTaes3Mc=;
+        b=6xFCgDyJUmJZJqx2l5SX+ajtjmwAmGB552hSylfrszu9Ev2jrm/7V6tCVbUtFIYgqn
+         tA2JyyPqmbT2n02jlnSEWOJ//AYD/EvjxTh3kmHGzdiy8wEG/T8jH5Ec+b/LRtbAcHsB
+         E92EnFvQA3ZCeFofM9B74i6FHTFk5kLFnmd3wq7v3e0jNVJpDhrJpYcc8i7jP+PRoUiz
+         AeLV3qRHq9fX1ZJH+mQijDSpvyusnYK1PKYOloXJGrXJ28Ji5RibGYfhR2SBPd2pwqCW
+         buFOr69aSOdaW5hQN9+t6s+g/FfOhor5mx4TUS5ZigKMG1TX06mqFbKuOtzoMQSxTsoO
+         iJhA==
+X-Gm-Message-State: AO0yUKWKsxF2SoykR7qEB4Jb8h/ytk1u+Hz4SWlCbdmGY1slShZIZdFk
+        z4yPmt1Y0GJvH1tUdsrwOi1pHiWgZaxGSGQ/7yIE0g==
+X-Google-Smtp-Source: AK7set+9QGd09G9H0H+duic/XO65p0Yg/8XFn8ktQw7uv5jx733l5yAhwJNJGpoTcxvEeHvJE6gSOA==
+X-Received: by 2002:a17:903:42c7:b0:199:3f82:ef62 with SMTP id jy7-20020a17090342c700b001993f82ef62mr10886267plb.5.1678744896833;
+        Mon, 13 Mar 2023 15:01:36 -0700 (PDT)
+Received: from [192.168.1.136] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id la15-20020a170902fa0f00b00186cf82717fsm318355plb.165.2023.03.13.15.01.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 15:01:36 -0700 (PDT)
+Message-ID: <9e5dc1c6-ec4a-7c6d-9c3f-653ba55db0f8@kernel.dk>
+Date:   Mon, 13 Mar 2023 16:01:35 -0600
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+ <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+ <ee962f58-1074-0480-333b-67b360ea8b87@gmail.com>
+ <9322c9ab-6bf5-b717-9f25-f5e55954db7b@kernel.dk>
+ <4ed9ee1e-db0f-b164-4558-f3afa279dd4f@gmail.com>
+ <c433f8cf-57dc-52c9-9959-f6a21297d1b0@kernel.dk>
+ <ad5d6234-b11d-7ac6-0218-78058df99712@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <ad5d6234-b11d-7ac6-0218-78058df99712@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Packet length retrieved from skb data may be larger than
-the actual socket buffer length (up to 1526 bytes). In such
-case the cloned skb passed up the network stack will leak
-kernel memory contents.
+On 3/13/23 11:50?AM, Pavel Begunkov wrote:
+> On 3/13/23 14:16, Jens Axboe wrote:
+>> On 3/12/23 9:45?PM, Pavel Begunkov wrote:
+>>>>>> Didn't take a closer look just yet, but I grok the concept. One
+>>>>>> immediate thing I'd want to change is the FACILE part of it. Let's call
+>>>>>> it something a bit more straightforward, perhaps LIGHT? Or LIGHTWEIGHT?
+>>>>>
+>>>>> I don't really care, will change, but let me also ask why?
+>>>>> They're more or less synonyms, though facile is much less
+>>>>> popular. Is that your reasoning?
+>>>
+>>>> Yep, it's not very common and the name should be self-explanatory
+>>>> immediately for most people.
+>>>
+>>> That's exactly the problem. Someone will think that it's
+>>> like normal tw but "better" and blindly apply it. Same happened
+>>> before with priority tw lists.
+>>
+>> But the way to fix that is not through obscure naming, it's through
+>> better and more frequent review. Naming is hard, but naming should be
+>> basically self-explanatory in terms of why it differs from not setting
+>> that flag. LIGHTWEIGHT and friends isn't great either, maybe it should
+>> just be explicit in that this task_work just posts a CQE and hence it's
+>> pointless to wake the task to run it unless it'll then meet the criteria
+>> of having that task exit its wait loop as it now has enough CQEs
+>> available. IO_UF_TWQ_CQE_POST or something like that. Then if it at some
+> 
+> There are 2 expectations (will add a comment)
+> 1) it's posts no more that 1 CQE, 0 is fine
+> 
+> 2) it's not urgent, including that it doesn't lock out scarce
+> [system wide] resources. DMA mappings come to mind as an example.
+> 
+> IIRC is a problem even now with nvme passthrough and DEFER_TASKRUN
 
-Fixes: 2f7ca802bdae ("net: Add SMSC LAN9500 USB2.0 10/100 ethernet adapter driver")
-Signed-off-by: Szymon Heidrich <szymon.heidrich@gmail.com>
----
- drivers/net/usb/smsc95xx.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+DMA mappings aren't really scarce, only on weird/crappy setups with a
+very limited IOMMU space where and IOMMU is being used. So not a huge
+deal I think.
 
-diff --git a/drivers/net/usb/smsc95xx.c b/drivers/net/usb/smsc95xx.c
-index 32d2c60d3..ba766bdb2 100644
---- a/drivers/net/usb/smsc95xx.c
-+++ b/drivers/net/usb/smsc95xx.c
-@@ -1851,7 +1851,8 @@ static int smsc95xx_rx_fixup(struct usbnet *dev, struct sk_buff *skb)
- 			}
- 		} else {
- 			/* ETH_FRAME_LEN + 4(CRC) + 2(COE) + 4(Vlan) */
--			if (unlikely(size > (ETH_FRAME_LEN + 12))) {
-+			if (unlikely(size > (ETH_FRAME_LEN + 12) ||
-+				     size > skb->len)) {
- 				netif_dbg(dev, rx_err, dev->net,
- 					  "size err header=0x%08x\n", header);
- 				return 0;
+>> point gets modified to also encompass different types of task_work that
+>> should not cause wakes, then it can change again. Just tossing
+>> suggestions out there...
+> 
+> I honestly don't see how LIGHTWEIGHT is better. I think a proper
+> name would be _LAZY_WAKE or maybe _DEFERRED_WAKE. It doesn't tell
+> much about why you would want it, but at least sets expectations
+> what it does. Only needs a comment that multishot is not supported.
+
+Agree, and this is what I said too, LIGHTWEIGHT isn't a great word
+either. DEFERRED_WAKE seems like a good candidate, and it'd be great to
+also include a code comment there on what it does. That'll help future
+contributors.
+
 -- 
-2.39.2
+Jens Axboe
 
