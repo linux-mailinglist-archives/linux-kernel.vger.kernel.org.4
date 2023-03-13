@@ -2,118 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5C946B7B8B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:09:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 571C46B7B88
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:09:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbjCMPJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:09:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34564 "EHLO
+        id S230022AbjCMPJA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:09:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34376 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229832AbjCMPJC (ORCPT
+        with ESMTP id S229622AbjCMPI5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:09:02 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A4443018B;
-        Mon, 13 Mar 2023 08:08:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9477F61336;
-        Mon, 13 Mar 2023 15:08:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2710C433AA;
-        Mon, 13 Mar 2023 15:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678720124;
-        bh=S10P55qoSefp3tquh9o+ql/D/gx54XqqWmAW+yYAqF4=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=ZPqVyGE2rEFwb0iHgg420twm9Dv7NRBiGQ0+Ox+4Ui+3iyrMJoysFuAZIWLGy0Hlr
-         uCYfcncRpvwGXEHi2COdJUUvoNDgzmsoKWqf4hwYmtE9d9kLmE7gj/eOMwUlqIBlwm
-         SsDaeS22cahCQEAOog5GXItXnKG6ofQmdIRU3keKjC1NSfpW7+7cM04e44BAzH35PE
-         imHwLw4OigRkMMFaNyB7Efoco4TXppwpFntnjrJ3mL9GN0tHNOLtUcDd5VreZM9OeO
-         W1F03kIYoSb3MEUSs89kzw3Sm72e9HniNftcNoFSkrFKZhDsFm0bLL9wd5F1g1Czsk
-         l2dKUNHcFrqrw==
-Received: by mail-lf1-f51.google.com with SMTP id s22so16114707lfi.9;
-        Mon, 13 Mar 2023 08:08:43 -0700 (PDT)
-X-Gm-Message-State: AO0yUKU6j5tlEBUSBqE0zdJkMLQ5qQmykFveiXVqLNY/hqo9pAnWCisV
-        J8Ao3kTVOqGxBbZ/NggyWR0EcwJCH4P4pANgew==
-X-Google-Smtp-Source: AK7set8O8oG4SXhOvRL6HCMEQolVFDwrGrQP5nswTrxrSjexg5YyYijOPMKZuhjj2e7ORk3z38TIJ8Y5USlb96Za1fE=
-X-Received: by 2002:ac2:5923:0:b0:4d5:ca42:e43e with SMTP id
- v3-20020ac25923000000b004d5ca42e43emr11026612lfi.7.1678720122020; Mon, 13 Mar
- 2023 08:08:42 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230220-display-v1-0-45cbc68e188b@baylibre.com> <20230220-display-v1-9-45cbc68e188b@baylibre.com>
-In-Reply-To: <20230220-display-v1-9-45cbc68e188b@baylibre.com>
-From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
-Date:   Mon, 13 Mar 2023 23:08:30 +0800
-X-Gmail-Original-Message-ID: <CAAOTY_--qP-PBBt9zZwcMewiWB-ow_n2XZSHFAz7FeU=v1Hj7g@mail.gmail.com>
-Message-ID: <CAAOTY_--qP-PBBt9zZwcMewiWB-ow_n2XZSHFAz7FeU=v1Hj7g@mail.gmail.com>
-Subject: Re: [PATCH 09/21] dt-bindings: display: mediatek: ovl: add binding
- for MT8365 SoC
-To:     Alexandre Mergnat <amergnat@baylibre.com>
-Cc:     Daniel Vetter <daniel@ffwll.ch>, CK Hu <ck.hu@mediatek.com>,
-        Jitao Shi <jitao.shi@mediatek.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Xinlei Lee <xinlei.lee@mediatek.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-pwm@vger.kernel.org, Fabien Parent <fparent@baylibre.com>,
-        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        Guillaume La Roque <glaroque@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 11:08:57 -0400
+Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6491A1EFCB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:08:35 -0700 (PDT)
+Received: by mail-pf1-x449.google.com with SMTP id p39-20020a056a0026e700b0062315c420d6so2707621pfw.21
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:08:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678720115;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qxVtFxj5uIOOrP7E5ckXz59l5LUm4FTXlW2JIMeCZC4=;
+        b=lbU3RYJo7s2aZnku7crrKpLwQN66z0CQKamdFxZyBvXHpfPHa8kylP7pfqZ73mh7J9
+         P8myWTj3MzzXvIwT0n9M7Hyj2SdHLh1xBeUuPZLIczgpkh4oM/AaV9oVKLz4u6Qu7D/T
+         Cf01LzFd4uEHzo/BlRgMedg08jFu6VfyrEXRgReh6CcItRBytxTMmKV1xfBlvs3qhJM1
+         qEcqXiOwgudVfn3oIjJkVzJwhXzhfXlLyvCfZcSmhNX7r2RmpRZd7SQyjhdtmAxirriT
+         GHVd2V4tA0V+wMEezeyRpVMpQjZc16CLECIGBThoO7sPuX+4zNIoQIDmovLqGMuVDiq2
+         w/Mw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678720115;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qxVtFxj5uIOOrP7E5ckXz59l5LUm4FTXlW2JIMeCZC4=;
+        b=TEw3Hyk8kJbR3x3ur0cepWaJikcviUlHUUQAbe0HuPFASqBf+yfErgEpc55MWzBaBs
+         PG1cmGyp+eOOCrg+XzRLss+IMJSDmb2l9C9eeOVkGteP1KE6YzQ8rXOrDzT1L+7SYI76
+         7ebYcgXXPn0M5GSj1rHumf0N5VETT9gWQPvTN7vrpCiNv59Jnku/gyFSIiDIKnsAI32i
+         1Nd0tvsJ0C1jcwOKzDPUHS1aVYxHUYffgVLdvGgows91ApNTZkE6XWPwy0z8K+pfwx14
+         xV/dk4NK3mWZtIXvvmAlkQTZxuOPDrLhSv0zo/M8no7gqZ8B0A3WAR3dkUc7Mp9DTkMG
+         TJhQ==
+X-Gm-Message-State: AO0yUKXXVMffUGJxpaZu7NvSSDHiiEQUqo0r0YPssbY8ZZMLo8C9hJF0
+        ajoYk2vs//wTVSaf5RGRdtqj4Yp/EU0=
+X-Google-Smtp-Source: AK7set/ypfmiMHKiQWM0Mr5K258qJZo5qN/vPg3C/rQu5ihDKnRH/PNe8kDR9buo0iugWL9UiE7JrRt/LxI=
+X-Received: from zagreus.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:5c37])
+ (user=seanjc job=sendgmr) by 2002:a65:66c6:0:b0:4fc:2a22:898a with SMTP id
+ c6-20020a6566c6000000b004fc2a22898amr11206098pgw.3.1678720114907; Mon, 13 Mar
+ 2023 08:08:34 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 08:08:33 -0700
+In-Reply-To: <20230312151731.GB1757905@hirez.programming.kicks-ass.net>
+Mime-Version: 1.0
+References: <cover.1678474914.git.jpoimboe@kernel.org> <016c1e9cbdf726a885a406ff6baed85087ad1213.1678474914.git.jpoimboe@kernel.org>
+ <20230310205926.GB1605437@hirez.programming.kicks-ass.net>
+ <20230311012004.vyc4kdlqjsv4zliw@treble> <20230312151731.GB1757905@hirez.programming.kicks-ass.net>
+Message-ID: <ZA88cQ58/qW0D0TZ@google.com>
+Subject: Re: [RFC][PATCH 1/5] static_call: Make NULL static calls consistent
+From:   Sean Christopherson <seanjc@google.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     Josh Poimboeuf <jpoimboe@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sami Tolvanen <samitolvanen@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Will McVicker <willmcvicker@google.com>,
+        Kees Cook <keescook@chromium.org>
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Alexandre:
+On Sun, Mar 12, 2023, Peter Zijlstra wrote:
+> On Fri, Mar 10, 2023 at 05:20:04PM -0800, Josh Poimboeuf wrote:
+> > On Fri, Mar 10, 2023 at 09:59:26PM +0100, Peter Zijlstra wrote:
+> > > > -#define __static_call_cond(name)					\
+> > > > -({									\
+> > > > -	void *func = READ_ONCE(STATIC_CALL_KEY(name).func);		\
+> > > > -	if (!func)							\
+> > > > -		func = &__static_call_nop;				\
+> > > > -	(typeof(STATIC_CALL_TRAMP(name))*)func;				\
+> > > > -})
+> > > 
+> > > So a sufficiently clever compiler can optimize the above to avoid the
+> > > actual indirect call (and resulting CFI violation, see below), because
+> > > __static_call_nop() is inline and hence visible as an empty stub
+> > > function. Currently none of the compilers are that clever :/
+> > 
+> > I won't hold my breath waiting for theoretical optimizations.
+> 
+> Well, I'm thinking the clang folks might like this option to unbreak the
+> arm64 build. At least here they have a fighting chance of actually doing
+> the right thing.
+> 
+> Let me Cc some actual compiler folks.
 
-Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
-9=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=8810:23=E5=AF=AB=E9=81=93=EF=
-=BC=9A
->
-> Display Overlay for MT8365 is compatible with another SoC.
-> Then, add MT8365 binding along with MT8192 SoC.
++Will and Kees too for the arm64+CFI mess.
 
-Reviewed-by: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+https://lore.kernel.org/all/YfrQzoIWyv9lNljh@google.com
 
->
-> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
-> ---
->  Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yaml | 1=
- +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
-ovl.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.=
-yaml
-> index a2a27d0ca038..20e4ca4fc915 100644
-> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam=
-l
-> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ovl.yam=
-l
-> @@ -41,6 +41,7 @@ properties:
->        - items:
->            - enum:
->                - mediatek,mt8186-disp-ovl
-> +              - mediatek,mt8365-disp-ovl
->            - const: mediatek,mt8192-disp-ovl
->
->    reg:
->
-> --
-> b4 0.10.1
+> > > This will break ARM64 I think, they don't HAVE_STATIC_CALL but do have
+> > > CLANG_CFI, which means the above will end up being a runtime indirect
+> > > call to a non-matching signature function.
+> > > 
+> > > Now, I suppose we don't actually have this happen in current code by the
+> > > simple expedient of not actually having any static_call_cond() usage
+> > > outside of arch code.
+> > > 
+> > > (/me git-grep's some and *arrrggh* trusted-keys)
+> > > 
+> > > I really don't think we can do this though, must not promote CFI
+> > > violations.
+> > 
+> > Ouch, so static_call_cond() and __static_call_return0() are broken today
+> > on CFI_CLANG + arm64.
+> 
+> Yes. Now __static_call_return0() should really only happen when
+> HAVE_STATIC_CALL per the definition only being available in that case.
+> 
+> And static_call_cond() as implemented today *might* just be fixable by
+> the compiler.
+> 
+> > Some ideas:
+> > 
+> >   1) Implement HAVE_STATIC_CALL for arm64.  IIRC, this wasn't worth the
+> >      effort due to restricted branch ranges and CFI fun.
+> 
+> The powerpc32 thing did it, iirc a similar approach could work for arm.
+> But this would basically mandate HAVE_STATIC_CALL for CFI_CLANG.
+> 
+> > 
+> >   2) Create yet another "tier" of static call implementations, for
+> >      arches which can have the unfortunate combo of CFI_CLANG +
+> >      !HAVE_STATIC_CALL.  CONFIG_ALMOST_DONT_HAVE_STATIC_CALL?
+> > 
+> >      The arch can define ARCH_DEFINE_STATIC_CALL_NOP() which uses inline
+> >      asm to create a CFI-compliant NOP/BUG/whatever version of the
+> >      function (insert lots of hand-waving).  Is the kcfi hash available
+> >      to inline asm at build time?
+> 
+> Yes, clang creates magic symbol for everything it sees a declaration
+> for. This symbols can be referenced from asm, linking will make it all
+> work.
+> 
+> And yes, C sucks, you can't actually create a function definition from a
+> type :/ Otherwise this could be trivially fixable.
+> 
+> >   3) Use a jump label to bypass the static call instead of calling
+> >      __static_call_nop().  NOTE: I couldn't figure out how to do this
+> >      without angering the compiler, unless we want to change
+> >      static_call() back to the old-school interface:
+> > 
+> >         static_call(foo, args...)
+> > 
+> > Is it Friday yet?
+> 
+> Always right :-)
+> 
+> And yes, the whole premise of all this is that we let the compiler
+> generate the actuall CALL and then have objtool scan the output and
+> report the locations of them. There is no way to intercept this at the
+> compiler level.
