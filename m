@@ -2,69 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4B526B82F6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:41:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AF886B82FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:41:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbjCMUlD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:41:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40758 "EHLO
+        id S229768AbjCMUli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:41:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCMUlA (ORCPT
+        with ESMTP id S229622AbjCMUle (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:41:00 -0400
-Received: from mail-il1-x135.google.com (mail-il1-x135.google.com [IPv6:2607:f8b0:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B55B950721;
-        Mon, 13 Mar 2023 13:40:07 -0700 (PDT)
-Received: by mail-il1-x135.google.com with SMTP id 4so7590975ilz.6;
-        Mon, 13 Mar 2023 13:40:07 -0700 (PDT)
+        Mon, 13 Mar 2023 16:41:34 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DD19558E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:40:58 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id m22so5548491ioy.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:40:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678740006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JZaCV0WUtBPAAadzUTN1+MYnU8j2LSiKAw9rROH/ouw=;
-        b=JtofO/o3gg0239JS75f2bHGUOx1O8xSzUbXwHyM7gEMl2D9ouJPoN7pkWICQjgIsfS
-         /sU0y2PVmDml/f89PZu0LDpGvuh11lH4itW1jbqx0Lj9YJrCi+ti1j5t5b1J98G9M3et
-         4CwuuASQK/mhg/ASaJ19PxRvsyFEmbfhQhAycjYkwKT5SNNkYa81U+cQo10onwGGadMr
-         ejs4VvRTPoax5lWdECcehOP1UpCWUCuUnK0k4ShB5wMYQbzA1rKoyzAVwAP2tr82V2FA
-         Foi0LwqnkGmOu1Be+shGE56Q2AB9GineC2g0BBDdQ1QUzEGXjMfbGnWZkPG44FNHirNY
-         V7xQ==
+        d=google.com; s=20210112; t=1678740054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0T+Km9cavSQaDYPpPQXfU9zdS3Tn01gJlo4SYSaGTsQ=;
+        b=TQATrXuUbv73UnY+1AoZezSFrjnoWb6XBb4KKmy55Dz6xoRMZMU5Lk5mVbE/yBcLoS
+         uielXBVD5Xil2P2hsyGwgq3sdGc01SpHIjc9oWqTjvvue5SLYFhijuaVnRJjZY8gDNOh
+         ZTvdnJYkRVLx6HpXv7gMdi7CWdOgEwoykKcbtHLrJZ8A/WwLPpcEoLzGE7malfTUYJjd
+         iSVCqvSgQAD7jOwK0C0ecMYOFtRxx6gjS8WryAOQFoPuQV79KsFJoh8X2QvDhTcPIfs9
+         qELFz6z7V3giyT7opexr6QgITwDZrGVqYPaijuP+BS4ZDSv/mCQxNh03E+/46usgG7CZ
+         zZrw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678740006;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JZaCV0WUtBPAAadzUTN1+MYnU8j2LSiKAw9rROH/ouw=;
-        b=U4R5WJBgWTDJ3ZdBXIbVP2LTUoWxULRX0rOlgp2G9+NOGgdeZQNbGiN+WgAJRc3HCq
-         7xrYevYRhHlk6PV4M5zdfIbKxgfOlIeLQZwANp+2gxHiR6cunPugLTw7GdrklNRpnP/r
-         WKAj58buWnz9ijJyUUy1eSmWtkFjF5iGV7JDUiEMc2lTG2XP7iEVAg5OqFHDK24u0Vj9
-         dGYyi+wTpVT1pLqqeJSRtDvPcielKJj15Ra1SV/CJb6PJweggUksvo6jBtfMoHa+IB1U
-         aJ3hgswDtRXWRCOQMHX0GZPH9UqEEdPdusn9IX8F9Q5T8dzfclbcfn7Yea2R+VOV/mMR
-         ilsw==
-X-Gm-Message-State: AO0yUKX/9JELG+2mpJWmzv3KTNKjzMFz15v47lJEX6TBT6KhmqU7e6RX
-        a8se75kz3eXFNlad5roEESygYUHDfXYvvLc7iOe4ZTz7meg=
-X-Google-Smtp-Source: AK7set93On5UXiWXqIE/iSH6Lyki5HnTxQbbXShr7riWwECrynof73TKCea678jmafu1j1FjmhSIG1K0NtbHbO4dy5k=
-X-Received: by 2002:a05:6e02:790:b0:322:fdba:24c1 with SMTP id
- q16-20020a056e02079000b00322fdba24c1mr504636ils.1.1678740006525; Mon, 13 Mar
- 2023 13:40:06 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678740054;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0T+Km9cavSQaDYPpPQXfU9zdS3Tn01gJlo4SYSaGTsQ=;
+        b=dbju17WvrK4IFzif4QRNb+xqjD7/u1+pQkm1mImUpUiMyuL+H1q4ryYTt39rLJ5T72
+         udNYqvIGh0tBKDHfElOZT6Ak1h2tiyLa5YJCHSP6HtFHuZ3nVFJpm4mVXmq7Qy5/fn6e
+         8q0BNb4SW+pMFJHoOHuPwYeBt+WDIthb+ZVT1fjmLuRY3xpQ+MAbraS0NDX7oGFWaF8P
+         dGJ36nBeOVMD4N40qVBz6SoF09tW0mqcH9W+tIO95TI8AZeFbGLdRqcC3KD9XJVHpsXy
+         +tZiiczysH90F2AyOlIQRsXMitqyFyCLtnmscHaC41Wi3+M8ueUo7jJWgQZRzvEmK1ZX
+         HNDA==
+X-Gm-Message-State: AO0yUKUyZER5y6JIueKI+AKH9XdQnLD10apZ/D+wfoiobxyLCk13jLtT
+        6mAinyrlJGDY0kF7+7d1p7HGxQ==
+X-Google-Smtp-Source: AK7set/xW8ytFvQ8KfIVjFvFDObW2b6jVdvNOP69AGFe4AmpmWOEiHtIGspIfm9vNvggXDisP45jHw==
+X-Received: by 2002:a5e:8819:0:b0:74d:114c:832b with SMTP id l25-20020a5e8819000000b0074d114c832bmr24055572ioj.20.1678740054335;
+        Mon, 13 Mar 2023 13:40:54 -0700 (PDT)
+Received: from google.com ([2620:15c:183:200:a33c:9b70:2c95:9544])
+        by smtp.gmail.com with ESMTPSA id h14-20020a0566380f8e00b003c4e3ecb02dsm189549jal.24.2023.03.13.13.40.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 13:40:54 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 14:40:50 -0600
+From:   Ross Zwisler <zwisler@google.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     zwisler@kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Jiri Olsa <jolsa@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Yonghong Song <yhs@fb.com>, linux-kselftest@vger.kernel.org,
+        linux-rdma@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+        "Michael S . Tsirkin" <mst@redhat.com>
+Subject: Re: [PATCH bpf-next v3 2/2] selftests/bpf: use canonical ftrace path
+Message-ID: <20230313204050.GA592900@google.com>
+References: <20230310175209.2130880-1-zwisler@kernel.org>
+ <20230310175209.2130880-2-zwisler@kernel.org>
+ <20230310183352.2943e633@gandalf.local.home>
 MIME-Version: 1.0
-References: <20230220212245.153554-1-gpiccoli@igalia.com> <ba225af5-3729-32a4-318a-c1c4b8e8b37a@igalia.com>
-In-Reply-To: <ba225af5-3729-32a4-318a-c1c4b8e8b37a@igalia.com>
-From:   Matt Turner <mattst88@gmail.com>
-Date:   Mon, 13 Mar 2023 16:39:55 -0400
-Message-ID: <CAEdQ38HS=V9QJsdSoccos02HGn4=QKobkci=BTP9tc3=RyzUFQ@mail.gmail.com>
-Subject: Re: [PATCH v4] alpha: Clean-up the panic notifier code
-To:     "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-Cc:     linux-alpha@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Petr Mladek <pmladek@suse.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310183352.2943e633@gandalf.local.home>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,52 +88,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 4:18=E2=80=AFPM Guilherme G. Piccoli
-<gpiccoli@igalia.com> wrote:
->
-> On 20/02/2023 18:22, Guilherme G. Piccoli wrote:
-> > The alpha panic notifier has some code issues, not following
-> > the conventions of other notifiers. Also, it might halt the
-> > machine but still it is set to run as early as possible, which
-> > doesn't seem to be a good idea.
-> >
-> > So, let's clean the code and set the notifier to run as the
-> > latest, following the same approach other architectures are
-> > doing - also, remove the unnecessary include of a header already
-> > included indirectly.
-> >
-> > Cc: Ivan Kokshaysky <ink@jurassic.park.msu.ru>
-> > Cc: Matt Turner <mattst88@gmail.com>
-> > Cc: Richard Henderson <richard.henderson@linaro.org>
-> > Reviewed-by: Petr Mladek <pmladek@suse.com>
-> > Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
-> >
-> > ---
-> >
-> >
-> > V4:
-> > - Rebased (and build-tested) against v6.2.
-> >
-> > V3:
-> > - No changes.
-> >
-> > V2:
-> > - Fixed rth email address;
-> > - Added Petr's review tag - thanks!
-> >
->
-> Hi folks, just a gentle ping.
-> Lemme know if there's anything I could do in order to get this move forwa=
-rd.
->
-> Thanks in advance,
->
->
-> Guilherme
+On Fri, Mar 10, 2023 at 06:33:52PM -0500, Steven Rostedt wrote:
+> On Fri, 10 Mar 2023 10:52:09 -0700
+> zwisler@kernel.org wrote:
+> 
+> > diff --git a/tools/testing/selftests/bpf/get_cgroup_id_user.c b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+> > index 156743cf5870..4fa61ac8a0ee 100644
+> > --- a/tools/testing/selftests/bpf/get_cgroup_id_user.c
+> > +++ b/tools/testing/selftests/bpf/get_cgroup_id_user.c
+> > @@ -86,8 +86,12 @@ int main(int argc, char **argv)
+> >  	pid = getpid();
+> >  	bpf_map_update_elem(pidmap_fd, &key, &pid, 0);
+> >  
+> > -	snprintf(buf, sizeof(buf),
+> > -		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/tracing/events/%s/id", probe_name);
+> > +	else
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> 
+> I don't know how the BPF folks feel, but I do know some kernel developers
+> prefer that if you need to break a single command into multiple lines that
+> you then need to add brackets around it. As it makes it easier to read.
+> 
+> 	if (access("/sys/kernel/tracing/trace", F_OK) == 0) {
+> 		snprintf(buf, sizeof(buf),
+> 			 "/sys/kernel/tracing/events/%s/id", probe_name);
+> 	} else {
+> 		snprintf(buf, sizeof(buf),
+> 			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> 	}
+> 
+> 
+> 
+> >  	efd = open(buf, O_RDONLY, 0);
+> >  	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+> >  		goto close_prog;
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > index 113dba349a57..22be0a9a5a0a 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/kprobe_multi_test.c
+> > @@ -338,7 +338,12 @@ static int get_syms(char ***symsp, size_t *cntp, bool kernel)
+> >  	 * Filtering out duplicates by using hashmap__add, which won't
+> >  	 * add existing entry.
+> >  	 */
+> > -	f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+> > +
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		f = fopen("/sys/kernel/tracing/available_filter_functions", "r");
+> > +	else
+> > +		f = fopen("/sys/kernel/debug/tracing/available_filter_functions", "r");
+> > +
+> >  	if (!f)
+> >  		return -EINVAL;
+> >  
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+> > index c717741bf8b6..60f92fd3c37a 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/task_fd_query_tp.c
+> > @@ -17,8 +17,12 @@ static void test_task_fd_query_tp_core(const char *probe_name,
+> >  	if (CHECK(err, "bpf_prog_test_load", "err %d errno %d\n", err, errno))
+> >  		goto close_prog;
+> >  
+> > -	snprintf(buf, sizeof(buf),
+> > -		 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/tracing/events/%s/id", probe_name);
+> > +	else
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/debug/tracing/events/%s/id", probe_name);
+> 
+> Same here.
+> 
+> >  	efd = open(buf, O_RDONLY, 0);
+> >  	if (CHECK(efd < 0, "open", "err %d errno %d\n", efd, errno))
+> >  		goto close_prog;
+> > diff --git a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+> > index 770fcc3bb1ba..d3e377fa8e9b 100644
+> > --- a/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+> > +++ b/tools/testing/selftests/bpf/prog_tests/tp_attach_query.c
+> > @@ -16,8 +16,12 @@ void serial_test_tp_attach_query(void)
+> >  	for (i = 0; i < num_progs; i++)
+> >  		obj[i] = NULL;
+> >  
+> > -	snprintf(buf, sizeof(buf),
+> > -		 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
+> > +	if (access("/sys/kernel/tracing/trace", F_OK) == 0)
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/tracing/events/sched/sched_switch/id");
+> > +	else
+> > +		snprintf(buf, sizeof(buf),
+> > +			 "/sys/kernel/debug/tracing/events/sched/sched_switch/id");
+> 
+> and here.
+> 
+> But perhaps the BPF folks don't care?
 
-My apologies. I meant to include this in my last pull request.
-
-I'll take it through my tree.
-
-Thanks,
-Matt
+Sure, I agree that this is more readable.  I'll gather your Reviewed-by for
+patch #1, make this change, rebase to the current bpf/bpf-next and send out
+v4.
