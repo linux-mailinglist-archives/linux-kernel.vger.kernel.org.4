@@ -2,173 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 128416B7301
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:45:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 971DF6B730C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:46:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230176AbjCMJpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46422 "EHLO
+        id S230089AbjCMJqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:46:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjCMJpE (ORCPT
-        <rfc822;Linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:45:04 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59F4D12CCA;
-        Mon, 13 Mar 2023 02:45:03 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so2752575pjt.5;
-        Mon, 13 Mar 2023 02:45:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678700703;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Of+FjKvd8s+vxa4KebPCKUMymCE/4pxsMzXCM2VIFgI=;
-        b=h7m7ha+Jr3ID7HHwjceLrXT/nNrw+V0JrGtoBM1w+3NKQwGPVbFfjTt4LvwV+EHSp5
-         o3FFel3SUS0BsEzxh8Jtqg5gSvzPQ463dkugulalwgJDadPsWEZv0G8cwWtDqpr8NHxG
-         Jip2ggqiUPjyybwjzWwzCSYq3J7kJXLWhnTepudhBMd+wfBL4QP2nZvxfPySE5xLPf4K
-         v+pqTMfCIqJkLrRB1QF8DmKjQo8+MsBfA/Rk94R+O/Va/oTHB5M7aOLo9bpAUa9nJQx1
-         hwMiUEn9Dk9qJi+bzfaP8Ot+4rER6cmRT7MXbtNgi3pTKxYQj0XrbjkJoC1n/sG0uVar
-         TfUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678700703;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Of+FjKvd8s+vxa4KebPCKUMymCE/4pxsMzXCM2VIFgI=;
-        b=ZUvViCU834HAjKAnN1YvRXqzgl3HM8C2aPKR8pXiYUkYezfkAM0eG/FYUKPdIdB3Px
-         vZtMtk9VKw7+JuygQAShJ1SUkUHPpUZOLaP3i2TsoW8IodJPELGUNAxahtDq1rEet7wW
-         NcsRy4JqBIoEnElzhGD2XnGRkKuscd0KUWoXpUtbSDyn05uSYgMNkYaJG+vozYJnmHBN
-         Tory/Wu3q8tOD0z18Y9xKsdnIbXAnpZ3wLAxUvjQSpMW6p5ANzOwXHx5we3p3XIwituw
-         lWQOmkQkChpMfGY149k6W2KklUDmRDWjYVrDspUEdMay6et3BuJeD5TALUZx3M1IWbCp
-         Efww==
-X-Gm-Message-State: AO0yUKUws2kxUspWLoQHnJ7sqTjrkPXs14YzaiFql2/LWm4RjJMLzamS
-        47o2Z/O0xeOyVkDvJka6tUc=
-X-Google-Smtp-Source: AK7set+iHhuVpNlD9WMkgP9eruUEEmzysC7RHGFFNKSVnsdlOXaMn1+BKaVfxKkKp/7vVmfzLux3Pw==
-X-Received: by 2002:a05:6a21:9998:b0:d3:73be:3ea2 with SMTP id ve24-20020a056a21999800b000d373be3ea2mr8809433pzb.36.1678700702578;
-        Mon, 13 Mar 2023 02:45:02 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-18.three.co.id. [180.214.232.18])
-        by smtp.gmail.com with ESMTPSA id a10-20020a62bd0a000000b00593e84f2d08sm4040294pff.52.2023.03.13.02.45.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 02:45:02 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 688E1105FA7; Mon, 13 Mar 2023 16:44:59 +0700 (WIB)
-Date:   Mon, 13 Mar 2023 16:44:59 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Sreevani Sreejith <ssreevani@meta.com>, void@manifault.com,
-        psreep@gmail.com, bpf@vger.kernel.org,
-        Linux-kernel@vger.kernel.org, andrii@kernel.org, mykola@meta.com
-Cc:     linux-doc@vger.kernel.org
-Subject: Re: [PATCH V3 bpf-next] BPF, docs: libbpf Overview Document
-Message-ID: <ZA7wm8scokV+XPav@debian.me>
-References: <20230310180928.2462527-1-ssreevani@meta.com>
+        with ESMTP id S229743AbjCMJp7 (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Mar 2023 05:45:59 -0400
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2089.outbound.protection.outlook.com [40.107.92.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2DEC274AA;
+        Mon, 13 Mar 2023 02:45:42 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Xhy7/S3T6em46m77SpCDu2POWNwu+piLYbwEoCT1JXAbJok6oyVLBewGWPQpjMOTSpO9NKHYvYf99Po1qkA6em5Z0NuBiF51xXr7mQi0m+ziOKkJRsF4uDaV+YasXsD5xAdQYIm8szMaIyEZENt3YEyaZHpj7AhWP5JhgLUo8adO2/gMGOxzGxcljhm441uyDDV3q6yFIibdOeD8H24eqTK5zmwj9BNCmiDORctuQytPKVbxDtJPCApuRF5qkIPFFfrybw7Y1kwgkUDVSB0N71wXgPvbPCVfoW7ji6hhe8t7oXo4iJfrCVA/4t1UpSY1JZlErv0S60ATE5g7Nh8/GQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=3/bAkxfmL4RorA+Aq9hQL+TRaaE4z66sKX1SJ8nP2mM=;
+ b=hu764KxZkxSZCEeD7zPSXMHJ0Q+bD5pE5JwDgK+UMoSeNtpL7FAjc5pjdyMAstSaTX7Mw95CQx4KoQ5BS7JLrxu/oJKZwum87WGDuzxZOUkAEAzYZaESUVPQnJt6mQoeT449dw6xZlpR3wUDPYuElXBheVaVtI18rtEs2JT8yldbjmcJOncKFR6k6tP8ejRWztLN7DteqV+WbEHyQmbbXw6A39SWRrATzlskEFlv8yn4NV90aYnfHDEF8t4EKLDzqqYG0AsNbx7t+ubrlIHRjZUWzfI14RnawisZ950IdTvUgNLZj2NLEAh9vXHfK/Y2Cmbv3qu34oNU+fSZR+/FyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.161) smtp.rcpttodomain=linuxfoundation.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=3/bAkxfmL4RorA+Aq9hQL+TRaaE4z66sKX1SJ8nP2mM=;
+ b=fDGfmtZpIhbKHI57VAxHp6GfD+/VP4lfthUJ+t6zgGFi26d2yT/Dz9ZOEVpkqaYf7ngwGDkzqqmFMi8G6g5vGIwgq0mOEPL7twcphxpTjFyI1PqKjb6UVtPg4fwrW2QJUjk7xv7DH43fAfxAN7E+ijvp45Y5WU9y4ee6jk4cDQMF6p0obnO2dDchYxwkYqns7LUw44+ykgmyNGnBOS9uc4GrLG9gUUqknvMdKpFhmAfItqAqeRLdWWkkSHiR8GXrWmpJWjOym0exRaepzJO4Kqjkj8c4hzn1nV6t4OB9diKhEwgGqSMon3AZ/bxfdPenfF6UGPH1R5XVhxhLXX+W0g==
+Received: from BN9PR03CA0929.namprd03.prod.outlook.com (2603:10b6:408:107::34)
+ by DM4PR12MB5914.namprd12.prod.outlook.com (2603:10b6:8:67::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 09:45:39 +0000
+Received: from BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:107:cafe::99) by BN9PR03CA0929.outlook.office365.com
+ (2603:10b6:408:107::34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.25 via Frontend
+ Transport; Mon, 13 Mar 2023 09:45:38 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ BN8NAM11FT037.mail.protection.outlook.com (10.13.177.182) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.24 via Frontend Transport; Mon, 13 Mar 2023 09:45:38 +0000
+Received: from rnnvmail202.nvidia.com (10.129.68.7) by mail.nvidia.com
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Mon, 13 Mar 2023
+ 02:45:24 -0700
+Received: from rnnvmail204.nvidia.com (10.129.68.6) by rnnvmail202.nvidia.com
+ (10.129.68.7) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Mon, 13 Mar
+ 2023 02:45:24 -0700
+Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
+ (10.129.68.6) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5 via Frontend
+ Transport; Mon, 13 Mar 2023 02:45:24 -0700
+From:   Jon Hunter <jonathanh@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
+        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
+        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
+        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
+        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
+        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
+        <rwarsow@gmx.de>, <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH 6.2 000/211] 6.2.4-rc1 review
+In-Reply-To: <20230310133718.689332661@linuxfoundation.org>
+References: <20230310133718.689332661@linuxfoundation.org>
+X-NVConfidentiality: public
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="okP/XnxEkGF/S5Bq"
-Content-Disposition: inline
-In-Reply-To: <20230310180928.2462527-1-ssreevani@meta.com>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Message-ID: <3bd56fce-d281-439d-a95b-439ff6afe918@rnnvmail204.nvidia.com>
+Date:   Mon, 13 Mar 2023 02:45:24 -0700
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT037:EE_|DM4PR12MB5914:EE_
+X-MS-Office365-Filtering-Correlation-Id: e3287312-325e-465b-1cbc-08db23a7b3d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: O2sBevakd1VnL3XD3rrRM/jX+q6MJw7XlTUaQTsHXI55hhOLyP/DTPCegJ5ijp2Bh2zqLik9mNTxY4my8YwRADtCxWoS5SVeyELvrSPuGxua2kW2zdtl0x5WhNp9XsQYY8z75WXjMF8Fldm2He3mtTsJGu4vqbjLG80/jxFFQFoWmDRNTHWjlL2NmVEsEGXpbEoaGc7wPeLXeEaY5suvL2BzJD67vMZpLvNWyMbYY21SDq5Vn/Ke9e/tmHkWWccaK7lN1loQyfgSDsfTu9Z4pOiSF+xAR5507H66JLMFnRVuKI1wgUr1WgfbcXOqGa3KR3zocKJQ9v4n6y4bLKDD/L2nL8WjLAyNmvzNCTWTIXK8LUDlLhHgFjWfcUBWjfmimkqZ/bq2xbgWXdy5LbNCLibWoKbl9e6SiKghrZrANvNBX82qnHBfrybZWblc2Wfxc06f1ijezFJVCWF6KfPI0y2NeDLG5ksixbymAto6IZrCONDIWdON6PwEcQ9AqgmcH3d6Tdqvcpp4DHLsVZ5WeoMXas5vTXp5oHnTFEBbQyyXMYQf2PKiUnePC9bcDA0tHsUqggCHHXjCchOwquP5HHI3C0g+bRtPyjPHAf2X7RIH7DjxIRX6DpFoJY/omk0dstZJ81MqA/7xTnhIZ3+eKiAQ6qDekVHQUx6i98vd/VygokuIls8b3/gM0frMckAWJuEoJ+uACjqfAagukWd2a/lJ3Mu6MwKcXLS/PGwN1C2Y0fPqPn0bZn+vXOZgKzv0ffIH1GX+DxxcBTGRvu4pL+L/+Tk/vw7BFoz/jTEWfkI=
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(376002)(136003)(346002)(451199018)(40470700004)(36840700001)(46966006)(31696002)(86362001)(82310400005)(356005)(36860700001)(82740400003)(7636003)(40480700001)(40460700003)(4326008)(70206006)(8676002)(70586007)(6916009)(8936002)(54906003)(478600001)(41300700001)(316002)(7416002)(5660300002)(2906002)(47076005)(426003)(336012)(966005)(186003)(26005)(31686004);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 09:45:38.5043
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e3287312-325e-465b-1cbc-08db23a7b3d9
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT037.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5914
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 10 Mar 2023 14:36:20 +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.2.4 release.
+> There are 211 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+> 
+> Responses should be made by Sun, 12 Mar 2023 13:36:38 +0000.
+> Anything received after that time might be too late.
+> 
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.2.4-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.2.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
---okP/XnxEkGF/S5Bq
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+All tests passing for Tegra ...
 
-On Fri, Mar 10, 2023 at 10:09:28AM -0800, Sreevani Sreejith wrote:
-> From: Sreevani <ssreevani@meta.com>
->=20
-> Summary: Document that provides an overview of libbpf features for BPF
-> application development.
+Test results for stable-v6.2:
+    11 builds:	11 pass, 0 fail
+    28 boots:	28 pass, 0 fail
+    130 tests:	130 pass, 0 fail
 
-It seems like you ignore some of my reviews at [1]. Anyway, I repeat
-them here, augmenting my new comments.
+Linux version:	6.2.4-rc1-g54d58d14b95c
+Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
+                tegra194-p2972-0000, tegra194-p3509-0000+p3668-0000,
+                tegra20-ventana, tegra210-p2371-2180,
+                tegra210-p3450-0000, tegra30-cardhu-a04
 
-The patch description should have been "Document overview of libbpf,
-including its features for developing BPF programs.".
+Tested-by: Jon Hunter <jonathanh@nvidia.com>
 
-> +######
->  libbpf
-> -=3D=3D=3D=3D=3D=3D
-> +######
-
-Why did you add heading overline and change the heading character marker?
-
-> +The following code snippet shows how to read the parent field of a kernel
-> +``task_struct`` using BPF CO-RE and libbf. The basic helper to read a fi=
-eld in a
-> +CO-RE relocatable manner is ``bpf_core_read(dst, sz, src)``, which will =
-read
-> +``sz`` bytes from the field referenced by ``src`` into the memory pointe=
-d to by
-> +``dst``.
-> +
-> +  .. code-block:: C
-> +    :emphasize-lines: 6
-> +
-> +    //...
-> +    struct task_struct *task =3D (void *)bpf_get_current_task();
-> +    struct task_struct *parent_task;
-> +    int err;
-> +
-> +    err =3D bpf_core_read(&parent_task, sizeof(void *), &task->parent);
-> +    if (err) {
-> +      /* handle error */
-> +    }
-> +
-> +    /* parent_task contains the value of task->parent pointer */
-
-You may want to also add :lineos: option or manually add line numbers
-if you add :emphasize-lines: so that readers can see the line number
-it refers to.
-
-> +Also, find the libbpf API documentation `here
-> +<https://libbpf.readthedocs.io/en/latest/api.html>`_
-
-"See also `libbpf API documentation <link>`_".
-
-> +
-> +libbpf and Rust
-> +=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-> +
-> +If you are building BPF applications in Rust, it is recommended to use t=
-he
-> +`Libbpf-rs <https://github.com/libbpf/libbpf-rs>`_ library instead of bi=
-ndgen
-> +bindings directly to libbpf. Libbpf-rs wraps libbpf functionality in
-> +Rust-idiomatic interfaces and provides libbpf-cargo plugin to handle BPF=
- code
-> +compilation and skeleton generation. Using Libbpf-rs will make building =
-user
-> +space part of the BPF application easier. Note that the BPF program them=
-selves
-> +must still be written in plain C.
-
-BPF apps are application that use BPF program, right? I thought that
-despite there is libbpf-rs, I still have to develop BPF apps in C.
-
-Thanks.
-
-[1]: https://lore.kernel.org/linux-doc/ZAqzeQZLNMyaZOck@debian.me/
-
---=20
-An old man doll... just what I always wanted! - Clara
-
---okP/XnxEkGF/S5Bq
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZA7wlwAKCRD2uYlJVVFO
-ow8vAP4rjUd07tAFMNXeoUbvQ2+9unWvXYLxgNH7/5YFykfw7wD/asWTzftMz36d
-LRR+Tn7gOkXksj1jB+PZ4+OVTHyIKA0=
-=eyQJ
------END PGP SIGNATURE-----
-
---okP/XnxEkGF/S5Bq--
+Jon
