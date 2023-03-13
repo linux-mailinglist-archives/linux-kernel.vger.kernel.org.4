@@ -2,178 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD3AE6B7A3A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:21:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B76636B7A3B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:22:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbjCMOV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:21:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S231266AbjCMOWN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:22:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbjCMOVY (ORCPT
+        with ESMTP id S230184AbjCMOWM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:21:24 -0400
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A43DD55BD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:21:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678717282; x=1710253282;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ismnZUXCepfarzPEOqeUUYQq3kwkDm86f+K7irh3FbU=;
-  b=LHeuS7xDjutV+U8BDI5vR1y83Q/6fAlzECbMQVsaUOQO75DumM3xDqhS
-   D9svZ6SeUmAdpCNOyeuIoyhgK5E41GKXS7zNb32g04nOcpc4t2KkvO34l
-   eO7N04WajL7aN06Z9if1esAszY+6wZPF+EVMDJp9X2AKivmDibewLYDOD
-   d7n3M+7o38/xINevIsdGuQONdU3nDCTM7QXBd2a0Nw8pg0Kx8AZLJPYeb
-   6GPfnsK00NnsbMxVEqP3SfPM64eISoPFXqWht4ZMJLo5AYHqX1fyNGGC2
-   pJ9xY8EnGAcEXBrVoKawtHoSFhMG3p96JXRmBkX+HpRyW03dzFEEftd03
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,257,1673910000"; 
-   d="scan'208";a="29649817"
-Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
-  by mx1-pgp.tq-group.com with ESMTP; 13 Mar 2023 15:21:20 +0100
-Received: from mx1.tq-group.com ([192.168.6.7])
-  by tq-pgp-pr1.tq-net.de (PGP Universal service);
-  Mon, 13 Mar 2023 15:21:20 +0100
-X-PGP-Universal: processed;
-        by tq-pgp-pr1.tq-net.de on Mon, 13 Mar 2023 15:21:20 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1678717280; x=1710253280;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ismnZUXCepfarzPEOqeUUYQq3kwkDm86f+K7irh3FbU=;
-  b=baEfwFKXtfxOIiXPzInB66abWsytihehbyML3BOBpctN+Vtf0/XX/4Il
-   9gM41PRceF+uo71IDznZbUKPTn158SLbEAhOugEgyVuQRsWAkBPonrmF6
-   Vh6YlG8IlIFpdwITH6mZ8p0rMGvlsyuELR4ogZkULeOoqF2SYlY41H6NU
-   4IlonLpZZ+77b8pWjnY6L267w6MI5WFL2pXzxUi2kS42zfgDso2X0THjb
-   +q+biwt45/5F8Ar1HDK3H1Ez+Vcm2hXjH3LVEEinmSfqZ0tFukkya1pE3
-   i9Zy9g51CwhgWD3wTJVSMtIBTU7rR+2gvZqLRylcr35PmC5jD8aGpS7NA
-   w==;
-X-IronPort-AV: E=Sophos;i="5.98,257,1673910000"; 
-   d="scan'208";a="29649816"
-Received: from vtuxmail01.tq-net.de ([10.115.0.20])
-  by mx1.tq-group.com with ESMTP; 13 Mar 2023 15:21:20 +0100
-Received: from steina-w.localnet (unknown [10.123.53.21])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
-        (No client certificate requested)
-        by vtuxmail01.tq-net.de (Postfix) with ESMTPSA id 822FC280056;
-        Mon, 13 Mar 2023 15:21:20 +0100 (CET)
-From:   Alexander Stein <alexander.stein@ew.tq-group.com>
-To:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Robin Gong <yibin.gong@nxp.com>,
-        Frieder Schrempf <frieder.schrempf@kontron.de>
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] regulator: pca9450: Fix BUCK2 enable_mask
-Date:   Mon, 13 Mar 2023 15:21:18 +0100
-Message-ID: <1848012.tdWV9SEqCh@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <b7e39919-a94f-3929-8814-ada801365dfe@kontron.de>
-References: <20230310092857.3555187-1-alexander.stein@ew.tq-group.com> <b7e39919-a94f-3929-8814-ada801365dfe@kontron.de>
+        Mon, 13 Mar 2023 10:22:12 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5FC1C1AD;
+        Mon, 13 Mar 2023 07:22:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=IS55g0S66y8y4INdsvsEQ01kM13lZ7aZPntjdQt/z6k=; b=fIXGJPJMOmi+ej6WgGuCSOwHh6
+        09hVUbs9A1swzOHw+opRoouJYbgJ7xt70ELTzNyCRXCiZs86qbcpoA2MKK1UM+chZHRJkvUQQj/iX
+        BeRySBsPrD5H0J/xBmZtTUh5owQDcKOOhVa9/s1e48XAMPta4+VyU3Xo9yFms/qnKJy6MEiPRJcWR
+        6VRSUpK3L3/LKrN90z/qCevzrq8dcy9msG85rIzh+RiAz3F9QGUA6aPHQVJdcZtbAcxpDN15hk4ke
+        thX/6SccEJiT6PQUJQ+yRrJxlC0WetqOuGCMxEAgKRNfY485NLQoXFpB+1vcecwqbHCaQT+Z7dfb1
+        4yuaE9cw==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pbj3m-001OOw-16;
+        Mon, 13 Mar 2023 14:21:58 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 19D9B30030F;
+        Mon, 13 Mar 2023 15:21:57 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 00847200C9CB3; Mon, 13 Mar 2023 15:21:56 +0100 (CET)
+Date:   Mon, 13 Mar 2023 15:21:56 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Ravi Bangoria <ravi.bangoria@amd.com>
+Cc:     namhyung@kernel.org, eranian@google.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
+        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, santosh.shukla@amd.com
+Subject: Re: [PATCH v2 2/3] perf/ibs: Fix interface via core pmu events
+Message-ID: <20230313142156.GL2017917@hirez.programming.kicks-ass.net>
+References: <20230309101111.444-1-ravi.bangoria@amd.com>
+ <20230309101111.444-3-ravi.bangoria@amd.com>
+ <20230312145426.GA1757905@hirez.programming.kicks-ass.net>
+ <45de7e62-d951-1019-990e-6df285a64cf6@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <45de7e62-d951-1019-990e-6df285a64cf6@amd.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Frieder,
+On Mon, Mar 13, 2023 at 05:59:46PM +0530, Ravi Bangoria wrote:
 
-thanks for your comments.
+> > Now, we already have a gruesome hack in there, and I'm thikning you
+> > should use that instead of adding yet another one. Note:
+> > 
+> > 		if (ret == -ENOENT && event->attr.type != type && !extended_type) {
+> > 			type = event->attr.type;
+> > 			goto again;
+> > 
+> > So if you have amd_pmu_hw_config() do:
+> > 
+> > 	event->attr.type = ibs_pmu.type;
+> > 	return -ENOENT;
+> > 
+> > it should all just work no?
+> 
+> IBS driver needs to convert RAW pmu config to IBS config, which it does
+> based on original event->attr.type. See perf_ibs_precise_event(). This
+> logic will fail with event->attr.type overwrite.
 
-Am Montag, 13. M=E4rz 2023, 14:46:08 CET schrieb Frieder Schrempf:
-> On 10.03.23 10:28, Alexander Stein wrote:
-> > This fixes a copy & paste error.
->=20
-> I would mention here, that this doesn't contain any functional changes
-> as BUCK1_ENMODE_MASK is equal to BUCK2_ENMODE_MASK.
+amd_pmu_hw_config() could also rewrite event->attr.config I suppose.
 
-That's a good idea.
+I don't think we actually use/expose these event->attr fields again
+after all this, do wel?
 
-> > Fixes: 0935ff5f1f0a ("regulator: pca9450: add pca9450 pmic driver")
-> > Originally-from: Robin Gong <yibin.gong@nxp.com>
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> > This diff is extracted from a downstream commit authored by Robin Gong.
-> > I'm not sure if adding Originally-from: is enough here or I do have to
-> > change From: as well.
->=20
-> I never heard of "Originally-from:". Does this tag exist? Is it
-> documented somewhere?
-
-Well, it's not documented, but it pops up occasionally in some commits, e.g.
-3fb906e7fabbb ("cgroup/cpuset: Don't filter offline CPUs in=20
-cpuset_cpus_allowed() for top cpuset tasks")
-I might be something only some maintainers accept though.
-
-> I think that your tooling (git format-patch) should add a From: tag
-> automatically if you correctly pick up a patch from someone else.
-
-Well, it's not exactly cherry-picked, but extracted from an existing commit=
-=20
-[1], so that's maybe why my name has been put into From: while extracting.
-As the diff in this patch is not exactly the same as from the origin, I did=
-=20
-not want to put Robin Gong into Signed-off-by. And I think having an author=
- in=20
-=46rom: but not in Signed-off-by: tag should not happen.
-Searching how I can still give credit I found Originally-from. If there is =
-a=20
-better way to handle this, I'm ready to adapt to that.
-
-Best regards,
-Alexander
-
-[1] https://github.com/Freescale/linux-fslc/commit/
-fe6b4f7a23a79637c6fb182fb1ea9136d953e3f7
-
-> Other than these formal issues the change itself looks good to me.
->=20
-> >  drivers/regulator/pca9450-regulator.c | 4 ++--
-> >  1 file changed, 2 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/regulator/pca9450-regulator.c
-> > b/drivers/regulator/pca9450-regulator.c index c84d95b11e9c..544e741f7108
-> > 100644
-> > --- a/drivers/regulator/pca9450-regulator.c
-> > +++ b/drivers/regulator/pca9450-regulator.c
-> > @@ -265,7 +265,7 @@ static const struct pca9450_regulator_desc
-> > pca9450a_regulators[] =3D {>=20
-> >  			.vsel_reg =3D PCA9450_REG_BUCK2OUT_DVS0,
-> >  			.vsel_mask =3D BUCK2OUT_DVS0_MASK,
-> >  			.enable_reg =3D PCA9450_REG_BUCK2CTRL,
-> >=20
-> > -			.enable_mask =3D BUCK1_ENMODE_MASK,
-> > +			.enable_mask =3D BUCK2_ENMODE_MASK,
-> >=20
-> >  			.enable_val =3D BUCK_ENMODE_ONREQ_STBYREQ,
-> >  			.ramp_reg =3D PCA9450_REG_BUCK2CTRL,
-> >  			.ramp_mask =3D BUCK2_RAMP_MASK,
-> >=20
-> > @@ -509,7 +509,7 @@ static const struct pca9450_regulator_desc
-> > pca9450bc_regulators[] =3D {>=20
-> >  			.vsel_reg =3D PCA9450_REG_BUCK2OUT_DVS0,
-> >  			.vsel_mask =3D BUCK2OUT_DVS0_MASK,
-> >  			.enable_reg =3D PCA9450_REG_BUCK2CTRL,
-> >=20
-> > -			.enable_mask =3D BUCK1_ENMODE_MASK,
-> > +			.enable_mask =3D BUCK2_ENMODE_MASK,
-> >=20
-> >  			.enable_val =3D BUCK_ENMODE_ONREQ_STBYREQ,
-> >  			.ramp_reg =3D PCA9450_REG_BUCK2CTRL,
-> >  			.ramp_mask =3D BUCK2_RAMP_MASK,
-
-
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
-
-
+The closest to that is perf_event_modify_attr(), but that is limited to
+TYPE_BREAKPOINT for the time being (also, could this be used to cure
+your in-kernel IBS usage woes?).
