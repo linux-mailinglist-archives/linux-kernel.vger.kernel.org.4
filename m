@@ -2,72 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 916C66B81D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:45:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9106B81DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:48:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229832AbjCMTpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S229978AbjCMTsI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:48:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60830 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCMTpR (ORCPT
+        with ESMTP id S229473AbjCMTsG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 15:45:17 -0400
+        Mon, 13 Mar 2023 15:48:06 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57674838AC;
-        Mon, 13 Mar 2023 12:45:16 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D79FF13;
+        Mon, 13 Mar 2023 12:48:05 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id F03AB614A7;
-        Mon, 13 Mar 2023 19:45:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32D62C433D2;
-        Mon, 13 Mar 2023 19:45:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C6861485;
+        Mon, 13 Mar 2023 19:48:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0959C433D2;
+        Mon, 13 Mar 2023 19:48:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678736715;
-        bh=AvlUso4KYkp1l30VXRmyTuU2ziwo0V1J35ALSrtrQvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=swtloOobGFfgTpVWibyC1HAPg+JDVxsi0U3xo1EzWswVs/CvqHHS5g/rtIcz/s9YS
-         OoC0IKeNs8J2Q/jiNd2SY1WaFPfEHBwD63IXiRnfbzjOCsgQTZn8p7jwku7lQ1b1+t
-         /e8plgzC6c4bqfpUXetsXvAtu9k1D9+P2doUNevE4XMYybJKmF4erRKZwBc14MTkiv
-         dlH93ublpPmIk0OPjRn5rIzDphFy4LNmNKoq2cnHmoyhi1qAWva5cjAJ+asbbvUGdw
-         /5rjo0Ve4vR4sdVGokZiB4txnC0/7fx/UZc5kPP/UvD/KPMbARLADhtGEdi6ScxXZ+
-         cMWkf7U32G6dQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id AC0994049F; Mon, 13 Mar 2023 16:45:12 -0300 (-03)
-Date:   Mon, 13 Mar 2023 16:45:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 04/13] perf build: Error if no libelf and NO_LIBELF
- isn't set
-Message-ID: <ZA99SPGAlLUIjQoj@kernel.org>
-References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-5-irogers@google.com>
+        s=k20201202; t=1678736884;
+        bh=G2Dygv9h1k+AsQjs6iEoGo+aHQ82JlNoZoMwg+tfTdg=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=ThIzozSw+qA+WbXZ5ZEUZMLXLp74nrCv6P5181EvRezMgzJlos3qJmki256PPKMxX
+         WDnRBx6in5H551XdcqfD6ynszY6OtG2WFMEWbbwMsmvMi1Gm/yc8bBUgGnEkas2L2p
+         zrc/lJUXnvSvL1e1M1+dKoPP0q+tQFYIMmmpVjxUnSwx8HTclzh4A1OUlTKomPFyUw
+         SzoANoHq1Dk3hfGgs4VBKSvlL/WXqhgOJTOPw3Q1TSynu7u7Hxh+/Rr54MtO3sJadY
+         Vjl3zt8X7NI73YNsAths7QSOAenXLqB+nDzJT+Z8LlOQcDHDOud1vKclR4NSQqR/yn
+         daLi1fGQJCmJQ==
+Date:   Mon, 13 Mar 2023 14:48:02 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Elad Nachman <enachman@marvell.com>
+Cc:     thomas.petazzoni@bootlin.com, bhelgaas@google.com,
+        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
+        krzysztof.kozlowski+dt@linaro.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Subject: Re: [PATCH v4 8/8] PCI: dwc: Introduce region limit from DT
+Message-ID: <20230313194802.GA1531673@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311065753.3012826-5-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
+In-Reply-To: <20230313124016.17102-9-enachman@marvell.com>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -77,41 +56,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 10:57:44PM -0800, Ian Rogers escreveu:
-> Building without libelf support is going disable a lot of
-> functionality. Require that the NO_LIBELF=1 build option is passed if
-> this is intentional.
+[+cc Serge, who has done most of the recent work in this file]
 
+On Mon, Mar 13, 2023 at 02:40:16PM +0200, Elad Nachman wrote:
+> From: Elad Nachman <enachman@marvell.com>
+> 
+> Allow dts override of region limit for SOCs with older Synopsis
+> Designware PCIe IP but with greater than 32-bit address range support,
+> such as the Armada 7020/7040/8040 family of SOCs by Marvell,
+> when the DT file places the PCIe window above the 4GB region.
+> The Synopsis Designware PCIe IP in these SOCs is too old to specify the
+> highest memory location supported by the PCIe, but practically supports
+> such locations. Allow these locations to be specified in the DT file.
+> DT property is called num-regionmask , and can range between 33 and 64.
 
-'make -C tools/perf build-test' is failing:
+s/Synopsis/Synopsys/ (several occurrences)
 
-⬢[acme@toolbox perf-tools-next]$ git log --oneline -1 ; time make -C tools/perf build-test
-ace4d44d094ce850 (HEAD -> perf-tools-next) perf build: Remove redundant NO_NEWT build option
-make: Entering directory '/var/home/acme/git/perf-tools-next/tools/perf'
-Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-- tarpkg: ./tests/perf-targz-src-pkg .
-                 make_static: cd . && make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 -j32  DESTDIR=/tmp/tmp.jqGYXdF9cQ
-cd . && make LDFLAGS=-static NO_PERF_READ_VDSO32=1 NO_PERF_READ_VDSOX32=1 NO_JVMTI=1 -j32 DESTDIR=/tmp/tmp.jqGYXdF9cQ
-  BUILD:   Doing 'make -j32' parallel build
-  HOSTCC  fixdep.o
-  HOSTLD  fixdep-in.o
-  LINK    fixdep
-Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
-Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
-Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
-Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
-Makefile.config:429: *** ERROR: No libelf found. Disables 'probe' tool, jvmti and BPF support. Please install libelf-dev, libelf-devel, elfutils-libelf-devel or build with NO_LIBELF=1..  Stop.
-make[3]: *** [Makefile.perf:236: sub-make] Error 2
-make[2]: *** [Makefile:70: all] Error 2
-  test: test -x ./perf
-make[1]: *** [tests/make:316: make_static] Error 1
-make: *** [Makefile:103: build-test] Error 2
+s/Designware/DesignWare/ (several occurrences)
 
-Same thing for the libtraceevent, I'll add NO_LIBTRACEEVENT=1 and NO_LIBELF=1 to the static build test in tools/perf/tests/make
+Remove space before comma.
+
+> Signed-off-by: Elad Nachman <enachman@marvell.com>
+> ---
+> v4:
+>    1) Fix blank lines removal / addition
+> 
+>    2) Remove usage of variable with same name as dt binding property
+> 
+>  drivers/pci/controller/dwc/pcie-designware.c | 12 ++++++++++--
+>  1 file changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-designware.c b/drivers/pci/controller/dwc/pcie-designware.c
+> index 53a16b8b6ac2..9773c110c733 100644
+> --- a/drivers/pci/controller/dwc/pcie-designware.c
+> +++ b/drivers/pci/controller/dwc/pcie-designware.c
+> @@ -735,8 +735,10 @@ static void dw_pcie_link_set_max_speed(struct dw_pcie *pci, u32 link_gen)
+>  void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  {
+>  	int max_region, ob, ib;
+> -	u32 val, min, dir;
+> +	u32 val, min, dir, ret;
+>  	u64 max;
+> +	struct device *dev = pci->dev;
+> +	struct device_node *np = dev->of_node;
+>  
+>  	val = dw_pcie_readl_dbi(pci, PCIE_ATU_VIEWPORT);
+>  	if (val == 0xFFFFFFFF) {
+> @@ -781,7 +783,13 @@ void dw_pcie_iatu_detect(struct dw_pcie *pci)
+>  		dw_pcie_writel_atu(pci, dir, 0, PCIE_ATU_UPPER_LIMIT, 0xFFFFFFFF);
+>  		max = dw_pcie_readl_atu(pci, dir, 0, PCIE_ATU_UPPER_LIMIT);
+>  	} else {
+> -		max = 0;
+> +		/* Allow dts override of region limit for older IP with above 32-bit support: */
+
+Reflow comment to fit in 80 columns.
+
+> +		ret = of_property_read_u32(np, "num-regionmask", &val);
+> +		if (!ret && val > 32) {
+> +			max = GENMASK(val - 33, 0);
+> +			dev_info(pci->dev, "Overriding region limit to %u bits\n", val);
+> +		} else
+> +			max = 0;
+>  	}
+>  
+>  	pci->num_ob_windows = ob;
+> -- 
+> 2.17.1
+> 
