@@ -2,114 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74C5A6B7E0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:48:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBFB36B7DEC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231446AbjCMQs2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:48:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33572 "EHLO
+        id S230174AbjCMQpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231311AbjCMQsJ (ORCPT
+        with ESMTP id S229757AbjCMQpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:48:09 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2262704
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:47:59 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id n2so16489992lfb.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:47:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678726077;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=x4EPxcSMKiqyNw8mJBAxwHQ7n6kIvPBes74o/rWBPSc=;
-        b=WGT3m6Bq+FlMV89lAyG3qHtf4a7T1H74+Zt8ihSuVZidukp4nDaGzKHmFa6q8SuA7j
-         EDSs201AUmv31A5BHRpq2n51b458N4EvR8I7r7vthkBwWOIpqQdu/JNLreVpqtMk09hq
-         cU1aPHmMkWqVNY+nupjvZBQX7dOmxcd6PGVHAcgmndK6UGTIZr3YYfbnyKZj/LUma8Gb
-         U4v0ehJ7U5kdnEnb4BpMvW2qB2X+SOzcuEY9V21ucFMBjdAjECYLzVG148tj4qUCkrvI
-         EWB0khNY5ToBkHQS7WGdwCttlL7zYurFiuEjI4z8gpnMGiSq7lG8avHwuls7gAZTmaIF
-         8meA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678726077;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x4EPxcSMKiqyNw8mJBAxwHQ7n6kIvPBes74o/rWBPSc=;
-        b=NHBFItx1EXCPidcps1M27DX3jrC1fLPIUtcSa9ya5Tj7qede7LwcdYHMD/vuraf7WU
-         kBPpRlwttHf8MT5kqkvAINgWPoKTenzNs3CNENlgxlIp5Y3IOvWUA4xb26h7Yn8qSwHU
-         +UcMeJ5lb1L+NY5WF9P4hTaR9CYDWWqrQ/zZ9jIWw69XhMLs0l+DxpNYXX9GPhG5Mcxd
-         XQaVYcVpqu8Dtd9R0NCQzs0mA1GB9Kgn+WjHajFuO6bFbRFpjczFXmdWInUxUt32sHAP
-         +Si1ejSFJGpcfrbYDLhgIfveyaLpPagzK8YcryYd3CdxBTGX/i4kIciMo+Kxdpa0j09f
-         1bSQ==
-X-Gm-Message-State: AO0yUKW1dVEq2YFnyE5bsPTugazbYqOOUZb9/yCGYc9rhdv0QWypJnHd
-        2D5dVhVhemBY9E30DGtQB6JSc9wJhoydMRZhkbk=
-X-Google-Smtp-Source: AK7set/Jbk5EExCKOsl9LSNiNwUukfcT6PIrHp7lrdbYtZkzlEltDW1HfF8bJ5S6P8Vybs45H+Azog==
-X-Received: by 2002:ac2:4859:0:b0:4e8:3f35:6844 with SMTP id 25-20020ac24859000000b004e83f356844mr1879171lfy.19.1678726077472;
-        Mon, 13 Mar 2023 09:47:57 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id o9-20020a05651238a900b004db48ae69cbsm18134lft.206.2023.03.13.09.47.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:47:57 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 13 Mar 2023 17:44:21 +0100
-Subject: [PATCH v3 6/6] arm64: dts: qcom: sm8350: Add qcom,smmu-500 to
- Adreno SMMU
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230313-topic-gpu_smmu_bindings-v3-6-66ab655fbfd5@linaro.org>
-References: <20230313-topic-gpu_smmu_bindings-v3-0-66ab655fbfd5@linaro.org>
-In-Reply-To: <20230313-topic-gpu_smmu_bindings-v3-0-66ab655fbfd5@linaro.org>
-To:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
+        Mon, 13 Mar 2023 12:45:38 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 817131F49B;
+        Mon, 13 Mar 2023 09:45:37 -0700 (PDT)
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 4Pb2b33L6sz4BKKQ;
+        Mon, 13 Mar 2023 18:45:35 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1678725935;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=09Kna67nVseHs09S+p/lfcaEE+UDENKEBFM4ppU3O54=;
+        b=g+NbnJdEYI7DTohf+uiRvJwnn4Ajcfm3Ki8xt8u9qeFZDC9HCw4yt2kYhMR9BDa/1TpQYA
+        MAXNZxflVEBZYN3fGFZopj+nmbxolaSJowZkcZuTiRWyOAjyuUp353BfBjJTP/d9LwYWFN
+        RVs/g5FXzE1Q5BjA6eEfI4arhvo+9drCsAli+cBpNsWjv33MHUWLkPyOrAs8gxeIR/pZCP
+        WjOmhUbxTBLFlDcU891Dtxt22I1YToSDawmzzbV7wOzULOV5//11IYEn528nQAQkExLC1f
+        NzfC3ZsoVTGtmhDekDf7KW/cvhYqqHf4fcWsnI5LKM1MZC3LXk/irOpqlzYLQg==
+Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4Pb2Zs43VMzyd2;
+        Mon, 13 Mar 2023 18:45:25 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1678725928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=09Kna67nVseHs09S+p/lfcaEE+UDENKEBFM4ppU3O54=;
+        b=ai5fepUEvCxWwNXpPa33iwFrh8MjZE3W+7kr7QvsybpGa0eH7dOhRwHCBAnxx19H0q5rqZ
+        nHVLweGoWlyhc65ScP/w8g+6ImTYY+x2vHlz22Xv2VQO4rr/QbZZm1F+q0CgxWnNKd+13P
+        bfijnEK0CaaPG19Rce1idCjfekR/Bhk=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1678725928; a=rsa-sha256; cv=none;
+        b=NtMpv6469vL4zn+gQbcpfDWA5+XVDSauvdi/UjZSwmF28MsKg6y89o4dvH48FtzGTthUq4
+        t2pCmqtlLJxG4ynf5FP56tUH1bXrR6UCWdcsBYTx6/K8OnkBcq5BDcAxreRokzPGbq6CWY
+        XdOiTGmJkGADdQLUJadugeo14VR3afg=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1678725928;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=09Kna67nVseHs09S+p/lfcaEE+UDENKEBFM4ppU3O54=;
+        b=FBL7TqR8aL8NgsJby5zCL955cu5hWTrJsQuOrCF5sE+v4InZv7sdKo4fZToSX08RxdFgsA
+        NqDFwUqMkQAG7sOzpThejpgBDu7VqOCm1Bf+1XHeQNGwXYzgGNZ3IkObBqMP0lPsgqdMvH
+        TqXa3mF95J/4vdZ25fFlumUJI1ce/bA=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 69F52634C91;
+        Mon, 13 Mar 2023 18:44:27 +0200 (EET)
+Date:   Mon, 13 Mar 2023 18:44:27 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678726067; l=837;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=B33R6GkwOZUQE4WAkOBwxyKbh5vZSkdob4J+byg527A=;
- b=rbYRN3k+OOfapcGQJCdMVaFAS/giXvdxVEt4RJwwDV+/PVlnyaHmUoaBAJDQCYdc7LLb+ZIY3uwb
- Pd3VvH/pDaIRSt3IcFGDqmVWwr3M5IlEKmWKVPvQv/qNIJIohQhy
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rob Herring <robh@kernel.org>
+Subject: Re: [PATCH v3 6/7] media: dt-bindings: samsung,fimc: convert to
+ dtschema
+Message-ID: <ZA9S62I1mTedUYSv@valkosipuli.retiisi.eu>
+References: <20230216142204.48394-1-krzysztof.kozlowski@linaro.org>
+ <20230216142204.48394-7-krzysztof.kozlowski@linaro.org>
+ <ZA8YJx+NE0+89YaD@valkosipuli.retiisi.eu>
+ <ZA8v98mqm4Xdt2Sl@valkosipuli.retiisi.eu>
+ <85bbec87-992d-f9a9-2f2b-bc41457933bb@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <85bbec87-992d-f9a9-2f2b-bc41457933bb@linaro.org>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the fallback Qualcomm SMMU500 compatible to the Adreno SMMU.
+Hi Krzysztof,
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8350.dtsi | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+On Mon, Mar 13, 2023 at 03:28:15PM +0100, Krzysztof Kozlowski wrote:
+> On 13/03/2023 15:15, Sakari Ailus wrote:
+> > On Mon, Mar 13, 2023 at 02:33:43PM +0200, Sakari Ailus wrote:
+> >> Hi Krzysztof,
+> >>
+> >> On Thu, Feb 16, 2023 at 03:22:03PM +0100, Krzysztof Kozlowski wrote:
+> >>> Convert the Samsung S5P/Exynos Camera Subsystem (FIMC) bindings to DT
+> >>> schema.  Changes during conversion - adjust to existing DTS and Linux
+> >>> driver: add iommus and power-domains.
+> >>>
+> >>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> >>> Reviewed-by: Rob Herring <robh@kernel.org>
+> >>
+> >> This does not apply on top of -rc1.
+> >>
+> >> ...
+> >>
+> >>> -- compatible: must be "samsung,fimc"
+> >>
+> >> I guess you have another patch removing "simple-bus" here and another
+> >> location in your tree?
+> > 
+> > Ah, what's missing seems to be this set:
+> > 
+> > <URL:https://patchwork.linuxtv.org/project/linux-media/list/?series=9839>
+> 
+> Yeah, dependency is mention in cover letter.
+> 
+> > 
+> > But also the second patch of that set doesn't seem to apply. :-(
+> 
+> Yep, I forgot I already sent same patch two months earlier. Let me merge
+> two patches, rebase and resent, so everything will be easier for you
+> (hopefully). Sorry for the mess.
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8350.dtsi b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-index 1c97e28da6ad..19a6a9785936 100644
---- a/arch/arm64/boot/dts/qcom/sm8350.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8350.dtsi
-@@ -1907,7 +1907,8 @@ gpucc: clock-controller@3d90000 {
- 		};
- 
- 		adreno_smmu: iommu@3da0000 {
--			compatible = "qcom,sm8350-smmu-500", "qcom,adreno-smmu", "arm,mmu-500";
-+			compatible = "qcom,sm8350-smmu-500", "qcom,adreno-smmu",
-+				     "qcom,smmu-500", "arm,mmu-500";
- 			reg = <0 0x03da0000 0 0x20000>;
- 			#iommu-cells = <2>;
- 			#global-interrupts = <2>;
+No worries. I was expecting a comment from the author but never saw one...
+
+Thanks for refreshing the set.
 
 -- 
-2.39.2
+Kind regards,
 
+Sakari Ailus
