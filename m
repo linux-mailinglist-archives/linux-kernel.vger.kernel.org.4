@@ -2,306 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B52D16B8262
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:12:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7A486B8269
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:12:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbjCMUMG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:12:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44570 "EHLO
+        id S230075AbjCMUMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:12:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCMUMD (ORCPT
+        with ESMTP id S229864AbjCMUMS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:12:03 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8C5488896;
-        Mon, 13 Mar 2023 13:11:33 -0700 (PDT)
-Received: from 2603-8080-2102-63d7-c4a8-7e10-0391-f3ff.res6.spectrum.com (2603-8080-2102-63d7-c4a8-7e10-0391-f3ff.res6.spectrum.com [IPv6:2603:8080:2102:63d7:c4a8:7e10:391:f3ff])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gfxstrand)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 140006603082;
-        Mon, 13 Mar 2023 20:11:18 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678738283;
-        bh=/Hk85AyfI2+qDYVuOaAdIFIbZ8GVt1D5Rz/mY9nD+bc=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=krDlgSytWz0sq/iTTW2SXDHQwmmoR/jFvL+iPFDdhh+hBIMSZibRB3CXnlKa9F73H
-         qSp4p37r52VSbu5JqPRO+6CeH+2sk+i78khJsZnBycxcIrTvDo8qv/bjRU9Z5dwqsB
-         cytuIQG6xpVV5NAG3rsqqmDySlodqud00MVf9uaoYXvyHaDEEGF7Qmfg09x1oeVlTu
-         chvk9g2gtKNj4gr2PwF9BOt+P0uT+Yt8KVCPZdN6FUTOrgeTM6bnIG0xC4EG2F7ZdP
-         1k/YwrgTIB3VubeTEAqsHGvPSYtRE5FoqNHOqF6OHYR7YjT4P3FIs82xL5tPXu8Dj9
-         FYdqe2qpyxCNg==
-Message-ID: <4b7101104e6775a4cbe5a0be9ad7f27fe1e28cdb.camel@collabora.com>
-Subject: Re: [PATCH RFC 11/18] drm/scheduler: Clean up jobs when the
- scheduler is torn down
-From:   Faith Ekstrand <faith.ekstrand@collabora.com>
-To:     Asahi Lina <lina@asahilina.net>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>, Mary <mary@mary.zone>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        rust-for-linux@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-sgx@vger.kernel.org,
-        asahi@lists.linux.dev
-Date:   Mon, 13 Mar 2023 15:11:14 -0500
-In-Reply-To: <25349030-5cc6-90a2-f1d2-4f9a67c4f194@asahilina.net>
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
-         <20230307-rust-drm-v1-11-917ff5bc80a8@asahilina.net>
-         <bbd7c5ee-c2f0-3e19-757d-a9aff1a26d3d@linux.intel.com>
-         <585fa052-4eff-940e-b307-2415c315686a@amd.com>
-         <3320e497-09c0-6eb6-84c5-bab2e63f28ec@asahilina.net>
-         <7b39ef96-3ec5-c492-6e1b-bf065b7c90a2@amd.com>
-         <0f14c1ae-0c39-106c-9563-7c1c672154c0@asahilina.net>
-         <e18500b5-21a0-77fd-8434-86258cefce5a@amd.com>
-         <8696d00a-c642-b080-c19a-b0e619e4b585@asahilina.net>
-         <5f0814a3-4be3-a609-d3b3-dd51a4f459a1@amd.com>
-         <9403e89d-a78f-8abd-2869-20da23d89475@asahilina.net>
-         <777dea65ef81c402d0765b1244b40633c483f4b2.camel@collabora.com>
-         <25349030-5cc6-90a2-f1d2-4f9a67c4f194@asahilina.net>
+        Mon, 13 Mar 2023 16:12:18 -0400
+Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D77187D81;
+        Mon, 13 Mar 2023 13:11:56 -0700 (PDT)
+Received: by mail-ed1-x52f.google.com with SMTP id x3so53498070edb.10;
+        Mon, 13 Mar 2023 13:11:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=googlemail.com; s=20210112; t=1678738314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IhNghR12Doc7EYuGR8r4Vteb6OOTNo1fI6PKH8ZpZK0=;
+        b=gonHkX7Yhe72Ie531l/HxB0Vd26zSeA4TGU3AoW1HEATK5jseXU3RGul1Z4oo9/X4A
+         oIv3rd6pQsJokXef2rVXAuZxYO8LYsK1khitF++SayAlYXbbenAMkWQa5hCtwCXV5b1e
+         FBBZpQlwljguIskB3xiapTEz5F56IZkqFTRAIxQKzFJeh8fnWZjnhm2WnE3UsnQ2cX+1
+         3vs5Wy7UhfYnEYgoNMJYBVbp6BIxKuvnlBoFR73+rr9IkPYfyMLG+BFDqcePvl6LDM1F
+         Yoe1ik1yZyj0GADpi0bnnSI0n+0ZZVtVTrE8KwjpD/bhRdgdTZ9KjZmTqzt3WAAu1F5j
+         KNUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678738314;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IhNghR12Doc7EYuGR8r4Vteb6OOTNo1fI6PKH8ZpZK0=;
+        b=8HGGtD4rWnWnkewLZUte/zB8bW9wMuiFVyn/Xn4+TqEl+bi99kordV8Fsda05e5aOJ
+         oeCl2cjErh72YwB344ZOhha7wgm6UljsuxFT0mjF6wuQHed9XTo4Ml8GhR5GCZB1aHB/
+         ImADtk8Ulo+W54fMQTWj0j4Pa3Q+dhWY7hMjEME2gYv/5shczKoF1LXB1Fv4qz/fnEPz
+         tKB0sQThpaZn2s179lu/Ug9zT9NdIEih0w+gY53TarH65fPZt9qas8X+ezcIRuzLysLn
+         OBLqB9HroDmgSFVf37gDeb+admzlNUAkwJ9AYjW4PMJ3802SeXbWuceGv0MF6Ux92gVk
+         px8g==
+X-Gm-Message-State: AO0yUKWOd5eC/JJ8PvC5QaPldaD3HpTrP9+jUUiX5TkhxATRnoF8lRRE
+        9/Fmv9RbB4SlRcQ5kkUXARah34rxAwZTo5D/iFg=
+X-Google-Smtp-Source: AK7set/DTcyZfjovezCMaS0m/zslIPL2EYyyypZPlsR45JWZYAH35nG/3f4bbTQcodJEiI2AwpZZ5m7541l8Pwgw8O4=
+X-Received: by 2002:a50:9f04:0:b0:4fa:3c0b:73f with SMTP id
+ b4-20020a509f04000000b004fa3c0b073fmr4720292edf.4.1678738314232; Mon, 13 Mar
+ 2023 13:11:54 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com>
+ <20230310202922.2459680-4-martin.blumenstingl@googlemail.com> <7330960d32664bf0bce8446aa93d10c8@realtek.com>
+In-Reply-To: <7330960d32664bf0bce8446aa93d10c8@realtek.com>
+From:   Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Date:   Mon, 13 Mar 2023 21:11:43 +0100
+Message-ID: <CAFBinCA-OHPbwdxdDe50og787LMSnbPhYbsRL6UzQUhxWgxWbQ@mail.gmail.com>
+Subject: Re: [PATCH v2 RFC 3/9] wifi: rtw88: mac: Support SDIO specific bits
+ in the power on sequence
+To:     Ping-Ke Shih <pkshih@realtek.com>
+Cc:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        Nitin Gupta <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
-MIME-Version: 1.0
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-10 at 18:58 +0900, Asahi Lina wrote:
-> On 10/03/2023 04.59, Faith Ekstrand wrote:
-> > On Thu, 2023-03-09 at 18:43 +0900, Asahi Lina wrote:
-> > > On 09/03/2023 17.42, Christian K=C3=B6nig wrote:
-> > > > Long story short: Don't do this! This is what the Windows
-> > > > drivers
-> > > > have=20
-> > > > been doing and it creates tons of problems.
-> >=20
-> > Yeah, we tried to do a bit of that in the GL days.=C2=A0 It was a bad
-> > idea.
->=20
-> I think I should clarify: I was proposing re-queueing innocent jobs
-> from
-> innocent queues/VMs that were impacted by a fault. The reason is that
-> we
-> may be able to tweak firmware state to force it to do that safely,
-> during the firmware recovery cycle, such that an aborted job restarts
-> and then subsequent jobs/commands continue as normal. We can't leave
-> it
-> to userspace because if we do nothing, the affected job ends up
-> incomplete but then everything after it that is already queued still
-> runs, and that is definitely a recipe for a bigger mess if userspace
-> wants to seamlessly recover. The firmware recovery cycle is a
-> "stop-the-world" situation for the GPU (the firmware literally
-> busy-loops waiting for the driver to set a continue flag in
-> memory...),
-> so that's the only real chance that the driver gets to make decisions
-> about what is going to happen next.
+Hello Ping-Ke,
 
-Ok, that makes sense.  Yes, if you have other jobs on other queues and
-are able to recover everything that isn't in the faulting VM, that's a
-good thing.  I wasn't sure how hang/fault recovery worked on AGX.  In
-tat case, I don't think there's a dma_fence problem.  As long as you
-keep recovering and killing off any faulting contexts, eventually the
-good contexts should make progress and those fences should signal.
+On Mon, Mar 13, 2023 at 10:05=E2=80=AFAM Ping-Ke Shih <pkshih@realtek.com> =
+wrote:
+[...]
+> >         pwr_seq =3D pwr_on ? chip->pwr_on_seq : chip->pwr_off_seq;
+> >         ret =3D rtw_pwr_seq_parser(rtwdev, pwr_seq);
+> > -       if (ret)
+> > -               return ret;
+> > +
+> > +       if (rtw_hci_type(rtwdev) =3D=3D RTW_HCI_TYPE_SDIO)
+> > +               rtw_write32(rtwdev, REG_SDIO_HIMR, imr);
+> >
+> >         if (pwr_on)
+> >                 set_bit(RTW_FLAG_POWERON, rtwdev->flags);
+>
+> If failed to power on, it still set RTW_FLAG_POWERON. Is it reasonable?
+That sounds very reasonable to me!
 
-Of course, the firmware recovery cycle may be complex and need (or at
-least appear to) memory allocation or similar and that's where
-everything gets hairy.  Hopefully, though, if you've already got the
-resources from the old context, you can re-use them after a bit of
-clean-up work and still get deterministic and reliable recovery cycles.
+> Did you meet real problem here?
+>
+> Maybe, here can be
+>
+>          if (pwr_on && !ret)
+>                  set_bit(RTW_FLAG_POWERON, rtwdev->flags);
+I can't remember any issue that I've seen. I'll verify this at the end
+of the week (until then I am pretty busy with my daytime job) and then
+go with your suggestion.
+Thanks again as always - your feedback is really appreciated!
 
-> Of course, that only works if individual possibly concurrently
-> running
-> commands are idempotent, but I think a lot of typical GPU work is?
+Also thank you for commenting on the other patches. I'll take a closer
+look at your feedback at the end of the week and send another version
+of this series.
 
-No, that's not a valid assumption.  For a single 3D render pass which
-doesn't do any image or SSBO access, it may be possible to re-run it.=20
-However, that won't be true of compute work and isn't necessarily true
-of back-to-back passes. Lots of modern apps do temporal stuff where one
-frame depends on the previous and a re-run might screw that up. Also,
-with Vulkan's memory aliasing, it's hard to tell just from which
-resources are accessed whether or not a command buffer leaves its input
-memory undamaged.
 
-> (E.g.
-> any render pass without side effects other than the render targets
-> and
-> where the background shader does no loads, or even render passes that
-> do
-> loads but where all draws are opaque, which are all things the
-> current
-> Gallium driver is intimately familiar with since Crazy Tiler
-> Optimizations=E2=84=A2 need that info to be provided anyway). So I was
-> wondering
-> whether it'd make sense to have such an idempotency/restartable flag
-> on
-> job submission, and then the driver would do its best to recover and
-> rerun it if it gets killed by an unrelated concurrent bad job.
->=20
-> Then again this all depends on an investigation into what we *can* do
-> during firmware recovery that hasn't happened at all yet. It might be
-> that it isn't safe to do anything really, or that doing things
-> depends
-> on touching even deeper firmware state structs that we treat as
-> opaque
-> right now and we really don't want to have to touch...
->=20
-> But maybe none of this is worth it in practice, it just sounded like
-> it
-> could be useful maybe?
-
-Maybe? It's not clear to me that such a flag would be useful or even
-practical to provide from the Mesa side.  Ideally, you'd be able to
-figure out when a fault happens, what VM it happened in and exactly
-what work was in-flight when it happened and only kill the one guilty
-VM.  However, it sounds like your understanding of the firmware is
-currently rough enough that doing so may not be practical.  In that
-case, the best thing to do is to kill any VMs which were on the GPU at
-the time and hope the individual apps are able to recover.
-
-> Now that I look at it, we have a lovely "what is this flag doing
-> anyway"
-> bit already passed from Mesa through to the firmware we called
-> ASAHI_RENDER_SET_WHEN_RELOADING_Z_OR_S which, now that I look at it,
-> is
-> actually getting set when any attachment (any color, Z, S) is not
-> being
-> cleared for that pass (so it's loaded). That could very well be an
-> "is
-> not idempotent" flag... and maybe that means the firmware does this
-> for
-> us already? Sounds like something to test... I might have some
-> 16Kx16K
-> GLmark runs to do concurrent with an evil faulting job now ^^ (and
-> then
-> that also means we need to set it when shaders have side effects and
-> stuff, which right now we don't).
->=20
-> > > > Just signal the problem back to userspace and let the user
-> > > > space
-> > > > driver=20
-> > > > decide what to do.
-> > > >=20
-> > > > The background is that most graphics applications (games etc..)
-> > > > then=20
-> > > > rather start on the next frame instead of submitting the
-> > > > current
-> > > > one=20
-> > > > again while compute applications make sure that the abort and
-> > > > tell
-> > > > the=20
-> > > > user that the calculations might be corrupted and need to be
-> > > > redone.
-> >=20
-> > The guarantee that Vulkan makes is that, if you idle the GPU and
-> > you
-> > haven't gotten a DEVICE_LOST yet, your data is good.=C2=A0 If you get a
-> > DEVICE_LOST, all bets are off.=C2=A0 The problem is that, no matter how
-> > fast
-> > the error propagation may be in the kernel or userspace driver,
-> > errors
-> > can still show up in strange ways.=C2=A0 An OOB buffer access could end
-> > up
-> > modifying a shader binary which gets run 3 frames later and causes
-> > a
-> > corruption.=C2=A0 Once you've faulted, you really have no idea how far
-> > back
-> > is good or what memory is corrupted.=C2=A0 You have to assume that
-> > everything mapped to the GPU VA space is potentially toast.
->=20
-> Yes of course, for the actually faulting VM all bets are off after a
-> fault (though we can try a bit harder at least... I have a READ_ONLY
-> BO
-> flag now, I should set it on the shader pools!).
->=20
-> > > Actually I wanted to ask about error notifications. Right now we
-> > > have
-> > > an
-> > > out-of-band mechanism to provide detailed fault info to userspace
-> > > which
-> > > works fine, but in principle it's optional.
-> >=20
-> > This is fine, in principal.=C2=A0 Because of the nature of errors, asyn=
-c
-> > is
-> > fine as long as the error shows up eventually.=C2=A0 Faster is better,
-> > for
-> > sure, but error latency doesn't really matter in practice.
-> >=20
-> > > However, I also mark the hw
-> > > =C2=A0fences as errored when a fault happens (with an errno that
-> > > describes
-> > > the overall situation), but that never makes it into the
-> > > drm_sched
-> > > job
-> > > complete fence. I looked at the drm_sched code and I didn't see
-> > > any
-> > > error propagation. Is that supposed to work, or am I supposed to
-> > > directly mark the drm_sched side fence as complete, or did I
-> > > misunderstand all this? I get the feeling maybe existing drivers
-> > > just
-> > > rely on the recovery/timeout/etc paths to mark jobs as errored
-> > > (since
-> > > those do it explicitly) and never need error forwarding from the
-> > > hw
-> > > fence?
-> >=20
-> > The end behavior needs to be that all fences for all jobs submitted
-> > to
-> > the queue get signaled.=C2=A0 That's needed to satisfy the finite time
-> > guarantees of dma_fence.=C2=A0 Exactly how that happens (let the job
-> > run,
-> > abort all the jobs, etc.) is an implementation detail for the
-> > driver to
-> > decide.=C2=A0 If you want, you can also set a bit on the context (or
-> > queue)
-> > to mark it as dead and start returning EIO or similar from any
-> > ioctls
-> > trying to submit more work if you wanted.=C2=A0 Not required but you
-> > can.
->=20
-> Fences have an error flag though, does that get reported to userspace
-> somehow? I thought it did, but maybe not, or maybe only drm_sched not
-> propagating it is the issue?
->=20
-> In other words, absent my fancy stats reporting BO system, what is
-> the
-> normal way that an explicit sync driver signals to userspace that the
-> job associated with a syncobj has failed?
-
-One is via the return value from exec/submit.  Often there's also a
-query mechanism for more detailed information.  It's not particularly
-standard at the moment, I'm afraid.  I could point you at i915 but I
-wouldn't call that uAPI something to be emulated, in general.
-
-> (If there is no way, then I'll probably want to change the stats BO
-> system to be configurable, so if you ask for no stats/time info, you
-> only get overall job status and faults, which has less overhead.)
-
-There is an error but it doesn't automatically get propagated to
-userspace.  So, for instance, a SYNCOBJ_WAIT ioctl won't return an
-error if it sees a fence error.  It needs to get caught by the driver
-and returned through a driver ioctl somehow.
-
-~Faith
-
+Best regards,
+Martin
