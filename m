@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 959496B7651
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:43:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0D506B7656
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:43:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjCMLm7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:42:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49376 "EHLO
+        id S231381AbjCMLnL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:43:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49400 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjCMLmG (ORCPT
+        with ESMTP id S230452AbjCMLmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:42:06 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2959565448
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:34 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id a2so12596937plm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:34 -0700 (PDT)
+        Mon, 13 Mar 2023 07:42:10 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ADDE64B2D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:37 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so1268634pjt.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678707689;
+        d=linaro.org; s=google; t=1678707693;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LbWTiwsNLCzhmnfJIO7ZAOWJugOE9iyft/rP2uRGCC8=;
-        b=nZ8i5WMS0zGdM96heslrKJUIiOb1D7ofUN3SjacWtXfTVuSHaMD9cIkbY/tUTbZfmh
-         nrLHpWAfXQavr0jWc8kCwfpXwMFxJGdFcK2WBhjk3s3iN3EhOW0bjnL2lbkgAV/l3KYR
-         AZ3DEM/B8cFHgDYR7SlLG+B+/R46eeqwiJ3rw89Zn63nX+bLW30xeJGgJYdHPC2G0Yxk
-         usB13ToHqBp7Dmk9JoZETT7VjOuH/1TOA4isEi8PrNUy7QDgBrs9jOmAK8VHIGOG+Yzx
-         ilf56Z++S3UpY997GBOfGN8CDRhWHlkuEAuJDmpX60BPmx+6Eur2+MRv2mIH6ntlrujG
-         u/fg==
+        bh=JgI7sIUXfEuJw5LLT6sg1Fr5x2zyVVOPMU2FeyfJj/s=;
+        b=JSIqC98bHXd1HfroD6mo8qc6VuzWGpMiZiOthJxGbxLvgobrPsxvkG5EQWiZDRv19w
+         8a/xOu07TOj4EYGKthPFFnp2SbxDfE0fbj3bSEFRiSxL4P/fUXW9F+kDAMPDzWtT/bd2
+         SyjB158rjJK1DEIXNp+dd7yq+0P7jv0shgpYeDdvDZF9Nd8dGuuTZ6jkTa5/m6zh2Se0
+         uK2kxdbbp1G6x/0vfMELj8w9TzaykirdcTQ5RDv67S9/bX6Zu7e+MLWdq/txA1aLnFB0
+         r30Hwq9iMEbBMyK0a5eZwP+lTh0Vyr5MkZDlsVkuwX45BrDeM47pS5tdlHkWbtilq/v7
+         7BgA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678707689;
+        d=1e100.net; s=20210112; t=1678707693;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=LbWTiwsNLCzhmnfJIO7ZAOWJugOE9iyft/rP2uRGCC8=;
-        b=kLxIe6AaNU0C3tFyu3Ags3K4RGNOlxX7UMOqqn0re4jRKmqGosh6beqFM+O+mjHCyS
-         BnuIpIJuWqwcM/HfqNmfCzqV248vjVXZ8sCCM+8gkk8dFct+WJWQ3pQB50cVYj4NmaiE
-         1hGs/2qRvMtVjm4sinOcRohZymtNxYYX4pTgXDLrseisoujLvpoyuB0jZPty3TTsxmFh
-         Eio96d2mGUq2aVvF77o87wMvTKRC88KzDs5biL1VF5f2A2Qvl7+YjHq+YLVKixynMNp6
-         YdceeKdHUcaQ2U7EBkiKggxwa7l2mMvxljFwsT8AKGRUTHtXNf6lMux4grmqIdaBJJTy
-         rBxA==
-X-Gm-Message-State: AO0yUKX1QBbJFeFOe0W0wO7LqoD8qWKwxa/unLjeklkmO3M/6uplhWZi
-        h1HR7GvIDhJVKpUPOtzsvuPDbw==
-X-Google-Smtp-Source: AK7set8WqNlf7dj/GMmV4Uw0lWZ5Rte24uCy7j8wI2Vo0/UwEBhQE3vjtSMKNpzD/MjfTmuR6vTWtg==
-X-Received: by 2002:a17:90a:dac3:b0:23b:446b:bbfe with SMTP id g3-20020a17090adac300b0023b446bbbfemr5713335pjx.10.1678707688565;
-        Mon, 13 Mar 2023 04:41:28 -0700 (PDT)
+        bh=JgI7sIUXfEuJw5LLT6sg1Fr5x2zyVVOPMU2FeyfJj/s=;
+        b=0Ut9hhVVukEIoXH4HSJjv2SA6nvpMrs98uZXzoUyABEn/Dln2c/5Os7quG164WbGGj
+         5c60XYyYQqn89sB+ZNNfa7nhM6wMUbsOUexSNHbvPRzD5SoFBBGOOFOfFc1NgproVAzq
+         qze3K/AObWyetiXrVK31QeRxmd/E0GcMQw5xZPW4rUC3kznSmUnWjhlNJDASKU1HhjF6
+         aP+zrFoUUNCSnWkQXREtFCZGImqcBKoWWXrv1ymaoDtnzNiGrpYkXnmqqgx3cykY3psq
+         /lBpYUCqtobCcaP+AyT3QNBNJx4rJYQuGeATyEdAhg6ssCw2T3FkP1NCg/mMezSiZRIM
+         5+jQ==
+X-Gm-Message-State: AO0yUKW02vAIMQy7YPVWg0kznoSTFT5FiPYiOTrHQfC5pUO9axMR7AEe
+        S0Kf9jQwwuxrMUdRbQylq+D7mQ==
+X-Google-Smtp-Source: AK7set8lj7ygHJaxfEtsTufHlkoST0XAsShMw0uYRCqpWkwxzect/JSVGbVD3bocqyj/ONMhfjXT1Q==
+X-Received: by 2002:a17:90a:53:b0:234:d1c:f112 with SMTP id 19-20020a17090a005300b002340d1cf112mr35281110pjb.0.1678707692996;
+        Mon, 13 Mar 2023 04:41:32 -0700 (PDT)
 Received: from leoy-huanghe.lan ([156.59.236.112])
-        by smtp.gmail.com with ESMTPSA id q21-20020a17090a2e1500b0022335f1dae2sm4281625pjd.22.2023.03.13.04.41.24
+        by smtp.gmail.com with ESMTPSA id q21-20020a17090a2e1500b0022335f1dae2sm4281625pjd.22.2023.03.13.04.41.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 04:41:28 -0700 (PDT)
+        Mon, 13 Mar 2023 04:41:32 -0700 (PDT)
 From:   Leo Yan <leo.yan@linaro.org>
 To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         Jiri Olsa <jolsa@kernel.org>,
@@ -65,9 +65,9 @@ To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
         linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org
 Cc:     Leo Yan <leo.yan@linaro.org>
-Subject: [PATCH v4 11/16] perf kvm: Use histograms list to replace cached list
-Date:   Mon, 13 Mar 2023 19:40:13 +0800
-Message-Id: <20230313114018.543254-12-leo.yan@linaro.org>
+Subject: [PATCH v4 12/16] perf kvm: Polish sorting key
+Date:   Mon, 13 Mar 2023 19:40:14 +0800
+Message-Id: <20230313114018.543254-13-leo.yan@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230313114018.543254-1-leo.yan@linaro.org>
 References: <20230313114018.543254-1-leo.yan@linaro.org>
@@ -75,368 +75,119 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-perf kvm tool defines its own cached list which is managed with RB tree,
-histograms also provide RB tree to manage data entries.  Since now we
-have introduced histograms in the tool, it's not necessary to use the
-self defined list and we can directly use histograms list to manage
-KVM events.
+Since histograms supports sorting, the tool doesn't need to maintain the
+mapping between the sorting keys and the corresponding comparison
+callbacks, therefore, this patch removes structure kvm_event_key.
 
-This patch changes to use histograms list to track KVM events, and it
-invokes the common function hists__output_resort_cb() to sort result,
-this also give us flexibility to extend more sorting key words easily.
-
-After histograms list supported, the cached list is redundant so remove
-the relevant code for it.
+But we still need to validate the sorting key, this patch uses an array
+for sorting keys and renames function select_key() to is_valid_key()
+to validate the sorting key passed by user.
 
 Signed-off-by: Leo Yan <leo.yan@linaro.org>
 ---
- tools/perf/builtin-kvm.c   | 189 +++++++++++++++++++------------------
- tools/perf/util/kvm-stat.h |   7 --
- 2 files changed, 95 insertions(+), 101 deletions(-)
+ tools/perf/builtin-kvm.c   | 29 ++++++++++-------------------
+ tools/perf/util/kvm-stat.h |  8 --------
+ 2 files changed, 10 insertions(+), 27 deletions(-)
 
 diff --git a/tools/perf/builtin-kvm.c b/tools/perf/builtin-kvm.c
-index 3f601ccb7aab..ba3134613bcb 100644
+index ba3134613bcb..1e9338855239 100644
 --- a/tools/perf/builtin-kvm.c
 +++ b/tools/perf/builtin-kvm.c
-@@ -323,6 +323,12 @@ static int kvm_hists__init(void)
- 	return kvm_hpp_list__parse(&kvm_hists.list, NULL, "ev_name");
- }
+@@ -76,15 +76,6 @@ COMPARE_EVENT_KEY(min, stats.min);
+ COMPARE_EVENT_KEY(count, stats.n);
+ COMPARE_EVENT_KEY(mean, stats.mean);
  
-+static int kvm_hists__reinit(const char *output, const char *sort)
-+{
-+	perf_hpp__reset_output_field(&kvm_hists.list);
-+	return kvm_hpp_list__parse(&kvm_hists.list, output, sort);
-+}
-+
- static const char *get_filename_for_perf_kvm(void)
- {
- 	const char *filename;
-@@ -420,44 +426,37 @@ struct vcpu_event_record {
- 	struct kvm_event *last_event;
- };
- 
+-#define DEF_SORT_NAME_KEY(name, compare_key)				\
+-	{ #name, cmp_event_ ## compare_key }
 -
--static void init_kvm_event_record(struct perf_kvm_stat *kvm)
--{
--	unsigned int i;
+-static struct kvm_event_key keys[] = {
+-	DEF_SORT_NAME_KEY(sample, count),
+-	DEF_SORT_NAME_KEY(time, mean),
+-	{ NULL, NULL }
+-};
 -
--	for (i = 0; i < EVENTS_CACHE_SIZE; i++)
--		INIT_LIST_HEAD(&kvm->kvm_events_cache[i]);
--}
--
- #ifdef HAVE_TIMERFD_SUPPORT
--static void clear_events_cache_stats(struct list_head *kvm_events_cache)
-+static void clear_events_cache_stats(void)
- {
--	struct list_head *head;
-+	struct rb_root_cached *root;
-+	struct rb_node *nd;
- 	struct kvm_event *event;
--	unsigned int i;
--	int j;
--
--	for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
--		head = &kvm_events_cache[i];
--		list_for_each_entry(event, head, hash_entry) {
--			/* reset stats for event */
--			event->total.time = 0;
--			init_stats(&event->total.stats);
--
--			for (j = 0; j < event->max_vcpu; ++j) {
--				event->vcpu[j].time = 0;
--				init_stats(&event->vcpu[j].stats);
--			}
-+	int i;
-+
-+	if (hists__has(&kvm_hists.hists, need_collapse))
-+		root = &kvm_hists.hists.entries_collapsed;
-+	else
-+		root = kvm_hists.hists.entries_in;
-+
-+	for (nd = rb_first_cached(root); nd; nd = rb_next(nd)) {
-+		struct hist_entry *he;
-+
-+		he = rb_entry(nd, struct hist_entry, rb_node_in);
-+		event = container_of(he, struct kvm_event, he);
-+
-+		/* reset stats for event */
-+		event->total.time = 0;
-+		init_stats(&event->total.stats);
-+
-+		for (i = 0; i < event->max_vcpu; ++i) {
-+			event->vcpu[i].time = 0;
-+			init_stats(&event->vcpu[i].stats);
- 		}
- 	}
- }
- #endif
- 
--static int kvm_events_hash_fn(u64 key)
--{
--	return key & (EVENTS_CACHE_SIZE - 1);
--}
--
- static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
- {
- 	int old_max_vcpu = event->max_vcpu;
-@@ -483,44 +482,64 @@ static bool kvm_event_expand(struct kvm_event *event, int vcpu_id)
+ struct kvm_hists {
+ 	struct hists		hists;
+ 	struct perf_hpp_list	list;
+@@ -757,18 +748,18 @@ static bool handle_kvm_event(struct perf_kvm_stat *kvm,
  	return true;
  }
  
--static struct kvm_event *kvm_alloc_init_event(struct perf_kvm_stat *kvm,
--					      struct event_key *key,
--					      struct perf_sample *sample __maybe_unused)
-+static void *kvm_he_zalloc(size_t size)
+-static bool select_key(struct perf_kvm_stat *kvm)
++static bool is_valid_key(struct perf_kvm_stat *kvm)
  {
--	struct kvm_event *event;
-+	struct kvm_event *kvm_ev;
+-	int i;
++	static const char *key_array[] = {
++		"ev_name", "sample", "time", "max_t", "min_t", "mean_t",
++	};
++	unsigned int i;
  
--	event = zalloc(sizeof(*event));
--	if (!event) {
--		pr_err("Not enough memory\n");
-+	kvm_ev = zalloc(size + sizeof(*kvm_ev));
-+	if (!kvm_ev)
- 		return NULL;
+-	for (i = 0; keys[i].name; i++) {
+-		if (!strcmp(keys[i].name, kvm->sort_key)) {
+-			kvm->compare = keys[i].key;
++	for (i = 0; i < ARRAY_SIZE(key_array); i++)
++		if (!strcmp(key_array[i], kvm->sort_key))
+ 			return true;
+-		}
 -	}
  
--	event->perf_kvm = kvm;
--	event->key = *key;
--	init_stats(&event->total.stats);
--	return event;
-+	init_stats(&kvm_ev->total.stats);
-+	hists__inc_nr_samples(&kvm_hists.hists, 0);
-+	return &kvm_ev->he;
-+}
-+
-+static void kvm_he_free(void *he)
-+{
-+	struct kvm_event *kvm_ev;
-+
-+	free(((struct hist_entry *)he)->kvm_info);
-+	kvm_ev = container_of(he, struct kvm_event, he);
-+	free(kvm_ev);
- }
- 
-+static struct hist_entry_ops kvm_ev_entry_ops = {
-+	.new	= kvm_he_zalloc,
-+	.free	= kvm_he_free,
-+};
-+
- static struct kvm_event *find_create_kvm_event(struct perf_kvm_stat *kvm,
- 					       struct event_key *key,
- 					       struct perf_sample *sample)
- {
- 	struct kvm_event *event;
--	struct list_head *head;
-+	struct hist_entry *he;
-+	struct kvm_info *ki;
- 
- 	BUG_ON(key->key == INVALID_KEY);
- 
--	head = &kvm->kvm_events_cache[kvm_events_hash_fn(key->key)];
--	list_for_each_entry(event, head, hash_entry) {
--		if (event->key.key == key->key && event->key.info == key->info)
--			return event;
-+	ki = zalloc(sizeof(*ki));
-+	if (!ki) {
-+		pr_err("Failed to allocate kvm info\n");
-+		return NULL;
- 	}
- 
--	event = kvm_alloc_init_event(kvm, key, sample);
--	if (!event)
-+	kvm->events_ops->decode_key(kvm, key, ki->name);
-+	he = hists__add_entry_ops(&kvm_hists.hists, &kvm_ev_entry_ops,
-+				  &kvm->al, NULL, NULL, NULL, ki, sample, true);
-+	if (he == NULL) {
-+		pr_err("Failed to allocate hist entry\n");
-+		free(ki);
- 		return NULL;
-+	}
-+
-+	event = container_of(he, struct kvm_event, he);
-+	if (!event->perf_kvm) {
-+		event->perf_kvm = kvm;
-+		event->key = *key;
-+	}
- 
--	list_add(&event->hash_entry, head);
- 	return event;
- }
- 
-@@ -753,58 +772,32 @@ static bool select_key(struct perf_kvm_stat *kvm)
+-	pr_err("Unknown compare key:%s\n", kvm->sort_key);
++	pr_err("Unsupported sort key: %s\n", kvm->sort_key);
  	return false;
  }
  
--static void insert_to_result(struct rb_root *result, struct kvm_event *event,
--			     key_cmp_fun bigger, int vcpu)
--{
--	struct rb_node **rb = &result->rb_node;
--	struct rb_node *parent = NULL;
--	struct kvm_event *p;
--
--	while (*rb) {
--		p = container_of(*rb, struct kvm_event, rb);
--		parent = *rb;
--
--		if (bigger(event, p, vcpu) > 0)
--			rb = &(*rb)->rb_left;
--		else
--			rb = &(*rb)->rb_right;
--	}
--
--	rb_link_node(&event->rb, parent, rb);
--	rb_insert_color(&event->rb, result);
--}
--
- static bool event_is_valid(struct kvm_event *event, int vcpu)
- {
- 	return !!get_event_count(event, vcpu);
- }
+@@ -1198,7 +1189,7 @@ static int kvm_events_live_report(struct perf_kvm_stat *kvm)
+ 		return ret;
  
--static void sort_result(struct perf_kvm_stat *kvm)
-+static int filter_cb(struct hist_entry *he, void *arg __maybe_unused)
- {
--	unsigned int i;
--	int vcpu = kvm->trace_vcpu;
- 	struct kvm_event *event;
-+	struct perf_kvm_stat *perf_kvm;
- 
--	for (i = 0; i < EVENTS_CACHE_SIZE; i++) {
--		list_for_each_entry(event, &kvm->kvm_events_cache[i], hash_entry) {
--			if (event_is_valid(event, vcpu)) {
--				insert_to_result(&kvm->result, event,
--						 kvm->compare, vcpu);
--			}
--		}
--	}
-+	event = container_of(he, struct kvm_event, he);
-+	perf_kvm = event->perf_kvm;
-+	if (!event_is_valid(event, perf_kvm->trace_vcpu))
-+		he->filtered = 1;
-+	else
-+		he->filtered = 0;
-+	return 0;
- }
- 
--/* returns left most element of result, and erase it */
--static struct kvm_event *pop_from_result(struct rb_root *result)
-+static void sort_result(struct perf_kvm_stat *kvm)
- {
--	struct rb_node *node = rb_first(result);
--
--	if (!node)
--		return NULL;
-+	const char *output_columns = "ev_name,sample,time,max_t,min_t,mean_t";
- 
--	rb_erase(node, result);
--	return container_of(node, struct kvm_event, rb);
-+	kvm_hists__reinit(output_columns, kvm->sort_key);
-+	hists__collapse_resort(&kvm_hists.hists, NULL);
-+	hists__output_resort_cb(&kvm_hists.hists, NULL, filter_cb);
- }
- 
- static void print_vcpu_info(struct perf_kvm_stat *kvm)
-@@ -847,6 +840,7 @@ static void print_result(struct perf_kvm_stat *kvm)
- 	char decode[KVM_EVENT_NAME_LEN];
- 	struct kvm_event *event;
- 	int vcpu = kvm->trace_vcpu;
-+	struct rb_node *nd;
- 
- 	if (kvm->live) {
- 		puts(CONSOLE_CLEAR);
-@@ -865,9 +859,15 @@ static void print_result(struct perf_kvm_stat *kvm)
- 	pr_info("%16s ", "Avg time");
- 	pr_info("\n\n");
- 
--	while ((event = pop_from_result(&kvm->result))) {
-+	for (nd = rb_first_cached(&kvm_hists.hists.entries); nd; nd = rb_next(nd)) {
-+		struct hist_entry *he;
- 		u64 ecount, etime, max, min;
- 
-+		he = rb_entry(nd, struct hist_entry, rb_node);
-+		if (he->filtered)
-+			continue;
-+
-+		event = container_of(he, struct kvm_event, he);
- 		ecount = get_event_count(event, vcpu);
- 		etime = get_event_time(event, vcpu);
- 		max = get_event_max(event, vcpu);
-@@ -1144,8 +1144,11 @@ static int perf_kvm__handle_timerfd(struct perf_kvm_stat *kvm)
- 	sort_result(kvm);
- 	print_result(kvm);
- 
-+	/* Reset sort list to "ev_name" */
-+	kvm_hists__reinit(NULL, "ev_name");
-+
- 	/* reset counts */
--	clear_events_cache_stats(kvm->kvm_events_cache);
-+	clear_events_cache_stats();
- 	kvm->total_count = 0;
- 	kvm->total_time = 0;
- 	kvm->lost_events = 0;
-@@ -1201,7 +1204,6 @@ static int kvm_events_live_report(struct perf_kvm_stat *kvm)
+ 	if (!verify_vcpu(kvm->trace_vcpu) ||
+-	    !select_key(kvm) ||
++	    !is_valid_key(kvm) ||
+ 	    !register_kvm_events_ops(kvm)) {
+ 		goto out;
  	}
- 
- 	set_term_quiet_input(&save);
--	init_kvm_event_record(kvm);
- 
- 	kvm_hists__init();
- 
-@@ -1397,7 +1399,6 @@ static int kvm_events_report_vcpu(struct perf_kvm_stat *kvm)
- 	if (!register_kvm_events_ops(kvm))
+@@ -1393,7 +1384,7 @@ static int kvm_events_report_vcpu(struct perf_kvm_stat *kvm)
+ 	if (!verify_vcpu(vcpu))
  		goto exit;
  
--	init_kvm_event_record(kvm);
- 	setup_pager();
+-	if (!select_key(kvm))
++	if (!is_valid_key(kvm))
+ 		goto exit;
  
- 	kvm_hists__init();
+ 	if (!register_kvm_events_ops(kvm))
 diff --git a/tools/perf/util/kvm-stat.h b/tools/perf/util/kvm-stat.h
-index 92da2fb87380..4385be769eee 100644
+index 4385be769eee..35d03894fac3 100644
 --- a/tools/perf/util/kvm-stat.h
 +++ b/tools/perf/util/kvm-stat.h
-@@ -36,7 +36,6 @@ struct perf_kvm_stat;
- 
- struct kvm_event {
- 	struct list_head hash_entry;
--	struct rb_node rb;
- 
- 	struct perf_kvm_stat *perf_kvm;
- 	struct event_key key;
-@@ -81,9 +80,6 @@ struct exit_reasons_table {
- 	const char *reason;
+@@ -49,13 +49,6 @@ struct kvm_event {
+ 	struct hist_entry he;
  };
  
--#define EVENTS_BITS		12
--#define EVENTS_CACHE_SIZE	(1UL << EVENTS_BITS)
+-typedef int (*key_cmp_fun)(struct kvm_event*, struct kvm_event*, int);
 -
- struct perf_kvm_stat {
- 	struct perf_tool    tool;
- 	struct record_opts  opts;
-@@ -103,7 +99,6 @@ struct perf_kvm_stat {
+-struct kvm_event_key {
+-	const char *name;
+-	key_cmp_fun key;
+-};
+-
+ struct child_event_ops {
+ 	void (*get_key)(struct evsel *evsel,
+ 			struct perf_sample *sample,
+@@ -98,7 +91,6 @@ struct perf_kvm_stat {
+ 	const char *exit_reasons_isa;
  
  	struct kvm_events_ops *events_ops;
- 	key_cmp_fun compare;
--	struct list_head kvm_events_cache[EVENTS_CACHE_SIZE];
+-	key_cmp_fun compare;
  
  	u64 total_time;
  	u64 total_count;
-@@ -112,8 +107,6 @@ struct perf_kvm_stat {
- 
- 	struct intlist *pid_list;
- 
--	struct rb_root result;
--
- 	int timerfd;
- 	unsigned int display_time;
- 	bool live;
 -- 
 2.34.1
 
