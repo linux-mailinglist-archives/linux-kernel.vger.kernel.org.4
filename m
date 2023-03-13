@@ -2,156 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 117356B78AC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:17:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8136B788C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:12:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjCMNRW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:17:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
+        id S230360AbjCMNMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229689AbjCMNRU (ORCPT
+        with ESMTP id S229573AbjCMNMQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:17:20 -0400
-X-Greylist: delayed 405 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Mar 2023 06:17:18 PDT
-Received: from ofcsgdbm.dwd.de (ofcsgdbm.dwd.de [141.38.3.245])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 53BB848E2D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:17:18 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by ofcsg2dn3.dwd.de (Postfix) with ESMTP id 4PZxpv6lZmz2wML
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dwd.de; h=
-        content-type:content-type:mime-version:message-id:subject
-        :subject:from:from:date:date:received:received:received:received
-        :received:received:received:received; s=dwd-csg20210107; t=
-        1678713031; x=1679922632; bh=a6zq0ZHbn8Ul6+P0t6VHiaGX0lfQuULZXFp
-        9OAVqJ5w=; b=Y3NbGRNy3AUCDGrvrPpi/LjNcdbIGqB8z0fY2DxR6D+ov30hh/8
-        jIFw5fzvdLfe2RgVHAR5OT21O2UoUlqJDJaafvwP8BaJjiBJNAja4GyEnVyE7mWE
-        vcfEAsZX1li11DdNKTBoQ2jB/dgNr+JK/kQgJDxi7gtdRZhTsISgPRcNJyZd4fTV
-        4ekLaWrK9NCQ4dtjiNHKPO1a85w0R+JT+IqVGEoZtSJdf3YVUwz9mgl7jlmM9kpL
-        NDLVuxdz1lvihV6a9YdtBWdZEz5x/8e0NccUExjOXIXlEYDG0VlSDggwlzTHfP9S
-        G/1yxvL1JMIm7ImqD+ZRVVuQMuH7QKlVh3Q==
-X-Virus-Scanned: by amavisd-new at csg.dwd.de
-Received: from ofcsg2cteh1.dwd.de ([172.30.232.65])
- by localhost (ofcsg2dn3.dwd.de [172.30.232.26]) (amavisd-new, port 10024)
- with ESMTP id yVzQgfpOd5qk for <linux-kernel@vger.kernel.org>;
- Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-Received: from ofcsg2cteh1.dwd.de (unknown [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id B5101C902C7B
-        for <root@ofcsg2dn3.dwd.de>; Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-Received: from ofcsg2cteh1.dwd.de (unknown [127.0.0.1])
-        by DDEI (Postfix) with ESMTP id A8B3CC902C34
-        for <root@ofcsg2dn3.dwd.de>; Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-X-DDEI-TLS-USAGE: Unused
-Received: from ofcsgdbm.dwd.de (unknown [172.30.232.26])
-        by ofcsg2cteh1.dwd.de (Postfix) with ESMTP
-        for <root@ofcsg2dn3.dwd.de>; Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-Received: from ofcsgdbm.dwd.de by localhost (Postfix XFORWARD proxy);
- Mon, 13 Mar 2023 13:10:31 -0000
-Received: from ofcsg2dvf2.dwd.de (ofcsg2dvf2.dwd.de [172.30.232.11])
-        by ofcsg2dn3.dwd.de (Postfix) with ESMTPS id 4PZxpv4Shrz2wML;
-        Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-Received: from ofmailhub.dwd.de (ofmailhub.dwd.de [141.38.39.196])
-        by ofcsg2dvf2.dwd.de  with ESMTP id 32DDAVE4021349-32DDAVE5021349;
-        Mon, 13 Mar 2023 13:10:31 GMT
-Received: from praktifix.dwd.de (praktifix.dwd.de [141.38.44.46])
-        by ofmailhub.dwd.de (Postfix) with ESMTP id 730E3E26D2;
-        Mon, 13 Mar 2023 13:10:31 +0000 (UTC)
-Date:   Mon, 13 Mar 2023 13:10:31 +0000 (GMT)
-From:   Holger Kiehl <Holger.Kiehl@dwd.de>
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Jean Delvare <jdelvare@suse.com>, linux-hwmon@vger.kernel.org,
-        linux-kernel <linux-kernel@vger.kernel.org>
-Subject: [PATCH] hwmon: (nct6775) add Asus Pro A520M-C II/CSM
-Message-ID: <868bdc4f-9d45-475c-963e-f5232a8b95@praktifix.dwd.de>
+        Mon, 13 Mar 2023 09:12:16 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84AD6A9CA;
+        Mon, 13 Mar 2023 06:11:55 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id z5so12553205ljc.8;
+        Mon, 13 Mar 2023 06:11:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678713114;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RdumDddMGTo/lxSp6U39dpdHLeeUajQBgrqlqp/Lqwo=;
+        b=YyRViZ2tMVCQ5HOYVxbJgGPwNQbgZLwtpviCB4sehgaq82qshs1fb5+O8yvTZKF55h
+         lbEaiFY4QszCFAkUuzCZLxpyUk/ysFGT6TaNLiRdqfdXsEEXn+g3qao1LO+ZQrxWm2pN
+         O06H17E3tbxp5u69zRByccDCR3TmOmcQ1GAS7YVITbEhrfl+P7otdIRIwNsKJ6I4I3nT
+         b1MSH5I9u4obst97d45yqacAMS7OWqyjCfFLlLdDRFAr/cS1TGXl74RkFDiOnmrKpejS
+         J1ZCJmN8+Ke32YzA7dhApSFv1FCyTNPM+StuqF/OKGBcGpAkLsWLSqZ84RdbWqfwmXAD
+         Np1w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678713114;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RdumDddMGTo/lxSp6U39dpdHLeeUajQBgrqlqp/Lqwo=;
+        b=lLL5JXJKBhSHxFKH9kanD5uNAsXr6fdsU94xa3XmJEuM5VvTBmlLL4uWJITaQtTJ6L
+         96/3/KtX96LDpkAA3NmRa0Tx/HZmd2aYKp21xpN3Y3KQDIgDBqt0TgJf+KYkmy2kawcY
+         3+PSJZTxa+su7iGZ4XIXbyOLIXCh1uQReBXdfyg5FrrAPBSGWsYMJ5VJbOwiwY2uHpgx
+         8roFK+uZhDdtdExmYYACc7B75GxJZTV/txvD42qh+8e/wHFJR50C5vJiM6Q+L9QjlL7R
+         +35EnwxEofQCNSsT1MggMoCTFHedasGheizIaYWFefSnFyANN/t2c0p04JwhDAHSWWlE
+         jPDA==
+X-Gm-Message-State: AO0yUKWUofFldFJPRB8Cm9VoJSaixT/R8Ap2gFpUOFeRDJWk4KoLPPTK
+        T7GBtIfaQjklfyHCATP028A=
+X-Google-Smtp-Source: AK7set+j7k6zCYH2XDZt6UocFTT0dsbmNt3I+8pboVGgC2Br/or+Myzd7ZaFp4agajWReTebtxmJQA==
+X-Received: by 2002:a2e:a4bb:0:b0:293:524a:9164 with SMTP id g27-20020a2ea4bb000000b00293524a9164mr10377947ljm.34.1678713113951;
+        Mon, 13 Mar 2023 06:11:53 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id a18-20020a05651c031200b002934a7c04efsm1019486ljp.98.2023.03.13.06.11.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 06:11:53 -0700 (PDT)
+Message-ID: <31d8bc33-eabe-9084-71c3-7d1e29f51863@gmail.com>
+Date:   Mon, 13 Mar 2023 15:11:52 +0200
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="646786604-2096725857-1678713031=:1647830"
-X-FEAS-Client-IP: 141.38.39.196
-X-FE-Last-Public-Client-IP: 141.38.39.196
-X-FE-Policy-ID: 2:2:1:SYSTEM
-X-TMASE-Version: DDEI-5.1-9.0.1002-27500.007
-X-TMASE-Result: 10--0.544100-10.000000
-X-TMASE-MatchedRID: 54gb2yeIOXQKcsqwFvHPpZGzIhDiMWXrm+DHlE+ssdDbwrIdcV7mW9mw
-        Qde3CIwayPWKi2J7rbTlgULyZ+0QfaZTCp7W/He3ASoGV8JrJg31+9bO3CCbk8C5DTEMxpeQ38b
-        Hk6Pl8X1/XjpbSJS7a0NziVKCujClwG9P01lFxWXi8zVgXoAltnS4vQrt84k3wrbXMGDYqV+8bR
-        Ued1HGApLRodsDsRTAAcTRAXiI1anWW2YoKwhdnUUjywkdcMMgQbQop27i6wwZGC3E/epWpm49R
-        pMKzOm5ottZkIYeDOGDhTuQFwWOoYUozDgi4nhXekI2ow+xm4Ub2xdIiL0Uv161uUBD8bm1
-X-TMASE-SNAP-Result: 1.821001.0001-0-1-22:0,33:0,34:0-0
-X-TMASE-INERTIA: 0-0;;;;
-X-DDEI-PROCESSED-RESULT: Safe
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Content-Language: en-US, en-GB
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Jonathan Cameron <jic23@kernel.org>
+Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Shreeya Patel <shreeya.patel@collabora.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
+        Zhigang Shi <Zhigang.Shi@liteon.com>,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+References: <cover.1678093787.git.mazziesaccount@gmail.com>
+ <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
+ <20230312170638.3e6807b7@jic23-huawei> <20230312170848.651b5b2c@jic23-huawei>
+ <ZA8Z08U1sMOhc+V5@smile.fi.intel.com>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
+In-Reply-To: <ZA8Z08U1sMOhc+V5@smile.fi.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+On 3/13/23 14:40, Andy Shevchenko wrote:
+> On Sun, Mar 12, 2023 at 05:08:48PM +0000, Jonathan Cameron wrote:
+>> On Sun, 12 Mar 2023 17:06:38 +0000
+>> Jonathan Cameron <jic23@kernel.org> wrote:
+>>> On Mon, 6 Mar 2023 11:17:15 +0200
+>>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+> 
+> ...
+> 
+>>> Given most modern IIO drivers use fully devm_ based probing, for now I would not
+>>> expose anything else.  That will reduce the interface a lot which I think
+>>> is probably a good thing at this stage.
 
---646786604-2096725857-1678713031=:1647830
-Content-Type: text/plain; charset=ISO-8859-15
-Content-Transfer-Encoding: 8BIT
+Probably at any stage :)
 
-An NCT6798D chip is now detected:
+>>>
+>>> Keep the non devm stuff internally though as it is a nice structure to have
+>>> an I can see we may want some of these in non devm form in the future.
 
-   dmesg|grep nct6775
-   [   23.765392] nct6775: Found NCT6798D or compatible chip at 0x2e:0x290
+Ok. I was pondering this while writing these APIs. I was just thinking 
+that _maybe_ someone has an driver where they do not use devm for a 
+reason. Allowing a "non devm" variants for such is likely to be needed. 
+Hence, I was thinking that having a non devm version could be beneficial 
+from the start to avoid someone being tempted to just mix the readily 
+available devm with manual unwinding...
 
-And sensors now shows:
+>>>
+>>> Similarly - for now don't expose the individual table building functions
+>>> as we may never need them in drivers.  We (more or less) only support interfaces
+>>> that are used and so far they aren't.
 
-   nct6798-isa-0290
-   Adapter: ISA adapter
-   in0:                      312.00 mV (min =  +0.00 V, max =  +1.74 V)
-   in1:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in2:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in3:                        3.38 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in4:                        1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in5:                        1.02 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in6:                      200.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in7:                        3.42 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in8:                        3.28 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in9:                      920.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in10:                     512.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in11:                     504.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in12:                       1.03 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in13:                     256.00 mV (min =  +0.00 V, max =  +0.00 V)  ALARM
-   in14:                       1.47 V  (min =  +0.00 V, max =  +0.00 V)  ALARM
-   fan1:                        0 RPM  (min =    0 RPM)
-   fan2:                        0 RPM  (min =    0 RPM)
-   fan3:                      355 RPM  (min =    0 RPM)
-   fan7:                        0 RPM  (min =    0 RPM)
-   SYSTIN:                    +25.0°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-   CPUTIN:                    +26.5°C  (high = +80.0°C, hyst = +75.0°C)  sensor = thermistor
-   AUXTIN0:                   +97.0°C    sensor = thermistor
-   AUXTIN1:                   +25.0°C    sensor = thermistor
-   AUXTIN2:                   +25.0°C    sensor = thermistor
-   AUXTIN3:                    +1.0°C    sensor = thermistor
-   PECI Agent 0 Calibration:  +26.0°C
-   PCH_CHIP_CPU_MAX_TEMP:      +0.0°C
-   PCH_CHIP_TEMP:              +0.0°C
-   PCH_CPU_TEMP:               +0.0°C
-   TSI0_TEMP:                 +27.9°C
-   intrusion0:               ALARM
-   intrusion1:               OK
-   beep_enable:              disabled
+I was thinking of this too. It was just the small 'avoid extra 
+operations [like unnecessary endianess conversions :p] when 
+needed'-voice in me that started screaming when I though of exporting 
+only the 'build all' and 'purge all' APIs...
 
-Signed-off-by: Holger Kiehl <holger.kiehl@dwd.de>
-Tested-by: Holger Kiehl <holger.kiehl@dwd.de>
----
+>>>
+>>> For other functions it's worth thinking about whether to not export them
+>>> initially. I haven't been through them all to figure out what is not currently used.
 
-diff --git a/drivers/hwmon/nct6775-platform.c b/drivers/hwmon/nct6775-platform.c
-index 76c6b564d7fc..1e6abfc7974d 100644
---- a/drivers/hwmon/nct6775-platform.c
-+++ b/drivers/hwmon/nct6775-platform.c
-@@ -1052,6 +1052,7 @@ static int __init nct6775_find(int sioaddr, struct nct6775_sio_data *sio_data)
- static struct platform_device *pdev[2];
- 
- static const char * const asus_wmi_boards[] = {
-+	"Pro A520M-C II",
- 	"PRO H410T",
- 	"ProArt B550-CREATOR",
- 	"ProArt X570-CREATOR WIFI",
---646786604-2096725857-1678713031=:1647830--
+I think I can go through them. There are a few that aren't currently used.
+
+>>>
+>> Ah. I forgot the tests that don't have a device so can't use devm.
+> 
+> Why not? I have seen, IIRC, test cases inside the kernel that fakes the device
+> for that.
+
+I'd appreciated any pointer for such an example if you have one at hand. 
+(I can do the digging if you don't though!)
+
+I am not a fan of unit tests. They add huge amount of inertia to 
+development, and in worst case, they stop people from contributing where 
+improving a feature requires test code modification(s). And harder the 
+test code is to understand, worse the unwanted side-effects. Also, 
+harder the test code is to read, more time and effort it requires to 
+analyze a test failure... Hence, I am _very_ conservative what comes to 
+adding size of test code with anything that is not strictly required.
+
+After that being said, unit tests are a great tool when carefully used - 
+and I assume/hope stubbing a device for devm_ tests does not add much 
+extra... But let me see if I can find an example :)
+
+Yours,
+	-- Matti
+
+-- 
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
