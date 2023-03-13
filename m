@@ -2,98 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A11836B73DB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:25:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96F156B73DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:25:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCMKZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56124 "EHLO
+        id S229836AbjCMKZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:25:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbjCMKZU (ORCPT
+        with ESMTP id S229792AbjCMKZX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:25:20 -0400
-Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFC116307
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:25:18 -0700 (PDT)
-Received: by mail-lj1-x231.google.com with SMTP id a32so12071323ljq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:25:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678703116;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pbrJDtN9FhNDtr20R0XiPnYTSZFkmiksV9h1k4kyQ98=;
-        b=VY8uugNkMiYA+TYm6b4G1dm9cgjqMlafEB+6oiXdPNMHA94piZsYq6sl9o4htfoHxy
-         jiWIVFntqtPn9gMRcYzgF0qLR6jgdgUcyJ9LvDx7xxbuYF/f2gwzVAObkWm2axbX1cOe
-         nxcowpZv/gbHyKqiCXxjYOT66sAmI4IY82pbefTDcaqbQMnKq8xPVQc872uLlqzMEjJO
-         +fmd6VaZI341zuLoiBb3dsJyUNo57S+d0oDvGuH2Gfwki7km5Em59CHKmosDdLVtvEq5
-         LczIIFYYzD5hDxESdaOFdAakUMZJ3sdoofmwLmXv6b7KDiziAa3yfH7ajsU6SI9bp2PV
-         oPdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678703116;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pbrJDtN9FhNDtr20R0XiPnYTSZFkmiksV9h1k4kyQ98=;
-        b=MJ/Cr6g5G2EUt8t/cb9OQU8X8liqM6DGpDvga89gSBihp9w7eeqd7SZo4PcCWMRzEC
-         kfDltMLrgCLc1E85JhrpwyMlPJKNg0XmW1sDJPcmuL3NMTkul6mYPu5B2Ior05oCFnOI
-         oodejhfgV6kQ1rCzA3Y2TDkSccRM0xz5zzxaHtHzPSwEvJR78kZJje1PLQcSwcVKkqt2
-         mFUoyo3s7KiDnXWKcUvsMZOf4Jk+fsnbxVlmf3Nos/W5kWyOOFUa6CzMQRL9178ADE1L
-         QC8p40RMaBGd+dTMMuTX9DEmrZfVbblXdeDHuvhq39rExMMmOzwsWQ8i2kh44JoxNbrx
-         8kaw==
-X-Gm-Message-State: AO0yUKWlwhmM1n3qyl4MNbkz2u9Q2MKj/0ACASJsZLAdrQiiVnvqIHyD
-        CjShPz78CWdVL4QXEc2cB7AOzg==
-X-Google-Smtp-Source: AK7set9r8v+cNOL0nDYJPIKVpvSdm7/GrRj5qHTxjwsR9LSWNA2w1DNDiPRxbcGRdZ/FZBf3YGyMag==
-X-Received: by 2002:a2e:9243:0:b0:295:aa1f:3d6e with SMTP id v3-20020a2e9243000000b00295aa1f3d6emr9665037ljg.38.1678703116387;
-        Mon, 13 Mar 2023 03:25:16 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id d15-20020ac24c8f000000b004db39e80733sm922259lfl.155.2023.03.13.03.25.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 03:25:16 -0700 (PDT)
-Message-ID: <6d83e088-9ed2-9b4b-6468-5b5ea1a45205@linaro.org>
-Date:   Mon, 13 Mar 2023 11:25:14 +0100
+        Mon, 13 Mar 2023 06:25:23 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E05E18152;
+        Mon, 13 Mar 2023 03:25:20 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 204C75FD0B;
+        Mon, 13 Mar 2023 13:25:17 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678703117;
+        bh=3oXZsLeafS38+qYJFdTL8leUTox2P7WbbzgFUBRnCNg=;
+        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
+        b=Qv/6hWdUh6jbEDRyIaWb0tKazL9ceDy5A4eBl9oL1x15fhKp0lC3vw3j324sOYQ0v
+         6xUgWl2C/Qt2YbkdjVoKgbGd8evAqrEUN4qI8MXoluGDowAAJbyREitrFmUd5mtcP1
+         Vb86myzYsKE7owVQq6dkJXyTvbxG1zJ52VDRSB4VRjGeQ/uqHS/+sQ5ESTa78y7EP5
+         B/RmhZOkv8c8x5AFQSp2KlHC2db1nH+lwfJQzSwThjC3v79A9Iy1D8skAuOD9cdziT
+         abV2qOGPZiflje6hBIFK+HijGFq3u1tLoSiv4KrTqWT0dVjrx8rkpIUQEnf47NMx+u
+         cMvfkYXcMB4wQ==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 13 Mar 2023 13:25:16 +0300 (MSK)
+Date:   Mon, 13 Mar 2023 13:25:16 +0300
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     Jerome Brunet <jbrunet@baylibre.com>
+CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
+        <sboyd@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
+        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
+        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
+        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH v9 2/5] clk: meson: a1: add Amlogic A1 PLL clock
+ controller driver
+Message-ID: <20230313102516.grkj4jhkke2w7blm@CAB-WSD-L081021>
+References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
+ <20230301183759.16163-3-ddrokosov@sberdevices.ru>
+ <1jr0u2azfi.fsf@starbuckisacylon.baylibre.com>
+ <20230306200549.7iuedbl27ejfhf6b@CAB-WSD-L081021>
+ <1jlek60zun.fsf@starbuckisacylon.baylibre.com>
+ <20230309182857.a2fzotcejueio23w@CAB-WSD-L081021>
+ <1j5yb50zxz.fsf@starbuckisacylon.baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] pinctrl: qcom: msm8998: Add MPM pin mappings
-Content-Language: en-US
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org, marijn.suijten@somainline.org,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230308213651.647098-1-konrad.dybcio@linaro.org>
- <CACRpkdZFWaLZvD6uW6rO+oKGZw24S+dKD+TBBpkQJKceiSBnaw@mail.gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <CACRpkdZFWaLZvD6uW6rO+oKGZw24S+dKD+TBBpkQJKceiSBnaw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <1j5yb50zxz.fsf@starbuckisacylon.baylibre.com>
+User-Agent: NeoMutt/20220415
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/13 06:38:00 #20941627
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13.03.2023 11:23, Linus Walleij wrote:
-> On Wed, Mar 8, 2023 at 10:36 PM Konrad Dybcio <konrad.dybcio@linaro.org> wrote:
+On Mon, Mar 13, 2023 at 10:18:02AM +0100, Jerome Brunet wrote:
 > 
->> Add MPM <-> TLMM pin mappings to allow for waking up the AP from sleep
->> through MPM-connected pins.
->>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+> On Thu 09 Mar 2023 at 21:28, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
 > 
-> Patch applied as nonurgent fix, tell me if it should rather be treated as
-> urgent (for the -rc:s and/or stable tags)
-Nope, I'd be screaming very loud if it was urgent! :D
-
-Thanks for your very prompt response!
-
-Konrad
+> >> >> 
+> >> >> This last poke should not bits otherwise handled by parms.
+> >> >> This is a rate init in disguise.
+> >> >> 
+> >> >
+> >> > I believe, you are talking about hifi_pll clk_regmap conflicts with
+> >> > hifi_init_regs. The above init sequence shouldn't affect pll regmap setup,
+> >> > it doesn't touch them (we assume that default bit values are all zero):
+> >> >
+> >> >     .en = {
+> >> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >> >         .shift   = 28,
+> >> >         .width   = 1,
+> >> >     },
+> >> >     // init_value = 0x01f18440
+> >> >     // en_mask    = 0x10000000
+> >> >
+> >> >     .m = {
+> >> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
+> >> >         .shift   = 0,
+> >> >         .width   = 8,
+> >> >     },
+> >> >     // init_value = 0x01f18440
+> >> >     // m_mask     = 0x0000000f
+> >> 
+> >> mask is 0xff with width 8
+> >> 
+> >
+> > Ah, you're right. Anyway, I think this is just init value and it's okay
+> > to set it during initialization and rewrite after in parameter
+> > propagation stage.
+> >
 > 
-> Yours,
-> Linus Walleij
+> ... But the magic pokes are there only to initialize the unmanaged part
+> of the clock regs. I'd like it to be clear and stay that way.
+> 
+> So please, clear the managed fields from the initial poke table.
+
+I've double checked hifi_pll clk. In the my current configuration no any
+clks inherited from it. Therefore its 'enable_count' equals to 0.
+And of course in the such situation the rate must be zeroed as well.
+It means you are right at all. I'll remove pre_sel and fbkdiv hifi_pll
+pre-setup in the next version.
+Thank you for hunted down!
+
+-- 
+Thank you,
+Dmitry
