@@ -2,111 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C037C6B768E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7EAE6B769A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:50:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231152AbjCMLtY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:49:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38744 "EHLO
+        id S231181AbjCMLuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:50:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbjCMLtL (ORCPT
+        with ESMTP id S230512AbjCMLua (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:49:11 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D033217CCB
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:48:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678708125; x=1710244125;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=Wa9svA1I+8OZGsRu2QKTnWAj+EdcwmRsgApr32RKku8=;
-  b=iVj6fGZqYMJnTNx/l9sjayaqySQtOiTgnhTQDn7eeNXbihBA0iNcjhEk
-   mBo6WYqNMAjLbzisV8GmrtbD8iRcgK39W16UsF4QMecbwjU80wDFy+D9M
-   IwpE/tZeBHXtjsvdzMauzOBy8Ybz241EIcN1EuuFy7Hy4aCSLcDgeSYG2
-   DrVapXVbHq9yErp5blIJCfMtrGDkWqTKTHkwp8plTAu71FhmlugKqN/WS
-   jXmcy7nljjxEe+amv7uksq8ivGV62iyIozOEDcwbohIJ5oglaG1d1ByxB
-   xu2Q0GTuul3keFL86CCmxEx5IJ2k69IHfXuRcxY9X6SOsMuBGKhnXW1Y/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="337147059"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="337147059"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 04:48:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="681011113"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="681011113"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 13 Mar 2023 04:48:42 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pbgfQ-002bd5-08;
-        Mon, 13 Mar 2023 13:48:40 +0200
-Date:   Mon, 13 Mar 2023 13:48:39 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
-Cc:     Paul Moore <paul@paul-moore.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        linux-kernel@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [PATCH v1 1/2] LSM: add a release() hook for the clean exit
- cleanup of the LSM modules
-Message-ID: <ZA8Nl2z4Tl+0wCj6@smile.fi.intel.com>
-References: <20230310231107.10954-1-mirsad.todorovac@alu.unizg.hr>
+        Mon, 13 Mar 2023 07:50:30 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFECC19F32
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:50:02 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so7650732wmq.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:50:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20210112.gappssmtp.com; s=20210112; t=1678708194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=a2e76SVF27ZugGmUDflwqLOuHVazSHBJvoHoACHILcw=;
+        b=SHO5FThiChWqlKWWisdxKbcKmWAq5E7zsKeOUnXcnwQBkwC47QFequMG0bYlwzsER8
+         ZXVtPSWZxaliGD1jWU+bemIkR5WPBWIzCkE54EZNrfkDwvlpOpMyAGHEpjdnGzZteM7j
+         D/4JP3omJq8WZ/WqShov0gsd+cytY3CLyYbZDTbVK1Tm1tPQjmoAjDMTebXg+X3CDBv7
+         VTk+q8kFRWLHcqkMoP8bVzuYeuN8BzJ2z3bPsRpVryiAQU9c7Vr4W77NVNQH11jaSxVI
+         OA0/i1wDBQUVN1Mn0skO5xps8iDNOB87TDD/VCrgxRT4XMJzoGZZlx632mT/+VIxU2qB
+         hzlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678708194;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=a2e76SVF27ZugGmUDflwqLOuHVazSHBJvoHoACHILcw=;
+        b=BTMtLLYTYDh9DvyBWP/v/ZbbX4B9FwLsA1anhlvp+Bjenl7LLis3xwaDftZXkVEvU7
+         l5WT7kqF40p3Fdi2iziH1x9wlVZQm7Uar2XrbbpkqXITp8FWkhve+5d0pHw1yuBt+fd2
+         X1v5l+GUzZdUEd4r490vpDtITHrD9h2HQqbeqdLvHtF+1rk7v+StmCtNyUXHzJqfHuQo
+         ig43nA0AoEEJCuwMfhdc6K5hqT9ykheChTmHujQk1M4nue0MamK5TEV6YMB44YoYtS+L
+         IbB5X66x8QqJnryyjiv+PwLbgbo3bWUJbeKCSz0ABBdNOnk/AxV3Hu/4sDs39O1aDGYk
+         jnng==
+X-Gm-Message-State: AO0yUKW+8YpqT1t6J+aHhHoO2sLQQIRiZG3L+Vt3CCy9Ky89L9mZZeXk
+        1litEZ/OYFSKCqnIZUDhO08jpw==
+X-Google-Smtp-Source: AK7set8meTjPh/Br20yfI40uXRcIqhSc5RR5NsQ7qx9l4QuOIWQ99K59We2ke8ThU4vOtSCCxDgBsw==
+X-Received: by 2002:a05:600c:3c9e:b0:3e1:f8af:8772 with SMTP id bg30-20020a05600c3c9e00b003e1f8af8772mr10250341wmb.9.1678708194053;
+        Mon, 13 Mar 2023 04:49:54 -0700 (PDT)
+Received: from blmsp ([2001:4090:a247:8056:be7d:83e:a6a5:4659])
+        by smtp.gmail.com with ESMTPSA id l7-20020a05600c1d0700b003e209186c07sm9889227wms.19.2023.03.13.04.49.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 04:49:53 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 12:49:52 +0100
+From:   Markus Schneider-Pargmann <msp@baylibre.com>
+To:     Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chun-Jie Chen <chun-jie.chen@mediatek.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Fabien Parent <parent.f@gmail.com>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH 3/8] soc: mediatek: pm-domains: Create bus protection
+ operation functions
+Message-ID: <20230313114952.b6o4qngyyd7eup6d@blmsp>
+References: <20230105170735.1637416-1-msp@baylibre.com>
+ <20230105170735.1637416-4-msp@baylibre.com>
+ <fb36ce3f-dd67-32b5-7ce0-ad15dd3b540a@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230310231107.10954-1-mirsad.todorovac@alu.unizg.hr>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <fb36ce3f-dd67-32b5-7ce0-ad15dd3b540a@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 12:11:08AM +0100, Mirsad Goran Todorovac wrote:
-> The LSM modules, namely integrity, do not have a clean way to deallocate
-> resources allocated in the init() hook or later in their lifetime. The
-> resources are destroyed on kernel shutdown in an undefined order.
+Hi Matthias,
+
+On Fri, Feb 03, 2023 at 01:32:11PM +0100, Matthias Brugger wrote:
 > 
-> This will allow a .release member per LSM module and calling proper
-> destructors in a well-behaved order.
+> 
+> On 05/01/2023 18:07, Markus Schneider-Pargmann wrote:
+> > Separate the register access used for bus protection enable/disable into
+> > their own functions. These will be used later for WAY_EN bits.
+> > 
+> > Signed-off-by: Markus Schneider-Pargmann <msp@baylibre.com>
+> > ---
+> >   drivers/soc/mediatek/mtk-pm-domains.c | 68 +++++++++++++++------------
+> >   1 file changed, 39 insertions(+), 29 deletions(-)
+> > 
+> > diff --git a/drivers/soc/mediatek/mtk-pm-domains.c b/drivers/soc/mediatek/mtk-pm-domains.c
+> > index 4333cd297405..999e1f6c86b0 100644
+> > --- a/drivers/soc/mediatek/mtk-pm-domains.c
+> > +++ b/drivers/soc/mediatek/mtk-pm-domains.c
+> > @@ -117,26 +117,50 @@ static int scpsys_sram_disable(struct scpsys_domain *pd)
+> >   					MTK_POLL_TIMEOUT);
+> >   }
+> > +static int scpsys_bus_protect_clear(const struct scpsys_bus_prot_data *bpd,
+> > +				    struct regmap *regmap)
+> > +{
+> > +	u32 val;
+> > +	u32 sta_mask = bpd->bus_prot_sta_mask;
+> > +
+> > +	if (bpd->bus_prot_reg_update)
+> > +		regmap_clear_bits(regmap, bpd->bus_prot_clr, bpd->bus_prot_set_clr_mask);
+> > +	else
+> > +		regmap_write(regmap, bpd->bus_prot_clr, bpd->bus_prot_set_clr_mask);
+> > +
+> > +	if (bpd->ignore_clr_ack)
+> > +		return 0;
+> > +
+> > +	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta,
+> > +					val, !(val & sta_mask),
+> > +					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+> > +}
+> > +
+> 
+> NIT: please move this function below
+> static int scpsys_bus_protect_enable(struct scpsys_domain *pd) {...}
+> 
+> This allows for better readability.
 
-...
+With the WAY_EN patch later in this series scpsys_bus_protect_enable()
+is going to use scpsys_bus_protect_clear(). So I would need to add a
+signature in that patch for scpsys_bus_protect_clear() or move it back
+up. I would prefer to avoid adding a signature or moving so I added it
+above these functions here. I could swap scpsys_bus_protect_set() and
+scpscpsys_bus_protect_clear() if that helps readability.
 
-> Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Cc: Mimi Zohar <zohar@linux.ibm.com>
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: Thomas Weißschuh <linux@weissschuh.net>
-> Cc: Casey Schaufler <casey@schaufler-ca.com>
-> Cc: Christian Göttsche <cgzones@googlemail.com>
-> Cc: Mickaël Salaün <mic@digikod.net>
-> Cc: Frederick Lawler <fred@cloudflare.com>
+Thank you,
+Markus
 
-As I told you, try to use my script instead, run it as
-
-`ge2maintainer.sh -c 2 -v 2 HEAD~0 --annotate --cover-letter`
-
-(assuming your 2 patches are on the top of the current branch
- in the Git tree of Linux kernel source code).
-
-It will create a template for the cover letter, automatically
-applies To and Cc lists based on the MAINTAINERS database and
-sends them.
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> 
+> > +static int scpsys_bus_protect_set(const struct scpsys_bus_prot_data *bpd,
+> > +				  struct regmap *regmap)
+> > +{
+> > +	u32 val;
+> > +	u32 sta_mask = bpd->bus_prot_sta_mask;
+> > +
+> > +	if (bpd->bus_prot_reg_update)
+> > +		regmap_set_bits(regmap, bpd->bus_prot_set, bpd->bus_prot_set_clr_mask);
+> > +	else
+> > +		regmap_write(regmap, bpd->bus_prot_set, bpd->bus_prot_set_clr_mask);
+> > +
+> > +	return regmap_read_poll_timeout(regmap, bpd->bus_prot_sta,
+> > +					val, (val & sta_mask) == sta_mask,
+> > +					MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+> > +}
+> > +
+> >   static int _scpsys_bus_protect_enable(const struct scpsys_bus_prot_data *bpd, struct regmap *regmap)
+> >   {
+> >   	int i, ret;
+> >   	for (i = 0; i < SPM_MAX_BUS_PROT_DATA; i++) {
+> > -		u32 val;
+> > -		u32 set_clr_mask = bpd[i].bus_prot_set_clr_mask;
+> > -		u32 sta_mask = bpd[i].bus_prot_sta_mask;
+> > -
+> > -		if (!set_clr_mask)
+> > +		if (!bpd[i].bus_prot_set_clr_mask)
+> >   			break;
+> > -		if (bpd[i].bus_prot_reg_update)
+> > -			regmap_set_bits(regmap, bpd[i].bus_prot_set, set_clr_mask);
+> > -		else
+> > -			regmap_write(regmap, bpd[i].bus_prot_set, set_clr_mask);
+> > -
+> > -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
+> > -					       val, (val & sta_mask) == sta_mask,
+> > -					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+> > +		ret = scpsys_bus_protect_set(&bpd[i], regmap);
+> >   		if (ret)
+> >   			return ret;
+> >   	}
+> > @@ -161,24 +185,10 @@ static int _scpsys_bus_protect_disable(const struct scpsys_bus_prot_data *bpd,
+> >   	int i, ret;
+> >   	for (i = SPM_MAX_BUS_PROT_DATA - 1; i >= 0; i--) {
+> > -		u32 val;
+> > -		u32 set_clr_mask = bpd[i].bus_prot_set_clr_mask;
+> > -		u32 sta_mask = bpd[i].bus_prot_sta_mask;
+> > -
+> > -		if (!set_clr_mask)
+> > -			continue;
+> > -
+> > -		if (bpd[i].bus_prot_reg_update)
+> > -			regmap_clear_bits(regmap, bpd[i].bus_prot_clr, set_clr_mask);
+> > -		else
+> > -			regmap_write(regmap, bpd[i].bus_prot_clr, set_clr_mask);
+> > -
+> > -		if (bpd[i].ignore_clr_ack)
+> > +		if (!bpd[i].bus_prot_set_clr_mask)
+> >   			continue;
+> > -		ret = regmap_read_poll_timeout(regmap, bpd[i].bus_prot_sta,
+> > -					       val, !(val & sta_mask),
+> > -					       MTK_POLL_DELAY_US, MTK_POLL_TIMEOUT);
+> > +		ret = scpsys_bus_protect_clear(&bpd[i], regmap);
+> >   		if (ret)
+> >   			return ret;
+> >   	}
