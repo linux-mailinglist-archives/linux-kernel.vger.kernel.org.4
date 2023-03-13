@@ -2,108 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F3FA36B6D39
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 02:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F6216B6D3C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 02:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjCMBxe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 21:53:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33856 "EHLO
+        id S229559AbjCMB4R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 21:56:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229515AbjCMBxc (ORCPT
+        with ESMTP id S229437AbjCMB4Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 21:53:32 -0400
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [IPv6:2001:df5:b000:5::4])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67A25136E8
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 18:53:25 -0700 (PDT)
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 15BA32C04A0;
-        Mon, 13 Mar 2023 14:53:24 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-        s=mail181024; t=1678672404;
-        bh=Z6a/CTUmcb8tPfzzC26tw0NjBYk4oxAmY7/2LQUDgZM=;
-        h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-        b=rtI3/6zVxzZ7j2KwJ4L7eLpvkBfDzXKhBFVKrUN/1JdLFubOGh9fPyjur2Q1nQK+U
-         F7XP0sGbhfkMCvULflCFCVB8qqw563sC3k0hsC+KIlnwqTtDW2weHF4v2P6jyRRBXL
-         MK3QF0cKqcoIpQ5ASNKJFY7RsUDEvP037RCQy/iu0vCG5eu4kLXXLBHU7bw4jnyL11
-         BZzTlEbULW1dNiDjWza1EVkWu5WAYEtC0AjlsZo7pWch+Yp0+AkhBfFbHQZqTeFacB
-         5uFwqkQ+dUbVjefGkeANnHDsKxw/pp2AYWbzht4aUNXspZ/i9gi/E9Upf3CkgDSCxV
-         mCCh4PfScVlrg==
-Received: from svr-chch-ex1.atlnz.lc (Not Verified[2001:df5:b000:bc8::77]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-        id <B640e82140001>; Mon, 13 Mar 2023 14:53:24 +1300
-Received: from svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8)
- by svr-chch-ex1.atlnz.lc (2001:df5:b000:bc8:409d:36f5:8899:92e8) with
- Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar 2023 14:53:23 +1300
-Received: from svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8]) by
- svr-chch-ex1.atlnz.lc ([fe80::409d:36f5:8899:92e8%12]) with mapi id
- 15.00.1497.047; Mon, 13 Mar 2023 14:53:23 +1300
-From:   Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To:     Andi Shyti <andi.shyti@kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v3 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
- property
-Thread-Topic: [PATCH v3 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
- property
-Thread-Index: AQHZVTuFDX+DgmEDFk23hBmDkBbcm673GMuA
-Date:   Mon, 13 Mar 2023 01:53:23 +0000
-Message-ID: <f3d6760d-f2cc-c725-d7fb-6056ee555b65@alliedtelesis.co.nz>
-References: <20230312233613.303408-1-andi.shyti@kernel.org>
- <20230312233613.303408-4-andi.shyti@kernel.org>
-In-Reply-To: <20230312233613.303408-4-andi.shyti@kernel.org>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.32.1.11]
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <F66BACD56264934CA106B4A1804B0779@atlnz.lc>
-Content-Transfer-Encoding: base64
+        Sun, 12 Mar 2023 21:56:16 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B8DC29403;
+        Sun, 12 Mar 2023 18:56:15 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id j11so42745216edq.4;
+        Sun, 12 Mar 2023 18:56:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678672573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kWK9l6oO63fsuYbhxw+2itoc1uIny5FLOrsGgX9Wzz0=;
+        b=oXnTMU9xWdaJ54cug1P2DyGEqBGgaJj1loGiv526Boo7pTw4RCdpTimgwutbr/6ZIr
+         bRDcCwt0BFMDnXexx5BlG/McxTEvoQJk5R4LWVY16y69l1yZV5sr+Cp1rrD51dRYp62v
+         4wFM6h0/NEpP6FJAQnPTBUgAVaH+bBH5YbC4wj2KIw+BRdoYw4OexVLiLwZtrSzEpUvq
+         4qLWRVj8TPdID8k3DS07ca5ijUgq0eBKA9tZFI3MmUf3dEbRYdkAqknyTfyVF/s7GV8I
+         Fqh3rVNZSFmQh4tHErt0i5vDEsz6YrFZjG9mn9DeuAm4ZbpED/vVI+fc71bFrctKc7Yd
+         E/cA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678672573;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kWK9l6oO63fsuYbhxw+2itoc1uIny5FLOrsGgX9Wzz0=;
+        b=iv75QxaVtS6lNU5TGiSaX+JhChanapbdgBEUvvassMyMXOmag8DfD+UpWkJvIU/mSJ
+         VQPqlmKXZArmDEib4luz3gvNQ0hV+zLpsQuTeozzZ5aQvgg9xdql6pD01iPOr+wVUNMx
+         UwYZTwSSj6KrzGFBXbpB30lj1g6HzWMGIGjFoGdeT3kinNGOnDRmzpvM0XLrMnNSw+42
+         3bX6MHPuTBIwN1sm4ePnrJuG56OcpPI3E/0m67K13N2rnT7wq8D4OhMZk3lA/sITcDf8
+         zplNkLPWhSsLt/D50kRmTU5R0pEIKdG+ptuOZCsyQKCQRQvyQiHGldlYjBDAgFz3XKFM
+         wkxQ==
+X-Gm-Message-State: AO0yUKUAFr3/f32Q4MenuCitSDB4XgfLIjd19H1wQeFz8SumoYvpJfaG
+        IuNrPifSOitjF+oc4RWZ4HdQQIthSfiJjiOXThM=
+X-Google-Smtp-Source: AK7set/MTjxsChf+B5WhVnnNN8MlSbOTlXD6uA5tgzkdHL4q+18DOSUu+HV1VZLKY1E9llgUoKg6aNs6AmuOdMcIX40=
+X-Received: by 2002:a17:906:b256:b0:924:32b2:e3d1 with SMTP id
+ ce22-20020a170906b25600b0092432b2e3d1mr1968310ejb.3.1678672573448; Sun, 12
+ Mar 2023 18:56:13 -0700 (PDT)
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.3 cv=GdlpYjfL c=1 sm=1 tr=0 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=oKJsc7D3gJEA:10 a=IkcTkHD0fZMA:10 a=k__wU0fu6RkA:10 a=VwQbUJbxAAAA:8 a=wGBd0DG7BR80vmoGwPEA:9 a=QEXdDO2ut3YA:10 a=AjGcO6oz07-iQ99wixmX:22
-X-SEG-SpamProfiler-Score: 0
+References: <20230311151756.83302-1-kerneljasonxing@gmail.com> <ZA4huzYKK/tdT3Ep@corigine.com>
+In-Reply-To: <ZA4huzYKK/tdT3Ep@corigine.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 13 Mar 2023 09:55:37 +0800
+Message-ID: <CAL+tcoDi5fVWjyTX6wjJGKrszqL6JWkEgDBajhZchYSW7kyhGQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] net-sysfs: display two backlog queue len separately
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQpPbiAxMy8wMy8yMyAxMjozNiwgQW5kaSBTaHl0aSB3cm90ZToNCj4gImZzbCx0aW1lb3V0IiBp
-cyBtYXJrZWQgYXMgZGVwcmVjYXRlZCBhbmQgcmVwbGFjZWQgYnkgdGhlDQo+ICJpMmMtc2NsLWNs
-ay1sb3ctdGltZW91dC1tcyIgaTJjIHByb3BlcnR5Lg0KPg0KPiBVc2UgdGhpcyBsYXR0ZXIgYW5k
-LCBpbiBjYXNlIGl0IGlzIG1pc3NpbmcsIGZvciBiYWNrDQo+IGNvbXBhdGliaWxpdHksIGNoZWNr
-IHdoZXRoZXIgd2Ugc3RpbGwgaGF2ZSAiZnNsLHRpbWVvdXQiIGRlZmluZWQuDQo+DQo+IFNpZ25l
-ZC1vZmYtYnk6IEFuZGkgU2h5dGkgPGFuZGkuc2h5dGlAa2VybmVsLm9yZz4NCj4gUmV2aWV3ZWQt
-Ynk6IENocmlzIFBhY2toYW0gPGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCkdh
-dmUgdGhlIHBhdGNoZXMgYSBzcGluIG9uIGEgUDIwNDFSREIgc28NCg0KVGVzdGVkLWJ5OiBDaHJp
-cyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFsbGllZHRlbGVzaXMuY28ubno+DQoNCj4gLS0tDQo+
-ICAgZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tcGMuYyB8IDEyICsrKysrKysrKysrLQ0KPiAgIDEg
-ZmlsZSBjaGFuZ2VkLCAxMSBpbnNlcnRpb25zKCspLCAxIGRlbGV0aW9uKC0pDQo+DQo+IGRpZmYg
-LS1naXQgYS9kcml2ZXJzL2kyYy9idXNzZXMvaTJjLW1wYy5jIGIvZHJpdmVycy9pMmMvYnVzc2Vz
-L2kyYy1tcGMuYw0KPiBpbmRleCA4N2U1YzE3MjU3NTAuLjI4ZjExZTMwYWM1MCAxMDA2NDQNCj4g
-LS0tIGEvZHJpdmVycy9pMmMvYnVzc2VzL2kyYy1tcGMuYw0KPiArKysgYi9kcml2ZXJzL2kyYy9i
-dXNzZXMvaTJjLW1wYy5jDQo+IEBAIC04NDMsOCArODQzLDE4IEBAIHN0YXRpYyBpbnQgZnNsX2ky
-Y19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpvcCkNCj4gICAJCQltcGNfaTJjX3NldHVw
-Xzh4eHgob3AtPmRldi5vZl9ub2RlLCBpMmMsIGNsb2NrKTsNCj4gICAJfQ0KPiAgIA0KPiArCS8q
-DQo+ICsJICogImZzbCx0aW1lb3V0IiBoYXMgYmVlbiBtYXJrZWQgYXMgZGVwcmVjYXRlZCBhbmQs
-IHRvIG1haW50YWluDQo+ICsJICogYmFja3dhcmQgY29tcGF0aWJpbGl0eSwgd2Ugd2lsbCBvbmx5
-IGxvb2sgZm9yIGl0IGlmDQo+ICsJICogImkyYy1zY2wtY2xrLWxvdy10aW1lb3V0LW1zIiBpcyBu
-b3QgcHJlc2VudC4NCj4gKwkgKi8NCj4gICAJcmVzdWx0ID0gb2ZfcHJvcGVydHlfcmVhZF91MzIo
-b3AtPmRldi5vZl9ub2RlLA0KPiAtCQkJCSAgICAgICJmc2wsdGltZW91dCIsICZtcGNfb3BzLnRp
-bWVvdXQpOw0KPiArCQkJCSAgICAgICJpMmMtc2NsLWNsay1sb3ctdGltZW91dC1tcyIsDQo+ICsJ
-CQkJICAgICAgJm1wY19vcHMudGltZW91dCk7DQo+ICsJaWYgKHJlc3VsdCA9PSAtRUlOVkFMKQ0K
-PiArCQlyZXN1bHQgPSBvZl9wcm9wZXJ0eV9yZWFkX3UzMihvcC0+ZGV2Lm9mX25vZGUsDQo+ICsJ
-CQkJCSAgICAgICJmc2wsdGltZW91dCIsICZtcGNfb3BzLnRpbWVvdXQpOw0KPiArDQo+ICAgCWlm
-ICghcmVzdWx0KSB7DQo+ICAgCQltcGNfb3BzLnRpbWVvdXQgKj0gSFogLyAxMDAwMDAwOw0KPiAg
-IAkJaWYgKG1wY19vcHMudGltZW91dCA8IDUp
+On Mon, Mar 13, 2023 at 3:02=E2=80=AFAM Simon Horman <simon.horman@corigine=
+.com> wrote:
+>
+> On Sat, Mar 11, 2023 at 11:17:56PM +0800, Jason Xing wrote:
+> > From: Jason Xing <kernelxing@tencent.com>
+> >
+> > Sometimes we need to know which one of backlog queue can be exactly
+> > long enough to cause some latency when debugging this part is needed.
+> > Thus, we can then separate the display of both.
+> >
+> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> > ---
+> >  net/core/net-procfs.c | 17 ++++++++++++-----
+> >  1 file changed, 12 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
+> > index 1ec23bf8b05c..97a304e1957a 100644
+> > --- a/net/core/net-procfs.c
+> > +++ b/net/core/net-procfs.c
+> > @@ -115,10 +115,14 @@ static int dev_seq_show(struct seq_file *seq, voi=
+d *v)
+> >       return 0;
+> >  }
+> >
+> > -static u32 softnet_backlog_len(struct softnet_data *sd)
+> > +static u32 softnet_input_pkt_queue_len(struct softnet_data *sd)
+> >  {
+> > -     return skb_queue_len_lockless(&sd->input_pkt_queue) +
+> > -            skb_queue_len_lockless(&sd->process_queue);
+> > +     return skb_queue_len_lockless(&sd->input_pkt_queue);
+> > +}
+> > +
+> > +static u32 softnet_process_queue_len(struct softnet_data *sd)
+> > +{
+> > +     return skb_queue_len_lockless(&sd->process_queue);
+> >  }
+> >
+> >  static struct softnet_data *softnet_get_online(loff_t *pos)
+> > @@ -169,12 +173,15 @@ static int softnet_seq_show(struct seq_file *seq,=
+ void *v)
+> >        * mapping the data a specific CPU
+> >        */
+> >       seq_printf(seq,
+> > -                "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08=
+x %08x %08x\n",
+> > +                "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08=
+x %08x %08x "
+> > +                "%08x %08x\n",
+> >                  sd->processed, sd->dropped, sd->time_squeeze, 0,
+> >                  0, 0, 0, 0, /* was fastroute */
+> >                  0,   /* was cpu_collision */
+> >                  sd->received_rps, flow_limit_count,
+> > -                softnet_backlog_len(sd), (int)seq->index);
+> > +                0,   /* was len of two backlog queues */
+> > +                (int)seq->index,
+>
+> nit: I think you could avoid this cast by using %llx as the format specif=
+ier.
+
+I'm not sure if I should change this format since the above line is
+introduced in commit 7d58e6555870d ('net-sysfs: add backlog len and
+CPU id to softnet data').
+The seq->index here manifests which cpu it uses, so it can be
+displayed in 'int' format. Meanwhile, using %8x to output is much
+cleaner if the user executes 'cat /proc/net/softnet_stat'.
+
+What do you think about this?
+
+Thanks,
+Jason
+
+>
+> > +                softnet_input_pkt_queue_len(sd), softnet_process_queue=
+_len(sd));
+> >       return 0;
+> >  }
+> >
+> > --
+> > 2.37.3
+> >
