@@ -2,74 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59D4E6B8295
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:20:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0033D6B829B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:20:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229790AbjCMUUe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:20:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35074 "EHLO
+        id S229934AbjCMUUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229633AbjCMUUb (ORCPT
+        with ESMTP id S229836AbjCMUUu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:20:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B053D30184;
-        Mon, 13 Mar 2023 13:19:53 -0700 (PDT)
+        Mon, 13 Mar 2023 16:20:50 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5873934011;
+        Mon, 13 Mar 2023 13:20:20 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D16D1B8154D;
-        Mon, 13 Mar 2023 20:19:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B55BC433EF;
-        Mon, 13 Mar 2023 20:19:09 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DEA7A614BC;
+        Mon, 13 Mar 2023 20:20:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 45CE9C433D2;
+        Mon, 13 Mar 2023 20:20:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678738749;
-        bh=GDmcN/dy0SnSUMLHE7Vl7Yc0OKdYbuahZ2sS0Zgi9nk=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=paQr7rvkAs+Np/ks66qj7uKD4IgUujNj51OA0x/xcHYY02DQk0kGwpvZPAkGgW+gJ
-         tALopIq8T2VCeEfUGZpB6u4PCHerpg+aWIBYbmWMeMf3Jb0JE0/fbEjdC9BW65Sl0M
-         nO/3RG/NCYYHWQyWo4PFWTpfP/BHd2CKvQpQcw3+PpOwjA3Q/c7eDbVXeevwZFYCcp
-         RjPo6x8tUAL2ZTKKjkskbVR8MdbD3V5Uc5pYJUI7/0HqrT0fBLEh5RprCRScBir2LW
-         pzDqgkCGZXQnTEZgLabfYcYxk2CeH7prrgCQAzqiBITj0YaS68wYzvuFC9lu1QGepu
-         3UuaV4p8QOOCg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 5F79D4049F; Mon, 13 Mar 2023 17:19:06 -0300 (-03)
-Date:   Mon, 13 Mar 2023 17:19:06 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 02/13] perf build: Make BUILD_BPF_SKEL default, rename
- to NO_BPF_SKEL
-Message-ID: <ZA+FOpzJswZx8os+@kernel.org>
-References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-3-irogers@google.com>
+        s=k20201202; t=1678738818;
+        bh=elXHeg8+AQHHggRDBtDTTIbhG+p7aTNbqwRm6zAaP9s=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=YuvOpqSS/Gel/YSDIJEDVtiuBv2BDVT2ixpm6vIGeNk3/IukRNDUmLLNJc8iKHuI2
+         XEojSo+n2aEd1kXJ4rPxd7nbU6q9AFu8DZyrm2ulUJAYu3VSFb4r8XK3pFsn4bNr8S
+         9uXucOpyrhO42RR6MVxUT4QltshHC8nLSAed4OXAUHpx2hjYKBEAcq9fXCytenm4I8
+         eo3ctz6OLA0y1bpAxZhylhszgHNYZvG5+1G3n0gIw+RNJ9Ac+DYo6JEKpP8pHA+JoM
+         361rkgtGy/740PMpBMVe0zPWjVEBv1e9eZxbo8laPsmaFgVqts9+jxiFgTg44BDhoI
+         yhAuoSPIMFSng==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 26DE3E66CBD;
+        Mon, 13 Mar 2023 20:20:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311065753.3012826-3-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Subject: Re: [f2fs-dev] [PATCH v2] f2fs: fix uninitialized skipped_gc_rwsem
+From:   patchwork-bot+f2fs@kernel.org
+Message-Id: <167873881815.1608.4070724001980966812.git-patchwork-notify@kernel.org>
+Date:   Mon, 13 Mar 2023 20:20:18 +0000
+References: <20230216074427epcms2p49a3d71b08d356530b40e34e750cc2366@epcms2p4>
+In-Reply-To: <20230216074427epcms2p49a3d71b08d356530b40e34e750cc2366@epcms2p4>
+To:     Yonggil Song <yonggil.song@samsung.com>
+Cc:     chao@kernel.org, jaegeuk@kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net,
+        linux-kernel@vger.kernel.org, daehojeong@google.com,
+        gregkh@linuxfoundation.org, stable@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,245 +58,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 10:57:42PM -0800, Ian Rogers escreveu:
-> BPF skeleton support is now key to a number of perf features. Rather
-> than making it so that BPF support must be enabled for the build, make
-> this the default and error if the build lacks a clang and libbpf that
-> are sufficient. To avoid the error and build without BPF skeletons the
-> NO_BPF_SKEL=1 flag can be used. Add a build-options flag to 'perf
-> version' to enable detection of the BPF skeleton support and use this
-> in the offcpu shell test.
+Hello:
 
-Checking this:
+This patch was applied to jaegeuk/f2fs.git (dev)
+by Jaegeuk Kim <jaegeuk@kernel.org>:
 
-cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.Rr5xDuXo13 DESTDIR=/tmp/tmp.cYdDvy09eY
-  BUILD:   Doing 'make -j32' parallel build
-  HOSTCC  /tmp/tmp.Rr5xDuXo13/fixdep.o
-  HOSTLD  /tmp/tmp.Rr5xDuXo13/fixdep-in.o
-  LINK    /tmp/tmp.Rr5xDuXo13/fixdep
-Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
-Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
-Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
-Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
-Makefile.config:1130: No openjdk development package found, please install JDK package, e.g. openjdk-8-jdk, java-1.8.0-openjdk-devel
+On Thu, 16 Feb 2023 16:44:27 +0900 you wrote:
+> When f2fs skipped a gc round during victim migration, there was a bug which
+> would skip all upcoming gc rounds unconditionally because skipped_gc_rwsem
+> was not initialized. It fixes the bug by correctly initializing the
+> skipped_gc_rwsem inside the gc loop.
+> 
+> Fixes: 3db1de0e582c ("f2fs: change the current atomic write way")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
 
-  GEN     /tmp/tmp.Rr5xDuXo13/common-cmds.h
-  CC      /tmp/tmp.Rr5xDuXo13/dlfilters/dlfilter-test-api-v0.o
-  CC      /tmp/tmp.Rr5xDuXo13/dlfilters/dlfilter-show-cycles.o
-  LINK    /tmp/tmp.Rr5xDuXo13/dlfilters/dlfilter-test-api-v0.so
-  LINK    /tmp/tmp.Rr5xDuXo13/dlfilters/dlfilter-show-cycles.so
-  INSTALL /tmp/tmp.Rr5xDuXo13/libsubcmd/include/subcmd/exec-cmd.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libsubcmd/include/subcmd/help.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libsubcmd/include/subcmd/pager.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libsubcmd/include/subcmd/parse-options.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libsubcmd/include/subcmd/run-command.h
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/exec-cmd.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/help.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/pager.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/parse-options.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/run-command.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/sigchain.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsubcmd/subcmd-config.o
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/
-  INSTALL libsubcmd_headers
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/hashmap.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/relo_core.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_internal.h
-  PERF_VERSION = 6.3.rc1.g0b82b38b7b56
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/bpf_perf.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/core.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/cpumap.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/threadmap.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libsymbol/include/symbol/kallsyms.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libapi/include/api/cpu.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/evlist.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libapi/include/api/debug.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/evsel.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libapi/include/api/io.h
-  GEN     perf-archive
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/event.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libapi/include/api/fd/array.h
-  GEN     perf-iostat
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/perf/mmap.h
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/core.o
-  CC      /tmp/tmp.Rr5xDuXo13/libsymbol/kallsyms.o
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/cpu.o
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/cpumap.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libapi/include/api/fs/fs.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/libapi/include/api/fs/tracing_path.h
-  MKDIR   /tmp/tmp.Rr5xDuXo13/libapi/fd/
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/debug.o
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/str_error_r.o
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/cpumap.o
-  INSTALL libsymbol_headers
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/evlist.h
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/threadmap.o
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/evsel.h
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/evsel.o
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/lib.h
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/evlist.o
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/mmap.h
-  MKDIR   /tmp/tmp.Rr5xDuXo13/libapi/fs/
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/threadmap.h
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/fd/array.o
-  MKDIR   /tmp/tmp.Rr5xDuXo13/libapi/fs/
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/mmap.o
-  INSTALL /tmp/tmp.Rr5xDuXo13/libperf/include/internal/xyarray.h
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/fs/fs.o
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/zalloc.o
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/xyarray.o
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/fs/cgroup.o
-  CC      /tmp/tmp.Rr5xDuXo13/libperf/lib.o
-  INSTALL libapi_headers
-  CC      /tmp/tmp.Rr5xDuXo13/libapi/fs/tracing_path.o
-  INSTALL libperf_headers
-  GEN     /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/bpf_helper_defs.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/btf.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_common.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_legacy.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_helpers.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_tracing.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_endian.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_core_read.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/skel_internal.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/libbpf_version.h
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/usdt.bpf.h
-  LD      /tmp/tmp.Rr5xDuXo13/libapi/fd/libapi-in.o
-  LD      /tmp/tmp.Rr5xDuXo13/libsymbol/libsymbol-in.o
-  AR      /tmp/tmp.Rr5xDuXo13/libsymbol/libsymbol.a
-  LD      /tmp/tmp.Rr5xDuXo13/libapi/fs/libapi-in.o
-  INSTALL /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/include/bpf/bpf_helper_defs.h
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  INSTALL libbpf_headers
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  LD      /tmp/tmp.Rr5xDuXo13/libapi/libapi-in.o
-  MKDIR   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/bpf.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf_probes.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/hashmap.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/nlattr.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf_dump.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/btf.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf_errno.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/str_error.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/netlink.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/ringbuf.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/bpf_prog_linfo.o
-  LD      /tmp/tmp.Rr5xDuXo13/libperf/libperf-in.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/strset.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/linker.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/gen_loader.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/relo_core.o
-  AR      /tmp/tmp.Rr5xDuXo13/libapi/libapi.a
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/usdt.o
-  AR      /tmp/tmp.Rr5xDuXo13/libperf/libperf.a
-  LD      /tmp/tmp.Rr5xDuXo13/libsubcmd/libsubcmd-in.o
-  AR      /tmp/tmp.Rr5xDuXo13/libsubcmd/libsubcmd.a
-  GEN     /tmp/tmp.Rr5xDuXo13/python/perf.cpython-311-x86_64-linux-gnu.so
-  LD      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/staticobjs/libbpf-in.o
-  LINK    /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/libbpf/libbpf.a
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/main.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/common.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/json_writer.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/gen.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/btf.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/xlated_dumper.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/btf_dumper.o
-  CC      /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/disasm.o
-  LINK    /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bootstrap/bpftool
-  GEN     /tmp/tmp.Rr5xDuXo13/util/bpf_skel/vmlinux.h
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bpf_prog_profiler.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_leader.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_follower.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_cgroup.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/func_latency.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/off_cpu.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/lock_contention.bpf.o
-  CLANG   /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/kwork_trace.bpf.o
-util/bpf_skel/lock_contention.bpf.c:192:7: error: call to undeclared function 'bpf_core_type_matches'; ISO C99 and later do not support implicit function declarations [-Werror,-Wimplicit-function-declaration]
-                if (bpf_core_type_matches(struct rw_semaphore___old)) {
-                    ^
-util/bpf_skel/lock_contention.bpf.c:192:29: error: expected expression
-                if (bpf_core_type_matches(struct rw_semaphore___old)) {
-                                          ^
-util/bpf_skel/lock_contention.bpf.c:195:36: error: expected expression
-                } else if (bpf_core_type_matches(struct rw_semaphore___new)) {
-                                                 ^
-3 errors generated.
-/usr/bin/ld: bpf architecture of input file `/tmp/bperf_follower-74fba5.o' is incompatible with i386:x86-64 output
-/usr/bin/ld: bpf architecture of input file `/tmp/bperf_leader-b2ec61.o' is incompatible with i386:x86-64 output
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-collect2: error: ld returned 1 exit status
-collect2: error: ld returned 1 exit status
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-/usr/bin/ld: bpf architecture of input file `/tmp/func_latency-70b7d4.o' is incompatible with i386:x86-64 output
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/lock_contention.bpf.o] Error 1
-make[4]: *** Waiting for unfinished jobs....
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_follower.bpf.o] Error 1
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_leader.bpf.o] Error 1
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-collect2: error: ld returned 1 exit status
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/func_latency.bpf.o] Error 1
-/usr/bin/ld: bpf architecture of input file `/tmp/bpf_prog_profiler-6e9720.o' is incompatible with i386:x86-64 output
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-collect2: error: ld returned 1 exit status
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bpf_prog_profiler.bpf.o] Error 1
-/usr/bin/ld: bpf architecture of input file `/tmp/kwork_trace-8d5b4e.o' is incompatible with i386:x86-64 output
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-collect2: error: ld returned 1 exit status
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/kwork_trace.bpf.o] Error 1
-/usr/bin/ld: bpf architecture of input file `/tmp/off_cpu-1cb75d.o' is incompatible with i386:x86-64 output
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-collect2: error: ld returned 1 exit status
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/off_cpu.bpf.o] Error 1
-/usr/bin/ld: bpf architecture of input file `/tmp/bperf_cgroup-45eb44.o' is incompatible with i386:x86-64 output
-/usr/bin/ld: /usr/lib/gcc/x86_64-redhat-linux/12/../../../../lib64/crt1.o: in function `_start':
-(.text+0x1b): undefined reference to `main'
-/usr/bin/ld: final link failed: file in wrong format
-collect2: error: ld returned 1 exit status
-clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_cgroup.bpf.o] Error 1
-make[3]: *** [Makefile.perf:236: sub-make] Error 2
-make[2]: *** [Makefile:70: all] Error 2
-make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
-make: *** [Makefile:103: build-test] Error 2
-make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
+Here is the summary with links:
+  - [f2fs-dev,v2] f2fs: fix uninitialized skipped_gc_rwsem
+    https://git.kernel.org/jaegeuk/f2fs/c/196036c45f8c
 
-real	5m55.192s
-user	62m31.596s
-sys	14m30.828s
-⬢[acme@toolbox perf-tools-next]$
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
