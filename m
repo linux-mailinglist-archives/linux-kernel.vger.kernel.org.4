@@ -2,316 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7643F6B7771
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:28:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2519A6B7777
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:29:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229663AbjCMM2A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:28:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49018 "EHLO
+        id S229698AbjCMM3h convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 08:29:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCMM15 (ORCPT
+        with ESMTP id S229593AbjCMM3f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:27:57 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF79637FE;
-        Mon, 13 Mar 2023 05:27:54 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id f18so15506915lfa.3;
-        Mon, 13 Mar 2023 05:27:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678710473;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=XxtPvQMZV2mCK+5C4lQiOKLhkxSXW7szGvOPTDx1T2Q=;
-        b=jo56tZtzXDcOCxUp/6P4Sb11B5485prAg2yiDY0cK9xYogus5NTSd5CibV/ou8rK1I
-         iI3gIgLwD8QNLHdUNv4fNY9mYdI/a5qV0LHE6HSgT1NbBLptZc0LNfjMj4okQeL61Lhh
-         gb6MjLs8bX+odVcKi53mbj4uiRtKg0jMOQVwWJRxecRDiTA71bG2RKTpxKHdxH9zShq3
-         klyG9XIWT8w8e3XjIXqIMjBimtF3O2QZDfj1+qsDqp0ohB34a/1A3PoACfCOx09yKJHF
-         6pxzYgxjqNB+1yCufisAxZH3zsNWDaLAtYK4hmyKCcH1fss4pTPYgGL1I8qcb90+Iab7
-         gGTQ==
+        Mon, 13 Mar 2023 08:29:35 -0400
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE52348E08;
+        Mon, 13 Mar 2023 05:29:33 -0700 (PDT)
+Received: by mail-ed1-f50.google.com with SMTP id cn21so17824227edb.0;
+        Mon, 13 Mar 2023 05:29:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678710473;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XxtPvQMZV2mCK+5C4lQiOKLhkxSXW7szGvOPTDx1T2Q=;
-        b=jpiQgfQbQiNde5a3iXrZZx0X5U4BpElEKp49ZHPgnTFeR5mvuyq1AewBCBF119gJ2o
-         qhR5IaP9pUpop0tSg8DwXCnr3H0eSldLBRexSmEvIzej8UYt7nRuzr8K/GamrRjPfjfC
-         YUurAuf47Dps+eDWuaVGbgDx5GP58WYoj9j+I5OHvpxzX+fp7nB9zaXxTemyCfXIMzNZ
-         JPlgYAkvE8cst/5xRpet+5BAPnmTMKzF8SxSXQxhwUBMiDpH6VXSdWAYliwSXORIRQOT
-         9L3b5VcMFh+DZ4qy+7nJ4pYAjEVInZv6UVciyO74Ue0ZxeT4WaYgo2rPXTlabFGVCp99
-         Pw9w==
-X-Gm-Message-State: AO0yUKVl/tf/drkko+FWm9cF6qmxCFMBEL/I3NmXD2iuFhtkOl4Qxq4m
-        zR9wjDr1m8GVj837kj5Pb8GhHSs6i1s=
-X-Google-Smtp-Source: AK7set8MA6Rozhn/ejemOTSbdCBjH1qcTzbnWBzsy2OuD7WcuUtlWqKzFpWDxvse9EEw2ovuFD9Kjg==
-X-Received: by 2002:ac2:5624:0:b0:4db:3890:cb4e with SMTP id b4-20020ac25624000000b004db3890cb4emr9153884lff.4.1678710472756;
-        Mon, 13 Mar 2023 05:27:52 -0700 (PDT)
-Received: from pc636 (host-78-79-233-41.mobileonline.telia.com. [78.79.233.41])
-        by smtp.gmail.com with ESMTPSA id f5-20020ac25325000000b004dc4cb4f9c4sm957271lfh.35.2023.03.13.05.27.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 05:27:52 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Mon, 13 Mar 2023 13:27:50 +0100
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        linux-doc@vger.kernel.org, rcu@vger.kernel.org
-Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
-Message-ID: <ZA8WxjUL0eUPtVy8@pc636>
-References: <20230307173313.GJ1301832@paulmck-ThinkPad-P17-Gen-1>
- <20230307185443.GA516865@google.com>
- <20230307192726.GL1301832@paulmck-ThinkPad-P17-Gen-1>
- <ZAhYP9a8u05hzsOn@pc636>
- <20230308144528.GR1301832@paulmck-ThinkPad-P17-Gen-1>
- <ZAnXxr9OyFT63xSx@pc636>
- <20230309221056.GB148448@google.com>
- <ZArwZjcEYXAYwmqi@pc636>
- <8f8a40cd-8b1f-4121-98f7-7a1bdbcaf6a6@paulmck-laptop>
- <ZA7yK6iznHqiBu5i@pc636>
+        d=1e100.net; s=20210112; t=1678710572;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ESAp3UfXRxsSAchomKtpcRbG9GtF4ptbUdeeyQFslxk=;
+        b=5e3qpFhXcxckJIfGwpQ3idCxlyEcooVi8tKDXKS180KuGUJsVbio6Hbkyi4bAnxeIT
+         kqlyuzN+JsOlgeNISgmly1H//osx+rRNtitWIgNjxyQ5MpdnHODAywysbAaTSrDcMuQj
+         wzeyUbIy2kq2FU6NVr8cwPN4atSnzmBlf1ukgwoq0xrw4Pn+vuxoLzgegCtCDbMGSNNr
+         iDZ0p55PjC561iELkjc85+ALER71cRwMbCNRSqpyi2nMQ5bLSunzqKUGALuLemsmWpG6
+         IRENgMQ2kf4t85J1lVveegGHpZasIiR3pkFaUfNtNNccDihLMFjl8fvSfKp/GGehzpBb
+         gNYw==
+X-Gm-Message-State: AO0yUKW6HPkn9xnnEdfwZfh5t4LsVUNNcs2TV1H/TfoAJEdN8+vO1JUB
+        xp8GesgNkMxYcjJTs7bnGcz/jTGWYuSwg9cwpBE=
+X-Google-Smtp-Source: AK7set+fobktK3NwY5dh4rmvgAxFeKPXgkIZMTivuEmcFfSghCGw4Ren1fitbeVvYdLVUpydC9R6/23nUytjswZkBYg=
+X-Received: by 2002:a17:906:13c2:b0:8b1:7aec:c8e6 with SMTP id
+ g2-20020a17090613c200b008b17aecc8e6mr17897480ejc.2.1678710572140; Mon, 13 Mar
+ 2023 05:29:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA7yK6iznHqiBu5i@pc636>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230312204150.1353517-1-robdclark@gmail.com> <20230312204150.1353517-9-robdclark@gmail.com>
+In-Reply-To: <20230312204150.1353517-9-robdclark@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Mon, 13 Mar 2023 13:29:17 +0100
+Message-ID: <CAJZ5v0ijxoLM+bGuW0oksm8a4tbmV-wX=WSFHKutYSBcYTJTuA@mail.gmail.com>
+Subject: Re: [PATCH 08/13] PM / QoS: Fix constraints alloc vs reclaim locking
+To:     Rob Clark <robdclark@gmail.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
+        Rob Clark <robdclark@chromium.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "open list:POWER MANAGEMENT CORE" <linux-pm@vger.kernel.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:51:39AM +0100, Uladzislau Rezki wrote:
-> On Fri, Mar 10, 2023 at 10:24:34PM -0800, Paul E. McKenney wrote:
-> > On Fri, Mar 10, 2023 at 09:55:02AM +0100, Uladzislau Rezki wrote:
-> > > On Thu, Mar 09, 2023 at 10:10:56PM +0000, Joel Fernandes wrote:
-> > > > On Thu, Mar 09, 2023 at 01:57:42PM +0100, Uladzislau Rezki wrote:
-> > > > [..]
-> > > > > > > > > > See this commit:
-> > > > > > > > > > 
-> > > > > > > > > > 3705b88db0d7cc ("rcu: Add a module parameter to force use of
-> > > > > > > > > > expedited RCU primitives")
-> > > > > > > > > > 
-> > > > > > > > > > Antti provided this commit precisely in order to allow Android
-> > > > > > > > > > devices to expedite the boot process and to shut off the
-> > > > > > > > > > expediting at a time of Android userspace's choosing.  So Android
-> > > > > > > > > > has been making this work for about ten years, which strikes me
-> > > > > > > > > > as an adequate proof of concept.  ;-)
-> > > > > > > > > 
-> > > > > > > > > Thanks for the pointer. That's true. Looking at Android sources, I
-> > > > > > > > > find that Android Mediatek devices at least are setting
-> > > > > > > > > rcu_expedited to 1 at late stage of their userspace boot (which is
-> > > > > > > > > weird, it should be set to 1 as early as possible), and
-> > > > > > > > > interestingly I cannot find them resetting it back to 0!.  Maybe
-> > > > > > > > > they set rcu_normal to 1? But I cannot find that either. Vlad? :P
-> > > > > > > > 
-> > > > > > > > Interesting.  Though this is consistent with Antti's commit log,
-> > > > > > > > where he talks about expediting grace periods but not unexpediting
-> > > > > > > > them.
-> > > > > > > > 
-> > > > > > > Do you think we need to unexpedite it? :))))
-> > > > > > 
-> > > > > > Android runs on smallish systems, so quite possibly not!
-> > > > > > 
-> > > > > We keep it enabled and never unexpedite it. The reason is a performance.  I
-> > > > > have done some app-launch time analysis with enabling and disabling of it.
-> > > > > 
-> > > > > An expedited case is much better when it comes to app launch time. It
-> > > > > requires ~25% less time to run an app comparing with unexpedited variant.
-> > > > > So we have a big gain here.
-> > > > 
-> > > > Wow, that's huge. I wonder if you can dig deeper and find out why that is so
-> > > > as the callbacks may need to be synchronize_rcu_expedited() then, as it could
-> > > > be slowing down other usecases! I find it hard to believe, real-time
-> > > > workloads will run better without those callbacks being always-expedited if
-> > > > it actually gives back 25% in performance!
-> > > > 
-> > > I can dig further, but on a high level i think there are some spots
-> > > which show better performance if expedited is set. I mean synchronize_rcu()
-> > > becomes as "less blocking a context" from a time point of view.
-> > > 
-> > > The problem of a regular synchronize_rcu() is - it can trigger a big latency
-> > > delays for a caller. For example for nocb case we do not know where in a list
-> > > our callback is located and when it is invoked to unblock a caller.
-> > 
-> > True, expedited RCU grace periods do not have this callback-invocation
-> > delay that normal RCU does.
-> > 
-> > > I have already mentioned somewhere. Probably it makes sense to directly wake-up
-> > > callers from the GP kthread instead and not via nocb-kthread that invokes our callbacks
-> > > one by one.
-> > 
-> > Makes sense, but it is necessary to be careful.  Wakeups are not fast,
-> > so making the RCU grace-period kthread do them all sequentially is not
-> > a strategy to win.  For example, note that the next expedited grace
-> > period can start before the previous expedited grace period has finished
-> > its wakeups.
-> > 
-> I hove done a small and quick prototype:
-> 
-> <snip>
-> diff --git a/include/linux/rcupdate_wait.h b/include/linux/rcupdate_wait.h
-> index 699b938358bf..e1a4cca9a208 100644
-> --- a/include/linux/rcupdate_wait.h
-> +++ b/include/linux/rcupdate_wait.h
-> @@ -9,6 +9,8 @@
->  #include <linux/rcupdate.h>
->  #include <linux/completion.h>
-> 
-> +extern struct llist_head gp_wait_llist;
-> +
->  /*
->   * Structure allowing asynchronous waiting on RCU.
->   */
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index ee27a03d7576..50b81ca54104 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -113,6 +113,9 @@ int rcu_num_lvls __read_mostly = RCU_NUM_LVLS;
->  int num_rcu_lvl[] = NUM_RCU_LVL_INIT;
->  int rcu_num_nodes __read_mostly = NUM_RCU_NODES; /* Total # rcu_nodes in use. */
-> 
-> +/* Waiters for a GP kthread. */
-> +LLIST_HEAD(gp_wait_llist);
-> +
->  /*
->   * The rcu_scheduler_active variable is initialized to the value
->   * RCU_SCHEDULER_INACTIVE and transitions RCU_SCHEDULER_INIT just before the
-> @@ -1776,6 +1779,14 @@ static noinline void rcu_gp_cleanup(void)
->                 on_each_cpu(rcu_strict_gp_boundary, NULL, 0);
+On Sun, Mar 12, 2023 at 9:42 PM Rob Clark <robdclark@gmail.com> wrote:
+>
+> From: Rob Clark <robdclark@chromium.org>
+>
+> In the process of adding lockdep annotation for drm GPU scheduler's
+> job_run() to detect potential deadlock against shrinker/reclaim, I hit
+> this lockdep splat:
+>
+>    ======================================================
+>    WARNING: possible circular locking dependency detected
+>    6.2.0-rc8-debug+ #558 Tainted: G        W
+>    ------------------------------------------------------
+>    ring0/125 is trying to acquire lock:
+>    ffffffd6d6ce0f28 (dev_pm_qos_mtx){+.+.}-{3:3}, at: dev_pm_qos_update_request+0x38/0x68
+>
+>    but task is already holding lock:
+>    ffffff8087239208 (&gpu->active_lock){+.+.}-{3:3}, at: msm_gpu_submit+0xec/0x178
+>
+>    which lock already depends on the new lock.
+>
+>    the existing dependency chain (in reverse order) is:
+>
+>    -> #4 (&gpu->active_lock){+.+.}-{3:3}:
+>           __mutex_lock+0xcc/0x3c8
+>           mutex_lock_nested+0x30/0x44
+>           msm_gpu_submit+0xec/0x178
+>           msm_job_run+0x78/0x150
+>           drm_sched_main+0x290/0x370
+>           kthread+0xf0/0x100
+>           ret_from_fork+0x10/0x20
+>
+>    -> #3 (dma_fence_map){++++}-{0:0}:
+>           __dma_fence_might_wait+0x74/0xc0
+>           dma_resv_lockdep+0x1f4/0x2f4
+>           do_one_initcall+0x104/0x2bc
+>           kernel_init_freeable+0x344/0x34c
+>           kernel_init+0x30/0x134
+>           ret_from_fork+0x10/0x20
+>
+>    -> #2 (mmu_notifier_invalidate_range_start){+.+.}-{0:0}:
+>           fs_reclaim_acquire+0x80/0xa8
+>           slab_pre_alloc_hook.constprop.0+0x40/0x25c
+>           __kmem_cache_alloc_node+0x60/0x1cc
+>           __kmalloc+0xd8/0x100
+>           topology_parse_cpu_capacity+0x8c/0x178
+>           get_cpu_for_node+0x88/0xc4
+>           parse_cluster+0x1b0/0x28c
+>           parse_cluster+0x8c/0x28c
+>           init_cpu_topology+0x168/0x188
+>           smp_prepare_cpus+0x24/0xf8
+>           kernel_init_freeable+0x18c/0x34c
+>           kernel_init+0x30/0x134
+>           ret_from_fork+0x10/0x20
+>
+>    -> #1 (fs_reclaim){+.+.}-{0:0}:
+>           __fs_reclaim_acquire+0x3c/0x48
+>           fs_reclaim_acquire+0x54/0xa8
+>           slab_pre_alloc_hook.constprop.0+0x40/0x25c
+>           __kmem_cache_alloc_node+0x60/0x1cc
+>           kmalloc_trace+0x50/0xa8
+>           dev_pm_qos_constraints_allocate+0x38/0x100
+>           __dev_pm_qos_add_request+0xb0/0x1e8
+>           dev_pm_qos_add_request+0x58/0x80
+>           dev_pm_qos_expose_latency_limit+0x60/0x13c
+>           register_cpu+0x12c/0x130
+>           topology_init+0xac/0xbc
+>           do_one_initcall+0x104/0x2bc
+>           kernel_init_freeable+0x344/0x34c
+>           kernel_init+0x30/0x134
+>           ret_from_fork+0x10/0x20
+>
+>    -> #0 (dev_pm_qos_mtx){+.+.}-{3:3}:
+>           __lock_acquire+0xe00/0x1060
+>           lock_acquire+0x1e0/0x2f8
+>           __mutex_lock+0xcc/0x3c8
+>           mutex_lock_nested+0x30/0x44
+>           dev_pm_qos_update_request+0x38/0x68
+>           msm_devfreq_boost+0x40/0x70
+>           msm_devfreq_active+0xc0/0xf0
+>           msm_gpu_submit+0x10c/0x178
+>           msm_job_run+0x78/0x150
+>           drm_sched_main+0x290/0x370
+>           kthread+0xf0/0x100
+>           ret_from_fork+0x10/0x20
+>
+>    other info that might help us debug this:
+>
+>    Chain exists of:
+>      dev_pm_qos_mtx --> dma_fence_map --> &gpu->active_lock
+>
+>     Possible unsafe locking scenario:
+>
+>           CPU0                    CPU1
+>           ----                    ----
+>      lock(&gpu->active_lock);
+>                                   lock(dma_fence_map);
+>                                   lock(&gpu->active_lock);
+>      lock(dev_pm_qos_mtx);
+>
+>     *** DEADLOCK ***
+>
+>    3 locks held by ring0/123:
+>     #0: ffffff8087251170 (&gpu->lock){+.+.}-{3:3}, at: msm_job_run+0x64/0x150
+>     #1: ffffffd00b0e57e8 (dma_fence_map){++++}-{0:0}, at: msm_job_run+0x68/0x150
+>     #2: ffffff8087251208 (&gpu->active_lock){+.+.}-{3:3}, at: msm_gpu_submit+0xec/0x178
+>
+>    stack backtrace:
+>    CPU: 6 PID: 123 Comm: ring0 Not tainted 6.2.0-rc8-debug+ #559
+>    Hardware name: Google Lazor (rev1 - 2) with LTE (DT)
+>    Call trace:
+>     dump_backtrace.part.0+0xb4/0xf8
+>     show_stack+0x20/0x38
+>     dump_stack_lvl+0x9c/0xd0
+>     dump_stack+0x18/0x34
+>     print_circular_bug+0x1b4/0x1f0
+>     check_noncircular+0x78/0xac
+>     __lock_acquire+0xe00/0x1060
+>     lock_acquire+0x1e0/0x2f8
+>     __mutex_lock+0xcc/0x3c8
+>     mutex_lock_nested+0x30/0x44
+>     dev_pm_qos_update_request+0x38/0x68
+>     msm_devfreq_boost+0x40/0x70
+>     msm_devfreq_active+0xc0/0xf0
+>     msm_gpu_submit+0x10c/0x178
+>     msm_job_run+0x78/0x150
+>     drm_sched_main+0x290/0x370
+>     kthread+0xf0/0x100
+>     ret_from_fork+0x10/0x20
+>
+> The issue is that dev_pm_qos_mtx is held in the runpm suspend/resume (or
+> freq change) path, but it is also held across allocations that could
+> recurse into shrinker.
+>
+> Solve this by changing dev_pm_qos_constraints_allocate() into a function
+> that can be called unconditionally before the device qos object is
+> needed and before aquiring dev_pm_qos_mtx.  This way the allocations can
+> be done without holding the mutex.  In the case that we raced with
+> another thread to allocate the qos object, detect this *after* acquiring
+> the dev_pm_qos_mtx and simply free the redundant allocations.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+
+I need to take a deeper look at this and so some time is required.
+
+> ---
+>  drivers/base/power/qos.c | 60 +++++++++++++++++++++++++++-------------
+>  1 file changed, 41 insertions(+), 19 deletions(-)
+>
+> diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
+> index 8e93167f1783..f3e0c6b65635 100644
+> --- a/drivers/base/power/qos.c
+> +++ b/drivers/base/power/qos.c
+> @@ -185,18 +185,24 @@ static int apply_constraint(struct dev_pm_qos_request *req,
 >  }
-> 
-> +static void rcu_notify_gp_end(struct llist_node *llist)
-> +{
-> +       struct llist_node *rcu, *next;
-> +
-> +       llist_for_each_safe(rcu, next, llist)
-> +               complete(&((struct rcu_synchronize *) rcu)->completion);
-> +}
-> +
+>
 >  /*
->   * Body of kthread that handles grace periods.
+> - * dev_pm_qos_constraints_allocate
+> + * dev_pm_qos_constraints_ensure_allocated
+>   * @dev: device to allocate data for
+>   *
+> - * Called at the first call to add_request, for constraint data allocation
+> - * Must be called with the dev_pm_qos_mtx mutex held
+> + * Called to ensure that devices qos is allocated, before acquiring
+> + * dev_pm_qos_mtx.
 >   */
-> @@ -1811,6 +1822,9 @@ static int __noreturn rcu_gp_kthread(void *unused)
->                 WRITE_ONCE(rcu_state.gp_state, RCU_GP_CLEANUP);
->                 rcu_gp_cleanup();
->                 WRITE_ONCE(rcu_state.gp_state, RCU_GP_CLEANED);
+> -static int dev_pm_qos_constraints_allocate(struct device *dev)
+> +static int dev_pm_qos_constraints_ensure_allocated(struct device *dev)
+>  {
+>         struct dev_pm_qos *qos;
+>         struct pm_qos_constraints *c;
+>         struct blocking_notifier_head *n;
+>
+> +       if (!dev)
+> +               return -ENODEV;
 > +
-> +               /* Wake-app all users. */
-> +               rcu_notify_gp_end(llist_del_all(&gp_wait_llist));
->         }
+> +       if (!IS_ERR_OR_NULL(dev->power.qos))
+> +               return 0;
+> +
+>         qos = kzalloc(sizeof(*qos), GFP_KERNEL);
+>         if (!qos)
+>                 return -ENOMEM;
+> @@ -227,10 +233,26 @@ static int dev_pm_qos_constraints_allocate(struct device *dev)
+>
+>         INIT_LIST_HEAD(&qos->flags.list);
+>
+> +       mutex_lock(&dev_pm_qos_mtx);
+> +
+> +       if (!IS_ERR_OR_NULL(dev->power.qos)) {
+> +               /*
+> +                * We have raced with another task to create the qos.
+> +                * No biggie, just free the resources we've allocated
+> +                * outside of dev_pm_qos_mtx and move on with life.
+> +                */
+> +               kfree(n);
+> +               kfree(qos);
+> +               goto unlock;
+> +       }
+> +
+>         spin_lock_irq(&dev->power.lock);
+>         dev->power.qos = qos;
+>         spin_unlock_irq(&dev->power.lock);
+>
+> +unlock:
+> +       mutex_unlock(&dev_pm_qos_mtx);
+> +
+>         return 0;
 >  }
-> 
-> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
-> index 19bf6fa3ee6a..1de7c328a3e5 100644
-> --- a/kernel/rcu/update.c
-> +++ b/kernel/rcu/update.c
-> @@ -426,7 +426,10 @@ void __wait_rcu_gp(bool checktiny, int n, call_rcu_func_t *crcu_array,
->                 if (j == i) {
->                         init_rcu_head_on_stack(&rs_array[i].head);
->                         init_completion(&rs_array[i].completion);
-> -                       (crcu_array[i])(&rs_array[i].head, wakeme_after_rcu);
+>
+> @@ -331,17 +353,15 @@ static int __dev_pm_qos_add_request(struct device *dev,
+>  {
+>         int ret = 0;
+>
+> -       if (!dev || !req || dev_pm_qos_invalid_req_type(dev, type))
+> +       if (!req || dev_pm_qos_invalid_req_type(dev, type))
+>                 return -EINVAL;
+>
+>         if (WARN(dev_pm_qos_request_active(req),
+>                  "%s() called for already added request\n", __func__))
+>                 return -EINVAL;
+>
+> -       if (IS_ERR(dev->power.qos))
+> +       if (IS_ERR_OR_NULL(dev->power.qos))
+>                 ret = -ENODEV;
+> -       else if (!dev->power.qos)
+> -               ret = dev_pm_qos_constraints_allocate(dev);
+>
+>         trace_dev_pm_qos_add_request(dev_name(dev), type, value);
+>         if (ret)
+> @@ -390,6 +410,10 @@ int dev_pm_qos_add_request(struct device *dev, struct dev_pm_qos_request *req,
+>  {
+>         int ret;
+>
+> +       ret = dev_pm_qos_constraints_ensure_allocated(dev);
+> +       if (ret)
+> +               return ret;
 > +
-> +                       /* Kick a grace period if needed. */
-> +                       (void) start_poll_synchronize_rcu();
-> +                       llist_add((struct llist_node *) &rs_array[i].head, &gp_wait_llist);
->                 }
+>         mutex_lock(&dev_pm_qos_mtx);
+>         ret = __dev_pm_qos_add_request(dev, req, type, value);
+>         mutex_unlock(&dev_pm_qos_mtx);
+> @@ -537,15 +561,11 @@ int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier,
+>  {
+>         int ret = 0;
+>
+> -       mutex_lock(&dev_pm_qos_mtx);
+> -
+> -       if (IS_ERR(dev->power.qos))
+> -               ret = -ENODEV;
+> -       else if (!dev->power.qos)
+> -               ret = dev_pm_qos_constraints_allocate(dev);
+> -
+> +       ret = dev_pm_qos_constraints_ensure_allocated(dev);
+>         if (ret)
+> -               goto unlock;
+> +               return ret;
+> +
+> +       mutex_lock(&dev_pm_qos_mtx);
+>
+>         switch (type) {
+>         case DEV_PM_QOS_RESUME_LATENCY:
+> @@ -565,7 +585,6 @@ int dev_pm_qos_add_notifier(struct device *dev, struct notifier_block *notifier,
+>                 ret = -EINVAL;
 >         }
-> <snip>
-> 
-> and did some experiments in terms of performance and comparison. A test case is:
-> 
-> thread_X:
->   synchronize_rcu();
->   kfree(ptr);
-> 
-> below are results with running 10 parallel workers running 1000 times of mentioned
-> test scenario:
-> 
-> # default(NOCB)
-> [   29.322944] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 17286604 usec
-> [   29.325759] All test took worker0=63964052068 cycles
-> [   29.327255] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 23414575 usec
-> [   29.329974] All test took worker1=86638822563 cycles
-> [   29.331460] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 23357988 usec
-> [   29.334205] All test took worker2=86429439193 cycles
-> [   29.350808] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 17174001 usec
-> [   29.353553] All test took worker3=63547397954 cycles
-> [   29.355039] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 17141904 usec
-> [   29.357770] All test took worker4=63428630877 cycles
-> [   29.374831] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 23397952 usec
-> [   29.377577] All test took worker5=86577316353 cycles
-> [   29.398809] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 17142038 usec
-> [   29.401549] All test took worker6=63429124938 cycles
-> [   29.414828] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 17158248 usec
-> [   29.417574] All test took worker7=63489107118 cycles
-> [   29.438811] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 18102109 usec
-> [   29.441550] All test took worker8=66981588881 cycles
-> [   29.462826] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 23446042 usec
-> [   29.465561] All test took worker9=86755258455 cycles
-> 
-> # patch(NOCB)
-> [   14.720986] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837883 usec
-> [   14.723753] All test took worker0=32702015768 cycles
-> [   14.740386] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837750 usec
-> [   14.743076] All test took worker1=32701525814 cycles
-> [   14.760350] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837734 usec
-> [   14.763036] All test took worker2=32701466281 cycles
-> [   14.780369] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837707 usec
-> [   14.783057] All test took worker3=32701364901 cycles
-> [   14.800352] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837730 usec
-> [   14.803041] All test took worker4=32701449927 cycles
-> [   14.820355] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837724 usec
-> [   14.823048] All test took worker5=32701428134 cycles
-> [   14.840359] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837705 usec
-> [   14.843052] All test took worker6=32701356465 cycles
-> [   14.860322] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837742 usec
-> [   14.863005] All test took worker7=32701494475 cycles
-> [   14.880363] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837750 usec
-> [   14.883081] All test took worker8=32701525074 cycles
-> [   14.900362] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 8837918 usec
-> [   14.903065] All test took worker9=32702145379 cycles
-> 
+>
+> -unlock:
+>         mutex_unlock(&dev_pm_qos_mtx);
+>         return ret;
+>  }
+> @@ -905,10 +924,13 @@ int dev_pm_qos_update_user_latency_tolerance(struct device *dev, s32 val)
+>  {
+>         int ret;
+>
+> +       ret = dev_pm_qos_constraints_ensure_allocated(dev);
+> +       if (ret)
+> +               return ret;
+> +
+>         mutex_lock(&dev_pm_qos_mtx);
+>
+> -       if (IS_ERR_OR_NULL(dev->power.qos)
+> -           || !dev->power.qos->latency_tolerance_req) {
+> +       if (!dev->power.qos->latency_tolerance_req) {
+>                 struct dev_pm_qos_request *req;
+>
+>                 if (val < 0) {
 > --
-> Uladzislau Rezki
-A quick app launch test. This is a camera app on our device:
-
-urezki@pc636:~/data/yoshino_bin/scripts$ ./test-cam.sh
-629
-572
-652
-622
-642
-650
-613
-654
-607
-urezki@pc636:~/data/yoshino_bin/scripts$ adb shell
-XQ-DQ54:/ $ su
-XQ-DQ54:/ # echo 1 > /sy
-sys/          system/       system_dlkm/  system_ext/
-XQ-DQ54:/ # echo 1 > /sys/kernel/rc
-rcu_expedited       rcu_improve_normal  rcu_normal
-XQ-DQ54:/ # echo 1 > /sys/kernel/rcu_improve_normal
-XQ-DQ54:/ # exit
-XQ-DQ54:/ $ exit
-urezki@pc636:~/data/yoshino_bin/scripts$ ./test-cam.sh
-533
-549
-563
-537
-540
-563
-531
-549
-548
-urezki@pc636:~/data/yoshino_bin/scripts$
-
-the taken time to run an app in milliseconds.
-
---
-Uladzislau Rezki
+> 2.39.2
+>
