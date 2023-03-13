@@ -2,60 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 461566B83E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:18:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B09326B83DD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:18:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbjCMVSy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:18:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55432 "EHLO
+        id S229536AbjCMVSC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:18:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCMVSi (ORCPT
+        with ESMTP id S229456AbjCMVSA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:18:38 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01A0862FCE;
-        Mon, 13 Mar 2023 14:18:18 -0700 (PDT)
+        Mon, 13 Mar 2023 17:18:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BC919009;
+        Mon, 13 Mar 2023 14:17:57 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 917C661518;
-        Mon, 13 Mar 2023 21:18:18 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00DA5C433A1;
-        Mon, 13 Mar 2023 21:18:16 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B035EB81058;
+        Mon, 13 Mar 2023 21:17:55 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 282C3C433D2;
+        Mon, 13 Mar 2023 21:17:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678742298;
-        bh=VoI18tD8o9ZMnsU9Cf6DTDg2Lm9gO1Nul+/I2tAuayk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=nCpgKbakOtkAns5toIg+NwkKvMGL+DU/SdMEBmWUkakSH/dMzXWwA7SDfX6clXZMK
-         gU/KyHhzhT0gDFeK9iucWz0e0IglHGtW32DmLtNqGHBiTDDudMb+/45zNVlOeIuvZl
-         Bo/12sLk3dj/tcHxQxjKCDttyWYQMzQznpLph3UWOcNhoURoNwuMtKVnnRoeaqNdoy
-         a5hf43SlvKT+tDcTLnSz57prfqT8Xjaf9pAmoouN8QsUhIHZrP7PTlSvqcoOY6P2ez
-         N3MOxbOKHntJ5z8gd4RjLpB+XMzx8H03MC+sPhcjiLTOUWadx1pk4yzLPHiUpm7qts
-         YK1pPGfXI5wag==
-From:   Ross Zwisler <zwisler@kernel.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Ross Zwisler <zwisler@google.com>,
-        "Tobin C. Harding" <me@tobin.cc>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Shuah Khan <shuah@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Tycho Andersen <tycho@tycho.pizza>, kvm@vger.kernel.org,
-        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
-        Mukesh Ojha <quic_mojha@quicinc.com>
-Subject: [PATCH v4 3/3] tools/kvm_stat: use canonical ftrace path
-Date:   Mon, 13 Mar 2023 15:17:45 -0600
-Message-Id: <20230313211746.1541525-3-zwisler@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230313211746.1541525-1-zwisler@kernel.org>
-References: <20230313211746.1541525-1-zwisler@kernel.org>
+        s=k20201202; t=1678742274;
+        bh=RNZgWd9QC5n0z3iGMl1kUYPuyhL0ukCDE3/3h54eF0Q=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=KNMtxtnX/gum2ytfefDUfh5kMrWWeGlxTc9Q9iF0ph9d51/2o/AXMAdiDHwkugx6p
+         mTZQit9R6F5RonZ1/QM+zCaMAPeiChSlN4yBklCQ8JH6qTlla9q8J9pE0zGhmVtas3
+         mwnpaYiTDHyCpCNZDm2aL7/IqXv8QM8HmPwkSOMJmVMnQ1T0g38U7ds+FkrNt0WT06
+         XX+ne0kAUAytJjGiMU33WUsGsEbZ54klN3Qubr0T63YIUqYcwbwPZvgohv9iCSY+aO
+         BO7b80GDC/UhCVPE/zRgUOg5ziX6/0+4JLOUAVvfewcpk9PDLn1uwbvwPUA6djG7iV
+         369P15wwZDwCw==
+Date:   Mon, 13 Mar 2023 16:17:52 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc:     Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 00/11] PCI: dwc: Relatively simple fixes and
+ cleanups
+Message-ID: <20230313211752.GA1541360@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313200816.30105-1-Sergey.Semin@baikalelectronics.ru>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,43 +65,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Ross Zwisler <zwisler@google.com>
+On Mon, Mar 13, 2023 at 11:08:04PM +0300, Serge Semin wrote:
+> ...
+> Link: https://lore.kernel.org/linux-pci/20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru/
+> Changelog v2:
+> - Rebase onto the kernel 6.3-rc2.
 
-The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+This is fine, but just FYI that there's no need to rebase past -rc1
+because PCI patches are applied on topic branches based on the PCI
+"main" branch, typically -rc1.
 
-But, from Documentation/trace/ftrace.rst:
-
-  Before 4.1, all ftrace tracing control files were within the debugfs
-  file system, which is typically located at /sys/kernel/debug/tracing.
-  For backward compatibility, when mounting the debugfs file system,
-  the tracefs file system will be automatically mounted at:
-
-  /sys/kernel/debug/tracing
-
-A comment in kvm_stat still refers to this older debugfs path, so let's
-update it to avoid confusion.
-
-Acked-by: Paolo Bonzini <pbonzini@redhat.com>
-Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
-Signed-off-by: Ross Zwisler <zwisler@google.com>
----
- tools/kvm/kvm_stat/kvm_stat | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/tools/kvm/kvm_stat/kvm_stat b/tools/kvm/kvm_stat/kvm_stat
-index 6f28180ffeea..15bf00e79e3f 100755
---- a/tools/kvm/kvm_stat/kvm_stat
-+++ b/tools/kvm/kvm_stat/kvm_stat
-@@ -627,7 +627,7 @@ class TracepointProvider(Provider):
-         name)'.
- 
-         All available events have directories under
--        /sys/kernel/debug/tracing/events/ which export information
-+        /sys/kernel/tracing/events/ which export information
-         about the specific event. Therefore, listing the dirs gives us
-         a list of all available events.
- 
--- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+Bjorn
