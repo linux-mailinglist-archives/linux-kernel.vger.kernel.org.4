@@ -2,55 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 040336B85D1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D71446B85D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:05:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCMXEQ convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 19:04:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54482 "EHLO
+        id S229820AbjCMXFb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:05:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCMXEM (ORCPT
+        with ESMTP id S229748AbjCMXF1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:04:12 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A21799385B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 16:03:29 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-270-dDXYfkCXNfKgBi0MNI-W8g-1; Mon, 13 Mar 2023 23:02:23 +0000
-X-MC-Unique: dDXYfkCXNfKgBi0MNI-W8g-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar
- 2023 23:02:22 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Mon, 13 Mar 2023 23:02:22 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Jarkko Sonninen' <kasper@iki.fi>
-CC:     Johan Hovold <johan@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Thread-Topic: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Thread-Index: AQHZVYXc9R4nUUIaSE2rrq7+pSxNzK75UfkQ
-Date:   Mon, 13 Mar 2023 23:02:22 +0000
-Message-ID: <f17e5d7c4ccd4db7a5d5001d7dde42da@AcuMS.aculab.com>
-References: <ZA7Wh2Z/DdKOsOYr@kroah.com>
- <20230313082734.886890-1-kasper@iki.fi>
-In-Reply-To: <20230313082734.886890-1-kasper@iki.fi>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 13 Mar 2023 19:05:27 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B3221959;
+        Mon, 13 Mar 2023 16:04:35 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r11so3435318edd.5;
+        Mon, 13 Mar 2023 16:04:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678748647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=FB8Ui7aB1q1yvb8FVgLJ9bAl5Qx318FcsSeRuev6vaY=;
+        b=fbL2bjdsbAOU6bmXLkJLshswntGHKtZ6LApJkQksRwNXY1lbo+1ItOWvLcjANIT33A
+         0AMZNsUtCU1zObgF/WV33Ie7kBoC+QGuLxqy8OZLo8QNnjlfqt1mOzYMK0F7FBdr6uqC
+         be/Ub6EAEax7zIFsx46SNAqrZQxI9YR2eN1QD0b6ZAwzFo3vJPFCrVAMY3tCvrf/sVaK
+         wPP/DSCLYOZtd1ZlhXCTTkCJxkzNHfjglX+Fi2UqqXEM/4pQAYot24w4A12Z+pdZRUqP
+         +vLtptjQfyfMXfVWh6D9MJx9QbhvzthfJ8N3QXLtLrtbJ5hnuB7SlUNhn6Y09tWZZF8Q
+         QQyA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678748647;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FB8Ui7aB1q1yvb8FVgLJ9bAl5Qx318FcsSeRuev6vaY=;
+        b=k/4LeXmAtivcn4bDnGplUWQdyYKUJbN/F6YQbRcuqGg/W4uO+hi1L/NgHYFUhNtnlU
+         9EshvC16QUnp1MLM07KVHCQMI9nGQHJWp3DBmNLpL2+CkUsxlD6yYoOr1rGY7sbe+7L0
+         D+7t82eHNBE7+F2/Ib2gLxl9rTH8rJMgEHumhAmz+G5F9Sp4Btrr2CKp6GWEQq9H4zjP
+         mUwBvD6OQgmsiZ10QwXeEV4UOMhKYsyES6jTxk9roWQOBKS6Ksu5ltatKix2Krx74/x/
+         /jdz1k+PeX0s1b55QQedsBOLzUUa1CxEY1HA6Q5pUa4jjYYwHrR4F6d7F2TCDiS1x/px
+         pweQ==
+X-Gm-Message-State: AO0yUKU6zGa8vAmbjt1Z+GAdSJWkgyQ8AMiyHevxN3AY9F6NnCV6sMmi
+        8VWtDGurrg1owQaaLxBa+rY=
+X-Google-Smtp-Source: AK7set+c38k4SobQg6fRXJbxW9hsgcGZNXV6tLWaYIgcLQHuQe5d9JERYOaT0hj6+J4bWMGO9/o18A==
+X-Received: by 2002:a17:906:a18e:b0:921:5cce:6599 with SMTP id s14-20020a170906a18e00b009215cce6599mr183291ejy.41.1678748646681;
+        Mon, 13 Mar 2023 16:04:06 -0700 (PDT)
+Received: from skbuf ([188.27.184.189])
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b0092b65c54379sm319526ejg.104.2023.03.13.16.04.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 16:04:06 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 01:04:04 +0200
+From:   Vladimir Oltean <olteanv@gmail.com>
+To:     Simon Horman <simon.horman@corigine.com>
+Cc:     Danila Chernetsov <listdansp@mail.ru>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org
+Subject: Re: [PATCH] net: dsa: vsc73xxx: Fix uninitalized 'val' in
+ vsc73xx_adjust_link
+Message-ID: <20230313230404.vww27tkxh6xvp24h@skbuf>
+References: <20230312155008.7830-1-listdansp@mail.ru>
+ <ZA9yj1FT7eLOCU34@corigine.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZA9yj1FT7eLOCU34@corigine.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -59,56 +79,20 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Jarkko Sonninen
-> Sent: 13 March 2023 08:28
+On Mon, Mar 13, 2023 at 07:59:27PM +0100, Simon Horman wrote:
+> On Sun, Mar 12, 2023 at 03:50:08PM +0000, Danila Chernetsov wrote:
+> > Using uninitialized variable after calls vsc73xx_read 
+> > without error checking may cause incorrect driver behavior.
 > 
-> Add support for RS-485 in Exar USB adapters.
-> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
-> Gpio mode register is set to enable RS-485.
+> I wonder if it is:
+> a) intentional that these calls are not checked for errors
 
-The locking is entirely dubious.
-Summary:
+probably no; this is precisely the only vsc73xx_read() call whose return
+code is ignores. I'd say it partly has to do with the fact that vsc73xx_adjust_link()
+returns void, so the author was thinking there'd be no point in checking
+for errors, but there clearly is
 
-Taking the lock to read the flags is pretty pointless.
-You are only looking at one bit and nothing else is tied
-to the lock.
-Even a READ_ONCE() isn't needed.
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	rs485_flags = data->rs485.flags;
-> +	spin_unlock_irqrestore(&data->lock, flags);
-> +	if (rs485_flags & SER_RS485_ENABLED)
-> +		gpio_mode |= XR_GPIO_MODE_SEL_RS485 | XR_GPIO_MODE_RS485_TX_H;
-> +	else if (C_CRTSCTS(tty) && C_BAUD(tty) != B0)
-> +		gpio_mode |= XR_GPIO_MODE_SEL_RTS_CTS;
-> +
+> b) errors can occur in these call paths
 
-The ioctl read code reads the data unlocked.
-> +	if (copy_to_user(argp, &data->rs485, sizeof(data->rs485)))
-> +		return -EFAULT;
-So could return old and new data if the ioctl write code
-runs concurrently (and you get a hardware interrupt or page
-fault mid-buffer).
-
-The ioctl write code acquires the lock across a structure copy.
-(which should be a structure copy, not a memcpy).
-The only way the lock will have any effect is if multiple
-threads are doing updates at the same time.
-Code doing that won't work anyway.
-> +	if (copy_from_user(&rs485, argp, sizeof(rs485)))
-> +		return -EFAULT;
-> +
-> +	dev_dbg(tty->dev, "Flags %02x\n", rs485.flags);
-> +	rs485.flags &= SER_RS485_ENABLED;
-> +	spin_lock_irqsave(&data->lock, flags);
-> +	memcpy(&data->rs485, &rs485, sizeof(rs485));
-> +	spin_unlock_irqrestore(&data->lock, flags);
-
-In any case you one seem to be implementing one bit of
-the flags - so the rest of the data can be ignored.
-
-	David
-
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
-
+probably yes; one of the instantiations of vsc73xx is over SPI, where
+the controller can time out, etc.
