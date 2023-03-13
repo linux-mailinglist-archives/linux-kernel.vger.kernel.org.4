@@ -2,109 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F5AC6B748F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 293E66B7495
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230213AbjCMKr4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:47:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35026 "EHLO
+        id S230212AbjCMKse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35226 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229879AbjCMKrp (ORCPT
+        with ESMTP id S230231AbjCMKsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:47:45 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC3658C27;
-        Mon, 13 Mar 2023 03:47:37 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DAlQYX061397;
-        Mon, 13 Mar 2023 05:47:26 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678704446;
-        bh=Drp+DNgfmOYJXmrRk5m+FDN6zK4WlOkcfGcQhr3nuX0=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=hMEA+8fVbdlUbjpA/+8Bu+eouPizHSg01SFT1AZ6BmSITTDtQHe0Fy1voOztlysaF
-         f+RbE9Ka8IMns1ixf9PSGjoy4LIzXUABdukprlXTYrcShVozFXqcfRhYw+07ksMvJi
-         TWS4lwjr2wTSXb1b9+nyJmQYz+P9hSPcENubDJlk=
-Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DAlQ1T113788
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Mar 2023 05:47:26 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE107.ent.ti.com
- (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
- Mar 2023 05:47:25 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 13 Mar 2023 05:47:25 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DAlPPE055040;
-        Mon, 13 Mar 2023 05:47:25 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <nm@ti.com>, <vigneshr@ti.com>
-CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <kamlesh@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <j-choudhary@ti.com>
-Subject: [PATCH 2/2] arm64: dts: ti: k3-j784s4-main: Enable crypto accelerator
-Date:   Mon, 13 Mar 2023 16:17:21 +0530
-Message-ID: <20230313104721.407071-3-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230313104721.407071-1-j-choudhary@ti.com>
-References: <20230313104721.407071-1-j-choudhary@ti.com>
+        Mon, 13 Mar 2023 06:48:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8B3C175;
+        Mon, 13 Mar 2023 03:48:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A8E51B8100B;
+        Mon, 13 Mar 2023 10:48:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6570C433D2;
+        Mon, 13 Mar 2023 10:48:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678704486;
+        bh=Bp5TXoOJ/Wv93fmFssCfDV9bpII5nb3PWXt4PA5WmWg=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=HjDXgua77k09CEmzK0n53WvrXHZumhoHS4CpKeTCOGA4U+PeH/L2csFcjeXIpN+qm
+         +AXXBqVGre6TRH3WrSl4bSPL8zRzWeGq/cwm94VH1/wPm3+BtwUb7fKHQxALeE0Xu6
+         kH6v+50Rscr2skkXey3OgYv0oms+UifnOArvb41D7sHkURgsyMZTRUG+9qhsQ44zfy
+         FHgIEro4OXB+r5LVHhxmxn30bNmCBUvVVy9N8fDbk2aIAa/M0WiTqueU84eIRdtJYQ
+         7ez5ZP8KL1Kx0r6vCS4sMRWA4nTvZQ+tFarfQoYpVTcxKP/gPTTRX+zPFwDp6y/05C
+         g4XXz6Grsy2wA==
+Message-ID: <b719944dbe8b8790524a10c1032dfb09a2182cb8.camel@kernel.org>
+Subject: Re: [PATCH v3 0/5] sunrpc: simplfy sysctl registrations
+From:   Jeff Layton <jlayton@kernel.org>
+To:     Luis Chamberlain <mcgrof@kernel.org>, chuck.lever@oracle.com,
+        trond.myklebust@hammerspace.com, anna@kernel.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        kuba@kernel.org, linux-nfs@vger.kernel.org
+Cc:     ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
+        j.granados@samsung.com, patches@lists.linux.dev,
+        linux-fsdevel@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Date:   Mon, 13 Mar 2023 06:48:03 -0400
+In-Reply-To: <20230311233944.354858-1-mcgrof@kernel.org>
+References: <20230311233944.354858-1-mcgrof@kernel.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the node for SA2UL to support hardware crypto algorithms,
-including SHA-1/256/512, AES, 3DES and AEAD suites.
-Add rng node for hardware random number generator.
+On Sat, 2023-03-11 at 15:39 -0800, Luis Chamberlain wrote:
+> This is my v3 series to simplify sysctl registration for sunrpc. The
+> first series was posted just yesterday [0] but 0-day found an issue with
+> CONFIG_SUNRPC_DEBUG. After this fix I poasted a fix for v2 [1] but alas
+> 0-day then found an issue when CONFIG_SUNRPC_DEBUG is disabled. This
+> fixes both cases... hopefully that's it.
+>                                                                          =
+                                                                           =
+                                         =20
+> Changes on v3:
+>=20
+>    o Fix compilation when CONFIG_SUNRPC_DEBUG is disabled.. forgot to
+>      keep all the sysctl stuff under the #ifdef.
+>=20
+> Changes on v2:
+>=20
+>    o Fix compilation when CONFIG_SUNRPC_DEBUG is enabled, I forgot to mov=
+e the
+>      proc routines above, and so the 4th patch now does that too.
+>                                                                          =
+                                                                           =
+                                         =20
+> Feel free to take these patches or let me know and I'm happy to also
+> take these in through sysctl-next. Typically I use sysctl-next for
+> core sysctl changes or for kernel/sysctl.c cleanup to avoid conflicts.
+> All these syctls however are well contained to sunrpc so they can also
+> go in separately. Let me know how you'd like to go about these patches.
+>                                                                          =
+                                                                           =
+                                         =20
+> [0] https://lkml.kernel.org/r/20230310225236.3939443-1-mcgrof@kernel.org
+>=20
+> Luis Chamberlain (5):
+>   sunrpc: simplify two-level sysctl registration for tsvcrdma_parm_table
+>   sunrpc: simplify one-level sysctl registration for xr_tunables_table
+>   sunrpc: simplify one-level sysctl registration for xs_tunables_table
+>   sunrpc: move sunrpc_table and proc routines above
+>   sunrpc: simplify one-level sysctl registration for debug_table
+>=20
+>  net/sunrpc/sysctl.c             | 42 ++++++++++++---------------------
+>  net/sunrpc/xprtrdma/svc_rdma.c  | 21 ++---------------
+>  net/sunrpc/xprtrdma/transport.c | 11 +--------
+>  net/sunrpc/xprtsock.c           | 13 ++--------
+>  4 files changed, 20 insertions(+), 67 deletions(-)
+>=20
 
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
- arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi | 19 +++++++++++++++++++
- 1 file changed, 19 insertions(+)
+Nice little cleanup.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-index 80a1b08c51a8..8c1474a7bd0f 100644
---- a/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j784s4-main.dtsi
-@@ -72,6 +72,25 @@ main_pmx0: pinctrl@11c000 {
- 		pinctrl-single,function-mask = <0xffffffff>;
- 	};
- 
-+	main_crypto: crypto@4e00000 {
-+		compatible = "ti,j721e-sa2ul";
-+		reg = <0x00 0x4e00000 0x00 0x1200>;
-+		power-domains = <&k3_pds 369 TI_SCI_PD_EXCLUSIVE>;
-+		#address-cells = <2>;
-+		#size-cells = <2>;
-+		ranges = <0x00 0x04e00000 0x00 0x04e00000 0x00 0x30000>;
-+
-+		dmas = <&main_udmap 0xca40>, <&main_udmap 0x4a40>,
-+				<&main_udmap 0x4a41>;
-+		dma-names = "tx", "rx1", "rx2";
-+
-+		rng: rng@4e10000 {
-+			compatible = "inside-secure,safexcel-eip76";
-+			reg = <0x00 0x4e10000 0x00 0x7d>;
-+			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
-+		};
-+	};
-+
- 	main_uart0: serial@2800000 {
- 		compatible = "ti,j721e-uart", "ti,am654-uart";
- 		reg = <0x00 0x02800000 0x00 0x200>;
--- 
-2.25.1
-
+Reviewed-by: Jeff Layton <jlayton@kernel.org>
