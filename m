@@ -2,92 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F78E6B85DA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB6D6B85E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:09:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229901AbjCMXHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59056 "EHLO
+        id S229638AbjCMXJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:09:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCMXHs (ORCPT
+        with ESMTP id S229889AbjCMXJP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:07:48 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A9810254;
-        Mon, 13 Mar 2023 16:07:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 45CCB6154C;
-        Mon, 13 Mar 2023 23:07:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B9CBC433EF;
-        Mon, 13 Mar 2023 23:07:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678748835;
-        bh=JlkQRxZUbcfwnQ9VdkB1aYg4+loILNLrAAOVONzCXAU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PN5KhCdkOBYJxn9HQVR3vakp+DP+XyeR6paoTO3aMo0XnRgNQBGKszzEiLYJgzwvo
-         UsPR8F8NTxcBO2VxSyDYghNFEfZJDs57Jl/oeWuwOHgpYUWN665UOZWAxz/+ZAjJFS
-         3hA8LL6GFkxf7d6lEQeBI/UplY1fBlHzqxvdPHBSt0+7BzCh9OZN9ILPCERC1GXFb4
-         MQKjNJVJ2lh49gts+vqAMuTKSX4lUb3HHQ0JTUP4vyBI9rT/HpNLbkRR8RwB09L8cm
-         zoAvrVCpfL3HEaD+WolrJe90zyRFK0eZoBoNfB55WFzr5XKv9jMXwUZoAtjYxk5TRf
-         GWLBvfhzmPbTw==
-Date:   Tue, 14 Mar 2023 00:07:12 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Todd Brandt <todd.e.brandt@intel.com>
-Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, todd.e.brandt@linux.intel.com,
-        srinivas.pandruvada@linux.intel.com, jic23@kernel.org,
-        jikos@kernel.org, p.jungkamp@gmx.net
-Subject: Re: [PATCH v2] Fix buffer overrun in HID-SENSOR name string
-Message-ID: <20230313230712.6xboy3w5ocrvj3vn@intel.intel>
-References: <20230313220653.3996-1-todd.e.brandt@intel.com>
+        Mon, 13 Mar 2023 19:09:15 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03638C83B;
+        Mon, 13 Mar 2023 16:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678748933; x=1710284933;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=KshWSejkFbkeVBwakT7QiRHIr/W7baLNEGoxZeDhpeo=;
+  b=c6+sPB9rnTyoE8r5QWk8wv7EiOqEu1Dct4dzAczEz1NfnzM3thHe4oQn
+   6gGIodcueU1evOQIJ5iq2OVgrAgo8dhXLEyW4ulCtArO8u+Bo8ht5G5K8
+   tgbY9FLsesTQyG3pme/+GwR3Z3M70evR8NLQk2PblSpK3/ujLPUIgOtgX
+   QJ/uMBsK2jEkTh8IR+jAPect5WwLuOICUrbVl9lyDpPrPoknaxWRsaqvy
+   K8E0ORL/ljiKt2uK7efEIapNOFaqeBj/K98f11WfoOFxcaFbc91Euz7Ed
+   kSJ9VSxB1Q+qJTcYfg67QB2A7PmoBh2TSXSl2aH5ZmdjEVpZFQWN1kzlX
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399871312"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="399871312"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 16:08:53 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="628806685"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="628806685"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga003.jf.intel.com with ESMTP; 13 Mar 2023 16:08:51 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pbrHe-0006EC-0e;
+        Mon, 13 Mar 2023 23:08:50 +0000
+Date:   Tue, 14 Mar 2023 07:07:53 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Christian Brauner <brauner@kernel.org>,
+        Trond Myklebust <trond.myklebust@hammerspace.com>,
+        Anna Schumaker <anna@kernel.org>,
+        Chuck Lever <chuck.lever@oracle.com>,
+        Jeff Layton <jlayton@kernel.org>
+Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
+        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        "Christian Brauner (Microsoft)" <brauner@kernel.org>
+Subject: Re: [PATCH] nfs: use vfs setgid helper
+Message-ID: <202303140652.dN7XrtM4-lkp@intel.com>
+References: <20230313-fs-nfs-setgid-v1-1-5b1fa599f186@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313220653.3996-1-todd.e.brandt@intel.com>
+In-Reply-To: <20230313-fs-nfs-setgid-v1-1-5b1fa599f186@kernel.org>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Todd,
+Hi Christian,
 
-On Mon, Mar 13, 2023 at 03:06:53PM -0700, Todd Brandt wrote:
-> On some platforms there are some platform devices created with
-> invalid names. For example: "HID-SENSOR-INT-020b?.39.auto" instead
-> of "HID-SENSOR-INT-020b.39.auto"
-> 
-> This string include some invalid characters, hence it will fail to
-> properly load the driver which will handle this custom sensor. Also
-> it is a problem for some user space tools, which parse the device
-> names from ftrace and dmesg.
-> 
-> This is because the string, real_usage, is not NULL terminated and
-> printed with %s to form device name.
-> 
-> To address this, we initialize the real_usage string with 0s.
-> 
-> Philipp Jungkamp created this fix, I'm simply submitting it. I've
-> verified it fixes bugzilla issue 217169
-> 
-> Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-> Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
-> Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
+I love your patch! Yet something to improve:
 
-Why is not Philip in the SoB list?
+[auto build test ERROR on eeac8ede17557680855031c6f305ece2378af326]
 
-Anyway the original patch made it to stable, so:
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Brauner/nfs-use-vfs-setgid-helper/20230313-212725
+base:   eeac8ede17557680855031c6f305ece2378af326
+patch link:    https://lore.kernel.org/r/20230313-fs-nfs-setgid-v1-1-5b1fa599f186%40kernel.org
+patch subject: [PATCH] nfs: use vfs setgid helper
+config: parisc64-defconfig (https://download.01.org/0day-ci/archive/20230314/202303140652.dN7XrtM4-lkp@intel.com/config)
+compiler: hppa64-linux-gcc (GCC) 12.1.0
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/503d040be490a519b2e483672702dcca530443ce
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Christian-Brauner/nfs-use-vfs-setgid-helper/20230313-212725
+        git checkout 503d040be490a519b2e483672702dcca530443ce
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc64 SHELL=/bin/bash
 
-Fixes: 98c062e82451 ("HID: hid-sensor-custom: Allow more custom iio sensors")
-Cc: stable@vger.kernel.org
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303140652.dN7XrtM4-lkp@intel.com/
 
-and with those you can add:
+All errors (new ones prefixed by >>, old ones prefixed by <<):
 
-Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+>> ERROR: modpost: "setattr_should_drop_sgid" [fs/nfs/nfs.ko] undefined!
 
-Andi
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
