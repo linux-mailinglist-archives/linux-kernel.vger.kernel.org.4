@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 694A96B818B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:15:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8F2C06B818E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjCMTPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41772 "EHLO
+        id S230211AbjCMTP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229826AbjCMTPj (ORCPT
+        with ESMTP id S229871AbjCMTPy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 15:15:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1509234FA;
-        Mon, 13 Mar 2023 12:14:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0B489B811CF;
-        Mon, 13 Mar 2023 19:14:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7B2ADC433EF;
-        Mon, 13 Mar 2023 19:14:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678734855;
-        bh=LXMh4NvSmVKBlcVqMo1zkDaUAwShf4KNcqkkQcUaVJA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=jpY3IHTZv4aO25v5UD6QgNlLNvH5SQufaCoqj60K9+AC04CTrR5jyW9v30vb5wOEc
-         6YMoX0prQMTxf0tmgkBY5t3JcjPjwSGqAKTyQ2SkCw5OSZ+se90cc3VGFOqruurx04
-         cv9evuqG/4F1L/Wnb22ICEZw3ufqk/QN8LW3YE72mpgl9RaNqNmTvC9PEUTMO0Bm4J
-         9GXV5cM7qRQRML68Qh/C6Wf60hBbE6KmLe6kV+4e3RrKVhzp+THxJm9joS6Pzl/VLZ
-         hEKTD4FgtPB25L/eeaVWsjs7WlUsGojQweXzf7C1T2P5oJvcJI67hBl/sDFuF1AKv2
-         ZpVyImNC4247w==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id BA0FB4049F; Mon, 13 Mar 2023 16:14:12 -0300 (-03)
-Date:   Mon, 13 Mar 2023 16:14:12 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Ian Rogers <irogers@google.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Martin KaFai Lau <martin.lau@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bpf@vger.kernel.org
-Subject: Re: [PATCH v2] perf lock contention: Fix builtin detection
-Message-ID: <ZA92BKt4E7ZAogol@kernel.org>
-References: <20230308003020.3653271-1-irogers@google.com>
- <CAM9d7ciyGagEiM6zSVjh9VpsiShLeRBUFjfGGLrzoqTD+hT9KA@mail.gmail.com>
+        Mon, 13 Mar 2023 15:15:54 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D969A233F6;
+        Mon, 13 Mar 2023 12:15:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678734906; x=1710270906;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=CnRGi2DlXQHfjc8Y7yJwp04BFPdrnOE5EboKtIok3mM=;
+  b=YiJzlyJxPJSQbqBWbO9ztCgPJVykLkaTQNbJj7/tPS0hbxyoRNbV7GF5
+   qBTr5MgUk1ip7bJI9Mo02g2lJTBknGlhud/+3f0QwoRm2CvWepiOiwfjl
+   DzfKcoFk6mVKdLMTFcrCcsxgrqUbELcSdEvi+gT/SL55FXCrVNwVGEkmu
+   lFFsYwcQnEGq0axblY2aLz9HdV9PRvr1xDceWz2SA+QlX4EMh1EnQ5yBh
+   TRWuL5J0HjwvhqFZPBDWMmgyaawq9FfW842qJIYf8HNm2UP7gQDo8q+DX
+   76Elrpg85utpXBpQqyC1HJ8CS1XcaxPsLAi7yNqWy2Vqp33cCVqTdHXbM
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316879856"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="316879856"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 12:14:33 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="708990227"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="708990227"
+Received: from igodinez-mobl.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.87.244])
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 12:14:33 -0700
+Message-ID: <cb7a82e9becb35231ac87681a1861348bd27047d.camel@linux.intel.com>
+Subject: Re: [PATCH 05/36] platform/x86: intel-uncore-freq: move to use
+ bus_get_dev_root()
+From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        platform-driver-x86@vger.kernel.org
+Date:   Mon, 13 Mar 2023 12:14:32 -0700
+In-Reply-To: <20230313182918.1312597-5-gregkh@linuxfoundation.org>
+References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
+         <20230313182918.1312597-5-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAM9d7ciyGagEiM6zSVjh9VpsiShLeRBUFjfGGLrzoqTD+hT9KA@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Mar 07, 2023 at 05:41:19PM -0800, Namhyung Kim escreveu:
-> On Tue, Mar 7, 2023 at 4:30 PM Ian Rogers <irogers@google.com> wrote:
-> >
-> > __has_builtin was passed the macro rather than the actual builtin
-> > feature. The builtin test isn't sufficient and a clang version test
-> > also needs to be performed.
-> >
-> > Fixes: 1bece1351c65 ("perf lock contention: Support old rw_semaphore type")
-> > Signed-off-by: Ian Rogers <irogers@google.com>
+On Mon, 2023-03-13 at 19:28 +0100, Greg Kroah-Hartman wrote:
+> Direct access to the struct bus_type dev_root pointer is going away
+> soon
+> so replace that with a call to bus_get_dev_root() instead, which is
+> what
+> it is there for.
 > 
-> Reviewed-by: Namhyung Kim <namhyung@kernel.org>
+> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> Cc: Hans de Goede <hdegoede@redhat.com>
+> Cc: Mark Gross <markgross@kernel.org>
+> Cc: platform-driver-x86@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Acked-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
 
-Thanks, applied.
-
-- Arnaldo
-
- 
-> Thanks,
-> Namhyung
+> ---
+> Note, this is a patch that is a prepatory cleanup as part of a larger
+> series of patches that is working on resolving some old driver core
+> design mistakes.  It will build and apply cleanly on top of 6.3-rc2
+> on
+> its own, but I'd prefer if I could take it through my driver-core
+> tree
+> so that the driver core changes can be taken through there for 6.4-
+> rc1.
 > 
+>  .../intel/uncore-frequency/uncore-frequency-common.c | 12 +++++++++-
+> --
+>  1 file changed, 9 insertions(+), 3 deletions(-)
 > 
-> > ---
-> >  tools/perf/util/bpf_skel/lock_contention.bpf.c | 8 +++++++-
-> >  1 file changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/tools/perf/util/bpf_skel/lock_contention.bpf.c b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > index e6007eaeda1a..141b36d13b19 100644
-> > --- a/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > +++ b/tools/perf/util/bpf_skel/lock_contention.bpf.c
-> > @@ -182,7 +182,13 @@ static inline struct task_struct *get_lock_owner(__u64 lock, __u32 flags)
-> >                 struct mutex *mutex = (void *)lock;
-> >                 owner = BPF_CORE_READ(mutex, owner.counter);
-> >         } else if (flags == LCB_F_READ || flags == LCB_F_WRITE) {
-> > -#if __has_builtin(bpf_core_type_matches)
-> > +       /*
-> > +        * Support for the BPF_TYPE_MATCHES argument to the
-> > +        * __builtin_preserve_type_info builtin was added at some point during
-> > +        * development of clang 15 and it's what is needed for
-> > +        * bpf_core_type_matches.
-> > +        */
-> > +#if __has_builtin(__builtin_preserve_type_info) && __clang_major__ >= 15
-> >                 if (bpf_core_type_matches(struct rw_semaphore___old)) {
-> >                         struct rw_semaphore___old *rwsem = (void *)lock;
-> >                         owner = (unsigned long)BPF_CORE_READ(rwsem, owner);
-> > --
-> > 2.40.0.rc0.216.gc4246ad0f0-goog
-> >
+> diff --git a/drivers/platform/x86/intel/uncore-frequency/uncore-
+> frequency-common.c b/drivers/platform/x86/intel/uncore-
+> frequency/uncore-frequency-common.c
+> index cb24de9e97dc..1a300e14f350 100644
+> --- a/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-
+> common.c
+> +++ b/drivers/platform/x86/intel/uncore-frequency/uncore-frequency-
+> common.c
+> @@ -224,9 +224,15 @@ int uncore_freq_common_init(int
+> (*read_control_freq)(struct uncore_data *data, u
+>         uncore_write = write_control_freq;
+>         uncore_read_freq = read_freq;
+>  
+> -       if (!uncore_root_kobj)
+> -               uncore_root_kobj =
+> kobject_create_and_add("intel_uncore_frequency",
+> -                                                          
+> &cpu_subsys.dev_root->kobj);
+> +       if (!uncore_root_kobj) {
+> +               struct device *dev_root =
+> bus_get_dev_root(&cpu_subsys);
+> +
+> +               if (dev_root) {
+> +                       uncore_root_kobj =
+> kobject_create_and_add("intel_uncore_frequency",
+> +                                                                
+> &dev_root->kobj);
+> +                       put_device(dev_root);
+> +               }
+> +       }
+>         if (uncore_root_kobj)
+>                 ++uncore_instance_count;
+>         mutex_unlock(&uncore_lock);
 
--- 
-
-- Arnaldo
