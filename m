@@ -2,87 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BCBB6B7540
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:05:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 653996B7546
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCMLFw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:05:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41744 "EHLO
+        id S229847AbjCMLGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCMLFr (ORCPT
+        with ESMTP id S229925AbjCMLGS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:05:47 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22DE19EF1;
-        Mon, 13 Mar 2023 04:05:45 -0700 (PDT)
-Received: from zn.tnic (p5de8e9fe.dip0.t-ipconnect.de [93.232.233.254])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 2DD021EC04DA;
-        Mon, 13 Mar 2023 12:05:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1678705544;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=WNDMylAInwsppeYyZOJK7Jz1yVA+TciusPUv+jlQGkc=;
-        b=ozHa1zi/l5kctzIp5XnqLpQ1KP7+CTEjb8SiUCRN7EFlvoe7oqT/uqk2iab7eLYk7Nisw3
-        1vVPcM4AMCKBELmtt3XCM8Am3MTzKrQdU7Xt2nQ2Vid/zgq4frHIQ5HqIhQSlGASxZpZDl
-        3C26yhB6WoPYGZz1c+zLdXwyZ9Ie+VI=
-Date:   Mon, 13 Mar 2023 12:05:43 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Edgecombe, Rick P" <rick.p.edgecombe@intel.com>
-Cc:     "david@redhat.com" <david@redhat.com>,
-        "bsingharora@gmail.com" <bsingharora@gmail.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "Syromiatnikov, Eugene" <esyr@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "rdunlap@infradead.org" <rdunlap@infradead.org>,
-        "keescook@chromium.org" <keescook@chromium.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "Eranian, Stephane" <eranian@google.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "fweimer@redhat.com" <fweimer@redhat.com>,
-        "nadav.amit@gmail.com" <nadav.amit@gmail.com>,
-        "jannh@google.com" <jannh@google.com>,
-        "dethoma@microsoft.com" <dethoma@microsoft.com>,
-        "rppt@linux.ibm.com" <rppt@linux.ibm.com>,
-        "kcc@google.com" <kcc@google.com>,
-        "linux-arch@vger.kernel.org" <linux-arch@vger.kernel.org>,
-        "pavel@ucw.cz" <pavel@ucw.cz>, "oleg@redhat.com" <oleg@redhat.com>,
-        "hjl.tools@gmail.com" <hjl.tools@gmail.com>,
-        "Yang, Weijiang" <weijiang.yang@intel.com>,
-        "Lutomirski, Andy" <luto@kernel.org>,
-        "linux-doc@vger.kernel.org" <linux-doc@vger.kernel.org>,
-        "arnd@arndb.de" <arnd@arndb.de>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Schimpe, Christina" <christina.schimpe@intel.com>,
-        "mike.kravetz@oracle.com" <mike.kravetz@oracle.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "akpm@linux-foundation.org" <akpm@linux-foundation.org>,
-        "debug@rivosinc.com" <debug@rivosinc.com>,
-        "jamorris@linux.microsoft.com" <jamorris@linux.microsoft.com>,
-        "john.allen@amd.com" <john.allen@amd.com>,
-        "rppt@kernel.org" <rppt@kernel.org>,
-        "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "corbet@lwn.net" <corbet@lwn.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "gorcunov@gmail.com" <gorcunov@gmail.com>
-Subject: Re: [PATCH v7 40/41] x86/shstk: Add ARCH_SHSTK_UNLOCK
-Message-ID: <20230313110543.GBZA8Dh/Ov/Jbmjot1@fat_crate.local>
-References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
- <20230227222957.24501-41-rick.p.edgecombe@intel.com>
- <ZAyaIJFhSh0QyVq0@zn.tnic>
- <2c67ed3b9dd93e215e5e7489ad56373da789a84d.camel@intel.com>
+        Mon, 13 Mar 2023 07:06:18 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35E8C76BF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:06:16 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d13so1550847pjh.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:06:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678705575;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UkFGpX/eytRfCnIWS2LFVwG+AZS8z2rXKsDz1orSn7Y=;
+        b=lWp/gJZNNgMGbBo5ukpQCXfLhSRK2GWILiz4uidZmM4ZERjpntSLvW0WyQAvUtWcPb
+         1D+a8QzwI1xci1PmDAy0jEpeCB7DWlYlstq+eG3lId9dn/aiXTe8ll30RTIOpONAK/Eo
+         rPnz2+gIIsA939BstS6mvUmt/VWZszc+MWzCrxlg1/DRQliyV3W3YAHKh36FsV2vjI7i
+         2Jtbd2Nu0rihXhVZhDzuHY6ICTCTzO+/PGiNKiPVmASGj9hRi9Ly1h+ZqHD67rlu6kJU
+         wWzXKMaQYH+4EbmN4K80CUAQmQHtsiypoW0QUhem3DdlQ7UQYGFwZjysWKVN6KVxH44d
+         hP+w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678705575;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UkFGpX/eytRfCnIWS2LFVwG+AZS8z2rXKsDz1orSn7Y=;
+        b=Nk7mMrQVdyO5Dei9oqRQPOm6fqxn19W0sgLYwStIv0NstL+6d4emMMyIi+tUQfd5Kc
+         WgaWYhCJkMk73UnsK57TBj4uTC/kLUapQggFPuAy3Yl98bLl2G3tJdM+BHZ90XBYS2ne
+         ZxqIRwNmzxBzRVOabVlCPRaRT9vY3CDrnaOZUniywRVc8FsYcquEMli33Yx9DdXuL58t
+         6IE4vDUFJuTGjFpnchcQmr8b4dlymwCUMtz7dysMbXxY5MMqPxhNAWmu9mHYkSeDlflO
+         HiWJ6tVaLtqmlhyXyhrVbgiCuNIQLhYBjWBarM6pL1M/1bVFrHfq1t92SY6xYTmFi09N
+         gOkA==
+X-Gm-Message-State: AO0yUKUG5Ct8m4V+QK/Re063nrbBeCfCdDbqQBPeMWBahu9SaKe7H5E8
+        cmrg1JAKCsUNISI+dTQtD5I=
+X-Google-Smtp-Source: AK7set9/hq90vejCEDTqUHV4EhsRte7LeGb5L5G/+6VprdaiCjSXXVHcY1yJKcHCsgNVld79QdfTPQ==
+X-Received: by 2002:a17:903:2309:b0:1a0:49eb:4cb8 with SMTP id d9-20020a170903230900b001a049eb4cb8mr3312175plh.44.1678705575602;
+        Mon, 13 Mar 2023 04:06:15 -0700 (PDT)
+Received: from [172.30.1.89] ([14.32.163.5])
+        by smtp.gmail.com with ESMTPSA id g1-20020a1709026b4100b0019a96d3b456sm4543543plt.44.2023.03.13.04.06.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 04:06:15 -0700 (PDT)
+Message-ID: <c2e6aae5-e980-112d-e75f-187d27c3af5d@gmail.com>
+Date:   Mon, 13 Mar 2023 20:06:11 +0900
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <2c67ed3b9dd93e215e5e7489ad56373da789a84d.camel@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v4 2/4] extcon: Added extcon_alloc_cables to simplify
+ extcon register function
+Content-Language: en-US
+To:     Bumwoo Lee <bw365.lee@samsung.com>,
+        MyungJoo Ham <myungjoo.ham@samsung.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        linux-kernel@vger.kernel.org
+References: <20230302090143.46678-1-bw365.lee@samsung.com>
+ <CGME20230302090149epcas1p2bad39de9aa367644cda3ffcb4dd4a612@epcas1p2.samsung.com>
+ <20230302090143.46678-3-bw365.lee@samsung.com>
+From:   Chanwoo Choi <cwchoi00@gmail.com>
+In-Reply-To: <20230302090143.46678-3-bw365.lee@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -90,26 +79,159 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 03:04:10AM +0000, Edgecombe, Rick P wrote:
-> This is how the other arch_prctl()s handle it (if they do handle it,
-> some don't). So I would think it would be nice to keep all the logic
-> the same.
+On 23. 3. 2. 18:01, Bumwoo Lee wrote:
+> The cable allocation part is functionalized from extcon_dev_register.
 > 
-> I guess the flag might work based on the assumption that if the task is
-> being ptraced, the arch_prctl() couldn't be coming from anywhere else.
-> Maybe it should get a nicely named helper that they could all use and
-> whatever best logic could be commented.
+> Signed-off-by: Bumwoo Lee <bw365.lee@samsung.com>
+> ---
+>  drivers/extcon/extcon.c | 108 +++++++++++++++++++++++-----------------
+>  1 file changed, 62 insertions(+), 46 deletions(-)
 > 
-> Would this maybe be better as a future cleanup that did the change for
-> them all?
+> diff --git a/drivers/extcon/extcon.c b/drivers/extcon/extcon.c
+> index adcf01132f70..49605e96bedd 100644
+> --- a/drivers/extcon/extcon.c
+> +++ b/drivers/extcon/extcon.c
+> @@ -1070,6 +1070,63 @@ void extcon_dev_free(struct extcon_dev *edev)
+>  }
+>  EXPORT_SYMBOL_GPL(extcon_dev_free);
+>  
+> +/**
+> + * extcon_alloc_cables() - alloc the cables for extcon device
+> + * @edev:	extcon device which has cables
+> + *
+> + * Returns 0 if success or error number if fail.
+> + */
+> +static int extcon_alloc_cables(struct extcon_dev *edev)
+> +{
+> +	int index;
+> +	char *str;
+> +	struct extcon_cable *cable;
+> +
+> +	if (!edev->max_supported)
+> +		return 0;
 
-Yeah, I'm just being overly paranoid.
 
-Because if there's another way to unlock that feature, then this whole
-"overhead" we're doing is for nothing.
+Need to check whether edev is NULL or not 
+because make the separate function.
+
+	if (!edev && !edev->max_supported)
+
+> +
+> +	edev->cables = kcalloc(edev->max_supported,
+> +			       sizeof(struct extcon_cable),
+> +			       GFP_KERNEL);
+> +	if (!edev->cables)
+> +		return -ENOMEM;
+> +
+> +	for (index = 0; index < edev->max_supported; index++) {
+> +		cable = &edev->cables[index];
+> +
+> +		str = kasprintf(GFP_KERNEL, "cable.%d", index);
+> +		if (!str) {
+> +			for (index--; index >= 0; index--) {
+> +				cable = &edev->cables[index];
+> +				kfree(cable->attr_g.name);
+> +			}
+> +
+> +			kfree(edev->cables);
+> +			return -ENOMEM;
+> +		}
+> +
+> +		cable->edev = edev;
+> +		cable->cable_index = index;
+> +		cable->attrs[0] = &cable->attr_name.attr;
+> +		cable->attrs[1] = &cable->attr_state.attr;
+> +		cable->attrs[2] = NULL;
+> +		cable->attr_g.name = str;
+> +		cable->attr_g.attrs = cable->attrs;
+> +
+> +		sysfs_attr_init(&cable->attr_name.attr);
+> +		cable->attr_name.attr.name = "name";
+> +		cable->attr_name.attr.mode = 0444;
+> +		cable->attr_name.show = cable_name_show;
+> +
+> +		sysfs_attr_init(&cable->attr_state.attr);
+> +		cable->attr_state.attr.name = "state";
+> +		cable->attr_state.attr.mode = 0444;
+> +		cable->attr_state.show = cable_state_show;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>  /**
+>   * extcon_dev_register() - Register an new extcon device
+>   * @edev:	the extcon device to be registered
+> @@ -1117,50 +1174,9 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  	dev_set_name(&edev->dev, "extcon%lu",
+>  			(unsigned long)atomic_inc_return(&edev_no));
+>  
+> -	if (edev->max_supported) {
+> -		char *str;
+> -		struct extcon_cable *cable;
+> -
+> -		edev->cables = kcalloc(edev->max_supported,
+> -				       sizeof(struct extcon_cable),
+> -				       GFP_KERNEL);
+> -		if (!edev->cables) {
+> -			ret = -ENOMEM;
+> -			goto err_sysfs_alloc;
+> -		}
+> -		for (index = 0; index < edev->max_supported; index++) {
+> -			cable = &edev->cables[index];
+> -
+> -			str = kasprintf(GFP_KERNEL, "cable.%d", index);
+> -			if (!str) {
+> -				for (index--; index >= 0; index--) {
+> -					cable = &edev->cables[index];
+> -					kfree(cable->attr_g.name);
+> -				}
+> -				ret = -ENOMEM;
+> -
+> -				goto err_alloc_cables;
+> -			}
+> -
+> -			cable->edev = edev;
+> -			cable->cable_index = index;
+> -			cable->attrs[0] = &cable->attr_name.attr;
+> -			cable->attrs[1] = &cable->attr_state.attr;
+> -			cable->attrs[2] = NULL;
+> -			cable->attr_g.name = str;
+> -			cable->attr_g.attrs = cable->attrs;
+> -
+> -			sysfs_attr_init(&cable->attr_name.attr);
+> -			cable->attr_name.attr.name = "name";
+> -			cable->attr_name.attr.mode = 0444;
+> -			cable->attr_name.show = cable_name_show;
+> -
+> -			sysfs_attr_init(&cable->attr_state.attr);
+> -			cable->attr_state.attr.name = "state";
+> -			cable->attr_state.attr.mode = 0444;
+> -			cable->attr_state.show = cable_state_show;
+> -		}
+> -	}
+> +	ret = extcon_alloc_cables(edev);
+> +	if (ret < 0)
+> +		goto err_alloc_cables;
+>  
+>  	if (edev->max_supported && edev->mutually_exclusive) {
+>  		char *name;
+> @@ -1279,10 +1295,10 @@ int extcon_dev_register(struct extcon_dev *edev)
+>  err_muex:
+>  	for (index = 0; index < edev->max_supported; index++)
+>  		kfree(edev->cables[index].attr_g.name);
+> -err_alloc_cables:
+>  	if (edev->max_supported)
+>  		kfree(edev->cables);
+> -err_sysfs_alloc:
+> +err_alloc_cables:
+> +
+>  	return ret;
+>  }
+>  EXPORT_SYMBOL_GPL(extcon_dev_register);
 
 -- 
-Regards/Gruss,
-    Boris.
+Best Regards,
+Samsung Electronics
+Chanwoo Choi
 
-https://people.kernel.org/tglx/notes-about-netiquette
