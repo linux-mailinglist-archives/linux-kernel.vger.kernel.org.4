@@ -2,101 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B00046B7C50
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:46:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0946B7C58
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:47:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCMPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:46:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
+        id S230138AbjCMPrb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:47:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCMPqb (ORCPT
+        with ESMTP id S229524AbjCMPr3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:46:31 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F335254
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:46:30 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id z128-20020a6bc986000000b0074d32ddcce7so6445902iof.21
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:46:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678722389;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DgoMhRyS4hyS64tey/KhVVb7fuEqh7f4Mb+2Jzq1dUc=;
-        b=FVqo10NiHbK2gYGV270NX8kc6LY69ihR8ilrHTtogbPZqeeOkD4sl1dkDEi65GsSUP
-         +K3eSD9Sv2iytXoQD3drOR2UW8d0PAEqOQPbWCxnPDDU4NvHVQUVm9CsD/j3kyIr2cAI
-         m7sjotXGCfdYUOXNDXZ3utLZGyDgbkfvF76NPcIzAV+s6Kdh3jgWOUphx6ZR9ixcr4u9
-         r3Xnpy71z1BE21nxKWfXSZtgE+t8fZy4RqGC/GoqOO49txTKoONZijbEmQeq6K28Lsf1
-         Ayy9EistYrP2l454znBtz+Vz3ej+CskzJGQbcPMgqIDVtcOtuQJCLW4pTQIeKKSc0ZLm
-         0rQQ==
-X-Gm-Message-State: AO0yUKWUSqZ6TG4T2jztoGqA4D7qiqyD421DgaIZCsywHCbI8po1+T7l
-        mYUsHbaPUVewfh6MiLXXchqHyPOYWca3lRJopLPQ9ejGmbCW
-X-Google-Smtp-Source: AK7set+k4OunDSeNLiPyZEP0lEmmuaLW/Yz3UNXT5kTDUNS6G5VJfGY0g1jZF7m7CEmt48VC4XB89prpXEUMeVPncNlgPF1B8Yga
+        Mon, 13 Mar 2023 11:47:29 -0400
+Received: from EUR01-VE1-obe.outbound.protection.outlook.com (mail-ve1eur01on2084.outbound.protection.outlook.com [40.107.14.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 004935D45D;
+        Mon, 13 Mar 2023 08:47:27 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=nYDushW11yKM3lEXJ5dmKg38CqH68eXQyQyVK/0aP9L1b7ISd9wieqeuoJ27vdTQdIsHY92fdULserWrizcU6fz8s6txXj2/3qQDU/o8dUhiyf7Lkn+tT8etS0/YoCjtBi45YBZrv+LjOFDhh9n0w+WMyV8rJWq55QB8cTNDNf13Dvf57NWWJFiojTEzCph4E5x/U9pUTxoXq3xpgD9xqNfTdzBADYS4nMYeHyWlylvBAIhO4PNvnzC0vH5LeYqjg+bFowqBWZ+oyKr27QE4tcDKFArvwWTzb9euZFX+E0taTOfnEZ6sO7fSYrB2h76eBvTM39KUrfHZiIBGNmpQLQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=29QtUbAOrZ06TQ0+MtSyDA1MjCf2l3qVoC5CcOKIEjE=;
+ b=ToH7Ogl5TS8HoDPWNE5AS3SuHG/UoIK4YJ28DRg/q9r35E+jntaQfKqI30qkfQ+thB0qXoG6khqI5gCu5XLEi0sKf3a+mJ7vbh/SPylbRHqBku7TPYmg+w1Qi7KD5d4AIIqyClsYKAU5kkbClOGmoPdB6VibPpReUp7XCA0Rrme+NX6dLsGHFbHEZqRjFOHHgiMz3FQK6B0PO1Fy/LM3yBuhwldOZ/AvEv4/4Y0Onwh2tWdNdeS/+ASvaVMPmu72emwaTLGQgaRWSyqRXvHgwmoJcgiDckAbsMSERwU3MkUg8XW/WiAil0gPEDdlNtbKDL7uBHcGxSYUyp79HtaBDw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=29QtUbAOrZ06TQ0+MtSyDA1MjCf2l3qVoC5CcOKIEjE=;
+ b=V//ggHCcuA73lZpLz1GCRdcBWOB/dDkBquUyD63IOpHvzDFBNENyOJU3VVeQYDNeuMapEYGqMMNQULgUIbcQ7V2QFQec70szNSoWcxdYpK9agSiP1SvdNf8QbYN5s9w/wl+CMzIOD3xjxGk9x0sMWoKuJd+LzDEw+yqjDaH+Kg0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from VI1PR0402MB3405.eurprd04.prod.outlook.com (2603:10a6:803:3::26)
+ by PAXPR04MB8405.eurprd04.prod.outlook.com (2603:10a6:102:1c2::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 15:47:25 +0000
+Received: from VI1PR0402MB3405.eurprd04.prod.outlook.com
+ ([fe80::f469:ba5b:88ad:3fa0]) by VI1PR0402MB3405.eurprd04.prod.outlook.com
+ ([fe80::f469:ba5b:88ad:3fa0%7]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 15:47:25 +0000
+Message-ID: <b12d1fb1-1ca6-5f9c-c8b9-97c451734923@nxp.com>
+Date:   Mon, 13 Mar 2023 17:47:18 +0200
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH 0/6] bus: fsl-mc: Make remove function return void
+Content-Language: en-CA
+To:     =?UTF-8?Q?Uwe_Kleine-K=c3=b6nig?= <u.kleine-koenig@pengutronix.de>,
+        Stuart Yoder <stuyoder@gmail.com>,
+        Roy Pledge <Roy.Pledge@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        =?UTF-8?Q?Horia_Geant=c4=83?= <horia.geanta@nxp.com>,
+        Pankaj Gupta <pankaj.gupta@nxp.com>,
+        Gaurav Jain <gaurav.jain@nxp.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vinod Koul <vkoul@kernel.org>,
+        Ioana Ciornei <ioana.ciornei@nxp.com>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Yangbo Lu <yangbo.lu@nxp.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>
+Cc:     kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+        dmaengine@vger.kernel.org, netdev@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+From:   Laurentiu Tudor <laurentiu.tudor@nxp.com>
+In-Reply-To: <20230310224128.2638078-1-u.kleine-koenig@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: AM9P192CA0024.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21d::29) To VI1PR0402MB3405.eurprd04.prod.outlook.com
+ (2603:10a6:803:3::26)
 MIME-Version: 1.0
-X-Received: by 2002:a92:d384:0:b0:313:b6ee:2037 with SMTP id
- o4-20020a92d384000000b00313b6ee2037mr76188ilo.3.1678722389631; Mon, 13 Mar
- 2023 08:46:29 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 08:46:29 -0700
-In-Reply-To: <20230313143619.ljca56xjl4nsrm3b@fpc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000b5ec8105f6ca0390@google.com>
-Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
-From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-kernel@vger.kernel.org,
-        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR0402MB3405:EE_|PAXPR04MB8405:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8b99d424-b6ae-4b79-127b-08db23da3d3c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zgO2AseiaSvkGMtZ7axDFoGaT8xZaaKFuW+7dN35XmGxxosu/aXRJ/j2Ac6GsQRvIqkm/f8cCMB27HJrVtVbrcJYLyE4MfosrsKj9O3gNTceve6r08WmGUJReBDfwkKv9ah6303Vo4IfmTkWItLhR/wIF2LqfG3z4VS5bzNMe1ajqm6iPM1YrVVI9WDpkvRoYPWhl/sBY27PYIfZV6m6iErtjTNwQWbFUo83CzlR6GE9qF9M6jY0ei7uECBLwCdRyPiZVAjziOCk8QPon9D9wltD5eAmY98fgHY6CU6t4yOsJd9mdonskugWPd3wbiID347P5KouC1JCrC5rjL3Z0w5yf50uQHxtLcGl7PrpytNxj+VmDTnb55MO7qeN5l3+xbeQzObygnPPA6oHELGkS1KNrZkXdGQX5kt7smG2uUAFwJfjDdPZhmFWj6UWeU7Y8sSlBg6gB9JF5Uhx9D4DneVXpOqGc29zQl2DdnBfx8RjWFceCb7HyKeIyZktxv0kbFDnpzggXqwc5stcuvAf2UvIp5WNnhc87Aqo0p1uTJQdfGg0G6K4Qaxnk1amCXIYfv4OplgiXPdy0sSF3y9NikA8dVF0juZ/diRhQA3pGPTWLswWGso4xd0FIHopgLpWJZgW1xcItUwDp2lY4pt1wnhNY5WO2+DII+Vf0A+UeJtQ9haEMAV1lcSBsaPT/R8HPzA3+pXYzsx/ztodWdX8Mp04BMDtTLbp/bQyRGg50xDdnHy+F6LkckQUA+9l1ZApsc6msXtT6DqLcI2b7o1MS/0kE0MVor2+wRDVUtsscss=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR0402MB3405.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(376002)(346002)(366004)(136003)(396003)(451199018)(2906002)(31686004)(83380400001)(7416002)(5660300002)(36756003)(44832011)(66946007)(66556008)(8936002)(41300700001)(921005)(4326008)(38100700002)(31696002)(38350700002)(66476007)(86362001)(110136005)(316002)(8676002)(478600001)(66574015)(186003)(2616005)(53546011)(52116002)(6506007)(26005)(6666004)(6512007)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aU5GdHc5QWZtUVk4YVZCSzFuVFVzbjdEM3B1dlZITnZBTitTVDFCTDRKK1E4?=
+ =?utf-8?B?Zk0xWFFnUTRRU2RNTUtpZFNaQUU2VmpPZzhPWVN5MkQ2SlhvZXVlQUphYlFL?=
+ =?utf-8?B?dUVGRlR6SVI4cjUyNmtBWFIvc0poS2R6VEl1S1FYL016SGUxdGhlMWQ0Ymdo?=
+ =?utf-8?B?V085MHlVdGVNaUZ0RVd3WmVma21PMWJyT0pYWS9VbFUzMlRIN3VweEc5MDh5?=
+ =?utf-8?B?REhBcitwbFVuSFBkblBHNkdxeGJIL05scEZhLzlLZU1ETkdqWjB1OVJwaGhF?=
+ =?utf-8?B?cFlrVGNqUjZtbFd2eFZhcHZrdmhEeE1Zalp1VG9BWkVxdFNFa09QVkZpdkJo?=
+ =?utf-8?B?dGZxWlR2U2I3ZVA5YWNvYWlvZHhVTnMzTlozS0JZRy8wYmRoczdNR0FEalQw?=
+ =?utf-8?B?YjF6Sm1CTjdmYXJHWVY1VUdBMnlSbVRnNU1xZlhMWjFlV3IxSzk5eGxGaGNC?=
+ =?utf-8?B?N3BjczR6YnBVWFc5QkV5SWtkbVJxRjFhelZJTzQ0Y1NIajQ2TDVpQ3V3VGh1?=
+ =?utf-8?B?emlwbW5BTWd2NFc1TFBBMVh0RWVMSGljc0lqKy84UkF5eUw0bVhMUGxVOElH?=
+ =?utf-8?B?TW8xV3BrOFFTWjQwVnZFS29HNHZTdkhMRnJEanh6Sm1YZHFKZVRvMjJzT1NE?=
+ =?utf-8?B?LzlqcmxZNEpYQjhMcUZuRE94enQzZTBIdkxqMEdhZnAybHhLWHd1Z3lKdmZZ?=
+ =?utf-8?B?RTVIT2RpWlNIcVJmU3NMY0o1SlZYVHFTdnRqYzdXTHZlR0pYb28xMVVPemVn?=
+ =?utf-8?B?cVd0UUJoMm4xM25hS0tDemlKRG94elc2cXNmd3kvK3dZbmxxbGJWSTVXTWR3?=
+ =?utf-8?B?R3ExOUVYbUZuVnVxY0xqUjVVQytFenpZY3BBcjYxTEk0anNxeTYwbjdPRWJ6?=
+ =?utf-8?B?aUtVNFYwL2w5a0E5d0dZa0ZZUFVwcVF6MG8rT25MQXFyUDJRaC9veXZzdzI4?=
+ =?utf-8?B?Ky9BL284UFMvT3AxeVdiMm9iL0ZpSERQQjM5a2pMcmtPTE1OV0dXL0RRTkxp?=
+ =?utf-8?B?dzRjcTV4TjNtbEpGTFZ4dmJkT0wvZHU5N3Y2VjFmbHhmZkJ6TVlURnZkaEYw?=
+ =?utf-8?B?dmcranZ6OEFaV2JHYWRVYkZNQUd5T0NNMjlHS0ZDMEpYZ0VVYkhCeXhUMW5H?=
+ =?utf-8?B?Ky85REM2SnpZbGJvM2o3MHRtMTJrMlNBbnVibTVzR3d4dmZEd0VJRndTVkh5?=
+ =?utf-8?B?bWNUMlpzU3hLWit1RTBxNkJadGM1eUdjTmNzR2U3Ni9nRFg1ci94Vlp5UTlP?=
+ =?utf-8?B?bDdvUFRvQkdjK2Mzb0Jwb2RFV0lxRVREU0VRK2Z1NlNrNUJ0QXZGTFR0cFBI?=
+ =?utf-8?B?bm5wdmZaVm9MNmYvaXAzSTlLYVpYRXhVMndEMG9hY2hvcXJBWnQzSFRJb2dK?=
+ =?utf-8?B?T1JueVJMcWFCNktSVzJOc0FvbGpxdWtGczJ6cVVGZ0p5K3pjdWNmbjNoMENQ?=
+ =?utf-8?B?eFhneFNSZHk5enJKYmJrdVVsU1NSdkxjRzFLZHlhTGEvNjVKeloyZHNqaWdQ?=
+ =?utf-8?B?TkVwOFEwZ3RGaitWeWp6ZjFWRXRIMjdwNjFFWEcxQXkrZkovUTJ3TXlpU0o4?=
+ =?utf-8?B?d1FBR0ZQZmJGamlMTkZlRmpKOXpmY0ZMWjhoMEhTNng3b3ZPVjRXUktNUEQy?=
+ =?utf-8?B?bmZDWG5PbzhNcmI5QkxTMzdjSlIyaUxsUVBrOEZiNktQU0JDNWZjOXV5eGYz?=
+ =?utf-8?B?L1ovUTczSWhWd2ZoOU5wVVFPVy9YL0RzNXE5L0ZQQUN2b2dFRTBwVTIwOUVX?=
+ =?utf-8?B?dzZNbkJHSVljUVRQb2tReEdBNmZ1c2JlVm03M0RnTzQ0SmwwQ3dLN0psRXpF?=
+ =?utf-8?B?WDV3bHVMSTdkREo2RlMyeFpla3hnNlVjRytoVzFEREZ6LzJWL0lUZ3V5T2s0?=
+ =?utf-8?B?eVN0ZkhXRHlVNHFVbGYraklIM2pTdkNjY3BSWkYwNjZYYklSUHV4bnExMFdV?=
+ =?utf-8?B?aGdGem1zWUJOK1hsbzdyVDNMRDg3bzVxeUVoS1JyRGJGc3VualJhUjdiUEFW?=
+ =?utf-8?B?R3lZZE9sSWNUaDAzOFI5cmt2UjY0WFZub2NlcUVWM2ZBY2JsaUJuM2J6YklQ?=
+ =?utf-8?B?VndiZ25IMG1nOGpFTjY4b2RGZkc2KzBOL3RnYlpqTGJ3cHlXYVpzdExPenAz?=
+ =?utf-8?B?ZnRjT2EzejdXK2I5WWtaRTFSODdCbStMS2JNUjY2NklqZ20vbXh3RmxZZjUw?=
+ =?utf-8?B?dVE9PQ==?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8b99d424-b6ae-4b79-127b-08db23da3d3c
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR0402MB3405.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 15:47:24.7590
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: rXQ+O3+JIgti9inFtMhQpc6SNR6z2HuYDd3+hQORenDdXaovJX4rnpBh2cJqWHbYQ68vXdUHUpTMI9JvjwW5Hg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8405
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KMSAN: uninit-value in ath9k_hw_init
-
-ath9k_htc 2-1:1.0: ath9k_htc: HTC initialized with 33 credits
-=====================================================
-BUG: KMSAN: uninit-value in ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
-BUG: KMSAN: uninit-value in __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
-BUG: KMSAN: uninit-value in ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
- ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
- __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
- ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
- ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
- ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
- ath9k_htc_probe_device+0xf48/0x3b60 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
- ath9k_htc_hw_init+0x4f/0x100 drivers/net/wireless/ath/ath9k/htc_hst.c:523
- ath9k_hif_usb_firmware_cb+0x2eb/0x800 drivers/net/wireless/ath/ath9k/hif_usb.c:1256
- request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
- kthread+0x31f/0x430 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-
-Local variable val created at:
- ath9k_regread+0x62/0x1c0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:239
- ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
- __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
- ath9k_hw_init+0x5c4/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
-
-CPU: 1 PID: 20 Comm: kworker/1:0 Not tainted 6.3.0-rc2-syzkaller-00010-g34add094f9de-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Workqueue: events request_firmware_work_func
-=====================================================
 
 
-Tested on:
+On 3/11/2023 12:41 AM, Uwe Kleine-König wrote:
+> Hello,
+> 
+> many bus remove functions return an integer which is a historic
+> misdesign that makes driver authors assume that there is some kind of
+> error handling in the upper layers. This is wrong however and returning
+> and error code only yields an error message.
+> 
+> This series improves the fsl-mc bus by changing the remove callback to
+> return no value instead. As a preparation all drivers are changed to
+> return zero before so that they don't trigger the error message.
+> 
+> Best regards
+> Uwe
+> 
+> Uwe Kleine-König (6):
+>    bus: fsl-mc: Only warn once about errors on device unbind
+>    bus: fsl-mc: dprc: Push down error message from fsl_mc_driver_remove()
+>    bus: fsl-mc: fsl-mc-allocator: Drop if block with always wrong
+>      condition
+>    bus: fsl-mc: fsl-mc-allocator: Improve error reporting
+>    soc: fsl: dpio: Suppress duplicated error reporting on device remove
+>    bus: fsl-mc: Make remove function return void
+> 
 
-commit:         34add094 kmsan: add test_stackdepot_roundtrip
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=1352768ac80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76a9330669c37355
-dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=15f40c3ac80000
+Thanks for the series, Uwe. Did a quick boot test with ACPI, so:
 
+Reviewed-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
+Tested-by: Laurentiu Tudor <laurentiu.tudor@nxp.com>
