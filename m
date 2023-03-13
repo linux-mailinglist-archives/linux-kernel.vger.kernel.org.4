@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22C2A6B815F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:07:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B46A6B815E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbjCMTHu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:07:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
+        id S230174AbjCMTHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCMTHq (ORCPT
+        with ESMTP id S229980AbjCMTHq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Mar 2023 15:07:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BB625AB4A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:07:42 -0700 (PDT)
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1BC94584B4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:07:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8C7C61469
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:07:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E98ABC433D2;
-        Mon, 13 Mar 2023 19:07:38 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9071A6148E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:07:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92246C4339C;
+        Mon, 13 Mar 2023 19:07:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678734461;
-        bh=NSgcGMlvHaZdY1J2Us1HiQZa412OdeIu/4FLhrIhJVY=;
+        s=k20201202; t=1678734463;
+        bh=ZuSDX5rYmGMOCuLmkY33ZeNcxthLztyqURCdRdw8JL0=;
         h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=Hke5SM/mxLaeP5gd2fw1qU77XLIYsy+ZXz0S7dsUv8LMn1YYsIlQ6sXh+uiX1zMho
-         wMadRJNLkrsf+GDOtvxXZ7rhhtkafdpZp1pXKaGOJp9aWdzK+9CKn/67GFQ1EWF6A2
-         c4s27L+XyF3z4d18AuPa8c/tist0WAr6kC1SvAacWEA/KYWex07XzZw2tDWVJO85ID
-         44i1KbUg9ph5zxCOfrcQxri2+1o25dXnLu2gRnZYcZkWxCTkWGOhQImXGWGa7BUmto
-         UQl8KN52L6Qz4CjVdj743JQ1EDE66kiT6ixeUJwJlUxpWl0gKjHrbJMH88r+oIaSfc
-         W/tGN9jJcNGEQ==
+        b=jrEcryFrfiEjYX1bmlj29MXtjQk2hy12glEHEoFlP1MFwebAY/Ns+JNESdIERY33e
+         GKVNw9iA4EuK7OL10MuQPb20YdS0rYgWWAPMMMKlqkyPvbh9YfT0nKwCsAhtJ7Z7pM
+         vrRvHQc8nV2uZ2UJOPLa2Xs2gM0IxPTSEPmmteihd/tKw3n8pXqHNYgXQbHuDEvCmn
+         t8dLr0LunUlQJNHtp+/5kjIiI84ExfnXkfmFrkcmDK3kqajm5oK/9gczOJYyigTfpz
+         zoA5Ksy4MHDCzfJzpdLSZp4njNson42lyPr8mQHq4TmWgPcIGMgkipUcSLT2pvXMNb
+         dv2J9ICdIiLyQ==
 From:   Mark Brown <broonie@kernel.org>
-To:     lgirdwood@gmail.com, tiwai@suse.com, perex@perex.cz,
-        matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-        Trevor Wu <trevor.wu@mediatek.com>
-Cc:     jiaxin.yu@mediatek.com, alsa-devel@alsa-project.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20230307040938.7484-1-trevor.wu@mediatek.com>
-References: <20230307040938.7484-1-trevor.wu@mediatek.com>
-Subject: Re: [PATCH 0/4] ASoC: mediatek: fix coverity problems
-Message-Id: <167873445867.106067.16026073006550113761.b4-ty@kernel.org>
-Date:   Mon, 13 Mar 2023 19:07:38 +0000
+To:     kiseok.jo@irondevice.com, lgirdwood@gmail.com, perex@perex.cz,
+        tiwai@suse.com, Tom Rix <trix@redhat.com>
+Cc:     alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20230309140959.2616497-1-trix@redhat.com>
+References: <20230309140959.2616497-1-trix@redhat.com>
+Subject: Re: [PATCH] ASoC: SMA1303: set sma_i2c_regmap
+ storage-class-specifier to static
+Message-Id: <167873446131.106067.2236196636490693766.b4-ty@kernel.org>
+Date:   Mon, 13 Mar 2023 19:07:41 +0000
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,15 +55,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 07 Mar 2023 12:09:34 +0800, Trevor Wu wrote:
-> Coverity reports some UNINIT and CERT STR31-C problems, so we add
-> initialization and dai id check to resolve problems.
+On Thu, 09 Mar 2023 09:09:59 -0500, Tom Rix wrote:
+> smatch reports
+> sound/soc/codecs/sma1303.c:1594:28:
+>   warning: symbol 'sma_i2c_regmap' was not declared. Should it be static?
 > 
-> Trevor Wu (4):
->   ASoC: mediatek: mt8195: add dai id check before accessing array
->   ASoC: mediatek: mt9195-mt6359: fix UNINIT problem
->   ASoC: mediatek: mt6358: fix UNINIT problem
->   ASoC: mediatek: mt6359: fix UNINIT problem
+> sma_i2c_regmap is only used in sma1303, so it should be static
+> 
 > 
 > [...]
 
@@ -75,14 +71,8 @@ Applied to
 
 Thanks!
 
-[1/4] ASoC: mediatek: mt8195: add dai id check before accessing array
-      commit: ff728899065922534d80170685fb807194d6487b
-[2/4] ASoC: mediatek: mt9195-mt6359: fix UNINIT problem
-      commit: 1a3f0116b74ba2f9477c28fcf9d66ac7126455fd
-[3/4] ASoC: mediatek: mt6358: fix UNINIT problem
-      commit: 9760e01b3851dc51d1901876668168328d34a647
-[4/4] ASoC: mediatek: mt6359: fix UNINIT problem
-      commit: 3a60fa4c063dacc5eb66660aa23107f3cb8a477e
+[1/1] ASoC: SMA1303: set sma_i2c_regmap storage-class-specifier to static
+      commit: d7d103d1779c3d0bc4d55f2802930a6b067450c0
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent to Linus during
