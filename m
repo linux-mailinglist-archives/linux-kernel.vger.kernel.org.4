@@ -2,47 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC6416B80CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:33:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4892C6B80D9
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:38:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231526AbjCMSdv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:33:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34008 "EHLO
+        id S230318AbjCMSiA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:38:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45422 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231489AbjCMSdT (ORCPT
+        with ESMTP id S231405AbjCMShp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:33:19 -0400
+        Mon, 13 Mar 2023 14:37:45 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FF9E85B21;
-        Mon, 13 Mar 2023 11:31:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F910222D7;
+        Mon, 13 Mar 2023 11:36:48 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 60BC661484;
-        Mon, 13 Mar 2023 18:30:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6FA3AC433EF;
-        Mon, 13 Mar 2023 18:30:56 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0E54C61464;
+        Mon, 13 Mar 2023 18:30:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2405FC433EF;
+        Mon, 13 Mar 2023 18:30:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678732256;
-        bh=sdMhGh/v0S4uLhhMgXoZcxTftjLcVbQ0JldvEDTZ1yE=;
+        s=korg; t=1678732225;
+        bh=/YljSSK5bkf0A5p++gDOQhTrbvu0meKM3gc6Wqmpcik=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=h/hI9tL/g1oKZX9SamcN3M5/Phk2olRLoatPJFm31YFAUcAsHgxSUO3k5HrcUFBGR
-         oTFlhpdu5AzaDPUsg8JPv2FLzqxqaON2iQZQPmb/f7IuSBmUXQAln9+7wnXBsgdkfo
-         ujvYCBIj/MpDkfXQafdJ925ZIXxw9Js6vvSnB+k8=
+        b=JZuW8D0A6kYVqF6udIwRPFUbDNKarWp+aG9MdmZAfzvfwL091bU1pRVD06iPU9yQi
+         69T46Gdn3EtJ1MbLsLah0P0CImxbvPkAnq4/WJz2qjfGZpM/Az5Srox+oono4i3H1L
+         KmNOk7uMQNXhIE3GwY9xte0Bf17QPPPE595IrL1E=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>, kvm@vger.kernel.org,
-        virtualization@lists.linux-foundation.org, netdev@vger.kernel.org
-Subject: [PATCH 31/36] vhost-vdpa: vhost_vdpa_alloc_domain() should be using a const struct bus_type *
-Date:   Mon, 13 Mar 2023 19:29:13 +0100
-Message-Id: <20230313182918.1312597-31-gregkh@linuxfoundation.org>
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Vinod Koul <vkoul@kernel.org>, dmaengine@vger.kernel.org
+Subject: [PATCH 32/36] dmaengine: idxd: use const struct bus_type *
+Date:   Mon, 13 Mar 2023 19:29:14 +0100
+Message-Id: <20230313182918.1312597-32-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
 References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1408; i=gregkh@linuxfoundation.org; h=from:subject; bh=sdMhGh/v0S4uLhhMgXoZcxTftjLcVbQ0JldvEDTZ1yE=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82TUvbDoStjD0i/1v+vmN+6FAU3bEc8GDO0VEeJmnK n3uEcvoiGVhEGRikBVTZPmyjefo/opDil6Gtqdh5rAygQxh4OIUgIlE/mOYp+sx9Tebv8y3yUbr ta71fL9koRnIzzDfQ/VD509tq8Db9tk3zRNct9fM6dcHAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1736; i=gregkh@linuxfoundation.org; h=from:subject; bh=/YljSSK5bkf0A5p++gDOQhTrbvu0meKM3gc6Wqmpcik=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn82TX6kZ/vWz5Tste57XYkInulvW3Dsd+vJbdo3OIIn n2O58rajlgWBkEmBlkxRZYv23iO7q84pOhlaHsaZg4rE8gQBi5OAZiIaBHD/MAFhiy3Q9NCqiem r3q4bjJbgra+CcM8JY6ke5Pcy60cy4N917PKMUi/nqYGAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -54,16 +54,15 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function, vhost_vdpa_alloc_domain(), has a pointer to a struct
-bus_type, but it should be constant as the function it passes it to
-expects it to be const, and the vhost code does not modify it in any
-way.
+In the functions unbind_store() and bind_store(), a struct bus_type *
+should be a const one, as the driver core bus functions used by this
+variable are expecting the pointer to be constant, and these functions
+do not modify the pointer at all.
 
-Cc: "Michael S. Tsirkin" <mst@redhat.com>
-Cc: Jason Wang <jasowang@redhat.com>
-Cc: kvm@vger.kernel.org
-Cc: virtualization@lists.linux-foundation.org
-Cc: netdev@vger.kernel.org
+Cc: Fenghua Yu <fenghua.yu@intel.com>
+Cc: Dave Jiang <dave.jiang@intel.com>
+Cc: Vinod Koul <vkoul@kernel.org>
+Cc: dmaengine@vger.kernel.org
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
 Note, this is a patch that is a prepatory cleanup as part of a larger
@@ -72,22 +71,31 @@ design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
 its own, but I'd prefer if I could take it through my driver-core tree
 so that the driver core changes can be taken through there for 6.4-rc1.
 
- drivers/vhost/vdpa.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/dma/idxd/compat.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/vhost/vdpa.c b/drivers/vhost/vdpa.c
-index dc12dbd5b43b..08c7cb3399fc 100644
---- a/drivers/vhost/vdpa.c
-+++ b/drivers/vhost/vdpa.c
-@@ -1140,7 +1140,7 @@ static int vhost_vdpa_alloc_domain(struct vhost_vdpa *v)
- 	struct vdpa_device *vdpa = v->vdpa;
- 	const struct vdpa_config_ops *ops = vdpa->config;
- 	struct device *dma_dev = vdpa_get_dma_dev(vdpa);
--	struct bus_type *bus;
-+	const struct bus_type *bus;
- 	int ret;
+diff --git a/drivers/dma/idxd/compat.c b/drivers/dma/idxd/compat.c
+index 3df21615f888..5fd38d1b9d28 100644
+--- a/drivers/dma/idxd/compat.c
++++ b/drivers/dma/idxd/compat.c
+@@ -16,7 +16,7 @@ extern void device_driver_detach(struct device *dev);
  
- 	/* Device want to do DMA by itself */
+ static ssize_t unbind_store(struct device_driver *drv, const char *buf, size_t count)
+ {
+-	struct bus_type *bus = drv->bus;
++	const struct bus_type *bus = drv->bus;
+ 	struct device *dev;
+ 	int rc = -ENODEV;
+ 
+@@ -32,7 +32,7 @@ static DRIVER_ATTR_IGNORE_LOCKDEP(unbind, 0200, NULL, unbind_store);
+ 
+ static ssize_t bind_store(struct device_driver *drv, const char *buf, size_t count)
+ {
+-	struct bus_type *bus = drv->bus;
++	const struct bus_type *bus = drv->bus;
+ 	struct device *dev;
+ 	struct device_driver *alt_drv = NULL;
+ 	int rc = -ENODEV;
 -- 
 2.39.2
 
