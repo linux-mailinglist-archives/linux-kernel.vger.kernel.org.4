@@ -2,84 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDD86B731E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:49:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C00E6B7323
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:49:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbjCMJtK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:49:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54236 "EHLO
+        id S230199AbjCMJtv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:49:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCMJs7 (ORCPT
+        with ESMTP id S231337AbjCMJtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:48:59 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91F0A16893
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:48:58 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id k25-20020a7bc419000000b003ed23114fa7so1754850wmi.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:48:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678700937;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=HkyQXV8Sx9ZiihnRIEst2K2Pia3Osr/efAg4G6vW/d4=;
-        b=YyIhi+qBKXeCniBQqYHNXvbSy+16jKMevR5pLkpADFaOLjyEDkhC1KEP/+/NtUNqLq
-         WRtlKz6pUBPcjb4ZyHkYR+Zyfd5tzUnvH6LkYPU3ym7PxHURP+R2tVeHPQy2VivX91IT
-         y1fpoowiLZ5AIV5uyXZQofz9T9bTRjLbAtZezcwoN0COtmR1SagwpWgKbSX7Uy0Y4arS
-         ZrrAO5teJRJXswXBzMcBvdjWuTjdZy4iAzhhGImwEyt0elgs8DBIKVuZUNgkQQVkwcPY
-         thb/JLkAv46ioNhodlfr0RgdHBKOennanVxscJu0TTFISuJgGIXZiyCXxRzFJLkzQ/jh
-         kKWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678700937;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HkyQXV8Sx9ZiihnRIEst2K2Pia3Osr/efAg4G6vW/d4=;
-        b=zevxFlC/OOuMeXbuvApEdn9FU9tHD+4eHk4rNXIFF9gmqonAYtMMPmCD1AI0XUHltU
-         WthxmvnkoQAQzYwppZSwebUqfuAoMAMlFhDpQnjYXCvFv58asjSXDzDlxR+ShagZAq+X
-         vxCRYFSLF08qtux8QPF/SsiatB+H8009+2Rogiy3813U6qOfyZloCVAVQQY1WxNSNh76
-         EKXiE4z7j/n8QVpxlT4e1CmbUSTW/2dsCKVDQ4b8TJpKo44nLthnr1uRAjaqfabHzO0z
-         KwlScmB3qwwfyGlDYLgDDO09pP7i0VscLc45d1pqiL5abOZ5tpHvUsebJ2Y7UGsUpGel
-         oGAg==
-X-Gm-Message-State: AO0yUKUOohfPT6sseTX+/25tK///tFJs/PpySdKIdgHuydy7S5Ol+ACD
-        DgDTkSAHD/bgLkeftMvyHmQ2+DfL728uwYlwQkXo4w==
-X-Google-Smtp-Source: AK7set/o8hyLBzsXl3rkE65eXXSwq1sPMaL90pmRe5O2/veHyLmLBgHIUUgjnFdyrjDZ5pHpoAQCsg==
-X-Received: by 2002:a05:600c:198a:b0:3e2:1368:e395 with SMTP id t10-20020a05600c198a00b003e21368e395mr10237994wmq.33.1678700937004;
-        Mon, 13 Mar 2023 02:48:57 -0700 (PDT)
-Received: from aspen.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id t1-20020a05600c2f8100b003e2058a7109sm4732704wmn.14.2023.03.13.02.48.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 02:48:56 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 09:48:54 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Helge Deller <deller@gmx.de>, dri-devel@lists.freedesktop.org,
-        linux-fbdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] backlight: lp855x: mark OF related data as maybe
- unused
-Message-ID: <20230313094854.GC55049@aspen.lan>
-References: <20230311173556.263086-1-krzysztof.kozlowski@linaro.org>
+        Mon, 13 Mar 2023 05:49:49 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F3D661AB;
+        Mon, 13 Mar 2023 02:49:35 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32D9nQJp110077;
+        Mon, 13 Mar 2023 04:49:26 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678700966;
+        bh=5tIHLp8mna+dpOxvauCmGw9dgMnWj4HTyDR1d2zhhR4=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=e8B55OML3EtDXIIl+h5Y52/upMe5o6Heo1tQCJF+aBtbLKGUn/t2XkDuhV6jLYWtw
+         ZHsrQCjdtkcauiYS1f+0JnsoV7poaUSevxGF5JWuJGKgz5+14tqmM+1b22gM1b/SSy
+         3don19VqM2CqE4ROH2bj5tm6q30/fhSyJOpZO8UM=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32D9nQuA075729
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Mar 2023 04:49:26 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
+ Mar 2023 04:49:25 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 13 Mar 2023 04:49:25 -0500
+Received: from [172.24.218.99] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32D9nIDL113095;
+        Mon, 13 Mar 2023 04:49:19 -0500
+Message-ID: <f28489b1-4ece-4f48-e2c0-9bd7755071d8@ti.com>
+Date:   Mon, 13 Mar 2023 15:19:18 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311173556.263086-1-krzysztof.kozlowski@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel
+ property
+To:     Bhavya Kapoor <b-kapoor@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <a-govindraju@ti.com>, <kishon@ti.com>, <u-kumar1@ti.com>
+References: <20230203073724.29529-1-b-kapoor@ti.com>
+Content-Language: en-US
+From:   Nitin Yadav <n-yadav@ti.com>
+In-Reply-To: <20230203073724.29529-1-b-kapoor@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 06:35:55PM +0100, Krzysztof Kozlowski wrote:
-> The driver can be compile tested with !CONFIG_OF making certain data
-> unused:
+On 2/3/2023 1:07 PM, Bhavya Kapoor wrote:
+> According to latest errata of J721e [1], (i2024) 'MMCSD: Peripherals
+> Do Not Support HS400' which applies to MMCSD0 subsystem. Speed modes
+> supported has been already updated in commit eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+> but it missed dropping 'ti,strobe-sel' property which is only required
+> by HS400 speed mode.
+> 
+> Thus, drop 'ti,strobe-sel' property from kernel dtsi for J721e SoC.
+> 
+> [1] https://www.ti.com/lit/er/sprz455/sprz455.pdf
+> 
+> Fixes: eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
+>  1 file changed, 1 deletion(-)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> index c935622f0102..bfa296dce3a3 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
+> @@ -1180,7 +1180,6 @@ main_sdhci0: mmc@4f80000 {
+>  		ti,itap-del-sel-mmc-hs = <0xa>;
+>  		ti,itap-del-sel-ddr52 = <0x3>;
+>  		ti,trm-icp = <0x8>;
+> -		ti,strobe-sel = <0x77>;
+>  		dma-coherent;
+>  	};
 >
->   drivers/video/backlight/lp855x_bl.c:551:34: error: ‘lp855x_dt_ids’ defined but not used [-Werror=unused-const-variable=]
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
+Reviewed-by: Nitin Yadav <n-yadav@ti.com>
+  
