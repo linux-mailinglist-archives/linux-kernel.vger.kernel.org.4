@@ -2,143 +2,223 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B3106B70CF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:06:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 773A96B70D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:06:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbjCMIGG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 04:06:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42702 "EHLO
+        id S230284AbjCMIGV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:06:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCMIFi (ORCPT
+        with ESMTP id S229784AbjCMIFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 04:05:38 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE6B159419;
-        Mon, 13 Mar 2023 01:02:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678694555; x=1710230555;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=uhBtqsa1AIy5YV1rBDSt/rXxAQ/955DS3N8XQfdem04=;
-  b=VcOTkdqBdHUvHJrIgHxUZZ8wSWBE5LbVCBBEnW9h0PmxWN7nSAwWBk7h
-   Y4RvjrpnjYxQusQEHnEtguTo618ejs3p6lEHrMcBxdtwt3aRuCo31F/kc
-   fuscOQn6xzopRCrICi67nRTtt8ak4okjlOD7TimV59UaKm9nbvUHxYWI1
-   6unt3bHev5uB101hoczS8XMm6AfzwUiMyOL/hJ4a0PlDv0IsEHRO63SFD
-   AlJNkRyVNs0VXN2d9+U69zx2Rl3LPTeGKOgC5gL5BtzYfYjZo56C1mEt3
-   PlEBiWJoVKER9SJz2w6jTRs4Z2+NH6cFGnCJVGGhJc0HwoxbNce16nq6C
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="337107425"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="337107425"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 01:02:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="747518016"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="747518016"
-Received: from mike-ilbpg1.png.intel.com ([10.88.227.76])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Mar 2023 01:02:14 -0700
-From:   Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
-To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
-        Voon Weifeng <weifeng.voon@intel.com>,
-        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
-Subject: [PATCH net 2/2] net: stmmac: move fixed-link support fixup code
-Date:   Mon, 13 Mar 2023 16:01:35 +0800
-Message-Id: <20230313080135.2952774-3-michael.wei.hong.sit@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230313080135.2952774-1-michael.wei.hong.sit@intel.com>
-References: <20230313080135.2952774-1-michael.wei.hong.sit@intel.com>
-MIME-Version: 1.0
+        Mon, 13 Mar 2023 04:05:46 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6FFC59410;
+        Mon, 13 Mar 2023 01:02:49 -0700 (PDT)
+Received: from pps.filterd (m0098396.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32D7pWne007420;
+        Mon, 13 Mar 2023 08:02:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=W3sSDkvUeJHf9tD3g5PeDz9HU2CPI9L7sOUY3ZAn8SQ=;
+ b=hK75zh4A9hr7U0DSLZS/uzhVk4U1Gipa7TO3KwbMpDUJl4tlOt2wLrZ3/Lx7mOMtwH4T
+ 5HfFf8O//h1cmvQ5BB92bw72E78xeeM50DxrzN+16x7VRjjV7s4jxgLdLoEvo9GKLOUf
+ rUoLpJGCoNfVm7a+gC78v8Gxhl0qgLAsh23AB0+q6u2wLU0wEgX7E0J0yIRtfm8FozNx
+ 3uBj5CIf51GjB1Bh2NO4Cu5pASGCEG+sSI5smWGouNwzL+AwBir4c0TOLBFeY44bMnhF
+ pBngnjhUXPd5VEQRJEMnwboVo/hJLx0wiZt3D9z+TiLomwAzC/uSUYo5ayjrjAI3VB6H DA== 
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3p93fs65c0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 08:02:13 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32D2kieq028609;
+        Mon, 13 Mar 2023 08:02:10 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+        by ppma04ams.nl.ibm.com (PPS) with ESMTPS id 3p8h96k058-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 08:02:10 +0000
+Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
+        by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32D827d956361380
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Mon, 13 Mar 2023 08:02:07 GMT
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 329DD204B4;
+        Mon, 13 Mar 2023 08:02:07 +0000 (GMT)
+Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id E7D5520536;
+        Mon, 13 Mar 2023 08:02:06 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTP;
+        Mon, 13 Mar 2023 08:02:06 +0000 (GMT)
+From:   Thomas Richter <tmricht@linux.ibm.com>
+To:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        acme@kernel.org, sumanthk@linux.ibm.com
+Cc:     svens@linux.ibm.com, gor@linux.ibm.com, hca@linux.ibm.com,
+        Thomas Richter <tmricht@linux.ibm.com>
+Subject: [PATCH 1/6] tools/perf/json: Add common metrics for s390
+Date:   Mon, 13 Mar 2023 09:01:56 +0100
+Message-Id: <20230313080201.2440201-1-tmricht@linux.ibm.com>
+X-Mailer: git-send-email 2.37.2
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: l3efZP7XxXzcOHKReJtlnggfpeZEis1L
+X-Proofpoint-ORIG-GUID: l3efZP7XxXzcOHKReJtlnggfpeZEis1L
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-12_10,2023-03-10_01,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ malwarescore=0 suspectscore=0 priorityscore=1501 mlxscore=0 clxscore=1015
+ lowpriorityscore=0 mlxlogscore=999 phishscore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
+ definitions=main-2303130065
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xpcs_an_inband value is updated in the speed_mode_2500 function
-which turns on the xpcs_an_inband mode.
+Add 3 metrics for s390 machines:
+- Cycles per instruction: Amount of CPU cycles used per instructions,
+  named cpi.
+- Problem state ratio: Ratio of instructions executed in problem state
+  compared to total number of instructions, named prbstate.
+- Level one instruction and data cache misses per 100 instructions,
+  named l1mp.
 
-Moving the fixed-link fixup code to right before phylink setup to
-ensure no more fixup will affect the fixed-link mode configurations.
+For details about the formulas see this documentation:
+https://www.ibm.com/support/pages/system/files/inline-files/CPU%20MF%20Formulas%20including%20z16%20-%20May%202022_1.pdf
 
-Fixes: 72edaf39fc65 ("stmmac: intel: add phy-mode and fixed-link ACPI _DSD setting support")
-Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+Outpuf after:
+ # ./perf stat -M cpi -- dd if=/dev/zero of=/dev/null bs=1M count=10K
+ 10240+0 records in
+ 10240+0 records out
+ 10737418240 bytes (11 GB, 10 GiB) copied, 1.30151 s, 8.2 GB/s
+
+Performance counter stats for 'dd if=/dev/zero of=/dev/null .....':
+
+  6,779,778,802      CPU_CYCLES              #     1.96 cpi
+  3,461,975,090      INSTRUCTIONS
+
+  1.306873021 seconds time elapsed
+
+  0.001034000 seconds user
+  1.305677000 seconds sys
+ #
+
+Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+Acked-By: Sumanth Korikkar <sumanthk@linux.ibm.com>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c | 11 -----------
- drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 15 +++++++++++++++
- 2 files changed, 15 insertions(+), 11 deletions(-)
+ .../pmu-events/arch/s390/cf_z13/transaction.json  | 15 +++++++++++++++
+ .../pmu-events/arch/s390/cf_z14/transaction.json  | 15 +++++++++++++++
+ .../pmu-events/arch/s390/cf_z15/transaction.json  | 15 +++++++++++++++
+ .../pmu-events/arch/s390/cf_z16/transaction.json  | 15 +++++++++++++++
+ 4 files changed, 60 insertions(+)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-index 7deb1f817dac..d02db2b529b9 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-intel.c
-@@ -592,17 +592,6 @@ static int intel_mgbe_common_data(struct pci_dev *pdev,
- 		plat->mdio_bus_data->xpcs_an_inband = true;
- 	}
- 
--	/* For fixed-link setup, we clear xpcs_an_inband */
--	if (fwnode) {
--		struct fwnode_handle *fixed_node;
--
--		fixed_node = fwnode_get_named_child_node(fwnode, "fixed-link");
--		if (fixed_node)
--			plat->mdio_bus_data->xpcs_an_inband = false;
--
--		fwnode_handle_put(fixed_node);
--	}
--
- 	/* Ensure mdio bus scan skips intel serdes and pcs-xpcs */
- 	plat->mdio_bus_data->phy_mask = 1 << INTEL_MGBE_ADHOC_ADDR;
- 	plat->mdio_bus_data->phy_mask |= 1 << INTEL_MGBE_XPCS_ADDR;
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 398adcd68ee8..5a9abafba490 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7064,6 +7064,7 @@ int stmmac_dvr_probe(struct device *device,
- 		     struct stmmac_resources *res)
- {
- 	struct net_device *ndev = NULL;
-+	struct fwnode_handle *fwnode;
- 	struct stmmac_priv *priv;
- 	u32 rxq;
- 	int i, ret = 0;
-@@ -7306,6 +7307,20 @@ int stmmac_dvr_probe(struct device *device,
- 			goto error_xpcs_setup;
- 	}
- 
-+	/* For fixed-link setup, we clear xpcs_an_inband */
-+	if (!fwnode)
-+		fwnode = dev_fwnode(priv->device);
-+
-+	if (fwnode) {
-+		struct fwnode_handle *fixed_node;
-+
-+		fixed_node = fwnode_get_named_child_node(fwnode, "fixed-link");
-+		if (fixed_node)
-+			priv->plat->mdio_bus_data->xpcs_an_inband = false;
-+
-+		fwnode_handle_put(fixed_node);
-+	}
-+
- 	ret = stmmac_phy_setup(priv);
- 	if (ret) {
- 		netdev_err(ndev, "failed to setup phy (%d)\n", ret);
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z13/transaction.json b/tools/perf/pmu-events/arch/s390/cf_z13/transaction.json
+index 1a0034f79f73..86bf83b4504e 100644
+--- a/tools/perf/pmu-events/arch/s390/cf_z13/transaction.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z13/transaction.json
+@@ -3,5 +3,20 @@
+     "BriefDescription": "Transaction count",
+     "MetricName": "transaction",
+     "MetricExpr": "TX_C_TEND + TX_NC_TEND + TX_NC_TABORT + TX_C_TABORT_SPECIAL + TX_C_TABORT_NO_SPECIAL"
++  },
++  {
++    "BriefDescription": "Cycles per Instruction",
++    "MetricName": "cpi",
++    "MetricExpr": "CPU_CYCLES / INSTRUCTIONS"
++  },
++  {
++    "BriefDescription": "Problem State Instruction Ratio",
++    "MetricName": "prbstate",
++    "MetricExpr": "(PROBLEM_STATE_INSTRUCTIONS / INSTRUCTIONS) * 100"
++  },
++  {
++    "BriefDescription": "Level One Miss per 100 Instructions",
++    "MetricName": "l1mp",
++    "MetricExpr": "((L1I_DIR_WRITES + L1D_DIR_WRITES) / INSTRUCTIONS) * 100"
+   }
+ ]
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z14/transaction.json b/tools/perf/pmu-events/arch/s390/cf_z14/transaction.json
+index 1a0034f79f73..86bf83b4504e 100644
+--- a/tools/perf/pmu-events/arch/s390/cf_z14/transaction.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z14/transaction.json
+@@ -3,5 +3,20 @@
+     "BriefDescription": "Transaction count",
+     "MetricName": "transaction",
+     "MetricExpr": "TX_C_TEND + TX_NC_TEND + TX_NC_TABORT + TX_C_TABORT_SPECIAL + TX_C_TABORT_NO_SPECIAL"
++  },
++  {
++    "BriefDescription": "Cycles per Instruction",
++    "MetricName": "cpi",
++    "MetricExpr": "CPU_CYCLES / INSTRUCTIONS"
++  },
++  {
++    "BriefDescription": "Problem State Instruction Ratio",
++    "MetricName": "prbstate",
++    "MetricExpr": "(PROBLEM_STATE_INSTRUCTIONS / INSTRUCTIONS) * 100"
++  },
++  {
++    "BriefDescription": "Level One Miss per 100 Instructions",
++    "MetricName": "l1mp",
++    "MetricExpr": "((L1I_DIR_WRITES + L1D_DIR_WRITES) / INSTRUCTIONS) * 100"
+   }
+ ]
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z15/transaction.json b/tools/perf/pmu-events/arch/s390/cf_z15/transaction.json
+index 1a0034f79f73..86bf83b4504e 100644
+--- a/tools/perf/pmu-events/arch/s390/cf_z15/transaction.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z15/transaction.json
+@@ -3,5 +3,20 @@
+     "BriefDescription": "Transaction count",
+     "MetricName": "transaction",
+     "MetricExpr": "TX_C_TEND + TX_NC_TEND + TX_NC_TABORT + TX_C_TABORT_SPECIAL + TX_C_TABORT_NO_SPECIAL"
++  },
++  {
++    "BriefDescription": "Cycles per Instruction",
++    "MetricName": "cpi",
++    "MetricExpr": "CPU_CYCLES / INSTRUCTIONS"
++  },
++  {
++    "BriefDescription": "Problem State Instruction Ratio",
++    "MetricName": "prbstate",
++    "MetricExpr": "(PROBLEM_STATE_INSTRUCTIONS / INSTRUCTIONS) * 100"
++  },
++  {
++    "BriefDescription": "Level One Miss per 100 Instructions",
++    "MetricName": "l1mp",
++    "MetricExpr": "((L1I_DIR_WRITES + L1D_DIR_WRITES) / INSTRUCTIONS) * 100"
+   }
+ ]
+diff --git a/tools/perf/pmu-events/arch/s390/cf_z16/transaction.json b/tools/perf/pmu-events/arch/s390/cf_z16/transaction.json
+index 1a0034f79f73..86bf83b4504e 100644
+--- a/tools/perf/pmu-events/arch/s390/cf_z16/transaction.json
++++ b/tools/perf/pmu-events/arch/s390/cf_z16/transaction.json
+@@ -3,5 +3,20 @@
+     "BriefDescription": "Transaction count",
+     "MetricName": "transaction",
+     "MetricExpr": "TX_C_TEND + TX_NC_TEND + TX_NC_TABORT + TX_C_TABORT_SPECIAL + TX_C_TABORT_NO_SPECIAL"
++  },
++  {
++    "BriefDescription": "Cycles per Instruction",
++    "MetricName": "cpi",
++    "MetricExpr": "CPU_CYCLES / INSTRUCTIONS"
++  },
++  {
++    "BriefDescription": "Problem State Instruction Ratio",
++    "MetricName": "prbstate",
++    "MetricExpr": "(PROBLEM_STATE_INSTRUCTIONS / INSTRUCTIONS) * 100"
++  },
++  {
++    "BriefDescription": "Level One Miss per 100 Instructions",
++    "MetricName": "l1mp",
++    "MetricExpr": "((L1I_DIR_WRITES + L1D_DIR_WRITES) / INSTRUCTIONS) * 100"
+   }
+ ]
 -- 
-2.34.1
+2.39.1
 
