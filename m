@@ -2,183 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3482E6B7EBF
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:05:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE5246B7ED1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:06:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCMRFl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:05:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42038 "EHLO
+        id S231475AbjCMRGk convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 13:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229847AbjCMRFV (ORCPT
+        with ESMTP id S231347AbjCMRGU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:05:21 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DB83A875;
-        Mon, 13 Mar 2023 10:04:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CCC05613F1;
-        Mon, 13 Mar 2023 17:03:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CAFDC433D2;
-        Mon, 13 Mar 2023 17:03:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678727029;
-        bh=2fV05cI4GhiMYR3KLrK2+mj2n5gX/Sc5m5PDzzFmPmA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=D5yxDdV/g8lOgNvM0+Tf37WN30x0RU+VsxZfRNgo8qM5DQdy4gwHaZi/PfSg5P+Xc
-         67NSPT9po5fYmCQnF9jN3qFLI018d+WEhzX+U+ZzDBRbe0OIAz7XlF4mfmGp7QZCj3
-         QPf+2U0NuBf1D83uQpjaG8b10lfgx3lANZUlX8hwI8r1AAxEn+G8tEIo5sf9pPRA+N
-         p3aVsdpjCDBN9OrmURoICCgDdKmvL1ZeIlFhlNf7R+N2oI+2ouJEL4E5EgYdpXICJ5
-         8E0CJKfdya6IXQXFEhck1P0k5z9qsnZKf8LMaZiHqvmzEWsYG0knSq9l0g9DqtoHJY
-         5adQFRayEByKQ==
-Date:   Mon, 13 Mar 2023 17:03:41 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Ye Xiang <xiang.ye@intel.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Wolfram Sang <wsa@kernel.org>,
-        Tyrone Ting <kfting@nuvoton.com>,
-        Mark Brown <broonie@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, linux-usb@vger.kernel.org,
-        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-spi@vger.kernel.org, linux-gpio@vger.kernel.org,
-        srinivas.pandruvada@intel.com, heikki.krogerus@linux.intel.com,
-        andriy.shevchenko@linux.intel.com, sakari.ailus@linux.intel.com,
-        zhifeng.wang@intel.com, wentong.wu@intel.com, lixu.zhang@intel.com
-Subject: Re: [PATCH v5 1/5] usb: Add support for Intel LJCA device
-Message-ID: <20230313170341.GV9667@google.com>
-References: <20230312190435.3568212-1-xiang.ye@intel.com>
- <20230312190435.3568212-2-xiang.ye@intel.com>
+        Mon, 13 Mar 2023 13:06:20 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557997C9CA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:05:30 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-246-bQ2qnsRDO5aCOHhkgp0Jow-1; Mon, 13 Mar 2023 17:04:15 +0000
+X-MC-Unique: bQ2qnsRDO5aCOHhkgp0Jow-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar
+ 2023 17:04:11 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.047; Mon, 13 Mar 2023 17:04:11 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Horatiu Vultur' <horatiu.vultur@microchip.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "richardcochran@gmail.com" <richardcochran@gmail.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
+Subject: RE: [PATCH net-next 2/2] net: lan966x: Stop using packing library
+Thread-Topic: [PATCH net-next 2/2] net: lan966x: Stop using packing library
+Thread-Index: AQHZVSC3u0fDDFQR5EmW1hDzDWEnv6748Dbw
+Date:   Mon, 13 Mar 2023 17:04:11 +0000
+Message-ID: <cad1c4aac9ae4047b8ed29b181c908fd@AcuMS.aculab.com>
+References: <20230312202424.1495439-1-horatiu.vultur@microchip.com>
+ <20230312202424.1495439-3-horatiu.vultur@microchip.com>
+In-Reply-To: <20230312202424.1495439-3-horatiu.vultur@microchip.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230312190435.3568212-2-xiang.ye@intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Mar 2023, Ye Xiang wrote:
-
-> This patch implements the USB part of Intel USB-I2C/GPIO/SPI adapter
-> device named "La Jolla Cove Adapter" (LJCA).
->
-> The communication between the various LJCA module drivers and the
-> hardware will be muxed/demuxed by this driver. The sub-module of
-> LJCA can use ljca_transfer() to issue a transfer between host
-> and hardware.
->
-> Each sub-module of LJCA device is identified by type field within
-> the LJCA message header.
->
-> The minimum code in ASL that covers this board is
-> Scope (\_SB.PCI0.DWC3.RHUB.HS01)
->     {
->         Device (GPIO)
->         {
->             Name (_ADR, Zero)
->             Name (_STA, 0x0F)
->         }
->
->         Device (I2C)
->         {
->             Name (_ADR, One)
->             Name (_STA, 0x0F)
->         }
->
->         Device (SPI)
->         {
->             Name (_ADR, 0x02)
->             Name (_STA, 0x0F)
->         }
->     }
->
-> Signed-off-by: Ye Xiang <xiang.ye@intel.com>
-> Reviewed-by: Sakari Ailus <sakari.ailus@linux.intel.com>
-> ---
->  drivers/usb/misc/Kconfig  |  13 +
->  drivers/usb/misc/Makefile |   1 +
->  drivers/usb/misc/ljca.c   | 998 ++++++++++++++++++++++++++++++++++++++
->  include/linux/usb/ljca.h  |  95 ++++
->  4 files changed, 1107 insertions(+)
->  create mode 100644 drivers/usb/misc/ljca.c
->  create mode 100644 include/linux/usb/ljca.h
->
-> diff --git a/drivers/usb/misc/Kconfig b/drivers/usb/misc/Kconfig
-> index a5f7652db7da..59ec120c26d4 100644
-> --- a/drivers/usb/misc/Kconfig
-> +++ b/drivers/usb/misc/Kconfig
-> @@ -273,6 +273,19 @@ config USB_LINK_LAYER_TEST
->  	  Layer Test Device. Say Y only when you want to conduct USB Super Speed
->  	  Link Layer Test for host controllers.
->
-> +config USB_LJCA
-> +	tristate "Intel La Jolla Cove Adapter support"
-> +	select MFD_CORE
-> +	depends on USB
-> +	help
-> +	  This adds support for Intel La Jolla Cove USB-I2C/SPI/GPIO
-> +	  Master Adapter (LJCA). Additional drivers such as I2C_LJCA,
-> +	  GPIO_LJCA and SPI_LJCA must be enabled in order to use the
-> +	  functionality of the device.
+From: Horatiu Vultur
+> Sent: 12 March 2023 20:24
+> 
+> When a frame is injected from CPU, it is required to create an IFH(Inter
+> frame header) which sits in front of the frame that is transmitted.
+> This IFH, contains different fields like destination port, to bypass the
+> analyzer, priotity, etc. Lan966x it is using packing library to set and
+> get the fields of this IFH. But this seems to be an expensive
+> operations.
+> If this is changed with a simpler implementation, the RX will be
+> improved with ~5Mbit while on the TX is a much bigger improvement as it
+> is required to set more fields. Below are the numbers for TX.
+...
+> +static void lan966x_ifh_set(u8 *ifh, size_t val, size_t pos, size_t length)
+> +{
+> +	u32 v = 0;
 > +
-> +	  This driver can also be built as a module. If so, the module
-> +	  will be called ljca.
+> +	for (int i = 0; i < length ; i++) {
+> +		int j = pos + i;
+> +		int k = j % 8;
 > +
->  config USB_CHAOSKEY
->  	tristate "ChaosKey random number generator driver support"
->  	depends on HW_RANDOM
-> diff --git a/drivers/usb/misc/Makefile b/drivers/usb/misc/Makefile
-> index 93581baec3a8..6f6adfbe17e0 100644
-> --- a/drivers/usb/misc/Makefile
-> +++ b/drivers/usb/misc/Makefile
-> @@ -29,6 +29,7 @@ obj-$(CONFIG_USB_HUB_USB251XB)		+= usb251xb.o
->  obj-$(CONFIG_USB_HSIC_USB3503)		+= usb3503.o
->  obj-$(CONFIG_USB_HSIC_USB4604)		+= usb4604.o
->  obj-$(CONFIG_USB_CHAOSKEY)		+= chaoskey.o
-> +obj-$(CONFIG_USB_LJCA)			+= ljca.o
->
->  obj-$(CONFIG_USB_SISUSBVGA)		+= sisusbvga/
->  obj-$(CONFIG_USB_LINK_LAYER_TEST)	+= lvstest.o
-> diff --git a/drivers/usb/misc/ljca.c b/drivers/usb/misc/ljca.c
-> new file mode 100644
-> index 000000000000..ab98deaf0074
-> --- /dev/null
-> +++ b/drivers/usb/misc/ljca.c
-> @@ -0,0 +1,998 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Intel La Jolla Cove Adapter USB driver
-> + *
-> + * Copyright (c) 2023, Intel Corporation.
-> + */
+> +		if (i == 0 || k == 0)
+> +			v = ifh[IFH_LEN_BYTES - (j / 8) - 1];
 > +
-> +#include <linux/dev_printk.h>
-> +#include <linux/kernel.h>
-> +#include <linux/mfd/core.h>
+> +		if (val & (1 << i))
+> +			v |= (1 << k);
+> +
+> +		if (i == (length - 1) || k == 7)
+> +			ifh[IFH_LEN_BYTES - (j / 8) - 1] = v;
+> +	}
+> +}
+> +
 
-Please don't use the MFD API outside of drivers/mfd.
+It has to be possible to do much better that that.
+Given  that 'pos' and 'length' are always constants it looks like
+each call should reduce to (something like):
+	ifh[k] |= val << n;
+	ifk[k + 1] |= val >> (8 - n);
+	...
+It might be that the compiler manages to do this, but I doubt it.
 
-If you wish to use the API, please do.
+	David
 
-Strip out (only) the MFD parts and move them into drivers/mfd.
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
 
-> +#include <linux/module.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/mutex.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/slab.h>
-> +#include <linux/types.h>
-> +#include <linux/usb.h>
-> +#include <linux/usb/ljca.h>
-
---
-Lee Jones [李琼斯]
