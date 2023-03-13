@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F5C6B8038
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:19:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83AEE6B803B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:19:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjCMSTM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:19:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37708 "EHLO
+        id S230135AbjCMSTX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:19:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCMSTD (ORCPT
+        with ESMTP id S229899AbjCMSTJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:19:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98CFE4DBFD
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:19:01 -0700 (PDT)
+        Mon, 13 Mar 2023 14:19:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D4060413
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:19:06 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3400E6144F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:19:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45544C4339B;
-        Mon, 13 Mar 2023 18:19:00 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B93DCB811C0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:19:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12EBEC433EF;
+        Mon, 13 Mar 2023 18:19:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678731540;
-        bh=Ao8E7I6q4IqhdrrchnK3hfPSFJkT9ZPSxEvWAhBtTUY=;
+        s=korg; t=1678731543;
+        bh=ctjKqSuJOUxpeEuy+4gwiXJmrXmRPpbRLRRhC9+pDrM=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Mbv0P7nwVw7bKDKzaPcuGuQV4E5mgJq77e469LDVKQELNfp48353TI+KPMdGJdfeK
-         YLhcZIBXdwGkTNcEYc5ON8Gk7AgXBR448Z/nyTcmWU6VHNATvZ6s95y81ANyko3lY1
-         xmDo0JGBCdMFbQd1umUUjNp81+3svDSjW067g5is=
+        b=wdg8jHRR4oPOiF1OhWuEOaVOifv3pVQV3R56+fwa9OM0XCYSn8x9uXmpIojcKbA52
+         QnaVDIPe9qNub1PZ114EV4jiWSfVNqC1RAfT3+Toi87uuWxC1cLumFTWza0IrAodWT
+         /3hsojjpGpWjtG9dSUw9ZBTV8YfZ7CEKs6WpTt70=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     rafael@kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Subject: [PATCH 11/12] driver core: device: mark struct class in struct device as constant
-Date:   Mon, 13 Mar 2023 19:18:42 +0100
-Message-Id: <20230313181843.1207845-11-gregkh@linuxfoundation.org>
+Subject: [PATCH 12/12] driver core: device: make device_create*() take a const struct class *
+Date:   Mon, 13 Mar 2023 19:18:43 +0100
+Message-Id: <20230313181843.1207845-12-gregkh@linuxfoundation.org>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
 References: <20230313181843.1207845-1-gregkh@linuxfoundation.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2552; i=gregkh@linuxfoundation.org; h=from:subject; bh=Ao8E7I6q4IqhdrrchnK3hfPSFJkT9ZPSxEvWAhBtTUY=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn8mcy3r21bfEqx5LLMlZ93XQ+ds7l1Pt3ma4nMNt9Fx kyL1u7f2BHLwiDIxCArpsjyZRvP0f0VhxS9DG1Pw8xhZQIZwsDFKQATmajCMFf2/+2gZotdk9f9 P67Ht1N8ms1X03MM83SXNrMclr/IGtjhw/x8rrhXkEVcDgA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2761; i=gregkh@linuxfoundation.org; h=from:subject; bh=ctjKqSuJOUxpeEuy+4gwiXJmrXmRPpbRLRRhC9+pDrM=; b=owGbwMvMwCRo6H6F97bub03G02pJDCn8mcx6/w9MZPH7XKIss+ydt33Zvnnh/fNizi2+cYt/X 7z8nUUPO2JZGASZGGTFFFm+bOM5ur/ikKKXoe1pmDmsTCBDGLg4BWAi4R8Y5hef8rv0XGQ2UzxD 2alZSsJMl9hvtzLM4TXqblW75CBXfFYvynNzpH7Dh7cuAA==
 X-Developer-Key: i=gregkh@linuxfoundation.org; a=openpgp; fpr=F4B60CC5BF78C2214A313DCB3147D40DDB2DFB29
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -51,82 +51,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The pointer to a struct class in a struct device should never be used to
-change anything in that class.  So mark it as constant to enforce this
-requirement.
-
-This requires a few minor changes to some internal driver core functions
-to enforce the const * being used here now.
+The functions device_create() and device_create_with_groups() do not
+modify the struct class passed into it, so enforce this by changing the
+function parameters to be struct const class.
 
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>
 Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 ---
- drivers/base/core.c    | 10 +++++-----
- include/linux/device.h |  2 +-
- 2 files changed, 6 insertions(+), 6 deletions(-)
+ drivers/base/core.c    | 6 +++---
+ include/linux/device.h | 4 ++--
+ 2 files changed, 5 insertions(+), 5 deletions(-)
 
 diff --git a/drivers/base/core.c b/drivers/base/core.c
-index f3b7040ef9b6..0970db630839 100644
+index 0970db630839..f1889b9cab45 100644
 --- a/drivers/base/core.c
 +++ b/drivers/base/core.c
-@@ -2820,7 +2820,7 @@ EXPORT_SYMBOL_GPL(devm_device_add_groups);
+@@ -4253,7 +4253,7 @@ static void device_create_release(struct device *dev)
+ }
  
- static int device_add_attrs(struct device *dev)
+ static __printf(6, 0) struct device *
+-device_create_groups_vargs(struct class *class, struct device *parent,
++device_create_groups_vargs(const struct class *class, struct device *parent,
+ 			   dev_t devt, void *drvdata,
+ 			   const struct attribute_group **groups,
+ 			   const char *fmt, va_list args)
+@@ -4317,7 +4317,7 @@ device_create_groups_vargs(struct class *class, struct device *parent,
+  * Note: the struct class passed to this function must have previously
+  * been created with a call to class_create().
+  */
+-struct device *device_create(struct class *class, struct device *parent,
++struct device *device_create(const struct class *class, struct device *parent,
+ 			     dev_t devt, void *drvdata, const char *fmt, ...)
  {
--	struct class *class = dev->class;
-+	const struct class *class = dev->class;
- 	const struct device_type *type = dev->type;
- 	int error;
- 
-@@ -2887,7 +2887,7 @@ static int device_add_attrs(struct device *dev)
- 
- static void device_remove_attrs(struct device *dev)
- {
--	struct class *class = dev->class;
-+	const struct class *class = dev->class;
- 	const struct device_type *type = dev->type;
- 
- 	if (dev->physical_location) {
-@@ -3120,7 +3120,7 @@ struct kobject *virtual_device_parent(struct device *dev)
- 
- struct class_dir {
- 	struct kobject kobj;
--	struct class *class;
-+	const struct class *class;
- };
- 
- #define to_class_dir(obj) container_of(obj, struct class_dir, kobj)
-@@ -3145,7 +3145,7 @@ static const struct kobj_type class_dir_ktype = {
- };
- 
- static struct kobject *
--class_dir_create_and_add(struct class *class, struct kobject *parent_kobj)
-+class_dir_create_and_add(const struct class *class, struct kobject *parent_kobj)
- {
- 	struct class_dir *dir;
- 	int retval;
-@@ -4580,7 +4580,7 @@ static int device_attrs_change_owner(struct device *dev, kuid_t kuid,
- 				     kgid_t kgid)
- {
- 	struct kobject *kobj = &dev->kobj;
--	struct class *class = dev->class;
-+	const struct class *class = dev->class;
- 	const struct device_type *type = dev->type;
- 	int error;
- 
+ 	va_list vargs;
+@@ -4358,7 +4358,7 @@ EXPORT_SYMBOL_GPL(device_create);
+  * Note: the struct class passed to this function must have previously
+  * been created with a call to class_create().
+  */
+-struct device *device_create_with_groups(struct class *class,
++struct device *device_create_with_groups(const struct class *class,
+ 					 struct device *parent, dev_t devt,
+ 					 void *drvdata,
+ 					 const struct attribute_group **groups,
 diff --git a/include/linux/device.h b/include/linux/device.h
-index c0c02a00fe87..f97a793c6683 100644
+index f97a793c6683..b050c545a4dd 100644
 --- a/include/linux/device.h
 +++ b/include/linux/device.h
-@@ -629,7 +629,7 @@ struct device {
- 	spinlock_t		devres_lock;
- 	struct list_head	devres_head;
- 
--	struct class		*class;
-+	const struct class	*class;
- 	const struct attribute_group **groups;	/* optional groups */
- 
- 	void	(*release)(struct device *dev);
+@@ -1013,10 +1013,10 @@ bool device_is_bound(struct device *dev);
+  * Easy functions for dynamically creating devices on the fly
+  */
+ __printf(5, 6) struct device *
+-device_create(struct class *cls, struct device *parent, dev_t devt,
++device_create(const struct class *cls, struct device *parent, dev_t devt,
+ 	      void *drvdata, const char *fmt, ...);
+ __printf(6, 7) struct device *
+-device_create_with_groups(struct class *cls, struct device *parent, dev_t devt,
++device_create_with_groups(const struct class *cls, struct device *parent, dev_t devt,
+ 			  void *drvdata, const struct attribute_group **groups,
+ 			  const char *fmt, ...);
+ void device_destroy(const struct class *cls, dev_t devt);
 -- 
 2.39.2
 
