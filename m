@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC0796B7A7E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 327176B7A83
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:38:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbjCMOiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:38:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54216 "EHLO
+        id S230084AbjCMOiO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:38:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230084AbjCMOiB (ORCPT
+        with ESMTP id S231438AbjCMOiJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:38:01 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AFB6AD2B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:37:59 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id s12so13263685qtq.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:37:58 -0700 (PDT)
+        Mon, 13 Mar 2023 10:38:09 -0400
+Received: from mail-qt1-x82f.google.com (mail-qt1-x82f.google.com [IPv6:2607:f8b0:4864:20::82f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D62161A65E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:38:04 -0700 (PDT)
+Received: by mail-qt1-x82f.google.com with SMTP id c18so13320451qte.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:38:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678718276;
+        d=chromium.org; s=google; t=1678718284;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nAqJ0VRun7GLH0P7PDatGQQt5VcBWd3DCbBuaXJxSSc=;
-        b=O33xqR8cnFnw9Ua8eE13pUFaX5FOsy/vDGMQDg5Q7KyLi46tmIRXE6lqIVYPLfCfZ/
-         +CU5NZf5CmAZD5gtZK+Pz2X3KSY8ewUTzuj/5HeAjutIDIHIBoCV8Xk0V8Wd23XN7Z3C
-         g7hQGo5j6D1sLyMGllXEujdi1jZOU2LXy4fBs=
+        bh=uDaRIIqW7/+ly5ySR9hbSflFpXoocSQAnYPTqjUre/k=;
+        b=MAcXl6at3/winOcS4KxrIvBiQSaZHfivydwNQ1x59zIf4Sw3uDOAJWl420fYIAB+ZH
+         MqLh1S5Sjjpl7UW052yl6OHHTZ9WzU1N00DxaBoDcgfwpIEpdqL0DBWhTP3FDLEWBerq
+         CfDkJ70A0LG3I5PCAys7GsLYjfw3npFmBA9mA=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718276;
+        d=1e100.net; s=20210112; t=1678718284;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nAqJ0VRun7GLH0P7PDatGQQt5VcBWd3DCbBuaXJxSSc=;
-        b=lIZBk1x7zY0F7wS7P3vuuSJKCP+I+oiD+K+mtez8yt6I92CCJJ0tOvK+Ebr2IE+Jeh
-         G8dv+wPjEr5fSI3IuJmYEkUULlJcuHK8YJgTmKrEu7Jzg0bLqJ6/gurn76ndfG5MZIzS
-         xCkhFJWIGvsZIcTFULfHUilz+eHjTyainWqnp+YIst0OxjSkfFkSCXxnMHxAgJlEHW1F
-         +YEWJ123D22va8EvDfdLDDTI+lMIRr/Hw3SB7YSS4UUTsRUQ5Syrzisy+sqHiEw1c8cU
-         iFnChW/dM9rmtvh+6eEGcZ3K0imVqRGqr0TcDNiwVIReoyL6u+cu+zcDu2YJ+fPB0AbC
-         X9cQ==
-X-Gm-Message-State: AO0yUKV1J/bnKcKKnZPfE2t5bOYOJfy7VBCrJDnSStfiYzFSudRL+eon
-        yiEg5BV7wmiz2l9R1hOdlPJ2fm9H36Ett2SeC6M=
-X-Google-Smtp-Source: AK7set98RSfsl26VTaeVCrKCr54MIR7qWwUPeePBXPNtCOXoPPDgzZiVHghplY1ZGBsQ1VmW1XqfEg==
-X-Received: by 2002:a05:622a:1895:b0:3bf:b504:d5ea with SMTP id v21-20020a05622a189500b003bfb504d5eamr27055501qtc.48.1678718276619;
-        Mon, 13 Mar 2023 07:37:56 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id o191-20020a3741c8000000b0071a02d712b0sm5425034qka.99.2023.03.13.07.37.55
+        bh=uDaRIIqW7/+ly5ySR9hbSflFpXoocSQAnYPTqjUre/k=;
+        b=AOy4F46v/GZtnm6+ijGDx0BiOcUC0IdNGx8ivwwT+38p3GGwVgnrPYR0/hUSgGeyBV
+         ex1PEH7adzMQ2HJqSlr49jwTpDqNYIB6xKjao+8oXiguW9Ch7FfDL/4LVhCOX+AmpPMe
+         kxEcvCrxJVKKt+aw2mfYwwQJ3l/Ol7wUCjas0zSfSVvC6a8UdW4jEyqecFR829iicto/
+         IML/3TrMJL/EqMt+bYOMJl2VXseppBxynzBLStFAg/s8Xly30pZOJhJwoCTXvMENeUbx
+         nYjKIhIB3QHvb5ArzjBXL7RAE2RxwSWVkJrf4+kyQNzu5F/ifmmwAwZAr+N0Gj3gaXlt
+         AYJg==
+X-Gm-Message-State: AO0yUKUlyibD8N93LyTa8p6WBN20dAfAQMthgqZL0cPkaTgj0zvSFxE/
+        bUXrfJU2pn+/lynORQpBkb18dKx0f6Ppv5fdj40=
+X-Google-Smtp-Source: AK7set+zJJPQ58FieEJkBCKl0SkKDUqRNMaCd9avpPIxpNB0Q9al3D7Cp2A4YDqJ+q///xFtgYciDQ==
+X-Received: by 2002:a05:622a:1709:b0:3b9:a4c8:d57a with SMTP id h9-20020a05622a170900b003b9a4c8d57amr59787045qtk.32.1678718283862;
+        Mon, 13 Mar 2023 07:38:03 -0700 (PDT)
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com. [209.85.219.182])
+        by smtp.gmail.com with ESMTPSA id h4-20020ac87d44000000b003b9bca1e093sm5666844qtb.27.2023.03.13.07.38.03
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 07:37:56 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-5416b0ab0ecso116498837b3.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:37:55 -0700 (PDT)
-X-Received: by 2002:a81:a782:0:b0:541:6763:3ce1 with SMTP id
- e124-20020a81a782000000b0054167633ce1mr5003671ywh.2.1678718275345; Mon, 13
- Mar 2023 07:37:55 -0700 (PDT)
+        Mon, 13 Mar 2023 07:38:03 -0700 (PDT)
+Received: by mail-yb1-f182.google.com with SMTP id j7so1271964ybg.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:38:03 -0700 (PDT)
+X-Received: by 2002:a25:9c46:0:b0:a5d:3d45:26c with SMTP id
+ x6-20020a259c46000000b00a5d3d45026cmr21326349ybo.0.1678718283055; Mon, 13 Mar
+ 2023 07:38:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230312183622.460488-1-krzysztof.kozlowski@linaro.org> <20230312183622.460488-3-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230312183622.460488-3-krzysztof.kozlowski@linaro.org>
+References: <20230312183622.460488-1-krzysztof.kozlowski@linaro.org> <20230312183622.460488-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230312183622.460488-4-krzysztof.kozlowski@linaro.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Mon, 13 Mar 2023 07:37:44 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V4uSUDnpOGuX-bYmPOn+-AknqM1SD-p6d2AX7ZPTyVSA@mail.gmail.com>
-Message-ID: <CAD=FV=V4uSUDnpOGuX-bYmPOn+-AknqM1SD-p6d2AX7ZPTyVSA@mail.gmail.com>
-Subject: Re: [PATCH 3/8] arm64: dts: qcom: sc7180-trogdor-lazor: correct
+Date:   Mon, 13 Mar 2023 07:37:51 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=Uhpc5idOzPt5Oknzng8qaTFh4Fsibs1hXFfZRsKn+9cA@mail.gmail.com>
+Message-ID: <CAD=FV=Uhpc5idOzPt5Oknzng8qaTFh4Fsibs1hXFfZRsKn+9cA@mail.gmail.com>
+Subject: Re: [PATCH 4/8] arm64: dts: qcom: sc7180-trogdor-pazquel: correct
  trackpad supply
 To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Cc:     Andy Gross <agross@kernel.org>,
@@ -95,23 +95,23 @@ On Sun, Mar 12, 2023 at 11:36=E2=80=AFAM Krzysztof Kozlowski
 > The hid-over-i2c takes VDD, not VCC supply.  Fix copy-pasta from other
 > boards which use elan,ekth3000 with valid VCC:
 >
->   sc7180-trogdor-lazor-limozeen-nots-r4.dtb: trackpad@2c: 'vcc-supply' do=
-es not match any of the regexes: 'pinctrl-[0-9]+'
+>   sc7180-trogdor-pazquel360-lte.dtb: trackpad@15: 'vcc-supply' does not m=
+atch any of the regexes: 'pinctrl-[0-9]+'
 >
-> Fixes: 2c26adb8dbab ("arm64: dts: qcom: Add sc7180-lazor-limozeen skus")
+> Fixes: fb69f6adaf88 ("arm64: dts: qcom: sc7180: Add pazquel dts files")
 > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
->  .../boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts     | 2 +-
+>  arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi | 2 +-
 >  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-=
-r4.dts b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts
-> index 850776c5323d..70d5a7aa8873 100644
-> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts
-> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-lazor-limozeen-nots-r4.dts
-> @@ -26,7 +26,7 @@ trackpad: trackpad@2c {
+> diff --git a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi b/arch/=
+arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+> index d06cc4ea3375..8823edbb4d6e 100644
+> --- a/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sc7180-trogdor-pazquel.dtsi
+> @@ -39,7 +39,7 @@ trackpad: trackpad@15 {
 >                 interrupt-parent =3D <&tlmm>;
->                 interrupts =3D <58 IRQ_TYPE_EDGE_FALLING>;
+>                 interrupts =3D <0 IRQ_TYPE_EDGE_FALLING>;
 >
 > -               vcc-supply =3D <&pp3300_fp_tp>;
 > +               vdd-supply =3D <&pp3300_fp_tp>;
