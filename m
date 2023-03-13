@@ -2,99 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D01FA6B847C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:07:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E4CC6B847E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:08:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCMWG6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 18:06:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40756 "EHLO
+        id S230165AbjCMWIR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 18:08:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229627AbjCMWG5 (ORCPT
+        with ESMTP id S229627AbjCMWIP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 18:06:57 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10FEA3AAB;
-        Mon, 13 Mar 2023 15:06:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678745216; x=1710281216;
-  h=from:to:cc:subject:date:message-id;
-  bh=pxSJXOAP6+FkS4KwMiPDKrgeUrDK7Fjyk3nrgSzvo5Y=;
-  b=eJJADclN1iYXvdqD6SyljyipXeVL9VCHaM0oWQ51T7OeAA6GTTxH2NfX
-   9HMdoO1ZxWKfN2603+Gpq2/0xQli+DRhyYp0TUYRkIs0uFql/F5UJVy7N
-   ydxb9F2xYnPFDO8ft3k7l0wgBLpI3cY3AAcO/Xcy8PR1CAWVuG+a9SNEs
-   dfkonGFnIgAkrAN5+5pGdjO2AvDmvdF0IQAgbRSmvFmvt93Qsk8SEog1D
-   98II3XTJ4GoWInPdRcB311Azr/YrVxhvIwB46t5vCDA8GMUN8H/7ALAAB
-   gct178QiziSSlQUQMsuEFAJ8X9exv99Xm6tLE8uxPQM+pzpNiTStaf5N4
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="402142779"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="402142779"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 15:06:55 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822117433"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="822117433"
-Received: from wopr.jf.intel.com ([10.54.75.136])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Mar 2023 15:06:54 -0700
-From:   Todd Brandt <todd.e.brandt@intel.com>
-To:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     todd.e.brandt@linux.intel.com, todd.e.brandt@intel.com,
-        srinivas.pandruvada@linux.intel.com, jic23@kernel.org,
-        jikos@kernel.org, p.jungkamp@gmx.net
-Subject: [PATCH v2] Fix buffer overrun in HID-SENSOR name string
-Date:   Mon, 13 Mar 2023 15:06:53 -0700
-Message-Id: <20230313220653.3996-1-todd.e.brandt@intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 18:08:15 -0400
+Received: from nautica.notk.org (nautica.notk.org [91.121.71.147])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7940F222DB;
+        Mon, 13 Mar 2023 15:08:13 -0700 (PDT)
+Received: by nautica.notk.org (Postfix, from userid 108)
+        id C6820C009; Mon, 13 Mar 2023 23:08:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1678745291; bh=+3hvHtxOKm+x6xuyu0609vnA9psaq5/XZ9w8PURWMRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Q+2XhhEmo/HDRno8AcK7DIjIlwDBBoI9AjEIliJyR3jmF+Tcrw/QNSnpg5zmoPyGs
+         zgvmeDVWk4QBnDDbDxvMBvJyFR2ArH90Q0pL/xDLXD1c5i+ItneOwPw6ofzh13Abg5
+         mmpc2ERt94S4gUIWMWTqG9d07BmqM5RZ7LorNsR/7J5u7D7tHy7ousQLhbG4xlfTr5
+         83LG1XRtL9wEwDxxwwqT7tB2ygiBhAqP+hSWpU4XcauoFKk5+yehHhf19DWLsTDZ1+
+         1wR6mQTd5x4WE0swSdMwBc6bwH9ZAMsrpRb4T7+/bGydM3WJ1/PtU5vqal1Up+yUyL
+         DMfCjbo3U17gw==
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+X-Spam-Level: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
+Received: from odin.codewreck.org (localhost [127.0.0.1])
+        by nautica.notk.org (Postfix) with ESMTPS id 8E47AC009;
+        Mon, 13 Mar 2023 23:08:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=codewreck.org; s=2;
+        t=1678745290; bh=+3hvHtxOKm+x6xuyu0609vnA9psaq5/XZ9w8PURWMRU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=rcbznV7IIhDUoiRMQf+9vd8Sj3wcDKpZ+Cy0hZ3mqu41tU4AP6shdcIuZc/VTPKi4
+         GG9CQ2i8yR8P5QwdHxsV50BSKxAM2aZnBEiWErmcj9XF387Nvg3HOOHa4Umow75y5o
+         t3UF7DmTP1lARsf0T4cLPpRW7suxpSBcc1SixliJFc5gwo2MB9s8cHw/dHZ2AhspqS
+         mR8hU62q1V3+MfSXLNfFmDaPiVOvbn8qzSOKaB/zrUIfC97rkHM3TlCkBdR8UqTPn7
+         C6Y633Qb3S/UOxn5ZaUvUZVff+TtMbF8zsXDhomvmK0ANSmA9/knZaQFIJqnFNsKNm
+         XJ8RD08WOMuYA==
+Received: from localhost (odin.codewreck.org [local])
+        by odin.codewreck.org (OpenSMTPD) with ESMTPA id 86503e90;
+        Mon, 13 Mar 2023 22:08:03 +0000 (UTC)
+Date:   Tue, 14 Mar 2023 07:07:48 +0900
+From:   asmadeus@codewreck.org
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Zheng Wang <zyytlz.wz@163.com>, ericvh@gmail.com,
+        lucho@ionkov.net, linux_oss@crudebyte.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Subject: Re: [PATCH net v2] 9p/xen : Fix use after free bug in
+ xen_9pfs_front_remove due  to race condition
+Message-ID: <ZA+etMBFSw/999Aq@codewreck.org>
+References: <20230313090002.3308025-1-zyytlz.wz@163.com>
+ <ZA8rDCw+mJmyETEx@localhost.localdomain>
+ <20230313143054.538565ac@kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230313143054.538565ac@kernel.org>
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On some platforms there are some platform devices created with
-invalid names. For example: "HID-SENSOR-INT-020b?.39.auto" instead
-of "HID-SENSOR-INT-020b.39.auto"
+Jakub Kicinski wrote on Mon, Mar 13, 2023 at 02:30:54PM -0700:
+> On Mon, 13 Mar 2023 14:54:20 +0100 Michal Swiatkowski wrote:
+> > >  	for (i = 0; i < priv->num_rings; i++) {
+> > > +		/*cancel work*/  
+> > It isn't needed I think, the function cancel_work_sync() tells everything
+> > here.
+> 
+> Note that 9p is more storage than networking, so this patch is likely
+> to go via a different tree than us.
 
-This string include some invalid characters, hence it will fail to
-properly load the driver which will handle this custom sensor. Also
-it is a problem for some user space tools, which parse the device
-names from ftrace and dmesg.
+Any review done is useful anyway ;)
 
-This is because the string, real_usage, is not NULL terminated and
-printed with %s to form device name.
+Either Eric or me will take the patch, but in the past such fixes have
+sometimes also been taken into the net tree; honestly I wouldn't mind a
+bit more "rule" here as it's a bit weird that some of our patches are Cc
+to fsdevel@ (fs/ from fs/9p) and the other half netdev@ (net/ from
+net/9p), but afaict the MAINTAINERS syntax doesn't have a way of
+excluding e.g. net/9p from the `NETWORKING [GENERAL]` group so I guess
+we just have to live with that.
 
-To address this, we initialize the real_usage string with 0s.
+There's little enough volume and netdev automation sends a mail when a
+patch is picked up, so as long as there's no conflict (large majority of
+the cases) such fixes can go either way as far as I'm concerned.
 
-Philipp Jungkamp created this fix, I'm simply submitting it. I've
-verified it fixes bugzilla issue 217169
-
-Reported-and-tested-by: Todd Brandt <todd.e.brandt@linux.intel.com>
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
-Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
----
- drivers/hid/hid-sensor-custom.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/hid/hid-sensor-custom.c b/drivers/hid/hid-sensor-custom.c
-index 3e3f89e01d81..d85398721659 100644
---- a/drivers/hid/hid-sensor-custom.c
-+++ b/drivers/hid/hid-sensor-custom.c
-@@ -940,7 +940,7 @@ hid_sensor_register_platform_device(struct platform_device *pdev,
- 				    struct hid_sensor_hub_device *hsdev,
- 				    const struct hid_sensor_custom_match *match)
- {
--	char real_usage[HID_SENSOR_USAGE_LENGTH];
-+	char real_usage[HID_SENSOR_USAGE_LENGTH] = { 0 };
- 	struct platform_device *custom_pdev;
- 	const char *dev_name;
- 	char *c;
 -- 
-2.17.1
-
+Dominique
