@@ -2,98 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3DCB6B6DC8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:05:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13EEF6B6DD4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:09:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229723AbjCMDFn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:05:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37406 "EHLO
+        id S229980AbjCMDI7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:08:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41752 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCMDFZ (ORCPT
+        with ESMTP id S230084AbjCMDI2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:05:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7E2127988
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:04:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678676680;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=AQANVrvaj9/B2WSrHSzaItV2LmCoP7qwGr+9zKi06ow=;
-        b=gV5nfgQcY2t+5q9xafnrC8wyaqh+Rs87zFLiRGmyrA+blUpLeABk2GRf+eaweEj7WCPUSN
-        5GLSJ3ZbmomKlXDQg9vCujGZwvvfT14qfpxziXT9hQ3SoMUA4WybMoAfWB1Zb5e7U2Aj6H
-        AsetDE+rkYj1CBllBsZj2uTd+7hsDDc=
-Received: from mail-ua1-f70.google.com (mail-ua1-f70.google.com
- [209.85.222.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-447-6F31cFwaM02ri9VHzJ4R3Q-1; Sun, 12 Mar 2023 23:04:31 -0400
-X-MC-Unique: 6F31cFwaM02ri9VHzJ4R3Q-1
-Received: by mail-ua1-f70.google.com with SMTP id j20-20020ab06014000000b00445260e9ad6so5536256ual.13
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:04:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678676671;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AQANVrvaj9/B2WSrHSzaItV2LmCoP7qwGr+9zKi06ow=;
-        b=ECvlHNsgUBseNKAsvGyEKDQEDz8E59cWnaYGCcZM8CGY2R/goXUiSM28CeJxU6Cja3
-         hUiLQ8yo0UXgyU6q0822stKbmr6aNdIcsLFjuJWcoE4LMUDVbdMn6D7whwJRlcLwXznc
-         78pLCD/l1tzrb+lPk8zeoD9gW5RPN/XjMNTb2OFB6SryuM4PzvmCDrYWdMXDQ6zH8P0A
-         Fs/c74AvDQtcdC0sGB95yRZQ/n+tuo880lsxLFxa9MVgqQCDWVAS6ORHbvZda7N+go6r
-         JBE/si5k1bzS1A6Fm9dTVx22VxS1BBgpyBHfXKOjix2URByNukPipvMkUzHLXsD3V1CD
-         /RXg==
-X-Gm-Message-State: AO0yUKX+Eom9fp0a02TYeZ9lKfJOqGWyhDZV+UG62HoMEI5J3ygPhkaX
-        VHC78SbpTiEV7sdA7vIYqM6Vct1vM09AIKmdLPs4F5A4jfM4qZEXoTYbhAc4XyMAUh8JzKLcJhE
-        urFzY1XuVseQebSnary4C7oQ7wZ9Vip3cI65NU21r
-X-Received: by 2002:a1f:4b01:0:b0:401:8898:ea44 with SMTP id y1-20020a1f4b01000000b004018898ea44mr18555379vka.3.1678676671151;
-        Sun, 12 Mar 2023 20:04:31 -0700 (PDT)
-X-Google-Smtp-Source: AK7set83d8dKkzLeJ9M1ow+hnonqiyLfMHFAS+UySCvJj8sJK2fNKWzzVwX2uSVj8vcnI9W5BAG2+1uG1juFgoNFqic=
-X-Received: by 2002:a1f:4b01:0:b0:401:8898:ea44 with SMTP id
- y1-20020a1f4b01000000b004018898ea44mr18555374vka.3.1678676670837; Sun, 12 Mar
- 2023 20:04:30 -0700 (PDT)
+        Sun, 12 Mar 2023 23:08:28 -0400
+Received: from 1wt.eu (wtarreau.pck.nerim.net [62.212.114.60])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 819DEC14C;
+        Sun, 12 Mar 2023 20:08:17 -0700 (PDT)
+Received: (from willy@localhost)
+        by mail.home.local (8.17.1/8.17.1/Submit) id 32D38AAT006824;
+        Mon, 13 Mar 2023 04:08:10 +0100
+Date:   Mon, 13 Mar 2023 04:08:10 +0100
+From:   Willy Tarreau <w@1wt.eu>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     Shuah Khan <shuah@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH RFC 5/5] tools/nolibc: tests: add test for
+ -fstack-protector
+Message-ID: <ZA6TmjtAJ5lvFCeF@1wt.eu>
+References: <20230223-nolibc-stackprotector-v1-0-3e74d81b3f21@weissschuh.net>
+ <20230223-nolibc-stackprotector-v1-5-3e74d81b3f21@weissschuh.net>
+ <ZA3OhLBmUz3fui+f@1wt.eu>
+ <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
 MIME-Version: 1.0
-References: <20230310201525.2615385-1-eblake@redhat.com> <20230310201525.2615385-2-eblake@redhat.com>
-In-Reply-To: <20230310201525.2615385-2-eblake@redhat.com>
-From:   Ming Lei <ming.lei@redhat.com>
-Date:   Mon, 13 Mar 2023 11:04:19 +0800
-Message-ID: <CAFj5m9JmwYn9BTYEWWFykC_20rDVXfENKRbD2A=G=DmM4ni1-g@mail.gmail.com>
-Subject: Re: [PATCH 1/3] uapi nbd: improve doc links to userspace spec
-To:     Eric Blake <eblake@redhat.com>
-Cc:     josef@toxicpanda.com, linux-block@vger.kernel.org,
-        nbd@other.debian.org, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
-        corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6c627adf-d25d-4135-8185-e59f215f89ee@t-8ch.de>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 4:17=E2=80=AFAM Eric Blake <eblake@redhat.com> wrot=
-e:
->
-> The uapi <linux/nbd.h> header intentionally documents only the NBD
-> server features that the kernel module will utilize as a client.  But
-> while it already had one mention of skipped bits due to userspace
-> extensions, it did not actually direct the reader to the canonical
-> source to learn about those extensions.
->
-> While touching comments, fix an outdated reference that listed only
-> READ and WRITE as commands.
->
-> The documentation file also had a stale link to sourceforge; nbd
-> ditched that several years ago in favor of github.
->
-> Signed-off-by: Eric Blake <eblake@redhat.com>
+On Sun, Mar 12, 2023 at 11:12:50PM +0000, Thomas Weißschuh wrote:
+> FYI there is also another patch to make nolibc-test buildable with
+> compilers that enable -fstack-protector by default.
+> Maybe this can be picked up until the proper stack-protector support is
+> hashed out.
+> Maybe even for 6.3:
+> 
+> https://lore.kernel.org/lkml/20230221-nolibc-no-stack-protector-v1-1-4e6a42f969e2@weissschuh.net/
 
-Reviewed-by: Ming Lei <ming.lei@redhat.com>
+Ah thanks, it seems I indeed missed it. It looks good, I'll take it.
 
+> > > +int run_stackprotector(int min, int max)
+> > > +{
+> > > +	int llen = 0;
+> > > +
+> > > +	llen += printf("0 ");
+> > > +
+> > > +#if !defined(NOLIBC_STACKPROTECTOR)
+> > > +	llen += printf("stack smashing detection not supported");
+> > > +	pad_spc(llen, 64, "[SKIPPED]\n");
+> > > +	return 0;
+> > > +#endif
+> > 
+> > Shouldn't the whole function be enclosed instead ? I know it's more of
+> > a matter of taste, but avoiding to build and link it for archs that
+> > will not use it may be better.
+> 
+> The goal was to print a [SKIPPED] message if it's not supported.
+
+Ah indeed makes sense.
+
+> The overhead of doing this should be neglectable.
+
+It was not the overhead (that's only a regtest program after all), I
+was more thinking about the difficulty to maintain this function over
+time for other archs if it starts to rely on optional support. But for
+now it's not a problem, it it would ever become one we could simply
+change that to have a function just print SKIPPED. So I'm fine with
+your option.
+
+> > > @@ -719,8 +784,11 @@ int prepare(void)
+> > >  /* This is the definition of known test names, with their functions */
+> > >  static const struct test test_names[] = {
+> > >  	/* add new tests here */
+> > > -	{ .name = "syscall",   .func = run_syscall  },
+> > > -	{ .name = "stdlib",    .func = run_stdlib   },
+> > > +	{ .name = "syscall",        .func = run_syscall         },
+> > > +	{ .name = "stdlib",         .func = run_stdlib          },
+> > > +	{ .name = "stackprotector", .func = run_stackprotector, },
+> > > +	{ .name = "_smash_stack",   .func = run_smash_stack,
+> > 
+> > I think it would be better to keep the number of categories low
+> > and probably you should add just one called "protection" or so,
+> > and implement your various tests in it as is done for other
+> > categories. The goal is to help developers quickly spot and select
+> > the few activities they're interested in at a given moment. 
+> 
+> I'm not sure how this would be done. The goal here is that
+> "stackprotector" is the user-visible category. It can be changed to
+> "protection".
+> "_smash_stack" however is just an entrypoint that is used by the forked
+> process to call the crashing code.
+
+Ah I didn't realize that, I now understand how that can be useful,
+indeed. Then maybe just rename your .skip_by_default field to .hidden
+so that it becomes more generic (i.e. if one day we permit enumeration
+we don't want such tests to be listed either), and assign the field on
+the same line so that it's easily visible with a grep.
+
+Thanks,
+Willy
