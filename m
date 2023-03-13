@@ -2,64 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD8586B7D7F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:29:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FDCE6B7D68
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbjCMQ3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50286 "EHLO
+        id S230426AbjCMQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231309AbjCMQ27 (ORCPT
+        with ESMTP id S229608AbjCMQ0L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:28:59 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE4757A90B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:27:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678724865;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         references:references; bh=s8sJ/cpBUh6LGMZ+lcAYSBuSqrBbcVYVRwc+yqWmsjw=;
-        b=VmieFrNyXtV1VDpHI26EEzy1xpQogJpnGOLKPqHUO0caxC5K88HncBOcMdS36ruQFdrmMi
-        W1epDBe7fA2cN6+I8pzuYluMOpcbHmSnVM80sWg0wHKyxSmtCxkGrKrQhxyTo3E1d6Wpks
-        j2hOLxCBZ600HdSzkd2hgB/qxVqP+yM=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-617-ZMuT39A6OHKSVs7hfn-Tvw-1; Mon, 13 Mar 2023 12:27:41 -0400
-X-MC-Unique: ZMuT39A6OHKSVs7hfn-Tvw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4280818E0045;
-        Mon, 13 Mar 2023 16:27:40 +0000 (UTC)
-Received: from tpad.localdomain (ovpn-112-2.gru2.redhat.com [10.97.112.2])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 15EC3492C14;
-        Mon, 13 Mar 2023 16:27:40 +0000 (UTC)
-Received: by tpad.localdomain (Postfix, from userid 1000)
-        id 467DB4038AB8F; Mon, 13 Mar 2023 13:26:44 -0300 (-03)
-Message-ID: <20230313162634.561005765@redhat.com>
-User-Agent: quilt/0.67
-Date:   Mon, 13 Mar 2023 13:25:19 -0300
-From:   Marcelo Tosatti <mtosatti@redhat.com>
-To:     Christoph Lameter <cl@linux.com>
-Cc:     Aaron Tomlin <atomlin@atomlin.com>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Russell King <linux@armlinux.org.uk>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: [PATCH v5 12/12] vmstat: add pcp remote node draining via cpu_vm_stats_fold
-References: <20230313162507.032200398@redhat.com>
+        Mon, 13 Mar 2023 12:26:11 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0421F360AB;
+        Mon, 13 Mar 2023 09:26:10 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso11339642wmq.1;
+        Mon, 13 Mar 2023 09:26:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678724768;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=PTS3TvsaI19NjFQi3zg5TWV9y2d9pm99dtScZ0oVUQo=;
+        b=MuzLAXw50lYgGq40JnV3ctiw64T+L0DmnFMGIUr74EXpJ1c1Cf92k88ATt63trzuD4
+         3Ts1bfT5aOCpk2r5lG9G55Nz96/L82e8oeWcRvgxxN8fcC8Z8X3fulaDW0wt/aF2nivK
+         89mWOw2EWXhZ4s6Vb4bECSLNN3Y9RaY8qYGFtmet92jDu5uU6Lkdm0ozclknqq6jJsj1
+         dbQ2EJgrmk81ru5lKHHG3L/9yXCQpaKq9QlREw6gCH1ILdqSvm7j+/Zdz0gZou0R606G
+         r1Q81R2Jk6b64LP6Z4wAPdqtsw6soJ4qdT4GFWLMWnXxPMfornvexuQDSla2ptsk16wb
+         EIkw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678724768;
+        h=user-agent:content-disposition:mime-version:message-id:subject:to
+         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PTS3TvsaI19NjFQi3zg5TWV9y2d9pm99dtScZ0oVUQo=;
+        b=x415K3jtkhazseO4ecpOtI30qatxvkXasc+IFK+hwvg+tu0V3PDj6f54vZ5PD3xwc2
+         Ooj8WJGpccmY+IoEC66Y32l4c3BuVfOWteJnv+qiPKRZwDKc/GIkgH71GnkIYcIDIPV4
+         e8kiSkJsvLwlUkLCaEJe2ldDvauF7TPxUzSDJEzLhxkEEiWzspHZqHpZTbxaSpO3ZSxE
+         VZH/n7rBffjsY77VELQRc1Z/a4JROlq/Srcz4v6jLuZYZQEapNNCU62x0XKluG8Zq8Wl
+         lFqNiu4zLQcYpqiW1yghVRfsXh6j1Xx+SfL6wFQpMJrmPJKg9+7/Qpv2/Dx2o/ASkaFt
+         VUQQ==
+X-Gm-Message-State: AO0yUKUEmDmRkr9OhfWnn72BSBU2ojskFXGT8Nx2/lKJ30KZfVVXJGfv
+        etJ5Y0foWzPNI5SXscvBDV0=
+X-Google-Smtp-Source: AK7set8wDucz4hPvGRBd6pLsS8FtDu1eAKAN6WORwSdEAt/PlxgAMfgosxlY/7X6SbGrmESuVNo6rQ==
+X-Received: by 2002:a05:600c:19cf:b0:3eb:3cc9:9f85 with SMTP id u15-20020a05600c19cf00b003eb3cc99f85mr12199068wmq.26.1678724768377;
+        Mon, 13 Mar 2023 09:26:08 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id ja9-20020a05600c556900b003ed29f4e45esm282700wmb.0.2023.03.13.09.25.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 09:26:08 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 17:25:34 +0100
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, dsahern@kernel.org, alexanderduyck@fb.com,
+        richardbgobert@gmail.com, lucien.xin@gmail.com,
+        lixiaoyan@google.com, iwienand@redhat.com, leon@kernel.org,
+        ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] gro: optimise redundant parsing of packets
+Message-ID: <20230313162520.GA17199@debian>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,128 +73,85 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Large NUMA systems might have significant portions 
-of system memory to be trapped in pcp queues. The number of pcp is                                                             
-determined by the number of processors and nodes in a system. A system                                                              
-with 4 processors and 2 nodes has 8 pcps which is okay. But a system                                                                
-with 1024 processors and 512 nodes has 512k pcps with a high potential                                                              
-for large amount of memory being caught in them.
+Currently the IPv6 extension headers are parsed twice: first in
+ipv6_gro_receive, and then again in ipv6_gro_complete.
 
-Enable remote node draining for the CONFIG_HAVE_CMPXCHG_LOCAL case,
-where vmstat_shepherd will perform the aging and draining via
-cpu_vm_stats_fold.
+By using the new ->transport_proto and ->network_proto fields, and also
+storing the size of the network header, we can avoid parsing a second time
+during the gro complete phase.
 
-Suggested-by: Vlastimil Babka <vbabka@suse.cz>
-Signed-off-by: Marcelo Tosatti <mtosatti@redhat.com>
+The first commit frees up space in the GRO CB. The second commit reduces
+the redundant parsing during the complete phase, using the freed CB space.
 
-Index: linux-vmstat-remote/mm/vmstat.c
-===================================================================
---- linux-vmstat-remote.orig/mm/vmstat.c
-+++ linux-vmstat-remote/mm/vmstat.c
-@@ -928,7 +928,7 @@ static int refresh_cpu_vm_stats(bool do_
-  * There cannot be any access by the offline cpu and therefore
-  * synchronization is simplified.
-  */
--void cpu_vm_stats_fold(int cpu)
-+void cpu_vm_stats_fold(int cpu, bool do_pagesets)
- {
- 	struct pglist_data *pgdat;
- 	struct zone *zone;
-@@ -938,6 +938,9 @@ void cpu_vm_stats_fold(int cpu)
- 
- 	for_each_populated_zone(zone) {
- 		struct per_cpu_zonestat *pzstats;
-+#ifdef CONFIG_NUMA
-+		struct per_cpu_pages *pcp = per_cpu_ptr(zone->per_cpu_pageset, cpu);
-+#endif
- 
- 		pzstats = per_cpu_ptr(zone->per_cpu_zonestats, cpu);
- 
-@@ -948,6 +951,11 @@ void cpu_vm_stats_fold(int cpu)
- 				v = xchg(&pzstats->vm_stat_diff[i], 0);
- 				atomic_long_add(v, &zone->vm_stat[i]);
- 				global_zone_diff[i] += v;
-+#ifdef CONFIG_NUMA
-+				/* 3 seconds idle till flush */
-+				if (do_pagesets)
-+					pcp->expire = 3;
-+#endif
- 			}
- 		}
- #ifdef CONFIG_NUMA
-@@ -959,6 +967,38 @@ void cpu_vm_stats_fold(int cpu)
- 				zone_numa_event_add(v, zone, i);
- 			}
- 		}
-+
-+		if (do_pagesets) {
-+			cond_resched();
-+			/*
-+			 * Deal with draining the remote pageset of a
-+			 * processor
-+			 *
-+			 * Check if there are pages remaining in this pageset
-+			 * if not then there is nothing to expire.
-+			 */
-+			if (!pcp->expire || !pcp->count)
-+				continue;
-+
-+			/*
-+			 * We never drain zones local to this processor.
-+			 */
-+			if (zone_to_nid(zone) == cpu_to_node(cpu)) {
-+				pcp->expire = 0;
-+				continue;
-+			}
-+
-+			WARN_ON(pcp->expire < 0);
-+			/*
-+			 * pcp->expire is only accessed from vmstat_shepherd context,
-+			 * therefore no locking is required.
-+			 */
-+			if (--pcp->expire)
-+				continue;
-+
-+			if (pcp->count)
-+				drain_zone_pages(zone, pcp);
-+		}
- #endif
- 	}
- 
-@@ -2060,7 +2100,7 @@ static int refresh_all_vm_stats(void)
- 
- 	cpus_read_lock();
- 	for_each_online_cpu(cpu) {
--		cpu_vm_stats_fold(cpu);
-+		cpu_vm_stats_fold(cpu, true);
- 		cond_resched();
- 	}
- 	cpus_read_unlock();
-Index: linux-vmstat-remote/include/linux/vmstat.h
-===================================================================
---- linux-vmstat-remote.orig/include/linux/vmstat.h
-+++ linux-vmstat-remote/include/linux/vmstat.h
-@@ -291,7 +291,7 @@ extern void __dec_zone_state(struct zone
- extern void __dec_node_state(struct pglist_data *, enum node_stat_item);
- 
- void quiet_vmstat(void);
--void cpu_vm_stats_fold(int cpu);
-+void cpu_vm_stats_fold(int cpu, bool do_pagesets);
- void refresh_zone_stat_thresholds(void);
- 
- struct ctl_table;
-Index: linux-vmstat-remote/mm/page_alloc.c
-===================================================================
---- linux-vmstat-remote.orig/mm/page_alloc.c
-+++ linux-vmstat-remote/mm/page_alloc.c
-@@ -8629,7 +8629,7 @@ static int page_alloc_cpu_dead(unsigned
- 	 * Zero the differential counters of the dead processor
- 	 * so that the vm statistics are consistent.
- 	 */
--	cpu_vm_stats_fold(cpu);
-+	cpu_vm_stats_fold(cpu, false);
- 
- 	for_each_populated_zone(zone)
- 		zone_pcp_update(zone, 0);
+In addition, the second commit contains a fix for a potential future
+problem in BIG TCP, which is detailed in the commit message itself.
 
+Performance tests for TCP stream over IPv6 with extension headers
+demonstrate rx improvement of ~0.7%.
 
+For the benchmarks, I used 100Gbit NIC mlx5 single-core (power management
+off), turboboost off.
+
+Typical IPv6 traffic (zero extension headers):
+
+    for i in {1..5}; do netperf -t TCP_STREAM -H 2001:db8:2:2::2 -l 90 | tail -1; done
+    # before
+    131072  16384  16384    90.00    16391.20
+    131072  16384  16384    90.00    16403.50
+    131072  16384  16384    90.00    16403.30
+    131072  16384  16384    90.00    16397.84
+    131072  16384  16384    90.00    16398.00
+
+    # after
+    131072  16384  16384    90.00    16399.85
+    131072  16384  16384    90.00    16392.37
+    131072  16384  16384    90.00    16403.06
+    131072  16384  16384    90.00    16406.97
+    131072  16384  16384    90.00    16406.09
+
+IPv6 over IPv6 traffic:
+
+    for i in {1..5}; do netperf -t TCP_STREAM -H 4001:db8:2:2::2 -l 90 | tail -1; done
+    # before
+    131072  16384  16384    90.00    14791.61
+    131072  16384  16384    90.00    14791.66
+    131072  16384  16384    90.00    14783.47
+    131072  16384  16384    90.00    14810.17
+    131072  16384  16384    90.00    14806.15
+
+    # after
+    131072  16384  16384    90.00    14793.49
+    131072  16384  16384    90.00    14816.10
+    131072  16384  16384    90.00    14818.41
+    131072  16384  16384    90.00    14780.35
+    131072  16384  16384    90.00    14800.48
+
+IPv6 traffic with varying extension headers:
+
+    for i in {1..5}; do netperf -t TCP_STREAM -H 2001:db8:2:2::2 -l 90 | tail -1; done
+    # before
+    131072  16384  16384    90.00    14812.37
+    131072  16384  16384    90.00    14813.04
+    131072  16384  16384    90.00    14802.54
+    131072  16384  16384    90.00    14804.06
+    131072  16384  16384    90.00    14819.08
+
+    # after
+    131072  16384  16384    90.00    14927.11
+    131072  16384  16384    90.00    14910.45
+    131072  16384  16384    90.00    14917.36
+    131072  16384  16384    90.00    14916.53
+    131072  16384  16384    90.00    14928.88
+
+Richard Gobert (2):
+  gro: decrease size of CB
+  gro: optimise redundant parsing of packets
+
+ include/net/gro.h      | 33 ++++++++++++++++++++++++---------
+ net/core/gro.c         | 18 +++++++++++-------
+ net/ethernet/eth.c     | 14 +++++++++++---
+ net/ipv6/ip6_offload.c | 20 +++++++++++++++-----
+ 4 files changed, 61 insertions(+), 24 deletions(-)
+
+-- 
+2.36.1
