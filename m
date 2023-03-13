@@ -2,64 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F11A6B763C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:42:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A2FA6B763F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:42:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231267AbjCMLmR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:42:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48730 "EHLO
+        id S231144AbjCMLmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231144AbjCMLly (ORCPT
+        with ESMTP id S231153AbjCMLl4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:41:54 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE6A66485B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:18 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id g17so15319793lfv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:18 -0700 (PDT)
+        Mon, 13 Mar 2023 07:41:56 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F96865C4E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:22 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id g17so15319860lfv.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678707677;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/S6tlhnVD0jMwhriK/KPRi3yBgfbrY3W/h0PzQMNaR8=;
-        b=v9TS3FASe5QrmtH2GPYTbcmnSqeIrOTUIgIFqpXj4ZNmMpyD97ZOAuRuA6xzIvOgwc
-         5ToA4XYKFdh7MtK3Vzy8M+RENE8aB1OuNTtkcXENfN0QL2yH0AlyWSZPw+lr1TGr+1Qz
-         CacIDCy0tEOHVWkgkKjsZ8INhHgsagPF3IJ4lNjKoAbA6PiKS9X9iKMW74q6C4VCWSbc
-         mdhuj4aTx44uQHF+lqxd4e2oqTAeeTAnqiESoLzT8Gc6meyqYIx/TpLvxFpfKyV6fdCG
-         eyCo71tdl5lmBzbpo0c9sS9NbluG/puOitJln1Gk34KSK9IHJAxjmjw7BtBKBh6vD1hU
-         bAtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678707677;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=linaro.org; s=google; t=1678707678;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/S6tlhnVD0jMwhriK/KPRi3yBgfbrY3W/h0PzQMNaR8=;
-        b=vb/PfVTobpnFxRxz8/M9m0EpdaLeELhWynul9rKWh9SB7jnVSrKgocfHxRO4R5t/72
-         CaQivWBKYz8xcoYfkYBZqEQlhxBn2qNJNuknmKeh2jTCG6clF3oofuylPBooxGISkFEL
-         QxW4RgzxsmJO2S7uVgOBnuCU4zVOhxhbwEawpZGjz9lcpyYSvoL6KoB9UA3bqTmDocr6
-         vZFvAb1k2rTyRMnP9l8a+jaSnDREhdrK7NPiRovBw4ddvKQOPhImo/V7+YQpq0xpe37R
-         Nr4xpKusjrJgIpjkokV60Xgk1mLubw21Cp0qMt/mwq5oPRSw0VL+9m11as6hf2kH0mU7
-         zdHw==
-X-Gm-Message-State: AO0yUKWMR+YjV/6fCc2sp/5y3rKMJ0mtCCg1VvNzrDlJ9GECUzZLgxEo
-        ndDag8s2j1q5bl/yU2MehWx8i1ODO85uv6RanxA=
-X-Google-Smtp-Source: AK7set9v8fcwISQUDvacfsx5NKc3IorSPfzW8quB1f7SIhNWvGL9qSeDapUgBCfPcNrnff23tqojJA==
-X-Received: by 2002:ac2:5151:0:b0:4e8:1798:f9e1 with SMTP id q17-20020ac25151000000b004e81798f9e1mr6000204lfd.57.1678707676842;
-        Mon, 13 Mar 2023 04:41:16 -0700 (PDT)
+        bh=VaeNat/r39kxcqF7BN2wWc7swe6HV6M8E5ETNmOYRZQ=;
+        b=YUk/I/O3kiX/JKsTnxRfOsR8Zky9UKva3xOg+ByHwUbKeu7YcHMS0i5RNenXBJPUaZ
+         +Qt1P+AWVxaxP9j02K5Y5Sk+jAzdEfFImcdOj4K9iN4iCAGtbYdVKobtGSklmVUOSXW2
+         E8XEnsLYHNi3TT5PPReJk0UB4DWqMz0tle2w/SgaqAsEqeil6NQ1/fyMYCgUGvHKZ9qU
+         5gCxt66CCtO5fF28YTY/MQ2B5uOxfQkw3isRoFU1HJYbdzIZESJHi5yfyMvv3TOXqILU
+         49F786nnFj/W4xkceWhjdmyzksLFUZXUsKqfOeeeQFZdYmdtBcb3fgGg9jxVSeZt25g+
+         phEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678707678;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=VaeNat/r39kxcqF7BN2wWc7swe6HV6M8E5ETNmOYRZQ=;
+        b=utHrKjdNHZNC4scHXFUf9w9jfK55fkjTHNFuqF6OjIsoPqOWOb5fGklWqShzeLxhoa
+         C4JlDTmNRFAh+OJzed7x5pB3Xfu/qCWWc7OWKGJqfq4D6lC4W9OliPhEbeR+IaR060ze
+         +Ybx/SJhcHBHPIDXoSroHVorcGPlQVrEkkgWJHx+ffXEZ2wwcL3LTlqq7PRxCHB/Hm43
+         LnW1RB51eiJR/fKXWwCaS55AJyWAug7q2oXlJtl6+EjkXNVz0uYAjWrjD3d/oKwJ5Ohn
+         kwoLU48HrTLpBDH6MkzSQIGTZvF4gkEnwGyVlsu5gJAU86172GXbpzpJnE3C73AzjKFs
+         c7BA==
+X-Gm-Message-State: AO0yUKW1iPRUK94SomVEoUehrBreUPO3cadYw7slwG2MsCFBMPj6F0Gu
+        Dlhh+fSBx5fJ5WdgjzqlzpTUft1NFajkclHIFjM=
+X-Google-Smtp-Source: AK7set90kRV+4rOoqD9GMvOoW28cV+Q+7sP+gOoKNg27pxmJlh8TNHtJb9YwJpeePPn8282Kyz1brg==
+X-Received: by 2002:ac2:5391:0:b0:4dd:abb9:dae4 with SMTP id g17-20020ac25391000000b004ddabb9dae4mr10139714lfh.25.1678707678010;
+        Mon, 13 Mar 2023 04:41:18 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.15
+        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 04:41:16 -0700 (PDT)
+        Mon, 13 Mar 2023 04:41:17 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Subject: [PATCH v2 0/7] Fix BWMONv4 for <SDM845
-Date:   Mon, 13 Mar 2023 12:41:06 +0100
-Message-Id: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
+Date:   Mon, 13 Mar 2023 12:41:07 +0100
+Subject: [PATCH v2 1/7] dt-bindings: interconnect: qcom,msm8998-bwmon:
+ Resolve MSM8998 support
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIANILD2QC/3WNQQ6CMBAAv0J6dk1pBdST/zDElHaFTbAlW6waw
- t+t3D3OJJNZREQmjOJcLIIxUaTgM6hdIexgfI9ALrNQUmmp5QHmMJEF5/jWvR7BQy1PUinrKtS
- VyFVnIkLHxtshd/45jllOjHd6b5trm3mgOAf+bNdU/uz/QSpBAla1PurG2caVl5G84bAP3It2X
- dcvcrJloMQAAAA=
+Message-Id: <20230304-topic-ddr_bwmon-v2-1-04db989db059@linaro.org>
+References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
+In-Reply-To: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
@@ -71,11 +71,11 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=3845;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=3131;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=F+Wdt7KucrU/3l2BmjjW7lX2O3UZbJYREc/jBzPumpI=;
- b=fmD4t1vb7FXPLTry4Ekkk7HRLZtygRgXTIHyurArLHXJoWQSJUMRsgWrwCyhzmLjXxyzTPBiSidp
- yooZgnjJBYBrUG5zEv1nepmyJ3VwyyuwaNiLCGvBfjrzHjvAVSId
+ bh=SbN98Ibah4gas5eacqICwCuMX8VfaPWlZmkr7n14GAg=;
+ b=DdyWr1FxIsUnPNy/1QEqjJJtlRLNjh6PqilSYN3ygAQcO44LPckma+4V/1hDmmIjwyBAFbysYGX1
+ Dz6T7uwpDLzhX+9LiT3WKSbb7aQXxdaPXvTOC12NEsCFPDAhU6D1
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -88,84 +88,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v1 -> v2:
-- Un-mess-up the example in bindings
-- Correctly limit reg/-names in bindings
-- Introduce "qcom,sdm845-cpu-bwmon"
-- Fix incorrect register assignment in msm8998_bwmon_reg_noread_ranges
-- Clean up the code around setting global registers on <=8998
-  - Don't add a separate enum for global registers
-  - Don't use _GLOBAL vs _GLB
-  - Add of match entries for targets that abused qcom,msm8998-bwmon before
-    to keep old DTs working
-  - Add comments near of match entries to make things clearer
-  - Instead of if (...) { write to x } else { write to y } make the global
-    register variable to keep the code more readable
-- Add dts patches to stop improperly using the 8998 compatible
-- (grumpily) drop Fixes from [2/7]
-- Pick up rb on [3/7]
-- Re-test on MSM8998 and SM6375 (OOT, uses 845-style BWMONv4)
+BWMONv4 has two sets of registers: one for handling the monitor itself
+and one called "global" which hosts some sort of a headswitch and an
+interrupt control register. We did not handle that one before, as on
+SoCs starting with SDM845 they have been merged into a single contiguous
+range.
 
-v1: https://lore.kernel.org/r/20230304-topic-ddr_bwmon-v1-0-e563837dc7d1@linaro.org
-
-BWMONv4 (the one used for DDR scaling on all SoCs from msm8998 to sm8550)
-features two register regions: "monitor" and "global" with the first one
-containing registers specific to the throughput monitor itself and the
-second one containing some sort of a head switch.
-
-The register layout on all BWMON versions an implementations up to that
-looked like this:
-
-|..........[GLOBAL].........[MONITOR]........|
-
-however with SDM845 somebody thought it would be a good idea to turn it
-into this:
-
-|................[GLOBAL]....................|
-|....................[MONITOR]...............|
-
-Sadly, the existing upstream driver was architected with SDM845 in mind,
-which means it doesn't support the global registers being somewhere else
-than near the beginning of the monitor space. This series tries to address
-that in the hopefully least painful way. Tested on msm8998 (the count unit
-seems to be wrong, should probably be 1MiB and not 64 KiB but the point is
-that this series makes it work at all, as without it the headswitch is
-never turned on) and SM6375 (with the "combined" layout introduced in
-SDM845). Equally sadly, everybody uses the qcom,msm8998-bwmon compatible
-(which frankly should have been just qcom,bwmon-v4) that never actually
-worked on MSM8998 , which prevents us from handling it in a simpler way..
-
-While at it, an unused struct member is removed.
-
-One suboptimal feature of this patchset is that it introduces an "invalid
-resource" print from within devres. This could be solved with an
-introduction of devm_ioremap_resource_optional or by dropping devres
-functions in place of manual handling, which also doesn't sound great..
-I'll leave it up to the reviewers to decide.
+To make the qcom,msm8998-bwmon less confusing and in preparation for
+actual MSM8998 support, describe the global register space and introduce
+new "qcom,sdm845-cpu-bwmon" compatible while keeping the
+"qcom,sdm845-bwmon" as a fallback for SoCs with this merged register space
+scheme.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
-Konrad Dybcio (7):
-      dt-bindings: interconnect: qcom,msm8998-bwmon: Resolve MSM8998 support
-      soc: qcom: icc-bwmon: Handle global registers correctly
-      soc: qcom: icc-bwmon: Remove unused struct member
-      arm64: dts: qcom: sc7280: Use the correct BWMON fallback compatible
-      arm64: dts: qcom: sc8280xp: Use the correct BWMON fallback compatible
-      arm64: dts: qcom: sdm845: Use the correct BWMON compatible
-      arm64: dts: qcom: sm8550: Use the correct BWMON fallback compatible
+ .../bindings/interconnect/qcom,msm8998-bwmon.yaml  | 41 ++++++++++++++++++----
+ 1 file changed, 34 insertions(+), 7 deletions(-)
 
- .../bindings/interconnect/qcom,msm8998-bwmon.yaml  |  41 +++-
- arch/arm64/boot/dts/qcom/sc7280.dtsi               |   2 +-
- arch/arm64/boot/dts/qcom/sc8280xp.dtsi             |   2 +-
- arch/arm64/boot/dts/qcom/sdm845.dtsi               |   2 +-
- arch/arm64/boot/dts/qcom/sm8550.dtsi               |   2 +-
- drivers/soc/qcom/icc-bwmon.c                       | 229 +++++++++++++++++++--
- 6 files changed, 246 insertions(+), 32 deletions(-)
----
-base-commit: 24469a0e5052ba01a35a15f104717a82b7a4798b
-change-id: 20230304-topic-ddr_bwmon-609022cd5e35
+diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+index 12a0d3ecbabb..5d17bdcfdf70 100644
+--- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
++++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
+@@ -22,14 +22,14 @@ description: |
+ properties:
+   compatible:
+     oneOf:
++      - const: qcom,msm8998-bwmon       # BWMON v4
+       - items:
+           - enum:
+               - qcom,sc7280-cpu-bwmon
+               - qcom,sc8280xp-cpu-bwmon
+-              - qcom,sdm845-bwmon
++              - qcom,sdm845-cpu-bwmon
+               - qcom,sm8550-cpu-bwmon
+-          - const: qcom,msm8998-bwmon
+-      - const: qcom,msm8998-bwmon       # BWMON v4
++          - const: qcom,sdm845-bwmon    # BWMON v4, unified register space
+       - items:
+           - enum:
+               - qcom,sc8280xp-llcc-bwmon
+@@ -49,9 +49,13 @@ properties:
+     type: object
+ 
+   reg:
+-    # BWMON v4 (currently described) and BWMON v5 use one register address
+-    # space.  BWMON v2 uses two register spaces - not yet described.
+-    maxItems: 1
++    # BWMON v5 uses one register address space, v1-v4 use one or two.
++    minItems: 1
++    maxItems: 2
++
++  reg-names:
++    minItems: 1
++    maxItems: 2
+ 
+ required:
+   - compatible
+@@ -63,13 +67,36 @@ required:
+ 
+ additionalProperties: false
+ 
++allOf:
++  - if:
++      properties:
++        compatible:
++          const: qcom,msm8998-bwmon
++    then:
++      properties:
++        reg:
++          minItems: 2
++
++        reg-names:
++          items:
++            - const: monitor
++            - const: global
++
++    else:
++      properties:
++        reg:
++          maxItems: 1
++
++        reg-names:
++          maxItems: 1
++
+ examples:
+   - |
+     #include <dt-bindings/interconnect/qcom,sdm845.h>
+     #include <dt-bindings/interrupt-controller/arm-gic.h>
+ 
+     pmu@1436400 {
+-        compatible = "qcom,sdm845-bwmon", "qcom,msm8998-bwmon";
++        compatible = "qcom,sdm845-cpu-bwmon", "qcom,sdm845-bwmon";
+         reg = <0x01436400 0x600>;
+         interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+         interconnects = <&gladiator_noc MASTER_APPSS_PROC 3 &mem_noc SLAVE_LLCC 3>;
 
-Best regards,
 -- 
-Konrad Dybcio <konrad.dybcio@linaro.org>
+2.39.2
 
