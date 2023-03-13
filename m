@@ -2,163 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6C926B72E8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C32066B72EC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:43:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbjCMJnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43234 "EHLO
+        id S229962AbjCMJnz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:43:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229837AbjCMJnf (ORCPT
+        with ESMTP id S230070AbjCMJnx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:43:35 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1DF51B33B;
-        Mon, 13 Mar 2023 02:43:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678700612; x=1710236612;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=f2jaxRyW4/AFQnjCX1PeRlWlFVAQ0ExRiYHZWktn/p0=;
-  b=S0Qh0J8S0tX1pkQB9TETuX8Ry3obFVctBY+3UjbxO7YqM32Vqi0csWEZ
-   KLldNionn4wq5MhqmAHFi1/lXd7cWhoAVC7CQIQzmVxFIsku7B9L3XmRT
-   uALwDDI21N389cugbSSoK82hvMX706B7lxpUnAe7U+vNw8jx6J8yBZNT9
-   qVMIasmxwY/xPhbgRRJ32keR36JwMFM6koUz2+ggIFMULfK7IcJnN5b1z
-   hrA3yLsnvpXrsk7MlaZBkZSkkP+6HmImSHcsPKsTS1FU4OWt5IzjGx8gA
-   VVUeIW6PYHdBRtw+Gzmk1Lb4dAb9hrt5miN7YyOYf7C6bQIqPtS/6AoDS
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338654236"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="338654236"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:43:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="821884735"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="821884735"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 13 Mar 2023 02:43:26 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Mon, 13 Mar 2023 11:43:26 +0200
-Date:   Mon, 13 Mar 2023 11:43:26 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v3 01/12] usb: typec: ucsi: add PMIC Glink UCSI driver
-Message-ID: <ZA7wPtttsWlQRpAR@kuha.fi.intel.com>
-References: <20230130-topic-sm8450-upstream-pmic-glink-v3-0-4c860d265d28@linaro.org>
- <20230130-topic-sm8450-upstream-pmic-glink-v3-1-4c860d265d28@linaro.org>
+        Mon, 13 Mar 2023 05:43:53 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6481E1D9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:43:50 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbeiZ-0001bb-NA; Mon, 13 Mar 2023 10:43:47 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbeiX-003okP-IY; Mon, 13 Mar 2023 10:43:45 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbeiW-004UsW-RW; Mon, 13 Mar 2023 10:43:44 +0100
+Date:   Mon, 13 Mar 2023 10:43:44 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 2/5] clocksource: timer-stm32-lp: Mark driver as
+ non-removable
+Message-ID: <20230313094344.emv6pazrvberusil@pengutronix.de>
+References: <20230313075430.2730803-1-u.kleine-koenig@pengutronix.de>
+ <20230313075430.2730803-3-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="rm7zyqg5zd7u5psn"
 Content-Disposition: inline
-In-Reply-To: <20230130-topic-sm8450-upstream-pmic-glink-v3-1-4c860d265d28@linaro.org>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230313075430.2730803-3-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
 
-On Thu, Mar 09, 2023 at 02:27:52PM +0100, Neil Armstrong wrote:
-> +static void pmic_glink_ucsi_register(struct work_struct *work)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = container_of(work, struct pmic_glink_ucsi, register_work);
-> +
-> +	ucsi_register(ucsi->ucsi);
-> +}
-> +
-> +static void pmic_glink_ucsi_callback(const void *data, size_t len, void *priv)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = priv;
-> +	const struct pmic_glink_hdr *hdr = data;
-> +
-> +	switch (hdr->opcode) {
-> +	case UC_UCSI_READ_BUF_REQ:
-> +		pmic_glink_ucsi_read_ack(ucsi, data, len);
-> +		break;
-> +	case UC_UCSI_WRITE_BUF_REQ:
-> +		pmic_glink_ucsi_write_ack(ucsi, data, len);
-> +		break;
-> +	case UC_UCSI_USBC_NOTIFY_IND:
-> +		schedule_work(&ucsi->notify_work);
-> +		break;
-> +	};
-> +}
-> +
-> +static void pmic_glink_ucsi_pdr_notify(void *priv, int state)
-> +{
-> +	struct pmic_glink_ucsi *ucsi = priv;
-> +
-> +	if (state == SERVREG_SERVICE_STATE_UP)
-> +		schedule_work(&ucsi->register_work);
-> +	else if (state == SERVREG_SERVICE_STATE_DOWN)
-> +		ucsi_unregister(ucsi->ucsi);
-> +}
-> +
-> +static int pmic_glink_ucsi_probe(struct auxiliary_device *adev,
-> +				 const struct auxiliary_device_id *id)
-> +{
-> +	struct pmic_glink_ucsi *ucsi;
-> +	struct device *dev = &adev->dev;
-> +
-> +	ucsi = devm_kzalloc(dev, sizeof(*ucsi), GFP_KERNEL);
-> +	if (!ucsi)
-> +		return -ENOMEM;
-> +
-> +	ucsi->dev = dev;
-> +	dev_set_drvdata(dev, ucsi);
-> +
-> +	INIT_WORK(&ucsi->notify_work, pmic_glink_ucsi_notify);
-> +	INIT_WORK(&ucsi->register_work, pmic_glink_ucsi_register);
-> +	init_completion(&ucsi->read_ack);
-> +	init_completion(&ucsi->write_ack);
-> +	init_completion(&ucsi->sync_ack);
-> +	mutex_init(&ucsi->lock);
-> +
-> +	ucsi->ucsi = ucsi_create(dev, &pmic_glink_ucsi_ops);
-> +	if (IS_ERR(ucsi->ucsi))
-> +		return PTR_ERR(ucsi->ucsi);
-> +
-> +	ucsi_set_drvdata(ucsi->ucsi, ucsi);
-> +
-> +	ucsi->client = devm_pmic_glink_register_client(dev,
-> +						       PMIC_GLINK_OWNER_USBC,
-> +						       pmic_glink_ucsi_callback,
-> +						       pmic_glink_ucsi_pdr_notify,
-> +						       ucsi);
-> +	return PTR_ERR_OR_ZERO(ucsi->client);
-> +}
-> +
-> +static const struct auxiliary_device_id pmic_glink_ucsi_id_table[] = {
-> +	{ .name = "pmic_glink.ucsi", },
-> +	{},
-> +};
-> +MODULE_DEVICE_TABLE(auxiliary, pmic_glink_ucsi_id_table);
-> +
-> +static struct auxiliary_driver pmic_glink_ucsi_driver = {
-> +	.name = "pmic_glink_ucsi",
-> +	.probe = pmic_glink_ucsi_probe,
-> +	.id_table = pmic_glink_ucsi_id_table,
-> +};
+--rm7zyqg5zd7u5psn
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-What happens if you remove the module - I think you need to implement
-the remove callback, no?
+Hello,
 
-thanks,
+On Mon, Mar 13, 2023 at 08:54:27AM +0100, Uwe Kleine-K=F6nig wrote:
+> The comment in the remove callback suggests that the driver is not
+> supposed to be unbound. However returning an error code in the remove
+> callback doesn't accomplish that. Instead set the suppress_bind_attrs
+> property (which makes it impossible to unbind the driver via sysfs).
+> The only remaining way to unbind an stm32-lp device would be module
+> unloading, but that doesn't apply here, as the driver cannot be built as
+> a module.
+>=20
+> Also drop the useless remove callback.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
+> ---
+>  drivers/clocksource/timer-stm32-lp.c | 7 +------
+>  1 file changed, 1 insertion(+), 6 deletions(-)
+>=20
+> diff --git a/drivers/clocksource/timer-stm32-lp.c b/drivers/clocksource/t=
+imer-stm32-lp.c
+> index db2841d0beb8..616ea4fe4234 100644
+> --- a/drivers/clocksource/timer-stm32-lp.c
+> +++ b/drivers/clocksource/timer-stm32-lp.c
+> @@ -195,11 +195,6 @@ static int stm32_clkevent_lp_probe(struct platform_d=
+evice *pdev)
+>  	return ret;
+>  }
+> =20
+> -static int stm32_clkevent_lp_remove(struct platform_device *pdev)
+> -{
+> -	return -EBUSY; /* cannot unregister clockevent */
+> -}
+> -
+>  static const struct of_device_id stm32_clkevent_lp_of_match[] =3D {
+>  	{ .compatible =3D "st,stm32-lptimer-timer", },
+>  	{},
+> @@ -207,11 +202,11 @@ static const struct of_device_id stm32_clkevent_lp_=
+of_match[] =3D {
+>  MODULE_DEVICE_TABLE(of, stm32_clkevent_lp_of_match);
+> =20
+>  static struct platform_driver stm32_clkevent_lp_driver =3D {
+> -	.probe	=3D stm32_clkevent_lp_probe,
+>  	.remove =3D stm32_clkevent_lp_remove,
 
--- 
-heikki
+This is of course broken, I intended to drop the remove line ... and
+only noticed that breakage after sending out the patch set :-\
+
+So please either skip this patch, or fixup while applying. If you do the
+former I'll come back to this driver and send a fixed patch.
+
+Best regards and sorry
+Uwe
+
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--rm7zyqg5zd7u5psn
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQO8E0ACgkQwfwUeK3K
+7Ama0Af9EAieyD1ilr+oUAsZ/Eghf0bXKulJmBLB9iw5CfGxUqr9e6wgKKREjimg
+HNzY5n//YrM0/VjyRSmSVmO5ZTs0MfuHPt7aj6S5bP/EPX8C7WmfJ6e7+KdJqJvN
+Gqfy9pn5/yFprpiM7Uv1o7vxFIDTqLfWIf3s0tLwxEY7IE5TZcFewmF5Y70UhyyZ
+sPC4zKtimQf2q4e6JiB8OwX8LICHALRsVAwrb4WN+CkM84TcMPihc0rB4XvJEgpJ
+ZKIRG0Riq7fB1TYc5RA+K1dwdSPbEXy7oFHJ9YaHg7fnU6g8OII42DoVxUI3Oyht
+HGZ8yjATI4rGmdPfj79+s3n7B6g0fQ==
+=51x9
+-----END PGP SIGNATURE-----
+
+--rm7zyqg5zd7u5psn--
