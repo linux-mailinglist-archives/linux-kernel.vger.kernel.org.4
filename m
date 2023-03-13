@@ -2,359 +2,594 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 657336B7AB2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0FD6B7AC7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:46:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230238AbjCMOog (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:44:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40250 "EHLO
+        id S230155AbjCMOq2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:46:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230094AbjCMOoc (ORCPT
+        with ESMTP id S231218AbjCMOqR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:44:32 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0E0A3B66F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:43:48 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id fd5so15801287edb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:43:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678718621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2h6sx1OZEM5O2Wj7lrFSv5VOGNWWsN079kjONBrmaTk=;
-        b=iBeP6qeAyEtBnJq8CBA8WjFWskFUyJF+jDz8+18kmpomP8HKAiALQMun2eIAMA7A6o
-         2D36RSpUKupuC5L1t+JbIpGwFFiODhVQ0YzfobXA22Rf/wk0i+5N2bBVL29YijtNz/15
-         J/v05oEzLsg3PtEOXyx8TH/Z7qQbEFKfNGjuV2xd8CgAwYQHfEzDpIQnqZn7bazQez2w
-         Oxmnd1irJjyv6GMj8BDSqildUeG8E8IXy016t64if2keFGV3aawchhpcERFe8WJwnrk+
-         JbR1ceXPLOv4YtSSd002CQOHrCWn99Eah60E05b32bQWTPraf0fWGMurVmTHSEzj+6Az
-         MHQg==
+        Mon, 13 Mar 2023 10:46:17 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49B131BAF8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:45:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678718709;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=JeyU3OkLDADoHVbv9XEBjFeFQD0XfzUZG7MtTMRbF+Y=;
+        b=Y4l6jlcqBuxS1/u+N+G+tlLqYjRqrXo6OFw1CcB0FMTWjPWkxh03YG9ZcS+7qmR9+aoDyX
+        esvcUkJ36jfyHGfJx6cuNULiKazbarEQdoVDstlTcEuEh1XeyQ1pFZBI7D4hwM6Hlg4lVh
+        AcYo6fvfmM0dR+5WMOO7mK4wOIeUCeM=
+Received: from mail-qv1-f69.google.com (mail-qv1-f69.google.com
+ [209.85.219.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-652-wpuXGVqRMKKGRJ8NisjN9w-1; Mon, 13 Mar 2023 10:45:08 -0400
+X-MC-Unique: wpuXGVqRMKKGRJ8NisjN9w-1
+Received: by mail-qv1-f69.google.com with SMTP id ge13-20020a05621427cd00b005739f5f9d7cso7110427qvb.22
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:45:08 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718621;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2h6sx1OZEM5O2Wj7lrFSv5VOGNWWsN079kjONBrmaTk=;
-        b=B44kzF0D+zBSsAwbZOqXGt/iAOW71pUlltJ7NtEw/fPV1NuVDFKidEIyOEUPHEqUJE
-         BbzBxJMIEQyREH9hqs5kOwbzjRGV0VkBd5Qlf0vLq/JimK9U/FTbYcCpdge/iMtOUbDC
-         qUtsJ3xif8tYhOs8zeVJWc+TNMP+4s0R0pwGG2UOcdKPKghoNGnuiIRIJLsPmW3sE6B7
-         9KacBarMFGSkkqm6/UU+UI0YGlboVglJjCbJQ4UqiykI9JFYnJ722ssFQU+nN0e9iFQB
-         i+t1Dgw+RL9ArJ0KU0l6/x3rpvE8IK4KO4mDUzWWc57qEOmWsmzajr1AZVQJk0o6PgvL
-         5h1Q==
-X-Gm-Message-State: AO0yUKW2brk10BsSV1rnVVqJZ5AcM0FfMbwvYLvYPmoFvp3I1vsXAUXu
-        BeU4KX/QcRtIwOr1LS0mO1lQ/g==
-X-Google-Smtp-Source: AK7set8Itk1eWYQXLzYiaRpr9H89ftDQ8zfWody7n5GcqpqQdfu7Ax7XNP8erOCIWlNE7wRqouKc+Q==
-X-Received: by 2002:a17:907:3f90:b0:8de:acd1:90f0 with SMTP id hr16-20020a1709073f9000b008deacd190f0mr41798081ejc.3.1678718621376;
-        Mon, 13 Mar 2023 07:43:41 -0700 (PDT)
-Received: from [192.168.2.107] ([79.115.63.78])
-        by smtp.gmail.com with ESMTPSA id lg17-20020a170906f89100b008cd1f773754sm3521369ejb.5.2023.03.13.07.43.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 07:43:41 -0700 (PDT)
-Message-ID: <cfd49d97-613a-d18e-3a43-0d636ab20caf@linaro.org>
-Date:   Mon, 13 Mar 2023 14:43:39 +0000
+        d=1e100.net; s=20210112; t=1678718707;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=JeyU3OkLDADoHVbv9XEBjFeFQD0XfzUZG7MtTMRbF+Y=;
+        b=EwpBDrojZfJhM9rER+JiSDAOvMcxmBa0pQWCYAUGKvvmq7nzEOmGc0mBnZNSAePsJG
+         2w35Dp2iPflIkf1gN99rNmqEn/5DG+ot5TwhPpj2tLljDf7H9ctH07HRc9dci4TgdAGo
+         3UzM3mMYVMMVUQkzTZo9yWbpT1yA9UYiE4xpJMnlr9Msm8QhCpjizPVso76iJ1eKAUjG
+         t1AplJmb4b4m3j8l0jP05Ki+b278HGVH8wbgGrKsEbIiAMcUGW3fGNr0zKc+jX0rlIT3
+         QzVlaxIJRh3OiSC6PQO+NTa0KTCCUFsh0UgnuBUdShEn5hIFUadgZZkncvzM+lKAZChR
+         pLKg==
+X-Gm-Message-State: AO0yUKU2D+REcZVtYlRlla0G6OR7e6pngtdPDNBuHetLszaOnd9JJ3FJ
+        b0SmWpfFyh4rZFl5Otv8wVdwU9np9tKoLXssrKBacxXknNxGWgbcLRk7etfxwedoCg3NZWBKRma
+        ZqIR9n41T1+pfuna52XblidOV
+X-Received: by 2002:ac8:5c4a:0:b0:3bf:d0ac:5ba9 with SMTP id j10-20020ac85c4a000000b003bfd0ac5ba9mr59575492qtj.7.1678718707309;
+        Mon, 13 Mar 2023 07:45:07 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+xVVdLvypUTU5W6069rWSQDyaqnOfkHMnUQHFXczkJCYRzTya4McHW9Ee9xZkS47ts22J8wA==
+X-Received: by 2002:ac8:5c4a:0:b0:3bf:d0ac:5ba9 with SMTP id j10-20020ac85c4a000000b003bfd0ac5ba9mr59575427qtj.7.1678718706871;
+        Mon, 13 Mar 2023 07:45:06 -0700 (PDT)
+Received: from fedora (g2.ign.cz. [91.219.240.8])
+        by smtp.gmail.com with ESMTPSA id e20-20020a05622a111400b003bfb1416c2bsm5567518qty.96.2023.03.13.07.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 07:45:06 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, arnd@arndb.de, tiala@microsoft.com,
+        mikelley@microsoft.com, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
+In-Reply-To: <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
+ <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
+Date:   Mon, 13 Mar 2023 15:45:02 +0100
+Message-ID: <87a60gww0h.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
- ext4_group_desc_csum
-Content-Language: en-US
-To:     Jan Kara <jack@suse.cz>, yebin <yebin@huaweicloud.com>
-Cc:     syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com, tytso@mit.edu,
-        Lee Jones <joneslee@google.com>
-References: <000000000000ef6cf905f496e40b@google.com>
- <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3>
- <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
- <20230313115728.2wxy2qj4mqpwgrx7@quack3> <640F16B6.10100@huaweicloud.com>
- <20230313130151.bnarkjxx2u45bazf@quack3>
-From:   Tudor Ambarus <tudor.ambarus@linaro.org>
-In-Reply-To: <20230313130151.bnarkjxx2u45bazf@quack3>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jan, Ye,
+Saurabh Sengar <ssengar@linux.microsoft.com> writes:
 
-On 3/13/23 13:01, Jan Kara wrote:
-> On Mon 13-03-23 20:27:34, yebin wrote:
->> On 2023/3/13 19:57, Jan Kara wrote:
->>> On Mon 13-03-23 11:11:18, Tudor Ambarus wrote:
->>>> On 3/7/23 11:02, Tudor Ambarus wrote:
->>>>> On 3/7/23 10:39, Jan Kara wrote:
->>>>>> On Wed 01-03-23 12:13:51, Tudor Ambarus wrote:
->>>>>>> On 2/13/23 15:56, syzbot wrote:
->>>>>>>> syzbot has found a reproducer for the following issue on:
->>>>>>>>
->>>>>>>> HEAD commit:    ceaa837f96ad Linux 6.2-rc8
->>>>>>>> git tree:       upstream
->>>>>>>> console output:
->>>>>>>> https://syzkaller.appspot.com/x/log.txt?x=11727cc7480000
->>>>>>>> kernel config:
->>>>>>>> https://syzkaller.appspot.com/x/.config?x=42ba4da8e1e6af9f
->>>>>>>> dashboard link:
->>>>>>>> https://syzkaller.appspot.com/bug?extid=8785e41224a3afd04321
->>>>>>>> compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils
->>>>>>>> for Debian) 2.35.2
->>>>>>>> syz repro:
->>>>>>>> https://syzkaller.appspot.com/x/repro.syz?x=14392a4f480000
->>>>>>>>
->>>>>>>> Downloadable assets:
->>>>>>>> disk image:
->>>>>>>> https://storage.googleapis.com/syzbot-assets/88042f9b5fc8/disk-ceaa837f.raw.xz
->>>>>>>> vmlinux:
->>>>>>>> https://storage.googleapis.com/syzbot-assets/9945b57ec9ee/vmlinux-ceaa837f.xz
->>>>>>>> kernel image:
->>>>>>>> https://storage.googleapis.com/syzbot-assets/72ff118ed96b/bzImage-ceaa837f.xz
->>>>>>>> mounted in repro:
->>>>>>>> https://storage.googleapis.com/syzbot-assets/dabec17b2679/mount_0.gz
->>>>>>>>
->>>>>>>> IMPORTANT: if you fix the issue, please add the following tag to the
->>>>>>>> commit:
->>>>>>>> Reported-by: syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com
->>>>>>>>
->>>>>>>> ==================================================================
->>>>>>>> BUG: KASAN: use-after-free in crc16+0x1fb/0x280 lib/crc16.c:58
->>>>>>>> Read of size 1 at addr ffff88807de00000 by task syz-executor.1/5339
->>>>>>>>
->>>>>>>> CPU: 1 PID: 5339 Comm: syz-executor.1 Not tainted
->>>>>>>> 6.2.0-rc8-syzkaller #0
->>>>>>>> Hardware name: Google Google Compute Engine/Google Compute Engine,
->>>>>>>> BIOS Google 01/21/2023
->>>>>>>> Call Trace:
->>>>>>>>     <TASK>
->>>>>>>>     __dump_stack lib/dump_stack.c:88 [inline]
->>>>>>>>     dump_stack_lvl+0x1e7/0x2d0 lib/dump_stack.c:106
->>>>>>>>     print_address_description mm/kasan/report.c:306 [inline]
->>>>>>>>     print_report+0x163/0x4f0 mm/kasan/report.c:417
->>>>>>>>     kasan_report+0x13a/0x170 mm/kasan/report.c:517
->>>>>>>>     crc16+0x1fb/0x280 lib/crc16.c:58
->>>>>>>>     ext4_group_desc_csum+0x90f/0xc50 fs/ext4/super.c:3187
->>>>>>>>     ext4_group_desc_csum_set+0x19b/0x240 fs/ext4/super.c:3210
->>>>>>>>     ext4_mb_clear_bb fs/ext4/mballoc.c:6027 [inline]
->>>>>>>>     ext4_free_blocks+0x1c57/0x3010 fs/ext4/mballoc.c:6173
->>>>>>>>     ext4_remove_blocks fs/ext4/extents.c:2527 [inline]
->>>>>>>>     ext4_ext_rm_leaf fs/ext4/extents.c:2710 [inline]
->>>>>>>>     ext4_ext_remove_space+0x289e/0x5270 fs/ext4/extents.c:2958
->>>>>>>>     ext4_ext_truncate+0x176/0x210 fs/ext4/extents.c:4416
->>>>>>>>     ext4_truncate+0xafa/0x1450 fs/ext4/inode.c:4342
->>>>>>>>     ext4_evict_inode+0xc40/0x1230 fs/ext4/inode.c:286
->>>>>>>>     evict+0x2a4/0x620 fs/inode.c:664
->>>>>>>>     do_unlinkat+0x4f1/0x930 fs/namei.c:4327
->>>>>>>>     __do_sys_unlink fs/namei.c:4368 [inline]
->>>>>>>>     __se_sys_unlink fs/namei.c:4366 [inline]
->>>>>>>>     __x64_sys_unlink+0x49/0x50 fs/namei.c:4366
->>>>>>>>     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>>>>>     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>>>>>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>>>>>> RIP: 0033:0x7fbc85a8c0f9
->>>>>>>> Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 f1 19 00 00 90 48 89 f8 48
->>>>>>>> 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48>
->>>>>>>> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
->>>>>>>> RSP: 002b:00007fbc86838168 EFLAGS: 00000246 ORIG_RAX: 0000000000000057
->>>>>>>> RAX: ffffffffffffffda RBX: 00007fbc85babf80 RCX: 00007fbc85a8c0f9
->>>>>>>> RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000020000000
->>>>>>>> RBP: 00007fbc85ae7ae9 R08: 0000000000000000 R09: 0000000000000000
->>>>>>>> R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
->>>>>>>> R13: 00007ffd5743beaf R14: 00007fbc86838300 R15: 0000000000022000
->>>>>>>>     </TASK>
->>>>>>>>
->>>>>>>> The buggy address belongs to the physical page:
->>>>>>>> page:ffffea0001f78000 refcount:0 mapcount:-128
->>>>>>>> mapping:0000000000000000 index:0x0 pfn:0x7de00
->>>>>>>> flags: 0xfff00000000000(node=0|zone=1|lastcpupid=0x7ff)
->>>>>>>> raw: 00fff00000000000 ffffea0001f86008 ffffea0001db2a08
->>>>>>>> 0000000000000000
->>>>>>>> raw: 0000000000000000 0000000000000001 00000000ffffff7f
->>>>>>>> 0000000000000000
->>>>>>>> page dumped because: kasan: bad access detected
->>>>>>>> page_owner tracks the page as freed
->>>>>>>> page last allocated via order 1, migratetype Unmovable, gfp_mask
->>>>>>>> 0xd20c0(__GFP_IO|__GFP_FS|__GFP_NOWARN|__GFP_NORETRY|__GFP_COMP|__GFP_NOMEMALLOC), pid 4855, tgid 4855 (sshd), ts 43553490210, free_ts 58249059760
->>>>>>>>     prep_new_page mm/page_alloc.c:2531 [inline]
->>>>>>>>     get_page_from_freelist+0x3449/0x35c0 mm/page_alloc.c:4283
->>>>>>>>     __alloc_pages+0x291/0x7e0 mm/page_alloc.c:5549
->>>>>>>>     alloc_slab_page+0x6a/0x160 mm/slub.c:1851
->>>>>>>>     allocate_slab mm/slub.c:1998 [inline]
->>>>>>>>     new_slab+0x84/0x2f0 mm/slub.c:2051
->>>>>>>>     ___slab_alloc+0xa85/0x10a0 mm/slub.c:3193
->>>>>>>>     __kmem_cache_alloc_bulk mm/slub.c:3951 [inline]
->>>>>>>>     kmem_cache_alloc_bulk+0x160/0x430 mm/slub.c:4026
->>>>>>>>     mt_alloc_bulk lib/maple_tree.c:157 [inline]
->>>>>>>>     mas_alloc_nodes+0x381/0x640 lib/maple_tree.c:1257
->>>>>>>>     mas_node_count_gfp lib/maple_tree.c:1316 [inline]
->>>>>>>>     mas_preallocate+0x131/0x350 lib/maple_tree.c:5724
->>>>>>>>     vma_expand+0x277/0x850 mm/mmap.c:541
->>>>>>>>     mmap_region+0xc43/0x1fb0 mm/mmap.c:2592
->>>>>>>>     do_mmap+0x8c9/0xf70 mm/mmap.c:1411
->>>>>>>>     vm_mmap_pgoff+0x1ce/0x2e0 mm/util.c:520
->>>>>>>>     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>>>>>     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>>>>>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>>>>>> page last free stack trace:
->>>>>>>>     reset_page_owner include/linux/page_owner.h:24 [inline]
->>>>>>>>     free_pages_prepare mm/page_alloc.c:1446 [inline]
->>>>>>>>     free_pcp_prepare mm/page_alloc.c:1496 [inline]
->>>>>>>>     free_unref_page_prepare+0xf3a/0x1040 mm/page_alloc.c:3369
->>>>>>>>     free_unref_page+0x37/0x3f0 mm/page_alloc.c:3464
->>>>>>>>     qlist_free_all+0x22/0x60 mm/kasan/quarantine.c:187
->>>>>>>>     kasan_quarantine_reduce+0x15a/0x170 mm/kasan/quarantine.c:294
->>>>>>>>     __kasan_slab_alloc+0x23/0x80 mm/kasan/common.c:302
->>>>>>>>     kasan_slab_alloc include/linux/kasan.h:201 [inline]
->>>>>>>>     slab_post_alloc_hook+0x68/0x390 mm/slab.h:761
->>>>>>>>     slab_alloc_node mm/slub.c:3452 [inline]
->>>>>>>>     kmem_cache_alloc_node+0x158/0x2c0 mm/slub.c:3497
->>>>>>>>     __alloc_skb+0xd6/0x2d0 net/core/skbuff.c:552
->>>>>>>>     alloc_skb include/linux/skbuff.h:1270 [inline]
->>>>>>>>     alloc_skb_with_frags+0xa8/0x750 net/core/skbuff.c:6194
->>>>>>>>     sock_alloc_send_pskb+0x919/0xa50 net/core/sock.c:2743
->>>>>>>>     unix_dgram_sendmsg+0x5b5/0x2050 net/unix/af_unix.c:1943
->>>>>>>>     sock_sendmsg_nosec net/socket.c:714 [inline]
->>>>>>>>     sock_sendmsg net/socket.c:734 [inline]
->>>>>>>>     __sys_sendto+0x475/0x5f0 net/socket.c:2117
->>>>>>>>     __do_sys_sendto net/socket.c:2129 [inline]
->>>>>>>>     __se_sys_sendto net/socket.c:2125 [inline]
->>>>>>>>     __x64_sys_sendto+0xde/0xf0 net/socket.c:2125
->>>>>>>>     do_syscall_x64 arch/x86/entry/common.c:50 [inline]
->>>>>>>>     do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
->>>>>>>>     entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>>>>>>
->>>>>>>> Memory state around the buggy address:
->>>>>>>>     ffff88807ddfff00: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>>>>>>>     ffff88807ddfff80: 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00 00
->>>>>>>>> ffff88807de00000: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>>>>                       ^
->>>>>>>>     ffff88807de00080: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>>>>     ffff88807de00100: ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff ff
->>>>>>>> ==================================================================
->>>>>>>>
->>>>>>>
->>>>>>> I think the patch from below should fix it.
->>>>>>>
->>>>>>> I printed le16_to_cpu(sbi->s_es->s_desc_size) and it was greater than
->>>>>>> EXT4_MAX_DESC_SIZE. What I think it happens is that the contents of the
->>>>>>> super block in the buffer get corrupted sometime after the .get_tree
->>>>>>> (which eventually calls __ext4_fill_super()) is called. So instead of
->>>>>>> relying on the contents of the buffer, we should instead rely on the
->>>>>>> s_desc_size initialized at the __ext4_fill_super() time.
->>>>>>>
->>>>>>> If someone finds this good (or bad), or has a more in depth explanation,
->>>>>>> please let me know, it will help me better understand the subsystem. In
->>>>>>> the meantime I'll continue to investigate this and prepare a patch for
->>>>>>> it.
->>>>>> If there's something corrupting the superblock while the filesystem is
->>>>>> mounted, we need to find what is corrupting the SB and fix *that*. Not
->>>>>> try
->>>>>> to paper over the problem by not using the on-disk data... Maybe journal
->>>>>> replay is corrupting the value or something like that?
->>>>>>
->>>>>>                                  Honza
->>>>>>
->>>>> Ok, I agree. First thing would be to understand the reproducer and to
->>>>> simplify it if possible. I haven't yet decoded what the syz repro is
->>>>> doing at
->>>>> https://syzkaller.appspot.com/text?tag=ReproSyz&x=16ce3de4c80000
->>>>> Will reply to this email thread once I understand what's happening. If
->>>>> you or someone else can decode the syz repro faster than me, shoot.
->>>>>
->>>> I can now explain how the contents of the super block of the buffer get
->>>> corrupted. After the ext4 fs is mounted to the target ("./bus"), the
->>>> reproducer maps 6MB of data starting at offset 0 in the target's file
->>>> ("./bus"), then it starts overriding the data with something else, by
->>>> using memcpy, memset, individual byte inits. Does that mean that we
->>>> shouldn't rely on the contents of the super block in the buffer after we
->>>> mount the file system? If so, then my patch stands. I'll be happy to
->>>> extend it if needed. Below one may find a step by step interpretation of
->>>> the reproducer.
->>>>
->>>> We have a strace log for the same bug, but on Android 5.15:
->>>> https://syzkaller.appspot.com/text?tag=CrashLog&x=14ecec8cc80000
->>>>
->>>> Look for pid 328. You notice that the bpf() syscalls return error, so I
->>>> commented them out in the c repro to confirm that they are not the
->>>> cause. The bug reproduced without the bpf() calls. One can find the c
->>>> repro at:
->>>> https://syzkaller.appspot.com/text?tag=ReproC&x=17c5fc50c80000
->>>>
->>>> Let's look at these calls, just before the bug was hit:
->>>> [pid   328] open("./bus",
->>>> O_RDWR|O_CREAT|O_TRUNC|O_NONBLOCK|O_SYNC|O_DIRECT|O_LARGEFILE|O_NOATIME,
->>>> 000) = 4
->>>> [pid   328] mount("/dev/loop0", "./bus", NULL, MS_BIND, NULL) = 0
->>>> [pid   328] open("./bus", O_RDWR|O_SYNC|O_NOATIME|0x3c) = 5
->>>> [pid   328] mmap(0x20000000, 6291456,
->>>> PROT_READ|PROT_WRITE|PROT_EXEC|PROT_SEM|0x47ffff0, MAP_SHARED|MAP_FIXED,
->>>> 5, 0) = 0x20000000
->>> Yeah, looking at the reproducer, before this the reproducer also mounts
->>> /dev/loop0 as ext4 filesystem.
->>>
->>>> - ./bus is created (if it does not exist), fd 4 is returned.
->>>> - /dev/loop0 is mounted to ./bus
->>>> - then it creates a new file descriptor (5) for the same ./bus
->>>> - then it creates a mapping for ./bus starting at offset zero. The
->>>> mapped area is at 0x20000000 and is of 0x600000ul length.
->>> So the result is that the reproducer modified the block device while it is
->>> mounted by the filesystem. We know cases like this can crash the kernel and
->>> it is inherently difficult to fix. We have to trust the buffer cache
->>> contents as otherwise the performance will be unacceptable. For historical
->>> reasons we also have to allow modifications of buffer cache while ext4 is
->>> mounted because tune2fs uses this to e.g. update the label of a mounted
->>> filesystem.
->>>
->>> Long-term we are moving ext4 in a direction where we can disallow block
->>> device modifications while the fs is mounted but we are not there yet. I've
+> Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
+> feature. VSM is a set of hypervisor capabilities and enlightenments
+> offered to host and guest partitions which enable the creation and
+> management of new security boundaries within operating system software.
+> VSM achieves and maintains isolation through VTLs.
+>
+> Add early initialization for Virtual Trust Levels (VTL). This includes
+> initializing the x86 platform for VTL and enabling boot support for
+> secondary CPUs to start in targeted VTL context. For now, only enable
+> the code for targeted VTL level as 2.
+>
+> When starting an AP at a VTL other than VTL 0, the AP must start directly
+> in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
+> transition sequence that occurs after waking up an AP with SIPI whose
+> vector points to the 16-bit AP startup trampoline code.
+>
+> This commit also moves hv_get_nmi_reason function to header file, so
+> that it can be reused by VTL.
+>
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> ---
+>  arch/x86/Kconfig                   |  24 +++
+>  arch/x86/hyperv/Makefile           |   1 +
+>  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
+>  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
+>  arch/x86/include/asm/mshyperv.h    |  14 ++
+>  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
+>  include/asm-generic/hyperv-tlfs.h  |   4 +
 
-sounds good.
+This patch is quite big, I'd suggest you split it up. E.g. TLFS definitions
+can easily be a separate patch. Moving hv_get_nmi_reason() can be a
+separate patch. Secondary CPU bringup can be a separate patch. The new
+config option to enable the feature (assuming it is really needed) can
+be the last separate patch.
 
->>> discussed some shorter-term solution to avoid such known problems with syzbot
->>> developers and what seems plausible would be a kconfig option to disallow
->>> writing to a block device when it is exclusively open by someone else.
+>  7 files changed, 346 insertions(+), 5 deletions(-)
+>  create mode 100644 arch/x86/hyperv/hv_vtl.c
+>
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 453f462f6c9c..b9e52ac9c9f9 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
+>  
+>  if HYPERVISOR_GUEST
+>  
+> +config HYPERV_VTL
+> +	bool "Enable VTL"
+> +	depends on X86_64 && HYPERV
+> +	default n
+> +	help
+> +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
+> +	  enlightenments offered to host and guest partitions which enables
+> +	  the creation and management of new security boundaries within
+> +	  operating system software.
+> +
+> +	  VSM achieves and maintains isolation through Virtual Trust Levels
+> +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
+> +	  being more privileged than lower levels. VTL0 is the least privileged
+> +	  level, and currently only other level supported is VTL2.
+> +
+> +	  Select this option to build a Linux kernel to run at a VTL other than
+> +	  the normal VTL 0, which currently is only VTL 2.  This option
+> +	  initializes the x86 platform for VTL 2, and adds the ability to boot
+> +	  secondary CPUs directly into 64-bit context as required for VTLs other
+> +	  than 0.  A kernel built with this option must run at VTL 2, and will
+> +	  not run as a normal guest.
 
-How do we determine when a block device is exclusively open by someone else?
+This is quite unfortunate, is there a way to detect which VTL the guest
+is running at and change the behavior dynamically?
 
->>> But so far I didn't get to trying whether this would reasonably work. Would
->>> you be interested in having a look into this?
->>
->> I am interested in this job. The file system is often damaged by writing
+> +
+> +	  If unsure, say N
+> +
+>  config PARAVIRT
+>  	bool "Enable paravirtualization code"
+>  	depends on HAVE_STATIC_CALL
+> diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
+> index 5d2de10809ae..a538df01181a 100644
+> --- a/arch/x86/hyperv/Makefile
+> +++ b/arch/x86/hyperv/Makefile
+> @@ -1,6 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0-only
+>  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
+>  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
+> +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
+>  
+>  ifdef CONFIG_X86_64
+>  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
+> diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
+> new file mode 100644
+> index 000000000000..0da8b242eb8b
+> --- /dev/null
+> +++ b/arch/x86/hyperv/hv_vtl.c
+> @@ -0,0 +1,227 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023, Microsoft Corporation.
+> + *
+> + * Author:
+> + *   Saurabh Sengar <ssengar@microsoft.com>
+> + */
+> +
+> +#include <asm/apic.h>
+> +#include <asm/boot.h>
+> +#include <asm/desc.h>
+> +#include <asm/i8259.h>
+> +#include <asm/mshyperv.h>
+> +#include <asm/realmode.h>
+> +
+> +extern struct boot_params boot_params;
+> +static struct real_mode_header hv_vtl_real_mode_header;
+> +
+> +void __init hv_vtl_init_platform(void)
+> +{
+> +	pr_info("Initializing Hyper-V VTL\n");
+> +
+> +	x86_init.irqs.pre_vector_init = x86_init_noop;
+> +	x86_init.timers.timer_init = x86_init_noop;
+> +
+> +	x86_platform.get_wallclock = get_rtc_noop;
+> +	x86_platform.set_wallclock = set_rtc_noop;
+> +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
+> +
+> +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
+> +	x86_platform.legacy.rtc = 0;
+> +	x86_platform.legacy.warm_reset = 0;
+> +	x86_platform.legacy.reserve_bios_regions = 0;
+> +	x86_platform.legacy.devices.pnpbios = 0;
+> +}
+> +
+> +static inline u64 hv_vtl_system_desc_base(struct ldttss_desc *desc)
+> +{
+> +	return ((u64)desc->base3 << 32) | ((u64)desc->base2 << 24) |
+> +		(desc->base1 << 16) | desc->base0;
+> +}
+> +
+> +static inline u32 hv_vtl_system_desc_limit(struct ldttss_desc *desc)
+> +{
+> +	return ((u32)desc->limit1 << 16) | (u32)desc->limit0;
+> +}
+> +
+> +typedef void (*secondary_startup_64_fn)(void*, void*);
+> +static void hv_vtl_ap_entry(void)
+> +{
+> +	((secondary_startup_64_fn)secondary_startup_64)(&boot_params, &boot_params);
+> +}
+> +
+> +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
+> +{
+> +	u64 status;
+> +	int ret = 0;
+> +	struct hv_enable_vp_vtl *input;
+> +	unsigned long irq_flags;
+> +
+> +	struct desc_ptr gdt_ptr;
+> +	struct desc_ptr idt_ptr;
+> +
+> +	struct ldttss_desc *tss;
+> +	struct ldttss_desc *ldt;
+> +	struct desc_struct *gdt;
+> +
+> +	u64 rsp = initial_stack;
+> +	u64 rip = (u64)&hv_vtl_ap_entry;
+> +
+> +	native_store_gdt(&gdt_ptr);
+> +	store_idt(&idt_ptr);
+> +
+> +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
+> +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
+> +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
+> +
+> +	local_irq_save(irq_flags);
+> +
+> +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+> +	memset(input, 0, sizeof(*input));
+> +
+> +	input->partition_id = HV_PARTITION_ID_SELF;
+> +	input->vp_index = target_vp_index;
+> +	input->target_vtl.target_vtl = HV_VTL_MGMT;
+> +
+> +	/*
+> +	 * The x86_64 Linux kernel follows the 16-bit -> 32-bit -> 64-bit
+> +	 * mode transition sequence after waking up an AP with SIPI whose
+> +	 * vector points to the 16-bit AP startup trampoline code. Here in
+> +	 * VTL2, we can't perform that sequence as the AP has to start in
+> +	 * the 64-bit mode.
+> +	 *
+> +	 * To make this happen, we tell the hypervisor to load a valid 64-bit
+> +	 * context (most of which is just magic numbers from the CPU manual)
+> +	 * so that AP jumps right to the 64-bit entry of the kernel, and the
+> +	 * control registers are loaded with values that let the AP fetch the
+> +	 * code and data and carry on with work it gets assigned.
+> +	 */
+> +
+> +	input->vp_context.rip = rip;
+> +	input->vp_context.rsp = rsp;
+> +	input->vp_context.rflags = 0x0000000000000002;
+> +	input->vp_context.efer = __rdmsr(MSR_EFER);
+> +	input->vp_context.cr0 = native_read_cr0();
+> +	input->vp_context.cr3 = __native_read_cr3();
+> +	input->vp_context.cr4 = native_read_cr4();
+> +	input->vp_context.msr_cr_pat = __rdmsr(MSR_IA32_CR_PAT);
+> +	input->vp_context.idtr.limit = idt_ptr.size;
+> +	input->vp_context.idtr.base = idt_ptr.address;
+> +	input->vp_context.gdtr.limit = gdt_ptr.size;
+> +	input->vp_context.gdtr.base = gdt_ptr.address;
+> +
+> +	/* Non-system desc (64bit), long, code, present */
+> +	input->vp_context.cs.selector = __KERNEL_CS;
+> +	input->vp_context.cs.base = 0;
+> +	input->vp_context.cs.limit = 0xffffffff;
+> +	input->vp_context.cs.attributes = 0xa09b;
+> +	/* Non-system desc (64bit), data, present, granularity, default */
+> +	input->vp_context.ss.selector = __KERNEL_DS;
+> +	input->vp_context.ss.base = 0;
+> +	input->vp_context.ss.limit = 0xffffffff;
+> +	input->vp_context.ss.attributes = 0xc093;
+> +
+> +	/* System desc (128bit), present, LDT */
+> +	input->vp_context.ldtr.selector = GDT_ENTRY_LDT * 8;
+> +	input->vp_context.ldtr.base = hv_vtl_system_desc_base(ldt);
+> +	input->vp_context.ldtr.limit = hv_vtl_system_desc_limit(ldt);
+> +	input->vp_context.ldtr.attributes = 0x82;
+> +
+> +	/* System desc (128bit), present, TSS, 0x8b - busy, 0x89 -- default */
+> +	input->vp_context.tr.selector = GDT_ENTRY_TSS * 8;
+> +	input->vp_context.tr.base = hv_vtl_system_desc_base(tss);
+> +	input->vp_context.tr.limit = hv_vtl_system_desc_limit(tss);
+> +	input->vp_context.tr.attributes = 0x8b;
+> +
+> +	status = hv_do_hypercall(HVCALL_ENABLE_VP_VTL, input, NULL);
+> +
+> +	if (!hv_result_success(status) &&
+> +	    hv_result(status) != HV_STATUS_VTL_ALREADY_ENABLED) {
+> +		pr_err("HVCALL_ENABLE_VP_VTL failed for VP : %d ! [Err: %#llx\n]",
+> +		       target_vp_index, status);
+> +		ret = -EINVAL;
+> +		goto free_lock;
+> +	}
+> +
+> +	status = hv_do_hypercall(HVCALL_START_VP, input, NULL);
+> +
+> +	if (!hv_result_success(status)) {
+> +		pr_err("HVCALL_START_VP failed for VP : %d ! [Err: %#llx]\n",
+> +		       target_vp_index, status);
+> +		ret = -EINVAL;
+> +	}
+> +
+> +free_lock:
+> +	local_irq_restore(irq_flags);
+> +
+> +	return ret;
+> +}
+> +
+> +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
+> +{
+> +	u64 control;
+> +	u64 status;
+> +	unsigned long irq_flags;
+> +	struct hv_get_vp_from_apic_id_in *input;
+> +	u32 *output, ret;
+> +
+> +	local_irq_save(irq_flags);
+> +
+> +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
+> +	memset(input, 0, sizeof(*input));
+> +	input->partition_id = HV_PARTITION_ID_SELF;
+> +	input->apic_ids[0] = apic_id;
+> +
+> +	output = (u32 *)input;
+> +
+> +	control = HV_HYPERCALL_REP_COMP_1 | HVCALL_GET_VP_ID_FROM_APIC_ID;
+> +	status = hv_do_hypercall(control, input, output);
+> +	ret = output[0];
+> +
+> +	local_irq_restore(irq_flags);
+> +
+> +	if (!hv_result_success(status)) {
+> +		pr_err("failed to get vp id from apic id %d, status %#llx\n",
+> +		       apic_id, status);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return ret;
+> +}
+> +
+> +static int hv_vtl_wakeup_secondary_cpu(int apicid, unsigned long start_eip)
+> +{
+> +	int vp_id;
+> +
+> +	pr_debug("Bringing up CPU with APIC ID %d in VTL2...\n", apicid);
+> +	vp_id = hv_vtl_apicid_to_vp_id(apicid);
+> +
+> +	if (vp_id < 0) {
+> +		pr_err("Couldn't find CPU with APIC ID %d\n", apicid);
+> +		return -EINVAL;
+> +	}
+> +	if (vp_id > ms_hyperv.max_vp_index) {
+> +		pr_err("Invalid CPU id %d for APIC ID %d\n", vp_id, apicid);
+> +		return -EINVAL;
+> +	}
+> +
+> +	return hv_vtl_bringup_vcpu(vp_id, start_eip);
+> +}
+> +
+> +static int __init hv_vtl_early_init(void)
+> +{
+> +	/*
+> +	 * `boot_cpu_has` returns the runtime feature support,
+> +	 * and here is the earliest it can be used.
+> +	 */
+> +	if (cpu_feature_enabled(X86_FEATURE_XSAVE))
+> +		panic("XSAVE has to be disabled as it is not supported by this module.\n"
+> +			  "Please add 'noxsave' to the kernel command line.\n");
 
-I'm fine with Ye handling this. If that's not the case I can take a look
-too, but I need more pointers than the ones already provided, as I've
-recently started skimming over ext4.
+Can't we just suppress the feature early instead?
 
->> block devices, which is a headache. I have always wanted to eradicate
->> this kind of problem.  A few months ago, I tried to add a mount parameter
->> to prohibit modification after the block device is mounted.But I
->> encountered several problems that led to the termination of my attempt.
->> First of all, the 32-bit super block flags have been used up and need to
->> be extended. Secondly, I don't know how to handle read-only flag in the
->> case of multiple mount points.
->>  "disallow writing to a block device when it is exclusively open by someone
->> else. "
->> -> Perhaps we can add a new IOCTL command to control whether write
->> operations are allowed after the block device has been exclusively
->> opened. I don't know if this is feasible?  Do you have any good
->> suggestions?
-> 
-> Well, ioctl() for syzbot would be possible as well but for start I'd try
-> whether the idea with kconfig option will work. Then it will be enough to
-> just make sure all kernels used for fuzzing are built with this option set.
+> +
+> +	real_mode_header = &hv_vtl_real_mode_header;
+> +	apic->wakeup_secondary_cpu_64 = hv_vtl_wakeup_secondary_cpu;
+> +
+> +	return 0;
+> +}
+> +early_initcall(hv_vtl_early_init);
+> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
+> index 0b73a809e9e1..08a6845a233d 100644
+> --- a/arch/x86/include/asm/hyperv-tlfs.h
+> +++ b/arch/x86/include/asm/hyperv-tlfs.h
+> @@ -713,6 +713,81 @@ union hv_msi_entry {
+>  	} __packed;
+>  };
+>  
+> +struct hv_x64_segment_register {
+> +	__u64 base;
+> +	__u32 limit;
+> +	__u16 selector;
+> +	union {
+> +		struct {
+> +			__u16 segment_type : 4;
+> +			__u16 non_system_segment : 1;
+> +			__u16 descriptor_privilege_level : 2;
+> +			__u16 present : 1;
+> +			__u16 reserved : 4;
+> +			__u16 available : 1;
+> +			__u16 _long : 1;
+> +			__u16 _default : 1;
+> +			__u16 granularity : 1;
+> +		} __packed;
+> +		__u16 attributes;
+> +	};
+> +} __packed;
+> +
+> +struct hv_x64_table_register {
+> +	__u16 pad[3];
+> +	__u16 limit;
+> +	__u64 base;
+> +} __packed;
+> +
+> +struct hv_init_vp_context_t {
+> +	u64 rip;
+> +	u64 rsp;
+> +	u64 rflags;
+> +
+> +	struct hv_x64_segment_register cs;
+> +	struct hv_x64_segment_register ds;
+> +	struct hv_x64_segment_register es;
+> +	struct hv_x64_segment_register fs;
+> +	struct hv_x64_segment_register gs;
+> +	struct hv_x64_segment_register ss;
+> +	struct hv_x64_segment_register tr;
+> +	struct hv_x64_segment_register ldtr;
+> +
+> +	struct hv_x64_table_register idtr;
+> +	struct hv_x64_table_register gdtr;
+> +
+> +	u64 efer;
+> +	u64 cr0;
+> +	u64 cr3;
+> +	u64 cr4;
+> +	u64 msr_cr_pat;
+> +} __packed;
+> +
+> +union hv_input_vtl {
+> +	u8 as_uint8;
+> +	struct {
+> +		u8 target_vtl: 4;
+> +		u8 use_target_vtl: 1;
+> +		u8 reserved_z: 3;
+> +	};
+> +} __packed;
+> +
+> +struct hv_enable_vp_vtl {
+> +	u64				partition_id;
+> +	u32				vp_index;
+> +	union hv_input_vtl		target_vtl;
+> +	u8				mbz0;
+> +	u16				mbz1;
+> +	struct hv_init_vp_context_t	vp_context;
+> +} __packed;
+> +
+> +struct hv_get_vp_from_apic_id_in {
+> +	u64 partition_id;
+> +	union hv_input_vtl target_vtl;
+> +	u8 res[7];
+> +	u32 apic_ids[];
+> +} __packed;
+> +
+>  #include <asm-generic/hyperv-tlfs.h>
+>  
+>  #endif
+> diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
+> index 4c4c0ec3b62e..4ff549dcd49a 100644
+> --- a/arch/x86/include/asm/mshyperv.h
+> +++ b/arch/x86/include/asm/mshyperv.h
+> @@ -11,6 +11,10 @@
+>  #include <asm/paravirt.h>
+>  #include <asm/mshyperv.h>
+>  
+> +#define HV_VTL_NORMAL 0x0
+> +#define HV_VTL_SECURE 0x1
+> +#define HV_VTL_MGMT   0x2
 
-How should we treat such bugs until the kconfig option is introduced? Do
-we let them open, do we mark them as won't fix? The kconfig solution
-feels a bit as a workaround, the bugs will still be hit by someone not
-selecting that config option.
+Don't these belong to hyperv-tlfs.h too (even if they're not directly
+described in Hyper-V TLFS)?
 
-Cheers,
-ta
+> +
+>  union hv_ghcb;
+>  
+>  DECLARE_STATIC_KEY_FALSE(isolation_type_snp);
+> @@ -181,6 +185,11 @@ static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
+>  	return hv_vp_assist_page[cpu];
+>  }
+>  
+> +static inline unsigned char hv_get_nmi_reason(void)
+> +{
+> +	return 0;
+> +}
+> +
+>  void __init hyperv_init(void);
+>  void hyperv_setup_mmu_ops(void);
+>  void set_hv_tscchange_cb(void (*cb)(void));
+> @@ -266,6 +275,11 @@ static inline int hv_set_mem_host_visibility(unsigned long addr, int numpages,
+>  }
+>  #endif /* CONFIG_HYPERV */
+>  
+> +#ifdef CONFIG_HYPERV_VTL
+> +void __init hv_vtl_init_platform(void);
+> +#else
+> +static inline void __init hv_vtl_init_platform(void) {}
+> +#endif
+>  
+>  #include <asm-generic/mshyperv.h>
+>  
+> diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
+> index f36dc2f796c5..da5d13d29c4e 100644
+> --- a/arch/x86/kernel/cpu/mshyperv.c
+> +++ b/arch/x86/kernel/cpu/mshyperv.c
+> @@ -250,11 +250,6 @@ static uint32_t  __init ms_hyperv_platform(void)
+>  	return HYPERV_CPUID_VENDOR_AND_MAX_FUNCTIONS;
+>  }
+>  
+> -static unsigned char hv_get_nmi_reason(void)
+> -{
+> -	return 0;
+> -}
+> -
+>  #ifdef CONFIG_X86_LOCAL_APIC
+>  /*
+>   * Prior to WS2016 Debug-VM sends NMIs to all CPUs which makes
+> @@ -521,6 +516,7 @@ static void __init ms_hyperv_init_platform(void)
+>  
+>  	/* Register Hyper-V specific clocksource */
+>  	hv_init_clocksource();
+> +	hv_vtl_init_platform();
+>  #endif
+>  	/*
+>  	 * TSC should be marked as unstable only after Hyper-V
+> diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
+> index b870983596b9..87258341fd7c 100644
+> --- a/include/asm-generic/hyperv-tlfs.h
+> +++ b/include/asm-generic/hyperv-tlfs.h
+> @@ -146,6 +146,7 @@ union hv_reference_tsc_msr {
+>  /* Declare the various hypercall operations. */
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE	0x0002
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_LIST	0x0003
+> +#define HVCALL_ENABLE_VP_VTL			0x000f
+>  #define HVCALL_NOTIFY_LONG_SPIN_WAIT		0x0008
+>  #define HVCALL_SEND_IPI				0x000b
+>  #define HVCALL_FLUSH_VIRTUAL_ADDRESS_SPACE_EX	0x0013
+> @@ -165,6 +166,8 @@ union hv_reference_tsc_msr {
+>  #define HVCALL_MAP_DEVICE_INTERRUPT		0x007c
+>  #define HVCALL_UNMAP_DEVICE_INTERRUPT		0x007d
+>  #define HVCALL_RETARGET_INTERRUPT		0x007e
+> +#define HVCALL_START_VP				0x0099
+> +#define HVCALL_GET_VP_ID_FROM_APIC_ID		0x009a
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_SPACE 0x00af
+>  #define HVCALL_FLUSH_GUEST_PHYSICAL_ADDRESS_LIST 0x00b0
+>  #define HVCALL_MODIFY_SPARSE_GPA_PAGE_HOST_VISIBILITY 0x00db
+> @@ -218,6 +221,7 @@ enum HV_GENERIC_SET_FORMAT {
+>  #define HV_STATUS_INVALID_PORT_ID		17
+>  #define HV_STATUS_INVALID_CONNECTION_ID		18
+>  #define HV_STATUS_INSUFFICIENT_BUFFERS		19
+> +#define HV_STATUS_VTL_ALREADY_ENABLED		134
+>  
+>  /*
+>   * The Hyper-V TimeRefCount register and the TSC
+
+-- 
+Vitaly
+
