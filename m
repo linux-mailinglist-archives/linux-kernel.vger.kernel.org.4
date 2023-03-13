@@ -2,269 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5715C6B7E38
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB23D6B7E64
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:59:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230234AbjCMQ4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:56:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50404 "EHLO
+        id S231301AbjCMQ7f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:59:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCMQ4P (ORCPT
+        with ESMTP id S231254AbjCMQ7W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:56:15 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23A420541;
-        Mon, 13 Mar 2023 09:56:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678726573; x=1710262573;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=35jKFnRN3WFewle4kyuMtbuyLqVRQ727HOwYCxRN3Zc=;
-  b=AFPxQ0FTfewebpblIPaWR9MRzO9iVtLh5DHX90KHYLE+sMHAlFPHRrnA
-   jGf6noBg4sTRElCJ4+C8wuILTmxa6WGcin4KfG1RNad7W3IUScLez/S01
-   F2o+flkGi5BDgfAfrTiKriny5/KuOi4rD5Yo/FtCBTrmtfqR3+Oh6jjCD
-   D9MA6lTaF5XAm9JxQy5SLaIZb0OWslCmg+gMNWp2aNdmbbbcxleNG/WCr
-   G3ifPEbsnmQv6jATMrLyyMMsmse0uMbaVKpOqEKDDKUuPlTc+svVtYhio
-   gbMxftmxaPbX+5kTBqkI9ziGwLOMDjie2z5LauQZ+o0hnU+0LN6FvEKTo
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325564349"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="325564349"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:13 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="678772058"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="678772058"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.33.115])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 09:56:10 -0700
-Message-ID: <3effa855-1668-db9f-7d38-2c3352ea6ef1@intel.com>
-Date:   Mon, 13 Mar 2023 18:56:07 +0200
+        Mon, 13 Mar 2023 12:59:22 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8FB91987
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:57:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678726640;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=t5POBg1qZ82GqoEDaDaIA79xn4Mgw94E10MmvGFG+QA=;
+        b=UCSmaXaGHUsmxostezSfNGm2h5CB0G88EFirpB43bzQR9V9vIOplKH1G6lkne+3Lko3CUg
+        wzaFSfeD5UmTo4lnW3+ONt2MrfX1mAHN4ub3Cku164pS8RNe+iixDjIhhWmUNalzRQc8Bx
+        F2HbHlRiR37JDrhiRt8Nzt9g5Yw52lk=
+Received: from mail-ot1-f72.google.com (mail-ot1-f72.google.com
+ [209.85.210.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-673-GM5A_55SMR6vnhvDMRVJDQ-1; Mon, 13 Mar 2023 12:57:19 -0400
+X-MC-Unique: GM5A_55SMR6vnhvDMRVJDQ-1
+Received: by mail-ot1-f72.google.com with SMTP id x10-20020a056830408a00b0068db8db7c5aso6377496ott.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:57:19 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678726638;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=t5POBg1qZ82GqoEDaDaIA79xn4Mgw94E10MmvGFG+QA=;
+        b=7S8CVqYM/oIbIaFrsz4SfUXpHtb/+FJKaNOG7LtossueKh8sFkdyIiySeQDRTwMRFN
+         hTLpefVTuCNndme/TBd3nniqOC2qthSTTeMhHfMpSxUd8L7sbYDBm/ruXezEL/lx4WWF
+         685aS/AyQnuDkBW7P6rjvGx3DElx5YSbBhjJMOTOEVbLHe7IA2R8y+BsntfWtPKeQXks
+         rSaosINRMV8XZvWxc8dyJO9wBzBueXZT5RprA/A1BGNp9iUrJfrYwgriyKw8qn0373ac
+         aqm1Y7FLi5zlW9gi52XfVM7981IB43p+XEGqx8RrPgafgD051caiflvHsQLx9pn6o2D+
+         DJtQ==
+X-Gm-Message-State: AO0yUKW9++PCHTYd+4a95495VXDriyNototrgVojQpJSw/dl1ubw3IOO
+        Uwr6CqmBaI2eUtpjQnrjM1PAy6oXskPfoenQklqM+fJ/fNjMCjwSaxh9eTfhChTozEDdEtOK8sk
+        rCkAMyMMDLl0BGkNix75EcvVG6WuKAsqTwArma8BrngjF2vMXJaEtVpXKw5BsRxP06/TCI7xfIf
+        HSF22mPlgkDz0=
+X-Received: by 2002:a05:6808:150:b0:37f:b1d6:9f3c with SMTP id h16-20020a056808015000b0037fb1d69f3cmr17439029oie.46.1678726638193;
+        Mon, 13 Mar 2023 09:57:18 -0700 (PDT)
+X-Google-Smtp-Source: AK7set/DcZ9ZIOTk8pbqQbIpqBKMFacVCaRW/B1/QFZ8b2XK2GO2nvasDBBZ4a2w0GAU24OnbrYXGg==
+X-Received: by 2002:a05:6808:150:b0:37f:b1d6:9f3c with SMTP id h16-20020a056808015000b0037fb1d69f3cmr17438954oie.46.1678726636191;
+        Mon, 13 Mar 2023 09:57:16 -0700 (PDT)
+Received: from halaney-x13s.attlocal.net ([2600:1700:1ff0:d0e0::21])
+        by smtp.gmail.com with ESMTPSA id o2-20020acad702000000b00384d3003fa3sm3365273oig.26.2023.03.13.09.57.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 09:57:15 -0700 (PDT)
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, vkoul@kernel.org,
+        bhupesh.sharma@linaro.org, mturquette@baylibre.com,
+        sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com,
+        Andrew Halaney <ahalaney@redhat.com>
+Subject: [PATCH net-next 00/11] Add EMAC3 support for sa8540p-ride
+Date:   Mon, 13 Mar 2023 11:56:09 -0500
+Message-Id: <20230313165620.128463-1-ahalaney@redhat.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.8.0
-Subject: Re: [RFC PATCH] mmc: core: Disable REQ_FUA if the eMMC supports an
- internal cache
-Content-Language: en-US
-To:     =?UTF-8?Q?Christian_L=c3=b6hle?= <CLoehle@hyperstone.com>,
-        Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Wenchao Chen <wenchao.chen666@gmail.com>,
-        Avri Altman <avri.altman@wdc.com>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-References: <20230302144330.274947-1-ulf.hansson@linaro.org>
- <54cee7de4ab7479db74b21e64e5f53cf@hyperstone.com>
- <CAPDyKFq-qToEX+qiuHirNbcuedii_f0KKuHiPAv7+tydrUTpqQ@mail.gmail.com>
- <4a2c5b752968496ca72966f80e148d47@hyperstone.com>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <4a2c5b752968496ca72966f80e148d47@hyperstone.com>
-Content-Type: text/plain; charset=UTF-8
+Content-type: text/plain
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/23 19:06, Christian Löhle wrote:
-> 
->>>
->>> I have benchmarked the FUA/Cache behavior a bit.
->>> I don't have an actual filesystem benchmark that does what I wanted and is easy to port to the target so I used:
->>>
->>> # call with
->>> # for loop in {1..3}; do sudo dd if=/dev/urandom bs=1M 
->>> of=/dev/mmcblk2; done; for loop in {1..5}; do time 
->>> ./filesystembenchmark.sh; umount /mnt; done
->>> mkfs.ext4 -F /dev/mmcblk2
->>> mount /dev/mmcblk2 /mnt
->>> for i in {1..3}
->>> do
->>> cp -r linux-6.2.2 /mnt/$i
->>> done
->>> for i in {1..3}
->>> do
->>> rm -r /mnt/$i
->>> done
->>> for i in {1..3}
->>> do
->>> cp -r linux-6.2.2 /mnt/$i
->>> done
->>>
->>>
->>> I found a couple of DUTs that I can link, I also tested one industrial card.
->>>
->>> DUT1: blue PCB Foresee eMMC
->>> https://pine64.com/product/32gb-emmc-module/
->>> DUT2: green PCB SiliconGo eMMC
->>> Couldn't find that one online anymore unfortunately
->>> DUT3: orange hardkernel PCB 8GB
->>> https://www.hardkernel.com/shop/8gb-emmc-module-c2-android/
->>> DUT4: orange hardkernel PCB white dot
->>> https://rlx.sk/en/odroid/3198-16gb-emmc-50-module-xu3-android-for-odro
->>> id-xu3.html
->>> DUT5: Industrial card
->>
->> Thanks a lot for helping out with testing! Much appreciated!
-> 
-> No problem, glad to be of help.
-> 
->>
->>>
->>>
->>> The test issued 461 DO_REL_WR during one of the iterations for DUT5
->>>
->>> DUT1:
->>> Cache, no FUA:
->>> 13:04.49
->>> 13:13.82
->>> 13:30.59
->>> 13:28:13
->>> 13:20:64
->>> FUA:
->>> 13:30.32
->>> 13:36.26
->>> 13:10.86
->>> 13:32.52
->>> 13:48.59
->>>
->>> DUT2:
->>> FUA:
->>> 8:11.24
->>> 7:47.73
->>> 7:48.00
->>> 7:48.18
->>> 7:47.38
->>> Cache, no FUA:
->>> 8:10.30
->>> 7:48.97
->>> 7:48.47
->>> 7:47.93
->>> 7:44.18
->>>
->>> DUT3:
->>> Cache, no FUA:
->>> 7:02.82
->>> 6:58.94
->>> 7:03.20
->>> 7:00.27
->>> 7:00.88
->>> FUA:
->>> 7:05.43
->>> 7:03.44
->>> 7:04.82
->>> 7:03.26
->>> 7:04.74
->>>
->>> DUT4:
->>> FUA:
->>> 7:23.92
->>> 7:20.15
->>> 7:20.52
->>> 7:19.10
->>> 7:20.71
->>> Cache, no FUA:
->>> 7:20.23
->>> 7:20.48
->>> 7:19.94
->>> 7:18.90
->>> 7:19.88
->>
->> Without going into the details of the above, it seems like for DUT1, DUT2, DUT3 and DUT4 there a good reasons to why we should move forward with $subject patch.
->>
->> Do you agree?
-> 
-> That is a good question, that's why I just posted the data without further comment from my side.
-> I was honestly expecting the difference to be much higher, given the original patch.
-> If this is representative for most cards, you would require quite an unusual workload to actually notice the difference IMO.
-> If there are cards where the difference is much more significant then of course a quirk would be nicer.
-> On the other side I don't see why not and any improvement is a good one?
-> 
->>
->>>
->>> Cache, no FUA:
->>> 7:19.36
->>> 7:02.11
->>> 7:01.53
->>> 7:01.35
->>> 7:00.37
->>> Cache, no FUA CQE:
->>> 7:17.55
->>> 7:00.73
->>> 6:59.25
->>> 6:58.44
->>> 6:58.60
->>> FUA:
->>> 7:15.10
->>> 6:58.99
->>> 6:58.94
->>> 6:59.17
->>> 6:60.00
->>> FUA CQE:
->>> 7:11.03
->>> 6:58.04
->>> 6:56.89
->>> 6:56.43
->>> 6:56:28
->>>
->>> If anyone has any comments or disagrees with the benchmark, or has a specific eMMC to test, let me know.
->>
->> If I understand correctly, for DUT5, it seems like using FUA may be slightly better than just cache-flushing, right?
-> 
-> That is correct, I specifically tested with this card as under the assumption that reliable write is without much additional cost, the DCMD would be slightly worse for performance and SYNC a bit worse.
-> 
->>
->> For CQE, it seems like FUA could be slightly even better, at least for DUT5.  Do you know if REQ_OP_FLUSH translates into MMC_ISSUE_DCMD or MMC_ISSUE_SYNC for your case? See mmc_cqe_issue_type().
-> It is SYNC (this is sdhci-of-arasan on rk3399, no DCMD), but even SYNC is not too bad here it seems, could of course be worse if the workload was less sequential.
-> 
->>
->> When it comes to CQE, maybe Adrian have some additional thoughts around this? Perhaps we should keep using REQ_FUA, if we have CQE?
-> Sure, I'm also interested in Adrian's take on this.
+This is a forward port / upstream refactor of code delivered
+downstream by Qualcomm over at [0] to enable the DWMAC5 based
+implementation called EMAC3 on the sa8540p-ride dev board.
 
-Testing an arbitrary system and looking only at individual I/Os,
-which may not be representative of any use-case, resulted in
-FUA always winning, see below.
+From what I can tell with the board schematic in hand,
+as well as the code delivered, the main changes needed are:
 
-All values are approximate and in microseconds.
+    1. A new address space layout for /dwmac5/EMAC3 MTL/DMA regs
+    2. A new programming sequence required for the EMAC3 base platforms
 
-		With FUA		Without FUA
+This series makes those adaptations as well as other housekeeping items
+such as converting dt-bindings to yaml, adding clock descriptions, etc.
 
-With CQE	Reliable Write	350	Write	125
-					Flush	300
-		Total		350		425
+[0] https://git.codelinaro.org/clo/la/kernel/ark-5.14/-/commit/510235ad02d7f0df478146fb00d7a4ba74821b17
 
-Without CQE	Reliable Write	350	Write	125
-		CMD13		100	CMD13	100
-					Flush	300
-					CMD13	100
-		Total		450		625
+Thanks,
+Andrew
 
-FYI the test I was doing was:
+Bhupesh Sharma (3):
+  dt-bindings: net: snps,dwmac: Update interrupt-names
+  dt-bindings: net: snps,dwmac: Add Qualcomm Ethernet ETHQOS compatibles
+  dt-bindings: net: qcom,ethqos: Convert bindings to yaml
 
-  # cat test.sh
-	#!/bin/sh
+Brian Masney (1):
+  net: stmmac: Add EMAC3 variant of dwmac4
 
-	echo "hi" > /mnt/mmc/hi.txt
+ .../devicetree/bindings/net/qcom,ethqos.txt   |  66 ----
+ .../devicetree/bindings/net/qcom,ethqos.yaml  | 113 ++++++
+ .../devicetree/bindings/net/snps,dwmac.yaml   |  11 +-
+ MAINTAINERS                                   |   2 +-
+ arch/arm64/boot/dts/qcom/sa8540p-ride.dts     | 181 ++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp.dtsi        |  53 +++
+ drivers/clk/qcom/gcc-sc8280xp.c               |  18 +
+ .../stmicro/stmmac/dwmac-qcom-ethqos.c        | 161 ++++++---
+ drivers/net/ethernet/stmicro/stmmac/dwmac4.h  |  32 +-
+ .../net/ethernet/stmicro/stmmac/dwmac4_core.c | 190 ++++++++--
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.c  | 336 ++++++++++++++----
+ .../net/ethernet/stmicro/stmmac/dwmac4_dma.h  |  38 ++
+ .../net/ethernet/stmicro/stmmac/dwmac4_lib.c  | 144 ++++++--
+ drivers/net/ethernet/stmicro/stmmac/hwif.c    |  29 +-
+ drivers/net/ethernet/stmicro/stmmac/hwif.h    |   2 +
+ .../ethernet/stmicro/stmmac/stmmac_ethtool.c  |   6 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_main.c |  17 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_mdio.c |   9 +-
+ .../net/ethernet/stmicro/stmmac/stmmac_ptp.c  |   4 +-
+ include/dt-bindings/clock/qcom,gcc-sc8280xp.h |   2 +
+ include/linux/stmmac.h                        |   1 +
+ 21 files changed, 1164 insertions(+), 251 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.txt
+ create mode 100644 Documentation/devicetree/bindings/net/qcom,ethqos.yaml
 
-	sync
-
-
-  # perf record --no-bpf-event -e mmc:* -a -- ./test.sh
-  # perf script --ns --deltatime
-
-
-The conclusion in this case would seem to be that CQE
-makes the case for removing FUA less bad.
-
-Perhaps CQE is more common in newer eMMCs which in turn
-have better FUA implementations.
+-- 
+2.39.2
 
