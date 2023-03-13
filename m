@@ -2,120 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 705E56B7F9E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D38B6B7FA0
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:38:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230084AbjCMRie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55270 "EHLO
+        id S230252AbjCMRix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbjCMRid (ORCPT
+        with ESMTP id S230104AbjCMRit (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:38:33 -0400
-Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CACD12ED58;
-        Mon, 13 Mar 2023 10:38:31 -0700 (PDT)
-Received: by mail-pl1-f180.google.com with SMTP id y11so13840018plg.1;
-        Mon, 13 Mar 2023 10:38:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678729111;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=+5EZDs6kXnSVYcikXXlYapDyzbwlC80fqfQCO/00Qrc=;
-        b=fMXIagtLxBDhvjjuEu//L0RZiZKsyqq7JVOdZwWumUKwkxrBbF/QCzcj3Oh2lraz76
-         1HPNcYMDvzx54ZizUo1MdJotAq72Re2cHzbJjz+7h2qSyXvH8rU67ZDPeH/sOhRCMaxj
-         0RPj+lfVtfyG5d30VDhIc+rJnvGKh6Q87Lz8vwpyDc2nCjvtxtIMVq+obpiRkgUCK2mw
-         4e4xlbFzOTEsmPwcIvsEeMdDvkHIvbi4CkGxPlhmyTrIxNDQ4MoBsAE9djcwU4u5ZesS
-         uNEhtWsTP9UIWU94EHIlWDpQ6QcFber8BOPSY9pAtF92nB5XJ9ODIEuyIiOTbuAAcoZ3
-         TRmQ==
-X-Gm-Message-State: AO0yUKXCGZTqqcC1Ua0ihPZ/zGkqzUOOb9MUSMXLRpzbTcbvnZ637cnZ
-        cbNZHovyHepsXcP2Lh2Vdcg=
-X-Google-Smtp-Source: AK7set+K5X0r3LmBgdo7wHrqi7g4j77i+4gRAsbnAvLIQEJRuj9bOo4d5dJJD1sgCHuS3nTj5m7O/w==
-X-Received: by 2002:a05:6a20:a88a:b0:d5:1f75:669a with SMTP id ca10-20020a056a20a88a00b000d51f75669amr798156pzb.13.1678729110953;
-        Mon, 13 Mar 2023 10:38:30 -0700 (PDT)
-Received: from localhost.localdomain (61-227-97-148.dynamic-ip.hinet.net. [61.227.97.148])
-        by smtp.gmail.com with ESMTPSA id 12-20020a63184c000000b004fc2582aedbsm25873pgy.17.2023.03.13.10.38.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 10:38:30 -0700 (PDT)
-From:   "You-Sheng Yang (vicamo)" <vicamo.yang@canonical.com>
-To:     Nirmal Patel <nirmal.patel@linux.intel.com>,
-        Jonathan Derrick <jonathan.derrick@linux.dev>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Rob Herring <robh@kernel.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
+        Mon, 13 Mar 2023 13:38:49 -0400
+Received: from out-20.mta1.migadu.com (out-20.mta1.migadu.com [95.215.58.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DD262300
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:38:45 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 17:38:30 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1678729123;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=Ybjm14aOpi7A3aopxAqo4v6WPM99l74ygtnwOLCEz88=;
+        b=qKL8BE7By0J03+sOQJyOVoPjg1EGaqkkILFMuvPubmJwJo5R2I4Ioa3AvwEaBz6xeymaZv
+        fSiwHIOu2V9lLMl5hGzbssWXHnbWFVtrn7RUibLPjv8SLEBZ3oZbk6sfw51BVun6oviMRP
+        /MmVzX2rgkW/XRE5u55rvZjO02g9bOE=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Oliver Upton <oliver.upton@linux.dev>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Keith Busch <kbusch@kernel.org>
-Cc:     "You-Sheng Yang (vicamo)" <vicamo.yang@canonical.com>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] PCI: vmd: guard device addition and removal
-Date:   Tue, 14 Mar 2023 01:37:33 +0800
-Message-Id: <20230313173733.1815277-1-vicamo.yang@canonical.com>
-X-Mailer: git-send-email 2.39.2
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Sagi Shahar <sagis@google.com>,
+        Erdem Aktas <erdemaktas@google.com>,
+        Peter Shier <pshier@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        James Houghton <jthoughton@google.com>,
+        Anish Moorthy <amoorthy@google.com>,
+        Ben Gardon <bgardon@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Ricardo Koller <ricarkol@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Aaron Lewis <aaronlewis@google.com>,
+        Ashish Kalra <ashish.kalra@amd.com>,
+        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
+        Chao Peng <chao.p.peng@linux.intel.com>,
+        Chenyi Qiang <chenyi.qiang@intel.com>,
+        David Woodhouse <dwmw@amazon.co.uk>,
+        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
+        Gavin Shan <gshan@redhat.com>,
+        Guang Zeng <guang.zeng@intel.com>,
+        Hou Wenlong <houwenlong.hwl@antgroup.com>,
+        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
+        Jim Mattson <jmattson@google.com>,
+        Jing Liu <jing2.liu@intel.com>,
+        Junaid Shahid <junaids@google.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Leonardo Bras <leobras@redhat.com>,
+        Like Xu <like.xu.linux@gmail.com>,
+        Li RongQing <lirongqing@baidu.com>,
+        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        Michael Roth <michael.roth@amd.com>,
+        Michal Luczaj <mhal@rbox.co>,
+        Mingwei Zhang <mizhang@google.com>,
+        Nikunj A Dadhania <nikunj@amd.com>,
+        Paul Durrant <pdurrant@amazon.com>,
+        Peng Hao <flyingpenghao@gmail.com>,
+        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
+        Robert Hoo <robert.hu@linux.intel.com>,
+        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Wei Wang <wei.w.wang@intel.com>,
+        Xiaoyao Li <xiaoyao.li@intel.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
+ for KVM x86
+Message-ID: <ZA9flqMBSlW95S/i@linux.dev>
+References: <20230309010336.519123-1-seanjc@google.com>
+ <20230309010336.519123-3-seanjc@google.com>
+ <ZAlGeYAmvhPmVmGe@debian.me>
+ <ZAmWefGcsBwcODxW@linux.dev>
+ <ZAoWogdeET5N0mug@google.com>
+ <ZA9eHzE5vhnXh+TA@linux.dev>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZA9eHzE5vhnXh+TA@linux.dev>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-VMD may fail to create sysfs entries while `pci_rescan_bus()` called in
-some other drivers like t7xx wwan driver:
+On Mon, Mar 13, 2023 at 05:32:29PM +0000, Oliver Upton wrote:
+> On Thu, Mar 09, 2023 at 09:25:54AM -0800, Sean Christopherson wrote:
+> > On Thu, Mar 09, 2023, Oliver Upton wrote:
+> > > On Thu, Mar 09, 2023 at 09:37:45AM +0700, Bagas Sanjaya wrote:
+> > > > On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
+> > > > > +As a general guideline, use ``kvm-x86/next`` even if a patch/series touches
+> > > > > +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of the
+> > > > > +branches from the main KVM tree is usually a less good option as they likely
+> > > > > +won't have many, if any, changes for the next release, i.e. using the main KVM
+> > > > > +tree as a base is more likely to yield conflicts.  And if there are non-trivial
+> > > > > +conflicts with multiple architectures, coordination between maintainers will be
+> > > > > +required no matter what base is used.  Note, this is far from a hard rule, i.e.
+> > > > > +use a different base for multi-arch series if that makes the most sense.
+> > > 
+> > > I don't think this is the best way to coordinate with other architectures.
+> > > Regardless of whether you intended this to be prescriptive, I'm worried most
+> > > folks will follow along and just base patches on kvm-x86/next anyway.
+> > 
+> > Probably, but for the target audience (KVM x86 contributors), that's likely the
+> > least awful base 99% of the time.
+> 
+> Sorry, I follow this reasoning at all.
 
-  sysfs: cannot create duplicate filename '/devices/.../resource0'
-  Call Trace:
-   <TASK>
-   sysfs_warn_dup.cold+0x17/0x34
-   sysfs_add_bin_file_mode_ns+0xc0/0xf0
-   sysfs_create_bin_file+0x6d/0xb0
-   pci_create_attr+0x117/0x260
-   pci_create_resource_files+0x6b/0x150
-   pci_create_sysfs_dev_files+0x18/0x30
-   pci_bus_add_device+0x30/0x80
-   pci_bus_add_devices+0x31/0x80
-   pci_bus_add_devices+0x5b/0x80
-   vmd_enable_domain.constprop.0+0x6b7/0x880 [vmd]
-   vmd_probe+0x16d/0x193 [vmd]
+I *don't* follow ...
 
-Fixes: 185a383ada2e ("x86/PCI: Add driver for Intel Volume Management Device (VMD)")
-Signed-off-by: You-Sheng Yang (vicamo) <vicamo.yang@canonical.com>
----
- drivers/pci/controller/vmd.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 769eedeb8802..f050991bd1e9 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -838,9 +838,13 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 	pci_add_resource_offset(&resources, &vmd->resources[1], offset[0]);
- 	pci_add_resource_offset(&resources, &vmd->resources[2], offset[1]);
- 
-+	pci_lock_rescan_remove();
-+
- 	vmd->bus = pci_create_root_bus(&vmd->dev->dev, vmd->busn_start,
- 				       &vmd_ops, sd, &resources);
- 	if (!vmd->bus) {
-+		pci_unlock_rescan_remove();
-+
- 		pci_free_resource_list(&resources);
- 		vmd_remove_irq_domain(vmd);
- 		return -ENODEV;
-@@ -893,6 +897,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 
- 	vmd_acpi_end();
- 
-+	pci_unlock_rescan_remove();
-+
- 	WARN(sysfs_create_link(&vmd->dev->dev.kobj, &vmd->bus->dev.kobj,
- 			       "domain"), "Can't create symlink to domain\n");
- 	return 0;
 -- 
-2.39.2
-
+Thanks,
+Oliver
