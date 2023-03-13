@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AEEDA6B8394
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:01:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B01326B839E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230419AbjCMVBy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:01:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49202 "EHLO
+        id S230300AbjCMVCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230268AbjCMVBO (ORCPT
+        with ESMTP id S230141AbjCMVBT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:01:14 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC0E21C315;
-        Mon, 13 Mar 2023 14:00:37 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id j11so54044810edq.4;
-        Mon, 13 Mar 2023 14:00:37 -0700 (PDT)
+        Mon, 13 Mar 2023 17:01:19 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 488401A64C;
+        Mon, 13 Mar 2023 14:00:42 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id h8so10270353ede.8;
+        Mon, 13 Mar 2023 14:00:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678741235;
+        d=gmail.com; s=20210112; t=1678741237;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=n9xABVi9xTX3sYpyPG86wyS9dmTZ5RSzu4zqx6NQ57w=;
-        b=d0KCdHSbqqa855MIrgrgBhpuvvH6Sp1dUhm1z8UW7aYtrgCrmtvu9bTSfjtZ41Z4xs
-         9/3K14Yv6IrndeWOeAU9rddQ9n614q+G1GkTfsQalJQ3v+CEBj5q6m7G2vUchLIYnmzE
-         zaHHYoJMvrAgfeyAXMiCe4LXj17yhIeJBeQoiV2BR290yUmt+nIwvs2/uLM5xU9CQfKS
-         /vdNgq9Cf4z5BkqX4SXcwsk+BxjFnResDSk0Ot8KhinkoXVgKokF2qGhzbtPKH7hf+LI
-         SZPcpDS6d8etpbWvEexgJXy7UiFNv7xhaBvdLPNurra4/WukPNcQM/J2u84kv5+Gfpwy
-         3mgg==
+        bh=FT2oLy5xFYDKklrDL9H1QV3B6NDWG41BsEllERkvJLQ=;
+        b=b4L/dI6UxOp+1xOw7wipdCZycTsIXOTyl5TihDRA83a/wKmp9RKXdDkiE1PudpDk7i
+         Ljud0fu2w/Qj78cXewlHVf+Sj4KOi0lhqHEftssS2wgKgW+aBuj3F90K8VF0inLC2AFc
+         Bu2aWFIeBJqdyhY2Ep1j4AX/i/ZWBJvy6WlPCB88YeDp4LjCrdQAtU/X7jMZphCqYnAN
+         1xWrW8dYdR9aZt8mgNEk5X7c31C8qfghmu/x0mwteYUQICLsG2LkYDgS+eJ9hD9/h31z
+         Hquk2vM/YuS2QsC6ztC7UKXabU+j+cPUlHZXxRHpfaAlOrGO+1qV1kV3M+DqUoXH8jCs
+         ZjrA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678741235;
+        d=1e100.net; s=20210112; t=1678741237;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=n9xABVi9xTX3sYpyPG86wyS9dmTZ5RSzu4zqx6NQ57w=;
-        b=CCv/qUV3PIQXcYOJrtFJAdOEj69SK12rsq7tZ3SgBrC3qc0YMFvp9OELjb/i08LPby
-         I1EA4kINXqnKU7kxzi0cJI+2A1GskyBWgzrg657lTu0WIg5XcCM/rv9gvzPPl2MbIUCO
-         uukPTkfAHYWkyd14SnGcRlvXiJvOWedO6f/ZA508A1QKv7chC6K+8f1EZ6K/+8AKeHqs
-         I0Z08xbwTUkeWqoBksBDxrGcUwAc93g7SGhTH/GF3m2SAKeG2/sM4qGkc4stauyq8Qzt
-         dpTmjWmBF77COptCu897XaVnSCMEFNvlI6Wq3GgihFEYHs60KkOUMxr3+KcT8yq18vlR
-         0Bmg==
-X-Gm-Message-State: AO0yUKW7uIMe+Krcv3bcErntw8M/qMvRz5bnsoaa6cxXM3HGG7p/bf42
-        +Ft0kmtzk5Jg8ri7O26JF0Q=
-X-Google-Smtp-Source: AK7set//RDjZDpjs0z7q/DUoPq5RSSYLFVpv/JBReZIuEIAS4kd84AXGWc75+ljxqFUEv9Aca0WQSA==
-X-Received: by 2002:a17:906:dac3:b0:8a9:fa2f:e440 with SMTP id xi3-20020a170906dac300b008a9fa2fe440mr44000207ejb.55.1678741234782;
-        Mon, 13 Mar 2023 14:00:34 -0700 (PDT)
+        bh=FT2oLy5xFYDKklrDL9H1QV3B6NDWG41BsEllERkvJLQ=;
+        b=hJyiLrcTKu507nD6aOdCxphRWg9sBiXErY27uQK3D0Zy+tJU3An9FqMdVmYpRLewjq
+         5Yw5UDvv/6v01DiNerWf0ihwAJUFK0hWIBoCDsyBCakyIn9dt/f/WyfpQFUcV8CqHgRn
+         sLfRZf8/f1PhZtqAfVW6iRT45iP2/T9DgIN80k1GbWwRrNYvWIznY2M+78BDUC3O27Tt
+         ofSEi6q+MMHzPyxJ/9AFLnkk9m7qLRYvI34tSXhU73iNP9AnhtEKAoBc9wrb55smOOi7
+         qm040wqj1hX9owyToCCe2zhrJyUDnJjaJxxl7aekOJxPLZKYmxNOZPjKQjXnV/W3HcHQ
+         PsBw==
+X-Gm-Message-State: AO0yUKXz1PydS0w0v7Z5MCdz59pNzPXsSqxQdMZhf+k98iv/jJtcA6xI
+        yPg5NsSc4wI42Ia+mcnGUTo=
+X-Google-Smtp-Source: AK7set/Bk179OhlZ6F2sRo2tcyDbF2gPTQblGFOVfe7U4X5Cp4w3TtAL2B8dAeJbMQhD9VTjihbOMw==
+X-Received: by 2002:a17:907:6da3:b0:878:50f7:a35a with SMTP id sb35-20020a1709076da300b0087850f7a35amr44708274ejc.72.1678741237136;
+        Mon, 13 Mar 2023 14:00:37 -0700 (PDT)
 Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170906830b00b008ee5356801dsm219853ejx.187.2023.03.13.14.00.32
+        by smtp.gmail.com with ESMTPSA id j11-20020a170906830b00b008ee5356801dsm219853ejx.187.2023.03.13.14.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 14:00:34 -0700 (PDT)
+        Mon, 13 Mar 2023 14:00:36 -0700 (PDT)
 From:   arinc9.unal@gmail.com
 X-Google-Original-From: arinc.unal@arinc9.com
 To:     Linus Walleij <linus.walleij@linaro.org>,
@@ -75,9 +75,9 @@ Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
         linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 17/21] dt-bindings: pinctrl: mediatek: drop quotes from referred schemas
-Date:   Mon, 13 Mar 2023 23:59:17 +0300
-Message-Id: <20230313205921.35342-18-arinc.unal@arinc9.com>
+Subject: [PATCH v2 18/21] dt-bindings: pinctrl: mediatek: mt7986: fix patternProperties regex
+Date:   Mon, 13 Mar 2023 23:59:18 +0300
+Message-Id: <20230313205921.35342-19-arinc.unal@arinc9.com>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230313205921.35342-1-arinc.unal@arinc9.com>
 References: <20230313205921.35342-1-arinc.unal@arinc9.com>
@@ -96,242 +96,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Arınç ÜNAL <arinc.unal@arinc9.com>
 
-Drop the quotes from the referred schemas.
+Set second level patternProperties to '^.*mux.*$' and '^.*conf.*$' on
+mediatek,mt7986-pinctrl.yaml to be on par with other schemas.
 
 Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
 ---
- .../bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml           | 4 ++--
- .../bindings/pinctrl/mediatek,mt6779-pinctrl.yaml           | 4 ++--
- .../bindings/pinctrl/mediatek,mt6795-pinctrl.yaml           | 4 ++--
- .../bindings/pinctrl/mediatek,mt7622-pinctrl.yaml           | 6 +++---
- .../bindings/pinctrl/mediatek,mt7986-pinctrl.yaml           | 6 +++---
- .../bindings/pinctrl/mediatek,mt8183-pinctrl.yaml           | 4 ++--
- .../bindings/pinctrl/mediatek,mt8186-pinctrl.yaml           | 2 +-
- .../bindings/pinctrl/mediatek,mt8188-pinctrl.yaml           | 2 +-
- .../bindings/pinctrl/mediatek,mt8192-pinctrl.yaml           | 4 ++--
- .../bindings/pinctrl/mediatek,mt8195-pinctrl.yaml           | 4 ++--
- 10 files changed, 20 insertions(+), 20 deletions(-)
+ .../devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml  | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml
-index 3b3d59140073..bccff08a5ba3 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt65xx-pinctrl.yaml
-@@ -67,7 +67,7 @@ required:
-   - "#gpio-cells"
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- patternProperties:
-   'pins$':
-@@ -83,7 +83,7 @@ patternProperties:
-           pins it needs, and how they should be configured, with regard to muxer
-           configuration, pullups, drive strength, input enable/disable and input
-           schmitt.
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        $ref: /schemas/pinctrl/pincfg-node.yaml
- 
-         properties:
-           pinmux:
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-index e5e7143674b5..7f0e2d6cd6d9 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6779-pinctrl.yaml
-@@ -58,7 +58,7 @@ required:
-   - "#gpio-cells"
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
-   - if:
-       properties:
-         compatible:
-@@ -124,7 +124,7 @@ patternProperties:
-           pins it needs, and how they should be configured, with regard to muxer
-           configuration, pullups, drive strength, input enable/disable and input
-           schmitt.
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        $ref: /schemas/pinctrl/pincfg-node.yaml
- 
-         properties:
-           pinmux:
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml
-index 742ca9bd67d2..7cad814a5d53 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml
-@@ -82,7 +82,7 @@ patternProperties:
-               }
-             };
-           };
--        $ref: "pinmux-node.yaml"
-+        $ref: pinmux-node.yaml
- 
-         properties:
-           pinmux:
-@@ -156,7 +156,7 @@ patternProperties:
-           - pinmux
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
-index 38dc41c735eb..bd72a326e6e0 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
-@@ -43,7 +43,7 @@ properties:
-     const: 2
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- required:
-   - compatible
-@@ -70,7 +70,7 @@ patternProperties:
-         additionalProperties: false
-         description:
-           pinmux configuration nodes.
--        $ref: "/schemas/pinctrl/pinmux-node.yaml"
-+        $ref: /schemas/pinctrl/pinmux-node.yaml
-         properties:
-           function:
-             description:
-@@ -249,7 +249,7 @@ patternProperties:
-         additionalProperties: false
-         description:
-           pinconf configuration nodes.
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        $ref: /schemas/pinctrl/pincfg-node.yaml
- 
-         properties:
-           groups:
 diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-index 7157500a7f81..31c36689438c 100644
+index 31c36689438c..0f615ada290a 100644
 --- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
 +++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt7986-pinctrl.yaml
-@@ -57,7 +57,7 @@ properties:
-     const: 2
+@@ -72,7 +72,7 @@ patternProperties:
+     additionalProperties: false
  
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- required:
-   - compatible
-@@ -128,7 +128,7 @@ patternProperties:
-           "wf_dbdc"         "wifi"      74, 75, 76, 77, 78, 79, 80, 81, 82, 83,
-                                         84, 85
- 
--        $ref: "/schemas/pinctrl/pinmux-node.yaml"
-+        $ref: /schemas/pinctrl/pinmux-node.yaml
-         properties:
-           function:
-             description:
-@@ -261,7 +261,7 @@ patternProperties:
-         additionalProperties: false
-         description:
-           pinconf configuration nodes.
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        $ref: /schemas/pinctrl/pincfg-node.yaml
- 
-         properties:
-           pins:
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-index 372a3aefa937..bf67d4672455 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
-@@ -57,7 +57,7 @@ properties:
-     const: 2
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- required:
-   - compatible
-@@ -80,7 +80,7 @@ patternProperties:
-           pins it needs, and how they should be configured, with regard to muxer
-           configuration, pullups, drive strength, input enable/disable and input
-           schmitt.
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        $ref: /schemas/pinctrl/pincfg-node.yaml
- 
-         properties:
-           pinmux:
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml
-index eb6a5cdecc6c..69136ddd0bbc 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8186-pinctrl.yaml
-@@ -94,7 +94,7 @@ patternProperties:
-               }
-             };
-           };
--        $ref: "pinmux-node.yaml"
-+        $ref: pinmux-node.yaml
- 
-         properties:
-           pinmux:
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-index 028146fb173f..e994b0c70dbf 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8188-pinctrl.yaml
-@@ -74,7 +74,7 @@ patternProperties:
      patternProperties:
-       '^pins':
+-      '.*mux.*':
++      '^.*mux.*$':
          type: object
--        $ref: "/schemas/pinctrl/pincfg-node.yaml"
-+        $ref: /schemas/pinctrl/pincfg-node.yaml
+         additionalProperties: false
+         description: |
+@@ -256,7 +256,7 @@ patternProperties:
+                   items:
+                     enum: [wf_2g, wf_5g, wf_dbdc]
+                   maxItems: 3
+-      '.*conf.*':
++      '^.*conf.*$':
+         type: object
          additionalProperties: false
          description:
-           A pinctrl node should contain at least one subnode representing the
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml
-index 8cca1ce40f25..c43338cafd61 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8192-pinctrl.yaml
-@@ -65,7 +65,7 @@ patternProperties:
-           pins it needs, and how they should be configured, with regard to muxer
-           configuration, pullups, drive strength, input enable/disable and input
-           schmitt.
--        $ref: "pinmux-node.yaml"
-+        $ref: pinmux-node.yaml
- 
-         properties:
-           pinmux:
-@@ -126,7 +126,7 @@ patternProperties:
-         additionalProperties: false
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- required:
-   - compatible
-diff --git a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-index b8ba260d74cd..33cb71775db9 100644
---- a/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/mediatek,mt8195-pinctrl.yaml
-@@ -87,7 +87,7 @@ patternProperties:
-               }
-             };
-           };
--        $ref: "pinmux-node.yaml"
-+        $ref: pinmux-node.yaml
- 
-         properties:
-           pinmux:
-@@ -216,7 +216,7 @@ patternProperties:
-           - pinmux
- 
- allOf:
--  - $ref: "pinctrl.yaml#"
-+  - $ref: pinctrl.yaml#
- 
- required:
-   - compatible
 -- 
 2.37.2
 
