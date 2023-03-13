@@ -2,298 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EBAA6B8344
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:59:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31C16B8355
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:00:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229765AbjCMU7M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:59:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44724 "EHLO
+        id S230109AbjCMVA1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:00:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbjCMU7K (ORCPT
+        with ESMTP id S229797AbjCMVAS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:59:10 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1482BEB54
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:58:24 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id cn6so713850pjb.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:58:24 -0700 (PDT)
+        Mon, 13 Mar 2023 17:00:18 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0028F84808;
+        Mon, 13 Mar 2023 13:59:53 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id x13so6733088edd.1;
+        Mon, 13 Mar 2023 13:59:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678741102;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r2U9HWf+sA0AVg4GQ6mhyf88FiJRsJOROsFvX9o9iAQ=;
-        b=qiMZqhnHJoEkAcldGIp5VLSoiJ1HoRNLJpTkAcL606wau+CZ5F50xtoQNfzoh+Dr20
-         WQAVwPVtZ+h5JR2HZO9NZ44x2WFz5D/a73+Nh1NbnEH0cmfu9nOrIbA47XAxgNBndD7x
-         Ile+yocu1jqQxeD6M/W30bU3Lmkjur6lr3OTjHIQqg9ZHg37GoeVi6dLCcrUqtSs3neL
-         rKLieywLiDBp/ey1kIVLiL0wO2K2Y5722s3ZFR9bxXNH/rcPIGf0va5LkklNxksQ4/yR
-         bbxYRKKZbTjsNGiycvaTAiFP8TbOXgDnLhwMidTchh82UtZPHCGTFo/mzRaN9AxA866K
-         jWig==
+        d=gmail.com; s=20210112; t=1678741192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=clG8kMvKt8WSjuvF5NCWvQYiJ04cwb/jYow6A+hKr4E=;
+        b=KtD/In2gR0Za9xDMzjRferPOBx/btX4MyGerGbdhQVIIS95VrhGki8CA14iF/5pYBZ
+         jFztYdpwDGH7SjLbmhUuAiXZsGaJl6L3wCEuJWrwHw8x/YHHy9z2qZngLlbj3qAYyP0k
+         wRIFZinNF5irrpMxU1Nl5ZRxImJc8YYbOIiyTurdVgAQJIguRuWy9V0jcdPEyRFknqjv
+         jo8gk9/pDn5f6zYo/+CxvSF3+QuEOBsAgXFtpSoHAhAN8e78E2/rSRHwIOGlj+oS2oRj
+         j0EpnpRsHTqqLkKOdlVrRguM3bm+Nrg+2qW5BTgXF3qBJGT4ED5QR1uurhKMOFbkQos4
+         YC7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678741102;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r2U9HWf+sA0AVg4GQ6mhyf88FiJRsJOROsFvX9o9iAQ=;
-        b=tWfFaP9pJWddVWYRqLIMqDF2nBiRQSfiRuW3Bvvwtzid51tbxW0m1pgNlWXMJ3TEaK
-         V57lWfvtljcQB8C32Sus0gn1tR9cvE0aw6V8LaGef/+6ZRA+n9AmewCCIJ5rcktzP9+g
-         OoC9xv1gfWLS68WpHf8D55Wf1vm9vzGkg8vKaWHDZKVShTakbToZh20Q3Z1QeuFeL03I
-         gs+HLVgw0AD4vspesxnhwVJFCSF8WIgFs/4XdaMpwpLr2PeFs3fhfGFZiVQDswCNHpyN
-         J8CYcqTzIUu9HYKawUuUTGZzxnqLJRZxqTYYq6RykUg1mst1PqDlam79qXe0L3CEXJ0J
-         aHyQ==
-X-Gm-Message-State: AO0yUKUSFaLk4/icX9ECnszrqSVaLJKbaGQ91lR8zMA5BHPxKY0SMv/q
-        lB6vygDn6tVgXPbfQ6iebF8KLqG1vDOqP/zVVuc=
-X-Google-Smtp-Source: AK7set8T/NTAAjk73Imef5Nz7v59fZZ963ggOdpW0Lw4pjUXEgdffVMNaSKrNZzqy9OcJFcuXyfHvQ==
-X-Received: by 2002:a05:6a20:7f8f:b0:d0:15c9:4e67 with SMTP id d15-20020a056a207f8f00b000d015c94e67mr31698886pzj.19.1678741102356;
-        Mon, 13 Mar 2023 13:58:22 -0700 (PDT)
-Received: from ?IPV6:2401:4900:1c5e:4a3e:15d0:d540:3861:ef0e? ([2401:4900:1c5e:4a3e:15d0:d540:3861:ef0e])
-        by smtp.gmail.com with ESMTPSA id z22-20020aa791d6000000b005ac8a51d591sm163626pfa.21.2023.03.13.13.58.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 13:58:21 -0700 (PDT)
-Message-ID: <5922cd55-060c-d1b1-0eb2-0875439e4268@linaro.org>
-Date:   Tue, 14 Mar 2023 02:28:16 +0530
+        d=1e100.net; s=20210112; t=1678741192;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=clG8kMvKt8WSjuvF5NCWvQYiJ04cwb/jYow6A+hKr4E=;
+        b=uTJP3GeDoeWD3XMDiibTQKo86BHSwY1gYDdzf5D3E4UZXI6Scq83LtTJ2CGCsCgjCd
+         l56DAb3HX2gG3vjYGj6UZ1jD83NTvKZmxadD3KnbvO3ccT19HeT1+0dHfGjGi6vnU61N
+         GN12hQO5cULwQIphVKwvpOMinven4Ns5qbdKv6dqTtlM4xmJ9TYcItDAocrr9/qnq3u/
+         15eNHYCQXMtVx11wbkyAA3ICx5zkjHZc2IWuX1wX86GK6/Zk4E0WDBz4JBo3xLwd+uJK
+         Sn0z2tiPR4fde4Gc6EzpCO2F166fYOCn+Z9q21aVzUPcC8Ys2fbieVPb1HcdFKZK71ix
+         ekFw==
+X-Gm-Message-State: AO0yUKVBmjNFevGckzYO/CrgtB3LSr6zxDQP2fU7aobg9WqhOsPE7y9X
+        wVTjj3XF12m6VwOpArjfCFSd+7gQlO3en6Yn
+X-Google-Smtp-Source: AK7set8LdIjCZD10owBtNeRy8tit/0u7lbXw3YqjC210RIL5GUaWh1N8ZA+yROCO+JoF/SpRl01dSQ==
+X-Received: by 2002:a17:907:3e2a:b0:929:bd3:eab4 with SMTP id hp42-20020a1709073e2a00b009290bd3eab4mr6017338ejc.68.1678741192216;
+        Mon, 13 Mar 2023 13:59:52 -0700 (PDT)
+Received: from arinc9-PC.lan ([149.91.1.15])
+        by smtp.gmail.com with ESMTPSA id j11-20020a170906830b00b008ee5356801dsm219853ejx.187.2023.03.13.13.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 13:59:51 -0700 (PDT)
+From:   arinc9.unal@gmail.com
+X-Google-Original-From: arinc.unal@arinc9.com
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        William Dean <williamsukatube@gmail.com>,
+        Sean Wang <sean.wang@kernel.org>,
+        Andy Teng <andy.teng@mediatek.com>,
+        Del Regno <angelogioacchino.delregno@collabora.com>,
+        Daniel Golle <daniel@makrotopia.org>,
+        Hui Liu <hui.liu@mediatek.com>,
+        Zhiyong Tao <zhiyong.tao@mediatek.com>,
+        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        Daniel Santos <daniel.santos@pobox.com>,
+        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
+        Frank Wunderlich <frank-w@public-files.de>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
+Subject: [PATCH 00/21] pinctrl: ralink: fix ABI, improve driver, move to mediatek, improve dt-bindings
+Date:   Mon, 13 Mar 2023 23:59:00 +0300
+Message-Id: <20230313205921.35342-1-arinc.unal@arinc9.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add remoteproc nodes
-Content-Language: en-US
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org
-Cc:     agross@kernel.org, konrad.dybcio@linaro.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        linux-remoteproc@vger.kernel.org, robh+dt@kernel.org,
-        devicetree@vger.kernel.org
-References: <20230128054256.2100501-1-bhupesh.sharma@linaro.org>
-From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
-In-Reply-To: <20230128054256.2100501-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
+This is an ambitious effort I've been wanting to do for months.
 
-On 1/28/23 11:12 AM, Bhupesh Sharma wrote:
-> Add the adsp, cdsp and modem remoteproc nodes to sm6115.
-> 
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> - Depends on the dt-binding and driver change submitted via [1].
-> [1]. https://lore.kernel.org/linux-arm-msm/20230128053504.2099620-1-bhupesh.sharma@linaro.org
+Straight off the bat, I'm fixing the ABI that I broke a while back, by
+reintroducing the ralink,rt2880-pinmux compatible string.
 
-Gentle Ping. Since the dependencies (dt-bindings and driver changes) 
-have already been merged into linux-next, this patch can now be applied.
+If you take a look at the schema for mt7620 and rt305x, some functions got
+multiple lists for groups. Like refclk on mt7620. Because mt7620 and
+mt7628/mt7688 SoCs use the same compatible string, it's impossible to
+differentiate on the binding which SoC a devicetree is actually for.
+Therefore, the binding will allow all groups listed for that function. For
+example, if the SoC is mt7620, only the refclk function for the mdio group
+can be used. If one were to put "spi cs1" as the function there, there
+wouldn't be a warning.
 
-Thanks,
-Bhupesh
+I address this by introducing new compatible strings for these SoCs, then
+split the schemas. I also separate mt7628/mt7688 from mt7620 pinctrl
+subdriver in the process.
 
->   arch/arm64/boot/dts/qcom/sm6115.dtsi | 184 +++++++++++++++++++++++++++
->   1 file changed, 184 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index 3c66f998a81b..3540cd24af5c 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -1309,6 +1309,39 @@ dispcc: clock-controller@5f00000 {
->   			#power-domain-cells = <1>;
->   		};
->   
-> +		remoteproc_mpss: remoteproc@6080000 {
-> +			compatible = "qcom,sm6115-mpss-pas";
-> +			reg = <0x06080000 0x100>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 307 IRQ_TYPE_EDGE_RISING>,
-> +					      <&modem_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +					      <&modem_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +					      <&modem_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +					      <&modem_smp2p_in 3 IRQ_TYPE_EDGE_RISING>,
-> +					      <&modem_smp2p_in 7 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "wdog", "fatal", "ready", "handover",
-> +					  "stop-ack", "shutdown-ack";
-> +
-> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +			clock-names = "xo";
-> +
-> +			power-domains = <&rpmpd SM6115_VDDCX>;
-> +
-> +			memory-region = <&pil_modem_mem>;
-> +
-> +			qcom,smem-states = <&modem_smp2p_out 0>;
-> +			qcom,smem-state-names = "stop";
-> +
-> +			status = "disabled";
-> +
-> +			glink-edge {
-> +				interrupts = <GIC_SPI 68 IRQ_TYPE_EDGE_RISING>;
-> +				label = "mpss";
-> +				qcom,remote-pid = <1>;
-> +				mboxes = <&apcs_glb 12>;
-> +			};
-> +		};
-> +
->   		stm@8002000 {
->   			compatible = "arm,coresight-stm", "arm,primecell";
->   			reg = <0x08002000 0x1000>,
-> @@ -1921,6 +1954,157 @@ funnel_apss1_in: endpoint {
->   			};
->   		};
->   
-> +		remoteproc_adsp: remoteproc@ab00000 {
-> +			compatible = "qcom,sm6115-adsp-pas";
-> +			reg = <0x0ab00000 0x100>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 282 IRQ_TYPE_EDGE_RISING>,
-> +					      <&adsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +					      <&adsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +					      <&adsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +					      <&adsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "wdog", "fatal", "ready",
-> +					  "handover", "stop-ack";
-> +
-> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +			clock-names = "xo";
-> +
-> +			power-domains = <&rpmpd SM6115_VDD_LPI_CX>,
-> +					<&rpmpd SM6115_VDD_LPI_MX>;
-> +
-> +			memory-region = <&pil_adsp_mem>;
-> +
-> +			qcom,smem-states = <&adsp_smp2p_out 0>;
-> +			qcom,smem-state-names = "stop";
-> +
-> +			status = "disabled";
-> +
-> +			glink-edge {
-> +				interrupts = <GIC_SPI 277 IRQ_TYPE_EDGE_RISING>;
-> +				label = "lpass";
-> +				qcom,remote-pid = <2>;
-> +				mboxes = <&apcs_glb 8>;
-> +
-> +				fastrpc {
-> +					compatible = "qcom,fastrpc";
-> +					qcom,glink-channels = "fastrpcglink-apps-dsp";
-> +					label = "adsp";
-> +					qcom,non-secure-domain;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					compute-cb@3 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <3>;
-> +						iommus = <&apps_smmu 0x01c3 0x0>;
-> +					};
-> +
-> +					compute-cb@4 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <4>;
-> +						iommus = <&apps_smmu 0x01c4 0x0>;
-> +					};
-> +
-> +					compute-cb@5 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <5>;
-> +						iommus = <&apps_smmu 0x01c5 0x0>;
-> +					};
-> +
-> +					compute-cb@6 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <6>;
-> +						iommus = <&apps_smmu 0x01c6 0x0>;
-> +					};
-> +
-> +					compute-cb@7 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <7>;
-> +						iommus = <&apps_smmu 0x01c7 0x0>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +
-> +		remoteproc_cdsp: remoteproc@b300000 {
-> +			compatible = "qcom,sm6115-cdsp-pas";
-> +			reg = <0x0b300000 0x100000>;
-> +
-> +			interrupts-extended = <&intc GIC_SPI 265 IRQ_TYPE_EDGE_RISING>,
-> +					      <&cdsp_smp2p_in 0 IRQ_TYPE_EDGE_RISING>,
-> +					      <&cdsp_smp2p_in 1 IRQ_TYPE_EDGE_RISING>,
-> +					      <&cdsp_smp2p_in 2 IRQ_TYPE_EDGE_RISING>,
-> +					      <&cdsp_smp2p_in 3 IRQ_TYPE_EDGE_RISING>;
-> +			interrupt-names = "wdog", "fatal", "ready",
-> +					  "handover", "stop-ack";
-> +
-> +			clocks = <&rpmcc RPM_SMD_XO_CLK_SRC>;
-> +			clock-names = "xo";
-> +
-> +			power-domains = <&rpmpd SM6115_VDDCX>;
-> +
-> +			memory-region = <&pil_cdsp_mem>;
-> +
-> +			qcom,smem-states = <&cdsp_smp2p_out 0>;
-> +			qcom,smem-state-names = "stop";
-> +
-> +			status = "disabled";
-> +
-> +			glink-edge {
-> +				interrupts = <GIC_SPI 261 IRQ_TYPE_EDGE_RISING>;
-> +				label = "cdsp";
-> +				qcom,remote-pid = <5>;
-> +				mboxes = <&apcs_glb 28>;
-> +
-> +				fastrpc {
-> +					compatible = "qcom,fastrpc";
-> +					qcom,glink-channels = "fastrpcglink-apps-dsp";
-> +					label = "cdsp";
-> +					qcom,non-secure-domain;
-> +					#address-cells = <1>;
-> +					#size-cells = <0>;
-> +
-> +					compute-cb@1 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <1>;
-> +						iommus = <&apps_smmu 0x0c01 0x0>;
-> +					};
-> +
-> +					compute-cb@2 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <2>;
-> +						iommus = <&apps_smmu 0x0c02 0x0>;
-> +					};
-> +
-> +					compute-cb@3 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <3>;
-> +						iommus = <&apps_smmu 0x0c03 0x0>;
-> +					};
-> +
-> +					compute-cb@4 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <4>;
-> +						iommus = <&apps_smmu 0x0c04 0x0>;
-> +					};
-> +
-> +					compute-cb@5 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <5>;
-> +						iommus = <&apps_smmu 0x0c05 0x0>;
-> +					};
-> +
-> +					compute-cb@6 {
-> +						compatible = "qcom,fastrpc-compute-cb";
-> +						reg = <6>;
-> +						iommus = <&apps_smmu 0x0c06 0x0>;
-> +					};
-> +
-> +					/* note: secure cb9 in downstream */
-> +				};
-> +			};
-> +		};
-> +
->   		apps_smmu: iommu@c600000 {
->   			compatible = "qcom,sm6115-smmu-500", "qcom,smmu-500", "arm,mmu-500";
->   			reg = <0x0c600000 0x80000>;
+I wanted to split the rt305x driver too but too much code would be reused
+so I backed down from that.
+
+This platform from Ralink was acquired by MediaTek in 2011. Then, MediaTek
+introduced new SoCs which utilise this platform. We're moving the Ralink
+pinctrl driver to MediaTek, and rename the schemas for MediaTek SoCs to
+mediatek.
+
+I've renamed the ralink core driver to mtmips. I decided to call the core
+mtmips as I've seen folks from MediaTek use the same name when they added
+support for MT7621 pinctrl on U-Boot. Feel free to comment on this.
+
+Arınç
+
+v2:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More more cleanups, hooray!
+- Don't add new mediatek compatible strings, we don't do that here. RIP
+Chadwick Boseman.
+- Don't deprecate ralink,mt7620-pinctrl, we need it now.
+- More slight changes I can't currently remember to mention.
+
+RFC to v1:
+- Address Rob and Krzysztof's reviews, add Rob's acked-by.
+- More cleanups, hooray!
+- Keep ralink,rt2880-pinmux deprecated.
+- Deprecate ralink,mt7620-pinctrl. Another one bites the dust!
+- More slight changes I can't currently remember to mention.
+
+Arınç ÜNAL (21):
+  pinctrl: ralink: reintroduce ralink,rt2880-pinmux compatible string
+  pinctrl: ralink: rt305x: add new compatible string for every SoC
+  pinctrl: ralink: mt7620: split out to mt76x8
+  pinctrl: ralink: move to mediatek as mtmips
+  pinctrl: mediatek: remove OF_GPIO as reverse dependency
+  dt-bindings: pinctrl: ralink: move additionalProperties to top
+  dt-bindings: pinctrl: ralink: drop quotes from referred schemas
+  dt-bindings: pinctrl: ralink: add new compatible strings
+  dt-bindings: pinctrl: ralink: {mt7620,mt7621}: rename to mediatek
+  dt-bindings: pinctrl: mediatek: mt6795: rename to mediatek,mt6795-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8186: rename to mediatek,mt8186-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8192: rename to mediatek,mt8192-pinctrl
+  dt-bindings: pinctrl: mediatek: mt8195: rename to mediatek,mt8195-pinctrl
+  dt-bindings: pinctrl: mediatek: fix naming inconsistency
+  dt-bindings: pinctrl: {mediatek,ralink}: fix formatting
+  dt-bindings: pinctrl: mediatek: fix pinmux header location
+  dt-bindings: pinctrl: mediatek: drop quotes from referred schemas
+  dt-bindings: pinctrl: mediatek: mt7986: fix patternProperties regex
+  dt-bindings: pinctrl: ralink: rt305x: split binding
+  dt-bindings: pinctrl: mediatek: mt7620: split binding
+  MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
+
+ .../pinctrl/mediatek,mt65xx-pinctrl.yaml        |  32 +-
+ .../pinctrl/mediatek,mt6779-pinctrl.yaml        |  39 +-
+ ...mt6795.yaml => mediatek,mt6795-pinctrl.yaml} |  43 +-
+ .../pinctrl/mediatek,mt7620-pinctrl.yaml        | 298 ++++++++++++++
+ ...inctrl.yaml => mediatek,mt7621-pinctrl.yaml} |  17 +-
+ .../pinctrl/mediatek,mt7622-pinctrl.yaml        |  34 +-
+ ...inctrl.yaml => mediatek,mt76x8-pinctrl.yaml} | 252 ++----------
+ .../pinctrl/mediatek,mt7981-pinctrl.yaml        |  35 +-
+ .../pinctrl/mediatek,mt7986-pinctrl.yaml        |  80 ++--
+ .../pinctrl/mediatek,mt8183-pinctrl.yaml        |  32 +-
+ ...mt8186.yaml => mediatek,mt8186-pinctrl.yaml} |  55 ++-
+ .../pinctrl/mediatek,mt8188-pinctrl.yaml        |  80 ++--
+ ...mt8192.yaml => mediatek,mt8192-pinctrl.yaml} |  57 +--
+ ...mt8195.yaml => mediatek,mt8195-pinctrl.yaml} |  51 ++-
+ .../pinctrl/mediatek,mt8365-pinctrl.yaml        |  30 +-
+ .../bindings/pinctrl/ralink,rt2880-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt305x-pinctrl.yaml |  89 +----
+ .../bindings/pinctrl/ralink,rt3352-pinctrl.yaml | 243 ++++++++++++
+ .../bindings/pinctrl/ralink,rt3883-pinctrl.yaml |  11 +-
+ .../bindings/pinctrl/ralink,rt5350-pinctrl.yaml | 206 ++++++++++
+ MAINTAINERS                                     |  29 +-
+ drivers/pinctrl/Kconfig                         |   1 -
+ drivers/pinctrl/Makefile                        |   1 -
+ drivers/pinctrl/mediatek/Kconfig                |  54 ++-
+ drivers/pinctrl/mediatek/Makefile               |  63 +--
+ drivers/pinctrl/mediatek/pinctrl-mt7620.c       | 137 +++++++
+ .../{ralink => mediatek}/pinctrl-mt7621.c       |  31 +-
+ drivers/pinctrl/mediatek/pinctrl-mt76x8.c       | 283 ++++++++++++++
+ .../pinctrl-mtmips.c}                           |  90 ++---
+ .../pinctrl-mtmips.h}                           |  16 +-
+ .../{ralink => mediatek}/pinctrl-rt2880.c       |  21 +-
+ .../{ralink => mediatek}/pinctrl-rt305x.c       |  47 +--
+ .../{ralink => mediatek}/pinctrl-rt3883.c       |  29 +-
+ drivers/pinctrl/ralink/Kconfig                  |  35 --
+ drivers/pinctrl/ralink/Makefile                 |   8 -
+ drivers/pinctrl/ralink/pinctrl-mt7620.c         | 391 -------------------
+ 36 files changed, 1738 insertions(+), 1193 deletions(-)
+
+
