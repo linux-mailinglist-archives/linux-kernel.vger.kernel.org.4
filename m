@@ -2,139 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B14D6B7951
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:46:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA1C56B7953
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:46:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229673AbjCMNqH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:46:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45690 "EHLO
+        id S229621AbjCMNqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:46:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbjCMNqF (ORCPT
+        with ESMTP id S229612AbjCMNqN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:46:05 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58E3E6423D;
-        Mon, 13 Mar 2023 06:45:59 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id bd34so7642452pfb.3;
-        Mon, 13 Mar 2023 06:45:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678715159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9wLaFePw5uizR8ACmMIJJlsaFTkZCvBfOgjm8YIL3M8=;
-        b=eFS47Ssmt7X0FwhY4ytr+0HcNC+s4l132+lewLE6h3FqNYvWsLX1ZooOfoWgjHKpzY
-         fUntVw+nFnXpH5JLd9XMpKqGOf9rXfOH6JcZK7qWE/G0nLJEjetc3Z8bgE6mTkrnhD+t
-         wtvraxMxzmOETvmkyOak3onEodjxFzl1kEr5gJjkCToq9k/U9ok5+HPTrE3QKnUsEDYA
-         avSydApo7/weB5xinrrvgJR0e8C6xPsUJqrP3o4Yx8vK165b9Ko8vKNWJK0jDcYQLhug
-         YdsQIgZ/8hLBFDvH954hkEJSjznS94mXEr9qd3t1Yy+imZ8FpAaFjnsepAPHDT79S5YJ
-         eidw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678715159;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9wLaFePw5uizR8ACmMIJJlsaFTkZCvBfOgjm8YIL3M8=;
-        b=PjKJOhlCnGWK0d2gt4E3WrUhPi66Do4RbQsDrWIZYnCmkIpy+ZzkzSlo2JyYjgAPEZ
-         +gUlP1nUYCniWkqNoXByiQYUsBAc5rKWcZ4NHUqOLNttRdneA766bK/N3f2M6EEQz/6B
-         kgf88BEzhn2MBow3Zct49J3NyhgnCLsqVQl1LJtyhXcnsQAClisH4pEdzSyb+7Aph50w
-         7/3ssDBxg2EHTnMUzuH48NRWzVdcKTbP556dek6qfEuz9lqPSIuLVZIwbsuAoLb6mK9a
-         6hQwwOpJK30BWt2R4HOjraMPxkc9TBacpSmm2UHke+QDi9sDHwvw4/2eCKD3IrfYWNHz
-         YCnA==
-X-Gm-Message-State: AO0yUKWg2Z9IlhwyW9dKlLYXHD4iZltCc4EX61qh7MwMQT8b7zCTCSZD
-        raQETuB+1WKJOdn2liEjN0LRCk16HN+orrCBuCs=
-X-Google-Smtp-Source: AK7set/4ZrSgWUOtk8zrsPfXTKInpjR2EbM8Tull01+AqwU7TJ0HaK9Kxl7M3/EdWIkALOWLpSBkDTzHhVDkaRDwG/M=
-X-Received: by 2002:a63:f0a:0:b0:502:f5c8:a00c with SMTP id
- e10-20020a630f0a000000b00502f5c8a00cmr11041793pgl.9.1678715158757; Mon, 13
- Mar 2023 06:45:58 -0700 (PDT)
+        Mon, 13 Mar 2023 09:46:13 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D25637FF;
+        Mon, 13 Mar 2023 06:46:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B32F4B8106E;
+        Mon, 13 Mar 2023 13:46:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89A45C433D2;
+        Mon, 13 Mar 2023 13:46:03 +0000 (UTC)
+Date:   Mon, 13 Mar 2023 09:46:01 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     LKML <linux-kernel@vger.kernel.org>,
+        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH v2] tracing: Make tracepoint lockdep check actually test
+ something
+Message-ID: <20230313094601.3df9182d@gandalf.local.home>
+In-Reply-To: <20230310172856.77406446@gandalf.local.home>
+References: <20230310172856.77406446@gandalf.local.home>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-References: <20230307153542.1178065-1-zyytlz.wz@163.com> <7f9796d2-1885-a6f2-b9e3-d6ea58524033@xs4all.nl>
-In-Reply-To: <7f9796d2-1885-a6f2-b9e3-d6ea58524033@xs4all.nl>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 13 Mar 2023 21:45:45 +0800
-Message-ID: <CAJedcCwnvNK8Gbcxz2V5+ebRJFrEYjpoJsKTKZ7DOSETr_7LEQ@mail.gmail.com>
-Subject: Re: [PATCH] media: hantro: fix use after free bug in hantro_release
- due to race condition
-To:     Hans Verkuil <hverkuil@xs4all.nl>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, ezequiel@vanguardiasur.com.ar,
-        p.zabel@pengutronix.de, mchehab@kernel.org,
-        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hans Verkuil <hverkuil@xs4all.nl> =E4=BA=8E2023=E5=B9=B43=E6=9C=8813=E6=97=
-=A5=E5=91=A8=E4=B8=80 21:17=E5=86=99=E9=81=93=EF=BC=9A
->
-> On 07/03/2023 16:35, Zheng Wang wrote:
-> > In hantro_probe, vpu->watchdog_work is bound with
-> > hantro_watchdog. Then hantro_end_prepare_run may
-> > be called to start the work.
-> >
-> > If we close the file or remove the module which will
-> > call hantro_release and hantro_remove to make cleanup,
-> > there may be a unfinished work. The possible sequence
-> > is as follows, which will cause a typical UAF bug.
-> >
-> > The same thing will happen in hantro_release, and use
-> > ctx after freeing it.
-> >
-> > Fix it by canceling the work before cleanup in hantro_release.
-> >
-> > CPU0                  CPU1
-> >
-> >                     |hantro_watchdog
-> > hantro_remove     |
-> >   v4l2_m2m_release  |
-> >     kfree(m2m_dev); |
-> >                     |
-> >                     | v4l2_m2m_get_curr_priv
-> >                     |   m2m_dev->curr_ctx //use
-> >
-> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > ---
-> >  drivers/media/platform/verisilicon/hantro_drv.c | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/media/platform/verisilicon/hantro_drv.c b/drivers/=
-media/platform/verisilicon/hantro_drv.c
-> > index b0aeedae7b65..cf00ccaa7829 100644
-> > --- a/drivers/media/platform/verisilicon/hantro_drv.c
-> > +++ b/drivers/media/platform/verisilicon/hantro_drv.c
-> > @@ -601,6 +601,7 @@ static int hantro_release(struct file *filp)
-> >        * No need for extra locking because this was the last reference
-> >        * to this file.
-> >        */
-> > +     cancel_delayed_work(&vpu->watchdog_work);
-> >       v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
-> >       v4l2_fh_del(&ctx->fh);
-> >       v4l2_fh_exit(&ctx->fh);
->
-> drivers/media/platform/verisilicon/hantro_drv.c: In function =E2=80=98han=
-tro_release=E2=80=99:
-> drivers/media/platform/verisilicon/hantro_drv.c:604:30: error: =E2=80=98v=
-pu=E2=80=99 undeclared (first use in this function); did you mean =E2=80=98=
-fpu=E2=80=99?
->   604 |         cancel_delayed_work(&vpu->watchdog_work);
->       |                              ^~~
->       |                              fpu
-> drivers/media/platform/verisilicon/hantro_drv.c:604:30: note: each undecl=
-ared identifier is reported only once for each function it appears in
->
-> You clearly didn't compile this patch!
->
-Sorry for my mistake. I was hurried to report the issue and discuss
-with developer to confirm it . I'll complete it and test it locally.
+On Fri, 10 Mar 2023 17:28:56 -0500
+Steven Rostedt <rostedt@goodmis.org> wrote:
 
-Best regards,
-Zheng
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+> 
+> A while ago where the trace events had the following:
+> 
+>    rcu_read_lock_sched_notrace();
+>    rcu_dereference_sched(...);
+>    rcu_read_unlock_sched_notrace();
+> 
+> If the tracepoint is enabled, it could trigger RCU issues if called in
+> the wrong place. And this warning was only triggered if lockdep was
+> enabled. If the tracepoint was never enabled with lockdep, the bug would
+> not be caught. To handle this, the above sequence was done when lockdep
+> was enabled regardless if the tracepoint was enabled or not (although the
+> always enabled code really didn't do anything, it would still trigger a
+> warning).
+> 
+> But a lot has changed since that lockdep code was added. One is, that
+> sequence no longer triggers any warning. Another is, the tracepoint when
+> enabled doesn't even do that sequence anymore.
+> 
+> The main check we care about today is whether RCU is "watching" or not.
+> So if lockdep is enabled, always check if rcu_is_watching() which will
+> trigger a warning if it is not (tracepoints require RCU to be watching).
+> 
+> Note, that old sequence did add a bit of overhead when lockdep was enabled,
+> and with the latest kernel updates, would cause the system to slow down
+> enough to trigger kernel "stalled" warnings.
+> 
+> Link: http://lore.kernel.org/lkml/20140806181801.GA4605@redhat.com
+> Link: http://lore.kernel.org/lkml/20140807175204.C257CAC5@viggo.jf.intel.com
+> Link: https://lore.kernel.org/lkml/20230307184645.521db5c9@gandalf.local.home/
+> 
+> Cc: stable@vger.kernel.org
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Fixes: e6753f23d961 ("tracepoint: Make rcuidle tracepoint callers use SRCU")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> ---
+> Changes since v1: https://lore.kernel.org/linux-trace-kernel/20230309165603.6967197d@gandalf.local.home
+> 
+>  - Updated the comment above the code (Masami Hiramatsu)
+> 
+>  include/linux/tracepoint.h | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index fa1004fcf810..2083f2d2f05b 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -231,12 +231,11 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>   * not add unwanted padding between the beginning of the section and the
+>   * structure. Force alignment to the same alignment as the section start.
+>   *
+> - * When lockdep is enabled, we make sure to always do the RCU portions of
+> - * the tracepoint code, regardless of whether tracing is on. However,
+> - * don't check if the condition is false, due to interaction with idle
+> - * instrumentation. This lets us find RCU issues triggered with tracepoints
+> - * even when this tracepoint is off. This code has no purpose other than
+> - * poking RCU a bit.
+> + * When lockdep is enabled, we make sure to always test if RCU is
+> + * "watching" regardless if the tracepoint is enabled or not. Tracepoints
+> + * require RCU to be active, and it should always warn at the tracepoint
+> + * site if it is not watching, as it will need to be active when the
+> + * tracepoint is enabled.
+>   */
+
+Masami,
+
+Are you OK with this version of the patch?
+
+-- Steve
+
+>  #define __DECLARE_TRACE(name, proto, args, cond, data_proto)		\
+>  	extern int __traceiter_##name(data_proto);			\
+> @@ -249,9 +248,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
+>  				TP_ARGS(args),				\
+>  				TP_CONDITION(cond), 0);			\
+>  		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
+> -			rcu_read_lock_sched_notrace();			\
+> -			rcu_dereference_sched(__tracepoint_##name.funcs);\
+> -			rcu_read_unlock_sched_notrace();		\
+> +			WARN_ON_ONCE(!rcu_is_watching());		\
+>  		}							\
+>  	}								\
+>  	__DECLARE_TRACE_RCU(name, PARAMS(proto), PARAMS(args),		\
+
