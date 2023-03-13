@@ -2,144 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4BCF16B8416
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:39:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1CB76B8420
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229853AbjCMVjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:39:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55950 "EHLO
+        id S229709AbjCMVmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60482 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229901AbjCMVjf (ORCPT
+        with ESMTP id S229493AbjCMVmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:39:35 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E5798B302;
-        Mon, 13 Mar 2023 14:39:31 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-541a05e4124so80089287b3.1;
-        Mon, 13 Mar 2023 14:39:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678743570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6JXlbj1faTAj8EHCq7W4vAIdTKPi8yA3Zju7BfiDTic=;
-        b=RHdGsjoy1dll6IdiStmheyksBtAqRtxsXGBKDpVRGr2GcpN9reO/LAhKAOwJ6kl4sb
-         jYbOGWAZgDfJiAg1RKqHN72zz55N4672/SifWa9RTiftbGjxwjq0LG2lW/6CzJxY8zzF
-         Jw2k4ZKdgRPwzctl2BPv7ueKVDuLpA4SKfuTn6//klpbCuwvUSI6DybJhdwYAEFeJ4Hh
-         fkaMUYHxTuOvQOQqdv2FQsSfpdtAe9SmrDaWc5pqmnVbfORJtl2tWPv/TG6bDWudju1U
-         XHBuAQYhgTXfPd+KBjyWhrWVQw/4hLamYe3eQSpEeHrGN26Fmwapq0BAIalRvsFF0XL9
-         mMpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678743570;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6JXlbj1faTAj8EHCq7W4vAIdTKPi8yA3Zju7BfiDTic=;
-        b=oqekwlLW300Hr5p8bpur2JiFc/VAUfmukr4F2Ffi1ceuFNCC0+UashPwA7lf0yHOOb
-         cH13L0BUMrd71Ld/BH9K+oLC0xi5BzqsJo+BdzB1PDddl+pk/qrYOVi8ElqctmaA27B4
-         VnA6FhZv/bMEWR4s5jUFMOBrkCrosxdHGvPArj0WHFEffNgUpCPSbapRAuwoV9uBIbh7
-         CN7wDRr2iB8O0eEEH/ELz7RpkYAjRNZHdi8Tj5SFkP4f2EXjG97m6FUOvOSwx741SQ/B
-         wIEKusa8L1BaAoIWWnb+ohX0NtJOTMj+m8dMGBtACEE/oi8yFXqRm0FOhzyYIUrgtI2I
-         nluA==
-X-Gm-Message-State: AO0yUKXYxES0OCWJ97WxKcjJO68ShZKUxw39e3krhC40q5ojh6MsmS8z
-        Yuyfshj/MK+x9WYzQrCuGMFj8Mv8d8PBLj4IKnc=
-X-Google-Smtp-Source: AK7set8gyoVgmVJ0bH1A0Ukh8d5UbesQp5whWIp9pFhSPf6sWaCkuiCgI2nVLCio4rpycn/kTDVe2uX6kCgFCktWM/w=
-X-Received: by 2002:a81:a782:0:b0:541:6763:3ce1 with SMTP id
- e124-20020a81a782000000b0054167633ce1mr5823421ywh.2.1678743570108; Mon, 13
- Mar 2023 14:39:30 -0700 (PDT)
+        Mon, 13 Mar 2023 17:42:21 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CDF88ABF4;
+        Mon, 13 Mar 2023 14:42:17 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pb99L6T25z4whr;
+        Tue, 14 Mar 2023 08:42:14 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678743735;
+        bh=17d+EcKlY/En8UZdp52sksh6GRy/ocvPXgStvvw3rJ0=;
+        h=Date:From:To:Cc:Subject:From;
+        b=jixGxLlLUz3SLOEsHfBLB1bAZ3vS4cSSIgN0l0WC95kCg425TPzkTp5TGa9dRKMcj
+         VvnoXxSpOuU/KPkZPGMe8P9Kek9Tx9chvK9VFzGJbkBr6+zmAvA4AqnFR+rFywICWo
+         ZvU8fdDf1mejt34n63C2P9o5f/w++cVNW0yn/5UGIzFhvrdSOFm1z5IqfjYF3Cb0TN
+         kCXmu7EYk4PbBg5b2wd/maXYJpp/AZx4h1bwBTcgonvUWRQjRa2eQeGQxz5fDTPwOm
+         2BBa15wF60MtlGWf9zng43A0tkafI2hGjesw5Cv2M/tKXM133qfwdVzr03vvfbFAVP
+         4+PLsgJRZ/Zfw==
+Date:   Tue, 14 Mar 2023 08:42:14 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Herbert Xu <herbert@gondor.apana.org.au>
+Cc:     Linux Crypto List <linux-crypto@vger.kernel.org>,
+        Uwe =?UTF-8?B?S2xl?= =?UTF-8?B?aW5lLUvDtm5pZw==?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Signed-off-by missing for commit in the crypto tree
+Message-ID: <20230314084214.113e74dc@canb.auug.org.au>
 MIME-Version: 1.0
-References: <20230310121306.4632-1-noltari@gmail.com> <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
- <CAOiHx=njCvfVju9BAe7gTzMq0vybQF-gy4SRZrhEJFULGLhC7w@mail.gmail.com>
- <5b4d3eef-ff80-29e8-9be0-d487aee5e4e2@broadcom.com> <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
- <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com> <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com>
-In-Reply-To: <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Mon, 13 Mar 2023 22:39:19 +0100
-Message-ID: <CAKR-sGcyMF26NGoeEApKuKDe6=14nCGKwRYx-o68LHAcmUNXhA@mail.gmail.com>
-Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     William Zhang <william.zhang@broadcom.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/yuUr.7MdmN_.eaT8M0Qqkc/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+--Sig_/yuUr.7MdmN_.eaT8M0Qqkc/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-I did another test changing from TP1 to TP0 and this is the result:
-[ 0.000000] Linux version 5.15.98 (noltari@atlantis)
-(mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
-12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
-[ 0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
-[ 0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x2a00015
-[ 0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
+Hi all,
 
-And there were no exceptions with EHCI/OHCI as opposed to TP1.
-So the issue is only happening when booting from TP1.
-Maybe it's due to the fact that BCM6358 has a shared TLB?
+Commit
 
-Maybe the correct way of solving the issue would be by adding the
-following code at bcm6358_quirks():
-if (read_c0_brcm_cmt_local() & (1 << 31))
-    bmips_dma_sync_disabled =3D 1;
+  b4fb7f4afa5d ("hwrng: xgene - Improve error reporting for problems during=
+ .remove()")
 
-BTW, if I understood it correctly, you want me to reverse the logic,
-so bmips_dma_sync_disabled instead of bmips_dma_sync_enabled.
-Is this correct?
+is missing a Signed-off-by from its author.
 
-Best regards,
-=C3=81lvaro.
+--=20
+Cheers,
+Stephen Rothwell
 
+--Sig_/yuUr.7MdmN_.eaT8M0Qqkc/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
 
-El lun, 13 mar 2023 a las 18:37, Florian Fainelli
-(<f.fainelli@gmail.com>) escribi=C3=B3:
->
-> On 3/12/23 11:50, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> > Hi Florian,
-> >
-> > I tried what you suggested but it stil panics on EHCI:
-> >
-> > [    0.000000] Linux version 5.15.98 (noltari@atlantis)
-> > (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
-> > 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
-> > [    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
-> > [    0.000000] bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x3c1b8041
-> > [    0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
-> >
-> > It looks like bit 29 is set so RAC should be present.
-> > And RAC_I seems to be set, but not RAC_D...
-> >
-> > BTW, this is what I added to bmips_cpu_setup:
-> >
-> > case CPU_BMIPS4350:
-> > cfg =3D read_c0_brcm_config_0();
-> > pr_info("bmips_cpu_setup: read_c0_brcm_config_0() =3D 0x%x\n", cfg);
-> >
-> > cfg =3D __raw_readl(cbr + BMIPS_RAC_CONFIG);
-> > pr_info("bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x%x\n", cfg);
-> > __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
-> > __raw_readl(cbr + BMIPS_RAC_CONFIG);
-> > break;
->
-> Thanks for running those experiments, I cannot explain what you are
-> seeing, so there must be some sort of erratum applicable to the
-> BMIPS4380 revision used on the 6358 somehow...
->
-> If you can make the suggested change to use negative logic in order to
-> disable the RAC flushing, that would work for me, also maybe add a
-> Fixes: tag so it gets backported to stable trees?
->
-> Thanks!
-> --
-> Florian
->
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPmLYACgkQAVBC80lX
+0GzlxAgAhKeWO6dELwmRH1XAyqaQzS35NS4CYTtJz5Hqt+nY0Qi/hbj+80mic5T/
+dtlhpw1A24/XK3jV+2LZRnswaBzsNqcbfP/dHG2wmZ9F/bEDWKqq8K3yuZVMuz7Z
+tLbJQcT+UuI2luwrhyVHGooECvhAr7WoLeh1v1q0wxVFe/2+ttsz+vX5hqJqakmz
+4uMwZ4WhLKAdA84gHYYVxkgBYE2/KzzuSR9ltb1mGJKxVne2NgQLBa3z4pguTcjK
+TVUQK8+TLrMdV2Mynh34xO+HzikpJTN3l0YkDgAHQr+8vJlfe1+4mSD7JSRjdswK
+O98W1W6C1nDXXkuBPLoBuSrDO6D37w==
+=Yf9r
+-----END PGP SIGNATURE-----
+
+--Sig_/yuUr.7MdmN_.eaT8M0Qqkc/--
