@@ -2,67 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81E9A6B7C2D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A692F6B7C38
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:41:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCMPkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:40:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56304 "EHLO
+        id S229863AbjCMPl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230232AbjCMPkB (ORCPT
+        with ESMTP id S229494AbjCMPlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:40:01 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52CAA29434;
-        Mon, 13 Mar 2023 08:40:00 -0700 (PDT)
-Received: from cryzen.lan (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: tanureal)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 993E166030CA;
-        Mon, 13 Mar 2023 15:39:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678721999;
-        bh=Ugt/cIk2aYivDAu6VNt7dUsTeai7krVEsAmcZ9e7wWs=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=Bd765l908OmmWhFYITUDBoKLNVSoFBGGRuUHurNuKeVIvs1bZPOlADesrYi7OOlco
-         Mez/I4NgoLPQ398YNO4deXU6KMd93TB29MAQmOv5C6UWfC85zWIXLol41RxxKU2u7Y
-         DOP2fHsD8HZBFaWu2g9tK1X5O3KNvfQ/FuBc1lUI7oBJI2qN9C0uOOgYG344hid3/3
-         4ffWY4ArsApH19WApzPge0qCfs8AJfyhC0CPVD3wj3cQTSVUKgdGBCkOt6s5y8hl/r
-         WZmfAiW4NtGmHPe0NTL7sgIcaRQtmnuuo3t6sddBxW9/D7ad2iZHmvC37yeAaHyTd0
-         JKW/95Q/iLzYA==
-From:   Lucas Tanure <lucas.tanure@collabora.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Qu Wenruo <wqu@suse.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org,
-        Lucas Tanure <lucas.tanure@collabora.com>,
-        kernel@collabora.com, Andrew Powers-Holmes <aholmes@omnom.net>
-Subject: [PATCH 4/4] phy: rockchip: Add naneng combo phy support for RK3588
-Date:   Mon, 13 Mar 2023 15:39:53 +0000
-Message-Id: <20230313153953.422375-5-lucas.tanure@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313153953.422375-1-lucas.tanure@collabora.com>
-References: <20230313153953.422375-1-lucas.tanure@collabora.com>
+        Mon, 13 Mar 2023 11:41:25 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2054.outbound.protection.outlook.com [40.107.243.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EA4C474E7;
+        Mon, 13 Mar 2023 08:40:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=btRpvVtAqAdo4cHeQz2ufvyWsnMU+Z1KdnIMGYvvMk6kQDKhaO1oQPAgWTqPCEuiSO6+0LkvhSMbCTf16jG/iLrSdGkdNKWzyTdU05NG2Bz6GUcdbiyglY71Zg+Qg6baTn6VbgKuzjNer1f5TvLgZ62p7Azd89/O+0CpoNV3OnmhlUrN8baVg0sbasEfzqQDfa1eBOFROK5XjwPTp7LB7SvD0pbGlkO/TnyHtPclVtp4DE0IzlF8wB5My8VDgu6cvaH0mk3DOTVCDZdWViSrxlHR1YlJtmsTTsiiLZg0WFjXyMQ/DlCXD/TiYVjeXnyivFEKKp8ZgbtbCvI8ABzTbw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=OYIfbtdjMRmzARo3S5LAImFWIrCDDihUyGboHIb96bo=;
+ b=aa1KpaC8cdhJ+h7hj/mn8Kfh33m2+b9rdKtdmZ5wMbdi2MEzN1pFsLZojAkJ0jpV9ZGQNja6CFoWGO11FQSqPohjqvH2BbP3eqRnaxPR1fSlcsY8m0jx4o3hLbCiL89AMgSWzJxea4SRyAwjB21ECUdTBO38uRHORNjSRx1ZzpPg8jUabG1ktkTtDbpBGpiurJqY0W9SEpK1+C9wfXq835LxKA2k1w5mi172VgbTizNKGFxMOKQ2TK18GZyb7AkvDrcsFK83CoVno1uUFikmoKMThzbhcG0Ts46oMHWbD5WG8rOk/qPaJrkAAq7Lg/F38Xi32nnebBc+vFXNxi+iig==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=OYIfbtdjMRmzARo3S5LAImFWIrCDDihUyGboHIb96bo=;
+ b=omUDjMDxA5ug8cuH1PdwATEdRVaLIN36P6HHloqRkmUdo1l3FK5BdqP9NCEmk6/ONB+NI5w9rlDZp9+Dx/ENWqVUh8i4zq7Apdod6sggLtcAeq3AWfYj4O1MKn46Nbih46B+Qsy1cIRcMENvQ56HtauEyXfChrio1kpOXpajiKQ=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com (2603:10b6:510:210::10)
+ by SN7PR12MB7449.namprd12.prod.outlook.com (2603:10b6:806:299::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 15:40:48 +0000
+Received: from PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::d8e6:76b5:2c23:1247]) by PH7PR12MB6588.namprd12.prod.outlook.com
+ ([fe80::d8e6:76b5:2c23:1247%4]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 15:40:48 +0000
+Message-ID: <838392a5-0b60-4b43-6d5f-b97524f6f157@amd.com>
+Date:   Mon, 13 Mar 2023 21:10:36 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+Subject: Re: [PATCH v2 2/3] perf/ibs: Fix interface via core pmu events
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     namhyung@kernel.org, eranian@google.com, acme@kernel.org,
+        mark.rutland@arm.com, jolsa@kernel.org, irogers@google.com,
+        bp@alien8.de, x86@kernel.org, linux-perf-users@vger.kernel.org,
+        linux-kernel@vger.kernel.org, sandipan.das@amd.com,
+        ananth.narayan@amd.com, santosh.shukla@amd.com,
+        Ravi Bangoria <ravi.bangoria@amd.com>
+References: <20230309101111.444-1-ravi.bangoria@amd.com>
+ <20230309101111.444-3-ravi.bangoria@amd.com>
+ <20230312145426.GA1757905@hirez.programming.kicks-ass.net>
+ <45de7e62-d951-1019-990e-6df285a64cf6@amd.com>
+ <20230313142156.GL2017917@hirez.programming.kicks-ass.net>
+Content-Language: en-US
+From:   Ravi Bangoria <ravi.bangoria@amd.com>
+In-Reply-To: <20230313142156.GL2017917@hirez.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN2PR01CA0004.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:25::9) To PH7PR12MB6588.namprd12.prod.outlook.com
+ (2603:10b6:510:210::10)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB6588:EE_|SN7PR12MB7449:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1b479079-f325-4338-3e4b-08db23d95151
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: zIYrAX5DG51SalXaqimwm2SgpBE8zplrXaXdpzazKc5CRJTtFFJG/6SVZbO0n0i4zPl+L1i5ZBDR98ZKI6qsFKAQ2ShMrXs11L0u2TsBE1sFZ7igUp76ceHQFsQMkotTx/n7OVUHea5wLNtiYrXTKZ3z6PY69qRo+cMJ7/rQmBH8GF43Bl7Hx2/i8e58clbayTXmJ7nOYXlZdbGmJed14gxLPNPfi2Yt3d9QXR6L4i5DkfjQcaVT86ZP+8DJGIn8pYO3WW/j2+NHFSB6mwUuaZsqoyGrkxIjUuj1UJP8tj1lD66EWUQPfsElwsIRiDcNvI1RGAJuzGTub4tMY3+/+XOzSga700m78DmhXuZLWKUpOY4L9PrZzZhedAoyyyh5dUemdiyPWVwePlETusEUirnOx5OcWUMlth/tcuriM4qs/IL11OO+5zOCvtCeLr19QkMxqty/zbiMAYxpZ8IKDRFu8G+pDhLQlLFTzuXwg2CFG80fls/eCnNDqRHuDSP5mxppsYiXOnG5e+iqoczN5fDe2xD6utKM9oitDW4bH0yicDGGlBz9b8tGLeL+QTe1Jy3I/SnSU3IUp8CFqejEVVMefzgdfV9HSXs68c6MDcrsESze5DAkDTWmaudtKrB03ailtmyPnfdVAKOMf3Upo3i2+JwCAt4tteK0528sHbGCYbfhZ/vkXpVU9sEB+TpgSPxKw0JuZrShoZ7EmTDMjZgKpe7ZBSqQtw4PYAqrhtM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB6588.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(396003)(366004)(376002)(451199018)(5660300002)(7416002)(36756003)(44832011)(83380400001)(186003)(478600001)(6512007)(6666004)(6506007)(6486002)(2616005)(26005)(53546011)(4326008)(6916009)(66476007)(8936002)(66556008)(66946007)(8676002)(86362001)(31696002)(316002)(38100700002)(31686004)(41300700001)(2906002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?UkpWbHNXNWRnNWQ2VlNUZU5hRXY0YzIrWlBLVzhTYnlPTUZPUy9hdGh4NTE0?=
+ =?utf-8?B?Z2pJMmx2R2NrRWxLdnQxcjVMb1Z0S3JMMWdpVEdhQThQTkdQMEtmTTI1UVR3?=
+ =?utf-8?B?eTdrVkdFWVlPSTZMZ1BOZTM0bVlCejFMcE5MMk5PUGluVTh6YnVpbnFqd25p?=
+ =?utf-8?B?L1BSZThCUE1Pak5YdCs4WEVFbHpGajdLOHJrNUlRaWJNV0J2elJ4bS91Vlkz?=
+ =?utf-8?B?THZjUUp5WDUwZHNRVElJNzBlaVIrQkRhSC8zWUdUNTdVVjJqRGhRMmRtNDRn?=
+ =?utf-8?B?bUFvSkcwbGp2VzRlUXFtRUpQc1ora2dleWIxRHZsR1c3VnQ5K2JQT1M0eXhJ?=
+ =?utf-8?B?T1k1V3doWXFIeUJBSGIrNE5Yd1J4c1Mwak9weEVGSytXd0t1a25tYnh0eDM2?=
+ =?utf-8?B?bXZHdG5WYkloK09aTGdaN0lnYjRtajZwR1FCcEpOSlBLODJoOEw5dUNQOGhO?=
+ =?utf-8?B?TmdObmRYMGphZXh6aHRtZmJpY29hODZZT01RbHBETE1sS09SaUt0ZmY3SW9I?=
+ =?utf-8?B?bmgwV25LUmp6Ti9DOTZocUl4NUZXeUo5VTFFUHpjYzdZNjNTWWhQUDRuK2NY?=
+ =?utf-8?B?bjFabUxHZDhiYTNKSFdsNmJwK24xVTFjd0s1K1Nzb0ljWlJ6MWYvYm1WRkRi?=
+ =?utf-8?B?NWFJbGM2NTNlZ0V3b1c3S0M4UVRBUDJncmVyK0pTSVdRTmhaekZ0MnJPendj?=
+ =?utf-8?B?ZVdGNXpqbThySWt5eHhBVVVVQ2lnd0lMQ1ovenk3ZTVuRmgrenJTc3hReG9B?=
+ =?utf-8?B?NS9IeW1zNDVJZC9Tb1lzcCtnVWlySVBmcGRxUzl1Vi9EYmdrRnYzNTlSYkh3?=
+ =?utf-8?B?bWl0TW1FVE9NRDZsbHBhS0lBemtja0hrVS91aHpxU0pvZk9VRG9ZeTU4bDMv?=
+ =?utf-8?B?TEFiWXViK3ZmUHUzV3NOU1pVa0FweWhpQW1FS2ZQOHdoZ1RNR0xuSW9WN25N?=
+ =?utf-8?B?WHROZHJMbXlBYUJvclE1RjJBZDVUODJIQnQ2MnFXbDVSWDRXVGNYclUrUUNF?=
+ =?utf-8?B?ZEEzeWYxMHlyZGdVa1g5VnNMcnEycWp3a0NRdUsxRFV2OERwZk1Yd0hleWZp?=
+ =?utf-8?B?c0RDelFzS2xPVk1TWitUK1ZsT3ZDR1ZGeGVUcjhUVEc4aVk4a1c2ZzM5VU02?=
+ =?utf-8?B?MjQ1UXBZRkNtWWV4emxKbml3S2F6RXQxS3lIQ0o1eVVhM1NCWTBKcGt0MlBY?=
+ =?utf-8?B?ZXlXNXl5aWExR3hZM3BFUlZ3ZmN3WDk2aW10Z2VZN0M3VUExanFDdFNYbXM2?=
+ =?utf-8?B?eGdraUNvZVE0eUZaVDJZUDY1M05xSENkVkVSbUlUSGYzNm9PVlNiNXlXdmVs?=
+ =?utf-8?B?bWpqb1FOWEdiVE1tK3VuQzNmTzFFTm9RelBqbHVHdTh0YVhuV2dvWUZqcytl?=
+ =?utf-8?B?cTlKRk1ESzdjZEJNcWYzbWJlOEZrWEVqU3VYbjRkVlowb3R4UzJ2b25wU2Jm?=
+ =?utf-8?B?ZW1DbnNEZzdLRUlTYVJ3aVNUQ2NNNjRRZ0FhcGt4QjJ4SmI5UGJ4QmlQa3Rp?=
+ =?utf-8?B?OVR6UTMyQTZhNnpacVBLMVF4ZE1nU25DQUVxbVNZaDBKbXBFRktWSndNZG1E?=
+ =?utf-8?B?NzBMMVNWMERrUmExZVpwOUV4VG9wbW1tejgyNkpmOE9GNjlybFROS0RJTXZ4?=
+ =?utf-8?B?YjdDL3dMeGIweE0rUDdXRkJKZmxvbGhHRzNvTzJ0NjZsRWdIdUdpNnZaeDFt?=
+ =?utf-8?B?WGxkQ0RPN1BabmNLeXhCQVJLSFB5RURiaGhVUTNjUEhGWktYRWpKc0NxbHli?=
+ =?utf-8?B?WWFERDFlWGpDa1hiNDFUMEp2R0FFR2pxY3ZnRC83SVpMMnY4bzJsZDBBN0JB?=
+ =?utf-8?B?U09MZ0RnVVpWSmttNm41OXVvaGl4ZUVxbithTGVGTEdnT1BJUjJ6WVQ1aG55?=
+ =?utf-8?B?cDlvVm9zeTMrZ3N2TmtYV3hGdm1ZSHE3dTNGRWtyRW9OaUFSdEhmN0tHSnJX?=
+ =?utf-8?B?aldrdXd5NExLTjRvUmY5N3BIOFBDZG1iWDBScjBSWStPSHVsajdZRFU0R3Uy?=
+ =?utf-8?B?cVZBRFV1UzJybGN1MVdVZmZQK1IzcEhybDh2em90MzFwZ2RaeFVpNDNyMGxl?=
+ =?utf-8?B?bFFSREdFelBNeEJZbnpqcGRUSGExbzI2V3FNMjEzUVhDN1c0S0dNMi8zSHhL?=
+ =?utf-8?Q?wLVRXunr5cSUptsyrIYk1XM54?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1b479079-f325-4338-3e4b-08db23d95151
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB6588.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 15:40:48.6116
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: DdQ+6K4/cHr/Jzmd+m7UzGowMIG9QQ9S4eWN1cVka5gIH6y2rZmOA3leznJsmX3X0zD9YNn7JNang3TMFBdgXA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7449
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,233 +132,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for RK3588 combo phy
+On 13-Mar-23 7:51 PM, Peter Zijlstra wrote:
+> On Mon, Mar 13, 2023 at 05:59:46PM +0530, Ravi Bangoria wrote:
+> 
+>>> Now, we already have a gruesome hack in there, and I'm thikning you
+>>> should use that instead of adding yet another one. Note:
+>>>
+>>> 		if (ret == -ENOENT && event->attr.type != type && !extended_type) {
+>>> 			type = event->attr.type;
+>>> 			goto again;
+>>>
+>>> So if you have amd_pmu_hw_config() do:
+>>>
+>>> 	event->attr.type = ibs_pmu.type;
+>>> 	return -ENOENT;
+>>>
+>>> it should all just work no?
+>>
+>> IBS driver needs to convert RAW pmu config to IBS config, which it does
+>> based on original event->attr.type. See perf_ibs_precise_event(). This
+>> logic will fail with event->attr.type overwrite.
+> 
+> amd_pmu_hw_config() could also rewrite event->attr.config I suppose.
 
-This is based on prior work from XiaoDong Huang and
-Peter Geis fixing this issue specifically for Rockchip 356x.
+This might work. Let me try.
 
-Co-developed-by: Andrew Powers-Holmes <aholmes@omnom.net>
-Signed-off-by: Andrew Powers-Holmes <aholmes@omnom.net>
-Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
----
- .../rockchip/phy-rockchip-naneng-combphy.c    | 184 ++++++++++++++++++
- 1 file changed, 184 insertions(+)
+> 
+> I don't think we actually use/expose these event->attr fields again
+> after all this, do wel?
 
-diff --git a/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c b/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
-index 7b213825fb5d..7b8b001e4f9e 100644
---- a/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
-+++ b/drivers/phy/rockchip/phy-rockchip-naneng-combphy.c
-@@ -63,6 +63,9 @@
- #define PHYREG18			0x44
- #define PHYREG18_PLL_LOOP		0x32
- 
-+#define PHYREG27			0x6C
-+#define PHYREG27_RX_TRIM_RK3588		0x4C
-+
- #define PHYREG32			0x7C
- #define PHYREG32_SSC_MASK		GENMASK(7, 4)
- #define PHYREG32_SSC_DIR_SHIFT		4
-@@ -114,7 +117,10 @@ struct rockchip_combphy_grfcfg {
- 	struct combphy_reg con2_for_sata;
- 	struct combphy_reg con3_for_sata;
- 	struct combphy_reg pipe_con0_for_sata;
-+	struct combphy_reg pipe_con1_for_sata;
- 	struct combphy_reg pipe_xpcs_phy_ready;
-+	struct combphy_reg pipe_pcie1l0_sel;
-+	struct combphy_reg pipe_pcie1l1_sel;
- };
- 
- struct rockchip_combphy_cfg {
-@@ -559,11 +565,189 @@ static const struct rockchip_combphy_cfg rk3568_combphy_cfgs = {
- 	.combphy_cfg	= rk3568_combphy_cfg,
- };
- 
-+static int rk3588_combphy_cfg(struct rockchip_combphy_priv *priv)
-+{
-+	const struct rockchip_combphy_grfcfg *cfg = priv->cfg->grfcfg;
-+	unsigned long rate;
-+	u32 val;
-+
-+	switch (priv->type) {
-+	case PHY_TYPE_PCIE:
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con0_for_pcie, true);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con1_for_pcie, true);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con2_for_pcie, true);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con3_for_pcie, true);
-+		rockchip_combphy_param_write(priv->pipe_grf, &cfg->pipe_pcie1l0_sel, true);
-+		rockchip_combphy_param_write(priv->pipe_grf, &cfg->pipe_pcie1l1_sel, true);
-+		break;
-+	case PHY_TYPE_USB3:
-+		/* Set SSC downward spread spectrum */
-+		rockchip_combphy_updatel(priv, PHYREG32_SSC_MASK,
-+					 PHYREG32_SSC_DOWNWARD << PHYREG32_SSC_DIR_SHIFT,
-+					 PHYREG32);
-+
-+		/* Enable adaptive CTLE for USB3.0 Rx. */
-+		val = readl(priv->mmio + PHYREG15);
-+		val |= PHYREG15_CTLE_EN;
-+		writel(val, priv->mmio + PHYREG15);
-+
-+		/* Set PLL KVCO fine tuning signals. */
-+		rockchip_combphy_updatel(priv, PHYREG33_PLL_KVCO_MASK,
-+					 PHYREG33_PLL_KVCO_VALUE << PHYREG33_PLL_KVCO_SHIFT,
-+					 PHYREG33);
-+
-+		/* Enable controlling random jitter. */
-+		writel(PHYREG12_PLL_LPF_ADJ_VALUE, priv->mmio + PHYREG12);
-+
-+		/* Set PLL input clock divider 1/2. */
-+		rockchip_combphy_updatel(priv, PHYREG6_PLL_DIV_MASK,
-+					 PHYREG6_PLL_DIV_2 << PHYREG6_PLL_DIV_SHIFT,
-+					 PHYREG6);
-+
-+		writel(PHYREG18_PLL_LOOP, priv->mmio + PHYREG18);
-+		writel(PHYREG11_SU_TRIM_0_7, priv->mmio + PHYREG11);
-+
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->pipe_txcomp_sel, false);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->pipe_txelec_sel, false);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->usb_mode_set, true);
-+		break;
-+	case PHY_TYPE_SATA:
-+		/* Enable adaptive CTLE for SATA Rx. */
-+		val = readl(priv->mmio + PHYREG15);
-+		val |= PHYREG15_CTLE_EN;
-+		writel(val, priv->mmio + PHYREG15);
-+		/*
-+		 * Set tx_rterm=50ohm and rx_rterm=44ohm for SATA.
-+		 * 0: 60ohm, 8: 50ohm 15: 44ohm (by step abort 1ohm)
-+		 */
-+		val = PHYREG7_TX_RTERM_50OHM << PHYREG7_TX_RTERM_SHIFT;
-+		val |= PHYREG7_RX_RTERM_44OHM << PHYREG7_RX_RTERM_SHIFT;
-+		writel(val, priv->mmio + PHYREG7);
-+
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con0_for_sata, true);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con1_for_sata, true);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con2_for_sata, true);
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->con3_for_sata, true);
-+		rockchip_combphy_param_write(priv->pipe_grf, &cfg->pipe_con0_for_sata, true);
-+		rockchip_combphy_param_write(priv->pipe_grf, &cfg->pipe_con1_for_sata, true);
-+		break;
-+	case PHY_TYPE_SGMII:
-+	case PHY_TYPE_QSGMII:
-+	default:
-+		dev_err(priv->dev, "incompatible PHY type\n");
-+		return -EINVAL;
-+	}
-+
-+	rate = clk_get_rate(priv->refclk);
-+
-+	switch (rate) {
-+	case REF_CLOCK_24MHz:
-+		if (priv->type == PHY_TYPE_USB3 || priv->type == PHY_TYPE_SATA) {
-+			/* Set ssc_cnt[9:0]=0101111101 & 31.5KHz. */
-+			val = PHYREG15_SSC_CNT_VALUE << PHYREG15_SSC_CNT_SHIFT;
-+			rockchip_combphy_updatel(priv, PHYREG15_SSC_CNT_MASK,
-+						 val, PHYREG15);
-+
-+			writel(PHYREG16_SSC_CNT_VALUE, priv->mmio + PHYREG16);
-+		}
-+		break;
-+
-+	case REF_CLOCK_25MHz:
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->pipe_clk_25m, true);
-+		break;
-+	case REF_CLOCK_100MHz:
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->pipe_clk_100m, true);
-+		if (priv->type == PHY_TYPE_PCIE) {
-+			/* PLL KVCO fine tuning. */
-+			val = 4 << PHYREG33_PLL_KVCO_SHIFT;
-+			rockchip_combphy_updatel(priv, PHYREG33_PLL_KVCO_MASK,
-+						 val, PHYREG33);
-+
-+			/* Enable controlling random jitter. */
-+			writel(PHYREG12_PLL_LPF_ADJ_VALUE, priv->mmio + PHYREG12);
-+
-+			/* Set up rx_trim: PLL LPF C1 85pf R1 1.25kohm */
-+			writel(PHYREG27_RX_TRIM_RK3588, priv->mmio + PHYREG27);
-+
-+			/* Set up su_trim:  */
-+			writel(PHYREG11_SU_TRIM_0_7, priv->mmio + PHYREG11);
-+		} else if (priv->type == PHY_TYPE_SATA) {
-+			/* downward spread spectrum +500ppm */
-+			val = PHYREG32_SSC_DOWNWARD << PHYREG32_SSC_DIR_SHIFT;
-+			val |= PHYREG32_SSC_OFFSET_500PPM << PHYREG32_SSC_OFFSET_SHIFT;
-+			rockchip_combphy_updatel(priv, PHYREG32_SSC_MASK, val, PHYREG32);
-+		}
-+		break;
-+	default:
-+		dev_err(priv->dev, "Unsupported rate: %lu\n", rate);
-+		return -EINVAL;
-+	}
-+
-+	if (priv->ext_refclk) {
-+		rockchip_combphy_param_write(priv->phy_grf, &cfg->pipe_clk_ext, true);
-+		if (priv->type == PHY_TYPE_PCIE && rate == REF_CLOCK_100MHz) {
-+			val = PHYREG13_RESISTER_HIGH_Z << PHYREG13_RESISTER_SHIFT;
-+			val |= PHYREG13_CKRCV_AMP0;
-+			rockchip_combphy_updatel(priv, PHYREG13_RESISTER_MASK, val, PHYREG13);
-+
-+			val = readl(priv->mmio + PHYREG14);
-+			val |= PHYREG14_CKRCV_AMP1;
-+			writel(val, priv->mmio + PHYREG14);
-+		}
-+	}
-+
-+	if (priv->enable_ssc) {
-+		val = readl(priv->mmio + PHYREG8);
-+		val |= PHYREG8_SSC_EN;
-+		writel(val, priv->mmio + PHYREG8);
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct rockchip_combphy_grfcfg rk3588_combphy_grfcfgs = {
-+	/* pipe-phy-grf */
-+	.pcie_mode_set		= { 0x0000, 5, 0, 0x00, 0x11 },
-+	.usb_mode_set		= { 0x0000, 5, 0, 0x00, 0x04 },
-+	.pipe_rxterm_set	= { 0x0000, 12, 12, 0x00, 0x01 },
-+	.pipe_txelec_set	= { 0x0004, 1, 1, 0x00, 0x01 },
-+	.pipe_txcomp_set	= { 0x0004, 4, 4, 0x00, 0x01 },
-+	.pipe_clk_25m		= { 0x0004, 14, 13, 0x00, 0x01 },
-+	.pipe_clk_100m		= { 0x0004, 14, 13, 0x00, 0x02 },
-+	.pipe_rxterm_sel	= { 0x0008, 8, 8, 0x00, 0x01 },
-+	.pipe_txelec_sel	= { 0x0008, 12, 12, 0x00, 0x01 },
-+	.pipe_txcomp_sel	= { 0x0008, 15, 15, 0x00, 0x01 },
-+	.pipe_clk_ext		= { 0x000c, 9, 8, 0x02, 0x01 },
-+	.pipe_phy_status	= { 0x0034, 6, 6, 0x01, 0x00 },
-+	.con0_for_pcie		= { 0x0000, 15, 0, 0x00, 0x1000 },
-+	.con1_for_pcie		= { 0x0004, 15, 0, 0x00, 0x0000 },
-+	.con2_for_pcie		= { 0x0008, 15, 0, 0x00, 0x0101 },
-+	.con3_for_pcie		= { 0x000c, 15, 0, 0x00, 0x0200 },
-+	.con0_for_sata		= { 0x0000, 15, 0, 0x00, 0x0129 },
-+	.con1_for_sata		= { 0x0004, 15, 0, 0x00, 0x0000 },
-+	.con2_for_sata		= { 0x0008, 15, 0, 0x00, 0x80c1 },
-+	.con3_for_sata		= { 0x000c, 15, 0, 0x00, 0x0407 },
-+	/* pipe-grf */
-+	.pipe_con0_for_sata	= { 0x0000, 11, 5, 0x00, 0x22 },
-+	.pipe_con1_for_sata	= { 0x0000, 2, 0, 0x00, 0x2 },
-+	.pipe_pcie1l0_sel	= { 0x0100, 0, 0, 0x01, 0x0 },
-+	.pipe_pcie1l1_sel	= { 0x0100, 1, 1, 0x01, 0x0 },
-+};
-+
-+static const struct rockchip_combphy_cfg rk3588_combphy_cfgs = {
-+	.grfcfg		= &rk3588_combphy_grfcfgs,
-+	.combphy_cfg	= rk3588_combphy_cfg,
-+};
-+
- static const struct of_device_id rockchip_combphy_of_match[] = {
- 	{
- 		.compatible = "rockchip,rk3568-naneng-combphy",
- 		.data = &rk3568_combphy_cfgs,
- 	},
-+	{
-+		.compatible = "rockchip,rk3588-naneng-combphy",
-+		.data = &rk3588_combphy_cfgs,
-+	},
- 	{ },
- };
- MODULE_DEVICE_TABLE(of, rockchip_combphy_of_match);
--- 
-2.39.2
+I'll confirm this as well.
 
+> 
+> The closest to that is perf_event_modify_attr(), but that is limited to
+> TYPE_BREAKPOINT for the time being (also, could this be used to cure
+> your in-kernel IBS usage woes?).
+
+I think doing it transparently at the arch layer would be better.
+
+Thanks,
+Ravi
