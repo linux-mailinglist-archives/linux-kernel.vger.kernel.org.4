@@ -2,300 +2,895 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 085B06B7FBD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:50:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A76616B7FBF
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:51:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230382AbjCMRuj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:50:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45894 "EHLO
+        id S229735AbjCMRvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:51:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCMRuh (ORCPT
+        with ESMTP id S230430AbjCMRux (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:50:37 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274FC78CBB;
-        Mon, 13 Mar 2023 10:50:09 -0700 (PDT)
-Received: from 2603-8080-2102-63d7-c4a8-7e10-0391-f3ff.res6.spectrum.com (2603-8080-2102-63d7-c4a8-7e10-0391-f3ff.res6.spectrum.com [IPv6:2603:8080:2102:63d7:c4a8:7e10:391:f3ff])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: gfxstrand)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id C57FB6602179;
-        Mon, 13 Mar 2023 17:50:02 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678729807;
-        bh=xAoSrt6ok3rZEBjY+weW5rQvZBVH8IFHlHFW3Km1xIE=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=oSWXTgrlnOu+4tRAuaTAhAxxQPeXH9BthRHi10Q9cQbXmnkh3bucEb9d2wQJZCWD1
-         1z2j9H6C9DXjOv5OEyK4Sj2jinbBdVER4qizvl/SDiNngN4X2GK8ibY5HMN/jUiM0K
-         Lgb6wuw6jRM3dxATRJR2vIIU09devvxy61sEzOWeK1nF1Hze8dC35r9dSuGxJ6P9Yc
-         ubFZnsGEb/WR1Wv+c0FzKfGuK2UsjxOC/6d/SCbm6mqA6pSMvvmy447L/+HmcuH2gC
-         fdCmebbYSohZS2wJXNt1zOCWQ2qcBzDZexbOxd7dTRFDn4ZnANbAx4hk0gT+L5AsRJ
-         FJff+kwAI+EYA==
-Message-ID: <5a0db63c043adc47b289b3f1d22935a0a63c926e.camel@collabora.com>
-Subject: Re: [PATCH RFC 03/18] rust: drm: file: Add File abstraction
-From:   Faith Ekstrand <faith.ekstrand@collabora.com>
-To:     Asahi Lina <lina@asahilina.net>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Luben Tuikov <luben.tuikov@amd.com>,
-        Jarkko Sakkinen <jarkko@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Karol Herbst <kherbst@redhat.com>,
-        Ella Stanforth <ella@iglunix.org>, Mary <mary@mary.zone>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        rust-for-linux@vger.kernel.org, linux-media@vger.kernel.org,
-        linaro-mm-sig@lists.linaro.org, linux-sgx@vger.kernel.org,
-        asahi@lists.linux.dev
-Date:   Mon, 13 Mar 2023 12:49:57 -0500
-In-Reply-To: <28fa3f97-4c7c-212e-2be2-fb1c05f7f576@asahilina.net>
-References: <20230307-rust-drm-v1-0-917ff5bc80a8@asahilina.net>
-         <20230307-rust-drm-v1-3-917ff5bc80a8@asahilina.net>
-         <9ba89e97155400fb379f5101ccb8960d0bcbc025.camel@collabora.com>
-         <28fa3f97-4c7c-212e-2be2-fb1c05f7f576@asahilina.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
+        Mon, 13 Mar 2023 13:50:53 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556D174DDD;
+        Mon, 13 Mar 2023 10:50:28 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DHo2T4090414;
+        Mon, 13 Mar 2023 12:50:02 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678729802;
+        bh=0xSSBO+ZhsESS/wr5gW4zBwKlW9NcNJWL+GhrEh0JFo=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=K1VlB3zwSDOXeEQ/coLhzB1OxWWLqzMCJuzpjMerL4nl9zif4deYQbsCHqmdXQvPC
+         27SNA7o3kMvusRwEn7DpEsajoN2YJKWEIQi60c1f4kH4WKS+BSszv8Ht8szvo2ib0k
+         Vl3AzLGVL2V7zsjfEUFx34di2nKYR4J4iNbacGbc=
+Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DHo255002297
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Mar 2023 12:50:02 -0500
+Received: from DFLE101.ent.ti.com (10.64.6.22) by DFLE114.ent.ti.com
+ (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
+ Mar 2023 12:50:01 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE101.ent.ti.com
+ (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 13 Mar 2023 12:50:01 -0500
+Received: from [10.250.32.223] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DHo0sf057533;
+        Mon, 13 Mar 2023 12:50:00 -0500
+Message-ID: <da7555ae-b56a-f895-96cc-447bfd1c772d@ti.com>
+Date:   Mon, 13 Mar 2023 12:50:00 -0500
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 2/3] arm64: dts: ti: Add k3-am625-beagleplay
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+CC:     <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Tero Kristo <kristo@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Julien Panis <jpanis@baylibre.com>, Bryan Brattlof <bb@ti.com>,
+        Jason Kridner <jkridner@gmail.com>,
+        Robert Nelson <robertcnelson@gmail.com>
+References: <20230311111022.23717-1-nm@ti.com>
+ <20230311111022.23717-3-nm@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20230311111022.23717-3-nm@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 2023-03-10 at 07:16 +0900, Asahi Lina wrote:
-> On 10/03/2023 06.16, Faith Ekstrand wrote:
-> > On Tue, 2023-03-07 at 23:25 +0900, Asahi Lina wrote:
-> > > A DRM File is the DRM counterpart to a kernel file structure,
-> > > representing an open DRM file descriptor. Add a Rust abstraction
-> > > to
-> > > allow drivers to implement their own File types that implement
-> > > the
-> > > DriverFile trait.
-> > >=20
-> > > Signed-off-by: Asahi Lina <lina@asahilina.net>
-> > > ---
-> > > =C2=A0rust/bindings/bindings_helper.h |=C2=A0=C2=A0 1 +
-> > > =C2=A0rust/kernel/drm/drv.rs=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 7 ++-
-> > > =C2=A0rust/kernel/drm/file.rs=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 113
-> > > ++++++++++++++++++++++++++++++++++++++++
-> > > =C2=A0rust/kernel/drm/mod.rs=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0 |=C2=A0=C2=A0 1 +
-> > > =C2=A04 files changed, 120 insertions(+), 2 deletions(-)
-> > >=20
-> > > diff --git a/rust/bindings/bindings_helper.h
-> > > b/rust/bindings/bindings_helper.h
-> > > index 2a999138c4ae..7d7828faf89c 100644
-> > > --- a/rust/bindings/bindings_helper.h
-> > > +++ b/rust/bindings/bindings_helper.h
-> > > @@ -8,6 +8,7 @@
-> > > =C2=A0
-> > > =C2=A0#include <drm/drm_device.h>
-> > > =C2=A0#include <drm/drm_drv.h>
-> > > +#include <drm/drm_file.h>
-> > > =C2=A0#include <drm/drm_ioctl.h>
-> > > =C2=A0#include <linux/delay.h>
-> > > =C2=A0#include <linux/device.h>
-> > > diff --git a/rust/kernel/drm/drv.rs b/rust/kernel/drm/drv.rs
-> > > index 29a465515dc9..1dcb651e1417 100644
-> > > --- a/rust/kernel/drm/drv.rs
-> > > +++ b/rust/kernel/drm/drv.rs
-> > > @@ -144,6 +144,9 @@ pub trait Driver {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 /// Should be either `drm::gem::Object<T>` o=
-r
-> > > `drm::gem::shmem::Object<T>`.
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 type Object: AllocImpl;
-> > > =C2=A0
-> > > +=C2=A0=C2=A0=C2=A0 /// The type used to represent a DRM File (client=
-)
-> > > +=C2=A0=C2=A0=C2=A0 type File: drm::file::DriverFile;
-> > > +
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 /// Driver metadata
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 const INFO: DriverInfo;
-> > > =C2=A0
-> > > @@ -213,8 +216,8 @@ macro_rules! drm_device_register {
-> > > =C2=A0impl<T: Driver> Registration<T> {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0 const VTABLE: bindings::drm_driver =3D drm_l=
-egacy_fields! {
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 load: None,
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 open: None, // TODO: File=
- abstraction
-> > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 postclose: None, // TODO:=
- File abstraction
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 open: Some(drm::file::ope=
-n_callback::<T::File>),
-> > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 postclose:
-> > > Some(drm::file::postclose_callback::<T::File>),
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 lastclose: None,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unload: None,
-> > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 release: None,
-> > > diff --git a/rust/kernel/drm/file.rs b/rust/kernel/drm/file.rs
-> > > new file mode 100644
-> > > index 000000000000..48751e93c38a
-> > > --- /dev/null
-> > > +++ b/rust/kernel/drm/file.rs
-> > > @@ -0,0 +1,113 @@
-> > > +// SPDX-License-Identifier: GPL-2.0 OR MIT
-> > > +
-> > > +//! DRM File objects.
-> > > +//!
-> > > +//! C header:
-> > > [`include/linux/drm/drm_file.h`](../../../../include/linux/drm/dr
-> > > m_fi
-> > > le.h)
-> > > +
-> > > +use crate::{bindings, drm, error::Result};
-> > > +use alloc::boxed::Box;
-> > > +use core::marker::PhantomData;
-> > > +use core::ops::Deref;
-> > > +
-> > > +/// Trait that must be implemented by DRM drivers to represent a
-> > > DRM
-> > > File (a client instance).
-> > > +pub trait DriverFile {
-> > > +=C2=A0=C2=A0=C2=A0 /// The parent `Driver` implementation for this
-> > > `DriverFile`.
-> > > +=C2=A0=C2=A0=C2=A0 type Driver: drm::drv::Driver;
-> > > +
-> > > +=C2=A0=C2=A0=C2=A0 /// Open a new file (called when a client opens t=
-he DRM
-> > > device).
-> > > +=C2=A0=C2=A0=C2=A0 fn open(device: &drm::device::Device<Self::Driver=
->) ->
-> > > Result<Box<Self>>;
-> > > +}
-> > > +
-> > > +/// An open DRM File.
-> > > +///
-> > > +/// # Invariants
-> > > +/// `raw` is a valid pointer to a `drm_file` struct.
-> > > +#[repr(transparent)]
-> > > +pub struct File<T: DriverFile> {
-> > > +=C2=A0=C2=A0=C2=A0 raw: *mut bindings::drm_file,
-> > > +=C2=A0=C2=A0=C2=A0 _p: PhantomData<T>,
-> > > +}
-> > > +
-> > > +pub(super) unsafe extern "C" fn open_callback<T: DriverFile>(
-> > > +=C2=A0=C2=A0=C2=A0 raw_dev: *mut bindings::drm_device,
-> > > +=C2=A0=C2=A0=C2=A0 raw_file: *mut bindings::drm_file,
-> > > +) -> core::ffi::c_int {
-> > > +=C2=A0=C2=A0=C2=A0 let drm =3D core::mem::ManuallyDrop::new(unsafe {
-> > > drm::device::Device::from_raw(raw_dev) });
-> >=20
-> > Maybe you can help educate me a bit here... This feels like a
-> > really
-> > sketchy pattern.=C2=A0 We're creating a Device from a pointer, an
-> > operation
-> > which inherently consumes a reference but then marking it
-> > ManuallyDrop
-> > so drm_device_put() never gets called.=C2=A0 It took me a while but I
-> > think
-> > I figured out what you're trying to do: Make it so all the Rust
-> > stuff
-> > works with Device, not drm_device but it still feels really wrong.=C2=
-=A0
-> > It
-> > works, it just feels like there's a lot of unsafe abstraction
-> > juggling
-> > happening here and I expect this operation is going to be pretty
-> > common
-> > in the Rust abstraction layer.
->=20
-> So I think this is going to be a pretty common pattern in this kind
-> of
-> abstraction. The problem is that, of course, in C there is no
-> distinction between an owned reference and a borrowed one. Here we
-> have
-> a borrowed reference to a struct drm_device, and we need to turn it
-> into
-> a &Device (which is the Rust equivalent type). But for &Device to
-> exist
-> we need a Device to exist in the first place, and Device normally
-> implies ownership of the underlying drm_device.
+On 3/11/23 5:10 AM, Nishanth Menon wrote:
+> From: Robert Nelson <robertcnelson@gmail.com>
+> 
+> BeagleBoard.org BeaglePlay is an easy to use, affordable open source
+> hardware single board computer based on the Texas Instruments AM625
+> SoC that allows you to create connected devices that work even at long
+> distances using IEEE 802.15.4g LR-WPAN and IEEE 802.3cg 10Base-T1L.
+> Expansion is provided over open standards based mikroBUS, Grove and
+> QWIIC headers among other interfaces.
+> 
+> This board family can be identified by the 24c32 eeprom:
+> 
+> [aa 55 33 ee 01 37 00 10  2e 00 42 45 41 47 4c 45  |.U3..7....BEAGLE|]
+> [50 4c 41 59 2d 41 30 2d  00 00 30 32 30 30 37 38  |PLAY-A0-..020078|]
+> 
+> https://beagleplay.org/
+> https://git.beagleboard.org/beagleplay/beagleplay
+> 
+> Co-developed-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Nishanth Menon <nm@ti.com>
+> Signed-off-by: Robert Nelson <robertcnelson@gmail.com>
+> ---
+>   arch/arm64/boot/dts/ti/Makefile               |   1 +
+>   .../arm64/boot/dts/ti/k3-am625-beagleplay.dts | 753 ++++++++++++++++++
+>   2 files changed, 754 insertions(+)
+>   create mode 100644 arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+> 
+> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> index 6acd12409d59..09b4eafd5716 100644
+> --- a/arch/arm64/boot/dts/ti/Makefile
+> +++ b/arch/arm64/boot/dts/ti/Makefile
+> @@ -9,6 +9,7 @@
+>   # alphabetically.
+>   
+>   # Boards with AM62x SoC
+> +dtb-$(CONFIG_ARCH_K3) += k3-am625-beagleplay.dtb
+>   dtb-$(CONFIG_ARCH_K3) += k3-am625-sk.dtb
+>   
+>   # Boards with AM62Ax SoC
+> diff --git a/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+> new file mode 100644
+> index 000000000000..d1957d8fd779
+> --- /dev/null
+> +++ b/arch/arm64/boot/dts/ti/k3-am625-beagleplay.dts
+> @@ -0,0 +1,753 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * https://beagleplay.org/
+> + *
+> + * Copyright (C) 2022-2023 Texas Instruments Incorporated - https://www.ti.com/
+> + * Copyright (C) 2022-2023 Robert Nelson, BeagleBoard.org Foundation
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/leds/common.h>
+> +#include <dt-bindings/gpio/gpio.h>
+> +#include <dt-bindings/input/input.h>
+> +#include "k3-am625.dtsi"
+> +
+> +/ {
+> +	compatible =  "beagle,am625-beagleplay", "ti,am625";
+> +	model = "BeagleBoard.org BeaglePlay";
+> +
+> +	aliases {
+> +		ethernet0 = &cpsw_port1;
+> +		ethernet1 = &cpsw_port2;
+> +		gpio0 = &main_gpio0;
+> +		gpio1 = &main_gpio1;
+> +		gpio2 = &mcu_gpio0;
+> +		i2c0 = &main_i2c0;
+> +		i2c1 = &main_i2c1;
+> +		i2c2 = &main_i2c2;
+> +		i2c3 = &main_i2c3;
+> +		i2c4 = &wkup_i2c0;
+> +		i2c5 = &mcu_i2c0;
+> +		mdio-gpio0 = &mdio0;
+> +		mmc0 = &sdhci0;
+> +		mmc1 = &sdhci1;
+> +		mmc2 = &sdhci2;
+> +		rtc0 = &rtc;
+> +		rtc1 = &wkup_rtc0;
+> +		serial0 = &wkup_uart0;
+> +		serial1 = &mcu_uart0;
+> +		serial2 = &main_uart0;
+> +		serial3 = &main_uart5;
 
-Thanks! Putting it in terms of borrow really helps clear up the
-difference.
+What are we using main_uart5 for, and why does it need to be serial3?
 
-> We could just acquire a reference here, but then we're needlessly
-> grabbing a ref only to drop it at the end of the function, which is
-> pointless when the caller is holding another reference for us while
-> the
-> callback runs. And of course Rust likes to claim to offer zero-cost
-> abstractions, so it would be kind of sad to have to do that... ^^
+> +		usb0 = &usb0;
+> +		usb1 = &usb1;
+> +	};
+> +
+> +	chosen {
+> +		stdout-path = "serial2:115200n8";
+> +	};
+> +
+> +	memory@80000000 {
+> +		device_type = "memory";
+> +		/* 2G RAM */
+> +		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
+> +	};
+> +
+> +	reserved-memory {
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges;
+> +
+> +		ramoops@9ca00000 {
+> +			compatible = "ramoops";
+> +			reg = <0x00 0x9ca00000 0x00 0x00100000>;
+> +			record-size = <0x8000>;
+> +			console-size = <0x8000>;
+> +			ftrace-size = <0x00>;
+> +			pmsg-size = <0x8000>;
+> +		};
+> +
+> +		secure_tfa_ddr: tfa@9e780000 {
+> +			reg = <0x00 0x9e780000 0x00 0x80000>;
+> +			alignment = <0x1000>;
 
-Yeah, I agree we don't want to take extra references.
+"alignment" not needed since we cannot allocate from "no-map" regions anyway. Same
+for OP-TEE mem below.
 
-> Just doing drm::device::Device::from_raw(raw_dev) is a ticking time
-> bomb, because we haven't acquired a reference (which would normally
-> be
-> required). If that Device ever gets dropped, we've messed up the
-> refcounting and stolen the caller's reference. We could try to ensure
-> it
-> gets passed to core::mem::forget in all paths out, but that gets
-> error-prone very quickly when trying to cover error paths. So
-> instead,
-> we put it into a ManuallyDrop. That takes care of neutering the ref
-> drop, so we don't have to worry about messing that up. Then the only
-> remaining safety requirement is that that the ManuallyDrop<Device>
-> never
-> escape the callback function, and that's easy to ensure: we only pass
-> a
-> &ref to the user (which via auto-deref ends up being a &Device), and
-> then nothing bad can happen. If the user wants an owned reference to
-> the
-> device to keep around, they can call .clone() on it and that's when
-> the
-> incref happens.
->=20
-> Basically, ManuallyDrop<T> where T is a reference counted type
-> represents a borrowed reference to a T coming from the C side. You
-> can
-> see another use of this pattern in gem::Object, which contains a
-> ManuallyDrop<Device> that represents a borrowed reference to the
-> device
-> that owns that object. The DRM core (as far as I know!) guarantees
-> that
-> DRM devices outlive all of their GEM objects, so we can materialize a
-> borrowed reference and as long as it never leaves the GEM object, it
-> will be sound. Then we can take &Device references from it whenever
-> we
-> want, and the usual Rust borrow checker rules ensure we can't do
-> something illegal.
+> +			no-map;
+> +		};
+> +
+> +		secure_ddr: optee@9e800000 {
+> +			reg = <0x00 0x9e800000 0x00 0x01800000>; /* for OP-TEE */
 
-Ok, that all matches my understanding of what I thought was going on. I
-do wonder if it would be good to wrap this up in a
+"for OP-TEE" comment is probably extra now that the node is named "optee".
 
-struct DeviceBorrow {
-   dev: ManuallyDrop<Device>
-}
+> +			alignment = <0x1000>;
+> +			no-map;
+> +		};
+> +
+> +		wkup_r5fss0_core0_dma_memory_region: r5f-dma-memory@9db00000 {
+> +			compatible = "shared-dma-pool";
+> +			reg = <0x00 0x9db00000 0x00 0xc00000>;
+> +			no-map;
+> +		};
+> +	};
+> +
+> +	vsys_5v0: regulator-1 {
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vsys_5v0";
+> +		regulator-min-microvolt = <5000000>;
+> +		regulator-max-microvolt = <5000000>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	vdd_3v3: regulator-2 {
+> +		/* output of TLV62595DMQR-U12 */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd_3v3";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		vin-supply = <&vsys_5v0>;
+> +		regulator-always-on;
+> +		regulator-boot-on;
+> +	};
+> +
+> +	wlan_en: regulator-3 {
+> +		/* OUTPUT of SN74AVC2T244DQMR */
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "wlan_en";
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <1800000>;
+> +		enable-active-high;
+> +		regulator-always-on;
+> +		vin-supply = <&vdd_3v3>;
+> +		gpio = <&main_gpio0 38 GPIO_ACTIVE_HIGH>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wifi_en_pins_default>;
+> +	};
+> +
+> +	vdd_3v3_sd: regulator-4 {
+> +		/* output of TPS22918DBVR-U21 */
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vdd_3v3_sd_pins_default>;
+> +
+> +		compatible = "regulator-fixed";
+> +		regulator-name = "vdd_3v3_sd";
+> +		regulator-min-microvolt = <3300000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		enable-active-high;
+> +		regulator-always-on;
+> +		vin-supply = <&vdd_3v3>;
+> +		gpio = <&main_gpio1 19 GPIO_ACTIVE_HIGH>;
+> +	};
+> +
+> +	vdd_sd_dv: regulator-5 {
+> +		compatible = "regulator-gpio";
+> +		regulator-name = "sd_hs200_switch";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&vdd_sd_dv_pins_default>;
+> +		regulator-min-microvolt = <1800000>;
+> +		regulator-max-microvolt = <3300000>;
+> +		regulator-boot-on;
+> +		vin-supply = <&vdd_3v3>;
+> +		gpios = <&main_gpio1 49 GPIO_ACTIVE_HIGH>;
+> +		states = <1800000 0x0>,
+> +			 <3300000 0x1>;
+> +	};
+> +
+> +	leds {
+> +		compatible = "gpio-leds";
+> +
+> +		led-0 {
+> +			gpios = <&main_gpio0 3 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "heartbeat";
+> +			function = LED_FUNCTION_HEARTBEAT;
+> +			default-state = "off";
+> +		};
+> +
+> +		led-1 {
+> +			gpios = <&main_gpio0 4 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "disk-activity";
+> +			function = LED_FUNCTION_DISK_ACTIVITY;
+> +			default-state = "keep";
+> +		};
+> +
+> +		led-2 {
+> +			gpios = <&main_gpio0 5 GPIO_ACTIVE_HIGH>;
+> +			linux,default-trigger = "cpu";
+> +			function = LED_FUNCTION_CPU;
+> +		};
+> +
+> +		led-3 {
+> +			gpios = <&main_gpio0 6 GPIO_ACTIVE_HIGH>;
+> +			function = LED_FUNCTION_LAN;
+> +		};
+> +
+> +		led-4 {
+> +			gpios = <&main_gpio0 9 GPIO_ACTIVE_HIGH>;
+> +			function = LED_FUNCTION_WLAN;
+> +		};
+> +	};
+> +
+> +	gpio_keys: gpio-keys {
+> +		compatible = "gpio-keys";
+> +		autorepeat;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&usr_button_pins_default>;
+> +
+> +		usr: button-usr {
+> +			label = "User Key";
+> +			linux,code = <BTN_0>;
+> +			gpios = <&main_gpio0 18 GPIO_ACTIVE_LOW>;
+> +		};
+> +
+> +	};
+> +
+> +	/* Workaround for errata i2329 - just use mdio bitbang */
+> +	mdio0: mdio {
+> +		compatible = "virtual,mdio-gpio";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&mdio0_pins_default>;
+> +		gpios = <&main_gpio0 86 GPIO_ACTIVE_HIGH>, /* MDC */
+> +			<&main_gpio0 85 GPIO_ACTIVE_HIGH>; /* MDIO */
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +
+> +		cpsw3g_phy0: ethernet-phy@0 {
+> +			reg = <0>;
+> +		};
+> +
+> +		cpsw3g_phy1: ethernet-phy@1 {
+> +			reg = <1>;
+> +			reset-gpios = <&main_gpio1 5 GPIO_ACTIVE_LOW>;
+> +			reset-assert-us = <25>;
+> +			reset-deassert-us = <60000>; /* T2 */
+> +		};
+> +	};
+> +};
+> +
+> +&main_pmx0 {
+> +	gpio0_pins_default: gpio0-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0004, PIN_INPUT, 7) /* (G25) OSPI0_LBCLKO.GPIO0_1 */
+> +			AM62X_IOPAD(0x0008, PIN_INPUT, 7) /* (J24) OSPI0_DQS.GPIO0_2 */
+> +			AM62X_IOPAD(0x000c, PIN_INPUT, 7) /* (E25) OSPI0_D0.GPIO0_3 */
+> +			AM62X_IOPAD(0x0010, PIN_INPUT, 7) /* (G24) OSPI0_D1.GPIO0_4 */
+> +			AM62X_IOPAD(0x0014, PIN_INPUT, 7) /* (F25) OSPI0_D2.GPIO0_5 */
+> +			AM62X_IOPAD(0x0018, PIN_INPUT, 7) /* (F24) OSPI0_D3.GPIO0_6 */
+> +			AM62X_IOPAD(0x0024, PIN_INPUT, 7) /* (H25) OSPI0_D6.GPIO0_9 */
+> +			AM62X_IOPAD(0x0028, PIN_INPUT, 7) /* (J22) OSPI0_D7.GPIO0_10 */
+> +			AM62X_IOPAD(0x002c, PIN_INPUT, 7) /* (F23) OSPI0_CSn0.GPIO0_11 */
+> +			AM62X_IOPAD(0x0030, PIN_INPUT, 7) /* (G21) OSPI0_CSn1.GPIO0_12 */
+> +			AM62X_IOPAD(0x0034, PIN_INPUT, 7) /* (H21) OSPI0_CSn2.GPIO0_13 */
+> +			AM62X_IOPAD(0x0038, PIN_INPUT, 7) /* (E24) OSPI0_CSn3.GPIO0_14 */
+> +			AM62X_IOPAD(0x004c, PIN_INPUT, 7) /* (P24) GPMC0_AD4.GPIO0_19 */
+> +			AM62X_IOPAD(0x0050, PIN_INPUT, 7) /* (P22) GPMC0_AD5.GPIO0_20 */
+> +			AM62X_IOPAD(0x00a4, PIN_INPUT, 7) /* (M22) GPMC0_DIR.GPIO0_40 */
+> +			AM62X_IOPAD(0x00ac, PIN_INPUT, 7) /* (L21) GPMC0_CSn1.GPIO0_42 */
+> +		>;
+> +	};
+> +
+> +	vdd_sd_dv_pins_default: vdd-sd-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0244, PIN_OUTPUT, 7) /* (C17) MMC1_SDWP.GPIO1_49 */
+> +		>;
+> +	};
+> +
+> +	usr_button_pins_default: usr-button-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0048, PIN_INPUT, 7) /* (N25) GPMC0_AD3.GPIO0_18 */
+> +		>;
+> +	};
+> +
+> +	grove_pins_default: grove-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x01e8, PIN_INPUT_PULLUP, 0) /* (B17) I2C1_SCL */
+> +			AM62X_IOPAD(0x01ec, PIN_INPUT_PULLUP, 0) /* (A17) I2C1_SDA */
+> +		>;
+> +	};
+> +
+> +	local_i2c_pins_default: local-i2c-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x01e0, PIN_INPUT_PULLUP, 0) /* (B16) I2C0_SCL */
+> +			AM62X_IOPAD(0x01e4, PIN_INPUT_PULLUP, 0) /* (A16) I2C0_SDA */
+> +		>;
+> +	};
+> +
+> +	i2c2_1v8_pins_default: i2c2-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x00b0, PIN_INPUT_PULLUP, 1) /* (K22) GPMC0_CSn2.I2C2_SCL */
+> +			AM62X_IOPAD(0x00b4, PIN_INPUT_PULLUP, 1) /* (K24) GPMC0_CSn3.I2C2_SDA */
+> +		>;
+> +	};
+> +
+> +	mdio0_pins_default: mdio0-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0160, PIN_OUTPUT, 7) /* (AD24) MDIO0_MDC.GPIO0_86 */
+> +			AM62X_IOPAD(0x015c, PIN_INPUT, 7) /* (AB22) MDIO0_MDIO.GPIO0_85 */
+> +		>;
+> +	};
+> +
+> +	rgmii1_pins_default: rgmii1-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x014c, PIN_INPUT, 0) /* (AB17) RGMII1_RD0 */
+> +			AM62X_IOPAD(0x0150, PIN_INPUT, 0) /* (AC17) RGMII1_RD1 */
+> +			AM62X_IOPAD(0x0154, PIN_INPUT, 0) /* (AB16) RGMII1_RD2 */
+> +			AM62X_IOPAD(0x0158, PIN_INPUT, 0) /* (AA15) RGMII1_RD3 */
+> +			AM62X_IOPAD(0x0148, PIN_INPUT, 0) /* (AD17) RGMII1_RXC */
+> +			AM62X_IOPAD(0x0144, PIN_INPUT, 0) /* (AE17) RGMII1_RX_CTL */
+> +			AM62X_IOPAD(0x0134, PIN_OUTPUT, 0) /* (AE20) RGMII1_TD0 */
+> +			AM62X_IOPAD(0x0138, PIN_OUTPUT, 0) /* (AD20) RGMII1_TD1 */
+> +			AM62X_IOPAD(0x013c, PIN_OUTPUT, 0) /* (AE18) RGMII1_TD2 */
+> +			AM62X_IOPAD(0x0140, PIN_OUTPUT, 0) /* (AD18) RGMII1_TD3 */
+> +			AM62X_IOPAD(0x0130, PIN_OUTPUT, 0) /* (AE19) RGMII1_TXC */
+> +			AM62X_IOPAD(0x012c, PIN_OUTPUT, 0) /* (AD19) RGMII1_TX_CTL */
+> +		>;
+> +	};
+> +
+> +	emmc_pins_default: emmc-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0220, PIN_INPUT, 0) /* (Y3) MMC0_CMD */
+> +			AM62X_IOPAD(0x0218, PIN_INPUT, 0) /* (AB1) MMC0_CLK */
+> +			AM62X_IOPAD(0x0214, PIN_INPUT, 0) /* (AA2) MMC0_DAT0 */
+> +			AM62X_IOPAD(0x0210, PIN_INPUT, 0) /* (AA1) MMC0_DAT1 */
+> +			AM62X_IOPAD(0x020c, PIN_INPUT, 0) /* (AA3) MMC0_DAT2 */
+> +			AM62X_IOPAD(0x0208, PIN_INPUT, 0) /* (Y4) MMC0_DAT3 */
+> +			AM62X_IOPAD(0x0204, PIN_INPUT, 0) /* (AB2) MMC0_DAT4 */
+> +			AM62X_IOPAD(0x0200, PIN_INPUT, 0) /* (AC1) MMC0_DAT5 */
+> +			AM62X_IOPAD(0x01fc, PIN_INPUT, 0) /* (AD2) MMC0_DAT6 */
+> +			AM62X_IOPAD(0x01f8, PIN_INPUT, 0) /* (AC2) MMC0_DAT7 */
+> +		>;
+> +	};
+> +
+> +	vdd_3v3_sd_pins_default: vdd-3v3-sd-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x01c4, PIN_INPUT, 7) /* (B14) SPI0_D1_GPIO1_19 */
+> +		>;
+> +	};
+> +
+> +	sd_pins_default: sd-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x023c, PIN_INPUT, 0) /* (A21) MMC1_CMD */
+> +			AM62X_IOPAD(0x0234, PIN_INPUT, 0) /* (B22) MMC1_CLK */
+> +			AM62X_IOPAD(0x0230, PIN_INPUT, 0) /* (A22) MMC1_DAT0 */
+> +			AM62X_IOPAD(0x022c, PIN_INPUT, 0) /* (B21) MMC1_DAT1 */
+> +			AM62X_IOPAD(0x0228, PIN_INPUT, 0) /* (C21) MMC1_DAT2 */
+> +			AM62X_IOPAD(0x0224, PIN_INPUT, 0) /* (D22) MMC1_DAT3 */
+> +			AM62X_IOPAD(0x0240, PIN_INPUT, 7) /* (D17) MMC1_SDCD.GPIO1_48 */
+> +		>;
+> +	};
+> +
+> +	wifi_pins_default: wifi-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0120, PIN_INPUT, 0) /* (C24) MMC2_CMD */
+> +			AM62X_IOPAD(0x0118, PIN_INPUT, 0) /* (D25) MMC2_CLK */
+> +			AM62X_IOPAD(0x0114, PIN_INPUT, 0) /* (B24) MMC2_DAT0 */
+> +			AM62X_IOPAD(0x0110, PIN_INPUT, 0) /* (C25) MMC2_DAT1 */
+> +			AM62X_IOPAD(0x010c, PIN_INPUT, 0) /* (E23) MMC2_DAT2 */
+> +			AM62X_IOPAD(0x0108, PIN_INPUT, 0) /* (D24) MMC2_DAT3 */
+> +			AM62X_IOPAD(0x0124, PIN_INPUT, 0) /* (A23) MMC2_SDCD */
+> +			AM62X_IOPAD(0x11c, PIN_INPUT, 0) /* (#N/A) MMC2_CLKB */
+> +		>;
+> +	};
+> +
+> +	wifi_en_pins_default: wifi-en-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x009c, PIN_OUTPUT, 7) /* (V25) GPMC0_WAIT1.GPIO0_38 */
+> +		>;
+> +	};
+> +
+> +	wifi_wlirq_pins_default: wifi-wlirq-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x00a8, PIN_INPUT, 7) /* (M21) GPMC0_CSn0.GPIO0_41 */
+> +		>;
+> +	};
+> +
+> +	spe_pins_default: spe-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0168, PIN_INPUT, 1) /* (AE21) RGMII2_TXC.RMII2_CRS_DV */
+> +			AM62X_IOPAD(0x0180, PIN_INPUT, 1) /* (AD23) RGMII2_RXC.RMII2_REF_CLK */
+> +			AM62X_IOPAD(0x0184, PIN_INPUT, 1) /* (AE23) RGMII2_RD0.RMII2_RXD0 */
+> +			AM62X_IOPAD(0x0188, PIN_INPUT, 1) /* (AB20) RGMII2_RD1.RMII2_RXD1 */
+> +			AM62X_IOPAD(0x017c, PIN_INPUT, 1) /* (AD22) RGMII2_RX_CTL.RMII2_RX_ER */
+> +			AM62X_IOPAD(0x016c, PIN_INPUT, 1) /* (Y18) RGMII2_TD0.RMII2_TXD0 */
+> +			AM62X_IOPAD(0x0170, PIN_INPUT, 1) /* (AA18) RGMII2_TD1.RMII2_TXD1 */
+> +			AM62X_IOPAD(0x0164, PIN_INPUT, 1) /* (AA19) RGMII2_TX_CTL.RMII2_TX_EN */
+> +			AM62X_IOPAD(0x018c, PIN_OUTPUT, 7) /* (AC21) RGMII2_RD2.GPIO1_5 */
+> +			AM62X_IOPAD(0x0190, PIN_INPUT, 7) /* (AE22) RGMII2_RD3.GPIO1_6 */
+> +			AM62X_IOPAD(0x01f0, PIN_OUTPUT, 5) /* (A18) EXT_REFCLK1.CLKOUT0 */
+> +		>;
+> +	};
+> +
+> +	mikrobus_i2c_pins_default: mikrobus-i2c-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x01d0, PIN_INPUT_PULLUP, 2) /* (A15) UART0_CTSn.I2C3_SCL */
+> +			AM62X_IOPAD(0x01d4, PIN_INPUT_PULLUP, 2) /* (B15) UART0_RTSn.I2C3_SDA */
+> +		>;
+> +	};
+> +
+> +	console_pins_default: console-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x01c8, PIN_INPUT, 0) /* (D14) UART0_RXD */
+> +			AM62X_IOPAD(0x01cc, PIN_OUTPUT, 0) /* (E14) UART0_TXD */
+> +		>;
+> +	};
+> +
+> +	wifi_debug_uart_pins_default: wifi-debug-uart-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x001c, PIN_INPUT, 3) /* (J23) OSPI0_D4.UART6_RXD */
+> +			AM62X_IOPAD(0x0020, PIN_OUTPUT, 3) /* (J25) OSPI0_D5.UART6_TXD */
+> +		>;
+> +	};
+> +
+> +	usb1_pins_default: usb1-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x0258, PIN_INPUT, 0) /* (F18) USB1_DRVVBUS */
+> +		>;
+> +	};
+> +
+> +	pmic_irq_pins_default: pmic-irq-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_IOPAD(0x01f4, PIN_INPUT_PULLUP, 0) /* (D16) EXTINTn */
+> +		>;
+> +	};
+> +};
+> +
+> +&mcu_pmx0 {
+> +	i2c_qwiic_pins_default: i2c-qwiic-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_MCU_IOPAD(0x0044, PIN_INPUT, 0) /* (A8) MCU_I2C0_SCL */
+> +			AM62X_MCU_IOPAD(0x0048, PIN_INPUT, 0) /* (D10) MCU_I2C0_SDA */
+> +		>;
+> +	};
+> +
+> +	gbe_pmx_obsclk: gbe-pmx-clk-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_MCU_IOPAD(0x0004, PIN_OUTPUT, 1) /* (B8) MCU_SPI0_CS1.MCU_OBSCLK0 */
+> +		>;
+> +	};
+> +
+> +	mcu_mikrobus_uart_pins_default: mcu-mikrobus-uart-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_MCU_IOPAD(0x0014, PIN_INPUT, 0) /* (B5) MCU_UART0_RXD */
+> +			AM62X_MCU_IOPAD(0x0018, PIN_OUTPUT, 0) /* (A5) MCU_UART0_TXD */
+> +		>;
+> +	};
+> +
+> +	i2c_csi_pins_default: i2c-csi-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_MCU_IOPAD(0x004c, PIN_INPUT_PULLUP, 0) /* (B9) WKUP_I2C0_SCL */
+> +			AM62X_MCU_IOPAD(0x0050, PIN_INPUT_PULLUP, 0) /* (A9) WKUP_I2C0_SDA */
+> +		>;
+> +	};
+> +
+> +	mcu_mikrobus_rst_int_pins_default: mcu-mikrobus-rst-int-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_MCU_IOPAD(0x0024, PIN_INPUT, 0) /* (B4) WKUP_UART0_RXD */
+> +			AM62X_MCU_IOPAD(0x0028, PIN_OUTPUT, 0) /* (C5) WKUP_UART0_TXD */
+> +		>;
+> +	};
+> +
+> +	wifi_32k_clk: mcu-clk-out-pins-default {
+> +		pinctrl-single,pins = <
+> +			AM62X_MCU_IOPAD(0x0084, PIN_OUTPUT, 0) /* (A12) WKUP_CLKOUT0 */
+> +		>;
+> +	};
+> +};
+> +
+> +&a53_opp_table {
+> +		/* Requires VDD_CORE to be at 0.85V */
+> +		opp-1400000000 {
+> +			opp-hz = /bits/ 64 <1400000000>;
+> +			opp-supported-hw = <0x01 0x0004>;
+> +		};
 
-impl DeviceBorrow {
-   pub unsafe fn from_raw(*mut bindings::drm_device) -> DeviceBorrow;
-}
+Seems tabed out too far.
 
-impl Deref<Device> for DeviceBorrow {
-   ...
-}
+> +};
+> +
+> +&wkup_i2c0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c_csi_pins_default>;
+> +	clock-frequency = <400000>;
+> +	/* Enable with overlay for camera sensor */
 
-with documentation, etc.  Seeing a ManuallyDrop which is never dropped
-sets my rust senses tingling.  Maybe that's too much typing for each
-object?  I don't want to add a bunch of extra work but this seems like
-a pretty common pattern we're going to hit everywhere.
+If we don't want to enable it here, why not move all this to the overlay?
 
-~Faith
+> +};
+> +
+> +&wkup_uart0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_mikrobus_rst_int_pins_default>;
+> +	status = "okay";
+> +};
+> +
+> +&mcu_i2c0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c_qwiic_pins_default>;
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+> +};
+> +
+> +&mcu_uart0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mcu_mikrobus_uart_pins_default>;
+> +	status = "okay";
+> +};
+> +
+> +&usbss0 {
+> +	ti,vbus-divider;
+> +	status = "okay";
+> +};
+> +
+> +&usb0 {
+> +	dr_mode = "peripheral";
+> +};
+> +
+> +&usbss1 {
+> +	status = "okay";
+> +};
+> +
+> +&usb1 {
+> +	dr_mode = "host";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&usb1_pins_default>;
+> +};
+> +
+> +&cpsw3g {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&rgmii1_pins_default
+> +		     &spe_pins_default
+> +		     &gbe_pmx_obsclk>;
+> +	assigned-clocks = <&k3_clks 157 70>, <&k3_clks 157 20>;
+> +	assigned-clock-parents = <&k3_clks 157 72>, <&k3_clks 157 22>;
+> +};
+> +
+> +&cpsw_port1 {
+> +	phy-mode = "rgmii-rxid";
+> +	phy-handle = <&cpsw3g_phy0>;
+> +};
+> +
+> +&cpsw_port2 {
+> +	phy-mode = "rmii";
+> +	phy-handle = <&cpsw3g_phy1>;
+> +};
+> +
+> +&cpsw3g_mdio {
+> +	/* Workaround for errata i2329 - Use mdio bitbang */
+> +	status = "disabled";
+
+Should already be disabled, but the comment is nice to have so
+probably okay to keep IMHO.
+
+Andrew
+
+> +};
+> +
+> +&main_gpio0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&gpio0_pins_default>;
+> +	gpio-line-names = "BL_EN_3V3", "SPE_PO_EN", "RTC_INT",	/* 0-2 */
+> +		"USR0", "USR1", "USR2", "USR3", "", "", "USR4",	/* 3-9 */
+> +		"EEPROM_WP",					/* 10 */
+> +		"CSI2_CAMERA_GPIO1", "CSI2_CAMERA_GPIO2",	/* 11-12 */
+> +		"CC1352P7_BOOT", "CC1352P7_RSTN", "", "", "",	/* 13-17 */
+> +		"USR_BUTTON", "", "", "", "", "", "", "", "",	/* 18-26 */
+> +		"", "", "", "", "", "", "", "", "", "HDMI_INT",	/* 27-36 */
+> +		"", "VDD_WLAN_EN", "", "", "WL_IRQ", "GBE_INTN",/* 37-42 */
+> +		"", "", "", "", "", "", "", "", "", "", "", "",	/* 43-54 */
+> +		"", "", "", "", "", "", "", "", "", "", "", "", /* 55-66 */
+> +		"", "", "", "", "", "", "", "", "", "", "", "", /* 67-78 */
+> +		"", "", "", "", "", "",				/* 79-84 */
+> +		"BITBANG_MDIO_DATA", "BITBANG_MDIO_CLK",	/* 85-86 */
+> +		"", "", "", "", "";				/* 87-91 */
+> +};
+> +
+> +&main_gpio1 {
+> +	gpio-line-names = "", "", "", "", "",			/* 0-4 */
+> +		"SPE_RSTN", "SPE_INTN", "MIKROBUS_GPIO1_7",	/* 5-7 */
+> +		"MIKROBUS_GPIO1_8", "MIKROBUS_GPIO1_9",		/* 8-9 */
+> +		"MIKROBUS_GPIO1_10", "MIKROBUS_GPIO1_11",	/* 10-11 */
+> +		"MIKROBUS_GPIO1_12", "MIKROBUS_W1_GPIO0",	/* 12-13 */
+> +		"MIKROBUS_GPIO1_14",				/* 14 */
+> +		"", "", "", "", "VDD_3V3_SD", "", "",		/* 15-21 */
+> +		"MIKROBUS_GPIO1_22", "MIKROBUS_GPIO1_23",	/* 22-23 */
+> +		"MIKROBUS_GPIO1_24", "MIKROBUS_GPIO1_25",	/* 24-25 */
+> +		"", "", "", "", "", "", "", "", "", "", "", "",	/* 26-37 */
+> +		"", "", "", "", "", "", "", "", "", "",		/* 38-47 */
+> +		"SD_CD", "SD_VOLT_SEL", "", "";			/* 48-51 */
+> +};
+> +
+> +&main_i2c0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&local_i2c_pins_default>;
+> +	clock-frequency = <400000>;
+> +	status = "okay";
+> +
+> +	eeprom@50 {
+> +		compatible = "atmel,24c32";
+> +		reg = <0x50>;
+> +	};
+> +
+> +	rtc: rtc@68 {
+> +		compatible = "ti,bq32000";
+> +		reg = <0x68>;
+> +		interrupt-parent = <&main_gpio0>;
+> +		interrupts = <2 IRQ_TYPE_EDGE_FALLING>;
+> +	};
+> +
+> +	tps65219: pmic@30 {
+> +		compatible = "ti,tps65219";
+> +		reg = <0x30>;
+> +		buck1-supply = <&vsys_5v0>;
+> +		buck2-supply = <&vsys_5v0>;
+> +		buck3-supply = <&vsys_5v0>;
+> +		ldo1-supply = <&vdd_3v3>;
+> +		ldo2-supply = <&buck2_reg>;
+> +		ldo3-supply = <&vdd_3v3>;
+> +		ldo4-supply = <&vdd_3v3>;
+> +
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pmic_irq_pins_default>;
+> +		interrupt-parent = <&gic500>;
+> +		interrupts = <GIC_SPI 224 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-controller;
+> +		#interrupt-cells = <1>;
+> +
+> +		system-power-controller;
+> +		ti,power-button;
+> +
+> +		regulators {
+> +			buck1_reg: buck1 {
+> +				regulator-name = "VDD_CORE";
+> +				regulator-min-microvolt = <850000>;
+> +				regulator-max-microvolt = <850000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck2_reg: buck2 {
+> +				regulator-name = "VDD_1V8";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			buck3_reg: buck3 {
+> +				regulator-name = "VDD_1V2";
+> +				regulator-min-microvolt = <1200000>;
+> +				regulator-max-microvolt = <1200000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo1_reg: ldo1 {
+> +				/*
+> +				 * Regulator is left as is unused, vdd_sd
+> +				 * is controlled via GPIO with bypass config
+> +				 * as per the NVM configuration
+> +				 */
+> +				regulator-name = "VDD_SD_3V3";
+> +				regulator-min-microvolt = <3300000>;
+> +				regulator-max-microvolt = <3300000>;
+> +				regulator-allow-bypass;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo2_reg: ldo2 {
+> +				regulator-name = "VDDA_0V85";
+> +				regulator-min-microvolt = <850000>;
+> +				regulator-max-microvolt = <850000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo3_reg: ldo3 {
+> +				regulator-name = "VDDA_1V8";
+> +				regulator-min-microvolt = <1800000>;
+> +				regulator-max-microvolt = <1800000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +
+> +			ldo4_reg: ldo4 {
+> +				regulator-name = "VDD_2V5";
+> +				regulator-min-microvolt = <2500000>;
+> +				regulator-max-microvolt = <2500000>;
+> +				regulator-boot-on;
+> +				regulator-always-on;
+> +			};
+> +		};
+> +	};
+> +};
+> +
+> +&main_i2c1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&grove_pins_default>;
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+> +};
+> +
+> +&main_i2c2 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&i2c2_1v8_pins_default>;
+> +	clock-frequency = <100000>;
+> +	status = "okay";
+> +};
+> +
+> +&main_i2c3 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&mikrobus_i2c_pins_default>;
+> +	clock-frequency = <400000>;
+> +	status = "okay";
+> +};
+> +
+> +&sdhci0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&emmc_pins_default>;
+> +	ti,driver-strength-ohm = <50>;
+> +	disable-wp;
+> +	status = "okay";
+> +};
+> +
+> +&sdhci1 {
+> +	/* SD/MMC */
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&sd_pins_default>;
+> +
+> +	vmmc-supply = <&vdd_3v3_sd>;
+> +	vqmmc-supply = <&vdd_sd_dv>;
+> +	ti,driver-strength-ohm = <50>;
+> +	disable-wp;
+> +	cd-gpios = <&main_gpio1 48 GPIO_ACTIVE_LOW>;
+> +	cd-debounce-delay-ms = <100>;
+> +	ti,fails-without-test-cd;
+> +	status = "okay";
+> +};
+> +
+> +&sdhci2 {
+> +	vmmc-supply = <&wlan_en>;
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&wifi_pins_default &wifi_32k_clk>;
+> +	bus-width = <4>;
+> +	non-removable;
+> +	ti,fails-without-test-cd;
+> +	cap-power-off-card;
+> +	keep-power-in-suspend;
+> +	ti,driver-strength-ohm = <50>;
+> +	assigned-clocks = <&k3_clks 157 158>;
+> +	assigned-clock-parents = <&k3_clks 157 160>;
+> +	status = "okay";
+> +
+> +	#address-cells = <1>;
+> +	#size-cells = <0>;
+> +	wlcore: wlcore@2 {
+> +		compatible = "ti,wl1807";
+> +		reg = <2>;
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&wifi_wlirq_pins_default>;
+> +		interrupt-parent = <&main_gpio0>;
+> +		interrupts = <41 IRQ_TYPE_EDGE_FALLING>;
+> +	};
+> +};
+> +
+> +&main_uart0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&console_pins_default>;
+> +	status = "okay";
+> +};
+> +
+> +&main_uart1 {
+> +	/* Main UART1 is used by TIFS firmware */
+> +	status = "reserved";
+> +};
+> +
+> +&main_uart5 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&wifi_debug_uart_pins_default>;
+> +	status = "okay";
+> +};
