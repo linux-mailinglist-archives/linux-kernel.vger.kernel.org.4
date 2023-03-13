@@ -2,123 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC37F6B8408
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A03C6B840B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:37:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229807AbjCMVge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51432 "EHLO
+        id S229827AbjCMVhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:37:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229449AbjCMVgc (ORCPT
+        with ESMTP id S229449AbjCMVhp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:36:32 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DD7898D1;
-        Mon, 13 Mar 2023 14:36:31 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id y11so14521301plg.1;
-        Mon, 13 Mar 2023 14:36:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678743391;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/dZytMHjh8b67xix8O8bZdnN1Cx47vlb8v10mIqLg8o=;
-        b=KHjxi/Cg9cur6Nsd2pX5mgSv3/r8NaXgoCm39cU71V7gBTII0iGbOL8cUTUnxLlioT
-         noBHtT6ltrjuNT6p5waY75+qH3tvS8KkmnBDSZvWKMhteUq4z60PA89SFWzvt9ff0X+q
-         PXN5ZE65+vuus13o2w6jX4mR5ozSU203mIcdSYRZGARAwfyzYLE1p7/XfUaNfMIM57il
-         n2wzYLHkRg1YLUKuLDxo43ektKuh0/3GiXkQ2+OM5X5eWJzuqzEQIcxQ6Bm9L5mXFKiQ
-         dhpN7/cFkqvUaBKdXNTo4JzJB86mr1RYvIdjU39Ye5+jkRYOt2uSaAZnzVC2iTi2A4EE
-         JrlA==
-X-Gm-Message-State: AO0yUKWk4IGdMU9d4Ll6p7rwPpm/RzvcyOhNlW2cWoAIP36zUHoxX5FR
-        ZPRUqoat3P1/Jw/+Ijm69hScKo0aIPw=
-X-Google-Smtp-Source: AK7set95DQi/rzm/uIe/p/jfOg3q8h1plmMCNBcRUGzfD97ucntNbYRG/dNYXe96dkgT9h0Tp7WxCA==
-X-Received: by 2002:a05:6a20:7f8c:b0:d0:36d5:cf1f with SMTP id d12-20020a056a207f8c00b000d036d5cf1fmr12093386pzj.5.1678743391250;
-        Mon, 13 Mar 2023 14:36:31 -0700 (PDT)
-Received: from ?IPV6:2620:15c:211:201:9cdb:df66:226e:e52a? ([2620:15c:211:201:9cdb:df66:226e:e52a])
-        by smtp.gmail.com with ESMTPSA id a17-20020a62e211000000b006247123adf1sm172621pfi.143.2023.03.13.14.36.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 14:36:30 -0700 (PDT)
-Message-ID: <5d317f56-b1ba-e35a-a558-e462a70a4717@acm.org>
-Date:   Mon, 13 Mar 2023 14:36:27 -0700
+        Mon, 13 Mar 2023 17:37:45 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 733BB898D9;
+        Mon, 13 Mar 2023 14:37:43 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pb9454VpKz4whh;
+        Tue, 14 Mar 2023 08:37:41 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678743461;
+        bh=49K12yWWdtmrUou9Tpbx/H8QMp/k/kD118qkD2thWhI=;
+        h=Date:From:To:Cc:Subject:From;
+        b=f5H3WW1XPLzcG0bTKuo5IB5bmDo7OOmQXr/gDidNqdlQmka3lJpVnYlOa5LFZTx9y
+         cpHF1FhRDWjVHkRTWZRIa84v9a/hDzQOH0afz1pimd6s0jv/1lkhPp+JHkjQoqQlpz
+         Ze4/LbZPRgVXQv+WvvUygfywAF7so7v4LUCX/+6W30Sqs/bhFB6Ue2bdQWe5ZApJpV
+         st3uhehlDy7OIinF9HAhFynq4dYMgMLBmypi7EJsr4rL+vZc3x4hx0C3RTy8W6bmmw
+         iicyoUkgtkOPCfkXNCce/taytkEa2n3M36EL58E9W2Bcw8iDNZRHvWjZsDKXE64pyG
+         ts4KLa1i1Zl3Q==
+Date:   Tue, 14 Mar 2023 08:37:40 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the qcom tree
+Message-ID: <20230314083740.758e909b@canb.auug.org.au>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v4 5/5] scsi: ufs: ufs-mediatek: Add MCQ support for MTK
- platform
-Content-Language: en-US
-To:     Po-Wen Kao <powen.kao@mediatek.com>, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Stanley Chu <stanley.chu@mediatek.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     wsd_upstream@mediatek.com, peter.wang@mediatek.com,
-        alice.chao@mediatek.com, naomi.chu@mediatek.com,
-        chun-hung.wu@mediatek.com, cc.chou@mediatek.com,
-        eddie.huang@mediatek.com, mason.zhang@mediatek.com,
-        chaotian.jing@mediatek.com, jiajie.hao@mediatek.com
-References: <20230307065448.15279-1-powen.kao@mediatek.com>
- <20230307065448.15279-6-powen.kao@mediatek.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20230307065448.15279-6-powen.kao@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/qjPLLPcjp=JZjD6ho15UTsM";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/6/23 22:54, Po-Wen Kao wrote:
-> +static unsigned int mtk_mcq_irq[UFSHCD_MAX_Q_NR];
+--Sig_/qjPLLPcjp=JZjD6ho15UTsM
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Shouldn't there be one instance of this array per controller such that 
-this driver can support multiple host controllers instead of only one?
+Hi all,
 
-> -	err = ufshcd_make_hba_operational(hba);
-> +	if (!hba->mcq_enabled) {
-> +		err = ufshcd_make_hba_operational(hba);
-> +	} else {
-> +		ufs_mtk_config_mcq(hba, false);
-> +		ufshcd_mcq_make_queues_operational(hba);
-> +		ufshcd_mcq_config_mac(hba, hba->nutrs);
-> +		ufshcd_writel(hba, ufshcd_readl(hba, REG_UFS_MEM_CFG) | 0x1,
-> +			      REG_UFS_MEM_CFG);
-> +	}
+In commits
 
-ufshcd_config_mcq() in the UFSHCD core already calls 
-ufshcd_mcq_config_mac(). Why is there another call to 
-ufshcd_mcq_config_mac() in the MediaTek driver?
+  2e498f35c385 ("arm64: dts: qcom: sc8280xp-x13s: fix va dmic dai links and=
+ routing")
+  4def7aa377ba ("arm64: dts: qcom: sc8280xp-x13s: fix dmic sample rate")
 
-> +	/*
-> +	 * Disable MCQ_CQ_EVENT interrupt.
-> +	 * Use CQ Tail Entry Push Status instead.
-> +	 */
-> +	ufshcd_disable_intr(hba, MCQ_CQ_EVENT_STATUS);
+Fixes tag
 
-UFS host controller drivers should not call ufshcd_disable_intr().
+  Fixes: 8c1ea87e80b4 ("arm64: dts: qcom: sc8280xp-x13s: Add soundcard supp=
+ort")
 
- From the UFSHCI 4.0 specification: "MCQ CQ Event Status (CQES): This 
-bit is transparent and becomes ‘1’ when all of the following conditions 
-are met:
-• Controller is operating in MCQ mode (Config.QT=1)
-• ESI is not enabled (Config.ESIE=0)
-• CQES set only for Events in Queues that do not have interrupt 
-aggregation enabled or the Events that do not belong to MCQIACRy.IACTH 
-counter operation criteria.
-• At least one bit in CQISy is set and associated bit in CQIEy is set. 
-y=0..31"
+has these problem(s):
 
-Is there perhaps a bug in the MediaTek controller that causes the MCQ CQ 
-Event Status to be set in ESI mode? If not, can the above 
-ufshcd_disable_intr() call be left out?
+  - Target SHA1 does not exist
 
-Thanks,
+Maybe you meant
 
-Bart.
+Fixes: f29077d86652 ("arm64: dts: qcom: sc8280xp-x13s: Add soundcard suppor=
+t")
 
+In commits
+
+  e43bd22cb377 ("arm64: dts: qcom: sc8280xp: fix lpass tx macro clocks")
+  670b7d6569bf ("arm64: dts: qcom: sc8280xp: fix rx frame shapping info")
+
+Fixes tag
+
+  Fixes: 1749a8ae49a3 ("arm64: dts: qcom: sc8280xp: add SoundWire and LPASS=
+")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: c18773d162a6 ("arm64: dts: qcom: sc8280xp: add SoundWire and LPASS")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/qjPLLPcjp=JZjD6ho15UTsM
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPl6QACgkQAVBC80lX
+0Gyt+gf7BmB+lKEk38ogQl6EulcksxNvF/J3cEgOGTC+tr3UfbRVjf3K1eQ8BC+0
+L1hq+sSFBCdRc0Y2wMuc0Tv9Byp4LH9kXh644G/ShYTqwZyrmEpUg2S+QdUiMb1F
+dtLkxgl5mdHlc8cgIqugtEWLiinI5cFa91kCBTB4ut67JfE9c3sFvLbi9TR/0Q8/
+0wpkm/0FG8TXsMujsWrFGKqKgLsoHg9ZO/UlZ3Sg66DtoDUW2HNKCoMRUnT/Y+Kz
+PJn0UQsGpL1uFZEtgv8pCIECxaNXhClrDIiDZe/9av1oUnAjqIAHFod7p14+QpGG
+xFhVpTqZvYEJbgMXsXzGpqnT1FNk9Q==
+=10Xk
+-----END PGP SIGNATURE-----
+
+--Sig_/qjPLLPcjp=JZjD6ho15UTsM--
