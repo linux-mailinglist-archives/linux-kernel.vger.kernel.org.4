@@ -2,57 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D72866B7D4A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:20:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D43636B7D4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:20:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjCMQUP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:20:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38834 "EHLO
+        id S230411AbjCMQUY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:20:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229514AbjCMQUF (ORCPT
+        with ESMTP id S229957AbjCMQUV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:20:05 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A006F48B
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:19:46 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DGJd2O067895;
-        Mon, 13 Mar 2023 11:19:39 -0500
+        Mon, 13 Mar 2023 12:20:21 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48A461F5ED;
+        Mon, 13 Mar 2023 09:20:18 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DGK956004984;
+        Mon, 13 Mar 2023 11:20:09 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678724379;
-        bh=Wwi66okJUkO1Rt0duQ0lKNZdTblEA/oDpv8WKt+0yAA=;
+        s=ti-com-17Q1; t=1678724409;
+        bh=Uc2APdIAYB7poq9J28h4dQiY7hK7soScXAAPeXg8vIs=;
         h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=S2ccUw69eHnMQmDsopmesJYAKQ12R5WTfhJfYeuHm8qYVm9/h4ydMTBBk5gd6gA4z
-         XWfzrJuTOd2dNYBvkhkSZmzEm4IETKK8RI+8euJt/IyjsFuIQkAOyKvWGePJ3oXUN0
-         1ILi1OTZwMKR1l9hEBIrmzB+aTG6rHpNB6KJUatc=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DGJdX8022073
+        b=oLFZ5reC/TrJfowviVD24QbGoytUeZmk5sO7mxXs8MqztcHN+/nsekiBgfvQAryy/
+         WJAUiMPD9Owyb70/oSy9eb9G4j6swxjsm0WX/6lYuG5E/dUlUBKZbfpQUZdm9GpDGO
+         X6SVKr4EJK03ilwnfDECmFv71VscK2P0HHvfCVHI=
+Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DGK9SA071070
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Mar 2023 11:19:39 -0500
-Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 13 Mar 2023 11:20:09 -0500
+Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE102.ent.ti.com
+ (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
- Mar 2023 11:19:39 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE103.ent.ti.com
- (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 11:20:08 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 13 Mar 2023 11:19:39 -0500
+ Frontend Transport; Mon, 13 Mar 2023 11:20:08 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DGJdgQ022589;
-        Mon, 13 Mar 2023 11:19:39 -0500
-Date:   Mon, 13 Mar 2023 11:19:39 -0500
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DGK8iI065378;
+        Mon, 13 Mar 2023 11:20:08 -0500
+Date:   Mon, 13 Mar 2023 11:20:08 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     Jayesh Choudhary <j-choudhary@ti.com>
-CC:     <ssantosh@kernel.org>, <s-vadapalli@ti.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH] soc: ti: k3-socinfo: Add entry for J784S4 SOC
-Message-ID: <20230313161939.ortphyo3ntu2dl3b@bully>
-References: <20230313065025.185320-1-j-choudhary@ti.com>
+To:     a0502875 <d-dhyani@ti.com>
+CC:     Bhavya Kapoor <b-kapoor@ti.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <a-govindraju@ti.com>,
+        <kishon@ti.com>, <u-kumar1@ti.com>
+Subject: Re: [PATCH v3] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel
+ property
+Message-ID: <20230313162008.faokisdbaeecm55h@swampland>
+References: <20230203073724.29529-1-b-kapoor@ti.com>
+ <3279b78d-fa6d-d1f4-3692-87e628bcd737@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20230313065025.185320-1-j-choudhary@ti.com>
+In-Reply-To: <3279b78d-fa6d-d1f4-3692-87e628bcd737@ti.com>
 X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
@@ -63,34 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 12:20-20230313, Jayesh Choudhary wrote:
-> J784S4 SoC's JTAG PARTNO is 0xBB80.
+On 14:27-20230313, a0502875 wrote:
+> On 03/02/23 13:07, Bhavya Kapoor wrote:
+> > According to latest errata of J721e [1], (i2024) 'MMCSD: Peripherals
+> > Do Not Support HS400' which applies to MMCSD0 subsystem. Speed modes
+> > supported has been already updated in commit eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+> > but it missed dropping 'ti,strobe-sel' property which is only required
+> > by HS400 speed mode.
+> > 
+> > Thus, drop 'ti,strobe-sel' property from kernel dtsi for J721e SoC.
+> > 
+> > [1]https://www.ti.com/lit/er/sprz455/sprz455.pdf
+> > 
+> > Fixes: eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+> > Signed-off-by: Bhavya Kapoor<b-kapoor@ti.com>
 > 
-> Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
+> Reviewed-by: Diwakar Dhyani <d-dhyani@ti.com <mailto:d-dhyani@ti.com>>
 
-^^ is that Co-developed-by ?
-
-> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
-> ---
->  drivers/soc/ti/k3-socinfo.c | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-> index d15764e19d96..ad97e08a25f6 100644
-> --- a/drivers/soc/ti/k3-socinfo.c
-> +++ b/drivers/soc/ti/k3-socinfo.c
-> @@ -43,6 +43,7 @@ static const struct k3_soc_id {
->  	{ 0xBB38, "AM64X" },
->  	{ 0xBB75, "J721S2"},
->  	{ 0xBB7E, "AM62X" },
-> +	{ 0xBB80, "J784S4" },
->  	{ 0xBB8D, "AM62AX" },
->  };
->  
-> -- 
-> 2.25.1
-> 
-
+Please fix your mailer. I will need to hand apply for now.
 -- 
 Regards,
 Nishanth Menon
