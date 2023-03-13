@@ -2,202 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6257A6B820E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 002BF6B822B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjCMUAv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:00:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S230164AbjCMUEZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:04:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230087AbjCMUAS (ORCPT
+        with ESMTP id S230253AbjCMUEJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:00:18 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E3B5848ED
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:00:17 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id s22so17198068lfi.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:00:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678737617;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pPJGmyWSQOR8Kw09B8Mt5WVgya5iFa+bc4j8CO+ggz0=;
-        b=mvShdL4yBYq3XhrQ/GdtbIB+BcS1zqacbkjifgw2EkH2AFU22aywn6htkZqlw9UwGN
-         ufIAkuvRXx3Jj2gC77V+imQ3c7RIYzOYMHGJaF4Y/DATt/T2+LPTNsPHSNo3nUH8P4Yr
-         MacCYhvmwetNm2ok8IpSA8kyBDL2gzfSsFq1Ok/C31y871Waj58qoDpXuS4Sz1+ovhv6
-         Ns/D92cZK3EcHwXXTj5kg+dAZ3312r6+K7AkZ+eej7+w3Q41qIcZ9+JqfvuA4CrFDqEY
-         YFFJ36O4axm0tJEMbYn8iOQCtx5LefMMQYPvrvJknb7FzUiqJIszpMDEHu4sn19BHkxf
-         bI0Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678737617;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pPJGmyWSQOR8Kw09B8Mt5WVgya5iFa+bc4j8CO+ggz0=;
-        b=DkXK+gTDg0imjitd/Emn7+MRevBGc/wXG8V367RHvrtqmmoBSBWmcgyqLaRp5CifvY
-         7CcMP4B7RyqLUhrBoMwdQKr9EBPnrQj5naXYXagtWjzTdpAG1wDERBdR2z4ljXfc+zZl
-         KFxAczYkSbWtLsFo/XUiCWIth2GpcFYMMYDSnZXvCrmn9yVaw16vOyjiOwRj/vrd7iq5
-         u6fgF/KLXU04mVXB8v7qenFJIVPVI97/2wuRYSWAK59vfsEveNqgNUQN6OLXpMWzAKlB
-         AneaixPKl7uGQmcY9tGKUvkrAG9XFXT2V8o00ewaQ/KRWKRZJPhyhGHiz4oq5gZ29Dtb
-         2QFA==
-X-Gm-Message-State: AO0yUKWbkj/3Q6RWtyofafr/RxF3bhRf18wEkYBXemFRuk8rXLMDuZXX
-        qmyTdondGF3RL4iQ4ktBesQGFQ==
-X-Google-Smtp-Source: AK7set8VLIGQmRJ6bzAhX79qPSYOmRtGAHzXCIFZA+GKP1EESmU41oQxnJC2V3ep+cxHbfMRTgjPqg==
-X-Received: by 2002:a19:7516:0:b0:4dc:8215:5531 with SMTP id y22-20020a197516000000b004dc82155531mr10488291lfe.6.1678737617071;
-        Mon, 13 Mar 2023 13:00:17 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id w3-20020ac254a3000000b004cc800b1f2csm75431lfk.238.2023.03.13.13.00.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 13:00:16 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 13 Mar 2023 21:00:08 +0100
-Subject: [PATCH v3 10/10] soc: qcom: rpmpd: Remove useless comments
+        Mon, 13 Mar 2023 16:04:09 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EBBA6C8A8;
+        Mon, 13 Mar 2023 13:04:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678737846; x=1710273846;
+  h=from:to:cc:subject:in-reply-to:references:date:
+   message-id:mime-version;
+  bh=Y5ECLy3twENnI8OadRYmVgVwWANZtmeHdLoi5ULIRXk=;
+  b=nqpcEXMusIBW2Wu5dI0hvTnRy7eqbXejlfQ1baAQX+dKFBi4uZcB/rTP
+   a4S7gABo9pD0RDf3iADE0/FZs2E2ymonRudgqCg+WrgLpQYinEE8jiVBF
+   tMsIGuRaNRlFc69c3cbA62WDfKMBDwILAf6N89+Q7INYxzFzNhjlxQ0q0
+   uRYId03am/icEciJNssswp2IEm5VIRn62rG/QwG0ayhogvgvdNnKpP1Eo
+   mRtOhrxByCCWUiQkT0KXR/Uc5jZK/kH5yMhRLgnh6FiMUp5fSY24pgQBG
+   rFwXfhlH1EPaZxYBG6t5UrVJBbX+zUNfLbSlxVA3rjBfSWxhU1dVilo42
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334725077"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="334725077"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 13:04:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="656082539"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="656082539"
+Received: from jjohanss-mobl.ger.corp.intel.com (HELO localhost) ([10.252.60.50])
+  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 13:04:00 -0700
+From:   Jani Nikula <jani.nikula@linux.intel.com>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org,
+        Todd E Brandt <todd.e.brandt@linux.intel.com>,
+        linux-pm@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: update the 01.org website entries
+In-Reply-To: <20230308141322.25201-1-lukas.bulwahn@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <20230308141322.25201-1-lukas.bulwahn@gmail.com>
+Date:   Mon, 13 Mar 2023 22:03:55 +0200
+Message-ID: <87sfe87710.fsf@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230313-topic-rpmpd-v3-10-06a4f448ff90@linaro.org>
-References: <20230313-topic-rpmpd-v3-0-06a4f448ff90@linaro.org>
-In-Reply-To: <20230313-topic-rpmpd-v3-0-06a4f448ff90@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678737603; l=3977;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=bOHyvIQlgUtTwAbq7sTRhqnwQEdIyL2gK1RO1F45Xro=;
- b=W4lHZVIWj64yHXpeNN4lxidb0hTaZz7y23XGHt7ll/VMQk+KxQB8/RcsngW0CcjspDzIe2auTizT
- d4Eai3dRD5tWVpBbN8RDD6J96WLtiOHy71Xw70wl/G8ihk4ds/F2
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It goes without saying that socname_rpmpds[] is the array of the RPM
-power domains associated with socname. Remove these comments.
+On Wed, 08 Mar 2023, Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+> The 01.org links in MAINTAINERS now forward to different other pages or do
+> not resolve.
+>
+> The link https://01.org/linuxgraphics/ resolves to the Intel Graphics for
+> Linux - Programmer's Reference Manuals. Update this webpage entry.
+>
+> The link
+> https://01.org/linuxgraphics/gfx-docs/maintainer-tools/drm-misc.html
+> does not resolve. Remove this webpage entry.
+>
+> The link https://01.org/igvt-g resolves to
+> https://github.com/intel/gvt-linux. Remove the webpage entry, as the
+> github repository is already referred to by the T: entry in that section.
+>
+> The link resolves the pm-graph project page in Intel's Open Ecosystem area
+> at intel.com. Update this webpage entry.
+>
+> M:      "Todd E Brandt" <todd.e.brandt@linux.intel.com>
+> L:      linux-pm@vger.kernel.org
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+> ---
+>  MAINTAINERS | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+>
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 1333928a7be4..99adcd74b06a 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -6747,7 +6747,6 @@ M:	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>
+>  M:	Maxime Ripard <mripard@kernel.org>
+>  M:	Thomas Zimmermann <tzimmermann@suse.de>
+>  S:	Maintained
+> -W:	https://01.org/linuxgraphics/gfx-docs/maintainer-tools/drm-misc.html
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- drivers/soc/qcom/rpmpd.c | 13 -------------
- 1 file changed, 13 deletions(-)
+This was likely the same as:
 
-diff --git a/drivers/soc/qcom/rpmpd.c b/drivers/soc/qcom/rpmpd.c
-index 84283719853c..f8397dcb146c 100644
---- a/drivers/soc/qcom/rpmpd.c
-+++ b/drivers/soc/qcom/rpmpd.c
-@@ -514,7 +514,6 @@ static struct rpmpd ssc_mx_rwsm0_vfl = {
- 	.key = KEY_FLOOR_LEVEL,
- };
- 
--/* mdm9607 RPM Power Domains */
- static struct rpmpd *mdm9607_rpmpds[] = {
- 	[MDM9607_VDDCX] =	&cx_s3a_lvl,
- 	[MDM9607_VDDCX_AO] =	&cx_s3a_lvl_ao,
-@@ -530,7 +529,6 @@ static const struct rpmpd_desc mdm9607_desc = {
- 	.max_state = RPM_SMD_LEVEL_TURBO,
- };
- 
--/* msm8226 RPM Power Domains */
- static struct rpmpd *msm8226_rpmpds[] = {
- 	[MSM8226_VDDCX] =	&cx_s1a_corner,
- 	[MSM8226_VDDCX_AO] =	&cx_s1a_corner_ao,
-@@ -543,7 +541,6 @@ static const struct rpmpd_desc msm8226_desc = {
- 	.max_state = MAX_CORNER_RPMPD_STATE,
- };
- 
--/* msm8939 RPM Power Domains */
- static struct rpmpd *msm8939_rpmpds[] = {
- 	[MSM8939_VDDMDCX] =	&md_s1a_corner,
- 	[MSM8939_VDDMDCX_AO] =	&md_s1a_corner_ao,
-@@ -561,7 +558,6 @@ static const struct rpmpd_desc msm8939_desc = {
- 	.max_state = MAX_CORNER_RPMPD_STATE,
- };
- 
--/* msm8916 RPM Power Domains */
- static struct rpmpd *msm8916_rpmpds[] = {
- 	[MSM8916_VDDCX] =	&cx_s1a_corner,
- 	[MSM8916_VDDCX_AO] =	&cx_s1a_corner_ao,
-@@ -576,7 +572,6 @@ static const struct rpmpd_desc msm8916_desc = {
- 	.max_state = MAX_CORNER_RPMPD_STATE,
- };
- 
--/* msm8953 RPM Power Domains */
- static struct rpmpd *msm8953_rpmpds[] = {
- 	[MSM8953_VDDMD] =	&md_s1a_lvl,
- 	[MSM8953_VDDMD_AO] =	&md_s1a_lvl_ao,
-@@ -593,7 +588,6 @@ static const struct rpmpd_desc msm8953_desc = {
- 	.max_state = RPM_SMD_LEVEL_TURBO,
- };
- 
--/* msm8976 RPM Power Domains */
- static struct rpmpd *msm8976_rpmpds[] = {
- 	[MSM8976_VDDCX] =	&cx_s2a_lvl,
- 	[MSM8976_VDDCX_AO] =	&cx_s2a_lvl_ao,
-@@ -609,7 +603,6 @@ static const struct rpmpd_desc msm8976_desc = {
- 	.max_state = RPM_SMD_LEVEL_TURBO_HIGH,
- };
- 
--/* msm8994 RPM Power domains */
- static struct rpmpd *msm8994_rpmpds[] = {
- 	[MSM8994_VDDCX] =	&cx_s1a_corner,
- 	[MSM8994_VDDCX_AO] =	&cx_s1a_corner_ao,
-@@ -628,7 +621,6 @@ static const struct rpmpd_desc msm8994_desc = {
- 	.max_state = MAX_CORNER_RPMPD_STATE,
- };
- 
--/* msm8996 RPM Power domains */
- static struct rpmpd *msm8996_rpmpds[] = {
- 	[MSM8996_VDDCX] =	&cx_s1a_corner,
- 	[MSM8996_VDDCX_AO] =	&cx_s1a_corner_ao,
-@@ -645,7 +637,6 @@ static const struct rpmpd_desc msm8996_desc = {
- 	.max_state = MAX_CORNER_RPMPD_STATE,
- };
- 
--/* msm8998 RPM Power domains */
- static struct rpmpd *msm8998_rpmpds[] = {
- 	[MSM8998_VDDCX] =	&cx_rwcx0_lvl,
- 	[MSM8998_VDDCX_AO] =	&cx_rwcx0_lvl_ao,
-@@ -665,7 +656,6 @@ static const struct rpmpd_desc msm8998_desc = {
- 	.max_state = RPM_SMD_LEVEL_BINNING,
- };
- 
--/* qcs404 RPM Power domains */
- static struct rpmpd *qcs404_rpmpds[] = {
- 	[QCS404_VDDMX] =	&mx_rwmx0_lvl,
- 	[QCS404_VDDMX_AO] =	&mx_rwmx0_lvl_ao,
-@@ -682,7 +672,6 @@ static const struct rpmpd_desc qcs404_desc = {
- 	.max_state = RPM_SMD_LEVEL_BINNING,
- };
- 
--/* sdm660 RPM Power domains */
- static struct rpmpd *sdm660_rpmpds[] = {
- 	[SDM660_VDDCX] =	&cx_rwcx0_lvl,
- 	[SDM660_VDDCX_AO] =	&cx_rwcx0_lvl_ao,
-@@ -702,7 +691,6 @@ static const struct rpmpd_desc sdm660_desc = {
- 	.max_state = RPM_SMD_LEVEL_TURBO,
- };
- 
--/* sm4250/6115 RPM Power domains */
- static struct rpmpd *sm6115_rpmpds[] = {
- 	[SM6115_VDDCX] =	&cx_rwcx0_lvl,
- 	[SM6115_VDDCX_AO] =	&cx_rwcx0_lvl_ao,
-@@ -720,7 +708,6 @@ static const struct rpmpd_desc sm6115_desc = {
- 	.max_state = RPM_SMD_LEVEL_TURBO_NO_CPR,
- };
- 
--/* sm6125 RPM Power domains */
- static struct rpmpd *sm6125_rpmpds[] = {
- 	[SM6125_VDDCX] =	&cx_rwcx0_lvl,
- 	[SM6125_VDDCX_AO] =	&cx_rwcx0_lvl_ao,
+https://drm.pages.freedesktop.org/maintainer-tools/drm-misc.html
+
+>  T:	git git://anongit.freedesktop.org/drm/drm-misc
+>  F:	Documentation/gpu/
+>  F:	drivers/gpu/drm/*
+> @@ -10250,7 +10249,7 @@ M:	Rodrigo Vivi <rodrigo.vivi@intel.com>
+>  M:	Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
+>  L:	intel-gfx@lists.freedesktop.org
+>  S:	Supported
+> -W:	https://01.org/linuxgraphics/
+> +W:	https://www.intel.com/content/www/us/en/develop/documentation/intel-graphics-for-linux-programmers-reference-guide/top.html
+
+I don't think this is what we want, but we'll need to sort out what the
+right thing is first.
+
+BR,
+Jani.
+
+>  Q:	http://patchwork.freedesktop.org/project/intel-gfx/
+>  B:	https://gitlab.freedesktop.org/drm/intel/-/wikis/How-to-file-i915-bugs
+>  C:	irc://irc.oftc.net/intel-gfx
+> @@ -10312,7 +10311,6 @@ M:	Zhi Wang <zhi.a.wang@intel.com>
+>  L:	intel-gvt-dev@lists.freedesktop.org
+>  L:	intel-gfx@lists.freedesktop.org
+>  S:	Supported
+> -W:	https://01.org/igvt-g
+>  T:	git https://github.com/intel/gvt-linux.git
+>  F:	drivers/gpu/drm/i915/gvt/
+>  
+> @@ -16668,7 +16666,7 @@ PM-GRAPH UTILITY
+>  M:	"Todd E Brandt" <todd.e.brandt@linux.intel.com>
+>  L:	linux-pm@vger.kernel.org
+>  S:	Supported
+> -W:	https://01.org/pm-graph
+> +W:	https://www.intel.com/content/www/us/en/developer/topic-technology/open/pm-graph/overview.html
+>  B:	https://bugzilla.kernel.org/buglist.cgi?component=pm-graph&product=Tools
+>  T:	git git://github.com/intel/pm-graph
+>  F:	tools/power/pm-graph
 
 -- 
-2.39.2
-
+Jani Nikula, Intel Open Source Graphics Center
