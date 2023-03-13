@@ -2,110 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 459056B85C9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B1E96B85CD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229540AbjCMXBc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:01:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47580 "EHLO
+        id S230353AbjCMXCE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:02:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229881AbjCMXBX (ORCPT
+        with ESMTP id S230280AbjCMXBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:01:23 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78621211DB;
-        Mon, 13 Mar 2023 16:00:34 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id i9so3745934wrp.3;
-        Mon, 13 Mar 2023 16:00:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678748408;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lQ8HCvy+knNv4fgP277vjD/YWRmgOe4jFTBMj1XoMvQ=;
-        b=NaFGprQgPLF5N3bvetu4WdLJuW1Pb02I28YZafmKEfgTsFlfNzBGm7iqsbBr7smFoE
-         3xVbSltMaYkOl1ELg/3Q3lg8su8siBq+aun6McYn6tIw9o0oWUOxg8WO/N7tqNXIK3Vy
-         WT1FkEgmQ2w1xPaHhpBStO8GOLBiMNyI11eHvnImXyvMqU3t8GIojA4BusoMzCS3/FDu
-         fuIVGMvkzNmhYXFdvUxfPjdzCg7k3BEsuKDWQkue5D0uSCgvJcBG0PibP3hFhX7NgItf
-         stMggtvA9OJz6nTqQDoHtS7HYU24fnSWN26zLzCYz9DdxdOiGPMZ9LQlfecWF+VzhSC8
-         EuRA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678748408;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lQ8HCvy+knNv4fgP277vjD/YWRmgOe4jFTBMj1XoMvQ=;
-        b=ZBsahoPwC2eP+v2xXL6pNLmGw3JquvukcYDsoL8T3pz4sRB6X9GBxVuLKuqVLtQUMq
-         yUvdsk/vew0hO+5PILJc9Eh3+B9ish5CuCVgjzk4gKuLsRRlXV+M5zO+h70S+KQVmFdj
-         F8wXUbn5K9nyn7Cez+caXQV2zRGzdWY6/IyI47LhpKI/zlSK0+yYGDchwk5k0pRjgLMB
-         ne2LXEYhwUUUbk1a1OLxZIcDaIOCZIBG7WOiRyUrQX91nbXnsdPoBeTz/kfm7STANJzq
-         kTfWb7v69cdF1k9JhkdKBkF/AEHw4htfKC6XeJzMGF69eEjoSbEZ7a2l1io9Tt1UAnRg
-         FQwg==
-X-Gm-Message-State: AO0yUKU58bkIzL24oWo3TdpoY7gzGvdEtDFn8jb6wuJHooqF6tJFXePl
-        393RVOCIayW04NHARHvgzA==
-X-Google-Smtp-Source: AK7set/uhvWPQ0Ie9gQ1N3wv4IkubfAyRs1bC9cnXC/JpgVKHE6EO6sgTZpjN7pB+iKjNG7hZbsabQ==
-X-Received: by 2002:adf:e34c:0:b0:2c7:17a5:8687 with SMTP id n12-20020adfe34c000000b002c717a58687mr25075279wrj.0.1678748407393;
-        Mon, 13 Mar 2023 16:00:07 -0700 (PDT)
-Received: from playfield-dev-2 ([2a00:23c8:881a:8601:beed:984d:cecc:ef14])
-        by smtp.gmail.com with ESMTPSA id t18-20020a1c7712000000b003ed2987690dsm961375wmi.26.2023.03.13.16.00.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 16:00:07 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 23:00:03 +0000
-From:   Jules Irenge <jbi.octave@gmail.com>
-To:     jejb@linux.ibm.com
-Cc:     martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        linux@highpoint-tech.com, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: hptiop:Convert snprintf() to sysfs_emit()
-Message-ID: <ZA+q87K8vP72y69l@playfield-dev-2>
+        Mon, 13 Mar 2023 19:01:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 041A3769ED;
+        Mon, 13 Mar 2023 16:00:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E05A5B815FC;
+        Mon, 13 Mar 2023 23:00:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F0B3C433EF;
+        Mon, 13 Mar 2023 23:00:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678748448;
+        bh=JCeQvBY6bMqovbU34cXbJ4Zgnocr52q58fWGR8Okslg=;
+        h=From:Date:Subject:To:Cc:From;
+        b=db8ONJnU3rzg0GkiT8U7ITxd6f/Pcpenykg1Q3Gh7uOGiQUfuKf+uowPWc92kRciM
+         XClRrybnkrciyd9wLhE/RVuTmdPSSpoo7sk4Uu7cFGrpVokmkJWJOy7Hrynp5WTs1A
+         tKssWkWDmsSGhK3ZFN2v3EDos4Sx/zcxpYCOHTvciNdA1uUZhLXT8xgvToT2/9EtRR
+         eyHRXwwGypRwKKEKNAucW0swKGz8yjRYkcN5tV3YiY7srhFlfRiL7r9aGbsW3iv4AB
+         bOT+ASwBhst36EDe6ab+VBcGUZgESIgn8UzP1gnHdQMCaarY5lvCF/UM1LOA2QscI7
+         IAT03dPN/YTGw==
+From:   Nathan Chancellor <nathan@kernel.org>
+Date:   Mon, 13 Mar 2023 16:00:23 -0700
+Subject: [PATCH] riscv: Handle zicsr/zifencei issues between clang and
+ binutils
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20230313-riscv-zicsr-zifencei-fiasco-v1-1-dd1b7840a551@kernel.org>
+X-B4-Tracking: v=1; b=H4sIAAarD2QC/x2NQQrDMAwEvxJ0riC2A6X9SulBVuRGhzpFKiE05
+ O91clkYFmY2cDEVh3u3gcmirnNtEC4d8ET1JahjY4h9TH0KCU2dF/wpu7UtUlkUi5LzjPE2BCb
+ Jch0ZmiGTC2ajytPheJN/xY7jY1J0PbOP577/AX8nSeKGAAAA
+To:     paul.walmsley@sifive.com, palmer@dabbelt.com,
+        aou@eecs.berkeley.edu, conor.dooley@microchip.com
+Cc:     nathan@kernel.org, ndesaulniers@google.com, trix@redhat.com,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        stable@vger.kernel.org
+X-Mailer: b4 0.12.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6797; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=JCeQvBY6bMqovbU34cXbJ4Zgnocr52q58fWGR8Okslg=;
+ b=owGbwMvMwCEmm602sfCA1DTG02pJDCn8q+W/p6yaqjirarFIdECezW+de4YNOQ0aynImBz++m
+ sKzSO9uRykLgxgHg6yYIkv1Y9XjhoZzzjLeODUJZg4rE8gQBi5OAZhI53xGhu3M74vyHI/Vdh0N
+ Fnbm+HaSU2tO389nYWqvr3sy9NQrrWFkaFCeGvwou9z2E8P1nR6KSVdWnPwXds6/6nW4bNjJte0
+ XWQE=
+X-Developer-Key: i=nathan@kernel.org; a=openpgp;
+ fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Coccinnelle reports a warning
-Warning: Use scnprintf or sprintf
+There are two related issues that appear in certain combinations with
+clang and GNU binutils.
 
-Following the advice on kernel documentation
-https://www.kernel.org/doc/html/latest/filesystems/sysfs.html
+The first occurs when a version of clang that supports zicsr or zifencei
+via '-march=' [1] (i.e, >= 17.x) is used in combination with a version
+of GNU binutils that do not recognize zicsr and zifencei in the
+'-march=' value (i.e., < 2.36):
 
-For show(device *...) functions we should only use sysfs_emit() or sysfs_emit_at()
-especially when formatting the value to be returned to user space.
+  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
+  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/file.o
+  riscv64-linux-gnu-ld: -march=rv64i2p0_m2p0_a2p0_c2p0_zicsr2p0_zifencei2p0: Invalid or unknown z ISA extension: 'zifencei'
+  riscv64-linux-gnu-ld: failed to merge target specific data of file fs/efivarfs/super.o
 
-Convert snprintf() to sysfs_emit()
+The second occurs when a version of clang that does not support zicsr or
+zifencei via '-march=' (i.e., <= 16.x) is used in combination with a
+version of GNU as that defaults to a newer ISA base spec, which requires
+specifying zicsr and zifencei in the '-march=' value explicitly (i.e, >=
+2.38):
 
-Signed-off-by: Jules Irenge <jbi.octave@gmail.com>
+  ../arch/riscv/kernel/kexec_relocate.S: Assembler messages:
+  ../arch/riscv/kernel/kexec_relocate.S:147: Error: unrecognized opcode `fence.i', extension `zifencei' required
+  clang-12: error: assembler command failed with exit code 1 (use -v to see invocation)
+
+This is the same issue addressed by commit 6df2a016c0c8 ("riscv: fix
+build with binutils 2.38") (see [2] for additional information) but
+older versions of clang miss out on it because the cc-option check
+fails:
+
+  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
+  clang-12: error: invalid arch name 'rv64imac_zicsr_zifencei', unsupported standard user-level extension 'zicsr'
+
+To resolve the first issue, only attempt to add zicsr and zifencei to
+the march string when using the GNU assembler 2.38 or newer, which is
+when the default ISA spec was updated, requiring these extensions to be
+specified explicitly. LLVM implements an older version of the base
+specification for all currently released versions, so these instructions
+are available as part of the 'i' extension. If LLVM's implementation is
+updated in the future, a CONFIG_AS_IS_LLVM condition can be added to
+CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI.
+
+To resolve the second issue, use version 2.2 of the base ISA spec when
+using an older version of clang that does not support zicsr or zifencei
+via '-march=', as that is the spec version most compatible with the one
+clang/LLVM implements and avoids the need to specify zicsr and zifencei
+explicitly due to still being a part of 'i'.
+
+[1]: https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
+[2]: https://lore.kernel.org/ZAxT7T9Xy1Fo3d5W@aurel32.net/
+
+Cc: stable@vger.kernel.org
+Link: https://github.com/ClangBuiltLinux/linux/issues/1808
+Co-developed-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- drivers/scsi/hptiop.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+This is essentially a v3 of Conor's v1 and v2 but since I am sending the
+patch after finding a separate but related issue, I left it at v1:
 
-diff --git a/drivers/scsi/hptiop.c b/drivers/scsi/hptiop.c
-index 7e8903718245..3ae4a0a8be57 100644
---- a/drivers/scsi/hptiop.c
-+++ b/drivers/scsi/hptiop.c
-@@ -1111,7 +1111,7 @@ static int hptiop_adjust_disk_queue_depth(struct scsi_device *sdev,
- static ssize_t hptiop_show_version(struct device *dev,
- 				   struct device_attribute *attr, char *buf)
- {
--	return snprintf(buf, PAGE_SIZE, "%s\n", driver_ver);
-+	return sysfs_emit(buf, "%s\n", driver_ver);
- }
+- v1: https://lore.kernel.org/20230223220546.52879-1-conor@kernel.org/
+- v2: https://lore.kernel.org/20230308220842.1231003-1-conor@kernel.org/
+
+I have built allmodconfig with the following toolchain combinations to
+confirm this problem is resolved:
+
+- clang 12/17 + GNU as and ld 2.35/2.39
+- clang 12/17 with the integrated assembler + GNU ld 2.35/2.39
+- clang 12/17 with the integrated assembler + ld.lld
+
+There are a couple of other incompatibilities between clang-17 and GNU
+binutils that I had to patch to get allmodconfig to build successfully
+but those are less likely to be hit in practice because the full LLVM
+stack can be used with LLVM versions 13.x and newer. I will follow up
+with separate issues and patches.
+---
+ arch/riscv/Kconfig  | 22 ++++++++++++++++++++++
+ arch/riscv/Makefile | 10 ++++++----
+ 2 files changed, 28 insertions(+), 4 deletions(-)
+
+diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+index c5e42cc37604..5b182d1c196c 100644
+--- a/arch/riscv/Kconfig
++++ b/arch/riscv/Kconfig
+@@ -464,6 +464,28 @@ config TOOLCHAIN_HAS_ZIHINTPAUSE
+ 	depends on !32BIT || $(cc-option,-mabi=ilp32 -march=rv32ima_zihintpause)
+ 	depends on LLD_VERSION >= 150000 || LD_VERSION >= 23600
  
- static ssize_t hptiop_show_fw_version(struct device *dev,
-@@ -1120,7 +1120,7 @@ static ssize_t hptiop_show_fw_version(struct device *dev,
- 	struct Scsi_Host *host = class_to_shost(dev);
- 	struct hptiop_hba *hba = (struct hptiop_hba *)host->hostdata;
++config TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
++	def_bool y
++	# https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=aed44286efa8ae8717a77d94b51ac3614e2ca6dc
++	depends on AS_IS_GNU && AS_VERSION >= 23800
++	help
++	  Newer binutils versions default to ISA spec version 20191213 which
++	  moves some instructions from the I extension to the Zicsr and Zifencei
++	  extensions.
++
++config TOOLCHAIN_NEEDS_OLD_ISA_SPEC
++	def_bool y
++	depends on TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI
++	# https://github.com/llvm/llvm-project/commit/22e199e6afb1263c943c0c0d4498694e15bf8a16
++	depends on CC_IS_CLANG && CLANG_VERSION < 170000
++	help
++	  Certain versions of clang do not support zicsr and zifencei via -march
++	  but newer versions of binutils require it for the reasons noted in the
++	  help text of CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI. This
++	  option causes an older ISA spec compatible with these older versions
++	  of clang to be passed to GAS, which has the same result as passing zicsr
++	  and zifencei to -march.
++
+ config FPU
+ 	bool "FPU support"
+ 	default y
+diff --git a/arch/riscv/Makefile b/arch/riscv/Makefile
+index 4de83b9b1772..b05e833a022d 100644
+--- a/arch/riscv/Makefile
++++ b/arch/riscv/Makefile
+@@ -57,10 +57,12 @@ riscv-march-$(CONFIG_ARCH_RV64I)	:= rv64ima
+ riscv-march-$(CONFIG_FPU)		:= $(riscv-march-y)fd
+ riscv-march-$(CONFIG_RISCV_ISA_C)	:= $(riscv-march-y)c
  
--	return snprintf(buf, PAGE_SIZE, "%d.%d.%d.%d\n",
-+	return sysfs_emit(buf, "%d.%d.%d.%d\n",
- 				hba->firmware_version >> 24,
- 				(hba->firmware_version >> 16) & 0xff,
- 				(hba->firmware_version >> 8) & 0xff,
+-# Newer binutils versions default to ISA spec version 20191213 which moves some
+-# instructions from the I extension to the Zicsr and Zifencei extensions.
+-toolchain-need-zicsr-zifencei := $(call cc-option-yn, -march=$(riscv-march-y)_zicsr_zifencei)
+-riscv-march-$(toolchain-need-zicsr-zifencei) := $(riscv-march-y)_zicsr_zifencei
++ifdef CONFIG_TOOLCHAIN_NEEDS_OLD_ISA_SPEC
++KBUILD_CFLAGS += -Wa,-misa-spec=2.2
++KBUILD_AFLAGS += -Wa,-misa-spec=2.2
++else
++riscv-march-$(CONFIG_TOOLCHAIN_NEEDS_EXPLICIT_ZICSR_ZIFENCEI) := $(riscv-march-y)_zicsr_zifencei
++endif
+ 
+ # Check if the toolchain supports Zihintpause extension
+ riscv-march-$(CONFIG_TOOLCHAIN_HAS_ZIHINTPAUSE) := $(riscv-march-y)_zihintpause
+
+---
+base-commit: eeac8ede17557680855031c6f305ece2378af326
+change-id: 20230313-riscv-zicsr-zifencei-fiasco-2941caebe7dc
+
+Best regards,
 -- 
-2.39.2
+Nathan Chancellor <nathan@kernel.org>
 
