@@ -2,108 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 404A56B718E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:50:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E716A6B719B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCMIur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 04:50:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52916 "EHLO
+        id S230274AbjCMIvj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:51:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229777AbjCMIuA (ORCPT
+        with ESMTP id S230203AbjCMIu6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 04:50:00 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C5B1EBF8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:48:27 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id da10so45543817edb.3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:48:26 -0700 (PDT)
+        Mon, 13 Mar 2023 04:50:58 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C96904FAB1;
+        Mon, 13 Mar 2023 01:49:08 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id p6so6461660pga.0;
+        Mon, 13 Mar 2023 01:49:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678697301;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=pYebPHbCYlq536pyuASzma+BqBMabPZtr85QVHAg0mw=;
-        b=VXM/as5ptTza/LqdP2gaOKcPNo08rqm4nEiRDaKWwHfoT509x4KoPJLtN4PF/iTYk9
-         BKYhyGraGRmoEJUciW3vM7zmCBszmds+7XI3FlzpL3V+thXWJzr/n/zd1SlA8NFi8yf8
-         QbqXMG5nOA3DNMMgmfgruAf0r7gFG23uzf7C/uYC+qeZFFuFb1Z/zO9QMGAgg41BGEFc
-         szau7z5set3PxBlW1rOL0nmqpeyVRezmOIOFgpn6rG79MGtEOIhFvL6k2qV7/3k6ZPJF
-         UieVY5Z+jKXAkxkYfjNw6ACmuh4UXKk1C7mHeX33uNlKdWzVao4Xzz5LaiSj/Z0at3R1
-         jrVg==
+        d=gmail.com; s=20210112; t=1678697348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UdJZFGWnCqrGrvX1AXmXSN5ym6vA1hPmy0582RXs6Uo=;
+        b=lVhyFjJrYO5YFrPABmayHEJrldR9VVyOKxVDVd6Wo+aHPyUJqBH3i10hXtcEn+aDsb
+         Z56nA82rDW4Pej1y0jajJ+uxJIOeYTX5COvWri7BEEanXSZEJwNTRrVTZVCWvNrIJAp4
+         6w2YPnICOc07ATlGh1Ii2BwRPNwiHtpEOrbnEFhuDgSa1ko3+zQ6aXGHqGq6WPrWzwCH
+         DgXXVcD9yyDvLCbr/pY78x67lGU9Qsei+zKM+/zsrbTJfMf261lQ18IK4pAYEig57aSD
+         1ew6thgxTYVrAU+t5gY563kmk9Khk5IeDJUgx+bjovmPP7/dlVD363A4aftOS+5SAzZJ
+         ZTXQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678697301;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pYebPHbCYlq536pyuASzma+BqBMabPZtr85QVHAg0mw=;
-        b=BZq8H8TN3WWtjqxQchmWIR0BEoyQupnQv5ErECklyCH7Pxz2ozEy2nC1bdKbe0FVCC
-         HHi2sqN15VqV8rXlYHgOhcyPQyPNhhrdxeugvOU7ue+6NgsRlS2/by9J4DBbXHvv6ETc
-         uc555Zx5umKZwMxnXg61D2xGbL8t9sZ95JyUql9YiB4jnj+iTlm2rG7PgK97izPTDTE/
-         W+baxMCWtocshqKUY+SYpOf/EHEIiJuEm48l4zX+nDfBwD5Zz7j+YtGgJXHxz/LJASDO
-         3V24TQ790ZlmSYCJq+V9HkoTrg/GCENv3zNxxxm6f24ylqQUxludO+eTni482Uqmgbl7
-         k0Mg==
-X-Gm-Message-State: AO0yUKUIsH2wgncgIvMjEpU39BJfPK2D9hxgxSKJLmQpTfF7j5P7NTQ2
-        Ho+ZjxVR5sfKOERJRCvfXYx+xA==
-X-Google-Smtp-Source: AK7set8xmjglP6bDYh4KU79tBTt8O9DsU3OK3wVlOF/nnQr0H7Vjqz9Z4Hbd8g2grWj3Wjra3O0ssQ==
-X-Received: by 2002:a17:907:320a:b0:87a:ee05:f7b with SMTP id xg10-20020a170907320a00b0087aee050f7bmr39446997ejb.24.1678697301571;
-        Mon, 13 Mar 2023 01:48:21 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:f052:f15:3f90:fcb3? ([2a02:810d:15c0:828:f052:f15:3f90:fcb3])
-        by smtp.gmail.com with ESMTPSA id y11-20020a1709060a8b00b009245ba892d6sm2051886ejf.103.2023.03.13.01.48.20
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 01:48:21 -0700 (PDT)
-Message-ID: <ea652d10-d910-40d8-9eae-39f2ba722466@linaro.org>
-Date:   Mon, 13 Mar 2023 09:48:20 +0100
+        d=1e100.net; s=20210112; t=1678697348;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UdJZFGWnCqrGrvX1AXmXSN5ym6vA1hPmy0582RXs6Uo=;
+        b=j62LXA53/7sVhnYQsqUV1NCfzW11pmbCa+q+BMbqi9bSfuvltC5SmVEgRnHEi24jMP
+         KJVgDIX9w23sv2ZrgmUJjc+e6PZjDjngEACaLUzhV/14WfjN3IvtVelkmXLIAssct7hz
+         i97qw+snryo8lfY33P78hEJP+qTv+DQiE/MXMIwq9kyY4/EUs94Ey56sr5hNsWGQiYDF
+         CNGSYKWTMxdgaAetHAA7eUeedYC/QlS2SWZrXcb42+dWkguv9ZecPvFtGaoSVV7JwdGt
+         WuIwH+pHVIbOs23MsJfkfgkZ7r/Pt6Qat6Ar9m+47yAFNBXH8A86Ko9WoR1B9sKBVS0L
+         ti1g==
+X-Gm-Message-State: AO0yUKUVhXZH7YOrDpttcBvlE2P24oIc3gkv71gy2dlbm8DVo+hV01Pk
+        OcpP3KA6mMtZ9ZhGDp6OV2Waa1PdX6StHFPeYlA=
+X-Google-Smtp-Source: AK7set93yVCJ7vYMwpAXAJXNnGjB4sTvhmMwrUr4NfDYWkzd7Sv2OBew8QoG0y27UJHpTvhcdUJufud9Op3Yf7SNsFc=
+X-Received: by 2002:a63:6e02:0:b0:50b:188d:3381 with SMTP id
+ j2-20020a636e02000000b0050b188d3381mr615559pgc.4.1678697347846; Mon, 13 Mar
+ 2023 01:49:07 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 2/6] ARM: dts: imx6dl-yapp4: Change LED channel names
- according to dt-binding
-Content-Language: en-US
-To:     Shawn Guo <shawnguo@kernel.org>,
-        =?UTF-8?B?TWljaGFsIFZva8OhxI0=?= <michal.vokac@ysoft.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230210154855.3086900-1-michal.vokac@ysoft.com>
- <20230210154855.3086900-3-michal.vokac@ysoft.com>
- <20230313082834.GO143566@dragon>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230313082834.GO143566@dragon>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311161242.3773432-1-zyytlz.wz@163.com> <TYBPR01MB534196428158C2D79A910E07D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+In-Reply-To: <TYBPR01MB534196428158C2D79A910E07D8B99@TYBPR01MB5341.jpnprd01.prod.outlook.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 13 Mar 2023 16:48:54 +0800
+Message-ID: <CAJedcCztRHuHVtrqsA3Osn+yp+Swgbu1GEAyfDE3d90CREn25g@mail.gmail.com>
+Subject: Re: [PATCH v2] usb: gadget: udc: renesas_usb3: Fix use after free bug
+ in renesas_usb3_remove due to race condition
+To:     Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        "phil.edworthy@renesas.com" <phil.edworthy@renesas.com>,
+        "linux-usb@vger.kernel.org" <linux-usb@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "1395428693sheep@gmail.com" <1395428693sheep@gmail.com>,
+        "alex000young@gmail.com" <alex000young@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 09:28, Shawn Guo wrote:
-> On Fri, Feb 10, 2023 at 04:48:51PM +0100, Michal Vokáč wrote:
->> The lp55xx LED controller binding was converted to schema and dtbs_check
->> now complains:
->>
->>   led-controller@30: 'chan@0', 'chan@1', 'chan@2' do not match any of the regexes
->>
->> Use correct names to fix that.
->>
->> Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
-> 
-> It's been address as part of this commit:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=4b0d1f2738899dbcc7a026d826373530019aa31b
-> 
+Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com> =E4=BA=8E2023=E5=B9=B4=
+3=E6=9C=8813=E6=97=A5=E5=91=A8=E4=B8=80 16:28=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Hi Zheng,
+>
+> > From: Zheng Wang, Sent: Sunday, March 12, 2023 1:13 AM
+> >
+> > In renesas_usb3_probe, &usb3->role_work is bound with
+> > renesas_usb3_role_work. renesas_usb3_start will be called
+> > to start the work.
+> >
+> > to make cleanup, there may be an unfinished work. The possible
+> > sequence is as follows:
+>
+> Why do you remove the following description on this v2 patch?
+> -----
+> If we remove the driver which will call usbhs_remove
+> -----
+> I think this description is helpful to understand.
+>
 
-Which is mainline, so it raises the question on what old tree this was
-based on...
+Sorry I misunderstood you previous response for my poor English. Will
+append it again in the next version.
 
-Best regards,
-Krzysztof
+Best reagrds,
+Zheng
 
+>
+> > Fix it by canceling the work before cleanup in the renesas_usb3_remove
+> >
+> > CPU0                  CPU1
+> >
+> >                     |renesas_usb3_role_work
+> > renesas_usb3_remove |
+> > usb_role_switch_unregister  |
+> > device_unregister   |
+> > kfree(sw)          |
+> > free usb3->role_sw  |
+> >                     |   usb_role_switch_set_role
+> >                     |   //use usb3->role_sw
+> >
+> > Fixes: 39facfa01c9f ("usb: gadget: udc: renesas_usb3: Add register of u=
+sb role switch")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > v2:
+> > - fix typo, use clearer commit message and only cancel the UAF-related =
+work suggested by Yoshihiro Shimoda
+> > ---
+> >  drivers/usb/gadget/udc/renesas_usb3.c | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/usb/gadget/udc/renesas_usb3.c b/drivers/usb/gadget=
+/udc/renesas_usb3.c
+> > index bee6bceafc4f..a301af66bd91 100644
+> > --- a/drivers/usb/gadget/udc/renesas_usb3.c
+> > +++ b/drivers/usb/gadget/udc/renesas_usb3.c
+> > @@ -2661,6 +2661,7 @@ static int renesas_usb3_remove(struct platform_de=
+vice *pdev)
+> >       debugfs_remove_recursive(usb3->dentry);
+> >       device_remove_file(&pdev->dev, &dev_attr_role);
+> >
+> > +     cancel_work_sync(&usb3->role_work);
+> >       usb_role_switch_unregister(usb3->role_sw);
+> >
+> >       usb_del_gadget_udc(&usb3->gadget);
+> > --
+> > 2.25.1
+>
