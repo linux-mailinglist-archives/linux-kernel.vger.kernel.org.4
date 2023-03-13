@@ -2,123 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF4D56B7ACE
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F2A26B7AD2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:48:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229925AbjCMOrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45058 "EHLO
+        id S230238AbjCMOsC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:48:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbjCMOrf (ORCPT
+        with ESMTP id S229987AbjCMOr7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:47:35 -0400
-Received: from mail-oi1-x232.google.com (mail-oi1-x232.google.com [IPv6:2607:f8b0:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 479271420F;
-        Mon, 13 Mar 2023 07:47:06 -0700 (PDT)
-Received: by mail-oi1-x232.google.com with SMTP id q15so9561005oiw.11;
-        Mon, 13 Mar 2023 07:47:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678718825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=923lbrDnlGJSqSY3Xt8v6D4PUhcMD5WLpjqFY9Dv+lQ=;
-        b=N6JPqulPkDgn21ORqIZqJ56J1lBbYUaeHV0aEIemOsHOhKxKuf3/iru8tdPyO7R0H1
-         QFzf0lEcpgB79Bu2NByEFGGIPtq348JwvO1PfstrN1dtLTKtrA9fcIUf4yQn6S7dt02o
-         jalgj97ykc1GBx0mp+fb4Uq/sAGxsPlk4+Wb3soj3besvYBfIG4PIihVtbNny4orImCN
-         82LbcI35gstnU64OECe7g4KBBxw6nqQsc5CVs8s4rt4rSLRY7emXIQ8WTNpO3Qmf6SjD
-         4G7MY6RfnzMXYV91AKB1wVIr23FRKpxvNMDLPvnGhfUwpr76C7JROHqze7au8tSF52pX
-         /pdg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718825;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=923lbrDnlGJSqSY3Xt8v6D4PUhcMD5WLpjqFY9Dv+lQ=;
-        b=znrIpoyDW/subfIPoDFInnhnx5OIfIt3i9AzTCNq9jM0+saoS9MVO3whQxG2ptw502
-         rich+raNMK7vja0Sfd6TPGbA2k+LGRkEQgBjZJ8tV5YYfieupbYYZ3se8mECQALMlZXS
-         Gs2UfpRU6BrH2tNoZtiToiyHvvILqJ571tmphx3j5ff+2Bf6Yrw58YD1OIu0tHo3VSC3
-         Sd/sHy4EtNIWrw1VjlD0xi7QSbuWQR16IuG1xdfxWle31D2msZCd2xJhm9GpOT3KUEKO
-         1kvr0FMZMGQgGGLixYD1u4kjO3D97khi26Wsg2mABu2oFgDRIbBckc+KDTRvgf9sFEw3
-         LZTA==
-X-Gm-Message-State: AO0yUKU8hr37AnZsLrCN1czYZQXuH3zRTTFDhrOZCUhtFQpoL0DQtQH2
-        aCo0EypYjr7jA8tFia/qVxTvDBvZLYa8cMLar2s=
-X-Google-Smtp-Source: AK7set+t6Zd0ULAt1RXgYIU+6YQcPZGwFKu1FRMUu2gsq4o+CZmjaWhnRZBvBJFJVHUMQWkpBWPI8LlTbokFdPkkWH4=
-X-Received: by 2002:a05:6808:220a:b0:383:db64:65 with SMTP id
- bd10-20020a056808220a00b00383db640065mr5427713oib.4.1678718824817; Mon, 13
- Mar 2023 07:47:04 -0700 (PDT)
+        Mon, 13 Mar 2023 10:47:59 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D03FE73AE0;
+        Mon, 13 Mar 2023 07:47:23 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id 4AF273200754;
+        Mon, 13 Mar 2023 10:47:07 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Mon, 13 Mar 2023 10:47:07 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1678718826; x=1678805226; bh=1Tl9Nr3VhFjj5+5e3yKZreEBB/EH+2rar2/
+        gd2lLpXA=; b=d2rPMRNTIeokJyFEBrVmTqwi3gtFTmPCpy53c8Fc7o7S8tQyOSc
+        s6o0rKPt7Jhy0+XLmYDo7s9dj9yqgEQbk5uECyYwupqcliA5OfoxJExFOEIWVjT1
+        xEDfmgoyHiJANuD+7hBwYV7QoLyqhbTjJ+eHCFXwdQIzfQoC3ewfgkPihIqkCJ1t
+        AIyrZ5EpA1QPzL6FmgpLpssPsrxULiixiUHLmfVKD0kCj4qb/L81soJqBNOS/te1
+        uS+6sqknTV9EjL35fbCOKEyHTx3QAMsssjb9M5Nsq+kX4dKCuUQwSF2nscg5Y/Ro
+        P0WwyOO8iNnlWxL2mK/96sHTdTMgJqlT+Pw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678718826; x=1678805226; bh=1Tl9Nr3VhFjj5
+        +5e3yKZreEBB/EH+2rar2/gd2lLpXA=; b=Qe9NUyfii0X8qGtpIJdfZ+WAJGDAX
+        B5bwPvBfoVRMzlVshV+oR4H9JDhoxGRKA4cf4+A3Elf6TKzXH1pyihqTICnqDBi/
+        FXhPSbQw9NRvbz6qkQUiGDq8m5qEdaUUd11hkqRph1tJjWtLoFhD8aVjbkElYHRq
+        k4/rdxhKRZtNhsKa7M1NaXMsCh0XIriJrGS8iviblCa+T2TFEWVBAElnODwhXxV+
+        VlHSTPI44Y8dwD4s/igl4E0ZLnkogUX3btnMa1HyqCWsK6zQZQcWEi/F7fksF3Gs
+        X/E+YH8MK6Rmu2CEvtZOIA4s4DUGDe0+sL4jqwtiuEM6mduGj/JXZxe+w==
+X-ME-Sender: <xms:ajcPZCeqDmW82XO-1poX6vs7pPT0rlEyV1qCkj1M75Nr1dKYIjKQwQ>
+    <xme:ajcPZMOYByqTQ7-8S6M17rf_6IhvY0eBiL6CadCCiCfM8QorPygU-3jjfCdhnY2Gg
+    sZuBYV3u7IhGo8>
+X-ME-Received: <xmr:ajcPZDiVn51LSkzhwCm2fBfR__o3pitHNtBZ26fJxfqXhdc29ICoqriv7qwBLrMMUI1aMXbvfCh07fzy9RzWXR8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieejucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhimhhonhcu
+    ifgrihhsvghruceoshhimhhonhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeuveehgedtfeegfeduvdefudeuudffffffjeevueeg
+    fedufeeiudegudegvedugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhimhhonhesihhn
+    vhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:ajcPZP9EhuGuGV7mv2jtWDuOweifcNLk4PAFlXUB9t9YvVIgPH2iEg>
+    <xmx:ajcPZOs-gKH6FcHu3xLvXh0Zk8W0rnPNNa6rBBqvCL8PWO5UmhlYQQ>
+    <xmx:ajcPZGGIrEdI5jHYE3WzFVrth9GFLj3AVHZ91N1TBugNPRLWwjm5NQ>
+    <xmx:ajcPZH4eXkJoSDXs4hl2C7u3CyNeuJ7pAya71KX6ic4jMYjPnom4xQ>
+Feedback-ID: idc5945a3:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Mar 2023 10:47:04 -0400 (EDT)
+From:   Simon Gaiser <simon@invisiblethingslab.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>
+Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Simon Gaiser <simon@invisiblethingslab.com>
+Subject: [PATCH v2] ACPI: s2idle: Log when enabling wakeup IRQ fails
+Date:   Mon, 13 Mar 2023 15:47:10 +0100
+Message-Id: <20230313144710.3516-1-simon@invisiblethingslab.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230312204150.1353517-1-robdclark@gmail.com> <20230312204150.1353517-11-robdclark@gmail.com>
- <CAJZ5v0gEmFj5Yrm0OZx5XhvGStHXx1OsPXGQqmbFQpeYSADkwA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0gEmFj5Yrm0OZx5XhvGStHXx1OsPXGQqmbFQpeYSADkwA@mail.gmail.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Mon, 13 Mar 2023 07:46:53 -0700
-Message-ID: <CAF6AEGvDf0R3xhjhQn9Qub16FmP0wEM=vTO7xTmcQc4s0iY1cA@mail.gmail.com>
-Subject: Re: [PATCH 10/13] PM / QoS: Teach lockdep about dev_pm_qos_mtx
- locking order
-To:     "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        Rob Clark <robdclark@chromium.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "open list:SUSPEND TO RAM" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 5:31=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Sun, Mar 12, 2023 at 9:42=E2=80=AFPM Rob Clark <robdclark@gmail.com> w=
-rote:
-> >
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > Annotate dev_pm_qos_mtx to teach lockdep to scream about allocations
-> > that could trigger reclaim under dev_pm_qos_mtx.
->
-> So why is this needed?
+enable_irq_wake() can fail. Previously acpi_s2idle_prepare() silently
+ignored it's return code. Based on [1] we should try to continue even in
+case of an error, so just log a warning for now.
 
-Because it allows lockdep to warn about problems even if it hasn't
-seen recursion into shrinker yet.
+Discovered when trying to go into s2idle under Xen. This leads to a
+system that can't be woken, since xen-pirq currently doesn't support
+setting wakeup IRQs [2]. With this you get at least some helpful log
+message if you have access to console messages.
 
-BR,
--R
+Link: https://lore.kernel.org/linux-acpi/20230313125344.2893-1-simon@invisiblethingslab.com/ # v1
+Link: https://lore.kernel.org/linux-acpi/CAJZ5v0jahjt58nP6P5+xRdtD_ndYPvq4ecMVz6nfGu9tf5iaUw@mail.gmail.com/ # [1]
+Link: https://lore.kernel.org/xen-devel/20230313134102.3157-1-simon@invisiblethingslab.com/ # [2]
+Signed-off-by: Simon Gaiser <simon@invisiblethingslab.com>
+---
+v2:
+ - Based on feedback switched to only logging a warning instead of
+   returning an error.
+---
+ drivers/acpi/sleep.c | 8 +++++++-
+ 1 file changed, 7 insertions(+), 1 deletion(-)
 
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >  drivers/base/power/qos.c | 11 +++++++++++
-> >  1 file changed, 11 insertions(+)
-> >
-> > diff --git a/drivers/base/power/qos.c b/drivers/base/power/qos.c
-> > index 9cba334b3729..d4addda3944a 100644
-> > --- a/drivers/base/power/qos.c
-> > +++ b/drivers/base/power/qos.c
-> > @@ -1012,3 +1012,14 @@ void dev_pm_qos_hide_latency_tolerance(struct de=
-vice *dev)
-> >         pm_runtime_put(dev);
-> >  }
-> >  EXPORT_SYMBOL_GPL(dev_pm_qos_hide_latency_tolerance);
-> > +
-> > +static int __init dev_pm_qos_init(void)
-> > +{
-> > +       /* Teach lockdep about lock ordering wrt. shrinker: */
-> > +       fs_reclaim_acquire(GFP_KERNEL);
-> > +       might_lock(&dev_pm_qos_mtx);
-> > +       fs_reclaim_release(GFP_KERNEL);
-> > +
-> > +       return 0;
-> > +}
-> > +early_initcall(dev_pm_qos_init);
-> > --
-> > 2.39.2
-> >
+diff --git a/drivers/acpi/sleep.c b/drivers/acpi/sleep.c
+index 4ca667251272..6b30dea94fae 100644
+--- a/drivers/acpi/sleep.c
++++ b/drivers/acpi/sleep.c
+@@ -714,7 +714,13 @@ int acpi_s2idle_begin(void)
+ int acpi_s2idle_prepare(void)
+ {
+ 	if (acpi_sci_irq_valid()) {
+-		enable_irq_wake(acpi_sci_irq);
++		int error;
++
++		error = enable_irq_wake(acpi_sci_irq);
++		if (error)
++			pr_warn("Warning: Failed to enable wakeup from IRQ %d: %d\n",
++				acpi_sci_irq,
++				error);
+ 		acpi_ec_set_gpe_wake_mask(ACPI_GPE_ENABLE);
+ 	}
+ 
+-- 
+2.39.2
+
