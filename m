@@ -2,251 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D3B6B6E0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:38:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE9116B6E1B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:46:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbjCMDh6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:37:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51116 "EHLO
+        id S230017AbjCMDqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229737AbjCMDhz (ORCPT
+        with ESMTP id S229992AbjCMDqs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:37:55 -0400
-Received: from HK2P15301CU002.outbound.protection.outlook.com (mail-eastasiaazon11020016.outbound.protection.outlook.com [52.101.128.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24B453251D
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:37:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Vk0is64BEIUmv0Mk52Aj+y+zTly2F1nN4pm8gUd1IlCZrLOf6JGFX6Vl0nCwQ29LQY9DbSpXYQpoHn3KyWLLocz9DEw+akmgAc1zWdooRAKm3jRS7vI9wlVLYVsWTqC/z6FwJcYq4hYm63a4G0LFdF7puOb4G5icAJkVQf/sl+OVSYX8ufvNlCnsZrt8JLdnOYcFQWhUFSCSq6uz+V6IInB+XMFMUXAUM6POTuwh7Jf0dfiWZ3gqGnhs1A2nr7ZZNO2Ez+Dlic66K/sOivufCy4wV5tYg2bB3Iv6RMSbyW1sg8Ic2UUK2QU/55qJVAnJ2OGs7ep2rCXXidcb2ZMiQA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=lCf/gw+a8POVyoEC631H38YzxhT3mnBgn3foSQ/KX7Q=;
- b=FzKRGwTVo7KM2aecePP/jJMv4IztnAza1qs5UqAflFIG+BwWnAUY2fsIPB5sWFucGmk0tXhIch34T1zpLE2EwbnY3Z+YVXMHI8KCEt5TN5SMbg1YdYtZGfTwI8bUJDYu7Lw7u8u1bU81YP7fbtkxE5dmECeb5b99Delj9XeZDKpohgST1HenXHeswmywtu6xPjNKcDiSoUhMuCJFFrdpCGvYNFmThcaee38qW3m4e4sbdA99Vguo++FYOSbIyADn19ce+Bi142JlkXWZnTCr8ChE5XgfXc+P5oNpBZiI1ToXlsXAjswcXPBnRSeweR6KojyDoFC35e6Ka1Ti8rh1KQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=microsoft.com; dmarc=pass action=none
- header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=lCf/gw+a8POVyoEC631H38YzxhT3mnBgn3foSQ/KX7Q=;
- b=hZgNHBnIr6iILLYcLJPfLRfWwWdU6R5vi1UBfr6tiev5+cMZRD34vaZPqdLshz0bYhF2RpYRW92gM5uw9R+JLnfwkuIsu99HHu1axQvgPF5Z4CmUA83HMq6U1/+GU7BAI+SOFwnKDyH15osxnAr5JaKhu5jSbt1M7lD7gJvGMRc=
-Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM (2603:1096:301:e6::8) by
- TYZP153MB0430.APCP153.PROD.OUTLOOK.COM (2603:1096:400:2f::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6178.19; Mon, 13 Mar 2023 03:37:45 +0000
-Received: from PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
- ([fe80::efc9:b06b:c407:5b6]) by PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
- ([fe80::efc9:b06b:c407:5b6%6]) with mapi id 15.20.6222.003; Mon, 13 Mar 2023
- 03:37:45 +0000
-From:   Saurabh Singh Sengar <ssengar@microsoft.com>
-To:     Saurabh Singh Sengar <ssengar@microsoft.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Saurabh Sengar <ssengar@linux.microsoft.com>
-CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
-        "johan+linaro@kernel.org" <johan+linaro@kernel.org>,
-        "isaku.yamahata@intel.com" <isaku.yamahata@intel.com>,
-        "Michael Kelley (LINUX)" <mikelley@microsoft.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "andriy.shevchenko@intel.com" <andriy.shevchenko@intel.com>
-Subject: Re: [PATCH] x86/ioapic: Don't return 0 as valid virq
-Thread-Topic: [PATCH] x86/ioapic: Don't return 0 as valid virq
-Thread-Index: AQHZVV0s0K9sEwubBk+XEhV+nVia1Q==
-Date:   Mon, 13 Mar 2023 03:37:44 +0000
-Message-ID: <PUZP153MB0749DD5C9CE7B60DDC75ADACBEB99@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
-References: <1677785686-2152-1-git-send-email-ssengar@linux.microsoft.com>
- <20230312204019.GBZA44s28AOAfAcRuy@fat_crate.local>
- <PUZP153MB074987B356FCB28933B87CCBBEB99@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
-In-Reply-To: <PUZP153MB074987B356FCB28933B87CCBBEB99@PUZP153MB0749.APCP153.PROD.OUTLOOK.COM>
-Accept-Language: en-IN, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=5a8939aa-a389-4c82-b8cb-7804940c2eae;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2023-03-13T03:06:01Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=microsoft.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PUZP153MB0749:EE_|TYZP153MB0430:EE_
-x-ms-office365-filtering-correlation-id: 55d323aa-b1a6-4768-7857-08db23744ee8
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: uMruA2FFWfTDIXnIAsUATYmytwt13oSZE3DBGJzwpfpn/fJOsveeNa8TbVwSONKnnUzSl/Mx1rTBw3W7NAr+Pbg+7kCx6QAV7XZIZ7I/i2uiV2uMfT/u5LoMU1hA1Ilm+86aLVOPI6LWcgBIzyaZLi88qxqX/fcy7ArfAWD2DUap/30ri4rqv8DSiyKOdSWSFHt2vb8Jghyi0Ls93gFIk1sdHK0GgzDP2bvKxSJx9DAivDa5mjOsb7KvQWrihjI7cT8xRp83drgVTvtbUcDga+7rVa8i4Dj++IdG+NMpDEcApi2lUmxBgOAAJaSCkLDztrH0pS5JwYiMgH7ywdZkAyk30wURC3abJQ8WdDT9T5qcWYYIXPZUt1Takpd2sasWYYDJz5AzG5cJp10TTwG6Mdb2744uOLZ94yoMaopq3OMJlLgl2n+AqQfm7QO0XFN3xLTsbZ+kjFuhTlHSGVSAnG0AsrJaQuJ7+yHIi5w84cN878vuK/DkLvpCwdO2NuL0WoVrd594mS9Tc37mlSiIoqb/FxQEtG3F0fsxtQnVe29zSlEHk6rMxCJl29LjGN23L/at/oQTNpOttN8mmIXtpMXIsQci1UK04B07fFc7+syUB7Oyzh2UlIhaRjorialtqVijRnwst5kbiqSZQBs0PHj5Y8zXhyu43S2i9E4XsTicHXJRV0ZFCx1LJn0I0m47e/34vlhxQqkt2pryy1xxX+TmlEwMTKounXewDAIjFxoFens6v0+/7DkkqM7I5Ylp
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PUZP153MB0749.APCP153.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(376002)(346002)(366004)(39860400002)(136003)(451199018)(122000001)(55016003)(33656002)(38070700005)(82960400001)(38100700002)(82950400001)(83380400001)(52536014)(478600001)(8936002)(5660300002)(86362001)(10290500003)(71200400001)(7696005)(7416002)(966005)(2906002)(64756008)(76116006)(2940100002)(66556008)(8676002)(66946007)(66446008)(110136005)(316002)(66476007)(54906003)(4326008)(9686003)(41300700001)(186003)(8990500004)(53546011)(6506007);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?/ivJPEFjsczb/1t3cE2NgZBr98atxps1kZgVQVyjuqKDsYtppFqcMgG6CNX7?=
- =?us-ascii?Q?HE5U4xMcn8g8QY+tt3qhYDV/4evanarhAcW7lLf/T/ta9h08jOnwjQvkit+d?=
- =?us-ascii?Q?fH3zDXbNVh01tf14nnYzAmrP44/Um1OYQcTpHP1mMcCWSHrSRSaPTHKJIJL4?=
- =?us-ascii?Q?+2evOs30oiqty77zFfQEW7QFG44LfWbzLT3xanIDRa0jwBtaOoweF0dyBoJ5?=
- =?us-ascii?Q?MMQN/O6idH5VOMzCFU9eTVPi/C5LLhpllcOZNsCEMLU7xgPDLHb7I06y7pSL?=
- =?us-ascii?Q?5PJZ4S65f2MwXEHUGdN4Abi4GzYkANWizvdxsSm+ChFPWEZ1YLQxcZnLxQdX?=
- =?us-ascii?Q?qcM7oMcsZd2wWqo0M4TbsH1VzA5+vB/R3EeU9ueRyCJnrJVi18K+5pdERcf+?=
- =?us-ascii?Q?IU6khT1gvdtcEhFtKy47HcF5VmJT7ntIhO5c+8fLdew7Nnjdc0PyS4+x3kXk?=
- =?us-ascii?Q?KSJmTzpvflKPTQJTCYVgY+ffLZ2wMPTLsKcai9QlKD4HtIe7Hz1xdKHd0yEg?=
- =?us-ascii?Q?vs6WDFu+QyguRlrJG/i6s7sejmiBa/PR2RPeoNeJwhRuKJ9z13WBUnX1eo5T?=
- =?us-ascii?Q?bD1BEfzSSmJdRuSoGbj4dTxVSQL5gfw1Sr5T7jTPR4L0DBTV6NqqtCYxBZo6?=
- =?us-ascii?Q?fAnazLMkLvKksKT3D3QoeiKjtCkpZl8zZ4GmfHSKgJLgoq/TlhD2tvZe4TBC?=
- =?us-ascii?Q?XCLI95nVnGYTEuv0n9M3vLuYh3DEzD9nsFonPP9OPE1ZuFeqlAy9+e7foa16?=
- =?us-ascii?Q?2O7EF4JeY07HRes33+fBrpH0KgHddueOn5Kimxb/bCttaH+gOErN9dxWNqJd?=
- =?us-ascii?Q?pfY736aWG5wN5BgK6OJauRge46NJ+AahNQyGSR15L2Vk+i0FMUhIS5iFqWRs?=
- =?us-ascii?Q?+G6U4jV/7ZXFCG4o/ZZ8E6ugJaek2dOAqHx2HfqmgBSRguKjYjQzk8T32NyP?=
- =?us-ascii?Q?kr26em2fFnJhiqRk52NDwofKmC3Mzf0CNwgO2mSaQLBwsDdsrSt9f4PQ5hFm?=
- =?us-ascii?Q?omfMRVEXWAAYZRHPjAyNQ07RSqQe4gjqzWj27xVMelR7RjYmuG6m9X6luTor?=
- =?us-ascii?Q?v4LBM0bkjOjnwUhSG2n2Qvm8/uVYOwBGBG73/zw41l0d1zOO7JeP03TrMTzy?=
- =?us-ascii?Q?YLuaXAaKQDM73pGG/uBwv85wG5pqKiZUnNG92j2YiIZBBiriQ+fegl9CAMzt?=
- =?us-ascii?Q?ZGl4bul9VT49ik92133IwrLWbeniuin4AVvnMhErJSe1CrezMl7XBVRVD53f?=
- =?us-ascii?Q?EmVI1gJDHu098xm1By5/bSdiKUCdbtAXoY1DDs21pMfU9qeEOcZZmzE2CXVL?=
- =?us-ascii?Q?K8SXbQQPTMk1KFLsetXOmyu3QOy7Rfbcq6m/4VQIrKvTTLZ7uvEhgb63dlE/?=
- =?us-ascii?Q?b82MtUIMVRnQr197uuYzrMuUXZSDuQe7QcGpVSmzfSYLrb+W1bceSOZZOYSp?=
- =?us-ascii?Q?bRDRmpjnprBP/lO+LVY/vUOR8nT/Pt+/zuBX8Bn0glulMXTGZ6dptMhKBvOg?=
- =?us-ascii?Q?YRoYHVWt156RvedhIk4W4eFCPB0f5rK4BD4avmtkHj2l5XTrRpHUZrnc+6Jv?=
- =?us-ascii?Q?VzByo1mR7/qK/nz/1hYwMkvzv2/SljhkxLWFPEWC?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 12 Mar 2023 23:46:48 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C15E93B87E;
+        Sun, 12 Mar 2023 20:46:44 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id ek18so12201718edb.6;
+        Sun, 12 Mar 2023 20:46:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678679203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=m3ivdNPo81WizlSI2L9KYGriSsBblsDqaVgcFRLFTQc=;
+        b=W4HvhwtVmo0incxQ/cFP3ekS5DgUrZ5eu95UrLEEDra5tQxQH2U+5Jgf4c0ZonLvjt
+         1kroHTpQcPau7Reof0gUcp+tVrLPznVx+IvEWGpYtcTuKwUD95ywdKm3VSsYSvhbIyig
+         K8r6q8JFrhKZ+744RfsngvSOJb4iK8Q0MdEBMdQ9xRghTTuNwO0kDkAZchT7tm4DA02G
+         Z3BWNefV+S2bgGzLrabNQJ4Aig2UiwhAWDqpNIQFL+TchePDq/n7n8kbVOLQObWQLauI
+         y0a6KOQm3Z2+7Xlvy8y8Wk2ml7cLskCqMChMQihd9TLM0NVXjNkFomYextj4H9xG34rX
+         QPQQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678679203;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=m3ivdNPo81WizlSI2L9KYGriSsBblsDqaVgcFRLFTQc=;
+        b=LnaFDM0dzh24bLZBnQuZ/9GfYjBOABQVIduzElub1tGzUEuRLES1scFIF1d5wQFuUB
+         HQswJ03r3cl4pULJBa0rxjHu4nhHQZ25lGviO47s6TFWr2I7gQUQXWtt3AkmDzyala8d
+         1Qh8vPAteaQ+E92fGR93ekJumt6zkrrXliFrE5pc3phJ1371Xsdt5IFX3dfk98X1/dDS
+         Pcwk7ws/t5+DKhMLP188dZVWaF3oIZpCxjmVP3LVllUpPjgv+q+TlueLuvRGnHItnFDP
+         3CFoZ3JAB9MIPsM9Rfrxh5gsJ/wD3we9YRkgfE3+tNjBqMkTMxJvE1wODYoMWC+ObkYX
+         Fqrw==
+X-Gm-Message-State: AO0yUKUyIlGXWXA4xYu4+H7PiVxyv9lg+TIMZG4I3bSnjeobfRxPrTgE
+        41/09NtlyGudd3M09eXwsHML7QpUwCo=
+X-Google-Smtp-Source: AK7set9ykTjacRqKV2JevFqRqTl7ARyu2wNpAiWVd48XAeTSZ66uVdneDWw5XAloCag1YKSgYpv5eQ==
+X-Received: by 2002:a17:907:7d9f:b0:8b1:781d:f9a4 with SMTP id oz31-20020a1709077d9f00b008b1781df9a4mr40752415ejc.21.1678679203045;
+        Sun, 12 Mar 2023 20:46:43 -0700 (PDT)
+Received: from [192.168.8.100] (188.30.129.33.threembb.co.uk. [188.30.129.33])
+        by smtp.gmail.com with ESMTPSA id c26-20020a170906695a00b00914001c91fcsm2903986ejs.86.2023.03.12.20.46.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 12 Mar 2023 20:46:42 -0700 (PDT)
+Message-ID: <4ed9ee1e-db0f-b164-4558-f3afa279dd4f@gmail.com>
+Date:   Mon, 13 Mar 2023 03:45:43 +0000
 MIME-Version: 1.0
-X-OriginatorOrg: microsoft.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PUZP153MB0749.APCP153.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 55d323aa-b1a6-4768-7857-08db23744ee8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 03:37:44.9582
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: GUGgH80WjGZ3NKPNtIcOMJg5fVwi/IRwTyFZOihQiqJTv0pqBuU7eau6DcWQ9PjbAO1Ogw+rya8c4KcCjKx1Ww==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYZP153MB0430
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Content-Language: en-US
+To:     Jens Axboe <axboe@kernel.dk>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+ <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+ <ee962f58-1074-0480-333b-67b360ea8b87@gmail.com>
+ <9322c9ab-6bf5-b717-9f25-f5e55954db7b@kernel.dk>
+From:   Pavel Begunkov <asml.silence@gmail.com>
+In-Reply-To: <9322c9ab-6bf5-b717-9f25-f5e55954db7b@kernel.dk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-I just see mail to rahul.tanwar@linux.intel.com is undelivered, shall I sti=
-ll add it in "Cc:" ?
-Please let me know what we usually do in such cases.
+On 3/12/23 15:30, Jens Axboe wrote:
+> On 3/11/23 1:45?PM, Pavel Begunkov wrote:
+>> On 3/11/23 17:24, Jens Axboe wrote:
+>>> On 3/10/23 12:04?PM, Pavel Begunkov wrote:
+>>>> io_uring extensively uses task_work, but when a task is waiting
+>>>> for multiple CQEs it causes lots of rescheduling. This series
+>>>> is an attempt to optimise it and be a base for future improvements.
+>>>>
+>>>> For some zc network tests eventually waiting for a portion of
+>>>> buffers I've got 10x descrease in the number of context switches,
+>>>> which reduced the CPU consumption more than twice (17% -> 8%).
+>>>> It also helps storage cases, while running fio/t/io_uring against
+>>>> a low performant drive it got 2x descrease of the number of context
+>>>> switches for QD8 and ~4 times for QD32.
+>>>>
+>>>> Not for inclusion yet, I want to add an optimisation for when
+>>>> waiting for 1 CQE.
+>>>
+>>> Ran this on the usual peak benchmark, using IRQ. IOPS is around ~70M for
+>>> that, and I see context rates of around 8.1-8.3M/sec with the current
+>>> kernel.
+>>>
+>>> Applied the two patches, but didn't see much of a change? Performance is
+>>> about the same, and cx rate ditto. Confused... As you probably know,
+>>> this test waits for 32 ios at the time.
+>>
+>> If I'd to guess it already has perfect batching, for which case
+>> the patch does nothing. Maybe it's due to SSD coalescing +
+>> small ro I/O + consistency and small latencies of Optanes,
+>> or might be on the scheduling and the kernel side to be slow
+>> to react.
+>>
+>> I was looking at trace_io_uring_local_work_run() while testing,
+>> It's always should be @loop=QD (i.e. 32) for the patch, but
+>> the guess is it's also 32 with that setup but without patches.
+> 
+> It very well could be that it's just loaded enough that we get perfect
+> batching anyway. I'd need to reuse some of your tracing to know for
+> sure.
 
-Regards,
-Saurabh
+I used existing trace points. If you see a pattern
+
+trace_io_uring_local_work_run()
+trace_io_uring_cqring_wait(@count=32)
+
+trace_io_uring_local_work_run()
+trace_io_uring_cqring_wait(@count=32)
+
+...
+
+that would mean a perfect batching. Even more so
+if @loops=1
 
 
-> -----Original Message-----
-> From: Saurabh Singh Sengar <ssengar@microsoft.com>
-> Sent: Monday, March 13, 2023 9:00 AM
-> To: Borislav Petkov <bp@alien8.de>; Saurabh Sengar
-> <ssengar@linux.microsoft.com>
-> Cc: tglx@linutronix.de; mingo@redhat.com; dave.hansen@linux.intel.com;
-> x86@kernel.org; hpa@zytor.com; johan+linaro@kernel.org;
-> isaku.yamahata@intel.com; Michael Kelley (LINUX)
-> <mikelley@microsoft.com>; linux-kernel@vger.kernel.org;
-> rahul.tanwar@linux.intel.com; andriy.shevchenko@intel.com
-> Subject: RE: [EXTERNAL] Re: [PATCH] x86/ioapic: Don't return 0 as valid v=
-irq
->=20
-> Cc: rahul.tanwar@linux.intel.com, andriy.shevchenko@intel.com
->=20
-> Thanks for you comments, please see my responses below.
->=20
-> > -----Original Message-----
-> > From: Borislav Petkov <bp@alien8.de>
-> > Sent: Monday, March 13, 2023 2:10 AM
-> > To: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > Cc: tglx@linutronix.de; mingo@redhat.com; dave.hansen@linux.intel.com;
-> > x86@kernel.org; hpa@zytor.com; johan+linaro@kernel.org;
-> > isaku.yamahata@intel.com; Michael Kelley (LINUX)
-> > <mikelley@microsoft.com>; linux-kernel@vger.kernel.org
-> > Subject: [EXTERNAL] Re: [PATCH] x86/ioapic: Don't return 0 as valid
-> > virq
-> >
-> > On Thu, Mar 02, 2023 at 11:34:46AM -0800, Saurabh Sengar wrote:
-> > > Zero is invalid virq and should't be returned as a valid value for
-> > > lower irq bound. If IO-APIC and gsi_top are not initialized return
-> >
-> > Why isn't gsi_top initialized?
-> >
-> > What is this fixing?
->=20
-> In the absence of a device tree node for IO-APIC,  IO-APIC is not registe=
-red,
-> resulting in uninitialized gsi_top. And in such cases arch_dynirq_lower_b=
-ound
-> will return 0. Returning 0 from this function will allow interrupts to ha=
-ve 0
-> assigned as valid irq, which is wrong. In case gsi_top is 0, lower bound =
-of irq
-> should be derived from 'hint' value passed to function as 'from'.
->=20
-> I can add above info in commit message,  please let me know if anything
-> more to be added.
->=20
-> To be specific in our system which is a guest VM we don't need IO-APIC an=
-d
-> hence there is no device tree node for it. It is observed that we get irq=
- 0
-> assigned to PCI-MSI.
->=20
-> >
-> > Don't be afraid to do
-> >
-> > git annotate arch/x86/kernel/apic/io_apic.c
-> >
-> > and see which commit added this. This one:
-> >
-> > 3e5bedc2c258 ("x86/apic: Fix arch_dynirq_lower_bound() bug for DT
-> > enabled
-> > machines")
-> >
-> > Now add the folks from this commit to Cc and tell them why in your
-> > case gsi_top is not initialized and what they're breaking by doing that=
-.
->=20
-> Thanks. I will add "Fixes:" and "Cc:" tag in next version.
->=20
-> >
-> > The more your commit message explains *why* you're fixing something,
-> > the better it is for the maintainers/reviewers to actually know what to=
- do.
-> >
-> > Right now I'm reading this and I'm thinking, random, unjustified change=
-.
-> > Ignore.
-> >
-> > Ok?
-> >
-> > Thx.
-> >
-> > --
-> > Regards/Gruss,
-> >     Boris.
-> >
-> >
-> https://nam06.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Fpeop
-> >
-> l%2F&data=3D05%7C01%7Cssengar%40microsoft.com%7C0595a41023f849c5ee
-> b308db
-> >
-> 23732cd0%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%7C638142749
-> 8888650
-> >
-> 08%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzI
-> iLCJBTiI
-> >
-> 6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&sdata=3DqpOM5MMYpUof
-> VOaNsp8HxTmv
-> > %2B80iVn5rFfzNQTlTwLw%3D&reserved=3D0
-> > e.kernel.org%2Ftglx%2Fnotes-about-
-> >
-> netiquette&data=3D05%7C01%7Cssengar%40microsoft.com%7C6e1e0e21051c4
-> >
-> 9c1cfe008db233a0376%7C72f988bf86f141af91ab2d7cd011db47%7C1%7C0%
-> >
-> 7C638142504360574969%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjA
-> >
-> wMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C
-> >
-> %7C&sdata=3DOLdgb1AuLbLvlzucgNFBQEEK6G%2FsFV%2BO2TqT%2FNCujJU%3
-> > D&reserved=3D0
+>>> Didn't take a closer look just yet, but I grok the concept. One
+>>> immediate thing I'd want to change is the FACILE part of it. Let's call
+>>> it something a bit more straightforward, perhaps LIGHT? Or LIGHTWEIGHT?
+>>
+>> I don't really care, will change, but let me also ask why?
+>> They're more or less synonyms, though facile is much less
+>> popular. Is that your reasoning?
+> 
+> Yep, it's not very common and the name should be self-explanatory
+> immediately for most people.
+
+That's exactly the problem. Someone will think that it's
+like normal tw but "better" and blindly apply it. Same happened
+before with priority tw lists.
+
+-- 
+Pavel Begunkov
