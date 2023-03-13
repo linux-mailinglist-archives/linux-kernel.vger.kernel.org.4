@@ -2,202 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAD7A6B7B0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:51:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD16D6B7B19
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:54:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231676AbjCMOv3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:51:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53306 "EHLO
+        id S230232AbjCMOyC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:54:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231669AbjCMOu4 (ORCPT
+        with ESMTP id S229987AbjCMOx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:50:56 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83A56738BD;
-        Mon, 13 Mar 2023 07:50:24 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32DEnl0G098652;
-        Mon, 13 Mar 2023 09:49:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678718987;
-        bh=M9oOgXpy7VJsV6og9C3G518iHqPrz1pxGesdLOm0XXk=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=aQyd0xzxpQsh5u3jdoKM6M3PYnj10FG4/56uWrIUt8BwLV00IYZd/SfGNwBK6IrQN
-         Rwv6/WWUoU34THeqgQTC7a0jCMA08QECxnEhWAFZWY2ym5/kdWlDEIbNX27djucOgX
-         FqGNj6rA1LvKI4xwz9RVuy69YIOQx7bEccrYOALE=
-Received: from DFLE107.ent.ti.com (dfle107.ent.ti.com [10.64.6.28])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32DEnlgj123692
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 13 Mar 2023 09:49:47 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
- Mar 2023 09:49:46 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Mon, 13 Mar 2023 09:49:46 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32DEnkOC005381;
-        Mon, 13 Mar 2023 09:49:46 -0500
-From:   Jai Luthra <j-luthra@ti.com>
-To:     Nishanth Menon <nm@ti.com>, Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
+        Mon, 13 Mar 2023 10:53:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92D2338670;
+        Mon, 13 Mar 2023 07:53:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E75F96133A;
+        Mon, 13 Mar 2023 14:52:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C59C433A4;
+        Mon, 13 Mar 2023 14:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678719142;
+        bh=U2MqS6kyxhQiLdwVlKalP2bSs4K0XighMTWsX41Gi/w=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J3q5ehobb57atQWdCuphh5upCJ1h/1caTXcCliCoCmfhVKXa6ct2MB7NVZbRYxP9o
+         02Xh/DBLUNAJ5v5qRr9Y+dZYjJtsML6vjFdde2XazSWmTke7pUtKC11MDwXOuaeaOd
+         2DYvpYVOGMTVUvFetN9GwQ8CxBJT8cdcKFMKAjloW0d2BFU2gSyqFs0UjycYzg4UnW
+         AgKrajr61788diT80RgcE7Vyxi1EbsVC5bMTWDTxiDOqTae9ScDf8iEWQTqS1wFYos
+         YndgrcThBt6lA6lvM8kdypVifZJIO2mnXPX5px9frUTvz/ULDVLyqYlNphZRe3sXKl
+         HxQexLUkZ/UyA==
+Received: by mail-lf1-f54.google.com with SMTP id s20so16034925lfb.11;
+        Mon, 13 Mar 2023 07:52:22 -0700 (PDT)
+X-Gm-Message-State: AO0yUKU3Yv+LSVoA31v1IfcXKEkvLk8NdivLRgFB0sYVP0L1o5hQ+tv5
+        iTb2O4mQY+Gj0pEvSWLXYmKAHHK4BO6G6rdj7A==
+X-Google-Smtp-Source: AK7set8X94msxVXedXhmMyx7ozcIXRIQjjj/hP3IIwwprdTSlUQCO0NlUMVovHxCkY5Sw2tXL186oPXe7fqueIj4uYE=
+X-Received: by 2002:ac2:4c29:0:b0:4e8:4117:67c8 with SMTP id
+ u9-20020ac24c29000000b004e8411767c8mr1600006lfq.7.1678719140352; Mon, 13 Mar
+ 2023 07:52:20 -0700 (PDT)
+MIME-Version: 1.0
+References: <20230306-ccorr-binding-fix-v5-0-6c56aaecc3b1@baylibre.com>
+In-Reply-To: <20230306-ccorr-binding-fix-v5-0-6c56aaecc3b1@baylibre.com>
+From:   Chun-Kuang Hu <chunkuang.hu@kernel.org>
+Date:   Mon, 13 Mar 2023 22:52:08 +0800
+X-Gmail-Original-Message-ID: <CAAOTY_9_i7RCcmPKUvD5jjWL1hUB6=Xr3TxGSkZ2u9eP3gMynA@mail.gmail.com>
+Message-ID: <CAAOTY_9_i7RCcmPKUvD5jjWL1hUB6=Xr3TxGSkZ2u9eP3gMynA@mail.gmail.com>
+Subject: Re: [PATCH v5] dt-bindings: display: mediatek: clean unnecessary item
+To:     Alexandre Mergnat <amergnat@baylibre.com>
+Cc:     Philipp Zabel <p.zabel@pengutronix.de>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        David Airlie <airlied@gmail.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>
-CC:     <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Jai Luthra <j-luthra@ti.com>
-Subject: [PATCH v5 6/6] arm64: dts: ti: k3-am62a7-sk: Enable audio on AM62A
-Date:   Mon, 13 Mar 2023 20:19:35 +0530
-Message-ID: <20230313-mcasp_upstream-v5-6-d6844707aa8a@ti.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com>
-References: <20230313-mcasp_upstream-v5-0-d6844707aa8a@ti.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3124; i=j-luthra@ti.com;
- h=from:subject:message-id; bh=e0XqG1n85p5rfGQ8c31UUUGa4/j6/dGgmGuUYExZ8Ok=;
- b=owEBbQKS/ZANAwAIAUPekfkkmnFFAcsmYgBkDzbWHCsj+mR3HmGG6neUPrlEPfrjErffXZIG1
- OpecTjEp62JAjMEAAEIAB0WIQRN4NgY5dV16NRar8VD3pH5JJpxRQUCZA821gAKCRBD3pH5JJpx
- RbMRD/sH6pQfqs0i5JoEQ0U9031GIJfnNJ6vKBj6cb4dHbDFv9//1/cjEF8eYfeYRzQ5bRAxPn1
- sF1kkUigh85xwcTkXQfT3WuafJQYf2UtSZGv6DaAXJb86zAur8Qw8e/rgBXbSiHFaQWg7xcm+JN
- Kab7/Sn5KNB6uBUOtwHGMHCb7yq6gdRuEGY8UqPl7Vhv/71Qd2w+JzLRpeBALGlgQ2LfgYNBQQJ
- E/+E//B/1veWZfC/qU+BIZhX5iGPUOvpLf7eQdkgtkH5ksNonW0bgcxwrVCMLHYrT/pnUUL0x9z
- vNaebMRtO8DVPT6VGyXyDClQvQTIvOVqoXiuylww8pSM1Gr6PH89JhBxYuMCerJJ5zuUeblovYY
- khMIJ9N6rPltOEndUeBFvC9G18Es9snoH4W/tlImUVzI9SDjy8FQBHmgTxFeSLCupGki24ZlDVs
- CrwYZ5gQw7YYAOBnIqsWeJ/da0g6L/8A1lOi+c610H5QmsNqHJ8s970+3uNjTyzV0pAHKJzyF/W
- CftLyigWalAZp4js58hKhGXvA687VZCzrAckohSSAKDCHi3/DvAB7GkVtb78bVXJmsN5CZq/2tL
- dpUxrHNsuH3SxRBFMqazFs3nY9TooEzJxGpzWN8AtL3NDmZHfmhTVrGRSQiFcoXpiMP2vsMiNLG
- ayaFu8AJ0uGbabA==
-X-Developer-Key: i=j-luthra@ti.com; a=openpgp; fpr=4DE0D818E5D575E8D45AAFC543DE91F9249A7145
-Content-Transfer-Encoding: 8bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>,
+        linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add nodes for audio codec and sound card, enable the audio serializer
-(McASP1) under use and update pinmux.
+Hi, Alexandre:
 
-Signed-off-by: Jai Luthra <j-luthra@ti.com>
----
- arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 77 +++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+Alexandre Mergnat <amergnat@baylibre.com> =E6=96=BC 2023=E5=B9=B43=E6=9C=88=
+9=E6=97=A5 =E9=80=B1=E5=9B=9B =E4=B8=8B=E5=8D=885:06=E5=AF=AB=E9=81=93=EF=
+=BC=9A
+>
+> The item which have the mediatek,mt8192-disp-ccorr as const compatible
+> already exist above. Merge all compatibles which have the same fallback
+> under the same item.
 
-diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-index 063e69e45163..1775ed154aff 100644
---- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-+++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
-@@ -122,6 +122,41 @@ led-0 {
- 			default-state = "off";
- 		};
- 	};
-+
-+	tlv320_mclk: clk-0 {
-+		#clock-cells = <0>;
-+		compatible = "fixed-clock";
-+		clock-frequency = <12288000>;
-+	};
-+
-+	codec_audio: sound {
-+		compatible = "simple-audio-card";
-+		simple-audio-card,name = "AM62Ax-SKEVM";
-+		simple-audio-card,widgets =
-+			"Headphone",	"Headphone Jack",
-+			"Line",	"Line In",
-+			"Microphone",	"Microphone Jack";
-+		simple-audio-card,routing =
-+			"Headphone Jack",	"HPLOUT",
-+			"Headphone Jack",	"HPROUT",
-+			"LINE1L",		"Line In",
-+			"LINE1R",		"Line In",
-+			"MIC3R",		"Microphone Jack",
-+			"Microphone Jack",	"Mic Bias";
-+		simple-audio-card,format = "dsp_b";
-+		simple-audio-card,bitclock-master = <&sound_master>;
-+		simple-audio-card,frame-master = <&sound_master>;
-+		simple-audio-card,bitclock-inversion;
-+
-+		simple-audio-card,cpu {
-+			sound-dai = <&mcasp1>;
-+		};
-+
-+		sound_master: simple-audio-card,codec {
-+			sound-dai = <&tlv320aic3106>;
-+			clocks = <&tlv320_mclk>;
-+		};
-+	};
- };
- 
- &main_pmx0 {
-@@ -200,6 +235,15 @@ AM62AX_IOPAD(0x130, PIN_INPUT, 0) /* (AB17) RGMII1_TXC */
- 			AM62AX_IOPAD(0x12c, PIN_INPUT, 0) /* (W16) RGMII1_TX_CTL */
- 		>;
- 	};
-+
-+	main_mcasp1_pins_default: main-mcasp1-pins-default {
-+		pinctrl-single,pins = <
-+			AM62AX_IOPAD(0x090, PIN_INPUT, 2) /* (L19) GPMC0_BE0n_CLE.MCASP1_ACLKX */
-+			AM62AX_IOPAD(0x098, PIN_INPUT, 2) /* (R18) GPMC0_WAIT0.MCASP1_AFSX */
-+			AM62AX_IOPAD(0x08c, PIN_OUTPUT, 2) /* (K19) GPMC0_WEn.MCASP1_AXR0 */
-+			AM62AX_IOPAD(0x084, PIN_INPUT, 2) /* (L18) GPMC0_ADVn_ALE.MCASP1_AXR2 */
-+		>;
-+	};
- };
- 
- &main_i2c0 {
-@@ -234,6 +278,19 @@ exp1: gpio@22 {
- 				   "MCASP1_FET_SEL", "UART1_FET_SEL",
- 				   "PD_I2C_IRQ", "IO_EXP_TEST_LED";
- 	};
-+
-+	tlv320aic3106: audio-codec@1b {
-+		#sound-dai-cells = <0>;
-+		compatible = "ti,tlv320aic3106";
-+		reg = <0x1b>;
-+		ai3x-micbias-vg = <1>;		/* 2.0V */
-+		status = "okay";
-+
-+		/* Regulators */
-+		AVDD-supply = <&vcc_3v3_sys>;
-+		IOVDD-supply = <&vcc_3v3_sys>;
-+		DRVDD-supply = <&vcc_3v3_sys>;
-+	};
- };
- 
- &sdhci1 {
-@@ -302,3 +359,23 @@ cpsw3g_phy0: ethernet-phy@0 {
- 		ti,min-output-impedance;
- 	};
- };
-+
-+&mcasp1 {
-+	status = "okay";
-+	#sound-dai-cells = <0>;
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&main_mcasp1_pins_default>;
-+
-+	op-mode = <0>;          /* MCASP_IIS_MODE */
-+	tdm-slots = <2>;
-+
-+	serial-dir = <  /* 0: INACTIVE, 1: TX, 2: RX */
-+	       1 0 2 0
-+	       0 0 0 0
-+	       0 0 0 0
-+	       0 0 0 0
-+	>;
-+	tx-num-evt = <32>;
-+	rx-num-evt = <32>;
-+};
+Applied to mediatek-drm-next [1], thanks.
 
--- 
-2.39.2
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/chunkuang.hu/linux.git/=
+log/?h=3Dmediatek-drm-next
+
+Regards,
+Chun-Kuang.
+
+>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collab=
+ora.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Alexandre Mergnat <amergnat@baylibre.com>
+> ---
+> Fix MTK color correction binding
+>
+> The fallback compatible has been duplicated in the 137272ef1b0f commit.
+>
+> To: Chun-Kuang Hu <chunkuang.hu@kernel.org>
+> To: Philipp Zabel <p.zabel@pengutronix.de>
+> To: David Airlie <airlied@gmail.com>
+> To: Daniel Vetter <daniel@ffwll.ch>
+> To: Rob Herring <robh+dt@kernel.org>
+> To: Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+> To: Matthias Brugger <matthias.bgg@gmail.com>
+> To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> To: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Cc: Rob Herring <robh@kernel.org>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-mediatek@lists.infradead.org
+> Cc: devicetree@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+> Changes in v5:
+> - Add trailers.
+> - Link to v4: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v4-0-1=
+17daea88efb@baylibre.com
+>
+> Changes in v4:
+> - Reword commit title and message.
+> - Link to v3: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v3-0-7=
+877613a35cb@baylibre.com
+>
+> Changes in v3:
+> - Re-order compatible.
+> - Link to v2: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v2-0-4=
+822939a837d@baylibre.com
+>
+> Changes in v2:
+> - Fix commit title.
+> - Link to v1: https://lore.kernel.org/r/20230306-ccorr-binding-fix-v1-0-1=
+77d81d60c69@baylibre.com
+> ---
+>  .../devicetree/bindings/display/mediatek/mediatek,ccorr.yaml         | 5=
+ +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,=
+ccorr.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,cc=
+orr.yaml
+> index b04820c95b22..bda86e6857f5 100644
+> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y=
+aml
+> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,ccorr.y=
+aml
+> @@ -27,13 +27,10 @@ properties:
+>            - const: mediatek,mt8192-disp-ccorr
+>        - items:
+>            - enum:
+> +              - mediatek,mt8186-disp-ccorr
+>                - mediatek,mt8188-disp-ccorr
+>                - mediatek,mt8195-disp-ccorr
+>            - const: mediatek,mt8192-disp-ccorr
+> -      - items:
+> -          - enum:
+> -              - mediatek,mt8186-disp-ccorr
+> -          - const: mediatek,mt8192-disp-ccorr
+>
+>    reg:
+>      maxItems: 1
+>
+> ---
+> base-commit: add072536971d7ce891fde3cdbf68c55e7cfa95a
+> change-id: 20230306-ccorr-binding-fix-718c6d725088
+>
+> Best regards,
+> --
+> Alexandre Mergnat <amergnat@baylibre.com>
