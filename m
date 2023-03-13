@@ -2,122 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF73B6B8087
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:29:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38B766B807F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:28:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230115AbjCMS3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60758 "EHLO
+        id S229709AbjCMS2o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:28:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbjCMS3c (ORCPT
+        with ESMTP id S229682AbjCMS2m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:29:32 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBC201420A;
-        Mon, 13 Mar 2023 11:28:50 -0700 (PDT)
-Received: from [172.18.236.247] (unknown [46.183.103.17])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id E9CF361CC457B;
-        Mon, 13 Mar 2023 19:27:01 +0100 (CET)
-Message-ID: <12d1ab7d-c4fd-44b5-7e53-e80cd4b00a21@molgen.mpg.de>
-Date:   Mon, 13 Mar 2023 19:26:57 +0100
+        Mon, 13 Mar 2023 14:28:42 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BBD072B4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:27:58 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbmtS-0001kx-KQ; Mon, 13 Mar 2023 19:27:34 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbmtQ-003uMr-GO; Mon, 13 Mar 2023 19:27:32 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbmtP-004cQD-2V; Mon, 13 Mar 2023 19:27:31 +0100
+Date:   Mon, 13 Mar 2023 19:27:30 +0100
+From:   Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
+        linux-clk@vger.kernel.org, kernel@pengutronix.de,
+        linux-doc@vger.kernel.org
+Subject: Re: [PATCH v3] clk: expand clk_ignore_unused mechanism to keep only
+ a few clks on
+Message-ID: <20230313182730.cx4n7lvhbtcs4hpn@pengutronix.de>
+References: <20221026151812.1042052-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [Intel-wired-lan] [PATCH net] ice: fix invalid check for empty
- list in ice_sched_assoc_vsi_to_agg()
-Content-Language: en-US
-To:     Jakob Koschel <jkl820.git@gmail.com>
-Cc:     Jesse Brandeburg <jesse.brandeburg@intel.com>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        Pietro Borrello <borrello@diag.uniroma1.it>,
-        linux-kernel@vger.kernel.org, "Bos, H.J." <h.j.bos@vu.nl>,
-        Cristiano Giuffrida <c.giuffrida@vu.nl>,
-        intel-wired-lan@lists.osuosl.org
-References: <20230301-ice-fix-invalid-iterator-found-check-v1-1-87c26deed999@gmail.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230301-ice-fix-invalid-iterator-found-check-v1-1-87c26deed999@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="xgfwba3jlkbdegto"
+Content-Disposition: inline
+In-Reply-To: <20221026151812.1042052-1-u.kleine-koenig@pengutronix.de>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Jakob,
 
+--xgfwba3jlkbdegto
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thank you for the patch.
+Hello,
 
-Am 13.03.23 um 17:31 schrieb Jakob Koschel:
-> The code implicitly assumes that the list iterator finds a correct
-> handle. If 'vsi_handle' is not found the 'old_agg_vsi_info' was
-> pointing to an bogus memory location. For safety a separate list
-> iterator variable should be used to make the != NULL check on
-> 'old_agg_vsi_info' correct under any circumstances.
-> 
-> Additionally Linus proposed to avoid any use of the list iterator
-> variable after the loop, in the attempt to move the list iterator
-> variable declaration into the macro to avoid any potential misuse after
-> the loop. Using it in a pointer comparision after the loop is undefined
-
-compar*i*son
-
-> behavior and should be omitted if possible [1].
-
-(It took me a short time to find the reference number at the end of the 
-URL.)
-
-> Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
-> Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+On Wed, Oct 26, 2022 at 05:18:12PM +0200, Uwe Kleine-K=F6nig wrote:
+> Allow to pass an integer n that results in only keeping n unused clocks
+> enabled.
+>=20
+> This helps to debug the problem if you only know that clk_ignore_unused
+> helps but you have no clue yet which clock is the culprit.
+>=20
+> Signed-off-by: Uwe Kleine-K=F6nig <u.kleine-koenig@pengutronix.de>
 > ---
->   drivers/net/ethernet/intel/ice/ice_sched.c | 8 +++++---
->   1 file changed, 5 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/intel/ice/ice_sched.c b/drivers/net/ethernet/intel/ice/ice_sched.c
-> index 4eca8d195ef0..b7682de0ae05 100644
-> --- a/drivers/net/ethernet/intel/ice/ice_sched.c
-> +++ b/drivers/net/ethernet/intel/ice/ice_sched.c
-> @@ -2788,7 +2788,7 @@ static int
->   ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
->   			   u16 vsi_handle, unsigned long *tc_bitmap)
->   {
-> -	struct ice_sched_agg_vsi_info *agg_vsi_info, *old_agg_vsi_info = NULL;
-> +	struct ice_sched_agg_vsi_info *agg_vsi_info, *iter, *old_agg_vsi_info = NULL;
->   	struct ice_sched_agg_info *agg_info, *old_agg_info;
->   	struct ice_hw *hw = pi->hw;
->   	int status = 0;
-> @@ -2806,11 +2806,13 @@ ice_sched_assoc_vsi_to_agg(struct ice_port_info *pi, u32 agg_id,
->   	if (old_agg_info && old_agg_info != agg_info) {
->   		struct ice_sched_agg_vsi_info *vtmp;
->   
-> -		list_for_each_entry_safe(old_agg_vsi_info, vtmp,
-> +		list_for_each_entry_safe(iter, vtmp,
->   					 &old_agg_info->agg_vsi_list,
->   					 list_entry)
-> -			if (old_agg_vsi_info->vsi_handle == vsi_handle)
-> +			if (iter->vsi_handle == vsi_handle) {
-> +				old_agg_vsi_info = iter;
->   				break;
-> +			}
->   	}
->   
->   	/* check if entry already exist */
+> Hello,
+>=20
+> compared to v2 sent in August 2021 this is a trivial rebase on top of
+> v6.1-rc1. I pinged that one repeatedly, I'm now trying with resending
+> and calling the rebased patch v3 to maybe get some feedback. :-\
 
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+I didn't get any feedback on this patch and still consider it useful.
 
+Any insights from your side?
 
-Kind regards,
+Best regards
+Uwe
 
-Paul
+--=20
+Pengutronix e.K.                           | Uwe Kleine-K=F6nig            |
+Industrial Linux Solutions                 | https://www.pengutronix.de/ |
+
+--xgfwba3jlkbdegto
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEfnIqFpAYrP8+dKQLwfwUeK3K7AkFAmQPaw8ACgkQwfwUeK3K
+7Al3PAf8DpEgu09BjbaLoin1vOdceJBfVEzZVAdzpCgLxVciSav2Hy2QfZAxtsuM
+J07SVb+T06jMVy1Nd/xPUvr1R/+PkBcXKeKA1ZRc5AXUoY3IMuAx6FdcV2r2K9+X
+sV4ysQfTGq0GT2UDAgpexKwyKBrE4TwrPArjh42v7RMmUX5OVOTN82NrXGrGVFYH
+BQ8rOmE1up9v5K/wZ79s7flc0ZB3hmzTso7uHJc68bnRs2tukvCzeHNGMXh5q88e
+FmQ7zPpRZd42zwN8wlfx98algYFa+O/+Qkx3ryCrHweojJx5xNDgJj+iHHnUUx2A
+UARE4pBbsGXlsIjwFS8hy3M7fcpfqw==
+=PdGy
+-----END PGP SIGNATURE-----
+
+--xgfwba3jlkbdegto--
