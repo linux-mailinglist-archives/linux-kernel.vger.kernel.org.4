@@ -2,114 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 458FE6B7653
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B06086B7688
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:48:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231361AbjCMLmx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:42:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50144 "EHLO
+        id S230331AbjCMLsr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:48:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231221AbjCMLmF (ORCPT
+        with ESMTP id S230131AbjCMLso (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:42:05 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D8765C7E
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:34 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id y15so5786958lfa.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:41:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678707686;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=RH10IfoWhFhfMN7U8guTBq/z8yFM8bycsFPXU+lvHyE=;
-        b=xT30oxgN4y6Rar0wqRH4afPyKNC4nqyZTJ8SIeW/1FIly1DqrAbpUWyajxrBMlL6xa
-         IC1FXWHVX+AI48ZCLgJ58xxG6Bol9YXcvtHOPuaG4YTrwdkqpFtd2v2mtxKPqthncZLV
-         DFF7IXyFJhq/WySK/632zrh+rKhWbl10XPV5Esx0ACxHhSTN1ojE8KYE9vQ2vkOj184c
-         2aXQNlVC6sDdm+H3kH44c3ShSNXQstXCMBEAUg4t4XBFzGLomILmQzdB7FxatkK+FaYH
-         CEJu8+Fv2iRDSx0oRLVT6MGjysxonOiP/duwhSlP1B6I5GQjrLfcIrQFsDlYPGokBTmq
-         MeRw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678707686;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RH10IfoWhFhfMN7U8guTBq/z8yFM8bycsFPXU+lvHyE=;
-        b=tPcS6xZzhO9fJDyEQ5DBs+arN1+g8LPXiBTvNBUCwcRH3z5yS3CChw2ZQYVjdT0/DS
-         /jusfrHlFEeCOGYMTBwGuj5Pqadt700ZQsTA8rYG1hV4wDTtCLUNOzQffcaSgblVP64X
-         +3HAGR9HU8n9wwDZLg34kQJXLoW8byg9YAWWepts6QQ1Ux5ap1+jxI1FL8LJbD3BcB1P
-         FHy6DN+/rmOmViOtKrIffXakI0LKK+H3+KKgJwGIr6Poz5ftH1BHjkc9L6n3T5RJvwHG
-         slxnWHwMvmtdkAG3nR7I/yiws99PsT15bpizzadAl14eVrNMP8cGp8lyw+e+NjW0tDNR
-         EOYQ==
-X-Gm-Message-State: AO0yUKUkgT9D6PhxOdV/kM8YdKQM6TfGngAbqVn6Cg/4/5z0gXGj8Aia
-        4MWfbaRT9P6jjulb9KxpBmZyyOOz0VWFNNn4tqU=
-X-Google-Smtp-Source: AK7set/tI4nk7AoITBvfoTwGu0Y7NAxmBwOlHtVgi7aTL3sLkjBEvxxpJ+ZblFUd2oU/KXkw05pmFQ==
-X-Received: by 2002:a19:7614:0:b0:4e0:ce21:b92 with SMTP id c20-20020a197614000000b004e0ce210b92mr10348746lff.16.1678707685996;
-        Mon, 13 Mar 2023 04:41:25 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id i2-20020ac25222000000b004d86808fd33sm948465lfl.15.2023.03.13.04.41.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 04:41:25 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 13 Mar 2023 12:41:13 +0100
-Subject: [PATCH v2 7/7] arm64: dts: qcom: sm8550: Use the correct BWMON
- fallback compatible
+        Mon, 13 Mar 2023 07:48:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58BF51A64E;
+        Mon, 13 Mar 2023 04:48:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678708092; x=1710244092;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=PraY/NBSpSOEe3yeG3aJePM/Xx+W2T8DfCL/4PKtSek=;
+  b=j1x7GhxyaO434W514LFPQh1+z38QqoIyCHA7kwMxh8P2hOjC55PE3GvN
+   UCjdFDw/2qeFvunbr6I2LwZuKHbXXO+YivA49s5R9IU+1r+/aBWJxZEzx
+   IVeNhqvR5gdBGQqgeufBMsZj4e3Wgk4aEubExwlwBrNtzkWoK/6+tvSN0
+   CiP/539nZG7yzD7d7YmgFlyD0pKXb9SE2JJ98regsrttNYEbQnnhzl6i2
+   yuEmzlLfkogdmD5sMhudTcdHCMQWNCfBAjINZu1au7UKPXZVaajYvgqUX
+   OFogzUIkfdOfOD5xBYgk2rwv2jULisW15NRSzG5J02qjCU3oXZ9/qv3BU
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="337146472"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="337146472"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 04:45:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655949945"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="655949945"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2023 04:45:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pbgcO-002bZ4-1Q;
+        Mon, 13 Mar 2023 13:45:32 +0200
+Date:   Mon, 13 Mar 2023 13:45:32 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Stephen Rothwell <sfr@canb.auug.org.au>
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Mark Brown <broonie@kernel.org>
+Subject: Re: linux-next: Tree for Mar 10 (drivers/spi/spi-mpc512x-psc.c:)
+Message-ID: <ZA8M3NZbMxi80z7O@smile.fi.intel.com>
+References: <20230310124850.245ba584@canb.auug.org.au>
+ <ed382974-1613-8a60-913c-60cfc27f8ab3@infradead.org>
+ <20230312105006.6c46df35@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230304-topic-ddr_bwmon-v2-7-04db989db059@linaro.org>
-References: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
-In-Reply-To: <20230304-topic-ddr_bwmon-v2-0-04db989db059@linaro.org>
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Thara Gopinath <thara.gopinath@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>
-X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678707675; l=848;
- i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=jgTEqsKAebB9bsGGIMDxQ30Eg4/dVyljepjgSni4ZzI=;
- b=a3ILA0uJYyR1CR/vHX+MwLfp1w+hxsINjmLCYH+GzvdULrSU2BCmuMMAFNVZPML/8nT5b1Qa8SK2
- DwQCCVKxB/8JKZ1iDcm1Pa2VXyHKOzpxu4GiCwA3IhQOtN9UOmBY
-X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
- pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312105006.6c46df35@canb.auug.org.au>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the correct fallback compatible for the BWMONv4 with merged global and
-monitor register spaces.
+On Sun, Mar 12, 2023 at 10:50:06AM +1100, Stephen Rothwell wrote:
+> On Sat, 11 Mar 2023 15:36:10 -0800 Randy Dunlap <rdunlap@infradead.org> wrote:
+> > On 3/9/23 17:48, Stephen Rothwell wrote:
 
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- arch/arm64/boot/dts/qcom/sm8550.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8550.dtsi b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-index 25f51245fe9b..b5488c6822bd 100644
---- a/arch/arm64/boot/dts/qcom/sm8550.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8550.dtsi
-@@ -3391,7 +3391,7 @@ opp-8 {
- 		};
- 
- 		pmu@240b6400 {
--			compatible = "qcom,sm8550-cpu-bwmon", "qcom,msm8998-bwmon";
-+			compatible = "qcom,sm8550-cpu-bwmon", "qcom,sdm845-bwmon";
- 			reg = <0 0x240b6400 0 0x600>;
- 			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
- 			interconnects = <&gem_noc MASTER_APPSS_PROC 3 &gem_noc SLAVE_LLCC 3>;
+> > drivers/spi/spi-mpc512x-psc.c: In function 'mpc512x_psc_spi_of_probe':
+> > drivers/spi/spi-mpc512x-psc.c:518:17: error: label 'free_ipg_clock' used but not defined
+> >   518 |                 goto free_ipg_clock;
+> >       |                 ^~~~
+> > 
+> > 
+> > on allmodconfig.
+> 
+> Caused by commit
+> 
+>   9e21720a4958 ("spi: mpc5xxx-psc: use devm_clk_get_enabled() for core clock")
+> 
+> from the spi tree.
+
+It's fixed already in the SPI tree.
 
 -- 
-2.39.2
+With Best Regards,
+Andy Shevchenko
+
 
