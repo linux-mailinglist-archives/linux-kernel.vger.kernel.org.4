@@ -2,196 +2,192 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B38366B6D42
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 03:04:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AE186B6D47
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 03:06:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229641AbjCMCES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 22:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46414 "EHLO
+        id S229700AbjCMCGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 22:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCMCER (ORCPT
+        with ESMTP id S229437AbjCMCGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 22:04:17 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 689CD2B633;
-        Sun, 12 Mar 2023 19:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678673056; x=1710209056;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=I6n1764iPq3QLkU9B199QCYPqBydWrtjMdH/HNzCMGQ=;
-  b=Yd2zSlVJcVZWTNMNaS6LZzRhY9PhZyHXrEYlSY1on/UdRCT++/Ypdx11
-   58C4eBY5O+xD0fEOCHxwZPoDgrnYb4fX9o2swKhyPF0Ib0SNM7Cxe1HW/
-   lKaAm8hfyjGM5QmRhLztw0Z4vJlwA/G9cbSRKxW3kzx3vUsovwfvRAivi
-   R+81UqYJcrwkswXWJY9B4lTUY9QH/+GqHPlFPR1Ba/WaQ0j3ONdGcpr77
-   b3K85A0ZLTjuI29b0LXm1jVqcX4BVr2cU+5oGse3tXZ9b22fIHb1fwrQ4
-   oBSHR2LKfEPEb8VbUOBGQ5Wft/qoBHXH+dftVzznUQsaGPl7ejnl1OZyf
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="334514373"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="334514373"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 19:04:11 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="747434681"
-X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
-   d="scan'208";a="747434681"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga004.fm.intel.com with ESMTP; 12 Mar 2023 19:04:07 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 12 Mar 2023 19:04:06 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Sun, 12 Mar 2023 19:04:06 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Sun, 12 Mar 2023 19:04:06 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.107)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Sun, 12 Mar 2023 19:04:06 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cfp0gJ8p/jV4MuKW+xmpfRJIsgK9n0CZF683q+wHbF3UAhPlV12bJdWLAONqaCfkZ45KXXgkVtCB2ecazt1puoaLT7SIus+ST1os1pgAkyt9uJJSMg5scSoU6qxwAV8i5qvD6FD0DO1tIYpY+rWAMXdaoClenccMG8IxRPuoVqIm9Kfss9MkOpRwVkefZa6VwRGSPhLNyT/VMwM2X69Z47gS+uvm0wEmgKwK8595QiUhyufNuaW/69p/F3MEdw/fyiYXm0Jd5n4JVyHjUbarvjY2v5b8JCj68SSs2shYnr248a6Dp9nlhhWQLL5vJGw5wBXMpE4c9s9NyUYoTijNEg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=sOQ02U1t4sh/Ug7jE+EFBWixiK6D4puy06PyeML/RQ4=;
- b=aNaIxylyo2JonBU8XT47/xBQqRMxqDT01bxdx7AIW0rBifhySHEIkGb3wVZVO5Yzvja0v4w03JJxGx0Q1G3xodRDfvyDbNT/beBhyYfEWaZm17iEm9IySASswAQDn+ymdi1u+ZEosaQ0MeVv8LMyaMEL4TssTHe1/y1TtftUhz8TCK8Gr7Te2Zs8Lh+TnoReVBq8V8VA7TSCw7jsqphdKntC+G5RIqTMj5/A99wC0Pov4p9n4o58qEHUakptVpGUsiBThLPiTERTsOIU00PqDl1J86h5t8A7uZAWJGPh2ZXNhnG45DZzwi8vo9gvXvqQtDu6AWtrbrFt2F1KoR5anQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by PH7PR11MB6055.namprd11.prod.outlook.com (2603:10b6:510:1d3::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 02:04:04 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::1aac:b695:f7c5:bcac%8]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 02:04:04 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Nicolin Chen <nicolinc@nvidia.com>
-CC:     "jgg@nvidia.com" <jgg@nvidia.com>,
-        "joro@8bytes.org" <joro@8bytes.org>,
-        "will@kernel.org" <will@kernel.org>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "shuah@kernel.org" <shuah@kernel.org>,
-        "Liu, Yi L" <yi.l.liu@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "farman@linux.ibm.com" <farman@linux.ibm.com>
-Subject: RE: [PATCH v4 5/5] vfio: Support IO page table replacement
-Thread-Topic: [PATCH v4 5/5] vfio: Support IO page table replacement
-Thread-Index: AQHZUcoFRLfg4HbeIES7vtug94baI67z6iAQgADFIACAA0rNEA==
-Date:   Mon, 13 Mar 2023 02:04:04 +0000
-Message-ID: <BN9PR11MB52763E69446196B5D4C109E28CB99@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <cover.1678284812.git.nicolinc@nvidia.com>
- <600343ffb282ff3bed5eb98a9255c0084d01a859.1678284812.git.nicolinc@nvidia.com>
- <BN9PR11MB5276F7F917F76DDC0D9186DD8CBA9@BN9PR11MB5276.namprd11.prod.outlook.com>
- <ZAu/dHzS+ZcLfOHY@Asurada-Nvidia>
-In-Reply-To: <ZAu/dHzS+ZcLfOHY@Asurada-Nvidia>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|PH7PR11MB6055:EE_
-x-ms-office365-filtering-correlation-id: b115db5f-9ddb-4abb-9afc-08db236738b0
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CP4Fsm5ibHRcklgmi5smqJz3GhFefsbkXssv6KN3FTik8htfSU4XX9q+oDBFgqeWxu6vkpf6mv8nX0zvd2qFZFvVpaOQeBP+S3Zynvkbt8MxkSsY8a1Kt/50HVE3uTbRqCq4YE59P85VG4wK4fQ9QVJbWWzAFH+F7iDu53o+cCF9FGBKiznHzuURwKDa95t87ufkGMV1BeBW66hA6M97kRVbARwua+nFk8svvl3qXCRSbqZJiASvEVo0ast8f/5yHG9C4IDkI8T42QfxI7Pykhf/U8zBtwg2kdIH0xkE3MHrWGvCjSuN20cyjyRFGE2p1cjeyUIhsYM3RXArjJklWmziXGLdEUNsS9PxhtflPRSbhqQdl8lSeR8/00CwgOzr8o4D5En2EGYS+hZdrV7bhMPKNXmHUXpBq1ka2Bjtr7a6lSKWOfkH+yBA+h3cz1MGQNwOwTnzs3MVAGo0EKMYBWK0uTIOZFPxOxsloWClrM8HGzsmkhCYgqV0bl5Azor41B95N+gfEXoYpFP4PuFPANbA2LtEPZ7UGYtmHTzQ8zBk3hRPtaMTPniA89E8dLz+UCFxQDMlhVrXYJxf7xc9v70RQnPrJEwE48go8mSjcx8Wn494yXgfQL2TbM8vsK0jILT74jpUlWQ5HeQL8Tf6J1fhPRMTSbz/vqHJIwvQZFqPzY8ImEbpcLjjhMil+kNRaV/BQ7L15XRHpCiAh2lIEg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(346002)(366004)(39860400002)(376002)(136003)(396003)(451199018)(54906003)(41300700001)(8936002)(478600001)(6916009)(66476007)(4326008)(66946007)(66556008)(66446008)(64756008)(52536014)(76116006)(8676002)(33656002)(86362001)(38070700005)(122000001)(55016003)(38100700002)(82960400001)(26005)(6506007)(7696005)(71200400001)(9686003)(186003)(7416002)(5660300002)(4744005)(2906002)(316002)(83380400001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?GanRegBikGGqy2/jWmiB76SXhUv0oP8Z4JYyO1WbL/Cw4RQdeMXUsx80TUoa?=
- =?us-ascii?Q?8hMYGXjPbXwkzNhgtca+aX8dyUfST89IeKqn5BWd55TPz9r/Ci7gJDsrYPqf?=
- =?us-ascii?Q?JfLfojs9ztnP+DuS9qcymUHHBeRJDKZzTj7xGNIj3rRsVhGsKX337RsiBt5w?=
- =?us-ascii?Q?7tWG6Tg20tXhtBIIoy7CLb98vNCVzFeMvUB680kdHVxKdbzhDinPd/HZuUwk?=
- =?us-ascii?Q?Hinl9CJ2JjKgEQXtDLaVlqsF/DMM5KuaoZxq9RVUst4+MUD+1ke7q9aqGMmS?=
- =?us-ascii?Q?OmdoTgam8ye8E3u1cXSFgJfirZfixk00g0S6Nq927vjAIj8brn9wpVaWfGWW?=
- =?us-ascii?Q?e7VF84JR/bgQE/ZvMypip3+1wXoeb/TmJkyhwsLJV29MGZWwtUtTk6OYdD+0?=
- =?us-ascii?Q?TSZWVtzjd7E0014HGt+m6FUiqosIi9eNuesWmsBPi6rCz1Wa1/BbLbGQlkV5?=
- =?us-ascii?Q?XvFZyw71LXo9uXDgVzqsn7hYaUpchiEaEzwPBNPZA/h/9TBkoAEd2kdV1pyB?=
- =?us-ascii?Q?4bNs4iieaZ+GCPqJqWYuEKbFQbJ84FHuZwkGQj6S+R3UukfWWPOb0h6+Pgkp?=
- =?us-ascii?Q?SrHfPLOIFUWQoEEyLh+ReCmbI0d4+4DxrjlkdXEBfg4W+nKWsQOezYan003G?=
- =?us-ascii?Q?1f9I585Kzq+p+FkZlxOfSro80bIXFT9K8jTcSmDX5Zp6WL2GNBK+9Ue0HeEr?=
- =?us-ascii?Q?/fUeEp+1P81q2G0b3YhMLWQfXNB6bbopraRVeBRxui0l5JtsobL0+aFbs1N+?=
- =?us-ascii?Q?IPSO0jBsX82lFCuB9BTQiJ3HgzdnFo8j9hnBMAXEWgIe5dADbmmr45GZQwJM?=
- =?us-ascii?Q?TVM1rCgj0Xbsiu2mBWlWqqAGQgcEPGWMVD9XvDTt+Zagfqun/Y3qzpq3LESc?=
- =?us-ascii?Q?pUi9qI5m+vmNdWEWHsbSobhd2wo3WcJJlg7tSJ/2cFWmvZy/Ze5/ExOb32ya?=
- =?us-ascii?Q?Wr0WlXTRIR5sKePTRmWosaTIn2BkC9/QzhAyYeE0UlpwGURvOUiIJjE3vuyq?=
- =?us-ascii?Q?vjQGoQhGeEcX4ZID5PAhldRBMNPeqeOtMQ75F5zWY9Ha3FUQNz6NoBjv2NW0?=
- =?us-ascii?Q?k9Mcw06HwFVJK1Jg5/qMoiTicoMVK6Befwg6Oou9JxR4jbSZll8hmGzUcLzi?=
- =?us-ascii?Q?1qjWzWi1Sj1r+b+bkY1thTfLN9/9ws3NL/IeZKG92ZRjWzZDbVwAptD4G8k9?=
- =?us-ascii?Q?FqEoBD7psbQjj9PBwG2TXDZ1fsiEYByZvZ9lM6sHi5+QXzEovkT1vvivar88?=
- =?us-ascii?Q?dtFjkmCUj2U1byQWXUIKJUfFDyBh/jJEnFoC3yKXEgMjENudubtaARFsR9gi?=
- =?us-ascii?Q?YiJ+Pt8n2JwBzsz5mVnKSxRT3TaBMfVK60Hj69YKH+77TJgXp8WTcHWGnsTw?=
- =?us-ascii?Q?sN0A7D0LnXZTLv+arjl9WPEOfJK3ZWLVy68ATJLTAG3j+SR/0GnXUs9ooc3U?=
- =?us-ascii?Q?aR5JVO5Y020iuFZ+TzFExjf9DvKpyDbbbiMLuATTTTMAWG1JyqCYsipO74y/?=
- =?us-ascii?Q?5TdegdrCHV1Muo/1dbAA5wfcNYx8cHXj5uVoAJssKjXNMNkcm+Ehulu8s7yu?=
- =?us-ascii?Q?baA24x/RbYw6txkv8AALrN+DCbl2QqV8OW7jkN30?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Sun, 12 Mar 2023 22:06:00 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAA3E2B9C0;
+        Sun, 12 Mar 2023 19:05:56 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id er25so14652075edb.5;
+        Sun, 12 Mar 2023 19:05:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678673155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TsW3dvHtBacErIgFhlA9bXaiByEkzIAm0g3kJvWL330=;
+        b=AvTgFNH5ntUuH4XHlxfqLkR/SCOaFqBxVB9pwoWY3LXiTovQuHfsZGnFfivs+IOynF
+         VVN3UJVlSUCj8XQPypnmXVZ4dYbC2nJtvPHzftFvRtG7XxeHJXli4ZFs5JsQdCYQUib8
+         DYKz0X91I2/z/wwK/7s8+UFw6x3+KwnhYrowD78rO0OXCNu77I+L5huDXAp2UjeFIyUM
+         OXE/HHLM94o8lqFS8+rMUE7cLG7sRQaRHBNQjY/OucgptCZy6jOpyi51d58FpeUWj1O2
+         6QVZO9CqIJZmLWC1K8ZDpmBiOhty9zdVyTM7Cegeogu1TSOCAycvzwwmogZuurI/sPhB
+         BibA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678673155;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TsW3dvHtBacErIgFhlA9bXaiByEkzIAm0g3kJvWL330=;
+        b=IjIHA0pPtyJ0/Tq9TMSFiV2giZL0RNBoS1s/cVMAPp6ucOq4wEEehAHg5JveKdYIDz
+         42EX2mJ8u04h7/QzaIfwWzpQ6OZ0ALp8IokIXlainfQg2YmZNy7Mmrt5ajsDm345qhH9
+         0c4tDuCpxws4b/5MJMNWtDQkXWYJxlj88FyvuF0JGEQRRlKcbcDP4pjRG5oubeq4N+P3
+         xrBtD/kTxHnLACkISS13zQlJRvqAODz5Iv6qKVNEl3uvx23k11706l1g255wrOVvvNAE
+         PtPDiEGTvf9+mZXvkeC7NSratcS9BsM9vBuUf7+V4HkC4Y9AwLTRsM8KqoPHX+N8PpxQ
+         XK7A==
+X-Gm-Message-State: AO0yUKUXPK9V7pNC9YUQmlWpqMvoASiVMgJtNTIIqa7vSxyPAM4h8laR
+        E+mZ9wat2lal5VSf7j9VwWex5rM/7XUCwtdGRl4=
+X-Google-Smtp-Source: AK7set8dwZ7chPbJDgI5Wm0jdSvSFA14kZJy9hH1qpnVwcv7EKQhPP2lEUs0hKPTR0ZNojoIgHGCoJFxeSfxI6IY82s=
+X-Received: by 2002:a17:906:40a:b0:926:8f9:735d with SMTP id
+ d10-20020a170906040a00b0092608f9735dmr1552916eja.3.1678673155199; Sun, 12 Mar
+ 2023 19:05:55 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: b115db5f-9ddb-4abb-9afc-08db236738b0
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 02:04:04.2590
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: CY2b/1jFicI79QC1D42KYcdqaukZpr7zAZPRblY2HIi1a+L+9D7i2jEdAZe8XYOvZ6dbvVcCfAhhnopk/z5bWw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6055
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230311163614.92296-1-kerneljasonxing@gmail.com>
+In-Reply-To: <20230311163614.92296-1-kerneljasonxing@gmail.com>
+From:   Jason Xing <kerneljasonxing@gmail.com>
+Date:   Mon, 13 Mar 2023 10:05:18 +0800
+Message-ID: <CAL+tcoAwodpnE2NjMLPhBbmHUvmKMgSykqx0EQ4YZaQHjrx0Hw@mail.gmail.com>
+Subject: Re: [PATCH net-next] net: introduce budget_squeeze to help us tune rx behavior
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com
+Cc:     kuniyu@amazon.com, liuhangbin@gmail.com, xiangxia.m.yue@gmail.com,
+        jiri@nvidia.com, andy.ren@getcruise.com, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Nicolin Chen <nicolinc@nvidia.com>
-> Sent: Saturday, March 11, 2023 7:38 AM
->=20
-> On Fri, Mar 10, 2023 at 11:53:56AM +0000, Tian, Kevin wrote:
-> > External email: Use caution opening links or attachments
-> >
-> >
-> > > From: Nicolin Chen <nicolinc@nvidia.com>
-> > > Sent: Wednesday, March 8, 2023 10:26 PM
-> > >
-> > > Now both the physical path and the emulated path should support an IO
-> > > page
-> > > table replacement.
-> > >
-> > > Call iommufd_device_replace() when vdev->iommufd_attached is true.
-> > >
-> >
-> > why is replace enabled only in physical path in this patch?
->=20
-> The emulated pathway does not call iommufd_device_attach() but
-> iommufd_access_set_ioas() in the other patch, which internally
-> takes care of the replacement for the access pointer.
->=20
+On Sun, Mar 12, 2023 at 12:36=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.=
+com> wrote:
+>
+> From: Jason Xing <kernelxing@tencent.com>
+>
+> When we encounter some performance issue and then get lost on how
+> to tune the budget limit and time limit in net_rx_action() function,
+> we can separately counting both of them to avoid the confusion.
+>
+> Signed-off-by: Jason Xing <kernelxing@tencent.com>
+> ---
+> note: this commit is based on the link as below:
+> https://lore.kernel.org/lkml/20230311151756.83302-1-kerneljasonxing@gmail=
+.com/
+> ---
+>  include/linux/netdevice.h |  1 +
+>  net/core/dev.c            | 12 ++++++++----
+>  net/core/net-procfs.c     |  9 ++++++---
+>  3 files changed, 15 insertions(+), 7 deletions(-)
+>
+> diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
+> index 6a14b7b11766..5736311a2133 100644
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -3157,6 +3157,7 @@ struct softnet_data {
+>         /* stats */
+>         unsigned int            processed;
+>         unsigned int            time_squeeze;
+> +       unsigned int            budget_squeeze;
+>  #ifdef CONFIG_RPS
+>         struct softnet_data     *rps_ipi_list;
+>  #endif
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 253584777101..bed7a68fdb5d 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -6637,6 +6637,7 @@ static __latent_entropy void net_rx_action(struct s=
+oftirq_action *h)
+>         unsigned long time_limit =3D jiffies +
+>                 usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
+>         int budget =3D READ_ONCE(netdev_budget);
+> +       bool is_continue =3D true;
 
-I thought there is a similar check as in physical path which should
-be removed:
+I kept thinking during these days, I think it looks not that concise
+and elegant and also the name is not that good though the function can
+work.
 
-	if (vdev->iommufd_attached)
--		return -EBUSY;
+In the next submission, I'm going to choose to use 'while()' instead
+of 'for()' suggested by Stephen.
 
-but looks it's not the case for the emulated path.=20
+Does anyone else have some advice about this?
+
+Thanks,
+Jason
+
+>         LIST_HEAD(list);
+>         LIST_HEAD(repoll);
+>
+> @@ -6644,7 +6645,7 @@ static __latent_entropy void net_rx_action(struct s=
+oftirq_action *h)
+>         list_splice_init(&sd->poll_list, &list);
+>         local_irq_enable();
+>
+> -       for (;;) {
+> +       for (; is_continue;) {
+>                 struct napi_struct *n;
+>
+>                 skb_defer_free_flush(sd);
+> @@ -6662,10 +6663,13 @@ static __latent_entropy void net_rx_action(struct=
+ softirq_action *h)
+>                  * Allow this to run for 2 jiffies since which will allow
+>                  * an average latency of 1.5/HZ.
+>                  */
+> -               if (unlikely(budget <=3D 0 ||
+> -                            time_after_eq(jiffies, time_limit))) {
+> +               if (unlikely(budget <=3D 0)) {
+> +                       sd->budget_squeeze++;
+> +                       is_continue =3D false;
+> +               }
+> +               if (unlikely(time_after_eq(jiffies, time_limit))) {
+>                         sd->time_squeeze++;
+> -                       break;
+> +                       is_continue =3D false;
+>                 }
+>         }
+>
+> diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
+> index 97a304e1957a..4d1a499d7c43 100644
+> --- a/net/core/net-procfs.c
+> +++ b/net/core/net-procfs.c
+> @@ -174,14 +174,17 @@ static int softnet_seq_show(struct seq_file *seq, v=
+oid *v)
+>          */
+>         seq_printf(seq,
+>                    "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08=
+x %08x %08x "
+> -                  "%08x %08x\n",
+> -                  sd->processed, sd->dropped, sd->time_squeeze, 0,
+> +                  "%08x %08x %08x %08x\n",
+> +                  sd->processed, sd->dropped,
+> +                  0, /* was old way to count time squeeze */
+> +                  0,
+>                    0, 0, 0, 0, /* was fastroute */
+>                    0,   /* was cpu_collision */
+>                    sd->received_rps, flow_limit_count,
+>                    0,   /* was len of two backlog queues */
+>                    (int)seq->index,
+> -                  softnet_input_pkt_queue_len(sd), softnet_process_queue=
+_len(sd));
+> +                  softnet_input_pkt_queue_len(sd), softnet_process_queue=
+_len(sd),
+> +                  sd->time_squeeze, sd->budget_squeeze);
+>         return 0;
+>  }
+>
+> --
+> 2.37.3
+>
