@@ -2,132 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 252EB6B6E0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:43:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25AB76B6DFE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:32:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229784AbjCMDnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59200 "EHLO
+        id S229838AbjCMDcV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:32:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbjCMDnq (ORCPT
+        with ESMTP id S229504AbjCMDcS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:43:46 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C9632BEE8;
-        Sun, 12 Mar 2023 20:43:44 -0700 (PDT)
-Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PZjCt6d1HzrSNJ;
-        Mon, 13 Mar 2023 11:42:50 +0800 (CST)
-Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
- (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Mon, 13 Mar
- 2023 11:32:24 +0800
-Subject: Re: [PATCH net v3] net: ravb: Fix possible UAF bug in ravb_remove
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-CC:     Zheng Wang <zyytlz.wz@163.com>, <s.shtylyov@omp.ru>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <1395428693sheep@gmail.com>,
-        <alex000young@gmail.com>
-References: <20230311180630.4011201-1-zyytlz.wz@163.com>
- <57f6d87e-8bfb-40fc-7724-89676c2e75ef@huawei.com>
- <CAJedcCy8QOCv3SC-Li2JkaFEQydTDd1aiY77BHn7ht0Y8r1nUA@mail.gmail.com>
-From:   Yunsheng Lin <linyunsheng@huawei.com>
-Message-ID: <43a4a617-2633-a501-6fd1-b2495aed90f7@huawei.com>
-Date:   Mon, 13 Mar 2023 11:32:24 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
- Thunderbird/52.2.0
+        Sun, 12 Mar 2023 23:32:18 -0400
+Received: from Atcsqr.andestech.com (60-248-80-70.hinet-ip.hinet.net [60.248.80.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07F7430EB6
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:32:15 -0700 (PDT)
+Received: from mail.andestech.com (ATCPCS16.andestech.com [10.0.1.222])
+        by Atcsqr.andestech.com with ESMTP id 32D3W50e044563;
+        Mon, 13 Mar 2023 11:32:05 +0800 (+08)
+        (envelope-from dylan@andestech.com)
+Received: from APC323 (10.0.12.101) by ATCPCS16.andestech.com (10.0.1.222)
+ with Microsoft SMTP Server id 14.3.498.0; Mon, 13 Mar 2023 11:32:03 +0800
+Date:   Mon, 13 Mar 2023 11:32:27 +0800
+From:   Dylan Jhong <dylan@andestech.com>
+To:     Guo Ren <guoren@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+        <sergey.matyukevich@syntacore.com>, <aou@eecs.berkeley.edu>,
+        <palmer@dabbelt.com>, <paul.walmsley@sifive.com>,
+        <x5710999x@gmail.com>, <tim609@andestech.com>,
+        <peterlin@andestech.com>, <ycliang@andestech.com>
+Subject: Re: [PATCH] riscv: mm: Fix incorrect ASID argument when flushing TLB
+Message-ID: <ZA6ZS3hIXWR9PeXV@APC323>
+References: <20230310103144.396214-1-dylan@andestech.com>
+ <CAJF2gTTwEJNmee7TcbdbcmLQKTTWpokrUST4xanyreUJHxETqg@mail.gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <CAJedcCy8QOCv3SC-Li2JkaFEQydTDd1aiY77BHn7ht0Y8r1nUA@mail.gmail.com>
 Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.69.30.204]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- dggpemm500005.china.huawei.com (7.185.36.74)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAJF2gTTwEJNmee7TcbdbcmLQKTTWpokrUST4xanyreUJHxETqg@mail.gmail.com>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Originating-IP: [10.0.12.101]
+X-DNSRBL: 
+X-SPAM-SOURCE-CHECK: pass
+X-MAIL: Atcsqr.andestech.com 32D3W50e044563
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
+        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/13 11:02, Zheng Hacker wrote:
-> Yunsheng Lin <linyunsheng@huawei.com> 于2023年3月13日周一 09:15写道：
->>
->> On 2023/3/12 2:06, Zheng Wang wrote:
->>> In ravb_probe, priv->work was bound with ravb_tx_timeout_work.
->>> If timeout occurs, it will start the work. And if we call
->>> ravb_remove without finishing the work, there may be a
->>> use-after-free bug on ndev.
->>>
->>> Fix it by finishing the job before cleanup in ravb_remove.
->>>
->>> Fixes: c156633f1353 ("Renesas Ethernet AVB driver proper")
->>> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
->>> Reviewed-by: Sergey Shtylyov <s.shtylyov@omp.ru>
->>> ---
->>> v3:
->>> - fix typo in commit message
->>> v2:
->>> - stop dev_watchdog so that handle no more timeout work suggested by Yunsheng Lin,
->>> add an empty line to make code clear suggested by Sergey Shtylyov
->>> ---
->>>  drivers/net/ethernet/renesas/ravb_main.c | 4 ++++
->>>  1 file changed, 4 insertions(+)
->>>
->>> diff --git a/drivers/net/ethernet/renesas/ravb_main.c b/drivers/net/ethernet/renesas/ravb_main.c
->>> index 0f54849a3823..eb63ea788e19 100644
->>> --- a/drivers/net/ethernet/renesas/ravb_main.c
->>> +++ b/drivers/net/ethernet/renesas/ravb_main.c
->>> @@ -2892,6 +2892,10 @@ static int ravb_remove(struct platform_device *pdev)
->>>       struct ravb_private *priv = netdev_priv(ndev);
->>>       const struct ravb_hw_info *info = priv->info;
->>>
->>> +     netif_carrier_off(ndev);
->>> +     netif_tx_disable(ndev);
->>> +     cancel_work_sync(&priv->work);
->>
->> LGTM.
->> Reviewed-by: Yunsheng Lin <linyunsheng@huawei.com>
->>
->> As noted by Sergey, ravb_remove() and ravb_close() may
->> share the same handling, but may require some refactoring
->> in order to do that. So for a fix, it seems the easiest
->> way to just add the handling here.
-> 
-> Dear Yunsheng,
-> 
-> I think Sergey is right for I've seen other drivers' same handling
-> logic. Do you think we should try to move the cancel-work-related code
-> from ravb_remove to ravb_close funtion?
-> Appreciate for your precise advice.
+On Sun, Mar 12, 2023 at 08:40:59PM +0800, Guo Ren wrote:
+> On Fri, Mar 10, 2023 at 6:32 PM Dylan Jhong <dylan@andestech.com> wrote:
+> >
+> > Currently, we pass the CONTEXTID instead of the ASID to the TLB flush
+> > function. We should only take the ASID field to prevent from touching
+> > the reserved bit field.
+> >
+> > Fixes: 3f1e782998cd ("riscv: add ASID-based tlbflushing methods")
+> > Signed-off-by: Dylan Jhong <dylan@andestech.com>
+> > ---
+> >  arch/riscv/include/asm/tlbflush.h | 2 ++
+> >  arch/riscv/mm/context.c           | 3 ++-
+> >  arch/riscv/mm/tlbflush.c          | 2 +-
+> >  3 files changed, 5 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/arch/riscv/include/asm/tlbflush.h b/arch/riscv/include/asm/tlbflush.h
+> > index 907b9efd39a8..597d6d8aec28 100644
+> > --- a/arch/riscv/include/asm/tlbflush.h
+> > +++ b/arch/riscv/include/asm/tlbflush.h
+> > @@ -12,6 +12,8 @@
+> >  #include <asm/errata_list.h>
+> >
+> >  #ifdef CONFIG_MMU
+> > +extern unsigned long asid_mask;
+> > +
+> >  static inline void local_flush_tlb_all(void)
+> >  {
+> >         __asm__ __volatile__ ("sfence.vma" : : : "memory");
+> > diff --git a/arch/riscv/mm/context.c b/arch/riscv/mm/context.c
+> > index 80ce9caba8d2..a6b76b33e377 100644
+> > --- a/arch/riscv/mm/context.c
+> > +++ b/arch/riscv/mm/context.c
+> > @@ -22,7 +22,8 @@ DEFINE_STATIC_KEY_FALSE(use_asid_allocator);
+> >
+> >  static unsigned long asid_bits;
+> >  static unsigned long num_asids;
+> > -static unsigned long asid_mask;
+> > +unsigned long asid_mask;
+> > +EXPORT_SYMBOL(asid_mask);
+> Why EXPORT_SYMBOL? (No module would use it by your patch.)
+>
+OK. I'll remove EXPORT_SYMBOL in v2.
+Thanks.
 
-As Sergey question "can ravb_remove() be called without ravb_close()
-having been called on the bound devices?"
-If I understand it correctly, I think ravb_remove() can be called
-without ravb_close() having been called on the bound devices. I am
-happy to be corrected if I am wrong.
-
-Yes, you can call *_close() directly in *_remove(), but that may
-require some refactoring and a lot of testing.
-
-Also, if you found the bug through some static analysis, it may
-be better to make it clear in the commit log and share some info
-about the static analysis, which I suppose it is a tool?
-
+> >
+> >  static atomic_long_t current_version;
+> >
+> > diff --git a/arch/riscv/mm/tlbflush.c b/arch/riscv/mm/tlbflush.c
+> > index ce7dfc81bb3f..ba4c27187c95 100644
+> > --- a/arch/riscv/mm/tlbflush.c
+> > +++ b/arch/riscv/mm/tlbflush.c
+> > @@ -27,7 +27,7 @@ static void __sbi_tlb_flush_range(struct mm_struct *mm, unsigned long start,
+> >         /* check if the tlbflush needs to be sent to other CPUs */
+> >         broadcast = cpumask_any_but(cmask, cpuid) < nr_cpu_ids;
+> >         if (static_branch_unlikely(&use_asid_allocator)) {
+> > -               unsigned long asid = atomic_long_read(&mm->context.id);
+> > +               unsigned long asid = atomic_long_read(&mm->context.id) & asid_mask;
+> >
+> >                 /*
+> >                  * TLB will be immediately flushed on harts concurrently
+> > --
+> > 2.34.1
+> >
 > 
-> Best regards,
-> Zheng
 > 
->>
->>> +
->>>       /* Stop PTP Clock driver */
->>>       if (info->ccc_gac)
->>>               ravb_ptp_stop(ndev);
->>>
-> .
-> 
+> -- 
+> Best Regards
+>  Guo Ren
