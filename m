@@ -2,117 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5D4B6B7071
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:53:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505876B7089
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:56:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCMHxd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:53:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50328 "EHLO
+        id S230243AbjCMH4Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:56:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230156AbjCMHwv (ORCPT
+        with ESMTP id S230135AbjCMHzX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:52:51 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE94451F8F;
-        Mon, 13 Mar 2023 00:52:19 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id t14so11634168ljd.5;
-        Mon, 13 Mar 2023 00:52:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678693930;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DP22K4i2hvSQUMj03mmf1nrlTT4nDZqslXzw3b5STVg=;
-        b=mq4CVXLbEPFpKdmBnLa+DaPZzaB+5PUIR1eMjh/S3fQORQr+7borK30x1Sezcwvn3h
-         GURCYNkzr8nsUL31CT/9nX7UJ2u4sA8psHIJrab55dBjZPCFypFurmSJrIPqiUwafkLy
-         nXiFnALJjYOqNPU7FDabiJDarRrua8EmKrWRNxfQW0/fUC7XRZasBI2sBxy5KXjs3WYs
-         9A5BAyxpxFw4SzRZI7Wm3Exmv5L20yk1Zr7GmrR4Y8aG5l4BnQOiYOAt+rNw6COZSI0a
-         e5dkLHtYSuFhxNBxcFuu3+mEQNiv1ECxluOgUyxUTx2Cfr8EuDNd70C0MyzOlD3ZwZ1I
-         v8fw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678693930;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DP22K4i2hvSQUMj03mmf1nrlTT4nDZqslXzw3b5STVg=;
-        b=Ux67mV44g0E8te8tXR1aJsgnrRGWgAMYcH8umwDl/j5S/rcWiQkSo4iF75uVTgqUAu
-         Q3GkMA8LxHDNBkjlSII+FliKwRedARGCUsA1mDf80n5x1DPrZx7AfrJdgCPPAmF4ok11
-         AWyLQQhIaEDTfCmFbXZByV12DRnNxGamUE/h26+MNa/PiMsAX3qc8qp42DyDeXLH8op0
-         dvRdbTy8xRMVXno+toYCOD6XhrEQywKCD7hdS+EI+RaZ/toS1Jg8OWhHxtULUUz3GR7J
-         eSorgHGx87BUgkeOtoyVjnLC6PtkUNc9QmYgciCr0tO23ALlGCa1fMiKR+frYSq6JrOq
-         GNWA==
-X-Gm-Message-State: AO0yUKU04eH0GSUSzTYr1zYSTO4zbgXYPOKhwnurMGEzRAcF3ShMXd7l
-        zcFCsUWFsw3qkVrdwB4/shs=
-X-Google-Smtp-Source: AK7set+fCZnioNoLHXd86gA5fdj9retwzd09OegGlbQGd8saON8iHEbmrTCRWzvBpZhUxZqO/WFw2w==
-X-Received: by 2002:a2e:99c4:0:b0:293:4d57:7148 with SMTP id l4-20020a2e99c4000000b002934d577148mr10265826ljj.11.1678693930688;
-        Mon, 13 Mar 2023 00:52:10 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id v10-20020a2ea44a000000b002986d9bdecesm912257ljn.129.2023.03.13.00.52.09
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 00:52:10 -0700 (PDT)
-Message-ID: <e07c2fbf-6432-0065-3e68-aeac2ee51799@gmail.com>
-Date:   Mon, 13 Mar 2023 09:52:09 +0200
+        Mon, 13 Mar 2023 03:55:23 -0400
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6A5EA132FE;
+        Mon, 13 Mar 2023 00:54:05 -0700 (PDT)
+Received: from [192.168.1.3] (gsystem.sk [85.248.217.30])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id 10ADE7A0258;
+        Mon, 13 Mar 2023 08:53:25 +0100 (CET)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Subject: Re: [PATCH v2] pata_parport: fix possible memory leak
+Date:   Mon, 13 Mar 2023 08:53:21 +0100
+User-Agent: KMail/1.9.10
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <202303112239.21234.linux@zary.sk> <202303122224.29035.linux@zary.sk> <cf8c7b34-3c5d-2b9e-b410-d83f4af7274a@opensource.wdc.com>
+In-Reply-To: <cf8c7b34-3c5d-2b9e-b410-d83f4af7274a@opensource.wdc.com>
+X-KMail-QuotePrefix: > 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv1 04/11] power: supply: generic-adc-battery: fix unit
- scaling
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-5-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230309225041.477440-5-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: Text/Plain;
+  charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Content-Disposition: inline
+Message-Id: <202303130853.21446.linux@zary.sk>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> power-supply properties are reported in µV, µA and µW.
-> The IIO API provides mV, mA, mW, so the values need to
-> be multiplied by 1000.
+On Monday 13 March 2023, Damien Le Moal wrote:
+> On 3/13/23 06:24, Ondrej Zary wrote:
+> > On Sunday 12 March 2023 01:56:25 Damien Le Moal wrote:
+> >> On 3/12/23 06:44, Ondrej Zary wrote:
+> >>> When ida_alloc() fails, "pi" is not freed although the misleading
+> >>> comment says otherwise.
+> >>> Move the ida_alloc() call up so we really don't have to free it.
+> >>
+> >> Certainly you meant: "so we really do free it in case of error.", no ?
+> > 
+> > I meant "so we don't have to free pi in case of ida_alloc failure".
 > 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-
-As Linus wrote, Fixes-tag would be good. With that remark:
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-> ---
->   drivers/power/supply/generic-adc-battery.c | 3 +++
->   1 file changed, 3 insertions(+)
+> That is better. Please rephrase the commit message to this.
 > 
-> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
-> index 917bd2a6cc52..535972a332b3 100644
-> --- a/drivers/power/supply/generic-adc-battery.c
-> +++ b/drivers/power/supply/generic-adc-battery.c
-> @@ -136,6 +136,9 @@ static int read_channel(struct gab *adc_bat, enum power_supply_property psp,
->   			result);
->   	if (ret < 0)
->   		pr_err("read channel error\n");
-> +	else
-> +		*result *= 1000;
-> +
->   	return ret;
->   }
->   
+> >>>  	/* set up pi->dev before pi_probe_unit() so it can use dev_printk() */
+> >>>  	pi->dev.parent = &pata_parport_bus;
+> >>>  	pi->dev.bus = &pata_parport_bus_type;
+> >>>  	pi->dev.driver = &pr->driver;
+> >>>  	pi->dev.release = pata_parport_dev_release;
+> >>> -	id = ida_alloc(&pata_parport_bus_dev_ids, GFP_KERNEL);
+> >>> -	if (id < 0)
+> >>> -		return NULL; /* pata_parport_dev_release will do kfree(pi) */
+> >>>  	pi->dev.id = id;
+> >>>  	dev_set_name(&pi->dev, "pata_parport.%u", pi->dev.id);
+> >>>  	if (device_register(&pi->dev)) {
+> >>> @@ -571,7 +572,7 @@ static struct pi_adapter *pi_init_one(struct parport *parport,
+> >>>  out_unreg_dev:
+> >>>  	device_unregister(&pi->dev);
+> >>
+> >> Same comment as Sergey: isn't this going to do the ida free ? So shouldn't you
+> >> return here ?
+> > 
+> > No. device_unregister() calls pata_parport_dev_release() which does only kfree(pi), not ida_free(). But it probably should do ida_free() too.
+> 
+> Yes, it should, otherwise you are leaking the ida with the normal (no errors)
+> case. Care to send a fix for that too ?
+
+Yes, I'll send it as soon as I fix a problem that I noticed during testing. The ida is never freed with this fix. And neither "pi" because pata_parport_dev_release is never called (confirmed by adding printk).
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Ondrej Zary
