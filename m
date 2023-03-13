@@ -2,78 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5ACFE6B72C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:38:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB4716B72C2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:38:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229571AbjCMJiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50732 "EHLO
+        id S229837AbjCMJiD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:38:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjCMJiS (ORCPT
+        with ESMTP id S231179AbjCMJhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:38:18 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDBA124120
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:35:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678700117;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=AQpW0MtAAGC9H850DvbSl98IgEUwIqqbc/Y7v5HGv34=;
-        b=JDBz+kIu25R0/tG8uc2n+Yww1v8DzxQDBS/Fyf5lc1ZenUcefzWBVUOCPEU2VRKLezVubD
-        CHULO+zuch6GW+9/dB86UGG7HaBuksP+b3876CU/npdmSgUYI+g9u/ck03NNPR5z2ev/By
-        3dxDhIACHpNDsv68QRarCaKqXu0SyjY=
-Received: from mail-pg1-f200.google.com (mail-pg1-f200.google.com
- [209.85.215.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-515-aHvRc4A2PkapPz2Q_VGDEg-1; Mon, 13 Mar 2023 05:35:15 -0400
-X-MC-Unique: aHvRc4A2PkapPz2Q_VGDEg-1
-Received: by mail-pg1-f200.google.com with SMTP id q15-20020a63d60f000000b00502e1c551aaso2493675pgg.21
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:35:15 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678700114;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AQpW0MtAAGC9H850DvbSl98IgEUwIqqbc/Y7v5HGv34=;
-        b=PyMOaoLMnlZeFoaG42xwWEP33OjLhky0pULegrTi5tbHdpFFGUmvP3YjPnW4iOzzPA
-         g50m0URBfmxg7NwyaIAvEL828EgxxdWmiP5QiGykAEtvERYisC2WnENtN0Ee4gmVkIZd
-         BEnpnw2WqthDVuAJgY/LIiLw1WYu/0BuoKqseFb0J5ZO/LHCLWshnH0lCPb5k4sD/Zu5
-         dlx0fpjBwYGV97dBOmOvhGVyw4iuRwwWbNnXE4apKp2wDQiGD/m3kWZ5qmNrXxx3ANXK
-         grVCniOdCSZQ6dG+RyoGuTpdmpt9QJGxDo4eoLA5cMn7EnzCeXtn2ADQ4CN4BIeixTvF
-         Lwpw==
-X-Gm-Message-State: AO0yUKXvk5nI1PmagHrKB7PXB5Q5fxVwQzx/E0F9P3iiJ1IXFm2VUgB4
-        BFZYfcksBdlvlbuZWjMiRjcbA0Xsv4J4NLHJNpE3pmDT+6MP1FTjrEvFv5NuYUbm+XBE+3oINMY
-        ji+Qonr6O2NQa0LbXcbpX8ztz
-X-Received: by 2002:a17:902:c10c:b0:19a:bbd0:c5ca with SMTP id 12-20020a170902c10c00b0019abbd0c5camr30025403pli.48.1678700114256;
-        Mon, 13 Mar 2023 02:35:14 -0700 (PDT)
-X-Google-Smtp-Source: AK7set8qak99w/AMcIHIkbXFQmu0oB5IulOHjMgE3Cr+/Edugbjr1WBiM99TptRhutLefIoxxEt3Fw==
-X-Received: by 2002:a17:902:c10c:b0:19a:bbd0:c5ca with SMTP id 12-20020a170902c10c00b0019abbd0c5camr30025390pli.48.1678700113905;
-        Mon, 13 Mar 2023 02:35:13 -0700 (PDT)
-Received: from kernel-devel ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
-        by smtp.gmail.com with ESMTPSA id w1-20020a170902a70100b0019aeddce6casm4269374plq.205.2023.03.13.02.35.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 02:35:13 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 18:35:08 +0900
-From:   Shigeru Yoshida <syoshida@redhat.com>
-To:     Nikolay Aleksandrov <razor@blackwall.org>
-Cc:     j.vosburgh@gmail.com, andy@greyhouse.net, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
-        syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
-Subject: Re: [PATCH net] bonding: Fix warning in default_device_exit_batch()
-Message-ID: <ZA7uTL2/IkBEIRD7@kernel-devel>
-References: <20230312152158.995043-1-syoshida@redhat.com>
- <d7a740f1-99e9-6947-06ef-3139198730f7@blackwall.org>
+        Mon, 13 Mar 2023 05:37:48 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78F892B600;
+        Mon, 13 Mar 2023 02:36:09 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47A8A2F4;
+        Mon, 13 Mar 2023 02:36:15 -0700 (PDT)
+Received: from [10.57.18.52] (unknown [10.57.18.52])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E32313F71A;
+        Mon, 13 Mar 2023 02:35:29 -0700 (PDT)
+Message-ID: <8727651b-88ec-efe7-eed2-1ff08faf22b8@arm.com>
+Date:   Mon, 13 Mar 2023 09:35:27 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <d7a740f1-99e9-6947-06ef-3139198730f7@blackwall.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
+ be reset
+Content-Language: en-US
+To:     Xuewen Yan <xuewen.yan94@gmail.com>
+Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
+        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
+References: <20230309135515.1232-1-di.shen@unisoc.com>
+ <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
+ <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
+From:   Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,100 +50,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Nik,
+Hi Xuewen,
 
-On Sun, Mar 12, 2023 at 10:58:18PM +0200, Nikolay Aleksandrov wrote:
-> On 12/03/2023 17:21, Shigeru Yoshida wrote:
-> > syzbot reported warning in default_device_exit_batch() like below [1]:
-> > 
-> > WARNING: CPU: 1 PID: 56 at net/core/dev.c:10867 unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
-> > ...
-> > Call Trace:
-> >  <TASK>
-> >  unregister_netdevice_many net/core/dev.c:10897 [inline]
-> >  default_device_exit_batch+0x451/0x5b0 net/core/dev.c:11350
-> >  ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
-> >  cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
-> >  process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
-> >  worker_thread+0x669/0x1090 kernel/workqueue.c:2537
-> >  kthread+0x2e8/0x3a0 kernel/kthread.c:376
-> >  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
-> >  </TASK>
-> > 
-> > For bond devices which also has a master device, IFF_SLAVE flag is
-> > cleared at err_undo_flags label in bond_enslave() if it is not
-> > ARPHRD_ETHER type.  In this case, __bond_release_one() is not called
-> > when bond_netdev_event() received NETDEV_UNREGISTER event.  This
-> > causes the above warning.
-> > 
-> > This patch fixes this issue by setting IFF_SLAVE flag at
-> > err_undo_flags label in bond_enslave() if the bond device has a master
-> > device.
-> > 
+On 3/13/23 01:40, Xuewen Yan wrote:
+> Hi Lukasz
 > 
-> The proper way is to check if the bond device had the IFF_SLAVE flag before the
-> ether_setup() call which clears it, and restore it after.
+> On Fri, Mar 10, 2023 at 11:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
+>>
+>> Hi Di,
+>>
+>> On 3/9/23 13:55, Di Shen wrote:
+>>> Commit 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
+>>> add a update flag to update cooling device only once when temp is low.
+>>> But when the switch_on_temp is set to be a higher value, the cooling device state
+>>> may not be reset to max, because the last_temp is smaller than the switch_on_temp.
+>>>
+>>> For example:
+>>> First:
+>>> swicth_on_temp=70 control_temp=85;
+>>>
+>>> Then userspace change the trip_temp:
+>>> swicth_on_temp=45 control_temp=55 cur_temp=54
+>>>
+>>> Then userspace reset the trip_temp:
+>>> swicth_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
+>>>
+>>> At this time, the cooling device state should be reset to be max.
+>>> However, because cur_temp(57) < switch_on_temp(70)
+>>> last_temp(54) < swicth_on_temp(70) --> update = false
+>>> When update is false, the cooling device state can not be reset.
+>>
+>> That's a tricky use case. How is that now possible,
 > 
-> > Fixes: 7d5cd2ce5292 ("bonding: correctly handle bonding type change on enslave failure")
-> > Cc: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
-> > Link: https://syzkaller.appspot.com/bug?id=391c7b1f6522182899efba27d891f1743e8eb3ef [1]
-> > Reported-by: syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
-> > Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
-> > ---
-> >  drivers/net/bonding/bond_main.c | 2 ++
-> >  include/net/bonding.h           | 5 +++++
-> >  2 files changed, 7 insertions(+)
-> > 
-> > diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
-> > index 00646aa315c3..1a8b59e1468d 100644
-> > --- a/drivers/net/bonding/bond_main.c
-> > +++ b/drivers/net/bonding/bond_main.c
-> > @@ -2291,6 +2291,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
-> >  			dev_close(bond_dev);
-> >  			ether_setup(bond_dev);
-> >  			bond_dev->flags |= IFF_MASTER;
-> > +			if (bond_has_master(bond))
-> > +				bond_dev->flags |= IFF_SLAVE;
-> >  			bond_dev->priv_flags &= ~IFF_TX_SKB_SHARING;
-> >  		}
-> >  	}
-> > diff --git a/include/net/bonding.h b/include/net/bonding.h
-> > index ea36ab7f9e72..ed0b49501fad 100644
-> > --- a/include/net/bonding.h
-> > +++ b/include/net/bonding.h
-> > @@ -57,6 +57,11 @@
-> >  
-> >  #define bond_has_slaves(bond) !list_empty(bond_slave_list(bond))
-> >  
-> > +/* master list primitives */
-> > +#define bond_master_list(bond) (&(bond)->dev->adj_list.upper)
-> > +
-> > +#define bond_has_master(bond) !list_empty(bond_master_list(bond))
-> > +
-> 
-> This is not the proper way to check for a master device.
-> 
-> >  /* IMPORTANT: bond_first/last_slave can return NULL in case of an empty list */
-> >  #define bond_first_slave(bond) \
-> >  	(bond_has_slaves(bond) ? \
-> 
-> The device flags are wrong because of ether_setup() which clears IFF_SLAVE, we should
-> just check if it was present before and restore it after the ether_setup() call.
+> We use the trip_temp in the Android System. Often, we set different
+> control temperatures in different scenarios,
+> and when we change the switch_on_temp from small to bigger, we find
+> the power can not be reset to be max.
 
-Thank you so much for your comment!  I understand your point, and
-agree that your approach must resolve the issue.
-
-BTW, do you mean there is a case where a device has IFF_SLAVE flag but
-the upper list is empty?  I thought a device with IFF_SLAVE flag has a
-master device in the upper list (that is why I took the above way.)
-
-Thanks,
-Shigeru
+I see, thanks for letting me know that this is Android.
 
 > 
-> I'll send a fix tomorrow after testing it.
 > 
-> Thanks,
->  Nik
+>>>
+>>> So delete the update condition, so that the cooling device state
+>>> could be reset.
+>>
+>> IMO this is not the desired solution. Daniel reported the issue that
+>> IPA triggers the event sent to user-space even when there is no need.
+>> That's the motivation for the 0952177f2a1f change.
+>>
+>> To address your scenario properly, we need an interface which allows
+>> to respond properly for such situation when someone from user-space
+>> writes a new value to something fundamental as trip point.
+>>
+>> You also have a kernel config enabled:
+>> CONFIG_THERMAL_WRITABLE_TRIPS
+>> which IMO is only for debug kernels for system integrator (according
+>> to the Kconfig description).
 > 
+>   Yes, we use it to meet the temperature control needs of different scenarios.
+> And now in android with google's GKI2.0, the config must be opened.
 
+OK
+
+> 
+>>
+>> When you disable this config in your deploy/product kernel
+>> than this issue would disappear.
+>>
+>>>
+>>> Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
+>>> Signed-off-by: Di Shen <di.shen@unisoc.com>
+>>> ---
+>>>    drivers/thermal/gov_power_allocator.c | 9 +++------
+>>>    1 file changed, 3 insertions(+), 6 deletions(-)
+>>>
+>>
+>> That's why IMO this is not the solution.
+> 
+> Yes, but I think we should fix the bug, although the
+> CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
+> How about record the last_trip_temp, and when the last_temp >
+> last_trip_temp, set the update tobe true?
+
+Yes, if that config is used in Android then we must fix it.
+
+That last_trip_temp makes sense (but maybe name it last_switch_on_temp).
+Please put that new field into the IPA local
+struct power_allocator_params. We should store the trip temp
+value there every time power_allocator_throttle() is called.
+That can be called due to a write from user-space w/ a new trip point
+value, so should be OK.
+
+Regards,
+Lukasz
