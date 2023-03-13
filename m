@@ -2,122 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDFFC6B7A65
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:33:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B2266B7A73
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:35:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231438AbjCMOdN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:33:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44810 "EHLO
+        id S231459AbjCMOe6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:34:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231466AbjCMOdG (ORCPT
+        with ESMTP id S231450AbjCMOel (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:33:06 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30201BBB7;
-        Mon, 13 Mar 2023 07:33:02 -0700 (PDT)
-Received: from pps.filterd (m0098416.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DDw8fL020315;
-        Mon, 13 Mar 2023 14:27:03 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- mime-version : content-transfer-encoding; s=pp1;
- bh=EB0cwcFCZq1QLZZYrEEn68+CuFIz0tlLaFF5ULkdTrk=;
- b=f21UmAlv7MrKkKkvYFQWyRSm+St/EO8iiq0Sv7VRtq5QYNWajhG1TENN2hPgxZR64Hfv
- rQ4pCLqiiOapWqbo4GkUxKlp2Spkz9CU2KyjLHiUsOqaOb1j++jEvqc+a52V/AALd60a
- 9GIbberPbVQklB6jvPQtReFHHzowO0pd3naWhp/4jLJO4NHGLS4KmStwvypfnzJ63anr
- CbZZ9vqWP2mceT0f8RJjrn01xGng0SOysxSLU9ubaM4YM/ElViacKZM3Ul9e3eq+Hla1
- 7+W5F5liGaCuviypPNac/vjP+vGfPCs6wjthgmvfYz0wo4qMpuwmSzCJKWfGc00zA/LA SQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pa3sbupxs-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 14:27:03 +0000
-Received: from m0098416.ppops.net (m0098416.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32DCMJdB020816;
-        Mon, 13 Mar 2023 14:27:02 GMT
-Received: from ppma04wdc.us.ibm.com (1a.90.2fa9.ip4.static.sl-reverse.com [169.47.144.26])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3pa3sbupx8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 14:27:02 +0000
-Received: from pps.filterd (ppma04wdc.us.ibm.com [127.0.0.1])
-        by ppma04wdc.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32DDwa9Z008599;
-        Mon, 13 Mar 2023 14:27:01 GMT
-Received: from smtprelay07.dal12v.mail.ibm.com ([9.208.130.99])
-        by ppma04wdc.us.ibm.com (PPS) with ESMTPS id 3p8h96x5d0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 14:27:01 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-        by smtprelay07.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32DER01f37355910
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Mar 2023 14:27:00 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 84B9C5805C;
-        Mon, 13 Mar 2023 14:27:00 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 1A26A5805A;
-        Mon, 13 Mar 2023 14:26:59 +0000 (GMT)
-Received: from sig-9-77-159-147.ibm.com (unknown [9.77.159.147])
-        by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Mar 2023 14:26:59 +0000 (GMT)
-Message-ID: <32ec16c9c3caa731c3de69371de6318da7f7ea91.camel@linux.ibm.com>
-Subject: Re: [PATCH v5 6/6] integrity: machine keyring CA configuration
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Eric Snowberg <eric.snowberg@oracle.com>, jarkko@kernel.org,
-        dhowells@redhat.com, dwmw2@infradead.org
-Cc:     herbert@gondor.apana.org.au, davem@davemloft.net,
-        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
-        serge@hallyn.com, pvorel@suse.cz, kanth.ghatraju@oracle.com,
-        konrad.wilk@oracle.com, erpalmer@linux.vnet.ibm.com,
-        coxu@redhat.com, keyrings@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org
-Date:   Mon, 13 Mar 2023 10:26:47 -0400
-In-Reply-To: <20230302164652.83571-7-eric.snowberg@oracle.com>
-References: <20230302164652.83571-1-eric.snowberg@oracle.com>
-         <20230302164652.83571-7-eric.snowberg@oracle.com>
-Content-Type: text/plain; charset="ISO-8859-15"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: AVn6e_N1RxRLy5krPqhqwYoTOHO05acB
-X-Proofpoint-GUID: Ns97NCTx73M2atYukwJYoFiNIAEjPIeb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_06,2023-03-13_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 spamscore=0
- adultscore=0 lowpriorityscore=0 priorityscore=1501 mlxscore=0
- impostorscore=0 malwarescore=0 bulkscore=0 mlxlogscore=999 clxscore=1011
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303130112
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 10:34:41 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D655E24BE7;
+        Mon, 13 Mar 2023 07:34:39 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 16fd6ca9926dc160; Mon, 13 Mar 2023 15:34:38 +0100
+Received: from kreacher.localnet (unknown [213.134.189.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 71A469C5854;
+        Mon, 13 Mar 2023 15:34:37 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Quanxian Wang <quanxian.wang@intel.com>
+Subject: [PATCH v2 1/4] ACPI: processor: Reorder acpi_processor_driver_init()
+Date:   Mon, 13 Mar 2023 15:27:03 +0100
+Message-ID: <5934791.lOV4Wx5bFT@kreacher>
+In-Reply-To: <2692681.mvXUDI8C0e@kreacher>
+References: <2692681.mvXUDI8C0e@kreacher>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.189.11
+X-CLIENT-HOSTNAME: 213.134.189.11
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekledruddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledruddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+ rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2023-03-02 at 11:46 -0500, Eric Snowberg wrote:
-> Add machine keyring CA restriction options to control the type of
-> keys that may be added to it. The motivation is separation of
-> certificate signing from code signing keys. Subsquent work will
-> limit certificates being loaded into the IMA keyring to code
-> signing keys used for signature verification.
-> 
-> When no restrictions are selected, all Machine Owner Keys (MOK) are added
-> to the machine keyring.  When CONFIG_INTEGRITY_CA_MACHINE_KEYRING is
-> selected, the CA bit must be true.  Also the key usage must contain
-> keyCertSign, any other usage field may be set as well.
-> 
-> When CONFIG_INTEGRITY_CA_MACHINE_KEYRING_MAX is selected, the CA bit must
-> be true. Also the key usage must contain keyCertSign and the
-> digitialSignature usage may not be set.
-> 
-> Signed-off-by: Eric Snowberg <eric.snowberg@oracle.com>
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Thanks, Eric.
+The cpufreq policy notifier in the ACPI processor driver may as
+well be registered before the driver itself, which causes
+acpi_processor_cpufreq_init to be true (unless the notifier
+registration fails, which is unlikely at that point) when the
+ACPI CPU thermal cooling devices are registered, so the
+processor_get_max_state() result does not change while
+acpi_processor_driver_init() is running.
 
-Acked-by: Mimi Zohar <zohar@linux.ibm.com>
+Change the ordering in acpi_processor_driver_init() accordingly
+to prevent the max_state value from remaining 0 permanently for all
+ACPI CPU cooling devices due to setting acpi_processor_cpufreq_init
+too late.  [Note that processor_get_max_state() may still return
+different values at different times after this change, depending on
+the cpufreq driver registration time, but that issue needs to be
+addressed separately.]
+
+Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
+Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
+Link: https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: Expand changelog to explain that this particular patch addresses
+          part of the issue.
+
+---
+ drivers/acpi/processor_driver.c |   12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
+
+Index: linux-pm/drivers/acpi/processor_driver.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_driver.c
++++ linux-pm/drivers/acpi/processor_driver.c
+@@ -263,6 +263,12 @@ static int __init acpi_processor_driver_
+ 	if (acpi_disabled)
+ 		return 0;
+ 
++	if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
++				       CPUFREQ_POLICY_NOTIFIER)) {
++		acpi_processor_cpufreq_init = true;
++		acpi_processor_ignore_ppc_init();
++	}
++
+ 	result = driver_register(&acpi_processor_driver);
+ 	if (result < 0)
+ 		return result;
+@@ -276,12 +282,6 @@ static int __init acpi_processor_driver_
+ 	cpuhp_setup_state_nocalls(CPUHP_ACPI_CPUDRV_DEAD, "acpi/cpu-drv:dead",
+ 				  NULL, acpi_soft_cpu_dead);
+ 
+-	if (!cpufreq_register_notifier(&acpi_processor_notifier_block,
+-				       CPUFREQ_POLICY_NOTIFIER)) {
+-		acpi_processor_cpufreq_init = true;
+-		acpi_processor_ignore_ppc_init();
+-	}
+-
+ 	acpi_processor_throttling_init();
+ 	return 0;
+ err:
+
+
 
