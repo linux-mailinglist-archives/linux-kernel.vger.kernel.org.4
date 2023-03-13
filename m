@@ -2,137 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CC536B726D
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:22:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 28F116B7271
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:23:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231235AbjCMJWg convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 05:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34734 "EHLO
+        id S229660AbjCMJXV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:23:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbjCMJWd (ORCPT
+        with ESMTP id S230303AbjCMJXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:22:33 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9D53303CB;
-        Mon, 13 Mar 2023 02:22:32 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32D9M9xeC013503, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32D9M9xeC013503
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
-        Mon, 13 Mar 2023 17:22:09 +0800
-Received: from RTEXDAG02.realtek.com.tw (172.21.6.101) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.17; Mon, 13 Mar 2023 17:22:21 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXDAG02.realtek.com.tw (172.21.6.101) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Mon, 13 Mar 2023 17:22:20 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
- RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
- 15.01.2375.007; Mon, 13 Mar 2023 17:22:20 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>
-CC:     Yan-Hsuan Chuang <tony0620emma@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
-        Chris Morgan <macroalpha82@gmail.com>,
-        "Nitin Gupta" <nitin.gupta981@gmail.com>,
-        Neo Jou <neojou@gmail.com>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: RE: [PATCH v2 RFC 9/9] wifi: rtw88: Add support for the SDIO based RTL8821CS chipset
-Thread-Topic: [PATCH v2 RFC 9/9] wifi: rtw88: Add support for the SDIO based
- RTL8821CS chipset
-Thread-Index: AQHZU48VGCxmxOqKXUqxNunwzfio6674cHaQ
-Date:   Mon, 13 Mar 2023 09:22:20 +0000
-Message-ID: <2df6178819784f9f9b5c9956bddf7e3f@realtek.com>
-References: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com>
- <20230310202922.2459680-10-martin.blumenstingl@googlemail.com>
-In-Reply-To: <20230310202922.2459680-10-martin.blumenstingl@googlemail.com>
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXDAG02.realtek.com.tw, 9
-x-kse-antispam-interceptor-info: fallback
-x-kse-antivirus-interceptor-info: fallback
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: 8BIT
+        Mon, 13 Mar 2023 05:23:19 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88E323C1A
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:23:17 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id j11so45835896edq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:23:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678699396;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/CKjAglWz/Z0UKapvGTWzM4Jv1UJAkt9JJZQVmUC3Ag=;
+        b=kmwXNbdX6Yv5B0qf+FtauS1FWClKukDF9UgPFNhKKnvj3K64MQafXL/WI+R6y8qTh+
+         S48Vfrx3f88DR6Nzr/XKhxVmGETrRGdG0g0kg0bDkIPc5Jw6WFYvxpjmrsX14FlWHSij
+         KPKm+8uSU/A2apZi/zx40Bt+OjAMMh4x4g5Rx7cjrnFAXUiLLWDt2hTGrWTLgSCPgLpX
+         nOD4FtNK+DSDHwiWbURmNQkjDJCLv5hH/Yyx62MdsaDJx4zGLzT4Lme+ll/CF+kkU5w3
+         k0/OUnGGrmR68sYOHavrGTmWs/p2W5Oza1MbBf64CSUeUcXAvqIDQitGl96s0kQebDNz
+         muUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678699396;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/CKjAglWz/Z0UKapvGTWzM4Jv1UJAkt9JJZQVmUC3Ag=;
+        b=GRg8WiFbv1N4PGx4ZVUl7e/JtzYmQKqsPqkoSyPM4D96r9F+zCjTrZ14y8vijH+leM
+         GOytH/lhvrm3uisDK082L9kkyc45VGf7/SR9WSCpxTc7k6+yeYlP6FjUJ6qAtQzpuO4v
+         trEUbcNJ2yApBgkeATyGTaME3/A9jyZfJ2nSkfAsL42mANjf4YBlZUhGFnq9A+Oh70it
+         YMiCYap6fd9CkUt7d7+ldpIA5OjWVvMlllCsOsD4NM41frAMrQLgQnIBmSUYp9POQ01F
+         OQpHBSQFtgbmIuTaQfM8isyzt48bPV4bX407BLWzerHoh0PWXAoqG5Hu+nfCDLKo6b7b
+         YZsQ==
+X-Gm-Message-State: AO0yUKU2j2fAXEaK7v4Ec2RIk2kAgrPe5o0rxS8yMrCe18qnyjwDqWU8
+        7HIMeHXvC1e6gWpCeBdIOS0fp4Crh4577VXLQAE=
+X-Google-Smtp-Source: AK7set9wfWWQkWIGbAxb6yUogzNu1z4CVCuICv4FoGu1LamMcQdgG9VchIghpJTSxnSr++q9G9F+9A==
+X-Received: by 2002:a17:907:6092:b0:888:b471:8e46 with SMTP id ht18-20020a170907609200b00888b4718e46mr42341888ejc.50.1678699396039;
+        Mon, 13 Mar 2023 02:23:16 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:f052:f15:3f90:fcb3? ([2a02:810d:15c0:828:f052:f15:3f90:fcb3])
+        by smtp.gmail.com with ESMTPSA id m2-20020a509302000000b004f1e91c9f87sm2991131eda.3.2023.03.13.02.23.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 02:23:15 -0700 (PDT)
+Message-ID: <91ebf91e-99ac-2733-2dcd-860af318a03a@linaro.org>
+Date:   Mon, 13 Mar 2023 10:23:14 +0100
 MIME-Version: 1.0
-X-KSE-AntiSpam-Interceptor-Info: fallback
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4 3/3] dt-bindings: gpio: add NPCM sgpio driver bindings
+Content-Language: en-US
+To:     Jim Liu <jim.t90615@gmail.com>, Rob Herring <robh@kernel.org>
+Cc:     linux-gpio@vger.kernel.org, JJLIU0@nuvoton.com, robh+dt@kernel.org,
+        devicetree@vger.kernel.org, KWLIU@nuvoton.com,
+        openbmc@lists.ozlabs.org, brgl@bgdev.pl,
+        linux-kernel@vger.kernel.org, linus.walleij@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org
+References: <20230110083238.19230-1-jim.t90615@gmail.com>
+ <20230110083238.19230-4-jim.t90615@gmail.com>
+ <167335661623.1967925.9927691364268671668.robh@kernel.org>
+ <CAKUZ0+HQYiwp0pGLhQUckk9zOYg42MSWucYss6iP68YRmHyAxA@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAKUZ0+HQYiwp0pGLhQUckk9zOYg42MSWucYss6iP68YRmHyAxA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> -----Original Message-----
-> From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Sent: Saturday, March 11, 2023 4:29 AM
-> To: linux-wireless@vger.kernel.org
-> Cc: Yan-Hsuan Chuang <tony0620emma@gmail.com>; Kalle Valo <kvalo@kernel.org>; Ulf Hansson
-> <ulf.hansson@linaro.org>; linux-kernel@vger.kernel.org; netdev@vger.kernel.org;
-> linux-mmc@vger.kernel.org; Chris Morgan <macroalpha82@gmail.com>; Nitin Gupta <nitin.gupta981@gmail.com>;
-> Neo Jou <neojou@gmail.com>; Ping-Ke Shih <pkshih@realtek.com>; Jernej Skrabec <jernej.skrabec@gmail.com>;
-> Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> Subject: [PATCH v2 RFC 9/9] wifi: rtw88: Add support for the SDIO based RTL8821CS chipset
+On 13/03/2023 09:54, Jim Liu wrote:
+> Hi Krzysztof
 > 
-> Wire up RTL8821CS chipset support using the new rtw88 SDIO HCI code as
-> well as the existing RTL8821C chipset code.
-> 
-> Signed-off-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> ---
-> Changes since v1:
-> - use /* ... */ style for copyright comments
-> 
-> 
->  drivers/net/wireless/realtek/rtw88/Kconfig    | 11 ++++++
->  drivers/net/wireless/realtek/rtw88/Makefile   |  3 ++
->  .../net/wireless/realtek/rtw88/rtw8821cs.c    | 35 +++++++++++++++++++
->  3 files changed, 49 insertions(+)
->  create mode 100644 drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-> 
+> sorry for reply late.
+> I think I need to explain more details about the clock.
 
-[...]
+You top posted to Rob's bot's email, so I have no clue what do you refer to.
 
-> diff --git a/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-> b/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-> new file mode 100644
-> index 000000000000..7ad7c13ac9e6
-> --- /dev/null
-> +++ b/drivers/net/wireless/realtek/rtw88/rtw8821cs.c
-> @@ -0,0 +1,35 @@
-> +// SPDX-License-Identifier: GPL-2.0 OR BSD-3-Clause
-> +/* Copyright(c) Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-> + */
-> +
-> +#include <linux/mmc/sdio_func.h>
-> +#include <linux/mmc/sdio_ids.h>
-> +#include <linux/module.h>
-> +#include "sdio.h"
-> +#include "rtw8821c.h"
-
-nit: alphabetic order
-
-
-I run sparse/smatch with this patchset, and smatch warns:
-
-1. drivers/net/wireless/realtek/rtw88/mac.c:313 rtw_mac_power_switch() error: uninitialized symbol 'imr'.
-This should be a false-alarm, but just initialize imr to 0 to avoid this.
-
-
-2. drivers/net/wireless/realtek/rtw88/sdio.c:136 rtw_sdio_read_indirect_bytes() error: uninitialized symbol 'ret'.
-This should be a false-alarm too. I guess it considers 'count = 0' is possible.
-
-Ping-Ke
+Best regards,
+Krzysztof
 
