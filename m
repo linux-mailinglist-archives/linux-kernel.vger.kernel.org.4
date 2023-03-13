@@ -2,131 +2,193 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3126B7843
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:00:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D31F06B7846
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbjCMNAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53080 "EHLO
+        id S230373AbjCMNAb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:00:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54242 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230131AbjCMNAO (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:00:14 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EC4464234;
-        Mon, 13 Mar 2023 05:59:52 -0700 (PDT)
-Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32DC17h5001687;
-        Mon, 13 Mar 2023 12:59:17 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=p/uBGT7CPg8tBHDJ7eVXHXW6FWUluHA2VNiNAc55PD4=;
- b=lakHdwYYL3kYSl8Zp734Lkz6FrB7DUICNNIQ6Ss6w0l8cT4wlVS6d1QuMH6NSMWDvdKL
- u8W9CRduhGrOP0eJpWldzu21k92T8Cm3K5pd2/PYgPUvK7JpAqdqfVLvoPI6VDDDBkYK
- 0XBVB6Subt+9QDKG4Ck6i0oHM3G0RGiqVD/XRNJLZdVOg7ggfj+xj0M5XQo1PVNmt5zY
- 8LKpA1G/YtwFmKGrHs7S5LeSrvBRKjq/0aR0d2pJPKQIUATRViDvwij9rCYV0DaJ+L+r
- Q9s0/ctkzG+6A9+NAaADw8wcvrvDJZOy5EQC+O/BooIBhaS0AZp7OBZKTF+x8JaB9zvC uA== 
-Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pa3ffsmtf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 12:59:17 +0000
-Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
-        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32DBjl7u004928;
-        Mon, 13 Mar 2023 12:59:16 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([9.208.129.120])
-        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3p8h97h539-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 13 Mar 2023 12:59:16 +0000
-Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
-        by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32DCxEos6816348
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 13 Mar 2023 12:59:14 GMT
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 61F7F58052;
-        Mon, 13 Mar 2023 12:59:14 +0000 (GMT)
-Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 5F12F58045;
-        Mon, 13 Mar 2023 12:59:13 +0000 (GMT)
-Received: from [9.160.124.22] (unknown [9.160.124.22])
-        by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Mon, 13 Mar 2023 12:59:13 +0000 (GMT)
-Message-ID: <1cf97806-300d-d79e-4c4c-3b7cccba7312@linux.ibm.com>
-Date:   Mon, 13 Mar 2023 07:59:12 -0500
+        with ESMTP id S230309AbjCMNA3 (ORCPT
+        <rfc822;Linux-kernel@vger.kernel.org>);
+        Mon, 13 Mar 2023 09:00:29 -0400
+Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CE7E265B0;
+        Mon, 13 Mar 2023 05:59:57 -0700 (PDT)
+Received: by mail-qt1-f182.google.com with SMTP id d7so12882903qtr.12;
+        Mon, 13 Mar 2023 05:59:57 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678712391;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HyhoiIprON3e9d/iMrrXklhEgytlrwbdZ2FyKWhZiIU=;
+        b=Q5E2Mz69pFw2G55Xvm+gqrXMtylpbOXblHSj1C8gW1rTZwqMPZuZlYgoKSHF2Rr97i
+         fDdZZdJb4KGNaXc/3sLGk57hg9GI0AELVQf/TMlNVxT+ABTPeME3v0vjCIRWLsKY0o6v
+         +p0NSZ179/sxB+DYxG5/d46tmtVSbOprPxu45UsRXSBT68csfn/IzcNCAdxmqGEGXztF
+         39V3qLYFAn2YcNqOpWz+oZx5WMmUBMHrS2h9X27MCSmfiOb9u0QlIuEGzN2zAkqhSMR0
+         h7B+A2KytFRyFGtW1B2zPHGLB0pyorSKYvSV6z87Kkx6PnTcBXZGmwrVzVCAvon0lUkn
+         /JAA==
+X-Gm-Message-State: AO0yUKXWImwNA/ra1HwaHGcTkWpWlY6gjwQPKjPTBBve42hZPh4eNHF7
+        fG/sXI8IQezqb9vy0DDgHtiK2uC4lIReckrr
+X-Google-Smtp-Source: AK7set/jl6yTWlk41zFY0gcge1frQ0tWiRIVBpPSVJzHlzExg12wPnM3dIBXdj4o5GepfOjlUonmFg==
+X-Received: by 2002:ac8:5b8c:0:b0:3b8:67cb:7928 with SMTP id a12-20020ac85b8c000000b003b867cb7928mr58098528qta.31.1678712390251;
+        Mon, 13 Mar 2023 05:59:50 -0700 (PDT)
+Received: from maniforge ([24.1.27.177])
+        by smtp.gmail.com with ESMTPSA id o24-20020ac86998000000b003b86a6449b8sm5452921qtq.85.2023.03.13.05.59.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 05:59:49 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 07:59:47 -0500
+From:   David Vernet <void@manifault.com>
+To:     Bagas Sanjaya <bagasdotme@gmail.com>
+Cc:     Sreevani Sreejith <ssreevani@meta.com>, psreep@gmail.com,
+        bpf@vger.kernel.org, Linux-kernel@vger.kernel.org,
+        andrii@kernel.org, mykola@meta.com, linux-doc@vger.kernel.org
+Subject: Re: [PATCH V3 bpf-next] BPF, docs: libbpf Overview Document
+Message-ID: <20230313125947.GB2392@maniforge>
+References: <20230310180928.2462527-1-ssreevani@meta.com>
+ <ZA7wm8scokV+XPav@debian.me>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [RESEND PATCH v4 0/6] crypto: Accelerated AES/GCM stitched
- implementation
-Content-Language: en-US
-To:     Herbert Xu <herbert@gondor.apana.org.au>
-Cc:     linux-crypto@vger.kernel.org, leitao@debian.org,
-        nayna@linux.ibm.com, appro@cryptogams.org,
-        linux-kernel@vger.kernel.org, ltcgcw@linux.vnet.ibm.com,
-        dtsen@us.ibm.com
-References: <20230221034021.15121-1-dtsen@linux.ibm.com>
- <ZAsUV4Nn6qrwA2am@gondor.apana.org.au>
-From:   Danny Tsen <dtsen@linux.ibm.com>
-In-Reply-To: <ZAsUV4Nn6qrwA2am@gondor.apana.org.au>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: vs_ATB29RtpnMaJhexFX4MtjxJIZvHME
-X-Proofpoint-ORIG-GUID: vs_ATB29RtpnMaJhexFX4MtjxJIZvHME
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_05,2023-03-13_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 spamscore=0
- suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
- priorityscore=1501 mlxscore=0 mlxlogscore=842 lowpriorityscore=0
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303130102
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZA7wm8scokV+XPav@debian.me>
+User-Agent: Mutt/2.2.9 (2022-11-12)
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks Hubert.
+On Mon, Mar 13, 2023 at 04:44:59PM +0700, Bagas Sanjaya wrote:
+> On Fri, Mar 10, 2023 at 10:09:28AM -0800, Sreevani Sreejith wrote:
+> > From: Sreevani <ssreevani@meta.com>
+> > 
+> > Summary: Document that provides an overview of libbpf features for BPF
+> > application development.
+> 
+> It seems like you ignore some of my reviews at [1]. Anyway, I repeat
+> them here, augmenting my new comments.
 
--Danny
+Sreevani, please be sure to reply to and address all reviewers'
+comments. I've also requested that we not use these internal Meta tags
+on more than one occasion, so please be mindful of it for future
+patches, and take a bit of extra time to double check that you've
+addressed all reviewers' concerns. I also suggest reading over [0],
+which specifies that new versions of patches should include descriptions
+of what's changed from prior versions. Please see Joanne's patch set in
+[1] which serves as a very nice example.
 
-On 3/10/23 5:28 AM, Herbert Xu wrote:
-> On Mon, Feb 20, 2023 at 10:40:15PM -0500, Danny Tsen wrote:
->> This patch series enable an accelerated AES/GCM stitched implementation
->> for Power10 or later CPU(ppc64le).  This module supports AEAD algorithm.
->> The stitched implementation provides 3.5X+ better performance than the
->> baseline.
->>
->> This patch has been tested with the kernel crypto module tcrypt.ko and
->> has passed the selftest.  The patch is also tested with
->> CONFIG_CRYPTO_MANAGER_EXTRA_TESTS enabled.
->>
->> Danny Tsen (6):
->>    Glue code for AES/GCM stitched implementation.
->>    An accelerated AES/GCM stitched implementation.
->>    Supporting functions for AES.
->>    Supporting functions for ghash.
->>    A perl script to process PowerPC assembler source.
->>    Update Kconfig and Makefile.
->>
->>   arch/powerpc/crypto/aes-gcm-p10-glue.c |  345 ++++++
->>   arch/powerpc/crypto/aes-gcm-p10.S      | 1521 ++++++++++++++++++++++++
->>   arch/powerpc/crypto/aesp8-ppc.pl       |  585 +++++++++
->>   arch/powerpc/crypto/ghashp8-ppc.pl     |  370 ++++++
->>   arch/powerpc/crypto/ppc-xlate.pl       |  229 ++++
->>   arch/powerpc/crypto/Kconfig            |   17 +
->>   arch/powerpc/crypto/Makefile           |   13 +
->>   7 files changed, 3080 insertions(+)
->>   create mode 100644 arch/powerpc/crypto/aes-gcm-p10-glue.c
->>   create mode 100644 arch/powerpc/crypto/aes-gcm-p10.S
->>   create mode 100644 arch/powerpc/crypto/aesp8-ppc.pl
->>   create mode 100644 arch/powerpc/crypto/ghashp8-ppc.pl
->>   create mode 100644 arch/powerpc/crypto/ppc-xlate.pl
->>
->> -- 
->> 2.31.1
-> All applied.  Thanks.
+[0]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#the-canonical-patch-format
+[1]: https://lore.kernel.org/all/20230301154953.641654-1-joannelkoong@gmail.com/
+
+Bagas -- just FYI, a quick git log would have shown that this is only
+Sreevani's second patch. I don't think she intentionally ignored
+anything. It's likely just an artifact of getting used to the kernel
+review process.
+
+> 
+> The patch description should have been "Document overview of libbpf,
+> including its features for developing BPF programs.".
+> 
+> > +######
+> >  libbpf
+> > -======
+> > +######
+> 
+> Why did you add heading overline and change the heading character marker?
+
+I assume that Sreevani is following python documentation conventions [0], which
+suggest that #### with overline refers to the highest-level heading in a page.
+This is suggested in Sphinx documentation [1] as well.
+
+[0]: https://devguide.python.org/documentation/markup/#sections
+[1]: https://www.sphinx-doc.org/en/master/usage/restructuredtext/basics.html#sections
+
+> 
+> > +The following code snippet shows how to read the parent field of a kernel
+> > +``task_struct`` using BPF CO-RE and libbf. The basic helper to read a field in a
+> > +CO-RE relocatable manner is ``bpf_core_read(dst, sz, src)``, which will read
+> > +``sz`` bytes from the field referenced by ``src`` into the memory pointed to by
+> > +``dst``.
+> > +
+> > +  .. code-block:: C
+> > +    :emphasize-lines: 6
+> > +
+> > +    //...
+> > +    struct task_struct *task = (void *)bpf_get_current_task();
+> > +    struct task_struct *parent_task;
+> > +    int err;
+> > +
+> > +    err = bpf_core_read(&parent_task, sizeof(void *), &task->parent);
+> > +    if (err) {
+> > +      /* handle error */
+> > +    }
+> > +
+> > +    /* parent_task contains the value of task->parent pointer */
+> 
+> You may want to also add :lineos: option or manually add line numbers
+> if you add :emphasize-lines: so that readers can see the line number
+> it refers to.
+
+What is :lineos:? I don't see it anywhere else in Documentation/ and if
+I add it, the docs build complains:
+
+Documentation/bpf/libbpf/libbpf_overview.rst:177: WARNING: Error in "code-block" directive:
+unknown option: "lineos".
+
+.. code-block:: C
+  :lineos:
+  :emphasize-lines: 6
+
+  //...
+  struct task_struct *task = (void *)bpf_get_current_task();
+  struct task_struct *parent_task;
+  int err;
+
+  err = bpf_core_read(&parent_task, sizeof(void *), &task->parent);
+  if (err) {
+    /* handle error */
+  }
+
+  /* parent_task contains the value of task->parent pointer */
+
+I personally think adding line numbers is overkill. The highlighting is
+already a nice touch, and gets the point across without the additional
+visual cue of line numbers.
+
+> 
+> > +Also, find the libbpf API documentation `here
+> > +<https://libbpf.readthedocs.io/en/latest/api.html>`_
+> 
+> "See also `libbpf API documentation <link>`_".
+> 
+> > +
+> > +libbpf and Rust
+> > +===============
+> > +
+> > +If you are building BPF applications in Rust, it is recommended to use the
+> > +`Libbpf-rs <https://github.com/libbpf/libbpf-rs>`_ library instead of bindgen
+> > +bindings directly to libbpf. Libbpf-rs wraps libbpf functionality in
+> > +Rust-idiomatic interfaces and provides libbpf-cargo plugin to handle BPF code
+> > +compilation and skeleton generation. Using Libbpf-rs will make building user
+> > +space part of the BPF application easier. Note that the BPF program themselves
+> > +must still be written in plain C.
+> 
+> BPF apps are application that use BPF program, right? I thought that
+> despite there is libbpf-rs, I still have to develop BPF apps in C.
+
+It says that at the end of the paragraph?
+
+> 
+> Thanks.
+> 
+> [1]: https://lore.kernel.org/linux-doc/ZAqzeQZLNMyaZOck@debian.me/
+> 
+> -- 
+> An old man doll... just what I always wanted! - Clara
+
+
