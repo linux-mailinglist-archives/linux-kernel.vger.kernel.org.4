@@ -2,137 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B02216B741B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:32:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3150A6B741F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:33:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbjCMKcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39906 "EHLO
+        id S230017AbjCMKdQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:33:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbjCMKcr (ORCPT
+        with ESMTP id S230014AbjCMKdO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:32:47 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E902F1CF66;
-        Mon, 13 Mar 2023 03:32:45 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 8DEB722A3B;
-        Mon, 13 Mar 2023 10:32:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678703564; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VHdNtQjCqb3Vt8pNGTQr7HY3gsesOM01FBMwNyxFwks=;
-        b=TDFAXWoNCSFC+7ZyGnFGVUf1HEAm0TqX7utOhqoMZuBLF8xETy6TYVXmM9OAkVQLZRkJvv
-        2eYx9wD8XXHFZGR2Wmb9Yxq+hvCe/rOItxSiwffPFRFgFBJrdxSbs9qQ2fMrQ42EUPKdBF
-        JUU+aEaDYZGsbh7yZV5PqMzmdegikBc=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678703564;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VHdNtQjCqb3Vt8pNGTQr7HY3gsesOM01FBMwNyxFwks=;
-        b=xvBXW1Sl3GB6cxLigExGWfi9IS4Ne2TE0awxiYTCT8ts8wRxqpCVMwC2debR/zfU56zVEY
-        joEUdy0756SHz1BA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7D1FB139F9;
-        Mon, 13 Mar 2023 10:32:44 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id U2j0Hcz7DmQsQgAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 13 Mar 2023 10:32:44 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id 018BCA06FD; Mon, 13 Mar 2023 11:32:43 +0100 (CET)
-Date:   Mon, 13 Mar 2023 11:32:43 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Luis Chamberlain <mcgrof@kernel.org>
-Cc:     dhowells@redhat.com, linux-cachefs@redhat.com, jack@suse.com,
-        jaharkes@cs.cmu.edu, coda@cs.cmu.edu, codalist@coda.cs.cmu.edu,
-        anton@tuxera.com, linux-ntfs-dev@lists.sourceforge.net,
-        ebiederm@xmission.com, keescook@chromium.org, yzaikin@google.com,
-        j.granados@samsung.com, patches@lists.linux.dev,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/5] quota: simplify two-level sysctl registration for
- fs_dqstats_table
-Message-ID: <20230313103243.ubn3mw3nkkcdyi5c@quack3>
-References: <20230310231206.3952808-1-mcgrof@kernel.org>
- <20230310231206.3952808-4-mcgrof@kernel.org>
+        Mon, 13 Mar 2023 06:33:14 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED0BCDFF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:33:08 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-53d277c1834so232322377b3.10
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:33:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678703587;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MnFPjolSGcAGgVVAU9LHqJVcOXvL6bwD45MTkZA8cAQ=;
+        b=TdRMo4vCxI7jkwffjz992EoyA+NFZIktl9fWEzsvmnu+Enp+kqMtjIKLD9l9Dn3JJP
+         lkVtORs8pcVShZUtFiMqgcV0NL3EUkQgkewJqk89nNWE3s9eGD4seV2k/hAij+hLHiQL
+         qXdSp49sLBj1Nw6XBo5c6ZfSc35nITY/kaCDdyNPOkx5B5iMeWIFchYcCQuadR4HqXCu
+         SimH2y0tnQnXOv7b4LuqLV/woxPW7EeZQsmz4n0oe2+eitiF16/bUrSLdi2uBTwhK1rK
+         X2u9A1wcNagflZVXQCHOP68evTXqkRaoVwwOhaDHB4tuhpRpA08IrgnqxvPlO+VFUR0a
+         exwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678703587;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MnFPjolSGcAGgVVAU9LHqJVcOXvL6bwD45MTkZA8cAQ=;
+        b=UxN1JXTRXYP6DiQKHqC+ymSW6DGg4QVL3QP23mfq2sb1WtfNoyHtcDoacfo0ZNIqtA
+         5eYlsoPXzrRAqPZAvrofZ7qgyfB2cIbEVe28HVuAMG9B51omGVRaml6hiba3LyzgJ5z4
+         TnTd6hnvfjDhHV0uvnE+rLQ2C62wGwykwIPfBnaMXhqwKItqAVndzltFlH39jhESJr6A
+         vrTb2Ry2ReeIQggRdS/oJaFN+87BwCQ4zZHXa5ab0KyNP4tLOMfkODMwUeN0bWWTu+cz
+         St7yCiP6aJRNfCzQnNzVM4vwIJ7i3ZZKA/33OPAWiTv+Z+svF0pwTBtTLUc+PR9COuOe
+         YXdQ==
+X-Gm-Message-State: AO0yUKUCx0YIgCb/0bAdbHEXBgVjSh3M13M43jXygqgXBF2JyUKsf9Rd
+        F3Jb6X6tBg/lrMtjOiFxTv3z1k2vBbWQ6DOiMDH1Ow==
+X-Google-Smtp-Source: AK7set+p+PXqVfhGIcoeezzILTzkQ5hjANPkgn5fmW12pUVn5gEYBSczeu+L+yu1hgplG+tB9aazX/yuCtoO2JqIJX8=
+X-Received: by 2002:a81:e80a:0:b0:541:69bc:8626 with SMTP id
+ a10-20020a81e80a000000b0054169bc8626mr4597042ywm.10.1678703587257; Mon, 13
+ Mar 2023 03:33:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310231206.3952808-4-mcgrof@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230117094425.19004-1-Delphine_CC_Chiu@Wiwynn.com>
+ <20230117094425.19004-4-Delphine_CC_Chiu@Wiwynn.com> <CACRpkdY2ohNNJnnFUZscVg1ETEZBOCby7p-B-uCrrGwvLcQZ7Q@mail.gmail.com>
+ <TY2PR04MB40328E5E7FC548F3FD207E1083B99@TY2PR04MB4032.apcprd04.prod.outlook.com>
+In-Reply-To: <TY2PR04MB40328E5E7FC548F3FD207E1083B99@TY2PR04MB4032.apcprd04.prod.outlook.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 13 Mar 2023 11:32:56 +0100
+Message-ID: <CACRpkdZCrjWhwcut6AiNdRsyJWFjaz1GgxekYXHhUpcO+iy5BQ@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] misc: Add meta cld driver
+To:     "Delphine_CC_Chiu/WYHQ/Wiwynn" <Delphine_CC_Chiu@wiwynn.com>
+Cc:     "patrick@stwcx.xyz" <patrick@stwcx.xyz>,
+        Derek Kiernan <derek.kiernan@xilinx.com>,
+        Dragan Cvetic <dragan.cvetic@xilinx.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "garnermic@fb.com" <garnermic@fb.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stanislav Jakubek <stano.jakubek@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Lee Jones <lee@kernel.org>, Sebastian Reichel <sre@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri 10-03-23 15:12:04, Luis Chamberlain wrote:
-> There is no need to declare two tables to just create directories,
-> this can be easily be done with a prefix path with register_sysctl().
-> 
-> Simplify this registration.
-> 
-> Signed-off-by: Luis Chamberlain <mcgrof@kernel.org>
+On Mon, Mar 13, 2023 at 9:48 AM Delphine_CC_Chiu/WYHQ/Wiwynn
+<Delphine_CC_Chiu@wiwynn.com> wrote:
+> > On Tue, Jan 17, 2023 at 10:46 AM Delphine CC Chiu
+> > <Delphine_CC_Chiu@wiwynn.com> wrote:
 
-Thanks. I've taken the patch into my tree.
+> > Why should this driver be in drivers/misc and not drivers/mfd?
+>
+> The cld device is not a physical ASIC.
 
-								Honza
+Nobody cares about the difference, that is only a convention.
+It has a stable hardware/software API that is all that matters.
 
-> ---
->  fs/quota/dquot.c | 20 +-------------------
->  1 file changed, 1 insertion(+), 19 deletions(-)
-> 
-> diff --git a/fs/quota/dquot.c b/fs/quota/dquot.c
-> index a6357f728034..90cb70c82012 100644
-> --- a/fs/quota/dquot.c
-> +++ b/fs/quota/dquot.c
-> @@ -2948,24 +2948,6 @@ static struct ctl_table fs_dqstats_table[] = {
->  	{ },
->  };
->  
-> -static struct ctl_table fs_table[] = {
-> -	{
-> -		.procname	= "quota",
-> -		.mode		= 0555,
-> -		.child		= fs_dqstats_table,
-> -	},
-> -	{ },
-> -};
-> -
-> -static struct ctl_table sys_table[] = {
-> -	{
-> -		.procname	= "fs",
-> -		.mode		= 0555,
-> -		.child		= fs_table,
-> -	},
-> -	{ },
-> -};
-> -
->  static int __init dquot_init(void)
->  {
->  	int i, ret;
-> @@ -2973,7 +2955,7 @@ static int __init dquot_init(void)
->  
->  	printk(KERN_NOTICE "VFS: Disk quotas %s\n", __DQUOT_VERSION__);
->  
-> -	register_sysctl_table(sys_table);
-> +	register_sysctl("fs/quota", fs_dqstats_table);
->  
->  	dquot_cachep = kmem_cache_create("dquot",
->  			sizeof(struct dquot), sizeof(unsigned long) * 4,
-> -- 
-> 2.39.1
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> It's a controller based on FPGA device and the FPGA may be Altera or Lattice.
+> So, we put the cld driver in misc folder. Is the cld driver suitable to put in mfd folder?
+
+Yes.
+
+> > MFS has support code for spawning child devices for the LED you are also
+> > creating for example, so please use that.
+>
+> Could you please guide us which device driver we can refer?
+
+For example drivers/mfd/stmfx.c another firmware-driven FPGA thing.
+
+Yours,
+Linus Walleij
