@@ -2,115 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 580456B8523
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:51:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B70656B8539
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:52:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229617AbjCMWvB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 18:51:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55016 "EHLO
+        id S230109AbjCMWwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 18:52:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229707AbjCMWu6 (ORCPT
+        with ESMTP id S229612AbjCMWwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 18:50:58 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2BC147A90F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:50:18 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id i19so7718442ila.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 15:50:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678747768;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=RXdBPjaM1WfjoK8YXDJdoMOlz61gqqSKxs3ISgBCJio=;
-        b=Sk4tcyiJZY4eqUC1+qs15WscbJpRa4XaHSgMMdJ+Nt07bNH+pbjWa0BhGMYnxJZuJ3
-         1SvpsB/UGcqOiXXXMQ4Cm6njzHw9AIuZboMjSsiiDuX8Txk5U4fB36jQCzP+X2+BDbmQ
-         Dh4721MFLa0LsA0Ypa6PaLTUoTYtqeCizEZZiyKYzerCO8KrcaCoxBxs4CaL/ssX1gL9
-         9Bn6ULxzu393Hk6S4II4I+RfbSFvkwPtNUtwemGkE/gZb2Tt7uYlwZmPFAuvd9+UUN81
-         6VBxo+jO3FsXk0gEk/LOee1mQ4HBg3tUS0d4csD3bkMOOF6dTkxduqfRZmxrhPhlhaJc
-         3ZeA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678747768;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=RXdBPjaM1WfjoK8YXDJdoMOlz61gqqSKxs3ISgBCJio=;
-        b=fQk1AeG6JWRDlJ32SljQzN/zk3FD7x2uTsDR3IXvT6b7H5iM33RPc9Ggo094MECSCF
-         DTzWXTeV2DRAMlaCEnoyhVa6DU2EXnRt2mLM0qW7eVtxT3l25thDY4cqkJWfxiNiyaei
-         T1TGEd62mC05q//EhoijWK90Ad4icV1rvf6A7TlCZN6o5S4URfR9P9rY2jjmiGg77S4N
-         4KMxMHth5Fu3GMucoW14XG9a3A2xFHXD6y3YlYR8SFCkZTyfeRpULAm2kA9WXihEFiUg
-         J5E22snBe9sxoGvoJCg4YdrSOZQqkQhimBObccTuAPj5lItOS/EG+4CX0nSB8YXTMHc7
-         uoRA==
-X-Gm-Message-State: AO0yUKVQaHSCg47ewjyQ9t0pUMhWlRjJXA+4knUE1IRP26xLFkd4U+t/
-        hoa+fT7Tps5/V+XeGwgeCa8=
-X-Google-Smtp-Source: AK7set/kZvixLEKQlPAXhmkAVSq3gLLeEAAaNMLLciV0ZM0KF/MiseYcD5PptZ79hSsZjhYR+vwY6g==
-X-Received: by 2002:a92:da05:0:b0:323:70c:ba7a with SMTP id z5-20020a92da05000000b00323070cba7amr1155204ilm.0.1678747768693;
-        Mon, 13 Mar 2023 15:49:28 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g7-20020a92dd87000000b00310f9a0f8a7sm293937iln.76.2023.03.13.15.49.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 15:49:27 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <c5f4fe2d-fc32-cb2f-669c-c9c5f6e3b46e@roeck-us.net>
-Date:   Mon, 13 Mar 2023 15:49:26 -0700
+        Mon, 13 Mar 2023 18:52:08 -0400
+Received: from post.baikalelectronics.com (post.baikalelectronics.com [213.79.110.86])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9772A5BC8D;
+        Mon, 13 Mar 2023 15:51:40 -0700 (PDT)
+Received: from post.baikalelectronics.com (localhost.localdomain [127.0.0.1])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 9DAA8E0EB1;
+        Tue, 14 Mar 2023 01:51:06 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        baikalelectronics.ru; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:from:from:message-id
+        :mime-version:reply-to:subject:subject:to:to; s=post; bh=20td581
+        5OptUIxR9S+Fsvw+x+FPjDGPbexfUZ0eZGN4=; b=J238E5ZgG1lJC8KVbX/cetX
+        PB3W0psKwHbkOGMm+NsqVAEKxbOn8wtoJPFZ+EyC9/u+zqRNfxfLIN3c73zQoR66
+        gYcGrus5YY1nVscjhTh//UKP7Jk+Rw0WfGfjJIN4y/8ECF9Ah9Kw7nhRJO7kq2yA
+        tNDdSg4fV11DEChBIDrs=
+Received: from mail.baikal.int (mail.baikal.int [192.168.51.25])
+        by post.baikalelectronics.com (Proxmox) with ESMTP id 8354DE0E6A;
+        Tue, 14 Mar 2023 01:51:06 +0300 (MSK)
+Received: from localhost (10.8.30.10) by mail (192.168.51.25) with Microsoft
+ SMTP Server (TLS) id 15.0.1395.4; Tue, 14 Mar 2023 01:51:05 +0300
+From:   Serge Semin <Sergey.Semin@baikalelectronics.ru>
+To:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+CC:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        Biao Huang <biao.huang@mediatek.com>,
+        Yang Yingliang <yangyingliang@huawei.com>,
+        <devicetree@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH net-next 00/16] dt-bindings: net: dwmac: Extend clocks, props desc and constraints
+Date:   Tue, 14 Mar 2023 01:50:47 +0300
+Message-ID: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
- <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
- <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
- <fce02d50-65a7-4aa7-8949-6a82321da292@roeck-us.net>
- <CAHk-=wgVCTJTQPwoLrscmOa+n9X8+bc5ieCD+7PXw35Ke7i6ng@mail.gmail.com>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 6.3-rc2
-In-Reply-To: <CAHk-=wgVCTJTQPwoLrscmOa+n9X8+bc5ieCD+7PXw35Ke7i6ng@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.8.30.10]
+X-ClientProxiedBy: MAIL.baikal.int (192.168.51.25) To mail (192.168.51.25)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 15:16, Linus Torvalds wrote:
-> On Mon, Mar 13, 2023 at 1:30 PM Guenter Roeck <linux@roeck-us.net> wrote:
->>
->> It gets weird. Bisect log below. Reverting the identified patch does
->> indeed seem to fix the problem, only I have no clue why this might
->> be the case. The patch looks completely innocent to me. Yet, I can
->> reliably reproduce the problem with v6.3-rc2, but at least so far I
->> have not been able to reproduce it with commit f3dd0c53370 reverted
->> (and I am trying on five different servers in parallel).
-> 
-> Yeah, that commit looks very innocuous. I'm surprised it would even
-> change any code generation, but it's very possible that it ends up
-> affecting some code layout or something almost by mistake.
-> 
-> I'd be inclined to think that the problem is very timing-sensitive,
-> and has probably been there for a while, and some random moon phase
-> just made it happen now.
-> 
+This patchset is the fourth one in the series of updates implemented in
+the framework of activity to simplify the DW MAC/STMMAC driver code and
+provide Baikal GMAC/X-GMAC support after all:
 
-Maybe, but it seems unlikely. I can reliably reproduce the problem
-with v6.3-rc2. Typically it takes some 20-30 boot attempts to see it. With
-f3dd0c53370 reverted I tried more than 1,000 boot attempts and did not see
-the problem. I also don't recall ever having seen it before.
+[1: In-review v1]: net: stmmac: Fixes bundle #1
+Link: https://lore.kernel.org/netdev/20230313224237.28757-1-Sergey.Semin@baikalelectronics.ru/
+[2: Stalled   v1]: net: stmmac: Fixes bundle #2
+Link: ---not submitted yet---
+[3: Stalled   v1]: net: stmmac: Fixes bundle #3
+Link: ---not submitted yet---
++> [4: In-review v1]: dt-bindings: net: dwmac: Extend clocks, props desc and constraints
++> Link: ---you are looking at it---
+[5: Stalled   v1]: dt-bindings: net: dwmac: Fix MTL queues and AXI-bus props
+Link: ---not submitted yet---
+[6: Stalled   v1]: net: stmmac: Generic platform res, props and DMA cleanups
+Link: ---not submitted yet---
+[7: Stalled   v1]: net: stmmac: Generic platform rst, phy and clk cleanups
+Link: ---not submitted yet---
+[8: Stalled   v1]: net: stmmac: Main driver code cleanups bundle #1
+Link: ---not submitted yet---
+[9: Stalled   v1]: net: stmmac: Main driver code cleanups bundle #2
+Link: ---not submitted yet---
+[10: Stalled  v1]: net: stmmac: DW MAC HW info init refactoring
+Link: ---not submitted yet---
+[11: Stalled  v1]: net: stmmac: Convert to using HW capabilities bundle #1
+Link: ---not submitted yet---
+[12: Stalled  v1]: net: stmmac: Convert to using HW capabilities bundle #2
+Link: ---not submitted yet---
+[13: Stalled  v1]: net: stmmac: Convert to using HW capabilities bundle #3
+Link: ---not submitted yet---
+[14: Stalled  v1]: net: stmmac: Convert to using HW capabilities bundle #4
+Link: ---not submitted yet---
+[15: Stalled  v1]: net: stmmac: Unify/simplify HW-interface
+Link: ---not submitted yet---
+[16: Stalled  v1]: net: stmmac: Norm/Enh/etc DMA descriptor init fixes
+Link: ---not submitted yet---
+[17: Stalled  v1]: net: stmmac: Norm/Enh/etc DMA descriptor init cleanups
+Link: ---not submitted yet---
+[18: Stalled  v1]: net: stmmac: Main driver code cleanups bundle #3
+Link: ---not submitted yet---
+[..: In-prep] to be continued (IRQ handling refactoring, SW-reset-less config,
+                               generic GPIO support, ARP offload support,
+                               In-band RGMII link state, etc)
+[..: In-prep] to be continued (Baikal-{T,M,L,S} SoCs GMAC, X-GMAC and XPCS
+                               support)
 
-Anyway, I'll probably just disable CONFIG_DEBUG_LOCK_ALLOC for my
-arm boot tests to avoid the message. I don't want it to create noise
-and hide other problems.
+Please visit the next link for the detailed justification of the changes
+series introduced in the list above:
+Link: https://lore.kernel.org/netdev/20230313224237.28757-1-Sergey.Semin@baikalelectronics.ru/
 
-Thanks,
-Guenter
+Here is a short summary of what is introduced in this patchset.
+
+The series starts with fixes of the PBL (Programmable DMA Burst length)
+DT-property, which is supposed to be defined for each DW *MAC IP-core, but
+not only for a Allwinner sun* and Ingenic GMAC and DW xGMAC. The number of
+possible PBL values need to be also extended in accordance with the DW
+*MAC manual. Then the TSO flag property should be also declared free of
+the vendor-specific conditional schema, because the driver expects the
+compatible string to have the IP-core version specified anyway and none of
+the glue-drivers refer to the property directly. Moreover the original
+Allwinner sunXi bindings file didn't have the TSO-related property
+declared. So we can freely do that.
+
+Then in order to improve the DT-bindings maintainability we suggest to
+split up the generic DT-properties and generic DT-nodes schema leaving the
+properties definition in the "snps,dwmac.yaml" file and moving the generic
+DW *MAC DT-nodes bindings validation in the dedicated DT-schema
+"snps,dwmac-generic.yaml".
+
+We've found out that the DW MAC bindings don't provide a correct description
+of the System/CSR clocks and a comprehensive enough description of the
+clock-related "snps,clk-csr" property. So in order to have more
+descriptive bindings we suggest to add a bit more details about the
+App/CSR clocks and CSR-MDC divider property.
+
+Then seeing the any DW MAC IP-core revision can be equipped with an
+external Tx/Rx clock sources we suggest to add the "tx"/"rx" clocks
+declaration into the generic DW MAC DT-schema.
+
+Afterwards a set of the AXI-bus config property cleanups are introduced.
+First we suggest to drop the "snps,axi-config" property description since
+it duplicates the stmmac-axi-config sub-node DT-bindings. Second the
+unevaluatedProperties property is replaced with additionalProperties as
+more suitable for the "stmmac-axi-config" schema. Third the proper
+constraints are added to the properties of the "stmmac-axi-config"
+sub-node.
+
+Then three patches concerning the MTL Tx/Rx queue configs go, which add
+the sub-nodes properties constraints and fix the MTL Tx queue properties
+description.
+
+The next patch converts the DW MAC DT-bindings to using the "flag"
+definition instead of the native boolean type for relevant properties.
+It's done for the sake of the DT-schema unification.
+
+The series is closed with the two patches concerning the MTL queue config
+properties dependencies. First one provides a simpler construction for the
+MTL queue properties inter-dependencies. The second one adds the
+dependencies definition for the MTL Tx queue CBS-algo properties.
+
+Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
+Cc: Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>
+Cc: Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>
+Cc: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Richard Cochran <richardcochran@gmail.com>
+Cc: Biao Huang <biao.huang@mediatek.com>
+Cc: Yang Yingliang <yangyingliang@huawei.com>
+Cc: devicetree@vger.kernel.org
+Cc: netdev@vger.kernel.org
+Cc: linux-stm32@st-md-mailman.stormreply.com
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-kernel@vger.kernel.org
+
+Serge Semin (16):
+  dt-bindings: net: dwmac: Validate PBL for all IP-cores
+  dt-bindings: net: dwmac: Extend number of PBL values
+  dt-bindings: net: dwmac: Fix the TSO property declaration
+  dt-bindings: net: dwmac: Detach Generic DW MAC bindings
+  dt-bindings: net: dwmac: Elaborate snps,clk-csr description
+  dt-bindings: net: dwmac: Elaborate stmmaceth/pclk clocks description
+  dt-bindings: net: dwmac: Add Tx/Rx clock sources
+  dt-bindings: net: dwmac: Drop prop names from snps,axi-config
+    description
+  dt-bindings: net: dwmac: Prohibit additional props in AXI-config
+  dt-bindings: net: dwmac: Add AXI-bus properties constraints
+  dt-bindings: net: dwmac: Add MTL Rx Queue properties constraints
+  dt-bindings: net: dwmac: Add MTL Tx Queue properties constraints
+  dt-bindings: net: dwmac: Fix MTL Tx Queue props description
+  dt-bindings: net: dwmac: Use flag definition instead of booleans
+  dt-bindings: net: dwmac: Simplify MTL queue props dependencies
+  dt-bindings: net: dwmac: Add MTL Tx queue CBS-algo props dependencies
+
+ .../bindings/net/snps,dwmac-generic.yaml      | 155 +++++
+ .../devicetree/bindings/net/snps,dwmac.yaml   | 586 +++++++-----------
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 381 insertions(+), 361 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/snps,dwmac-generic.yaml
+
+-- 
+2.39.2
+
 
