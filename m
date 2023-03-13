@@ -2,77 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DF5C86B6F97
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:45:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 047476B6F9A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:47:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229774AbjCMGpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43860 "EHLO
+        id S229723AbjCMGrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 02:47:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44888 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229638AbjCMGpW (ORCPT
+        with ESMTP id S229493AbjCMGq7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:45:22 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1944941088;
-        Sun, 12 Mar 2023 23:45:21 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id bp27so4020147lfb.6;
-        Sun, 12 Mar 2023 23:45:21 -0700 (PDT)
+        Mon, 13 Mar 2023 02:46:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2255E48E3E;
+        Sun, 12 Mar 2023 23:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678690016; x=1710226016;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=Ka2XxIyV+HGdQABPaSeZS75ymvM3FEoLMg9AEtA09bc=;
+  b=gmGQ9FocSE6s7/J9y+d+W1GAnfLKlC2i/7Z1gYglzoIrcTPUktngLu3h
+   4UoyeYUIYaVGbFYauGQYjwFYn3PX8U89Ol5UqDokes/pFomGB1QQ8ABeH
+   isDpdaV0mH3ZrjNt0TnZTVaArnfrrVz3BcLpNl7oja41+5r0OfJd2BDXL
+   UDItlZJwGkGFOiNEvTeqzsNCA+uvU3gr8x5zJGFzdF2203ASduwalSkYt
+   TE6eulDAulb8bxlzAuVeYEGxeydb+lJ1BMWy6DZI4pF2kK1mYIjNPqTHU
+   zTTsM0+yMhEIeuVSgMW9RPhSSi8xuYjhGLfPRr16b7WnP7eg4kO+DGv2p
+   A==;
+X-IronPort-AV: E=Sophos;i="5.98,256,1673938800"; 
+   d="scan'208";a="201296430"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 12 Mar 2023 23:46:54 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Sun, 12 Mar 2023 23:46:53 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Sun, 12 Mar 2023 23:46:53 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=F2KhqPf59gZn0HADPdTz8Ho6qSouIpy6Ov7fs/HWuJS5pLuGC28tqs+TDY+oDMEjIXPjkM5injK31K6p/6UDpJNAxW7r2JJ5EU9JH6z13pGClWsLy4mJ0PWFgsIT2mDW4tudxoWfaWXx2ntnnx+hdswun8liWMrG9V5wZxWId9+Un8q2VoCP3SVljIYWBKNHcy5S2C4fkW6zVIcpkFbG6iAdGVIKOCjm99oZZXoGahthrOawgbIDtUadeiQXfSkdnH0xtMmwuIsC8JNoJEPH9wHUm99XKwgXXBANURKEv4IXljlVGxekV3zfS5uNGYp3WkWkmUEZGDEgW0wPQtiDAA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Ka2XxIyV+HGdQABPaSeZS75ymvM3FEoLMg9AEtA09bc=;
+ b=cXOu1M/Pw1qNoDpYCQSjqfQ78aEFWu7ZcSVpVPhkDbVD23QV1LlHCb5rA2Ds106r4odzMkJx18XSaulDMkaXHXd3b32jV+DGDXaCkXAiFAmm0ftgrrD/Cg56xLGTWxtrngA2vXw1fG42ozsc5skfN45E0wWiJogHD/iNvDetsL3bd251yAzXp/GG43m7OMc0sgu+7lRNfxZuostCG7nRtA4DfqXT9xnsFwqITNM0LLsHTtU1bgcK3aRmqtHl+WEQm4FhUhVsPFl+2a4OmvfEJ6ZnuCVG0axXULT7yC1aWrHFlgBacypq2sr9m8wiBZ7Ncl9WIa1DrYJcVQZZcRspdg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678689919;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gY0qPy0GOPqIHczpB+O9ixtAv+lNXDzFAMv5wze+hKI=;
-        b=DoaDcMzlv11N1PE21UzFZ7OEXCuHHSgLsHIep70JFsRR3+ffDF46tWSKmt2/OV34GV
-         8MF2X+OuYqhLkcBeOr/hoV+Lwb+3savscxyTTunXAnSBZ4kZMUQbioCovhGOg8kT6oha
-         qowY1i8VCV42O7kP4bwvPaVsyn5qw23oDUhIZyeknK0i2U//2/zgXsY7H06FdrXjEslB
-         AcsLttt+uhA+8zfu0/VDwaGargtDyr1ta56IHtBm2tsQOSuJR70gMjMfvtckObsl60jS
-         SZjX1WbYKS/y5OhlVVAYqxXz/fMolO/puY86i8c9zQnLQZcJKCa/BUKyXbTgAkxH5Ot8
-         3MSw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678689919;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gY0qPy0GOPqIHczpB+O9ixtAv+lNXDzFAMv5wze+hKI=;
-        b=70SWN+wRhHzyjyUdfv+mM8G0PoB0wpXhMENxy3QQUEfz+6OaRiAJ3dt73iVFcbrgQL
-         8XCMHh3BIW6eo0kfQ6ZawQmg2juGWcaNxdKZPX8wSPnS9mgn0NIoQ3togmpqlXWspJqV
-         yurRfTv6sxiLo0yj6Eis3Fr6d1jDOYtXdZHPfShyKcGnSUecwoNMlsxdGC0qNfjlDoEW
-         8YdcncRXaKqAyheDPy/a0IfZ7m+iGN3L0mow8HNJpAVERQmfkKKqaQsUPKMR8J8cFlUd
-         wdTHTGpjyEVsiTQO3P1MyrCMZb3fGUND1Ebtug/v2GZIm1YFXENABwsaE9RTy/LU0Iv5
-         GkVw==
-X-Gm-Message-State: AO0yUKXhRf6fkJ7JGnz8Vd3neyCGmF6DeJyTpnIIfYOqVImR+yRThGzA
-        UlDboUO8zulg6pbFCnmNRe4=
-X-Google-Smtp-Source: AK7set/jEXYFFDMIxAZqfVeFG9BX06e4S9c/mBX/neppggLLD6qHkfZ0NTU5CLoGXxDHy1TE16+EHQ==
-X-Received: by 2002:a05:6512:23a7:b0:4db:5123:c271 with SMTP id c39-20020a05651223a700b004db5123c271mr3610230lfv.29.1678689919303;
-        Sun, 12 Mar 2023 23:45:19 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id s13-20020a19ad4d000000b004e048852377sm866850lfd.263.2023.03.12.23.45.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 23:45:18 -0700 (PDT)
-Message-ID: <cd278a98-c8dc-ac73-f269-e75cd88f9a27@gmail.com>
-Date:   Mon, 13 Mar 2023 08:45:18 +0200
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Ka2XxIyV+HGdQABPaSeZS75ymvM3FEoLMg9AEtA09bc=;
+ b=mz64j32lS2d53P6nRktqlyZT8+YS0SK47IytwUVxvxOENXFvaJKViUax66oe8zoLw2VVc9EpXEkOq7EZG3KgIBkILH2MP/q2oM8sium6zFC54Ceq0HvUw0BiYlGnRJJSqwixuQuCBZnH9gjwcRoA7+fBSY61f+rXcw2tnAJiZo4=
+Received: from DM5PR11MB0076.namprd11.prod.outlook.com (2603:10b6:4:6b::28) by
+ DM4PR11MB6382.namprd11.prod.outlook.com (2603:10b6:8:be::18) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.6178.24; Mon, 13 Mar 2023 06:46:50 +0000
+Received: from DM5PR11MB0076.namprd11.prod.outlook.com
+ ([fe80::cbd2:3e6c:cad1:1a00]) by DM5PR11MB0076.namprd11.prod.outlook.com
+ ([fe80::cbd2:3e6c:cad1:1a00%3]) with mapi id 15.20.6178.025; Mon, 13 Mar 2023
+ 06:46:50 +0000
+From:   <Arun.Ramadoss@microchip.com>
+To:     <o.rempel@pengutronix.de>
+CC:     <olteanv@gmail.com>, <andrew@lunn.ch>,
+        <linux-kernel@vger.kernel.org>, <UNGLinuxDriver@microchip.com>,
+        <f.fainelli@gmail.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
+        <edumazet@google.com>, <netdev@vger.kernel.org>,
+        <Woojung.Huh@microchip.com>, <davem@davemloft.net>,
+        <kernel@pengutronix.de>
+Subject: Re: [PATCH net-next v3 2/2] net: dsa: microchip: add ETS Qdisc
+ support for KSZ9477 series
+Thread-Topic: [PATCH net-next v3 2/2] net: dsa: microchip: add ETS Qdisc
+ support for KSZ9477 series
+Thread-Index: AQHZUy//xI4vRrArI0eXiyVZdC83n674EwIAgAAiCYCAABPFgA==
+Date:   Mon, 13 Mar 2023 06:46:50 +0000
+Message-ID: <42e1c1fe287d7109e0a9c2d2d3f83fde6181d04e.camel@microchip.com>
+References: <20230310090809.220764-1-o.rempel@pengutronix.de>
+         <20230310090809.220764-3-o.rempel@pengutronix.de>
+         <1b07b82f8692f5eb5134f78dad4cbcb3110224b2.camel@microchip.com>
+         <20230313053607.GD29822@pengutronix.de>
+In-Reply-To: <20230313053607.GD29822@pengutronix.de>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-mailer: Evolution 3.28.5-0ubuntu0.18.04.2 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DM5PR11MB0076:EE_|DM4PR11MB6382:EE_
+x-ms-office365-filtering-correlation-id: 9acca11c-4830-4013-aed9-08db238eb96d
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: GHkNRXuTyv4/R8OXL2sqzxxAuvrfjFqI2HTCBmbPkbvCRZuuC2574ifcW+zxD6dURm2XquZFrZ66FHg6nBex6M8184u7c1dBEZQvGqpIe6aZEZdCES6uNfOy8lmnL2WDs/kBHqETDNF4oczYcQEnWmcaSEwkGVmvR5j8EyfHq+sCUFYhYN8x/hTzdaj58qvQaeNALiA2AOKrLUGxVUsZUhh1R7lXDjcDB5/mH9cPquh0EH3Fc6N/JmVYDv81F6YciYRaswvL6euDJNZYo3ag3NR2V1W1FcvKe3931tMj/HQPa4eHjvEHBeSSjt6ARPdTKzjFZLI5BhU6YA9ez1ILBkz21AdT7g7zrhLMzednZp3pKiBuHiHgzd0r17gM1PJ/pvraXbZlkGIVDN7SWikG6CjdxeR2URPG/g6ru7me/4LMBCrafMUJa1Et3kfpebM1nKji1FJy8WRppTsB1H61za6WIS7y2LAXvw3XtzLszgIHbNqJoWGnUU4jTbps/o0aBlF+PVVqPisKNwg7JUEXpCEElloLJjhujGo6d3g31JRXvw4/dgz8n+iXqdaUd72I4ZFNEwInDikAkU2Pnb+Aeo4bLnsZrFK9b3eaB4s/H/Bp0YTmFlOS04NnZKyy3ef+lPobsZvlKjfFENTSRBKIMcQ8P5ihJuxoiHyvbCWI7i/WEvAB+LMTjp19VwgbtoDgCiayi9fT9iblhIrCYcIEbA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB0076.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(366004)(376002)(346002)(136003)(396003)(39860400002)(451199018)(8936002)(54906003)(91956017)(41300700001)(478600001)(66446008)(4326008)(64756008)(8676002)(66946007)(66556008)(66476007)(6916009)(76116006)(36756003)(38070700005)(86362001)(122000001)(38100700002)(6512007)(26005)(966005)(6486002)(71200400001)(186003)(7416002)(5660300002)(2906002)(316002)(6506007)(83380400001)(2616005)(99106002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?akZRTExlM0dZWmxkYnlVZkpVb1VaaWVzWnNUVlFIay84KzdyZ0xjeHBSU0o0?=
+ =?utf-8?B?LzR4S3YwWm43RzFBb1lFOWU5dTR1Z3VhRWxacnpZdG5NVUtLVUpxbGdxSVBI?=
+ =?utf-8?B?M0tNVXJnMXBzazZWUUJuMlBRcDAzNzNlK2oyVUNROTgycFJUa25TSzBzTkpJ?=
+ =?utf-8?B?YnhuRlNsMHVQUERYMTZRY2h5WUVnQnIrQ0l5Y0pBb1FMczlIT29DWDhIZnpE?=
+ =?utf-8?B?b0pwZDBIVktZNldwdFdvUlJPellCZFBEV3NqR3ZFNWZtSTZvc2VIUXlzY21F?=
+ =?utf-8?B?dFVVUnZKR3J5WmkxTXBhbUQ1R09qZEwzbUhwdU9ReEJZTWFuQkVtQ0lXRWlk?=
+ =?utf-8?B?YTVHd3dlRklmUWpGM0NhQXZwdXFLYWN1Qy83bUFNR0h2SGoyMVYxM0VJZkhm?=
+ =?utf-8?B?bCsvbWtJK3h3d0tOQzJHU2pGSHdsd1EvUEdZRTk3UU41OVkwajREdGxCd0F4?=
+ =?utf-8?B?VUJ2dUptVlE2NHdMYXY0dWlTd3F1b1MrTWpGKy96MUZQV2RMcXVnaTgxQXFY?=
+ =?utf-8?B?eHlobzlTMGpQTVZMSHlyU1NJUDl0aEc0YUNmekxwL2duOEg3cmtYcnEyN2tF?=
+ =?utf-8?B?SUFKT3B4aDU5WnZLWS9kQnhub29kSUExcGdsckZyQlpJT28xc0xPTitoK0wx?=
+ =?utf-8?B?aGdNMEJXUU5md1lDSGVBQWZCWkxyQXU2RStDblVpSEhrM040bUhsaUVoYjE1?=
+ =?utf-8?B?U1pxT3VXSW9SM1MwSk1Yc1owekcybnBUT1JYcjJTdjFNMWtqNjJXSm42czdw?=
+ =?utf-8?B?QytJenZyTVljYUZhQ2dpR2dGZFNoamVMZXZ5QThGVWxoeWxPc1NhS1hDY1VK?=
+ =?utf-8?B?dHZvclhNY1RqQTRuQllwL2VFRXhSdVpmTDl6U1piYmpxWHFJN1FiUEVmU1Zh?=
+ =?utf-8?B?TTdiTGdqZUhMSXNSdmFCcVFId1VvL3N6bUkvbXlpNVFuWm1MQ0ltZXZrZmZ2?=
+ =?utf-8?B?Q25uTXpzVTdRNGZhdy9rTmoyaXBYL1BtR0p3L25vNFZqRzFXZjBOWTN5ZjFG?=
+ =?utf-8?B?d0FFQ0RjcnBpdzF6aTFISmJYSEIzRXpYZDB0RHJ4TXd3WWtDVzZrM1N0cDNE?=
+ =?utf-8?B?eElScnh4L2FrWEJlSCtoN1ZGV2V1VitBYkdubG5aK0Q5bU1qN21GcDZLb29Y?=
+ =?utf-8?B?eXZEc1N3cjhrWFZZenhtVkorM1hvZ01ndEVmbkdCQ2loZ3hJdUhYVmhnS2Zz?=
+ =?utf-8?B?MmVGR3NTMERpNDU3V2s3b1FidjJkeDV2TEdEcE1sNktZa2Z1UnliVzFTRTlB?=
+ =?utf-8?B?aXdVZkFRSFVINHJ0c2g5K091VHdYU2pMeFVyZ0EvM2ZNc0hZTWtybGNndklU?=
+ =?utf-8?B?ZjNMcEdkQUtCWGtxUTNGU0gzeFdGbklxRjA2SjZsQSt2V25XczZWcjBNMjhz?=
+ =?utf-8?B?STV1UTVMZ1pmTXlxenBDVFNsS3VFWkJrWnN6OXNIT3g3NnVZSXhRcEdFdW5y?=
+ =?utf-8?B?bVlFaU9HVTBabnFOdWZUYnFPUHpzZEJLVis3bjMwL0xrdC9qWlUxNUNIeGRU?=
+ =?utf-8?B?NE9wS1NvQm5qYTB2eWxManZmRlEyVjVLYUpLU3ZhT2VpWkszbG9NTmVoaTR3?=
+ =?utf-8?B?TmlEb2VLVERmQjJkUkNvRXJnTVhWM0F3Uk90bDFmdG4vVkVhd2pZWmZKVEZE?=
+ =?utf-8?B?aytCanV4WFJjNHQ4UmZNVThVREJQamIza3JGVjNBTVpIeVk1d04wRWJtN25Z?=
+ =?utf-8?B?QThCQ1lRWWNENGE4bFVSTkhkR3VaaEFCTHloYjR0Y2t2NnhCZUx5bXZxTWFL?=
+ =?utf-8?B?M2tNM2h6cVNzMkdxQWhNdDFZbjdHcll3RmQrb2JndmQzRGVaeUlCMGt2UkZZ?=
+ =?utf-8?B?VlJSamdtNk9GenZDQ3g2MlJqSjVDbnFhZzVNSjFPYUFJaXpXcVpOQUs4ZXEr?=
+ =?utf-8?B?a1dKMkFYcUtpbTh6UXBvSDFmWXlmVWFBWml3ZzBjYWV2U0txc05jSTQzbG03?=
+ =?utf-8?B?cHk0N3JlMld3MUR2WnVrMEhhQUo4NWZsYlFnNnFJaFBRM2cvV1IxTkJMd3V2?=
+ =?utf-8?B?OGJEeEpPcTNCRlo3L3FGdjRpeiszQXVUV3BZYVJKL0hoWTZraEhtdGVhNEJn?=
+ =?utf-8?B?ZFRHb1dBYzhrSVFVRmlWdG96RDZCbnU3dzAwYlhoUUdib1BNSjNINjA1dXpG?=
+ =?utf-8?B?Z1EvTDlLcWJEelRhMFpPNitDaWxURy8rcU9mSWVwL21vQXRlOGU5SXhkKzlD?=
+ =?utf-8?Q?4jTSGo3ZT/7g2Vb87trMVSU=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <103685543AD6924B8F24ABF608C44F80@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-3-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCHv1 02/11] power: supply: core: auto-exposure of
- simple-battery data
-In-Reply-To: <20230309225041.477440-3-sre@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB0076.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9acca11c-4830-4013-aed9-08db238eb96d
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 06:46:50.5889
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: N3N4Fq35vLgcZqIZqmaSnVlB8TFykzyfh7MveE9zSEFup2QlS4sTFJQ2fQmMedFBSX9JQ4kxZ5ff9NFtPHVSN6tFki7nEokPe5erbCUNxQg=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6382
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,273 +162,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> Add support for automatically exposing data from the
-> simple-battery firmware node with a single configuration
-> option in the power-supply device.
-> 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-> ---
->   drivers/power/supply/power_supply_core.c  | 153 +++++++++++++++++++---
->   drivers/power/supply/power_supply_sysfs.c |  16 +++
->   include/linux/power_supply.h              |  31 +++++
->   3 files changed, 181 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index f3d7c1da299f..c3684ec46b3f 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -388,7 +388,7 @@ static int __power_supply_get_supplier_property(struct device *dev, void *_data)
->   	struct psy_get_supplier_prop_data *data = _data;
->   
->   	if (__power_supply_is_supplied_by(epsy, data->psy))
-> -		if (!epsy->desc->get_property(epsy, data->psp, data->val))
-> +		if (!power_supply_get_property(epsy, data->psp, data->val))
->   			return 1; /* Success */
->   
->   	return 0; /* Continue iterating */
-> @@ -832,6 +832,111 @@ void power_supply_put_battery_info(struct power_supply *psy,
->   }
->   EXPORT_SYMBOL_GPL(power_supply_put_battery_info);
->   
-> +bool power_supply_battery_info_has_prop(struct power_supply_battery_info *info,
-> +				        enum power_supply_property psp)
-> +{
-> +	if (!info)
-> +		return false;
-> +
-> +	switch (psp) {
-> +		case POWER_SUPPLY_PROP_TECHNOLOGY:
-> +			return info->technology != POWER_SUPPLY_TECHNOLOGY_UNKNOWN;
-> +		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> +			return info->energy_full_design_uwh >= 0;
-> +		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> +			return info->charge_full_design_uah >= 0;
-> +		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-> +			return info->voltage_min_design_uv >= 0;
-> +		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-> +			return info->voltage_max_design_uv >= 0;
-> +		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> +			return info->precharge_current_ua >= 0;
-> +		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> +			return info->charge_term_current_ua >= 0;
-> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +			return info->constant_charge_current_max_ua >= 0;
-> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> +			return info->constant_charge_voltage_max_uv >= 0;
-> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
-> +			return info->temp_ambient_alert_min > INT_MIN;
-> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
-> +			return info->temp_ambient_alert_max < INT_MAX;
-> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
-> +			return info->temp_alert_min > INT_MIN;
-> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
-> +			return info->temp_alert_max < INT_MAX;
-> +		case POWER_SUPPLY_PROP_TEMP_MIN:
-> +			return info->temp_min > INT_MIN;
-> +		case POWER_SUPPLY_PROP_TEMP_MAX:
-> +			return info->temp_max < INT_MAX;
-> +		default:
-> +			return false;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_battery_info_has_prop);
-> +
-> +int power_supply_battery_info_get_prop(struct power_supply_battery_info *info,
-> +				       enum power_supply_property psp,
-> +				       union power_supply_propval *val)
-> +{
-> +	if (!info)
-> +		return -EINVAL;
-> +
-> +	if (!power_supply_battery_info_has_prop(info, psp))
-> +		return -EINVAL;
-> +
-> +	switch (psp) {
-> +		case POWER_SUPPLY_PROP_TECHNOLOGY:
-> +			val->intval = info->technology;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_ENERGY_FULL_DESIGN:
-> +			val->intval = info->energy_full_design_uwh;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
-> +			val->intval = info->charge_full_design_uah;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
-> +			val->intval = info->voltage_min_design_uv;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_VOLTAGE_MAX_DESIGN:
-> +			val->intval = info->voltage_max_design_uv;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_PRECHARGE_CURRENT:
-> +			val->intval = info->precharge_current_ua;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_CHARGE_TERM_CURRENT:
-> +			val->intval = info->charge_term_current_ua;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT_MAX:
-> +			val->intval = info->constant_charge_current_max_ua;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_CONSTANT_CHARGE_VOLTAGE_MAX:
-> +			val->intval = info->constant_charge_voltage_max_uv;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MIN:
-> +			val->intval = info->temp_ambient_alert_min;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_TEMP_AMBIENT_ALERT_MAX:
-> +			val->intval = info->temp_ambient_alert_max;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MIN:
-> +			val->intval = info->temp_alert_min;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_TEMP_ALERT_MAX:
-> +			val->intval = info->temp_alert_max;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_TEMP_MIN:
-> +			val->intval = info->temp_min;
-> +			return 0;
-> +		case POWER_SUPPLY_PROP_TEMP_MAX:
-> +			val->intval = info->temp_max;
-> +			return 0;
-> +		default:
-> +			return -EINVAL;
-> +	}
-> +}
-> +EXPORT_SYMBOL_GPL(power_supply_battery_info_get_prop);
-
-This is not really relevant for the series. Just speaking it as it came 
-into my mind - I am not expecting changes to this series.
-
-I do very much like the way you have these battery-info APIs not 
-requiring the "struct power_supply *psy". It may be useful for drivers 
-to get the stuff from battery-node prior registering to the power-supply 
-core. I think it'd be nice to have a 'power-supply-info getter API like 
-power_supply_get_battery_info() - which does not require the struct 
-power_supply * but just a device pointer or fwnode pointer. I think it 
-might also be reasonable to pull the battery-info parsing APIs in own 
-file. Or maybe not - definitely up-to you guys. I don't have any active 
-psy-stuff at my hands right now :)
-
-> +
->   /**
->    * power_supply_temp2resist_simple() - find the battery internal resistance
->    * percent from temperature
-> @@ -1046,6 +1151,22 @@ bool power_supply_battery_bti_in_range(struct power_supply_battery_info *info,
->   }
->   EXPORT_SYMBOL_GPL(power_supply_battery_bti_in_range);
->   
-> +static bool psy_has_property(const struct power_supply_desc *psy_desc,
-> +			     enum power_supply_property psp)
-> +{
-> +	bool found = false;
-> +	int i;
-> +
-> +	for (i = 0; i < psy_desc->num_properties; i++) {
-> +		if (psy_desc->properties[i] == psp) {
-> +			found = true;
-> +			break;
-> +		}
-> +	}
-> +
-> +	return found;
-> +}
-> +
->   int power_supply_get_property(struct power_supply *psy,
->   			    enum power_supply_property psp,
->   			    union power_supply_propval *val)
-> @@ -1056,9 +1177,13 @@ int power_supply_get_property(struct power_supply *psy,
->   		return -ENODEV;
->   	}
->   
-> -	return psy->desc->get_property(psy, psp, val);
-> +	if (psy_has_property(psy->desc, psp))
-> +		return psy->desc->get_property(psy, psp, val);
-> +	else if(psy->desc->expose_battery_info)
-> +		return power_supply_battery_info_get_prop(psy->battery_info, psp, val);
-> +	else
-> +		return -EINVAL;
->   }
-> -EXPORT_SYMBOL_GPL(power_supply_get_property);
->   
->   int power_supply_set_property(struct power_supply *psy,
->   			    enum power_supply_property psp,
-> @@ -1117,22 +1242,6 @@ void power_supply_unreg_notifier(struct notifier_block *nb)
->   }
->   EXPORT_SYMBOL_GPL(power_supply_unreg_notifier);
->   
-> -static bool psy_has_property(const struct power_supply_desc *psy_desc,
-> -			     enum power_supply_property psp)
-> -{
-> -	bool found = false;
-> -	int i;
-> -
-> -	for (i = 0; i < psy_desc->num_properties; i++) {
-> -		if (psy_desc->properties[i] == psp) {
-> -			found = true;
-> -			break;
-> -		}
-> -	}
-> -
-> -	return found;
-> -}
-> -
->   #ifdef CONFIG_THERMAL
->   static int power_supply_read_temp(struct thermal_zone_device *tzd,
->   		int *temp)
-> @@ -1255,6 +1364,12 @@ __power_supply_register(struct device *parent,
->   		goto check_supplies_failed;
->   	}
->   
-> +	if (psy->desc->expose_battery_info) {
-> +		rc = power_supply_get_battery_info(psy, &psy->battery_info);
-> +		if (rc)
-> +			goto check_supplies_failed;
-> +	}
-> +
->   	spin_lock_init(&psy->changed_lock);
->   	rc = device_add(dev);
->   	if (rc)
-> diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
-> index c228205e0953..8822a17f9589 100644
-> --- a/drivers/power/supply/power_supply_sysfs.c
-> +++ b/drivers/power/supply/power_supply_sysfs.c
-> @@ -380,6 +380,11 @@ static umode_t power_supply_attr_is_visible(struct kobject *kobj,
->   		}
->   	}
->   
-> +	if (psy->desc->expose_battery_info) {
-> +		if (power_supply_battery_info_has_prop(psy->battery_info, attrno))
-> +			return mode;
-> +	}
-> +
->   	return 0;
->   }
->   
-> @@ -488,6 +493,17 @@ int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env)
->   			goto out;
->   	}
->   
-> +	if (psy->desc->expose_battery_info) {
-> +		for (j = 0; j < ARRAY_SIZE(power_supply_battery_info_properties); j++) {
-> +			if (!power_supply_battery_info_has_prop(psy->battery_info, power_supply_battery_info_properties[j]))
-> +				continue;
-> +			ret = add_prop_uevent(dev, env, power_supply_battery_info_properties[j],
-> +				      prop_buf);
-
-Usually I do not spot styling things like this - but for some reason it 
-now caught my attention. If you for some reason respin, then you might 
-want to either do this an oneliner - or split the longer line 
-"power_supply_battery_info_has_prop(..." just above.
-
-With or without that:
-Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
-
-
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+T24gTW9uLCAyMDIzLTAzLTEzIGF0IDA2OjM2ICswMTAwLCBPbGVrc2lqIFJlbXBlbCB3cm90ZToN
+Cj4gRVhURVJOQUwgRU1BSUw6IERvIG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRz
+IHVubGVzcyB5b3UNCj4ga25vdyB0aGUgY29udGVudCBpcyBzYWZlDQo+IA0KPiBPbiBNb24sIE1h
+ciAxMywgMjAyMyBhdCAwMzozNDoxNkFNICswMDAwLCBBcnVuLlJhbWFkb3NzQG1pY3JvY2hpcC5j
+b20NCj4gIHdyb3RlOg0KPiA+IEhpIE9sZWtzaWosDQo+ID4gT24gRnJpLCAyMDIzLTAzLTEwIGF0
+IDEwOjA4ICswMTAwLCBPbGVrc2lqIFJlbXBlbCB3cm90ZToNCj4gPiA+IEVYVEVSTkFMIEVNQUlM
+OiBEbyBub3QgY2xpY2sgbGlua3Mgb3Igb3BlbiBhdHRhY2htZW50cyB1bmxlc3MgeW91DQo+ID4g
+PiBrbm93IHRoZSBjb250ZW50IGlzIHNhZmUNCj4gPiA+IA0KPiA+ID4gQWRkIEVUUyBRZGlzYyBz
+dXBwb3J0IGZvciBLU1o5NDc3IG9mIHN3aXRjaGVzLiBDdXJyZW50DQo+ID4gPiBpbXBsZW1lbnRh
+dGlvbg0KPiA+ID4gaXMNCj4gPiA+IGxpbWl0ZWQgdG8gc3RyaWN0IHByaW9yaXR5IG1vZGUuDQo+
+ID4gPiANCj4gPiA+IFRlc3RlZCBvbiBLU1o4NTYzUiB3aXRoIGZvbGxvd2luZyBjb25maWd1cmF0
+aW9uOg0KPiA+ID4gdGMgcWRpc2MgcmVwbGFjZSBkZXYgbGFuMiByb290IGhhbmRsZSAxOiBldHMg
+c3RyaWN0IDQgXA0KPiA+ID4gICBwcmlvbWFwIDMgMyAyIDIgMSAxIDAgMA0KPiA+ID4gaXAgbGlu
+ayBhZGQgbGluayBsYW4yIG5hbWUgdjEgdHlwZSB2bGFuIGlkIDEgXA0KPiA+ID4gICBlZ3Jlc3Mt
+cW9zLW1hcCAwOjAgMToxIDI6MiAzOjMgNDo0IDU6NSA2OjYgNzo3DQo+ID4gPiANCj4gPiA+IGFu
+ZCBwYXRjaGVkIGlwZXJmMyB2ZXJzaW9uOg0KPiA+ID4gaHR0cHM6Ly9naXRodWIuY29tL2VzbmV0
+L2lwZXJmL3B1bGwvMTQ3Ng0KPiA+ID4gaXBlcmYzIC1jIDE3Mi4xNy4wLjEgLWIxMDBNICAtbDE0
+NzIgLXQxMDAgLXUgLVIgLS1zb2NrLXByaW8gMg0KPiA+ID4gDQo+ID4gPiBTaWduZWQtb2ZmLWJ5
+OiBPbGVrc2lqIFJlbXBlbCA8by5yZW1wZWxAcGVuZ3V0cm9uaXguZGU+DQo+ID4gPiAtLS0NCj4g
+PiA+ICBkcml2ZXJzL25ldC9kc2EvbWljcm9jaGlwL2tzel9jb21tb24uYyB8IDIxOA0KPiA+ID4g
+KysrKysrKysrKysrKysrKysrKysrKysrKw0KPiA+ID4gIGRyaXZlcnMvbmV0L2RzYS9taWNyb2No
+aXAva3N6X2NvbW1vbi5oIHwgIDEyICsrDQo+ID4gPiAgMiBmaWxlcyBjaGFuZ2VkLCAyMzAgaW5z
+ZXJ0aW9ucygrKQ0KPiA+ID4gDQo+ID4gPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvZHNhL21p
+Y3JvY2hpcC9rc3pfY29tbW9uLmMNCj4gPiA+IGIvZHJpdmVycy9uZXQvZHNhL21pY3JvY2hpcC9r
+c3pfY29tbW9uLmMNCj4gPiA+IGluZGV4IGFlMDVmZTBiMGE4MS4uNTRkNzVlYzIyZWYwIDEwMDY0
+NA0KPiA+ID4gLS0tIGEvZHJpdmVycy9uZXQvZHNhL21pY3JvY2hpcC9rc3pfY29tbW9uLmMNCj4g
+PiA+ICsrKyBiL2RyaXZlcnMvbmV0L2RzYS9taWNyb2NoaXAva3N6X2NvbW1vbi5jDQo+ID4gPiBA
+QCAtMTA4Nyw2ICsxMDg3LDcgQEAgY29uc3Qgc3RydWN0IGtzel9jaGlwX2RhdGENCj4gPiA+IGtz
+el9zd2l0Y2hfY2hpcHNbXSA9DQo+ID4gPiB7DQo+ID4gPiAgICAgICAgICAgICAgICAgLnBvcnRf
+bmlycXMgPSAzLA0KPiA+ID4gICAgICAgICAgICAgICAgIC5udW1fdHhfcXVldWVzID0gNCwNCj4g
+PiA+ICAgICAgICAgICAgICAgICAudGNfY2JzX3N1cHBvcnRlZCA9IHRydWUsDQo+ID4gPiArICAg
+ICAgICAgICAgICAgLnRjX2V0c19zdXBwb3J0ZWQgPSB0cnVlLA0KPiA+IA0KPiA+IFdoZXRoZXIg
+dGhlIHN3aXRjaCB3aGljaCBhcmUgc3VwcG9ydGluZyBjYnMgd2lsbCBhbHNvIHN1cHBvcnQgZXRz
+DQo+ID4gb3INCj4gPiBub3QuIElmIENCUyBhbmQgRVRTIGFyZSByZWxhdGVkLCB0aGVuIGlzIGl0
+IHBvc3NpYmxlIHRvIHVzZSBzaW5nbGUNCj4gPiBmbGFnDQo+ID4gY29udHJvbGxpbmcgYm90aCB0
+aGUgZmVhdHVyZS4gSSBjb3VsZCBpbmZlciB0aGF0IHN3aXRjaCB3aGljaCBoYXMNCj4gPiB0Y19j
+YnNfc3VwcG9ydGVkICB0cnVlLCBhbHNvIGhhcyB0Y19ldHNfc3VwcG9ydGVkIGFsc28gdHJ1ZS4N
+Cj4gPiANCj4gPiBJZiBib3RoIGFyZSBkaWZmZXJlbnQsIHBhdGNoIGxvb2tzIGdvb2QgdG8gbWUu
+DQo+IA0KPiBCb3RoIGFyZSBkaWZmZXJlbnQuIEZvciBleGFtcGxlIG9uIGtzejggc3dpdGNoZXMg
+aXQgaXMgcG9zc2libGUgdG8NCj4gaW1wbGVtZW50IHRjLWV0YyBidXQgbm90IHRjLWNicy4NCg0K
+T2suIA0KDQpBY2tlZC1ieTogQXJ1biBSYW1hZG9zcyA8YXJ1bi5yYW1hZG9zc0BtaWNyb2NoaXAu
+Y29tPg0KDQo+IA0KPiBSZWdhdGRzLA0KPiBPbGVrc2lqDQo+IC0tDQo+IFBlbmd1dHJvbml4DQo+
+IGUuSy4gICAgICAgICAgICAgICAgICAgICAgICAgICB8ICAgICAgICAgICAgICAgICAgICAgICAg
+ICAgICB8DQo+IFN0ZXVlcndhbGRlciBTdHIuIDIxICAgICAgICAgICAgICAgICAgICAgICB8IA0K
+PiBodHRwOi8vd3d3LnBlbmd1dHJvbml4LmRlL2UvICB8DQo+IDMxMTM3IEhpbGRlc2hlaW0sIEdl
+cm1hbnkgICAgICAgICAgICAgICAgICB8IFBob25lOiArNDktNTEyMS0yMDY5MTctDQo+IDAgICAg
+fA0KPiBBbXRzZ2VyaWNodCBIaWxkZXNoZWltLCBIUkEgMjY4NiAgICAgICAgICAgfCBGYXg6ICAg
+KzQ5LTUxMjEtMjA2OTE3LQ0KPiA1NTU1IHwNCg==
