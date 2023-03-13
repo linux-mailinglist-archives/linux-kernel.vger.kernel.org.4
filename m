@@ -2,113 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05FA6B7206
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 970106B71FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:05:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbjCMJGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54238 "EHLO
+        id S229742AbjCMJFP convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 05:05:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjCMJGN (ORCPT
+        with ESMTP id S230479AbjCMJEk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:06:13 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.215])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1F5F2126DA;
-        Mon, 13 Mar 2023 02:03:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=Gp4+C
-        4gCMjSOFnYU898NA74fjHaBuOlyPKxcR6f/MrM=; b=KGETv7MYHU+IHxw98BaBR
-        VDQdxpMYuwdI1zU0dSr77DawJfbRVpRuAa0fgLiQwAxWr3trRXIyDtCzcrX1TD5f
-        naMFYoZ39uhUIHbo6a2mEgnQ3hC+dMZ3QXhHe4GFxefMpqA3DwnqwItVIKaYqQYU
-        gXBFT+1IfXoEjwX0xtGnXQ=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g0-3 (Coremail) with SMTP id _____wDXOaAT5g5kXWohAA--.8836S2;
-        Mon, 13 Mar 2023 17:00:04 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     ericvh@gmail.com
-Cc:     lucho@ionkov.net, asmadeus@codewreck.org, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH net v2] 9p/xen : Fix use after free bug in xen_9pfs_front_remove due  to race condition
-Date:   Mon, 13 Mar 2023 17:00:02 +0800
-Message-Id: <20230313090002.3308025-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 13 Mar 2023 05:04:40 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5A1B3C29;
+        Mon, 13 Mar 2023 02:01:02 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id l18so12414410qtp.1;
+        Mon, 13 Mar 2023 02:01:02 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678698061;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JMjv67oqH0XcHnu1slnz7obBOYeNA0kXm4szuRMQips=;
+        b=aw1AdWyNMcEeGLnQunCJe99uq/ZZs0gLThSnXLv+UBhc9Rib6ovcsXKl3FGetg/oI6
+         ELwDiOyJtQjDTNja5v2ZagaJPgs9QPrssPZvAR2Vz3O5XHvJki7Ry/CJEzk45yPkT/LE
+         Idjww0rBB6xtPzaYnzWxrYjHP5XGwhR4VlTHBM9Rz8rXW1Z/OFh8CBGYDxWate6iW781
+         HOwK5AE9Y5kAF9OP9pQ6PY7ESjW7riNLsFouQnySoJlb7CyunaMaHQHtOpq9iBFh7/+C
+         dDd3aHEu8Q27kQM1Wts1lqnAgTacpIgXs01//Igy+aGGfzE8UQkVYjBi1PNxpDI41son
+         dTJg==
+X-Gm-Message-State: AO0yUKW0XN2nKFEHPr37VqxYuhiuf0+D+au45+Lp5+h1X2S9ZQAWjXkJ
+        3eA0TA/xPaXgXIybuo+Q6zMoEka+I/bVoQ==
+X-Google-Smtp-Source: AK7set8WzH26vCM0R1qdZpsSSh6qK0fRhpddR77RNdbVXnu1G9x9/BW/Idu5OTcljORGnqz/50GFlg==
+X-Received: by 2002:a05:622a:1a0e:b0:3b9:cc9b:1d9d with SMTP id f14-20020a05622a1a0e00b003b9cc9b1d9dmr16045605qtb.20.1678698061442;
+        Mon, 13 Mar 2023 02:01:01 -0700 (PDT)
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com. [209.85.219.181])
+        by smtp.gmail.com with ESMTPSA id j6-20020ac86646000000b003bfb820f17csm5074246qtp.63.2023.03.13.02.01.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 02:01:01 -0700 (PDT)
+Received: by mail-yb1-f181.google.com with SMTP id t4so10929109ybg.11;
+        Mon, 13 Mar 2023 02:01:00 -0700 (PDT)
+X-Received: by 2002:a25:8b08:0:b0:b14:91e:4d19 with SMTP id
+ i8-20020a258b08000000b00b14091e4d19mr14474451ybl.7.1678698060305; Mon, 13 Mar
+ 2023 02:01:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wDXOaAT5g5kXWohAA--.8836S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF15Cw48JFy5Kr1kWF4DJwb_yoW8Xw1xpa
-        nakFWrAFyUA3WjyFsYyas7G3WrCw4rGr1Iga12kw4fJr98Jry8XFZ5t34Yg345Ar4YqF1r
-        Cw1UWFWDJFWDZw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziID73UUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXRoxU1WBo5B68QAAsJ
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310144721.1544669-1-robh@kernel.org>
+In-Reply-To: <20230310144721.1544669-1-robh@kernel.org>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Mon, 13 Mar 2023 10:00:48 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUaeyHs9fQxS+16F62uHaifJYMXKJpL2-xi-SL5HCrTHQ@mail.gmail.com>
+Message-ID: <CAMuHMdUaeyHs9fQxS+16F62uHaifJYMXKJpL2-xi-SL5HCrTHQ@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: Use of_property_present() for testing DT
+ property presence
+To:     Rob Herring <robh@kernel.org>
+Cc:     Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xen_9pfs_front_probe, it calls xen_9pfs_front_alloc_dataring
-to init priv->rings and bound &ring->work with p9_xen_response.
+Hi Rob,
 
-When it calls xen_9pfs_front_event_handler to handle IRQ requests,
-it will finally call schedule_work to start the work.
+On Fri, Mar 10, 2023 at 3:56 PM Rob Herring <robh@kernel.org> wrote:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
+>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-When we call xen_9pfs_front_remove to remove the driver, there
-may be a sequence as follows:
+Thanks for your patch!
 
-Fix it by finishing the work before cleanup in xen_9pfs_front_free.
+> --- a/drivers/pinctrl/renesas/pinctrl.c
+> +++ b/drivers/pinctrl/renesas/pinctrl.c
+> @@ -125,8 +125,8 @@ static int sh_pfc_dt_subnode_to_map(struct pinctrl_dev *pctldev,
+>          * inside a subnode nor across subnodes.
+>          */
+>         if (!pmx->func_prop_name) {
+> -               if (of_find_property(np, "groups", NULL) ||
+> -                   of_find_property(np, "pins", NULL)) {
+> +               if (of_property_present(np, "groups")||
+> +                   of_property_present(np, "pins")) {
+>                         pmx->func_prop_name = "function";
+>                         pmx->groups_prop_name = "groups";
+>                         pmx->pins_prop_name = "pins";
 
-Note that, this bug is found by static analysis, which might be
-false positive.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-CPU0                  CPU1
+This check is used to auto-detect if the standard property names
+should be used, or the "renesas,"-prefixed ones.
+As the last users of the latter were removed from DTS in v4.10,
+perhaps I should just remove these checks instead?
 
-                     |p9_xen_response
-xen_9pfs_front_remove|
-  xen_9pfs_front_free|
-kfree(priv)          |
-//free priv          |
-                     |p9_tag_lookup
-                     |//use priv->client
+Gr{oetje,eeting}s,
 
-Fixes: 71ebd71921e4 ("xen/9pfs: connect to the backend")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
----
-v2:
-- fix type error of ring found by kernel test robot
----
- net/9p/trans_xen.c | 5 +++++
- 1 file changed, 5 insertions(+)
+                        Geert
 
-diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
-index c64050e839ac..83764431c066 100644
---- a/net/9p/trans_xen.c
-+++ b/net/9p/trans_xen.c
-@@ -274,12 +274,17 @@ static const struct xenbus_device_id xen_9pfs_front_ids[] = {
- static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
- {
- 	int i, j;
-+	struct xen_9pfs_dataring *ring = NULL;
- 
- 	write_lock(&xen_9pfs_lock);
- 	list_del(&priv->list);
- 	write_unlock(&xen_9pfs_lock);
- 
- 	for (i = 0; i < priv->num_rings; i++) {
-+		/*cancel work*/
-+		ring = &priv->rings[i];
-+		cancel_work_sync(&ring->work);
-+
- 		if (!priv->rings[i].intf)
- 			break;
- 		if (priv->rings[i].irq > 0)
 -- 
-2.25.1
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
