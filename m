@@ -2,221 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D66B66B6D0E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 02:23:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 230136B6D10
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 02:24:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCMBXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 21:23:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
+        id S229877AbjCMBX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 21:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCMBXd (ORCPT
+        with ESMTP id S229883AbjCMBXy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 21:23:33 -0400
-Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611D327D79;
-        Sun, 12 Mar 2023 18:23:30 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 01:23:18 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1678670608; x=1678929808;
-        bh=XdinrPtR68VBR2Oe7yoV/KX84VkXWkmiSOLxXszvESk=;
-        h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
-         Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=biOaiB8SrAcoEGLq2xURoFLR4bbe2u0lT5ad924UQqbgNhkMmOEuErl3nlJU2qnN0
-         FYkoC19X0aMQ6UKrQh6rIz68CdOXi5ivzldTOgp4cvsG1rRSHv1H1iqAcDYNHpSr/d
-         /cZiRO/WaDmxzRNbWjZ4msXoOd3WhEHcoQvm/wi40j6dbndSdX32djfmNOac9tK6p7
-         MEy/vs9rtmnAgrfbupV/+pN7PmYDNbE9FMvc0P4QqWoKTiboDTMuRyDoYhdlCa4Z/h
-         NU0rxSJM3n0GVGQlroRGXMxDSApKu6JzBwF/NezkCiLXJ6UFOHbiLCFbjjOFRURTuj
-         w9Xq9gfCo717Q==
-To:     "ojeda@kernel.org" <ojeda@kernel.org>,
-        "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
-        "wedsonaf@gmail.com" <wedsonaf@gmail.com>,
-        "boqun.feng@gmail.com" <boqun.feng@gmail.com>,
-        Gary Guo <gary@garyguo.net>,
-        "bjorn3_gh@protonmail.com" <bjorn3_gh@protonmail.com>
-From:   y86-dev <y86-dev@protonmail.com>
-Cc:     "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: [PATCH v1 1/3] rust: macros: add `quote!` macro
-Message-ID: <u9FrnEbtGtyUPp-CmzAQIv--8hmKwHdIIPiq-3IHJPcHdaJi_VXuDdVR2Js2GzvtWgCNrBLp4PhQs3tTlWNVDBZfIStCHiS9SoMtsDgc4oM=@protonmail.com>
-Feedback-ID: 40624463:user:proton
+        Sun, 12 Mar 2023 21:23:54 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC6D234010;
+        Sun, 12 Mar 2023 18:23:47 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0VdeV5bi_1678670624;
+Received: from 30.97.48.63(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VdeV5bi_1678670624)
+          by smtp.aliyun-inc.com;
+          Mon, 13 Mar 2023 09:23:45 +0800
+Message-ID: <f722a4e6-ceb1-2b8d-d931-e452cbe29991@linux.alibaba.com>
+Date:   Mon, 13 Mar 2023 09:23:43 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 2/2] serial: sprd: Drop of_match_ptr for ID table
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20230310222957.315848-1-krzysztof.kozlowski@linaro.org>
+ <20230310222957.315848-2-krzysztof.kozlowski@linaro.org>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230310222957.315848-2-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
+        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Gary Guo <gary@garyguo.net>
 
-Add the `quote!` macro for creating `TokenStream`s directly via the
-given Rust tokens. It also supports repetitions using iterators.
 
-It will be used by the pin-init API proc-macros to generate code.
+On 3/11/2023 6:29 AM, Krzysztof Kozlowski wrote:
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it is not relevant here).
+> 
+>    drivers/tty/serial/sprd_serial.c:1242:34: error: ‘serial_ids’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Signed-off-by: Gary Guo <gary@garyguo.net>
-Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
----
- rust/macros/lib.rs   |   2 +
- rust/macros/quote.rs | 125 +++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 127 insertions(+)
- create mode 100644 rust/macros/quote.rs
+LGTM. Thanks.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
 
-diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
-index c1d385e345b9..82b520f024dd 100644
---- a/rust/macros/lib.rs
-+++ b/rust/macros/lib.rs
-@@ -2,6 +2,8 @@
-=20
- //! Crate for all kernel procedural macros.
-=20
-+#[macro_use]
-+mod quote;
- mod concat_idents;
- mod helpers;
- mod module;
-diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
-new file mode 100644
-index 000000000000..55b663d665ec
---- /dev/null
-+++ b/rust/macros/quote.rs
-@@ -0,0 +1,125 @@
-+use proc_macro::{TokenStream, TokenTree};
-+
-+pub(crate) trait ToTokens {
-+    fn to_tokens(&self, tokens: &mut TokenStream);
-+}
-+
-+impl<T: ToTokens> ToTokens for Option<T> {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        if let Some(v) =3D self {
-+            v.to_tokens(tokens);
-+        }
-+    }
-+}
-+
-+impl ToTokens for proc_macro::Group {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        tokens.extend([TokenTree::from(self.clone())]);
-+    }
-+}
-+
-+impl ToTokens for TokenTree {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        tokens.extend([self.clone()]);
-+    }
-+}
-+
-+impl ToTokens for TokenStream {
-+    fn to_tokens(&self, tokens: &mut TokenStream) {
-+        tokens.extend(self.clone());
-+    }
-+}
-+
-+macro_rules! quote_spanned {
-+    ($span:expr =3D> $($tt:tt)*) =3D> {{
-+        let mut tokens =3D Vec::new();
-+        let span =3D $span;
-+        quote_spanned!(@proc tokens span $($tt)*);
-+        proc_macro::TokenStream::from_iter(tokens)
-+    }};
-+    (@proc $v:ident $span:ident) =3D> {};
-+    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) =3D> {
-+        let mut ts =3D proc_macro::TokenStream::new();
-+        crate::quote::ToTokens::to_tokens(&$id, &mut ts);
-+        $v.extend(ts.into_iter());
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) =3D> {
-+        for token in $id {
-+            let mut ts =3D proc_macro::TokenStream::new();
-+            crate::quote::ToTokens::to_tokens(&token, &mut ts);
-+            $v.extend(ts.into_iter());
-+        }
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) =3D> {
-+        let mut tokens =3D Vec::new();
-+        quote_spanned!(@proc tokens $span $($inner)*);
-+        $v.push(proc_macro::TokenTree::Group(proc_macro::Group::new(
-+            proc_macro::Delimiter::Parenthesis,
-+            proc_macro::TokenStream::from_iter(tokens)
-+        )));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) =3D> {
-+        let mut tokens =3D Vec::new();
-+        quote_spanned!(@proc tokens $span $($inner)*);
-+        $v.push(proc_macro::TokenTree::Group(proc_macro::Group::new(
-+            proc_macro::Delimiter::Bracket,
-+            proc_macro::TokenStream::from_iter(tokens)
-+        )));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) =3D> {
-+        let mut tokens =3D Vec::new();
-+        quote_spanned!(@proc tokens $span $($inner)*);
-+        $v.push(proc_macro::TokenTree::Group(proc_macro::Group::new(
-+            proc_macro::Delimiter::Brace,
-+            proc_macro::TokenStream::from_iter(tokens)
-+        )));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident :: $($tt:tt)*) =3D> {
-+        $v.push(
-+            proc_macro::TokenTree::Punct(proc_macro::Punct::new(':', proc_=
-macro::Spacing::Joint))
-+        );
-+        $v.push(
-+            proc_macro::TokenTree::Punct(proc_macro::Punct::new(':', proc_=
-macro::Spacing::Alone))
-+        );
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident : $($tt:tt)*) =3D> {
-+        $v.push(
-+            proc_macro::TokenTree::Punct(proc_macro::Punct::new(':', proc_=
-macro::Spacing::Alone))
-+        );
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident , $($tt:tt)*) =3D> {
-+        $v.push(
-+            proc_macro::TokenTree::Punct(proc_macro::Punct::new(',', proc_=
-macro::Spacing::Alone))
-+        );
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident @ $($tt:tt)*) =3D> {
-+        $v.push(
-+            proc_macro::TokenTree::Punct(proc_macro::Punct::new('@', proc_=
-macro::Spacing::Alone))
-+        );
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident ! $($tt:tt)*) =3D> {
-+        $v.push(
-+            proc_macro::TokenTree::Punct(proc_macro::Punct::new('!', proc_=
-macro::Spacing::Alone))
-+        );
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) =3D> {
-+        $v.push(proc_macro::TokenTree::Ident(proc_macro::Ident::new(string=
-ify!($id), $span)));
-+        quote_spanned!(@proc $v $span $($tt)*);
-+    };
-+}
-+
-+macro_rules! quote {
-+    ($($tt:tt)*) =3D> {
-+        quote_spanned!(proc_macro::Span::mixed_site() =3D> $($tt)*)
-+    }
-+}
---=20
-2.39.2
+> ---
+>   drivers/tty/serial/sprd_serial.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/tty/serial/sprd_serial.c b/drivers/tty/serial/sprd_serial.c
+> index 492a3bdab5ba..b58f51296ace 100644
+> --- a/drivers/tty/serial/sprd_serial.c
+> +++ b/drivers/tty/serial/sprd_serial.c
+> @@ -1250,7 +1250,7 @@ static struct platform_driver sprd_platform_driver = {
+>   	.remove		= sprd_remove,
+>   	.driver		= {
+>   		.name	= "sprd_serial",
+> -		.of_match_table = of_match_ptr(serial_ids),
+> +		.of_match_table = serial_ids,
+>   		.pm	= &sprd_pm_ops,
+>   	},
+>   };
