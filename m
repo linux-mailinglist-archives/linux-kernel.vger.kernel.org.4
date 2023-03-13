@@ -2,127 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0EF006B733B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:55:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E800D6B733E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230355AbjCMJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:55:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
+        id S229829AbjCMJ5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCMJzu (ORCPT
+        with ESMTP id S229540AbjCMJ5Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:55:50 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A420F25E21;
-        Mon, 13 Mar 2023 02:55:49 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id n16so1078121pfa.12;
-        Mon, 13 Mar 2023 02:55:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678701349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9MhHEvNZe13+TDFjC8K3erYv+7/DolQnJIs4c1a8yKY=;
-        b=U5wrvJW3qwYOYhADEVAhz9jV+8xWEkZNx25s3zOcGpVuQTnIR7WGW1OQBAh5+E8LXt
-         IX7S2L6EaQ7J9407dzl+Ldc6P+1Z/U3KcM5huhREdl9SX4Aow65D2oC5VGric6FKaiBx
-         iJ4YuQRlPOKYxu1zOhLffrlEKD7V6cJj7VmSuJ6Lmdvev8oBsXQAtiZ/HCi797gUUp4z
-         gwcsnCcl9YzJSq3d2mrat1/Q/13zGSrb8Q4AL9cbda/Fup9ABBV25hbkVhrj0tMfUmrR
-         zTs1rtV4tW2hznFujgd1ADwCQAgOBK8C5VOdWBDMozTBfmtC6/osSIdlGWI1SAUJFwxk
-         52LA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678701349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9MhHEvNZe13+TDFjC8K3erYv+7/DolQnJIs4c1a8yKY=;
-        b=NWWoulzZAb8pTwC84A0w2IioAzhKAF6Qhx3lORzV0HCeK7JGuYOeVEt3n3PsQcb7iZ
-         0QPXcV9hvy+T0xS4tuPTWPZPEknypE7Pm2wCwG/18tz2Qy1U1cem+TXwOCP7smhINrHd
-         yvB7AkXRHqaYDOVTYS1Ycw6uC99Mrq2bfwR4cjHhGOTjH+8mW7LWLCtbQlFsdmw4mneK
-         2dOgM3Ma6gfJzEqBgPty8HZYqwkjkdGMTcdewle/dhWrSziCVlaKcpGesRj/x4kfaVnc
-         9qPZ0CG9/ITdKq4Mz5mqXN5oRyepAbQCJl94+U+Sk0+KFbxKbmpR07raVuV03OWHlcni
-         zleA==
-X-Gm-Message-State: AO0yUKXacWFpWr8RPnDieVusnFvWBgG4h87RZXCFY2yO1yoZb3OCWArs
-        08mM2FuJGVD4NSaj5qZalOpyamuK7+oILYzsitI=
-X-Google-Smtp-Source: AK7set+xOSxu/T7WJBh17bxSEY8zfdEMaDlHePZIaxLS/tZaVg6a4odXZh1RWW27FYxxjUrnKm6eM5Cf7aWMdYEHGpI=
-X-Received: by 2002:a62:1c13:0:b0:622:c6ad:b373 with SMTP id
- c19-20020a621c13000000b00622c6adb373mr1903656pfc.3.1678701349107; Mon, 13 Mar
- 2023 02:55:49 -0700 (PDT)
+        Mon, 13 Mar 2023 05:57:16 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B655E26C14;
+        Mon, 13 Mar 2023 02:57:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 29F0ECE0FA7;
+        Mon, 13 Mar 2023 09:57:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13548C433D2;
+        Mon, 13 Mar 2023 09:57:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678701431;
+        bh=P7OH/paeGzFeUha18/vUKd29B3YRhN48njNhdHEAYrI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=VwkiYl+LfJa4WWBKLg0pa4+jnMSyE8tyZjx0rTlzME3P9hiSIYyOSjVjPeb+8P43x
+         kqfospe5AuuZveVVetvuw1Xnj9btKac01USlZ/4U0WAZmroP29Msdbnguq1nx/4k21
+         jEytIkmogvH4jgIGovLtDM1wObU21vJxq/PkKlCg=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.14.309
+Date:   Mon, 13 Mar 2023 10:57:07 +0100
+Message-Id: <167870142822219@kroah.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230217100223.702330-1-zyytlz.wz@163.com>
-In-Reply-To: <20230217100223.702330-1-zyytlz.wz@163.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Mon, 13 Mar 2023 17:55:35 +0800
-Message-ID: <CAJedcCxUNBWOpkcaN2aLbwNs_xvqi=LC8mhFWh-jWeh6q-cBCQ@mail.gmail.com>
-Subject: Re: [PATCH v2] Bluetooth: hci_core: Fix poential Use-after-Free bug
- in hci_remove_adv_monitor
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     marcel@holtmann.org, alex000young@gmail.com,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-friendly ping
+I'm announcing the release of the 4.14.309 kernel.
 
-Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=8817=E6=97=A5=
-=E5=91=A8=E4=BA=94 18:05=E5=86=99=E9=81=93=EF=BC=9A
->
-> In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT case,
-> the function will free the monitor and print its handle after that.
-> Fix it by removing the logging into msft_le_cancel_monitor_advertisement_=
-cb
-> before calling hci_free_adv_monitor.
->
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
-> v2:
-> - move the logging inside msft_remove_monitor suggested by Luiz
-> ---
->  net/bluetooth/hci_core.c | 2 --
->  net/bluetooth/msft.c     | 2 ++
->  2 files changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> index b65c3aabcd53..69b82c2907ff 100644
-> --- a/net/bluetooth/hci_core.c
-> +++ b/net/bluetooth/hci_core.c
-> @@ -1981,8 +1981,6 @@ static int hci_remove_adv_monitor(struct hci_dev *h=
-dev,
->
->         case HCI_ADV_MONITOR_EXT_MSFT:
->                 status =3D msft_remove_monitor(hdev, monitor);
-> -               bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
-> -                          hdev->name, monitor->handle, status);
->                 break;
->         }
->
-> diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
-> index bee6a4c656be..4b35f0ed1360 100644
-> --- a/net/bluetooth/msft.c
-> +++ b/net/bluetooth/msft.c
-> @@ -286,6 +286,8 @@ static int msft_le_cancel_monitor_advertisement_cb(st=
-ruct hci_dev *hdev,
->                  * suspend. It will be re-monitored on resume.
->                  */
->                 if (!msft->suspending) {
-> +                       bt_dev_dbg(hdev, "%s remove monitor %d status %d"=
-, hdev->name,
-> +                                  monitor->handle, status);
->                         hci_free_adv_monitor(hdev, monitor);
->
->                         /* Clear any monitored devices by this Adv Monito=
-r */
-> --
-> 2.25.1
->
+All users of the 4.14 kernel series must upgrade.
+
+The updated 4.14.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
+
+thanks,
+
+greg k-h
+
+------------
+
+ Makefile                                   |    2 -
+ drivers/staging/rtl8192e/rtl8192e/rtl_dm.c |   39 -----------------------------
+ net/wireless/sme.c                         |    2 -
+ 3 files changed, 1 insertion(+), 42 deletions(-)
+
+Greg Kroah-Hartman (1):
+      Linux 4.14.309
+
+Hector Martin (1):
+      wifi: cfg80211: Partial revert "wifi: cfg80211: Fix use after free for wext"
+
+Philipp Hortmann (2):
+      staging: rtl8192e: Remove function ..dm_check_ac_dc_power calling a script
+      staging: rtl8192e: Remove call_usermodehelper starting RadioPower.sh
+
