@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 744986B7062
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:51:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3F726B7051
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjCMHvq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:51:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49364 "EHLO
+        id S229927AbjCMHuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:50:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbjCMHvb (ORCPT
+        with ESMTP id S229960AbjCMHuq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:51:31 -0400
-Received: from out-19.mta1.migadu.com (out-19.mta1.migadu.com [95.215.58.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98FF451FA0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:51:25 -0700 (PDT)
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678693883;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=VJD8Qq9A5I4qmDAo4WgHqL7An+vb1MFXUqWfw8s5fTI=;
-        b=QAvMcBGEUQ2zIhDGPqQCYeBAR1+mhH8UMkY3j06xjL9IXjqI18lKBbhhHfN3ON1/XKRP6l
-        SKhhsjne10ANAd/3ktY8hz8kMW11awufbb7XCzbrTYZNnKkYq+5PPrGkYMEGQIxBDmt7To
-        71biPtkZ30zC/6psBPK7jb7xcUtvrFs=
-From:   richard.leitner@linux.dev
-Date:   Mon, 13 Mar 2023 08:50:17 +0100
-Subject: [PATCH RESEND v2 2/2] drm/panel: simple: Add InnoLux G070ACE-L01
+        Mon, 13 Mar 2023 03:50:46 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8C28EBA;
+        Mon, 13 Mar 2023 00:50:44 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id m4so1488608lfj.2;
+        Mon, 13 Mar 2023 00:50:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678693843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HHVFhtI+WXf+TBj10nSr3LhfstrJCEyqqp0nJVtIGAI=;
+        b=VVZESDY+oTzxvnvslJHVZjQSe5DUbdpK43nfxg2WnlNfG0M+gT0Gjl08wmwh5cQ49/
+         JQ3wfc5d/UvLsYAf9JfeMndoXE9pyJ7yGCFstuNbTB9RvTB+qZl1ylD8JGktY5Ri7FoL
+         7jzT9qXP/n0/UUT9dIy2P6Lg3LmvQAV9pdLGDJIQjXqVLsyg0p0vFE+tMvWAElf0IOuC
+         +GWmp9ieI/IyGets07dkU1CRexebvgGdK5Ciy6ppXiQWrnp56LNDO98XbErBT4jRwiwJ
+         wjfrnDbsjwi2gCOQQO282QQJeE0ru7HQ7Az/BzNzkxEQpNHAjM8JafCouafLWGl/U5IJ
+         VIIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678693843;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HHVFhtI+WXf+TBj10nSr3LhfstrJCEyqqp0nJVtIGAI=;
+        b=eUpumf1WXVDnuIXr84HqTg1bu6I1HZJottEuWWjvsbQ6uP2RXHoacJ8Iwx3OWObVew
+         lS0XtL/KIypkpAoID9j+BMCfwcXY81XRFC9jHFtvBO0fg//WUBRbpM0CjMH67EacUh40
+         FxBP0AGQErhoMZilw3Cb0NQzbzMuKjJ6JuZdfxNSUB9ocnexqq+MJjI1HGfqcCrntPsQ
+         YuObtjxRcg7PqCGTG5Q6oehZYWDjgNup7XvZwkjluiXbBMJMWPdNWRL76rAnJw91UZUI
+         ly0iaX/uZJa+VLpYV8IBU+ha/PD2iTXy2oBzWUAe/9+TjyGC5YDUXcQsTU2QFN1zhvgq
+         kO+w==
+X-Gm-Message-State: AO0yUKXLOVP5IuJlgzCXYBCQZrLa/XeIckFjROUv2u+kOeiGapBNaWJF
+        EC0fUaT7SubOQNHDh5A6DS4=
+X-Google-Smtp-Source: AK7set+a/ehVNgVfh6mj22qz9e7j+xFSeNhlbdsU/N6rBb/9ab+vAMThy59TeGCu7cwhl4xkVxs05Q==
+X-Received: by 2002:ac2:4a90:0:b0:4dd:ac8d:671f with SMTP id l16-20020ac24a90000000b004ddac8d671fmr8196362lfp.34.1678693843053;
+        Mon, 13 Mar 2023 00:50:43 -0700 (PDT)
+Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
+        by smtp.gmail.com with ESMTPSA id x2-20020ac259c2000000b004db3d57c3a8sm895354lfn.96.2023.03.13.00.50.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 00:50:42 -0700 (PDT)
+Message-ID: <f30f2b92-e4ba-a5a4-54e1-926495338009@gmail.com>
+Date:   Mon, 13 Mar 2023 09:50:41 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20230201-innolux-g070ace-v2-2-2371e251dd40@skidata.com>
-References: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
-In-Reply-To: <20230201-innolux-g070ace-v2-0-2371e251dd40@skidata.com>
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCHv1 07/11] power: supply: generic-adc-battery: drop memory
+ alloc error message
+Content-Language: en-US, en-GB
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Richard Leitner <richard.leitner@skidata.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2026;
- i=richard.leitner@skidata.com; h=from:subject:message-id;
- bh=WvzSY3I/uDMGpjXzQJsnCK3M11M4y5h/o4MS4BYdVEI=;
- b=owGbwMvMwCX2R2KahkXN7wuMp9WSGFL4rv7k36RU1ZL08rrGNiHdb6K6NxUumPIvCk6/aupt++18
- YYxTRykLgxgXg6yYIou9MVe7e27Z+0pFnVyYOaxMIEMYuDgFYCJ6dxn+e7noiAnO4/BqzrpwW1zAkL
- f6dxmXbeO92gIN7+YseSdXRoZN20TF79amHdjV66QW/zwsY+uhpd2+v46aTp/2sO0r8xROAA==
-X-Developer-Key: i=richard.leitner@skidata.com; a=openpgp;
- fpr=3F330A87476D76EF79212C6DFC189628387CFBD0
-X-Migadu-Flow: FLOW_OUT
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+References: <20230309225041.477440-1-sre@kernel.org>
+ <20230309225041.477440-8-sre@kernel.org>
+From:   Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20230309225041.477440-8-sre@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Richard Leitner <richard.leitner@skidata.com>
+On 3/10/23 00:50, Sebastian Reichel wrote:
+> Error printing happens automatically for memory allocation problems.
+> 
+> Signed-off-by: Sebastian Reichel <sre@kernel.org>
 
-Add InnoLux G070ACE-L01 7" 800x480 TFT LCD with WLED backlight panel
-support. Timing data was extracted from datasheet and vendor provided
-EDID file.
+Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Signed-off-by: Richard Leitner <richard.leitner@skidata.com>
----
- drivers/gpu/drm/panel/panel-simple.c | 35 +++++++++++++++++++++++++++++++++++
- 1 file changed, 35 insertions(+)
-
-diff --git a/drivers/gpu/drm/panel/panel-simple.c b/drivers/gpu/drm/panel/panel-simple.c
-index 8a3b685c2fcc..d90f86ad3789 100644
---- a/drivers/gpu/drm/panel/panel-simple.c
-+++ b/drivers/gpu/drm/panel/panel-simple.c
-@@ -2142,6 +2142,38 @@ static const struct panel_desc innolux_at070tn92 = {
- 	.bus_format = MEDIA_BUS_FMT_RGB888_1X24,
- };
- 
-+static const struct display_timing innolux_g070ace_l01_timing = {
-+	.pixelclock = { 25200000, 35000000, 35700000 },
-+	.hactive = { 800, 800, 800 },
-+	.hfront_porch = { 30, 32, 87 },
-+	.hback_porch = { 30, 32, 87 },
-+	.hsync_len = { 1, 1, 1 },
-+	.vactive = { 480, 480, 480 },
-+	.vfront_porch = { 3, 3, 3 },
-+	.vback_porch = { 13, 13, 13 },
-+	.vsync_len = { 1, 1, 4 },
-+	.flags = DISPLAY_FLAGS_DE_HIGH,
-+};
-+
-+static const struct panel_desc innolux_g070ace_l01 = {
-+	.timings = &innolux_g070ace_l01_timing,
-+	.num_timings = 1,
-+	.bpc = 8,
-+	.size = {
-+		.width = 152,
-+		.height = 91,
-+	},
-+	.delay = {
-+		.prepare = 10,
-+		.enable = 50,
-+		.disable = 50,
-+		.unprepare = 500,
-+	},
-+	.bus_format = MEDIA_BUS_FMT_RGB888_1X7X4_SPWG,
-+	.bus_flags = DRM_BUS_FLAG_DE_HIGH,
-+	.connector_type = DRM_MODE_CONNECTOR_LVDS,
-+};
-+
- static const struct display_timing innolux_g070y2_l01_timing = {
- 	.pixelclock = { 28000000, 29500000, 32000000 },
- 	.hactive = { 800, 800, 800 },
-@@ -4098,6 +4130,9 @@ static const struct of_device_id platform_of_match[] = {
- 	}, {
- 		.compatible = "innolux,at070tn92",
- 		.data = &innolux_at070tn92,
-+	}, {
-+		.compatible = "innolux,g070ace-l01",
-+		.data = &innolux_g070ace_l01,
- 	}, {
- 		.compatible = "innolux,g070y2-l01",
- 		.data = &innolux_g070y2_l01,
+> ---
+>   drivers/power/supply/generic-adc-battery.c | 4 +---
+>   1 file changed, 1 insertion(+), 3 deletions(-)
+> 
+> diff --git a/drivers/power/supply/generic-adc-battery.c b/drivers/power/supply/generic-adc-battery.c
+> index d07eeb7d46d3..771e5cfc49c3 100644
+> --- a/drivers/power/supply/generic-adc-battery.c
+> +++ b/drivers/power/supply/generic-adc-battery.c
+> @@ -243,10 +243,8 @@ static int gab_probe(struct platform_device *pdev)
+>   	bool any = false;
+>   
+>   	adc_bat = devm_kzalloc(&pdev->dev, sizeof(*adc_bat), GFP_KERNEL);
+> -	if (!adc_bat) {
+> -		dev_err(&pdev->dev, "failed to allocate memory\n");
+> +	if (!adc_bat)
+>   		return -ENOMEM;
+> -	}
+>   
+>   	psy_cfg.drv_data = adc_bat;
+>   	psy_desc = &adc_bat->psy_desc;
 
 -- 
-2.39.2
+Matti Vaittinen
+Linux kernel developer at ROHM Semiconductors
+Oulu Finland
+
+~~ When things go utterly wrong vim users can always type :help! ~~
 
