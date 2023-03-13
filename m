@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0A236B7994
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:56:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF6876B7996
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:56:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229768AbjCMN4K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:56:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36242 "EHLO
+        id S229524AbjCMN4Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:56:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjCMN4I (ORCPT
+        with ESMTP id S230493AbjCMN4T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:56:08 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98790F76A;
-        Mon, 13 Mar 2023 06:56:05 -0700 (PDT)
+        Mon, 13 Mar 2023 09:56:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E15B36B961;
+        Mon, 13 Mar 2023 06:56:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3CA68B8111F;
-        Mon, 13 Mar 2023 13:56:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80A2FC4339B;
-        Mon, 13 Mar 2023 13:55:58 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 75559612CE;
+        Mon, 13 Mar 2023 13:56:14 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91EEEC433D2;
+        Mon, 13 Mar 2023 13:56:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678715763;
-        bh=XrmPKmwKZEzUZa89QLtk4Hd7HK8rWUR7XZq2R52mvKw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ZVNK4YgYZJ4K0piJo8DAROawkHWiV1+E7FZWwtIO/Rt2OOgmhtH/LqF7k/X39Ds9L
-         JSsJgJmRbkxqRUf5YCq+wkPHuyCBL2P0ko7LAjoBHxoTm0qDuxjZA1RM98qbYPlOym
-         wsLZ27sFCNUI2w7Fz0XFd/lZGognWMCA9U6zy5Uu+BgEoDaC/VIFVXXOQ7Gwxt8Eyg
-         DzeQcuT/4u9w83j46qXdIoAqx0e+xCT1jbWKVGEHftI6gGQ7X/bhw8k/W9Qi6NXwBz
-         AIhlybAlFKfBPsrkJjnaC3Mm6Jma9WXfIWBT9YlWkNAQ/6NtDWlbhl/U6beUoCKvsU
-         sD/YvX7+JerIw==
-Date:   Mon, 13 Mar 2023 13:55:55 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Kamal Dasu <kdasu.kdev@gmail.com>,
-        Broadcom internal kernel review list 
-        <bcm-kernel-feedback-list@broadcom.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Daniel Mack <daniel@zonque.org>,
-        Haojian Zhuang <haojian.zhuang@gmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Andi Shyti <andi@etezian.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-spi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        s=k20201202; t=1678715773;
+        bh=lwNDyirsOLX/1gzMo/KMEGrZVGoMdUl7WVD7PqcZeVk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SdAHjZD4Q+Xfpyh780M0HO/FZr+7H1jOadclJCst9hSAjktOqwq+/ZY53UXt3HGAs
+         +tYNo18uBF3YoaNQ3P1d+VRDTea0qLyGZjcZwETWdnobaqtH0W46Bcifsd4NsJQtTJ
+         cJTlEFQJHapbn/qw7h5Hm8Npvt9xUkhLq561I6G3FzHGEAQwzQacGC0wf6SCVcl0VC
+         RZoMk7LrwZnCzBUCaQkGzwISzY3VlSKSdGAYq6Y48SlLtt2uyUx7THPuowSs81HmrA
+         dlPXoRUUqrPsrJvhhljBD4kh93Hp8AmirXlAebQ3HezQnnpb9iK8ltMNQ7ZQTVJ4Ok
+         PMURugHaB8y2w==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     linux-trace-kernel@vger.kernel.org
+Cc:     Heinz Wiesinger <pprkut@slackware.com>, andersson@kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org,
-        linux-rockchip@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 01/16] spi: armada-3700: Drop of_match_ptr for ID table
-Message-ID: <7a65d775-cf07-4393-8b10-2cef4d5266ab@sirena.org.uk>
-References: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mhiramat@kernel.org, quic_rjendra@quicinc.com,
+        quic_saipraka@quicinc.com, quic_sibis@quicinc.com
+Subject: [PATCH] bootconfig: Fix testcase to increase max node
+Date:   Mon, 13 Mar 2023 22:56:09 +0900
+Message-Id: <167871576880.783280.2390717518955954275.stgit@devnote2>
+X-Mailer: git-send-email 2.25.1
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="6DRAQdU86hSK7NNa"
-Content-Disposition: inline
-In-Reply-To: <20230310222857.315629-1-krzysztof.kozlowski@linaro.org>
-X-Cookie: Type louder, please.
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,36 +56,64 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
---6DRAQdU86hSK7NNa
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Since commit 6c40624930c5 ("bootconfig: Increase max nodes of bootconfig
+from 1024 to 8192 for DCC support") increased the max number of bootconfig
+node to 8192, the bootconfig testcase of the max number of nodes fails.
+To fix this issue, we can not simply increase the number in the test script
+because the test bootconfig file becomes too big (>32KB). To fix that, we
+can use a combination of three alphabets (26^3 = 17576). But with that,
+we can not express the 8193 (just one exceed from the limitation) because
+it also exceeds the max size of bootconfig. So, the first 26 nodes will just
+use one alphabet.
 
-On Fri, Mar 10, 2023 at 11:28:42PM +0100, Krzysztof Kozlowski wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it is not relevant here).
->=20
->   drivers/spi/spi-armada-3700.c:807:34: error: =E2=80=98a3700_spi_dt_ids=
-=E2=80=99 defined but not used [-Werror=3Dunused-const-variable=3D]
+With this fix, test-bootconfig.sh passes all tests.
 
-It would be much better to fix of_match_ptr() and/or the module stuff
-that also references the match table here.
+Reported-by: Heinz Wiesinger <pprkut@slackware.com>
+Link: https://lore.kernel.org/all/2463802.XAFRqVoOGU@amaterasu.liwjatan.org
+Fixes: 6c40624930c5 ("bootconfig: Increase max nodes of bootconfig from 1024 to 8192 for DCC support")
+Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+---
+ tools/bootconfig/test-bootconfig.sh |   17 ++++++++++++-----
+ 1 file changed, 12 insertions(+), 5 deletions(-)
 
---6DRAQdU86hSK7NNa
-Content-Type: application/pgp-signature; name="signature.asc"
+diff --git a/tools/bootconfig/test-bootconfig.sh b/tools/bootconfig/test-bootconfig.sh
+index f68e2e9eef8b..b1b77d76110d 100755
+--- a/tools/bootconfig/test-bootconfig.sh
++++ b/tools/bootconfig/test-bootconfig.sh
+@@ -14,10 +14,11 @@ ALIGN=4
+ INITRD=`mktemp ${TESTDIR}/initrd-XXXX`
+ TEMPCONF=`mktemp ${TESTDIR}/temp-XXXX.bconf`
+ OUTFILE=`mktemp ${TESTDIR}/tempout-XXXX`
++AWKFILE=`mktemp ${TESTDIR}/temp-XXXX.awk`
+ NG=0
+ 
+ cleanup() {
+-  rm -f $INITRD $TEMPCONF $OUTFILE
++  rm -f $INITRD $TEMPCONF $OUTFILE $AWKFILE
+   exit $NG
+ }
+ 
+@@ -87,10 +88,16 @@ xfail grep -i "error" $OUTFILE
+ 
+ echo "Max node number check"
+ 
+-echo -n > $TEMPCONF
+-for i in `seq 1 1024` ; do
+-   echo "node$i" >> $TEMPCONF
+-done
++cat > $AWKFILE << EOF
++BEGIN {
++  for (i = 0; i < 26; i += 1)
++      printf("%c\n", 65 + i % 26)
++  for (i = 26; i < 8192; i += 1)
++      printf("%c%c%c\n", 65 + i % 26, 65 + (i / 26) % 26, 65 + (i / 26 / 26))
++}
++EOF
++awk -f "$AWKFILE" > $TEMPCONF
++
+ xpass $BOOTCONF -a $TEMPCONF $INITRD
+ 
+ echo "badnode" >> $TEMPCONF
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmQPK2oACgkQJNaLcl1U
-h9CaXwf8DMJQ+FCZOrCTMX1qtiYniAQfqUZMw81w1uhZli/zJ0bkKyQuozjfL87N
-j5LsX0tvE/nD48FYdMKnHL1aZ7gnmS3iVWPTCb2hYYCjMiRddTVEe4Sw9o13d/zo
-8lJrUeGddSjzluNsDnpxQzwtR/z33eHcjNGU3KkauqbVczIkrQS9vSXiRxLydFPk
-+T3QQHtIn3Ya4Q3IRY9TO4eAMBFZgoHeeMWyYA98GSVmrrTdygzyGXKvdv6xeJQD
-cBAtY0MVSyUACuxgGJWvxTi1eGiHvQ0a4aWEgO6J29PAJJyMr71SaiKHcBI5W6CB
-RRo4kwWeaZerBbrW1ByTmVBKFXbQIQ==
-=vTNz
------END PGP SIGNATURE-----
-
---6DRAQdU86hSK7NNa--
