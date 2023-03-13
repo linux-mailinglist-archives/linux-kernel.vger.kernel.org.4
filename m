@@ -2,142 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 62D576B799F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:57:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8003D6B79A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:57:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjCMN47 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:56:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37530 "EHLO
+        id S229801AbjCMN5q convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 09:57:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229910AbjCMN4s (ORCPT
+        with ESMTP id S229552AbjCMN5n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:56:48 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 550BD664EB;
-        Mon, 13 Mar 2023 06:56:42 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id c3so13139678qtc.8;
-        Mon, 13 Mar 2023 06:56:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678715801;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3AmBuWVzCeWcPysh/zrfiCJW1ORbVCzeJReTTpgJTcI=;
-        b=5koYIbNX02RCgAj53qg2QetZvWqhaY0qBTrfvc5sPRwYmd5VjlmXRo2dAI2MlPbZA/
-         9mXQo/+hGqrTnjWWCrXyGAGjhMqscldplhd6f/KYm46YkUnSbYIIxpeTfbLJ7wHZk2Y5
-         pDfFihd/WxN997wrWA8g8gdBQahqNITovmg2Gxff7F+sKFYpxFcQWqihwbnInVQFHqHS
-         eVEhc60BYqRh1LgLvFfORGmQvgH5m5rKVn43dz6loAuxyWXMFyrbkT0zyxPaS24swjom
-         WzYy+ZpERi24PWStS72wSgWbyjl+ZDHYAdMCVZ5tULp04JuOGVwspXdJ33O79zLRkyoS
-         uelA==
-X-Gm-Message-State: AO0yUKUQ8J7M1FcgZH4ZhCFA6omD8qIhtg20OvXMjJi7XLwvCXUnQHsJ
-        dOr4wc9YeYYD7mPjRlBZTZXaFLennn71GHQU
-X-Google-Smtp-Source: AK7set8M7GFhu/FRzb/OXZlhngwMXusy+bFgyE0ELxozalvLkpJGdj3NJQRakdbvwSJsoQWJxWp+ZA==
-X-Received: by 2002:a05:622a:45:b0:3b9:ca95:da6e with SMTP id y5-20020a05622a004500b003b9ca95da6emr25579888qtw.44.1678715800955;
-        Mon, 13 Mar 2023 06:56:40 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:b967])
-        by smtp.gmail.com with ESMTPSA id t6-20020a37ea06000000b007186c9e167esm294473qkj.52.2023.03.13.06.56.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 06:56:40 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 08:56:38 -0500
-From:   David Vernet <void@manifault.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux BPF <bpf@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Tobin C. Harding" <me@tobin.cc>
-Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
- netdev FAQ
-Message-ID: <20230313135638.GD2392@maniforge>
-References: <20230313025119.17430-1-bagasdotme@gmail.com>
- <20230313030938.GA152792@maniforge>
- <ZA6knaEQcddfTCyS@debian.me>
- <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
- <4653cfd1-7209-6e49-4f01-fcc3f82f16ce@gmail.com>
- <20230313123602.GA2392@maniforge>
- <87wn3kvkkq.fsf@meer.lwn.net>
+        Mon, 13 Mar 2023 09:57:43 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F7B4222ED;
+        Mon, 13 Mar 2023 06:57:36 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id DDF9A24DBCE;
+        Mon, 13 Mar 2023 21:57:32 +0800 (CST)
+Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
+ 2023 21:57:32 +0800
+Received: from ubuntu.localdomain (202.190.105.77) by EXMBX068.cuchost.com
+ (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
+ 2023 21:57:12 +0800
+From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
+To:     Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor.dooley@microchip.com>
+CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v3 0/4] crypto: starfive - Add drivers for crypto engine
+Date:   Mon, 13 Mar 2023 21:56:42 +0800
+Message-ID: <20230313135646.2077707-1-jiajie.ho@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87wn3kvkkq.fsf@meer.lwn.net>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [202.190.105.77]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
+ (172.16.6.68)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 07:37:25AM -0600, Jonathan Corbet wrote:
-> David Vernet <void@manifault.com> writes:
-> 
-> > Sure, but there are practicalities to consider here. It takes O(minutes)
-> > to do a full docs build, as opposed to O(seconds). I've done reviews of
-> > docs patches where the engineer tried to build the docs tree, but
-> > thought it was hung and ended up cancelling it. Full docs builds also
-> > unfortunately spew quite a few warnings in other subtrees. You have to
-> > carefully wade through the warnings in those other subtrees to ensure
-> > you haven't added any new ones.
-> >
-> > It's hard enough to get people to write documentation. It's also hard
-> > enough to get them to test building their documentation before
-> > submitting it. I think there is a lot of value in being able to build
-> > the documentation for the subtree you're contributing to, and be able to
-> > have some expectation that it builds cleanly. Let's not make it more
-> > difficult for the people who are actually adding substantive
-> > documentation.
-> 
-> I get your point, but that is essentially saying that there should be no
-> linkages between our documentation subtrees, which defeats much of the
-> purpose of using a system like Sphinx.
+This patch series adds kernel driver support for StarFive JH7110 crypto
+engine. The first patch adds Documentations for the device and Patch 2
+adds device probe and DMA init for the module. Patch 3 adds crypto and
+DMA dts node for VisionFive 2 board. Patch 4 adds hash/hmac support to
+the module.
 
-I certainly agree that inter-subtree links are great to have, though in
-my opinion, other features such as linking kernel-doc comments, auto
-section labeling, etc make Sphinx very useful in their own right. But
-yes, having inter-subtree links is of course a useful feature as well.
+Patch 3 needs to be applied on top of:
+https://patchwork.kernel.org/project/linux-riscv/patch/20230221024645.127922-18-hal.feng@starfivetech.com/
+https://patchwork.kernel.org/project/linux-riscv/cover/20230120024445.244345-1-xingyu.wu@starfivetech.com/
 
-> In this specific case, though, there is a better solution.  Text like:
-> 
->   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
-> 
-> will add links in the built docs, and also tells readers of the
-> plain-text files where they should be looking.  Without adding warnings.
+Changes v2->v3:
+- Only implement digest and use fallback for other ops (Herbert)
+- Use interrupt instead of polling for hash complete (Herbert)
+- Remove manual data copy from out-of-bound memory location as it will
+  be handled by DMA API. (Christoph & Herbert)
 
-Nice, seems like the best of both worlds. A syntax clarification
-question: are you saying that this would work?
+Changes v1->v2:
+- Fixed yaml filename and format (Krzysztof)
+- Removed unnecessary property names in yaml (Krzysztof)
+- Moved of_device_id table close to usage (Krzysztof)
+- Use dev_err_probe for error returns (Krzysztof)
+- Dropped redundant readl and writel wrappers (Krzysztof)
+- Updated commit signed offs (Conor)
+- Dropped redundant node in dts, module set to on in dtsi (Conor)
 
-> see the `netdev-FAQ`_.
->
->   <snip>
->
-> .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
+Jia Jie Ho (4):
+  dt-bindings: crypto: Add StarFive crypto module
+  crypto: starfive - Add crypto engine support
+  riscv: dts: starfive: Add crypto and DMA node for VisionFive 2
+  crypto: starfive - Add hash and HMAC support
 
-Or is it required to have the full path inline in the text, as in your
-example:
+ .../crypto/starfive,jh7110-crypto.yaml        |   70 ++
+ MAINTAINERS                                   |    7 +
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      |   28 +
+ drivers/crypto/Kconfig                        |    1 +
+ drivers/crypto/Makefile                       |    1 +
+ drivers/crypto/starfive/Kconfig               |   21 +
+ drivers/crypto/starfive/Makefile              |    4 +
+ drivers/crypto/starfive/jh7110-cryp.c         |  239 ++++
+ drivers/crypto/starfive/jh7110-cryp.h         |  134 +++
+ drivers/crypto/starfive/jh7110-hash.c         | 1041 +++++++++++++++++
+ 10 files changed, 1546 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/crypto/starfive,jh7110-crypto.yaml
+ create mode 100644 drivers/crypto/starfive/Kconfig
+ create mode 100644 drivers/crypto/starfive/Makefile
+ create mode 100644 drivers/crypto/starfive/jh7110-cryp.c
+ create mode 100644 drivers/crypto/starfive/jh7110-cryp.h
+ create mode 100644 drivers/crypto/starfive/jh7110-hash.c
 
->   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
+-- 
+2.25.1
 
-The benefit of the former is of course that you only have to specify the
-link in one place.
-
-> For the bigger problem, the right answer is to start using intersphinx.
-> I guess I need to get serious about playing with that.
-
-Based on a quick online search, that indeed sounds like the ideal
-solution.
-
-Thanks,
-David
