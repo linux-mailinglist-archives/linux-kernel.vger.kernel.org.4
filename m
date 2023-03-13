@@ -2,47 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48DFE6B708E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E6AEE6B708D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:57:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbjCMH5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50390 "EHLO
+        id S230344AbjCMH46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230160AbjCMH42 (ORCPT
+        with ESMTP id S229534AbjCMH40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:56:28 -0400
+        Mon, 13 Mar 2023 03:56:26 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C35EC359F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:54:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DE9554CAC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:54:42 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pbd0w-0001jC-Ui; Mon, 13 Mar 2023 08:54:38 +0100
+        id 1pbd0x-0001jH-04; Mon, 13 Mar 2023 08:54:39 +0100
 Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pbd0w-003nam-6T; Mon, 13 Mar 2023 08:54:38 +0100
+        id 1pbd0w-003nap-Bg; Mon, 13 Mar 2023 08:54:38 +0100
 Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
         (envelope-from <ukl@pengutronix.de>)
-        id 1pbd0v-004TOj-DO; Mon, 13 Mar 2023 08:54:37 +0100
+        id 1pbd0v-004TOn-Il; Mon, 13 Mar 2023 08:54:37 +0100
 From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
         <u.kleine-koenig@pengutronix.de>
 To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: [PATCH 4/5] clocksource: timer-tegra186: Convert to platform remove callback returning void
-Date:   Mon, 13 Mar 2023 08:54:29 +0100
-Message-Id: <20230313075430.2730803-5-u.kleine-koenig@pengutronix.de>
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH 5/5] clocksource: timer-ti-dm: Convert to platform remove callback returning void
+Date:   Mon, 13 Mar 2023 08:54:30 +0100
+Message-Id: <20230313075430.2730803-6-u.kleine-koenig@pengutronix.de>
 X-Mailer: git-send-email 2.39.1
 In-Reply-To: <20230313075430.2730803-1-u.kleine-koenig@pengutronix.de>
 References: <20230313075430.2730803-1-u.kleine-koenig@pengutronix.de>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1785; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=fWROh41pLFAOOuaiIIcU6R9zdNm1DYH76BDFy3r52HE=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkDtavHL7WtDQHc1rbvZJIqcgl0K9PqzTyycMnC 6Nf5KH11GuJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZA7WrwAKCRDB/BR4rcrs CWQLB/41/1OCgtQxaLErB4WJV6Ma17tE20bSAkkJok3pVc7CSdHeSW8eNf9kjC3KRUrj2ligs4l LIVuFA/HaxYHMAL4Yl6HqF7MIn/4xMfvbIN0H1EP/hgfBA+2dfwJcd4DsLQnIPTqGTcRSI7qmbB gjXgAvzizCICokkN1p7zKo97Nki8sgv5AGB0w89dZKRXh3IAWVCYJv4xP3rLlsYjg6fwD37jW1z 86yfBkfSrGKOuJLbsLmiHr40+xsMfDItTmlVvcS2cFckywqhSVydAjn5/tryyJqkSk102PhkH0c /6GUqM5+8JqrVQuQIZ3+iWbv7vuN16/sc7nsxUipYgkOw9bB
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1920; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=jWLwC9JWT1zAkN3MuVmGacjm0Ju2XN58CNDdUcULjW0=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkDtayowyjk/IGAmlFJ43CRKgvHOPq7G6WGJL55 GpXMyDV2KeJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZA7WsgAKCRDB/BR4rcrs CWXEB/9i8nksWGfGxjcU5//fTFQp0JrVL+aYr3XZNVBokMVlPNHovvmtXwb0ar6hVrucmdOaQHc HQbvBRj+FQSk1WtmBTgEF2wZWZGfY0FXFEvKHIguHvUYn5EHxB5b4VaOO/ZXbSOGBT7TEPcABA4 JZ31uuaja0mtksTBiwKJ1Z7VRc/m7FRUfWhVgUNIxfiAj8ulaYkciidGmEhhsbFp/mI4qpFmrRa 4SaPqeKVWPF5duWabzo5KDd1Fvm4VVd+6Oaeg21ORxpcuogQUXcbk3eKYRWCKLUtcrxcoVh4lea lQ4bqwekXbs5usuzy+hIv+AuE36wL46ttE4fjAIOSONntrze
 X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
 Content-Transfer-Encoding: 8bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
@@ -70,39 +68,40 @@ callback to the void returning variant.
 
 Signed-off-by: Uwe Kleine-König <u.kleine-koenig@pengutronix.de>
 ---
- drivers/clocksource/timer-tegra186.c | 6 ++----
+ drivers/clocksource/timer-ti-dm.c | 6 ++----
  1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/clocksource/timer-tegra186.c b/drivers/clocksource/timer-tegra186.c
-index ea742889ee06..ccc762d32422 100644
---- a/drivers/clocksource/timer-tegra186.c
-+++ b/drivers/clocksource/timer-tegra186.c
-@@ -447,15 +447,13 @@ static int tegra186_timer_probe(struct platform_device *pdev)
- 	return err;
- }
- 
--static int tegra186_timer_remove(struct platform_device *pdev)
-+static void tegra186_timer_remove(struct platform_device *pdev)
+diff --git a/drivers/clocksource/timer-ti-dm.c b/drivers/clocksource/timer-ti-dm.c
+index 098562bda487..ab7a6caa36c5 100644
+--- a/drivers/clocksource/timer-ti-dm.c
++++ b/drivers/clocksource/timer-ti-dm.c
+@@ -1177,7 +1177,7 @@ static int omap_dm_timer_probe(struct platform_device *pdev)
+  * In addition to freeing platform resources it also deletes the timer
+  * entry from the local list.
+  */
+-static int omap_dm_timer_remove(struct platform_device *pdev)
++static void omap_dm_timer_remove(struct platform_device *pdev)
  {
- 	struct tegra186_timer *tegra = platform_get_drvdata(pdev);
+ 	struct dmtimer *timer;
+ 	unsigned long flags;
+@@ -1199,8 +1199,6 @@ static int omap_dm_timer_remove(struct platform_device *pdev)
  
- 	clocksource_unregister(&tegra->usec);
- 	clocksource_unregister(&tegra->osc);
- 	clocksource_unregister(&tegra->tsc);
+ 	if (ret)
+ 		dev_err(&pdev->dev, "Unable to determine timer entry in list of drivers on remove\n");
 -
 -	return 0;
  }
  
- static int __maybe_unused tegra186_timer_suspend(struct device *dev)
-@@ -505,7 +503,7 @@ static struct platform_driver tegra186_wdt_driver = {
- 		.of_match_table = tegra186_timer_of_match,
- 	},
- 	.probe = tegra186_timer_probe,
--	.remove = tegra186_timer_remove,
-+	.remove_new = tegra186_timer_remove,
- };
- module_platform_driver(tegra186_wdt_driver);
+ static const struct omap_dm_timer_ops dmtimer_ops = {
+@@ -1275,7 +1273,7 @@ MODULE_DEVICE_TABLE(of, omap_timer_match);
  
+ static struct platform_driver omap_dm_timer_driver = {
+ 	.probe  = omap_dm_timer_probe,
+-	.remove = omap_dm_timer_remove,
++	.remove_new = omap_dm_timer_remove,
+ 	.driver = {
+ 		.name   = "omap_timer",
+ 		.of_match_table = omap_timer_match,
 -- 
 2.39.1
 
