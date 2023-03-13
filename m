@@ -2,108 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4352B6B797F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:53:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEDCB6B7983
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbjCMNxI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:53:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57860 "EHLO
+        id S231248AbjCMNxY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:53:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjCMNxG (ORCPT
+        with ESMTP id S231231AbjCMNxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:53:06 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB4C111650
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:53:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 2911322174;
-        Mon, 13 Mar 2023 13:53:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1678715580; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l4RVJxeFhlJK4A+jfUM+KWCrLAkkkjRrUSLboxMq/ZA=;
-        b=Enayjk4sGDHXlLtY39BHsb2096o6MVzmUpyxOMzFWkmVN/TmG8uytSfx+nM53cAY5BY+su
-        FP8Bovou214jGFkdxSjQyvklCkqkKk7ks+phskPtcoTLPxdFTIOnLLUdafTmNRvm45CjtB
-        dexX6G/cuumsUtgySTrJn3+SfLKc7X4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1678715580;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=l4RVJxeFhlJK4A+jfUM+KWCrLAkkkjRrUSLboxMq/ZA=;
-        b=3uYz12eEd+nE7SoTGeiUS4CeOvlAtw1V8TKb9J+6NUA+vcRrpweOtFFc/PHSj28MgeRYRq
-        309jrdmuYqG/KvBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id EAC8113517;
-        Mon, 13 Mar 2023 13:52:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 21SGOLsqD2QbNwAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 13 Mar 2023 13:52:59 +0000
-Message-ID: <d264f626-19aa-70dc-aabe-283e4296b3aa@suse.cz>
-Date:   Mon, 13 Mar 2023 14:52:59 +0100
+        Mon, 13 Mar 2023 09:53:19 -0400
+Received: from out30-97.freemail.mail.aliyun.com (out30-97.freemail.mail.aliyun.com [115.124.30.97])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A330024BF9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:53:12 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R401e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046051;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=5;SR=0;TI=SMTPD_---0VdoOEkX_1678715589;
+Received: from localhost(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0VdoOEkX_1678715589)
+          by smtp.aliyun-inc.com;
+          Mon, 13 Mar 2023 21:53:10 +0800
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+To:     xiang@kernel.org, chao@kernel.org, huyue2@coolpad.com,
+        linux-erofs@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org
+Subject: [PATCH v6 0/2] erofs: set block size to the on-disk block size
+Date:   Mon, 13 Mar 2023 21:53:07 +0800
+Message-Id: <20230313135309.75269-1-jefflexu@linux.alibaba.com>
+X-Mailer: git-send-email 2.19.1.6.gb485710b
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] slab: Adjust comment after refactoring of gfp.h
-Content-Language: en-US
-To:     Thorsten Scherer <t.scherer@eckelmann.de>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Ingo Molnar <mingo@kernel.org>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-References: <20230312122315.3562-1-t.scherer@eckelmann.de>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <20230312122315.3562-1-t.scherer@eckelmann.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/23 13:23, Thorsten Scherer wrote:
-> Reflect the change from the commit below.
-> 
-> Fixes: cb5a065b4ea9 ("headers/deps: mm: Split <linux/gfp_types.h> out of <linux/gfp.h>")
-> Signed-off-by: Thorsten Scherer <t.scherer@eckelmann.de>
+changes since v5:
+- patch 1: calculate len of crc range correctly considering when
+  blocksize <= EROFS_SUPER_OFFSET, i.e. blocksize is 512 or 1024 bytes
+  (Gao Xiang)
+- patch 2: remove sbi->dirblkbits for now (Gao Xiang)
 
-Thanks, added to slab/for-6.4/trivial
+changes since v4:
+- patch 1: convert several remained call sites of sb->s_blocksize_bits
+  to erofs_blknr() and erofs_pos() (Yue Hu)
+- patch 2: revise comment for blkszbits and dirblkbits (Yue Hu)
 
-> ---
->  include/linux/slab.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/linux/slab.h b/include/linux/slab.h
-> index 45af70315a94..87d687c43d8c 100644
-> --- a/include/linux/slab.h
-> +++ b/include/linux/slab.h
-> @@ -526,7 +526,7 @@ void *kmalloc_large_node(size_t size, gfp_t flags, int node) __assume_page_align
->   * to be at least to the size.
->   *
->   * The @flags argument may be one of the GFP flags defined at
-> - * include/linux/gfp.h and described at
-> + * include/linux/gfp_types.h and described at
->   * :ref:`Documentation/core-api/mm-api.rst <mm-api-gfp-flags>`
->   *
->   * The recommended usage of the @flags is described at
+changes since v3:
+- patch 1: remove redundant newline when printing messages (Gao Xiang)
+- patch 2: introduce dirblkbits in on-disk superblock and disable this
+  feature for now, so that the current kernel won't break with the image
+  with this feature enabled later (Gao Xiang)
+
+
+v1: https://lore.kernel.org/all/20230216094745.47868-1-jefflexu@linux.alibaba.com/
+v2: https://lore.kernel.org/all/20230217055016.71462-2-jefflexu@linux.alibaba.com/
+v3: https://lore.kernel.org/all/20230220025046.103777-1-jefflexu@linux.alibaba.com/
+v4: https://lore.kernel.org/all/20230302143915.111739-1-jefflexu@linux.alibaba.com/
+v5: https://lore.kernel.org/all/20230306100200.117684-1-jefflexu@linux.alibaba.com/
+
+
+Jingbo Xu (2):
+  erofs: avoid hardcoded blocksize for subpage block support
+  erofs: set block size to the on-disk block size
+
+ fs/erofs/data.c              | 50 +++++++++++++------------
+ fs/erofs/decompressor.c      |  6 +--
+ fs/erofs/decompressor_lzma.c |  4 +-
+ fs/erofs/dir.c               | 22 +++++------
+ fs/erofs/erofs_fs.h          |  5 ++-
+ fs/erofs/fscache.c           |  5 ++-
+ fs/erofs/inode.c             | 23 +++++++-----
+ fs/erofs/internal.h          | 28 ++++----------
+ fs/erofs/namei.c             | 14 +++----
+ fs/erofs/super.c             | 72 ++++++++++++++++++++++--------------
+ fs/erofs/xattr.c             | 40 ++++++++++----------
+ fs/erofs/xattr.h             | 10 ++---
+ fs/erofs/zdata.c             | 18 +++++----
+ fs/erofs/zmap.c              | 29 ++++++++-------
+ include/trace/events/erofs.h |  4 +-
+ 15 files changed, 171 insertions(+), 159 deletions(-)
+
+-- 
+2.19.1.6.gb485710b
 
