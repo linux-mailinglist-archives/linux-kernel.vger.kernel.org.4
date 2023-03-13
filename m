@@ -2,49 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D3FB6B75C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:18:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C3D86B75C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229813AbjCMLS3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:18:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35522 "EHLO
+        id S229914AbjCMLSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229768AbjCMLSX (ORCPT
+        with ESMTP id S229847AbjCMLSX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 13 Mar 2023 07:18:23 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D7F25BB92;
-        Mon, 13 Mar 2023 04:18:11 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E26F24B3;
-        Mon, 13 Mar 2023 04:18:54 -0700 (PDT)
-Received: from [10.57.18.52] (unknown [10.57.18.52])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8A90B3F71A;
-        Mon, 13 Mar 2023 04:18:09 -0700 (PDT)
-Message-ID: <f6aaa5f1-495d-a158-14d8-ddb2bffbd9c2@arm.com>
-Date:   Mon, 13 Mar 2023 11:18:07 +0000
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B188113DE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:18:16 -0700 (PDT)
+Received: (Authenticated sender: miquel.raynal@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 902CA100005;
+        Mon, 13 Mar 2023 11:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678706295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XOFpHOYu/H34Q2s+uwCeSHHQZCRIFK+aDl1wzsSdNlQ=;
+        b=mVTipQjYC4iXdBOVs4SnNxA5VDqWyafInznBZdUaXtkHWT9+6cDncJ0vUkBhL0AOpiyqqi
+        TlaYW49Xx/L3SzPV/kNCaTovQ9xlvsId5XSWHzP6KlmakXsmS6NDL3SIxYYCjl97LaDwR8
+        yNJ2wSsuTZm5CTLDzG3GhUzzk1EaEzL3Aj64r1ADABqxkSXDH9L2no0tkbL8pDNxKZgvNF
+        mW22Xqp+R6J2TnAOfufNZw5VUQn2+pJBIB+PoG2hihV8YwRjqDU+mFhYN9zEuZq3BrktAI
+        HM2Qhqfjx80wLB+pkcAdLniwvv/+oGS+d7ptC4Fb4lXaN6qUosc+gDOLYSVQig==
+Date:   Mon, 13 Mar 2023 12:18:08 +0100
+From:   Miquel Raynal <miquel.raynal@bootlin.com>
+To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Cc:     Liang Yang <liang.yang@amlogic.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Jianxin Pan <jianxin.pan@amlogic.com>,
+        <linux-mtd@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <kernel@sberdevices.ru>,
+        <oxffffaa@gmail.com>
+Subject: Re: [RFC PATCH v1] mtd: rawnand: meson: invalidate cache on polling
+ ECC bit
+Message-ID: <20230313121808.27170d1b@xps-13>
+In-Reply-To: <20f7f1f8-e8f8-b3e1-251e-27db71ab6840@sberdevices.ru>
+References: <d4ef0bd6-816e-f6fa-9385-f05f775f0ae2@sberdevices.ru>
+        <20f7f1f8-e8f8-b3e1-251e-27db71ab6840@sberdevices.ru>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] thermal/core/power_allocator: avoid cdev->state can not
- be reset
-Content-Language: en-US
-To:     Xuewen Yan <xuewen.yan94@gmail.com>
-Cc:     Di Shen <di.shen@unisoc.com>, daniel.lezcano@linaro.org,
-        rafael@kernel.org, amitk@kernel.org, rui.zhang@intel.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xuewen.yan@unisoc.com, Qais Yousef <qyousef@layalina.io>
-References: <20230309135515.1232-1-di.shen@unisoc.com>
- <db539c1e-22d5-2261-1248-07883dac12ee@arm.com>
- <CAB8ipk_T5RUZxD42d9wg_i8-3UXHFP=4Ffa_NH8Nm7FnyW2Ppw@mail.gmail.com>
- <8727651b-88ec-efe7-eed2-1ff08faf22b8@arm.com>
- <CAB8ipk8dwkaqx7q_57Ehd5OZUfAJKtD_Bk2drpx+Op4grquAdQ@mail.gmail.com>
-From:   Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAB8ipk8dwkaqx7q_57Ehd5OZUfAJKtD_Bk2drpx+Op4grquAdQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,108 +67,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Arseniy,
+
+avkrasnov@sberdevices.ru wrote on Mon, 13 Mar 2023 10:36:11 +0300:
+
+> Hello,
+>=20
+> we reproduced this problem on one of our boards. It triggers very rare
+> when 'usleep_range()' is present, but when sleeping is removed - it fires
+> always. I suppose problem is with caching, as 'info_buf' memory is mapped=
+ by
+> 'dma_map_single()'.
+
+The fix looks really legitimate, indeed I get that the usleep_range()
+might make it work most of the time but not always. Having this bit in
+a DMA buf area is a bit strange. Well, the fix LGTM anyway.
+
+>=20
+> Thanks, Arseniy
+>=20
+> On 13.03.2023 10:32, Arseniy Krasnov wrote:
+> > 'info_buf' memory is cached and driver polls ECC bit in it. This bit
+> > is set by the NAND controller. If 'usleep_range()' returns before device
+> > sets this bit, 'info_buf' will be cached and driver won't see update of
+> > this bit and will loop forever.
+> >=20
+> > Fixes: 8fae856c5350 ("mtd: rawnand: meson: add support for Amlogic NAND=
+ flash controller")
+> > Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+> > ---
+> >  drivers/mtd/nand/raw/meson_nand.c | 8 +++++++-
+> >  1 file changed, 7 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/mtd/nand/raw/meson_nand.c b/drivers/mtd/nand/raw/m=
+eson_nand.c
+> > index 5ee01231ac4c..2c05c08a0eaf 100644
+> > --- a/drivers/mtd/nand/raw/meson_nand.c
+> > +++ b/drivers/mtd/nand/raw/meson_nand.c
+> > @@ -176,6 +176,7 @@ struct meson_nfc {
+> > =20
+> >  	dma_addr_t daddr;
+> >  	dma_addr_t iaddr;
+> > +	u32 info_bytes;
+> > =20
+> >  	unsigned long assigned_cs;
+> >  };
+> > @@ -503,6 +504,7 @@ static int meson_nfc_dma_buffer_setup(struct nand_c=
+hip *nand, void *databuf,
+> >  					 nfc->daddr, datalen, dir);
+> >  			return ret;
+> >  		}
+> > +		nfc->info_bytes =3D infolen;
+> >  		cmd =3D GENCMDIADDRL(NFC_CMD_AIL, nfc->iaddr);
+> >  		writel(cmd, nfc->reg_base + NFC_REG_CMD);
+> > =20
+> > @@ -520,8 +522,10 @@ static void meson_nfc_dma_buffer_release(struct na=
+nd_chip *nand,
+> >  	struct meson_nfc *nfc =3D nand_get_controller_data(nand);
+> > =20
+> >  	dma_unmap_single(nfc->dev, nfc->daddr, datalen, dir);
+> > -	if (infolen)
+> > +	if (infolen) {
+> >  		dma_unmap_single(nfc->dev, nfc->iaddr, infolen, dir);
+> > +		nfc->info_bytes =3D 0;
+> > +	}
+> >  }
+> > =20
+> >  static int meson_nfc_read_buf(struct nand_chip *nand, u8 *buf, int len)
+> > @@ -710,6 +714,8 @@ static void meson_nfc_check_ecc_pages_valid(struct =
+meson_nfc *nfc,
+> >  		usleep_range(10, 15);
+> >  		/* info is updated by nfc dma engine*/
+> >  		smp_rmb();
+> > +		dma_sync_single_for_cpu(nfc->dev, nfc->iaddr, nfc->info_bytes,
+> > +					DMA_FROM_DEVICE);
+> >  		ret =3D *info & ECC_COMPLETE;
+> >  	} while (!ret);
+> >  } =20
 
 
-On 3/13/23 11:10, Xuewen Yan wrote:
-> Hi Lukasz
-> 
-> On Mon, Mar 13, 2023 at 5:35 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->> Hi Xuewen,
->>
->> On 3/13/23 01:40, Xuewen Yan wrote:
->>> Hi Lukasz
->>>
->>> On Fri, Mar 10, 2023 at 11:56 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>>>
->>>> Hi Di,
->>>>
->>>> On 3/9/23 13:55, Di Shen wrote:
->>>>> Commit 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
->>>>> add a update flag to update cooling device only once when temp is low.
->>>>> But when the switch_on_temp is set to be a higher value, the cooling device state
->>>>> may not be reset to max, because the last_temp is smaller than the switch_on_temp.
->>>>>
->>>>> For example:
->>>>> First:
->>>>> swicth_on_temp=70 control_temp=85;
->>>>>
->>>>> Then userspace change the trip_temp:
->>>>> swicth_on_temp=45 control_temp=55 cur_temp=54
->>>>>
->>>>> Then userspace reset the trip_temp:
->>>>> swicth_on_temp=70 control_temp=85 cur_temp=57 last_temp=54
->>>>>
->>>>> At this time, the cooling device state should be reset to be max.
->>>>> However, because cur_temp(57) < switch_on_temp(70)
->>>>> last_temp(54) < swicth_on_temp(70) --> update = false
->>>>> When update is false, the cooling device state can not be reset.
->>>>
->>>> That's a tricky use case. How is that now possible,
->>>
->>> We use the trip_temp in the Android System. Often, we set different
->>> control temperatures in different scenarios,
->>> and when we change the switch_on_temp from small to bigger, we find
->>> the power can not be reset to be max.
->>
->> I see, thanks for letting me know that this is Android.
->>
->>>
->>>
->>>>>
->>>>> So delete the update condition, so that the cooling device state
->>>>> could be reset.
->>>>
->>>> IMO this is not the desired solution. Daniel reported the issue that
->>>> IPA triggers the event sent to user-space even when there is no need.
->>>> That's the motivation for the 0952177f2a1f change.
->>>>
->>>> To address your scenario properly, we need an interface which allows
->>>> to respond properly for such situation when someone from user-space
->>>> writes a new value to something fundamental as trip point.
->>>>
->>>> You also have a kernel config enabled:
->>>> CONFIG_THERMAL_WRITABLE_TRIPS
->>>> which IMO is only for debug kernels for system integrator (according
->>>> to the Kconfig description).
->>>
->>>    Yes, we use it to meet the temperature control needs of different scenarios.
->>> And now in android with google's GKI2.0, the config must be opened.
->>
->> OK
->>
->>>
->>>>
->>>> When you disable this config in your deploy/product kernel
->>>> than this issue would disappear.
->>>>
->>>>>
->>>>> Fixes: 0952177f2a1f (thermal/core/power_allocator: Update once cooling devices when temp is low)
->>>>> Signed-off-by: Di Shen <di.shen@unisoc.com>
->>>>> ---
->>>>>     drivers/thermal/gov_power_allocator.c | 9 +++------
->>>>>     1 file changed, 3 insertions(+), 6 deletions(-)
->>>>>
->>>>
->>>> That's why IMO this is not the solution.
->>>
->>> Yes, but I think we should fix the bug, although the
->>> CONFIG_THERMAL_WRITABLE_TRIPS is just for debugging.
->>> How about record the last_trip_temp, and when the last_temp >
->>> last_trip_temp, set the update tobe true?
->>
->> Yes, if that config is used in Android then we must fix it.
->>
->> That last_trip_temp makes sense (but maybe name it last_switch_on_temp).
->> Please put that new field into the IPA local
->> struct power_allocator_params. We should store the trip temp
->> value there every time power_allocator_throttle() is called.
->> That can be called due to a write from user-space w/ a new trip point
->> value, so should be OK.
-> 
-> Thanks for the suggestion. We would send the patch-v2 as soon as possible.
-
-Thanks!
-I'll review that and check on my board.
-BTW, which board/device you use with this IPA? Maybe I can buy it
-and also test to capture such regression in future.
+Thanks,
+Miqu=C3=A8l
