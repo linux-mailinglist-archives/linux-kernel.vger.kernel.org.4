@@ -2,145 +2,191 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E446B7FE9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:04:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E710C6B7FED
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:06:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229734AbjCMSEf convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 14:04:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41260 "EHLO
+        id S230281AbjCMSGZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:06:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCMSEd (ORCPT
+        with ESMTP id S229516AbjCMSGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:04:33 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E579832E67
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:04:26 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id k23-20020a5e8917000000b0074cbfb58b5bso6733390ioj.14
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:04:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678730666;
-        h=content-transfer-encoding:to:from:subject:message-id:in-reply-to
-         :date:mime-version:x-gm-message-state:from:to:cc:subject:date
+        Mon, 13 Mar 2023 14:06:23 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E16A303EE;
+        Mon, 13 Mar 2023 11:06:22 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id d7so14066262qtr.12;
+        Mon, 13 Mar 2023 11:06:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678730781;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=IUClCA8ixvbHg3XIwEr+29D5IhwBAvU2c3FyGS/wwzA=;
-        b=b7PltW9jeRZYgZv1De4zKYvkYpZ80h+Ep9Zz63TPqpFHodxQCnyJ0/gFFADNib6P+A
-         kpaZVXsN9oRkIPsthNolwiPtC3FllxdbaD0nqfWpHVPz+gcLFwusT38WbgjlMirfkv1o
-         r0XMMV7fKg6I2HHj4JVsdZEVu8ts6zcNJGjfgo3vUl5WkLVC+6uYmvuT8HZBAqnHFjs3
-         a5YCSt1bhq7YeosKVOa086joGTgrYdRlq7pemZQD8KoFameEHk7vGBx+SQYo/1Mjph6i
-         3zlmUHV6Z5scLI2FLy/wff0t6gbX4nJOr6ttm+a3E2ZDIlaScFKyG4yvRZlplRQxrCNB
-         c0gw==
-X-Gm-Message-State: AO0yUKWabmMWlxzbz+lUL4mA85j1uTjsqQFamOXSiW58MIgteRNF2dTy
-        WV7aj8wDPpUmlwqJnhAwEwSW2E6S70L4dnAupPsiaAaCHkH5
-X-Google-Smtp-Source: AK7set/nf4mFYdToQ28x4zNXFvUhaQsgQ8310zoFHs/2hWGi16zmqOB8dH6xQjU5KCsj/L8c1evLCBADMxLi8TPhH/NRpoSFjnZ0
+        bh=yBPezHniAB5CPc6kCyPETjZBNEEImPV7AJtKEga0h/M=;
+        b=Y30uN0HT5bcXZ8ePBOstL9ELHoJvu+5CvU7UU7H5yxUR+4l/5p0Wq23Y4iMMsDtiJz
+         DRioR8krhgAOE2DxsISBEkeJsA8F4DJLwU0WV510bOFiRu5z/LFHGEeStZWTsVIbe9Q+
+         vKb0J5EHPIczPwqJDDMVBPQgZnkNtzDZJevxuXqA+TOa3ekpdFf2EC6NWjahVkyA0CZk
+         aX1oHd9ZKnKNj0lnGXZJ3UiVxlTmhzOdDCDsXvrfSiHzmpKqqq+S2+XokRBZd8Ce+mmB
+         r+cNUACcYlFN7QcnELHOZ6c43pCQszfAguRjkGX5hHZXoIgeUV6XzA/GNYDk1IGfk64v
+         Qv9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678730781;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:feedback-id:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=yBPezHniAB5CPc6kCyPETjZBNEEImPV7AJtKEga0h/M=;
+        b=x5TdSYnLhexJaBfM738b0GfIGJo1rlqim6JcT+xrSEkqV6NXfeZr3y6S8y1TTTlMFu
+         dXZtpUrp18UVqhF5PL7FXEhOJqpAaY3PEs/83nrV0JGDLRVYNab7tG3izPPv/0ByaxH2
+         2fQuEpZyZjf0S1i9eh9q5a49o+qTxkbyPHOc8rUh4Jb28rE7tKq2KwDcg+pGjDvysRds
+         /NeJXJbjHX7vEzPj64dgHz11s3eLaj7BD2PlG0qB8ZiYi4HgfFk3kdfR9jTv2jRwimwq
+         jCCFRmfPu/IaxSC5SrYl8uewlpaXEke7TLyCFkbrKUk9kKxY6jVF2gT1uavFWgnzOikk
+         nnFw==
+X-Gm-Message-State: AO0yUKXhCad5E6+9LiBU1LlIlU0LigQaO8odM2VR8ddL6bEX1sW+gxhg
+        e5KkUw4Q8XgessBRAuMg698=
+X-Google-Smtp-Source: AK7set/d2VSdo2tDZCtTxqBG2QOV+vJvY7KS/FUBsg2RfeyrvWr5f4Lis1spEwcqJVnCzM3MTIaGKQ==
+X-Received: by 2002:a05:622a:1a01:b0:3bd:1a8a:8015 with SMTP id f1-20020a05622a1a0100b003bd1a8a8015mr57765677qtb.16.1678730781684;
+        Mon, 13 Mar 2023 11:06:21 -0700 (PDT)
+Received: from auth2-smtp.messagingengine.com (auth2-smtp.messagingengine.com. [66.111.4.228])
+        by smtp.gmail.com with ESMTPSA id f3-20020a37d203000000b0073b4a55a2d1sm128091qkj.124.2023.03.13.11.06.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 11:06:21 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailauth.nyi.internal (Postfix) with ESMTP id A72A227C0054;
+        Mon, 13 Mar 2023 14:06:19 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 13 Mar 2023 14:06:20 -0400
+X-ME-Sender: <xms:GmYPZLVLDdvoPalmbHhjU7DAUSycTgdiRxoJPz6rDQr5shVHGfmAww>
+    <xme:GmYPZDn2fz-z9m-20ST9wDZEYk0VWh7LhZwHYWnzryH8tWY7j9f1bj4vu_0HumEZe
+    ty0cw7seloFlSN0Tw>
+X-ME-Received: <xmr:GmYPZHZkn2KvXeIZWDJik9jgdeIIJB-SbSBM6oSgaKRN-27UfEoNSyX_XZA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedguddtjecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpeffhffvvefukfhfgggtuggjsehttdertddttddvnecuhfhrohhmpeeuohhq
+    uhhnucfhvghnghcuoegsohhquhhnrdhfvghnghesghhmrghilhdrtghomheqnecuggftrf
+    grthhtvghrnhephedugfduffffteeutddvheeuveelvdfhleelieevtdeguefhgeeuveei
+    udffiedvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
+    epsghoqhhunhdomhgvshhmthhprghuthhhphgvrhhsohhnrghlihhthidqieelvdeghedt
+    ieegqddujeejkeehheehvddqsghoqhhunhdrfhgvnhhgpeepghhmrghilhdrtghomhesfh
+    higihmvgdrnhgrmhgv
+X-ME-Proxy: <xmx:GmYPZGU2y2ebUk1w8a8OqwvPjHQL2jralnaZ-N8O86srZcCUaMfXgQ>
+    <xmx:GmYPZFmrxLvNS-0TdjxrLFFYHkUY1fwbNr0aU5fo1jwmEpCM7ca_NA>
+    <xmx:GmYPZDeHoUnXAhjCOwcy2kEDqc0iC6vYpvTVM5JnbwU44wjWt6XQDA>
+    <xmx:G2YPZEftKxq6Pi30Wji_FgJX3YqSgDDaH60inewR8SF2I-pme7lL5g>
+Feedback-ID: iad51458e:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Mar 2023 14:06:17 -0400 (EDT)
+Date:   Mon, 13 Mar 2023 11:05:04 -0700
+From:   Boqun Feng <boqun.feng@gmail.com>
+To:     Gary Guo <gary@garyguo.net>
+Cc:     Asahi Lina <lina@asahilina.net>, Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@gmail.com>,
+        =?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+        Will Deacon <will@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Hector Martin <marcan@marcan.st>,
+        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
+        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
+Subject: Re: [PATCH 5/5] rust: device: Add a stub abstraction for devices
+Message-ID: <ZA9l0EHCRRr/myoq@boqun-archlinux>
+References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
+ <20230224-rust-iopt-rtkit-v1-5-49ced3391295@asahilina.net>
+ <20230313175202.300bb1f4.gary@garyguo.net>
 MIME-Version: 1.0
-X-Received: by 2002:a02:a98f:0:b0:3b7:9d19:fec7 with SMTP id
- q15-20020a02a98f000000b003b79d19fec7mr16446833jam.0.1678730666212; Mon, 13
- Mar 2023 11:04:26 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 11:04:26 -0700
-In-Reply-To: <20230313174118.325aaafflrliiehe@fpc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000883f905f6cbf108@google.com>
-Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
-From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-kernel@vger.kernel.org,
-        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=0.1 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLACK autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313175202.300bb1f4.gary@garyguo.net>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Mar 13, 2023 at 05:52:02PM +0000, Gary Guo wrote:
+[...]
+> > diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
+> > index 9be021e393ca..e57da622d817 100644
+> > --- a/rust/kernel/device.rs
+> > +++ b/rust/kernel/device.rs
+> > @@ -4,7 +4,7 @@
+> >  //!
+> >  //! C header: [`include/linux/device.h`](../../../../include/linux/device.h)
+> >  
+> > -use crate::bindings;
+> > +use crate::{bindings, str::CStr};
+> >  
+> >  /// A raw device.
+> >  ///
+> > @@ -20,4 +20,78 @@ use crate::bindings;
+> >  pub unsafe trait RawDevice {
+> >      /// Returns the raw `struct device` related to `self`.
+> >      fn raw_device(&self) -> *mut bindings::device;
+> > +
+> > +    /// Returns the name of the device.
+> > +    fn name(&self) -> &CStr {
+> > +        let ptr = self.raw_device();
+> > +
+> > +        // SAFETY: `ptr` is valid because `self` keeps it alive.
+> > +        let name = unsafe { bindings::dev_name(ptr) };
+> > +
+> > +        // SAFETY: The name of the device remains valid while it is alive (because the device is
+> > +        // never renamed, per the safety requirement of this trait). This is guaranteed to be the
+> > +        // case because the reference to `self` outlives the one of the returned `CStr` (enforced
+> > +        // by the compiler because of their lifetimes).
+> > +        unsafe { CStr::from_char_ptr(name) }
+> > +    }
+> > +}
+> > +
+> > +/// A ref-counted device.
+> > +///
+> > +/// # Invariants
+> > +///
+> > +/// `ptr` is valid, non-null, and has a non-zero reference count. One of the references is owned by
+> > +/// `self`, and will be decremented when `self` is dropped.
+> > +pub struct Device {
+> > +    pub(crate) ptr: *mut bindings::device,
+> > +}
+> > +
+> 
+> Shouldn't this be
+> 
+> #[repr(transparent)]
+> pub struct Device(Opaque<bindings::device>);
+> 
+> ?
 
-syzbot tried to test the proposed patch but the build/boot failed:
+I have the same feeling, for `task_struct`, we have
 
-failed to copy binary to VM: failed to run ["scp" "-P" "22" "-F" "/dev/null" "-o" "UserKnownHostsFile=/dev/null" "-o" "BatchMode=yes" "-o" "IdentitiesOnly=yes" "-o" "StrictHostKeyChecking=no" "-o" "ConnectTimeout=10" "/tmp/syz-executor3739450099" "root@10.128.0.155:./syz-executor3739450099"]: exit status 1
-ssh: connect to host 10.128.0.155 port 22: Connection timed out
-lost connection
+	#[repr(transparent)]
+	pub struct Task(pub(crate) UnsafeCell<bindings::task_struct>);
 
+and
+	
+	pub struct TaskRef<'a> {
+	    task: &'a Task,
+	    _not_send: PhantomData<*mut ()>,
+	}
 
+I wonder whether we should do the similar for `Device`, meaning `Device`
+is just a tranparent representation for `struct device` and another
+type (say, `DeviceRef`) is introduced as the reference type, or we can
+just use `ARef`.
 
-
-syzkaller build log:
-go env (err=<nil>)
-GO111MODULE="auto"
-GOARCH="amd64"
-GOBIN=""
-GOCACHE="/syzkaller/.cache/go-build"
-GOENV="/syzkaller/.config/go/env"
-GOEXE=""
-GOEXPERIMENT=""
-GOFLAGS=""
-GOHOSTARCH="amd64"
-GOHOSTOS="linux"
-GOINSECURE=""
-GOMODCACHE="/syzkaller/jobs-2/linux/gopath/pkg/mod"
-GONOPROXY=""
-GONOSUMDB=""
-GOOS="linux"
-GOPATH="/syzkaller/jobs-2/linux/gopath"
-GOPRIVATE=""
-GOPROXY="https://proxy.golang.org,direct"
-GOROOT="/usr/local/go"
-GOSUMDB="sum.golang.org"
-GOTMPDIR=""
-GOTOOLDIR="/usr/local/go/pkg/tool/linux_amd64"
-GOVCS=""
-GOVERSION="go1.20.1"
-GCCGO="gccgo"
-GOAMD64="v1"
-AR="ar"
-CC="gcc"
-CXX="g++"
-CGO_ENABLED="1"
-GOMOD="/syzkaller/jobs-2/linux/gopath/src/github.com/google/syzkaller/go.mod"
-GOWORK=""
-CGO_CFLAGS="-O2 -g"
-CGO_CPPFLAGS=""
-CGO_CXXFLAGS="-O2 -g"
-CGO_FFLAGS="-O2 -g"
-CGO_LDFLAGS="-O2 -g"
-PKG_CONFIG="pkg-config"
-GOGCCFLAGS="-fPIC -m64 -pthread -Wl,--no-gc-sections -fmessage-length=0 -fdebug-prefix-map=/tmp/go-build388716093=/tmp/go-build -gno-record-gcc-switches"
-
-git status (err=<nil>)
-HEAD detached at f8902b574
-nothing to commit, working tree clean
-
-
-tput: No value for $TERM and no -T specified
-tput: No value for $TERM and no -T specified
-Makefile:32: run command via tools/syz-env for best compatibility, see:
-Makefile:33: https://github.com/google/syzkaller/blob/master/docs/contributing.md#using-syz-env
-go list -f '{{.Stale}}' ./sys/syz-sysgen | grep -q false || go install ./sys/syz-sysgen
-make .descriptions
-tput: No value for $TERM and no -T specified
-tput: No value for $TERM and no -T specified
-bin/syz-sysgen
-touch .descriptions
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=f8902b5747fbe3d5b860bd782eec63fc9c7da6e7 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20230301-104759'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-fuzzer github.com/google/syzkaller/syz-fuzzer
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=f8902b5747fbe3d5b860bd782eec63fc9c7da6e7 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20230301-104759'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-execprog github.com/google/syzkaller/tools/syz-execprog
-GOOS=linux GOARCH=amd64 go build "-ldflags=-s -w -X github.com/google/syzkaller/prog.GitRevision=f8902b5747fbe3d5b860bd782eec63fc9c7da6e7 -X 'github.com/google/syzkaller/prog.gitRevisionDate=20230301-104759'" "-tags=syz_target syz_os_linux syz_arch_amd64 " -o ./bin/linux_amd64/syz-stress github.com/google/syzkaller/tools/syz-stress
-mkdir -p ./bin/linux_amd64
-gcc -o ./bin/linux_amd64/syz-executor executor/executor.cc \
-	-m64 -O2 -pthread -Wall -Werror -Wparentheses -Wunused-const-variable -Wframe-larger-than=16384 -Wno-stringop-overflow -Wno-array-bounds -Wno-format-overflow -Wno-unused-but-set-variable -Wno-unused-command-line-argument -static-pie -fpermissive -w -DGOOS_linux=1 -DGOARCH_amd64=1 \
-	-DHOSTGOOS_linux=1 -DGIT_REVISION=\"f8902b5747fbe3d5b860bd782eec63fc9c7da6e7\"
+Regards,
+Boqun
 
 
 
-Tested on:
-
-commit:         34add094 kmsan: add test_stackdepot_roundtrip
-git tree:       https://github.com/google/kmsan.git master
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76a9330669c37355
-dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=12969e56c80000
-
+> 
+> Best,
+> Gary
