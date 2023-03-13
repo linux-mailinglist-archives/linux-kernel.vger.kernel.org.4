@@ -2,73 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3B656B7327
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:50:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73DEC6B732B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:51:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbjCMJuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:50:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
+        id S231156AbjCMJvF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:51:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231277AbjCMJup (ORCPT
+        with ESMTP id S231341AbjCMJuy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:50:45 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BC237F34
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:50:34 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id f31so10463683vsv.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:50:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678701033;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0thsfBhKWc4p+EFtaKanDgEsWWKR0LrE3hmVfPf/OgA=;
-        b=Nh3RFuZOS7PVy3YaLzs4wUqwSvbWILuwB1hJqMBUNlYfPJIJj0zyfp/uPCULg/m4EP
-         cqfSzk7J07ROlJY+CgXgJ9SA/d2UhU+SB9CH7/Vsi4zPtHA/uw8bsTx9msC26QFZTEjg
-         cjwPyfaCN1kofIEo4p1lK73Czbl8KDoh8E8Mv5bsDcd+XZmM5uhZBVaiK4iqCM4qIotm
-         H4XWhxHhHg/QBEEoanIOrMFkdY/6QEohAMJsfAFdBIwYisZTl/8to5SWEjR20CkqDa6/
-         K5wb/8kMzvf3pJdhplZY8F2MugRXqANUDWe4MmA9rl53Z15aAKkzefgjEsiN++DD7Iku
-         dSHg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678701033;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0thsfBhKWc4p+EFtaKanDgEsWWKR0LrE3hmVfPf/OgA=;
-        b=QzDnVpGQymna87/o8GtEcqP6o5pQOVEYSh1T5ZTQsNXa7z1KzLZv9LrTPz7h7u7K7H
-         l6oNCS1Iz9ia29kisS+sdQO8HgFjiuFuPCionxzjjYPtr3eAQw+eVXKL+B5nDctfS3vT
-         N0U9CQXEjTa+F7g7WWoOoQ1NTbv1yPV8k62cpNH3iI+6PjGh+N+cB1c3tHh/o1ztBU0k
-         T+oXjDdJ/rqiQ6Vj05C/1vosO2LY5V0NcdYcQOdTVIU7e79bkTIPNb5/0lKQUtkTINyz
-         ug34eX4F/NSx4GkftfWKxDXm2fB+AL0kICBBMt6RD45VYG96IoUaz5nmYzwT/Hk9QT0/
-         iMRA==
-X-Gm-Message-State: AO0yUKXce0TsXTnau+S3y5OK+pIU5svGEK33695d3fmG4BPCkN6ZJ0Vp
-        T6BvPFBtUtRz1hWaXjyKETuUCXzBSWyRXTGHdGpKvQ==
-X-Google-Smtp-Source: AK7set/M8gEYQsVx0+WWXfj/bSZ1YioVzkOVkLFio9jFik9aJjbtJBiBoSSNstXJXQmtGgiZ+KicAEYxmQSMf6GCZXs=
-X-Received: by 2002:a67:1005:0:b0:425:8e57:7bfd with SMTP id
- 5-20020a671005000000b004258e577bfdmr1261928vsq.3.1678701033388; Mon, 13 Mar
- 2023 02:50:33 -0700 (PDT)
+        Mon, 13 Mar 2023 05:50:54 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A744A255
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:50:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 7966FCE0FA4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:50:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CD09C433D2;
+        Mon, 13 Mar 2023 09:50:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678701049;
+        bh=GMpaLnOqXb+7MPkHeMOKZKNyvoOvPhAmgpt/cCCapG4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=IlKbUZTEfaWxHP6cZkwLsDTXGNL3BXy7K86TuZ25hVU7t44PnNf+2Eplg+Ys7L2hc
+         un8IrYMbyS29LC1JTQaiL3LLbvPhsFqIvlqX+HBNVhBkOEiaIYIBYqLh+IiH8JTEKM
+         ugvtGLUPSuiaHpstiWhgD/FRR5b5KhI8FovbBwzU=
+Date:   Mon, 13 Mar 2023 10:50:47 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Vincenzo Palazzo <vincenzopalazzodev@gmail.com>
+Cc:     Andrew Morton <akpm@linux-foundation.org>, david@redhat.com,
+        jhubbard@nvidia.com, linux-kernel@vger.kernel.org,
+        willy@infradead.org, Suren Baghdasaryan <surenb@google.com>,
+        jgg@ziepe.ca, Liam.Howlett@oracle.com,
+        linux-kernel-mentees@lists.linuxfoundation.org
+Subject: Re: [RFC PATCH v1 1/1] linux: mm_types: allow to modified the
+ vm_flags in vm_area_struct
+Message-ID: <ZA7x9y60sfGOanHl@kroah.com>
+References: <20230312224250.425727-1-vincenzopalazzodev@gmail.com>
+ <20230312175703.d8d8e0192387dfa9592ee8e5@linux-foundation.org>
+ <CR55BD4YCDR1.22R5TLYJW6YS0@vincent-arch>
 MIME-Version: 1.0
-References: <20230308195933.806917-1-ndesaulniers@google.com>
-In-Reply-To: <20230308195933.806917-1-ndesaulniers@google.com>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Mon, 13 Mar 2023 15:20:22 +0530
-Message-ID: <CA+G9fYtTL+y-ZYeZXKHbVg9XiYVeHE-RaAjaRHTT+EfXO924cA@mail.gmail.com>
-Subject: Re: [PATCH] selftests: sigaltstack: fix -Wuninitialized
-To:     Nick Desaulniers <ndesaulniers@google.com>
-Cc:     Shuah Khan <shuah@kernel.org>,
-        Linux Kernel Functional Testing <lkft@linaro.org>,
-        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
-        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lkft-triage@lists.linaro.org, Thomas Gleixner <tglx@linutronix.de>,
-        "Chang S. Bae" <chang.seok.bae@intel.com>,
-        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
-        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Kees Cook <keescook@chromium.org>,
-        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CR55BD4YCDR1.22R5TLYJW6YS0@vincent-arch>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,159 +56,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 9 Mar 2023 at 01:29, Nick Desaulniers <ndesaulniers@google.com> wrote:
->
-> Building sigaltstack with clang via:
-> $ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
->
-> produces the following warning:
->   warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
->   if (sp < (unsigned long)sstack ||
->       ^~
->
-> Clang expects these to be declared at global scope; we've fixed this in
-> the kernel proper by using the macro `current_stack_pointer`. This is
-> defined in different headers for different target architectures, so just
-> create a new header that defines the arch-specific register names for
-> the stack pointer register, and define it for more targets (at least the
-> ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
-> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
+On Mon, Mar 13, 2023 at 10:25:19AM +0100, Vincenzo Palazzo wrote:
+> P.S: regaring the warning at compile time the __deprecated looks a good
+> fit to generate error message, but to me in this particular case do not.
 
-Build and boot tested with clang-16 and tested sigaltstack
-on arm64, armv7, FVP, x86_64 and i386 [1] & [2].
-These tests were performed at Linaro test farm by Anders
-with the help of tuxplan / tuxmake and tuxrun.
+__deprecated does not work in the kernel tree, sorry.  We have tried
+that in the past and it just gets ignored.  Instead, we fix up all
+in-kernel users and continue on.
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-Tested-by:  Anders Roxell <anders.roxell@linaro.org>
+thanks,
 
-
-Build log:
--------
-clang --target=aarch64-linux-gnu -fintegrated-as
--Werror=unknown-warning-option -Werror=ignored-optimization-argument
--Werror=option-ignored -Werror=unused-command-line-argument
---target=aarch64-linux-gnu -fintegrated-as -Wall     sas.c  -o
-/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/sigaltstack/sas
-
-Test log:
-----------
-
-Linux version 6.3.0-rc1-next-20230310 (tuxmake@tuxmake) (Debian clang
-version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
-Debian LLD 16.0.0) #1 SMP PREEMPT @1678519789
-...
-
-[   56.327569] kselftest: Running tests in sigaltstack
-TAP version 13
-1..1
-# selftests: sigaltstack: sas
-# # [NOTE] the stack size is 26400
-# TAP version 13
-# 1..3
-# ok 1 Initial sigaltstack state was SS_DISABLE
-# # [RUN] signal USR1
-# ok 2 sigaltstack is disabled in sighandler
-# # [RUN] switched to user ctx
-# # [RUN] signal USR2
-# # [OK] Stack preserved
-# ok 3 sigaltstack is still SS_AUTODISARM after signal
-# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
-ok 1 selftests: sigaltstack: sas
-
-Details of test log links provided [3].
-
-> ---
-> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
-> Cc: KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>
-> Cc: linux-api@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: lkft-triage@lists.linaro.org
-> Cc: Shuah Khan <shuah@kernel.org>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: "Chang S. Bae" <chang.seok.bae@intel.com>
-> Cc: Len Brown <len.brown@intel.com>
-> Cc: Borislav Petkov <bp@suse.de>
-> Cc: Stas Sergeev <stsp@list.ru>
-> Cc: Arnd Bergmann <arnd@arndb.de>
-> Cc: Anders Roxell <anders.roxell@linaro.org>
-> Cc: Andy Lutomirski <luto@kernel.org>
-> Cc: Kees Cook <keescook@chromium.org>
-> Cc: Nathan Chancellor <nathan@kernel.org>
-> Cc: llvm@lists.linux.dev
-> ---
->  .../sigaltstack/current_stack_pointer.h       | 23 +++++++++++++++++++
->  tools/testing/selftests/sigaltstack/sas.c     |  7 +-----
->  2 files changed, 24 insertions(+), 6 deletions(-)
->  create mode 100644 tools/testing/selftests/sigaltstack/current_stack_pointer.h
->
-> diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.h b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-> new file mode 100644
-> index 000000000000..ea9bdf3a90b1
-> --- /dev/null
-> +++ b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
-> @@ -0,0 +1,23 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +
-> +#if __alpha__
-> +register unsigned long sp asm("$30");
-> +#elif __arm__ || __aarch64__ || __csky__ || __m68k__ || __mips__ || __riscv
-> +register unsigned long sp asm("sp");
-> +#elif __i386__
-> +register unsigned long sp asm("esp");
-> +#elif __loongarch64
-> +register unsigned long sp asm("$sp");
-> +#elif __ppc__
-> +register unsigned long sp asm("r1");
-> +#elif __s390x__
-> +register unsigned long sp asm("%15");
-> +#elif __sh__
-> +register unsigned long sp asm("r15");
-> +#elif __x86_64__
-> +register unsigned long sp asm("rsp");
-> +#elif __XTENSA__
-> +register unsigned long sp asm("a1");
-> +#else
-> +#error "implement current_stack_pointer equivalent"
-> +#endif
-> diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
-> index c53b070755b6..98d37cb744fb 100644
-> --- a/tools/testing/selftests/sigaltstack/sas.c
-> +++ b/tools/testing/selftests/sigaltstack/sas.c
-> @@ -20,6 +20,7 @@
->  #include <sys/auxv.h>
->
->  #include "../kselftest.h"
-> +#include "current_stack_pointer.h"
->
->  #ifndef SS_AUTODISARM
->  #define SS_AUTODISARM  (1U << 31)
-> @@ -46,12 +47,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
->         stack_t stk;
->         struct stk_data *p;
->
-> -#if __s390x__
-> -       register unsigned long sp asm("%15");
-> -#else
-> -       register unsigned long sp asm("sp");
-> -#endif
-> -
->         if (sp < (unsigned long)sstack ||
->                         sp >= (unsigned long)sstack + stack_size) {
->                 ksft_exit_fail_msg("SP is not on sigaltstack\n");
-> --
-> 2.40.0.rc0.216.gc4246ad0f0-goog
-
-log link:
------
-[1] https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-kselftest_20230308195933_806917-1-ndesaulniers_google_com/?failures_only=false#!?filter-tests=kselftest-sigaltstack&details=#test-results
-[2] https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-kselftest_20230308195933_806917-1-ndesaulniers_google_com/testrun/15468761/suite/kselftest-sigaltstack/test/sigaltstack_sas/log
-[3] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/anders/tests/2MrJ2e4bDCC4iZjIrnRqmnE7KfC
-
-
---
-Linaro LKFT
-https://lkft.linaro.org
+greg k-h
