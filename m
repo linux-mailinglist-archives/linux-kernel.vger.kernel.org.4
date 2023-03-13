@@ -2,114 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2D1A46B6E57
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 05:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A88576B6E53
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 05:14:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCMEPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 00:15:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45472 "EHLO
+        id S229805AbjCMEOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 00:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229656AbjCMEPE (ORCPT
+        with ESMTP id S229656AbjCMEOI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 00:15:04 -0400
-Received: from m12.mail.163.com (m12.mail.163.com [220.181.12.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C12152886E;
-        Sun, 12 Mar 2023 21:15:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=SHitx
-        /p2v515lWIUtrn7VLSosh3Eis87AfBcSEwzhzA=; b=jxU/5wgcfYNdDyK7u6Hjc
-        DjkHb77etGnELIsNQN/ri/2VB+L9s/MYXYheXz0Ie/NKcr0oPNGpYrCMCrYdSea0
-        eK9QeazJYKHM0Ig3giywQfJpnz36lEWQR2jw08WBNSaWKG2YaWNnlLzlPGeR+lLX
-        FYeMbjn3pEWORK8silVnt8=
-Received: from leanderwang-LC2.localdomain (unknown [111.206.145.21])
-        by zwqz-smtp-mta-g4-0 (Coremail) with SMTP id _____wBXdh_Rog5kJ4YGAA--.1868S2;
-        Mon, 13 Mar 2023 12:13:05 +0800 (CST)
-From:   Zheng Wang <zyytlz.wz@163.com>
-To:     ericvh@gmail.com
-Cc:     lucho@ionkov.net, asmadeus@codewreck.org, linux_oss@crudebyte.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, Zheng Wang <zyytlz.wz@163.com>
-Subject: [PATCH net] 9p/xen : Fix use after free bug in xen_9pfs_front_remove due to race condition
-Date:   Mon, 13 Mar 2023 12:13:03 +0800
-Message-Id: <20230313041303.3158458-1-zyytlz.wz@163.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 13 Mar 2023 00:14:08 -0400
+Received: from mail-io1-xd30.google.com (mail-io1-xd30.google.com [IPv6:2607:f8b0:4864:20::d30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 029C02203B;
+        Sun, 12 Mar 2023 21:14:06 -0700 (PDT)
+Received: by mail-io1-xd30.google.com with SMTP id e11so4528582ioe.3;
+        Sun, 12 Mar 2023 21:14:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678680846;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0XUhL8FFcNhP1iWeAiFBGkWuirlsQdIqQYoFoEIJuKs=;
+        b=SUwtv8PubyTyqt86xU2y0a3JjevLFIWqH0BM9Zo2+N0D5TeCC/5Dl+89ooEFgx8ZlV
+         ROwuuot4uXc8ZawFh89qWVw5l920E2Umz+F4oy8kaOL2FzXEmJpLPhC9JgdCgLMhijuQ
+         IwdQFX68IMa6n/YhWYbi2OS+K1b61Bemj9t7XF9h0ifuHuyfyQKdX9wiSEU0WxWqEDqG
+         EUUfCdCI3c1NOvXTA0UW3xnyJdMg0IcxUAHILw5HLEHbI3mElJF84nLm0okA+bpX/VNi
+         Lrd1LHjZb2cdwfKojLlEcAH9jmpbC4p1ExN7uK46K6UIQKZEvjZivz6IUc42XmmUAcDp
+         9Rmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678680846;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0XUhL8FFcNhP1iWeAiFBGkWuirlsQdIqQYoFoEIJuKs=;
+        b=D+Cso6KheQRdIFzEAYkdlfhGZoMoBA+7A28HfuY7Tu/5icknmcn8FWeANjVVlgkuKX
+         rNcuCGeKc/fJEpnksB8LdH2tKr95DcizKeMpy2R2ijDpPqslZrVjPF15IR9iDaIvllDl
+         prNt7NJ5xrrhoeG4JmW8mwc/V6t8vdXWsQeGY3btnyAMJBnjwo/6yVwIg7bu71oPsr0T
+         aZGif/NAYPOCY7iXEQdr4nSWltfnQE25m5ogAI3KpqmhLt5AL8dor+xrZ1l4ORtOcrdg
+         5piVHX3CdQp6bHCSN/sWx9AAMzkfCkhmhVEvZGI4ehtwGHOMdjEAqOyso5FGfsH4Yxzr
+         4CIg==
+X-Gm-Message-State: AO0yUKXb4jZwwR+I54AoIwRVNFtpKvoFNoMrJfBnRurA7Tdgj6OE9TA6
+        +MWkaK6Lcs0fFvICrv7q2wghByo7W4nIhA==
+X-Google-Smtp-Source: AK7set8nuC3o2iqcZmK+SspoElhwJxaJ0cnSuWnz7DvEEZSLt3+M+jCQEdT+uiqu0U3a8rq+GCbpsA==
+X-Received: by 2002:a5d:9297:0:b0:74c:99e8:7f44 with SMTP id s23-20020a5d9297000000b0074c99e87f44mr5152476iom.2.1678680846323;
+        Sun, 12 Mar 2023 21:14:06 -0700 (PDT)
+Received: from JOEL-DESKTOP.. ([2604:2d80:4d87:cd00:9f51:32d7:1177:67d])
+        by smtp.gmail.com with ESMTPSA id w12-20020a6b4a0c000000b0074e6f2c584dsm2186258iob.12.2023.03.12.21.14.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Mar 2023 21:14:05 -0700 (PDT)
+From:   Joel Selvaraj <joelselvaraj.oss@gmail.com>
+To:     "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Joel Selvaraj <joelselvaraj.oss@gmail.com>
+Subject: [PATCH] scsi: core: Add BLIST_SKIP_VPD_PAGES for SKhynix H28U74301AMR
+Date:   Sun, 12 Mar 2023 23:14:02 -0500
+Message-Id: <20230313041402.39330-1-joelselvaraj.oss@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: _____wBXdh_Rog5kJ4YGAA--.1868S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7tF15Cw48JFy5tr1xuF45Wrg_yoW8WF4Upa
-        1Skrn5AFyqya1YyFsYy3WxJ3WYkw4rGr1Iga12kw4fJr98Ary8XrZ5tr1Yg34UAr4YqF4r
-        Gw1DXa98JFZrAw7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0ziaZXrUUUUU=
-X-Originating-IP: [111.206.145.21]
-X-CM-SenderInfo: h2113zf2oz6qqrwthudrp/1tbiXQ8xU1WBo41K9wABs2
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In xen_9pfs_front_probe, it calls xen_9pfs_front_alloc_dataring
-to init priv->rings and bound &ring->work with p9_xen_response.
+Xiaomi Poco F1(qcom/sdm845-xiaomi-beryllium*.dts) comes with a SKhynix
+H28U74301AMR UFS. The sd_read_cpr operation leads to a 120 seconds timeout
+making the device bootup very slow. Like the following:
 
-When it calls xen_9pfs_front_event_handler to handle IRQ requests,
-it will finally call schedule_work to start the work.
+[  121.457736] sd 0:0:0:1: [sdb] tag#23 timing out command, waited 120s
 
-When we call xen_9pfs_front_remove to remove the driver, there
-may be a sequence as follows:
+Setting the BLIST_SKIP_VPD_PAGES allows the device to skip the failing
+sd_read_cpr operation and boot normally.
 
-Fix it by finishing the work before cleanup in xen_9pfs_front_free.
-
-Note that, this bug is found by static analysis, which might be
-false positive.
-
-CPU0                  CPU1
-
-                     |p9_xen_response
-xen_9pfs_front_remove|
-  xen_9pfs_front_free|
-kfree(priv)          |
-//free priv          |
-                     |p9_tag_lookup
-                     |//use priv->client
-
-Fixes: 71ebd71921e4 ("xen/9pfs: connect to the backend")
-Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
 ---
- net/9p/trans_xen.c | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/scsi/scsi_devinfo.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
-index c64050e839ac..60adb3aadd63 100644
---- a/net/9p/trans_xen.c
-+++ b/net/9p/trans_xen.c
-@@ -274,16 +274,21 @@ static const struct xenbus_device_id xen_9pfs_front_ids[] = {
- static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
- {
- 	int i, j;
-+	struct xen_9pfs_dataring *ring = NULL;
- 
- 	write_lock(&xen_9pfs_lock);
- 	list_del(&priv->list);
- 	write_unlock(&xen_9pfs_lock);
- 
- 	for (i = 0; i < priv->num_rings; i++) {
-+		ring = priv->rings[i];
- 		if (!priv->rings[i].intf)
- 			break;
- 		if (priv->rings[i].irq > 0)
- 			unbind_from_irqhandler(priv->rings[i].irq, priv->dev);
-+
-+		cancel_work_sync(&ring->work);
-+
- 		if (priv->rings[i].data.in) {
- 			for (j = 0;
- 			     j < (1 << priv->rings[i].intf->ring_order);
+diff --git a/drivers/scsi/scsi_devinfo.c b/drivers/scsi/scsi_devinfo.c
+index c7080454aea9..bd110a93d047 100644
+--- a/drivers/scsi/scsi_devinfo.c
++++ b/drivers/scsi/scsi_devinfo.c
+@@ -233,6 +233,7 @@ static struct {
+ 	{"SGI", "RAID5", "*", BLIST_SPARSELUN},
+ 	{"SGI", "TP9100", "*", BLIST_REPORTLUN2},
+ 	{"SGI", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
++	{"SKhynix", "H28U74301AMR", NULL, BLIST_SKIP_VPD_PAGES},
+ 	{"IBM", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
+ 	{"SUN", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
+ 	{"DELL", "Universal Xport", "*", BLIST_NO_ULD_ATTACH},
 -- 
-2.25.1
+2.39.2
 
