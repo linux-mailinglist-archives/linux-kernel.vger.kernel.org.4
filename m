@@ -2,181 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B5256B83F9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0AC4E6B83FD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:31:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229820AbjCMV3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:29:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41270 "EHLO
+        id S229801AbjCMVbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbjCMV3e (ORCPT
+        with ESMTP id S229480AbjCMVa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:29:34 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABB2A7203A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:29:32 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (zone.collabora.co.uk [167.235.23.81])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 13 Mar 2023 17:30:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6A23DBCB;
+        Mon, 13 Mar 2023 14:30:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id A86B4660308F;
-        Mon, 13 Mar 2023 21:29:28 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678742971;
-        bh=mWFcFs6EaqxA+zO4mnrYdfWBJNLnPvbamIJ4mjHcCOg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=mmOtB8Dm37lrB6dpX7uwY8hJ4Rd3Lj3BLfyDMa85FoEWZf9r/NVcsUQeY641Sb7bD
-         FSe8vOQuzj1u6pfhd07PpCKZBNuzD4BvaGW2Jko1gEZfKjhu47A73xmFyFUFkoZnaK
-         3aP5jrM0DYtJiDNYpgVG+qxXS1d+bFLxV+LywpXCnWs1/FD3gGO7+WNHSpb2KqExkD
-         Zw7WI/pyNAF8965JoMRyRdNv1sGb2BT/A1ADCmINjSy3Nfs8Xn2DMrBoKKs7q1RD3f
-         av9HyBfR6hm2JRW4dz7EL0U8geAaCczuwwTnnWj97faX2ZkNFxsqO5GmCJAiyHuOnx
-         S0WmmPwELnggw==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Mark Brown <broonie@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>, Akihiko Odaki <akihiko.odaki@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Jiaxin Yu <jiaxin.yu@mediatek.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Takashi Iwai <tiwai@suse.com>,
-        Tzung-Bi Shih <tzungbi@kernel.org>,
-        alsa-devel@alsa-project.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH 2/2] ASoC: mt8192: Move spammy messages to debug level
-Date:   Mon, 13 Mar 2023 17:29:07 -0400
-Message-Id: <20230313212908.2282961-3-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230313212908.2282961-1-nfraprado@collabora.com>
-References: <20230313212908.2282961-1-nfraprado@collabora.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 52B29B8136B;
+        Mon, 13 Mar 2023 21:30:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 968C2C433EF;
+        Mon, 13 Mar 2023 21:30:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678743056;
+        bh=R+WwqoKh0zISD9Xarl/rtQ2nfnBou/E1Hvs+a5wGQK8=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=ek1s+QMFPSxstNjHuSAf7o9BoIcjKgs5XDMvqzEzyL0xU12gtqkUh3qcKt0k/alG8
+         ZRyttzce25fyEKBTbtxN9wWweFxLRVZl+VaPRF4QjkURQthDTBOZidy0sly29/tWWw
+         zcR1ZSQLJFGtS0EDx1YebEXzP9FGAuu34zX0QlEPnCsSGNTtQHQttEA0awmF8X9sc9
+         78Pe/+HLEx/7hQDm9Q7rYHJERcC8Y2jpX5kXOIwQtapoz1tTVADyaDPMZqIQaHLXpo
+         fdxPP3EJndSemVi7QoqKN2yyVL4qUFt4eKz1C2GP2wmetfkLSPCe3ws1G0u+656llD
+         yh3kT9QC7bAnw==
+Date:   Mon, 13 Mar 2023 14:30:54 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, ericvh@gmail.com, lucho@ionkov.net,
+        asmadeus@codewreck.org, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Subject: Re: [PATCH net v2] 9p/xen : Fix use after free bug in
+ xen_9pfs_front_remove due  to race condition
+Message-ID: <20230313143054.538565ac@kernel.org>
+In-Reply-To: <ZA8rDCw+mJmyETEx@localhost.localdomain>
+References: <20230313090002.3308025-1-zyytlz.wz@163.com>
+        <ZA8rDCw+mJmyETEx@localhost.localdomain>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are many log messages throughout the mt8192 sound drivers that
-print to the info level and are triggered very frequently. Move these
-messages to the debug level to avoid spamming the console.
+On Mon, 13 Mar 2023 14:54:20 +0100 Michal Swiatkowski wrote:
+> > @@ -274,12 +274,17 @@ static const struct xenbus_device_id xen_9pfs_front_ids[] = {
+> >  static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
+> >  {
+> >  	int i, j;
+> > +	struct xen_9pfs_dataring *ring = NULL;  
+> Move it before int i, j to have RCT.
+> 
+> >  
+> >  	write_lock(&xen_9pfs_lock);
+> >  	list_del(&priv->list);
+> >  	write_unlock(&xen_9pfs_lock);
+> >  
+> >  	for (i = 0; i < priv->num_rings; i++) {
+> > +		/*cancel work*/  
+> It isn't needed I think, the function cancel_work_sync() tells everything
+> here.
 
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
-
- sound/soc/mediatek/mt8192/mt8192-afe-pcm.c    |  2 +-
- sound/soc/mediatek/mt8192/mt8192-dai-tdm.c    | 26 +++++++++----------
- .../mt8192/mt8192-mt6359-rt1015-rt5682.c      | 10 +++----
- 3 files changed, 19 insertions(+), 19 deletions(-)
-
-diff --git a/sound/soc/mediatek/mt8192/mt8192-afe-pcm.c b/sound/soc/mediatek/mt8192/mt8192-afe-pcm.c
-index a420b78dde89..333e0ee98c5a 100644
---- a/sound/soc/mediatek/mt8192/mt8192-afe-pcm.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-afe-pcm.c
-@@ -369,7 +369,7 @@ static int ul_tinyconn_event(struct snd_soc_dapm_widget *w,
- 	unsigned int reg_shift;
- 	unsigned int reg_mask_shift;
- 
--	dev_info(afe->dev, "%s(), event 0x%x\n", __func__, event);
-+	dev_dbg(afe->dev, "%s(), event 0x%x\n", __func__, event);
- 
- 	if (strstr(w->name, "UL1")) {
- 		reg_shift = VUL1_USE_TINY_SFT;
-diff --git a/sound/soc/mediatek/mt8192/mt8192-dai-tdm.c b/sound/soc/mediatek/mt8192/mt8192-dai-tdm.c
-index bcd2150c2816..9ce06821c7d0 100644
---- a/sound/soc/mediatek/mt8192/mt8192-dai-tdm.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-dai-tdm.c
-@@ -256,8 +256,8 @@ static int mtk_tdm_en_event(struct snd_soc_dapm_widget *w,
- 		return -EINVAL;
- 	}
- 
--	dev_info(cmpnt->dev, "%s(), name %s, event 0x%x\n",
--		 __func__, w->name, event);
-+	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x\n",
-+		__func__, w->name, event);
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_PRE_PMU:
-@@ -288,8 +288,8 @@ static int mtk_tdm_bck_en_event(struct snd_soc_dapm_widget *w,
- 		return -EINVAL;
- 	}
- 
--	dev_info(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
--		 __func__, w->name, event, dai_id);
-+	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
-+		__func__, w->name, event, dai_id);
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_PRE_PMU:
-@@ -320,8 +320,8 @@ static int mtk_tdm_mck_en_event(struct snd_soc_dapm_widget *w,
- 		return -EINVAL;
- 	}
- 
--	dev_info(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
--		 __func__, w->name, event, dai_id);
-+	dev_dbg(cmpnt->dev, "%s(), name %s, event 0x%x, dai_id %d\n",
-+		__func__, w->name, event, dai_id);
- 
- 	switch (event) {
- 	case SND_SOC_DAPM_PRE_PMU:
-@@ -545,13 +545,13 @@ static int mtk_dai_tdm_hw_params(struct snd_pcm_substream *substream,
- 	if (tdm_priv->mclk_rate % tdm_priv->bck_rate != 0)
- 		dev_warn(afe->dev, "%s(), bck cannot generate", __func__);
- 
--	dev_info(afe->dev, "%s(), id %d, rate %d, channels %d, format %d, mclk_rate %d, bck_rate %d\n",
--		 __func__,
--		 tdm_id, rate, channels, format,
--		 tdm_priv->mclk_rate, tdm_priv->bck_rate);
-+	dev_dbg(afe->dev, "%s(), id %d, rate %d, channels %d, format %d, mclk_rate %d, bck_rate %d\n",
-+		__func__,
-+		tdm_id, rate, channels, format,
-+		tdm_priv->mclk_rate, tdm_priv->bck_rate);
- 
--	dev_info(afe->dev, "%s(), out_channels_per_sdata = %d\n",
--		 __func__, out_channels_per_sdata);
-+	dev_dbg(afe->dev, "%s(), out_channels_per_sdata = %d\n",
-+		__func__, out_channels_per_sdata);
- 
- 	/* set tdm */
- 	if (tdm_priv->bck_invert)
-@@ -644,7 +644,7 @@ static int mtk_dai_tdm_set_sysclk(struct snd_soc_dai *dai,
- 		return -EINVAL;
- 	}
- 
--	dev_info(afe->dev, "%s(), freq %d\n", __func__, freq);
-+	dev_dbg(afe->dev, "%s(), freq %d\n", __func__, freq);
- 
- 	return mtk_dai_tdm_cal_mclk(afe, tdm_priv, freq);
- }
-diff --git a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-index 87737d054682..5e163e23a207 100644
---- a/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-+++ b/sound/soc/mediatek/mt8192/mt8192-mt6359-rt1015-rt5682.c
-@@ -292,11 +292,11 @@ static int mt8192_mt6359_mtkaif_calibration(struct snd_soc_pcm_runtime *rtd)
- 	mt8192_afe_gpio_request(afe->dev, false, MT8192_DAI_ADDA_CH34, 0);
- 	pm_runtime_put(afe->dev);
- 
--	dev_info(afe->dev, "%s(), mtkaif_chosen_phase[0/1/2]:%d/%d/%d\n",
--		 __func__,
--		 afe_priv->mtkaif_chosen_phase[0],
--		 afe_priv->mtkaif_chosen_phase[1],
--		 afe_priv->mtkaif_chosen_phase[2]);
-+	dev_dbg(afe->dev, "%s(), mtkaif_chosen_phase[0/1/2]:%d/%d/%d\n",
-+		__func__,
-+		afe_priv->mtkaif_chosen_phase[0],
-+		afe_priv->mtkaif_chosen_phase[1],
-+		afe_priv->mtkaif_chosen_phase[2]);
- 
- 	return 0;
- }
--- 
-2.39.2
-
+Note that 9p is more storage than networking, so this patch is likely
+to go via a different tree than us.
