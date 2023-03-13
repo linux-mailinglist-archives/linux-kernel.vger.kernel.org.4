@@ -2,179 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A3DB6B83B5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:07:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 332756B83B8
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230141AbjCMVH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:07:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
+        id S229864AbjCMVIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCMVHY (ORCPT
+        with ESMTP id S229666AbjCMVIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:07:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4364824487;
-        Mon, 13 Mar 2023 14:06:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 229F2614F1;
-        Mon, 13 Mar 2023 21:05:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288F8C4339B;
-        Mon, 13 Mar 2023 21:05:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678741509;
-        bh=jVEbYSaDY85e2O7DDoCo5LPr2RoisuVHRdSf0mtTx7o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=FR5omo3r03m3+pCEBeKe0CYyYZsQgbvbB0IwrRjgmS92QjiiS4/54ZCeXH9wzjhaM
-         oHxcG55KSIuS/HYs1iwNrpAyDYWwsIXYwyIkqrzbaTwZTqgs2uF9f8pl61WAtDeKdr
-         qt4W4o0ZMszOEFLPJuapNscclHTDYcVg6bXsIj8hhE2w8eu+U9a51Iqlqtw6EzkPcZ
-         +ViV4uftN2byR54H7tJUofWEwUUUTkeJImPmG1WMpBY2MFqNafJTQOd3lACffRRt3o
-         0c6DjqsaSrPrMp4REu/Xr7CR1mEV3ndhDC7Luiryqh+bH46RRz7/HadB4/0i2zU5JR
-         fZy574U8wH8bg==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 792E24049F; Mon, 13 Mar 2023 18:05:06 -0300 (-03)
-Date:   Mon, 13 Mar 2023 18:05:06 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 02/13] perf build: Make BUILD_BPF_SKEL default, rename
- to NO_BPF_SKEL
-Message-ID: <ZA+QAvj0DIpxTGSS@kernel.org>
-References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-3-irogers@google.com>
- <ZA+FOpzJswZx8os+@kernel.org>
- <CAP-5=fUG1CbzevoS=+Jj_pBO4umNj6ekaMeEuSHGC4kAZgVJJg@mail.gmail.com>
- <ZA+IvqVb6Gos+NOe@kernel.org>
- <ZA+Ot0dnX0MNZKmn@kernel.org>
+        Mon, 13 Mar 2023 17:08:22 -0400
+Received: from mail-il1-x146.google.com (mail-il1-x146.google.com [IPv6:2607:f8b0:4864:20::146])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2783E8E3CF
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:07:33 -0700 (PDT)
+Received: by mail-il1-x146.google.com with SMTP id k13-20020a056e021a8d00b0031bae68b383so7223060ilv.18
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:07:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678741522;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BYS6Iu4hHFrTUlHj/j1E//vcMrDFbW8TckKBUMoFx8k=;
+        b=1SN4HttJzIgHAKYGYOgjCddNsK3sG/KYCdtqehVifvw6LJgUvjcVvfPKd0gJjbu2X5
+         ij/m+yxuWc/4zEBQAqGQ5IwTAHESVVcUXMcCvn6ioRjM+o0B0WEuvHsSViY00Yl0QTq/
+         sN60tNSlV3BdcUOqSdsx5I7gBKJvfKUWsFgEWGXwyYoF86kDUl71Bw8WvvsNHVFplqHw
+         ZbEqrILESRbF646Y6t6Bsd2XpkEo6QlXPAg19RU42z///PlZUpeKxHnrHw7na+OyeCod
+         WMfGrzFpohtT/hwaGNw8IOXHskgjOxOPAESd7Fw0oIs0R6WnNwD864DORaPOFBt/ZzQf
+         2IdA==
+X-Gm-Message-State: AO0yUKU71Ef8XOFgVeicP37uINuVrSzKc8vMBisQGYFmHfXN/pHGXg5p
+        LnE6QGeeiWUoDAtX47JG7IyEbtcYEiuCsILcBWA5h0zyJEAe
+X-Google-Smtp-Source: AK7set9K6KIJTDvUPF8mXjQ8G/iflr0t2FEkcMa2ufvRIaaa7/BRgaAsfIi0BFQO/kVVDuMuxY5GMHH2m8HsxlUHCUNNRVYcGURu
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZA+Ot0dnX0MNZKmn@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c14b:0:b0:316:f0d7:8db with SMTP id
+ b11-20020a92c14b000000b00316f0d708dbmr502554ilh.5.1678741522792; Mon, 13 Mar
+ 2023 14:05:22 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 14:05:22 -0700
+In-Reply-To: <20230313204732.zjcmd3ruvzw3bljo@fpc>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000022c8b705f6ce78a3@google.com>
+Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
+From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-kernel@vger.kernel.org,
+        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 13, 2023 at 05:59:35PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Mar 13, 2023 at 05:34:06PM -0300, Arnaldo Carvalho de Melo escreveu:
-> > Em Mon, Mar 13, 2023 at 01:27:21PM -0700, Ian Rogers escreveu:
-> > > On Mon, Mar 13, 2023 at 1:19 PM Arnaldo Carvalho de Melo
-> > > > (.text+0x1b): undefined reference to `main'
-> > > > /usr/bin/ld: final link failed: file in wrong format
-> > > > collect2: error: ld returned 1 exit status
-> > > > clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-> > > > make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_cgroup.bpf.o] Error 1
-> > > > make[3]: *** [Makefile.perf:236: sub-make] Error 2
-> > > > make[2]: *** [Makefile:70: all] Error 2
-> > > > make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
-> > > > make: *** [Makefile:103: build-test] Error 2
-> > > > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
-> > > >
-> > > > real    5m55.192s
-> > > > user    62m31.596s
-> > > > sys     14m30.828s
-> > > > ⬢[acme@toolbox perf-tools-next]$
-> > > 
-> > > Sorry, I was testing this on top of:
-> > > https://lore.kernel.org/lkml/20230116010115.490713-1-irogers@google.com/
-> > > The issue being that we're trying to use an old libbpf that the has
-> > > meant disabling things but:
-> > >   NO_BPF_SKEL := 1
-> > > hadn't been set as part of this. I can address in v2, but with the
-> > > "assume libbpf 1.0+" patch I hadn't been worrying about this as we'd
-> > > error out for this case  - rather than build error. The erroring out
-> > > can be worked around by just not having libbpf be dynamic (ie static
-> > > or not at all by adding NO_LIBBPF=1).
-> > 
-> > I'll try adding that 3-patch series before this one.
-> 
-> ⬢[acme@toolbox perf-tools-next]$ git log --oneline -16
-> 76c8a07f51703787 (HEAD -> perf-tools-next) perf build: Error if no libelf and NO_LIBELF isn't set
-> 030a6c72b38e334d perf build: Remove redundant NO_NEWT build option
-> 5d1360fc84cd2e3b perf build: If libtraceevent isn't present error the build
-> e25e0db4700aa39a perf build: Switch libpfm4 to opt-out rather than opt-in
-> 39f53202a8961d3d perf symbol: Add abi::__cxa_demangle C++ demangling support
-> d857f258f3d1214a tools build: Add feature test for abi::__cxa_demangle
-> 7aae0d8341c9c373 perf build: Make binutil libraries opt in
-> dc4890e772aba1e9 perf build: Error if jevents won't work and NO_JEVENTS=1 isn't set
-> 334e64172816623d perf util: Remove weak sched_getcpu
-> e44d7e7c60fc4ded perf build: Remove unused HAVE_GLIBC_SUPPORT
-> 14ea53be45758450 perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
-> eb03903c5c119254 perf build: Support python/perf.so testing
-> f8b579c1996ba4a9 perf bpf: Remove pre libbpf 1.0 conditional logic
-> 2cce43c63d4d0abc perf build: Remove libbpf pre-1.0 feature tests
-> a24ebff6cce14a34 tools build: Pass libbpf feature only if libbpf 1.0+
-> 17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
-> ⬢[acme@toolbox perf-tools-next]$
-> 
->        make_libbpf_dynamic_O: cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
-> ldd: /tmp/tmp.cO9WpgtAvo/perf: No such file or directory
-> cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
->   BUILD:   Doing 'make -j32' parallel build
->   HOSTCC  /tmp/tmp.cO9WpgtAvo/fixdep.o
->   HOSTLD  /tmp/tmp.cO9WpgtAvo/fixdep-in.o
->   LINK    /tmp/tmp.cO9WpgtAvo/fixdep
-> Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-> diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
-> Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-> diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
-> Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-> diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
-> Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-> diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
-> Makefile.config:563: *** Error: No libbpf devel library found, please install libbpf-devel.  Stop.
-> make[3]: *** [Makefile.perf:236: sub-make] Error 2
-> make[2]: *** [Makefile:70: all] Error 2
-> make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
-> 
-> 
-> But:
-> 
-> ⬢[acme@toolbox perf-tools-next]$ rpm -qa | grep libbpf
-> libbpf-0.8.0-2.fc37.x86_64
-> libbpf-devel-0.8.0-2.fc37.x86_64
-> ⬢[acme@toolbox perf-tools-next]$
-> 
-> ⬢[acme@toolbox perf-tools-next]$ cat /etc/os-release
-> NAME="Fedora Linux"
-> VERSION="37 (Container Image)"
-> 
-> 
-> I'll see if this is just a matter of tweaking the error message to
-> something like "libbpf-devel not found or older than 1.0.0, please install/update"
+Hello,
 
-Yeah, I'll tweak the warning:
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KMSAN: uninit-value in ath9k_hw_init
 
-⬢[acme@toolbox perf-tools-next]$ cat /tmp/build/perf-tools-next/feature/test-libbpf.make.output
-test-libbpf.c:5:2: error: #error At least libbpf 1.0 is required for Linux tools.
-    5 | #error At least libbpf 1.0 is required for Linux tools.
-      |  ^~~~~
-⬢[acme@toolbox perf-tools-next]$
+ath9k_htc 2-1:1.0: ath9k_htc: HTC initialized with 33 credits
+=====================================================
+BUG: KMSAN: uninit-value in ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
+BUG: KMSAN: uninit-value in __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+BUG: KMSAN: uninit-value in ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+ ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
+ __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+ ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+ ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
+ ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
+ ath9k_htc_probe_device+0xf48/0x3b60 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
+ ath9k_htc_hw_init+0x4f/0x100 drivers/net/wireless/ath/ath9k/htc_hst.c:523
+ ath9k_hif_usb_firmware_cb+0x2eb/0x800 drivers/net/wireless/ath/ath9k/hif_usb.c:1256
+ request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
+ process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
+ worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
+ kthread+0x31f/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
 
-- Arnaldo
+Local variable val created at:
+ ath9k_regread+0x62/0x1b0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:239
+ ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
+ __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+ ath9k_hw_init+0x5c4/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+
+CPU: 1 PID: 5549 Comm: kworker/1:5 Not tainted 6.3.0-rc2-syzkaller-00010-g34add094f9de-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Workqueue: events request_firmware_work_func
+=====================================================
+
+
+Tested on:
+
+commit:         34add094 kmsan: add test_stackdepot_roundtrip
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=13196aecc80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=76a9330669c37355
+dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=17a0437cc80000
+
