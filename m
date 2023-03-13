@@ -2,111 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE5246B7ED1
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:06:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7CC476B7F27
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:17:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbjCMRGk convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 13:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43914 "EHLO
+        id S230389AbjCMRRD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:17:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39028 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjCMRGU (ORCPT
+        with ESMTP id S231451AbjCMRQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:06:20 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557997C9CA
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:05:30 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with both STARTTLS and AUTH (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-246-bQ2qnsRDO5aCOHhkgp0Jow-1; Mon, 13 Mar 2023 17:04:15 +0000
-X-MC-Unique: bQ2qnsRDO5aCOHhkgp0Jow-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.47; Mon, 13 Mar
- 2023 17:04:11 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.047; Mon, 13 Mar 2023 17:04:11 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Horatiu Vultur' <horatiu.vultur@microchip.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-CC:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
-Subject: RE: [PATCH net-next 2/2] net: lan966x: Stop using packing library
-Thread-Topic: [PATCH net-next 2/2] net: lan966x: Stop using packing library
-Thread-Index: AQHZVSC3u0fDDFQR5EmW1hDzDWEnv6748Dbw
-Date:   Mon, 13 Mar 2023 17:04:11 +0000
-Message-ID: <cad1c4aac9ae4047b8ed29b181c908fd@AcuMS.aculab.com>
-References: <20230312202424.1495439-1-horatiu.vultur@microchip.com>
- <20230312202424.1495439-3-horatiu.vultur@microchip.com>
-In-Reply-To: <20230312202424.1495439-3-horatiu.vultur@microchip.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 13 Mar 2023 13:16:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3E277C8E;
+        Mon, 13 Mar 2023 10:16:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 12BDCB810D8;
+        Mon, 13 Mar 2023 17:15:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE31DC433EF;
+        Mon, 13 Mar 2023 17:15:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678727732;
+        bh=AgxnGnjCcuCLrvUebJaSyNbX/LjrIkQcC+AUGh//ULo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Rc1X74Z0PSz0l+9fCLydu9UqhFcIazbnDk4YVJ2BFsmNxkIqMEaKNBtigo95WLuW0
+         qrLi7CACAwXSyrit0YQ7TefcadFTdBu1hQKaRkYkFHBV9brsOyDn4/7cp20Mk1LY33
+         hE+yZNL0cKfzlBDVfPBLuXzga2mg8QGbb6q2VtBNwG/Z1XPfVLMS73mqn0sH42L/qL
+         e4/oBDdQNahOyL1d1IrfAoylwTrPm9bq2EWTUeHty0iml60OKDA+R072Z1WP21M0ZT
+         sdKsj023JvtU4mlSb8voF+iRpl3Xqowkr5J9E3RCB3uWcmx1OSGpif6TVZHvwq8hlP
+         +GB35luE+SsKA==
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>
+Cc:     dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 00/11] dmaengine: dw-axi_dmac: bug fix clean up and more features
+Date:   Tue, 14 Mar 2023 01:04:39 +0800
+Message-Id: <20230313170450.897-1-jszhang@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,PDS_BAD_THREAD_QP_64,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Horatiu Vultur
-> Sent: 12 March 2023 20:24
-> 
-> When a frame is injected from CPU, it is required to create an IFH(Inter
-> frame header) which sits in front of the frame that is transmitted.
-> This IFH, contains different fields like destination port, to bypass the
-> analyzer, priotity, etc. Lan966x it is using packing library to set and
-> get the fields of this IFH. But this seems to be an expensive
-> operations.
-> If this is changed with a simpler implementation, the RX will be
-> improved with ~5Mbit while on the TX is a much bigger improvement as it
-> is required to set more fields. Below are the numbers for TX.
-...
-> +static void lan966x_ifh_set(u8 *ifh, size_t val, size_t pos, size_t length)
-> +{
-> +	u32 v = 0;
-> +
-> +	for (int i = 0; i < length ; i++) {
-> +		int j = pos + i;
-> +		int k = j % 8;
-> +
-> +		if (i == 0 || k == 0)
-> +			v = ifh[IFH_LEN_BYTES - (j / 8) - 1];
-> +
-> +		if (val & (1 << i))
-> +			v |= (1 << k);
-> +
-> +		if (i == (length - 1) || k == 7)
-> +			ifh[IFH_LEN_BYTES - (j / 8) - 1] = v;
-> +	}
-> +}
-> +
+This series first fix a bug related with runtime pm. Then do three clean
+up. After that, we add three new features: per channel irq support,
+dma-channel-mask support and polled mode support.
 
-It has to be possible to do much better that that.
-Given  that 'pos' and 'length' are always constants it looks like
-each call should reduce to (something like):
-	ifh[k] |= val << n;
-	ifk[k + 1] |= val >> (8 - n);
-	...
-It might be that the compiler manages to do this, but I doubt it.
+Jisheng Zhang (11):
+  dmaengine: dw-axi-dmac: fix reading register hen runtime suspended
+  dmaengine: dw-axi-dmac: remove unnecessary devm_free_irq() calling
+  dmaengine: dw-axi-dmac: remove unnecessary axi_dma_enable() calling
+  dmaengine: dw-axi-dmac: remove redudant axi_dma_disable() calling
+  dmaengine: dw-axi-dmac: delay irq getting until request_irq
+  dmaengine: dw-axi-dmac: move ch irq handling into common routine
+  dmaengine: dw-axi-dmac: support per channel irq
+  dmaengine: dw-axi-dmac: support dma-channel-mask
+  dmaengine: dw-axi-dmac: try best to get residue when tx is running
+  dmaengine: dw-axi-dmac: move dma_chan_tx_status()
+  dmaengine: dw-axi-dmac: support polled mode
 
-	David
+ .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 207 ++++++++++++------
+ drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |   4 +
+ 2 files changed, 147 insertions(+), 64 deletions(-)
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+-- 
+2.39.2
 
