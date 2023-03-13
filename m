@@ -2,289 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 962F66B6E9C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 05:57:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32F1A6B6EA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 06:01:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbjCME5f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 00:57:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37558 "EHLO
+        id S230033AbjCMFBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 01:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229609AbjCME5b (ORCPT
+        with ESMTP id S229543AbjCMFB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 00:57:31 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id A78073B877;
-        Sun, 12 Mar 2023 21:57:30 -0700 (PDT)
-Received: by linux.microsoft.com (Postfix, from userid 1127)
-        id 19C0E204778C; Sun, 12 Mar 2023 21:57:30 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 19C0E204778C
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1678683450;
-        bh=9aLl/BvNmqEEf3Eln7g8qpek3FbNIeMRD0Ya6P8HIrc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VwpvAFouSf69voKUGyg9brlqv6dO49K9bBxDilrgJFfPsHxpBnrpGctyR9HKwd8Ya
-         vd7gZbsTLj67WSxbL8WMEcAI3tQ9mUEFxWZBnBuu1ImcPNFvqj67PQimxhpOTS4h4u
-         jI912CeX5cv3iI/ujtzAy5D6/9WQczgoprTIlsOk=
-Date:   Sun, 12 Mar 2023 21:57:30 -0700
-From:   Saurabh Singh Sengar <ssengar@linux.microsoft.com>
-To:     Wei Liu <wei.liu@kernel.org>
-Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        kys@microsoft.com, haiyangz@microsoft.com, decui@microsoft.com,
-        arnd@arndb.de, tiala@microsoft.com, mikelley@microsoft.com,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] x86/hyperv: VTL support for Hyper-V
-Message-ID: <20230313045730.GA31503@linuxonhyperv3.guj3yctzbm1etfxqx2vob5hsef.xx.internal.cloudapp.net>
-References: <1678386957-18016-1-git-send-email-ssengar@linux.microsoft.com>
- <1678386957-18016-3-git-send-email-ssengar@linux.microsoft.com>
- <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
+        Mon, 13 Mar 2023 01:01:29 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 979CF43935;
+        Sun, 12 Mar 2023 22:01:26 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32D51A6G041004;
+        Mon, 13 Mar 2023 00:01:10 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678683670;
+        bh=7YNQsJHAcjBomy56+HsztQEPct9ELDRVhRmdwFoUaVA=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=IVfaqIEuFqKm6F9UDDYv4RqGBoAZhBuEiKoTsoHv/BmDUpJWzsdVNgSMEVzVeA0Wb
+         qoBoiYI1T5nGZaHDwPv5nG3Jqzxm6xCg2+pFT0ssXO80Au3nWGhNjGIxVy+ePcEO44
+         T5a0e+6ovmyvwQf/ph9ua+CK0ZhTz1DWIEN9/fLg=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32D51A0h032628
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 13 Mar 2023 00:01:10 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Mon, 13
+ Mar 2023 00:01:09 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Mon, 13 Mar 2023 00:01:09 -0500
+Received: from [10.24.69.114] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32D514Sm113061;
+        Mon, 13 Mar 2023 00:01:05 -0500
+Message-ID: <ab595625-d2ad-3f14-737e-748b233d7fe5@ti.com>
+Date:   Mon, 13 Mar 2023 10:31:04 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA5JAVlSVhgv1CBS@liuwe-devbox-debian-v2>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [EXTERNAL] Re: [EXTERNAL] Re: [EXTERNAL] Re: [EXTERNAL] Re:
+ [PATCH v3 3/6] soc: ti: pruss: Add pruss_cfg_read()/update() API
+To:     Roger Quadros <rogerq@kernel.org>,
+        MD Danish Anwar <danishanwar@ti.com>,
+        "Andrew F. Davis" <afd@ti.com>, Suman Anna <s-anna@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Santosh Shilimkar <ssantosh@kernel.org>,
+        Nishanth Menon <nm@ti.com>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <linux-omap@vger.kernel.org>,
+        <srk@ti.com>, <devicetree@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+References: <20230306110934.2736465-1-danishanwar@ti.com>
+ <20230306110934.2736465-4-danishanwar@ti.com>
+ <7076208d-7dca-6980-5399-498e55648740@kernel.org>
+ <afd6cd8a-8ba7-24b2-d7fc-c25a9c5f3c42@ti.com>
+ <a74e5079-d89d-2420-b6af-d630c4f04380@kernel.org>
+ <a4395259-9b83-1101-7c4c-d8a36c3600eb@ti.com>
+ <367f6b50-e4cc-c3eb-e8e9-dabd4e044530@ti.com>
+ <46415d8e-3c92-d489-3f44-01a586160082@kernel.org>
+ <1c1e67fd-1eaa-30f5-8b2a-41a7e3ff664a@ti.com>
+ <ba703ed6-e91d-5128-f1a4-1667125c531e@kernel.org>
+Content-Language: en-US
+From:   Md Danish Anwar <a0501179@ti.com>
+Organization: Texas Instruments
+In-Reply-To: <ba703ed6-e91d-5128-f1a4-1667125c531e@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Thanks for your review, please find my comments inline.
+Hi Roger
 
-On Sun, Mar 12, 2023 at 09:49:53PM +0000, Wei Liu wrote:
-> On Thu, Mar 09, 2023 at 10:35:57AM -0800, Saurabh Sengar wrote:
-> > Virtual Trust Levels (VTL) helps enable Hyper-V Virtual Secure Mode (VSM)
-> > feature. VSM is a set of hypervisor capabilities and enlightenments
-> > offered to host and guest partitions which enable the creation and
-> > management of new security boundaries within operating system software.
-> > VSM achieves and maintains isolation through VTLs.
-> > 
-> > Add early initialization for Virtual Trust Levels (VTL). This includes
-> > initializing the x86 platform for VTL and enabling boot support for
-> > secondary CPUs to start in targeted VTL context. For now, only enable
-> > the code for targeted VTL level as 2.
-> > 
-> > When starting an AP at a VTL other than VTL 0, the AP must start directly
-> > in 64-bit mode, bypassing the usual 16-bit -> 32-bit -> 64-bit mode
-> > transition sequence that occurs after waking up an AP with SIPI whose
-> > vector points to the 16-bit AP startup trampoline code.
-> > 
-> > This commit also moves hv_get_nmi_reason function to header file, so
-> > that it can be reused by VTL.
-> > 
-> > Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> > ---
-> >  arch/x86/Kconfig                   |  24 +++
-> >  arch/x86/hyperv/Makefile           |   1 +
-> >  arch/x86/hyperv/hv_vtl.c           | 227 +++++++++++++++++++++++++++++
-> >  arch/x86/include/asm/hyperv-tlfs.h |  75 ++++++++++
-> >  arch/x86/include/asm/mshyperv.h    |  14 ++
-> >  arch/x86/kernel/cpu/mshyperv.c     |   6 +-
-> >  include/asm-generic/hyperv-tlfs.h  |   4 +
-> >  7 files changed, 346 insertions(+), 5 deletions(-)
-> >  create mode 100644 arch/x86/hyperv/hv_vtl.c
-> > 
-> > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> > index 453f462f6c9c..b9e52ac9c9f9 100644
-> > --- a/arch/x86/Kconfig
-> > +++ b/arch/x86/Kconfig
-> > @@ -782,6 +782,30 @@ menuconfig HYPERVISOR_GUEST
-> >  
-> >  if HYPERVISOR_GUEST
-> >  
-> > +config HYPERV_VTL
-> > +	bool "Enable VTL"
+On 11/03/23 17:36, Roger Quadros wrote:
+> Hi Danish,
 > 
-> This is not to "Enable VTL". VTL is always there with or without this
-> option. This option is to enable Linux to run in VTL2.
+> On 10/03/2023 17:36, Md Danish Anwar wrote:
+>> Hi Roger,
+>>
+>> On 10/03/23 18:53, Roger Quadros wrote:
+>>> Hi Danish,
+>>>
+>>> On 10/03/2023 13:53, Md Danish Anwar wrote:
+>>>> Hi Roger,
+>>>>
+>>>> On 09/03/23 17:00, Md Danish Anwar wrote:
+>>>>> Hi Roger,
+>>>>>
+>>>>> On 08/03/23 17:12, Roger Quadros wrote:
+>>>>>>
+>>>>>>
+>>>>>> On 08/03/2023 13:36, Md Danish Anwar wrote:
+>>>>>>> Hi Roger,
+>>>>>>>
+>>>>>>> On 08/03/23 13:57, Roger Quadros wrote:
+>>>>>>>> Hi,
+>>>>>>>>
+>>>>>>>> On 06/03/2023 13:09, MD Danish Anwar wrote:
+>>>>>>>>> From: Suman Anna <s-anna@ti.com>
+>>>>>>>>>
+>>>>>>>>> Add two new generic API pruss_cfg_read() and pruss_cfg_update() to
+>>>>>>>>> the PRUSS platform driver to allow other drivers to read and program
+>>>>>>>>> respectively a register within the PRUSS CFG sub-module represented
+>>>>>>>>> by a syscon driver. This interface provides a simple way for client
+>>>>>>>>
+>>>>>>>> Do you really need these 2 functions to be public?
+>>>>>>>> I see that later patches (4-6) add APIs for doing specific things
+>>>>>>>> and that should be sufficient than exposing entire CFG space via
+>>>>>>>> pruss_cfg_read/update().
+>>>>>>>>
+>>>>>>>>
+>>>>>>>
+>>>>>>> I think the intention here is to keep this APIs pruss_cfg_read() and
+>>>>>>> pruss_cfg_update() public so that other drivers can read / modify PRUSS config
+>>>>>>> when needed.
+>>>>>>
+>>>>>> Where are these other drivers? If they don't exist then let's not make provision
+>>>>>> for it now.
+>>>>>> We can provide necessary API helpers when needed instead of letting client drivers
+>>>>>> do what they want as they can be misused and hard to debug.
+>>>>>>
+>>>>>
+>>>>> The ICSSG Ethernet driver uses pruss_cfg_update() API. It is posted upstream in
+>>>>> the series [1]. The ethernet driver series is dependent on this series. In
+>>>>> series [1] we are using pruss_cfg_update() in icssg_config.c file,
+>>>>> icssg_config() API.
+>>>
+>>> You can instead add a new API on what exactly you want it to do rather than exposing
+>>> entire CFG space.
+>>>
+>>
+>> Sure.
+>>
+>> In icssg_config.c, a call to pruss_cfg_update() is made to enable XFR shift for
+>> PRU and RTU,
+>>
+>> 	/* enable XFR shift for PRU and RTU */
+>> 	mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN;
+>> 	pruss_cfg_update(prueth->pruss, PRUSS_CFG_SPP, mask, mask);
+>>
+>> I will add the below API as part of Patch 4 of the series. We'll call this API
+>> and entire CFG space will not be exposed.
+>>
+>> /**
+>>  * pruss_cfg_xfr_pru_rtu_enable() - Enable/disable XFR shift for PRU and RTU
+>>  * @pruss: the pruss instance
+>>  * @enable: enable/disable
+>>  *
+>>  * Return: 0 on success, or an error code otherwise
+>>  */
+>> static inline int pruss_cfg_xfr_pru_rtu_enable(struct pruss *pruss, bool enable)
+>> {
+>> 	u32 mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN;
+>> 	u32 set = enable ? mask : 0;
+>>
+>> 	return pruss_cfg_update(pruss, PRUSS_CFG_SPP, mask, set);
+>> }
 > 
-> I would suggest it to be changed to HYPERV_VTL2_MODE or something more
-> explicit.
+> I would suggest to make separate APIs for PRU XFR vs RTU XFR.
 > 
-> HYPERV_VTL is better reserved to guard code which makes use of VTL
-> related functionality -- if there is such a need in the future.
 
-Thanks, I am fine to change the description. However I named it as HYPERV_VTL
-so as this is generic and in future it can be extended to other VTLs. I see it
-as generic VTL code with current support only for VTL2, others will be added
-when need arises.
+How about making only one API for XFR shift and passing PRU or RTU as argument
+to the API. The API along with struct pruss and bool enable will take another
+argument u32 mask.
 
-As per my understanding apart from setting the target VTL, rest of the code
-can be reused for any VTL. Once we have the other VTLs support we might think
-of tweaking the target vtl whereas the flag name and other code remains same.
-Please let me know your opinion on this.
+mask = PRUSS_SPP_XFER_SHIFT_EN for PRU
+mask = PRUSS_SPP_RTU_XFR_SHIFT_EN for RTU
+mask = PRUSS_SPP_XFER_SHIFT_EN | PRUSS_SPP_RTU_XFR_SHIFT_EN for PRU and RTU
 
+So one API will be able to do all three jobs.
+
+How does this seem?
+
+>>
+>> To make pruss_cfg_update() and pruss_cfg_read() API internal to pruss.c, I will
+>> add the below change to pruss.h file and pruss.c file. Let me know if this
+>> change looks okay to you.
+>>
+>> diff --git a/drivers/soc/ti/pruss.c b/drivers/soc/ti/pruss.c
+>>
+>> index 537a3910ffd8..9f01c8809deb 100644
+>>
+>> --- a/drivers/soc/ti/pruss.c
+>>
+>> +++ b/drivers/soc/ti/pruss.c
+>>
+>> @@ -182,7 +182,6 @@ int pruss_cfg_read(struct pruss *pruss, unsigned int reg,
+>> unsigned int *val)
 > 
-> > +	depends on X86_64 && HYPERV
-> > +	default n
-> > +	help
-> > +	  Virtual Secure Mode (VSM) is a set of hypervisor capabilities and
-> > +	  enlightenments offered to host and guest partitions which enables
-> > +	  the creation and management of new security boundaries within
-> > +	  operating system software.
-> > +
-> > +	  VSM achieves and maintains isolation through Virtual Trust Levels
-> > +	  (VTLs). Virtual Trust Levels are hierarchical, with higher levels
-> > +	  being more privileged than lower levels. VTL0 is the least privileged
-> > +	  level, and currently only other level supported is VTL2.
+> Need to declare this as 'static'.
 > 
-> Please be consistent as to VTL 0 vs VTL0. You use one form here and the
-> other form in the next paragraph.
-
-Sure will fix this in next version.
-
+>>
+>>
+>>
+>>         return regmap_read(pruss->cfg_regmap, reg, val);
+>>
+>>  }
+>>
+>> -EXPORT_SYMBOL_GPL(pruss_cfg_read);
+>>
+>>
+>>
+>>  /**
+>>
+>>   * pruss_cfg_update() - configure a PRUSS CFG sub-module register
+>>
+>> @@ -203,7 +202,6 @@ int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
 > 
-> > +
-> > +	  Select this option to build a Linux kernel to run at a VTL other than
-> > +	  the normal VTL 0, which currently is only VTL 2.  This option
-> > +	  initializes the x86 platform for VTL 2, and adds the ability to boot
-> > +	  secondary CPUs directly into 64-bit context as required for VTLs other
-> > +	  than 0.  A kernel built with this option must run at VTL 2, and will
-> > +	  not run as a normal guest.
-> > +
-> > +	  If unsure, say N
-> > +
-> >  config PARAVIRT
-> >  	bool "Enable paravirtualization code"
-> >  	depends on HAVE_STATIC_CALL
-> > diff --git a/arch/x86/hyperv/Makefile b/arch/x86/hyperv/Makefile
-> > index 5d2de10809ae..a538df01181a 100644
-> > --- a/arch/x86/hyperv/Makefile
-> > +++ b/arch/x86/hyperv/Makefile
-> > @@ -1,6 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0-only
-> >  obj-y			:= hv_init.o mmu.o nested.o irqdomain.o ivm.o
-> >  obj-$(CONFIG_X86_64)	+= hv_apic.o hv_proc.o
-> > +obj-$(CONFIG_HYPERV_VTL)	+= hv_vtl.o
-> >  
-> >  ifdef CONFIG_X86_64
-> >  obj-$(CONFIG_PARAVIRT_SPINLOCKS)	+= hv_spinlock.o
-> > diff --git a/arch/x86/hyperv/hv_vtl.c b/arch/x86/hyperv/hv_vtl.c
-> > new file mode 100644
-> > index 000000000000..0da8b242eb8b
-> > --- /dev/null
-> > +++ b/arch/x86/hyperv/hv_vtl.c
-> > @@ -0,0 +1,227 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * Copyright (c) 2023, Microsoft Corporation.
-> > + *
-> > + * Author:
-> > + *   Saurabh Sengar <ssengar@microsoft.com>
-> > + */
-> > +
-> > +#include <asm/apic.h>
-> > +#include <asm/boot.h>
-> > +#include <asm/desc.h>
-> > +#include <asm/i8259.h>
-> > +#include <asm/mshyperv.h>
-> > +#include <asm/realmode.h>
-> > +
-> > +extern struct boot_params boot_params;
-> > +static struct real_mode_header hv_vtl_real_mode_header;
-> > +
-> > +void __init hv_vtl_init_platform(void)
-> > +{
-> > +	pr_info("Initializing Hyper-V VTL\n");
-> > +
+> this as well.
 > 
-> We can be more explicit here, "Linux runs in Hyper-V Virtual Trust Level 2".
+>>
+>>
+>>
+>>         return regmap_update_bits(pruss->cfg_regmap, reg, mask, val);
+>>
+>>  }
+>>
+>> -EXPORT_SYMBOL_GPL(pruss_cfg_update);
+>>
+>>
+>>
+>>  static void pruss_of_free_clk_provider(void *data)
+>>
+>>  {
+>>
+>> diff --git a/include/linux/remoteproc/pruss.h b/include/linux/remoteproc/pruss.h
+>>
+>> index d41bec448f06..12ef10b9fe9a 100644
+>>
+>> --- a/include/linux/remoteproc/pruss.h
+>>
+>> +++ b/include/linux/remoteproc/pruss.h
+>>
+>> @@ -165,9 +165,6 @@ int pruss_request_mem_region(struct pruss *pruss, enum
+>> pruss_mem mem_id,
+>>
+>>                              struct pruss_mem_region *region);
+>>
+>>  int pruss_release_mem_region(struct pruss *pruss,
+>>
+>>                              struct pruss_mem_region *region);
+>>
+>> -int pruss_cfg_read(struct pruss *pruss, unsigned int reg, unsigned int *val);
+>>
+>> -int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>
+>> -                    unsigned int mask, unsigned int val);
+>>
+>>
+>>
+>>  #else
+>>
+>>
+>>
+>> @@ -191,18 +188,6 @@ static inline int pruss_release_mem_region(struct pruss
+>> *pruss,
+>>
+>>         return -EOPNOTSUPP;
+>>
+>>  }
+>>
+>>
+>>
+>> -static inline int pruss_cfg_read(struct pruss *pruss, unsigned int reg,
+>>
+>> -                                unsigned int *val)
+>>
+>> -{
+>>
+>> -       return -EOPNOTSUPP;
+>>
+>> -}
+>>
+>> -
+>>
+>> -static inline int pruss_cfg_update(struct pruss *pruss, unsigned int reg,
+>>
+>> -                                  unsigned int mask, unsigned int val)
+>>
+>> -{
+>>
+>> -       return -EOPNOTSUPP;
+>>
+>> -}
+>>
+>> -
+>>
+>>  #endif /* CONFIG_TI_PRUSS */
+>>
+>>
+>>
+>>  #if IS_ENABLED(CONFIG_PRU_REMOTEPROC)
+>>
+>>
+>> Please have a look and let me know if above API and code changes looks OK to you.
+>>
 > 
-> If we go with this, this and other function names should be renamed to
-> something more explicit too.
-
-Sure I can do this. However I will like to put it as generic VTL not specific
-to VTL 2 only. Please let me know your opinion.
-
+> Rest looks OK.
 > 
-> > +	x86_init.irqs.pre_vector_init = x86_init_noop;
-> > +	x86_init.timers.timer_init = x86_init_noop;
-> > +
-> > +	x86_platform.get_wallclock = get_rtc_noop;
-> > +	x86_platform.set_wallclock = set_rtc_noop;
-> > +	x86_platform.get_nmi_reason = hv_get_nmi_reason;
-> > +
-> > +	x86_platform.legacy.i8042 = X86_LEGACY_I8042_PLATFORM_ABSENT;
-> > +	x86_platform.legacy.rtc = 0;
-> > +	x86_platform.legacy.warm_reset = 0;
-> > +	x86_platform.legacy.reserve_bios_regions = 0;
-> > +	x86_platform.legacy.devices.pnpbios = 0;
-> > +}
-> > +
-> [...]
-> > +static int hv_vtl_bringup_vcpu(u32 target_vp_index, u64 eip_ignored)
-> > +{
-> > +	u64 status;
-> > +	int ret = 0;
-> > +	struct hv_enable_vp_vtl *input;
-> > +	unsigned long irq_flags;
-> > +
-> > +	struct desc_ptr gdt_ptr;
-> > +	struct desc_ptr idt_ptr;
-> > +
-> > +	struct ldttss_desc *tss;
-> > +	struct ldttss_desc *ldt;
-> > +	struct desc_struct *gdt;
-> > +
-> > +	u64 rsp = initial_stack;
-> > +	u64 rip = (u64)&hv_vtl_ap_entry;
-> > +
-> > +	native_store_gdt(&gdt_ptr);
-> > +	store_idt(&idt_ptr);
-> > +
-> > +	gdt = (struct desc_struct *)((void *)(gdt_ptr.address));
-> > +	tss = (struct ldttss_desc *)(gdt + GDT_ENTRY_TSS);
-> > +	ldt = (struct ldttss_desc *)(gdt + GDT_ENTRY_LDT);
-> > +
-> > +	local_irq_save(irq_flags);
-> > +
-> > +	input = (struct hv_enable_vp_vtl *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
-> 
-> Not a big deal, but you don't actually need to cast here.
+> cheers,
+> -roger
 
-Ok, will fix.
-
-> 
-> [...]
-> > +
-> > +static int hv_vtl_apicid_to_vp_id(u32 apic_id)
-> > +{
-> > +	u64 control;
-> > +	u64 status;
-> > +	unsigned long irq_flags;
-> > +	struct hv_get_vp_from_apic_id_in *input;
-> > +	u32 *output, ret;
-> > +
-> > +	local_irq_save(irq_flags);
-> > +
-> > +	input = (struct hv_get_vp_from_apic_id_in *)(*this_cpu_ptr(hyperv_pcpu_input_arg));
-> 
-> No need to cast here.
-
-Sure.
-
-> 
-> [...]
-> > +struct hv_x64_table_register {
-> > +	__u16 pad[3];
-> > +	__u16 limit;
-> > +	__u64 base;
-> > +} __packed;
-> > +
-> > +struct hv_init_vp_context_t {
-> 
-> Drop the _t suffix please.
-
-OK
-
-Regards,
-Saurabh
-
-> 
-> Thanks,
-> Wei.
+-- 
+Thanks and Regards,
+Danish.
