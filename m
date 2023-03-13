@@ -2,177 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98A536B76A5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:52:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A04F6B76AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231277AbjCMLwP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:52:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44302 "EHLO
+        id S231287AbjCMLwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231261AbjCMLwM (ORCPT
+        with ESMTP id S231279AbjCMLwT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:52:12 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90C0AD28;
-        Mon, 13 Mar 2023 04:51:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 982CFB8104F;
-        Mon, 13 Mar 2023 11:51:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B67AC433D2;
-        Mon, 13 Mar 2023 11:51:42 +0000 (UTC)
-Message-ID: <75900e56-b430-8d7d-3a97-336bd3d84a68@xs4all.nl>
-Date:   Mon, 13 Mar 2023 12:51:41 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v5 02/11] dt-bindings: media: mediatek,jpeg: Remove
- dma-ranges property
-Content-Language: en-US
-To:     Yong Wu <yong.wu@mediatek.com>, Joerg Roedel <joro@8bytes.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>
-Cc:     Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>,
+        Mon, 13 Mar 2023 07:52:19 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AD445DECD
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:52:10 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so7390967wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 04:52:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678708328;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=o5gykfX2bmfwMlcyaSUJHUuynXbdEn2Jn2hMntaBdA8=;
+        b=jTPVoMmYB82d+INXPTCISg1Ni/0nJkR1rU6+eaE7FcvtlCNWJT/Mlsc+FjBMCr1Vlt
+         3bs1xgcdwKd1WYS4l/cW0AxBXFRi/mXoDN5xEzUNIsIOrOlAdBvBm5NP6JBMC/1akx7G
+         KSbPa+1uzWgMjNjo4rArzyeAZSjJ2YWXbB16br78OsG6ycjc6z/4245XPpkKPSsXeD+G
+         DWfluqUrOriW991v1pUiTdBN3QQ6/P/ixTJ8cU23wnjIVcLQCQmXuahDekfNMWYLbS9b
+         UlWL+0S7YYUY5AokG9VIrL1D4vdiuTAkN+XDgPj0uPIjUj5w2Rl4zHVRZ+k+tuzFFT0o
+         3kgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678708328;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o5gykfX2bmfwMlcyaSUJHUuynXbdEn2Jn2hMntaBdA8=;
+        b=aAtYhVWbSF0e+jjT3fOCP5WvdBns6vXyTOeOwOFrwhJD+E1vbW51sMdakXyHtQqCcV
+         4WIWIWVEs3AGDki0OxPg+49nCyR7lYJfzarngELbT0hByRio1kYtlE9j/6vgaXQl1idF
+         g4ND634V3lpT4NDHQiOT/GghfEQfqUbfmR1Wq7n2u8VNt+d3UwMwQ/xK4smuVT1eeiyE
+         swJj5D/raWTd2GPO3rhpNHIDCL0iLHLKsjB6pePfZM/xTO3Ecf9BWIcRPvK2/p3sBH50
+         op6PsQ0UkawKyMk3KHGJXTV5TdMab49MTtkzV8xu/V1yxBNkDGR7jMgs2Is7rwbFX3zB
+         9Ntg==
+X-Gm-Message-State: AO0yUKWY7jD7TA/f7/RJszVffJmNoS6vx8oVwJthbD9x3VTG2WycQql0
+        oYNTfO9HK2GQ8/5H3IEAprmj5Q==
+X-Google-Smtp-Source: AK7set9uAdyrBT0fMJ/+4ExIf42UZdHhoPSYbzui/SAELuql13PVvWwSgyB6mJmYoXS75woY9Wll/w==
+X-Received: by 2002:a05:600c:c10:b0:3eb:248f:a13e with SMTP id fm16-20020a05600c0c1000b003eb248fa13emr10803608wmb.22.1678708328527;
+        Mon, 13 Mar 2023 04:52:08 -0700 (PDT)
+Received: from localhost.localdomain ([94.52.112.99])
+        by smtp.gmail.com with ESMTPSA id u15-20020a05600c440f00b003e21dcccf9fsm8801090wmn.16.2023.03.13.04.52.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 04:52:08 -0700 (PDT)
+From:   Abel Vesa <abel.vesa@linaro.org>
+To:     Ulf Hansson <ulf.hansson@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        nfraprado@collabora.com, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        mingyuan.ma@mediatek.com, yf.wang@mediatek.com,
-        jianjiao.zeng@mediatek.com, Yunfei Dong <yunfei.dong@mediatek.com>,
-        kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>,
-        chengci.xu@mediatek.com, youlin.pei@mediatek.com,
-        anan.sun@mediatek.com, Bin Liu <bin.liu@mediatek.com>,
-        Xia Jiang <xia.jiang@mediatek.com>,
-        Rob Herring <robh@kernel.org>
-References: <20230307023507.13306-1-yong.wu@mediatek.com>
- <20230307023507.13306-3-yong.wu@mediatek.com>
-From:   Hans Verkuil <hverkuil@xs4all.nl>
-In-Reply-To: <20230307023507.13306-3-yong.wu@mediatek.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Alim Akhtar <alim.akhtar@samsung.com>,
+        Avri Altman <avri.altman@wdc.com>,
+        Bart Van Assche <bvanassche@acm.org>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Biggers <ebiggers@kernel.org>
+Cc:     linux-mmc@vger.kernel.org, devicetree@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        linux-arm-msm@vger.kernel.org, linux-crypto@vger.kernel.org,
+        linux-scsi@vger.kernel.org
+Subject: [RFC PATCH v3 0/7] Add dedicated Qcom ICE driver
+Date:   Mon, 13 Mar 2023 13:51:55 +0200
+Message-Id: <20230313115202.3960700-1-abel.vesa@linaro.org>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 07/03/2023 03:34, Yong Wu wrote:
-> After commit f1ad5338a4d5 ("of: Fix "dma-ranges" handling for bus
-> controllers"), the dma-ranges of the leaf node doesn't work. Remove
-> it for jpeg here.
-> 
-> Currently there is only mt8195 jpeg node has this property in upstream,
-> and it already uses parent-child node, this property did work. But instead,
-> MediaTek iommu will control the masters' iova ranges by the master's
-> larb/port id internally, then this property is unnecessary.
-> 
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: Matthias Brugger <matthias.bgg@gmail.com>
-> Cc: Bin Liu <bin.liu@mediatek.com>
-> Cc: kyrie wu <kyrie.wu@mediatek.corp-partner.google.com>
-> Cc: Xia Jiang <xia.jiang@mediatek.com>
-> Signed-off-by: Yong Wu <yong.wu@mediatek.com>
-> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-> Acked-by: Rob Herring <robh@kernel.org>
+As both SDCC and UFS drivers use the ICE with duplicated implementation,
+while none of the currently supported platforms make use concomitantly
+of the same ICE IP block instance, the new SM8550 allows both UFS and
+SDCC to do so. In order to support such scenario, there is a need for
+a unified implementation and a devicetree node to be shared between
+both types of storage devices. So lets drop the duplicate implementation
+of the ICE from both SDCC and UFS and make it a dedicated (soc) driver.
+Also, switch all UFS and SDCC devicetree nodes to use the new ICE
+approach.
 
-Reviewed-by: Hans Verkuil <hverkuil-cisco@xs4all.nl>
+See each individual patch for changelogs.
 
-Thanks!
+The v2 is here:
+https://lore.kernel.org/all/20230308155838.1094920-1-abel.vesa@linaro.org/
 
-	Hans
+Abel Vesa (7):
+  dt-bindings: crypto: Add Qualcomm Inline Crypto Engine
+  dt-bindings: mmc: sdhci-msm: Add ICE phandle and drop core clock
+  dt-bindings: ufs: qcom: Add ICE phandle and drop core clock
+  soc: qcom: Make the Qualcomm UFS/SDCC ICE a dedicated driver
+  scsi: ufs: ufs-qcom: Switch to the new ICE API
+  mmc: sdhci-msm: Switch to the new ICE API
+  arm64: dts: qcom: sm8550: Add the Inline Crypto Engine node
 
-> ---
->  .../devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml | 7 -------
->  .../devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml | 7 -------
->  .../devicetree/bindings/media/mediatek-jpeg-encoder.yaml   | 5 -----
->  3 files changed, 19 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
-> index 71595c013dbb..e5448c60e3eb 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegdec.yaml
-> @@ -26,11 +26,6 @@ properties:
->        Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
->        Ports are according to the HW.
->  
-> -  dma-ranges:
-> -    maxItems: 1
-> -    description: |
-> -      Describes the physical address space of IOMMU maps to memory.
-> -
->    "#address-cells":
->      const: 2
->  
-> @@ -89,7 +84,6 @@ required:
->    - compatible
->    - power-domains
->    - iommus
-> -  - dma-ranges
->    - ranges
->  
->  additionalProperties: false
-> @@ -115,7 +109,6 @@ examples:
->                       <&iommu_vpp M4U_PORT_L19_JPGDEC_BSDMA1>,
->                       <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET1>,
->                       <&iommu_vpp M4U_PORT_L19_JPGDEC_BUFF_OFFSET0>;
-> -            dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
->              #address-cells = <2>;
->              #size-cells = <2>;
->              ranges;
-> diff --git a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
-> index 95990539f7c0..596186497b68 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek,mt8195-jpegenc.yaml
-> @@ -26,11 +26,6 @@ properties:
->        Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
->        Ports are according to the HW.
->  
-> -  dma-ranges:
-> -    maxItems: 1
-> -    description: |
-> -      Describes the physical address space of IOMMU maps to memory.
-> -
->    "#address-cells":
->      const: 2
->  
-> @@ -89,7 +84,6 @@ required:
->    - compatible
->    - power-domains
->    - iommus
-> -  - dma-ranges
->    - ranges
->  
->  additionalProperties: false
-> @@ -113,7 +107,6 @@ examples:
->                       <&iommu_vpp M4U_PORT_L20_JPGENC_C_RDMA>,
->                       <&iommu_vpp M4U_PORT_L20_JPGENC_Q_TABLE>,
->                       <&iommu_vpp M4U_PORT_L20_JPGENC_BSDMA>;
-> -            dma-ranges = <0x1 0x0 0x0 0x40000000 0x0 0xfff00000>;
->              #address-cells = <2>;
->              #size-cells = <2>;
->              ranges;
-> diff --git a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-> index c8412e8ab353..37800e1908cc 100644
-> --- a/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-> +++ b/Documentation/devicetree/bindings/media/mediatek-jpeg-encoder.yaml
-> @@ -44,11 +44,6 @@ properties:
->        Documentation/devicetree/bindings/iommu/mediatek,iommu.yaml for details.
->        Ports are according to the HW.
->  
-> -  dma-ranges:
-> -    maxItems: 1
-> -    description: |
-> -      Describes the physical address space of IOMMU maps to memory.
-> -
->  required:
->    - compatible
->    - reg
+ .../crypto/qcom,inline-crypto-engine.yaml     |  42 +++
+ .../devicetree/bindings/mmc/sdhci-msm.yaml    |   4 +
+ .../devicetree/bindings/ufs/qcom,ufs.yaml     |   4 +
+ arch/arm64/boot/dts/qcom/sm8550.dtsi          |  10 +
+ drivers/mmc/host/Kconfig                      |   2 +-
+ drivers/mmc/host/sdhci-msm.c                  | 215 ++---------
+ drivers/soc/qcom/Kconfig                      |   4 +
+ drivers/soc/qcom/Makefile                     |   1 +
+ drivers/soc/qcom/ice.c                        | 347 ++++++++++++++++++
+ drivers/ufs/host/Kconfig                      |   2 +-
+ drivers/ufs/host/Makefile                     |   1 -
+ drivers/ufs/host/ufs-qcom-ice.c               | 244 ------------
+ drivers/ufs/host/ufs-qcom.c                   |  83 ++++-
+ drivers/ufs/host/ufs-qcom.h                   |  32 +-
+ include/soc/qcom/ice.h                        |  39 ++
+ 15 files changed, 575 insertions(+), 455 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/crypto/qcom,inline-crypto-engine.yaml
+ create mode 100644 drivers/soc/qcom/ice.c
+ delete mode 100644 drivers/ufs/host/ufs-qcom-ice.c
+ create mode 100644 include/soc/qcom/ice.h
+
+-- 
+2.34.1
 
