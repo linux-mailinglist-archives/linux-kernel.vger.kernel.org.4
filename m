@@ -2,534 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A666B7F52
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:22:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F3D26B7F73
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:26:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231576AbjCMRWC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:22:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40956 "EHLO
+        id S229823AbjCMR0M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:26:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231201AbjCMRVl (ORCPT
+        with ESMTP id S229449AbjCMR0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:21:41 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20629.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A432081CDC;
-        Mon, 13 Mar 2023 10:20:39 -0700 (PDT)
+        Mon, 13 Mar 2023 13:26:10 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2165012878;
+        Mon, 13 Mar 2023 10:25:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678728321; x=1710264321;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=gbjG7kAWoFAmU9gAiiQi9DYE3JT5THbae8Omc+z/eBc=;
+  b=eOlKxi9rvqOTjkaIaroonhw9IabxKPcqo5X4Fo24445mbtDLWY4LOG9R
+   jXFPuAqIW0OgocONOwMtPUNGSRLJMALZWgRu2sTepxQ9jGfWNvuV9CKwr
+   uhlB37KKG3PvBU4VO7ECHuqqkxKyvsFZAgPRtpeBsi7ugCK8noYfH/AuF
+   g7ZH+IdaYuVcRrYUcWFMimBk2f/B/7cXDgCYHb7Z4uIoujQX/ztnpp2mx
+   8q73G60qChEoUuXGPjQByf4eJN4FaEJzjXnD0gmxWNNRFSktLiQr7cyx+
+   vZR4SpBvfhAduv7Gc5ruphwqI5wUUYyOyPD5BkQms33PMEzFJk4rgaY4o
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="325572430"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="325572430"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:21:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="628714580"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="628714580"
+Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
+  by orsmga003.jf.intel.com with ESMTP; 13 Mar 2023 10:21:40 -0700
+Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
+ ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 13 Mar 2023 10:21:40 -0700
+Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Mon, 13 Mar 2023 10:21:39 -0700
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 10:21:39 -0700
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (104.47.66.45) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Mon, 13 Mar 2023 10:21:39 -0700
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J+CegSyXOpIXjhHUwuDwgvLSSCJMW2pzQuFr3IVlGE+Uf+s5MyZgkUZBYxsvSBcCjJgp6Hj8dX1gh22IwdOeOMhwVmMuTfPNa2oT05+nOrQTNoPrGLWFYSfREeq6TExbBMlGdwtFTvkcvBp8KK3mv1KXBuJh/TTwm1mzsvKV65UzK1mOvAP66VFIlSkgDBbVlLB18oVdTcDSzBHfdSvEOYJx4h32hs1jO5JnC+9dpMqH3mmBLBQbfC/geThj2tx6PlGDZGzDITMBvv0NMRL4lvAemincUTM5J09uBOrdH5JUSly3yO0eABd06JNt3FP6PIyu2RCbeu6LZlcRIvJxvg==
+ b=KPcEZkSxLkBwMaO4ufnUqKB496hTYPW0GeDO0V4CLHwO4/fzOAXtOB562HvfJQyduc8GtKaHduLpYK1YKKxzWoa3lCMkxeakBduOqPhGTq9yhyMR3g0M4/3jjU6f5k43+2Oj3MEzugMiqhDfR0oLwsipveB/wjvhDrZdkC475H+Z4uGjNrV3ViiGsAaIQubW6/1vH2C8nVqkjxJJZk0vQfuL2oq5APZtD6223vAqnOkwKzn8BMqXiER1xfrSXJWvJseqUkCv4JHjwXYH2gH+nwrPzegOfXUPO/T46y8GLYAhm3Gk8AkGMbYx5fmOY2gemMgtyCbQozgp69LG2MSWIA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=11Q6Mmiqx1ClcdLLlx+e/0xWJg3wzuEWUELD7LXoXVI=;
- b=MRiI57i0WelwcXkBZbBmRTeZKfAU8oWG2VPtcXg8lhDCr+5g0KmOLvX7dcFohgcQj8H5tKkhzk/3XQWr4DKywtsZmaJQVKM1euKySgl0JZdDdHF2HcJSjCz4gKZHbVy6aUVvMTek7NiVS4inxUVvMKpuhaDPnrymw2rz7PyFApK1Y/Nhca02722Vm2vbR9cEIAKEX+o4i/PqqRtPZxKpLPMxJXJ4jeaI+s4f26nV5g/0bk2thAnjf77HrLaNCW0fWGJhEUGXzgyLyziBMuGrzwglqHghSyQV02ME2Iu6COlX+YGhUtTSjBxqyZeYlD8wGELiUcZkhxszJF/dOU6Hqw==
+ bh=gbjG7kAWoFAmU9gAiiQi9DYE3JT5THbae8Omc+z/eBc=;
+ b=Mun+3v6HJ2bkgQPE9jGwBg+MLItoJuU03rpM/5TQHl9jrRs1xQMxEx4JKyisBSbRe/dchX/WIcin94ztaLSpR1IT/CYTYtTP4FhqA+ik5JIEJCoYpMaNvtZLJTi09qH4cGGmxvPEoaDjX5eZ4UghPo5sISuBB9CdR+WjGDZGayEDc5bBIjCn7U84JJuJR0TjmWhQz40jfx/U4k7audP7iBHJjQGwxQV/dkx+XtUZQ3yGhdsOWgiichGmFieaWJjhzx3AwrSJ0YM9mq/4qH5tHotVpMCPlD4HkBKNKDwxiVfzABDbjtKlFXSJ/y3p7abKL1TeqrlEK5BiW4+9sYRIHQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=11Q6Mmiqx1ClcdLLlx+e/0xWJg3wzuEWUELD7LXoXVI=;
- b=nyI3nmWvUi4q4F8T3MqtXfWcaxOECN4vhS480lhDF8rp3AL0dX3j2ySvoePVLLiX2ggHdMINapaHF5bGO3+CNznGvtYkwW3LWYWmh3kjT33XmJcchowrbYrxg9wNOM02wdbGhNb+QygET1xbOWWasN+059wrWaTFnlYikrHkygs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com (2603:10b6:208:394::20)
- by DM4PR12MB5054.namprd12.prod.outlook.com (2603:10b6:5:389::24) with
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com (2603:10b6:a03:48a::9)
+ by CY5PR11MB6210.namprd11.prod.outlook.com (2603:10b6:930:26::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 17:19:21 +0000
-Received: from BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::7222:fe4b:effd:b732]) by BL1PR12MB5825.namprd12.prod.outlook.com
- ([fe80::7222:fe4b:effd:b732%5]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 17:19:21 +0000
-Message-ID: <0f32e6fc-deaf-c65c-4ffe-f8f7c1139346@amd.com>
-Date:   Mon, 13 Mar 2023 22:49:08 +0530
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next v2 11/14] sfc: use PF's IOMMU domain for running
- VF's MCDI commands
+ 2023 17:21:38 +0000
+Received: from SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a47:481:d644:a8b5]) by SJ1PR11MB6083.namprd11.prod.outlook.com
+ ([fe80::a47:481:d644:a8b5%7]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 17:21:37 +0000
+From:   "Luck, Tony" <tony.luck@intel.com>
+To:     Hans de Goede <hdegoede@redhat.com>,
+        "Joseph, Jithu" <jithu.joseph@intel.com>,
+        "markgross@kernel.org" <markgross@kernel.org>
+CC:     "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "bp@alien8.de" <bp@alien8.de>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "x86@kernel.org" <x86@kernel.org>, "hpa@zytor.com" <hpa@zytor.com>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>,
+        "rostedt@goodmis.org" <rostedt@goodmis.org>,
+        "Raj, Ashok" <ashok.raj@intel.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        "patches@lists.linux.dev" <patches@lists.linux.dev>,
+        "Shankar, Ravi V" <ravi.v.shankar@intel.com>,
+        "Macieira, Thiago" <thiago.macieira@intel.com>,
+        "Jimenez Gonzalez, Athenas" <athenas.jimenez.gonzalez@intel.com>,
+        "Mehta, Sohil" <sohil.mehta@intel.com>
+Subject: RE: [PATCH v3 4/8] platform/x86/intel/ifs: Introduce Array Scan test
+ to IFS
+Thread-Topic: [PATCH v3 4/8] platform/x86/intel/ifs: Introduce Array Scan test
+ to IFS
+Thread-Index: AQHZS+G/UVVPr/AokUavzZblP7FWM6749OCAgAAFcICAAAheEA==
+Date:   Mon, 13 Mar 2023 17:21:37 +0000
+Message-ID: <SJ1PR11MB60831C996C2EC462262948CDFCB99@SJ1PR11MB6083.namprd11.prod.outlook.com>
+References: <20230214234426.344960-1-jithu.joseph@intel.com>
+ <20230301015942.462799-1-jithu.joseph@intel.com>
+ <20230301015942.462799-5-jithu.joseph@intel.com>
+ <7f82f241-39ee-15e0-1ae7-e98e50730c95@redhat.com>
+ <275d2f04-782f-2c9d-187a-7a510bf34f41@redhat.com>
+In-Reply-To: <275d2f04-782f-2c9d-187a-7a510bf34f41@redhat.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Gautam Dawar <gautam.dawar@amd.com>, linux-net-drivers@amd.com,
-        jasowang@redhat.com, Edward Cree <ecree.xilinx@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        eperezma@redhat.com, harpreet.anand@amd.com, tanuj.kamde@amd.com,
-        koushik.dutta@amd.com
-References: <20230307113621.64153-1-gautam.dawar@amd.com>
- <20230307113621.64153-12-gautam.dawar@amd.com> <ZAjNbSN38YY+vbwS@gmail.com>
-From:   Gautam Dawar <gdawar@amd.com>
-In-Reply-To: <ZAjNbSN38YY+vbwS@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2PR01CA0015.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:25::20) To BL1PR12MB5825.namprd12.prod.outlook.com
- (2603:10b6:208:394::20)
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: SJ1PR11MB6083:EE_|CY5PR11MB6210:EE_
+x-ms-office365-filtering-correlation-id: 45d6f1e0-24ff-4855-0c8b-08db23e7671c
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: xlOkm49EKJ6uUScEOVoArWUN41HNj7z6L0HwIxXBqNEMZqPWg/sZi0VWBWseFABomigRr9q6jv2hm4q/V8EX2uZV8kDADC8I4NVidb0H/HFjf3vFaUiI6Okmf5l93dvqSrkhoh5dL0AJk5+o0rQc3qafk2zmNMAAdDbUTG0JfCPxGknWhMfFrpkdOuWePPe7p4dRV2hTRqVhDxCddz1DOJAuAdK3hz4tLG5JtRyMYKITfOV5JERHWEcnTX6MbQ3r5F3xcbEeoSDPsP+arAAMCqSKpMaImEpMzxY2RFNiEvHUpZKGZCsA7UgLKv6IuqyThBZxFjavev66VXju1Pq06Ce1+P/d5iS10Yi9459AWqnSIF2v/TBbCqQgB5+sJaWGUb1PwQ5b+vZK97du/1yxi054uazX6g3VM7dV0OiLw8MjoIsIKboxG4Z4yp5MQ/jyb4Xn487vNQtBQq9xF4f4g6v4TkrevFcc4XuHMpBT1mKtwmq8gy1a5U5RW7CN9bsm0vn/ogZrnxPnxRFL/gceORnvwViQiyPqWwJZJRDZ2JX3fg7DBM5SxAc/kD9pk/5xOMCTLNZgYYQDzvK4XN4smUZkRsChAkkb/+2mn2y+RzWRCkwqtnOBxOOXx0ULbkIGRoA2BJ6/6DSv9sswGoEInej0POHImGnS8fDpYf9d5NlDtsfjxTvH/1fY21QcLP4v/EZLuCFlBZN9uIe4ksmSYg==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SJ1PR11MB6083.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(346002)(396003)(39860400002)(376002)(366004)(451199018)(82960400001)(122000001)(2906002)(83380400001)(5660300002)(7416002)(76116006)(8676002)(55016003)(66476007)(52536014)(110136005)(66946007)(186003)(33656002)(86362001)(8936002)(38070700005)(41300700001)(4326008)(66446008)(38100700002)(316002)(54906003)(64756008)(478600001)(9686003)(7696005)(71200400001)(66556008)(6506007)(26005);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?aThEa3E4SDEyYUpEZEUyTDM5V3FjUGVWeVl0Q1BtUzIzU2gxV21Gb1VreGhy?=
+ =?utf-8?B?MkVTQUlKSEJUWDA1aEUvVENTVENLaDBpT24vbkwxR3JyUUY3OGRLaXA4MHYr?=
+ =?utf-8?B?RUtGSHRFU1J1c2l3MzliY1puOWg2THFGYmdKTUpDb3d5cnJCWi91NjNsdkdK?=
+ =?utf-8?B?TjNBR3ZEekQrNzZZczJJOXMwN0NZZ0U0cjNoVXRvc0dyUDRYa2NEQmUrRkdt?=
+ =?utf-8?B?T2ZTL29uSElDQVFMNnZoNmVmRzBoVlN0cW93a1pCak5HbXJhUnNPTnFabmt4?=
+ =?utf-8?B?VFFxemZNM2FnSHB6VnYycW00aHQ4SmxtcG13YWRpMzcvS3I5N05YWlZOeGZE?=
+ =?utf-8?B?c2czS1FJQnJUNnZkeHlaOG1jdmRiUkxqTVNlcEUrSTRmdTFnN2JHQXJ6bVRi?=
+ =?utf-8?B?UVdjWC8wWDdOSFNkanJIN3NZYTg4RG12QjE3c3BVT2Iwd25Xa3h0QkozNUEv?=
+ =?utf-8?B?TTBGNG1UNnYybk9PMURqNEo2YXFiRlRMdWZMSlFmVDhIeTZWZEhQc3NtWmNu?=
+ =?utf-8?B?a2ExK25oK1Mva25kQnZLMXBLenAyZWwxQjRjVEd5b1A3U1Q3b3BDc2x2WFhL?=
+ =?utf-8?B?UnZsam1ZaU1XTDR6RGhjZkhBTjVBZ3NqVVJVR3VzYk5DRkFlbnJ5SzZtbnU2?=
+ =?utf-8?B?VHhFZUVqcGgzS2hRS05scExzT292RmF6eURORUF0cWY2RnAza3dGb3ZiZ0Nh?=
+ =?utf-8?B?NlY2eUxRQUJ2NzJBaDJ6Wm9ESDFrbTFvVVhBR0ZZRjZYTGx1cnA1dTNKWXFq?=
+ =?utf-8?B?Zmhma3ZYOG5POHhuN3pWYjAwdlM4elJNV3VZb0c0aW9tQnZWM1dwTU5lM3lu?=
+ =?utf-8?B?TDdqcXhlaTdON0NNVzNycUVPb0JpTzZsSkhoNlUrV2lpcUt1QzQ0Zlp6YmdR?=
+ =?utf-8?B?dGUyajFMMGY3aENhRUVtdUpwNy8vdFJlbjdhNXljYmNGUW94ZGdMM0dhU24w?=
+ =?utf-8?B?cmpHaERxa244TFFJT05WQ1R0ZzlIYXhia1grQnlvdlZDOFRiZ3hCMnJmWndD?=
+ =?utf-8?B?dzU2MTJYczZjalVlaUZzT01XNGJCWElFUUVKZzFJMVlOY2RSN3dicm9UQ0pO?=
+ =?utf-8?B?Z011MXlncGRNQkRsNkVFT2FITE5TV0lGcDRISEhxSFJoemY2bUJldldCVjY0?=
+ =?utf-8?B?ayt3d25zRS9TZVdKVHg4dWpWVTNIUjhvTU11bWl6NWxyWHFsV0h2NHNSRmsx?=
+ =?utf-8?B?djRFbWxaVTRaZjZraDRINkZzdnFNNk40UnZnK3haWTVXZnNzV3Q1aDl5Q2Mv?=
+ =?utf-8?B?cWNSWTd3UGE1d20yT3lwOTRPS0dLeGZyQm1NNTJSKzBFQnVYMkIveXlSdUtU?=
+ =?utf-8?B?Y05aSmxyc3M0ak9rQWhzemVxU09PSzkyM0JuU2dLbm9FbjRQSWRYVjZOUVo1?=
+ =?utf-8?B?MjZKd2JnOFNtWHhpT1E5Ry9ndXB3c25ncDZ2U2ZPQXBGN1ErQjZnTWZVK2E1?=
+ =?utf-8?B?YXFta2pEVlZNRk52eU0ra09aVmluQmEzS01qbVhtTXMzZjNZM2E2ejhFWm5s?=
+ =?utf-8?B?OHFCZjE5VVNIL1hyb1grY0RaZUszUHNId1JNT2E2Z3BlZTMvR0FrY1VnNG9B?=
+ =?utf-8?B?S21PS25HQnFiTnJoZ2NIeGg3K2hGcUN4NW45OGZVUmRzT2M3b0NCTXNoYTlm?=
+ =?utf-8?B?a0kxeHBFYktsRkYyRHUvdEpyY05vdCtlSlRjdW84Y0lGMnEybHdHcElFVkF2?=
+ =?utf-8?B?ZHp3R1JRTHRVZWszYU9sSnNyd1NnNzdQek01S0t4RVdwdC9aVWhZRG1LeEh4?=
+ =?utf-8?B?MUdsYnAzaWQ5VHBKUU8yUlFDMTV4U3VaWCtXNFd4Ukp0dDYzV2VvRUlXV29j?=
+ =?utf-8?B?M200aU1sTnNrR2o0RFNreEQyV29ZdmZtcDhQNzluZXgxc29aSTRIUTZBUmd4?=
+ =?utf-8?B?S0kwa29uYkFuem5pQmZ1YjhoMkpuekpPRGZHcnNJcWZVN0J6ZUxINTJKNUpP?=
+ =?utf-8?B?KzdwMzNhK0d3Ry9WZE5UeGx1ODhOUlJQVG5VRDZUQmM0SGxDQjJTUDNTWmZQ?=
+ =?utf-8?B?eUE2eE5GK0pqeUdsN2NLV2hjdkg1NVRNKzZRejUycXFSNFd0MGJkTUJiaTZk?=
+ =?utf-8?B?S3hXNG5JQ2V0L1NULzU0ZTJZdno2dmNPejQ0ODV0QVBvUVhyV3BQL2xTMnBB?=
+ =?utf-8?Q?z/rg=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BL1PR12MB5825:EE_|DM4PR12MB5054:EE_
-X-MS-Office365-Filtering-Correlation-Id: 31cc29d2-0b6c-49b0-47a7-08db23e715c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: RbI9XEzLUQdr3W9Tj766S2xAm0Yr++Ur2wcIedn4+4UI+DcjWPAvnwyDHRKj8VRJaAN5QY+IPfO4PK/ckXIGbP51HdI9ZZ507CZecgNLop/Jnwqxkeyybn8o5drU8Uae1h05LG+1tjpgBW7wEjc52sB3lcoicdewxL3x8bsucy5NcNn2znP7ePjrIAkge1eTzdyUGX61VjQRVfcbRlp/R4kG488PryJsaIh4Z9Nr7r3Gay0mT/jybHXCFRLCsAC+81tr5ip0yccBD9hWzQmWmA76fY0Q3aXzryjy66QcyO/LWsFVOIrLrJESbZp36g6PznM/xWu1WDvsBUmC1GKdhZ5ntfoE+WLVzbPu5jNWZ7TmD/dkx1IS7qTb+mChxGh67R9DTPpeyLoGTYjq8tbQZOCRm2TWnvyF09D2S2bcogTOP87XYP9ufqEb1TiaMrFQ1JhRsIMnYCA2kK1rQXMJBV/uwjkOmUg27RzRvlJhVckXt1fc51wlMGrVZiAO7hegMxLLQ033YCnOr2Q2VBbxXJVaeAzaxATB2IBS26i0XY+XYmKcrKzPsE5A8PrcpCL56eYNp2eP7xyig7xLYMcQvvr9mLLidQe2p+jtJ6kWo9ocr61CzWuOvyeURoGldsxvUGee7r6LnvkRGNeLb0imMBBNOGtJlCH+NkEGHLWKUnVIP9yFecEzsPy2eYqe5TB1E7mOyW0EN/o86enDd37WVeiC4c58rogbhcGHTCzZuOdH0mpX+1x69DogveR+uAEk
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5825.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(39860400002)(366004)(376002)(396003)(346002)(451199018)(31686004)(7416002)(5660300002)(8936002)(2616005)(26005)(186003)(41300700001)(6512007)(53546011)(6506007)(36756003)(31696002)(2906002)(30864003)(83380400001)(6666004)(66556008)(66476007)(8676002)(6486002)(110136005)(66946007)(6636002)(316002)(478600001)(921005)(38100700002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TE5GbjQzN0ErODRGeitPQnV1TjY4a1YrTUswVlpwaVBCMStuVjZ4OGdlSnNj?=
- =?utf-8?B?S1NXc1o0V3dBbXVESEdydEhlOFpSWStlT3NtUTgzNTZkdzd4WEtTQVI5MWhB?=
- =?utf-8?B?azZobEVRV2xGYUk0RVRha2h3Q1ZEZkV6SG1qbzBZcVJwSG9QcnBlWGxFbTgv?=
- =?utf-8?B?MjFUK3ovb3NHMWhFV0xIT1FFbFU4RjZTbjRuUVJyVnF2WjJIY3V5elhJNE1x?=
- =?utf-8?B?cmRqOU5FUTlxTnA5bGY0c2loV1ltdHNZb3JEMVhkekV6ZGt0VVZmQ3d6ZEk5?=
- =?utf-8?B?MnRSb2MwMFBWOWVDdTBNM2hUUE5OWXBoOE9SbThBZWNXbW13MkNIZVVzc0dP?=
- =?utf-8?B?UnV2OStiTDBTNURDNUF5Q3JxYkJsY0tEdm9IZ0RPZUpxUmlERnVNTU1COXNO?=
- =?utf-8?B?TXlTcDlPNVd2NzRjazBxZTZtM1V0anU4RkJzOW1wRWZCRm9ZVW01WDh1eS9D?=
- =?utf-8?B?RExGei90MmtkdkZra2Y2aUZMV3pjN3g1bGxnZUlCdjJRU2FodXp4MHdseDRH?=
- =?utf-8?B?OFhhOVRHc24rdFJNREdxdG9BNXJWald3VVorZXpCOWxYTW4wUkpXdnY0SmYv?=
- =?utf-8?B?YU82MDFId3JGanhzS05JL1hsMnJnYXpLT0gvRm9mTTZvZjc4REswdm5sZ3BN?=
- =?utf-8?B?KzJKcHVwazkvSjQ3VE1rbUdwbmhLQmpMT0FmenNHSzYvQWR3NEZXS2trZXVJ?=
- =?utf-8?B?ektYYTY0M0REZHlXa01QZm9HUTJCVUNHZXYzdUdGeXN2N1ArNHpFYjc2U3B3?=
- =?utf-8?B?Lzh4Z0d2WGRiQXY1d3dKRFltOWw1ZjRmdEdqZmwvMVJLZGZDaTJoREc0L1JL?=
- =?utf-8?B?eDdJZXJndVJTR0VEWnhvU0Z2ckxGWGxwTktZcENPZHBXRnhud243bjFCNlJz?=
- =?utf-8?B?WGZjR0R1eUJCVFhOSFJmcmF4aWU3d2lpOWgvYlBobEtTZ214QnArL09vR3Jl?=
- =?utf-8?B?bElrV0x1d2dHQU9sRVdYZGVXVGlCNEdCY1lXK1NENlFJWGpGNFhuMGdQUzho?=
- =?utf-8?B?NmVORU5WSVNnbzBzOVVFNDVZNVVuUjNmL1dRL1Zsa1loYmZBTFkxL3owbmwy?=
- =?utf-8?B?NVlJQW1FSlhCN3B2RUR5SXJHMW5Hc1dIS1dCY3JNaFVtU2tONEVRNVBmV3Rx?=
- =?utf-8?B?dlVzaEtxMnc0MnRjWm5xV3pnTEd4TSthWk5iaWszVTE4c0V0b3ZhMGMxcFV5?=
- =?utf-8?B?REdMMVJCMzJVa1R6MHBBUGI2Zlg4d1FhSEdJTGlqQjEzSURJNHZRUy9ZenNQ?=
- =?utf-8?B?dWluM2ZrTnpGREFvM1NUYStUdnptcEFIcXJHdFNHS2paVE1LRW1KNjkxeXNJ?=
- =?utf-8?B?OHNobElaa0wzWmNRUk5oWGxwSys4Mk9PRkNWTE9jL0Y0K001N3hXNnhTNmxp?=
- =?utf-8?B?bU45ZEpzbU4weStLVEptb3FicmxVczFJd1pHR056Z1N0LzJaVUZ2bTUyZjgx?=
- =?utf-8?B?V0g3RGYvcjVvTmhZUGY1RjRzbCt3ZUI2STVpTDd1eFoxL1Y3RDJsWmZ3OWlI?=
- =?utf-8?B?OFUxc0hJbFFLdnhya3lVQzJ3SFBLSDhSUzVXNzhIUlFmTTRFS01mNFQ4NFBU?=
- =?utf-8?B?TFgrWWNLMFhoUUlwbEpvR3oxeVpkT3dKRTdFcDVLbVAxSEVoYnBhNVdnKy9S?=
- =?utf-8?B?eUhUbCtzTGUrVzR0R3RmSWxVNzYyazh0YWlyUmFGTGxHZ2JocWdpcDAvdGJD?=
- =?utf-8?B?TDhwM3pSTzdtZWdGdXpiKzgzVlY2eWE0VkhmQkI4M1pHNXBLcW1ZQkc3V2dx?=
- =?utf-8?B?VWZCc0VMTkVGNGsrdXdzTU5PZm54OEJCbzhjWE5mWHdySmlRcGFHQ2F5NjNh?=
- =?utf-8?B?VnUvY3hzSitDb1JicHA4WnRxWmtONG5jdXpMaTFtZVc1T0RuOW9OYU1QK3hr?=
- =?utf-8?B?YnpyRjRvcFdMV1J0MjR0L01lSzdHaXNqeVMvZnd2UnNXL1BrN0svNzJUVjdw?=
- =?utf-8?B?YWl1SGNJaHlsdngrTE05Z2NaRmxRdDRnWXh4YmFnbWY5VlU2T0d5TlhVNkt4?=
- =?utf-8?B?SmhiZm01anBrV0ZYVmVmZThrY0dWek1BY2JTK3lVM09UWXJ2RE01TjYrMnBm?=
- =?utf-8?B?WGVIbEdFb0xOMDhGbWc3YTIwa0tlWEdVQWYrN3puMktjdUxwd3Vnc0RjejI4?=
- =?utf-8?Q?CIgtbFt5AJ3gYh0XU4NJIT9cw?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31cc29d2-0b6c-49b0-47a7-08db23e715c4
-X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5825.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 17:19:21.3753
+X-MS-Exchange-CrossTenant-AuthSource: SJ1PR11MB6083.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 45d6f1e0-24ff-4855-0c8b-08db23e7671c
+X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Mar 2023 17:21:37.7053
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qv4jtRL+z6CqpgEMUJ248NtsEWOTC+ZP3dYZ4qkf3eRcPOOUl1tH5pVbt7ArbSMt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB5054
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: GtAHVR8J8fT7vbW609plONZ8mZ0qMcjPESo540QD2brOPFU8gCsnyGSMxqmjZBRe5s6wwN6ucJSXUmjtpo/HBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6210
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On 3/8/23 23:31, Martin Habets wrote:
-> Caution: This message originated from an External Source. Use proper caution when opening attachments, clicking links, or responding.
->
->
-> On Tue, Mar 07, 2023 at 05:06:13PM +0530, Gautam Dawar wrote:
->> This changeset uses MC_CMD_CLIENT_CMD to execute VF's MCDI
->> commands when running in vDPA mode (STATE_VDPA).
->> Also, use the PF's IOMMU domain for executing the encapsulated
->> VF's MCDI commands to isolate DMA of guest buffers in the VF's
->> IOMMU domain.
->> This patch also updates the PCIe FN's client id in the efx_nic
->> structure which is required while running MC_CMD_CLIENT_CMD.
->>
->> Signed-off-by: Gautam Dawar <gautam.dawar@amd.com>
->> ---
->>   drivers/net/ethernet/sfc/ef100.c      |   1 +
->>   drivers/net/ethernet/sfc/ef100_nic.c  |  35 +++++++++
->>   drivers/net/ethernet/sfc/mcdi.c       | 108 ++++++++++++++++++++++----
->>   drivers/net/ethernet/sfc/mcdi.h       |   2 +-
->>   drivers/net/ethernet/sfc/net_driver.h |   2 +
->>   drivers/net/ethernet/sfc/ptp.c        |   4 +-
->>   6 files changed, 132 insertions(+), 20 deletions(-)
->>
->> diff --git a/drivers/net/ethernet/sfc/ef100.c b/drivers/net/ethernet/sfc/ef100.c
->> index c1c69783db7b..8453c9ba0f41 100644
->> --- a/drivers/net/ethernet/sfc/ef100.c
->> +++ b/drivers/net/ethernet/sfc/ef100.c
->> @@ -465,6 +465,7 @@ static int ef100_pci_probe(struct pci_dev *pci_dev,
->>        efx->type = (const struct efx_nic_type *)entry->driver_data;
->>
->>        efx->pci_dev = pci_dev;
->> +     efx->client_id = MC_CMD_CLIENT_ID_SELF;
->>        pci_set_drvdata(pci_dev, efx);
->>        rc = efx_init_struct(efx, pci_dev);
->>        if (rc)
->> diff --git a/drivers/net/ethernet/sfc/ef100_nic.c b/drivers/net/ethernet/sfc/ef100_nic.c
->> index bda4fcbe1126..cd9f724a9e64 100644
->> --- a/drivers/net/ethernet/sfc/ef100_nic.c
->> +++ b/drivers/net/ethernet/sfc/ef100_nic.c
->> @@ -206,9 +206,11 @@ static int efx_ef100_init_datapath_caps(struct efx_nic *efx)
->>                  "firmware reports num_mac_stats = %u\n",
->>                  efx->num_mac_stats);
->>
->> +#ifdef CONFIG_SFC_VDPA
-> More opportunities to use IS_ENABLED(CONFIG_SFC_VDPA) in this patch
-> in stead of the #ifdef.
-
-Will fix the occurrence where nic_data->vdpa_supported is being updated. 
-However, I am not sure if using something like:
-
-if (IS_ENABLED(CONFIG_SFC_VDPA) && (new_config == EF100_BAR_CONFIG_VDPA 
-&& !nic_data->vdpa_supported))
-
-to replace
-
-#ifdef CONFIG_SFC_VDPA
-         if (new_config == EF100_BAR_CONFIG_VDPA && 
-!nic_data->vdpa_supported) {
-
-would be correct as vdpa_supported itself is conditionally defined:
-
-struct ef100_nic_data {
-
-...
-
-#ifdef CONFIG_SFC_VDPA
-         bool vdpa_supported; /* true if vdpa is supported on this PCIe 
-FN */
-  ...
-
-}
-
-Another way would be to use nested if statements but not sure if it is 
-really needed.
-
-Thanks
-
->
-> Martin
->
->>        nic_data->vdpa_supported = efx_ef100_has_cap(nic_data->datapath_caps3,
->>                                                     CLIENT_CMD_VF_PROXY) &&
->>                                   efx->type->is_vf;
->> +#endif
->>        return 0;
->>   }
->>
->> @@ -1086,6 +1088,35 @@ static int ef100_check_design_params(struct efx_nic *efx)
->>        return rc;
->>   }
->>
->> +static int efx_ef100_update_client_id(struct efx_nic *efx)
->> +{
->> +     struct ef100_nic_data *nic_data = efx->nic_data;
->> +     unsigned int pf_index = PCIE_FUNCTION_PF_NULL;
->> +     unsigned int vf_index = PCIE_FUNCTION_VF_NULL;
->> +     efx_qword_t pciefn;
->> +     int rc;
->> +
->> +     if (efx->pci_dev->is_virtfn)
->> +             vf_index = nic_data->vf_index;
->> +     else
->> +             pf_index = nic_data->pf_index;
->> +
->> +     /* Construct PCIE_FUNCTION structure */
->> +     EFX_POPULATE_QWORD_3(pciefn,
->> +                          PCIE_FUNCTION_PF, pf_index,
->> +                          PCIE_FUNCTION_VF, vf_index,
->> +                          PCIE_FUNCTION_INTF, PCIE_INTERFACE_CALLER);
->> +     /* look up self client ID */
->> +     rc = efx_ef100_lookup_client_id(efx, pciefn, &efx->client_id);
->> +     if (rc) {
->> +             pci_warn(efx->pci_dev,
->> +                      "%s: Failed to get client ID, rc %d\n",
->> +                      __func__, rc);
->> +     }
->> +
->> +     return rc;
->> +}
->> +
->>   /*   NIC probe and remove
->>    */
->>   static int ef100_probe_main(struct efx_nic *efx)
->> @@ -1173,6 +1204,10 @@ static int ef100_probe_main(struct efx_nic *efx)
->>                goto fail;
->>        efx->port_num = rc;
->>
->> +     rc = efx_ef100_update_client_id(efx);
->> +     if (rc)
->> +             goto fail;
->> +
->>        efx_mcdi_print_fwver(efx, fw_version, sizeof(fw_version));
->>        pci_dbg(efx->pci_dev, "Firmware version %s\n", fw_version);
->>
->> diff --git a/drivers/net/ethernet/sfc/mcdi.c b/drivers/net/ethernet/sfc/mcdi.c
->> index a7f2c31071e8..3bf1ebe05775 100644
->> --- a/drivers/net/ethernet/sfc/mcdi.c
->> +++ b/drivers/net/ethernet/sfc/mcdi.c
->> @@ -145,14 +145,15 @@ void efx_mcdi_fini(struct efx_nic *efx)
->>        kfree(efx->mcdi);
->>   }
->>
->> -static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
->> -                               const efx_dword_t *inbuf, size_t inlen)
->> +static void efx_mcdi_send_request(struct efx_nic *efx, u32 client_id,
->> +                               unsigned int cmd, const efx_dword_t *inbuf,
->> +                               size_t inlen)
->>   {
->>        struct efx_mcdi_iface *mcdi = efx_mcdi(efx);
->>   #ifdef CONFIG_SFC_MCDI_LOGGING
->>        char *buf = mcdi->logging_buffer; /* page-sized */
->>   #endif
->> -     efx_dword_t hdr[2];
->> +     efx_dword_t hdr[5];
->>        size_t hdr_len;
->>        u32 xflags, seqno;
->>
->> @@ -179,7 +180,7 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
->>                                     MCDI_HEADER_XFLAGS, xflags,
->>                                     MCDI_HEADER_NOT_EPOCH, !mcdi->new_epoch);
->>                hdr_len = 4;
->> -     } else {
->> +     } else if (client_id == efx->client_id) {
->>                /* MCDI v2 */
->>                BUG_ON(inlen > MCDI_CTL_SDU_LEN_MAX_V2);
->>                EFX_POPULATE_DWORD_7(hdr[0],
->> @@ -194,6 +195,35 @@ static void efx_mcdi_send_request(struct efx_nic *efx, unsigned cmd,
->>                                     MC_CMD_V2_EXTN_IN_EXTENDED_CMD, cmd,
->>                                     MC_CMD_V2_EXTN_IN_ACTUAL_LEN, inlen);
->>                hdr_len = 8;
->> +     } else {
->> +             /* MCDI v2 */
->> +             WARN_ON(inlen > MCDI_CTL_SDU_LEN_MAX_V2);
->> +             /* MCDI v2 with credentials of a different client */
->> +             BUILD_BUG_ON(MC_CMD_CLIENT_CMD_IN_LEN != 4);
->> +             /* Outer CLIENT_CMD wrapper command with client ID */
->> +             EFX_POPULATE_DWORD_7(hdr[0],
->> +                                  MCDI_HEADER_RESPONSE, 0,
->> +                                  MCDI_HEADER_RESYNC, 1,
->> +                                  MCDI_HEADER_CODE, MC_CMD_V2_EXTN,
->> +                                  MCDI_HEADER_DATALEN, 0,
->> +                                  MCDI_HEADER_SEQ, seqno,
->> +                                  MCDI_HEADER_XFLAGS, xflags,
->> +                                  MCDI_HEADER_NOT_EPOCH, !mcdi->new_epoch);
->> +             EFX_POPULATE_DWORD_2(hdr[1],
->> +                                  MC_CMD_V2_EXTN_IN_EXTENDED_CMD,
->> +                                  MC_CMD_CLIENT_CMD,
->> +                                  MC_CMD_V2_EXTN_IN_ACTUAL_LEN, inlen + 12);
->> +             MCDI_SET_DWORD(&hdr[2],
->> +                            CLIENT_CMD_IN_CLIENT_ID, client_id);
->> +
->> +             /* MCDIv2 header for inner command */
->> +             EFX_POPULATE_DWORD_2(hdr[3],
->> +                                  MCDI_HEADER_CODE, MC_CMD_V2_EXTN,
->> +                                  MCDI_HEADER_DATALEN, 0);
->> +             EFX_POPULATE_DWORD_2(hdr[4],
->> +                                  MC_CMD_V2_EXTN_IN_EXTENDED_CMD, cmd,
->> +                                  MC_CMD_V2_EXTN_IN_ACTUAL_LEN, inlen);
->> +             hdr_len = 20;
->>        }
->>
->>   #ifdef CONFIG_SFC_MCDI_LOGGING
->> @@ -474,7 +504,8 @@ static void efx_mcdi_release(struct efx_mcdi_iface *mcdi)
->>                        &mcdi->async_list, struct efx_mcdi_async_param, list);
->>                if (async) {
->>                        mcdi->state = MCDI_STATE_RUNNING_ASYNC;
->> -                     efx_mcdi_send_request(efx, async->cmd,
->> +                     efx_mcdi_send_request(efx, efx->client_id,
->> +                                           async->cmd,
->>                                              (const efx_dword_t *)(async + 1),
->>                                              async->inlen);
->>                        mod_timer(&mcdi->async_timer,
->> @@ -797,7 +828,7 @@ static int efx_mcdi_proxy_wait(struct efx_nic *efx, u32 handle, bool quiet)
->>        return mcdi->proxy_rx_status;
->>   }
->>
->> -static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->> +static int _efx_mcdi_rpc(struct efx_nic *efx, u32 client_id, unsigned int cmd,
->>                         const efx_dword_t *inbuf, size_t inlen,
->>                         efx_dword_t *outbuf, size_t outlen,
->>                         size_t *outlen_actual, bool quiet, int *raw_rc)
->> @@ -811,7 +842,7 @@ static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->>                return -EINVAL;
->>        }
->>
->> -     rc = efx_mcdi_rpc_start(efx, cmd, inbuf, inlen);
->> +     rc = efx_mcdi_rpc_start(efx, client_id, cmd, inbuf, inlen);
->>        if (rc)
->>                return rc;
->>
->> @@ -836,7 +867,8 @@ static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->>
->>                        /* We now retry the original request. */
->>                        mcdi->state = MCDI_STATE_RUNNING_SYNC;
->> -                     efx_mcdi_send_request(efx, cmd, inbuf, inlen);
->> +                     efx_mcdi_send_request(efx, efx->client_id, cmd,
->> +                                           inbuf, inlen);
->>
->>                        rc = _efx_mcdi_rpc_finish(efx, cmd, inlen,
->>                                                  outbuf, outlen, outlen_actual,
->> @@ -855,16 +887,44 @@ static int _efx_mcdi_rpc(struct efx_nic *efx, unsigned int cmd,
->>        return rc;
->>   }
->>
->> +#ifdef CONFIG_SFC_VDPA
->> +static bool is_mode_vdpa(struct efx_nic *efx)
->> +{
->> +     if (efx->pci_dev->is_virtfn &&
->> +         efx->pci_dev->physfn &&
->> +         efx->state == STATE_VDPA &&
->> +         efx->vdpa_nic)
->> +             return true;
->> +
->> +     return false;
->> +}
->> +#endif
->> +
->>   static int _efx_mcdi_rpc_evb_retry(struct efx_nic *efx, unsigned cmd,
->>                                   const efx_dword_t *inbuf, size_t inlen,
->>                                   efx_dword_t *outbuf, size_t outlen,
->>                                   size_t *outlen_actual, bool quiet)
->>   {
->> +#ifdef CONFIG_SFC_VDPA
->> +     struct efx_nic *efx_pf;
->> +#endif
->>        int raw_rc = 0;
->>        int rc;
->>
->> -     rc = _efx_mcdi_rpc(efx, cmd, inbuf, inlen,
->> -                        outbuf, outlen, outlen_actual, true, &raw_rc);
->> +#ifdef CONFIG_SFC_VDPA
->> +     if (is_mode_vdpa(efx)) {
->> +             efx_pf = pci_get_drvdata(efx->pci_dev->physfn);
->> +             rc = _efx_mcdi_rpc(efx_pf, efx->client_id, cmd, inbuf,
->> +                                inlen, outbuf, outlen, outlen_actual,
->> +                                true, &raw_rc);
->> +     } else {
->> +#endif
->> +             rc = _efx_mcdi_rpc(efx, efx->client_id, cmd, inbuf,
->> +                                inlen, outbuf, outlen, outlen_actual, true,
->> +                                &raw_rc);
->> +#ifdef CONFIG_SFC_VDPA
->> +     }
->> +#endif
->>
->>        if ((rc == -EPROTO) && (raw_rc == MC_CMD_ERR_NO_EVB_PORT) &&
->>            efx->type->is_vf) {
->> @@ -881,9 +941,22 @@ static int _efx_mcdi_rpc_evb_retry(struct efx_nic *efx, unsigned cmd,
->>
->>                do {
->>                        usleep_range(delay_us, delay_us + 10000);
->> -                     rc = _efx_mcdi_rpc(efx, cmd, inbuf, inlen,
->> -                                        outbuf, outlen, outlen_actual,
->> -                                        true, &raw_rc);
->> +#ifdef CONFIG_SFC_VDPA
->> +                     if (is_mode_vdpa(efx)) {
->> +                             efx_pf = pci_get_drvdata(efx->pci_dev->physfn);
->> +                             rc = _efx_mcdi_rpc(efx_pf, efx->client_id, cmd,
->> +                                                inbuf, inlen, outbuf, outlen,
->> +                                                outlen_actual, true,
->> +                                                &raw_rc);
->> +                     } else {
->> +#endif
->> +                             rc = _efx_mcdi_rpc(efx, efx->client_id,
->> +                                                cmd, inbuf, inlen, outbuf,
->> +                                                outlen, outlen_actual, true,
->> +                                                &raw_rc);
->> +#ifdef CONFIG_SFC_VDPA
->> +                     }
->> +#endif
->>                        if (delay_us < 100000)
->>                                delay_us <<= 1;
->>                } while ((rc == -EPROTO) &&
->> @@ -939,7 +1012,7 @@ int efx_mcdi_rpc(struct efx_nic *efx, unsigned cmd,
->>    * function and is then responsible for calling efx_mcdi_display_error
->>    * as needed.
->>    */
->> -int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned cmd,
->> +int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned int cmd,
->>                       const efx_dword_t *inbuf, size_t inlen,
->>                       efx_dword_t *outbuf, size_t outlen,
->>                       size_t *outlen_actual)
->> @@ -948,7 +1021,7 @@ int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned cmd,
->>                                       outlen_actual, true);
->>   }
->>
->> -int efx_mcdi_rpc_start(struct efx_nic *efx, unsigned cmd,
->> +int efx_mcdi_rpc_start(struct efx_nic *efx, u32 client_id, unsigned int cmd,
->>                       const efx_dword_t *inbuf, size_t inlen)
->>   {
->>        struct efx_mcdi_iface *mcdi = efx_mcdi(efx);
->> @@ -965,7 +1038,7 @@ int efx_mcdi_rpc_start(struct efx_nic *efx, unsigned cmd,
->>                return -ENETDOWN;
->>
->>        efx_mcdi_acquire_sync(mcdi);
->> -     efx_mcdi_send_request(efx, cmd, inbuf, inlen);
->> +     efx_mcdi_send_request(efx, client_id, cmd, inbuf, inlen);
->>        return 0;
->>   }
->>
->> @@ -1009,7 +1082,8 @@ static int _efx_mcdi_rpc_async(struct efx_nic *efx, unsigned int cmd,
->>                 */
->>                if (mcdi->async_list.next == &async->list &&
->>                    efx_mcdi_acquire_async(mcdi)) {
->> -                     efx_mcdi_send_request(efx, cmd, inbuf, inlen);
->> +                     efx_mcdi_send_request(efx, efx->client_id,
->> +                                           cmd, inbuf, inlen);
->>                        mod_timer(&mcdi->async_timer,
->>                                  jiffies + MCDI_RPC_TIMEOUT);
->>                }
->> diff --git a/drivers/net/ethernet/sfc/mcdi.h b/drivers/net/ethernet/sfc/mcdi.h
->> index dafab52aaef7..2c526d2edeb6 100644
->> --- a/drivers/net/ethernet/sfc/mcdi.h
->> +++ b/drivers/net/ethernet/sfc/mcdi.h
->> @@ -150,7 +150,7 @@ int efx_mcdi_rpc_quiet(struct efx_nic *efx, unsigned cmd,
->>                       efx_dword_t *outbuf, size_t outlen,
->>                       size_t *outlen_actual);
->>
->> -int efx_mcdi_rpc_start(struct efx_nic *efx, unsigned cmd,
->> +int efx_mcdi_rpc_start(struct efx_nic *efx, u32 client_id, unsigned int cmd,
->>                       const efx_dword_t *inbuf, size_t inlen);
->>   int efx_mcdi_rpc_finish(struct efx_nic *efx, unsigned cmd, size_t inlen,
->>                        efx_dword_t *outbuf, size_t outlen,
->> diff --git a/drivers/net/ethernet/sfc/net_driver.h b/drivers/net/ethernet/sfc/net_driver.h
->> index 1da71deac71c..948c7a06403a 100644
->> --- a/drivers/net/ethernet/sfc/net_driver.h
->> +++ b/drivers/net/ethernet/sfc/net_driver.h
->> @@ -859,6 +859,7 @@ struct efx_mae;
->>    * @secondary_list: List of &struct efx_nic instances for the secondary PCI
->>    *   functions of the controller, if this is for the primary function.
->>    *   Serialised by rtnl_lock.
->> + * @client_id: client ID of this PCIe function
->>    * @type: Controller type attributes
->>    * @legacy_irq: IRQ number
->>    * @workqueue: Workqueue for port reconfigures and the HW monitor.
->> @@ -1022,6 +1023,7 @@ struct efx_nic {
->>        struct list_head secondary_list;
->>        struct pci_dev *pci_dev;
->>        unsigned int port_num;
->> +     u32 client_id;
->>        const struct efx_nic_type *type;
->>        int legacy_irq;
->>        bool eeh_disabled_legacy_irq;
->> diff --git a/drivers/net/ethernet/sfc/ptp.c b/drivers/net/ethernet/sfc/ptp.c
->> index 9f07e1ba7780..d90d4f6b3824 100644
->> --- a/drivers/net/ethernet/sfc/ptp.c
->> +++ b/drivers/net/ethernet/sfc/ptp.c
->> @@ -1052,8 +1052,8 @@ static int efx_ptp_synchronize(struct efx_nic *efx, unsigned int num_readings)
->>
->>        /* Clear flag that signals MC ready */
->>        WRITE_ONCE(*start, 0);
->> -     rc = efx_mcdi_rpc_start(efx, MC_CMD_PTP, synch_buf,
->> -                             MC_CMD_PTP_IN_SYNCHRONIZE_LEN);
->> +     rc = efx_mcdi_rpc_start(efx, MC_CMD_CLIENT_ID_SELF, MC_CMD_PTP,
->> +                             synch_buf, MC_CMD_PTP_IN_SYNCHRONIZE_LEN);
->>        EFX_WARN_ON_ONCE_PARANOID(rc);
->>
->>        /* Wait for start from MCDI (or timeout) */
->> --
->> 2.30.1
+PiBVcG9uIHJlYWRpbmcgdGhlIHJlc3Qgb2YgdGhlIHNlcmllcywgSSB0aGluayB0aGUgYWJvdmUg
+bWlnaHQgYmUgYmFzZWQNCj4gb24gbWUgbWlzdW5kZXJzdGFuZGluZyB0aGlzIGJpdC4NCj4NCj4g
+SWYgSSB1bmRlcnN0YW5kIHRoaW5ncyBjb3JyZWN0bHkgdGhlbiB3aGF0IGlzIG5ldyB3aXRoIGVt
+ZXJhbGRfcmFwaWRzDQo+IGlzIHN1cHBvcnQgZm9yIGEgc2Vjb25kIHNldC90eXBlIG9mIHRlc3Rz
+IGNhbGxlZCAiIEFycmF5IFNjYW4gdGVzdCINCj4gYW5kIHRoZSBvbGQgdGVzdCBtZXRob2QgLyB0
+ZXN0LXR5cGUgaXMgYWxzbyBzdGlsbCBzdXBwb3J0ZWQuDQoNClllcy4gRW1lcmFsZCBSYXBpZHMg
+c3VwcG9ydHMgdGhlIG5ldyBhcnJheSBzY2FuIHRlc3QgKmluIGFkZGl0aW9uIHRvKg0KdGhlIGV4
+aXN0aW5nIHNjYW4gdGVzdC4gIEZ1dHVyZSBDUFVzIHdpbGwgc3VwcG9ydCBib3RoIG9mIHRoZXNl
+IHRlc3RzDQphbmQgbWF5IGFkZCBhZGRpdGlvbmFsIHRlc3RzLiBGdXJ0aGVyIGluIHRoZSBmdXR1
+cmUgaWYgc29tZSBuZXcgdGVzdHMNCmNvdmVyIHRoZSBzYW1lIGZ1bmN0aW9uYWxpdHkgYXMgb2xk
+ZXIgdGVzdHMsIHNvbWUgb2YgdGhlIG9sZGVyIHRlc3RzDQptYXkgYmUgZHJvcHBlZC4NCg0KU28g
+dGhlIElOVEVHUklUWV9DQVBBQklMSVRJRVMgTVNSIGlzIGEgYml0bWFwIGVudW1lcmF0aW5nDQp3
+aGljaCB0ZXN0cyBhcmUgc3VwcG9ydGVkIG9uIGVhY2ggbW9kZWwuDQoNCj4gQW5kIHlvdSBoYXZl
+IGNob3NlbiB0byByZWdpc3RlciAyIG1pc2MtZGV2aWNlcyAsIG9uZSBwZXIgc3VwcG9ydGVkDQo+
+IHRlc3QgdHlwZSA/DQo+DQo+IEhhdmUgSSB1bmRlcnN0b29kIHRoYXQgY29ycmVjdGx5Pw0KDQpZ
+ZXMuDQoNCj4gTWF5IEkgYXNrIHdoeSB1c2UgMSBtaXNjIGRldmljZSBwZXIgdGVzdC10eXBlLiBX
+aHkgbm90IGp1c3QgYWRkDQo+IGEgc2luZ2xlIG5ldyBzeXNmc19hdHRyIHRvIHRoZSBleGlzdGlu
+ZyBtaXNjIGRldmljZSB0byB0cmlnZ2VyDQo+IHRoZSBuZXcgdGVzdC10eXBlID8NCg0KVGhhdCdz
+IGFuIGludGVyZXN0aW5nIGlkZWEuIFNvIHdlJ2QgaGF2ZToNCg0KIyBlY2hvICRjcHUgPiBydW5f
+dGVzdA0KIyBjYXQgc3RhdHVzDQouLi4NCiMgY2F0IGRldGFpbHMNCi4uLg0KDQpmb3Igb3VyIGZp
+cnN0IHR5cGUgb2YgdGVzdCAoaW50cm9kdWNlZCB3aXRoIFNhcHBoaXJlIFJhcGlkcykuIFRoZW4N
+CmluIHRoZSBzYW1lIGRpcmVjdG9yeSBhZGQgYSBuZXcgZmlsZSB0byBydW4gdGhlIGFycmF5IHRl
+c3QgKG9uIEVtZXJhbGQNClJhcGlkcyBhbmRvdGhlciBmdXR1cmUgQ1BVcyB0aGF0IHN1cHBvcnQg
+aXQpDQoNCiMgZWNobyAkY3B1ID4gcnVuX2FycmF5X3Rlc3QNCiMgY2F0IHN0YXR1cw0KLi4uDQoj
+IGNhdCBkZXRhaWxzDQouLi4NCg0KQnV0IEkgc2VlIGEgcHJvYmxlbSB3aXRoIHRoZSAiY3VycmVu
+dF9iYXRjaCIgZmlsZSAodGhhdCB3aWxsIHNob3cgdXAgaWYgYSBmdXR1cmUNCnRlc3QgYWxzbyBu
+ZWVkcyB0byBsb2FkIHNvbWUgdGVzdCBkYXRhIC4uLiBzcG9pbGVyIC4uLiBpdCB3aWxsKS4NCg0K
+V2UgY2FuJ3QgZG86DQoNCiMgZWNobyAyID4gY3VycmVudF9iYXRjaA0KICAuLi4gd2hhdCBzaG91
+bGQgdGhpcyBsb2FkLCBkb24ndCBrbm93IHVudGlsIHRoZSB1c2VyIHR5cGVzIG9uZSBvZg0KDQoj
+IGVjaG8gJGNwdSA+IHJ1bl90ZXN0DQoNCm9yDQoNCiMgZWNobyAkY3B1ID4gcnVuXyR7bmFtZX1f
+dGVzdA0KDQpQZXJoYXBzIGFsc28gaGF2ZSBwZXIgdGVzdCB0eXBlIG5hbWVzIHRvIGxvYWQgdGhl
+IHRlc3QgaW1hZ2VzPw0KDQojIGVjaG8gMiA+IGN1cnJlbnRfJHtuYW1lfV9iYXRjaA0KIyBlY2hv
+ICRjcHUgPiBydW5fJHtuYW1lfV90ZXN0DQoNCg0KSSdtIG5vdCBzdXJlIHRoaXMgaXMgYmV0dGVy
+IHRoYW4gc3BsaXR0aW5nIHRoZSB0ZXN0cyBpbnRvIGRpZmZlcmVudCBkaXJlY3Rvcmllcy4NCg0K
+LVRvbnkNCg0KDQoNCg==
