@@ -2,226 +2,260 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93E206B81C7
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:38:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECF4D6B81CA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 20:39:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229666AbjCMTiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 15:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46370 "EHLO
+        id S229875AbjCMTjL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 15:39:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbjCMTiC (ORCPT
+        with ESMTP id S229673AbjCMTjJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 15:38:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04CA2EFAD;
-        Mon, 13 Mar 2023 12:38:01 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id AB201B811E1;
-        Mon, 13 Mar 2023 19:37:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5D36C433EF;
-        Mon, 13 Mar 2023 19:37:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678736278;
-        bh=jQi+PcG9SAfmGUTaLTv603Vpq8uAn+L4RzhgHyvuiig=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=d2SFcGprrSjv0cTpRZfKeQdx7abce/yNw5R+ZVX+rWeuJ8cXml22yTmTdYTt/f98d
-         uPu6Gz6PTVoqEC3ODp3SPKsebrenq2+tTNQ70T7u93my7rltHaKhEYv7koQYPQnyhK
-         jT5N4Vy8GA5plz95q9lOI6VtAus6U0cCRHLtx4o4TAtzMRYwYpSBbM8T3qUYKdpawm
-         3ERoghniuFKnwI4HZHbHJGBfs+/sfXhlhjsJYJ9Q9l23DGH489UG7kmilJ/ZTMLbEW
-         lVqa5aR2Kmky7rJbUVdTDVracaKWPVhs+vaC4IkYDbPNZ0VWF/jtfZv2sqFUZhCAoO
-         k4XBI0gYA2lSw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id EA6BE4049F; Mon, 13 Mar 2023 16:37:55 -0300 (-03)
-Date:   Mon, 13 Mar 2023 16:37:55 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 07/13] perf build: Make binutil libraries opt in
-Message-ID: <ZA97k8ZP4lAC0tia@kernel.org>
-References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-8-irogers@google.com>
+        Mon, 13 Mar 2023 15:39:09 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 692CC7F015
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:39:04 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id y4so23743130edo.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 12:39:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678736343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=wS8jmXNaPLsNZEoeUl7PhMCNiH0F6PKhoHc6Y2aL034=;
+        b=FwIqdh/7GyFQK7ObRGHVo7b3jAPMcWSbjdhVYfRlWkIPqFGf3qioU2zyU7TN7p0Yp8
+         twm8bIIC4OHRfPR6lY+JxIKLe/49FncmmpWBtVcB7Kk7zsqmZAhOaQIV6INJ7Jlp7TCG
+         vTuTBZVDdho71as/b9FwH0l6j3xI2NAZpTI2pBP9+mtR9EzJLqEnflq6GjWi0LXhdIlw
+         YA0yo+bMcoQLswKdPCsNEI1lqxQ2eIrB3UU80gulhntbQvLUZckvNyB8NLEIAVXIYgXM
+         evWaH0VYwpSdjR0KvQ42RteZKWfL5+Vx6Ib3kM9qFry43U2t6Bnpb3JG3sDu/Ru40bpf
+         gJUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678736343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=wS8jmXNaPLsNZEoeUl7PhMCNiH0F6PKhoHc6Y2aL034=;
+        b=Lx7h38OITZW+MpLAjUP7zhz7Mmn237Eu86wrznf07+Pqfd4TO4R/sLhUGcENrvJRNd
+         jTr55lIGOh3y6QKuZLD0BOs+4WbnOOh67D4FgQoVKw3V6wTy0x51kXB8tOr0syBWU5gI
+         13k32R4IgJ9qfN9qhPzMjR+p7jKYwrp37XsyBTOtD8Qko3/sNpq3ItpHXJtEFkAHcrDE
+         +z80itR/AePLuJlLzcqEW0rgYXRnzcaGU7nFqjBk8RgOZ24Hv+j1Q+Ss8RvtsgLdZ2U9
+         Z8VCfHJu9xtwMG4BPFrdLFbnQUaFOrk+l0t95U1V8uo1qf4BT/fXQZhfz5HC1b6MF+Ze
+         t72g==
+X-Gm-Message-State: AO0yUKWzWyKnMf7NXdgN6q0mA4/cF0DrPyENfE6/yY9rGaOWdNU4qKSD
+        T3mm9B0Hg403Yn3TfMgWFr/ou1ois2pHINjpPO+f+g==
+X-Google-Smtp-Source: AK7set+BqYQIoFP4NPt2wScs0G+JZdXprJZpv+ov3SBz4Jdd82gtbNhfhh1eoiynPky42VawkdpV0RHJMAtKYC2vmq8=
+X-Received: by 2002:a17:906:66c9:b0:8ef:ccc8:5075 with SMTP id
+ k9-20020a17090666c900b008efccc85075mr16437542ejp.11.1678736342741; Mon, 13
+ Mar 2023 12:39:02 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230311065753.3012826-8-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000226a6105f6954b47@google.com> <CAAa6QmSH-c4voB2vg=ohdeQwmGDJ8X5rUw97-99cFkVaOPD5mg@mail.gmail.com>
+ <20230313191557.6lm53ndvwoxtf5dz@google.com>
+In-Reply-To: <20230313191557.6lm53ndvwoxtf5dz@google.com>
+From:   "Zach O'Keefe" <zokeefe@google.com>
+Date:   Mon, 13 Mar 2023 12:38:25 -0700
+Message-ID: <CAAa6QmQnYYdVzESYvf6DE-nR9A-raSVpY-zVyTFHFrqpj8yd9A@mail.gmail.com>
+Subject: Re: [syzbot] [mm?] kernel BUG in hpage_collapse_scan_file
+To:     linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Fri, Mar 10, 2023 at 10:57:47PM -0800, Ian Rogers escreveu:
-> binutils is GPLv3 so distributions cannot ship perf linked against
-> libbfd and libiberty as the licenses are incompatible. Rather than
-> defaulting the build to opting in to libbfd and libiberty support and
-> opting out via NO_LIBBFD=1 and NO_DEMANGLE=1, make building against
-> the libraries optional and enabled with BUILD_NONDISTRO=1.
+On Mon, Mar 13, 2023 at 12:16=E2=80=AFPM Zach O'Keefe <zokeefe@google.com> =
+wrote:
+>
+> On Mar 10 17:02, Zach O'Keefe wrote:
+> > On Fri, Mar 10, 2023 at 4:52=E2=80=AFPM syzbot
+> > <syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com> wrote:
+> > >
+> > > Hello,
+> > >
+> > > syzbot found the following issue on:
+> > >
+> > > HEAD commit:    857f1268a591 Merge tag 'objtool-core-2023-03-02' of g=
+it://..
+> > > git tree:       upstream
+> > > console+strace: https://syzkaller.appspot.com/x/log.txt?x=3D168e1032c=
+80000
+> > > kernel config:  https://syzkaller.appspot.com/x/.config?x=3Df763d89e2=
+6d3d4c4
+> > > dashboard link: https://syzkaller.appspot.com/bug?extid=3D9578faa5475=
+acb35fa50
+> > > compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for=
+ Debian) 2.35.2
+> > > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=3D179e4e1=
+2c80000
+> > > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=3D119cce98c=
+80000
+> > >
+> > > Downloadable assets:
+> > > disk image: https://storage.googleapis.com/syzbot-assets/b3b7a7e333f1=
+/disk-857f1268.raw.xz
+> > > vmlinux: https://storage.googleapis.com/syzbot-assets/5940be1cf171/vm=
+linux-857f1268.xz
+> > > kernel image: https://storage.googleapis.com/syzbot-assets/986015398e=
+4a/bzImage-857f1268.xz
+> > >
+> > > IMPORTANT: if you fix the issue, please add the following tag to the =
+commit:
+> > > Reported-by: syzbot+9578faa5475acb35fa50@syzkaller.appspotmail.com
+> > >
+> > > ------------[ cut here ]------------
+> > > kernel BUG at mm/khugepaged.c:1823!
+> > > invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+> > > CPU: 1 PID: 5097 Comm: syz-executor220 Not tainted 6.2.0-syzkaller-13=
+154-g857f1268a591 #0
+> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BI=
+OS Google 02/16/2023
+> > > RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
+> > > RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
+> > > Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 =
+0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0=
+f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
+> > > RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
+> > > RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
+> > > RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
+> > > RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
+> > > R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+> > > R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
+> > > FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:000000000=
+0000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > > Call Trace:
+> > >  <TASK>
+> > >  madvise_collapse+0x721/0xf50 mm/khugepaged.c:2693
+> > >  madvise_vma_behavior mm/madvise.c:1086 [inline]
+> > >  madvise_walk_vmas mm/madvise.c:1260 [inline]
+> > >  do_madvise+0x9e5/0x4680 mm/madvise.c:1439
+> > >  __do_sys_madvise mm/madvise.c:1452 [inline]
+> > >  __se_sys_madvise mm/madvise.c:1450 [inline]
+> > >  __x64_sys_madvise+0xa5/0xb0 mm/madvise.c:1450
+> > >  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+> > >  do_syscall_64+0x41/0xc0 arch/x86/entry/common.c:80
+> > >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> > > RIP: 0033:0x7fdbae65dc39
+> > > Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 11 15 00 00 90 48 89 f8 48 =
+89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f=
+0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+> > > RSP: 002b:00007fdbae5ee2f8 EFLAGS: 00000246 ORIG_RAX: 000000000000001=
+c
+> > > RAX: ffffffffffffffda RBX: 00007fdbae6e64b8 RCX: 00007fdbae65dc39
+> > > RDX: 0000000000000019 RSI: 000000000060005f RDI: 0000000020000000
+> > > RBP: 00007fdbae6e64b0 R08: 0000000000000001 R09: 0000000000000033
+> > > R10: 0000000000000000 R11: 0000000000000246 R12: 00007fdbae5ee300
+> > > R13: 0000000000000001 R14: 00007fdbae5ee400 R15: 0000000000022000
+> > >  </TASK>
+> > > Modules linked in:
+> > > ---[ end trace 0000000000000000 ]---
+> > > RIP: 0010:collapse_file mm/khugepaged.c:1823 [inline]
+> > > RIP: 0010:hpage_collapse_scan_file+0x67c8/0x7580 mm/khugepaged.c:2233
+> > > Code: 00 00 89 de e8 c9 66 a3 ff 31 ff 89 de e8 c0 66 a3 ff 45 84 f6 =
+0f 85 28 0d 00 00 e8 22 64 a3 ff e9 dc f7 ff ff e8 18 64 a3 ff <0f> 0b f3 0=
+f 1e fa e8 0d 64 a3 ff e9 93 f6 ff ff f3 0f 1e fa 4c 89
+> > > RSP: 0018:ffffc90003dff4e0 EFLAGS: 00010093
+> > > RAX: ffffffff81e95988 RBX: 00000000000001c1 RCX: ffff8880205b3a80
+> > > RDX: 0000000000000000 RSI: 00000000000001c0 RDI: 00000000000001c1
+> > > RBP: ffffc90003dff830 R08: ffffffff81e90e67 R09: fffffbfff1a433c3
+> > > R10: 0000000000000000 R11: dffffc0000000001 R12: 0000000000000000
+> > > R13: ffffc90003dff6c0 R14: 00000000000001c0 R15: 0000000000000000
+> > > FS:  00007fdbae5ee700(0000) GS:ffff8880b9900000(0000) knlGS:000000000=
+0000000
+> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > > CR2: 00007fdbae6901e0 CR3: 000000007b2dd000 CR4: 00000000003506e0
+> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+> > >
+> > >
+> > > ---
+> > > This report is generated by a bot. It may contain errors.
+> > > See https://goo.gl/tpsmEJ for more information about syzbot.
+> > > syzbot engineers can be reached at syzkaller@googlegroups.com.
+> > >
+> > > syzbot will keep track of this issue. See:
+> > > https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> > > syzbot can test patches for this issue, for details see:
+> > > https://goo.gl/tpsmEJ#testing-patches
+> >
+> > I had a look at this, and the issue is stemming from failed (due to
+> > error injection here) xas_store() in collapse_file() (in this report,
+> > specifically was picking on shmem after MADV_REMOVE punch). This puts
+> > the xa_state into an error state (-ENOMEM) and the subsequent
+> > xas_next() will (a) not increment xas->xa_index (which trips the
+> > VM_BUG_ON), and (b) returns NULL (which is confusing, since AFAIU,
+> > that's a "valid" entry for a truncated page cache entry, but also
+> > being used to indicate error).
+> >
+> > I think the right thing to do is to check xas_invalid() at the top of
+> > the loop, or checking return value of all those xas_store()'s and
+> > taking appropriate action. There is also the possibility this never
+> > occurs in practice due to the "Ensure we have slots for all the pages
+> > in the range" check at the top of the function, and that we are only
+> > able to trip this from error injection.
+>
+> Right, so looking a bit more into this this morning, my last question abo=
+ut
+> whether the xas_create_range() check at the top of collapse_file() guaran=
+teeing
+> us the needed slots (and that syzbot was only able to trip this due to er=
+ror
+> injection) is plainly false: we are actually attempting to allocate memor=
+y here,
+> so clearly the slots weren't already available - duh.
+>
+> Now, why isn't that well-intending pre-reservation enough? Well, we are d=
+ropping
+> the xarray lock ~ every iteration of the for-loop, then relocking it to s=
+tore
+> the hugpage at the current index. While the lock is dropped, there isn't
+> anything protecting us from racing with page_cache_delete() -- here, from
+>
+>         __filemap_remove_folio()
+>         truncate_inode_folio()
+>         shmem_undo_range()
+>         shmem_truncate_range()
+>         vfs_fallocate()
+>         madvise_remove()
+>
+> which can then remove slots out from under us:
+>
+>         xas_delete_node()
+>         update_node()
+>         xas_store()
+>         page_cache_delete()
+>
+> So, I think this code needs to be guarded against concurrent slot removal=
+.
+>
+> I think just giving up is the best (i.e. simplest) route (vs taking some
+> additional measures to serialize vs concurrent removal). One concern is t=
+hat if
+> we've encountered ENOMEM situation where xas_store() is failing, then the
+> rollback code also won't work correctly. However, rollback xas_store() wi=
+ll
+> either replace the current hpage entry with the previous entry, or replac=
+e it
+> will a NULL entry (had it been a hole previously) -- neither of which wil=
+l
+> involve any additional allocations -- so we're safe.
+>
+> Patch to fix this should be following in the next day or so.
+>
+>
 
-So now I get this:
-
-⬢[acme@toolbox perf-tools-next]$ perf -vv
-perf version 6.3.rc1.gace4d44d094c
-                 dwarf: [ on  ]  # HAVE_DWARF_SUPPORT
-    dwarf_getlocations: [ on  ]  # HAVE_DWARF_GETLOCATIONS_SUPPORT
-         syscall_table: [ on  ]  # HAVE_SYSCALL_TABLE_SUPPORT
-                libbfd: [ OFF ]  # HAVE_LIBBFD_SUPPORT
-            debuginfod: [ on  ]  # HAVE_DEBUGINFOD_SUPPORT
-                libelf: [ on  ]  # HAVE_LIBELF_SUPPORT
-               libnuma: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-numa_num_possible_cpus: [ on  ]  # HAVE_LIBNUMA_SUPPORT
-               libperl: [ on  ]  # HAVE_LIBPERL_SUPPORT
-             libpython: [ on  ]  # HAVE_LIBPYTHON_SUPPORT
-              libslang: [ on  ]  # HAVE_SLANG_SUPPORT
-             libcrypto: [ on  ]  # HAVE_LIBCRYPTO_SUPPORT
-             libunwind: [ on  ]  # HAVE_LIBUNWIND_SUPPORT
-    libdw-dwarf-unwind: [ on  ]  # HAVE_DWARF_SUPPORT
-                  zlib: [ on  ]  # HAVE_ZLIB_SUPPORT
-                  lzma: [ on  ]  # HAVE_LZMA_SUPPORT
-             get_cpuid: [ on  ]  # HAVE_AUXTRACE_SUPPORT
-                   bpf: [ on  ]  # HAVE_LIBBPF_SUPPORT
-                   aio: [ on  ]  # HAVE_AIO_SUPPORT
-                  zstd: [ on  ]  # HAVE_ZSTD_SUPPORT
-               libpfm4: [ on  ]  # HAVE_LIBPFM
-         libtraceevent: [ on  ]  # HAVE_LIBTRACEEVENT
-         BPF skeletons: [ on  ]  # HAVE_BPF_SKEL
-⬢[acme@toolbox perf-tools-next]$
-
-Shouldn't we have, right next to libbpf that libstdc++ feature status?
-
-- Arnaldo
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/Makefile.config | 25 ++++++++++---------------
->  tools/perf/Makefile.perf   |  2 ++
->  tools/perf/tests/make      |  2 ++
->  3 files changed, 14 insertions(+), 15 deletions(-)
-> 
-> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> index 2557654d8e29..5756498248e0 100644
-> --- a/tools/perf/Makefile.config
-> +++ b/tools/perf/Makefile.config
-> @@ -882,7 +882,7 @@ ifneq ($(NO_JEVENTS),1)
->    endif
->  endif
->  
-> -ifndef NO_LIBBFD
-> +ifdef BUILD_NONDISTRO
->    ifeq ($(feature-libbfd), 1)
->      EXTLIBS += -lbfd -lopcodes
->    else
-> @@ -905,6 +905,7 @@ ifndef NO_LIBBFD
->      $(call feature_check,disassembler-init-styled)
->    endif
->  
-> +  CFLAGS += -DHAVE_LIBBFD_SUPPORT
->    ifeq ($(feature-libbfd-buildid), 1)
->      CFLAGS += -DHAVE_LIBBFD_BUILDID_SUPPORT
->    else
-> @@ -915,32 +916,26 @@ endif
->  ifdef NO_DEMANGLE
->    CFLAGS += -DNO_DEMANGLE
->  else
-> -  ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
-> -    EXTLIBS += -liberty
-> -  else
-> +  ifdef BUILD_NONDISTRO
->      ifeq ($(filter -liberty,$(EXTLIBS)),)
-> -      $(call feature_check,cplus-demangle)
-> -
-> -      # we dont have neither HAVE_CPLUS_DEMANGLE_SUPPORT
-> -      # or any of 'bfd iberty z' trinity
-> -      ifeq ($(feature-cplus-demangle), 1)
-> +      ifdef HAVE_CPLUS_DEMANGLE_SUPPORT
->          EXTLIBS += -liberty
->        else
-> -        msg := $(warning No bfd.h/libbfd found, please install binutils-dev[el]/zlib-static/libiberty-dev to gain symbol demangling)
-> -        CFLAGS += -DNO_DEMANGLE
-> +        $(call feature_check,cplus-demangle)
-> +        ifeq ($(feature-cplus-demangle), 1)
-> +          EXTLIBS += -liberty
-> +        endif
->        endif
->      endif
->    endif
->  
->    ifneq ($(filter -liberty,$(EXTLIBS)),)
->      CFLAGS += -DHAVE_CPLUS_DEMANGLE_SUPPORT
-> +  else
-> +    CFLAGS += -DNO_DEMANGLE
->    endif
->  endif
->  
-> -ifneq ($(filter -lbfd,$(EXTLIBS)),)
-> -  CFLAGS += -DHAVE_LIBBFD_SUPPORT
-> -endif
-> -
->  ifndef NO_ZLIB
->    ifeq ($(feature-zlib), 1)
->      CFLAGS += -DHAVE_ZLIB_SUPPORT
-> diff --git a/tools/perf/Makefile.perf b/tools/perf/Makefile.perf
-> index 283ee4f56234..a35bc995d5d8 100644
-> --- a/tools/perf/Makefile.perf
-> +++ b/tools/perf/Makefile.perf
-> @@ -128,6 +128,8 @@ include ../scripts/utilities.mak
->  #
->  # Define NO_BPF_SKEL to disable BPF skeletons
->  #
-> +# Define BUILD_NONDISTRO to enable building an linking against libbfd and
-> +# libiberty distribution license incompatible libraries.
->  
->  # As per kernel Makefile, avoid funny character set dependencies
->  unexport LC_ALL
-> diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-> index deb37fb982e9..c2f74ed43418 100644
-> --- a/tools/perf/tests/make
-> +++ b/tools/perf/tests/make
-> @@ -68,6 +68,7 @@ python_perf_so := $(shell $(MAKE) python_perf_target|grep "Target is:"|awk '{pri
->  make_clean_all      := clean all
->  make_python_perf_so := $(python_perf_so)
->  make_debug          := DEBUG=1
-> +make_nondistro      := BUILD_NONDISTRO=1
->  make_no_libperl     := NO_LIBPERL=1
->  make_no_libpython   := NO_LIBPYTHON=1
->  make_no_scripts     := NO_LIBPYTHON=1 NO_LIBPERL=1
-> @@ -134,6 +135,7 @@ MAKE_F := $(MAKE) -f $(MK)
->  endif
->  run += make_python_perf_so
->  run += make_debug
-> +run += make_nondistro
->  run += make_no_libperl
->  run += make_no_libpython
->  run += make_no_scripts
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
-> 
-
--- 
-
-- Arnaldo
+Also, to be clear, the concurrent removal isn't actually a problem on
+its own, it's only concurrent removal + subsequent inability to
+allocate missing xarray slot that is the issue.
