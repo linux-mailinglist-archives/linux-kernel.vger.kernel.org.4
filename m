@@ -2,56 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9976A6B83D3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BD326B83E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230129AbjCMVNF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:13:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43762 "EHLO
+        id S229899AbjCMVSk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:18:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55278 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjCMVNC (ORCPT
+        with ESMTP id S229636AbjCMVSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:13:02 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AEB88E3C0;
-        Mon, 13 Mar 2023 14:12:18 -0700 (PDT)
+        Mon, 13 Mar 2023 17:18:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6064584B3;
+        Mon, 13 Mar 2023 14:18:16 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D9D92B8149C;
-        Mon, 13 Mar 2023 21:12:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A0BFEC433EF;
-        Mon, 13 Mar 2023 21:12:15 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 361B6614F1;
+        Mon, 13 Mar 2023 21:18:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 93956C433EF;
+        Mon, 13 Mar 2023 21:18:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678741935;
-        bh=zYJBShYkwWSVXL8WyRJR97m9GVSH3Xk1/B+RUVJG3cQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=JH9S+RlT/DdfAYGtquoWHeApkus/ituRl3F76d67/bmm+2TIYoq11R3N+ZsINz5sP
-         Qw/mya8wO6vSqrR6VOLvR0dg67GkB1PoZTmqtD9A7nSoeTDRwgC0b4znGUHUnDt90t
-         ihgIlqEhh1oUbQ5OJ0LaRPtSircIA3B7oIfftIeV0j82TPELDYuoGvpjD0HVEbFYUu
-         rXeuuzEI+C3iLrtPCfu6FCNam6Me1DM4jL1qzUNSSbBcHHoY6oqE4dGvYrVTOQx//S
-         ztZ0Zi11M+tFVDGDbuLGe2mrQZd85GKmkbgKSeX+CvNnBba00ZFPWj6cKNAEMMfg1n
-         DI3Je75lf9HdA==
-Received: by mail-lf1-f50.google.com with SMTP id x17so1306459lfu.5;
-        Mon, 13 Mar 2023 14:12:15 -0700 (PDT)
-X-Gm-Message-State: AO0yUKUtYTUvqaUfr3DO8MN9eCdEzzoNq42eNlHltb8e9Y4sQ42o/8un
-        HhkkYcRqawS9i0YiCI3BK+4qvNfT5DUiJXKE+cM=
-X-Google-Smtp-Source: AK7set+DjQ1xvcDa5hV1VdH/Pr6Am7QIxL7TaTlkKoBpFB2dZDT/hkUK+3eGTF4IGCtolqIuEmueTFud7NHOOva8TTQ=
-X-Received: by 2002:ac2:5927:0:b0:4db:1a0d:f261 with SMTP id
- v7-20020ac25927000000b004db1a0df261mr10797689lfi.3.1678741933628; Mon, 13 Mar
- 2023 14:12:13 -0700 (PDT)
+        s=k20201202; t=1678742295;
+        bh=6mjt9yhry9OZrGSoFR8oPMv/MhGYAYm5/QiZHqwgr3Q=;
+        h=From:To:Cc:Subject:Date:From;
+        b=SALdwbEY67uvSj2NKIONHf4FyVXtnGDxNlObLGFUagGwVN6ayhPWsXf3i4zYs8RFv
+         UH3MjeVdE4evNvqVpwAGOpINbdEBSnoUfb80mWBjePkoqSH7RA3/e6vk5zo5UOSADS
+         y8Kmpr6hzjYvbFcaKD0cx8dwZ9k4BUWJryD0iaVSKQ4YBXRqZDyGiCPFkgrhgSTu4/
+         IhdPoofNqzzGwVim6/IrdXd/mO/KiEhwfMlYv6Et70EBQ1hcMG+++5wcaUKDwLd0rD
+         vO47Vf0yxE7NdcPT/1qbCcqmsIebO+im14pbhnuNDFtG9SUKQCMLksghODxr9lhtWo
+         8K7ROvfOyUd0w==
+From:   Ross Zwisler <zwisler@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Ross Zwisler <zwisler@google.com>,
+        "Tobin C. Harding" <me@tobin.cc>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Shuah Khan <shuah@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Tycho Andersen <tycho@tycho.pizza>, kvm@vger.kernel.org,
+        linux-hardening@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, linux-trace-kernel@vger.kernel.org,
+        Mukesh Ojha <quic_mojha@quicinc.com>
+Subject: [PATCH v4 1/3] selftests: use canonical ftrace path
+Date:   Mon, 13 Mar 2023 15:17:43 -0600
+Message-Id: <20230313211746.1541525-1-zwisler@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-References: <20230214-kobj_type-md-v1-1-d6853f707f11@weissschuh.net>
-In-Reply-To: <20230214-kobj_type-md-v1-1-d6853f707f11@weissschuh.net>
-From:   Song Liu <song@kernel.org>
-Date:   Mon, 13 Mar 2023 14:12:01 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW5atxr8iFS-=scHjhXo19We4Rnms+XU80c9aKANQL1k1g@mail.gmail.com>
-Message-ID: <CAPhsuW5atxr8iFS-=scHjhXo19We4Rnms+XU80c9aKANQL1k1g@mail.gmail.com>
-Subject: Re: [PATCH] md: make kobj_type structures constant
-To:     =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc:     linux-raid@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -61,62 +61,117 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 7:19=E2=80=AFPM Thomas Wei=C3=9Fschuh <linux@weisss=
-chuh.net> wrote:
->
-> Since commit ee6d3dd4ed48 ("driver core: make kobj_type constant.")
-> the driver core allows the usage of const struct kobj_type.
->
-> Take advantage of this to constify the structure definitions to prevent
-> modification at runtime.
->
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+From: Ross Zwisler <zwisler@google.com>
 
-Applied to md-next. Thanks!
+The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
 
-Song
+But, from Documentation/trace/ftrace.rst:
 
-> ---
->  drivers/md/md.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/md/md.c b/drivers/md/md.c
-> index 02b0240e7c71..091c1d6f0b87 100644
-> --- a/drivers/md/md.c
-> +++ b/drivers/md/md.c
-> @@ -78,7 +78,7 @@
->  static LIST_HEAD(pers_list);
->  static DEFINE_SPINLOCK(pers_lock);
->
-> -static struct kobj_type md_ktype;
-> +static const struct kobj_type md_ktype;
->
->  struct md_cluster_operations *md_cluster_ops;
->  EXPORT_SYMBOL(md_cluster_ops);
-> @@ -3600,7 +3600,7 @@ static const struct sysfs_ops rdev_sysfs_ops =3D {
->         .show           =3D rdev_attr_show,
->         .store          =3D rdev_attr_store,
->  };
-> -static struct kobj_type rdev_ktype =3D {
-> +static const struct kobj_type rdev_ktype =3D {
->         .release        =3D rdev_free,
->         .sysfs_ops      =3D &rdev_sysfs_ops,
->         .default_groups =3D rdev_default_groups,
-> @@ -5558,7 +5558,7 @@ static const struct sysfs_ops md_sysfs_ops =3D {
->         .show   =3D md_attr_show,
->         .store  =3D md_attr_store,
->  };
-> -static struct kobj_type md_ktype =3D {
-> +static const struct kobj_type md_ktype =3D {
->         .release        =3D md_kobj_release,
->         .sysfs_ops      =3D &md_sysfs_ops,
->         .default_groups =3D md_attr_groups,
->
-> ---
-> base-commit: f6feea56f66d34259c4222fa02e8171c4f2673d1
-> change-id: 20230214-kobj_type-md-a3c7773574cf
->
-> Best regards,
-> --
-> Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
->
+  Before 4.1, all ftrace tracing control files were within the debugfs
+  file system, which is typically located at /sys/kernel/debug/tracing.
+  For backward compatibility, when mounting the debugfs file system,
+  the tracefs file system will be automatically mounted at:
+
+  /sys/kernel/debug/tracing
+
+A few spots in tools/testing/selftests still refer to this older debugfs
+path, so let's update them to avoid confusion.
+
+Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+Reviewed-by: Mukesh Ojha <quic_mojha@quicinc.com>
+Signed-off-by: Ross Zwisler <zwisler@google.com>
+---
+
+v3 here:
+https://lore.kernel.org/all/20230310192050.4096886-1-zwisler@kernel.org/
+
+Changes from v3:
+ * Added Reviwed-by from Steven to patch 2
+ * Rebased onto the current linux/master
+
+ tools/testing/selftests/mm/protection_keys.c      |  4 ++--
+ tools/testing/selftests/user_events/dyn_test.c    |  2 +-
+ tools/testing/selftests/user_events/ftrace_test.c | 10 +++++-----
+ tools/testing/selftests/user_events/perf_test.c   |  8 ++++----
+ 4 files changed, 12 insertions(+), 12 deletions(-)
+
+diff --git a/tools/testing/selftests/mm/protection_keys.c b/tools/testing/selftests/mm/protection_keys.c
+index 95f403a0c46d..0381c34fdd56 100644
+--- a/tools/testing/selftests/mm/protection_keys.c
++++ b/tools/testing/selftests/mm/protection_keys.c
+@@ -98,7 +98,7 @@ int tracing_root_ok(void)
+ void tracing_on(void)
+ {
+ #if CONTROL_TRACING > 0
+-#define TRACEDIR "/sys/kernel/debug/tracing"
++#define TRACEDIR "/sys/kernel/tracing"
+ 	char pidstr[32];
+ 
+ 	if (!tracing_root_ok())
+@@ -124,7 +124,7 @@ void tracing_off(void)
+ #if CONTROL_TRACING > 0
+ 	if (!tracing_root_ok())
+ 		return;
+-	cat_into_file("0", "/sys/kernel/debug/tracing/tracing_on");
++	cat_into_file("0", "/sys/kernel/tracing/tracing_on");
+ #endif
+ }
+ 
+diff --git a/tools/testing/selftests/user_events/dyn_test.c b/tools/testing/selftests/user_events/dyn_test.c
+index d6265d14cd51..8879a7b04c6a 100644
+--- a/tools/testing/selftests/user_events/dyn_test.c
++++ b/tools/testing/selftests/user_events/dyn_test.c
+@@ -16,7 +16,7 @@
+ 
+ #include "../kselftest_harness.h"
+ 
+-const char *dyn_file = "/sys/kernel/debug/tracing/dynamic_events";
++const char *dyn_file = "/sys/kernel/tracing/dynamic_events";
+ const char *clear = "!u:__test_event";
+ 
+ static int Append(const char *value)
+diff --git a/tools/testing/selftests/user_events/ftrace_test.c b/tools/testing/selftests/user_events/ftrace_test.c
+index 404a2713dcae..a0b2c96eb252 100644
+--- a/tools/testing/selftests/user_events/ftrace_test.c
++++ b/tools/testing/selftests/user_events/ftrace_test.c
+@@ -16,11 +16,11 @@
+ 
+ #include "../kselftest_harness.h"
+ 
+-const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+-const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+-const char *enable_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/enable";
+-const char *trace_file = "/sys/kernel/debug/tracing/trace";
+-const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
++const char *data_file = "/sys/kernel/tracing/user_events_data";
++const char *status_file = "/sys/kernel/tracing/user_events_status";
++const char *enable_file = "/sys/kernel/tracing/events/user_events/__test_event/enable";
++const char *trace_file = "/sys/kernel/tracing/trace";
++const char *fmt_file = "/sys/kernel/tracing/events/user_events/__test_event/format";
+ 
+ static inline int status_check(char *status_page, int status_bit)
+ {
+diff --git a/tools/testing/selftests/user_events/perf_test.c b/tools/testing/selftests/user_events/perf_test.c
+index 8b4c7879d5a7..31505642aa9b 100644
+--- a/tools/testing/selftests/user_events/perf_test.c
++++ b/tools/testing/selftests/user_events/perf_test.c
+@@ -18,10 +18,10 @@
+ 
+ #include "../kselftest_harness.h"
+ 
+-const char *data_file = "/sys/kernel/debug/tracing/user_events_data";
+-const char *status_file = "/sys/kernel/debug/tracing/user_events_status";
+-const char *id_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/id";
+-const char *fmt_file = "/sys/kernel/debug/tracing/events/user_events/__test_event/format";
++const char *data_file = "/sys/kernel/tracing/user_events_data";
++const char *status_file = "/sys/kernel/tracing/user_events_status";
++const char *id_file = "/sys/kernel/tracing/events/user_events/__test_event/id";
++const char *fmt_file = "/sys/kernel/tracing/events/user_events/__test_event/format";
+ 
+ struct event {
+ 	__u32 index;
+
+base-commit: fc89d7fb499b0162e081f434d45e8d1b47e82ece
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
