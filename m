@@ -2,75 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F2D26B8335
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:57:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 817E26B8347
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229969AbjCMU5b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:57:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39938 "EHLO
+        id S229493AbjCMU7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44966 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbjCMU53 (ORCPT
+        with ESMTP id S229551AbjCMU7O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:57:29 -0400
-Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642018236C;
-        Mon, 13 Mar 2023 13:57:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=m3KRKIIxdQGzDnfQbP1Rf414m0PFZ7Oc2osrdxzJBmk=; b=mOvcffLPKSHMzp5msUiTRSnf6M
-        GACFCJHb1oFRC8NQpHSfAxYCgkrg/YW4MaAikPTySg4VabWqIWcicuLikA5eGcoft5ayR7AEHZV6O
-        AqOMLj6RRJpOM9Z9SjqeVev1BjlPqhNi3gSfEdVD4z9cbj1RWcbFnwEXDMDozw0N6D8GgA4Dw7bOH
-        9gJ0xIw1nJQE2TlmURapIZMFBKDKw691LB5Lv54I1HNxuvPy26M9okKO7EOVpwOz+p3K70QegGPjL
-        klhC7WHA6YkPNA9jNSN8xFBGQthVjwrCS8y0++66L2bx40qUFjWm3N1IPzSSf6iERzHXxRqAH3eqJ
-        JuhuUCvg==;
-Received: from [152.254.169.34] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1pbpEQ-008SEj-0N; Mon, 13 Mar 2023 21:57:22 +0100
-Message-ID: <522c745a-4e4c-8c6c-cca5-0d4ebc76ace3@igalia.com>
-Date:   Mon, 13 Mar 2023 17:57:17 -0300
+        Mon, 13 Mar 2023 16:59:14 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E99C126E3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:58:31 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id h11so2329723ild.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 13:58:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678741107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cz/F3ZMv7JJTYZGTybhdPyEf/RGnba1yVdkcAMI5UGs=;
+        b=CX5N+6G4k61+cs5paeZTKqx3CgY3MqW1PGC3VLqiHAc3Lrd0ET11IpVzV0YbGQuAhT
+         kN9pVSXmJaO4L+GH2fNmFZqiJe+kAanFT20RUughuKx+ZeCRJO2bsqE4d+iD9C6ICjY0
+         39bzUoWEwWWcxvXCPs2v6my2T9ZGYzCX5248ogRVXVwe/VNO+xxfdIGbJNmcY0yeA4Je
+         qmBMm9/otFx29sNbuFFVlWPreJqSlI4uyPY7XYirwAkxvWcN2yNJcMw0xGgVJ5ovTdOW
+         lUbtm9J2jP+rUsEsx1DVMhtWTKuv9vIcaVjGuEklJPnYUArGp8ho3d3FX45CjsuAXyA0
+         tj9Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678741107;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=cz/F3ZMv7JJTYZGTybhdPyEf/RGnba1yVdkcAMI5UGs=;
+        b=nKXGNVyYMMT5kjxQUlEmSBBeQkFxGeaOlUKi47HtYKJ9h74IixBNAkQqUWw+DkITi9
+         q4b36jFFJfmAm/B/WIMj0hO8OocqIGfr41iVJfUyq4AwfL4SfOuOwgjIDgS3SXj7nNd1
+         uW+L0/3INoMuFWJu5+jcLhH2N9XrGbWSwY9D3klIdJelMWrMFXVLp7u01qhjCZx+AeO0
+         49mHfqFQJeLc83rOCZ5eS5dpmjxce4g3MfbET4F6dMTVbx+aQ/IU1zevfS95IPS37PFH
+         LGQbF/Ehh3Rfmd5NfWxG1rXToEkkKYk0sGogazwo3DVhO/+GyDcrnZV8YeFwbktUaJfK
+         veZw==
+X-Gm-Message-State: AO0yUKU5BIOtIcinD1e3MAAtriyph9IgcSAAlS9nE85zTFX8UGfNtEIh
+        fDtVgxlmytNLMLA3N+qX6mIXKBjzHhnsTIFSoS9YvQ==
+X-Google-Smtp-Source: AK7set+Xi9ueG8OhlwmwlrRpeY2SXs9S254LzUANmFveR3Bx9FO9NaM1s5wYgid/T+MUYELve8vax69y6fNNKiJvEQ8=
+X-Received: by 2002:a05:6e02:12a8:b0:323:17f1:e752 with SMTP id
+ f8-20020a056e0212a800b0032317f1e752mr532220ilr.0.1678741107477; Mon, 13 Mar
+ 2023 13:58:27 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] alpha: Clean-up the panic notifier code
-Content-Language: en-US
-To:     Matt Turner <mattst88@gmail.com>
-Cc:     linux-alpha@vger.kernel.org,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        linux-kernel@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, Petr Mladek <pmladek@suse.com>
-References: <20230220212245.153554-1-gpiccoli@igalia.com>
- <ba225af5-3729-32a4-318a-c1c4b8e8b37a@igalia.com>
- <CAEdQ38HS=V9QJsdSoccos02HGn4=QKobkci=BTP9tc3=RyzUFQ@mail.gmail.com>
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <CAEdQ38HS=V9QJsdSoccos02HGn4=QKobkci=BTP9tc3=RyzUFQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230308225912.1960990-1-irogers@google.com> <20230308225912.1960990-7-irogers@google.com>
+ <ZA+KjvtPyDDb0Xb5@kernel.org>
+In-Reply-To: <ZA+KjvtPyDDb0Xb5@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Mon, 13 Mar 2023 13:58:16 -0700
+Message-ID: <CAP-5=fXdJ3UQMF47BVt4-mPdVnAyzPpFnWWCdh74WL89=+3VDQ@mail.gmail.com>
+Subject: Re: [PATCH v4 06/11] perf evsel: Add function to compute group PMU name
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>,
+        "Steinar H. Gunderson" <sesse@google.com>,
+        Kim Phillips <kim.phillips@amd.com>,
+        Florian Fischer <florian.fischer@muhq.space>,
+        James Clark <james.clark@arm.com>,
+        Suzuki Poulouse <suzuki.poulose@arm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        John Garry <john.g.garry@oracle.com>,
+        Kajol Jain <kjain@linux.ibm.com>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 17:39, Matt Turner wrote:
-> [...]
-> My apologies. I meant to include this in my last pull request.
-> 
-> I'll take it through my tree.
-> 
-> Thanks,
-> Matt
+On Mon, Mar 13, 2023 at 1:41=E2=80=AFPM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Wed, Mar 08, 2023 at 02:59:07PM -0800, Ian Rogers escreveu:
+> > The computed name respects software events and aux event groups, such
+> > that the pmu_name is changed to be that of the aux event leader or
+> > group leader for software events. This is done as a later change will
+> > split events that are in different PMUs into different groups.
+>
+> This makes 'perf test python' to fail:
+>
+> =E2=AC=A2[acme@toolbox perf-tools-next]$ perf test -v python
+> Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF =
+maps, etc
+>  19: 'import perf' in python                                         :
+> --- start ---
+> test child forked, pid 720242
+> python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf-t=
+ools-next/python'); import perf" | '/usr/bin/python3' "
+> Traceback (most recent call last):
+>   File "<stdin>", line 1, in <module>
+> ImportError: /tmp/build/perf-tools-next/python/perf.cpython-311-x86_64-li=
+nux-gnu.so: undefined symbol: evsel__is_aux_event
+> test child finished with -1
+> ---- end ----
+> 'import perf' in python: FAILED!
+> =E2=AC=A2[acme@toolbox perf-tools-next]$
+>
+> So I added the following patch, please run 'perf test' and 'make -C
+> tools/perf build-test' before submitting patch series.
+>
+> - Arnaldo
 
-Hi Matt, no need for apologies - thanks for including!
-Cheers,
+Hmm.. was passing for me:
 
+```
+ 19: 'import perf' in python                                         :
+--- start ---
+test child forked, pid 3161744
+python usage test: "echo "import sys ;
+sys.path.append('/tmp/perf/python'); import perf" | '/usr/bin/python3'
+"
+test child finished with 0
+---- end ----
+'import perf' in python: Ok
+```
 
-Guilherme
+albeit:
+```
+$ nm /tmp/perf/python/perf.cpython-310-x86_64-linux-gnu.so |grep is_aux_eve=
+nt
+                U evsel__is_aux_event
+```
+
+Perhaps there's some more aggressive linking flag I need to enable.
+
+Thanks,
+Ian
+
+> diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
+> index ab48ffbb644805df..be336f1b2b689602 100644
+> --- a/tools/perf/util/python.c
+> +++ b/tools/perf/util/python.c
+> @@ -93,6 +93,11 @@ int perf_pmu__scan_file(struct perf_pmu *pmu, const ch=
+ar *name, const char *fmt,
+>         return EOF;
+>  }
+>
+> +bool evsel__is_aux_event(const struct evsel *evsel __maybe_unused)
+> +{
+> +       return false;
+> +}
+> +
+>  /*
+>   * Add this one here not to drag util/metricgroup.c
+>   */
+>
+> > Signed-off-by: Ian Rogers <irogers@google.com>
+> > ---
+> >  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
+> >  tools/perf/util/evsel.h |  1 +
+> >  2 files changed, 25 insertions(+)
+> >
+> > diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
+> > index 2dc2c24252bb..51d9650267d0 100644
+> > --- a/tools/perf/util/evsel.c
+> > +++ b/tools/perf/util/evsel.c
+> > @@ -821,6 +821,30 @@ const char *evsel__name(struct evsel *evsel)
+> >       return "unknown";
+> >  }
+> >
+> > +const char *evsel__group_pmu_name(const struct evsel *evsel)
+> > +{
+> > +     const struct evsel *leader;
+> > +
+> > +     /* If the pmu_name is set use it. pmu_name isn't set for CPU and =
+software events. */
+> > +     if (evsel->pmu_name)
+> > +             return evsel->pmu_name;
+> > +     /*
+> > +      * Software events may be in a group with other uncore PMU events=
+. Use
+> > +      * the pmu_name of the group leader to avoid breaking the softwar=
+e event
+> > +      * out of the group.
+> > +      *
+> > +      * Aux event leaders, like intel_pt, expect a group with events f=
+rom
+> > +      * other PMUs, so substitute the AUX event's PMU in this case.
+> > +      */
+> > +     leader  =3D evsel__leader(evsel);
+> > +     if ((evsel->core.attr.type =3D=3D PERF_TYPE_SOFTWARE || evsel__is=
+_aux_event(leader)) &&
+> > +         leader->pmu_name) {
+> > +             return leader->pmu_name;
+> > +     }
+> > +
+> > +     return "cpu";
+> > +}
+> > +
+> >  const char *evsel__metric_id(const struct evsel *evsel)
+> >  {
+> >       if (evsel->metric_id)
+> > diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
+> > index 676c499323e9..d26745ca6147 100644
+> > --- a/tools/perf/util/evsel.h
+> > +++ b/tools/perf/util/evsel.h
+> > @@ -280,6 +280,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *=
+bf, size_t size);
+> >
+> >  int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char=
+ *bf, size_t size);
+> >  const char *evsel__name(struct evsel *evsel);
+> > +const char *evsel__group_pmu_name(const struct evsel *evsel);
+> >  const char *evsel__metric_id(const struct evsel *evsel);
+> >
+> >  static inline bool evsel__is_tool(const struct evsel *evsel)
+> > --
+> > 2.40.0.rc0.216.gc4246ad0f0-goog
+> >
+>
+> --
+>
+> - Arnaldo
