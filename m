@@ -2,49 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05336B7084
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:55:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04C366B7090
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 08:57:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230309AbjCMHzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 03:55:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49802 "EHLO
+        id S229688AbjCMH5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 03:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230169AbjCMHzL (ORCPT
+        with ESMTP id S229673AbjCMH4b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 03:55:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D720532A4;
-        Mon, 13 Mar 2023 00:53:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 93CEA6102C;
-        Mon, 13 Mar 2023 07:53:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A00A9C433D2;
-        Mon, 13 Mar 2023 07:53:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678694027;
-        bh=qXpORCVC22q6WFkUkgrUTCWoKOTFuIICXiYOXV4iEj0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=1ijGgz6YsPWKhJ0K9J5eGnkTqlVfLHOKSchxUPLzAiosv7VccmQMVK/4BtFAlBio3
-         NWwI//kQ1geBcgLF52Cn6s/wYQqDqlG3T1ri3A2ZzaiK0m7mJ11nJ3addojqCcwqCU
-         P4jToqBMfPe0N4nPoLHFg4EzmZa/zm27FaCxGhJ4=
-Date:   Mon, 13 Mar 2023 08:53:43 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Jarkko Sonninen <kasper@iki.fi>
-Cc:     Johan Hovold <johan@kernel.org>, linux-usb@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
-Message-ID: <ZA7Wh2Z/DdKOsOYr@kroah.com>
-References: <20230313010416.845252-1-kasper@iki.fi>
- <ZA7KIs2jA/acpN9n@kroah.com>
- <a1ba59be-30aa-08e9-65e7-2c458cc164f9@iki.fi>
+        Mon, 13 Mar 2023 03:56:31 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8888E90
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 00:54:51 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbd0x-0001j6-AO; Mon, 13 Mar 2023 08:54:39 +0100
+Received: from [2a0a:edc0:0:900:1d::77] (helo=ptz.office.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbd0v-003naX-CF; Mon, 13 Mar 2023 08:54:37 +0100
+Received: from ukl by ptz.office.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ukl@pengutronix.de>)
+        id 1pbd0u-004TOX-OE; Mon, 13 Mar 2023 08:54:36 +0100
+From:   =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>
+Cc:     linux-kernel@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        kernel@pengutronix.de
+Subject: [PATCH 0/5] clocksource: Convert to platform remove callback returning void
+Date:   Mon, 13 Mar 2023 08:54:25 +0100
+Message-Id: <20230313075430.2730803-1-u.kleine-koenig@pengutronix.de>
+X-Mailer: git-send-email 2.39.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <a1ba59be-30aa-08e9-65e7-2c458cc164f9@iki.fi>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1493; i=u.kleine-koenig@pengutronix.de; h=from:subject; bh=yo4yph09zji6jUBdgrKcMoe7RCLM6ePyFNEQRE1Mono=; b=owEBbQGS/pANAwAKAcH8FHityuwJAcsmYgBkDtajP8HGpAMePs0ZnmVVLrhvd2sv+Tnd0xIxZ h0sy6J4bKqJATMEAAEKAB0WIQR+cioWkBis/z50pAvB/BR4rcrsCQUCZA7WowAKCRDB/BR4rcrs CQpTB/0fklJTJiJcfqJgvfdMQaem2ZxZR/Gmruv90hj1UT6nMcstF5G68Btu/eTP7TWwYq4sQUs RhljjMAO/qioqNZL3bO8aZDgzlb8NOg22O3ggXg9+AkMkbm4fWlRWbGHlX/E3vCL/YsMugy2ffl lxg69QN0jZOfEu09mORB9tvbXwbeKHR4H/yvgpowCtiE6JqUF7otxDaQh7A6c4UOyblpQvdCjci WuP6O2hg9hRQjUn/qy4UObfEXeTYzdC1/sGxz9dXHeJU/o2WFu02wv/ggy/vN8ae+zAp6tJ2DNy mTQdLEGJjf23EV9BCefhUQkalSThsZgl3qSWStQbsGdGslP3
+X-Developer-Key: i=u.kleine-koenig@pengutronix.de; a=openpgp; fpr=0D2511F322BFAB1C1580266BE2DCDD9132669BD6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ukl@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,25 +60,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 09:49:26AM +0200, Jarkko Sonninen wrote:
-> > > +{
-> > > +	void __user *argp = (void __user *)arg;
-> > > +
-> > > +	switch (cmd) {
-> > > +	case TIOCGRS485:
-> > > +		return xr_get_rs485_config(tty, argp);
-> > > +	case TIOCSRS485:
-> > > +		return xr_set_rs485_config(tty, argp);
-> > > +	}
-> > > +	return -ENOIOCTLCMD;
-> > Wrong ioctl return value :(
-> 
-> What is the correct ioctl error return value ?
-> ENOIOCTLCMD was used in most places in usb serial as an error return.
+Hello,
 
-ENOTTY is the correct one for when an ioctl is not handled by the ioctl
-call.
+this patch series adapts the platform drivers below drivers/clk
+to use the .remove_new() callback. Compared to the traditional .remove()
+callback .remove_new() returns no value. This is a good thing because
+the driver core doesn't (and cannot) cope for errors during remove. The
+only effect of a non-zero return value in .remove() is that the driver
+core emits a warning. The device is removed anyhow and an early return
+from .remove() usually yields a resource leak.
 
-thanks,
+Most clocksource drivers are not supposed to be removed. Two drivers are
+adapted here to actually prevent removal. One driver is fixed not to
+return an error code in .remove() and then the two remaining drivers
+with a remove callback are trivially converted to .remove_new().
 
-greg k-h
+Best regards
+Uwe
+
+Uwe Kleine-König (5):
+  clocksource: sh_mtu2: Mark driver as non-removable
+  clocksource: timer-stm32-lp: Mark driver as non-removable
+  clocksource: timer-ti-dm: Improve error message in .remove
+  clocksource: timer-tegra186: Convert to platform remove callback
+    returning void
+  clocksource: timer-ti-dm: Convert to platform remove callback
+    returning void
+
+ drivers/clocksource/sh_mtu2.c        | 7 +------
+ drivers/clocksource/timer-stm32-lp.c | 7 +------
+ drivers/clocksource/timer-tegra186.c | 6 ++----
+ drivers/clocksource/timer-ti-dm.c    | 7 ++++---
+ 4 files changed, 8 insertions(+), 19 deletions(-)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+-- 
+2.39.1
+
