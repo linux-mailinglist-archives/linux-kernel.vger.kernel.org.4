@@ -2,108 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B0F26B77F5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:48:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48BD6B7805
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:50:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229493AbjCMMsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59026 "EHLO
+        id S230281AbjCMMub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:50:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjCMMsU (ORCPT
+        with ESMTP id S230289AbjCMMuX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:48:20 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D538136C9;
-        Mon, 13 Mar 2023 05:48:15 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.57])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PZxGg1LknzHwqB;
-        Mon, 13 Mar 2023 20:46:03 +0800 (CST)
-Received: from [10.174.176.34] (10.174.176.34) by
- canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 20:48:12 +0800
-Subject: Re: [PATCH 4/5] jbd2: factor out journal initialization from
- journal_get_superblock()
-To:     Jan Kara <jack@suse.cz>, Zhihao Cheng <chengzhihao1@huawei.com>
-CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.com>,
-        <linux-ext4@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230310125206.2867822-1-chengzhihao1@huawei.com>
- <20230310125206.2867822-5-chengzhihao1@huawei.com>
- <20230313111253.2eoplgfhcgbaqri2@quack3>
-From:   Zhang Yi <yi.zhang@huawei.com>
-Message-ID: <a1aef56e-652e-793c-3913-c083119d4b45@huawei.com>
-Date:   Mon, 13 Mar 2023 20:48:11 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.12.0
+        Mon, 13 Mar 2023 08:50:23 -0400
+Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D120434002
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:49:54 -0700 (PDT)
+Received: by mail-pg1-x52b.google.com with SMTP id 132so6800710pgh.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:49:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678711794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Wx8jF7FKGmBoaIt+aFf1/ouqS3HHqR+OXeKb+Cy9oZE=;
+        b=HKEZDOm+mV1HAdL7ER3iR1vWEz+4AMwcB8/eiYzfDT6G3vlc/AaUcvMnA+QJ8TeT8y
+         VFxsnjxJGqsNiwUpJ+hn81fvGKZv4x+d58+sjI9u4cMRSUA0YEmcNXr/ygpARwkw+f7/
+         eAchNtNYJBBtn/PE4ARsywNpqb/J+N4HdfukwE8Mvc+YC+nrIxTOndCSaacbcVKRBN/3
+         DBI2ew5D4qaoQmlBSUIF6ZG1KxARWrGfgil/kWwcGRNUbrJOfxigAjZTxycUfS7z1Wpf
+         9kpY6jDanHkZIjl420k/BbT1PmWkmPeGFVFO3WSLSBbMcAU9MfOXdev+i0VBNBL/JRUj
+         XQPA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678711794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Wx8jF7FKGmBoaIt+aFf1/ouqS3HHqR+OXeKb+Cy9oZE=;
+        b=XWIqGut5mTRllKJIu0FnuVMBLB0Gj+XQCkr9nRJCqK2OCeyV2h6bsea1b/K/L86s34
+         bEkJ8hE6F9LPlJALIob4v0jAiUfuhPKezqhXAd4wwchGpyYlx/fbRZGlGVLeBxblMr5k
+         zbMuKz1+/uHNAfdwrZPrlNhq5BdQzrNwOSnW2HHI7Hsmiq752ByoXGLQarZ86tV46SOT
+         xkRYHAt5h7sMxftxDwwTyebeDWo7bYOJaorkt2n1eTIoyZA6zR0jBJo/E7a2x5fzOyhO
+         9pn+2024KIwt3DVQHdQb/5NfcwXsIm5x8Ij5zpn6sA0lLIsrKKPO8jJ1Ew8lR6gtojrq
+         o1dg==
+X-Gm-Message-State: AO0yUKXNCEsCTCGZ7EpS877LjPNeipuyVvt6xRLuk9vIYVAHEMyqiDyp
+        XR53Wn3QK25tAUMN5uZugO7QWAOn3wtd8UHgyo1uTg==
+X-Google-Smtp-Source: AK7set+nraYkEbzD7lEiHtt/giSmKeJ3bPG/6dv6QjfYN2aLbyojc2xt8UY2wcR2r3heZo8J5ExHI7B2fVzTC6vEaTg=
+X-Received: by 2002:a63:f91d:0:b0:502:fd12:83ce with SMTP id
+ h29-20020a63f91d000000b00502fd1283cemr12062421pgi.5.1678711794210; Mon, 13
+ Mar 2023 05:49:54 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20230313111253.2eoplgfhcgbaqri2@quack3>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.174.176.34]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230311111238.251000-1-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230311111238.251000-1-krzysztof.kozlowski@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Mon, 13 Mar 2023 13:49:17 +0100
+Message-ID: <CAPDyKFqaq5ysudyqOe0dB8fm=+p_ywpXdqQr33QUCq3j+Bqnrw@mail.gmail.com>
+Subject: Re: [PATCH] mmc: sdhci: add static to !OF stub
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/13 19:12, Jan Kara wrote:
-> On Fri 10-03-23 20:52:05, Zhihao Cheng wrote:
->> From: Zhang Yi <yi.zhang@huawei.com>
->>
->> Current journal_get_superblock() couple journal superblock checking and
->> partial journal initialization, factor out initialization part from it
->> to make things clear.
->>
->> Signed-off-by: Zhang Yi <yi.zhang@huawei.com>
->> Signed-off-by: Zhihao Cheng <chengzhihao1@huawei.com>
->> ---
->>  fs/jbd2/journal.c | 52 ++++++++++++++++++++---------------------------
->>  1 file changed, 22 insertions(+), 30 deletions(-)
-> 
-> The patch looks mostly good. Just one style nit below.
-> 
->> diff --git a/fs/jbd2/journal.c b/fs/jbd2/journal.c
->> index b991d5c21d16..cd94d068b4e6 100644
->> --- a/fs/jbd2/journal.c
->> +++ b/fs/jbd2/journal.c
->> @@ -1921,26 +1921,15 @@ static int journal_get_superblock(journal_t *journal)
->>  		printk(KERN_WARNING "JBD2: no valid journal superblock found\n");
->>  		goto out;
->>  	}
->> -
->> -	switch(be32_to_cpu(sb->s_header.h_blocktype)) {
->> -	case JBD2_SUPERBLOCK_V1:
->> -		journal->j_format_version = 1;
->> -		break;
->> -	case JBD2_SUPERBLOCK_V2:
->> -		journal->j_format_version = 2;
->> -		break;
->> -	default:
->> +	if (be32_to_cpu(sb->s_header.h_blocktype) != JBD2_SUPERBLOCK_V1 &&
->> +	    be32_to_cpu(sb->s_header.h_blocktype) != JBD2_SUPERBLOCK_V2) {
->>  		printk(KERN_WARNING "JBD2: unrecognised superblock format ID\n");
->>  		goto out;
->>  	}
->> -
->> -	if (be32_to_cpu(sb->s_maxlen) < journal->j_total_len)
->> -		journal->j_total_len = be32_to_cpu(sb->s_maxlen);
->> -	else if (be32_to_cpu(sb->s_maxlen) > journal->j_total_len) {
->> +	if (be32_to_cpu(sb->s_maxlen) > journal->j_total_len) {
->>  		printk(KERN_WARNING "JBD2: journal file too short\n");
->>  		goto out;
->>  	}
->> -
-> 
-> Please keep this empty line here. It actually makes the code more readable,
-> separating logically different checks. Same with three empty lines below...
+On Sat, 11 Mar 2023 at 12:12, Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> The sdhci_get_compatibility() is not used outside of the unit:
+>
+>   drivers/mmc/host/sdhci-pltfm.c:76:6: error: no previous prototype for =
+=E2=80=98sdhci_get_compatibility=E2=80=99 [-Werror=3Dmissing-prototypes]
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>  drivers/mmc/host/sdhci-pltfm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/mmc/host/sdhci-pltfm.c b/drivers/mmc/host/sdhci-pltf=
+m.c
+> index 328b132bbe57..245e56324dff 100644
+> --- a/drivers/mmc/host/sdhci-pltfm.c
+> +++ b/drivers/mmc/host/sdhci-pltfm.c
+> @@ -73,7 +73,7 @@ static void sdhci_get_compatibility(struct platform_dev=
+ice *pdev)
+>                 host->quirks |=3D SDHCI_QUIRK_BROKEN_TIMEOUT_VAL;
+>  }
+>  #else
+> -void sdhci_get_compatibility(struct platform_device *pdev) {}
+> +static void sdhci_get_compatibility(struct platform_device *pdev) {}
+>  #endif /* CONFIG_OF */
 
-Thanks for the comments, I will add them back.
+sdhci_get_compatibility() is using OF functions with stubs for !OF.
 
-Yi.
+Perhaps a cleaner option is to drop the #ifdef CONFIG_OF completely
+around sdhci_get_compatibility(), thus we can drop the stub too.
+
+>
+>  void sdhci_get_property(struct platform_device *pdev)
+> --
+> 2.34.1
+>
+
+Kind regards
+Uffe
