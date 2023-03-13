@@ -2,125 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C89336B6F80
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05DD76B6F7C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229802AbjCMGcg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:32:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
+        id S229740AbjCMGbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 02:31:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229790AbjCMGcf (ORCPT
+        with ESMTP id S229514AbjCMGbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:32:35 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E5604A1D3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:31:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678689105;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=uP6OPkCE+3XV/LM8KCZyJuOxYGuLRyW9hCJ+ior5xWo=;
-        b=cuhXfW1TvjgJ+Tp1kEqGeasMdbcT0EI+OSChNuTAO9mToMezh5y9dSxkNQ7CnZOfgyF8kM
-        0ZPZn0zkwhZx54I440D4iPZEKv3cVdizjpEkcpTmgo6TykZwG7CEQKtMjd0jHrw+v99F1Q
-        uNLCgPlBCY9CqahOmsrxYppaag33EQM=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-461-rir8iuZwPv-DJPnqRM1STg-1; Mon, 13 Mar 2023 02:31:43 -0400
-X-MC-Unique: rir8iuZwPv-DJPnqRM1STg-1
-Received: by mail-wm1-f70.google.com with SMTP id n18-20020a05600c501200b003ed24740ea4so875756wmr.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:31:43 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678689102;
-        h=content-transfer-encoding:content-disposition:mime-version
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uP6OPkCE+3XV/LM8KCZyJuOxYGuLRyW9hCJ+ior5xWo=;
-        b=FeCxSe9VaRORO+zrTU31Tp22xB6WBR6+9Rkw4urf+Zy2yP7HV9S72B5FyRFw5QfZ98
-         egRbI08/rBCJ5rvEk70hEgqkH0ZhL0wXoGNWeaRVKtBtsph0QZbHRpdFYmjAUT4Brncr
-         Y82WL2vSYapyAOrLHCYCuiD8Xeaq8izH2aJYpj6cWJImD2SETixa56OJHHMNhrfDZlnC
-         4m9FmIu4J7sxcCQryO3DXzJo2ZrQnh5Uz+Oud4JuFLmWLdyf6+WtEFbhm/Gu9jPi0b0q
-         7VWOo+PTQr2RgVgVrOqUZiW5IOMtFxKWsGouZ4AXn5EBKYLhTy9stUt5leR1O3eB60t4
-         jTtg==
-X-Gm-Message-State: AO0yUKXpoHHtOn9Wj8hQ+xCP2xDUG3j1jsZLvFCW3YpJ5i9RS9yVxg5w
-        cNP8AXue0J95uI6dq8sOgPbvbH1Z7FRdK9ajUjFsCHbSymHGUbuE13wZM4B3jVY8wmwazMxSGq9
-        72XXeY5pSkJORlxxw9mR+TB39
-X-Received: by 2002:a05:600c:a4c:b0:3e2:d3:b2b6 with SMTP id c12-20020a05600c0a4c00b003e200d3b2b6mr7122724wmq.14.1678689102680;
-        Sun, 12 Mar 2023 23:31:42 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/m0d39bBRh2a53avY9wpGXBQ5w6WVRLPsP4dfir1NMRR7vQctreaympSD9w7L/W8ZMq9gTgQ==
-X-Received: by 2002:a05:600c:a4c:b0:3e2:d3:b2b6 with SMTP id c12-20020a05600c0a4c00b003e200d3b2b6mr7122711wmq.14.1678689102415;
-        Sun, 12 Mar 2023 23:31:42 -0700 (PDT)
-Received: from redhat.com ([2.52.26.7])
-        by smtp.gmail.com with ESMTPSA id f25-20020a7bc8d9000000b003ed24653333sm1899615wml.33.2023.03.12.23.31.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 12 Mar 2023 23:31:41 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 02:31:39 -0400
-From:   "Michael S. Tsirkin" <mst@redhat.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        elic@nvidia.com, eperezma@redhat.com, gautam.dawar@amd.com,
-        jasowang@redhat.com, leiyang@redhat.com, lulu@redhat.com,
-        mst@redhat.com, rongtao@cestc.cn, si-wei.liu@oracle.com,
-        stable@vger.kernel.org
-Subject: [GIT PULL] virtio,vhost,vdpa: bugfixes
-Message-ID: <20230313023139-mutt-send-email-mst@kernel.org>
+        Mon, 13 Mar 2023 02:31:50 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54D3F3CE12;
+        Sun, 12 Mar 2023 23:31:49 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D2769B80DBE;
+        Mon, 13 Mar 2023 06:31:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F39C433EF;
+        Mon, 13 Mar 2023 06:31:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678689106;
+        bh=XYltQqLH/YgnHqNRlpBtYqhy53KcaVe7vPvM9fbFjRo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=R8oqGE/BCMV/Ng214H0lYH40oL4csE6jT5MP7QnPEz7ghNYnhBG3hRGMZn9v66+q5
+         WXGFEWh+nkvZKgURNKKh0G9B+la0M6VIATTdsxsDza6MsgA9JhqaLvav4C0yL0cBqX
+         lLE7idxb1o2zIk3Gr5XK6BB1pc5QfoUzC/ChI9Ks=
+Date:   Mon, 13 Mar 2023 07:31:44 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Cixi Geng <cixi.geng@linux.dev>
+Cc:     orsonzhai@gmail.com, baolin.wang@linux.alibaba.com,
+        zhang.lyra@gmail.com, arnd@arndb.de, tony@atomide.com,
+        felipe.balbi@linux.intel.com, paul@crapouillou.net,
+        linus.walleij@linaro.org, cixi.geng1@unisoc.com,
+        gengcixi@gmail.com, linux-kernel@vger.kernel.org,
+        linux-usb@vger.kernel.org
+Subject: Re: [RFC PATCH v1] usb/phy add sprd ums512 usbphy
+Message-ID: <ZA7DUH+qJyMmWBq5@kroah.com>
+References: <20230312171438.177952-1-cixi.geng@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-X-Mutt-Fcc: =sent
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20230312171438.177952-1-cixi.geng@linux.dev>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
+On Mon, Mar 13, 2023 at 01:14:38AM +0800, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+> 
+> This driver is support USB2 phy for Spreadtrum UMS512 SOC's,
+> 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
 
-  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
+Why is this "RFC"?  What is left to do on it to be accepted?
 
-are available in the Git repository at:
+> ---
+>  drivers/usb/phy/Kconfig           |  10 +
+>  drivers/usb/phy/Makefile          |   1 +
+>  drivers/usb/phy/phy-sprd-ums512.c | 511 ++++++++++++++++++++++++++++++
+>  drivers/usb/phy/phy-sprd-ums512.h |  39 +++
 
-  https://git.kernel.org/pub/scm/linux/kernel/git/mst/vhost.git tags/for_linus
+Why do you need a .h file for a single .c file?  Please just put them
+all together into one file.
 
-for you to fetch changes up to ae43c20da2a77c508715a9c77845b4e87e6a1e25:
+thanks,
 
-  tools/virtio: Ignore virtio-trace/trace-agent (2023-03-13 02:29:12 -0400)
-
-----------------------------------------------------------------
-virtio,vhost,vdpa: bugfixes
-
-Some fixes accumulated so far.
-
-Signed-off-by: Michael S. Tsirkin <mst@redhat.com>
-
-----------------------------------------------------------------
-Cindy Lu (1):
-      vp_vdpa: fix the crash in hot unplug with vp_vdpa
-
-Eugenio Pérez (1):
-      vdpa_sim: set last_used_idx as last_avail_idx in vdpasim_queue_ready
-
-Gautam Dawar (1):
-      vhost-vdpa: free iommu domain after last use during cleanup
-
-Rong Tao (1):
-      tools/virtio: Ignore virtio-trace/trace-agent
-
-Si-Wei Liu (1):
-      vdpa/mlx5: should not activate virtq object when suspended
-
- drivers/vdpa/mlx5/core/mlx5_vdpa.h |  1 +
- drivers/vdpa/mlx5/net/mlx5_vnet.c  |  6 +++++-
- drivers/vdpa/vdpa_sim/vdpa_sim.c   | 11 +++++++++++
- drivers/vdpa/virtio_pci/vp_vdpa.c  |  2 +-
- drivers/vhost/vdpa.c               |  3 ++-
- tools/virtio/.gitignore            |  1 +
- 6 files changed, 21 insertions(+), 3 deletions(-)
-
+greg k-h
