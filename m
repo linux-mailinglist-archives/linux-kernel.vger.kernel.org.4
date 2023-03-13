@@ -2,133 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D38B6B7FA0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AF5B56B7FA4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230252AbjCMRix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:38:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57176 "EHLO
+        id S230221AbjCMRl0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:41:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230104AbjCMRit (ORCPT
+        with ESMTP id S229534AbjCMRlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:38:49 -0400
-Received: from out-20.mta1.migadu.com (out-20.mta1.migadu.com [95.215.58.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67DD262300
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:38:45 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 17:38:30 +0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678729123;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Ybjm14aOpi7A3aopxAqo4v6WPM99l74ygtnwOLCEz88=;
-        b=qKL8BE7By0J03+sOQJyOVoPjg1EGaqkkILFMuvPubmJwJo5R2I4Ioa3AvwEaBz6xeymaZv
-        fSiwHIOu2V9lLMl5hGzbssWXHnbWFVtrn7RUibLPjv8SLEBZ3oZbk6sfw51BVun6oviMRP
-        /MmVzX2rgkW/XRE5u55rvZjO02g9bOE=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
- for KVM x86
-Message-ID: <ZA9flqMBSlW95S/i@linux.dev>
-References: <20230309010336.519123-1-seanjc@google.com>
- <20230309010336.519123-3-seanjc@google.com>
- <ZAlGeYAmvhPmVmGe@debian.me>
- <ZAmWefGcsBwcODxW@linux.dev>
- <ZAoWogdeET5N0mug@google.com>
- <ZA9eHzE5vhnXh+TA@linux.dev>
+        Mon, 13 Mar 2023 13:41:25 -0400
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A75B6B5E2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:41:24 -0700 (PDT)
+Received: from fpc (unknown [10.10.165.12])
+        by mail.ispras.ru (Postfix) with ESMTPSA id C565F44C1009;
+        Mon, 13 Mar 2023 17:41:22 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru C565F44C1009
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+        s=default; t=1678729282;
+        bh=dcathSfQ23gltzgIcKInyh+BoofN73T1rgTJq8y09tA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=EPamrUk66P5gRHranF7zGO60zCKKzj/CZISJFsvQYf8/zkGcTc9/nb2juYDgObl+8
+         wOK3ghCBk4KgDpyUxHdvFuUqe3MsLmwAJMWb3N4jJxt651mZ+R+bDuoAQyTr7J6qk6
+         2dCvylxzSonFkJfRtMoczHI6kOdoSj9OKYshLx14=
+Date:   Mon, 13 Mar 2023 20:41:18 +0300
+From:   Fedor Pchelkin <pchelkin@ispras.ru>
+To:     syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com
+Cc:     syzkaller-bugs@googlegroups.com, linux-kernel@vger.kernel.org
+Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
+Message-ID: <20230313174118.325aaafflrliiehe@fpc>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <ZA9eHzE5vhnXh+TA@linux.dev>
-X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 05:32:29PM +0000, Oliver Upton wrote:
-> On Thu, Mar 09, 2023 at 09:25:54AM -0800, Sean Christopherson wrote:
-> > On Thu, Mar 09, 2023, Oliver Upton wrote:
-> > > On Thu, Mar 09, 2023 at 09:37:45AM +0700, Bagas Sanjaya wrote:
-> > > > On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
-> > > > > +As a general guideline, use ``kvm-x86/next`` even if a patch/series touches
-> > > > > +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of the
-> > > > > +branches from the main KVM tree is usually a less good option as they likely
-> > > > > +won't have many, if any, changes for the next release, i.e. using the main KVM
-> > > > > +tree as a base is more likely to yield conflicts.  And if there are non-trivial
-> > > > > +conflicts with multiple architectures, coordination between maintainers will be
-> > > > > +required no matter what base is used.  Note, this is far from a hard rule, i.e.
-> > > > > +use a different base for multi-arch series if that makes the most sense.
-> > > 
-> > > I don't think this is the best way to coordinate with other architectures.
-> > > Regardless of whether you intended this to be prescriptive, I'm worried most
-> > > folks will follow along and just base patches on kvm-x86/next anyway.
-> > 
-> > Probably, but for the target audience (KVM x86 contributors), that's likely the
-> > least awful base 99% of the time.
-> 
-> Sorry, I follow this reasoning at all.
+#syz test: https://github.com/google/kmsan.git master
 
-I *don't* follow ...
-
+--- a/drivers/net/wireless/ath/ath9k/htc_drv_init.c
++++ b/drivers/net/wireless/ath/ath9k/htc_drv_init.c
+@@ -259,7 +259,7 @@ static void ath9k_multi_regread(void *hw_priv, u32 *addr,
+ 	struct ath_common *common = ath9k_hw_common(ah);
+ 	struct ath9k_htc_priv *priv = (struct ath9k_htc_priv *) common->priv;
+ 	__be32 tmpaddr[8];
+-	__be32 tmpval[8];
++	__be32 tmpval[8] = {0};
+ 	int i, ret;
+ 
+ 	for (i = 0; i < count; i++) {
+--- a/drivers/net/wireless/ath/ath9k/wmi.c
++++ b/drivers/net/wireless/ath/ath9k/wmi.c
+@@ -204,8 +204,13 @@ static void ath9k_wmi_rsp_callback(struct wmi *wmi, struct sk_buff *skb)
+ {
+ 	skb_pull(skb, sizeof(struct wmi_cmd_hdr));
+ 
++	if (unlikely(skb->len < wmi->cmd_rsp_len))
++		return;
++
+ 	if (wmi->cmd_rsp_buf != NULL && wmi->cmd_rsp_len != 0)
+ 		memcpy(wmi->cmd_rsp_buf, skb->data, wmi->cmd_rsp_len);
++	else
++		return;
+ 
+ 	complete(&wmi->cmd_wait);
+ }
+@@ -221,6 +226,9 @@ static void ath9k_wmi_ctrl_rx(void *priv, struct sk_buff *skb,
+ 	if (unlikely(wmi->stopped))
+ 		goto free_skb;
+ 
++	if (unlikely(skb->len < sizeof(struct wmi_cmd_hdr)))
++		goto free_skb;
++
+ 	hdr = (struct wmi_cmd_hdr *) skb->data;
+ 	cmd_id = be16_to_cpu(hdr->command_id);
+ 
+@@ -308,8 +316,11 @@ int ath9k_wmi_cmd(struct wmi *wmi, enum wmi_cmd_id cmd_id,
+ 	unsigned long time_left;
+ 	int ret = 0;
+ 
+-	if (ah->ah_flags & AH_UNPLUGGED)
+-		return 0;
++	if (ah->ah_flags & AH_UNPLUGGED) {
++		ath_dbg(common, WMI, "Device unplugged for WMI command: %s\n",
++			wmi_cmd_to_name(cmd_id));
++		return -ENODEV;
++	}
+ 
+ 	skb = alloc_skb(headroom + cmd_len, GFP_ATOMIC);
+ 	if (!skb)
+@@ -342,15 +353,22 @@ int ath9k_wmi_cmd(struct wmi *wmi, enum wmi_cmd_id cmd_id,
+ 		ath_dbg(common, WMI, "Timeout waiting for WMI command: %s\n",
+ 			wmi_cmd_to_name(cmd_id));
+ 		wmi->last_seq_id = 0;
++		wmi->cmd_rsp_buf = NULL;
++		wmi->cmd_rsp_len = 0;
+ 		mutex_unlock(&wmi->op_mutex);
+ 		return -ETIMEDOUT;
+ 	}
+ 
++	wmi->cmd_rsp_buf = NULL;
++	wmi->cmd_rsp_len = 0;
++
+ 	mutex_unlock(&wmi->op_mutex);
+ 
+ 	return 0;
+ 
+ out:
++	wmi->cmd_rsp_buf = NULL;
++	wmi->cmd_rsp_len = 0;
+ 	ath_dbg(common, WMI, "WMI failure for: %s\n", wmi_cmd_to_name(cmd_id));
+ 	mutex_unlock(&wmi->op_mutex);
+ 	kfree_skb(skb);
 -- 
-Thanks,
-Oliver
