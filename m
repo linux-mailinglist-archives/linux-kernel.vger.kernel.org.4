@@ -2,236 +2,322 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A36D56B7FC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25C696B7FCD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:55:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230204AbjCMRwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48668 "EHLO
+        id S229830AbjCMRzr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:55:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCMRwj (ORCPT
+        with ESMTP id S229524AbjCMRzo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:52:39 -0400
-Received: from GBR01-CWL-obe.outbound.protection.outlook.com (mail-cwlgbr01on2090.outbound.protection.outlook.com [40.107.11.90])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3EB479B30;
-        Mon, 13 Mar 2023 10:52:06 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=O1FckNuPpBTQPVS+xxs9MadsqL9BWUqQC0efdUj3s8pfXuxzWyr3rzFCXA1u1q9BWbJ3fnDGVGpTrssSHn7o9G0M4WjNQ+8t+9/wg5S0Fnqeootq9P4QarQydjNiDggbJ/FryAHkir7f5omG1LmqvF5WuKLUh1wHs3G2uOg54iU8RbCfcaZCa3OZrvECFQIgS7Y9XNiJ0u3cBTL/y2prGuh3j8W+XDeH2PbZ8+N9ZYbUS3bzgyfUtEPQ2uDhSCxJ7xq9TLmG0GhbUX73wmTBfQOOYzPXg1Xsdkma/977rYpTOP8VEk9u4yprJVIDnT5A4+kzHFz1mPxvg75dAV687Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=s+24+30jX1Y1+A4rGZPmWbeb0UxP4fsoqj2vGiJvQZg=;
- b=Zj0D6Oya6S/N8mDCFC8EQiXRNL/1h1y+HHNsKGJJnmTpRerDeQGFLyIXStg9m0Exm2TAC3toOOdUFF9yW1ZMmEw/lkM23/pjmJZEPQNR0U3PCeM6XNWKhPNafn5pSKE0auxkl2RxRdxiRYOhzAC9kk1h3x/XyfubE1VSqyOu18qx2CAqgnCn47MAyTAkI0kxsLXVflIPlcU4MbQ1NB3nRvVKB8b+YWgy2sxT6OhH9Den/YqKenSdHgIStouDuNoh7iJ2NnQvmwemcPuasn/1SgtZjKSwKeVXDLiR91JXl6IC2l5FSXiLbg/weS+gnRKdqUDYwy62ZHOqEKQ47YesnQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=garyguo.net; dmarc=pass action=none header.from=garyguo.net;
- dkim=pass header.d=garyguo.net; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=garyguo.net;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=s+24+30jX1Y1+A4rGZPmWbeb0UxP4fsoqj2vGiJvQZg=;
- b=EoRZvU+hYpChJcMNHqoZt/PNAXsZ+0T2EI2ndUM9WDu9yKXGrU35MtUCtpDbGLCH3MeU640V3OS2OCy1p770mFb4yBXLlNHNRguPt3A9Rx34IlL0cRhz778lFtvIMpjHLzh1MuzXc9Y7vqDedluSSt42cwwchch+K7ITAQ3p9hE=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=garyguo.net;
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:253::10)
- by CWXP265MB1765.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:37::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
- 2023 17:52:04 +0000
-Received: from LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece]) by LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- ([fe80::2f2a:55d4:ea1d:dece%3]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
- 17:52:04 +0000
-Date:   Mon, 13 Mar 2023 17:52:02 +0000
-From:   Gary Guo <gary@garyguo.net>
-To:     Asahi Lina <lina@asahilina.net>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        =?UTF-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Hector Martin <marcan@marcan.st>,
-        Sven Peter <sven@svenpeter.dev>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Neal Gompa <neal@gompa.dev>, rust-for-linux@vger.kernel.org,
-        linux-kernel@vger.kernel.org, asahi@lists.linux.dev
-Subject: Re: [PATCH 5/5] rust: device: Add a stub abstraction for devices
-Message-ID: <20230313175202.300bb1f4.gary@garyguo.net>
-In-Reply-To: <20230224-rust-iopt-rtkit-v1-5-49ced3391295@asahilina.net>
-References: <20230224-rust-iopt-rtkit-v1-0-49ced3391295@asahilina.net>
-        <20230224-rust-iopt-rtkit-v1-5-49ced3391295@asahilina.net>
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: LO4P123CA0274.GBRP123.PROD.OUTLOOK.COM
- (2603:10a6:600:195::9) To LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:253::10)
+        Mon, 13 Mar 2023 13:55:44 -0400
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B49D929162;
+        Mon, 13 Mar 2023 10:55:40 -0700 (PDT)
+Received: from uucp (helo=alpha)
+        by elvis.franken.de with local-bsmtp (Exim 3.36 #1)
+        id 1pbmOT-0002OB-00; Mon, 13 Mar 2023 18:55:33 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+        id ABE78C1252; Mon, 13 Mar 2023 18:55:21 +0100 (CET)
+Date:   Mon, 13 Mar 2023 18:55:21 +0100
+From:   Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To:     Baoquan He <bhe@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
+        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
+        Helge Deller <deller@gmx.de>,
+        Serge Semin <fancer.lancer@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
+Message-ID: <20230313175521.GA14404@alpha.franken.de>
+References: <20230308130710.368085-1-bhe@redhat.com>
+ <20230308130710.368085-3-bhe@redhat.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LO2P265MB5183:EE_|CWXP265MB1765:EE_
-X-MS-Office365-Filtering-Correlation-Id: bcc8fc8f-e05b-4064-f376-08db23eba7f8
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UuBy/CJCG8/wGcFF8s1lz09sdPoDEyggAGwEV4u1lgTpYDjQ68quUCsZ0XPGYfH0tJLij7FDE2nKn55ndklZ0GGJWmZmHbu/Lb9bCEA2iB4lGZTFlA6xn+yC4/KTBPvMLyjcnVHmg4Weog4ZYNT1Naz8WysLEZBPDcBPCD3JaVa1zhQuR5Olkqfl7WPDZOJk74akO9nShTayESd26XFMiwW3KNlIqkM5nzgf9Gz8B69NZrtw1itDg2Ug3GmrZlUZ+fyH52SPC3Pbj2Dj+sxDeSZXQL+OdAsh4oSpk0k8rGaw3AYRRNgqKyjPVWl9G44Oo8Qnd1ikMYRJJagv8GLzLOYsXvvPw/2iavMQjLzGLf1kCAicCYbDDzQxD2jLGqk44/NqW4G9STD2Vk2Qibd6nxyhs3liEVWIOeWP3JfkUXOs1npmxzatywPXVz+RsV6b0hdxU9l8nouT1An8VfFLIgNcwEJwTZBWcZa79l7tHzV2lT8eu1/eEN9ZbASGR+gKKvUTVk+4+3dIYBn2dh2OOk+yq9FKMBigbbygYeC1TC64+CNm0TBhYkWigcKDezHZHIxcyz1sFu7LCIKJE/ul4PWPFVSVZx4WQ4M5iFoaTjzVWyDzA8eTiY+tClZYJ0QW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230025)(366004)(346002)(376002)(396003)(136003)(39830400003)(451199018)(5660300002)(7416002)(38100700002)(36756003)(86362001)(2906002)(2616005)(26005)(6512007)(186003)(1076003)(6506007)(478600001)(6486002)(66946007)(316002)(41300700001)(54906003)(66476007)(83380400001)(66556008)(6916009)(4326008)(8676002)(8936002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?TTCGIreqo/hdI/YuhFdOQFc/ISu3vyETPQTF/c4FvsXBVKMUXuXKoZu4MFg6?=
- =?us-ascii?Q?uxnFUrzX+W1zWgbB1/iyF9pGCHrYZzJn1OkSDLqslclCHQ8spV++LMSkzsli?=
- =?us-ascii?Q?7ydMWSOUZH1Uml7X8T3dJcvFQmh0b5efK3kncviLybjSdJ4HyADbHvGvdiye?=
- =?us-ascii?Q?EM2kLpKOgUEFnD8n207wKRKHNfyTjgRMa34R3NATtMPm6FNW7eSD8w7GdUBb?=
- =?us-ascii?Q?XFfIAKfbk5x80+2/M5c5pRtlbUufySFx7wwjs7BKTJ6xz1I8thHV1oSE1ZQZ?=
- =?us-ascii?Q?6jElIFu4qxfCMFJxCVW+Rziw8uARE2vBarPlr9L5NF9cjT85QY+zGrks11i3?=
- =?us-ascii?Q?APmvKMEyQvJw3H/SPrez7JJ+o0M4i0c2WdKPBsx2YNnMMVLiAjQjfom+H+pF?=
- =?us-ascii?Q?KL6thRgLeyYaEnVhABxZvfssNlm4QMkc33V7E6ERlcF20xinmlZySRNL9UcX?=
- =?us-ascii?Q?5kBBsFULheOK2SLx3PP1O+eYce3fuBpPcMiofKYLmVT/2oT0V89jLHLnMGW6?=
- =?us-ascii?Q?dWJ4ylb8+6PIqx2K8coBVMvoMqhDwVLaOhFJJlSCH4theTZnm6ukIKFYpbBg?=
- =?us-ascii?Q?NHbeRh24J1zZ0Jmm1Lj30H6/PVfFIcNf0wW9GFdOzCUPHeCY4cIZjvbSNuBa?=
- =?us-ascii?Q?kicPLiUAIQi9FFrn3lv9rIGLNGi4vuie9GvqM/EiEsnc58tVBM3RHb4zXXLd?=
- =?us-ascii?Q?HUTMkqlnl1f84k7vQPG/hCU++NBqckvaXXD1M7ZUq/Vgdg1kyKJ00HQQfiWa?=
- =?us-ascii?Q?SuZwSnnF1iVVK+E2F3xwT3gJRmEHJTsVFkVD9MmkZ+rcR8adhvWaxK5Bcmw2?=
- =?us-ascii?Q?B/9GzFwFTbBPXmh2USCtgG1RoGNQ/tQ7UMBoj7/WrbEJWg4iopWzl5P8Jp3C?=
- =?us-ascii?Q?g5ZkZUBfxG+gOeCbCYRK61wCCRSOZ8TSRZq7yujGmOctJvV6gNFRCHZtuqMx?=
- =?us-ascii?Q?R247YYGcFBNg91Gpj6mCe1dk+Dcx1mYn/f4ydBbxxicCTHCM5hDqtkU7i513?=
- =?us-ascii?Q?kWyTKSyHjxkGqNGjfatYgj2Pm2H/2mBlpOWdrQtPEq57ta/gMpnayAe7jQsU?=
- =?us-ascii?Q?mnPRLF7SjrG5HL3Y/ccD9l1bKyIrepeJbuJ3cKglOnTaCmiycrwhTYu7foZF?=
- =?us-ascii?Q?GpwHf9vOM0heLMq97aSS3m254PyUmNfY639LxX8wlP9T1bfRtZNJ2GhGkKh7?=
- =?us-ascii?Q?L0FtxFTXsQsbOmgS/Sez9M5fjF4HCz3cBaRqJ874vUc7Jt22P6q5+lbUJp8k?=
- =?us-ascii?Q?398i9fY4QfpeVZUEIASS+seyJtsDOmMqmFx0Rth6Xomo7VMGvUJA2Pt52dv/?=
- =?us-ascii?Q?A9EgRnPBwijn4F2J5575QXOShVTaBJesyWwU4xmoU5+UDOZWDdw7jnunRDS1?=
- =?us-ascii?Q?jFmC4AEv9OzFTs2777JAGBEH+5QXCjtxCJpZNcECDL/1ndV2lyNDqeuA3OWY?=
- =?us-ascii?Q?9rNSM+bO0ZdH5auUG2TBts4cXUkxJHVfOHvupbhA1U0grMlo7lO9HeXz59yW?=
- =?us-ascii?Q?fWm0RcLOUJGopqZc3Ax8tFC8w+QHgcfWGoAjiAb58FSovZenPZi8kEUUMtAG?=
- =?us-ascii?Q?3F2yXLExtlHEbeXg4uJxxqfEUW0EYep0jiVTzNpr?=
-X-OriginatorOrg: garyguo.net
-X-MS-Exchange-CrossTenant-Network-Message-Id: bcc8fc8f-e05b-4064-f376-08db23eba7f8
-X-MS-Exchange-CrossTenant-AuthSource: LO2P265MB5183.GBRP265.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 17:52:04.6860
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: bbc898ad-b10f-4e10-8552-d9377b823d45
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: q8XxvIYZZ6vlw3xCR2SvSfkDJhMVRo1X0CDJ8KVfAPFc4b9LxVuiYKNJZ9WRoCvS8Iwl+QSAu7CRKdvE3mDLWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CWXP265MB1765
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230308130710.368085-3-bhe@redhat.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 24 Feb 2023 19:53:17 +0900
-Asahi Lina <lina@asahilina.net> wrote:
-
-> From: Wedson Almeida Filho <wedsonaf@gmail.com>
+On Wed, Mar 08, 2023 at 09:07:08PM +0800, Baoquan He wrote:
+> With the adding, some default ioremap_xx methods defined in
+> asm-generic/io.h can be used. E.g the default ioremap_uc() returning
+> NULL.
 > 
-> Add a Device type which represents an owned reference to a generic
-> struct device. This minimal implementation just handles reference
-> counting and allows the user to get the device name.
-> 
-> Lina: Rewrote commit message, dropped the Amba bits, and squashed in
-> simple changes to the core Device code from latter commits in
-> rust-for-linux/rust. Also include the rust_helper_dev_get_drvdata
-> helper which will be needed by consumers later on anyway.
-> 
-> Co-developed-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Miguel Ojeda <ojeda@kernel.org>
-> Signed-off-by: Wedson Almeida Filho <wedsonaf@gmail.com>
-> Signed-off-by: Asahi Lina <lina@asahilina.net>
+> Signed-off-by: Baoquan He <bhe@redhat.com>
+> Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Geert Uytterhoeven <geert@linux-m68k.org>
+> Cc: Helge Deller <deller@gmx.de>
+> Cc: Serge Semin <fancer.lancer@gmail.com>
+> Cc: Florian Fainelli <f.fainelli@gmail.com>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: linux-mips@vger.kernel.org
 > ---
->  rust/helpers.c        | 13 +++++++++
->  rust/kernel/device.rs | 76 ++++++++++++++++++++++++++++++++++++++++++++++++++-
->  2 files changed, 88 insertions(+), 1 deletion(-)
+>  arch/mips/include/asm/io.h | 78 ++++++++++++++++++++++++++++++++++----
+>  1 file changed, 70 insertions(+), 8 deletions(-)
 > 
-> diff --git a/rust/helpers.c b/rust/helpers.c
-> index 04b9be46e887..54954fd80c77 100644
-> --- a/rust/helpers.c
-> +++ b/rust/helpers.c
-> @@ -20,6 +20,7 @@
+> diff --git a/arch/mips/include/asm/io.h b/arch/mips/include/asm/io.h
+> index cec8347f0b85..6756baadba6c 100644
+> --- a/arch/mips/include/asm/io.h
+> +++ b/arch/mips/include/asm/io.h
+> @@ -126,6 +126,7 @@ static inline phys_addr_t virt_to_phys(const volatile void *x)
+>   *     almost all conceivable cases a device driver should not be using
+>   *     this function
+>   */
+> +#define phys_to_virt phys_to_virt
+>  static inline void * phys_to_virt(unsigned long address)
+>  {
+>  	return __va(address);
+> @@ -359,6 +360,27 @@ __BUILD_MEMORY_PFX(__raw_, q, u64, 0)
+>  __BUILD_MEMORY_PFX(__mem_, q, u64, 0)
+>  #endif
 >  
->  #include <linux/bug.h>
->  #include <linux/build_bug.h>
-> +#include <linux/device.h>
->  #include <linux/err.h>
->  #include <linux/refcount.h>
+> +#define readb readb
+> +#define readw readw
+> +#define readl readl
+> +#define writeb writeb
+> +#define writew writew
+> +#define writel writel
+> +
+> +#ifdef CONFIG_64BIT
+> +#define readq readq
+> +#define writeq writeq
+> +#define __raw_readq __raw_readq
+> +#define __raw_writeq __raw_writeq
+> +#endif
+> +
+> +#define __raw_readb __raw_readb
+> +#define __raw_readw __raw_readw
+> +#define __raw_readl __raw_readl
+> +#define __raw_writeb __raw_writeb
+> +#define __raw_writew __raw_writew
+> +#define __raw_writel __raw_writel
+> +
+>  #define __BUILD_IOPORT_PFX(bus, bwlq, type)				\
+>  	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0,)			\
+>  	__BUILD_IOPORT_SINGLE(bus, bwlq, type, 1, 0, _p)
+> @@ -374,6 +396,27 @@ BUILDIO_IOPORT(l, u32)
+>  BUILDIO_IOPORT(q, u64)
+>  #endif
 >  
-> @@ -65,6 +66,18 @@ long rust_helper_PTR_ERR(__force const void *ptr)
+> +#define inb inb
+> +#define inw inw
+> +#define inl inl
+> +#define inb_p inb_p
+> +#define inw_p inw_p
+> +#define inl_p inl_p
+> +
+> +#define outb outb
+> +#define outw outw
+> +#define outl outl
+> +#define outb_p outb_p
+> +#define outw_p outw_p
+> +#define outl_p outl_p
+> +
+> +#ifdef CONFIG_64BIT
+> +#define inq inq
+> +#define outq outq
+> +#define inq_p inq_p
+> +#define outq_p outq_p
+> +#endif
+> +
+>  #define __BUILDIO(bwlq, type)						\
+>  									\
+>  __BUILD_MEMORY_SINGLE(____raw_, bwlq, type, 1, 0, 0)
+> @@ -412,14 +455,6 @@ __BUILDIO(q, u64)
+>  #define writeq_be(val, addr)						\
+>  	__raw_writeq(cpu_to_be64((val)), (__force unsigned *)(addr))
+>  
+> -/*
+> - * Some code tests for these symbols
+> - */
+> -#ifdef CONFIG_64BIT
+> -#define readq				readq
+> -#define writeq				writeq
+> -#endif
+> -
+>  #define __BUILD_MEMORY_STRING(bwlq, type)				\
+>  									\
+>  static inline void writes##bwlq(volatile void __iomem *mem,		\
+> @@ -480,14 +515,39 @@ BUILDSTRING(l, u32)
+>  BUILDSTRING(q, u64)
+>  #endif
+>  
+> +#define insb insb
+> +#define insw insw
+> +#define insl insl
+> +#define outsb outsb
+> +#define outsw outsw
+> +#define outsl outsl
+> +
+> +#define readsb readsb
+> +#define readsw readsw
+> +#define readsl readsl
+> +#define writesb writesb
+> +#define writesw writesw
+> +#define writesl writesl
+> +
+> +#ifdef CONFIG_64BIT
+> +#define insq insq
+> +#define readsq readsq
+> +#define readsq readsq
+> +#define writesq writesq
+> +#endif
+> +
+> +
+> +#define memset_io memset_io
+>  static inline void memset_io(volatile void __iomem *addr, unsigned char val, int count)
+>  {
+>  	memset((void __force *) addr, val, count);
 >  }
->  EXPORT_SYMBOL_GPL(rust_helper_PTR_ERR);
+> +#define memcpy_fromio memcpy_fromio
+>  static inline void memcpy_fromio(void *dst, const volatile void __iomem *src, int count)
+>  {
+>  	memcpy(dst, (void __force *) src, count);
+>  }
+> +#define memcpy_toio memcpy_toio
+>  static inline void memcpy_toio(volatile void __iomem *dst, const void *src, int count)
+>  {
+>  	memcpy((void __force *) dst, src, count);
+> @@ -556,4 +616,6 @@ extern void (*_dma_cache_inv)(unsigned long start, unsigned long size);
 >  
-> +void *rust_helper_dev_get_drvdata(struct device *dev)
-> +{
-> +	return dev_get_drvdata(dev);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_dev_get_drvdata);
-> +
-> +const char *rust_helper_dev_name(const struct device *dev)
-> +{
-> +	return dev_name(dev);
-> +}
-> +EXPORT_SYMBOL_GPL(rust_helper_dev_name);
-> +
->  /*
->   * We use `bindgen`'s `--size_t-is-usize` option to bind the C `size_t` type
->   * as the Rust `usize` type, so we can use it in contexts where Rust
-> diff --git a/rust/kernel/device.rs b/rust/kernel/device.rs
-> index 9be021e393ca..e57da622d817 100644
-> --- a/rust/kernel/device.rs
-> +++ b/rust/kernel/device.rs
-> @@ -4,7 +4,7 @@
->  //!
->  //! C header: [`include/linux/device.h`](../../../../include/linux/device.h)
+>  void __ioread64_copy(void *to, const void __iomem *from, size_t count);
 >  
-> -use crate::bindings;
-> +use crate::{bindings, str::CStr};
->  
->  /// A raw device.
->  ///
-> @@ -20,4 +20,78 @@ use crate::bindings;
->  pub unsafe trait RawDevice {
->      /// Returns the raw `struct device` related to `self`.
->      fn raw_device(&self) -> *mut bindings::device;
-> +
-> +    /// Returns the name of the device.
-> +    fn name(&self) -> &CStr {
-> +        let ptr = self.raw_device();
-> +
-> +        // SAFETY: `ptr` is valid because `self` keeps it alive.
-> +        let name = unsafe { bindings::dev_name(ptr) };
-> +
-> +        // SAFETY: The name of the device remains valid while it is alive (because the device is
-> +        // never renamed, per the safety requirement of this trait). This is guaranteed to be the
-> +        // case because the reference to `self` outlives the one of the returned `CStr` (enforced
-> +        // by the compiler because of their lifetimes).
-> +        unsafe { CStr::from_char_ptr(name) }
-> +    }
-> +}
-> +
-> +/// A ref-counted device.
-> +///
-> +/// # Invariants
-> +///
-> +/// `ptr` is valid, non-null, and has a non-zero reference count. One of the references is owned by
-> +/// `self`, and will be decremented when `self` is dropped.
-> +pub struct Device {
-> +    pub(crate) ptr: *mut bindings::device,
-> +}
-> +
+> +#include <asm-generic/io.h>
 
-Shouldn't this be
+this #include blows up builds with:
 
-#[repr(transparent)]
-pub struct Device(Opaque<bindings::device>);
+  GEN     Makefile
+  Checking missing-syscalls for N32
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  Checking missing-syscalls for O32
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  CC      init/version.o
+In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
+                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
+                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
+                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
+                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
+                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
+                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
+                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
+                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
+                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
+                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
+                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
+   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
+   ^~~~~~~~~~~~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
+   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
+                     ^~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
+  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
+                    ^~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
+  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
+  ^~~~~~~~~~~~~~
+  GEN     Makefile
+  Checking missing-syscalls for N32
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  Checking missing-syscalls for O32
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  CC      init/version.o
+In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
+                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
+                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
+                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
+                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
+                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
+                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
+                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
+                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
+                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
+                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
+                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
+   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
+   ^~~~~~~~~~~~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
+   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
+                     ^~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
+  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
+                    ^~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
+  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
+  ^~~~~~~~~~~~~~
+  GEN     Makefile
+  Checking missing-syscalls for N32
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  Checking missing-syscalls for O32
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
+  CC      init/version.o
+In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
+                 from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
+                 from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
+                 from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
+                 from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
+                 from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
+                 from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
+                 from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
+                 from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
+                 from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
+                 from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
+                 from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
+                 from /local/tbogendoerfer/korg/linux/init/version.c:17:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
+   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
+   ^~~~~~~~~~~~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
+   spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
+                     ^~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
+  spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
+                    ^~
+/local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
+  LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
+  ^~~~~~~~~~~~~~
+[...]
 
-?
+I've cut the compiler output. Removing the asm-generic doesn't show this
+problem, but so far I fail to see the reason...
 
-Best,
-Gary
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
