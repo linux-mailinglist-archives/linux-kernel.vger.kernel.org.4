@@ -2,169 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2CC76B834A
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:00:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0539E6B83AE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCMVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:00:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
+        id S230414AbjCMVCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbjCMVAQ (ORCPT
+        with ESMTP id S230327AbjCMVCW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:00:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70272716;
-        Mon, 13 Mar 2023 13:59:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6F297B815BD;
-        Mon, 13 Mar 2023 20:59:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1E9C433D2;
-        Mon, 13 Mar 2023 20:59:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678741178;
-        bh=X59VM+mVnGs6nAi19xoVBZJyc3qLMsw52qxHRGax6HE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=GKmvjqPabBQiL6LDwcUdN5JPGmUglT3G7lE8LVQwCppdXOGT2yLqPMLoTMuUO6Cpa
-         Z8fXyS00DxZFsq44lUDRKm05BDccjfp2ztyS9KoEKLyQ/eUdW9nB1SwOawiXJ4Bs+y
-         rvxU+7OgR4G29fLH2kZdAA/b4lmFIpz+OcNPvVZ/3C/zhWLJZAIYQkXKY4dMjrE8x2
-         k/f6vnBOLfFbFX9CdKN3MZa65yEXJz75KFzreuNqdiDNTOYiK0NYRa0DYULd7AvM5f
-         w/dclrBPnf6CqT+JrSmzRlqpfSaR2BBQZubBPNSwFESti2GC1wdTH+eT84r0nTqa+U
-         6Iz7RvNIDEoZQ==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 73B4F4049F; Mon, 13 Mar 2023 17:59:35 -0300 (-03)
-Date:   Mon, 13 Mar 2023 17:59:35 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Mon, 13 Mar 2023 17:02:22 -0400
+Received: from mail-il1-x136.google.com (mail-il1-x136.google.com [IPv6:2607:f8b0:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0835473018
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:01:13 -0700 (PDT)
+Received: by mail-il1-x136.google.com with SMTP id j6so3147785ilr.7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:01:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678741261;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MMqHKIxdMm3dM36ZLNxuSyWdPqYMqCbdnka0e38R2kM=;
+        b=pCSbxY1IuGxxgCsf0OZvGcJr4x3ejeAiZt5AqE/8KtXUT6a+XnM4fYT0xGMmfxKIZB
+         z24W/gF6BCKBX3jZg7GUjSMyrN1JLCgtWHPzTCkc1T4ZkN6ofeusc7MX224Gw+4eGVCb
+         bSiHxzOPnT/tgh1eTvMv6Td9mt0ppgKWiHP4rp5LrH8qmMbSAAHcV0hm/Mz1Kh4vxNvf
+         +MNCXtxGIF7aN+DnLGiAZJKL0CTcYgt5S+QDG+Fr4w1wJbW39XzCpwVt5tDuWg7gHetc
+         kqTodPJZj/HZGb3LZqnXeZ/M7vi3ZXd8SkOEbpkZDfg5BL1eS9pgZvYvhU/VxS7z02ci
+         i5ow==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678741261;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MMqHKIxdMm3dM36ZLNxuSyWdPqYMqCbdnka0e38R2kM=;
+        b=ztgIIoX1QF0ai0Kgn4mDqBeg8T7AvWPTgXNKEydKSJffHB05oIjPeFlfm04nMpEFb9
+         RyqxFKXfy7l7g7gtTaYvj2qm1m0ftKrjLNaY13wMhlQTJMZt8KgD6b9+5z56xTqn4pEB
+         PaYtayHl+EzhqxfPYSYoob9+U7tPkWqtu1sBERe/62sdbq1laG8+Vs1ZdElCUryageAI
+         oM2Yc7ksZY3rFAzL0VyRBDJ9Fs70zX3MzFbzuOsPyeY4syJPrAxAy8EdleD76N0dpwTO
+         vHRZUhTkFlcsQKV6iPmxYpes4F+1keG+FmGvwIqVZaYS12gNF4RD6IJMk0imartGTc3h
+         ANSw==
+X-Gm-Message-State: AO0yUKWmBENvXfU/9zO/8kqVqeUsEnbuASGp1ray1lvbJYaQ5kizsbX5
+        Ku0e4MRt6c59bpGjfWJBneX9Qg==
+X-Google-Smtp-Source: AK7set87hROC3DrRy/WHpgTl+q0g7aJEMwmTNpv2ADoDCdSubwZnPqmWHhNg4NYrayS39Mj3cpUa+Q==
+X-Received: by 2002:a92:7302:0:b0:315:6fc5:ea46 with SMTP id o2-20020a927302000000b003156fc5ea46mr746590ilc.2.1678741261504;
+        Mon, 13 Mar 2023 14:01:01 -0700 (PDT)
+Received: from google.com ([2620:15c:183:200:a33c:9b70:2c95:9544])
+        by smtp.gmail.com with ESMTPSA id e12-20020a02a78c000000b004046f72271esm32031jaj.100.2023.03.13.14.01.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 14:01:01 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 15:00:57 -0600
+From:   Ross Zwisler <zwisler@google.com>
+To:     Ross Zwisler <zwisler@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Hao Luo <haoluo@google.com>, Jason Gunthorpe <jgg@ziepe.ca>,
         Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Andres Freund <andres@anarazel.de>,
-        Tiezhu Yang <yangtiezhu@loongson.cn>,
-        Pavithra Gurushankar <gpavithrasha@gmail.com>,
-        Yang Jihong <yangjihong1@huawei.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v1 02/13] perf build: Make BUILD_BPF_SKEL default, rename
- to NO_BPF_SKEL
-Message-ID: <ZA+Ot0dnX0MNZKmn@kernel.org>
-References: <20230311065753.3012826-1-irogers@google.com>
- <20230311065753.3012826-3-irogers@google.com>
- <ZA+FOpzJswZx8os+@kernel.org>
- <CAP-5=fUG1CbzevoS=+Jj_pBO4umNj6ekaMeEuSHGC4kAZgVJJg@mail.gmail.com>
- <ZA+IvqVb6Gos+NOe@kernel.org>
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Leon Romanovsky <leon@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
+        Song Liu <song@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Yonghong Song <yhs@fb.com>, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org
+Subject: Re: [PATCH bpf-next v4 0/2] use canonical ftrace path whenever
+ possible
+Message-ID: <20230313210057.GB592900@google.com>
+References: <20230310192050.4096886-1-zwisler@kernel.org>
+ <20230313205628.1058720-1-zwisler@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZA+IvqVb6Gos+NOe@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230313205628.1058720-1-zwisler@kernel.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 13, 2023 at 05:34:06PM -0300, Arnaldo Carvalho de Melo escreveu:
-> Em Mon, Mar 13, 2023 at 01:27:21PM -0700, Ian Rogers escreveu:
-> > On Mon, Mar 13, 2023 at 1:19 PM Arnaldo Carvalho de Melo
-> > > (.text+0x1b): undefined reference to `main'
-> > > /usr/bin/ld: final link failed: file in wrong format
-> > > collect2: error: ld returned 1 exit status
-> > > clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
-> > > make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_cgroup.bpf.o] Error 1
-> > > make[3]: *** [Makefile.perf:236: sub-make] Error 2
-> > > make[2]: *** [Makefile:70: all] Error 2
-> > > make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
-> > > make: *** [Makefile:103: build-test] Error 2
-> > > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
-> > >
-> > > real    5m55.192s
-> > > user    62m31.596s
-> > > sys     14m30.828s
-> > > ⬢[acme@toolbox perf-tools-next]$
-> > 
-> > Sorry, I was testing this on top of:
-> > https://lore.kernel.org/lkml/20230116010115.490713-1-irogers@google.com/
-> > The issue being that we're trying to use an old libbpf that the has
-> > meant disabling things but:
-> >   NO_BPF_SKEL := 1
-> > hadn't been set as part of this. I can address in v2, but with the
-> > "assume libbpf 1.0+" patch I hadn't been worrying about this as we'd
-> > error out for this case  - rather than build error. The erroring out
-> > can be worked around by just not having libbpf be dynamic (ie static
-> > or not at all by adding NO_LIBBPF=1).
+On Mon, Mar 13, 2023 at 02:56:26PM -0600, Ross Zwisler wrote:
+> From: Ross Zwisler <zwisler@google.com>
 > 
-> I'll try adding that 3-patch series before this one.
+> v3 here:
+> https://lore.kernel.org/all/20230310192050.4096886-1-zwisler@kernel.org/
 
-⬢[acme@toolbox perf-tools-next]$ git log --oneline -16
-76c8a07f51703787 (HEAD -> perf-tools-next) perf build: Error if no libelf and NO_LIBELF isn't set
-030a6c72b38e334d perf build: Remove redundant NO_NEWT build option
-5d1360fc84cd2e3b perf build: If libtraceevent isn't present error the build
-e25e0db4700aa39a perf build: Switch libpfm4 to opt-out rather than opt-in
-39f53202a8961d3d perf symbol: Add abi::__cxa_demangle C++ demangling support
-d857f258f3d1214a tools build: Add feature test for abi::__cxa_demangle
-7aae0d8341c9c373 perf build: Make binutil libraries opt in
-dc4890e772aba1e9 perf build: Error if jevents won't work and NO_JEVENTS=1 isn't set
-334e64172816623d perf util: Remove weak sched_getcpu
-e44d7e7c60fc4ded perf build: Remove unused HAVE_GLIBC_SUPPORT
-14ea53be45758450 perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
-eb03903c5c119254 perf build: Support python/perf.so testing
-f8b579c1996ba4a9 perf bpf: Remove pre libbpf 1.0 conditional logic
-2cce43c63d4d0abc perf build: Remove libbpf pre-1.0 feature tests
-a24ebff6cce14a34 tools build: Pass libbpf feature only if libbpf 1.0+
-17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
-⬢[acme@toolbox perf-tools-next]$
+Sorry, this should have been:
+https://lore.kernel.org/all/20230310175209.2130880-1-zwisler@kernel.org/
 
-       make_libbpf_dynamic_O: cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
-ldd: /tmp/tmp.cO9WpgtAvo/perf: No such file or directory
-cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
-  BUILD:   Doing 'make -j32' parallel build
-  HOSTCC  /tmp/tmp.cO9WpgtAvo/fixdep.o
-  HOSTLD  /tmp/tmp.cO9WpgtAvo/fixdep-in.o
-  LINK    /tmp/tmp.cO9WpgtAvo/fixdep
-Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
-diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
-Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
-diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
-Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
-diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
-Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
-diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
-Makefile.config:563: *** Error: No libbpf devel library found, please install libbpf-devel.  Stop.
-make[3]: *** [Makefile.perf:236: sub-make] Error 2
-make[2]: *** [Makefile:70: all] Error 2
-make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
-
-
-But:
-
-⬢[acme@toolbox perf-tools-next]$ rpm -qa | grep libbpf
-libbpf-0.8.0-2.fc37.x86_64
-libbpf-devel-0.8.0-2.fc37.x86_64
-⬢[acme@toolbox perf-tools-next]$
-
-⬢[acme@toolbox perf-tools-next]$ cat /etc/os-release
-NAME="Fedora Linux"
-VERSION="37 (Container Image)"
-
-
-I'll see if this is just a matter of tweaking the error message to
-something like "libbpf-devel not found or older than 1.0.0, please install/update"
-
-- Arnaldo
+> 
+> Changes since v3:
+>  * Added braces around a few multi-line if/else statements (Steven Rostedt)
+>  * Added Reviewed-by from Steven to patch 1
+>  * Rebased onto the current bpf/bpf-next
+> 
+> Ross Zwisler (2):
+>   bpf: use canonical ftrace path
+>   selftests/bpf: use canonical ftrace path
+> 
+>  include/uapi/linux/bpf.h                            |  8 ++++----
+>  samples/bpf/cpustat_kern.c                          |  4 ++--
+>  samples/bpf/hbm.c                                   |  4 ++--
+>  samples/bpf/ibumad_kern.c                           |  4 ++--
+>  samples/bpf/lwt_len_hist.sh                         |  2 +-
+>  samples/bpf/offwaketime_kern.c                      |  2 +-
+>  samples/bpf/task_fd_query_user.c                    |  4 ++--
+>  samples/bpf/test_lwt_bpf.sh                         |  2 +-
+>  samples/bpf/test_overhead_tp.bpf.c                  |  4 ++--
+>  tools/include/uapi/linux/bpf.h                      |  8 ++++----
+>  tools/testing/selftests/bpf/get_cgroup_id_user.c    |  9 +++++++--
+>  .../selftests/bpf/prog_tests/kprobe_multi_test.c    |  7 ++++++-
+>  .../selftests/bpf/prog_tests/task_fd_query_tp.c     |  9 +++++++--
+>  .../selftests/bpf/prog_tests/tp_attach_query.c      |  9 +++++++--
+>  .../testing/selftests/bpf/prog_tests/trace_printk.c | 10 +++++++---
+>  .../selftests/bpf/prog_tests/trace_vprintk.c        | 10 +++++++---
+>  .../selftests/bpf/progs/test_stacktrace_map.c       |  2 +-
+>  tools/testing/selftests/bpf/progs/test_tracepoint.c |  2 +-
+>  tools/testing/selftests/bpf/test_ftrace.sh          |  7 ++++++-
+>  tools/testing/selftests/bpf/test_tunnel.sh          | 13 +++++++++----
+>  tools/testing/selftests/bpf/trace_helpers.c         |  8 ++++++--
+>  21 files changed, 85 insertions(+), 43 deletions(-)
+> 
+> 
+> base-commit: 22df776a9a866713d9decfb92b633bcfdb571954
+> -- 
+> 2.40.0.rc1.284.g88254d51c5-goog
+> 
