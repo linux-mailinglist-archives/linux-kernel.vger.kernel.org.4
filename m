@@ -2,192 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C8C26B80E0
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:40:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F02B96B80E5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230286AbjCMSkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:40:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57874 "EHLO
+        id S231192AbjCMSlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58418 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229820AbjCMSku (ORCPT
+        with ESMTP id S230341AbjCMSlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:40:50 -0400
-Received: from out-10.mta0.migadu.com (out-10.mta0.migadu.com [IPv6:2001:41d0:1004:224b::a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB35D93EC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:40:18 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 11:38:58 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1678732754;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2IOpydyYpZ00bNASBI6Lt0s4hb0qO64jhUR+NW29SJk=;
-        b=EB1X8tRCl+FfauVWnZvQlYAVpcjSiJI7ngdVJQfQ73ShqgD327ZnyyXcKIBsM7qC9twWry
-        x92x77y3VLYO7Oowhn8yOY+LcceCwqyuLKOI/2FJeeoUewBgp7u9jBJoFjc8oxY/pnxMPR
-        7wLlF34yBFEzkZPd0tH7EMiCVwLgkIA=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Oliver Upton <oliver.upton@linux.dev>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Sagi Shahar <sagis@google.com>,
-        Erdem Aktas <erdemaktas@google.com>,
-        Peter Shier <pshier@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        James Houghton <jthoughton@google.com>,
-        Anish Moorthy <amoorthy@google.com>,
-        Ben Gardon <bgardon@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Ricardo Koller <ricarkol@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Aaron Lewis <aaronlewis@google.com>,
-        Ashish Kalra <ashish.kalra@amd.com>,
-        Babu Moger <babu.moger@amd.com>, Chao Gao <chao.gao@intel.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>,
-        Chenyi Qiang <chenyi.qiang@intel.com>,
-        David Woodhouse <dwmw@amazon.co.uk>,
-        Emanuele Giuseppe Esposito <eesposit@redhat.com>,
-        Gavin Shan <gshan@redhat.com>,
-        Guang Zeng <guang.zeng@intel.com>,
-        Hou Wenlong <houwenlong.hwl@antgroup.com>,
-        Jiaxi Chen <jiaxi.chen@linux.intel.com>,
-        Jim Mattson <jmattson@google.com>,
-        Jing Liu <jing2.liu@intel.com>,
-        Junaid Shahid <junaids@google.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Leonardo Bras <leobras@redhat.com>,
-        Like Xu <like.xu.linux@gmail.com>,
-        Li RongQing <lirongqing@baidu.com>,
-        "Maciej S . Szmigiero" <maciej.szmigiero@oracle.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        Michael Roth <michael.roth@amd.com>,
-        Michal Luczaj <mhal@rbox.co>,
-        Mingwei Zhang <mizhang@google.com>,
-        Nikunj A Dadhania <nikunj@amd.com>,
-        Paul Durrant <pdurrant@amazon.com>,
-        Peng Hao <flyingpenghao@gmail.com>,
-        Peter Gonda <pgonda@google.com>, Peter Xu <peterx@redhat.com>,
-        Robert Hoo <robert.hu@linux.intel.com>,
-        Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Wei Wang <wei.w.wang@intel.com>,
-        Xiaoyao Li <xiaoyao.li@intel.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        Zhenzhong Duan <zhenzhong.duan@intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] Documentation/process: Add a maintainer handbook
- for KVM x86
-Message-ID: <ZA9twqv5XQMmgXWb@thinky-boi>
-References: <20230309010336.519123-1-seanjc@google.com>
- <20230309010336.519123-3-seanjc@google.com>
- <ZAlGeYAmvhPmVmGe@debian.me>
- <ZAmWefGcsBwcODxW@linux.dev>
- <ZAoWogdeET5N0mug@google.com>
- <ZA9eHzE5vhnXh+TA@linux.dev>
- <ZA9pfbhypRNPhdN8@google.com>
+        Mon, 13 Mar 2023 14:41:21 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099994EDF;
+        Mon, 13 Mar 2023 11:40:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678732740; i=frank-w@public-files.de;
+        bh=vnVRR7H0dRwp116/xX+I5PhqibcTnq0j1/I79a6rbt4=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=bAYgS+SOutp5qT7W189Mtkc/EoCKBYaYiOk7mJhTFnnWzQnI2BaBDc3xmC7xEjR55
+         Oqgy98Xc4DvUC4wNHlnYoDuFEKlyhuftCu04f12kp/g5P4NOSrHNPkIBWIpPCXeO/w
+         24I3jL7tx6CbdBu04xnzL9qyrmS+a2yquhN9XCty6iIB5E8wGhkZ1NYPG/eq97sFl+
+         68xdKYZryviFvQ4MaAvrKAK3x1HNRwcVG8SaUnglbXtV2ldXuOym1LzHXY65ZrpB6l
+         a71LWsYYIar84zB5/joWn9CiZ2TW7eS2OZhl5Qmn4dt4a771C17IUIjfKKlLfW6vWd
+         kl0aLAL0suL1A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [217.61.158.159] ([217.61.158.159]) by web-mail.gmx.net
+ (3c-app-gmx-bs66.server.lan [172.19.170.210]) (via HTTP); Mon, 13 Mar 2023
+ 19:39:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA9pfbhypRNPhdN8@google.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <trinity-93681801-f99c-40e2-9fbd-45888b3069aa-1678732740564@3c-app-gmx-bs66>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        netdev@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Lorenzo Bianconi <lorenzo@kernel.org>,
+        Mark Lee <Mark-MC.Lee@mediatek.com>,
+        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        DENG Qingfang <dqfext@gmail.com>,
+        Landen Chao <Landen.Chao@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Jianhui Zhao <zhaojh329@gmail.com>,
+        =?UTF-8?Q?Bj=C3=B8rn_Mork?= <bjorn@mork.no>,
+        Alexander Couzens <lynxis@fe80.eu>
+Subject: Aw: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet:
+ mtk_eth_soc: fix 1000Base-X and 2500Base-X modes
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 13 Mar 2023 19:39:00 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
+References: <ZAiciK5fElvLXYQ9@makrotopia.org>
+ <ZAijM91F18lWC80+@shell.armlinux.org.uk> <ZAik+I1Ei+grJdUQ@makrotopia.org>
+ <ZAioqp21521NsttV@shell.armlinux.org.uk>
+ <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+ <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
+ <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:F36nI6lCjaGvE9iW/olT5af3T1lus8s5NdMk0i96PzDNje8Vgi1yT25FZOFvH+go4cfu8
+ YF62npVZCcSjOJ13eNpaTbRKX3znmrvyt0mqt4/MNYM9b0KhSLgyhOwmIZhZmZ9epDly86fXGEqq
+ XKnvQWEubkZhGuY33qIcJSsLMb19ufLMD+ZxxazCKVZkAMpUCW2nYR6yJKUlCzlD1lzJuhJjZquy
+ 97SP44YGQ9o0fYSgebLfZoWAN6YaEayFRJFdQ4JRhq+IHExjdFa6PYn1LlLdyorC908iZ73wivem
+ Bs=
+UI-OutboundReport: notjunk:1;M01:P0:A3Bhvf3YgSA=;DYQ3ENw4UTM7sRf0hpJwY5A5OQ6
+ U71Dm0loE5cbRcAVkWmRiLqeImB56sd3lV0XbRk+El2+yb8MCcznUrZaPN7eSa2jD+enh12Kx
+ eQv9w4r7TSedZw5NOI5QC8E9Tvhkc+RVvy12JVtknPdR7VqTR2lVZE/QnqwBViym5XiYEIZJx
+ ei+wB43UaImFCUAliSsArVDSJU2CxsIWPhuFVXnYsaVkxSeHuwvSRbAqUJQtwO4oSfZFhL6+r
+ 3//nmLzSe+tOCY8377SUPRTX+dcVFveo1g+RWLLAnsRjsGVxfzjURTWfSNq8ibRC6if33tCw5
+ fUSlsIOhHS98X5R/eUnBzMJkHQiXKva8g3XLNISQQWNiBfC82m9VZvyTFPiO2BxnEeJRHJPI0
+ E+m5K+h0a445r9k2ozN/llRggXrZbA3TraY1EbWbqOYLp5P7T9ipjcndX8xMooye8w1VtOmgG
+ jgf6KynlEyYXJl9WvlfHpqsj0HtweQV7wILLoawvdQHLRqB+Mk8yOggKPBMrecaK+smnSa4UU
+ fQKpJRRHccWf9qaykgWsD1As18vUl9krRuLefH9VxKZZVt1fHgELxlF5oHRhzaKBuOEXzPTka
+ G7QTGsETK3ziOUJwEzHVCk8Kb4Q5chZTNCm6YH/LE1v2Wjc6BPkut94nQMADSwsIi07ywq0eU
+ rTDLiIGYwKFG6dAe4x3DGzGgEfsR/SJOmITMr5xd+Bd6rY9G6tZvoA/fds4vPVgB1aT1GDiZr
+ hkwPKRlwOHOJODPAkJ3ziACrxxGtJmh37NymUdCid84MwRKLOJS2UgZXuC+PuNTB4wO+kCx4A
+ 2yUIjwRzH4WUmfD+UwG96AUrk5Vlpso1drid14mPw0qfg=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:20:45AM -0700, Sean Christopherson wrote:
-> On Mon, Mar 13, 2023, Oliver Upton wrote:
-> > On Thu, Mar 09, 2023 at 09:25:54AM -0800, Sean Christopherson wrote:
-> > > On Thu, Mar 09, 2023, Oliver Upton wrote:
-> > > > On Thu, Mar 09, 2023 at 09:37:45AM +0700, Bagas Sanjaya wrote:
-> > > > > On Wed, Mar 08, 2023 at 05:03:36PM -0800, Sean Christopherson wrote:
-> > > > > > +As a general guideline, use ``kvm-x86/next`` even if a patch/series touches
-> > > > > > +multiple architectures, i.e. isn't strictly scoped to x86.  Using any of the
-> > > > > > +branches from the main KVM tree is usually a less good option as they likely
-> > > > > > +won't have many, if any, changes for the next release, i.e. using the main KVM
-> > > > > > +tree as a base is more likely to yield conflicts.  And if there are non-trivial
-> > > > > > +conflicts with multiple architectures, coordination between maintainers will be
-> > > > > > +required no matter what base is used.  Note, this is far from a hard rule, i.e.
-> > > > > > +use a different base for multi-arch series if that makes the most sense.
-> > > > 
-> > > > I don't think this is the best way to coordinate with other architectures.
-> > > > Regardless of whether you intended this to be prescriptive, I'm worried most
-> > > > folks will follow along and just base patches on kvm-x86/next anyway.
-> > > 
-> > > Probably, but for the target audience (KVM x86 contributors), that's likely the
-> > > least awful base 99% of the time.
-> > 
-> > Sorry, I follow this reasoning at all.
-> > 
-> > If folks are aiming to make a multi-arch contribution then the architecture
-> > they regularly contribute to has absolutely zero relevance on the series
-> > itself.
-> 
-> There's disconnect between what my brain is thinking and what I wrote.
-> 
-> The intent of the "use kvm-x86/next" guideline is aimed to address series that
-> are almost entirely x86 specific, and only superficially touch common KVM and/or
-> other architectures.  In my experience, the vast, vast majority of "multi-arch"
-> contributions from x86 fall into this category, i.e. aren't truly multi-arch in
-> nature.
-> 
-> If I replace the above paragraph with this, does that address (or at least mitigate
-> to an acceptable level) your concerns?  Inevitably there will still be series that
-> are wrongly based on kvm-x86, but I am more than happy to do the policing.  I
-> obviously can't guarantee that I will be the first to run afoul of a "bad" series,
-> but I do think I can be quick enough to avoid shifting the burden to other
-> maintainers.  And if I'm wrong on either front, you get to say "told you so" and
-> make me submit a patch of shame ;-)
-> 
->   The only exception to using ``kvm-x86/next`` as the base is if a patch/series
->   is a multi-arch series, i.e. has non-trivial modifications to common KVM code
->   and/or has more than superficial changes to other architectures's code.  Multi-
+> Gesendet: Montag, 13=2E M=C3=A4rz 2023 um 11:59 Uhr
+> Von: "Russell King (Oracle)" <linux@armlinux=2Eorg=2Euk>
 
-nit: Maybe 'to another architecture's code', since English is an annoying
-language :)
+> Since describing what I wanted you to test didn't work, here's a patch
+> instead, based upon the quirk that you provided (which is what I'd have
+> written anyway)=2E Add a "#define DEBUG" to the top of
+> drivers/net/phy/phylink=2Ec in addition to applying this patch, and plea=
+se
+> test the resulting kernel, sending me the resulting kernel messages, and
+> also reporting whether this works or not=2E
 
->   arch patch/series should instead be based on a common, stable point in KVM's
->   history, e.g. the release candidate upon which ``kvm-x86 next`` is based.  If
->   you're unsure whether a patch/series is truly multi-arch, err on the side of
->   caution and treat it as multi-arch, i.e. use a common base.
+Hi
 
-LGTM, and sorry for whining without getting across the net effect I was hoping
-for in the language.
+thx for the patch=2E=2E=2Esorry for misunderstanding=2E i thought the sfp =
+quirk only sets a flag and i need to change
+something in phylink=2Ec to do the same as done on userspace, so i tried t=
+o simulate the userspace call there only for testing=2E
 
-> > > > > That means patches that primarily kvm ARM changes should be based on
-> > > > > kvm-x86/next, right?
-> > > > 
-> > > > No, don't do that.
-> > > 
-> > > +<infinity symbol>
-> > > 
-> > > This doc is specifically for KVM x86.
-> > 
-> > You've also made some suggestions about cross-arch development that do not fit
-> > the development model of other architectures. I have no desire to nitpick
-> > about the x86 process but want the multiarch language to actually set folks up
-> > for success working outside of the KVM/x86 tree.
-> 
-> Ah, I see where y'all are coming from.  Yeah, I didn't intend for that type of
-> blanket rule, e.g. my comment about this being specifically for KVM x86 was
-> intended to clarify that this doc should NOT be used to determine how to handle
-> non-x86 code.
+here relevant parts of debug
 
-My biggest worry was that whether intentional or not, folks will probably take
-what you've written out of context. Not as though I could completely blame the
-developer in that case, as we have no documented process for arm64 at the
-moment.
+[    1=2E990637] sfp sfp-1: module OEM              SFP-2=2E5G-T       rev=
+ 1=2E0  sn SK2301110008     dc 230110 =20
+[    2=2E000147] mtk_soc_eth 15100000=2Eethernet eth1: optical SFP: interf=
+aces=3D[mac=3D2-4,21-22, sfp=3D]
 
---
-Thanks,
-Oliver
+[   56=2E321102] mtk_soc_eth 15100000=2Eethernet eth1: configuring for inb=
+and/2500base-x link mode
+[   56=2E329543] mtk_soc_eth 15100000=2Eethernet eth1: major config 2500ba=
+se-x
+[   56=2E336144] mtk_soc_eth 15100000=2Eethernet eth1: phylink_mac_config:=
+ mode=3Dinband/2500base-x/Unknown/Unknown/none adv=3D00,00000000,00000000,0=
+000e240 pause=3D04 link=3D0 an=3D1
+
+full log here:
+
+https://pastebin=2Ecom/vaXtXFY8
+
+unfortunately this does not bring link up
+
+root@bpi-r3:~# ethtool eth1
+Settings for eth1:
+        Supported ports: [ MII ]
+        Supported link modes:   2500baseX/Full
+        Supported pause frame use: Symmetric Receive-only
+        Supports auto-negotiation: Yes
+        Supported FEC modes: Not reported
+        Advertised link modes:  2500baseX/Full
+        Advertised pause frame use: Symmetric Receive-only
+        Advertised auto-negotiation: Yes
+        Advertised FEC modes: Not reported
+        Speed: Unknown!
+        Duplex: Unknown! (255)
+        Auto-negotiation: on
+        Port: MII
+        PHYAD: 0
+        Transceiver: internal
+        Current message level: 0x000000ff (255)
+                               drv probe link timer ifdown ifup rx_err tx_=
+err
+        Link detected: no
+
+also after calling this link does not came up
+
+root@bpi-r3:~# ethtool -s eth1 autoneg off
+[  542=2E690293] mtk_soc_eth 15100000=2Eethernet eth1: phylink_change_inba=
+nd_advert: mode=3Dinband/2500base-x adv=3D00,00000000,00000000,0000e200 pau=
+se=3D04
+
+so it looks like it needs to be configured first in inband mode and then a=
+utoneg needs to be disabled=2E
+
+regards Frank
+
