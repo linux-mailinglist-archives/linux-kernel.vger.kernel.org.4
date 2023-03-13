@@ -2,58 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 537D26B7FDA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:00:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1AA446B7FDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:00:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230038AbjCMSAP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:00:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33742 "EHLO
+        id S230140AbjCMSAg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:00:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229586AbjCMSAO (ORCPT
+        with ESMTP id S230063AbjCMSAe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:00:14 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 888EF746C6;
-        Mon, 13 Mar 2023 11:00:13 -0700 (PDT)
+        Mon, 13 Mar 2023 14:00:34 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39BC474DF3;
+        Mon, 13 Mar 2023 11:00:31 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3C94BB811C1;
-        Mon, 13 Mar 2023 18:00:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF5D2C433D2;
-        Mon, 13 Mar 2023 18:00:10 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C700A6145D;
+        Mon, 13 Mar 2023 18:00:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D010C433EF;
+        Mon, 13 Mar 2023 18:00:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678730410;
-        bh=wdmGj1RtXq9m1HFo5MiQc/9fneqd1MmfVbNzWS11LvY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=cJSHQ5RRZBGqAhQq6NRYSlJRtQ16EOQ3rYaCS3yVEgH/7or85fmOSBZPx0nES4jEL
-         AspgbxYMUuwXOwUpp19nXKCG25nDen04woPjVKa2KBcqL49W8J27oEz2T7iStsp529
-         PsfZ8SW//jvVCbvnuTcPYqYErowwRKS0Jmm+0REos0GoN9bMJqAz/Pd199t5B73Hzc
-         KjF1lMkPcwKs/1nB9KpNzPArjhYQescS+/Dlt4c7k3bDJ++2sFKWruVP056CVPPr4p
-         S5DyD7029eFDOIvzUGLN1Zi5Haw1Nr6tzH/2oCvAZg1BuUZKb6JJl9vdEtzVsmU8kE
-         8SFnakW2p+70A==
-Received: by mail-oi1-f177.google.com with SMTP id s41so10011444oiw.13;
-        Mon, 13 Mar 2023 11:00:10 -0700 (PDT)
-X-Gm-Message-State: AO0yUKX+ljwmI11ZW/uQepQ7njiiiee3Q9NYJdZNxr1dEggsQOw7euxu
-        7WQQYyu0cZIIMlwigkqUGJ8ZiKldT/cZGW7jvh4=
-X-Google-Smtp-Source: AK7set+KBDtcj8yhw30C6vs1ZhqhKEEsa4YAtqiyGpSgJ5Zr9kmKhUQ+9eaZCFC1Y+ArRdkV6XDp6gKLZxpjL2bOYIs=
-X-Received: by 2002:a05:6808:8cb:b0:384:33df:4dfc with SMTP id
- k11-20020a05680808cb00b0038433df4dfcmr12045953oij.11.1678730410205; Mon, 13
- Mar 2023 11:00:10 -0700 (PDT)
+        s=k20201202; t=1678730430;
+        bh=LVvECMF2JRIS2+UZiegISVGjENHSYWHFcEABfHx4Ofo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GmDkdvwH9Uawgk9LYBpbermXvvDECX/6RNccD8K+ELxVWRyH6oXSbon/VOBsEHR6n
+         F6u1NrAxAZeeBN3YP4JLjsGKbj+ur3URprpXcm0b5SVWjRDxLSIAjZGXNSvk7r/yLy
+         tREwM6XwdrHF5HOb86GOdDSTjy1yF+jdTm6cUtvIVPA8BIGCkRTeIQPH4r4GTlluwl
+         BCo/sMkcG64jtK1CL/eqRKmrALGrDrDlniP5oBxWgtkK1uT0A2JJYB9imUUoNzCMVq
+         ANF8rg4vOuACDCWW+Pm4zLOxx+DELNwtqJS/w1QFwVOHDfqhOV6uUXYIW5MaOfhqwq
+         XFUCyzR3sbtJQ==
+Date:   Mon, 13 Mar 2023 20:00:10 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Mike Rapoport <mike.rapoport@gmail.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>
+Subject: Re: [PATCH 0/7] remove SLOB and allow kfree() with kmem_cache_alloc()
+Message-ID: <ZA9kqkyjWli2F3/Q@kernel.org>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <ZA2gofYkXRcJ8cLA@kernel.org>
+ <20230313123147.6d28c47e@gandalf.local.home>
 MIME-Version: 1.0
-References: <20230313171036.268407-1-bage@linutronix.de> <20230313171036.268407-2-bage@linutronix.de>
-In-Reply-To: <20230313171036.268407-2-bage@linutronix.de>
-From:   Masahiro Yamada <masahiroy@kernel.org>
-Date:   Tue, 14 Mar 2023 02:59:33 +0900
-X-Gmail-Original-Message-ID: <CAK7LNARd8rQdwauAvgSo-+wxv=rU-4tTCtrzRJ2uhgWRrt6Xxw@mail.gmail.com>
-Message-ID: <CAK7LNARd8rQdwauAvgSo-+wxv=rU-4tTCtrzRJ2uhgWRrt6Xxw@mail.gmail.com>
-Subject: Re: [PATCH 1/1] kbuild: deb-pkg: Allow parallel build
-To:     Bastian Germann <bage@linutronix.de>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313123147.6d28c47e@gandalf.local.home>
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,58 +77,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 2:10=E2=80=AFAM Bastian Germann <bage@linutronix.de=
-> wrote:
+On Mon, Mar 13, 2023 at 12:31:47PM -0400, Steven Rostedt wrote:
+> On Sun, 12 Mar 2023 11:51:29 +0200
+> Mike Rapoport <mike.rapoport@gmail.com> wrote:
+> 
+> > git grep -in slob still gives a couple of matches. I've dropped the
+> > irrelevant ones it it left me with these:
+> > 
+> > CREDITS:14:D: SLOB slab allocator
+> > kernel/trace/ring_buffer.c:358: * Also stolen from mm/slob.c. Thanks to Mathieu Desnoyers for pointing
+> > mm/Kconfig:251:    SLOB allocator and is not recommended for systems with more than
+> > mm/Makefile:25:KCOV_INSTRUMENT_slob.o := n
+> >  
+> > Except the comment in kernel/trace/ring_buffer.c all are trivial.
+> > 
+> > As for the comment in ring_buffer.c, it looks completely irrelevant at this
+> > point.
+> > 
+> > @Steve?
+> 
+> You want me to remember something I wrote almost 15 years ago?
+
+I just wanted to make sure you don't have a problem with removing this
+comment :)
+
+> I think I understand that comment as much as you do. Yeah, that was when
+> I was still learning to write comments for my older self to understand,
+> and I failed miserably!
 >
-> Currently, the only way to build the deb-pkg generated package parallely
-> is adding -jN to the MAKEFLAGS environment variable. The package ignores
-> the usual parallel build option that is described in Debian Policy =C2=A7=
-4.9.1.
+> But git history comes to the rescue. The commit that added that comment was:
+> 
+> ed56829cb3195 ("ring_buffer: reset buffer page when freeing")
+> 
+> This was at a time when it was suggested to me to use the struct page
+> directly in the ring buffer and where we could do fun "tricks" for
+> "performance". (I was never really for this, but I wasn't going to argue).
+> 
+> And the code in question then had:
+> 
+> /*
+>  * Also stolen from mm/slob.c. Thanks to Mathieu Desnoyers for pointing
+>  * this issue out.
+>  */
+> static inline void free_buffer_page(struct buffer_page *bpage)
+> {
+>         reset_page_mapcount(&bpage->page);
+>         bpage->page.mapping = NULL;
+>         __free_page(&bpage->page);
+> }
+> 
+> 
+> But looking at commit: e4c2ce82ca27 ("ring_buffer: allocate buffer page
+> pointer")
+> 
+> It was finally decided that method was not safe, and we should not be using
+> struct page but just allocate an actual page (much safer!).
+> 
+> I never got rid of the comment, which was more about that
+> "reset_page_mapcount()", and should have been deleted back then.
 
+Yeah, I did the same analysis, just was too lazy to post it.
+ 
+> Just remove that comment. And you could even add:
+> 
+> Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Fixes: e4c2ce82ca27 ("ring_buffer: allocate buffer page pointer")
+> 
+> -- Steve
 
-
-"dpkg-buildpackage -b -j16" worked for me.
-
-
-
-
-
-
-
-> Derive make's -j parameter from the DEB_BUILD_OPTIONS environment variabl=
-e
-> that ends up being set by Debian's build tools.
->
-> Link: https://www.debian.org/doc/debian-policy/ch-source.html
-> Signed-off-by: Bastian Germann <bage@linutronix.de>
-> ---
->  scripts/package/deb-build-option | 6 ++++++
->  1 file changed, 6 insertions(+)
->
-> diff --git a/scripts/package/deb-build-option b/scripts/package/deb-build=
--option
-> index b079b0d121d4..dd170e2b3018 100755
-> --- a/scripts/package/deb-build-option
-> +++ b/scripts/package/deb-build-option
-> @@ -7,6 +7,12 @@ if [ -z "${CROSS_COMPILE}${cross_compiling}" -a "${DEB_H=
-OST_ARCH}" !=3D "${DEB_BUI
->         echo CROSS_COMPILE=3D${DEB_HOST_GNU_TYPE}-
->  fi
->
-> +for build_opt in $DEB_BUILD_OPTIONS; do
-> +       if [ "${build_opt#parallel=3D}" !=3D "$build_opt" ]; then
-> +               echo -j${build_opt#parallel=3D}
-> +       fi
-> +done
-> +
->  version=3D$(dpkg-parsechangelog -S Version)
->  version_upstream=3D"${version%-*}"
->  debian_revision=3D"${version#${version_upstream}}"
-> --
-> 2.39.2
->
-
-
---=20
-Best Regards
-Masahiro Yamada
+-- 
+Sincerely yours,
+Mike.
