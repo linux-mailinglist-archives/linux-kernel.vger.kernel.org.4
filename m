@@ -2,203 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 215BD6B7481
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59FEF6B7487
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:47:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbjCMKpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33118 "EHLO
+        id S230087AbjCMKr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCMKpt (ORCPT
+        with ESMTP id S229531AbjCMKrY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:45:49 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8CF8152F6C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:45:46 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so10568057wmb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678704345;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6YaG0SWzLbweQszAk60kBLdxmB/7i6RyPeQI10oAzV4=;
-        b=LGtukpD/p9tW2HynhY3ArpOnq71vUNWspCHDXcqL9E0H12uUGwCrNnJ8M0RxmdNpeq
-         pAeM7HgE3lC/iWS08/SNNgrlDNCkMeXQqRuX8cwlBg4zRVpNXPW3gDjtnKxALuceF78y
-         NdVTDObibZ8R4EtyBNCPIMcq0OgaTbkZvAM49h3p8hUGXW7fJ7YGuhjTjqQdepEuEkoV
-         cD7UbzHMLuWJXYr4Foe1gbFD2MHYxciKwANocceIkSdzewD4rowtkp2iwkioPH9TaNKp
-         rEBkV5vvEN+FggyOIX39CDWbzc/iJhYRAVxAyxEi2kAEgx37tlorGCa+Sd08jrlENeFY
-         mZeg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678704345;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6YaG0SWzLbweQszAk60kBLdxmB/7i6RyPeQI10oAzV4=;
-        b=CEl0fPdkLZMOFQsuTB7EA1fQ3Jsv8tuZSd+W/mT4dDqtV4EWcPCmiru55C7XsYqiRL
-         Q6khb8uyVIV9XmcWp4jyHG3B56+JNpF4kzL16MP3K1+JkoQKxkN99LDo0rR6/ySvAyNn
-         7Qw1RmUhKk67R0Ap8NrvkUrckE3loPboqIdkR/qDZ/DhCHTlu/WAf2OMQRRZLTsMsXch
-         Ozid6/TqUoBj4HGQNqPUgrPPudltjJ6lxVq6uwm8P2nLZIyCrAzjLCEG0TRAJ1eADoLd
-         OF7JqNTyuJq5MeK8L7xiKl2xPesj6CmaGZkbvP+jBXBvccV+IFDK2yHYlQP2yZqcGx3M
-         M7Tg==
-X-Gm-Message-State: AO0yUKW/iz/N0C988JidPK7TE+0aRfEeCXaX79n/nXYUah9IBERQYsQ0
-        ITXNWWoYif2IYIgb9TbpFyLmeA==
-X-Google-Smtp-Source: AK7set+0Oc4726DzdphLUKeZrWCln4A5vSwSav6cx8LjV/d2+4mI/5d3Gg6o/COIT9hrcw7T8dFWSQ==
-X-Received: by 2002:a05:600c:3504:b0:3ea:d620:579b with SMTP id h4-20020a05600c350400b003ead620579bmr9852881wmq.0.1678704344899;
-        Mon, 13 Mar 2023 03:45:44 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8522:ca6e:1db4:96c6? ([2a05:6e02:1041:c10:8522:ca6e:1db4:96c6])
-        by smtp.googlemail.com with ESMTPSA id l4-20020a05600c4f0400b003dc4a47605fsm9523224wmq.8.2023.03.13.03.45.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 03:45:44 -0700 (PDT)
-Message-ID: <f78e6b70-a963-c0ca-a4b2-0d4c6aeef1fb@linaro.org>
-Date:   Mon, 13 Mar 2023 11:45:41 +0100
+        Mon, 13 Mar 2023 06:47:24 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E68E453D94;
+        Mon, 13 Mar 2023 03:47:22 -0700 (PDT)
+Received: from dungeon.fi (dungeon.fi [81.4.110.129])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kasper)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4PZtdh1jZbz4BKKw;
+        Mon, 13 Mar 2023 12:47:19 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1678704440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jSbOH91PTg5uCkO4mWLFoGuNxDrNUjmjn2W/WzqjsG4=;
+        b=s7+pqLETYqZKlqiSeUbRPR2Z13viDOkZRoMgVX7IYUif9IAScHhDof3Trx1M2ntqf6jbcB
+        hl+eQ1URyGewhsBj/cOVb5a+oGOE/YFbLJbuvsyiE7aCbE/k6zbjs1RuQp6hvzCpDHUsmA
+        qWOawX+tVkMvhHsmwwYOyajalOGwwsGEw5EQl9wYprxkxexBh1TV0UKd0GlRaVIKCq+iBk
+        7O34szF59M4UHAV77CxTx1LBZ1nm8xNFZM/ypmFwEfx+q2gpqPu96PyGWNA4HYdnDuewuw
+        bIDXRIjIzE7jxKthHNdrt5IeLIb09cUUsNHu0ulLNj8P1ajf/qvL0azaAGdFtQ==
+ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1678704440; a=rsa-sha256;
+        cv=none;
+        b=ZoXgvzKxkEOS+CJ1t4pgE8FdBw/E0QfpLT3uaWEK/48t720uqqzed8qxh9WNu2uPZyyKf7
+        J90FPD0fBvtkCCL7GxHwqB7ntFAL4vTfntBLpq5kyV5sqe5kJ+5zMONS+zJOgr26kzlKKb
+        9LbKftJwK8SQm7EHxjCWqZLjhLvSVGQooJ23XjmoYL4dUB14MJDHtSbrIZAgg5sHeIE51n
+        Dmg0JUpef+HNXsF/C52qJSmm1zGDkl3HV0BIFa64s71dWSGarE9OJzlqS2CpumsjLpP1L4
+        /ouyqhZoPzUIZ2HgQIJPUd3aJk/TZj9dwtCCgJaNxZA5TUSoeRywMy81NMu8Gw==
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=kasper smtp.mailfrom=kasper@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=lahtoruutu; t=1678704440;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=jSbOH91PTg5uCkO4mWLFoGuNxDrNUjmjn2W/WzqjsG4=;
+        b=VIIFLRGvGi/L+TTexCdNMMv+LSD7dwPQ0ZhiP//OlTW3d+pEHfpf1zAWnGzQmASbB+689J
+        wKifsmoWRi2tcY1/m/S0P0P8JoAwQwoYpQF4irmjczavpv053S3GNI87GH1JIKwen/aHk7
+        OhI3dQRJHb+VwPlESkhYDzYsuZdR9cBwvxnhf9mQhRX0cZtXw+mksTdHrIlk4BQ+058fmt
+        +3B6Q4R8scP+KtVb/yKl6lKBO/k8utfwC5jyJButG79o6hHUuzQsNoIWYh1iNSS+hiDVyr
+        INfLcW34HiUD7jYv9xcX2fZ4q034LhtvQ7cD5tlgSMqpPAv7BxeTyF/TkSDOVg==
+Received: from [IPV6:2001:14ba:440a:f000:f999:2447:3c0c:d88e] (dktgsyyj5xfwfrsyp7cjy-3.rev.dnainternet.fi [IPv6:2001:14ba:440a:f000:f999:2447:3c0c:d88e])
+        by dungeon.fi (Postfix) with ESMTPSA id C6AE93F270;
+        Mon, 13 Mar 2023 12:47:18 +0200 (EET)
+Message-ID: <3c53eca1-ce62-e98d-ee52-269a09480658@iki.fi>
+Date:   Mon, 13 Mar 2023 12:47:17 +0200
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v8 01/29] thermal/core: Add a generic
- thermal_zone_get_trip() function
-Content-Language: en-US
-To:     Ido Schimmel <idosch@idosch.org>
-Cc:     rafael@kernel.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, rui.zhang@intel.com,
-        Raju Rangoju <rajur@chelsio.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Peter Kaestle <peter@piie.net>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Nicolas Saenz Julienne <nsaenz@kernel.org>,
-        Broadcom Kernel Team <bcm-kernel-feedback-list@broadcom.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Ray Jui <rjui@broadcom.com>,
-        Scott Branden <sbranden@broadcom.com>,
-        Support Opensource <support.opensource@diasemi.com>,
-        Lukasz Luba <lukasz.luba@arm.com>,
-        Shawn Guo <shawnguo@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Thara Gopinath <thara.gopinath@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= <niklas.soderlund@ragnatech.se>,
-        Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Eduardo Valentin <edubezval@gmail.com>,
-        Keerthy <j-keerthy@ti.com>,
-        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Antoine Tenart <atenart@kernel.org>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Dmitry Osipenko <digetx@gmail.com>, netdev@vger.kernel.org,
-        platform-driver-x86@vger.kernel.org,
-        linux-rpi-kernel@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-omap@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
-        danieller@nvidia.com, vadimp@nvidia.com, petrm@nvidia.com
-References: <20221003092602.1323944-1-daniel.lezcano@linaro.org>
- <20221003092602.1323944-2-daniel.lezcano@linaro.org>
- <ZA3CFNhU4AbtsP4G@shredder>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <ZA3CFNhU4AbtsP4G@shredder>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2] USB: serial: xr: Add TIOCGRS485 and TIOCSRS485 ioctls
+To:     Oliver Neukum <oneukum@suse.com>
+Cc:     Johan Hovold <johan@kernel.org>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <ZA7Wh2Z/DdKOsOYr@kroah.com>
+ <20230313082734.886890-1-kasper@iki.fi>
+ <e426ae4c-4e49-5773-e8da-919fa2e3dc33@suse.com>
+From:   Jarkko Sonninen <kasper@iki.fi>
+In-Reply-To: <e426ae4c-4e49-5773-e8da-919fa2e3dc33@suse.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+     Hello,
 
-Hi Ido,
+It uses only one flag from the struct from user. Would it be better to 
+store only that to state ?
 
-On 12/03/2023 13:14, Ido Schimmel wrote:
-> On Mon, Oct 03, 2022 at 11:25:34AM +0200, Daniel Lezcano wrote:
->> @@ -1252,9 +1319,10 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->>   		goto release_device;
->>   
->>   	for (count = 0; count < num_trips; count++) {
->> -		if (tz->ops->get_trip_type(tz, count, &trip_type) ||
->> -		    tz->ops->get_trip_temp(tz, count, &trip_temp) ||
->> -		    !trip_temp)
->> +		struct thermal_trip trip;
->> +
->> +		result = thermal_zone_get_trip(tz, count, &trip);
->> +		if (result)
->>   			set_bit(count, &tz->trips_disabled);
->>   	}
-> 
-> Daniel, this change makes it so that trip points with a temperature of
-> zero are no longer disabled. This behavior was originally added in
-> commit 81ad4276b505 ("Thermal: Ignore invalid trip points"). The mlxsw
-> driver relies on this behavior - see mlxsw_thermal_module_trips_reset()
-> - and with this change I see that the thermal subsystem tries to
-> repeatedly set the state of the associated cooling devices to the
-> maximum state. Other drivers might also be affected by this.
-> 
-> Following patch solves the problem for me:
-> 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 55679fd86505..b50931f84aaa 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -1309,7 +1309,7 @@ thermal_zone_device_register_with_trips(const char *type, struct thermal_trip *t
->                  struct thermal_trip trip;
->   
->                  result = thermal_zone_get_trip(tz, count, &trip);
-> -               if (result)
-> +               if (result || !trip.temperature)
->                          set_bit(count, &tz->trips_disabled);
->          }
-> 
-> Should I submit it or do you have a better idea?
+Do I need locking at all in that case ?
 
-Thanks for reporting this, I think the fix you are proposing is correct 
-regarding the previous behavior.
+The whole struct is stored just in case, if someone would implement 
+other functionality later.
 
-However, I disagree with the commit 81ad4276b505, because it defines the 
-zero as an invalid trip point. But some platforms have warming devices, 
-when the temperature is too cold, eg 0°C, we enable the warming device 
-in order to stay in the functioning temperature range.
-
-Other devices can do the same with negative temperature values.
-
-This feature is not yet upstream and the rework of the trip point should 
-allow proper handling of cold trip points.
-
-If you can send the change to fix the regression that would be great.
-
-But keep in mind, the driver is assuming an internal thermal framework 
-behavior. The trips_disabled is only to overcome a trip point 
-description bug and you should not rely on it as well as not changing 
-the trip points on the fly after they are registered.
-
-Actually, the mlxsw driver should just build a valid array of trip 
-points without 0°C trip point and pass it to 
-thermal_zone_device_register_with_trips(). That would be a proper change 
-without relying on a side effect of the thermal trip bug 0°C workaround.
+     - Jarkko
 
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+Oliver Neukum kirjoitti 13/03/2023 klo 11.54:
+>
+>
+> On 13.03.23 09:27, Jarkko Sonninen wrote:
+>> Add support for RS-485 in Exar USB adapters.
+>> RS-485 mode is controlled by TIOCGRS485 and TIOCSRS485 ioctls.
+>> Gpio mode register is set to enable RS-485.
+>>
+>> Signed-off-by: Jarkko Sonninen <kasper@iki.fi>
+>
+>
+> Hi,
+>
+> I am sorry, but locking is really broken here. All these contexts can 
+> sleep.
+> There is no need for a spinlock. As far as you need locking, just use 
+> a mutex.
+>
+> Secondly, if xr_set_rs485_config() needs locking, so will 
+> xr_get_rs485_config()
+> or you can get the case that you return half a new and half an old 
+> state to user
+> space.
+>
+>     Regards
+>         Oliver
