@@ -2,333 +2,166 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9913C6B74C6
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:55:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3215F6B74D7
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:57:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbjCMKzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:55:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S230047AbjCMK5Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:57:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51912 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230238AbjCMKzM (ORCPT
+        with ESMTP id S230256AbjCMK5W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:55:12 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D84543A8C
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:55:09 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id l12so2580991wrm.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:55:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678704908;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UFiu4gK1oF4dM0YNdw9Pi5aeqhM8jAUatJngxP34/Pc=;
-        b=CVFio4BDa5aU+nkhtauEDIcpFZI5PHh1ReX+icfExlAhiz6NBSg8/TCEzcX1OPtNKp
-         nh+74NcBW1PtR9wC7zLCDMs8dnq54M4lNjeSzGGrrhK2anLog/dcV4yfhoOPxql5sC1a
-         WeyOG5yVHIWg3zES670S8g7D35LkNB3IH6CVLagbP4EyZLXUbqif2ZoX8/+9fDtwZd4A
-         M8kC4LyULXr+XNn25LqHbOSwNAb+v4wklg7HtljcXqpyrEGnKu2yPGJI4Z97s0g0AoL7
-         Vf9esYIwKC6QEE5/CpBsPAD6AW/PXiQOYGwczQ8CFTz1jAckyJs5ihhuZAs3vuj2Iu3b
-         Kg6g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678704908;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UFiu4gK1oF4dM0YNdw9Pi5aeqhM8jAUatJngxP34/Pc=;
-        b=oSWqaCUhM5Yo29Z/gPnPrMzth92HKQKVVZXxfHI0misD6CYiwX+fp6n2wg4kufrac3
-         WPjnriGdRx834cOwRzjcGp0bgJdnnHXvwEQ12vUqKoimC7iyy9eG8GeeyegQi2FJbbAq
-         OMOIHvjC3fl2b2RJiUlF/C0w4gyQ9XzkG260ffAC1LD0vMklMeTlSIxOVIlm2hLSgLKW
-         tUaIYmVZxAerGgAziJcstWsm0YtAq+51I/ECH4kEjIYWo52ThgEsJvQcyGHM5d0wmlXe
-         y/YEEGXjo81251G1FTYFxvdDXiz5fveEVzUBWS5A7mfRUrawwrnXSIKcnEMYECvb+xd3
-         tNqQ==
-X-Gm-Message-State: AO0yUKUh2GFxXTTdZ/rUEZXkiUtAxnTxezy0y/xyMpIRf9hBa+uZ6jED
-        QOOu0QZYECywxZshBrMRXZRF/g==
-X-Google-Smtp-Source: AK7set9f8VZt3snkUFB3q4J/GDNuQzkNCXlRS2pa7s8pf6kxCKYRlcg5VUDjEeFoCHrGWGSQwvzG6w==
-X-Received: by 2002:adf:f44c:0:b0:2cf:6089:2408 with SMTP id f12-20020adff44c000000b002cf60892408mr1950978wrp.0.1678704908158;
-        Mon, 13 Mar 2023 03:55:08 -0700 (PDT)
-Received: from ?IPV6:2a05:6e02:1041:c10:8522:ca6e:1db4:96c6? ([2a05:6e02:1041:c10:8522:ca6e:1db4:96c6])
-        by smtp.googlemail.com with ESMTPSA id z16-20020adfd0d0000000b002c5d3f0f737sm7422539wrh.30.2023.03.13.03.55.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 03:55:07 -0700 (PDT)
-Message-ID: <ca4e9523-0d12-c29f-6de1-365d1713ec84@linaro.org>
-Date:   Mon, 13 Mar 2023 11:55:06 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v1 03/11] thermal/drivers/intel_menlow: Remove
- add_one_attribute
+        Mon, 13 Mar 2023 06:57:22 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2070.outbound.protection.outlook.com [40.107.220.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A17D5F6FD;
+        Mon, 13 Mar 2023 03:57:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=SqzpG0Dqotzwo4OLKzXzLGBzD0qCKWT2qC7Z5cvZC4hOX0LwcNCrU5/ezD+AKOILj3B7mV/ZZWfl989ceSSt00jr7lAmQ8G0+lVoGa1rwcBgPsjG72YuQUYSLf3U3iyFKn1/gQKXy7eStC7kKXtRG4ikkTNFMK4uggB7yViegKOdGso2Hys96iZsUPJdKzEBVg4/1pHkjYt2G0VPWO8evIPpaDEk3N2J7XrC8pSiduh4p429OXMJSC04tlQ/T1L6H+akuaZndZlJIILFP6IAlqX8ctg6GrliMAB6fRpKQUFqoQl5IRbPL4hkk3AASkk6SyG4rLsSPG5zNom+JvG7Nw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=gAqZw+yue5lZLefqokK15pK9470MSOyUf1NKyGPgbow=;
+ b=OmFA9XkBBclFNMf92JsLJqmWqdHe8aqcvBugH8U8s8GOA702t8BBw1th00IUmk7eSbxtRTIjriKYQsuQHh7GmZ1O+oQpxWefnzYIBd8PzO3bMk3Tpt9LBQZ/yLgRZZkThnLIJfcbndAWNgtrJu1Ii9u/QRmYqfpUYdcqG2bCvrCoqlzVU8QPvAtZ+chlF0eVrHwMoGU7yLF1SQ4oDcKS4kLdAkDN4fB5KxqAwpZLRei1kBX4ZAvUgeHLTX+9HhdSmD7Ej3cvQ3MT/Dy/O/aWWNa7geKjsW1xgdbGOIN9XyV1CCEFzA1pGOL24XXx9/Hx878vQWoq9iVVDe1bgkm/Ww==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=gAqZw+yue5lZLefqokK15pK9470MSOyUf1NKyGPgbow=;
+ b=PAxaAGeEyLpPuiKpMvcLAfTHQ310DY7DTV0PLjiAfvwlmI9e2Cq+2D6KlZIIT0Z54N48bb2ekRqIwM0OPOFS5Alby87R/6JAj0ZOBTTDj8x088MOe6CNxUYt7EKSbxfW+ZXuRTWZoIeHZADhcLyIliQqBpY64LmGbeZ8GZYwm94=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from PH7PR12MB5712.namprd12.prod.outlook.com (2603:10b6:510:1e3::13)
+ by PH8PR12MB7253.namprd12.prod.outlook.com (2603:10b6:510:226::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 10:57:18 +0000
+Received: from PH7PR12MB5712.namprd12.prod.outlook.com
+ ([fe80::68c:afbc:72ac:54af]) by PH7PR12MB5712.namprd12.prod.outlook.com
+ ([fe80::68c:afbc:72ac:54af%9]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 10:57:17 +0000
+Message-ID: <a53c8ba7-f66d-5bd7-c934-2357f42b3ac9@amd.com>
+Date:   Mon, 13 Mar 2023 16:27:04 +0530
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.1
+From:   Sandipan Das <sandipan.das@amd.com>
+Subject: Re: [PATCH 0/5] KVM: x86/pmu: Hide guest counter updates from the
+ VMRUN instruction
+To:     Like Xu <like.xu.linux@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Ravi Bangoria <ravi.bangoria@amd.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Santosh Shukla <santosh.shukla@amd.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Ananth Narayan <ananth.narayan@amd.com>
+References: <20230310105346.12302-1-likexu@tencent.com>
+X-Mozilla-News-Host: news://nntp.lore.kernel.org
 Content-Language: en-US
-To:     rafael@kernel.org, rui.zhang@intel.com
-Cc:     amitk@kernel.org, Sujith Thomas <sujith.thomas@intel.com>,
-        "open list:INTEL MENLOW THERMAL DRIVER" <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20230307133735.90772-1-daniel.lezcano@linaro.org>
- <20230307133735.90772-4-daniel.lezcano@linaro.org>
-From:   Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20230307133735.90772-4-daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230310105346.12302-1-likexu@tencent.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PR01CA0028.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:97::7) To PH7PR12MB5712.namprd12.prod.outlook.com
+ (2603:10b6:510:1e3::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5712:EE_|PH8PR12MB7253:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3396222e-f3f0-44bc-61fb-08db23b1b60c
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: rgBFCOlW/QbM6/EEhcBTg93MRsm5L0dTuwChWP04eZbaSXA977Zb2JOrhVJVJz9ckal8RFaIX6bPR+QGMAmGUDwbaET8md/P5hxIorJO5n7hUS2M6CQYSSh3WX5XepLtuGcCjqkoRnJhYOWlsbnfPtIzmFnvVsu4xcm0aat3NOONpoNSBq/4Ze0NuGQ5LYluIAGxrIQ7XKm3ePrUpmyp41icK9ndE2xAwLLUKay0EL5kxH3vN5MyB75t7L1nCzzSYPZvzOeD6KJYxITTtc65wU/b0SZpLSztRnT65NPssfgnhRjtH7a4BhGcbd6mWfy8VMQlVmwpCwK4Obpafi5J48c7YSWROht5v/PaymviOuX1NtQWZ8KAIS+4gY9vBH69jTHztam4X+mdXq4otP5gr0EajewBUA53QsMW1MP/Uvp0//h24Xdhukd/Dpb6duzi69iBp4CmlHYPmiIcURCV/pLbHpOsSSk06RN37ppD+PYv7HaiZNyrYN5X9qCVb9kXKaEuZCglItQ7QEEHBk4k0YbdCrLlQloBnNFZ5tIKANSH/Ra5R5QNhMzG9qrc5QpQKZ9uwIRPRyauJqH/F1ox9q66sH7ELIlJwcMpm9ohgf454hOvUDPu87rqjl2geOAwgitdoFKIYjH9neNxCRUKMTR02755VHAoEsJmDN++lJ4bZfi1i88tkjArPCrkNXc+aqkYVKXN/JjfS123jDyU+UTF+fl3GG771CggYq6PYNg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5712.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(366004)(376002)(39860400002)(346002)(136003)(451199018)(38100700002)(2906002)(41300700001)(8676002)(66556008)(66476007)(4326008)(478600001)(316002)(36756003)(66946007)(6916009)(86362001)(54906003)(31696002)(6486002)(5660300002)(44832011)(53546011)(26005)(6512007)(6506007)(2616005)(31686004)(186003)(6666004)(8936002)(83380400001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Z1N5bnVrNDhCdGRmMWVLR2tjSk1RdGRaaTlJVGlaNzAxQUlEdVdlUmlJOGxs?=
+ =?utf-8?B?RGE3WlpNWEdyTzdtQnB5bDFLSVVrdWp0RXlac1UzZ2x0MFEwNVdoVmtWcDdU?=
+ =?utf-8?B?Q2xBZU4vRE5taDFHRStlYU1USlZqYU92T1lKb29KbFR5eGtKODJSRDBpM094?=
+ =?utf-8?B?YkdDNzZtdnJ2Ynpkek53aXVYNmcxR0laSUFoaHdNdmJuQm8vcnJ3bnRVK0ZU?=
+ =?utf-8?B?YlowSmJrNFVxU2R1N1ZWYWpkaTFrMkhYU1hxYi91OElYeFpiS0o3aUtGUDRJ?=
+ =?utf-8?B?c3hLMWc1TkF3d2lxU1FHN0ZDVXJHMFh4KzQyVDVPTklKTXBkd1F2b25kY29Z?=
+ =?utf-8?B?bDFseCtvZGk0d2lVZjc5dGhPNnN6dGJGNTkvY3EzU3BIeHFNY1JENDYvYmlO?=
+ =?utf-8?B?OW5DSXd2S3JWRHM3cXBtdmFVVTNUc21YRllBYjF5WVgzbVRwb241SmsyVzZv?=
+ =?utf-8?B?c1BONSt5K1pRZlBaR3JmaU9yOGZRTWUvTEx6dEFpNFQ2QzYwNHErNkN3WHFq?=
+ =?utf-8?B?Z1NMYlBPakhoc1BQSC9XSmx3ZTNoUFMzOTk3WFV2TElUMTJmTDRYUWtLUUVZ?=
+ =?utf-8?B?RlN6VFo5bStHL2FYQzFjdURsdk9LS3RjYXNyMk9yN1Z3MW9oMklhMWE2a05R?=
+ =?utf-8?B?a3ZCZHVCcUlqWlVaWlBIR05lemEyUFF0anp3d2VLeEo5VWkyelpvMmp2MTlq?=
+ =?utf-8?B?TWsvUm02RlNNQi9kUFpFZ2JBTTBOS3dNQ3BKRTFBVzI0NHZod2NOdXFxQWlQ?=
+ =?utf-8?B?VzlrT0FINlEyb3pHbUlyYUVtUWhlaS9MZGFtemt1ZEhBYys4bW9SSkdwNHNR?=
+ =?utf-8?B?NnUySjVvaWR1Z0NTbmlaMGluaThuVHV5c0tLTzNHUW0vaTJqK25SN3dMUTFB?=
+ =?utf-8?B?NEQxS3pIZGF2OXZSTlkrd0NmS2llSDRGQWNwN0hQM1FFTVJsano0TlcvS1BE?=
+ =?utf-8?B?ZGx0dFk5WTlCVjhLODlxZzNvTWpzUFppaWdaVVpXaFdRVWpJTUVBalhCY0xz?=
+ =?utf-8?B?QVFqaXdYSmdjeUpCMFVnaXNxSjZRdVAzUWQ0M3dUNm5QRlJOMUtkNDhka0d1?=
+ =?utf-8?B?L0ZBZFJ3Tmpscmk1MTlvbmVwYnA1UDZaNEs4cHZ2QkhRMDJ1aURVWjZGNFg4?=
+ =?utf-8?B?ZGJjejBBYmFGamVKZkp5VnA3a0JOcUx6Z0Z0eDNjTEc2bXdEMnZIUzJHOStP?=
+ =?utf-8?B?cHE2aHQrU2lBQlBSM2ZrMVE0N1h0TzVZR2t3U2FvczVaYkVxRU9qYmhDZDEr?=
+ =?utf-8?B?Tml6MnN5Q254SWhNN0YrNnNUcFhPK1IvbW9RdHQrWDIreDcrbUt2bkgvemxp?=
+ =?utf-8?B?cjVvVVo1UEJ6TWYzelBOcENKcnc1ZVJwUDE0cU5BK2dUNkVDTFhuOVlPUVU2?=
+ =?utf-8?B?ZWlqNHFxZHlldnQxREJBaE1GcTZ4cGpZb3hlK3E2ZWs1NjhHYXZBNXlsbVJF?=
+ =?utf-8?B?RDVidmVkTy9JRnVaZlV2VmhVWGh0cDB2alRKakdXNUVKRTB1RUJUNG9weC9B?=
+ =?utf-8?B?OW1TUjhkQlNTWktSVDFTdUxKbHRteDFGQ3NBNXBYNkZ0cG42b1kydjNrdjNv?=
+ =?utf-8?B?SFlUdUQ2T2xGejRDNVM0R3RmTCtzeVhURmFxaEZLYWN4OC9YRVZXT2xWRTBu?=
+ =?utf-8?B?aDlOcVdRalMraVpOcS9RWTExa1VWT3dxdTAwV21xeGVrYW1qdUt2T1lPNlo2?=
+ =?utf-8?B?RkhYTE9Ic3dCS24rTGJaS1lPM1NkcDVNdTVpQkltaW9EaWVIM3pvaG1rMnNn?=
+ =?utf-8?B?aUphdjRiNmhJdmVMdks5OHdGUzF5RDdiM1YxMmFKeFBUWDcvcWNVT3V4My8z?=
+ =?utf-8?B?akRWZi9CTmY4NGJFdzdGNDd4QXlqamwwUlNpRTNWRlhSTGpUZ2FGMmhrMW5u?=
+ =?utf-8?B?RFducTdRZzM2bE02Sy9PcjQxc2V5Y09iNXVNQW1Tc1hsbytaOGcvaDFkVHdl?=
+ =?utf-8?B?cUVHM3lyZDNHTkZqWFJjUVFYbE5CN3lHRk9RRFV2MjJsQjNaek1POWdXSWUx?=
+ =?utf-8?B?OVllL3M1U1BYcFR2R1lzYXBuUWIvZlRnNU5VUlRZMmxIKzFkUWEzc25LSVhG?=
+ =?utf-8?B?QnF4QVliVUdJaWRSUGZrenhSZW5YZVZvNzBjUHAvaFg3cklEb0QvSktjcS8x?=
+ =?utf-8?Q?4akfRNwvclgS3CkLJGJlPgIek?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3396222e-f3f0-44bc-61fb-08db23b1b60c
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5712.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 10:57:17.7879
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EFVNTTUYW7vdUwMNWVurtBUCVP7S45j+wnymMMUCXSFw4yGssaoNr8JqWGhViEJLBMEzMWIVpvEBrR5cwUrvLw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7253
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
++CC: Santosh, Tom, Ananth
 
-Hi,
+Hi Like,
 
-is this code removal acceptable ?
-
-
-On 07/03/2023 14:37, Daniel Lezcano wrote:
-> The driver hooks the thermal framework sysfs to add some driver
-> specific information. A debatable approach as that may belong the
-> device sysfs directory, not the thermal zone directory.
+On 3/10/2023 4:23 PM, Like Xu wrote:
+> Considering that developers are more likely to have access to AMD VMs
+> and use vPMU inside guest, there's a dark cloud that needs to rain.
+> The x86_64/pmu_event_filter_test always fails on Zen3 boxes:
 > 
-> As the driver is accessing the thermal internals, we should provide at
-> least an API to the thermal framework to add an attribute to the
-> existing sysfs thermal zone entry.
+>   test_amd_deny_list: Branch instructions retired = 43 (expected 42)
+>   test_without_filter: Branch instructions retired = 43 (expected 42)
+>   test_member_allow_list: Branch instructions retired = 43 (expected 42)
+>   test_not_member_deny_list: Branch instructions retired = 43 (expected 42)
 > 
-> Before doing that and given the age of the driver (2008) may be it is
-> worth to double check if these attributes are really needed. So my
-> first proposal is to remove them if that does not hurt.
+> ,which is not caused by the event_filter feature (otherwise it's zero).
 > 
-> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-
-
-
-> ---
->   drivers/thermal/intel/intel_menlow.c | 193 ---------------------------
->   1 file changed, 193 deletions(-)
+> After some dubious guessing and microtesting on Zen3+ pmu hardware,
+> we found that VMRUN or one of the instructions in __svm_vcpu_run()
+> causes a guest-only enabled counter for counting guest instruction (in the
+> pmu_event_filter case, the branch instruction) to always increase by one
+> right after each vm_entry.
 > 
-> diff --git a/drivers/thermal/intel/intel_menlow.c b/drivers/thermal/intel/intel_menlow.c
-> index 5a6ad0552311..5a9738a93083 100644
-> --- a/drivers/thermal/intel/intel_menlow.c
-> +++ b/drivers/thermal/intel/intel_menlow.c
-> @@ -230,174 +230,8 @@ struct intel_menlow_attribute {
->   static LIST_HEAD(intel_menlow_attr_list);
->   static DEFINE_MUTEX(intel_menlow_attr_lock);
->   
-> -/*
-> - * sensor_get_auxtrip - get the current auxtrip value from sensor
-> - * @handle: Object handle
-> - * @index : GET_AUX1/GET_AUX0
-> - * @value : The address will be fill by the value
-> - */
-> -static int sensor_get_auxtrip(acpi_handle handle, int index,
-> -							unsigned long long *value)
-> -{
-> -	acpi_status status;
-> -
-> -	if ((index != 0 && index != 1) || !value)
-> -		return -EINVAL;
-> -
-> -	status = acpi_evaluate_integer(handle, index ? GET_AUX1 : GET_AUX0,
-> -				       NULL, value);
-> -	if (ACPI_FAILURE(status))
-> -		return -EIO;
-> -
-> -	return 0;
-> -}
-> -
-> -/*
-> - * sensor_set_auxtrip - set the new auxtrip value to sensor
-> - * @handle: Object handle
-> - * @index : GET_AUX1/GET_AUX0
-> - * @value : The value will be set
-> - */
-> -static int sensor_set_auxtrip(acpi_handle handle, int index, int value)
-> -{
-> -	acpi_status status;
-> -	union acpi_object arg = {
-> -		ACPI_TYPE_INTEGER
-> -	};
-> -	struct acpi_object_list args = {
-> -		1, &arg
-> -	};
-> -	unsigned long long temp;
-> -
-> -	if (index != 0 && index != 1)
-> -		return -EINVAL;
-> -
-> -	status = acpi_evaluate_integer(handle, index ? GET_AUX0 : GET_AUX1,
-> -				       NULL, &temp);
-> -	if (ACPI_FAILURE(status))
-> -		return -EIO;
-> -	if ((index && value < temp) || (!index && value > temp))
-> -		return -EINVAL;
-> -
-> -	arg.integer.value = value;
-> -	status = acpi_evaluate_integer(handle, index ? SET_AUX1 : SET_AUX0,
-> -				       &args, &temp);
-> -	if (ACPI_FAILURE(status))
-> -		return -EIO;
-> -
-> -	/* do we need to check the return value of SAX0/SAX1 ? */
-> -
-> -	return 0;
-> -}
-> -
-> -#define to_intel_menlow_attr(_attr)	\
-> -	container_of(_attr, struct intel_menlow_attribute, attr)
-> -
-> -static ssize_t aux_show(struct device *dev, struct device_attribute *dev_attr,
-> -			char *buf, int idx)
-> -{
-> -	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
-> -	unsigned long long value;
-> -	int result;
-> -
-> -	result = sensor_get_auxtrip(attr->handle, idx, &value);
-> -	if (result)
-> -		return result;
-> -
-> -	return sprintf(buf, "%lu", deci_kelvin_to_celsius(value));
-> -}
-> -
-> -static ssize_t aux0_show(struct device *dev,
-> -			 struct device_attribute *dev_attr, char *buf)
-> -{
-> -	return aux_show(dev, dev_attr, buf, 0);
-> -}
-> -
-> -static ssize_t aux1_show(struct device *dev,
-> -			 struct device_attribute *dev_attr, char *buf)
-> -{
-> -	return aux_show(dev, dev_attr, buf, 1);
-> -}
-> -
-> -static ssize_t aux_store(struct device *dev, struct device_attribute *dev_attr,
-> -			 const char *buf, size_t count, int idx)
-> -{
-> -	struct intel_menlow_attribute *attr = to_intel_menlow_attr(dev_attr);
-> -	int value;
-> -	int result;
-> -
-> -	/*Sanity check; should be a positive integer */
-> -	if (!sscanf(buf, "%d", &value))
-> -		return -EINVAL;
-> -
-> -	if (value < 0)
-> -		return -EINVAL;
-> -
-> -	result = sensor_set_auxtrip(attr->handle, idx,
-> -				    celsius_to_deci_kelvin(value));
-> -	return result ? result : count;
-> -}
-> -
-> -static ssize_t aux0_store(struct device *dev,
-> -			  struct device_attribute *dev_attr,
-> -			  const char *buf, size_t count)
-> -{
-> -	return aux_store(dev, dev_attr, buf, count, 0);
-> -}
-> -
-> -static ssize_t aux1_store(struct device *dev,
-> -			  struct device_attribute *dev_attr,
-> -			  const char *buf, size_t count)
-> -{
-> -	return aux_store(dev, dev_attr, buf, count, 1);
-> -}
-> -
->   /* BIOS can enable/disable the thermal user application in dabney platform */
->   #define BIOS_ENABLED "\\_TZ.GSTS"
-> -static ssize_t bios_enabled_show(struct device *dev,
-> -				 struct device_attribute *attr, char *buf)
-> -{
-> -	acpi_status status;
-> -	unsigned long long bios_enabled;
-> -
-> -	status = acpi_evaluate_integer(NULL, BIOS_ENABLED, NULL, &bios_enabled);
-> -	if (ACPI_FAILURE(status))
-> -		return -ENODEV;
-> -
-> -	return sprintf(buf, "%s\n", bios_enabled ? "enabled" : "disabled");
-> -}
-> -
-> -static int intel_menlow_add_one_attribute(char *name, umode_t mode, void *show,
-> -					  void *store, struct device *dev,
-> -					  acpi_handle handle)
-> -{
-> -	struct intel_menlow_attribute *attr;
-> -	int result;
-> -
-> -	attr = kzalloc(sizeof(struct intel_menlow_attribute), GFP_KERNEL);
-> -	if (!attr)
-> -		return -ENOMEM;
-> -
-> -	sysfs_attr_init(&attr->attr.attr); /* That is consistent naming :D */
-> -	attr->attr.attr.name = name;
-> -	attr->attr.attr.mode = mode;
-> -	attr->attr.show = show;
-> -	attr->attr.store = store;
-> -	attr->device = dev;
-> -	attr->handle = handle;
-> -
-> -	result = device_create_file(dev, &attr->attr);
-> -	if (result) {
-> -		kfree(attr);
-> -		return result;
-> -	}
-> -
-> -	mutex_lock(&intel_menlow_attr_lock);
-> -	list_add_tail(&attr->node, &intel_menlow_attr_list);
-> -	mutex_unlock(&intel_menlow_attr_lock);
-> -
-> -	return 0;
-> -}
->   
->   static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
->   						void *context, void **rv)
-> @@ -420,12 +254,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
->   	if (ACPI_FAILURE(status))
->   		return (status == AE_NOT_FOUND) ? AE_OK : status;
->   
-> -	result = intel_menlow_add_one_attribute("aux0", 0644,
-> -						aux0_show, aux0_store,
-> -						&thermal->device, handle);
-> -	if (result)
-> -		return AE_ERROR;
-> -
->   	status = acpi_get_handle(handle, GET_AUX1, &dummy);
->   	if (ACPI_FAILURE(status))
->   		goto aux1_not_found;
-> @@ -434,27 +262,6 @@ static acpi_status intel_menlow_register_sensor(acpi_handle handle, u32 lvl,
->   	if (ACPI_FAILURE(status))
->   		goto aux1_not_found;
->   
-> -	result = intel_menlow_add_one_attribute("aux1", 0644,
-> -						aux1_show, aux1_store,
-> -						&thermal->device, handle);
-> -	if (result) {
-> -		intel_menlow_unregister_sensor();
-> -		return AE_ERROR;
-> -	}
-> -
-> -	/*
-> -	 * create the "dabney_enabled" attribute which means the user app
-> -	 * should be loaded or not
-> -	 */
-> -
-> -	result = intel_menlow_add_one_attribute("bios_enabled", 0444,
-> -						bios_enabled_show, NULL,
-> -						&thermal->device, handle);
-> -	if (result) {
-> -		intel_menlow_unregister_sensor();
-> -		return AE_ERROR;
-> -	}
-> -
->   	return AE_OK;
->   
->    aux1_not_found:
+> This creates an inconsistency with the AMD64_EVENTSEL_GUESTONLY,
+> where the vPMU user in the VM does not expect to see any counter
+> changes due to the SVM transaction at all. This patch set provides a low
+> overhead software fix until HW change arrives or simply no fix planned.
+> 
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Yes, VMRUNs do get counted as retired branches in the guest context. My
+understanding is that this behaviour applies to all generations of Zen
+and even some older ones too, not just Zen 3 and later. I also do not
+expect this to change in the near future.
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
-
+- Sandipan
