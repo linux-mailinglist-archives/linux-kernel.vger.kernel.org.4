@@ -2,77 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34FBB6B8135
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 863386B8127
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:50:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbjCMSyq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:54:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59522 "EHLO
+        id S230230AbjCMSuN convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 14:50:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjCMSy1 (ORCPT
+        with ESMTP id S231614AbjCMSuB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:54:27 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33966D535;
-        Mon, 13 Mar 2023 11:53:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id A3C4C61469;
-        Mon, 13 Mar 2023 18:48:00 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BAB5C433D2;
-        Mon, 13 Mar 2023 18:48:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678733280;
-        bh=/d48bhLyzRVyeGxbnJF3Qv5h7/XTC0mhguBxZRlvvqU=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=GfHGVKoxU0W/N2wLo63mnd3Wc7tjoxw0cGbP7H/w/QB19ZggiY552NYKNip1AuS7O
-         yyEhBH5QUlTGepcYtQ0rYggBoxFGql5gkm+/6tE56b+9lS7Aszl6U3Uw11ZuLiRxbl
-         icEgjpYGDpuvQaidAQ+DoXKSfAmEC9XMwwHAe5fteGtrtJ8x/7Lx0KXHS9HEmbzWLO
-         RTfX5PzuiaXOTdpdG4PJEil+sMdxq5mEBJWaH60BSkHM8rFfpRuQ3Gzu7rihSDEYUp
-         Hi1BVYbP7E5WI9ncfgl22zSPBmHMqY9zEoEFS18oQT76bnG8/W0hZTazCNFmWO9OX/
-         Tze0GVrUJZQOg==
-Message-ID: <f0333440693d55316a064e3ad1dbd307.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+        Mon, 13 Mar 2023 14:50:01 -0400
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C9466C182;
+        Mon, 13 Mar 2023 11:49:30 -0700 (PDT)
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.95)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1pbnDx-001rD4-AJ; Mon, 13 Mar 2023 19:48:45 +0100
+Received: from p57bd9bc2.dip0.t-ipconnect.de ([87.189.155.194] helo=suse-laptop.fritz.box)
+          by inpost2.zedat.fu-berlin.de (Exim 4.95)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1pbnDx-001lj0-2N; Mon, 13 Mar 2023 19:48:45 +0100
+Message-ID: <ecf27b8c33d10b2816413b25c463ecf5d8298ea5.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 16/36] sh: dma-sysfs: move to use bus_get_dev_root()
+From:   John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-kernel@vger.kernel.org
+Cc:     rafael@kernel.org, Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>, linux-sh@vger.kernel.org
+Date:   Mon, 13 Mar 2023 19:48:44 +0100
+In-Reply-To: <20230313182918.1312597-16-gregkh@linuxfoundation.org>
+References: <20230313182918.1312597-1-gregkh@linuxfoundation.org>
+         <20230313182918.1312597-16-gregkh@linuxfoundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
-References: <20230206100105.861720-1-angelogioacchino.delregno@collabora.com> <20230206100105.861720-8-angelogioacchino.delregno@collabora.com>
-Subject: Re: [PATCH v3 7/7] clk: mediatek: mt8195: Add support for frequency hopping through FHCTL
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     mturquette@baylibre.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
-        edward-jw.yang@mediatek.com, johnson.wang@mediatek.com,
-        wenst@chromium.org, miles.chen@mediatek.com,
-        chun-jie.chen@mediatek.com, rex-bc.chen@mediatek.com,
-        jose.exposito89@gmail.com, linux-clk@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com
-To:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Date:   Mon, 13 Mar 2023 11:47:58 -0700
-User-Agent: alot/0.10
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-Originating-IP: 87.189.155.194
+X-ZEDAT-Hint: PO
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting AngeloGioacchino Del Regno (2023-02-06 02:01:05)
-> Add FHCTL parameters and register PLLs through FHCTL to add support
-> for frequency hopping and SSC. FHCTL will be enabled only on PLLs
-> specified in devicetree.
->=20
-> This commit brings functional changes only upon addition of
-> devicetree configuration.
->=20
-> Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@coll=
-abora.com>
-> ---
+Hi Greg!
 
-Applied to clk-next
+On Mon, 2023-03-13 at 19:28 +0100, Greg Kroah-Hartman wrote:
+> Direct access to the struct bus_type dev_root pointer is going away soon
+> so replace that with a call to bus_get_dev_root() instead, which is what
+> it is there for.
+> 
+> Cc: Yoshinori Sato <ysato@users.sourceforge.jp>
+> Cc: Rich Felker <dalias@libc.org>
+> Cc: linux-sh@vger.kernel.org
+> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> ---
+> Note, this is a patch that is a prepatory cleanup as part of a larger
+> series of patches that is working on resolving some old driver core
+> design mistakes.  It will build and apply cleanly on top of 6.3-rc2 on
+> its own, but I'd prefer if I could take it through my driver-core tree
+> so that the driver core changes can be taken through there for 6.4-rc1.
+> 
+>  arch/sh/drivers/dma/dma-sysfs.c | 8 +++++++-
+>  1 file changed, 7 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/sh/drivers/dma/dma-sysfs.c b/arch/sh/drivers/dma/dma-sysfs.c
+> index 8ef318150f84..431bc18f0a41 100644
+> --- a/arch/sh/drivers/dma/dma-sysfs.c
+> +++ b/arch/sh/drivers/dma/dma-sysfs.c
+> @@ -45,13 +45,19 @@ static DEVICE_ATTR(devices, S_IRUGO, dma_show_devices, NULL);
+>  
+>  static int __init dma_subsys_init(void)
+>  {
+> +	struct device *dev_root;
+>  	int ret;
+>  
+>  	ret = subsys_system_register(&dma_subsys, NULL);
+>  	if (unlikely(ret))
+>  		return ret;
+>  
+> -	return device_create_file(dma_subsys.dev_root, &dev_attr_devices);
+> +	dev_root = bus_get_dev_root(&dma_subsys);
+> +	if (dev_root) {
+> +		ret = device_create_file(dev_root, &dev_attr_devices);
+> +		put_device(dev_root);
+> +	}
+> +	return ret;
+>  }
+>  postcore_initcall(dma_subsys_init);
+>  
+
+After acking this, I noticed that if bus_get_dev_root() fails, "ret" remains
+set to the value by subsys_system_register() which might confuse the caller
+thinking that dma_subsys_init() succeeded unless I am missing something?
+
+Adrian
+
+-- 
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
