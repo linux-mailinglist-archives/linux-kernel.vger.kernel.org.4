@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B98F6B7C4F
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B00046B7C50
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:46:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230119AbjCMPpa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:45:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37938 "EHLO
+        id S229813AbjCMPqd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 11:46:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbjCMPp2 (ORCPT
+        with ESMTP id S229578AbjCMPqb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:45:28 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA4CD35254
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:45:26 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id h3so13065964lja.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:45:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678722325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X/tx4J6LJimmOalWj5bK2cKRpn0NIEM6z3rrObStaYA=;
-        b=Ya6YjiCHxnUQfVRSZBJJBiXWXj/k+vMAMip290SDX1t1E+Mpq2ahwSuTyxkXsvdJUU
-         P37COhxgFaDM1j+SaRPssUYIUGKSyIL1aWTdSO7fyEMpRbE57rk2QMiuMC1BZMd1u3BQ
-         W55H46dz8MAYQDDQeSaJ0igdH6NjPrHIOAu6ZRt9MiWKnARGPPZ9jrci0vI1NN6Jzapo
-         Tzyt1/G/qlkZN5p24YYHI5n77ug5G3uNwIw8c9wTtgL5PZA5VEEf5F3MRKqVIosmpLWj
-         nQFaQdedqLdgJThvop0rlTh2Qo3zf/CsIuzs1zpwn2197HgsD/AmLRtScJqvC2WRiVWB
-         pHQw==
+        Mon, 13 Mar 2023 11:46:31 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484F335254
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:46:30 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id z128-20020a6bc986000000b0074d32ddcce7so6445902iof.21
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:46:30 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678722325;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678722389;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X/tx4J6LJimmOalWj5bK2cKRpn0NIEM6z3rrObStaYA=;
-        b=q5E99MS/QjaOvPLBTqlE9e7zSUbaoZuIN0Lc2VkygWA4iKZdWMiRsDlLrSpmG+tlxL
-         dlVFXeV1AF4DcHN/zDp1XknWHyfy9HrbtZaQZAGI8g6yN7lhT36NxUBmZ/MWJd+baKs4
-         iKQH/BeJzlt/mvB2hbKC/jJJG9ma7rsDGMA1fvq74itf5sDVJxCaWBi+NuOhHkc6CBHO
-         mEhp6U/ynHHW1bTuFKZFukvSunIxuMOkqDHlPUCLTkIRQLCDV6TzOsxy2l4u1vLg6la/
-         wR0BtRCca5gnycw/AJJMzqOOVgO5bHmxfN5WMSI9RhxYnMakvdfoN7mQvIOfAeP5dvvT
-         x5zA==
-X-Gm-Message-State: AO0yUKWMiyOxV6OcV8LIYhmmTtbzq8ElkyWq0i7WvJ+LI5/ICS/17FIs
-        zZHebf4IxTIbn4BLaLp2QDowjg==
-X-Google-Smtp-Source: AK7set99IMiMkFYO61NIAvCQKMsK1kLV8VnRO2EYGJDE55ut0yKSLyZJp7D/M6exdw1vpZfmhZVAnA==
-X-Received: by 2002:a2e:b94a:0:b0:293:1565:4353 with SMTP id 10-20020a2eb94a000000b0029315654353mr10480143ljs.10.1678722325079;
-        Mon, 13 Mar 2023 08:45:25 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id v19-20020a2e87d3000000b002959b1162f0sm35426ljj.96.2023.03.13.08.45.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 08:45:24 -0700 (PDT)
-Message-ID: <9305de1e-1ee7-af9f-80b8-ee013108b131@linaro.org>
-Date:   Mon, 13 Mar 2023 16:45:23 +0100
+        bh=DgoMhRyS4hyS64tey/KhVVb7fuEqh7f4Mb+2Jzq1dUc=;
+        b=FVqo10NiHbK2gYGV270NX8kc6LY69ihR8ilrHTtogbPZqeeOkD4sl1dkDEi65GsSUP
+         +K3eSD9Sv2iytXoQD3drOR2UW8d0PAEqOQPbWCxnPDDU4NvHVQUVm9CsD/j3kyIr2cAI
+         m7sjotXGCfdYUOXNDXZ3utLZGyDgbkfvF76NPcIzAV+s6Kdh3jgWOUphx6ZR9ixcr4u9
+         r3Xnpy71z1BE21nxKWfXSZtgE+t8fZy4RqGC/GoqOO49txTKoONZijbEmQeq6K28Lsf1
+         Ayy9EistYrP2l454znBtz+Vz3ej+CskzJGQbcPMgqIDVtcOtuQJCLW4pTQIeKKSc0ZLm
+         0rQQ==
+X-Gm-Message-State: AO0yUKWUSqZ6TG4T2jztoGqA4D7qiqyD421DgaIZCsywHCbI8po1+T7l
+        mYUsHbaPUVewfh6MiLXXchqHyPOYWca3lRJopLPQ9ejGmbCW
+X-Google-Smtp-Source: AK7set+k4OunDSeNLiPyZEP0lEmmuaLW/Yz3UNXT5kTDUNS6G5VJfGY0g1jZF7m7CEmt48VC4XB89prpXEUMeVPncNlgPF1B8Yga
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: sdm845-xiaomi-beryllium: add
- notification LED
-Content-Language: en-US
-To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230313154226.136726-1-joelselvaraj.oss@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230313154226.136726-1-joelselvaraj.oss@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:d384:0:b0:313:b6ee:2037 with SMTP id
+ o4-20020a92d384000000b00313b6ee2037mr76188ilo.3.1678722389631; Mon, 13 Mar
+ 2023 08:46:29 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 08:46:29 -0700
+In-Reply-To: <20230313143619.ljca56xjl4nsrm3b@fpc>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000b5ec8105f6ca0390@google.com>
+Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
+From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
+To:     glider@google.com, linux-kernel@vger.kernel.org,
+        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
+
+syzbot has tested the proposed patch but the reproducer is still triggering an issue:
+KMSAN: uninit-value in ath9k_hw_init
+
+ath9k_htc 2-1:1.0: ath9k_htc: HTC initialized with 33 credits
+=====================================================
+BUG: KMSAN: uninit-value in ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
+BUG: KMSAN: uninit-value in __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+BUG: KMSAN: uninit-value in ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+ ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
+ __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+ ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+ ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
+ ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
+ ath9k_htc_probe_device+0xf48/0x3b60 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
+ ath9k_htc_hw_init+0x4f/0x100 drivers/net/wireless/ath/ath9k/htc_hst.c:523
+ ath9k_hif_usb_firmware_cb+0x2eb/0x800 drivers/net/wireless/ath/ath9k/hif_usb.c:1256
+ request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
+ process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
+ worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
+ kthread+0x31f/0x430 kernel/kthread.c:376
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+
+Local variable val created at:
+ ath9k_regread+0x62/0x1c0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:239
+ ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
+ __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
+ ath9k_hw_init+0x5c4/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+
+CPU: 1 PID: 20 Comm: kworker/1:0 Not tainted 6.3.0-rc2-syzkaller-00010-g34add094f9de-dirty #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Workqueue: events request_firmware_work_func
+=====================================================
 
 
-On 13.03.2023 16:42, Joel Selvaraj wrote:
-> The Poco F1 has a single color white notification LED. Enable the
-> Qualcomm Light Pulse Generator (LPG) driver based notification LED.
-> 
-> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
-> ---
-Reviewed-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+Tested on:
 
-Konrad
-> Changes in v2: (No functional changes)
-> - Fixed the inconsistency in the commit title prefix
-> - Minor update to commit message.
-> 
->  .../boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi | 11 +++++++++++
->  1 file changed, 11 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-> index e0fda4d754fe..9d11502e5e0e 100644
-> --- a/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sdm845-xiaomi-beryllium-common.dtsi
-> @@ -2,6 +2,7 @@
->  
->  /dts-v1/;
->  
-> +#include <dt-bindings/leds/common.h>
->  #include <dt-bindings/pinctrl/qcom,pmic-gpio.h>
->  #include <dt-bindings/regulator/qcom,rpmh-regulator.h>
->  #include <dt-bindings/sound/qcom,q6afe.h>
-> @@ -322,6 +323,16 @@ vol_up_pin_a: vol-up-active-state {
->  	};
->  };
->  
-> +&pmi8998_lpg {
-> +	status = "okay";
-> +
-> +	led@5 {
-> +		reg = <5>;
-> +		color = <LED_COLOR_ID_WHITE>;
-> +		function = LED_FUNCTION_STATUS;
-> +	};
-> +};
-> +
->  &pmi8998_wled {
->  	status = "okay";
->  	qcom,current-boost-limit = <970>;
+commit:         34add094 kmsan: add test_stackdepot_roundtrip
+git tree:       https://github.com/google/kmsan.git master
+console output: https://syzkaller.appspot.com/x/log.txt?x=1352768ac80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=76a9330669c37355
+dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
+compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=15f40c3ac80000
+
