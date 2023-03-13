@@ -2,129 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F156B73DD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:25:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D4966B73E2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 11:26:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229836AbjCMKZ1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 06:25:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56136 "EHLO
+        id S229648AbjCMK0e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 06:26:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229792AbjCMKZX (ORCPT
+        with ESMTP id S229534AbjCMK0c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 06:25:23 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E05E18152;
-        Mon, 13 Mar 2023 03:25:20 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 204C75FD0B;
-        Mon, 13 Mar 2023 13:25:17 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678703117;
-        bh=3oXZsLeafS38+qYJFdTL8leUTox2P7WbbzgFUBRnCNg=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=Qv/6hWdUh6jbEDRyIaWb0tKazL9ceDy5A4eBl9oL1x15fhKp0lC3vw3j324sOYQ0v
-         6xUgWl2C/Qt2YbkdjVoKgbGd8evAqrEUN4qI8MXoluGDowAAJbyREitrFmUd5mtcP1
-         Vb86myzYsKE7owVQq6dkJXyTvbxG1zJ52VDRSB4VRjGeQ/uqHS/+sQ5ESTa78y7EP5
-         B/RmhZOkv8c8x5AFQSp2KlHC2db1nH+lwfJQzSwThjC3v79A9Iy1D8skAuOD9cdziT
-         abV2qOGPZiflje6hBIFK+HijGFq3u1tLoSiv4KrTqWT0dVjrx8rkpIUQEnf47NMx+u
-         cMvfkYXcMB4wQ==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Mon, 13 Mar 2023 13:25:16 +0300 (MSK)
-Date:   Mon, 13 Mar 2023 13:25:16 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Jerome Brunet <jbrunet@baylibre.com>
-CC:     <neil.armstrong@linaro.org>, <mturquette@baylibre.com>,
-        <sboyd@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <khilman@baylibre.com>,
-        <martin.blumenstingl@googlemail.com>, <jian.hu@amlogic.com>,
-        <kernel@sberdevices.ru>, <rockosov@gmail.com>,
-        <linux-amlogic@lists.infradead.org>, <linux-clk@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v9 2/5] clk: meson: a1: add Amlogic A1 PLL clock
- controller driver
-Message-ID: <20230313102516.grkj4jhkke2w7blm@CAB-WSD-L081021>
-References: <20230301183759.16163-1-ddrokosov@sberdevices.ru>
- <20230301183759.16163-3-ddrokosov@sberdevices.ru>
- <1jr0u2azfi.fsf@starbuckisacylon.baylibre.com>
- <20230306200549.7iuedbl27ejfhf6b@CAB-WSD-L081021>
- <1jlek60zun.fsf@starbuckisacylon.baylibre.com>
- <20230309182857.a2fzotcejueio23w@CAB-WSD-L081021>
- <1j5yb50zxz.fsf@starbuckisacylon.baylibre.com>
+        Mon, 13 Mar 2023 06:26:32 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E252D16307
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:26:30 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id cj14so116969ybb.12
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 03:26:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678703190;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VuiQfp6nu8wwMmVIDaOcc9Bq5ccsIajhxnpeTIFBEBE=;
+        b=ZuN5kFXLkH+mpHUEK6Xp/ga5+iJGC4jitcWtwFGkX3Im62Pv201rkxvHNxFp0hhCCg
+         /SdtxwM/AUG7NrMUJwAhDJfOurOtJxT893Wa65Kjun9Sf/s0lD9IcwmD4PrP7YXXZIV+
+         jKsbAAQ4ddLf5aEZnxvdwTjMsv9W4ZRRquq8zP6EYO0v6Jbr208Pz2RSR/8o2aZxep/B
+         uG8SROBObtpEIkv6/9TukDoHPzw1UyFspJg7qVwrTcHuTyNurINXmSa9ctWzWzteQ0zR
+         Rd3yIqZLVnRUMN++5OLPQAbjgeVfvkl3rfqSoLbPaptbCfEKV6fk7bs8cY0B3C2/oC94
+         qdug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678703190;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VuiQfp6nu8wwMmVIDaOcc9Bq5ccsIajhxnpeTIFBEBE=;
+        b=qlXL9SpVPBp4TbSR5bUt7emp5dawJHNRt7sx+1E6nXE/1I1taRTxVqkkZYHB4I4q60
+         8NksGy/cKRn8ydmU9PhfulW9pA+UvPmwH6G/EiRZ+GZy6Z7v7rPyrxI+zxwBmQ2C3I6T
+         FmyucAqlru2n5VsOtQm4g4Rz/jvtM+Yk510zBgBE4ORxjU8imBZjb2qoc/56RPJnQPIW
+         Qth1gfC3EmwKXJvlE6vsNSZnSQ6aoToq6xPprKqGcWsvVgUT8qgiZO066xeYHN3ur0dC
+         7AAQ+RCniOUtpSNJov1My1OI6BxcdP2Dw2qIHHOiAT3wpn77C9mPbcseeWSXA/YQgpvj
+         cLaQ==
+X-Gm-Message-State: AO0yUKUmP/QM8nx/9o3MNPKnau0C5ywHg7jnXYKfC00TqyfM13SLqidY
+        4Qfz6L3Ve+1hesUrpaodAuEpjx5RgNLANUAgAWEu2w==
+X-Google-Smtp-Source: AK7set87p2OVK2UrHNBxtLnxGyLAOtK0ZqeddlMEnDi2scid+vzT38Y8IvbgAl/gP3KhACQs1qCL1GV3lGYaf6YrreQ=
+X-Received: by 2002:a25:e90b:0:b0:9fc:e3d7:d60f with SMTP id
+ n11-20020a25e90b000000b009fce3d7d60fmr16203762ybd.5.1678703190121; Mon, 13
+ Mar 2023 03:26:30 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <1j5yb50zxz.fsf@starbuckisacylon.baylibre.com>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/13 06:38:00 #20941627
-X-KSMG-AntiVirus-Status: Clean, skipped
+References: <20230309154949.658380-1-krzysztof.kozlowski@linaro.org> <20230309154949.658380-4-krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230309154949.658380-4-krzysztof.kozlowski@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 13 Mar 2023 11:26:19 +0100
+Message-ID: <CACRpkdbxzbrAHtd1mNv9N_ErOpWQ=QD_cokF5LVemU=QdQeKgg@mail.gmail.com>
+Subject: Re: [PATCH 4/4] pinctrl: qcom: sm8550-lpass-lpi: allow GPIO function
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:18:02AM +0100, Jerome Brunet wrote:
-> 
-> On Thu 09 Mar 2023 at 21:28, Dmitry Rokosov <ddrokosov@sberdevices.ru> wrote:
-> 
-> >> >> 
-> >> >> This last poke should not bits otherwise handled by parms.
-> >> >> This is a rate init in disguise.
-> >> >> 
-> >> >
-> >> > I believe, you are talking about hifi_pll clk_regmap conflicts with
-> >> > hifi_init_regs. The above init sequence shouldn't affect pll regmap setup,
-> >> > it doesn't touch them (we assume that default bit values are all zero):
-> >> >
-> >> >     .en = {
-> >> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
-> >> >         .shift   = 28,
-> >> >         .width   = 1,
-> >> >     },
-> >> >     // init_value = 0x01f18440
-> >> >     // en_mask    = 0x10000000
-> >> >
-> >> >     .m = {
-> >> >         .reg_off = ANACTRL_HIFIPLL_CTRL0,
-> >> >         .shift   = 0,
-> >> >         .width   = 8,
-> >> >     },
-> >> >     // init_value = 0x01f18440
-> >> >     // m_mask     = 0x0000000f
-> >> 
-> >> mask is 0xff with width 8
-> >> 
-> >
-> > Ah, you're right. Anyway, I think this is just init value and it's okay
-> > to set it during initialization and rewrite after in parameter
-> > propagation stage.
-> >
-> 
-> ... But the magic pokes are there only to initialize the unmanaged part
-> of the clock regs. I'd like it to be clear and stay that way.
-> 
-> So please, clear the managed fields from the initial poke table.
+On Thu, Mar 9, 2023 at 4:50 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
 
-I've double checked hifi_pll clk. In the my current configuration no any
-clks inherited from it. Therefore its 'enable_count' equals to 0.
-And of course in the such situation the rate must be zeroed as well.
-It means you are right at all. I'll remove pre_sel and fbkdiv hifi_pll
-pre-setup in the next version.
-Thank you for hunted down!
+> All LPASS pins have basic GPIO function and most of the code is ready
+> for that.  Add missing glue pieces to allow LPASS pins to work as GPIO,
+> which is going to be used on MTP8550 and QRD8550 boards.
+>
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
--- 
-Thank you,
-Dmitry
+These four patches applied as non-urgent fixes. Tell me if they should
+rather be treated as urgent. (for -rcN and/or stable)
+
+Yours,
+Linus Walleij
