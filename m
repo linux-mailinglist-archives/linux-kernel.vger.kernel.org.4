@@ -2,83 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 217B36B79CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:01:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 44B1E6B79D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjCMOBF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:01:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47474 "EHLO
+        id S230313AbjCMOCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:02:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231373AbjCMOAa (ORCPT
+        with ESMTP id S230201AbjCMOCM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:00:30 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FF5A6F4AA;
-        Mon, 13 Mar 2023 07:00:00 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id by8so12714991ljb.7;
-        Mon, 13 Mar 2023 06:59:59 -0700 (PDT)
+        Mon, 13 Mar 2023 10:02:12 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8ED27041B;
+        Mon, 13 Mar 2023 07:01:34 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id u5so13033514plq.7;
+        Mon, 13 Mar 2023 07:01:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678715994;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=TSz5ErZZ4x/NRLe7JN2WWQR6b9KCGMkpJUx1wnV62dU=;
-        b=JMIfrOgH0MQMlYkc5oFNSSCP0sSLQapnv7/cbFNREe8eFAM2TKGtpcVNFZupArIW+I
-         QvAn/N84HrNghyhmWxTzW8SrruCdIzqF4C1bbvKEv8/CvKMVzGHejKbhem5GKh3e2y+8
-         b3n/eW8BRSrROq6BfERYGI+Jg+1S3HWLL6CQB7GcQ+qlf6cOX8BULslHmZsU9zf/rWMf
-         l1hWm53CF6q/DJN/CzPgeKNpPmhqtm9O9fwCUyXTbAYie3+r5/+gw33OhYc0jaiay7OT
-         WYj41pIsgU7MGY7fjK0R953+9Zos97aTg9I1M/2+5IbSuqRetrOI5cMhBsGSgq2HB2EF
-         vhbA==
+        d=gmail.com; s=20210112; t=1678716093;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=xqxxP+NmXLp8umJHs6SnxZxdSNjdtg4YX/6KjcEE3WY=;
+        b=V69HZWslPHyyyl7CN1Zbwb3h5Vu/x7rPAeqzyyr03nJOhQCLh0Q6Q6mfjVwMf5XiCv
+         Gt8ehRPBpCDvMbzdWlYM7W/ZjQrb96PnbKONR8GMvqt/vcZk24b7Q/Zw9UxUmDTOoCGm
+         mziI+x4jS1t1jRSk2dTGimraXG7gtfOwp4XbcORHo22xbHqknRSD0WDU9CtLgVdHcGMq
+         tjyHR1Mp/rMOt+oUSoTCp7wRqhVPNO8Gc4o6Rgdei71IOHPsFnI8YbccrRGjfrFMOsgk
+         H02WR5TN4NQAk0m7QTCNudm1SNWxRtDZg+O8wmQSA9SRnNZUZaSXNBn2G5gUPGmEVnZI
+         AXhg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678715994;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TSz5ErZZ4x/NRLe7JN2WWQR6b9KCGMkpJUx1wnV62dU=;
-        b=tBSFddQPp4o5J1sPSOs36L6vNAxHj9LPcQSiRuXrziA6DFVjYf8xfSB6cnkrunWNcM
-         C0XLJ0AIMFAhM5SblE4T8Fteqk8vrTA+RYw739nwUkD5i8PXje/XhXHgB7FqKnB5S9y8
-         3fp0PvCLs9Rfv8g/wU44RG9eJR93Ke/ufg4+4bHkAkq9Tij5oYhhXRaTePmz5wAy6201
-         kma0c16TupcC+hFqaIkzzlhaqf14AFEqV1/w3HRsIqq6h/bgRluJ//fZ23FYhQrEOTwF
-         qSbRZrW6eHgCRoR8WYEUf6GPaZaDbXeggSYsD9gSPO6tHxrZD9obx7JVK6+7bzarEoFa
-         TiEg==
-X-Gm-Message-State: AO0yUKUccX1XQ+osaOuwDLwhjE3QDX77WO7cWR/3djNl1rV8RfoVO53p
-        iT5KUia7I0elfQ8Sudcxlz8=
-X-Google-Smtp-Source: AK7set+ip2QPITMQmcKMI13u5vDZflDrbwxL1G5HDy+jPmQFsEC5H6OsWYNrm/ajbPgOV1AvvCjg5g==
-X-Received: by 2002:a2e:9545:0:b0:295:8fd5:da00 with SMTP id t5-20020a2e9545000000b002958fd5da00mr11925903ljh.22.1678715993746;
-        Mon, 13 Mar 2023 06:59:53 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id m9-20020ac24249000000b004db1cd5efcesm993929lfl.241.2023.03.13.06.59.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 06:59:52 -0700 (PDT)
-Message-ID: <39a7b489-4856-8dc1-d0a6-f27d0c1324a2@gmail.com>
-Date:   Mon, 13 Mar 2023 15:59:51 +0200
+        d=1e100.net; s=20210112; t=1678716093;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xqxxP+NmXLp8umJHs6SnxZxdSNjdtg4YX/6KjcEE3WY=;
+        b=cvC0Q3WTNhsWzNACAUj4/Wz5ujziiJIzunNcf+SrzoK0Idi1bzZXDLtPhuJE1Wrm2a
+         5M3oul6T5+MUf22mxKTru4vbtzTSVquSMXwEPGOX1myzgShJUWgiBAMGfPlmD8Yd4VF0
+         8MVUjeqm44+JTtdRowxz1qE0YzPbvb876CnCpBgFbAr0gzu0DJdyr5Rd7vpA+VhMwED1
+         AC2K8yRbElcM+aQW91jhfJqfs1SNukrYPq8FMvktFJ/qQfU/PCwZlSbBsU5Vzrz1r5+/
+         +6mo4HVXV3E28Bhw+2jn2EA5QI4lRP4oyfZcSelvaKX+5BlSeSR7DlsqTMj0E0NUrsyn
+         emuA==
+X-Gm-Message-State: AO0yUKVQtUcbGVKD+9Q/ajxH2WsqKu30uK6Nm8IG9cEeM5CiGlo2dT4D
+        mbI30ZdIfjdmyFtTT1XDP2PuDs509AfVBo6yDj0=
+X-Google-Smtp-Source: AK7set93wvcJ2lqVoJK9m9f5Ty8L6w8MePLZRLCU6iIxSR5R10O+/E1J/u3z+VonBCSK40kBB5W6s5V5FerEQx0wL7M=
+X-Received: by 2002:a17:903:3410:b0:19f:3cc1:e3c3 with SMTP id
+ ke16-20020a170903341000b0019f3cc1e3c3mr1852337plb.12.1678716092879; Mon, 13
+ Mar 2023 07:01:32 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
-Content-Language: en-US, en-GB
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Jonathan Cameron <jic23@kernel.org>,
-        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
- <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
- <20230312170638.3e6807b7@jic23-huawei> <20230312170848.651b5b2c@jic23-huawei>
- <ZA8Z08U1sMOhc+V5@smile.fi.intel.com>
- <31d8bc33-eabe-9084-71c3-7d1e29f51863@gmail.com>
- <ZA8lNBPCB4BNnfUq@smile.fi.intel.com>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <ZA8lNBPCB4BNnfUq@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230313090002.3308025-1-zyytlz.wz@163.com> <ZA8rDCw+mJmyETEx@localhost.localdomain>
+In-Reply-To: <ZA8rDCw+mJmyETEx@localhost.localdomain>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 13 Mar 2023 22:01:21 +0800
+Message-ID: <CAJedcCwgvo3meC=k_nPYrRzEj7Hzcy8kqrvHqHLvmPWLjCq_3Q@mail.gmail.com>
+Subject: Re: [PATCH net v2] 9p/xen : Fix use after free bug in
+ xen_9pfs_front_remove due to race condition
+To:     Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, ericvh@gmail.com, lucho@ionkov.net,
+        asmadeus@codewreck.org, linux_oss@crudebyte.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, v9fs-developer@lists.sourceforge.net,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        1395428693sheep@gmail.com, alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,52 +74,67 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 15:29, Andy Shevchenko wrote:
-> On Mon, Mar 13, 2023 at 03:11:52PM +0200, Matti Vaittinen wrote:
->> On 3/13/23 14:40, Andy Shevchenko wrote:
->>> On Sun, Mar 12, 2023 at 05:08:48PM +0000, Jonathan Cameron wrote:
->>>> On Sun, 12 Mar 2023 17:06:38 +0000
->>>> Jonathan Cameron <jic23@kernel.org> wrote:
-> 
-> ...
-> 
->>>> Ah. I forgot the tests that don't have a device so can't use devm.
->>>
->>> Why not? I have seen, IIRC, test cases inside the kernel that fakes the device
->>> for that.
->>
->> I'd appreciated any pointer for such an example if you have one at hand. (I
->> can do the digging if you don't though!)
->>
->> I am not a fan of unit tests. They add huge amount of inertia to
->> development, and in worst case, they stop people from contributing where
->> improving a feature requires test code modification(s). And harder the test
->> code is to understand, worse the unwanted side-effects. Also, harder the
->> test code is to read, more time and effort it requires to analyze a test
->> failure... Hence, I am _very_ conservative what comes to adding size of test
->> code with anything that is not strictly required.
->>
->> After that being said, unit tests are a great tool when carefully used - and
->> I assume/hope stubbing a device for devm_ tests does not add much extra...
->> But let me see if I can find an example :)
-> 
-> drivers/gpu/drm/tests/drm_managed_test.c ?
-> 
-> (somewhere underneath:
-> 
->   ret = platform_driver_register(&fake_platform_driver);
-> 
-> which suggests... what exactly? :-)
-> 
+Michal Swiatkowski <michal.swiatkowski@linux.intel.com> =E4=BA=8E2023=E5=B9=
+=B43=E6=9C=8813=E6=97=A5=E5=91=A8=E4=B8=80 21:54=E5=86=99=E9=81=93=EF=BC=9A
+>
+> On Mon, Mar 13, 2023 at 05:00:02PM +0800, Zheng Wang wrote:
+> > In xen_9pfs_front_probe, it calls xen_9pfs_front_alloc_dataring
+> > to init priv->rings and bound &ring->work with p9_xen_response.
+> >
+> > When it calls xen_9pfs_front_event_handler to handle IRQ requests,
+> > it will finally call schedule_work to start the work.
+> >
+> > When we call xen_9pfs_front_remove to remove the driver, there
+> > may be a sequence as follows:
+> >
+> > Fix it by finishing the work before cleanup in xen_9pfs_front_free.
+> >
+> > Note that, this bug is found by static analysis, which might be
+> > false positive.
+> >
+> > CPU0                  CPU1
+> >
+> >                      |p9_xen_response
+> > xen_9pfs_front_remove|
+> >   xen_9pfs_front_free|
+> > kfree(priv)          |
+> > //free priv          |
+> >                      |p9_tag_lookup
+> >                      |//use priv->client
+> >
+> > Fixes: 71ebd71921e4 ("xen/9pfs: connect to the backend")
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > v2:
+> > - fix type error of ring found by kernel test robot
+> > ---
+> >  net/9p/trans_xen.c | 5 +++++
+> >  1 file changed, 5 insertions(+)
+> >
+> > diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
+> > index c64050e839ac..83764431c066 100644
+> > --- a/net/9p/trans_xen.c
+> > +++ b/net/9p/trans_xen.c
+> > @@ -274,12 +274,17 @@ static const struct xenbus_device_id xen_9pfs_fro=
+nt_ids[] =3D {
+> >  static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
+> >  {
+> >       int i, j;
+> > +     struct xen_9pfs_dataring *ring =3D NULL;
+> Move it before int i, j to have RCT.
+>
+> >
+> >       write_lock(&xen_9pfs_lock);
+> >       list_del(&priv->list);
+> >       write_unlock(&xen_9pfs_lock);
+> >
+> >       for (i =3D 0; i < priv->num_rings; i++) {
+> > +             /*cancel work*/
+> It isn't needed I think, the function cancel_work_sync() tells everything
+> here.
+>
 
-Thanks!
+Get it, will remove it in the next version of patch.
 
---Matti
-
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Best regards,
+Zheng
