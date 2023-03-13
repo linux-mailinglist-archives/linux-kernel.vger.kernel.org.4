@@ -2,158 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86BB46B83AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:02:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2CC76B834A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:00:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231181AbjCMVCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:02:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49958 "EHLO
+        id S229796AbjCMVAS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:00:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230422AbjCMVCA (ORCPT
+        with ESMTP id S229551AbjCMVAQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:02:00 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C60C8C955;
-        Mon, 13 Mar 2023 14:00:56 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id j11so54046627edq.4;
-        Mon, 13 Mar 2023 14:00:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678741244;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=DiOQ7LpQ9BueYA5S5WwnImfMJeB+W428SPYWHW2VPcXaBWdV53EPgkhu8Uunn2HLDX
-         H3l+hmiEN6HwBhf+Bk80dRnMkuOp2Dd+bZwsDGFGfZiYxBqzAIpJf7yPEQHIsA+yoSNp
-         Mj6SHaJJs4wlgjhEdiWuol833lJWGTgED9Nri7CGIr1cYgeicyOw/FDN+oYemLy52Zhj
-         WGTVC2Td3pK4CBvNPuXlNv+7rbvTM8kAP/pJufiN6g4LQ2Y63kzC/A2V3IX1DIqkvrM/
-         KWoG/vb/GelWeH5k1uP5n60zzE8pPCe8SQQgyKAGOQFjwkhG7KLB3GZM6yYfHW9Tc8NI
-         gS/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678741244;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=gA3EusZCOhK627Wk0FirSH/GwKNGmUqwf4ijzEsCNuk=;
-        b=ZeQrmvDYd6OvSSweVU+6FsxB8gvlr54m2DXuhh5OXB9T6lTv7ONgxgsd0+hup2PwqQ
-         jWTssI373U++h7BlZU6hNT7w5aGEEZNUXuMcBx3lZs65UtSrJtWGS4GbxvaZanNc6DRa
-         wgLBh9FpWWuih9Xis7pUcq2F1OgkPxING3EHSqL6NECqjv5yChbruAcEES6pCc5x/ceV
-         mOKNMFoihDEMNIWUcZYjhJrut6lmpoqVi9ikV61/MVBIsEbCNlrAVYmABCFhyjIZWfKm
-         D5BXPIIWWM4fd0z4rXvA0a/Hg5hD5o+vTTRklCdSvAzneNyRS/0a45s40u2WYcDwjvT+
-         1r7w==
-X-Gm-Message-State: AO0yUKVALl31+aAUE2s1DAbqEkk+TjFa2sy4WtAp6F2YWsKhjhaI50OF
-        b0cNOVehpakYpZD08Z6RSCA=
-X-Google-Smtp-Source: AK7set+xc/A2AUsEpnkeSAPo/NefGhegXt8FflrkGyYZI98MGsPQwOInyI7rwtArMe68neAJkvQ48A==
-X-Received: by 2002:a17:907:7241:b0:884:fd73:8053 with SMTP id ds1-20020a170907724100b00884fd738053mr46136247ejc.9.1678741244643;
-        Mon, 13 Mar 2023 14:00:44 -0700 (PDT)
-Received: from arinc9-PC.lan ([149.91.1.15])
-        by smtp.gmail.com with ESMTPSA id j11-20020a170906830b00b008ee5356801dsm219853ejx.187.2023.03.13.14.00.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 14:00:44 -0700 (PDT)
-From:   arinc9.unal@gmail.com
-X-Google-Original-From: arinc.unal@arinc9.com
-To:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        William Dean <williamsukatube@gmail.com>,
-        Sean Wang <sean.wang@kernel.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        =?UTF-8?q?Bernhard=20Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Sean Wang <sean.wang@mediatek.com>, erkin.bozoglu@xeront.com,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org
-Subject: [PATCH v2 21/21] MAINTAINERS: move ralink pinctrl to mediatek mips pinctrl
-Date:   Mon, 13 Mar 2023 23:59:21 +0300
-Message-Id: <20230313205921.35342-22-arinc.unal@arinc9.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230313205921.35342-1-arinc.unal@arinc9.com>
-References: <20230313205921.35342-1-arinc.unal@arinc9.com>
+        Mon, 13 Mar 2023 17:00:16 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B70272716;
+        Mon, 13 Mar 2023 13:59:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6F297B815BD;
+        Mon, 13 Mar 2023 20:59:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF1E9C433D2;
+        Mon, 13 Mar 2023 20:59:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678741178;
+        bh=X59VM+mVnGs6nAi19xoVBZJyc3qLMsw52qxHRGax6HE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GKmvjqPabBQiL6LDwcUdN5JPGmUglT3G7lE8LVQwCppdXOGT2yLqPMLoTMuUO6Cpa
+         Z8fXyS00DxZFsq44lUDRKm05BDccjfp2ztyS9KoEKLyQ/eUdW9nB1SwOawiXJ4Bs+y
+         rvxU+7OgR4G29fLH2kZdAA/b4lmFIpz+OcNPvVZ/3C/zhWLJZAIYQkXKY4dMjrE8x2
+         k/f6vnBOLfFbFX9CdKN3MZa65yEXJz75KFzreuNqdiDNTOYiK0NYRa0DYULd7AvM5f
+         w/dclrBPnf6CqT+JrSmzRlqpfSaR2BBQZubBPNSwFESti2GC1wdTH+eT84r0nTqa+U
+         6Iz7RvNIDEoZQ==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 73B4F4049F; Mon, 13 Mar 2023 17:59:35 -0300 (-03)
+Date:   Mon, 13 Mar 2023 17:59:35 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andres Freund <andres@anarazel.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 02/13] perf build: Make BUILD_BPF_SKEL default, rename
+ to NO_BPF_SKEL
+Message-ID: <ZA+Ot0dnX0MNZKmn@kernel.org>
+References: <20230311065753.3012826-1-irogers@google.com>
+ <20230311065753.3012826-3-irogers@google.com>
+ <ZA+FOpzJswZx8os+@kernel.org>
+ <CAP-5=fUG1CbzevoS=+Jj_pBO4umNj6ekaMeEuSHGC4kAZgVJJg@mail.gmail.com>
+ <ZA+IvqVb6Gos+NOe@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <ZA+IvqVb6Gos+NOe@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Arınç ÜNAL <arinc.unal@arinc9.com>
+Em Mon, Mar 13, 2023 at 05:34:06PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Mar 13, 2023 at 01:27:21PM -0700, Ian Rogers escreveu:
+> > On Mon, Mar 13, 2023 at 1:19 PM Arnaldo Carvalho de Melo
+> > > (.text+0x1b): undefined reference to `main'
+> > > /usr/bin/ld: final link failed: file in wrong format
+> > > collect2: error: ld returned 1 exit status
+> > > clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
+> > > make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_cgroup.bpf.o] Error 1
+> > > make[3]: *** [Makefile.perf:236: sub-make] Error 2
+> > > make[2]: *** [Makefile:70: all] Error 2
+> > > make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
+> > > make: *** [Makefile:103: build-test] Error 2
+> > > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
+> > >
+> > > real    5m55.192s
+> > > user    62m31.596s
+> > > sys     14m30.828s
+> > > ⬢[acme@toolbox perf-tools-next]$
+> > 
+> > Sorry, I was testing this on top of:
+> > https://lore.kernel.org/lkml/20230116010115.490713-1-irogers@google.com/
+> > The issue being that we're trying to use an old libbpf that the has
+> > meant disabling things but:
+> >   NO_BPF_SKEL := 1
+> > hadn't been set as part of this. I can address in v2, but with the
+> > "assume libbpf 1.0+" patch I hadn't been worrying about this as we'd
+> > error out for this case  - rather than build error. The erroring out
+> > can be worked around by just not having libbpf be dynamic (ie static
+> > or not at all by adding NO_LIBBPF=1).
+> 
+> I'll try adding that 3-patch series before this one.
 
-The Ralink pinctrl driver is now under the name of MediaTek MIPS pin
-controller. Move the maintainer information accordingly. Add dt-binding
-schema files. Add linux-mediatek@lists.infradead.org as an associated
-mailing list.
+⬢[acme@toolbox perf-tools-next]$ git log --oneline -16
+76c8a07f51703787 (HEAD -> perf-tools-next) perf build: Error if no libelf and NO_LIBELF isn't set
+030a6c72b38e334d perf build: Remove redundant NO_NEWT build option
+5d1360fc84cd2e3b perf build: If libtraceevent isn't present error the build
+e25e0db4700aa39a perf build: Switch libpfm4 to opt-out rather than opt-in
+39f53202a8961d3d perf symbol: Add abi::__cxa_demangle C++ demangling support
+d857f258f3d1214a tools build: Add feature test for abi::__cxa_demangle
+7aae0d8341c9c373 perf build: Make binutil libraries opt in
+dc4890e772aba1e9 perf build: Error if jevents won't work and NO_JEVENTS=1 isn't set
+334e64172816623d perf util: Remove weak sched_getcpu
+e44d7e7c60fc4ded perf build: Remove unused HAVE_GLIBC_SUPPORT
+14ea53be45758450 perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
+eb03903c5c119254 perf build: Support python/perf.so testing
+f8b579c1996ba4a9 perf bpf: Remove pre libbpf 1.0 conditional logic
+2cce43c63d4d0abc perf build: Remove libbpf pre-1.0 feature tests
+a24ebff6cce14a34 tools build: Pass libbpf feature only if libbpf 1.0+
+17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
+⬢[acme@toolbox perf-tools-next]$
 
-Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
-Acked-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- MAINTAINERS | 29 ++++++++++++++++++++++-------
- 1 file changed, 22 insertions(+), 7 deletions(-)
+       make_libbpf_dynamic_O: cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
+ldd: /tmp/tmp.cO9WpgtAvo/perf: No such file or directory
+cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
+  BUILD:   Doing 'make -j32' parallel build
+  HOSTCC  /tmp/tmp.cO9WpgtAvo/fixdep.o
+  HOSTLD  /tmp/tmp.cO9WpgtAvo/fixdep-in.o
+  LINK    /tmp/tmp.cO9WpgtAvo/fixdep
+Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
+diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
+Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
+diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
+Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
+diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
+Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
+diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
+Makefile.config:563: *** Error: No libbpf devel library found, please install libbpf-devel.  Stop.
+make[3]: *** [Makefile.perf:236: sub-make] Error 2
+make[2]: *** [Makefile:70: all] Error 2
+make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 6048bbe0e672..f4ee11dab1ab 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16521,6 +16521,28 @@ F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7622-pinctrl.yaml
- F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt8183-pinctrl.yaml
- F:	drivers/pinctrl/mediatek/
- 
-+PIN CONTROLLER - MEDIATEK MIPS
-+M:	Arınç ÜNAL <arinc.unal@arinc9.com>
-+M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
-+L:	linux-mediatek@lists.infradead.org (moderated for non-subscribers)
-+L:	linux-mips@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7620-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt7621-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/mediatek,mt76x8-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt2880-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt305x-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3352-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt3883-pinctrl.yaml
-+F:	Documentation/devicetree/bindings/pinctrl/ralink,rt5350-pinctrl.yaml
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7620.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt7621.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mt76x8.c
-+F:	drivers/pinctrl/mediatek/pinctrl-mtmips.*
-+F:	drivers/pinctrl/mediatek/pinctrl-rt2880.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt305x.c
-+F:	drivers/pinctrl/mediatek/pinctrl-rt3883.c
-+
- PIN CONTROLLER - MICROCHIP AT91
- M:	Ludovic Desroches <ludovic.desroches@microchip.com>
- L:	linux-arm-kernel@lists.infradead.org (moderated for non-subscribers)
-@@ -17496,13 +17518,6 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	arch/mips/boot/dts/ralink/mt7621*
- 
--RALINK PINCTRL DRIVER
--M:	Arınç ÜNAL <arinc.unal@arinc9.com>
--M:	Sergio Paracuellos <sergio.paracuellos@gmail.com>
--L:	linux-mips@vger.kernel.org
--S:	Maintained
--F:	drivers/pinctrl/ralink/
--
- RALINK RT2X00 WIRELESS LAN DRIVER
- M:	Stanislaw Gruszka <stf_xl@wp.pl>
- M:	Helmut Schaa <helmut.schaa@googlemail.com>
--- 
-2.37.2
 
+But:
+
+⬢[acme@toolbox perf-tools-next]$ rpm -qa | grep libbpf
+libbpf-0.8.0-2.fc37.x86_64
+libbpf-devel-0.8.0-2.fc37.x86_64
+⬢[acme@toolbox perf-tools-next]$
+
+⬢[acme@toolbox perf-tools-next]$ cat /etc/os-release
+NAME="Fedora Linux"
+VERSION="37 (Container Image)"
+
+
+I'll see if this is just a matter of tweaking the error message to
+something like "libbpf-devel not found or older than 1.0.0, please install/update"
+
+- Arnaldo
