@@ -2,151 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 00F416B842C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 048BA6B842E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:46:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCMVqC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:46:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37270 "EHLO
+        id S229896AbjCMVqg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:46:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCMVqA (ORCPT
+        with ESMTP id S229865AbjCMVqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:46:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D365CC25;
-        Mon, 13 Mar 2023 14:45:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 13 Mar 2023 17:46:34 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 022495CC25;
+        Mon, 13 Mar 2023 14:46:29 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 25C57B81200;
-        Mon, 13 Mar 2023 21:45:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4BEC433D2;
-        Mon, 13 Mar 2023 21:45:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678743955;
-        bh=01Ky8EiYMwVn2GreiPVqNFSfUohDeHiZlfiMQ+PP1Ks=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=V3ZMpDK5NbupqVlmGKeqgNKszfOJuWmnoPatTttYap7E7HEaCf6DwGi8B08WOOTv1
-         hkPThANc/MtITZPVNVmE5hRfK0Uv45q2BiG1HUkUoqtXmElBRzbu+uJm5qbunY0h/M
-         U9mW7y0FUgaqzwvc3JJ9sx1W2ZrF4giYMc1ImxBo9ySaI+4rdyg6OrBXiAPe3DbMU5
-         zeHD+IIapwMEq8qxeiNUujvchKoAypUk9l0WgtkjtniU171CBXuNhksZayv4dJU8vf
-         JHvqtRXFRTRvukTOT4YOrfnwr6z5bcztwePDDem0TZ2Pz2jc5QvwTu8Fmd/2MxZ2aW
-         1lo+CTY98wrsw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 19FC64049F; Mon, 13 Mar 2023 18:45:53 -0300 (-03)
-Date:   Mon, 13 Mar 2023 18:45:53 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Jiri Olsa <jolsa@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>, Song Liu <song@kernel.org>,
-        Hao Luo <haoluo@google.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        Stephane Eranian <eranian@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: Re: [PATCH 0/4] perf lock contention: Improve lock symbol display
- (v1)
-Message-ID: <ZA+ZkRYADwtFEsPt@kernel.org>
-References: <20230313204825.2665483-1-namhyung@kernel.org>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pb9GC1d26z4whh;
+        Tue, 14 Mar 2023 08:46:26 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678743987;
+        bh=Z53a6q+bbCCn8GLXM5pWz9falpfSYpf+QeC3vrxprEA=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZtBhXCu4TotiGblkYTaFxdqOa9YrrTt0CNmNu/MrPzwwxFjnpPJsLks7od//hyCG4
+         CdDw9bDtVO9hNMFO7Y8XYWdKHEaOcLKEywtqefxTeGFfztU4F9F7eiHDS2bkOaJy1i
+         k5yfgO//nxV8RWSY8/qS79ghbWL0niynuVjxU+NcePTyowOvNzCDlwGAyl61u6xQ9F
+         E4GT27X/lPQySpfysePVyFS7ZAeQTNVY0kbhE2robwrgAEB4cyxQbzujqRXkWB8Eqs
+         fleR+3TYbFRKT0e22G3SGb7DDqA1ubyez/FcAXbi736YovLToMAHAaqoHg14IVRPYx
+         wZUbLMjJWhhHg==
+Date:   Tue, 14 Mar 2023 08:46:25 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: duplicate patch in the block tree
+Message-ID: <20230314084625.3530839b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313204825.2665483-1-namhyung@kernel.org>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/peD7sxK.Bo2GppS61dYUzvT";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Mon, Mar 13, 2023 at 01:48:21PM -0700, Namhyung Kim escreveu:
-> Hello,
-> 
-> This patchset improves the symbolization of locks for -l/--lock-addr mode.
-> As of now it only shows global lock symbols present in the kallsyms.  But
-> we can add some more lock symbols by traversing pointers in the BPF program.
-> 
-> For example, mmap_lock can be reached from the mm_struct of the current task
-> (task_struct->mm->mmap_lock) and we can compare the address of the give lock
-> with it.  Similarly I've added 'siglock' for current->sighand->siglock.
-> 
-> On the other hand, we can traverse some of semi-global locks like per-cpu,
-> per-device, per-filesystem and so on.  I've added 'rqlock' for each cpu's
-> runqueue lock.
-> 
-> It cannot cover all types of locks in the system but it'd be fairly usefule
-> if we can add many of often contended locks.  I tried to add futex locks
-> but it failed to find the __futex_data symbol from BTF.  I'm not sure why but
-> I guess it's because the struct doesn't have a tag name.
-> 
-> Those locks are added just because they got caught during my test.
-> It'd be nice if you suggest which locks to add and how to do that. :)
-> I'm thinking if there's a way to track file-based locks (like epoll, etc).
-> 
-> Finally I also added a lock type name after the symbols (if any) so that we
-> can get some idea even though it has no symbol.  The example output looks
-> like below:
-> 
->   $ sudo ./perf lock con -abl -- sleep 1
->    contended   total wait     max wait     avg wait            address   symbol
-> 
->           44      6.13 ms    284.49 us    139.28 us   ffffffff92e06080   tasklist_lock (rwlock)
->          159    983.38 us     12.38 us      6.18 us   ffff8cc717c90000   siglock (spinlock)
->           10    679.90 us    153.35 us     67.99 us   ffff8cdc2872aaf8   mmap_lock (rwsem)
->            9    558.11 us    180.67 us     62.01 us   ffff8cd647914038   mmap_lock (rwsem)
->           78    228.56 us      7.82 us      2.93 us   ffff8cc700061c00    (spinlock)
->            5     41.60 us     16.93 us      8.32 us   ffffd853acb41468    (spinlock)
->           10     37.24 us      5.87 us      3.72 us   ffff8cd560b5c200   siglock (spinlock)
->            4     11.17 us      3.97 us      2.79 us   ffff8d053ddf0c80   rq_lock (spinlock)
->            1      7.86 us      7.86 us      7.86 us   ffff8cd64791404c    (spinlock)
->            1      4.13 us      4.13 us      4.13 us   ffff8d053d930c80   rq_lock (spinlock)
->            7      3.98 us      1.67 us       568 ns   ffff8ccb92479440    (mutex)
->            2      2.62 us      2.33 us      1.31 us   ffff8cc702e6ede0    (rwlock)
-> 
-> The tasklist_lock is global so it's from the kallsyms.  But others like
-> siglock, mmap_lock and rq_lock are from the BPF.
+--Sig_/peD7sxK.Bo2GppS61dYUzvT
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Beautiful :-)
+Hi all,
 
-And the csets are _so_ small and demonstrate techniques that should be
-used in more and more tools.
+The following commit is also in Linus Torvalds' tree as a different commit
+(but the same patch):
 
-Applied, testing.
+  6d114e22385b ("io_uring: silence variable =E2=80=98prev=E2=80=99 set but =
+not used warning")
 
-- Arnaldo
- 
-> You get get the code at 'perf/lock-symbol-v1' branch in
-> 
->   git://git.kernel.org/pub/scm/linux/kernel/git/namhyung/linux-perf.git
-> 
-> Thanks,
-> Namhyung
-> 
-> Namhyung Kim (4):
->   perf lock contention: Track and show mmap_lock with address
->   perf lock contention: Track and show siglock with address
->   perf lock contention: Show per-cpu rq_lock with address
->   perf lock contention: Show lock type with address
-> 
->  tools/perf/builtin-lock.c                     | 46 +++++++----
->  tools/perf/util/bpf_lock_contention.c         | 35 ++++++++-
->  .../perf/util/bpf_skel/lock_contention.bpf.c  | 77 +++++++++++++++++++
->  tools/perf/util/bpf_skel/lock_data.h          | 14 ++++
->  4 files changed, 152 insertions(+), 20 deletions(-)
-> 
-> 
-> base-commit: b8fa3e3833c14151a47ebebbc5427dcfe94bb407
-> -- 
-> 2.40.0.rc1.284.g88254d51c5-goog
-> 
+This is commit
 
--- 
+  fa780334a8c3 ("io_uring: silence variable =E2=80=98prev=E2=80=99 set but =
+not used warning")
 
-- Arnaldo
+in Linus' tree.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/peD7sxK.Bo2GppS61dYUzvT
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPmbIACgkQAVBC80lX
+0GwFHgf+PzjjIR8vq3MMkwULDbC7iksGPI4TprsRIFCyGZNTbazNvhNgR/Afg332
+IClXlVVKRMrv74kIzXC9umDagGNTKIxJTt8rnGr4n+xXqnOor+Q9DnN5vmTknf8p
+Qv3/VMLqnorVwKYpyd6AUoY4+rZCx0O+5w5gPJSKJ23FHGeJeIMrlfs2bCD3cYN2
+BTGq4mIuXvuNOJ7ypt1ico5ea2N3Ph48Q+SrA2zpH9f/tVS3OoePnLOv2dC38NCU
+BxMY4wFOIcIpSM4C4Y/kqA+e22NmnUKg/kZcoo/urgFbI71WDLiBTj/iOc5Ts49/
+E+0hC1AOHIqKeG8U/QLCZYovg9z+LA==
+=T/S7
+-----END PGP SIGNATURE-----
+
+--Sig_/peD7sxK.Bo2GppS61dYUzvT--
