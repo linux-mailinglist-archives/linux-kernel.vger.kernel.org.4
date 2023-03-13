@@ -2,102 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 765156B7326
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:50:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3B656B7327
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:50:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjCMJu1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:50:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57430 "EHLO
+        id S231284AbjCMJuy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:50:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbjCMJuY (ORCPT
+        with ESMTP id S231277AbjCMJup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:50:24 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3527FA255;
-        Mon, 13 Mar 2023 02:50:13 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so16296920pjb.3;
-        Mon, 13 Mar 2023 02:50:13 -0700 (PDT)
+        Mon, 13 Mar 2023 05:50:45 -0400
+Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81BC237F34
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:50:34 -0700 (PDT)
+Received: by mail-vs1-xe34.google.com with SMTP id f31so10463683vsv.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:50:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678701012;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=HG3KG6VQNJrTxZcAoDu4OYtxrPugKypRTH1cm2KrTvM=;
-        b=qmNbxg+/zafbEzl8LVY73WJv/tnPnP1u65jbXrRjR0ifAxslhjvPyHfH96My+r5CRV
-         rEYIENbEzFNQJyGOA7lEBkSILjeiNZql4OEX9ZbGOLdl2eChvXM73kCJIrsluybH7jkc
-         DAcnLz9JGKJxOnaGTwTUQ62XyXyTVK5gC+AAWw97DloErOm0V7bR+3yijC9fLqAwBOkO
-         O2ZG9w+8fjSrT4iZdn6X9BtzMmS474szqbBwwMH2DqQ53TbsQVTOIDkda5z45oqo6Q9/
-         Te3PPJNE2hWfv6zs2knRSmLLPEJHfJ38PVbacaXiJGwp8X0pt3GzMPhC8PI6z2Qq3n1G
-         npOw==
+        d=linaro.org; s=google; t=1678701033;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0thsfBhKWc4p+EFtaKanDgEsWWKR0LrE3hmVfPf/OgA=;
+        b=Nh3RFuZOS7PVy3YaLzs4wUqwSvbWILuwB1hJqMBUNlYfPJIJj0zyfp/uPCULg/m4EP
+         cqfSzk7J07ROlJY+CgXgJ9SA/d2UhU+SB9CH7/Vsi4zPtHA/uw8bsTx9msC26QFZTEjg
+         cjwPyfaCN1kofIEo4p1lK73Czbl8KDoh8E8Mv5bsDcd+XZmM5uhZBVaiK4iqCM4qIotm
+         H4XWhxHhHg/QBEEoanIOrMFkdY/6QEohAMJsfAFdBIwYisZTl/8to5SWEjR20CkqDa6/
+         K5wb/8kMzvf3pJdhplZY8F2MugRXqANUDWe4MmA9rl53Z15aAKkzefgjEsiN++DD7Iku
+         dSHg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678701012;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20210112; t=1678701033;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=HG3KG6VQNJrTxZcAoDu4OYtxrPugKypRTH1cm2KrTvM=;
-        b=YhWvQIxv9DbjbktCKFIrjmVdfD56CUMy1FyIK0+J6GOrHd8pIwC6zwP3A16A5zoCXu
-         M1pS0sj8+vtgf/9r5NZsJ5WPy7MnZ0Qb4T4lFAusSHGS0Bt+IwEZ+jppasWl8HiN8/iu
-         WIMh3WRW2ZWerrS9/UQe/QRPiaHlxLLUGcvRmshKoercYp/LnxVlYDDd4lOQFFLe+mud
-         y33RBGNmi0jfbssm860rQtBWzPM5uRVN15/n9+lOtTnIY1vzBEmKurrfEWOfWvuGdYM3
-         6egAGdA8MAuCu6ccofETqsUwHo+eqRNcivLAGSHvKBh1DvZiiKiBiKDGTpF8giXJPGvJ
-         +K1w==
-X-Gm-Message-State: AO0yUKX4p1u/ihJcT98hhIu1+6vKKExgoUTpJLZUfGNn6Y3lJ3cGK9tc
-        y9gd1gjLZy9OlwQ+GAZPKvo=
-X-Google-Smtp-Source: AK7set9X/eLJm4HatzB8FVC4j7JM46lgk9d3TBh2MX3eA17lo0ZO50hhD2xz6IZRPrFxjLdFN4FESA==
-X-Received: by 2002:a17:902:d492:b0:19c:b7da:fbdf with SMTP id c18-20020a170902d49200b0019cb7dafbdfmr42661165plg.26.1678701012550;
-        Mon, 13 Mar 2023 02:50:12 -0700 (PDT)
-Received: from chcpu13.cse.ust.hk (191host119.mobilenet.cse.ust.hk. [143.89.191.119])
-        by smtp.gmail.com with ESMTPSA id ki5-20020a170903068500b00196251ca124sm4340511plb.75.2023.03.13.02.50.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 02:50:11 -0700 (PDT)
-From:   Wei Chen <harperchen1110@gmail.com>
-To:     mchehab@kernel.org
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wei Chen <harperchen1110@gmail.com>
-Subject: [PATCH] media: dvb-usb: digitv: Fix null-ptr-deref in digitv_i2c_xfer()
-Date:   Mon, 13 Mar 2023 09:50:08 +0000
-Message-Id: <20230313095008.1039689-1-harperchen1110@gmail.com>
-X-Mailer: git-send-email 2.25.1
+        bh=0thsfBhKWc4p+EFtaKanDgEsWWKR0LrE3hmVfPf/OgA=;
+        b=QzDnVpGQymna87/o8GtEcqP6o5pQOVEYSh1T5ZTQsNXa7z1KzLZv9LrTPz7h7u7K7H
+         l6oNCS1Iz9ia29kisS+sdQO8HgFjiuFuPCionxzjjYPtr3eAQw+eVXKL+B5nDctfS3vT
+         N0U9CQXEjTa+F7g7WWoOoQ1NTbv1yPV8k62cpNH3iI+6PjGh+N+cB1c3tHh/o1ztBU0k
+         T+oXjDdJ/rqiQ6Vj05C/1vosO2LY5V0NcdYcQOdTVIU7e79bkTIPNb5/0lKQUtkTINyz
+         ug34eX4F/NSx4GkftfWKxDXm2fB+AL0kICBBMt6RD45VYG96IoUaz5nmYzwT/Hk9QT0/
+         iMRA==
+X-Gm-Message-State: AO0yUKXce0TsXTnau+S3y5OK+pIU5svGEK33695d3fmG4BPCkN6ZJ0Vp
+        T6BvPFBtUtRz1hWaXjyKETuUCXzBSWyRXTGHdGpKvQ==
+X-Google-Smtp-Source: AK7set/M8gEYQsVx0+WWXfj/bSZ1YioVzkOVkLFio9jFik9aJjbtJBiBoSSNstXJXQmtGgiZ+KicAEYxmQSMf6GCZXs=
+X-Received: by 2002:a67:1005:0:b0:425:8e57:7bfd with SMTP id
+ 5-20020a671005000000b004258e577bfdmr1261928vsq.3.1678701033388; Mon, 13 Mar
+ 2023 02:50:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20230308195933.806917-1-ndesaulniers@google.com>
+In-Reply-To: <20230308195933.806917-1-ndesaulniers@google.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Mon, 13 Mar 2023 15:20:22 +0530
+Message-ID: <CA+G9fYtTL+y-ZYeZXKHbVg9XiYVeHE-RaAjaRHTT+EfXO924cA@mail.gmail.com>
+Subject: Re: [PATCH] selftests: sigaltstack: fix -Wuninitialized
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Shuah Khan <shuah@kernel.org>,
+        Linux Kernel Functional Testing <lkft@linaro.org>,
+        KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>,
+        linux-api@vger.kernel.org, linux-kernel@vger.kernel.org,
+        lkft-triage@lists.linaro.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Len Brown <len.brown@intel.com>, Borislav Petkov <bp@suse.de>,
+        Stas Sergeev <stsp@list.ru>, Arnd Bergmann <arnd@arndb.de>,
+        Anders Roxell <anders.roxell@linaro.org>,
+        Andy Lutomirski <luto@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In digitv_i2c_xfer, msg is controlled by user. When msg[i].buf
-is null and msg[i].len is zero, former checks on msg[i].buf would be
-passed. Malicious data finally reach digitv_i2c_xfer. If accessing
-msg[i].buf[0] without sanity check, null ptr deref would happen. We add
-check on msg[i].len to prevent crash.
+On Thu, 9 Mar 2023 at 01:29, Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> Building sigaltstack with clang via:
+> $ ARCH=x86 make LLVM=1 -C tools/testing/selftests/sigaltstack/
+>
+> produces the following warning:
+>   warning: variable 'sp' is uninitialized when used here [-Wuninitialized]
+>   if (sp < (unsigned long)sstack ||
+>       ^~
+>
+> Clang expects these to be declared at global scope; we've fixed this in
+> the kernel proper by using the macro `current_stack_pointer`. This is
+> defined in different headers for different target architectures, so just
+> create a new header that defines the arch-specific register names for
+> the stack pointer register, and define it for more targets (at least the
+> ones that support current_stack_pointer/ARCH_HAS_CURRENT_STACK_POINTER).
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> Link: https://lore.kernel.org/lkml/CA+G9fYsi3OOu7yCsMutpzKDnBMAzJBCPimBp86LhGBa0eCnEpA@mail.gmail.com/
+> Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
 
-Similar commit:
-commit 0ed554fd769a ("media: dvb-usb: az6027: fix null-ptr-deref in az6027_i2c_xfer()")
+Build and boot tested with clang-16 and tested sigaltstack
+on arm64, armv7, FVP, x86_64 and i386 [1] & [2].
+These tests were performed at Linaro test farm by Anders
+with the help of tuxplan / tuxmake and tuxrun.
 
-Signed-off-by: Wei Chen <harperchen1110@gmail.com>
----
- drivers/media/usb/dvb-usb/digitv.c | 4 ++++
- 1 file changed, 4 insertions(+)
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+Tested-by:  Anders Roxell <anders.roxell@linaro.org>
 
-diff --git a/drivers/media/usb/dvb-usb/digitv.c b/drivers/media/usb/dvb-usb/digitv.c
-index 2756815a780b..32134be16914 100644
---- a/drivers/media/usb/dvb-usb/digitv.c
-+++ b/drivers/media/usb/dvb-usb/digitv.c
-@@ -63,6 +63,10 @@ static int digitv_i2c_xfer(struct i2c_adapter *adap,struct i2c_msg msg[],int num
- 		warn("more than 2 i2c messages at a time is not handled yet. TODO.");
- 
- 	for (i = 0; i < num; i++) {
-+		if (msg[i].len < 1) {
-+			i = -EOPNOTSUPP;
-+			break;
-+		}
- 		/* write/read request */
- 		if (i+1 < num && (msg[i+1].flags & I2C_M_RD)) {
- 			if (digitv_ctrl_msg(d, USB_READ_COFDM, msg[i].buf[0], NULL, 0,
--- 
-2.25.1
 
+Build log:
+-------
+clang --target=aarch64-linux-gnu -fintegrated-as
+-Werror=unknown-warning-option -Werror=ignored-optimization-argument
+-Werror=option-ignored -Werror=unused-command-line-argument
+--target=aarch64-linux-gnu -fintegrated-as -Wall     sas.c  -o
+/home/tuxbuild/.cache/tuxmake/builds/1/build/kselftest/sigaltstack/sas
+
+Test log:
+----------
+
+Linux version 6.3.0-rc1-next-20230310 (tuxmake@tuxmake) (Debian clang
+version 16.0.0 (++20230228093516+60692a66ced6-1~exp1~20230228093525.41),
+Debian LLD 16.0.0) #1 SMP PREEMPT @1678519789
+...
+
+[   56.327569] kselftest: Running tests in sigaltstack
+TAP version 13
+1..1
+# selftests: sigaltstack: sas
+# # [NOTE] the stack size is 26400
+# TAP version 13
+# 1..3
+# ok 1 Initial sigaltstack state was SS_DISABLE
+# # [RUN] signal USR1
+# ok 2 sigaltstack is disabled in sighandler
+# # [RUN] switched to user ctx
+# # [RUN] signal USR2
+# # [OK] Stack preserved
+# ok 3 sigaltstack is still SS_AUTODISARM after signal
+# # Totals: pass:3 fail:0 xfail:0 xpass:0 skip:0 error:0
+ok 1 selftests: sigaltstack: sas
+
+Details of test log links provided [3].
+
+> ---
+> Cc: Naresh Kamboju <naresh.kamboju@linaro.org>
+> Cc: KERNEL SELFTEST FRAMEWORK <linux-kselftest@vger.kernel.org>
+> Cc: linux-api@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Cc: lkft-triage@lists.linaro.org
+> Cc: Shuah Khan <shuah@kernel.org>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: "Chang S. Bae" <chang.seok.bae@intel.com>
+> Cc: Len Brown <len.brown@intel.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Stas Sergeev <stsp@list.ru>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Cc: Anders Roxell <anders.roxell@linaro.org>
+> Cc: Andy Lutomirski <luto@kernel.org>
+> Cc: Kees Cook <keescook@chromium.org>
+> Cc: Nathan Chancellor <nathan@kernel.org>
+> Cc: llvm@lists.linux.dev
+> ---
+>  .../sigaltstack/current_stack_pointer.h       | 23 +++++++++++++++++++
+>  tools/testing/selftests/sigaltstack/sas.c     |  7 +-----
+>  2 files changed, 24 insertions(+), 6 deletions(-)
+>  create mode 100644 tools/testing/selftests/sigaltstack/current_stack_pointer.h
+>
+> diff --git a/tools/testing/selftests/sigaltstack/current_stack_pointer.h b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
+> new file mode 100644
+> index 000000000000..ea9bdf3a90b1
+> --- /dev/null
+> +++ b/tools/testing/selftests/sigaltstack/current_stack_pointer.h
+> @@ -0,0 +1,23 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +
+> +#if __alpha__
+> +register unsigned long sp asm("$30");
+> +#elif __arm__ || __aarch64__ || __csky__ || __m68k__ || __mips__ || __riscv
+> +register unsigned long sp asm("sp");
+> +#elif __i386__
+> +register unsigned long sp asm("esp");
+> +#elif __loongarch64
+> +register unsigned long sp asm("$sp");
+> +#elif __ppc__
+> +register unsigned long sp asm("r1");
+> +#elif __s390x__
+> +register unsigned long sp asm("%15");
+> +#elif __sh__
+> +register unsigned long sp asm("r15");
+> +#elif __x86_64__
+> +register unsigned long sp asm("rsp");
+> +#elif __XTENSA__
+> +register unsigned long sp asm("a1");
+> +#else
+> +#error "implement current_stack_pointer equivalent"
+> +#endif
+> diff --git a/tools/testing/selftests/sigaltstack/sas.c b/tools/testing/selftests/sigaltstack/sas.c
+> index c53b070755b6..98d37cb744fb 100644
+> --- a/tools/testing/selftests/sigaltstack/sas.c
+> +++ b/tools/testing/selftests/sigaltstack/sas.c
+> @@ -20,6 +20,7 @@
+>  #include <sys/auxv.h>
+>
+>  #include "../kselftest.h"
+> +#include "current_stack_pointer.h"
+>
+>  #ifndef SS_AUTODISARM
+>  #define SS_AUTODISARM  (1U << 31)
+> @@ -46,12 +47,6 @@ void my_usr1(int sig, siginfo_t *si, void *u)
+>         stack_t stk;
+>         struct stk_data *p;
+>
+> -#if __s390x__
+> -       register unsigned long sp asm("%15");
+> -#else
+> -       register unsigned long sp asm("sp");
+> -#endif
+> -
+>         if (sp < (unsigned long)sstack ||
+>                         sp >= (unsigned long)sstack + stack_size) {
+>                 ksft_exit_fail_msg("SP is not on sigaltstack\n");
+> --
+> 2.40.0.rc0.216.gc4246ad0f0-goog
+
+log link:
+-----
+[1] https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-kselftest_20230308195933_806917-1-ndesaulniers_google_com/?failures_only=false#!?filter-tests=kselftest-sigaltstack&details=#test-results
+[2] https://qa-reports.linaro.org/~anders.roxell/linux-mainline-patches/build/lore_kernel_org_linux-kselftest_20230308195933_806917-1-ndesaulniers_google_com/testrun/15468761/suite/kselftest-sigaltstack/test/sigaltstack_sas/log
+[3] https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/anders/tests/2MrJ2e4bDCC4iZjIrnRqmnE7KfC
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
