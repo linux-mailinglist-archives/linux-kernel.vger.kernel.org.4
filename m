@@ -2,168 +2,689 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6EDD16B723D
+	by mail.lfdr.de (Postfix) with ESMTP id 237C36B723C
 	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbjCMJML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:12:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35850 "EHLO
+        id S230372AbjCMJMN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:12:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231274AbjCMJLq (ORCPT
+        with ESMTP id S230247AbjCMJLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:11:46 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06C9D1555A;
-        Mon, 13 Mar 2023 02:11:14 -0700 (PDT)
-Received: from mail.ispras.ru (unknown [83.149.199.84])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 5DE1F44C1006;
-        Mon, 13 Mar 2023 09:11:09 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 5DE1F44C1006
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678698669;
-        bh=icT63P40ly/ybYZrM/KY+THKyNlAaEMSAn7Kz2zSEjE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=hvBIkxiEmg9m+wBzUjVPx47Luv3kc+wlayW1Mr3DglMfF/+khvEnzLzqWptVseD/f
-         LFXFGOjQcoXiXoWmiYOpkulA3JkOw29w27WNVs1IT08sCh8CkxLZd/eWtW7hoZ1Mu4
-         AU8IlxJyz68zoAwDq/FGVDAffxcvRsA6TStIEgdY=
+        Mon, 13 Mar 2023 05:11:52 -0400
+Received: from out30-124.freemail.mail.aliyun.com (out30-124.freemail.mail.aliyun.com [115.124.30.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E333515CBD;
+        Mon, 13 Mar 2023 02:11:18 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R161e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046056;MF=baolin.wang@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VdkCmoD_1678698674;
+Received: from 30.97.48.63(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0VdkCmoD_1678698674)
+          by smtp.aliyun-inc.com;
+          Mon, 13 Mar 2023 17:11:15 +0800
+Message-ID: <01d7b3c7-1514-5d8c-fc88-11b3d806496f@linux.alibaba.com>
+Date:   Mon, 13 Mar 2023 17:11:13 +0800
 MIME-Version: 1.0
-Date:   Mon, 13 Mar 2023 12:11:09 +0300
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Borislav Petkov <bp@alien8.de>, Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v4 20/26] x86/build: Make generated PE more spec compliant
-In-Reply-To: <CAMj1kXGK=z_taR2__RrCEDTE_F=+dbiXb_9HTCyG9R7iOp+yoA@mail.gmail.com>
-References: <cover.1671098103.git.baskov@ispras.ru>
- <2dd706f95dd4fbb24de534b5fdedf7b740d1bac0.1671098103.git.baskov@ispras.ru>
- <CAMj1kXGu0uFynyt=MostXo58A4f4Zu6cFFiSShFZChU5LWt1ZQ@mail.gmail.com>
- <f5aaddbe13211c3a3d6d879675ebcaf8@ispras.ru>
- <CAMj1kXFFsxUWRjLzWpz5qWWA4VaVnC0hYodLOxBoR_kDf=x8=Q@mail.gmail.com>
- <b649071c0a919c284de79b74201e4438@ispras.ru>
- <CAMj1kXGK=z_taR2__RrCEDTE_F=+dbiXb_9HTCyG9R7iOp+yoA@mail.gmail.com>
-User-Agent: Roundcube Webmail/1.4.4
-Message-ID: <f069d71d9e1f3e7dc253a16386befa5d@ispras.ru>
-X-Sender: baskov@ispras.ru
-Content-Type: text/plain; charset=US-ASCII;
- format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC PATCH v1] usb/phy add sprd ums512 usbphy
+To:     Cixi Geng <cixi.geng@linux.dev>, gregkh@linuxfoundation.org,
+        orsonzhai@gmail.com, zhang.lyra@gmail.com, arnd@arndb.de,
+        tony@atomide.com, felipe.balbi@linux.intel.com,
+        paul@crapouillou.net, linus.walleij@linaro.org,
+        cixi.geng1@unisoc.com, gengcixi@gmail.com
+Cc:     linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20230312171438.177952-1-cixi.geng@linux.dev>
+From:   Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <20230312171438.177952-1-cixi.geng@linux.dev>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-12 16:09, Ard Biesheuvel wrote:
-> On Sun, 12 Mar 2023 at 13:02, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> 
->> On 2023-03-11 20:31, Ard Biesheuvel wrote:
->> > On Sat, 11 Mar 2023 at 16:02, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> >>
->> >> On 2023-03-10 18:17, Ard Biesheuvel wrote:
->> >> > On Thu, 15 Dec 2022 at 13:42, Evgeniy Baskov <baskov@ispras.ru> wrote:
->> >> >>
->> >> >> Currently kernel image is not fully compliant PE image, so it may
->> >> >> fail to boot with stricter implementations of UEFI PE loaders.
->> >> >>
->> >> >> Set minimal alignments and sizes specified by PE documentation [1]
->> >> >> referenced by UEFI specification [2]. Align PE header to 8 bytes.
->> >> >>
->> >> >> Generate PE sections dynamically. This simplifies code, since with
->> >> >> current implementation all of the sections needs to be defined in
->> >> >> header.S, where most section header fields do not hold valid values,
->> >> >> except for their names. Before the change, it also held flags,
->> >> >> but now flags depend on kernel configuration and it is simpler
->> >> >> to set them from build.c too.
->> >> >>
->> >> >> Setup sections protection. Since we cannot fit every needed section,
->> >> >> set a part of protection flags dynamically during initialization.
->> >> >> This step is omitted if CONFIG_EFI_DXE_MEM_ATTRIBUTES is not set.
->> >> >>
->> >> >> [1]
->> >> >> https://download.microsoft.com/download/9/c/5/9c5b2167-8017-4bae-9fde-d599bac8184a/pecoff_v83.docx
->> >> >> [2]
->> >> >> https://uefi.org/sites/default/files/resources/UEFI_Spec_2_9_2021_03_18.pdf
->> >> >>
->> >> >> Tested-by: Peter Jones <pjones@redhat.com>
->> >> >> Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
->> >> >
->> >> > I would prefer it if we didn't rewrite the build tool this way.
->> >> >
->> >> > Having the sections in header.S in the order they appear in the binary
->> >> > is rather useful, and I don't think we should manipulate the section
->> >> > flags based on whether CONFIG_DXE_MEM_ATTRIBUTES is set. I also don't
->> >> > think we need more than .text / .,data (as discussed in the other
->> >> > thread on linux-efi@)
->> >> >
->> >> > Furthermore, I had a look at the audk PE loader [0], and I think it is
->> >> > being overly pedantic.
->> >> >
->> >> > The PE/COFF spec does not require that all sections are virtually
->> >> > contiguous, and it does not require that the file content is
->> >> > completely covered by either the header or by a section.
->> >> >
->> >> > So what I would prefer to do is the following:
->> >> >
->> >> > Sections:
->> >> > Idx Name          Size     VMA              Type
->> >> >   0 .reloc        00000200 0000000000002000 DATA
->> >> >   1 .compat       00000200 0000000000003000 DATA
->> >> >   2 .text         00bee000 0000000000004000 TEXT
->> >> >   3 .data         00002200 0000000000bf2000 DATA
->> >> >
->> >> > using 4k section alignment and 512 byte file alignment, and a header
->> >> > size of 0x200 as before (This requires my patch that allows the setup
->> >> > header to remain unmapped when running the stub [1])
->> >> >
->> >> > The reloc and compat payloads are placed at the end of the setup data
->> >> > as before, but increased in size to 512 bytes each, and then mapped
->> >> > non-1:1 into the RVA space.
->> >> >
->> >> > This works happily with both the existing PE loader as well as the
->> >> > audk one, but with the pedantic flags disabled.
->> >> >
->> >>
->> >> This makes sense. I'll change this patch to use this layout and
->> >> to keep sections in headers.S before sending v5. (and I guess I'll
->> >> make the compressed kernel a part of .text). I have a few questions
->> >> though:
->> >>
->> >> This layout assumes having the local copy of the bootparams as
->> >> in your RFC patches, right?
->> >>
->> >
->> > Indeed. Otherwise, the setup header may not have been copied to memory
->> > by the loader.
->> >
->> >> Can I keep the .rodata -- 5th section fits in the section table
->> >> without much work?
->> >>
->> >
->> > You could, but at least the current PE/COFF loader in EDK2 will map it
->> > read/write, as it only distinguishes between executable sections and
->> > non-executable sections.
->> >
->> 
->> At least it will slightly improve security for some implementations
->> (e.g. audk, while being overly strict support RO sections)
->> 
-> 
-> Yeah, but more common loaders will put the compressed data in a
-> writable region. I'd prefer to have a simple and common baseline where
-> we always just use R-X for all text and rodata, and RW- for everything
-> else.
 
-Hmm... I'll remove the .rodata for now then. If anything changes I can
-always submit it as a separate patch later anyways.
+
+On 3/13/2023 1:14 AM, Cixi Geng wrote:
+> From: Cixi Geng <cixi.geng1@unisoc.com>
+> 
+> This driver is support USB2 phy for Spreadtrum UMS512 SOC's,
+> 
+> Signed-off-by: Cixi Geng <cixi.geng1@unisoc.com>
+> ---
+>   drivers/usb/phy/Kconfig           |  10 +
+>   drivers/usb/phy/Makefile          |   1 +
+>   drivers/usb/phy/phy-sprd-ums512.c | 511 ++++++++++++++++++++++++++++++
+>   drivers/usb/phy/phy-sprd-ums512.h |  39 +++
+>   4 files changed, 561 insertions(+)
+>   create mode 100644 drivers/usb/phy/phy-sprd-ums512.c
+>   create mode 100644 drivers/usb/phy/phy-sprd-ums512.h
+> 
+> diff --git a/drivers/usb/phy/Kconfig b/drivers/usb/phy/Kconfig
+> index 5f629d7cad64..fa5564e6f3a3 100644
+> --- a/drivers/usb/phy/Kconfig
+> +++ b/drivers/usb/phy/Kconfig
+> @@ -158,6 +158,16 @@ config USB_TEGRA_PHY
+>   	  This driver provides PHY support for the USB controllers found
+>   	  on NVIDIA Tegra SoC's.
+>   
+> +config USB_SPRD_UMS512_PHY
+> +	tristate "Spreadtrum ums512 USB2 PHY Driver"
+> +	depends on ARCH_SPRD || COMPILE_TEST
+> +	select USB_PHY
+> +	select EXTCON_USB_GPIO
+> +	help
+> +	  Enable this to support the SPRD ums512 USB2 PHY that is part of SOC.
+> +	  This driver takes care of all the PHY functionality, normally paired with
+> +	  DesignWare USB20 (DRD) Controller.
+> +
+>   config USB_ULPI
+>   	bool "Generic ULPI Transceiver Driver"
+>   	depends on ARM || ARM64 || COMPILE_TEST
+> diff --git a/drivers/usb/phy/Makefile b/drivers/usb/phy/Makefile
+> index e5d619b4d8f6..ce45ee0f12a8 100644
+> --- a/drivers/usb/phy/Makefile
+> +++ b/drivers/usb/phy/Makefile
+> @@ -22,4 +22,5 @@ obj-$(CONFIG_USB_MV_OTG)		+= phy-mv-usb.o
+>   obj-$(CONFIG_USB_MXS_PHY)		+= phy-mxs-usb.o
+>   obj-$(CONFIG_USB_ULPI)			+= phy-ulpi.o
+>   obj-$(CONFIG_USB_ULPI_VIEWPORT)		+= phy-ulpi-viewport.o
+> +obj-$(CONFIG_USB_SPRD_UMS512_PHY)	+= phy-sprd-ums512.o
+>   obj-$(CONFIG_KEYSTONE_USB_PHY)		+= phy-keystone.o
+> diff --git a/drivers/usb/phy/phy-sprd-ums512.c b/drivers/usb/phy/phy-sprd-ums512.c
+> new file mode 100644
+> index 000000000000..025f45e8d509
+> --- /dev/null
+> +++ b/drivers/usb/phy/phy-sprd-ums512.c
+> @@ -0,0 +1,511 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Driver for Unisoc USB PHY driver
+> + *
+> + * Copyright (C) 2023 Unisoc Inc.
+> + */
+> +
+> +#include <linux/delay.h>
+> +#include <linux/device.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +#include <linux/regulator/consumer.h>
+> +#include <linux/slab.h>
+> +#include <linux/usb/otg.h>
+> +#include <linux/usb/phy.h>
+> +#include <uapi/linux/usb/charger.h>
+> +
+> +#include "phy-sprd-ums512.h"
+> +
+> +struct sprd_hsphy {
+> +	struct device		*dev;
+> +	struct usb_phy		phy;
+> +	struct regulator	*vdd;
+> +	struct regmap		*hsphy_glb;
+> +	struct regmap		*ana_g2;
+> +	struct regmap		*pmic;
+> +	u32			vdd_vol;
+> +	atomic_t		reset;
+> +	atomic_t		inited;
+> +	bool			is_host;
+> +};
+> +
+> +#define TUNEHSAMP_2_6MA		(3 << 25)
+> +#define TFREGRES_TUNE_VALUE	(0x14 << 19)
+> +#define SC2730_CHARGE_STATUS	0x1b9c
+> +#define BIT_CHG_DET_DONE	BIT(11)
+> +#define BIT_SDP_INT		BIT(7)
+> +#define BIT_DCP_INT		BIT(6)
+> +#define BIT_CDP_INT		BIT(5)
+> +
+> +static enum usb_charger_type sc27xx_charger_detect(struct regmap *regmap)
+> +{
+> +	enum usb_charger_type type;
+> +	u32 status = 0, val;
+> +	int ret, cnt = 10;
+> +
+> +	do {
+> +		ret = regmap_read(regmap, SC2730_CHARGE_STATUS, &val);
+> +		if (ret)
+> +			return UNKNOWN_TYPE;
+> +
+> +		if (val & BIT_CHG_DET_DONE) {
+> +			status = val & (BIT_CDP_INT | BIT_DCP_INT | BIT_SDP_INT);
+> +			break;
+> +		}
+> +
+> +		msleep(200);
+> +	} while (--cnt > 0);
+> +
+> +	switch (status) {
+> +	case BIT_CDP_INT:
+> +		type = CDP_TYPE;
+> +		break;
+> +	case BIT_DCP_INT:
+> +		type = DCP_TYPE;
+> +		break;
+> +	case BIT_SDP_INT:
+> +		type = SDP_TYPE;
+> +		break;
+> +	default:
+> +		type = UNKNOWN_TYPE;
+> +	}
+> +
+> +	return type;
+> +}
+
+Please do not add duplicate code, and use the 
+sprd_pmic_detect_charger_type() instead, which had been exported in the 
+mainline.
+
+> +
+> +static inline void sprd_hsphy_enable(struct sprd_hsphy *sprd_phy)
+> +{
+> +	u32 reg, msk;
+> +
+> +	/* enable usb module */
+> +	reg = msk = (MASK_AON_APB_OTG_UTMI_EB | MASK_AON_APB_ANA_EB);
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_APB_EB1, msk, reg);
+> +	reg = msk = MASK_AON_APB_CGM_OTG_REF_EN |
+> +		MASK_AON_APB_CGM_DPHY_REF_EN;
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_CGM_REG1, msk, reg);
+> +}
+> +
+> +static inline void sprd_hsphy_power_down(struct sprd_hsphy *sprd_phy)
+> +{
+> +	u32 reg, msk;
+> +
+> +	/* usb power down */
+> +	reg = msk = (MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_PS_PD_L |
+> +		MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_PS_PD_S);
+> +	regmap_update_bits(sprd_phy->ana_g2,
+> +		REG_ANLG_PHY_G2_ANALOG_USB20_USB20_BATTER_PLL, msk, reg);
+> +}
+> +
+> +static inline void sprd_hsphy_reset_core(struct sprd_hsphy *sprd_phy)
+> +{
+> +	u32 reg, msk;
+> +
+> +	/* Reset PHY */
+> +	reg = msk = MASK_AON_APB_OTG_PHY_SOFT_RST | MASK_AON_APB_OTG_UTMI_SOFT_RST;
+> +
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_APB_RST1, msk, reg);
+> +	/* USB PHY reset need to delay 20ms~30ms */
+> +	usleep_range(20000, 30000);
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_APB_RST1, msk, 0);
+> +}
+> +
+> +static int sprd_hostphy_set(struct usb_phy *u_phy, int on)
+> +{
+> +	struct sprd_hsphy *sprd_phy = container_of(u_phy, struct sprd_hsphy, phy);
+> +	u32 reg, msk;
+> +	int ret = 0;
+> +
+> +	if (on) {
+> +		msk = MASK_AON_APB_USB2_PHY_IDDIG;
+> +		ret |= regmap_update_bits(sprd_phy->hsphy_glb,
+> +			REG_AON_APB_OTG_PHY_CTRL, msk, 0);
+> +
+> +		msk = MASK_ANLG_PHY_G2_DBG_SEL_ANALOG_USB20_USB20_DMPULLDOWN |
+> +			MASK_ANLG_PHY_G2_DBG_SEL_ANALOG_USB20_USB20_DPPULLDOWN;
+> +		ret |= regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_REG_SEL_CFG_0,
+> +			msk, msk);
+> +
+> +		msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DMPULLDOWN |
+> +			MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DPPULLDOWN;
+> +		ret |= regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL2,
+> +			msk, msk);
+> +
+> +		reg = 0x200;
+> +		msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_RESERVED;
+> +		ret |= regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1,
+> +			msk, reg);
+> +		sprd_phy->is_host = true;
+> +	} else {
+> +		reg = msk = MASK_AON_APB_USB2_PHY_IDDIG;
+> +		ret |= regmap_update_bits(sprd_phy->hsphy_glb,
+> +			REG_AON_APB_OTG_PHY_CTRL, msk, reg);
+> +
+> +		msk = MASK_ANLG_PHY_G2_DBG_SEL_ANALOG_USB20_USB20_DMPULLDOWN |
+> +			MASK_ANLG_PHY_G2_DBG_SEL_ANALOG_USB20_USB20_DPPULLDOWN;
+> +		ret |= regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_REG_SEL_CFG_0,
+> +			msk, msk);
+> +
+> +		msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DMPULLDOWN |
+> +			MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DPPULLDOWN;
+> +		ret |= regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL2,
+> +			msk, 0);
+> +
+> +		msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_RESERVED;
+> +		ret |= regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1,
+> +			msk, 0);
+> +		sprd_phy->is_host = false;
+> +	}
+> +	return ret;
+> +}
+> +
+> +static int sprd_hsphy_init(struct usb_phy *u_phy)
+> +{
+> +	struct sprd_hsphy *sprd_phy = container_of(u_phy, struct sprd_hsphy, phy);
+> +	u32 reg, msk;
+> +	int ret;
+> +
+> +	if (atomic_read(&sprd_phy->inited)) {
+> +		dev_dbg(u_phy->dev, "%s is already inited!\n", __func__);
+> +		return 0;
+> +	}
+> +
+> +	/* Turn On VDD */
+> +	regulator_set_voltage(sprd_phy->vdd, sprd_phy->vdd_vol, sprd_phy->vdd_vol);
+> +	if (!regulator_is_enabled(sprd_phy->vdd)) {
+> +		ret = regulator_enable(sprd_phy->vdd);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+> +	sprd_hsphy_enable(sprd_phy);
+> +	regmap_update_bits(sprd_phy->ana_g2, REG_ANLG_PHY_G2_ANALOG_USB20_USB20_ISO_SW,
+> +				MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_ISO_SW_EN, 0);
+> +
+> +	/* usb phy power */
+> +	msk = (MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_PS_PD_L |
+> +		MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_PS_PD_S);
+> +	regmap_update_bits(sprd_phy->ana_g2, REG_ANLG_PHY_G2_ANALOG_USB20_USB20_BATTER_PLL,
+> +			msk, 0);
+> +
+> +	/* usb vbus valid */
+> +	reg = msk = MASK_AON_APB_OTG_VBUS_VALID_PHYREG;
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_OTG_PHY_TEST, msk, reg);
+> +
+> +	reg = msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_VBUSVLDEXT;
+> +	regmap_update_bits(sprd_phy->ana_g2, REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1,
+> +			msk, reg);
+> +
+> +	/* for SPRD phy utmi_width sel */
+> +	reg = msk = MASK_AON_APB_UTMI_WIDTH_SEL;
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_OTG_PHY_CTRL, msk, reg);
+> +
+> +	reg = msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DATABUS16_8;
+> +	regmap_update_bits(sprd_phy->ana_g2, REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1,
+> +			msk, reg);
+> +
+> +	reg = TUNEHSAMP_2_6MA;
+> +	msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_TUNEHSAMP;
+> +	regmap_update_bits(sprd_phy->ana_g2, REG_ANLG_PHY_G2_ANALOG_USB20_USB20_TRIMMING,
+> +			msk, reg);
+> +
+> +	reg = TFREGRES_TUNE_VALUE;
+> +	msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_TFREGRES;
+> +	regmap_update_bits(sprd_phy->ana_g2, REG_ANLG_PHY_G2_ANALOG_USB20_USB20_TRIMMING,
+> +			msk, reg);
+> +
+> +	if (!atomic_read(&sprd_phy->reset)) {
+> +		sprd_hsphy_reset_core(sprd_phy);
+> +		atomic_set(&sprd_phy->reset, 1);
+> +	}
+> +
+> +	atomic_set(&sprd_phy->inited, 1);
+> +
+> +	return 0;
+> +}
+> +
+> +static void sprd_hsphy_shutdown(struct usb_phy *u_phy)
+> +{
+> +	struct sprd_hsphy *sprd_phy = container_of(u_phy, struct sprd_hsphy, phy);
+> +	u32 reg, msk;
+> +
+> +	if (!atomic_read(&sprd_phy->inited)) {
+> +		dev_dbg(sprd_phy->dev, "%s is already shut down\n", __func__);
+> +		return;
+> +	}
+> +
+> +	/* usb vbus */
+> +	msk = MASK_AON_APB_OTG_VBUS_VALID_PHYREG;
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_OTG_PHY_TEST, msk, 0);
+> +	msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_VBUSVLDEXT;
+> +	regmap_update_bits(sprd_phy->ana_g2,
+> +		REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1, msk, 0);
+> +
+> +	sprd_hsphy_power_down(sprd_phy);
+> +	regmap_update_bits(sprd_phy->ana_g2,
+> +		REG_ANLG_PHY_G2_ANALOG_USB20_USB20_ISO_SW,
+> +		msk, reg);
+> +
+> +	/* usb cgm ref */
+> +	msk = MASK_AON_APB_CGM_OTG_REF_EN |
+> +		MASK_AON_APB_CGM_DPHY_REF_EN;
+> +	regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_CGM_REG1, msk, 0);
+> +
+> +	if (regulator_is_enabled(sprd_phy->vdd))
+> +		regulator_disable(sprd_phy->vdd);
+> +
+> +	atomic_set(&sprd_phy->inited, 0);
+> +	atomic_set(&sprd_phy->reset, 0);
+> +}
+> +
+> +static ssize_t vdd_voltage_show(struct device *dev,
+> +				struct device_attribute *attr,
+> +				char *buf)
+> +{
+> +	struct sprd_hsphy *sprd_phy = dev_get_drvdata(dev);
+> +
+> +	if (!sprd_phy)
+> +		return -EINVAL;
+> +
+> +	return sprintf(buf, "%d\n", sprd_phy->vdd_vol);
+> +}
+> +
+> +static ssize_t vdd_voltage_store(struct device *dev,
+> +				 struct device_attribute *attr,
+> +				 const char *buf, size_t size)
+> +{
+> +	struct sprd_hsphy *sprd_phy = dev_get_drvdata(dev);
+> +	u32 vol;
+> +
+> +	if (!sprd_phy)
+> +		return -EINVAL;
+> +
+> +	if (kstrtouint(buf, 16, &vol) < 0)
+> +		return -EINVAL;
+> +
+> +	if (vol < 1200000 || vol > 3750000) {
+> +		dev_err(dev, "Invalid voltage value %d\n", vol);
+> +		return -EINVAL;
+> +	}
+> +	sprd_phy->vdd_vol = vol;
+> +
+> +	return size;
+> +}
+> +static DEVICE_ATTR_RW(vdd_voltage);
+
+Why add voltage setting interface in a usb phy driver? should move to 
+regulator driver?
+
+> +
+> +static struct attribute *usb_hsphy_attrs[] = {
+> +	&dev_attr_vdd_voltage.attr,
+> +	NULL
+> +};
+> +ATTRIBUTE_GROUPS(usb_hsphy);
+> +
+> +static int sprd_hsphy_vbus_notify(struct notifier_block *nb,
+> +				  unsigned long event, void *data)
+> +{
+> +	struct usb_phy *u_phy = container_of(nb, struct usb_phy, vbus_nb);
+> +	struct sprd_hsphy *sprd_phy = container_of(u_phy, struct sprd_hsphy, phy);
+> +	u32 reg, msk;
+> +
+> +	if (sprd_phy->is_host || u_phy->last_event == USB_EVENT_ID) {
+> +		dev_info(sprd_phy->dev, "USB PHY is host mode\n");
+> +		return 0;
+> +	}
+> +
+> +	if (event) {
+> +		/* usb vbus valid */
+> +		reg = msk = MASK_AON_APB_OTG_VBUS_VALID_PHYREG;
+> +		regmap_update_bits(sprd_phy->hsphy_glb,
+> +			REG_AON_APB_OTG_PHY_TEST, msk, reg);
+> +
+> +		reg = msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_VBUSVLDEXT;
+> +		regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1, msk, reg);
+> +		usb_phy_set_charger_state(u_phy, USB_CHARGER_PRESENT);
+> +	} else {
+> +		/* usb vbus invalid */
+> +		msk = MASK_AON_APB_OTG_VBUS_VALID_PHYREG;
+> +		regmap_update_bits(sprd_phy->hsphy_glb, REG_AON_APB_OTG_PHY_TEST,
+> +			msk, 0);
+> +		msk = MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_VBUSVLDEXT;
+> +		regmap_update_bits(sprd_phy->ana_g2,
+> +			REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1, msk, 0);
+> +		usb_phy_set_charger_state(u_phy, USB_CHARGER_ABSENT);
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static enum usb_charger_type sprd_hsphy_charger_detect(struct usb_phy *u_phy)
+> +{
+> +	struct sprd_hsphy *sprd_phy = container_of(u_phy, struct sprd_hsphy, phy);
+> +
+> +	return sc27xx_charger_detect(sprd_phy->pmic);
+> +}
+> +
+> +static int sprd_hsphy_probe(struct platform_device *pdev)
+> +{
+> +	struct device_node *regmap_np;
+> +	struct platform_device *regmap_pdev;
+> +	struct sprd_hsphy *sprd_phy;
+> +	struct device *dev = &pdev->dev;
+> +	int ret;
+> +	struct usb_otg *otg;
+> +
+> +	sprd_phy = devm_kzalloc(dev, sizeof(*sprd_phy), GFP_KERNEL);
+> +	if (!sprd_phy)
+> +		return -ENOMEM;
+> +
+> +	regmap_np = of_find_compatible_node(NULL, NULL, "sprd,sc27xx-syscon");
+> +	if (!regmap_np) {
+> +		dev_err(dev, "unable to get syscon node\n");
+> +		return -ENODEV;
+> +	}
+> +
+> +	regmap_pdev = of_find_device_by_node(regmap_np);
+> +	if (!regmap_pdev) {
+> +		dev_err(dev, "unable to get syscon platform device\n");
+> +		ret = -ENODEV;
+> +		goto device_node_err;
+> +	}
+> +
+> +	sprd_phy->pmic = dev_get_regmap(regmap_pdev->dev.parent, NULL);
+> +	if (!sprd_phy->pmic) {
+> +		dev_err(dev, "unable to get pmic regmap device\n");
+> +		ret = -ENODEV;
+> +		goto platform_device_err;
+> +	}
+> +
+> +	ret = of_property_read_u32(dev->of_node, "sprd,vdd-voltage",
+> +				   &sprd_phy->vdd_vol);
+
+Where is the DT binding secription?
+
+> +	if (ret < 0) {
+> +		dev_err(dev, "unable to read ssphy vdd voltage\n");
+> +		goto platform_device_err;
+> +	}
+> +
+> +	sprd_phy->vdd = devm_regulator_get(dev, "vdd");
+
+ditto.
+Please add the DT binding firstly.
+
+> +	if (IS_ERR(sprd_phy->vdd)) {
+> +		dev_err(dev, "unable to get ssphy vdd supply\n");
+> +		ret = PTR_ERR(sprd_phy->vdd);
+> +		goto platform_device_err;
+> +	}
+> +
+> +	ret = regulator_set_voltage(sprd_phy->vdd, sprd_phy->vdd_vol, sprd_phy->vdd_vol);
+> +	if (ret < 0) {
+> +		dev_err(dev, "fail to set ssphy vdd voltage at %dmV\n", sprd_phy->vdd_vol);
+> +		goto platform_device_err;
+> +	}
+> +
+> +	otg = devm_kzalloc(&pdev->dev, sizeof(*otg), GFP_KERNEL);
+> +	if (!otg) {
+> +		ret = -ENOMEM;
+> +		goto platform_device_err;
+> +	}
+> +
+> +	sprd_phy->ana_g2 = syscon_regmap_lookup_by_phandle(dev->of_node,
+> +				 "sprd,syscon-anag2");
+> +	if (IS_ERR(sprd_phy->ana_g2)) {
+> +		dev_err(&pdev->dev, "ap USB anag2 syscon failed!\n");
+> +		ret = PTR_ERR(sprd_phy->ana_g2);
+> +		goto platform_device_err;
+> +	}
+> +
+> +	sprd_phy->hsphy_glb = syscon_regmap_lookup_by_phandle(dev->of_node,
+> +				 "sprd,syscon-enable");
+> +	if (IS_ERR(sprd_phy->hsphy_glb)) {
+> +		dev_err(&pdev->dev, "ap USB aon apb syscon failed!\n");
+> +		ret = PTR_ERR(sprd_phy->hsphy_glb);
+> +		goto platform_device_err;
+> +	}
+> +
+> +	sprd_hsphy_enable(sprd_phy);
+> +
+> +	sprd_hsphy_power_down(sprd_phy);
+
+Why doing this? please add comments to explain these strange hardware 
+operation.
+
+> +
+> +	sprd_phy->phy.dev = dev;
+> +	sprd_phy->phy.label = "sprd-hsphy";
+> +	sprd_phy->phy.otg = otg;
+> +	sprd_phy->phy.init = sprd_hsphy_init;
+> +	sprd_phy->phy.shutdown = sprd_hsphy_shutdown;
+> +	sprd_phy->phy.set_vbus = sprd_hostphy_set;
+> +	sprd_phy->phy.type = USB_PHY_TYPE_USB2;
+> +	sprd_phy->phy.vbus_nb.notifier_call = sprd_hsphy_vbus_notify;
+> +	sprd_phy->phy.charger_detect = sprd_hsphy_charger_detect;
+> +	otg->usb_phy = &sprd_phy->phy;
+> +
+> +	platform_set_drvdata(pdev, sprd_phy);
+> +
+> +	ret = usb_add_phy_dev(&sprd_phy->phy);
+> +	if (ret) {
+> +		dev_err(dev, "fail to add phy\n");
+> +		goto platform_device_err;
+> +	}
+> +
+> +	ret = sysfs_create_groups(&dev->kobj, usb_hsphy_groups);
+> +	if (ret)
+> +		dev_warn(dev, "failed to create usb hsphy attributes\n");
+> +
+> +	if (extcon_get_state(sprd_phy->phy.edev, EXTCON_USB) > 0)
+> +		usb_phy_set_charger_state(&sprd_phy->phy, USB_CHARGER_PRESENT);
+> +
+> +	dev_info(dev, "sprd usb phy probe ok !\n");
+
+Please remove these useless printing.
+
+> +
+> +platform_device_err:
+> +device_node_err:
+
+2 same level label?
+
+> +	of_node_put(regmap_np);
+> +
+> +	return ret;
+> +}
+> +
+> +static int sprd_hsphy_remove(struct platform_device *pdev)
+> +{
+> +	struct sprd_hsphy *sprd_phy = platform_get_drvdata(pdev);
+> +
+> +	sysfs_remove_groups(&pdev->dev.kobj, usb_hsphy_groups);
+> +	usb_remove_phy(&sprd_phy->phy);
+> +	if (regulator_is_enabled(sprd_phy->vdd))
+> +		regulator_disable(sprd_phy->vdd);
+> +
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id sprd_hsphy_match[] = {
+> +	{ .compatible = "sprd,ums512-phy"},
+> +	{},
+> +};
+> +
+> +MODULE_DEVICE_TABLE(of, sprd_hsphy_match);
+> +
+> +static struct platform_driver sprd_hsphy_driver = {
+> +	.probe = sprd_hsphy_probe,
+> +	.remove = sprd_hsphy_remove,
+> +	.driver = {
+> +		.name = "sprd-hsphy",
+> +		.of_match_table = sprd_hsphy_match,
+> +	},
+> +};
+> +
+> +static int __init sprd_hsphy_driver_init(void)
+> +{
+> +	return platform_driver_register(&sprd_hsphy_driver);
+> +}
+> +
+> +static void __exit sprd_hsphy_driver_exit(void)
+> +{
+> +	platform_driver_unregister(&sprd_hsphy_driver);
+> +}
+> +
+> +late_initcall(sprd_hsphy_driver_init);
+> +module_exit(sprd_hsphy_driver_exit);
+> +
+> +MODULE_DESCRIPTION("UNISOC USB PHY driver");
+> +MODULE_LICENSE("GPL");
+> diff --git a/drivers/usb/phy/phy-sprd-ums512.h b/drivers/usb/phy/phy-sprd-ums512.h
+> new file mode 100644
+> index 000000000000..903da0573eae
+> --- /dev/null
+> +++ b/drivers/usb/phy/phy-sprd-ums512.h
+> @@ -0,0 +1,39 @@
+> +/* SPDX-License-Identifier: GPL-2.0+ OR MIT */
+> +/*
+> + * Spreadtrum UMS512 SOC USB registers file
+> + *
+> + * Copyright C 2022, Spreadtrum Communications Inc.
+> + */
+> +
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DATABUS16_8			0x10000000
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DMPULLDOWN			0x8
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_DPPULLDOWN			0x10
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_ISO_SW_EN			0x1
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_PS_PD_L			0x8
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_PS_PD_S			0x10
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_RESERVED			0xffff
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_TFREGRES			0x1f80000
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_TUNEHSAMP			0x6000000
+> +#define MASK_ANLG_PHY_G2_ANALOG_USB20_USB20_VBUSVLDEXT			0x10000
+> +#define MASK_ANLG_PHY_G2_DBG_SEL_ANALOG_USB20_USB20_DMPULLDOWN		0x2
+> +#define MASK_ANLG_PHY_G2_DBG_SEL_ANALOG_USB20_USB20_DPPULLDOWN		0x4
+> +#define MASK_AON_APB_ANA_EB						0x1000
+> +#define MASK_AON_APB_CGM_DPHY_REF_EN					0x400
+> +#define MASK_AON_APB_CGM_OTG_REF_EN					0x1000
+> +#define MASK_AON_APB_OTG_PHY_SOFT_RST					0x200
+> +#define MASK_AON_APB_OTG_UTMI_EB					0x100
+> +#define MASK_AON_APB_OTG_UTMI_SOFT_RST					0x100
+> +#define MASK_AON_APB_OTG_VBUS_VALID_PHYREG				0x1000000
+> +#define MASK_AON_APB_USB2_PHY_IDDIG					0x8
+> +#define MASK_AON_APB_UTMI_WIDTH_SEL					0x40000000
+> +#define REG_ANLG_PHY_G2_ANALOG_USB20_USB20_BATTER_PLL			0x005c
+> +#define REG_ANLG_PHY_G2_ANALOG_USB20_USB20_ISO_SW			0x0070
+> +#define REG_ANLG_PHY_G2_ANALOG_USB20_USB20_TRIMMING			0x0064
+> +#define REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL1			0x0058
+> +#define REG_ANLG_PHY_G2_ANALOG_USB20_USB20_UTMI_CTL2			0x0060
+> +#define REG_ANLG_PHY_G2_ANALOG_USB20_REG_SEL_CFG_0			0x0074
+> +#define REG_AON_APB_APB_EB1						0x0004
+> +#define REG_AON_APB_APB_RST1						0x0010
+> +#define REG_AON_APB_CGM_REG1						0x0138
+> +#define REG_AON_APB_OTG_PHY_CTRL					0x0208
+> +#define REG_AON_APB_OTG_PHY_TEST					0x0204
+
+Move them to the driver file and please rename the ugly macro names, too 
+long :(
+
+And why not move the usb phy driver to be a generic phy driver? I mean 
+move it to the drivers/phy.
