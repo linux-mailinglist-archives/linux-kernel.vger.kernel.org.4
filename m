@@ -2,158 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F12EF6B7336
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EF006B733B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:55:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjCMJzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36912 "EHLO
+        id S230355AbjCMJzx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:55:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229756AbjCMJzP (ORCPT
+        with ESMTP id S229616AbjCMJzu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:55:15 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA7EE2687B;
-        Mon, 13 Mar 2023 02:55:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678701312; x=1710237312;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=6MsZIZ9wXPpyDXI+vkAXY5STqCo+1yxkx3xmgRky9to=;
-  b=HKdhA0BmYD/gjRpi+DZC3fpsnRZO3Dco5w4Q0nvpaalfcMrXg7QTFRH2
-   tI8222FkcbqZ+zqNNljOn8f9FvLccPVuEHgnz4gvyv6aXvqDrCDByt8rV
-   rbmvYZR/gx/gznC8k+Wl8hvdbkF9iaegQhxaLZSWpJcyf9A7sgyqBDgUV
-   ZuL/kP4YVx22/dS52tqjbGW5DPq09MvYVT4wptiZNXL62kH0LdGC8BpSa
-   eI1o88PHg15oG9l1f/4/gw0/y9UVexAccI3FWyawgMNdVfSa5WIeYG1Li
-   u2M5PJKBMSlXms8hDPbgIP8D8FXqU/2ubeFq0MZ7hodapGryyrTNsII7h
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="338655796"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="338655796"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:55:12 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="671836653"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="671836653"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga007.jf.intel.com with ESMTP; 13 Mar 2023 02:55:08 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pbetY-0005Xc-0U;
-        Mon, 13 Mar 2023 09:55:08 +0000
-Date:   Mon, 13 Mar 2023 17:54:45 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Komal Bajaj <quic_kbajaj@quicinc.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH 4/5] soc: qcom: Add LLCC support for multi channel DDR
-Message-ID: <202303131722.uo5Li701-lkp@intel.com>
-References: <20230313071325.21605-5-quic_kbajaj@quicinc.com>
+        Mon, 13 Mar 2023 05:55:50 -0400
+Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A420F25E21;
+        Mon, 13 Mar 2023 02:55:49 -0700 (PDT)
+Received: by mail-pf1-x430.google.com with SMTP id n16so1078121pfa.12;
+        Mon, 13 Mar 2023 02:55:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678701349;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9MhHEvNZe13+TDFjC8K3erYv+7/DolQnJIs4c1a8yKY=;
+        b=U5wrvJW3qwYOYhADEVAhz9jV+8xWEkZNx25s3zOcGpVuQTnIR7WGW1OQBAh5+E8LXt
+         IX7S2L6EaQ7J9407dzl+Ldc6P+1Z/U3KcM5huhREdl9SX4Aow65D2oC5VGric6FKaiBx
+         iJ4YuQRlPOKYxu1zOhLffrlEKD7V6cJj7VmSuJ6Lmdvev8oBsXQAtiZ/HCi797gUUp4z
+         gwcsnCcl9YzJSq3d2mrat1/Q/13zGSrb8Q4AL9cbda/Fup9ABBV25hbkVhrj0tMfUmrR
+         zTs1rtV4tW2hznFujgd1ADwCQAgOBK8C5VOdWBDMozTBfmtC6/osSIdlGWI1SAUJFwxk
+         52LA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678701349;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9MhHEvNZe13+TDFjC8K3erYv+7/DolQnJIs4c1a8yKY=;
+        b=NWWoulzZAb8pTwC84A0w2IioAzhKAF6Qhx3lORzV0HCeK7JGuYOeVEt3n3PsQcb7iZ
+         0QPXcV9hvy+T0xS4tuPTWPZPEknypE7Pm2wCwG/18tz2Qy1U1cem+TXwOCP7smhINrHd
+         yvB7AkXRHqaYDOVTYS1Ycw6uC99Mrq2bfwR4cjHhGOTjH+8mW7LWLCtbQlFsdmw4mneK
+         2dOgM3Ma6gfJzEqBgPty8HZYqwkjkdGMTcdewle/dhWrSziCVlaKcpGesRj/x4kfaVnc
+         9qPZ0CG9/ITdKq4Mz5mqXN5oRyepAbQCJl94+U+Sk0+KFbxKbmpR07raVuV03OWHlcni
+         zleA==
+X-Gm-Message-State: AO0yUKXacWFpWr8RPnDieVusnFvWBgG4h87RZXCFY2yO1yoZb3OCWArs
+        08mM2FuJGVD4NSaj5qZalOpyamuK7+oILYzsitI=
+X-Google-Smtp-Source: AK7set+xOSxu/T7WJBh17bxSEY8zfdEMaDlHePZIaxLS/tZaVg6a4odXZh1RWW27FYxxjUrnKm6eM5Cf7aWMdYEHGpI=
+X-Received: by 2002:a62:1c13:0:b0:622:c6ad:b373 with SMTP id
+ c19-20020a621c13000000b00622c6adb373mr1903656pfc.3.1678701349107; Mon, 13 Mar
+ 2023 02:55:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313071325.21605-5-quic_kbajaj@quicinc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230217100223.702330-1-zyytlz.wz@163.com>
+In-Reply-To: <20230217100223.702330-1-zyytlz.wz@163.com>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Mon, 13 Mar 2023 17:55:35 +0800
+Message-ID: <CAJedcCxUNBWOpkcaN2aLbwNs_xvqi=LC8mhFWh-jWeh6q-cBCQ@mail.gmail.com>
+Subject: Re: [PATCH v2] Bluetooth: hci_core: Fix poential Use-after-Free bug
+ in hci_remove_adv_monitor
+To:     Zheng Wang <zyytlz.wz@163.com>
+Cc:     marcel@holtmann.org, alex000young@gmail.com,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Komal,
+friendly ping
 
-Thank you for the patch! Yet something to improve:
-
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-151543
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230313071325.21605-5-quic_kbajaj%40quicinc.com
-patch subject: [PATCH 4/5] soc: qcom: Add LLCC support for multi channel DDR
-config: hexagon-randconfig-r041-20230312 (https://download.01.org/0day-ci/archive/20230313/202303131722.uo5Li701-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/ef96faadeb37bb94f77361aef72e2d863fe6e0f9
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-151543
-        git checkout ef96faadeb37bb94f77361aef72e2d863fe6e0f9
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=hexagon SHELL=/bin/bash drivers/soc/qcom/
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303131722.uo5Li701-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
-   In file included from drivers/soc/qcom/llcc-qcom.c:11:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:547:31: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __raw_readb(PCI_IOBASE + addr);
-                             ~~~~~~~~~~ ^
-   include/asm-generic/io.h:560:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le16_to_cpu((__le16 __force)__raw_readw(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:37:51: note: expanded from macro '__le16_to_cpu'
-   #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
-                                                     ^
-   In file included from drivers/soc/qcom/llcc-qcom.c:11:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:573:61: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           val = __le32_to_cpu((__le32 __force)__raw_readl(PCI_IOBASE + addr));
-                                                           ~~~~~~~~~~ ^
-   include/uapi/linux/byteorder/little_endian.h:35:51: note: expanded from macro '__le32_to_cpu'
-   #define __le32_to_cpu(x) ((__force __u32)(__le32)(x))
-                                                     ^
-   In file included from drivers/soc/qcom/llcc-qcom.c:11:
-   In file included from include/linux/io.h:13:
-   In file included from arch/hexagon/include/asm/io.h:334:
-   include/asm-generic/io.h:584:33: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writeb(value, PCI_IOBASE + addr);
-                               ~~~~~~~~~~ ^
-   include/asm-generic/io.h:594:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writew((u16 __force)cpu_to_le16(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
-   include/asm-generic/io.h:604:59: warning: performing pointer arithmetic on a null pointer has undefined behavior [-Wnull-pointer-arithmetic]
-           __raw_writel((u32 __force)cpu_to_le32(value), PCI_IOBASE + addr);
-                                                         ~~~~~~~~~~ ^
->> drivers/soc/qcom/llcc-qcom.c:20:10: fatal error: 'linux/qcom_scm.h' file not found
-   #include <linux/qcom_scm.h>
-            ^~~~~~~~~~~~~~~~~~
-   6 warnings and 1 error generated.
-
-
-vim +20 drivers/soc/qcom/llcc-qcom.c
-
-  > 20	#include <linux/qcom_scm.h>
-    21	#include <linux/soc/qcom/llcc-qcom.h>
-    22	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Zheng Wang <zyytlz.wz@163.com> =E4=BA=8E2023=E5=B9=B42=E6=9C=8817=E6=97=A5=
+=E5=91=A8=E4=BA=94 18:05=E5=86=99=E9=81=93=EF=BC=9A
+>
+> In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT case,
+> the function will free the monitor and print its handle after that.
+> Fix it by removing the logging into msft_le_cancel_monitor_advertisement_=
+cb
+> before calling hci_free_adv_monitor.
+>
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> ---
+> v2:
+> - move the logging inside msft_remove_monitor suggested by Luiz
+> ---
+>  net/bluetooth/hci_core.c | 2 --
+>  net/bluetooth/msft.c     | 2 ++
+>  2 files changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> index b65c3aabcd53..69b82c2907ff 100644
+> --- a/net/bluetooth/hci_core.c
+> +++ b/net/bluetooth/hci_core.c
+> @@ -1981,8 +1981,6 @@ static int hci_remove_adv_monitor(struct hci_dev *h=
+dev,
+>
+>         case HCI_ADV_MONITOR_EXT_MSFT:
+>                 status =3D msft_remove_monitor(hdev, monitor);
+> -               bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
+> -                          hdev->name, monitor->handle, status);
+>                 break;
+>         }
+>
+> diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+> index bee6a4c656be..4b35f0ed1360 100644
+> --- a/net/bluetooth/msft.c
+> +++ b/net/bluetooth/msft.c
+> @@ -286,6 +286,8 @@ static int msft_le_cancel_monitor_advertisement_cb(st=
+ruct hci_dev *hdev,
+>                  * suspend. It will be re-monitored on resume.
+>                  */
+>                 if (!msft->suspending) {
+> +                       bt_dev_dbg(hdev, "%s remove monitor %d status %d"=
+, hdev->name,
+> +                                  monitor->handle, status);
+>                         hci_free_adv_monitor(hdev, monitor);
+>
+>                         /* Clear any monitored devices by this Adv Monito=
+r */
+> --
+> 2.25.1
+>
