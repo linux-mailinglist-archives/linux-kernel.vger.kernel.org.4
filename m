@@ -2,57 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22AA16B85FA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:17:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A955C6B8603
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:19:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230094AbjCMXRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:17:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
+        id S229673AbjCMXTZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50056 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230071AbjCMXRb (ORCPT
+        with ESMTP id S229571AbjCMXTW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:17:31 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 758997F015;
-        Mon, 13 Mar 2023 16:17:28 -0700 (PDT)
+        Mon, 13 Mar 2023 19:19:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D2DB298C2;
+        Mon, 13 Mar 2023 16:19:21 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id CB530CE1290;
-        Mon, 13 Mar 2023 23:17:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3DA5C433D2;
-        Mon, 13 Mar 2023 23:17:24 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AB2E361541;
+        Mon, 13 Mar 2023 23:19:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E45B0C433EF;
+        Mon, 13 Mar 2023 23:19:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678749445;
-        bh=rkf+w2R5U9yIyPxz2FD9JcXK7xhs8LnPgBEvZWq+PXw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p4uiqAV+1Dom/tq2BBK/v5VM0GdAD+C72IHMEwHM9H8xKqSslhSoJJWeWm9kUAp68
-         FqEqZXgcCQfhwmRRvRxuG6APBkfypGak6gjl5658yMjV+vJxytUgyvyE8aJOy4c4RS
-         5ZSwkfobbVqFcrFdDTr46j9cgzSbY6IKXedhVCswu9hjlObWlFucvzo5bwzVD4FzZf
-         vBm5sJc+4OloxUOZ9fZkHxwst0a1NPq1SGoWXUldtCJmaWZ1a7SpGAIq5qcdTJO8t0
-         TFxKgE7Wg15Qw3sN0us/GNeR27WazFQn89Mec3R4UpKzeF04WQRuXXQb5+O7029qb0
-         RVIIdll/Fkv6A==
-Received: by mercury (Postfix, from userid 1000)
-        id 172041061E59; Tue, 14 Mar 2023 00:17:19 +0100 (CET)
-Date:   Tue, 14 Mar 2023 00:17:19 +0100
-From:   Sebastian Reichel <sre@kernel.org>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     Matti Vaittinen <mazziesaccount@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCHv1 04/11] power: supply: generic-adc-battery: fix unit
- scaling
-Message-ID: <1fdf00a0-4830-465a-801c-147472fdcd22@mercury.local>
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-5-sre@kernel.org>
- <CACRpkdaa6ZOt7U+iLwjrTGx87BdgXX6wbW2Ab_bHye_TNzi9Tg@mail.gmail.com>
+        s=k20201202; t=1678749560;
+        bh=C1akAhs4JCBJ3FejFWSYsBe4XahMeSnJ+p2ZorfamJo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=TO/b53OxFOcIPniMEba8eUcEUaok+zOaRze2vPKjG6GFTSjKhh8KwjeFqxF3i/CvL
+         sd+uLiBSXsfcq/YYiN3VaxZL6xAuNLcO3Qkm6b43FAPEluwIPeHpGUkInA4CGDAb1K
+         YVyzrRy9IwUroLfKiiC6LqCa3922Sw7InjB7eXVoE+b5qdVeWZQ3Sd/ZAGA6rT7J7a
+         qOkQc9564jqjmFnzcCTIEYxYgjBBQe/zrmTWo9OEpkJgbZKZcpw75RpAr1oqj3WSMg
+         ZLzUnFvKN0ljt7A4whYuHC3AltRGi/Ri1+RZ+mETEdf4+Zj8x0WW/IfCxcdMEGpZ2X
+         0EOkwAv5hIUpQ==
+From:   Stephen Boyd <sboyd@kernel.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] clk fixes for v6.3-rc2
+Date:   Mon, 13 Mar 2023 16:19:18 -0700
+Message-Id: <20230313231919.66868-1-sboyd@kernel.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7uyvyepd44usvzdp"
-Content-Disposition: inline
-In-Reply-To: <CACRpkdaa6ZOt7U+iLwjrTGx87BdgXX6wbW2Ab_bHye_TNzi9Tg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,55 +51,72 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
---7uyvyepd44usvzdp
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-Hi,
+are available in the Git repository at:
 
-On Fri, Mar 10, 2023 at 09:23:06AM +0100, Linus Walleij wrote:
-> On Thu, Mar 9, 2023 at 11:50=E2=80=AFPM Sebastian Reichel <sre@kernel.org=
-> wrote:
->=20
-> > power-supply properties are reported in =C2=B5V, =C2=B5A and =C2=B5W.
-> > The IIO API provides mV, mA, mW, so the values need to
-> > be multiplied by 1000.
-> >
-> > Signed-off-by: Sebastian Reichel <sre@kernel.org>
->=20
-> Fixes: tag?
-> Cc: stable@vger.kernel.org
->=20
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->=20
-> This code can not have seen much testing.
+  https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git tags/clk-fixes-for-linus
 
-There is no mainline board using this driver and I think there
-never was one. I did add a Fixes tag now, but its probably not worth
-any backporting trouble considering it has no users.
+for you to fetch changes up to 5cf9d015be160e2d90d29ae74ef1364390e8fce8:
 
--- Sebastian
+  clk: Avoid invalid function names in CLK_OF_DECLARE() (2023-03-09 15:40:49 -0800)
 
---7uyvyepd44usvzdp
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+The collection of clk driver fixes, and a couple OF clk patches to fix
+regressions seen in the last few weeks. The fwnode patch broke the build
+for one driver that isn't always compiled, so I waited over the weekend
+to be certain no more build issues came up.
 
------BEGIN PGP SIGNATURE-----
+[Note: I'm looking at the module license patches in here after gregkh
+questioned them on the list. They're coming into my inbox in dribbles,
+and I thought they were necessary to fix some build issue but that
+doesn't seem to be the case so I stopped applying any more. They're
+still potentially useful because it slightly speeds up builds if we
+don't need to include module.h for module macros. If you're flat out
+opposed I'll rewind this branch and send a new pull request. Please let
+me know.]
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmQPrvcACgkQ2O7X88g7
-+pr+5g//boqvVUatIQJz3AYJDUC/o9r62m7SjGB5Zumh4KgV0KuIQmVqm3yxiW6u
-o3Gxo+SrJw5aUmUceXIhjzueK34uaZm9ncHeIch/IcwyepZKvPBEz4o5+hOwwfG7
-b1nDx93sQsOkB2mOiCFGID6DB8M6slRagc6qIbk01lkKppWhTqxnUh1yvG1nURZo
-FaNqXkB8KJbQglknVOZZ4nVsJnkt8jj0L3H5LfoHaSEBJtd48j/22kVfHI4KCdo3
-Shyxh6B8Z+RDPxWmqGEOQd9IrCPxje07M2mq0p1XG4gARUtFc8oS+kWW15Jv2W9x
-DDy5HlPvPQ2legMlLTjsYWcDBDmO8TU1Sj/aTi6h+lV18fi2nfC/FSpUBXHW/tfI
-1/KCzDKziTMxRPAjVa4l+AjJCtOW48uTc1r+OxXpSBjQ4Tj91f+xLR2pgtq7Fvv9
-E3uNigw8WDlfzrvjFXKr5Mrt/mixYexfmfm9hRdAkhs7vMSkhnyDMGgUEylHSYtD
-6ZzLvCrF1ClMSFfN54wgk596TLM1QFIO/LZvc4/820MuprXpGqCK9OLbcyGt9OdW
-PrHSQmdCFmW+u6YGMurTeJMaxTw0fHK6QibluRvZUbLqR974sRJ4ilVfVruMEBNS
-yz1R8ifTVTACoJoKFKcWKp+HLjrTJSP/4yKcoxCoo2doUMyrbXs=
-=+FR2
------END PGP SIGNATURE-----
+ - Mark the firmware node (fwnode) that matches the compatible in
+   CLK_OF_DECLARE() as initialized to fix a regression on u8500 SoCs
+   after fw_devlink stopped checking parent nodes in
+   of_link_to_phandle()
+ - Remove a couple MODULE_LICENSE macros in non-modules
+ - Update the maintainers file for Microchip clk drivers
+ - Select instead of depend on the REGMAP config to fix Kconfig issues
+ - Use div_u64() for portable 64-bit division in K210 clk driver
 
---7uyvyepd44usvzdp--
+----------------------------------------------------------------
+Conor Dooley (2):
+      MAINTAINERS: add missing clock driver coverage for Microchip FPGAs
+      clk: k210: remove an implicit 64-bit division
+
+Nathan Chancellor (1):
+      clk: Avoid invalid function names in CLK_OF_DECLARE()
+
+Nick Alcock (2):
+      kbuild, clk: bcm2835: remove MODULE_LICENSE in non-modules
+      kbuild, clk: remove MODULE_LICENSE in non-modules
+
+Randy Dunlap (1):
+      clk: HI655X: select REGMAP instead of depending on it
+
+Saravana Kannan (1):
+      clk: Mark a fwnode as initialized when using CLK_OF_DECLARE() macro
+
+ MAINTAINERS                          | 2 +-
+ drivers/clk/Kconfig                  | 2 +-
+ drivers/clk/bcm/clk-bcm2835-aux.c    | 1 -
+ drivers/clk/bcm/clk-bcm2835.c        | 1 -
+ drivers/clk/clk-fixed-mmio.c         | 1 -
+ drivers/clk/clk-fsl-sai.c            | 1 -
+ drivers/clk/clk-k210.c               | 2 +-
+ drivers/clk/hisilicon/clk-hi3559a.c  | 1 -
+ drivers/clk/microchip/clk-mpfs-ccc.c | 1 -
+ include/linux/clk-provider.h         | 8 +++++++-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
+
+-- 
+https://git.kernel.org/pub/scm/linux/kernel/git/clk/linux.git/
+https://git.kernel.org/pub/scm/linux/kernel/git/sboyd/spmi.git
