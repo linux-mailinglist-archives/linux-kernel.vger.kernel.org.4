@@ -2,1333 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4D66B79B2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9D666B79B4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbjCMN6u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 09:58:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41576 "EHLO
+        id S230119AbjCMN7U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:59:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231297AbjCMN6g (ORCPT
+        with ESMTP id S230382AbjCMN7G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:58:36 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4902D14203;
-        Mon, 13 Mar 2023 06:58:20 -0700 (PDT)
-Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id C2E5B24E195;
-        Mon, 13 Mar 2023 21:58:17 +0800 (CST)
-Received: from EXMBX068.cuchost.com (172.16.6.68) by EXMBX165.cuchost.com
- (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
- 2023 21:58:17 +0800
-Received: from ubuntu.localdomain (202.190.105.77) by EXMBX068.cuchost.com
- (172.16.6.68) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
- 2023 21:58:02 +0800
-From:   Jia Jie Ho <jiajie.ho@starfivetech.com>
-To:     Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S . Miller" <davem@davemloft.net>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Emil Renner Berthing <kernel@esmil.dk>,
-        Conor Dooley <conor.dooley@microchip.com>
-CC:     <linux-crypto@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-Subject: [PATCH v3 4/4] crypto: starfive - Add hash and HMAC support
-Date:   Mon, 13 Mar 2023 21:56:46 +0800
-Message-ID: <20230313135646.2077707-5-jiajie.ho@starfivetech.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230313135646.2077707-1-jiajie.ho@starfivetech.com>
-References: <20230313135646.2077707-1-jiajie.ho@starfivetech.com>
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [202.190.105.77]
-X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX068.cuchost.com
- (172.16.6.68)
-X-YovoleRuleAgent: yovoleflag
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 13 Mar 2023 09:59:06 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B5D1EFF3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:58:46 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso11761798pjs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:58:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678715925;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=eneYNU+nUmxOh8t+MF9m5KBckGw7QMn0ZWgboiFr43c=;
+        b=DduqQKirrtiP/8odRJmxLlH6WM1LkBuiNjuvGz9FSUN7fLw5HAUD6uc19foxRVmbLY
+         o3FZGAlklijqnbA28sMX92rD569rN4q4eQGx2Gwpp3ylwQaViVJxU7gs5Dq0nAF5aMuY
+         49mLcRlR8U5YHkI08IbJcgaxh/a727XUpVJAQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678715925;
+        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
+         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eneYNU+nUmxOh8t+MF9m5KBckGw7QMn0ZWgboiFr43c=;
+        b=jXzJh0i5Chy1Ee0XDz+7HpySatFuzNzZpyM5rbeBHOysQ8AWOIwLAxfT6KfO7lcYBa
+         qYiDIGgsVI/VDWO9veto9Kr5yI22D7cjusmKuAEb/D5PW1LsNySejO80O/wYKyOlL+sD
+         WeRGUk5G/+HbcmVGKfyVoGJ2EzguEwMilLUjqM1WM/M6JYUqCJrz99q+LbxmMZiauWyj
+         G6EEHk86Z5KQ5WyreGb1aKzqMVanPT0x4C9r6fI4FAAXX0OoBsUOdACJs5fHnFpjo7yS
+         /tzepC07Bc5bcd2LEcUsiTetRBU4ntoVu+t/S9Cho2PApo0mHU/IaYNfZO34oquiUQTX
+         mWOw==
+X-Gm-Message-State: AO0yUKUQ88WVeNtHpvJeAQORYZkDm9duanoqYQZ9dyZjucnNv+2q13ld
+        vMbQxF+ORbGEzrSiK7D+eY1E0bGlxfcuC3IUbHM=
+X-Google-Smtp-Source: AK7set8GqexXi9aOzjtjlYy/A2z6Eb7VJELOikOO1SEArvaYtW2BESXlMuKLO1EX78+C4TFAKMv8aw==
+X-Received: by 2002:a17:902:8688:b0:19c:d23e:52a0 with SMTP id g8-20020a170902868800b0019cd23e52a0mr28355194plo.14.1678715925149;
+        Mon, 13 Mar 2023 06:58:45 -0700 (PDT)
+Received: from smtpclient.apple (071-095-008-132.biz.spectrum.com. [71.95.8.132])
+        by smtp.gmail.com with ESMTPSA id g1-20020a1709026b4100b0019a96d3b456sm4864641plt.44.2023.03.13.06.58.44
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 06:58:44 -0700 (PDT)
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+From:   Joel Fernandes <joel@joelfernandes.org>
+Mime-Version: 1.0 (1.0)
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Date:   Mon, 13 Mar 2023 06:58:30 -0700
+Message-Id: <01559085-EB77-4962-B5EF-FF767F5A7353@joelfernandes.org>
+References: <ZA7yK6iznHqiBu5i@pc636>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+In-Reply-To: <ZA7yK6iznHqiBu5i@pc636>
+To:     Uladzislau Rezki <urezki@gmail.com>
+X-Mailer: iPhone Mail (20B101)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Adding hash/HMAC support for SHA-2 and SM3 to StarFive cryptographic
-module.
 
-Co-developed-by: Huan Feng <huan.feng@starfivetech.com>
-Signed-off-by: Huan Feng <huan.feng@starfivetech.com>
-Signed-off-by: Jia Jie Ho <jiajie.ho@starfivetech.com>
----
- drivers/crypto/starfive/Kconfig       |    4 +
- drivers/crypto/starfive/Makefile      |    2 +-
- drivers/crypto/starfive/jh7110-cryp.c |   35 +
- drivers/crypto/starfive/jh7110-cryp.h |   69 +-
- drivers/crypto/starfive/jh7110-hash.c | 1041 +++++++++++++++++++++++++
- 5 files changed, 1147 insertions(+), 4 deletions(-)
- create mode 100644 drivers/crypto/starfive/jh7110-hash.c
 
-diff --git a/drivers/crypto/starfive/Kconfig b/drivers/crypto/starfive/Kconfig
-index 73f39b6bc09f..cde485910f88 100644
---- a/drivers/crypto/starfive/Kconfig
-+++ b/drivers/crypto/starfive/Kconfig
-@@ -6,6 +6,10 @@ config CRYPTO_DEV_JH7110
- 	tristate "StarFive JH7110 cryptographic engine driver"
- 	depends on SOC_STARFIVE
- 	select CRYPTO_ENGINE
-+	select CRYPTO_HMAC
-+	select CRYPTO_SHA256
-+	select CRYPTO_SHA512
-+	select CRYPTO_SM3_GENERIC
- 	select ARM_AMBA
- 	select DMADEVICES
- 	select AMBA_PL08X
-diff --git a/drivers/crypto/starfive/Makefile b/drivers/crypto/starfive/Makefile
-index 071a4872fb5f..2af49062e36d 100644
---- a/drivers/crypto/starfive/Makefile
-+++ b/drivers/crypto/starfive/Makefile
-@@ -1,4 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- obj-$(CONFIG_CRYPTO_DEV_JH7110) += jh7110-crypto.o
--starfive-crypto-objs := jh7110-cryp.o
-+jh7110-crypto-objs := jh7110-cryp.o jh7110-hash.o
-diff --git a/drivers/crypto/starfive/jh7110-cryp.c b/drivers/crypto/starfive/jh7110-cryp.c
-index abd500f3c1f3..94c99aab308f 100644
---- a/drivers/crypto/starfive/jh7110-cryp.c
-+++ b/drivers/crypto/starfive/jh7110-cryp.c
-@@ -85,10 +85,25 @@ static void starfive_dma_cleanup(struct starfive_cryp_dev *cryp)
- 	dma_release_channel(cryp->rx);
- }
- 
-+static irqreturn_t starfive_cryp_irq(int irq, void *priv)
-+{
-+	u32 status;
-+	struct starfive_cryp_dev *cryp = (struct starfive_cryp_dev *)priv;
-+
-+	status = readl(cryp->base + STARFIVE_IE_FLAG_OFFSET);
-+	if (status & STARFIVE_IE_FLAG_HASH_DONE) {
-+		writel(STARFIVE_IE_MASK_HASH_DONE, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+		complete(&cryp->hash_done);
-+	}
-+
-+	return IRQ_HANDLED;
-+}
-+
- static int starfive_cryp_probe(struct platform_device *pdev)
- {
- 	struct starfive_cryp_dev *cryp;
- 	struct resource *res;
-+	int irq;
- 	int ret;
- 
- 	cryp = devm_kzalloc(&pdev->dev, sizeof(*cryp), GFP_KERNEL);
-@@ -121,6 +136,18 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 		return dev_err_probe(&pdev->dev, PTR_ERR(cryp->rst),
- 				     "Error getting hardware reset line\n");
- 
-+	init_completion(&cryp->hash_done);
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
-+
-+	ret = devm_request_irq(&pdev->dev, irq, starfive_cryp_irq, 0, pdev->name,
-+			       (void *)cryp);
-+	if (ret)
-+		return dev_err_probe(&pdev->dev, irq,
-+				     "Failed to register interrupt handler\n");
-+
- 	clk_prepare_enable(cryp->hclk);
- 	clk_prepare_enable(cryp->ahb);
- 	reset_control_deassert(cryp->rst);
-@@ -144,8 +171,14 @@ static int starfive_cryp_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto err_engine_start;
- 
-+	ret = starfive_hash_register_algs();
-+	if (ret)
-+		goto err_algs_hash;
-+
- 	return 0;
- 
-+err_algs_hash:
-+	crypto_engine_stop(cryp->engine);
- err_engine_start:
- 	crypto_engine_exit(cryp->engine);
- err_engine:
-@@ -165,6 +198,8 @@ static int starfive_cryp_remove(struct platform_device *pdev)
- 	if (!cryp)
- 		return -ENODEV;
- 
-+	starfive_hash_unregister_algs();
-+
- 	crypto_engine_stop(cryp->engine);
- 	crypto_engine_exit(cryp->engine);
- 
-diff --git a/drivers/crypto/starfive/jh7110-cryp.h b/drivers/crypto/starfive/jh7110-cryp.h
-index 2ac87ed3fb03..28cc73308031 100644
---- a/drivers/crypto/starfive/jh7110-cryp.h
-+++ b/drivers/crypto/starfive/jh7110-cryp.h
-@@ -7,6 +7,8 @@
- #include <linux/dmaengine.h>
- 
- #include <crypto/engine.h>
-+#include <crypto/sha2.h>
-+#include <crypto/sm3.h>
- 
- #define STARFIVE_ALG_CR_OFFSET			0x0
- #define STARFIVE_ALG_FIFO_OFFSET		0x4
-@@ -15,7 +17,44 @@
- #define STARFIVE_DMA_IN_LEN_OFFSET		0x10
- #define STARFIVE_DMA_OUT_LEN_OFFSET		0x14
- 
-+#define STARFIVE_IE_MASK_HASH_DONE		BIT(2)
-+#define STARFIVE_IE_FLAG_HASH_DONE		BIT(2)
-+
- #define STARFIVE_MSG_BUFFER_SIZE		SZ_16K
-+#define MAX_KEY_SIZE				SHA512_BLOCK_SIZE
-+
-+union starfive_hash_csr {
-+	u32 v;
-+	struct {
-+		u32 start			:1;
-+		u32 reset			:1;
-+		u32 ie				:1;
-+		u32 firstb			:1;
-+#define STARFIVE_HASH_SM3			0x0
-+#define STARFIVE_HASH_SHA224			0x3
-+#define STARFIVE_HASH_SHA256			0x4
-+#define STARFIVE_HASH_SHA384			0x5
-+#define STARFIVE_HASH_SHA512			0x6
-+#define STARFIVE_HASH_MODE_MASK			0x7
-+		u32 mode			:3;
-+		u32 rsvd_1			:1;
-+		u32 final			:1;
-+		u32 rsvd_2			:2;
-+#define STARFIVE_HASH_HMAC_FLAGS		0x800
-+		u32 hmac			:1;
-+		u32 rsvd_3			:1;
-+#define STARFIVE_HASH_KEY_DONE			BIT(13)
-+		u32 key_done			:1;
-+		u32 key_flag			:1;
-+#define STARFIVE_HASH_HMAC_DONE			BIT(15)
-+		u32 hmac_done			:1;
-+#define STARFIVE_HASH_BUSY			BIT(16)
-+		u32 busy			:1;
-+		u32 hashdone			:1;
-+		u32 rsvd_4			:14;
-+	};
-+};
-+
- 
- union starfive_alg_cr {
- 	u32 v;
-@@ -34,14 +73,17 @@ union starfive_alg_cr {
- struct starfive_cryp_ctx {
- 	struct crypto_engine_ctx		enginectx;
- 	struct starfive_cryp_dev		*cryp;
-+	struct starfive_cryp_request_ctx	*rctx;
- 
--	u8					*buffer;
-+	unsigned int				hash_mode;
-+	u8					key[MAX_KEY_SIZE];
-+	int					keylen;
-+	struct crypto_ahash			*ahash_fbk;
- };
- 
- struct starfive_cryp_dev {
- 	struct list_head			list;
- 	struct device				*dev;
--
- 	struct clk				*hclk;
- 	struct clk				*ahb;
- 	struct reset_control			*rst;
-@@ -56,12 +98,33 @@ struct starfive_cryp_dev {
- 	struct dma_slave_config			cfg_out;
- 	struct completion			tx_comp;
- 	struct completion			rx_comp;
--
-+	struct completion			hash_done;
- 	struct crypto_engine			*engine;
- 
- 	union starfive_alg_cr			alg_cr;
- };
- 
-+struct starfive_cryp_request_ctx {
-+	union {
-+		struct ahash_request		*hreq;
-+	} req;
-+	union {
-+		union starfive_hash_csr		hash;
-+	} csr;
-+
-+	struct scatterlist			*in_sg;
-+	struct scatterlist			in_sgl;
-+	struct ahash_request			ahash_fbk_req;
-+	size_t					total;
-+	unsigned int				blksize;
-+	unsigned int				digsize;
-+	unsigned long				in_sg_len;
-+	bool					sgs_copied;
-+};
-+
- struct starfive_cryp_dev *starfive_cryp_find_dev(struct starfive_cryp_ctx *ctx);
- 
-+int starfive_hash_register_algs(void);
-+void starfive_hash_unregister_algs(void);
-+
- #endif
-diff --git a/drivers/crypto/starfive/jh7110-hash.c b/drivers/crypto/starfive/jh7110-hash.c
-new file mode 100644
-index 000000000000..39570f517ccc
---- /dev/null
-+++ b/drivers/crypto/starfive/jh7110-hash.c
-@@ -0,0 +1,1041 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Hash function and HMAC support for StarFive driver
-+ *
-+ * Copyright (c) 2022 StarFive Technology
-+ *
-+ */
-+
-+#include <linux/clk.h>
-+#include <linux/crypto.h>
-+#include <linux/dma-direct.h>
-+#include <linux/interrupt.h>
-+#include <linux/io.h>
-+#include <linux/iopoll.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/of_device.h>
-+#include <linux/platform_device.h>
-+#include <linux/pm_runtime.h>
-+#include <linux/reset.h>
-+#include <linux/amba/pl080.h>
-+
-+#include <crypto/hash.h>
-+#include <crypto/scatterwalk.h>
-+#include <crypto/internal/hash.h>
-+
-+#include "jh7110-cryp.h"
-+
-+#define STARFIVE_HASH_REGS_OFFSET	0x300
-+#define STARFIVE_HASH_SHACSR		(STARFIVE_HASH_REGS_OFFSET + 0x0)
-+#define STARFIVE_HASH_SHAWDR		(STARFIVE_HASH_REGS_OFFSET + 0x4)
-+#define STARFIVE_HASH_SHARDR		(STARFIVE_HASH_REGS_OFFSET + 0x8)
-+#define STARFIVE_HASH_SHAWSR		(STARFIVE_HASH_REGS_OFFSET + 0xC)
-+#define STARFIVE_HASH_SHAWLEN3		(STARFIVE_HASH_REGS_OFFSET + 0x10)
-+#define STARFIVE_HASH_SHAWLEN2		(STARFIVE_HASH_REGS_OFFSET + 0x14)
-+#define STARFIVE_HASH_SHAWLEN1		(STARFIVE_HASH_REGS_OFFSET + 0x18)
-+#define STARFIVE_HASH_SHAWLEN0		(STARFIVE_HASH_REGS_OFFSET + 0x1C)
-+#define STARFIVE_HASH_SHAWKR		(STARFIVE_HASH_REGS_OFFSET + 0x20)
-+#define STARFIVE_HASH_SHAWKLEN		(STARFIVE_HASH_REGS_OFFSET + 0x24)
-+
-+#define STARFIVE_HASH_BUFLEN		SHA512_BLOCK_SIZE
-+
-+static inline int starfive_hash_wait_busy(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	u32 status;
-+
-+	return readl_relaxed_poll_timeout(cryp->base + STARFIVE_HASH_SHACSR, status,
-+					  !(status & STARFIVE_HASH_BUSY), 10, 100000);
-+}
-+
-+static inline int starfive_hash_wait_key_done(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	u32 status;
-+
-+	return readl_relaxed_poll_timeout(cryp->base + STARFIVE_HASH_SHACSR, status,
-+					  (status & STARFIVE_HASH_KEY_DONE), 10, 100000);
-+}
-+
-+static void starfive_hash_start(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+
-+	rctx->csr.hash.v = readl(cryp->base + STARFIVE_HASH_SHACSR);
-+	rctx->csr.hash.firstb = 0;
-+	rctx->csr.hash.final = 1;
-+
-+	writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+}
-+
-+static int starfive_hash_hmac_key(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	int klen = ctx->keylen, loop;
-+	unsigned int *key = (unsigned int *)ctx->key;
-+	unsigned char *cl;
-+
-+	writel(ctx->keylen, cryp->base + STARFIVE_HASH_SHAWKLEN);
-+
-+	rctx->csr.hash.hmac = !!(ctx->hash_mode & STARFIVE_HASH_HMAC_FLAGS);
-+	rctx->csr.hash.key_flag = 1;
-+
-+	writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+
-+	for (loop = 0; loop < klen / sizeof(unsigned int); loop++, key++)
-+		writel(*key, cryp->base + STARFIVE_HASH_SHAWKR);
-+
-+	if (klen & 0x3) {
-+		cl = (unsigned char *)key;
-+		for (loop = 0; loop < (klen & 0x3); loop++, cl++)
-+			writeb(*cl, cryp->base + STARFIVE_HASH_SHAWKR);
-+	}
-+
-+	if (starfive_hash_wait_key_done(ctx))
-+		return dev_err_probe(cryp->dev, -ETIMEDOUT, "starfive_hash_wait_key_done error\n");
-+
-+	return 0;
-+}
-+
-+static void starfive_hash_dma_callback(void *param)
-+{
-+	struct starfive_cryp_dev *cryp = param;
-+
-+	complete(&cryp->tx_comp);
-+}
-+
-+static int starfive_hash_xmit_dma(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct dma_async_tx_descriptor	*in_desc;
-+	dma_cookie_t cookie;
-+	union  starfive_alg_cr alg_cr;
-+	int total_len;
-+	int ret;
-+
-+	if (!rctx->total)
-+		return 0;
-+
-+	writel(rctx->total, cryp->base + STARFIVE_DMA_IN_LEN_OFFSET);
-+
-+	total_len = rctx->total;
-+	total_len = (total_len & 0x3) ? (((total_len >> 2) + 1) << 2) : total_len;
-+	sg_dma_len(rctx->in_sg) = total_len;
-+
-+	alg_cr.v = 0;
-+	alg_cr.start = 1;
-+	alg_cr.hash_dma_en = 1;
-+
-+	writel(alg_cr.v, cryp->base + STARFIVE_ALG_CR_OFFSET);
-+
-+	ret = dma_map_sg(cryp->dev, rctx->in_sg, rctx->in_sg_len, DMA_TO_DEVICE);
-+	if (!ret)
-+		return dev_err_probe(cryp->dev, -EINVAL, "dma_map_sg() error\n");
-+
-+	cryp->cfg_in.direction = DMA_MEM_TO_DEV;
-+	cryp->cfg_in.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cryp->cfg_in.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cryp->cfg_in.src_maxburst = cryp->dma_maxburst;
-+	cryp->cfg_in.dst_maxburst = cryp->dma_maxburst;
-+	cryp->cfg_in.dst_addr = cryp->phys_base + STARFIVE_ALG_FIFO_OFFSET;
-+
-+	dmaengine_slave_config(cryp->tx, &cryp->cfg_in);
-+
-+	in_desc = dmaengine_prep_slave_sg(cryp->tx, rctx->in_sg,
-+					  rctx->in_sg_len, DMA_MEM_TO_DEV,
-+					  DMA_PREP_INTERRUPT  |  DMA_CTRL_ACK);
-+
-+	if (!in_desc)
-+		return -EINVAL;
-+
-+	reinit_completion(&cryp->tx_comp);
-+
-+	in_desc->callback = starfive_hash_dma_callback;
-+	in_desc->callback_param = cryp;
-+
-+	cookie = dmaengine_submit(in_desc);
-+	dma_async_issue_pending(cryp->tx);
-+
-+	if (!wait_for_completion_timeout(&cryp->tx_comp,
-+					 msecs_to_jiffies(10000))) {
-+		dev_err(cryp->dev, "wait_for_completion_timeout error, cookie = %x\n",
-+			dma_async_is_tx_complete(cryp->rx, cookie,
-+						 NULL, NULL));
-+	}
-+
-+	dma_unmap_sg(cryp->dev, rctx->in_sg, rctx->in_sg_len, DMA_TO_DEVICE);
-+
-+	alg_cr.v = 0;
-+	alg_cr.clear = 1;
-+
-+	writel(alg_cr.v, cryp->base + STARFIVE_ALG_CR_OFFSET);
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_xmit(struct starfive_cryp_ctx *ctx)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ctx->rctx;
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	int ret;
-+
-+	rctx->csr.hash.v = 0;
-+	rctx->csr.hash.reset = 1;
-+	writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+
-+	if (starfive_hash_wait_busy(ctx))
-+		return dev_err_probe(cryp->dev, -ETIMEDOUT, "Error resetting engine.\n");
-+
-+	rctx->csr.hash.v = 0;
-+	rctx->csr.hash.mode = ctx->hash_mode & STARFIVE_HASH_MODE_MASK;
-+	rctx->csr.hash.ie = 1;
-+
-+	if (ctx->hash_mode & STARFIVE_HASH_HMAC_FLAGS) {
-+		ret = starfive_hash_hmac_key(ctx);
-+		if (ret)
-+			return ret;
-+	} else {
-+		rctx->csr.hash.start = 1;
-+		rctx->csr.hash.firstb = 1;
-+		writel(rctx->csr.hash.v, cryp->base + STARFIVE_HASH_SHACSR);
-+	}
-+
-+	ret = starfive_hash_xmit_dma(ctx);
-+	if (ret)
-+		return ret;
-+
-+	reinit_completion(&cryp->hash_done);
-+	writel(~STARFIVE_IE_MASK_HASH_DONE, cryp->base + STARFIVE_IE_MASK_OFFSET);
-+
-+	starfive_hash_start(ctx);
-+
-+	if (!wait_for_completion_timeout(&cryp->hash_done, usecs_to_jiffies(1000)))
-+		return dev_err_probe(cryp->dev, -ETIMEDOUT, "Timeout waiting for hash done\n");
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_copy_hash(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
-+	int count, *data;
-+	int mlen;
-+
-+	if (!req->result)
-+		return 0;
-+
-+	mlen = rctx->digsize / sizeof(u32);
-+	data = (u32 *)req->result;
-+
-+	for (count = 0; count < mlen; count++)
-+		data[count] = readl(ctx->cryp->base + STARFIVE_HASH_SHARDR);
-+
-+	return 0;
-+}
-+
-+static void starfive_hash_finish_req(struct ahash_request *req, int err)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+
-+	if (!err)
-+		err = starfive_hash_copy_hash(req);
-+
-+	if (rctx->sgs_copied) {
-+		void *buf_in;
-+		int pages, len;
-+
-+		buf_in = sg_virt(&rctx->in_sgl);
-+		len = ALIGN(rctx->total, rctx->blksize);
-+		pages = len ? get_order(len) : 1;
-+		free_pages((unsigned long)buf_in, pages);
-+	}
-+
-+	crypto_finalize_hash_request(cryp->engine, req, err);
-+}
-+
-+static int starfive_hash_check_aligned(struct scatterlist *sg, size_t total, size_t align)
-+{
-+	int len = 0;
-+
-+	if (!total)
-+		return 0;
-+
-+	if (!IS_ALIGNED(total, align))
-+		return -EINVAL;
-+
-+	while (sg) {
-+		if (!IS_ALIGNED(sg->offset, sizeof(u32)))
-+			return -EINVAL;
-+
-+		if (!IS_ALIGNED(sg->length, align))
-+			return -EINVAL;
-+
-+		len += sg->length;
-+		sg = sg_next(sg);
-+	}
-+
-+	if (len != total)
-+		return -EINVAL;
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_check_io_aligned(struct starfive_cryp_request_ctx *rctx)
-+{
-+	return starfive_hash_check_aligned(rctx->in_sg, rctx->total, rctx->blksize);
-+}
-+
-+static void sg_copy_buf(void *buf, struct scatterlist *sg,
-+			unsigned int start, unsigned int nbytes, int out)
-+{
-+	struct scatter_walk walk;
-+
-+	if (!nbytes)
-+		return;
-+
-+	scatterwalk_start(&walk, sg);
-+	scatterwalk_advance(&walk, start);
-+	scatterwalk_copychunks(buf, &walk, nbytes, out);
-+	scatterwalk_done(&walk, out, 0);
-+}
-+
-+static int starfive_hash_copy_sgs(struct starfive_cryp_request_ctx *rctx)
-+{
-+	void *buf_in;
-+	int pages, total_in;
-+
-+	if (!starfive_hash_check_io_aligned(rctx)) {
-+		rctx->sgs_copied = 0;
-+		return 0;
-+	}
-+
-+	total_in = ALIGN(rctx->total, rctx->blksize);
-+	pages = total_in ? get_order(total_in) : 1;
-+	buf_in = (void *)__get_free_pages(GFP_ATOMIC, pages);
-+	if (!buf_in) {
-+		rctx->sgs_copied = 0;
-+		return -EFAULT;
-+	}
-+
-+	sg_copy_buf(buf_in, rctx->in_sg, 0, rctx->total, 0);
-+	sg_init_one(&rctx->in_sgl, buf_in, total_in);
-+
-+	rctx->in_sg = &rctx->in_sgl;
-+	rctx->in_sg_len = 1;
-+	rctx->sgs_copied = 1;
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_prepare_req(struct crypto_engine *engine, void *areq)
-+{
-+	struct ahash_request *req = container_of(areq, struct ahash_request,
-+						 base);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+
-+	if (!cryp)
-+		return -ENODEV;
-+
-+	rctx->req.hreq = req;
-+
-+	return starfive_hash_copy_sgs(rctx);
-+}
-+
-+static int starfive_hash_one_request(struct crypto_engine *engine, void *areq)
-+{
-+	struct ahash_request *req = container_of(areq, struct ahash_request,
-+						 base);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(crypto_ahash_reqtfm(req));
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+	int err;
-+
-+	if (!cryp)
-+		return -ENODEV;
-+
-+	err = starfive_hash_xmit(ctx);
-+	if (err)
-+		return err;
-+
-+	starfive_hash_finish_req(req, err);
-+
-+	return 0;
-+}
-+
-+static int starfive_hash_init(struct ahash_request *req)
-+{
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	rctx->ahash_fbk_req.base.flags = req->base.flags
-+		& CRYPTO_TFM_REQ_MAY_SLEEP;
-+
-+	return crypto_ahash_init(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_update(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	rctx->ahash_fbk_req.base.flags = req->base.flags
-+		& CRYPTO_TFM_REQ_MAY_SLEEP;
-+	rctx->ahash_fbk_req.nbytes = req->nbytes;
-+	rctx->ahash_fbk_req.src = req->src;
-+
-+	return crypto_ahash_update(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_final(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	rctx->ahash_fbk_req.base.flags = req->base.flags
-+		& CRYPTO_TFM_REQ_MAY_SLEEP;
-+	rctx->ahash_fbk_req.result = req->result;
-+
-+	return crypto_ahash_final(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_finup(struct ahash_request *req)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	rctx->ahash_fbk_req.base.flags = req->base.flags
-+		& CRYPTO_TFM_REQ_MAY_SLEEP;
-+	rctx->ahash_fbk_req.nbytes = req->nbytes;
-+	rctx->ahash_fbk_req.src = req->src;
-+	rctx->ahash_fbk_req.result = req->result;
-+
-+	return crypto_ahash_finup(&rctx->ahash_fbk_req);
-+}
-+
-+static int starfive_hash_digest(struct ahash_request *req)
-+{
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct starfive_cryp_dev *cryp = ctx->cryp;
-+
-+	memset(rctx, 0, sizeof(struct starfive_cryp_request_ctx));
-+
-+	rctx->req.hreq = req;
-+	rctx->total = req->nbytes;
-+	rctx->in_sg = req->src;
-+	rctx->blksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	rctx->digsize = crypto_ahash_digestsize(tfm);
-+	rctx->in_sg_len = sg_nents_for_len(rctx->in_sg, rctx->total);
-+	ctx->rctx = rctx;
-+
-+	return crypto_transfer_hash_request_to_engine(cryp->engine, req);
-+}
-+
-+static int starfive_hash_export(struct ahash_request *req, void *out)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	rctx->ahash_fbk_req.base.flags = req->base.flags
-+		& CRYPTO_TFM_REQ_MAY_SLEEP;
-+
-+	return crypto_ahash_export(&rctx->ahash_fbk_req, out);
-+}
-+
-+static int starfive_hash_import(struct ahash_request *req, const void *in)
-+{
-+	struct starfive_cryp_request_ctx *rctx = ahash_request_ctx(req);
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+
-+	ahash_request_set_tfm(&rctx->ahash_fbk_req, ctx->ahash_fbk);
-+	rctx->ahash_fbk_req.base.flags = req->base.flags
-+		& CRYPTO_TFM_REQ_MAY_SLEEP;
-+
-+	return crypto_ahash_import(&rctx->ahash_fbk_req, in);
-+}
-+
-+static int starfive_hash_cra_init_algs(struct crypto_tfm *tfm,
-+				       const char *algs_hmac_name,
-+				       unsigned int mode,
-+				       const char *alg_name)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_tfm_ctx(tfm);
-+	struct crypto_ahash *ahash = __crypto_ahash_cast(tfm);
-+
-+	ctx->cryp = starfive_cryp_find_dev(ctx);
-+
-+	if (!ctx->cryp)
-+		return -ENODEV;
-+
-+	ctx->ahash_fbk = crypto_alloc_ahash(alg_name, 0,
-+					    CRYPTO_ALG_NEED_FALLBACK);
-+
-+	if (IS_ERR(ctx->ahash_fbk))
-+		return dev_err_probe(ctx->cryp->dev, PTR_ERR(ctx->ahash_fbk),
-+				     "starfive_hash: Could not load fallback driver.\n");
-+
-+	crypto_hash_alg_common(ahash)->statesize = crypto_ahash_statesize(ctx->ahash_fbk);
-+	crypto_ahash_set_reqsize(ahash, sizeof(struct starfive_cryp_request_ctx) +
-+				 crypto_ahash_reqsize(ctx->ahash_fbk));
-+
-+	ctx->keylen = 0;
-+	ctx->hash_mode = mode;
-+
-+	if (algs_hmac_name)
-+		ctx->hash_mode |= STARFIVE_HASH_HMAC_FLAGS;
-+
-+	ctx->enginectx.op.do_one_request = starfive_hash_one_request;
-+	ctx->enginectx.op.prepare_request = starfive_hash_prepare_req;
-+	ctx->enginectx.op.unprepare_request = NULL;
-+
-+	return 0;
-+}
-+
-+static void starfive_hash_cra_exit(struct crypto_tfm *tfm)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_tfm_ctx(tfm);
-+
-+	crypto_free_ahash(ctx->ahash_fbk);
-+
-+	ctx->ahash_fbk = NULL;
-+	ctx->enginectx.op.do_one_request = NULL;
-+	ctx->enginectx.op.prepare_request = NULL;
-+	ctx->enginectx.op.unprepare_request = NULL;
-+}
-+
-+static int starfive_hash_long_setkey(struct starfive_cryp_ctx *ctx,
-+				     const u8 *key, unsigned int keylen,
-+				     const char *alg_name)
-+{
-+	struct crypto_wait wait;
-+	struct ahash_request *req;
-+	struct scatterlist sg;
-+	struct crypto_ahash *ahash_tfm;
-+	u8 *buf;
-+	int ret;
-+
-+	ahash_tfm = crypto_alloc_ahash(alg_name, 0, 0);
-+	if (IS_ERR(ahash_tfm))
-+		return PTR_ERR(ahash_tfm);
-+
-+	req = ahash_request_alloc(ahash_tfm, GFP_KERNEL);
-+	if (!req) {
-+		ret = -ENOMEM;
-+		goto err_free_ahash;
-+	}
-+
-+	crypto_init_wait(&wait);
-+	ahash_request_set_callback(req, CRYPTO_TFM_REQ_MAY_BACKLOG,
-+				   crypto_req_done, &wait);
-+	crypto_ahash_clear_flags(ahash_tfm, ~0);
-+
-+	buf = kzalloc(keylen + STARFIVE_HASH_BUFLEN, GFP_KERNEL);
-+	if (!buf) {
-+		ret = -ENOMEM;
-+		goto err_free_req;
-+	}
-+
-+	memcpy(buf, key, keylen);
-+	sg_init_one(&sg, buf, keylen);
-+	ahash_request_set_crypt(req, &sg, ctx->key, keylen);
-+
-+	ret = crypto_wait_req(crypto_ahash_digest(req), &wait);
-+
-+	kfree(buf);
-+err_free_req:
-+	ahash_request_free(req);
-+err_free_ahash:
-+	crypto_free_ahash(ahash_tfm);
-+	return ret;
-+}
-+
-+static int starfive_hash224_setkey(struct crypto_ahash *tfm,
-+				   const u8 *key, unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	unsigned int digestsize = crypto_ahash_digestsize(tfm);
-+	unsigned int blocksize;
-+	int ret = 0;
-+
-+	blocksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	crypto_ahash_setkey(ctx->ahash_fbk, key, keylen);
-+
-+	if (keylen <= blocksize) {
-+		memcpy(ctx->key, key, keylen);
-+		ctx->keylen = keylen;
-+	} else {
-+		ctx->keylen = digestsize;
-+		ret = starfive_hash_long_setkey(ctx, key, keylen, "starfive-sha224");
-+	}
-+
-+	return ret;
-+}
-+
-+static int starfive_hash256_setkey(struct crypto_ahash *tfm,
-+				   const u8 *key, unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	unsigned int digestsize = crypto_ahash_digestsize(tfm);
-+	unsigned int blocksize;
-+	int ret = 0;
-+
-+	blocksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	crypto_ahash_setkey(ctx->ahash_fbk, key, keylen);
-+
-+	if (keylen <= blocksize) {
-+		memcpy(ctx->key, key, keylen);
-+		ctx->keylen = keylen;
-+	} else {
-+		ctx->keylen = digestsize;
-+		ret = starfive_hash_long_setkey(ctx, key, keylen, "starfive-sha256");
-+	}
-+
-+	return ret;
-+}
-+
-+static int starfive_hash384_setkey(struct crypto_ahash *tfm,
-+				   const u8 *key, unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	unsigned int digestsize = crypto_ahash_digestsize(tfm);
-+	unsigned int blocksize;
-+	int ret = 0;
-+
-+	blocksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	crypto_ahash_setkey(ctx->ahash_fbk, key, keylen);
-+
-+	if (keylen <= blocksize) {
-+		memcpy(ctx->key, key, keylen);
-+		ctx->keylen = keylen;
-+	} else {
-+		ctx->keylen = digestsize;
-+		ret = starfive_hash_long_setkey(ctx, key, keylen, "starfive-sha384");
-+	}
-+
-+	return ret;
-+}
-+
-+static int starfive_hash512_setkey(struct crypto_ahash *tfm,
-+				   const u8 *key, unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	unsigned int digestsize = crypto_ahash_digestsize(tfm);
-+	unsigned int blocksize;
-+	int ret = 0;
-+
-+	blocksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	crypto_ahash_setkey(ctx->ahash_fbk, key, keylen);
-+
-+	if (keylen <= blocksize) {
-+		memcpy(ctx->key, key, keylen);
-+		ctx->keylen = keylen;
-+	} else {
-+		ctx->keylen = digestsize;
-+		ret = starfive_hash_long_setkey(ctx, key, keylen, "starfive-sha512");
-+	}
-+
-+	return ret;
-+}
-+
-+static int starfive_sm3_setkey(struct crypto_ahash *tfm,
-+			       const u8 *key, unsigned int keylen)
-+{
-+	struct starfive_cryp_ctx *ctx = crypto_ahash_ctx(tfm);
-+	unsigned int digestsize = crypto_ahash_digestsize(tfm);
-+	unsigned int blocksize;
-+	int ret = 0;
-+
-+	blocksize = crypto_tfm_alg_blocksize(crypto_ahash_tfm(tfm));
-+	crypto_ahash_setkey(ctx->ahash_fbk, key, keylen);
-+
-+	if (keylen <= blocksize) {
-+		memcpy(ctx->key, key, keylen);
-+		ctx->keylen = keylen;
-+	} else {
-+		ctx->keylen = digestsize;
-+		ret = starfive_hash_long_setkey(ctx, key, keylen, "starfive-sm3");
-+	}
-+
-+	return ret;
-+}
-+
-+static int starfive_hash_cra_sha224_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, NULL,
-+					   STARFIVE_HASH_SHA224,
-+					   "sha224-generic");
-+}
-+
-+static int starfive_hash_cra_sha256_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, NULL,
-+					   STARFIVE_HASH_SHA256,
-+					   "sha256-generic");
-+}
-+
-+static int starfive_hash_cra_sha384_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, NULL,
-+					   STARFIVE_HASH_SHA384,
-+					   "sha384-generic");
-+}
-+
-+static int starfive_hash_cra_sha512_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, NULL,
-+					   STARFIVE_HASH_SHA512,
-+					   "sha512-generic");
-+}
-+
-+static int starfive_hash_cra_sm3_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, NULL,
-+					   STARFIVE_HASH_SM3,
-+					   "sm3-generic");
-+}
-+
-+static int starfive_hash_cra_hmac_sha224_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, "sha224",
-+					   STARFIVE_HASH_SHA224,
-+					   "hmac(sha224-generic)");
-+}
-+
-+static int starfive_hash_cra_hmac_sha256_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, "sha256",
-+					   STARFIVE_HASH_SHA256,
-+					   "hmac(sha256-generic)");
-+}
-+
-+static int starfive_hash_cra_hmac_sha384_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, "sha384",
-+					   STARFIVE_HASH_SHA384,
-+					   "hmac(sha384-generic)");
-+}
-+
-+static int starfive_hash_cra_hmac_sha512_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, "sha512",
-+					   STARFIVE_HASH_SHA512,
-+					   "hmac(sha512-generic)");
-+}
-+
-+static int starfive_hash_cra_hmac_sm3_init(struct crypto_tfm *tfm)
-+{
-+	return starfive_hash_cra_init_algs(tfm, "sm3",
-+					   STARFIVE_HASH_SM3,
-+					   "hmac(sm3-generic)");
-+}
-+
-+static struct ahash_alg algs_sha2_sm3[] = {
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SHA224_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "sha224",
-+			.cra_driver_name	= "starfive-sha224",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA224_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_sha224_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.setkey   = starfive_hash224_setkey,
-+	.halg = {
-+		.digestsize = SHA224_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "hmac(sha224)",
-+			.cra_driver_name	= "starfive-hmac-sha224",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA224_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_hmac_sha224_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SHA256_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "sha256",
-+			.cra_driver_name	= "starfive-sha256",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA256_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_sha256_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.setkey   = starfive_hash256_setkey,
-+	.halg = {
-+		.digestsize = SHA256_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha256_state),
-+		.base = {
-+			.cra_name		= "hmac(sha256)",
-+			.cra_driver_name	= "starfive-hmac-sha256",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA256_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_hmac_sha256_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SHA384_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "sha384",
-+			.cra_driver_name	= "starfive-sha384",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA384_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_sha384_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.setkey   = starfive_hash384_setkey,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SHA384_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "hmac(sha384)",
-+			.cra_driver_name	= "starfive-hmac-sha384",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA384_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_hmac_sha384_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SHA512_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "sha512",
-+			.cra_driver_name	= "starfive-sha512",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH,
-+			.cra_blocksize		= SHA512_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_sha512_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.setkey   = starfive_hash512_setkey,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SHA512_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sha512_state),
-+		.base = {
-+			.cra_name		= "hmac(sha512)",
-+			.cra_driver_name	= "starfive-hmac-sha512",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SHA512_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_hmac_sha512_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init     = starfive_hash_init,
-+	.update   = starfive_hash_update,
-+	.final    = starfive_hash_final,
-+	.finup    = starfive_hash_finup,
-+	.digest   = starfive_hash_digest,
-+	.export   = starfive_hash_export,
-+	.import   = starfive_hash_import,
-+	.halg = {
-+		.digestsize = SM3_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sm3_state),
-+		.base = {
-+			.cra_name		= "sm3",
-+			.cra_driver_name	= "starfive-sm3",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SM3_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_sm3_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+{
-+	.init		= starfive_hash_init,
-+	.update		= starfive_hash_update,
-+	.final		= starfive_hash_final,
-+	.finup		= starfive_hash_finup,
-+	.digest		= starfive_hash_digest,
-+	.setkey		= starfive_sm3_setkey,
-+	.export		= starfive_hash_export,
-+	.import		= starfive_hash_import,
-+	.halg = {
-+		.digestsize = SM3_DIGEST_SIZE,
-+		.statesize  = sizeof(struct sm3_state),
-+		.base = {
-+			.cra_name		= "hmac(sm3)",
-+			.cra_driver_name	= "starfive-hmac-sm3",
-+			.cra_priority		= 200,
-+			.cra_flags		= CRYPTO_ALG_ASYNC |
-+						  CRYPTO_ALG_TYPE_AHASH |
-+						  CRYPTO_ALG_NEED_FALLBACK,
-+			.cra_blocksize		= SM3_BLOCK_SIZE,
-+			.cra_ctxsize		= sizeof(struct starfive_cryp_ctx),
-+			.cra_alignmask		= 3,
-+			.cra_init		= starfive_hash_cra_hmac_sm3_init,
-+			.cra_exit		= starfive_hash_cra_exit,
-+			.cra_module		= THIS_MODULE,
-+		}
-+	}
-+},
-+};
-+
-+int starfive_hash_register_algs(void)
-+{
-+	int ret = 0;
-+
-+	ret = crypto_register_ahashes(algs_sha2_sm3, ARRAY_SIZE(algs_sha2_sm3));
-+
-+	return ret;
-+}
-+
-+void starfive_hash_unregister_algs(void)
-+{
-+	crypto_unregister_ahashes(algs_sha2_sm3, ARRAY_SIZE(algs_sha2_sm3));
-+}
--- 
-2.25.1
+> On Mar 13, 2023, at 2:51 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
+>=20
+> =EF=BB=BFOn Fri, Mar 10, 2023 at 10:24:34PM -0800, Paul E. McKenney wrote:=
 
+>>> On Fri, Mar 10, 2023 at 09:55:02AM +0100, Uladzislau Rezki wrote:
+>>> On Thu, Mar 09, 2023 at 10:10:56PM +0000, Joel Fernandes wrote:
+>>>> On Thu, Mar 09, 2023 at 01:57:42PM +0100, Uladzislau Rezki wrote:
+>>>> [..]
+>>>>>>>>>> See this commit:
+>>>>>>>>>>=20
+>>>>>>>>>> 3705b88db0d7cc ("rcu: Add a module parameter to force use of
+>>>>>>>>>> expedited RCU primitives")
+>>>>>>>>>>=20
+>>>>>>>>>> Antti provided this commit precisely in order to allow Android
+>>>>>>>>>> devices to expedite the boot process and to shut off the
+>>>>>>>>>> expediting at a time of Android userspace's choosing.  So Android=
+
+>>>>>>>>>> has been making this work for about ten years, which strikes me
+>>>>>>>>>> as an adequate proof of concept.  ;-)
+>>>>>>>>>=20
+>>>>>>>>> Thanks for the pointer. That's true. Looking at Android sources, I=
+
+>>>>>>>>> find that Android Mediatek devices at least are setting
+>>>>>>>>> rcu_expedited to 1 at late stage of their userspace boot (which is=
+
+>>>>>>>>> weird, it should be set to 1 as early as possible), and
+>>>>>>>>> interestingly I cannot find them resetting it back to 0!.  Maybe
+>>>>>>>>> they set rcu_normal to 1? But I cannot find that either. Vlad? :P
+>>>>>>>>=20
+>>>>>>>> Interesting.  Though this is consistent with Antti's commit log,
+>>>>>>>> where he talks about expediting grace periods but not unexpediting
+>>>>>>>> them.
+>>>>>>>>=20
+>>>>>>> Do you think we need to unexpedite it? :))))
+>>>>>>=20
+>>>>>> Android runs on smallish systems, so quite possibly not!
+>>>>>>=20
+>>>>> We keep it enabled and never unexpedite it. The reason is a performanc=
+e.  I
+>>>>> have done some app-launch time analysis with enabling and disabling of=
+ it.
+>>>>>=20
+>>>>> An expedited case is much better when it comes to app launch time. It
+>>>>> requires ~25% less time to run an app comparing with unexpedited varia=
+nt.
+>>>>> So we have a big gain here.
+>>>>=20
+>>>> Wow, that's huge. I wonder if you can dig deeper and find out why that i=
+s so
+>>>> as the callbacks may need to be synchronize_rcu_expedited() then, as it=
+ could
+>>>> be slowing down other usecases! I find it hard to believe, real-time
+>>>> workloads will run better without those callbacks being always-expedite=
+d if
+>>>> it actually gives back 25% in performance!
+>>>>=20
+>>> I can dig further, but on a high level i think there are some spots
+>>> which show better performance if expedited is set. I mean synchronize_rc=
+u()
+>>> becomes as "less blocking a context" from a time point of view.
+>>>=20
+>>> The problem of a regular synchronize_rcu() is - it can trigger a big lat=
+ency
+>>> delays for a caller. For example for nocb case we do not know where in a=
+ list
+>>> our callback is located and when it is invoked to unblock a caller.
+>>=20
+>> True, expedited RCU grace periods do not have this callback-invocation
+>> delay that normal RCU does.
+>>=20
+>>> I have already mentioned somewhere. Probably it makes sense to directly w=
+ake-up
+>>> callers from the GP kthread instead and not via nocb-kthread that invoke=
+s our callbacks
+>>> one by one.
+>>=20
+>> Makes sense, but it is necessary to be careful.  Wakeups are not fast,
+>> so making the RCU grace-period kthread do them all sequentially is not
+>> a strategy to win.  For example, note that the next expedited grace
+>> period can start before the previous expedited grace period has finished
+>> its wakeups.
+>>=20
+> I hove done a small and quick prototype:
+>=20
+> <snip>
+> diff --git a/include/linux/rcupdate_wait.h b/include/linux/rcupdate_wait.h=
+
+> index 699b938358bf..e1a4cca9a208 100644
+> --- a/include/linux/rcupdate_wait.h
+> +++ b/include/linux/rcupdate_wait.h
+> @@ -9,6 +9,8 @@
+> #include <linux/rcupdate.h>
+> #include <linux/completion.h>
+>=20
+> +extern struct llist_head gp_wait_llist;
+> +
+> /*
+>  * Structure allowing asynchronous waiting on RCU.
+>  */
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index ee27a03d7576..50b81ca54104 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -113,6 +113,9 @@ int rcu_num_lvls __read_mostly =3D RCU_NUM_LVLS;
+> int num_rcu_lvl[] =3D NUM_RCU_LVL_INIT;
+> int rcu_num_nodes __read_mostly =3D NUM_RCU_NODES; /* Total # rcu_nodes in=
+ use. */
+>=20
+> +/* Waiters for a GP kthread. */
+> +LLIST_HEAD(gp_wait_llist);
+> +
+> /*
+>  * The rcu_scheduler_active variable is initialized to the value
+>  * RCU_SCHEDULER_INACTIVE and transitions RCU_SCHEDULER_INIT just before t=
+he
+> @@ -1776,6 +1779,14 @@ static noinline void rcu_gp_cleanup(void)
+>                on_each_cpu(rcu_strict_gp_boundary, NULL, 0);
+> }
+>=20
+> +static void rcu_notify_gp_end(struct llist_node *llist)
+> +{
+> +       struct llist_node *rcu, *next;
+> +
+> +       llist_for_each_safe(rcu, next, llist)
+> +               complete(&((struct rcu_synchronize *) rcu)->completion);
+
+This looks broken to me, so the synchronize will complete even
+if it was called in the middle of an ongoing GP?
+
+Thanks,
+
+ - Joel
+
+
+
+> +}
+> +
+> /*
+>  * Body of kthread that handles grace periods.
+>  */
+> @@ -1811,6 +1822,9 @@ static int __noreturn rcu_gp_kthread(void *unused)
+>                WRITE_ONCE(rcu_state.gp_state, RCU_GP_CLEANUP);
+>                rcu_gp_cleanup();
+>                WRITE_ONCE(rcu_state.gp_state, RCU_GP_CLEANED);
+> +
+> +               /* Wake-app all users. */
+> +               rcu_notify_gp_end(llist_del_all(&gp_wait_llist));
+>        }
+> }
+>=20
+> diff --git a/kernel/rcu/update.c b/kernel/rcu/update.c
+> index 19bf6fa3ee6a..1de7c328a3e5 100644
+> --- a/kernel/rcu/update.c
+> +++ b/kernel/rcu/update.c
+> @@ -426,7 +426,10 @@ void __wait_rcu_gp(bool checktiny, int n, call_rcu_fu=
+nc_t *crcu_array,
+>                if (j =3D=3D i) {
+>                        init_rcu_head_on_stack(&rs_array[i].head);
+>                        init_completion(&rs_array[i].completion);
+> -                       (crcu_array[i])(&rs_array[i].head, wakeme_after_rc=
+u);
+> +
+> +                       /* Kick a grace period if needed. */
+> +                       (void) start_poll_synchronize_rcu();
+> +                       llist_add((struct llist_node *) &rs_array[i].head,=
+ &gp_wait_llist);
+>                }
+>        }
+> <snip>
+>=20
+> and did some experiments in terms of performance and comparison. A test ca=
+se is:
+>=20
+> thread_X:
+>  synchronize_rcu();
+>  kfree(ptr);
+>=20
+> below are results with running 10 parallel workers running 1000 times of m=
+entioned
+> test scenario:
+>=20
+> # default(NOCB)
+> [   29.322944] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 172=
+86604 usec
+> [   29.325759] All test took worker0=3D63964052068 cycles
+> [   29.327255] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 234=
+14575 usec
+> [   29.329974] All test took worker1=3D86638822563 cycles
+> [   29.331460] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 233=
+57988 usec
+> [   29.334205] All test took worker2=3D86429439193 cycles
+> [   29.350808] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 171=
+74001 usec
+> [   29.353553] All test took worker3=3D63547397954 cycles
+> [   29.355039] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 171=
+41904 usec
+> [   29.357770] All test took worker4=3D63428630877 cycles
+> [   29.374831] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 233=
+97952 usec
+> [   29.377577] All test took worker5=3D86577316353 cycles
+> [   29.398809] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 171=
+42038 usec
+> [   29.401549] All test took worker6=3D63429124938 cycles
+> [   29.414828] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 171=
+58248 usec
+> [   29.417574] All test took worker7=3D63489107118 cycles
+> [   29.438811] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 181=
+02109 usec
+> [   29.441550] All test took worker8=3D66981588881 cycles
+> [   29.462826] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 234=
+46042 usec
+> [   29.465561] All test took worker9=3D86755258455 cycles
+>=20
+> # patch(NOCB)
+> [   14.720986] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7883 usec
+> [   14.723753] All test took worker0=3D32702015768 cycles
+> [   14.740386] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7750 usec
+> [   14.743076] All test took worker1=3D32701525814 cycles
+> [   14.760350] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7734 usec
+> [   14.763036] All test took worker2=3D32701466281 cycles
+> [   14.780369] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7707 usec
+> [   14.783057] All test took worker3=3D32701364901 cycles
+> [   14.800352] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7730 usec
+> [   14.803041] All test took worker4=3D32701449927 cycles
+> [   14.820355] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7724 usec
+> [   14.823048] All test took worker5=3D32701428134 cycles
+> [   14.840359] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7705 usec
+> [   14.843052] All test took worker6=3D32701356465 cycles
+> [   14.860322] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7742 usec
+> [   14.863005] All test took worker7=3D32701494475 cycles
+> [   14.880363] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7750 usec
+> [   14.883081] All test took worker8=3D32701525074 cycles
+> [   14.900362] Summary: kvfree_rcu_1_arg_vmalloc_test loops: 1000 avg: 883=
+7918 usec
+> [   14.903065] All test took worker9=3D32702145379 cycles
+>=20
+> --
+> Uladzislau Rezki
