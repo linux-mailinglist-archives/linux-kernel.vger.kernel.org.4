@@ -2,104 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA9E96B83CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:12:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A3DB6B83B5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:07:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229674AbjCMVMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42640 "EHLO
+        id S230141AbjCMVH1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:07:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229844AbjCMVMQ (ORCPT
+        with ESMTP id S229666AbjCMVHY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:12:16 -0400
-Received: from mail-lj1-x22e.google.com (mail-lj1-x22e.google.com [IPv6:2a00:1450:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 393B68F70F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:11:45 -0700 (PDT)
-Received: by mail-lj1-x22e.google.com with SMTP id h9so14030165ljq.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678741902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=+ne8t/EiBvW0vN7e00XtbUoK+necbXV5F7cPmVrqdNM=;
-        b=V2h2U+d+Dex99u0OVHypIVA9yi1R24KgZ7AScDuvenlrLmxii7Q1cqzK+VOj0FXGpS
-         1RGzB0M5xnK4uvE5SuVFxMtTJPLp33C1AQKKc09Fl4M66bjdkU+vCUJxduSGRTQ5gP2e
-         Y8djXinS36evWOyVEKwwjdFz84tZqZwB5T3Ldqm0YUIhM2JuGWKbq8km1H8Rmd4KqNxp
-         Wkmu9hywCPreCD3MPmTGDUdO9dqiEVomgladMm6aOIPF7HllSEZmalSsgsQ5+1uG8WCS
-         Ix9eXiBkhEabNz3aNBNg8tl2+e0Y2bNDVNyx9qTyZ6Pily6Xzsbj4P1Ghg4qeR0g7+mp
-         5eCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678741902;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=+ne8t/EiBvW0vN7e00XtbUoK+necbXV5F7cPmVrqdNM=;
-        b=4b2egQruWjlEomKS+cgYwbJzzPLQwM8rp+7idrATEG6jdJRwEa6rfxqesQIRZC9lc8
-         El5XPeQCbe5jeGC4Y6t24kfYYkp9MBXHlygPrOgJRVMaYCEQEZp+OFbwU/xel1hY0n9a
-         4Q0/JCrYxhXmZHOM1tQNwRdhrXUMPyqfd+ScCrX6+cVwBjOzHUFqASInAiwDEMrd4eAK
-         JnLSAsPBNQv/Km9v1OXMy39bi+C7EjUlbr0tEG0TsFIAlXeooboUeitpRAqRWnyKXYvC
-         4g4vIvNwl032L+3MD2dFvs7Y5/7QOcQi6xXBC9lNMZif+Zn9mDTKCXzbI2LEbu/qxnqM
-         VaUA==
-X-Gm-Message-State: AO0yUKWI3YfTp4YQWa4ink8ozKKkg7wWA1Mkz7dYv66lQXTCVxMloqHz
-        47bd/H5JNsiDWo/8Y4IyXZyeeJ85l7ZUdHglRXM=
-X-Google-Smtp-Source: AK7set+4+MDDr8Imm37JZRDfAWvvfr51MtYpj0mcq32Kq6EuEp70Ub2edl/UE0Wce4DElwi6S/mfAA==
-X-Received: by 2002:ac2:44b4:0:b0:4db:1e4a:74a1 with SMTP id c20-20020ac244b4000000b004db1e4a74a1mr9472348lfm.0.1678741425726;
-        Mon, 13 Mar 2023 14:03:45 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id g22-20020a19ee16000000b004d61af6771dsm101299lfb.41.2023.03.13.14.03.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 14:03:44 -0700 (PDT)
-Message-ID: <4b6df5f4-d5e5-30f4-dc1e-a8e5f8c66363@linaro.org>
-Date:   Mon, 13 Mar 2023 22:03:43 +0100
+        Mon, 13 Mar 2023 17:07:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4364824487;
+        Mon, 13 Mar 2023 14:06:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 229F2614F1;
+        Mon, 13 Mar 2023 21:05:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 288F8C4339B;
+        Mon, 13 Mar 2023 21:05:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678741509;
+        bh=jVEbYSaDY85e2O7DDoCo5LPr2RoisuVHRdSf0mtTx7o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FR5omo3r03m3+pCEBeKe0CYyYZsQgbvbB0IwrRjgmS92QjiiS4/54ZCeXH9wzjhaM
+         oHxcG55KSIuS/HYs1iwNrpAyDYWwsIXYwyIkqrzbaTwZTqgs2uF9f8pl61WAtDeKdr
+         qt4W4o0ZMszOEFLPJuapNscclHTDYcVg6bXsIj8hhE2w8eu+U9a51Iqlqtw6EzkPcZ
+         +ViV4uftN2byR54H7tJUofWEwUUUTkeJImPmG1WMpBY2MFqNafJTQOd3lACffRRt3o
+         0c6DjqsaSrPrMp4REu/Xr7CR1mEV3ndhDC7Luiryqh+bH46RRz7/HadB4/0i2zU5JR
+         fZy574U8wH8bg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 792E24049F; Mon, 13 Mar 2023 18:05:06 -0300 (-03)
+Date:   Mon, 13 Mar 2023 18:05:06 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andres Freund <andres@anarazel.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 02/13] perf build: Make BUILD_BPF_SKEL default, rename
+ to NO_BPF_SKEL
+Message-ID: <ZA+QAvj0DIpxTGSS@kernel.org>
+References: <20230311065753.3012826-1-irogers@google.com>
+ <20230311065753.3012826-3-irogers@google.com>
+ <ZA+FOpzJswZx8os+@kernel.org>
+ <CAP-5=fUG1CbzevoS=+Jj_pBO4umNj6ekaMeEuSHGC4kAZgVJJg@mail.gmail.com>
+ <ZA+IvqVb6Gos+NOe@kernel.org>
+ <ZA+Ot0dnX0MNZKmn@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: qcom: sm6115: Add remoteproc nodes
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org, andersson@kernel.org
-Cc:     agross@kernel.org, linux-kernel@vger.kernel.org,
-        bhupesh.linux@gmail.com, linux-remoteproc@vger.kernel.org,
-        robh+dt@kernel.org, devicetree@vger.kernel.org
-References: <20230128054256.2100501-1-bhupesh.sharma@linaro.org>
- <5922cd55-060c-d1b1-0eb2-0875439e4268@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <5922cd55-060c-d1b1-0eb2-0875439e4268@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <ZA+Ot0dnX0MNZKmn@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13.03.2023 21:58, Bhupesh Sharma wrote:
-> Hi Bjorn,
+Em Mon, Mar 13, 2023 at 05:59:35PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Mon, Mar 13, 2023 at 05:34:06PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Mar 13, 2023 at 01:27:21PM -0700, Ian Rogers escreveu:
+> > > On Mon, Mar 13, 2023 at 1:19 PM Arnaldo Carvalho de Melo
+> > > > (.text+0x1b): undefined reference to `main'
+> > > > /usr/bin/ld: final link failed: file in wrong format
+> > > > collect2: error: ld returned 1 exit status
+> > > > clang-15: error: linker (via gcc) command failed with exit code 1 (use -v to see invocation)
+> > > > make[4]: *** [Makefile.perf:1081: /tmp/tmp.Rr5xDuXo13/util/bpf_skel/.tmp/bperf_cgroup.bpf.o] Error 1
+> > > > make[3]: *** [Makefile.perf:236: sub-make] Error 2
+> > > > make[2]: *** [Makefile:70: all] Error 2
+> > > > make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
+> > > > make: *** [Makefile:103: build-test] Error 2
+> > > > make: Leaving directory '/var/home/acme/git/perf-tools-next/tools/perf'
+> > > >
+> > > > real    5m55.192s
+> > > > user    62m31.596s
+> > > > sys     14m30.828s
+> > > > ⬢[acme@toolbox perf-tools-next]$
+> > > 
+> > > Sorry, I was testing this on top of:
+> > > https://lore.kernel.org/lkml/20230116010115.490713-1-irogers@google.com/
+> > > The issue being that we're trying to use an old libbpf that the has
+> > > meant disabling things but:
+> > >   NO_BPF_SKEL := 1
+> > > hadn't been set as part of this. I can address in v2, but with the
+> > > "assume libbpf 1.0+" patch I hadn't been worrying about this as we'd
+> > > error out for this case  - rather than build error. The erroring out
+> > > can be worked around by just not having libbpf be dynamic (ie static
+> > > or not at all by adding NO_LIBBPF=1).
+> > 
+> > I'll try adding that 3-patch series before this one.
 > 
-> On 1/28/23 11:12 AM, Bhupesh Sharma wrote:
->> Add the adsp, cdsp and modem remoteproc nodes to sm6115.
->>
->> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
->> ---
->> - Depends on the dt-binding and driver change submitted via [1].
->> [1]. https://lore.kernel.org/linux-arm-msm/20230128053504.2099620-1-bhupesh.sharma@linaro.org
+> ⬢[acme@toolbox perf-tools-next]$ git log --oneline -16
+> 76c8a07f51703787 (HEAD -> perf-tools-next) perf build: Error if no libelf and NO_LIBELF isn't set
+> 030a6c72b38e334d perf build: Remove redundant NO_NEWT build option
+> 5d1360fc84cd2e3b perf build: If libtraceevent isn't present error the build
+> e25e0db4700aa39a perf build: Switch libpfm4 to opt-out rather than opt-in
+> 39f53202a8961d3d perf symbol: Add abi::__cxa_demangle C++ demangling support
+> d857f258f3d1214a tools build: Add feature test for abi::__cxa_demangle
+> 7aae0d8341c9c373 perf build: Make binutil libraries opt in
+> dc4890e772aba1e9 perf build: Error if jevents won't work and NO_JEVENTS=1 isn't set
+> 334e64172816623d perf util: Remove weak sched_getcpu
+> e44d7e7c60fc4ded perf build: Remove unused HAVE_GLIBC_SUPPORT
+> 14ea53be45758450 perf build: Make BUILD_BPF_SKEL default, rename to NO_BPF_SKEL
+> eb03903c5c119254 perf build: Support python/perf.so testing
+> f8b579c1996ba4a9 perf bpf: Remove pre libbpf 1.0 conditional logic
+> 2cce43c63d4d0abc perf build: Remove libbpf pre-1.0 feature tests
+> a24ebff6cce14a34 tools build: Pass libbpf feature only if libbpf 1.0+
+> 17535a33a9c1e4fb perf lock contention: Fix compiler builtin detection
+> ⬢[acme@toolbox perf-tools-next]$
 > 
-> Gentle Ping. Since the dependencies (dt-bindings and driver changes) have already been merged into linux-next, this patch can now be applied.
-Not really, it won't apply as-is. I suggest applying the version below
-which was rebased, the reg was adjusted for 64bit addressing and the
--names were turned into vertical lists, I've been carrying it downstream
-for a while and can confirm it works - I even got Wi-Fi up on the Tab P11!
+>        make_libbpf_dynamic_O: cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
+> ldd: /tmp/tmp.cO9WpgtAvo/perf: No such file or directory
+> cd . && make LIBBPF_DYNAMIC=1 FEATURES_DUMP=/var/home/acme/git/perf-tools-next/tools/perf/BUILD_TEST_FEATURE_DUMP -j32 O=/tmp/tmp.cO9WpgtAvo DESTDIR=/tmp/tmp.jjguTPlLWt
+>   BUILD:   Doing 'make -j32' parallel build
+>   HOSTCC  /tmp/tmp.cO9WpgtAvo/fixdep.o
+>   HOSTLD  /tmp/tmp.cO9WpgtAvo/fixdep-in.o
+>   LINK    /tmp/tmp.cO9WpgtAvo/fixdep
+> Warning: Kernel ABI header at 'tools/include/uapi/linux/in.h' differs from latest version at 'include/uapi/linux/in.h'
+> diff -u tools/include/uapi/linux/in.h include/uapi/linux/in.h
+> Warning: Kernel ABI header at 'tools/arch/x86/include/asm/cpufeatures.h' differs from latest version at 'arch/x86/include/asm/cpufeatures.h'
+> diff -u tools/arch/x86/include/asm/cpufeatures.h arch/x86/include/asm/cpufeatures.h
+> Warning: Kernel ABI header at 'tools/arch/arm64/include/uapi/asm/perf_regs.h' differs from latest version at 'arch/arm64/include/uapi/asm/perf_regs.h'
+> diff -u tools/arch/arm64/include/uapi/asm/perf_regs.h arch/arm64/include/uapi/asm/perf_regs.h
+> Warning: Kernel ABI header at 'tools/include/linux/coresight-pmu.h' differs from latest version at 'include/linux/coresight-pmu.h'
+> diff -u tools/include/linux/coresight-pmu.h include/linux/coresight-pmu.h
+> Makefile.config:563: *** Error: No libbpf devel library found, please install libbpf-devel.  Stop.
+> make[3]: *** [Makefile.perf:236: sub-make] Error 2
+> make[2]: *** [Makefile:70: all] Error 2
+> make[1]: *** [tests/make:326: make_libbpf_dynamic_O] Error 1
+> 
+> 
+> But:
+> 
+> ⬢[acme@toolbox perf-tools-next]$ rpm -qa | grep libbpf
+> libbpf-0.8.0-2.fc37.x86_64
+> libbpf-devel-0.8.0-2.fc37.x86_64
+> ⬢[acme@toolbox perf-tools-next]$
+> 
+> ⬢[acme@toolbox perf-tools-next]$ cat /etc/os-release
+> NAME="Fedora Linux"
+> VERSION="37 (Container Image)"
+> 
+> 
+> I'll see if this is just a matter of tweaking the error message to
+> something like "libbpf-devel not found or older than 1.0.0, please install/update"
 
-https://github.com/SoMainline/linux/commit/a34e0bf410318b573820254bd241fef0ea013ea1.patch
+Yeah, I'll tweak the warning:
 
-(this is a git am-able plaintext patchfile)
+⬢[acme@toolbox perf-tools-next]$ cat /tmp/build/perf-tools-next/feature/test-libbpf.make.output
+test-libbpf.c:5:2: error: #error At least libbpf 1.0 is required for Linux tools.
+    5 | #error At least libbpf 1.0 is required for Linux tools.
+      |  ^~~~~
+⬢[acme@toolbox perf-tools-next]$
 
-
-Konrad
+- Arnaldo
