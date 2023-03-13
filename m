@@ -2,107 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14416B72C4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:38:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C12966B72C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:38:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231251AbjCMJia (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:38:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
+        id S229664AbjCMJil (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:38:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231145AbjCMJiC (ORCPT
+        with ESMTP id S231179AbjCMJiF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:38:02 -0400
-Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B062B3B86A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:36:35 -0700 (PDT)
-Received: by mail-wm1-x336.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso10428063wmq.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:36:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678700193;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=/voBu6XJv3Cuj4S1ZjmI/oeTZAcic/pgfze+nCN+AT0=;
-        b=ZqJSmKTV8NfA58WB+WzePvSMWdfCwDddQE/PtoPdRV8N4+TIhZES7HK8mHwH5Zk4Rj
-         Z0UByrMNGXFIkeUhPflzyVJ0sPJuMhQw6rDkZbFPAqhXp6VnU51OZwe8+O4Xko4B+dJV
-         3hinDiIYhXEZFPz3riHzj+V5XPLbzktxlE/+pDGFP6rtxrZ+LJIwnRp7a9MkonLkqJi/
-         jrh7zFobZUaJ3nmDLQeUWrGIigNZ3RYq1E0rLiJStf/M3a6ZVwc+N7gAYuxm6yls4bSC
-         kzA4bS3a9tRfH05HYHE3aVNYpYu5PqkP5raXMwUayuwtyPDT1S7Jxi+3ysmRWEVdoJVx
-         DZGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678700193;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/voBu6XJv3Cuj4S1ZjmI/oeTZAcic/pgfze+nCN+AT0=;
-        b=MnA67JUz116Fp4TA/GTNFpBxGXaeNmHxWQvHtxNDxzO2s6Z3N4AQvZFQsS+q06OWeQ
-         8et57Synej0Q+Tqv2HWRo5HcnLQubl3ByCUVY80EZ9X6vYBMv8kFH82Qq5HqsceU8JcM
-         yqfLNwJA3RDZWcgnJNoNNLrso5pTwzgWH5WRPo7SsjNodWTZdyp5KLjXRfyVXSjPlp7K
-         Iaxfy2LqIhv9K1WvACSOv3oGOQ6zcNOa5nIKADL4Kwr/ea6f/LFC2yr0Tg3fCjx75T2g
-         jM4efjIHVTjtcHf9qF1kZ5rWbxe6phquF7xcuYa/7X12j5HesLWyo67nnQdr0N7DsPkq
-         waHw==
-X-Gm-Message-State: AO0yUKVJLYwG+ZFfSWMD17J0ZX5SzMTPR1EpXnm7srABJeo7QjyApumx
-        aBYz9+QiPNDcppIV2ob+y7Pz4w==
-X-Google-Smtp-Source: AK7set+f9cpJyxCSLO6I2npjkfIwt56hnr9ULKBRmRjuy9MEkUdHAMeS9NJlzhQt8QuW3LddJn4H0w==
-X-Received: by 2002:a05:600c:c8e:b0:3db:2e06:4091 with SMTP id fj14-20020a05600c0c8e00b003db2e064091mr11333479wmb.37.1678700192785;
-        Mon, 13 Mar 2023 02:36:32 -0700 (PDT)
-Received: from [192.168.7.111] (679773502.box.freepro.com. [212.114.21.58])
-        by smtp.gmail.com with ESMTPSA id v7-20020a05600c470700b003e8dc7a03basm8792434wmo.41.2023.03.13.02.36.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 02:36:32 -0700 (PDT)
-Message-ID: <292f25d7-2b2b-ba2a-36c3-c207960141f9@linaro.org>
-Date:   Mon, 13 Mar 2023 10:36:31 +0100
+        Mon, 13 Mar 2023 05:38:05 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C9557D30;
+        Mon, 13 Mar 2023 02:36:45 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 10:36:41 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678700203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tMzFh7fvdbobB01BlTluHQ92/K/MC3vwvbvz+/sibis=;
+        b=IG+MwBsbm4dukJ8o8MfpzxtrymmoCoggA/6gpM/Bd2uq17lFnPUPlkqjQc7f5wLdI9rxGF
+        3g41n8Bu+QdldqAkZdxEDZ1TKXlraPuBFxdsciR1O/MoNcyfVAKLhKBh8WS5htV/7C4pdN
+        5jNDgd+QJ9NSoTu/R8gsR54Huhhw+0M9+8460uM3C9NixxWbQb3BK2TDqBAPHC8l1e9z20
+        01aY5TXu5DQW8JuqnXe7v293LmJr04LsaxPmq6meOnU7KdtvB0aHSZGnmsJMhEYaCcjeHY
+        lqG8U6dqDs9HQKX5HFEL/9k/GXrr/hecHRJZhS9QxJCNK0LxMAwoMW6DUY/FQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678700203;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=tMzFh7fvdbobB01BlTluHQ92/K/MC3vwvbvz+/sibis=;
+        b=4lNmV8XuV8YZWXX1KunLeqSeagXcFlHwTaIeQfniYqnaR4I6BPcA9h16vZTlEfDoy/K9Gj
+        R0Q/m/SxUR5tGDCw==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     "Brennan Lamoreaux (VMware)" <brennanlamoreaux@gmail.com>,
+        Daniel Wagner <wagi@monom.org>
+Cc:     linux-rt-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        blamoreaux@vmware.com, frederic.martinsons@gmail.com,
+        srivatsa@csail.mit.edu, vsirnapalli@vmware.com,
+        amakhalov@vmware.com, keerthanak@vmware.com, ankitja@vmware.com,
+        bordoloih@vmware.com, srivatsab@vmware.com,
+        Tejun Heo <tj@kernel.org>
+Subject: Re: [PATCH 4.19-rt] workqueue: Fix deadlock due to recursive locking
+ of pool->lock
+Message-ID: <20230313093641.pxvwFHCJ@linutronix.de>
+References: <20230228224938.88035-1-brennanlamoreaux@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.2
-From:   neil.armstrong@linaro.org
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH] MAINTAINERS: Add include/drm/drm_bridge.h to DRM DRIVERS
- FOR BRIDGE CHIPS
-Content-Language: en-US
-To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     maarten.lankhorst@linux.intel.com, mripard@kernel.org,
-        tzimmermann@suse.de, andrzej.hajda@intel.com, rfoss@kernel.org,
-        Laurent.pinchart@ideasonboard.com, jonas@kwiboo.se,
-        jernej.skrabec@gmail.com, airlied@gmail.com, daniel@ffwll.ch
-References: <20230313055951.2997299-1-victor.liu@nxp.com>
-Organization: Linaro Developer Services
-In-Reply-To: <20230313055951.2997299-1-victor.liu@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20230228224938.88035-1-brennanlamoreaux@gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 06:59, Liu Ying wrote:
-> Appropriate maintainers should be suggested for changes to the
-> include/drm/drm_bridge.h header file, so add the header file to the
-> 'DRM DRIVERS FOR BRIDGE CHIPS' section.
-> 
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
->   MAINTAINERS | 1 +
->   1 file changed, 1 insertion(+)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 3d409875740d..b6e7ac70b8a8 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -6824,6 +6824,7 @@ S:	Maintained
->   T:	git git://anongit.freedesktop.org/drm/drm-misc
->   F:	Documentation/devicetree/bindings/display/bridge/
->   F:	drivers/gpu/drm/bridge/
-> +F:	include/drm/drm_bridge.h
->   
->   DRM DRIVERS FOR EXYNOS
->   M:	Inki Dae <inki.dae@samsung.com>
+On 2023-02-28 14:49:38 [-0800], Brennan Lamoreaux (VMware) wrote:
+> Upstream commit d8bb65ab70f7 ("workqueue: Use rcuwait for wq_manager_wait")
+> replaced the waitqueue with rcuwait in the workqueue code. This change
+> involved removing the acquisition of pool->lock in put_unbound_pool(),
+> as it also adds the function wq_manager_inactive() which acquires this same
+> lock and is called one line later as a parameter to rcu_wait_event().
 
+Daniel, I double checked and this patch is correct - the backport was
+faulty. Could you please pick it up and release an update?
 
-Acked-by: Neil Armstrong <neil.armstrong@linaro.org>
+Sebastian
