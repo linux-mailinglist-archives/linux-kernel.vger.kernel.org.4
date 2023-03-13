@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4EE6B7DBC
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:35:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B89BC6B7DB6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:35:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230289AbjCMQea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35222 "EHLO
+        id S231376AbjCMQee (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:34:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33996 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231376AbjCMQd6 (ORCPT
+        with ESMTP id S231209AbjCMQeD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:33:58 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 197AE2CFCF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:33:25 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id b13so13254854ljf.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:33:25 -0700 (PDT)
+        Mon, 13 Mar 2023 12:34:03 -0400
+Received: from mail-lj1-x231.google.com (mail-lj1-x231.google.com [IPv6:2a00:1450:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 318644608C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:33:30 -0700 (PDT)
+Received: by mail-lj1-x231.google.com with SMTP id y14so13241870ljq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:33:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678725192;
+        d=linaro.org; s=google; t=1678725193;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2jvLqw/iUmqFEw7pDvRYLLaTw8rrTc1/hAIGay/5Ppo=;
-        b=oQL+5IH9ybn9A6+ZLkz+sQrqEmrho9NhJP+j24JCbc0aCuLCawT7oJ1RWAJIi1i1Wr
-         Kb8Xm+MpFEDruMaBBSYJn4QBNONqEczs3qxtUhWPdHyEacZRhlpK3F4fVCEummNAGrM2
-         74geHM7i14d3FU9R40CE7NE57E7qQ/Kw4Tg+h/+Tp1XpPMyaaPtCd2Q6hp7Iqb6SocNI
-         GluzkzC1MKw3XBuGA4HQ2jaLwAr46YbIUslnw9UngOgmDP61RnwkRGS99JROHXt4Bva2
-         DghOoo44YLVQtoCZRKRdmZPtyKtErSzJaONGvkDJz4XZurniiyJG+JP4GKYeEFASKGDX
-         Xigw==
+        bh=2frje31Y2fNq0lYe5DcH6dNkKqnLB8dR+H+Ds8PEhpo=;
+        b=xQ7EJme0rZEWlpluRbdJkiXFvtEcRYsz/8xywyjaFjSD5YbbqJMinRGC8vxGoyvzDW
+         OrVy6UCMZLIVIFRSI3N9bn18mZHjkWaJqnsk9jaKH2sJe2bLHEqPUcgyGH4FFST2CMKN
+         FMElE8VlH04FPlX29dB+o/r+PIT2snDAnx3U4dak7AzTlvGMdAcbqs7e16h+I2HkJJTn
+         rV+RtGlygNY1yZSDtG5Of3ubqpQR1QyT3szg/VrJeruX3XwDgA0z6PbswLddUEe6tax8
+         aE3lT8sfVFRw6I4psm1Mmh7w7tFlcpsi8UMKDWX5hE6nLCWuRTzAPUZan/WvBJwcTx/L
+         O1hA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678725192;
+        d=1e100.net; s=20210112; t=1678725193;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2jvLqw/iUmqFEw7pDvRYLLaTw8rrTc1/hAIGay/5Ppo=;
-        b=5xJbKs8B86DsaU3eqf4o1y6csmDdVJhqZS8rf3iFtFYTlybEW2Nov4mmJpBcSXhZBI
-         wZNpheRNu1ukQMYbY3DS9hdCXvFDGrbT9tULPyYxV1nPRhusDXNzFGQBKYRdpQH74ew/
-         zg24HwGJe9xib/0mcsR6ygpDRDOdfbkU7Cwsl7cVy5BLXdG+P3cs+Nmo6Y7Zh6ck6B6h
-         NfzLIAt2u++hmUwC7ob8UnWiE5z7gEJrYeRNJhME1R0vQqg66COKYOuPrC7WRM3G+MrU
-         uqYL0p6bdyUi1G6F14n8LgN9wsPETZLjXqK/EBDw+SxcmR4OIVf5yDtHF4Hdbr0w8mzA
-         ngtQ==
-X-Gm-Message-State: AO0yUKX7WOdoqyf+2Dfm7S6ex/HYAf529uvKiyqKt5QE3eTlGKLSh4QU
-        f9YC/FRCjGjgEtCxxbwX96wSfg==
-X-Google-Smtp-Source: AK7set9cs+olZsMDJhYN/FFOOOMxduVVYOdU33uPJTTkr58zQgr9pP3zfK6fEQmWC/15jGWXYfGrgg==
-X-Received: by 2002:a2e:9996:0:b0:293:530f:cbc with SMTP id w22-20020a2e9996000000b00293530f0cbcmr10006252lji.24.1678725192141;
-        Mon, 13 Mar 2023 09:33:12 -0700 (PDT)
+        bh=2frje31Y2fNq0lYe5DcH6dNkKqnLB8dR+H+Ds8PEhpo=;
+        b=s/d9LE4TUGVsCeKfploTjWy8mc1SI1QuhqsH9jblb1G//u5tPlTjFZQE87R9HtHnhs
+         7jcfzXKj3P2on8f0ZoZnaJJ7LcQgNt2xcgoZW1Kn56V6UlyJCu53uHVMHx97pUwYItGE
+         TjI+FdgJMODfyal4h3b6CCYeTgXlVsiYXpE0Z7Dp8UxjhUdMteMst1fGE5SrgzT4cBtr
+         24OHfCSOEbUuoT5orTxESm8+Z/BN2iJHZ6V/TMnZE/Yg06iP0YFmj1E715Zkn7nFawo7
+         6LeMxw6cVRd5sy3A68IHehtWXNR4aFO63afNNoP0iBFciLAxY5DLwuZV8oq7Xu+fCMKU
+         v+UA==
+X-Gm-Message-State: AO0yUKUM3cc2vA7BQR0OliNYRcQMZmORK3IkLnD6qresyzUVSDGe2ZvQ
+        iYGH+33j17+1h+hbpZXQ4LU/1Q==
+X-Google-Smtp-Source: AK7set/PMKuyRAOrmY81VkBc6HIS5XjMb4tGZu0zRXcsQnJ5g48OKx2dl/pOvCs7co4PV561KRZTqA==
+X-Received: by 2002:a2e:2a41:0:b0:290:6af8:ec25 with SMTP id q62-20020a2e2a41000000b002906af8ec25mr9996801ljq.52.1678725193232;
+        Mon, 13 Mar 2023 09:33:13 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id q62-20020a2e5c41000000b00295765966d9sm57417ljb.86.2023.03.13.09.33.11
+        by smtp.gmail.com with ESMTPSA id q62-20020a2e5c41000000b00295765966d9sm57417ljb.86.2023.03.13.09.33.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:33:11 -0700 (PDT)
+        Mon, 13 Mar 2023 09:33:12 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Mon, 13 Mar 2023 17:32:40 +0100
-Subject: [PATCH v2 5/6] arm64: dts: qcom: sdm845-tama: Enable GPU
+Date:   Mon, 13 Mar 2023 17:32:41 +0100
+Subject: [PATCH v2 6/6] arm64: dts: qcom: sdm845-tama: Enable GPI_DMA0/1
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230313-topic-tama_disp-v2-5-37ececf43770@linaro.org>
+Message-Id: <20230313-topic-tama_disp-v2-6-37ececf43770@linaro.org>
 References: <20230313-topic-tama_disp-v2-0-37ececf43770@linaro.org>
 In-Reply-To: <20230313-topic-tama_disp-v2-0-37ececf43770@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -68,11 +68,11 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>,
         Konrad Dybcio <konrad.dybcio@somainline.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678725183; l=887;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678725183; l=728;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=sfOcCjF/CfP30Au7ZmpvkwMbP27lT5DjZVeGjKXyRIU=;
- b=qWsv045+fAZiWcr3fNE2t4L9MEh7YDZUNR+DDA0Q8m0h8f/XVJd62ROIICONhiuQkgn2v6PvzfAe
- 0i1GLTgvDODQVpxV1Fxh9i0lkvX1vgcS/pwhniHuGTPXVeoRiz9p
+ bh=Zz0jpPtt5NqsJRQJ9rDZmNvMC4Id+uhckcZNV4HE0Dg=;
+ b=gvUDcvkcH04zmmWJjOHgfleMiF7JaBRSbGVR+HMrS34+HwlZR5J5wvAWSjxyxbhnxfyx/4lKicgT
+ MkXB7uBfBbLJya2stx7nx1PcjKrSsFSf4k/ojjL2T2NbFtGsTQPT
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -87,38 +87,33 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Konrad Dybcio <konrad.dybcio@somainline.org>
 
-Enable the A630 GPU and its GMU.
+Enable both GPI DMAs.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+ arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-index 68faf46540b0..6a3da19c6b36 100644
+index 6a3da19c6b36..7d860c20149d 100644
 --- a/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sdm845-sony-xperia-tama.dtsi
-@@ -416,6 +416,19 @@ &gcc {
- 			<GCC_LPASS_SWAY_CLK>;
+@@ -420,6 +420,14 @@ &gmu {
+ 	status = "okay";
  };
  
-+&gmu {
++&gpi_dma0 {
 +	status = "okay";
 +};
 +
-+&gpu {
++&gpi_dma1 {
 +	status = "okay";
-+
-+	zap-shader {
-+		memory-region = <&gpu_mem>;
-+		firmware-name = "qcom/sdm845/Sony/tama/a630_zap.mbn";
-+	};
 +};
 +
- &i2c5 {
- 	clock-frequency = <400000>;
+ &gpu {
  	status = "okay";
+ 
 
 -- 
 2.39.2
