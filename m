@@ -2,121 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2F6B6B7A1E
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16ABE6B7A23
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCMOQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46688 "EHLO
+        id S230333AbjCMORK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbjCMOQX (ORCPT
+        with ESMTP id S230424AbjCMORF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:16:23 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1B310DE;
-        Mon, 13 Mar 2023 07:16:20 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4PZzGn6Kmhz4BKJH;
-        Mon, 13 Mar 2023 16:16:17 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1678716978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KG7ikvzasViGTb/pL3/hJJMbpS3y8IKQUZv3vIs9R2c=;
-        b=rQ01nmXN3xE8+T5powJ5sFzYKEGTRhcZL+O1TDElWMcCtbU+Aed2hyIoWu9I3EgbJ22i7G
-        WOZlHPTvgykG7CjMUAtMeqYHXc3u284jCd5Tbn1jqZrlSmtFrnWNqS3VhpIQgBYYXTQjqC
-        rr8E0xyaSxO1QJiBabjtMJ80vBd862656SuNko25ukaS/vHZL2/C4HEc25pzGSoS/SZS0E
-        8oa33AY26jI2f96Sp1JPu5J23XZn8flU+wK2ie2Oc/sDkagiF+X30ywGs2OqopP0YAKMuQ
-        ntj1hWq7fBIdKivlmHqMKTx3eROTXjRKpDyvN2DDcbw8E6+yQxlTgRAu70rlew==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1678716978; a=rsa-sha256;
-        cv=none;
-        b=V9l5Dqjo0nk0Ld5hgBG8diKCaapqhPphBY3KMj9BlMrAjsFMVPUbH3f5fx1qpvPFvGhQIv
-        1wkvx2GLAPIZX+S+WLg5o0aGnil5IrB+e7v8ZEV26u3kFbnmFUMdBGR+1M2sgKpUyphISK
-        KrC91aCfdk4RC41jL0CrS9bMHZFpzk+blHt8LB+nYVM7utE3oYbxFqmJU/CMhCZq3Zj0zi
-        WVQA3HbDSnIsoM7VKiPXxo3BDCN3szxfNeZ1Z7THLxSdU0Pk0EgRdRmxuWkGw0yRvGRNTs
-        aLpXBieqCcuVYtY4G1nlHeO+m+MkxOVS52NlDtb/2BQoRWDB6uve80/k9WLlqw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1678716978;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=KG7ikvzasViGTb/pL3/hJJMbpS3y8IKQUZv3vIs9R2c=;
-        b=vvYYHV2aZ+ZUbUKNKSMDFR0Ikyj2VMrZPTfw2B7E4kqlv6NGoTZ4TicMyV5Hl1pjoopYnq
-        DYvt9mpGZTa8mGGp5gXIRArXuet8dMygPZuTNQENsJPtewhVpIIDi85aKyvwmJm51wkAcV
-        88IZHrMRbqMug0zL/Pdm4bsFtbl2jTTXt0YW9Rww9bZrB0q9DIPcxX0NwQgiDWbiIi6Cam
-        OcEUlL2y9a60YYEtSITAykOK1zDq5d55wiJRxNi5NVBvYJgDp8YYq89eRNvdzNPtB3mpWe
-        TCFVD12Pc/pGIEiXNKBAugZ745MEK/vxI9ONFQIUzMkqLFaE4K7165Cj6vcUKA==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 0614E634C91;
-        Mon, 13 Mar 2023 16:15:19 +0200 (EET)
-Date:   Mon, 13 Mar 2023 16:15:19 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Rob Herring <robh@kernel.org>
-Subject: Re: [PATCH v3 6/7] media: dt-bindings: samsung,fimc: convert to
- dtschema
-Message-ID: <ZA8v98mqm4Xdt2Sl@valkosipuli.retiisi.eu>
-References: <20230216142204.48394-1-krzysztof.kozlowski@linaro.org>
- <20230216142204.48394-7-krzysztof.kozlowski@linaro.org>
- <ZA8YJx+NE0+89YaD@valkosipuli.retiisi.eu>
+        Mon, 13 Mar 2023 10:17:05 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C44CF5C9C8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:16:53 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id y12so2795042ilq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:16:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112; t=1678717013;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XNEL4l0swnCTQCDn63hdWZ9w/KZETPh/ZiDh0JjJWl4=;
+        b=dujQrmUscRtPXqCMzGkLrUJflRptzP3oZ4l9Jy9IFEpstO+QcbjbTR1kTWKoMYQmOL
+         fkDdUxWSvBpQ34Hy+PYuiRZIQg6R2KjV9EpJynnZWO3D1rJcJA7s1hRpS+J6aF78lAoZ
+         XVTmHIPZXdWI6hIVdCSQBo6qHgDItcpVugi3IoMpy3aMnSQbehS3soa0bgxRjT+oFSPj
+         s1O3tks45MbPI2KMJgjkqF7rREolk9iY3ZFYUj9bSf8ixVl4qamWZ0s2Ru9OEt/ltF3i
+         wfEI/yWSn++lUrMKBpQtXQYYxUz0TIcYk6efoCex95f7Tg6LIZ1VRynR00CJrw0l2L6W
+         lduQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678717013;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XNEL4l0swnCTQCDn63hdWZ9w/KZETPh/ZiDh0JjJWl4=;
+        b=vqql1NmxXCSjY8iIAA8PtSI8og6g8/adgvcS+xHBnOLweBpeOhU99hjwxfbQh2ZV1y
+         YXKSy2tGveEiqpuzEkode4LBbehYVIsYOO0xppt0z/D/tPTanhAKtHlc4x7tkcQD1eD3
+         91kndltQvAh+quHEYRToyFn6q2PnFmWREQFH7R/BzYhFHQGh+7ilX0yokWb0/kuUjSt7
+         seSGOS+WWMUxNsBBCtdSw+rZtAigD/MCKLU1Ezz/+eQ8yp3kTYC1HJ/Qir3FjfwpKkdZ
+         Rs1hv8XGLPw52MYQVVCbUvbLOcIaDFPzhkAbwtPUZZw1gyoC7OgEW5rLBoJ9YS2azURx
+         FN7Q==
+X-Gm-Message-State: AO0yUKW28+hMvJ12cB2jo1kSlP+JzlUeU+TbsmJ9yHRqLwuvPBEeUy1x
+        yX+WXn+bzshZb2exY9Lf2EQIdA==
+X-Google-Smtp-Source: AK7set9OkGE0IqOxTpWpX3T6cDY1p5xgwzk9FvMsrJTtaOFh25r+LM3UfsbnfS3L6sKZb6XO6FdNSA==
+X-Received: by 2002:a92:d186:0:b0:323:504:cff6 with SMTP id z6-20020a92d186000000b003230504cff6mr2137669ilz.3.1678717013026;
+        Mon, 13 Mar 2023 07:16:53 -0700 (PDT)
+Received: from [192.168.1.94] ([96.43.243.2])
+        by smtp.gmail.com with ESMTPSA id b21-20020a029a15000000b003f1929b34f2sm2515143jal.68.2023.03.13.07.16.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 07:16:52 -0700 (PDT)
+Message-ID: <c433f8cf-57dc-52c9-9959-f6a21297d1b0@kernel.dk>
+Date:   Mon, 13 Mar 2023 08:16:51 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA8YJx+NE0+89YaD@valkosipuli.retiisi.eu>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 0/2] optimise local-tw task resheduling
+Content-Language: en-US
+To:     Pavel Begunkov <asml.silence@gmail.com>, io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org
+References: <cover.1678474375.git.asml.silence@gmail.com>
+ <9250606d-4998-96f6-aeaf-a5904d7027e3@kernel.dk>
+ <ee962f58-1074-0480-333b-67b360ea8b87@gmail.com>
+ <9322c9ab-6bf5-b717-9f25-f5e55954db7b@kernel.dk>
+ <4ed9ee1e-db0f-b164-4558-f3afa279dd4f@gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <4ed9ee1e-db0f-b164-4558-f3afa279dd4f@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 02:33:43PM +0200, Sakari Ailus wrote:
-> Hi Krzysztof,
+On 3/12/23 9:45?PM, Pavel Begunkov wrote:
+>>>> Didn't take a closer look just yet, but I grok the concept. One
+>>>> immediate thing I'd want to change is the FACILE part of it. Let's call
+>>>> it something a bit more straightforward, perhaps LIGHT? Or LIGHTWEIGHT?
+>>>
+>>> I don't really care, will change, but let me also ask why?
+>>> They're more or less synonyms, though facile is much less
+>>> popular. Is that your reasoning?
+>>
+>> Yep, it's not very common and the name should be self-explanatory
+>> immediately for most people.
 > 
-> On Thu, Feb 16, 2023 at 03:22:03PM +0100, Krzysztof Kozlowski wrote:
-> > Convert the Samsung S5P/Exynos Camera Subsystem (FIMC) bindings to DT
-> > schema.  Changes during conversion - adjust to existing DTS and Linux
-> > driver: add iommus and power-domains.
-> > 
-> > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > Reviewed-by: Rob Herring <robh@kernel.org>
-> 
-> This does not apply on top of -rc1.
-> 
-> ...
-> 
-> > -- compatible: must be "samsung,fimc"
-> 
-> I guess you have another patch removing "simple-bus" here and another
-> location in your tree?
+> That's exactly the problem. Someone will think that it's
+> like normal tw but "better" and blindly apply it. Same happened
+> before with priority tw lists.
 
-Ah, what's missing seems to be this set:
-
-<URL:https://patchwork.linuxtv.org/project/linux-media/list/?series=9839>
-
-But also the second patch of that set doesn't seem to apply. :-(
+But the way to fix that is not through obscure naming, it's through
+better and more frequent review. Naming is hard, but naming should be
+basically self-explanatory in terms of why it differs from not setting
+that flag. LIGHTWEIGHT and friends isn't great either, maybe it should
+just be explicit in that this task_work just posts a CQE and hence it's
+pointless to wake the task to run it unless it'll then meet the criteria
+of having that task exit its wait loop as it now has enough CQEs
+available. IO_UF_TWQ_CQE_POST or something like that. Then if it at some
+point gets modified to also encompass different types of task_work that
+should not cause wakes, then it can change again. Just tossing
+suggestions out there...
 
 -- 
-Sakari Ailus
+Jens Axboe
+
