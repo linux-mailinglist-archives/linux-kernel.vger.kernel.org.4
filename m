@@ -2,101 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 332756B83B8
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C22D6B83C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 22:10:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229864AbjCMVIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 17:08:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
+        id S229745AbjCMVKv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 17:10:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbjCMVIW (ORCPT
+        with ESMTP id S229534AbjCMVKs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 17:08:22 -0400
-Received: from mail-il1-x146.google.com (mail-il1-x146.google.com [IPv6:2607:f8b0:4864:20::146])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2783E8E3CF
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:07:33 -0700 (PDT)
-Received: by mail-il1-x146.google.com with SMTP id k13-20020a056e021a8d00b0031bae68b383so7223060ilv.18
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 14:07:33 -0700 (PDT)
+        Mon, 13 Mar 2023 17:10:48 -0400
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A1192C661;
+        Mon, 13 Mar 2023 14:10:11 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso13047900pjs.3;
+        Mon, 13 Mar 2023 14:10:11 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678741522;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
+        d=1e100.net; s=20210112; t=1678741771;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BYS6Iu4hHFrTUlHj/j1E//vcMrDFbW8TckKBUMoFx8k=;
-        b=1SN4HttJzIgHAKYGYOgjCddNsK3sG/KYCdtqehVifvw6LJgUvjcVvfPKd0gJjbu2X5
-         ij/m+yxuWc/4zEBQAqGQ5IwTAHESVVcUXMcCvn6ioRjM+o0B0WEuvHsSViY00Yl0QTq/
-         sN60tNSlV3BdcUOqSdsx5I7gBKJvfKUWsFgEWGXwyYoF86kDUl71Bw8WvvsNHVFplqHw
-         ZbEqrILESRbF646Y6t6Bsd2XpkEo6QlXPAg19RU42z///PlZUpeKxHnrHw7na+OyeCod
-         WMfGrzFpohtT/hwaGNw8IOXHskgjOxOPAESd7Fw0oIs0R6WnNwD864DORaPOFBt/ZzQf
-         2IdA==
-X-Gm-Message-State: AO0yUKU71Ef8XOFgVeicP37uINuVrSzKc8vMBisQGYFmHfXN/pHGXg5p
-        LnE6QGeeiWUoDAtX47JG7IyEbtcYEiuCsILcBWA5h0zyJEAe
-X-Google-Smtp-Source: AK7set9K6KIJTDvUPF8mXjQ8G/iflr0t2FEkcMa2ufvRIaaa7/BRgaAsfIi0BFQO/kVVDuMuxY5GMHH2m8HsxlUHCUNNRVYcGURu
+        bh=NlbP4RMuI0UuGpDLkK+kTJ9DE1XKYPJgo0MhTNATv38=;
+        b=cbKDqV0ze5AvyQmXeGBELpf8Ock5/8DBqbUwtBHfv3xAQzcnDfjxxQEhFrqJK9s1Lh
+         cEBm3OrjM80MuXMJFIxrBVqh98wmesN09J+3t0fYSsYr4ZJlHayn0s0GxfOWpUfxZ1Gi
+         G04v/us8Tgzbr+kQU3e/T6OwC/xJKLN0LecOArW/9vFJfLwp/dEHqAT19nB4SAIBtig1
+         OCpvNNXvlwQ4hcEqx4orsr37UAek8m9B3d+02rxfmxmpQT31or6tTFP8wjopb9TwKdgt
+         mwNVqZ3i6fA0oL20sV9TA/BTfxYFrcbvkTddpcAZSXdS6kwc4red/egMCDuaKTs5sAkL
+         VfiA==
+X-Gm-Message-State: AO0yUKVjZS1tv7Fg8BcM9KeaEjvtQwqKMuOReXnenSTXh/Y/cqoCEwJp
+        zO2ZGwfkpytkyMFM/7BQ3s0=
+X-Google-Smtp-Source: AK7set+QSfPstXZPjDc6o/gv7ERNFNhqrNhy/iy0ONgwO/xGZ//yARXWv+44cLD9sfmyrcpV81ZI6w==
+X-Received: by 2002:a17:90a:bd85:b0:23b:d506:226e with SMTP id z5-20020a17090abd8500b0023bd506226emr5992734pjr.42.1678741770779;
+        Mon, 13 Mar 2023 14:09:30 -0700 (PDT)
+Received: from ?IPV6:2620:15c:211:201:9cdb:df66:226e:e52a? ([2620:15c:211:201:9cdb:df66:226e:e52a])
+        by smtp.gmail.com with ESMTPSA id l10-20020a17090aaa8a00b002311dbb2bc5sm273276pjq.45.2023.03.13.14.09.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 14:09:30 -0700 (PDT)
+Message-ID: <5ee20e75-8a61-be89-5302-45f390a0cbd6@acm.org>
+Date:   Mon, 13 Mar 2023 14:09:27 -0700
 MIME-Version: 1.0
-X-Received: by 2002:a92:c14b:0:b0:316:f0d7:8db with SMTP id
- b11-20020a92c14b000000b00316f0d708dbmr502554ilh.5.1678741522792; Mon, 13 Mar
- 2023 14:05:22 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 14:05:22 -0700
-In-Reply-To: <20230313204732.zjcmd3ruvzw3bljo@fpc>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000022c8b705f6ce78a3@google.com>
-Subject: Re: [syzbot] [wireless?] KMSAN: uninit-value in ath9k_hw_init
-From:   syzbot <syzbot+df61b36319e045c00a08@syzkaller.appspotmail.com>
-To:     glider@google.com, linux-kernel@vger.kernel.org,
-        pchelkin@ispras.ru, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v5] scsi: ufs: core: Add trace event for MCQ
+Content-Language: en-US
+To:     Ziqi Chen <quic_ziqichen@quicinc.com>, quic_asutoshd@quicinc.com,
+        quic_cang@quicinc.com, quic_nguyenb@quicinc.com, mani@kernel.org,
+        stanley.chu@mediatek.com, adrian.hunter@intel.com,
+        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
+        martin.petersen@oracle.com
+Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        open list <linux-kernel@vger.kernel.org>,
+        "open list:TRACING" <linux-trace-kernel@vger.kernel.org>
+References: <1678699023-6645-1-git-send-email-quic_ziqichen@quicinc.com>
+From:   Bart Van Assche <bvanassche@acm.org>
+In-Reply-To: <1678699023-6645-1-git-send-email-quic_ziqichen@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On 3/13/23 02:16, Ziqi Chen wrote:
+> Added a new trace event to record MCQ relevant information
+> for each request in MCQ mode, include hardware queue ID,
+> SQ tail slot, CQ head slot and CQ tail slot.
 
-syzbot has tested the proposed patch but the reproducer is still triggering an issue:
-KMSAN: uninit-value in ath9k_hw_init
+Added a new trace event ... -> Add the MCQ information in the existing 
+trace event ...
 
-ath9k_htc 2-1:1.0: ath9k_htc: HTC initialized with 33 credits
-=====================================================
-BUG: KMSAN: uninit-value in ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
-BUG: KMSAN: uninit-value in __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
-BUG: KMSAN: uninit-value in ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
- ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:289 [inline]
- __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
- ath9k_hw_init+0x119e/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
- ath9k_init_priv drivers/net/wireless/ath/ath9k/htc_drv_init.c:662 [inline]
- ath9k_init_device drivers/net/wireless/ath/ath9k/htc_drv_init.c:839 [inline]
- ath9k_htc_probe_device+0xf48/0x3b60 drivers/net/wireless/ath/ath9k/htc_drv_init.c:963
- ath9k_htc_hw_init+0x4f/0x100 drivers/net/wireless/ath/ath9k/htc_hst.c:523
- ath9k_hif_usb_firmware_cb+0x2eb/0x800 drivers/net/wireless/ath/ath9k/hif_usb.c:1256
- request_firmware_work_func+0x130/0x240 drivers/base/firmware_loader/main.c:1107
- process_one_work+0xb0d/0x1410 kernel/workqueue.c:2390
- worker_thread+0x107e/0x1d60 kernel/workqueue.c:2537
- kthread+0x31f/0x430 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+ From Documentation/process/submitting-patches.rst: "Describe your 
+changes in imperative mood, e.g. "make xyzzy do frotz"".
 
-Local variable val created at:
- ath9k_regread+0x62/0x1b0 drivers/net/wireless/ath/ath9k/htc_drv_init.c:239
- ath9k_hw_read_revisions drivers/net/wireless/ath/ath9k/hw.c:287 [inline]
- __ath9k_hw_init drivers/net/wireless/ath/ath9k/hw.c:572 [inline]
- ath9k_hw_init+0x5c4/0x2ba0 drivers/net/wireless/ath/ath9k/hw.c:700
+> Changes to v1:
+> - Adjust the order of fileds to keep them aligned.
+                         ^^^^^^
+                         fields?
 
-CPU: 1 PID: 5549 Comm: kworker/1:5 Not tainted 6.3.0-rc2-syzkaller-00010-g34add094f9de-dirty #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
-Workqueue: events request_firmware_work_func
-=====================================================
+> -	u32 intr, doorbell;
+> +	u32 doorbell = 0, hwq_id = 0;
+> +	u32 intr;
 
+Since hwq_id can be assigned the value -1, shouldn't its type be changed 
+from u32 into int, int16_t or int32_t?
 
-Tested on:
+> +	struct ufs_hw_queue *hwq = NULL;
 
-commit:         34add094 kmsan: add test_stackdepot_roundtrip
-git tree:       https://github.com/google/kmsan.git master
-console output: https://syzkaller.appspot.com/x/log.txt?x=13196aecc80000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=76a9330669c37355
-dashboard link: https://syzkaller.appspot.com/bug?extid=df61b36319e045c00a08
-compiler:       Debian clang version 15.0.7, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=17a0437cc80000
+Is this pointer only used inside one branch of the if-statement below? 
+If so, can it be moved under "if (is_mcq_enabled(hba)) {"?
 
+> +		"%s: %s: tag: %u, DB: 0x%x, size: %d, IS: %u, LBA: %llu, opcode: 0x%x (%s), group_id: 0x%x, hqid: %d",
+
+Consider changing "hqid" into "hwq_id" to make the trace information 
+easier to understand.
+
+Thanks,
+
+Bart.
