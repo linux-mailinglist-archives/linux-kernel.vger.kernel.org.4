@@ -2,101 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86C806B8138
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35D586B8137
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:55:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231387AbjCMSzR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:55:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59672 "EHLO
+        id S231203AbjCMSzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231575AbjCMSyw (ORCPT
+        with ESMTP id S231556AbjCMSyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:54:52 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2900287DA7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:52:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678733560;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=G8VTCHZ3m4KVktMISSoKGR6SbUH6ZBvRQrkruaWACog=;
-        b=EGO+3hZIA0H4zRSJHJjXoPKzQZDfqhjZAJOKvFs6GEVtkvISEyfkab+bPjElJwkFy3+2Sw
-        M/fmvdf3WOww0Iov2/Bo4t1g4QZdrku80EPxSkDoYyPAIMPsivPfyzjgmszT4cTR9BA129
-        qCznwNOncfO+BINF6yCHJuSKK6O/Qk8=
-Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
- [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-41-Y-YIBbnxNj-wi6l7Wbp2jg-1; Mon, 13 Mar 2023 14:52:39 -0400
-X-MC-Unique: Y-YIBbnxNj-wi6l7Wbp2jg-1
-Received: by mail-wm1-f70.google.com with SMTP id j6-20020a05600c1c0600b003eaf882cb85so4783816wms.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:52:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678733557;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G8VTCHZ3m4KVktMISSoKGR6SbUH6ZBvRQrkruaWACog=;
-        b=syalKIKV345F8e7LjZNT3AxCvCckEumVQPXZTyQRJmY7GYjUmsyy+10MlbCVaoYIbm
-         dHKz5z2qDBRBHL4mLVopNIc5593GoFcsj2P3HWV0OyP9eKBDPTc5leo1PLeF+4Vxhhpo
-         LldbZHl65ckeimuSvSgDtBFBOuIHm+oZN7p6Yfq8DDNODtFSo5zb5XuEVByRWCicVedP
-         1Yb+uTKSS1eM2lh0M3dJYLQW+ptFFl5XkpZTKI7lcmquQV2L1CynLvMVIFnnc0rXHWs+
-         SqnJU0PlVAW85TV32vZv2VTCMtXLP6NS80sQO4n+W1Or1iX2AeYWiN4xGTJMZZhayHy9
-         x3Gg==
-X-Gm-Message-State: AO0yUKUH9l6/VmhW2cosfN9q7CXpnL0oDyNdiz2sYQs7EGXTBZj4DcGZ
-        TrZLKKDMmXR8+gjSoz8gNMiml6CjuWFkAcAk3J7gQe/kXgQ8NrqpgNEpVJiHovehSO303/PMcNp
-        uObbvuDdgJvfJKx2NDW1wNAEI
-X-Received: by 2002:a05:600c:470e:b0:3ed:1fa1:9030 with SMTP id v14-20020a05600c470e00b003ed1fa19030mr5792195wmo.29.1678733557824;
-        Mon, 13 Mar 2023 11:52:37 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9TvA6r5EXacliDuiYhZheG2jfGc1duSyGOa9hRsbVnPfgKKBTxKjJo0kQulu/mdvPLWiUXEg==
-X-Received: by 2002:a05:600c:470e:b0:3ed:1fa1:9030 with SMTP id v14-20020a05600c470e00b003ed1fa19030mr5792178wmo.29.1678733557497;
-        Mon, 13 Mar 2023 11:52:37 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c701:7500:9d5c:56ee:46c3:8593? (p200300cbc70175009d5c56ee46c38593.dip0.t-ipconnect.de. [2003:cb:c701:7500:9d5c:56ee:46c3:8593])
-        by smtp.gmail.com with ESMTPSA id m20-20020a7bca54000000b003ecc64edf7esm504097wml.39.2023.03.13.11.52.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 11:52:36 -0700 (PDT)
-Message-ID: <662a1ed9-2a40-1082-b893-e5d7e02955b9@redhat.com>
-Date:   Mon, 13 Mar 2023 19:52:35 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mm: prefer xxx_page() alloc/free functions for order-0
- pages
-Content-Language: en-US
-To:     Lorenzo Stoakes <lstoakes@gmail.com>, linux-mm@kvack.org,
+        Mon, 13 Mar 2023 14:54:51 -0400
+Received: from mailrelay2-1.pub.mailoutpod2-cph3.one.com (mailrelay2-1.pub.mailoutpod2-cph3.one.com [IPv6:2a02:2350:5:401::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF88D72003
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:53:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=rsa2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=MgrV3LilewuhqmbVjO8RxzUTtaR1+vbnicMyPFFpwAM=;
+        b=vYP0maXsWtgajTiEfra2Tg51b+hBuX1vK9N4+SgVi7WGqRs5pR0lsFVXhISV6Tmw3E9cWr5BHiw75
+         WyNa3VPCN7/o1iW+N8xjpnBAa/Nl3sChif8zRqdddijLc2TkJfVxfrhoDuKD5PM8GsMlGxFTgzanpu
+         vi/yEDuFbHolP+J0hY5szMfqnc+MZeFGtbwDGFx62V62HtJ6o0+YB4GU0wG57m9QjN900vdStfJUWM
+         pH8R8g1INiS5k70ZqmsaN5vZnQnwU5dgZEQh/1UtOV3/kOsshToposSzQYOijsvGH8uBsA4wmiwILk
+         NRjqZI+LlS1kRtF7n+5HoLSV8JqrMWg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=ravnborg.org; s=ed2;
+        h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
+         from:date:from;
+        bh=MgrV3LilewuhqmbVjO8RxzUTtaR1+vbnicMyPFFpwAM=;
+        b=MlV8G0UHvhx3766kkcTJrCusIOBh66LFtAdDHT8vshgOmK1DVRVyF5Pm9tsdUZ4F/D4Xqyfin3YmI
+         VelkWMiAQ==
+X-HalOne-ID: 5882c668-c1d0-11ed-90a3-3df7d73157c4
+Received: from ravnborg.org (2-105-2-98-cable.dk.customer.tdc.net [2.105.2.98])
+        by mailrelay2 (Halon) with ESMTPSA
+        id 5882c668-c1d0-11ed-90a3-3df7d73157c4;
+        Mon, 13 Mar 2023 18:53:31 +0000 (UTC)
+Date:   Mon, 13 Mar 2023 19:53:30 +0100
+From:   Sam Ravnborg <sam@ravnborg.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Jianhua Lu <lujianhua000@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Nick Piggin <npiggin@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Mel Gorman <mgorman@techsingularity.net>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Christoph Hellwig <hch@infradead.org>
-References: <50c48ca4789f1da2a65795f2346f5ae3eff7d665.1678710232.git.lstoakes@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <50c48ca4789f1da2a65795f2346f5ae3eff7d665.1678710232.git.lstoakes@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] drm/panel: Add driver for Novatek NT36523
+Message-ID: <ZA9xKlScy9/LS753@ravnborg.org>
+References: <20230311123231.20771-1-lujianhua000@gmail.com>
+ <20230311123231.20771-2-lujianhua000@gmail.com>
+ <904bc493-7160-32fd-9709-1dcb978ddbab@linaro.org>
+ <ZAx4KqXw+an555d4@Gentoo>
+ <6c02557d-372d-05b1-2998-7c2cde99fac7@linaro.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <6c02557d-372d-05b1-2998-7c2cde99fac7@linaro.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13.03.23 13:27, Lorenzo Stoakes wrote:
-> Update instances of alloc_pages(..., 0), __get_free_pages(..., 0) and
-> __free_pages(..., 0) to use alloc_page(), __get_free_page() and
-> __free_page() respectively in core code.
-> 
-> Signed-off-by: Lorenzo Stoakes <lstoakes@gmail.com>
-> ---
+On Mon, Mar 13, 2023 at 09:06:50AM +0100, Neil Armstrong wrote:
+> On 11/03/2023 13:46, Jianhua Lu wrote:
+> > On Sat, Mar 11, 2023 at 01:38:52PM +0100, Konrad Dybcio wrote:
+> > > 
+> > > 
+> > > On 11.03.2023 13:32, Jianhua Lu wrote:
+> > > > Add a driver for panels using the Novatek NT36523 display driver IC.
+> > > > 
+> > > > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> > > > ---
+> > > [...]
+> > > 
+> > > > +
+> > > > +static int nt36523_get_modes(struct drm_panel *panel,
+> > > > +			       struct drm_connector *connector)
+> > > > +{
+> > > > +	struct panel_info *pinfo = to_panel_info(panel);
+> > > > +	int i;
+> > > > +
+> > > > +	for (i = 0; i < pinfo->desc->num_modes; i++) {
+> > > > +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
+> > > > +		struct drm_display_mode *mode;
+> > > > +
+> > > > +		mode = drm_mode_duplicate(connector->dev, m);
+> > > > +		if (!mode) {
+> > > > +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
+> > > > +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
+> > > > +			return -ENOMEM;
+> > > > +		}
+> > > > +
+> > > > +		mode->type = DRM_MODE_TYPE_DRIVER;
+> > > > +		if (pinfo->desc->num_modes == 1)
+> > > > +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+> > > That's not quite correct, as that means "if you have more than one
+> > > defined panel mode (say 60Hz and 120 Hz), there will be no preferred one".
+> > This piece of code I see in the other panels, so I'm not sure if it is
+> > correct.
+Jianhua is correct that the same code exists in several places,
+and from a quick browse I consider all the cases bogus.
 
-Reviewed-by: David Hildenbrand <david@redhat.com>
+It would be fine if someone volunteered to fix all the panels so we
+avoid this bug to creep into more panel drivers.
 
+	Sam
