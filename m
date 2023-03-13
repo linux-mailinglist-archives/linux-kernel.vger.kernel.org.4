@@ -2,87 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0D966B8048
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:21:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6363D6B8037
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:19:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbjCMSU5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:20:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39530 "EHLO
+        id S230079AbjCMSTK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:19:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230437AbjCMSUl (ORCPT
+        with ESMTP id S229883AbjCMSTD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:20:41 -0400
-X-Greylist: delayed 110 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 13 Mar 2023 11:20:12 PDT
-Received: from violet.fr.zoreil.com (violet.fr.zoreil.com [IPv6:2001:4b98:dc0:41:216:3eff:fe56:8398])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B02B7E7A4;
-        Mon, 13 Mar 2023 11:20:12 -0700 (PDT)
-Received: from violet.fr.zoreil.com ([127.0.0.1])
-        by violet.fr.zoreil.com (8.17.1/8.17.1) with ESMTP id 32DII48B525011;
-        Mon, 13 Mar 2023 19:18:04 +0100
-DKIM-Filter: OpenDKIM Filter v2.11.0 violet.fr.zoreil.com 32DII48B525011
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fr.zoreil.com;
-        s=v20220413; t=1678731484;
-        bh=fDODv/JG6TlBswRvg4d33h1IlTOtA6L8xzOB57WlhEM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fgYRIeOrOxLUgHicG+sUWCDB30KAfKyx7pLKxPGVFm0PKzSAgF8waEyVG2cGnhwOh
-         W0zMOWOGdf57bj6vCGCNO7R4EoUyDloc2I92XX2u567dapKjA51SzdlaQW20WoTTPy
-         YMiub42DWA6fODW+K7NBHV4wpcjeeS2kNz4ZomCU=
-Received: (from romieu@localhost)
-        by violet.fr.zoreil.com (8.17.1/8.17.1/Submit) id 32DII4dm525010;
-        Mon, 13 Mar 2023 19:18:04 +0100
-Date:   Mon, 13 Mar 2023 19:18:03 +0100
-From:   Francois Romieu <romieu@fr.zoreil.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, netdev@vger.kernel.org,
+        Mon, 13 Mar 2023 14:19:03 -0400
+Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CA3C5DECC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:19:01 -0700 (PDT)
+Received: by mail-pl1-x636.google.com with SMTP id p20so13910093plw.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:19:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678731540;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=vKP/AFJeQr40lfvkoUD7JjvzM1HAlX7kxzH4QWjB/+A=;
+        b=QppRJ6VBsJ2wKq3IgydXDAmdaCQYA72iSNQZuFXd5Vy318KyNTAAx2EWBosJo1mr+3
+         5NLFw1uAeCAkzNQ23L5py1MR2RsKDJ7fS76EoMAD4n+9eQxe1evhh3ddejHwY6zQIneN
+         U6RVu3YevdGMoVxiz0EMNm2DbBZVTNKy+vaUQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678731540;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vKP/AFJeQr40lfvkoUD7JjvzM1HAlX7kxzH4QWjB/+A=;
+        b=i1GG1162AQiAbBcB03EGErVQ+hYdNxej3jGk+tI/cnt5ag70Lr0LasNp0BjsevAzA/
+         S4Kl95ss4LSvkaP1N3B3B0q09stcKG3tNZgNk6Mn0STRSb2KINYQt+kd2XyQ07VSCiFC
+         rC259xdWsro2ozVDQ9rB/shA7ofbEHbZTNUFyeFiOEyggw60kuij65aALxEVU6OHJbSU
+         Hy/RQ+fkQPez6UMqss5YqW2XbTYNQV6RfkiDo7qigtgLG6cFoZ9sdkNtGIGBd6yEhskZ
+         PRBY+qNiM7bDenGqQZCsUKHTT7fJEetvgcLvdf69YznbQaYZP5Feuvp1/HAGB94rqNvE
+         S31g==
+X-Gm-Message-State: AO0yUKVOWyCrxcb/R0yrnlPaTT3r2h4dt+670enC7Ll4t0MlfvLqudab
+        JuS2gP7lfzbyQFAsIWFWT5bEpg==
+X-Google-Smtp-Source: AK7set9foeKnFdbG/Ui1XAXKuHYGeyr9EQ8oOYQWT5Aa50yJhB5fHYLdK/hdEMYaalFgdigbD1NkPw==
+X-Received: by 2002:a05:6a20:258a:b0:c7:8644:a9ff with SMTP id k10-20020a056a20258a00b000c78644a9ffmr32590787pzd.57.1678731540454;
+        Mon, 13 Mar 2023 11:19:00 -0700 (PDT)
+Received: from tictac2.mtv.corp.google.com ([2620:15c:9d:2:79c6:a848:199d:3491])
+        by smtp.gmail.com with ESMTPSA id a11-20020aa780cb000000b005ac419804d3sm25169pfn.186.2023.03.13.11.18.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 11:18:59 -0700 (PDT)
+From:   Douglas Anderson <dianders@chromium.org>
+To:     Mark Brown <broonie@kernel.org>
+Cc:     mka@chromium.org, christian@kohlschutter.com,
+        Douglas Anderson <dianders@chromium.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] net: Use of_property_read_bool() for boolean properties
-Message-ID: <20230313181803.GA524627@electric-eye.fr.zoreil.com>
-References: <20230310144718.1544169-1-robh@kernel.org>
+Subject: [PATCH 0/2] regulator: Fix boot speed regression w/ off-on-delay-us
+Date:   Mon, 13 Mar 2023 11:18:18 -0700
+Message-Id: <20230313181820.2482385-1-dianders@chromium.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310144718.1544169-1-robh@kernel.org>
-X-Organisation: Land of Sunshine Inc.
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_SBL_CSS,SPF_HELO_PASS,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rob Herring <robh@kernel.org> :
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties.
-> Convert reading boolean properties to to of_property_read_bool().
-> 
-> Signed-off-by: Rob Herring <robh@kernel.org>
-> ---
-[...]
->  drivers/net/ethernet/via/via-velocity.c         |  3 +--
-[...]
-> diff --git a/drivers/net/ethernet/via/via-velocity.c b/drivers/net/ethernet/via/via-velocity.c
-> index a502812ac418..86f7843b4591 100644
-> --- a/drivers/net/ethernet/via/via-velocity.c
-> +++ b/drivers/net/ethernet/via/via-velocity.c
-> @@ -2709,8 +2709,7 @@ static int velocity_get_platform_info(struct velocity_info *vptr)
->  	struct resource res;
->  	int ret;
->  
-> -	if (of_get_property(vptr->dev->of_node, "no-eeprom", NULL))
-> -		vptr->no_eeprom = 1;
-> +	vptr->no_eeprom = of_property_read_bool(vptr->dev->of_node, "no-eeprom");
->  
->  	ret = of_address_to_resource(vptr->dev->of_node, 0, &res);
->  	if (ret) {
+These two patches together fix a boot speed regression on
+sc7180-trogdor boards which use off-on-delay-us together with
+regulator-boot-on with the eDP power rail.
 
-Acked-by: Francois Romieu <romieu@fr.zoreil.com>
+The first patch is _almost_ a revert of another patch. Depending on
+when the regulator is probed and the actual delay, the end result
+might be the same as a revert or might result in a delay that's
+somewhere between "no delay" and a full delay. As talked about in the
+patch, I believe this is the correct behavior and, if the problems
+fixed in the original patch are still present, I'm hoping that they
+can be fixed in a cleaner way.
 
-Simon Horman's comment regarding assignment of bool value to an integer
-typed field also apply here.
+The first patch doesn't fully eliminate the boot speed regression, it
+only gets us back ~250 of the 500 ms delay. The second patch gets us
+the rest of the way.
+
+The two patches can be applied independently of each other.
+
+
+Douglas Anderson (2):
+  regulator: core: Shorten off-on-delay-us for always-on/boot-on by time
+    since booted
+  regulator: fixed: Set PROBE_PREFER_ASYNCHRONOUS
+
+ drivers/regulator/core.c  | 7 +++----
+ drivers/regulator/fixed.c | 1 +
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
 -- 
-Ueimor
+2.40.0.rc1.284.g88254d51c5-goog
+
