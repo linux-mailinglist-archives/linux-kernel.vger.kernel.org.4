@@ -2,65 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D48BD6B7805
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:50:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F3A6B77EB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 13:46:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230281AbjCMMub (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 08:50:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36172 "EHLO
+        id S230097AbjCMMqV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 08:46:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjCMMuX (ORCPT
+        with ESMTP id S229888AbjCMMqT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 08:50:23 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D120434002
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:49:54 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 132so6800710pgh.13
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 05:49:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678711794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Wx8jF7FKGmBoaIt+aFf1/ouqS3HHqR+OXeKb+Cy9oZE=;
-        b=HKEZDOm+mV1HAdL7ER3iR1vWEz+4AMwcB8/eiYzfDT6G3vlc/AaUcvMnA+QJ8TeT8y
-         VFxsnjxJGqsNiwUpJ+hn81fvGKZv4x+d58+sjI9u4cMRSUA0YEmcNXr/ygpARwkw+f7/
-         eAchNtNYJBBtn/PE4ARsywNpqb/J+N4HdfukwE8Mvc+YC+nrIxTOndCSaacbcVKRBN/3
-         DBI2ew5D4qaoQmlBSUIF6ZG1KxARWrGfgil/kWwcGRNUbrJOfxigAjZTxycUfS7z1Wpf
-         9kpY6jDanHkZIjl420k/BbT1PmWkmPeGFVFO3WSLSBbMcAU9MfOXdev+i0VBNBL/JRUj
-         XQPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678711794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Wx8jF7FKGmBoaIt+aFf1/ouqS3HHqR+OXeKb+Cy9oZE=;
-        b=XWIqGut5mTRllKJIu0FnuVMBLB0Gj+XQCkr9nRJCqK2OCeyV2h6bsea1b/K/L86s34
-         bEkJ8hE6F9LPlJALIob4v0jAiUfuhPKezqhXAd4wwchGpyYlx/fbRZGlGVLeBxblMr5k
-         zbMuKz1+/uHNAfdwrZPrlNhq5BdQzrNwOSnW2HHI7Hsmiq752ByoXGLQarZ86tV46SOT
-         xkRYHAt5h7sMxftxDwwTyebeDWo7bYOJaorkt2n1eTIoyZA6zR0jBJo/E7a2x5fzOyhO
-         9pn+2024KIwt3DVQHdQb/5NfcwXsIm5x8Ij5zpn6sA0lLIsrKKPO8jJ1Ew8lR6gtojrq
-         o1dg==
-X-Gm-Message-State: AO0yUKXNCEsCTCGZ7EpS877LjPNeipuyVvt6xRLuk9vIYVAHEMyqiDyp
-        XR53Wn3QK25tAUMN5uZugO7QWAOn3wtd8UHgyo1uTg==
-X-Google-Smtp-Source: AK7set+nraYkEbzD7lEiHtt/giSmKeJ3bPG/6dv6QjfYN2aLbyojc2xt8UY2wcR2r3heZo8J5ExHI7B2fVzTC6vEaTg=
-X-Received: by 2002:a63:f91d:0:b0:502:fd12:83ce with SMTP id
- h29-20020a63f91d000000b00502fd1283cemr12062421pgi.5.1678711794210; Mon, 13
- Mar 2023 05:49:54 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230311111238.251000-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111238.251000-1-krzysztof.kozlowski@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Mon, 13 Mar 2023 13:49:17 +0100
-Message-ID: <CAPDyKFqaq5ysudyqOe0dB8fm=+p_ywpXdqQr33QUCq3j+Bqnrw@mail.gmail.com>
-Subject: Re: [PATCH] mmc: sdhci: add static to !OF stub
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>, linux-mmc@vger.kernel.org,
+        Mon, 13 Mar 2023 08:46:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CF256EBB;
+        Mon, 13 Mar 2023 05:46:00 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D4C0F61277;
+        Mon, 13 Mar 2023 12:45:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABDBDC433D2;
+        Mon, 13 Mar 2023 12:45:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678711559;
+        bh=qVkmwXonH8hmMSSCuPxE/fYZDjtdar66MDKlKu02CYg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YviOT9U7ELoxrS3EwLG3X7qlriMbweVhj5Kek/YLMV+E/QrriI1BSExdG/pcc46GW
+         At6bYmXyqHEyOkXbVoMlRLvmSIW65zg13KX53Pi1ISApLImH7x0GnXvHeMaJsF1W1Y
+         g4x6tflym2Dd7Dy4wBUC5yVKPUoMvaKMmvCx4K/d/eey/y+OBgLFkaoIqK2hfpN5Q4
+         Xnut8+nuUTm0IluESvj37VI29Cn/JjQ5dAb2EvHzvui4XbN2hJmhKqEDUOph/rscT5
+         zWRKTs3ogfflZDFof8WeDwgLcTuY9Dim9u7/wP8tRkeBlrFivCA5L6wK194SuSmRy0
+         XJ299IuuVz45Q==
+Date:   Mon, 13 Mar 2023 05:49:23 -0700
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     Eric Chanudet <echanude@redhat.com>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
+Message-ID: <20230313124923.iwaknvrnitqal3wa@ripper>
+References: <20230309233945.1199358-1-echanude@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309233945.1199358-1-echanude@redhat.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,43 +57,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 at 12:12, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->
-> The sdhci_get_compatibility() is not used outside of the unit:
->
->   drivers/mmc/host/sdhci-pltfm.c:76:6: error: no previous prototype for =
-=E2=80=98sdhci_get_compatibility=E2=80=99 [-Werror=3Dmissing-prototypes]
->
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Thu, Mar 09, 2023 at 06:39:48PM -0500, Eric Chanudet wrote:
+> ABL uses the __symbols__ section to process the DTB before passing it
+> forward. Without it, the bootstrap is interrupted.
+> 
+> Signed-off-by: Eric Chanudet <echanude@redhat.com>
+
+@Rob, @Krzysztof, it seems useful to be able to use the upstream
+generated DTBs with overlays.
+
+Do you suggest that we enable this on a per-board basis when it's being
+requested, across all devices, or tell the users that they have to
+re-generate the dtbs themselves?
+
+Thanks,
+Bjorn
+
 > ---
->  drivers/mmc/host/sdhci-pltfm.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/sdhci-pltfm.c b/drivers/mmc/host/sdhci-pltf=
-m.c
-> index 328b132bbe57..245e56324dff 100644
-> --- a/drivers/mmc/host/sdhci-pltfm.c
-> +++ b/drivers/mmc/host/sdhci-pltfm.c
-> @@ -73,7 +73,7 @@ static void sdhci_get_compatibility(struct platform_dev=
-ice *pdev)
->                 host->quirks |=3D SDHCI_QUIRK_BROKEN_TIMEOUT_VAL;
->  }
->  #else
-> -void sdhci_get_compatibility(struct platform_device *pdev) {}
-> +static void sdhci_get_compatibility(struct platform_device *pdev) {}
->  #endif /* CONFIG_OF */
-
-sdhci_get_compatibility() is using OF functions with stubs for !OF.
-
-Perhaps a cleaner option is to drop the #ifdef CONFIG_OF completely
-around sdhci_get_compatibility(), thus we can drop the stub too.
-
->
->  void sdhci_get_property(struct platform_device *pdev)
-> --
-> 2.34.1
->
-
-Kind regards
-Uffe
+> Depends on initial sa8775p-ride.dts:
+> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
+> 
+>  arch/arm64/boot/dts/qcom/Makefile | 4 ++++
+>  1 file changed, 4 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
+> index b63cd1861e68..72e85ab31d74 100644
+> --- a/arch/arm64/boot/dts/qcom/Makefile
+> +++ b/arch/arm64/boot/dts/qcom/Makefile
+> @@ -1,4 +1,8 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> +
+> +# Enable support for device-tree overlays required on sa8775p-ride.
+> +DTC_FLAGS_sa8775p-ride := -@
+> +
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
+>  dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
+> -- 
+> 2.39.1
+> 
