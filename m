@@ -2,156 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1FDCE6B7D68
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:26:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 703946B7D6A
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 17:26:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCMQ0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 12:26:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47138 "EHLO
+        id S229921AbjCMQ03 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 12:26:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229608AbjCMQ0L (ORCPT
+        with ESMTP id S231132AbjCMQ0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 12:26:11 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0421F360AB;
-        Mon, 13 Mar 2023 09:26:10 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso11339642wmq.1;
-        Mon, 13 Mar 2023 09:26:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678724768;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PTS3TvsaI19NjFQi3zg5TWV9y2d9pm99dtScZ0oVUQo=;
-        b=MuzLAXw50lYgGq40JnV3ctiw64T+L0DmnFMGIUr74EXpJ1c1Cf92k88ATt63trzuD4
-         3Ts1bfT5aOCpk2r5lG9G55Nz96/L82e8oeWcRvgxxN8fcC8Z8X3fulaDW0wt/aF2nivK
-         89mWOw2EWXhZ4s6Vb4bECSLNN3Y9RaY8qYGFtmet92jDu5uU6Lkdm0ozclknqq6jJsj1
-         dbQ2EJgrmk81ru5lKHHG3L/9yXCQpaKq9QlREw6gCH1ILdqSvm7j+/Zdz0gZou0R606G
-         r1Q81R2Jk6b64LP6Z4wAPdqtsw6soJ4qdT4GFWLMWnXxPMfornvexuQDSla2ptsk16wb
-         EIkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678724768;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PTS3TvsaI19NjFQi3zg5TWV9y2d9pm99dtScZ0oVUQo=;
-        b=x415K3jtkhazseO4ecpOtI30qatxvkXasc+IFK+hwvg+tu0V3PDj6f54vZ5PD3xwc2
-         Ooj8WJGpccmY+IoEC66Y32l4c3BuVfOWteJnv+qiPKRZwDKc/GIkgH71GnkIYcIDIPV4
-         e8kiSkJsvLwlUkLCaEJe2ldDvauF7TPxUzSDJEzLhxkEEiWzspHZqHpZTbxaSpO3ZSxE
-         VZH/n7rBffjsY77VELQRc1Z/a4JROlq/Srcz4v6jLuZYZQEapNNCU62x0XKluG8Zq8Wl
-         lFqNiu4zLQcYpqiW1yghVRfsXh6j1Xx+SfL6wFQpMJrmPJKg9+7/Qpv2/Dx2o/ASkaFt
-         VUQQ==
-X-Gm-Message-State: AO0yUKUEmDmRkr9OhfWnn72BSBU2ojskFXGT8Nx2/lKJ30KZfVVXJGfv
-        etJ5Y0foWzPNI5SXscvBDV0=
-X-Google-Smtp-Source: AK7set8wDucz4hPvGRBd6pLsS8FtDu1eAKAN6WORwSdEAt/PlxgAMfgosxlY/7X6SbGrmESuVNo6rQ==
-X-Received: by 2002:a05:600c:19cf:b0:3eb:3cc9:9f85 with SMTP id u15-20020a05600c19cf00b003eb3cc99f85mr12199068wmq.26.1678724768377;
-        Mon, 13 Mar 2023 09:26:08 -0700 (PDT)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id ja9-20020a05600c556900b003ed29f4e45esm282700wmb.0.2023.03.13.09.25.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 09:26:08 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 17:25:34 +0100
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, dsahern@kernel.org, alexanderduyck@fb.com,
-        richardbgobert@gmail.com, lucien.xin@gmail.com,
-        lixiaoyan@google.com, iwienand@redhat.com, leon@kernel.org,
-        ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/2] gro: optimise redundant parsing of packets
-Message-ID: <20230313162520.GA17199@debian>
+        Mon, 13 Mar 2023 12:26:24 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 284D077E2E
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 09:26:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id CDFF31FE0E;
+        Mon, 13 Mar 2023 16:26:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1678724779; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSRdEVYjIp3MPfK6d1mb8MjcriEK9DC473gzAVaXYC4=;
+        b=NXt0ygQ5dQYT2n0avtfdCcn1HyyFiIaVgfT4u/L6yNULFuYxnVZc/P/+QoR4pI0XQ7EOkJ
+        BqlpCMlbDZtUIDLGqVym7G0Tu7oFuz4zdJ06rDtuitNO8lyIGwA5tqaYWNvOHrpAbxg1a4
+        sL+TleXLvIyU5YtBAJbUhA5bMRB0e80=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1678724779;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=BSRdEVYjIp3MPfK6d1mb8MjcriEK9DC473gzAVaXYC4=;
+        b=/ViIEdP1QPQw63BYLqTLgjilMHEV49DDb7/K8iE2xQL6A7TxdzbTmTD8zFU4k7LDiX85W/
+        gA1mT8ajCadaIADA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id B136F13517;
+        Mon, 13 Mar 2023 16:26:19 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xEq+KatOD2QIDwAAMHmgww
+        (envelope-from <vbabka@suse.cz>); Mon, 13 Mar 2023 16:26:19 +0000
+Message-ID: <b0ceb6a5-5949-2e0b-0634-e9d991c43188@suse.cz>
+Date:   Mon, 13 Mar 2023 17:26:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mm/slub: fix help comment of SLUB_DEBUG[_ON]
+Content-Language: en-US
+To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Vernon Yang <vernon2gm@gmail.com>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230222232058.66971-1-vernon2gm@gmail.com>
+ <Y/a7db7v9zJJnX30@localhost>
+From:   Vlastimil Babka <vbabka@suse.cz>
+In-Reply-To: <Y/a7db7v9zJJnX30@localhost>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Currently the IPv6 extension headers are parsed twice: first in
-ipv6_gro_receive, and then again in ipv6_gro_complete.
+On 2/23/23 02:03, Hyeonggon Yoo wrote:
+> On Thu, Feb 23, 2023 at 07:20:58AM +0800, Vernon Yang wrote:
+>> Since commit 081248de0a02 ("kset: move /sys/slab to /sys/kernel/slab"),
+>> the SYSFS path of slab was modified, so fix up the help comment of
+>> SLUB_DEBUG to use the correct one.
+>> 
+>> And now the "slub_debug" parameter on boot that is support for more
+>> fine grained debug control, so fix up help comment of SLUB_DEBUG_ON
+>> for "no support" to "support".
+>> 
+>> Signed-off-by: Vernon Yang <vernon2gm@gmail.com>
+>> ---
+>>  mm/Kconfig.debug | 12 ++++++------
+>>  1 file changed, 6 insertions(+), 6 deletions(-)
+>> 
+>> diff --git a/mm/Kconfig.debug b/mm/Kconfig.debug
+>> index fca699ad1fb0..732043bf56c6 100644
+>> --- a/mm/Kconfig.debug
+>> +++ b/mm/Kconfig.debug
+>> @@ -61,8 +61,8 @@ config SLUB_DEBUG
+>>  	help
+>>  	  SLUB has extensive debug support features. Disabling these can
+>>  	  result in significant savings in code size. This also disables
+>> -	  SLUB sysfs support. /sys/slab will not exist and there will be
+>> -	  no support for cache validation etc.
+>> +	  SLUB sysfs support. /sys/kernel/slab will not exist and there
+>> +	  will be no support for cache validation etc.
+> 
+> After commit ab4d5ed5eeda ("slub: Enable sysfs support for !CONFIG_SLUB_DEBUG"),
+> "Disabling SLUB_DEBUG also disables SLUB sysfs support" is not true anymore.
 
-By using the new ->transport_proto and ->network_proto fields, and also
-storing the size of the network header, we can avoid parsing a second time
-during the gro complete phase.
+Yeah we could say that /sys/kernel/slab will exist but will not provide e.g.
+cache validation.
 
-The first commit frees up space in the GRO CB. The second commit reduces
-the redundant parsing during the complete phase, using the freed CB space.
+>>  config SLUB_DEBUG_ON
+>>  	bool "SLUB debugging on by default"
+>> @@ -73,10 +73,10 @@ config SLUB_DEBUG_ON
+>>  	  Boot with debugging on by default. SLUB boots by default with
+>>  	  the runtime debug capabilities switched off. Enabling this is
+>>  	  equivalent to specifying the "slub_debug" parameter on boot.
+>> -	  There is no support for more fine grained debug control like
+>> -	  possible with slub_debug=xxx. SLUB debugging may be switched
+>> -	  off in a kernel built with CONFIG_SLUB_DEBUG_ON by specifying
+>> -	  "slub_debug=-".
+>> +	  There is support for more fine grained debug control like
+>> +	  possible with slub_debug=xxx, details in Documentation/mm/slub.rst.
+>> +	  SLUB debugging may be switched off in a kernel built with
+>> +	  CONFIG_SLUB_DEBUG_ON by specifying "slub_debug=-".
+> 
+> I think this is a misunderstanding. SLUB_DEBUG_ON is equivalent to
+> passing boot parameter slub_debug=FUPZ, and what the help text says is that
+> 
+> "You can enable slub debugging by default using this config option but
+>  there is no support for fine-grained control like what slub_debug
+>  boot parameter provides."
+> 
+>  IOW SLUB_DEBUG_ON cannot be used to have same effect as passing
+>  something like slub_debug=F.
 
-In addition, the second commit contains a fix for a potential future
-problem in BIG TCP, which is detailed in the commit message itself.
+Agree with both comments. Vernon, will you send an updated patch?
 
-Performance tests for TCP stream over IPv6 with extension headers
-demonstrate rx improvement of ~0.7%.
+>>  
+>>  config PAGE_OWNER
+>>  	bool "Track page owner"
+>> -- 
+>> 2.34.1
+>> 
+>> 
 
-For the benchmarks, I used 100Gbit NIC mlx5 single-core (power management
-off), turboboost off.
-
-Typical IPv6 traffic (zero extension headers):
-
-    for i in {1..5}; do netperf -t TCP_STREAM -H 2001:db8:2:2::2 -l 90 | tail -1; done
-    # before
-    131072  16384  16384    90.00    16391.20
-    131072  16384  16384    90.00    16403.50
-    131072  16384  16384    90.00    16403.30
-    131072  16384  16384    90.00    16397.84
-    131072  16384  16384    90.00    16398.00
-
-    # after
-    131072  16384  16384    90.00    16399.85
-    131072  16384  16384    90.00    16392.37
-    131072  16384  16384    90.00    16403.06
-    131072  16384  16384    90.00    16406.97
-    131072  16384  16384    90.00    16406.09
-
-IPv6 over IPv6 traffic:
-
-    for i in {1..5}; do netperf -t TCP_STREAM -H 4001:db8:2:2::2 -l 90 | tail -1; done
-    # before
-    131072  16384  16384    90.00    14791.61
-    131072  16384  16384    90.00    14791.66
-    131072  16384  16384    90.00    14783.47
-    131072  16384  16384    90.00    14810.17
-    131072  16384  16384    90.00    14806.15
-
-    # after
-    131072  16384  16384    90.00    14793.49
-    131072  16384  16384    90.00    14816.10
-    131072  16384  16384    90.00    14818.41
-    131072  16384  16384    90.00    14780.35
-    131072  16384  16384    90.00    14800.48
-
-IPv6 traffic with varying extension headers:
-
-    for i in {1..5}; do netperf -t TCP_STREAM -H 2001:db8:2:2::2 -l 90 | tail -1; done
-    # before
-    131072  16384  16384    90.00    14812.37
-    131072  16384  16384    90.00    14813.04
-    131072  16384  16384    90.00    14802.54
-    131072  16384  16384    90.00    14804.06
-    131072  16384  16384    90.00    14819.08
-
-    # after
-    131072  16384  16384    90.00    14927.11
-    131072  16384  16384    90.00    14910.45
-    131072  16384  16384    90.00    14917.36
-    131072  16384  16384    90.00    14916.53
-    131072  16384  16384    90.00    14928.88
-
-Richard Gobert (2):
-  gro: decrease size of CB
-  gro: optimise redundant parsing of packets
-
- include/net/gro.h      | 33 ++++++++++++++++++++++++---------
- net/core/gro.c         | 18 +++++++++++-------
- net/ethernet/eth.c     | 14 +++++++++++---
- net/ipv6/ip6_offload.c | 20 +++++++++++++++-----
- 4 files changed, 61 insertions(+), 24 deletions(-)
-
--- 
-2.36.1
