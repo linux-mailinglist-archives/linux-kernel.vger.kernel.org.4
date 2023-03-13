@@ -2,98 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D9F96B7932
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:40:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 145776B7934
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbjCMNkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36682 "EHLO
+        id S229861AbjCMNlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37770 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229543AbjCMNki (ORCPT
+        with ESMTP id S229616AbjCMNln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:40:38 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9F6961888
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:40:35 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so7535625wms.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:40:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678714834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=31bIBBam0f6kecXsPhvAYb/shqew87ztMsMZCGP7Fyo=;
-        b=a+yJWnElquqYbn/oICWpaQlm3ZZ3bFqIHFfXnnVVEa7PuDT6nvnm5tUmj0B5XQx2J2
-         7yIj/RF7qe5wgEcR308v22xh0zJKvU6amW9qlKg2YVHfAyHo234WjE9FS1ebEstAVAhM
-         iBuQ62jrO/cN2z55419ssAQRkeKMiy+g8QmEpLd6lJzSOLID0zxrREz/9TGqUGQepiw0
-         t0Z3yDIKjGaO7VDgg390oZKuIJa2Kt/7KQdcpd/nBWSXA2zsSTd1Aj8mPN7yBeVO7hLI
-         e7Tk04dscKAFXDTceu6VtfIwb2IlUGTwmpE8UIODGS9Zt5QxTPhy8LVEMSz4I+TM2hNZ
-         VQqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678714834;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=31bIBBam0f6kecXsPhvAYb/shqew87ztMsMZCGP7Fyo=;
-        b=rA2QZi3e2q5+AmdPv0/1s4IPJjLgTaw1xYrZv5bAHsV1S4K6SrlmwWVtLJCX4o42Ww
-         OdlSb4DXAfI/MV7PBJwDNfwvpXq6o82PMbPz9e6h20JqfufNhjfuKq/FRkGgD9SVbDZW
-         fqlHaxAviEkC2XS3KA1/QA+htLty8a5skiz7xKY35bSQLyat1+2MiqATXfCNL1W81sb9
-         DwK9g6DGkakPVu4Oai/AmD7BRieiqrdWX4heufCAcekNbVTKiPOvI1J9nMfvp8YYckAi
-         hpwoi725yTj6JvB1Kdb8kqPefHKsa4I5BWd1Bjiu2qYMZp9Ah7TiPVCsYjg6tPHZ0LzV
-         Em8A==
-X-Gm-Message-State: AO0yUKVcYO/tKjThbgJw1pfrDFOqe/CRIxcbhpymMo7yuNpU/tQuxUi3
-        M8LBLa/Gd1FFFLPDl9za0fvNeIM062UHUZNTMCuakZ0Lb5M=
-X-Google-Smtp-Source: AK7set9lDqU39yypMAy0cjQ86QYU+3Njby8QG8Rj7JOvcecnYCcaHA2RVLNH73dyVErvidwPxpTbbVV6dFsNZEyZee4=
-X-Received: by 2002:a7b:c843:0:b0:3eb:3e75:5db2 with SMTP id
- c3-20020a7bc843000000b003eb3e755db2mr2468540wml.2.1678714834218; Mon, 13 Mar
- 2023 06:40:34 -0700 (PDT)
+        Mon, 13 Mar 2023 09:41:43 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B372E61888
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:41:42 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0A042320083A;
+        Mon, 13 Mar 2023 09:41:39 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Mon, 13 Mar 2023 09:41:40 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        invisiblethingslab.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1678714899; x=1678801299; bh=mDBHXJHbLHY4OkAvYL2dWBthdlcWZEvbZj2
+        obyGBERA=; b=h4rtboW2Qrvw9tx98u0N9eZvysQD8t2hlWNmlJYvlJwmmlszFk7
+        sk8YVcqEQnNe8ZB8OwRSk02GWF/OuZE2VLTqLEzVWR4RC0Wq3EKaoHxIwmCxjPZ4
+        ycraHBQVYYyhrlPN2/pFa2o9K2hoVFJ83i3PGCF750q1L28zei6WPRVU7/35Kash
+        UMQjpbTLuFuFPwKmZxpIzTWPdmNa19tjFTKpJcfeH+y+e9uTn6CCj6dCX0QBATz+
+        fnJiRcHQsogwl8UUO8Ws6DtBuhAVLJ9CqLRiUOD8eliyc4II3hbKAFuxq/WRbV+V
+        LxHnkbFDEdissZErFHFr9yuCtGOj5o7109w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:date:date:feedback-id:feedback-id:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678714899; x=1678801299; bh=mDBHXJHbLHY4O
+        kAvYL2dWBthdlcWZEvbZj2obyGBERA=; b=ow5lf4b+A2bNELk85JSd3TD+fwwAQ
+        mJ20c1tUdJKORCwxQGcr7rwbdF2UKZcFTNVsSIO3wkRSuVM6vAwLsgu/o74QonXz
+        wSuvnGJYMCPvyMnRFzJAOZpFy71rOt3PXC5xLc6vNcMQlE/sWF1/+kyqYFP3HA+/
+        FcRY2CR2NzFI6Q5jRVT3C9txmuBfigFWGHS8m56iilmhymX8Uena+AJ8JRidJ6Xm
+        dG65pH/DohxT6cHgb8Zx1CJwghhnYeLuMQQZg0ghAVLPImdc1AweqP8d8LjiJSTe
+        JBtqemCaEy5cTpcFHdCbN5j9OawO5phl+5l9yCo8rnJdJkDAMJbApOPAw==
+X-ME-Sender: <xms:EygPZKFb6VkB4EhsbfkD8maRG5Q0iJDRCje08yoGOjG6iAkhdxnlPQ>
+    <xme:EygPZLXFEE9ZwS0OZmNfM-cC8nvHZQxwsoKgZXLwCrlLFIX9v9URqJy_JOfEcd8um
+    vwlG3QCUW2sHu4>
+X-ME-Received: <xmr:EygPZEIkAewDbmtsbJFH_HRPyXAspbkmrq81hC_c_RboaBi2s2iOpYZoSdinJw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgheefucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhephffvvefufffkofgggfestdekredtredttdenucfhrhhomhepufhimhhonhcu
+    ifgrihhsvghruceoshhimhhonhesihhnvhhishhisghlvghthhhinhhgshhlrggsrdgtoh
+    hmqeenucggtffrrghtthgvrhhnpeeuveehgedtfeegfeduvdefudeuudffffffjeevueeg
+    fedufeeiudegudegvedugfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhimhhonhesihhn
+    vhhishhisghlvghthhhinhhgshhlrggsrdgtohhm
+X-ME-Proxy: <xmx:EygPZEEoy3Brpi1rYkHthEijJBxr3iXh1M7BFqlH6QYW-Spu6BanSQ>
+    <xmx:EygPZAVO2kLPGBQyf4KbfnaY2D2Kk6f9fYdht02Uc7HRP_PFTfKiSw>
+    <xmx:EygPZHNSjlxhk2BNyAbfmr6xSH7WzpW5onUVdcE59kMi6_NHh2hGYw>
+    <xmx:EygPZHRz1ZAnBarJ25rSyZ_FYmivSx3V7W2b_gYXchRmxccWWHOEmg>
+Feedback-ID: idc5945a3:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 13 Mar 2023 09:41:33 -0400 (EDT)
+From:   Simon Gaiser <simon@invisiblethingslab.com>
+To:     Juergen Gross <jgross@suse.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Cc:     xen-devel@lists.xenproject.org, linux-kernel@vger.kernel.org,
+        Simon Gaiser <simon@invisiblethingslab.com>
+Subject: [PATCH] xen/events: Add wakeup support to xen-pirq
+Date:   Mon, 13 Mar 2023 14:41:02 +0100
+Message-Id: <20230313134102.3157-1-simon@invisiblethingslab.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <299fbb80-e3ab-3b7c-3491-e85cac107930@intel.com>
- <CAPAsAGyG2_sUfb7aPSPuMatMraDbPCFKxhv2kSDkrV1XxQ8_bw@mail.gmail.com> <20230313094127.3cqsnmngbdegbe6o@blackpad>
-In-Reply-To: <20230313094127.3cqsnmngbdegbe6o@blackpad>
-From:   Andrey Ryabinin <ryabinin.a.a@gmail.com>
-Date:   Mon, 13 Mar 2023 14:40:33 +0100
-Message-ID: <CAPAsAGzYSi_mCy64rFH=o+m8eT-A9ffttsFO9Wx94=nsj+Q8Jg@mail.gmail.com>
-Subject: Re: KASLR vs. KASAN on x86
-To:     =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>
-Cc:     Dave Hansen <dave.hansen@intel.com>,
-        "the arch/x86 maintainers" <x86@kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        kasan-dev@googlegroups.com, Kees Cook <keescook@chromium.org>,
-        Thomas Garnier <thgarnie@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:41=E2=80=AFAM Michal Koutn=C3=BD <mkoutny@suse.c=
-om> wrote:
->
-> On Wed, Mar 08, 2023 at 06:24:05PM +0100, Andrey Ryabinin <ryabinin.a.a@g=
-mail.com> wrote:
-> > So the vmemmap_base and probably some part of vmalloc could easily end
-> > up in KASAN shadow.
->
-> Would it help to (conditionally) reduce vaddr_end to the beginning of
-> KASAN shadow memory?
-> (I'm not that familiar with KASAN, so IOW, would KASAN handle
-> randomized: linear mapping (__PAGE_OFFSET), vmalloc (VMALLOC_START) and
-> vmemmap (VMEMMAP_START) in that smaller range.)
->
+This allows entering and exiting s2idle. Actual S0ix residency is
+another topic [1].
 
-Yes, with the vaddr_end =3D KASAN_SHADOW_START  it should work,
- kaslr_memory_enabled() can be removed in favor of just the kaslr_enabled()
+Without this the ACPI code currently ignores the error enable_irq_wake()
+returns when being used on a xen-pirq and the system goes to idle for
+ever since the wakeup IRQ doesn't gets enabled. With [2] the error is
+handled and the system refuses to go to s2idle.
 
-> Thanks,
-> Michal
+Link: https://lore.kernel.org/xen-devel/9051e484-b128-715a-9253-48af8e47bb9d@invisiblethingslab.com/ # [1]
+Link: https://lore.kernel.org/linux-acpi/20230313125344.2893-1-simon@invisiblethingslab.com/ # [2]
+Signed-off-by: Simon Gaiser <simon@invisiblethingslab.com>
+---
+
+While I think that the set of flags I set is correct, I'm not familiar
+with that code, so please pay special attention during review if they
+are actually correct for xen-pirq.
+
+ drivers/xen/events/events_base.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/xen/events/events_base.c b/drivers/xen/events/events_base.c
+index c7715f8bd452..991082f04f05 100644
+--- a/drivers/xen/events/events_base.c
++++ b/drivers/xen/events/events_base.c
+@@ -2176,6 +2176,10 @@ static struct irq_chip xen_pirq_chip __read_mostly = {
+ 	.irq_set_affinity	= set_affinity_irq,
+ 
+ 	.irq_retrigger		= retrigger_dynirq,
++
++	.flags                  = IRQCHIP_SKIP_SET_WAKE |
++				  IRQCHIP_ENABLE_WAKEUP_ON_SUSPEND |
++				  IRQCHIP_MASK_ON_SUSPEND,
+ };
+ 
+ static struct irq_chip xen_percpu_chip __read_mostly = {
+-- 
+2.39.2
+
