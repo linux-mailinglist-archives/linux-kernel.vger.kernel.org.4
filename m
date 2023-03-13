@@ -2,123 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 552B26B7A60
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C6826B7A69
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:34:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231422AbjCMOcs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:32:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
+        id S231440AbjCMOej (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:34:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231410AbjCMOcq (ORCPT
+        with ESMTP id S231404AbjCMOeh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:32:46 -0400
-Received: from mail-qt1-f170.google.com (mail-qt1-f170.google.com [209.85.160.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D85A64AA5;
-        Mon, 13 Mar 2023 07:32:44 -0700 (PDT)
-Received: by mail-qt1-f170.google.com with SMTP id d7so13225368qtr.12;
-        Mon, 13 Mar 2023 07:32:44 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678717963;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cTi73Q81+ETNnAfOPWev/jD86ObO6SL82+Ks7Qrg148=;
-        b=nJpwrQWQdIIYvjbX8XcFtxUk4k98Amnq6t1OwEpIJi9MDC0TKRx1c2PBpNJJk3RIw0
-         YdKVwXxyjy8dMop8fFOY1Rv/vtw+hipkYNyQSjykoI68IUTB+l4f+LrnYKfbtf3rD0ax
-         +DNnjrr7A3LAJ3xNvWHCKyjdyKSlOlIORcK1RUrEDnDo781bhiBxWmPXoeBhpI6CY+UD
-         LC7WC6i2vgAWS+1XHwB6b6+VPE0SKsGoyGfMkVfB6yWY5Ellqc3FgXsKODy3WU5Kpx2l
-         hm52yp83fp6FY5g5n9kC1hbdzmrIrS0XW2GlxegZ0PWTwUXLtR6sujy41G59N3pBrJuv
-         jktg==
-X-Gm-Message-State: AO0yUKWb426iamzYvtEoa02gtCAeVjIumdvmvVdmkPjKr1UvFh4wbvwG
-        405kywtnQHAB0HXJReLKXKw=
-X-Google-Smtp-Source: AK7set9Q+JPZ2i1V6OMj9i68y+HnrzPjdi6QEw689/b6Zj7pl7FbRyDq8rVsfPRvScvQuOV3PhOCBA==
-X-Received: by 2002:a05:622a:1b9e:b0:3bf:e2d8:28d4 with SMTP id bp30-20020a05622a1b9e00b003bfe2d828d4mr24052310qtb.14.1678717963117;
-        Mon, 13 Mar 2023 07:32:43 -0700 (PDT)
-Received: from maniforge ([2620:10d:c091:400::5:b967])
-        by smtp.gmail.com with ESMTPSA id a5-20020ac84345000000b003bfaff2a6b9sm5541060qtn.10.2023.03.13.07.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 07:32:42 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 09:32:40 -0500
-From:   David Vernet <void@manifault.com>
-To:     Jonathan Corbet <corbet@lwn.net>
-Cc:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Linux BPF <bpf@vger.kernel.org>,
-        Linux Documentation <linux-doc@vger.kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Tobin C. Harding" <me@tobin.cc>
-Subject: Re: [PATCH bpf-next] bpf, doc: use internal linking for link to
- netdev FAQ
-Message-ID: <20230313143240.GE2392@maniforge>
-References: <20230313025119.17430-1-bagasdotme@gmail.com>
- <20230313030938.GA152792@maniforge>
- <ZA6knaEQcddfTCyS@debian.me>
- <fefa25fe-8148-cbd7-a91e-e4713eb6b0ef@gmail.com>
- <4653cfd1-7209-6e49-4f01-fcc3f82f16ce@gmail.com>
- <20230313123602.GA2392@maniforge>
- <87wn3kvkkq.fsf@meer.lwn.net>
- <20230313135638.GD2392@maniforge>
- <87sfe8vi9s.fsf@meer.lwn.net>
+        Mon, 13 Mar 2023 10:34:37 -0400
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B372234D6;
+        Mon, 13 Mar 2023 07:34:36 -0700 (PDT)
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 5.1.0)
+ id 3f128afb96eb52b3; Mon, 13 Mar 2023 15:34:34 +0100
+Received: from kreacher.localnet (unknown [213.134.189.11])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by v370.home.net.pl (Postfix) with ESMTPSA id 1A31E9C5854;
+        Mon, 13 Mar 2023 15:34:33 +0100 (CET)
+From:   "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To:     Linux PM <linux-pm@vger.kernel.org>
+Cc:     Zhang Rui <rui.zhang@intel.com>,
+        Linux ACPI <linux-acpi@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Quanxian Wang <quanxian.wang@intel.com>
+Subject: [PATCH v2 4/4] ACPI: processor: thermal: Update CPU cooling devices on cpufreq policy changes
+Date:   Mon, 13 Mar 2023 15:34:27 +0100
+Message-ID: <2893417.e9J7NaK4W3@kreacher>
+In-Reply-To: <2692681.mvXUDI8C0e@kreacher>
+References: <2692681.mvXUDI8C0e@kreacher>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87sfe8vi9s.fsf@meer.lwn.net>
-User-Agent: Mutt/2.2.9 (2022-11-12)
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 213.134.189.11
+X-CLIENT-HOSTNAME: 213.134.189.11
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvgedgieegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepfeduudeutdeugfelffduieegiedtueefledvjeegffdttefhhffhtefhleejgfetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvddufedrudefgedrudekledruddunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvddufedrudefgedrudekledruddupdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehlihhnuhigqdgrtghpihesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+ rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 08:27:11AM -0600, Jonathan Corbet wrote:
-> David Vernet <void@manifault.com> writes:
-> 
-> >> In this specific case, though, there is a better solution.  Text like:
-> >> 
-> >>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
-> >> 
-> >> will add links in the built docs, and also tells readers of the
-> >> plain-text files where they should be looking.  Without adding warnings.
-> >
-> > Nice, seems like the best of both worlds. A syntax clarification
-> > question: are you saying that this would work?
-> >
-> >> see the `netdev-FAQ`_.
-> >>
-> >>   <snip>
-> >>
-> >> .. _netdev-FAQ: Documentation/process/maintainer-netdev.rst
-> >
-> > Or is it required to have the full path inline in the text, as in your
-> > example:
-> >
-> >>   see the netdev FAQ (Documentation/process/maintainer-netdev.rst)
-> >
-> > The benefit of the former is of course that you only have to specify the
-> > link in one place.
-> 
-> Yeah, but the latter is what we actually have.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Ack, just wanted to make sure I understood the suggestion. I think this
-is just fine. There's really no need to add 5 - 6 links in the same file
-anyways.
+When a cpufreq policy appears or goes away, the CPU cooling devices for
+the CPUs covered by that policy need to be updated so that the new
+processor_get_max_state() value is stored as max_state and the
+statistics in sysfs are rearranged for each of them.
 
-Bagas would you be OK with submitting a v2 patch which changes the first
-instance of the `netdev-FAQ`_ to netdev FAQ
-(Documentation/process/maintainer-netdev.rst) per Jon's suggestion?
+Do that accordingly in acpi_thermal_cpufreq_init() and
+acpi_thermal_cpufreq_exit().
 
-Thanks,
-David
+Fixes: a365105c685c("thermal: sysfs: Reuse cdev->max_state")
+Reported-by: Wang, Quanxian <quanxian.wang@intel.com>
+Link: https://lore.kernel.org/linux-pm/53ec1f06f61c984100868926f282647e57ecfb2d.camel@intel.com/
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+
+v1 -> v2: Remove the now redundant IS_ERR() checks on cdev before calling
+          thermal_cooling_device_update().
+
+---
+ drivers/acpi/processor_thermal.c |   14 +++++++++++---
+ 1 file changed, 11 insertions(+), 3 deletions(-)
+
+Index: linux-pm/drivers/acpi/processor_thermal.c
+===================================================================
+--- linux-pm.orig/drivers/acpi/processor_thermal.c
++++ linux-pm/drivers/acpi/processor_thermal.c
+@@ -140,9 +140,13 @@ void acpi_thermal_cpufreq_init(struct cp
+ 		ret = freq_qos_add_request(&policy->constraints,
+ 					   &pr->thermal_req,
+ 					   FREQ_QOS_MAX, INT_MAX);
+-		if (ret < 0)
++		if (ret < 0) {
+ 			pr_err("Failed to add freq constraint for CPU%d (%d)\n",
+ 			       cpu, ret);
++			continue;
++		}
++
++		thermal_cooling_device_update(pr->cdev);
+ 	}
+ }
+ 
+@@ -153,8 +157,12 @@ void acpi_thermal_cpufreq_exit(struct cp
+ 	for_each_cpu(cpu, policy->related_cpus) {
+ 		struct acpi_processor *pr = per_cpu(processors, cpu);
+ 
+-		if (pr)
+-			freq_qos_remove_request(&pr->thermal_req);
++		if (!pr)
++			continue;
++
++		freq_qos_remove_request(&pr->thermal_req);
++
++		thermal_cooling_device_update(pr->cdev);
+ 	}
+ }
+ #else				/* ! CONFIG_CPU_FREQ */
+
+
+
