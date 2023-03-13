@@ -2,123 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36C956B7A5B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2F026B7A5D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:32:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231439AbjCMOau (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:30:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42318 "EHLO
+        id S231396AbjCMOc1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:32:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjCMOap (ORCPT
+        with ESMTP id S231349AbjCMOcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:30:45 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EF134008;
-        Mon, 13 Mar 2023 07:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678717844; x=1710253844;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=2A5vXcR9dVDQtHTdsgDzpaUet920wYeoo1FeiQYkThg=;
-  b=koRx0upe2e6SBdfahHaT2sSHlqPiWEO6y/N5i/5AbRtxA3HEXQtZNlDG
-   u+2q9UfU4Qi6ttfT9TqWtkvsY0/MGrkXkW0YSeVQa1prXkrsJoDq223Az
-   /lAyMutULsAm9vJQFJbcYHnWwEdaMvf8+kbdDWtO49NJkwfaf0aNmwTqw
-   QDCQN+LVF/Ty3QWYjbLJkGX2r28P4ZTfs/cB0JmoE+zK8j57dkJ3OShJf
-   Q5xl0Y1IwkosZfXNzHjwMWLgHd5wtvnuEByTQA6nmJ2VMd1sKHQvMPZMI
-   /lxHi+A3Fp4rs1FsHTKbqxY26qy+fwlRIO9jOwZaOKogtIl9Uy/PqNubM
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="337180473"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="337180473"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 07:30:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="678701605"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="678701605"
-Received: from etsykuno-mobl2.ccr.corp.intel.com ([10.252.47.211])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 07:30:37 -0700
-Date:   Mon, 13 Mar 2023 16:30:34 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
-cc:     "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>,
-        "marcel@holtmann.org" <marcel@holtmann.org>,
-        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
-        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
-        "hdanton@sina.com" <hdanton@sina.com>,
-        "leon@kernel.org" <leon@kernel.org>,
-        "simon.horman@corigine.com" <simon.horman@corigine.com>,
-        Netdev <netdev@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
-        Rohit Fule <rohit.fule@nxp.com>,
-        Sherry Sun <sherry.sun@nxp.com>
-Subject: RE: [EXT] Re: [PATCH v9 3/3] Bluetooth: NXP: Add protocol support
- for NXP Bluetooth chipsets
-In-Reply-To: <AM9PR04MB8603EB5DA53821B12E049649E7B99@AM9PR04MB8603.eurprd04.prod.outlook.com>
-Message-ID: <17a9ffd1-342c-2cf1-2a57-7fabe1fce8b8@linux.intel.com>
-References: <20230313140924.3104691-1-neeraj.sanjaykale@nxp.com> <20230313140924.3104691-4-neeraj.sanjaykale@nxp.com> <b28d1e39-f036-c260-4452-ac1332efca0@linux.intel.com> <AM9PR04MB8603EB5DA53821B12E049649E7B99@AM9PR04MB8603.eurprd04.prod.outlook.com>
+        Mon, 13 Mar 2023 10:32:25 -0400
+Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF92658497
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:32:24 -0700 (PDT)
+Received: by mail-io1-f71.google.com with SMTP id c13-20020a0566022d0d00b0074cc4ed52d9so6430753iow.18
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:32:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678717944;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4y/5zA6M4Bgo32w3DEC2QVqTxoqFR5HvYaARqLXL8ek=;
+        b=ecWXISq9FPf+bEDIWnBDd6dj74r1fWjP3Mc/zDVnFZe5aUqmm3wRSQPd71O0zwtmN2
+         4WsKltisZnjXaONIlgLtHABfUrayZTaBs0/dlMGqYmEKwSqrxLqAR/ymxrI++31gKepS
+         Z56DPR+TD+eC3Bm/GCYHRA8vKAlXGZxKfMgkQhNpECDQgy+rt0eYb6fcMRmq/bUIGWNI
+         dEXP6ZjJo2+f5zw5xp7nejHcGJQ7eu6TYQPHb+7kUtrAFsGZsjL8IzPgJ2OxLQSMfFFr
+         jc3r9Z/EMX7Or8S5p6D92CCkTmbKIKCD8MMudn4CIIx+BXdV6/hUmLtpEwvSeSdhMNqH
+         SxNQ==
+X-Gm-Message-State: AO0yUKVYyU+Yzg7Nkye+J4XqOnvlTiszolNp0UMBxKVn047qZUalKOYT
+        NcJozyxtYYOdu7xRmxShpQqO7qHnwLrlQ6AMcboTE3IbxJDO
+X-Google-Smtp-Source: AK7set//Vxwu9cDJinI5+BoatG3+ShJiVgoRfhjdyDSgiMrcH7fhxRJ3a933Uwu++c+91ZnsWuj/l+LRUU8CbGVvI5Y+IF2T/veh
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323329-1280341670-1678717842=:2573"
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:7902:0:b0:745:70d7:4962 with SMTP id
+ i2-20020a6b7902000000b0074570d74962mr15645557iop.0.1678717944153; Mon, 13 Mar
+ 2023 07:32:24 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 07:32:24 -0700
+In-Reply-To: <000000000000f0fb6005f1cfc17f@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000bd527205f6c8fa41@google.com>
+Subject: Re: [syzbot] [io-uring?] KASAN: use-after-free Read in io_wq_worker_wake
+From:   syzbot <syzbot+b3ba2408ce0c74bb9230@syzkaller.appspotmail.com>
+To:     asml.silence@gmail.com, axboe@kernel.dk, io-uring@vger.kernel.org,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+syzbot suspects this issue was fixed by commit:
 
---8323329-1280341670-1678717842=:2573
-Content-Type: text/plain; charset=iso-8859-1
-Content-Transfer-Encoding: 8BIT
+commit e6db6f9398dadcbc06318a133d4c44a2d3844e61
+Author: Jens Axboe <axboe@kernel.dk>
+Date:   Sun Jan 8 17:39:17 2023 +0000
 
-On Mon, 13 Mar 2023, Neeraj sanjay kale wrote:
+    io_uring/io-wq: only free worker if it was allocated for creation
 
-> > 
-> > Thanks, looks okay to me except this one I just noticed while preparing this
-> > email:
-> > 
-> > > +MODULE_DESCRIPTION("NXP Bluetooth Serial driver v1.0 ");
-> > 
-> > I don't think version numbers belong to the module description.
-> > 
-> I was asked to remove the MODULE_VERSION("v1.0") line in my v2 patch, hence kept it in the description.
-> https://patchwork.kernel.org/project/bluetooth/patch/20230130180504.2029440-4-neeraj.sanjaykale@nxp.com/
-> 
-> Please suggest me the right way to put the version string in this driver.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=113a76fac80000
+start commit:   1fe4fd6f5cad Merge tag 'xfs-6.2-fixes-2' of git://git.kern..
+git tree:       upstream
+kernel config:  https://syzkaller.appspot.com/x/.config?x=8b79b14037065d92
+dashboard link: https://syzkaller.appspot.com/bug?extid=b3ba2408ce0c74bb9230
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1388e5f2480000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=127f1aa4480000
 
-I think Leon meant you should just drop the version altogether (since this 
-is new code).
+If the result looks correct, please mark the issue as fixed by replying with:
 
--- 
- i.
+#syz fix: io_uring/io-wq: only free worker if it was allocated for creation
 
-> > Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
-> > 
-> > 
-> > --
-> >  i.
-> 
-> Thank you again for reviewing this patch. :D
-> 
-> -Neeraj
-> 
-
---8323329-1280341670-1678717842=:2573--
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
