@@ -2,90 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 21A6D6B8000
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:10:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 612036B8003
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:11:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229899AbjCMSK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:10:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49960 "EHLO
+        id S229872AbjCMSLX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:11:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51536 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjCMSKP (ORCPT
+        with ESMTP id S229668AbjCMSLV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:10:15 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD2877C88
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:10:13 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id m4so3828876lfj.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:10:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678731012;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/UmHmPBg3/KI8KvoUSeeIp1LmuluBX0Sv6TgjKs3d9E=;
-        b=mxXEcHfqp01IK15NmgnwBXXKUc4nQvrXWX21tuzlRrDbwI3AahzL2snAI3dkTc47Hb
-         1isieLtMMUSc6VccPO4Xej39klM4R700IdP2q1ECUf2NqBX7Bu9C2cCilW3xo6MX+NHF
-         gC8cxqBYzc9D2c0RoQ0rBoKPV3ZKfQ9joxva8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678731012;
-        h=to:subject:message-id:date:user-agent:from:references:in-reply-to
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/UmHmPBg3/KI8KvoUSeeIp1LmuluBX0Sv6TgjKs3d9E=;
-        b=SCvsuAjMzAeEWRMhlTeiK1O2JRDvM2KZbRgXqOA8zuZ25XYF4DOccfKWdfDFibrOgt
-         Z1isWSpXb3zjP5CgoLPS/llD6i40Kb8TxADnFFaCNE7JGwKCHnu5RdCN5XbfYXl6iHMU
-         Daid0ydJlhg0HiPh7Hb2PWIme4XU/1GSpKZfEtgPIv/86+y4mG4vExJJtjKaZi7UvwLI
-         Y6mMd9RKqb329vypN/IUZNvIXoj6GjspJOmGRQ8TNMN4AbuwXRM0AvwGkGYFABlxPgl6
-         pDHDebuL7FznwXiumbPgackaFJTDbCUpBhr516/9zhhCK2FXd+te2T73eSZRiIZwU9Zy
-         E8/Q==
-X-Gm-Message-State: AO0yUKVq7djFPdnZrRD/WFZEqNyUEafI4oBJSzJ9ujet4PBSQldaUm5+
-        4fmLUTaIjP1g/1LNeqsFaPyzjTy0JqARoIiMfGEo4A==
-X-Google-Smtp-Source: AK7set+f6kjqU/JYMNhvXXZiogIza/ykidaSJZkuSbt2NvCqe/3opxyPqZXqakkXk/QAvNMFkDSKtY+k9GQb21x6vvA=
-X-Received: by 2002:ac2:5312:0:b0:4e1:dbbb:493b with SMTP id
- c18-20020ac25312000000b004e1dbbb493bmr11186617lfh.4.1678731011790; Mon, 13
- Mar 2023 11:10:11 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Mon, 13 Mar 2023 11:10:11 -0700
+        Mon, 13 Mar 2023 14:11:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34CB076F74;
+        Mon, 13 Mar 2023 11:11:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9DA006145D;
+        Mon, 13 Mar 2023 18:11:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6E7EC433EF;
+        Mon, 13 Mar 2023 18:11:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678731071;
+        bh=YbU+0kUMJaZnSa7tMMVdbVJVj9WWTS5hkt3+89vm0Kk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gC/T8yVGkjmxwepJBMC7wvb6jeaWYU4HVs7AVGxILgi5qEdGJuPukZhu9fOdgt8o1
+         wziGTCBcr+N8HkQakWMHRU1qVp4pJ6OAna6WF8Jy0Ar5p8ZgcRjZ0R1ru0fCDaXvTb
+         Oi3PT1vQtVMX6VZQiCHyPvpZGHdxQlevMmwGV1tMP/Rf4nc2zro4w/qXLBBVwL9xKa
+         khx/Q2xfAY9MiJBURVFQxO2h7X/n3/hVQ9wRP2JZ15k67nsunpqOeIL/9rexBLFNa8
+         jPyYyy0meE04ko0fkslCb8ZyBY2wssY3YQdEDSZuAFLawG1TDtjXjMnXATTKaw7s+E
+         kcB/RDMdJ3uJA==
+Date:   Mon, 13 Mar 2023 11:11:09 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+Cc:     Xiubo Li <xiubli@redhat.com>, Jeff Layton <jlayton@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] ceph: switch atomic open to use new fscrypt helper
+Message-ID: <ZA9nPXNpBX0U5joC@sol.localdomain>
+References: <20230313123310.13040-1-lhenriques@suse.de>
+ <20230313123310.13040-3-lhenriques@suse.de>
 MIME-Version: 1.0
-In-Reply-To: <20230312183622.460488-4-krzysztof.kozlowski@linaro.org>
-References: <20230312183622.460488-1-krzysztof.kozlowski@linaro.org> <20230312183622.460488-4-krzysztof.kozlowski@linaro.org>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Mon, 13 Mar 2023 11:10:11 -0700
-Message-ID: <CAE-0n50=pjP4Quu0grdb12wbetm-gRdxJq_CVEn8Ky=exNYKKw@mail.gmail.com>
-Subject: Re: [PATCH 4/8] arm64: dts: qcom: sc7180-trogdor-pazquel: correct
- trackpad supply
-To:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        Gustave Monce <gustave.monce@outlook.com>,
-        "Joseph S. Barrera III" <joebar@chromium.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        Rajendra Nayak <rnayak@codeaurora.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20230313123310.13040-3-lhenriques@suse.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Krzysztof Kozlowski (2023-03-12 11:36:18)
-> The hid-over-i2c takes VDD, not VCC supply.  Fix copy-pasta from other
-> boards which use elan,ekth3000 with valid VCC:
->
->   sc7180-trogdor-pazquel360-lte.dtb: trackpad@15: 'vcc-supply' does not match any of the regexes: 'pinctrl-[0-9]+'
->
-> Fixes: fb69f6adaf88 ("arm64: dts: qcom: sc7180: Add pazquel dts files")
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+On Mon, Mar 13, 2023 at 12:33:10PM +0000, Luís Henriques wrote:
+> Switch ceph atomic open to use fscrypt_prepare_atomic_open().  This fixes
+> a bug where a dentry is incorrectly set with DCACHE_NOKEY_NAME when 'dir'
+> has been evicted but the key is still available (for example, where there's
+> a drop_caches).
+> 
+> Signed-off-by: Luís Henriques <lhenriques@suse.de>
 > ---
+>  fs/ceph/file.c | 8 +++-----
+>  1 file changed, 3 insertions(+), 5 deletions(-)
+> 
+> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
+> index dee3b445f415..5ad57cc4c13b 100644
+> --- a/fs/ceph/file.c
+> +++ b/fs/ceph/file.c
+> @@ -795,11 +795,9 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
+>  	ihold(dir);
+>  	if (IS_ENCRYPTED(dir)) {
+>  		set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
+> -		if (!fscrypt_has_encryption_key(dir)) {
+> -			spin_lock(&dentry->d_lock);
+> -			dentry->d_flags |= DCACHE_NOKEY_NAME;
+> -			spin_unlock(&dentry->d_lock);
+> -		}
+> +		err = fscrypt_prepare_atomic_open(dir, dentry);
+> +		if (err)
+> +			goto out_req;
 
-Reviewed-by: Stephen Boyd <swboyd@chromium.org>
+Note that this patch does not apply to upstream or even to linux-next.
+
+I'd be glad to take patch 1 through the fscrypt tree for 6.4.  But I'm wondering
+what the current plans are for getting ceph's fscrypt support upstream?
+
+- Eric
