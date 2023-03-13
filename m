@@ -2,81 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1789B6B7A32
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:19:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2CE66B7A39
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbjCMOS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:18:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
+        id S231281AbjCMOUF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:20:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231411AbjCMOSh (ORCPT
+        with ESMTP id S231279AbjCMOTh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:18:37 -0400
-Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F375267;
-        Mon, 13 Mar 2023 07:18:18 -0700 (PDT)
-Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
-        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
-        id 1pbj0B-0006t7-6G; Mon, 13 Mar 2023 15:18:15 +0100
-Message-ID: <c2f61ec5-85e9-06ac-f333-e1f97472b5d4@leemhuis.info>
-Date:   Mon, 13 Mar 2023 15:18:14 +0100
+        Mon, 13 Mar 2023 10:19:37 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B25855BD;
+        Mon, 13 Mar 2023 07:19:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678717176; x=1710253176;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=UvXWWjYWFyByb3yselhOpraN5TwzIc41HmQ1z3Y7kNU=;
+  b=VlPZQ5gj+HuMNV5pXKMNnJce7PhC8chkfyo7uosvnG4HhnD7bYeG5DK6
+   esBDAip7HAb9gf0E+/VIQcPp7ZkMo+dOnrkBcLDy+Zg/0FE3KD5Y0bNIU
+   GfT94v9rXgtdIqrDG5o7iulSx/Qr6i1CRJ60ZRKFcPfWGFdLJ0YCGigf2
+   sgFaspkmgMBfkQGnxukAl643A5gICUtcwuikW1H+3sKRZTR2kGEhXtzBo
+   wkYhvhkrMJkWjzdcK97lwp6au0G1s6w5BCq1DUJL1TGPamqjw5Bz2o1u5
+   kKD04koIk8wufwlxzQxqTpGfp2Q6UoY9RzsSLuGAAV7SpcuN6HnR3hkN6
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="335855779"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="335855779"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 07:19:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="628650322"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="628650322"
+Received: from etsykuno-mobl2.ccr.corp.intel.com ([10.252.47.211])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 07:19:15 -0700
+Date:   Mon, 13 Mar 2023 16:19:13 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>, alok.a.tiwari@oracle.com,
+        hdanton@sina.com, leon@kernel.org, simon.horman@corigine.com,
+        Netdev <netdev@vger.kernel.org>, devicetree@vger.kernel.org,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-bluetooth@vger.kernel.org,
+        linux-serial <linux-serial@vger.kernel.org>,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
+Subject: Re: [PATCH v9 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+In-Reply-To: <20230313140924.3104691-4-neeraj.sanjaykale@nxp.com>
+Message-ID: <b28d1e39-f036-c260-4452-ac1332efca0@linux.intel.com>
+References: <20230313140924.3104691-1-neeraj.sanjaykale@nxp.com> <20230313140924.3104691-4-neeraj.sanjaykale@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [REGRESSION] Patch broke WPA auth: Re: [PATCH v2] wifi: cfg80211:
- Fix use after free for wext
-Content-Language: en-US, de-DE
-To:     Hector Martin <marcan@marcan.st>,
-        Alexander Wetzel <alexander@wetzel-home.de>,
-        linux-wireless@vger.kernel.org,
-        Johannes Berg <johannes.berg@intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     johannes@sipsolutions.net, stable@vger.kernel.org,
-        Asahi Linux <asahi@lists.linux.dev>, Ilya <me@0upti.me>,
-        Janne Grunau <j@jannau.net>,
-        LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev
-References: <20230124141856.356646-1-alexander@wetzel-home.de>
- <d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st>
-From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
-        <regressions@leemhuis.info>
-Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
-In-Reply-To: <d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678717099;b8d09017;
-X-HE-SMSGID: 1pbj0B-0006t7-6G
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/mixed; BOUNDARY="8323329-949427343-1678716921=:2573"
+Content-ID: <d0d0d083-5eee-bc4e-247e-ae68d1b8294@linux.intel.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[TLDR: This mail in primarily relevant for Linux kernel regression
-tracking. See link in footer if these mails annoy you.]
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-On 11.03.23 10:55, Hector Martin wrote:
+--8323329-949427343-1678716921=:2573
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: 8BIT
+Content-ID: <e726a4dc-97d5-5826-9ea5-ba8b2d5bbdfe@linux.intel.com>
+
+On Mon, 13 Mar 2023, Neeraj Sanjay Kale wrote:
+
+> This adds a driver based on serdev driver for the NXP BT serial protocol
+> based on running H:4, which can enable the built-in Bluetooth device
+> inside an NXP BT chip.
 > 
-> This broke WPA auth entirely on brcmfmac (in offload mode) and probably
-> others, including on stable 6.2.3 and 6.3-rc1 (tested with iwd). Please
-> revert or fix. Notes below.
+> This driver has Power Save feature that will put the chip into sleep state
+> whenever there is no activity for 2000ms, and will be woken up when any
+> activity is to be initiated over UART.
 > 
-> Reported-by: Ilya <me@0upti.me>
-> Reported-by: Janne Grunau <j@jannau.net>
+> This driver enables the power save feature by default by sending the vendor
+> specific commands to the chip during setup.
 > 
-> #regzbot introduced: 015b8cc5e7c4d7
-> #regzbot monitor:
-> https://lore.kernel.org/linux-wireless/20230124141856.356646-1-alexander@wetzel-home.de/
+> During setup, the driver checks if a FW is already running on the chip
+> by waiting for the bootloader signature, and downloads device specific FW
+> file into the chip over UART if bootloader signature is received..
+> 
+> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> ---
+> v2: Removed conf file support and added static data for each chip based
+> on compatibility devices mentioned in DT bindings. Handled potential
+> memory leaks and null pointer dereference issues, simplified FW download
+> feature, handled byte-order and few cosmetic changes. (Ilpo Järvinen,
+> Alok Tiwari, Hillf Danton)
+> v3: Added conf file support necessary to support different vendor modules,
+> moved .h file contents to .c, cosmetic changes. (Luiz Augusto von Dentz,
+> Rob Herring, Leon Romanovsky)
+> v4: Removed conf file support, optimized driver data, add logic to select
+> FW name based on chip signature (Greg KH, Ilpo Järvinen, Sherry Sun)
+> v5: Replaced bt_dev_info() with bt_dev_dbg(), handled user-space cmd
+> parsing in nxp_enqueue() in a better way. (Greg KH, Luiz Augusto von Dentz)
+> v6: Add support for fw-init-baudrate parameter from device tree,
+> modified logic to detect FW download is needed or FW is running. (Greg
+> KH, Sherry Sun)
+> v7: Renamed variables, improved FW download functions, include ps_data
+> into btnxpuart_dev. (Ilpo Järvinen)
+> v8: Move bootloader signature handling to a separate function. Add
+> select CRC32 to Kconfig file. (Ilpo Järvinen)
+> v9: Change datatype of FW download command CRC to __be32. (Ilpo Järvinen)
 
-#regzbot fix: 79d1ed5ca7db67d48
-#regzbot ignore-activity
+Thanks, looks okay to me except this one I just noticed while preparing 
+this email:
 
-Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
---
-Everything you wanna know about Linux kernel regression tracking:
-https://linux-regtracking.leemhuis.info/about/#tldr
-That page also explains what to do if mails like this annoy you.
+> +MODULE_DESCRIPTION("NXP Bluetooth Serial driver v1.0 ");
+
+I don't think version numbers belong to the module description.
 
 
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+
+
+-- 
+ i.
+--8323329-949427343-1678716921=:2573--
