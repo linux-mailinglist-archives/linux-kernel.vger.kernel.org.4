@@ -2,127 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437A26B6DED
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:22:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C9636B6DEE
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 04:24:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCMDWl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 23:22:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
+        id S229759AbjCMDYK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 23:24:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35016 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229623AbjCMDWh (ORCPT
+        with ESMTP id S229623AbjCMDYF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 23:22:37 -0400
-Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AE2E27D64;
-        Sun, 12 Mar 2023 20:22:35 -0700 (PDT)
-Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
-        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
-        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
-        by ex01.ufhost.com (Postfix) with ESMTP id B9B5724E1D2;
-        Mon, 13 Mar 2023 11:22:33 +0800 (CST)
-Received: from EXMBX172.cuchost.com (172.16.6.92) by EXMBX166.cuchost.com
- (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
- 2023 11:22:33 +0800
-Received: from [192.168.125.74] (183.27.96.115) by EXMBX172.cuchost.com
- (172.16.6.92) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 13 Mar
- 2023 11:22:32 +0800
-Message-ID: <92306b73-d7d2-0d60-de15-87bcd71714ed@starfivetech.com>
-Date:   Mon, 13 Mar 2023 11:22:31 +0800
+        Sun, 12 Mar 2023 23:24:05 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFA902B9E4
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 20:24:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678677843; x=1710213843;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=27FvXAAxEp2El8sKAUFSCBz/DlxIShXqrOYAjOcmstY=;
+  b=m6bsuvQHEIvE9ZY8PN+GSUXxE4PhvLe1xrTGop+qDcvSUWEHjrMIi4tU
+   2uefJE+q5Us4PZS33ClRrwiSyLckGvfqJSfjSwN+X5Q+Y61C+uqbOeY6E
+   +EWEXFgstVafhQT/uIUVB0F7IMTLX/T1fRDNNl7dm2ACf57pRuvWv+Riy
+   o7B1WW080YJ2AR762rDZCtMKi82TPwOo5lYlk3fXYA5sajImw+EI/Ftwb
+   GbvmFPXLL2CsG9PvvySH+BU2f0hIL6r5/tJMbVZHuOehb9bz9Ey/xYz5J
+   EPjy4K3tnxAQiKtC5D8s9PvEs2Dyv5UEQohLAbUvoP7jgm7l1f214Xgb7
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="423316305"
+X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
+   d="scan'208";a="423316305"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 20:24:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="671747371"
+X-IronPort-AV: E=Sophos;i="5.98,254,1673942400"; 
+   d="scan'208";a="671747371"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.238.1.34]) ([10.238.1.34])
+  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Mar 2023 20:23:58 -0700
+Message-ID: <66bf51ab-15bd-7988-77c6-8776ac9755d4@linux.intel.com>
+Date:   Mon, 13 Mar 2023 11:23:55 +0800
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH v5 11/21] dt-bindings: clock: Add StarFive JH7110 system
- clock and reset generator
-Content-Language: en-US
-To:     Conor Dooley <conor@kernel.org>
-CC:     <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>, Stephen Boyd <sboyd@kernel.org>,
-        "Michael Turquette" <mturquette@baylibre.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Ben Dooks <ben.dooks@sifive.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
-        <linux-kernel@vger.kernel.org>
-References: <20230311090733.56918-1-hal.feng@starfivetech.com>
- <20230311090733.56918-12-hal.feng@starfivetech.com>
- <34b0473a-91bd-453b-91dd-01defde92d68@spud>
-From:   Hal Feng <hal.feng@starfivetech.com>
-In-Reply-To: <34b0473a-91bd-453b-91dd-01defde92d68@spud>
-Content-Type: text/plain; charset="UTF-8"
+ Thunderbird/102.8.0
+Subject: Re: [PATCHv15 00/17] Linear Address Masking enabling
+To:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Cc:     x86@kernel.org, Kostya Serebryany <kcc@google.com>,
+        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>,
+        Alexander Potapenko <glider@google.com>,
+        Taras Madan <tarasmadan@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>,
+        Andi Kleen <ak@linux.intel.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Bharata B Rao <bharata@amd.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>,
+        Ashok Raj <ashok.raj@intel.com>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+References: <20230123220500.21077-1-kirill.shutemov@linux.intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20230123220500.21077-1-kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [183.27.96.115]
-X-ClientProxiedBy: EXCAS061.cuchost.com (172.16.6.21) To EXMBX172.cuchost.com
- (172.16.6.92)
-X-YovoleRuleAgent: yovoleflag
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 13:11:38 +0000, Conor Dooley wrote:
-> On Sat, Mar 11, 2023 at 05:07:23PM +0800, Hal Feng wrote:
->> From: Emil Renner Berthing <kernel@esmil.dk>
->> 
->> Add bindings for the system clock and reset generator (SYSCRG) on the
->> JH7110 RISC-V SoC by StarFive Ltd.
->> 
->> Signed-off-by: Emil Renner Berthing <kernel@esmil.dk>
->> Signed-off-by: Hal Feng <hal.feng@starfivetech.com>
->> ---
->>  .../clock/starfive,jh7110-syscrg.yaml         | 104 +++++++++
->>  MAINTAINERS                                   |   8 +-
->>  .../dt-bindings/clock/starfive,jh7110-crg.h   | 203 ++++++++++++++++++
->>  .../dt-bindings/reset/starfive,jh7110-crg.h   | 142 ++++++++++++
->>  4 files changed, 454 insertions(+), 3 deletions(-)
->>  create mode 100644 Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
->>  create mode 100644 include/dt-bindings/clock/starfive,jh7110-crg.h
->>  create mode 100644 include/dt-bindings/reset/starfive,jh7110-crg.h
->> 
->> diff --git a/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
->> new file mode 100644
->> index 000000000000..84373ae31644
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/clock/starfive,jh7110-syscrg.yaml
-> 
->> +  clock-names:
->> +    oneOf:
->> +      - items:
->> +          - const: osc
->> +          - enum:
->> +              - gmac1_rmii_refin
->> +              - gmac1_rgmii_rxin
->> +          - const: i2stx_bclk_ext
->> +          - const: i2stx_lrck_ext
->> +          - const: i2srx_bclk_ext
->> +          - const: i2srx_lrck_ext
->> +          - const: tdm_ext
->> +          - const: mclk_ext
->> +
->> +      - items:
->> +          - const: osc
->> +          - const: gmac1_rmii_refin
->> +          - const: gmac1_rgmii_rxin
->> +          - const: i2stx_bclk_ext
->> +          - const: i2stx_lrck_ext
->> +          - const: i2srx_bclk_ext
->> +          - const: i2srx_lrck_ext
->> +          - const: tdm_ext
->> +          - const: mclk_ext
-> 
-> Assuming nothing else here is optional,
-> Reviewed-by: Conor Dooley <conor.dooley@microchip.com>
 
-Yeah, nothing else here is optional. Thanks for your review.
+On 1/24/2023 6:04 AM, Kirill A. Shutemov wrote:
+> Linear Address Masking[1] (LAM) modifies the checking that is applied to
+> 64-bit linear addresses, allowing software to use of the untranslated
+> address bits for metadata.
+>
+> The capability can be used for efficient address sanitizers (ASAN)
+> implementation and for optimizations in JITs and virtual machines.
+>
+> The patchset brings support for LAM for userspace addresses. Only LAM_U57 at
+> this time.
+>
+> Please review and consider applying.
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/kas/linux.git lam
+>
+...
+>
+> [1] ISE, Chapter 10. https://cdrdv2.intel.com/v1/dl/getContent/671368
 
-Best regards,
-Hal
+It is Chapter 7. Or maybe use the name of the chapter instead.
+
+
+> Kirill A. Shutemov (12):
+>    x86/mm: Rework address range check in get_user() and put_user()
+>    x86: Allow atomic MM_CONTEXT flags setting
+>    x86: CPUID and CR3/CR4 flags for Linear Address Masking
+>    x86/mm: Handle LAM on context switch
+>    mm: Introduce untagged_addr_remote()
+>    x86/uaccess: Provide untagged_addr() and remove tags before address
+>      check
+>    x86/mm: Reduce untagged_addr() overhead for systems without LAM
+>    x86/mm: Provide arch_prctl() interface for LAM
+>    mm: Expose untagging mask in /proc/$PID/status
+>    iommu/sva: Replace pasid_valid() helper with mm_valid_pasid()
+>    x86/mm/iommu/sva: Make LAM and SVA mutually exclusive
+>    selftests/x86/lam: Add test cases for LAM vs thread creation
+>
+> Weihong Zhang (5):
+>    selftests/x86/lam: Add malloc and tag-bits test cases for
+>      linear-address masking
+>    selftests/x86/lam: Add mmap and SYSCALL test cases for linear-address
+>      masking
+>    selftests/x86/lam: Add io_uring test cases for linear-address masking
+>    selftests/x86/lam: Add inherit test cases for linear-address masking
+>    selftests/x86/lam: Add ARCH_FORCE_TAGGED_SVA test cases for
+>      linear-address masking
+>
+>   arch/arm64/include/asm/mmu_context.h        |    6 +
+>   arch/sparc/include/asm/mmu_context_64.h     |    6 +
+>   arch/sparc/include/asm/uaccess_64.h         |    2 +
+>   arch/x86/Kconfig                            |   11 +
+>   arch/x86/entry/vsyscall/vsyscall_64.c       |    2 +-
+>   arch/x86/include/asm/cpufeatures.h          |    1 +
+>   arch/x86/include/asm/disabled-features.h    |    8 +-
+>   arch/x86/include/asm/mmu.h                  |   18 +-
+>   arch/x86/include/asm/mmu_context.h          |   49 +-
+>   arch/x86/include/asm/processor-flags.h      |    2 +
+>   arch/x86/include/asm/tlbflush.h             |   48 +-
+>   arch/x86/include/asm/uaccess.h              |   58 +-
+>   arch/x86/include/uapi/asm/prctl.h           |    5 +
+>   arch/x86/include/uapi/asm/processor-flags.h |    6 +
+>   arch/x86/kernel/process.c                   |    6 +
+>   arch/x86/kernel/process_64.c                |   66 +-
+>   arch/x86/kernel/traps.c                     |    6 +-
+>   arch/x86/lib/getuser.S                      |   83 +-
+>   arch/x86/lib/putuser.S                      |   54 +-
+>   arch/x86/mm/init.c                          |    5 +
+>   arch/x86/mm/tlb.c                           |   53 +-
+>   drivers/iommu/iommu-sva.c                   |    8 +-
+>   drivers/vfio/vfio_iommu_type1.c             |    2 +-
+>   fs/proc/array.c                             |    6 +
+>   fs/proc/task_mmu.c                          |    9 +-
+>   include/linux/ioasid.h                      |    9 -
+>   include/linux/mm.h                          |   11 -
+>   include/linux/mmu_context.h                 |   14 +
+>   include/linux/sched/mm.h                    |    8 +-
+>   include/linux/uaccess.h                     |   22 +
+>   mm/debug.c                                  |    1 +
+>   mm/gup.c                                    |    4 +-
+>   mm/madvise.c                                |    5 +-
+>   mm/migrate.c                                |   11 +-
+>   tools/testing/selftests/x86/Makefile        |    2 +-
+>   tools/testing/selftests/x86/lam.c           | 1241 +++++++++++++++++++
+>   36 files changed, 1699 insertions(+), 149 deletions(-)
+>   create mode 100644 tools/testing/selftests/x86/lam.c
+>
+> --
+> 2.39.1
+>
