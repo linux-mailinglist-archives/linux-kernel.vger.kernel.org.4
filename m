@@ -2,96 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA1396B714C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94DE76B714F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 09:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbjCMIls (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 04:41:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43510 "EHLO
+        id S229829AbjCMImo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 04:42:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230162AbjCMIle (ORCPT
+        with ESMTP id S229534AbjCMImj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 04:41:34 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EDD3265B3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:41:30 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id h3so11740536lja.12
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 01:41:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678696889;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UGYPLzjUcOMYCS9PgF3AEJ+YYHpQz28xcB60P/4Z3Q4=;
-        b=PV+hoOQKvr8krdqbX3msOaj2OhYcAhADHbCsW+STPkRgArxbvVJHgZFhope2jRQ+OA
-         VToQUOSAAM8e8GqvdtBMDapua3lSJ59rANDTMXzvDh9EBt+gv7kbo/N9CfI9DvW7Aooa
-         xzDaAjLrfFbE0zTyRq+t8qVRfr6Q7g1cM7Tei+5fIWOK9QrPuAn43Y2k+V0KA1n4DvSN
-         Ffax6bGrU4ajTS8ZrPwadrpKEzT3udLvVhbaKtD2VGtv36GgjorcEC4PsYw4yVpLfewx
-         rclntRjRt9OWE5NSDiA0VeWc+svaKmlCQh1zrOncAl/9cjK7fjiyTSzyiIDk9OL95TBW
-         hqaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678696889;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UGYPLzjUcOMYCS9PgF3AEJ+YYHpQz28xcB60P/4Z3Q4=;
-        b=OyEkXZImD0udtQ2Vat+OXnd1TkQru9ki1TBNR0SIXlgeb6beR+eMQqRLi1yygP0b8G
-         pIzVWeggyxmV7Tr6vAKa32tE6LmzgeL+21q4HzRMDgoI0oPehjEqRe6H89sdvwXj9JQi
-         anaktvuShb1xkYySXJAUSSt7qwKF0FFb3RmpDXuhsFELtMCXWVlf7bMvP4ZicMpJ8n02
-         KLFHbhBQyyEogJ1UsR9Qx3pGVks4oHWSB8LYg/8t2EK1qsLr4OyZMG/QN4zSkL48Ud0i
-         PxFalObPVOAbzPW+e5MFg6MQ3FFSivQSWMpuFx5GtTjUWJdDMgtkTYF8+mW+18eI2hVC
-         yjAw==
-X-Gm-Message-State: AO0yUKUzFHxf3hX2PUJoM99vTOmj3bMXCNfR//g7XeTmJpm7/j+CtrXx
-        tRmUZkHHf7NMPoOicHcA3hm8CLXbLt24DLF3Lfo=
-X-Google-Smtp-Source: AK7set+O+49wCt5LULhHHAr8WaqE6BfQ3cmUqdhrV5fAQ6g7DhUBtHot3Whf1uunKo3lbDY9EZSvZw==
-X-Received: by 2002:a2e:9902:0:b0:293:4fda:22d1 with SMTP id v2-20020a2e9902000000b002934fda22d1mr9570874lji.46.1678696888804;
-        Mon, 13 Mar 2023 01:41:28 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id y7-20020a2e7d07000000b00293d7c95df1sm919247ljc.78.2023.03.13.01.41.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 01:41:28 -0700 (PDT)
-Message-ID: <3a29fd86-7ede-33b3-0d3c-15e33121f3bb@linaro.org>
-Date:   Mon, 13 Mar 2023 09:41:27 +0100
+        Mon, 13 Mar 2023 04:42:39 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0392A42BF0;
+        Mon, 13 Mar 2023 01:42:38 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AF4D7660217C;
+        Mon, 13 Mar 2023 08:42:35 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678696956;
+        bh=x8wzIUy9Cxdue6iWvChHsFFMMVEqwwyF7up4rDSFcMU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=TN6d9OgE3CSyCBCidca1xh1FvLRtPL6Oz0dwlmYp1XdhnIH0JQDKo7PFF4U/HBbpX
+         /Zni4fexbWaSweqJcsaz9CkH1OsLZD2bdat8jYyeBQyByljx32uZ8slDDBNvcipSfj
+         pBnkCy1LCf2pMHIm0xV4bzkQi9lNojAUAGxYVH0YSiVmIO+6MAg9EEnAO5kKCx9toB
+         aatokoXdNshIHtm37DcR1BwY9XJ7KV0XN2AK7PU4vK1z0PA0MWsHmcOBxNr59Lk3KJ
+         NvcCaWYx6pvl8ehmg3wrMLth0dIOjEcYt5eA831uAGjiv/AoXo9D0AalFZ8MYcFdTV
+         bOx+tNoIoz6BQ==
+Message-ID: <d27d813d-60be-a67b-8eb3-44b50e490794@collabora.com>
+Date:   Mon, 13 Mar 2023 09:42:33 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH] arch: arm64: qcom: sdm845-xiaomi-beryllium: add
- notification LED
+Subject: Re: [PATCH] media: Use of_property_present() for testing DT property
+ presence
+To:     Rob Herring <robh@kernel.org>, Bin Liu <bin.liu@mediatek.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hyun Kwon <hyun.kwon@xilinx.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Michal Simek <michal.simek@xilinx.com>
+Cc:     devicetree@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20230310144711.1543225-1-robh@kernel.org>
 Content-Language: en-US
-To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-References: <20230313045539.47538-1-joelselvaraj.oss@gmail.com>
- <b5020395-f6c5-680c-c169-aa46c903613c@gmail.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <b5020395-f6c5-680c-c169-aa46c903613c@gmail.com>
-Content-Type: text/plain; charset=UTF-8
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20230310144711.1543225-1-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13.03.2023 07:56, Joel Selvaraj wrote:
-> Hi,
+Il 10/03/23 15:47, Rob Herring ha scritto:
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
 > 
-> The commit title should have had the prefix "arm64: dts: qcom:" instead.
-> Sorry for the inconsistency. Shall I send a v2 with the commit title fixed?
-Resending one commit does not seem like a lot of work, so yes please
+> Signed-off-by: Rob Herring <robh@kernel.org>
 
-Konrad
-> 
-> Regards,
-> Joel
+For MTK JPEG, MTK vcodec
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com
+
