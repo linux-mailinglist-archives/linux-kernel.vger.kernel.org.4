@@ -2,72 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50F156B84A9
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:18:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A485E6B84AD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 23:21:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229847AbjCMWSw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 18:18:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58124 "EHLO
+        id S229701AbjCMWVd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 18:21:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCMWSu (ORCPT
+        with ESMTP id S229482AbjCMWVc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 18:18:50 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C8208E3D0;
-        Mon, 13 Mar 2023 15:18:48 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 57B9CB81185;
-        Mon, 13 Mar 2023 22:18:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4F42C433D2;
-        Mon, 13 Mar 2023 22:18:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678745926;
-        bh=4Ie5F9+yNd8+j8B1DSv2ufImjnst5rSZzdgnN+9xPUI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Pxstvy70o1gpf5ktY9c/lxqUWBDtPdq41c8M6hPu1oYc5T6emC3cTgn5SioBe/n/O
-         zDqq2wvPlzvO0GKsRJsSMIcxHe6FGli8L8Vs6zvsDKkqxccjkzfgadlE7u+oDYlxst
-         rgAZGjQVfBEXk+5+Y67+EtAvl9p0IHfnbRtHzfkRZ0tDS2V8qNPiHgY3qvo7OCfayO
-         5aGRujMT4uJRgiwD7zhtELPJGyRDvbMP3lfSl/XBTS0a3VLEI4HLdKShCGMbYD5CtP
-         ymSvXVgOujhBE9/EyEwnKfXJRdhxmTxs1LchisSLFt3WZhtlGf4VQwzFdMf2GDNgds
-         kuDxyOWx/kzMA==
-Date:   Mon, 13 Mar 2023 15:18:44 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Horatiu Vultur' <horatiu.vultur@microchip.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "richardcochran@gmail.com" <richardcochran@gmail.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net-next 2/2] net: lan966x: Stop using packing library
-Message-ID: <20230313151844.6eee28c6@kernel.org>
-In-Reply-To: <cad1c4aac9ae4047b8ed29b181c908fd@AcuMS.aculab.com>
-References: <20230312202424.1495439-1-horatiu.vultur@microchip.com>
-        <20230312202424.1495439-3-horatiu.vultur@microchip.com>
-        <cad1c4aac9ae4047b8ed29b181c908fd@AcuMS.aculab.com>
+        Mon, 13 Mar 2023 18:21:32 -0400
+Received: from mail-lj1-x235.google.com (mail-lj1-x235.google.com [IPv6:2a00:1450:4864:20::235])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFEFB1ABC8;
+        Mon, 13 Mar 2023 15:21:30 -0700 (PDT)
+Received: by mail-lj1-x235.google.com with SMTP id b13so14191114ljf.6;
+        Mon, 13 Mar 2023 15:21:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678746089;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/lgLb5XFePEU9jptTtQsEKcrGixEAnt+jbUUD2Xgwnk=;
+        b=XrECHhrUNMF7t1fwGgwocFZDCoNVlVcKRW5Em4KQoq1n8fmq6JuBJSVM51ELcsxROP
+         1LzAJ9r6cQ8fK22QU8b7+71aJZq6timCL+alDw0n6IB5XrCg52tVoc8YUG6cl1g1gGRd
+         QVYJf9W1iWwWwxIlwD5b69A50LglRfo5bxIjNupvDdqQdaLEY43MfTZKFgUIDbtoooRz
+         AyrsyTQr0f16aGDfRAWPAMHoIWVODHcKD8kRpqdgI+Lt1vLtPPeYW2uuJQqYqYOlPMzg
+         hqnjYkMwdkSNAmNWdYKxhDDuzDM3LuwSbMSFvUgmkKjhLhSXuyjaPFhnfpiioR6Sj6Uv
+         WIAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678746089;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/lgLb5XFePEU9jptTtQsEKcrGixEAnt+jbUUD2Xgwnk=;
+        b=YLB49Dc2V7ISdcgNmwO6rMcm/Tklo7xz7evlJrefwmr3NBg40haGDuuBBnRZgAKPmg
+         ABtD/ZhTL/L5OiPZRN2QhSAnGJjb61lgBffcXjVqWxN6UiCTFG6U76saVim2VNwkt8Hs
+         QO45Ky2bykBmtZ7y4hLBpUBq1xgNvYHgZBbQNadbCCVskniCfooomEf0rEZemOXS/hFD
+         0mUm7/w4+AVQZsvQycMG6VordRpDZIJ1CVfgQFcgdU64OskJbA67RwpmauffKdoboiFO
+         LWAFjF51Bar1Xb2ImWfHkYDm85gy0I0BQ8K56VISJiNUhtfTCXWgqEs3qbOSNnzOOUMk
+         ke3g==
+X-Gm-Message-State: AO0yUKVNFsYtVDWLXWjd8ZCuBaPm6WIiCl5TEhjoNjrtyuS4XR+qjAtj
+        y4rRiAtt794HVBaMvYa2UKs=
+X-Google-Smtp-Source: AK7set9VSGT9OVCegHXHz7hvv7WJzGrMgLmFof3LizWBxMiVI+Q8qhqs1X7/TA3/c6KZhSy8EiUx4g==
+X-Received: by 2002:a2e:8510:0:b0:295:9ba2:8a78 with SMTP id j16-20020a2e8510000000b002959ba28a78mr3394391lji.17.1678746088803;
+        Mon, 13 Mar 2023 15:21:28 -0700 (PDT)
+Received: from mobilestation ([95.79.133.202])
+        by smtp.gmail.com with ESMTPSA id e19-20020a2e9853000000b002934b5c5c67sm173547ljj.32.2023.03.13.15.21.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 15:21:28 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 01:21:23 +0300
+From:   Serge Semin <fancer.lancer@gmail.com>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>,
+        Jingoo Han <jingoohan1@gmail.com>,
+        Gustavo Pimentel <gustavo.pimentel@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
+        Rob Herring <robh@kernel.org>,
+        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
+        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
+        linux-pci@vger.kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 00/11] PCI: dwc: Relatively simple fixes and
+ cleanups
+Message-ID: <20230313222123.fshj3vvpbpcptyru@mobilestation>
+References: <20230313200816.30105-1-Sergey.Semin@baikalelectronics.ru>
+ <20230313211752.GA1541360@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313211752.GA1541360@bhelgaas>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 13 Mar 2023 17:04:11 +0000 David Laight wrote:
-> It has to be possible to do much better that that.
-> Given  that 'pos' and 'length' are always constants it looks like
-> each call should reduce to (something like):
-> 	ifh[k] |= val << n;
-> 	ifk[k + 1] |= val >> (8 - n);
-> 	...
-> It might be that the compiler manages to do this, but I doubt it.
+Hi Bjorn
 
-Agreed, going bit-by-bit seems overly cautious.
+On Mon, Mar 13, 2023 at 04:17:52PM -0500, Bjorn Helgaas wrote:
+> On Mon, Mar 13, 2023 at 11:08:04PM +0300, Serge Semin wrote:
+> > ...
+> > Link: https://lore.kernel.org/linux-pci/20230217093956.27126-1-Sergey.Semin@baikalelectronics.ru/
+> > Changelog v2:
+> > - Rebase onto the kernel 6.3-rc2.
+> 
+
+> This is fine, but just FYI that there's no need to rebase past -rc1
+> because PCI patches are applied on topic branches based on the PCI
+> "main" branch, typically -rc1.
+
+Thanks for reminding about that. I am not that keen of early rc's
+because there is a higher risk to catch instability in unexpected
+places. Normally I wait for rc2 or newer kernel is released in order
+to rebase onto that mainline kernel. I am using the Linus' master
+because most of time I get to develop and submit patchsets for several
+subsystems concurrently (currently it's PCIe, EDAC, net and MIPS-arch)
+and having them rebased on top of each subsystem' next-branch would be
+even more risky. Of course I understand that the subsystem main/topic
+branches may have some conflicting changes. So normally I make sure
+that the submitted changes are applicable against the subsystem trees
+if/when it's necessary. (Can't deny though I forget to do that from
+time to time.)
+
+-Serge(y)
+
+> 
+> Bjorn
