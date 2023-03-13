@@ -2,112 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 623B36B7217
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:09:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29C8A6B721F
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbjCMJI4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:08:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35678 "EHLO
+        id S230308AbjCMJKD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:10:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35906 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231140AbjCMJI3 (ORCPT
+        with ESMTP id S230479AbjCMJJr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:08:29 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B2E8C222F3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 02:06:53 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C508E2F4;
-        Mon, 13 Mar 2023 02:07:36 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5FAAB3F71A;
-        Mon, 13 Mar 2023 02:06:51 -0700 (PDT)
-Message-ID: <02a08042-e7c4-464d-bc20-9ec4ccdab1ff@arm.com>
-Date:   Mon, 13 Mar 2023 10:06:41 +0100
+        Mon, 13 Mar 2023 05:09:47 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A16D156159;
+        Mon, 13 Mar 2023 02:08:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678698521; x=1710234521;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=cq6QdrMcR3tA5ptzjJyzksVlZ4tZ93rLnwQheu8e54Q=;
+  b=Ulprt4xM1tdMpTmsVc/JhnJCDDu7xcaQMYLK1tFy8h5QObEKk8Lxi81d
+   ZDEZ6fkxzRuarFY14o47BFptora5h9+uCnjKRcYSMXrecuyY9eKqEma0a
+   hNapvJEs6r2nzS8tLtDENtOkS0qHPk1KQoNX3/qBxL6IOuSrDGIEWXxro
+   lph5kq0QGotjl8zs/2JmnMUrdnxzERCPjxILAMGLjvnf4Wa8p281ksCjj
+   /DnX/56pB5fmD7vvvu/R/jjjs8kxtTczOUBWssSl4VszH4AHWN93cCuIq
+   f8R7TLuusmleCJikVnQNq53Kg0JDdoCu6UlzaZPzAa+J1aQiP5l7Y6FDE
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="423363959"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="423363959"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:08:41 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="680950602"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="680950602"
+Received: from etsykuno-mobl2.ccr.corp.intel.com ([10.252.47.211])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:08:35 -0700
+Date:   Mon, 13 Mar 2023 11:08:33 +0200 (EET)
+From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To:     Neeraj sanjay kale <neeraj.sanjaykale@nxp.com>
+cc:     "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        "alok.a.tiwari@oracle.com" <alok.a.tiwari@oracle.com>,
+        "hdanton@sina.com" <hdanton@sina.com>,
+        "leon@kernel.org" <leon@kernel.org>,
+        Netdev <netdev@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        linux-serial <linux-serial@vger.kernel.org>,
+        Amitkumar Karwar <amitkumar.karwar@nxp.com>,
+        Rohit Fule <rohit.fule@nxp.com>,
+        Sherry Sun <sherry.sun@nxp.com>
+Subject: Re: [PATCH v6 3/3] Bluetooth: NXP: Add protocol support for NXP
+ Bluetooth chipsets
+In-Reply-To: <AM9PR04MB8603D2F3E3CDC714BDACECC0E7BA9@AM9PR04MB8603.eurprd04.prod.outlook.com>
+Message-ID: <11c7e098-19c8-6961-5369-214bc948bc37@linux.intel.com>
+References: <20230301154514.3292154-1-neeraj.sanjaykale@nxp.com> <20230301154514.3292154-4-neeraj.sanjaykale@nxp.com> <73527cb7-6546-6c47-768c-5f4648b6d477@linux.intel.com> <AM9PR04MB86037CDF6A032963405AF0CEE7B69@AM9PR04MB8603.eurprd04.prod.outlook.com>
+ <48e776a1-7526-5b77-568b-322d4555a138@linux.intel.com> <AM9PR04MB8603D2F3E3CDC714BDACECC0E7BA9@AM9PR04MB8603.eurprd04.prod.outlook.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-Content-Language: en-US
-To:     Vincent Guittot <vincent.guittot@linaro.org>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rkagan@amazon.de
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <20230309130524.GA273121@hirez.programming.kicks-ass.net>
- <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
- <20230309142825.GB273121@hirez.programming.kicks-ass.net>
- <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
- <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
- <ZAs+zV0o9ShO7nLT@vingu-book>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <ZAs+zV0o9ShO7nLT@vingu-book>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/03/2023 15:29, Vincent Guittot wrote:
-> Le jeudi 09 mars 2023 ï¿½ 16:14:38 (+0100), Vincent Guittot a ï¿½crit :
->> On Thu, 9 Mar 2023 at 15:37, Peter Zijlstra <peterz@infradead.org> wrote:
->>>
->>> On Thu, Mar 09, 2023 at 03:28:25PM +0100, Peter Zijlstra wrote:
->>>> On Thu, Mar 09, 2023 at 02:34:05PM +0100, Vincent Guittot wrote:
+On Fri, 10 Mar 2023, Neeraj sanjay kale wrote:
 
-[...]
-
->> you mean taking the patch 1/2 that you mentioned here to add a
->> migrated field:
->> https://lore.kernel.org/all/68832dfbb60fda030540b5f4e39c5801942689b1.1648228023.git.tim.c.chen@linux.intel.com/T/#ma5637eb8010f3f4a4abff778af8db705429d003b
->>
->> And assume that the divergence between the rq_clock_task() can be ignored ?
->>
->> That could probably work but we need to replace the (60LL *
->> NSEC_PER_SEC) by ((1ULL << 63) / NICE_0_LOAD) because 60sec divergence
->> would not be unrealistic.
->> and a comment to explain why it's acceptable
+> Hi Ilpo,
 > 
-> Zhang,
+> I have resolved most of your comments in v8 patch, and I have few things to discuss regarding the v6 patch.
 > 
-> Could you try the patch below ?
-> This is a rebase/merge/update of:
-> -patch 1/2 above and 
-> -https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
-> 
-> The proposal accepts a divergence of up to 52 days between the 2 rqs.
-> 
-> If this work, we will prepare a proper patch
+> > > > > +static bool nxp_fw_change_baudrate(struct hci_dev *hdev, u16
+> > > > > +req_len) {
+> > > > > +     struct btnxpuart_dev *nxpdev = hci_get_drvdata(hdev);
+> > > > > +     struct nxp_bootloader_cmd nxp_cmd5;
+> > > > > +     struct uart_config uart_config;
+> > > > > +
+> > > > > +     if (req_len == sizeof(nxp_cmd5)) {
+> > > > > +             nxp_cmd5.header = __cpu_to_le32(5);
+> > > > > +             nxp_cmd5.arg = 0;
+> > > > > +             nxp_cmd5.payload_len = __cpu_to_le32(sizeof(uart_config));
+> > > > > +             nxp_cmd5.crc = swab32(crc32_be(0UL, (char *)&nxp_cmd5,
+> > > > > +                                            sizeof(nxp_cmd5) -
+> > > > > + 4));
+> > > >
+> > > > swab32(crc32_be(...)) seems and odd construct instead of
+> > __cpu_to_le32().
+> > > Earlier I had tried using __cpu_to_le32() but that did not work. The
+> > > FW expects a swapped CRC value for it's header and payload data.
+> > 
+> > So the .crc member should be __be32 then?
+> > 
+> I disagree with using __be32.
+> I have simplified this part of the code in v8 patch, please do check it out.
+> So the CRC part of the data structure will remain __le32, and will be sent over UART to the chip in Little Endian format.
+> It's just that the FW expects the CRC to be byte-swapped. 
+> Technically it is big endian format, but you may think of it as a "+1 level" of encryption (although it isn't).
+> So defining this structure member as __be32 can create more questions 
+> than answers, leading to more confusion. 
+> If it helps, I have also added a small comment in there to signify that 
+> the FW  expects CRC in byte swapped method.
 
-Looks to me that this patch brings back the old numbers:
+I'd have still put the member as __be32 and commented the swap expectation 
+there. But it's not an end of the world even in the current form.
 
-model name	: Intel(R) Xeon(R) Silver 4314 CPU @ 2.40GHz
+> > > > > +     serdev_device_write_buf(nxpdev->serdev, (u8 *)&nxp_cmd7,
+> > > > > + req_len);
+> > > >
+> > > > Is it safe to assume req_len is small enough to not leak stack content?
+> > > The chip requests chunk of FW data which is never more than 2048 bytes
+> > > at a time.
+> > 
+> > Eh, sizeof(*nxp_cmd7) is 16 bytes!?! Are you sure that req_len given to
+> > serdev_device_write_buf() is not larger than 16 bytes?
+> > 
+> I have now replaced req_len with sizeof(<struct>).
+> There is also a check in the beginning of the function to return if req_len is not 16 bytes.
 
-perf stat --null --repeat 10 -- perf bench sched messaging -g 50 -l 5000
+Ah, I'd missed that check for some reason.
 
-tip sched/core
 
-a2e90611b9f4 - sched/fair: Remove capacity inversion detection
-(2023-02-11 Vincent Guittot)
-
-  5.7295 +- 0.0219 seconds time elapsed  ( +-  0.38% )
-
-829c1651e9c4 - sched/fair: sanitize vruntime of entity being placed
-(2023-02-11 Zhang Qiao)
-
-  6.0961 +- 0.0297 seconds time elapsed  ( +-  0.49% )
-
-this patch on top 829c1651e9c4
-
-  5.7165 +- 0.0231 seconds time elapsed  ( +-  0.40% )
-
-[...]
-
+-- 
+ i.
 
