@@ -2,79 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488756B80F4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:43:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF7D46B80FC
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:44:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231404AbjCMSnY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:43:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33724 "EHLO
+        id S231304AbjCMSoi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:44:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231370AbjCMSnO (ORCPT
+        with ESMTP id S229790AbjCMSof (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:43:14 -0400
-Received: from mail-yb1-xb2a.google.com (mail-yb1-xb2a.google.com [IPv6:2607:f8b0:4864:20::b2a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C5F484F79
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:42:48 -0700 (PDT)
-Received: by mail-yb1-xb2a.google.com with SMTP id t4so12958773ybg.11
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:42:48 -0700 (PDT)
+        Mon, 13 Mar 2023 14:44:35 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on20725.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::725])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 307897F024;
+        Mon, 13 Mar 2023 11:43:54 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=el/6kz1arwAiRR+jb/wIQRpwqWDPabnbk5uwlS+ZkyBo/6OqtbtFMZmz2PI5LpXw38cOoMrJ6eNLRabKtXkZpLn5btrM8uCLOh5+1g25A+y9P9xFGlt7kor3LX6qbtjkpDB8OpgHcL23eSweLLNe/Yq+jkECk9B33I/PozZ0Hv+xVFbcJ0Vd+LOgj0//tLAA+O3BefVBP0yeOdMLrVjP1LsfJqmZRkNV3AN6JQfc31FZdAo131WWduiRs/NhAQ0zRuG/04K7n9HF9zza7N+yOR0y4VfiVo0Or+//iy61d32+QjDcmA1lWL/lYl1AuFLuoe7615IAtK1DV+hrnboRSg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=AtY5Ncp8w6rTRdFzbDJ8YosVUDDzAgTiu3P6To0P3J4=;
+ b=a3mKCgNJzAoYzlxvS/fEhsXEzOdNYXmDfKhBdklo64etD7xpml30TBx8p/DMtkfdY6bZb4ygo61BFnnsd05kowr+LlaLoxx+MqiBcX7Dom0+0LfySfcjX5B4XaszwZrR8gZ3GNUw9U+cW0MPSrfPPeRcJtIG0Wkdt3poIM7VWE7WY2svaslwT/wAQqJTBC6c/zHGtaqvyn9rDmRdtDAeHw28LQBbif4jFNB+WZHUBbYMHSXK3zsEsEa8LJo1Fu+QBPM15GBW0FgciguxsHLka7GujfLr/1OizNs+1lK46XDO8Cj7gbRRZSd2UNiu1BuSDevMxopjhHwqSz/LjapGrw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678732947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hc4qD0dBROAsSu6VxDvfykn2MYkacMKgknIXt+XjvfU=;
-        b=saN7elFeQznmtibfBOSiIjhNuxMhg6FimCIcq7r61bXo9mayiTUp8DD1+iJU3EYbku
-         GbAGT2GRb4pp97mkR59CDQm7f0/WR08TKmAQ27JQCQtUrvvsDirBdCLyeNOouJ7YPLvx
-         Fc2bQ+Aym34eOGQeZnPM4vp4Sf6J+XX6cpaYCyH+3SW+b8zMfVRCdBXu/nSSSVoSYrr9
-         eOcnpfaYqgqMFPDFPOJaGwMiZNUD9qT+p3SVy/cxflC2BF1zYKq0XgMD03ITU1yaurZq
-         PWtFPq6B5fAt8O2VK5uha7qGmM6sUWOU43l534/ddSPiElS377MFfIcVGvEnHfDQA2F0
-         qo8g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678732947;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=hc4qD0dBROAsSu6VxDvfykn2MYkacMKgknIXt+XjvfU=;
-        b=3PROCzLz7W7hffyk5nv6+Tl3jvH/ec8Qco4+t1Lsw1JrqSE5VScCDrezEi4b6RJ7Ll
-         0SXEkDJ/OLhOtmIoD5zgh68QN35Q/N8q2w04QwdjfsrxaE8JnjQjyiPztGaw++ajhrUD
-         PniS/qEsv6s/FK+2aLphD4qBwaDgYMpLfsvDJeTRTAS9TuU4BAdkkA7h1GCfHG6f+Ti0
-         0sWKvjyxHrLmcF9uFXPc6DRwo2cYnjsst7aCcMSpQFxHKPCrUByZQfrZTpHtPbN183lx
-         o2sgLsB9VlvI55w3Qt9frFr0iWyK1sbluR7tpT5L+qnCNdA0tZ7UfCH8Dp9KmaGrhWtq
-         /NWA==
-X-Gm-Message-State: AO0yUKVe6AR+cBc0Xyhsf9IsaC3IpqHNB0A6MsIeSxYj1SBItH6mTL3Q
-        gG1E7NtqyEq7dux8bPIheJftp6gRKuwLdDR5GJbMnQ==
-X-Google-Smtp-Source: AK7set+75k/6wpJlLHYeLR6WsdbBWu8a19iQ5MMCLCjF+dE6M/z3ppb7dxMGbQzvpWjm9q+hhYVvtEFgNX9klTn9usU=
-X-Received: by 2002:a05:6902:cf:b0:a02:a44e:585c with SMTP id
- i15-20020a05690200cf00b00a02a44e585cmr21945010ybs.1.1678732947713; Mon, 13
- Mar 2023 11:42:27 -0700 (PDT)
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=AtY5Ncp8w6rTRdFzbDJ8YosVUDDzAgTiu3P6To0P3J4=;
+ b=FvQIr263yJnSTiB5ajxt4ihu+r/yXCRePo93/qLhYXVkgegTwfJPGGLk16Rv5+Lc+fiYcdzuaQ9BYgGzST7qZBcMhj/lNEtXafHXqzwXuLE6WFOuXcIYjD8TxVl6UVJcCqo6wRmjgXEDm8nR/lgV/AH70pA3PFBQeS2HWyIrCFc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by CO1PR13MB4999.namprd13.prod.outlook.com (2603:10b6:303:f5::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 18:42:54 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 18:42:54 +0000
+Date:   Mon, 13 Mar 2023 19:42:48 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Josef Miegl <josef@miegl.cz>
+Cc:     Eyal Birger <eyal.birger@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next] net: geneve: set IFF_POINTOPOINT with
+ IFLA_GENEVE_INNER_PROTO_INHERIT
+Message-ID: <ZA9uqAPhmUyYPcdo@corigine.com>
+References: <20230312164557.55354-1-josef@miegl.cz>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230312164557.55354-1-josef@miegl.cz>
+X-ClientProxiedBy: AS4P190CA0026.EURP190.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d0::13) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-References: <20230301214952.2190757-1-saravanak@google.com>
- <CAGETcx_DTHW4-WMK4qRhvhxiunUB2f79cpXSfQ1x-hifZQ+tgw@mail.gmail.com>
- <CAMSo37XuNaV4Y3+ExrUjNzPDRD_BNSn1258Ve3We+qtbsO7qEw@mail.gmail.com> <CAGETcx8qKCNuD5p=e-f-T93VstptPWHq2gVzmghkQucNyhwocA@mail.gmail.com>
-In-Reply-To: <CAGETcx8qKCNuD5p=e-f-T93VstptPWHq2gVzmghkQucNyhwocA@mail.gmail.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Tue, 14 Mar 2023 02:42:16 +0800
-Message-ID: <CAMSo37UyDWB5dfTo91Y_de3de1gYActdKj4fsu==eW90kuHjyw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/4] Remove use of fw_devlink_purge_absent_suppliers()
-To:     Saravana Kannan <saravanak@google.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Daniel Scally <djrscally@gmail.com>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Len Brown <lenb@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Martin Kepplinger <martin.kepplinger@puri.sm>,
-        Amelie Delaunay <amelie.delaunay@foss.st.com>,
-        kernel-team@android.com, linux-kernel@vger.kernel.org,
-        linux-usb@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|CO1PR13MB4999:EE_
+X-MS-Office365-Filtering-Correlation-Id: b17e30b9-4c0f-4c9a-6901-08db23f2c186
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZqtFejp6/sUR+uyBXuXFr7KV7IFKIU4tb+lAkYzgOK5mhfWgcTEcMVSIWF32b9WG47hClQ7rj5AClrgyt128iHXF8Qs8MZnImJSnRTpE3n5uHDkkPVNWx6IEuNqlmQEbbHRF0PXcgrBRoHm6AubjSLU40eyOKJycq6Tu1qkanyi82lEEB54kEiuWAi3AUjtrDZeLrgDjSOZhClVf50dYscf0rWcCZR9f+t+FD8p8GXOZ91NbpbF5mBUxzX/+ZAFo2qsxCZ46HRtKwaYXel9uo88eWMa4rlbDzLTZjVkP7EWFx1UftEBhtRO0PFdSoVoExCnPbXgzFI5iiJpTdQCZLhgbXT/DAty3QR53Vo5Yb0tkECai6d0Cvtcd4kridcGFj4HkpG4jhYB70UAnklOueFIP2akxwF1WK5AfMvR4IlhR9wcDQXXC4EYKQaUUO/eT/WZSiIwnEaCl4lGLABJjabrt3hP4WGddelxofnWCPCjjvmSzXv+7XwLDp/F4GhCH7BpgAtGSxL7F8+US6kPC3nPeFp54EFRjUvl/C+r1AtOBhF+bEXZw1fTxAL8RPl2RE1BOUA1M3IaNl3UKbwiEPnV5rGfI5lLrihfLRy+0xheLFm0BjJtUQ7l3ja4S0pwOdEaKpvesFJtx8MGgn8zXnXLutwEsqP1SueCt3OOiPTDlYGs5Q5lem8rxf5/JXiaC
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(39840400004)(396003)(346002)(376002)(451199018)(6916009)(4326008)(5660300002)(8936002)(2616005)(186003)(41300700001)(6512007)(6506007)(36756003)(86362001)(4744005)(44832011)(2906002)(83380400001)(66476007)(66556008)(8676002)(6486002)(66946007)(54906003)(316002)(478600001)(38100700002)(6666004);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?cLZSiKG4UwQBD81c+k32/QIbVjapwsUORxra33oAzhwzqOomoVhi8l0CLgV1?=
+ =?us-ascii?Q?x4R8TV5ovxcuBdvBlPw+rx/EAl8W0vKvrxuieuA2+WFpCeTIoYKSmwwwlgyr?=
+ =?us-ascii?Q?EUBrIQNGqvDMAyb0CLBXsab/IOrK9fMyMKUO2Ix+NFtdbgb+D+0OIO8wchpR?=
+ =?us-ascii?Q?qAqX6E3YVb+ZdKZNmhn27EkG3Q9e2v/W7SJMx0xVNDDnR1mDw0mqfQRD0X25?=
+ =?us-ascii?Q?ltR8jfN6vqOt8FeeqeETr04e6bf/4Z2q8puCZcMqzNPsGZhWQq/n7UokEvr/?=
+ =?us-ascii?Q?Gbigzh2ZEk1lLF7CzF1z3JGrDURytHsQAmjRLu1loQuwwnKgIeec2r6ap4N0?=
+ =?us-ascii?Q?/yT+TZcCHMpUlz/yZdVu/B709ljC9h2flNdbkKmobVYYyP+b7B/DnPepKeJH?=
+ =?us-ascii?Q?yeCzOypGQY0+DSzno39KBzkoaFnI+zFJh2lbhXbPg+RJmE2Y3srbjgXtgewQ?=
+ =?us-ascii?Q?CE4y3VjrMWmYaJ72R1n9TgqAR9DsvDqvTCKqDUydBH+Dtev1mzv3KtmbEN+K?=
+ =?us-ascii?Q?6696CosG64uapFPQZhiLhilUr1NiJzZVWsx+82TM5ena+WDYz5HA+LcOT+IW?=
+ =?us-ascii?Q?QMPE2DU2sAo+70ysIMbBD3t9Z7+fmiYhFY8i2vcxnEG/wR1ny52IjptErYIo?=
+ =?us-ascii?Q?xAGsS4x6maJafIdCLhv+h8xVygyf+swI30jwJ1G4JAXQAVrNZhXoDvzCBu2u?=
+ =?us-ascii?Q?GjXy9uK9dXTdBiYVIJ+JWc3bjCymVh9j7VQFQYqTZH+Xa3vwpIAs6lGxSVbc?=
+ =?us-ascii?Q?sO7n94jWQHXAr9G5GcAQHnc9mV6jqag7cLVGUn2X3johpnw7tc9WuPMT4O8E?=
+ =?us-ascii?Q?wRQsv4T8KjRzaxrewWm+zXY69v/qeX7NpuKX60IGUzpStJu7rxgLux5DbCiv?=
+ =?us-ascii?Q?+8KtQ6fjRkdql7uJD/YinQJeMLNgDymCdTJB0rjKv3Gd0N15S4EYM4PqJdfh?=
+ =?us-ascii?Q?tR9hBvuGAxoyail22dFl4ZRnfZVErxkzforW54/BH4Cdu3cFvPq1Nt1ot8jH?=
+ =?us-ascii?Q?8u4q3Z8fqsJWrt99riWvKbm1FxJAxerP7D1IG5haSiBvmGMiqAQom3O0eNwR?=
+ =?us-ascii?Q?R9feoWkf2+YgtqOIhJM8FJSK9k1Qn0khDJvEbR2ztCUGi7nejChiMc83PI9w?=
+ =?us-ascii?Q?StoqlRxUw5Tl+EtZO8/thB+21ukNlrOHls+8MHmnaOd1Yf+8n6jEz5me8P53?=
+ =?us-ascii?Q?z3X52HmiXFiDnCQYQbJEMJPV+vpJNeMEGYkDTPOwJQ8NVgk+8KhucexwKSw4?=
+ =?us-ascii?Q?06R+F+jX3bEUSwhgwVt9iw/Qbk9KqOASWQzmpwFN1nt7yUfNbKTWNuuOfL3K?=
+ =?us-ascii?Q?WKpnf8tjrpyzkIe69FSpWJjZWMqZeNJaDuW9/EXLSn7sK7IG9uYHIr2Gbw4O?=
+ =?us-ascii?Q?r8CXhBANSpsltud1IGva8oKYmjvW5wJm9YcjhuOtNs30W9WxNXuUcYU+NJ/w?=
+ =?us-ascii?Q?mvEeEpMGLIgW74p0/ShbasF0SYMqK/nvv+G/o/9ODPArpm4f0/4eXzLFvQjW?=
+ =?us-ascii?Q?yBf6sBmNATKy4DKYTU0BG4fh64BeofyilHfnAIMElm1gLOiuCmnk85fRESD0?=
+ =?us-ascii?Q?uuSilrnKaFtjBMcegH+u1XG7ykX9WypuT86v8Ij3UCp1a6PCkVNWsMNW9APG?=
+ =?us-ascii?Q?cH1KVEKHWvFjfX6hjN9SPzl/bHb3oXI31MHMgKz5FTurP+GycjFJ8gsmc+yf?=
+ =?us-ascii?Q?hraTPQ=3D=3D?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b17e30b9-4c0f-4c9a-6901-08db23f2c186
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 18:42:54.1269
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: aTi+IWQXml8mz+vBoXqczoK1NRDNfOAI59k5n4ag/1wS4KObbkHoK0F9Aa6Pf2EfuKZ0PpxzZwntVPrDe03Xtu/mQi74bw1zUz2T9Qf5vaM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR13MB4999
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,139 +119,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Saravana
+On Sun, Mar 12, 2023 at 05:45:57PM +0100, Josef Miegl wrote:
+> The GENEVE tunnel used with IFLA_GENEVE_INNER_PROTO_INHERIT is
+> point-to-point, so set IFF_POINTOPOINT to reflect that.
+> 
+> Signed-off-by: Josef Miegl <josef@miegl.cz>
 
-On Fri, 10 Mar 2023 at 08:17, Saravana Kannan <saravanak@google.com> wrote:
->
-> On Thu, Mar 9, 2023 at 10:53=E2=80=AFAM Yongqin Liu <yongqin.liu@linaro.o=
-rg> wrote:
-> >
-> > Hi, Saravana
-> >
-> > Sorry for the lateness, I was just aware of this today.
->
-> No worries.
->
-> > I tested with the ACK android-mainline branch + the 12 commits ending
-> > with fb42378dcc7f
-> > + the 4 commits of this series + hikey960 AOSP Master userspace.
-> > The hikey960 Android build could boot to the home screen, no stuck ther=
-e,
->
-> Thanks for testing! Can you confirm what happens if you drop the "12
-> commits ending with fb42378dcc7f" ? Does it get stuck at boot or have
-> some limited functionality?
+Reviewed-by: Simon Horman <simon.horman@corigine.com>
 
-I tried to only apply the 4 commits of this series, but that would cause bu=
-ild
-error as the commit here:
-https://lore.kernel.org/all/20210205222644.2357303-2-saravanak@google.com/
-
-so I need to apply the first commit of the "12 commits ending with fb42378d=
-cc7f"
-here as well:
-https://lore.kernel.org/all/20230207014207.1678715-2-saravanak@google.com/
-
-With the 5 commits applied on the android-mainline branch, the build could =
-boot
-to the home screen, but the adb connection could not be created.
-For details please check here https://termbin.com/wf9hj.
-
-Thanks,
-Yongqin Liu
->
-> It's surprising that for the same type of DT node, in your case
-> fw_devlink is able to handle it
-> correctly, but no so for Martin's case.
->
-> -Saravana
->
-> >
-> > Here is the link of the logat in case you want to check some message he=
-re:
-> > https://gist.github.com/liuyq/6525af08c547cd2e494af5d1c8b181b5
-> >
-> > Thanks,
-> > Yongqin Liu
-> > On Fri, 10 Mar 2023 at 02:05, Saravana Kannan <saravanak@google.com> wr=
-ote:
-> > >
-> > > Greg,
-> > >
-> > > Don't pull in this series please. It needs more testing from the folk=
-s
-> > > I cc'ed and it's already breaking things for Martin. This needs more
-> > > revisions.
-> > >
-> > > -Saravana
-> > >
-> > > On Wed, Mar 1, 2023 at 1:49=E2=80=AFPM Saravana Kannan <saravanak@goo=
-gle.com> wrote:
-> > > >
-> > > > Yongqin, Martin, Amelie,
-> > > >
-> > > > We recent refactor of fw_devlink that ends with commit fb42378dcc7f
-> > > > ("mtd: mtdpart: Don't create platform device that'll never probe"),
-> > > > fw_devlink is smarter and doesn't depend on compatible property. So=
-, I
-> > > > don't think these calls are needed anymore. But I don't have these
-> > > > devices to test on and be sure and the hardware I use to test chang=
-es
-> > > > doesn't have this issue either.
-> > > >
-> > > > Can you please test these changes on the hardware where you hit the
-> > > > issue to make sure things work as expected?
-> > > >
-> > > > Yongqin, If you didn't have the context, this affected hikey960.
-> > > >
-> > > > Greg,
-> > > >
-> > > > Let's wait for some tests before we land these.
-> > > >
-> > > > Thanks,
-> > > > Saravana
-> > > >
-> > > > Cc: Yongqin Liu <yongqin.liu@linaro.org>
-> > > > Cc: Sumit Semwal <sumit.semwal@linaro.org>
-> > > > Cc: Martin Kepplinger <martin.kepplinger@puri.sm>
-> > > > Cc: Amelie Delaunay <amelie.delaunay@foss.st.com>
-> > > >
-> > > > Saravana Kannan (4):
-> > > >   usb: typec: stusb160x: Remove use of
-> > > >     fw_devlink_purge_absent_suppliers()
-> > > >   usb: typec: tipd: Remove use of fw_devlink_purge_absent_suppliers=
-()
-> > > >   usb: typec: tcpm: Remove use of fw_devlink_purge_absent_suppliers=
-()
-> > > >   driver core: Delete fw_devlink_purge_absent_suppliers()
-> > > >
-> > > >  drivers/base/core.c           | 16 ----------------
-> > > >  drivers/usb/typec/stusb160x.c |  9 ---------
-> > > >  drivers/usb/typec/tcpm/tcpm.c |  9 ---------
-> > > >  drivers/usb/typec/tipd/core.c |  9 ---------
-> > > >  include/linux/fwnode.h        |  1 -
-> > > >  5 files changed, 44 deletions(-)
-> > > >
-> > > > --
-> > > > 2.39.2.722.g9855ee24e9-goog
-> > > >
-> >
-> >
-> >
-> > --
-> > Best Regards,
-> > Yongqin Liu
-> > ---------------------------------------------------------------
-> > #mailing list
-> > linaro-android@lists.linaro.org
-> > http://lists.linaro.org/mailman/listinfo/linaro-android
-
-
-
---
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+> ---
+>  drivers/net/geneve.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/geneve.c b/drivers/net/geneve.c
+> index 32684e94eb4f..78f9d588f712 100644
+> --- a/drivers/net/geneve.c
+> +++ b/drivers/net/geneve.c
+> @@ -1421,7 +1421,7 @@ static int geneve_configure(struct net *net, struct net_device *dev,
+>  		dev->type = ARPHRD_NONE;
+>  		dev->hard_header_len = 0;
+>  		dev->addr_len = 0;
+> -		dev->flags = IFF_NOARP;
+> +		dev->flags = IFF_POINTOPOINT | IFF_NOARP;
+>  	}
+>  
+>  	err = register_netdevice(dev);
+> -- 
+> 2.37.1
+> 
