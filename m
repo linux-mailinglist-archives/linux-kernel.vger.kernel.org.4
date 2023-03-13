@@ -2,183 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69F7B6B8300
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:42:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4119E6B82E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:38:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229537AbjCMUmS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:42:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S230164AbjCMUiJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:38:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCMUmQ (ORCPT
+        with ESMTP id S229536AbjCMUiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:42:16 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC627222E7;
-        Mon, 13 Mar 2023 13:41:56 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AEFAB815BD;
-        Mon, 13 Mar 2023 20:41:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6999DC433EF;
-        Mon, 13 Mar 2023 20:41:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678740112;
-        bh=bJXg9mYFCKPj9PiWaVA2SmE2ljg2bwrnaELxXbWxheU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=cNzpsfBa2zg+Jts3NPng/BkK2iy+1PQwQBuERgWck6OQ5ozPYOnrPFGvx33hcMiCY
-         qDQ5rDi9awn7Wd2BBOY/c6hBAtWmguvnDrG/3X3EVyRSdbaeGbmAFRongT6cZHSbR4
-         IRflqshTeMSim7USoOHN12q81qUWeGJPyN5aTojWtO9dAItFvb5OnPc221YJJV0uFQ
-         4IB55ae+XlwBQ7hlP6YqFyNu/c2QoBriWy2bcwSxYpwioErGVfNm8MZjiQ//NOjZxA
-         jjxPQ6f0g3YfhRV04d6Q/SKXVZjU3Sx+Euai5Hc2+BzDMDUTSoeiZhw5pc5wkaLtoC
-         QotEF8YwxZ3nA==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id 172E84049F; Mon, 13 Mar 2023 17:41:50 -0300 (-03)
-Date:   Mon, 13 Mar 2023 17:41:50 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Zhengjun Xing <zhengjun.xing@linux.intel.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        "Steinar H. Gunderson" <sesse@google.com>,
-        Kim Phillips <kim.phillips@amd.com>,
-        Florian Fischer <florian.fischer@muhq.space>,
-        James Clark <james.clark@arm.com>,
-        Suzuki Poulouse <suzuki.poulose@arm.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        John Garry <john.g.garry@oracle.com>,
-        Kajol Jain <kjain@linux.ibm.com>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Stephane Eranian <eranian@google.com>
-Subject: Re: [PATCH v4 06/11] perf evsel: Add function to compute group PMU
- name
-Message-ID: <ZA+KjvtPyDDb0Xb5@kernel.org>
-References: <20230308225912.1960990-1-irogers@google.com>
- <20230308225912.1960990-7-irogers@google.com>
+        Mon, 13 Mar 2023 16:38:06 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47D9D55BE;
+        Mon, 13 Mar 2023 13:38:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678739885; x=1710275885;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=xhLemzapIYtjwt7W6UjVVSZx3bQKLmhz6UvBBX3dL3c=;
+  b=NYyfInkMm8rKQCdXPwFYho32BAhtDX4FwScEizr+Y9ocRy6vBohl5zi6
+   OkTigMJD3sZafm4Y1d6TTFkhXyJF+N6Qf3y4uj3CbY6yUz3Y4t4kB9Qo5
+   V2cOKEsPyPoUPg75hNwHNkMzUExVfVUhD4Ko2iSL3llQ3lcyEQe/qWAa1
+   zOIr3pVq9PKCDl1fi0EhKm4pyNG5+F2DagZMkGyrkdXhXRAkZNTiB/Db1
+   00ER/pDRL3fPrggUFKm09gw+CHdjzZxHqjxIHoZNfKWYVym+aezwcG+xZ
+   8kMoLgJhNUWPfhrp+FTIU/oZCSo7xAw9GVuSHnt/HcmJt524ihj7rxuWg
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334732019"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="334732019"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 13:38:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802584766"
+X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
+   d="scan'208";a="802584766"
+Received: from srinivas-otcpl-7600.jf.intel.com (HELO jacob-builder.jf.intel.com) ([10.54.39.106])
+  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2023 13:38:03 -0700
+From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
+To:     LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Lu Baolu" <baolu.lu@linux.intel.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.com>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        X86 Kernel <x86@kernel.org>, bp@alien8.de,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
+        vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Cc:     "Will Deacon" <will@kernel.org>,
+        David Woodhouse <dwmw2@infradead.org>,
+        Raj Ashok <ashok.raj@intel.com>,
+        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        "Yu, Fenghua" <fenghua.yu@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Jacob Pan <jacob.jun.pan@linux.intel.com>
+Subject: 
+Date:   Mon, 13 Mar 2023 13:41:51 -0700
+Message-Id: <20230313204158.1495067-1-jacob.jun.pan@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230308225912.1960990-7-irogers@google.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=AC_FROM_MANY_DOTS,BAYES_00,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Wed, Mar 08, 2023 at 02:59:07PM -0800, Ian Rogers escreveu:
-> The computed name respects software events and aux event groups, such
-> that the pmu_name is changed to be that of the aux event leader or
-> group leader for software events. This is done as a later change will
-> split events that are in different PMUs into different groups.
+Subject: [PATCH v6 0/7] Remove VT-d virtual command interface and IOASID
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-This makes 'perf test python' to fail:
+Hi all,
 
-⬢[acme@toolbox perf-tools-next]$ perf test -v python
-Couldn't bump rlimit(MEMLOCK), failures may take place when creating BPF maps, etc
- 19: 'import perf' in python                                         :
---- start ---
-test child forked, pid 720242
-python usage test: "echo "import sys ; sys.path.append('/tmp/build/perf-tools-next/python'); import perf" | '/usr/bin/python3' "
-Traceback (most recent call last):
-  File "<stdin>", line 1, in <module>
-ImportError: /tmp/build/perf-tools-next/python/perf.cpython-311-x86_64-linux-gnu.so: undefined symbol: evsel__is_aux_event
-test child finished with -1
----- end ----
-'import perf' in python: FAILED!
-⬢[acme@toolbox perf-tools-next]$
+This patch set removes unused VT-d virtual command interface followed by
+removal of the IOASID infrastructure.
 
-So I added the following patch, please run 'perf test' and 'make -C
-tools/perf build-test' before submitting patch series.
+This has only been tested on x86 platforms, need help with testing on ARM
+SMMU and other architectures.
 
-- Arnaldo
 
-diff --git a/tools/perf/util/python.c b/tools/perf/util/python.c
-index ab48ffbb644805df..be336f1b2b689602 100644
---- a/tools/perf/util/python.c
-+++ b/tools/perf/util/python.c
-@@ -93,6 +93,11 @@ int perf_pmu__scan_file(struct perf_pmu *pmu, const char *name, const char *fmt,
- 	return EOF;
- }
- 
-+bool evsel__is_aux_event(const struct evsel *evsel __maybe_unused)
-+{
-+	return false;
-+}
-+
- /*
-  * Add this one here not to drag util/metricgroup.c
-  */
- 
-> Signed-off-by: Ian Rogers <irogers@google.com>
-> ---
->  tools/perf/util/evsel.c | 24 ++++++++++++++++++++++++
->  tools/perf/util/evsel.h |  1 +
->  2 files changed, 25 insertions(+)
-> 
-> diff --git a/tools/perf/util/evsel.c b/tools/perf/util/evsel.c
-> index 2dc2c24252bb..51d9650267d0 100644
-> --- a/tools/perf/util/evsel.c
-> +++ b/tools/perf/util/evsel.c
-> @@ -821,6 +821,30 @@ const char *evsel__name(struct evsel *evsel)
->  	return "unknown";
->  }
->  
-> +const char *evsel__group_pmu_name(const struct evsel *evsel)
-> +{
-> +	const struct evsel *leader;
-> +
-> +	/* If the pmu_name is set use it. pmu_name isn't set for CPU and software events. */
-> +	if (evsel->pmu_name)
-> +		return evsel->pmu_name;
-> +	/*
-> +	 * Software events may be in a group with other uncore PMU events. Use
-> +	 * the pmu_name of the group leader to avoid breaking the software event
-> +	 * out of the group.
-> +	 *
-> +	 * Aux event leaders, like intel_pt, expect a group with events from
-> +	 * other PMUs, so substitute the AUX event's PMU in this case.
-> +	 */
-> +	leader  = evsel__leader(evsel);
-> +	if ((evsel->core.attr.type == PERF_TYPE_SOFTWARE || evsel__is_aux_event(leader)) &&
-> +	    leader->pmu_name) {
-> +		return leader->pmu_name;
-> +	}
-> +
-> +	return "cpu";
-> +}
-> +
->  const char *evsel__metric_id(const struct evsel *evsel)
->  {
->  	if (evsel->metric_id)
-> diff --git a/tools/perf/util/evsel.h b/tools/perf/util/evsel.h
-> index 676c499323e9..d26745ca6147 100644
-> --- a/tools/perf/util/evsel.h
-> +++ b/tools/perf/util/evsel.h
-> @@ -280,6 +280,7 @@ int arch_evsel__hw_name(struct evsel *evsel, char *bf, size_t size);
->  
->  int __evsel__hw_cache_type_op_res_name(u8 type, u8 op, u8 result, char *bf, size_t size);
->  const char *evsel__name(struct evsel *evsel);
-> +const char *evsel__group_pmu_name(const struct evsel *evsel);
->  const char *evsel__metric_id(const struct evsel *evsel);
->  
->  static inline bool evsel__is_tool(const struct evsel *evsel)
-> -- 
-> 2.40.0.rc0.216.gc4246ad0f0-goog
-> 
+Thanks,
+
+Jacob
+
+ChangeLog:
+v6:
+ - put pasid helpers under iommu.h instead of iommu-helper.h
+ - add comments for pasid allocation function to clarify inclusive range
+
+v5:
+ - rebased on v6.3-rc1
+ - put removing iommu_sva_find() in a separate patch (Kevin)
+ - move definition of helpers to iommu code to be consistent with
+   declarations. (Kevin)
+ - misc fixes
+
+v4:
+ - keep mm_pasid helpers inline as much as we can for fork performance
+ - separate GFP_ATOMIC to GFP_KERNEL change for bisectability
+
+v3:
+ - moved helper functions for PASID under SVA code, avoided circular inclusion
+   between mm.h and iommu.h
+ - deleted makefiles
+ - put rename under a different patch
+
+
+Jacob Pan (5):
+  iommu/vt-d: Remove virtual command interface
+  iommu/sva: Move PASID helpers to sva code
+  iommu/sva: Remove PASID to mm lookup function
+  iommu/sva: Use GFP_KERNEL for pasid allocation
+  iommu/ioasid: Rename INVALID_IOASID
+
+Jason Gunthorpe (2):
+  iommu/sva: Stop using ioasid_set for SVA
+  iommu: Remove ioasid infrastructure
+
+ Documentation/x86/sva.rst       |   2 +-
+ arch/x86/kernel/traps.c         |   5 +-
+ drivers/dma/idxd/device.c       |   8 +-
+ drivers/dma/idxd/idxd.h         |   2 +-
+ drivers/dma/idxd/init.c         |   2 +-
+ drivers/dma/idxd/irq.c          |   2 +-
+ drivers/iommu/Kconfig           |   5 -
+ drivers/iommu/Makefile          |   1 -
+ drivers/iommu/intel/cap_audit.c |   2 -
+ drivers/iommu/intel/dmar.c      |   6 +-
+ drivers/iommu/intel/iommu.c     |  87 +------
+ drivers/iommu/intel/iommu.h     |   3 -
+ drivers/iommu/intel/svm.c       |   3 +-
+ drivers/iommu/ioasid.c          | 422 --------------------------------
+ drivers/iommu/iommu-sva.c       |  63 ++---
+ drivers/iommu/iommu-sva.h       |   4 -
+ include/linux/ioasid.h          |  83 -------
+ include/linux/iommu.h           |  14 +-
+ include/linux/sched/mm.h        |  26 --
+ kernel/fork.c                   |   3 +
+ mm/init-mm.c                    |   4 +-
+ 21 files changed, 53 insertions(+), 694 deletions(-)
+ delete mode 100644 drivers/iommu/ioasid.c
+ delete mode 100644 include/linux/ioasid.h
 
 -- 
+2.25.1
 
-- Arnaldo
