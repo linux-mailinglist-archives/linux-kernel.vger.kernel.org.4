@@ -2,130 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32AC86B7989
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:54:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A5DB6B798D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 14:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231204AbjCMNye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 09:54:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33816 "EHLO
+        id S231266AbjCMNzQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 09:55:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34662 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231181AbjCMNyc (ORCPT
+        with ESMTP id S231192AbjCMNzO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 09:54:32 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEE89F76A;
-        Mon, 13 Mar 2023 06:54:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678715671; x=1710251671;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8EoYPm5xEQrXeCcnAVT/F8N4W4AYyn4iKdyRBjBLcKg=;
-  b=mT+zcruT5mIvsV+t9a7JdyApd0bOAmjS9BlvSQ9RKYQZA33h/CljfPqr
-   dPBAynEe+gMbsy9FA8ws0Obho8aiZkxNh/fRtfvW8ececdbHAFhDh5E0i
-   jZnHz2QA+/+8j5obKxUEmdGrjNYrPgQD6J457CkZPLdo9lkSflhnEa6LW
-   WeSjjjNn1t5az1E7Klw5ZWoHsXs2jRfeoyFa+12lWbwYEsMXukh44bpsF
-   mYJZKHpRwiiMOTewo+EZ7IuZP6TYZr7EEaRnzSNbBt4VjSdqShoDNal2u
-   SBk46pcd4aevivl/ivrIuxiMJJrhOx/W2PXmsuDZ7b9th6wwpL32QnZ9w
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="364813311"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="364813311"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 06:54:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="788939110"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="788939110"
-Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 06:54:28 -0700
-Date:   Mon, 13 Mar 2023 14:54:20 +0100
-From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
-To:     Zheng Wang <zyytlz.wz@163.com>
-Cc:     ericvh@gmail.com, lucho@ionkov.net, asmadeus@codewreck.org,
-        linux_oss@crudebyte.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, hackerzheng666@gmail.com,
-        1395428693sheep@gmail.com, alex000young@gmail.com
-Subject: Re: [PATCH net v2] 9p/xen : Fix use after free bug in
- xen_9pfs_front_remove due  to race condition
-Message-ID: <ZA8rDCw+mJmyETEx@localhost.localdomain>
-References: <20230313090002.3308025-1-zyytlz.wz@163.com>
+        Mon, 13 Mar 2023 09:55:14 -0400
+Received: from mail-ed1-x542.google.com (mail-ed1-x542.google.com [IPv6:2a00:1450:4864:20::542])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0893E1CBDE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:55:13 -0700 (PDT)
+Received: by mail-ed1-x542.google.com with SMTP id o12so49030532edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 06:55:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678715711;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5ANUqqLjStoxoRFBqdgwmvZsT70GJ/Jr3W8t8R6fOUM=;
+        b=LfvryJ/Hh9VtYfYGkYcRE5XtQIW5CiCZpxNR9nyzT1kOsu0Jrtjr7v2iOxMb/w99cx
+         tPaTM4Eluypt4+FrGHJ4bjOiMtHW3w9W5QMalZWrztjOw+h0fcExZfKUluQdaNxWUYXJ
+         ztahp9nyxgr8S5qxk5aNIdgqrLwh4nlwLflUyQNzYL7zvYo+v0l7j6OL1sutWFvT2J/p
+         CEn84V+4Q5kyARP8+iDj6iemwFOwiAsApfRDaAE5fNTr52L4TJ6hyXW1QTsibXdg3zFG
+         NB/Rps7/RbXFEYRDO4UbwQrZrQPsvCTZqFGZbzdWpBAPkqbgLBWxg1WR5aNQ7MrM4SOW
+         B8Cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678715711;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5ANUqqLjStoxoRFBqdgwmvZsT70GJ/Jr3W8t8R6fOUM=;
+        b=F9rSF9iaDIhMtSa87n0GyIiHz6kFiNVoXWnxnqQkFYLuAEaZB9wCk8XBkVjb8QN5Du
+         gQqR+/RQpVy5K8BZPjyQFpBcjdcitZfPuUWulTQxXBz+Nt84QzQnzFtVOoLS/qDekJp4
+         9Be7RVK9vGVs2OqtQ/BB0btju8GdLzK4dAVv0AaRQ+gEb/3IJVAHuw+lWnC6t+CZzwIo
+         sEu2AoT/dMsa9EoII+5QMqVisba2wssIYo5PNXOwe7rzFhiOTB0SBGOfGUVEyVEeyE9Q
+         ESffNiFaecBnq1d/8K2RYHSQRjWGxWM+xG9pTIM+wuhpAgbOzImCvbuDeBILfYDpgNDv
+         7y0A==
+X-Gm-Message-State: AO0yUKWJsQa/aOeKQSenoAjzWyvD/dQMv3ysM73eWrxILpLhZ6Ev+0bi
+        KinOh49IUT5xudCFDQ1qiGo=
+X-Google-Smtp-Source: AK7set9/H1wWlFAmPUJSqeoduvu77jubQDUoBG2Tq/orIZDxpSFJwPGjAQdHPFvc9rKR1pOjDEClTg==
+X-Received: by 2002:a17:906:3141:b0:8b1:7b10:61d5 with SMTP id e1-20020a170906314100b008b17b1061d5mr33118610eje.33.1678715711476;
+        Mon, 13 Mar 2023 06:55:11 -0700 (PDT)
+Received: from [127.0.1.1] (i130160.upc-i.chello.nl. [62.195.130.160])
+        by smtp.googlemail.com with ESMTPSA id t29-20020a50d71d000000b004fb419921e2sm2100094edi.57.2023.03.13.06.55.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 06:55:11 -0700 (PDT)
+From:   Jakob Koschel <jkl820.git@gmail.com>
+Subject: [PATCH v2 0/2] drm/nouveau: avoid usage of list iterator after
+ loop
+Date:   Mon, 13 Mar 2023 14:54:48 +0100
+Message-Id: <20230301-drm-nouveau-avoid-iter-after-loop-v2-0-1e6428cc7fa8@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313090002.3308025-1-zyytlz.wz@163.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACgrD2QC/5WOwQqDMBBEf0Vy7pYkFqU99T+KhzVudMEkJdHQI
+ v57o3/Qy8CbXWZmE4kiUxKPahORMicOvoC+VMJM6EcCHgoLLXUta6lgiA58WDPhCpgDD8ALRUB
+ 76BzCG269tfdWNQ1ZFCWnx0TQR/RmOpIcpvJ6HN6RLH/O8ldXeOK0hPg9t2R1uP/UZgUSZCs1G
+ V2XAfI5OuT5aoIT3b7vP6y2HRnrAAAA
+To:     Ben Skeggs <bskeggs@redhat.com>, Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+Cc:     dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Pietro Borrello <borrello@diag.uniroma1.it>,
+        Cristiano Giuffrida <c.giuffrida@vu.nl>,
+        "Bos, H.J." <h.j.bos@vu.nl>, Jakob Koschel <jkl820.git@gmail.com>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678715710; l=1449;
+ i=jkl820.git@gmail.com; s=20230112; h=from:subject:message-id;
+ bh=2L1COAFZdosvV2nj+9Azdzd+YrB52T+o5+nwJnnaB04=;
+ b=bzOGournFjDpt2sMS0dAIh4T4eb7MuWaz0jjEOJP/0+zGY+ul4w4rHxchzbQWjNAK2Exf5l6K3zw
+ UxK4gnsXAp1nsjLXuxfTz8D3BlJSObdekHvIPgtIxVdtICKsgUqM
+X-Developer-Key: i=jkl820.git@gmail.com; a=ed25519;
+ pk=rcRpP90oZXet9udPj+2yOibfz31aYv8tpf0+ZYOQhyA=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 05:00:02PM +0800, Zheng Wang wrote:
-> In xen_9pfs_front_probe, it calls xen_9pfs_front_alloc_dataring
-> to init priv->rings and bound &ring->work with p9_xen_response.
-> 
-> When it calls xen_9pfs_front_event_handler to handle IRQ requests,
-> it will finally call schedule_work to start the work.
-> 
-> When we call xen_9pfs_front_remove to remove the driver, there
-> may be a sequence as follows:
-> 
-> Fix it by finishing the work before cleanup in xen_9pfs_front_free.
-> 
-> Note that, this bug is found by static analysis, which might be
-> false positive.
-> 
-> CPU0                  CPU1
-> 
->                      |p9_xen_response
-> xen_9pfs_front_remove|
->   xen_9pfs_front_free|
-> kfree(priv)          |
-> //free priv          |
->                      |p9_tag_lookup
->                      |//use priv->client
-> 
-> Fixes: 71ebd71921e4 ("xen/9pfs: connect to the backend")
-> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> ---
-> v2:
-> - fix type error of ring found by kernel test robot
-> ---
->  net/9p/trans_xen.c | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/net/9p/trans_xen.c b/net/9p/trans_xen.c
-> index c64050e839ac..83764431c066 100644
-> --- a/net/9p/trans_xen.c
-> +++ b/net/9p/trans_xen.c
-> @@ -274,12 +274,17 @@ static const struct xenbus_device_id xen_9pfs_front_ids[] = {
->  static void xen_9pfs_front_free(struct xen_9pfs_front_priv *priv)
->  {
->  	int i, j;
-> +	struct xen_9pfs_dataring *ring = NULL;
-Move it before int i, j to have RCT.
+This patch set includes two instances where the list iterator variable
+'pstate' is implicitly assumed to be valid after the iterator loop.
+While in pratice that is most likely the case (if
+'pstatei'/'args->v0.state' is <= the elements in clk->states), we should
+explicitly only allow 'pstate' to always point to correct 'nvkm_pstate'
+structs.
 
->  
->  	write_lock(&xen_9pfs_lock);
->  	list_del(&priv->list);
->  	write_unlock(&xen_9pfs_lock);
->  
->  	for (i = 0; i < priv->num_rings; i++) {
-> +		/*cancel work*/
-It isn't needed I think, the function cancel_work_sync() tells everything
-here.
+That allows catching potential bugs with WARN_ON(!pstate) that otherwise
+would be completely undetectable.
 
-> +		ring = &priv->rings[i];
-> +		cancel_work_sync(&ring->work);
-> +
->  		if (!priv->rings[i].intf)
->  			break;
->  		if (priv->rings[i].irq > 0)
-> -- 
-> 2.25.1
+It also helps the greater mission to hopefully move the list iterator
+variable into the iterating macro directly [1].
+
+Link: https://lore.kernel.org/all/CAHk-=wgRr_D8CB-D9Kg-c=EHreAsk5SqXPwr9Y7k9sA6cWXJ6w@mail.gmail.com/ [1]
+Signed-off-by: Jakob Koschel <jkl820.git@gmail.com>
+---
+Changes in v2:
+- convert BUG_ON() into WARN_ON()
+- Link to v1: https://lore.kernel.org/r/20230301-drm-nouveau-avoid-iter-after-loop-v1-0-0702ec23f970@gmail.com
+
+---
+Jakob Koschel (2):
+      drm/nouveau/device: avoid usage of list iterator after loop
+      drm/nouveau/clk: avoid usage of list iterator after loop
+
+ drivers/gpu/drm/nouveau/nvkm/engine/device/ctrl.c | 11 ++++++++---
+ drivers/gpu/drm/nouveau/nvkm/subdev/clk/base.c    | 10 +++++++---
+ 2 files changed, 15 insertions(+), 6 deletions(-)
+---
+base-commit: c0927a7a5391f7d8e593e5e50ead7505a23cadf9
+change-id: 20230301-drm-nouveau-avoid-iter-after-loop-4bff97166efa
+
+Best regards,
+-- 
+Jakob Koschel <jkl820.git@gmail.com>
+
