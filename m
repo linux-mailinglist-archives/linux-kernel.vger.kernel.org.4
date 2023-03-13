@@ -2,374 +2,273 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63E756B8270
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 196546B82B2
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 21:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230174AbjCMUNC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 16:13:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45888 "EHLO
+        id S229879AbjCMU11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 16:27:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229838AbjCMUMt (ORCPT
+        with ESMTP id S229863AbjCMU1O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 16:12:49 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0879559DD;
-        Mon, 13 Mar 2023 13:12:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 29B81B8136F;
-        Mon, 13 Mar 2023 20:12:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D859DC4339B;
-        Mon, 13 Mar 2023 20:12:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678738349;
-        bh=iM9qaWzIqxrzdc/XXmThEnslQOCj5cY4u+vy2Q+AUrw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=AxxrWHwYebQ3ggSK9GzvYRMj2XUafwbEuHtzpGp8pNXWA3qgQjBQCRx22RgVv243C
-         ZWIzg4u0VAn+8e0KL7qojeHPF9bC+tqi8VdC/Qw9nA5D2aQIn/e1uNqYu9mUCQVAHd
-         +CwQY8G0gaIybEdIDXtgEOd3wdv+6xYY8gwaN9HiaZaVM4i3z50+PGXCds6sl/HrdH
-         zrBJZnCJ/wFbmzaCGCrfu5kykFOuaOvDJN9Kcliw5Rp8jsqMDHP7rdLDKpaFyKQigY
-         HxdAdvvY7ny4N6mIsLc7NT/bg7EsgMy7dktwWUZfDTpPGGoHhRB9yklZiyaizGJb+B
-         aR+SLoCRTvRgA==
-From:   Jaegeuk Kim <jaegeuk@kernel.org>
-To:     linux-kernel@vger.kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     Jaegeuk Kim <jaegeuk@kernel.org>, stable@vger.kernel.org
-Subject: [PATCH 3/3] f2fs: remove entire rb_entry sharing
-Date:   Mon, 13 Mar 2023 13:12:16 -0700
-Message-Id: <20230313201216.924234-4-jaegeuk@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230313201216.924234-1-jaegeuk@kernel.org>
-References: <20230313201216.924234-1-jaegeuk@kernel.org>
+        Mon, 13 Mar 2023 16:27:14 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BC5D89F19;
+        Mon, 13 Mar 2023 13:27:03 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 71EE55FD13;
+        Mon, 13 Mar 2023 23:13:11 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678738391;
+        bh=Pt/rMVZVzjxdoqrvWivQZAPujmubQBrmNfuoW/GP36w=;
+        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
+        b=pggFpvg5Ubo2d0XPAzbBoYGREaPkv64UR3bBf6Sv6C42zr99v/g/Cyj+FCUaCGgf+
+         3fFXoB7+V7uwHNng/3gLmxF+xMbyTUMehyrKHgUhBtmSbNcPOekeMlBWgJg4QQbX4y
+         9piPxH0rEENH8waWdov+OpeH+phv5OxbaFbLJoyIVxQSgu67SaIBhrOplskywj39fL
+         T2Hvoxnj+39rL5S3Q69oy5QF9GdCmnt6W5Jxc/JceiJ2dgsyoxDFtjgyIeNTHJflHJ
+         TUoptR3OyuTWOc2EWiz2uRSQqgaJoaW9D5Mu+Bvw0YoLo2EQD+25WoyhNMGZ0fs8zS
+         OXb4O969DbkIA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Mon, 13 Mar 2023 23:13:10 +0300 (MSK)
+From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
+To:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>
+CC:     <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
+        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
+        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Subject: [PATCH v10 0/5] add Amlogic A1 clock controller drivers
+Date:   Mon, 13 Mar 2023 23:12:54 +0300
+Message-ID: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/13 10:14:00 #20942017
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a last part to remove the memory sharing for rb_tree in extent_cache.
+A1 SoC has four clock controllers on the board: PLL, Peripherals, CPU,
+and Audio. The audio clock controller is different from others, but the
+rest are very similar from a functional and regmap point of view.
+This patch series add support for Amlogic A1 PLL and Peripherals clock
+drivers.
+It blocks all A1 peripherals mainline support and a couple of patch series,
+which were already reviewed and acked, but weren't merged due to pending
+clock controller drivers series, e.g.
+https://lore.kernel.org/linux-amlogic/7hd09cw9oh.fsf@baylibre.com/
 
-This should also fix arm32 memory alignment issue.
+TODO: CPU and Audio clock controllers are not included in this patch
+series, it will be sent later. The following clks from these controllers
+are not supported for now:
+* Audio clks - vad, mclk_vad, mclk_d, resample_a, locker_in, mclk_b,
+   pdmdclk, pdmsysclk, eqdrc, spdifin, mclk_a, audio2_toaudiotop,
+   audio2_tovad, audio2_toddr_vad, audio2_tdmin_vad, audio2_pdm,
+   audio2_ddr_arb, audio_audiolocker, audio_eqdrc, audio_resamplea,
+   audio_spdifin, audio_toddrb, audio_toddra, audio_frddrb, audio_frddra,
+   audio_tdmoutb, audio_tdmouta, audio_loopbacka, audio_tdminlb,
+   audio_tdminb, audio_tdmina, audio_ddr_arb, mclk_c
 
-[struct extent_node]               [struct rb_entry]
-[0] struct rb_node rb_node;        [0] struct rb_node rb_node;
-  union {                              union {
-    struct {                             struct {
-[16]  unsigned int fofs;           [12]    unsigned int ofs;
-      unsigned int len;                    unsigned int len;
-                                         };
-                                         unsigned long long key;
-                                       } __packed;
+* CPU clks: cpu_fixed_source_sel0, cpu_fixed_source_div0,
+            cpu_fixed_source_sel1, cpu_fixed_source_div1, cpu_clk
 
-Cc: <stable@vger.kernel.org>
-Fixes: 13054c548a1c ("f2fs: introduce infra macro and data structure of rb-tree extent cache")
-Signed-off-by: Jaegeuk Kim <jaegeuk@kernel.org>
----
- fs/f2fs/extent_cache.c | 177 +++++++++++++++++------------------------
- fs/f2fs/f2fs.h         |   6 --
- 2 files changed, 71 insertions(+), 112 deletions(-)
+Validation:
+* to double check all clk flags run below helper script:
+    pushd /sys/kernel/debug/clk
+    for f in *; do
+        if [[ -f "$f/clk_flags" ]]; then
+            flags="$(cat $f/clk_flags | awk '{$1=$1};1' | sed ':a;N;$!ba;s/\n/ | /g')"
+            echo -e "$f: $flags"
+        fi
+    done
+    popd
 
-diff --git a/fs/f2fs/extent_cache.c b/fs/f2fs/extent_cache.c
-index 5c206f941aac..9a8153895d20 100644
---- a/fs/f2fs/extent_cache.c
-+++ b/fs/f2fs/extent_cache.c
-@@ -161,95 +161,52 @@ static bool __is_front_mergeable(struct extent_info *cur,
- 	return __is_extent_mergeable(cur, front, type);
- }
- 
--static struct rb_entry *__lookup_rb_tree_fast(struct rb_entry *cached_re,
--							unsigned int ofs)
--{
--	if (cached_re) {
--		if (cached_re->ofs <= ofs &&
--				cached_re->ofs + cached_re->len > ofs) {
--			return cached_re;
--		}
--	}
--	return NULL;
--}
--
--static struct rb_entry *__lookup_rb_tree_slow(struct rb_root_cached *root,
--							unsigned int ofs)
-+static struct extent_node *__lookup_extent_node(struct rb_root_cached *root,
-+			struct extent_node *cached_en, unsigned int fofs)
- {
- 	struct rb_node *node = root->rb_root.rb_node;
--	struct rb_entry *re;
-+	struct extent_node *en;
-+
-+	/* check a cached entry */
-+	if (cached_en && cached_en->ei.fofs <= fofs &&
-+			cached_en->ei.fofs + cached_en->ei.len > fofs)
-+		return cached_en;
- 
-+	/* check rb_tree */
- 	while (node) {
--		re = rb_entry(node, struct rb_entry, rb_node);
-+		en = rb_entry(node, struct extent_node, rb_node);
- 
--		if (ofs < re->ofs)
-+		if (fofs < en->ei.fofs)
- 			node = node->rb_left;
--		else if (ofs >= re->ofs + re->len)
-+		else if (fofs >= en->ei.fofs + en->ei.len)
- 			node = node->rb_right;
- 		else
--			return re;
-+			return en;
- 	}
- 	return NULL;
- }
- 
--static struct rb_entry *f2fs_lookup_rb_tree(struct rb_root_cached *root,
--				struct rb_entry *cached_re, unsigned int ofs)
--{
--	struct rb_entry *re;
--
--	re = __lookup_rb_tree_fast(cached_re, ofs);
--	if (!re)
--		return __lookup_rb_tree_slow(root, ofs);
--
--	return re;
--}
--
--static struct rb_node **f2fs_lookup_rb_tree_for_insert(struct f2fs_sb_info *sbi,
--				struct rb_root_cached *root,
--				struct rb_node **parent,
--				unsigned int ofs, bool *leftmost)
--{
--	struct rb_node **p = &root->rb_root.rb_node;
--	struct rb_entry *re;
--
--	while (*p) {
--		*parent = *p;
--		re = rb_entry(*parent, struct rb_entry, rb_node);
--
--		if (ofs < re->ofs) {
--			p = &(*p)->rb_left;
--		} else if (ofs >= re->ofs + re->len) {
--			p = &(*p)->rb_right;
--			*leftmost = false;
--		} else {
--			f2fs_bug_on(sbi, 1);
--		}
--	}
--
--	return p;
--}
--
- /*
-- * lookup rb entry in position of @ofs in rb-tree,
-+ * lookup rb entry in position of @fofs in rb-tree,
-  * if hit, return the entry, otherwise, return NULL
-- * @prev_ex: extent before ofs
-- * @next_ex: extent after ofs
-- * @insert_p: insert point for new extent at ofs
-+ * @prev_ex: extent before fofs
-+ * @next_ex: extent after fofs
-+ * @insert_p: insert point for new extent at fofs
-  * in order to simplify the insertion after.
-  * tree must stay unchanged between lookup and insertion.
-  */
--static struct rb_entry *f2fs_lookup_rb_tree_ret(struct rb_root_cached *root,
--				struct rb_entry *cached_re,
--				unsigned int ofs,
--				struct rb_entry **prev_entry,
--				struct rb_entry **next_entry,
-+static struct extent_node *__lookup_extent_node_ret(struct rb_root_cached *root,
-+				struct extent_node *cached_en,
-+				unsigned int fofs,
-+				struct extent_node **prev_entry,
-+				struct extent_node **next_entry,
- 				struct rb_node ***insert_p,
- 				struct rb_node **insert_parent,
--				bool force, bool *leftmost)
-+				bool *leftmost)
- {
- 	struct rb_node **pnode = &root->rb_root.rb_node;
- 	struct rb_node *parent = NULL, *tmp_node;
--	struct rb_entry *re = cached_re;
-+	struct extent_node *en = cached_en;
- 
- 	*insert_p = NULL;
- 	*insert_parent = NULL;
-@@ -259,24 +216,20 @@ static struct rb_entry *f2fs_lookup_rb_tree_ret(struct rb_root_cached *root,
- 	if (RB_EMPTY_ROOT(&root->rb_root))
- 		return NULL;
- 
--	if (re) {
--		if (re->ofs <= ofs && re->ofs + re->len > ofs)
--			goto lookup_neighbors;
--	}
-+	if (en && en->ei.fofs <= fofs && en->ei.fofs + en->ei.len > fofs)
-+		goto lookup_neighbors;
- 
--	if (leftmost)
--		*leftmost = true;
-+	*leftmost = true;
- 
- 	while (*pnode) {
- 		parent = *pnode;
--		re = rb_entry(*pnode, struct rb_entry, rb_node);
-+		en = rb_entry(*pnode, struct extent_node, rb_node);
- 
--		if (ofs < re->ofs) {
-+		if (fofs < en->ei.fofs) {
- 			pnode = &(*pnode)->rb_left;
--		} else if (ofs >= re->ofs + re->len) {
-+		} else if (fofs >= en->ei.fofs + en->ei.len) {
- 			pnode = &(*pnode)->rb_right;
--			if (leftmost)
--				*leftmost = false;
-+			*leftmost = false;
- 		} else {
- 			goto lookup_neighbors;
- 		}
-@@ -285,30 +238,32 @@ static struct rb_entry *f2fs_lookup_rb_tree_ret(struct rb_root_cached *root,
- 	*insert_p = pnode;
- 	*insert_parent = parent;
- 
--	re = rb_entry(parent, struct rb_entry, rb_node);
-+	en = rb_entry(parent, struct extent_node, rb_node);
- 	tmp_node = parent;
--	if (parent && ofs > re->ofs)
-+	if (parent && fofs > en->ei.fofs)
- 		tmp_node = rb_next(parent);
--	*next_entry = rb_entry_safe(tmp_node, struct rb_entry, rb_node);
-+	*next_entry = rb_entry_safe(tmp_node, struct extent_node, rb_node);
- 
- 	tmp_node = parent;
--	if (parent && ofs < re->ofs)
-+	if (parent && fofs < en->ei.fofs)
- 		tmp_node = rb_prev(parent);
--	*prev_entry = rb_entry_safe(tmp_node, struct rb_entry, rb_node);
-+	*prev_entry = rb_entry_safe(tmp_node, struct extent_node, rb_node);
- 	return NULL;
- 
- lookup_neighbors:
--	if (ofs == re->ofs || force) {
-+	if (fofs == en->ei.fofs) {
- 		/* lookup prev node for merging backward later */
--		tmp_node = rb_prev(&re->rb_node);
--		*prev_entry = rb_entry_safe(tmp_node, struct rb_entry, rb_node);
-+		tmp_node = rb_prev(&en->rb_node);
-+		*prev_entry = rb_entry_safe(tmp_node,
-+					struct extent_node, rb_node);
- 	}
--	if (ofs == re->ofs + re->len - 1 || force) {
-+	if (fofs == en->ei.fofs + en->ei.len - 1) {
- 		/* lookup next node for merging frontward later */
--		tmp_node = rb_next(&re->rb_node);
--		*next_entry = rb_entry_safe(tmp_node, struct rb_entry, rb_node);
-+		tmp_node = rb_next(&en->rb_node);
-+		*next_entry = rb_entry_safe(tmp_node,
-+					struct extent_node, rb_node);
- 	}
--	return re;
-+	return en;
- }
- 
- static struct kmem_cache *extent_tree_slab;
-@@ -523,8 +478,7 @@ static bool __lookup_extent_tree(struct inode *inode, pgoff_t pgofs,
- 		goto out;
- 	}
- 
--	en = (struct extent_node *)f2fs_lookup_rb_tree(&et->root,
--				(struct rb_entry *)et->cached_en, pgofs);
-+	en = __lookup_extent_node(&et->root, et->cached_en, pgofs);
- 	if (!en)
- 		goto out;
- 
-@@ -598,7 +552,7 @@ static struct extent_node *__insert_extent_tree(struct f2fs_sb_info *sbi,
- 				bool leftmost)
- {
- 	struct extent_tree_info *eti = &sbi->extent_tree[et->type];
--	struct rb_node **p;
-+	struct rb_node **p = &et->root.rb_root.rb_node;
- 	struct rb_node *parent = NULL;
- 	struct extent_node *en = NULL;
- 
-@@ -610,8 +564,21 @@ static struct extent_node *__insert_extent_tree(struct f2fs_sb_info *sbi,
- 
- 	leftmost = true;
- 
--	p = f2fs_lookup_rb_tree_for_insert(sbi, &et->root, &parent,
--						ei->fofs, &leftmost);
-+	/* look up extent_node in the rb tree */
-+	while (*p) {
-+		parent = *p;
-+		en = rb_entry(parent, struct extent_node, rb_node);
-+
-+		if (ei->fofs < en->ei.fofs) {
-+			p = &(*p)->rb_left;
-+		} else if (ei->fofs >= en->ei.fofs + en->ei.len) {
-+			p = &(*p)->rb_right;
-+			leftmost = false;
-+		} else {
-+			f2fs_bug_on(sbi, 1);
-+		}
-+	}
-+
- do_insert:
- 	en = __attach_extent_node(sbi, et, ei, parent, p, leftmost);
- 	if (!en)
-@@ -670,11 +637,10 @@ static void __update_extent_tree_range(struct inode *inode,
- 	}
- 
- 	/* 1. lookup first extent node in range [fofs, fofs + len - 1] */
--	en = (struct extent_node *)f2fs_lookup_rb_tree_ret(&et->root,
--					(struct rb_entry *)et->cached_en, fofs,
--					(struct rb_entry **)&prev_en,
--					(struct rb_entry **)&next_en,
--					&insert_p, &insert_parent, false,
-+	en = __lookup_extent_node_ret(&et->root,
-+					et->cached_en, fofs,
-+					&prev_en, &next_en,
-+					&insert_p, &insert_parent,
- 					&leftmost);
- 	if (!en)
- 		en = next_en;
-@@ -812,12 +778,11 @@ void f2fs_update_read_extent_tree_range_compressed(struct inode *inode,
- 
- 	write_lock(&et->lock);
- 
--	en = (struct extent_node *)f2fs_lookup_rb_tree_ret(&et->root,
--				(struct rb_entry *)et->cached_en, fofs,
--				(struct rb_entry **)&prev_en,
--				(struct rb_entry **)&next_en,
--				&insert_p, &insert_parent, false,
--				&leftmost);
-+	en = __lookup_extent_node_ret(&et->root,
-+					et->cached_en, fofs,
-+					&prev_en, &next_en,
-+					&insert_p, &insert_parent,
-+					&leftmost);
- 	if (en)
- 		goto unlock_out;
- 
-diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index 6e04fea9c34f..90a67feddcdc 100644
---- a/fs/f2fs/f2fs.h
-+++ b/fs/f2fs/f2fs.h
-@@ -620,12 +620,6 @@ enum extent_type {
- 	NR_EXTENT_CACHES,
- };
- 
--struct rb_entry {
--	struct rb_node rb_node;		/* rb node located in rb-tree */
--	unsigned int ofs;		/* start offset of the entry */
--	unsigned int len;		/* length of the entry */
--};
--
- struct extent_info {
- 	unsigned int fofs;		/* start offset in a file */
- 	unsigned int len;		/* length of the extent */
+* to trace current clks state use '/sys/kernel/debug/clk/clk_dump' node
+  with jq post-processing:
+    $ cat /sys/kernel/debug/clk/clk_dump | jq '.' > clk_dump.json
+
+* to debug clk rate propagation, compile kernel with the following
+  definition:
+    $ sed -i "s/undef CLOCK_ALLOW_WRITE_DEBUGFS/define CLOCK_ALLOW_WRITE_DEBUGFS/g" drivers/clk/clk.c
+  after that, clk_rate debug node for each clock will be available for
+  write operation
+
+Changes v10 since v9 at [10]:
+    - split general clk-pll changes into two different patchsets:
+      optional rst usage and new power sequence
+    - squash dt bindings patchsets to avoid chicken-or-the-egg problem
+      during run dt binding check routines
+    - add vendor prefix to PLL and Peripherals clkcs bindings filenames
+    - clear managed hifi_pll fields from initial poke table
+    - move DSPA_SEL, DSPB_SEL and SARADC_SEL to private clkid table,
+      because it should not be opened for direct usage
+    - pwm_a clk used for voltage regulation is not critical anymore, it
+      must be included to the proper cpu voltage regulation setup (will
+      be available in the next patch series)
+    - as discussed with Jerome, dspX clks are simple clocks and it
+      should be enabled/disabled/ignored/anything else from appropriate
+      DSP driver, so remove CLK_IGNORE_UNUSED tags
+    - provide more understandable comments and remove irrelevant (I hope so)
+    - remove CONFIG_OF usage, because it's redundant
+    - fix license issue, it's GPL-2.0+ only in the current version
+    - some commit msgs rewording
+
+Changes v9 since v8 at [9]:
+    - remove common a1-clkc driver for the first version of a1 clock
+      controllers as Jerome suggested (it will be discussed after s4 and
+      a1 clks landed, hope so)
+    - replace inherited a1-pll clk_pll_ops with common ops and
+      introduce custom A1 PLL logic under MESON_PARM_APPLICABLE()
+      conditions
+    - rename xtal depended clocks in PLL and Peripherals domains
+    - remove 'a1_' prefix for all clocks, because they are already
+      inside A1 driver, it's redundant
+    - change udelay() to usleep_range() as preferred for small msec
+      amount
+    - purge all double quotes from the yaml schemas
+    - use proper dt node names following kernel guidelines
+      https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+    - use devm_platform_ioremap_resource() instead of simple
+      devm_ioremap_resource()
+    - mark all dspX clocks as CLK_IGNORE_UNUSED, because we do not want
+      to touch these clocks during CCF initialization due to possible
+      workload execution on it started from bootloader; in this case
+      bootloader already made all initialization stuff for dspX
+    - also mark all dspX with NO_REPARENT tag, because from dspX clocks
+      we want to select proper clk source from device tree
+
+Changes v8 since v7 at [8]:
+    - introduced a1-clkc common driver for all A1 clock controllers
+    - exported meson_clk_pll_wait_lock symbol
+    - supported meson-a1-clkc common driver in the a1-pll and a1 clkc
+    - inherited a1-pll from the base clk-pll driver, implemented own
+      version of init/enable/disable/enabled routines; rate calculating
+      logic is fully the same
+    - aligned CLKID-related definitions with CLKID list from order
+      perspective to remove holes and permutations
+    - corrected Kconfig dependencies and types
+    - provided correct MODULE_AUTHORs()
+    - optimized and fixed up some clock relationships
+    - removed unused register offset definitions
+    - fixed up A1 PLL and Peripherals clkc dtb_check errors
+    - fixed clk_summary kernel panic due to missing a1_pad_ctrl
+      clk_regmap definition
+    - included PLL and Peripherals clk controllers to the base a1 dts
+    - The previous v7 version [8] had several logic and style problems,
+      all of them are resolved in this version. Original Jian Hu v7 patches
+      are not touched, and all additional fixes are implemented in separate
+      patches. Patch "clk: meson: add support for A1 PLL clock ops" is
+      removed, because a1-pll clk driver inherits all stuff from clk-pll
+      base driver, just implements custom init/enable/disable/is_enabled
+      callbacks.
+
+Changes v7 since v6 at [7]:
+    - fix 'dt_binding_check' compiling error
+    - add acked-by
+
+Changes v6 since v5 at [6]:
+    - fix yaml file
+    - add rst/current_en/l_detect parm detection
+    - remove 'meson_eeclkc_data' in a1.c and a1-pll.c
+
+Changes v5 since v4 at [5]:
+    - change yaml GPL
+    - drop meson-eeclk.c patch, add probe function in each driver
+    - add CLK_IS_CRITICAL for sys_clk clock, drop the flag for sys_a
+      and sys_b
+    - add new parm for pll, add protection for rst parm
+    - drop flag for a1_fixed_pll
+    - remove the same comment for fclk_div, add "refer to"
+    - add critical flag for a1_sys_clk
+    - remove rtc table
+    - rename a1_dspa_en_dspa and a1_dspb_en_dspb
+    - remove useless comment
+
+Changes v4 since v3 at [3]:
+    - fix reparenting orphan failed, it depends on jerome's patch [4]
+    - fix changelist in v3 about reparenting orphan
+    - remove the dts patch 
+
+Changes v3 since v2 at [2]:
+    - add probe function for A1
+    - separate the clock driver into two patch
+    - change some clock flags and ops
+    - add support for a1 PLL ops
+    - add A1 clock node
+    - fix reparenting orphan clock failed, registering xtal_fixpll
+      and xtal_hifipll after the provider registration, it is not
+      a best way.
+
+Changes v2 since v1 at [1]:
+    - place A1 config alphabetically
+    - add actual reason for RO ops, CLK_IS_CRITICAL, CLK_IGNORE_UNUSED
+    - separate the driver into two driver: peripheral and pll driver
+    - delete CLK_IGNORE_UNUSED flag for pwm b/c/d/e/f clock, dsp clock
+    - delete the change in Kconfig.platforms, address to Kevin alone
+    - remove the useless comments
+    - modify the meson pll driver to support A1 PLLs
+
+[1] https://lkml.kernel.org/r/1569411888-98116-1-git-send-email-jian.hu@amlogic.com
+[2] https://lkml.kernel.org/r/1571382865-41978-1-git-send-email-jian.hu@amlogic.com
+[3] https://lkml.kernel.org/r/20191129144605.182774-1-jian.hu@amlogic.com
+[4] https://lkml.kernel.org/r/20191203080805.104628-1-jbrunet@baylibre.com
+[5] https://lkml.kernel.org/r/20191206074052.15557-1-jian.hu@amlogic.com
+[6] https://lkml.kernel.org/r/20191227094606.143637-1-jian.hu@amlogic.com
+[7] https://lkml.kernel.org/r/20200116080440.118679-1-jian.hu@amlogic.com
+[8] https://lore.kernel.org/linux-amlogic/20200120034937.128600-1-jian.hu@amlogic.com/
+[9] https://lore.kernel.org/linux-amlogic/20221201225703.6507-1-ddrokosov@sberdevices.ru/
+[10] https://lore.kernel.org/all/20230301183759.16163-1-ddrokosov@sberdevices.ru/
+
+Dmitry Rokosov (5):
+  clk: meson: make pll rst bit as optional
+  clk: meson: introduce new pll power-on sequence for A1 SoC family
+  dt-bindings: clock: meson: add A1 PLL and Peripherals clkcs bindings
+  clk: meson: a1: add Amlogic A1 PLL clock controller driver
+  clk: meson: a1: add Amlogic A1 Peripherals clock controller driver
+
+ .../bindings/clock/amlogic,a1-clkc.yaml       |   73 +
+ .../bindings/clock/amlogic,a1-pll-clkc.yaml   |   59 +
+ MAINTAINERS                                   |    1 +
+ drivers/clk/meson/Kconfig                     |   20 +
+ drivers/clk/meson/Makefile                    |    2 +
+ drivers/clk/meson/a1-pll.c                    |  356 +++
+ drivers/clk/meson/a1-pll.h                    |   47 +
+ drivers/clk/meson/a1.c                        | 2242 +++++++++++++++++
+ drivers/clk/meson/a1.h                        |  118 +
+ drivers/clk/meson/clk-pll.c                   |   47 +-
+ drivers/clk/meson/clk-pll.h                   |    2 +
+ include/dt-bindings/clock/amlogic,a1-clkc.h   |  100 +
+ .../dt-bindings/clock/amlogic,a1-pll-clkc.h   |   20 +
+ 13 files changed, 3080 insertions(+), 7 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-clkc.yaml
+ create mode 100644 Documentation/devicetree/bindings/clock/amlogic,a1-pll-clkc.yaml
+ create mode 100644 drivers/clk/meson/a1-pll.c
+ create mode 100644 drivers/clk/meson/a1-pll.h
+ create mode 100644 drivers/clk/meson/a1.c
+ create mode 100644 drivers/clk/meson/a1.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-clkc.h
+ create mode 100644 include/dt-bindings/clock/amlogic,a1-pll-clkc.h
+
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
+2.36.0
 
