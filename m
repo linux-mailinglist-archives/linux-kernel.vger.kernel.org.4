@@ -2,117 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC11E6B72B4
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A6F3F6B72BB
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 10:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231249AbjCMJfR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 05:35:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50544 "EHLO
+        id S230302AbjCMJhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 05:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230186AbjCMJet (ORCPT
+        with ESMTP id S230198AbjCMJgn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 05:34:49 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58FB012BD8;
-        Mon, 13 Mar 2023 02:33:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678699994; x=1710235994;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=F26rz5vL8ASK0vwBawwnPkZu1yacUTeFb5CHoZ+HiH0=;
-  b=SlDJJ1A85O6yTggIhVRUVypHdLD27XC3VrHX1tNut9NpKkUbRn23JrOn
-   09/reILQJMq1R5D0nrLx8dE1asq5jgICQ2pELXCCW/qlVZ43SNIGZWdDX
-   fj0Ql4aaUe+xDoxI/dLcyWyjqZ3IHidTR2doE6wbBxy2oTNUpPnCmi5R3
-   xM0NKNBqCyqvw280kGz/r/Y8KFZiObrh78xsHheuoGf7rPdqzKxshtBAv
-   xdpMfiHZG39MSHnNNHrs5UgUXtJeOwGfTLM4cls7FGRkFm2Jhn1lJUY49
-   MLlM+PpWYZi4gg/kYwli0t6cBL2rMOSn8/bNLBoqxby42MIWWRBTcu1Od
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="325459694"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="325459694"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 02:33:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="655914665"
-X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
-   d="scan'208";a="655914665"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga006.jf.intel.com with ESMTP; 13 Mar 2023 02:33:01 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pbeY6-002Xjv-27;
-        Mon, 13 Mar 2023 11:32:58 +0200
-Date:   Mon, 13 Mar 2023 11:32:58 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Paul Moore <paul@paul-moore.com>
-Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
-Message-ID: <ZA7tyrscjwavzY3a@smile.fi.intel.com>
-References: <20230310192614.GA528@domac.alu.hr>
- <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
- <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr>
- <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
+        Mon, 13 Mar 2023 05:36:43 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C0BD5A6F7;
+        Mon, 13 Mar 2023 02:34:35 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id o67so544200pfg.10;
+        Mon, 13 Mar 2023 02:34:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678700073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=OI7Db7BHeqVEz8L9hVGNwbJcVk46KjMrg/IvivHmeU0=;
+        b=dzdnfahlvokvl0+fMpuS0JMeiuX8ty68pK/cITnN9rlO/l+0tuE3mlmAnwfWV/osI7
+         3vSLfYBH9PGTECDWFyJLy81VDQcFqr1g6CbC+v68gwSHpwvCncMMBmCsjO0wheaBsNkr
+         6rDXggn69h3mOlqzYGfxX0rk0o17xEw9ATjr8R76Ci0Sqs/b7aHn/9Nr/Fg/YqRpMAM6
+         x9G8L0R5GjWv4LAuF32BeFZd/FEyNXdTXri9T0uAgc6NzdLdWlQOl15yieRK7POcmql3
+         VJ/xQDYWet6E2GFgBHyoW4tH0zna+QyrqmvwuM/DwD4Cszm2SzvfQewP4QPaHnrcO3+T
+         LwcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678700073;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OI7Db7BHeqVEz8L9hVGNwbJcVk46KjMrg/IvivHmeU0=;
+        b=ujCMO0B3ORxGUgaGYQXWxu3GnsaCX2MKKE44nMDyUfsNuweXvTuHFTykmhcO5OVfUA
+         xdrnSM5mkCP5BCAEwdr2Rxi7MXrIVKCeIr6v1uV8Mo9238Q6EKDDWTF/iRY38Zy2jVL6
+         bFkEXTm6QnD9Cd7TgpVBm4NlEoDjZBjZeFzxCSz8mpF1L6Gni5zYI95vNZB/dwOHS/I8
+         PHh3uMA4MaT7QWhYQNBJRrQbESHBgEZoqYFDkgjCdOCBY9myackOJF+TgKfPNO5r0yDB
+         u5OPHa3Kv5PkCHSok7/l+YfrxMARPAZaOiN1SuwioYF1UkkZsi2dOy7BPOUs8WSNpEV+
+         wraQ==
+X-Gm-Message-State: AO0yUKVwtnyl00bRaA4yLPYU974xviq+/I/qBIHIARhRkjtx6Slnr9zC
+        F94QBCKCYkRJ4DxD6qZaL5U=
+X-Google-Smtp-Source: AK7set+YvKu0xE5cKX91dxboKMZosjDQqSF8ZN05inC82xLe1eG6h0f6ThJti9wYHTG+A0zZT5FLTA==
+X-Received: by 2002:a62:1a4c:0:b0:623:79d9:a8e6 with SMTP id a73-20020a621a4c000000b0062379d9a8e6mr3154233pfa.19.1678700072883;
+        Mon, 13 Mar 2023 02:34:32 -0700 (PDT)
+Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
+        by smtp.gmail.com with ESMTPSA id j11-20020aa7800b000000b005b0853a1a3esm4006367pfi.159.2023.03.13.02.34.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 02:34:32 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 17:34:23 +0800
+From:   Jianhua Lu <lujianhua000@gmail.com>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Sam Ravnborg <sam@ravnborg.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: Re: [PATCH v5 2/2] drm/panel: Add driver for Novatek NT36523
+Message-ID: <ZA7uH173ZmbGWzv8@Gentoo>
+References: <20230311123231.20771-1-lujianhua000@gmail.com>
+ <20230311123231.20771-2-lujianhua000@gmail.com>
+ <904bc493-7160-32fd-9709-1dcb978ddbab@linaro.org>
+ <ZAx4KqXw+an555d4@Gentoo>
+ <6c02557d-372d-05b1-2998-7c2cde99fac7@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <6c02557d-372d-05b1-2998-7c2cde99fac7@linaro.org>
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 09:59:17AM -0500, Paul Moore wrote:
-> On Fri, Mar 10, 2023 at 5:53 PM Mirsad Goran Todorovac
-> <mirsad.todorovac@alu.unizg.hr> wrote:
-
-...
-
-> With that out of the way, I wanted to make a quick comment on the
-> patch itself.  Currently LSMs do not support unloading, or dynamic
-> loading for that matter.  There are several reasons for this, but
-> perhaps the most important is that in order to help meet the security
-> goals for several of the LSMs they need to be present in the kernel
-> from the very beginning and remain until the very end.  Adding a
-> proper "release" method to a LSM is going to be far more complicated
-> than what you've done with this patchset, involving a lot of
-> discussion both for the LSM layer itself and all of the currently
-> supported LSMs, and ultimately I don't believe it is something we will
-> want to support.
+On Mon, Mar 13, 2023 at 09:06:50AM +0100, Neil Armstrong wrote:
+> On 11/03/2023 13:46, Jianhua Lu wrote:
+> > On Sat, Mar 11, 2023 at 01:38:52PM +0100, Konrad Dybcio wrote:
+> >>
+> >>
+> >> On 11.03.2023 13:32, Jianhua Lu wrote:
+> >>> Add a driver for panels using the Novatek NT36523 display driver IC.
+> >>>
+> >>> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
+> >>> ---
+> >> [...]
+> >>
+> >>> +
+> >>> +static int nt36523_get_modes(struct drm_panel *panel,
+> >>> +			       struct drm_connector *connector)
+> >>> +{
+> >>> +	struct panel_info *pinfo = to_panel_info(panel);
+> >>> +	int i;
+> >>> +
+> >>> +	for (i = 0; i < pinfo->desc->num_modes; i++) {
+> >>> +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
+> >>> +		struct drm_display_mode *mode;
+> >>> +
+> >>> +		mode = drm_mode_duplicate(connector->dev, m);
+> >>> +		if (!mode) {
+> >>> +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
+> >>> +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
+> >>> +			return -ENOMEM;
+> >>> +		}
+> >>> +
+> >>> +		mode->type = DRM_MODE_TYPE_DRIVER;
+> >>> +		if (pinfo->desc->num_modes == 1)
+> >>> +			mode->type |= DRM_MODE_TYPE_PREFERRED;
+> >> That's not quite correct, as that means "if you have more than one
+> >> defined panel mode (say 60Hz and 120 Hz), there will be no preferred one".
+> > This piece of code I see in the other panels, so I'm not sure if it is
+> > correct. Should
+> > if (pinfo->desc->num_modes > 1)
+> > 			mode->type |= DRM_MODE_TYPE_PREFERRED;
+> > is correct?
 > 
-> I appreciate your desire to help, and I want to thank you for your
-> patch and the effort behind it, but I don't believe the kobject memory
-> leak you saw at kernel shutdown was a real issue (it was only "leaked"
-> because the system was shutting down) and I'm not sure the current
-> behavior is something we want to change in the near future.
-
-Currently the security module so secure that even adds an unneeded noise to
-the debugging output.
-
-At very least it would be nice to add a stub and put a big comment
-(on your taste) explaining why we do not do anything there.
-
-Agree?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> I think only a single mode with DRM_MODE_TYPE_PREFERRED is preferred,
+> so:
+> if (i == 0)
+> 	mode->type |= DRM_MODE_TYPE_PREFERRED;		
+> 
+> would be the right thing to do.
+Thanks for your explanation.
+> 
+> 
+> Neil
+> >>
+> >> Konrad
+> >>>
+> 
