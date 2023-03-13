@@ -2,106 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 914346B7EA3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:03:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60946B7EA6
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:03:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229524AbjCMRDS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:03:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60094 "EHLO
+        id S230256AbjCMRDd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:03:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjCMRDB (ORCPT
+        with ESMTP id S229985AbjCMRDO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:03:01 -0400
-Received: from mail-yb1-xb34.google.com (mail-yb1-xb34.google.com [IPv6:2607:f8b0:4864:20::b34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76DF076F4D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:02:03 -0700 (PDT)
-Received: by mail-yb1-xb34.google.com with SMTP id u32so5893413ybi.6
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:02:03 -0700 (PDT)
+        Mon, 13 Mar 2023 13:03:14 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5057E7AA
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:02:29 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id a32so13318114ljr.9
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:02:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678726873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+3LTJVQ8I7Md44dC0AzAPJrh+kx0iHH3FkY/zz5mmQk=;
-        b=JwLRo2H8LkJNs/lKAF6GdiW8kBrP8YKe0c1h4gZE3oielQ93KgRC1nL6EjJqq129DC
-         jfaNiHgX7XdNlGa9VCpA8YKqSS2iG2XCcGwLWzgNXcn9JUqoj1/cEl1l8Ucc0W/JtTFu
-         w/+Y4bWJ24PZWIAjZglJYiY5fOGNGqF6nn2CNUq7d076DU6syh6loYSM5ffLemCY0DwV
-         +3Gc42Wqb6E5Wy3Vk+OjLJMhw1czabLk+TX65vHhZmt3CmL1xn5glbUpqCKBytxUUKD2
-         TQx2XS230JoWCsmh/H1Lsjl6Ri+c7EsDYCerBly880SkmAUGtoRobNhdEWT0CpsoCPBy
-         smGA==
+        d=linaro.org; s=google; t=1678726880;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=f1RDtAGLj0Ru2Y2XZ1WbfrRwXcKezO5xKtNrT7rLq4M=;
+        b=i1ay3requ062Q/P51oQcvpIxd3HoiBx9BQwoVQO1GtfP+yzxTw8KHfJZBVsDkNdwvF
+         FTT9RMf3tIsG7hgHOu5wxE0BdczImUtinFEPCCYjiDFX0l86vBTNANw4uVm05AgktBki
+         YZaKPwua9xHwGRJx72zFISfXk31qhYvUTweQnMGIV39d8yUslUPKfxCaTNvczoqcM2Rs
+         EfQif4dAfLOImmbBoDpVDKktpcv5ineqKKfuoRL35/EK9A7+oj5KkMljtIrWL8MjaGZa
+         0TmsddaTpYbHDk27jt4kJQp4VvvF4Jy+o7T5Nl/lBR68qgRp2cdxlt0XP73ZjZHK8MDA
+         zpdQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678726873;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+3LTJVQ8I7Md44dC0AzAPJrh+kx0iHH3FkY/zz5mmQk=;
-        b=7RMpMpFgGuMPbHGipYKv/MxaKce7VoQztIWdip+H0VbtNGZtec/EiGL3xFcbtaBkrN
-         2pqrsdEBu2YupuGFiAKjaltXv4pOwc7iU6FidGlta6YO1DzXE+TUhOb1tCT0Wnr0zWv/
-         E+52uLbdpGJuJ680/ofVWT96AcjwvmfVkJckT5f8V6fUT6Xf7QSPdegO61YTWKg7lNLD
-         emhM9Cj8ktOXYmNnMg5YJtUJmiAm6bpHqhDR1VCGyVpGGGdjQqHxeopvh+yGS79vrNoy
-         z+zb5g/P5HxaY64i7iSGS4SJNkoWt1Y8bw/PyggcfrH0QEHi7OV/b0plIms9j3w28jEK
-         Tzdw==
-X-Gm-Message-State: AO0yUKU33Glg3cZVq9Op+KP+HtWW4KlgE9EDsik6R8EG9JH/fzbXZ8ts
-        QZtIk05SZWLJmVeIQWYJDD1dK7GMPJ7lJicdmzoYjw==
-X-Google-Smtp-Source: AK7set9AGI9Yup843jOL+BxMIvnxdJnpdOzdNn1Qgz4OEl6d5d4kvCTnls97Ui1PaHdghV59qsWHM/i0zXaplRzioT0=
-X-Received: by 2002:a05:6902:524:b0:ab8:1ed9:cfc5 with SMTP id
- y4-20020a056902052400b00ab81ed9cfc5mr21762528ybs.6.1678726872826; Mon, 13 Mar
- 2023 10:01:12 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678726880;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=f1RDtAGLj0Ru2Y2XZ1WbfrRwXcKezO5xKtNrT7rLq4M=;
+        b=X54Eo7FELWwrjpFCRJSO90bYANthBkC7xKZfIGr57vAdogsrRROxXj9CXXOao3Nt8M
+         K05S/f+Izw14/stepJfSlfJ3zPliXyP+W8uZ8jgQNY8NyMimdy7z+Y8EMJiG639M8hQM
+         umPW87g4WkxrzLxn76NGTkDBsFE2jcgMooFxq2nIefrqakL9ZRcewMZ6Xx9DIvZRBIWK
+         QT1oWpKqpMhTMIO2Y1Tmub5qLPoO/2JHceCxgBjJjB++XBfiifkrA1Jz4JjiWaksh1wh
+         lE9wY1QNGEvQq1Z5PHvn1fYkBEplA4hl24dVAzL2NQmfnDthnsDqWUVP9duUj7uGZJTL
+         EQiA==
+X-Gm-Message-State: AO0yUKXTp/uAGnHESwepRq226o980FutPPuPFteuIyC3MkfGpGkP9Psg
+        jbl6dlDY2/eVqS1e+WAqHMUNhKxukvfIUlrgVpg=
+X-Google-Smtp-Source: AK7set9ikAiz3Ii8WfPk13mIVyXmlhmTfMzPl5IqSmp1dTqqDaWFactO+pFjYLfz/l/Tyotkzw2nZQ==
+X-Received: by 2002:a2e:99c4:0:b0:293:4d57:7148 with SMTP id l4-20020a2e99c4000000b002934d577148mr10860247ljj.11.1678726880222;
+        Mon, 13 Mar 2023 10:01:20 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id q7-20020a2e8747000000b002959f550084sm63352ljj.100.2023.03.13.10.01.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 10:01:19 -0700 (PDT)
+Message-ID: <a131ffa0-1e9c-d355-16db-19e679ab0380@linaro.org>
+Date:   Mon, 13 Mar 2023 18:01:13 +0100
 MIME-Version: 1.0
-References: <20230313162520.GA17199@debian> <20230313162956.GA17242@debian>
-In-Reply-To: <20230313162956.GA17242@debian>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Mon, 13 Mar 2023 10:01:01 -0700
-Message-ID: <CANn89iJfnK1q51ushoN-H4h8DCZBrbvwLB8JCyS6z3ViQczVVw@mail.gmail.com>
-Subject: Re: [PATCH v3 1/2] gro: decrease size of CB
-To:     Richard Gobert <richardbgobert@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        dsahern@kernel.org, alexanderduyck@fb.com, lucien.xin@gmail.com,
-        lixiaoyan@google.com, iwienand@redhat.com, leon@kernel.org,
-        ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH RFC v2 2/6] arm64: dts: qcom: sdm845-tama: Add Synaptics
+ Touchscreen
+Content-Language: en-US
+To:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@somainline.org>
+References: <20230313-topic-tama_disp-v2-0-37ececf43770@linaro.org>
+ <20230313-topic-tama_disp-v2-2-37ececf43770@linaro.org>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230313-topic-tama_disp-v2-2-37ececf43770@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 9:30=E2=80=AFAM Richard Gobert <richardbgobert@gmai=
-l.com> wrote:
->
-> The GRO control block (NAPI_GRO_CB) is currently at its maximum size.  Th=
-is
-> commit reduces its size by putting two groups of fields that are used onl=
-y
-> at different times into a union.
->
-> Specifically, the fields frag0 and frag0_len are the fields that make up
-> the frag0 optimisation mechanism, which is used during the initial parsin=
-g
-> of the SKB.
 
-Note that these fields could also be stored in some auto variable,
-instead of skb.
 
->
-> The fields last and age are used after the initial parsing, while the SKB
-> is stored in the GRO list, waiting for other packets to arrive.
->
-> There was one location in dev_gro_receive that modified the frag0 fields
-> after setting last and age. I changed this accordingly without altering t=
-he
-> code behaviour.
->
-> Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+On 13.03.2023 17:32, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@somainline.org>
+> 
+> Add required pins and RMI4 node to the common DT and remove it
+> from Akatsuki, as it uses a different touch.
+> 
+> Since the panels are super high tech proprietary incell, they
+> need to be handled with very precise timings. As such the panel
+> driver sets up the power rails and GPIOs and the touchscreen
+> driver *has to* probe afterwards.
+> 
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@somainline.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 > ---
+[...]
 
-SGTM, thanks.
+>  &i2c5 {
+> -	status = "okay";
+>  	clock-frequency = <400000>;
+> +	status = "okay";
+> +
+> +	touchscreen: touchscreen@2c {
+> +		compatible = "syna,rmi4-i2c";
+> +		reg = <0x2c>;
+> +
+> +		interrupt-parent = <&tlmm>;
+> +		interrupts = <125 IRQ_TYPE_EDGE_FALLING>;
+interrupts-extended
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+> +		vdd-supply = <&vreg_l14a_1p8>;
+> +		/*
+> +		 * This is a blatant abuse of OF, but the panel driver *needs*
+> +		 * to probe first, as the power/gpio switching needs to be precisely
+> +		 * timed in order for both the display and touch panel to function properly.
+> +		 */
+> +		incell-supply = <&panel>;
+> +
+> +		syna,reset-delay-ms = <220>;
+> +		syna,startup-delay-ms = <1000>;
+> +
+> +		pinctrl-names = "default", "sleep";
+> +		pinctrl-0 = <&ts_default>;
+> +		pinctrl-1 = <&ts_sleep>;
+swapped
+
+>  
+> -	/* Synaptics touchscreen @ 2c, 3c */
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+Konrad
+
