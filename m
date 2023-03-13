@@ -2,194 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A618A6B7CD5
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:54:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CF8D66B7CDD
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 16:55:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbjCMPyS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 11:54:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54604 "EHLO
+        id S231308AbjCMPzM convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 11:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231304AbjCMPyD (ORCPT
+        with ESMTP id S231287AbjCMPzG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 11:54:03 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29354298C0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:53:31 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id r4so7179124ila.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:53:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678722811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2GwmHsZ4aR/s+GWHvo1abiSlvkMUwX5enaxuZbVVdEk=;
-        b=ZGZb9iAS2PdSYCyKo2MjEa7gCePvHm57os60uA0GV35/UACv17wDXCT1FA0zKn2b5h
-         S5OnT126+LdT6FD9Mfz66iN/LSrpbI1TpRTb5HmeRF85VVszF1M5mKOv4mFon9Xa7ntK
-         vkS/qnkR7Q2SIEQb+faOLJbF0U4Zk8bb/CC36eKKF73KwsN2vIqhEJP4v30FeBs8kN46
-         mJvPRHIVdJ6cqJcFxaOpYVv5u/3NOvKIFiWjQgPx7DQ7K8tC+oLE7At7A+Hl/E0ciyHc
-         aKW8R+oRIuLfYGVLsOlA41b2kdo4ua7eARWYGRu5AY2rZ5BDzHGc0Nv6QQ3LishbVZVf
-         DjwA==
+        Mon, 13 Mar 2023 11:55:06 -0400
+Received: from mail-io1-f80.google.com (mail-io1-f80.google.com [209.85.166.80])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A072D298C2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:54:24 -0700 (PDT)
+Received: by mail-io1-f80.google.com with SMTP id r25-20020a056602235900b0074d472df653so6401697iot.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 08:54:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678722811;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2GwmHsZ4aR/s+GWHvo1abiSlvkMUwX5enaxuZbVVdEk=;
-        b=bUsxOKvqehlHiH9s79+VBDEM+AOuY2VZoXxuXmxgpIiEv4EEHZhPXClsfx8HBPAFOn
-         mwQ9w9F04DoBrx/Ga4bMAWQJEvfPzlqTIHyRDZpU5XGEFT0DUbpmay2hZ5T4ixfi4FNw
-         ozHa9KTkLCblSNAEQsCA7CUukAkmNpgGK9in/tp+kdNjfc7JVlv/VOORKVNKT9zo9lGV
-         UYmJtFPzpbX3t3LSS2dVcEyWWPOMcB6URD43c+dXdoz1+NjfAr2yZnedBnkiN0ULRS0q
-         Ir3v61ZV+wXANCQhXm+E6bmZiR/XFDtHhMQoBSl0K+x2V+eAtFb+n2J5l4zhs6mkcwky
-         J48w==
-X-Gm-Message-State: AO0yUKWyeIafzJKNKgFXFZphvnGc3vAY+Jy3Z43s9FTtfQLS6OFV/LG6
-        s+bQNBjdQZ8+JpgNoSKQnTajBN9rApQ=
-X-Google-Smtp-Source: AK7set+WXLqpBgPZWxmoqbyHxI5wyhF35SM3zbuC8fpc49r4NTcq2AGJObDfZaIo18PyZSpJXqKIRw==
-X-Received: by 2002:a92:6011:0:b0:323:aa7:bf08 with SMTP id u17-20020a926011000000b003230aa7bf08mr110927ilb.18.1678722811086;
-        Mon, 13 Mar 2023 08:53:31 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id m2-20020a02c882000000b003b39dcca1dfsm2578833jao.170.2023.03.13.08.53.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 08:53:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 13 Mar 2023 08:53:28 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Subject: Re: Linux 6.3-rc2
-Message-ID: <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
-References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
+        d=1e100.net; s=20210112; t=1678722835;
+        h=content-transfer-encoding:to:from:subject:message-id:date
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=I/P4nyi7jmV9gI9/8CWk2ut4YSoCbdN8RC307sLyIPI=;
+        b=GXz2QPPcxtNsgaHnU+bYlvjocGuMTX4y/fJbkNtA4JF/OrQ3nnOLnVIJgjLjSxnGY8
+         7GvdOXDvAJK2R27Nsg0aI4UK8IPxc686n+ZwER3baWpn2bDIEd4AlNdisn0J0z83KVoZ
+         WQS5c7qxGFaNgoYAYswpZPW/RboIMWrZFhVZ/mh02WvwSgEcige+WvtKW224a7kLCH4I
+         jTRgWNTvPiQgWl+V1/NoPXIql76pDmwYFpJ/f5mjdggzu9P8MWmCY5gzdI2w/i5qRHbU
+         02tcLKVXPDV2XLdrzHxn4YbIu+3NEbYOjtyhCKasy0/n0WIItNdjxhGbi2UryWw5ulTu
+         8hOA==
+X-Gm-Message-State: AO0yUKUlflBnxvB3477lH+Czyv6w8HAWRfRx3I3EL0fYxpVeOdZC2PCa
+        4LPfyta0QNtavSRV/+QpJFrkhVndTytDyF4uELkiaumyiRHn
+X-Google-Smtp-Source: AK7set/BqNfTut+qZJwpUuAaYvTdOcGsx97zaAGRHv/k5SDPIS7KdELDAfe2ydg7+LcHHoC4wLDzEXcmoAMcDxhyB7ANZG+dBTKI
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:dac7:0:b0:310:d631:cd72 with SMTP id
+ o7-20020a92dac7000000b00310d631cd72mr102422ilq.2.1678722835401; Mon, 13 Mar
+ 2023 08:53:55 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 08:53:55 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000047d32505f6ca1e86@google.com>
+Subject: [syzbot] net test error: WARNING: suspicious RCU usage in veth_set_xdp_features
+From:   syzbot <syzbot+c3d0d9c42d59ff644ea6@syzkaller.appspotmail.com>
+To:     ast@kernel.org, bpf@vger.kernel.org, daniel@iogearbox.net,
+        davem@davemloft.net, edumazet@google.com, hawk@kernel.org,
+        john.fastabend@gmail.com, kuba@kernel.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        pabeni@redhat.com, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 04:45:57PM -0700, Linus Torvalds wrote:
-> It's another Sunday afternoon. which must mean another rc release.
-> 
-> This one looks fairly normal, although if you look at the diffs, they
-> are dominated by the removal of a staging driver (r8188eu) that has
-> been superceded by a proper driver. That removal itself is 90% of the
-> diffs.
-> 
-> But if you filter that out, it all looks normal. Still more than two
-> thirds in drivers, but hey, that's pretty normal. It's mostly gpu and
-> networking as usual, but there's various other driver fixes in there
-> too.
-> 
-> Outside of that regular driver noise (and the unusual driver removal
-> noise) it's a little bit of everything: core networking, arch fixes,
-> documentation, filesystems (btrfs, xfs, and ext4, but also some core
-> vfs fixes). And io_uring and some tooling.
-> 
-> The full shortlog is appended, for the adventurous souls that want to
-> get that kind of details. The release feels fairly normal so far, but
-> it's early days. Please keep testing and reporting any issues,
-> 
+Hello,
 
-Build results:
-	total: 153 pass: 146 fail: 7
-Failed builds:
-	alpha:allmodconfig
-	csky:allmodconfig
-	m68k:allmodconfig
-	openrisc:allmodconfig
-	parisc:allmodconfig
-	s390:allmodconfig
-	sparc64:allmodconfig
-Qemu test results:
-	total: 517 pass: 517 fail: 0
+syzbot found the following issue on:
+
+HEAD commit:    064d70527aaa Merge git://git.kernel.org/pub/scm/linux/kern..
+git tree:       net
+console output: https://syzkaller.appspot.com/x/log.txt?x=1155fa8ac80000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=732758ed7ee39a7
+dashboard link: https://syzkaller.appspot.com/bug?extid=c3d0d9c42d59ff644ea6
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/684589f5f27e/disk-064d7052.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c0a3e4044ee2/vmlinux-064d7052.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/27e1b018eb4e/bzImage-064d7052.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+c3d0d9c42d59ff644ea6@syzkaller.appspotmail.com
+
+chnl_net:caif_netlink_parms(): no params data found
+=============================
+WARNING: suspicious RCU usage
+6.3.0-rc1-syzkaller-00144-g064d70527aaa #0 Not tainted
+-----------------------------
+drivers/net/veth.c:1265 suspicious rcu_dereference_check() usage!
+
+other info that might help us debug this:
+
+
+rcu_scheduler_active = 2, debug_locks = 1
+1 lock held by syz-executor.0/5084:
+ #0: ffffffff8e102ec8 (rtnl_mutex){+.+.}-{3:3}, at: rtnl_lock net/core/rtnetlink.c:75 [inline]
+ #0: ffffffff8e102ec8 (rtnl_mutex){+.+.}-{3:3}, at: rtnetlink_rcv_msg+0x3e8/0xd50 net/core/rtnetlink.c:6171
+
+stack backtrace:
+CPU: 1 PID: 5084 Comm: syz-executor.0 Not tainted 6.3.0-rc1-syzkaller-00144-g064d70527aaa #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 03/02/2023
+Call Trace:
+ <TASK>
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x136/0x150 lib/dump_stack.c:106
+ lockdep_rcu_suspicious+0x208/0x3a0 kernel/locking/lockdep.c:6599
+ veth_set_xdp_features+0x1c7/0x250 drivers/net/veth.c:1265
+ veth_newlink+0x729/0x9d0 drivers/net/veth.c:1891
+ rtnl_newlink_create net/core/rtnetlink.c:3440 [inline]
+ __rtnl_newlink+0x10c2/0x1840 net/core/rtnetlink.c:3657
+ rtnl_newlink+0x68/0xa0 net/core/rtnetlink.c:3670
+ rtnetlink_rcv_msg+0x43d/0xd50 net/core/rtnetlink.c:6174
+ netlink_rcv_skb+0x165/0x440 net/netlink/af_netlink.c:2574
+ netlink_unicast_kernel net/netlink/af_netlink.c:1339 [inline]
+ netlink_unicast+0x547/0x7f0 net/netlink/af_netlink.c:1365
+ netlink_sendmsg+0x925/0xe30 net/netlink/af_netlink.c:1942
+ sock_sendmsg_nosec net/socket.c:724 [inline]
+ sock_sendmsg+0xde/0x190 net/socket.c:747
+ __sys_sendto+0x23a/0x340 net/socket.c:2142
+ __do_sys_sendto net/socket.c:2154 [inline]
+ __se_sys_sendto net/socket.c:2150 [inline]
+ __x64_sys_sendto+0xe1/0x1b0 net/socket.c:2150
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x39/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fe359c3e12c
+Code: fa fa ff ff 44 8b 4c 24 2c 4c 8b 44 24 20 89 c5 44 8b 54 24 28 48 8b 54 24 18 b8 2c 00 00 00 48 8b 74 24 10 8b 7c 24 08 0f 05 <48> 3d 00 f0 ff ff 77 34 89 ef 48 89 44 24 08 e8 20 fb ff ff 48 8b
+RSP: 002b:00007ffd5c9024c0 EFLAGS: 00000293 ORIG_RAX: 000000000000002c
+RAX: ffffffffffffffda RBX: 00007fe35a8d4620 RCX: 00007fe359c3e12c
+RDX: 000000000000002c RSI: 00007fe35a8d4670 RDI: 0000000000000003
+RBP: 0000000000000000 R08: 00007ffd5c902514 R09: 000000000000000c
+R10: 0000000000000000 R11: 0000000000000293 R12: 0000000000000000
+R13: 00007fe35a8d4670 R14: 0000000000000003 R15: 0000000000000000
+ </TASK>
+bridge0: port 1(bridge_slave_0) entered blocking state
+bridge0: port 1(bridge_slave_0) entered disabled state
+bridge_slave_0: entered allmulticast mode
+bridge_slave_0: entered promiscuous mode
+bridge0: port 2(bridge_slave_1) entered blocking state
+bridge0: port 2(bridge_slave_1) entered disabled state
+bridge_slave_1: entered allmulticast mode
+bridge_slave_1: entered promiscuous mode
+bond0: (slave bond_slave_0): Enslaving as an active interface with an up link
+bond0: (slave bond_slave_1): Enslaving as an active interface with an up link
+team0: Port device team_slave_0 added
+team0: Port device team_slave_1 added
+batman_adv: batadv0: Adding interface: batadv_slave_0
+batman_adv: batadv0: The MTU of interface batadv_slave_0 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+batman_adv: batadv0: Not using interface batadv_slave_0 (retrying later): interface not active
+batman_adv: batadv0: Adding interface: batadv_slave_1
+batman_adv: batadv0: The MTU of interface batadv_slave_1 is too small (1500) to handle the transport of batman-adv packets. Packets going over this interface will be fragmented on layer2 which could impact the performance. Setting the MTU to 1560 would solve the problem.
+batman_adv: batadv0: Not using interface batadv_slave_1 (retrying later): interface not active
+hsr_slave_0: entered promiscuous mode
+hsr_slave_1: entered promiscuous mode
+netdevsim netdevsim0 netdevsim0: renamed from eth0
+netdevsim netdevsim0 netdevsim1: renamed from eth1
+netdevsim netdevsim0 netdevsim2: renamed from eth2
+netdevsim netdevsim0 netdevsim3: renamed from eth3
+bridge0: port 2(bridge_slave_1) entered blocking state
+bridge0: port 2(bridge_slave_1) entered forwarding state
+bridge0: port 1(bridge_slave_0) entered blocking state
+bridge0: port 1(bridge_slave_0) entered forwarding state
+8021q: adding VLAN 0 to HW filter on device bond0
+8021q: adding VLAN 0 to HW filter on device team0
+hsr0: Slave A (hsr_slave_0) is not up; please bring it up to get a fully working HSR network
+hsr0: Slave B (hsr_slave_1) is not up; please bring it up to get a fully working HSR network
+8021q: adding VLAN 0 to HW filter on device batadv0
+veth0_vlan: entered promiscuous mode
+veth1_vlan: entered promiscuous mode
+veth0_macvtap: entered promiscuous mode
+veth1_macvtap: entered promiscuous mode
+batman_adv: batadv0: Interface activated: batadv_slave_0
+batman_adv: batadv0: Interface activated: batadv_slave_1
+netdevsim netdevsim0 netdevsim0: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim1: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim2: set [1, 0] type 2 family 0 port 6081 - 0
+netdevsim netdevsim0 netdevsim3: set [1, 0] type 2 family 0 port 6081 - 0
+
 
 ---
-Build failures:
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-alpha:allmodconfig
-csky:allmodconfig
-m68k:allmodconfig
-openrisc:allmodconfig
-parisc:allmodconfig
-s390:allmodconfig
-sparc64:allmodconfig
-
-Tracked at https://linux-regtracking.leemhuis.info/regzbot/mainline.
-
-- Build failures for sparc64:allmodconfig and parisc:allmodconfig with gcc 11.x
-- Build error in drivers/media/i2c/imx290.c if PM support is disabled
-
-Fixes pending.
-
-===
-Runtime:
-
-Warning backtraces in calls from ct_nmi_enter(),
-seen randomly.
-
-   28.758119] ------------[ cut here ]------------
-[   28.758418] WARNING: CPU: 0 PID: 301 at kernel/locking/lockdep.c:5527 check_flags+0x170/0x258
-[   28.759084] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
-[   28.759127] Modules linked in:
-[   28.759652] CPU: 0 PID: 301 Comm: run.sh Tainted: G                 N 6.2.0-13115-gee3f96b16468 #1
-[   28.759959] Hardware name: Freescale i.MX7 Dual (Device Tree)
-[   28.760324]  unwind_backtrace from show_stack+0x10/0x14
-[   28.760567]  show_stack from dump_stack_lvl+0x68/0x90
-[   28.760708]  dump_stack_lvl from __warn+0x70/0x1e0
-[   28.760863]  __warn from warn_slowpath_fmt+0x118/0x230
-[   28.761015]  warn_slowpath_fmt from check_flags+0x170/0x258
-[   28.761179]  check_flags from lock_is_held_type+0x6c/0x308
-[   28.761326]  lock_is_held_type from rcu_read_lock_sched_held+0x3c/0x70
-[   28.761505]  rcu_read_lock_sched_held from trace_rcu_dyntick+0x7c/0x128
-[   28.761698]  trace_rcu_dyntick from ct_nmi_enter+0x6c/0xe4
-[   28.761857]  ct_nmi_enter from irq_enter+0x8/0x10
-[   28.762021]  irq_enter from generic_handle_arch_irq+0xc/0x64
-[   28.762187]  generic_handle_arch_irq from call_with_stack+0x18/0x20
-[   28.762370]  call_with_stack from __irq_svc+0x9c/0xbc
-[   28.762594] Exception stack(0xd1b15f60 to 0xd1b15fa8)
-[   28.762849] 5f60: ecac8b10 40000000 b6ec9418 c1c2607c 00000000 40000000 c557b00b 00000001
-[   28.763056] 5f80: 00000b00 c0101278 c557b0f0 00000000 00000051 d1b15fb0 c01011c4 c0103c00
-[   28.763249] 5fa0: 40000013 ffffffff
-[   28.763394]  __irq_svc from vfp_support_entry+0x1c/0x30
-[   28.763659] irq event stamp: 6348
-[   28.763783] hardirqs last  enabled at (6347): [<c010106c>] __und_usr+0x6c/0x98
-[   28.764030] hardirqs last disabled at (6348): [<c0100bd4>] __irq_svc+0x54/0xbc
-[   28.764232] softirqs last  enabled at (6328): [<c0103814>] vfp_sync_hwstate+0x48/0x8c
-[   28.764453] softirqs last disabled at (6326): [<c01037cc>] vfp_sync_hwstate+0x0/0x8c
-[   28.764665] ---[ end trace 0000000000000000 ]---
-[   28.764907] irq event stamp: 6348
-[   28.765018] hardirqs last  enabled at (6347): [<c010106c>] __und_usr+0x6c/0x98
-[   28.765202] hardirqs last disabled at (6348): [<c0100bd4>] __irq_svc+0x54/0xbc
-[   28.765386] softirqs last  enabled at (6328): [<c0103814>] vfp_sync_hwstate+0x48/0x8c
-[   28.765575] softirqs last disabled at (6326): [<c01037cc>] vfp_sync_hwstate+0x0/0x8c
-
-Sample decoded stack trace:
-
-[   11.848957] unwind_backtrace from show_stack (arch/arm/kernel/traps.c:258)
-[   11.848999] show_stack from dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
-[   11.849026] dump_stack_lvl from __warn (./include/linux/jump_label.h:260 ./include/linux/jump_label.h:270 ./include/trace/events/error_report.h:69 kernel/panic.c:681)
-[   11.849053] __warn from warn_slowpath_fmt (./include/asm-generic/preempt.h:59 ./include/linux/context_tracking.h:154 kernel/panic.c:706)
-[   11.849081] warn_slowpath_fmt from check_flags (kernel/locking/lockdep.c:5527 (discriminator 9))
-[   11.849110] check_flags from lock_is_held_type (./arch/arm/include/asm/percpu.h:37 kernel/locking/lockdep.c:462 kernel/locking/lockdep.c:5711)
-[   11.849138] lock_is_held_type from rcu_read_lock_sched_held (kernel/rcu/update.c:125)
-[   11.849170] rcu_read_lock_sched_held from ct_nmi_enter (./include/trace/events/rcu.h:480 ./include/trace/events/rcu.h:480 kernel/context_tracking.c:297)
-[   11.849202] ct_nmi_enter from irq_enter (kernel/softirq.c:625)
-[   11.849227] irq_enter from generic_handle_arch_irq (kernel/irq/handle.c:238)
-[   11.849256] generic_handle_arch_irq from call_with_stack (arch/arm/lib/call_with_stack.S:45)
-[   11.849287] call_with_stack from __irq_svc (arch/arm/kernel/entry-armv.S:232)
-
-Seen if CONFIG_DEBUG_LOCK_ALLOC=y and CONFIG_CONTEXT_TRACKING_IDLE=y.
-It seems that rcu_read_lock_sched_held() can be true when entering an interrupt.
-
-The problem is not seen in v6.2, but occurs randomly on ToT with various
-arm emulations.
-First time observed and reproduced with v6.2-5715-g0175ec3a28c6. Still trying
-to track down further.
-
-Guenter
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
