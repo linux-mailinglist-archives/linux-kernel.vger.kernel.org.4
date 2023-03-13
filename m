@@ -2,78 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB826B7F91
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:34:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 356686B7F92
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:34:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbjCMReX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:34:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49518 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbjCMReT (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S230255AbjCMReT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Mon, 13 Mar 2023 13:34:19 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD052114
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:34:07 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x13so4540306edd.1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:34:07 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49462 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S229757AbjCMReR (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Mon, 13 Mar 2023 13:34:17 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1AD125A0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:34:04 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-536af432ee5so256431007b3.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:34:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678728846;
+        d=google.com; s=20210112; t=1678728844;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rIbaVotkbMkcwxISK+Gki0bm3/JChDv6I0UuodDYHc0=;
-        b=T78v1EzfObjBvkEVYZ/GHQT7kUquMWkXwG5GptxqZbSvFpe7IJSKVm4uCX5MhYpULm
-         CTbiXgppxV96ovBjyvr7UBmOEro7BsR0OGh2CMbplaElaPBs22qlmyV090sHgQ5QQ8tn
-         JwkAchMGvLDiu7lzrZpCDic/wjzx4v6hN+6Sk=
+        bh=E8OoBtnsiUhLio1XkxWQCxxFKn2qFyy0u1AAbg2mfZs=;
+        b=QoXlhRk3GPVQklHmVFD/RvvwrG4rsWGzRLtWigCNCjQeM/YHzeXLMdctP3DzSwmLbW
+         nKm0lsxuQb7j44cFIOPPJ2Ao+Fef3MSEw3h9PT6h9n6hOLpLq9M19QAa5Hlrs3kRvUXc
+         Uyg60hpvOloUlp9vNs1bHEeWZX1U/vUUNW89tQMiZoly3hB2J+wJ3myg1wFat6FY3NCv
+         7i3yodw9Ob2wAUQBgqFKf4iXFWHRfUtOI1VWTpPcpyT70gOTZZ8FqeiAwdVlXDFYJ7kZ
+         A5a+Bfg0VIdcDa46Y4GxoAiTPfeC8ekSDO9WSfwrmFyYoIO2+u4PTuXCf/YhZ3wwCJDD
+         /k+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678728846;
+        d=1e100.net; s=20210112; t=1678728844;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rIbaVotkbMkcwxISK+Gki0bm3/JChDv6I0UuodDYHc0=;
-        b=ygJhobuo1ZjEYfzCmmARU0SqK7eDcIhdVmgWxgEBB4dX2UQuvKdvSVuKn8mXl71Xb8
-         xRyHvmJWLkqvskfk8eHsRnJ11YNdJN7Hm9EQM/dcxymeFKQCR53EHgtexT/djlHf6/RQ
-         GgiXsZ4ZVe/uEUWnn9UqRcNQWsQ3t6L0sBoYGtpZjvbXt6En0XCf0fgw0dvb5Z3hvVzk
-         TrHuwlwW7wnd/QyYpTNZPonjCJia80Wfq9OyRMs4j2hAfwXgYr4H0cZ7BLdBqDs1+HLJ
-         1Kv5mZqviktSiZaZ7uBZevrjCbpURjc5/PP4C5pUc35e6ZBRR87L8Kh22Mrh9KJRnDJ8
-         1b6g==
-X-Gm-Message-State: AO0yUKU8kPHh7IJdkl64cVFR6uXXz1JR5pqfCeVdVojzS0JT/hs/IcAS
-        2peRjzTP8XFgRY0xnfOo/+bGksWirpYTpboDI80Tug==
-X-Google-Smtp-Source: AK7set/vB9iLL/Z0Va4th+s3g/4dERq3ncKVW/0JowocDl+Lmv5OJm8HjXIgo/OIfTlIEXyhuysuLQ==
-X-Received: by 2002:a17:907:787:b0:8b1:3225:66f0 with SMTP id xd7-20020a170907078700b008b1322566f0mr47134030ejb.68.1678728845818;
-        Mon, 13 Mar 2023 10:34:05 -0700 (PDT)
-Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com. [209.85.208.47])
-        by smtp.gmail.com with ESMTPSA id l1-20020a170906644100b0091f5e98abd5sm56671ejn.133.2023.03.13.10.34.05
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 10:34:05 -0700 (PDT)
-Received: by mail-ed1-f47.google.com with SMTP id x3so51787761edb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:34:05 -0700 (PDT)
-X-Received: by 2002:a50:bb44:0:b0:4fa:cef4:a27f with SMTP id
- y62-20020a50bb44000000b004facef4a27fmr3797657ede.2.1678728844911; Mon, 13 Mar
- 2023 10:34:04 -0700 (PDT)
+        bh=E8OoBtnsiUhLio1XkxWQCxxFKn2qFyy0u1AAbg2mfZs=;
+        b=IixSXKzYGo0m3CwEDGLngbUK6HTwXM5JwIny3FJ92OThgH5dk1Bc/+u4zqCgYfBDpz
+         1BiUSoEyQEir4IgfUKYbxOXxlAPeaQn7v+aKCuokUcH1cxZsefj2dtxANoL1dFq0M1N+
+         +QKSsoH++8grR3BuceMwt8A/KSsx4vrUokffwOLDWDLwnoOkw/9uEtp22SYIlAueunrt
+         MiZzuTq4TlqRquMci3HeoABvwOUv+NcLVDPzIHwL0ZhW3vt5/qGdItvBYjY9Pd5c6+el
+         vHNR3+j1aaPfHhpgdTR6UHaMI7SZAEx4zpeuEJZM6SrxhPWtQ2TB3GxryrhoyPySPLLx
+         J0mA==
+X-Gm-Message-State: AO0yUKVI3IiboG0OISpA8X7u1jaa62JfM3sExdlMNl6+CCNC1a9T4aV7
+        cPeRClevgNZlKaWc2r02eFKgj8MDBIfbsBe3n1gtaA==
+X-Google-Smtp-Source: AK7set9x56RnCIOXJlBDAjoX6Fz8Cex6878uDmkPuKM363zKCV7DFGJhlh5PcV0Cyp6RA37TExWl2Z3CGvctByMLalk=
+X-Received: by 2002:a81:4520:0:b0:533:9d49:f9c9 with SMTP id
+ s32-20020a814520000000b005339d49f9c9mr23458033ywa.0.1678728843816; Mon, 13
+ Mar 2023 10:34:03 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230312200731.599706-1-masahiroy@kernel.org> <CAHk-=wgL-GspdmghwQ2kXJO1QCKFY+HieU0arYSFDHBLO0dZuA@mail.gmail.com>
- <CAK7LNATXqPy6F+gB8-1Zqh8hooXh3U_5+3xeMFZDZwYsUi=aeg@mail.gmail.com>
-In-Reply-To: <CAK7LNATXqPy6F+gB8-1Zqh8hooXh3U_5+3xeMFZDZwYsUi=aeg@mail.gmail.com>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Mon, 13 Mar 2023 10:33:47 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wjCZNRNL_2ftKoL9xWkUNgPb+0bAx_v_HVWW7bgW_YtBw@mail.gmail.com>
-Message-ID: <CAHk-=wjCZNRNL_2ftKoL9xWkUNgPb+0bAx_v_HVWW7bgW_YtBw@mail.gmail.com>
-Subject: Re: [PATCH 0/6] kbuild: fix some packaging issues, and use
- git-archive for source package
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nick Terrell <terrelln@fb.com>,
-        Nicolas Schier <nicolas@fjasle.eu>
+References: <20230311151756.83302-1-kerneljasonxing@gmail.com>
+ <CANn89iKWewG7JZXQ=bmab9rSXUs_P5fX-BQ792QjYuH151DV-g@mail.gmail.com>
+ <CAL+tcoAchbTk9ibrAVH-bZ-0KHJ8g3XnsQHFWiBosyNgYJtymA@mail.gmail.com>
+ <CANn89i+uS7-mA227g6yJfTK4ugdA82z+PLV9_74f1dBMo_OhEg@mail.gmail.com> <CAL+tcoCsQ18ae+hUwqFigerJQfhrusuOOC63Wc+ZGyGWEvSFBQ@mail.gmail.com>
+In-Reply-To: <CAL+tcoCsQ18ae+hUwqFigerJQfhrusuOOC63Wc+ZGyGWEvSFBQ@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 13 Mar 2023 10:33:52 -0700
+Message-ID: <CANn89iLWTie6bZZR3fkuOPfVWgjmiV9er_6MPbbcM2AE13ZQLQ@mail.gmail.com>
+Subject: Re: [PATCH net-next] net-sysfs: display two backlog queue len separately
+To:     Jason Xing <kerneljasonxing@gmail.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Jason Xing <kernelxing@tencent.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,14 +74,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 5:53=E2=80=AFPM Masahiro Yamada <masahiroy@kernel.o=
-rg> wrote:
+On Mon, Mar 13, 2023 at 10:16=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.=
+com> wrote:
+
 >
-> 6/6 did that.
+> Thanks for the guidance. Scaling is a good way to go really. But I
+> just would like to separate these two kinds of limits to watch them
+> closely. More often we cannot decide to adjust accurately which one
+> should be adjusted. Time squeeze may not be clear and we cannot
+> randomly write a larger number into both proc files which may do harm
+> to some external customers unless we can show some proof to them.
+>
+> Maybe I got something wrong. If adding some tracepoints for those
+> limits in softnet_data is not elegant, please enlighten me :)
+>
 
-Oh, I looked at that one, but only reacted to the removal of the
-ignored-files script, not realizing that it also did that revert.
+I dunno, but it really looks like you are re-discovering things that
+we dealt with about 10 years ago.
 
-No complaints then,
-
-              Linus
+I wonder why new ways of tracing stuff are needed nowadays, while ~10
+years ago nothing
+officially put and maintained forever in the kernel was needed.
