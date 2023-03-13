@@ -2,266 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BFD8E6B7612
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:34:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B12CD6B761B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 12:36:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbjCMLea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 07:34:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36632 "EHLO
+        id S230253AbjCMLfc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 07:35:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38200 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCMLe1 (ORCPT
+        with ESMTP id S230499AbjCMLfW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 07:34:27 -0400
-Received: from mail11.truemail.it (mail11.truemail.it [217.194.8.81])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E54E1A493;
-        Mon, 13 Mar 2023 04:34:01 -0700 (PDT)
-Received: from francesco-nb.pivistrello.it (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        by mail11.truemail.it (Postfix) with ESMTPA id 4A36221DF3;
-        Mon, 13 Mar 2023 12:33:15 +0100 (CET)
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     linux-gpio@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>
-Cc:     Emanuele Ghidoli <emanuele.ghidoli@toradex.com>,
-        linux-kernel@vger.kernel.org, andy.shevchenko@gmail.com,
-        Francesco Dolcini <francesco.dolcini@toradex.com>
-Subject: [PATCH v2 2/2] gpio: fxl6408: add I2C GPIO expander driver
-Date:   Mon, 13 Mar 2023 12:33:08 +0100
-Message-Id: <20230313113308.157930-3-francesco@dolcini.it>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230313113308.157930-1-francesco@dolcini.it>
-References: <20230313113308.157930-1-francesco@dolcini.it>
+        Mon, 13 Mar 2023 07:35:22 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F4323DAD;
+        Mon, 13 Mar 2023 04:35:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678707304; x=1710243304;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=NY8qvYTr7xVntkMrD4cfbSK3BNhGq4p46TRzfLXOtqU=;
+  b=n3nF0UiIWZa0I1DTplI/Ro9QjoSPM7uQREFf6q4DWsdAFx90hX1MaD2U
+   ng7DFL2ZFhBRxb8lCIUKwBaAA5oW72+9G1SNLIDala5av44ssmzLuJe55
+   aPSyLxlgAm+3FqsEgTWCoWk+bBG4uu/O+TM9Of/fHcunFBbXkFgYaj746
+   dLUWmEpQoYMq9g3QaXkgyEp9uTOO2r8lORUa6FaOj3mye+kPOwjreExCa
+   wBs5eF+RtWjwd7KVsqdlKkZQiJn24GaRT7pd0kjkLBeYHBLRAbdEj46C5
+   kwttufS38WvANAR+1SKBYAOHWRhNQJIyG97MSg2PvnqIc+NdDJMIjkxRZ
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="337143881"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="337143881"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 04:34:29 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10647"; a="681006841"
+X-IronPort-AV: E=Sophos;i="5.98,256,1673942400"; 
+   d="scan'208";a="681006841"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 13 Mar 2023 04:34:26 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1pbgRd-002b96-0d;
+        Mon, 13 Mar 2023 13:34:25 +0200
+Date:   Mon, 13 Mar 2023 13:34:24 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Jarkko Nikula <jarkko.nikula@linux.intel.com>
+Cc:     Mario Limonciello <mario.limonciello@amd.com>,
+        Jan =?utf-8?B?RMSFYnJvxZs=?= <jsd@semihalf.com>,
+        Grzegorz Bernacki <gjb@semihalf.com>, Rijo-john.Thomas@amd.com,
+        Thomas.Lendacky@amd.com, herbert@gondor.apana.org.au,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Felix.Held@amd.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 8/8] i2c: designware: Add doorbell support for Skyrim
+Message-ID: <ZA8KQIeRUtAXbkTV@smile.fi.intel.com>
+References: <20230310211954.2490-1-mario.limonciello@amd.com>
+ <20230310211954.2490-9-mario.limonciello@amd.com>
+ <b18aefc2-dd07-5356-0d19-b4783ed500e6@linux.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <b18aefc2-dd07-5356-0d19-b4783ed500e6@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+On Mon, Mar 13, 2023 at 12:29:50PM +0200, Jarkko Nikula wrote:
+> On 3/10/23 23:19, Mario Limonciello wrote:
 
-Add minimal driver for Fairchild FXL6408 8-bit I2C-controlled GPIO expander
-using the generic regmap based GPIO driver (GPIO_REGMAP).
+...
 
-The driver implements setting the GPIO direction, reading inputs
-and writing outputs.
+> > +	if (rdev->device == 0x1630)
+> > +		_psp_send_i2c_req = psp_send_i2c_req_cezanne;
+> > +	else
+> > +		_psp_send_i2c_req = psp_send_i2c_req_skyrim;
+> 
+> Is there any possibility pci_get_domain_bus_and_slot() returns NULL? Or is
+> 00:00.0 always present?
 
-In addition to that the FXL6408 has the following functionalities:
-- allows to monitor input ports for data transitions with an interrupt pin
-- all inputs can be configured with pull-up or pull-down resistors
+Theoretically it's possible in two cases (or more?):
+1) no PCI support compiled;
+2) no device found (PCI-less system).
 
-Datasheet: https://www.onsemi.com/download/data-sheet/pdf/fxl6408-d.pdf
-Signed-off-by: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-Signed-off-by: Francesco Dolcini <francesco.dolcini@toradex.com>
----
-v2:
- * remove includes: <linux/gpio.h> and <linux/of_platform.h>
- * add missing and required select REGMAP_I2C in KConfig
- * use dev_err_probe()
- * add "Datasheet:" tag in commit message
- * improve KConfig help section
- * fix newlines, multi-line comments and trailing commas
----
- drivers/gpio/Kconfig        |  10 +++
- drivers/gpio/Makefile       |   1 +
- drivers/gpio/gpio-fxl6408.c | 152 ++++++++++++++++++++++++++++++++++++
- 3 files changed, 163 insertions(+)
- create mode 100644 drivers/gpio/gpio-fxl6408.c
-
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index 13be729710f2..56a73007ebcb 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1000,6 +1000,16 @@ config GPIO_ADNP
- 	  enough to represent all pins, but the driver will assume a
- 	  register layout for 64 pins (8 registers).
- 
-+config GPIO_FXL6408
-+	tristate "FXL6408 I2C GPIO expander"
-+	select GPIO_REGMAP
-+	select REGMAP_I2C
-+	help
-+	  GPIO driver for Fairchild Semiconductor FXL6408 GPIO expander.
-+
-+	  To compile this driver as a module, choose M here: the module will
-+	  be called gpio-fxl6408.
-+
- config GPIO_GW_PLD
- 	tristate "Gateworks PLD GPIO Expander"
- 	depends on OF_GPIO
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index c048ba003367..12027f4c3bee 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -60,6 +60,7 @@ obj-$(CONFIG_GPIO_EP93XX)		+= gpio-ep93xx.o
- obj-$(CONFIG_GPIO_EXAR)			+= gpio-exar.o
- obj-$(CONFIG_GPIO_F7188X)		+= gpio-f7188x.o
- obj-$(CONFIG_GPIO_FTGPIO010)		+= gpio-ftgpio010.o
-+obj-$(CONFIG_GPIO_FXL6408)		+= gpio-fxl6408.o
- obj-$(CONFIG_GPIO_GE_FPGA)		+= gpio-ge.o
- obj-$(CONFIG_GPIO_GPIO_MM)		+= gpio-gpio-mm.o
- obj-$(CONFIG_GPIO_GRGPIO)		+= gpio-grgpio.o
-diff --git a/drivers/gpio/gpio-fxl6408.c b/drivers/gpio/gpio-fxl6408.c
-new file mode 100644
-index 000000000000..2560fe99c2d6
---- /dev/null
-+++ b/drivers/gpio/gpio-fxl6408.c
-@@ -0,0 +1,152 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * FXL6408 GPIO driver
-+ *
-+ * Copyright 2023 Toradex
-+ *
-+ * Author: Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
-+ */
-+
-+#include <linux/gpio/regmap.h>
-+#include <linux/i2c.h>
-+#include <linux/module.h>
-+#include <linux/regmap.h>
-+
-+#define FXL6408_REG_DEVICE_ID		0x01
-+#define FXL6408_MF_FAIRCHILD		0b101
-+#define FXL6408_MF_SHIFT		5
-+
-+/* Bits set here indicate that the GPIO is an output. */
-+#define FXL6408_REG_IO_DIR		0x03
-+
-+/*
-+ * Bits set here, when the corresponding bit of IO_DIR is set, drive
-+ * the output high instead of low.
-+ */
-+#define FXL6408_REG_OUTPUT		0x05
-+
-+/* Bits here make the output High-Z, instead of the OUTPUT value. */
-+#define FXL6408_REG_OUTPUT_HIGH_Z	0x07
-+
-+/* Returns the current status (1 = HIGH) of the input pins. */
-+#define FXL6408_REG_INPUT_STATUS	0x0f
-+
-+#define FXL6408_MAX_REGISTER		0x13
-+
-+#define FXL6408_NGPIO			8
-+
-+static const struct regmap_range rd_range[] = {
-+	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
-+	{ FXL6408_REG_IO_DIR, FXL6408_REG_OUTPUT },
-+	{ FXL6408_REG_INPUT_STATUS, FXL6408_REG_INPUT_STATUS },
-+};
-+
-+static const struct regmap_range wr_range[] = {
-+	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
-+	{ FXL6408_REG_IO_DIR, FXL6408_REG_OUTPUT },
-+	{ FXL6408_REG_OUTPUT_HIGH_Z, FXL6408_REG_OUTPUT_HIGH_Z },
-+};
-+
-+static const struct regmap_range volatile_range[] = {
-+	{ FXL6408_REG_DEVICE_ID, FXL6408_REG_DEVICE_ID },
-+	{ FXL6408_REG_INPUT_STATUS, FXL6408_REG_INPUT_STATUS },
-+};
-+
-+static const struct regmap_access_table rd_table = {
-+	.yes_ranges = rd_range,
-+	.n_yes_ranges = ARRAY_SIZE(rd_range),
-+};
-+
-+static const struct regmap_access_table wr_table = {
-+	.yes_ranges = wr_range,
-+	.n_yes_ranges = ARRAY_SIZE(wr_range),
-+};
-+
-+static const struct regmap_access_table volatile_table = {
-+	.yes_ranges = volatile_range,
-+	.n_yes_ranges = ARRAY_SIZE(volatile_range),
-+};
-+
-+static const struct regmap_config regmap = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+
-+	.max_register = FXL6408_MAX_REGISTER,
-+	.wr_table = &wr_table,
-+	.rd_table = &rd_table,
-+	.volatile_table = &volatile_table,
-+
-+	.cache_type = REGCACHE_RBTREE,
-+	.num_reg_defaults_raw = FXL6408_MAX_REGISTER + 1,
-+};
-+
-+static int fxl6408_identify(struct device *dev, struct regmap *regmap)
-+{
-+	int val, ret;
-+
-+	ret = regmap_read(regmap, FXL6408_REG_DEVICE_ID, &val);
-+	if (ret) {
-+		dev_err(dev, "error %d reading DEVICE_ID\n", ret);
-+	} else if (val >> FXL6408_MF_SHIFT != FXL6408_MF_FAIRCHILD) {
-+		dev_err(dev, "invalid device id 0x%02x\n", val);
-+		ret = -ENODEV;
-+	}
-+
-+	return ret;
-+}
-+
-+static int fxl6408_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	int ret;
-+	struct gpio_regmap_config gpio_config = {
-+		.parent = dev,
-+		.ngpio = FXL6408_NGPIO,
-+		.reg_dat_base = GPIO_REGMAP_ADDR(FXL6408_REG_INPUT_STATUS),
-+		.reg_set_base = GPIO_REGMAP_ADDR(FXL6408_REG_OUTPUT),
-+		.reg_dir_out_base = GPIO_REGMAP_ADDR(FXL6408_REG_IO_DIR),
-+		.ngpio_per_reg = FXL6408_NGPIO,
-+	};
-+
-+	gpio_config.regmap = devm_regmap_init_i2c(client, &regmap);
-+	if (IS_ERR(gpio_config.regmap))
-+		return dev_err_probe(dev, PTR_ERR(gpio_config.regmap),
-+				     "failed to allocate register map\n");
-+
-+	ret = fxl6408_identify(dev, gpio_config.regmap);
-+	if (ret)
-+		return ret;
-+
-+	/* Disable High-Z of outputs, so that our OUTPUT updates actually take effect. */
-+	ret = regmap_write(gpio_config.regmap, FXL6408_REG_OUTPUT_HIGH_Z, 0);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to write 'output high Z' register\n");
-+
-+	return PTR_ERR_OR_ZERO(devm_gpio_regmap_register(dev, &gpio_config));
-+}
-+
-+static const __maybe_unused struct of_device_id fxl6408_dt_ids[] = {
-+	{ .compatible = "fcs,fxl6408" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, fxl6408_dt_ids);
-+
-+static const struct i2c_device_id fxl6408_id[] = {
-+	{ "fxl6408", 0 },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, fxl6408_id);
-+
-+static struct i2c_driver fxl6408_driver = {
-+	.driver = {
-+		.name	= "fxl6408",
-+		.of_match_table = fxl6408_dt_ids,
-+	},
-+	.probe_new	= fxl6408_probe,
-+	.id_table	= fxl6408_id,
-+};
-+module_i2c_driver(fxl6408_driver);
-+
-+MODULE_AUTHOR("Emanuele Ghidoli <emanuele.ghidoli@toradex.com>");
-+MODULE_DESCRIPTION("FXL6408 GPIO driver");
-+MODULE_LICENSE("GPL");
 -- 
-2.25.1
+With Best Regards,
+Andy Shevchenko
+
 
