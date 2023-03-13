@@ -2,114 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3CC56B7A2B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:18:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1789B6B7A32
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:19:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCMOST (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:18:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50058 "EHLO
+        id S231420AbjCMOS7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:18:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49052 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbjCMOSK (ORCPT
+        with ESMTP id S231411AbjCMOSh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:18:10 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7086EBBBD;
-        Mon, 13 Mar 2023 07:17:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678717077; x=1710253077;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=vnCVt+wdWALDJ5asvXR3HRX+LKXTlmdftdrQVlu2wDw=;
-  b=jEyZw3xt5g1heQ3eiRU+N5H6UanZPziyfDhZOaG4cjJU6nb90zW6Sm+N
-   OCNxTavZKzudTY8QNblDoRxOy5YugGSBlwyStp8303qHlevM5xGUkM4Vo
-   KtlpOmXi1HfQMIFN3QjMOBtyyRwzA4xZKfX0HpnpfXe1LoIWOmezX872L
-   xx3mDkkaD5CoO+9vgAqk456rKB1Pz+xzl/eM5n+HFZGSGHsTUc+9kbrtN
-   UVIAKCPWl4C2QkJHfDZ865QVzIGDkETW+Zou6h2HtDq2doXO0FmrfmJGG
-   zY9GALTYhFDX/2jWAcbcGCxudJnJDf+5HV0zJbMnpDuT33WTje5N/AUrN
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="423423944"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="423423944"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 07:17:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="821988528"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="821988528"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga001.fm.intel.com with ESMTP; 13 Mar 2023 07:17:54 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pbizo-002fW4-1b;
-        Mon, 13 Mar 2023 16:17:52 +0200
-Date:   Mon, 13 Mar 2023 16:17:52 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <ZA8wkMhShRbyE/wm@smile.fi.intel.com>
-References: <cover.1678093787.git.mazziesaccount@gmail.com>
- <a4cb9a34ca027867ac014ffe93ca7e8245ce263f.1678093787.git.mazziesaccount@gmail.com>
- <ZAXiKfRbsXpHhwAJ@smile.fi.intel.com>
- <e507c171-bebc-84f6-c326-ff129b42fb7f@gmail.com>
- <ZA8kTx4exvGwUfNn@smile.fi.intel.com>
- <b4bf8587-d3cd-ff88-0276-7e394c110757@gmail.com>
+        Mon, 13 Mar 2023 10:18:37 -0400
+Received: from wp530.webpack.hosteurope.de (wp530.webpack.hosteurope.de [80.237.130.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28F375267;
+        Mon, 13 Mar 2023 07:18:18 -0700 (PDT)
+Received: from [2a02:8108:8980:2478:8cde:aa2c:f324:937e]; authenticated
+        by wp530.webpack.hosteurope.de running ExIM with esmtpsa (TLS1.3:ECDHE_RSA_AES_128_GCM_SHA256:128)
+        id 1pbj0B-0006t7-6G; Mon, 13 Mar 2023 15:18:15 +0100
+Message-ID: <c2f61ec5-85e9-06ac-f333-e1f97472b5d4@leemhuis.info>
+Date:   Mon, 13 Mar 2023 15:18:14 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b4bf8587-d3cd-ff88-0276-7e394c110757@gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [REGRESSION] Patch broke WPA auth: Re: [PATCH v2] wifi: cfg80211:
+ Fix use after free for wext
+Content-Language: en-US, de-DE
+To:     Hector Martin <marcan@marcan.st>,
+        Alexander Wetzel <alexander@wetzel-home.de>,
+        linux-wireless@vger.kernel.org,
+        Johannes Berg <johannes.berg@intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     johannes@sipsolutions.net, stable@vger.kernel.org,
+        Asahi Linux <asahi@lists.linux.dev>, Ilya <me@0upti.me>,
+        Janne Grunau <j@jannau.net>,
+        LKML <linux-kernel@vger.kernel.org>, regressions@lists.linux.dev
+References: <20230124141856.356646-1-alexander@wetzel-home.de>
+ <d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st>
+From:   "Linux regression tracking #update (Thorsten Leemhuis)" 
+        <regressions@leemhuis.info>
+Reply-To: Linux regressions mailing list <regressions@lists.linux.dev>
+In-Reply-To: <d6851c2b-7966-6cb4-a51c-7268c60e0a86@marcan.st>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-bounce-key: webpack.hosteurope.de;regressions@leemhuis.info;1678717099;b8d09017;
+X-HE-SMSGID: 1pbj0B-0006t7-6G
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 03:59:03PM +0200, Matti Vaittinen wrote:
-> On 3/13/23 15:25, Andy Shevchenko wrote:
-> > On Mon, Mar 13, 2023 at 02:47:45PM +0200, Matti Vaittinen wrote:
-> > > On 3/6/23 14:52, Andy Shevchenko wrote:
-> > > > On Mon, Mar 06, 2023 at 11:17:15AM +0200, Matti Vaittinen wrote:
+[TLDR: This mail in primarily relevant for Linux kernel regression
+tracking. See link in footer if these mails annoy you.]
 
-...
-
-> > > > > +	if (ret && gts->avail_all_scales_table)
-> > > > 
-> > > > In one case you commented that free(NULL) is okay, in the other, you add
-> > > > a duplicative check. Why?
-> > > 
-> > > Sorry but what do you mean by dublicative check?
-> > > 
-> > > Usually I avoid the kfree(NULL). That's why I commented on it in that
-> > > another case where it was not explicitly disallowed. I'll change that for v4
-> > > to avoid kfree(NULL) as you suggested.
-> > 
-> > So, and with it you put now a double check for NULL, do you think it's okay?
-> > I don't.
+On 11.03.23 10:55, Hector Martin wrote:
 > 
-> I don't see the double check. I see only one check just above the kfree()?
-> Where is the other check?
+> This broke WPA auth entirely on brcmfmac (in offload mode) and probably
+> others, including on stable 6.2.3 and 6.3-rc1 (tested with iwd). Please
+> revert or fix. Notes below.
+> 
+> Reported-by: Ilya <me@0upti.me>
+> Reported-by: Janne Grunau <j@jannau.net>
+> 
+> #regzbot introduced: 015b8cc5e7c4d7
+> #regzbot monitor:
+> https://lore.kernel.org/linux-wireless/20230124141856.356646-1-alexander@wetzel-home.de/
 
-	if (... gts->avail_all_scales_table)
+#regzbot fix: 79d1ed5ca7db67d48
+#regzbot ignore-activity
 
-is a double to one, which is inside kfree(). I.o.w. kfree() is NULL-aware
-and you know that.
-
-> > > > > +		kfree(gts->avail_all_scales_table);
-
--- 
-With Best Regards,
-Andy Shevchenko
+Ciao, Thorsten (wearing his 'the Linux kernel's regression tracker' hat)
+--
+Everything you wanna know about Linux kernel regression tracking:
+https://linux-regtracking.leemhuis.info/about/#tldr
+That page also explains what to do if mails like this annoy you.
 
 
