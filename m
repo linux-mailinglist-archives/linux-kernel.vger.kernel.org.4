@@ -2,249 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C07F46B6F6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:13:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C18C16B6F6D
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229749AbjCMGN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:13:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
+        id S229553AbjCMGQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 02:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38202 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229437AbjCMGNy (ORCPT
+        with ESMTP id S229437AbjCMGP7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:13:54 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1F122022
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:13:52 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1755e639b65so12688476fac.3
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678688032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sFwFZRZYKw2DA2WpiOF9s0EPlDORWW1/wSadX5SWkOg=;
-        b=EKIllb8+E7Qmsu5WbtRfmy52Ir7ImanQP6EIuBRXtQ1Xz7YguDZZeN2FH8tSdBcgHu
-         xTQfw8bYHNayWn9ks+VONjGupukS+KULMygYf1MHH7yDtwJZdObcGO408cOIBqGuQTrq
-         3VBhOtn415ebnqjykAs61ibbYOtMA2D2aJVlGbPL7zNMvlFSVTM5rqg1Lz1MVqMdkZ4T
-         veCXODjEvDCWhNRrJLcyobco9ikGQadvIvAouC8gP5PRZaN6wp3XUp9trEhyo6zCPhYK
-         ln7URbS6kHApxkNhoG7VS5mL9lfq+bIuEKS7sfNYLVLGXdvM5Gv/lUPtg/0/MVNNPmPn
-         536A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678688032;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sFwFZRZYKw2DA2WpiOF9s0EPlDORWW1/wSadX5SWkOg=;
-        b=5z6YpHLOPl2kmtrY7fimL8Gbt5gxLFAlCFqkuFlIcS2AONws9yOLzPLHmc+pgAu74r
-         hdjDMCJb4f7JD3+j0CMKl6xszWiY8Lyn/TuMhrBF7q/Zjo6IaRAEk5cYMusTW0eBK/px
-         8v7z8jjGXFeK+qYoCPXMouGT92XD4QNZOgQIZ/+PTRAjl7Y+CloJdXConbm2j3p/BQrt
-         MPPEZh166+y6GphmxJijTlfBI1b1bOpKffnDUA7iOqKcbjmFtYyq+41ICSEONKWi6Q7O
-         98mxRH0TNvxpCv4QOVBgsXjSD0DE9hVbh9Bcjykd+iHYZN9qWtzXh4hHU8WDXhPT7Zi5
-         qTUQ==
-X-Gm-Message-State: AO0yUKXM4fWk8BjZ3do3s+8DHdvnl84rnPHSQHuimxE7vwwXGxXEOl3u
-        A60obluAnyKXorD8OhZHWqnH9TH5+jMBc0Q54ztAtA==
-X-Google-Smtp-Source: AK7set9YRC56/G09PuwqH204/SkCS1mEmaSo3TAXT/AuwwL9QBrPNx/HiSxphwu3Ij66/FCiVtt0OQ==
-X-Received: by 2002:a05:6870:f150:b0:176:2585:e6ac with SMTP id l16-20020a056870f15000b001762585e6acmr19830680oac.23.1678688032018;
-        Sun, 12 Mar 2023 23:13:52 -0700 (PDT)
-Received: from [192.168.17.16] ([189.219.75.19])
-        by smtp.gmail.com with ESMTPSA id et3-20020a056808280300b00383e0bec93bsm2768695oib.49.2023.03.12.23.13.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 23:13:51 -0700 (PDT)
-Message-ID: <a552adfc-9c16-5c97-c566-806041cfa7a6@linaro.org>
-Date:   Mon, 13 Mar 2023 00:13:50 -0600
+        Mon, 13 Mar 2023 02:15:59 -0400
+Received: from JPN01-OS0-obe.outbound.protection.outlook.com (mail-os0jpn01on2129.outbound.protection.outlook.com [40.107.113.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3446B43912
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:15:58 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=oRVgNiqcAdU7ShaauoAq6nXt6YLy7D+e8jm/uv9amEDgeVlPxo4rlrzF4rgMAp9sn4mhlf9veC3XLY2lN+CS5pSyFtBYgRHxmgsWhM1MuHHhxuYsmgf6v8H+964v27mEjxOpoE1o//8NpDr5+/7JCm6fIfY2ECQSmtPnln8qVTVikeJ14RfKY1E7Ja9VIpHcx1iTSbsnRb3RHHqt9yMY0u19gDSXKS9S7VUvx3q5nXdNdFkmPMlZFBz0wV2xfpHfD6yTS+9W4zQbg1qCcpFDoZnDskrHGnmXQsg53ln42tZcJbO+5P1oUh/cIgwVZk1sgMnzJPdjI/vgaFRETyYxzg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=S4JlwXGcKv920Cu5T/OU1xkkKcbw2uKcKGBF+/CoPio=;
+ b=XjODUmhNjAeRgKWm34uKpp3JruVqxPyHSMrdwlgi/fMRD55zsK/sbIDvlOYh/aoIUj6zjHVA/nmRnvKE7Xq0617HTwtfp6p8+xCUL0x9WgIrPNc2H4HwoAINcYu7MoiKY/aQSpfDnbXr5V4mAwJEo4aia6r2YmUxwnmXMdZoIK+iFD7Mlt9H2ugBjzQ2Lu0oaR0xkTnhp2MFG2fHwvKZKYY2IVofjQyd5M7S/XnNXJsUsWxTqCuWwnZFRiPHwL+IysVw9G7Ml8QstTPYIgXFgE5600NdsEHgacrVgnJzdXBWnnXlaoLH5b2EqkU1mR1ydViUehb/Ue09J/Ho7MR0kQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=renesas.com; dmarc=pass action=none header.from=renesas.com;
+ dkim=pass header.d=renesas.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=renesas.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=S4JlwXGcKv920Cu5T/OU1xkkKcbw2uKcKGBF+/CoPio=;
+ b=PV/qtXeDHi92s1PWtrKRH/QLI7K2KGSNZND+kM332U3Fiazy+cBX4UHnTmPYBWg4skoYB/BIAvrxOXvC9QHxeC9V3DuP+brzaXETM0n6EMpzTLSQJeaZs9uD11xGDP78B4YgEC2tF9Ei+G0EDhX55RbdqxLsHIOGE5hsMwl2NnU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=renesas.com;
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com (2603:1096:604:194::10)
+ by TYYPR01MB8231.jpnprd01.prod.outlook.com (2603:1096:400:fa::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Mon, 13 Mar
+ 2023 06:15:55 +0000
+Received: from OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::e03e:1938:695b:f472]) by OS3PR01MB8426.jpnprd01.prod.outlook.com
+ ([fe80::e03e:1938:695b:f472%8]) with mapi id 15.20.6178.024; Mon, 13 Mar 2023
+ 06:15:55 +0000
+Message-ID: <87r0ttdvmt.wl-kuninori.morimoto.gx@renesas.com>
+From:   Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>
+To:     Shengjiu Wang <shengjiu.wang@gmail.com>
+Cc:     Shengjiu Wang <shengjiu.wang@nxp.com>, lgirdwood@gmail.com,
+        broonie@kernel.org, perex@perex.cz, tiwai@suse.com,
+        alsa-devel@alsa-project.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] ASoC: soc-pcm: fix hw->formats cleared by soc_pcm_hw_init() for dpcm
+In-Reply-To: <CAA+D8AOztY7Qp3hs3OOhKuhCDFzqWjSrk240S0CzLR7cg94GLA@mail.gmail.com>
+References: <1678346017-3660-1-git-send-email-shengjiu.wang@nxp.com>
+        <875yb5frnl.wl-kuninori.morimoto.gx@renesas.com>
+        <CAA+D8AOztY7Qp3hs3OOhKuhCDFzqWjSrk240S0CzLR7cg94GLA@mail.gmail.com>
+User-Agent: Wanderlust/2.15.9 Emacs/26.3 Mule/6.0
+Content-Type: text/plain; charset=US-ASCII
+Date:   Mon, 13 Mar 2023 06:15:54 +0000
+X-ClientProxiedBy: TYCP286CA0125.JPNP286.PROD.OUTLOOK.COM
+ (2603:1096:400:2b6::7) To OS3PR01MB8426.jpnprd01.prod.outlook.com
+ (2603:1096:604:194::10)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 5.10 000/528] 5.10.173-rc2 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de
-References: <20230311091908.975813595@linuxfoundation.org>
-From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
-In-Reply-To: <20230311091908.975813595@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: OS3PR01MB8426:EE_|TYYPR01MB8231:EE_
+X-MS-Office365-Filtering-Correlation-Id: 6e87e727-7313-4d06-0f0c-08db238a673a
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: kIojG/QWKU8IWdNHJdN00DxD9QL+hpzxzKv0y3w2kxGJ74Hxj7Rznmq8jHLwdCnB53UO+RkPkOSMtcTRkaAtGeApRcltMfw1rjugLCk6KCa9ntffWFH+BRnAXEloeyxao3fz2hwHj/5Q0Cfsc89s02J0EdScQssB0ociYndkAPUYOO/B9W72R+sHq7tEoO2+0jd5JlrnzNebj+lThYhvKfWgNqmJbPEJhDVU4rmTTAb+/QSv9fH/rQbYgwHoygJzZZSC7J0i+pdE7thGgFDfyhp2zvOEE2ZT9z94UgOUdErsuejYzozUh8Yc90Xg4gw99Hsg9jhnwwF573KRMHp7z++c87D9BTmtB7hJ0k+B7rCXvR19d0M1MmdRTCDiayRhhCuj2HZGlxNWmV5yGsYK0YTrwzQmmsr71Lozr/J4o+EzIjA2LHcA9NoIWoc9lO+yrCwWoJjGwrzrFD6gCDubFsTEXhgZaN4GzA+JQO5r0h1wE/6lWRbeJQSl1uG2nlBYdy6cvgt+m28r4/bEhVx2bSOQPcbeeU2c+Qcy4jyvYOJlJblokgY6anWeT38hK8kdT6aemX8vXZs6HdM0+xlhBIVM0gnHwp/yKCxVkUY3xsQlscW1SHwz3uiUIYyWL+J71TYQwu9uAh4PVp0zxLYO3/ub8krFGQ1yl8QtzP2pqrLM6c+qYb3xC4g9/nAVJjgn92yMNPdzJyoPhUx7t/QQMA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OS3PR01MB8426.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(39860400002)(376002)(396003)(451199018)(66476007)(6916009)(41300700001)(66946007)(8676002)(66556008)(4326008)(5660300002)(4744005)(26005)(8936002)(186003)(6486002)(6506007)(6512007)(316002)(478600001)(52116002)(2616005)(36756003)(86362001)(2906002)(38350700002)(38100700002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?gLpz86Zp+9EDJXWZZYE48lW80uC0040E8Mq11qfb7n+Aavs5XhTd2hi/FJUj?=
+ =?us-ascii?Q?taHXCY9OhuIdZcdkPvrEgSc9ISKTGSnWaOBh5QgFQ/+qvQffUolGrN9ghBrS?=
+ =?us-ascii?Q?rnBJn67aM0oeyVOgOufweVZbEP/EICB5+rOP6kbvGxo5CrsN91b8T8R9daDb?=
+ =?us-ascii?Q?/0CqU/dVNy8ud11Gs4d5uPBIksnhYGvpcsxTYWmipl0dwKguq+pChIsrsvXQ?=
+ =?us-ascii?Q?nU0eN7LXTGo2B5mCEg8hhoJHOdp8+fIBq1p+GWU3ZrnNyJ4XSNsx8D7+d3ca?=
+ =?us-ascii?Q?RV5Yky1fGjYJzJ8xow1uc7frkidUsGPRKOVroiapuYmxJCfbDgq2OJl/lAFl?=
+ =?us-ascii?Q?cCI4bba+PQBhmbxU1YUaSE4fC4EoNq05n2z+JZhDD3i/iRaTtWVxsQv48u8/?=
+ =?us-ascii?Q?nTErj5bMpC6HY1Lod9zjGX6aJK1gBHo5NaQCXBqif/csRHH86MdKREC4c/tM?=
+ =?us-ascii?Q?LOrTYHPoIUmguQOvO8gjsqCtx0qfqWKCNq5vSZnqK6GcSqCERELAj87Zj78R?=
+ =?us-ascii?Q?k6fpYlh2+vJT4aQa6cjfS2zMy8a8BUPHfbKvYG2x9svoU41Cxe5GNX7zJLEG?=
+ =?us-ascii?Q?sOmvRIC6Gb5HeJdP7noJO2XiHBKMxH3LcEBa2wNyTi1kKMC9mp0UZ0vjqeWJ?=
+ =?us-ascii?Q?XqF73hnPfnlxS0eUt1uwskxbmiCbeLqXpXhqMFS1qMpjAsqsROwmmVi8I0o1?=
+ =?us-ascii?Q?TY/IQvKWYlm4VeMaXj28h19GX6+iKgl/vrdV2jho5diewHu39Pzkd90LKefk?=
+ =?us-ascii?Q?6X6T1hUgy6IU1JIhHaNyi4uMR1zB7AXXWMjRj/gFmVH1uYQ2E4t3i8Ntg655?=
+ =?us-ascii?Q?z1v4A/6qk+Inxk2PHoyIEjFluc+2Fb4fNrG6AjpIHS2Gdw3ngmOxHD08ttUH?=
+ =?us-ascii?Q?b9PIGri206CXL3WHI1LMXUuc0CGuPaPw8VqLri3YV0xmoGiWEvRomZbMChv6?=
+ =?us-ascii?Q?qwInveqTCycNWc2j/yoOfexUqT8HOKQuM3OjXWzm3L7OjPmJxYwI9DA0m5xw?=
+ =?us-ascii?Q?YIKWeelRY+WzQD+W+jUr7K26W/l90e7uquAL6PCmkVouOmdzB4IdftrJ5dJC?=
+ =?us-ascii?Q?0LNf/ET1vKBS/d4XmC+43MDo9MpPUiOz7fsmYfWPHiGt9rLf4RbZkEOPhGM2?=
+ =?us-ascii?Q?9otQ78QEK/sv97VYXekVwe5tkd9m73qKfZwXDvW0J7fNiyLMq07QwTmPsdio?=
+ =?us-ascii?Q?AZgjvBwO5EXciFqmhzWROieGI2iGx3WKYvQ0jpwGwQ1+yIPr4bIP5hs/pLnD?=
+ =?us-ascii?Q?ZNcNXuIdu2+VJ67vjT2K4t2Hb2oudH2maS9rD/zRFXeMTn0eIYdCDD2tY3Ip?=
+ =?us-ascii?Q?2x38nXOO0i3mIoooKbm80TRz/yMTGyOsbOQ7FJ4esFScl0xQ5UuLjeLxw2TD?=
+ =?us-ascii?Q?sQCPVa3E0gASixGYnG+MpjCRJbwaGUsu8uUXRRTLGBcA60pmWHwUoWil+1ip?=
+ =?us-ascii?Q?amxV/O2Ft7I4IB5FQXTZ5vl3vKmyev/xvwKs7QIe9ZoLKaARevOXvg/EZGSx?=
+ =?us-ascii?Q?R0FKYRpDem88PdgWWav3Ij8A6dHDI+vLtPNwpDAgg2PNNiM2LKtitpDGG+4l?=
+ =?us-ascii?Q?NPbvNQmHOtBxJD/tlCR7BYyd5/sVjqMMb2jYYLxdVdPT30oMfnHz3chxJWpf?=
+ =?us-ascii?Q?W5dKhoHnqIznfp8YJSAN0QQ=3D?=
+X-OriginatorOrg: renesas.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6e87e727-7313-4d06-0f0c-08db238a673a
+X-MS-Exchange-CrossTenant-AuthSource: OS3PR01MB8426.jpnprd01.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 13 Mar 2023 06:15:54.9405
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 53d82571-da19-47e4-9cb4-625a166a4a2a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3Z23IG6eNC1TC1jGI1YXYtJWZ2xBZAno8Pb4mzEMTvQdMJvi7x1gNTco/DmHpAVbIWZEPvF6AXH9RJfqzWJmQtWarZHqJbUd7cnQjTyOabNkeT38NebUA4MoXXCzSl0B
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYYPR01MB8231
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
 
-On 11/03/23 03:20, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.173 release.
-> There are 528 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+Hi Shengjiu
+
+>     But, it is doing same things under (A), too.
+>     Do we need to initialize hw many times ? I'm not sure.
+>     Can we simply remove soc_pcm_hw_init() from dpcm_runtime_setup_fe() ?
+(snip)
+> which only calls soc_pcm_init_runtime_hw() for non dpcm case.
 > 
-> Responses should be made by Mon, 13 Mar 2023 09:17:40 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.173-rc2.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> So the initialization of hw is not many times.
+>  
+> For dpcm the code here will be skipped. The initialization happens
+> only in dpcm_runtime_setup_fe().
 
-## Build
-* kernel: 5.10.173-rc2
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-5.10.y
-* git commit: 79ef18039d4902c95b2a84af18b5612d9e9f222a
-* git describe: v5.10.172-529-g79ef18039d49
-* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.172-529-g79ef18039d49
+Oh I see.
+Thank you for clarify it.
 
-## Test Regressions (compared to v5.10.172)
-No test regressions found.
-
-## Metric Regressions (compared to v5.10.172)
-No metric regressions found.
-
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-
-## Test Fixes (compared to v5.10.172)
-No test fixes found.
-
-## Metric Fixes (compared to v5.10.172)
-No metric fixes found.
-
-## Test result summary
-total: 138158, pass: 113527, fail: 3907, skip: 20437, xfail: 287
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 115 total, 114 passed, 1 failed
-* arm64: 42 total, 39 passed, 3 failed
-* i386: 33 total, 31 passed, 2 failed
-* mips: 27 total, 26 passed, 1 failed
-* parisc: 8 total, 8 passed, 0 failed
-* powerpc: 26 total, 20 passed, 6 failed
-* riscv: 12 total, 11 passed, 1 failed
-* s390: 12 total, 12 passed, 0 failed
-* sh: 14 total, 12 passed, 2 failed
-* sparc: 8 total, 8 passed, 0 failed
-* x86_64: 36 total, 34 passed, 2 failed
-
-## Test suites summary
-* boot
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-memory-hotplug
-* kselftest-mincore
-* kselftest-mount
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-net-mptcp
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-seccomp
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* perf
-* rcutorture
-* v4l2-compliance
-* vdso
-
-
-Greetings!
-
-Daniel Díaz
-daniel.diaz@linaro.org
-
--- 
-Linaro LKFT
-https://lkft.linaro.org
+Best regards
+---
+Kuninori Morimoto
