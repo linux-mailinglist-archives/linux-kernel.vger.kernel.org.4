@@ -2,261 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0442A6B7EE3
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:07:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32086B7EAA
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:04:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231298AbjCMRHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
+        id S229665AbjCMREi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 13:04:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231273AbjCMRHI (ORCPT
+        with ESMTP id S229494AbjCMREf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:07:08 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9400C23305;
-        Mon, 13 Mar 2023 10:06:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678727186; x=1710263186;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=hPT8u68bZ2bhw3ksoI+ABo14zNuLKH375W6tuyoGx1s=;
-  b=TxE2ZDZvGOyN+Z0f+dIElC5p/f0uTGmxZeDgAPx663+1R31H320O6IOi
-   nBHaiISp7GxMsEswXLST6R4lYlznnIbLh4IfVlAuRidgjhKiLvtn1mR7R
-   iVw6IPD3cB3WLFiEUlPCy6KWMOnAHQx+NfY+pTeTsbfUTE8fWHhbxXEqZ
-   zV9sHL+HxZHlijvXNFRCAtsUHT5JZ5F29F7Bw/eHl/Jf3BGdEH+QHtXH1
-   wOMaeGnE9nok82E3bTLSUAc6j/HDfoQLfsGXebO2hX1ui8EUCSqcce+l4
-   DoC1+MjQaOd17YkvBtbu7yLibGEMiSJOuuklLoviK3sg2rXxWPvxqQJXi
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334679699"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="334679699"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 10:02:43 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="708950962"
-X-IronPort-AV: E=Sophos;i="5.98,257,1673942400"; 
-   d="scan'208";a="708950962"
-Received: from fyu1.sc.intel.com ([172.25.103.126])
-  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2023 10:02:43 -0700
-From:   Fenghua Yu <fenghua.yu@intel.com>
-To:     "Vinod Koul" <vkoul@kernel.org>,
-        "Dave Jiang" <dave.jiang@intel.com>
-Cc:     dmaengine@vger.kernel.org,
-        "linux-kernel" <linux-kernel@vger.kernel.org>,
-        Tony Zhu <tony.zhu@intel.com>,
-        Fenghua Yu <fenghua.yu@intel.com>
-Subject: [PATCH v3 16/16] dmaengine: idxd: add per wq PRS disable
-Date:   Mon, 13 Mar 2023 10:02:19 -0700
-Message-Id: <20230313170219.1956012-17-fenghua.yu@intel.com>
-X-Mailer: git-send-email 2.37.1
-In-Reply-To: <20230313170219.1956012-1-fenghua.yu@intel.com>
-References: <20230313170219.1956012-1-fenghua.yu@intel.com>
+        Mon, 13 Mar 2023 13:04:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E66B4CA13;
+        Mon, 13 Mar 2023 10:03:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC789B81196;
+        Mon, 13 Mar 2023 17:02:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BE23BC433D2;
+        Mon, 13 Mar 2023 17:02:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678726960;
+        bh=m+gRAhlextJ5L3RQ/bBFFeXPwv/jmWB+9pPPrZ6G7oc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=wRrvxR41W/OTafoGGoOFgb+vILnavvFRIgPbOL1KzCCyk8FkjKehv0p6Za0KfThf2
+         mYplghwkEV0VhE7mLzBGndZIaSsI+1BEgHN1aB3kRT0fPSLyiWhsEwVl9iAoSM8T5q
+         a38u3kBmOPKon1E7641F8I/fiSEaLO3D45ZF4UXI=
+Date:   Mon, 13 Mar 2023 18:02:37 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Jorge Merlino <jorge.merlino@canonical.com>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org
+Subject: Re: [PATCH] Add symlink in /sys/class/net for interface altnames
+Message-ID: <ZA9XLfunTLtQJNCf@kroah.com>
+References: <20230313164903.839-1-jorge.merlino@canonical.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313164903.839-1-jorge.merlino@canonical.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Dave Jiang <dave.jiang@intel.com>
+On Mon, Mar 13, 2023 at 01:49:03PM -0300, Jorge Merlino wrote:
+> Currently interface altnames behave almost the same as the interface
+> principal name. One difference is that the not have a symlink in
+> /sys/class/net as the principal has.
+> This was mentioned as a TODO item in the original commit:
+> https://lore.kernel.org/netdev/20190719110029.29466-1-jiri@resnulli.us
+> This patch adds that symlink when an altname is created and removes it
+> when the altname is deleted.
+> 
+> Signed-off-by: Jorge Merlino <jorge.merlino@canonical.com>
+> ---
+>  drivers/base/core.c    | 22 ++++++++++++++++++++++
+>  include/linux/device.h |  3 +++
+>  net/core/dev.c         | 11 +++++++++++
+>  3 files changed, 36 insertions(+)
+> 
+> diff --git a/drivers/base/core.c b/drivers/base/core.c
+> index e54a10b5d..165f51438 100644
+> --- a/drivers/base/core.c
+> +++ b/drivers/base/core.c
+> @@ -4223,6 +4223,28 @@ void root_device_unregister(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(root_device_unregister);
+>  
+> +/**
+> + * device_add_altname_symlink - add a symlink in /sys/class/net for a device
 
-Add sysfs knob for per wq Page Request Service disable. This knob
-disables PRS support for the specific wq. When this bit is set,
-it also overrides the wq's block on fault enabling.
+If this is only for networking devices, why are you accepting any device
+pointer?
 
-Tested-by: Tony Zhu <tony.zhu@intel.com>
-Signed-off-by: Dave Jiang <dave.jiang@intel.com>
-Co-developed-by: Fenghua Yu <fenghua.yu@intel.com>
-Signed-off-by: Fenghua Yu <fenghua.yu@intel.com>
----
- .../ABI/stable/sysfs-driver-dma-idxd          | 10 ++++
- drivers/dma/idxd/device.c                     |  6 +-
- drivers/dma/idxd/idxd.h                       |  1 +
- drivers/dma/idxd/registers.h                  |  5 +-
- drivers/dma/idxd/sysfs.c                      | 57 ++++++++++++++++++-
- 5 files changed, 74 insertions(+), 5 deletions(-)
+> + * altname
+> + * @dev: device getting a new altname
+> + * @altname: new altname
+> + */
+> +int device_add_altname_symlink(struct device *dev, const char *altname)
+> +{
+> +	return sysfs_create_link(&dev->class->p->subsys.kobj, &dev->kobj,
 
-diff --git a/Documentation/ABI/stable/sysfs-driver-dma-idxd b/Documentation/ABI/stable/sysfs-driver-dma-idxd
-index 5d0df57f5298..534b7a3d59fc 100644
---- a/Documentation/ABI/stable/sysfs-driver-dma-idxd
-+++ b/Documentation/ABI/stable/sysfs-driver-dma-idxd
-@@ -235,6 +235,16 @@ Contact:	dmaengine@vger.kernel.org
- Description:	Indicate whether ATS disable is turned on for the workqueue.
- 		0 indicates ATS is on, and 1 indicates ATS is off for the workqueue.
- 
-+What:		/sys/bus/dsa/devices/wq<m>.<n>/prs_disable
-+Date:		Sept 14, 2022
-+KernelVersion: 6.4.0
-+Contact:	dmaengine@vger.kernel.org
-+Description:	Controls whether PRS disable is turned on for the workqueue.
-+		0 indicates PRS is on, and 1 indicates PRS is off for the
-+		workqueue. This option overrides block_on_fault attribute
-+		if set. It's visible only on platforms that support the
-+		capability.
-+
- What:		/sys/bus/dsa/devices/wq<m>.<n>/occupancy
- Date		May 25, 2021
- KernelVersion:	5.14.0
-diff --git a/drivers/dma/idxd/device.c b/drivers/dma/idxd/device.c
-index fd97b2b58734..3c80b9681c72 100644
---- a/drivers/dma/idxd/device.c
-+++ b/drivers/dma/idxd/device.c
-@@ -967,12 +967,16 @@ static int idxd_wq_config_write(struct idxd_wq *wq)
- 	wq->wqcfg->priority = wq->priority;
- 
- 	if (idxd->hw.gen_cap.block_on_fault &&
--	    test_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags))
-+	    test_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags) &&
-+	    !test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags))
- 		wq->wqcfg->bof = 1;
- 
- 	if (idxd->hw.wq_cap.wq_ats_support)
- 		wq->wqcfg->wq_ats_disable = test_bit(WQ_FLAG_ATS_DISABLE, &wq->flags);
- 
-+	if (idxd->hw.wq_cap.wq_prs_support)
-+		wq->wqcfg->wq_prs_disable = test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags);
-+
- 	/* bytes 12-15 */
- 	wq->wqcfg->max_xfer_shift = ilog2(wq->max_xfer_bytes);
- 	idxd_wqcfg_set_max_batch_shift(idxd->data->type, wq->wqcfg, ilog2(wq->max_batch_size));
-diff --git a/drivers/dma/idxd/idxd.h b/drivers/dma/idxd/idxd.h
-index bd544eb2ddcb..e44b1d45ccd5 100644
---- a/drivers/dma/idxd/idxd.h
-+++ b/drivers/dma/idxd/idxd.h
-@@ -143,6 +143,7 @@ enum idxd_wq_flag {
- 	WQ_FLAG_DEDICATED = 0,
- 	WQ_FLAG_BLOCK_ON_FAULT,
- 	WQ_FLAG_ATS_DISABLE,
-+	WQ_FLAG_PRS_DISABLE,
- };
- 
- enum idxd_wq_type {
-diff --git a/drivers/dma/idxd/registers.h b/drivers/dma/idxd/registers.h
-index 9f3959d001b6..7b54a3939ea1 100644
---- a/drivers/dma/idxd/registers.h
-+++ b/drivers/dma/idxd/registers.h
-@@ -59,7 +59,8 @@ union wq_cap_reg {
- 		u64 occupancy:1;
- 		u64 occupancy_int:1;
- 		u64 op_config:1;
--		u64 rsvd3:9;
-+		u64 wq_prs_support:1;
-+		u64 rsvd4:8;
- 	};
- 	u64 bits;
- } __packed;
-@@ -371,7 +372,7 @@ union wqcfg {
- 		u32 mode:1;	/* shared or dedicated */
- 		u32 bof:1;	/* block on fault */
- 		u32 wq_ats_disable:1;
--		u32 rsvd2:1;
-+		u32 wq_prs_disable:1;
- 		u32 priority:4;
- 		u32 pasid:20;
- 		u32 pasid_en:1;
-diff --git a/drivers/dma/idxd/sysfs.c b/drivers/dma/idxd/sysfs.c
-index 465d2e7627e4..293739ac5596 100644
---- a/drivers/dma/idxd/sysfs.c
-+++ b/drivers/dma/idxd/sysfs.c
-@@ -822,10 +822,14 @@ static ssize_t wq_block_on_fault_store(struct device *dev,
- 	if (rc < 0)
- 		return rc;
- 
--	if (bof)
-+	if (bof) {
-+		if (test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags))
-+			return -EOPNOTSUPP;
-+
- 		set_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags);
--	else
-+	} else {
- 		clear_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags);
-+	}
- 
- 	return count;
- }
-@@ -1109,6 +1113,44 @@ static ssize_t wq_ats_disable_store(struct device *dev, struct device_attribute
- static struct device_attribute dev_attr_wq_ats_disable =
- 		__ATTR(ats_disable, 0644, wq_ats_disable_show, wq_ats_disable_store);
- 
-+static ssize_t wq_prs_disable_show(struct device *dev, struct device_attribute *attr, char *buf)
-+{
-+	struct idxd_wq *wq = confdev_to_wq(dev);
-+
-+	return sysfs_emit(buf, "%u\n", test_bit(WQ_FLAG_PRS_DISABLE, &wq->flags));
-+}
-+
-+static ssize_t wq_prs_disable_store(struct device *dev, struct device_attribute *attr,
-+				    const char *buf, size_t count)
-+{
-+	struct idxd_wq *wq = confdev_to_wq(dev);
-+	struct idxd_device *idxd = wq->idxd;
-+	bool prs_dis;
-+	int rc;
-+
-+	if (wq->state != IDXD_WQ_DISABLED)
-+		return -EPERM;
-+
-+	if (!idxd->hw.wq_cap.wq_prs_support)
-+		return -EOPNOTSUPP;
-+
-+	rc = kstrtobool(buf, &prs_dis);
-+	if (rc < 0)
-+		return rc;
-+
-+	if (prs_dis) {
-+		set_bit(WQ_FLAG_PRS_DISABLE, &wq->flags);
-+		/* when PRS is disabled, BOF needs to be off as well */
-+		clear_bit(WQ_FLAG_BLOCK_ON_FAULT, &wq->flags);
-+	} else {
-+		clear_bit(WQ_FLAG_PRS_DISABLE, &wq->flags);
-+	}
-+	return count;
-+}
-+
-+static struct device_attribute dev_attr_wq_prs_disable =
-+		__ATTR(prs_disable, 0644, wq_prs_disable_show, wq_prs_disable_store);
-+
- static ssize_t wq_occupancy_show(struct device *dev, struct device_attribute *attr, char *buf)
- {
- 	struct idxd_wq *wq = confdev_to_wq(dev);
-@@ -1239,6 +1281,7 @@ static struct attribute *idxd_wq_attributes[] = {
- 	&dev_attr_wq_max_transfer_size.attr,
- 	&dev_attr_wq_max_batch_size.attr,
- 	&dev_attr_wq_ats_disable.attr,
-+	&dev_attr_wq_prs_disable.attr,
- 	&dev_attr_wq_occupancy.attr,
- 	&dev_attr_wq_enqcmds_retries.attr,
- 	&dev_attr_wq_op_config.attr,
-@@ -1260,6 +1303,13 @@ static bool idxd_wq_attr_max_batch_size_invisible(struct attribute *attr,
- 	       idxd->data->type == IDXD_TYPE_IAX;
- }
- 
-+static bool idxd_wq_attr_wq_prs_disable_invisible(struct attribute *attr,
-+						  struct idxd_device *idxd)
-+{
-+	return attr == &dev_attr_wq_prs_disable.attr &&
-+	       !idxd->hw.wq_cap.wq_prs_support;
-+}
-+
- static umode_t idxd_wq_attr_visible(struct kobject *kobj,
- 				    struct attribute *attr, int n)
- {
-@@ -1273,6 +1323,9 @@ static umode_t idxd_wq_attr_visible(struct kobject *kobj,
- 	if (idxd_wq_attr_max_batch_size_invisible(attr, idxd))
- 		return 0;
- 
-+	if (idxd_wq_attr_wq_prs_disable_invisible(attr, idxd))
-+		return 0;
-+
- 	return attr->mode;
- }
- 
--- 
-2.37.1
+That's a deep -> chain, are you _SURE_ that is going to work properly?
+You just want a link in the subsystem directory, so why not pass in the
+class/subsystem instead?
 
+
+> +			altname);
+> +}
+> +
+> +/**
+> + * device_remove_altname_symlink - remove device altname symlink from
+> + * /sys/class/net
+> + * @dev: device losing an altname
+> + * @altname: removed altname
+> + */
+> +void device_remove_altname_symlink(struct device *dev, const char *altname)
+> +{
+> +	sysfs_delete_link(&dev->class->p->subsys.kobj, &dev->kobj, altname);
+
+Same here, why not pass in the class?
+
+> +}
+>  
+>  static void device_create_release(struct device *dev)
+>  {
+> diff --git a/include/linux/device.h b/include/linux/device.h
+> index 1508e637b..658d4d743 100644
+> --- a/include/linux/device.h
+> +++ b/include/linux/device.h
+> @@ -986,6 +986,9 @@ struct device *__root_device_register(const char *name, struct module *owner);
+>  
+>  void root_device_unregister(struct device *root);
+>  
+> +int device_add_altname_symlink(struct device *dev, const char *altname);
+> +void device_remove_altname_symlink(struct device *dev, const char *altname);
+> +
+>  static inline void *dev_get_platdata(const struct device *dev)
+>  {
+>  	return dev->platform_data;
+> diff --git a/net/core/dev.c b/net/core/dev.c
+> index 253584777..b40ed0b21 100644
+> --- a/net/core/dev.c
+> +++ b/net/core/dev.c
+> @@ -150,6 +150,7 @@
+>  #include <linux/pm_runtime.h>
+>  #include <linux/prandom.h>
+>  #include <linux/once_lite.h>
+> +#include <linux/device.h>
+>  
+>  #include "dev.h"
+>  #include "net-sysfs.h"
+> @@ -328,6 +329,7 @@ int netdev_name_node_alt_create(struct net_device *dev, const char *name)
+>  {
+>  	struct netdev_name_node *name_node;
+>  	struct net *net = dev_net(dev);
+> +	int ret;
+>  
+>  	name_node = netdev_name_node_lookup(net, name);
+>  	if (name_node)
+> @@ -339,6 +341,11 @@ int netdev_name_node_alt_create(struct net_device *dev, const char *name)
+>  	/* The node that holds dev->name acts as a head of per-device list. */
+>  	list_add_tail(&name_node->list, &dev->name_node->list);
+>  
+> +#ifdef CONFIG_SYSFS
+> +	ret = device_add_altname_symlink(&dev->dev, name);
+
+Why do you need a #ifdef?  Put the proper #ifdef in the .h file please.
+
+> +	if (ret)
+> +		netdev_info(dev, "Unable to create symlink for altname: %d\n", ret);
+
+info level for an error?
+
+> +#endif
+>  	return 0;
+>  }
+>  
+> @@ -366,6 +373,10 @@ int netdev_name_node_alt_destroy(struct net_device *dev, const char *name)
+>  
+>  	__netdev_name_node_alt_destroy(name_node);
+>  
+> +#ifdef CONFIG_SYSFS
+> +	device_remove_altname_symlink(&dev->dev, name);
+> +#endif
+
+Again, no #ifdef should be needed.
+
+thanks,
+
+greg k-h
