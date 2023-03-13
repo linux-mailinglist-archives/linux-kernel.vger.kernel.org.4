@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A32B86B6D0C
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 02:23:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D66B66B6D0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 02:23:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229854AbjCMBXC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 12 Mar 2023 21:23:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53728 "EHLO
+        id S229872AbjCMBXf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 12 Mar 2023 21:23:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229677AbjCMBW7 (ORCPT
+        with ESMTP id S229473AbjCMBXd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 12 Mar 2023 21:22:59 -0400
-Received: from mail-0201.mail-europe.com (mail-0201.mail-europe.com [51.77.79.158])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F48012E
-        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 18:22:55 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 01:22:29 +0000
+        Sun, 12 Mar 2023 21:23:33 -0400
+Received: from mail-4318.protonmail.ch (mail-4318.protonmail.ch [185.70.43.18])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 611D327D79;
+        Sun, 12 Mar 2023 18:23:30 -0700 (PDT)
+Date:   Mon, 13 Mar 2023 01:23:18 +0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
-        s=protonmail3; t=1678670567; x=1678929767;
-        bh=8JDf4Eklx3nC7W1bhw1n1uLJ99rwzcE6YOLk5j3je2E=;
+        s=protonmail3; t=1678670608; x=1678929808;
+        bh=XdinrPtR68VBR2Oe7yoV/KX84VkXWkmiSOLxXszvESk=;
         h=Date:To:From:Cc:Subject:Message-ID:Feedback-ID:From:To:Cc:Date:
          Subject:Reply-To:Feedback-ID:Message-ID:BIMI-Selector;
-        b=Dn0A4kYODpwMSO1GM/pni6FLrtz15KvEgoxkR3Z84SjclMB8wYhHJlAFwLrF4q6jd
-         rVrab21R05z5qN4EJsbbxg2wAebxfGfCDvHL9RNPWPDMhzEpzeJ2xeYFQ7S2mV6rx8
-         CP3qnUzMbCoTQl+MiEch7LiCDjKLDxBvULERZsa7HFcSsgu6YCbfoT7AQA12LciSNO
-         d5iAne3Wf+lRt+/GLv6iBEFtuGJuH8OO/KCVOkEND2KIHG2wDFZLoYnu0FghNZ/BNz
-         oPKg9Al4dA3j1NITMoHZMzv5viJD5kVz4DrirL6o+u4GFuhETh0TapO4OT8RNgz0Lc
-         vnfNAQ32WBOWw==
+        b=biOaiB8SrAcoEGLq2xURoFLR4bbe2u0lT5ad924UQqbgNhkMmOEuErl3nlJU2qnN0
+         FYkoC19X0aMQ6UKrQh6rIz68CdOXi5ivzldTOgp4cvsG1rRSHv1H1iqAcDYNHpSr/d
+         /cZiRO/WaDmxzRNbWjZ4msXoOd3WhEHcoQvm/wi40j6dbndSdX32djfmNOac9tK6p7
+         MEy/vs9rtmnAgrfbupV/+pN7PmYDNbE9FMvc0P4QqWoKTiboDTMuRyDoYhdlCa4Z/h
+         NU0rxSJM3n0GVGQlroRGXMxDSApKu6JzBwF/NezkCiLXJ6UFOHbiLCFbjjOFRURTuj
+         w9Xq9gfCo717Q==
 To:     "ojeda@kernel.org" <ojeda@kernel.org>,
         "alex.gaynor@gmail.com" <alex.gaynor@gmail.com>,
         "wedsonaf@gmail.com" <wedsonaf@gmail.com>,
@@ -37,91 +37,186 @@ From:   y86-dev <y86-dev@protonmail.com>
 Cc:     "rust-for-linux@vger.kernel.org" <rust-for-linux@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
         "patches@lists.linux.dev" <patches@lists.linux.dev>
-Subject: [PATCH v1 0/3] Rust pin-init API for pinned initialization of structs
-Message-ID: <Bk4Yd1TBtgoLg2g_c37V3c_Wt30FMS89z7LrjnfadhDquwG_0dUGz1c_9BlMDmymg0tCACBpmCw-wZxlg4Jl4W2gkorh5P78ePgSnJVR5cU=@protonmail.com>
+Subject: [PATCH v1 1/3] rust: macros: add `quote!` macro
+Message-ID: <u9FrnEbtGtyUPp-CmzAQIv--8hmKwHdIIPiq-3IHJPcHdaJi_VXuDdVR2Js2GzvtWgCNrBLp4PhQs3tTlWNVDBZfIStCHiS9SoMtsDgc4oM=@protonmail.com>
 Feedback-ID: 40624463:user:proton
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series adds the pin-init API for initializing pinned structs in-place.
-It reduces the need for `unsafe` and streamlines initialization of structs.
+From: Gary Guo <gary@garyguo.net>
 
-The first patch adds a utility macro `quote!` for proc-macros. This macro
-converts the typed characters directly into Rust tokens that are the output
-of proc-macros. It is used by the pin-init API.
+Add the `quote!` macro for creating `TokenStream`s directly via the
+given Rust tokens. It also supports repetitions using iterators.
 
-The second patch introduces the pin-init API. The commit message details
-the problem it solves and lays out the overall architecture. The
-implementation details are fairly complex; however, this is required to
-provide a safe API for users -- reducing the amount of `unsafe` code is a
-key goal of the Rust support in the kernel. An example of the before/after
-difference from the point of view of users is provided in the commit
-message. Ultimately, it is a goal is to at some point have this as a
-language feature of Rust. A first step in this direction is the Field
-Projection RFC [1].
+It will be used by the pin-init API proc-macros to generate code.
 
-The third patch improves the function `UniqueArc::try_new_uninit` by using
-the pin-init API. The old version first allocated uninitialized memory on
-the stack and then moved it into the location in the heap. The new version
-directly allocates this on the heap.
-
-These patches provide an important foundation for ergonomic and safe
-synchronization primitives and their users. It also enables in-place
-initialization of structs, so structs with a bigger size than the stack
-size can be created.
-
-These patches are also a long way coming, since I held a presentation on
-safe pinned initialization at Kangrejos [2]. And my discovery of this
-problem was almost a year ago [3].
-
-The repository at [4] contains these patches applied. The Rust-doc
-documentation of the pin-init API can be found at [5].
-
-Link: https://github.com/rust-lang/rfcs/pull/3318 [1]
-Link: https://kangrejos.com [2]
-Link: https://github.com/Rust-for-Linux/linux/issues/772 [3]
-Link: https://github.com/y86-dev/linux.git patch/pinned-init-v1 [4]
-Link: https://rust-for-linux.github.io/docs/pinned-init/kernel/init [5]
-
-Benno Lossin (2):
-  rust: add pin-init API
-  rust: sync: reduce stack usage of `UniqueArc::try_new_uninit`
-
-Gary Guo (1):
-  rust: macros: add `quote!` macro
-
- rust/kernel/init.rs        | 1396 ++++++++++++++++++++++++++++++++++++
- rust/kernel/init/common.rs |   42 ++
- rust/kernel/init/macros.rs |  449 ++++++++++++
- rust/kernel/lib.rs         |    6 +
- rust/kernel/prelude.rs     |    6 +-
- rust/kernel/sync/arc.rs    |   48 +-
- rust/kernel/types.rs       |    8 +
- rust/macros/lib.rs         |   80 +++
- rust/macros/pin_data.rs    |   79 ++
- rust/macros/pinned_drop.rs |   49 ++
- rust/macros/quote.rs       |  125 ++++
- scripts/Makefile.build     |    2 +-
- 12 files changed, 2286 insertions(+), 4 deletions(-)
- create mode 100644 rust/kernel/init.rs
- create mode 100644 rust/kernel/init/common.rs
- create mode 100644 rust/kernel/init/macros.rs
- create mode 100644 rust/macros/pin_data.rs
- create mode 100644 rust/macros/pinned_drop.rs
+Signed-off-by: Gary Guo <gary@garyguo.net>
+Signed-off-by: Benno Lossin <y86-dev@protonmail.com>
+---
+ rust/macros/lib.rs   |   2 +
+ rust/macros/quote.rs | 125 +++++++++++++++++++++++++++++++++++++++++++
+ 2 files changed, 127 insertions(+)
  create mode 100644 rust/macros/quote.rs
 
-
-base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+diff --git a/rust/macros/lib.rs b/rust/macros/lib.rs
+index c1d385e345b9..82b520f024dd 100644
+--- a/rust/macros/lib.rs
++++ b/rust/macros/lib.rs
+@@ -2,6 +2,8 @@
+=20
+ //! Crate for all kernel procedural macros.
+=20
++#[macro_use]
++mod quote;
+ mod concat_idents;
+ mod helpers;
+ mod module;
+diff --git a/rust/macros/quote.rs b/rust/macros/quote.rs
+new file mode 100644
+index 000000000000..55b663d665ec
+--- /dev/null
++++ b/rust/macros/quote.rs
+@@ -0,0 +1,125 @@
++use proc_macro::{TokenStream, TokenTree};
++
++pub(crate) trait ToTokens {
++    fn to_tokens(&self, tokens: &mut TokenStream);
++}
++
++impl<T: ToTokens> ToTokens for Option<T> {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        if let Some(v) =3D self {
++            v.to_tokens(tokens);
++        }
++    }
++}
++
++impl ToTokens for proc_macro::Group {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        tokens.extend([TokenTree::from(self.clone())]);
++    }
++}
++
++impl ToTokens for TokenTree {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        tokens.extend([self.clone()]);
++    }
++}
++
++impl ToTokens for TokenStream {
++    fn to_tokens(&self, tokens: &mut TokenStream) {
++        tokens.extend(self.clone());
++    }
++}
++
++macro_rules! quote_spanned {
++    ($span:expr =3D> $($tt:tt)*) =3D> {{
++        let mut tokens =3D Vec::new();
++        let span =3D $span;
++        quote_spanned!(@proc tokens span $($tt)*);
++        proc_macro::TokenStream::from_iter(tokens)
++    }};
++    (@proc $v:ident $span:ident) =3D> {};
++    (@proc $v:ident $span:ident #$id:ident $($tt:tt)*) =3D> {
++        let mut ts =3D proc_macro::TokenStream::new();
++        crate::quote::ToTokens::to_tokens(&$id, &mut ts);
++        $v.extend(ts.into_iter());
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident #(#$id:ident)* $($tt:tt)*) =3D> {
++        for token in $id {
++            let mut ts =3D proc_macro::TokenStream::new();
++            crate::quote::ToTokens::to_tokens(&token, &mut ts);
++            $v.extend(ts.into_iter());
++        }
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident ( $($inner:tt)* ) $($tt:tt)*) =3D> {
++        let mut tokens =3D Vec::new();
++        quote_spanned!(@proc tokens $span $($inner)*);
++        $v.push(proc_macro::TokenTree::Group(proc_macro::Group::new(
++            proc_macro::Delimiter::Parenthesis,
++            proc_macro::TokenStream::from_iter(tokens)
++        )));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident [ $($inner:tt)* ] $($tt:tt)*) =3D> {
++        let mut tokens =3D Vec::new();
++        quote_spanned!(@proc tokens $span $($inner)*);
++        $v.push(proc_macro::TokenTree::Group(proc_macro::Group::new(
++            proc_macro::Delimiter::Bracket,
++            proc_macro::TokenStream::from_iter(tokens)
++        )));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident { $($inner:tt)* } $($tt:tt)*) =3D> {
++        let mut tokens =3D Vec::new();
++        quote_spanned!(@proc tokens $span $($inner)*);
++        $v.push(proc_macro::TokenTree::Group(proc_macro::Group::new(
++            proc_macro::Delimiter::Brace,
++            proc_macro::TokenStream::from_iter(tokens)
++        )));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident :: $($tt:tt)*) =3D> {
++        $v.push(
++            proc_macro::TokenTree::Punct(proc_macro::Punct::new(':', proc_=
+macro::Spacing::Joint))
++        );
++        $v.push(
++            proc_macro::TokenTree::Punct(proc_macro::Punct::new(':', proc_=
+macro::Spacing::Alone))
++        );
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident : $($tt:tt)*) =3D> {
++        $v.push(
++            proc_macro::TokenTree::Punct(proc_macro::Punct::new(':', proc_=
+macro::Spacing::Alone))
++        );
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident , $($tt:tt)*) =3D> {
++        $v.push(
++            proc_macro::TokenTree::Punct(proc_macro::Punct::new(',', proc_=
+macro::Spacing::Alone))
++        );
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident @ $($tt:tt)*) =3D> {
++        $v.push(
++            proc_macro::TokenTree::Punct(proc_macro::Punct::new('@', proc_=
+macro::Spacing::Alone))
++        );
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident ! $($tt:tt)*) =3D> {
++        $v.push(
++            proc_macro::TokenTree::Punct(proc_macro::Punct::new('!', proc_=
+macro::Spacing::Alone))
++        );
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++    (@proc $v:ident $span:ident $id:ident $($tt:tt)*) =3D> {
++        $v.push(proc_macro::TokenTree::Ident(proc_macro::Ident::new(string=
+ify!($id), $span)));
++        quote_spanned!(@proc $v $span $($tt)*);
++    };
++}
++
++macro_rules! quote {
++    ($($tt:tt)*) =3D> {
++        quote_spanned!(proc_macro::Span::mixed_site() =3D> $($tt)*)
++    }
++}
 --=20
 2.39.2
-
