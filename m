@@ -2,105 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEB6D6B85E6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:09:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E378D6B85DF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 00:08:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229638AbjCMXJV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 19:09:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
+        id S229953AbjCMXIf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 19:08:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbjCMXJP (ORCPT
+        with ESMTP id S229864AbjCMXIc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 19:09:15 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E03638C83B;
-        Mon, 13 Mar 2023 16:08:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678748933; x=1710284933;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=KshWSejkFbkeVBwakT7QiRHIr/W7baLNEGoxZeDhpeo=;
-  b=c6+sPB9rnTyoE8r5QWk8wv7EiOqEu1Dct4dzAczEz1NfnzM3thHe4oQn
-   6gGIodcueU1evOQIJ5iq2OVgrAgo8dhXLEyW4ulCtArO8u+Bo8ht5G5K8
-   tgbY9FLsesTQyG3pme/+GwR3Z3M70evR8NLQk2PblSpK3/ujLPUIgOtgX
-   QJ/uMBsK2jEkTh8IR+jAPect5WwLuOICUrbVl9lyDpPrPoknaxWRsaqvy
-   K8E0ORL/ljiKt2uK7efEIapNOFaqeBj/K98f11WfoOFxcaFbc91Euz7Ed
-   kSJ9VSxB1Q+qJTcYfg67QB2A7PmoBh2TSXSl2aH5ZmdjEVpZFQWN1kzlX
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399871312"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="399871312"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 16:08:53 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="628806685"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="628806685"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga003.jf.intel.com with ESMTP; 13 Mar 2023 16:08:51 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pbrHe-0006EC-0e;
-        Mon, 13 Mar 2023 23:08:50 +0000
-Date:   Tue, 14 Mar 2023 07:07:53 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Christian Brauner <brauner@kernel.org>,
-        Trond Myklebust <trond.myklebust@hammerspace.com>,
-        Anna Schumaker <anna@kernel.org>,
-        Chuck Lever <chuck.lever@oracle.com>,
-        Jeff Layton <jlayton@kernel.org>
-Cc:     oe-kbuild-all@lists.linux.dev, linux-fsdevel@vger.kernel.org,
-        linux-nfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Christian Brauner (Microsoft)" <brauner@kernel.org>
-Subject: Re: [PATCH] nfs: use vfs setgid helper
-Message-ID: <202303140652.dN7XrtM4-lkp@intel.com>
-References: <20230313-fs-nfs-setgid-v1-1-5b1fa599f186@kernel.org>
+        Mon, 13 Mar 2023 19:08:32 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2B27B9AC
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 16:08:13 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so52140wms.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 16:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678748890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gCAgZtvsvzEwpyf+tDTv88lry9y+fkPb0SFZ89lPlIY=;
+        b=U6ICPpoPPnsA6GsxHGPXzbQn2+EEE6xLdbLQfH0Zm21MgYRzBEptOazyKUi2PCUrIm
+         VTG7ywGv7Q/POGk0pJFJw6vo8Z43W9rWiLHzTtkDUqDwCn/+n/Xzuj/W636hqcU97SbO
+         eKhU0EQTzSy3uj/lXi1FFFOsV1YedONHfnVjEipSceLLEWprp0+uuy40fMLIannRlbVI
+         SZp6yhGjMZrFRgPkL4MpjiyD95VvegFGfEq/6Xab6UGsfzs5Sq9oMkTdaPhgcGA4polx
+         Gfew9da7JTsYxxU6xUFcN0IXinXBI1j1X2ZKFLl2EIeYj8GseDysmHFY+43ueyMHTtry
+         +wVA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678748890;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gCAgZtvsvzEwpyf+tDTv88lry9y+fkPb0SFZ89lPlIY=;
+        b=rDPLqpT1LHPi/edtOpEGSa2e8gNgnj5NVaLJvBjeYQfWLQ7bU28rWLJw5tV83vAgyk
+         GuB8xvTZlNX5c/2eJT8aIdXra0Ko1IhU12mGslxnwtUq4k50lDSSoZFMlbQE/8Lfhgh2
+         YgQuKDOHAOkaoJ27bZE5XojFBcGwa8nLCxhWVdiMDWWwWk+YP+bk9LEIl/M9O0h6eIAD
+         jfPeK+Q4noQaiRe3KZwKy8gmvlPRONU7B2GTX36xWyeYPni9ATOZ5TtGZd7E+lFkOvM2
+         lrRaEXwokTz6bf/EB0D8zfR+ker6uSSjt54Vi11QacYW8HVJ4njNP9sWPySsNOlRAHI8
+         WYuA==
+X-Gm-Message-State: AO0yUKW9QfiBPo9SeMueMNPSWLm/DVPODIrtkpvrVyvqGuk8MwZd1GV5
+        rjQpPevnQyUhJNI9Ngekb0LJwhcC3l6+9mjaAc3LFA==
+X-Google-Smtp-Source: AK7set9NFQkbop6nJgcwtia/x3RdY5/3UU85190ckqLwVyrIVh+aws8dF2LEUlwSbgMaOHOssSbOdj/4KqZebXkzEWw=
+X-Received: by 2002:a05:600c:4709:b0:3e2:2107:b7f2 with SMTP id
+ v9-20020a05600c470900b003e22107b7f2mr3569275wmo.6.1678748890480; Mon, 13 Mar
+ 2023 16:08:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313-fs-nfs-setgid-v1-1-5b1fa599f186@kernel.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20230310193325.620493-1-nhuck@google.com> <ZA+qt0gakiyAoacr@sol.localdomain>
+In-Reply-To: <ZA+qt0gakiyAoacr@sol.localdomain>
+From:   Nathan Huckleberry <nhuck@google.com>
+Date:   Mon, 13 Mar 2023 16:07:59 -0700
+Message-ID: <CAJkfWY5eg2wLMUKUL5whU6zoHFogiUna1NPE+W8fPHm8YS-ReA@mail.gmail.com>
+Subject: Re: [PATCH v2] fsverity: Remove WQ_UNBOUND from fsverity read workqueue
+To:     Eric Biggers <ebiggers@kernel.org>
+Cc:     "Theodore Y. Ts'o" <tytso@mit.edu>, fsverity@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Christian,
+Thanks Eric.
 
-I love your patch! Yet something to improve:
-
-[auto build test ERROR on eeac8ede17557680855031c6f305ece2378af326]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Brauner/nfs-use-vfs-setgid-helper/20230313-212725
-base:   eeac8ede17557680855031c6f305ece2378af326
-patch link:    https://lore.kernel.org/r/20230313-fs-nfs-setgid-v1-1-5b1fa599f186%40kernel.org
-patch subject: [PATCH] nfs: use vfs setgid helper
-config: parisc64-defconfig (https://download.01.org/0day-ci/archive/20230314/202303140652.dN7XrtM4-lkp@intel.com/config)
-compiler: hppa64-linux-gcc (GCC) 12.1.0
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/503d040be490a519b2e483672702dcca530443ce
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Christian-Brauner/nfs-use-vfs-setgid-helper/20230313-212725
-        git checkout 503d040be490a519b2e483672702dcca530443ce
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc64 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=parisc64 SHELL=/bin/bash
-
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303140652.dN7XrtM4-lkp@intel.com/
-
-All errors (new ones prefixed by >>, old ones prefixed by <<):
-
->> ERROR: modpost: "setattr_should_drop_sgid" [fs/nfs/nfs.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+On Mon, Mar 13, 2023 at 3:59=E2=80=AFPM Eric Biggers <ebiggers@kernel.org> =
+wrote:
+>
+> On Fri, Mar 10, 2023 at 11:33:25AM -0800, Nathan Huckleberry wrote:
+> > WQ_UNBOUND causes significant scheduler latency on ARM64/Android.  This
+> > is problematic for latency sensitive workloads, like I/O
+> > post-processing.
+> >
+> > Removing WQ_UNBOUND gives a 96% reduction in fsverity workqueue related
+> > scheduler latency and improves app cold startup times by ~30ms.
+> > WQ_UNBOUND was also removed from the dm-verity workqueue for the same
+> > reason [1].
+> >
+> > This code was tested by running Android app startup benchmarks and
+> > measuring how long the fsverity workqueue spent in the runnable state.
+> >
+> > Before
+> > Total workqueue scheduler latency: 553800us
+> > After
+> > Total workqueue scheduler latency: 18962us
+> >
+> > [1]: https://lore.kernel.org/all/20230202012348.885402-1-nhuck@google.c=
+om/
+> >
+> > Signed-off-by: Nathan Huckleberry <nhuck@google.com>
+> > ---
+> > Changelog:
+> > v1 -> v2:
+> > - Added comment about WQ_UNBOUND
+> > - Added info about related dm-verity patches in commit message
+> >
+> >  fs/verity/verify.c | 10 +++++-----
+> >  1 file changed, 5 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/fs/verity/verify.c b/fs/verity/verify.c
+> > index f50e3b5b52c9..782b8b4a24c1 100644
+> > --- a/fs/verity/verify.c
+> > +++ b/fs/verity/verify.c
+> > @@ -387,15 +387,15 @@ EXPORT_SYMBOL_GPL(fsverity_enqueue_verify_work);
+> >  int __init fsverity_init_workqueue(void)
+> >  {
+> >       /*
+> > -      * Use an unbound workqueue to allow bios to be verified in paral=
+lel
+> > -      * even when they happen to complete on the same CPU.  This sacri=
+fices
+> > -      * locality, but it's worthwhile since hashing is CPU-intensive.
+> > -      *
+> >        * Also use a high-priority workqueue to prioritize verification =
+work,
+> >        * which blocks reads from completing, over regular application t=
+asks.
+> > +      *
+> > +      * This workqueue is not marked as unbound for performance reason=
+s.
+> > +      * Using an unbound workqueue for crypto operations causes excess=
+ive
+> > +      * scheduler latency on ARM64.
+> >        */
+> >       fsverity_read_workqueue =3D alloc_workqueue("fsverity_read_queue"=
+,
+> > -                                               WQ_UNBOUND | WQ_HIGHPRI=
+,
+> > +                                               WQ_HIGHPRI,
+> >                                                 num_online_cpus());
+>
+> Applied to https://git.kernel.org/pub/scm/fs/fsverity/linux.git/log/?h=3D=
+for-next
+>
+> I adjusted the comment slightly so that the first paragraph doesn't start=
+ with
+> "Also".
+>
+> - Eric
