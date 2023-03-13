@@ -2,69 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3BD516B7F38
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:17:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E9C6B7F4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 18:19:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231365AbjCMRRq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 13:17:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S231626AbjCMRTZ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 13 Mar 2023 13:19:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39114 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231572AbjCMRRe (ORCPT
+        with ESMTP id S231617AbjCMRSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 13:17:34 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29E7E4690;
-        Mon, 13 Mar 2023 10:17:02 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id t15so12021445wrz.7;
-        Mon, 13 Mar 2023 10:17:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678727776;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=47d6taB7/MZ6YZbSesVGjWTXifSAYTZlkflqE0tXlfM=;
-        b=Yq+O+O/j6/AxYf44A9hDFiCW0W92T6XjbAiMJV2vJK1leFN5jYpefJ/oqX6jfbggbS
-         GlqBFkCO9VZPLBsVpsSndWwgVCjLKs0CU/zdUV/aRtglqI5vbfLpZbamMvu3xPPpxehQ
-         UC0JdKeCx6tIBKakeuhdq4CSOHumnHZzpTjAIu9BdnTWsk2qdwmsMc/oyhKRBZIx0wy+
-         a7Ad3WB5ymtjDmaM3YUQw6A01NBcILiePMhfdRNtfjRrEQ3k8s/ah3jjMgXVzLqFIFGf
-         XT231hoXeB9qBtfMHspRGzqgR8UUZc/VRtFVdrS1s0dmsNJoAPArmd5vPapLfDbB0Kfb
-         5XgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678727776;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=47d6taB7/MZ6YZbSesVGjWTXifSAYTZlkflqE0tXlfM=;
-        b=xU48qSU8rgRLT9NEfM/PHMXWjk8k9HZBQaJXm9IqDtMTUhABrEDkaIfXNDkg91A836
-         MhH0W7oaIZRYzBxymE1LT+2ZMAuuoZnH+88DWgLNskc6OJzAhGm6SxBWsvxDT5ZD8Vu+
-         x7kjg8SzSDoWAzNY/JhFiqcfQZiDn2FXScOWd1//vquRP2A8C8Vlbusm295odyhyDVxB
-         i5sDv8hd7Oo7OWeRLTiZvdzgZqEP9Yg0k8Qb3q3CCAK7oUKEj5oGVEH8XhFBAgT5rzms
-         9yLbJWD6Cv61FZRjchZK/0wcT1eV1JG78xB8DOY/k0A42cuo+r24q86e9FECLALuXcF8
-         sJqw==
-X-Gm-Message-State: AO0yUKWL+2PFGXxN3SX4JgpcQkg+CN+7NyoCBgcI/8sIGAeVpHWtR4y/
-        xJvZZW2QZDRaWy3LyJdTNlYVK92XTKW1+Ah6Fnc=
-X-Google-Smtp-Source: AK7set8lxbNMKIKwoVxMiSXTcq+UiBKK0Gj1lKTABg5wdq3FcR72lilFXdQfWnuRjRuOHLMdecY/hfHlARsqjJmdwsY=
-X-Received: by 2002:adf:f452:0:b0:2ce:a631:4a0 with SMTP id
- f18-20020adff452000000b002cea63104a0mr1173907wrp.14.1678727776071; Mon, 13
- Mar 2023 10:16:16 -0700 (PDT)
+        Mon, 13 Mar 2023 13:18:25 -0400
+Received: from mx0a-00082601.pphosted.com (mx0b-00082601.pphosted.com [67.231.153.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A313B1A8
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:17:58 -0700 (PDT)
+Received: from pps.filterd (m0089730.ppops.net [127.0.0.1])
+        by m0089730.ppops.net (8.17.1.19/8.17.1.19) with ESMTP id 32DDBo6C005100
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:16:31 -0700
+Received: from mail.thefacebook.com ([163.114.132.120])
+        by m0089730.ppops.net (PPS) with ESMTPS id 3p8p1jjs1w-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 10:16:31 -0700
+Received: from twshared15216.17.frc2.facebook.com (2620:10d:c085:108::8) by
+ mail.thefacebook.com (2620:10d:c085:11d::4) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Mon, 13 Mar 2023 10:16:29 -0700
+Received: by devbig932.frc1.facebook.com (Postfix, from userid 4523)
+        id DBAD11842FC48; Mon, 13 Mar 2023 10:16:19 -0700 (PDT)
+From:   Song Liu <song@kernel.org>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <kernel-team@meta.com>, Song Liu <song@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Namhyung Kim <namhyung@kernel.org>
+Subject: [PATCH v2] perf: fix perf_event_context->time
+Date:   Mon, 13 Mar 2023 10:16:08 -0700
+Message-ID: <20230313171608.298734-1-song@kernel.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230311151756.83302-1-kerneljasonxing@gmail.com>
- <CANn89iKWewG7JZXQ=bmab9rSXUs_P5fX-BQ792QjYuH151DV-g@mail.gmail.com>
- <CAL+tcoAchbTk9ibrAVH-bZ-0KHJ8g3XnsQHFWiBosyNgYJtymA@mail.gmail.com> <CANn89i+uS7-mA227g6yJfTK4ugdA82z+PLV9_74f1dBMo_OhEg@mail.gmail.com>
-In-Reply-To: <CANn89i+uS7-mA227g6yJfTK4ugdA82z+PLV9_74f1dBMo_OhEg@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 14 Mar 2023 01:15:39 +0800
-Message-ID: <CAL+tcoCsQ18ae+hUwqFigerJQfhrusuOOC63Wc+ZGyGWEvSFBQ@mail.gmail.com>
-Subject: Re: [PATCH net-next] net-sysfs: display two backlog queue len separately
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8BIT
+X-FB-Internal: Safe
+Content-Type: text/plain
+X-Proofpoint-GUID: c5QADoIkh4ZcrNpUYWSfAFIRl_uAeI-4
+X-Proofpoint-ORIG-GUID: c5QADoIkh4ZcrNpUYWSfAFIRl_uAeI-4
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_08,2023-03-13_02,2023-02-09_01
+X-Spam-Status: No, score=-2.4 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,130 +56,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:59=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> On Mon, Mar 13, 2023 at 6:16=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
-.com> wrote:
-> >
-> > On Mon, Mar 13, 2023 at 8:34=E2=80=AFPM Eric Dumazet <edumazet@google.c=
-om> wrote:
-> > >
-> > > On Sat, Mar 11, 2023 at 7:18=E2=80=AFAM Jason Xing <kerneljasonxing@g=
-mail.com> wrote:
-> > > >
-> > > > From: Jason Xing <kernelxing@tencent.com>
-> > > >
-> > > > Sometimes we need to know which one of backlog queue can be exactly
-> > > > long enough to cause some latency when debugging this part is neede=
-d.
-> > > > Thus, we can then separate the display of both.
-> > > >
-> > > > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > > > ---
-> > > >  net/core/net-procfs.c | 17 ++++++++++++-----
-> > > >  1 file changed, 12 insertions(+), 5 deletions(-)
-> > > >
-> > > > diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-> > > > index 1ec23bf8b05c..97a304e1957a 100644
-> > > > --- a/net/core/net-procfs.c
-> > > > +++ b/net/core/net-procfs.c
-> > > > @@ -115,10 +115,14 @@ static int dev_seq_show(struct seq_file *seq,=
- void *v)
-> > > >         return 0;
-> > > >  }
-> > > >
-> > > > -static u32 softnet_backlog_len(struct softnet_data *sd)
-> > > > +static u32 softnet_input_pkt_queue_len(struct softnet_data *sd)
-> > > >  {
-> > > > -       return skb_queue_len_lockless(&sd->input_pkt_queue) +
-> > > > -              skb_queue_len_lockless(&sd->process_queue);
-> > > > +       return skb_queue_len_lockless(&sd->input_pkt_queue);
-> > > > +}
-> > > > +
-> > > > +static u32 softnet_process_queue_len(struct softnet_data *sd)
-> > > > +{
-> > > > +       return skb_queue_len_lockless(&sd->process_queue);
-> > > >  }
-> > > >
-> > > >  static struct softnet_data *softnet_get_online(loff_t *pos)
-> > > > @@ -169,12 +173,15 @@ static int softnet_seq_show(struct seq_file *=
-seq, void *v)
-> > > >          * mapping the data a specific CPU
-> > > >          */
-> > > >         seq_printf(seq,
-> > > > -                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %0=
-8x %08x %08x %08x\n",
-> > > > +                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %0=
-8x %08x %08x %08x "
-> > > > +                  "%08x %08x\n",
-> > > >                    sd->processed, sd->dropped, sd->time_squeeze, 0,
-> > > >                    0, 0, 0, 0, /* was fastroute */
-> > > >                    0,   /* was cpu_collision */
-> > > >                    sd->received_rps, flow_limit_count,
-> > > > -                  softnet_backlog_len(sd), (int)seq->index);
-> > > > +                  0,   /* was len of two backlog queues */
-> > >
-> > > You can not pretend the sum is zero, some user space tools out there
-> > > would be fooled.
-> > >
-> > > > +                  (int)seq->index,
-> > > > +                  softnet_input_pkt_queue_len(sd), softnet_process=
-_queue_len(sd));
-> > > >         return 0;
-> > > >  }
-> > > >
-> > > > --
-> > > > 2.37.3
-> > > >
-> > >
-> > > In general I would prefer we no longer change this file.
-> >
-> > Fine. Since now, let this legacy file be one part of history.
-> >
-> > >
-> > > Perhaps add a tracepoint instead ?
-> >
-> > Thanks, Eric. It's one good idea. It seems acceptable if we only need
-> > to trace two separate backlog queues where it can probably hit the
-> > limit, say, in the enqueue_to_backlog().
->
->
-[...]
-> Note that enqueue_to_backlog() already uses a specific kfree_skb_reason()=
- reason
-> (SKB_DROP_REASON_CPU_BACKLOG) so existing infrastructure should work just=
- fine.
+Time readers rely on perf_event_context->[time|timestamp|timeoffset] to get
+accurate time_enabled and time_running for an event. The difference between
+ctx->timestamp and ctx->time is the among of time when the context is not
+enabled. __update_context_time(ctx, false) is used to increase timestamp,
+but not time. Therefore, it should only be called in ctx_sched_in() when
+EVENT_TIME was not enabled.
 
-Sure, I noticed that. It traces all the kfree_skb paths, not only
-softnet_data. If it isn't proper, what would you recommend where to
-put the trace function into? Now I'm thinking of resorting to the
-legacy file we discussed above :(
+Fixes: 09f5e7dc7ad7 ("perf: Fix perf_event_read_local() time")
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: Namhyung Kim <namhyung@kernel.org>
+Acked-by: Namhyung Kim <namhyung@kernel.org>
+Signed-off-by: Song Liu <song@kernel.org>
+---
+ kernel/events/core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
->
->
-> >
-> > Similarly I decide to write another two tracepoints of time_squeeze
-> > and budget_squeeze which I introduced to distinguish from time_squeeze
-> > as the below link shows:
-> > https://lore.kernel.org/lkml/CAL+tcoAwodpnE2NjMLPhBbmHUvmKMgSykqx0EQ4YZ=
-aQHjrx0Hw@mail.gmail.com/.
-> > For that change, any suggestions are deeply welcome :)
-> >
->
-> For your workloads to hit these limits enough for you to be worried,
-> it looks like you are not using any scaling stuff documented
-> in Documentation/networking/scaling.rst
+diff --git a/kernel/events/core.c b/kernel/events/core.c
+index 380476a934e8..67478f43e26e 100644
+--- a/kernel/events/core.c
++++ b/kernel/events/core.c
+@@ -3872,7 +3872,7 @@ ctx_sched_in(struct perf_event_context *ctx, enum event_type_t event_type)
+ 	if (likely(!ctx->nr_events))
+ 		return;
+ 
+-	if (is_active ^ EVENT_TIME) {
++	if (!(is_active & EVENT_TIME)) {
+ 		/* start ctx time */
+ 		__update_context_time(ctx, false);
+ 		perf_cgroup_set_timestamp(cpuctx);
+-- 
+2.34.1
 
-Thanks for the guidance. Scaling is a good way to go really. But I
-just would like to separate these two kinds of limits to watch them
-closely. More often we cannot decide to adjust accurately which one
-should be adjusted. Time squeeze may not be clear and we cannot
-randomly write a larger number into both proc files which may do harm
-to some external customers unless we can show some proof to them.
-
-Maybe I got something wrong. If adding some tracepoints for those
-limits in softnet_data is not elegant, please enlighten me :)
-
-Thanks,
-Jason
