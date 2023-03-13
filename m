@@ -2,98 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F5556B80D2
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:35:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37DB36B80D4
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 19:35:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbjCMSfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 14:35:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35230 "EHLO
+        id S231492AbjCMSfw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 14:35:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230047AbjCMSel (ORCPT
+        with ESMTP id S231454AbjCMSfb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 14:34:41 -0400
-Received: from mail-vs1-xe29.google.com (mail-vs1-xe29.google.com [IPv6:2607:f8b0:4864:20::e29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 681DB8737A
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:32:53 -0700 (PDT)
-Received: by mail-vs1-xe29.google.com with SMTP id x14so11853856vso.9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 11:32:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678732348;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=gK68d71BdAuxvyUvoGgRfRqMNS5Snq3vUvWzE6JJ78U=;
-        b=NouBiGMrk0eotnhDhu5zgb6PRXUMNBWr+m7MtVGpbxPzEGExQaECwfPTbWSujo1ag/
-         jVfqWdGq3q23mj6nqVkcu5yqY9GUsVSJ/km/dNczupHIjXaGtVVmyi5oTT6OUBTUNFmz
-         B9GaM7bH8AI4tSld/CKsh7B+o2sXpcIBizxsfQw6oTNAUTM2NtDD6wdvPbQhMiOSI5pp
-         /Y7a6NAgKkCxPIi5Id8EtgnGvN2QEN/kaVlO8ummlm+9jfdidb+CGB3IifZK+1i9x/IR
-         L2VewHy5so+QzAtjLdsPoBjOV1WsmSDkxfWdZ0A/RPEABV0NGpc/4q26xHTxCiCdU6WN
-         ssAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678732348;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gK68d71BdAuxvyUvoGgRfRqMNS5Snq3vUvWzE6JJ78U=;
-        b=B9XxkMswcQkzNGwnILc9Di0N2zqiz/M1PRmn3sGi6LcvmtqyoAcX0hKQnNFEVCgsH/
-         4AWLI5K/RFbbG6kVXzVmGWnXB3Nf9Ki02ssRjGbgLrXoGwUoLvVzCTKC/KgOlCzVN/s3
-         N5UfT+4fsMdETUUYl3P5JKQGgxF00Rn6uThllzWsmy4JrvyiPicWhtEKhgE8+ih4eX5z
-         ywnQimoVRTcvH/7am5o8mNqaNTxTHwknm/vi5OeLxL+atvQAek0HnIgb35bfYo8wH1xb
-         ezhOLEHI7pQRVPWYHfvCjlLZcSL9KXjFTzXP6b9CCfACAtnC9RLertdLqJMX3Ka4f3IL
-         wQ7w==
-X-Gm-Message-State: AO0yUKUeh6ch3JVjWUH9YuB5Ov26p/D3uzvPJPpwlc/2IoIIcz1toabU
-        iMsvo8JKzHbvG8J7nnuFzYD6P/t9qv0aJsJ3jxk=
-X-Google-Smtp-Source: AK7set/VkPji6U19UgDaeNL7MB1/wtMTmIeyHoSSyi8sxyUkpz40vrh9glTUfCbe/ZDDweNHXOy1xWh0W3pENrp+F3U=
-X-Received: by 2002:a05:6102:304f:b0:421:c4a3:b607 with SMTP id
- w15-20020a056102304f00b00421c4a3b607mr8408101vsa.3.1678732348434; Mon, 13 Mar
- 2023 11:32:28 -0700 (PDT)
+        Mon, 13 Mar 2023 14:35:31 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411F686151;
+        Mon, 13 Mar 2023 11:34:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52838612FE;
+        Mon, 13 Mar 2023 18:33:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AEB4C4339B;
+        Mon, 13 Mar 2023 18:33:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678732387;
+        bh=Qvjiry3j6mDR6Vh8s4c81dINZYpikTiYdWJ60bOpkcM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=XhHmCRiCZOyGKXJUg3UdOju2bmn60DCmAGvqNrBINb0H9m2RMvBtahzg8qzzpsSWM
+         CHW7dxX/6JE9FNOvrDSmKwAmlNxzpyan2WvmCM9YriWNJYu12FzI0QeNDtpM68SkvJ
+         8GDbpUdCDjJr5/f4WORw+3ExzndSMyfA90Tw+L57t7FdB8LqqnrfraqlUyED2YpLRu
+         Y23n/j56lNxyAigSAQ4fYJhO5+QNRQFdU5T6n+ryNx+j9hbAW6DV28zB1Zh87ti4aH
+         j6eYNMGrht2JR4n96OvvWW+pMBNavOMJcPxj3SDMEOuJlsITD31Bu+bQfyBK634IWY
+         HXAlQlQjmi0Jg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id E2EA74049F; Mon, 13 Mar 2023 15:33:04 -0300 (-03)
+Date:   Mon, 13 Mar 2023 15:33:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Thomas Richter <tmricht@linux.ibm.com>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        sumanthk@linux.ibm.com, svens@linux.ibm.com, gor@linux.ibm.com,
+        hca@linux.ibm.com
+Subject: Re: [PATCH 2/6] tools/perf/json: Add cache metrics for s390 z16
+Message-ID: <ZA9sYL/re/aNVpo+@kernel.org>
+References: <20230313080201.2440201-1-tmricht@linux.ibm.com>
+ <20230313080201.2440201-2-tmricht@linux.ibm.com>
+ <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
 MIME-Version: 1.0
-Received: by 2002:a59:a5e1:0:b0:3ad:f687:ace5 with HTTP; Mon, 13 Mar 2023
- 11:32:28 -0700 (PDT)
-From:   wisdom raymond <wisdomraymond0667@gmail.com>
-Date:   Mon, 13 Mar 2023 18:32:28 +0000
-Message-ID: <CAM1J=0u+Xh=LN_ohcO8A4k=kTrXv9G_Y-__f7pfk5_gxLNQyOQ@mail.gmail.com>
-Subject: Hello
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=7.0 required=5.0 tests=BAYES_80,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLY,HK_SCAM,LOTS_OF_MONEY,LOTTO_DEPT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_MONEY autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:e29 listed in]
-        [list.dnswl.org]
-        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
-        *      [score: 0.9492]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [wisdomraymond0667[at]gmail.com]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [wisdomraymond0667[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        *  2.0 HK_SCAM No description available.
-        *  0.0 LOTS_OF_MONEY Huge... sums of money
-        *  1.0 FREEMAIL_REPLY From and body contain different freemails
-        *  0.0 LOTTO_DEPT Claims Department
-        *  2.0 UNDISC_MONEY Undisclosed recipients + money/fraud signs
-X-Spam-Level: *******
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SANTANDER BANK COMPENSATION UNIT, IN AFFILIATION WITH THE UNITED
-NATION: Your compensation fund of 5.2million euro. is ready for
-payment. contact me for more details.     ( david.harden.chantal09@gmail.com )
+Em Mon, Mar 13, 2023 at 08:22:44AM -0700, Ian Rogers escreveu:
+> On Mon, Mar 13, 2023 at 1:30 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
+> >
+> > Add metrics for s390 z16
+> > - Percentage sourced from Level 2 cache
+> > - Percentage sourced from Level 3 on same chip cache
+> > - Percentage sourced from Level 4 Local cache on same book
+> > - Percentage sourced from Level 4 Remote cache on different book
+> > - Percentage sourced from memory
+> >
+> > For details about the formulas see this documentation:
+> > https://www.ibm.com/support/pages/system/files/inline-files/CPU%20MF%20Formulas%20including%20z16%20-%20May%202022_1.pdf
+> >
+> > Outpuf after:
+> >  # ./perf stat -M l4rp -- dd if=/dev/zero of=/dev/null bs=10M count=10K
+> >  .... dd output deleted
+> >
+> >  Performance counter stats for 'dd if=/dev/zero of=/dev/null bs=10M count=10K':
+> >
+> >                  0      IDCW_OFF_DRAWER_CHIP_HIT         #     0.00 l4rp
+> >            431,866      L1I_DIR_WRITES
+> >              2,395      IDCW_OFF_DRAWER_IV
+> >                  0      ICW_OFF_DRAWER
+> >                  0      IDCW_OFF_DRAWER_DRAWER_HIT
+> >              1,437      DCW_OFF_DRAWER
+> >        425,960,793      L1D_DIR_WRITES
+> >
+> >       12.165030699 seconds time elapsed
+> >
+> >        0.001037000 seconds user
+> >       12.162140000 seconds sys
+> >
+> >  #
+> >
+> > Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
+> > Acked-By: Sumanth Korikkar <sumanthk@linux.ibm.com>
+> 
+> Acked-by: Ian Rogers <irogers@google.com>
 
-thanks
+Thanks, applied the first two patches, please address the review
+suggestions for patches 3-6 and resubmit only those.
+
+The patches will be in the public perf-tools-next branch later today.
+
+- Arnaldo
+
