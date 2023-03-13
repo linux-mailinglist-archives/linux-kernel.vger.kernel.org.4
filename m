@@ -2,193 +2,249 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF4B26B6F69
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C07F46B6F6B
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 07:13:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229552AbjCMGNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 02:13:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33684 "EHLO
+        id S229749AbjCMGN4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 02:13:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229655AbjCMGNL (ORCPT
+        with ESMTP id S229437AbjCMGNy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 02:13:11 -0400
-Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07476C640;
-        Sun, 12 Mar 2023 23:13:09 -0700 (PDT)
-Received: by mail-lf1-x12d.google.com with SMTP id g17so14265615lfv.4;
-        Sun, 12 Mar 2023 23:13:08 -0700 (PDT)
+        Mon, 13 Mar 2023 02:13:54 -0400
+Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE1F122022
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:13:52 -0700 (PDT)
+Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-1755e639b65so12688476fac.3
+        for <linux-kernel@vger.kernel.org>; Sun, 12 Mar 2023 23:13:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678687987;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=cRhBcf5ZDslUPYrSaszRsi4kzEuDzWr1ClJbjTYi3Tk=;
-        b=hp13GnpJvHNlKW7UrZhp28Yd97f62UyJZWYN3y68MhiJV3kD8xtnWKIYUKu9AX9rcm
-         ZMkTvvkDI6YlvON8BbY6Oado2GtV3pvtFq0sfX/jqmdOZZyD2k9mzBQinDXmHllGNZLc
-         TCOx0pB/OmE3v4djCIF47t3q/t7afpT7FzYdOCm4YKax+dUSRNoZsEcTh0N0cHffrSWF
-         di0i2OUDwit2zlG8Z8jXSng+1+XZXHUsSEtluhDvvmSTrsSKC61c8uQvgb/Gdree6LSs
-         ep8xA/ONXOT8gVPAIsjo8QRAmPr+8IBb/sfPZzAa379OvmE1CkiH4Slon+46EigYXNZh
-         y66w==
+        d=linaro.org; s=google; t=1678688032;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sFwFZRZYKw2DA2WpiOF9s0EPlDORWW1/wSadX5SWkOg=;
+        b=EKIllb8+E7Qmsu5WbtRfmy52Ir7ImanQP6EIuBRXtQ1Xz7YguDZZeN2FH8tSdBcgHu
+         xTQfw8bYHNayWn9ks+VONjGupukS+KULMygYf1MHH7yDtwJZdObcGO408cOIBqGuQTrq
+         3VBhOtn415ebnqjykAs61ibbYOtMA2D2aJVlGbPL7zNMvlFSVTM5rqg1Lz1MVqMdkZ4T
+         veCXODjEvDCWhNRrJLcyobco9ikGQadvIvAouC8gP5PRZaN6wp3XUp9trEhyo6zCPhYK
+         ln7URbS6kHApxkNhoG7VS5mL9lfq+bIuEKS7sfNYLVLGXdvM5Gv/lUPtg/0/MVNNPmPn
+         536A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678687987;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20210112; t=1678688032;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=cRhBcf5ZDslUPYrSaszRsi4kzEuDzWr1ClJbjTYi3Tk=;
-        b=EdzSiCifWEPp6ep4AoemwGQpj25vfQ8xj7AZ15ikDpvuzUP3sMgu0HuernuPLHbZ+a
-         JFmTS7NtT1vIzJvY6WGtbwYZ/tpeoSxwAEPfzTWLhLt2gQutYK8XPoQws+FxD5a7e5iK
-         Af6AavvZzjMVz9Yrqt8nyl4bGZKtA+0SpANB/qbP/YK+Mp9aL7KdTBSSE2HTB+g9Ue/i
-         RAVVTvGUZN58J/ozdH/Cwilt/7we7g52ZBiDV+cIKcc769+0Xvqw9EbUpYLUK/WlUe4u
-         5VfC1zG0alovBXZQ9LD+0VutHgwpRH4NP3GCui5z+WSZVv2i2PNXf41K56W1DpBmkmZJ
-         S4Lw==
-X-Gm-Message-State: AO0yUKV2uTKkfZD/EhzItq+PstCyqayBBb/1/nPcBtnd/j8EVncJJQFF
-        PgBkUTvvsoXnaj08mXhuv6biTtk0THU=
-X-Google-Smtp-Source: AK7set8NPLifK38O/uGQzCr4tN5Dn6eLIY7/DHqlA+pCbAZc9r7FYETdy61jrvlaSaiWtwB4W0iifA==
-X-Received: by 2002:a05:6512:1319:b0:4e8:3d0:84b4 with SMTP id x25-20020a056512131900b004e803d084b4mr2527943lfu.24.1678687987108;
-        Sun, 12 Mar 2023 23:13:07 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id w11-20020a19c50b000000b004dc4b0ca734sm864626lfe.250.2023.03.12.23.13.06
+        bh=sFwFZRZYKw2DA2WpiOF9s0EPlDORWW1/wSadX5SWkOg=;
+        b=5z6YpHLOPl2kmtrY7fimL8Gbt5gxLFAlCFqkuFlIcS2AONws9yOLzPLHmc+pgAu74r
+         hdjDMCJb4f7JD3+j0CMKl6xszWiY8Lyn/TuMhrBF7q/Zjo6IaRAEk5cYMusTW0eBK/px
+         8v7z8jjGXFeK+qYoCPXMouGT92XD4QNZOgQIZ/+PTRAjl7Y+CloJdXConbm2j3p/BQrt
+         MPPEZh166+y6GphmxJijTlfBI1b1bOpKffnDUA7iOqKcbjmFtYyq+41ICSEONKWi6Q7O
+         98mxRH0TNvxpCv4QOVBgsXjSD0DE9hVbh9Bcjykd+iHYZN9qWtzXh4hHU8WDXhPT7Zi5
+         qTUQ==
+X-Gm-Message-State: AO0yUKXM4fWk8BjZ3do3s+8DHdvnl84rnPHSQHuimxE7vwwXGxXEOl3u
+        A60obluAnyKXorD8OhZHWqnH9TH5+jMBc0Q54ztAtA==
+X-Google-Smtp-Source: AK7set9YRC56/G09PuwqH204/SkCS1mEmaSo3TAXT/AuwwL9QBrPNx/HiSxphwu3Ij66/FCiVtt0OQ==
+X-Received: by 2002:a05:6870:f150:b0:176:2585:e6ac with SMTP id l16-20020a056870f15000b001762585e6acmr19830680oac.23.1678688032018;
+        Sun, 12 Mar 2023 23:13:52 -0700 (PDT)
+Received: from [192.168.17.16] ([189.219.75.19])
+        by smtp.gmail.com with ESMTPSA id et3-20020a056808280300b00383e0bec93bsm2768695oib.49.2023.03.12.23.13.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 12 Mar 2023 23:13:06 -0700 (PDT)
-Message-ID: <7a8d38bb-cfc1-f13b-e108-be0c61928ff0@gmail.com>
-Date:   Mon, 13 Mar 2023 08:13:06 +0200
+        Sun, 12 Mar 2023 23:13:51 -0700 (PDT)
+Message-ID: <a552adfc-9c16-5c97-c566-806041cfa7a6@linaro.org>
+Date:   Mon, 13 Mar 2023 00:13:50 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Content-Language: en-US, en-GB
-To:     Sebastian Reichel <sre@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org
-References: <20230309225041.477440-1-sre@kernel.org>
- <20230309225041.477440-2-sre@kernel.org>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-Subject: Re: [PATCHv1 01/11] dt-bindings: power: supply: adc-battery: add
- binding
-In-Reply-To: <20230309225041.477440-2-sre@kernel.org>
+Subject: Re: [PATCH 5.10 000/528] 5.10.173-rc2 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net, rwarsow@gmx.de
+References: <20230311091908.975813595@linuxfoundation.org>
+From:   =?UTF-8?Q?Daniel_D=c3=adaz?= <daniel.diaz@linaro.org>
+In-Reply-To: <20230311091908.975813595@linuxfoundation.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sebastian,
+Hello!
 
-On 3/10/23 00:50, Sebastian Reichel wrote:
-> Add binding for a battery that is only monitored via ADC
-> channels and simple status GPIOs.
+On 11/03/23 03:20, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.10.173 release.
+> There are 528 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> Signed-off-by: Sebastian Reichel <sre@kernel.org>
-> ---
->   .../bindings/power/supply/adc-battery.yaml    | 67 +++++++++++++++++++
->   1 file changed, 67 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/power/supply/adc-battery.yaml
+> Responses should be made by Mon, 13 Mar 2023 09:17:40 +0000.
+> Anything received after that time might be too late.
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/adc-battery.yaml b/Documentation/devicetree/bindings/power/supply/adc-battery.yaml
-> new file mode 100644
-> index 000000000000..9d478bf9d2ee
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/adc-battery.yaml
-> @@ -0,0 +1,67 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/adc-battery.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ADC battery
-> +
-> +maintainers:
-> +  - Sebastian Reichel <sre@kernel.org>
-> +
-> +description: |
-> +  Basic Battery, which only reports (in circuit) voltage and optionally
-> +  current via an ADC channel.
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: adc-battery
-> +
-> +  charged-gpios:
-> +    description:
-> +      GPIO which signals that the battery is fully charged.
-> +    maxItems: 1
-> +
-> +  io-channels:
-> +    minItems: 1
-> +    maxItems: 3
-> +
-> +  io-channel-names:
-> +    oneOf:
-> +      - const: voltage
-> +      - items:
-> +          - const: voltage
-> +          - enum:
-> +              - current
-> +              - power
-> +      - items:
-> +          - const: voltage
-> +          - const: current
-> +          - const: power
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.173-rc2.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
+> and the diffstat can be found below.
+> 
+> thanks,
+> 
+> greg k-h
 
-Good side of not knowing things is being able to asking for more 
-information ;)
+## Build
+* kernel: 5.10.173-rc2
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-5.10.y
+* git commit: 79ef18039d4902c95b2a84af18b5612d9e9f222a
+* git describe: v5.10.172-529-g79ef18039d49
+* test details: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.10.y/build/v5.10.172-529-g79ef18039d49
 
-So, just by judging these bindings, we have a battery which provides 
-fuel-gauge information via analog line connected to ADC(?)
+## Test Regressions (compared to v5.10.172)
+No test regressions found.
 
-Reading the description you have here and comments by Linus allows me to 
-assume the line can represent current flowing out of the battery, or the 
-battery voltage.
+## Metric Regressions (compared to v5.10.172)
+No metric regressions found.
 
-My guess then is that the io-channel-names property is going to tell 
-which if these properties is being informed by the specific lines, 
-right(?). Do you think you could add some small description for 
-io-channel-names if you respin the series? I'd like to be more certain I 
-"guessed" things right. ;) Maybe also add the 'power' option in the main 
-description which currently just states voltage and power. (Assuming 
-some devices do actually "expose" power levels via these "channels"?
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> +
-> +  monitored-battery: true
-> +
-> +required:
-> +  - compatible
-> +  - io-channels
-> +  - io-channel-names
-> +  - monitored-battery
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +
-> +    fuel-gauge {
-> +        compatible = "adc-battery";
-> +        charged-gpios = <&gpio 42 GPIO_ACTIVE_HIGH>;
-> +        io-channels = <&adc 13>, <&adc 37>;
-> +        io-channel-names = "voltage", "current";
-> +
-> +        power-supplies = <&charger>;
-> +        monitored-battery = <&battery>;
-> +    };
+
+## Test Fixes (compared to v5.10.172)
+No test fixes found.
+
+## Metric Fixes (compared to v5.10.172)
+No metric fixes found.
+
+## Test result summary
+total: 138158, pass: 113527, fail: 3907, skip: 20437, xfail: 287
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 115 total, 114 passed, 1 failed
+* arm64: 42 total, 39 passed, 3 failed
+* i386: 33 total, 31 passed, 2 failed
+* mips: 27 total, 26 passed, 1 failed
+* parisc: 8 total, 8 passed, 0 failed
+* powerpc: 26 total, 20 passed, 6 failed
+* riscv: 12 total, 11 passed, 1 failed
+* s390: 12 total, 12 passed, 0 failed
+* sh: 14 total, 12 passed, 2 failed
+* sparc: 8 total, 8 passed, 0 failed
+* x86_64: 36 total, 34 passed, 2 failed
+
+## Test suites summary
+* boot
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-memory-hotplug
+* kselftest-mincore
+* kselftest-mount
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-forwarding
+* kselftest-net-mptcp
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* perf
+* rcutorture
+* v4l2-compliance
+* vdso
+
+
+Greetings!
+
+Daniel Díaz
+daniel.diaz@linaro.org
 
 -- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+Linaro LKFT
+https://lkft.linaro.org
