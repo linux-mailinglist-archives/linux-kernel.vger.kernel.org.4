@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFD826B7AFB
-	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:50:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DF156B7B01
+	for <lists+linux-kernel@lfdr.de>; Mon, 13 Mar 2023 15:50:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231674AbjCMOuZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 10:50:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S231654AbjCMOu2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 10:50:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231605AbjCMOts (ORCPT
+        with ESMTP id S231609AbjCMOtt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 10:49:48 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C61366B311
+        Mon, 13 Mar 2023 10:49:49 -0400
+Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F41596EB95
         for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:49:35 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id k10so49643123edk.13
+Received: by mail-ed1-x535.google.com with SMTP id y4so20292365edo.2
         for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 07:49:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678718974;
+        d=linaro.org; s=google; t=1678718975;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=OpVNZbNey5l0D8eKJKh3Emsd8uv7zn5I/hm7+8mVQDo=;
-        b=gyJPzJGJ2zxHBLfdWhPVhCiodoCFiln/o4HvoqpgYy1n4z7XcB8GATHw2mTs9q4+Qr
-         vaE0TFZTPNS4S4ss8C0vkWFpSJIUDTZMr1y9HHTxI6dZ6vLeN36LTWU0DeZQoZ6XYv8S
-         eovHIZwhZxmy9DY+PRZOOIgjc6lwdTycJWBcLCyPYJo8/56uGKsAO+MXXoF83gzqWqHU
-         GCRAgBwp77WbYD8Fxs3J75QIebY+ONoMCOrywKhMlFAIVcELVKcb6j0FFXqtxc6VziMZ
-         cw/3amdZmvTTyPdVSVui8GNnPTardvA6STLp0AVjE696nd9j/La4zXEwvYHyefOsi+5J
-         4/wg==
+        bh=YVDfzqmZYB+14h3bb9VZGcnGXVUqKuJCJWyXlt4DowQ=;
+        b=CrehpXb9EboR13BKDiqkPfamk5Gt852aaO7vcqK10pQmMl6+biIIYQVmThkfx4DZL3
+         BfP61qiapnU4PVwdGgFsQb6LNDOh0H9Crr3t/gZD204kZuEHuzp83ul/fwoPv7BKDGXz
+         6kZXb2MpRKMyghc0xI/Wsyjk1eYouVaB15QKOXgYsCp3HapSeY4Zk13oHEUk8SPYe/NK
+         P5ugc5+Z2Jmr5PYc4TwZ9xPThtMsZaEckwBey3/o0ZTiOSnzPv+Lh/j/fA5Gc7mQlrrB
+         ad+k5j7fimnajOat+jnw02x7dKaPqrvsPsVjjvpDKkhOhuZdg43xGW1j0He/R5Wkz1jZ
+         a1Yg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678718974;
+        d=1e100.net; s=20210112; t=1678718975;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=OpVNZbNey5l0D8eKJKh3Emsd8uv7zn5I/hm7+8mVQDo=;
-        b=fgUVDWPqGsgK+7z72sMW1KcTVMOOcMKKNTukEsKD3ETonta5J3IqP7gGOLy08Ki1uQ
-         kfK6dcF/xgViquWj3nLPhpZcRw7LSI57IcwUfUIo81MNLC9e54FxKI2pQmsHtj54IpCm
-         W6X8Ehx2wR5mQJ8+JOm7MWceAh8WC//h53xy76ldZAqKpJcXE+gpVEQw7HmI4GQaAhmU
-         rJCHCCymDTsfVXfEBK7jucWBmXX9TLFDz/by1fo7s7S2QYByv12oiCbtEzz5nCtSzA/K
-         kAUzxORtHgJnpgMqJSWRvAct8Iziht7X9rbX/94m4qspRIZMjAj0XVfOgC/bzHWVT1lQ
-         jHJQ==
-X-Gm-Message-State: AO0yUKXhca1WFYhbt764c6fw3bgi+pf+iScFMGvkKbWKaR19UXj/A2Pl
-        5djMI+CJlRF/0Fdlw252CzkVpg==
-X-Google-Smtp-Source: AK7set+kQp38zQfdHF811J8xV9tB4oY08IGhqWdEwKiywMj4dWLinIiLdASCDUN4heyf83713fg8nw==
-X-Received: by 2002:a17:906:b0d9:b0:8af:3519:ea1 with SMTP id bk25-20020a170906b0d900b008af35190ea1mr41078827ejb.57.1678718974222;
-        Mon, 13 Mar 2023 07:49:34 -0700 (PDT)
+        bh=YVDfzqmZYB+14h3bb9VZGcnGXVUqKuJCJWyXlt4DowQ=;
+        b=d5zWuH3yU7m1EZdizC8FGRXOx4rr5AfV6YAUnC/m4cqxY4o/lrWj06TbwSA4utzI8C
+         wZ3VfvpTUpK78Tol1ww8T8Vgk+XXBH+dl3h3oAwskKwUOTGn2OuTrMtt6tzPx4a/5y27
+         rn5RcmE4yxab/DqSNfkAXo5p7ADwXC2tBRLdfIG00kHa8od93Sfx+388XSprYFbLke5V
+         ig0rPs7qvxCdzZcXL3KhzmmFUoV/QKwGm8IgaR+wKGmbhENrj1YXHWvzpoMGYRKLzFnL
+         M7GinYzSYJrZN6XB+2Mo5RmPV5EagJQwIVIjQVhAVWToXFkKKI3wQXKF2j3eUXSfLthk
+         V1zQ==
+X-Gm-Message-State: AO0yUKUppWYEqxAB5RbZzKYDr8gKPw7zQQowJ8FHW9FSNumP7w7Ryk4K
+        klfTpyBvy6EZ6c2Urq6o/oNQTQ==
+X-Google-Smtp-Source: AK7set9ClA0WU9RkcfcEMl2t3exGRrg5410P/ussJnt/Czgyis+iSWyOsqghy6qj0kPWRXp5LdJgqg==
+X-Received: by 2002:a17:907:787:b0:91f:9024:bbab with SMTP id xd7-20020a170907078700b0091f9024bbabmr10562350ejb.23.1678718975350;
+        Mon, 13 Mar 2023 07:49:35 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:69db:4882:d071:27c4])
-        by smtp.gmail.com with ESMTPSA id ia17-20020a170907a07100b0092153c6b549sm3030164ejc.22.2023.03.13.07.49.33
+        by smtp.gmail.com with ESMTPSA id ia17-20020a170907a07100b0092153c6b549sm3030164ejc.22.2023.03.13.07.49.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 07:49:33 -0700 (PDT)
+        Mon, 13 Mar 2023 07:49:35 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         Rob Herring <robh+dt@kernel.org>,
@@ -62,9 +62,9 @@ To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
         linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v4 09/10] media: dt-bindings: samsung,fimc: convert to dtschema
-Date:   Mon, 13 Mar 2023 15:49:15 +0100
-Message-Id: <20230313144916.511884-10-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v4 10/10] media: dt-bindings: samsung,s5c73m3: convert to dtschema
+Date:   Mon, 13 Mar 2023 15:49:16 +0100
+Message-Id: <20230313144916.511884-11-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230313144916.511884-1-krzysztof.kozlowski@linaro.org>
 References: <20230313144916.511884-1-krzysztof.kozlowski@linaro.org>
@@ -79,9 +79,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the Samsung S5P/Exynos Camera Subsystem (FIMC) bindings to DT
-schema.  Changes during conversion - adjust to existing DTS and Linux
-driver: add iommus and power-domains.
+Convert the Samsung S5C73M3 8Mp camera ISP bindings to DT schema.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Reviewed-by: Rob Herring <robh@kernel.org>
@@ -90,694 +88,300 @@ Reviewed-by: Rob Herring <robh@kernel.org>
 
 Changes since v2:
 1. Add Rb tag.
-2. Move size-cells next to address-cells.
-
-The patch depends on:
-https://lore.kernel.org/all/20230207205834.673163-1-krzysztof.kozlowski@linaro.org/
 ---
- .../media/samsung,exynos4210-fimc.yaml        | 152 ++++++++++
- .../bindings/media/samsung,fimc.yaml          | 279 ++++++++++++++++++
- .../bindings/media/samsung-fimc.txt           | 210 -------------
- MAINTAINERS                                   |   2 +
- 4 files changed, 433 insertions(+), 210 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/media/samsung,exynos4210-fimc.yaml
- create mode 100644 Documentation/devicetree/bindings/media/samsung,fimc.yaml
- delete mode 100644 Documentation/devicetree/bindings/media/samsung-fimc.txt
+ .../bindings/media/samsung,s5c73m3.yaml       | 165 ++++++++++++++++++
+ .../bindings/media/samsung-s5c73m3.txt        |  97 ----------
+ MAINTAINERS                                   |   1 +
+ 3 files changed, 166 insertions(+), 97 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+ delete mode 100644 Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
 
-diff --git a/Documentation/devicetree/bindings/media/samsung,exynos4210-fimc.yaml b/Documentation/devicetree/bindings/media/samsung,exynos4210-fimc.yaml
+diff --git a/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml b/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
 new file mode 100644
-index 000000000000..271d0577a83c
+index 000000000000..1b75390fdaac
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/media/samsung,exynos4210-fimc.yaml
-@@ -0,0 +1,152 @@
++++ b/Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+@@ -0,0 +1,165 @@
 +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 +%YAML 1.2
 +---
-+$id: http://devicetree.org/schemas/media/samsung,exynos4210-fimc.yaml#
++$id: http://devicetree.org/schemas/media/samsung,s5c73m3.yaml#
 +$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
-+title: Samsung S5P/Exynos SoC Fully Integrated Mobile Camera
++title: Samsung S5C73M3 8Mp camera ISP
 +
 +maintainers:
 +  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 +  - Sylwester Nawrocki <s.nawrocki@samsung.com>
 +
 +description:
-+  Each FIMC device should have an alias in the aliases node, in the form of
-+  fimc<n>, where <n> is an integer specifying the IP block instance.
++  The S5C73M3 camera ISP supports MIPI CSI-2 and parallel (ITU-R BT.656)
++  video data busses. The I2C bus is the main control bus and additionally the
++  SPI bus is used, mostly for transferring the firmware to and from the
++  device. Two slave device nodes corresponding to these control bus
++  interfaces are required and should be placed under respective bus
++  controller nodes.
 +
 +properties:
 +  compatible:
-+    enum:
-+      - samsung,exynos4210-fimc
-+      - samsung,exynos4212-fimc
-+      - samsung,s5pv210-fimc
++    const: samsung,s5c73m3
 +
 +  reg:
 +    maxItems: 1
 +
 +  clocks:
-+    maxItems: 2
++    maxItems: 1
 +
 +  clock-names:
 +    items:
-+      - const: fimc
-+      - const: sclk_fimc
++      - const: cis_extclk
 +
 +  clock-frequency:
-+    description:
-+      Maximum FIMC local clock (LCLK) frequency.
++    default: 24000000
++    description: cis_extclk clock frequency.
 +
-+  interrupts:
++  standby-gpios:
 +    maxItems: 1
++    description: STANDBY pin.
 +
-+  iommus:
++  vdda-supply:
++    description: Analog power supply (1.2V).
++
++  vdd-af-supply:
++    description: lens power supply (2.8V).
++
++  vddio-cis-supply:
++    description: CIS I/O power supply (1.2V to 1.8V).
++
++  vddio-host-supply:
++    description: Host I/O power supply (1.8V to 2.8V).
++
++  vdd-int-supply:
++    description: Digital power supply (1.2V).
++
++  vdd-reg-supply:
++    description: Regulator input power supply (2.8V).
++
++  xshutdown-gpios:
 +    maxItems: 1
++    description: XSHUTDOWN pin.
 +
-+  power-domains:
-+    maxItems: 1
++  port:
++    $ref: /schemas/graph.yaml#/$defs/port-base
++    additionalProperties: false
 +
-+  samsung,cam-if:
-+    type: boolean
-+    description:
-+      The FIMC IP block includes the camera input interface.
++    properties:
++      endpoint:
++        $ref: /schemas/media/video-interfaces.yaml#
++        unevaluatedProperties: false
 +
-+  samsung,isp-wb:
-+    type: boolean
-+    description: |
-+      The FIMC IP block has the ISP writeback input.
-+
-+  samsung,lcd-wb:
-+    type: boolean
-+    description: |
-+      The FIMC IP block has the LCD writeback input.
-+
-+  samsung,mainscaler-ext:
-+    type: boolean
-+    description:
-+      FIMC IP supports extended image size and has CIEXTEN register.
-+
-+  samsung,min-pix-alignment:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    items:
-+      - description: Minimum supported image height alignment.
-+      - description: Horizontal image offset.
-+    description:
-+      The values are in pixels and default is <2 1>.
-+
-+  samsung,min-pix-sizes:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    maxItems: 2
-+    description: |
-+      An array specyfing minimum image size in pixels at the FIMC input and
-+      output DMA, in the first and second cell respectively.  Default value
-+      is <16 16>.
-+
-+  samsung,pix-limits:
-+    $ref: /schemas/types.yaml#/definitions/uint32-array
-+    maxItems: 4
-+    description: |
-+      An array of maximum supported image sizes in pixels, for details refer to
-+      Table 2-1 in the S5PV210 SoC User Manual. The meaning of each cell is as
-+      follows:
-+       0 - scaler input horizontal size
-+       1 - input horizontal size for the scaler bypassed
-+       2 - REAL_WIDTH without input rotation
-+       3 - REAL_HEIGHT with input rotation
-+
-+  samsung,rotators:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    default: 0x11
-+    description: |
-+      A bitmask specifying whether this IP has the input and the output
-+      rotator. Bits 4 and 0 correspond to input and output rotator
-+      respectively. If a rotator is present its corresponding bit should be
-+      set.
-+
-+  samsung,sysreg:
-+    $ref: /schemas/types.yaml#/definitions/phandle
-+    description:
-+      System Registers (SYSREG) node.
++        properties:
++          data-lanes:
++            items:
++              - const: 1
++              - const: 2
++              - const: 3
++              - const: 4
 +
 +required:
 +  - compatible
 +  - reg
-+  - clocks
-+  - clock-names
-+  - samsung,pix-limits
 +
 +allOf:
++  - $ref: /schemas/spi/spi-peripheral-props.yaml#
 +  - if:
 +      required:
-+        - samsung,isp-wb
++        - spi-max-frequency
 +    then:
++      properties:
++        # The SPI node is simplified firmware-transfer interface only
++        clocks: false
++        clock-names: false
++        standby-gpios: false
++        vdda-supply: false
++        vdd-af-supply: false
++        vddio-cis-supply: false
++        vddio-host-supply: false
++        vdd-int-supply: false
++        vdd-reg-supply: false
++        xshutdown-gpios: false
++        port: false
++    else:
 +      required:
-+        - samsung,sysreg
++        - clocks
++        - clock-names
++        - standby-gpios
++        - vdda-supply
++        - vdd-af-supply
++        - vddio-cis-supply
++        - vddio-host-supply
++        - vdd-int-supply
++        - vdd-reg-supply
++        - xshutdown-gpios
++        - port
 +
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/exynos4.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    fimc@11800000 {
-+        compatible = "samsung,exynos4212-fimc";
-+        reg = <0x11800000 0x1000>;
-+        clocks = <&clock CLK_FIMC0>,
-+                 <&clock CLK_SCLK_FIMC0>;
-+        clock-names = "fimc", "sclk_fimc";
-+        interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
-+        iommus = <&sysmmu_fimc0>;
-+        power-domains = <&pd_cam>;
-+        samsung,sysreg = <&sys_reg>;
-+
-+        samsung,pix-limits = <4224 8192 1920 4224>;
-+        samsung,mainscaler-ext;
-+        samsung,isp-wb;
-+        samsung,cam-if;
-+
-+        assigned-clocks = <&clock CLK_MOUT_FIMC0>,
-+                          <&clock CLK_SCLK_FIMC0>;
-+        assigned-clock-parents = <&clock CLK_MOUT_MPLL_USER_T>;
-+        assigned-clock-rates = <0>, <176000000>;
-+    };
-diff --git a/Documentation/devicetree/bindings/media/samsung,fimc.yaml b/Documentation/devicetree/bindings/media/samsung,fimc.yaml
-new file mode 100644
-index 000000000000..79ff6d83a9fd
---- /dev/null
-+++ b/Documentation/devicetree/bindings/media/samsung,fimc.yaml
-@@ -0,0 +1,279 @@
-+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/media/samsung,fimc.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Samsung S5P/Exynos SoC Camera Subsystem (FIMC)
-+
-+maintainers:
-+  - Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-+  - Sylwester Nawrocki <s.nawrocki@samsung.com>
-+
-+description: |
-+  The S5P/Exynos SoC Camera subsystem comprises of multiple sub-devices
-+  represented by separate device tree nodes. Currently this includes: Fully
-+  Integrated Mobile Camera (FIMC, in the S5P SoCs series known as CAMIF), MIPI
-+  CSIS, FIMC-LITE and FIMC-IS (ISP).
-+
-+properties:
-+  compatible:
-+    const: samsung,fimc
-+
-+  ranges: true
-+
-+  '#address-cells':
-+    const: 1
-+
-+  '#size-cells':
-+    const: 1
-+
-+  '#clock-cells':
-+    const: 1
-+    description: |
-+      The clock specifier cell stores an index of a clock: 0, 1 for
-+      CAM_A_CLKOUT, CAM_B_CLKOUT clocks respectively.
-+
-+  clocks:
-+    minItems: 2
-+    maxItems: 4
-+
-+  clock-names:
-+    minItems: 2
-+    items:
-+      - const: sclk_cam0
-+      - const: sclk_cam1
-+      - const: pxl_async0
-+      - const: pxl_async1
-+
-+  clock-output-names:
-+    maxItems: 2
-+
-+  parallel-ports:
-+    $ref: /schemas/graph.yaml#/properties/ports
-+    description:
-+      Active parallel video input ports.
-+
-+    patternProperties:
-+      "^port@[01]$":
-+        $ref: /schemas/graph.yaml#/$defs/port-base
-+        description:
-+          Camera A and camera B inputs.
-+
-+        properties:
-+          endpoint:
-+            $ref: /schemas/media/video-interfaces.yaml#
-+            unevaluatedProperties: false
-+
-+  pinctrl-names:
-+    minItems: 1
-+    items:
-+      - const: default
-+      - const: idle
-+      - const: active_a
-+      - const: active_b
-+
-+patternProperties:
-+  "^csis@[0-9a-f]+$":
-+    type: object
-+    $ref: samsung,exynos4210-csis.yaml#
-+    description: MIPI CSI-2 receiver.
-+
-+  "^fimc@[0-9a-f]+$":
-+    type: object
-+    $ref: samsung,exynos4210-fimc.yaml#
-+    description: Fully Integrated Mobile Camera.
-+
-+  "^fimc-is@[0-9a-f]+$":
-+    type: object
-+    $ref: samsung,exynos4212-fimc-is.yaml#
-+    description: Imaging Subsystem (FIMC-IS).
-+
-+  "^fimc-lite@[0-9a-f]+$":
-+    type: object
-+    $ref: samsung,exynos4212-fimc-lite.yaml#
-+    description: Camera host interface (FIMC-LITE).
-+
-+required:
-+  - compatible
-+  - '#address-cells'
-+  - '#clock-cells'
-+  - clocks
-+  - clock-names
-+  - clock-output-names
-+  - ranges
-+  - '#size-cells'
-+
-+additionalProperties: false
++unevaluatedProperties: false
 +
 +examples:
 +  - |
-+    #include <dt-bindings/clock/exynos4.h>
 +    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
 +
-+    camera@11800000 {
-+        compatible = "samsung,fimc";
-+        #clock-cells = <1>;
++    i2c {
 +        #address-cells = <1>;
-+        #size-cells = <1>;
-+        ranges = <0x0 0x0 0x18000000>;
++        #size-cells = <0>;
 +
-+        clocks = <&clock CLK_SCLK_CAM0>, <&clock CLK_SCLK_CAM1>,
-+                 <&clock CLK_PIXELASYNCM0>, <&clock CLK_PIXELASYNCM1>;
-+        clock-names = "sclk_cam0", "sclk_cam1", "pxl_async0", "pxl_async1";
-+        clock-output-names = "cam_a_clkout", "cam_b_clkout";
++        image-sensor@3c {
++            compatible = "samsung,s5c73m3";
++            reg = <0x3c>;
++            clock-frequency = <24000000>;
++            clocks = <&camera 0>;
++            clock-names = "cis_extclk";
++            standby-gpios = <&gpm0 6 GPIO_ACTIVE_LOW>;
++            vdda-supply = <&cam_vdda_reg>;
++            vdd-af-supply = <&cam_af_reg>;
++            vddio-cis-supply = <&ldo9_reg>;
++            vddio-host-supply = <&ldo18_reg>;
++            vdd-int-supply = <&buck9_reg>;
++            vdd-reg-supply = <&cam_io_reg>;
++            xshutdown-gpios = <&gpf1 3 GPIO_ACTIVE_LOW>; /* ISP_RESET */
 +
-+        assigned-clocks = <&clock CLK_MOUT_CAM0>,
-+                          <&clock CLK_MOUT_CAM1>;
-+        assigned-clock-parents = <&clock CLK_XUSBXTI>,
-+                                 <&clock CLK_XUSBXTI>;
-+
-+        pinctrl-0 = <&cam_port_a_clk_active &cam_port_b_clk_active>;
-+        pinctrl-names = "default";
-+
-+        fimc@11800000 {
-+            compatible = "samsung,exynos4212-fimc";
-+            reg = <0x11800000 0x1000>;
-+            interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&clock CLK_FIMC0>,
-+                     <&clock CLK_SCLK_FIMC0>;
-+            clock-names = "fimc", "sclk_fimc";
-+            power-domains = <&pd_cam>;
-+            samsung,sysreg = <&sys_reg>;
-+            iommus = <&sysmmu_fimc0>;
-+
-+            samsung,pix-limits = <4224 8192 1920 4224>;
-+            samsung,mainscaler-ext;
-+            samsung,isp-wb;
-+            samsung,cam-if;
-+        };
-+
-+        /* ... FIMC 1-3 */
-+
-+        csis@11880000 {
-+            compatible = "samsung,exynos4210-csis";
-+            reg = <0x11880000 0x4000>;
-+            interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&clock CLK_CSIS0>,
-+                     <&clock CLK_SCLK_CSIS0>;
-+            clock-names = "csis", "sclk_csis";
-+            assigned-clocks = <&clock CLK_MOUT_CSIS0>,
-+                              <&clock CLK_SCLK_CSIS0>;
-+            assigned-clock-parents = <&clock CLK_MOUT_MPLL_USER_T>;
-+            assigned-clock-rates = <0>, <176000000>;
-+
-+            bus-width = <4>;
-+            power-domains = <&pd_cam>;
-+            phys = <&mipi_phy 0>;
-+            phy-names = "csis";
-+            #address-cells = <1>;
-+            #size-cells = <0>;
-+
-+            vddcore-supply = <&ldo8_reg>;
-+            vddio-supply = <&ldo10_reg>;
-+
-+            /* Camera C (3) MIPI CSI-2 (CSIS0) */
-+            port@3 {
-+                reg = <3>;
-+                endpoint {
-+                    remote-endpoint = <&s5c73m3_ep>;
++            port {
++                s5c73m3_ep: endpoint {
++                    remote-endpoint = <&csis0_ep>;
 +                    data-lanes = <1 2 3 4>;
-+                    samsung,csis-hs-settle = <12>;
-+                };
-+            };
-+        };
-+
-+        /* ... CSIS 1 */
-+
-+        fimc-lite@12390000 {
-+              compatible = "samsung,exynos4212-fimc-lite";
-+              reg = <0x12390000 0x1000>;
-+              interrupts = <GIC_SPI 105 IRQ_TYPE_LEVEL_HIGH>;
-+              power-domains = <&pd_isp>;
-+              clocks = <&isp_clock CLK_ISP_FIMC_LITE0>;
-+              clock-names = "flite";
-+              iommus = <&sysmmu_fimc_lite0>;
-+        };
-+
-+        /* ... FIMC-LITE 1 */
-+
-+        fimc-is@12000000 {
-+            compatible = "samsung,exynos4212-fimc-is";
-+            reg = <0x12000000 0x260000>;
-+            interrupts = <GIC_SPI 90 IRQ_TYPE_LEVEL_HIGH>,
-+                         <GIC_SPI 95 IRQ_TYPE_LEVEL_HIGH>;
-+            clocks = <&isp_clock CLK_ISP_FIMC_LITE0>,
-+                     <&isp_clock CLK_ISP_FIMC_LITE1>,
-+                     <&isp_clock CLK_ISP_PPMUISPX>,
-+                     <&isp_clock CLK_ISP_PPMUISPMX>,
-+                     <&isp_clock CLK_ISP_FIMC_ISP>,
-+                     <&isp_clock CLK_ISP_FIMC_DRC>,
-+                     <&isp_clock CLK_ISP_FIMC_FD>,
-+                     <&isp_clock CLK_ISP_MCUISP>,
-+                     <&isp_clock CLK_ISP_GICISP>,
-+                     <&isp_clock CLK_ISP_MCUCTL_ISP>,
-+                     <&isp_clock CLK_ISP_PWM_ISP>,
-+                     <&isp_clock CLK_ISP_DIV_ISP0>,
-+                     <&isp_clock CLK_ISP_DIV_ISP1>,
-+                     <&isp_clock CLK_ISP_DIV_MCUISP0>,
-+                     <&isp_clock CLK_ISP_DIV_MCUISP1>,
-+                     <&clock CLK_MOUT_MPLL_USER_T>,
-+                     <&clock CLK_ACLK200>,
-+                     <&clock CLK_ACLK400_MCUISP>,
-+                     <&clock CLK_DIV_ACLK200>,
-+                     <&clock CLK_DIV_ACLK400_MCUISP>,
-+                     <&clock CLK_UART_ISP_SCLK>;
-+            clock-names = "lite0", "lite1", "ppmuispx",
-+                          "ppmuispmx", "isp",
-+                          "drc", "fd", "mcuisp",
-+                          "gicisp", "mcuctl_isp", "pwm_isp",
-+                          "ispdiv0", "ispdiv1", "mcuispdiv0",
-+                          "mcuispdiv1", "mpll", "aclk200",
-+                          "aclk400mcuisp", "div_aclk200",
-+                          "div_aclk400mcuisp", "uart";
-+            iommus = <&sysmmu_fimc_isp>, <&sysmmu_fimc_drc>,
-+                     <&sysmmu_fimc_fd>, <&sysmmu_fimc_mcuctl>;
-+            iommu-names = "isp", "drc", "fd", "mcuctl";
-+            power-domains = <&pd_isp>;
-+
-+            #address-cells = <1>;
-+            #size-cells = <1>;
-+            ranges;
-+
-+            pmu@10020000 {
-+                reg = <0x10020000 0x3000>;
-+            };
-+
-+            i2c-isp@12140000 {
-+                compatible = "samsung,exynos4212-i2c-isp";
-+                reg = <0x12140000 0x100>;
-+                clocks = <&isp_clock CLK_ISP_I2C1_ISP>;
-+                clock-names = "i2c_isp";
-+                pinctrl-0 = <&fimc_is_i2c1>;
-+                pinctrl-names = "default";
-+                #address-cells = <1>;
-+                #size-cells = <0>;
-+
-+                image-sensor@10 {
-+                    compatible = "samsung,s5k6a3";
-+                    reg = <0x10>;
-+                    svdda-supply = <&cam_io_reg>;
-+                    svddio-supply = <&ldo19_reg>;
-+                    afvdd-supply = <&ldo19_reg>;
-+                    clock-frequency = <24000000>;
-+                    /* CAM_B_CLKOUT */
-+                    clocks = <&camera 1>;
-+                    clock-names = "extclk";
-+                    gpios = <&gpm1 6 GPIO_ACTIVE_LOW>;
-+
-+                    port {
-+                        endpoint {
-+                            remote-endpoint = <&csis1_ep>;
-+                            data-lanes = <1>;
-+                        };
-+                    };
 +                };
 +            };
 +        };
 +    };
-diff --git a/Documentation/devicetree/bindings/media/samsung-fimc.txt b/Documentation/devicetree/bindings/media/samsung-fimc.txt
++
++    spi {
++        #address-cells = <1>;
++        #size-cells = <0>;
++
++        image-sensor@0 {
++            compatible = "samsung,s5c73m3";
++            reg = <0>;
++            spi-max-frequency = <50000000>;
++            controller-data {
++                samsung,spi-feedback-delay = <2>;
++            };
++        };
++    };
+diff --git a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt b/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
 deleted file mode 100644
-index f90267f1180e..000000000000
---- a/Documentation/devicetree/bindings/media/samsung-fimc.txt
+index f0ea9adad442..000000000000
+--- a/Documentation/devicetree/bindings/media/samsung-s5c73m3.txt
 +++ /dev/null
-@@ -1,210 +0,0 @@
--Samsung S5P/Exynos SoC Camera Subsystem (FIMC)
------------------------------------------------
+@@ -1,97 +0,0 @@
+-Samsung S5C73M3 8Mp camera ISP
+-------------------------------
 -
--The S5P/Exynos SoC Camera subsystem comprises of multiple sub-devices
--represented by separate device tree nodes. Currently this includes: FIMC (in
--the S5P SoCs series known as CAMIF), MIPI CSIS, FIMC-LITE and FIMC-IS (ISP).
+-The S5C73M3 camera ISP supports MIPI CSI-2 and parallel (ITU-R BT.656) video
+-data busses. The I2C bus is the main control bus and additionally the SPI bus
+-is used, mostly for transferring the firmware to and from the device. Two
+-slave device nodes corresponding to these control bus interfaces are required
+-and should be placed under respective bus controller nodes.
 -
--The sub-subdevices are defined as child nodes of the common 'camera' node which
--also includes common properties of the whole subsystem not really specific to
--any single sub-device, like common camera port pins or the CAMCLK clock outputs
--for external image sensors attached to an SoC.
--
--Common 'camera' node
----------------------
+-I2C slave device node
+----------------------
 -
 -Required properties:
 -
--- compatible: must be "samsung,fimc"
--- clocks: list of clock specifiers, corresponding to entries in
--  the clock-names property;
--- clock-names : must contain "sclk_cam0", "sclk_cam1", "pxl_async0",
--  "pxl_async1" entries, matching entries in the clocks property.
--
--- #clock-cells: from the common clock bindings (../clock/clock-bindings.txt),
--  must be 1. A clock provider is associated with the 'camera' node and it should
--  be referenced by external sensors that use clocks provided by the SoC on
--  CAM_*_CLKOUT pins. The clock specifier cell stores an index of a clock.
--  The indices are 0, 1 for CAM_A_CLKOUT, CAM_B_CLKOUT clocks respectively.
--
--- clock-output-names: from the common clock bindings, should contain names of
--  clocks registered by the camera subsystem corresponding to CAM_A_CLKOUT,
--  CAM_B_CLKOUT output clocks respectively.
--
--The pinctrl bindings defined in ../pinctrl/pinctrl-bindings.txt must be used
--to define a required pinctrl state named "default" and optional pinctrl states:
--"idle", "active-a", active-b". These optional states can be used to switch the
--camera port pinmux at runtime. The "idle" state should configure both the camera
--ports A and B into high impedance state, especially the CAMCLK clock output
--should be inactive. For the "active-a" state the camera port A must be activated
--and the port B deactivated and for the state "active-b" it should be the other
--way around.
--
--The 'camera' node must include at least one 'fimc' child node.
--
--
--'fimc' device nodes
---------------------
--
--Required properties:
--
--- compatible: "samsung,s5pv210-fimc" for S5PV210, "samsung,exynos4210-fimc"
--  for Exynos4210 and "samsung,exynos4212-fimc" for Exynos4x12 SoCs;
--- reg: physical base address and length of the registers set for the device;
--- interrupts: should contain FIMC interrupt;
--- clocks: list of clock specifiers, must contain an entry for each required
--  entry in clock-names;
--- clock-names: must contain "fimc", "sclk_fimc" entries.
--- samsung,pix-limits: an array of maximum supported image sizes in pixels, for
--  details refer to Table 2-1 in the S5PV210 SoC User Manual; The meaning of
--  each cell is as follows:
--  0 - scaler input horizontal size,
--  1 - input horizontal size for the scaler bypassed,
--  2 - REAL_WIDTH without input rotation,
--  3 - REAL_HEIGHT with input rotation,
--- samsung,sysreg: a phandle to the SYSREG node.
--
--Each FIMC device should have an alias in the aliases node, in the form of
--fimc<n>, where <n> is an integer specifying the IP block instance.
+-- compatible	    : "samsung,s5c73m3";
+-- reg		    : I2C slave address of the sensor;
+-- vdd-int-supply    : digital power supply (1.2V);
+-- vdda-supply	    : analog power supply (1.2V);
+-- vdd-reg-supply    : regulator input power supply (2.8V);
+-- vddio-host-supply : host I/O power supply (1.8V to 2.8V);
+-- vddio-cis-supply  : CIS I/O power supply (1.2V to 1.8V);
+-- vdd-af-supply     : lens power supply (2.8V);
+-- xshutdown-gpios   : specifier of GPIO connected to the XSHUTDOWN pin;
+-- standby-gpios     : specifier of GPIO connected to the STANDBY pin;
+-- clocks	    : should contain list of phandle and clock specifier pairs
+-		      according to common clock bindings for the clocks described
+-		      in the clock-names property;
+-- clock-names	    : should contain "cis_extclk" entry for the CIS_EXTCLK clock;
 -
 -Optional properties:
 -
--- clock-frequency: maximum FIMC local clock (LCLK) frequency;
--- samsung,min-pix-sizes: an array specyfing minimum image size in pixels at
--  the FIMC input and output DMA, in the first and second cell respectively.
--  Default value when this property is not present is <16 16>;
--- samsung,min-pix-alignment: minimum supported image height alignment (first
--  cell) and the horizontal image offset (second cell). The values are in pixels
--  and default to <2 1> when this property is not present;
--- samsung,mainscaler-ext: a boolean property indicating whether the FIMC IP
--  supports extended image size and has CIEXTEN register;
--- samsung,rotators: a bitmask specifying whether this IP has the input and
--  the output rotator. Bits 4 and 0 correspond to input and output rotator
--  respectively. If a rotator is present its corresponding bit should be set.
--  Default value when this property is not specified is 0x11.
--- samsung,cam-if: a bolean property indicating whether the IP block includes
--  the camera input interface.
--- samsung,isp-wb: this property must be present if the IP block has the ISP
--  writeback input.
--- samsung,lcd-wb: this property must be present if the IP block has the LCD
--  writeback input.
+-- clock-frequency   : the frequency at which the "cis_extclk" clock should be
+-		      configured to operate, in Hz; if this property is not
+-		      specified default 24 MHz value will be used.
 -
+-The common video interfaces bindings (see video-interfaces.txt) should be used
+-to specify link from the S5C73M3 to an external image data receiver. The S5C73M3
+-device node should contain one 'port' child node with an 'endpoint' subnode for
+-this purpose. The data link from a raw image sensor to the S5C73M3 can be
+-similarly specified, but it is optional since the S5C73M3 ISP and a raw image
+-sensor are usually inseparable and form a hybrid module.
 -
--'parallel-ports' node
-----------------------
+-Following properties are valid for the endpoint node(s):
 -
--This node should contain child 'port' nodes specifying active parallel video
--input ports. It includes camera A and camera B inputs. 'reg' property in the
--port nodes specifies data input - 1, 2 indicates input A, B respectively.
+-endpoint subnode
+-----------------
 -
--Optional properties
+-- data-lanes : (optional) specifies MIPI CSI-2 data lanes as covered in
+-  video-interfaces.txt. This sensor doesn't support data lane remapping
+-  and physical lane indexes in subsequent elements of the array should
+-  be only consecutive ascending values.
 -
--- samsung,camclk-out (deprecated) : specifies clock output for remote sensor,
--  0 - CAM_A_CLKOUT, 1 - CAM_B_CLKOUT;
+-SPI device node
+----------------
 -
--Image sensor nodes
--------------------
+-Required properties:
 -
--The sensor device nodes should be added to their control bus controller (e.g.
--I2C0) nodes and linked to a port node in the csis or the parallel-ports node,
--using the common video interfaces bindings, defined in video-interfaces.txt.
+-- compatible	    : "samsung,s5c73m3";
+-
+-For more details see description of the SPI busses bindings
+-(../spi/spi-bus.txt) and bindings of a specific bus controller.
 -
 -Example:
 -
--	aliases {
--		fimc0 = &fimc_0;
--	};
--
--	/* Parallel bus IF sensor */
--	i2c_0: i2c@13860000 {
--		s5k6aa: sensor@3c {
--			compatible = "samsung,s5k6aafx";
--			reg = <0x3c>;
--			vddio-supply = <...>;
--
--			clock-frequency = <24000000>;
--			clocks = <&camera 1>;
--			clock-names = "mclk";
--
--			port {
--				s5k6aa_ep: endpoint {
--					remote-endpoint = <&fimc0_ep>;
--					bus-width = <8>;
--					hsync-active = <0>;
--					vsync-active = <1>;
--					pclk-sample = <1>;
--				};
--			};
--		};
--
--		/* MIPI CSI-2 bus IF sensor */
--		s5c73m3: sensor@1a {
--			compatible = "samsung,s5c73m3";
--			reg = <0x1a>;
--			vddio-supply = <...>;
--
--			clock-frequency = <24000000>;
--			clocks = <&camera 0>;
--			clock-names = "mclk";
--
--			port {
--				s5c73m3_1: endpoint {
--					data-lanes = <1 2 3 4>;
--					remote-endpoint = <&csis0_ep>;
--				};
+-i2c@138a000000 {
+-	...
+-	s5c73m3@3c {
+-		compatible = "samsung,s5c73m3";
+-		reg = <0x3c>;
+-		vdd-int-supply = <&buck9_reg>;
+-		vdda-supply = <&ldo17_reg>;
+-		vdd-reg-supply = <&cam_io_reg>;
+-		vddio-host-supply = <&ldo18_reg>;
+-		vddio-cis-supply = <&ldo9_reg>;
+-		vdd-af-supply = <&cam_af_reg>;
+-		clock-frequency = <24000000>;
+-		clocks = <&clk 0>;
+-		clock-names = "cis_extclk";
+-		xshutdown-gpios = <&gpf1 3 1>;
+-		standby-gpios = <&gpm0 1 1>;
+-		port {
+-			s5c73m3_ep: endpoint {
+-				remote-endpoint = <&csis0_ep>;
+-				data-lanes = <1 2 3 4>;
 -			};
 -		};
 -	};
+-};
 -
--	camera@11800000 {
--		compatible = "samsung,fimc";
--		clocks = <&clock 132>, <&clock 133>, <&clock 351>,
--			 <&clock 352>;
--		clock-names = "sclk_cam0", "sclk_cam1", "pxl_async0",
--			      "pxl_async1";
--		#clock-cells = <1>;
--		clock-output-names = "cam_a_clkout", "cam_b_clkout";
--		pinctrl-names = "default";
--		pinctrl-0 = <&cam_port_a_clk_active>;
--		ranges;
--		#address-cells = <1>;
--		#size-cells = <1>;
--
--		/* parallel camera ports */
--		parallel-ports {
--			/* camera A input */
--			port@1 {
--				reg = <1>;
--				fimc0_ep: endpoint {
--					remote-endpoint = <&s5k6aa_ep>;
--					bus-width = <8>;
--					hsync-active = <0>;
--					vsync-active = <1>;
--					pclk-sample = <1>;
--				};
--			};
--		};
--
--		fimc_0: fimc@11800000 {
--			compatible = "samsung,exynos4210-fimc";
--			reg = <0x11800000 0x1000>;
--			interrupts = <0 85 0>;
--		};
--
--		csis_0: csis@11880000 {
--			compatible = "samsung,exynos4210-csis";
--			reg = <0x11880000 0x1000>;
--			interrupts = <0 78 0>;
--			/* camera C input */
--			port@3 {
--				reg = <3>;
--				csis0_ep: endpoint {
--					remote-endpoint = <&s5c73m3_ep>;
--					data-lanes = <1 2 3 4>;
--					samsung,csis-hs-settle = <12>;
--				};
--			};
--		};
+-spi@1392000 {
+-	...
+-	s5c73m3_spi: s5c73m3@0 {
+-		compatible = "samsung,s5c73m3";
+-		reg = <0>;
+-		...
 -	};
--
--The MIPI-CSIS device binding is defined in samsung-mipi-csis.txt.
+-};
 diff --git a/MAINTAINERS b/MAINTAINERS
-index ea2bb7599da8..7963cae23544 100644
+index 7963cae23544..bcbf0aec6ecf 100644
 --- a/MAINTAINERS
 +++ b/MAINTAINERS
-@@ -18557,8 +18557,10 @@ L:	linux-media@vger.kernel.org
+@@ -18532,6 +18532,7 @@ M:	Sylwester Nawrocki <s.nawrocki@samsung.com>
+ M:	Andrzej Hajda <andrzej.hajda@intel.com>
+ L:	linux-media@vger.kernel.org
  S:	Supported
- Q:	https://patchwork.linuxtv.org/project/linux-media/list/
- F:	Documentation/devicetree/bindings/media/samsung,exynos4210-csis.yaml
-+F:	Documentation/devicetree/bindings/media/samsung,exynos4210-fimc.yaml
- F:	Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-is.yaml
- F:	Documentation/devicetree/bindings/media/samsung,exynos4212-fimc-lite.yaml
-+F:	Documentation/devicetree/bindings/media/samsung,fimc.yaml
- F:	drivers/media/platform/samsung/exynos4-is/
++F:	Documentation/devicetree/bindings/media/samsung,s5c73m3.yaml
+ F:	drivers/media/i2c/s5c73m3/*
  
- SAMSUNG SOC CLOCK DRIVERS
+ SAMSUNG S5K5BAF CAMERA DRIVER
 -- 
 2.34.1
 
