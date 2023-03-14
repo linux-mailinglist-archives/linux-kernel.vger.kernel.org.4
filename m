@@ -2,86 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 90CB06B8BD8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 240A86B8BD7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:20:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230177AbjCNHU3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 03:20:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57900 "EHLO
+        id S229897AbjCNHT6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 03:19:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57092 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230054AbjCNHU1 (ORCPT
+        with ESMTP id S230242AbjCNHTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 03:20:27 -0400
-Received: from mail.21d02.saludzona1.gob.ec (mail.21d02.saludzona1.gob.ec [190.152.151.92])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6273C5D762
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 00:20:26 -0700 (PDT)
-Received: from mail.21d02.saludzona1.gob.ec (localhost [127.0.0.1])
-        by mail.21d02.saludzona1.gob.ec (Postfix) with ESMTPS id 0C816184BD3;
-        Tue, 14 Mar 2023 02:19:55 -0500 (-05)
-Received: from mail.21d02.saludzona1.gob.ec (localhost [127.0.0.1])
-        by mail.21d02.saludzona1.gob.ec (Postfix) with ESMTPS id 5379C184B76;
-        Tue, 14 Mar 2023 02:19:16 -0500 (-05)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.21d02.saludzona1.gob.ec 5379C184B76
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=21d02.saludzona1.gob.ec; s=24C6D9D4-9B00-11EC-A370-2E316D1EF6D8;
-        t=1678778356; bh=JdEXVS4knNzBDrqgq11llib5sx6OnjKCzXCJ2OhjXfg=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=1QuGUVeNzIpMMtSsn4OwhJb6cu9TwAuYu1m4/dQo7bEcRhmeEKp37pBO6YS5kSoDn
-         Pf+aaS8Nmhgu+HIXYkszNjNR5tNFdkdysoW1DZ58OnGETBxrobGjSbnCP8yeTOVD9i
-         xDz45hrws/08tHu49N+iEjFdUy9AbEBhSFFIQMMPpP2ViYifW7jzeLcSJFUUtxX+qO
-         JUNC+vY7ZeDmpi7KljpBwwwxZ4p53AnuCIfkNqxOQrZ9FkrHEAboqWHzpOS90WY5uP
-         ZObqUUon76boQ1WoGzUAWfG282ijBuerPoiPIbosKyOFiWRGFkUvqb9P/Cz16niIsO
-         0Esi4/6i4y9vw==
-Received: from [23.146.243.3] (coo3.checkononline.com [23.146.243.3])
-        by mail.21d02.saludzona1.gob.ec (Postfix) with ESMTPSA id 63E2A184AD7;
-        Tue, 14 Mar 2023 02:18:55 -0500 (-05)
-Content-Type: text/plain; charset="iso-8859-1"
+        Tue, 14 Mar 2023 03:19:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9DDB19C68;
+        Tue, 14 Mar 2023 00:19:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5ACB9B81887;
+        Tue, 14 Mar 2023 07:19:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18B34C433EF;
+        Tue, 14 Mar 2023 07:19:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678778388;
+        bh=rEcwpr6ZTgtGaQrka2qK+7yPmKYXTmYdMJswZJ4beXE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Xc+htRg4jwkaQ1NdwL15ZlqUDMviGCnMWy9asoPgzTkQsycHYyOuxImk+2fwxRjJg
+         ANSpQgtaUXSm5JxSsOEx18+zhZX4fFXLwaw89hdRjNu+43fhg7cT2exl6XR/v50yQx
+         PVdG/eSVNK9EXDfcDdUf3czRPirAefJxegCSQo0VUSKps7q9gqtPs+f87B4YaMdsgM
+         pnULmDVF+F93AQhI8H5MAQdQAK2mCfBbSxV6ARQ0lKbuqqyuK7HcPID8wRiIB/R/S1
+         ksVWWlmvLvg/6n6asn34itV+OVlWruZdWD4KY/wTe8Y6R7U2VUCKtue6AvIarS974i
+         U01UkRTpXIeng==
+Date:   Tue, 14 Mar 2023 09:19:25 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Deepak Gupta <debug@rivosinc.com>
+Cc:     Szabolcs Nagy <szabolcs.nagy@arm.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>, x86@kernel.org,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, linux-kernel@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-mm@kvack.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        Arnd Bergmann <arnd@arndb.de>,
+        Andy Lutomirski <luto@kernel.org>,
+        Balbir Singh <bsingharora@gmail.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Cyrill Gorcunov <gorcunov@gmail.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Eugene Syromiatnikov <esyr@redhat.com>,
+        Florian Weimer <fweimer@redhat.com>,
+        "H . J . Lu" <hjl.tools@gmail.com>, Jann Horn <jannh@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Kees Cook <keescook@chromium.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Oleg Nesterov <oleg@redhat.com>, Pavel Machek <pavel@ucw.cz>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Weijiang Yang <weijiang.yang@intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        John Allen <john.allen@amd.com>, kcc@google.com,
+        eranian@google.com, jamorris@linux.microsoft.com,
+        dethoma@microsoft.com, akpm@linux-foundation.org,
+        Andrew.Cooper3@citrix.com, christina.schimpe@intel.com,
+        david@redhat.com, nd@arm.com, al.grant@arm.com
+Subject: Re: [PATCH v7 33/41] x86/shstk: Introduce map_shadow_stack syscall
+Message-ID: <ZBAf/QI42hcVQ4Uq@kernel.org>
+References: <20230227222957.24501-1-rick.p.edgecombe@intel.com>
+ <20230227222957.24501-34-rick.p.edgecombe@intel.com>
+ <ZADbP7HvyPHuwUY9@arm.com>
+ <20230309185511.GA1964069@debug.ba.rivosinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: Actualizacion
-To:     Recipients <juan.alban@21d02.saludzona1.gob.ec>
-From:   "zimbra@" <juan.alban@21d02.saludzona1.gob.ec>
-Date:   Tue, 14 Mar 2023 00:19:18 -0700
-Reply-To: webmasterzimbra1@gmail.com
-Message-Id: <20230314071855.63E2A184AD7@mail.21d02.saludzona1.gob.ec>
-X-Distrito21d02-MailScanner: Found to be clean, Found to be clean
-X-Spam-Status: No, score=3.3 required=5.0 tests=BAYES_50,DKIM_INVALID,
-        DKIM_SIGNED,FREEMAIL_FORGED_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Distrito21d02-MailScanner-Information: Please contact the ISP for more information
-X-Distrito21d02-MailScanner-ID: 5379C184B76.A5BE9
-X-Distrito21d02-MailScanner-From: juan.alban@21d02.saludzona1.gob.ec
-X-Spam-Level: ***
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230309185511.GA1964069@debug.ba.rivosinc.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Atenci=F3n Correo,
+Hi,
 
+On Thu, Mar 09, 2023 at 10:55:11AM -0800, Deepak Gupta wrote:
+> On Thu, Mar 02, 2023 at 05:22:07PM +0000, Szabolcs Nagy wrote:
+> > The 02/27/2023 14:29, Rick Edgecombe wrote:
+> > > Previously, a new PROT_SHADOW_STACK was attempted,
+> > ...
+> > > So rather than repurpose two existing syscalls (mmap, madvise) that don't
+> > > quite fit, just implement a new map_shadow_stack syscall to allow
+> > > userspace to map and setup new shadow stacks in one step. While ucontext
+> > > is the primary motivator, userspace may have other unforeseen reasons to
+> > > setup it's own shadow stacks using the WRSS instruction. Towards this
+> > > provide a flag so that stacks can be optionally setup securely for the
+> > > common case of ucontext without enabling WRSS. Or potentially have the
+> > > kernel set up the shadow stack in some new way.
+> > ...
+> > > The following example demonstrates how to create a new shadow stack with
+> > > map_shadow_stack:
+> > > void *shstk = map_shadow_stack(addr, stack_size, SHADOW_STACK_SET_TOKEN);
+> > 
+> > i think
+> > 
+> > mmap(addr, size, PROT_READ, MAP_ANON|MAP_SHADOW_STACK, -1, 0);
+> > 
+> > could do the same with less disruption to users (new syscalls
+> > are harder to deal with than new flags). it would do the
+> > guard page and initial token setup too (there is no flag for
+> > it but could be squeezed in).
+> 
+> Discussion on this topic in v6
+> https://lore.kernel.org/all/20230223000340.GB945966@debug.ba.rivosinc.com/
+> 
+> Again I know earlier CET patches had protection flag and somehow due to pushback
+> on mailing list, it was adopted to go for special syscall because no one else
+> had shadow stack.
+> 
+> Seeing a response from Szabolcs, I am assuming arm4 would also want to follow
+> using mmap to manufacture shadow stack. For reference RFC patches for risc-v shadow stack,
+> use a new protection flag = PROT_SHADOWSTACK.
+> https://lore.kernel.org/lkml/20230213045351.3945824-1-debug@rivosinc.com/
+> 
+> I know earlier discussion had been that we let this go and do a re-factor later as other
+> arch support trickle in. But as I thought more on this and I think it may just be
+> messy from user mode point of view as well to have cognition of two different ways of
+> creating shadow stack. One would be special syscall (in current libc) and another `mmap`
+> (whenever future re-factor happens)
+> 
+> If it's not too late, it would be more wise to take `mmap`
+> approach rather than special `syscall` approach.
+ 
+I disagree. 
 
-Le hemos estado enviando una serie de correos electr=F3nicos con respecto a=
- la actualizaci=F3n de su cuenta de correo web. Has estado demostrando ser =
-fuerte. Te damos 24 horas o desactivas tu cuenta.
+Having shadow stack flags for mmap() adds unnecessary complexity to the
+core-mm, while having a dedicated syscall hides all the details in the
+architecture specific code.
 
-1) Contrase=F1a:
-2) Vuelva a escribir la contrase=F1a:
+Another reason to use a dedicated system call allows for better
+extensibility if/when we'd need to update the way shadow stack VMA is
+created.
 
+As for the userspace convenience, it is anyway required to add special
+code for creating the shadow stack and it wouldn't matter if that code
+would use mmap(NEW_FLAG) or map_shadow_stack().
 
-Env=EDe la informaci=F3n de la contrase=F1a lo antes posible para evitar la=
- desactivaci=F3n.
+> > most of the mmap features need not be available (EINVAL) when
+> > MAP_SHADOW_STACK is specified.
+> > 
+> > the main drawback is running out of mmap flags so extension
+> > is limited. (but the new syscall has limitations too).
 
-
-Se=F1al
-
-Gesti=F3n de correo web.
-
---=20
-Este mensaje ha sido analizado por MailScanner
-en busca de virus y otros contenidos peligrosos,
-y se considera que est=E1 limpio.
-
-
+-- 
+Sincerely yours,
+Mike.
