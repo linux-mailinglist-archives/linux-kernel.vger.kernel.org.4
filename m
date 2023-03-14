@@ -2,71 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BA87A6B99F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:40:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B4576B99F0
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:39:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230149AbjCNPkF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:40:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52856 "EHLO
+        id S230012AbjCNPjk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:39:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50638 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229648AbjCNPjn (ORCPT
+        with ESMTP id S230047AbjCNPjY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:39:43 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84168B1A56;
-        Tue, 14 Mar 2023 08:38:56 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id cy23so63600435edb.12;
-        Tue, 14 Mar 2023 08:38:56 -0700 (PDT)
+        Tue, 14 Mar 2023 11:39:24 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB3CFB759
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:38:37 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id j11so63719133edq.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:38:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678808288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w3ZuYTnI2XHY7qD63HYvqwpI7hWCTPg4374W3++0NbA=;
-        b=L0jFXnD6fY2x71EQ6w5SQvZLc7ZP5CiMlLl4xc0rdvsqGB5tEvmmxbPeKgrGvU9/uH
-         Nkr8DxsNI+KjwtM8AoP4ciM3N+C1/kbI9m6KYG7YnpPwKZUm7gJKqSXhRtrLSlzfEVeu
-         33J5hjtg2BBUTdLptztUqdfOyNJJbUmsV6F4+Et6z1GDzCIXkwzv/hK5j0DY+8xwvOV9
-         KHM9aGLsq232L01gSCxnGG+sYkkNy58kZNbdF1qJVond/CQ4T+gHOOpYpzSHt+yXQIUb
-         7NfzEYCOLqPM5QvsgcszumEN93G/0WC1EguFNpjoJyQUFRHlew+g0jMj/bhvFpjN82Jc
-         XOCw==
+        d=linaro.org; s=google; t=1678808279;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2TF36IhKXXk6YGbpKzPAtC6Xow3FHaqTfrUySLBDzQc=;
+        b=yMenpJmh6h0dQFb0waXpMdvJuTFRjxpgNLTbnbIHK6DlBmKA7EEuy+FwT5rSljD1DS
+         pLkZtnO4j1rt/C/KhIBdO42UU0o3lw+ksJ8O837YfjkpSmmkiu9lQHb0Rdvkj9TZvkCq
+         b55ApjN6XOlMzG11n9kfI2qHIvMM/g7pjEXZXya0+W44ZUBZTHRM0+j+ReL1wHC1Rw59
+         TrbFXzrAqmsT/7DTbFASErPZHb2dUy7U8hxFJ9rFtHl1Pv6T4GTxQWVJ0UdupAHCev8q
+         YTlhBSEMOITBXK0vnOts68LGZSoNQ5iR27VnKSD7StKMmQJkzF+APxuaR1vydyklinie
+         PBZQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678808288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w3ZuYTnI2XHY7qD63HYvqwpI7hWCTPg4374W3++0NbA=;
-        b=m4Gh0JPNwp0duQnv8ImKxkBcZMURksCtdfvMrbRtkn3O+R2mYJqMASrD5JRsxL2ks+
-         B24yQyD62d+agv+WZGYijCe6o6icls6OILI8Qj6b1lhuZsJc4QDPl0pOpXUN3Pq83Bop
-         J2Uxeu3H6T/O6YCNgQlc86s9nhekXQxeMlvfoOzX0L2c6/8NB6O/XFX41fjlYbzEeZLy
-         oRqA+bBEJ5Tu5kvr9gWB32i3t/X0R+25ktfd9US4fualbW4zL59g/KurXGIeJTyfRMC3
-         ficiX3XYxskgHuoQnZQlgRLlYFXr3Cz3ee8Wj6JIJOQ5FFPUUQUf3mJXENkLiAWH/vhA
-         5+UA==
-X-Gm-Message-State: AO0yUKVr5rpX63ays4C6r4pCv6ToAW/r3w8OEr84iuadm/w9HTrxtw/m
-        qLnYjlAXUedOztsyMjC7u/YwTxNSLk1iUileWc0=
-X-Google-Smtp-Source: AK7set/dZz+S30ElspvS+EcKXPdVdzDcBSO9QhvK39lm23VCHLr/Hpbu8dtl8+OAdMgr3AlVyBzh8Mhibzq+cHa5/VA=
-X-Received: by 2002:a17:906:8443:b0:922:26ae:c68c with SMTP id
- e3-20020a170906844300b0092226aec68cmr1630233ejy.5.1678808287719; Tue, 14 Mar
- 2023 08:38:07 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678808279;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2TF36IhKXXk6YGbpKzPAtC6Xow3FHaqTfrUySLBDzQc=;
+        b=b69YJmQPOA6sCV7xS+I1fkc7KdVnHHGpUqi8jtB38UC9jo4yowWlEnPZDEXw01l++c
+         /cKQDe+PD/WxQn8hi8devJvOK2EHvYN/yiDAo9VTqxjUh9DQq0Uu6BVEM78j78s5eGwW
+         e7bWdP21nWzOFkgetfaDPlrgx7BqxpIJ95sj+gt4j42Mg+jIVxq+ymj9Rtm2n/zV0KdE
+         FSPHbZeF36RKpWWHo3lJDhz7JKYyfU/v9DUfxVtvFQyJrfVXLDaoAz4X1RuPLLb5SrRZ
+         kMGt1SQerl6LxiAy3pgEk7QMaaQaSXS26w08nSqc07TsR2l2xfG2rER/7KqFZ8qJ7ofM
+         kRtQ==
+X-Gm-Message-State: AO0yUKXQ/wDUl2s/v0EC6BKo61YOCRvRK2n3L1GoVNG36AVy6y3Us9VS
+        XBYV7A94cureMwb+Ts40CpZVpg==
+X-Google-Smtp-Source: AK7set9VlEaie3T4XSfwYSyfX9w55uBK9zmwb3D2/voALZ/htwROvQHC39CEVKRyTaWJmi8tkw0VJg==
+X-Received: by 2002:a17:907:c508:b0:92c:6fbf:28 with SMTP id tq8-20020a170907c50800b0092c6fbf0028mr3153303ejc.64.1678808279056;
+        Tue, 14 Mar 2023 08:37:59 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id q19-20020a17090676d300b00922f76decefsm1304341ejn.99.2023.03.14.08.37.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 08:37:58 -0700 (PDT)
+Message-ID: <21add21d-4afe-7840-6c49-3786f82761d9@linaro.org>
+Date:   Tue, 14 Mar 2023 16:37:57 +0100
 MIME-Version: 1.0
-References: <20230314131427.85135-1-kerneljasonxing@gmail.com>
- <20230314131427.85135-2-kerneljasonxing@gmail.com> <CANn89iJzVjht5L1zxwCMTPXXoXdRMtRmzbL5UzHodhBJziCxYg@mail.gmail.com>
-In-Reply-To: <CANn89iJzVjht5L1zxwCMTPXXoXdRMtRmzbL5UzHodhBJziCxYg@mail.gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 14 Mar 2023 23:37:31 +0800
-Message-ID: <CAL+tcoCitx8045qWr1E-yudvEkCndDMBJT+OtqqjbdEPv7EXhQ@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 1/2] net-sysfs: display two backlog queue len separately
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, stephen@networkplumber.org,
-        simon.horman@corigine.com, sinquersw@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Content-Language: en-US
+To:     neil.armstrong@linaro.org,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     jbrunet@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        khilman@baylibre.com, martin.blumenstingl@googlemail.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+ <20230313201259.19998-4-ddrokosov@sberdevices.ru>
+ <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
+ <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
+ <2d9297e9-dab7-9615-3859-79b3b2980d9a@linaro.org>
+ <20230314150107.mwcglcu2jv4ixy3r@CAB-WSD-L081021>
+ <9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org>
+ <c8fecf94-2581-6cc9-955c-324efdc7c70a@linaro.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <c8fecf94-2581-6cc9-955c-324efdc7c70a@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,102 +89,21 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:15=E2=80=AFPM Eric Dumazet <edumazet@google.com>=
- wrote:
->
-> On Tue, Mar 14, 2023 at 6:14=E2=80=AFAM Jason Xing <kerneljasonxing@gmail=
-.com> wrote:
-> >
-> > From: Jason Xing <kernelxing@tencent.com>
-> >
-> > Sometimes we need to know which one of backlog queue can be exactly
-> > long enough to cause some latency when debugging this part is needed.
-> > Thus, we can then separate the display of both.
-> >
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> > ---
-> > v3: drop the comment suggested by Simon
-> > Link: https://lore.kernel.org/lkml/20230314030532.9238-2-kerneljasonxin=
-g@gmail.com/
-> >
-> > v2: keep the total len of backlog queues untouched as Eric said
-> > Link: https://lore.kernel.org/lkml/20230311151756.83302-1-kerneljasonxi=
-ng@gmail.com/
-> > ---
-> >  net/core/net-procfs.c | 19 +++++++++++++++----
-> >  1 file changed, 15 insertions(+), 4 deletions(-)
-> >
-> > diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-> > index 1ec23bf8b05c..8056f39da8a1 100644
-> > --- a/net/core/net-procfs.c
-> > +++ b/net/core/net-procfs.c
-> > @@ -115,10 +115,19 @@ static int dev_seq_show(struct seq_file *seq, voi=
-d *v)
-> >         return 0;
-> >  }
-> >
-> > +static u32 softnet_input_pkt_queue_len(struct softnet_data *sd)
-> > +{
-> > +       return skb_queue_len_lockless(&sd->input_pkt_queue);
-> > +}
-> > +
-> > +static u32 softnet_process_queue_len(struct softnet_data *sd)
-> > +{
-> > +       return skb_queue_len_lockless(&sd->process_queue);
-> > +}
-> > +
-> >  static u32 softnet_backlog_len(struct softnet_data *sd)
-> >  {
-> > -       return skb_queue_len_lockless(&sd->input_pkt_queue) +
-> > -              skb_queue_len_lockless(&sd->process_queue);
-> > +       return softnet_input_pkt_queue_len(sd) + softnet_process_queue_=
-len(sd);
-> >  }
-> >
-> >  static struct softnet_data *softnet_get_online(loff_t *pos)
-> > @@ -169,12 +178,14 @@ static int softnet_seq_show(struct seq_file *seq,=
- void *v)
-> >          * mapping the data a specific CPU
-> >          */
-> >         seq_printf(seq,
-> > -                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %=
-08x %08x %08x\n",
-> > +                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %=
-08x %08x %08x "
-> > +                  "%08x %08x\n",
-> >                    sd->processed, sd->dropped, sd->time_squeeze, 0,
-> >                    0, 0, 0, 0, /* was fastroute */
-> >                    0,   /* was cpu_collision */
-> >                    sd->received_rps, flow_limit_count,
-> > -                  softnet_backlog_len(sd), (int)seq->index);
-> > +                  softnet_backlog_len(sd), (int)seq->index,
-> > +                  softnet_input_pkt_queue_len(sd), softnet_process_que=
-ue_len(sd));
-> >         return 0;
->
->
-[...]
-> It is customary to wait ~24 hours between each version, so that
-> everybody gets a chance to comment,
-> and to avoid polluting mailing lists with too many messages/day.
+On 14/03/2023 16:33, neil.armstrong@linaro.org wrote:
+>> There are many ways - depend on your driver. For example like this:
+>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/samsung/clk-exynos5420.c#n975
+>>
+>> The first argument is the clock ID (or ignore).
+>>
+>> BTW, quite likely the problem is generic to all Meson clock drivers.
+> 
+> This issue about "public" non-continuous defined was already discussed at https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
+> 
+> I don't see what's different with this one.
 
-Thanks for your reminder.
+So you are aware that all undocumented clock IDs are still allowed to
+use in DTS and they are ABI? Changing them will be an ABI break.
 
->
-> (I see you are including lkml@, which seems unnecessary for this kind of =
-patch)
+Best regards,
+Krzysztof
 
-Yes, I alway do the get_maintainers.pl to check before I submit. So
-I'll remove the lkml@.
-
->
-> Please address the feedback I gave for v2.
-
-Sure :)
-
-Thanks,
-Jason
-
->
-> Thanks.
