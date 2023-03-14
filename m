@@ -2,172 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 01D826B8E90
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:23:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 973046B8E99
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:25:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231133AbjCNJXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
+        id S229934AbjCNJX5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:23:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbjCNJXV (ORCPT
+        with ESMTP id S231148AbjCNJXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:23:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C25350F9D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:22:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 06208B816DA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:22:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A20C4339C;
-        Tue, 14 Mar 2023 09:22:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1678785770;
-        bh=dlm/nxuSKTp43OoyQoRKTCpUnmzgoQkE2Ux5U5sBaTc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=B5fUznEVs34JDctK6qUKPKEL53HEAsq/y0mZvGNuE4QDJmAg1kGc4RvKrFXTj6AxF
-         n+BE/RvSwq34y23QwpUUPjyjdIjdIY9bTNj3RpvgJc9yOW+IlcUyvmF5/KwV8s3f4G
-         2kHqq7fvxxEzCGtd9MbWTcV+e0GEeF1XzxiEgmvY=
-Date:   Tue, 14 Mar 2023 10:22:48 +0100
-From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
-To:     "Noah (Wensheng) Wang" <Noah.Wang@monolithicpower.com>
-Cc:     "arnd@arndb.de" <arnd@arndb.de>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Luke (Lijie) Jiang" <Luke.Jiang@monolithicpower.com>,
-        pebble liang <pebble.liang@monolithicpower.com>,
-        "Eva (Ting) Ma" <Eva.Ma@monolithicpower.com>
-Subject: Re: [PATCH] char: add driver for mps VR controller mp2891
-Message-ID: <ZBA86BAVMWGiS39s@kroah.com>
-References: <08e7bd6ed16f4bde95b674db940783ec@monolithicpower.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <08e7bd6ed16f4bde95b674db940783ec@monolithicpower.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Mar 2023 05:23:51 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B6B481CE1;
+        Tue, 14 Mar 2023 02:23:41 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so19713673pjb.3;
+        Tue, 14 Mar 2023 02:23:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678785821;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WkRcazuJb7v9nTIQ0dhQR/wIjE8fenM+pHebExHfSRc=;
+        b=gDFXjIIIBxk2rJLz6BEGVWRZGsY0bEHGcvQtoBp9I0YSbhTwhuzE4loJTzLmLMA1d3
+         YzwiWWsJw7t2R3r39B/Ny0SwHfhP5vywYBCfuyZZDHV56KddrQlh90Y7Z1MOyjDV/XSK
+         W3rdzBR/KrF8lRu5DQmtd01Dn//M3xIDf/iFMDGVnVE7tYC3NzMxJQcklE52wFB4OR88
+         yNd9dMyngc5sQeMhK655/nTL50O9fQwqFfMFGvkFeyzJvIGo6ufBLe0k1qfmKHo4c5ig
+         Bg4BFzP2oZV5dRc0OJVrVmCxgWV0slzuU8YEusvOqHxN5DmW3FldGQxrB2cvfrBbt6/d
+         i7BA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678785821;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WkRcazuJb7v9nTIQ0dhQR/wIjE8fenM+pHebExHfSRc=;
+        b=xjoJEjKqqzZMYGIW5hGW9FjkMx6KzAL5OKd8h1Mu9Q1dWFcrVkRo12379yqSY+iycj
+         QZCpqbS5Zn48CI9If9bGHT6RN8YTbE9jTDjSkMY4SGxLQtJyKQHh9hUH9hVb0WbJ/vM9
+         yCPMO+atCvCsDzC3MCCBulytXfEnLyACb4pt29QOQyOQSlzC43Z5QkH1fOzoOlMpFpI8
+         sj4FHVj8m31r6M4NOFNJ2UqsbwIGt0ukd3koEyaL5/pOy5j52YkEbhEu02dicAvxePDt
+         7PvI39eIxreP3Ra9x9gE3xcBydRKSK96vKMu1tbUct8ptpjeCwZQMxwbOh90DpukE5ZB
+         Wycw==
+X-Gm-Message-State: AO0yUKXXCh1KETe5MGlhioeZKDJgM5TTBKc0TBl/ueJfwD07YvQ8Gqfw
+        jB2eOCuhERvKgWi7tdXh44b8omVBD+Q=
+X-Google-Smtp-Source: AK7set9CmVYYHzcHXn+3N7OGiHWr47DueIgz3FHgT31XfMbtEpFH52tbv+yXIF0e5GGnYiFDYxPy6A==
+X-Received: by 2002:a05:6a20:8e0a:b0:c7:6a98:5bd8 with SMTP id y10-20020a056a208e0a00b000c76a985bd8mr23210905pzj.0.1678785820982;
+        Tue, 14 Mar 2023 02:23:40 -0700 (PDT)
+Received: from localhost.localdomain ([1.200.129.193])
+        by smtp.gmail.com with ESMTPSA id f21-20020aa782d5000000b00592626fe48csm1120898pfn.122.2023.03.14.02.23.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 02:23:40 -0700 (PDT)
+From:   Jim Liu <jim.t90615@gmail.com>
+To:     JJLIU0@nuvoton.com, KWLIU@nuvoton.com, linus.walleij@linaro.org,
+        brgl@bgdev.pl, jim.t90615@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, openbmc@lists.ozlabs.org
+Subject: [PATCH v5 0/3]Add Nuvoton NPCM SGPIO feature
+Date:   Tue, 14 Mar 2023 17:23:08 +0800
+Message-Id: <20230314092311.8924-1-jim.t90615@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:18:50AM +0000, Noah (Wensheng) Wang wrote:
-> Hi Arnd, Grey:
-> Thanks for the review.
-> 
-> This driver will be used by facebook. This driver provide a device node for userspace to get output voltage, input voltage, input current, input power, output power and temperature of mp2891 controller through I2C. This driver determine what kind of value the userspace wants through the mp2891_write interface and return the corresponding value when the interface mp2891_read is called.
+This SGPIO controller is for NUVOTON NPCM7xx and NPCM8xx SoC.
+Nuvoton NPCM SGPIO module is combine serial to parallel IC (HC595)
+and parallel to serial IC (HC165), and use APB3 clock to control it.
+This interface has 4 pins  (D_out , D_in, S_CLK, LDSH).
+NPCM7xx/NPCM8xx have two sgpio module each module can support up
+to 64 output pins,and up to 64 input pin, the pin is only for gpi or gpo.
+GPIO pins have sequential, First half is gpo and second half is gpi.
 
-Note, can you please take a look at the kernel documentation for how to
-write a good changelog text when you resubmit this?
 
-> 
-> Signed-off-by: Noah Wang <Noah.Wang@monolithicpower.com>
-> ---
->  drivers/char/mp2891.c | 403 ++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 403 insertions(+)
->  create mode 100644 drivers/char/mp2891.c
+Jim Liu (3):
+  gpio: nuvoton: Add Nuvoton NPCM sgpio driver
+  arm: dts: nuvoton: npcm: Add sgpio feature
+  dt-bindings: gpio: add NPCM sgpio driver bindings
 
-You didn't add the driver to the build, so it can not actually be used
-at all.  How did you test this?
+ .../bindings/gpio/nuvoton,sgpio.yaml          |  87 +++
+ arch/arm/boot/dts/nuvoton-common-npcm7xx.dtsi |  30 +
+ drivers/gpio/Kconfig                          |   8 +
+ drivers/gpio/Makefile                         |   1 +
+ drivers/gpio/gpio-npcm-sgpio.c                | 648 ++++++++++++++++++
+ 5 files changed, 774 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/gpio/nuvoton,sgpio.yaml
+ create mode 100644 drivers/gpio/gpio-npcm-sgpio.c
 
-> 
-> diff --git a/drivers/char/mp2891.c b/drivers/char/mp2891.c new file mode 100644 index 000000000000..84529b73f065
-> --- /dev/null
-> +++ b/drivers/char/mp2891.c
-> @@ -0,0 +1,403 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
+-- 
+2.17.1
 
-Are you _sure_ you mean "or later"?  (I have to ask)
-
-> +/*
-> + * Driver for MPS Multi-phase Digital VR Controllers(MP2891)
-> + *
-> + * Copyright (C) 2023 MPS
-> + */
-> +
-> +#include <linux/types.h>
-> +#include <linux/kernel.h>
-> +#include <linux/delay.h>
-> +#include <linux/ide.h>
-> +#include <linux/init.h>
-> +#include <linux/module.h>
-> +#include <linux/errno.h>
-> +#include <linux/gpio.h>
-> +#include <linux/cdev.h>
-> +#include <linux/device.h>
-> +#include <linux/of_gpio.h>
-> +#include <linux/semaphore.h>
-> +#include <linux/timer.h>
-> +#include <linux/i2c.h>
-> +#include <linux/uaccess.h>
-> +#include <linux/io.h>
-> +#include <asm/mach/map.h>
-> +
-> +#define PMBUS_PAGE              0x00
-> +#define MFR_VOUT_LOOP_CTRL_R1   0xBD
-> +#define MFR_VOUT_LOOP_CTRL_R2   0xBD
-> +
-> +#define VID_STEP_POS            14
-> +#define VID_STEP_MSK            (0x3 << VID_STEP_POS)
-> +
-> +#define READ_VIN                0x88
-> +#define READ_VOUT               0x8B
-> +#define READ_IOUT               0x8C
-> +#define READ_TEMPERATURE        0x8D
-> +#define READ_PIN_EST_PMBUS_R1   0x94
-> +#define READ_PIN_EST_PMBUS_R2   0x94
-> +#define READ_POUT_PMBUS_R1      0x96
-> +#define READ_POUT_PMBUS_R2      0x96
-> +
-> +#define MP2891_PAGE_NUM			2
-> +
-> +#define MP2891_CNT 1
-> +#define MP2891_NAME "mp2891"
-> +
-> +#define IOUT_PAGE0          "IOUT-0"
-> +#define IOUT_PAGE1          "IOUT-1"
-> +#define VOUT_PAGE0          "VOUT-0"
-> +#define VOUT_PAGE1          "VOUT-1"
-> +#define TEMPERATURE_PAGE0   "TEMPERATURE-0"
-> +#define TEMPERATURE_PAGE1   "TEMPERATURE-1"
-> +#define VIN_PAGE0           "VIN-0"
-> +#define PIN_EST_PAGE0		"PIN_EST-0"
-> +#define PIN_EST_PAGE1		"PIN_EST-1"
-> +#define POUT_PAGE0          "POUT-0"
-> +#define POUT_PAGE1          "POUT-1"
-> +
-> +struct mp2891_data {
-> +	int vid_step[MP2891_PAGE_NUM];
-> +};
-> +
-> +struct mp2891_dev {
-> +	dev_t devid;
-> +	struct cdev cdev;
-> +	struct class *class;
-> +	struct device *device;
-> +	int major;
-> +	char read_flag[20];
-> +	struct i2c_client *client;
-> +	struct mp2891_data *data;
-> +};
-> +
-> +struct mp2891_dev mp2891cdev;
-
-You really do not want to do this, the driver should be able to handle
-any number of devices in the system, not just one.  Also, this is a
-dynamic structure that you just made static, which is going to be
-interesting when it comes to properly memory lifetime rules, right?
-
-> +
-> +static int read_word_data(struct i2c_client *client, int page, int reg) 
-
-Always run scripts/checkpatch.pl on your code before submitting it so
-you don't get grumpy reviewers asking why you didn't run
-scripts/checkpatch.pl on your code before submitting it.
-
-thanks,
-
-greg k-h
