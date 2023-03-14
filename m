@@ -2,131 +2,660 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 882ED6B8E47
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:13:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7A656B8E45
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:13:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjCNJNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46056 "EHLO
+        id S230489AbjCNJMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:12:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46054 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbjCNJMp (ORCPT
+        with ESMTP id S229548AbjCNJMo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:12:45 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCEC762D85;
-        Tue, 14 Mar 2023 02:12:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=872ImSCZ3X8e4qu5m2YVUu1socM3dn7WUGYc6th1yyE=; b=oZCUQ6RZqX5bITahefVtYNcr9g
-        pBvHbwrbB93xvLWVpfEBQ/9/ATKvE+9ZzWGCLaq+R3csBz7L6IzaSKCPKqWlZI27R6dNZnA1OajzT
-        92FKFrUmfnkSPNsDbDyIMkg4/FGu4G0mWsMjf9VSJndeAnSRc1emweBpAE5My21NrNhP9qKo+nGyX
-        c2iumqGRHGIq0rlzEjBDK9wYSP5cTezwITtU7bsTWlj/Fl/TbKncSY0c1PNxjhhfBenmp9kx4m9rl
-        jb70mzceeP10ur8rXUMjlUTM6uRdai7RNURcIOSRwwAww/np9dkJg7LS+xGll9TvCpdXGhc8JxXTb
-        MdTTh5qw==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:34654)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pc0hy-0004kr-V5; Tue, 14 Mar 2023 09:12:38 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pc0hu-0000D2-D9; Tue, 14 Mar 2023 09:12:34 +0000
-Date:   Tue, 14 Mar 2023 09:12:34 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Frank Wunderlich <frank-w@public-files.de>
-Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: Re: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet:
- mtk_eth_soc: fix 1000Base-X and 2500Base-X modes
-Message-ID: <ZBA6gszARdJY26Mz@shell.armlinux.org.uk>
-References: <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
- <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
- <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
- <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
- <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
- <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
- <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
- <trinity-93681801-f99c-40e2-9fbd-45888b3069aa-1678732740564@3c-app-gmx-bs66>
- <ZA+qTyQ3n6YiURkQ@shell.armlinux.org.uk>
- <trinity-e2c457f1-c897-45f1-907a-8ea3664b7512-1678783872771@3c-app-gmx-bap66>
+        Tue, 14 Mar 2023 05:12:44 -0400
+Received: from box.trvn.ru (box.trvn.ru [194.87.146.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 793D358493;
+        Tue, 14 Mar 2023 02:12:41 -0700 (PDT)
+Received: from authenticated-user (box.trvn.ru [194.87.146.52])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits))
+        (No client certificate requested)
+        by box.trvn.ru (Postfix) with ESMTPSA id 57D1B4183B;
+        Tue, 14 Mar 2023 14:12:37 +0500 (+05)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=trvn.ru; s=mail;
+        t=1678785158; bh=UyHhpq2/wnOp+S9dMA1ZgpVfNd8rlkhcR2fWl5Ewx1M=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Q6oRH87GnlKgRohXz9d0AGFk0gWbOxAyoYkKMbj+IaKGt9Z98vuVmI5NBTfGYqrJA
+         q+twcrUdWAJEu74Xom8CkwYv+EG+rk8EWy+Ft9FQWR70VlvA/MJgLd9VngI9SWVVd4
+         R2uVsO1HaIqwkTkfLPWPiu0lKD87MvOa1xlPMD5tb5qfhZAW2PhGawvtce3evvnBIO
+         5LnI2iT2gLkl4Ms85274xt4Pl9BK8FBprk3kBR1vzlY3bTe+Q0VS0mgRNUy0cM1Hrf
+         PYje4KptbS7yPQfyxwcsHSQ3pfh2hFgDHmXxy/FB9dlA4UO/YT+UqmbwryieAoFFBh
+         zQzyS9w+noMTQ==
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <trinity-e2c457f1-c897-45f1-907a-8ea3664b7512-1678783872771@3c-app-gmx-bap66>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Date:   Tue, 14 Mar 2023 14:12:36 +0500
+From:   Nikita Travkin <nikita@trvn.ru>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     agross@kernel.org, andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@linaro.org,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: Add Acer Aspire 1
+In-Reply-To: <7042213c-1f2a-d877-a0b0-0ed1c6eee477@linaro.org>
+References: <20230314064322.65429-1-nikita@trvn.ru>
+ <20230314064322.65429-2-nikita@trvn.ru>
+ <7042213c-1f2a-d877-a0b0-0ed1c6eee477@linaro.org>
+Message-ID: <ac0531a79da83a2228667a256fd0e4bc@trvn.ru>
+X-Sender: nikita@trvn.ru
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:51:12AM +0100, Frank Wunderlich wrote:
-> Hi,
+Krzysztof Kozlowski писал(а) 14.03.2023 13:26:
+> On 14/03/2023 07:43, Nikita Travkin wrote:
+>> Acer Aspire 1 is a WoA laptop based on Snapdragon 7c gen1 platform.
+>>
+>> The laptop design is similar to trogdor in the choice of primary
+>> components but the specifics on usage of those differ slightly.
+>>
+>> Add the devicetree for the laptop with support for most of the
+>> hardware present.
+>>
 > 
-> at least the error-message is gone, and interface gets up when i call ethtoo to switch off autoneg.
+> Thank you for your patch. There is something to discuss/improve.
 > 
-> root@bpi-r3:~# dmesg | grep -i 'sfp\|eth1'
-> [    1.991838] sfp sfp-1: module OEM              SFP-2.5G-T       rev 1.0  sn SK2301110008     dc 230110  
-> [    2.001352] mtk_soc_eth 15100000.ethernet eth1: optical SFP: interfaces=[mac=2-4,21-22, sfp=22]
-> [    2.010059] mtk_soc_eth 15100000.ethernet eth1: optical SFP: chosen 2500base-x interface
-> [    2.018145] mtk_soc_eth 15100000.ethernet eth1: requesting link mode inband/2500base-x with support 00,00000000,00000000,0000e400
-> [   34.385814] mtk_soc_eth 15100000.ethernet eth1: configuring for inband/2500base-x link mode
-> [   34.394259] mtk_soc_eth 15100000.ethernet eth1: major config 2500base-x
-> [   34.400860] mtk_soc_eth 15100000.ethernet eth1: phylink_mac_config: mode=inband/2500base-x/Unknown/Unknown/none adv=00,00000000,00000000,0000e400 pause=04 link=0 an=1
-
-Looking good - apart from that pesky an=1 (which isn't used by the PCS
-driver, and I've been thinking of killing it off anyway.) Until such
-time that happens, we really ought to set that correctly, which means
-an extra bit is needed in phylink_sfp_set_config(). However, this
-should not affect anything.
-
-> root@bpi-r3:~# 
-> root@bpi-r3:~# ethtool -s eth1 autoneg off
-> root@bpi-r3:~# [  131.031902] mtk_soc_eth 15100000.ethernet eth1: Link is Up - 2.5Gbps/Full - flow control off
-> [  131.040366] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+>> +/ {
+>> +	model = "Acer Aspire 1";
+>> +	compatible = "acer,aspire1", "qcom,sc7180";
+>> +	chassis-type = "laptop";
+>> +
+>> +	reserved-memory {
 > 
-> full log here:
-> https://pastebin.com/yDC7PuM2
+> Wrong ordering. Top-level nodes go alphanumeric.
 > 
-> i see that an is still 1..maybe because of the fixed value here?
+
+Oops, missed it. I will sort the DT spec nodes (this, aliases, chosen)
+but I would like to still keep them on top to separate them from
+devices. If you think the nodes must be sorted regardless of the semantics,
+please let me know.
+
+>> +		zap_mem: zap-shader@80840000 {
+>> +			reg = <0 0x80840000 0 0x2000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		venus_mem: venus@85b00000 {
+>> +			reg = <0 0x85b00000 0 0x500000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		mpss_mem: mpss@86000000 {
+>> +			reg = <0x0 0x86000000 0x0 0x2000000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		adsp_mem: adsp@8e400000 {
+>> +			reg = <0x0 0x8e400000 0x0 0x2800000>;
+>> +			no-map;
+>> +		};
+>> +
+>> +		wlan_mem: wlan@93900000 {
+>> +			reg = <0x0 0x93900000 0x0 0x200000>;
+>> +			no-map;
+>> +		};
+>> +	};
+>> +
+>> +	aliases {
+>> +		bluetooth0 = &bluetooth;
+>> +		hsuart0 = &uart3;
+>> +		serial0 = &uart8;
+>> +		wifi0 = &wifi;
+>> +	};
+>> +
+>> +	chosen {
+>> +		stdout-path = "serial0:115200n8";
+>> +	};
+>> +
+>> +	max98357a: audio-codec-0 {
 > 
-> https://elixir.bootlin.com/linux/v6.3-rc1/source/drivers/net/phy/phylink.c#L3038
+> Do you have second audio-codec? If not, drop -0.
+> 
+There are two physical chips (L,R) but I think they are represented
+by a single node. I will check if I missed something while
+"inheriting" this but will probably drop the suffix.
 
-Not sure what that line has to do with it - this is what the above
-points to:
+> 
+>> +		compatible = "maxim,max98357a";
+>> +		sdmode-gpios = <&tlmm 23 GPIO_ACTIVE_HIGH>;
+>> +
+>> +		pinctrl-0 = <&amp_sd_mode_default>;
+>> +		pinctrl-names = "default";
+>> +
+>> +		#sound-dai-cells = <0>;
+>> +	};
+>> +
+>> +	backlight: backlight {
+>> +		compatible = "pwm-backlight";
+>> +		pwms = <&sn65dsi86_bridge 1000000>;
+>> +		enable-gpios = <&tlmm 10 GPIO_ACTIVE_HIGH>;
+>> +
+>> +		pinctrl-0 = <&soc_bkoff_default>;
+>> +		pinctrl-names = "default";
+>> +	};
+>> +
+>> +	reg_brij_1p2: bridge-1p2-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "brij_1p2";
+>> +		regulator-min-microvolt = <1200000>;
+>> +		regulator-max-microvolt = <1200000>;
+>> +
+>> +		gpio = <&tlmm 19 GPIO_ACTIVE_HIGH>;
+>> +		enable-active-high;
+>> +
+>> +		pinctrl-0 = <&reg_edp_1p2_en_default>;
+>> +		pinctrl-names = "default";
+>> +	};
+>> +
+>> +	reg_brij_1p8: bridge-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "brij_1p8";
+>> +		regulator-min-microvolt = <1800000>;
+>> +		regulator-max-microvolt = <1800000>;
+>> +
+>> +		vin-supply = <&vreg_l8c_1p8>;
+>> +
+>> +		gpio = <&tlmm 20 GPIO_ACTIVE_HIGH>;
+>> +		enable-active-high;
+>> +
+>> +		pinctrl-0 = <&reg_edp_1p8_en_default>;
+>> +		pinctrl-names = "default";
+>> +	};
+>> +
+>> +	reg_codec_3p3: codec-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "codec_3p3";
+>> +		regulator-min-microvolt = <3300000>;
+>> +		regulator-max-microvolt = <3300000>;
+>> +
+>> +		gpio = <&tlmm 83 GPIO_ACTIVE_HIGH>;
+>> +		enable-active-high;
+>> +
+>> +		pinctrl-0 = <&reg_audio_en_default>;
+>> +		pinctrl-names = "default";
+>> +	};
+>> +
+>> +	reg_lcm_3p3: panel-regulator {
+>> +		compatible = "regulator-fixed";
+>> +		regulator-name = "lcm_3p3";
+>> +		regulator-min-microvolt = <3300000>;
+>> +		regulator-max-microvolt = <3300000>;
+>> +
+> 
+> 		/*
+> 		 * Comment starts here
+> 
 
-        phylink_sfp_set_config(pl, MLO_AN_INBAND, pl->sfp_support, &config);
+Will fix all comments, wraps and alignments.
 
-Anyway, the important thing is the Autoneg bit in the advertising mask
-is now zero, which is what we want. That should set the PCS to disable
-negotiation when in 2500baseX mode, the same as ethtool -s eth1 autoneg
-off.
+> 
+>> +		/* HACK: Display fails with
+>> +		 *
+>> +		 * *ERROR* Unexpected max rate (0x0); assuming 5.4 GHz
+>> +		 * *ERROR* Link training failed, link is off (-5)
+>> +		 *
+>> +		 * if the power to the panel was ever cut
+>> +		 */
+> 
+> 
+>> +};
+>> +
+>> +&camcc { status = "disabled"; };
+> 
+> Don't wrap nodes.
+> 
+>> +
+>> +&dsi0 {
+>> +	vdda-supply = <&vreg_l3c_1p2>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&dsi0_out {
+>> +	remote-endpoint = <&sn65dsi86_in>;
+>> +	data-lanes = <0 1 2 3>;
+>> +};
+>> +
+>> +&dsi_phy {
+>> +	vdds-supply = <&vreg_l4a_0p8>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&i2c2 {
+>> +	clock-frequency = <400000>;
+>> +	status = "okay";
+>> +
+>> +	/* embedded-controller@76 */
+>> +};
+>> +
+>> +&i2c4 {
+>> +	clock-frequency = <400000>;
+>> +	status = "okay";
+>> +
+>> +	/*
+>> +	 * NOTE: DSDT defines two possible touchpads, other one is
+>> +	 *
+>> +	 * reg = <0x15>;
+>> +	 * hid-descr-addr = <0x1>;
+>> +	 */
+>> +
+>> +	touchpad@2c {
+>> +		compatible = "hid-over-i2c";
+>> +		reg = <0x2c>;
+>> +		hid-descr-addr = <0x20>;
+>> +
+>> +		vdd-supply = <&reg_tp_3p3>;
+>> +
+>> +		interrupts-extended = <&tlmm 94 IRQ_TYPE_LEVEL_LOW>;
+>> +
+>> +		pinctrl-0 = <&hid_touchpad_default>;
+>> +		pinctrl-names = "default";
+>> +	};
+>> +
+>> +	keyboard@3a {
+>> +		compatible = "hid-over-i2c";
+>> +		reg = <0x3a>;
+>> +		hid-descr-addr = <0x1>;
+>> +
+>> +		interrupts-extended = <&tlmm 33 IRQ_TYPE_LEVEL_LOW>;
+>> +
+>> +		pinctrl-0 = <&hid_keyboard_default>;
+>> +		pinctrl-names = "default";
+>> +
+>> +		wakeup-source;
+>> +	};
+>> +};
+>> +
+>> +&i2c9 {
+>> +	clock-frequency = <400000>;
+>> +	status = "okay";
+>> +
+>> +	alc5682: codec@1a {
+>> +		compatible = "realtek,rt5682i";
+>> +		reg = <0x1a>;
+>> +
+>> +		#sound-dai-cells = <1>;
+>> +
+>> +		interrupt-parent = <&tlmm>;
+>> +		/*
+>> +		 * This will get ignored because the interrupt type
+>> +		 * is set in rt5682.c.
+> 
+> Don't add Linux driver stuff to DTS. Not relevant, so drop the comment.
+> 
 
-So I think the question becomes - what was the state that ethtool was
-reporting before asking ethtool to set autoneg off, and why does that
-make a difference.
+I think this was "inherited" from sc7180-trogdor.dtsi
+Will drop.
 
-> and yes, module seems to do rate adaption (it is labeled with 100M/1G/2.5G), i tried it on a 1G-Port and link came up (with workaround patch from daniel),
-> traffic "works" but in tx-direction with massive retransmitts (i guess because pause-frames are ignored - pause was 00).
+>> +		 */
+>> +		interrupts = <28 IRQ_TYPE_EDGE_BOTH>;
+>> +
+>> +		pinctrl-0 = <&codec_irq_default>;
+>> +		pinctrl-names = "default";
+>> +
+>> +		AVDD-supply = <&vreg_l15a_1p8>;
+>> +		MICVDD-supply = <&reg_codec_3p3>;
+>> +		VBAT-supply = <&reg_codec_3p3>;
+>> +
+>> +		realtek,dmic1-data-pin = <1>;
+>> +		realtek,dmic1-clk-pin = <1>;
+>> +		realtek,jd-src = <1>;
+>> +	};
+>> +};
+>> +
+>> +&i2c10 {
+>> +	clock-frequency = <400000>;
+>> +	status = "okay";
+>> +
+>> +	sn65dsi86_bridge: bridge@2c {
+>> +		compatible = "ti,sn65dsi86";
+>> +		reg = <0x2c>;
+>> +		gpio-controller;
+>> +		#gpio-cells = <2>;
+>> +		#pwm-cells = <1>;
+>> +
+>> +		interrupt-parent = <&tlmm>;
+>> +		interrupts = <11 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +		enable-gpios = <&tlmm 51 GPIO_ACTIVE_HIGH>;
+>> +		suspend-gpios = <&tlmm 22 GPIO_ACTIVE_LOW>;
+>> +
+>> +		pinctrl-0 = <&bridge_en_default>,
+>> +			<&edp_bridge_irq_default>,
+>> +			<&bridge_suspend_default>;
+> 
+> Align entries.
+> 
+>> +		pinctrl-names = "default";
+>> +
+>> +		vpll-supply = <&reg_brij_1p8>;
+>> +		vccio-supply = <&reg_brij_1p8>;
+>> +		vcca-supply = <&reg_brij_1p2>;
+>> +		vcc-supply = <&reg_brij_1p2>;
+>> +
+>> +		clocks = <&rpmhcc RPMH_LN_BB_CLK3>;
+>> +		clock-names = "refclk";
+>> +
+>> +		ports {
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +
+>> +			port@0 {
+>> +				reg = <0>;
+>> +
+>> +				sn65dsi86_in: endpoint {
+>> +					remote-endpoint = <&dsi0_out>;
+>> +				};
+>> +			};
+>> +
+>> +			port@1 {
+>> +				reg = <1>;
+>> +
+>> +				sn65dsi86_out: endpoint {
+>> +					data-lanes = <0 1>;
+>> +					remote-endpoint = <&panel_in_edp>;
+>> +				};
+>> +			};
+>> +		};
+>> +
+>> +		aux-bus {
+>> +			panel: panel {
+>> +				compatible = "edp-panel";
+>> +				power-supply = <&reg_lcm_3p3>;
+>> +				backlight = <&backlight>;
+>> +
+>> +				port {
+>> +					panel_in_edp: endpoint {
+>> +						remote-endpoint = <&sn65dsi86_out>;
+>> +					};
+>> +				};
+>> +			};
+>> +		};
+>> +	};
+>> +};
+>> +
+>> +&gpu {
+>> +	status = "okay";
+>> +
+>> +	zap-shader {
+>> +		memory-region = <&zap_mem>;
+>> +		firmware-name = "qcom/sc7180-acer-aspire1/qcdxkmsuc7180.mbn";
+>> +	};
+>> +};
+>> +
+>> +/* Seems like ADSP really insists on managing those itself */
+>> +&lpasscc { status = "disabled"; };
+>> +&lpass_hm { status = "disabled"; };
+> 
+> No wrapping.
+> 
+>> +
+>> +&mdp {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&mdss {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&pm6150_adc {
+>> +	thermistor@4e {
+>> +		reg = <ADC5_AMUX_THM2_100K_PU>;
+>> +		qcom,ratiometric;
+>> +		qcom,hw-settle-time = <200>;
+>> +	};
+>> +
+>> +	charger-thermistor@4f {
+>> +		reg = <ADC5_AMUX_THM3_100K_PU>;
+>> +		qcom,ratiometric;
+>> +		qcom,hw-settle-time = <200>;
+>> +	};
+>> +};
+>> +
+>> +&pm6150_adc_tm {
+>> +	status = "okay";
+>> +
+>> +	charger-thermistor@0 {
+>> +		reg = <0>;
+>> +		io-channels = <&pm6150_adc ADC5_AMUX_THM3_100K_PU>;
+>> +		qcom,ratiometric;
+>> +		qcom,hw-settle-time-us = <200>;
+>> +	};
+>> +
+>> +	thermistor@1 {
+>> +		reg = <1>;
+>> +		io-channels = <&pm6150_adc ADC5_AMUX_THM2_100K_PU>;
+>> +		qcom,ratiometric;
+>> +		qcom,hw-settle-time-us = <200>;
+>> +	};
+>> +};
+>> +
+>> +&pm6150_pon { status = "disabled"; };
+>> +
+>> +&qupv3_id_0 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&qupv3_id_1 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&remoteproc_mpss {
+>> +	firmware-name = "qcom/sc7180-acer-aspire1/qcmpss7180_nm.mbn";
+>> +	status = "okay";
+>> +};
+>> +
+>> +&sdhc_1 {
+>> +	pinctrl-0 = <&sdc1_default>;
+>> +	pinctrl-1 = <&sdc1_sleep>;
+>> +	pinctrl-names = "default", "sleep";
+>> +	vmmc-supply = <&vreg_l19a_2p9>;
+>> +	vqmmc-supply = <&vreg_l12a_1p8>;
+>> +
+>> +	status = "okay";
+>> +};
+>> +
+>> +&uart3 {
+>> +	/delete-property/interrupts;
+>> +	interrupts-extended = <&intc GIC_SPI 604 IRQ_TYPE_LEVEL_HIGH>,
+>> +				<&tlmm 41 IRQ_TYPE_EDGE_FALLING>;
+> 
+> Looks not aligned.
+> 
+>> +
+>> +	pinctrl-1 = <&qup_uart3_sleep>;
+>> +	pinctrl-names = "default", "sleep";
+>> +
+>> +	status = "okay";
+>> +
+>> +	bluetooth: bluetooth {
+>> +		compatible = "qcom,wcn3991-bt";
+>> +		vddio-supply = <&vreg_l10a_1p8>;
+>> +		vddxo-supply = <&vreg_l1c_1p8>;
+>> +		vddrf-supply = <&vreg_l2c_1p3>;
+>> +		vddch0-supply = <&vreg_l10c_3p3>;
+>> +		max-speed = <3200000>;
+>> +	};
+>> +};
+>> +
+>> +&uart8 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_1 {
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_1_dwc3 {
+>> +	dr_mode = "host";
+>> +	#address-cells = <1>;
+>> +	#size-cells = <0>;
+>> +
+>> +	usb_hub_2_x: hub@1 {
+>> +		compatible = "usbbda,5411";
+>> +		reg = <1>;
+>> +		peer-hub = <&usb_hub_3_x>;
+>> +	};
+>> +
+>> +	usb_hub_3_x: hub@2 {
+>> +		compatible = "usbbda,411";
+>> +		reg = <2>;
+>> +		peer-hub = <&usb_hub_2_x>;
+>> +	};
+>> +};
+>> +
+>> +&usb_1_hsphy {
+>> +	vdd-supply = <&vreg_l4a_0p8>;
+>> +	vdda-pll-supply = <&vreg_l11a_1p8>;
+>> +	vdda-phy-dpdm-supply = <&vreg_l17a_3p0>;
+>> +	qcom,imp-res-offset-value = <8>;
+>> +	qcom,preemphasis-level = <QUSB2_V2_PREEMPHASIS_15_PERCENT>;
+>> +	qcom,preemphasis-width = <QUSB2_V2_PREEMPHASIS_WIDTH_HALF_BIT>;
+>> +	qcom,bias-ctrl-value = <0x22>;
+>> +	qcom,charge-ctrl-value = <3>;
+>> +	qcom,hsdisc-trim-value = <0>;
+>> +
+>> +	status = "okay";
+>> +};
+>> +
+>> +&usb_1_qmpphy {
+>> +	vdda-phy-supply = <&vreg_l3c_1p2>;
+>> +	vdda-pll-supply = <&vreg_l4a_0p8>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&venus {
+>> +	firmware-name = "qcom/sc7180-acer-aspire1/qcvss7180.mbn";
+>> +};
+>> +
+>> +&wifi {
+>> +	vdd-0.8-cx-mx-supply = <&vreg_l9a_0p6>;
+>> +	vdd-1.8-xo-supply = <&vreg_l1c_1p8>;
+>> +	vdd-1.3-rfa-supply = <&vreg_l2c_1p3>;
+>> +	vdd-3.3-ch0-supply = <&vreg_l10c_3p3>;
+>> +	vdd-3.3-ch1-supply = <&vreg_l11c_3p3>;
+>> +	status = "okay";
+>> +};
+>> +
+>> +&apps_rsc {
+>> +	pm6150-rpmh-regulators {
+> 
+> regulators-0
+> 
 
-We'll see about addressing that later once we've got the module working
-at 2.5G. However, thanks for the information.
+Oops, I guess I've missed this warning, will do.
 
-The patch below should result in ethtool reporting 2500baseT rather than
-2500baseX, and that an=1 should now be an=0. Please try it, and dump the
-ethtool eth1 before asking for autoneg to be manually disabled, and also
-report the kernel messages.
+Thanks for the review!
+Nikita
 
-Thanks.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+> We fixed it some time ago, so:
+> Does not look like you tested the DTS against bindings. Please run `make
+> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+> for instructions).
+> 
+>> +		compatible = "qcom,pm6150-rpmh-regulators";
+>> +		qcom,pmic-id = "a";
+>> +
+>> +		vreg_s1a_1p1: smps1 {
+>> +			regulator-min-microvolt = <1128000>;
+>> +			regulator-max-microvolt = <1128000>;
+>> +		};
+>> +
+>> +		vreg_l4a_0p8: ldo4 {
+>> +			regulator-min-microvolt = <824000>;
+>> +			regulator-max-microvolt = <928000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l9a_0p6: ldo9 {
+>> +			regulator-min-microvolt = <488000>;
+>> +			regulator-max-microvolt = <800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l10a_1p8: ldo10 {
+>> +			regulator-min-microvolt = <1800000>;
+>> +			regulator-max-microvolt = <1800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +
+>> +			regulator-always-on;
+>> +			regulator-boot-on;
+>> +		};
+>> +
+>> +		vreg_l11a_1p8: ldo11 {
+>> +			regulator-min-microvolt = <1800000>;
+>> +			regulator-max-microvolt = <1800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l12a_1p8: ldo12 {
+>> +			regulator-min-microvolt = <1800000>;
+>> +			regulator-max-microvolt = <1800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l13a_1p8: ldo13 {
+>> +			regulator-min-microvolt = <1800000>;
+>> +			regulator-max-microvolt = <1800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l14a_1p8: ldo14 {
+>> +			regulator-min-microvolt = <1800000>;
+>> +			regulator-max-microvolt = <1800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l15a_1p8: ldo15 {
+>> +			regulator-min-microvolt = <1800000>;
+>> +			regulator-max-microvolt = <1800000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l16a_2p7: ldo16 {
+>> +			regulator-min-microvolt = <2496000>;
+>> +			regulator-max-microvolt = <3304000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l17a_3p0: ldo17 {
+>> +			regulator-min-microvolt = <2920000>;
+>> +			regulator-max-microvolt = <3232000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l18a_2p8: ldo18 {
+>> +			regulator-min-microvolt = <2496000>;
+>> +			regulator-max-microvolt = <3304000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +
+>> +		vreg_l19a_2p9: ldo19 {
+>> +			regulator-min-microvolt = <2960000>;
+>> +			regulator-max-microvolt = <2960000>;
+>> +			regulator-initial-mode = <RPMH_REGULATOR_MODE_HPM>;
+>> +		};
+>> +	};
+>> +
+>> +	pm6150l-rpmh-regulators {
+> 
+> Does not look like you tested the DTS against bindings. Please run `make
+> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+> for instructions).
+> 
+> 
+> 
+> Best regards,
+> Krzysztof
