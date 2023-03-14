@@ -2,124 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B24EF6B9618
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D5F246B9616
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:27:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbjCNN1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43158 "EHLO
+        id S232376AbjCNN1D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:27:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231549AbjCNN0e (ORCPT
+        with ESMTP id S231201AbjCNN0d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:26:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B8A11BADE;
-        Tue, 14 Mar 2023 06:24:00 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id EB0CB6176B;
-        Tue, 14 Mar 2023 13:23:59 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59253C4339E;
-        Tue, 14 Mar 2023 13:23:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678800239;
-        bh=OfM3hT6uoMNd3/FINM80boLpc05PsZ3wMWGSXM5LelQ=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XEE6N9MQS61ng3tZpY0N2LEMBo0mzDXV8KZ3fHBGp7dimC1i2tmtXmzkmOz8eGEoF
-         YQK1H7+ofQGKp1mUTI4oIplF0FvKVLZGUtAFXUNFEn4EMB7etJ1Oi4yYiCnu6i3zF0
-         9s47+DyYeuegIeNwgGt75P7Vv6xDQOSDO2GL52+8AumesBkby+mjwKeu8QSsWWILDA
-         MMgZpA5KAlNgxa3jJXFynNroRT9RBCa7lVYRdsdqSMqvMiH+hyv86GABnevts0F4Hu
-         cXmH0fuP27IcHsDvEDl8hvXDLvdRy/OcdsvBKeDPIkSgx2vJQlXHjHww0FvgckrsCR
-         EwlNCsyYHujJw==
-Received: by mail-vs1-f50.google.com with SMTP id x14so14060426vso.9;
-        Tue, 14 Mar 2023 06:23:59 -0700 (PDT)
-X-Gm-Message-State: AO0yUKWAvL0BS1gY2GfXeK8hm3ihO+eTXQAKwnBoenwUW1Qf1V6iRLs+
-        fUQq1UGr6LXITvVghdVWnHWSeug1liPyaXnOIg==
-X-Google-Smtp-Source: AK7set/YgSFtm49HHMG7GpsmLoSaLCHGZ39/OFUu1tdOauCfSijB7VdKgS5MrLVbbrlfT5LUFI38a7WBgGeJqtfY70E=
-X-Received: by 2002:a67:b142:0:b0:412:bca:d304 with SMTP id
- z2-20020a67b142000000b004120bcad304mr24925406vsl.7.1678800238244; Tue, 14 Mar
- 2023 06:23:58 -0700 (PDT)
+        Tue, 14 Mar 2023 09:26:33 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ED1E5F511
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:23:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=+BkzovrVJzPzcLdkwhRIKd8pQ8NbVCXk9KhgYJj2Ke8=; b=Rd5l+sXlzQbZDYJzt5bi4Sp9n9
+        CxSkIA1z4SOMQbYfKekamcnzaj06eCoijGuieCrBx7FMo1AQsp4emlW53rHq226/jnrhDhJJoLeMo
+        w+WahXFiOdqot934bpb+wmWuUDSEeR2xNnNJ4qBolicQEIkc7ugqYMAqajKX26MM68vRFVE4yNcGp
+        9eNCsLWX/+QY7qwl/LmOLr5y8eOthIMbXeSI4VacK1pTPsnnY+lrrsqKuOLSfd74oQlilKZu9RSSw
+        sAngWdL/5wrZ7SLMU8vqndlsH3Ynaroru9dEmNZB8dJ2C7t3WpWBxB14arNs/+lh8Q6eGn7IIt8eF
+        mI9YK62g==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pc4d1-00CvqQ-74; Tue, 14 Mar 2023 13:23:47 +0000
+Date:   Tue, 14 Mar 2023 13:23:47 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peng Zhang <zhangpeng362@huawei.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        vishal.moola@gmail.com, sidhartha.kumar@oracle.com,
+        wangkefeng.wang@huawei.com, sunnanyong@huawei.com
+Subject: Re: [PATCH v2 0/3] userfaultfd: convert userfaultfd functions to use
+ folios
+Message-ID: <ZBB1YxPmze070Ltb@casper.infradead.org>
+References: <20230314131350.924377-1-zhangpeng362@huawei.com>
 MIME-Version: 1.0
-References: <20230310144725.1545315-1-robh@kernel.org> <c6a5dc7f-46bf-8f1e-0a9c-2614d5f1824d@amd.com>
-In-Reply-To: <c6a5dc7f-46bf-8f1e-0a9c-2614d5f1824d@amd.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 14 Mar 2023 08:23:46 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKy7qWDkU3z1p0oTn1umLzWchKw86Zu8mKzugDWQXJF-w@mail.gmail.com>
-Message-ID: <CAL_JsqKy7qWDkU3z1p0oTn1umLzWchKw86Zu8mKzugDWQXJF-w@mail.gmail.com>
-Subject: Re: [PATCH] soc: xilinx: Use of_property_present() for testing DT
- property presence
-To:     Michal Simek <michal.simek@amd.com>
-Cc:     Michal Simek <michal.simek@xilinx.com>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314131350.924377-1-zhangpeng362@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 5:19=E2=80=AFAM Michal Simek <michal.simek@amd.com>=
- wrote:
->
->
->
-> On 3/10/23 15:47, Rob Herring wrote:
-> > It is preferred to use typed property access functions (i.e.
-> > of_property_read_<type> functions) rather than low-level
-> > of_get_property/of_find_property functions for reading properties. As
-> > part of this, convert of_get_property/of_find_property calls to the
-> > recently added of_property_present() helper when we just want to test
-> > for presence of a property and nothing more.
-> >
-> > Signed-off-by: Rob Herring <robh@kernel.org>
-> > ---
-> >   drivers/soc/xilinx/zynqmp_power.c | 4 ++--
-> >   1 file changed, 2 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/drivers/soc/xilinx/zynqmp_power.c b/drivers/soc/xilinx/zyn=
-qmp_power.c
-> > index 78a8a7545d1e..641dcc958911 100644
-> > --- a/drivers/soc/xilinx/zynqmp_power.c
-> > +++ b/drivers/soc/xilinx/zynqmp_power.c
-> > @@ -218,7 +218,7 @@ static int zynqmp_pm_probe(struct platform_device *=
-pdev)
-> >          } else if (ret !=3D -EACCES && ret !=3D -ENODEV) {
-> >                  dev_err(&pdev->dev, "Failed to Register with Xilinx Ev=
-ent manager %d\n", ret);
-> >                  return ret;
-> > -       } else if (of_find_property(pdev->dev.of_node, "mboxes", NULL))=
- {
-> > +       } else if (of_property_present(pdev->dev.of_node, "mboxes")) {
-> >                  zynqmp_pm_init_suspend_work =3D
-> >                          devm_kzalloc(&pdev->dev,
-> >                                       sizeof(struct zynqmp_pm_work_stru=
-ct),
-> > @@ -240,7 +240,7 @@ static int zynqmp_pm_probe(struct platform_device *=
-pdev)
-> >                          dev_err(&pdev->dev, "Failed to request rx chan=
-nel\n");
-> >                          return PTR_ERR(rx_chan);
-> >                  }
-> > -       } else if (of_find_property(pdev->dev.of_node, "interrupts", NU=
-LL)) {
-> > +       } else if (of_property_present(pdev->dev.of_node, "interrupts")=
-) {
-> >                  irq =3D platform_get_irq(pdev, 0);
-> >                  if (irq <=3D 0)
-> >                          return -ENXIO;
-> > --
-> > 2.39.2
-> >
->
-> Waiting for v2 because of missing of.h header reported by lkp.
-> https://lore.kernel.org/all/202303120017.BIw01Y21-lkp@intel.com/
+On Tue, Mar 14, 2023 at 01:13:47PM +0000, Peng Zhang wrote:
+> From: ZhangPeng <zhangpeng362@huawei.com>
+> 
+> This patch series converts several userfaultfd functions to use folios.
+> And this series pass the userfaultfd selftests and the LTP userfaultfd
+> test cases.
 
-It's a false positive. The header change is in v6.3-rc1, but 0-day is
-applying these to branches not yet updated to rc1.
-
-Rob
+That's what you said about the earlier patchset too.  Assuming you
+ran the tests, they need to be improved to fid the bug that was in the
+earlier version of the patches.
