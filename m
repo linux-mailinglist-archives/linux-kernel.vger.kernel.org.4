@@ -2,153 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEF6A6B905D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:43:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799436B907C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:46:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbjCNKnJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:43:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41636 "EHLO
+        id S229929AbjCNKqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:46:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCNKnC (ORCPT
+        with ESMTP id S229535AbjCNKqu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:43:02 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13989CA
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:42:33 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id i28so19427445lfv.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:42:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678790552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ddsEOqN0WCluTndil1PR5ITOkumrYADNMRhiGg1TLi8=;
-        b=GiEuRVL3oLL6Vh+sncGzeoqofKVyv0oQaQnK1B5lKE+IQYpEUJO49q0Ycv97g9BFz6
-         j7uwVrrCtpJnqtKgzkBL/w0bRPBjLXWpbze6CYBufebtkM0r9b2Y+5yqHCBpLtswdHlp
-         aGh5wMAJHKCwYF/y0SQRrhVTo/4DIp9SQEJtriEoTcP7tnmd7lDJoocMm8AbU+mpRr5C
-         avraMcBFlllF1GlbnCWfFwzWwfCa7lOa+84bjo6iligIncVgXzpS9DaiaXp6SH5aFxw/
-         czRrXARjCNVbIFY8TP5VKCZK5UVeMH0JMDOYIMryU71nI3pt8Mu+ebvGe/ChjS8lvS08
-         yQiQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678790552;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ddsEOqN0WCluTndil1PR5ITOkumrYADNMRhiGg1TLi8=;
-        b=OmIQSGcjQFBGSzl37eW7f7qXu2SGOVYn5p1Yx4KpiwM4gDN0KF5IfPrO0H7PPKYm2X
-         1BjqVONmfCOXpK7WuihAinXSWqKakK20N01nsJ3jlitJiV1t9KV+v+bztH5XSvSEllUk
-         48QSrcaQ4S9rRdpdS29S1BTBpu0qnTOssVBg4wdtSoKA3fq0brRAYwN2qWfx3QeaivAw
-         PgXY8OtsOGou9oUCOY1maIzx8Q36a6Jw5CVeuJxUvl+wApIVmT7Mi5XaGRmK1Pla8Rnz
-         5TdsLIONySewSMNLXjx2VbKLb34NoDCFIVznglKXjWqOBIK3Gh2aUM587jCKVTIQyxaW
-         zP8Q==
-X-Gm-Message-State: AO0yUKWTXdqGLMWlh1q3Sge5ZT4rEfUuTRspWhWqoCMwgBAafa/WEpzT
-        kPiINQj6hMttvRh6FyCRs+LYRw==
-X-Google-Smtp-Source: AK7set/wgp8O8fMeZ11Mfbu0XNr4HVywv2i7lajlKxdFLMuiU8qd3wZT0aGnXXqUMdnxSLfygLGJYg==
-X-Received: by 2002:a05:6512:3743:b0:4cc:ff7c:4846 with SMTP id a3-20020a056512374300b004ccff7c4846mr518444lfs.0.1678790551852;
-        Tue, 14 Mar 2023 03:42:31 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id w30-20020ac2599e000000b004b58500383bsm345858lfn.272.2023.03.14.03.42.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 03:42:30 -0700 (PDT)
-Message-ID: <5a921230-c84f-aa10-1f5c-e9c2972fb9fd@linaro.org>
-Date:   Tue, 14 Mar 2023 11:42:28 +0100
+        Tue, 14 Mar 2023 06:46:50 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C6DAD02;
+        Tue, 14 Mar 2023 03:46:24 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id EB5EC5FD1B;
+        Tue, 14 Mar 2023 13:45:45 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678790746;
+        bh=3iLPJaGeMrLb7xNjIHjUqhJAp4hqvLxn8oJMxDMG6R0=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=Mh6CXTWqdb0MRZ4PqlZvkcVKvjPOONs26mLmnVxfv4NhrTfsY9r1wqzykxD4aPit4
+         /wtXJt1ZzvJey0C3GLgYxtbokw55ehCZCjkBQsUkc+v26LuMj1tWStZd3GFRjphDPB
+         LdVBdK8xq2Y7E29rkNPuZZFt9crQfMbiC3gd76iIR6fncm+tCAdjHcp6kPs+1Osh3G
+         mTSTD0wDLAuv1xAJq4ooyGUrlcwbYxBcE3qHYQq4hCiaJpSKc5KipD28eHsde2stVT
+         o6gs6TGG7JcBqW6gUSEc+w9+CiyKD1N9a6XO+r30l2T4sD43iersYND5Q5XEcSebfY
+         5FKMZW6w0XnUA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 14 Mar 2023 13:45:45 +0300 (MSK)
+Message-ID: <77841baa-47de-63e9-240a-76c76d2c0764@sberdevices.ru>
+Date:   Tue, 14 Mar 2023 13:42:36 +0300
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 07/10] drm/msm/dsi: Remove custom DSI config handling
+ Thunderbird/102.7.1
 Content-Language: en-US
-To:     Marijn Suijten <marijn.suijten@somainline.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20230307-topic-dsi_qcm-v3-0-8bd7e1add38a@linaro.org>
- <20230307-topic-dsi_qcm-v3-7-8bd7e1add38a@linaro.org>
- <20230314000744.otbglr33ndizq5pc@SoMainline.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230314000744.otbglr33ndizq5pc@SoMainline.org>
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <34d65539-015e-23c8-cf5e-f34bd5795e52@sberdevices.ru>
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [PATCH net v4 1/4] virtio/vsock: don't use skbuff state to account
+ credit
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+'skb->len' can vary when we partially read the data, this complicates the
+calculation of credit to be updated in 'virtio_transport_inc_rx_pkt()/
+virtio_transport_dec_rx_pkt()'.
 
+Also in 'virtio_transport_dec_rx_pkt()' we were miscalculating the
+credit since 'skb->len' was redundant.
 
-On 14.03.2023 01:07, Marijn Suijten wrote:
-> On 2023-03-07 14:01:45, Konrad Dybcio wrote:
->> Now that the only user is handled by common code, remove the option to
->> specify custom handlers through match data.
->>
->> This is effectively a revert of commit:
->> 5ae15e76271 ("drm/msm/dsi: Allow to specify dsi config as pdata")
-> 
-> Would it also be worth to mention something along these lines in the
-> previous patch, but for ee1f09678f14 ("drm/msm/dsi: Add support for
-> qcm2290 dsi controller")?
-50/50, it wouldn't hurt but it doesn't sound groundbreaking to skip it..
+For these reasons, let's replace the use of skbuff state to calculate new
+'rx_bytes'/'fwd_cnt' values with explicit value as input argument. This
+makes code more simple, because it is not needed to change skbuff state
+before each call to update 'rx_bytes'/'fwd_cnt'.
 
-Konrad
-> 
->> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> 
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> 
->> ---
->>  drivers/gpu/drm/msm/dsi/dsi.c      | 4 ++--
->>  drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ----
->>  2 files changed, 2 insertions(+), 6 deletions(-)
->>
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
->> index 90d43628b22b..e0b911af618d 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
->> @@ -173,10 +173,10 @@ static int dsi_dev_remove(struct platform_device *pdev)
->>  }
->>  
->>  static const struct of_device_id dt_match[] = {
->> -	{ .compatible = "qcom,mdss-dsi-ctrl", .data = NULL /* autodetect cfg */ },
->> +	{ .compatible = "qcom,mdss-dsi-ctrl" },
->>  
->>  	/* Deprecated, don't use */
->> -	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = NULL },
->> +	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290" },
->>  	{}
->>  };
->>  
->> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> index 9cfb9e91bfea..961689a255c4 100644
->> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
->> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
->> @@ -214,10 +214,6 @@ static const struct msm_dsi_cfg_handler *dsi_get_config(
->>  	int ret;
->>  	u32 major = 0, minor = 0;
->>  
->> -	cfg_hnd = device_get_match_data(dev);
->> -	if (cfg_hnd)
->> -		return cfg_hnd;
->> -
->>  	ahb_clk = msm_clk_get(msm_host->pdev, "iface");
->>  	if (IS_ERR(ahb_clk)) {
->>  		pr_err("%s: cannot get interface clock\n", __func__);
->>
->> -- 
->> 2.39.2
->>
+Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
+Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+---
+ net/vmw_vsock/virtio_transport_common.c | 23 +++++++++++------------
+ 1 file changed, 11 insertions(+), 12 deletions(-)
+
+diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
+index a1581c77cf84..618680fd9906 100644
+--- a/net/vmw_vsock/virtio_transport_common.c
++++ b/net/vmw_vsock/virtio_transport_common.c
+@@ -241,21 +241,18 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
+ }
+ 
+ static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
+-					struct sk_buff *skb)
++					u32 len)
+ {
+-	if (vvs->rx_bytes + skb->len > vvs->buf_alloc)
++	if (vvs->rx_bytes + len > vvs->buf_alloc)
+ 		return false;
+ 
+-	vvs->rx_bytes += skb->len;
++	vvs->rx_bytes += len;
+ 	return true;
+ }
+ 
+ static void virtio_transport_dec_rx_pkt(struct virtio_vsock_sock *vvs,
+-					struct sk_buff *skb)
++					u32 len)
+ {
+-	int len;
+-
+-	len = skb_headroom(skb) - sizeof(struct virtio_vsock_hdr) - skb->len;
+ 	vvs->rx_bytes -= len;
+ 	vvs->fwd_cnt += len;
+ }
+@@ -388,7 +385,9 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
+ 		skb_pull(skb, bytes);
+ 
+ 		if (skb->len == 0) {
+-			virtio_transport_dec_rx_pkt(vvs, skb);
++			u32 pkt_len = le32_to_cpu(virtio_vsock_hdr(skb)->len);
++
++			virtio_transport_dec_rx_pkt(vvs, pkt_len);
+ 			consume_skb(skb);
+ 		} else {
+ 			__skb_queue_head(&vvs->rx_queue, skb);
+@@ -437,17 +436,17 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
+ 
+ 	while (!msg_ready) {
+ 		struct virtio_vsock_hdr *hdr;
++		size_t pkt_len;
+ 
+ 		skb = __skb_dequeue(&vvs->rx_queue);
+ 		if (!skb)
+ 			break;
+ 		hdr = virtio_vsock_hdr(skb);
++		pkt_len = (size_t)le32_to_cpu(hdr->len);
+ 
+ 		if (dequeued_len >= 0) {
+-			size_t pkt_len;
+ 			size_t bytes_to_copy;
+ 
+-			pkt_len = (size_t)le32_to_cpu(hdr->len);
+ 			bytes_to_copy = min(user_buf_len, pkt_len);
+ 
+ 			if (bytes_to_copy) {
+@@ -484,7 +483,7 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
+ 				msg->msg_flags |= MSG_EOR;
+ 		}
+ 
+-		virtio_transport_dec_rx_pkt(vvs, skb);
++		virtio_transport_dec_rx_pkt(vvs, pkt_len);
+ 		kfree_skb(skb);
+ 	}
+ 
+@@ -1040,7 +1039,7 @@ virtio_transport_recv_enqueue(struct vsock_sock *vsk,
+ 
+ 	spin_lock_bh(&vvs->rx_lock);
+ 
+-	can_enqueue = virtio_transport_inc_rx_pkt(vvs, skb);
++	can_enqueue = virtio_transport_inc_rx_pkt(vvs, len);
+ 	if (!can_enqueue) {
+ 		free_pkt = true;
+ 		goto out;
+-- 
+2.25.1
