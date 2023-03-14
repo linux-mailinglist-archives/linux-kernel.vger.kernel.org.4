@@ -2,135 +2,546 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DA356B89E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20E866B89EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:55:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjCNEtj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:49:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43114 "EHLO
+        id S229537AbjCNEzO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 00:55:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCNEtf (ORCPT
+        with ESMTP id S229484AbjCNEzC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:49:35 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A758F94F4A;
-        Mon, 13 Mar 2023 21:49:07 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32E3WW6a009513;
-        Tue, 14 Mar 2023 04:48:42 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=GXHNRae79Yv1jTgXEj+ykb0o3orfiIoOE9qjwwFlVHI=;
- b=iJeV1xgkj8LmXKSqi1JA57D7XHT15SMhCBPbTzD4gLiWkbLXaLH+fTePes+LmPl4OO+v
- z2YpIdZpsBnEknnpwK0J2tN6wt8CAdBgsx3Xv9n2L0HAePXI04/Iz7ANxlcroQ5cw6ZP
- G7KLKXWpbdML3ZJqv1CiIGpVKYFjtr6t+biHzndk9eMdwTPW0zVdFaT8emsnXSPrPQm6
- DbNLI82jXBAtauUrbL8f/LYrFg7XGeRyMmWbaWXtU+nGHnHS2EfOBuRPK3OEgBM+s1hy
- l/wKoXQ5M/Tgvxgnh569Iu14+xk4TN/0aYqsCwppMZGhZeshs3ia7hzd+cKzKFXc8snC vg== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa203thbf-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 04:48:42 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32E4mf7d003639
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 04:48:41 GMT
-Received: from [10.110.22.229] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Mon, 13 Mar
- 2023 21:48:40 -0700
-Message-ID: <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
-Date:   Mon, 13 Mar 2023 21:48:39 -0700
+        Tue, 14 Mar 2023 00:55:02 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C05B82914B
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678769651;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mhbeQsCOWkBmfbdwAK6IkHvnb648Y/rpGHwMeBRvTFU=;
+        b=CifTnEFe9qkDYFQsR3/zb0dGmRhS/M+CKN4CE0x6EkI69/IzDUZEtU40WTXssM0li1RUl9
+        rg6J5Uw3pCcoH11QVMgbpLnaPeBIFAbmkjImDoR3coJPtgp9I+peHhusbZ5H5uB5jfFdfg
+        zK+6YhXTeEEOUrMmhXnJT6ikmI5RcHM=
+Received: from mail-oi1-f199.google.com (mail-oi1-f199.google.com
+ [209.85.167.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-160-42c0oeUbOMuenqc6fvDJVg-1; Tue, 14 Mar 2023 00:54:10 -0400
+X-MC-Unique: 42c0oeUbOMuenqc6fvDJVg-1
+Received: by mail-oi1-f199.google.com with SMTP id e15-20020a056808148f00b003844fd09434so6297197oiw.5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:54:10 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678769649;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=mhbeQsCOWkBmfbdwAK6IkHvnb648Y/rpGHwMeBRvTFU=;
+        b=3atMHiXcwPP7/nmGXZu8yaEzaCoHk7UOmIBY1YgMHwO1V2o1ee0F8oCylJI+nq8X+I
+         m6mJnBq3MaVmhw7agYnvAxYJXroO+P1uhBSZdqDrYieUWY7XJhynYS1hSnwiHERkvT77
+         fZu7SSnZ5LsvygDF13uk2APlZGuu/sQcaRlqk8a247fN0Nzk8FbxKSsx6vBN+LcAHQt1
+         o65dkCFb/RcteBVioOsy3b7d+r4XOBG5N9sbgM/Mj8kARgxELxAdFY6WTgZzL8RNcZDi
+         0Rt9o+zccPbpsCbzEpwCznC84qWqD5f3oHNVqc293AU/GY+GxqZ38kUzWoMRNY2NaNtP
+         PfJg==
+X-Gm-Message-State: AO0yUKVav6ufQRCRyBso3He9WnmdNQJeXp6dxgkqCTapIJW6ayEw+Nk8
+        b8hUUqjxN9VHnY8Z1zMq5zHSAfT08K67eOg18PxI859Q9tgBnVEAOHNNbLjCf/pr2ynimFjoBqC
+        k/XnXqa1pqCFxBU6Z2OOqe3UU0xTDTA0O2Y1w0hWM
+X-Received: by 2002:a05:6870:5147:b0:177:b9c0:bcba with SMTP id z7-20020a056870514700b00177b9c0bcbamr2444289oak.3.1678769649246;
+        Mon, 13 Mar 2023 21:54:09 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+nRM380JVzXg4oGG6ZzdC0Wyk+h+IHs+whvfeimKYfKtBA7Fkefnns9aW+jmQB5Dnx/xRGCvWfvJjeLfw2NKQ=
+X-Received: by 2002:a05:6870:5147:b0:177:b9c0:bcba with SMTP id
+ z7-20020a056870514700b00177b9c0bcbamr2444279oak.3.1678769648938; Mon, 13 Mar
+ 2023 21:54:08 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.1
-Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
-Content-Language: en-US
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Eric Chanudet <echanude@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230309233945.1199358-1-echanude@redhat.com>
- <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
-From:   Prasad Sodagudi <quic_psodagud@quicinc.com>
-In-Reply-To: <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: j_tz-nZj03YcvYZTdFlNdVkfPFyIYb7S
-X-Proofpoint-GUID: j_tz-nZj03YcvYZTdFlNdVkfPFyIYb7S
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_13,2023-03-13_03,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
- suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
- clxscore=1011 phishscore=0 adultscore=0 priorityscore=1501
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140041
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230302113421.174582-1-sgarzare@redhat.com> <20230302113421.174582-5-sgarzare@redhat.com>
+In-Reply-To: <20230302113421.174582-5-sgarzare@redhat.com>
+From:   Jason Wang <jasowang@redhat.com>
+Date:   Tue, 14 Mar 2023 12:53:57 +0800
+Message-ID: <CACGkMEui+-8JcTOsF+=b3W7oduMLsaL3Y7upUDmAMu4zPcrQTg@mail.gmail.com>
+Subject: Re: [PATCH v2 4/8] vringh: support VA with iotlb
+To:     Stefano Garzarella <sgarzare@redhat.com>
+Cc:     virtualization@lists.linux-foundation.org,
+        Andrey Zhadchenko <andrey.zhadchenko@virtuozzo.com>,
+        eperezma@redhat.com, netdev@vger.kernel.org, stefanha@redhat.com,
+        linux-kernel@vger.kernel.org,
+        "Michael S. Tsirkin" <mst@redhat.com>, kvm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Mar 2, 2023 at 7:35=E2=80=AFPM Stefano Garzarella <sgarzare@redhat.=
+com> wrote:
+>
+> vDPA supports the possibility to use user VA in the iotlb messages.
+> So, let's add support for user VA in vringh to use it in the vDPA
+> simulators.
+>
+> Signed-off-by: Stefano Garzarella <sgarzare@redhat.com>
+> ---
+>
+> Notes:
+>     v2:
+>     - replace kmap_atomic() with kmap_local_page() [see previous patch]
+>     - fix cast warnings when build with W=3D1 C=3D1
+>
+>  include/linux/vringh.h            |   5 +-
+>  drivers/vdpa/mlx5/net/mlx5_vnet.c |   2 +-
+>  drivers/vdpa/vdpa_sim/vdpa_sim.c  |   4 +-
+>  drivers/vhost/vringh.c            | 247 ++++++++++++++++++++++++------
+>  4 files changed, 205 insertions(+), 53 deletions(-)
+>
+> diff --git a/include/linux/vringh.h b/include/linux/vringh.h
+> index 1991a02c6431..d39b9f2dcba0 100644
+> --- a/include/linux/vringh.h
+> +++ b/include/linux/vringh.h
+> @@ -32,6 +32,9 @@ struct vringh {
+>         /* Can we get away with weak barriers? */
+>         bool weak_barriers;
+>
+> +       /* Use user's VA */
+> +       bool use_va;
+> +
+>         /* Last available index we saw (ie. where we're up to). */
+>         u16 last_avail_idx;
+>
+> @@ -279,7 +282,7 @@ void vringh_set_iotlb(struct vringh *vrh, struct vhos=
+t_iotlb *iotlb,
+>                       spinlock_t *iotlb_lock);
+>
+>  int vringh_init_iotlb(struct vringh *vrh, u64 features,
+> -                     unsigned int num, bool weak_barriers,
+> +                     unsigned int num, bool weak_barriers, bool use_va,
+>                       struct vring_desc *desc,
+>                       struct vring_avail *avail,
+>                       struct vring_used *used);
+> diff --git a/drivers/vdpa/mlx5/net/mlx5_vnet.c b/drivers/vdpa/mlx5/net/ml=
+x5_vnet.c
+> index 3a0e721aef05..babc8dd171a6 100644
+> --- a/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> +++ b/drivers/vdpa/mlx5/net/mlx5_vnet.c
+> @@ -2537,7 +2537,7 @@ static int setup_cvq_vring(struct mlx5_vdpa_dev *mv=
+dev)
+>
+>         if (mvdev->actual_features & BIT_ULL(VIRTIO_NET_F_CTRL_VQ))
+>                 err =3D vringh_init_iotlb(&cvq->vring, mvdev->actual_feat=
+ures,
+> -                                       MLX5_CVQ_MAX_ENT, false,
+> +                                       MLX5_CVQ_MAX_ENT, false, false,
+>                                         (struct vring_desc *)(uintptr_t)c=
+vq->desc_addr,
+>                                         (struct vring_avail *)(uintptr_t)=
+cvq->driver_addr,
+>                                         (struct vring_used *)(uintptr_t)c=
+vq->device_addr);
+> diff --git a/drivers/vdpa/vdpa_sim/vdpa_sim.c b/drivers/vdpa/vdpa_sim/vdp=
+a_sim.c
+> index 6a0a65814626..481eb156658b 100644
+> --- a/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> +++ b/drivers/vdpa/vdpa_sim/vdpa_sim.c
+> @@ -60,7 +60,7 @@ static void vdpasim_queue_ready(struct vdpasim *vdpasim=
+, unsigned int idx)
+>         struct vdpasim_virtqueue *vq =3D &vdpasim->vqs[idx];
+>         uint16_t last_avail_idx =3D vq->vring.last_avail_idx;
+>
+> -       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true,
+> +       vringh_init_iotlb(&vq->vring, vdpasim->features, vq->num, true, f=
+alse,
+>                           (struct vring_desc *)(uintptr_t)vq->desc_addr,
+>                           (struct vring_avail *)
+>                           (uintptr_t)vq->driver_addr,
+> @@ -81,7 +81,7 @@ static void vdpasim_vq_reset(struct vdpasim *vdpasim,
+>         vq->cb =3D NULL;
+>         vq->private =3D NULL;
+>         vringh_init_iotlb(&vq->vring, vdpasim->dev_attr.supported_feature=
+s,
+> -                         VDPASIM_QUEUE_MAX, false, NULL, NULL, NULL);
+> +                         VDPASIM_QUEUE_MAX, false, false, NULL, NULL, NU=
+LL);
+>
+>         vq->vring.notify =3D NULL;
+>  }
+> diff --git a/drivers/vhost/vringh.c b/drivers/vhost/vringh.c
+> index 0ba3ef809e48..61c79cea44ca 100644
+> --- a/drivers/vhost/vringh.c
+> +++ b/drivers/vhost/vringh.c
+> @@ -1094,15 +1094,99 @@ EXPORT_SYMBOL(vringh_need_notify_kern);
+>
+>  #if IS_REACHABLE(CONFIG_VHOST_IOTLB)
+>
+> -static int iotlb_translate(const struct vringh *vrh,
+> -                          u64 addr, u64 len, u64 *translated,
+> -                          struct bio_vec iov[],
+> -                          int iov_size, u32 perm)
+> +static int iotlb_translate_va(const struct vringh *vrh,
+> +                             u64 addr, u64 len, u64 *translated,
+> +                             struct iovec iov[],
+> +                             int iov_size, u32 perm)
+>  {
+>         struct vhost_iotlb_map *map;
+>         struct vhost_iotlb *iotlb =3D vrh->iotlb;
+> +       u64 s =3D 0, last =3D addr + len - 1;
+>         int ret =3D 0;
+> +
+> +       spin_lock(vrh->iotlb_lock);
+> +
+> +       while (len > s) {
+> +               u64 size;
+> +
+> +               if (unlikely(ret >=3D iov_size)) {
+> +                       ret =3D -ENOBUFS;
+> +                       break;
+> +               }
+> +
+> +               map =3D vhost_iotlb_itree_first(iotlb, addr, last);
+> +               if (!map || map->start > addr) {
+> +                       ret =3D -EINVAL;
+> +                       break;
+> +               } else if (!(map->perm & perm)) {
+> +                       ret =3D -EPERM;
+> +                       break;
+> +               }
+> +
+> +               size =3D map->size - addr + map->start;
+> +               iov[ret].iov_len =3D min(len - s, size);
+> +               iov[ret].iov_base =3D (void __user *)(unsigned long)
+> +                                   (map->addr + addr - map->start);
+> +               s +=3D size;
+> +               addr +=3D size;
+> +               ++ret;
+> +       }
+> +
+> +       spin_unlock(vrh->iotlb_lock);
+> +
+> +       if (translated)
+> +               *translated =3D min(len, s);
+> +
+> +       return ret;
+> +}
+> +
+> +static inline int copy_from_va(const struct vringh *vrh, void *dst, void=
+ *src,
+> +                              u64 len, u64 *translated)
+> +{
+> +       struct iovec iov[16];
+> +       struct iov_iter iter;
+> +       int ret;
+> +
+> +       ret =3D iotlb_translate_va(vrh, (u64)(uintptr_t)src, len, transla=
+ted, iov,
+> +                                ARRAY_SIZE(iov), VHOST_MAP_RO);
+> +       if (ret =3D=3D -ENOBUFS)
+> +               ret =3D ARRAY_SIZE(iov);
+> +       else if (ret < 0)
+> +               return ret;
+> +
+> +       iov_iter_init(&iter, ITER_SOURCE, iov, ret, *translated);
+> +
+> +       return copy_from_iter(dst, *translated, &iter);
+> +}
+> +
+> +static inline int copy_to_va(const struct vringh *vrh, void *dst, void *=
+src,
+> +                            u64 len, u64 *translated)
+> +{
+> +       struct iovec iov[16];
+> +       struct iov_iter iter;
+> +       int ret;
+> +
+> +       ret =3D iotlb_translate_va(vrh, (u64)(uintptr_t)dst, len, transla=
+ted, iov,
+> +                                ARRAY_SIZE(iov), VHOST_MAP_WO);
+> +       if (ret =3D=3D -ENOBUFS)
+> +               ret =3D ARRAY_SIZE(iov);
+> +       else if (ret < 0)
+> +               return ret;
+> +
+> +       iov_iter_init(&iter, ITER_DEST, iov, ret, *translated);
+> +
+> +       return copy_to_iter(src, *translated, &iter);
+> +}
+> +
+> +static int iotlb_translate_pa(const struct vringh *vrh,
+> +                             u64 addr, u64 len, u64 *translated,
+> +                             struct bio_vec iov[],
+> +                             int iov_size, u32 perm)
+> +{
+> +       struct vhost_iotlb_map *map;
+> +       struct vhost_iotlb *iotlb =3D vrh->iotlb;
+>         u64 s =3D 0, last =3D addr + len - 1;
+> +       int ret =3D 0;
+>
+>         spin_lock(vrh->iotlb_lock);
+>
+> @@ -1141,28 +1225,61 @@ static int iotlb_translate(const struct vringh *v=
+rh,
+>         return ret;
+>  }
+>
+> +static inline int copy_from_pa(const struct vringh *vrh, void *dst, void=
+ *src,
+> +                              u64 len, u64 *translated)
+> +{
+> +       struct bio_vec iov[16];
+> +       struct iov_iter iter;
+> +       int ret;
+> +
+> +       ret =3D iotlb_translate_pa(vrh, (u64)(uintptr_t)src, len, transla=
+ted, iov,
+> +                                ARRAY_SIZE(iov), VHOST_MAP_RO);
+> +       if (ret =3D=3D -ENOBUFS)
+> +               ret =3D ARRAY_SIZE(iov);
+> +       else if (ret < 0)
+> +               return ret;
+> +
+> +       iov_iter_bvec(&iter, ITER_SOURCE, iov, ret, *translated);
+> +
+> +       return copy_from_iter(dst, *translated, &iter);
+> +}
+> +
+> +static inline int copy_to_pa(const struct vringh *vrh, void *dst, void *=
+src,
+> +                            u64 len, u64 *translated)
+> +{
+> +       struct bio_vec iov[16];
+> +       struct iov_iter iter;
+> +       int ret;
+> +
+> +       ret =3D iotlb_translate_pa(vrh, (u64)(uintptr_t)dst, len, transla=
+ted, iov,
+> +                                ARRAY_SIZE(iov), VHOST_MAP_WO);
+> +       if (ret =3D=3D -ENOBUFS)
+> +               ret =3D ARRAY_SIZE(iov);
+> +       else if (ret < 0)
+> +               return ret;
+> +
+> +       iov_iter_bvec(&iter, ITER_DEST, iov, ret, *translated);
+> +
+> +       return copy_to_iter(src, *translated, &iter);
+> +}
+> +
+>  static inline int copy_from_iotlb(const struct vringh *vrh, void *dst,
+>                                   void *src, size_t len)
+>  {
+>         u64 total_translated =3D 0;
+>
+>         while (total_translated < len) {
+> -               struct bio_vec iov[16];
+> -               struct iov_iter iter;
+>                 u64 translated;
+>                 int ret;
+>
+> -               ret =3D iotlb_translate(vrh, (u64)(uintptr_t)src,
+> -                                     len - total_translated, &translated=
+,
+> -                                     iov, ARRAY_SIZE(iov), VHOST_MAP_RO)=
+;
+> -               if (ret =3D=3D -ENOBUFS)
+> -                       ret =3D ARRAY_SIZE(iov);
+> -               else if (ret < 0)
+> -                       return ret;
+> -
+> -               iov_iter_bvec(&iter, ITER_SOURCE, iov, ret, translated);
+> +               if (vrh->use_va) {
+> +                       ret =3D copy_from_va(vrh, dst, src,
+> +                                          len - total_translated, &trans=
+lated);
+> +               } else {
+> +                       ret =3D copy_from_pa(vrh, dst, src,
+> +                                          len - total_translated, &trans=
+lated);
+> +               }
+>
+> -               ret =3D copy_from_iter(dst, translated, &iter);
+>                 if (ret < 0)
+>                         return ret;
+>
+> @@ -1180,22 +1297,17 @@ static inline int copy_to_iotlb(const struct vrin=
+gh *vrh, void *dst,
+>         u64 total_translated =3D 0;
+>
+>         while (total_translated < len) {
+> -               struct bio_vec iov[16];
+> -               struct iov_iter iter;
+>                 u64 translated;
+>                 int ret;
+>
+> -               ret =3D iotlb_translate(vrh, (u64)(uintptr_t)dst,
+> -                                     len - total_translated, &translated=
+,
+> -                                     iov, ARRAY_SIZE(iov), VHOST_MAP_WO)=
+;
+> -               if (ret =3D=3D -ENOBUFS)
+> -                       ret =3D ARRAY_SIZE(iov);
+> -               else if (ret < 0)
+> -                       return ret;
+> -
+> -               iov_iter_bvec(&iter, ITER_DEST, iov, ret, translated);
+> +               if (vrh->use_va) {
+> +                       ret =3D copy_to_va(vrh, dst, src,
+> +                                        len - total_translated, &transla=
+ted);
+> +               } else {
+> +                       ret =3D copy_to_pa(vrh, dst, src,
+> +                                        len - total_translated, &transla=
+ted);
+> +               }
+>
+> -               ret =3D copy_to_iter(src, translated, &iter);
+>                 if (ret < 0)
+>                         return ret;
+>
+> @@ -1210,20 +1322,37 @@ static inline int copy_to_iotlb(const struct vrin=
+gh *vrh, void *dst,
+>  static inline int getu16_iotlb(const struct vringh *vrh,
+>                                u16 *val, const __virtio16 *p)
+>  {
+> -       struct bio_vec iov;
+> -       void *kaddr, *from;
+>         int ret;
+>
+>         /* Atomic read is needed for getu16 */
+> -       ret =3D iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p), NULL,
+> -                             &iov, 1, VHOST_MAP_RO);
+> -       if (ret < 0)
+> -               return ret;
+> +       if (vrh->use_va) {
+> +               struct iovec iov;
+> +               __virtio16 tmp;
+> +
+> +               ret =3D iotlb_translate_va(vrh, (u64)(uintptr_t)p, sizeof=
+(*p),
+> +                                        NULL, &iov, 1, VHOST_MAP_RO);
+> +               if (ret < 0)
+> +                       return ret;
 
+Nit: since we have copy_to_va/copy_to_pa variants, let's introduce
+getu16_iotlb_va/pa variants?
 
-On 3/9/2023 3:47 PM, Konrad Dybcio wrote:
-> 
-> 
-> On 10.03.2023 00:39, Eric Chanudet wrote:
->> ABL uses the __symbols__ section to process the DTB before passing it
->> forward. Without it, the bootstrap is interrupted.
->>
->> Signed-off-by: Eric Chanudet <echanude@redhat.com>
->> ---
-> Fix your ABL.
-Hi Konrad,
+>
+> -       kaddr =3D kmap_local_page(iov.bv_page);
+> -       from =3D kaddr + iov.bv_offset;
+> -       *val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)from));
+> -       kunmap_local(kaddr);
+> +               ret =3D __get_user(tmp, (__virtio16 __user *)iov.iov_base=
+);
+> +               if (ret)
+> +                       return ret;
+> +
+> +               *val =3D vringh16_to_cpu(vrh, tmp);
+> +       } else {
+> +               struct bio_vec iov;
+> +               void *kaddr, *from;
+> +
+> +               ret =3D iotlb_translate_pa(vrh, (u64)(uintptr_t)p, sizeof=
+(*p),
+> +                                        NULL, &iov, 1, VHOST_MAP_RO);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               kaddr =3D kmap_local_page(iov.bv_page);
 
-Apps boot-loader need __symbols__ for dynamic overlay operation. 
-Qualcomm firmware passes an overlay file to apps boot-loader to overlay 
-some of the nodes based on firmware configuration. Without __symbols__ 
-apps boot-loader is not able to overlay.
+If we decide to have a use_va switch, is kmap_local_page() still required h=
+ere?
 
-Qualcomm hypervisor/gunyah would like to overlay arch timer node with 
-always-on property, So adding __symbols__ helps boot-loader to overlay.
+Other looks good.
 
-I think, commit text is misleading here and I will request Eric to fix 
-the commit text.
+Thanks
 
--Thanks, Prasad
+> +               from =3D kaddr + iov.bv_offset;
+> +               *val =3D vringh16_to_cpu(vrh, READ_ONCE(*(__virtio16 *)fr=
+om));
+> +               kunmap_local(kaddr);
+> +       }
+>
+>         return 0;
+>  }
+> @@ -1231,20 +1360,37 @@ static inline int getu16_iotlb(const struct vring=
+h *vrh,
+>  static inline int putu16_iotlb(const struct vringh *vrh,
+>                                __virtio16 *p, u16 val)
+>  {
+> -       struct bio_vec iov;
+> -       void *kaddr, *to;
+>         int ret;
+>
+>         /* Atomic write is needed for putu16 */
+> -       ret =3D iotlb_translate(vrh, (u64)(uintptr_t)p, sizeof(*p), NULL,
+> -                             &iov, 1, VHOST_MAP_WO);
+> -       if (ret < 0)
+> -               return ret;
+> +       if (vrh->use_va) {
+> +               struct iovec iov;
+> +               __virtio16 tmp;
+>
+> -       kaddr =3D kmap_local_page(iov.bv_page);
+> -       to =3D kaddr + iov.bv_offset;
+> -       WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
+> -       kunmap_local(kaddr);
+> +               ret =3D iotlb_translate_va(vrh, (u64)(uintptr_t)p, sizeof=
+(*p),
+> +                                        NULL, &iov, 1, VHOST_MAP_RO);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               tmp =3D cpu_to_vringh16(vrh, val);
+> +
+> +               ret =3D __put_user(tmp, (__virtio16 __user *)iov.iov_base=
+);
+> +               if (ret)
+> +                       return ret;
+> +       } else {
+> +               struct bio_vec iov;
+> +               void *kaddr, *to;
+> +
+> +               ret =3D iotlb_translate_pa(vrh, (u64)(uintptr_t)p, sizeof=
+(*p), NULL,
+> +                                        &iov, 1, VHOST_MAP_WO);
+> +               if (ret < 0)
+> +                       return ret;
+> +
+> +               kaddr =3D kmap_local_page(iov.bv_page);
+> +               to =3D kaddr + iov.bv_offset;
+> +               WRITE_ONCE(*(__virtio16 *)to, cpu_to_vringh16(vrh, val));
+> +               kunmap_local(kaddr);
+> +       }
+>
+>         return 0;
+>  }
+> @@ -1306,6 +1452,7 @@ static inline int putused_iotlb(const struct vringh=
+ *vrh,
+>   * @features: the feature bits for this ring.
+>   * @num: the number of elements.
+>   * @weak_barriers: true if we only need memory barriers, not I/O.
+> + * @use_va: true if IOTLB contains user VA
+>   * @desc: the userpace descriptor pointer.
+>   * @avail: the userpace avail pointer.
+>   * @used: the userpace used pointer.
+> @@ -1313,11 +1460,13 @@ static inline int putused_iotlb(const struct vrin=
+gh *vrh,
+>   * Returns an error if num is invalid.
+>   */
+>  int vringh_init_iotlb(struct vringh *vrh, u64 features,
+> -                     unsigned int num, bool weak_barriers,
+> +                     unsigned int num, bool weak_barriers, bool use_va,
+>                       struct vring_desc *desc,
+>                       struct vring_avail *avail,
+>                       struct vring_used *used)
+>  {
+> +       vrh->use_va =3D use_va;
+> +
+>         return vringh_init_kern(vrh, features, num, weak_barriers,
+>                                 desc, avail, used);
+>  }
+> --
+> 2.39.2
+>
 
-> 
-> Konrad
->> Depends on initial sa8775p-ride.dts:
->> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
->>
->>   arch/arm64/boot/dts/qcom/Makefile | 4 ++++
->>   1 file changed, 4 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->> index b63cd1861e68..72e85ab31d74 100644
->> --- a/arch/arm64/boot/dts/qcom/Makefile
->> +++ b/arch/arm64/boot/dts/qcom/Makefile
->> @@ -1,4 +1,8 @@
->>   # SPDX-License-Identifier: GPL-2.0
->> +
->> +# Enable support for device-tree overlays required on sa8775p-ride.
->> +DTC_FLAGS_sa8775p-ride := -@
->> +
->>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8016-sbc.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8094-sony-xperia-kitakami-karin_windy.dtb
->>   dtb-$(CONFIG_ARCH_QCOM)	+= apq8096-db820c.dtb
-> 
-> 
