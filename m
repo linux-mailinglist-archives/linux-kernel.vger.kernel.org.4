@@ -2,194 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4A96BA020
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:55:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BC846BA01C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:54:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbjCNTzN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:55:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54150 "EHLO
+        id S230111AbjCNTye (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:54:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbjCNTzL (ORCPT
+        with ESMTP id S229722AbjCNTyc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:55:11 -0400
-Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [185.185.170.37])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F19438031;
-        Tue, 14 Mar 2023 12:54:59 -0700 (PDT)
-Received: from hillosipuli.retiisi.eu (82-181-192-243.bb.dnainternet.fi [82.181.192.243])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: sailus)
-        by lahtoruutu.iki.fi (Postfix) with ESMTPSA id 4Pbkl465RTz49Q7F;
-        Tue, 14 Mar 2023 21:54:56 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
-        t=1678823697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K9JI+qty9Vz485GIKEV112iQoQGKC29JbO4+C01JJTY=;
-        b=BMzKelRDsJwNeY5+RMJzEz5sxG6rWJ6WUYGQjwi5qbh+pHpzzpMCibujV3q7fayTsChbFA
-        4Rdd9NiYFJ2nKd8xTnpQK/ZgddccphdFhXDpXzYFeSJfnc80JB6M/SsXgwlBcR/TMV0ALw
-        j02zPUQ+XOjJIkDrrMWe7bEM29lhIR4/w7slJDeA2gXG7UuJyDYdwxbF2WoB76iCTUr8Q0
-        EbSwWqaTJLvRNe7m8bfhIok2qccJ5CQ0I3WVp/XzBxGYbYt9ivibfzciF3O9F5BLmrL9+R
-        zCHqXGU3GALjJqB07yNqoJmwWOGg7Nk13H/WcgCEtUOieBcY5ml+o2+aVl4UZw==
-ARC-Seal: i=1; s=lahtoruutu; d=iki.fi; t=1678823697; a=rsa-sha256;
-        cv=none;
-        b=qjdEI+qPsgxQ/elLA4g/7kxzyvfwU2cnpLl8kEE5GdRniQ2oRLhq4eWvzqsEepgZXEBfGV
-        KwAW7lVEJ6y3f8FFO87OxLimvJ4tOvKfLrhQr66+zKmo/hb7WjKHDSrvwMRktOi+rcfRfP
-        oTnP689VzlgD/pMMbzGxm6JAYzVBINyk3/5Ssy7Cw377dCp7MV0+3Ii0SJCiAtMrOjX/q0
-        KqThELJZw2eAgxXnE4D9hk3PM6++qcG8f1We5feLhdd9ziyc9uPf0/rbfpUkFJp+BSGMqP
-        pz+p/UkYB9crhbMsIBcjVxU0BWA6KyOLhhI7pbG+k3YoghkTUk5d6AlMv3p/Tg==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
-        s=lahtoruutu; t=1678823697;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=K9JI+qty9Vz485GIKEV112iQoQGKC29JbO4+C01JJTY=;
-        b=NWkUu8EbMK3joggOPH/zH13goyQhTZWBHy7q+EFw+mDVPg7c8KLeK5tv2N5RdQcHEzTI8z
-        Mlr3ePAcbe828eAxFVnhfQHgERUWxEYcSIZ/CH4+T0iX2xUQ4V+uvN+c0c6hoAtjCFejYD
-        dq9Y+6AaUslFxZaa0c+7Imq6df4kxV7YP5PncitCWlKD8gi+9jtUKNJ+Is8pqbnJ8q4bOT
-        JT8yMZauhXY7HbrculBAzf/o7a15+GQnEb444h2DqKFAsv+PHPXaCYO02O/FN3CcPAJubK
-        jZwXaBvH7p8n4Adlk6I2D9033D4ChK2vHQJDIJU/zTJmXgDDqRADnjJzb95PHQ==
-Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 950AF634C91;
-        Tue, 14 Mar 2023 21:53:53 +0200 (EET)
-Date:   Tue, 14 Mar 2023 21:53:53 +0200
-From:   Sakari Ailus <sakari.ailus@iki.fi>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        phone-devel@vger.kernel.org,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
-Message-ID: <ZBDQ0YcBkYW3M/v0@valkosipuli.retiisi.eu>
-References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
- <2665862.mvXUDI8C0e@z3ntu.xyz>
- <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
- <5654018.DvuYhMxLoT@z3ntu.xyz>
+        Tue, 14 Mar 2023 15:54:32 -0400
+Received: from mail-il1-x132.google.com (mail-il1-x132.google.com [IPv6:2607:f8b0:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4264925949
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:54:11 -0700 (PDT)
+Received: by mail-il1-x132.google.com with SMTP id s7so1621638ilv.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678823650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=0ILXYxmnfOLR0ewM60G3euG3ql1j35ZPmWRlhkZCiP0=;
+        b=b7+Z0objvds1+g+MvHWg73uKyRsDn7xQDsrO8N7y5nen+snWZz62/2DCKr+C0ayHlh
+         P3qPei6OCXlzaWbzFO+MrlrP/pQ9gFRP0CCvwwwQyKWxfIavYHkST9viDLG/6R/bne43
+         fBeyImX0Oa/I3zIUX1G3VttadI8Kjje6aXMZc=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678823650;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=0ILXYxmnfOLR0ewM60G3euG3ql1j35ZPmWRlhkZCiP0=;
+        b=vFyLSHpe3Qs6gUcj6Vl5paW6ZX2hmihf/mNn5FcduZaC08yhTgxL214er0rVDSalDp
+         s8yhhDyShrkPAIejKy1kyKDNBujCz94CCmuAH7rouDZhURBS8bMNDDJLcPPSaNPYqhPY
+         lpjG1LtLeTnL4PLcXrAU2PUU6CkfV+U5dU/RgjOiC3p52aDZb2D1FVfl6L8euTgyqDwU
+         ftUdTqAA7IzkRTrPyiXrLSR1VYEAF2btkdktwsoISd+U0ymvYa1G0CyeQilZOXvgCybp
+         NrXYimeq6TCL1MAe2T1HpXY002XVboYGv2k8+jtxfE1TyOj54r9cbpnS9iC0eMGM7ARo
+         mjPw==
+X-Gm-Message-State: AO0yUKVcNsU61drmP42h4jduF3aJ46zrsT5C3HB9JxXnaPHStb9pjGEH
+        +U90vnT+RePVlXXCFCr7kNOwKQ==
+X-Google-Smtp-Source: AK7set9u8J4nHcX/9iBm0CPgxbmxzUuW1WdTeigP4mZCYcQyLJQAQ77l+aELPl1OxKuxN3uk6qfJYQ==
+X-Received: by 2002:a05:6e02:1c01:b0:323:ad6:5357 with SMTP id l1-20020a056e021c0100b003230ad65357mr3511492ilh.28.1678823650533;
+        Tue, 14 Mar 2023 12:54:10 -0700 (PDT)
+Received: from markhas1.corp.google.com ([2620:15c:183:204:da4a:3c9d:f298:5d61])
+        by smtp.gmail.com with ESMTPSA id w2-20020a029682000000b00403b917f3a8sm1012718jai.56.2023.03.14.12.54.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 12:54:10 -0700 (PDT)
+From:   Mark Hasemeyer <markhas@chromium.org>
+To:     Jarkko Sakkinen <jarkko@kernel.org>
+Cc:     Mark Hasemeyer <markhas@chromium.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] tpm: cr50: i2c: use jiffies to wait for tpm ready irq
+Date:   Tue, 14 Mar 2023 13:54:04 -0600
+Message-Id: <20230314135400.1.I5561dfbc4438418281626e43e345e8acc879cd7c@changeid>
+X-Mailer: git-send-email 2.40.0.rc2.332.ga46443480c-goog
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <5654018.DvuYhMxLoT@z3ntu.xyz>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 07:33:06PM +0100, Luca Weiss wrote:
-> On Dienstag, 14. März 2023 13:00:52 CET Sakari Ailus wrote:
-> > Hi Luca,
-> > 
-> > On Thu, Feb 09, 2023 at 05:46:48PM +0100, Luca Weiss wrote:
-> > > +CC Helen Koike
-> > > 
-> > > On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
-> > > > On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
-> > > > > Convert the text-based dt-bindings to yaml.
-> > > > > 
-> > > > > Changes from original txt:
-> > > > > * Take wording for various properties from other yaml bindings, this
-> > > > > 
-> > > > >   removes e.g. volt amount from schema since it isn't really relevant
-> > > > >   and the datasheet is a better source.
-> > > > > 
-> > > > > * Don't make reset-gpios a required property since it can be tied to
-> > > > > 
-> > > > >   DOVDD instead.
-> > > > > 
-> > > > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > > > > ---
-> > > > > 
-> > > > >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
-> > > > >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
-> > > > >  +++++++++++++++++++++ MAINTAINERS
-> > > > >  
-> > > > >  |   1 +
-> > > > >  
-> > > > >  3 files changed, 102 insertions(+), 41 deletions(-)
-> > > > 
-> > > > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > > > 
-> > > > yamllint warnings/errors:
-> > > > 
-> > > > dtschema/dtc warnings/errors:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > medi a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required
-> > > > property From schema:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/i2c/ovti,ov2685.yaml
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
-> > > > property From schema:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/i2c/ovti,ov2685.yaml
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
-> > > > property From schema:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/i2c/ovti,ov2685.yaml
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
-> > > > property From schema:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/i2c/ovti,ov2685.yaml
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
-> > > > property From schema:
-> > > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/
-> > > > med
-> > > > ia/i2c/ovti,ov2685.yaml
-> > > 
-> > > Looks like rockchip-isp1.yaml uses very incomplete sensor examples in
-> > > their
-> > > binding example, which sort of makes sense since those bindings are
-> > > showing
-> > > the rockchip isp bindings and contain the bare minimum to show how a
-> > > sensor is connected in dt.
-> > > 
-> > > Not sure how to solve this - ov2685 is also one of three sensors that are
-> > > used very abbreviated there.
-> > 
-> > Could these regulators be simply made optional?
-> 
-> Sure, from driver side it would just get dummy regulators instead.
-> 
-> Still the clocks are also missing in this rockchip example. Any suggestion 
-> what to do about those?
-> 
-> Honestly I don't want to spend too much time on some ISP docs that I don't 
-> really care about, would be nice if the maintainers of that could do that...
+When waiting for a tpm ready completion, the cr50 i2c driver incorrectly
+assumes that the value of timeout_a is represented in milliseconds
+instead of jiffies.
 
-Ah, I think I missed this was about examples only, not actual DT source.
+Remove the msecs_to_jiffies conversion.
 
-I guess you could just make up some clocks in that case? :-)
+Signed-off-by: Mark Hasemeyer <markhas@chromium.org>
+---
 
+ drivers/char/tpm/tpm_tis_i2c_cr50.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
+
+diff --git a/drivers/char/tpm/tpm_tis_i2c_cr50.c b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+index 77cea5b31c6e4..376ae18a04ebb 100644
+--- a/drivers/char/tpm/tpm_tis_i2c_cr50.c
++++ b/drivers/char/tpm/tpm_tis_i2c_cr50.c
+@@ -100,8 +100,7 @@ static int tpm_cr50_i2c_wait_tpm_ready(struct tpm_chip *chip)
+ 	}
+ 
+ 	/* Wait for interrupt to indicate TPM is ready to respond */
+-	if (!wait_for_completion_timeout(&priv->tpm_ready,
+-					 msecs_to_jiffies(chip->timeout_a))) {
++	if (!wait_for_completion_timeout(&priv->tpm_ready, chip->timeout_a)) {
+ 		dev_warn(&chip->dev, "Timeout waiting for TPM ready\n");
+ 		return -ETIMEDOUT;
+ 	}
 -- 
-Sakari Ailus
+2.40.0.rc2.332.ga46443480c-goog
+
