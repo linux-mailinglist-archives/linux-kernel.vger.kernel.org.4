@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA6D76B9F5C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:08:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A05DD6B9F61
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:10:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbjCNTIA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:08:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34124 "EHLO
+        id S231285AbjCNTKK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:10:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCNTH6 (ORCPT
+        with ESMTP id S231469AbjCNTKG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:07:58 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 37D4D22A1A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:07:57 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id o12so66224811edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:07:57 -0700 (PDT)
+        Tue, 14 Mar 2023 15:10:06 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FFD01722
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:10:04 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id x3so66204088edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:10:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1678820875;
+        d=linux-foundation.org; s=google; t=1678821002;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=5XXQN4LaizH2j4eXVSdO1xOJU1STk3wgvGGHOknlOD8=;
-        b=a6WyRdFfi0DT7KYrcVh8KTBoERDVjfv/XJ6l0uILwYMBAPnA/UBOlqSBYK5E8mAA5E
-         gyMsC6wKiXOOl13zzf6+ip5YEB6dQ1oXi+QLJ8Z5sLuxArOr0GPojIVKAlN0eNCjCQTJ
-         oTKawdKO94eDLMqkex9c7ds01Gql5IOB48HKs=
+        bh=QAToBCAVYt3GcGYadQEhb7AkREOTPXmIkwVjM1uSyZg=;
+        b=NkFjtkLoXbRILsSISuqp0dVywd4nQ7PYdZL1ie9aQuH1CTHCMG7AT/XsjuaHWJS15X
+         U73hS5PVjTRrcBUNa/5rXqAL8ZMkIHedHwv+kOKUbr9ndeNguqVLnqyQbv5AthkJdl9C
+         YGOnB3f3KqypaBLHo6tn1nud60KnbWRT4RxnM=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678820875;
+        d=1e100.net; s=20210112; t=1678821002;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=5XXQN4LaizH2j4eXVSdO1xOJU1STk3wgvGGHOknlOD8=;
-        b=YPb0tCDSDG5Bmjx8qrIpVt+HcTgVFP1GB/4ayS85AaS5y9BB6jmlE5HbJejlIgiKHB
-         4KTvNCo6AJEXoHqpS4RILohN0GoAqhg3ZTbe0qokBpHzvHoY9pMDU9ktbVD8IUrEYkrH
-         pDkWly3c5BM8XpUcycqwbxO0DSSU3bY8MNNPLfrijiivF32rBCnVENtj6XcCHIWsw8cq
-         bB8jpLvXxmRa5AMZFacNbn/zuBbO2N9j3xqE2EW6n6nfDt+Hq+r1Q6XVT/d0UXFAVVmH
-         q4bqZ+D7v4xtND6s2ZhSQf7fXI5rflssxikER6mClt7xjO2Ch10+V+w9oeMh1XQkD/+h
-         mHpg==
-X-Gm-Message-State: AO0yUKVmvqu56KdsndnnxgbZciwoR8Ze3QmCiOzU49CrmLM3CioGb3Lw
-        vPdPxnr8IPn9HR2/hMgss9t/+0fa9y2zTnCHZQ1MPQ==
-X-Google-Smtp-Source: AK7set/w8BoQkrTEYzGlwWOCA2ojizrPkT3Vmao9NomjyMExwzK397jTlrBByNF3zB1Bs0AsI84X6g==
-X-Received: by 2002:a17:906:9508:b0:907:6759:7679 with SMTP id u8-20020a170906950800b0090767597679mr3539591ejx.54.1678820875461;
-        Tue, 14 Mar 2023 12:07:55 -0700 (PDT)
-Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com. [209.85.208.44])
-        by smtp.gmail.com with ESMTPSA id hd31-20020a170907969f00b0092d58e24e11sm1001048ejc.137.2023.03.14.12.07.54
+        bh=QAToBCAVYt3GcGYadQEhb7AkREOTPXmIkwVjM1uSyZg=;
+        b=C3YborkcyMiJ/EE9wn8czOU4RVbJvTA3qre7yR1PUilP5Oa5o0TDFYsag2wQkE3eXH
+         cS1nxAmHX9IvzAb9z0xA5w52MzDwjdmEp54ztRDuaV4e27hkX1EC1MMbU5URXQbNddA4
+         XdIXnUp85XI1yhxefzCmsY+fivyWBdC8Ki8QXGMku9aJRH3ZG+TJ1hFz6gqbDjfyCVqc
+         OjKIIl2s8NObXVcU36mVriubxxUr2LFQG5J4dubZ2T18UOR6ZFIiuZEMSe1JIuRUbHuv
+         WJySKJGO1olbLo4qUDTYFb95wUgMs4Z8P1q1lwShB1lAZ1ZBxS0ct2OCOINlQwuZNmTz
+         YxVg==
+X-Gm-Message-State: AO0yUKX1/lLLWlftdcI9j0sJXqtgMOLEAki6zQcW9kC20wbuIO098r37
+        gvX+sv2Au1lxb3zFh8FdrtQi4pAxeVRNvab8NUN32Q==
+X-Google-Smtp-Source: AK7set/zfkjZJo95nueqz1Pd98TL9Yv+kha+X/Q436KikmA1HET1HF0zsPISbxuZ0Lr4hZTg7PNHoQ==
+X-Received: by 2002:a17:906:5012:b0:91d:a049:17a9 with SMTP id s18-20020a170906501200b0091da04917a9mr3474413ejj.36.1678821002468;
+        Tue, 14 Mar 2023 12:10:02 -0700 (PDT)
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com. [209.85.208.48])
+        by smtp.gmail.com with ESMTPSA id f13-20020a170906138d00b008b1fc59a22esm1513322ejc.65.2023.03.14.12.10.00
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 12:07:54 -0700 (PDT)
-Received: by mail-ed1-f44.google.com with SMTP id da10so66352163edb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:07:54 -0700 (PDT)
-X-Received: by 2002:a50:d506:0:b0:4fb:482b:f93d with SMTP id
- u6-20020a50d506000000b004fb482bf93dmr106272edi.2.1678820874229; Tue, 14 Mar
- 2023 12:07:54 -0700 (PDT)
+        Tue, 14 Mar 2023 12:10:01 -0700 (PDT)
+Received: by mail-ed1-f48.google.com with SMTP id z21so955707edb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:10:00 -0700 (PDT)
+X-Received: by 2002:a17:907:2069:b0:8af:4963:fb08 with SMTP id
+ qp9-20020a170907206900b008af4963fb08mr1869330ejb.15.1678821000656; Tue, 14
+ Mar 2023 12:10:00 -0700 (PDT)
 MIME-Version: 1.0
 References: <20230308165251.2078898-1-dhowells@redhat.com> <20230308165251.2078898-4-dhowells@redhat.com>
  <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
  <ZBCkDvveAIJENA0G@casper.infradead.org> <CAHk-=wiO-Z7QdKnA+yeLCROiVVE6dBK=TaE7wz4hMc0gE2SPRw@mail.gmail.com>
- <3761465.1678818404@warthog.procyon.org.uk>
-In-Reply-To: <3761465.1678818404@warthog.procyon.org.uk>
+ <3761465.1678818404@warthog.procyon.org.uk> <CAHk-=wh-OKQdK2AE+CD_Y5bimnoSH=_4+F5EOZoGUf3SGJdxGA@mail.gmail.com>
+In-Reply-To: <CAHk-=wh-OKQdK2AE+CD_Y5bimnoSH=_4+F5EOZoGUf3SGJdxGA@mail.gmail.com>
 From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Tue, 14 Mar 2023 12:07:36 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh-OKQdK2AE+CD_Y5bimnoSH=_4+F5EOZoGUf3SGJdxGA@mail.gmail.com>
-Message-ID: <CAHk-=wh-OKQdK2AE+CD_Y5bimnoSH=_4+F5EOZoGUf3SGJdxGA@mail.gmail.com>
+Date:   Tue, 14 Mar 2023 12:09:43 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whEuJ6VXqaCemzXR-nss_aM-hUVWEnKSwdGioQJXDLF_g@mail.gmail.com>
+Message-ID: <CAHk-=whEuJ6VXqaCemzXR-nss_aM-hUVWEnKSwdGioQJXDLF_g@mail.gmail.com>
 Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
 To:     David Howells <dhowells@redhat.com>
 Cc:     Matthew Wilcox <willy@infradead.org>, Jens Axboe <axboe@kernel.dk>,
@@ -91,21 +91,13 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:26=E2=80=AFAM David Howells <dhowells@redhat.com=
-> wrote:
+On Tue, Mar 14, 2023 at 12:07=E2=80=AFPM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Are you okay if we go with my current patch for the moment?
+> Maybe we can do /dev/null some day and actually have a common case for th=
+ose.
 
-I  guess.
+/dev/zero, I mean. We already do splice to /dev/null (and splicing
+from /dev/null isn't interesting ;)
 
-But please at least stop doing the
-
-     get_page(buf->page);
-
-on the zero-page (which includes using no-op .get and .put functions
-in  zero_pipe_buf_ops().
-
-Maybe we can do /dev/null some day and actually have a common case for thos=
-e.
-
-             Linus
+            Linus
