@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E04826B9E6E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 602036B9E71
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:31:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjCNSbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41084 "EHLO
+        id S230445AbjCNSbP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:31:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230286AbjCNSbI (ORCPT
+        with ESMTP id S230308AbjCNSbJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:31:08 -0400
+        Tue, 14 Mar 2023 14:31:09 -0400
 Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F3918AAD
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:30:56 -0700 (PDT)
-Received: by mail-wm1-x32f.google.com with SMTP id p23-20020a05600c1d9700b003ead4835046so1058654wms.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:30:55 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20F1C1A48F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:30:57 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id j19-20020a05600c191300b003eb3e1eb0caso13838126wmq.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:30:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678818654;
+        d=bgdev-pl.20210112.gappssmtp.com; s=20210112; t=1678818655;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/vO0yyz37sCPjmTdBPnxOQssiPwo3vE8UW/JvvEZOCQ=;
-        b=4Gp6JaA+LlrNYraBYA8mWAWkIYN3+2QBmR2ZoCgv8mKrhj6OaBkVzALZZ2IsHQ8rj8
-         rf/HpQHGt8QAXJ7mTNyCxkSkRiP98EP5KTwCZJtwj18BmHTcbQaqIvfSkQbd4Yxbmxw+
-         a+xuPPLUPgdZk81+OFWDNm2/OdZQt4CjthOly5yO52BbthRyKKqCboq/icw/GoDwPI6M
-         myseMTmicelOqnfW2JSIvIDIsUMiaOofIMcK3JViQRbZtGo6E+Fpt12ZuM5X7RRSXFz+
-         ne/Gv6RWef3bgCaK1QtxI3nWAIgk78WFLl9Jar5OQZxHoSTUhqFPFPHC0WxpnyRucP6a
-         FJFw==
+        bh=fuuEjmrbMj1oVSmMC53YE236zaBmRiKiAfz/V0m6A8g=;
+        b=wNzmctlA1WtK9v028tbq9ylEjdTPyatTxL8veKW1ylMOMx7tN3jbK6zUnnQ86iYWHY
+         L5pjuTrVpyXrVLaqqMD3bhEcoMo+5MFK+OthVb/taJGnIMsdFLzPruA67XHdrDgR9983
+         RsQe3FPLjpMyhL8LiPuapf8+/fwgRrqd+q6cfNO+Dj2Ei5rO8zSfdqL6cbNUaLRPNWQj
+         PXp+OEsl5PsO24/OA4aQv37NLbRQf8zMpLDMinKQIcqKfXitzii8BeYeX7/tX7CqzaYV
+         qS9GDdmscqjbYVDR0dN4OxkJrgfY0Evz5qOZVGQoRAYCxpqmI2I5++aTxoW3AZbb45nl
+         sDtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678818654;
+        d=1e100.net; s=20210112; t=1678818655;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=/vO0yyz37sCPjmTdBPnxOQssiPwo3vE8UW/JvvEZOCQ=;
-        b=Am4rtEHDkIhMkN+UkH9mwh/9C7OB2mKakPWYlngXS+AodDhgj6/2WaFWADq7Nq6HL6
-         kVfUOShxuf3uFB3Gt9FNTMj9alTqhPPYTk2VRaIYnWG0Iu1jha6ZRLOGgmIUEvLFBC9A
-         YcVu+hpU6YZFWCgvcHkEDiXqWKL7IpSvgdnA8OzdlOlEy9pAiMJM8Klpbg6nAjRJ6C7u
-         E9G2ZZGcwuHFVNYT0Q+lemd24hPrGeJLmq21taLix/u7tx86vImdLAz7mUCp6Ao7O8Gr
-         iDDnwIRH1Qj3sDPNEvX4taujuer5tI965xFNeBmnG4FzkkPLxzkbCLC/PZMMDoI6Ip8+
-         togA==
-X-Gm-Message-State: AO0yUKVbTa3+TqCixyLOkGYTds3tF4sLfUgUebQlAjVGadhxafwVfyo1
-        d4lp0wmB9x0lEwieHM5LonJCgQ==
-X-Google-Smtp-Source: AK7set98JiTo2th2oPGQJOngAEPw6VLt3IgHn4vuukzs7XUq7gqA87KwXNTJBZ1jsCbvcr/7apwWvA==
-X-Received: by 2002:a05:600c:4ecf:b0:3eb:29fe:70ec with SMTP id g15-20020a05600c4ecf00b003eb29fe70ecmr16501913wmq.27.1678818654514;
-        Tue, 14 Mar 2023 11:30:54 -0700 (PDT)
+        bh=fuuEjmrbMj1oVSmMC53YE236zaBmRiKiAfz/V0m6A8g=;
+        b=ZpP6nW/ZQhJ5/y2a4OGU3buMgRyMbv8BwehmbU0uts3SsqRmtq59y9zTOOORQfDdwf
+         ZzzeO6CXss5P5qpBjswUl38CRmkbVO9Q8v8rHd2oJ2ciFZiXO69x9Nr046Wr9111nvir
+         oEG61H3D6RDxz205BD8migVcaVJTbhEcHcQ5eQYCiC57K0FHiAE+ibui8UHzAbZknPZ1
+         3uQq4RXkmWLqz0UBwOeTjQyt2c7s3gHrcsd0vaWBsYVLcE11D+8Fxc2UiK8zwXfb8msg
+         GJukOypPVJvIv2G9xgKPeabK/inbJMrvmw46gg4f5U+LtSrvpOvv1ITD8ss7xXFbocCS
+         ho1g==
+X-Gm-Message-State: AO0yUKXRRhjiWBJmOx91n9RnzjfPNYu3AP3MaOohAQ90orOm2KDSgDpz
+        nQ9OEr1kehBQRZzCP4qxzWkNKg==
+X-Google-Smtp-Source: AK7set+DuSjV0TVBYAzpUW5T23+3Dh5B6PpeWaJX6Qu4GYSM7vLMdB6o51w99gLRrR4EhcTYd6O15A==
+X-Received: by 2002:a05:600c:4ecf:b0:3eb:29fe:70ec with SMTP id g15-20020a05600c4ecf00b003eb29fe70ecmr16501959wmq.27.1678818655642;
+        Tue, 14 Mar 2023 11:30:55 -0700 (PDT)
 Received: from brgl-uxlite.home ([2a01:cb1d:334:ac00:fd14:bd52:b53b:d94c])
-        by smtp.gmail.com with ESMTPSA id k28-20020a05600c1c9c00b003e209b45f6bsm4083938wms.29.2023.03.14.11.30.53
+        by smtp.gmail.com with ESMTPSA id k28-20020a05600c1c9c00b003e209b45f6bsm4083938wms.29.2023.03.14.11.30.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 11:30:54 -0700 (PDT)
+        Tue, 14 Mar 2023 11:30:55 -0700 (PDT)
 From:   Bartosz Golaszewski <brgl@bgdev.pl>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -58,20 +58,18 @@ To:     Andy Gross <agross@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
 Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>
-Subject: [PATCH 01/14] dt-bindings: interrupt-controller: qcom-pdc: add compatible for sa8775p
-Date:   Tue, 14 Mar 2023 19:30:30 +0100
-Message-Id: <20230314183043.619997-2-brgl@bgdev.pl>
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH 02/14] arm64: dts: qcom: sa8775p: add the pdc node
+Date:   Tue, 14 Mar 2023 19:30:31 +0100
+Message-Id: <20230314183043.619997-3-brgl@bgdev.pl>
 X-Mailer: git-send-email 2.37.2
 In-Reply-To: <20230314183043.619997-1-brgl@bgdev.pl>
 References: <20230314183043.619997-1-brgl@bgdev.pl>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -80,27 +78,65 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Add a compatible for the Power Domain Controller on SA8775p platforms.
+Add the Power Domain Controller node for SA8775p.
 
 Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Marc Zyngier <maz@kernel.org>
 ---
- .../devicetree/bindings/interrupt-controller/qcom,pdc.yaml       | 1 +
- 1 file changed, 1 insertion(+)
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi | 41 +++++++++++++++++++++++++++
+ 1 file changed, 41 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-index 94791e261c42..25c4662a0280 100644
---- a/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-+++ b/Documentation/devicetree/bindings/interrupt-controller/qcom,pdc.yaml
-@@ -26,6 +26,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - qcom,sa8775p-pdc
-           - qcom,sc7180-pdc
-           - qcom,sc7280-pdc
-           - qcom,sc8280xp-pdc
+diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+index c5b73c591e0f..428d9e0849b8 100644
+--- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
++++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
+@@ -585,6 +585,47 @@ &config_noc SLAVE_QUP_2 QCOM_ICC_TAG_ALWAYS>,
+ 			};
+ 		};
+ 
++		pdc: interrupt-controller@b220000 {
++			compatible = "qcom,sa8775p-pdc", "qcom,pdc";
++			reg = <0x0 0x0b220000 0x0 0x30000>,
++			      <0x0 0x17c000f0 0x0 0x64>;
++			qcom,pdc-ranges = <0 480 40>,
++					  <40 140 14>,
++					  <54 263 1>,
++					  <55 306 4>,
++					  <59 312 3>,
++					  <62 374 2>,
++					  <64 434 2>,
++					  <66 438 2>,
++					  <70 520 1>,
++					  <73 523 1>,
++					  <118 568 6>,
++					  <124 609 3>,
++					  <159 638 1>,
++					  <160 720 3>,
++					  <169 728 30>,
++					  <199 416 2>,
++					  <201 449 1>,
++					  <202 89 1>,
++					  <203 451 1>,
++					  <204 462 1>,
++					  <205 264 1>,
++					  <206 579 1>,
++					  <207 653 1>,
++					  <208 656 1>,
++					  <209 659 1>,
++					  <210 122 1>,
++					  <211 699 1>,
++					  <212 705 1>,
++					  <213 450 1>,
++					  <214 643 2>,
++					  <216 646 5>,
++					  <221 390 5>;
++			#interrupt-cells = <2>;
++			interrupt-parent = <&intc>;
++			interrupt-controller;
++		};
++
+ 		intc: interrupt-controller@17a00000 {
+ 			compatible = "arm,gic-v3";
+ 			reg = <0x0 0x17a00000 0x0 0x10000>,     /* GICD */
 -- 
 2.37.2
 
