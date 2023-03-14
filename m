@@ -2,213 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F696B8741
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:54:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFD686B8744
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:54:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCNAx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:53:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
+        id S229888AbjCNAyw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:54:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCNAx5 (ORCPT
+        with ESMTP id S229496AbjCNAyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:53:57 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A624129;
-        Mon, 13 Mar 2023 17:53:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DA1DFB8169C;
-        Tue, 14 Mar 2023 00:53:53 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CC4C433D2;
-        Tue, 14 Mar 2023 00:53:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678755232;
-        bh=2DrJLkuUgorhS4aRsd6guPDQJPAJsGtB34wensbN/rA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=WY9JzQOsxmdcp90IysXxRHkkhGV8wWNmf58MOaA+FZk4ERlXf3bMl5wQer1UN3mQv
-         yUbOm3LjT7EPmwgw2eF4yheaBO+tRFveN3uSo0x/CmbjyoEbW1ReETHZRgvcf1f9H5
-         v8ithuXN6AXXGybstjwEXOdDlAW2a4V4as9+0pQ+dXm5X2uhjejbnfTb4uD8saak86
-         cqrbREA5xHF/FyvXQIIOsydQyQgN4dcN8F1j/nhEjlMFkr7GeqhtNxko+/XLksJuAj
-         k6G/tvXzcyRPPiaU94iGBCPzSafc/7DsehDyjVDtHkYGjSd5RezGPNwf4B846tLSED
-         7cJDQaQ393rFw==
-Date:   Tue, 14 Mar 2023 08:53:45 +0800
-From:   Shawn Guo <shawnguo@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
-        <linux-arm-kernel@lists.infradead.org>,
-        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
-Subject: Re: [PATCH 2/2] arm64: dts: freescale: imx8qxp-mek: enable cadence
- usb3
-Message-ID: <20230314005345.GU143566@dragon>
-References: <20230213222229.686072-1-Frank.Li@nxp.com>
- <20230213222229.686072-2-Frank.Li@nxp.com>
+        Mon, 13 Mar 2023 20:54:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0BEE6E6B1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:54:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678755240;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=y0JsJvgfxeXuomqiITRaXn7QAOEAlk3ESZfXTSZSg34=;
+        b=ghRAlWsD+XBiiKIn/jTXT+BbAlqH3roOcghAheciVrerbdxDNLi3xI+6augRyCjQxObAuN
+        vuLXr2Ixbx/6pffgp41SUcTaNVeWrt52eCkJnmOI5dMPmkCkChNLmw/q0Tjpf1ll3xW4+Q
+        w/0alIS3W7hbumKXNEiQ5xbEVJSu/oY=
+Received: from mail-pj1-f69.google.com (mail-pj1-f69.google.com
+ [209.85.216.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-424-e0NqkRw1MumAOx4TgbpcKA-1; Mon, 13 Mar 2023 20:53:58 -0400
+X-MC-Unique: e0NqkRw1MumAOx4TgbpcKA-1
+Received: by mail-pj1-f69.google.com with SMTP id l10-20020a17090a598a00b0023b28afea55so13813pji.0
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:53:58 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678755237;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=y0JsJvgfxeXuomqiITRaXn7QAOEAlk3ESZfXTSZSg34=;
+        b=a7uTUlCl/Lwu+iZN7GwRX4r4F+LNTUpoz5UKm+amhU49YaYsbMKt+wkS9jCTVa0KoX
+         vfgKasemMnn7lTWyHh/GefAgWVuTC0fcT6u315UgzfY34w3xsk2Od1mQVfemf2dsubkl
+         drNw7oKXZpBYRK0cxDZlGmksiBZQHqZY5cwTGzgVWbrmovpV9Y/heWkkxQXUj0Gu8HTk
+         6EaDPm5tgoudimZblr/m9Vnm23pT2QPlvcSu31Pk5FC1OwgJ9kSPH6M9QXQ1cDDp4X34
+         5oyVtEw9CjBoF2/ZkEXlu3+1hhZXc6Kydv2L0idy/oldnzfTsEbSuMqaZMfLd2TmqJnI
+         4vXw==
+X-Gm-Message-State: AO0yUKXUqiE67Om972ZrLy3G0Ro1TCDq/H7Tf1kuP0zTys5zKpmnAlZJ
+        xULrK82eG4VINhJOdDj1sldfFtFAqwSOaYIYo1BETE7sYNlDPnIkWlryMvb6Dnfd+cb3FPvb1kd
+        SwORandT8r94t+yNiXGsFR6Df
+X-Received: by 2002:a17:902:e84c:b0:1a0:616d:7618 with SMTP id t12-20020a170902e84c00b001a0616d7618mr1946709plg.51.1678755237325;
+        Mon, 13 Mar 2023 17:53:57 -0700 (PDT)
+X-Google-Smtp-Source: AK7set+4xhNMS8rLjRXHFNApIg44pXLbObNkPasVgsTbnY3fm0mlwOpvisr84Yi2Zp4ZwbWF6fan6Q==
+X-Received: by 2002:a17:902:e84c:b0:1a0:616d:7618 with SMTP id t12-20020a170902e84c00b001a0616d7618mr1946683plg.51.1678755237028;
+        Mon, 13 Mar 2023 17:53:57 -0700 (PDT)
+Received: from [10.72.12.147] ([43.228.180.230])
+        by smtp.gmail.com with ESMTPSA id z10-20020a170903018a00b001964c8164aasm430433plg.129.2023.03.13.17.53.53
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 17:53:56 -0700 (PDT)
+Message-ID: <f72cf7fe-f489-47f2-fab9-be9eee441fca@redhat.com>
+Date:   Tue, 14 Mar 2023 08:53:51 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230213222229.686072-2-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.6.0
+Subject: Re: [PATCH 1/2] fscrypt: new helper function -
+ fscrypt_prepare_atomic_open()
+Content-Language: en-US
+To:     Eric Biggers <ebiggers@kernel.org>,
+        =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>
+Cc:     Jeff Layton <jlayton@kernel.org>,
+        "Theodore Y. Ts'o" <tytso@mit.edu>,
+        Jaegeuk Kim <jaegeuk@kernel.org>,
+        Ilya Dryomov <idryomov@gmail.com>,
+        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230313123310.13040-1-lhenriques@suse.de>
+ <20230313123310.13040-2-lhenriques@suse.de>
+ <ZA9mwPUg7H/fq0L8@sol.localdomain>
+From:   Xiubo Li <xiubli@redhat.com>
+In-Reply-To: <ZA9mwPUg7H/fq0L8@sol.localdomain>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 13, 2023 at 05:22:28PM -0500, Frank Li wrote:
-> Enable USB3 controller, phy and typec related nodes.
-> 
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
->  arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 87 +++++++++++++++++++
->  1 file changed, 87 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-> index afa883389456..64f20ff44ba7 100644
-> --- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-> +++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
-> @@ -6,6 +6,7 @@
->  /dts-v1/;
->  
->  #include "imx8qxp.dtsi"
-> +#include <dt-bindings/usb/pd.h>
->  
->  / {
->  	model = "Freescale i.MX8QXP MEK";
-> @@ -28,6 +29,21 @@ reg_usdhc2_vmmc: usdhc2-vmmc {
->  		gpio = <&lsio_gpio4 19 GPIO_ACTIVE_HIGH>;
->  		enable-active-high;
->  	};
-> +
-> +	gpio-sbu-mux {
-> +		compatible = "gpio-sbu-mux";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_typec_mux>;
-> +		select-gpios = <&lsio_gpio5 9 GPIO_ACTIVE_LOW>;
-> +		enable-gpios = <&pca9557_a 7 GPIO_ACTIVE_LOW>;
-> +		orientation-switch;
-> +
-> +		port {
-> +			usb3_data_ss: endpoint {
-> +				remote-endpoint = <&typec_con_ss>;
-> +			};
-> +		};
-> +	};
->  };
->  
->  &dsp {
-> @@ -127,6 +143,44 @@ light-sensor@44 {
->  			};
->  		};
->  	};
-> +
-> +	ptn5110: tcpc@50 {
-> +		compatible = "nxp,ptn5110";
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&pinctrl_typec>;
-> +		reg = <0x50>;
-> +
 
-Unneeded newline.
+On 14/03/2023 02:09, Eric Biggers wrote:
+> On Mon, Mar 13, 2023 at 12:33:09PM +0000, Luís Henriques wrote:
+>> + * The regular open path will use fscrypt_file_open for that, but in the
+>> + * atomic open a different approach is required.
+> This should actually be fscrypt_prepare_lookup, not fscrypt_file_open, right?
+>
+>> +int fscrypt_prepare_atomic_open(struct inode *dir, struct dentry *dentry)
+>> +{
+>> +	int err;
+>> +
+>> +	if (!IS_ENCRYPTED(dir))
+>> +		return 0;
+>> +
+>> +	err = fscrypt_get_encryption_info(dir, true);
+>> +	if (!err && !fscrypt_has_encryption_key(dir)) {
+>> +		spin_lock(&dentry->d_lock);
+>> +		dentry->d_flags |= DCACHE_NOKEY_NAME;
+>> +		spin_unlock(&dentry->d_lock);
+>> +	}
+>> +
+>> +	return err;
+>> +}
+>> +EXPORT_SYMBOL_GPL(fscrypt_prepare_atomic_open);
+> [...]
+>> +static inline int fscrypt_prepare_atomic_open(struct inode *dir,
+>> +					      struct dentry *dentry)
+>> +{
+>> +	return -EOPNOTSUPP;
+>> +}
+> This has different behavior on unencrypted directories depending on whether
+> CONFIG_FS_ENCRYPTION is enabled or not.  That's bad.
+>
+> In patch 2, the caller you are introducing has already checked IS_ENCRYPTED().
+>
+> Also, your kerneldoc comment for fscrypt_prepare_atomic_open() says it is for
+> *encrypted* directories.
+>
+> So IMO, just remove the IS_ENCRYPTED() check from the CONFIG_FS_ENCRYPTION
+> version of fscrypt_prepare_atomic_open().
 
-> +		interrupt-parent = <&lsio_gpio1>;
-> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
-> +		status = "okay";
+IMO we should keep this check in fscrypt_prepare_atomic_open() to make 
+it consistent with the existing fscrypt_prepare_open(). And we can just 
+remove the check from ceph instead.
 
-Unneeded "okay" status.
+- Xiubo
 
-> +
-> +		port {
-> +			typec_dr_sw: endpoint {
-> +				remote-endpoint = <&usb3_drd_sw>;
-> +			};
-> +		};
-> +
-> +		usb_con1: connector {
-> +			compatible = "usb-c-connector";
-> +			label = "USB-C";
-> +			power-role = "source";
-> +			data-role = "dual";
-> +			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
-> +
-> +			ports {
-> +				#address-cells = <1>;
-> +				#size-cells = <0>;
-> +
-> +				port@1 {
-> +					reg = <1>;
-> +						typec_con_ss: endpoint {
+> - Eric
+>
+-- 
+Best Regards,
 
-Broken indent alignment.
+Xiubo Li (李秀波)
 
-Shawn
+Email: xiubli@redhat.com/xiubli@ibm.com
+Slack: @Xiubo Li
 
-> +							remote-endpoint = <&usb3_data_ss>;
-> +					};
-> +				};
-> +			};
-> +		};
-> +	};
-> +
->  };
->  
->  &lpuart0 {
-> @@ -204,6 +258,27 @@ &usdhc2 {
->  	status = "okay";
->  };
->  
-> +&usb3_phy {
-> +	status = "okay";
-> +};
-> +
-> +&usbotg3 {
-> +	status = "okay";
-> +};
-> +
-> +&usbotg3_cdns3 {
-> +	dr_mode = "otg";
-> +	usb-role-switch;
-> +	status = "okay";
-> +
-> +	port {
-> +		usb3_drd_sw: endpoint {
-> +			remote-endpoint = <&typec_dr_sw>;
-> +		};
-> +	};
-> +};
-> +
-> +
->  &vpu {
->  	compatible = "nxp,imx8qxp-vpu";
->  	status = "okay";
-> @@ -267,6 +342,18 @@ IMX8QXP_UART0_TX_ADMA_UART0_TX				0x06000020
->  		>;
->  	};
->  
-> +	pinctrl_typec: typecgrp {
-> +		fsl,pins = <
-> +			IMX8QXP_SPI2_SCK_LSIO_GPIO1_IO03                        0x06000021
-> +		>;
-> +	};
-> +
-> +	pinctrl_typec_mux: typecmuxgrp {
-> +		fsl,pins = <
-> +			IMX8QXP_ENET0_REFCLK_125M_25M_LSIO_GPIO5_IO09           0x60
-> +		>;
-> +	};
-> +
->  	pinctrl_usdhc1: usdhc1grp {
->  		fsl,pins = <
->  			IMX8QXP_EMMC0_CLK_CONN_EMMC0_CLK			0x06000041
-> -- 
-> 2.34.1
-> 
