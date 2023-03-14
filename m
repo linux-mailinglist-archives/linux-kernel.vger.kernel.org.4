@@ -2,170 +2,282 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 179366B9C87
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 799636B9C90
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230474AbjCNRJ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:09:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37364 "EHLO
+        id S230479AbjCNRKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230388AbjCNRJ4 (ORCPT
+        with ESMTP id S230484AbjCNRKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:09:56 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE2A379B23;
-        Tue, 14 Mar 2023 10:09:50 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id m4so7922747lfj.2;
-        Tue, 14 Mar 2023 10:09:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678813789;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=A3mTGYj7JV/DxYx8PY7Jjtyf3i3A4TY4QKPyGUShY+4=;
-        b=Pt9FXMyV5qPTnBsN9S1/ue6ef/xHOAdmSIiLfyYu0b5z8FVXXS1yj4ZK1ucSROuPRG
-         jDyAlusKmNAaEVi6bK3kDVBpf6AGWU9T7G5LNXbgXRxebGCYrJidVsFdZ+6LCbkTcR59
-         xnKKxVKWv9z9kJBHtIXobR8p6nSXCU3GzZTqFQP7wexHJsPLFmx2tZSCK/GA+REeelbu
-         0SxCODAFMY88ynul6wJCGBHe7NI+t6qu825Iptsp1ZbKcS8A9M1zyNkc1e1A84ehOq4o
-         IdU+k74tQ+L39Bk+Fa/ESNr/YZwbgGVjHerqrj0/7/gdEYmlX3/IBoI1i1DggLgPpprn
-         f2+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678813789;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=A3mTGYj7JV/DxYx8PY7Jjtyf3i3A4TY4QKPyGUShY+4=;
-        b=Vvp24ywrq1Jzu5HWi+Zxpa77lH+K+uctTX9pfh88EylYZlXXqUBwkA2+U3/gxg0g1d
-         vhwBHMNfwLkyNFs0OVMv8sjesl/CnzF7IudTPzRqYMxo3skLdkgNfjjhA9A2vPeMkI3+
-         00RKxSwwHC/5qDrG8cCaYUwI4+Ia1DMNIARTR4wYNmiEDHP6IW9jWiUXUrafxpUmBWNV
-         j84K0jY8xDZssPtEFVfRZdGDGkO+OD8ryKC9fUSJBqsqOEKh8BkxCexv9WbrmA7n+TJy
-         sIwjLW56JnnEIgDZWYQhCK1ggRXmyBgUC+7iqLL/XHQ6HR7v53TUO/C40RZgVIqnqaVW
-         AtYg==
-X-Gm-Message-State: AO0yUKVlNdkNw1IcDaPcqQKc76RVVbCd73aLfDEsqyuE2O80TfIADrTU
-        VvdXt8QEQLoay4JG8YAjijc=
-X-Google-Smtp-Source: AK7set+uEt5IoqG9OS+mes6VV9AY4oMiyZ0VVvoQaK5iRVnuv11mr63pkW7lH+CP6HBvafiA2+RvoQ==
-X-Received: by 2002:ac2:5449:0:b0:4e7:b481:c1c3 with SMTP id d9-20020ac25449000000b004e7b481c1c3mr1072908lfn.20.1678813788840;
-        Tue, 14 Mar 2023 10:09:48 -0700 (PDT)
-Received: from mobilestation ([95.79.133.202])
-        by smtp.gmail.com with ESMTPSA id b7-20020a056512024700b004caf992bba9sm464219lfo.268.2023.03.14.10.09.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 10:09:48 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 20:09:45 +0300
-From:   Serge Semin <fancer.lancer@gmail.com>
-To:     Rob Herring <robh@kernel.org>
-Cc:     Serge Semin <Sergey.Semin@baikalelectronics.ru>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Biao Huang <biao.huang@mediatek.com>, netdev@vger.kernel.org,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Richard Cochran <richardcochran@gmail.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Rob Herring <robh+dt@kernel.org>,
-        linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH net-next 01/16] dt-bindings: net: dwmac: Validate PBL for
- all IP-cores
-Message-ID: <20230314170945.6yow2i5z4jdubwgt@mobilestation>
-References: <20230313225103.30512-1-Sergey.Semin@baikalelectronics.ru>
- <20230313225103.30512-2-Sergey.Semin@baikalelectronics.ru>
- <167880254800.26004.7037306365469081272.robh@kernel.org>
- <20230314150657.ytgyegi7qlwao6px@mobilestation>
+        Tue, 14 Mar 2023 13:10:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0158B61AAE;
+        Tue, 14 Mar 2023 10:10:48 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 79EAF61865;
+        Tue, 14 Mar 2023 17:10:48 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4172C433D2;
+        Tue, 14 Mar 2023 17:10:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678813847;
+        bh=ok1k63vTwaFT1h6WbAsaye8ZP5fcNL1HoRcPKwtbVtI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=b5JwnUG5XA7W5kE4jyFISaw2q860l5uvxAHwMuk5lHg+BEEqh0TT2uVLDCxsmCTDQ
+         3C84R7HuY2lWuRB01w97S61A/z25ENX9FxOXCp7sZTZf+l/2PfEpCR29v8vnqK/fWe
+         IZI1l5Uz3qZCF0f9VqGtsQWMiH7QcvuKHE96fVzJSBRpU0/vOYpFLPc2ANuPmZ36Gm
+         VapqcxYrs+3lnS9Qy5HXZeE9aEb56zmuIvadvnGSg1VyYozj0yLpdCY4Xq9vT0jMie
+         Y6EXwMWAfnQuE1YYVshLMkYLi09aT9Fn5BDqP4nTSxCN7A313gbcyUTl4KJmAJ+Nu3
+         pY/eTBAqYMyKg==
+Date:   Tue, 14 Mar 2023 12:10:46 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
+        will@kernel.org, jean-philippe@linaro.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com
+Subject: Re: [PATCH v2 1/2] PCI/ATS: Add a helper function to configure ATS
+ STU of a PF
+Message-ID: <20230314171046.GA1655423@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20230314150657.ytgyegi7qlwao6px@mobilestation>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <6d3b4608-f859-f1c3-2391-0017d1b512f4@linux.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 06:07:01PM +0300, Serge Semin wrote:
-> On Tue, Mar 14, 2023 at 09:10:19AM -0500, Rob Herring wrote:
+On Tue, Mar 14, 2023 at 09:50:06AM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 3/14/23 9:02 AM, Bjorn Helgaas wrote:
+> > On Tue, Mar 14, 2023 at 08:06:07PM +0530, Ganapatrao Kulkarni wrote:
+> >> On 14-03-2023 06:22 pm, Sathyanarayanan Kuppuswamy wrote:
+> >>> On 3/14/23 3:08 AM, Ganapatrao Kulkarni wrote:
+> >>>> On 14-03-2023 04:00 am, Sathyanarayanan Kuppuswamy wrote:
+> >>>>> On 3/13/23 2:12 PM, Bjorn Helgaas wrote:
+> >>>>>> On Mon, Feb 27, 2023 at 08:21:36PM -0800, Ganapatrao Kulkarni wrote:
+> >>>>>>> As per PCI specification (PCI Express Base Specification
+> >>>>>>> Revision 6.0, Section 10.5) both PF and VFs of a PCI EP
+> >>>>>>> are permitted to be enabled independently for ATS
+> >>>>>>> capability, however the STU(Smallest Translation Unit) is
+> >>>>>>> shared between PF and VFs. For VFs, it is hardwired to
+> >>>>>>> Zero and the associated PF's value applies to VFs.
+> >>>>>>>
+> >>>>>>> In the current code, the STU is being configured while
+> >>>>>>> enabling the PF ATS.  Hence, it is not able to enable ATS
+> >>>>>>> for VFs, if it is not enabled on the associated PF
+> >>>>>>> already.
+> >>>>>>>
+> >>>>>>> Adding a function pci_ats_stu_configure(), which can be
+> >>>>>>> called to configure the STU during PF enumeration.  Latter
+> >>>>>>> enumerations of VFs can successfully enable ATS
+> >>>>>>> independently.
 > > 
-> > On Tue, 14 Mar 2023 01:50:48 +0300, Serge Semin wrote:
-> > > Indeed the maximum DMA burst length can be programmed not only for DW
-> > > xGMACs, Allwinner EMACs and Spear SoC GMAC, but in accordance with [1]
-> > > for Generic DW *MAC IP-cores. Moreover the STMMAC set of drivers parse
-> > > the property and then apply the configuration for all supported DW MAC
-> > > devices. All of that makes the property being available for all IP-cores
-> > > the bindings supports. Let's make sure the PBL-related properties are
-> > > validated for all of them by the common DW MAC DT schema.
-> > > 
-> > > [1] DesignWare Cores Ethernet MAC Universal Databook, Revision 3.73a,
-> > >     October 2013, p. 380.
-> > > 
-> > > Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> > > Reviewed-by: Rob Herring <robh@kernel.org>
-> > > 
-> > > ---
-> > > 
-> > > Changelog v1:
-> > > - Use correct syntax of the JSON pointers, so the later would begin
-> > >   with a '/' after the '#'.
-> > > ---
-> > >  .../devicetree/bindings/net/snps,dwmac.yaml   | 77 +++++++------------
-> > >  1 file changed, 26 insertions(+), 51 deletions(-)
-> > > 
+> >>>>>>> @@ -46,6 +46,35 @@ bool pci_ats_supported(struct pci_dev *dev)
+> >>>>>>>    }
+> >>>>>>>    EXPORT_SYMBOL_GPL(pci_ats_supported);
+> >>>>>>>    +/**
+> >>>>>>> + * pci_ats_stu_configure - Configure STU of a PF.
+> >>>>>>> + * @dev: the PCI device
+> >>>>>>> + * @ps: the IOMMU page shift
+> >>>>>>> + *
+> >>>>>>> + * Returns 0 on success, or negative on failure.
+> >>>>>>> + */
+> >>>>>>> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> >>>>>>> +{
+> >>>>>>> +    u16 ctrl;
+> >>>>>>> +
+> >>>>>>> +    if (dev->ats_enabled || dev->is_virtfn)
+> >>>>>>> +        return 0;
+> >>>>>>
+> >>>>>> I might return an error for the VF case on the assumption
+> >>>>>> that it's likely an error in the caller.  I guess one could
+> >>>>>> argue that it simplifies the caller if it doesn't have to
+> >>>>>> check for PF vs VF.  But the fact that STU is shared between
+> >>>>>> PF and VFs is an important part of understanding how ATS
+> >>>>>> works, so the caller should be aware of the distinction
+> >>>>>> anyway.
+> >>>>>
+> >>>>> I have already asked this question. But let me repeat it.
+> >>>>>
+> >>>>> We don't have any checks for the PF case here. That means you
+> >>>>> can re-configure the STU as many times as you want until ATS
+> >>>>> is enabled in PF. So, if there are active VFs which uses this
+> >>>>> STU, can PF re-configure the STU at will?
+> >>>>
+> >>>> IMO, Since STU is shared, programming it multiple times is not expected from callers code do it, however we can add below check to allow to program STU once from a PF.
+> >>>>
+> >>>> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> >>>> index 1611bfa1d5da..f7bb01068e18 100644
+> >>>> --- a/drivers/pci/ats.c
+> >>>> +++ b/drivers/pci/ats.c
+> >>>> @@ -60,6 +60,10 @@ int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> >>>>          if (dev->ats_enabled || dev->is_virtfn)
+> >>>>                  return 0;
+> >>>>
+> >>>> +       /* Configured already */
+> >>>> +       if (dev->ats_stu)
+> >>>> +               return 0;
+> >>>
+> >>> Theoretically, you can re-configure STU as long as no one is using
+> >>> it. Instead of this check, is there a way to check whether there
+> >>> are active VMs which enables ATS?
+> >>
+> >> Yes I agree, there is no limitation on how many times you write STU
+> >> bits, but practically it is happening while PF is enumerated.
+> >>
+> >> The usage of function pci_ats_stu_configure is almost
+> >> similar(subset) to pci_enable_ats and only difference is one does
+> >> ATS enable + STU program and another does only STU program.
 > > 
-> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > What would you think of removing the STU update feature from
+> > pci_enable_ats() so it always fails if pci_ats_stu_configure() has not
+> > been called, even when called on the PF, e.g.,
 > > 
-> > yamllint warnings/errors:
-> > 
-> > dtschema/dtc warnings/errors:
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,txpbl:0:0: 1 is not one of [2, 4, 8]
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,rxpbl:0:0: 1 is not one of [2, 4, 8]
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/snps,dwmac.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,txpbl:0:0: 1 is not one of [2, 4, 8]
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: snps,rxpbl:0:0: 1 is not one of [2, 4, 8]
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
-> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.example.dtb: ethernet@1101c000: Unevaluated properties are not allowed ('interrupt-names', 'interrupts', 'mac-address', 'phy-mode', 'reg', 'snps,reset-delays-us', 'snps,reset-gpio', 'snps,rxpbl', 'snps,txpbl' were unexpected)
-> > 	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/mediatek-dwmac.yaml
+> >   if (ps != pci_physfn(dev)->ats_stu)
+> >     return -EINVAL;
 > 
-> Oops, on rebasing my work from older kernel I missed that the PBL
-> properties constraints have already been extended. I'll drop the next
-> patch in the series then and fix this one so the already defined
-> constraints would be preserved.
+> If we are removing the STU update from pci_enable_ats(), why
+> even allow passing "ps (page shift)" parameter? IMO, we can assume that
+> for STU reconfigure, users will call pci_ats_stu_configure().
 
-BTW it's strange I didn't have that bug spotted during my
-dt_binding_check run...
+The reason to pass "ps" would be to verify that the STU the caller
+plans to use matches the actual STU.
 
--Serge(y)
-
+> Since zero is a valid STU, enabling ATS can be decoupled from STU
+> update.
+>
+> >   pci_read_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, &ctrl);
+> >   ctrl |= PCI_ATS_CTRL_ENABLE;
+> >   pci_write_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, ctrl);
+> > 
+> > Would probably also have to set "dev->ats_stu = 0" in
+> > pci_disable_ats() to allow the possibility of calling
+> > pci_ats_stu_configure() again.
+> > 
+> >> IMO, I dont think, there is any need to find how many active VMs
+> >> with attached VFs and it is not done for pci_enable_ats as well.
+> > 
+> > Enabling or disabling ATS in a PF or VF has no effect on other
+> > functions.
+> > 
+> > But changing STU while a VF has ATS enabled would definitely break any
+> > user of that VF, so if it's practical to verify that no VFs have ATS
+> > enabled, I think we should.
 > 
-> -Serge(y)
+> I also think it is better to check for a ats_enabled status of VF before
+> configuring the STU.
+> 
+> May be something like below (untested),
+> 
+> static int is_ats_enabled_in_vf(struct pci_dev *dev)
+> {
+>         struct pci_sriov *iov = dev->sriov;
+>         struct pci_dev *vdev;
+> 
+>         if (dev->is_virtfn) 
+>                 return -EINVAL;
+> 
+>         for (i = 0; i < pci_sriov_get_totalvfs(pdev); i++) {
+>                 vdev = pci_get_domain_bus_and_slot(pci_domain_nr(dev->bus),
+>                                              pci_iov_virtfn_bus(dev, i),
+>                                              pci_iov_virtfn_devfn(dev, i));
+
+I would try hard to avoid pci_get_domain_bus_and_slot().  That's
+expensive (searches *all* PCI devs with for_each_pci_dev()) and
+requires dealing with reference counts.
+
+Maybe an atomic count in the PF of VFs with ATS enabled.
+
+>                 if (vdev && vdev->ats_enabled)
+>                         return 1;
+>         }
+> 
+>         return 0;
+> 
+> }
+> 
+> int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> {
+> ...
+> if (is_ats_enabled_in_vf(dev))
+>    return -EBUSY;
 > 
 > > 
-> > doc reference errors (make refcheckdocs):
-> > 
-> > See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230313225103.30512-2-Sergey.Semin@baikalelectronics.ru
-> > 
-> > The base for the series is generally the latest rc1. A different dependency
-> > should be noted in *this* patch.
-> > 
-> > If you already ran 'make dt_binding_check' and didn't see the above
-> > error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> > date:
-> > 
-> > pip3 install dtschema --upgrade
-> > 
-> > Please check and re-submit after running the above command yourself. Note
-> > that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> > your schema. However, it must be unset to test all examples with your schema.
-> > 
+> >> Also the caller has the requirement to call either
+> >> pci_ats_stu_configure or pci_enable_ats while enumerating the PF.
+> >>
+> >>>>          if (!pci_ats_supported(dev))
+> >>>>                  return -EINVAL;
+> >>>>>>
+> >>>>>>> +
+> >>>>>>> +    if (!pci_ats_supported(dev))
+> >>>>>>> +        return -EINVAL;
+> >>>>>>> +
+> >>>>>>> +    if (ps < PCI_ATS_MIN_STU)
+> >>>>>>> +        return -EINVAL;
+> >>>>>>> +
+> >>>>>>> +    dev->ats_stu = ps;
+> >>>>>>> +    pci_read_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, &ctrl);
+> >>>>>>> +    ctrl |= PCI_ATS_CTRL_STU(dev->ats_stu - PCI_ATS_MIN_STU);
+> >>>>>>> +    pci_write_config_word(dev, dev->ats_cap + PCI_ATS_CTRL, ctrl);
+> >>>>>>> +
+> >>>>>>> +    return 0;
+> >>>>>>> +}
+> >>>>>>> +EXPORT_SYMBOL_GPL(pci_ats_stu_configure);
+> >>>>>>> +
+> >>>>>>>    /**
+> >>>>>>>     * pci_enable_ats - enable the ATS capability
+> >>>>>>>     * @dev: the PCI device
+> >>>>>>> @@ -68,8 +97,8 @@ int pci_enable_ats(struct pci_dev *dev, int ps)
+> >>>>>>>            return -EINVAL;
+> >>>>>>>          /*
+> >>>>>>> -     * Note that enabling ATS on a VF fails unless it's already enabled
+> >>>>>>> -     * with the same STU on the PF.
+> >>>>>>> +     * Note that enabling ATS on a VF fails unless it's already
+> >>>>>>> +     * configured with the same STU on the PF.
+> >>>>>>>         */
+> >>>>>>>        ctrl = PCI_ATS_CTRL_ENABLE;
+> >>>>>>>        if (dev->is_virtfn) {
+> >>>>>>> diff --git a/include/linux/pci-ats.h b/include/linux/pci-ats.h
+> >>>>>>> index df54cd5b15db..7d62a92aaf23 100644
+> >>>>>>> --- a/include/linux/pci-ats.h
+> >>>>>>> +++ b/include/linux/pci-ats.h
+> >>>>>>> @@ -8,6 +8,7 @@
+> >>>>>>>    /* Address Translation Service */
+> >>>>>>>    bool pci_ats_supported(struct pci_dev *dev);
+> >>>>>>>    int pci_enable_ats(struct pci_dev *dev, int ps);
+> >>>>>>> +int pci_ats_stu_configure(struct pci_dev *dev, int ps);
+> >>>>>>>    void pci_disable_ats(struct pci_dev *dev);
+> >>>>>>>    int pci_ats_queue_depth(struct pci_dev *dev);
+> >>>>>>>    int pci_ats_page_aligned(struct pci_dev *dev);
+> >>>>>>> @@ -16,6 +17,8 @@ static inline bool pci_ats_supported(struct pci_dev *d)
+> >>>>>>>    { return false; }
+> >>>>>>>    static inline int pci_enable_ats(struct pci_dev *d, int ps)
+> >>>>>>>    { return -ENODEV; }
+> >>>>>>> +static inline int pci_ats_stu_configure(struct pci_dev *d, int ps)
+> >>>>>>> +{ return -ENODEV; }
+> >>>>>>>    static inline void pci_disable_ats(struct pci_dev *d) { }
+> >>>>>>>    static inline int pci_ats_queue_depth(struct pci_dev *d)
+> >>>>>>>    { return -ENODEV; }
+> 
+> -- 
+> Sathyanarayanan Kuppuswamy
+> Linux Kernel Developer
+> 
+> _______________________________________________
+> linux-arm-kernel mailing list
+> linux-arm-kernel@lists.infradead.org
+> http://lists.infradead.org/mailman/listinfo/linux-arm-kernel
