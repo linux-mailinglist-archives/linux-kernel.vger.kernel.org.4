@@ -2,102 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7006B99A2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3FE36B99CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:37:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231877AbjCNPg1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:36:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44304 "EHLO
+        id S229956AbjCNPhe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:37:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44172 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230329AbjCNPgA (ORCPT
+        with ESMTP id S231613AbjCNPhQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:36:00 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AA7FAA70D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:35:06 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id ek18so32519892edb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:35:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678808097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=FWvjTACZB7naGN3Yd+xoyyM0LDSOA0CiNkBK/BotokU=;
-        b=iEDFHoYq58ptYSxpyflEg44b95YS/+HIXRjw1Mc7KRTsPnymRvz/YNF/coj5G9MCJ1
-         wNHRBhxrTBqgEe52msyrGGGq+JR7QpzLQLqgM2lIeTz6EH25OiPKOjcktOi32ZDfCGr3
-         xjpUe+E9zIaxri6OxDvNQEdH5Oswmegi9HUxQvZ4Zp6ryxAkWHMgK7uAKLCdmKfvvhTI
-         ao6+vA1RLh2O6EYfS/20qG9kq50szfVNbrwxB/MMaIxKozCEjqlm+hAYm6jnMrN3Vm4H
-         Mp0uRuchU4ELP7zoWz8bc61E33gs/QpY9hDfO12paR6GPdSo46LsDDXOePngWkCMlIo4
-         rooQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678808097;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FWvjTACZB7naGN3Yd+xoyyM0LDSOA0CiNkBK/BotokU=;
-        b=jICmH3sWG1s/xJiEh6JfemOCfSM/fRwMbrC5POX+vGU/gyds67z5Fyl/SImy15mLzf
-         wNuAlLhZ5VmXm3EOoNH+mZVFd81xVPbl3xsNoivJRwASAIDNrAnwB9njSYaBkUDxBaYe
-         mnlqy/lXjjfziSYuZBPkHiVIoDx0MgaZJiir7RN2i+ieHGtzp8zkvAWh4VWci+/m4qw5
-         1CMABlJjK2mfN04t1+GG4q6mXcD/M9LGCxA5GEmAu8b3QystNabJMesIfCwjtq+XiKn2
-         apQzzIC9iqmFc73RLIBiBYvKmq54bpUxQB2BuYXkSmH3uPpZ1nJmNpyapKnOpSkPHrkw
-         gYBg==
-X-Gm-Message-State: AO0yUKX8KAPPmBaVPqCXFwcrFicuSa3XKnNdUvaplno5cN/NXKdIX8aW
-        cTP5bW6j4nSouR5oBb2AwOjcsg==
-X-Google-Smtp-Source: AK7set9WsIo/C/eDbPrezn1YzXrTdYGRlXUEk5VQV0anRfZLBeTf2u+icDOxjCFJNhRqVsAfIcu3Dw==
-X-Received: by 2002:a17:906:6a09:b0:8f5:8da0:a482 with SMTP id qw9-20020a1709066a0900b008f58da0a482mr3171155ejc.25.1678808097505;
-        Tue, 14 Mar 2023 08:34:57 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id f13-20020a170906138d00b008b1fc59a22esm1309460ejc.65.2023.03.14.08.34.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 08:34:57 -0700 (PDT)
-Message-ID: <ba35d5fd-c361-368f-9efe-490d2669ea94@linaro.org>
-Date:   Tue, 14 Mar 2023 16:34:56 +0100
+        Tue, 14 Mar 2023 11:37:16 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F33BA6BF7;
+        Tue, 14 Mar 2023 08:36:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BE5B7617ED;
+        Tue, 14 Mar 2023 15:35:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E9B1C433EF;
+        Tue, 14 Mar 2023 15:35:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678808120;
+        bh=lDxTSgsnXum9DYPXFxbGHFuMeuz70JNgYVKghxXniaQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PCbHWZWFAJlaHmd0FT7vhDiC4wqizF5BpL3ect84f8v0e1UNTESM3LvnrzbhI2reT
+         7nxR3gTkrhTS2uMmYZLDo7/oAbLUwrU+I6ajJIoot/l5bJRZabCymLbKPUgAY8qeSN
+         9UWTeXhHicJV7fU/KCy8hxbBX3ULT1Mn9sPrCy9et4dcxWt604vKEMljxZeNPOpalB
+         BvwLY0rIbr+cdaHOqr4D4Bs3512/5bn/mu0WNJMZp4QbA+QxwUp22TDWAlRnxWaEg1
+         6gRU4p6ofq61DtVttGeFblrTs6dUFeGEeXbUzlCsdTeZb0U8z1wyje3Ia5Lqg6/jVN
+         E+p+tHrGHwFcw==
+Date:   Tue, 14 Mar 2023 15:35:15 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     Sakari Ailus <sakari.ailus@iki.fi>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>
+Cc:     Eugen Hristev <eugen.hristev@microchip.com>,
+        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        luis.oliveira@synopsys.com,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH v5 3/4] media: platform: dwc: Add MIPI CSI-2 controller
+ driver
+Message-ID: <97746427-c373-4e49-be8d-31a22ece30c7@spud>
+References: <20221216143717.1002015-1-eugen.hristev@microchip.com>
+ <20221216143717.1002015-4-eugen.hristev@microchip.com>
+ <ZBCCmWQ8lM/wfexr@valkosipuli.retiisi.eu>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: marvell: armada-ap810: Fix GICv3 ITS node
- name
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230207234735.201812-1-robh@kernel.org>
- <CAL_JsqLitc8rX4aXomgXKSPcW8ejEYe1wB_ecyAg7pgJgR=zyA@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAL_JsqLitc8rX4aXomgXKSPcW8ejEYe1wB_ecyAg7pgJgR=zyA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="8J/HusImJ6ezRElp"
+Content-Disposition: inline
+In-Reply-To: <ZBCCmWQ8lM/wfexr@valkosipuli.retiisi.eu>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 16:22, Rob Herring wrote:
-> On Tue, Feb 7, 2023 at 5:47 PM Rob Herring <robh@kernel.org> wrote:
->>
->> The GICv3 ITS is an MSI controller, therefore its node name should be
->> 'msi-controller'.
->>
->> Signed-off-by: Rob Herring <robh@kernel.org>
->> ---
->>  arch/arm64/boot/dts/marvell/armada-ap810-ap0.dtsi | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> Ping!
-> 
-> If not maintained, should I send a patch removing this platform instead?
 
-I am not the maintainer but I produce (and take) such stuff, so I can
-take this one.
+--8J/HusImJ6ezRElp
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Best regards,
-Krzysztof
+On Tue, Mar 14, 2023 at 04:20:09PM +0200, Sakari Ailus wrote:
+> Hi Eugen,
+>=20
+> On Fri, Dec 16, 2022 at 04:37:16PM +0200, Eugen Hristev wrote:
+> > From: Luis Oliveira <Luis.Oliveira@synopsys.com>
+> >=20
+> > Add the Synopsys MIPI CSI-2 controller driver. This
+> > controller driver is divided in platform functions and core functions.
+> > This way it serves as platform for future DesignWare drivers.
+> >=20
+> > Signed-off-by: Luis Oliveira <luis.oliveira@synopsys.com>
+> > Co-developed-by: Eugen Hristev <eugen.hristev@microchip.com>
+> > [eugen.hristev@microchip.com:
+> > Add format SRGGB10 to supported format list.
+> > Write the data type to the correct register DATA_IDS_1.
+> > Changed dev_info to dev_dbg to remove extra chatty messages
+> > Avoid overwriting static array of formats]
+> > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> > [luis.oliveira@synopsys.com: Add MIPI CSI-2 platform data]
+> > Signed-off-by: Luis Oliveira <luis.oliveira@synopsys.com>
+> > [eugen.hristev@microchip.com:
+> > Add support for periph clock and phy clock
+> > Fix enum_mbus function
+> > Implement get_mbus_config
+> > Implement media controller
+> > Update to use fwnode API
+> > In s_stream, first start/stop the sensor
+> > remove chatty 'number of lanes' message]
+> > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+> > [conor.dooley@microchip.com: fix potential uninitialized variable use]
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > [eugen.hristev@microchip.com: port to kernel 5.16, 5.17]
+> > Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+>=20
+> Same comment than on the 4th patch, this isn't very readable or relevant.
 
+I'd imagine it can just be collapsed into a Co-developed-by & a signoff
+as we hardly need multiple w/ the same names & companies involved each
+time.
+My "contribution" here (initialising some variables) doesn't warrant
+inclusion IMO.
+
+Eugen doesn't work for Microchip anymore though, and I don't know what
+the plan for continuing the upstreaming of this driver is.
+
+@Nicolas, do you have a plan here?
+
+Cheers,
+Conor.
+
+--8J/HusImJ6ezRElp
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZBCULgAKCRB4tDGHoIJi
+0iXuAP43K8ntq9hXNbCfFEVPAXip9/lwYTQwOWcfU6wbxAHrcwD/TZa0zkYCap0q
+qTYag3lIixUkXWo4nH8aVLD7SH3EngQ=
+=e0GH
+-----END PGP SIGNATURE-----
+
+--8J/HusImJ6ezRElp--
