@@ -2,146 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E10E6BA079
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:12:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CB996BA07B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjCNUMw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:12:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55046 "EHLO
+        id S231127AbjCNUNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:13:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229780AbjCNUMu (ORCPT
+        with ESMTP id S230515AbjCNUMy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:12:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E38321EFD7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:11:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678824709;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9wQYTp3YB8E8Qol6aRWb0q0ebKdxfSZQ88xnQL/Q0do=;
-        b=E56unI+1cbX4ZmMXasSE/pWApmlgcMNuvDzarLWSvHTp21SklUPzfpCjbptpE4B5jVITYn
-        OC05C2FRoLGVn7L3rIrnutZlr8K9vOBVVPgMha3gVAa4O/UW/OUHfoQTWkYSfgrCSHECk4
-        M0CGc93AKvminC3q5KutwCn9//Xu+jI=
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com
- [209.85.166.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-197-qEom4j0JNf6jV8mpa4ZE-g-1; Tue, 14 Mar 2023 16:11:48 -0400
-X-MC-Unique: qEom4j0JNf6jV8mpa4ZE-g-1
-Received: by mail-il1-f200.google.com with SMTP id b9-20020a926709000000b00322ffd64968so4515208ilc.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:11:48 -0700 (PDT)
+        Tue, 14 Mar 2023 16:12:54 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528A36453
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:12:53 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id x3so66890654edb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:12:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678824771;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=AgTwHzZth/P2ovg4/SIXDhWMrCdYyhs06Uhyp9mdV6s=;
+        b=KrC2zofZrNiIyyk9GGjG9QFwYogUxCILqDxJiE7/QVUYPTIx0O2K3207z+zK9C3IMJ
+         a08fJAdRY+y2PjkMrnYgGvRCWwJl8GFUK/Ysh+wau54xWNwVBNKIK3PKViJG6E8dzxzU
+         tD0AIuqSaLWpKMiqFfjK/9InUQEXgZ7YajWY6MNOoqcZtQEmBzRju/noI+d4ZmSLVfGj
+         XRU8ErAZYOrrYgrHoz2sLFa5i3/TsorARVqE4/tRHz8MyCd73gWK5SYU80NYgyRgIIAK
+         H2HjAXWAUzWt5o9rcw4D5Mxzny7c4qDaQxWSahnTf5yzlYS/BVosigPCE/SR7S7wkZ0g
+         VsKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824707;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9wQYTp3YB8E8Qol6aRWb0q0ebKdxfSZQ88xnQL/Q0do=;
-        b=h0zhkOFYexn5EvCqQtvf1SQkYlkekZSJhSfWicaxnFulaK3KtAyk9RSkbKT7gdAPQX
-         3+EOhbCzoa2566cZtNryH4QfcEhdNSrG+FnyQcEK2Ec5dhEwHcH3CsXomNq2jZD922/X
-         OzhjF2meSKYce5sO44qrbxwlaWK8cgdoGML3gxIEFcrnSlZHo4ZL4fxFk+/A5UCZPTjb
-         7uV22Gb4wjIfTrbYqyGgRaOPIPDq/B8GZd9jcmBuuO5kruNFxcReXx6cthgfDyLtUQPI
-         FO7RFQ//qlFBTYzYiXV/vLIAweJU6WiQlt+QdmXYyx8yLXzLe2nqxMlckKbov1W9Uyju
-         XsqQ==
-X-Gm-Message-State: AO0yUKVc0Sik8xaKx5yamgqlYVnjcHKxW/tuwZElVbbpNB8mvrUVUcyf
-        MCp7yTP06Z1n/6D8IGIJZukNkfng2YxnKItmqBrM6dO7E3oLOB9q2uzSkXWM2zmEyg2bP8kqX0G
-        FfuZhX0LNneDWSvGwxcSQpPBH
-X-Received: by 2002:a05:6e02:1aa6:b0:317:83ad:a2a2 with SMTP id l6-20020a056e021aa600b0031783ada2a2mr2902944ilv.10.1678824707651;
-        Tue, 14 Mar 2023 13:11:47 -0700 (PDT)
-X-Google-Smtp-Source: AK7set+WFDrvIixXmlqMGu/bCY3ZmjaTxWtCpgpTEGZODyspTTPhzeQHSA5z9/Or1gn7wARcWXseMA==
-X-Received: by 2002:a05:6e02:1aa6:b0:317:83ad:a2a2 with SMTP id l6-20020a056e021aa600b0031783ada2a2mr2902903ilv.10.1678824707351;
-        Tue, 14 Mar 2023 13:11:47 -0700 (PDT)
-Received: from redhat.com ([38.15.36.239])
-        by smtp.gmail.com with ESMTPSA id q1-20020a056e02096100b00314201bcbdfsm1079964ilt.3.2023.03.14.13.11.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 13:11:46 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 14:11:44 -0600
-From:   Alex Williamson <alex.williamson@redhat.com>
-To:     Suren Baghdasaryan <surenb@google.com>
-Cc:     akpm@linux-foundation.org, michel@lespinasse.org,
-        jglisse@google.com, mhocko@suse.com, vbabka@suse.cz,
-        hannes@cmpxchg.org, mgorman@techsingularity.net, dave@stgolabs.net,
-        willy@infradead.org, liam.howlett@oracle.com, peterz@infradead.org,
-        ldufour@linux.ibm.com, paulmck@kernel.org, mingo@redhat.com,
-        will@kernel.org, luto@kernel.org, songliubraving@fb.com,
-        peterx@redhat.com, david@redhat.com, dhowells@redhat.com,
-        hughd@google.com, bigeasy@linutronix.de, kent.overstreet@linux.dev,
-        punit.agrawal@bytedance.com, lstoakes@gmail.com,
-        peterjung1337@gmail.com, rientjes@google.com,
-        axelrasmussen@google.com, joelaf@google.com, minchan@google.com,
-        rppt@kernel.org, jannh@google.com, shakeelb@google.com,
-        tatashin@google.com, edumazet@google.com, gthelen@google.com,
-        gurua@google.com, arjunroy@google.com, soheil@google.com,
-        leewalsh@google.com, posk@google.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@android.com,
-        "Michael S. Tsirkin" <mst@redhat.com>,
-        Jason Wang <jasowang@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        =?UTF-8?B?Q8OpZHJpYw==?= Le Goater <clg@redhat.com>,
-        dimitri.sivanich@hpe.com
-Subject: Re: [PATCH v4 0/7] introduce vm_flags modifier functions
-Message-ID: <20230314141144.6a0892e6.alex.williamson@redhat.com>
-In-Reply-To: <20230126193752.297968-1-surenb@google.com>
-References: <20230126193752.297968-1-surenb@google.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.35; x86_64-redhat-linux-gnu)
+        d=1e100.net; s=20210112; t=1678824771;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=AgTwHzZth/P2ovg4/SIXDhWMrCdYyhs06Uhyp9mdV6s=;
+        b=11RgSHJrb5c3GOBev8U+UMBvyvsHyTvkC/uR5g5a/JqwVGVYo4at7U1mONP5x3vMsm
+         PzcTla1SSiom61UkPP92Rh0gqbUqZyWVKjgT4Gj0Jm3l8vFOGgmYfIsF4Gi7Zy5n/DYY
+         GjGQ5uGtUcYabhuJyAXiVKnO6tOA/XqyeoD3nW/FKFmNydQL8HEICHGIAqCqgPhQ2fMu
+         l7WHlv6eeyv+7PhZovcWZe+Hnf8YPxrKIg2zm9KsaXg3yJrBjN5Q3X7nBUe8y5e0r64C
+         qoD9EVXfOhgLQFrh7Ci8IV25ePKr2cW4hdKnLxA5OmF94GuySKhkwfu+KLhvTmNM6JRO
+         1ZJQ==
+X-Gm-Message-State: AO0yUKXVFNTNHCc/Tn6W3kdl34fWw2kGLGu2n0JdEkAfKkRHxe1rzSjV
+        gIWk1mQi4MJP3m6aLzCrn4MEEA==
+X-Google-Smtp-Source: AK7set9FwKmH8IWRt0oGFHXN64uPFH0geW/+oy2YAf2Rufey01dFKgJ19ytNYbdzett+AF5M5soC9w==
+X-Received: by 2002:a17:906:6945:b0:8ae:f1cd:9551 with SMTP id c5-20020a170906694500b008aef1cd9551mr3922346ejs.76.1678824771563;
+        Tue, 14 Mar 2023 13:12:51 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:642b:87c2:1efc:c8af? ([2a02:810d:15c0:828:642b:87c2:1efc:c8af])
+        by smtp.gmail.com with ESMTPSA id e12-20020a50a68c000000b004ac54d4da22sm1512106edc.71.2023.03.14.13.12.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 13:12:51 -0700 (PDT)
+Message-ID: <a0ec54c2-b11e-5f4b-eb0e-ab9a8e71b02c@linaro.org>
+Date:   Tue, 14 Mar 2023 21:12:50 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] mmc: sdhci: add static to !OF stub
+Content-Language: en-US
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Adrian Hunter <adrian.hunter@intel.com>, linux-mmc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230311111238.251000-1-krzysztof.kozlowski@linaro.org>
+ <CAPDyKFqaq5ysudyqOe0dB8fm=+p_ywpXdqQr33QUCq3j+Bqnrw@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAPDyKFqaq5ysudyqOe0dB8fm=+p_ywpXdqQr33QUCq3j+Bqnrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 26 Jan 2023 11:37:45 -0800
-Suren Baghdasaryan <surenb@google.com> wrote:
-
-> This patchset was originally published as a part of per-VMA locking [1] and
-> was split after suggestion that it's viable on its own and to facilitate
-> the review process. It is now a preprequisite for the next version of per-VMA
-> lock patchset, which reuses vm_flags modifier functions to lock the VMA when
-> vm_flags are being updated.
+On 13/03/2023 13:49, Ulf Hansson wrote:
+> On Sat, 11 Mar 2023 at 12:12, Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> The sdhci_get_compatibility() is not used outside of the unit:
+>>
+>>   drivers/mmc/host/sdhci-pltfm.c:76:6: error: no previous prototype for ‘sdhci_get_compatibility’ [-Werror=missing-prototypes]
+>>
+>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>> ---
+>>  drivers/mmc/host/sdhci-pltfm.c | 2 +-
+>>  1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/mmc/host/sdhci-pltfm.c b/drivers/mmc/host/sdhci-pltfm.c
+>> index 328b132bbe57..245e56324dff 100644
+>> --- a/drivers/mmc/host/sdhci-pltfm.c
+>> +++ b/drivers/mmc/host/sdhci-pltfm.c
+>> @@ -73,7 +73,7 @@ static void sdhci_get_compatibility(struct platform_device *pdev)
+>>                 host->quirks |= SDHCI_QUIRK_BROKEN_TIMEOUT_VAL;
+>>  }
+>>  #else
+>> -void sdhci_get_compatibility(struct platform_device *pdev) {}
+>> +static void sdhci_get_compatibility(struct platform_device *pdev) {}
+>>  #endif /* CONFIG_OF */
 > 
-> VMA vm_flags modifications are usually done under exclusive mmap_lock
-> protection because this attrubute affects other decisions like VMA merging
-> or splitting and races should be prevented. Introduce vm_flags modifier
-> functions to enforce correct locking.
+> sdhci_get_compatibility() is using OF functions with stubs for !OF.
 > 
-> The patchset applies cleanly over mm-unstable branch of mm tree.
+> Perhaps a cleaner option is to drop the #ifdef CONFIG_OF completely
+> around sdhci_get_compatibility(), thus we can drop the stub too.
 
-With this series, vfio-pci developed a bunch of warnings around not
-holding the mmap_lock write semaphore while calling
-io_remap_pfn_range() from our fault handler, vfio_pci_mmap_fault().
+Works, indeed, better idea. I'll send v2.
 
-I suspect vdpa has the same issue for their use of remap_pfn_range()
-from their fault handler, JasonW, MST, FYI.
-
-It also looks like gru_fault() would have the same issue, Dimitri.
-
-In all cases, we're preemptively setting vm_flags to what
-remap_pfn_range_notrack() uses, so I thought we were safe here as I
-specifically remember trying to avoid changing vm_flags from the
-fault handler.  But apparently that doesn't take into account
-track_pfn_remap() where VM_PAT comes into play.
-
-The reason for using remap_pfn_range() on fault in vfio-pci is that
-we're mapping device MMIO to userspace, where that MMIO can be disabled
-and we'd rather zap the mapping when that occurs so that we can sigbus
-the user rather than allow the user to trigger potentially fatal bus
-errors on the host.
-
-Peter Xu has suggested offline that a non-lazy approach to reinsert the
-mappings might be more inline with mm expectations relative to touching
-vm_flags during fault.  What's the right solution here?  Can the fault
-handling be salvaged, is proactive remapping the right approach, or is
-there something better?  Thanks,
-
-Alex
+Best regards,
+Krzysztof
 
