@@ -2,84 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A30FE6BA371
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4A0A6BA355
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229675AbjCNXMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51404 "EHLO
+        id S229818AbjCNXHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229997AbjCNXMi (ORCPT
+        with ESMTP id S229540AbjCNXHF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:12:38 -0400
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7AE062A6C2;
-        Tue, 14 Mar 2023 16:12:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=tQPhhNBlCS6fcUFwNOTfLKKm1TR9Z5ixAZW9T52AJ9g=; b=XTCf5LQ0AL2PtBceVjBzHBzMcP
-        9uuW7FreifwFbq8YHCPpuji3oM4j4FmJIJx29DCbDAuB+04bEKMhtugeaPkXyAkjYudnhr7kUpED8
-        dbwCop4pHOB9gYbpg8ln1cb1Jx2Ywj5FUTqlyYf60G1x1DN1LM9eng93KlWv8VfFDeuYygXeDQQYg
-        Qjul8HmNHC0fZQMj4WUISJngU8ou23L2wEAUzKjOUiVlfvK9PuNBw+oV7YCUukHJyn2IQKkl4ayD+
-        AYVlgZ5o2SQGGb+nKMNN2loOlOP1WYbqcj/L1bUX9cR9p2qGgMsLgxrPrGQMzTs968mGhTw+3mPs/
-        9KNtqAWA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:57834)
-        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-        (Exim 4.94.2)
-        (envelope-from <linux@armlinux.org.uk>)
-        id 1pcDoM-00065K-4C; Tue, 14 Mar 2023 23:12:06 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
-        (envelope-from <linux@shell.armlinux.org.uk>)
-        id 1pcDoE-0000m1-Qn; Tue, 14 Mar 2023 23:11:58 +0000
-Date:   Tue, 14 Mar 2023 23:11:58 +0000
-From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     =?utf-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>,
-        Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Mark Lee <Mark-MC.Lee@mediatek.com>,
-        John Crispin <john@phrozen.org>, Felix Fietkau <nbd@nbd.name>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        Sean Wang <sean.wang@mediatek.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        =?iso-8859-1?Q?Bj=F8rn?= Mork <bjorn@mork.no>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Alexander Couzens <lynxis@fe80.eu>
-Subject: Re: [PATCH net-next v13 11/16] net: dsa: mt7530: use external PCS
- driver
-Message-ID: <ZBD/PrMM7vxae5gY@shell.armlinux.org.uk>
-References: <cover.1678357225.git.daniel@makrotopia.org>
- <2ac2ee40d3b0e705461b50613fda6a7edfdbc4b3.1678357225.git.daniel@makrotopia.org>
- <e99cc7d1-554d-5d4d-e69a-a38ded02bb08@arinc9.com>
- <ZBCyqdfaeF/q8oZr@makrotopia.org>
- <c07651cd-27b4-5ba4-8116-398522327d27@arinc9.com>
- <20230314195322.tsciinumrxtw64o5@skbuf>
- <3e3e6a1e-61ba-a6e8-5503-258fb8e949bb@arinc9.com>
- <20230314223413.velxur7gi7snpdei@skbuf>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314223413.velxur7gi7snpdei@skbuf>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        Tue, 14 Mar 2023 19:07:05 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0C12CFD5;
+        Tue, 14 Mar 2023 16:07:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678835224; x=1710371224;
+  h=from:to:cc:subject:date:message-id;
+  bh=WrrhCRvdXc22LfrfW5RvmTwqb6i5r2ubwQSHJiMjvQE=;
+  b=Dq80RIaqaSINecA0xrtIbjXy4wKht35msa1KXtYjPigzAE+FQ0GAfwG8
+   dQTF+4atESJ83stEYMfxg5yWs1JTsp1lhqURVwlRfnBW+VFZMFinmQw03
+   43oX3RS8+IxoCmbxROPKipNSNytFd57lK4ZlueQ7J4jlr50DIZjaqkAxd
+   gD2LNaPj7uCI191cgBkxcd2Lw3hBDblMFde5SPOpLIZgsSc4A3kM7v9Rb
+   HSULqOQcMlgvjddBovFgd+4uckJFYKcv278D8zaroIuONIrmQLCcZpDP1
+   4+I7FAG4s3MxLUOBBDJV/gzUAK3p5LLGP73Gv7diFHJQAfCV6g+VbEKWj
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339926314"
+X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
+   d="scan'208";a="339926314"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 16:07:04 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="743481196"
+X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
+   d="scan'208";a="743481196"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Mar 2023 16:07:03 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     x86@kernel.org
+Cc:     Ricardo Neri <ricardo.neri@intel.com>,
+        linux-kernel@vger.kernel.org,
+        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Len Brown <len.brown@intel.com>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
+        stable@vger.kernel.org
+Subject: [PATCH] x86/cacheinfo: Define per-CPU num_cache_leaves
+Date:   Tue, 14 Mar 2023 16:16:58 -0700
+Message-Id: <20230314231658.30169-1-ricardo.neri-calderon@linux.intel.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,36 +61,144 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 15, 2023 at 12:34:13AM +0200, Vladimir Oltean wrote:
-> But the mt7530 maintainers have gone
-> pretty silent as of late, and I, as a fallback maintainer with no
-> hardware, have had to send 2 bug fixes to the mt7530 and 1 to the
-> mtk_eth_soc driver in the past month, to address the reports.
+Make num_cache_leaves a per-CPU variable. Otherwise, populate_cache_
+leaves() fails on systems with asymmetric number of subleaves in CPUID
+leaf 0x4. Intel Meteor Lake is an example of such a system.
 
-That's an under-statement, and not just the DSA driver, but the
-ethernet driver too. It's been years trying to get the attention
-of anyone to sort out the pre-March 2020 crud in this driver, and
-no one seems to care, and none of the alleged maintainers bother
-replying.
+Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+Cc: Len Brown <len.brown@intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
+Cc: Zhang Rui <rui.zhang@intel.com>
+Cc: Chen Yu <yu.c.chen@intel.com>
+Cc: stable@vger.kernel.org
+Reviewed-by: Len Brown <len.brown@intel.com>
+Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+---
+After this change, all CPUs will traverse CPUID leaf 0x4 when booted for
+the first time. On systems with asymmetric cache topologies this is
+useless work.
 
-I don't believe anyone who claims to be a maintainer for either the
-DSA or Ethernet driver has commented on any of my patches or provided
-any review.
+Creating a list of processor models that have asymmetric cache topologies
+was considered. The burden of maintaining such list would outweigh the
+performance benefit of skipping this extra step.
+---
+ arch/x86/kernel/cpu/cacheinfo.c | 48 ++++++++++++++++++++-------------
+ 1 file changed, 29 insertions(+), 19 deletions(-)
 
-In my mind, these drivers do not have maintainers.
-
-What I have to resort to is spotting potential victims^wtesters on
-the mailing lists to try stuff out for me - which is really not
-how this should work.
-
-It seems to me that this is the old "chuck code over the wall into
-mainline, then do a runner" approach to kernel maintenance.
-
-So, honestly, the sooner these drivers get proper maintainers, the
-better - and if someone wants to step up to do that amongst those
-who are involved in the current work, I'm all for that - it would
-be a hell of a lot better than the current situation.
-
+diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
+index 4063e8991211..6ad51657c853 100644
+--- a/arch/x86/kernel/cpu/cacheinfo.c
++++ b/arch/x86/kernel/cpu/cacheinfo.c
+@@ -176,7 +176,18 @@ struct _cpuid4_info_regs {
+ 	struct amd_northbridge *nb;
+ };
+ 
+-static unsigned short num_cache_leaves;
++static DEFINE_PER_CPU(unsigned short, num_cache_leaves);
++
++static inline unsigned short get_num_cache_leaves(unsigned int cpu)
++{
++	return per_cpu(num_cache_leaves, cpu);
++}
++
++static inline void
++set_num_cache_leaves(unsigned short nr_leaves, unsigned int cpu)
++{
++	per_cpu(num_cache_leaves, cpu) = nr_leaves;
++}
+ 
+ /* AMD doesn't have CPUID4. Emulate it here to report the same
+    information to the user.  This makes some assumptions about the machine:
+@@ -716,19 +727,21 @@ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu)
+ void init_amd_cacheinfo(struct cpuinfo_x86 *c)
+ {
+ 
++	unsigned int cpu = c->cpu_index;
++
+ 	if (boot_cpu_has(X86_FEATURE_TOPOEXT)) {
+-		num_cache_leaves = find_num_cache_leaves(c);
++		set_num_cache_leaves(find_num_cache_leaves(c), cpu);
+ 	} else if (c->extended_cpuid_level >= 0x80000006) {
+ 		if (cpuid_edx(0x80000006) & 0xf000)
+-			num_cache_leaves = 4;
++			set_num_cache_leaves(4, cpu);
+ 		else
+-			num_cache_leaves = 3;
++			set_num_cache_leaves(3, cpu);
+ 	}
+ }
+ 
+ void init_hygon_cacheinfo(struct cpuinfo_x86 *c)
+ {
+-	num_cache_leaves = find_num_cache_leaves(c);
++	set_num_cache_leaves(find_num_cache_leaves(c), c->cpu_index);
+ }
+ 
+ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
+@@ -738,24 +751,21 @@ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
+ 	unsigned int new_l1d = 0, new_l1i = 0; /* Cache sizes from cpuid(4) */
+ 	unsigned int new_l2 = 0, new_l3 = 0, i; /* Cache sizes from cpuid(4) */
+ 	unsigned int l2_id = 0, l3_id = 0, num_threads_sharing, index_msb;
+-#ifdef CONFIG_SMP
+ 	unsigned int cpu = c->cpu_index;
+-#endif
+ 
+ 	if (c->cpuid_level > 3) {
+-		static int is_initialized;
+-
+-		if (is_initialized == 0) {
+-			/* Init num_cache_leaves from boot CPU */
+-			num_cache_leaves = find_num_cache_leaves(c);
+-			is_initialized++;
+-		}
++		/*
++		 * There should be at least one leaf. A non-zero value means
++		 * that the number of leaves has been initialized.
++		 */
++		if (!get_num_cache_leaves(cpu))
++			set_num_cache_leaves(find_num_cache_leaves(c), cpu);
+ 
+ 		/*
+ 		 * Whenever possible use cpuid(4), deterministic cache
+ 		 * parameters cpuid leaf to find the cache details
+ 		 */
+-		for (i = 0; i < num_cache_leaves; i++) {
++		for (i = 0; i < get_num_cache_leaves(cpu); i++) {
+ 			struct _cpuid4_info_regs this_leaf = {};
+ 			int retval;
+ 
+@@ -791,14 +801,14 @@ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
+ 	 * Don't use cpuid2 if cpuid4 is supported. For P4, we use cpuid2 for
+ 	 * trace cache
+ 	 */
+-	if ((num_cache_leaves == 0 || c->x86 == 15) && c->cpuid_level > 1) {
++	if ((!get_num_cache_leaves(cpu) || c->x86 == 15) && c->cpuid_level > 1) {
+ 		/* supports eax=2  call */
+ 		int j, n;
+ 		unsigned int regs[4];
+ 		unsigned char *dp = (unsigned char *)regs;
+ 		int only_trace = 0;
+ 
+-		if (num_cache_leaves != 0 && c->x86 == 15)
++		if (get_num_cache_leaves(cpu) && c->x86 == 15)
+ 			only_trace = 1;
+ 
+ 		/* Number of times to iterate */
+@@ -1000,12 +1010,12 @@ int init_cache_level(unsigned int cpu)
+ {
+ 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
+ 
+-	if (!num_cache_leaves)
++	if (!get_num_cache_leaves(cpu))
+ 		return -ENOENT;
+ 	if (!this_cpu_ci)
+ 		return -EINVAL;
+ 	this_cpu_ci->num_levels = 3;
+-	this_cpu_ci->num_leaves = num_cache_leaves;
++	this_cpu_ci->num_leaves = get_num_cache_leaves(cpu);
+ 	return 0;
+ }
+ 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
+2.25.1
+
