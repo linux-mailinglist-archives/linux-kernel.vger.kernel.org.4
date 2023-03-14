@@ -2,76 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8520E6B9511
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:00:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D38B56B94FB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:56:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231863AbjCNM7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:59:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43696 "EHLO
+        id S231695AbjCNM4I convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 08:56:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232420AbjCNM7V (ORCPT
+        with ESMTP id S232807AbjCNMzb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:59:21 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EAF9366AA;
-        Tue, 14 Mar 2023 05:55:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 96573B811F5;
-        Tue, 14 Mar 2023 12:47:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCB90C433A4;
-        Tue, 14 Mar 2023 12:47:45 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="b5R/jWL6"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1678798060;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=XOFa9e8BNmMVgxHJvgqbkR1KMTLdpurluNOIJewz+Gw=;
-        b=b5R/jWL60Qdm0/QQGpwEW25FVxsdqdyNFniHB+QAGf5lMwEjUybNaTT3jo3XHmni5GiUrZ
-        pIUjvJNZz0AjdVWiFNraUGu4cP5kEfYf42zJr9iavZL/4yz7xk3n/IBZ4pEqA/cOcEa9zK
-        jTi8AHO/zVlKVDIOP9RWtsR5JY4R/d4=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id d2cd63a4 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 14 Mar 2023 12:47:40 +0000 (UTC)
-Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-53d277c1834so301996047b3.10;
-        Tue, 14 Mar 2023 05:47:40 -0700 (PDT)
-X-Gm-Message-State: AO0yUKWTRSn/zQBGltMBNoRBYZNkMCnWqnJgA9daj9WhrsjfQ/yQokWm
-        a1RqMVMesZKLwmZqG7MFL+cJ8Y5jAzEDIoa81fE=
-X-Google-Smtp-Source: AK7set8cHiziQ5N/k4D1qIDmhTeKT6cHmqgyz1r29oB+Y8BS84yMnsHlNg8FYtL/MJx4qt3C8z7VprHNLvqFX6ZEdVc=
-X-Received: by 2002:a81:ac61:0:b0:544:6828:3c0f with SMTP id
- z33-20020a81ac61000000b0054468283c0fmr864005ywj.4.1678798058695; Tue, 14 Mar
- 2023 05:47:38 -0700 (PDT)
+        Tue, 14 Mar 2023 08:55:31 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EFBA676D;
+        Tue, 14 Mar 2023 05:51:00 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id h7so8570179ila.5;
+        Tue, 14 Mar 2023 05:51:00 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678798136;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=gBpmO88aubLNx5ds9k4LYpaw6LJjHZV6232nWb27C40=;
+        b=F/kw06fa4E2Ncy3YZWjTpozsk/uEjpPYL+2is5cIZC+P58OegEkgDGz8ouVWG/Q1xE
+         Et8D+rcrK0xMif92M6dEqkmX6yfko55xNYaRa/dbni5K4hnMg2kJbS4/8N5mQY5HTF7Q
+         BuNVrYExTJQKj0m847hrRMjI5hL/at2PTpDev6MFju/5YmkoW25rySdsU0UD+4d5UkNo
+         jXBkpw5/9i7PCHGZNLOZEH415wd3DX5XJX3ItX9HWYdCiie0ZC/MqygGX6ds/8v08Pbm
+         yaXtFFKw61YpJpp/62dKUu7jdJfUxdSx37XPUWZuUUVoXqX6fT4tmKAD2dnnb8j9ZqBS
+         cfHQ==
+X-Gm-Message-State: AO0yUKV7FGwu8G54frPgXfvRFHivRRVu38Rlppr/9khy6TUcYSyIfRZ9
+        eGWLIfvbg58oegOwmWkvWHM1NlT5zYRypg==
+X-Google-Smtp-Source: AK7set9uaU9BS2YJ7QMbWwxTVXrP8kR0ag9yvjORrw/DCh/YZzKu/5KzWRtQ0EXzIfXazCdoYGSwVA==
+X-Received: by 2002:a05:6e02:df2:b0:316:e39f:13f2 with SMTP id m18-20020a056e020df200b00316e39f13f2mr2007150ilj.12.1678798136649;
+        Tue, 14 Mar 2023 05:48:56 -0700 (PDT)
+Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
+        by smtp.gmail.com with ESMTPSA id z22-20020a029f16000000b003c4920e7c74sm750704jal.57.2023.03.14.05.48.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 05:48:56 -0700 (PDT)
+Received: by mail-il1-f169.google.com with SMTP id i19so8550137ila.10;
+        Tue, 14 Mar 2023 05:48:55 -0700 (PDT)
+X-Received: by 2002:a05:6902:1002:b0:b48:1359:4e28 with SMTP id
+ w2-20020a056902100200b00b4813594e28mr461087ybt.12.1678798114483; Tue, 14 Mar
+ 2023 05:48:34 -0700 (PDT)
 MIME-Version: 1.0
-Received: by 2002:a05:7110:53ce:b0:1f4:dffd:2c5c with HTTP; Tue, 14 Mar 2023
- 05:47:38 -0700 (PDT)
-In-Reply-To: <ZBBmVhwsTf/URoqs@kernel.org>
-References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz> <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
- <Y60RoP77HnwaukEA@zx2c4.com> <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
- <Y7w74EBYP3+FHlkw@zx2c4.com> <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
- <ZBBmVhwsTf/URoqs@kernel.org>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 14 Mar 2023 13:47:38 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
-Message-ID: <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
-Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
-To:     Jarkko Sakkinen <jarkko@kernel.org>
-Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Peter Huewe <peterhuewe@gmx.de>,
-        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
-        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
-        linux-integrity@vger.kernel.org,
-        Dominik Brodowski <linux@dominikbrodowski.net>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Johannes Altmanninger <aclopte@gmail.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-2-schnelle@linux.ibm.com>
+In-Reply-To: <20230314121216.413434-2-schnelle@linux.ibm.com>
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+Date:   Tue, 14 Mar 2023 13:48:22 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdV9ZoB5XNiiVEG-zBzB9eN5RJSC42WMDD-RZfcg=2tr4g@mail.gmail.com>
+Message-ID: <CAMuHMdV9ZoB5XNiiVEG-zBzB9eN5RJSC42WMDD-RZfcg=2tr4g@mail.gmail.com>
+Subject: Re: [PATCH v3 01/38] Kconfig: introduce HAS_IOPORT option and select
+ it as necessary
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,51 +107,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
-> On Tue, Mar 14, 2023 at 10:35:33AM +0100, Thorsten Leemhuis wrote:
->> On 09.01.23 17:08, Jason A. Donenfeld wrote:
->> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
->> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
->> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
->> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
->> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening
->> >>>>> again
->> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
->> >>>>> "tpm_try_transmit" error this time. The first indication of a
->> >>>>> problem
->> >>>>> is this during a resume from suspend to ram:
->> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
->> >>>>> and then periodically
->> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
->> >>>>
->> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
->> >>>> original problem was reported against TPM 2.0  because of a missing
->> >>>> try_get_ops().
->> >>>
->> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
->> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
->> >>> considering it's the same hardware from Vlastimil causing this. I
->> >>> also
->> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
->> >>> that's not correct.
->> > [...]
->> > So, this is now in rc3:
->> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
->> >
->> > That should help avoid the worst of the issue -- laptop not sleeping.
->> > But the race or whatever it is still does exist. So you might want to
->> > keep this in your tracker to periodically nudge the TPM folks about it.
->>
->> I did, and with -rc2 out now is a good time to remind everybody about
->> it. Jarkko even looked into it, but no real fix emerged afaics. Or did
->> it?
+On Tue, Mar 14, 2023 at 1:13 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
+> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/O
+> Port access. In a future patch HAS_IOPORT=n will disable compilation of
+> the I/O accessor functions inb()/outb() and friends on architectures
+> which can not meaningfully support legacy I/O spaces such as s390. Also
+> add dependencies on HAS_IOPORT for the ISA and HAVE_EISA config options
+> as these busses always go along with HAS_IOPORT.
 >
-> Jason's workaround was picked. I asked some questions in the thread but
-> have not received any responses.
+> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
+> for HAS_IOPORT specific sections will be added in subsequent patches on
+> a per subsystem basis.
+>
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
 
-As I've written several times now, that patch doesn't fix the issue.
-It makes it less common but it still exists and needs to be addressed.
-Please re-read my various messages describing this. I have nothing new
-at all to add; you just need to review my prior comments. There's a
-bug that probably needs to be fixed here by somebody who understands
-the tpm1 code.
+>  arch/m68k/Kconfig       | 1 +
+
+Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
