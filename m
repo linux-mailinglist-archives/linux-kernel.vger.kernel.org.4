@@ -2,240 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EA1D6BA23A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22E206BA233
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:15:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbjCNWPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48584 "EHLO
+        id S231349AbjCNWPV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:15:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231548AbjCNWOu (ORCPT
+        with ESMTP id S231518AbjCNWOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:14:50 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B07056789
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:14:09 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-536a5a0b6e3so181892117b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:14:09 -0700 (PDT)
+        Tue, 14 Mar 2023 18:14:47 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FBAB39BA1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:14:06 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id iw3so1278486plb.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:14:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678831993;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pTQknU0yyvhsrgkZGBBdxk3ve6H2jxjb5KB6cR7GsY=;
-        b=R5pck/04mfxPmIVBB9o4uaUAo15/ZfMIMU4zBBeiy60dN3PkzfG+pL2Jk8ShQx/wnT
-         tu1lgw8s51UeJbNP7Jq1JSaDKFmENaAF8z1goiVAAzBIHtPHaXkByRIiol+yJE5/YgnQ
-         hW5qdRTIt9H9xpPdA02kwFo7Rk+Ynt1+wYVf34T5VMzeBtBNZvPPA5O3aC3D91D0RNtm
-         mSJ+v1/gDC92H9jo4qw/x0rtVNP40bPesp90xC2s/8DWp1y16hh7VG0pXJdfZGwPx2Bb
-         3g6PFtXcDzEpd66sHf07DdrXtn5FXRMWyPg2Jsy3ULZKlqOp9KCEKjeIRXmZa8Bhn/E3
-         nxaA==
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112; t=1678831989;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4XnYZAxxhA6tqO/+QU5FPwVQ3ZTboYKzwGys5pyLjfs=;
+        b=b7ShfFvuy7/o7jT+od5bs68UIhkWiIumdXAa4ZVHBOYlHxKgsdtGeciMG3yc+3OMwF
+         J5CnaXgDiyaC+uU4oAjYtr9vhWdZc7LCGFCKf0TF/zr9LX0+GQ0/nOZiU0t+fDNkVtum
+         8qPQ9kfuLzhlK7yFiriIS5hITNG9bBlET0eOYM+Z5zKC6+9Cfk76oGLXI/vxYgBaSamZ
+         D0xKNV8z29qhg39hERv/HfyOy0AvRwG7Wfp17yOLGuMHDQb1Gnsc/G/XplXJp0ZbGodY
+         MuXAZE/WIGr1d56EEQsK5jSQFOs2TPdYfrqy+t4G+naWryM62SSfOessvIy6PpmtLvUs
+         RqvA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831993;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=4pTQknU0yyvhsrgkZGBBdxk3ve6H2jxjb5KB6cR7GsY=;
-        b=73vmgLKkRhxH+uYgIrAlDvc7OfhWipJFR+j9tu210/cfSoKfauhq4X5kLoEVqzK30Y
-         KbBeMrlynCBjwn1lAaVuy77U2pyhe4v6AHInSstSLaXHV6Bhy3iX5e7KmP+k6lIBr7kZ
-         Ou7V9OCZtP8TVwWrc7r52VzNhCfRAHsHrACpm7DkSXtwlKi7I7KEkvexga5d5R4VmQ8g
-         Ut5AKPgwZ3HQQTxNSypS0tyWUwqJp5GHjBRbS6TZUDlOWay7R+g0zcDzj+UhK7JMzipq
-         ketMtnpI6ZFLG4H2DuDHVsSB88dgFJstTfkGtVWTeh8qXbRzkTwk1fba2llQXJ17hN74
-         oPzw==
-X-Gm-Message-State: AO0yUKV0g6kf7GhO1RkYQFc5UzKfoNUZthy6KpwZTIaqcxOL6CGRobfC
-        jzYI5kH8xuF8oJGdZ2o/H990dnb/y67LKOphRSZR
-X-Google-Smtp-Source: AK7set+CfovE4o2SVuha7KE903+E9XdVfmvAi2JH8R4Sr+s1e8IgI0cxifkuT5NnCB1X9zPcFkujhBDANx40mexrV28r
-X-Received: from axel.svl.corp.google.com ([2620:15c:2d4:203:21ce:bab3:17ec:2276])
- (user=axelrasmussen job=sendgmr) by 2002:a81:ac52:0:b0:541:9b2b:8240 with
- SMTP id z18-20020a81ac52000000b005419b2b8240mr6114708ywj.6.1678831992903;
- Tue, 14 Mar 2023 15:13:12 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 15:12:50 -0700
-In-Reply-To: <20230314221250.682452-1-axelrasmussen@google.com>
-Mime-Version: 1.0
-References: <20230314221250.682452-1-axelrasmussen@google.com>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-Message-ID: <20230314221250.682452-5-axelrasmussen@google.com>
-Subject: [PATCH v5 4/4] mm: userfaultfd: add UFFDIO_CONTINUE_MODE_WP to
- install WP PTEs
-From:   Axel Rasmussen <axelrasmussen@google.com>
-To:     Alexander Viro <viro@zeniv.linux.org.uk>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Hugh Dickins <hughd@google.com>, Jan Kara <jack@suse.cz>,
-        "Liam R. Howlett" <Liam.Howlett@Oracle.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Mike Rapoport <rppt@kernel.org>,
-        Muchun Song <muchun.song@linux.dev>,
-        Nadav Amit <namit@vmware.com>, Peter Xu <peterx@redhat.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     James Houghton <jthoughton@google.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-kselftest@vger.kernel.org,
-        Axel Rasmussen <axelrasmussen@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        d=1e100.net; s=20210112; t=1678831989;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4XnYZAxxhA6tqO/+QU5FPwVQ3ZTboYKzwGys5pyLjfs=;
+        b=5qbDFmQoEuK/R6XqT0QnI03d3VE+OA6tHMgWuZfsEFFf3X1/ikCDdkDh4RGjnfQoCv
+         F5h2YFWni2sQZkHNlndM3fr2JJZOtDtmrwZM5l1IcsutA+qPkKViumTwbHseq+EKgtzX
+         VPtyI7Mn281p3fpbxWY1tMDG9dK4s+TPvMnLxply61+vynDBR0da3Tk49S9QBpHBivvP
+         7n8RXn8Pei9Jqnm0JxZ+iN4EiSw4NbKeAkUvaHoHTfgCt8WxsEPhd9OdHNTKrrTg2ZtI
+         bSRYoGd1Pz3dkU2VtAjiBJ0E6eLQECeHBbDySN/GPy/5ySIDTgbvfKeyYDXE/V79NTkM
+         NwbA==
+X-Gm-Message-State: AO0yUKXg0bidRf1m16FjwMrovyScIUffnTOSbkRfv4TOSV68JukYHqUn
+        b79u1TowO8/1Qm5i03vQnrH5Qg==
+X-Google-Smtp-Source: AK7set+tgmW5AlsxN5YmxxUFdS6mgDkKSypzJ8ZUWx8IcwYjP6AdyXEX3kxwDueMMeBxIsXOKiTafg==
+X-Received: by 2002:a17:902:e38a:b0:19f:1e3e:a84d with SMTP id g10-20020a170902e38a00b0019f1e3ea84dmr355485ple.64.1678831988927;
+        Tue, 14 Mar 2023 15:13:08 -0700 (PDT)
+Received: from dread.disaster.area (pa49-186-4-237.pa.vic.optusnet.com.au. [49.186.4.237])
+        by smtp.gmail.com with ESMTPSA id ka16-20020a170903335000b0019e21d2ed2esm2240881plb.88.2023.03.14.15.13.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 15:13:08 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1pcCtF-008oq2-ND; Wed, 15 Mar 2023 09:13:05 +1100
+Date:   Wed, 15 Mar 2023 09:13:05 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Darrick J. Wong" <djwong@kernel.org>
+Cc:     Ye Bin <yebin@huaweicloud.com>, linux-xfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Ye Bin <yebin10@huawei.com>
+Subject: Re: [PATCH] xfs: fix possible assert failed in xfs_fs_put_super()
+ when do cpu offline
+Message-ID: <20230314221305.GR360264@dread.disaster.area>
+References: <20230314090649.326642-1-yebin@huaweicloud.com>
+ <20230314163100.GC11376@frogsfrogsfrogs>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314163100.GC11376@frogsfrogsfrogs>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-UFFDIO_COPY already has UFFDIO_COPY_MODE_WP, so when installing a new
-PTE to resolve a missing fault, one can install a write-protected one.
-This is useful when using UFFDIO_REGISTER_MODE_{MISSING,WP} in
-combination.
+On Tue, Mar 14, 2023 at 09:31:00AM -0700, Darrick J. Wong wrote:
+> On Tue, Mar 14, 2023 at 05:06:49PM +0800, Ye Bin wrote:
+> > From: Ye Bin <yebin10@huawei.com>
+> > 
+> > There's a issue when do cpu offline test:
+> > CPU: 48 PID: 1168152 Comm: umount Kdump: loaded Tainted: G L
+> > pstate: 60000005 (nZCv daif -PAN -UAO -TCO BTYPE=--)
+> > pc : assfail+0x8c/0xb4
+> > lr : assfail+0x38/0xb4
+> > sp : ffffa00033ce7c40
+> > x29: ffffa00033ce7c40 x28: ffffa00014794f30
+> > x27: ffffa00014f6ca20 x26: 1fffe0120b2e2030
+> > x25: ffff009059710188 x24: ffff00886c0a4650
+> > x23: 1fffe0110d8148ca x22: ffff009059710180
+> > x21: ffffa00015155680 x20: ffff00886c0a4000
+> > x19: 0000000000000001 x18: 0000000000000000
+> > x17: 0000000000000000 x16: 0000000000000000
+> > x15: 0000000000000007 x14: 1fffe00304cef265
+> > x13: ffff00182642b200 x12: ffff8012d37757bf
+> > x11: 1fffe012d37757be x10: ffff8012d37757be
+> > x9 : ffffa00010603a0c x8 : 0000000041b58ab3
+> > x7 : ffff94000679cf44 x6 : 00000000ffffffc0
+> > x5 : 0000000000000021 x4 : 00000000ffffffca
+> > x3 : 1ffff40002a27ee1 x2 : 0000000000000004
+> > x1 : 0000000000000000 x0 : ffffa0001513f000
+> > Call trace:
+> >  assfail+0x8c/0xb4
+> >  xfs_destroy_percpu_counters+0x98/0xa4
+> >  xfs_fs_put_super+0x1a0/0x2a4
+> >  generic_shutdown_super+0x104/0x2c0
+> >  kill_block_super+0x8c/0xf4
+> >  deactivate_locked_super+0xa4/0x164
+> >  deactivate_super+0xb0/0xdc
+> >  cleanup_mnt+0x29c/0x3ec
+> >  __cleanup_mnt+0x1c/0x30
+> >  task_work_run+0xe0/0x200
+> >  do_notify_resume+0x244/0x320
+> >  work_pending+0xc/0xa0
+> > 
+> > We analyzed the data in vmcore is correct. But triggered above issue.
+> > As f689054aace2 ("percpu_counter: add percpu_counter_sum_all interface")
+> > commit describes there is a small race window between the online CPUs traversal
+> > of percpu_counter_sum and the CPU offline callback. This means percpu_counter_sum()
+> > may return incorrect result during cpu offline.
+> > To solve above issue use percpu_counter_sum_all() interface to make sure
+> > result is correct to prevent false triggering of assertions.
+> 
+> How about the other percpu_counter_sum callsites inside XFS?  Some of
+> them are involved in writing ondisk metadata (xfs_log_sb) or doing
+> correctness checks (fs/xfs/scrub/*); shouldn't those also be using the
+> _all variant?
 
-This was motivated by testing HugeTLB HGM [1], and in particular its
-interaction with userfaultfd features. Existing userfaultfd code
-supports using WP and MINOR modes together (i.e. you can register an
-area with both enabled), but without this CONTINUE flag the combination
-is in practice unusable.
+Ugh. I kinda wish that the percpu_counter_sum_all() patch had been
+cc'd to lists for subsystems that use percpu_counter_sum()
+extensively, or just to people who have modified that code in the
+past.
 
-So, add an analogous UFFDIO_CONTINUE_MODE_WP, which does the same thing
-as UFFDIO_COPY_MODE_WP, but for *minor* faults.
+The problem is that it uses cpu_possible_mask, which means it
+walks all possible CPUs that can be added to the system even if the
+CPUs aren't physically present. That can be a lot in the case of
+systems that can have cpu-capable nodes hotplugged into them, and
+that makes percpu_counter_sum_all() excitingly expensive for no good
+reason.
 
-Update the selftest to do some very basic exercising of the new flag.
+AFAICT, if we are trying to close a race condition between iterating
+online CPUs not summing dying CPUs and the cpu dead notification
+updating the sum, then shouldn't we be using
+cpu_mask_or(cpu_online_mask, cpu_dying_mask) for summing iteration
+rather than just cpu_online_mask?
 
-Update Documentation/ to describe how these flags are used (neither the
-COPY nor the new CONTINUE versions of this mode flag were described
-there before).
+i.e. when a CPU is being taken down, it gets added to the
+cpu_dying_mask, then removed from the cpu_online_mask, then the
+offline notifications are run (i.e. the percpu counter dead
+callback), and when the CPU reaches the CPUHP_TEARDOWN_CPU state,
+it is removed from the cpu_dying_mask because it is now dead and all
+the "cpu dying" callbacks have been run.
 
-[1]: https://patchwork.kernel.org/project/linux-mm/cover/20230218002819.1486479-1-jthoughton@google.com/
+Except when a hotplug event is being processed, cpu_dying_mask will
+be empty, hence there is little change in summing overhead. But it
+will close the summing race condition when a CPU is being
+offlined...
 
-Acked-by: Peter Xu <peterx@redhat.com>
-Acked-by: Mike Rapoport (IBM) <rppt@kernel.org>
-Signed-off-by: Axel Rasmussen <axelrasmussen@google.com>
----
- Documentation/admin-guide/mm/userfaultfd.rst | 8 ++++++++
- fs/userfaultfd.c                             | 8 ++++++--
- include/linux/userfaultfd_k.h                | 3 ++-
- include/uapi/linux/userfaultfd.h             | 7 +++++++
- mm/userfaultfd.c                             | 5 +++--
- tools/testing/selftests/mm/userfaultfd.c     | 4 ++++
- 6 files changed, 30 insertions(+), 5 deletions(-)
+That, I think, is the solution we want for XFS. Having the percpu
+counters just do the right thing is far better than always having to
+wonder if summation interface we are using is correct in the face of
+CPU hotplug. I'll put a patchset together to do:
 
-diff --git a/Documentation/admin-guide/mm/userfaultfd.rst b/Documentation/admin-guide/mm/userfaultfd.rst
-index 7dc823b56ca4..0ce400f8da93 100644
---- a/Documentation/admin-guide/mm/userfaultfd.rst
-+++ b/Documentation/admin-guide/mm/userfaultfd.rst
-@@ -219,6 +219,14 @@ former will have ``UFFD_PAGEFAULT_FLAG_WP`` set, the latter
- you still need to supply a page when ``UFFDIO_REGISTER_MODE_MISSING`` was
- used.
- 
-+When using ``UFFDIO_REGISTER_MODE_WP`` in combination with either
-+``UFFDIO_REGISTER_MODE_MISSING`` or ``UFFDIO_REGISTER_MODE_MINOR``, when
-+resolving missing / minor faults with ``UFFDIO_COPY`` or ``UFFDIO_CONTINUE``
-+respectively, it may be desirable for the new page / mapping to be
-+write-protected (so future writes will also result in a WP fault). These ioctls
-+support a mode flag (``UFFDIO_COPY_MODE_WP`` or ``UFFDIO_CONTINUE_MODE_WP``
-+respectively) to configure the mapping this way.
-+
- QEMU/KVM
- ========
- 
-diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-index 56e54e50414e..664019381e04 100644
---- a/fs/userfaultfd.c
-+++ b/fs/userfaultfd.c
-@@ -1878,6 +1878,7 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	struct uffdio_continue uffdio_continue;
- 	struct uffdio_continue __user *user_uffdio_continue;
- 	struct userfaultfd_wake_range range;
-+	uffd_flags_t flags = 0;
- 
- 	user_uffdio_continue = (struct uffdio_continue __user *)arg;
- 
-@@ -1902,13 +1903,16 @@ static int userfaultfd_continue(struct userfaultfd_ctx *ctx, unsigned long arg)
- 	    uffdio_continue.range.start) {
- 		goto out;
- 	}
--	if (uffdio_continue.mode & ~UFFDIO_CONTINUE_MODE_DONTWAKE)
-+	if (uffdio_continue.mode & ~(UFFDIO_CONTINUE_MODE_DONTWAKE |
-+				     UFFDIO_CONTINUE_MODE_WP))
- 		goto out;
-+	if (uffdio_continue.mode & UFFDIO_CONTINUE_MODE_WP)
-+		flags |= MFILL_ATOMIC_WP;
- 
- 	if (mmget_not_zero(ctx->mm)) {
- 		ret = mfill_atomic_continue(ctx->mm, uffdio_continue.range.start,
- 					    uffdio_continue.range.len,
--					    &ctx->mmap_changing);
-+					    &ctx->mmap_changing, flags);
- 		mmput(ctx->mm);
- 	} else {
- 		return -ESRCH;
-diff --git a/include/linux/userfaultfd_k.h b/include/linux/userfaultfd_k.h
-index a948d92154f5..fd6d7d80b6ea 100644
---- a/include/linux/userfaultfd_k.h
-+++ b/include/linux/userfaultfd_k.h
-@@ -83,7 +83,8 @@ extern ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm,
- 				     unsigned long len,
- 				     atomic_t *mmap_changing);
- extern ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long dst_start,
--				     unsigned long len, atomic_t *mmap_changing);
-+				     unsigned long len, atomic_t *mmap_changing,
-+				     uffd_flags_t flags);
- extern int mwriteprotect_range(struct mm_struct *dst_mm,
- 			       unsigned long start, unsigned long len,
- 			       bool enable_wp, atomic_t *mmap_changing);
-diff --git a/include/uapi/linux/userfaultfd.h b/include/uapi/linux/userfaultfd.h
-index 005e5e306266..14059a0861bf 100644
---- a/include/uapi/linux/userfaultfd.h
-+++ b/include/uapi/linux/userfaultfd.h
-@@ -297,6 +297,13 @@ struct uffdio_writeprotect {
- struct uffdio_continue {
- 	struct uffdio_range range;
- #define UFFDIO_CONTINUE_MODE_DONTWAKE		((__u64)1<<0)
-+	/*
-+	 * UFFDIO_CONTINUE_MODE_WP will map the page write protected on
-+	 * the fly.  UFFDIO_CONTINUE_MODE_WP is available only if the
-+	 * write protected ioctl is implemented for the range
-+	 * according to the uffdio_register.ioctls.
-+	 */
-+#define UFFDIO_CONTINUE_MODE_WP			((__u64)1<<1)
- 	__u64 mode;
- 
- 	/*
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 9202c1fc79ba..048beb5d0edd 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -693,10 +693,11 @@ ssize_t mfill_atomic_zeropage(struct mm_struct *dst_mm, unsigned long start,
- }
- 
- ssize_t mfill_atomic_continue(struct mm_struct *dst_mm, unsigned long start,
--			      unsigned long len, atomic_t *mmap_changing)
-+			      unsigned long len, atomic_t *mmap_changing,
-+			      uffd_flags_t flags)
- {
- 	return mfill_atomic(dst_mm, start, 0, len, mmap_changing,
--			    uffd_flags_set_mode(0, MFILL_ATOMIC_CONTINUE));
-+			    uffd_flags_set_mode(flags, MFILL_ATOMIC_CONTINUE));
- }
- 
- long uffd_wp_range(struct vm_area_struct *dst_vma,
-diff --git a/tools/testing/selftests/mm/userfaultfd.c b/tools/testing/selftests/mm/userfaultfd.c
-index 7f22844ed704..41c1f9abc481 100644
---- a/tools/testing/selftests/mm/userfaultfd.c
-+++ b/tools/testing/selftests/mm/userfaultfd.c
-@@ -585,6 +585,8 @@ static void continue_range(int ufd, __u64 start, __u64 len)
- 	req.range.start = start;
- 	req.range.len = len;
- 	req.mode = 0;
-+	if (test_uffdio_wp)
-+		req.mode |= UFFDIO_CONTINUE_MODE_WP;
- 
- 	if (ioctl(ufd, UFFDIO_CONTINUE, &req))
- 		err("UFFDIO_CONTINUE failed for address 0x%" PRIx64,
-@@ -1332,6 +1334,8 @@ static int userfaultfd_minor_test(void)
- 	uffdio_register.range.start = (unsigned long)area_dst_alias;
- 	uffdio_register.range.len = nr_pages * page_size;
- 	uffdio_register.mode = UFFDIO_REGISTER_MODE_MINOR;
-+	if (test_uffdio_wp)
-+		uffdio_register.mode |= UFFDIO_REGISTER_MODE_WP;
- 	if (ioctl(uffd, UFFDIO_REGISTER, &uffdio_register))
- 		err("register failure");
- 
+1. fix percpu_counter_sum() to include the dying mask in it's
+iteration. This should fix the XFS issue.
+2. change the only user of percpu_counter_sum_all() to only use
+percpu_counter_sum() because percpu_counter_sum_all() is now
+redundant.
+3. remove percpu_counter_sum_all() because it is unused.
+
+Cheers,
+
+Dave.
 -- 
-2.40.0.rc1.284.g88254d51c5-goog
-
+Dave Chinner
+david@fromorbit.com
