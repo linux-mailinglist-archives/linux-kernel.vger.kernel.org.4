@@ -2,218 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8EC36B8C2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2A756B8C35
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:52:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbjCNHrp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 03:47:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S229840AbjCNHwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 03:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbjCNHrm (ORCPT
+        with ESMTP id S229468AbjCNHwO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 03:47:42 -0400
-Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 21BD095444
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 00:47:39 -0700 (PDT)
-Received: from epcas2p3.samsung.com (unknown [182.195.41.55])
-        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20230314074735epoutp03471fdf6f0cdd6adf9c58df1246ee70ab~MOZDYl_ej3089630896epoutp031
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:47:35 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20230314074735epoutp03471fdf6f0cdd6adf9c58df1246ee70ab~MOZDYl_ej3089630896epoutp031
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1678780055;
-        bh=Rh6UJxWisQFryDemfLydE6a77p2ZTG2G9wZ47GaDRRo=;
-        h=Subject:Reply-To:From:To:Date:References:From;
-        b=MfJy2X/e2StM5wrUro9aHC4UYj3EaQsh8XwtNffT5a5CiuYN+3DUV2IiWum2QwM7r
-         VytnjHW1CyIrU/aSSouvORJ9TRvIEucva1N7kIviQ3Iu8sY8sy/UlzgynURiRJPgB8
-         U5BeZSx0Xhhh7FwAb6+DooYltBDsM1/OpFPv+oLo=
-Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
-        epcas2p1.samsung.com (KnoxPortal) with ESMTP id
-        20230314074735epcas2p1b4f3d417fa3df9152499c5a8a009c0d1~MOZDHou100842908429epcas2p1W;
-        Tue, 14 Mar 2023 07:47:35 +0000 (GMT)
-Received: from epsmges2p4.samsung.com (unknown [182.195.36.91]) by
-        epsnrtp1.localdomain (Postfix) with ESMTP id 4PbQbp1T2Cz4x9Q2; Tue, 14 Mar
-        2023 07:47:34 +0000 (GMT)
-X-AuditID: b6c32a48-45bfc70000021624-ba-64102695b236
-Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
-        epsmges2p4.samsung.com (Symantec Messaging Gateway) with SMTP id
-        F3.5D.05668.59620146; Tue, 14 Mar 2023 16:47:33 +0900 (KST)
-Mime-Version: 1.0
-Subject: [PATCH v1] f2fs: Fix system crash due to lack of free space in LFS
-Reply-To: yonggil.song@samsung.com
-Sender: Yonggil Song <yonggil.song@samsung.com>
-From:   Yonggil Song <yonggil.song@samsung.com>
-To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
-        "chao@kernel.org" <chao@kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-X-Priority: 3
-X-Content-Kind-Code: NORMAL
-X-CPGS-Detection: blocking_info_exchange
-X-Drm-Type: N,general
-X-Msg-Generator: Mail
-X-Msg-Type: PERSONAL
-X-Reply-Demand: N
-Message-ID: <20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
-Date:   Tue, 14 Mar 2023 16:47:33 +0900
-X-CMS-MailID: 20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb
-Content-Transfer-Encoding: 7bit
-Content-Type: text/plain; charset="utf-8"
-X-Sendblock-Type: AUTO_CONFIDENTIAL
-CMS-TYPE: 102P
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJKsWRmVeSWpSXmKPExsWy7bCmme5UNYEUg1n3DS1OTz3LZPFk/Sxm
-        i0uL3C0u75rDZjH1/BEmB1aPTas62Tx2L/jM5NG3ZRWjx+dNcgEsUdk2GamJKalFCql5yfkp
-        mXnptkrewfHO8aZmBoa6hpYW5koKeYm5qbZKLj4Bum6ZOUBrlRTKEnNKgUIBicXFSvp2NkX5
-        pSWpChn5xSW2SqkFKTkF5gV6xYm5xaV56Xp5qSVWhgYGRqZAhQnZGY9uz2Et+KpR8fPdPvYG
-        xg6lLkZODgkBE4nj8/8zdjFycQgJ7GCUmHj+I3sXIwcHr4CgxN8dwiA1wgLeEj1bl7OD2EIC
-        ShLXDvSyQMT1JTYvXgYWZxPQlfi7AaJGROAVo8SZ1aIQ83klZrQ/ZYGwpSW2L9/KCGFrSPxY
-        1ssMYYtK3Fz9lh3Gfn9sPlSNiETrvbNQNYISD37uhopLSiw6dJ4Jws6X+LviOhuEXSOxtaEN
-        Kq4vca1jI9heXgFfiZa7c1lBbBYBVYnbnVeg5rhInPkyDSzOLCAvsf3tHGaQ15kFNCXW79IH
-        MSUElCWO3GKBqOCT6Dj8lx3mqx3znkBtUpPYvGkzK4QtI3HhcRvUdA+JXzNPskJCLVDi+NkG
-        1gmM8rMQYTsLyd5ZCHsXMDKvYhRLLSjOTU8tNiowgUdncn7uJkZwmtPy2ME4++0HvUOMTByM
-        hxglOJiVRHjDWQRShHhTEiurUovy44tKc1KLDzGaAn08kVlKNDkfmGjzSuINTSwNTMzMDM2N
-        TA3MlcR5pW1PJgsJpCeWpGanphakFsH0MXFwSjUwJd+eduqbypfCzk5lq+K7N7l9n6qf/8d8
-        QOyJ10Grhc19bc7Tytkvu51w0HxezJXdcOJ1nvcVKwd5ziePP61y+xTqfXZaTcC7BtUW1gOi
-        rvPn+9rp72nik79zcv/NptJZ5fJzD6zs5Fv19x/XwQT7rQvVblQeaJxRt/uyH1+avtTPCcFJ
-        /G/XPGVWnjptlevvp4sm1e/2NF+5n+8A26IqvwMzmD1nxvftTqnwZxP+2tX9M+lRh6sCt+mK
-        qkNLYz8yfP27bOr/I6qr715+F7D0rd/EeX9elyRe3VbdWujcMP/F4nuHVmydaHlnV4NAq5tL
-        oKTbyxVP3p1a7s6w9fXOHF2Bi3syHk6sWejV9uY/m4sSS3FGoqEWc1FxIgBA6duw/AMAAA==
-DLP-Filter: Pass
-X-CFilter-Loop: Reflected
-X-CMS-RootMailID: 20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb
-References: <CGME20230314074733epcms2p511d7a7fa11d5b54ac2fbaa840db3f1cb@epcms2p5>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 03:52:14 -0400
+Received: from proxima.lasnet.de (proxima.lasnet.de [IPv6:2a01:4f8:121:31eb:3::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 865A69660D;
+        Tue, 14 Mar 2023 00:52:06 -0700 (PDT)
+Received: from [10.196.200.216] (unknown [88.128.88.188])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: stefan@datenfreihafen.org)
+        by proxima.lasnet.de (Postfix) with ESMTPSA id 37525C01E7;
+        Tue, 14 Mar 2023 08:52:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=datenfreihafen.org;
+        s=2021; t=1678780324;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=mq6eXg1wvxEuVfFUKMPv5WXkwBa0PhpyXmFCkxWLv6A=;
+        b=LldZbbGDbS42HhL3szZLFNu0SMTWXcdpnjAK/is24DJeNq3w9zOolqiqEWBJPAiR6AW0Rz
+        nsveQM/BXHwq2eCCHs9/n305OFRn8gUA6dxOpAQgj9qscKQI5fbrKfFBOmSGKl6ZofADuD
+        3q1iJutmIof4bBPFuCFWBsf59vH7ri1SOVkNrn7S34IHNynTbBpcxpgM4Ux4MfaL/1Cady
+        5ahL2jlN3WHlQe/hl5hfctI9QwnxXlrz/DWz2w1E5fPdugq+TRV72kp8J+FtL7vAssvH4q
+        Ifm8FeBU/iqO5de1jcX1f0A2gxvRodoR541/jHEa2kPDm0nRvl5hq2Qw4siWHQ==
+Message-ID: <9b240897-17b3-747e-2c41-54298002fb83@datenfreihafen.org>
+Date:   Tue, 14 Mar 2023 08:52:02 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 08/12] net: ieee802154: mcr20a: drop of_match_ptr for ID
+ table
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Hauke Mehrtens <hauke@hauke-m.de>,
+        Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Colin Foster <colin.foster@in-advantage.com>,
+        Michael Hennerich <michael.hennerich@analog.com>,
+        Alexander Aring <alex.aring@gmail.com>,
+        Miquel Raynal <miquel.raynal@bootlin.com>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-wpan@vger.kernel.org
+References: <20230311173303.262618-1-krzysztof.kozlowski@linaro.org>
+ <20230311173303.262618-8-krzysztof.kozlowski@linaro.org>
+Content-Language: en-US
+From:   Stefan Schmidt <stefan@datenfreihafen.org>
+In-Reply-To: <20230311173303.262618-8-krzysztof.kozlowski@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When f2fs tries to checkpoint during foreground gc in LFS mode, system
-crash occurs due to lack of free space if the amount of dirty node and
-dentry pages generated by data migration exceeds free space.
-The reproduction sequence is as follows.
+Hello
 
- - 20GiB capacity block device (null_blk)
- - format and mount with LFS mode
- - create a file and write 20,000MiB
- - 4k random write on full range of the file
+On 11.03.23 18:32, Krzysztof Kozlowski wrote:
+> The driver will match mostly by DT table (even thought there is regular
+> ID table) so there is little benefit in of_match_ptr (this also allows
+> ACPI matching via PRP0001, even though it might not be relevant here).
+> 
+>    drivers/net/ieee802154/mcr20a.c:1340:34: error: ‘mcr20a_of_match’ defined but not used [-Werror=unused-const-variable=]
+> 
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   drivers/net/ieee802154/mcr20a.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ieee802154/mcr20a.c b/drivers/net/ieee802154/mcr20a.c
+> index f53d185e0568..87abe3b46316 100644
+> --- a/drivers/net/ieee802154/mcr20a.c
+> +++ b/drivers/net/ieee802154/mcr20a.c
+> @@ -1352,7 +1352,7 @@ MODULE_DEVICE_TABLE(spi, mcr20a_device_id);
+>   static struct spi_driver mcr20a_driver = {
+>   	.id_table = mcr20a_device_id,
+>   	.driver = {
+> -		.of_match_table = of_match_ptr(mcr20a_of_match),
+> +		.of_match_table = mcr20a_of_match,
+>   		.name	= "mcr20a",
+>   	},
+>   	.probe      = mcr20a_probe,
 
- RIP: 0010:new_curseg+0x48a/0x510 [f2fs]
- Code: 55 e7 f5 89 c0 48 0f af c3 48 8b 5d c0 48 c1 e8 20 83 c0 01 89 43 6c 48 83 c4 28 5b 41 5c 41 5d 41 5e 41 5f 5d c3 cc cc cc cc <0f> 0b f0 41 80 4f 48 04 45 85 f6 0f 84 ba fd ff ff e9 ef fe ff ff
- RSP: 0018:ffff977bc397b218 EFLAGS: 00010246
- RAX: 00000000000027b9 RBX: 0000000000000000 RCX: 00000000000027c0
- RDX: 0000000000000000 RSI: 00000000000027b9 RDI: ffff8c25ab4e74f8
- RBP: ffff977bc397b268 R08: 00000000000027b9 R09: ffff8c29e4a34b40
- R10: 0000000000000001 R11: ffff977bc397b0d8 R12: 0000000000000000
- R13: ffff8c25b4dd81a0 R14: 0000000000000000 R15: ffff8c2f667f9000
- FS: 0000000000000000(0000) GS:ffff8c344ec80000(0000) knlGS:0000000000000000
- CS: 0010 DS: 0000 ES: 0000 CR0: 0000000080050033
- CR2: 000000c00055d000 CR3: 0000000e30810003 CR4: 00000000003706e0
- DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
- DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
- Call Trace:
- <TASK>
- allocate_segment_by_default+0x9c/0x110 [f2fs]
- f2fs_allocate_data_block+0x243/0xa30 [f2fs]
- ? __mod_lruvec_page_state+0xa0/0x150
- do_write_page+0x80/0x160 [f2fs]
- f2fs_do_write_node_page+0x32/0x50 [f2fs]
- __write_node_page+0x339/0x730 [f2fs]
- f2fs_sync_node_pages+0x5a6/0x780 [f2fs]
- block_operations+0x257/0x340 [f2fs]
- f2fs_write_checkpoint+0x102/0x1050 [f2fs]
- f2fs_gc+0x27c/0x630 [f2fs]
- ? folio_mark_dirty+0x36/0x70
- f2fs_balance_fs+0x16f/0x180 [f2fs]
+Acked-by: Stefan Schmidt <stefan@datenfreihafen.org>
 
-This patch adds checking whether free sections are enough before checkpoint
-during gc.
-
-Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
----
- fs/f2fs/gc.c      |  7 ++++++-
- fs/f2fs/segment.h | 26 +++++++++++++++++++++-----
- 2 files changed, 27 insertions(+), 6 deletions(-)
-
-diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
-index 4546e01b2ee0..b22f49a6f128 100644
---- a/fs/f2fs/gc.c
-+++ b/fs/f2fs/gc.c
-@@ -1773,6 +1773,7 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 		.iroot = RADIX_TREE_INIT(gc_list.iroot, GFP_NOFS),
- 	};
- 	unsigned int skipped_round = 0, round = 0;
-+	unsigned int nr_needed_secs = 0, node_blocks = 0, dent_blocks = 0;
- 
- 	trace_f2fs_gc_begin(sbi->sb, gc_type, gc_control->no_bg_gc,
- 				gc_control->nr_free_secs,
-@@ -1858,8 +1859,12 @@ int f2fs_gc(struct f2fs_sb_info *sbi, struct f2fs_gc_control *gc_control)
- 		}
- 	}
- 
-+	/* need more three extra sections for writer's data/node/dentry */
-+	nr_needed_secs = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + 3;
-+	nr_needed_secs += ((node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0));
-+
- 	/* Write checkpoint to reclaim prefree segments */
--	if (free_sections(sbi) < NR_CURSEG_PERSIST_TYPE &&
-+	if (free_sections(sbi) <= nr_needed_secs &&
- 				prefree_segments(sbi)) {
- 		ret = f2fs_write_checkpoint(sbi, &cpc);
- 		if (ret)
-diff --git a/fs/f2fs/segment.h b/fs/f2fs/segment.h
-index be8f2d7d007b..ac11c47bfe37 100644
---- a/fs/f2fs/segment.h
-+++ b/fs/f2fs/segment.h
-@@ -605,8 +605,11 @@ static inline bool has_curseg_enough_space(struct f2fs_sb_info *sbi,
- 	return true;
- }
- 
--static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
--					int freed, int needed)
-+/*
-+ * calculate the minimum number of sections (needed) for dirty node/dentry
-+ */
-+static inline unsigned int get_min_need_secs(struct f2fs_sb_info *sbi,
-+		unsigned int *node_blocks, unsigned int *dent_blocks)
- {
- 	unsigned int total_node_blocks = get_pages(sbi, F2FS_DIRTY_NODES) +
- 					get_pages(sbi, F2FS_DIRTY_DENTS) +
-@@ -614,15 +617,28 @@ static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
- 	unsigned int total_dent_blocks = get_pages(sbi, F2FS_DIRTY_DENTS);
- 	unsigned int node_secs = total_node_blocks / CAP_BLKS_PER_SEC(sbi);
- 	unsigned int dent_secs = total_dent_blocks / CAP_BLKS_PER_SEC(sbi);
--	unsigned int node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
--	unsigned int dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
-+
-+	f2fs_bug_on(sbi, (!node_blocks || !dent_blocks));
-+
-+	*node_blocks = total_node_blocks % CAP_BLKS_PER_SEC(sbi);
-+	*dent_blocks = total_dent_blocks % CAP_BLKS_PER_SEC(sbi);
-+
-+	return (node_secs + dent_secs);
-+}
-+
-+static inline bool has_not_enough_free_secs(struct f2fs_sb_info *sbi,
-+					int freed, int needed)
-+{
-+	unsigned int node_blocks = 0;
-+	unsigned int dent_blocks = 0;
- 	unsigned int free, need_lower, need_upper;
- 
- 	if (unlikely(is_sbi_flag_set(sbi, SBI_POR_DOING)))
- 		return false;
- 
- 	free = free_sections(sbi) + freed;
--	need_lower = node_secs + dent_secs + reserved_sections(sbi) + needed;
-+	need_lower = get_min_need_secs(sbi, &node_blocks, &dent_blocks) + needed +
-+				reserved_sections(sbi);
- 	need_upper = need_lower + (node_blocks ? 1 : 0) + (dent_blocks ? 1 : 0);
- 
- 	if (free > need_upper)
--- 
-2.34.1
+regards
+Stefan Schmidt
