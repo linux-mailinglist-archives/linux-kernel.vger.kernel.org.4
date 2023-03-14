@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E839F6B964D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:32:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 758206B964F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231187AbjCNNcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55388 "EHLO
+        id S231906AbjCNNcr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:32:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232249AbjCNNcD (ORCPT
+        with ESMTP id S230256AbjCNNcE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:32:03 -0400
-Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFD4A90AD
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:28:44 -0700 (PDT)
-Received: by mail-lf1-x12c.google.com with SMTP id o8so46140lfo.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:28:44 -0700 (PDT)
+        Tue, 14 Mar 2023 09:32:04 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CEF5A9DF9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:28:47 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id f18so20049639lfa.3
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:28:47 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678800519;
+        d=linaro.org; s=google; t=1678800521;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=oyXgn9YP7XQ9gyU7T+fvTMc6wV6dOwpxjNcYcLnoGbg=;
-        b=s69HBAsoNavmod/now9GOTOEMdL/zB0iVEDHVpTyUXw251UeBd+FEkP2hMW8fw5L2P
-         ymC9qoVHrhbiRW3xdNrxqXcPicNIyW9ZmTylSYsKX4ckSzduuZw1BpSYqwEGQN6US2Vj
-         wLwtv5T+Z8MD40BLbYmodWeMbT22u5aKxcWGyZLvI4ngQAzwzF7ubf/MYexiBzn+YCiB
-         0pICB09PX13Hh5N6jTRwmgdhmKDWziXuy7G2uVXKbbI6YcKVhuaMoYCNP6u6C9ZA8Eg0
-         jb6TEGGYPCAMgEx6++/pU8epv15HMoh4LViu2bJIXKUB9i/zvEF6gntLnnbKi17r4A/K
-         kNSw==
+        bh=On0Sn5ODlBIWJUId5IrSccw6/czdShXkavsZLO1moks=;
+        b=JOEK6IsqR9hXgwXOUVjAuX20RouL0XkQwE8y3nDJogyDQmg37O4J7Us6Uccr7+3t8D
+         xU+YDQps2TlWspFxK0SGXkbCZMA7ujRmT5lE+Slo+PvPZH82MsMCAEfzdvW+w17Xmyc5
+         n6l5LhcoE2J4BMhCiESpIc2ZvDX69cLMEQhfoUvjqB62LZby6mcT1ZmJhhWN2GWXE1H3
+         KJSiQmeQ6VA4YzZdNOC0UZ21T5pYVupu03KY9SfFGFrYiHBT8FNQWCSQFLKQgbsJX/eK
+         nVldWFqCcA5sK0j6n85igX/cxWnWzZGdV1Njay9sh1EOD5x9d09VtNHLShFG4TRx2s2o
+         4osA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678800519;
+        d=1e100.net; s=20210112; t=1678800521;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=oyXgn9YP7XQ9gyU7T+fvTMc6wV6dOwpxjNcYcLnoGbg=;
-        b=zHV2Rkg8al1RLaYnIZwB/j++t8gVmIo1yMMBns6AgDuydBSlo9c5sP8eqRGkj7sBpR
-         HhDmZA91IzNlJykWYTyNIy+ILlpxVNrYmBU4yJgX/gLRSR9Qt9L0KUmOat5WpJCnDo0Y
-         rVJ+RdKtJfSVZ6HP+d1Z6BZSpK82AWkU4BPkwqMbzYwexXt6bDp0YTJA+3Em3sJjvYyj
-         ZN0dMuuokb634OiLDLwXGZkxqh8Ek0dcc9f4GpKsQCYrQ3AvWelX+m2JAjaJ5NOc5Ma1
-         6Kw2h8mCUeOJPwJ0GAyNEhAq+3qCz5g3pOlN1yfyzLDGyRiopa0865SjEt99QYuIzwKe
-         9CeQ==
-X-Gm-Message-State: AO0yUKXmlX2yHizzIXNwnh47D4nC0CwWEbIFRujjBe6WoJfhrLZUeOlD
-        SlnDYIwYn6jfMfqj0+MG1UT5sw==
-X-Google-Smtp-Source: AK7set/cplHkbnPUztaeewmI3otmWr7GZvxoAIvNm1iSgFCpdOw9hCdYgD1NRqYEJsRbjD/oyaCbbQ==
-X-Received: by 2002:a19:5502:0:b0:4e8:3d24:de6f with SMTP id n2-20020a195502000000b004e83d24de6fmr710458lfe.14.1678800519537;
-        Tue, 14 Mar 2023 06:28:39 -0700 (PDT)
+        bh=On0Sn5ODlBIWJUId5IrSccw6/czdShXkavsZLO1moks=;
+        b=CTZS3aa8ZVe3aIsLacoUtng0hPVE3PJ85yqTcxy9kLsXUBZ4sMZ34XfwSJFd9D2uLp
+         jIjMQppBB9CUhIjvzs8opb9vJcKQ82SEWkp3M6D9pDN+NveP+EI/HJquwJPxkGPd7bNj
+         9s6i40Wmm80K2ycG2RA8uTxbmhQTZkfCGnuv9m9JOFznObeMiZ4bCxGkEGfdkaF55GdQ
+         YR543k1kfmMxySSBKBjhIVbTj5pqeUTXnJ8bZZN+wLzxA4Q2+AvlWBMFDHvKhjVQetIe
+         N0neaCiOehY4LDpmDy+fMYTdMxwDp6/L2VpkbbVZWyLsaBo4S7l7hyU3O2WYAJSTFhO5
+         pUWw==
+X-Gm-Message-State: AO0yUKU9zDfstp+z7gGAJUB8OBHqXjrpJZgKTvymNvmMfKFuKFU12o+O
+        zu0unfOMoNQPNV3lvxc1akJYYw==
+X-Google-Smtp-Source: AK7set/cD5weaLXxuOZOEunDt8gdT/nazgj8O5ojnseb5rU4WoJc/yH6mZMJD/Ulc9uo7CswoukEKA==
+X-Received: by 2002:ac2:4a8c:0:b0:4dc:4e1e:ebfc with SMTP id l12-20020ac24a8c000000b004dc4e1eebfcmr780195lfp.62.1678800520946;
+        Tue, 14 Mar 2023 06:28:40 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm406012lfd.68.2023.03.14.06.28.38
+        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm406012lfd.68.2023.03.14.06.28.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 06:28:39 -0700 (PDT)
+        Tue, 14 Mar 2023 06:28:40 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 14 Mar 2023 14:28:34 +0100
-Subject: [PATCH v2 1/2] arm64: dts: qcom: msm8998-yoshino: Use SONY GPIO
- names
+Date:   Tue, 14 Mar 2023 14:28:35 +0100
+Subject: [PATCH v2 2/2] arm64: dts: qcom: msm8998-yoshino: Use actual pin
+ names for pin nodes
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230314-topic-yoshino_gpio-v2-1-4cb80e187e38@linaro.org>
+Message-Id: <20230314-topic-yoshino_gpio-v2-2-4cb80e187e38@linaro.org>
 References: <20230314-topic-yoshino_gpio-v2-0-4cb80e187e38@linaro.org>
 In-Reply-To: <20230314-topic-yoshino_gpio-v2-0-4cb80e187e38@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -69,483 +69,283 @@ Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
         Marijn Suijten <marijn.suijten@somainline.org>,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678800516; l=10116;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678800516; l=7699;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=gF+fxT2+OAPtuTsh5Ywse84/vBNT5S+3gtRjqt/JgRw=;
- b=oz198pZymYJj5LiruV4EKUWyPiB8T/J0vUHfITFOCJHROsT0IQXv6QZu7EXJdtlAfk7jm6S0f9RN
- UdyJ3DqeAs8/91MwO/9QtE8p1vJZDJvY9ogbVv/pL5k1yJ/eOhBg
+ bh=6GcliGblReeLYCni8H/SCTgW54WjlWd0vVAVmyIP5rE=;
+ b=rHLQh38E+T2WXwZN1QAA9ypvdX2QiPKqp+tFP6vL2jqnGXaN1PxGwJRowAxcewVTzDkhrMcgimbY
+ bcdROkFmDkMTC0VW48Z9DOab1Zj34fBv7Ahn/p+2F6Eg8e5gPXv4
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        UPPERCASE_50_75,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sony ever so graciously provides GPIO line names in their downstream
-kernel (though sometimes they are not 100% accurate and you can judge
-that by simply looking at them and with what drivers they are used).
-
-Add these to the Yoshino devices DTs to better document the hardware.
-
-Lilac and Poplar have identical pin assignments.
-Diff between these two and maple:
-
-TLMM:
--  "NC",
-+  "TS_VDDIO_EN",
-
-PMI8998:
--  "NC"
-+  "USB_SWITCH_SEL"
-
--  "NC"
-+  "4K_DISP_DCDC_EN"
-
-PM8005:
--  "NC"
-+  "EAR_EN"
-
-Which is probably due to Maple being designed and released quite a bit
-earlier than the other two and it having a super high tech true-4K
-display.
+With the gpio-line-names in place coming from SONY themselves, we can
+now make the pin nodes and their labels to more closely resemble the
+actual thing. 4k has been renamed to four_k due to dtc limitations.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- .../dts/qcom/msm8998-sony-xperia-yoshino-maple.dts | 175 ++++++++++++++++++
- .../boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 199 +++++++++++++++++++++
- 2 files changed, 374 insertions(+)
+ .../dts/qcom/msm8998-sony-xperia-yoshino-maple.dts |  4 +-
+ .../boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi | 59 +++++++++++-----------
+ 2 files changed, 31 insertions(+), 32 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts
-index 1868ad649415..8b6a718835c7 100644
+index 8b6a718835c7..055b6a643d82 100644
 --- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts
 +++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino-maple.dts
-@@ -37,7 +37,29 @@ &lab {
- 	qcom,soft-start-us = <200>;
- };
- 
-+&pm8005_gpios {
-+	gpio-line-names = "EAR_EN", /* GPIO_1 */
-+			  "NC",
-+			  "SLB",
-+			  "OPTION_1_PM8005";
-+};
-+
- &pmi8998_gpios {
-+	gpio-line-names = "MAIN_CAM_PWR_IO_EN", /* GPIO_1 */
-+			  "NC",
-+			  "NC",
-+			  "TYPEC_UUSB_SEL",
-+			  "VIB_LDO_EN",
-+			  "NC",
-+			  "DISPLAY_TYPE_SEL",
-+			  "USB_SWITCH_SEL",
-+			  "NC",
-+			  "4K_DISP_DCDC_EN", /* GPIO_10 */
-+			  "NC",
-+			  "DIV_CLK3",
-+			  "SPMI_I2C_SEL",
-+			  "NC";
-+
- 	disp_dvdd_en: disp-dvdd-en-active-state {
- 		pins = "gpio10";
- 		function = "normal";
-@@ -49,6 +71,159 @@ disp_dvdd_en: disp-dvdd-en-active-state {
+@@ -22,7 +22,7 @@ disp_dvdd_vreg: disp-dvdd-vreg {
+ 		enable-active-high;
+ 		gpio = <&pmi8998_gpios 10 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&disp_dvdd_en>;
++		pinctrl-0 = <&four_k_disp_dcdc_en>;
  	};
  };
  
-+&tlmm {
-+	gpio-line-names = "", /* GPIO_0 */
-+			  "",
-+			  "",
-+			  "",
-+			  "DEBUG_UART_TX",
-+			  "DEBUG_UART_RX",
-+			  "CAMSENSOR_I2C_SDA",
-+			  "CAMSENSOR_I2C_SCL",
-+			  "NC",
-+			  "NC",
-+			  "MDP_VSYNC_P", /* GPIO_10 */
-+			  "RGBC_IR_INT",
-+			  "NFC_VEN",
-+			  "CAM_MCLK0",
-+			  "CAM_MCLK1",
-+			  "NC",
-+			  "NC",
-+			  "CCI_I2C_SDA0",
-+			  "CCI_I2C_SCL0",
-+			  "CCI_I2C_SDA1",
-+			  "CCI_I2C_SCL1", /* GPIO_20 */
-+			  "MAIN_CAM_PWR_EN",
-+			  "TOF_INT_N",
-+			  "NC",
-+			  "NC",
-+			  "CHAT_CAM_PWR_EN",
-+			  "NC",
-+			  "TOF_RESET_N",
-+			  "CAM2_RSTN",
-+			  "NC",
-+			  "CAM1_RSTN", /* GPIO_30 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "CC_DIR",
-+			  "UIM2_DETECT_EN",
-+			  "FP_RESET_N", /* GPIO_40 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "BT_HCI_UART_TXD",
-+			  "BT_HCI_UART_RXD",
-+			  "BT_HCI_UART_CTS_N",
-+			  "BT_HCI_UART_RFR_N",
-+			  "NC",
-+			  "NC", /* GPIO_50 */
-+			  "NC",
-+			  "NC",
-+			  "CODEC_INT2_N",
-+			  "CODEC_INT1_N",
-+			  "APPS_I2C_SDA",
-+			  "APPS_I2C_SCL",
-+			  "FORCED_USB_BOOT",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_60 */
-+			  "NC",
-+			  "NC",
-+			  "TRAY2_DET_DS",
-+			  "CODEC_RST_N",
-+			  "WSA_L_EN",
-+			  "WSA_R_EN",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "LPASS_SLIMBUS_CLK", /* GPIO_70 */
-+			  "LPASS_SLIMBUS_DATA0",
-+			  "LPASS_SLIMBUS_DATA1",
-+			  "BT_FM_SLIMBUS_DATA",
-+			  "BT_FM_SLIMBUS_CLK",
-+			  "NC",
-+			  "RF_LCD_ID_EN",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_80 */
-+			  "SW_SERVICE",
-+			  "TX_GTR_THRES_IN",
-+			  "HW_ID0",
-+			  "HW_ID1",
-+			  "NC",
-+			  "NC",
-+			  "TS_I2C_SDA",
-+			  "TS_I2C_SCL",
-+			  "TS_RESET_N",
-+			  "NC", /* GPIO_90 */
-+			  "NC",
-+			  "NFC_IRQ",
-+			  "NFC_DWLD_EN",
-+			  "DISP_RESET_N",
-+			  "TRAY2_DET",
-+			  "CAM_SOF",
-+			  "RFFE6_CLK",
-+			  "RFFE6_DATA",
-+			  "DEBUG_GPIO0",
-+			  "DEBUG_GPIO1", /* GPIO_100 */
-+			  "GRFC4",
-+			  "NC",
-+			  "NC",
-+			  "RSVD",
-+			  "UIM2_DATA",
-+			  "UIM2_CLK",
-+			  "UIM2_RESET",
-+			  "UIM2_PRESENT",
-+			  "UIM1_DATA",
-+			  "UIM1_CLK", /* GPIO_110 */
-+			  "UIM1_RST",
-+			  "UIM1_PRESENT",
-+			  "UIM_BATT_ALARM",
-+			  "RSVD",
-+			  "NC",
-+			  "NC",
-+			  "ACCEL_INT",
-+			  "GYRO_INT",
-+			  "COMPASS_INT",
-+			  "ALS_PROX_INT_N", /* GPIO_120 */
-+			  "FP_INT_N",
-+			  "NC",
-+			  "BAROMETER_INT",
-+			  "ACC_COVER_OPEN",
-+			  "TS_INT_N",
-+			  "NC",
-+			  "NC",
-+			  "USB_DETECT_EN",
-+			  "NC",
-+			  "QLINK_REQUEST", /* GPIO_130 */
-+			  "QLINK_ENABLE",
-+			  "NC",
-+			  "TS_VDDIO_EN",
-+			  "WMSS_RESET_N",
-+			  "PA_INDICATOR_OR",
-+			  "NC",
-+			  "RFFE3_DATA",
-+			  "RFFE3_CLK",
-+			  "RFFE4_DATA",
-+			  "RFFE4_CLK", /* GPIO_140 */
-+			  "RFFE5_DATA",
-+			  "RFFE5_CLK",
-+			  "GNSS_EN",
-+			  "MSS_LTE_COXM_TXD",
-+			  "MSS_LTE_COXM_RXD",
-+			  "RFFE2_DATA",
-+			  "RFFE2_CLK",
-+			  "RFFE1_DATA",
-+			  "RFFE1_CLK";
-+};
-+
- &vreg_l22a_2p85 {
- 	regulator-min-microvolt = <2704000>;
- 	regulator-max-microvolt = <2704000>;
+@@ -60,7 +60,7 @@ &pmi8998_gpios {
+ 			  "SPMI_I2C_SEL",
+ 			  "NC";
+ 
+-	disp_dvdd_en: disp-dvdd-en-active-state {
++	four_k_disp_dcdc_en: 4k-disp-dcdc-en-state {
+ 		pins = "gpio10";
+ 		function = "normal";
+ 		bias-disable;
 diff --git a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-index 820414758888..ede12a583236 100644
+index ede12a583236..5609c4a7d3c3 100644
 --- a/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
 +++ b/arch/arm64/boot/dts/qcom/msm8998-sony-xperia-yoshino.dtsi
-@@ -292,6 +292,13 @@ &lab {
- 	regulator-soft-start;
+@@ -21,7 +21,7 @@ / {
+ 	clocks {
+ 		div1_mclk: divclk1 {
+ 			compatible = "gpio-gate-clock";
+-			pinctrl-0 = <&audio_mclk_pin>;
++			pinctrl-0 = <&div_clk1>;
+ 			pinctrl-names = "default";
+ 			clocks = <&rpmcc RPM_SMD_DIV_CLK1>;
+ 			#clock-cells = <0>;
+@@ -46,7 +46,7 @@ cam0_vdig_vreg: cam0-vdig {
+ 		enable-active-high;
+ 		gpio = <&tlmm 21 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&cam0_vdig_default>;
++		pinctrl-0 = <&main_cam_pwr_en>;
+ 	};
+ 
+ 	cam1_vdig_vreg: cam1-vdig {
+@@ -56,7 +56,7 @@ cam1_vdig_vreg: cam1-vdig {
+ 		enable-active-high;
+ 		gpio = <&tlmm 25 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&cam1_vdig_default>;
++		pinctrl-0 = <&chat_cam_pwr_en>;
+ 		vin-supply = <&vreg_s3a_1p35>;
+ 	};
+ 
+@@ -67,7 +67,7 @@ cam_vio_vreg: cam-vio-vreg {
+ 		enable-active-high;
+ 		gpio = <&pmi8998_gpios 1 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&cam_vio_default>;
++		pinctrl-0 = <&main_cam_pwr_io_en>;
+ 		vin-supply = <&vreg_lvs1a_1p8>;
+ 	};
+ 
+@@ -92,15 +92,14 @@ extcon_usb: extcon-usb {
+ 		id-gpio = <&tlmm 38 GPIO_ACTIVE_HIGH>;
+ 		vbus-gpio = <&tlmm 128 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&usb_extcon_active &usb_vbus_active>;
++		pinctrl-0 = <&cc_dir_default &usb_detect_en>;
+ 	};
+ 
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		label = "Side buttons";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&vol_down_pin_a>, <&cam_focus_pin_a>,
+-			    <&cam_snapshot_pin_a>;
++		pinctrl-0 = <&vol_down_n &focus_n &snapshot_n>;
+ 		button-vol-down {
+ 			label = "Volume Down";
+ 			gpios = <&pm8998_gpios 5 GPIO_ACTIVE_LOW>;
+@@ -131,7 +130,7 @@ gpio-hall-sensor {
+ 		compatible = "gpio-keys";
+ 		label = "Hall sensors";
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&hall_sensor0_default>;
++		pinctrl-0 = <&acc_cover_open>;
+ 
+ 		event-hall-sensor0 {
+ 			label = "Cover Hall Sensor";
+@@ -189,7 +188,7 @@ vibrator {
+ 		compatible = "gpio-vibrator";
+ 		enable-gpios = <&pmi8998_gpios 5 GPIO_ACTIVE_HIGH>;
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&vib_default>;
++		pinctrl-0 = <&vib_ldo_en>;
+ 	};
  };
  
-+&pm8005_gpios {
-+	gpio-line-names = "NC", /* GPIO_1 */
-+			  "NC",
-+			  "SLB",
-+			  "OPTION_1_PM8005";
-+};
-+
- &pm8005_regulators {
- 	/* VDD_GFX supply */
- 	pm8005_s1: s1 {
-@@ -304,6 +311,33 @@ pm8005_s1: s1 {
+@@ -263,7 +262,7 @@ proximity@29 {
+ 		vdd-supply = <&cam_vio_vreg>;
+ 
+ 		pinctrl-names = "default";
+-		pinctrl-0 = <&tof_int &tof_reset>;
++		pinctrl-0 = <&tof_int_n &tof_reset>;
+ 	};
  };
  
- &pm8998_gpios {
-+	gpio-line-names = "UIM_BATT_ALARM", /* GPIO_1 */
-+			  "NC",
-+			  "WLAN_SW_CTRL (DISALLOWED)",
-+			  "SSC_PWR_EN",
-+			  "VOL_DOWN_N",
-+			  "VOL_UP_N",
-+			  "SNAPSHOT_N",
-+			  "FOCUS_N",
-+			  "FLASH_THERM",
-+			  "", /* GPIO_10 */
-+			  "",
-+			  "",
-+			  "DIV_CLK1",
-+			  "NC",
-+			  "NC (DISALLOWED)",
-+			  "DIV_CLK3",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC (DISALLOWED)", /* GPIO_20 */
-+			  "NFC_CLK_REQ",
-+			  "NC (DISALLOWED)",
-+			  "WCSS_PWR_REQ",
-+			  "OPTION_1 (DISALLOWED)",
-+			  "OPTION_2 (DISALLOWED)",
-+			  "PM_SLB (DISALLOWED)";
-+
- 	vol_down_pin_a: vol-down-active-state {
+@@ -338,7 +337,7 @@ &pm8998_gpios {
+ 			  "OPTION_2 (DISALLOWED)",
+ 			  "PM_SLB (DISALLOWED)";
+ 
+-	vol_down_pin_a: vol-down-active-state {
++	vol_down_n: vol-down-n-state {
  		pins = "gpio5";
  		function = PMIC_GPIO_FUNC_NORMAL;
-@@ -336,6 +370,21 @@ audio_mclk_pin: audio-mclk-pin-active-state {
- };
+ 		bias-pull-up;
+@@ -346,7 +345,7 @@ vol_down_pin_a: vol-down-active-state {
+ 		qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
+ 	};
  
- &pmi8998_gpios {
-+	gpio-line-names = "MAIN_CAM_PWR_IO_EN", /* GPIO_1 */
-+			  "NC",
-+			  "NC",
-+			  "TYPEC_UUSB_SEL",
-+			  "VIB_LDO_EN",
-+			  "NC",
-+			  "DISPLAY_TYPE_SEL",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_10 */
-+			  "NC",
-+			  "DIV_CLK3",
-+			  "SPMI_I2C_SEL",
-+			  "NC";
-+
- 	cam_vio_default: cam-vio-active-state {
+-	cam_focus_pin_a: cam-focus-btn-active-state {
++	focus_n: focus-n-state {
+ 		pins = "gpio7";
+ 		function = PMIC_GPIO_FUNC_NORMAL;
+ 		bias-pull-up;
+@@ -354,7 +353,7 @@ cam_focus_pin_a: cam-focus-btn-active-state {
+ 		qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
+ 	};
+ 
+-	cam_snapshot_pin_a: cam-snapshot-btn-active-state {
++	snapshot_n: snapshot-n-state {
+ 		pins = "gpio8";
+ 		function = PMIC_GPIO_FUNC_NORMAL;
+ 		bias-pull-up;
+@@ -362,7 +361,7 @@ cam_snapshot_pin_a: cam-snapshot-btn-active-state {
+ 		qcom,drive-strength = <PMIC_GPIO_STRENGTH_NO>;
+ 	};
+ 
+-	audio_mclk_pin: audio-mclk-pin-active-state {
++	div_clk1: div-clk1-state {
+ 		pins = "gpio13";
+ 		function = "func2";
+ 		power-source = <0>;
+@@ -385,7 +384,7 @@ &pmi8998_gpios {
+ 			  "SPMI_I2C_SEL",
+ 			  "NC";
+ 
+-	cam_vio_default: cam-vio-active-state {
++	main_cam_pwr_io_en: main-cam-pwr-io-en-state {
  		pins = "gpio1";
  		function = PMIC_GPIO_FUNC_NORMAL;
-@@ -590,6 +639,156 @@ &sdhc2 {
+ 		bias-disable;
+@@ -395,7 +394,7 @@ cam_vio_default: cam-vio-active-state {
+ 		power-source = <1>;
+ 	};
  
- &tlmm {
- 	gpio-reserved-ranges = <0 4>, <81 4>;
-+	gpio-line-names = "", /* GPIO_0 */
-+			  "",
-+			  "",
-+			  "",
-+			  "DEBUG_UART_TX",
-+			  "DEBUG_UART_RX",
-+			  "CAMSENSOR_I2C_SDA",
-+			  "CAMSENSOR_I2C_SCL",
-+			  "NC",
-+			  "NC",
-+			  "MDP_VSYNC_P", /* GPIO_10 */
-+			  "RGBC_IR_INT",
-+			  "NFC_VEN",
-+			  "CAM_MCLK0",
-+			  "CAM_MCLK1",
-+			  "NC",
-+			  "NC",
-+			  "CCI_I2C_SDA0",
-+			  "CCI_I2C_SCL0",
-+			  "CCI_I2C_SDA1",
-+			  "CCI_I2C_SCL1", /* GPIO_20 */
-+			  "MAIN_CAM_PWR_EN",
-+			  "TOF_INT_N",
-+			  "NC",
-+			  "NC",
-+			  "CHAT_CAM_PWR_EN",
-+			  "NC",
-+			  "TOF_RESET_N",
-+			  "CAM2_RSTN",
-+			  "NC",
-+			  "CAM1_RSTN", /* GPIO_30 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "CC_DIR",
-+			  "UIM2_DETECT_EN",
-+			  "FP_RESET_N", /* GPIO_40 */
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "BT_HCI_UART_TXD",
-+			  "BT_HCI_UART_RXD",
-+			  "BT_HCI_UART_CTS_N",
-+			  "BT_HCI_UART_RFR_N",
-+			  "NC",
-+			  "NC", /* GPIO_50 */
-+			  "NC",
-+			  "NC",
-+			  "CODEC_INT2_N",
-+			  "CODEC_INT1_N",
-+			  "APPS_I2C_SDA",
-+			  "APPS_I2C_SCL",
-+			  "FORCED_USB_BOOT",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_60 */
-+			  "NC",
-+			  "NC",
-+			  "TRAY2_DET_DS",
-+			  "CODEC_RST_N",
-+			  "WSA_L_EN",
-+			  "WSA_R_EN",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "LPASS_SLIMBUS_CLK", /* GPIO_70 */
-+			  "LPASS_SLIMBUS_DATA0",
-+			  "LPASS_SLIMBUS_DATA1",
-+			  "BT_FM_SLIMBUS_DATA",
-+			  "BT_FM_SLIMBUS_CLK",
-+			  "NC",
-+			  "RF_LCD_ID_EN",
-+			  "NC",
-+			  "NC",
-+			  "NC",
-+			  "NC", /* GPIO_80 */
-+			  "SW_SERVICE",
-+			  "TX_GTR_THRES_IN",
-+			  "HW_ID0",
-+			  "HW_ID1",
-+			  "NC",
-+			  "NC",
-+			  "TS_I2C_SDA",
-+			  "TS_I2C_SCL",
-+			  "TS_RESET_N",
-+			  "NC", /* GPIO_90 */
-+			  "NC",
-+			  "NFC_IRQ",
-+			  "NFC_DWLD_EN",
-+			  "DISP_RESET_N",
-+			  "TRAY2_DET",
-+			  "CAM_SOF",
-+			  "RFFE6_CLK",
-+			  "RFFE6_DATA",
-+			  "DEBUG_GPIO0",
-+			  "DEBUG_GPIO1", /* GPIO_100 */
-+			  "GRFC4",
-+			  "NC",
-+			  "NC",
-+			  "RSVD",
-+			  "UIM2_DATA",
-+			  "UIM2_CLK",
-+			  "UIM2_RESET",
-+			  "UIM2_PRESENT",
-+			  "UIM1_DATA",
-+			  "UIM1_CLK", /* GPIO_110 */
-+			  "UIM1_RST",
-+			  "UIM1_PRESENT",
-+			  "UIM_BATT_ALARM",
-+			  "RSVD",
-+			  "NC",
-+			  "NC",
-+			  "ACCEL_INT",
-+			  "GYRO_INT",
-+			  "COMPASS_INT",
-+			  "ALS_PROX_INT_N", /* GPIO_120 */
-+			  "FP_INT_N",
-+			  "NC",
-+			  "BAROMETER_INT",
-+			  "ACC_COVER_OPEN",
-+			  "TS_INT_N",
-+			  "NC",
-+			  "NC",
-+			  "USB_DETECT_EN",
-+			  "NC",
-+			  "QLINK_REQUEST", /* GPIO_130 */
-+			  "QLINK_ENABLE",
-+			  "NC",
-+			  "NC",
-+			  "WMSS_RESET_N",
-+			  "PA_INDICATOR_OR",
-+			  "NC",
-+			  "RFFE3_DATA",
-+			  "RFFE3_CLK",
-+			  "RFFE4_DATA",
-+			  "RFFE4_CLK", /* GPIO_140 */
-+			  "RFFE5_DATA",
-+			  "RFFE5_CLK",
-+			  "GNSS_EN",
-+			  "MSS_LTE_COXM_TXD",
-+			  "MSS_LTE_COXM_RXD",
-+			  "RFFE2_DATA",
-+			  "RFFE2_CLK",
-+			  "RFFE1_DATA",
-+			  "RFFE1_CLK";
+-	vib_default: vib-en-state {
++	vib_ldo_en: vib-ldo-en-state {
+ 		pins = "gpio5";
+ 		function = PMIC_GPIO_FUNC_NORMAL;
+ 		bias-disable;
+@@ -790,7 +789,7 @@ &tlmm {
+ 			  "RFFE1_DATA",
+ 			  "RFFE1_CLK";
  
- 	mdp_vsync_n: mdp-vsync-n-state {
+-	mdp_vsync_n: mdp-vsync-n-state {
++	mdp_vsync_p: mdp-vsync-p-state {
  		pins = "gpio10";
+ 		function = "mdp_vsync_a";
+ 		drive-strength = <2>;
+@@ -805,14 +804,14 @@ nfc_ven: nfc-ven-state {
+ 		output-low;
+ 	};
+ 
+-	msm_mclk0_default: msm-mclk0-active-state {
++	cam_mclk0_active: cam-mclk0-active-state {
+ 		pins = "gpio13";
+ 		function = "cam_mclk";
+ 		drive-strength = <2>;
+ 		bias-disable;
+ 	};
+ 
+-	msm_mclk1_default: msm-mclk1-active-state {
++	cam_mclk1_active: cam-mclk1-active-state {
+ 		pins = "gpio14";
+ 		function = "cam_mclk";
+ 		drive-strength = <2>;
+@@ -833,14 +832,14 @@ cci1_default: cci1-default-state {
+ 		drive-strength = <2>;
+ 	};
+ 
+-	cam0_vdig_default: cam0-vdig-default-state {
++	main_cam_pwr_en: main-cam-pwr-en-default-state {
+ 		pins = "gpio21";
+ 		function = "gpio";
+ 		bias-disable;
+ 		drive-strength = <2>;
+ 	};
+ 
+-	tof_int: tof-int-state {
++	tof_int_n: tof-int-n-state {
+ 		pins = "gpio22";
+ 		function = "gpio";
+ 		bias-pull-up;
+@@ -848,28 +847,28 @@ tof_int: tof-int-state {
+ 		input-enable;
+ 	};
+ 
+-	cam1_vdig_default: cam1-vdig-default-state {
++	chat_cam_pwr_en: chat-cam-pwr-en-default-state {
+ 		pins = "gpio25";
+ 		function = "gpio";
+ 		bias-disable;
+ 		drive-strength = <2>;
+ 	};
+ 
+-	usb_extcon_active: usb-extcon-active-state {
+-		pins = "gpio38";
++	tof_reset: tof-reset-state {
++		pins = "gpio27";
+ 		function = "gpio";
+ 		bias-disable;
+-		drive-strength = <16>;
++		drive-strength = <2>;
+ 	};
+ 
+-	tof_reset: tof-reset-state {
+-		pins = "gpio27";
++	cc_dir_default: cc-dir-active-state {
++		pins = "gpio38";
+ 		function = "gpio";
+ 		bias-disable;
+-		drive-strength = <2>;
++		drive-strength = <16>;
+ 	};
+ 
+-	hall_sensor0_default: acc-cover-open-state {
++	acc_cover_open: acc-cover-open-state {
+ 		pins = "gpio124";
+ 		function = "gpio";
+ 		bias-disable;
+@@ -884,7 +883,7 @@ ts_int_n: ts-int-n-state {
+ 		bias-pull-up;
+ 	};
+ 
+-	usb_vbus_active: usb-vbus-active-state {
++	usb_detect_en: usb-detect-en-active-state {
+ 		pins = "gpio128";
+ 		function = "gpio";
+ 		bias-disable;
 
 -- 
 2.39.2
