@@ -2,265 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 779296B9D5E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:47:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73A126B9D82
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:51:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230409AbjCNRrn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:47:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43488 "EHLO
+        id S230190AbjCNRvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:51:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230107AbjCNRrl (ORCPT
+        with ESMTP id S229626AbjCNRvd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:47:41 -0400
-Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9F0B04A7;
-        Tue, 14 Mar 2023 10:47:31 -0700 (PDT)
-Received: by mail-io1-xd33.google.com with SMTP id o12so762147iow.6;
-        Tue, 14 Mar 2023 10:47:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678816051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=nh0cTcQRpEReTRq9tA/U9ZmiFjEH4n3ecr8tBmF9AsM=;
-        b=IcYCzBQbdqXKiW5OqOFDOJruRlVNuB4PCB3Ti1qWnE48h7k2s0lgzqZ9jrrmnIYUjG
-         6IJhDDPILR+UtVfr2rcPS3UYXzpAq9WxfmOK4A1YnK2EsxX+QaJVu6InmoG4qu+yzF2Q
-         4mOV3x+r++lsCjE0O+ljGWiGDtawuStrJi3TdgYCk5xWexhqmJx/YxV38gm79JDVkCqz
-         sTosxwXxzB4fKIkFC/hc6vRB1zZ3/L2uyRovzy0ijNcTv8wMaxj+H4i4hyS7qcOcRLdi
-         0zTK8YNy3rfa3iB1NzHNiDDKUqiEMDPWMorZ90UKmsffXcNvtTymfj9E24WmrtHziWEg
-         ayNw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678816051;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nh0cTcQRpEReTRq9tA/U9ZmiFjEH4n3ecr8tBmF9AsM=;
-        b=M87uTbn2hL70lpQNmlEEphGwYsYRcI1MDb11cyi+NgoH/PR0YhMe2mO4UmaQ2GPcYD
-         6Yh3U45nj/G0rjicpdecVCWRT6+9r7qrmInk5Ih2fmbYQN1Gc2Y7PYs+lcFdjfL+tPjP
-         CROh/Bx9fNe2VfnQ/Eew2uyQz5tC5oHTVCsgMBP2QfbL5XYmulvHTtY9ClqEB+9VOtOV
-         fZBQhZ4fZdSarWRFPDt30PO0bgz6yAVjo24DMeiQ7ctcUfo3puxuKvYC9g2WhztgeluT
-         gF/a91scy+fG6EYtWRcckOlhsqTXxelU1t8noRn4W24oLFVb10hLCNKTgh5uWy8rXv/8
-         IFkg==
-X-Gm-Message-State: AO0yUKXgGxhSyU5wjaq0AUe03DFbCgLDwPVFbku4UKPfmqAYO/05hwna
-        Ww4/PAHEeQwyahwBFcLJqaI=
-X-Google-Smtp-Source: AK7set9OLArw5DXhOo715+j0pTmoUAa5Z9/C4+yCiRmcG3lh/wYWcDl4SrsiWLcHTYgimEryBffpDQ==
-X-Received: by 2002:a6b:7c09:0:b0:74e:3b0f:4498 with SMTP id m9-20020a6b7c09000000b0074e3b0f4498mr21390006iok.7.1678816050812;
-        Tue, 14 Mar 2023 10:47:30 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id x20-20020a5d9ad4000000b0074ce0b89a37sm984876ion.1.2023.03.14.10.47.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 10:47:30 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <87df4524-5a64-c285-238d-ac1ae0c31249@roeck-us.net>
-Date:   Tue, 14 Mar 2023 10:47:28 -0700
+        Tue, 14 Mar 2023 13:51:33 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532A3B421C;
+        Tue, 14 Mar 2023 10:50:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
+        t=1678816230; i=deller@gmx.de;
+        bh=hiRcwa3Bj6JP6LNEczfBcFHjplGK9+ZvNc9H7ZoMwPs=;
+        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=EAc0R3bNgjecoU592ZKL/GAsi5xFKouguRxsWXdi9FOTSlJvlOCPoA4Q23IdXE42A
+         xsiaiiL1wfbvpesw6kr8h/UnPPqh039w4tNxK3+8EV7pxYJr+uf6lzeXcWQD0mt0eP
+         j0jywFFss1HHvJQ/s6dzVYQIPpRrNtn3qPfwUuMo5iQ5MYDGF6rm/klDzI9flXwJGi
+         IYHtBxrdg7N7Ncew7vx4dmFNriSK+RkdKooVbYTYGJenNPIEIerryR/5xwi20HOQbz
+         mgzxSgOD3pVMK96unXtrUMm74jb0PNDDCP5j0wh7Je6ggA2UGNCft+t2ObL6E3mXIh
+         NJdLinM/NYmVg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [192.168.20.60] ([94.134.156.222]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MiaYJ-1q8i3d2t7P-00fm7k; Tue, 14
+ Mar 2023 18:50:30 +0100
+Message-ID: <8ace3dfb-a254-849f-614c-e3ab262a326a@gmx.de>
+Date:   Tue, 14 Mar 2023 18:50:29 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] watchdog: ebc-c384_wdt: Migrate to the regmap API
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] fbdev: omapfb: remove omap1 osk driver
 Content-Language: en-US
-To:     William Breathitt Gray <william.gray@linaro.org>,
-        Wim Van Sebroeck <wim@linux-watchdog.org>
-Cc:     linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Demetrotion <pdemetrotion@winsystems.com>,
-        techsupport@winsystems.com,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-References: <20230314152916.185939-1-william.gray@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <20230314152916.185939-1-william.gray@linaro.org>
+To:     Arnd Bergmann <arnd@kernel.org>
+Cc:     Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>,
+        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
+        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
+        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org
+References: <20230314162720.759220-1-arnd@kernel.org>
+From:   Helge Deller <deller@gmx.de>
+In-Reply-To: <20230314162720.759220-1-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:o5cuRxTMJaH64czFiaSigYfCyUGemdhcMG6VLO5HIGBBl4kjnH/
+ jO3Goz+1UkP4NilMknd10y/vj8jA7YC2U22HiffnPxeI9/Um6NRhuT6NV8c0CsXjHOdz/nG
+ Ar9dSmXfcaKfCAX5ktHGI6tf1d7gR8khgJKTr112LE5GTggAnzPjDOaD9j8RSLtksrX09vg
+ WeiJL0hLJdh9R0SBC29Lg==
+UI-OutboundReport: notjunk:1;M01:P0:3lGrawyPYt8=;U5APRKzheTzr2fYF/kshZ2MTMaP
+ vx0a9gSExdrK6Rd8uLOYibFPOTe41iHW9NyBw39JP2J/y88TZwIGe0IA7en6SLhhsAlqQeept
+ ZhKUS/vyZMzqCU7LsAR1kFynDVZyI2iXxX2CUYjGP3NKeli1cNmCZ7gY1ujEh2kYwkku80OtA
+ 3wOMC9ndpnzTM92ROQQbCsfV1Zv5NfbjShml4iiZGlqOeOs+1M3moXYZK8KaTvHrebJgSSIkA
+ j3ZGfVzjtl7XI8EU0tBf5GmiB25vhulTrf0eQZPVB0dj/9HUM1YX6+cCGmzMKbjEthLlNBfDD
+ +ApLnNiPl+VWuR46gq3IddRVCVpPHHFlJSsQc4duTUfUNesTfSMfZQJFZFmOrsxV5L8io9W8D
+ 0ZfZoLVqf4MTTpt+aeXaUUMW31kWtiXcZ+1ViY7U1hwbjinxGTU9YpcA7cnjBO4J1aQzF4ar7
+ n5FbUKSKfHhl0D3pt1tjSZOl8g4/IV5oi2Bx8ctL3R0TJ2JgyHN0hw7sUtD1cGKhOHQteZgO9
+ gnKgN93UHFqCHOz68afvW8vLXArrIv/6cYFjVrOPZq17qhMledwq/aF5AF3aeRzPAEdOTuldY
+ pTvSSuOwQclFE5aXolr0k5HrEMn3mS7VOYKep8JuZ+9yo9J6Ev703aeJIrXmQDDZEckmPAMzo
+ rZ2eoSpGW6gCBWLBOD7Xbffoa3A6WeBEhigeLukjf4/IJd8zRKdC2N4dLCUVQs9WWqj4wpLT6
+ q+MN+we+rbv8Sz3KExE4pwVYYZDsyW7FHiGcfX5j7kbszc+Mq29m0eDhA6m3xy8Ko07jgruTI
+ v7cN0KuSrNFyKIB8yfFvYiFnCS69rNCBKtLJu4wb+fL6b4+yf2ZAy7UW+q+WEzymCWhNkA10X
+ 5KC94F6HQA6vU6iv6XEyL6JAu7dw1U20LrPkTcQP6ItSbMAO8UrI96oZOe4nGTJ7gNCADwKyt
+ sf2Wfg==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 08:29, William Breathitt Gray wrote:
-> The regmap API supports IO port accessors so we can take advantage of
-> regmap abstractions rather than handling access to the device registers
-> directly in the driver.
-> 
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Signed-off-by: William Breathitt Gray <william.gray@linaro.org>
+On 3/14/23 17:27, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+>
+> Commit 21a3e6eed423 ("ARM: omap1: remove osk-mistral add-on board
+> support") removed the platform_device definition for the "lcd_osk"
+> device, so this driver is now unused and can be removed as well.
+>
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-The changes are too invasive to accept without testing.
-I hope we can get a Tested-by: tag from someone. Other than
-that, we are good to go from my perspective.
+applied.
 
-Thanks,
-Guenter
+Thanks!
+Helge
 
 > ---
-> Changes in v2:
->   - Utilize watchdog_set_drvdata() and watchdog_get_drvdata()
->   - Map watchdog control registers based on offset 0x1 and adjust regmap
->     configurations accordingly; offset 0x0 is unused in this driver so we
->     should avoid unnecessary exposure of it
-> 
->   drivers/watchdog/Kconfig        |  1 +
->   drivers/watchdog/ebc-c384_wdt.c | 67 +++++++++++++++++++++++----------
->   2 files changed, 49 insertions(+), 19 deletions(-)
-> 
-> diff --git a/drivers/watchdog/Kconfig b/drivers/watchdog/Kconfig
-> index f0872970daf9..301cfe79263c 100644
-> --- a/drivers/watchdog/Kconfig
-> +++ b/drivers/watchdog/Kconfig
-> @@ -1089,6 +1089,7 @@ config EBC_C384_WDT
->   	tristate "WinSystems EBC-C384 Watchdog Timer"
->   	depends on X86
->   	select ISA_BUS_API
-> +	select REGMAP_MMIO
->   	select WATCHDOG_CORE
->   	help
->   	  Enables watchdog timer support for the watchdog timer on the
-> diff --git a/drivers/watchdog/ebc-c384_wdt.c b/drivers/watchdog/ebc-c384_wdt.c
-> index 8ef4b0df3855..2f9fec5073b3 100644
-> --- a/drivers/watchdog/ebc-c384_wdt.c
-> +++ b/drivers/watchdog/ebc-c384_wdt.c
-> @@ -3,15 +3,15 @@
->    * Watchdog timer driver for the WinSystems EBC-C384
->    * Copyright (C) 2016 William Breathitt Gray
->    */
-> +#include <linux/bits.h>
->   #include <linux/device.h>
->   #include <linux/dmi.h>
-> -#include <linux/errno.h>
-> -#include <linux/io.h>
-> -#include <linux/ioport.h>
-> +#include <linux/err.h>
->   #include <linux/isa.h>
->   #include <linux/kernel.h>
->   #include <linux/module.h>
->   #include <linux/moduleparam.h>
-> +#include <linux/regmap.h>
->   #include <linux/types.h>
->   #include <linux/watchdog.h>
->   
-> @@ -24,8 +24,14 @@
->   #define WATCHDOG_MAX_TIMEOUT	15300
->   #define BASE_ADDR		0x564
->   #define ADDR_EXTENT		5
-> -#define CFG_ADDR		(BASE_ADDR + 1)
-> -#define PET_ADDR		(BASE_ADDR + 2)
-> +#define CTRL_BASE_ADDR		(BASE_ADDR + 0x1)
-> +#define CTRL_ADDR_EXTENT	2
-> +#define CTRL_MAX_REGISTER	(CTRL_ADDR_EXTENT - 1)
-> +#define CFG_REG			0x0
-> +#define PET_REG			0x1
-> +#define CFG_MINUTES		0x00
-> +#define CFG_SECONDS		BIT(7)
-> +#define PET_DISABLED		0x00
->   
->   static bool nowayout = WATCHDOG_NOWAYOUT;
->   module_param(nowayout, bool, 0);
-> @@ -37,43 +43,54 @@ module_param(timeout, uint, 0);
->   MODULE_PARM_DESC(timeout, "Watchdog timeout in seconds (default="
->   	__MODULE_STRING(WATCHDOG_TIMEOUT) ")");
->   
-> +static const struct regmap_range ebc_c384_wdt_wr_ranges[] = {
-> +	regmap_reg_range(0x0, 0x1),
-> +};
-> +static const struct regmap_access_table ebc_c384_wdt_wr_table = {
-> +	.yes_ranges = ebc_c384_wdt_wr_ranges,
-> +	.n_yes_ranges = ARRAY_SIZE(ebc_c384_wdt_wr_ranges),
-> +};
-> +static const struct regmap_config ebc_c384_wdt_regmap_config = {
-> +	.reg_bits = 8,
-> +	.reg_stride = 1,
-> +	.val_bits = 8,
-> +	.io_port = true,
-> +	.max_register = CTRL_MAX_REGISTER,
-> +	.wr_table = &ebc_c384_wdt_wr_table,
-> +};
-> +
->   static int ebc_c384_wdt_start(struct watchdog_device *wdev)
->   {
-> +	struct regmap *const map = watchdog_get_drvdata(wdev);
->   	unsigned t = wdev->timeout;
->   
->   	/* resolution is in minutes for timeouts greater than 255 seconds */
->   	if (t > 255)
->   		t = DIV_ROUND_UP(t, 60);
->   
-> -	outb(t, PET_ADDR);
+>   drivers/video/fbdev/omap/Makefile  |  1 -
+>   drivers/video/fbdev/omap/lcd_osk.c | 86 ------------------------------
+>   2 files changed, 87 deletions(-)
+>   delete mode 100644 drivers/video/fbdev/omap/lcd_osk.c
+>
+> diff --git a/drivers/video/fbdev/omap/Makefile b/drivers/video/fbdev/oma=
+p/Makefile
+> index 504edb9c09dd..6d5082c76919 100644
+> --- a/drivers/video/fbdev/omap/Makefile
+> +++ b/drivers/video/fbdev/omap/Makefile
+> @@ -18,7 +18,6 @@ objs-y$(CONFIG_FB_OMAP_LCDC_HWA742) +=3D hwa742.o
+>
+>   lcds-y$(CONFIG_MACH_AMS_DELTA) +=3D lcd_ams_delta.o
+>   lcds-y$(CONFIG_MACH_OMAP_PALMTE) +=3D lcd_palmte.o
+> -lcds-y$(CONFIG_MACH_OMAP_OSK) +=3D lcd_osk.o
+>
+>   lcds-y$(CONFIG_FB_OMAP_LCD_MIPID) +=3D lcd_mipid.o
+>
+> diff --git a/drivers/video/fbdev/omap/lcd_osk.c b/drivers/video/fbdev/om=
+ap/lcd_osk.c
+> deleted file mode 100644
+> index 8168ba0d47fd..000000000000
+> --- a/drivers/video/fbdev/omap/lcd_osk.c
+> +++ /dev/null
+> @@ -1,86 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-or-later
+> -/*
+> - * LCD panel support for the TI OMAP OSK board
+> - *
+> - * Copyright (C) 2004 Nokia Corporation
+> - * Author: Imre Deak <imre.deak@nokia.com>
+> - * Adapted for OSK by <dirk.behme@de.bosch.com>
+> - */
+> -
+> -#include <linux/module.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/gpio.h>
+> -
+> -#include <linux/soc/ti/omap1-io.h>
+> -#include <linux/soc/ti/omap1-mux.h>
+> -
+> -#include "omapfb.h"
+> -
+> -static int osk_panel_enable(struct lcd_panel *panel)
+> -{
+> -	/* configure PWL pin */
+> -	omap_cfg_reg(PWL);
+> -
+> -	/* Enable PWL unit */
+> -	omap_writeb(0x01, OMAP_PWL_CLK_ENABLE);
+> -
+> -	/* Set PWL level */
+> -	omap_writeb(0xFF, OMAP_PWL_ENABLE);
+> -
+> -	/* set GPIO2 high (lcd power enabled) */
+> -	gpio_set_value(2, 1);
 > -
 > -	return 0;
-> +	return regmap_write(map, PET_REG, t);
->   }
->   
->   static int ebc_c384_wdt_stop(struct watchdog_device *wdev)
->   {
-> -	outb(0x00, PET_ADDR);
-> +	struct regmap *const map = watchdog_get_drvdata(wdev);
->   
-> -	return 0;
-> +	return regmap_write(map, PET_REG, PET_DISABLED);
->   }
->   
->   static int ebc_c384_wdt_set_timeout(struct watchdog_device *wdev, unsigned t)
->   {
-> +	struct regmap *const map = watchdog_get_drvdata(wdev);
-> +
->   	/* resolution is in minutes for timeouts greater than 255 seconds */
->   	if (t > 255) {
->   		/* round second resolution up to minute granularity */
->   		wdev->timeout = roundup(t, 60);
+> -}
 > -
-> -		/* set watchdog timer for minutes */
-> -		outb(0x00, CFG_ADDR);
-> -	} else {
-> -		wdev->timeout = t;
+> -static void osk_panel_disable(struct lcd_panel *panel)
+> -{
+> -	/* Set PWL level to zero */
+> -	omap_writeb(0x00, OMAP_PWL_ENABLE);
 > -
-> -		/* set watchdog timer for seconds */
-> -		outb(0x80, CFG_ADDR);
-> +		return regmap_write(map, CFG_REG, CFG_MINUTES);
->   	}
->   
+> -	/* Disable PWL unit */
+> -	omap_writeb(0x00, OMAP_PWL_CLK_ENABLE);
+> -
+> -	/* set GPIO2 low */
+> -	gpio_set_value(2, 0);
+> -}
+> -
+> -static struct lcd_panel osk_panel =3D {
+> -	.name		=3D "osk",
+> -	.config		=3D OMAP_LCDC_PANEL_TFT,
+> -
+> -	.bpp		=3D 16,
+> -	.data_lines	=3D 16,
+> -	.x_res		=3D 240,
+> -	.y_res		=3D 320,
+> -	.pixel_clock	=3D 12500,
+> -	.hsw		=3D 40,
+> -	.hfp		=3D 40,
+> -	.hbp		=3D 72,
+> -	.vsw		=3D 1,
+> -	.vfp		=3D 1,
+> -	.vbp		=3D 0,
+> -	.pcd		=3D 12,
+> -
+> -	.enable		=3D osk_panel_enable,
+> -	.disable	=3D osk_panel_disable,
+> -};
+> -
+> -static int osk_panel_probe(struct platform_device *pdev)
+> -{
+> -	omapfb_register_panel(&osk_panel);
 > -	return 0;
-> +	wdev->timeout = t;
-> +	return regmap_write(map, CFG_REG, CFG_SECONDS);
->   }
->   
->   static const struct watchdog_ops ebc_c384_wdt_ops = {
-> @@ -89,6 +106,8 @@ static const struct watchdog_info ebc_c384_wdt_info = {
->   
->   static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
->   {
-> +	void __iomem *regs;
-> +	struct regmap *map;
->   	struct watchdog_device *wdd;
->   
->   	if (!devm_request_region(dev, BASE_ADDR, ADDR_EXTENT, dev_name(dev))) {
-> @@ -97,6 +116,15 @@ static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
->   		return -EBUSY;
->   	}
->   
-> +	regs = devm_ioport_map(dev, CTRL_BASE_ADDR, CTRL_ADDR_EXTENT);
-> +	if (!regs)
-> +		return -ENOMEM;
-> +
-> +	map = devm_regmap_init_mmio(dev, regs, &ebc_c384_wdt_regmap_config);
-> +	if (IS_ERR(map))
-> +		return dev_err_probe(dev, PTR_ERR(map),
-> +				     "Unable to initialize register map\n");
-> +
->   	wdd = devm_kzalloc(dev, sizeof(*wdd), GFP_KERNEL);
->   	if (!wdd)
->   		return -ENOMEM;
-> @@ -107,6 +135,7 @@ static int ebc_c384_wdt_probe(struct device *dev, unsigned int id)
->   	wdd->min_timeout = 1;
->   	wdd->max_timeout = WATCHDOG_MAX_TIMEOUT;
->   
-> +	watchdog_set_drvdata(wdd, map);
->   	watchdog_set_nowayout(wdd, nowayout);
->   	watchdog_init_timeout(wdd, timeout, dev);
->   
-> 
-> base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+> -}
+> -
+> -static struct platform_driver osk_panel_driver =3D {
+> -	.probe		=3D osk_panel_probe,
+> -	.driver		=3D {
+> -		.name	=3D "lcd_osk",
+> -	},
+> -};
+> -
+> -module_platform_driver(osk_panel_driver);
+> -
+> -MODULE_AUTHOR("Imre Deak");
+> -MODULE_DESCRIPTION("LCD panel support for the TI OMAP OSK board");
+> -MODULE_LICENSE("GPL");
 
