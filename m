@@ -2,81 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB6A16BA047
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:01:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E891A6BA037
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:59:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjCNUBt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:01:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S230384AbjCNT7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:59:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCNUBh (ORCPT
+        with ESMTP id S230233AbjCNT6t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:01:37 -0400
-Received: from mail-il1-x12d.google.com (mail-il1-x12d.google.com [IPv6:2607:f8b0:4864:20::12d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C68881B2E5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:01:27 -0700 (PDT)
-Received: by mail-il1-x12d.google.com with SMTP id a13so2850017ilr.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:01:27 -0700 (PDT)
+        Tue, 14 Mar 2023 15:58:49 -0400
+Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3786019130;
+        Tue, 14 Mar 2023 12:58:44 -0700 (PDT)
+Received: by mail-lf1-x133.google.com with SMTP id r27so21502206lfe.10;
+        Tue, 14 Mar 2023 12:58:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678824087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=daEuCuG7DXOdjWhiCTyJik6XgyB8D3WRZ/VzAWKx3KA=;
-        b=eSQRb8tXj9GGNO4A71DATPGrLAjfPar+fRCBJgreepWxbtWxZSZhNptR80zD3O+KEM
-         TEThEkfKvl1Y8Dp+lGsY2RCsUwm1bz8738EFr0eSLg/c4X7tzawk/OQRpQZYRTYBkv96
-         O2dI7jgYH+vYDEx9OBpvW9UUaessOMV5uQ9hFTTbhlzGeKQmkvQCp2kNlmp5Q5rzg5CF
-         H3Nlj+aRn/5m2l7+W/I0xgmI1SfqjuBTkbeP3SJUQbOIt6ZZRPlP6IORcE3mShl6m5TT
-         YMbgh8fEnycZvROkqzeKDxsTKKhfDJEIwzuNlm672k5E8pYSL2CDR6LAtasbfoqln6d8
-         +VVQ==
+        d=gmail.com; s=20210112; t=1678823922;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=LGgRX/2BUBwYcike5aUEW/Egn+pesM4WHWNRXI6B9BE=;
+        b=hhqAUsRVFCC/gjfPDgDJEsRdPp9QDcC0oERAHoeZpMbQ/josNSNCDGD/mWgNzVv1gd
+         JXnj8dSgFA7aa1lHk1DK6Cw/Fmt/74ZnKRm15TOAczptqJbzszSy4lUxlvydYD7+8FBl
+         zS88BMACUmO6hcxY2l0dmxJOItcYExC+xLm1+9deLnMMf+f+VSN6Jd5WzcSOFzFbrh6Q
+         lS9kCxoFffCaoiBTqqGAfdvxrCvAFnDtufJAbm0v1YIxdznHo8ClwbUYIhY573uJVpQr
+         HNfgpmU9Cd5DXSE6ww/Zlf5cUyPsNjzQOk2sdTMrujLnc8FF+HLzOhAEzKU+C/hohVQW
+         7Nuw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824087;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=daEuCuG7DXOdjWhiCTyJik6XgyB8D3WRZ/VzAWKx3KA=;
-        b=cJ7k6ZFoL5rzYS+FOW8uN6tOkWVTEq879qEfCZWW1djBtlZagxNDaEbcOpmeyyPjfr
-         uWTF+JvwHOiSppQPbfd/ma0v7l+fPSzYoBNxpGJMdJzgQ5h8HRt50UIlG0QG71SAHSeU
-         60+xBYGqbrz/1Em7aeEM5+mJayzCvVU2D2Edz4hs+0L9qYVLMKDJllhA53xgL8hoRXXM
-         XNNE8f9IB1enR8Lu8TqTobVmWO1NAi/hnRGHExyT3wC6eMOAaO7GXpeBMYh1CxB43R1+
-         ITNQQjXrUOTrieOSSEvG31S2pnQwyKe8t+WLOxzmkqKNwhbs+qVcOipvVt+I/IZtG6Bk
-         vi7w==
-X-Gm-Message-State: AO0yUKX1BD3cWUT6NMqud2csmfmLofFozKcO1dBsSomAgMZudwNN4BO0
-        +Jt8G8PBuCLlq4n1J7+Sk+/ZbuP1guFP/TNqXL0vwg==
-X-Google-Smtp-Source: AK7set96x6suxfGHScWxcXUHwap0eV9HJEwIfYQuknkf9aG7fLFjai5z7b95ejSc9XOLkUfd8utZv/hV6VfBvk3Z8DA=
-X-Received: by 2002:a05:6e02:66e:b0:313:93c8:e714 with SMTP id
- l14-20020a056e02066e00b0031393c8e714mr297734ilt.8.1678824086871; Tue, 14 Mar
- 2023 13:01:26 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678823922;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=LGgRX/2BUBwYcike5aUEW/Egn+pesM4WHWNRXI6B9BE=;
+        b=oTfpfb5dcIqc9Xu05r5oBv+0SyM+6DIWxytfodfgQbfvLffFne9aFh7xS/kqS8cfHb
+         LqMfFbCtk8bz54UzYORq5MkZgTVLVC4O0E99JGUxNsanKWy3joLH06A2wXdZvnqNc+zh
+         mdnVASkwbTQJ0UggCdpeVyt01X4JL0ACyZ+tlfcgD5c4QnrQ7haygDZFAGj5BD+X/PQr
+         O/Yjcz2p3qD19tv+c7eemyL3THAFCMmmcltU5mWeLkWQiyPBhrNqhHIgrsfKsJk8ULC2
+         EN5bNjoET6Ji3ttifeSghURSw9pwt3krXmDjwiOksfu+qOum2V3Ga/5kJDe/GGPBJxOq
+         NQkQ==
+X-Gm-Message-State: AO0yUKWeweS2cMTV9Sz44n+5QySv0LGcuIXvxS0QsT+UK0GGv+tIO8Jl
+        LJb0lTWTJhAyAEvITQbCpeG2y5ajF6/VBQ==
+X-Google-Smtp-Source: AK7set9MtwzGDW7oRn6jmNEkZEBR3MNrePLLU6xlo+h9RQ8v5YQSav4Z1FaWwspBMvAwTKW0HjumCw==
+X-Received: by 2002:ac2:48b3:0:b0:4dd:a74d:ac46 with SMTP id u19-20020ac248b3000000b004dda74dac46mr1102055lfg.0.1678823922329;
+        Tue, 14 Mar 2023 12:58:42 -0700 (PDT)
+Received: from [10.0.0.100] (host-213-145-197-218.kaisa-laajakaista.fi. [213.145.197.218])
+        by smtp.gmail.com with ESMTPSA id w12-20020a056512098c00b004e8468b92c2sm519072lft.146.2023.03.14.12.58.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 12:58:41 -0700 (PDT)
+Message-ID: <c0a50add-5c76-8e16-f65b-803d4389b36f@gmail.com>
+Date:   Tue, 14 Mar 2023 22:01:40 +0200
 MIME-Version: 1.0
-References: <CA+G9fYtBnwxAWXi2+GyNByApxnf_DtP1-6+_zOKAdJKnJBexjg@mail.gmail.com>
- <CAEf4Bzb9_5KvWKxEAgz0V_OS0+h6PQN_Pir_rfrcviu2O80cqQ@mail.gmail.com>
-In-Reply-To: <CAEf4Bzb9_5KvWKxEAgz0V_OS0+h6PQN_Pir_rfrcviu2O80cqQ@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Tue, 14 Mar 2023 13:01:16 -0700
-Message-ID: <CAP-5=fXURWoZu2j6Y8xQy23i7=DfgThq3WC1RkGFBx-4moQKYQ@mail.gmail.com>
-Subject: Re: next: zip.c:35:8: error: packed attribute causes inefficient
- alignment for 'magic' [-Werror=attributes]
-To:     Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Cc:     Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>,
-        open list <linux-kernel@vger.kernel.org>,
-        bpf <bpf@vger.kernel.org>, lkft-triage@lists.linaro.org,
-        Linux-Next Mailing List <linux-next@vger.kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] dmaengine: ti: add null check of devm_kasprintf in
+ edma_probe and udma_probe
+Content-Language: en-US
+To:     Kang Chen <void0red@gmail.com>
+Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230226094038.3227062-1-void0red@gmail.com>
+From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
+In-Reply-To: <20230226094038.3227062-1-void0red@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,172 +76,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:52=E2=80=AFAM Andrii Nakryiko
-<andrii.nakryiko@gmail.com> wrote:
->
-> On Mon, Mar 13, 2023 at 11:38=E2=80=AFPM Naresh Kamboju
-> <naresh.kamboju@linaro.org> wrote:
-> >
-> > perf builds failing from Linux next-20230307..next-20230314 but pass on
-> > Linux mainline v6.3-rc2.
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> Thanks for the report, but I'm not sure what's wrong here. We added
-> __attribute__((packed)) attribute intentionally and want to keep it
-> this way. It seems like perf itself is using packed structs (e.g.,
-> struct debug_line_header in util/genelf_debug.c), so I'm wondering why
-> that code doesn't cause any problems.
->
-> Any hints from perf folks?
+Hi,
 
-We use a #pragma to disable the warnings in at least one place:
-https://git.kernel.org/pub/scm/linux/kernel/git/acme/linux.git/tree/tools/l=
-ib/perf/include/perf/event.h?h=3Dperf-tools#n194
+On 26/02/2023 11:40, Kang Chen wrote:
+> devm_kasprintf may fails, irq_name and uc->name might be null and wrong irq
+> name will be used in request.
 
-Thanks,
-Ian
+In general, I would have preferred to have separate patches for the two 
+drivers to make them easier to backport if one decides.
 
-> >
-> > Build log:
-> > ---
-> > libbpf/staticobjs/zip.o
-> > zip.c:35:8: error: packed attribute causes inefficient alignment for
-> > 'magic' [-Werror=3Dattributes]
-> >    35 |  __u32 magic;
-> >       |        ^~~~~
-> > zip.c:40:8: error: packed attribute causes inefficient alignment for
-> > 'this_disk' [-Werror=3Dattributes]
-> >    40 |  __u16 this_disk;
-> >       |        ^~~~~~~~~
-> > zip.c:45:8: error: packed attribute causes inefficient alignment for
-> > 'cd_disk' [-Werror=3Dattributes]
-> >    45 |  __u16 cd_disk;
-> >       |        ^~~~~~~
-> > zip.c:50:8: error: packed attribute causes inefficient alignment for
-> > 'cd_records' [-Werror=3Dattributes]
-> >    50 |  __u16 cd_records;
-> >       |        ^~~~~~~~~~
-> > zip.c:55:8: error: packed attribute causes inefficient alignment for
-> > 'cd_records_total' [-Werror=3Dattributes]
-> >    55 |  __u16 cd_records_total;
-> >       |        ^~~~~~~~~~~~~~~~
-> > zip.c:58:8: error: packed attribute causes inefficient alignment for
-> > 'cd_size' [-Werror=3Dattributes]
-> >    58 |  __u32 cd_size;
-> >       |        ^~~~~~~
-> > zip.c:63:8: error: packed attribute causes inefficient alignment for
-> > 'cd_offset' [-Werror=3Dattributes]
-> >    63 |  __u32 cd_offset;
-> >       |        ^~~~~~~~~
-> > zip.c:66:8: error: packed attribute causes inefficient alignment for
-> > 'comment_length' [-Werror=3Dattributes]
-> >    66 |  __u16 comment_length;
-> >       |        ^~~~~~~~~~~~~~
-> > zip.c:79:8: error: packed attribute causes inefficient alignment for
-> > 'magic' [-Werror=3Dattributes]
-> >    79 |  __u32 magic;
-> >       |        ^~~~~
-> > zip.c:80:8: error: packed attribute causes inefficient alignment for
-> > 'version' [-Werror=3Dattributes]
-> >    80 |  __u16 version;
-> >       |        ^~~~~~~
-> > zip.c:82:8: error: packed attribute causes inefficient alignment for
-> > 'min_version' [-Werror=3Dattributes]
-> >    82 |  __u16 min_version;
-> >       |        ^~~~~~~~~~~
-> > zip.c:83:8: error: packed attribute causes inefficient alignment for
-> > 'flags' [-Werror=3Dattributes]
-> >    83 |  __u16 flags;
-> >       |        ^~~~~
-> > zip.c:84:8: error: packed attribute causes inefficient alignment for
-> > 'compression' [-Werror=3Dattributes]
-> >    84 |  __u16 compression;
-> >       |        ^~~~~~~~~~~
-> > zip.c:85:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_time' [-Werror=3Dattributes]
-> >    85 |  __u16 last_modified_time;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:86:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_date' [-Werror=3Dattributes]
-> >    86 |  __u16 last_modified_date;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:87:8: error: packed attribute causes inefficient alignment for
-> > 'crc' [-Werror=3Dattributes]
-> >    87 |  __u32 crc;
-> >       |        ^~~
-> > zip.c:88:8: error: packed attribute causes inefficient alignment for
-> > 'compressed_size' [-Werror=3Dattributes]
-> >    88 |  __u32 compressed_size;
-> >       |        ^~~~~~~~~~~~~~~
-> > zip.c:89:8: error: packed attribute causes inefficient alignment for
-> > 'uncompressed_size' [-Werror=3Dattributes]
-> >    89 |  __u32 uncompressed_size;
-> >       |        ^~~~~~~~~~~~~~~~~
-> > zip.c:90:8: error: packed attribute causes inefficient alignment for
-> > 'file_name_length' [-Werror=3Dattributes]
-> >    90 |  __u16 file_name_length;
-> >       |        ^~~~~~~~~~~~~~~~
-> > zip.c:91:8: error: packed attribute causes inefficient alignment for
-> > 'extra_field_length' [-Werror=3Dattributes]
-> >    91 |  __u16 extra_field_length;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:92:8: error: packed attribute causes inefficient alignment for
-> > 'file_comment_length' [-Werror=3Dattributes]
-> >    92 |  __u16 file_comment_length;
-> >       |        ^~~~~~~~~~~~~~~~~~~
-> > zip.c:94:8: error: packed attribute causes inefficient alignment for
-> > 'disk' [-Werror=3Dattributes]
-> >    94 |  __u16 disk;
-> >       |        ^~~~
-> > zip.c:95:8: error: packed attribute causes inefficient alignment for
-> > 'internal_attributes' [-Werror=3Dattributes]
-> >    95 |  __u16 internal_attributes;
-> >       |        ^~~~~~~~~~~~~~~~~~~
-> > zip.c:108:8: error: packed attribute causes inefficient alignment for
-> > 'magic' [-Werror=3Dattributes]
-> >   108 |  __u32 magic;
-> >       |        ^~~~~
-> > zip.c:110:8: error: packed attribute causes inefficient alignment for
-> > 'min_version' [-Werror=3Dattributes]
-> >   110 |  __u16 min_version;
-> >       |        ^~~~~~~~~~~
-> > zip.c:111:8: error: packed attribute causes inefficient alignment for
-> > 'flags' [-Werror=3Dattributes]
-> >   111 |  __u16 flags;
-> >       |        ^~~~~
-> > zip.c:112:8: error: packed attribute causes inefficient alignment for
-> > 'compression' [-Werror=3Dattributes]
-> >   112 |  __u16 compression;
-> >       |        ^~~~~~~~~~~
-> > zip.c:113:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_time' [-Werror=3Dattributes]
-> >   113 |  __u16 last_modified_time;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:114:8: error: packed attribute causes inefficient alignment for
-> > 'last_modified_date' [-Werror=3Dattributes]
-> >   114 |  __u16 last_modified_date;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > zip.c:118:8: error: packed attribute causes inefficient alignment for
-> > 'file_name_length' [-Werror=3Dattributes]
-> >   118 |  __u16 file_name_length;
-> >       |        ^~~~~~~~~~~~~~~~
-> > zip.c:119:8: error: packed attribute causes inefficient alignment for
-> > 'extra_field_length' [-Werror=3Dattributes]
-> >   119 |  __u16 extra_field_length;
-> >       |        ^~~~~~~~~~~~~~~~~~
-> > cc1: all warnings being treated as errors
-> >
-> > Build links,
-> > https://storage.tuxsuite.com/public/linaro/lkft/builds/2MfXEyvgh4ba9y3r=
-kt6KPf6sUMR/
-> >
-> >
-> > History link,
-> > https://qa-reports.linaro.org/lkft/linux-next-master/build/next-2023031=
-4/testrun/15564056/suite/build/test/gcc-10-lkftconfig-perf/history/
-> >
-> >
-> > --
-> > Linaro LKFT
-> > https://lkft.linaro.org
+If you decide to resend, you can add my to them:
+
+Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
+
+> 
+> Signed-off-by: Kang Chen <void0red@gmail.com>
+> ---
+>   drivers/dma/ti/edma.c    | 8 ++++++++
+>   drivers/dma/ti/k3-udma.c | 2 ++
+>   2 files changed, 10 insertions(+)
+> 
+> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
+> index fa06d7e6d..85cd72b64 100644
+> --- a/drivers/dma/ti/edma.c
+> +++ b/drivers/dma/ti/edma.c
+> @@ -2413,6 +2413,10 @@ static int edma_probe(struct platform_device *pdev)
+>   	if (irq >= 0) {
+>   		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_ccint",
+>   					  dev_name(dev));
+> +		if (!irq_name) {
+> +			ret = -ENOMEM;
+> +			goto err_disable_pm;
+> +		}
+>   		ret = devm_request_irq(dev, irq, dma_irq_handler, 0, irq_name,
+>   				       ecc);
+>   		if (ret) {
+> @@ -2429,6 +2433,10 @@ static int edma_probe(struct platform_device *pdev)
+>   	if (irq >= 0) {
+>   		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_ccerrint",
+>   					  dev_name(dev));
+> +		if (!irq_name) {
+> +			ret = -ENOMEM;
+> +			goto err_disable_pm;
+> +		}
+>   		ret = devm_request_irq(dev, irq, dma_ccerr_handler, 0, irq_name,
+>   				       ecc);
+>   		if (ret) {
+> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
+> index 7e23a6fde..692d1d25c 100644
+> --- a/drivers/dma/ti/k3-udma.c
+> +++ b/drivers/dma/ti/k3-udma.c
+> @@ -5494,6 +5494,8 @@ static int udma_probe(struct platform_device *pdev)
+>   		uc->config.dir = DMA_MEM_TO_MEM;
+>   		uc->name = devm_kasprintf(dev, GFP_KERNEL, "%s chan%d",
+>   					  dev_name(dev), i);
+> +		if (!uc->name)
+> +			return -ENOMEM;
+>   
+>   		vchan_init(&uc->vc, &ud->ddev);
+>   		/* Use custom vchan completion handling */
+
+-- 
+Péter
