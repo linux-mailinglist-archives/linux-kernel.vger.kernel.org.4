@@ -2,202 +2,209 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A4C06B8F4C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:10:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56E7A6B8F5B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:11:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230018AbjCNKJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:09:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55856 "EHLO
+        id S230201AbjCNKKr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:10:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229793AbjCNKJy (ORCPT
+        with ESMTP id S230012AbjCNKKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:09:54 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5E7F20072
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:09:45 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id j11so19229036lfg.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:09:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678788584;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qfP7OisdfBLXKLqUWZNkPQ3fDRBGJKSNwG4JFeeABvc=;
-        b=k5MXVulEA3k+OwHJPPjL9ag/mbJTQznJMLJ4PsbuL2HZ+ty9iU+CgQ/7GH2jKnobkY
-         6mPhvO+ZrrSnogUxkZrSlvos85iXIdoMybhMEpICMLHz62Epqc8bW35zFCKaoQp/F4VE
-         rBGqrdmq/g6ABvhb7ZqGkefzX96O83ON8rUDmYX9QPt+6MIVwWAUPSN3YaKDzzKiargK
-         b+cIjk20Q4xwTy5go6vu3EtKMqtR7aleqxukm5luYrZvRJp53joAZJB+R6AaR1PldyYb
-         7rXDaXtIwl88l3whCVI8kzY/b4T6JnvuS/RPFLtl3biqH4+ynSbkOajE+uBf8Qkv3yrt
-         fkEA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678788584;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qfP7OisdfBLXKLqUWZNkPQ3fDRBGJKSNwG4JFeeABvc=;
-        b=i+N1rP2M7MKi+0eXbO5jZwdMxz6mtyuwP1drt9BUD8Otst014e1X9EQjs/tID0AEv0
-         ABhhnlnBRuQHvl55ym1nsOOij5vtusfa65+xgZMSGxZbJ9ZuFkKBd1he/Urw0bUwYGjb
-         wefrJ0QD6cqcETEHLSht+OnDbiRJvSRiJV5p49ifEpgvya1SoVwOz4r8gbGAS6+KRqSS
-         Dgwz/fF/AiCL08S1dR+eD70t60YMI+X/St9q1qHoNpk7vaHklwY3SRUU4L0wTH9YHd07
-         MUqiwvDMj3rUwV9g8FgN8ZFV9ncE6YZ0ZfhI8LE3rFc0/lssusGyVLBTFyVgDkP9gBHr
-         Mpug==
-X-Gm-Message-State: AO0yUKVG22OUGemxBS6FVsv0Y/VtOeKtpDxilJYD8k6K+07ZnaRGOs8f
-        4HV9AlHu2Aa3EtGr+oDGDrtIjw==
-X-Google-Smtp-Source: AK7set+okIbof1RS3blXA94VZLZjC6cATnGSNNfyOzb9Em4KQWzJofbA8LFNppL6tyvYEUfDUaRiFw==
-X-Received: by 2002:ac2:51dc:0:b0:4dd:ad88:ba65 with SMTP id u28-20020ac251dc000000b004ddad88ba65mr554446lfm.67.1678788583902;
-        Tue, 14 Mar 2023 03:09:43 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id f11-20020ac2508b000000b004db511ccae6sm335695lfm.294.2023.03.14.03.09.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 03:09:43 -0700 (PDT)
-Message-ID: <426ca0fd-5119-7e3c-89ce-27590b11f63f@linaro.org>
-Date:   Tue, 14 Mar 2023 11:09:41 +0100
+        Tue, 14 Mar 2023 06:10:37 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6616199D53;
+        Tue, 14 Mar 2023 03:10:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:
+        Content-Transfer-Encoding:Content-Type:MIME-Version:References:Message-ID:
+        Subject:Cc:To:From:Date:Reply-To:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=VQ33iZJmnaGPLs1JKyJHobUOGjRoWRzrCfXEf5N8Wt0=; b=PZcFPjanUJDU928agC8qijdUmR
+        qSng2Mtwp9Oy2jB626Q4/beZ4eFmgF5zs5aL3oTiNCMKpDGEM0VaPJKoHLU19mZ1gPxfKlOClVdSf
+        V1iFa7hnRvYCpguQ/tLf6OiIZLLk1sFLkYhr1Unt/5hyj9LIlWoyQycFXjaKNyAnbPJcKngv9QV+r
+        yt/uCe6Xan1qhoKXBhiyUZi2MHWuJb+aVjXf9MJTKYVM/Mo9WhK71Wk0fLdxk6stGVhGB02O/1fYo
+        /HIODuxEfnROsx2wOT4/iSm5F7Z9z8+k6wbVHhOR1J21J1ZCVdzmUVgwA2dxpMrGk2gR6cj7JoEpD
+        E+ptmNAw==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:38744)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1pc1bq-0004o6-Nh; Tue, 14 Mar 2023 10:10:22 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1pc1bq-0000GN-3D; Tue, 14 Mar 2023 10:10:22 +0000
+Date:   Tue, 14 Mar 2023 10:10:22 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Frank Wunderlich <frank-w@public-files.de>
+Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v12 08/18] net: ethernet: mtk_eth_soc: fix
+ 1000Base-X and 2500Base-X modes
+Message-ID: <ZBBIDqZaqdSfwu9g@shell.armlinux.org.uk>
+References: <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+ <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
+ <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
+ <trinity-93681801-f99c-40e2-9fbd-45888b3069aa-1678732740564@3c-app-gmx-bs66>
+ <ZA+qTyQ3n6YiURkQ@shell.armlinux.org.uk>
+ <trinity-e2c457f1-c897-45f1-907a-8ea3664b7512-1678783872771@3c-app-gmx-bap66>
+ <ZBA6gszARdJY26Mz@shell.armlinux.org.uk>
+ <trinity-bc4bbf4e-812a-4682-ac8c-5178320467f5-1678788102813@3c-app-gmx-bap66>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] arm64: dts: qcom: sm6115: Move SDHC node(s)'s
- 'pinctrl' properties to dts
-Content-Language: en-US
-To:     Bhupesh Sharma <bhupesh.sharma@linaro.org>,
-        linux-arm-msm@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org,
-        linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
-        robh+dt@kernel.org, devicetree@vger.kernel.org,
-        Marijn Suijten <marijn.suijten@somainline.org>
-References: <20230314074001.1873781-1-bhupesh.sharma@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230314074001.1873781-1-bhupesh.sharma@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <trinity-bc4bbf4e-812a-4682-ac8c-5178320467f5-1678788102813@3c-app-gmx-bap66>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 14.03.2023 08:40, Bhupesh Sharma wrote:
-> Normally the 'pinctrl' properties of a SDHC controller and the
-> chip detect pin settings are dependent on the type of the slots
-> (for e.g uSD card slot), regulators and GPIO(s) available on the
-> board(s).
+On Tue, Mar 14, 2023 at 11:01:42AM +0100, Frank Wunderlich wrote:
+> Hi
 > 
-> So, move the same from the sm6115 dtsi file to the respective
-> board file(s).
-So, file or files? :D
-
+> > Gesendet: Dienstag, 14. März 2023 um 10:12 Uhr
+> > Von: "Russell King (Oracle)" <linux@armlinux.org.uk>
+> > On Tue, Mar 14, 2023 at 09:51:12AM +0100, Frank Wunderlich wrote:
+> > > Hi,
+> > > 
+> > > at least the error-message is gone, and interface gets up when i call ethtoo to switch off autoneg.
+> ...
+> > > [   34.400860] mtk_soc_eth 15100000.ethernet eth1: phylink_mac_config: mode=inband/2500base-x/Unknown/Unknown/none adv=00,00000000,00000000,0000e400 pause=04 link=0 an=1
+> > 
+> > Looking good - apart from that pesky an=1 (which isn't used by the PCS
+> > driver, and I've been thinking of killing it off anyway.) Until such
+> > time that happens, we really ought to set that correctly, which means
+> > an extra bit is needed in phylink_sfp_set_config(). However, this
+> > should not affect anything.
+> > 
+> > > root@bpi-r3:~# 
+> > > root@bpi-r3:~# ethtool -s eth1 autoneg off
+> > > root@bpi-r3:~# [  131.031902] mtk_soc_eth 15100000.ethernet eth1: Link is Up - 2.5Gbps/Full - flow control off
+> > > [  131.040366] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes ready
+> > > 
+> > > full log here:
+> > > https://pastebin.com/yDC7PuM2
+> > > 
+> > > i see that an is still 1..maybe because of the fixed value here?
+> > > 
+> > > https://elixir.bootlin.com/linux/v6.3-rc1/source/drivers/net/phy/phylink.c#L3038
+> > 
+> > Not sure what that line has to do with it - this is what the above
+> > points to:
+> > 
+> >         phylink_sfp_set_config(pl, MLO_AN_INBAND, pl->sfp_support, &config);
 > 
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
-> ---
-> Changes since v1:
-> - v1 can be seen here: https://lore.kernel.org/linux-arm-msm/20221220113616.1556097-1-bhupesh.sharma@linaro.org/
-> - Colleted the R-B from Marijn.
-> - Rebased on linux-next/master
+> MLO_AN_INBAND => may cause the an=1 and mode=inband if previously (?) disabled :)
+
+For 802.3z modes, MLO_AN_INBAND with Autoneg clear in the advertising mode
+disables in-band negotiation. This is exactly how "ethtool -s ethX
+autoneg off" works.
+
+> > The patch below should result in ethtool reporting 2500baseT rather than
+> > 2500baseX, and that an=1 should now be an=0. Please try it, and dump the
+> > ethtool eth1 before asking for autoneg to be manually disabled, and also
+> > report the kernel messages.
 > 
->  .../boot/dts/qcom/sm4250-oneplus-billie2.dts  | 10 +++++++++
->  arch/arm64/boot/dts/qcom/sm6115.dtsi          | 22 -------------------
->  2 files changed, 10 insertions(+), 22 deletions(-)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> index a3f1c7c41fd73..329eb496bbc5f 100644
-> --- a/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> +++ b/arch/arm64/boot/dts/qcom/sm4250-oneplus-billie2.dts
-> @@ -202,12 +202,22 @@ &sdhc_2 {
->  	vqmmc-supply = <&vreg_l5a>;
->  
->  	cd-gpios = <&tlmm 88 GPIO_ACTIVE_HIGH>;
-> +	pinctrl-names = "default", "sleep";
-> +	pinctrl-0 = <&sdc2_state_on &sdc2_card_det_n>;
-> +	pinctrl-1 = <&sdc2_state_off &sdc2_card_det_n>;
-This should have been
+> i see no Patch below ;)
 
-pinctrl-n
-pinctrl-names
+diff --git a/drivers/net/phy/phylink.c b/drivers/net/phy/phylink.c
+index 1a2f074685fa..b8844dfcbf51 100644
+--- a/drivers/net/phy/phylink.c
++++ b/drivers/net/phy/phylink.c
+@@ -2898,6 +2898,10 @@ static void phylink_sfp_set_config(struct phylink *pl, u8 mode,
+ 		changed = true;
+ 	}
+ 
++	if (pl->link_config.an_enabled != state->an_enabled)
++		changed = true;
++	pl->link_config.an_enabled = state->an_enabled;
++
+ 	if (pl->cur_link_an_mode != mode ||
+ 	    pl->link_config.interface != state->interface) {
+ 		pl->cur_link_an_mode = mode;
+@@ -3001,7 +3005,8 @@ static int phylink_sfp_config_optical(struct phylink *pl)
+ 	config.speed = SPEED_UNKNOWN;
+ 	config.duplex = DUPLEX_UNKNOWN;
+ 	config.pause = MLO_PAUSE_AN;
+-	config.an_enabled = true;
++	config.an_enabled = linkmode_test_bit(ETHTOOL_LINK_MODE_Autoneg_BIT,
++					      support);
+ 
+ 	/* For all the interfaces that are supported, reduce the sfp_support
+ 	 * mask to only those link modes that can be supported.
+diff --git a/drivers/net/phy/sfp-bus.c b/drivers/net/phy/sfp-bus.c
+index daac293e8ede..1dd50f2ca05d 100644
+--- a/drivers/net/phy/sfp-bus.c
++++ b/drivers/net/phy/sfp-bus.c
+@@ -151,6 +151,10 @@ void sfp_parse_support(struct sfp_bus *bus, const struct sfp_eeprom_id *id,
+ 	unsigned int br_min, br_nom, br_max;
+ 	__ETHTOOL_DECLARE_LINK_MODE_MASK(modes) = { 0, };
+ 
++	phylink_set(modes, Autoneg);
++	phylink_set(modes, Pause);
++	phylink_set(modes, Asym_Pause);
++
+ 	/* Decode the bitrate information to MBd */
+ 	br_min = br_nom = br_max = 0;
+ 	if (id->base.br_nominal) {
+@@ -329,10 +333,6 @@ void sfp_parse_support(struct sfp_bus *bus, const struct sfp_eeprom_id *id,
+ 		bus->sfp_quirk->modes(id, modes, interfaces);
+ 
+ 	linkmode_or(support, support, modes);
+-
+-	phylink_set(support, Autoneg);
+-	phylink_set(support, Pause);
+-	phylink_set(support, Asym_Pause);
+ }
+ EXPORT_SYMBOL_GPL(sfp_parse_support);
+ 
+diff --git a/drivers/net/phy/sfp.c b/drivers/net/phy/sfp.c
+index 39e3095796d0..9c1fa0b1737f 100644
+--- a/drivers/net/phy/sfp.c
++++ b/drivers/net/phy/sfp.c
+@@ -360,6 +360,23 @@ static void sfp_quirk_2500basex(const struct sfp_eeprom_id *id,
+ 	__set_bit(PHY_INTERFACE_MODE_2500BASEX, interfaces);
+ }
+ 
++static void sfp_quirk_disable_autoneg(const struct sfp_eeprom_id *id,
++				      unsigned long *modes,
++				      unsigned long *interfaces)
++{
++	linkmode_clear_bit(ETHTOOL_LINK_MODE_Autoneg_BIT, modes);
++}
++
++static void sfp_quirk_oem_2_5g(const struct sfp_eeprom_id *id,
++			       unsigned long *modes,
++			       unsigned long *interfaces)
++{
++	/* Copper 2.5G SFP */
++	linkmode_set_bit(ETHTOOL_LINK_MODE_2500baseT_Full_BIT, modes);
++	__set_bit(PHY_INTERFACE_MODE_2500BASEX, interfaces);
++	sfp_quirk_disable_autoneg(id, modes, interfaces);
++}
++
+ static void sfp_quirk_ubnt_uf_instant(const struct sfp_eeprom_id *id,
+ 				      unsigned long *modes,
+ 				      unsigned long *interfaces)
+@@ -401,6 +418,7 @@ static const struct sfp_quirk sfp_quirks[] = {
+ 	SFP_QUIRK_M("UBNT", "UF-INSTANT", sfp_quirk_ubnt_uf_instant),
+ 
+ 	SFP_QUIRK_F("OEM", "SFP-10G-T", sfp_fixup_rollball_cc),
++	SFP_QUIRK_M("OEM", "SFP-2.5G-T", sfp_quirk_oem_2_5g),
+ 	SFP_QUIRK_F("OEM", "RTSFP-10", sfp_fixup_rollball_cc),
+ 	SFP_QUIRK_F("OEM", "RTSFP-10G", sfp_fixup_rollball_cc),
+ 	SFP_QUIRK_F("Turris", "RTSFP-10", sfp_fixup_rollball),
 
-I made a mistake in my lenovo dts if that was your reference..
-
-You should also mention that the implicit removal of sdhci1's
-gpio properties from the lenovo j606f and oneplus billie2 is intentional
-as they both use UFS instead of eMMC.
-
-And one more thing, you missed bringing the CD pin back into pinctrl-0/1
-in the tab dts. I'd really appreciate if you could fix up that ordering
-mess I mentioned above while at it.
-
-Konrad
->  
->  	status = "okay";
->  };
->  
->  &tlmm {
->  	gpio-reserved-ranges = <14 4>;
-> +
-> +	sdc2_card_det_n: sd-card-det-n-state {
-> +		pins = "gpio88";
-> +		function = "gpio";
-> +		drive-strength = <2>;
-> +		bias-pull-up;
-> +	};
->  };
->  
->  &ufs_mem_hc {
-> diff --git a/arch/arm64/boot/dts/qcom/sm6115.dtsi b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> index fbd67d2c8d781..e8e5f2cafebb9 100644
-> --- a/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> +++ b/arch/arm64/boot/dts/qcom/sm6115.dtsi
-> @@ -595,13 +595,6 @@ data-pins {
->  					bias-pull-up;
->  					drive-strength = <10>;
->  				};
-> -
-> -				sd-cd-pins {
-> -					pins = "gpio88";
-> -					function = "gpio";
-> -					bias-pull-up;
-> -					drive-strength = <2>;
-> -				};
->  			};
->  
->  			sdc2_state_off: sdc2-off-state {
-> @@ -622,13 +615,6 @@ data-pins {
->  					bias-pull-up;
->  					drive-strength = <2>;
->  				};
-> -
-> -				sd-cd-pins {
-> -					pins = "gpio88";
-> -					function = "gpio";
-> -					bias-disable;
-> -					drive-strength = <2>;
-> -				};
->  			};
->  		};
->  
-> @@ -731,10 +717,6 @@ sdhc_1: mmc@4744000 {
->  				 <&gcc GCC_SDCC1_ICE_CORE_CLK>;
->  			clock-names = "iface", "core", "xo", "ice";
->  
-> -			pinctrl-0 = <&sdc1_state_on>;
-> -			pinctrl-1 = <&sdc1_state_off>;
-> -			pinctrl-names = "default", "sleep";
-> -
->  			bus-width = <8>;
->  			status = "disabled";
->  		};
-> @@ -753,10 +735,6 @@ sdhc_2: mmc@4784000 {
->  				 <&rpmcc RPM_SMD_XO_CLK_SRC>;
->  			clock-names = "iface", "core", "xo";
->  
-> -			pinctrl-0 = <&sdc2_state_on>;
-> -			pinctrl-1 = <&sdc2_state_off>;
-> -			pinctrl-names = "default", "sleep";
-> -
->  			power-domains = <&rpmpd SM6115_VDDCX>;
->  			operating-points-v2 = <&sdhc2_opp_table>;
->  			iommus = <&apps_smmu 0x00a0 0x0>;
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
