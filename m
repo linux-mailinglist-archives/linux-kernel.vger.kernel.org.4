@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 528BC6B8F6B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FCE6B8F77
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:12:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjCNKMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58152 "EHLO
+        id S230281AbjCNKM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:12:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbjCNKME (ORCPT
+        with ESMTP id S230123AbjCNKMp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:12:04 -0400
+        Tue, 14 Mar 2023 06:12:45 -0400
 Received: from EUR05-VI1-obe.outbound.protection.outlook.com (mail-vi1eur05on2080.outbound.protection.outlook.com [40.107.21.80])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAA409AA02;
-        Tue, 14 Mar 2023 03:11:35 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B51C199BEE;
+        Tue, 14 Mar 2023 03:12:04 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BPFCgR9AoGZHmZW8s7dFlC3pTSSE36pt5AgqBAzVhQfUL3YjsZRK4wdEGpar0XIxkdHNgS6Bj8DT13iUTyiWJ317ObvwXPPgVwPuiRLGSGvS+ckIg8z16VADFY3On3h01jFhBe5biSm+RxsC5dmCKit3lWXmyHPm739uE01/OMVaxJhNjoiDar3g1kFEEvQXmkGLmuVdkLUyVUaFaCzRA92M2yJHowXinjjXzm0kcpuyjS74QPrC6h8lGQvRUTkWpZ8WKLEP54kgNP1iEf8j/FSZnG4H7UT0V4XNQIRkfXk5zJ+dpYmJc4TPlLeK7nTon84U7wik/895Xn9NSIGKeg==
+ b=SMz7A6qeZI0gDImST8+vYmJgNTwqdM+/hi1BZeDvMuUMjEafTIS4n3bCiEZkMdy5wStFKo021xWJcXBy+FGqpyjgNo6Nfik4Kkkt07acEBq/EvTIzWbeHCLiRN1qygPmEUj0/O33Y7oriKyg+/5LazR9WvDMh0rJ/P5ipXXXwxiPi57dsnfGyPmwr6bdS/aG9Lh1UV9E8dNUAMkeONBFgXruPoW1Y07ATWYy9SpitrXvoDCYFlB+m1LF2WcPEdfyxd77INHQdPEA0i8EiTr0QWUu2UEp0NbDINlYFe242d/VpjEVSb8sKYOPRY4IaFfpg/qbaANqq6IeAonU6N4IAg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=4KQHy4ojmtQF1BduRAXSRUeX6FHJREEZUO4mQRp9hxA=;
- b=Rg7Tq8U4K+7gl1TxTbBh9j6rBhStgevonKbDYr/X9NJjf4ahAEW3r+vSxnAFdUSCr60JCzsO3/HMNsCYJk0yynSI0f0F13616AhSQOw+M2CjTUqJ8xow77vHumBegxzlVbZyio6O0GWrw0+Gs2yHQE0AULUI/nrwHOdh4StfE/uRuqGRM0igiaW+VWe0QxnO+lCXDiWH48pFYbpnggLVZ2PgDMcE3TsZvLN9y+56ucJVLaGzPXApJ3VPOHFNbP7N5OiXiV4JXuZqD8Zr26YO79eQpelzfqX/zZTfTyPqjfKc6dfG8nI6IrXsdt4aK1CjQ+xGb40UXMzjO02iBmL8Og==
+ bh=qCAL8779U4zEgsqncy9scuUL8gibGXjTY42SAMO9ens=;
+ b=AyngtXbeo0IKZxNFO4pJDf/A6IxqorDlfszhJ5ijg0SsUbB1c6wBDm/ueFSi8rHxT2WSZm7UEs31eBIh4vyjcT2Cu6/3j8YAxpDNhiXhf5VFuz4xvg4XY430UOditfw6DRSmvrG1DXkPikWjxLGKtl3lFncajilYZXTyV/u2ficKgzjZOfpxtmjJaAVPaZHXIIspThGjMUl43lcllBIBjiIJ3cN5gCm6saSoc0g7wJqAxsstbL1KLYBGyVEk8F+ig4n47udg2JRcmWjjY9ZjAN6BHZUvI8OL81zeZ2e73KOA0Ud7zWsm5G/HBt6PPxZChfAqKj5qr1VCqX6ixwEB7g==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
  header.d=nxp.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=4KQHy4ojmtQF1BduRAXSRUeX6FHJREEZUO4mQRp9hxA=;
- b=dDfOytYaXdYJ2/p4qICMICChR8oLbAb/zNFREkQYT1cfABBuP6KNc4KljkDW1wIf0UmNufq1826jvTD4nmEPjcX14oNEYVqqGNzIOHxr5+sXmhFbM6w8eSX82E3aZubLScQDw9q8lPNMzaheMMUclGKdBoR8nt0qRm7RDrKw+pM=
+ bh=qCAL8779U4zEgsqncy9scuUL8gibGXjTY42SAMO9ens=;
+ b=jMl10IG2/1xVghzyhY+CL/xWN8VsXSOiW51h4mm4EECv39QHchkg7MHiDR+z5zUeZ12yGVe1JKiIC8FKkoQdDWYnP6dE0yw0IFmOg0lwBZTYsppjyKHhNTRzLhvkKSSS7QBvqtdn3r5qkPaeHgj04Yy51IRKqN05mXkAkbMWrQ4=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=nxp.com;
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com (2603:10a6:20b:d8::14)
  by AM8PR04MB7841.eurprd04.prod.outlook.com (2603:10a6:20b:244::21) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 10:10:34 +0000
+ 2023 10:10:38 +0000
 Received: from AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::89aa:9204:790d:e46b]) by AM6PR04MB6341.eurprd04.prod.outlook.com
  ([fe80::89aa:9204:790d:e46b%5]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 10:10:34 +0000
+ 10:10:38 +0000
 From:   Ming Qian <ming.qian@nxp.com>
 To:     mchehab@kernel.org, mirela.rabulea@oss.nxp.com,
         hverkuil-cisco@xs4all.nl
@@ -47,9 +47,9 @@ Cc:     shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
         festevam@gmail.com, xiahong.bao@nxp.com, linux-imx@nxp.com,
         linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v4 09/10] media: imx-jpeg: Decoder add support for 12bit jpeg
-Date:   Tue, 14 Mar 2023 18:08:52 +0800
-Message-Id: <69bd4bbc12b167d84fce97979257081eec281a67.1678788305.git.ming.qian@nxp.com>
+Subject: [PATCH v4 10/10] media: imx-jpeg: Encoder add support for 12bit jpeg
+Date:   Tue, 14 Mar 2023 18:08:53 +0800
+Message-Id: <f5b6856e1eeb9f03df4bc38538c84cb21ea088fc.1678788305.git.ming.qian@nxp.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <cover.1678788305.git.ming.qian@nxp.com>
 References: <cover.1678788305.git.ming.qian@nxp.com>
@@ -61,50 +61,50 @@ X-ClientProxiedBy: SI1PR02CA0028.apcprd02.prod.outlook.com
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: AM6PR04MB6341:EE_|AM8PR04MB7841:EE_
-X-MS-Office365-Filtering-Correlation-Id: c7424708-70c0-42cd-74ba-08db247459b1
+X-MS-Office365-Filtering-Correlation-Id: 3ac5b80d-ef4a-4066-7485-08db24745c43
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: bUBLTdUaP177q/36sbPYu7vlmmppO9WRTvP2PghtuUrb/gdeeaRNqNJt2ES/IidNQwGG3HWM6i4mfCuak/txCWDq4DYKL26dyxrA0d0MXWQ6obiQAVJ7sMulwzeOud7cLIyPjPrHPSyNvtPJm60Vphj+ZTKYh/AdQX2tI8dkWYvKY9osHjo0aIzjCQLvR0y35bfkkKDaw+THuNgLLsjxrmQh6EH20oyVMOjuee7ciEfmwJzMIznkb0LA1zM3tlI2N0kVuBe92+r38nTkSZN5WDlPEvPcdQXxYxlX+b4ColQJ4/vt6q8BrQwzgJOxi2Srsi7F5yCmWqwc0IKmCZJSS+k4Xx9K7QN597krG0YV9+a2sB95/vVxcFHvTJBYKu/atn4zIXqfLlIr6Lb1P/PmssgZh6ghIvPaMWNxhtyOZuiP0mB1GJZ56i0cSZBDgD58NtEMBaWaIX3ShY/7CoMH+NH8vdE5Goa5DWQVj3yQaz/OX9O01OPz1qxFWe4TLMBg1xu9gkc+bODv9KVIdvXda4Zh0fuC2eqDf2AoiUVgYOzGLXiUTyOBNn6EdJVsKOhbPClJm/Ou2LM1OFFXsmUurTICEturK8wcp7gl4ywarBHZVV2+EOSnkc7ThB7a8j2jIiWJOOHzycLwHejTX6vSmyGfTPManKCumOhCa6P8N0IuLL3Y8ycQkJkZnIZnSZEmJfH70MRncqERGAba9me2fw==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199018)(7416002)(5660300002)(8936002)(2906002)(44832011)(38350700002)(38100700002)(86362001)(36756003)(41300700001)(478600001)(66946007)(66556008)(66476007)(8676002)(6486002)(6666004)(4326008)(52116002)(83380400001)(316002)(186003)(26005)(6506007)(2616005)(6512007);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: kI74PbbL7nyySy0uCm0P6EFv9iK8kjUASC1SXeXrAumG3CEJUndMJHn5qLRU8hlq6L6Hns7xTcxI8pyIS38s4PMlwXVNvWt6rv9ITfLMBHqf2MNvN8ejZUuEjKZYMfGdsfYd7ta3colEqTmdCwhF1P/+fju6uPJ9jNWmiTiKqr4hzNav4eivFR44FRy9TdYfo7DceioF+AziOqjRXwAXaMITt/HmJTLEhaxq/rMGsRLVHcVqxUJf5/zaEjKtBMouOY4K80R+xLf5YSVtdZKzCed9WrhuKh//feAgaFwMCgBHXJRHJBDOGzvyN6HD0IHj8HH94l5KqnS3QbqghkTFYIY8vNwEo9SqZCWApmOAX9XB7KOGhY3TcI0LBPjlpGCA+EhNgTsTY9um9w4Aze5Yz/27UmyCILglna8va1lzkocMJGAwOHQWLZucl7fPvp2eTxU+/SSn1SlSdeUcJRI445bJTsjGkdm1NzQ4mPgAHU+xlJC3P/QSajJG/fkJ8MtfMCe25Ij5t22NbL9ipcBLfrS4b4gcX/n1UJeULPNicP+TrhiaCWkuVvN7AIaQgWHSxAjdtiMdE8qFZcD6onh42jmZTzLP+Keecov3w0xeLEXbz1CgzUS8CF+7shVAQf9muwCuQ2XUYnkXXwCsT04WNqGryJeTLBL056Rp/37YbRaM/Ocs62wxgDb9vJ/i8trMCuRt86mQJDLl+mxKH2iFsA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB6341.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(346002)(39860400002)(366004)(376002)(136003)(451199018)(7416002)(5660300002)(30864003)(8936002)(2906002)(44832011)(38350700002)(38100700002)(86362001)(36756003)(41300700001)(478600001)(66946007)(66556008)(66476007)(8676002)(6486002)(6666004)(4326008)(52116002)(83380400001)(316002)(186003)(26005)(6506007)(2616005)(6512007);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?v56h01PXKfxiO1xuhnYP6scxqrWTBIRKgw3ZwF4jXnWtEiB+uHeKxQELmZq3?=
- =?us-ascii?Q?8h7RV8kBkJ/wmEMwZe1LshryaBdCvtYggzZlUF4YoOM0rn+hRVsN2TXNY4B7?=
- =?us-ascii?Q?GjGceh7ARPy8+CHsg4niS0KSdNNnlkQfgHMUrPYKLkB8cSQ3Rtel4hCYFihE?=
- =?us-ascii?Q?8RrfBtNnsz+wHxZ02NJDO//PTtIHOHfQ7A2Zf0bz7Lu4m2O+OT8lym2In2O1?=
- =?us-ascii?Q?uu7lu7Y4x1uiuJfrkgxdUr64tLVeYszgNf9khtUsNT+G/S2uooZcpGw8jIsC?=
- =?us-ascii?Q?+csAg6iSUuYi3E5njHOaFIxsPZX1znNgpfHDg3PS5IscurlyqNsJAnhDBm4D?=
- =?us-ascii?Q?iwdv9D2HmqKBBpU/4+LAoLQSxrmxp3dDmxZWeV4GUJqm+jGL1syvG+KDWQHI?=
- =?us-ascii?Q?Ws2LTuUbb8ASb+HQ1AKJHhrIkqW32e7cKpvd+Ypo9fLFaXyiZRB//OkC5Hz7?=
- =?us-ascii?Q?yhol7CUf9SBC7fGXkqCTSMpxUz2+bYMSQwk+C8FjCqNWM30UexGj8lNdUxA+?=
- =?us-ascii?Q?NqMMyLXZBgWnCTk/sN8/KOkhvp4/G6g4H2yqNQnQr9Hk3zm8gsjhmPa5ODAQ?=
- =?us-ascii?Q?qcTu0ivoOQ4DJHdsg40x8ho/hRnBOh6ye3mi0PKaI1k12Kz0UluWgB6bewdu?=
- =?us-ascii?Q?dl61Rpt+par0HAuwRL6Ey8b5AXNIjw3F+f1T6J/asFCFtRVWmwSz8L1I9eUM?=
- =?us-ascii?Q?T0WiMjhFCl1dntGyQM2HsuDbSqme0JjNHFvmM5OPj3/crZJdphpbuGMRLc6o?=
- =?us-ascii?Q?1QyRHmeyYqrOYIlKEKW4bBSuIwnvjqZ7ILsNWGoN8n1ykSZpZnJK8NR7BeIX?=
- =?us-ascii?Q?FBAmxrfB8UCmpYyiImS+AR7bzNIU163faCj8IzS7ufD+8s9XBy/RuxC8MT5P?=
- =?us-ascii?Q?mYYMcolXJXbmwigdNaVTvZzYoJ+Q8Lyp3l0sKcsMGrHYVDylxgKUrRa+J4WE?=
- =?us-ascii?Q?yhjS1qyLEngoXLFeMNdE/p1cWqsTCNPa8LfVw4/V7RnC251wIUZYu+eB+uOp?=
- =?us-ascii?Q?pYZtLofDW+eEejQynFXRNpW/pu0keTovYpno8dSydBvDqgbTbxtxIzX2Z92j?=
- =?us-ascii?Q?AczECi3H+rbmlTZFzH4T1jaqXdD6UbH0vaothue/nZLR7d745VRnYq7t78no?=
- =?us-ascii?Q?yH7UFgtmffzd1AJFwAnRCrUvuGYyjsFF7PuPdsQfJ/Ps/sU+OuTxNS4jtXyV?=
- =?us-ascii?Q?zZY508BEyRbYzOYIfuYz8TSKSLoA31OVLpaHsZMAsaO0TbV9MdEdKeTme0hH?=
- =?us-ascii?Q?+rCPdaN11v393a/StGiZbYun1vIp3g1K+pTBZK9CUNs8IRfE/ispIlVUErH/?=
- =?us-ascii?Q?HAMzAJjM0fAK/4TgoxWcTkXlxTfnAiQdwmM9nO3YU6lsj1q6eeehciJ91m59?=
- =?us-ascii?Q?habBkiH24C9aq8HHiKA8YiCJ/kHYskHYGRXEeDpnPbbMhPpKFSYqEqatguwo?=
- =?us-ascii?Q?4rAlNe8tn6YCnSjJuy2A8zrA7tYRiu3PpdlfVpXlXlU6nElVjzrhqH1SLInu?=
- =?us-ascii?Q?DFtM1FXg92G64gAoGzfQFI9enj9kxcWM5uAw8eQy7ZuOuGu+/tGYiV8kKjXH?=
- =?us-ascii?Q?slXoVajeSk95qnBW94wx6nsXRED3ebJgu2/74XKR?=
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?ARWasc0gq/++sR2xbwLLxc4mnCLZbgamHFfxxlwxZU3WNXRtfUJFM01mOF8J?=
+ =?us-ascii?Q?qJV+MhNnnlxo846TEVkMfz5iH5cek4haTwbNYt2lmqd8U+cyw6upJ+OGAPG9?=
+ =?us-ascii?Q?+PNgF85vmGo6ONjOIVgAVoYtDY62ns8nAuFrUC6qJNqANoauHjID6QB6zPC6?=
+ =?us-ascii?Q?gW5W0uYiJN4cgiyOdy1U7hdG+YYof/+p3fsGeZ2BDTjeUTZGFy4isBQrV2GT?=
+ =?us-ascii?Q?sU993avvnC9opf7TX5QKutG0nDqWiRPITOcRHdAqFGn1acMbowZ4bt4fDN9D?=
+ =?us-ascii?Q?jdPGM4cNSG3F77C3Ix7iEZ7TpN57DmFpbdd1scsoU/kDTzQMuP/QF1irsjpD?=
+ =?us-ascii?Q?GHWirsKD3hLgYjbGY1QGcC9li58cVelO/U3uXAcr0o9VGCGH0ncsdrT628su?=
+ =?us-ascii?Q?urERhDb0e8wWuPwQezqsncLuNBVTbJhrOOrcCT2dio/mZXCebyIgepBov0nN?=
+ =?us-ascii?Q?PBXyvZHVI1ggpx7qZkb87UlmV6rfZpjyFEMiP1LRrl+xsJj9OyKhC6qTp6XF?=
+ =?us-ascii?Q?oSPbnfYY8DRk4ENP97hM9KMrHDJ+D1qZd+eMLMe2nMKDEzDEErqTWeNKfYKv?=
+ =?us-ascii?Q?O+PTv1jQpw3vH07jooy/ZuH2pWk43zGQQ4WVBUu/Q2EAeKpB5TpK1+KKs4/O?=
+ =?us-ascii?Q?897gEZYwvp1zHMwXtGd000LT4pRYFWiCQ1Kq25oPWpA3oJtfVRxye2a6bZg+?=
+ =?us-ascii?Q?/sjkvrEumT5BBUXipYAaL9+uaI5VlC63mMqVRKG/F/D4DxPk0wpo4V2PA2zK?=
+ =?us-ascii?Q?4HQNmNd1UK2U0grkf15Mtmy3c5ZNnN8xr1PzLN3G+cVf2tJbGQ2TA7FyWoCC?=
+ =?us-ascii?Q?3JPTfjAgddifLDWFQ65joIG9p0tV/shwmZVrDEkJY5sIgBFIqyz/i4+Lrla9?=
+ =?us-ascii?Q?J+nRHiHtxlnRDfWuw6dp2OJofpxBo2l2eSmNvEbGwmaEDvhq6+OnMQKaXRN8?=
+ =?us-ascii?Q?wo+rWo/RSdApzJ7dZFpgZ/92CEFNDpdcPQ/5BiMbtTqfzVgQ+w13o1cNg1lJ?=
+ =?us-ascii?Q?ci015RdL7QDWZ/XMnHJHuVbM5M3DKth6Ou/1GZhnltD6it19j2pRQY6wclsm?=
+ =?us-ascii?Q?OQbagWuS0s82ZLS/F+0Zy5e52noa6/8aqmUZNKW/ESsFDhN1oV/EFRjQYhtd?=
+ =?us-ascii?Q?Ec+VQNvNqcLLesSFvdyEsNOxaewhmRBICc6aRHfLdscN7XIEY5M4Vftgslvi?=
+ =?us-ascii?Q?+OhoC13yZ6g8h3I86BCRZaO7j+N5lEyIQZUkiGIwuWkL02ni8itvPHd9ZybG?=
+ =?us-ascii?Q?8yB+KFhSCy1Eo7Y5/Xk884wHBcPvlioO7dnLCBF3tuAs2M1a1hP+YxBcz9Rr?=
+ =?us-ascii?Q?tucI+qMbiVTBEkAPSLz7Hi9b21OihmPfqlpcRKCxnrnGWVVD3DD3zXsFHASb?=
+ =?us-ascii?Q?XvB+Yx1V1/NxCL89/aG3L9MU3F7KM3ErM67TpU5smCKudLeUwG2BSsuCw7IO?=
+ =?us-ascii?Q?pFGp7JGYHVJt/JfVfCMtyNYEX6RZzkczA/Xs7Vi5bnl1Od7S51M5+2C1SAkK?=
+ =?us-ascii?Q?YqVxE1DhalA+DAJ690fw+unZiBYpca/nrmQZBDM9SFJLHHUfnXhlI4wdAOAv?=
+ =?us-ascii?Q?Yz2BVjXzE2QqDy0WBNqTBhDLkxTOMsSar71qwPNX?=
 X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c7424708-70c0-42cd-74ba-08db247459b1
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ac5b80d-ef4a-4066-7485-08db24745c43
 X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB6341.eurprd04.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 10:10:34.4384
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 10:10:38.8444
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: HOiI8+T9pIm4fOGdPVMDhILzC/RWlul6MhCxlkIn4wZ7PiYtzaETmFlmnX5VeRrm7nVrI13rLJJxjsxPKDUVuw==
+X-MS-Exchange-CrossTenant-UserPrincipalName: bew7Unotvncgu23kz1Pms0Nm5LNpBrNyLaVzT+l4UO4Zf/AL5b7QZUH/zdUjEQJwzmOjnBl43Yi0sjD8s0fQ+w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM8PR04MB7841
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -116,284 +116,318 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-enable decoding 12-bit extended jpeg
+enable encoding 12-bit extended jpeg
 
 Signed-off-by: Ming Qian <ming.qian@nxp.com>
 ---
- .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 136 +++++++++++++++++-
- 1 file changed, 134 insertions(+), 2 deletions(-)
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c |  14 +-
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h |   4 +-
+ .../media/platform/nxp/imx-jpeg/mxc-jpeg.c    | 172 +++++++++++++++++-
+ 3 files changed, 175 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-index 3f1c9bc4b144..74ecc5415aa6 100644
---- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-+++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
-@@ -87,6 +87,20 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
- 		.precision	= 8,
- 		.is_rgb		= 1,
- 	},
-+	{
-+		.name		= "BGR 12bit", /*12-bit BGR packed format*/
-+		.fourcc		= V4L2_PIX_FMT_BGR48_12,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
-+		.nc		= 3,
-+		.depth		= 36,
-+		.mem_planes	= 1,
-+		.comp_planes	= 1,
-+		.h_align	= 3,
-+		.v_align	= 3,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+		.is_rgb		= 1,
-+	},
- 	{
- 		.name		= "ABGR", /* ABGR packed format */
- 		.fourcc		= V4L2_PIX_FMT_ABGR32,
-@@ -101,6 +115,20 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
- 		.precision	= 8,
- 		.is_rgb		= 1,
- 	},
-+	{
-+		.name		= "ABGR 12bit", /* 12-bit ABGR packed format */
-+		.fourcc		= V4L2_PIX_FMT_ABGR64_12,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
-+		.nc		= 4,
-+		.depth		= 48,
-+		.mem_planes	= 1,
-+		.comp_planes	= 1,
-+		.h_align	= 3,
-+		.v_align	= 3,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+		.is_rgb		= 1,
-+	},
- 	{
- 		.name		= "YUV420", /* 1st plane = Y, 2nd plane = UV */
- 		.fourcc		= V4L2_PIX_FMT_NV12M,
-@@ -127,6 +155,32 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
- 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
- 		.precision	= 8,
- 	},
-+	{
-+		.name		= "YUV420 12bit", /* 1st plane = Y, 2nd plane = UV */
-+		.fourcc		= V4L2_PIX_FMT_P012M,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
-+		.nc		= 3,
-+		.depth		= 18, /* 6 x 12 bits (4Y + UV) for 4 pixels */
-+		.mem_planes	= 2,
-+		.comp_planes	= 2, /* 1 plane Y, 1 plane UV interleaved */
-+		.h_align	= 4,
-+		.v_align	= 4,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+	},
-+	{
-+		.name		= "YUV420 12bit", /* 1st plane = Y, 2nd plane = UV */
-+		.fourcc		= V4L2_PIX_FMT_P012,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_420,
-+		.nc		= 3,
-+		.depth		= 18, /* 6 x 12 bits (4Y + UV) for 4 pixels */
-+		.mem_planes	= 1,
-+		.comp_planes	= 2, /* 1 plane Y, 1 plane UV interleaved */
-+		.h_align	= 4,
-+		.v_align	= 4,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+	},
- 	{
- 		.name		= "YUV422", /* YUYV */
- 		.fourcc		= V4L2_PIX_FMT_YUYV,
-@@ -140,6 +194,19 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
- 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
- 		.precision	= 8,
- 	},
-+	{
-+		.name		= "YUV422 12bit", /* YUYV */
-+		.fourcc		= V4L2_PIX_FMT_Y212,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_422,
-+		.nc		= 3,
-+		.depth		= 24,
-+		.mem_planes	= 1,
-+		.comp_planes	= 1,
-+		.h_align	= 4,
-+		.v_align	= 3,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+	},
- 	{
- 		.name		= "YUV444", /* YUVYUV */
- 		.fourcc		= V4L2_PIX_FMT_YUV24,
-@@ -153,6 +220,19 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
- 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
- 		.precision	= 8,
- 	},
-+	{
-+		.name		= "YUV444 12bit", /* YUVYUV */
-+		.fourcc		= V4L2_PIX_FMT_YUV48_12,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_444,
-+		.nc		= 3,
-+		.depth		= 36,
-+		.mem_planes	= 1,
-+		.comp_planes	= 1,
-+		.h_align	= 3,
-+		.v_align	= 3,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+	},
- 	{
- 		.name		= "Gray", /* Gray (Y8/Y12) or Single Comp */
- 		.fourcc		= V4L2_PIX_FMT_GREY,
-@@ -166,6 +246,19 @@ static const struct mxc_jpeg_fmt mxc_formats[] = {
- 		.flags		= MXC_JPEG_FMT_TYPE_RAW,
- 		.precision	= 8,
- 	},
-+	{
-+		.name		= "Gray 12bit", /* Gray (Y8/Y12) or Single Comp */
-+		.fourcc		= V4L2_PIX_FMT_Y012,
-+		.subsampling	= V4L2_JPEG_CHROMA_SUBSAMPLING_GRAY,
-+		.nc		= 1,
-+		.depth		= 12,
-+		.mem_planes	= 1,
-+		.comp_planes	= 1,
-+		.h_align	= 3,
-+		.v_align	= 3,
-+		.flags		= MXC_JPEG_FMT_TYPE_RAW,
-+		.precision	= 12,
-+	},
- };
- 
- #define MXC_JPEG_NUM_FORMATS ARRAY_SIZE(mxc_formats)
-@@ -437,17 +530,24 @@ static enum mxc_jpeg_image_format mxc_jpeg_fourcc_to_imgfmt(u32 fourcc)
- {
- 	switch (fourcc) {
- 	case V4L2_PIX_FMT_GREY:
-+	case V4L2_PIX_FMT_Y012:
- 		return MXC_JPEG_GRAY;
- 	case V4L2_PIX_FMT_YUYV:
-+	case V4L2_PIX_FMT_Y212:
- 		return MXC_JPEG_YUV422;
- 	case V4L2_PIX_FMT_NV12:
- 	case V4L2_PIX_FMT_NV12M:
-+	case V4L2_PIX_FMT_P012:
-+	case V4L2_PIX_FMT_P012M:
- 		return MXC_JPEG_YUV420;
- 	case V4L2_PIX_FMT_YUV24:
-+	case V4L2_PIX_FMT_YUV48_12:
- 		return MXC_JPEG_YUV444;
- 	case V4L2_PIX_FMT_BGR24:
-+	case V4L2_PIX_FMT_BGR48_12:
- 		return MXC_JPEG_BGR;
- 	case V4L2_PIX_FMT_ABGR32:
-+	case V4L2_PIX_FMT_ABGR64_12:
- 		return MXC_JPEG_ABGR;
- 	default:
- 		return MXC_JPEG_INVALID;
-@@ -483,6 +583,17 @@ static void mxc_jpeg_addrs(struct mxc_jpeg_desc *desc,
- 		offset;
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+index bbd5d6a9fc86..9a6e8b332e12 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.c
+@@ -97,25 +97,31 @@ void mxc_jpeg_sw_reset(void __iomem *reg)
+ 	writel(GLB_CTRL_SFT_RST, reg + GLB_CTRL);
  }
  
-+static bool mxc_jpeg_is_extended_sequential(const struct mxc_jpeg_fmt *fmt)
-+{
-+	if (!fmt || !(fmt->flags & MXC_JPEG_FMT_TYPE_RAW))
-+		return false;
-+
-+	if (fmt->precision > 8)
-+		return true;
-+
-+	return false;
-+}
-+
- static void notify_eos(struct mxc_jpeg_ctx *ctx)
+-void mxc_jpeg_enc_mode_conf(struct device *dev, void __iomem *reg)
++void mxc_jpeg_enc_mode_conf(struct device *dev, void __iomem *reg, u8 extseq)
  {
- 	const struct v4l2_event ev = {
-@@ -767,24 +878,31 @@ static int mxc_jpeg_fixup_sof(struct mxc_jpeg_sof *sof,
- 	switch (fourcc) {
- 	case V4L2_PIX_FMT_NV12:
- 	case V4L2_PIX_FMT_NV12M:
-+	case V4L2_PIX_FMT_P012:
-+	case V4L2_PIX_FMT_P012M:
- 		sof->components_no = 3;
- 		sof->comp[0].v = 0x2;
- 		sof->comp[0].h = 0x2;
- 		break;
- 	case V4L2_PIX_FMT_YUYV:
-+	case V4L2_PIX_FMT_Y212:
- 		sof->components_no = 3;
- 		sof->comp[0].v = 0x1;
- 		sof->comp[0].h = 0x2;
- 		break;
- 	case V4L2_PIX_FMT_YUV24:
-+	case V4L2_PIX_FMT_YUV48_12:
- 	case V4L2_PIX_FMT_BGR24:
-+	case V4L2_PIX_FMT_BGR48_12:
- 	default:
- 		sof->components_no = 3;
- 		break;
- 	case V4L2_PIX_FMT_ABGR32:
-+	case V4L2_PIX_FMT_ABGR64_12:
- 		sof->components_no = 4;
- 		break;
- 	case V4L2_PIX_FMT_GREY:
-+	case V4L2_PIX_FMT_Y012:
- 		sof->components_no = 1;
- 		break;
- 	}
-@@ -804,20 +922,27 @@ static int mxc_jpeg_fixup_sos(struct mxc_jpeg_sos *sos,
- 	switch (fourcc) {
- 	case V4L2_PIX_FMT_NV12:
- 	case V4L2_PIX_FMT_NV12M:
-+	case V4L2_PIX_FMT_P012:
-+	case V4L2_PIX_FMT_P012M:
- 		sos->components_no = 3;
- 		break;
- 	case V4L2_PIX_FMT_YUYV:
-+	case V4L2_PIX_FMT_Y212:
- 		sos->components_no = 3;
- 		break;
- 	case V4L2_PIX_FMT_YUV24:
-+	case V4L2_PIX_FMT_YUV48_12:
- 	case V4L2_PIX_FMT_BGR24:
-+	case V4L2_PIX_FMT_BGR48_12:
- 	default:
- 		sos->components_no = 3;
- 		break;
- 	case V4L2_PIX_FMT_ABGR32:
-+	case V4L2_PIX_FMT_ABGR64_12:
- 		sos->components_no = 4;
- 		break;
- 	case V4L2_PIX_FMT_GREY:
-+	case V4L2_PIX_FMT_Y012:
- 		sos->components_no = 1;
- 		break;
- 	}
-@@ -847,12 +972,15 @@ static unsigned int mxc_jpeg_setup_cfg_stream(void *cfg_stream_vaddr,
- 	u8 *cfg = (u8 *)cfg_stream_vaddr;
- 	struct mxc_jpeg_sof *sof;
- 	struct mxc_jpeg_sos *sos;
-+	const struct mxc_jpeg_fmt *fmt = mxc_jpeg_find_format(fourcc);
+ 	dev_dbg(dev, "CAST Encoder CONFIG...\n");
+ 	/*
+ 	 * "Config_Mode" enabled, "Config_Mode auto clear enabled",
+ 	 */
+-	writel(0xa0, reg + CAST_MODE);
++	if (extseq)
++		writel(0xb0, reg + CAST_MODE);
++	else
++		writel(0xa0, reg + CAST_MODE);
+ 
+ 	/* all markers and segments */
+ 	writel(0x3ff, reg + CAST_CFG_MODE);
+ }
+ 
+-void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg)
++void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg, u8 extseq)
+ {
+ 	dev_dbg(dev, "CAST Encoder GO...\n");
+ 	/*
+ 	 * "GO" enabled, "GO bit auto clear" enabled
+ 	 */
+-	writel(0x140, reg + CAST_MODE);
++	if (extseq)
++		writel(0x150, reg + CAST_MODE);
++	else
++		writel(0x140, reg + CAST_MODE);
+ }
+ 
+ void mxc_jpeg_enc_set_quality(struct device *dev, void __iomem *reg, u8 quality)
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+index 8b7cd6526efd..ed15ea348f97 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg-hw.h
+@@ -117,8 +117,8 @@ void print_wrapper_info(struct device *dev, void __iomem *reg);
+ void mxc_jpeg_sw_reset(void __iomem *reg);
+ int mxc_jpeg_enable(void __iomem *reg);
+ void wait_frmdone(struct device *dev, void __iomem *reg);
+-void mxc_jpeg_enc_mode_conf(struct device *dev, void __iomem *reg);
+-void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg);
++void mxc_jpeg_enc_mode_conf(struct device *dev, void __iomem *reg, u8 extseq);
++void mxc_jpeg_enc_mode_go(struct device *dev, void __iomem *reg, u8 extseq);
+ void mxc_jpeg_enc_set_quality(struct device *dev, void __iomem *reg, u8 quality);
+ void mxc_jpeg_dec_mode_go(struct device *dev, void __iomem *reg);
+ int mxc_jpeg_get_slot(void __iomem *reg);
+diff --git a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+index 74ecc5415aa6..1bf24bf3257d 100644
+--- a/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
++++ b/drivers/media/platform/nxp/imx-jpeg/mxc-jpeg.c
+@@ -322,6 +322,45 @@ static const unsigned char jpeg_dqt[] = {
+ 	0x63, 0x63, 0x63, 0x63, 0x63, 0x63
+ };
+ 
++static const unsigned char jpeg_dqt_extseq[] = {
++	0xFF, 0xDB,
++	0x01, 0x04,
++	0x10,
++	0x00, 0x80, 0x00, 0x58, 0x00, 0x60, 0x00, 0x70,
++	0x00, 0x60, 0x00, 0x50, 0x00, 0x80, 0x00, 0x70,
++	0x00, 0x68, 0x00, 0x70, 0x00, 0x90, 0x00, 0x88,
++	0x00, 0x80, 0x00, 0x98, 0x00, 0xC0, 0x01, 0x40,
++	0x00, 0xD0, 0x00, 0xC0, 0x00, 0xB0, 0x00, 0xB0,
++	0x00, 0xC0, 0x01, 0x88, 0x01, 0x18, 0x01, 0x28,
++	0x00, 0xE8, 0x01, 0x40, 0x01, 0xD0, 0x01, 0x98,
++	0x01, 0xE8, 0x01, 0xE0, 0x01, 0xC8, 0x01, 0x98,
++	0x01, 0xC0, 0x01, 0xB8, 0x02, 0x00, 0x02, 0x40,
++	0x02, 0xE0, 0x02, 0x70, 0x02, 0x00, 0x02, 0x20,
++	0x02, 0xB8, 0x02, 0x28, 0x01, 0xB8, 0x01, 0xC0,
++	0x02, 0x80, 0x03, 0x68, 0x02, 0x88, 0x02, 0xB8,
++	0x02, 0xF8, 0x03, 0x10, 0x03, 0x38, 0x03, 0x40,
++	0x03, 0x38, 0x01, 0xF0, 0x02, 0x68, 0x03, 0x88,
++	0x03, 0xC8, 0x03, 0x80, 0x03, 0x20, 0x03, 0xC0,
++	0x02, 0xE0, 0x03, 0x28, 0x03, 0x38, 0x03, 0x18,
++	0x11,
++	0x00, 0x88, 0x00, 0x90, 0x00, 0x90, 0x00, 0xC0,
++	0x00, 0xA8, 0x00, 0xC0, 0x01, 0x78, 0x00, 0xD0,
++	0x00, 0xD0, 0x01, 0x78, 0x03, 0x18, 0x02, 0x10,
++	0x01, 0xC0, 0x02, 0x10, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++	0x03, 0x18, 0x03, 0x18, 0x03, 0x18, 0x03, 0x18,
++};
 +
-+	if (!fmt)
-+		return 0;
+ static const unsigned char jpeg_sof_maximal[] = {
+ 	0xFF, 0xC0,
+ 	0x00, 0x14, 0x08, 0x00, 0x40, 0x00, 0x40,
+@@ -329,6 +368,13 @@ static const unsigned char jpeg_sof_maximal[] = {
+ 	0x03, 0x11, 0x01, 0x04, 0x11, 0x01
+ };
  
- 	memcpy(cfg + offset, jpeg_soi, ARRAY_SIZE(jpeg_soi));
- 	offset += ARRAY_SIZE(jpeg_soi);
++static const unsigned char jpeg_sof_extseq[] = {
++	0xFF, 0xC1,
++	0x00, 0x14, 0x08, 0x00, 0x40, 0x00, 0x40,
++	0x04, 0x01, 0x11, 0x00, 0x02, 0x11, 0x01,
++	0x03, 0x11, 0x01, 0x04, 0x11, 0x01
++};
++
+ static const unsigned char jpeg_dht[] = {
+ 	0xFF, 0xC4,
+ 	0x01, 0xA2, 0x00, 0x00, 0x01, 0x05, 0x01,
+@@ -393,6 +439,90 @@ static const unsigned char jpeg_dht[] = {
+ 	0xF6, 0xF7, 0xF8, 0xF9, 0xFA
+ };
  
--	if (fourcc == V4L2_PIX_FMT_BGR24 ||
--	    fourcc == V4L2_PIX_FMT_ABGR32) {
-+	if (fmt->is_rgb) {
- 		memcpy(cfg + offset, jpeg_app14, sizeof(jpeg_app14));
- 		offset += sizeof(jpeg_app14);
- 	} else {
-@@ -918,6 +1046,10 @@ static void mxc_jpeg_config_dec_desc(struct vb2_buffer *out_buf,
- 	desc->stm_ctrl &= ~STM_CTRL_IMAGE_FORMAT(0xF); /* clear image format */
- 	desc->stm_ctrl |= STM_CTRL_IMAGE_FORMAT(img_fmt);
++static const unsigned char jpeg_dht_extseq[] = {
++	0xFF, 0xC4,
++	0x02, 0x2a, 0x00, 0x00, 0x01, 0x05, 0x01,
++	0x01, 0x01, 0x01, 0x01, 0x01, 0x01, 0x01,
++	0x01, 0x01, 0x00, 0x00, 0x00, 0x00, 0x01,
++	0x02, 0x03, 0x04, 0x05, 0x06, 0x07, 0x08,
++	0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
++	0x10, 0x00, 0x02, 0x01, 0x03, 0x03, 0x02,
++	0x04, 0x03, 0x05, 0x05, 0x02, 0x03, 0x02,
++	0x00, 0x00, 0xbf, 0x01, 0x02, 0x03, 0x00,
++	0x04, 0x11, 0x05, 0x12, 0x21, 0x31, 0x41,
++	0x06, 0x13, 0x51, 0x61, 0x07, 0x22, 0x71,
++	0x14, 0x32, 0x81, 0x91, 0xa1, 0x08, 0x23,
++	0x42, 0xb1, 0xc1, 0x15, 0x52, 0xd1, 0xf0,
++	0x24, 0x33, 0x62, 0x72, 0x82, 0x09, 0x0a,
++	0x16, 0x17, 0x18, 0x19, 0x1a, 0x25, 0x26,
++	0x27, 0x28, 0x29, 0x2a, 0x34, 0x35, 0x36,
++	0x37, 0x38, 0x39, 0x3a, 0x43, 0x44, 0x45,
++	0x46, 0x47, 0x48, 0x49, 0x4a, 0x53, 0x54,
++	0x55, 0x56, 0x57, 0x58, 0x59, 0x5a, 0x63,
++	0x64, 0x65, 0x66, 0x67, 0x68, 0x69, 0x6a,
++	0x73, 0x74, 0x75, 0x76, 0x77, 0x78, 0x79,
++	0x7a, 0x83, 0x84, 0x85, 0x86, 0x87, 0x88,
++	0x89, 0x8a, 0x92, 0x93, 0x94, 0x95, 0x96,
++	0x97, 0x98, 0x99, 0x9a, 0xa2, 0xa3, 0xa4,
++	0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa, 0xb2,
++	0xb3, 0xb4, 0xb5, 0xb6, 0xb7, 0xb8, 0xb9,
++	0xba, 0xc2, 0xc3, 0xc4, 0xc5, 0xc6, 0xc7,
++	0xc8, 0xc9, 0xca, 0xd2, 0xd3, 0xd4, 0xd5,
++	0xd6, 0xd7, 0xd8, 0xd9, 0xda, 0xe1, 0xe2,
++	0xe3, 0xe4, 0xe5, 0xe6, 0xe7, 0xe8, 0xe9,
++	0xea, 0xf1, 0xf2, 0xf3, 0xf4, 0xf5, 0xf6,
++	0xf7, 0xf8, 0xf9, 0xfa, 0x0b, 0x0c, 0x0d,
++	0x0e, 0x1b, 0x1c, 0x1d, 0x1e, 0x2b, 0x2c,
++	0x2d, 0x2e, 0x3b, 0x3c, 0x3d, 0x3e, 0x4b,
++	0x4c, 0x4d, 0x4e, 0x5b, 0x5c, 0x5d, 0x5e,
++	0x6b, 0x6c, 0x6d, 0x6e, 0x7b, 0x7c, 0x7d,
++	0x7e, 0x8b, 0x8c, 0x8d, 0x8e, 0x9b, 0x9c,
++	0x9d, 0x9e, 0xab, 0xac, 0xad, 0xae, 0xbb,
++	0xbc, 0xbd, 0xbe, 0xcb, 0xcc, 0xcd, 0xce,
++	0xdb, 0xdc, 0xdd, 0xde, 0xeb, 0xec, 0xed,
++	0xee, 0xfb, 0xfc, 0xfd, 0xfe, 0x01, 0x00,
++	0x01, 0x05, 0x01, 0x01, 0x01, 0x01, 0x01,
++	0x01, 0x01, 0x01, 0x01, 0x01, 0x00, 0x00,
++	0x00, 0x00, 0x01, 0x02, 0x03, 0x04, 0x05,
++	0x06, 0x07, 0x08, 0x09, 0x0a, 0x0b, 0x0c,
++	0x0d, 0x0e, 0x0f, 0x11, 0x00, 0x02, 0x01,
++	0x03, 0x03, 0x02, 0x04, 0x03, 0x05, 0x05,
++	0x02, 0x03, 0x02, 0x00, 0x00, 0xbf, 0x01,
++	0x02, 0x03, 0x00, 0x04, 0x11, 0x05, 0x12,
++	0x21, 0x31, 0x41, 0x06, 0x13, 0x51, 0x61,
++	0x07, 0x22, 0x71, 0x14, 0x32, 0x81, 0x91,
++	0xa1, 0x08, 0x23, 0x42, 0xb1, 0xc1, 0x15,
++	0x52, 0xd1, 0xf0, 0x24, 0x33, 0x62, 0x72,
++	0x82, 0x09, 0x0a, 0x16, 0x17, 0x18, 0x19,
++	0x1a, 0x25, 0x26, 0x27, 0x28, 0x29, 0x2a,
++	0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a,
++	0x43, 0x44, 0x45, 0x46, 0x47, 0x48, 0x49,
++	0x4a, 0x53, 0x54, 0x55, 0x56, 0x57, 0x58,
++	0x59, 0x5a, 0x63, 0x64, 0x65, 0x66, 0x67,
++	0x68, 0x69, 0x6a, 0x73, 0x74, 0x75, 0x76,
++	0x77, 0x78, 0x79, 0x7a, 0x83, 0x84, 0x85,
++	0x86, 0x87, 0x88, 0x89, 0x8a, 0x92, 0x93,
++	0x94, 0x95, 0x96, 0x97, 0x98, 0x99, 0x9a,
++	0xa2, 0xa3, 0xa4, 0xa5, 0xa6, 0xa7, 0xa8,
++	0xa9, 0xaa, 0xb2, 0xb3, 0xb4, 0xb5, 0xb6,
++	0xb7, 0xb8, 0xb9, 0xba, 0xc2, 0xc3, 0xc4,
++	0xc5, 0xc6, 0xc7, 0xc8, 0xc9, 0xca, 0xd2,
++	0xd3, 0xd4, 0xd5, 0xd6, 0xd7, 0xd8, 0xd9,
++	0xda, 0xe1, 0xe2, 0xe3, 0xe4, 0xe5, 0xe6,
++	0xe7, 0xe8, 0xe9, 0xea, 0xf1, 0xf2, 0xf3,
++	0xf4, 0xf5, 0xf6, 0xf7, 0xf8, 0xf9, 0xfa,
++	0x0b, 0x0c, 0x0d, 0x0e, 0x1b, 0x1c, 0x1d,
++	0x1e, 0x2b, 0x2c, 0x2d, 0x2e, 0x3b, 0x3c,
++	0x3d, 0x3e, 0x4b, 0x4c, 0x4d, 0x4e, 0x5b,
++	0x5c, 0x5d, 0x5e, 0x6b, 0x6c, 0x6d, 0x6e,
++	0x7b, 0x7c, 0x7d, 0x7e, 0x8b, 0x8c, 0x8d,
++	0x8e, 0x9b, 0x9c, 0x9d, 0x9e, 0xab, 0xac,
++	0xad, 0xae, 0xbb, 0xbc, 0xbd, 0xbe, 0xcb,
++	0xcc, 0xcd, 0xce, 0xdb, 0xdc, 0xdd, 0xde,
++	0xeb, 0xec, 0xed, 0xee, 0xfb, 0xfc, 0xfd,
++	0xfe,
++};
++
+ static const unsigned char jpeg_dri[] = {
+ 	0xFF, 0xDD,
+ 	0x00, 0x04, 0x00, 0x20
+@@ -802,7 +932,8 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+ 	if (dec_ret & SLOT_STATUS_ENC_CONFIG_ERR) {
+ 		u32 ret = readl(reg + CAST_STATUS12);
+ 
+-		dev_err(dev, "Encoder/decoder error, status=0x%08x", ret);
++		dev_err(dev, "Encoder/decoder error, dec_ret = 0x%08x, status=0x%08x",
++			dec_ret, ret);
+ 		mxc_jpeg_clr_desc(reg, slot);
+ 		mxc_jpeg_sw_reset(reg);
+ 		buf_state = VB2_BUF_STATE_ERROR;
+@@ -814,10 +945,11 @@ static irqreturn_t mxc_jpeg_dec_irq(int irq, void *priv)
+ 
+ 	if (jpeg->mode == MXC_JPEG_ENCODE &&
+ 	    ctx->enc_state == MXC_JPEG_ENC_CONF) {
++		q_data = mxc_jpeg_get_q_data(ctx, V4L2_BUF_TYPE_VIDEO_OUTPUT_MPLANE);
+ 		ctx->enc_state = MXC_JPEG_ENCODING;
+ 		dev_dbg(dev, "Encoder config finished. Start encoding...\n");
+ 		mxc_jpeg_enc_set_quality(dev, reg, ctx->jpeg_quality);
+-		mxc_jpeg_enc_mode_go(dev, reg);
++		mxc_jpeg_enc_mode_go(dev, reg, mxc_jpeg_is_extended_sequential(q_data->fmt));
+ 		goto job_unlock;
+ 	}
+ 	if (jpeg->mode == MXC_JPEG_DECODE && jpeg_src_buf->dht_needed) {
+@@ -868,8 +1000,12 @@ static int mxc_jpeg_fixup_sof(struct mxc_jpeg_sof *sof,
+ 			      u16 w, u16 h)
+ {
+ 	int sof_length;
++	const struct mxc_jpeg_fmt *fmt = mxc_jpeg_find_format(fourcc);
+ 
+-	sof->precision = 8; /* TODO allow 8/12 bit precision*/
++	if (fmt)
++		sof->precision = fmt->precision;
++	else
++		sof->precision = 8; /* TODO allow 8/12 bit precision*/
+ 	sof->height = h;
+ 	_bswap16(&sof->height);
+ 	sof->width = w;
+@@ -988,16 +1124,28 @@ static unsigned int mxc_jpeg_setup_cfg_stream(void *cfg_stream_vaddr,
+ 		offset += sizeof(jpeg_app0);
+ 	}
+ 
+-	memcpy(cfg + offset, jpeg_dqt, sizeof(jpeg_dqt));
+-	offset += sizeof(jpeg_dqt);
++	if (mxc_jpeg_is_extended_sequential(fmt)) {
++		memcpy(cfg + offset, jpeg_dqt_extseq, sizeof(jpeg_dqt_extseq));
++		offset += sizeof(jpeg_dqt_extseq);
++
++		memcpy(cfg + offset, jpeg_sof_extseq, sizeof(jpeg_sof_extseq));
++	} else {
++		memcpy(cfg + offset, jpeg_dqt, sizeof(jpeg_dqt));
++		offset += sizeof(jpeg_dqt);
+ 
+-	memcpy(cfg + offset, jpeg_sof_maximal, sizeof(jpeg_sof_maximal));
++		memcpy(cfg + offset, jpeg_sof_maximal, sizeof(jpeg_sof_maximal));
++	}
+ 	offset += 2; /* skip marker ID */
+ 	sof = (struct mxc_jpeg_sof *)(cfg + offset);
+ 	offset += mxc_jpeg_fixup_sof(sof, fourcc, w, h);
+ 
+-	memcpy(cfg + offset, jpeg_dht, sizeof(jpeg_dht));
+-	offset += sizeof(jpeg_dht);
++	if (mxc_jpeg_is_extended_sequential(fmt)) {
++		memcpy(cfg + offset, jpeg_dht_extseq, sizeof(jpeg_dht_extseq));
++		offset += sizeof(jpeg_dht_extseq);
++	} else {
++		memcpy(cfg + offset, jpeg_dht, sizeof(jpeg_dht));
++		offset += sizeof(jpeg_dht);
++	}
+ 
+ 	memcpy(cfg + offset, jpeg_dri, sizeof(jpeg_dri));
+ 	offset += sizeof(jpeg_dri);
+@@ -1138,6 +1286,10 @@ static void mxc_jpeg_config_enc_desc(struct vb2_buffer *out_buf,
+ 	desc->stm_ctrl = STM_CTRL_CONFIG_MOD(0) |
+ 			 STM_CTRL_IMAGE_FORMAT(img_fmt);
  	desc->stm_ctrl |= STM_CTRL_BITBUF_PTR_CLR(1);
-+	if (mxc_jpeg_is_extended_sequential(jpeg_src_buf->fmt))
++	if (mxc_jpeg_is_extended_sequential(q_data->fmt))
 +		desc->stm_ctrl |= STM_CTRL_PIXEL_PRECISION;
 +	else
 +		desc->stm_ctrl &= ~STM_CTRL_PIXEL_PRECISION;
- 	desc->line_pitch = q_data_cap->bytesperline[0];
- 	mxc_jpeg_addrs(desc, dst_buf, src_buf, 0);
- 	mxc_jpeg_set_bufsize(desc, ALIGN(vb2_plane_size(src_buf, 0), 1024));
+ 	mxc_jpeg_addrs(desc, src_buf, dst_buf, 0);
+ 	dev_dbg(jpeg->dev, "cfg_desc:\n");
+ 	print_descriptor_info(jpeg->dev, cfg_desc);
+@@ -1338,7 +1490,9 @@ static void mxc_jpeg_device_run(void *priv)
+ 		ctx->enc_state = MXC_JPEG_ENC_CONF;
+ 		mxc_jpeg_config_enc_desc(&dst_buf->vb2_buf, ctx,
+ 					 &src_buf->vb2_buf, &dst_buf->vb2_buf);
+-		mxc_jpeg_enc_mode_conf(dev, reg); /* start config phase */
++		/* start config phase */
++		mxc_jpeg_enc_mode_conf(dev, reg,
++				       mxc_jpeg_is_extended_sequential(q_data_out->fmt));
+ 	} else {
+ 		dev_dbg(dev, "Decoding on slot %d\n", ctx->slot);
+ 		print_mxc_buf(jpeg, &src_buf->vb2_buf, 0);
 -- 
 2.38.1
 
