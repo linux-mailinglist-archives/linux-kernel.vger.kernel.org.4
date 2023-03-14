@@ -2,98 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1034E6BA180
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:37:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C9F0D6BA183
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:41:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230334AbjCNVhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
+        id S230380AbjCNVk6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:40:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjCNVhi (ORCPT
+        with ESMTP id S229690AbjCNVk4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:37:38 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C2E53DA9;
-        Tue, 14 Mar 2023 14:37:36 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbn1V57RDz4x8y;
-        Wed, 15 Mar 2023 08:37:34 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678829854;
-        bh=Nd2x1gG2+NtcTScVqI2c9zvK2kePXYNOFcyym9qGNug=;
-        h=Date:From:To:Cc:Subject:From;
-        b=ZJWT4IMt6bAm/afFuu6BfF+YU8G0QEdwe8JIPLoZoAlHJDsKNPze/1C9p/dtYxwqB
-         L2sRnD7Gx8gOKp3atQ/33hXkhczvttR1rPFx5SHrgnfZOz0YrpASdLfps0ApQBhZWE
-         7STvh3RuTqnRoFRfgnqT8JSxtF5xmzK8gueCx+yu2Rg8LYjIAU4fwFapSS9su0CnJS
-         H1ThW1WxKdn34Ys1YejvijV9OjG5+C8KLk4e7NttD290aa8VB/o18sHGZqdgqWerGe
-         r5xysvG0rdZ8IAmLlp9GTfvOzOGsGvpwS+37/qy4alCHbugu3FXmevC9T5Ah22iLp5
-         9hJWOi364FJcQ==
-Date:   Wed, 15 Mar 2023 08:37:33 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Robin Chen <robin.chen@amd.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the amdgpu tree
-Message-ID: <20230315083733.352cbf84@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/2cNvZ49YqAmsSTP6cfBmj=u";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 17:40:56 -0400
+Received: from wnew3-smtp.messagingengine.com (wnew3-smtp.messagingengine.com [64.147.123.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74DC210E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:40:54 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailnew.west.internal (Postfix) with ESMTP id 4D0D92B06998;
+        Tue, 14 Mar 2023 17:40:49 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 14 Mar 2023 17:40:51 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-type:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm1; t=1678830048; x=1678837248; bh=5b
+        KacenUJfm/nP5sO5Oy+iL59bFvwd5SQ5iWdLqSo4g=; b=YqOtIxPA+cenlSXmEi
+        oE/uy4NZjAva5jR+QabiGcAlnZf+GRYmdaLPuezreOWpGLeK+79HKWs5ovQI73Qy
+        /ZdzNjiELcZ0Khc7tQThlji9o9aFMFZDN1xjHPZogp5+qVudhvyJBfye7KCv95DC
+        DA+WVurirmQ/hdAM0KmQ78F7b431AfMs4xX720iKXEh57fiNLCmqxob4UQcj2k6h
+        jxK1y4kfRwDcGvPtfoUOWFPfquGeblyJ65toUwiq++c0GqUijdGGcCvvfFmFojtj
+        cotFBBTH/22V7ya8bJJ9JJtgDzbHMwh+fxM74Qt+tT6qeY7BgHaDdR8gfXi7o+u7
+        cBmA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678830048; x=1678837248; bh=5bKacenUJfm/n
+        P5sO5Oy+iL59bFvwd5SQ5iWdLqSo4g=; b=qRxUZQAmpg5QJcl9WX1S5CgDDmK0M
+        cxCVreIPFl1JJRODX1xb4GquKGhrsmBy8O3olaVB7KlQESzM3cVmXuskNOSzrJgb
+        S9Z/B0JQlGb/YhDjY6VSdF3E7DN7H8owbH4HUBBtrRMBp0Ci08hhEUZ1kAaHAIJo
+        2rAf9fiTU90Hmiwbr7F6C//na42jhy/xR4LsZ++HpA3R8ebSlyb4Qyw7G/orPVMs
+        hguqbgIDqFeARu2762LQbprGfPc9ZG2DT+9203hBJLU4YqnS6GNsG9bFadE/oE8H
+        iZdZR5j5H7MH9/gW7rq4twT0rf+5+NOOUpu+sl9kcfPGS9xI9Mn5oTS9A==
+X-ME-Sender: <xms:3-kQZJXFQJHQkta4QvilzNqcOzjithYjaaFBh78TLVaLM_y9qNiIFQ>
+    <xme:3-kQZJkaaq3elsxKt3gPqWaNSR6jxEhGj-_9oZoVjaPEHGPycq4VASFWz9afPRKcc
+    bbAEfPxyGdTyozlP8A>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgudehhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpeffheeugeetiefhgeethfejgfdtuefggeejleehjeeutefhfeeggefhkedt
+    keetffenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    grrhhnugesrghrnhgusgdruggv
+X-ME-Proxy: <xmx:3-kQZFYhf1TsT3pLLX6NZmaCfIf3H5wp84LFusnJJ-Pp3lKSQxYTcw>
+    <xmx:3-kQZMXhP8b3Tp_w9haN4FT9huU5zgBLyGlGmPBxE4InX9Bagld48g>
+    <xmx:3-kQZDnj6QFV9Xb2HDYBWc7nJILXRyYWy5rv6CJdxk0EcLsKHxZxpA>
+    <xmx:4OkQZBFL9QqWRkq4JlCzjiqgfKAqW_oC1iZCdZn2Rj279g00Z1zyPhldr-E>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 5FE61B60089; Tue, 14 Mar 2023 17:40:47 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <e19fd8bc-5944-409d-a4a1-3a3d53691634@app.fastmail.com>
+In-Reply-To: <4ac809d2-3924-3839-479f-0b4be9f18a1f@linaro.org>
+References: <20230314163201.955689-1-arnd@kernel.org>
+ <4ac809d2-3924-3839-479f-0b4be9f18a1f@linaro.org>
+Date:   Tue, 14 Mar 2023 22:40:26 +0100
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        "Arnd Bergmann" <arnd@kernel.org>,
+        "Christian Lamparter" <chunkeey@googlemail.com>,
+        "Kalle Valo" <kvalo@kernel.org>
+Cc:     "Linus Walleij" <linus.walleij@linaro.org>,
+        "Bartosz Golaszewski" <brgl@bgdev.pl>,
+        "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+        Linux-OMAP <linux-omap@vger.kernel.org>,
+        "Tony Lindgren" <tony@atomide.com>,
+        "Aaro Koskinen" <aaro.koskinen@iki.fi>,
+        "Felipe Balbi" <balbi@kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        =?UTF-8?Q?Beno=C3=AEt_Cousson?= <bcousson@baylibre.com>,
+        "Russell King" <linux@armlinux.org.uk>,
+        "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
+        "Johannes Berg" <johannes@sipsolutions.net>,
+        linux-wireless@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] p54spi: convert to devicetree
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/2cNvZ49YqAmsSTP6cfBmj=u
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 14, 2023, at 20:57, Krzysztof Kozlowski wrote:
+> On 14/03/2023 17:30, Arnd Bergmann wrote:
+>
+> Please split bindings to separate patch.
+>
+>>  MAINTAINERS                                   |  1 +
+>>  arch/arm/boot/dts/omap2.dtsi                  |  4 ++
+>>  arch/arm/boot/dts/omap2420-n8x0-common.dtsi   | 12 ++++
+>
+> DTS as well...
 
-Hi all,
+ok
 
-In commit
+>> +maintainers:
+>> +  - Johannes Berg <johannes@sipsolutions.net>
+>> +  - Christian Lamparter <chunkeey@web.de>
+>> +
+>> +description: |
+>
+> You can drop '|'.
 
-  540359b2e8a4 ("drm/amd/display: hpd rx irq not working with eDP interface=
-")
+ok
 
-Fixes tag
+>> +properties:
+>> +  compatible:
+>> +    enum:
+>> +      - st,stlc4550
+>> +      - st,stlc4560
+>> +      - isil,p54spi
+>> +      - cnxt,3110x
+>
+> Order above entries by name.
 
-  Fixes: 11ec7d8f2263 ("drm/amd/display: Allow individual control of eDP ho=
-tplug support")
+ok
 
-has these problem(s):
+>> +
+>> +  power-gpios:
+>
+> If this is GPIO driving some power pin, then it should be
+> "powerdown-gpios" (like in /bindings/gpio/gpio-consumer-common.yaml)
 
-  - Target SHA1 does not exist
+As far as I can tell, it's the opposite: the gpio turns the power on
+in 'high' state. I could make it GPIO_ACTIVE_LOW and call it powerdown,
+if you think that's better, but I don't think that is how it was
+meant.
 
-Maybe you meant
+>> +examples:
+>> +  - |
+>> +   gpio {
+>
+> Align example with above |, so four spaces. Or better indent entire
+> example with four spaces.
 
-Fixes: ab144f0b4ad6 ("drm/amd/display: Allow individual control of eDP hotp=
-lug support")
+Ok, that makes it much more readable.
 
---=20
-Cheers,
-Stephen Rothwell
+>> +     gpio-controller;
+>> +     #gpio-cells = <1>;
+>> +     #interupt-cells = <1>;
+>> +   };
+>
+> Drop "gpio" node. It's not needed for the example.
 
---Sig_/2cNvZ49YqAmsSTP6cfBmj=u
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+ok.
 
------BEGIN PGP SIGNATURE-----
+>> +   spi {
+>> +      #address-cells = <1>;
+>> +      #size-cells = <0>;
+>> +
+>> +      wifi@0 {
+>> +        reg = <0>;
+>> +        compatible = "st,stlc4560";
+>
+> compatible before reg.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ6R4ACgkQAVBC80lX
-0Gx06gf9EwGz8K7axGcsjMWLbz3lMlgCU6NTNV+CyOeW780ix0GBiLfieZrLZEPv
-5aVl1P9OeSVrABEw2VQZFaTidSW5cyjDThFMkObQzZkPCpKo7gCq5Bnmb/GxQ/Xb
-RlvioKKOZuoXzHmneg0wXRshzBgzbEyrqM1XdCz7+yNP+xVIh0DjV1hSUam7pXiQ
-nl2nlgdKv5KzCvpuitKTTxcvSKgnhyxX5t/hVGEJb/c6OX3RDr6s7h5l+Ci+eBZR
-QT/+H+4pQTnDNzcxw/sWxLlAuYjhUT5X0fcdud1wfO4H1a7rqjbkRc1QFPkr59/n
-/QlyhQHtcyiMbP4XMlrhELXj9ojDzw==
-=Nqk4
------END PGP SIGNATURE-----
+ok.
 
---Sig_/2cNvZ49YqAmsSTP6cfBmj=u--
+       Arnd
