@@ -2,203 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B4A0A6BA355
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB1896BA37E
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:21:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229818AbjCNXHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42948 "EHLO
+        id S230122AbjCNXV3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:21:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229540AbjCNXHF (ORCPT
+        with ESMTP id S229850AbjCNXVY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:07:05 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0C12CFD5;
-        Tue, 14 Mar 2023 16:07:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678835224; x=1710371224;
-  h=from:to:cc:subject:date:message-id;
-  bh=WrrhCRvdXc22LfrfW5RvmTwqb6i5r2ubwQSHJiMjvQE=;
-  b=Dq80RIaqaSINecA0xrtIbjXy4wKht35msa1KXtYjPigzAE+FQ0GAfwG8
-   dQTF+4atESJ83stEYMfxg5yWs1JTsp1lhqURVwlRfnBW+VFZMFinmQw03
-   43oX3RS8+IxoCmbxROPKipNSNytFd57lK4ZlueQ7J4jlr50DIZjaqkAxd
-   gD2LNaPj7uCI191cgBkxcd2Lw3hBDblMFde5SPOpLIZgsSc4A3kM7v9Rb
-   HSULqOQcMlgvjddBovFgd+4uckJFYKcv278D8zaroIuONIrmQLCcZpDP1
-   4+I7FAG4s3MxLUOBBDJV/gzUAK3p5LLGP73Gv7diFHJQAfCV6g+VbEKWj
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339926314"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="339926314"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 16:07:04 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="743481196"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="743481196"
-Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
-  by fmsmga008.fm.intel.com with ESMTP; 14 Mar 2023 16:07:03 -0700
-From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-To:     x86@kernel.org
-Cc:     Ricardo Neri <ricardo.neri@intel.com>,
-        linux-kernel@vger.kernel.org,
-        Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        Len Brown <len.brown@intel.com>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Zhang Rui <rui.zhang@intel.com>, Chen Yu <yu.c.chen@intel.com>,
-        stable@vger.kernel.org
-Subject: [PATCH] x86/cacheinfo: Define per-CPU num_cache_leaves
-Date:   Tue, 14 Mar 2023 16:16:58 -0700
-Message-Id: <20230314231658.30169-1-ricardo.neri-calderon@linux.intel.com>
-X-Mailer: git-send-email 2.17.1
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 19:21:24 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 056ED30E84;
+        Tue, 14 Mar 2023 16:21:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6F6F261A43;
+        Tue, 14 Mar 2023 23:21:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06B18C433D2;
+        Tue, 14 Mar 2023 23:21:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678836081;
+        bh=1LpG8Owr5h1Nv/yVkTjkl6nlXkxG8Oan2DRA4buy3zE=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=TlmqXPQ6PCSyTMy7FM1O2V+iWNqVaBb7Iy3h36aSy8QcjtFubzEIPmPYMRvRoX2N5
+         VF7+9EUU7kesqX4EUfyFUKQNcTrnGfCXeAKuE5NKKaqJVBT845IBUpXYN9VoWJrdj5
+         qagmLbTfH4BQ+YD5VPK8IGVlZ/JN/pQyi7QiMkhl7lDxktwTO1WCUOUCsRxGEnWkVV
+         BBvM1o8rTitEkXvsQVf0e4iTN8kJ5IFk689Sf1cu2/ybM2YsOCufAp8HrdXO7SRjuS
+         rhWFiYRg3ct6h3OFgft0C2G7BT2cGjGEMHZgQKmCUIzJe5mxbtjK3FrgVgOpUUudug
+         NjjkyAWthKyJg==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id CE3D827C0054;
+        Tue, 14 Mar 2023 19:21:19 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Tue, 14 Mar 2023 19:21:19 -0400
+X-ME-Sender: <xms:bgERZF-R6V2BvHK54N93fzcPxKyYc04MEA6T3NLYUK8L6QQ49J3r3w>
+    <xme:bgERZJtbmILXoH6H7gR_0JSDSFcLwvjYyMgsh2AiO2UDXAHk5U_xnC9E2LI_uUICX
+    tKUHNQv5KRKFB24DQg>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddvjedgtdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehn
+    ugihucfnuhhtohhmihhrshhkihdfuceolhhuthhosehkvghrnhgvlhdrohhrgheqnecugg
+    ftrfgrthhtvghrnhepgedugedtledtieduteffveevhfefheeuhfegfeduvdeltdeugeet
+    veeliedvfeehnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhprghu
+    thhhphgvrhhsohhnrghlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqdhluh
+    htoheppehkvghrnhgvlhdrohhrgheslhhinhhugidrlhhuthhordhush
+X-ME-Proxy: <xmx:bgERZDCbcFEkx3oeJCN44ysiNNUUI0Fqa289qbZyDAjvNp2swyYjzg>
+    <xmx:bgERZJefgs1xsuybL_QtwGHtzoqyCJtwPMw957We9aZawtPxMqYmgA>
+    <xmx:bgERZKNhdykp_OA2tlYxeiYIR2IuPQbDA-pniq8zlxMl4tvBV3fidw>
+    <xmx:bwERZBkgrohfTVb_w_Y35cX-J-LaoJ_JiG8IBv0Fy0YsgTh6EV7LuQ>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id C2D3731A0063; Tue, 14 Mar 2023 19:21:18 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <ea1b6e36-c434-49e9-bede-b4bd2b41868d@app.fastmail.com>
+In-Reply-To: <d575db7f-bad3-477e-a501-19d2d84527cd@app.fastmail.com>
+References: <cover.1678785672.git.baskov@ispras.ru>
+ <d575db7f-bad3-477e-a501-19d2d84527cd@app.fastmail.com>
+Date:   Tue, 14 Mar 2023 16:20:43 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Evgeniy Baskov" <baskov@ispras.ru>,
+        "Ard Biesheuvel" <ardb@kernel.org>
+Cc:     "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>,
+        "Peter Jones" <pjones@redhat.com>,
+        "Gerd Hoffmann" <kraxel@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-efi@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v5 00/27] x86_64: Improvements at compressed kernel stage
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make num_cache_leaves a per-CPU variable. Otherwise, populate_cache_
-leaves() fails on systems with asymmetric number of subleaves in CPUID
-leaf 0x4. Intel Meteor Lake is an example of such a system.
 
-Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-Cc: Len Brown <len.brown@intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>
-Cc: Zhang Rui <rui.zhang@intel.com>
-Cc: Chen Yu <yu.c.chen@intel.com>
-Cc: stable@vger.kernel.org
-Reviewed-by: Len Brown <len.brown@intel.com>
-Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
----
-After this change, all CPUs will traverse CPUID leaf 0x4 when booted for
-the first time. On systems with asymmetric cache topologies this is
-useless work.
 
-Creating a list of processor models that have asymmetric cache topologies
-was considered. The burden of maintaining such list would outweigh the
-performance benefit of skipping this extra step.
----
- arch/x86/kernel/cpu/cacheinfo.c | 48 ++++++++++++++++++++-------------
- 1 file changed, 29 insertions(+), 19 deletions(-)
+On Tue, Mar 14, 2023, at 2:23 PM, Andy Lutomirski wrote:
+> On Tue, Mar 14, 2023, at 3:13 AM, Evgeniy Baskov wrote:
+>>
+>> Kernel is made to be more compatible with PE image specification [3],
+>> allowing it to be successfully loaded by stricter PE loader
+>> implementations like the one from [2]. There is at least one
+>> known implementation that uses that loader in production [4].
+>> There are also ongoing efforts to upstream these changes.
+>
+> Can you clarify 
 
-diff --git a/arch/x86/kernel/cpu/cacheinfo.c b/arch/x86/kernel/cpu/cacheinfo.c
-index 4063e8991211..6ad51657c853 100644
---- a/arch/x86/kernel/cpu/cacheinfo.c
-+++ b/arch/x86/kernel/cpu/cacheinfo.c
-@@ -176,7 +176,18 @@ struct _cpuid4_info_regs {
- 	struct amd_northbridge *nb;
- };
- 
--static unsigned short num_cache_leaves;
-+static DEFINE_PER_CPU(unsigned short, num_cache_leaves);
-+
-+static inline unsigned short get_num_cache_leaves(unsigned int cpu)
-+{
-+	return per_cpu(num_cache_leaves, cpu);
-+}
-+
-+static inline void
-+set_num_cache_leaves(unsigned short nr_leaves, unsigned int cpu)
-+{
-+	per_cpu(num_cache_leaves, cpu) = nr_leaves;
-+}
- 
- /* AMD doesn't have CPUID4. Emulate it here to report the same
-    information to the user.  This makes some assumptions about the machine:
-@@ -716,19 +727,21 @@ void cacheinfo_hygon_init_llc_id(struct cpuinfo_x86 *c, int cpu)
- void init_amd_cacheinfo(struct cpuinfo_x86 *c)
- {
- 
-+	unsigned int cpu = c->cpu_index;
-+
- 	if (boot_cpu_has(X86_FEATURE_TOPOEXT)) {
--		num_cache_leaves = find_num_cache_leaves(c);
-+		set_num_cache_leaves(find_num_cache_leaves(c), cpu);
- 	} else if (c->extended_cpuid_level >= 0x80000006) {
- 		if (cpuid_edx(0x80000006) & 0xf000)
--			num_cache_leaves = 4;
-+			set_num_cache_leaves(4, cpu);
- 		else
--			num_cache_leaves = 3;
-+			set_num_cache_leaves(3, cpu);
- 	}
- }
- 
- void init_hygon_cacheinfo(struct cpuinfo_x86 *c)
- {
--	num_cache_leaves = find_num_cache_leaves(c);
-+	set_num_cache_leaves(find_num_cache_leaves(c), c->cpu_index);
- }
- 
- void init_intel_cacheinfo(struct cpuinfo_x86 *c)
-@@ -738,24 +751,21 @@ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
- 	unsigned int new_l1d = 0, new_l1i = 0; /* Cache sizes from cpuid(4) */
- 	unsigned int new_l2 = 0, new_l3 = 0, i; /* Cache sizes from cpuid(4) */
- 	unsigned int l2_id = 0, l3_id = 0, num_threads_sharing, index_msb;
--#ifdef CONFIG_SMP
- 	unsigned int cpu = c->cpu_index;
--#endif
- 
- 	if (c->cpuid_level > 3) {
--		static int is_initialized;
--
--		if (is_initialized == 0) {
--			/* Init num_cache_leaves from boot CPU */
--			num_cache_leaves = find_num_cache_leaves(c);
--			is_initialized++;
--		}
-+		/*
-+		 * There should be at least one leaf. A non-zero value means
-+		 * that the number of leaves has been initialized.
-+		 */
-+		if (!get_num_cache_leaves(cpu))
-+			set_num_cache_leaves(find_num_cache_leaves(c), cpu);
- 
- 		/*
- 		 * Whenever possible use cpuid(4), deterministic cache
- 		 * parameters cpuid leaf to find the cache details
- 		 */
--		for (i = 0; i < num_cache_leaves; i++) {
-+		for (i = 0; i < get_num_cache_leaves(cpu); i++) {
- 			struct _cpuid4_info_regs this_leaf = {};
- 			int retval;
- 
-@@ -791,14 +801,14 @@ void init_intel_cacheinfo(struct cpuinfo_x86 *c)
- 	 * Don't use cpuid2 if cpuid4 is supported. For P4, we use cpuid2 for
- 	 * trace cache
- 	 */
--	if ((num_cache_leaves == 0 || c->x86 == 15) && c->cpuid_level > 1) {
-+	if ((!get_num_cache_leaves(cpu) || c->x86 == 15) && c->cpuid_level > 1) {
- 		/* supports eax=2  call */
- 		int j, n;
- 		unsigned int regs[4];
- 		unsigned char *dp = (unsigned char *)regs;
- 		int only_trace = 0;
- 
--		if (num_cache_leaves != 0 && c->x86 == 15)
-+		if (get_num_cache_leaves(cpu) && c->x86 == 15)
- 			only_trace = 1;
- 
- 		/* Number of times to iterate */
-@@ -1000,12 +1010,12 @@ int init_cache_level(unsigned int cpu)
- {
- 	struct cpu_cacheinfo *this_cpu_ci = get_cpu_cacheinfo(cpu);
- 
--	if (!num_cache_leaves)
-+	if (!get_num_cache_leaves(cpu))
- 		return -ENOENT;
- 	if (!this_cpu_ci)
- 		return -EINVAL;
- 	this_cpu_ci->num_levels = 3;
--	this_cpu_ci->num_leaves = num_cache_leaves;
-+	this_cpu_ci->num_leaves = get_num_cache_leaves(cpu);
- 	return 0;
- }
- 
--- 
-2.25.1
+Sorry, lost part of a sentence.  Can you clarify in what respect the loader is stricter?
 
+
+Anyway, I did some research.  I found:
+
+https://github.com/rhboot/shim/pull/459/commits/99a8d19326f69665e0b86bcfa6a59d554f662fba
+
+which gives a somewhat incoherent-sounding description in which setting EFI_IMAGE_DLLCHARACTERISTICS_NX_COMPAT apparently enables allocating memory that isn't RWX.  But this seems odd EFI_IMAGE_DLLCHARACTERISTICS_NX_COMPAT is a property of the EFI *program*, not the boot services implementation.  And I'd be surprised if a flag on the application changes the behavior of boot services, but, OTOH, this is Microsoft.
+
+And the PE 89 spec does say that EFI_IMAGE_DLLCHARACTERISTICS_NX_COMPAT means "Image is NX compatible" and that is the sole mention of NX in the document.
+
+And *this* seems to be the actual issue:
+
+https://github.com/rhboot/shim/pull/459/commits/825d99361b4aaa16144392dc6cea43e24c8472ae
+
+I assume that MS required this change as a condition for signing, but what do I know?  Anyway, the rules appear to be that the PE sections must not be both W and X at the same size.  (For those who are familiar with the abomination known as ELF but not with the abomination known as PE, a "section" is a range in the file that gets mapped into memory.  Like a PT_LOAD segment in ELF.)
+
+Now I don't know whether anything prevents us from doing something awful like mapping the EFI stuf RX and then immediately *re*mapping everything RWX.  (Not that I'm seriously suggesting that.)  And it's not immediately clear to me how the rest of this series fits in, what this has to do with the identity map, etc.
+
+Anyway, I think the series needs to document what's going on, in the changelog and relevant comments.  And if the demand-population of the identity map is a problem, then there should be a comment like (made up -- don't say this unless it's correct):
+
+A sufficiently paranoid EFI implementation may enforce W^X when mapping memory through the boot services protocols.  And creating identity mappings in the page fault handler needs to use the boot services protocols to do so because [fill this in] [or it would be a bit of an abomination to do an end run around them by modifying the page tables ourselves] [or whatever is actually happening].  While we *could* look at the actual fault type and create an R or RW or RX mapping as appropriate, it's better to figure out what needs to be mapped for real and to map it with the correct permissions before faulting.
+
+But I still think we should keep the demand-faulting code as a fallback, even if it's hardcoded as RW, and just log the fault mode and address.  We certainly shouldn't be *executing* code that wasn't identity mapped.  Unless that code is boot services and we're creating the boot services mappings!
+
+For that matter, how confident are we that there aren't crappy boot services implementations out there that require that we fix up page faults? After all, it's not like EFI implementations, especially early ones, are any good.
+
+--Andy
