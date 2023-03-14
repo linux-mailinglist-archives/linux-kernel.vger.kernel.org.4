@@ -2,158 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE7846B88CA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:57:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9BC126B88CC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:57:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjCNC5i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 22:57:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37626 "EHLO
+        id S230080AbjCNC5l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:57:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229807AbjCNC5g (ORCPT
+        with ESMTP id S229950AbjCNC5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 22:57:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18B2D8FBC9
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:56:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678762607;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=JyrIGLqX2YJPW6IWpAt0DsDXF+2ApyDZOpSw0P/BqXc=;
-        b=jIqWVIbKxjJpO+52/Q81n6QHbdWcapDBTe1tjdPvcXbPjjl5qJucfj5hob7tEmFkeJ0jDo
-        JapwLw1zCr03dqy6ZuH+dosI5tD30I6pM2Z5fCsplvzFjRRG074/n/wgRNaKI/3oIf/fJu
-        F9IQDkf1wZS9s9NcKwj1EiRbS350o6I=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-224-YTYGE28YOkKWi1CSSHqk2g-1; Mon, 13 Mar 2023 22:56:42 -0400
-X-MC-Unique: YTYGE28YOkKWi1CSSHqk2g-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A64B4100F909;
-        Tue, 14 Mar 2023 02:56:41 +0000 (UTC)
-Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 51E402A68;
-        Tue, 14 Mar 2023 02:56:39 +0000 (UTC)
-Date:   Tue, 14 Mar 2023 10:56:36 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-mm@kvack.org, arnd@arndb.de, mpe@ellerman.id.au,
-        geert@linux-m68k.org, mcgrof@kernel.org, hch@infradead.org,
-        Helge Deller <deller@gmx.de>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 2/4] mips: add <asm-generic/io.h> including
-Message-ID: <ZA/iZHEHaQ2WR+HL@MiWiFi-R3L-srv>
-References: <20230308130710.368085-1-bhe@redhat.com>
- <20230308130710.368085-3-bhe@redhat.com>
- <20230313175521.GA14404@alpha.franken.de>
+        Mon, 13 Mar 2023 22:57:37 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 381478F730
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:57:36 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id p203so6856081ybb.13
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678762655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uAvGox7GmZ47c9P+o7CExrDCvG1ChWStyBz58KXV08M=;
+        b=hBtk3G2P/OGc+ZQuHY3srIPgQUGXlr4cUhanFC2bUMFTXzIod08PPEFEInU2rsRJcG
+         4Ftmnd4/52gW8GUsYqae7CkJtBy9b12lLFhGFGsHA3xG6eXP/d69VO7dt3QnoUkjNhev
+         5h3AkNMRvIkOSknTlckwE+hrNhlwxHlgX3IFidR/TIQaCXmy0qQ5x52dY6IY56r6T5i7
+         ep948QDV3KYKd8T9LGuSdbIkzuPDAnAuL+ggsjxc4n8sr8cLIq2UyF3BLjM55JzCC5ZA
+         0+zD/WPFPXCN+SUWqMtQL46d7XVOSCuVUkO1bQpO+isNEWHILQmTm4Q9UR7p3gtGXHWn
+         dd5A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678762655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uAvGox7GmZ47c9P+o7CExrDCvG1ChWStyBz58KXV08M=;
+        b=tAGSh9EfpliQT4FVCD49IlzHd/ZyI/lSkQcQ3Q4oC/2uMcX+fTti5ltmTmkyAr6sXj
+         OVF66MS1hMHIDhBTEaE1i53oo6nR2hFhAppp0p5gYvxn7NHY9NhUPFP5Hr+jCBhn1uQn
+         jMSc9eEUHaXU2/tD8HAnfT+MnygEkBQbcTbmKeyYFbmOGJpMGbwSNzEClBbe5CyNLObN
+         uHkCAVpMutDiLYsPY+yXxcnwraKZJfpSszsQi38Ci9xZSkgLCnl9xbGdaB5uSAenAADX
+         tBkPJnmj9/7kG1uI4Jcq0HaW5ZOYN/C21mMYH8Xm9NbD65PT9WehslwQc7kE86cNWgyz
+         /Bog==
+X-Gm-Message-State: AO0yUKWTgK6RV7Mkj8zzfN33B+BunEThjmQ5zyAGgtNsyuwRzbJ2ye9Z
+        rxoMoOs97/feW3Q4xCptGAYlVJ8O9BXuo0ofo5tyeA==
+X-Google-Smtp-Source: AK7set9XoB7w0sxv/2dOEHV8DzsSNR0CNiaktPvOCBFqHMvaAph7PAN9vGGaBshCGP+v0N1/aLJlXigSJwzG+/IFeSw=
+X-Received: by 2002:a05:6902:4f:b0:b38:461f:daeb with SMTP id
+ m15-20020a056902004f00b00b38461fdaebmr4022126ybh.6.1678762655212; Mon, 13 Mar
+ 2023 19:57:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230313175521.GA14404@alpha.franken.de>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20230313075107.376898-1-gavinl@nvidia.com> <20230313075107.376898-5-gavinl@nvidia.com>
+In-Reply-To: <20230313075107.376898-5-gavinl@nvidia.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Mon, 13 Mar 2023 19:57:23 -0700
+Message-ID: <CANn89iLDUR_3pmxco47VQkvWweq2g4Og6UhtLN1gQMQiCUy2KQ@mail.gmail.com>
+Subject: Re: [PATCH net-next v7 4/5] ip_tunnel: Preserve pointer const in ip_tunnel_info_opts
+To:     Gavin Li <gavinl@nvidia.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        roopa@nvidia.com, eng.alaamohamedsoliman.am@gmail.com,
+        bigeasy@linutronix.de, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, gavi@nvidia.com, roid@nvidia.com,
+        maord@nvidia.com, saeedm@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/13/23 at 06:55pm, Thomas Bogendoerfer wrote:
-......
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
->   LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
->   ^~~~~~~~~~~~~~
->   GEN     Makefile
->   Checking missing-syscalls for N32
->   CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
->   Checking missing-syscalls for O32
->   CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
->   CALL    /local/tbogendoerfer/korg/linux/scripts/checksyscalls.sh
->   CC      init/version.o
-> In file included from /local/tbogendoerfer/korg/linux/include/linux/spinlock.h:311:0,
->                  from /local/tbogendoerfer/korg/linux/include/linux/vmalloc.h:5,
->                  from /local/tbogendoerfer/korg/linux/include/asm-generic/io.h:994,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/io.h:618,
->                  from /local/tbogendoerfer/korg/linux/include/linux/io.h:13,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/mips-cps.h:11,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp-ops.h:16,
->                  from /local/tbogendoerfer/korg/linux/arch/mips/include/asm/smp.h:21,
->                  from /local/tbogendoerfer/korg/linux/include/linux/smp.h:113,
->                  from /local/tbogendoerfer/korg/linux/include/linux/lockdep.h:14,
->                  from /local/tbogendoerfer/korg/linux/include/linux/rcupdate.h:29,
->                  from /local/tbogendoerfer/korg/linux/include/linux/rculist.h:11,
->                  from /local/tbogendoerfer/korg/linux/include/linux/pid.h:5,
->                  from /local/tbogendoerfer/korg/linux/include/linux/sched.h:14,
->                  from /local/tbogendoerfer/korg/linux/include/linux/utsname.h:6,
->                  from /local/tbogendoerfer/korg/linux/init/version.c:17:
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_trylock’:
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:3: error: implicit declaration of function ‘spin_acquire’ [-Werror=implicit-function-declaration]
->    spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
->    ^~~~~~~~~~~~
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:90:21: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
->    spin_acquire(&lock->dep_map, 0, 1, _RET_IP_);
->                      ^~
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h: In function ‘__raw_spin_lock_irqsave’:
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:110:20: error: ‘raw_spinlock_t {aka struct raw_spinlock}’ has no member named ‘dep_map’
->   spin_acquire(&lock->dep_map, 0, 0, _RET_IP_);
->                     ^~
-> /local/tbogendoerfer/korg/linux/include/linux/spinlock_api_smp.h:111:2: error: implicit declaration of function ‘LOCK_CONTENDED’ [-Werror=implicit-function-declaration]
->   LOCK_CONTENDED(lock, do_raw_spin_trylock, do_raw_spin_lock);
->   ^~~~~~~~~~~~~~
-> [...]
-> 
-> I've cut the compiler output. Removing the asm-generic doesn't show this
-> problem, but so far I fail to see the reason...
+On Mon, Mar 13, 2023 at 12:51=E2=80=AFAM Gavin Li <gavinl@nvidia.com> wrote=
+:
+>
+> Change ip_tunnel_info_opts( ) from static function to macro to cast retur=
+n
+> value and preserve the const-ness of the pointer.
+>
+> Signed-off-by: Gavin Li <gavinl@nvidia.com>
+> ---
+>  include/net/ip_tunnels.h | 11 ++++++-----
+>  1 file changed, 6 insertions(+), 5 deletions(-)
+>
 
-Thanks for trying this.
-
-Do you have the kernel config file, I can try to reproduce on my local
-machine. And by the way, it could be fixed with below patch, not very
-sure. Earlier, Arnd suggested this to fix a similar case.
-
-
-From b3310e58c063b695ba7ab3966c57269f57f16585 Mon Sep 17 00:00:00 2001
-From: Baoquan He <bhe@redhat.com>
-Date: Tue, 14 Mar 2023 08:53:15 +0800
-Subject: [PATCH] mips: use wmb() instead to replace iobarrier_w()
-Content-type: text/plain
-
-Otherwise nested including of asm/io.h and asm/mmiowb.h will cause
-compiling error.
-
-Signed-off-by: Baoquan He <bhe@redhat.com>
----
- arch/mips/include/asm/mmiowb.h | 4 +---
- 1 file changed, 1 insertion(+), 3 deletions(-)
-
-diff --git a/arch/mips/include/asm/mmiowb.h b/arch/mips/include/asm/mmiowb.h
-index a40824e3ef8e..dd206792abed 100644
---- a/arch/mips/include/asm/mmiowb.h
-+++ b/arch/mips/include/asm/mmiowb.h
-@@ -2,9 +2,7 @@
- #ifndef _ASM_MMIOWB_H
- #define _ASM_MMIOWB_H
- 
--#include <asm/io.h>
--
--#define mmiowb()	iobarrier_w()
-+#define mmiowb()	wmb()
- 
- #include <asm-generic/mmiowb.h>
- 
--- 
-2.34.1
-
+Reviewed-by: Eric Dumazet <edumazet@google.com>
