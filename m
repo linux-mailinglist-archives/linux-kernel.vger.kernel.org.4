@@ -2,107 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48716B981A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 505BA6B981D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbjCNOge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51530 "EHLO
+        id S230414AbjCNOh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:37:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231286AbjCNOg3 (ORCPT
+        with ESMTP id S229787AbjCNOh0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:36:29 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 25346A1FCB;
-        Tue, 14 Mar 2023 07:36:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B46D9617B3;
-        Tue, 14 Mar 2023 14:36:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D464C4339B;
-        Tue, 14 Mar 2023 14:36:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678804587;
-        bh=1KOIUg/c4x1Y731O96Vc4ctZpyAHpv9PVjnCx+8hBfQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=vIWkDzmtYN4G2jq2zVFtvA+iU2TNpFGfFQjV73Hp5jbDEj2Zy1292f0FEktn7jtT9
-         XdaepO+CUBsbgH1Yfkjvh3HkV3jZYsW+3cpx7O9jSNc4D3jb0xY7yDR3GijOgRAUeT
-         gMfwj6kM0FTNSAiZ0hTfJoS5KaWU1INIHh+Be5EFgICyX7oHCyKMk89bnx6XnkYLsq
-         Xzok03y7wX7n9B5zNJvX811AMnEpriTLaNJuVjzJeE2PJJnnMZJWyntfqi2H+AXDzd
-         ieHlNK4lni3a4sOCFkxtVGsIry/nxeNfKtJBL1it9doDPBr69LZ8clkiKj8AFqPPdK
-         PoNRRpu8oEcqQ==
-Date:   Tue, 14 Mar 2023 15:36:23 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wolfram Sang <wsa@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: mpc: Mark "fsl,timeout" as
- deprecated
-Message-ID: <20230314143623.gkbs2htdcw4gue6c@intel.intel>
-References: <20230312233613.303408-1-andi.shyti@kernel.org>
- <20230312233613.303408-2-andi.shyti@kernel.org>
- <49f0b7d9-475d-898d-29d2-7e7cdf07cb0b@linaro.org>
- <06468199-b7cf-113f-b8b7-89c196842538@linaro.org>
+        Tue, 14 Mar 2023 10:37:26 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5229F079;
+        Tue, 14 Mar 2023 07:37:24 -0700 (PDT)
+Received: from kwepemm600013.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4Pbbf72tmhzHwk9;
+        Tue, 14 Mar 2023 22:35:11 +0800 (CST)
+Received: from [10.174.178.46] (10.174.178.46) by
+ kwepemm600013.china.huawei.com (7.193.23.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 22:37:21 +0800
+Subject: Re: [PATCH v2 1/5] ext4: Fix reusing stale buffer heads from last
+ failed mounting
+To:     Jan Kara <jack@suse.cz>
+CC:     <tytso@mit.edu>, <adilger.kernel@dilger.ca>, <jack@suse.com>,
+        <tudor.ambarus@linaro.org>, <linux-ext4@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <yi.zhang@huawei.com>
+References: <20230313132021.672134-1-chengzhihao1@huawei.com>
+ <20230313132021.672134-2-chengzhihao1@huawei.com>
+ <20230314113342.74g2pfwe5y7b5poa@quack3>
+ <b7d108d6-9e5a-d88a-305d-932e75098b09@huawei.com>
+ <20230314121125.tnz22hckcaj46kp6@quack3>
+ <f86584f6-3877-ff18-47a1-2efaa12d18b2@huawei.com>
+ <20230314142831.75ste5im66rx4mt3@quack3>
+From:   Zhihao Cheng <chengzhihao1@huawei.com>
+Message-ID: <456d5a86-9e5a-6915-bf79-737afe656a2e@huawei.com>
+Date:   Tue, 14 Mar 2023 22:37:20 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:68.0) Gecko/20100101
+ Thunderbird/68.5.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <06468199-b7cf-113f-b8b7-89c196842538@linaro.org>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314142831.75ste5im66rx4mt3@quack3>
+Content-Type: text/plain; charset="utf-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.174.178.46]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600013.china.huawei.com (7.193.23.68)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 03:22:19PM +0100, Krzysztof Kozlowski wrote:
-> On 14/03/2023 15:21, Krzysztof Kozlowski wrote:
-> > On 13/03/2023 00:36, Andi Shyti wrote:
-> >> Now we have the i2c-scl-clk-low-timeout-ms property defined in
-> >> the i2c schema.
-> >>
-> >> Mark "fsl,timeout" as deprecated and update the example.
-> >>
-> >> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> >> ---
-> >>  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 3 ++-
-> >>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>
-> > 
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> ...
-> 
-> and unreviewed. Are you sure these are using same units? Old code used us.
-> 
-> Your example:
-> 	i2c-scl-clk-low-timeout-ms = <10000>;
-> 
-> 10s timeout?
 
-ops!
+> OK, fair point. But please move this cleanup into a separate commit with
+> this justification. Thanks!
 
-I will keep it ms, if anyone doesn't have anything against. The
-clock stretching goes in order of milliseconds and in any case
-doesn't need to be precisely that, as long as it's longer.
-
-I don't see any need for it to be us... if it 12500us, let it be
-13ms.
-
-I will update the example.
-
-Can I keep your r-b with:
-
-	i2c-scl-clk-low-timeout-ms = <10>;
-
-?
-
-Thanks for noticing it, it would have been a wacky mistake,
-Andi
+OK, I will split it from patch 1 in v3.
