@@ -2,104 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2F9B76B9800
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:30:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14FDE6B9804
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:31:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjCNOab (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:30:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S230199AbjCNObx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231874AbjCNOaG (ORCPT
+        with ESMTP id S231332AbjCNObe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:30:06 -0400
-Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 467DB75856
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:29:42 -0700 (PDT)
-Received: by mail-ed1-x532.google.com with SMTP id cn21so32670706edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:29:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678804181;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ElHjwIeT7npoxRMCw2nu+jmWqBva4+bKaapSz/mECSU=;
-        b=TwVSJKTA35/n7SvFYUMIlB1ti+ObmERDISpugC0l5FukjPltxsLMTim+fYoqzITV48
-         Trw+IaBTNH1Tc9uawQC+HZo+5oPJTqFty35G1Umuv/dmjPrqA7Eqneu1dZxeABPqSIRD
-         0f2MjRjrXYt7GZEGmmhaPIVxnGU/zIf6NCHbYcuZXxOkybmaJvexGSBxykK//oLP3mPE
-         5NK/nUYaWU/eyPRFiOcLoaP2qNqxVsCFrGcsGYdmIXXdLU2b9X7Pw9KMtNQM3D8xMqkt
-         mJvuya1ZYDXNI2zXQb+o408sxCZy1cUeWmQTOZO9EjYw5CFdtzAhPMdhEg8f4Sqa6N5w
-         Hc1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678804181;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ElHjwIeT7npoxRMCw2nu+jmWqBva4+bKaapSz/mECSU=;
-        b=lpgDvquFp0d+C68dFQPoxsJXmZR7BWuL1sUoXAMsbEwDDSjUksdAhHfX3va8lkT20Y
-         Oc9YB3eAFsWcaHxmVxyl4f/4mrH10mXtgV5gzFHaX/ttTzV6Ls9UkUWp0sEOfDCveVC+
-         BP20pfi6xNSYoToRcxR1BLAaJ67IfeeeIpv4Y/ECRXk3Z+n6tNPLLHUUMqx87HncpLko
-         Aa9AnILwCbJoWKiYF8VsJV4texytQ1oyyjIKroVtoQG7hC+s7O/TjrrT/y+uXJ3F2Urz
-         Qv8nd6bVc2deHkEPRR/PEWtR0JHbUaf0DL/xWMHmw0VgTB4R7gimS7k777cD7X5EMsJe
-         oG7w==
-X-Gm-Message-State: AO0yUKXOu6ZdpNbeHG6XlWb7Zi6FheQ9HyY/5yCPvOlH0YW3ggkvQcFj
-        qLwcdZYnO1E29EpPrngU5U/w3g==
-X-Google-Smtp-Source: AK7set8BTJKzs7H5rL6iH9MVtKlcHgRUHKBlpQX+UW1cWD83NcyG/8r94I7ANT1OFh2CKPgR9hQNTQ==
-X-Received: by 2002:a05:6402:202e:b0:4fd:c862:b3b7 with SMTP id ay14-20020a056402202e00b004fdc862b3b7mr2490284edb.20.1678804181215;
-        Tue, 14 Mar 2023 07:29:41 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id s23-20020a50ab17000000b004f1e91c9f87sm1147798edc.3.2023.03.14.07.29.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 07:29:40 -0700 (PDT)
-Message-ID: <9756a5ae-a5f9-c2e0-1bb4-cdcc4373b891@linaro.org>
-Date:   Tue, 14 Mar 2023 15:29:38 +0100
+        Tue, 14 Mar 2023 10:31:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50C528C583
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:31:23 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0924D1F895;
+        Tue, 14 Mar 2023 14:31:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678804282; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=/tQHVjEyQJuX3FqnGmPl/gpUD/F6uLUvg7AXsJvGx0s=;
+        b=j3s3H7VwQWAEQhUxPzKbzmHkO7PPskE2JzkwttoL7JqVF/OZjp84ElusL/6IxWzTGBDVdg
+        hH2kXEAFB8VSp49sg+GP3rBjzXRuzirEs2mz/MU7WQ3esr9KHMY0SXpICEnwU8mqc0pdCl
+        GL3hBDuFscxfOuggDUrEammlQAr7NnA=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id ED0B913A26;
+        Tue, 14 Mar 2023 14:31:21 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id 5MfTOTmFEGSlHwAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 14 Mar 2023 14:31:21 +0000
+Date:   Tue, 14 Mar 2023 15:31:21 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Christoph Lameter <cl@linux.com>,
+        Aaron Tomlin <atomlin@atomlin.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Russell King <linux@armlinux.org.uk>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Heiko Carstens <hca@linux.ibm.com>, x86@kernel.org,
+        Vlastimil Babka <vbabka@suse.cz>
+Subject: Re: [PATCH v5 00/12] fold per-CPU vmstats remotely
+Message-ID: <ZBCFOZOQY5Z735Km@dhcp22.suse.cz>
+References: <20230313162507.032200398@redhat.com>
+ <ZBBn0evSQeuiNna4@dhcp22.suse.cz>
+ <ZBBvuYkWgtVXCV7J@tpad>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCHv2 1/3] dt-bindings: PCI: dwc: Add rk3588 compatible
-Content-Language: en-US
-To:     Lucas Tanure <lucas.tanure@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Qu Wenruo <wqu@suse.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, kernel@collabora.com
-References: <20230314135555.44162-1-lucas.tanure@collabora.com>
- <20230314135555.44162-2-lucas.tanure@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230314135555.44162-2-lucas.tanure@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBBvuYkWgtVXCV7J@tpad>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 14:55, Lucas Tanure wrote:
-> PCIe for RK3588 is the same as RK3568.
+On Tue 14-03-23 09:59:37, Marcelo Tosatti wrote:
+> On Tue, Mar 14, 2023 at 01:25:53PM +0100, Michal Hocko wrote:
+> > On Mon 13-03-23 13:25:07, Marcelo Tosatti wrote:
+> > > This patch series addresses the following two problems:
+> > > 
+> > >     1. A customer provided some evidence which indicates that
+> > >        the idle tick was stopped; albeit, CPU-specific vmstat
+> > >        counters still remained populated.
+> > > 
+> > >        Thus one can only assume quiet_vmstat() was not
+> > >        invoked on return to the idle loop. If I understand
+> > >        correctly, I suspect this divergence might erroneously
+> > >        prevent a reclaim attempt by kswapd. If the number of
+> > >        zone specific free pages are below their per-cpu drift
+> > >        value then zone_page_state_snapshot() is used to
+> > >        compute a more accurate view of the aforementioned
+> > >        statistic.  Thus any task blocked on the NUMA node
+> > >        specific pfmemalloc_wait queue will be unable to make
+> > >        significant progress via direct reclaim unless it is
+> > >        killed after being woken up by kswapd
+> > >        (see throttle_direct_reclaim())
+> > 
+> > I have hard time to follow the actual problem described above. Are you
+> > suggesting that a lack of pcp vmstat counters update has led to
+> > reclaim issues? What is the said "evidence"? Could you share more of the
+> > story please?
 > 
-> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
-> ---
+> 
+>   - The process was trapped in throttle_direct_reclaim().
+>     The function wait_event_killable() was called to wait condition
+>     allow_direct_reclaim(pgdat) for current node to be true.
+>     The allow_direct_reclaim(pgdat) examined the number of free pages
+>     on the node by zone_page_state() which just returns value in
+>     zone->vm_stat[NR_FREE_PAGES].
+> 
+>   - On node #1, zone->vm_stat[NR_FREE_PAGES] was 0.
+>     However, the freelist on this node was not empty.
+> 
+>   - This inconsistent of vmstat value was caused by percpu vmstat on
+>     nohz_full cpus. Every increment/decrement of vmstat is performed
+>     on percpu vmstat counter at first, then pooled diffs are cumulated
+>     to the zone's vmstat counter in timely manner. However, on nohz_full
+>     cpus (in case of this customer's system, 48 of 52 cpus) these pooled
+>     diffs were not cumulated once the cpu had no event on it so that
+>     the cpu started sleeping infinitely.
+>     I checked percpu vmstat and found there were total 69 counts not
+>     cumulated to the zone's vmstat counter yet.
+> 
+>   - In this situation, kswapd did not help the trapped process.
+>     In pgdat_balanced(), zone_wakermark_ok_safe() examined the number
+>     of free pages on the node by zone_page_state_snapshot() which
+>     checks pending counts on percpu vmstat.
+>     Therefore kswapd could know there were 69 free pages correctly.
+>     Since zone->_watermark = {8, 20, 32}, kswapd did not work because
+>     69 was greater than 32 as high watermark.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+If the imprecision of allow_direct_reclaim is the underlying problem why
+haven't you used zone_page_state_snapshot instead?
 
-Best regards,
-Krzysztof
+Anyway, this is kind of information that is really helpful to have in
+the patch description.
 
+[...]
+> > >     2. With a SCHED_FIFO task that busy loops on a given CPU,
+> > >        and kworker for that CPU at SCHED_OTHER priority,
+> > >        queuing work to sync per-vmstats will either cause that
+> > >        work to never execute, or stalld (i.e. stall daemon)
+> > >        boosts kworker priority which causes a latency
+> > >        violation
+> > 
+> > Why is that a problem? Out-of-sync stats shouldn't cause major problems.
+> > Or can they?
+> 
+> Consider SCHED_FIFO task that is polling the network queue (say
+> testpmd).
+> 
+> 	do {
+> 	 	if (net_registers->state & DATA_AVAILABLE) {
+> 			process_data)();
+> 		}
+> 	 } while (!stopped);
+> 
+> Since this task runs at SCHED_FIFO priority, kworker won't 
+> be scheduled to run (therefore per-CPU vmstats won't be
+> flushed to global vmstats). 
+
+Yes, that is certainly possible. But my main point is that vmstat
+imprecision shouldn't cause functional problems. That is why we have
+_snapshot readers to get an exact value where it matters for
+consistency.
+
+> Or, if testpmd runs at SCHED_OTHER, then the work item to
+> flush per-CPU vmstats causes
+> 
+> 	testpmd -> kworker
+> 	kworker: flush per-CPU vmstats
+> 	kworker -> testpmd
+> 
+> And this might cause undesired latencies to the packets being
+> processed by the testpmd task.
+
+Right but can you have any latencies expectation in a situation like
+that?
+
+-- 
+Michal Hocko
+SUSE Labs
