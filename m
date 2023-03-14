@@ -2,74 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49D896B9E52
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:28:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29F586B9E50
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbjCNS16 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:27:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59520 "EHLO
+        id S230255AbjCNS1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230214AbjCNS1l (ORCPT
+        with ESMTP id S230247AbjCNS13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:27:41 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D372F8FBE7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:26:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678818415;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fTfsBvYbBxdRy/TFGETnYr2wutSLBUazSKwuZl5QCkE=;
-        b=TyuVcmKF4FnUs1VZMHWP+2Z9AmSsQSgfQGECSpk6VdIEYk1L9TGa690AMxFUOcgDEu+WIS
-        KOjQGv955J3MiBX7jx19axxx8ihTD+XU5hiFZgka13NO1glDkSpUrbIodP+bY/ZzVGo2jD
-        yZ1g/NzCt1wedJzVoKZJrj6PTkP8K3Y=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-644-OSAmWMqFMO6H_2rey2MskA-1; Tue, 14 Mar 2023 14:26:49 -0400
-X-MC-Unique: OSAmWMqFMO6H_2rey2MskA-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BD4E280A328;
-        Tue, 14 Mar 2023 18:26:48 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 9A90B1121318;
-        Tue, 14 Mar 2023 18:26:44 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-From:   David Howells <dhowells@redhat.com>
-In-Reply-To: <CAHk-=wiO-Z7QdKnA+yeLCROiVVE6dBK=TaE7wz4hMc0gE2SPRw@mail.gmail.com>
-References: <CAHk-=wiO-Z7QdKnA+yeLCROiVVE6dBK=TaE7wz4hMc0gE2SPRw@mail.gmail.com> <20230308165251.2078898-1-dhowells@redhat.com> <20230308165251.2078898-4-dhowells@redhat.com> <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com> <ZBCkDvveAIJENA0G@casper.infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     dhowells@redhat.com, Matthew Wilcox <willy@infradead.org>,
-        Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
-        Guenter Roeck <groeck7@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
+        Tue, 14 Mar 2023 14:27:29 -0400
+Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6D43B0493;
+        Tue, 14 Mar 2023 11:27:24 -0700 (PDT)
+Received: by mail-wm1-x333.google.com with SMTP id o11-20020a05600c4fcb00b003eb33ea29a8so10835762wmq.1;
+        Tue, 14 Mar 2023 11:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678818443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=OslNVTGF/1+Bz6lNmbS+ej3jqHu92dOWopXVORTQ9vw=;
+        b=SmDwFntjE1vamX2E10WyRpj0EKfTP1+8t1av9av5yp1w17FX8mCac6dPwuUaf1NNV1
+         m6GUzkq7nrUwU9My2+IPlROyEE3Kz/hPpvEeA0vbmJZgMt3I9AdJ7gdxrIgalqtcwuDf
+         Pu64VCkBhlfL0n6pBrHtZYdq+9RAi3sENM0LQ5CiMcJgxU6A8kDhzRUhXXVYaq5/VWIj
+         GCL1CogEGAZ2BeUfYFvXgLwptm5+JJseLyAq/hN/8WX0qybkUWhGfOQGpZeMZDQ1sP3M
+         6aVRnPo8KN935oSBpaLF4wJrEIanBy2oP4QYFeoqGuf2c7t4mtihmgolVnrfnzxCmkY+
+         zDoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678818443;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OslNVTGF/1+Bz6lNmbS+ej3jqHu92dOWopXVORTQ9vw=;
+        b=GSRYR6GgRsyvHDIRDNNS9/U7SJBohOmo5xQkxDZZ1V73Zt+RHJCdEwSd5c1wUe3wvl
+         MQn3sw2y2racor7Z5Lp2jaa1o+gLk0ABO/t5XApuxGoeiwaYNssi4Ahn5hOLA3ahCHCh
+         LGlbCJHBJmCPs47nCYp3M9K2iyT2jv0omn8XBHuuhYrquYQ3FSyED4A1+lmDJ1YMRqBI
+         E074vs5a6dTG4sWEMrOpWa/v40uiU6V7fwWbcAdXYFV2PDQmfTvyhZMNj2nOvCtWrxp6
+         BeNTZbXU5zIc4K819QUUPip+B/DBMN+L64H1yrf9IuEmSvzZya8UC0KB2LmfyZdJEJXJ
+         xz7w==
+X-Gm-Message-State: AO0yUKWT3RKUgcE/EvewwUTnLWzOM8j68YlvvPcF85s3ejqz8hohmNqZ
+        7i0KjGU60som6HlvDChEyRg=
+X-Google-Smtp-Source: AK7set89Bn6ym5r+P1wuuMlpR6pc4EiEG5u00As9st/iuxmhBFjX9BC5zBbpYch8jf8s4FN5NevwjQ==
+X-Received: by 2002:a05:600c:5386:b0:3ed:301c:375c with SMTP id hg6-20020a05600c538600b003ed301c375cmr1114753wmb.21.1678818443026;
+        Tue, 14 Mar 2023 11:27:23 -0700 (PDT)
+Received: from mars.. ([2a02:168:6806:0:5862:40de:7045:5e1b])
+        by smtp.gmail.com with ESMTPSA id u7-20020a7bc047000000b003e206cc7237sm3443490wmc.24.2023.03.14.11.27.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 11:27:22 -0700 (PDT)
+From:   Klaus Kudielka <klaus.kudielka@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Richard Cochran <richardcochran@gmail.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Klaus Kudielka <klaus.kudielka@gmail.com>
+Subject: [PATCH net-next v3 0/4] net: dsa: mv88e6xxx: accelerate C45 scan
+Date:   Tue, 14 Mar 2023 19:26:55 +0100
+Message-Id: <20230314182659.63686-1-klaus.kudielka@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <3761464.1678818404.1@warthog.procyon.org.uk>
-Date:   Tue, 14 Mar 2023 18:26:44 +0000
-Message-ID: <3761465.1678818404@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,9 +76,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Starting with commit 1a136ca2e089 ("net: mdio: scan bus based on bus
+capabilities for C22 and C45"), mdiobus_scan_bus_c45() is being called on
+buses with MDIOBUS_NO_CAP. On a Turris Omnia (Armada 385, 88E6176 switch),
+this causes a significant increase of boot time, from 1.6 seconds, to 6.3
+seconds. The boot time stated here is until start of /init.
 
-Are you okay if we go with my current patch for the moment?
+Further testing revealed that the C45 scan is indeed expensive (around
+2.7 seconds, due to a huge number of bus transactions), and called twice.
 
-David
+Two things were suggested:
+(1) to move the expensive call of mv88e6xxx_mdios_register() from
+    mv88e6xxx_probe() to mv88e6xxx_setup().
+(2) to mask apparently non-existing phys during probing.
+
+Before that:
+Patch #1 prepares the driver to handle the movement of
+mv88e6xxx_mdios_register() to mv88e6xxx_setup() for cross-chip DSA trees.
+Patch #2 is preparatory code movement, without functional change.
+
+With those changes, boot time on the Turris Omnia is back to normal.
+
+Link: https://lore.kernel.org/lkml/449bde236c08d5ab5e54abd73b645d8b29955894.camel@gmail.com/
+
+Changes in v2:
+Add cover letter
+Extend the cleanup in mv88e6xxx_setup() to remove the mdio bus on failure 
+Add patch "mask apparently non-existing phys during probing"
+
+Changes in v3:
+Add patch "don't dispose of Global2 IRQ mappings from mdiobus code"
+
+Klaus Kudielka (3):
+  net: dsa: mv88e6xxx: re-order functions
+  net: dsa: mv88e6xxx: move call to mv88e6xxx_mdios_register()
+  net: dsa: mv88e6xxx: mask apparently non-existing phys during probing
+
+Vladimir Oltean (1):
+  net: dsa: mv88e6xxx: don't dispose of Global2 IRQ mappings from
+    mdiobus code
+
+ drivers/net/dsa/mv88e6xxx/chip.c    | 381 ++++++++++++++--------------
+ drivers/net/dsa/mv88e6xxx/global2.c |  20 +-
+ 2 files changed, 196 insertions(+), 205 deletions(-)
+
+-- 
+2.39.2
 
