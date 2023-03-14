@@ -2,200 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8A7916B88BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:46:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8F676B88BD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:47:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjCNCqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 22:46:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52564 "EHLO
+        id S229765AbjCNCrk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:47:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCNCqg (ORCPT
+        with ESMTP id S229535AbjCNCri (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 22:46:36 -0400
-Received: from out30-118.freemail.mail.aliyun.com (out30-118.freemail.mail.aliyun.com [115.124.30.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE95C8EA33
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:46:33 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R111e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=xhao@linux.alibaba.com;NM=1;PH=DS;RN=14;SR=0;TI=SMTPD_---0Vdq38i0_1678761988;
-Received: from 30.240.99.29(mailfrom:xhao@linux.alibaba.com fp:SMTPD_---0Vdq38i0_1678761988)
-          by smtp.aliyun-inc.com;
-          Tue, 14 Mar 2023 10:46:29 +0800
-Message-ID: <e1de614b-25e1-5c21-933a-880412ac7421@linux.alibaba.com>
-Date:   Tue, 14 Mar 2023 10:46:28 +0800
+        Mon, 13 Mar 2023 22:47:38 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD8958E3C5;
+        Mon, 13 Mar 2023 19:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        MIME-Version:Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+        Content-ID:Content-Description:In-Reply-To:References;
+        bh=7XPPL7nwlO9qfQsOrR7OZiZJkx7m8TBAeAeafc1B5Is=; b=Twv/ZWYHldNJldvrOpN5Nmz6Ov
+        0yJ9tqJ1KPkgHHS1pb+xmqd08SWiHgPZFkitvPCzx9kF9GTtVgMeRNQklSdMaZIELRQYDihcG3yXC
+        ua8GxZ9+yWlcNlauCKZp58UbIb4svY8dTrAtPHGgntITPXItcaMbTLGm8/bvD2mJ2605I2LEGuw6r
+        kn3x/7GvC0l10L02XzicXcDXGBEgT0P7O/l3pPOwraVPd7rAP+M1jsId34i+886gHlmPUe0WEH3E4
+        mNKnEYGqTmYamvU0DnU1Bbi3qw5eI1T54ALHo1JdSOQ1t+787OL6Z1F1QtFW25nW4/turgOkBm7pZ
+        oJmb9vDw==;
+Received: from [2601:1c2:980:9ec0::df2f] (helo=bombadil.infradead.org)
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pbuhL-008ke9-0R; Tue, 14 Mar 2023 02:47:35 +0000
+From:   Randy Dunlap <rdunlap@infradead.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     Randy Dunlap <rdunlap@infradead.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org
+Subject: [PATCH v2] async_tx: fix kernel-doc notation warnings
+Date:   Mon, 13 Mar 2023 19:47:34 -0700
+Message-Id: <20230314024734.9066-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH v2 0/6] tmpfs: add the option to disable swap
-To:     Luis Chamberlain <mcgrof@kernel.org>, hughd@google.com,
-        akpm@linux-foundation.org, willy@infradead.org, brauner@kernel.org
-Cc:     linux-mm@kvack.org, p.raghav@samsung.com, da.gomez@samsung.com,
-        a.manzanares@samsung.com, dave@stgolabs.net, yosryahmed@google.com,
-        keescook@chromium.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <20230309230545.2930737-1-mcgrof@kernel.org>
-From:   haoxin <xhao@linux.alibaba.com>
-In-Reply-To: <20230309230545.2930737-1-mcgrof@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-All these series looks good to me and i do some test on my virtual 
-machine it works well.
+Fix kernel-doc warnings by adding "struct" keyword or "enum" keyword.
+Also fix 2 function parameter descriptions.
+Change some functions and structs from kernel-doc /** notation
+to regular /* comment notation.
 
-so please add Tested-by: Xin Hao <xhao@linux.alibaba.com> .
+async_pq.c:18: warning: cannot understand function prototype: 'struct page *pq_scribble_page; '
+async_pq.c:18: error: Cannot parse struct or union!
+async_pq.c:40: warning: No description found for return value of 'do_async_gen_syndrome'
+async_pq.c:109: warning: Function parameter or member 'blocks' not described in 'do_sync_gen_syndrome'
+async_pq.c:109: warning: Function parameter or member 'offsets' not described in 'do_sync_gen_syndrome'
+async_pq.c:109: warning: Function parameter or member 'disks' not described in 'do_sync_gen_syndrome'
+async_pq.c:109: warning: Function parameter or member 'len' not described in 'do_sync_gen_syndrome'
+async_pq.c:109: warning: Function parameter or member 'submit' not described in 'do_sync_gen_syndrome'
 
-just one question, if tmpfs pagecache occupies a large amount of memory, 
-how can we ensure successful memory reclamation in case of memory shortage?
+async_tx.c:136: warning: cannot understand function prototype: 'enum submit_disposition '
+async_tx.c:264: warning: Function parameter or member 'tx' not described in 'async_tx_quiesce'
 
-在 2023/3/10 上午7:05, Luis Chamberlain 写道:
-> Changes on this v2 PATCH series:
->
->    o Added all respective tags for Reviewed-by, Acked-by's
->    o David Hildenbrand suggested on the update-docs patch to mention THP.
->      It turns out tmpfs.rst makes absolutely no mention to THP at all
->      so I added all the relevant options to the docs including the
->      system wide sysfs file. All that should hopefully demistify that
->      and make it clearer.
->    o Yosry Ahmed spell checked my patch "shmem: add support to ignore swap"
->
-> Changes since RFCv2 to the first real PATCH series:
->
->    o Added Christian Brauner'd Acked-by for the noswap patch (the only
->      change in that patch is just the new shmem_show_options() change I
->      describe below).
->    o Embraced Yosry Ahmed's recommendation to use mapping_set_unevictable()
->      to at ensure the folios at least appear in the unevictable LRU.
->      Since that is the goal, this accomplishes what we want and the VM
->      takes care of things for us. The shem writepage() still uses a stop-gap
->      to ensure we don't get called for swap when its shmem uses
->      mapping_set_unevictable().
->    o I had evaluated using shmem_lock() instead of calling mapping_set_unevictable()
->      but upon my review this doesn't make much sense, as shmem_lock() was
->      designed to make use of the RLIMIT_MEMLOCK and this was designed for
->      files / IPC / unprivileged perf limits. If we were to use
->      shmem_lock() we'd bump the count on each new inode. Using
->      shmem_lock() would also complicate inode allocation on shmem as
->      we'd to unwind on failure from the user_shm_lock(). It would also
->      beg the question of when to capture a ucount for an inode, should we
->      just share one for the superblock at shmem_fill_super() or do we
->      really need to capture it at every single inode creation? In theory
->      we could end up with different limits. The simple solution is to
->      juse use mapping_set_unevictable() upon inode creation and be done
->      with it, as it cannot fail.
->    o Update the documentation for tmpfs before / after my patch to
->      reflect use cases a bit more clearly between ramfs, tmpfs and brd
->      ramdisks.
->    o I updated the shmem_show_options() to also reveal the noswap option
->      when its used.
->    o Address checkpatch style complaint with spaces before tabs on
->      shmem_fs.h.
->
-> Chances since first RFC:
->
->    o Matthew suggested BUG_ON(!folio_test_locked(folio)) is not needed
->      on writepage() callback for shmem so just remove that.
->    o Based on Matthew's feedback the inode is set up early as it is not
->      reset in case we split the folio. So now we move all the variables
->      we can set up really early.
->    o shmem writepage() should only be issued on reclaim, so just move
->      the WARN_ON_ONCE(!wbc->for_reclaim) early so that the code and
->      expectations are easier to read. This also avoid the folio splitting
->      in case of that odd case.
->    o There are a few cases where the shmem writepage() could possibly
->      hit, but in the total_swap_pages we just bail out. We shouldn't be
->      splitting the folio then. Likewise for VM_LOCKED case. But for
->      a writepage() on a VM_LOCKED case is not expected so we want to
->      learn about it so add a WARN_ON_ONCE() on that condition.
->    o Based on Yosry Ahmed's feedback the patch which allows tmpfs to
->      disable swap now just uses mapping_set_unevictable() on inode
->      creation. In that case writepage() should not be called so we
->      augment the WARN_ON_ONCE() for writepage() for that case to ensure
->      that never happens.
->
-> To test I've used kdevops [0] 8 vpcu 4 GiB libvirt guest on linux-next.
->
-> I'm doing this work as part of future experimentation with tmpfs and the
-> page cache, but given a common complaint found about tmpfs is the
-> innability to work without the page cache I figured this might be useful
-> to others. It turns out it is -- at least Christian Brauner indicates
-> systemd uses ramfs for a few use-cases because they don't want to use
-> swap and so having this option would let them move over to using tmpfs
-> for those small use cases, see systemd-creds(1).
->
-> To see if you hit swap:
->
-> mkswap /dev/nvme2n1
-> swapon /dev/nvme2n1
-> free -h
->
-> With swap - what we see today
-> =============================
-> mount -t tmpfs            -o size=5G           tmpfs /data-tmpfs/
-> dd if=/dev/urandom of=/data-tmpfs/5g-rand2 bs=1G count=5
-> free -h
->                 total        used        free      shared  buff/cache   available
-> Mem:           3.7Gi       2.6Gi       1.2Gi       2.2Gi       2.2Gi       1.2Gi
-> Swap:           99Gi       2.8Gi        97Gi
->
->
-> Without swap
-> =============
->
-> free -h
->                 total        used        free      shared  buff/cache   available
-> Mem:           3.7Gi       387Mi       3.4Gi       2.1Mi        57Mi       3.3Gi
-> Swap:           99Gi          0B        99Gi
-> mount -t tmpfs            -o size=5G -o noswap tmpfs /data-tmpfs/
-> dd if=/dev/urandom of=/data-tmpfs/5g-rand2 bs=1G count=5
-> free -h
->                 total        used        free      shared  buff/cache   available
-> Mem:           3.7Gi       2.6Gi       1.2Gi       2.3Gi       2.3Gi       1.1Gi
-> Swap:           99Gi        21Mi        99Gi
->
-> The mix and match remount testing
-> =================================
->
-> # Cannot disable swap after it was first enabled:
-> mount -t tmpfs            -o size=5G           tmpfs /data-tmpfs/
-> mount -t tmpfs -o remount -o size=5G -o noswap tmpfs /data-tmpfs/
-> mount: /data-tmpfs: mount point not mounted or bad option.
->         dmesg(1) may have more information after failed mount system call.
-> dmesg -c
-> tmpfs: Cannot disable swap on remount
->
-> # Remount with the same noswap option is OK:
-> mount -t tmpfs            -o size=5G -o noswap tmpfs /data-tmpfs/
-> mount -t tmpfs -o remount -o size=5G -o noswap tmpfs /data-tmpfs/
-> dmesg -c
->
-> # Trying to enable swap with a remount after it first disabled:
-> mount -t tmpfs            -o size=5G -o noswap tmpfs /data-tmpfs/
-> mount -t tmpfs -o remount -o size=5G           tmpfs /data-tmpfs/
-> mount: /data-tmpfs: mount point not mounted or bad option.
->         dmesg(1) may have more information after failed mount system call.
-> dmesg -c
-> tmpfs: Cannot enable swap on remount if it was disabled on first mount
->
-> [0] https://github.com/linux-kdevops/kdevops
->
-> Luis Chamberlain (6):
->    shmem: remove check for folio lock on writepage()
->    shmem: set shmem_writepage() variables early
->    shmem: move reclaim check early on writepages()
->    shmem: skip page split if we're not reclaiming
->    shmem: update documentation
->    shmem: add support to ignore swap
->
->   Documentation/filesystems/tmpfs.rst  | 66 ++++++++++++++++++++++-----
->   Documentation/mm/unevictable-lru.rst |  2 +
->   include/linux/shmem_fs.h             |  1 +
->   mm/shmem.c                           | 68 ++++++++++++++++++----------
->   4 files changed, 103 insertions(+), 34 deletions(-)
->
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: Dan Williams <dan.j.williams@intel.com>
+Cc: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: linux-crypto@vger.kernel.org
+---
+v2: fix more warnings
+
+ crypto/async_tx/async_pq.c |   10 +++++-----
+ crypto/async_tx/async_tx.c |    4 ++--
+ 2 files changed, 7 insertions(+), 7 deletions(-)
+
+diff -- a/crypto/async_tx/async_pq.c b/crypto/async_tx/async_pq.c
+--- a/crypto/async_tx/async_pq.c
++++ b/crypto/async_tx/async_pq.c
+@@ -11,8 +11,8 @@
+ #include <linux/async_tx.h>
+ #include <linux/gfp.h>
+ 
+-/**
+- * pq_scribble_page - space to hold throwaway P or Q buffer for
++/*
++ * struct pq_scribble_page - space to hold throwaway P or Q buffer for
+  * synchronous gen_syndrome
+  */
+ static struct page *pq_scribble_page;
+@@ -28,7 +28,7 @@ static struct page *pq_scribble_page;
+ 
+ #define MAX_DISKS 255
+ 
+-/**
++/*
+  * do_async_gen_syndrome - asynchronously calculate P and/or Q
+  */
+ static __async_inline struct dma_async_tx_descriptor *
+@@ -100,7 +100,7 @@ do_async_gen_syndrome(struct dma_chan *c
+ 	return tx;
+ }
+ 
+-/**
++/*
+  * do_sync_gen_syndrome - synchronously calculate a raid6 syndrome
+  */
+ static void
+@@ -281,7 +281,7 @@ pq_val_chan(struct async_submit_ctl *sub
+ /**
+  * async_syndrome_val - asynchronously validate a raid6 syndrome
+  * @blocks: source blocks from idx 0..disks-3, P @ disks-2 and Q @ disks-1
+- * @offset: common offset into each block (src and dest) to start transaction
++ * @offsets: common offset into each block (src and dest) to start transaction
+  * @disks: number of blocks (including missing P or Q, see below)
+  * @len: length of operation in bytes
+  * @pqres: on val failure SUM_CHECK_P_RESULT and/or SUM_CHECK_Q_RESULT are set
+diff -- a/crypto/async_tx/async_tx.c b/crypto/async_tx/async_tx.c
+--- a/crypto/async_tx/async_tx.c
++++ b/crypto/async_tx/async_tx.c
+@@ -124,7 +124,7 @@ async_tx_channel_switch(struct dma_async
+ 
+ 
+ /**
+- * submit_disposition - flags for routing an incoming operation
++ * enum submit_disposition - flags for routing an incoming operation
+  * @ASYNC_TX_SUBMITTED: we were able to append the new operation under the lock
+  * @ASYNC_TX_CHANNEL_SWITCH: when the lock is dropped schedule a channel switch
+  * @ASYNC_TX_DIRECT_SUBMIT: when the lock is dropped submit directly
+@@ -258,7 +258,7 @@ EXPORT_SYMBOL_GPL(async_trigger_callback
+ 
+ /**
+  * async_tx_quiesce - ensure tx is complete and freeable upon return
+- * @tx - transaction to quiesce
++ * @tx: transaction to quiesce
+  */
+ void async_tx_quiesce(struct dma_async_tx_descriptor **tx)
+ {
