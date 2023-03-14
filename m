@@ -2,117 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57D1E6B8E85
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:22:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01D826B8E90
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:23:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230482AbjCNJWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35494 "EHLO
+        id S231133AbjCNJXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:23:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCNJWU (ORCPT
+        with ESMTP id S230494AbjCNJXV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:22:20 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACE3A233FC;
-        Tue, 14 Mar 2023 02:22:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678785738; x=1710321738;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=669AdwOG4a24zmUH38pGEUS6+rjOIvBAa8LuWIw2i1k=;
-  b=P6rPTQuAMaa949xDZJlJSrIb+1qWkkXo6hPg7IQbcYcSfOWXZsFL6UO3
-   NzrC7ny6BrTgL9Ec9+h2SMKy+FwwXJNkDs3Gq3nWabMBkqR5+Tc+R8uh8
-   TWBEL9arpaUi5QcKbpQkN+rsqkXPP3Cc5rizA12GMOS2qH+zGZvttarW8
-   BZoVcaBDWyzGi8YChyPzcO7x+n9nkE/MoBdwERx+u6MVjZ5YOBnwV3yEh
-   3i+Wfy0MyUgumDkiIQHVq8XHk4CMz3/OnPuYZ9mgy9GXj5mjvKZKhQl4x
-   QCHzqr0KtlZH4vtXbRZbNINhEovY3q99gphrGCJEZHDb84Fvaj9Aqt33K
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="338917167"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="338917167"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 02:22:18 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="822292265"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="822292265"
-Received: from kuha.fi.intel.com ([10.237.72.185])
-  by fmsmga001.fm.intel.com with SMTP; 14 Mar 2023 02:22:14 -0700
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Tue, 14 Mar 2023 11:22:13 +0200
-Date:   Tue, 14 Mar 2023 11:22:13 +0200
-From:   Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To:     Frank Wang <frank.wang@rock-chips.com>
-Cc:     linux@roeck-us.net, gregkh@linuxfoundation.org, heiko@sntech.de,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-rockchip@lists.infradead.org, huangtao@rock-chips.com,
-        william.wu@rock-chips.com, jianwei.zheng@rock-chips.com,
-        yubing.zhang@rock-chips.com, wmc@rock-chips.com
-Subject: Re: [PATCH 2/4] usb: typec: tcpm: fix multiple times discover svids
- error
-Message-ID: <ZBA8xWmNDSDhUys2@kuha.fi.intel.com>
-References: <20230313025843.17162-1-frank.wang@rock-chips.com>
- <20230313025843.17162-3-frank.wang@rock-chips.com>
+        Tue, 14 Mar 2023 05:23:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C25350F9D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:22:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06208B816DA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:22:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74A20C4339C;
+        Tue, 14 Mar 2023 09:22:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678785770;
+        bh=dlm/nxuSKTp43OoyQoRKTCpUnmzgoQkE2Ux5U5sBaTc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=B5fUznEVs34JDctK6qUKPKEL53HEAsq/y0mZvGNuE4QDJmAg1kGc4RvKrFXTj6AxF
+         n+BE/RvSwq34y23QwpUUPjyjdIjdIY9bTNj3RpvgJc9yOW+IlcUyvmF5/KwV8s3f4G
+         2kHqq7fvxxEzCGtd9MbWTcV+e0GEeF1XzxiEgmvY=
+Date:   Tue, 14 Mar 2023 10:22:48 +0100
+From:   "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+To:     "Noah (Wensheng) Wang" <Noah.Wang@monolithicpower.com>
+Cc:     "arnd@arndb.de" <arnd@arndb.de>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Luke (Lijie) Jiang" <Luke.Jiang@monolithicpower.com>,
+        pebble liang <pebble.liang@monolithicpower.com>,
+        "Eva (Ting) Ma" <Eva.Ma@monolithicpower.com>
+Subject: Re: [PATCH] char: add driver for mps VR controller mp2891
+Message-ID: <ZBA86BAVMWGiS39s@kroah.com>
+References: <08e7bd6ed16f4bde95b674db940783ec@monolithicpower.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313025843.17162-3-frank.wang@rock-chips.com>
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <08e7bd6ed16f4bde95b674db940783ec@monolithicpower.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 10:58:41AM +0800, Frank Wang wrote:
-> PD3.0 Spec 6.4.4.3.2 say that only Responder supports 12 or more SVIDs,
-> the Discover SVIDs Command Shall be executed multiple times until a
-> Discover SVIDs VDO is returned ending either with a SVID value of
-> 0x0000 in the last part of the last VDO or with a VDO containing two
-> SVIDs with values of 0x0000.
+On Tue, Mar 14, 2023 at 09:18:50AM +0000, Noah (Wensheng) Wang wrote:
+> Hi Arnd, Grey:
+> Thanks for the review.
 > 
-> In the current implementation, if the last VDO does not find that the
-> Discover SVIDs Command would be executed multiple times even if the
-> Responder SVIDs are less than 12, and we found some odd dockers just
-> meet this case. So fix it.
+> This driver will be used by facebook. This driver provide a device node for userspace to get output voltage, input voltage, input current, input power, output power and temperature of mp2891 controller through I2C. This driver determine what kind of value the userspace wants through the mp2891_write interface and return the corresponding value when the interface mp2891_read is called.
+
+Note, can you please take a look at the kernel documentation for how to
+write a good changelog text when you resubmit this?
+
 > 
-> Signed-off-by: Frank Wang <frank.wang@rock-chips.com>
+> Signed-off-by: Noah Wang <Noah.Wang@monolithicpower.com>
 > ---
->  drivers/usb/typec/tcpm/tcpm.c | 16 +++++++++++++++-
->  1 file changed, 15 insertions(+), 1 deletion(-)
+>  drivers/char/mp2891.c | 403 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 403 insertions(+)
+>  create mode 100644 drivers/char/mp2891.c
+
+You didn't add the driver to the build, so it can not actually be used
+at all.  How did you test this?
+
 > 
-> diff --git a/drivers/usb/typec/tcpm/tcpm.c b/drivers/usb/typec/tcpm/tcpm.c
-> index 66de02a56f512..2962f7c261976 100644
-> --- a/drivers/usb/typec/tcpm/tcpm.c
-> +++ b/drivers/usb/typec/tcpm/tcpm.c
-> @@ -1515,7 +1515,21 @@ static bool svdm_consume_svids(struct tcpm_port *port, const u32 *p, int cnt)
->  		pmdata->svids[pmdata->nsvids++] = svid;
->  		tcpm_log(port, "SVID %d: 0x%x", pmdata->nsvids, svid);
->  	}
-> -	return true;
+> diff --git a/drivers/char/mp2891.c b/drivers/char/mp2891.c new file mode 100644 index 000000000000..84529b73f065
+> --- /dev/null
+> +++ b/drivers/char/mp2891.c
+> @@ -0,0 +1,403 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+
+Are you _sure_ you mean "or later"?  (I have to ask)
+
+> +/*
+> + * Driver for MPS Multi-phase Digital VR Controllers(MP2891)
+> + *
+> + * Copyright (C) 2023 MPS
+> + */
 > +
-> +	/*
-> +	 * PD3.0 Spec 6.4.4.3.2: The SVIDs are returned 2 per VDO (see Table
-> +	 * 6-43), and can be returned maximum 6 VDOs per response (see Figure
-> +	 * 6-19). If the Respondersupports 12 or more SVID then the Discover
-> +	 * SVIDs Command Shall be executed multiple times until a Discover
-> +	 * SVIDs VDO is returned ending either with a SVID value of 0x0000 in
-> +	 * the last part of the last VDO or with a VDO containing two SVIDs
-> +	 * with values of 0x0000.
-> +	 *
-> +	 * However, some odd dockers support SVIDs less than 12 but without
-> +	 * 0x0000 in the last VDO, so we need to break the Discover SVIDs
-> +	 * request and return false here.
-> +	 */
-> +	return cnt == 7 ? true : false;
+> +#include <linux/types.h>
+> +#include <linux/kernel.h>
+> +#include <linux/delay.h>
+> +#include <linux/ide.h>
+> +#include <linux/init.h>
+> +#include <linux/module.h>
+> +#include <linux/errno.h>
+> +#include <linux/gpio.h>
+> +#include <linux/cdev.h>
+> +#include <linux/device.h>
+> +#include <linux/of_gpio.h>
+> +#include <linux/semaphore.h>
+> +#include <linux/timer.h>
+> +#include <linux/i2c.h>
+> +#include <linux/uaccess.h>
+> +#include <linux/io.h>
+> +#include <asm/mach/map.h>
+> +
+> +#define PMBUS_PAGE              0x00
+> +#define MFR_VOUT_LOOP_CTRL_R1   0xBD
+> +#define MFR_VOUT_LOOP_CTRL_R2   0xBD
+> +
+> +#define VID_STEP_POS            14
+> +#define VID_STEP_MSK            (0x3 << VID_STEP_POS)
+> +
+> +#define READ_VIN                0x88
+> +#define READ_VOUT               0x8B
+> +#define READ_IOUT               0x8C
+> +#define READ_TEMPERATURE        0x8D
+> +#define READ_PIN_EST_PMBUS_R1   0x94
+> +#define READ_PIN_EST_PMBUS_R2   0x94
+> +#define READ_POUT_PMBUS_R1      0x96
+> +#define READ_POUT_PMBUS_R2      0x96
+> +
+> +#define MP2891_PAGE_NUM			2
+> +
+> +#define MP2891_CNT 1
+> +#define MP2891_NAME "mp2891"
+> +
+> +#define IOUT_PAGE0          "IOUT-0"
+> +#define IOUT_PAGE1          "IOUT-1"
+> +#define VOUT_PAGE0          "VOUT-0"
+> +#define VOUT_PAGE1          "VOUT-1"
+> +#define TEMPERATURE_PAGE0   "TEMPERATURE-0"
+> +#define TEMPERATURE_PAGE1   "TEMPERATURE-1"
+> +#define VIN_PAGE0           "VIN-0"
+> +#define PIN_EST_PAGE0		"PIN_EST-0"
+> +#define PIN_EST_PAGE1		"PIN_EST-1"
+> +#define POUT_PAGE0          "POUT-0"
+> +#define POUT_PAGE1          "POUT-1"
+> +
+> +struct mp2891_data {
+> +	int vid_step[MP2891_PAGE_NUM];
+> +};
+> +
+> +struct mp2891_dev {
+> +	dev_t devid;
+> +	struct cdev cdev;
+> +	struct class *class;
+> +	struct device *device;
+> +	int major;
+> +	char read_flag[20];
+> +	struct i2c_client *client;
+> +	struct mp2891_data *data;
+> +};
+> +
+> +struct mp2891_dev mp2891cdev;
 
-        return cnt == 7
+You really do not want to do this, the driver should be able to handle
+any number of devices in the system, not just one.  Also, this is a
+dynamic structure that you just made static, which is going to be
+interesting when it comes to properly memory lifetime rules, right?
 
+> +
+> +static int read_word_data(struct i2c_client *client, int page, int reg) 
+
+Always run scripts/checkpatch.pl on your code before submitting it so
+you don't get grumpy reviewers asking why you didn't run
+scripts/checkpatch.pl on your code before submitting it.
 
 thanks,
 
--- 
-heikki
+greg k-h
