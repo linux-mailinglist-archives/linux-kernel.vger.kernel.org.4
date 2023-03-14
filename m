@@ -2,106 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90966B9498
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C4D76B94EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjCNMrB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:47:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34584 "EHLO
+        id S231953AbjCNMwa convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 08:52:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49344 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231686AbjCNMps (ORCPT
+        with ESMTP id S232395AbjCNMwD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:45:48 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E32DA1FDC;
-        Tue, 14 Mar 2023 05:44:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id DFA55B81929;
-        Tue, 14 Mar 2023 12:44:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C00FC433EF;
-        Tue, 14 Mar 2023 12:44:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678797845;
-        bh=lCLsMt3NL3qouQq0xW8PNLryrGaViEFM5EBTwI63YHU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=KFzk/XaCa7ZiF97gnH/ySDVlNOWUrQcPwqaB+swurBCqloA0vtwSkGFYOdsbNrvpH
-         F15qqq0Dw/hShdKEh91EwDXJgOC17dfK9925BqOzlOdC7/9Xs6fDdDvP/LZFkX8wck
-         34MZzG4rTB4eGQNOn9O0CCWBFDEl3ma5pcYRPEHz1BHmm8NlrPT7/EKTd2LKGmXVL5
-         yWMIfZtE796svUoFMKWE2YJfoyV2oSZSkcG8QYfn4UQVWo659YERKWZyn9MU7Tu2G4
-         pPIm8rWv8kvcw15jBnBEj+y9PUE1V2+zdvX7tAYVN1lzo/Worc3wsjZ+pbInHO8L4m
-         q0uXTzbcUcYJg==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     David Gow <davidgow@google.com>,
-        =?UTF-8?q?Sergio=20Gonz=C3=A1lez=20Collado?= 
-        <sergio.collado@gmail.com>, Richard Weinberger <richard@nod.at>,
-        Sasha Levin <sashal@kernel.org>, tglx@linutronix.de,
-        mingo@redhat.com, hpa@zytor.com, x86@kernel.org
-Subject: [PATCH AUTOSEL 5.10 3/8] rust: arch/um: Disable FP/SIMD instruction to match x86
-Date:   Tue, 14 Mar 2023 08:43:55 -0400
-Message-Id: <20230314124400.471257-3-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230314124400.471257-1-sashal@kernel.org>
-References: <20230314124400.471257-1-sashal@kernel.org>
+        Tue, 14 Mar 2023 08:52:03 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0522A8C7A;
+        Tue, 14 Mar 2023 05:47:53 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id D7DA624E3C6;
+        Tue, 14 Mar 2023 20:44:07 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 20:44:07 +0800
+Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 20:44:06 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        "Michael Turquette" <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Emil Renner Berthing <kernel@esmil.dk>
+CC:     Rob Herring <robh+dt@kernel.org>, Conor Dooley <conor@kernel.org>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Hal Feng <hal.feng@starfivetech.com>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>, <linux-clk@vger.kernel.org>
+Subject: [PATCH v3 02/11] reset: starfive: jh7110: Add StarFive System-Top-Group reset support
+Date:   Tue, 14 Mar 2023 20:43:55 +0800
+Message-ID: <20230314124404.117592-3-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
+References: <20230314124404.117592-1-xingyu.wu@starfivetech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: David Gow <davidgow@google.com>
+Add auxiliary_device_id to support StarFive JH7110 System-Top-Group resets
+of which the auxiliary device name is "clk_starfive_jh71x0.reset-stg".
 
-[ Upstream commit 8849818679478933dd1d9718741f4daa3f4e8b86 ]
-
-The kernel disables all SSE and similar FP/SIMD instructions on
-x86-based architectures (partly because we shouldn't be using floats in
-the kernel, and partly to avoid the need for stack alignment, see:
-https://gcc.gnu.org/bugzilla/show_bug.cgi?id=53383 )
-
-UML does not do the same thing, which isn't in itself a problem, but
-does add to the list of differences between UML and "normal" x86 builds.
-
-In addition, there was a crash bug with LLVM < 15 / rustc < 1.65 when
-building with SSE, so disabling it fixes rust builds with earlier
-compiler versions, see:
-https://github.com/Rust-for-Linux/linux/pull/881
-
-Signed-off-by: David Gow <davidgow@google.com>
-Reviewed-by: Sergio González Collado <sergio.collado@gmail.com>
-Signed-off-by: Richard Weinberger <richard@nod.at>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: Xingyu Wu <xingyu.wu@starfivetech.com>
 ---
- arch/x86/Makefile.um | 6 ++++++
- 1 file changed, 6 insertions(+)
+ drivers/reset/starfive/reset-starfive-jh7110.c | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-diff --git a/arch/x86/Makefile.um b/arch/x86/Makefile.um
-index 1db7913795f51..e51c53d10efe7 100644
---- a/arch/x86/Makefile.um
-+++ b/arch/x86/Makefile.um
-@@ -1,6 +1,12 @@
- # SPDX-License-Identifier: GPL-2.0
- core-y += arch/x86/crypto/
+diff --git a/drivers/reset/starfive/reset-starfive-jh7110.c b/drivers/reset/starfive/reset-starfive-jh7110.c
+index 4ccb3f72ca83..2dc46d91a244 100644
+--- a/drivers/reset/starfive/reset-starfive-jh7110.c
++++ b/drivers/reset/starfive/reset-starfive-jh7110.c
+@@ -29,6 +29,12 @@ static const struct jh7110_reset_info jh7110_aon_info = {
+ 	.status_offset = 0x3C,
+ };
  
-+#
-+# Disable SSE and other FP/SIMD instructions to match normal x86
-+#
-+KBUILD_CFLAGS += -mno-sse -mno-mmx -mno-sse2 -mno-3dnow -mno-avx
-+KBUILD_RUSTFLAGS += -Ctarget-feature=-sse,-sse2,-sse3,-ssse3,-sse4.1,-sse4.2,-avx,-avx2
++static const struct jh7110_reset_info jh7110_stg_info = {
++	.nr_resets = JH7110_STGRST_END,
++	.assert_offset = 0x74,
++	.status_offset = 0x78,
++};
 +
- ifeq ($(CONFIG_X86_32),y)
- START := 0x8048000
- 
+ static int jh7110_reset_probe(struct auxiliary_device *adev,
+ 			      const struct auxiliary_device_id *id)
+ {
+@@ -55,6 +61,10 @@ static const struct auxiliary_device_id jh7110_reset_ids[] = {
+ 		.name = "clk_starfive_jh71x0.reset-aon",
+ 		.driver_data = (kernel_ulong_t)&jh7110_aon_info,
+ 	},
++	{
++		.name = "clk_starfive_jh71x0.reset-stg",
++		.driver_data = (kernel_ulong_t)&jh7110_stg_info,
++	},
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(auxiliary, jh7110_reset_ids);
 -- 
-2.39.2
+2.25.1
 
