@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AF9E6B922D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:55:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 214606B9232
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:55:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231534AbjCNLzs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:55:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44764 "EHLO
+        id S231551AbjCNLzt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:55:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229735AbjCNLzp (ORCPT
+        with ESMTP id S231520AbjCNLzr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:55:45 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9926382A99;
-        Tue, 14 Mar 2023 04:55:44 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtT4n056385;
-        Tue, 14 Mar 2023 06:55:29 -0500
+        Tue, 14 Mar 2023 07:55:47 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 048CF86DF3;
+        Tue, 14 Mar 2023 04:55:45 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtULE105814;
+        Tue, 14 Mar 2023 06:55:30 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678794929;
-        bh=O4xsDatyGPKQX0onRSd0fgi9UJM7fBoDvmCijQM4SEw=;
+        s=ti-com-17Q1; t=1678794930;
+        bh=JGSN//92xgAzRXhFvRWWriqMgsTJzBHHxKA2Y6028FI=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=HOaKGRprFKhOYXhPxc/z+dr3IyNBFaRLPVBKEM5MMs0flh/F2CHNz8kLPK6qYaYCF
-         PGmcltUmucXdeCHj1pBrLJg3H2Torba/ZxxvLs4ZEvMuV38k05gcTzEBjtfJxh13sI
-         UAuKY01eUEA7wDyZsC4AYVbXB3cLr0HmzTTM1a6U=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtSGJ003014
+        b=XNi/HoXEnzqQaQ77lAH5e76/8fMAZvFDq+/0IGnWvj7q6YXHToRfzmcCrkvJnqlhB
+         3fMfM6tMNDao4N5XLEjKPaoIcNTY1P/LSsuJnYXeO1xHhJQldkLL4tD6/MrC+NKrBe
+         ox9/jcf/ArwkZpNl/4vv2+P/J331OQNa0tU13Gf4=
+Received: from DFLE109.ent.ti.com (dfle109.ent.ti.com [10.64.6.30])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtUT3003074
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:55:28 -0500
-Received: from DLEE102.ent.ti.com (157.170.170.32) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 14 Mar 2023 06:55:30 -0500
+Received: from DFLE104.ent.ti.com (10.64.6.25) by DFLE109.ent.ti.com
+ (10.64.6.30) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:55:28 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 06:55:30 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:55:28 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtRfF057265;
-        Tue, 14 Mar 2023 06:55:27 -0500
+ Frontend Transport; Tue, 14 Mar 2023 06:55:30 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtTgY111843;
+        Tue, 14 Mar 2023 06:55:29 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
         <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
         <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>,
         <vaishnav.a@ti.com>
-Subject: [PATCH v7 05/13] media: cadence: csi2rx: Soft reset the streams before starting capture
-Date:   Tue, 14 Mar 2023 17:25:08 +0530
-Message-ID: <20230314115516.667-6-vaishnav.a@ti.com>
+Subject: [PATCH v7 06/13] media: cadence: csi2rx: Set the STOP bit when stopping a stream
+Date:   Tue, 14 Mar 2023 17:25:09 +0530
+Message-ID: <20230314115516.667-7-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230314115516.667-1-vaishnav.a@ti.com>
 References: <20230314115516.667-1-vaishnav.a@ti.com>
@@ -72,10 +72,9 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-This resets the stream state machines and FIFOs, giving them a clean
-slate. On J721E if the streams are not reset before starting the
-capture, the captured frame gets wrapped around vertically on every run
-after the first.
+The stream stop procedure says that the STOP bit should be set when the
+stream is to be stopped, and then the ready bit in stream status
+register polled to make sure the STOP operation is finished.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
@@ -85,47 +84,62 @@ Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 (no changes since v5)
 
 Changes in v5:
-- Make i unsigned.
+- Change %d to %u
 - Add Laurent's R-by.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 18 +++++++++++++++++-
+ 1 file changed, 17 insertions(+), 1 deletion(-)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index 6933626adfc8..8ecd889690b7 100644
+index 8ecd889690b7..e80220840e93 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -39,6 +39,7 @@
- #define CSI2RX_STREAM_BASE(n)		(((n) + 1) * 0x100)
+@@ -8,6 +8,7 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/io.h>
++#include <linux/iopoll.h>
+ #include <linux/module.h>
+ #include <linux/of.h>
+ #include <linux/of_graph.h>
+@@ -40,8 +41,12 @@
  
  #define CSI2RX_STREAM_CTRL_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x000)
-+#define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
+ #define CSI2RX_STREAM_CTRL_SOFT_RST			BIT(4)
++#define CSI2RX_STREAM_CTRL_STOP				BIT(1)
  #define CSI2RX_STREAM_CTRL_START			BIT(0)
  
++#define CSI2RX_STREAM_STATUS_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x004)
++#define CSI2RX_STREAM_STATUS_RDY			BIT(31)
++
  #define CSI2RX_STREAM_DATA_CFG_REG(n)		(CSI2RX_STREAM_BASE(n) + 0x008)
-@@ -135,12 +136,22 @@ struct csi2rx_priv *v4l2_subdev_to_csi2rx(struct v4l2_subdev *subdev)
- 
- static void csi2rx_reset(struct csi2rx_priv *csi2rx)
+ #define CSI2RX_STREAM_DATA_CFG_EN_VC_SELECT		BIT(31)
+ #define CSI2RX_STREAM_DATA_CFG_VC_SELECT(n)		BIT((n) + 16)
+@@ -304,12 +309,23 @@ static int csi2rx_start(struct csi2rx_priv *csi2rx)
+ static void csi2rx_stop(struct csi2rx_priv *csi2rx)
  {
-+	unsigned int i;
-+
- 	writel(CSI2RX_SOFT_RESET_PROTOCOL | CSI2RX_SOFT_RESET_FRONT,
- 	       csi2rx->base + CSI2RX_SOFT_RESET_REG);
+ 	unsigned int i;
++	u32 val;
++	int ret;
  
- 	udelay(10);
+ 	clk_prepare_enable(csi2rx->p_clk);
+ 	clk_disable_unprepare(csi2rx->sys_clk);
  
- 	writel(0, csi2rx->base + CSI2RX_SOFT_RESET_REG);
-+
-+	/* Reset individual streams. */
-+	for (i = 0; i < csi2rx->max_streams; i++) {
-+		writel(CSI2RX_STREAM_CTRL_SOFT_RST,
+ 	for (i = 0; i < csi2rx->max_streams; i++) {
+-		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
++		writel(CSI2RX_STREAM_CTRL_STOP,
 +		       csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+		usleep_range(10, 20);
-+		writel(0, csi2rx->base + CSI2RX_STREAM_CTRL_REG(i));
-+	}
- }
++
++		ret = readl_relaxed_poll_timeout(csi2rx->base +
++						 CSI2RX_STREAM_STATUS_REG(i),
++						 val,
++						 (val & CSI2RX_STREAM_STATUS_RDY),
++						 10, 10000);
++		if (ret)
++			dev_warn(csi2rx->dev, "Failed to stop stream%u\n", i);
  
- static int csi2rx_configure_external_dphy(struct csi2rx_priv *csi2rx)
+ 		clk_disable_unprepare(csi2rx->pixel_clk[i]);
+ 	}
 -- 
 2.17.1
 
