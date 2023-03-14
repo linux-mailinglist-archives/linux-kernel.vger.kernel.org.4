@@ -2,108 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB45B6B8B04
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:14:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAC8C6B8B08
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:16:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229564AbjCNGOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 02:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48574 "EHLO
+        id S229712AbjCNGQz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 02:16:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50928 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbjCNGOc (ORCPT
+        with ESMTP id S229446AbjCNGQx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 02:14:32 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13DB23B675;
-        Mon, 13 Mar 2023 23:14:27 -0700 (PDT)
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32E5wWxK012573;
-        Tue, 14 Mar 2023 06:14:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=9nmQ1nz6JsSzVgizUz/SCxxOqQSXbNOFqzRKs64tyto=;
- b=gVrCKHv/vaYw42tEoaG9nlBHHbTzypcPfuCVYVEdXr5TjbnaGhGnvdlVmXhQslRSg2fk
- 7Vs2klty15osJM1cj4VuDADeOkHK1ikdvRJh39BDTIqpWwApSVaTGIijQcarFUBJd0Rp
- VCZH5lY5pfwAvN5eOg/eq1T84zNJri4yIr1RLO/CogGtIYxC0ucJYxrEXerTBegEiPVq
- IblT2HCwGRjNKaRFmklNwDUgkNBAfs8QkJEJ7o2dRSlnYon/c9UmaOlpMPDhJX9fFqeR
- cn6MOxBvu6arWbeRaujJ7ySlwoHULV4gLsY81tghTWvCDYAnFSd83VJ4a9v+jiuKuL5A BQ== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3paay397ft-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 06:14:25 +0000
-Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32E6EOlZ030298
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 06:14:24 GMT
-Received: from varda-linux.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.41; Mon, 13 Mar 2023 23:14:21 -0700
-From:   Varadarajan Narayanan <quic_varada@quicinc.com>
-To:     <agross@kernel.org>, <andersson@kernel.org>,
-        <devicetree@vger.kernel.org>, <konrad.dybcio@linaro.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <robh+dt@kernel.org>
-CC:     Varadarajan Narayanan <quic_varada@quicinc.com>
-Subject: [PATCH 2/2] soc: qcom: socinfo: Add IDs for IPQ9574 and its variants
-Date:   Tue, 14 Mar 2023 11:43:34 +0530
-Message-ID: <1678774414-14414-3-git-send-email-quic_varada@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1678774414-14414-1-git-send-email-quic_varada@quicinc.com>
-References: <1678774414-14414-1-git-send-email-quic_varada@quicinc.com>
+        Tue, 14 Mar 2023 02:16:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 562AD76F62;
+        Mon, 13 Mar 2023 23:16:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFC3B615E0;
+        Tue, 14 Mar 2023 06:16:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52909C433D2;
+        Tue, 14 Mar 2023 06:16:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678774611;
+        bh=M7/IuZ+P1PMkCewwA2wliaQ2VYsdEdrWZtoteqZE3uM=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=ivZPgp0fzFpzbl1PePSR8pwCNcHXAJaX2T3GyMbcDDOMUbn1DBf9GKrrS8U7gbhsY
+         Q53u0QX9HeFEndORdqZyOKJsfkvkQQSYdgWF4V0S+kcnfz/MGX5ufmB7B2JiLmVwRX
+         YReLflmWli8DuDTMoNMipfIE+0zuj3iXBCFTliZRQlSrsDXGqzHXHDheKLnK9XiyP8
+         Emq20yvt2jZbewrLjx7Zp2Yv3i+lDSzQrqnfaHuNZBS2LZa+SeE/3YND1o9RM4YH3Z
+         nyxseywQcU3L8guRB82gWXeAWs1aJrqYsWnn3e7sVOA3B1Ycah3edOBiXEXPzE8hQS
+         adS2PC+qUZa6A==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Cc:     linux-wireless@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MAINTAINERS: adjust file entries after wifi driver movement
+References: <20230314041848.5120-1-lukas.bulwahn@gmail.com>
+Date:   Tue, 14 Mar 2023 08:16:45 +0200
+In-Reply-To: <20230314041848.5120-1-lukas.bulwahn@gmail.com> (Lukas Bulwahn's
+        message of "Tue, 14 Mar 2023 05:18:48 +0100")
+Message-ID: <87ttynyi0i.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6PxvXXzXvUcXV3wea3EeR9XXI03oANS1
-X-Proofpoint-GUID: 6PxvXXzXvUcXV3wea3EeR9XXI03oANS1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-13_13,2023-03-14_01,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- mlxlogscore=855 malwarescore=0 adultscore=0 lowpriorityscore=0 bulkscore=0
- phishscore=0 spamscore=0 impostorscore=0 priorityscore=1501 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2212070000
- definitions=main-2303140054
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add SOC ID for Qualcomm IPQ9574, IPQ9570, IPQ9554, IPQ9550,
-IPQ9514 and IPQ9510
+Lukas Bulwahn <lukas.bulwahn@gmail.com> writes:
 
-Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
----
- drivers/soc/qcom/socinfo.c | 6 ++++++
- 1 file changed, 6 insertions(+)
+> Commit f79cbc77abde ("wifi: move mac80211_hwsim and virt_wifi to virtual
+> directory") and commit 298e50ad8eb8 ("wifi: move raycs, wl3501 and
+> rndis_wlan to legacy directory") move remaining wireless drivers into
+> subdirectories, but does not adjust the entries in MAINTAINERS.
+>
+> Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
+> broken references.
+>
+> Repair these file references in those wireless driver sections.
+>
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 
-diff --git a/drivers/soc/qcom/socinfo.c b/drivers/soc/qcom/socinfo.c
-index e9012ca..d4c2e4c 100644
---- a/drivers/soc/qcom/socinfo.c
-+++ b/drivers/soc/qcom/socinfo.c
-@@ -441,7 +441,13 @@ static const struct soc_id soc_id[] = {
- 	{ qcom_board_id(SC7280) },
- 	{ qcom_board_id(SC7180P) },
- 	{ qcom_board_id(SM6375) },
-+	{ qcom_board_id(IPQ9514) },
-+	{ qcom_board_id(IPQ9550) },
-+	{ qcom_board_id(IPQ9554) },
-+	{ qcom_board_id(IPQ9570) },
-+	{ qcom_board_id(IPQ9574) },
- 	{ qcom_board_id(SM8550) },
-+	{ qcom_board_id(IPQ9510) },
- 	{ qcom_board_id(QRU1000) },
- 	{ qcom_board_id(QDU1000) },
- 	{ qcom_board_id(QDU1010) },
+Oh man, forgot about that. Thanks for fixing this.
+
 -- 
-2.7.4
+https://patchwork.kernel.org/project/linux-wireless/list/
 
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
