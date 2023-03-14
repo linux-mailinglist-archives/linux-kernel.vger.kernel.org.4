@@ -2,182 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4B6F6B87DE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:53:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E211F6B87AA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229685AbjCNBvU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 21:51:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51662 "EHLO
+        id S229958AbjCNBlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 21:41:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbjCNBvQ (ORCPT
+        with ESMTP id S229636AbjCNBlI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 21:51:16 -0400
-Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BDE17B124
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:51:13 -0700 (PDT)
-Received: by mail-il1-x129.google.com with SMTP id w4so7974474ilv.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:51:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678758673;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=589d5gGFeTRFSWyqkY4bWEOUvz8ytn+1q0THemjgTjo=;
-        b=sCoaYS53kX1FbnPJO069z9fN0xiunJwETCfuUF0U+/1RY4OSf2gZybXW3iq2NvZtxL
-         N3xD1WDLzMneibZj8Q3LKDEfJFudxp9oIpmwf5eOXWyWx+wW0FJtOX7nLfzWWpK2+z94
-         aJ5Xanx5/iUJnv4jg7mSaFCnACgXLQRGVkZAU0jGHhQpgDgZxawwuUPuUJRUCOccQwxu
-         oOiq+OeNrEHYo37W1HQdW/+izUkV1CJSVNCCDgjq7JSkccc0HO7BvdXU+s2bsT8CUhMT
-         elDT2/kflN9YtGfavs/UkIQ5Uo6goP5LKIO8AWva4YDcH2BjhLC0X0G8VMGzLVnfZfEF
-         q91A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678758673;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=589d5gGFeTRFSWyqkY4bWEOUvz8ytn+1q0THemjgTjo=;
-        b=fiTfcCaCJYFlM3RxtkLL/QpyDLyGxeR59X/OI9U+xYWuJ7T0LMcIag+BPXXIPQL96c
-         FhgsnpZjbcAJaQvqOHs2CsyYIoc8CL+WzeIyj93d+wCEBStbkxCTw1W5vBzwws8aLOH4
-         27GlChbGkamU+lAyTW+K97oG4NIZ39nbkk9MsN6/ZaHCVbORityk0nvWtpsgW87YEXue
-         kuGx7O6j21dUnWn9aJjGZw7bBwI0p6RM3KGbWjDPND+cMAu032FghAlWWH/spW6SnsU4
-         L7OxpZ+ZJo4Sg3VqJinrl3f35bgTU+pYB19A2tMZZiobmd7tnSZ7g5KTptZ47LHk3gs9
-         bUOg==
-X-Gm-Message-State: AO0yUKWJpRsqxXT82JoSwXnuk5m3JSDFmht+dyeiMje8TNA6dZ6Kesxw
-        NYlDDdkUjqRddpASaUbSyNA0UBttS7nt6VBbcBELDA==
-X-Google-Smtp-Source: AK7set8+Dh8f7H+Wetyv5sOVdRcPFSdXasKPH4Ttdqkf4wP3Sdu73sgx2P46Ghc94F6DQroovlvQv8Ld0rvKqSoUjYc=
-X-Received: by 2002:a05:6e02:601:b0:311:1424:47f1 with SMTP id
- t1-20020a056e02060100b00311142447f1mr54396ils.0.1678758672482; Mon, 13 Mar
- 2023 18:51:12 -0700 (PDT)
+        Mon, 13 Mar 2023 21:41:08 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94C93733BE
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:41:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678758067; x=1710294067;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=x2HDUBm4iNL4Ux/CxNLLfqxMzPTBD5JMWpg7L8l7OyQ=;
+  b=GuyVD9ja4PbeOLWgswWIJD2LzgPhLr+EfdNGzRCqSGtZk8dAnSEmqDib
+   IzvjaFiYjTtDK79hGR1uxMk60eA0Nu2sZPJqZvnIUTC7QQmlevR7C9R5c
+   qxY76pcNduGGhm6SVR+nTAoUt6bCIf+/kSqu003El+gzBjR2QB3mu4xVP
+   h9+MSU0FL5MI2u0yb3zqJWdirTzl9gSMJfEjCl4H7Qw1g5OdbKS03d8Ed
+   aXCX4W3IDlURDc4HfQpgZB2ZEj7AjrKTGxe07PSdysWeB21zWN2wBVi+V
+   2GfAzQjd4AtRlVQZLGvtIKPqLxdToKyTtw+BhAsPDKTXymvyr4XcSaFYB
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316949197"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="316949197"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:41:07 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="711327315"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="711327315"
+Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:41:05 -0700
+From:   Bard Liao <yung-chuan.liao@linux.intel.com>
+To:     alsa-devel@alsa-project.org, vkoul@kernel.org
+Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
+        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
+Subject: [PATCH 00/16] soundwire: updates before LunarLake introduction
+Date:   Tue, 14 Mar 2023 09:53:54 +0800
+Message-Id: <20230314015410.487311-1-yung-chuan.liao@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20230116010115.490713-1-irogers@google.com> <20230116010115.490713-3-irogers@google.com>
- <ZA+RUCE4vAgBlQRh@kernel.org> <ZA+X14KllWXrlr7C@kernel.org> <CAP-5=fWFYVyCCH19XrFSk0hwPoxGkWKJ=vyjrWNroFWzBZ-S2A@mail.gmail.com>
-In-Reply-To: <CAP-5=fWFYVyCCH19XrFSk0hwPoxGkWKJ=vyjrWNroFWzBZ-S2A@mail.gmail.com>
-From:   Ian Rogers <irogers@google.com>
-Date:   Mon, 13 Mar 2023 18:51:01 -0700
-Message-ID: <CAP-5=fVAhoqE6E87FRnwHr6Em2eX9Rq++6HmHMcFqVjFGCitmA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] perf build: Remove libbpf pre-1.0 feature tests
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Andres Freund <andres@anarazel.de>,
-        Quentin Monnet <quentin@isovalent.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        Christy Lee <christylee@fb.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        bpf@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 5:19=E2=80=AFPM Ian Rogers <irogers@google.com> wro=
-te:
->
-> On Mon, Mar 13, 2023 at 2:38=E2=80=AFPM Arnaldo Carvalho de Melo
-> <acme@kernel.org> wrote:
-> >
-> > Em Mon, Mar 13, 2023 at 06:10:40PM -0300, Arnaldo Carvalho de Melo escr=
-eveu:
-> > > Em Sun, Jan 15, 2023 at 05:01:14PM -0800, Ian Rogers escreveu:
-> > > > The feature tests were necessary for libbpf pre-1.0, but as the lib=
-bpf
-> > > > implies at least 1.0 we can remove these now.
-> > >
-> > > So I added this:
-> > >
-> > > diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
-> > > index 8b0bd3aa018ef166..b715cd4f43f4a014 100644
-> > > --- a/tools/perf/Makefile.config
-> > > +++ b/tools/perf/Makefile.config
-> > > @@ -580,7 +580,7 @@ ifndef NO_LIBELF
-> > >            EXTLIBS +=3D -lbpf
-> > >            $(call detected,CONFIG_LIBBPF_DYNAMIC)
-> > >          else
-> > > -          dummy :=3D $(error Error: No libbpf devel library found, p=
-lease install libbpf-devel);
-> > > +          dummy :=3D $(error Error: No libbpf devel library found or=
- older than v1.0, please install/update libbpf-devel);
-> > >          endif
-> > >        else
-> > >          # Libbpf will be built as a static library from tools/lib/bp=
-f.
-> > >
-> > > To better reflect the failure reason:
-> > >
-> > > =E2=AC=A2[acme@toolbox perf-tools-next]$ cat /tmp/build/perf-tools-ne=
-xt/feature/test-libbpf.make.output
-> > > test-libbpf.c:5:2: error: #error At least libbpf 1.0 is required for =
-Linux tools.
-> > >     5 | #error At least libbpf 1.0 is required for Linux tools.
-> > >       |  ^~~~~
-> > > =E2=AC=A2[acme@toolbox perf-tools-next]$ rpm -q libbpf-devel
-> > > libbpf-devel-0.8.0-2.fc37.x86_64
-> > > =E2=AC=A2[acme@toolbox perf-tools-next]$
-> > >
-> > > I'll see if I can make the build test conditional on libbpf being >=
-=3D 1.0
-> >
-> > I'm trying with this:
-> >
-> > =E2=AC=A2[acme@toolbox libbpf]$ git log --oneline -1 9476dce6fe905a6bf1=
-d4c483f7b2b8575c4ffb2d
-> > 9476dce6fe905a6b libbpf: remove deprecated low-level APIs
-> > =E2=AC=A2[acme@toolbox libbpf]$ git tag --contains 9476dce6fe905a6bf1d4=
-c483f7b2b8575c4ffb2d
-> > v1.0.0
-> > v1.0.1
-> > v1.1.0
-> > =E2=AC=A2[acme@toolbox libbpf]$
-> >
-> > diff --git a/tools/perf/tests/make b/tools/perf/tests/make
-> > index 531324c3dab594e1..f866c58b916f4d7a 100644
-> > --- a/tools/perf/tests/make
-> > +++ b/tools/perf/tests/make
-> > @@ -63,6 +63,7 @@ endif
-> >
-> >  has =3D $(shell which $1 2>/dev/null)
-> >  python_perf_so :=3D $(shell $(MAKE) python_perf_target|grep "Target is=
-:"|awk '{print $$3}')
-> > +old_libbpf :=3D $(shell grep -q LIBBPF_DEPRECATED /usr/include/bpf/bpf=
-.h)
->
-> I think this could also be:
-> old_libbpf :=3D $(shell grep MAJOR /usr/include/bpf/libbpf_version.h
-> 2>&1 |grep -q  0)
-> Which may be a bit more intention revealing and future proof.
->
-> Thanks,
-> Ian
+This series provides a set of cleanups and new abstractions needed for the
+introduction of LunarLake support.
 
-To avoid /usr/include assumptions, there's also:
-old_libbpf :=3D $(shell echo "#include <bpf/libbpf.h>" | $(CC) -E -dM -x
-c -|grep "define LIBBPF_MAJOR_VERSION"|grep -q 0)
-:-)
+For now this is an iso-functionality change, with changes on the Intel and
+Cadence sides. The low-level support for LunarLake will be introduced in a
+follow-up series that depends on HDaudio multi-link extensions.
 
-Ian
+Pierre-Louis Bossart (16):
+  soundwire: intel: move common definitions to header file
+  soundwire: intel: remove stale/misleading comment
+  soundwire: intel: remove PDI-level restrictions on rates and formats
+  soundwire: intel: remove useless abstraction
+  soundwire: intel: simplify sync_go sequence
+  soundwire: intel: add sync_arm/sync_go to ops
+  soundwire: intel: use indirection before moving bus start/stop
+    sequences
+  soundwire: intel: move bus common sequences to different file
+  soundwire: intel: add abstraction for cmdsync check
+  soundwire: intel: move bank switch routine to common
+    intel_bus_common.c
+  soundwire: cadence: remove CDNS_MCP_CONFIG_SSPMOD
+  soundwire: cadence: add helpers to access IP_MCP registers
+  soundwire: cadence: split access to IP_MCP_CONFIG fields
+  soundwire: cadence: split access to IP_MCP_CONTROL fields
+  soundwire: cadence: split access to IP_MCP_CMDCTRL fields
+  soundwire: cadence: change access to IP_MCP_CMD_BASE
 
-> >  # standard single make variable specified
-> >  make_clean_all      :=3D clean all
-> > @@ -151,7 +152,9 @@ run +=3D make_no_libaudit
-> >  run +=3D make_no_libbionic
-> >  run +=3D make_no_auxtrace
-> >  run +=3D make_no_libbpf
-> > +ifneq ($(old_libbpf),)
-> >  run +=3D make_libbpf_dynamic
-> > +endif
-> >  run +=3D make_no_libbpf_DEBUG
-> >  run +=3D make_no_libcrypto
-> >  run +=3D make_no_sdt
+ drivers/soundwire/Makefile           |   3 +-
+ drivers/soundwire/cadence_master.c   | 139 +++++++-----
+ drivers/soundwire/cadence_master.h   |   3 +
+ drivers/soundwire/intel.c            | 325 ++-------------------------
+ drivers/soundwire/intel.h            |  67 ++++++
+ drivers/soundwire/intel_bus_common.c | 259 +++++++++++++++++++++
+ include/linux/soundwire/sdw_intel.h  |  11 +
+ 7 files changed, 444 insertions(+), 363 deletions(-)
+ create mode 100644 drivers/soundwire/intel_bus_common.c
+
+-- 
+2.25.1
+
