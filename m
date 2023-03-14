@@ -2,152 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 978D66B9A03
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:41:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580296B99FC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:41:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230051AbjCNPlS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:41:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56508 "EHLO
+        id S231721AbjCNPlJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:41:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCNPku (ORCPT
+        with ESMTP id S231703AbjCNPkq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:40:50 -0400
-Received: from sender4-op-o10.zoho.com (sender4-op-o10.zoho.com [136.143.188.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F7FEAFBBE;
-        Tue, 14 Mar 2023 08:40:20 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; t=1678808324; cv=none; 
-        d=zohomail.com; s=zohoarc; 
-        b=RAOnXKx8Fb4MqB1wVrAAxOBX7beM5WUE8KoKAAw/vni8gi6JlsigmpoPkfqyAJE1U4+kCyKhTOdwqOGhhmgbYdUbHTx1az0uXXIBEtKHLaeCxh6MXkxrz8kMNwBXKwT5MHdQxMDpUHRRLX/3BNeqP6WcK83WuwcaUX6wsZoI7nA=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-        t=1678808324; h=Content-Type:Content-Transfer-Encoding:Cc:Date:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:To; 
-        bh=6olgbthaOhN3f4AFE/3iBlFPFGb625oZX9E4dP1sDhg=; 
-        b=GL95TvrtiRIE/4EbRySqwytvKn4VW5GOSZjZB8tymYHsOzZlxj3JEqkKGJdjRK7idqIUmOnhF8LH1h+hb3CK+EUBIjbWTsT+BXIQC5gxtKLK+WkhfEuiAhZeQXmBRMvk/KZzDM/up3yg7Bm0Ig2JGG1ps/N+MT88TaRzEN1LrEU=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-        dkim=pass  header.i=arinc9.com;
-        spf=pass  smtp.mailfrom=arinc.unal@arinc9.com;
-        dmarc=pass header.from=<arinc.unal@arinc9.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1678808324;
-        s=zmail; d=arinc9.com; i=arinc.unal@arinc9.com;
-        h=Message-ID:Date:Date:MIME-Version:Subject:Subject:To:To:Cc:Cc:References:From:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
-        bh=6olgbthaOhN3f4AFE/3iBlFPFGb625oZX9E4dP1sDhg=;
-        b=iPKP6Gz/R1TpNa0LjJzAreb6ProiuSXPsWVPDsG+WoHUGHzCtu30dgnnboxtfPpE
-        YHRCLUQBcRTvMNOHanG03z3sV6ubEkSeBA0sK9B+gpmviiOUKDKzRdAQp/RwApF0n+h
-        h+kLW1V3vRWssWZQBNdY7+uEAUd1A0Aw2hc+So2c=
-Received: from [10.10.10.3] (149.91.1.15 [149.91.1.15]) by mx.zohomail.com
-        with SMTPS id 1678808321651755.4458697967328; Tue, 14 Mar 2023 08:38:41 -0700 (PDT)
-Message-ID: <c64d9f88-75ca-3a6c-b5c2-6e4b1a161d5f@arinc9.com>
-Date:   Tue, 14 Mar 2023 18:38:33 +0300
+        Tue, 14 Mar 2023 11:40:46 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E13D8B0497;
+        Tue, 14 Mar 2023 08:40:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678808411; x=1710344411;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=UzlMpAtk/JrMVON44CzIZ5oumEcd7fiM8bADp/UkciU=;
+  b=G7htEcSkcf0up18llbo+yt7WnKc3pJAsiWoJourZz2JhjYYoFBwjpCuR
+   vM0N6q0iwHTufL1/fkqC6YY+JzAvEe1csWo9qSmzA3QQli6g6Z1WELaH5
+   wvnNEfgCBH9vRVzoZXZWOeVMvBfqToPj/gTtb1weqc4NULTXFXat12HjT
+   Nrad7c0wOXZi0el4YhNcYQ2twI/oTAEokDS0MqbM8uPrN49kVOZR57exo
+   jMDVzHRIeYLMdvoSrL46Rp+KN/rZFxvHR/cqznCk6mEy/CAljdPsnuNnv
+   INwwSauLmFqavz4OexSe9ZYb2qWGPO9e6smsgWaOFW76SfWrL/wGKI1h/
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="423735657"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="423735657"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:38:40 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="679151163"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="679151163"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 14 Mar 2023 08:38:37 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pc6jT-003IHX-1s;
+        Tue, 14 Mar 2023 17:38:35 +0200
+Date:   Tue, 14 Mar 2023 17:38:35 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Tony Lindgren <tony@atomide.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Johan Hovold <johan@kernel.org>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-serial@vger.kernel.org
+Subject: Re: [PATCH v7 1/1] serial: core: Start managing serial controllers
+ to enable runtime PM
+Message-ID: <ZBCU+8MpTCWAfJLG@smile.fi.intel.com>
+References: <20230314073603.42279-1-tony@atomide.com>
+ <ZBB1h12WHIGo4NX8@smile.fi.intel.com>
+ <20230314133810.GM7501@atomide.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 15/21] dt-bindings: pinctrl: {mediatek,ralink}: fix
- formatting
-To:     Rob Herring <robh@kernel.org>
-Cc:     Sean Wang <sean.wang@mediatek.com>,
-        linux-arm-kernel@lists.infradead.org,
-        Luiz Angelo Daros de Luca <luizluca@gmail.com>,
-        =?UTF-8?Q?Bernhard_Rosenkr=c3=a4nzer?= <bero@baylibre.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hui Liu <hui.liu@mediatek.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        linux-kernel@vger.kernel.org,
-        Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        Del Regno <angelogioacchino.delregno@collabora.com>,
-        erkin.bozoglu@xeront.com, linux-gpio@vger.kernel.org,
-        Zhiyong Tao <zhiyong.tao@mediatek.com>,
-        Daniel Santos <daniel.santos@pobox.com>,
-        Frank Wunderlich <frank-w@public-files.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Daniel Golle <daniel@makrotopia.org>,
-        Andy Teng <andy.teng@mediatek.com>,
-        William Dean <williamsukatube@gmail.com>,
-        devicetree@vger.kernel.org,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-        DENG Qingfang <dqfext@gmail.com>
-References: <20230313205921.35342-1-arinc.unal@arinc9.com>
- <20230313205921.35342-16-arinc.unal@arinc9.com>
- <167880254685.25972.15349420182231511267.robh@kernel.org>
-Content-Language: en-US
-From:   =?UTF-8?B?QXLEsW7DpyDDnE5BTA==?= <arinc.unal@arinc9.com>
-In-Reply-To: <167880254685.25972.15349420182231511267.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314133810.GM7501@atomide.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14.03.2023 17:10, Rob Herring wrote:
-> 
-> On Mon, 13 Mar 2023 23:59:15 +0300, arinc9.unal@gmail.com wrote:
->> From: Arınç ÜNAL <arinc.unal@arinc9.com>
->>
->> Change the style of description properties to plain style where there's no
->> need to preserve the line endings, and vice versa.
->>
->> Fit the schemas to 80 columns for each line.
->>
->> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
->> Reviewed-by: Rob Herring <robh@kernel.org>
->> ---
->>   .../pinctrl/mediatek,mt65xx-pinctrl.yaml      | 22 +++---
->>   .../pinctrl/mediatek,mt6779-pinctrl.yaml      | 33 +++++----
->>   .../pinctrl/mediatek,mt6795-pinctrl.yaml      | 33 +++++----
->>   .../pinctrl/mediatek,mt7620-pinctrl.yaml      |  2 +-
->>   .../pinctrl/mediatek,mt7621-pinctrl.yaml      |  2 +-
->>   .../pinctrl/mediatek,mt7622-pinctrl.yaml      | 26 +++----
->>   .../pinctrl/mediatek,mt7981-pinctrl.yaml      | 33 +++++----
->>   .../pinctrl/mediatek,mt7986-pinctrl.yaml      | 68 ++++++++---------
->>   .../pinctrl/mediatek,mt8183-pinctrl.yaml      | 26 ++++---
->>   .../pinctrl/mediatek,mt8186-pinctrl.yaml      | 47 ++++++------
->>   .../pinctrl/mediatek,mt8188-pinctrl.yaml      | 74 ++++++++++---------
->>   .../pinctrl/mediatek,mt8192-pinctrl.yaml      | 47 ++++++------
->>   .../pinctrl/mediatek,mt8195-pinctrl.yaml      | 41 +++++-----
->>   .../pinctrl/mediatek,mt8365-pinctrl.yaml      | 28 +++----
->>   .../pinctrl/ralink,rt2880-pinctrl.yaml        |  2 +-
->>   .../pinctrl/ralink,rt305x-pinctrl.yaml        |  2 +-
->>   .../pinctrl/ralink,rt3883-pinctrl.yaml        |  2 +-
->>   17 files changed, 254 insertions(+), 234 deletions(-)
->>
-> 
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> 
-> yamllint warnings/errors:
-> ./Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml:103:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
-> ./Documentation/devicetree/bindings/pinctrl/mediatek,mt6795-pinctrl.yaml:113:16: [warning] wrong indentation: expected 14 but found 15 (indentation)
-> 
-> dtschema/dtc warnings/errors:
-> 
-> doc reference errors (make refcheckdocs):
-> 
-> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230313205921.35342-16-arinc.unal@arinc9.com
-> 
-> The base for the series is generally the latest rc1. A different dependency
-> should be noted in *this* patch.
-> 
-> If you already ran 'make dt_binding_check' and didn't see the above
-> error(s), then make sure 'yamllint' is installed and dt-schema is up to
-> date:
-> 
-> pip3 install dtschema --upgrade
-> 
-> Please check and re-submit after running the above command yourself. Note
-> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-> your schema. However, it must be unset to test all examples with your schema.
+On Tue, Mar 14, 2023 at 03:38:10PM +0200, Tony Lindgren wrote:
+> * Andy Shevchenko <andriy.shevchenko@intel.com> [230314 13:25]:
+> > On Tue, Mar 14, 2023 at 09:35:59AM +0200, Tony Lindgren wrote:
 
-I do see the warning. Looks like the wrong indentation was there before 
-my patch series. I'll address that as well on this patch on v3.
+...
 
-Will you review the rest of v2?
+> > > +	/* Increment the runtime PM usage count for the active check below */
+> > > +	err = pm_runtime_get(port_dev);
+> > 
+> > The question here is why don't we need to actually turn on the device immediately
+> > (sync) if it's not already powered?
 
-Arınç
+> Doing it would require the use of pm_runtime_irq_safe() at least currently.
+
+> > > +	if (err < 0) {
+> > > +		pm_runtime_put_noidle(port_dev);
+> > > +		return;
+> > > +	}
+> > 
+> > > +	/*
+> > > +	 * Start TX if enabled, and kick runtime PM. Otherwise we must
+> > > +	 * wait for a retry. See also serial_port.c for runtime PM
+> > > +	 * autosuspend timeout.
+> > > +	 */
+> > 
+> > I.o.w. does the start_tx() require device to be powered on at this point?
+> 
+> Yes. And if the device is not enabled, serial_port.c runtime_resume()
+> calls this function again after the hardware is enabled.
+
+Ah, that makes sense.
+
+> > > +	if (pm_runtime_active(port_dev))
+> > >  		port->ops->start_tx(port);
+> > > +	pm_runtime_mark_last_busy(port_dev);
+> > > +	pm_runtime_put_autosuspend(port_dev);
+> 
+> For your other comments, I'll take a look thanks.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
