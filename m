@@ -2,124 +2,225 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13D856B9A3C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:47:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EAAC36B9890
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:09:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjCNPr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41668 "EHLO
+        id S230480AbjCNPJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:09:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231741AbjCNPrM (ORCPT
+        with ESMTP id S231308AbjCNPJN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:47:12 -0400
-X-Greylist: delayed 1248 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 14 Mar 2023 08:46:39 PDT
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7679BB0BA3;
-        Tue, 14 Mar 2023 08:46:39 -0700 (PDT)
-Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
-        by mailnew.west.internal (Postfix) with ESMTP id B5AC02B069D9;
-        Tue, 14 Mar 2023 11:08:43 -0400 (EDT)
-Received: from imap51 ([10.202.2.101])
-  by compute6.internal (MEProxy); Tue, 14 Mar 2023 11:08:45 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-        :cc:content-type:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm1; t=1678806523; x=1678813723; bh=K4
-        tQ8ndVOUfpM0Pr+iYsgl8sdiO//rofLCiHgEHKHaw=; b=Bs89wlqsdZVa4k07Fb
-        epoolTHKszWvfBhS2lZVBBRcF2IS0ywxX526WC1eBDNhzycvLK/kat0+XRfJx2W3
-        7bMNtqMaeH4ZJIdGU9yRt8ThnhgzDS7LLG23ou/0reQhjVATwpoCDU2V8vqm2W1g
-        J+1jlCnkFsdB00fs75PZcsnbMJQ5s0C5KPnLZjhqSn8SwimhhuRyHr4X0dC/PTsg
-        runNfLuCg/cSr0AkAoZgfQFS4waYRIDooAHqrMWtZtpzKTnjgRDZ+8reMknQWs0Z
-        eoZ852c0rPiprZQoIxvBFd9ZExdObLmVVzDXAkThfBx5XDZj6gfT51hkb+yCSOEK
-        qb1A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678806523; x=1678813723; bh=K4tQ8ndVOUfpM
-        0Pr+iYsgl8sdiO//rofLCiHgEHKHaw=; b=FcVdEJUEJOBFn8vyntSfSiv6vsKGS
-        hxzdTfs9AcxmtwZ5y1sR0yXhzJ99CF9MXTpWC+ABwuF7Rtpv1TkBGNjNpsV6Om5f
-        dtPB6w6JUNhXycjYrxPIg/RAWfQny5kcjIIZY4MsTNL5WQMkK9FZ5JVjfkhq6000
-        I4KrV9UjqLokn4iBCs+nAu+QFd5+zWcdFsaymVn1JdQjXp5p6OIcBjLpx4QgreLj
-        wYQZ3SOWH6tcEuqWKW6Z+BaR70e/RUZ9Fa/F4u+0ul++229JrQKHN7GgAgMbAdAD
-        4cns8a5dDWvtxvYx+83RxxNxPzNTvcFgOby7T3TIytlb8ZsA7HgRcFHmw==
-X-ME-Sender: <xms:-o0QZK7P_IOpvfkXAJTvZsGq0nxcIFi21rXd_e5XDXLyhDMebh2_nA>
-    <xme:-o0QZD7dmPVC77qe5xy7iIFqqccVdVdsSEIY2cJ65en99sOTy5DG8bDWDMZEjjCjK
-    kg8yMOB41kCCRQNqFA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgjeehucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepofgfggfkjghffffhvfevufgtsehttdertderredtnecuhfhrohhmpedftehr
-    nhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrth
-    htvghrnhepffehueegteeihfegtefhjefgtdeugfegjeelheejueethfefgeeghfektdek
-    teffnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprg
-    hrnhgusegrrhhnuggsrdguvg
-X-ME-Proxy: <xmx:-o0QZJc_ZJnv__s_0rxNyhivqegZK7Z_v0h4mlYw68ZNd9X5urONyg>
-    <xmx:-o0QZHIp6DY7kGHp39y5XRCh11PF4bviEV4MGoRs_tuGNYI_P-Cn5g>
-    <xmx:-o0QZOLVcUPTfqPTZ6w7QlCi-H2uAW7eIfDzED9woacZag2egABCvQ>
-    <xmx:-40QZDB8FC5V93wwc2nXAo4BNIGlkdi-SW-0xyTxCo85UPhNMS4EWPMW1F4>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 018F2B60086; Tue, 14 Mar 2023 11:08:41 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
-Mime-Version: 1.0
-Message-Id: <9894438c-dca7-40cf-adb8-4bc7cb7b5c02@app.fastmail.com>
-In-Reply-To: <CAMuHMdXXapUNn2-_+WWULq1ELLJEzVgJ7CZ-OJpbTSy-=JjZVA@mail.gmail.com>
-References: <20230314121216.413434-1-schnelle@linux.ibm.com>
- <20230314121216.413434-4-schnelle@linux.ibm.com>
- <CAMuHMdXXapUNn2-_+WWULq1ELLJEzVgJ7CZ-OJpbTSy-=JjZVA@mail.gmail.com>
-Date:   Tue, 14 Mar 2023 16:08:20 +0100
-From:   "Arnd Bergmann" <arnd@arndb.de>
-To:     "Geert Uytterhoeven" <geert@linux-m68k.org>,
-        "Niklas Schnelle" <schnelle@linux.ibm.com>
-Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        "Corey Minyard" <minyard@acm.org>,
-        "Peter Huewe" <peterhuewe@gmx.de>,
-        "Jarkko Sakkinen" <jarkko@kernel.org>,
-        "Jason Gunthorpe" <jgg@ziepe.ca>,
-        "Bjorn Helgaas" <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
-        "Alan Stern" <stern@rowland.harvard.edu>,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        "Paul Walmsley" <paul.walmsley@sifive.com>,
-        "Palmer Dabbelt" <palmer@dabbelt.com>,
-        "Albert Ou" <aou@eecs.berkeley.edu>, linux-kernel@vger.kernel.org,
-        Linux-Arch <linux-arch@vger.kernel.org>,
-        linux-pci@vger.kernel.org, "Arnd Bergmann" <arnd@kernel.org>,
-        openipmi-developer@lists.sourceforge.net,
-        linux-integrity@vger.kernel.org
-Subject: Re: [PATCH v3 03/38] char: impi, tpm: depend on HAS_IOPORT
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Tue, 14 Mar 2023 11:09:13 -0400
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2127.outbound.protection.outlook.com [40.107.93.127])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A37F2330C;
+        Tue, 14 Mar 2023 08:09:11 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BRbJddFkQGVAFBtxvFzTAoJjlyw/lCKNM/DtH5lQQ7+1nm4dAL6GCWJqTJttldVNIOv3JbpFfnSTmefoIHKVKWG0rigIgf6zLHCqXTb8pBKGgAtEiOoZMdIa4cY8eWPRc9mV8MFTWLXJ5ZGllpDV1OI/QxEdxS2k4TMdAyFXaDNuqwr8+b8pow/CEyqGBS/iITD/JOFHiFACEaa8bdqPi0JAPM4F+2lL7xrflfn4Y3bqph8r+zdO0ZX+oNeZ0Jyuf7gPZ0uE8T09D4wmFWnGbm5HrZ2wlR5iR8Pmk2vPE6J66BVvqqBJwYP9GVTHd1n5kjKayuV3WNFOCKNMW234uQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=U7HWzBB3V/sH8dAfxQ+MJ3TPhZp93kERLBu9Ck8DBW4=;
+ b=dhYgg7VX+z030WMhDEegc0YnmOiJxlPkFyoiyaaUILO+W4Vox+ELUigAgMKUrtfYYd8rIQ7ie5cG0ATjtn5s+TSBqJ7NKHqFNuyrUtzLPoKoHzekSshF3kCvGQ4xVl988RWuaix+FaAjXrxyJQoLVasdutyxz0SAN4GXyJUl82DDUIQYDUtqhiSFx+MVOSQZQIA9H3/FCoEJuXEwk3niaY0Er/4fT/zJwcIEE/AXfvAkn/uvoln/7e2DKXwjlKNfS/uRC1NC/VgXgx3gia3Aq20zVJ2MKBI1JJkRRsDYCOa6u1TQTGZkgIJN/og5L2tBXldNKL6uXVFeKpYtXny9gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=U7HWzBB3V/sH8dAfxQ+MJ3TPhZp93kERLBu9Ck8DBW4=;
+ b=oA6gorebeIxbEHO+AESyi5rW2Ev2w/2YPaP8ltuwHQdgJYMVCf/XSLapZI4fMwcQsheiYiktVE5lTpJsMscy3MlefK9PiDP4WtPHZyhbal/JLXqLjgLY/RH0+XpQ3SHzshhoNp/yA4xI351R+Fp0MrvI45m+LDC03fJQoxuqk7U=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by DM6PR13MB3723.namprd13.prod.outlook.com (2603:10b6:5:246::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 15:09:05 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
+ 15:09:05 +0000
+Date:   Tue, 14 Mar 2023 16:08:58 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Eyal Birger <eyal.birger@gmail.com>
+Cc:     Josef Miegl <josef@miegl.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Pravin B Shelar <pshelar@ovn.org>
+Subject: Re: [PATCH net-next] net: geneve: accept every ethertype
+Message-ID: <ZBCOCtzNKenD4dqq@corigine.com>
+References: <ZA9T14Ks66HOlwH+@corigine.com>
+ <20230312163726.55257-1-josef@miegl.cz>
+ <57238dfc519a27b1b8d604879caa7b1b@miegl.cz>
+ <ZA9s2Ti9PlUzsq/m@corigine.com>
+ <CAHsH6GsUAzye2puFES_5iemTtQZyoiR590NRPC8ZXrTg4B+OMA@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHsH6GsUAzye2puFES_5iemTtQZyoiR590NRPC8ZXrTg4B+OMA@mail.gmail.com>
+X-ClientProxiedBy: AS4P189CA0013.EURP189.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5d7::16) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DM6PR13MB3723:EE_
+X-MS-Office365-Filtering-Correlation-Id: e7cb7d33-6637-4d7a-817e-08db249e0d5d
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: Fgz476l8TzynA8NKKcR0x4cs/FWmmeCgk0sL1nCGNcx3jz8XX88vd7spJOrdZ9q/Xw6AzyHEFDOKI3zL94VdJO/h0MW99xTLOzI3L0kguzHw+2Sw0C41s3Yd5EoM/qSm67crhUKoKM0Wi6yy6hrRa7OBzNIFgxbXxpzftMiyvugIdYlKl/xPt0D06FfMDICnNqrAvXJeFkXtfzoE+EGUobgDGxXLyRyUqAzxn/tAgFQI5oA9Hiq2+YRkAbrtm2TbNRmyNkOniWIdxWoFRfoePbp1wPa8eAR+4FLVO+ZdOGOfts9BJ4j7aVvnRuLmcKzUfEAoJZI4tnoEHXKnLDGE+tcBby6Gx5zepNE6v/Xe+3JVmw6zkuL3EoeZ7mNxlyvKchKYF8VVYBCGBneQHPTgA/1LpeYWpkpM4m3HJXe3j4ey3Yh/bDmBIG+7D1D68Zh+0Qs411ag+mn/u5vle8Q8RNFcnru2/Hyk/46ZAFVBsp6/01EwduAZmHx3jpscXTVM48d+6qyI+U5cdUrgcU5CUYMy++f7Pj5KRbsIhCpmUzEJ7axZa5X9fVAiaUzIpD8ChiRQJ04lH4ZjPgyu4/UqtAlVVAUwDcl0AkMjquO1C082+t+ShBBdlqhbXQHdwXZH
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(376002)(366004)(39840400004)(136003)(396003)(451199018)(5660300002)(8936002)(44832011)(2906002)(38100700002)(36756003)(86362001)(41300700001)(478600001)(6916009)(66556008)(8676002)(66946007)(66476007)(6486002)(966005)(6666004)(4326008)(83380400001)(54906003)(316002)(6506007)(186003)(6512007)(2616005)(53546011);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NkxjZWN2N2lvZjMxZmF3LzYvRHZ1L3lCNDJ1SEgzQUx6ZXZmZC9WSjdIdTVF?=
+ =?utf-8?B?RDMvTnBYZUhUMm9BNkFXL0YvNzlIc3h0MXZyejBnMTU4bW9JVXo1ZmRqblpS?=
+ =?utf-8?B?K1d6RDB0VDQ2UUJKeG90SmFDZk9lTHVOaHIzQWhndWkzNjVhejg2N2NaZXJx?=
+ =?utf-8?B?M2dBanVPVCt0dHlBaXowVWpLek0zT1FRQjV6UXlEQmxEZVZLTnMxekxCQ1ls?=
+ =?utf-8?B?N29SOHFCY3ZZdVVwOStNay81NUJhcHZGQUl4Qk9sN3J0NWIxNHhxOW8wazE2?=
+ =?utf-8?B?SnBjK0RCUVdnaTFlcjhrSVhjdG5CUUVSWjEvdytZYllVQ0RDcDBldkgrZTVN?=
+ =?utf-8?B?UnB6eVk5Qk45eWErMzUxRTd2TnFXT1hxVXBabkVqN1pYL0h4ckFkUzhLWnlO?=
+ =?utf-8?B?RGMzZ3gxYmMxVnErUC90MGczRXRFeXhmbFZSS1MyNFk3SXdpdXI0UmtpOFE0?=
+ =?utf-8?B?S1NCaDRSUnBiK3NUaThIRkxDcDNkVHZyT2g0b2wyOVA4UkRGUTlPN2crU0hD?=
+ =?utf-8?B?SHhXTVJWVG44VzR0SmZRMU5JdzI3NzN2ZEtBdXYyYWF3TGxpV0JncEhGdTlz?=
+ =?utf-8?B?aTU5eGdkWWNqV3M1eWdyRWE4R2prSWtGTDEyR1lKYnhHMDg3OFc0Z0s4TTlt?=
+ =?utf-8?B?SVRzbEhmcjZoTUF5eFdhWHZDSFYzS3REcUJzc3FEV2szQVdVbjFCRkxYWjJq?=
+ =?utf-8?B?OVNVWnpCUEpMdU5WcmFacDNkb1VOTHZTS0VBTFZSZGtFQnlBTFp5clNEVGMx?=
+ =?utf-8?B?WjR3RloxUFNvT2tEN3R1cCtFQ1I4c0Q0bk1xS2NQVGN1T01LdklBUkErcmd2?=
+ =?utf-8?B?Ym4yS3Y4QXBMN2hPalZjcGIwcm1EL0YxSVYvNk4rZWFGWFlRcEhwcUpSM044?=
+ =?utf-8?B?QlVjTllOSDRvU3ZEQ2ZweGs0dkc0WGovMi81dHV5aFJQcXVnYVdQWUFvTi9E?=
+ =?utf-8?B?bVZqalVHdFo1V1V3UlAySGNzUWVicmtxS3ZyTEZGeU50YzI3SHFyUGo0YnpG?=
+ =?utf-8?B?bVZXcmtyRzRuQmtXRS9JaUNWbCtMZUc3MXdFOTR4MVVCbTRjKy9xTHNwZzI5?=
+ =?utf-8?B?UkxwVmloWUY0bXJETXlMUkFtTlpaRnQvcFhjOWgvdWtXNitFNHplS3kweGx3?=
+ =?utf-8?B?UDF4M3RyZnJyaWdHd3gyOXAzZnlZOUtLcEtvcFRwMDFPRVMzM0Y4bVdCQ1NJ?=
+ =?utf-8?B?SVMrWTZXSFNCS3Vka2hpVzZ0RzN4S1RBbDlnc2d2TE9EWFR5dkJFTXcydXFp?=
+ =?utf-8?B?WWtrWGJGRkVLR1J5azh0U2xkbk1RYmhFYzFoQTd4T1FlWmhCajhXcjhkNDF6?=
+ =?utf-8?B?NlNacmtUS0pBTjUrOFJ2VWV4Nmx2Ui9UNlBmU0VINHdyNVZ4aEJlNUZ5WGgr?=
+ =?utf-8?B?T2lCT0hXc2s1TjlmQUJrOExCNlRTbW1GUjA3Z2pqZ1Y5MlNCR1lEdGkrWlF4?=
+ =?utf-8?B?bTFTanRDQktGUW9wV2l4Ty9vcGlSQlhpOWdBM2dSUlNaYzZ6VDJ3aks4UjZu?=
+ =?utf-8?B?QWlYYThIbDh3ekhHbzh2SHl5Sko2TkN2VXBUWnRzWnJWV3ptOWU3YkxSbmRk?=
+ =?utf-8?B?Q1gzM3VlZWk2Z3RJOTMzTUFuSXc1QTNGRWFtYkxGMGNaQXBtNkFFQ3BUSWNr?=
+ =?utf-8?B?YUp2VFljLzV5VGM2WldCb0lMRWxvdlZHbmYzQ2cxRVh4Vm52RlByMXhiSWgr?=
+ =?utf-8?B?ZUZaNmFBdDJ3ZEkyVFZablJ1Z0NmRHRhcDk5d3E1T20rd3h1Szlnem1qTUE3?=
+ =?utf-8?B?ZVJSNTNZWXJOLzZYSHI0MnIwc0FmSlZnWFFPTHJsQ2NHcVlEQkhzNDRCbmVR?=
+ =?utf-8?B?eU9ZeUU1OEZpWXh1bHBoZnIycmJCMGREYWxHNVU4b1dNYUpaOUJHSmx1azdi?=
+ =?utf-8?B?ZjVnZGV5akc0T3pELzJVeVJndmRBRllyaTZZVUtRUE9QUmV5SUdCekd0UHY5?=
+ =?utf-8?B?dVZneWwwVHluUXZudStlTlJoTEQzVmZZcVpiV1ZvOGhEOUQ3NFgrVGtwTlIx?=
+ =?utf-8?B?VUxpZ2VqU3c2Y1dFc2NkclJmK21CeTRpTzhJeThrblF1YkZzQWZIanoxNVJq?=
+ =?utf-8?B?Si9GbUpNY2JDYVJlUWZTaTRhT3RuMW5idlkrTE9MRjhNdnllS1FrMjJsNVZq?=
+ =?utf-8?B?U3FkUndGa0dTcmhQZ1YvdDU4ZGdiU2F6OXNLK0syU1RRWk9XeGFHcVNJYWI2?=
+ =?utf-8?B?ZnZqdzExOUxtTnpFVCtxQTNSdkxKVUV3VzBPbUQzNDAvSHdHTHJMc21GSTJM?=
+ =?utf-8?B?aXdHd3o4amtBTFhUek8wUGR5YkR3PT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e7cb7d33-6637-4d7a-817e-08db249e0d5d
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:09:05.2440
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PoCs+q5vB9fHcNxaqt87GLRKbqhSqGdYn7Nr9dB08VdZXYdbnUkWQXK3og+YV3asBGOACYTyiJXe/1rZ23ULhyb+0l9+jMdVYgypgzhk34I=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR13MB3723
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023, at 15:17, Geert Uytterhoeven wrote:
->> --- a/drivers/char/Kconfig
->> +++ b/drivers/char/Kconfig
->> @@ -34,6 +34,7 @@ config TTY_PRINTK_LEVEL
->>  config PRINTER
->>         tristate "Parallel printer support"
->>         depends on PARPORT
->> +       depends on HAS_IOPORT
->
-> This looks wrong to me.
-> drivers/char/lp.c uses the parport API, no direct I/O port access.
+On Tue, Mar 14, 2023 at 11:55:07AM +0200, Eyal Birger wrote:
+> Hi,
+> 
+> On Mon, Mar 13, 2023 at 8:35 PM Simon Horman <simon.horman@corigine.com> wrote:
+> >
+> > On Mon, Mar 13, 2023 at 05:14:58PM +0000, Josef Miegl wrote:
+> > > March 13, 2023 5:48 PM, "Simon Horman" <simon.horman@corigine.com> wrote:
+> > >
+> > > > +Pravin
+> > > >
+> > > > On Sun, Mar 12, 2023 at 05:37:26PM +0100, Josef Miegl wrote:
+> > > >
+> > > >> The Geneve encapsulation, as defined in RFC 8926, has a Protocol Type
+> > > >> field, which states the Ethertype of the payload appearing after the
+> > > >> Geneve header.
+> > > >>
+> > > >> Commit 435fe1c0c1f7 ("net: geneve: support IPv4/IPv6 as inner protocol")
+> > > >> introduced a new IFLA_GENEVE_INNER_PROTO_INHERIT flag that allowed the
+> > > >> use of other Ethertypes than Ethernet. However, it imposed a restriction
+> > > >> that prohibits receiving payloads other than IPv4, IPv6 and Ethernet.
+> > > >>
+> > > >> This patch removes this restriction, making it possible to receive any
+> > > >> Ethertype as a payload, if the IFLA_GENEVE_INNER_PROTO_INHERIT flag is
+> > > >> set.
+> > > >>
+> > > >> This is especially useful if one wants to encapsulate MPLS, because with
+> > > >> this patch the control-plane traffic (IP, IS-IS) and the data-plane
+> > > >> traffic (MPLS) can be encapsulated without an Ethernet frame, making
+> > > >> lightweight overlay networks a possibility.
+> > > >
+> > > > Hi Josef,
+> > > >
+> > > > I could be mistaken. But I believe that the thinking at the time,
+> > > > was based on the idea that it was better to only allow protocols that
+> > > > were known to work. And allow more as time goes on.
+> > >
+> > > Thanks for the reply Simon!
+> > >
+> > > What does "known to work" mean? Protocols that the net stack handles will
+> > > work, protocols that Linux doesn't handle will not.
+> >
+> > Yes, a good question. But perhaps it was more "known to have been tested".
+> >
+> > > > Perhaps we have moved away from that thinking (I have no strong feeling
+> > > > either way). Or perhaps this is safe because of some other guard. But if
+> > > > not perhaps it is better to add the MPLS ethertype(s) to the if clause
+> > > > rather than remove it.
+> > >
+> > > The thing is it is not just adding one ethertype. For my own use-case,
+> > > I would need to whitelist MPLS UC and 0x00fe for IS-IS. But I am sure
+> > > other people will want to use GENEVE` for xx other protocols.
+> >
+> > Right, so the list could be expanded for known cases.
+> > But I also understand your point,
+> > which I might describe as this adding friction.
+> >
+> > > The protocol handling seems to work, what I am not sure about is if
+> > > allowing all Ethertypes has any security implications. However, if these
+> > > implications exist, safeguarding should be done somewhere down the stock.
+> >
+> > Yes, I believe that the idea was to limit the scope of such risks.
+> > (Really, it was a long time ago, so I very likely don't recall everything.)
+> 
+> Digging a little into the history of this code I found this discussion [1]
+> where this specific point was raised:
+> 
+> <quote>
+> >> +       if (unlikely(geneveh->proto_type != htons(ETH_P_TEB)))
+> >
+> > Why? I thought the point of geneve carrying protocol field was to
+> > allow protocols other than Ethernet... is this temporary maybe?
+> 
+> Yes, it is temporary. Currently OVS only handles Ethernet packets but
+> this restriction can be lifted once we have a consumer that is capable
+> of handling other protocols.
+> </quote>
+> 
+> This seems to have been ported as is when moving to a generic net device.
+> 
+> So now that the consumer is capable of other protocols, the question is
+> whether the restrictions should be lifted for any protocol or moderately.
+> 
+> I went with the moderate approach when adding IP support, but I do see the
+> merits in allowing any protocol without having to fiddle with this code.
+> 
+> https://www.spinics.net/lists/netdev/msg290579.html
 
-It looks like include/linux/parport.h requires I/O port access
-when PARPORT_PC is enabled and PARPORT_NOT_PC is disabled.
-Maybe this would work:
+Thanks.
 
-      depends on PARPORT
-      depends on HAS_IOPORT || PARPORT_NOT_PC
-
-       Arnd
+I think I would be comfortable with this patch if the patch description
+was updated to include some of the information above. I.e. why
+this was not done before, and why it is felt that it is appropriate now.
