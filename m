@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 10D2C6B9237
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:56:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1C8D76B9254
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:57:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231602AbjCNL4A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:56:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44850 "EHLO
+        id S231591AbjCNL45 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:56:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231542AbjCNLzs (ORCPT
+        with ESMTP id S231664AbjCNL40 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:55:48 -0400
-Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8EF3482A99;
-        Tue, 14 Mar 2023 04:55:47 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtYr7118828;
-        Tue, 14 Mar 2023 06:55:34 -0500
+        Tue, 14 Mar 2023 07:56:26 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22349A02A1;
+        Tue, 14 Mar 2023 04:56:06 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtaYc051532;
+        Tue, 14 Mar 2023 06:55:36 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678794934;
-        bh=c6aDqoAsbT1dBhEldNdWqv8Ad1QA4DE50tP0KhQ3cUs=;
+        s=ti-com-17Q1; t=1678794936;
+        bh=PSh3JOfebxzHh7OMYrBExmtN8GkKJtYIG5XeSZ5WRJ8=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=S3lpwN3wAtH+EU8Go5ga8V6l61GsmQ/Yxm5FFA3yEKpJvOMcnGuFuqWQ3JNZff1n2
-         j0B4OlEsoWj+HeXmo2nY5wIuTiQJPNurlXAq38cs2EuhHoDLGwcF245Vk0yF0yjiDO
-         iAVQZR5zXqeTkUWe89jpHxCh52P2oOn9ngPQ4snU=
-Received: from DLEE104.ent.ti.com (dlee104.ent.ti.com [157.170.170.34])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtYF7003105
+        b=Su7nFBh/KSWTs/gEusIwMC03o1mZfShIYEvkjrsIqUp/RVF3zrgz1MBWuLWmkC66u
+         LGWGfjhUFKCVZ9+5nsD6tkY3+iITTccZalS8EqCa4AyvGbYUxmDPZ7ybHw+Mr17jIf
+         IyENeFY2VCjPh5Va+/khHY9e6YdtSZM5yNmJTVtE=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EBtaXV003130
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 06:55:34 -0500
-Received: from DLEE100.ent.ti.com (157.170.170.30) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 14 Mar 2023 06:55:36 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 06:55:33 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE100.ent.ti.com
- (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 06:55:36 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 06:55:34 -0500
+ Frontend Transport; Tue, 14 Mar 2023 06:55:35 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtWES111879;
-        Tue, 14 Mar 2023 06:55:33 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EBtYXt072629;
+        Tue, 14 Mar 2023 06:55:35 -0500
 From:   Vaishnav Achath <vaishnav.a@ti.com>
 To:     <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <mripard@kernel.org>, <mchehab@kernel.org>, <robh+dt@kernel.org>,
@@ -51,9 +51,9 @@ CC:     <linux-kernel@vger.kernel.org>, <bparrot@ti.com>,
         <devarsht@ti.com>, <praneeth@ti.com>, <u-kumar1@ti.com>,
         <vigneshr@ti.com>, <nm@ti.com>, <martyn.welch@collabora.com>,
         <vaishnav.a@ti.com>
-Subject: [PATCH v7 08/13] media: cadence: csi2rx: Populate subdev devnode
-Date:   Tue, 14 Mar 2023 17:25:11 +0530
-Message-ID: <20230314115516.667-9-vaishnav.a@ti.com>
+Subject: [PATCH v7 09/13] media: cadence: csi2rx: Add link validation
+Date:   Tue, 14 Mar 2023 17:25:12 +0530
+Message-ID: <20230314115516.667-10-vaishnav.a@ti.com>
 X-Mailer: git-send-email 2.17.1
 In-Reply-To: <20230314115516.667-1-vaishnav.a@ti.com>
 References: <20230314115516.667-1-vaishnav.a@ti.com>
@@ -72,35 +72,47 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pratyush Yadav <p.yadav@ti.com>
 
-The devnode can be used by media-ctl and other userspace tools to
-perform configurations on the subdev. Without it, media-ctl returns
-ENOENT when setting format on the sensor subdev.
+Add media link validation to make sure incorrectly configured pipelines
+are caught.
 
 Signed-off-by: Pratyush Yadav <p.yadav@ti.com>
 Signed-off-by: Vaishnav Achath <vaishnav.a@ti.com>
 Reviewed-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 ---
 
-(no changes since v5)
+(no changes since v6)
 
-Changes in v5:
+Changes in v6:
+- Drop transcoding from the commit message.
+- Make csi2rx_media_ops const.
 - Add Laurent's R-by.
 
-Changes in v2:
-- New in v2.
+Changes in v5:
+- New in v5.
 
- drivers/media/platform/cadence/cdns-csi2rx.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/media/platform/cadence/cdns-csi2rx.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/drivers/media/platform/cadence/cdns-csi2rx.c b/drivers/media/platform/cadence/cdns-csi2rx.c
-index f8ce9360bfb0..639ade97b998 100644
+index 639ade97b998..026d95d60654 100644
 --- a/drivers/media/platform/cadence/cdns-csi2rx.c
 +++ b/drivers/media/platform/cadence/cdns-csi2rx.c
-@@ -676,6 +676,7 @@ static int csi2rx_probe(struct platform_device *pdev)
- 	csi2rx->pads[CSI2RX_PAD_SINK].flags = MEDIA_PAD_FL_SINK;
+@@ -478,6 +478,10 @@ static const struct v4l2_subdev_ops csi2rx_subdev_ops = {
+ 	.pad		= &csi2rx_pad_ops,
+ };
+ 
++static const struct media_entity_operations csi2rx_media_ops = {
++	.link_validate = v4l2_subdev_link_validate,
++};
++
+ static int csi2rx_async_bound(struct v4l2_async_notifier *notifier,
+ 			      struct v4l2_subdev *s_subdev,
+ 			      struct v4l2_async_subdev *asd)
+@@ -677,6 +681,7 @@ static int csi2rx_probe(struct platform_device *pdev)
  	for (i = CSI2RX_PAD_SOURCE_STREAM0; i < CSI2RX_PAD_MAX; i++)
  		csi2rx->pads[i].flags = MEDIA_PAD_FL_SOURCE;
-+	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
+ 	csi2rx->subdev.flags |= V4L2_SUBDEV_FL_HAS_DEVNODE;
++	csi2rx->subdev.entity.ops = &csi2rx_media_ops;
  
  	ret = media_entity_pads_init(&csi2rx->subdev.entity, CSI2RX_PAD_MAX,
  				     csi2rx->pads);
