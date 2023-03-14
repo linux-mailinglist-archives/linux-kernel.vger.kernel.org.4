@@ -2,138 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4DA96B8D64
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:35:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B5656B8D76
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:36:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCNIfN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:35:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37656 "EHLO
+        id S230104AbjCNIgC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:36:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjCNIfL (ORCPT
+        with ESMTP id S229700AbjCNIfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:35:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C709653DA9;
-        Tue, 14 Mar 2023 01:35:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7CCF3B818B8;
-        Tue, 14 Mar 2023 08:35:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49BDBC433EF;
-        Tue, 14 Mar 2023 08:34:59 +0000 (UTC)
-Message-ID: <74ae8afe-c537-1714-77ec-8a80d8ddad69@xs4all.nl>
-Date:   Tue, 14 Mar 2023 09:34:57 +0100
+        Tue, 14 Mar 2023 04:35:54 -0400
+Received: from ex01.ufhost.com (ex01.ufhost.com [61.152.239.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B06A67726;
+        Tue, 14 Mar 2023 01:35:52 -0700 (PDT)
+Received: from EXMBX165.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX165", Issuer "EXMBX165" (not verified))
+        by ex01.ufhost.com (Postfix) with ESMTP id 82B7E24E1FB;
+        Tue, 14 Mar 2023 16:35:49 +0800 (CST)
+Received: from EXMBX168.cuchost.com (172.16.6.78) by EXMBX165.cuchost.com
+ (172.16.6.75) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 16:35:49 +0800
+Received: from localhost.localdomain (113.72.145.194) by EXMBX168.cuchost.com
+ (172.16.6.78) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 16:35:48 +0800
+From:   Walker Chen <walker.chen@starfivetech.com>
+To:     Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        "Emil Renner Berthing" <emil.renner.berthing@canonical.com>,
+        Walker Chen <walker.chen@starfivetech.com>
+CC:     <dmaengine@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>
+Subject: [PATCH v5 0/3] Add DMA driver for StarFive JH7110 SoC
+Date:   Tue, 14 Mar 2023 16:35:34 +0800
+Message-ID: <20230314083537.22571-1-walker.chen@starfivetech.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
-Content-Language: en-US
-To:     Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc:     Joe Tessler <jrt@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <b83d6b81-c4ec-4fb8-b626-84af80d1c4a3@roeck-us.net>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <b83d6b81-c4ec-4fb8-b626-84af80d1c4a3@roeck-us.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS064.cuchost.com (172.16.6.24) To EXMBX168.cuchost.com
+ (172.16.6.78)
+X-YovoleRuleAgent: yovoleflag
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 23:01, Guenter Roeck wrote:
-> On Sun, Mar 12, 2023 at 02:12:51PM +0100, Krzysztof Kozlowski wrote:
->> The driver can match only via the DT table so the table should be always
->> used and the of_match_ptr does not have any sense (this also allows ACPI
->> matching via PRP0001, even though it might not be relevant here).
->>
->>   drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> 
-> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
-> 
-> FWIW: There is also
-> https://patches.linaro.org/project/linux-media/patch/20230215214724.3798917-1-linux@roeck-us.net/
+Hello,
 
-I superseded that patch in patchwork in favor of this patch since this is part of
-a larger series.
+This patch series adds dma support for the StarFive JH7110 RISC-V
+SoC. The first patch adds device tree binding. The second patch includes
+dma driver. The last patch adds device node of dma to JH7110 dts.
 
-Krzysztof, please let me know if you will take this series yourself or want me to
-make a PR for it.
+The series has been tested on the VisionFive 2 board which equip with
+JH7110 SoC and works normally.
 
-Regards,
+The last patch should be applied after the following patchset:
+https://lore.kernel.org/all/20230221083323.302471-1-xingyu.wu@starfivetech.com/
 
-	Hans
+Changes since v4:
+- Rebased on Linux 6.3-rc1.
+- Added description for reset items in the dt-binding.
+- Simplified the usage of match data.
 
-> 
-> The lack of ACPI support is a real problem and very relevant.
-> 
-> Guenter
-> 
->> ---
->>  drivers/media/cec/i2c/ch7322.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/media/cec/i2c/ch7322.c b/drivers/media/cec/i2c/ch7322.c
->> index 34fad7123704..3c6e6496a001 100644
->> --- a/drivers/media/cec/i2c/ch7322.c
->> +++ b/drivers/media/cec/i2c/ch7322.c
->> @@ -589,7 +589,7 @@ MODULE_DEVICE_TABLE(of, ch7322_of_match);
->>  static struct i2c_driver ch7322_i2c_driver = {
->>  	.driver = {
->>  		.name = "ch7322",
->> -		.of_match_table = of_match_ptr(ch7322_of_match),
->> +		.of_match_table = ch7322_of_match,
->>  	},
->>  	.probe_new	= ch7322_probe,
->>  	.remove		= ch7322_remove,
+Changes since v3:
+- Constrain the minItems of resets to 2 for jh7110 dma in the
+  dt-binding.
+- Replaced all uses of of_device_is_compatible with of_device_get_match_data.
+- Moved the definition of struct axi_dma_chip_config to dw-axi-dmac-platform.c
+
+Changes since v2:
+- Added minItems with value 1 and changed the maxItems' value to 2 about
+  resets properties in the dt-binding.
+- Added match data for jh7110-axi-dma and executed reset call to match
+  data.
+- Dropped reset-names from dma node of device tree.
+
+Changes since v1:
+- Rebased on Linux 6.2.
+- Changed the compatible string to SoC specific and dropped '-rst' from
+  reset-names in the dt-binding.
+- Dropped 'snps,num-hs-if' in the dt-binding.
+- Use different configuration on CH_CFG registers according to the compatible string.
+
+---
+v4: https://lore.kernel.org/all/20230306140430.28951-1-walker.chen@starfivetech.com/
+v3: https://lore.kernel.org/all/20230227131042.16125-1-walker.chen@starfivetech.com/
+v2: https://lore.kernel.org/all/20230221140424.719-1-walker.chen@starfivetech.com/
+v1: https://lore.kernel.org/all/20230206113811.23133-1-walker.chen@starfivetech.com/
+
+Walker Chen (3):
+  dt-bindings: dma: snps,dw-axi-dmac: constrain the items of resets for
+    JH7110 dma
+  dmaengine: dw-axi-dmac: Add support for StarFive JH7110 DMA
+  riscv: dts: starfive: add dma controller node
+
+ .../bindings/dma/snps,dw-axi-dmac.yaml        | 23 ++++++++++-
+ arch/riscv/boot/dts/starfive/jh7110.dtsi      | 18 +++++++++
+ .../dma/dw-axi-dmac/dw-axi-dmac-platform.c    | 40 ++++++++++++++++---
+ drivers/dma/dw-axi-dmac/dw-axi-dmac.h         |  1 +
+ 4 files changed, 75 insertions(+), 7 deletions(-)
+
+
+base-commit: fe15c26ee26efa11741a7b632e9f23b01aca4cc6
+prerequisite-patch-id: c3a6b87df79b338fc97766406d010fedb79ab428
+prerequisite-patch-id: b49509523cf7c098f684647bdc4fdaece48b61bc
+prerequisite-patch-id: 46cc850aa0e9e03ccf5ed23d8458babfca3d71af
+prerequisite-patch-id: a6975e61ee5803fbd74b1c21ab925fd81c3c0eab
+prerequisite-patch-id: ac150a8c622e858e088df8121093d448df49c245
+prerequisite-patch-id: 044263ef2fb9f1e5a586edbf85d5f67814a28430
+prerequisite-patch-id: 89f049f951e5acf75aab92541992f816fd0acc0d
+prerequisite-patch-id: 9f3dbc9073eee89134e68977e941e457593c2757
+prerequisite-patch-id: 8600b156a235be2b3db53be3f834e7a370e2cfb9
+prerequisite-patch-id: 1b2d0982b18da060c82134f05bf3ce16425bac8d
+prerequisite-patch-id: 090ba4b78d47bc19204916e76fdbc70021785388
+prerequisite-patch-id: a5d9e0f7d4f8163f566678894cf693015119f2d9
+prerequisite-patch-id: 4c12d958e3a3d629d86dddb1e4f099d8909393e0
+prerequisite-patch-id: bb939c0c7c26b08addfccd890f9d3974b6eaec53
+prerequisite-patch-id: 8f5c66dfb14403424044192f6fa05b347ad356a7
+prerequisite-patch-id: fd93763b95469912bde9bdfa4cd827c8d5dba9c6
+prerequisite-patch-id: 6987950c2eb4b3773b2df8f7934eff434244aeab
+prerequisite-patch-id: 258ea5f9b8bf41b6981345dcc81795f25865d38f
+prerequisite-patch-id: 8b6f2c9660c0ac0ee4e73e4c21aca8e6b75e81b9
+prerequisite-patch-id: dbb0c0151b8bdf093e6ce79fd2fe3f60791a6e0b
+prerequisite-patch-id: e7773c977a7b37692e9792b21cc4f17fa58f9215
+prerequisite-patch-id: d57e95d31686772abc4c4d5aa1cadc344dc293cd
+prerequisite-patch-id: 9f911969d0a550648493952c99096d26e05d4d83
+prerequisite-patch-id: 2ddada18ab6ea5cd1da14212aaf59632f5203d40
+prerequisite-patch-id: 398744c61913c76a35754de867c4f820ca7a8d99
+prerequisite-patch-id: be3d7a6a13098884ec26cd5e543cc95c39045e35
+prerequisite-patch-id: b3ce7955a80d90d992b7d1bca3409f465810b2bb
+prerequisite-patch-id: db2f66860cc5b2fd2f71747c4428287b6e3153fb
+prerequisite-patch-id: 9da71dcd3af4c68da9d855b43aab6927103e7525
+prerequisite-patch-id: 2d9e4f185631549094b6136cf8717a507b68c5bb
+prerequisite-patch-id: bb8e071ed43998874b9d98292c0dcdeedc0760ca
+prerequisite-patch-id: cd0b464336aabfbfad96c1a3595c0f9ce9401638
+prerequisite-patch-id: 24eab3d30274700c2be4727bece743c76d2618bd
+prerequisite-patch-id: 584c256c9acb52ee2773d0c81c3f4977fc18155a
+prerequisite-patch-id: 2bc43b375b470f7e8bbe937b78678ba3856e3b8f
+-- 
+2.17.1
 
