@@ -2,124 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E0926BA0E9
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:40:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3672E6BA0EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229519AbjCNUkM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:40:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36638 "EHLO
+        id S229784AbjCNUmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229720AbjCNUkJ (ORCPT
+        with ESMTP id S229473AbjCNUmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:40:09 -0400
-Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6529052932;
-        Tue, 14 Mar 2023 13:39:40 -0700 (PDT)
-Received: by mail-ed1-x52e.google.com with SMTP id ek18so36069681edb.6;
-        Tue, 14 Mar 2023 13:39:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678826379;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eyGDngrrwWPIxM672XPjRQ30S2ESLoP5nSFza+5+EjM=;
-        b=ira9xGzR5hc5JCLwYudB3eScpSTpIR1m3fFtid/a4uiUsh60E5TccV9mT9GqIRGvTA
-         ZBC1Ve9rKaJugz4BN1xuyUIYbqCsu+fR4bZaGy4jCKHjTynqS8xBQJcmRtmfgu+vJhkW
-         9Umxj5WlrcDEdj7qkWWgwSWB8WnSKU/jl0x60hhm53DRKG3WDCJuahcZ60B+SXC+UnJ9
-         hg39wRIM+p9zIGrQr/rAsKckTzjddFwa31DvnGkKx5A1c+O3ow9Jf4OGFnpbuYrzhrRl
-         QEvNLRub4WjHnlZAvWWR1Az7UUJZsr0EGN5eyiFNzg03S3JeoQaVprddoOZoY89Ijm51
-         oucA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678826379;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=eyGDngrrwWPIxM672XPjRQ30S2ESLoP5nSFza+5+EjM=;
-        b=7USjHcW4i+2pHNMb9sUkZo0wvF2O4lMiHn95+H/caJXDhA4dv8952vP4yTQ4oI1pqx
-         chB8VXNQJzB5WQ1akGZrlGq/PFOYZvSHCxpPEV6R3alW6UY2ArSFqClS9Je/3sqS4elb
-         gVoZwOzAAmHiPV1HnhIlFsZMF8P6wZ48eiKH1/GYfBSRAfJUz/JZN3wE8EVi1ElBYczA
-         aJg0H0S5UvFt/D8IW9IfJoW3ILdf2umUNxLPrV7VLpWWwCXmJLZB81zHkLZBO4pn3p6x
-         MIOOFgBlftXMA6DJNOB3G6h+0Fl7hBZD+rwbekdtysywXdndN1WQ/0NpTu0PD5AzOwI9
-         1oBg==
-X-Gm-Message-State: AO0yUKVyUOKHIJ4hAT2XesI3lSEQvftnWU/2x1AX4jpB2etGZ/6bthh0
-        f2N8Jg3ztoyFjdx/3uxuNoM=
-X-Google-Smtp-Source: AK7set+jrinMC6MRWeB656rnwC53S5/VJ5Q9JOypzJTH2TzWrlXJpiKs0oeno7Fxr9N470ge1c/y+g==
-X-Received: by 2002:a17:906:8506:b0:87b:1be:a8c2 with SMTP id i6-20020a170906850600b0087b01bea8c2mr3420089ejx.73.1678826378788;
-        Tue, 14 Mar 2023 13:39:38 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id mh19-20020a170906eb9300b009200601ea12sm1552934ejb.208.2023.03.14.13.39.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 13:39:38 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     mcgrof@kernel.org, Nick Alcock <nick.alcock@oracle.com>
-Cc:     linux-modules@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
-Subject: Re: [PATCH 12/24] kbuild,
- soc: sunxi: sram: remove MODULE_LICENSE in non-modules
-Date:   Tue, 14 Mar 2023 21:39:37 +0100
-Message-ID: <45375953.fMDQidcC6G@jernej-laptop>
-In-Reply-To: <20230217141059.392471-13-nick.alcock@oracle.com>
-References: <20230217141059.392471-1-nick.alcock@oracle.com>
- <20230217141059.392471-13-nick.alcock@oracle.com>
+        Tue, 14 Mar 2023 16:42:35 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DEDF1B2F8;
+        Tue, 14 Mar 2023 13:42:34 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id F1305B81903;
+        Tue, 14 Mar 2023 20:42:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CAF28C433EF;
+        Tue, 14 Mar 2023 20:42:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678826551;
+        bh=3F8VJYaSb8vhtJbEMBhDsBJmQehPisrUw1hBFyo1xBk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=FPwtHhGOxpFeiFu6PFlu8voRzvh7S77cxk4eSgqif6VNIlqDb1TnRXyYuhNJtWL7e
+         lC0wyV0S7JW2JIGEhXAS+YxDyCGbxUYPMaKuPncBi+aXwS8G2O2boKus0R4N/CN9NZ
+         dqYIkKozqSjraU9x8MH6d9F7gw4I/nv/HKY4j5I5J/B1DzmOZ/s0dRqq09xB1rns0m
+         AA1xxpZy0OEPliAsC8ViZAK1jvA8l/EFpcIza9AtmoTGuCJVP9HeQ8f5vOalQMl/df
+         eL/TD917cGGg+cfKVyk5k6o/JGRVty7oGFA3wayMRZkDX/vlhjkp3MouchapFy+D9r
+         rPZ+ze/7Jl+1w==
+Date:   Tue, 14 Mar 2023 21:42:28 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Kasumov Ruslan <xhxgldhlpfy@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+Subject: Re: [PATCH] iio: adc: qcom-pm8xxx-xoadc: Remove useless condition in
+ pm8xxx_xoadc_parse_channel()
+Message-ID: <20230314204228.m3rbmobsv2lyknhm@intel.intel>
+References: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 17. februar 2023 ob 15:10:47 CET je Nick Alcock napisal(a):
-> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
-> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
-> are used to identify modules. As a consequence, uses of the macro
-> in non-modules will cause modprobe to misidentify their containing
-> object file as a module when it is not (false positives), and modprobe
-> might succeed rather than failing with a suitable error message.
+On Tue, Mar 14, 2023 at 10:37:09PM +0300, Kasumov Ruslan wrote:
+> The left side of the loop condition never becomes false.
+> hwchan cannot be NULL, because it points to elements of the
+> hw_channels array that takes one of 4 predefined values:
+> pm8018_xoadc_channels, pm8038_xoadc_channels,
+> pm8058_xoadc_channels, pm8921_xoadc_channels.
 > 
-> So remove it in the files in this commit, none of which can be built as
-> modules.
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 > 
-> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
-> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: Luis Chamberlain <mcgrof@kernel.org>
-> Cc: linux-modules@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Cc: Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>
-> Cc: Chen-Yu Tsai <wens@csie.org>
-> Cc: Jernej Skrabec <jernej.skrabec@gmail.com>
-> Cc: Samuel Holland <samuel@sholland.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-sunxi@lists.linux.dev
+> Fixes: 63c3ecd946d4 ("iio: adc: add a driver for Qualcomm PM8xxx HK/XOADC")
 
-Applied, thanks!
+It wasn't broken before, it wasn't causing any harm. It's not a
+fix, it's a cleanup. Please, remove remove the "Fixes:" tag.
 
-Best regards,
-Jernej
-
+> Signed-off-by: Kasumov Ruslan <s02210418@gse.cs.msu.ru>
 > ---
->  drivers/soc/sunxi/sunxi_sram.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/iio/adc/qcom-pm8xxx-xoadc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/drivers/soc/sunxi/sunxi_sram.c b/drivers/soc/sunxi/sunxi_sram.c
-> index 92f9186c1c42..21116d47d26d 100644
-> --- a/drivers/soc/sunxi/sunxi_sram.c
-> +++ b/drivers/soc/sunxi/sunxi_sram.c
-> @@ -421,4 +421,3 @@ builtin_platform_driver_probe(sunxi_sram_driver,
-> sunxi_sram_probe);
+> diff --git a/drivers/iio/adc/qcom-pm8xxx-xoadc.c b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+> index eb424496ee1d..64a3aeb6261c 100644
+> --- a/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+> +++ b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+> @@ -758,7 +758,7 @@ static int pm8xxx_xoadc_parse_channel(struct device *dev,
+>  	/* Find the right channel setting */
+>  	chid = 0;
+>  	hwchan = &hw_channels[0];
+> -	while (hwchan && hwchan->datasheet_name) {
+> +	while (hwchan->datasheet_name) {
+
+With the fixes tag removed:
+
+Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
+
+Thanks,
+Andi
+
+>  		if (hwchan->pre_scale_mux == pre_scale_mux &&
+>  		    hwchan->amux_channel == amux_channel)
+>  			break;
+> -- 
+> 2.34.1
 > 
->  MODULE_AUTHOR("Maxime Ripard <maxime.ripard@free-electrons.com>");
->  MODULE_DESCRIPTION("Allwinner sunXi SRAM Controller Driver");
-> -MODULE_LICENSE("GPL");
-
-
-
-
