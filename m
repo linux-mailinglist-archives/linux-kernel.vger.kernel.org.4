@@ -2,108 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4E746BA241
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:18:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C6A36BA247
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbjCNWSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:18:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55484 "EHLO
+        id S231201AbjCNWSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:18:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229794AbjCNWST (ORCPT
+        with ESMTP id S230152AbjCNWS0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:18:19 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4D7F1B2FD;
-        Tue, 14 Mar 2023 15:17:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 4495961A10;
-        Tue, 14 Mar 2023 22:16:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A679C433EF;
-        Tue, 14 Mar 2023 22:16:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678832185;
-        bh=k6ND9M97R7Y6FDO6pJHrq7idbQ0eBx7iEsqSwSpZ06c=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=s2uXLj6lU0F32CIEEKAZl94GLY+fRaVfgi0h2/xRCFmluhqdjPz1qEYgtcbtMg3vS
-         rJa4eQVOKrtR1lGlUJXWdt85OLb4SRgqgIOznjTeCM44hH+uzoUO12NqrySwOGcm8P
-         pvk8bdUwCNOLKp1ixITaGPdW69b/cCK6TOM6evpidXTQ/0vNTZnFa58zTAAJjnVA1T
-         Zv9UywpHGyvHSlL2454Chu8kFFUBLv1FrYE09m8d24CUWpy+9HAc8ZHjDNYIorAHC0
-         lwbwO6S+IkHbNQhCO0QsGIoz+tZUYS9l6ZIx3E/KD2APyRirsJ/LUvFwK4TaaWRL8L
-         jTm/oAyYsOmTg==
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     linux-i2c@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>,
-        Andi Shyti <andi.shyti@kernel.org>
-Subject: [PATCH v5 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-us i2c property
-Date:   Tue, 14 Mar 2023 23:16:14 +0100
-Message-Id: <20230314221614.24205-1-andi.shyti@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230314215612.23741-4-andi.shyti@kernel.org>
-References: <20230314215612.23741-4-andi.shyti@kernel.org>
+        Tue, 14 Mar 2023 18:18:26 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9A8279BF;
+        Tue, 14 Mar 2023 15:17:43 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id x22so5901612wmj.3;
+        Tue, 14 Mar 2023 15:17:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678832188;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=0cgXw1zWR3UzIeNQHSkd/Pe/JYZucLUkg0+siqDji1Q=;
+        b=WiWabfdsc40Hw03sHacABR/DpeHPE1ytk52ltiIHJyYU96rC0iS1lraEKpFNPMr7fC
+         t88zt7gAQUBBIRqrgzPkQWQDI8IBIwbBSQ44S9GXEjINbumyhcaty1H8Wl8mk8TP7vah
+         R+sSYxV3pSFKpraUvvKNT26Tl4bm9IX1cxQTO0YuTtRAf1JyKECbjwfkxjSm3C79t2zu
+         WimroFz4zBdQaqQbKrHUb+k9u1UDe/t+bGf+sTOFdiO/SY1n3N2Yrx3e1ZAduqS48kT2
+         rVHJ3JqaH5emYPmU4Xh0N/DVVXcX1nJMZW+nmKAVSR8mX825oNgoQNZkzjKn0xyWZeQC
+         H2Bw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678832188;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0cgXw1zWR3UzIeNQHSkd/Pe/JYZucLUkg0+siqDji1Q=;
+        b=Ct1PlmvaVcbQoeH9hfGxx3WtOqbmA98mfvhdjtVZJgFxqMIhL0WoDVPrGTJVIrBjHC
+         nDCGFHrt9R1F0uPSlDc8KV+AeI77VNtg5zVR4Hi15nEwJ1VbpjfJxGczoWzyjoIykye/
+         ezFZLyhcW74mBDTuzOCDQbF46kKtQ7frSgqYnkQI795BKlw7Zo6CDNeDE1fWjpTkIV1N
+         yzr2au/BF9Fttzhn+zrrk2c02ta3d9Os1Fs1n9dWka1aZ0GdygDZKxO4Fxw/iGzbLzSk
+         rG8sBZ+1YKwEtWTC3RQf9FV+Zn0q6/syeGhRtg2ZJbp7QM8zCY0QKjVwiV1SFbJXzpXX
+         aBhQ==
+X-Gm-Message-State: AO0yUKXc7RD7fxrQBCEwCBBr2sPkPC81qEUilArgOjYH42IkbpRgrcHa
+        mb03ZJ4ki5YpCAIG2IRJTy0=
+X-Google-Smtp-Source: AK7set/LqyA4KOXjYW3gB61Tg1NOLoBdeKaWngQqOyAVUSHmnZgHB0VC+IljqkqXyulD+UybQrzJww==
+X-Received: by 2002:a05:600c:1546:b0:3ed:22f2:554c with SMTP id f6-20020a05600c154600b003ed22f2554cmr8549449wmg.29.1678832188560;
+        Tue, 14 Mar 2023 15:16:28 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id 4-20020a05600c22c400b003e00c453447sm3977442wmg.48.2023.03.14.15.16.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 15:16:27 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 22:16:26 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 4/7] mm, pagemap: remove SLOB and SLQB from comments and
+ documentation
+Message-ID: <a901f00e-99df-4fed-8117-e3735ec7df59@lucifer.local>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <20230310103210.22372-5-vbabka@suse.cz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310103210.22372-5-vbabka@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"fsl,timeout" is marked as deprecated and replaced by the
-"i2c-scl-clk-low-timeout-us" i2c property.
+On Fri, Mar 10, 2023 at 11:32:06AM +0100, Vlastimil Babka wrote:
+> SLOB has been removed and SLQB never merged, so remove their mentions
+> from comments and documentation of pagemap.
+>
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>  Documentation/admin-guide/mm/pagemap.rst | 6 +++---
+>  fs/proc/page.c                           | 5 ++---
+>  2 files changed, 5 insertions(+), 6 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
+> index b5f970dc91e7..bb4aa897a773 100644
+> --- a/Documentation/admin-guide/mm/pagemap.rst
+> +++ b/Documentation/admin-guide/mm/pagemap.rst
+> @@ -91,9 +91,9 @@ Short descriptions to the page flags
+>     The page is being locked for exclusive access, e.g. by undergoing read/write
+>     IO.
+>  7 - SLAB
+> -   The page is managed by the SLAB/SLOB/SLUB/SLQB kernel memory allocator.
+> -   When compound page is used, SLUB/SLQB will only set this flag on the head
+> -   page; SLOB will not flag it at all.
+> +   The page is managed by the SLAB/SLUB kernel memory allocator.
+> +   When compound page is used, either will only set this flag on the head
+> +   page..
 
-Use this latter and, in case it is missing, for back
-compatibility, check whether we still have "fsl,timeout" defined.
+I mean, perhaps the nittiest of nits but probably that '..' is unintended.
 
-Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-Hi,
+>  10 - BUDDY
+>      A free memory block managed by the buddy system allocator.
+>      The buddy system organizes free memory in blocks of various orders.
+> diff --git a/fs/proc/page.c b/fs/proc/page.c
+> index 6249c347809a..1356aeffd8dc 100644
+> --- a/fs/proc/page.c
+> +++ b/fs/proc/page.c
+> @@ -125,7 +125,7 @@ u64 stable_page_flags(struct page *page)
+>  	/*
+>  	 * pseudo flags for the well known (anonymous) memory mapped pages
+>  	 *
+> -	 * Note that page->_mapcount is overloaded in SLOB/SLUB/SLQB, so the
+> +	 * Note that page->_mapcount is overloaded in SLAB/SLUB, so the
+>  	 * simple test in page_mapped() is not enough.
+>  	 */
+>  	if (!PageSlab(page) && page_mapped(page))
+> @@ -166,8 +166,7 @@ u64 stable_page_flags(struct page *page)
+>
+>  	/*
+>  	 * Caveats on high order pages: page->_refcount will only be set
+> -	 * -1 on the head page; SLUB/SLQB do the same for PG_slab;
+> -	 * SLOB won't set PG_slab at all on compound pages.
+> +	 * -1 on the head page; SLAB/SLUB do the same for PG_slab;
 
-this should be the only patch where I forgot an 'ms'.
-It should be fixed now.
+Nice catch on the redundant reference to the mysterous SLQB (+ above) :)
 
-Thanks, Chris.
+>  	 */
+>  	if (PageBuddy(page))
+>  		u |= 1 << KPF_BUDDY;
+> --
+> 2.39.2
+>
 
-V4 -> v5
- - replace /ms/us/ in the commit subject and in the comment.
+Otherwise looks good to me,
 
- drivers/i2c/busses/i2c-mpc.c | 12 +++++++++++-
- 1 file changed, 11 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-index 87e5c1725750f..aec3ac387c579 100644
---- a/drivers/i2c/busses/i2c-mpc.c
-+++ b/drivers/i2c/busses/i2c-mpc.c
-@@ -843,8 +843,18 @@ static int fsl_i2c_probe(struct platform_device *op)
- 			mpc_i2c_setup_8xxx(op->dev.of_node, i2c, clock);
- 	}
- 
-+	/*
-+	 * "fsl,timeout" has been marked as deprecated and, to maintain
-+	 * backward compatibility, we will only look for it if
-+	 * "i2c-scl-clk-low-timeout-us" is not present.
-+	 */
- 	result = of_property_read_u32(op->dev.of_node,
--				      "fsl,timeout", &mpc_ops.timeout);
-+				      "i2c-scl-clk-low-timeout-us",
-+				      &mpc_ops.timeout);
-+	if (result == -EINVAL)
-+		result = of_property_read_u32(op->dev.of_node,
-+					      "fsl,timeout", &mpc_ops.timeout);
-+
- 	if (!result) {
- 		mpc_ops.timeout *= HZ / 1000000;
- 		if (mpc_ops.timeout < 5)
--- 
-2.39.2
-
+Acked-by: Lorenzo Stoakes <lstoakes@gmail.com>
