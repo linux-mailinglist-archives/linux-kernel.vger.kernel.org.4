@@ -2,157 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9F646B98C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:16:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A4686B98CB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:16:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbjCNPQM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:16:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35122 "EHLO
+        id S231603AbjCNPQa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:16:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35066 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231372AbjCNPQJ (ORCPT
+        with ESMTP id S231372AbjCNPQ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:16:09 -0400
-Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D081ADC3A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:15:35 -0700 (PDT)
-Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-54195ef155aso132371047b3.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:15:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678806931;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Mb8+E6m2WqIPXijCkvn4+H21mgnHkoR10v1IMUUcZr0=;
-        b=jmpaFxz/oWEOeDL/PrbbrCqP1pXG2ojMS2+Hx9jjRcV7LZgjVSAR3DME+ReuNpL8c/
-         ONH1WiSNthp2LBz4uVfdpuxk7cphOrlLVzgNiPxHstfMOyKZezfKT2MmSMKg2Cv7m3hk
-         UI4pEKHsv/iPaK91kJOTI39Ha1O5K8CPWJPznidxo7QlDYsthjhzaM6gUwZjR6+6tJFd
-         GgbH4zWWxHITktqx/VBklAStEqaKE7O82Bpx+5efTw4TU9aJp1RMQ5eIm4KXyUpia6Ls
-         GIUY/YdcyGtYG7YDNiBZIDxYt5q/ESX+K/uM4KUgz6PU6bQL/lhrW9HZZJjqFhjlUzKi
-         UrXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678806931;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Mb8+E6m2WqIPXijCkvn4+H21mgnHkoR10v1IMUUcZr0=;
-        b=mBCd5odd5r/O/dbOrxmKuMRHi1MmGNOkG6yPqDKemuTHj3SjYfnLW7HrAqn7puZKOb
-         GgFBLteD2Y4ugkf8gV3wJPcJH6AmEredhU7MDth3+zN9dC+dcPuzwOJQJTyp3L5GHBhO
-         Ks8j3ia9A9JHwAMQUAtLsPDV3OKjY35N2RzhKXep0O2tItdFDEKhAUUPHKSBdLnPUH/G
-         +eSoTe9yqcDF2qK7fZ8tMXIPxt0h91x8eoz2Jru63m9GEeiU0yuOnI1QaY853hCXmEWV
-         TcdlNXurglWDy03zHQah2ngWxh41VHqs2bdi6xCx8B6j2kRwgtbh/9wxIT1fAzZxHD1T
-         jvmQ==
-X-Gm-Message-State: AO0yUKUW6EEIjuqXoYehmAus/T40GuG+kmYlLebrSC6zAasLF8iFZ+bZ
-        u86APj3CjootAfOF7FkVd34BNaaYfSqpbzumO4FtZQ==
-X-Google-Smtp-Source: AK7set+3WyW9TClwj2X0yiptPJxGPByLfapst5/lXWp5akUIAjVHjNZRjrO90CZQ6cFryPDzDTlhYelh94yojRjBxO0=
-X-Received: by 2002:a81:a946:0:b0:52b:fd10:4809 with SMTP id
- g67-20020a81a946000000b0052bfd104809mr26039079ywh.0.1678806930921; Tue, 14
- Mar 2023 08:15:30 -0700 (PDT)
+        Tue, 14 Mar 2023 11:16:26 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC9443D910;
+        Tue, 14 Mar 2023 08:16:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678806968; x=1710342968;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=2rqT3CeZIAN6S64dIuFFBFFTOixUjZD0EjEoloUfSXw=;
+  b=TVe2VxDgDtlGGE3uAAcgrlCE7y1vAwZMsdah8DeV/CDXm0l/1KKqWyHL
+   8BL6Xl4zC3far2yBJt2dKIcgXLnrLGqFZuKwxvaq9NZLcnZCLr+oQ2xKJ
+   48oGd83iajq2B3GmmLULrRNuqwGiJwHbh4lW0aGHa7iEBHg5Zr319ux4L
+   FrBQVa1McSgAYTAngDm6QxwmypMwfRmMhTGIU+3ewcYVars8NVS5kaZXd
+   dQ5rpH3rNr6t0Y1Uq841VrreO3eFLZNONOu+c/aiI9s7mNWEhrDv77Xm2
+   1ji2Zt59WHrbBPMss93xJfET2Wecx5jwXGJ98Ox2+nariiaLe2DVYxYU9
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="325815683"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="325815683"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:15:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="711552927"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="711552927"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga001.jf.intel.com with ESMTP; 14 Mar 2023 08:15:23 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1pc6My-003Hh3-0v;
+        Tue, 14 Mar 2023 17:15:20 +0200
+Date:   Tue, 14 Mar 2023 17:15:20 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Martin =?utf-8?B?WmHFpW92acSN?= <m.zatovic1@gmail.com>
+Cc:     kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org,
+        oe-kbuild-all@lists.linux.dev, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, gregkh@linuxfoundation.org,
+        airlied@redhat.com, dipenp@nvidia.com, treding@nvidia.com,
+        mwen@igalia.com, fmdefrancesco@gmail.com, arnd@arndb.de,
+        bvanassche@acm.org, ogabbay@kernel.org, axboe@kernel.dk,
+        mathieu.poirier@linaro.org, linux@zary.sk, masahiroy@kernel.org,
+        yangyicong@hisilicon.com, dan.j.williams@intel.com,
+        jacek.lawrynowicz@linux.intel.com, benjamin.tissoires@redhat.com,
+        devicetree@vger.kernel.org, furong.zhou@linux.intel.com,
+        linus.walleij@linaro.org
+Subject: Re: [PATCHv3 2/4] wiegand: add Wiegand bus driver
+Message-ID: <ZBCPiJwVoe9gw2X8@smile.fi.intel.com>
+References: <20230301142835.19614-3-m.zatovic1@gmail.com>
+ <202303020615.0F00suDa-lkp@intel.com>
+ <CAPGNi97oc+tSrt-NF4KZhcEyUfZTo4PT0ms8zYSFVEyzOBq4ZA@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230314131427.85135-1-kerneljasonxing@gmail.com> <20230314131427.85135-2-kerneljasonxing@gmail.com>
-In-Reply-To: <20230314131427.85135-2-kerneljasonxing@gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Tue, 14 Mar 2023 08:15:19 -0700
-Message-ID: <CANn89iJzVjht5L1zxwCMTPXXoXdRMtRmzbL5UzHodhBJziCxYg@mail.gmail.com>
-Subject: Re: [PATCH v3 net-next 1/2] net-sysfs: display two backlog queue len separately
-To:     Jason Xing <kerneljasonxing@gmail.com>
-Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
-        ast@kernel.org, daniel@iogearbox.net, hawk@kernel.org,
-        john.fastabend@gmail.com, stephen@networkplumber.org,
-        simon.horman@corigine.com, sinquersw@gmail.com,
-        bpf@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAPGNi97oc+tSrt-NF4KZhcEyUfZTo4PT0ms8zYSFVEyzOBq4ZA@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 6:14=E2=80=AFAM Jason Xing <kerneljasonxing@gmail.c=
-om> wrote:
->
-> From: Jason Xing <kernelxing@tencent.com>
->
-> Sometimes we need to know which one of backlog queue can be exactly
-> long enough to cause some latency when debugging this part is needed.
-> Thus, we can then separate the display of both.
->
-> Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> Reviewed-by: Simon Horman <simon.horman@corigine.com>
-> ---
-> v3: drop the comment suggested by Simon
-> Link: https://lore.kernel.org/lkml/20230314030532.9238-2-kerneljasonxing@=
-gmail.com/
->
-> v2: keep the total len of backlog queues untouched as Eric said
-> Link: https://lore.kernel.org/lkml/20230311151756.83302-1-kerneljasonxing=
-@gmail.com/
-> ---
->  net/core/net-procfs.c | 19 +++++++++++++++----
->  1 file changed, 15 insertions(+), 4 deletions(-)
->
-> diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-> index 1ec23bf8b05c..8056f39da8a1 100644
-> --- a/net/core/net-procfs.c
-> +++ b/net/core/net-procfs.c
-> @@ -115,10 +115,19 @@ static int dev_seq_show(struct seq_file *seq, void =
-*v)
->         return 0;
->  }
->
-> +static u32 softnet_input_pkt_queue_len(struct softnet_data *sd)
-> +{
-> +       return skb_queue_len_lockless(&sd->input_pkt_queue);
-> +}
-> +
-> +static u32 softnet_process_queue_len(struct softnet_data *sd)
-> +{
-> +       return skb_queue_len_lockless(&sd->process_queue);
-> +}
-> +
->  static u32 softnet_backlog_len(struct softnet_data *sd)
->  {
-> -       return skb_queue_len_lockless(&sd->input_pkt_queue) +
-> -              skb_queue_len_lockless(&sd->process_queue);
-> +       return softnet_input_pkt_queue_len(sd) + softnet_process_queue_le=
-n(sd);
->  }
->
->  static struct softnet_data *softnet_get_online(loff_t *pos)
-> @@ -169,12 +178,14 @@ static int softnet_seq_show(struct seq_file *seq, v=
-oid *v)
->          * mapping the data a specific CPU
->          */
->         seq_printf(seq,
-> -                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08=
-x %08x %08x\n",
-> +                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08=
-x %08x %08x "
-> +                  "%08x %08x\n",
->                    sd->processed, sd->dropped, sd->time_squeeze, 0,
->                    0, 0, 0, 0, /* was fastroute */
->                    0,   /* was cpu_collision */
->                    sd->received_rps, flow_limit_count,
-> -                  softnet_backlog_len(sd), (int)seq->index);
-> +                  softnet_backlog_len(sd), (int)seq->index,
-> +                  softnet_input_pkt_queue_len(sd), softnet_process_queue=
-_len(sd));
->         return 0;
+On Tue, Mar 14, 2023 at 01:34:40PM +0100, Martin Zaťovič wrote:
+> Thank you for the code review Andy!
+
+I'm not sure why you mentioned this in the reply to kernel build bot
+message.
+
+> Regarding the OF only code - I have been told, that implementing my own ID
+> table
+> so that a device can be added from another driver is no longer the way to
+> go.
+> The only other option I can think of is ACPI device enumeration, which I
+> did not
+> implement as I really believe that Wiegand will only be used on embedded
+> devices.
+> 
+> Despite that I respect the message - the code should be agnostic and count
+> with
+> every option so I will add ACPI support. Is there any other way of
+> instantiating
+> devices I am not aware of?
+
+This is also seems to me unrelated to this message. Can you reply to
+the correct message with enough context, please?
+
+> st 1. 3. 2023 o 23:53 kernel test robot <lkp@intel.com> napísal(a):
+> 
+> > Hi Martin,
+> >
+> > I love your patch! Yet something to improve:
+> >
+> > [auto build test ERROR on robh/for-next]
+> > [also build test ERROR on linus/master v6.2 next-20230301]
+> > [If your patch is applied to the wrong git tree, kindly drop us a note.
+> > And when submitting patch, we suggest to use '--base' as documented in
+> > https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> >
+> > url:
+> > https://github.com/intel-lab-lkp/linux/commits/Martin-Za-ovi/dt-bindings-wiegand-add-Wiegand-controller-common-properties/20230301-223030
+> > base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
+> > for-next
+> > patch link:
+> > https://lore.kernel.org/r/20230301142835.19614-3-m.zatovic1%40gmail.com
+> > patch subject: [PATCHv3 2/4] wiegand: add Wiegand bus driver
+> > config: sh-allmodconfig (
+> > https://download.01.org/0day-ci/archive/20230302/202303020615.0F00suDa-lkp@intel.com/config
+> > )
+> > compiler: sh4-linux-gcc (GCC) 12.1.0
+> > reproduce (this is a W=1 build):
+> >         wget
+> > https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross
+> > -O ~/bin/make.cross
+> >         chmod +x ~/bin/make.cross
+> >         #
+> > https://github.com/intel-lab-lkp/linux/commit/c62b833f42989e355d82cd20b7803e0228e33792
+> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> >         git fetch --no-tags linux-review
+> > Martin-Za-ovi/dt-bindings-wiegand-add-Wiegand-controller-common-properties/20230301-223030
+> >         git checkout c62b833f42989e355d82cd20b7803e0228e33792
+> >         # save the config file
+> >         mkdir build_dir && cp config build_dir/.config
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross
+> > W=1 O=build_dir ARCH=sh olddefconfig
+> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross
+> > W=1 O=build_dir ARCH=sh SHELL=/bin/bash drivers/wiegand/
+> >
+> > If you fix the issue, kindly add following tag where applicable
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Link:
+> > https://lore.kernel.org/oe-kbuild-all/202303020615.0F00suDa-lkp@intel.com/
+> >
+> > All errors (new ones prefixed by >>):
+> >
+> > >> drivers/wiegand/wiegand.c:441:27: error: initialization of 'void
+> > (*)(struct device *)' from incompatible pointer type 'int (*)(struct device
+> > *)' [-Werror=incompatible-pointer-types]
+> >      441 |         .remove         = wiegand_remove,
+> >          |                           ^~~~~~~~~~~~~~
+> >    drivers/wiegand/wiegand.c:441:27: note: (near initialization for
+> > 'wiegand_bus_type.remove')
+> >    cc1: some warnings being treated as errors
+> >
+> >
+> > vim +441 drivers/wiegand/wiegand.c
+> >
+> >    436
+> >    437  static struct bus_type wiegand_bus_type = {
+> >    438          .name           = "wiegand",
+> >    439          .match          = wiegand_match_device,
+> >    440          .probe          = wiegand_probe,
+> >  > 441          .remove         = wiegand_remove,
+> >    442  };
+> >    443
+> >
+> > --
+> > 0-DAY CI Kernel Test Service
+> > https://github.com/intel/lkp-tests
+> >
+
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
-It is customary to wait ~24 hours between each version, so that
-everybody gets a chance to comment,
-and to avoid polluting mailing lists with too many messages/day.
-
-(I see you are including lkml@, which seems unnecessary for this kind of pa=
-tch)
-
-Please address the feedback I gave for v2.
-
-Thanks.
