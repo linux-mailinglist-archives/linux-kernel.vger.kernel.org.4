@@ -2,154 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0ECD6BA3AD
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:43:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE3916BA3B9
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:45:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbjCNXnk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:43:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57310 "EHLO
+        id S231421AbjCNXoU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:44:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59452 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbjCNXnP (ORCPT
+        with ESMTP id S231396AbjCNXoQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:43:15 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC11041095;
-        Tue, 14 Mar 2023 16:42:53 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id x11so18252355pln.12;
-        Tue, 14 Mar 2023 16:42:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678837373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FFnAoyfpXLJ85wVKVk68j2EdKRKyiS6g/ArZlkxtTRo=;
-        b=RkoV55+De2mUl77Ox/ZtUfAfqdTQAEOjZodzQ+51fsZHCBCRx0Bfo8yi41sxYL9/EY
-         jEsqLFL/r9q+R8YUdR3oe8ztC613oVnhiTdAjoGuGeb5RwDaKL5EOs6Z0UAoUaTy5v+f
-         m98Vm/uKUJZDSdEFv27dtsHcXTlwysILZXEumAWdsgA9O2gOptpwqLoYcoGgGTnR96TA
-         Scly6/RMGzxFeqfs2Oxp2TJJFOx4LhcpOFu2gKz9PCW/wEohWYK/Gcd9YufcW+yhEWeY
-         eNWNy7WLEox0NcQcPmTRhBLliJG3Y2SgkSEBuFtyUBqTBTUWlCWoGcuOrNFqf6mDUxZw
-         j/Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678837373;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:sender:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=FFnAoyfpXLJ85wVKVk68j2EdKRKyiS6g/ArZlkxtTRo=;
-        b=c4bc0rSR97le3WZZFiSKqSoKa0UwDc5PiYR6ZKgb9fzjSPTlsv6Miy1KNuskicsZEI
-         XpC5nDV7owZHwN4BLJCd/r2D3QsUQCVMnQV7c6OWBWuXiI5KSpGB23cAaAbzkmdHtepI
-         Uj/2clKpiYzFhcdd/NMZVZMDUgaOFybS40Gu+OK4c+BeDhLVtk/3NZHYP3I3DKH/SvVf
-         ur+utbTk+a+GHRZHfqAyoWr63o7pRvRqhxLF/sYdj2J/w8/DPsf9t5geMceq0rggHQr/
-         xpTuyNdFcIMXroYDiygfRj6qrsJF61L16r00XvmrA4V0JBmFXVBFwQzydcPYrSGAIOEC
-         A7fQ==
-X-Gm-Message-State: AO0yUKWCqZIIyRpy2upe/axRXqR0ylYBLz/uJMrpuniup6c83atq0A21
-        lIhx0Nc/SqjsmEsVfLNgb1c=
-X-Google-Smtp-Source: AK7set80nH9ENZKU/iAEZlc5wGC3RY3TZHfNIZbqmfOa7p2zLrPNLhd16hpi9syDt6IBNcZltbs4ww==
-X-Received: by 2002:a17:90b:1b52:b0:237:b64c:6bb3 with SMTP id nv18-20020a17090b1b5200b00237b64c6bb3mr41623994pjb.11.1678837372919;
-        Tue, 14 Mar 2023 16:42:52 -0700 (PDT)
-Received: from moohyul.svl.corp.google.com ([2620:15c:2d4:203:3826:a5cd:1f1d:6c85])
-        by smtp.gmail.com with ESMTPSA id ik13-20020a170902ab0d00b0019f39e4f120sm2280806plb.18.2023.03.14.16.42.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 16:42:52 -0700 (PDT)
-Sender: Namhyung Kim <namhyung@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Jiri Olsa <jolsa@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Ian Rogers <irogers@google.com>,
-        Adrian Hunter <adrian.hunter@intel.com>,
-        Andi Kleen <ak@linux.intel.com>,
-        Kan Liang <kan.liang@linux.intel.com>,
-        Song Liu <song@kernel.org>,
-        Stephane Eranian <eranian@google.com>,
-        Ravi Bangoria <ravi.bangoria@amd.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        James Clark <james.clark@arm.com>, Hao Luo <haoluo@google.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
-Subject: [PATCH 10/10] perf record: Update documentation for BPF filters
-Date:   Tue, 14 Mar 2023 16:42:37 -0700
-Message-Id: <20230314234237.3008956-11-namhyung@kernel.org>
-X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
-In-Reply-To: <20230314234237.3008956-1-namhyung@kernel.org>
-References: <20230314234237.3008956-1-namhyung@kernel.org>
+        Tue, 14 Mar 2023 19:44:16 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89EE1B75E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:44:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678837441; x=1710373441;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=MBgoGSf4sE91ML1xNyQ6/AuGFsnKIeAmJxt14t1QRyY=;
+  b=T2ub/6PitNLEQCtZMKUMZAV/wU7N5CZvrp5rlDnlEgGvUEBWY0cqSrEy
+   Qmqa3xYgQzPz0A2Ix4bBoEURT2KIfmraf9oKj0k+z8xNgyVj+a5P5KDKQ
+   x57fT9HFD4a0l8DSQ9gOeVmZ8DeQXQYqIpB+bDjs3DFDaPw7Tr6Zlrzv2
+   pbwei+oXf89ATSIhW9RwpAVYaYWEGo5OOUeRYtDAXJRBC2nUFhOlQK0ve
+   ryt7r/1646v8hIbTiQnzdDuXomx4KKReFYpBU6wscq8+Iww0ljetsY5eC
+   mI9JaeRKhgHqARyD7OwowyDZ9axY3+It5x37bb6AZPtre3F/zTiJ17eAu
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="336259078"
+X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
+   d="scan'208";a="336259078"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 16:43:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="672528045"
+X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
+   d="scan'208";a="672528045"
+Received: from ranerica-svr.sc.intel.com ([172.25.110.23])
+  by orsmga007.jf.intel.com with ESMTP; 14 Mar 2023 16:43:53 -0700
+Date:   Tue, 14 Mar 2023 16:54:03 -0700
+From:   Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+To:     Tim Chen <tim.c.chen@linux.intel.com>
+Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Ricardo Neri <ricardo.neri@intel.com>,
+        "Ravi V. Shankar" <ravi.v.shankar@intel.com>,
+        Ben Segall <bsegall@google.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Len Brown <len.brown@intel.com>, Mel Gorman <mgorman@suse.de>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Ionela Voinescu <ionela.voinescu@arm.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, "Tim C . Chen" <tim.c.chen@intel.com>
+Subject: Re: [PATCH v3 04/10] sched/fair: Let low-priority cores help
+ high-priority busy SMT cores
+Message-ID: <20230314235403.GB30287@ranerica-svr.sc.intel.com>
+References: <20230207045838.11243-1-ricardo.neri-calderon@linux.intel.com>
+ <20230207045838.11243-5-ricardo.neri-calderon@linux.intel.com>
+ <9f3688d2d44ae766069487858bd28b5d49c19575.camel@linux.intel.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <9f3688d2d44ae766069487858bd28b5d49c19575.camel@linux.intel.com>
+User-Agent: Mutt/1.9.4 (2018-02-28)
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add more description and examples.
+On Thu, Mar 09, 2023 at 04:51:35PM -0800, Tim Chen wrote:
+> On Mon, 2023-02-06 at 20:58 -0800, Ricardo Neri wrote:
+> > Using asym_packing priorities within an SMT core is straightforward.
+> > Just
+> > follow the priorities that hardware indicates.
+> > 
+> > When balancing load from an SMT core, also consider the idle of its
+> > siblings. Priorities do not reflect that an SMT core divides its
+> > throughput
+> > among all its busy siblings. They only makes sense when exactly one
+> > sibling
+> > is busy.
+> > 
+> > Indicate that active balance is needed if the destination CPU has
+> > lower
+> > priority than the source CPU but the latter has busy SMT siblings.
+> > 
+> > Make find_busiest_queue() not skip higher-priority SMT cores with
+> > more than
+> > busy sibling.
+> > 
+> > Cc: Ben Segall <bsegall@google.com>
+> > Cc: Daniel Bristot de Oliveira <bristot@redhat.com>
+> > Cc: Dietmar Eggemann <dietmar.eggemann@arm.com>
+> > Cc: Len Brown <len.brown@intel.com>
+> > Cc: Mel Gorman <mgorman@suse.de>
+> > Cc: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+> > Cc: Steven Rostedt <rostedt@goodmis.org>
+> > Cc: Tim C. Chen <tim.c.chen@intel.com>
+> > Cc: Valentin Schneider <vschneid@redhat.com>
+> > Cc: x86@kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Suggested-by: Valentin Schneider <vschneid@redhat.com>
+> > Signed-off-by: Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+> > ---
+> > Changes since v2:
+> >  * Introduced this patch.
+> > 
+> > Changes since v1:
+> >  * N/A
+> > ---
+> >  kernel/sched/fair.c | 31 ++++++++++++++++++++++++++-----
+> >  1 file changed, 26 insertions(+), 5 deletions(-)
+> > 
+> > diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> > index 80c86462c6f6..c9d0ddfd11f2 100644
+> > --- a/kernel/sched/fair.c
+> > +++ b/kernel/sched/fair.c
+> > @@ -10436,11 +10436,20 @@ static struct rq *find_busiest_queue(struct
+> > lb_env *env,
+> >                     nr_running == 1)
+> >                         continue;
+> >  
+> > -               /* Make sure we only pull tasks from a CPU of lower
+> > priority */
+> > +               /*
+> > +                * Make sure we only pull tasks from a CPU of lower
+> > priority
+> > +                * when balancing between SMT siblings.
+> > +                *
+> > +                * If balancing between cores, let lower priority
+> > CPUs help
+> > +                * SMT cores with more than one busy sibling.
+> > +                */
+> >                 if ((env->sd->flags & SD_ASYM_PACKING) &&
+> >                     sched_asym_prefer(i, env->dst_cpu) &&
+> > -                   nr_running == 1)
+> > -                       continue;
+> > +                   nr_running == 1) {
+> > +                       if (env->sd->flags & SD_SHARE_CPUCAPACITY ||
+> > +                           (!(env->sd->flags & SD_SHARE_CPUCAPACITY)
+> > && is_core_idle(i)))
+> > +                               continue;
+> > +               }
+> >  
+> >                 switch (env->migration_type) {
+> >                 case migrate_load:
+> > @@ -10530,8 +10539,20 @@ asym_active_balance(struct lb_env *env)
+> >          * lower priority CPUs in order to pack all tasks in the
+> >          * highest priority CPUs.
+> >          */
+> > -       return env->idle != CPU_NOT_IDLE && (env->sd->flags &
+> > SD_ASYM_PACKING) &&
+> > -              sched_asym_prefer(env->dst_cpu, env->src_cpu);
+> > +       if (env->idle != CPU_NOT_IDLE && (env->sd->flags &
+> > SD_ASYM_PACKING)) {
+> > +               /* Always obey priorities between SMT siblings. */
+> > +               if (env->sd->flags & SD_SHARE_CPUCAPACITY)
+> > +                       return sched_asym_prefer(env->dst_cpu, env-
+> > >src_cpu);
+> > +
+> > +               /*
+> > +                * A lower priority CPU can help an SMT core with
+> > more than one
+> > +                * busy sibling.
+> > +                */
+> > +               return sched_asym_prefer(env->dst_cpu, env->src_cpu)
+> > ||
+> > +                      !is_core_idle(env->src_cpu);
+> > +       }
+> 
+> Suppose we have the Atom cores in a sched group (e.g. a cluster),
+> this will pull the tasks from those core to a SMT thread even if
+> its sibling thread is busy.  Suggest this change
+> 
+> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+> index da1afa99cd55..b671cb0d7ab3 100644
+> --- a/kernel/sched/fair.c
+> +++ b/kernel/sched/fair.c
+> @@ -10473,9 +10473,11 @@ asym_active_balance(struct lb_env *env)
+>                 /*
+>                  * A lower priority CPU can help an SMT core with more than one
+>                  * busy sibling.
+> +                * Pull only if no SMT sibling busy.
+>                  */
+> -               return sched_asym_prefer(env->dst_cpu, env->src_cpu) ||
+> -                      !is_core_idle(env->src_cpu);
+> +               if (is_core_idle(env->dst_cpu))
+> +                       return sched_asym_prefer(env->dst_cpu, env->src_cpu) ||
+> +                              !is_core_idle(env->src_cpu);
 
-Signed-off-by: Namhyung Kim <namhyung@kernel.org>
----
- tools/perf/Documentation/perf-record.txt | 47 +++++++++++++++++++++++-
- 1 file changed, 46 insertions(+), 1 deletion(-)
+Thank you Tim! Patch 3 does this check for asym_packing, but we could land
+from other types of idle load balancing.
 
-diff --git a/tools/perf/Documentation/perf-record.txt b/tools/perf/Documentation/perf-record.txt
-index 122f71726eaa..680396c56bd1 100644
---- a/tools/perf/Documentation/perf-record.txt
-+++ b/tools/perf/Documentation/perf-record.txt
-@@ -183,7 +183,52 @@ OPTIONS
- 
- 	A BPF filter can access the sample data and make a decision based on the
- 	data.  Users need to set an appropriate sample type to use the BPF
--	filter.
-+	filter.  BPF filters need root privilege.
-+
-+	The sample data field can be specified in lower case letter.  Multiple
-+	filters can be separated with comma.  For example,
-+
-+	  --filter 'period > 1000, cpu == 1'
-+	or
-+	  --filter 'mem_op == load || mem_op == store, mem_lvl > l1'
-+
-+	The former filter only accept samples with period greater than 1000 AND
-+	CPU number is 1.  The latter one accepts either load and store memory
-+	operations but it should have memory level above the L1.  Since the
-+	mem_op and mem_lvl fields come from the (memory) data_source, it'd only
-+	work with some events which set the data_source field.
-+
-+	Also user should request to collect that information (with -d option in
-+	the above case).  Otherwise, the following message will be shown.
-+
-+	  $ sudo perf record -e cycles --filter 'mem_op == load'
-+	  Error: cycles event does not have PERF_SAMPLE_DATA_SRC
-+	   Hint: please add -d option to perf record.
-+	  failed to set filter "BPF" on event cycles with 22 (Invalid argument)
-+
-+	Essentially the BPF filter expression is:
-+
-+	  <term> <operator> <value> (("," | "||") <term> <operator> <value>)*
-+
-+	The <term> can be one of:
-+	  ip, id, tid, pid, cpu, time, addr, period, txn, weight, phys_addr,
-+	  code_pgsz, data_pgsz, weight1, weight2, weight3, ins_lat, retire_lat,
-+	  p_stage_cyc, mem_op, mem_lvl, mem_snoop, mem_remote, mem_lock,
-+	  mem_dtlb, mem_blk, mem_hops
-+
-+	The <operator> can be one of:
-+	  ==, !=, >, >=, <, <=, &
-+
-+	The <value> can be one of:
-+	  <number> (for any term)
-+	  na, load, store, pfetch, exec (for mem_op)
-+	  l1, l2, l3, l4, cxl, io, any_cache, lfb, ram, pmem (for mem_lvl)
-+	  na, none, hit, miss, hitm, fwd, peer (for mem_snoop)
-+	  remote (for mem_remote)
-+	  na, locked (for mem_locked)
-+	  na, l1_hit, l1_miss, l2_hit, l2_miss, any_hit, any_miss, walk, fault (for mem_dtlb)
-+	  na, by_data, by_addr (for mem_blk)
-+	  hops0, hops1, hops2, hops3 (for mem_hops)
- 
- --exclude-perf::
- 	Don't record events issued by perf itself. This option should follow
--- 
-2.40.0.rc1.284.g88254d51c5-goog
+I wil integrate this change to the series.
 
+Thanks and BR,
+Ricardo
