@@ -2,31 +2,31 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 428116B8FDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:25:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C88B26B8FE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:26:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230291AbjCNKZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:25:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
+        id S231263AbjCNK02 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:26:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230503AbjCNKZE (ORCPT
+        with ESMTP id S230228AbjCNKZ0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:25:04 -0400
-Received: from smtp-bc0a.mail.infomaniak.ch (smtp-bc0a.mail.infomaniak.ch [IPv6:2001:1600:4:17::bc0a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F53962D85
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:24:34 -0700 (PDT)
+        Tue, 14 Mar 2023 06:25:26 -0400
+Received: from smtp-8fac.mail.infomaniak.ch (smtp-8fac.mail.infomaniak.ch [IPv6:2001:1600:4:17::8fac])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC56A4345C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:25:03 -0700 (PDT)
 Received: from smtp-3-0000.mail.infomaniak.ch (unknown [10.4.36.107])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PbV4q4nQfzMqL8l;
-        Tue, 14 Mar 2023 11:24:27 +0100 (CET)
-Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PbV4q1TkDz2N3w;
+        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4PbV4r1vyfzMqQFw;
+        Tue, 14 Mar 2023 11:24:28 +0100 (CET)
+Received: from unknown by smtp-3-0000.mail.infomaniak.ch (Postfix) with ESMTPA id 4PbV4q5VcMz2MRr;
         Tue, 14 Mar 2023 11:24:27 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1678789467;
-        bh=ubrRREFJbi3avGa42t5b/PaZc2QNbUiTuZfC6xd4sFc=;
+        s=20220412; t=1678789468;
+        bh=2280h5yKDh1Do1lnEMHsty6z99uggkN1tc75OR/LLqk=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=hcd5AUeA+XNtjjj+Q86TBCDos3hExErBQLNn2SGuvRcU5W+t9WwLEWtz2uzSYYsYG
-         LvZTN2Q4eBvBvmbSCZlQdJZbCOZp8N4enNfDfCMS2UatyqcIHguAL6yIZlht7vDIsL
-         wCPUjL/6yLZ2+fQI6HYvch/n3gHdYdSsZ4Z87u3A=
+        b=qKG1ie52pgJDtCGwL+HaNmF8saw36cS5oep2BPttPPatvOHiyou5+c9H+jwed0KAI
+         RDkmUi9R50Y5tsXenZqFGPJmoXsLEUam3siSavQodGb0H/yHRUCteF9si4c1i2mmdq
+         qeYQe2sM19r4HmaK+XdCgryV9zX/Vh8aLRsTyBr4=
 From:   Philippe Schenker <dev@pschenker.ch>
 To:     devicetree@vger.kernel.org, Shawn Guo <shawnguo@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>
@@ -39,18 +39,19 @@ Cc:     NXP Linux Team <linux-imx@nxp.com>,
         linux-arm-kernel@lists.infradead.org,
         Philippe Schenker <philippe.schenker@toradex.com>,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v2 11/23] arm64: dts: colibri-imx8x: Add gpio-line-names
-Date:   Tue, 14 Mar 2023 11:23:57 +0100
-Message-Id: <20230314102410.424773-12-dev@pschenker.ch>
+Subject: [PATCH v2 12/23] arm64: dts: colibri-imx8x: Disable touchscreen by default
+Date:   Tue, 14 Mar 2023 11:23:58 +0100
+Message-Id: <20230314102410.424773-13-dev@pschenker.ch>
 X-Mailer: git-send-email 2.39.2
 In-Reply-To: <20230314102410.424773-1-dev@pschenker.ch>
 References: <20230314102410.424773-1-dev@pschenker.ch>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Infomaniak-Routing: alpha
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -59,179 +60,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Philippe Schenker <philippe.schenker@toradex.com>
 
-This commit adds gpio-line-names in line with other SoM from Toradex.
+Do not enable the touchscreen. By default it is not used but should be
+kept to enable it from a file that includes imx8x-colibri.dtsi.
 
 Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
 ---
 
 (no changes since v1)
 
- .../boot/dts/freescale/imx8x-colibri.dtsi     | 152 ++++++++++++++++++
- 1 file changed, 152 insertions(+)
+ arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi b/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
-index a2364845e976..26f46fe56aa2 100644
+index 26f46fe56aa2..2fd7f3483b3a 100644
 --- a/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8x-colibri.dtsi
-@@ -98,6 +98,158 @@ &lpspi2 {
- 	cs-gpios = <&lsio_gpio1 0 GPIO_ACTIVE_LOW>;
+@@ -40,6 +40,7 @@ touchscreen@2c {
+ 		adi,median-filter-size = /bits/ 8 <2>;
+ 		adi,averaging = /bits/ 8 <1>;
+ 		adi,conversion-interval = /bits/ 8 <255>;
++		status = "disabled";
+ 	};
  };
  
-+&lsio_gpio0 {
-+	gpio-line-names = "",
-+			  "SODIMM_70",
-+			  "SODIMM_60",
-+			  "SODIMM_58",
-+			  "SODIMM_78",
-+			  "SODIMM_72",
-+			  "SODIMM_80",
-+			  "SODIMM_46",
-+			  "SODIMM_62",
-+			  "SODIMM_48",
-+			  "SODIMM_74",
-+			  "SODIMM_50",
-+			  "SODIMM_52",
-+			  "SODIMM_54",
-+			  "SODIMM_66",
-+			  "SODIMM_64",
-+			  "SODIMM_68",
-+			  "",
-+			  "",
-+			  "SODIMM_82",
-+			  "SODIMM_56",
-+			  "SODIMM_28",
-+			  "SODIMM_30",
-+			  "",
-+			  "SODIMM_61",
-+			  "SODIMM_103",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_25",
-+			  "SODIMM_27",
-+			  "SODIMM_100";
-+};
-+
-+&lsio_gpio1 {
-+	gpio-line-names = "SODIMM_86",
-+			  "SODIMM_92",
-+			  "SODIMM_90",
-+			  "SODIMM_88",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_59",
-+			  "",
-+			  "SODIMM_6",
-+			  "SODIMM_8",
-+			  "",
-+			  "",
-+			  "SODIMM_2",
-+			  "SODIMM_4",
-+			  "SODIMM_34",
-+			  "SODIMM_32",
-+			  "SODIMM_63",
-+			  "SODIMM_55",
-+			  "SODIMM_33",
-+			  "SODIMM_35",
-+			  "SODIMM_36",
-+			  "SODIMM_38",
-+			  "SODIMM_21",
-+			  "SODIMM_19",
-+			  "SODIMM_140",
-+			  "SODIMM_142",
-+			  "SODIMM_196",
-+			  "SODIMM_194",
-+			  "SODIMM_186",
-+			  "SODIMM_188",
-+			  "SODIMM_138";
-+};
-+
-+&lsio_gpio2 {
-+	gpio-line-names = "SODIMM_23",
-+			  "",
-+			  "",
-+			  "SODIMM_144";
-+};
-+
-+&lsio_gpio3 {
-+	gpio-line-names = "SODIMM_96",
-+			  "SODIMM_75",
-+			  "SODIMM_37",
-+			  "SODIMM_29",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_43",
-+			  "SODIMM_45",
-+			  "SODIMM_69",
-+			  "SODIMM_71",
-+			  "SODIMM_73",
-+			  "SODIMM_77",
-+			  "SODIMM_89",
-+			  "SODIMM_93",
-+			  "SODIMM_95",
-+			  "SODIMM_99",
-+			  "SODIMM_105",
-+			  "SODIMM_107",
-+			  "SODIMM_98",
-+			  "SODIMM_102",
-+			  "SODIMM_104",
-+			  "SODIMM_106";
-+};
-+
-+&lsio_gpio4 {
-+	gpio-line-names = "",
-+			  "",
-+			  "",
-+			  "SODIMM_129",
-+			  "SODIMM_133",
-+			  "SODIMM_127",
-+			  "SODIMM_131",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_44",
-+			  "",
-+			  "SODIMM_76",
-+			  "SODIMM_31",
-+			  "SODIMM_47",
-+			  "SODIMM_190",
-+			  "SODIMM_192",
-+			  "SODIMM_49",
-+			  "SODIMM_51",
-+			  "SODIMM_53";
-+};
-+
-+&lsio_gpio5 {
-+	gpio-line-names = "",
-+			  "SODIMM_57",
-+			  "SODIMM_65",
-+			  "SODIMM_85",
-+			  "",
-+			  "",
-+			  "",
-+			  "",
-+			  "SODIMM_135",
-+			  "SODIMM_137",
-+			  "UNUSABLE_SODIMM_180",
-+			  "UNUSABLE_SODIMM_184";
-+};
-+
- /* On-module eMMC */
- &usdhc1 {
- 	bus-width = <8>;
 -- 
 2.39.2
 
