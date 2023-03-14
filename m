@@ -2,132 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D03B6B987E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:05:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8DD6B9883
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:06:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231491AbjCNPFM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:05:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43678 "EHLO
+        id S231524AbjCNPG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:06:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44878 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCNPFK (ORCPT
+        with ESMTP id S229818AbjCNPGY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:05:10 -0400
-Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0E9C9E67C;
-        Tue, 14 Mar 2023 08:05:09 -0700 (PDT)
-Received: from maxwell ([109.43.51.107]) by mrelayeu.kundenserver.de (mreue109
- [213.165.67.113]) with ESMTPSA (Nemesis) id 1MirfG-1q7s7C21hs-00exTj; Tue, 14
- Mar 2023 16:04:10 +0100
-References: <20230314123759.132521-1-jh@henneberg-systemdesign.com>
- <20230314123759.132521-2-jh@henneberg-systemdesign.com>
- <ZBCIM//XkpFkiC4W@nimitz>
-User-agent: mu4e 1.8.14; emacs 28.2
-From:   Jochen Henneberg <jh@henneberg-systemdesign.com>
-To:     Piotr Raczynski <piotr.raczynski@intel.com>
-Cc:     netdev@vger.kernel.org,
-        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Ong Boon Leong <boon.leong.ong@intel.com>,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 1/2] net: stmmac: Premature loop termination check
- was ignored
-Date:   Tue, 14 Mar 2023 16:01:11 +0100
-In-reply-to: <ZBCIM//XkpFkiC4W@nimitz>
-Message-ID: <878rfzgysa.fsf@henneberg-systemdesign.com>
+        Tue, 14 Mar 2023 11:06:24 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2112.outbound.protection.outlook.com [40.107.94.112])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2F1DACE21;
+        Tue, 14 Mar 2023 08:06:22 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=AOw4pfLzbNsDwL9CUJQPHKTRLpXz88jFxX+aq/mLLqyAXeso/KZ/D4bZmOCB/CqtOYoRYHJyEcsQOXC2Psa02raWRj3l391NQhidtK/zJpASOTxk2YYAloJzigqWjugXIpkqeHAJO+zuNnUKarBPwAbfLPt2lwlRjhXxXdFrlOJuETCtO+Lcrsrhu4lqa9ACtgXy3IeWh9Ox2nBLAfaYyp/f0f/MK62GS3w7QVidH/6B/ICwDkkH8VQWEbe0lYhYusccL/yo4X8tUVJ4tSAOjyUVmktr0X9X3P+kK4rTGETDBM0un3aFz8dmwUvw7lGCcdy+JO5c7LkQUWsKsVaszA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=UOgIskxvFGCilz86xUbm4fpfoWfJf92i9whjeVn6VVA=;
+ b=B/DopJMfaQtW2ID0sQ/6yfFkwLVLm+nR8oXk+uSQRmsi6znGp90ZsMtQ3k8Q6C9LaZau0LFurxdTFR4JJUZ/JO7UXwQl4amb1G4dXnLgTy2F9mHF5/RI/TSJo/PXRXVeQIUCi62PFK21AHHJZvHmhrJi452wxFxvqksFcNrQKuyCYPWsI93y3OCNFQ1eFyB7tXGK4OLPCkNBY9pthWQC3pC3zejRp0SotwyAdDTqbiCgVimXpYAKXfWIC0Fu9+ebttIndoRreO3Npe8aVd6Ayw3Z8q7/C+URIz6XWPOtzr82gCYhuyYuMYHg1TtiPNJC+jQF+c/GEurz1xmMgd7PtQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
+ dkim=pass header.d=corigine.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=UOgIskxvFGCilz86xUbm4fpfoWfJf92i9whjeVn6VVA=;
+ b=SYQqgHlMEB1E6e5EitdB6ukbMonKi3ui94S44jZvMqBh9O/X24f9svZj4yQT2EnOu+b6u4IcTJMDtJlKZgu7EoMy7+hMHeM3xlCVS5X+jd+Jx6H2Dg+3Vig16R1QWc0TFaOHViY7qmobUIziUDSnHzH/FTEkcVVHL8zmzSlb1V0=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=corigine.com;
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
+ by MW3PR13MB4010.namprd13.prod.outlook.com (2603:10b6:303:54::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
+ 2023 15:06:19 +0000
+Received: from PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
+ ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
+ 15:06:18 +0000
+Date:   Tue, 14 Mar 2023 16:06:11 +0100
+From:   Simon Horman <simon.horman@corigine.com>
+To:     Zheng Hacker <hackerzheng666@gmail.com>
+Cc:     Zheng Wang <zyytlz.wz@163.com>, marcel@holtmann.org,
+        alex000young@gmail.com, johan.hedberg@gmail.com,
+        luiz.dentz@gmail.com, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com,
+        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de
+Subject: Re: [PATCH v2] Bluetooth: hci_core: Fix poential Use-after-Free bug
+ in hci_remove_adv_monitor
+Message-ID: <ZBCNY8NoNkrA2nyN@corigine.com>
+References: <20230217100223.702330-1-zyytlz.wz@163.com>
+ <CAJedcCxUNBWOpkcaN2aLbwNs_xvqi=LC8mhFWh-jWeh6q-cBCQ@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJedcCxUNBWOpkcaN2aLbwNs_xvqi=LC8mhFWh-jWeh6q-cBCQ@mail.gmail.com>
+X-ClientProxiedBy: AS4P192CA0006.EURP192.PROD.OUTLOOK.COM
+ (2603:10a6:20b:5da::7) To PH0PR13MB4842.namprd13.prod.outlook.com
+ (2603:10b6:510:78::6)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Provags-ID: V03:K1:Wm2ytKUEV+DxoSZFFVeK86m/t8EpAeUoSfliuYPGpl5SQt5RAgh
- e6KCsq7PxzEqWsy306OUb+dE2q0GAaFc9xLI2m5LEhIblLUO2f/QluyChJmWIhx6JjhaJme
- GUu8JIC9wCOmB5jzZgEfufDvVI1Bw+m82bg0HRaos5yqQb6d5paSo+lCgmNO0IVdm6tOWVH
- 26jGm1i/apkG0nctKwiLA==
-UI-OutboundReport: notjunk:1;M01:P0:NbTMfrKiRJU=;PKfWXhuZIT2Oe5LyhecyZpuYd8O
- gadBhi9lAMrFbjqC6m0y+TJ7eB18Fl7eF6jTpq75i+mte3L8NJjOJ+ii4LDfso6crmSVyFEc7
- UnBXTTREWWxhpfLXw2a8HVzKk7y+Z5O8SMDApZpOp1laWkRnxlXROIX2aPyjyO2m0cKPNt17x
- 950D/TBDtENQBhRHlS5hOb/x5gkNfeOnVS5asEZzESBmtV98cmP9zcU85GP8J31CYaXDg8nBZ
- 1Yb4WZE46t529pc+VDDFd7kJfWbVGWC5jS+eSXEY1slzmikelXqhgSjGIHz8nfRLpsCL/3bCE
- ypFx3HrcbX3MqY0tfgiNnymycxTpKVbxgopejbtq1KX4sWK79FY6ynri8HMSm4jpSvtJ9LR+b
- IVVeMOjzbte733kLpV4VqzfAPuSTcDjvmruRjeSXJ95j9PZxSSFdiBv9NyRf0jqy+U6WnmqR5
- JEiajaCeYuBvzK4Pr3RD2zkRQNXis+PWSVeSWJDH099OPYHXZ2Vv55ZfpQAS98+HiY76ynFDv
- OBNI6CKweeIRPg6kGic2Mo21kk44bTE27LQ9Gu9eCWMFp9hisiP3Cv+tP6lSaZvXX/EwRU2Pi
- zJ+Knykx4Z1Jdj1tnFDocv5sShpnWMDn5ogOlev6p2JhHI9mB+iKMqZran2qkAzI4VPsa70gy
- liLELTqIj7l+vWnY1TA/mRQZ6bK+SvR6KjYv33vfPw==
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|MW3PR13MB4010:EE_
+X-MS-Office365-Filtering-Correlation-Id: f9feb88b-2420-4dac-c706-08db249da9d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZoHhbrnnijZgUlGI1PNTzuhtCqpR68wCNOu5d9dqOzg0hiEjxVaawbpczVSZ4+rv6tOM+/nNIIG0xbHYHvIXBFtimg/wkyIoAklvp1v5BzNBzYX/hhCb6Fmnwz7tLH/BuRSGBKqxKk/bRZNKZ3260jMH5KTCqNnMom0bTdjiB5gxUlFz5j/m2010vmKLqn1Ayp9av1/9VX2cqeF6aOBSF7sOdpGjbUWOcKKvqC6P9GPGRsphYALdFebx5n4TIM/UlVMcP2kD1J19T1biAYZBzNrjUXajT4YBsRQxwSyZIH3i7a1sQwCkViSOjZGIlATLloMGp3RJJNUF9PSgCz/GT0m+72MxaU21GwoyHeUu9DOUfXws0sibVUcGhDemt1E0PWL4rjOg4a0AjLR53Ia8BspaWu8K5XTskI29bhGOqr1/q6jRhAqUlcP4kzx2+iu1hQvSmyleqIESjHM3RBNiJtgnF+odhWFI1rZ2AOXuwJSbTfHNjpjZyyfknmV2EPx8lJP5Vr1dOS3/21RgX5BXveGtU3OYe5DDsW2AGm6XCH/gRBN+fKed2K6XWxBgQTB/r0EAGPdf9SvD5tqZ0sm0pPNk7Y9sg1wcK9EsZD3gzGvfgTmdW4NjSTbAdYZOIxpjEw4AfNudjENk1OIsi7JJuA==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(376002)(396003)(39840400004)(136003)(346002)(451199018)(2906002)(41300700001)(8676002)(66556008)(4326008)(36756003)(478600001)(66476007)(316002)(6916009)(86362001)(66946007)(38100700002)(6486002)(5660300002)(44832011)(6506007)(6512007)(2616005)(186003)(7416002)(6666004)(8936002)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NXpTeHlJS1ZnbVhyc1JpL2VuY0JhRUdwcXd5bkZ0cTI5MGQ1QWdWOURKT081?=
+ =?utf-8?B?aDgwTVJrMmo1REtrVTZjZ3k5eFI0MXhqNGFNYkNPQml5Y0dXNFNMeHlmbzlj?=
+ =?utf-8?B?a1B2aG5pV1NaaGdTTEg3aUdoWVFDaHJNcE03c09zc25tVFJLb1Q3TEtkcXlI?=
+ =?utf-8?B?R1R0Zm1pYi9remxTR2wxbkdCdHJBMStKaHkrMTJ3Y0lFMFQxaEF2bkx2S2x3?=
+ =?utf-8?B?TUJCR0lFdHJBcjB6WG1BMjlTNDdrOXVUVStXWnJrL3RKK0ZtSWYyVXBMdHBm?=
+ =?utf-8?B?bi9DUktPV2IwWmRydDhKVWpBMG10dUFTRlpQVFZvdU5GMHE3ZDNhWExOb3Vv?=
+ =?utf-8?B?ZExkaDF4N2ZPTFcvOTZRL1dhSGtRRmk5b0E2Wk96NUpsY1JRVWk3eVBDdnNI?=
+ =?utf-8?B?OS9LZW9obXV1WENpZXlsWEJxejVYR1ZlRzZiL0FoeW9NRWkzWDNOQms0OWNG?=
+ =?utf-8?B?dmM3bHVrdGlKZGliaXYyTzhUMHlvZWxHWHlPUnlGVkpPTURwZWNpWjMyVjh2?=
+ =?utf-8?B?K1N2eElPTHhDL2tSYThPUDl2ZCtyQ2IwakQrT3VYcDAvQldDUzZNcjdla3Vt?=
+ =?utf-8?B?Vk1qcFJwaS9wQ3U2SGFTLzZJbDJTK3FVeno5S0RJWlUvdmFJc1BuU1BseG90?=
+ =?utf-8?B?b3pUbWFFQVRYS0JaZHRTaXdjQnFab3psU3VGanU4cUtLM2cyd1A4V0xGb2VT?=
+ =?utf-8?B?cmljOGtRaUxOT2lUQnNyRlpQSlp1MzRQZ0FFK0duL1FUdXo2TDBFTHZiejRq?=
+ =?utf-8?B?ZjU3bUZmY0RERDVBekUrT0xhaGxuRDF3a0docGJoYnRpMDloYVFUODQ1ajJB?=
+ =?utf-8?B?ZGQwWElmNFpzVXl2eTQvcnR6RUtaTG5nRUNObVNQK1FQUzlZMGpOMnlIQmk2?=
+ =?utf-8?B?bjVwSXJ0cEhER3E1RHF5czFMSXVhbTZFeVhJU2FtY0prUEMxcFNsYXJiQ2JX?=
+ =?utf-8?B?OWtwRGNiVjhUMjlMNGtzM2hiTWdNY3gxdjNhL0ZyMGhEMHBBQUlzQTgwak5o?=
+ =?utf-8?B?NFMyaW1oOVJHUDlWVFZmcGczMGhDUzJNbmlDMjRmVTBkNmRKcXprS0hGeEE2?=
+ =?utf-8?B?V2tYWVVNc3VCMXNxM3MvcHRac1dTZXJJR3hST0h0QmZEN20zMEQrWnNWOFdu?=
+ =?utf-8?B?ZTJ1R2FlWTBhZVFra1FRclpQSEp0NFl4UllxOGhYekg1bzY1cEMyUmpuOGNx?=
+ =?utf-8?B?Q0Iwa09qRlRzY3RVWVUyeHMzT3BsLzl1SEYzelpYUjJXVm1xREUwYTZkVXl2?=
+ =?utf-8?B?azFjODJyWnpFa0dpeXhyaGxHVnNjcERiR3NyVkpkV1JRUWtQSzF5eDZhd3lh?=
+ =?utf-8?B?eW43ejdjelhRZUo3bGNjaHNwYmhaMndXMW5PdElOZkdRSllPN1RyTGMwMHdy?=
+ =?utf-8?B?UVB4cVlkWW1WSnZxZXlhWWprZFBlSW5EN0lIaU0rWjJndVpJallEc2lHQnQ5?=
+ =?utf-8?B?MU9KeS9KOFlYYkJ6clVZUC9pcjlBemxtQktWdTJqS2c5elZYMGRsckhHZzlP?=
+ =?utf-8?B?ZWFJUjRxSUFNRER0MGxWQ0xjMW85Y0N1TURwMVdwZGp5QUdyNzRyS1BpTXJs?=
+ =?utf-8?B?OXU1ek9UTEdqM2QraXZvblFEaXIxUzU0bFE2M2p5MXVMUDhtdlBIUzA4MVR3?=
+ =?utf-8?B?YmNnUVljUnRaemxNN29CVkNHdWRIa2JMV3RpM05Pc1FPL3NEb1Rod0hONGFC?=
+ =?utf-8?B?UVBkc2hVZzBSM0hpb2M4alBlc1o5d0ZHTFBOVkxaMStVeTBBWTBKRFZkUEJh?=
+ =?utf-8?B?ZUpFK0IvVUJvT2FMTnVaOHZnOWRGL1gwU1Q4V2Q1Q1BHTlRweUoxZm8yRFc2?=
+ =?utf-8?B?YXZMM2p3enhDeDRiVHZUYzVvMnQ5dFdkQit3WllqbVpXYjZDb2x6S29iQmFT?=
+ =?utf-8?B?TzB2NnFVOUtySHVLU0dXV2h0T0lWS2sxS0NNbnlSNGFheUF2L2NUeW9uZ1B4?=
+ =?utf-8?B?NnhSNHAxbUZtNTV6Tm9YRHd5a2MxSlVNYVpSd2RvVHZ3TzNsOHV3eXRQVEFi?=
+ =?utf-8?B?eUhLS1g3RDB5Zk9qdlZHTk8vYVBGUnkvWStsUCtmSVBZdVc2M3R1OFp0cXJt?=
+ =?utf-8?B?VGwweWVQYnQwNGJiT2w3YU56VnY0d3ZQbWk0WFhLSHRYRGtlVzZ4QmhERDZW?=
+ =?utf-8?B?ck1kVW15TjNGY1VrYUptYmV2TjV5bXptaTFpRGdudWJSNU1hNVF5N0NueVlP?=
+ =?utf-8?B?L1psS28xSktIR01DMHZGdnhkRzhTUXNmUnpMZFdjckZVZzV4TGdMTEt6UHlv?=
+ =?utf-8?B?ZlpsRWlZQXFLY09rVU41TEdZSjRnPT0=?=
+X-OriginatorOrg: corigine.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f9feb88b-2420-4dac-c706-08db249da9d9
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:06:18.7200
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Soq4UkfHvJsG7cHpWz0BlIkYze5jLnSpNFbllcPnQ1s0ztVL0hykvwOmjyvZjIVvTufhN9sR+8+/44aQde/glln0Ps+sIygWBiRC1NxlcNo=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW3PR13MB4010
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 13, 2023 at 05:55:35PM +0800, Zheng Hacker wrote:
+> friendly ping
+> 
+> Zheng Wang <zyytlz.wz@163.com> 于2023年2月17日周五 18:05写道：
+> >
+> > In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT case,
+> > the function will free the monitor and print its handle after that.
+> > Fix it by removing the logging into msft_le_cancel_monitor_advertisement_cb
+> > before calling hci_free_adv_monitor.
+> >
+> > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
+> > ---
+> > v2:
+> > - move the logging inside msft_remove_monitor suggested by Luiz
+> > ---
+> >  net/bluetooth/hci_core.c | 2 --
+> >  net/bluetooth/msft.c     | 2 ++
+> >  2 files changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
+> > index b65c3aabcd53..69b82c2907ff 100644
+> > --- a/net/bluetooth/hci_core.c
+> > +++ b/net/bluetooth/hci_core.c
+> > @@ -1981,8 +1981,6 @@ static int hci_remove_adv_monitor(struct hci_dev *hdev,
+> >
+> >         case HCI_ADV_MONITOR_EXT_MSFT:
+> >                 status = msft_remove_monitor(hdev, monitor);
+> > -               bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
+> > -                          hdev->name, monitor->handle, status);
+> >                 break;
 
-Piotr Raczynski <piotr.raczynski@intel.com> writes:
+I'm probably missing something obvious.
+But from my perspective a simpler fix would be to
+move the msft_remove_monitor() call to below the bt_dev_dbg() call.
 
-> On Tue, Mar 14, 2023 at 01:37:58PM +0100, Jochen Henneberg wrote:
->> The premature loop termination check makes sense only in case of the
->> jump to read_again where the count may have been updated. But
->> read_again did not include the check.
->
-> Your commit titles and messages seems identical in both patches, someone
-> may get confused, maybe you could change commit titles at least?
->
-> Or since those are very related one liner fixes, maybe combine them into
-> one?
-
-I was told to split them into a series because the fixes apply to
-different kernel versions.
-
->
-> Also a question, since you in generally goto backwards here, is it guarded from
-> an infinite loop (during some corner case scenario maybe)?
-
-In theory I think this may happen, however, I would consider that to be
-a different patch since it addresses a different issue.
-
->
-> Other than that looks fine, thanks.
-> Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
->
->> 
->> Fixes: ec222003bd94 ("net: stmmac: Prepare to add Split Header support")
->> Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
->> ---
->>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->> 
->> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->> index e4902a7bb61e..ea51c7c93101 100644
->> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
->> @@ -5221,10 +5221,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
->>  			len = 0;
->>  		}
->>  
->> +read_again:
->>  		if (count >= limit)
->>  			break;
->>  
->> -read_again:
->>  		buf1_len = 0;
->>  		buf2_len = 0;
->>  		entry = next_entry;
->> -- 
->> 2.39.2
->> 
-
-
--- 
-Henneberg - Systemdesign
-Jochen Henneberg
-Loehnfeld 26
-21423 Winsen (Luhe)
---
-Fon: +49 172 160 14 69
-Url: https://www.henneberg-systemdesign.com
+> >         }
+> >
+> > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
+> > index bee6a4c656be..4b35f0ed1360 100644
+> > --- a/net/bluetooth/msft.c
+> > +++ b/net/bluetooth/msft.c
+> > @@ -286,6 +286,8 @@ static int msft_le_cancel_monitor_advertisement_cb(struct hci_dev *hdev,
+> >                  * suspend. It will be re-monitored on resume.
+> >                  */
+> >                 if (!msft->suspending) {
+> > +                       bt_dev_dbg(hdev, "%s remove monitor %d status %d", hdev->name,
+> > +                                  monitor->handle, status);
+> >                         hci_free_adv_monitor(hdev, monitor);
+> >
+> >                         /* Clear any monitored devices by this Adv Monitor */
+> > --
+> > 2.25.1
+> >
+> 
