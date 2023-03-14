@@ -2,99 +2,269 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 408706B98FE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:28:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAE606B9904
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:28:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbjCNP2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:28:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56184 "EHLO
+        id S230457AbjCNP2q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:28:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229616AbjCNP2W (ORCPT
+        with ESMTP id S229616AbjCNP2n (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:28:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8381844B1;
-        Tue, 14 Mar 2023 08:28:20 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 38CEFB819C7;
-        Tue, 14 Mar 2023 15:28:19 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8346FC433D2;
-        Tue, 14 Mar 2023 15:28:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678807697;
-        bh=65I5JNrjq3L2NB/1GDeSH5LJoqTISGdDomt4jD2nldE=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=SZAHD7znl/GkqgTFkA77v7vPan/XhmIZU6Yp68c6FGE4T0BGmzPusl8tuG1a2Li9p
-         39W45QlVvW/i21IrKl7hrWYbYqJv/BS0nkaocgc5JBURVLvu9OD7y8mHnKkAvHlJcb
-         wNpV3QA0tqHjd2HTZ/frg+b8hk0bjfR4ujdhl68P30ip4Qw6/dp4Ey6timHWXZPC4r
-         J4QtRytW9oXZVVHnteDIdcfmA7l7a6pUlgg2IHx3e43ygEPprP66HjpliFlZhFQzVh
-         rqM3o0jNAxJkFbt2ewA13JyE1MFmOxWsvMWsGmZesjm7Q+W2qcq/bBBY+ZTA3i85aM
-         BWYxEk1ZgcOVA==
-From:   Mark Brown <broonie@kernel.org>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jens Axboe <axboe@kernel.dk>, linux-spi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     kernel-janitors@vger.kernel.org
-In-Reply-To: <20230314075609.5232-1-lukas.bulwahn@gmail.com>
-References: <20230314075609.5232-1-lukas.bulwahn@gmail.com>
-Subject: Re: [PATCH] spi: docs: adjust summary to CONFIG_SYSFS_DEPRECATED
- removal
-Message-Id: <167880769625.45617.10639491792263901775.b4-ty@kernel.org>
-Date:   Tue, 14 Mar 2023 15:28:16 +0000
+        Tue, 14 Mar 2023 11:28:43 -0400
+Received: from mail-lj1-x234.google.com (mail-lj1-x234.google.com [IPv6:2a00:1450:4864:20::234])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D1B3770F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:28:40 -0700 (PDT)
+Received: by mail-lj1-x234.google.com with SMTP id z5so16399150ljc.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:28:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678807718;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jbIM93C4tKGKbn9XSwbkovWk60emeCNank1oC62VUv8=;
+        b=RB33E+F2ta1xC32XujXhP4+4ag+VTAEXTrg7QNO6VVQSejbN5zw4LYPOZaCUadjFeN
+         /Fccagm9a0TtSx83qz8a/nwortHj89Q3It8welMyTjDzop+7c0S/KeRudp9+sLaxughl
+         fW2Si2/n85apqDvEfucqtrBEMvYcDTUShBHeUsLCCyGAzOY4uSY6p/3z8X/NaB2hUvM3
+         cia9F40bha915HF0A4oSPGMlG0Tf/UpLeW2tMRupwy3M3uGQ5c98nifZ6NACgTiebJ/z
+         9xVov4L0C0ccBk8PtlSya8YRMK0IIH6Jojz8C4spK077D1kK472XIRm5Ve3NVoPbo3+O
+         sxUA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678807718;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jbIM93C4tKGKbn9XSwbkovWk60emeCNank1oC62VUv8=;
+        b=TjEKbJqBwaJZGh1DT09lpX3Bns+Z6KS3pwhAVwPKgFt+Wq3PWT78mq4kny8FttLLOk
+         quPxL++nfp8H+AjK3JnDMABjytYhnGXLx29Pfql2mzzbcnGKzw07U1Rkc203Sflc43Yc
+         0dOfl/6nfJmoZSMecpcPI7kg21FdqWJw6MSZI+OHDj+drcy/UQi9F5f6pJ2xlOzWJp8Z
+         Ov3Bh7y49j2zUeX7Wqd7Ph6pjMX+Yv60pfq2phDloeZhqn5V/o9nh4uX/UhM+2AXlQZZ
+         SxhV30+QROX6crdQ5oikgNrDhxxgNTBcZXOrtKXJDojzSgDW1aCYgv9RS/Me16+fc6Fa
+         2rnA==
+X-Gm-Message-State: AO0yUKXbfH7090iPVbBto4NAm1DgYTX+QjPTlzcVloao1VGu3DH6K+e3
+        f0XcZ93lJ4JHtyczmbdVYX873A==
+X-Google-Smtp-Source: AK7set+0IaOQFHuIgNrWBRNrEWSNKJvLVQUzKB+w81ZS8GoiLJah0Ejig4mdH8cx3TrX/lklL30qCg==
+X-Received: by 2002:a2e:9092:0:b0:288:7a51:3882 with SMTP id l18-20020a2e9092000000b002887a513882mr11594781ljg.10.1678807718221;
+        Tue, 14 Mar 2023 08:28:38 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id 27-20020a2e165b000000b002986a977bf2sm491529ljw.90.2023.03.14.08.28.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 08:28:37 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+Subject: [PATCH v4 00/14] GMU-less A6xx support (A610, A619_holi)
+Date:   Tue, 14 Mar 2023 16:28:31 +0100
+Message-Id: <20230223-topic-gmuwrapper-v4-0-e987eb79d03f@linaro.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-B4-Tracking: v=1; b=H4sIAJ+SEGQC/32NQQ6DIBAAv2I4l8aCVO2p/2g8gC66iQWyKG1j/
+ HupD+hxJpnMxiIQQmS3YmMECSN6l6E6FayftBuB45CZiVLIUgjJFx+w5+NzfZEOAYibylqr7FD
+ XTctyZnQEbki7fsqhW+c5y0Bg8X18Hl3mCePi6XNsk/zZP4ckecmVAaW0lNfm0t5ndJr82dPIu
+ n3fv2V1AxLGAAAA
+To:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678807716; l=7262;
+ i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
+ bh=ww6LC3zFfwKhPQRrlZuOcU7HEQYua4JYe4dGDoD1iUg=;
+ b=Ato0q2dbo3kRPZnrf2Y941qV8zLQ0UjxUjZ+iX92EOvqTOWWlY8y/oTtsuzff1imVzpaVGofZSDX
+ ra5LaCVjAUBdd+88M0yOPp83Ma09t4aLTZq0v+cdWEY1UWDdUmvx
+X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
+ pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 08:56:09 +0100, Lukas Bulwahn wrote:
-> With commit 721da5cee9d4 ("driver core: remove CONFIG_SYSFS_DEPRECATED and
-> CONFIG_SYSFS_DEPRECATED_V2"), ./scripts/checkkconfigsymbols.py indicated
-> an unresolved reference to the config SYSFS_DEPRECATED in the SPI summary
-> documentation.
-> 
-> Simply, delete the sentence referring to the removed config there. Also
-> update the documentation, as these sys/class entries should always be
-> symlinks, as the commit message of the commit above suggests.
-> 
-> [...]
+v3 -> v4:
+- Drop the mistakengly-included and wrong A3xx-A5xx bindings changes
+- Improve bindings commit messages to better explain what GMU Wrapper is
+- Drop the A680 highest bank bit value adjustment patch
+- Sort UBWC config variables in a reverse-Christmass-tree fashion [4/14]
+- Don't alter any UBWC config values in [4/14]
+  - Do so for a619_holi in [8/14]
+- Rebase on next-20230314 (shouldn't matter at all)
 
-Applied to
+v3: https://lore.kernel.org/r/20230223-topic-gmuwrapper-v3-0-5be55a336819@linaro.org
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+v2 -> v3:
+New dependencies:
+- https://lore.kernel.org/linux-arm-msm/20230223-topic-opp-v3-0-5f22163cd1df@linaro.org/T/#t
+- https://lore.kernel.org/linux-arm-msm/20230120172233.1905761-1-konrad.dybcio@linaro.org/
 
-Thanks!
+Sidenote: A speedbin rework is in progress, the of_machine_is_compatible
+calls in A619_holi are ugly (but well, necessary..) but they'll be
+replaced with socid matching in this or the next kernel cycle.
 
-[1/1] spi: docs: adjust summary to CONFIG_SYSFS_DEPRECATED removal
-      commit: 93d205457dcda137e73dbfdcaa6a3c4c3b6d505f
+Due to the new way of identifying GMU wrapper GPUs, configuring 6350
+to use wrapper would cause the wrong fuse values to be checked, but that
+will be solved by the conversion + the ultimate goal is to use the GMU
+whenever possible with the wrapper left for GMU-less Adrenos and early
+bringup debugging of GMU-equipped ones.
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
+- Ship dt-bindings in this series as we're referencing the compatible now
 
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
+- "De-staticize" -> "remove static keyword" [3/15]
 
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
+- Track down all the values in [4/15]
 
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
+- Add many comments and explanations in [4/15]
 
-Thanks,
-Mark
+- Fix possible return-before-mutex-unlock [5/15]
+
+- Explain the GMU wrapper a bit more in the commit msg [5/15]
+
+- Separate out pm_resume/suspend for GMU-wrapper GPUs to make things
+  cleaner [5/15]
+
+- Don't check if `info` exists, it has to at this point [5/15]
+
+- Assign gpu->info early and clean up following if statements in
+  a6xx_gpu_init [5/15]
+
+- Determine whether we use GMU wrapper based on the GMU compatible
+  instead of a quirk [5/15]
+
+- Use a struct field to annotate whether we're using gmu wrapper so
+  that it can be assigned at runtime (turns out a619 holi-ness cannot
+  be determined by patchid + that will make it easier to test out GMU
+  GPUs without actually turning on the GMU if anybody wants to do so)
+  [5/15]
+
+- Unconditionally hook up gx to the gmu wrapper (otherwise our gpu
+  will not get power) [5/15]
+
+- Don't check for gx domain presence in gmu_wrapper paths, it's
+  guaranteed [5/15]
+
+- Use opp set rate in the gmuwrapper suspend path [5/15]
+
+- Call opp functions on the GPU device and not on the DRM device of
+  mdp4/5/DPU1 half the time (WHOOOOPS!) [5/15]
+
+- Disable the memory clock in a6xx_pm_suspend instead of enabling it
+  (moderate oops) [5/15]
+
+- Call the forgotten clk_bulk_disable_unprepare in a6xx_pm_suspend [5/15]
+
+- Set rate to FMIN (a6xx really doesn't like rate=0 + that's what
+  msm-5.x does anyway) before disabling core clock [5/15]
+
+- pm_runtime_get_sync -> pm_runtime_resume_and_get [5/15]
+
+- Don't annotate no cached BO support with a quirk, as A619_holi is
+  merged into the A619 entry in the big const struct - this means
+  that all GPUs operating in gmu wrapper configuration will be
+  implicitly treated as if they didn't have this feature [7/15]
+
+- Drop OPP rate & icc related patches, they're a part of a separate
+  series now; rebase on it
+
+- Clean up extra parentheses [8/15]
+
+- Identify A619_holi by checking the compatible of its GMU instead
+  of patchlevel [8/15]
+
+- Drop "Fix up A6XX protected registers" - unnecessary, Rob will add
+  a comment explaining why
+
+- Fix existing UBWC values for A680, new patch [10/15]
+
+- Use adreno_is_aXYZ macros in speedbin matching [13/15] - new patch
+
+v2: https://lore.kernel.org/linux-arm-msm/20230214173145.2482651-1-konrad.dybcio@linaro.org/
+
+v1 -> v2:
+- Fix A630 values in [2/14]
+- Fix [6/14] for GMU-equipped GPUs
+
+Link to v1: https://lore.kernel.org/linux-arm-msm/20230126151618.225127-1-konrad.dybcio@linaro.org/
+
+This series concludes my couple-weeks-long suffering of figuring out
+the ins and outs of the "non-standard" A6xx GPUs which feature no GMU.
+
+The GMU functionality is essentially emulated by parting out a
+"GMU wrapper" region, which is essentially just a register space
+within the GPU. It's modeled to be as similar to the actual GMU
+as possible while staying as unnecessary as we can make it - there's
+no IRQs, communicating with a microcontroller, no RPMh communication
+etc. etc. I tried to reuse as much code as possible without making
+a mess where every even line is used for GMU and every odd line is
+used for GMU wrapper..
+
+This series contains:
+- plumbing for non-GMU operation, if-ing out GMU calls based on
+  GMU presence
+- GMU wrapper support
+- A610 support (w/ speedbin)
+- A619 support (w/ speedbin)
+- couple of minor fixes and improvements
+- VDDCX/VDDGX scaling fix for non-GMU GPUs (concerns more than just
+  A6xx)
+- Enablement of opp interconnect properties
+
+A619_holi works perfectly fine using the already-present A619 support
+in mesa. A610 needs more work on that front, but can already replay
+command traces captures on downstream.
+
+NOTE: the "drm/msm/a6xx: Add support for A619_holi" patch contains
+two occurences of 0x18 used in place of a register #define, as it's
+supposed to be RBBM_GPR0_CNTL, but that will only be present after
+mesa-side changes are merged and headers are synced from there.
+
+Speedbin patches depend on:
+https://lore.kernel.org/linux-arm-msm/20230120172233.1905761-1-konrad.dybcio@linaro.org/
+
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+Konrad Dybcio (14):
+      dt-bindings: display/msm: gpu: Document GMU wrapper-equipped A6xx
+      dt-bindings: display/msm/gmu: Add GMU wrapper
+      drm/msm/a6xx: Remove static keyword from sptprac en/disable functions
+      drm/msm/a6xx: Extend and explain UBWC config
+      drm/msm/a6xx: Introduce GMU wrapper support
+      drm/msm/a6xx: Remove both GBIF and RBBM GBIF halt on hw init
+      drm/msm/adreno: Disable has_cached_coherent in GMU wrapper configurations
+      drm/msm/a6xx: Add support for A619_holi
+      drm/msm/a6xx: Add A610 support
+      drm/msm/a6xx: Fix some A619 tunables
+      drm/msm/a6xx: Use "else if" in GPU speedbin rev matching
+      drm/msm/a6xx: Use adreno_is_aXYZ macros in speedbin matching
+      drm/msm/a6xx: Add A619_holi speedbin support
+      drm/msm/a6xx: Add A610 speedbin support
+
+ .../devicetree/bindings/display/msm/gmu.yaml       |  49 +-
+ .../devicetree/bindings/display/msm/gpu.yaml       |  57 ++-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c              |  57 ++-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h              |   2 +
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.c              | 494 ++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gpu.h              |   1 +
+ drivers/gpu/drm/msm/adreno/a6xx_gpu_state.c        |  14 +-
+ drivers/gpu/drm/msm/adreno/adreno_device.c         |  17 +-
+ drivers/gpu/drm/msm/adreno/adreno_gpu.h            |  33 +-
+ 9 files changed, 632 insertions(+), 92 deletions(-)
+---
+base-commit: 647ef0d33d52a103b50469d7109b63d453686c11
+change-id: 20230223-topic-gmuwrapper-b4fff5fd7789
+
+Best regards,
+-- 
+Konrad Dybcio <konrad.dybcio@linaro.org>
 
