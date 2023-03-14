@@ -2,251 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 024F56B9634
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5E366B9622
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:27:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232484AbjCNN3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42574 "EHLO
+        id S232496AbjCNN1n convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 09:27:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232428AbjCNN2O (ORCPT
+        with ESMTP id S232024AbjCNN1W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:28:14 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8C8F8B307;
-        Tue, 14 Mar 2023 06:25:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678800342; x=1710336342;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=0DeveTeOTTZY6abqN216d+MpmyjSz+VWTzc+RDADd0I=;
-  b=Pom7t7R5qTtJjcwtAr5Z0/P+St8EUPJt4k66dK6rtiRF7AtLsqO/ek0p
-   6R9if7NrM6P58FocrJfzVsW8zSY6AHYOpNSnVo5Lrom2MkcQ+zRwGREWq
-   dLclwFBcauouE1LC680oE7JueuOCcc0eAVygV7kqbjbIkoC+k5G4+ouXW
-   H7yRDuzuF1nYNf1+D6m32ZWdTvB5BjvPo6cYZ8SCVVFCZ7HE16z6FEfEi
-   NtCGqokyeHIKDR7t6dR75qJAMADxCkgGBHs8GImgXimkNL5VCLgfzpe4X
-   TcpNo0soJV7uzG/2GW8mjqgjhNEyDmktQTNeI7xTG2ghWlxmQ9GClJ9MI
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="365088126"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="365088126"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 06:24:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802861553"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="802861553"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga004.jf.intel.com with ESMTP; 14 Mar 2023 06:24:26 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1pc4db-003EZd-39;
-        Tue, 14 Mar 2023 15:24:23 +0200
-Date:   Tue, 14 Mar 2023 15:24:23 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Tony Lindgren <tony@atomide.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-        Johan Hovold <johan@kernel.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        linux-omap@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-serial@vger.kernel.org
-Subject: Re: [PATCH v7 1/1] serial: core: Start managing serial controllers
- to enable runtime PM
-Message-ID: <ZBB1h12WHIGo4NX8@smile.fi.intel.com>
-References: <20230314073603.42279-1-tony@atomide.com>
+        Tue, 14 Mar 2023 09:27:22 -0400
+Received: from fd01.gateway.ufhost.com (fd01.gateway.ufhost.com [61.152.239.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D66A18B3F;
+        Tue, 14 Mar 2023 06:24:41 -0700 (PDT)
+Received: from EXMBX166.cuchost.com (unknown [175.102.18.54])
+        (using TLSv1 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+        (Client CN "EXMBX166", Issuer "EXMBX166" (not verified))
+        by fd01.gateway.ufhost.com (Postfix) with ESMTP id 5A1B424E20D;
+        Tue, 14 Mar 2023 21:24:39 +0800 (CST)
+Received: from EXMBX061.cuchost.com (172.16.6.61) by EXMBX166.cuchost.com
+ (172.16.6.76) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 21:24:39 +0800
+Received: from localhost.localdomain (113.72.145.194) by EXMBX061.cuchost.com
+ (172.16.6.61) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 14 Mar
+ 2023 21:24:37 +0800
+From:   Xingyu Wu <xingyu.wu@starfivetech.com>
+To:     <linux-riscv@lists.infradead.org>, <devicetree@vger.kernel.org>,
+        <linux-watchdog@vger.kernel.org>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Emil Renner Berthing <kernel@esmil.dk>,
+        Conor Dooley <conor@kernel.org>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Xingyu Wu <xingyu.wu@starfivetech.com>,
+        Samin Guo <samin.guo@starfivetech.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5 0/3] Add watchdog driver for StarFive JH7100/JH7110 RISC-V SoCs
+Date:   Tue, 14 Mar 2023 21:24:34 +0800
+Message-ID: <20230314132437.121534-1-xingyu.wu@starfivetech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314073603.42279-1-tony@atomide.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [113.72.145.194]
+X-ClientProxiedBy: EXCAS066.cuchost.com (172.16.6.26) To EXMBX061.cuchost.com
+ (172.16.6.61)
+X-YovoleRuleAgent: yovoleflag
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:35:59AM +0200, Tony Lindgren wrote:
-> We want to enable runtime PM for serial port device drivers in a generic
-> way. To do this, we want to have the serial core layer manage the
-> registered physical serial controller devices.
-> 
-> To do this, let's set up a struct bus and struct device for the serial
-> core controller as suggested by Greg and Jiri. The serial core controller
-> devices are children of the physical serial port device. The serial core
-> controller device is needed to support multiple different kind of ports
-> connected to single physical serial port device.
-> 
-> Let's also set up a struct device for the serial core port. The serial
-> core port instances are children of the serial core controller device.
+This patch serises are to add watchdog driver for the StarFive
+JH7100 and JH7110 RISC-V SoCs. The first patch adds docunmentation to
+describe device tree bindings. The subsequent patch adds watchdog driver
+and support JH7100/JH7110 SoCs. And the last patch adds watchdog node in
+the JH7100 dts. And the addition of JH7110 device tree node will be
+submitted after the JH7110 dts merge. This patchset is based on 6.3-rc1.
 
-> We need to also update the documentation a bit as suggested by Andy.
+The watchdog driver has been tested on the VisionFive 1 and VisionFive 2
+boards which equip with JH7100 and JH7110 SoCs respectively and both
+works normally.
 
-Now this can be moved to the comments section (below '---' cutter)
-with perhaps addition why it's not done yet.
+Changes since v4:
+Patch 2:
+- Dropped the struct device.
+- Renamed the struct watchdog_device.
+- Modified the struct reset_control to be local variable.
+- Fixed the exit error with spinlock.
+- Dropped the function of starfive_wdt_is_locked().
+- Changed the macro name of 'OPTIONS'.
+- Changed the order in probe to do less work if return '-EPROBE_DEFER'.
+- Fixed some function that ignored return value.
+Patch 3:
+- Dropped the label of watchdog node.
 
-> With the serial core port device we can now flush pending TX on the
+Changes since v3:
+- Modified the dt-binding, driver and dts to support JH7100 watchdog.
+- Modified the register comments.
+- Changed the return value and order when getting clock rate.
+- Used dev_err_probe() when getting clocks and resets.
+- Improved the codes of setting default timeout.
+- Moved the watchdog_register_device() after setting WDOG_HW_RUNNING.
+- Changed 'SOC_STARFIVE' to 'ARCH_STARFIVE' in Kconfig file.
+- Dropped the struct of platform_device_id.
+- Used new functions to enable or disable clock.
 
-...
+Changes since v2: 
+- Added watchdog.yaml and unevaluatedProperties in the dt-binding.
+- Removed some unnecessary include files.
+- Changed the 'module_param' name and dropped 'soft_noboot'.
+- Rrmoved 'CONFIG_OF'.
+- Added a check if clock rate is 0.
+- Modified the max_timeout calculation formula.
+- Removed restart function.
+- Removed duplicate checks on the upper and lower bounds of 'count'.
+- Removed 'started' variable.
+- Added pm_runtime_get_sync() and pm_runtime_put_sync().
+- Removed 'firmware_version = 0' variable.
+- Drop the device tree node commit.
 
-> +	return (strncmp(dev_name(dev), drv->name, len) == 0);
+Changes since v1:
+- Renamed the dt-binding 'starfive,wdt.yaml' to 'starfive,jh7110-wdt.yaml'.
+- Dropped the '_clk' and 'rst_' about the 'clock-names' and 'reset-names'
+  in the dt-binding.
+- Updated the example context in the dt-binding 'starfive,jh7110-wdt.yaml'
+  to be independent of other patchset.
+- Deleted unused macros like 'JH7110_WDOG_INT_EN'.
+- Changed the type of 'freq' in the struct from u64 to u32.
+- Used 'devm_clk_get_enabled()' instead of 'devm_clk_get()' and
+  'clk_prepare_enable()'.
+- Removed the operation to get the frequency from the device tree.
+- Added watchdog_stop_on_unregister() and watchdog_stop_on_reboot().
+- Removed any operations about interrupt.
 
-Outer parentheses are redundant. The ' == 0' can be replaced with !,
-but it's up to you.
+v4:
+--- https://lore.kernel.org/all/20230308034036.99213-1-xingyu.wu@starfivetech.com/
+v3:
+--- https://lore.kernel.org/all/20230220081926.267695-1-xingyu.wu@starfivetech.com/
+v2:
+--- https://lore.kernel.org/all/20221219094233.179153-1-xingyu.wu@starfivetech.com/
+v1:
+--- https://lore.kernel.org/all/20221202093943.149674-1-xingyu.wu@starfivetech.com/
 
-...
+Xingyu Wu (3):
+  dt-bindings: watchdog: Add watchdog for StarFive JH7100 and JH7110
+  drivers: watchdog: Add StarFive Watchdog driver
+  riscv: dts: starfive: jh7100: Add watchdog node
 
-> +struct serial_base_device *serial_base_device_add(struct uart_port *port,
-> +						  const char *name,
-> +						  struct device *parent_dev)
-> +{
-> +	struct serial_base_device *dev;
+ .../watchdog/starfive,jh7100-wdt.yaml         |  71 ++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/boot/dts/starfive/jh7100.dtsi      |  10 +
+ drivers/watchdog/Kconfig                      |  11 +
+ drivers/watchdog/Makefile                     |   3 +
+ drivers/watchdog/starfive-wdt.c               | 606 ++++++++++++++++++
+ 6 files changed, 708 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/starfive,jh7100-wdt.yaml
+ create mode 100644 drivers/watchdog/starfive-wdt.c
 
-Can we call this variable (and perhaps everywhere else) like sbd, or sbdev?
 
-This will help to distinguish core device operations and serial one, because,
-for example, I have stumbled over kfree(dev) and puzzled a lot.
-
-> +	int err, id;
-> +
-> +	dev = kzalloc(sizeof(*dev), GFP_KERNEL);
-> +	if (!dev)
-> +		return NULL;
-> +
-> +	device_initialize(&dev->dev);
-> +	dev->dev.parent = parent_dev;
-> +	dev->dev.bus = &serial_base_bus_type;
-
-Who should provide a ->release() callback?
-
-> +	if (str_has_prefix(name, "ctrl")) {
-> +		id = port->ctrl_id;
-> +	} else {
-> +		id = port->line;
-> +		dev->port = port;
-> +	}
-> +
-> +	err = dev_set_name(&dev->dev, "%s.%s.%d", name, dev_name(port->dev), id);
-> +	if (err)
-> +		goto err_free_dev;
-> +
-> +	err = device_add(&dev->dev);
-> +	if (err)
-> +		goto err_free_name;
-> +
-> +	return dev;
-> +
-> +err_free_name:
-> +	kfree_const(dev->dev.kobj.name);
-
-It's still missing put_device() call as suggested by device_add() kernel
-documentation. (Double) check also the removal path.
-
-> +err_free_dev:
-> +	kfree(dev);
-
-> +	return NULL;
-> +}
-
-...
-
-> +struct device;
-
-Since you are embedding the device object this won't suffice,
-you need to include device.h.
-
-> +struct uart_driver;
-> +struct uart_port;
-> +
-> +struct serial_base_device {
-> +	struct device dev;
-> +	struct uart_port *port;
-> +};
-> +
-> +#define to_serial_base_device(x) container_of((x), struct serial_base_device, dev)
-
-container_of.h
-
-...
-
-> +	/* Increment the runtime PM usage count for the active check below */
-> +	err = pm_runtime_get(port_dev);
-
-The question here is why don't we need to actually turn on the device immediately
-(sync) if it's not already powered?
-
-> +	if (err < 0) {
-> +		pm_runtime_put_noidle(port_dev);
-> +		return;
-> +	}
-
-> +	/*
-> +	 * Start TX if enabled, and kick runtime PM. Otherwise we must
-> +	 * wait for a retry. See also serial_port.c for runtime PM
-> +	 * autosuspend timeout.
-> +	 */
-
-I.o.w. does the start_tx() require device to be powered on at this point?
-
-> +	if (pm_runtime_active(port_dev))
->  		port->ops->start_tx(port);
-> +	pm_runtime_mark_last_busy(port_dev);
-> +	pm_runtime_put_autosuspend(port_dev);
-
-...
-
-> +++ b/drivers/tty/serial/serial_ctrl.c
-> @@ -0,0 +1,69 @@
-> +// SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +/*
-> + * Serial core controller driver
-> + *
-> + * This driver manages the serial core controller struct device instances.
-> + * The serial core controller devices are children of the physical serial
-> + * port device.
-> + */
-> +
-> +#include <linux/module.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/serial_core.h>
-
-Include for the struct device_driver?
-
-Do we need a separete include for EXPORT_SYMBOL_NS()?
-
-...
-
-> +/*
-> + * Serial core port device driver
-> + */
-> +#include <linux/module.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/serial_core.h>
-
-Similar questions.
-
-+ spinlock.h?
-
-...
-
-> +static __maybe_unused DEFINE_RUNTIME_DEV_PM_OPS(serial_port_pm,
-
-Do you still need __maybe_unused?
-
-> +						NULL,
-> +						serial_port_runtime_resume,
-> +						NULL);
-
+base-commit: 8ca09d5fa3549d142c2080a72a4c70ce389163cd
+prerequisite-patch-id: 558a5b43260d13a6f5229b139ccd45f737a4f686
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.25.1
 
