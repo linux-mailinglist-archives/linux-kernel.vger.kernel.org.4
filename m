@@ -2,235 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9A2DD6B995E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:34:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A59126B9969
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:35:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231735AbjCNPec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:34:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
+        id S231259AbjCNPfI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:35:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231733AbjCNPeN (ORCPT
+        with ESMTP id S231733AbjCNPef (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:34:13 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F1219112;
-        Tue, 14 Mar 2023 08:33:45 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Pz/bzjD8swLWOCByB4iQorrAj8yDbJUIPSx/qov7C/cDjV1xS7BwxV4ZS2tq7tNBJ1IKfRTvK6b1hiaTt9quQfj7Xz2xbWROKPs1QzXLyfuTzDytUmIkIngQvTmyKJJH40i3UAcai2m5wYMJm+4yGEfLOdGaLtUKOlGjev9hlHo3gxdzKTtGSaGcl31B4n2qZL9qBwwWsm+lELJpdm4L3pz8ipAANdVKI8WILGjhzTsIYAMFEYdKVWTYMeOM0UBdtaToEtZ9QhDXhD4Xf9DPcKBPL97b8W4FFIOuay5dHxo+L/OhZlusm857/rmPT39s+j/Ig0eDDbEzy4AWK2+4mQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=td0zIlqL7ArQhsgOdbcIqzBidI++4ILPzBAytnV8TOc=;
- b=UIp1hNyjDR7xDXzZ+rvtggvmTrUn08t+1sWKSDUHQYw6Nv8LnEmXyoTDCYTAo6EsISm4Ndy1SwUZyCsngGOL2wg0UgFKMCTcy+PqQojIiKMpV1RxktH4EsJo+NTxKnMrMWTkxh6XOwJr+xRPY29/5c8oO6hoSZ1Zs79IqQRCFs3PiR1O5BPzhJnMEcRPa7fI3M+BLTsoVQiE1MhofI7Lss98vOQQEGVaBr1+tO+mYMKNCuZlBk8IA1IE825BUS1aft4BHarkr62X0lymoS4fQON0nWyD/vsKzO8ZgaST7dxcibo2HXp5NU5VupKqmYuZm+V9k1+RuKRUOYHyl+TmcQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=td0zIlqL7ArQhsgOdbcIqzBidI++4ILPzBAytnV8TOc=;
- b=1z0i0oNUdcPVdbFO4PArgcVLHe/nF7S6UDpx/WPfuy/s5mkKqNSj7Yw0HuGXetXtBLS8ub6ashw1YY4bthpW17uipnSQ8lRBEqByk1fNuNRhrVJDhU3z+ISd4hLJ84TZlNgSSkLFSRyHkglh6DB36VSwhEdmeM3ExNEJUgjyPeo=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by CH0PR12MB5106.namprd12.prod.outlook.com (2603:10b6:610:bd::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 15:33:11 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 15:33:11 +0000
-Message-ID: <2d4c10c7-6406-7458-4f52-4260b415874e@amd.com>
-Date:   Tue, 14 Mar 2023 16:33:03 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [RFC 01/10] drm: Track clients by tgid and not tid
-Content-Language: en-US
-To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
-        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
-        Brian Welty <brian.welty@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
-        Zack Rusin <zackr@vmware.com>,
-        linux-graphics-maintainer@vmware.com,
-        Alex Deucher <alexander.deucher@amd.com>
-References: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
- <20230314141904.1210824-2-tvrtko.ursulin@linux.intel.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230314141904.1210824-2-tvrtko.ursulin@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0132.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:94::12) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Tue, 14 Mar 2023 11:34:35 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0523016319
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:34:08 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id p16so10619945wmq.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:34:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678808040;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=cUjs6NviTytRdWImr2LdV+yP+PAoWGINkzdtBEGmEbo=;
+        b=POV/DSkl33KHDBhOQAlydeOy9+73CLozXWLMG3Fp6HkjJKsola5G8Vziii75lLRhyv
+         CSRrs2f5lbJH7Kx/VJjSwdjCR3jsjTGlRuZcAnp6WFwG1E5Tmc08QtLvoXI1YyIDpThr
+         97WIxRQrrbJlOjfSR1TJpyA9y172fwxHOMRTCRC8QgHWSsf3Tkylu2dlIRWSdn2RlZTZ
+         R2pfaTyQ1Ppb5qo4K0FuKI38IxJIOAvJPJfOPUeW6Tki0UPChiPjFJ8Acx44qCYbrZ2m
+         mbpE4Qoi5+TTIXXuji8sQfgKBsxcNuqLn0IERYFuLgFpHl1BsV7Q/OAOL2vUFTJ+w/Lw
+         C5VQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678808040;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cUjs6NviTytRdWImr2LdV+yP+PAoWGINkzdtBEGmEbo=;
+        b=6ve59NxsvJxJQdKa5DJ+3BjZNc/c5iEeMvcYfO4Yxjhxdscqnhr/F4Z5HHl9VdVBQz
+         JtnxAwfAE3c5yrWg2TdgOAKSzhH5gd8RtuY5RnKnMnQaHc+1KwZpS9bAQrHsWdDNe5lN
+         twEWDuzUrb1DtM7CEP/4yo5YHRjgqfxAg1uMKqTzbZU+ucFadAFbtpFw8H7Yhtqsvk+L
+         PjKZfOq2BXqvRvvbLBqxF6RPaUyFSnwpkfP0o3xF8aOVR++MkmPynXWsK1sUOwlcqjr5
+         mHwY3dgb5JecVcRylYAQjexBkehJYU1Id8aGdbyhD1jNYThWaZPuDf/5D5PO0BCYKKiV
+         HaBA==
+X-Gm-Message-State: AO0yUKV2y5CZ1y3zuzuZBDDS+Py/o6l3L63RU0j9bsMEYzIRTWK9d2fe
+        ShBcvdsve0h/pdWyjZr+exygXcbVqlEZZmeki88p5g==
+X-Google-Smtp-Source: AK7set+opZ/oLe2qEwrmqbnw6+/2Ubn1r0GXttqg3AYw7OCBnJYLnOJKGMtbzfih7muqNbDNx5Ux0A==
+X-Received: by 2002:a05:600c:4f01:b0:3ea:f6c4:3060 with SMTP id l1-20020a05600c4f0100b003eaf6c43060mr14821352wmq.18.1678808040282;
+        Tue, 14 Mar 2023 08:34:00 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:11c3:d4e5:ef75:8eb9? ([2a01:e0a:982:cbb0:11c3:d4e5:ef75:8eb9])
+        by smtp.gmail.com with ESMTPSA id s16-20020a05600c45d000b003ed29899dfdsm3381407wmo.21.2023.03.14.08.33.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 08:33:59 -0700 (PDT)
+Message-ID: <c8fecf94-2581-6cc9-955c-324efdc7c70a@linaro.org>
+Date:   Tue, 14 Mar 2023 16:33:58 +0100
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH0PR12MB5106:EE_
-X-MS-Office365-Filtering-Correlation-Id: db5a78d4-2da1-49ad-5983-08db24a16b04
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: UHj9diJ4o82q+sjutEV80+S2+JjXlzYnXJdJBtUympYZLtW5AuYphtZJ0MQYuMox5E6jzxIp7/vpZoxQ/O4dCBj3lAjo95PMcunmERv+5b7hmu/VVzGWb+q91eDjxSeAarkFtH6GdpQv5+ltWDTdOQskzu4JD7bTSkB1Ke4e4GY3va9bv7pN+rsao23Qq8HYqaH8Hfv++Lx+KKQApQzBaH8c3NafZiZtDdqTs6vALe+zPh/p3m2EtFeafFplV3kzZj563DvPhiOSPXsBtYjDne/IwvwX/8rrz9KaFh2O1WvJlW1Y2rMzIXeYjC3wn9Gmcklnqe197+/O4KjVm41x95p02cZNFQGo1r3kMHAlEWTHzdK9dQJsFGnCvUhh4DQ6kmMYIGLDE7vRUs+V7n+01HGARtw4dhjsab4gBdtVE3K+hcCaZagWSwo0bQ/6tQAvJ6J42bK154e/R9s2UTsamRvcMuLOKyWKuqN55x+wxD2ENwcwZRJaEVPpbVOJb8c5IUo9VVvrpOHJ9D9cVgotLOYpWErvRP8A9LR6gct0Q5AKCAYys5yy6rXyy7h0iym223QjWLNyJ1naFLIJ0QLExaUn1Rtx+f0g5x7iTgqNkO1sjGcQbRx3/8AviT6w/hRiVzbfuqcxniKh9/N3ohLj6luK5UJs02jMg01oW0jhZtTgCg+UuN6TELBJwaviYp9XDuGRF0paKBestA8xEK3rcJFo7ZSMK4TSs9FNfYf/HYM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(451199018)(86362001)(66556008)(8676002)(66476007)(41300700001)(4326008)(66946007)(5660300002)(7416002)(83380400001)(8936002)(6486002)(186003)(66574015)(6666004)(6506007)(6512007)(54906003)(2616005)(316002)(478600001)(36756003)(2906002)(38100700002)(31686004)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVR1NW85clp1LzJqUGVCcWpZamt6OXNWejFMbGVkYjdySFViTFdGK0N5Ty90?=
- =?utf-8?B?a055dGNNaVpHQ1FFa0xicTR3dENUeGRMSm5sWmY1ckprZUg1M1B4aUU5L1Rr?=
- =?utf-8?B?YmoyN3FLSzFrT0wyKzFCU3B5WkxVYU82U3JPNUhVZFc1S2tmMnZ2V3RqTDBR?=
- =?utf-8?B?Z0w2Y1VNLzFqWnlLY253bnF0ZW9vR2lOTG80M253OGdTWDdIQU5FWHpVWEUr?=
- =?utf-8?B?Z1dhSUYyVytDZDNLWmhpTDhvakRWWjhmRVc4SHdZOGQ2QzdCMy9yMC9nMjJx?=
- =?utf-8?B?SVZTK01NNzgrVzZvVEhmS0c3Z2NGZnphNWtibXI3Z0tYYzVzTjVrYTVHWlRu?=
- =?utf-8?B?a1NGR24zeU9WaEVCRHdqNkRuWTJXd1F3SFlkWlhER0NBRHZoNE9CVlJDL0gx?=
- =?utf-8?B?Y0htUlVlZk5IeVp6NGphNGV3SHp3eVo1eHllU3U4WkFIR3ZWY2l2bGRXbThk?=
- =?utf-8?B?cnlpYm9MRFowNDlKYllxVlE0K012MmxhUHVmNFp2dnNMWDNxOU1NUTNUSFhK?=
- =?utf-8?B?Q3I2N2xDbVREaTk2MTVvTGIvK1B6K0dCWm14MGw3VURINUpHdnRPQnE1WUZL?=
- =?utf-8?B?YWpQL212dzhlT3czd05BeEllRkJhM05ZMWEvMUZLSFpFSmN5ckhFaVhSa3Rl?=
- =?utf-8?B?MjRobElvd1d3U2JLbmp2cTc2YjVXcXpUOWtpQW1vakwwNnAwNFFPVkN2RUFB?=
- =?utf-8?B?WkRCSHUyc09hV2dqcVg1ZUtVckNka3NhRWpnNnR1WU5zWmhNeklBeDZodnc4?=
- =?utf-8?B?SExXcU1iazkvNnJzRFJXa0Rwb09Yc2FicHplZy8wT3hpSTV2b0ZZYndRY2dp?=
- =?utf-8?B?SGJTOTRocXdoeElZaG8xb01UTkE0cjJVTDdZeHZwTENlS1NNOURoUTdyRks3?=
- =?utf-8?B?UEpEV3QwTm9hRjZrblhNVzRyN1F0enBWazduendMV0VkQVFmcitkOHEwUThx?=
- =?utf-8?B?Rld1OWhFYXJhVENBV1B1TUtWVW1wSGFmbGhJWWNXTzBiLzdmQlM2WXcvRGk1?=
- =?utf-8?B?Qzk4cWpoN2RUT2ZoMGZ1UVFoc1FmMGZEMGJ3QUJmd1pQS3hKS0MzMWk0QUov?=
- =?utf-8?B?QUhOZjY5Y2VpWWFSSjd6MFVyU2JZVUh5SmxoVDdMSzQ2RStIQmFkWGx2eHAy?=
- =?utf-8?B?SFJrcmZEVGRaRUt3ZlQxTVlLZXIzMVBFcklmbDdMNk1nQlJuWVhNQWdVRlVW?=
- =?utf-8?B?QWpzMVBQKzhZd05BS2RyVC8zc1RtdmwxMXlCZUFQMTFxNStpaE5BUnBrTUZ5?=
- =?utf-8?B?cHJ2RFVwOE0zV29Yc3JteG0vb21jd3U1dFlxeFh0VzVvRzNxeUQ5OGppbW44?=
- =?utf-8?B?WGVJNkxPSjY2aWMwUFN6d041eUpWS0JZZWlhN0JGMTNpdlU1QWFrSHM0dzBD?=
- =?utf-8?B?cno0b0cwdEQza3dsSHJlTlNLcExkaHdRelJkOFNVaVpMSTBpSHI3YTUwYVFy?=
- =?utf-8?B?MmdVcEFISStKdFdBREFKakZxNDZnWmp0UWc1TmtyL1NtWGdHRlF5aHlsenJT?=
- =?utf-8?B?QkhYOWdhRjA1V3RUSTlPRERKNWh4Nm1FcHlHa045YzhXcmFpSmFNcE9KL1dF?=
- =?utf-8?B?UmJqQTl2VkFISFdwcGF1Q1ovdGJwcU5tZ3l2Z08wN2NZV2dVTWhhR2tzbWRw?=
- =?utf-8?B?V3VMaU1YR0NIOTNQUWdPNDZZSzlKcUxpV3ErMjNWdHZMRlJqdVlhME1zU1JC?=
- =?utf-8?B?eDVjMER3eVZlbUJ6cU5DOWkyQyt0Y2RWWlBtcGZOWjdVR1NNQnF6WXA1c0xF?=
- =?utf-8?B?WTgyc1ZJY0VZSlhFbWdJQVN5eHJNM2E3SE9rN2RkNFZGQlQ3ZzR0bGJ2ZzF3?=
- =?utf-8?B?RytZNnk1NDgvZWt6Qysxczl0RmxtVzRBR3A1RDlKNXN3cUtHMmxOeEFNWm8r?=
- =?utf-8?B?L3VEeGJ0dmJaYnVUdnBQU2xibTVmazdiOVVpVGNLVS9XeWtHbU0vYWpFYjds?=
- =?utf-8?B?ejZPVCtYRzhjQm1iMmdmM29LS1JKbXhZWnlVNlRzRUdxQkcwNVM5NDd2eWhp?=
- =?utf-8?B?ajB4T08yWFlvNFhvU09mUnF3bVN6TWRyVWhoaE53RklrcXRFZU54YTE4RGdn?=
- =?utf-8?B?aUxkSElrcWRNS1oveEdFNXdDN0Z6cU5PeEU3SGVkVDZaQXRTUCtOcW1LcGdK?=
- =?utf-8?B?WU1sNUxsUS9zdGdVTitkSFBOWm5XWXJ5ajNYcW1oa0FJWWtqc1ZkRnc1clY1?=
- =?utf-8?Q?Bxe0YMjGfrTTig2sBoFLTexLgke5yvz/PT+VMs2LAY2c?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: db5a78d4-2da1-49ad-5983-08db24a16b04
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:33:10.8401
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /6yZO23EDwmO7yosF4U+c17SuMPqOeU/zDnBidR/hq+hbOdsnem/mYSQION+Xo0M
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5106
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.2
+From:   neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Dmitry Rokosov <ddrokosov@sberdevices.ru>
+Cc:     jbrunet@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        khilman@baylibre.com, martin.blumenstingl@googlemail.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+ <20230313201259.19998-4-ddrokosov@sberdevices.ru>
+ <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
+ <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
+ <2d9297e9-dab7-9615-3859-79b3b2980d9a@linaro.org>
+ <20230314150107.mwcglcu2jv4ixy3r@CAB-WSD-L081021>
+ <9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org>
+Organization: Linaro Developer Services
+In-Reply-To: <9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 14.03.23 um 15:18 schrieb Tvrtko Ursulin:
-> From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
->
-> Thread group id (aka pid from userspace point of view) is a more
-> interesting thing to show as an owner of a DRM fd, so track and show that
-> instead of the thread id.
->
-> In the next patch we will make the owner updated post file descriptor
-> handover, which will also be tgid based to avoid ping-pong when multiple
-> threads access the fd.
->
-> Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-> Cc: Zack Rusin <zackr@vmware.com>
-> Cc: linux-graphics-maintainer@vmware.com
-> Cc: Alex Deucher <alexander.deucher@amd.com>
-> Cc: "Christian König" <christian.koenig@amd.com>
-> Reviewed-by: Zack Rusin <zackr@vmware.com>
+Hi,
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+On 14/03/2023 16:19, Krzysztof Kozlowski wrote:
+> On 14/03/2023 16:01, Dmitry Rokosov wrote:
+>> On Tue, Mar 14, 2023 at 03:05:48PM +0100, Krzysztof Kozlowski wrote:
+>>> On 14/03/2023 12:48, Dmitry Rokosov wrote:
+>>>> On Tue, Mar 14, 2023 at 12:28:40PM +0100, Krzysztof Kozlowski wrote:
+>>>>> On 13/03/2023 21:12, Dmitry Rokosov wrote:
 
-Should we push the already reviewed cleanups like this one to 
-drm-misc-next? That makes sense even without the rest of the 
-functionality and reduce the amount of patches re-send.
+<snip>
 
-Christian.
+>>>>>> +/*
+>>>>>> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
+>>>>>> + * Author: Jian Hu <jian.hu@amlogic.com>
+>>>>>> + *
+>>>>>> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
+>>>>>> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
+>>>>>> + */
+>>>>>> +
+>>>>>> +#ifndef __A1_PLL_CLKC_H
+>>>>>> +#define __A1_PLL_CLKC_H
+>>>>>> +
+>>>>>> +#define CLKID_FIXED_PLL		1
+>>>>>> +#define CLKID_FCLK_DIV2		6
+>>>>>> +#define CLKID_FCLK_DIV3		7
+>>>>>> +#define CLKID_FCLK_DIV5		8
+>>>>>> +#define CLKID_FCLK_DIV7		9
+>>>>>> +#define CLKID_HIFI_PLL		10
+>>>>>
+>>>>>
+>>>>> Probably I asked about this... why indices are not continuous? You know
+>>>>> that consumers are allowed to use number 2 and it will be your ABI, even
+>>>>> though you did not write it in the binding? That's a tricky and
+>>>>> confusing pattern for no real gains.
+>>>>
+>>>> Actually, indices are continuou but splitted into two parts: public and
+>>>> private. The public part is located in the dt bindings and can be included
+>>>> from device tree sources. The private part is in the drivers/clk/meson
+>>>> folder, and only clk drivers can use it.
+>>>> I know, there is some trick when the user just inserts a digit value and
+>>>> doesn't use constants.
+>>>
+>>> This is not a trick. This is how DTS works. You have only indices/numbers.
+>>>
+>>>> But I'm starting from the assumption that such
+>>>> dts changes will not be approved by maintainers. In other words, the user
+>>>> *must* apply defined ABI constants from dt bindings; it's a strong
+>>>> restriction.
+>>>
+>>> But it is not correct assumption. Defines are very important, but they
+>>> are just helpers. Otherwise without defines you could not use any clock?
+>>> We pretty often use IDs - for DTS to allow merging via different trees,
+>>> for DT binding examples to not rely on headers.
+>>>
+>>> Your driver implements the ABI and the driver exposes for example clock
+>>> ID=2, even if it is not in the header.
+>>>
+>>> These IDs are unfortunately undocumented ABI and you if you change them,
+>>> users are allowed to complain.
+>>>
+>>> Solution: don't do this. Have all exposed clock IDs and clocks in sync
+>>> (and continuous).
+>>
+>> I see. But I don't understand how I can restrict access to private
+>> clock objects. I don't want to open ability to change system clocks
+>> parents, for example. Or it's under device tree developer responsibility?
+>> I would appreciate any assistance in determining the best path.
+> 
+> There are many ways - depend on your driver. For example like this:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/samsung/clk-exynos5420.c#n975
+> 
+> The first argument is the clock ID (or ignore).
+> 
+> BTW, quite likely the problem is generic to all Meson clock drivers.
 
-> ---
->   drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 2 +-
->   drivers/gpu/drm/drm_debugfs.c           | 4 ++--
->   drivers/gpu/drm/drm_file.c              | 2 +-
->   drivers/gpu/drm/vmwgfx/vmwgfx_gem.c     | 2 +-
->   4 files changed, 5 insertions(+), 5 deletions(-)
->
-> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> index d8e683688daa..863cb668e000 100644
-> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
-> @@ -969,7 +969,7 @@ static int amdgpu_debugfs_gem_info_show(struct seq_file *m, void *unused)
->   		 * Therefore, we need to protect this ->comm access using RCU.
->   		 */
->   		rcu_read_lock();
-> -		task = pid_task(file->pid, PIDTYPE_PID);
-> +		task = pid_task(file->pid, PIDTYPE_TGID);
->   		seq_printf(m, "pid %8d command %s:\n", pid_nr(file->pid),
->   			   task ? task->comm : "<unknown>");
->   		rcu_read_unlock();
-> diff --git a/drivers/gpu/drm/drm_debugfs.c b/drivers/gpu/drm/drm_debugfs.c
-> index 4f643a490dc3..4855230ba2c6 100644
-> --- a/drivers/gpu/drm/drm_debugfs.c
-> +++ b/drivers/gpu/drm/drm_debugfs.c
-> @@ -80,7 +80,7 @@ static int drm_clients_info(struct seq_file *m, void *data)
->   	seq_printf(m,
->   		   "%20s %5s %3s master a %5s %10s\n",
->   		   "command",
-> -		   "pid",
-> +		   "tgid",
->   		   "dev",
->   		   "uid",
->   		   "magic");
-> @@ -94,7 +94,7 @@ static int drm_clients_info(struct seq_file *m, void *data)
->   		bool is_current_master = drm_is_current_master(priv);
->   
->   		rcu_read_lock(); /* locks pid_task()->comm */
-> -		task = pid_task(priv->pid, PIDTYPE_PID);
-> +		task = pid_task(priv->pid, PIDTYPE_TGID);
->   		uid = task ? __task_cred(task)->euid : GLOBAL_ROOT_UID;
->   		seq_printf(m, "%20s %5d %3d   %c    %c %5d %10u\n",
->   			   task ? task->comm : "<unknown>",
-> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
-> index a51ff8cee049..c1018c470047 100644
-> --- a/drivers/gpu/drm/drm_file.c
-> +++ b/drivers/gpu/drm/drm_file.c
-> @@ -156,7 +156,7 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
->   	if (!file)
->   		return ERR_PTR(-ENOMEM);
->   
-> -	file->pid = get_pid(task_pid(current));
-> +	file->pid = get_pid(task_tgid(current));
->   	file->minor = minor;
->   
->   	/* for compatibility root is always authenticated */
-> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
-> index d6baf73a6458..c0da89e16e6f 100644
-> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
-> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
-> @@ -241,7 +241,7 @@ static int vmw_debugfs_gem_info_show(struct seq_file *m, void *unused)
->   		 * Therefore, we need to protect this ->comm access using RCU.
->   		 */
->   		rcu_read_lock();
-> -		task = pid_task(file->pid, PIDTYPE_PID);
-> +		task = pid_task(file->pid, PIDTYPE_TGID);
->   		seq_printf(m, "pid %8d command %s:\n", pid_nr(file->pid),
->   			   task ? task->comm : "<unknown>");
->   		rcu_read_unlock();
+This issue about "public" non-continuous defined was already discussed at https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
+
+I don't see what's different with this one.
+
+Neil
+
+> 
+> Best regards,
+> Krzysztof
+> 
 
