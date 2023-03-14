@@ -2,125 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C00EC6B8DD2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E2C66B8BFF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:35:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229573AbjCNIwU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:52:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40030 "EHLO
+        id S229911AbjCNHfS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 03:35:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCNIwR (ORCPT
+        with ESMTP id S229624AbjCNHfQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:52:17 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C8015FEBC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:52:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678783931; x=1710319931;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=+Yj0GSMmOs2YYXqr06EInVLu8RfOxE3KaMBdDBlgZbk=;
-  b=bocXX4i8aGiVCRVfSSACWMzDrtQOsk35N/EnGi91tKXrPP/ReGi72oWH
-   OeZ7VdYprp7r6njn6s5GMhoU+dIWuiQPGh0+Ggf9HgdjNVjGLr7MuYYwW
-   dbAAnEAV0GX9mPcv4BNlck81s1CPZQ9ixCfm2i9wJXcZOuYZWfULw7J1z
-   TJ5HquvVy8/m2QbeZyb/JBq8CdsNZ53XZ+NTuA01k0ywOnnaemXpbrbjG
-   SZSGENwelzoChhvepktTbpNeq9qA8Dc5MwOOvVLP66eM8irvHdpF39ccH
-   YkxU8Z/XBMe9dN+JAYuQUZm/mzaMaKlcqHwSCLPrwxXRKXZd5xCGfm5ZK
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="399956499"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="399956499"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:52:10 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="768011941"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="768011941"
-Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 01:52:08 -0700
-From:   Bard Liao <yung-chuan.liao@linux.intel.com>
-To:     alsa-devel@alsa-project.org, vkoul@kernel.org
-Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
-        pierre-louis.bossart@linux.intel.com, bard.liao@intel.com,
-        broonie@kernel.org, peter.ujfalusi@linux.intel.com
-Subject: [PATCH] soundwire: dmi-quirks: add remapping for Intel 'Rooks County' NUC M15
-Date:   Tue, 14 Mar 2023 17:06:18 +0800
-Message-Id: <20230314090618.498716-1-yung-chuan.liao@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 14 Mar 2023 03:35:16 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 173F87E7A6;
+        Tue, 14 Mar 2023 00:35:15 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4PbQKV0nZqz4f3l80;
+        Tue, 14 Mar 2023 15:35:10 +0800 (CST)
+Received: from k01.huawei.com (unknown [10.67.174.197])
+        by APP4 (Coremail) with SMTP id gCh0CgBnF6utIxBk_rhhFQ--.63403S2;
+        Tue, 14 Mar 2023 15:35:10 +0800 (CST)
+From:   Xu Kuohai <xukuohai@huaweicloud.com>
+To:     bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>
+Subject: [PATCH bpf-next v2 0/2] bpf: Fix a umin > umax reg bound error
+Date:   Tue, 14 Mar 2023 16:34:22 -0400
+Message-Id: <20230314203424.4015351-1-xukuohai@huaweicloud.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: gCh0CgBnF6utIxBk_rhhFQ--.63403S2
+X-Coremail-Antispam: 1UD129KBjvdXoWrXr1kCFyxGFWrZF1Dtw4DCFg_yoWxGFXEya
+        y8tas8JFnrXFy5Ja97KF17XrZrGrs09ryfAF1DtrWUJr1UZr18GFs5GF4Fqa4DXa18JrZ7
+        Jr90ya97Ar4agjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbsxYFVCjjxCrM7AC8VAFwI0_Gr0_Xr1l1xkIjI8I6I8E6xAIw20E
+        Y4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jr0_Jr4l87I20VAvwVAaII0Ic2I_Grv_XF1l8c
+        AvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWDJVCq
+        3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVAFwI0_Gc
+        CE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxI
+        r21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87
+        Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lFIxGxcIE
+        c7CjxVA2Y2ka0xkIwI1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2
+        IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v2
+        6r4a6rW5MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2
+        IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWrZr1j6s0DMIIF0xvEx4A2
+        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
+        ZFpf9x07joksgUUUUU=
+X-CM-SenderInfo: 50xn30hkdlqx5xdzvxpfor3voofrz/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Eugene Huang <eugene.huang99@gmail.com>
+From: Xu Kuohai <xukuohai@huawei.com>
 
-Same DSDT problem as the HP Omen 16-k0005TX, except rt1316 amp is on
-link2.
+This patchset fixes a umin > umax reg bound error and adds cases for it.
 
-Link: https://github.com/thesofproject/linux/issues/4088
-Signed-off-by: Eugene Huang <eugene.huang99@gmail.com>
-Reviewed-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
-Reviewed-by: Péter Ujfalusi <peter.ujfalusi@linux.intel.com>
-Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
----
-To support 'Rooks County', we also need the
-"ASOC: Intel: add quirk for Intel 'Rooks County' NUC M15" series.
+v2:
+1. add bound check to avoid min > max 
+2. update 32-bit reg min/max when 64-bit reg value is a constant
+3. add Fixes tag
 
----
- drivers/soundwire/dmi-quirks.c | 25 +++++++++++++++++++++++++
- 1 file changed, 25 insertions(+)
+v1: https://lore.kernel.org/bpf/20230307220449.2933650-1-xukuohai@huaweicloud.com/
 
-diff --git a/drivers/soundwire/dmi-quirks.c b/drivers/soundwire/dmi-quirks.c
-index 7969881f126d..58ea013fa918 100644
---- a/drivers/soundwire/dmi-quirks.c
-+++ b/drivers/soundwire/dmi-quirks.c
-@@ -73,6 +73,23 @@ static const struct adr_remap hp_omen_16[] = {
- 	{}
- };
- 
-+/*
-+ * Intel NUC M15 LAPRC510 and LAPRC710
-+ */
-+static const struct adr_remap intel_rooks_county[] = {
-+	/* rt711-sdca on link0 */
-+	{
-+		0x000020025d071100ull,
-+		0x000030025d071101ull
-+	},
-+	/* rt1316-sdca on link2 */
-+	{
-+		0x000120025d071100ull,
-+		0x000230025d131601ull
-+	},
-+	{}
-+};
-+
- static const struct dmi_system_id adr_remap_quirk_table[] = {
- 	/* TGL devices */
- 	{
-@@ -98,6 +115,14 @@ static const struct dmi_system_id adr_remap_quirk_table[] = {
- 		},
- 		.driver_data = (void *)intel_tgl_bios,
- 	},
-+	{
-+		/* quirk used for NUC15 'Rooks County' LAPRC510 and LAPRC710 skews */
-+		.matches = {
-+			DMI_MATCH(DMI_SYS_VENDOR, "Intel(R) Client Systems"),
-+			DMI_MATCH(DMI_PRODUCT_NAME, "LAPRC"),
-+		},
-+		.driver_data = (void *)intel_rooks_county,
-+	},
- 	{
- 		.matches = {
- 			DMI_MATCH(DMI_SYS_VENDOR, "Dell Inc"),
+Xu Kuohai (2):
+  bpf: Fix a umin > umax reg bound error
+  selftests/bpf: check bounds not in the 32-bit range
+
+ kernel/bpf/verifier.c                         | 143 ++++++++++++------
+ tools/testing/selftests/bpf/verifier/bounds.c | 121 +++++++++++++++
+ 2 files changed, 214 insertions(+), 50 deletions(-)
+
 -- 
-2.25.1
+2.30.2
 
