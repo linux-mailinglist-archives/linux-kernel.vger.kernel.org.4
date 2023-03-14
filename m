@@ -2,55 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D381E6BA365
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:10:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 895AC6BA36B
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbjCNXK2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:10:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47944 "EHLO
+        id S229682AbjCNXKj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:10:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCNXKX (ORCPT
+        with ESMTP id S229690AbjCNXK1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:10:23 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09FF136699;
-        Tue, 14 Mar 2023 16:10:22 -0700 (PDT)
+        Tue, 14 Mar 2023 19:10:27 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D67F460AD;
+        Tue, 14 Mar 2023 16:10:26 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9BDC861A4D;
-        Tue, 14 Mar 2023 23:10:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 01411C433D2;
+        by sin.source.kernel.org (Postfix) with ESMTPS id EA81BCE17BB;
+        Tue, 14 Mar 2023 23:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 12013C4339E;
         Tue, 14 Mar 2023 23:10:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
         s=k20201202; t=1678835421;
-        bh=3RW1LjUe9QdV4fvcdKvel7HMcg0PrtNvXvNC9faqtN0=;
+        bh=he9+eX/qxlOVc5NLfphaepMaTzE+siMIMb5ZhSybN3U=;
         h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=sxwn7HxWl4vX6OH3+nN5MSfK6/+P4tAOoduG9Wvfd3hLm4xLRedTKHluOsuXEzsbF
-         c2/jXdVcO5ZgZSm8mlika/PL6x4jPgIk9ZbbyTuqdaz28QwF+vL5/j9ieb3VhLc7j+
-         IiSL6e4OuMLFaLKHRx62KT1qLzapVh3jUARRyoz9WnPKaeOd8hJsXF2EHCqSyuuHTp
-         bHLxNsXLiIU28cDa3y1dfuFyTChQ4UzoBZ7NEkxLWQ4Ddn6aLdy9CxaKCFIwHhAqOz
-         m98WN2IRSIc8H/RgFgmQs76GW2jTUflApV+YCgbbnVOPS8QZOfXTutfJ/RFcTFVy3d
-         KvdYpWVWT+ZlQ==
+        b=eShUVvEjx9pzxhAFgf7uqPLbKQ2BoGzMZYdN2oTD4B1+g9wKnyGzK1eOAXopgPtcW
+         Wk6/TxWtgDvBP58ivKzDNQ2HvMYSmduY/SdgaW7fxd3276pxDiWNw8tth9sWzUML7n
+         3sAbSNekKxUapDGfQqQpRX5KAJ1TC77wJU9g6CkakhQy47v3AN/fOjQGfvko7eIn25
+         KsOOC+kl0c3ilKMFAuCXS62SOCq5i4iqmC9HdZxmf13oI14RcRtAk6c3/QqFYll+31
+         5TYj40ujrgUD/vDaPcj1kRlmnXCzAXp+uy10vQBFp+FqNVamwQ4n4aPSHn5vnr+2VF
+         pABGIzgswHbTg==
 Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D785BE50D65;
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id EA155E524FF;
         Tue, 14 Mar 2023 23:10:20 +0000 (UTC)
 Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 1/4] Bluetooth: hci_ll: drop of_match_ptr for ID table
+Subject: Re: [PATCH] Bluetooth: btsdio: fix use after free bug in btsdio_remove
+ due to unfinished work
 From:   patchwork-bot+bluetooth@kernel.org
-Message-Id: <167883542087.4543.16572103480151689650.git-patchwork-notify@kernel.org>
+Message-Id: <167883542095.4543.7797236411801708072.git-patchwork-notify@kernel.org>
 Date:   Tue, 14 Mar 2023 23:10:20 +0000
-References: <20230311111354.251316-1-krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230311111354.251316-1-krzysztof.kozlowski@linaro.org>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20230309080739.3714610-1-zyytlz.wz@163.com>
+In-Reply-To: <20230309080739.3714610-1-zyytlz.wz@163.com>
+To:     Zheng Wang <zyytlz.wz@163.com>
 Cc:     marcel@holtmann.org, johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        sean.wang@mediatek.com, matthias.bgg@gmail.com,
-        angelogioacchino.delregno@collabora.com,
         linux-bluetooth@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org
+        hackerzheng666@gmail.com, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -62,29 +61,24 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Hello:
 
-This series was applied to bluetooth/bluetooth-next.git (master)
+This patch was applied to bluetooth/bluetooth-next.git (master)
 by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-On Sat, 11 Mar 2023 12:13:51 +0100 you wrote:
-> The driver can match only via the DT table so the table should be always
-> used and the of_match_ptr does not have any sense (this also allows ACPI
-> matching via PRP0001, even though it might not be relevant here).
+On Thu,  9 Mar 2023 16:07:39 +0800 you wrote:
+> In btsdio_probe, &data->work was bound with btsdio_work.In
+> btsdio_send_frame, it was started by schedule_work.
 > 
->   drivers/bluetooth/hci_ll.c:769:34: error: ‘hci_ti_of_match’ defined but not used [-Werror=unused-const-variable=]
+> If we call btsdio_remove with an unfinished job, there may
+> be a race condition and cause UAF bug on hdev.
 > 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Fixes: ddbaf13e3609 ("[Bluetooth] Add generic driver for Bluetooth SDIO devices")
+> Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
 > 
 > [...]
 
 Here is the summary with links:
-  - [1/4] Bluetooth: hci_ll: drop of_match_ptr for ID table
-    https://git.kernel.org/bluetooth/bluetooth-next/c/7bbc48103072
-  - [2/4] Bluetooth: btmrvl_sdio: mark OF related data as maybe unused
-    https://git.kernel.org/bluetooth/bluetooth-next/c/ab0fc9bd67ba
-  - [3/4] Bluetooth: hci_qca: mark OF related data as maybe unused
-    https://git.kernel.org/bluetooth/bluetooth-next/c/e93d2fbf47e2
-  - [4/4] Bluetooth: btmtkuart: mark OF related data as maybe unused
-    https://git.kernel.org/bluetooth/bluetooth-next/c/f19083c1bdff
+  - Bluetooth: btsdio: fix use after free bug in btsdio_remove due to unfinished work
+    https://git.kernel.org/bluetooth/bluetooth-next/c/f132c2d13088
 
 You are awesome, thank you!
 -- 
