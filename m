@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 25DDC6B873F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:53:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95E496B873E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:52:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229834AbjCNAw6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:52:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53920 "EHLO
+        id S229801AbjCNAwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:52:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229701AbjCNAwy (ORCPT
+        with ESMTP id S229531AbjCNAwx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:52:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E6CF2CFD1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:52:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678755125;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=wU6C1kTdlo/msCLzsd7D9dBPtH6geyYmQsAT7wO3k7E=;
-        b=Qoj8iTHAJeEDL4GB5g5fjdGGYeVKAi+tRnLLjykFRfdPIb+idnrSIyxIQxMirza1azRW+I
-        J3IhMpof3TGMTnxf5widCuAXhmOLRzWLg6gJr5Z/AKi4XZrYlM2Gn4oUCDEGdN1zc24eLu
-        uKivnuInDCHH28F306Dk2Msuqx/36X0=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-10-tLezDPD2N62R4YFVX_MWEg-1; Mon, 13 Mar 2023 20:52:04 -0400
-X-MC-Unique: tLezDPD2N62R4YFVX_MWEg-1
-Received: by mail-qk1-f200.google.com with SMTP id o9-20020a05620a228900b0074585d47b77so2333639qkh.0
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:52:04 -0700 (PDT)
+        Mon, 13 Mar 2023 20:52:53 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5635B136C2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:52:52 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id r4so7881803ila.2
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:52:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678755171;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qHzjH7VglcppZFTUdFm592XUYZ3bt2CwGqlDMyOUI3s=;
+        b=WSZTts/id8ucNGvnP/AHh7ge3JvSfRpInRare3/mS+SKvXXFQ/ykW8jTykGqXl4cvG
+         iVbEyAdcJmpvwXbwWimibaY6wLlbf0QxjMkizuhido22EI9ccgaThl9YwDGZct3HBirN
+         ieul0p+M+EmM+tPDOeyT+GYG410tSXCWO5QOQFwaG1qx+M5T87zJEmP83KT0rVtgyLwS
+         W0ccIpcVn4XKCUZOSkxWi5jmLq3l8CAfJr8Y+LxjhAwPIhKlxcGSBdn2f9iu+NMcSC8A
+         zr1OstRNmGK/xqPphP7EghpxOkXTwzcXFfexe7efxjtnotS/fTyddUAT4Eq25WR432ON
+         5koQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678755123;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wU6C1kTdlo/msCLzsd7D9dBPtH6geyYmQsAT7wO3k7E=;
-        b=Z9irVuYMdNxrxxbS2+Vm9nHpOAtOBJObrwIQrpRJGDWT0sSKUM+lY0mVkxLJdFdFbY
-         8flmokJ+9jDD6HiCaDTVubyRlfDrce9SuhE/mcEH8kx9PQ6UJ2i0s/QShYS6FkWIZnef
-         4o6NdKcLcTnPuuZ4CoSeJhsXfzU7wEo1Ei7zQDANEx7GSFN4DXL+Agx1kFSPhK/k9QY0
-         SABctkAmOO80QioL0hTdpu0xAYrbTLuE3nd6KW30hQKTtyS6Tzk1ZHniAq/82K3/BCt9
-         l44SimDKfJsKX6qwFESE20JkFewC5MuHnoXaHa2EkOugrKwZmebNUq76gIteo2Tnw2g4
-         51vw==
-X-Gm-Message-State: AO0yUKWBJdJ1xS7esoJG6LEC5oqgSrPJobGNIvlsiTBvr/2XB7vWmsvj
-        D9f2TAlNjHq06stYaRBJBhNDTqyK52blwe/4Mhb7CbtA2IuD5Nd+I5AzSnt2nDKvshhjFbp14eK
-        2xljbL7VKffD3+J2mjAHXDsDWT/e8iRjm
-X-Received: by 2002:a05:622a:1c6:b0:3bf:d9d2:2d2c with SMTP id t6-20020a05622a01c600b003bfd9d22d2cmr29417192qtw.53.1678755123449;
-        Mon, 13 Mar 2023 17:52:03 -0700 (PDT)
-X-Google-Smtp-Source: AK7set/ozd7azivE/r/qnhMQCbLcegLfllz4fDRiotnm8AMyDXscbNGUliFwubGahh0fisCqegbzDg==
-X-Received: by 2002:a05:622a:1c6:b0:3bf:d9d2:2d2c with SMTP id t6-20020a05622a01c600b003bfd9d22d2cmr29417169qtw.53.1678755123231;
-        Mon, 13 Mar 2023 17:52:03 -0700 (PDT)
-Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
-        by smtp.gmail.com with ESMTPSA id do54-20020a05620a2b3600b0073b929d0371sm780531qkb.4.2023.03.13.17.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 17:52:02 -0700 (PDT)
-From:   Tom Rix <trix@redhat.com>
-To:     ketan.mukadam@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tom Rix <trix@redhat.com>
-Subject: [PATCH] scsi: be2iscsi: set some be_main.c variables storage-class-specifier to static
-Date:   Mon, 13 Mar 2023 20:51:57 -0400
-Message-Id: <20230314005157.536918-1-trix@redhat.com>
-X-Mailer: git-send-email 2.27.0
+        d=1e100.net; s=20210112; t=1678755171;
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id:sender
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qHzjH7VglcppZFTUdFm592XUYZ3bt2CwGqlDMyOUI3s=;
+        b=FB1QU26H/Zgm1y1Q4ZyZG5GtwZdhs+18ljOPVgZ+SkmCnsDQBgisLCBAhjqMcIPqIc
+         iE/rdDW40laiHqKTUC13hwPA/NI7n0SlZ3f74Et2IqmUL/SN9VXll61i7mmBzY42BfR3
+         Fc0svaN0d0HU+XlPQSfCHAZANUXZdxKXQfgComA7iwmVVIoAa0gSbM9n5/pHt76VjN1H
+         0o8WUezi0JilOzXGR7Vmz7Bkyuuas6CS4LYytJG5vC9igXYh8z9R7EwDm9cXxRICTcYA
+         wKDja5DWBryHRR4J2K5dMoKd12qHj8PCXK76DKqh1FLwbEX4dYVVEYqwqZdaFkoXeYwX
+         5wgg==
+X-Gm-Message-State: AO0yUKWGbZQY61HaNdcHnn+xTEEn6aqZCsLginweHcUWGWZPxDNSg0NP
+        6irob4InZtMDfiYyQ5AFDUQ=
+X-Google-Smtp-Source: AK7set96w0xlkbdEsvmQ7AFx3bUwX6ouwo0w7Bu3FALMc5QyzxgUTASVNAjAWROZKvMqrz7sCZxtog==
+X-Received: by 2002:a05:6e02:966:b0:311:1168:b9b5 with SMTP id q6-20020a056e02096600b003111168b9b5mr1052754ilt.23.1678755171634;
+        Mon, 13 Mar 2023 17:52:51 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id j2-20020a926e02000000b003230ef87bf4sm376907ilc.37.2023.03.13.17.52.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 17:52:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <dc031bc7-8ca4-7ca7-c24f-9db65b5547e4@roeck-us.net>
+Date:   Mon, 13 Mar 2023 17:52:49 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Frederic Weisbecker <frederic@kernel.org>,
+        Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
+ <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
+ <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
+ <ZA+ttVOPBvNOYHoC@lothringen>
+From:   Guenter Roeck <linux@roeck-us.net>
+Subject: Re: Linux 6.3-rc2
+In-Reply-To: <ZA+ttVOPBvNOYHoC@lothringen>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,65 +82,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-smatch reports several warnings
-drivers/scsi/be2iscsi/be_main.c:148:1: warning:
-  symbol 'dev_attr_beiscsi_log_enable' was not declared. Should it be static?
-drivers/scsi/be2iscsi/be_main.c:158:1: warning:
-  symbol 'dev_attr_beiscsi_drvr_ver' was not declared. Should it be static?
-drivers/scsi/be2iscsi/be_main.c:159:1: warning:
-  symbol 'dev_attr_beiscsi_adapter_family' was not declared. Should it be static?
-drivers/scsi/be2iscsi/be_main.c:160:1: warning:
-  symbol 'dev_attr_beiscsi_fw_ver' was not declared. Should it be static?
-drivers/scsi/be2iscsi/be_main.c:161:1: warning:
-  symbol 'dev_attr_beiscsi_phys_port' was not declared. Should it be static?
-drivers/scsi/be2iscsi/be_main.c:162:1: warning:
-  symbol 'dev_attr_beiscsi_active_session_count' was not declared. Should it be static?
-drivers/scsi/be2iscsi/be_main.c:164:1: warning:
-  symbol 'dev_attr_beiscsi_free_session_count' was not declared. Should it be static ?
+On 3/13/23 16:11, Frederic Weisbecker wrote:
+> On Mon, Mar 13, 2023 at 11:21:44AM -0700, Linus Torvalds wrote:
+[ ... ]
+> It would be interesting to see what the IRQ is interrupting. For example does it
+> happen while softirqs are serviced or just disabled? Or are we even outside any
+> of that? Any chance we can have a deeper stack trace? If not at least a print of
+> preempt_count() would be helpful.
+> 
+> Both would be awesome.
+> 
+> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+> index 50d4863974e7..a7d1a65e5425 100644
+> --- a/kernel/locking/lockdep.c
+> +++ b/kernel/locking/lockdep.c
+> @@ -5523,6 +5523,7 @@ static noinstr void check_flags(unsigned long flags)
+>   	 */
+>   	if (!hardirq_count()) {
+>   		if (softirq_count()) {
+> +			printk("preempt_count(): %x", preempt_count());
+>   			/* like the above, but with softirqs */
+>   			DEBUG_LOCKS_WARN_ON(current->softirqs_enabled);
+>   		} else {
+> 
 
-These variables are only used in be_main.c, so should be static.
+That crashed nicely; it didn't like the unconditional printk().
+With
 
-Signed-off-by: Tom Rix <trix@redhat.com>
----
- drivers/scsi/be2iscsi/be_main.c | 18 +++++++++---------
- 1 file changed, 9 insertions(+), 9 deletions(-)
+diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
+index 50d4863974e7..ea4f76e2d815 100644
+--- a/kernel/locking/lockdep.c
++++ b/kernel/locking/lockdep.c
+@@ -5524,7 +5524,9 @@ static noinstr void check_flags(unsigned long flags)
+         if (!hardirq_count()) {
+                 if (softirq_count()) {
+                         /* like the above, but with softirqs */
+-                       DEBUG_LOCKS_WARN_ON(current->softirqs_enabled);
++                       if (DEBUG_LOCKS_WARN_ON(current->softirqs_enabled))
++                               printk("preempt_count(): %x softirq_count(): %lx",
++                                      preempt_count(), softirq_count());
+                 } else {
+                         /* lick the above, does it taste good? */
+                         DEBUG_LOCKS_WARN_ON(!current->softirqs_enabled);
 
-diff --git a/drivers/scsi/be2iscsi/be_main.c b/drivers/scsi/be2iscsi/be_main.c
-index 50a577ac3bb4..e3a07084c7e7 100644
---- a/drivers/scsi/be2iscsi/be_main.c
-+++ b/drivers/scsi/be2iscsi/be_main.c
-@@ -139,7 +139,7 @@ beiscsi_disp_param(_name)\
- beiscsi_change_param(_name, _minval, _maxval, _defval)\
- beiscsi_store_param(_name)\
- beiscsi_init_param(_name, _minval, _maxval, _defval)\
--DEVICE_ATTR(beiscsi_##_name, S_IRUGO | S_IWUSR,\
-+static DEVICE_ATTR(beiscsi_##_name, S_IRUGO | S_IWUSR,\
- 	      beiscsi_##_name##_disp, beiscsi_##_name##_store)
- 
- /*
-@@ -155,14 +155,14 @@ BEISCSI_RW_ATTR(log_enable, 0x00,
- 		"\t\t\t\tConfiguration Path	: 0x20\n"
- 		"\t\t\t\tiSCSI Protocol		: 0x40\n");
- 
--DEVICE_ATTR(beiscsi_drvr_ver, S_IRUGO, beiscsi_drvr_ver_disp, NULL);
--DEVICE_ATTR(beiscsi_adapter_family, S_IRUGO, beiscsi_adap_family_disp, NULL);
--DEVICE_ATTR(beiscsi_fw_ver, S_IRUGO, beiscsi_fw_ver_disp, NULL);
--DEVICE_ATTR(beiscsi_phys_port, S_IRUGO, beiscsi_phys_port_disp, NULL);
--DEVICE_ATTR(beiscsi_active_session_count, S_IRUGO,
--	     beiscsi_active_session_disp, NULL);
--DEVICE_ATTR(beiscsi_free_session_count, S_IRUGO,
--	     beiscsi_free_session_disp, NULL);
-+static DEVICE_ATTR(beiscsi_drvr_ver, S_IRUGO, beiscsi_drvr_ver_disp, NULL);
-+static DEVICE_ATTR(beiscsi_adapter_family, S_IRUGO, beiscsi_adap_family_disp, NULL);
-+static DEVICE_ATTR(beiscsi_fw_ver, S_IRUGO, beiscsi_fw_ver_disp, NULL);
-+static DEVICE_ATTR(beiscsi_phys_port, S_IRUGO, beiscsi_phys_port_disp, NULL);
-+static DEVICE_ATTR(beiscsi_active_session_count, S_IRUGO,
-+		   beiscsi_active_session_disp, NULL);
-+static DEVICE_ATTR(beiscsi_free_session_count, S_IRUGO,
-+		   beiscsi_free_session_disp, NULL);
- 
- static struct attribute *beiscsi_attrs[] = {
- 	&dev_attr_beiscsi_log_enable.attr,
--- 
-2.27.0
+I got the following (decoded):
+
+[   11.360487] WARNING: CPU: 0 PID: 233 at kernel/locking/lockdep.c:5527 check_flags (./arch/arm/include/asm/current.h:36 (discriminator 12) ./include/asm-generic/preempt.h:11 (discriminator 12) kernel/locking/lockdep.c:5528 (discriminator 12))
+[   11.361102] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
+[   11.361173] Modules linked in:
+[   11.361730] CPU: 0 PID: 233 Comm: rcS Tainted: G                 N 6.3.0-rc2-dirty #2
+[   11.361921] Hardware name: Freescale i.MX6 Ultralite (Device Tree)
+[   11.362303] unwind_backtrace from show_stack (arch/arm/kernel/traps.c:258)
+[   11.362441] show_stack from dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
+[   11.362519] dump_stack_lvl from __warn (./include/linux/jump_label.h:260 ./include/linux/jump_label.h:270 ./include/trace/events/error_report.h:69 kernel/panic.c:681)
+[   11.362598] __warn from warn_slowpath_fmt (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:16 ./include/asm-generic/preempt.h:59 ./include/linux/context_tracking.h:154 kernel/panic.c:706)
+[   11.362702] warn_slowpath_fmt from check_flags (./arch/arm/include/asm/current.h:36 (discriminator 12) ./include/asm-generic/preempt.h:11 (discriminator 12) kernel/locking/lockdep.c:5528 (discriminator 12))
+[   11.362780] check_flags from lock_is_held_type (./arch/arm/include/asm/percpu.h:37 kernel/locking/lockdep.c:462 kernel/locking/lockdep.c:5713)
+[   11.362851] lock_is_held_type from rcu_read_lock_sched_held (kernel/rcu/update.c:125)
+[   11.362933] rcu_read_lock_sched_held from trace_rcu_dyntick (./include/trace/events/rcu.h:480 (discriminator 28))
+[   11.363016] trace_rcu_dyntick from ct_nmi_enter (./arch/arm/include/asm/percpu.h:37 (discriminator 4) ./include/linux/context_tracking_state.h:90 (discriminator 4) kernel/context_tracking.c:301 (discriminator 4))
+[   11.363108] ct_nmi_enter from irq_enter (kernel/softirq.c:625)
+[   11.363177] irq_enter from generic_handle_arch_irq (kernel/irq/handle.c:238)
+[   11.363251] generic_handle_arch_irq from call_with_stack (arch/arm/lib/call_with_stack.S:45)
+[   11.363339] call_with_stack from __irq_svc (arch/arm/kernel/entry-armv.S:232)
+[   11.363438] Exception stack(0xd1819f60 to 0xd1819fa8)
+[   11.363629] 9f60: ecac8b10 40000000 b6f88418 c1c2607c 00000000 40000000 c4acc00b 00000001
+[   11.363740] 9f80: 00000b00 c0101278 c4acc0f0 00000000 00000051 d1819fb0 c01011c4 c0103c1c
+[   11.363833] 9fa0: 00000013 ffffffff
+[   11.363896] __irq_svc from vfp_reload_hw (arch/arm/vfp/vfphw.S:149)
+[   11.364015] irq event stamp: 1626
+[   11.364069] hardirqs last enabled at (1625): __und_usr (arch/arm/kernel/entry-armv.S:465)
+[   11.364199] hardirqs last disabled at (1626): __irq_svc (arch/arm/kernel/entry-armv.S:221)
+[   11.364290] softirqs last enabled at (1424): __do_softirq (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:11 kernel/softirq.c:415 kernel/softirq.c:600)
+[   11.364396] softirqs last disabled at (1323): __irq_exit_rcu (kernel/softirq.c:445 kernel/softirq.c:650)
+[   11.364494] ---[ end trace 0000000000000000 ]---
+[   11.364637] preempt_count(): 201 softirq_count(): 200
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+[   11.364659] irq event stamp: 1626
+[   11.364757] hardirqs last enabled at (1625): __und_usr (arch/arm/kernel/entry-armv.S:465)
+[   11.364843] hardirqs last disabled at (1626): __irq_svc (arch/arm/kernel/entry-armv.S:221)
+[   11.364926] softirqs last enabled at (1424): __do_softirq (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:11 kernel/softirq.c:415 kernel/softirq.c:600)
+[   11.365014] softirqs last disabled at (1323): __irq_exit_rcu (kernel/softirq.c:445 kernel/softirq.c:650)
+
+Does that tell you anything ?
+
+Thanks,
+Guenter
 
