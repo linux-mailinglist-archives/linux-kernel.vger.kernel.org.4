@@ -2,169 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72ECF6B9147
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5FC56B9152
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230507AbjCNLOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50506 "EHLO
+        id S231158AbjCNLPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50650 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231207AbjCNLOT (ORCPT
+        with ESMTP id S231354AbjCNLOr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:14:19 -0400
-Received: from NAM04-DM6-obe.outbound.protection.outlook.com (mail-dm6nam04on2096.outbound.protection.outlook.com [40.107.102.96])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7F65410B0;
-        Tue, 14 Mar 2023 04:13:50 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=EHneikn+pRqnX5So6+kiZpAGlNCEMWSIH1z+fO7Uf8gR5dGNTXZB85p9Hun/sq1ze1O0FNI1vhqmxeEvMjf2PWa3Ip/Ok/TwGmXkVd3Ej5ZU9T9iFBJ4xUHBeGLOrAA7FCDPEK3lNcQkKv1fFEVZXQDzXRTz/vK+rhyuOJi8Ztdlt8yGpeB1Uu/Vf9C0AkFbkD3y52MQvnSo67REwWpd4jMjcuittEyfgO8JFeOKi2bZFC/2vgvgGLDNwO27jKFjz099Zg7oVqRyN5DCGYS5j9uDr/++hvIjjI6QTf9CQD6bHUNEyM+e2fOo1Q8/Oq6M4sVe07LIDno3HNnpREbcjw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=psyujY4oXhJmo+FZ3GUdWtghcCVSkCTVqJ7dXHmqnU8=;
- b=CWwpG7+EQh3iIPKmPfTvr+4mkd4iK+xkgMGl1qt5GQPviMeQ0mCgnzkPrhsYpziJl8SolT85HS4+ACMvCLJ+q0QdCS7W5qKA3BBheIGu6MB7ApBPdt6+/xt2BXJBb4DPZ0Q+9vwfMp2jKn9BIEK5w3R4a+bfZkUL1f9cOUVKI80mS8buzY3AkvCUNF3paZPsTkjTzckEK87QxRV0uPP/fXeJH1GYOq59Kyx93PmcVAdh1KL0v2Iq5v1mCCfJ3Ug31yQvxgowh78lslmLJcr5vop1H8Ku+GrBaWmE/1EbU033SY5BeeuR3THvtCwsv4PGTFwTQL9xXbfnPQPw5wHh2A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 14 Mar 2023 07:14:47 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 338A87A9E;
+        Tue, 14 Mar 2023 04:14:16 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id qa18-20020a17090b4fd200b0023750b675f5so20002088pjb.3;
+        Tue, 14 Mar 2023 04:14:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=psyujY4oXhJmo+FZ3GUdWtghcCVSkCTVqJ7dXHmqnU8=;
- b=QpeoiuXfR4Yo+ESJAu108kQG1S1h0y1XPj2MrPkXu65B3kVgFAN+Zv8RzLZ2dt9SHnVD3HYQjPQG/PQxKDBwlvXYQtnS71oMlGP5QFOmWxYkP4YxzlVFQ4qU3N5WSjzc5oDudelJmxM3kFhDKZN8Gk82Asim/RrKf9JtjkveFww=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by DS7PR13MB4606.namprd13.prod.outlook.com (2603:10b6:5:3a5::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 11:13:30 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 11:13:29 +0000
-Date:   Tue, 14 Mar 2023 12:13:23 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Dan Carpenter <error27@gmail.com>,
-        Alexander Lobakin <aleksander.lobakin@intel.com>,
-        Muhammad Usama Anjum <usama.anjum@collabora.com>,
-        Ariel Elior <aelior@marvell.com>,
-        Manish Chopra <manishc@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, kernel@collabora.com,
-        kernel-janitors@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] qede: remove linux/version.h and linux/compiler.h
-Message-ID: <ZBBW055iKkvNyiy0@corigine.com>
-References: <20230303185351.2825900-1-usama.anjum@collabora.com>
- <20230303155436.213ee2c0@kernel.org>
- <df8a446a-e8a9-3b3d-fd0f-791f0d01a0c9@collabora.com>
- <ZAdoivY94Y5dfOa4@corigine.com>
- <1107bc10-9b14-98f4-3e47-f87188453ce7@collabora.com>
- <8a90dca3-af66-5348-72b9-ac49610f22ce@intel.com>
- <ee08333d-d39d-45c6-9e6e-6328855d3068@kili.mountain>
- <20230313114538.74e6caca@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313114538.74e6caca@kernel.org>
-X-ClientProxiedBy: AM0PR04CA0044.eurprd04.prod.outlook.com
- (2603:10a6:208:1::21) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1678792449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5mgq4Gb4nShxf6TmYlZiPVcRLWKemqujm5F/88PcXx0=;
+        b=jwI6NyZ0sHbAv2SfupII60ISsAxcvwhbvvEgvI+TmfW1RSRtVcPPGiTr8xfzMdaTCC
+         o1ZCosT4jfzfZpRY/1sr2SM8g8T1BNYzKPOe1mpGqXYz6DOuFKOP1vEMtCtBzCkxyHFk
+         2FXqD+wPzojonD/YljZRMMHFPZCl9vINZfBT0VeMinSpkjpCMLF4r6OxX1XFarJV4GGj
+         ZkMpEocFDRf4Fc8MlHShnbWrruhn7U5FXVigquyiKjRkNXyRUUvG4+QWfI4/6fyoT8tu
+         TIt05b+4QU1tEw6hm6nEY/7SIZLbmK8o/WPRoFzZ07MtlD+tYW6lb8/GNi5awont9yZb
+         g9iA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678792449;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5mgq4Gb4nShxf6TmYlZiPVcRLWKemqujm5F/88PcXx0=;
+        b=kdTG0EB/Q34miyJQOttOdJPVw4e1Da2WzCAiWEEFfr2kKMkbQTtzqT+V4+ukC94QkC
+         TTGH5skPneiC9lCkggwqnxJoLBVPWkq3yeAOIWzHBHXG0tfl+fX5v6yNKnozmPO4tcZ8
+         prvXimys70LRc8QAqFh8urA3wcyt3K0KqL/4/ZhTbxJv/7v0vSR61W6NKLiJNvF2y/o1
+         sQV9jqqhwgTNWVQSNMDE4cJTEoY/2b+B0L+YvIOPYT4LhS8S14Gl+4JVv7hsOYFSsgbh
+         xZ1H9FQduoXdktVF3R4E8Rj19d73K0I5xtBidc1HkZEhyiyRm9VJjhHZqb1Pa5UUqsXC
+         Aikg==
+X-Gm-Message-State: AO0yUKXxJDMxzdKe6kd0nH7nZsvVAye3wt4eRDhEyqUR8464HeCv1TAt
+        ltZGo2T7OVjcKmGctPIC3HPOOM3HqFPDIoro+hk=
+X-Google-Smtp-Source: AK7set9HY2xm2VayZK7HhUQVDsETGJKyT3ZFyHR/3YD/mhiNHc3TesK1jlt6LDa+ywQeB0bNBKQs8ZLdMhxgF1pdIRg=
+X-Received: by 2002:a17:902:fa8f:b0:1a0:5057:1b81 with SMTP id
+ lc15-20020a170902fa8f00b001a050571b81mr2230680plb.3.1678792449416; Tue, 14
+ Mar 2023 04:14:09 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|DS7PR13MB4606:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0bec6387-c811-4c8b-042b-08db247d23f2
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GdSq0l5t03eeK7CS8IpmCDLUmVHdn92SI6V0M4aH9kM1/7J7kwJYtbMaBsZrgrGoIG68Sc6lsUzAYscAS8Cxz/ApSPC3mTpNni8OfUyFgJkNSIfsNKKSxS9qz3KY24KOv1WPWfZyTNXZwRrbLGlm9lPevhhre823fyPUV2Ig8aSQsmIvE4sKAIZi3YXXMW6D1oB9p+DQ3QMqp59BC7fFT+2TpPmNI7Xr+T9cgutRU7Aac7q/DnKu3dnyrGN7KqySsGMR1Sit0sjE2k+B7PcbVR2ERNGh5sVe8HTdG+u9/ERYOuNol8npSCbymwNSVqXXtazQ4MFoVNhZPm5l/e/QphC26CvWcqRsfqqTbW4/kLZmUBY6jvyE0OA2QXI/L7VgIMH6ubLu8yKpVBi53ni/pKWt0fDP81eepbE/Gc1Hfsnsh69mpaFY9M7CcOnjxObLeAP6jZk9H4vduCFSxnFZjeJYabz9DqLOjDm/xAafQGIe5lAXQepfCJjH4dlt2nvn4uvWNkHWS0sAoQTlttWBdWcwjBPhUu6hdrPo4yEt7P/V0uiL5txApsIfW9KGIn2rjr6czPbOQ5kVrWBy9aYrNXfi2U4B+DRf/y032pgXqlNjBNFmtYPnZ87A7cDcDXOD0PnLHertWt/Wv0MH0v1TEg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(136003)(376002)(366004)(39840400004)(396003)(451199018)(2616005)(7416002)(186003)(44832011)(6506007)(6512007)(8936002)(6666004)(38100700002)(6486002)(5660300002)(66556008)(2906002)(8676002)(41300700001)(36756003)(478600001)(66476007)(4326008)(54906003)(86362001)(66946007)(316002)(6916009);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?yLA4x+1PPbLVOlFM5KOHWOlp/yfm6JSJ1k9KS3zFgDPWYu0UGdqOvNY0Znsv?=
- =?us-ascii?Q?AiKYAuplIYpXZuKiMAlOUW7A8BVnFUK6QmQKeOaV1Xl148S+FH+2ZBegdTfX?=
- =?us-ascii?Q?FFSaoFZozgF4ovXvILKhEOe66+ane/krDlewmuFQFYI6Fthx1BfpUZ4E6Qva?=
- =?us-ascii?Q?w5aXDkZ1jSNouIn8Wz4SYqSeLumFW/h1f+Yd60sE2/O7g+LPRIWz5Z2VX98o?=
- =?us-ascii?Q?4TvG7Yc0WjVCRMBSvHn8N3lzXNxslLVProOSMgRbeN9+dvQ9LPyj9777wbAU?=
- =?us-ascii?Q?dcyfYolnFZPDJmOpCsKUriYneiCs0nPk3fmeV7C5SqtQSLKgwZHPC8XP2ew8?=
- =?us-ascii?Q?CmCbQZwvsWz253T6WX94HT98X6xuIO2+ONEyVxi2z3CE35DxAsFmAxVqwWkS?=
- =?us-ascii?Q?NB40igAO8lQyzm5G8Y7VUqypbtjI3/SaLpAGh3nr6IcbQDlIn8liqGJtosub?=
- =?us-ascii?Q?mU11Zo0SqIdg7aGnV14bchR8ovWmtG0B/4Z8rwpknGqaCZWBX7UQtBvEo+fx?=
- =?us-ascii?Q?GJa4SBgGq2E4k2o/TbXmg1RAQBj1oRbieEDCispyGQIqquIDvxATH2HI3aLS?=
- =?us-ascii?Q?6kfpwT7EYAmmdg9vAhwauKKZ9ZFSx6KqUX+P0P4RwLABbfz5zq3e5xvCHg9G?=
- =?us-ascii?Q?rt4NRUTdHWA4+UA9wy3THGQj8/NYUQSmFlbxnfSS4No1T5Bm7C2l/lZQ/POR?=
- =?us-ascii?Q?+FLO9Lumk0PJ0Pm453vsDP5ILMvfAAEahKufw/hMbvsPTJCAiLXf1mBaB24y?=
- =?us-ascii?Q?fI5WchNSOr1v8H92ZU+qSQLnjLzX7yTZmTCxr/RJAdwKGlxKUjYoOC4Jb6QQ?=
- =?us-ascii?Q?yz45nTrUwl2keKDj5N6fkFG8nN1qnMezt3UuT6Fa24bxeKrHInDdEiN3/kOy?=
- =?us-ascii?Q?/z3OVLjQsbk3iQxbJUO/gJbU22xwqfAjGrhlA6N2FyKWEJz6wg6KfQP2RPIp?=
- =?us-ascii?Q?NlTVqPCV9FhaGtmkdUgmVd+DzzHkBVRpccdw3AwDDIeGy30INXAPI4YFOQ/Z?=
- =?us-ascii?Q?GjC52a/JAhRmlOf+3ORPU70pyNwnCbVWaQOuHsrbMHCRW8sTe7t1X/NHph2F?=
- =?us-ascii?Q?q9RiFs/feD/8Qy/7ppUc6DrDE4JK0cqA8SEHf7zL3EKFKSvIHZK8vfU+vWAb?=
- =?us-ascii?Q?Fcg324JPbjswtmlp9FhFgisb3Lnao+CbxRBb2RBPLLoomSw9Pmgi18CzAi8d?=
- =?us-ascii?Q?O3n3GuRl03LCT45hskYGGx87otMhpCxjcxcalLURycV8lYGKes1hNJkyJfDT?=
- =?us-ascii?Q?wUKxgdWtQeAguYwuvEp6m14tfa5EWBlfZggkYQDg2YFIsn6r0xjpYLUhk4q0?=
- =?us-ascii?Q?fUvXxfHYNTz+uujIcMNRcxH1ogY37p6K/1IEQATtecKsaRN3x1Nw/6HVms/G?=
- =?us-ascii?Q?eQ+X/q35lkA5o5WGurIq9MuzEc4bFXi8PzAcvij+aIOdvXnwUAx0Ip9La4nw?=
- =?us-ascii?Q?QFv5c8e1pzq7ZP3A6J1KMfGA11c5dU9u8Um0qgz47RkWKxTS88vUTCsgfk8u?=
- =?us-ascii?Q?E4UPznSd+AtX4Rkher4P6lAqzz2UkWuOIoxWC9S4u/Fg5Qg7FolzDVvJzbtS?=
- =?us-ascii?Q?cSj5SRxFZy1SubviJIwbeewlwEi4OZQsEe258Sq+anHnUtbhAdwRgazMeW+8?=
- =?us-ascii?Q?7DX5or8CDIa7BltDqw+yOkIiL4+9jrUdgtRM6wku7G00JnTcsWF/an5FavKQ?=
- =?us-ascii?Q?BuASJw=3D=3D?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0bec6387-c811-4c8b-042b-08db247d23f2
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 11:13:29.7663
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MzJEOpeb5VR5AHZpWajI5VugSHdh+SOvHMx1psbyZkkaOjPNltIiBUUdJkB3q5NyOv9DK+FgI+aGZfAz+/m1BUZRIgVjsbmNo0VhP99Ps/8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR13MB4606
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314024449.50151-1-aford173@gmail.com> <DU0PR04MB9417C49457C9E60898E6A92188BE9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+In-Reply-To: <DU0PR04MB9417C49457C9E60898E6A92188BE9@DU0PR04MB9417.eurprd04.prod.outlook.com>
+From:   Adam Ford <aford173@gmail.com>
+Date:   Tue, 14 Mar 2023 06:13:57 -0500
+Message-ID: <CAHCN7xK8DyRa-NbAnQrZdkU279kHZqXAB2WCH96HgsULxzVKRw@mail.gmail.com>
+Subject: Re: [RFC] clk: imx: Let IMX8MN_CLK_DISP_PIXEL set parent rate
+To:     Peng Fan <peng.fan@nxp.com>
+Cc:     "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "l.stach@pengutronix.de" <l.stach@pengutronix.de>,
+        Abel Vesa <abelvesa@kernel.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:45:38AM -0700, Jakub Kicinski wrote:
-> On Mon, 13 Mar 2023 11:46:57 +0300 Dan Carpenter wrote:
-> > This is only for networking.
-> > 
-> > It affect BPF too, I suppose, but I always tell everyone to just send
-> > BPF bug reports instead of patches.  I can keep track of linux-next, net
-> > and net-next.  No one can keep track of all @#$@#$@#$@# 300+ trees.
-> > 
-> > I really hate this networking requirement but I try really hard to get
-> > it right and still mess up half the time.
-> 
-> Don't worry about it too much, there needs to be a level of
-> understanding for cross-tree folks. This unfortunately may 
-> not be afforded to less known developers.. because we don't 
-> know them/that they are working cross-tree.
-> 
-> Reality check for me - this is really something that should
-> be handled by our process scripts, right? get_maintainer/
-> /checkpatch ? Or that's not a fair expectation.
+On Mon, Mar 13, 2023 at 11:39=E2=80=AFPM Peng Fan <peng.fan@nxp.com> wrote:
+>
+> > Subject: [RFC] clk: imx: Let IMX8MN_CLK_DISP_PIXEL set parent rate
+> >
+> > By default the display pixel clock needs to be evenly divide down from
+> > 594MHz which rules out a significant number of resolution and refresh r=
+ates.
+> > The current clock tree looks something like:
+> >
+> >  video_pll                594000000
+> >   video_pll_bypass        594000000
+> >    video_pll_out          594000000
+> >     disp_pixel            148500000
+> >      disp_pixel_clk       148500000
+> >
+> > To enable CLK_SET_RATE_PARENT on disp_pixel, a helper function needs to
+> > be added called imx8m_clk_hw_composite_flags which can pass the
+> > additional flag to the clock controller. Letting disp_pixel set video_p=
+ll_out
+> > rate should actually lower the clock rates of video_pll_bypass and vide=
+o_pll
+> > as well, since those clocks are already configured to enable
+> > CLK_SET_RATE_PARENT.
+> >
+> > Signed-off-by: Adam Ford <aford173@gmail.com>
+> > ---
+> >
+> > This is an RFC, because even with this patch, the video_pll_out clock d=
+oes
+> > not drop to 148500000 like I would expect.  The video_pll clock is a
+> > fractional pll, so it should be able to generate a significant number o=
+f
+> > optional clock frequencies to facilitate video.
+> [Peng Fan]
+>
+> Have you ever tried to directly set video pll out clk to the freq that yo=
+u wanna?
 
-I think that what we are seeing is friction introduced by our processes.
+In the application I am using, I have the DSI connected to an HDMI
+bridge, so some resolutions and refresh rates work, as long as they
+are evenly divisible from 594000000.  I am testing a series that was
+recently submitted to enable DSI on the i.MX8M Mini and Nano.
 
-I'd say that for those who spend time contributing to net-next/net
-on a regular basis, the friction is not great. The process is learnt.
-And for the most part followed.
+If I manually change the video_pll to different frequencies, I can get
+other resolutions and refresh rates to work, but it then breaks the
+ones that I had previously working.  NXP's downstream code [1] as a
+comment added code to the ADV7511 driver which filters out clocks that
+are not divisible from 594 to mask the issue. It's listed as a TODO,
+and I think the author is blaming the ADV7511 driver, but  from my
+experience it's from the LCDIF clock not being able to reach to the
+proper value.  I think fixing this would also fix NXP's TODO list as
+well.
 
-But for others, developers more focused on other parts of the Kernel,
-or otherwise contributing to net-next/net infrequently, the friction
-seems real.
+I had modified the MXSFB driver to set the video_pll in addition to
+setting the disp_plixel_clk and I was able to sync many different
+resolutions and refresh rates, but I was told [2] that the solution
+would be to fix the clock driver by setting the parent clock rate,
+which is how I got here.
 
-I do think tooling can help.
-But perhaps we can also explore other ways to reduce friction:
+adam
 
-* Aligning processes with those of other parts of the Kernel
-* Streamlining processes
-* providing an alternate path for contributions of the nature
-  I described above.
+[1] - https://github.com/nxp-imx/linux-imx/blob/lf-5.15.y/drivers/gpu/drm/b=
+ridge/adv7511/adv7511_drv.c#L80
+[2] - https://lore.kernel.org/linux-arm-kernel/20230313112937.GC7446@pengut=
+ronix.de/T/
 
-Just ideas, seeing as you asked.
+>
+> Regards,
+> Peng.
+>
+> >
+> > diff --git a/drivers/clk/imx/clk-imx8mn.c b/drivers/clk/imx/clk-imx8mn.=
+c
+> > index af256ade554f..a116cc40d7d0 100644
+> > --- a/drivers/clk/imx/clk-imx8mn.c
+> > +++ b/drivers/clk/imx/clk-imx8mn.c
+> > @@ -470,7 +470,7 @@ static int imx8mn_clocks_probe(struct
+> > platform_device *pdev)
+> >       hws[IMX8MN_CLK_DRAM_ALT] =3D
+> > imx8m_clk_hw_fw_managed_composite("dram_alt",
+> > imx8mn_dram_alt_sels, base + 0xa000);
+> >       hws[IMX8MN_CLK_DRAM_APB] =3D
+> > imx8m_clk_hw_fw_managed_composite_critical("dram_apb",
+> > imx8mn_dram_apb_sels, base + 0xa080);
+> >
+> > -     hws[IMX8MN_CLK_DISP_PIXEL] =3D
+> > imx8m_clk_hw_composite("disp_pixel", imx8mn_disp_pixel_sels, base +
+> > 0xa500);
+> > +     hws[IMX8MN_CLK_DISP_PIXEL] =3D
+> > +imx8m_clk_hw_composite_flags("disp_pixel", imx8mn_disp_pixel_sels,
+> > base
+> > ++ 0xa500, CLK_SET_RATE_PARENT);
+> >       hws[IMX8MN_CLK_SAI2] =3D imx8m_clk_hw_composite("sai2",
+> > imx8mn_sai2_sels, base + 0xa600);
+> >       hws[IMX8MN_CLK_SAI3] =3D imx8m_clk_hw_composite("sai3",
+> > imx8mn_sai3_sels, base + 0xa680);
+> >       hws[IMX8MN_CLK_SAI5] =3D imx8m_clk_hw_composite("sai5",
+> > imx8mn_sai5_sels, base + 0xa780); diff --git a/drivers/clk/imx/clk.h
+> > b/drivers/clk/imx/clk.h index 689b3ad927c0..9977b512845b 100644
+> > --- a/drivers/clk/imx/clk.h
+> > +++ b/drivers/clk/imx/clk.h
+> > @@ -414,6 +414,10 @@ struct clk_hw *__imx8m_clk_hw_composite(const
+> > char *name,
+> >       _imx8m_clk_hw_composite(name, parent_names, reg, \
+> >                       0, IMX_COMPOSITE_CLK_FLAGS_DEFAULT)
+> >
+> > +#define imx8m_clk_hw_composite_flags(name, parent_names, reg, flags)
+> > \
+> > +     _imx8m_clk_hw_composite(name, parent_names, reg, \
+> > +                     0, IMX_COMPOSITE_CLK_FLAGS_DEFAULT |  flags)
+> > +
+> >  #define imx8m_clk_hw_composite_critical(name, parent_names, reg) \
+> >       _imx8m_clk_hw_composite(name, parent_names, reg, \
+> >                       0, IMX_COMPOSITE_CLK_FLAGS_CRITICAL)
+> > --
+> > 2.37.2
+>
