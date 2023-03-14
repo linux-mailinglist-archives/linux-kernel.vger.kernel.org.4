@@ -2,160 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1C0B6B871E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:41:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D288C6B8719
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:40:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229565AbjCNAlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34688 "EHLO
+        id S229793AbjCNAkw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:40:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCNAlr (ORCPT
+        with ESMTP id S229616AbjCNAkt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:41:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A059942BC1
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:40:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678754338;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TACuEVUrpVGXTKr6EQlyJHtwWOffnTkzlOP52YnEJ9Q=;
-        b=fBfZSaF7msr9rrMwXHlM6bJ886hZCxkrEjh1o1GCqGvdfrJexIQp2WdKdmKGAeSZB0Ulwg
-        Y9jB1xp38ATz1GSpWN43qJX9fc+4mqyGR7iEtkjRlmw49J9UztWo0oFISSdpwuoRpME6A3
-        kXmjaDcZF44bVe/FwdoTzCny4cveaGs=
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
- [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-480-ZrI9xR8-OqGdVsZk0M4zHA-1; Mon, 13 Mar 2023 20:38:57 -0400
-X-MC-Unique: ZrI9xR8-OqGdVsZk0M4zHA-1
-Received: by mail-pl1-f199.google.com with SMTP id e1-20020a17090301c100b0019cd429f407so7930210plh.17
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:38:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678754336;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TACuEVUrpVGXTKr6EQlyJHtwWOffnTkzlOP52YnEJ9Q=;
-        b=l7Jf3HUvd7D4pQdx5H5/latOvfMb/5j+qO8ZBbyT/1ExUJTXew0Qr182WVZsAFMeX8
-         M+vbOhGXT06qtTY5JjaB9GTlS0JZlepO/ebI6OIjaoGv7YkQMQBpGVXtkglAJgOhYZxO
-         GnIGU9Q4mDPUq4zi190auQIojoF6xgqKhahTuXIuIDoZ84hmATaiVg99YFWZpfQKFLAW
-         et54Ixlk91HsDLIy6oeFAokasDRK11TNFOvIUBslwsHA1o0DN4oWdwLfrpCZMTJ7HELY
-         vc4ADrj3dTA+q7/pcIXg7OJwd/DTeQtflQoVLyM3HYnskV5/DZjaDZwYb3MvmGQWdTpU
-         GPDw==
-X-Gm-Message-State: AO0yUKWYqItp86iLLkpK+XM3vGlBDf0iMtmeasf/GSVQlSd9SAfmYavA
-        V/oA4n/++NUteG4YM5nSMCjPQWD4csYb4ZyIJOssCIZf+RgNVW1ib4O+Rpzb1BLgsU6TQDT4Fb/
-        9HGOv1xb84nmE69VD3VN9PglF
-X-Received: by 2002:a05:6a20:258c:b0:cc:24de:4d6d with SMTP id k12-20020a056a20258c00b000cc24de4d6dmr36702645pzd.4.1678754336407;
-        Mon, 13 Mar 2023 17:38:56 -0700 (PDT)
-X-Google-Smtp-Source: AK7set9K+B8tzulqAPV8mv2hXEb5R62MQmg30WDjLsaks6kCiaul6YikY8Z+atOv0CNqRJUSEzKycQ==
-X-Received: by 2002:a05:6a20:258c:b0:cc:24de:4d6d with SMTP id k12-20020a056a20258c00b000cc24de4d6dmr36702628pzd.4.1678754336077;
-        Mon, 13 Mar 2023 17:38:56 -0700 (PDT)
-Received: from [10.72.12.147] ([43.228.180.230])
-        by smtp.gmail.com with ESMTPSA id s14-20020a65644e000000b0050362744b63sm285320pgv.90.2023.03.13.17.38.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 17:38:55 -0700 (PDT)
-Message-ID: <8aa61954-b6c4-d9b5-bb81-c03ca3631e3b@redhat.com>
-Date:   Tue, 14 Mar 2023 08:38:49 +0800
+        Mon, 13 Mar 2023 20:40:49 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA56F87A14;
+        Mon, 13 Mar 2023 17:40:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 95E3F6157B;
+        Tue, 14 Mar 2023 00:39:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD300C433D2;
+        Tue, 14 Mar 2023 00:39:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678754347;
+        bh=I5IHq5bn2nVWOr2WOI4rN3AaQ6amvwyigKJTJsYavWY=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=RruQ+s06WTk+cgWdUxjMHNjDsZv9dZeRSQBbtDz0mm8ecHaKRqyke90dcSCWbvpdf
+         xOy6FZr9xiRMMF/3D/cbp9YhCSUxmF4asMpc9X0jdYOSBJLfzwpXIkETHdpLgvYyCO
+         6ogWtkTJZhcch7QFSxcA7085rNO2EqjU0h3aQ5qvpCp+OQCJK1bpQylahTJj4TH7b1
+         flkn6Ia7DtYZvHaLvyfmfKFMEcEqxDyH8NMzkQuRtlTccvCTa0Xd09hJOJ+cftRDxb
+         aGOg+4Wf3ZWGxTxeTiNbrB9hUFlgB2r1+ebAK0+DVcjF0WdYdNoqS3IqP3KOrhN7iK
+         GIEJl2rq3Q6LQ==
+Date:   Mon, 13 Mar 2023 17:39:04 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Andrew Halaney <ahalaney@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, agross@kernel.org,
+        andersson@kernel.org, konrad.dybcio@linaro.org,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, bhupesh.sharma@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
+Subject: Re: [PATCH net-next 08/11] net: stmmac: Add EMAC3 variant of dwmac4
+Message-ID: <20230313173904.3d611e83@kernel.org>
+In-Reply-To: <20230313165620.128463-9-ahalaney@redhat.com>
+References: <20230313165620.128463-1-ahalaney@redhat.com>
+        <20230313165620.128463-9-ahalaney@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.6.0
-Subject: Re: [PATCH 2/2] ceph: switch atomic open to use new fscrypt helper
-Content-Language: en-US
-To:     =?UTF-8?Q?Lu=c3=ads_Henriques?= <lhenriques@suse.de>,
-        Eric Biggers <ebiggers@kernel.org>
-Cc:     Jeff Layton <jlayton@kernel.org>,
-        "Theodore Y. Ts'o" <tytso@mit.edu>,
-        Jaegeuk Kim <jaegeuk@kernel.org>,
-        Ilya Dryomov <idryomov@gmail.com>,
-        linux-fscrypt@vger.kernel.org, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230313123310.13040-1-lhenriques@suse.de>
- <20230313123310.13040-3-lhenriques@suse.de>
- <ZA9nPXNpBX0U5joC@sol.localdomain> <87cz5cv6h2.fsf@suse.de>
-From:   Xiubo Li <xiubli@redhat.com>
-In-Reply-To: <87cz5cv6h2.fsf@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, 13 Mar 2023 11:56:17 -0500 Andrew Halaney wrote:
+> EMAC3 is a Qualcomm variant of dwmac4 that functions the same, but has a
+> different address space layout for MTL and DMA registers. This makes the
+> patch a bit more complicated than we would like so let's explain why the
+> current approach was used.
 
-On 14/03/2023 02:42, Luís Henriques wrote:
-> Eric Biggers <ebiggers@kernel.org> writes:
->
->> On Mon, Mar 13, 2023 at 12:33:10PM +0000, Luís Henriques wrote:
->>> Switch ceph atomic open to use fscrypt_prepare_atomic_open().  This fixes
->>> a bug where a dentry is incorrectly set with DCACHE_NOKEY_NAME when 'dir'
->>> has been evicted but the key is still available (for example, where there's
->>> a drop_caches).
->>>
->>> Signed-off-by: Luís Henriques <lhenriques@suse.de>
->>> ---
->>>   fs/ceph/file.c | 8 +++-----
->>>   1 file changed, 3 insertions(+), 5 deletions(-)
->>>
->>> diff --git a/fs/ceph/file.c b/fs/ceph/file.c
->>> index dee3b445f415..5ad57cc4c13b 100644
->>> --- a/fs/ceph/file.c
->>> +++ b/fs/ceph/file.c
->>> @@ -795,11 +795,9 @@ int ceph_atomic_open(struct inode *dir, struct dentry *dentry,
->>>   	ihold(dir);
->>>   	if (IS_ENCRYPTED(dir)) {
->>>   		set_bit(CEPH_MDS_R_FSCRYPT_FILE, &req->r_req_flags);
->>> -		if (!fscrypt_has_encryption_key(dir)) {
->>> -			spin_lock(&dentry->d_lock);
->>> -			dentry->d_flags |= DCACHE_NOKEY_NAME;
->>> -			spin_unlock(&dentry->d_lock);
->>> -		}
->>> +		err = fscrypt_prepare_atomic_open(dir, dentry);
->>> +		if (err)
->>> +			goto out_req;
->> Note that this patch does not apply to upstream or even to linux-next.
-> True, I should have mentioned that in the cover-letter.  This patch should
-> be applied against the 'testing' branch in https://github.com/ceph/ceph-client,
-> which is where the ceph fscrypt currently lives.
->
->> I'd be glad to take patch 1 through the fscrypt tree for 6.4.  But I'm wondering
->> what the current plans are for getting ceph's fscrypt support upstream?
-> As far as I know, the current plan is to try to merge the ceph code during
-> the next merge window for 6.4 (but Xiubo and Ilya may correct me if I'm
-> wrong).  Also, regarding who picks which patch, I'm fine with you picking
-> the first one.  But I'll let the ceph maintainers say what they think,
-> because it may be easier for them to keep both patches together due to the
-> testing infrastructure being used.
->
-> Anyway, I'll send out a new rev tomorrow taking your comments into
-> account.  Thanks, Eric!
+Please drop all the static inlines in C sources, you're wrapping 
+a single function call, the compiler will do the right thing.
 
-Eric, Luis,
-
-It will be fine if Eric could merge patch 1 into the fscrypt tree. Then 
-I will merge the patch 1 into the ceph-client's testing by tagging as 
-[DO NOT MERGE] to run our tests.
-
-And locally we are still running the test, and there have several fixes 
-followed and need more time to review.
-
-Thanks
-
-- Xiubo
-
-> Cheers,
-
--- 
-Best Regards,
-
-Xiubo Li (李秀波)
-
-Email: xiubli@redhat.com/xiubli@ibm.com
-Slack: @Xiubo Li
-
+Please no more than 6 function arguments.
