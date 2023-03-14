@@ -2,125 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCE226B9ACF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:14:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2DFC6B9AEF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbjCNQOZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:14:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40096 "EHLO
+        id S230480AbjCNQRo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:17:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229519AbjCNQOX (ORCPT
+        with ESMTP id S230461AbjCNQRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:14:23 -0400
-Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B285A5FE89;
-        Tue, 14 Mar 2023 09:14:21 -0700 (PDT)
-Received: by mail-pj1-x102d.google.com with SMTP id u3-20020a17090a450300b00239db6d7d47so15653843pjg.4;
-        Tue, 14 Mar 2023 09:14:21 -0700 (PDT)
+        Tue, 14 Mar 2023 12:17:36 -0400
+Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA790B4817;
+        Tue, 14 Mar 2023 09:17:22 -0700 (PDT)
+Received: by mail-wr1-x435.google.com with SMTP id p4so8688045wre.11;
+        Tue, 14 Mar 2023 09:17:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678810461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CC2W8QjMD1ypSnrCCIS8nLiA3E2M+kFtJBrpVClTVyk=;
-        b=a08lj7EiXyJGJpcKcxAUzJcP02WQoI2Ma7WudZpW00sEr9kKeW+VqcAicvYm1Pm47l
-         F2He0yd55hDqERHDzk9i/cR057I2bvQ2HoMAcgIqvC8MePio7d5xxg47m+r8nnfPPidx
-         hcxI3utG4d9hn0VfzFgbpTimntvaJS+DV6WRdq63hi7WYakbC/bE9tlKzTWBR1XWyNeN
-         4/+jIM5nuqiy6zwn5E/+a47ohu0YA12U0dPBas/xjO67LixOWOQeh9MhK6G/NLuQq8rW
-         EGtc6U0INXTW2/PIwLIjYtsRv7ar5+L8rE+LtBx1JeizBpad0V+83BFXYQY3LBAR+LLA
-         eJJw==
+        d=gmail.com; s=20210112; t=1678810641;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=X7vTG+HM9wJv+2SsPq5Z6CfXlOJH/VnK+j1wp3/YuB0=;
+        b=Fpzi+wzS1P1O8VnVg03SXwJEshPGh5Zws72EDrJO0L/xMVj+Fxd02Zu28TR/mZrPx3
+         6mo03B9+EJve+qCX2jjp3HeBqa3Ewd4mJN7OwHCpzeSH5fsOEWqk9+R7uikwMhQuQyAN
+         yFiZfzTq1XIpL+TL3v/swxavpL1fnFx9N0o1r4R92KcvBAQvgQYGl2+PcZ4lNKZAU65v
+         2BOuzq6BpBxAfJ4kO+lKPM2Y4aiIckZB18Lvu/MpikuL3xdhNUpL8ewGUJhft5vUYRXC
+         VdyRcnNH6wXZK33Xjc5Kb+3dj0VZRYcu1SG94H5RAV5Y1B+27YCzzx0B9Vc6gjoeR7lB
+         BQCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678810461;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CC2W8QjMD1ypSnrCCIS8nLiA3E2M+kFtJBrpVClTVyk=;
-        b=PNi90Ht9PU7JtRirpC6UJ33kk7N8qBia9NuA50lc312XV4c24WBQdeBcPdnCTXtCHK
-         HD8zTjT+YtNFFMPBNs+WAihDGOyQSlcQjf+K/vFMhHDqBYgZdCJkqhDp6dR7XbKYkwi8
-         yvqr4gCTYvdCUiM+zjcFcTDF4k8kSP6pGMYpQDOcrpXi1h4kOHAsKsjNZtNn0z+hIpVv
-         keOaj9Ps90NebKZLtzXE7sIua851rv2uQRHw8PrmwvEHL5YrzfsteKzcAU4EVT7OmUmP
-         WzG4ct2XkPoKHF3+jkeU+YEPQWYTsrCY1liJ8pqV2toeLLBX16CLo/icSEM1UT2gjdlQ
-         mqsA==
-X-Gm-Message-State: AO0yUKUy07B2l+XAnO5gGr8iArKGYjmh28dfrZ0KoMERCA/n0sm4e0tj
-        a9UObOds07ZBdBWWjnobwrI=
-X-Google-Smtp-Source: AK7set//XPVfG0KxBl89YqjKLqlrVUVChnRcz9GUK07nw02Z7ZGl7Vimg3n/83sI7W0LXCuqNneWRQ==
-X-Received: by 2002:a05:6a20:b919:b0:cc:7f86:a804 with SMTP id fe25-20020a056a20b91900b000cc7f86a804mr34208846pzb.6.1678810461176;
-        Tue, 14 Mar 2023 09:14:21 -0700 (PDT)
-Received: from localhost (ec2-54-67-115-33.us-west-1.compute.amazonaws.com. [54.67.115.33])
-        by smtp.gmail.com with ESMTPSA id 13-20020aa7924d000000b0061998311344sm1778049pfp.211.2023.03.14.09.14.20
+        d=1e100.net; s=20210112; t=1678810641;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=X7vTG+HM9wJv+2SsPq5Z6CfXlOJH/VnK+j1wp3/YuB0=;
+        b=66haYn31UczgBJP1kemYg79zqEB6TBVNYbDO/thOTbGW6qMnHb5OHO1gRPkMWQAcw5
+         4Ac8Kl8UZBc5zybcJbByIJ901XFdw8iX9b0hqyMP5BCZJvSBrCz5pFjfWMzgyl7ABAUB
+         frkEHYKpPxAQPnzGAIwd0WchxVpLp9txroDzRF2ecCOMgrbNi+l7lZ6jR2LOSSI8vPl5
+         d6sD0P0Xrz/HiLJcEygQaF40PdmuTokeAhUDTTwB95G/t8TwGgkqwauXmrMSIKYlpL0J
+         aCzrTsQVkYip2NrGvuaqeTHUyI8VCZdWK9f2U+P+9pqZpfsPHYwwuucKKMNTzVrEJV6u
+         /Vwg==
+X-Gm-Message-State: AO0yUKUqzg1kBzg++UQZvLmZJ6RPfO/JEfRKrvCXhC+bytMG8Eqj4jn1
+        49xTvoBjILOKXDWVW7H3XJg=
+X-Google-Smtp-Source: AK7set+42EfdKL2fbiWypbrek1/lbnXDNrSKamn0m6MK6EhwrJ9cUjCNn6ivQtBty4le29YstiY1Tw==
+X-Received: by 2002:a5d:58ce:0:b0:2ce:9819:1c1e with SMTP id o14-20020a5d58ce000000b002ce98191c1emr8160361wrf.30.1678810640781;
+        Tue, 14 Mar 2023 09:17:20 -0700 (PDT)
+Received: from localhost.localdomain (93-34-89-197.ip49.fastwebnet.it. [93.34.89.197])
+        by smtp.googlemail.com with ESMTPSA id a16-20020a5d4570000000b002c5539171d1sm2426821wrc.41.2023.03.14.09.17.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 09:14:20 -0700 (PDT)
-Date:   Wed, 8 Mar 2023 15:16:45 +0000
-From:   Bobby Eshleman <bobbyeshleman@gmail.com>
-To:     Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Cc:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
+        Tue, 14 Mar 2023 09:17:20 -0700 (PDT)
+From:   Christian Marangi <ansuelsmth@gmail.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>,
-        kvm@vger.kernel.org, virtualization@lists.linux-foundation.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel@sberdevices.ru, oxffffaa@gmail.com
-Subject: Re: [PATCH RESEND net v4 3/4] virtio/vsock: don't drop skbuff on
- copy failure
-Message-ID: <ZAim3WjwQ24lpjZi@bullseye>
-References: <1bfcb7fd-bce3-30cf-8a58-8baa57b7345c@sberdevices.ru>
- <3f8fcfb1-6d5e-93db-f2d6-651e22dba9ce@sberdevices.ru>
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        John Crispin <john@phrozen.org>, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, Lee Jones <lee@kernel.org>,
+        linux-leds@vger.kernel.org
+Subject: [net-next PATCH v3 00/14] net: Add basic LED support for switch/phy
+Date:   Tue, 14 Mar 2023 11:15:02 +0100
+Message-Id: <20230314101516.20427-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3f8fcfb1-6d5e-93db-f2d6-651e22dba9ce@sberdevices.ru>
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DATE_IN_PAST_06_12,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 02:08:20PM +0300, Arseniy Krasnov wrote:
-> This returns behaviour of SOCK_STREAM read as before skbuff usage. When
-> copying to user fails current skbuff won't be dropped, but returned to
-> sockets's queue. Technically instead of 'skb_dequeue()', 'skb_peek()' is
-> called and when skbuff becomes empty, it is removed from queue by
-> '__skb_unlink()'.
-> 
-> Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-> Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-> Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
-> ---
->  net/vmw_vsock/virtio_transport_common.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-> index 9a411475e201..6564192e7f20 100644
-> --- a/net/vmw_vsock/virtio_transport_common.c
-> +++ b/net/vmw_vsock/virtio_transport_common.c
-> @@ -364,7 +364,7 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
->  
->  	spin_lock_bh(&vvs->rx_lock);
->  	while (total < len && !skb_queue_empty(&vvs->rx_queue)) {
-> -		skb = __skb_dequeue(&vvs->rx_queue);
-> +		skb = skb_peek(&vvs->rx_queue);
->  
->  		bytes = len - total;
->  		if (bytes > skb->len)
-> @@ -388,9 +388,8 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
->  			u32 pkt_len = le32_to_cpu(virtio_vsock_hdr(skb)->len);
->  
->  			virtio_transport_dec_rx_pkt(vvs, pkt_len);
-> +			__skb_unlink(skb, &vvs->rx_queue);
->  			consume_skb(skb);
-> -		} else {
-> -			__skb_queue_head(&vvs->rx_queue, skb);
->  		}
->  	}
->  
-> -- 
-> 2.25.1
+This is a continue of [1]. It was decided to take a more gradual
+approach to implement LEDs support for switch and phy starting with
+basic support and then implementing the hw control part when we have all
+the prereq done.
 
-Acked-by: Bobby Eshleman <bobby.eshleman@bytedance.com>
+This series implements only the brightness_set() and blink_set() ops.
+An example of switch implementation is done with qca8k.
+
+For PHY a more generic approach is used with implementing the LED
+support in PHY core and with the user (in this case marvell) adding all
+the required functions.
+
+Currently we set the default-state as "keep" to not change the default
+configuration of the declared LEDs since almost every switch have a
+default configuration.
+
+[1] https://lore.kernel.org/lkml/20230216013230.22978-1-ansuelsmth@gmail.com/
+
+Changes in new series v3:
+- Move QCA8K_LEDS Kconfig option from tristate to bool
+- Use new helper led_init_default_state_get for default-state in qca8k
+- Drop cled_qca8k_brightness_get() as there isn't a good way to describe
+  the mode the led is currently in
+- Rework qca8k_led_brightness_get() to return true only when LED is set
+  to always ON
+Changes in new series v2:
+- Add LEDs node for rb3011
+- Fix rb3011 switch node unevaluated properties while running 
+  make dtbs_check
+- Fix a copypaste error in qca8k-leds.c for port 4 required shift
+- Drop phy-handle usage for qca8k and use qca8k_port_to_phy()
+- Add review tag from Andrew
+- Add Christian Marangi SOB in each Andrew patch
+- Add extra description for dsa-port stressing that PHY have no access
+  and LED are controlled by the related MAC
+- Add missing additionalProperties for dsa-port.yaml and ethernet-phy.yaml
+
+Changes from the old v8 series:
+- Drop linux,default-trigger set to netdev.
+- Dropped every hw control related patch and implement only
+  blink_set and brightness_set
+- Add default-state to "keep" for each LED node example
+
+Andrew Lunn (6):
+  net: phy: Add a binding for PHY LEDs
+  net: phy: phy_device: Call into the PHY driver to set LED brightness.
+  net: phy: marvell: Add software control of the LEDs
+  net: phy: phy_device: Call into the PHY driver to set LED blinking.
+  net: phy: marvell: Implement led_blink_set()
+  arm: mvebu: dt: Add PHY LED support for 370-rd WAN port
+
+Christian Marangi (8):
+  net: dsa: qca8k: move qca8k_port_to_phy() to header
+  net: dsa: qca8k: add LEDs basic support
+  net: dsa: qca8k: add LEDs blink_set() support
+  dt-bindings: net: dsa: dsa-port: Document support for LEDs node
+  dt-bindings: net: dsa: qca8k: add LEDs definition example
+  arm: qcom: dt: Drop unevaluated properties in switch nodes for rb3011
+  arm: qcom: dt: Add Switch LED for each port for rb3011
+  dt-bindings: net: phy: Document support for LEDs node
+
+ .../devicetree/bindings/net/dsa/dsa-port.yaml |  21 ++
+ .../devicetree/bindings/net/dsa/qca8k.yaml    |  24 ++
+ .../devicetree/bindings/net/ethernet-phy.yaml |  31 +++
+ arch/arm/boot/dts/armada-370-rd.dts           |  14 ++
+ arch/arm/boot/dts/qcom-ipq8064-rb3011.dts     | 124 +++++++++-
+ drivers/net/dsa/qca/Kconfig                   |   7 +
+ drivers/net/dsa/qca/Makefile                  |   1 +
+ drivers/net/dsa/qca/qca8k-8xxx.c              |  19 +-
+ drivers/net/dsa/qca/qca8k-leds.c              | 229 ++++++++++++++++++
+ drivers/net/dsa/qca/qca8k.h                   |  83 +++++++
+ drivers/net/phy/marvell.c                     |  81 ++++++-
+ drivers/net/phy/phy_device.c                  | 115 +++++++++
+ include/linux/phy.h                           |  33 +++
+ 13 files changed, 758 insertions(+), 24 deletions(-)
+ create mode 100644 drivers/net/dsa/qca/qca8k-leds.c
+
+-- 
+2.39.2
+
