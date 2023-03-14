@@ -2,103 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 241016B95D0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:17:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A49A6B95D5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:18:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232186AbjCNNRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:17:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
+        id S232296AbjCNNSc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:18:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53574 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230414AbjCNNRb (ORCPT
+        with ESMTP id S229484AbjCNNSM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:17:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C919EADC34;
-        Tue, 14 Mar 2023 06:14:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7EECCB818FF;
-        Tue, 14 Mar 2023 13:14:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BBC7C4339B;
-        Tue, 14 Mar 2023 13:13:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678799640;
-        bh=2ZUt1NXLgOTjTAx7wNHlRJpGKUuuaf3lW8mEbMGTGGY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mxEJ0dFrRRF34KaAyP7K9a1D3/DbnesQpKB0QAybxrexrHR/fhoST3XJExnvUZxXS
-         io4WN3TmeUbdRS8v+UJPQi99bycsYarZmRtmksgdhDF076Hj6Rle6F/Pb/eXFIh2Rc
-         PNiCrJKCb05Jl+WwSIyJEXY7C65AsFfVz3XFb0DnGVQ8yH7ZpK7y4Yx0ctixnrI/BE
-         zruIjfmnIxvKFHQymXyYW4F7f0i1BodEgPl59bQuvjCZ8KG2Uv+vcthHJ9A4Cweb1G
-         5oPKedXF2keUMtpMltghVp0bqmoMs+0kt9PFvN4mIovVrUWdfixkInwmhR1NAKj70P
-         fcWK00Ye7HcgA==
-Date:   Tue, 14 Mar 2023 14:13:56 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Igor Artemiev <Igor.A.Artemiev@mcst.ru>
-Cc:     Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lvc-project@linuxtesting.org
-Subject: Re: [lvc-project] [PATCH] Input: trackpoint - remove unreachable code
-Message-ID: <20230314131356.cwb4nd7i43sws75j@intel.intel>
-References: <20230314122714.1494260-1-Igor.A.Artemiev@mcst.ru>
+        Tue, 14 Mar 2023 09:18:12 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC8ADA9DD3;
+        Tue, 14 Mar 2023 06:14:59 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id d13so5308394pjh.0;
+        Tue, 14 Mar 2023 06:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678799684;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=d0gqt2xwBEWN7KFuDaD6z1O6+7EY4w/LU3lD9GJPLEo=;
+        b=aMYmE1hEuwdLlI/2zCCA0x2SToSWpaRHorskMf9UnZVyss+H4rEyTCBqz8QFZcFQ1q
+         /DDII02KRQISN8kCXiRkP1AMyj349zf9M7TO7MKM9GjG+uz2HMgBfYMtKw9S7W9g1Pjv
+         kvL/iNstrbXG7Fk6Kj+lq5xtn9SuOzo7IYWmJqu2AMmF9KwGG/uwQ8mNAg/G2k518e1V
+         pepXmPFsfGv500KeMt+5nvQmjXFkj0mo7tfnV1aHL/oUKtwwzKcqSNu8k7OGv9fYSFx6
+         SdqebQP7SCF455a2WyaK969NXm9g9q6zCViK63fVqr7gdTxjAL2DYnB2+uwzsV0OJfZ4
+         NPqQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678799684;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=d0gqt2xwBEWN7KFuDaD6z1O6+7EY4w/LU3lD9GJPLEo=;
+        b=h73YjexNfy8HJt2JXP2B3YGXw0JndY8q+rkmNuQpuQQZBubnHZT07Glrrk233p6ICE
+         ibok4YCEPH9kC01Mxe3yHW5NWEPtmWDbUoFV5G6pwBHxm0hfe6rHwuTp7j+AzHCtLmMZ
+         r4t8VGWJygGfTrRlOuOc4JLx6oMn/AuQ/3cEZvdTfJ7W5UZKFNDerMsQ4MvIkxd6PNOF
+         Gq4AC5KGcGV8EENMQsJcLv3MbQveqKf6rQ8w89rm1NODx4QUPbRogHZSl6kyf1Polpd4
+         HxW4yIvjmWQxiso8hiGOMNUCgKMD0MnL6v/UWRttErvyxkn2KamOS3ulKya7mbZug0vi
+         e0Ww==
+X-Gm-Message-State: AO0yUKWzOkmcoWc7azVanBHyIBQWzeaDbo3velhk0sFD6e7F64Tw3BcD
+        5SANrXJKmGBxfcTqWWvQzHM=
+X-Google-Smtp-Source: AK7set8zgMeknF6IwyMTFFnLPHBq+bdrvghaoUEyleC6B9ETERn/V9lTbUJITI8Tad0ShsR9nEm9fw==
+X-Received: by 2002:a17:903:2290:b0:19e:25b4:7740 with SMTP id b16-20020a170903229000b0019e25b47740mr47027414plh.28.1678799684655;
+        Tue, 14 Mar 2023 06:14:44 -0700 (PDT)
+Received: from KERNELXING-MB0.tencent.com ([103.7.29.31])
+        by smtp.gmail.com with ESMTPSA id g15-20020a17090a7d0f00b0023d36aa85fesm1465843pjl.40.2023.03.14.06.14.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 06:14:44 -0700 (PDT)
+From:   Jason Xing <kerneljasonxing@gmail.com>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
+        hawk@kernel.org, john.fastabend@gmail.com,
+        stephen@networkplumber.org, simon.horman@corigine.com,
+        sinquersw@gmail.com
+Cc:     bpf@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kerneljasonxing@gmail.com,
+        Jason Xing <kernelxing@tencent.com>
+Subject: [PATCH v3 net-next 0/2] add some detailed data when reading softnet_stat
+Date:   Tue, 14 Mar 2023 21:14:25 +0800
+Message-Id: <20230314131427.85135-1-kerneljasonxing@gmail.com>
+X-Mailer: git-send-email 2.33.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314122714.1494260-1-Igor.A.Artemiev@mcst.ru>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Igor,
+From: Jason Xing <kernelxing@tencent.com>
 
-On Tue, Mar 14, 2023 at 03:27:14PM +0300, Igor Artemiev wrote:
-> The trackpoint_sync() function always returnd 0.
-> And there is no need to check its result.
-> 
-> Found by Linux Verification Center (linuxtesting.org) with SVACE.
-> 
-> Fixes: 2a924d71794c ("Input: trackpoint - only expose supported controls for Elan, ALPS and NXP")
-> Signed-off-by: Igor Artemiev <Igor.A.Artemiev@mcst.ru>
+Adding more detailed display of softnet_data when cating
+/proc/net/softnet_stat, which could help users understand more about
+which can be the bottlneck and then tune.
 
-I don't think it requires the Fixes tag... it's not really
-broken.
+Based on what we've dicussed in the previous mails, we could implement it
+in different ways, like put those display into separate sysfs file or add
+some tracepoints. Still I chose to touch the legacy file to print more
+useful data without changing some old data, say, length of backlog queues
+and time_squeeze.
 
-> ---
->  drivers/input/mouse/trackpoint.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/input/mouse/trackpoint.c b/drivers/input/mouse/trackpoint.c
-> index 4a86b3e31d3b..561a4d2d81ff 100644
-> --- a/drivers/input/mouse/trackpoint.c
-> +++ b/drivers/input/mouse/trackpoint.c
-> @@ -386,9 +386,7 @@ static int trackpoint_reconnect(struct psmouse *psmouse)
->  	was_reset = tp->variant_id == TP_VARIANT_IBM &&
->  		    trackpoint_power_on_reset(&psmouse->ps2dev) == 0;
->  
-> -	error = trackpoint_sync(psmouse, was_reset);
-> -	if (error)
-> -		return error;
-> +	trackpoint_sync(psmouse, was_reset);
+After this, we wouldn't alter the behavior some user-space tools get used
+to meanwhile we could show more data.
 
-what worries me here is that if this returns always '0' who tells
-me that it will always return '0'?
+Jason Xing (2):
+  net-sysfs: display two backlog queue len separately
+  net: introduce budget_squeeze to help us tune rx behavior
 
-One day someone might add an error return path and you would miss
-it here.
+ include/linux/netdevice.h |  1 +
+ net/core/dev.c            | 12 ++++++++----
+ net/core/net-procfs.c     | 25 ++++++++++++++++++++-----
+ 3 files changed, 29 insertions(+), 9 deletions(-)
 
-Would it make sense to make the trackpoint_sync() a void function
-as well?
+-- 
+2.37.3
 
-Andi
-
->  
->  	return 0;
->  }
-> -- 
-> 2.30.2
-> 
