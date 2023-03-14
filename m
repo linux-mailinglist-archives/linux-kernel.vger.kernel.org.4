@@ -2,127 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B4606B959A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:10:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 679C46B959B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:10:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbjCNNKX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:10:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58144 "EHLO
+        id S231659AbjCNNK0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:10:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231771AbjCNNJk (ORCPT
+        with ESMTP id S232410AbjCNNJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:09:40 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 217C7ABB3B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:06:10 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Tue, 14 Mar 2023 09:09:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0B39AB8BD;
+        Tue, 14 Mar 2023 06:06:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C57DE2010C;
-        Tue, 14 Mar 2023 14:05:23 +0100 (CET)
-Date:   Tue, 14 Mar 2023 14:05:22 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 07/10] drm/msm/dsi: Remove custom DSI config handling
-Message-ID: <20230314130522.wimbrf7d6lqwdbgz@SoMainline.org>
-References: <20230307-topic-dsi_qcm-v4-0-54b4898189cb@linaro.org>
- <20230307-topic-dsi_qcm-v4-7-54b4898189cb@linaro.org>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 1A2A86176D;
+        Tue, 14 Mar 2023 13:06:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B03A6C433EF;
+        Tue, 14 Mar 2023 13:06:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678799165;
+        bh=0XsjQknlIVLtvJ4Szh+4sUw0e3LItWQ1le/lbVxC4Vc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=H+ZDiuqqpf6hPedrL+HcNUHmt8nyxrtZrFc7GB5oQ0n7cPWVgbHJpXq9yUSMlyC2/
+         7/PLty15+plMwyV08QX85+9iq1l5DSjdtur/9gn5Li4/oFuqVDXZpPrEjHpAppNac0
+         4YLMeYyMzMN9X3c6/Vcw8nVbVvT3VGcIqJ6xdirhCMKZHJM+rRhkbl2Mlb6rS38A5m
+         tbtqmnRCSnD8a9XSWmNWhO6RHGjDR8rsIOjQitXXhG/jgKlTRstf6vYWefgtd9kLXi
+         uG66uakB49UdwW7dKCi7NU6YOQk2TNJGFo6aGIjZyLRT402f0bRHRr+/+Ayv8zgVjv
+         YFuGwHSVBj/nA==
+Date:   Tue, 14 Mar 2023 15:05:54 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Altmanninger <aclopte@gmail.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <ZBBxMl5rVjY9FGS9@kernel.org>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+ <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+ <Y60RoP77HnwaukEA@zx2c4.com>
+ <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+ <Y7w74EBYP3+FHlkw@zx2c4.com>
+ <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
+ <ZBBmVhwsTf/URoqs@kernel.org>
+ <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230307-topic-dsi_qcm-v4-7-54b4898189cb@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-14 13:13:45, Konrad Dybcio wrote:
-> Now that the only user is handled by common code, remove the option to
-> specify custom handlers through match data.
+On Tue, Mar 14, 2023 at 01:47:38PM +0100, Jason A. Donenfeld wrote:
+> On 3/14/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > On Tue, Mar 14, 2023 at 10:35:33AM +0100, Thorsten Leemhuis wrote:
+> >> On 09.01.23 17:08, Jason A. Donenfeld wrote:
+> >> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
+> >> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
+> >> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
+> >> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+> >> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening
+> >> >>>>> again
+> >> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
+> >> >>>>> "tpm_try_transmit" error this time. The first indication of a
+> >> >>>>> problem
+> >> >>>>> is this during a resume from suspend to ram:
+> >> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
+> >> >>>>> and then periodically
+> >> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
+> >> >>>>
+> >> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
+> >> >>>> original problem was reported against TPM 2.0  because of a missing
+> >> >>>> try_get_ops().
+> >> >>>
+> >> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
+> >> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
+> >> >>> considering it's the same hardware from Vlastimil causing this. I
+> >> >>> also
+> >> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
+> >> >>> that's not correct.
+> >> > [...]
+> >> > So, this is now in rc3:
+> >> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
+> >> >
+> >> > That should help avoid the worst of the issue -- laptop not sleeping.
+> >> > But the race or whatever it is still does exist. So you might want to
+> >> > keep this in your tracker to periodically nudge the TPM folks about it.
+> >>
+> >> I did, and with -rc2 out now is a good time to remind everybody about
+> >> it. Jarkko even looked into it, but no real fix emerged afaics. Or did
+> >> it?
+> >
+> > Jason's workaround was picked. I asked some questions in the thread but
+> > have not received any responses.
 > 
-> This is effectively a revert of commit:
-> 5ae15e76271 ("drm/msm/dsi: Allow to specify dsi config as pdata")
-> 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> ---
->  drivers/gpu/drm/msm/dsi/dsi.c      | 4 ++--
->  drivers/gpu/drm/msm/dsi/dsi_cfg.h  | 3 ---
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ----
->  3 files changed, 2 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-> index f761973e4cba..baab79ab6e74 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
-> @@ -172,10 +172,10 @@ static int dsi_dev_remove(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id dt_match[] = {
-> -	{ .compatible = "qcom,mdss-dsi-ctrl", .data = NULL /* autodetect cfg */ },
-> +	{ .compatible = "qcom,mdss-dsi-ctrl" },
->  
->  	/* Deprecated, don't use */
-> -	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = NULL },
-> +	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290" },
->  	{}
->  };
->  
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.h b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> index 8772a3631ac1..91bdaf50bb1a 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.h
-> @@ -65,8 +65,5 @@ struct msm_dsi_cfg_handler {
->  
->  const struct msm_dsi_cfg_handler *msm_dsi_cfg_get(u32 major, u32 minor);
->  
-> -/* Non autodetect configs */
-> -extern const struct msm_dsi_cfg_handler qcm2290_dsi_cfg_handler;
-> -
+> As I've written several times now, that patch doesn't fix the issue.
+> It makes it less common but it still exists and needs to be addressed.
+> Please re-read my various messages describing this. I have nothing new
+> at all to add; you just need to review my prior comments. There's a
+> bug that probably needs to be fixed here by somebody who understands
+> the tpm1 code.
 
-Probably the wrong `fixup!` commit: this should have been part of patch
-6 where the struct is removed, not patch 7 (this patch).
+I'll try qemu path to see if I can reproduce it with/without the already
+merged workaround.
 
-- Marijn
-
->  #endif /* __MSM_DSI_CFG_H__ */
->  
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 9cfb9e91bfea..961689a255c4 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -214,10 +214,6 @@ static const struct msm_dsi_cfg_handler *dsi_get_config(
->  	int ret;
->  	u32 major = 0, minor = 0;
->  
-> -	cfg_hnd = device_get_match_data(dev);
-> -	if (cfg_hnd)
-> -		return cfg_hnd;
-> -
->  	ahb_clk = msm_clk_get(msm_host->pdev, "iface");
->  	if (IS_ERR(ahb_clk)) {
->  		pr_err("%s: cannot get interface clock\n", __func__);
-> 
-> -- 
-> 2.39.2
-> 
+BR, Jarkko
