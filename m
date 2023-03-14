@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59F196B958B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 831C86B95AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:12:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230457AbjCNNIh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:08:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57538 "EHLO
+        id S232336AbjCNNM0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:12:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbjCNNIL (ORCPT
+        with ESMTP id S232198AbjCNNMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:08:11 -0400
-Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7FCA98877
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:04:53 -0700 (PDT)
-Received: by mail-ed1-x529.google.com with SMTP id eh3so5825274edb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:04:53 -0700 (PDT)
+        Tue, 14 Mar 2023 09:12:09 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B6CD9F067
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:08:49 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id y15so10432406lfa.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:08:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678799084;
+        d=linaro.org; s=google; t=1678799326;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Oc/yTtxpfi/cx0O/ciOGYJj7wULj4xSmUjomTMHGaJ0=;
-        b=gDCZA+oCtSzqC8KPkzoxVaXnNy+rAB6AD4ylZr65HTWrRDrIbjGhEEquy5eHebVdMA
-         by5Cy81VVY5D2eSlm1iMUcN1QdQNR22d20rnHn8wO+9C0CeIm+69S31oDTSQiNx1K/Cd
-         5pGp1foTzRZiEyMr6RM0LsKeuuGSY2FQNdoThsuNFayqicfVg4NslbgxqHsZ22MCIjgV
-         OOMgLnPWtz2RBXw8zHULB5IkBVkK8B1dTS38ek5htenCWxCp+Zq9pPHkREBMRnxaKRe1
-         qxivzhMIXkiul2lCiUNdrlD10LjKNXE8fDeappAPgtm86dMHam+k9CCy2uJ+gjnwYWgJ
-         AeFg==
+        bh=4u3Z3dy+BkRpYnwJeMmsX9DLvnoWFwoNz/SMy/Kse+s=;
+        b=hi6YnOISpXd1ln6dpAPPdnh5ZuMZIf0pBA1rGC9QkCTTqiGd2OgHQ8GJMd8/Z9F2Ga
+         u+OvdpkMlMBdvA1T/3ACVAPcBDc+HRsjHJCUMkdfcHbRrFFqK0BY6TIdP0kkYry+neAP
+         0xBKEqi/qA0tAlOLWUn8KW3BRhk6zl4mnXHRW2NUEg5bT6ds+LjEUNpwsYzEFWMUHOCa
+         Ayc8UmtRaum8ombE2LGqa48ngB1N+SCzrRAd9HsUhB8Agz0d1mhPTopK5ZUk7zXJlxVB
+         X1hmTKT1uW/5ST4wBstEZduHsDXgq9bAfS5cAGIPUjQNq5yXT8OnzRPzmJgFmDmuMYfE
+         MbvQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678799084;
+        d=1e100.net; s=20210112; t=1678799326;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Oc/yTtxpfi/cx0O/ciOGYJj7wULj4xSmUjomTMHGaJ0=;
-        b=5LLefINMOOlrMNxdJUZGjnezT5a1oCNvW36Bn5qlOaKuyBrieiQIsBwOSZdEi7Wtb2
-         UEJsLknOuOQS7DCQgc5jeCsuPAXYRD4rDxGig4g/6eMAcLjPjDSBeIQ7GW3ydX7lxJl5
-         5ZOjjLk8+i54NhZRNwGYtMKI8Ia2zFc8ZUmASaZpl62j7t5wu5JiO2IFtu60ZUNW74ip
-         aRz3JHD0pl7RhrmDa5qPwkXBXVUJoy2YpdBrcL9NuYZLgI7FxPkyL7fnq6OwRkpK9uER
-         20nNwGe7nQ2eDoSHMhN0w8hOsIsNS8RJREC1sIZ7+Aanbx9Ahyi14AWuZVYzwjxT5Ujo
-         /Isw==
-X-Gm-Message-State: AO0yUKXrBBsiWVOIt+tedKJ1+hBJwc3W0RuWn3rxkaQ38Aj7XUZMOEXW
-        gtTKCpWd8BIIXY2A13UTWkhXxAjuAfNWNHMqbK8=
-X-Google-Smtp-Source: AK7set/cA5JzNq58dSwBAkLHZCu0RayEc27uAlLkeTiHXGkrsrtUKK6Xmh8rmkhOulNKQc/fzE5z3w==
-X-Received: by 2002:ac2:4c29:0:b0:4e8:49ff:8df8 with SMTP id u9-20020ac24c29000000b004e849ff8df8mr770470lfq.61.1678798393458;
-        Tue, 14 Mar 2023 05:53:13 -0700 (PDT)
+        bh=4u3Z3dy+BkRpYnwJeMmsX9DLvnoWFwoNz/SMy/Kse+s=;
+        b=rmfdO98r0yFdg2BAWxLy+NXn+BdBkcALwXPcco5byFlx/fjncZj9W0h6Ag74h6BXlj
+         VzTmZfjrO7Ipp2pyGx7Gy1YzeOONIUKOG/HWwnbz9EvEtu2ireufbSyR99naWaQmIo3Q
+         H2wyZL8B9hsapALO/hieAKSJm84jVY/KZZjuay2IWqRLDeJa1sz3cNSKNjytv/J6onxQ
+         OkzkeKSXSj+MFAAE/n9rR/e3bq00kagJU6Cs+esumbZoaB77d27pQO3X450nhiSfobKR
+         krWMpEhfFv+J/VLd4AUaPxE1D0zZDYUumk788VqRqjKsM/Tvpw5u1YNGJhhYOqwTcEpc
+         wSSw==
+X-Gm-Message-State: AO0yUKUvzAe1jOm8L9ztRikg2Zm4SvD6mcT/ZrO6pkMEjIzeKOJTxse8
+        HWGN5ObKiTbFiFEfk0f/4QJnuT7zbYxMupZXO3Y=
+X-Google-Smtp-Source: AK7set/RixxVNKujsAXzNyntLdalHXNIeBxQK5g7qnTRfuTqqa5fNYgeB41cA485GhqwyPyUfX88XA==
+X-Received: by 2002:a19:f613:0:b0:4dd:af74:fe1a with SMTP id x19-20020a19f613000000b004ddaf74fe1amr821319lfe.48.1678798395683;
+        Tue, 14 Mar 2023 05:53:15 -0700 (PDT)
 Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm395374lfd.68.2023.03.14.05.53.11
+        by smtp.gmail.com with ESMTPSA id s9-20020a19ad49000000b004dda74eccafsm395374lfd.68.2023.03.14.05.53.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 05:53:13 -0700 (PDT)
+        Tue, 14 Mar 2023 05:53:15 -0700 (PDT)
 From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-Date:   Tue, 14 Mar 2023 13:52:58 +0100
-Subject: [PATCH 3/6] dt-bindings: nvmem: Add compatible for QCM2290
+Date:   Tue, 14 Mar 2023 13:52:59 +0100
+Subject: [PATCH 4/6] dt-bindings: mmc: sdhci-msm: Document QCM2290 SDHCI
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20230314-topic-2290_compats-v1-3-47e26c3c0365@linaro.org>
+Message-Id: <20230314-topic-2290_compats-v1-4-47e26c3c0365@linaro.org>
 References: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
 In-Reply-To: <20230314-topic-2290_compats-v1-0-47e26c3c0365@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
@@ -83,11 +83,11 @@ Cc:     linux-arm-msm@vger.kernel.org, linux-watchdog@vger.kernel.org,
         linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
         Konrad Dybcio <konrad.dybcio@linaro.org>
 X-Mailer: b4 0.12.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1678798384; l=777;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678798384; l=760;
  i=konrad.dybcio@linaro.org; s=20230215; h=from:subject:message-id;
- bh=hWgvEppu/A1SXLKMMX+IVEfzPX58BD27JWEng55RY7w=;
- b=Ef0WrVrVXlVDBJBByuHYfJlJ7lKiC4VKDD9vte3q6X/PFMC2o+9sSEcy8IVuH2VILi/qU5aK+BY5
- Ts3tc5KED8ipFSTE15LUOfkLBF7qH00cFE3ULYIfdjVnID+Jp6zW
+ bh=N4Xjte+JpBIPh/cB6jQob/nXlB7qFTxxjX08BpaMx4c=;
+ b=cHqD/zIBdnuelq4KzPpe+lOLAwsvFvrsDfIS2+ESZPop3zz77xxi1NVoWRRX75v9bCykU+2lLpRf
+ it1bWjpxDnXB4TIUAStq4P+tuYLYJi0SmeK0/c6UL3mtMdQbw89A
 X-Developer-Key: i=konrad.dybcio@linaro.org; a=ed25519;
  pk=iclgkYvtl2w05SSXO5EjjSYlhFKsJ+5OSZBjOkQuEms=
 X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -100,25 +100,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Docuemnt the QFPROM on QCM2290.
+Document the SDHCI on QCM2290.
 
 Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
 ---
- Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml | 1 +
+ Documentation/devicetree/bindings/mmc/sdhci-msm.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-index 2173fe82317d..1bd213f9eb38 100644
---- a/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/qcom,qfprom.yaml
-@@ -25,6 +25,7 @@ properties:
-           - qcom,msm8976-qfprom
-           - qcom,msm8996-qfprom
-           - qcom,msm8998-qfprom
-+          - qcom,qcm2290-qfprom
-           - qcom,qcs404-qfprom
-           - qcom,sc7180-qfprom
-           - qcom,sc7280-qfprom
+diff --git a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+index 64df6919abaf..7d4c5ca25e0d 100644
+--- a/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
++++ b/Documentation/devicetree/bindings/mmc/sdhci-msm.yaml
+@@ -36,6 +36,7 @@ properties:
+           - enum:
+               - qcom,ipq5332-sdhci
+               - qcom,ipq9574-sdhci
++              - qcom,qcm2290-sdhci
+               - qcom,qcs404-sdhci
+               - qcom,sc7180-sdhci
+               - qcom,sc7280-sdhci
 
 -- 
 2.39.2
