@@ -2,112 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B9136B869A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D3116B869D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:08:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCNAHz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:07:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37136 "EHLO
+        id S230274AbjCNAIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:08:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230243AbjCNAHw (ORCPT
+        with ESMTP id S229664AbjCNAID (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:07:52 -0400
-Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [5.144.164.164])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 020D18F71D;
-        Mon, 13 Mar 2023 17:07:47 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C28D620112;
-        Tue, 14 Mar 2023 01:07:45 +0100 (CET)
-Date:   Tue, 14 Mar 2023 01:07:44 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 07/10] drm/msm/dsi: Remove custom DSI config handling
-Message-ID: <20230314000744.otbglr33ndizq5pc@SoMainline.org>
-References: <20230307-topic-dsi_qcm-v3-0-8bd7e1add38a@linaro.org>
- <20230307-topic-dsi_qcm-v3-7-8bd7e1add38a@linaro.org>
+        Mon, 13 Mar 2023 20:08:03 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E19C5BDCF;
+        Mon, 13 Mar 2023 17:08:01 -0700 (PDT)
+From:   =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+        s=mail; t=1678752479;
+        bh=24lS7AT/mJMlMTu5fR6dYKGL0CJ7L1D9wf89E1D7eb0=;
+        h=From:Date:Subject:To:Cc:From;
+        b=qRfRQaiGBZirLnDK+0SyFSagcmW6luCRN6PFEVxbgcLMKHYu1umN3IotIlfLARUzy
+         /6C4B+zOMSRok6aHbGZ1kWHP0HHhnWl0lSmPMGeYJD/+jvwQOiNQJnHHw7OC2xVybv
+         x2gGZOSF3z5cb1fWujr3iN4j5wEeQ5fCvfVAmF2M=
+Date:   Tue, 14 Mar 2023 00:07:52 +0000
+Subject: [PATCH] platform/x86: think-lmi: Remove custom kobject sysfs_ops
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230307-topic-dsi_qcm-v3-7-8bd7e1add38a@linaro.org>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20230314-think-lmi-sysfs_ops-v1-1-9d4f1cf9caec@weissschuh.net>
+X-B4-Tracking: v=1; b=H4sIANe6D2QC/x2N0QrCMAwAf2Xk2cDa7WH1V0Sk3TIbrNloVBxj/
+ 27w8Q6O20GpMimcmx0qfVh5EQN3amDMUe6EPBmDb33Xdq7HV2Z5YHky6qaz3pZVkYY+RDf4EFI
+ CK1NUwlSjjNlaeZdicq008/e/ulyP4wcrffniegAAAA==
+To:     Mark Pearson <markpearson@lenovo.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>
+Cc:     platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org,
+        =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
+X-Mailer: b4 0.12.1
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1678752477; l=2247;
+ i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
+ bh=24lS7AT/mJMlMTu5fR6dYKGL0CJ7L1D9wf89E1D7eb0=;
+ b=kwdNGsBKDqC0SGg4gsX5c+cdmkanAlkbduZs0G6NlNzgTqcR8t+oinfPIZA0KjGDD8ILFmFS+
+ hKmx34onCk5DL8eXC2zXvOd+zE/ZQS/1CNLiMmtKcM/49c3XQSa7xre
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
+ pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-07 14:01:45, Konrad Dybcio wrote:
-> Now that the only user is handled by common code, remove the option to
-> specify custom handlers through match data.
-> 
-> This is effectively a revert of commit:
-> 5ae15e76271 ("drm/msm/dsi: Allow to specify dsi config as pdata")
+think-lmi defines its own sysfs_ops that are identical to the standard
+kobj_sysfs_ops. Use the standard definitions.
 
-Would it also be worth to mention something along these lines in the
-previous patch, but for ee1f09678f14 ("drm/msm/dsi: Add support for
-qcm2290 dsi controller")?
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+---
 
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+This has only been compile-tested.
+---
+ drivers/platform/x86/think-lmi.c | 31 ++-----------------------------
+ 1 file changed, 2 insertions(+), 29 deletions(-)
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+diff --git a/drivers/platform/x86/think-lmi.c b/drivers/platform/x86/think-lmi.c
+index 86b33b74519b..2b5ae68ffce8 100644
+--- a/drivers/platform/x86/think-lmi.c
++++ b/drivers/platform/x86/think-lmi.c
+@@ -1047,33 +1047,6 @@ static const struct attribute_group tlmi_attr_group = {
+ 	.attrs = tlmi_attrs,
+ };
+ 
+-static ssize_t tlmi_attr_show(struct kobject *kobj, struct attribute *attr,
+-				    char *buf)
+-{
+-	struct kobj_attribute *kattr;
+-
+-	kattr = container_of(attr, struct kobj_attribute, attr);
+-	if (kattr->show)
+-		return kattr->show(kobj, kattr, buf);
+-	return -EIO;
+-}
+-
+-static ssize_t tlmi_attr_store(struct kobject *kobj, struct attribute *attr,
+-				     const char *buf, size_t count)
+-{
+-	struct kobj_attribute *kattr;
+-
+-	kattr = container_of(attr, struct kobj_attribute, attr);
+-	if (kattr->store)
+-		return kattr->store(kobj, kattr, buf, count);
+-	return -EIO;
+-}
+-
+-static const struct sysfs_ops tlmi_kobj_sysfs_ops = {
+-	.show	= tlmi_attr_show,
+-	.store	= tlmi_attr_store,
+-};
+-
+ static void tlmi_attr_setting_release(struct kobject *kobj)
+ {
+ 	struct tlmi_attr_setting *setting = to_tlmi_attr_setting(kobj);
+@@ -1091,12 +1064,12 @@ static void tlmi_pwd_setting_release(struct kobject *kobj)
+ 
+ static const struct kobj_type tlmi_attr_setting_ktype = {
+ 	.release        = &tlmi_attr_setting_release,
+-	.sysfs_ops	= &tlmi_kobj_sysfs_ops,
++	.sysfs_ops	= &kobj_sysfs_ops,
+ };
+ 
+ static const struct kobj_type tlmi_pwd_setting_ktype = {
+ 	.release        = &tlmi_pwd_setting_release,
+-	.sysfs_ops	= &tlmi_kobj_sysfs_ops,
++	.sysfs_ops	= &kobj_sysfs_ops,
+ };
+ 
+ static ssize_t pending_reboot_show(struct kobject *kobj, struct kobj_attribute *attr,
 
-> ---
->  drivers/gpu/drm/msm/dsi/dsi.c      | 4 ++--
->  drivers/gpu/drm/msm/dsi/dsi_host.c | 4 ----
->  2 files changed, 2 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-> index 90d43628b22b..e0b911af618d 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi.c
-> @@ -173,10 +173,10 @@ static int dsi_dev_remove(struct platform_device *pdev)
->  }
->  
->  static const struct of_device_id dt_match[] = {
-> -	{ .compatible = "qcom,mdss-dsi-ctrl", .data = NULL /* autodetect cfg */ },
-> +	{ .compatible = "qcom,mdss-dsi-ctrl" },
->  
->  	/* Deprecated, don't use */
-> -	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = NULL },
-> +	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290" },
->  	{}
->  };
->  
-> diff --git a/drivers/gpu/drm/msm/dsi/dsi_host.c b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> index 9cfb9e91bfea..961689a255c4 100644
-> --- a/drivers/gpu/drm/msm/dsi/dsi_host.c
-> +++ b/drivers/gpu/drm/msm/dsi/dsi_host.c
-> @@ -214,10 +214,6 @@ static const struct msm_dsi_cfg_handler *dsi_get_config(
->  	int ret;
->  	u32 major = 0, minor = 0;
->  
-> -	cfg_hnd = device_get_match_data(dev);
-> -	if (cfg_hnd)
-> -		return cfg_hnd;
-> -
->  	ahb_clk = msm_clk_get(msm_host->pdev, "iface");
->  	if (IS_ERR(ahb_clk)) {
->  		pr_err("%s: cannot get interface clock\n", __func__);
-> 
-> -- 
-> 2.39.2
-> 
+---
+base-commit: eeac8ede17557680855031c6f305ece2378af326
+change-id: 20230314-think-lmi-sysfs_ops-e849a18299bb
+
+Best regards,
+-- 
+Thomas Weißschuh <linux@weissschuh.net>
+
