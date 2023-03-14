@@ -2,235 +2,230 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F2D6B916C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:18:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7C926B9163
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:17:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229676AbjCNLSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50526 "EHLO
+        id S230522AbjCNLRr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:17:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCNLRs (ORCPT
+        with ESMTP id S231273AbjCNLR0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:17:48 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 596BA22CA2;
-        Tue, 14 Mar 2023 04:17:18 -0700 (PDT)
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EASRkD022089;
-        Tue, 14 Mar 2023 11:16:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=g1l3lyZNTBh60xFeKe5WpfcYWJXdi2SY59E6+ExCylA=;
- b=HuQAWFwhGUPhA92v20L8oPByAdo6IWy3gU8y0IqkFFGt1exGo584P87YDWrlRKxto8mp
- m+zAW7+uajztzZLaiV3DKvst5bNlEfU5enaWztgLaED3mGbsjbcAqgicKnJueJ1mXvpR
- GODfdnrZ/5HOGbmRnj8xlMg8+gnV+5ngSM1sLItM75hYLsInD3RDEElRv4P2+KBOuBRy
- W37XphJxyu//9Jrsu5vME5aBF0xFLeQJ7bXia1o9Y+YbZngCbnMum5LFInFzVkbtCfD9
- +AHgnC3gNWpBtw1tSV3oiNXLFsRTS2qbsemydTKgy0BuLy26UhZRhHWlsmG+SjmIDCts Rw== 
-Received: from aptaippmta02.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa6n32ppa-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 11:16:44 +0000
-Received: from pps.filterd (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 32EBGfpq013655;
-        Tue, 14 Mar 2023 11:16:41 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 3p8jqmemx3-1;
-        Tue, 14 Mar 2023 11:16:41 +0000
-Received: from APTAIPPMTA02.qualcomm.com (APTAIPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EBGfAN013516;
-        Tue, 14 Mar 2023 11:16:41 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA02.qualcomm.com (PPS) with ESMTP id 32EBGeSI013506;
-        Tue, 14 Mar 2023 11:16:41 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 393357)
-        id B523B3E37; Tue, 14 Mar 2023 19:16:39 +0800 (CST)
-From:   Ziqi Chen <quic_ziqichen@quicinc.com>
-To:     quic_asutoshd@quicinc.com, quic_cang@quicinc.com,
-        quic_nguyenb@quicinc.com, bvanassche@acm.org, mani@kernel.org,
-        stanley.chu@mediatek.com, adrian.hunter@intel.com,
-        beanhuo@micron.com, avri.altman@wdc.com, junwoo80.lee@samsung.com,
-        martin.petersen@oracle.com, quic_ziqichen@quicinc.com
-Cc:     linux-scsi@vger.kernel.org, Alim Akhtar <alim.akhtar@samsung.com>,
-        "James E.J. Bottomley" <jejb@linux.ibm.com>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH v2] scsi: ufs: core: print trs for pending requests in MCQ mode
-Date:   Tue, 14 Mar 2023 19:16:32 +0800
-Message-Id: <1678792597-3232-1-git-send-email-quic_ziqichen@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: RspmfyAqmEnJPkDCKwZmhlrHt1iW7LAA
-X-Proofpoint-GUID: RspmfyAqmEnJPkDCKwZmhlrHt1iW7LAA
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_04,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
- bulkscore=0 mlxlogscore=999 impostorscore=0 priorityscore=1501
- adultscore=0 phishscore=0 spamscore=0 lowpriorityscore=0 clxscore=1015
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140096
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 07:17:26 -0400
+Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E673E1A7;
+        Tue, 14 Mar 2023 04:16:58 -0700 (PDT)
+Received: by mail-lf1-x12a.google.com with SMTP id j11so19473414lfg.13;
+        Tue, 14 Mar 2023 04:16:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678792615;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=paxnxYxbx4HrMv5BTgQUHEfCXgPIkhE/j+M9+u1vkJw=;
+        b=OOiD6pW8WIkarCNqNodK/HHj7CtDz5vYQ/qwXwQpFdahkhdYd1gyhrl2PElp4a+uKY
+         CT5G8YQvQkNj08P5vWxtnu1xWziMeI61oJ5+akMRrxFQhsE2nWeh/BMu0IKV/XyRuMU6
+         KP20nqndDTxAUCqmh3PSoqgTfL9MSczEZ6XSVC9EF2qLnGmeGs/UQ+adyQUWftoC3VP0
+         F58cgV2qPutsE85y+1a5OWAxRJ6bqS0Ztp3QtF0Fyssmcu+i9v5KM6owmSOlNeIP7mjN
+         lj8SmqdgOXcTe16PJ93B/+xM4SRmeILa6qBF8VrrGssrbzWI5PjDZnlwMeiv8Qfpc5Tv
+         2Fsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678792615;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=paxnxYxbx4HrMv5BTgQUHEfCXgPIkhE/j+M9+u1vkJw=;
+        b=KF60BBVYBcuFlRWpXD32VCJPQR87Q8xuHK0IO93HNxCHpqjMsUx05LKbZciGJpEtYk
+         JbrsSke+Lqe41n7kIgX2PLqCOJ+iz0IlXThRXgsOChszDNl2G/SVloOyZJcMGViVXoDn
+         jtB7sxle9TTq3/TkRdRrdK1ezq2dqXmKlXB52J1At2M6PaJfPN82QW9PfVmjnY0ezetS
+         APMjw+KNc+LCUJ5qdjgob2Q0tx8oGAKfQTKb8HSryVTkAtHHIhUFgm44D8Xgl/Gc4Cr9
+         edxz3t9sSZtQCMjq6qi0a0b/qwMexjQNXOJfq6gE+XmCpSU3AKbydDepRaloc3yiXBEi
+         aXFg==
+X-Gm-Message-State: AO0yUKVKsrLca1CKKegU6o7AYU8ll0XFsI0RnKpZu+uLzro4cq54Pomx
+        7rOOjTDAt1iPxSkhhW033G43ynXahag=
+X-Google-Smtp-Source: AK7set9+dVNAheONtnr9+/jTZ26WfHoeFOsv53hXj7Wbzeomt0X/hIbYw0rSMSbYNiiPbUZYqPF9wQ==
+X-Received: by 2002:ac2:4a7c:0:b0:4cc:53e3:771d with SMTP id q28-20020ac24a7c000000b004cc53e3771dmr604248lfp.64.1678792614632;
+        Tue, 14 Mar 2023 04:16:54 -0700 (PDT)
+Received: from pc636 (host-78-79-233-41.mobileonline.telia.com. [78.79.233.41])
+        by smtp.gmail.com with ESMTPSA id q11-20020a19a40b000000b00497a61453a9sm361981lfc.243.2023.03.14.04.16.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 04:16:54 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 14 Mar 2023 12:16:51 +0100
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        linux-kernel@vger.kernel.org, Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        linux-doc@vger.kernel.org, rcu@vger.kernel.org
+Subject: Re: [PATCH v3] rcu: Add a minimum time for marking boot as completed
+Message-ID: <ZBBXo/z21UQYgQ+9@pc636>
+References: <ZA7yK6iznHqiBu5i@pc636>
+ <01559085-EB77-4962-B5EF-FF767F5A7353@joelfernandes.org>
+ <ZA9B+sgrlK5yommJ@pc636>
+ <CAEXW_YTgDM+47rfz0XNjeV8MMPnhyfCcXX+o74SqONvwd4wfzA@mail.gmail.com>
+ <ZA9nd8LN4+qO5Sdn@pc636>
+ <c7a7fac9-ae29-404d-98ec-e01e2c63968e@paulmck-laptop>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <c7a7fac9-ae29-404d-98ec-e01e2c63968e@paulmck-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We don't have outstanding_reqs bitmap in MCQ mode. And in consideration
-of the queue depth may increase beyond 64 in the future, we reworked
-ufshcd_print_trs() to get rid of usage of bitmap so that we can print
-trs for pending requests in both SDB and MCQ mode.
+On Mon, Mar 13, 2023 at 11:56:34AM -0700, Paul E. McKenney wrote:
+> On Mon, Mar 13, 2023 at 07:12:07PM +0100, Uladzislau Rezki wrote:
+> > On Mon, Mar 13, 2023 at 11:49:58AM -0400, Joel Fernandes wrote:
+> > > On Mon, Mar 13, 2023 at 11:32 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > >
+> > > > On Mon, Mar 13, 2023 at 06:58:30AM -0700, Joel Fernandes wrote:
+> > > > >
+> > > > >
+> > > > > > On Mar 13, 2023, at 2:51 AM, Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > > > >
+> > > > > > ﻿On Fri, Mar 10, 2023 at 10:24:34PM -0800, Paul E. McKenney wrote:
+> > > > > >>> On Fri, Mar 10, 2023 at 09:55:02AM +0100, Uladzislau Rezki wrote:
+> > > > > >>> On Thu, Mar 09, 2023 at 10:10:56PM +0000, Joel Fernandes wrote:
+> > > > > >>>> On Thu, Mar 09, 2023 at 01:57:42PM +0100, Uladzislau Rezki wrote:
+> > > > > >>>> [..]
+> > > > > >>>>>>>>>> See this commit:
+> > > > > >>>>>>>>>>
+> > > > > >>>>>>>>>> 3705b88db0d7cc ("rcu: Add a module parameter to force use of
+> > > > > >>>>>>>>>> expedited RCU primitives")
+> > > > > >>>>>>>>>>
+> > > > > >>>>>>>>>> Antti provided this commit precisely in order to allow Android
+> > > > > >>>>>>>>>> devices to expedite the boot process and to shut off the
+> > > > > >>>>>>>>>> expediting at a time of Android userspace's choosing.  So Android
+> > > > > >>>>>>>>>> has been making this work for about ten years, which strikes me
+> > > > > >>>>>>>>>> as an adequate proof of concept.  ;-)
+> > > > > >>>>>>>>>
+> > > > > >>>>>>>>> Thanks for the pointer. That's true. Looking at Android sources, I
+> > > > > >>>>>>>>> find that Android Mediatek devices at least are setting
+> > > > > >>>>>>>>> rcu_expedited to 1 at late stage of their userspace boot (which is
+> > > > > >>>>>>>>> weird, it should be set to 1 as early as possible), and
+> > > > > >>>>>>>>> interestingly I cannot find them resetting it back to 0!.  Maybe
+> > > > > >>>>>>>>> they set rcu_normal to 1? But I cannot find that either. Vlad? :P
+> > > > > >>>>>>>>
+> > > > > >>>>>>>> Interesting.  Though this is consistent with Antti's commit log,
+> > > > > >>>>>>>> where he talks about expediting grace periods but not unexpediting
+> > > > > >>>>>>>> them.
+> > > > > >>>>>>>>
+> > > > > >>>>>>> Do you think we need to unexpedite it? :))))
+> > > > > >>>>>>
+> > > > > >>>>>> Android runs on smallish systems, so quite possibly not!
+> > > > > >>>>>>
+> > > > > >>>>> We keep it enabled and never unexpedite it. The reason is a performance.  I
+> > > > > >>>>> have done some app-launch time analysis with enabling and disabling of it.
+> > > > > >>>>>
+> > > > > >>>>> An expedited case is much better when it comes to app launch time. It
+> > > > > >>>>> requires ~25% less time to run an app comparing with unexpedited variant.
+> > > > > >>>>> So we have a big gain here.
+> > > > > >>>>
+> > > > > >>>> Wow, that's huge. I wonder if you can dig deeper and find out why that is so
+> > > > > >>>> as the callbacks may need to be synchronize_rcu_expedited() then, as it could
+> > > > > >>>> be slowing down other usecases! I find it hard to believe, real-time
+> > > > > >>>> workloads will run better without those callbacks being always-expedited if
+> > > > > >>>> it actually gives back 25% in performance!
+> > > > > >>>>
+> > > > > >>> I can dig further, but on a high level i think there are some spots
+> > > > > >>> which show better performance if expedited is set. I mean synchronize_rcu()
+> > > > > >>> becomes as "less blocking a context" from a time point of view.
+> > > > > >>>
+> > > > > >>> The problem of a regular synchronize_rcu() is - it can trigger a big latency
+> > > > > >>> delays for a caller. For example for nocb case we do not know where in a list
+> > > > > >>> our callback is located and when it is invoked to unblock a caller.
+> > > > > >>
+> > > > > >> True, expedited RCU grace periods do not have this callback-invocation
+> > > > > >> delay that normal RCU does.
+> > > > > >>
+> > > > > >>> I have already mentioned somewhere. Probably it makes sense to directly wake-up
+> > > > > >>> callers from the GP kthread instead and not via nocb-kthread that invokes our callbacks
+> > > > > >>> one by one.
+> > > > > >>
+> > > > > >> Makes sense, but it is necessary to be careful.  Wakeups are not fast,
+> > > > > >> so making the RCU grace-period kthread do them all sequentially is not
+> > > > > >> a strategy to win.  For example, note that the next expedited grace
+> > > > > >> period can start before the previous expedited grace period has finished
+> > > > > >> its wakeups.
+> > > > > >>
+> > > > > > I hove done a small and quick prototype:
+> > > > > >
+> > > > > > <snip>
+> > > > > > diff --git a/include/linux/rcupdate_wait.h b/include/linux/rcupdate_wait.h
+> > > > > > index 699b938358bf..e1a4cca9a208 100644
+> > > > > > --- a/include/linux/rcupdate_wait.h
+> > > > > > +++ b/include/linux/rcupdate_wait.h
+> > > > > > @@ -9,6 +9,8 @@
+> > > > > > #include <linux/rcupdate.h>
+> > > > > > #include <linux/completion.h>
+> > > > > >
+> > > > > > +extern struct llist_head gp_wait_llist;
+> > > > > > +
+> > > > > > /*
+> > > > > >  * Structure allowing asynchronous waiting on RCU.
+> > > > > >  */
+> > > > > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > > > > index ee27a03d7576..50b81ca54104 100644
+> > > > > > --- a/kernel/rcu/tree.c
+> > > > > > +++ b/kernel/rcu/tree.c
+> > > > > > @@ -113,6 +113,9 @@ int rcu_num_lvls __read_mostly = RCU_NUM_LVLS;
+> > > > > > int num_rcu_lvl[] = NUM_RCU_LVL_INIT;
+> > > > > > int rcu_num_nodes __read_mostly = NUM_RCU_NODES; /* Total # rcu_nodes in use. */
+> > > > > >
+> > > > > > +/* Waiters for a GP kthread. */
+> > > > > > +LLIST_HEAD(gp_wait_llist);
+> 
+> This being a single global will of course fail due to memory contention
+> on large systems.  So a patch that is ready for mainline must either
+> have per-rcu_node-structure lists or similar.
+> 
+I agree. This is a prototype and the aim is a proof of concept :)
+On bigger systems gp can starve if it wake-ups a lot of users.
 
-Signed-off-by: Ziqi Chen <quic_ziqichen@quicinc.com>
+At lease i see that a camera-app improves in terms of launch time.
+It is around 12% percent.
 
----
-Changes to v1:
-- Use blk_mq_tagset_busy_iter() to iterate over pending requests.
----
- drivers/ufs/core/ufshcd.c | 97 ++++++++++++++++++++++++++++-------------------
- 1 file changed, 58 insertions(+), 39 deletions(-)
+> > > > > > /*
+> > > > > >  * The rcu_scheduler_active variable is initialized to the value
+> > > > > >  * RCU_SCHEDULER_INACTIVE and transitions RCU_SCHEDULER_INIT just before the
+> > > > > > @@ -1776,6 +1779,14 @@ static noinline void rcu_gp_cleanup(void)
+> > > > > >                on_each_cpu(rcu_strict_gp_boundary, NULL, 0);
+> > > > > > }
+> > > > > >
+> > > > > > +static void rcu_notify_gp_end(struct llist_node *llist)
+> 
+> And calling this directly from rcu_gp_kthread() is a no-go for large
+> systems because the large number of wakeups will CPU-bound that kthread.
+> Also, it would be better to invoke this from rcu_gp_cleanup().
+> 
+> One option would be to do the wakeups from a workqueue handler.
+> 
+> You might also want to have an array of lists indexed by the bottom few
+> bits of the RCU grace-period sequence number.  This would reduce the
+> number of spurious wakeups.
+> 
+> > > > > > +{
+> > > > > > +       struct llist_node *rcu, *next;
+> > > > > > +
+> > > > > > +       llist_for_each_safe(rcu, next, llist)
+> > > > > > +               complete(&((struct rcu_synchronize *) rcu)->completion);
+> 
+> If you don't eliminate spurious wakeups, it is necessary to do something
+> like checking poll_state_synchronize_rcu() reject those wakeups.
+> 
+OK.
 
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 1d58cb2..3ce1be5 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -542,48 +542,67 @@ static void ufshcd_print_evt_hist(struct ufs_hba *hba)
- }
- 
- static
--void ufshcd_print_trs(struct ufs_hba *hba, unsigned long bitmap, bool pr_prdt)
-+void ufshcd_print_tr(struct ufs_hba *hba, int tag, bool pr_prdt)
- {
- 	const struct ufshcd_lrb *lrbp;
- 	int prdt_length;
--	int tag;
- 
--	for_each_set_bit(tag, &bitmap, hba->nutrs) {
--		lrbp = &hba->lrb[tag];
-+	lrbp = &hba->lrb[tag];
- 
--		dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
--				tag, div_u64(lrbp->issue_time_stamp_local_clock, 1000));
--		dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
--				tag, div_u64(lrbp->compl_time_stamp_local_clock, 1000));
--		dev_err(hba->dev,
--			"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
--			tag, (u64)lrbp->utrd_dma_addr);
--
--		ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
--				sizeof(struct utp_transfer_req_desc));
--		dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
--			(u64)lrbp->ucd_req_dma_addr);
--		ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
--				sizeof(struct utp_upiu_req));
--		dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
--			(u64)lrbp->ucd_rsp_dma_addr);
--		ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
--				sizeof(struct utp_upiu_rsp));
--
--		prdt_length = le16_to_cpu(
--			lrbp->utr_descriptor_ptr->prd_table_length);
--		if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
--			prdt_length /= ufshcd_sg_entry_size(hba);
-+	dev_err(hba->dev, "UPIU[%d] - issue time %lld us\n",
-+			tag, div_u64(lrbp->issue_time_stamp_local_clock, 1000));
-+	dev_err(hba->dev, "UPIU[%d] - complete time %lld us\n",
-+			tag, div_u64(lrbp->compl_time_stamp_local_clock, 1000));
-+	dev_err(hba->dev,
-+		"UPIU[%d] - Transfer Request Descriptor phys@0x%llx\n",
-+		tag, (u64)lrbp->utrd_dma_addr);
-+
-+	ufshcd_hex_dump("UPIU TRD: ", lrbp->utr_descriptor_ptr,
-+			sizeof(struct utp_transfer_req_desc));
-+	dev_err(hba->dev, "UPIU[%d] - Request UPIU phys@0x%llx\n", tag,
-+		(u64)lrbp->ucd_req_dma_addr);
-+	ufshcd_hex_dump("UPIU REQ: ", lrbp->ucd_req_ptr,
-+			sizeof(struct utp_upiu_req));
-+	dev_err(hba->dev, "UPIU[%d] - Response UPIU phys@0x%llx\n", tag,
-+		(u64)lrbp->ucd_rsp_dma_addr);
-+	ufshcd_hex_dump("UPIU RSP: ", lrbp->ucd_rsp_ptr,
-+			sizeof(struct utp_upiu_rsp));
-+
-+	prdt_length = le16_to_cpu(
-+		lrbp->utr_descriptor_ptr->prd_table_length);
-+	if (hba->quirks & UFSHCD_QUIRK_PRDT_BYTE_GRAN)
-+		prdt_length /= ufshcd_sg_entry_size(hba);
- 
--		dev_err(hba->dev,
--			"UPIU[%d] - PRDT - %d entries  phys@0x%llx\n",
--			tag, prdt_length,
--			(u64)lrbp->ucd_prdt_dma_addr);
-+	dev_err(hba->dev,
-+		"UPIU[%d] - PRDT - %d entries  phys@0x%llx\n",
-+		tag, prdt_length,
-+		(u64)lrbp->ucd_prdt_dma_addr);
- 
--		if (pr_prdt)
--			ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
--				ufshcd_sg_entry_size(hba) * prdt_length);
--	}
-+	if (pr_prdt)
-+		ufshcd_hex_dump("UPIU PRDT: ", lrbp->ucd_prdt_ptr,
-+			ufshcd_sg_entry_size(hba) * prdt_length);
-+}
-+
-+static bool ufshcd_print_tr_iter(struct request *req, void *priv)
-+{
-+	struct scsi_device *sdev = req->q->queuedata;
-+	struct Scsi_Host *shost = sdev->host;
-+	struct ufs_hba *hba = shost_priv(shost);
-+
-+	if (!IS_ERR_OR_NULL(hba))
-+		ufshcd_print_tr(hba, req->tag, *(bool *)priv);
-+
-+	return true;
-+}
-+
-+/**
-+ * ufshcd_print_trs_all - print trs for all started requests.
-+ * @hba: per-adapter instance.
-+ * @pr_prdt: need to print prdt or not.
-+ */
-+static void ufshcd_print_trs_all(struct ufs_hba *hba, bool pr_prdt)
-+{
-+	blk_mq_tagset_busy_iter(&hba->host->tag_set, ufshcd_print_tr_iter, &pr_prdt);
- }
- 
- static void ufshcd_print_tmrs(struct ufs_hba *hba, unsigned long bitmap)
-@@ -5332,7 +5351,7 @@ ufshcd_transfer_rsp_status(struct ufs_hba *hba, struct ufshcd_lrb *lrbp,
- 
- 	if ((host_byte(result) != DID_OK) &&
- 	    (host_byte(result) != DID_REQUEUE) && !hba->silence_err_logs)
--		ufshcd_print_trs(hba, 1 << lrbp->task_tag, true);
-+		ufshcd_print_tr(hba, lrbp->task_tag, true);
- 	return result;
- }
- 
-@@ -6406,7 +6425,7 @@ static void ufshcd_err_handler(struct work_struct *work)
- 		ufshcd_print_pwr_info(hba);
- 		ufshcd_print_evt_hist(hba);
- 		ufshcd_print_tmrs(hba, hba->outstanding_tasks);
--		ufshcd_print_trs(hba, hba->outstanding_reqs, pr_prdt);
-+		ufshcd_print_trs_all(hba, pr_prdt);
- 		spin_lock_irqsave(hba->host->host_lock, flags);
- 	}
- 
-@@ -7435,9 +7454,9 @@ static int ufshcd_abort(struct scsi_cmnd *cmd)
- 		ufshcd_print_evt_hist(hba);
- 		ufshcd_print_host_state(hba);
- 		ufshcd_print_pwr_info(hba);
--		ufshcd_print_trs(hba, 1 << tag, true);
-+		ufshcd_print_tr(hba, tag, true);
- 	} else {
--		ufshcd_print_trs(hba, 1 << tag, false);
-+		ufshcd_print_tr(hba, tag, false);
- 	}
- 	hba->req_abort_count++;
- 
--- 
-2.7.4
+I will come up with some data and figures soon.
 
+--
+Uladzislau Rezki
