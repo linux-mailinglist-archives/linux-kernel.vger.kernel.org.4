@@ -2,95 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C478E6B98B2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:13:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 795126B98BC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbjCNPNQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:13:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55398 "EHLO
+        id S229664AbjCNPOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231713AbjCNPND (ORCPT
+        with ESMTP id S231616AbjCNPOO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:13:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6B2AF2BE
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:12:33 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 35D0A617E0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:12:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37261C4339B;
-        Tue, 14 Mar 2023 15:12:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678806752;
-        bh=HYGfl2nv/L/zNAt09zcNi7tEiIXFZVfStqNB2ZQJs78=;
-        h=From:To:In-Reply-To:References:Subject:Date:From;
-        b=s/E/MIf0GLDV6n+oz0kIR4lHk3t8lSPBjj87apXdPREeNbyogHtT3tC2i9+gVWANR
-         MUM4dcrHVynn3BLeiYhm2GZF/Dc3rVz3GB34q9QE9QPZLC5llfrkA5J7cxLZ/M+PmZ
-         tcIRFGHfId0VYJEmPf0/gSlM/6OWSE5DBV2M/vcPs9n2h+gDeknKNmYCRmu6bSQlYq
-         rjlPxtR2VSQN+YG6/L+g6h/n5kHnR3oJkAu4yQERrJjc1QL/ZKZJ1w1jxGP+D+PpuJ
-         D0ViDzm836zkXso3N5AJQSW58aSdN3o0B1MkVeaTefjNUrl79SvMxXbD8GnaiWtx5H
-         fgHDDuKywK98Q==
-From:   Mark Brown <broonie@kernel.org>
-To:     shengjiu.wang@gmail.com, lgirdwood@gmail.com, perex@perex.cz,
-        tiwai@suse.com, alsa-devel@alsa-project.org,
-        linux-kernel@vger.kernel.org, Shengjiu Wang <shengjiu.wang@nxp.com>
-In-Reply-To: <1678346017-3660-1-git-send-email-shengjiu.wang@nxp.com>
-References: <1678346017-3660-1-git-send-email-shengjiu.wang@nxp.com>
-Subject: Re: [PATCH] ASoC: soc-pcm: fix hw->formats cleared by
- soc_pcm_hw_init() for dpcm
-Message-Id: <167880675094.43040.10172504832541716184.b4-ty@kernel.org>
-Date:   Tue, 14 Mar 2023 15:12:30 +0000
+        Tue, 14 Mar 2023 11:14:14 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC5A30286
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:13:39 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id d36so20448087lfv.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:13:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678806801;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=aWquE/66XhiUdKcAjOZcdT8JwAjOV0jdF3ZReJh+jhU=;
+        b=A70OxIRflPWeFRqLRBN8qDh9Nnpwl6mYudE01YgkwWijNkevncaAafkm4hhBFkYlPY
+         B+r3GEwqp0NgXcsOp5XuGK9r6rRnB/Obx5FjFgTAiep+FKTJN4Wf8YdFdeEt+FGeianQ
+         HKZRv9Gxy6ZXY22rJYBwB5fqIrxLopllTUZDbEXoT8/sDmpetnaCfVfzZjKfHbsVw5Ma
+         sKRrOmFpYtj4/IWOdsY6LEdG6eur/ataMRIvXZhgMnc/+DueCevIubHxa7SwxkyI+bBL
+         soT9s0BQKP1rOM59EGlR7NRgMnjXylMelTjMehReRdJPPj/aP3dV4uNWBeArjdPde47F
+         bsqg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678806801;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=aWquE/66XhiUdKcAjOZcdT8JwAjOV0jdF3ZReJh+jhU=;
+        b=ox/rVUoBjNMoRH4DdHyiBuemzOYTKlDcgfIe5xidGusuA9fwD9N7KBxtUFhBoDEH+t
+         PaQtGaR0esnB5z+q68G6X7wP1yZpgUdH3fXc+vgmTVnyScysah9WZjppdblNDqfWKNj1
+         h5sybYFI2P8pTCYQlOwSgpPoicMLqvMpYkzWOxyfwnBzazRZM35zFMg6TsLIcpnvAUE7
+         y7mdozw5Z3udbo4ivRmcUFjDQzKn0PA4mQPmfDJrJn77i8WAqPWTcI2w073jTZYjoBF7
+         HzGXFOxsD10R4FSfIOr/xEsQAEKQDHgWnjvlmktZBFa0vQC2s36ir6tjwcpWfQLEZ+Rw
+         rdGw==
+X-Gm-Message-State: AO0yUKVuR3OZmyz8PnIx4vhM+fgZLdlMu6IdKVGL2cDZzXbSIDSsZ4i9
+        yawbOlJDsTvbC/vm+haWAAjM7w==
+X-Google-Smtp-Source: AK7set+0FwZrp2Kqmgi11czNIWqOTIdgsRQEqlYZ+eN8f1lZ8ifft3X4RqJNjukpilWNLQkafq+Kxg==
+X-Received: by 2002:ac2:43ad:0:b0:4dc:4bda:c26f with SMTP id t13-20020ac243ad000000b004dc4bdac26fmr973810lfl.23.1678806801649;
+        Tue, 14 Mar 2023 08:13:21 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id l7-20020ac24a87000000b004d23763fe96sm431973lfp.72.2023.03.14.08.13.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 08:13:20 -0700 (PDT)
+Message-ID: <3f37eede-6d62-fb92-9cff-b308de333ebd@linaro.org>
+Date:   Tue, 14 Mar 2023 16:13:18 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next 05/11] clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
+Content-Language: en-US
+To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
+Cc:     agross@kernel.org, andersson@kernel.org, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        vkoul@kernel.org, bhupesh.sharma@linaro.org,
+        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
+        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
+        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
+        linux@armlinux.org.uk, veekhee@apple.com,
+        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
+        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
+        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
+        netdev@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-clk@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
+        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
+References: <20230313165620.128463-1-ahalaney@redhat.com>
+ <20230313165620.128463-6-ahalaney@redhat.com>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230313165620.128463-6-ahalaney@redhat.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13-dev-bd1bf
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 09 Mar 2023 15:13:37 +0800, Shengjiu Wang wrote:
-> The hw->formats may be set by snd_dmaengine_pcm_refine_runtime_hwparams()
-> in component's startup()/open(), but soc_pcm_hw_init() will init
-> hw->formats in dpcm_runtime_setup_fe() after component's startup()/open(),
-> which causes the valuable hw->formats to be cleared.
+
+
+On 13.03.2023 17:56, Andrew Halaney wrote:
+> Add the EMAC GDSCs to allow the EMAC hardware to be enabled.
 > 
-> So need to store the hw->formats before initialization, then restore
-> it after initialization.
+> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
+> ---
+Was it tested to not cause issues on access on "normal" 8280xp?
+AFAICS if there would be any, they would happen at registration
+time, as gdsc_init already accesses its registers
+
+Konrad
+>  drivers/clk/qcom/gcc-sc8280xp.c               | 18 ++++++++++++++++++
+>  include/dt-bindings/clock/qcom,gcc-sc8280xp.h |  2 ++
+>  2 files changed, 20 insertions(+)
 > 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
-
-Thanks!
-
-[1/1] ASoC: soc-pcm: fix hw->formats cleared by soc_pcm_hw_init() for dpcm
-      commit: 083a25b18d6ad9f1f540e629909aa3eaaaf01823
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
+> index b3198784e1c3..04a99dbaa57e 100644
+> --- a/drivers/clk/qcom/gcc-sc8280xp.c
+> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
+> @@ -6873,6 +6873,22 @@ static struct gdsc usb30_sec_gdsc = {
+>  	.pwrsts = PWRSTS_RET_ON,
+>  };
+>  
+> +static struct gdsc emac_0_gdsc = {
+> +	.gdscr = 0xaa004,
+> +	.pd = {
+> +		.name = "emac_0_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +};
+> +
+> +static struct gdsc emac_1_gdsc = {
+> +	.gdscr = 0xba004,
+> +	.pd = {
+> +		.name = "emac_1_gdsc",
+> +	},
+> +	.pwrsts = PWRSTS_OFF_ON,
+> +};
+> +
+>  static struct clk_regmap *gcc_sc8280xp_clocks[] = {
+>  	[GCC_AGGRE_NOC_PCIE0_TUNNEL_AXI_CLK] = &gcc_aggre_noc_pcie0_tunnel_axi_clk.clkr,
+>  	[GCC_AGGRE_NOC_PCIE1_TUNNEL_AXI_CLK] = &gcc_aggre_noc_pcie1_tunnel_axi_clk.clkr,
+> @@ -7351,6 +7367,8 @@ static struct gdsc *gcc_sc8280xp_gdscs[] = {
+>  	[USB30_MP_GDSC] = &usb30_mp_gdsc,
+>  	[USB30_PRIM_GDSC] = &usb30_prim_gdsc,
+>  	[USB30_SEC_GDSC] = &usb30_sec_gdsc,
+> +	[EMAC_0_GDSC] = &emac_0_gdsc,
+> +	[EMAC_1_GDSC] = &emac_1_gdsc,
+>  };
+>  
+>  static const struct clk_rcg_dfs_data gcc_dfs_clocks[] = {
+> diff --git a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
+> index cb2fb638825c..721105ea4fad 100644
+> --- a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
+> +++ b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
+> @@ -492,5 +492,7 @@
+>  #define USB30_MP_GDSC					9
+>  #define USB30_PRIM_GDSC					10
+>  #define USB30_SEC_GDSC					11
+> +#define EMAC_0_GDSC					12
+> +#define EMAC_1_GDSC					13
+>  
+>  #endif
