@@ -2,166 +2,280 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0E0B6B8683
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:02:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1C196B8688
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:03:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCNACH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:02:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57318 "EHLO
+        id S230231AbjCNADL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:03:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCNACE (ORCPT
+        with ESMTP id S230222AbjCNADH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:02:04 -0400
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (mail-sn1nam02on2072.outbound.protection.outlook.com [40.107.96.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9C1E88DA6;
-        Mon, 13 Mar 2023 17:02:01 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=iRk0uKf4f67pVjNq0PnToILMV98tGiwxUYRULXpUaoOCKfyXGx/QS/XCcSEY4PGJ4tr0UpJ1LHYFuTWKcWeU+MGYskgJQ0jR1j7Kvj81l+7dky/Sl2GYJLP8hPfWhu5TG6DAcq8Vz4TlPs0sLeIQVSMFJotjK0pMtub0NnlewvXHj7ypH9Cg6JglsDV5EkJ/7WXFwKP2CsEars6czrPvHz7nPjXmxKL+MxASWkF1Yfu20WFovlRFeQz4mF+cCqKB4/C/YHAsb6Fl+BdEY/uX3/gZwVXxJRtefQL0JzFG/MlwHjMv+rnY19HKQO0M4UK442EbMG/8mnSHFgu7lQHoLQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=9SQEXNaIOaBMQXBKQdFaXL/BUbki1PnJlcEWNydJj1A=;
- b=FlDrnByv1e8YpfrmH0vTVw3pwDdeOlCl/1C2UaHFX633vE5YYNT3g8qvoyEuvtVhFse4DuuB1hM2Kubnfk8ZXT176aPlCwvBmUmmd6Gz38XDL/JKrILI59aEZ91/jvZG89KZt0Zm8D0/KDCki8nl7qWzP47mBkZj6O5TcUtUxM5mk/GYmyKI4+wY0cG/2xdtVrkvSnX31ihxia8i8eOqZBOFt6fM8GFuJ87l5X/jc0fioKjhX27ivl6c9B2n5G48FmA7fnJgxz5xAzID1pnqHb/2a1mE1Kqk6sVlT7+G3bVd9Uz2tMaGuXauAFbIX+cT3FUay/tcyQYV/x/cpRjgyg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=9SQEXNaIOaBMQXBKQdFaXL/BUbki1PnJlcEWNydJj1A=;
- b=KSnFy8gETuBV7OnkLI8oHI2vpzx2TKSB5uixk2RTBtlBHF5sS8j+rh2/rJOPM8LVRLFcKi2KgAUXA7zyG9HBqiqUvRFNI67sdFlcLgjxKlfr7GMh4OpPk/c0IcDv7s/nvqreaGdfPHs5irSxyOPSm5SeKRyoq6/8G4tpOmq3pFBUwJOltzyCjdp92762y70P4yGb8fulhruzIoyLq+YsCbwv95mWGrnjZkp6s7s+sgAFBHGklF9fWC0owEDhJwJ5fTLHbV+iFMdr6ryKqQzTclJRh5HogJAmvIALkaPh0/23jyZSayiAZY1PpBV8r75eqCpZjoEUYqaMsPGB2OgD4g==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com (2603:10b6:208:3a0::7)
- by PH8PR12MB6916.namprd12.prod.outlook.com (2603:10b6:510:1bd::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 00:02:00 +0000
-Received: from IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::735c:fa9:2043:279a]) by IA1PR12MB6604.namprd12.prod.outlook.com
- ([fe80::735c:fa9:2043:279a%6]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 00:02:00 +0000
-Message-ID: <bceedc91-cccd-258a-1cab-57a79f5a294d@nvidia.com>
-Date:   Mon, 13 Mar 2023 17:01:55 -0700
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Subject: Re: [PATCH V3 2/6] dt-bindings: timestamp: Add Tegra234 support
-Content-Language: en-US
-From:   Dipen Patel <dipenp@nvidia.com>
-To:     Linus Walleij <linus.walleij@linaro.org>
-Cc:     thierry.reding@gmail.com, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, robh+dt@kernel.org,
-        timestamp@lists.linux.dev, krzysztof.kozlowski+dt@linaro.org,
-        brgl@bgdev.pl, corbet@lwn.net, gregkh@linuxfoundation.org
-References: <20230310190634.5053-1-dipenp@nvidia.com>
- <20230310190634.5053-3-dipenp@nvidia.com>
- <CACRpkdYmC=eLiWPPPRG7DYBmQfPNCN4pcDhzTCO=hkQDx2HoGw@mail.gmail.com>
- <798dd219-f4aa-39b3-2368-7a6d072b6de2@nvidia.com>
-X-Nvconfidentiality: public
-In-Reply-To: <798dd219-f4aa-39b3-2368-7a6d072b6de2@nvidia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SJ0PR03CA0374.namprd03.prod.outlook.com
- (2603:10b6:a03:3a1::19) To IA1PR12MB6604.namprd12.prod.outlook.com
- (2603:10b6:208:3a0::7)
+        Mon, 13 Mar 2023 20:03:07 -0400
+Received: from esa1.hgst.iphmx.com (esa1.hgst.iphmx.com [68.232.141.245])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07B2E8E3D7
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:03:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1678752182; x=1710288182;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=o1OcbpYDtCn8bpuI1Yx89Ke9JS/q7gUoWBOKl0Pp9qw=;
+  b=XIr+udjZcZXbZbrIWJCeU79bGsaxEs0Gg2HNr2pBJZSoTLpLXRu+1FS3
+   Nxz+3RHUnyKQ6yJKwg4lrvySBDpjt25yvbW4cXqBoePtslD7P2V251K4x
+   T4BccbEvNM5h7rIwkSwFRM0n53GamWZ1tWIKlgfJMtnXDPXgIiAaY2E0y
+   Sw5w9Fsn/TMtQUb/LLYfZSRwtfx/y0SaPk7sNG0iGcxY6pnfCN9z44DwT
+   mUkyQMrobidGcS4XtVFsbD0MXZf2KC8ZJh+ADtLZXXW4AamWfLdBIElRd
+   Dq2ERs/d8yp1oGzSDIZLWCCQ3icIEqw7RXpHVKdXS8bvF2Bug9E1gvUH2
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,258,1673884800"; 
+   d="scan'208";a="337564676"
+Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 14 Mar 2023 08:02:44 +0800
+IronPort-SDR: +KwZ7KBgXcS3wfgYpLP8wOr5MethrCq7YXtRV1lEc9SegRJQuQKbSlgizYd8Rw72nOS5QQWfxU
+ XJDtLYthzr4R9BeQsCJeVu3maGKaN9FCqgESbwUBqxHAVo/bQP2i6enGU+z9EKVGAD6JWZAkM5
+ Iyo8AGsqd+Adpl2cBULQViX4Ka2I4Ll29/tFADhobwDkVzW/7WA26eg9oWUemw/mLema0C+5AH
+ R+Ngp2pLepJUGCkBau0MT/uAfzR+6EYIK2ZBT/GVE4pSpZjMjUdqdm0+Aj4lSpPYhfdtGYBmIz
+ wNQ=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Mar 2023 16:13:32 -0700
+IronPort-SDR: zHSCaFv+eiRW+fh9uvWXSDoRtqm+d/ghlr47TnFKVYff6w0mhgLcaozSnC/IJFREXHOkvHZdUD
+ TS6Y+3UreQEdKAaM1C7rTUYgIi0pTp/GqkQfSJCp4XEufsSBHBGsXb07kEpfjYkX9Em5xJnYPt
+ RP7Vdu4UC9gpGi91pDFZJsOCiY0HkYHttEuzZKjgLOM2NLLB+IMb9tU70HXdO8EulnMSjQz1j9
+ K748RMeciL6cYWQhz3wv9cWRHF1H233XdOJRm6vLVp6Zx0/1tb/UTB1k3gvgmXSOLLvGBWkW1+
+ chI=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 13 Mar 2023 17:02:45 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4PbDHR57W5z1RtW4
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:02:43 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1678752160; x=1681344161; bh=o1OcbpYDtCn8bpuI1Yx89Ke9JS/q7gUoWBO
+        Kl0Pp9qw=; b=olQK+bAXDcDqz4kdXm5a0TP5frVQtRrQX3CHc5JqdErELDtD3Fa
+        Bl28tW1BcSZ2gU/VjDAZUuwzSndS8JLeMS7b4AlhvM06bY72LqF7oziZAHg2KGUG
+        83lMCnO0NDcpamRP8lBaGrzGDTpW7i8LLABzr3ymq/Mra0NdBIrUO48BG0QWAys6
+        ru5tBcv5O8zq3h1hxj4Pr3YvI5t28wHDxNX5STeAN9d+DBOgWFmav1x5io5aLn1p
+        DcCdQOeXFS/K8A+ceaY/MejzBrSp1ppJxzoWLjj+MVRhnlMgJ1ofWuOwHTs5gD6d
+        Ca6Nm9TCNIIHH+Uodufxi+hbZr0cSo9geMw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id 6HHbycI3zdpC for <linux-kernel@vger.kernel.org>;
+        Mon, 13 Mar 2023 17:02:40 -0700 (PDT)
+Received: from [10.149.53.254] (washi.fujisawa.hgst.com [10.149.53.254])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4PbDHK3zdTz1RtVm;
+        Mon, 13 Mar 2023 17:02:37 -0700 (PDT)
+Message-ID: <ecd09f27-b799-4741-2c5a-a2de99776c51@opensource.wdc.com>
+Date:   Tue, 14 Mar 2023 09:02:36 +0900
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: IA1PR12MB6604:EE_|PH8PR12MB6916:EE_
-X-MS-Office365-Filtering-Correlation-Id: 3394760c-94e0-44bb-fa58-08db241f5554
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: yRtAUlnl62xiR4JYBftH3QA0klEfMLwldW2TSv6BCQnb0pRfYobVyyz6esj4tXZPpAvA3+427WRtrgV1aNaGd2UnVmNhY8fkSOKonWdGqob0uW/ZLN/M4BL7m1VD2J//rtxK7FYo77v3VnUIyvuTWwQla5D8Z1GdV8KWML7ENbcCQ6yFaZBMlDKiUTpUKx1cDJiLaZe6+VGzOqW6PQg9hertEVXNWTJ4w4pvcrRjNshRCYdPvjlxJ1xc5t5kX9tTp4+7dPaYYqGQHZfw0tKwveWoqCm0va7oCXXMJKAIZNTq9NxPCz8/w1Eul4IabCHcqcB0M94g7YgMGteDpmRpgPK4DhKujg/kp5RzQ1z2cEyHQLhqo1+1+pZbc+eUEyRo96hJqNozDN7d8z9rANgtDhWgWh5gLEOBxH3TmgfG1EaqUSZOsOVDzBdtj5Co8LpHO7PnqiI/nrCgIxwwXCG5J6vhaBKN4bVPVcsRNc44UsvzxHlLSnv5fMabjUGkDh0hM9MXq/Ebwd8haZKlU8mu0rnW23MUT76x/nDIFeo3XNlhJptaYgzGI1i8GxlZkGH+SQIajRtD9cAEb5IMbLhVjORG6Hhci6qywkkfjqIpFFNSFUyg0NO1R+JVoPngOAVxcDN+Vb96vsn3MkIRB1jIXdPXNH2nRaLQYoXC9tyX/C0jFJmRsj5IeHcVkGLnC7oYUBhTE9Z8OZCGCMBmk0G+Tv4nhb73JAtvrlfyBlH+r+g=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA1PR12MB6604.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(136003)(346002)(39860400002)(396003)(376002)(451199018)(2906002)(8936002)(31686004)(41300700001)(66946007)(6916009)(8676002)(4326008)(5660300002)(4744005)(66476007)(66556008)(7416002)(316002)(478600001)(83380400001)(6512007)(6486002)(36756003)(6506007)(186003)(26005)(53546011)(6666004)(2616005)(31696002)(38100700002)(86362001)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NmZRanU2UFloVGMyZmJ0dDBkUldySmg0TTNjTkJCRDRNMnprVDYraTVxNERM?=
- =?utf-8?B?VEtCYXBlOTFqTndZdlZLb3JLRW9aMHZUQzJmYVVWcXM1QnpWU0VFSDg0Y1U0?=
- =?utf-8?B?SEZOL3l3STBQS2RXMmtTZVhuWEFrSGh2ODIyd3ZLTVhUSmdCR1JDdHBHWURQ?=
- =?utf-8?B?RmM3RzlFT3JoY2VmKytnU1RFMDB6VU4xZ1VWUDE3RFNQdEVYS2dZUHYwZ3RR?=
- =?utf-8?B?TmIvVzZLa2JJaXYzKzAzS0k4WDhuWi9JYTBya2Zyby93SDVMaG1LZmUzbW9O?=
- =?utf-8?B?Mk1tRGsvNjNkdFZFdW9rUXBnUzFzVCtKMlRDZHB0cnovUGtzWTZaTktqK01D?=
- =?utf-8?B?SDFSRFNHNC8zSEVtZENQc09lTHR1RTA5VTFHRytBbm96dXQ2Q1hzenNXMnBk?=
- =?utf-8?B?SWxQUkprd2x5Wk43NEZZa0dPM1BZbW1EV24yS2NZMC91Z1QxV3NXRWlyK2Nr?=
- =?utf-8?B?bTJwU1BGK1NINnBJZ3Q3YkVBUFV6MldQUERBMEFGc3FuaVlkdVo0MG9wWXZi?=
- =?utf-8?B?UnQ0dVZmN3dYRENRN1hLUDN0YlMxNHUwQTdmK1VUNkZ0M0NIbTdxd3VOY3lT?=
- =?utf-8?B?YXZjT2RKc1JWekxFTlA2aDJ1WUVDYzdrYXlDWDVPYW5SZUtrR0JSMDdxR1RE?=
- =?utf-8?B?Uy9wc1hKTnVvZXFXdGJ1a1ZoRWNxNEFsR3lUNGNmOU00SVNCKy9LZDFOUmx1?=
- =?utf-8?B?SjBjSFdjazdBd3Y5TkNyNXNnc0RKYnErMjNYRldlbUdCbHQwaGtmeU9rVjRZ?=
- =?utf-8?B?SldlMW13a1oxYW1VR0t2YkVQRzZKRUtYczJjN0dNWnNyaWlNbUlHSFh5LzE1?=
- =?utf-8?B?RXVZOHlYVXF3My8ySmtPRElDaENOOGozODhiLzRQQmlQVzFBMXlRNWNTekRr?=
- =?utf-8?B?ZHFLUnZibGFMdVhWSU9mOVpTemIwbWExdjdmRnhNRkl0SFdSS3NwOW5YSEFs?=
- =?utf-8?B?V1VENXpFcE5jY2MrRkkvL2pIRDRVUHFYMU9WZmlRSDJYNHg2cS9rUGlqdGNB?=
- =?utf-8?B?aTVTWjhzRjd4aFhqZlo4dU9DU1REcy9zQ2xwcnFsZHVwcm9pNGgwR0lNS1VQ?=
- =?utf-8?B?eUZNNVZocERmUmR3UnVMOGZmdnEyTHh4ZE83WlFSUlU2WTE3UDZOMTd0Y3pv?=
- =?utf-8?B?L3lkWm5lR2dRM05EK0VBU1kxNVY2Sm40KzBQUUJHc2Z3Qm1VNlVSMkpaNEM2?=
- =?utf-8?B?STRrNkVYZGtTcTc1a1VERmVDUHhRNWlFVlJmTlFoUURtbVl5c05aRGFFRnBl?=
- =?utf-8?B?eWtiQ0lBOHJsanhNLzdhZklsUlpEclFZeUlRNERvMVY5MWJGeFZMZHIwM09O?=
- =?utf-8?B?MUhmR3d1ZFRwdGtXNTdIaThVNmlGRjJYbndEcGhvTWFZeWVtNnZ3WTZXeWk4?=
- =?utf-8?B?dU9LQjJsZnR5WG5FTzJqZnh6dmVKMmIxU1hCNC9DbjU0M29RVDFzMEw4UStZ?=
- =?utf-8?B?Z2Jwb014aE14ckhOQ092MU9YNlhNZE54cHp2THFjckp3a0h4eGtsSzNWMW0r?=
- =?utf-8?B?cUdHK1hmbm9hSERWOWJzNko4UGR6elBTVC9GZ0ZSQTRPNVhrYlBPN0sreStt?=
- =?utf-8?B?dThnNzNJRS9LbTNXdTFhS3hia2dOemVOOEdGOXV2MS9WWCs2Y2NHSTduUW9z?=
- =?utf-8?B?dVdMY1NDamRCVlIrOGRIOERjcnlWOVFsRVN4N0JsNE9nRy9pbk40NUQ4cmdp?=
- =?utf-8?B?WUxhVStCdDlSdzRrWnF5a1BnaC9QcXFpUkVkUU5rMVZXSkpvTXUwZ3lNYU5I?=
- =?utf-8?B?WkNFY2t5Q0x6aDhEc3BkcVNRRkQ3UGlZc0czSm5LRTB4WkJkZjVraHE5MUl0?=
- =?utf-8?B?OFZ4SWZwc3BhRDFLY3I5ZmtkSFhtNTM0VGkxWGFqd0hWNlpIM2xuTUZKVHY0?=
- =?utf-8?B?bTI4Sml6WEpaUkZXd2ZhdHBvelJZS1BJWTcvOXRTbUhpYXdSaWQzUmZQTzdE?=
- =?utf-8?B?N0tBam8wanVlYlpZR3duWkUwenN4bWlqUGNQVmlTd1UzRWx3OXlseS9ZR1dk?=
- =?utf-8?B?eVowK1VqUlRYQzNDalVGR3NLMU5PVDFuMy9NSjd6c3Z4TmpoOVJ4UU8zWkpy?=
- =?utf-8?B?NDhGdjJiZGJPbXhwamJQeDNZYngxZE1vajBMc1ViaUwzZ2tOdHIvRVVibDU3?=
- =?utf-8?Q?HLh/7Ml7jc+znJs8a8m3J8LAh?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3394760c-94e0-44bb-fa58-08db241f5554
-X-MS-Exchange-CrossTenant-AuthSource: IA1PR12MB6604.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 00:01:59.9307
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: B86fkyr4sgp18dzk9459ZG9js4H89T+dN/8sS72rbSTYsItwzuB6KGRWuuhwbDI5suBnhA9IsQzP3CL+PQE3jQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6916
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 0/9] PCI: rockchip: Fix RK3399 PCIe endpoint controller
+ driver
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>,
+        alberto.dassatti@heig-vd.ch
+Cc:     xxm@rock-chips.com, rick.wertenbroek@heig-vd.ch,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 4:49 PM, Dipen Patel wrote:
-> On 3/13/23 2:57 PM, Linus Walleij wrote:
->> Hi Dipen,
->>
->> thanks for maintaining HTE!
->>
->> On Fri, Mar 10, 2023 at 8:06 PM Dipen Patel <dipenp@nvidia.com> wrote:
->>
->>> -  nvidia,slices:
->>> -     $ref: /schemas/types.yaml#/definitions/uint32
->>
->> I would not delete this, just mark it deprecated.
->>
->> nvidia,slices:
->>     $ref: /schemas/types.yaml#/definitions/uint32
->>     deprecated: true
->>
->> (And remove it from required, of course)
->>
->> This way you do not need to explain about why it was
->> deleted, it's just deprecated, which is fine.
-> 
-> Great suggestion, thanks, will make changes in the next patch.
+On 2/14/23 23:08, Rick Wertenbroek wrote:
+> This is a series of patches that fixes the PCIe endpoint controller driver
+> for the Rockchip RK3399 SoC. The driver was introduced in
+> cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> The original driver had issues and would not allow for the RK3399 to
+> operate in PCIe endpoint mode correctly. This patch series fixes that so
+> that the PCIe core controller of the RK3399 SoC can now act as a PCIe
+> endpoint. This is v2 of the patch series and addresses the concerns that
+> were raised during the review of the first version.
 
-However, as I understood, current point of contention/discussion is addition of the
-nvidia,gpio-controller property.
+Rick,
 
->>
->> Yours,
->> Linus Walleij
+Are you going to send a rebased V3 soon ? I have a couple of additional
+patches to add on top of your series...
+
+
 > 
+> Thank you in advance for reviewing these changes and hopefully
+> getting this merged. Having a functional PCIe endpoint controller
+> driver for the RK3399 would allow to develop further PCIe endpoint
+> functions through the Linux PCIe endpoint framework using this SoC.
+> 
+> Problem: The Rockchip RK3399 PCIe endpoint controller driver introduced in
+> cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe controller")
+> did not work.
+> 
+> Summary of problems with the driver :
+> 
+> * Missing dtsi entry
+> * Could not update Device ID (DID)
+> * The endpoint could not be configured by a host computer because the
+>   endpoint kept sending Configuration Request Retry Status (CRS) messages
+> * The kernel would sometimes hang on probe due to access to registers in
+>   a clock domain of which the PLLs were not locked
+> * The memory window mapping and address translation mechanism had
+>   conflicting mappings and did not follow the technical reference manual
+>   as to how the address translation should be done
+> * Legacy IRQs were not generated by the endpoint
+> * Message Signaled interrupts (MSI) were not generated by the endpoint
+> 
+> The problems have been addressed and validated through tests (see below).
+> 
+> Summary of changes :
+> 
+> This patch series is composed of 9 patches that do the following :
+> * Remove writes to unused registers in the PCIe core register space.
+>   The registers that were written to is marked "unused" and read
+>   only in the technical reference manual of the RK3399 SoC.
+> * Write PCI Device ID (DID) to correct register, the DID was written to
+>   a read only register and therefore would not update the DID.
+> * Assert PCI Configuration Enable bit after probe so that it would stop
+>   sending Configuration Request Retry Status (CRS) messages to the
+>   host once configured, without this the host would retry until
+>   timeout and cancel the PCI configuration.
+> * Add poll and timeout to wait for PHY PLLs to be locked, this
+>   is the only patch that also applies to the root complex function
+>   of the PCIe core controller, without this the kernel would
+>   sometimes access registers in the PHY PLL clock domain when the PLLs
+>   were not yet locked and the system would hang. This was hackily solved
+>   in other non mainline patches (e.g., in armbian) with a "msleep()"
+>   that was added after PHY PLL configuration but without realizing
+>   why it was needed. A poll with timeout seems like a sane approach.
+> * Add dtsi entry for RK3399 PCIe endpoint core. The new entry is
+>   in "disabled" status by default, so unless it is explicitly enabled
+>   it will not conflict with the PCIe root complex controller entry.
+>   Developers that will enable it would know that the root complex function
+>   then must be disabled, this can be done in the board level DTS.
+> * Fix window mapping and address translation for endpoint. The window
+>   mapping and address translation did not follow the technical reference
+>   manual and a single memory region was used which resulted in conflicting
+>   address translations for memory allocated in that region. The current
+>   patch allows to allocate up to 32 memory windows with 1MB pages.
+> * Fix legacy IRQ generation for RK3399 PCIe endpoint core, the legacy IRQs
+>   were not sent by the device because their generation did not follow the
+>   instructions in the technical reference manual. They now work.
+> * Use u32 variable to access 32-bit registers, u16 variables were used to
+>   access and manipulate data of 32-bit registers, this would lead to
+>   overflows e.g., when left shifting more than 16 bits.
+> * Add parameter check for RK3399 PCIe endpoint core set_msi(), return
+>   -EINVAL when incompatible parameters are passed.
+> 
+> Validation on real hardware:
+> 
+> This patch series has been tested with kernel 6.0.19 (and 5.19)
+> on real hardware, a FriendlyElec NanoPC-T4 RK3399 based single computer
+> board connected to a host computer through PCIe x1 and x4. The PCIe
+> endpoint test function driver was loaded on the SoC and the PCIe endpoint
+> test driver was loaded on the host computer. The following tests were
+> executed through this setup :
+> 
+> * enumeration of the PCIe endpoint device (lspci)
+>   lspci -vvv
+> * validation of PCI header and capabilities
+>   setpci and lspci -xxxx
+> * device was recognized by host computer dans PCIe endpoint test driver
+>   was loaded
+>   lspci -v states "Kernel modules: pci_endpoint_test"
+> * tested the BARs 0-5
+>   sudo /usr/bin/pcitest -b 0
+>   ...
+>   sudo /usr/bin/pcitest -b 5
+> * tested legacy interrupt through the test driver
+>   sudo /usr/bin/pcitest -i 0
+>   sudo /usr/bin/pcitest -l
+> * tested MSI interrupt through the test driver
+>   sudo /usr/bin/pcitest -i 1
+>   sudo /usr/bin/pcitest -m 1
+> * tested read/write to and from host through the test driver with checksum
+>   sudo /usr/bin/pcitest -r -s 1024
+>   sudo /usr/bin/pcitest -w -s 1024
+> * tested read/write with DMA enabled (all read/write tests also did IRQ)
+>   sudo /usr/bin/pcitest -r -d -s 8192
+>   sudo /usr/bin/pcitest -w -d -s 8192
+> 
+> Commands used on the SoC to launch the endpoint function (configfs) :
+> 
+> modprobe -i pci-epf-test
+> mkdir -p /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0
+> echo 0xb500 > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/deviceid
+> echo 0x104c > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/vendorid
+> echo 16 > /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0/msi_interrupts 
+> ln -s /sys/kernel/config/pci_ep/functions/pci_epf_test/pci_epf_test.0 \
+> /sys/kernel/config/pci_ep/controllers/fd000000.pcie-ep/
+> echo 1 > /sys/kernel/config/pci_ep/controllers/fd000000.pcie-ep/start
+> 
+> Note: to enable the endpoint controller on the board the file :
+> arch/arm64/boot/dts/rockchip/rk3399-nanopc-t4.dts
+> Was edited to set the status of &pcie0 to "disabled" and &pcie0_ep
+> to "okay". This is not submitted as a patch because most users
+> will use the PCIe core controller in host (root complex) mode
+> rather than endpoint mode.
+> 
+> I have tested and confirmed all basic functionality required for the
+> endpoint with the test driver and tools. With the previous state of
+> the driver the device would not even be enumerated by the host
+> computer (mainly because of CRS messages being sent back to the root
+> complex) and tests would not pass (driver would not even be loaded
+> because DID was not set correctly) and then only the BAR test would
+> pass. Now all tests pass as stated above.
+> 
+> Best regards
+> Rick
+> 
+> Rick Wertenbroek (9):
+>   PCI: rockchip: Remove writes to unused registers
+>   PCI: rockchip: Write PCI Device ID to correct register
+>   PCI: rockchip: Assert PCI Configuration Enable bit after probe
+>   PCI: rockchip: Add poll and timeout to wait for PHY PLLs to be locked
+>   arm64: dts: rockchip: Add dtsi entry for RK3399 PCIe endpoint core
+>   PCI: rockchip: Fix window mapping and address translation for endpoint
+>   PCI: rockchip: Fix legacy IRQ generation for RK3399 PCIe endpoint core
+>   PCI: rockchip: Use u32 variable to access 32-bit registers
+>   PCI: rockchip: Add parameter check for RK3399 PCIe endpoint core
+>     set_msi()
+> 
+>  arch/arm64/boot/dts/rockchip/rk3399.dtsi  |  23 ++++
+>  drivers/pci/controller/pcie-rockchip-ep.c | 143 ++++++++++------------
+>  drivers/pci/controller/pcie-rockchip.c    |  16 +++
+>  drivers/pci/controller/pcie-rockchip.h    |  36 ++++--
+>  4 files changed, 128 insertions(+), 90 deletions(-)
+> 
+
+-- 
+Damien Le Moal
+Western Digital Research
 
