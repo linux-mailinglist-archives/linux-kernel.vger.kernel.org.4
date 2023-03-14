@@ -2,144 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7CD586B8F16
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:59:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32FCC6B8F28
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229722AbjCNJ7u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:59:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38352 "EHLO
+        id S229810AbjCNKB6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:01:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229632AbjCNJ7r (ORCPT
+        with ESMTP id S229446AbjCNKB5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:59:47 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66F0B2A6C6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:59:45 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id r27so19202261lfe.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:59:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678787983;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gbQPUzNB3ID6pvgwQJH+wME6Ds92/P9woaOtkl2i5u8=;
-        b=GqKgGJ20kMDb5o3ZhnHFpC4sl0f61CUq2USW5m3TGTowgmFFbRGSV+Gifp9aBt3nQe
-         A490DTAu1kS58JZNJT+zUCcPJCInhpXydDUuim6rOyLmDmt+QgTdtzFTCJpLQCsZ/P9S
-         u4JA/MOpMMrJhCbqIypD5LmoJZgnSDXhgXRR5D1m0nLVp4gNHiOoEzzRib9+pdaTmt3p
-         piyKQtALFE1HmJbCq1MvvHYXOZbaa+SWjNAonr96szUrHYUcgF2TI6PvbhcRZEvCaFNo
-         gb4zE6aGs9Wz/bnE6sg1WuG7FfGcQvdnaIZO27jZ90yf8Tv/EVFXzhR/MfN+8YiGvFx7
-         Pn0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678787983;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gbQPUzNB3ID6pvgwQJH+wME6Ds92/P9woaOtkl2i5u8=;
-        b=MfObQv6EwAO7DbpwiUqTk8jWMIJIOJ/YWwTkSDony0vH+TvfkS9BECh1qq9cqlpwQj
-         tSruM8Z3B0aR4sIy0zB9OrI3Kh6cFkJleEmiWa+5oMGtSCMcErilZvzZYIWIiRRTIN+y
-         Fv0mTEnYWscg0ROeM6zlb4k1J5tHsaAczNs2fjflbAf6GvEHtvnfm7piSmTTKhkFaNH7
-         Qt/x6M7E3Yrg2ocyg0ZQj9yHhJzBS1MyJpj0koNABt8bNmvnS5RB3KCuLo9vehIRU0XN
-         EWvcwN3kBWGrmHz05N10d/qnLa4YK5eO9gE4Graw2TS4U79VwKgar3sPal+KQ6fe3V8C
-         Nyuw==
-X-Gm-Message-State: AO0yUKWkGzgJbCoyiLeCLy/qy0cGXGibnmw22/x39TOgBHCqvhLU3AKw
-        Z1PjtJs/qBYB76JNOSL3wvKgdBeR8GK7Bi+yS5I=
-X-Google-Smtp-Source: AK7set9J0jfti/lMPhcprp1dbInMOH8UTlXpjIv9GivdjQJIaKApf44OJfQEjPvxSP5uynMa96SaWQ==
-X-Received: by 2002:a19:740a:0:b0:4cb:2aa:9e58 with SMTP id v10-20020a19740a000000b004cb02aa9e58mr569835lfe.13.1678787983651;
-        Tue, 14 Mar 2023 02:59:43 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id l13-20020ac2430d000000b004e83fedf354sm332043lfh.122.2023.03.14.02.59.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 02:59:43 -0700 (PDT)
-Message-ID: <efff0988-869b-7ee8-17ea-4b82f6a5205a@linaro.org>
-Date:   Tue, 14 Mar 2023 10:59:41 +0100
+        Tue, 14 Mar 2023 06:01:57 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A7DF8C58F;
+        Tue, 14 Mar 2023 03:01:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=public-files.de;
+        s=s31663417; t=1678788102; i=frank-w@public-files.de;
+        bh=nWZ0C/Z5vtI09XjgI+kRHhkKyKhHcEAc1TQPLoGhFpk=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=iS/r78nySa9yxiZx6MuLGdklvMWytPnOcZHNg5SRnAZThJ5UuvJ7z/vGiylQuL3li
+         1eRY0YYxlVWU5Z/sLA29zzwRNLXRio1ZVMHu27f6Cua6jPBX5AfSlQohxWMPf86vcf
+         skoQkVeq/XCd2Zxq8Yf9ulJFqaG+MUrMGgFSiRLN6zl10j+j0TtuwtMQoOXCDn1s+1
+         LhfDgzXjCZclKjN6/ofzViW7RJ9GsfaV3tX+vGVlsomvxX/fHsmRq2REtUSG2nuQSe
+         iBy8banIjg/+0ajRc42MVr3IRo7FAseDwxF6IXDwnFGrIiZjB382g/+lGzBxSJcg3N
+         +VJNyu9SQLu4Q==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from [80.245.77.27] ([80.245.77.27]) by web-mail.gmx.net
+ (3c-app-gmx-bap66.server.lan [172.19.172.66]) (via HTTP); Tue, 14 Mar 2023
+ 11:01:42 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: qcom: sa8775p: add symbols to dtb
-To:     Prasad Sodagudi <quic_psodagud@quicinc.com>,
-        Eric Chanudet <echanude@redhat.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230309233945.1199358-1-echanude@redhat.com>
- <43c11038-91d5-cbfd-7349-06fcd61a0661@linaro.org>
- <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
-Content-Language: en-US
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <1bd61fa7-cd0e-e198-9cee-7485eacbe685@quicinc.com>
+Message-ID: <trinity-bc4bbf4e-812a-4682-ac8c-5178320467f5-1678788102813@3c-app-gmx-bap66>
+From:   Frank Wunderlich <frank-w@public-files.de>
+To:     "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc:     Daniel Golle <daniel@makrotopia.org>, netdev@vger.kernel.org,
+        linux-mediatek@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Aw: Re: Re: Re: Re: Re: [PATCH net-next v12 08/18] net: ethernet:
+ mtk_eth_soc: fix 1000Base-X and 2500Base-X modes
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Date:   Tue, 14 Mar 2023 11:01:42 +0100
+Importance: normal
+Sensitivity: Normal
+In-Reply-To: <ZBA6gszARdJY26Mz@shell.armlinux.org.uk>
+References: <trinity-79e9f0b8-a267-4bf9-a3d4-1ec691eb5238-1678536337569@3c-app-gmx-bs24>
+ <ZAzd1A0SAKZK0hF5@shell.armlinux.org.uk>
+ <4B891976-C29E-4D98-B604-3AC4507D3661@public-files.de>
+ <ZAzk71mTxgV/pRxC@shell.armlinux.org.uk>
+ <trinity-8577978d-1c11-4f6d-ae11-aef37e8b78b0-1678624836722@3c-app-gmx-bap51>
+ <ZA4wlQ8P48aDhDly@shell.armlinux.org.uk>
+ <ZA8B/kI0fLx4gkQm@shell.armlinux.org.uk>
+ <trinity-93681801-f99c-40e2-9fbd-45888b3069aa-1678732740564@3c-app-gmx-bs66>
+ <ZA+qTyQ3n6YiURkQ@shell.armlinux.org.uk>
+ <trinity-e2c457f1-c897-45f1-907a-8ea3664b7512-1678783872771@3c-app-gmx-bap66>
+ <ZBA6gszARdJY26Mz@shell.armlinux.org.uk>
+Content-Transfer-Encoding: quoted-printable
+X-UI-Message-Type: mail
+X-Priority: 3
+X-Provags-ID: V03:K1:wapH+Fg+zxqJspdputyYroVMnLUEUu0otmaCiOOlCS7FfawOEM2rytVRpJPH2qoKqiPNy
+ kyMfeRwfZGNyjYnVvLPvz8Bcr/kAybStj42JpuqUX3Uzv4XJuTnRd0SH/qVxXdtlfK7a+ypZgy/O
+ te/66HGI0LvRlbNgdUoRJtCZktwoUJlFAs/3VXBuX92qXvCZ9ZgdY9Wl6UgKvqQARuAzZHI73nEN
+ RykJXaj5XdFtTe43Frve8hvVRkxJpj4Zekj58O7RVUkQ+ure0jodPOEr3BKCAnl8Go4PCSREnIXq
+ us=
+UI-OutboundReport: notjunk:1;M01:P0:PayLcYJZHEs=;dG4E1CIyqqGyWe4q93J9DWLHHYy
+ 2Xoji/en+2pTKvfCap3nd/oQUDLv4W+mBiPI4bE0yLNRJFPZ4V3GdGlCWTTg2g6uLCLb5BjnS
+ 9bqt+CMZ64VwmyXp9Ppm60s5We42vnFaGEO83ZkJbHiDqW+NKrO4U3EM/6KTfyIMu1prp6lSg
+ EYGhAZxvfParsuvy+TVVzgwLiGJRyG5Cdm8Oco8pV0hBrPk4Oxz45mM8T3uyyGKNqEPyXkGP7
+ NzE8xxaxTJSr9lr+0e4s4wchaNFXMLYyuoJHHrVAVmvPb921qA9TmiF0ioYhuoAXCOWn5HgwO
+ CO8NsYu5oFfdsyiLsGUWIBSkKXp+zFxoJLF9XDZfE26v5vkm8J5MeL5e9QcfQDTJDTWpDKVMf
+ DgtYEALbmgWErWBCSLXY9kDocHQleyLGYbUmmnH6cdoORW4O4/9/9n9H9xRlvn8Jahq7nCsAh
+ xpQF6eIhWldLVM+lr2LvnQxyewHs84FFLo5JWUQ+0dQd0ZqzZoaLVrlFGisP9+313vVRlpUWF
+ VbCMAqY8/65+eHXIjtfBTZ+5KB35c0yixgXrF/RQl8wHwUempqN4g/IEKC8dd2P21zGr7cpuT
+ sYQow+Bsfdxw4+XzVDvoY2f5ETxqEaxH1kE2FWGbF1rvusq/iITBIWcMOS9CcAHHweJH09r8o
+ zz1atywcQWyEit7E5nRXlb+cuQV/WqoFqD2VZEPeR9h3dERFNmHyhS8rgBX6ZRMnrH9w66E4Y
+ PEPi62MGkG+5OrNNCkC2Mbs0iclUCV7IboI7O5SwA89HUHkIzn+Ry376H9Gdy+LFGvXZpNd2o
+ HNMy0nBjkZ4s/He7sd9KkBCA==
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi
 
+> Gesendet: Dienstag, 14=2E M=C3=A4rz 2023 um 10:12 Uhr
+> Von: "Russell King (Oracle)" <linux@armlinux=2Eorg=2Euk>
+> On Tue, Mar 14, 2023 at 09:51:12AM +0100, Frank Wunderlich wrote:
+> > Hi,
+> >=20
+> > at least the error-message is gone, and interface gets up when i call =
+ethtoo to switch off autoneg=2E
+=2E=2E=2E
+> > [   34=2E400860] mtk_soc_eth 15100000=2Eethernet eth1: phylink_mac_con=
+fig: mode=3Dinband/2500base-x/Unknown/Unknown/none adv=3D00,00000000,000000=
+00,0000e400 pause=3D04 link=3D0 an=3D1
+>=20
+> Looking good - apart from that pesky an=3D1 (which isn't used by the PCS
+> driver, and I've been thinking of killing it off anyway=2E) Until such
+> time that happens, we really ought to set that correctly, which means
+> an extra bit is needed in phylink_sfp_set_config()=2E However, this
+> should not affect anything=2E
+>=20
+> > root@bpi-r3:~#=20
+> > root@bpi-r3:~# ethtool -s eth1 autoneg off
+> > root@bpi-r3:~# [  131=2E031902] mtk_soc_eth 15100000=2Eethernet eth1: =
+Link is Up - 2=2E5Gbps/Full - flow control off
+> > [  131=2E040366] IPv6: ADDRCONF(NETDEV_CHANGE): eth1: link becomes rea=
+dy
+> >=20
+> > full log here:
+> > https://pastebin=2Ecom/yDC7PuM2
+> >=20
+> > i see that an is still 1=2E=2Emaybe because of the fixed value here?
+> >=20
+> > https://elixir=2Ebootlin=2Ecom/linux/v6=2E3-rc1/source/drivers/net/phy=
+/phylink=2Ec#L3038
+>=20
+> Not sure what that line has to do with it - this is what the above
+> points to:
+>=20
+>         phylink_sfp_set_config(pl, MLO_AN_INBAND, pl->sfp_support, &conf=
+ig);
 
-On 14.03.2023 05:48, Prasad Sodagudi wrote:
-> 
-> 
-> On 3/9/2023 3:47 PM, Konrad Dybcio wrote:
->>
->>
->> On 10.03.2023 00:39, Eric Chanudet wrote:
->>> ABL uses the __symbols__ section to process the DTB before passing it
->>> forward. Without it, the bootstrap is interrupted.
->>>
->>> Signed-off-by: Eric Chanudet <echanude@redhat.com>
->>> ---
->> Fix your ABL.
-> Hi Konrad,
-> 
-> Apps boot-loader need __symbols__ for dynamic overlay operation. Qualcomm firmware passes an overlay file to apps boot-loader to overlay some of the nodes based on firmware configuration. Without __symbols__ apps boot-loader is not able to overlay.
-Yes/no. There are a plenty of libfdt functions that let you do that,
-especially if you know something about the node.
+MLO_AN_INBAND =3D> may cause the an=3D1 and mode=3Dinband if previously (?=
+) disabled :)
 
-> 
-> Qualcomm hypervisor/gunyah would like to overlay arch timer node with always-on property, So adding __symbols__ helps boot-loader to overlay.
-For the arch timer, you can simply iterate over the top-level nodes (or
-in the worst case scenario, over all nodes which would not take very
-long on cortex-a / cortex-x cores) and look for the specific timer
-compatible that has been with us for like 10 years at this point and
-use libfdt's fdt_add_property without overlays.
+> Anyway, the important thing is the Autoneg bit in the advertising mask
+> is now zero, which is what we want=2E That should set the PCS to disable
+> negotiation when in 2500baseX mode, the same as ethtool -s eth1 autoneg
+> off=2E
+>=20
+> So I think the question becomes - what was the state that ethtool was
+> reporting before asking ethtool to set autoneg off, and why does that
+> make a difference=2E
 
-> 
-> I think, commit text is misleading here and I will request Eric to fix the commit text.
-Sort of, but then the design you explained is very error-prone as it's
-dependent on the device tree always satisfying your hypervisor's needs.
+ok, i do ethtool output before and after on next test=2E
 
-Konrad
-> 
-> -Thanks, Prasad
-> 
->>
->> Konrad
->>> Depends on initial sa8775p-ride.dts:
->>> https://lore.kernel.org/all/20230214092713.211054-3-brgl@bgdev.pl/
->>>
->>>   arch/arm64/boot/dts/qcom/Makefile | 4 ++++
->>>   1 file changed, 4 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/Makefile b/arch/arm64/boot/dts/qcom/Makefile
->>> index b63cd1861e68..72e85ab31d74 100644
->>> --- a/arch/arm64/boot/dts/qcom/Makefile
->>> +++ b/arch/arm64/boot/dts/qcom/Makefile
->>> @@ -1,4 +1,8 @@
->>>   # SPDX-License-Identifier: GPL-2.0
->>> +
->>> +# Enable support for device-tree overlays required on sa8775p-ride.
->>> +DTC_FLAGS_sa8775p-ride := -@
->>> +
->>>   dtb-$(CONFIG_ARCH_QCOM)    += apq8016-sbc.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += apq8094-sony-xperia-kitakami-karin_windy.dtb
->>>   dtb-$(CONFIG_ARCH_QCOM)    += apq8096-db820c.dtb
->>
->>
+> > and yes, module seems to do rate adaption (it is labeled with 100M/1G/=
+2=2E5G), i tried it on a 1G-Port and link came up (with workaround patch fr=
+om daniel),
+> > traffic "works" but in tx-direction with massive retransmitts (i guess=
+ because pause-frames are ignored - pause was 00)=2E
+>=20
+> We'll see about addressing that later once we've got the module working
+> at 2=2E5G=2E However, thanks for the information=2E
+
+of course=2E=2E=2Estep by step, just wanted to tell this behaviour
+
+> The patch below should result in ethtool reporting 2500baseT rather than
+> 2500baseX, and that an=3D1 should now be an=3D0=2E Please try it, and du=
+mp the
+> ethtool eth1 before asking for autoneg to be manually disabled, and also
+> report the kernel messages=2E
+
+i see no Patch below ;)
+
+regards Frank
