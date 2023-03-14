@@ -2,188 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9414C6B87ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:58:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79B1B6B87EE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:59:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229694AbjCNB6r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 21:58:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
+        id S230140AbjCNB6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 21:58:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjCNB6n (ORCPT
+        with ESMTP id S230179AbjCNB6p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 21:58:43 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B81B36A2D8;
-        Mon, 13 Mar 2023 18:58:37 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id h8so12402324ede.8;
-        Mon, 13 Mar 2023 18:58:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678759116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ln5orvH1KCueqxGfdeaxW69qj9y07fvda5WEi7cdD+M=;
-        b=XSBLTuIi8BHYlA+nG0GcLEwQXS4qqjq2ciu7YELNBQr02U6Fk9bvVzpJ7pQuk9b7L4
-         svF0P7QGTygpaW5n+Cl2GfyNvwQQM7kOWPsC1pJAyUtYVXZ05KVUAlCOHy56I82/Hut2
-         /Y5olSS+IArbk7IODQRzXwu2GHGiUNaoTFiqFbIc2lyYEiw1fFNRJLre22hRtECfuetX
-         n3lsCmBv/40HWhOzCmr/A2d21QQG6Uaz3gR7Oy9mmbNZu0X58/zgdlC75UemRWLoUwov
-         QU7kDML7T/P23cNlPlUlaPPhIcUf5tZg7lyxBXhKV5LGLxBS43X3owR61uadsJ6hspUC
-         /ltA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678759116;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ln5orvH1KCueqxGfdeaxW69qj9y07fvda5WEi7cdD+M=;
-        b=KEq9IEQB08cG3+mPlyUzLKburX14pRZGDv0143wcRNu5/903KY5QxaKQwwEfMw8xqU
-         op6YNYh99sam7wnaoseJU2QYPx8l8IxEC4T2CJFP24IaQsUsQnxpta6PisYCCHTlhRIv
-         qAaJcjNsv2WELoU0KOk7BcSaQnobFxcsgA4XyAODfGAskKOogkB+AJ6HOOMFVUr6ZvG+
-         CjW4UQP6Xr8JSpzWvu/wGQvHImSyJnm3HhRRFNfBsbiADddAgnJINq69pYYNaFAji/j4
-         HjU+1w9fFdI1GF7R9zHWUZIEVejwlTznbgiItCKjd5X13LEp5Tz7S6gB8paYYoRB9RPD
-         i/Nw==
-X-Gm-Message-State: AO0yUKVNiBKExeda5KI0Twx6lP7KlWY4zHiZHfcleD3e/5b00vdOoinY
-        yrlXBFwKDxH6n5dPgn88qwofZoKt4tk2FQCs/X4=
-X-Google-Smtp-Source: AK7set9odeAwlXyJZKUtbP8QeC/UKw/z4EKe5O4OBZxRh+34m/Lyhg9DzwcTbrsH89Geg+DYS9YYoFReAFXglOBX5yM=
-X-Received: by 2002:a17:906:714f:b0:92c:16cc:2dc8 with SMTP id
- z15-20020a170906714f00b0092c16cc2dc8mr311353ejj.11.1678759115853; Mon, 13 Mar
- 2023 18:58:35 -0700 (PDT)
+        Mon, 13 Mar 2023 21:58:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7CE51633C
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:58:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9234C615AC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:58:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89529C4339C;
+        Tue, 14 Mar 2023 01:58:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678759119;
+        bh=G8RSycebZt3dD6O9pae5i1zOll+TP4NQkVvirx16U5E=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=jJ6o60P6vfHynwVAWVlEdshVJuLRDXM4LsT42GrnKOP7BRLiEhk9eVDo1najCZVtt
+         AskJmJQ6fL5AQDDlKg5B90ToUmqTTsQnTXxilOFMwlc6Uu4mADASUiDzTdGSLiE7fX
+         JItVplN7N/csXBVs4YkgahhIl2hLxQXbKJcnMktx//aV5IVN6X9Wcozz189Bu5t/gs
+         fhGLZTXOFXcfGnL/aycIT7CbzrtxPeOjVimVcuvxxb+SQnp3EuAcDyZRxOEq7z5gMh
+         I9j3plRrm8iHZWFwlbJtEj3YiJl2iLeksTYBnsihqWI1/6Vya2KCezcnrlBuBHSt+Z
+         jD7kN20O4kQJA==
+Date:   Mon, 13 Mar 2023 18:58:36 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     Sami Tolvanen <samitolvanen@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org, Mark Rutland <mark.rutland@arm.com>,
+        Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>
+Subject: Re: [RFC][PATCH 1/5] static_call: Make NULL static calls consistent
+Message-ID: <20230314015836.p3l43w7ez7qzxylr@treble>
+References: <cover.1678474914.git.jpoimboe@kernel.org>
+ <016c1e9cbdf726a885a406ff6baed85087ad1213.1678474914.git.jpoimboe@kernel.org>
+ <20230310205926.GB1605437@hirez.programming.kicks-ass.net>
+ <20230311012004.vyc4kdlqjsv4zliw@treble>
+ <20230312151731.GB1757905@hirez.programming.kicks-ass.net>
+ <CABCJKuezD9sXTUTCecARUzfig+B=VirGBiVNM5bADvKLG3+YYw@mail.gmail.com>
 MIME-Version: 1.0
-References: <20230311163614.92296-1-kerneljasonxing@gmail.com> <cb09d3eb-8796-b6b8-10cb-35700ea9b532@gmail.com>
-In-Reply-To: <cb09d3eb-8796-b6b8-10cb-35700ea9b532@gmail.com>
-From:   Jason Xing <kerneljasonxing@gmail.com>
-Date:   Tue, 14 Mar 2023 09:57:59 +0800
-Message-ID: <CAL+tcoB9Gq44dKyZ2yvZdDHXp30=Hc_trbuuWDEeUZiNy9wRAw@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: introduce budget_squeeze to help us tune rx behavior
-To:     Kui-Feng Lee <sinquersw@gmail.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, ast@kernel.org, daniel@iogearbox.net,
-        hawk@kernel.org, john.fastabend@gmail.com, kuniyu@amazon.com,
-        liuhangbin@gmail.com, xiangxia.m.yue@gmail.com, jiri@nvidia.com,
-        andy.ren@getcruise.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jason Xing <kernelxing@tencent.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CABCJKuezD9sXTUTCecARUzfig+B=VirGBiVNM5bADvKLG3+YYw@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 5:58=E2=80=AFAM Kui-Feng Lee <sinquersw@gmail.com> =
-wrote:
->
->
->
-> On 3/11/23 08:36, Jason Xing wrote:
-> > From: Jason Xing <kernelxing@tencent.com>
+On Mon, Mar 13, 2023 at 10:48:58AM -0700, Sami Tolvanen wrote:
+> On Sun, Mar 12, 2023 at 8:17 AM Peter Zijlstra <peterz@infradead.org> wrote:
 > >
-> > When we encounter some performance issue and then get lost on how
-> > to tune the budget limit and time limit in net_rx_action() function,
-> > we can separately counting both of them to avoid the confusion.
+> > On Fri, Mar 10, 2023 at 05:20:04PM -0800, Josh Poimboeuf wrote:
+> > >   2) Create yet another "tier" of static call implementations, for
+> > >      arches which can have the unfortunate combo of CFI_CLANG +
+> > >      !HAVE_STATIC_CALL.  CONFIG_ALMOST_DONT_HAVE_STATIC_CALL?
+> > >
+> > >      The arch can define ARCH_DEFINE_STATIC_CALL_NOP() which uses inline
+> > >      asm to create a CFI-compliant NOP/BUG/whatever version of the
+> > >      function (insert lots of hand-waving).  Is the kcfi hash available
+> > >      to inline asm at build time?
 > >
-> > Signed-off-by: Jason Xing <kernelxing@tencent.com>
-> > ---
-> > note: this commit is based on the link as below:
-> > https://lore.kernel.org/lkml/20230311151756.83302-1-kerneljasonxing@gma=
-il.com/
-> > ---
-> >   include/linux/netdevice.h |  1 +
-> >   net/core/dev.c            | 12 ++++++++----
-> >   net/core/net-procfs.c     |  9 ++++++---
-> >   3 files changed, 15 insertions(+), 7 deletions(-)
+> > Yes, clang creates magic symbol for everything it sees a declaration
+> > for. This symbols can be referenced from asm, linking will make it all
+> > work.
 > >
-> > diff --git a/include/linux/netdevice.h b/include/linux/netdevice.h
-> > index 6a14b7b11766..5736311a2133 100644
-> > --- a/include/linux/netdevice.h
-> > +++ b/include/linux/netdevice.h
-> > @@ -3157,6 +3157,7 @@ struct softnet_data {
-> >       /* stats */
-> >       unsigned int            processed;
-> >       unsigned int            time_squeeze;
-> > +     unsigned int            budget_squeeze;
-> >   #ifdef CONFIG_RPS
-> >       struct softnet_data     *rps_ipi_list;
-> >   #endif
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index 253584777101..bed7a68fdb5d 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -6637,6 +6637,7 @@ static __latent_entropy void net_rx_action(struct=
- softirq_action *h)
-> >       unsigned long time_limit =3D jiffies +
-> >               usecs_to_jiffies(READ_ONCE(netdev_budget_usecs));
-> >       int budget =3D READ_ONCE(netdev_budget);
-> > +     bool is_continue =3D true;
-> >       LIST_HEAD(list);
-> >       LIST_HEAD(repoll);
-> >
-> > @@ -6644,7 +6645,7 @@ static __latent_entropy void net_rx_action(struct=
- softirq_action *h)
-> >       list_splice_init(&sd->poll_list, &list);
-> >       local_irq_enable();
-> >
-> > -     for (;;) {
-> > +     for (; is_continue;) {
-> >               struct napi_struct *n;
-> >
-> >               skb_defer_free_flush(sd);
-> > @@ -6662,10 +6663,13 @@ static __latent_entropy void net_rx_action(stru=
-ct softirq_action *h)
-> >                * Allow this to run for 2 jiffies since which will allow
-> >                * an average latency of 1.5/HZ.
-> >                */
-> > -             if (unlikely(budget <=3D 0 ||
-> > -                          time_after_eq(jiffies, time_limit))) {
-> > +             if (unlikely(budget <=3D 0)) {
-> > +                     sd->budget_squeeze++;
-> > +                     is_continue =3D false;
-> > +             }
-> > +             if (unlikely(time_after_eq(jiffies, time_limit))) {
-> >                       sd->time_squeeze++;
-> > -                     break;
-> > +                     is_continue =3D false;
-> >               }
-> >       }
-> >
-> > diff --git a/net/core/net-procfs.c b/net/core/net-procfs.c
-> > index 97a304e1957a..4d1a499d7c43 100644
-> > --- a/net/core/net-procfs.c
-> > +++ b/net/core/net-procfs.c
-> > @@ -174,14 +174,17 @@ static int softnet_seq_show(struct seq_file *seq,=
- void *v)
-> >        */
-> >       seq_printf(seq,
-> >                  "%08x %08x %08x %08x %08x %08x %08x %08x %08x %08x %08=
-x %08x %08x "
-> > -                "%08x %08x\n",
-> > -                sd->processed, sd->dropped, sd->time_squeeze, 0,
-> > +                "%08x %08x %08x %08x\n",
-> > +                sd->processed, sd->dropped,
-> > +                0, /* was old way to count time squeeze */
->
-> Should we show a proximate number?  For example,
-> sd->time_squeeze + sd->bud_squeeze.
+> > And yes, C sucks, you can't actually create a function definition from a
+> > type :/ Otherwise this could be trivially fixable.
+> 
+> Wouldn't creating a separate inline assembly nop function that
+> references the CFI hash of another function with the correct type
+> potentially solve this issue like Josh suggested?
 
-Yeah, It does make sense. Let the old way to display untouched.
+Right, I was thinking something like this, where the nop function gets
+generated by DEFINE_STATIC_CALL().
 
->
->
-> > +                0,
-> >                  0, 0, 0, 0, /* was fastroute */
-> >                  0,   /* was cpu_collision */
-> >                  sd->received_rps, flow_limit_count,
-> >                  0,   /* was len of two backlog queues */
-> >                  (int)seq->index,
-> > -                softnet_input_pkt_queue_len(sd), softnet_process_queue=
-_len(sd));
-> > +                softnet_input_pkt_queue_len(sd), softnet_process_queue=
-_len(sd),
-> > +                sd->time_squeeze, sd->budget_squeeze);
-> >       return 0;
-> >   }
-> >
+Completely untested of course...
+
+#define STATIC_CALL_NOP_PREFIX		__SCN__
+#define STATIC_CALL_NOP(name)		__PASTE(STATIC_CALL_NOP_PREFIX, name)
+#define STATIC_CALL_NOP_STR(name)	__stringify(STATIC_CALL_NOP(name))
+
+#define ARCH_DEFINE_STATIC_CALL_NOP(name, func)				\
+	asm(".align 4						\n"	\
+	    ".word __kcfi_typeid_" STATIC_CALL_NOP_STR(name) "  \n"	\
+	    ".globl " STATIC_CALL_NOP_STR(name) "		\n"	\
+	    STATIC_CALL_NOP_STR(name) ":			\n"	\
+	    "bti c						\n"	\
+	    "mov x0, xzr					\n"	\
+	    "ret						\n"	\
+	    ".type " STATIC_CALL_NOP_STR(name) ", @function	\n"	\
+	    ".size " STATIC_CALL_NOP_STR(name) ", . - " STATIC_CALL_NOP_STR(name) " \n")
+
+#define DECLARE_STATIC_CALL(name, func)					\
+	extern struct static_call_key STATIC_CALL_KEY(name);		\
+	extern typeof(func) STATIC_CALL_TRAMP(name)			\
+	extern typeof(func) STATIC_CALL_NOP(name)
+
+#define DEFINE_STATIC_CALL(name, _func, _func_init)			\
+	DECLARE_STATIC_CALL(name, _func);				\
+	ARCH_DEFINE_STATIC_CALL_NOP(name);				\
+	struct static_call_key STATIC_CALL_KEY(name) = {		\
+		.func = _func_init,					\
+	}
+-- 
+Josh
