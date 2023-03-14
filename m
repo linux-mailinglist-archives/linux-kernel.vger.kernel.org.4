@@ -2,155 +2,287 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 795126B98BC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 454256B98BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:15:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCNPOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:14:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57124 "EHLO
+        id S231395AbjCNPPU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:15:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231616AbjCNPOO (ORCPT
+        with ESMTP id S231618AbjCNPPQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:14:14 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4CC5A30286
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:13:39 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id d36so20448087lfv.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:13:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678806801;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aWquE/66XhiUdKcAjOZcdT8JwAjOV0jdF3ZReJh+jhU=;
-        b=A70OxIRflPWeFRqLRBN8qDh9Nnpwl6mYudE01YgkwWijNkevncaAafkm4hhBFkYlPY
-         B+r3GEwqp0NgXcsOp5XuGK9r6rRnB/Obx5FjFgTAiep+FKTJN4Wf8YdFdeEt+FGeianQ
-         HKZRv9Gxy6ZXY22rJYBwB5fqIrxLopllTUZDbEXoT8/sDmpetnaCfVfzZjKfHbsVw5Ma
-         sKRrOmFpYtj4/IWOdsY6LEdG6eur/ataMRIvXZhgMnc/+DueCevIubHxa7SwxkyI+bBL
-         soT9s0BQKP1rOM59EGlR7NRgMnjXylMelTjMehReRdJPPj/aP3dV4uNWBeArjdPde47F
-         bsqg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678806801;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aWquE/66XhiUdKcAjOZcdT8JwAjOV0jdF3ZReJh+jhU=;
-        b=ox/rVUoBjNMoRH4DdHyiBuemzOYTKlDcgfIe5xidGusuA9fwD9N7KBxtUFhBoDEH+t
-         PaQtGaR0esnB5z+q68G6X7wP1yZpgUdH3fXc+vgmTVnyScysah9WZjppdblNDqfWKNj1
-         h5sybYFI2P8pTCYQlOwSgpPoicMLqvMpYkzWOxyfwnBzazRZM35zFMg6TsLIcpnvAUE7
-         y7mdozw5Z3udbo4ivRmcUFjDQzKn0PA4mQPmfDJrJn77i8WAqPWTcI2w073jTZYjoBF7
-         HzGXFOxsD10R4FSfIOr/xEsQAEKQDHgWnjvlmktZBFa0vQC2s36ir6tjwcpWfQLEZ+Rw
-         rdGw==
-X-Gm-Message-State: AO0yUKVuR3OZmyz8PnIx4vhM+fgZLdlMu6IdKVGL2cDZzXbSIDSsZ4i9
-        yawbOlJDsTvbC/vm+haWAAjM7w==
-X-Google-Smtp-Source: AK7set+0FwZrp2Kqmgi11czNIWqOTIdgsRQEqlYZ+eN8f1lZ8ifft3X4RqJNjukpilWNLQkafq+Kxg==
-X-Received: by 2002:ac2:43ad:0:b0:4dc:4bda:c26f with SMTP id t13-20020ac243ad000000b004dc4bdac26fmr973810lfl.23.1678806801649;
-        Tue, 14 Mar 2023 08:13:21 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id l7-20020ac24a87000000b004d23763fe96sm431973lfp.72.2023.03.14.08.13.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 08:13:20 -0700 (PDT)
-Message-ID: <3f37eede-6d62-fb92-9cff-b308de333ebd@linaro.org>
-Date:   Tue, 14 Mar 2023 16:13:18 +0100
+        Tue, 14 Mar 2023 11:15:16 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86EACA42E5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:14:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678806881; x=1710342881;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=K6Vdzp8KjBCuYcLJXxHVlkQzUyS+zE/ruzxJSurp4Mc=;
+  b=f4T4dzh8LUkyEVJgas63A3peAqAVYJvtPOwwImRhPOnPFhiqtALMUY+1
+   PH1CWco0HtkCzz63WmN26DThoubMELTub88b2PxI+fTsdSMtcH3Tzy0zB
+   1NgtnnWKMuSW9H1P3Z0A78tIJarqk5Or4Wc4ixlIFOva2IgzHtzHfq05M
+   oeFivxQN05hYPKx6CQV0rIVWCQEOVTeEVfqFJbeaZGUarcc3WMemHY4PK
+   rTRvGGzWbK25u15LswWWVq1KO020m9MmyePnMF/nS3bZHLbEjFHLpHxKy
+   eF4NkM+tQAFi64KMTaYYWfW/k9RyRGNGbJVw0O2DzHcxmOP15TvAPx4ji
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="337478293"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="337478293"
+Received: from fmsmga001.fm.intel.com ([10.253.24.23])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:13:56 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="822410486"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="822410486"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.140.184])
+  by fmsmga001-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:13:55 -0700
+Date:   Tue, 14 Mar 2023 08:13:53 -0700
+From:   Alison Schofield <alison.schofield@intel.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        outreachy@lists.linux.dev, llvm@lists.linux.dev,
+        oe-kbuild-all@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Message-ID: <ZBCPMVFvjodeUbGF@aschofie-mobl2>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+ <202303141159.6wN9HNP9-lkp@intel.com>
+ <ZBB/30ZBW9EU1QfK@khadija-virtual-machine>
+ <20230314144207.GA4106922@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH net-next 05/11] clk: qcom: gcc-sc8280xp: Add EMAC GDSCs
-Content-Language: en-US
-To:     Andrew Halaney <ahalaney@redhat.com>, linux-kernel@vger.kernel.org
-Cc:     agross@kernel.org, andersson@kernel.org, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        vkoul@kernel.org, bhupesh.sharma@linaro.org,
-        mturquette@baylibre.com, sboyd@kernel.org, peppe.cavallaro@st.com,
-        alexandre.torgue@foss.st.com, joabreu@synopsys.com,
-        mcoquelin.stm32@gmail.com, richardcochran@gmail.com,
-        linux@armlinux.org.uk, veekhee@apple.com,
-        tee.min.tan@linux.intel.com, mohammad.athari.ismail@intel.com,
-        jonathanh@nvidia.com, ruppala@nvidia.com, bmasney@redhat.com,
-        andrey.konovalov@linaro.org, linux-arm-msm@vger.kernel.org,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-clk@vger.kernel.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, ncai@quicinc.com,
-        jsuraj@qti.qualcomm.com, hisunil@quicinc.com
-References: <20230313165620.128463-1-ahalaney@redhat.com>
- <20230313165620.128463-6-ahalaney@redhat.com>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230313165620.128463-6-ahalaney@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314144207.GA4106922@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 13.03.2023 17:56, Andrew Halaney wrote:
-> Add the EMAC GDSCs to allow the EMAC hardware to be enabled.
+On Tue, Mar 14, 2023 at 07:42:07AM -0700, Nathan Chancellor wrote:
+> Hi Khadija,
 > 
-> Signed-off-by: Andrew Halaney <ahalaney@redhat.com>
-> ---
-Was it tested to not cause issues on access on "normal" 8280xp?
-AFAICS if there would be any, they would happen at registration
-time, as gdsc_init already accesses its registers
-
-Konrad
->  drivers/clk/qcom/gcc-sc8280xp.c               | 18 ++++++++++++++++++
->  include/dt-bindings/clock/qcom,gcc-sc8280xp.h |  2 ++
->  2 files changed, 20 insertions(+)
+> On Tue, Mar 14, 2023 at 07:08:31PM +0500, Khadija Kamran wrote:
+> > On Tue, Mar 14, 2023 at 11:45:51AM +0800, kernel test robot wrote:
+> > > Hi Khadija,
+> > > 
+> > > Thank you for the patch! Perhaps something to improve:
+> > > 
+> > > [auto build test WARNING on staging/staging-testing]
+> > > 
+> > > url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
+> > > patch link:    https://lore.kernel.org/r/ZA9mThZ7NyRrQAMX%40khadija-virtual-machine
+> > > patch subject: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+> > > config: arm64-randconfig-r012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141159.6wN9HNP9-lkp@intel.com/config)
+> > > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
+> > > reproduce (this is a W=1 build):
+> > >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+> > >         chmod +x ~/bin/make.cross
+> > >         # install arm64 cross compiling tool for clang build
+> > >         # apt-get install binutils-aarch64-linux-gnu
+> > >         # https://github.com/intel-lab-lkp/linux/commit/9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
+> > >         git remote add linux-review https://github.com/intel-lab-lkp/linux
+> > >         git fetch --no-tags linux-review Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
+> > >         git checkout 9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
+> > >         # save the config file
+> > >         mkdir build_dir && cp config build_dir/.config
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
+> > >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/staging/axis-fifo/
+> > > 
+> > > If you fix the issue, kindly add following tag where applicable
+> > > | Reported-by: kernel test robot <lkp@intel.com>
+> > > | Link: https://lore.kernel.org/oe-kbuild-all/202303141159.6wN9HNP9-lkp@intel.com/
+> > > 
+> > > All warnings (new ones prefixed by >>):
+> > > 
+> > > >> drivers/staging/axis-fifo/axis-fifo.c:817:18: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+> > >                    read_timeout = MAX_SCHEDULE_TIMEOUT;
+> > >                                 ~ ^~~~~~~~~~~~~~~~~~~~
+> > >    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+> > >    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+> > >                                            ^~~~~~~~
+> > >    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+> > >    #define LONG_MAX        ((long)(~0UL >> 1))
+> > >                             ^~~~~~~~~~~~~~~~~
+> > >    drivers/staging/axis-fifo/axis-fifo.c:822:19: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
+> > >                    write_timeout = MAX_SCHEDULE_TIMEOUT;
+> > >                                  ~ ^~~~~~~~~~~~~~~~~~~~
+> > >    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
+> > >    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
+> > >                                            ^~~~~~~~
+> > >    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
+> > >    #define LONG_MAX        ((long)(~0UL >> 1))
+> > >                             ^~~~~~~~~~~~~~~~~
+> > >    2 warnings generated.
+> > >
+> > 
+> > Hi everyone!
+> > Kindly let me know if I should look into these warnings.
+> > Thank you!
 > 
-> diff --git a/drivers/clk/qcom/gcc-sc8280xp.c b/drivers/clk/qcom/gcc-sc8280xp.c
-> index b3198784e1c3..04a99dbaa57e 100644
-> --- a/drivers/clk/qcom/gcc-sc8280xp.c
-> +++ b/drivers/clk/qcom/gcc-sc8280xp.c
-> @@ -6873,6 +6873,22 @@ static struct gdsc usb30_sec_gdsc = {
->  	.pwrsts = PWRSTS_RET_ON,
->  };
->  
-> +static struct gdsc emac_0_gdsc = {
-> +	.gdscr = 0xaa004,
-> +	.pd = {
-> +		.name = "emac_0_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +};
-> +
-> +static struct gdsc emac_1_gdsc = {
-> +	.gdscr = 0xba004,
-> +	.pd = {
-> +		.name = "emac_1_gdsc",
-> +	},
-> +	.pwrsts = PWRSTS_OFF_ON,
-> +};
-> +
->  static struct clk_regmap *gcc_sc8280xp_clocks[] = {
->  	[GCC_AGGRE_NOC_PCIE0_TUNNEL_AXI_CLK] = &gcc_aggre_noc_pcie0_tunnel_axi_clk.clkr,
->  	[GCC_AGGRE_NOC_PCIE1_TUNNEL_AXI_CLK] = &gcc_aggre_noc_pcie1_tunnel_axi_clk.clkr,
-> @@ -7351,6 +7367,8 @@ static struct gdsc *gcc_sc8280xp_gdscs[] = {
->  	[USB30_MP_GDSC] = &usb30_mp_gdsc,
->  	[USB30_PRIM_GDSC] = &usb30_prim_gdsc,
->  	[USB30_SEC_GDSC] = &usb30_sec_gdsc,
-> +	[EMAC_0_GDSC] = &emac_0_gdsc,
-> +	[EMAC_1_GDSC] = &emac_1_gdsc,
->  };
->  
->  static const struct clk_rcg_dfs_data gcc_dfs_clocks[] = {
-> diff --git a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> index cb2fb638825c..721105ea4fad 100644
-> --- a/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> +++ b/include/dt-bindings/clock/qcom,gcc-sc8280xp.h
-> @@ -492,5 +492,7 @@
->  #define USB30_MP_GDSC					9
->  #define USB30_PRIM_GDSC					10
->  #define USB30_SEC_GDSC					11
-> +#define EMAC_0_GDSC					12
-> +#define EMAC_1_GDSC					13
->  
->  #endif
+> You should always avoid introducing new warnings whenever possible. In
+> this case, it appears that read_timeout and write_timeout should be
+> changed from 'int' to 'long' to account for the fact that
+> MAX_SCHEDULE_TIMEOUT is being assigned to it directly now, versus being
+> passed as a parameter to wait_event_interruptible_timeout(), which
+> assigned it to 'long' anyways.
+> 
+> If you have any other questions or need further help, let me know :)
+> 
+> Cheers,
+> Nathan
+
+Hi Khadaji,
+
+Echoing Nathan's feedback - yes, you need to correct these.
+
+Do you see these warnings when you compiled?  If yes, then your path to
+fixing them is easier. Make sure it recompiles with no warnings.
+
+If you don't see these warnings, then you need to follow the steps to
+reproduce in the lkp email. You have to be able to 'see the warning'
+make a change and 'see it go away'.
+
+Alison
+
+> 
+> > > vim +817 drivers/staging/axis-fifo/axis-fifo.c
+> > > 
+> > >    805	
+> > >    806	static int axis_fifo_probe(struct platform_device *pdev)
+> > >    807	{
+> > >    808		struct resource *r_mem; /* IO mem resources */
+> > >    809		struct device *dev = &pdev->dev; /* OS device (from device tree) */
+> > >    810		struct axis_fifo *fifo = NULL;
+> > >    811		char *device_name;
+> > >    812		int rc = 0; /* error return value */
+> > >    813	
+> > >    814		if (read_timeout >= 0)
+> > >    815			read_timeout = msecs_to_jiffies(read_timeout);
+> > >    816		else
+> > >  > 817			read_timeout = MAX_SCHEDULE_TIMEOUT;
+> > >    818	
+> > >    819		if (write_timeout >= 0)
+> > >    820			write_timeout = msecs_to_jiffies(write_timeout);
+> > >    821		else
+> > >    822			write_timeout = MAX_SCHEDULE_TIMEOUT;
+> > >    823	
+> > >    824		/* ----------------------------
+> > >    825		 *     init wrapper device
+> > >    826		 * ----------------------------
+> > >    827		 */
+> > >    828	
+> > >    829		device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
+> > >    830		if (!device_name)
+> > >    831			return -ENOMEM;
+> > >    832	
+> > >    833		/* allocate device wrapper memory */
+> > >    834		fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
+> > >    835		if (!fifo)
+> > >    836			return -ENOMEM;
+> > >    837	
+> > >    838		dev_set_drvdata(dev, fifo);
+> > >    839		fifo->dt_device = dev;
+> > >    840	
+> > >    841		init_waitqueue_head(&fifo->read_queue);
+> > >    842		init_waitqueue_head(&fifo->write_queue);
+> > >    843	
+> > >    844		mutex_init(&fifo->read_lock);
+> > >    845		mutex_init(&fifo->write_lock);
+> > >    846	
+> > >    847		/* ----------------------------
+> > >    848		 *   init device memory space
+> > >    849		 * ----------------------------
+> > >    850		 */
+> > >    851	
+> > >    852		/* get iospace for the device */
+> > >    853		r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+> > >    854		if (!r_mem) {
+> > >    855			dev_err(fifo->dt_device, "invalid address\n");
+> > >    856			rc = -ENODEV;
+> > >    857			goto err_initial;
+> > >    858		}
+> > >    859	
+> > >    860		/* request physical memory */
+> > >    861		fifo->base_addr = devm_ioremap_resource(fifo->dt_device, r_mem);
+> > >    862		if (IS_ERR(fifo->base_addr)) {
+> > >    863			rc = PTR_ERR(fifo->base_addr);
+> > >    864			goto err_initial;
+> > >    865		}
+> > >    866	
+> > >    867		dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
+> > >    868	
+> > >    869		/* create unique device name */
+> > >    870		snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
+> > >    871		dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
+> > >    872	
+> > >    873		/* ----------------------------
+> > >    874		 *          init IP
+> > >    875		 * ----------------------------
+> > >    876		 */
+> > >    877	
+> > >    878		rc = axis_fifo_parse_dt(fifo);
+> > >    879		if (rc)
+> > >    880			goto err_initial;
+> > >    881	
+> > >    882		reset_ip_core(fifo);
+> > >    883	
+> > >    884		/* ----------------------------
+> > >    885		 *    init device interrupts
+> > >    886		 * ----------------------------
+> > >    887		 */
+> > >    888	
+> > >    889		/* get IRQ resource */
+> > >    890		rc = platform_get_irq(pdev, 0);
+> > >    891		if (rc < 0)
+> > >    892			goto err_initial;
+> > >    893	
+> > >    894		/* request IRQ */
+> > >    895		fifo->irq = rc;
+> > >    896		rc = devm_request_irq(fifo->dt_device, fifo->irq, &axis_fifo_irq, 0,
+> > >    897				      DRIVER_NAME, fifo);
+> > >    898		if (rc) {
+> > >    899			dev_err(fifo->dt_device, "couldn't allocate interrupt %i\n",
+> > >    900				fifo->irq);
+> > >    901			goto err_initial;
+> > >    902		}
+> > >    903	
+> > >    904		/* ----------------------------
+> > >    905		 *      init char device
+> > >    906		 * ----------------------------
+> > >    907		 */
+> > >    908	
+> > >    909		/* create character device */
+> > >    910		fifo->miscdev.fops = &fops;
+> > >    911		fifo->miscdev.minor = MISC_DYNAMIC_MINOR;
+> > >    912		fifo->miscdev.name = device_name;
+> > >    913		fifo->miscdev.groups = axis_fifo_attrs_groups;
+> > >    914		fifo->miscdev.parent = dev;
+> > >    915		rc = misc_register(&fifo->miscdev);
+> > >    916		if (rc < 0)
+> > >    917			goto err_initial;
+> > >    918	
+> > >    919		dev_info(fifo->dt_device, "axis-fifo created at %pa mapped to 0x%pa, irq=%i\n",
+> > >    920			 &r_mem->start, &fifo->base_addr, fifo->irq);
+> > >    921	
+> > >    922		return 0;
+> > >    923	
+> > >    924	err_initial:
+> > >    925		dev_set_drvdata(dev, NULL);
+> > >    926		return rc;
+> > >    927	}
+> > >    928	
+> > > 
+> > > -- 
+> > > 0-DAY CI Kernel Test Service
+> > > https://github.com/intel/lkp-tests
+> > 
+> 
