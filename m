@@ -2,91 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DDA86B9102
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A260B6B9105
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:06:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230319AbjCNLFo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:05:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S230216AbjCNLGH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:06:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230235AbjCNLFk (ORCPT
+        with ESMTP id S230301AbjCNLFx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:05:40 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C9E307B48F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:05:05 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3DBFC4B3;
-        Tue, 14 Mar 2023 04:04:55 -0700 (PDT)
-Received: from e120937-lin (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 84F6E3F67D;
-        Tue, 14 Mar 2023 04:04:10 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 11:04:00 +0000
-From:   Cristian Marussi <cristian.marussi@arm.com>
-To:     Marc Zyngier <maz@kernel.org>
-Cc:     Oliver Upton <oliver.upton@linux.dev>,
-        Jeremy Linton <jeremy.linton@arm.com>,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, David Woodhouse <dwmw@amazon.co.uk>
-Subject: Re: Circular lockdep in kvm_reset_vcpu() ?
-Message-ID: <ZBBUoBsfGokxiBzC@e120937-lin>
-References: <f6452cdd-65ff-34b8-bab0-5c06416da5f6@arm.com>
- <Y+bnybGEkMpZzm/y@linux.dev>
- <ZA72c+TT9epTcvX4@e120937-lin>
- <3496a6a10b2d8693825e733b871938f5@misterjones.org>
- <ZA9pUNZPyFtLDfxC@e120937-lin>
- <82978ec75c0b34203dd1df693e7adf83@kernel.org>
+        Tue, 14 Mar 2023 07:05:53 -0400
+Received: from out199-15.us.a.mail.aliyun.com (out199-15.us.a.mail.aliyun.com [47.90.199.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 527A0763CA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:05:16 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R201e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=jefflexu@linux.alibaba.com;NM=1;PH=DS;RN=7;SR=0;TI=SMTPD_---0Vds.3uU_1678791867;
+Received: from 30.221.131.40(mailfrom:jefflexu@linux.alibaba.com fp:SMTPD_---0Vds.3uU_1678791867)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Mar 2023 19:04:28 +0800
+Message-ID: <b27307e0-2c7d-bcad-cbc8-f587fdf0eaa0@linux.alibaba.com>
+Date:   Tue, 14 Mar 2023 19:04:27 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <82978ec75c0b34203dd1df693e7adf83@kernel.org>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.6.1
+Subject: Re: [BUG REPORT] arch/x86/include/asm/uaccess_64.h:119: Error: junk
+ at end of line
+Content-Language: en-US
+To:     Borislav Petkov <bp@alien8.de>
+Cc:     tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <a9aae568-3046-306c-bd71-92c1fc8eeddc@linux.alibaba.com>
+ <20230314102316.GAZBBLFHKqQr9RSeM+@fat_crate.local>
+From:   Jingbo Xu <jefflexu@linux.alibaba.com>
+In-Reply-To: <20230314102316.GAZBBLFHKqQr9RSeM+@fat_crate.local>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 09:28:25AM +0000, Marc Zyngier wrote:
-> On 2023-03-13 18:20, Cristian Marussi wrote:
-> > On Mon, Mar 13, 2023 at 02:09:55PM +0000, Marc Zyngier wrote:
+
+
+On 3/14/23 6:23 PM, Borislav Petkov wrote:
+> On Tue, Mar 14, 2023 at 11:12:13AM +0800, Jingbo Xu wrote:
+>> 	gcc (GCC) 6.5.1 20181026 (Alibaba 6.5.1-1)
 > 
-> > > And -rc2 works just fine here.
-> > 
-> > Thanks, I'll dig deeper what's going on un my setup.
+> Looks like you should complain to whoever patched this gcc and broke it
+> in the process. Unless you can reproduce the issue with an official
+> compiler...
 > 
-> Actually, you really want this patch[1] which is on its
-> way to Linus.
-> 
-> It could explain the issue you're seeing with SMP.
 
-Hi Marc,
+Yeah, thanks for the reply.  I will try if I have a chance, though I
+doubt if I could compile the official compiler from the ground.
 
-thanks this just solves for me on JUNO with guest SMP.
-
-Indeed with earlycon on JUNO with SMP I was seeing, beside a lot of
-workqueue lockup that finally hanged the guest, some puzzling
-'time-traveling' stamps that seemed to align more with the host time
-than the guest.
-
-    [    0.509305] thermal_sys: Registered thermal governor 'step_wise'
-    [    0.509327] thermal_sys: Registered thermal governor 'power_allocator'
-    [  282.404523] audit: type=2000 audit(0.372:1): state=initialized audit_enabled=0 res=1
-    [    0.526380] cpuidle: using governor menu
-    [    0.530378] hw-breakpoint: found 6 breakpoint and 4 watchpoint registers.
-    [    0.536241] ASID allocator initialised with 65536 entries
-    [    0.547455] Serial: AMBA PL011 UART driver
-    [    0.563267] Callback from call_rcu_tasks() invoked.
-    [  282.463816] KASLR disabled due to lack of seed
-    [  282.470356] HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
-    [  282.476182] HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
-    ....
-    .....
-    [  345.799753] io scheduler bfq registered
-    [  126.753573] watchdog: BUG: soft lockup - CPU#0 stuck for 118s! [kworker/u4:0:9]
-    [  126.759801] Modules linked in:
-    [  126.762397] irq event stamp: 713
-
-Thanks a lot for the help.
-Cristian
+-- 
+Thanks,
+Jingbo
