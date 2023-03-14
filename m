@@ -2,110 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D3556B9CA3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:13:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8DEB86B9CB1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:14:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbjCNRMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:12:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
+        id S230137AbjCNRN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231143AbjCNRMi (ORCPT
+        with ESMTP id S230324AbjCNRNk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:12:38 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F431ADC2A;
-        Tue, 14 Mar 2023 10:12:34 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 18:12:31 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1678813952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zoXVxWY2RdbpAngboxJV6HcjSFULgSyzrd+jPOr62qw=;
-        b=ic5qX8K28DPh4A1SReQAfb52iaiU44STnCj0r+1mF1t/9m46edlxE0jRwvafLuOzGXfujw
-        izzkcTLH+jJTrZUbSIb3EqNc5iOsUisI9F506WVyAwup0t6RfhI0MHsU2WzhkEPGAZUCiH
-        u1LvDxtNWXjX+9zgOCHxfLjPui+J1/xoq8bd8GBNOYuRjcXAOsa4eRGBy77/26vV9dM/oc
-        Q5MUaTAuE7DCw3063AJspuIt865jvU5QYqK05ZtIAnmlWJSKbUMC6cLvgbm4aQ1ZxMg/cm
-        4+X8fJpPvrKuWGXio5Xk+pRq5YciKA2a4u+rd/KTBMVfftGJiKVxQnpnT5csfQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1678813952;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=zoXVxWY2RdbpAngboxJV6HcjSFULgSyzrd+jPOr62qw=;
-        b=Hm2fE8egrzz2LImXg9YyZI/bqqxdwwnc/3yBprHNJXsZ5gGkn3yB6Bhl1seDoqJ6He5CHb
-        InMunxgqbbMd4aDg==
-From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To:     Thomas Gleixner <tglx@linutronix.de>
-Cc:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users@vger.kernel.org,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [ANNOUNCE] v6.3-rc2-rt3
-Message-ID: <20230314171231.jwtham4a@linutronix.de>
-References: <20230314170502.OHw1_FK3@linutronix.de>
+        Tue, 14 Mar 2023 13:13:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE193BDB1;
+        Tue, 14 Mar 2023 10:13:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AC9D9B81A59;
+        Tue, 14 Mar 2023 17:13:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81236C433EF;
+        Tue, 14 Mar 2023 17:13:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678814015;
+        bh=f4mE9xqN56lqNZ/7UQMNXq/sDujWJ3ttWVllpQdBxVk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dEubZBxAXSJj5Vy9DiQAqnYtplW1JHEKCsSGvrPjxvr7+a7oD9s48R96j2Vy5ZqdE
+         CUORyktEXuPg/1S6dkP5pXnewPhf/Gkf0v7AYkhzN+6g2LiAE9AbavV0YW6mnmCzTq
+         vitDrkNTV6XhFZSUNnkVPW3JBbjEalQH957SN/hMiFxn5668fkTBCHvlLOKqWOsV85
+         3RH+Xd7KofW6GnrU5kMEaHjqiXcNI7VBg7jnBYBmkqe9mW/jZvYzHxNvT9aEBFwirJ
+         oHDWGLQoA0OSjmgDRn+i42ZQfVN4NPXW84K7lhatcHT2w9wEjGYwRy5VOxfiXbBYII
+         vsL2/aUT6A6MQ==
+Date:   Tue, 14 Mar 2023 18:13:27 +0100
+From:   Christian Brauner <brauner@kernel.org>
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Greg KH <gregkh@linuxfoundation.org>,
+        Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>,
+        security@kernel.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Linus Torvalds <torvalds@linuxfoundation.org>
+Subject: Re: Patch for a overwriting/corruption of the file system
+Message-ID: <20230314171327.k6krhiql3d7tpqat@wittgenstein>
+References: <CADZg-m0Z+dOGfG=ddJxqPvgFwG0+OLAyP157SNzj6R6J2p7L-g@mail.gmail.com>
+ <ZA734rBwf4ib2u9n@kroah.com>
+ <CADZg-m04XELrO-v-uYZ4PyYHXVPX35dgWbCHBpZvwepS4XV9Ew@mail.gmail.com>
+ <CADZg-m2k_L8-byX0WKYw5Cj1JPPhxk3HCBexpqPtZvcLRNY8Ug@mail.gmail.com>
+ <ZA77qAuaTVCEwqHc@kroah.com>
+ <20230314095539.zf7uy27cjflqp6kp@wittgenstein>
+ <20230314165708.GY3390869@ZenIV>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20230314170502.OHw1_FK3@linutronix.de>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230314165708.GY3390869@ZenIV>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-14 18:05:04 [+0100], To Thomas Gleixner wrote:
-> Dear RT folks!
->=20
-> I'm pleased to announce the v6.3-rc2-rt3 patch set.=20
->=20
-> Changes since v6.3-rc2-rt2:
->=20
->   - The i915 and other driver using io_mapping_map_atomic_wc() function
->     could deadlock. Reported by Richard Weinberger.
->=20
->   - A larger printk rework by John Ogness. This printk series is based
->     on the latest work by John and most of the patches have been
->     submitted for upstream review.
->     As in the previous version the concept of an atomic console
->     remained. That means a crash (BUG(), panic(), =E2=80=A6) without a at=
-omic
->     console driver remains invisible on PREEMPT_RT. The only available
->     atomic console driver is the 8250 UART and has been tested on X86.
->=20
-> Known issues
->      - Crystal Wood reported that a filesystem (XFS) may deadlock while
->        flushing during schedule.
->=20
-> The delta patch against v6.3-rc2-rt2 is appended below and can be found h=
-ere:
-> =20
->      https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/incr/patch-6=
-=2E3-rc2-rt2-rt3.patch.xz
->=20
-> You can get this release via the git tree at:
->=20
->     git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v=
-6.3-rc2-rt3
->=20
-> The RT patch against v6.3-rc2 can be found here:
->=20
->     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6=
-=2E3-rc2-rt3.patch.xz
->=20
-> The split quilt queue is available at:
->=20
->     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches=
--6.3-rc2-rt3.tar.xz
+On Tue, Mar 14, 2023 at 04:57:08PM +0000, Al Viro wrote:
+> On Tue, Mar 14, 2023 at 10:55:39AM +0100, Christian Brauner wrote:
+> > On Mon, Mar 13, 2023 at 11:32:08AM +0100, Greg KH wrote:
+> > > On Mon, Mar 13, 2023 at 03:54:55PM +0530, Kirtikumar Anandrao Ramchandani wrote:
+> > > > Seems like again it got rejected. I am sending it in the body if it works:
+> > > > 
+> > > > >From 839cae91705e044b49397590f2d85a5dd289f0c5 Mon Sep 17 00:00:00 2001
+> > > > From: KirtiRamchandani <kirtar15502@gmail.com>
+> > > > Date: Mon, 13 Mar 2023 15:05:08 +0530
+> > > > Subject: [PATCH] Fix bug in affs_rename() function. The `affs_rename()`
+> > > >  function in the AFFS filesystem has a bug that can cause the `retval`
+> > > >  variable to be overwritten before it is used. Specifically, the function
+> > > >  assigns `retval` a value in two separate code blocks, but then only checks
+> > > >  its value in one of those blocks. This commit fixes the bug by ensuring
+> > > > that
+> > > >  `retval` is properly checked in both code blocks.
+> > > > 
+> > > > Signed-off-by: KirtiRamchandani <kirtar15502@gmail.com>
+> > > > ---
+> > > >  namei.c | 4++++--
+> > > >  1 file changed, 4 insertions(+), 2 deletion(-)
+> > > > 
+> > > > diff --git a/fs/affs/namei.c b/fs/affs/namei.c
+> > > > index d1084e5..a54c700 100644
+> > > > --- a/fs/affs/namei.c
+> > > > +++ b/fs/affs/namei.c
+> > > > @@ -488,7 +488,8 @@ affs_xrename(struct inode *old_dir, struct dentry
+> > > > *old_dentry,
+> > > >         affs_lock_dir(new_dir);
+> > > >         retval = affs_insert_hash(new_dir, bh_old);
+> > > >         affs_unlock_dir(new_dir);
+> > > > -
+> > > > +       if (retval)
+> > > > +               goto done;
+> > > 
+> > > The patch is corrupted and can not be applied.
+> > 
+> > Yeah, that patch is pretty borked. This should probably be sm like:
+> > 
+> > >From f3a7758bb53cc776820656c6ac66b13fb8ed9022 Mon Sep 17 00:00:00 2001
+> > From: KirtiRamchandani <kirtar15502@gmail.com>
+> > Date: Tue, 14 Mar 2023 10:49:38 +0100
+> > Subject: [PATCH] affs: handle errors in affs_xrename()
+> > 
+> > Fix a bug in the affs_xrename() function. The affs_xrename() function in
+> > the AFFS filesystem has a bug that can cause the retval variable to be
+> > overwritten before it is used. Specifically, the function assigns retval
+> > a value in two separate code blocks, but then only checks its value in
+> > one of those blocks. This commit fixes the bug by ensuring that retval
+> > is properly checked in both code blocks.
+> 
+> "Properly checked" as in...?
+> 
+> > Signed-off-by: KirtiRamchandani <kirtar15502@gmail.com>
+> > ---
+> >  fs/affs/namei.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> > 
+> > diff --git a/fs/affs/namei.c b/fs/affs/namei.c
+> > index d12ccfd2a83d..98525d69391d 100644
+> > --- a/fs/affs/namei.c
+> > +++ b/fs/affs/namei.c
+> > @@ -488,6 +488,8 @@ affs_xrename(struct inode *old_dir, struct dentry *old_dentry,
+> >  	affs_lock_dir(new_dir);
+> >  	retval = affs_insert_hash(new_dir, bh_old);
+> >  	affs_unlock_dir(new_dir);
+> > +	if (retval)
+> > +		goto done;
+> 
+> OK, so you've got an IO error and insertion has failed.  Both entries had already
+> been removed from their directories.  Sure, we must report an error, but why is
+> leaking *both* entries the right thing to do?
+> 
+> >  	/* Insert new into the old directory with the old name. */
+> >  	affs_copy_name(AFFS_TAIL(sb, bh_new)->name, old_dentry);
+> > @@ -495,6 +497,8 @@ affs_xrename(struct inode *old_dir, struct dentry *old_dentry,
+> >  	affs_lock_dir(old_dir);
+> >  	retval = affs_insert_hash(old_dir, bh_new);
+> >  	affs_unlock_dir(old_dir);
+> > +	if (retval)
+> > +		goto done;
+> >  done:
+> 
+> Really?  How could that possibly make any sense?  I mean, look for the target of
+> that goto...
+> 
+> The bug here (AFFS awful layout aside) is that error from the first insert_hash
+> is always lost.  And it needs to be reported.  But this is no way to fix that.
 
-This email didn't pass the size restriction on linux-rt-users@ so this
-is just a small ping that this release happened. The whole email is in
-the archive:
-	https://lore.kernel.org/20230314170502.OHw1_FK3@linutronix.de
-=20
-Sebastian
+Note that I formatted that thing into something we can look at on the
+list from the borked attachment; not acked it...
