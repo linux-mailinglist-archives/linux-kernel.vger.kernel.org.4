@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35CC36B8C9F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:08:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 377ED6B8C9C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:08:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231199AbjCNIH3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:07:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39316 "EHLO
+        id S231228AbjCNIHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:07:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbjCNIGt (ORCPT
+        with ESMTP id S230510AbjCNIHI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:06:49 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4386D984D1
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:06:09 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id gp15-20020a17090adf0f00b0023d1bbd9f9eso4088509pjb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:06:09 -0700 (PDT)
+        Tue, 14 Mar 2023 04:07:08 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0CA984FB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:06:16 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so5185749pjv.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:06:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678781168;
+        d=linaro.org; s=google; t=1678781175;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hfib3mid0RNv0awlNHyD0vxmGxxP3t1h5XoLVgGQYbk=;
-        b=yf4ZTxotOIU67QI6f/wXZ/zJYvgr6n43s20tJqrl65vBN3IC13gEOytr6OGzX8+fD1
-         0o4CO3msCjAHU1/Dg1lU1YFE9AG9yHSv33akNRqof0AInDypR0SMRDQISBnr1OEpDxRU
-         OVCpOUMU3o212GffdTDsPOqRsJga4/nY8eWtiifY3BS4H+5zeuYI4Kgrkyk4mU4T5lEw
-         MrfX2AglTYOkmUBFZOe6ydxVSWxjUE17qWREIlOkKr8ZspRKhjm+Ym1w7vlyMNHNr5yH
-         WLnUvlbdsNRjOhm35uwDTbyH8eEc82sNNcRYvAr4Rejn046Imzsvcs55nhQ7BcmyMYa4
-         rI1A==
+        bh=9I5drFJ/rMd/JOlFD+7l7aDkUVR5wTwBOoMNeSTYK2g=;
+        b=gxpv2TEWg8Y7W3WUjM9DrjNO999BKPLuVBhRigTJvZhAEz2a89xOZ0Xqzf7o2utPf4
+         1s5JEzbzo2ojCl7xq2aLvcWf1UvoMnJxi/V352UMAP/zO/I+Fz0yWF3q+YRtfKXaR7jk
+         wBps3OZK0ApuO1eysrO95nq0L2134LQtyT/Dz3+tDae8TgAeea2TXL/3xnPe8NovrrdI
+         OIrxUHQ2zhRnMu2l6AUahm7LFjh/MmFOtolvcxlYzEiiZC44/omf3GemnZD4xTDkOGKI
+         aEpOE+dIt4z/6/o4Z1UQNzRDP7S/vIMfkVKWGTCAst/e7iDzCMSycgPo8x8qYWB+8EjM
+         cZIw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678781168;
+        d=1e100.net; s=20210112; t=1678781175;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hfib3mid0RNv0awlNHyD0vxmGxxP3t1h5XoLVgGQYbk=;
-        b=lwI1HqsTB/uW62gGqSjzWq3PVhZftXeCoCs2TEdwFQhZgMm5tqZALwyV8RHFd9yiAF
-         O1RxWMtS5VKYKRuyEMsrYJwjTtrs4SH/LKZBv3jcrA2MTVa5NzAAq05Y03SzpNetKzut
-         BIakQoGSXmdH8K28IDOYDf0/rghbYoxfDC/qKx8kjzuanJzwhrz7J91wRCSM7mHL1jQt
-         gFer562ioxwJnYldO5p7EB9hXNNqYz2Xdts2VARZRY+nxrJI0BNk5MC+diCmnWCgz8dE
-         OuyyGTArmDTy1WmSlu+4Mto9AWv1kc3Y4eqZJiOXa4+qaI8RMP972JnGlJ12BnZacyt1
-         ps7g==
-X-Gm-Message-State: AO0yUKW/pGdG02aCCdMhLijAIU5070LXo6xs+uEAUJO/25zeOEQmQpWV
-        jegAzY+29psNJ6lnaXAXK48R
-X-Google-Smtp-Source: AK7set8D0WZOisXVIllIVwyzE9SNHCjSM9A+Uc56ksiGi2TMM4jJ/I7VRFKuvqiAyLOS0SGZXkDSdg==
-X-Received: by 2002:a17:902:d50f:b0:19e:aafe:f7e9 with SMTP id b15-20020a170902d50f00b0019eaafef7e9mr40448490plg.25.1678781168473;
-        Tue, 14 Mar 2023 01:06:08 -0700 (PDT)
+        bh=9I5drFJ/rMd/JOlFD+7l7aDkUVR5wTwBOoMNeSTYK2g=;
+        b=ENXKL50JMWPMK9WE43OhlpeD0/IHjIvRn4YM7V434FRfYiwKAXGBKYL8N6nxecOjuN
+         NJJfUxZDTl6KrFCTa9VVUFX99HQ+gnrSrl1ZgyxpzGb094OJUTZXyyrtGb7D8eKCvdJW
+         JTa5Kx3xDzcu3dWLVKjmJXoyPVuEI1185twLrx2YQIS8ae4I7p/THZD7orwQdN7vdaUW
+         lWy7BrGjaevpLeRC6ekagK0VBD2HZ/ZS0JzpuR8/GCtv0l0aBYYxzAYsbllRsa6w3hO3
+         kp+XT8WNw/4n99rZM6fRgLWfdAyP/Jf2Npe59E1RrDThrCk1+6bKOC8wxMtRsyxKDUfw
+         UTcw==
+X-Gm-Message-State: AO0yUKURz7+6ep0RsB0sBmcTyGMRWqSZzEMqkGUHuTyajX6gPfw5BPqS
+        aeGwugZLr1IzQBkZiWFZ768L
+X-Google-Smtp-Source: AK7set/5deypqim9/Muj/nKoPFZ0hTR3MaxuNgHdFfFiu9LJlMOb2O+A9xX/Avw5ufiFHodRzbhE+Q==
+X-Received: by 2002:a17:902:bf4c:b0:19f:2444:409f with SMTP id u12-20020a170902bf4c00b0019f2444409fmr9364264pls.20.1678781175428;
+        Tue, 14 Mar 2023 01:06:15 -0700 (PDT)
 Received: from localhost.localdomain ([117.217.177.49])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b001994a0f3380sm1078022plg.265.2023.03.14.01.06.02
+        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b001994a0f3380sm1078022plg.265.2023.03.14.01.06.08
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 01:06:07 -0700 (PDT)
+        Tue, 14 Mar 2023 01:06:14 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
@@ -59,10 +59,11 @@ Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
         quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
         ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v8 13/14] qcom: llcc/edac: Support polling mode for ECC handling
-Date:   Tue, 14 Mar 2023 13:34:42 +0530
-Message-Id: <20230314080443.64635-14-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        stable@vger.kernel.org
+Subject: [PATCH v8 14/14] soc: qcom: llcc: Do not create EDAC platform device on SDM845
+Date:   Tue, 14 Mar 2023 13:34:43 +0530
+Message-Id: <20230314080443.64635-15-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230314080443.64635-1-manivannan.sadhasivam@linaro.org>
 References: <20230314080443.64635-1-manivannan.sadhasivam@linaro.org>
@@ -78,134 +79,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Not all Qcom platforms support IRQ mode for ECC handling. For those
-platforms, the current EDAC driver will not be probed due to missing ECC
-IRQ in devicetree.
+The platforms based on SDM845 SoC locks the access to EDAC registers in the
+bootloader. So probing the EDAC driver will result in a crash. Hence,
+disable the creation of EDAC platform device on all SDM845 devices.
 
-So add support for polling mode so that the EDAC driver can be used on all
-Qcom platforms supporting LLCC.
+The issue has been observed on Lenovo Yoga C630 and DB845c.
 
-The polling delay of 5000ms is chosen based on Qcom downstream/vendor
-driver.
+While at it, also sort the members of `struct qcom_llcc_config` to avoid
+any holes in-between.
 
-Reported-by: Luca Weiss <luca.weiss@fairphone.com>
-Tested-by: Luca Weiss <luca.weiss@fairphone.com>
-Tested-by: Steev Klimaszewski <steev@kali.org> # Thinkpad X13s
-Tested-by: Andrew Halaney <ahalaney@redhat.com> # sa8540p-ride
-Reviewed-by: Borislav Petkov (AMD) <bp@alien8.de>
+Cc: <stable@vger.kernel.org> # 5.10
+Reported-by: Steev Klimaszewski <steev@kali.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/edac/qcom_edac.c     | 50 +++++++++++++++++++++---------------
- drivers/soc/qcom/llcc-qcom.c | 13 +++++-----
- 2 files changed, 35 insertions(+), 28 deletions(-)
+ drivers/soc/qcom/llcc-qcom.c | 24 +++++++++++++++++-------
+ 1 file changed, 17 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/edac/qcom_edac.c b/drivers/edac/qcom_edac.c
-index 1d3cc1930a74..265e0fb39bc7 100644
---- a/drivers/edac/qcom_edac.c
-+++ b/drivers/edac/qcom_edac.c
-@@ -76,6 +76,8 @@
- #define DRP0_INTERRUPT_ENABLE           BIT(6)
- #define SB_DB_DRP_INTERRUPT_ENABLE      0x3
- 
-+#define ECC_POLL_MSEC			5000
-+
- enum {
- 	LLCC_DRAM_CE = 0,
- 	LLCC_DRAM_UE,
-@@ -283,8 +285,7 @@ dump_syn_reg(struct edac_device_ctl_info *edev_ctl, int err_type, u32 bank)
- 	return ret;
- }
- 
--static irqreturn_t
--llcc_ecc_irq_handler(int irq, void *edev_ctl)
-+static irqreturn_t llcc_ecc_irq_handler(int irq, void *edev_ctl)
- {
- 	struct edac_device_ctl_info *edac_dev_ctl = edev_ctl;
- 	struct llcc_drv_data *drv = edac_dev_ctl->dev->platform_data;
-@@ -328,6 +329,11 @@ llcc_ecc_irq_handler(int irq, void *edev_ctl)
- 	return irq_rc;
- }
- 
-+static void llcc_ecc_check(struct edac_device_ctl_info *edev_ctl)
-+{
-+	llcc_ecc_irq_handler(0, edev_ctl);
-+}
-+
- static int qcom_llcc_edac_probe(struct platform_device *pdev)
- {
- 	struct llcc_drv_data *llcc_driv_data = pdev->dev.platform_data;
-@@ -355,29 +361,31 @@ static int qcom_llcc_edac_probe(struct platform_device *pdev)
- 	edev_ctl->ctl_name = "llcc";
- 	edev_ctl->panic_on_ue = LLCC_ERP_PANIC_ON_UE;
- 
--	rc = edac_device_add_device(edev_ctl);
--	if (rc)
--		goto out_mem;
--
--	platform_set_drvdata(pdev, edev_ctl);
--
--	/* Request for ecc irq */
-+	/* Check if LLCC driver has passed ECC IRQ */
- 	ecc_irq = llcc_driv_data->ecc_irq;
--	if (ecc_irq < 0) {
--		rc = -ENODEV;
--		goto out_dev;
--	}
--	rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
-+	if (ecc_irq > 0) {
-+		/* Use interrupt mode if IRQ is available */
-+		rc = devm_request_irq(dev, ecc_irq, llcc_ecc_irq_handler,
- 			      IRQF_TRIGGER_HIGH, "llcc_ecc", edev_ctl);
--	if (rc)
--		goto out_dev;
-+		if (!rc) {
-+			edac_op_state = EDAC_OPSTATE_INT;
-+			goto irq_done;
-+		}
-+	}
- 
--	return rc;
-+	/* Fall back to polling mode otherwise */
-+	edev_ctl->poll_msec = ECC_POLL_MSEC;
-+	edev_ctl->edac_check = llcc_ecc_check;
-+	edac_op_state = EDAC_OPSTATE_POLL;
- 
--out_dev:
--	edac_device_del_device(edev_ctl->dev);
--out_mem:
--	edac_device_free_ctl_info(edev_ctl);
-+irq_done:
-+	rc = edac_device_add_device(edev_ctl);
-+	if (rc) {
-+		edac_device_free_ctl_info(edev_ctl);
-+		return rc;
-+	}
-+
-+	platform_set_drvdata(pdev, edev_ctl);
- 
- 	return rc;
- }
 diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 72f3f2a9aaa0..7b7c5a38bac6 100644
+index 7b7c5a38bac6..a5140f19f200 100644
 --- a/drivers/soc/qcom/llcc-qcom.c
 +++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -1011,13 +1011,12 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 		goto err;
+@@ -120,10 +120,11 @@ struct llcc_slice_config {
+ 
+ struct qcom_llcc_config {
+ 	const struct llcc_slice_config *sct_data;
+-	int size;
+-	bool need_llcc_cfg;
+ 	const u32 *reg_offset;
+ 	const struct llcc_edac_reg_offset *edac_reg_offset;
++	int size;
++	bool need_llcc_cfg;
++	bool no_edac;
+ };
+ 
+ enum llcc_reg_offset {
+@@ -452,6 +453,7 @@ static const struct qcom_llcc_config sdm845_cfg = {
+ 	.need_llcc_cfg	= false,
+ 	.reg_offset	= llcc_v1_reg_offset,
+ 	.edac_reg_offset = &llcc_v1_edac_reg_offset,
++	.no_edac	= true,
+ };
+ 
+ static const struct qcom_llcc_config sm6350_cfg = {
+@@ -1012,11 +1014,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
  
  	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
--	if (drv_data->ecc_irq >= 0) {
--		llcc_edac = platform_device_register_data(&pdev->dev,
--						"qcom_llcc_edac", -1, drv_data,
--						sizeof(*drv_data));
--		if (IS_ERR(llcc_edac))
--			dev_err(dev, "Failed to register llcc edac driver\n");
--	}
-+
-+	llcc_edac = platform_device_register_data(&pdev->dev,
-+					"qcom_llcc_edac", -1, drv_data,
-+					sizeof(*drv_data));
-+	if (IS_ERR(llcc_edac))
-+		dev_err(dev, "Failed to register llcc edac driver\n");
+ 
+-	llcc_edac = platform_device_register_data(&pdev->dev,
+-					"qcom_llcc_edac", -1, drv_data,
+-					sizeof(*drv_data));
+-	if (IS_ERR(llcc_edac))
+-		dev_err(dev, "Failed to register llcc edac driver\n");
++	/*
++	 * On some platforms, the access to EDAC registers will be locked by
++	 * the bootloader. So probing the EDAC driver will result in a crash.
++	 * Hence, disable the creation of EDAC platform device for the
++	 * problematic platforms.
++	 */
++	if (!cfg->no_edac) {
++		llcc_edac = platform_device_register_data(&pdev->dev,
++						"qcom_llcc_edac", -1, drv_data,
++						sizeof(*drv_data));
++		if (IS_ERR(llcc_edac))
++			dev_err(dev, "Failed to register llcc edac driver\n");
++	}
  
  	return 0;
  err:
