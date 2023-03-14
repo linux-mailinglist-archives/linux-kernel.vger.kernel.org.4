@@ -2,149 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 220776B8BE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E67D6B8BE8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230255AbjCNH0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 03:26:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
+        id S230137AbjCNH0X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 03:26:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35474 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229797AbjCNH0D (ORCPT
+        with ESMTP id S230265AbjCNH0S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 03:26:03 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06F173029;
-        Tue, 14 Mar 2023 00:26:02 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so5101076pjv.5;
-        Tue, 14 Mar 2023 00:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678778762;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=P4btLFxdwo7HqZYxM4e3XDdeo+DTrgbyuCAt7JOXufA=;
-        b=lczv1+oCjA44tNBOXDuZb6ygf8VSugMU6SI4f3m4RkNiRBcKFtF/kAxXclBRAPKP8B
-         M/0j99Xagn3nWRglvofL8CNl2IX2uyNzs3OsDdxT8GkAT/ILtxTcLB+Vjamhuf0yc58z
-         hpd1OAyI2vqMtBI+oVFj2hKq7nkNYFHdmVEnU79S0Gjcorj7a6d34QqlN5bis3OyKhmk
-         kp3XzQXtVR9Ddc6fqEhJjD6nRuiePRIsAX5U8mnaXz/nnpq0CGR/c9RZvb1Ik5DfOOA0
-         S2TV3diroWan8IfHdVDY6rRKIpMvad79Rdt8/Icjq6QYxvmGhsfAtQiXQ3RHVi51gz9D
-         dF+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678778762;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P4btLFxdwo7HqZYxM4e3XDdeo+DTrgbyuCAt7JOXufA=;
-        b=YP2JPu3BjbVqYmS/z/I6wGB5apOmZewUse3R4JVDvBG8kr4qLu9dxnJob2Pyu0//cE
-         Ag6zrxVk/6pcjEsFScjSDTddImaapFGhUYmLgru9p+zuWd5ujOpqcUlImQkQuSIoqamw
-         0St1n6d53WWOdlVDd5Zsmd6bQhYC62oA/lTCW7QKiEDMiP/C8RBRIGzYojrLdqCWAuHP
-         xsvKUjEUSh8sJurhTHdMoSkP4qevuQly3ToJKlNzOfXr0TeIqo6JTg+Qyw94nIihHXsq
-         6TrRcRtInw78Wh+6JCIKw02kNppYwHN9kMI4uixvnILNM3Ob7HdQS9asWQeB3HCVfpV9
-         Nf9A==
-X-Gm-Message-State: AO0yUKXgzsBS+UyFxLsixhn7FwV+Le8/JpEfi52EBHWqm5kQCjY4iiJ+
-        5ABCI4Yz8hD9zTNhY8I6sWU=
-X-Google-Smtp-Source: AK7set/kZq/B2QShY0y1HE88ddus1pElLywW15Ta+0oYzLvi6YuddzUADJuwEfCk9yGr65u+O8CuGQ==
-X-Received: by 2002:a05:6a21:6da6:b0:cb:e8c6:26a0 with SMTP id wl38-20020a056a216da600b000cbe8c626a0mr49148859pzb.11.1678778762183;
-        Tue, 14 Mar 2023 00:26:02 -0700 (PDT)
-Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
-        by smtp.gmail.com with ESMTPSA id l190-20020a6388c7000000b00502ea97cbc0sm888625pgd.40.2023.03.14.00.25.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 00:26:01 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 07:25:54 +0000
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 3/7] mm, page_flags: remove PG_slob_free
-Message-ID: <ZBAhgpY1KSE3FwAv@localhost>
-References: <20230310103210.22372-1-vbabka@suse.cz>
- <20230310103210.22372-4-vbabka@suse.cz>
+        Tue, 14 Mar 2023 03:26:18 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12DC74A72;
+        Tue, 14 Mar 2023 00:26:10 -0700 (PDT)
+X-UUID: 7ac013c6c23911eda06fc9ecc4dadd91-20230314
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Type:Content-Transfer-Encoding:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0BSMzhQxV0HjibSsjHG5IXMuBDWYtIn/i372U14mmuQ=;
+        b=L5fz/pItbq8eqOTJPwmfa0a4j7Pr7V0rOFdt1ryyWZkCtCk1RCIj5O6SY0ZOEgMf/ak//+jDRjBIEGnL1q1JQBsRmGTNpqfK3zMND0iY6GQqL67JmIXtz46P9slbmyUcGUlOEn0Ul01mA+FHigrGQIi600WxAlrieXeJ7r/X6Rs=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.20,REQID:2e37b784-acc2-412e-8397-bdb7ef68ade7,IP:0,U
+        RL:0,TC:0,Content:0,EDM:25,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION
+        :release,TS:25
+X-CID-META: VersionHash:25b5999,CLOUDID:20a3bcf5-ddba-41c3-91d9-10eeade8eac7,B
+        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:5,IP:nil,UR
+        L:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV:0
+X-CID-BVR: 0,NGT
+X-UUID: 7ac013c6c23911eda06fc9ecc4dadd91-20230314
+Received: from mtkmbs11n1.mediatek.inc [(172.21.101.185)] by mailgw01.mediatek.com
+        (envelope-from <yunfei.dong@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1904697292; Tue, 14 Mar 2023 15:26:04 +0800
+Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
+ mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1118.25; Tue, 14 Mar 2023 15:25:59 +0800
+Received: from mhfsdcap04.gcn.mediatek.inc (10.17.3.154) by
+ mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.1118.25 via Frontend Transport; Tue, 14 Mar 2023 15:25:59 +0800
+From:   Yunfei Dong <yunfei.dong@mediatek.com>
+To:     Yunfei Dong <yunfei.dong@mediatek.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        Nicolas Dufresne <nicolas@ndufresne.ca>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>
+CC:     Matthias Brugger <matthias.bgg@gmail.com>,
+        Hsin-Yi Wang <hsinyi@chromium.org>,
+        Fritz Koenig <frkoenig@chromium.org>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Steve Cho <stevecho@chromium.org>,
+        <linux-media@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-mediatek@lists.infradead.org>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>
+Subject: [PATCH v3] media: mediatek: vcodec: Force capture queue format to MM21
+Date:   Tue, 14 Mar 2023 15:25:57 +0800
+Message-ID: <20230314072557.29669-1-yunfei.dong@mediatek.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310103210.22372-4-vbabka@suse.cz>
-X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        T_SPF_TEMPERROR,UNPARSEABLE_RELAY,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 11:32:05AM +0100, Vlastimil Babka wrote:
-> With SLOB removed we no longer need the PG_slob_free alias for
-> PG_private. Also update tools/mm/page-types.
-> 
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  include/linux/page-flags.h | 4 ----
->  tools/mm/page-types.c      | 6 +-----
->  2 files changed, 1 insertion(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
-> index a7e3a3405520..2bdc41cb0594 100644
-> --- a/include/linux/page-flags.h
-> +++ b/include/linux/page-flags.h
-> @@ -174,9 +174,6 @@ enum pageflags {
->  	/* Remapped by swiotlb-xen. */
->  	PG_xen_remapped = PG_owner_priv_1,
->  
-> -	/* SLOB */
-> -	PG_slob_free = PG_private,
-> -
->  #ifdef CONFIG_MEMORY_FAILURE
->  	/*
->  	 * Compound pages. Stored in first tail page's flags.
-> @@ -483,7 +480,6 @@ PAGEFLAG(Active, active, PF_HEAD) __CLEARPAGEFLAG(Active, active, PF_HEAD)
->  PAGEFLAG(Workingset, workingset, PF_HEAD)
->  	TESTCLEARFLAG(Workingset, workingset, PF_HEAD)
->  __PAGEFLAG(Slab, slab, PF_NO_TAIL)
-> -__PAGEFLAG(SlobFree, slob_free, PF_NO_TAIL)
->  PAGEFLAG(Checked, checked, PF_NO_COMPOUND)	   /* Used by some filesystems */
->  
->  /* Xen */
-> diff --git a/tools/mm/page-types.c b/tools/mm/page-types.c
-> index 381dcc00cb62..8d5595b6c59f 100644
-> --- a/tools/mm/page-types.c
-> +++ b/tools/mm/page-types.c
-> @@ -85,7 +85,6 @@
->   */
->  #define KPF_ANON_EXCLUSIVE	47
->  #define KPF_READAHEAD		48
-> -#define KPF_SLOB_FREE		49
->  #define KPF_SLUB_FROZEN		50
->  #define KPF_SLUB_DEBUG		51
->  #define KPF_FILE		61
-> @@ -141,7 +140,6 @@ static const char * const page_flag_names[] = {
->  
->  	[KPF_ANON_EXCLUSIVE]	= "d:anon_exclusive",
->  	[KPF_READAHEAD]		= "I:readahead",
-> -	[KPF_SLOB_FREE]		= "P:slob_free",
->  	[KPF_SLUB_FROZEN]	= "A:slub_frozen",
->  	[KPF_SLUB_DEBUG]	= "E:slub_debug",
->  
-> @@ -478,10 +476,8 @@ static uint64_t expand_overloaded_flags(uint64_t flags, uint64_t pme)
->  	if ((flags & BIT(ANON)) && (flags & BIT(MAPPEDTODISK)))
->  		flags ^= BIT(MAPPEDTODISK) | BIT(ANON_EXCLUSIVE);
->  
-> -	/* SLOB/SLUB overload several page flags */
-> +	/* SLUB overloads several page flags */
->  	if (flags & BIT(SLAB)) {
-> -		if (flags & BIT(PRIVATE))
-> -			flags ^= BIT(PRIVATE) | BIT(SLOB_FREE);
->  		if (flags & BIT(ACTIVE))
->  			flags ^= BIT(ACTIVE) | BIT(SLUB_FROZEN);
->  		if (flags & BIT(ERROR))
-> -- 
-> 2.39.2
+Libyuv is one software library used to covert format. Only covert
+mediatek uncompressed mode MM21 to standard yuv420 for MT21 is
+compressed mode. Need to set capture queue format to MM21 in order
+to use Libyuv when scp firmware support MM21 and MT21.
 
-Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
+Fixes: 7501edef6b1f ("media: mediatek: vcodec: Different codec using different capture format")
+Signed-off-by: Yunfei Dong <yunfei.dong@mediatek.com>
+---
+changed with v2:
+- re-write commit message.
+- change the driver flow.
+changed with v1:
+- add Fixes tag.
+---
+ .../platform/mediatek/vcodec/mtk_vcodec_dec.c | 24 +++----------------
+ 1 file changed, 3 insertions(+), 21 deletions(-)
+
+diff --git a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+index 641f533c417f..c99705681a03 100644
+--- a/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
++++ b/drivers/media/platform/mediatek/vcodec/mtk_vcodec_dec.c
+@@ -39,10 +39,9 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx *ctx, int format_index)
+ {
+ 	const struct mtk_vcodec_dec_pdata *dec_pdata = ctx->dev->vdec_pdata;
+ 	const struct mtk_video_fmt *fmt;
+-	struct mtk_q_data *q_data;
+ 	int num_frame_count = 0, i;
+-	bool ret = true;
+ 
++	fmt = &dec_pdata->vdec_formats[format_index];
+ 	for (i = 0; i < *dec_pdata->num_formats; i++) {
+ 		if (dec_pdata->vdec_formats[i].type != MTK_FMT_FRAME)
+ 			continue;
+@@ -50,27 +49,10 @@ static bool mtk_vdec_get_cap_fmt(struct mtk_vcodec_ctx *ctx, int format_index)
+ 		num_frame_count++;
+ 	}
+ 
+-	if (num_frame_count == 1)
++	if (num_frame_count == 1 || fmt->fourcc == V4L2_PIX_FMT_MM21)
+ 		return true;
+ 
+-	fmt = &dec_pdata->vdec_formats[format_index];
+-	q_data = &ctx->q_data[MTK_Q_DATA_SRC];
+-	switch (q_data->fmt->fourcc) {
+-	case V4L2_PIX_FMT_VP8_FRAME:
+-		if (fmt->fourcc == V4L2_PIX_FMT_MM21)
+-			ret = true;
+-		break;
+-	case V4L2_PIX_FMT_H264_SLICE:
+-	case V4L2_PIX_FMT_VP9_FRAME:
+-		if (fmt->fourcc == V4L2_PIX_FMT_MM21)
+-			ret = false;
+-		break;
+-	default:
+-		ret = true;
+-		break;
+-	}
+-
+-	return ret;
++	return false;
+ }
+ 
+ static struct mtk_q_data *mtk_vdec_get_q_data(struct mtk_vcodec_ctx *ctx,
+-- 
+2.25.1
+
