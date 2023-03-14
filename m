@@ -2,122 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CFE6B9172
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:19:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 039E66B9174
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbjCNLTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:19:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
+        id S230356AbjCNLTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:19:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231398AbjCNLS4 (ORCPT
+        with ESMTP id S229802AbjCNLTX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:18:56 -0400
-Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B816B5C8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:18:12 -0700 (PDT)
-Received: by mail-ed1-x52a.google.com with SMTP id cn21so30334479edb.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:18:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678792686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BTLw347ZTk76CB3YCjWqXtSW/kYt7O7yegt9D9Y6FXA=;
-        b=DfbXKcyFf2lJtqM9kxnIwQgXX5YHPtmETobmmHOm3Xih8xuS22CBz9vhum+UjfNGnT
-         AX/sKetrvq19eNac6gFFkYcUDW6YBAVFgQXHp0yZuDLZpSYPkIMzfI0FWzowlfHnt+Vg
-         37NzIbYf2dKi907JOSf7p5gsNRdYl9kzMZYTJfbO8Hhm9o3V41bI153d7ILKIqjA6vue
-         qJxEVrZnAfIBudOJryrUnv2DX36HSLb0kv7MZFCynatG/tp0k9WpQp0YWQv6HyLnadxU
-         DzejyEjiM9TQ/0IOkDw4drPhRZBZ+wH+gSAyM8Q7/yWZ1UYuvNE0o0xX07pvvqoFd1Cq
-         1DuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678792686;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BTLw347ZTk76CB3YCjWqXtSW/kYt7O7yegt9D9Y6FXA=;
-        b=ivek3tFeJCgZgJnuiTgJ+n86WNHCjChIZG24Zc1jessqx4WjtzeItKSQmzHiuE85nt
-         WsWmelvTc+pM0MNzVeE6WMm87bKZUB4CdItkODyJNfYC/4XDpwW6W0R2lgkICktMAJ/7
-         VrPrEfJoJOwxVMhIYu4KkgmYJDlCRtHY8+zwoU06vaoFg/Tf7qIZTbIRvqKqW3PbHXhL
-         k70PTNglH2Hf57TwZQGnNhnstpLZPbGnwa8Lo3BD6Jc8c5mVYiSv86rSLgdz3YqguZpB
-         37nLODg5PQczN0HbuV/o5Ngzto4BGqFGHbe7+MxKJ5WBRAShnhChaFHQUfk3NnfMU/hb
-         TkXQ==
-X-Gm-Message-State: AO0yUKVGIW7zlCrEAzAlKBpbZ4kk3+Jnzn2+4NYR70znto6ShRB0mJAs
-        rBlclg+M6Nd1L/mZzeb5GJ6y0g==
-X-Google-Smtp-Source: AK7set9AeqSbWbMpQSeHyDHFZ0ow4SZlOYcmpT9uXkJZMQnegdxX9KuOMQUBc32BeUqDoZUsjzpCaQ==
-X-Received: by 2002:a17:907:a0e:b0:895:58be:957 with SMTP id bb14-20020a1709070a0e00b0089558be0957mr2625143ejc.2.1678792686070;
-        Tue, 14 Mar 2023 04:18:06 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id xa13-20020a170907b9cd00b0091ec885e016sm1016273ejc.54.2023.03.14.04.18.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 04:18:05 -0700 (PDT)
-Message-ID: <4ca61aac-a901-1bfa-6cf4-8c2917621667@linaro.org>
-Date:   Tue, 14 Mar 2023 12:18:04 +0100
+        Tue, 14 Mar 2023 07:19:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED0A41098
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:18:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id E45E3B818EC
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:18:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 414F3C433EF;
+        Tue, 14 Mar 2023 11:18:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678792717;
+        bh=dq736rjYaj0DSbyGbLkpNReEYE6IF/qTlF2gdIGVrjM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=GgNybPKaumWFWqHVq2MwEJ17bVyeTpdqJD0viQN15aIss8BowK+qNjqvUHDnncImJ
+         FvCuE/0ge42/aJ2GbH6DLXmIO4daVWLgplld9lrGle+aFYUT+EHhjtPf3TBNOHvRJw
+         rbItQW+Gmt+HsWxP8bMHFjlIWj3OcIzWeD1bPfNjdxw4myV0EC5z6+dhhTpbqj+Fkv
+         m8i6GDp007XBs8sregF5yJWVpnZsYiP4pIv7mllWoHLa+ej2GeFfyxEbxm+kreVqiH
+         nKUrIGxU5WUEkUZ08tD5w3wlUymjrGhD8EuVXBe7nPyw9ZzF5hgX0aC9ze32nn+/Hc
+         lnrrOxM58W5hA==
+Date:   Tue, 14 Mar 2023 12:18:33 +0100
+From:   Frederic Weisbecker <frederic@kernel.org>
+To:     Guenter Roeck <linux@roeck-us.net>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Subject: Re: Linux 6.3-rc2
+Message-ID: <ZBBYCSZUJOWBg1s8@localhost.localdomain>
+References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
+ <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
+ <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
+ <ZA+ttVOPBvNOYHoC@lothringen>
+ <dc031bc7-8ca4-7ca7-c24f-9db65b5547e4@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH 1/4] dt-bindings: PCI: dwc: Add rk3588 compatible line
-Content-Language: en-US
-To:     Lucas Tanure <lucas.tanure@collabora.com>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Krzysztof Wilczynski <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>
-Cc:     Qu Wenruo <wqu@suse.com>,
-        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
-        Peter Geis <pgwipeout@gmail.com>,
-        Kever Yang <kever.yang@rock-chips.com>,
-        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, kernel@collabora.com
-References: <20230313153953.422375-1-lucas.tanure@collabora.com>
- <20230313153953.422375-2-lucas.tanure@collabora.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230313153953.422375-2-lucas.tanure@collabora.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dc031bc7-8ca4-7ca7-c24f-9db65b5547e4@roeck-us.net>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 16:39, Lucas Tanure wrote:
-> RK3588 uses the same driver as RK3568
+Le Mon, Mar 13, 2023 at 05:52:49PM -0700, Guenter Roeck a écrit :
+> On 3/13/23 16:11, Frederic Weisbecker wrote:
+> [   11.360487] WARNING: CPU: 0 PID: 233 at kernel/locking/lockdep.c:5527 check_flags (./arch/arm/include/asm/current.h:36 (discriminator 12) ./include/asm-generic/preempt.h:11 (discriminator 12) kernel/locking/lockdep.c:5528 (discriminator 12))
+> [   11.361102] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
+> [   11.361173] Modules linked in:
+> [   11.361730] CPU: 0 PID: 233 Comm: rcS Tainted: G                 N 6.3.0-rc2-dirty #2
+> [   11.361921] Hardware name: Freescale i.MX6 Ultralite (Device Tree)
+> [   11.362303] unwind_backtrace from show_stack (arch/arm/kernel/traps.c:258)
+> [   11.362441] show_stack from dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
+> [   11.362519] dump_stack_lvl from __warn (./include/linux/jump_label.h:260 ./include/linux/jump_label.h:270 ./include/trace/events/error_report.h:69 kernel/panic.c:681)
+> [   11.362598] __warn from warn_slowpath_fmt (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:16 ./include/asm-generic/preempt.h:59 ./include/linux/context_tracking.h:154 kernel/panic.c:706)
+> [   11.362702] warn_slowpath_fmt from check_flags (./arch/arm/include/asm/current.h:36 (discriminator 12) ./include/asm-generic/preempt.h:11 (discriminator 12) kernel/locking/lockdep.c:5528 (discriminator 12))
+> [   11.362780] check_flags from lock_is_held_type (./arch/arm/include/asm/percpu.h:37 kernel/locking/lockdep.c:462 kernel/locking/lockdep.c:5713)
+> [   11.362851] lock_is_held_type from rcu_read_lock_sched_held (kernel/rcu/update.c:125)
+> [   11.362933] rcu_read_lock_sched_held from trace_rcu_dyntick (./include/trace/events/rcu.h:480 (discriminator 28))
+> [   11.363016] trace_rcu_dyntick from ct_nmi_enter (./arch/arm/include/asm/percpu.h:37 (discriminator 4) ./include/linux/context_tracking_state.h:90 (discriminator 4) kernel/context_tracking.c:301 (discriminator 4))
+> [   11.363108] ct_nmi_enter from irq_enter (kernel/softirq.c:625)
+> [   11.363177] irq_enter from generic_handle_arch_irq (kernel/irq/handle.c:238)
+> [   11.363251] generic_handle_arch_irq from call_with_stack (arch/arm/lib/call_with_stack.S:45)
+> [   11.363339] call_with_stack from __irq_svc (arch/arm/kernel/entry-armv.S:232)
+> [   11.363438] Exception stack(0xd1819f60 to 0xd1819fa8)
+> [   11.363629] 9f60: ecac8b10 40000000 b6f88418 c1c2607c 00000000 40000000 c4acc00b 00000001
+> [   11.363740] 9f80: 00000b00 c0101278 c4acc0f0 00000000 00000051 d1819fb0 c01011c4 c0103c1c
+> [   11.363833] 9fa0: 00000013 ffffffff
+> [   11.363896] __irq_svc from vfp_reload_hw (arch/arm/vfp/vfphw.S:149)
+> [   11.364015] irq event stamp: 1626
+> [   11.364069] hardirqs last enabled at (1625): __und_usr (arch/arm/kernel/entry-armv.S:465)
+> [   11.364199] hardirqs last disabled at (1626): __irq_svc (arch/arm/kernel/entry-armv.S:221)
+> [   11.364290] softirqs last enabled at (1424): __do_softirq (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:11 kernel/softirq.c:415 kernel/softirq.c:600)
+> [   11.364396] softirqs last disabled at (1323): __irq_exit_rcu (kernel/softirq.c:445 kernel/softirq.c:650)
+> [   11.364494] ---[ end trace 0000000000000000 ]---
+> [   11.364637] preempt_count(): 201 softirq_count(): 200
+>                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
 
-Subject: drop line
+Ok so this is a softirq disabled section that doesn't handle the lockdep
+part.
 
-Commit msg: drop driver and focus on hardware. Missing full stop.
+How does the following look like as a culprit?
 
-> 
-> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
-> ---
->  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> index 2be72ae1169f..91aa9070ee31 100644
-> --- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
-> @@ -23,6 +23,7 @@ properties:
->    compatible:
->      items:
->        - const: rockchip,rk3568-pcie
-> +      - const: rockchip,rk3588-pcie
+62b95a7b44d1 (ARM: 9282/1: vfp: Manipulate task VFP state with softirqs disabled)
 
-According to your driver change, these are compatible, so maybe this
-should be expressed in the bindings?
-
-Best regards,
-Krzysztof
-
+Thanks!
