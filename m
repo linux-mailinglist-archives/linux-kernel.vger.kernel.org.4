@@ -2,177 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86F116B8EFC
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:46:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2E306B8EFE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:47:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231194AbjCNJqJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:46:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46740 "EHLO
+        id S229808AbjCNJq7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:46:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjCNJp4 (ORCPT
+        with ESMTP id S229535AbjCNJq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:45:56 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372C199D71
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:45:47 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id n2so19138675lfb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:45:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678787145;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=f6pcqMq7ehIa6i1rtDr3wgfvzTOrNwTy03OqMiZgNpI=;
-        b=nXmm+uNaDPjCj0lX7JL+UbhoNrflVNvabuAFPSnzFyn68+uumCCA+TsBbI6hN6mqlP
-         DKpQHaqDrU796ImWM9FqHXmmbxVJS97M5vbjvw4TV81cr90J6MfISNGxHnKe1xzrkNGC
-         yQlZy8XMxuOiWkI/YLq4gbb5BakxLYLyv7idVohCB7uo4nn08axqxWjZkoY65WSb7vPV
-         LQ+RG3TB1e4g5GwwrrgisoPp4qCKd7HmdtxffNARJ+MBuWbDgmm3ZGlEdiZiebKHq58I
-         1nm3Ok53HBe//gIgo6jIHtEVNLBwcIxNvexx/V7MeEyFuN9mbJTWR9U4IbFikOTmCSRi
-         H3Sw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678787145;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=f6pcqMq7ehIa6i1rtDr3wgfvzTOrNwTy03OqMiZgNpI=;
-        b=Aqv2CD7FZ2DPUdJ0oqTdFGA+6gUZOCCHWLqM/VOod3V9yHQh6zWV2mATjlwdHTaC6r
-         1HHHN9841Q21t8SaUjuSFcJDhGRawPsspVCQBipTVi+3QrbjBMDdw+HUjNMYBMe8+9Of
-         YSZKUNZ7mw7pab2wnYallXdy3g1rNWTB6WimAPSrNBXDjlFCYp0hCAJ3jZkXvTobN7Jd
-         7eECt7nkBZXrdqHWJH2FzKOgjgQ2192fVUqpnuqFl3EBgfCA5g0PqnPy/tC8QKfDaThx
-         bUaG+03hguWh8dn6xq4qwTz9JMEBGGkWgLZU+kFvtPZrfTcSwx7vuvAJcZsU8b07bT35
-         B6aw==
-X-Gm-Message-State: AO0yUKUszLSOSV3JHwo0pgUtlwJCFWUDrx58QLItMiVDldLHWw7PaCF4
-        J/rfkitBUKXBPYAcru0yeNBzCPaJM8+Yo04pz3EaEw==
-X-Google-Smtp-Source: AK7set8tToRs8Na1+lGjKxbLv779LnOQTM/dCJ4Z8OoF+9MU8pxhAeiex7h4PJ510k7hhOvFrUwul1sq+AH/MeOBkj4=
-X-Received: by 2002:ac2:484f:0:b0:4e8:1706:65af with SMTP id
- 15-20020ac2484f000000b004e8170665afmr532059lfy.6.1678787145083; Tue, 14 Mar
- 2023 02:45:45 -0700 (PDT)
+        Tue, 14 Mar 2023 05:46:56 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93CC714EBE;
+        Tue, 14 Mar 2023 02:46:54 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32E9klTR094097;
+        Tue, 14 Mar 2023 04:46:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678787207;
+        bh=tmISwl53EEmJ0UyWepF6LKD4kNk5gNEJdpfnLQ6BEAw=;
+        h=From:To:CC:Subject:Date;
+        b=QC5rl1+KEu6qFKnxte89oLx5dl+AgC+/+dp5bwcO8Y0WWQdsfvbntpS96wp6XZFDi
+         7vfTAYSlob/06o3wZ6uhTxBbyIf6sJmj5hsTxMDY0gjrIsTGYsnKStMdSVybfK5tGe
+         49+lRxdz4fWYkpoDE7l9c1drp57gj+huleZUi7Ig=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32E9kloN024093
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 04:46:47 -0500
+Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 04:46:47 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 04:46:47 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32E9kkAX090240;
+        Tue, 14 Mar 2023 04:46:47 -0500
+From:   Devarsh Thakkar <devarsht@ti.com>
+To:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <nm@ti.com>, <vigneshr@ti.com>, <bb@ti.com>
+CC:     <hnagalla@ti.com>, <praneeth@ti.com>, <a-bhatia1@ti.com>,
+        <j-luthra@ti.com>, <devarsht@ti.com>
+Subject: [PATCH v3] arm64: dts: ti: k3-am62a7-sk: Fix DDR size to full 4GB
+Date:   Tue, 14 Mar 2023 15:16:45 +0530
+Message-ID: <20230314094645.3411599-1-devarsht@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <000000000000ef6cf905f496e40b@google.com> <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
- <20230307103958.lo6ynoypgwreqmnq@quack3> <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
- <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org> <20230313115728.2wxy2qj4mqpwgrx7@quack3>
- <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com> <20230314022649.GM860405@mit.edu>
-In-Reply-To: <20230314022649.GM860405@mit.edu>
-From:   Dmitry Vyukov <dvyukov@google.com>
-Date:   Tue, 14 Mar 2023 10:45:32 +0100
-Message-ID: <CACT4Y+b1vGfe0Uvp6YmKahK4GfCfvdBLCh0SAQzGgWN1s6A+0Q@mail.gmail.com>
-Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in ext4_group_desc_csum
-To:     "Theodore Ts'o" <tytso@mit.edu>
-Cc:     Jan Kara <jack@suse.cz>, Tudor Ambarus <tudor.ambarus@linaro.org>,
-        syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
-        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
-        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
-        nathan@kernel.org, ndesaulniers@google.com,
-        syzkaller-bugs@googlegroups.com, trix@redhat.com,
-        Lee Jones <joneslee@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 at 03:26, Theodore Ts'o <tytso@mit.edu> wrote:
->
-> On Mon, Mar 13, 2023 at 03:53:57PM +0100, Dmitry Vyukov wrote:
-> > > Long-term we are moving ext4 in a direction where we can disallow block
-> > > device modifications while the fs is mounted but we are not there yet. I've
-> > > discussed some shorter-term solution to avoid such known problems with syzbot
-> > > developers and what seems plausible would be a kconfig option to disallow
-> > > writing to a block device when it is exclusively open by someone else.
-> > > But so far I didn't get to trying whether this would reasonably work. Would
-> > > you be interested in having a look into this?
-> >
-> > Does this affect only the loop device or also USB storage devices?
-> > Say, if the USB device returns different contents during mount and on
-> > subsequent reads?
->
-> Modifying the block device while the file system is mounted is
-> something that we have to allow for now because tune2fs uses it to
-> modify the superblock.  It has historically also been used (rarely) by
-> people who know what they are doing to do surgery on a mounted file
-> system.  If we create a way for tune2fs to be able to update the
-> superblock via some kind of ioctl, we could disallow modifying the
-> block device while the file system is mounted.  Of course, it would
-> require waiting at least 5-6 years since sometimes people will update
-> the kernel without updating userspace.  We'd also need to check to
-> make sure there aren't boot loader installer (such as grub-install)
-> that depend on being able to modify the block device while the root
-> file system is mounted, at least in some rare cases.
->
-> The "how" to exclude mounted file systems is relatively easy.  The
-> kernel already knows when the file system is mounted, and it is
-> already a supported feature that a userspace application that wants to
-> be careful can open a block device with O_EXCL, and if it is in use by
-> the kernel --- mounted by a file system, being used by dm-thin, et. al
-> -- the open(2) system call will fail.  From the open(2) man page.
->
->           In  general, the behavior of O_EXCL is undefined if it is used without
->           O_CREAT.  There is one exception: on Linux 2.6 and later,  O_EXCL  can
->           be  used without O_CREAT if pathname refers to a block device.  If the
->           block device is in use by the system  (e.g.,  mounted),  open()  fails
->           with the error EBUSY.
->
-> Something which the syzbot could to do today is to simply use O_EXCL
-> whenever trying to open a block device.  This would avoid a class of
-> syzbot false positives, since normally it requires root privileges
-> and/or an experienced sysadmin to try to modify a block device while
-> it is mounted and/or in use by LVM.
->
->                                - Ted
->
-> P.S.  Trivia note: Aproximately month after I started work at VA Linux
-> Systems, a sysadmin intern which was given the root password to
-> sourceforge.net, while trying to fix a disk-to-disk backup, ran
-> mkfs.ext3 on /dev/hdXX, which was also being used as one-half of a
-> RAID 0 setup on which open source code critical to the community
-> (including, for example, OpenGL) was mounted and serving.  The intern
-> got about 50% the way through zeroing the inode table on /dev/hdXX
-> before the file system noticed and threw an error, at which point
-> wiser heads stopped what the intern was doing and tried to clean up
-> the mess.  Of course, there were no backups, since that was what the
-> intern was trying to fix!
->
-> There are a couple of things that we could learn from this incident.
-> One was that giving the root password to an untrained intern not
-> familiar with the setup on the serving system was... an unfortunate
-> choice.  Another was that adding the above-mentioned O_EXCL feature
-> and teaching mkfs to use it was an obvious post-mortem action item to
-> prevent this kind of problem in the future...
+All revisions of AM62A7-SK board have 4GB LPDDR4 Micron
+MT53E2G32D4DE-046 AUT:B memory. Commit 38c4a08c820c ("arm64: dts: ti:
+Add support for AM62A7-SK") enabled just 2GB due to a schematics error
+in early revision of the board. Fix it by enabling full 4GB available on
+the platform.
 
-I am struggling to make my mind re how to think about this case.
+Design docs: Link: https://www.ti.com/lit/zip/sprr459
 
-"root" is very overloaded, but generally it does not mean "randomly
-corrupting memory". Normally it gives access to system-wide changes
-but with the same protection/consistency guarantees as for
-unprivileged system calls.
+Fixes: 38c4a08c820c ("arm64: dts: ti: Add support for AM62A7-SK")
 
-There are, of course, things like /dev/{mem,kmem}. But at the same
-time there is also lockdown LSM and more distros today enable it.
+Signed-off-by: Devarsh Thakkar <devarsht@ti.com>
+Reviewed-by: Bryan Brattlof <bb@ti.com>
+---
+Logs:
+https://gist.github.com/devarsht/e85b6af89c01ddadb3a62f3e5f196af8
 
-Btw, should this "prohibit writes to mounted device" be part of
-LOCKDOWN_INTEGRITY? It looks like it gives capabilities similar to
-/dev/{mem,kmem}.
+Changelog:
+V2: Update commit message with mention of schematics error
+V3: Add Reviewed-By and update design docs link
+---
+ arch/arm64/boot/dts/ti/k3-am62a7-sk.dts | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-Disabling in testing something that's enabled in production is
-generally not very useful.
-So one option is to do nothing about this for now.
-If it's a true recognized issue that is in the process of fixing,
-syzbot will just show that it's still present. One of the goals of
-syzbot is to show the current state of things in an objective manner.
-If some kernel developers are aware of an issue, it does not mean that
-most distros/users are aware.
+diff --git a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+index 5c9012141ee2..f6a67f072dca 100644
+--- a/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
++++ b/arch/arm64/boot/dts/ti/k3-am62a7-sk.dts
+@@ -27,8 +27,9 @@ chosen {
+ 
+ 	memory@80000000 {
+ 		device_type = "memory";
+-		/* 2G RAM */
+-		reg = <0x00000000 0x80000000 0x00000000 0x80000000>;
++		/* 4G RAM */
++		reg = <0x00000000 0x80000000 0x00000000 0x80000000>,
++		      <0x00000008 0x80000000 0x00000000 0x80000000>;
+ 	};
+ 
+ 	reserved-memory {
+-- 
+2.34.1
 
-It makes sense to disable in testing things that are also recommended
-to be disabled in production settings.
-And LOCKDOWN_INTEGRITY may play such a role: we include this
-restriction into LOCKDOWN_INTEGRITY and enable it on syzbot.
-Though, unfortunately, we still don't enable it because it prohibits
-access to debugfs, which is required for fuzzing. Need to ask lockdown
-maintainers what they think about
-LOCKDOWN_TEST_ONLY_DONT_ENABLE_IN_PROD_INTEGRITY which would whitelist
-debugfs.
