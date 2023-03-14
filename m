@@ -2,159 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E4006BA346
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:03:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39E726BA348
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:04:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230250AbjCNXDF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:03:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36732 "EHLO
+        id S230395AbjCNXEB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:04:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230200AbjCNXDA (ORCPT
+        with ESMTP id S230266AbjCNXD6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:03:00 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABCE3CA04;
-        Tue, 14 Mar 2023 16:02:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 464A9619D0;
-        Tue, 14 Mar 2023 23:02:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A84CFC433D2;
-        Tue, 14 Mar 2023 23:02:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678834977;
-        bh=SHPRGCx5smTrFzp92YfdtlCVMmQ4EWiYEDg3at7k+jc=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=AbpMI4YEzwipEJM0wD7Yjo/vIkMcBYFre2IZaNhhEHbPhBxiAG0poifN0tueK3jIt
-         s/sbY/ZBaz5h2/w64tQdj/MucLW+ACIeMWVCIjFYnNB+vHq/rTqm6atvxSL5vhQ9jJ
-         TDUwi5N+/T2Ik9ltk+Qvp9w6FB0GRk6aOy8K5QGAODOLAln2uzCk9W/508sum59tYQ
-         vqTlEkELw6A8wCfjl+plu4CO96QyiC7Yl6eBD6dTdxmH7Y2lyS7NsuwBKdcZU9kBPP
-         X2CaXrRCIUoV992ybLP15RX7jyTb7rbrTXNE2qXtc9hmKBglhv3K4bPCt2K+Qy+qFL
-         /Hya0Hd+rDuoA==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3DC731540395; Tue, 14 Mar 2023 16:02:57 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 16:02:57 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>
-Cc:     Frederic Weisbecker <frederic@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Josh Triplett <josh@joshtriplett.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/1] rcu/rcuscale: Stop kfree_scale_thread thread(s)
- after unloading rcuscale
-Message-ID: <d930f2a8-4b75-4109-a303-e2fc04443693@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230313080403.89290-1-qiuxu.zhuo@intel.com>
+        Tue, 14 Mar 2023 19:03:58 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3F8C1D93D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:03:56 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id r1so4742729ybu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:03:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678835036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+M/wJAcMOPDypo34VuMZysKjW37fet4aHdhyCFRkO50=;
+        b=JFMvFsDkDX4N6+R2NB/BVGGCNkl4a/iQBFHOdlyiVy3dHZ2FRp3IA9rDVkaAWnQejv
+         iVWxJy88Q2Gb8ay1tG2EY0O7XnQSjlkjJCNlnXxhTgRPMyp5J4eI5KJb/joS+JO8y8AP
+         0bjymXmuvgpndNDI+8R7gAOOY5Yw9XDE4VDwM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678835036;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=+M/wJAcMOPDypo34VuMZysKjW37fet4aHdhyCFRkO50=;
+        b=MHzerhpiYxAyh9lJDzVD/uEClIFcMUuiTDhvjzlBxeOTNzHGR31jdDwREvObiIePz7
+         KwQaV7gXS3y6N201Vo4U0zhIXNKwFxu+v4G8mm3vy2Ebv//MJTBDl98+Tk+wBba/HEwG
+         C5aQigs+JnQjoaBCMpt6Bd0vXdhxFU5SEfWxyYmQnGrIGrS4bmCfxTCMW2K4f1POtlBE
+         GARF7R5h9FvNWvAqYB3nD9XQVaYsLyrqzBnrTqAb99WXxEReA3kSPQnKSuT0YlPKsuEG
+         BOHjHmWdbFCIOnYC0jkPaY5m6/E8lJKwjCxVX2RyyKKMEhiSLRMyr1FBxLTF71QBee7v
+         4bmw==
+X-Gm-Message-State: AO0yUKV4ciGLd6k22uICjgcixAR0xu++0HvuwGgoneH+ImsdKJ3paVoR
+        bjALBtjIGZChvtEmUvmZwETC62pljxZUFLX++hG+7Q==
+X-Google-Smtp-Source: AK7set/EqPgzTvragippGHLnm3Quj4y4xpXczhtAu3Hn0zlNlQh6+GH1BfN+FyjvWPzdYVJXVGr/HIC0rL2KuEiLCNM=
+X-Received: by 2002:a5b:6c4:0:b0:b26:d140:5f74 with SMTP id
+ r4-20020a5b06c4000000b00b26d1405f74mr10387224ybq.1.1678835035784; Tue, 14 Mar
+ 2023 16:03:55 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313080403.89290-1-qiuxu.zhuo@intel.com>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314190236.203370742@goodmis.org> <20230314190310.486609095@goodmis.org>
+In-Reply-To: <20230314190310.486609095@goodmis.org>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 14 Mar 2023 19:03:44 -0400
+Message-ID: <CAEXW_YRzVhbm2mNc04Fop7cud4kujgjT5sZR1paqkLeeNJvgHA@mail.gmail.com>
+Subject: Re: [for-linus][PATCH 5/5] tracing: Make tracepoint lockdep check
+ actually test something
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 04:04:03PM +0800, Qiuxu Zhuo wrote:
-> When running the 'kfree_rcu_test' test case with commands [1] the call
-> trace [2] was thrown. This was because the kfree_scale_thread thread(s)
-> still run after unloading rcuscale and torture modules. Fix the call
-> trace by invoking kfree_scale_cleanup() when removing the rcuscale module.
+On Tue, Mar 14, 2023 at 3:03=E2=80=AFPM Steven Rostedt <rostedt@goodmis.org=
+> wrote:
+>
+> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+>
+> A while ago where the trace events had the following:
+>
+>    rcu_read_lock_sched_notrace();
+>    rcu_dereference_sched(...);
+>    rcu_read_unlock_sched_notrace();
+>
+> If the tracepoint is enabled, it could trigger RCU issues if called in
+> the wrong place. And this warning was only triggered if lockdep was
+> enabled. If the tracepoint was never enabled with lockdep, the bug would
+> not be caught. To handle this, the above sequence was done when lockdep
+> was enabled regardless if the tracepoint was enabled or not (although the
+> always enabled code really didn't do anything, it would still trigger a
+> warning).
+>
+> But a lot has changed since that lockdep code was added. One is, that
+> sequence no longer triggers any warning. Another is, the tracepoint when
+> enabled doesn't even do that sequence anymore.
 
-Good catch, thank you!
+I agree with the change but I am confused by the commit message a bit
+due to "Another is, the tracepoint when enabled doesn't even do that
+sequence anymore.".
 
-> [1] modprobe torture
->     modprobe rcuscale kfree_rcu_test=1
+Whether the tracepoint was enabled or disabled, it is always doing the
+old sequence because we were skipping the tracepoint's static key test
+before running the sequence. Right?
 
-Given that loading the rcuscale kernel module automatically pulls in
-the rcuscale kernel module, why the "modprobe torture"?  Is doing the
-modprobes separately like this necessary to reproduce this bug?
+So how was it not doing the old sequence before?
 
-If it reproduces without manually loading and unloading the "torture"
-kernel module, could you please update the commit log to show that
-smaller reproducer?
+Other than that,
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
->     // After some time
->     rmmod rcuscale
->     rmmod torture
-> 
-> [2] BUG: unable to handle page fault for address: ffffffffc0601a87
->     #PF: supervisor instruction fetch in kernel mode
->     #PF: error_code(0x0010) - not-present page
->     PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
->     Oops: 0010 [#1] PREEMPT SMP NOPTI
->     CPU: 1 PID: 1798 Comm: kfree_scale_thr Not tainted 6.3.0-rc1-rcu+ #1
->     Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
->     RIP: 0010:0xffffffffc0601a87
->     Code: Unable to access opcode bytes at 0xffffffffc0601a5d.
->     RSP: 0018:ffffb25bc2e57e18 EFLAGS: 00010297
->     RAX: 0000000000000000 RBX: ffffffffc061f0b6 RCX: 0000000000000000
->     RDX: 0000000000000000 RSI: ffffffff962fd0de RDI: ffffffff962fd0de
->     RBP: ffffb25bc2e57ea8 R08: 0000000000000000 R09: 0000000000000000
->     R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000000
->     R13: 0000000000000000 R14: 000000000000000a R15: 00000000001c1dbe
->     FS:  0000000000000000(0000) GS:ffff921fa2200000(0000) knlGS:0000000000000000
->     CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
->     CR2: ffffffffc0601a5d CR3: 000000011de4c006 CR4: 0000000000370ee0
->     DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
->     DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
->     Call Trace:
->      <TASK>
->      ? kvfree_call_rcu+0xf0/0x3a0
->      ? kthread+0xf3/0x120
->      ? kthread_complete_and_exit+0x20/0x20
->      ? ret_from_fork+0x1f/0x30
->      </TASK>
->     Modules linked in: rfkill sunrpc ... [last unloaded: torture]
->     CR2: ffffffffc0601a87
->     ---[ end trace 0000000000000000 ]---
-> 
-> Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
-> Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+ - Joel
+
+
+> The main check we care about today is whether RCU is "watching" or not.
+> So if lockdep is enabled, always check if rcu_is_watching() which will
+> trigger a warning if it is not (tracepoints require RCU to be watching).
+>
+> Note, that old sequence did add a bit of overhead when lockdep was enable=
+d,
+> and with the latest kernel updates, would cause the system to slow down
+> enough to trigger kernel "stalled" warnings.
+>
+> Link: http://lore.kernel.org/lkml/20140806181801.GA4605@redhat.com
+> Link: http://lore.kernel.org/lkml/20140807175204.C257CAC5@viggo.jf.intel.=
+com
+> Link: https://lore.kernel.org/lkml/20230307184645.521db5c9@gandalf.local.=
+home/
+> Link: https://lore.kernel.org/linux-trace-kernel/20230310172856.77406446@=
+gandalf.local.home
+>
+> Cc: stable@vger.kernel.org
+> Cc: Masami Hiramatsu <mhiramat@kernel.org>
+> Cc: Dave Hansen <dave.hansen@linux.intel.com>
+> Cc: "Paul E. McKenney" <paulmck@kernel.org>
+> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+> Cc: Joel Fernandes <joel@joelfernandes.org>
+> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> Fixes: e6753f23d961 ("tracepoint: Make rcuidle tracepoint callers use SRC=
+U")
+> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 > ---
->  kernel/rcu/rcuscale.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
-> index 91fb5905a008..5e580cd08c58 100644
-> --- a/kernel/rcu/rcuscale.c
-> +++ b/kernel/rcu/rcuscale.c
-> @@ -522,6 +522,8 @@ rcu_scale_print_module_parms(struct rcu_scale_ops *cur_ops, const char *tag)
->  		 scale_type, tag, nrealreaders, nrealwriters, verbose, shutdown);
->  }
->  
-> +static void kfree_scale_cleanup(void);
-> +
-
-I do applaud minmimizing the size of the patch, but in this case could you
-please pull the kfree_scale_cleanup() function ahead of its first use?
-
-							Thanx, Paul
-
->  static void
->  rcu_scale_cleanup(void)
->  {
-> @@ -542,6 +544,11 @@ rcu_scale_cleanup(void)
->  	if (gp_exp && gp_async)
->  		SCALEOUT_ERRSTRING("No expedited async GPs, so went with async!");
->  
-> +	if (kfree_rcu_test) {
-> +		kfree_scale_cleanup();
-> +		return;
-> +	}
-> +
->  	if (torture_cleanup_begin())
->  		return;
->  	if (!cur_ops) {
-> -- 
-> 2.17.1
-> 
+>  include/linux/tracepoint.h | 15 ++++++---------
+>  1 file changed, 6 insertions(+), 9 deletions(-)
+>
+> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
+> index fa1004fcf810..2083f2d2f05b 100644
+> --- a/include/linux/tracepoint.h
+> +++ b/include/linux/tracepoint.h
+> @@ -231,12 +231,11 @@ static inline struct tracepoint *tracepoint_ptr_der=
+ef(tracepoint_ptr_t *p)
+>   * not add unwanted padding between the beginning of the section and the
+>   * structure. Force alignment to the same alignment as the section start=
+.
+>   *
+> - * When lockdep is enabled, we make sure to always do the RCU portions o=
+f
+> - * the tracepoint code, regardless of whether tracing is on. However,
+> - * don't check if the condition is false, due to interaction with idle
+> - * instrumentation. This lets us find RCU issues triggered with tracepoi=
+nts
+> - * even when this tracepoint is off. This code has no purpose other than
+> - * poking RCU a bit.
+> + * When lockdep is enabled, we make sure to always test if RCU is
+> + * "watching" regardless if the tracepoint is enabled or not. Tracepoint=
+s
+> + * require RCU to be active, and it should always warn at the tracepoint
+> + * site if it is not watching, as it will need to be active when the
+> + * tracepoint is enabled.
+>   */
+>  #define __DECLARE_TRACE(name, proto, args, cond, data_proto)           \
+>         extern int __traceiter_##name(data_proto);                      \
+> @@ -249,9 +248,7 @@ static inline struct tracepoint *tracepoint_ptr_deref=
+(tracepoint_ptr_t *p)
+>                                 TP_ARGS(args),                          \
+>                                 TP_CONDITION(cond), 0);                 \
+>                 if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {             \
+> -                       rcu_read_lock_sched_notrace();                  \
+> -                       rcu_dereference_sched(__tracepoint_##name.funcs);=
+\
+> -                       rcu_read_unlock_sched_notrace();                \
+> +                       WARN_ON_ONCE(!rcu_is_watching());               \
+>                 }                                                       \
+>         }                                                               \
+>         __DECLARE_TRACE_RCU(name, PARAMS(proto), PARAMS(args),          \
+> --
+> 2.39.1
