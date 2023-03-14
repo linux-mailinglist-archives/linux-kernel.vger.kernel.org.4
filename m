@@ -2,195 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8572A6B98E1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:23:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6EECF6B98E6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:23:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231338AbjCNPW5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:22:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47316 "EHLO
+        id S231592AbjCNPXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:23:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229558AbjCNPWy (ORCPT
+        with ESMTP id S231545AbjCNPX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:22:54 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2120.outbound.protection.outlook.com [40.107.93.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B882295E29;
-        Tue, 14 Mar 2023 08:22:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=GbjF+XhU5eRwfcW4PdxKLblRzSYqV9vhZN0+CJgiCWNAoD7pR903D2Fr5qE9EgJWD4RUPP93xjejVuTpE+/po1Uv2gZFIXhRmbQ42w1zjUvU3zr8vKuGsssLJMmQ/w5chBissuqtQ9i1zCbnZtZlTZNKwghFCgnrfma9FRCdwgeRn8Qv+K26Zkq+BxUa5bBzqNlcXjyS+u96S8hDqtZEQoNpfEGF3371Azih6OtNxLpns651c3zRHGdPzjh3xs7AzlCB+uz6kAUgU1NztxmPwqhuLRNbTsdY7+arjfUfStS1BPnJHvgM9dUCwj5EV+rywgbFnva37uONfGUdzGzbCA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=wx0Xxnc8DCQb1kEE7w8GrBPPxDJXVdkNs3ZJP0ZkhYw=;
- b=h0ARgErlW7BKHwttrS1Wc0mhgVQ5+Vat3Vz7GM9y8m4KYKeHQyUU8fFpSfd0/tjbz6hxwpo10EUykqEYLltqSCWtAquTuZibqVOEG9BRzbOVy/2y4IsTCOVABBQdB+3x/gh05W3A7pJwpvywSbfixE7bzbDXNu9SA/JkNxULnNJwyBJ6x64gDNxZlvhE+uEXPIq4OkBFkeC18TUCrnJmT+kpYTf7U6SkObxQ2aSx9Lnyidh+c2bSRyJotRGwMFdnhLKoDf0DBHEoGIbjlqcLc2bkqHUyDNDVTTs14q3bYi+3EP1UtMy2QZ2t1AiRuk4Co931XvDlxoe8A7PNzutqnw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=corigine.com; dmarc=pass action=none header.from=corigine.com;
- dkim=pass header.d=corigine.com; arc=none
+        Tue, 14 Mar 2023 11:23:28 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF6DB9CFFE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:23:11 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id be16so12103226oib.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:23:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=corigine.onmicrosoft.com; s=selector2-corigine-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=wx0Xxnc8DCQb1kEE7w8GrBPPxDJXVdkNs3ZJP0ZkhYw=;
- b=AfoEGX6oydlRqdunGplP8QMnIqcugpwEC2hHBs9APv09cQG6bGESBffAiDy70HT/FEPR3rX21raKAiEUs3wb/8EWM0ye2pSNRJT72o9hhb+lX7q9J8a3bvTtlEzp7N4hYSzXXHxc+h60RZIRjHb1Lo8e1iSKnJOX5H6gm2tGTSM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=corigine.com;
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com (2603:10b6:510:78::6)
- by SJ2PR13MB6168.namprd13.prod.outlook.com (2603:10b6:a03:4fa::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 15:22:51 +0000
-Received: from PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c]) by PH0PR13MB4842.namprd13.prod.outlook.com
- ([fe80::85f5:bdb:fb9e:294c%2]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 15:22:51 +0000
-Date:   Tue, 14 Mar 2023 16:22:44 +0100
-From:   Simon Horman <simon.horman@corigine.com>
-To:     Zheng Hacker <hackerzheng666@gmail.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, marcel@holtmann.org,
-        alex000young@gmail.com, johan.hedberg@gmail.com,
-        luiz.dentz@gmail.com, davem@davemloft.net, edumazet@google.com,
-        kuba@kernel.org, pabeni@redhat.com,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, pmenzel@molgen.mpg.de
-Subject: Re: [PATCH v2] Bluetooth: hci_core: Fix poential Use-after-Free bug
- in hci_remove_adv_monitor
-Message-ID: <ZBCRRL8+EtTBH2tl@corigine.com>
-References: <20230217100223.702330-1-zyytlz.wz@163.com>
- <CAJedcCxUNBWOpkcaN2aLbwNs_xvqi=LC8mhFWh-jWeh6q-cBCQ@mail.gmail.com>
- <ZBCNY8NoNkrA2nyN@corigine.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <ZBCNY8NoNkrA2nyN@corigine.com>
-X-ClientProxiedBy: AS4PR09CA0012.eurprd09.prod.outlook.com
- (2603:10a6:20b:5e0::15) To PH0PR13MB4842.namprd13.prod.outlook.com
- (2603:10b6:510:78::6)
+        d=gmail.com; s=20210112; t=1678807390;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=OZthyf9O7m+4xnS4ELJlsYXDAkPMiY/lLsht07DclGg=;
+        b=i9GIoQK6IG1EhUNatHWrIDXSgiVA6QYilOjlsQcjN6aAjRokymSQMk/MpQVe2k8k3P
+         X4+1BRavCnPk3i77vvRPiuAFNpeFa1aqA72h6R9FqtmLQtTnvbGHT77xWXDHOig3gdYh
+         apn/OHfsZf0qK/RziVA5noSb3R5Zsb3HI2VNqkC6YkvjCL/Cyq9yHHqas/vAjltC/rYZ
+         w8Z4Qmk+H6pSCHNmiNKVtO0nZkuFYvsEOsI5E3wZRRBm6kKQFOuhqdSVRyslrKe+tJAg
+         kusYYbrF+vSWYZjkuPGk5XZF7uecTdi3BholAmn/Deatgd45JrwqN/QoSplSc1+CQdS6
+         tkag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678807390;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=OZthyf9O7m+4xnS4ELJlsYXDAkPMiY/lLsht07DclGg=;
+        b=5N9TMwiXkJfY/zUykKIj3ZOA4dyRxkB31V54yP+JhsWXVbir2xmH9Pn0qpkdjD8Fy/
+         9VYakfeUpd1fwDyrsx05rF744OG++eKuqz/JtQyKPvqjOLgenNIGQZ7N2zZgWgcnHkIg
+         v96afUi/HB3hudHky1igqTtdXIYHavVYVzvR+jXY//yGq5D/+hJ5D1oGwB2eVMM/ov+Y
+         brr4FIc3HBzJ/trJh9NeUvtbaeI7TMNCD3nKzxBLMyvGBoV7SPIOZ8+Y1pHdQuTckYdg
+         zPD8DATVoZbEXeJgBn3Lqy6iHw7lsLRhIOgpj3421RmHM+OalQLYkKeOyFa40c8w4Ieb
+         PlBQ==
+X-Gm-Message-State: AO0yUKWHCOn629/R7Hh2VtzYNg4ZLKCl+Q+iW8Unn9c+j2OEy7p4Xpe5
+        +yLwJ48UCNQXez4E9gSrfBSmOaT5wGAWxRAs3BVgGaKO
+X-Google-Smtp-Source: AK7set94v1q4xLwDYtzPczh6Lmqc0MOw4TXfK+D1Yib/S6HGBlKAmKq/i19ZBpZ6z/63O59YIBlMj08NJipEKwDHlRM=
+X-Received: by 2002:a05:6808:354:b0:37f:b1b8:4a19 with SMTP id
+ j20-20020a056808035400b0037fb1b84a19mr11212188oie.3.1678807390120; Tue, 14
+ Mar 2023 08:23:10 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: PH0PR13MB4842:EE_|SJ2PR13MB6168:EE_
-X-MS-Office365-Filtering-Correlation-Id: 69f50bbf-d424-42f3-2d85-08db249ff9c4
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 5KrFLXBlZ2Fgl4D4A28ktdWWMURSfq5yU1qUNu/r+PDneExDNj1qY0vSAQo1AWibRq+guU8XUAGNBu7PqlGaMjQcx7zgYFhHbQ6s3tTMjZn5lqwhSObMneuGuh0+2W1cnt+izwWs/RWu3M6CCk+W+Cdb3gYgYQIeaPxG6/wJFwrUbbApXNlbQvc5NBJD7tdgmPU2G97pqp7LPYFuc/BtHvkfPcDjCiCspFNrW/6Bnrz18rWJhqX2Qx5SEbqqVrY8tEn8HuPlrtjDQ8uL0FQl1oqUDSBjmu8kO6eYjeM8yYoIcryg2yk36XpbmMW/vPLEzkmcNUAziUjfEOCMEvWjbBzNcf8dzssO+s+oOiA5PJtDZb7Q8/NsdUNqYwVIYhf7F5y7AjGzpchETpGRzG1TMATz1j5u5bBPa5HcBL+zKODKcKzCzS338MBCVE9TpqkT+jBgqlgyovmBtmQdVnd0K7vFMKBJPCbSaeplsM/Q8Ire+RNlAlDkCNtI1gw8HqKY442fjPP8Pbj6ClhpbGp+D1k2LaoAfbbgYikTNbnd/BxOZP8QPF8rnsK4SG5PDx5Ppt02jMhTfcQBrUAxk7Au05P0GtTzD8JxYrxLpolHIJGkpSL9bO8jHs3h8vk9d8W2NJmb4HoJjoJ+xY4VjkZkGsF/voP4lQYGD70UV4p/CDLjZkAorH6UoZtXmfRbJKy5eiOcCQIxjb9Ow9K33C9EfNPu5kTd8rzGgRAQGdxsdpA=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR13MB4842.namprd13.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(366004)(39840400004)(396003)(136003)(376002)(346002)(451199018)(36756003)(86362001)(38100700002)(2906002)(44832011)(41300700001)(7416002)(8936002)(5660300002)(4326008)(6512007)(2616005)(6506007)(186003)(83380400001)(316002)(8676002)(66476007)(66556008)(6916009)(6666004)(6486002)(966005)(478600001)(66946007)(67856001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RG1uVTRQbWd4WDdNY0psVWVNbndGYWs1MWM3VWVFZjVLd25hWnBSQm1wYnpC?=
- =?utf-8?B?WWpMUG5QNG5PZjlncGZiamFGUzRib3hyaHVDQXRzTTB3UWJwRGQ3eG5sZU5u?=
- =?utf-8?B?TlhuSG1qZ3dlcGJoZ0o0UnNJR2lVYXdmV3NhcGhLcmFsc1ZaWVRyQk9QR1lN?=
- =?utf-8?B?SXlweWp4c1A5MEhSa2V1VkxZZEtDaGUxZm5aNVBXOGVCTmJjWFNKNnR2L294?=
- =?utf-8?B?clMxRGRkTnByb1FhdDZmNFBGWTBnT2xUeWhSZE8rUWVEUU1XM1l6bW4zNnRT?=
- =?utf-8?B?TmtnTWVRWXlFK0EwRkpSWHVkdHVqMGFxZUdYVGhON0NWQTEyc1R1d0xyNUpl?=
- =?utf-8?B?em9MTUg4TmtBemhuaHgvUHVqV014U1ExeXFhM3F3ODBYU1VvTkZxSjM3d3pz?=
- =?utf-8?B?NmxldGJnU2huK2t1YU5GRzdFdklqUU9aSUdmZXh5WEdSbTNvL1dGeEZ3UEpK?=
- =?utf-8?B?YTJCMEVKNU5FNHIvRmo5TjVPZ21CZk1BNUFBZkwwak95NmY3aThoOU5sdEhI?=
- =?utf-8?B?ZFZpYXZsczEzV3oyYi8wRFBlZXc3MnJRRERwZk5TbjI4a000emwyc2dYbUVh?=
- =?utf-8?B?K1N3RU1HZUVSRnkrVWpCZ3dwQXprS3NGRDRHNWlFM2QzZ0dPTEhqOXhtb045?=
- =?utf-8?B?MXowV294WmRVVzF1RVhQQlRZQjVzcnlrSXhkNEZQUm83WVRtdEc0Z1ZhTWlh?=
- =?utf-8?B?bE9xMFdmVXBFUXRCbjd4OXNCamRqenp4MllSbFNpZ3hsblp0ZEJyWEVpMkxT?=
- =?utf-8?B?Q1RGUkF1ZzcvT25pUk1FOG9WVFhMaGhUdTRORVB0d09aZHY5d1FxQWNUMnJh?=
- =?utf-8?B?aGl0UTJmNERSVTZFY053akNlVlQ4SWpRb1MwM3pPUW53MEY3eUdMRDdUeTNu?=
- =?utf-8?B?Mm8yanlSYWdEUUJzUmRDVDdLa3pUUmxRZmFvQzFwanJmeFpaVVRvQkVXNFVG?=
- =?utf-8?B?VWN5V1FlcWxvc21zanpDMUFxbFJhNmVPZWxRMmV1OVZBZU5pNWMybXZ4Mzc3?=
- =?utf-8?B?emFmYkFsK2VxdzJKR05UUk1sUzhDc3J0aVNUZkJUbGplczlxYXY1YzNmRElZ?=
- =?utf-8?B?bkdCRjlmZitJWFNPT2pTcW9WVGZTV3EzM2syL3NnSzFybExEZWE5Ky9leFNU?=
- =?utf-8?B?d1krbHBtMG9IdVVKQWpiSjZBOUZYSUhNTEpBMXlkSHVROWZLRk9xNHp4TFpt?=
- =?utf-8?B?bTYvUVJJb29XTEdsdzZBSlNLSmJMWTZycmZaWnpkdkR4dVdsaE11TVVUWGZD?=
- =?utf-8?B?UGtrKy9oK0ZlRFVLMHFnNVFYTXZWUitPMG03OVRkZnZieiswSzlBM0dyeUcz?=
- =?utf-8?B?RGR3QkFIek00MmthSDVQZXJTNVk1L0swL1VkT3NpdVJYb00yVlZPQTMxcmdw?=
- =?utf-8?B?YThUeW54Rkk4NFB1L3FtelZkbHBsRUUvR3pOaVJneFhCNS9uajF4aEE2bXRH?=
- =?utf-8?B?aUpXOHp2SlNMcnRESUN0d2s2a3hVam52T3FrNmNSM1RDVTdJUWJmS1JJYmpK?=
- =?utf-8?B?NlNHeWZOV1NDVEsyS1k5R0xnaXNaV255MGJBVWw0em1vTEpDbElXK25hVktP?=
- =?utf-8?B?UUQvRHlzUi9FODVuVWY1T3V0cGM1b2NLU1hnR1NMN0lwZUhBREhwWW1yd29O?=
- =?utf-8?B?R0JXSURGakFzcWoxQkh4YmNsWmJSS1EwWHNBTGoyb2NyYWJXOEJtdnl1bDdF?=
- =?utf-8?B?aG5UQ3I2V3V4V2RmckE2b3NkQlpONDBXUno5RTNxc0pHWlkzamUxWVcyLzJY?=
- =?utf-8?B?Z2V1QS9uMFFzVmtxbkhyTnRLa0hXTE9nK1ZneWVvZ1JtcXpRUmhIeXU3bDJq?=
- =?utf-8?B?ZXNlalNOTzVPZ1pDSll1SEs3MXgrUHJnMGJhWllaTnUvc1Roc3VJUGlteXhX?=
- =?utf-8?B?YmZydUw1WnNKbXJvd3pWUlBPRVU0Ym5pSnZ4Q3V5UWRKNytSSnpsNHhyemhh?=
- =?utf-8?B?MGx4YnhTOTBjcUx1QlRJaGk5NHMyTnJWVHVtOGkrNlZ6RlhKUVA5MlJ1QkNB?=
- =?utf-8?B?cUQ1S3QyNGhQem4ya1lLNFlLdFRteUJYNXh1d1F6bnkvdzludWFIb3k4WElQ?=
- =?utf-8?B?Mk05Y1ZTaERZY1Z0TDdNV3Q4anRCN0tQQjBWYnQ4QjFzdHJueEFEdTNDMFFY?=
- =?utf-8?B?aXhiQVZkbXM4WXhCTktPNnhwOXRvRW9GTEJrZ3lRK25BZC85S05rOFBXc29p?=
- =?utf-8?B?cVJ6ZVR5ZE5wNnpXMTZ1aFllOUVrVTNJdG1BYnZwQUx5blRtdHhFU3hVSUpv?=
- =?utf-8?B?U3o0bi85RmwvQk1peHBRQ2xOQVV3PT0=?=
-X-OriginatorOrg: corigine.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 69f50bbf-d424-42f3-2d85-08db249ff9c4
-X-MS-Exchange-CrossTenant-AuthSource: PH0PR13MB4842.namprd13.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:22:51.3402
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: fe128f2c-073b-4c20-818e-7246a585940c
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 8JWrBG8HOrZN+Tl7DJRp/6w7YbEGKxxgq22mf4n2xuTTy7+CM+MsD6lsaYkO1ssJ68YwdPwOAUg7CviDCB89LmKwLCCuLU/8zJ2MKrZ3NnI=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR13MB6168
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314042605.346458-1-kai.heng.feng@canonical.com>
+In-Reply-To: <20230314042605.346458-1-kai.heng.feng@canonical.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 14 Mar 2023 11:22:56 -0400
+Message-ID: <CADnq5_OkFhONSKn2DbGhxaXyaSjzu0RBnydd99wgsVudxW3kxQ@mail.gmail.com>
+Subject: Re: [PATCH] drm/amdgpu/nv: Apply ASPM quirk on Intel ADL + AMD Navi
+To:     Kai-Heng Feng <kai.heng.feng@canonical.com>
+Cc:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com, Lijo Lazar <lijo.lazar@amd.com>,
+        dri-devel@lists.freedesktop.org, YiPeng Chai <YiPeng.Chai@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>, amd-gfx@lists.freedesktop.org,
+        Jiansong Chen <Jiansong.Chen@amd.com>,
+        Kenneth Feng <kenneth.feng@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Victor Zhao <Victor.Zhao@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>,
+        Veerabadhran Gopalakrishnan <veerabadhran.gopalakrishnan@amd.com>,
+        Evan Quan <evan.quan@amd.com>, Jack Xiao <Jack.Xiao@amd.com>,
+        Richard Gong <richard.gong@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        linux-kernel@vger.kernel.org, Leo Liu <leo.liu@amd.com>,
+        Hawking Zhang <Hawking.Zhang@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 04:06:11PM +0100, Simon Horman wrote:
-> On Mon, Mar 13, 2023 at 05:55:35PM +0800, Zheng Hacker wrote:
-> > friendly ping
-> > 
-> > Zheng Wang <zyytlz.wz@163.com> 于2023年2月17日周五 18:05写道：
-> > >
-> > > In hci_remove_adv_monitor, if it gets into HCI_ADV_MONITOR_EXT_MSFT case,
-> > > the function will free the monitor and print its handle after that.
-> > > Fix it by removing the logging into msft_le_cancel_monitor_advertisement_cb
-> > > before calling hci_free_adv_monitor.
-> > >
-> > > Signed-off-by: Zheng Wang <zyytlz.wz@163.com>
-> > > ---
-> > > v2:
-> > > - move the logging inside msft_remove_monitor suggested by Luiz
-> > > ---
-> > >  net/bluetooth/hci_core.c | 2 --
-> > >  net/bluetooth/msft.c     | 2 ++
-> > >  2 files changed, 2 insertions(+), 2 deletions(-)
-> > >
-> > > diff --git a/net/bluetooth/hci_core.c b/net/bluetooth/hci_core.c
-> > > index b65c3aabcd53..69b82c2907ff 100644
-> > > --- a/net/bluetooth/hci_core.c
-> > > +++ b/net/bluetooth/hci_core.c
-> > > @@ -1981,8 +1981,6 @@ static int hci_remove_adv_monitor(struct hci_dev *hdev,
-> > >
-> > >         case HCI_ADV_MONITOR_EXT_MSFT:
-> > >                 status = msft_remove_monitor(hdev, monitor);
-> > > -               bt_dev_dbg(hdev, "%s remove monitor %d msft status %d",
-> > > -                          hdev->name, monitor->handle, status);
-> > >                 break;
-> 
-> I'm probably missing something obvious.
-> But from my perspective a simpler fix would be to
-> move the msft_remove_monitor() call to below the bt_dev_dbg() call.
+On Tue, Mar 14, 2023 at 12:35=E2=80=AFAM Kai-Heng Feng
+<kai.heng.feng@canonical.com> wrote:
+>
+> S2idle resume freeze can be observed on Intel ADL + AMD WX5500. This is
+> caused by commit 0064b0ce85bb ("drm/amd/pm: enable ASPM by default").
+>
+> The root cause is still not clear for now.
+>
+> So extend and apply the ASPM quirk from commit e02fe3bc7aba
+> ("drm/amdgpu: vi: disable ASPM on Intel Alder Lake based systems"), to
+> workaround the issue on Navi cards too.
+>
+> Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+> Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2458
+> Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  1 +
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 15 +++++++++++++++
+>  drivers/gpu/drm/amd/amdgpu/nv.c            |  2 +-
+>  drivers/gpu/drm/amd/amdgpu/vi.c            | 15 ---------------
+>  4 files changed, 17 insertions(+), 16 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/am=
+dgpu/amdgpu.h
+> index 164141bc8b4a..c697580f1ee4 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> @@ -1272,6 +1272,7 @@ void amdgpu_device_pci_config_reset(struct amdgpu_d=
+evice *adev);
+>  int amdgpu_device_pci_reset(struct amdgpu_device *adev);
+>  bool amdgpu_device_need_post(struct amdgpu_device *adev);
+>  bool amdgpu_device_should_use_aspm(struct amdgpu_device *adev);
+> +bool aspm_support_quirk_check(void);
+>
+>  void amdgpu_cs_report_moved_bytes(struct amdgpu_device *adev, u64 num_by=
+tes,
+>                                   u64 num_vis_bytes);
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm=
+/amd/amdgpu/amdgpu_device.c
+> index c4a4e2fe6681..c09f19385628 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+> @@ -80,6 +80,10 @@
+>
+>  #include <drm/drm_drv.h>
+>
+> +#if IS_ENABLED(CONFIG_X86)
+> +#include <asm/intel-family.h>
+> +#endif
+> +
+>  MODULE_FIRMWARE("amdgpu/vega10_gpu_info.bin");
+>  MODULE_FIRMWARE("amdgpu/vega12_gpu_info.bin");
+>  MODULE_FIRMWARE("amdgpu/raven_gpu_info.bin");
+> @@ -1356,6 +1360,17 @@ bool amdgpu_device_should_use_aspm(struct amdgpu_d=
+evice *adev)
+>         return pcie_aspm_enabled(adev->pdev);
+>  }
+>
+> +bool aspm_support_quirk_check(void)
 
-The obvious thing I was missing is that was what was done in v1
-but Luiz suggested moving the logging to
-msft_le_cancel_monitor_advertisement_cb().
-Sorry for the noise.
+For consistency with naming, rename this
+amdgpu_device_aspm_support_quirk().  Other than that, looks good to
+me.  With that fixed:
+Reviewed-by: Alex Deucher <alexander.deucher@amd.com>
 
-Link: https://lore.kernel.org/all/CABBYNZL_gZ+kr_OEqjYgMmt+=91=jC88g310F-ScMC=kLh0xdw@mail.gmail.com/
+Alex
 
-> 
-> > >         }
-> > >
-> > > diff --git a/net/bluetooth/msft.c b/net/bluetooth/msft.c
-> > > index bee6a4c656be..4b35f0ed1360 100644
-> > > --- a/net/bluetooth/msft.c
-> > > +++ b/net/bluetooth/msft.c
-> > > @@ -286,6 +286,8 @@ static int msft_le_cancel_monitor_advertisement_cb(struct hci_dev *hdev,
-> > >                  * suspend. It will be re-monitored on resume.
-> > >                  */
-> > >                 if (!msft->suspending) {
-> > > +                       bt_dev_dbg(hdev, "%s remove monitor %d status %d", hdev->name,
-> > > +                                  monitor->handle, status);
-> > >                         hci_free_adv_monitor(hdev, monitor);
-> > >
-> > >                         /* Clear any monitored devices by this Adv Monitor */
-> > > --
-> > > 2.25.1
-> > >
-> > 
+
+> +{
+> +#if IS_ENABLED(CONFIG_X86)
+> +       struct cpuinfo_x86 *c =3D &cpu_data(0);
+> +
+> +       return !(c->x86 =3D=3D 6 && c->x86_model =3D=3D INTEL_FAM6_ALDERL=
+AKE);
+> +#else
+> +       return true;
+> +#endif
+> +}
+> +
+>  /* if we get transitioned to only one device, take VGA back */
+>  /**
+>   * amdgpu_device_vga_set_decode - enable/disable vga decode
+> diff --git a/drivers/gpu/drm/amd/amdgpu/nv.c b/drivers/gpu/drm/amd/amdgpu=
+/nv.c
+> index 855d390c41de..921adf66e3c4 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/nv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/nv.c
+> @@ -578,7 +578,7 @@ static void nv_pcie_gen3_enable(struct amdgpu_device =
+*adev)
+>
+>  static void nv_program_aspm(struct amdgpu_device *adev)
+>  {
+> -       if (!amdgpu_device_should_use_aspm(adev))
+> +       if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_c=
+heck())
+>                 return;
+>
+>         if (!(adev->flags & AMD_IS_APU) &&
+> diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu=
+/vi.c
+> index 12ef782eb478..e61ae372d674 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/vi.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+> @@ -81,10 +81,6 @@
+>  #include "mxgpu_vi.h"
+>  #include "amdgpu_dm.h"
+>
+> -#if IS_ENABLED(CONFIG_X86)
+> -#include <asm/intel-family.h>
+> -#endif
+> -
+>  #define ixPCIE_LC_L1_PM_SUBSTATE       0x100100C6
+>  #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK       0=
+x00000001L
+>  #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK   0x0000000=
+2L
+> @@ -1138,17 +1134,6 @@ static void vi_enable_aspm(struct amdgpu_device *a=
+dev)
+>                 WREG32_PCIE(ixPCIE_LC_CNTL, data);
+>  }
+>
+> -static bool aspm_support_quirk_check(void)
+> -{
+> -#if IS_ENABLED(CONFIG_X86)
+> -       struct cpuinfo_x86 *c =3D &cpu_data(0);
+> -
+> -       return !(c->x86 =3D=3D 6 && c->x86_model =3D=3D INTEL_FAM6_ALDERL=
+AKE);
+> -#else
+> -       return true;
+> -#endif
+> -}
+> -
+>  static void vi_program_aspm(struct amdgpu_device *adev)
+>  {
+>         u32 data, data1, orig;
+> --
+> 2.34.1
+>
