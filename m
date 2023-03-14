@@ -2,179 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 743666B8AF3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:10:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 270886B8AF9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230086AbjCNGKe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 02:10:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43334 "EHLO
+        id S230180AbjCNGN1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 02:13:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCNGKc (ORCPT
+        with ESMTP id S230152AbjCNGNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 02:10:32 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 293C55DCAE;
-        Mon, 13 Mar 2023 23:10:31 -0700 (PDT)
+        Tue, 14 Mar 2023 02:13:22 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4B1C3;
+        Mon, 13 Mar 2023 23:13:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678774231; x=1710310231;
+  t=1678774400; x=1710310400;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=4mLCEy2H7JEU8KoAKmGcuzQP9O9EsavChPpUcqcifCc=;
-  b=gGGWXK3KKqZsPWxOfP2VNov/ddWuJ73aDmwLkU7OVjsnu2/aAb3Xd3+U
-   OvNpx8PtoVCq90lSNgTtRNEItC83pg/SSOniXH6aaG3VGSJwOmQxcU9Hg
-   43OD/sXX1h344wpsy35AKgCY1fbTrtf7ZD3vju8caq5NYm1FIpGb1Uvhd
-   OCHYIXo3I7TWUQ2XNzUko1D5yya0g0XvFgBuzR0ul+cRQlOqKFO3JAbnQ
-   fOO6IeqZj8TRf5Hf53nb2CN5er+4vl5C5+P5zJ0h+svy8R3XHftcyr3Kt
-   cTC8liWoiesgjRtg+3DT95EPzdA31F+8ezxS4I7M5d4R1koQW9IxXyJcO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316986725"
+  bh=lYU9/lOsDjrGWnrNFnc3eD+bZCqLaCoXFbUAdhwVlmw=;
+  b=DgzQPJ/tlWNjob1Tq2lPzE7fj9cWi9ac0V3I4YM9UJPRh2Z3x9LFasa4
+   dqMbvUMzx8860mFrqM1LDP7mMa8lN1aIRweluvbad8V9H15AVnBGj5HwH
+   1j7PxKR4yIu5zTGLLtOIDm0XpxYHMZgpXHlPwmOpUoSKDMSA8tHLUTZvY
+   a/8s6F1EMvfJcO8frlGEUmzleG52UaX+IT80MfiSl+b9lBnhVywIsMSUE
+   RArN/G5hsocc5OP73pPKytbhoMfq8Ul8NvkFQPhjE3Bzi+aRpQOuDYx0S
+   gKVZ//b0sYawou+snZAqGO07nlJPzXukFFLgwjTjRW+85FOusY4ADk1MT
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="334818367"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="316986725"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:10:22 -0700
+   d="scan'208";a="334818367"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:12:50 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="802719705"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="681296678"
 X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="802719705"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by orsmga004.jf.intel.com with ESMTP; 13 Mar 2023 23:10:20 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pbxrX-0006aw-1A;
-        Tue, 14 Mar 2023 06:10:19 +0000
-Date:   Tue, 14 Mar 2023 14:09:23 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Alvin =?utf-8?Q?=C5=A0ipraga?= <alvin@pqrs.dk>,
-        MyungJoo Ham <myungjoo.ham@samsung.com>,
-        Chanwoo Choi <cw00.choi@samsung.com>,
-        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Marek Vasut <marex@denx.de>,
-        Alvin =?utf-8?Q?=C5=A0ipraga?= <alsi@bang-olufsen.dk>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-usb@vger.kernel.org, stable@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] extcon: usbc-tusb320: unregister typec port on driver
- removal
-Message-ID: <202303141316.EltVGG8V-lkp@intel.com>
-References: <20230313130105.4183296-1-alvin@pqrs.dk>
+   d="scan'208";a="681296678"
+Received: from unknown (HELO localhost.localdomain) ([10.237.112.144])
+  by fmsmga007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 23:12:44 -0700
+Date:   Tue, 14 Mar 2023 07:12:35 +0100
+From:   Michal Swiatkowski <michal.swiatkowski@linux.intel.com>
+To:     Shradha Gupta <shradhagupta@linux.microsoft.com>
+Cc:     linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
+        linux-rdma@vger.kernel.org, netdev@vger.kernel.org,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Ajay Sharma <sharmaajay@microsoft.com>,
+        Leon Romanovsky <leon@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        "K. Y. Srinivasan" <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Stephen Hemminger <sthemmin@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Long Li <longli@microsoft.com>,
+        Michael Kelley <mikelley@microsoft.com>
+Subject: Re: [PATCH] net: mana: Add new MANA VF performance counters for
+ easier troubleshooting
+Message-ID: <ZBAQU2qJg6kcud50@localhost.localdomain>
+References: <1678771810-21050-1-git-send-email-shradhagupta@linux.microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230313130105.4183296-1-alvin@pqrs.dk>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <1678771810-21050-1-git-send-email-shradhagupta@linux.microsoft.com>
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Alvin,
+On Mon, Mar 13, 2023 at 10:30:10PM -0700, Shradha Gupta wrote:
+> Extended performance counter stats in 'ethtool -S <interface>' output
+> for MANA VF to facilitate troubleshooting.
+> 
+> Tested-on: Ubuntu22
+> Signed-off-by: Shradha Gupta <shradhagupta@linux.microsoft.com>
+> ---
+>  drivers/net/ethernet/microsoft/mana/mana_en.c | 67 ++++++++++++++++++-
+>  .../ethernet/microsoft/mana/mana_ethtool.c    | 52 +++++++++++++-
+>  include/net/mana/mana.h                       | 18 +++++
+>  3 files changed, 133 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microsoft/mana/mana_en.c b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> index 6120f2b6684f..9762bdda6df1 100644
+> --- a/drivers/net/ethernet/microsoft/mana/mana_en.c
+> +++ b/drivers/net/ethernet/microsoft/mana/mana_en.c
+> @@ -156,6 +156,8 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+>  	struct mana_txq *txq;
+>  	struct mana_cq *cq;
+>  	int err, len;
+> +	u16 ihs;
+> +	int hopbyhop = 0;
+RCT
 
-I love your patch! Perhaps something to improve:
+>  
+>  	if (unlikely(!apc->port_is_up))
+>  		goto tx_drop;
+> @@ -166,6 +168,7 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+>  	txq = &apc->tx_qp[txq_idx].txq;
+>  	gdma_sq = txq->gdma_sq;
+>  	cq = &apc->tx_qp[txq_idx].tx_cq;
+> +	tx_stats = &txq->stats;
+>  
+>  	pkg.tx_oob.s_oob.vcq_num = cq->gdma_id;
+>  	pkg.tx_oob.s_oob.vsq_frame = txq->vsq_frame;
+> @@ -179,10 +182,17 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+>  
+>  	pkg.tx_oob.s_oob.pkt_fmt = pkt_fmt;
+>  
+> -	if (pkt_fmt == MANA_SHORT_PKT_FMT)
+> +	if (pkt_fmt == MANA_SHORT_PKT_FMT) {
+>  		pkg.wqe_req.inline_oob_size = sizeof(struct mana_tx_short_oob);
+> -	else
+> +		u64_stats_update_begin(&tx_stats->syncp);
+> +		tx_stats->short_pkt_fmt++;
+> +		u64_stats_update_end(&tx_stats->syncp);
+> +	} else {
+>  		pkg.wqe_req.inline_oob_size = sizeof(struct mana_tx_oob);
+> +		u64_stats_update_begin(&tx_stats->syncp);
+> +		tx_stats->long_pkt_fmt++;
+> +		u64_stats_update_end(&tx_stats->syncp);
+> +	}
+>  
+>  	pkg.wqe_req.inline_oob_data = &pkg.tx_oob;
+>  	pkg.wqe_req.flags = 0;
+> @@ -232,9 +242,37 @@ netdev_tx_t mana_start_xmit(struct sk_buff *skb, struct net_device *ndev)
+>  						 &ipv6_hdr(skb)->daddr, 0,
+>  						 IPPROTO_TCP, 0);
+>  		}
+> +
+> +		if (skb->encapsulation) {
+> +			ihs = skb_inner_tcp_all_headers(skb);
+> +			u64_stats_update_begin(&tx_stats->syncp);
+> +			tx_stats->tso_inner_packets++;
+> +			tx_stats->tso_inner_bytes += skb->len - ihs;
+> +			u64_stats_update_end(&tx_stats->syncp);
+> +		} else {
+hopbyhop can be defined here
 
-[auto build test WARNING on chanwoo-extcon/extcon-next]
-[also build test WARNING on linus/master v6.3-rc2 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+> +			if (skb_shinfo(skb)->gso_type & SKB_GSO_UDP_L4) {
+> +				ihs = skb_transport_offset(skb) + sizeof(struct udphdr);
+> +			} else {
+> +				ihs = skb_tcp_all_headers(skb);
+> +				if (ipv6_has_hopopt_jumbo(skb)) {
+> +					hopbyhop = sizeof(struct hop_jumbo_hdr);
+> +					ihs -= sizeof(struct hop_jumbo_hdr);
+> +				}
+Maybe I missed sth, but it looks like this part of code can be removed.
+hopbyhop is only used to calculate tso_bytes. Instead of substract
+hopbyhop from ihs, and calculate tso_bytes as len - ihs - hopbyhop, You
+can remove hopbyhop and calculate tso_bytes like len - ihs.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/chanwoo/extcon.git extcon-next
-patch link:    https://lore.kernel.org/r/20230313130105.4183296-1-alvin%40pqrs.dk
-patch subject: [PATCH] extcon: usbc-tusb320: unregister typec port on driver removal
-config: i386-randconfig-a013-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141316.EltVGG8V-lkp@intel.com/config)
-compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/fe414069d19f6d59c7c34f820459f4114e2de136
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Alvin-ipraga/extcon-usbc-tusb320-unregister-typec-port-on-driver-removal/20230313-210245
-        git checkout fe414069d19f6d59c7c34f820459f4114e2de136
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=i386 SHELL=/bin/bash drivers/extcon/ drivers/media/common/videobuf2/
+> +			}
+> +
+> +			u64_stats_update_begin(&tx_stats->syncp);
+> +			tx_stats->tso_packets++;
+> +			tx_stats->tso_bytes += skb->len - ihs - hopbyhop;
+> +			u64_stats_update_end(&tx_stats->syncp);
+> +		}
+> +
+>  
+[...]
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303141316.EltVGG8V-lkp@intel.com/
+> @@ -1341,11 +1394,17 @@ static void mana_poll_rx_cq(struct mana_cq *cq)
+>  {
+>  	struct gdma_comp *comp = cq->gdma_comp_buf;
+>  	struct mana_rxq *rxq = cq->rxq;
+> +	struct net_device *ndev;
+> +	struct mana_port_context *apc;
+RCT
+>  	int comp_read, i;
+>  
+> +	ndev = rxq->ndev;
+> +	apc = netdev_priv(ndev);
+maybe:
+apc = netdev_priv(rxq->ndev);
+> +
+>  	comp_read = mana_gd_poll_cq(cq->gdma_cq, comp, CQE_POLLING_BUFFER);
+>  	WARN_ON_ONCE(comp_read > CQE_POLLING_BUFFER);
+>  
+> +	apc->eth_stats.rx_cqes = comp_read;
+>  	rxq->xdp_flush = false;
+>  
+>  	for (i = 0; i < comp_read; i++) {
+> @@ -1357,6 +1416,8 @@ static void mana_poll_rx_cq(struct mana_cq *cq)
+>  			return;
+>  
+>  		mana_process_rx_cqe(rxq, cq, &comp[i]);
+> +
+> +		apc->eth_stats.rx_cqes--;
+>  	}
+>  
+>  	if (rxq->xdp_flush)
+>  
+[...]
 
-All warnings (new ones prefixed by >>):
-
->> drivers/extcon/extcon-usbc-tusb320.c:429:8: warning: expression result unused [-Wunused-value]
-           priv->connector_fwnode;
-           ~~~~  ^~~~~~~~~~~~~~~~
-   1 warning generated.
-
-
-vim +429 drivers/extcon/extcon-usbc-tusb320.c
-
-   379	
-   380	static int tusb320_typec_probe(struct i2c_client *client,
-   381				       struct tusb320_priv *priv)
-   382	{
-   383		struct fwnode_handle *connector;
-   384		const char *cap_str;
-   385		int ret;
-   386	
-   387		/* The Type-C connector is optional, for backward compatibility. */
-   388		connector = device_get_named_child_node(&client->dev, "connector");
-   389		if (!connector)
-   390			return 0;
-   391	
-   392		/* Type-C connector found. */
-   393		ret = typec_get_fw_cap(&priv->cap, connector);
-   394		if (ret)
-   395			goto err_put;
-   396	
-   397		priv->port_type = priv->cap.type;
-   398	
-   399		/* This goes into register 0x8 field CURRENT_MODE_ADVERTISE */
-   400		ret = fwnode_property_read_string(connector, "typec-power-opmode", &cap_str);
-   401		if (ret)
-   402			goto err_put;
-   403	
-   404		ret = typec_find_pwr_opmode(cap_str);
-   405		if (ret < 0)
-   406			goto err_put;
-   407	
-   408		priv->pwr_opmode = ret;
-   409	
-   410		/* Initialize the hardware with the devicetree settings. */
-   411		ret = tusb320_set_adv_pwr_mode(priv);
-   412		if (ret)
-   413			goto err_put;
-   414	
-   415		priv->cap.revision		= USB_TYPEC_REV_1_1;
-   416		priv->cap.accessory[0]		= TYPEC_ACCESSORY_AUDIO;
-   417		priv->cap.accessory[1]		= TYPEC_ACCESSORY_DEBUG;
-   418		priv->cap.orientation_aware	= true;
-   419		priv->cap.driver_data		= priv;
-   420		priv->cap.ops			= &tusb320_typec_ops;
-   421		priv->cap.fwnode		= connector;
-   422	
-   423		priv->port = typec_register_port(&client->dev, &priv->cap);
-   424		if (IS_ERR(priv->port)) {
-   425			ret = PTR_ERR(priv->port);
-   426			goto err_put;
-   427		}
-   428	
- > 429		priv->connector_fwnode;
-   430	
-   431		return 0;
-   432	
-   433	err_put:
-   434		fwnode_handle_put(connector);
-   435	
-   436		return ret;
-   437	}
-   438	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+> -- 
+> 2.37.2
+> 
