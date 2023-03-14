@@ -2,77 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 640DF6B918F
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:24:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3A3B6B9191
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:25:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCNLYI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:24:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42962 "EHLO
+        id S230505AbjCNLZH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:25:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbjCNLYF (ORCPT
+        with ESMTP id S231382AbjCNLZA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:24:05 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8814315573;
-        Tue, 14 Mar 2023 04:23:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id E792C21A12;
-        Tue, 14 Mar 2023 11:23:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678793015; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=7vMwARrpSWwlbu+JNqwQgd6T6dnpANcZT/4XN88yKPs=;
-        b=vBElblGnqZUNKDc+V7n4FdaEw5trIM3GdJDS9YSJ+OZcSKSv3uX0csyxQ+aEwZrcAAA6UA
-        g3AaHzihoScL6Iu48fOVNlna4VwY3wleljWh9ztt+p8jr5U3k/8F/3DplXmALttJNu16D1
-        C5ck2y0BvKLsyuxHiEsOtKU3GuA1NDI=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 84F8F13A1B;
-        Tue, 14 Mar 2023 11:23:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ip8RHzdZEGQPMAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 14 Mar 2023 11:23:35 +0000
-Message-ID: <4c5de098-5cd3-116b-54cb-6972c6c06818@suse.com>
-Date:   Tue, 14 Mar 2023 12:23:35 +0100
+        Tue, 14 Mar 2023 07:25:00 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 28C7B5D74D
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:24:58 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id fm20-20020a05600c0c1400b003ead37e6588so12888242wmb.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:24:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678793096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=bYSl+4VaNhyfbrRBiFejg1i2ozlbsnIGA6bpYEVONug=;
+        b=n3q3geUE4XDBFLqPpKurOdnjyisVsUirbwmImkHFR3uyTFE8Dm9hrO4/ciepIjG0th
+         BQaeJg8Qh02uXsdRmILcJlx4snzCgqhMeQm8aMstAAninEKjP/2LCR/VgEZNWg1Y5jjj
+         lJJq+LwzbsaDg44Q341SK05M8KgtmKaNc72bdFFboIgUGtqjy5T5xyf6CeA8t+uIMXF8
+         kFsP8gCIK+Jg+KbghIlC9JQTQAbL8KsPexFnuAntAt7H64snSqwvVrhBvYPQTB8pjBNQ
+         iVWuEAtiGVxRm/mjt+p6iYf1dHjIy9k8LZa/OpQMCeQe0VzqnTRHa1ooYDgKe4JRLxR1
+         vp7Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678793096;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=bYSl+4VaNhyfbrRBiFejg1i2ozlbsnIGA6bpYEVONug=;
+        b=tdzvn8ZQqIEuI5+2qz3IZTgaJK8m7tYCJFuvp5k1SaEK0wRVdrJLyeSFXI36j+rbKy
+         oqgYLTuVxtH2qxPOODgV+E3TXRJD3ghM7Ymsp9vggCTIgHlR9gRvJdTGuDvcGv1nBm6b
+         bkLXMhaaxBFVBiNq+A1obgVbo8khjhDna1qRHASas/Gu7uTXrGl9og9VrnL8RohtMpam
+         Uz7PNZtkSL9WOOsbGuKKDnnwt+0exbThKowLus4VGPyOaPdZgdG4NTwKqrD2YJ7pa5tg
+         Sm4eOr7tMXZ5sxjRZLYYrLRs7w/N+TLUGldXytnddjzsw8oKRmcgMhdAz5JBQiRfPGCx
+         df0g==
+X-Gm-Message-State: AO0yUKVm+pAR2l8CNGJYx4qTFTd2E7Rly+gP1wNSCgp2TPh9NtYu0yL7
+        eWh+Q122TmC8QlAxeUQaAapviNDStWB2/b/C3HhLtQ==
+X-Google-Smtp-Source: AK7set8Kz7/dD8LnpPwyze+Kz24D01g89gLghl6zu6I+yzxHvIVm9Ra8XlTG/uDtFsWMTdFu6ThdQYB8ueTQzc0P3OQ=
+X-Received: by 2002:a05:600c:512a:b0:3ed:26fa:6ee5 with SMTP id
+ o42-20020a05600c512a00b003ed26fa6ee5mr1570767wms.4.1678793096442; Tue, 14 Mar
+ 2023 04:24:56 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
- update to 5.10.149 in 5.10.y.
-Content-Language: en-US
-To:     Joost Roeleveld <joost@antarean.org>,
-        Christoph Hellwig <hch@infradead.org>,
-        Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     jejb@linux.ibm.com, Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        Salvatore Bonaccorso <carnil@debian.org>,
-        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        adi@kriegisch.at
-References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
- <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
- <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
- <2fd505a07bd26d76f1166761fa50905414edb7ef.camel@linux.ibm.com>
- <30a056c8-071f-4259-3253-75e718af619d@suse.com>
- <Y1bEQMS5SNTbZO/3@infradead.org>
- <858a4288-46ac-d423-a529-b3b77b7fbc8a@citrix.com>
- <20230314111752.EGroupware.TiNRv1BSroWqKL7zQtfNLJ8@_>
-From:   Juergen Gross <jgross@suse.com>
-In-Reply-To: <20230314111752.EGroupware.TiNRv1BSroWqKL7zQtfNLJ8@_>
-Content-Type: multipart/signed; micalg=pgp-sha256;
- protocol="application/pgp-signature";
- boundary="------------OvWhcPNzpB5IFiX0ENVleu8u"
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+References: <20230313100414.v7.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+In-Reply-To: <20230313100414.v7.1.I8e7f9b01d9ac940507d78e15368e200a6a69bedb@changeid>
+From:   Jens Wiklander <jens.wiklander@linaro.org>
+Date:   Tue, 14 Mar 2023 12:24:45 +0100
+Message-ID: <CAHUa44HQkdN3dgtDA=_J-TUm=AY69=em4Ox6R3q8wj-sLhh+Cw@mail.gmail.com>
+Subject: Re: [PATCH v7] tee: optee: Add SMC for loading OP-TEE image
+To:     Jeffrey Kardatzke <jkardatzke@chromium.org>
+Cc:     op-tee@lists.trustedfirmware.org,
+        Jeffrey Kardatzke <jkardatzke@google.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sumit Garg <sumit.garg@linaro.org>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,135 +72,385 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
---------------OvWhcPNzpB5IFiX0ENVleu8u
-Content-Type: multipart/mixed; boundary="------------2Q3vy6HJIm96Ptik5GhvztjE";
- protected-headers="v1"
-From: Juergen Gross <jgross@suse.com>
-To: Joost Roeleveld <joost@antarean.org>,
- Christoph Hellwig <hch@infradead.org>,
- Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc: jejb@linux.ibm.com, Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
- Bart Van Assche <bvanassche@acm.org>,
- Salvatore Bonaccorso <carnil@debian.org>, sathya.prakash@broadcom.com,
- suganath-prabu.subramani@broadcom.com,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
- linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
- adi@kriegisch.at
-Message-ID: <4c5de098-5cd3-116b-54cb-6972c6c06818@suse.com>
-Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
- update to 5.10.149 in 5.10.y.
-References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
- <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
- <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
- <2fd505a07bd26d76f1166761fa50905414edb7ef.camel@linux.ibm.com>
- <30a056c8-071f-4259-3253-75e718af619d@suse.com>
- <Y1bEQMS5SNTbZO/3@infradead.org>
- <858a4288-46ac-d423-a529-b3b77b7fbc8a@citrix.com>
- <20230314111752.EGroupware.TiNRv1BSroWqKL7zQtfNLJ8@_>
-In-Reply-To: <20230314111752.EGroupware.TiNRv1BSroWqKL7zQtfNLJ8@_>
+On Mon, Mar 13, 2023 at 6:16=E2=80=AFPM Jeffrey Kardatzke
+<jkardatzke@chromium.org> wrote:
+>
+> Adds an SMC call that will pass an OP-TEE binary image to EL3 and
+> instruct it to load it as the BL32 payload. This works in conjunction
+> with a feature added to Trusted Firmware for ARMv8 and above
+> architectures that supports this.
+>
+> The main purpose of this change is to facilitate updating the OP-TEE
+> component on devices via a rootfs change rather than having to do a
+> firmware update. Further details are linked to in the Kconfig file.
+>
+> Signed-off-by: Jeffrey Kardatzke <jkardatzke@chromium.org>
+> Signed-off-by: Jeffrey Kardatzke <jkardatzke@google.com>
+> ---
+>
+> Changes in v7:
+> - Added documentation to Documentation/staging/tee.rst
+>
+> Changes in v6:
+> - Expanded Kconfig documentation
+>
+> Changes in v5:
+> - Renamed config option
+> - Added runtime warning when config is used
+>
+> Changes in v4:
+> - Update commit message
+> - Added more documentation
+> - Renamed config option, added ARM64 dependency
+>
+> Changes in v3:
+> - Removed state tracking for driver reload
+> - Check UID of service to verify it needs image load
+>
+> Changes in v2:
+> - Fixed compile issue when feature is disabled
+> - Addressed minor comments
+> - Added state tracking for driver reload
+>
+>  Documentation/staging/tee.rst | 41 +++++++++++++++
+>  drivers/tee/optee/Kconfig     | 17 ++++++
+>  drivers/tee/optee/optee_msg.h | 12 +++++
+>  drivers/tee/optee/optee_smc.h | 24 +++++++++
+>  drivers/tee/optee/smc_abi.c   | 97 +++++++++++++++++++++++++++++++++++
+>  5 files changed, 191 insertions(+)
+>
+> diff --git a/Documentation/staging/tee.rst b/Documentation/staging/tee.rs=
+t
+> index 498343c7ab08..315aa8e35e6b 100644
+> --- a/Documentation/staging/tee.rst
+> +++ b/Documentation/staging/tee.rst
+> @@ -214,6 +214,47 @@ call is done from the thread assisting the interrupt=
+ handler. This is a
+>  building block for OP-TEE OS in secure world to implement the top half a=
+nd
+>  bottom half style of device drivers.
+>
+> +OPTEE_INSECURE_LOAD_IMAGE Kconfig option
+> +----------------------------------------
+> +
+> +The OPTEE_INSECURE_LOAD_IMAGE Kconfig option enables the ability to load=
+ the
+> +BL32 OP-TEE image from the kernel after the kernel boots, rather than lo=
+ading
+> +it from the firmware before the kernel boots. This also requires enablin=
+g the
+> +corresponding option in Trusted Firmware for Arm. The documentation ther=
+e
+> +explains the security threat associated with enabling this as well as
+> +mitigations at the firmware and platform level.
+> +https://trustedfirmware-a.readthedocs.io/en/latest/threat_model/threat_m=
+odel.html
+> +
+> +There are additional attack vectors/mitigations for the kernel that shou=
+ld be
+> +addressed when using this option.
+> +
+> +1. Boot chain security.
+> +   Attack vector: Replace the OP-TEE OS image in the rootfs to gain cont=
+rol of
+> +                  the system.
+> +   Migitation: There must be boot chain security that verifies the kerne=
+l and
+> +               rootfs, otherwise an attacker can modify the loaded OP-TE=
+E
+> +               binary by modifying it in the rootfs.
+> +3. Alternate boot modes.
+> +   Attack vector: Using an alternate boot mode (i.e. recovery mode), the=
+ OP-TEE
+> +                  driver isn't loaded, leaving the SMC hole open.
+> +   Mitigation: If there are alternate methods of booting the device, suc=
+h as a
+> +               recovery mode, it should be ensured that the same mitigat=
+ions are
+> +               applied in that mode.
+> +3. Attacks prior to SMC invocation.
+> +   Attack vector: Code that is executed prior to issuing the SMC call to=
+ load
+> +                  OP-TEE can be exploited to then load an alternate OS i=
+mage.
+> +   Mitigation: The OP-TEE driver must be loaded before any potential att=
+ack
+> +               vectors are opened up. This should include mounting of an=
+y
+> +               modifiable filesystems, opening of network ports or commu=
+nicating
+> +               with external devices (e.g. USB).
+> +4. Blocking SMC call to load OP-TEE.
+> +   Attack vector: Prevent the driver from being probed, so the SMC call =
+to load
+> +                  OP-TEE isn't executed when desired, leaving it open to=
+ being
+> +                  executed later and loading a modified OS.
+> +   Mitigation: It is recommended to build the OP-TEE driver as an includ=
+ed
+> +               driver rather than a module to prevent exploits that may =
+cause
+> +               the module to not be loaded.
+> +
+>  AMD-TEE driver
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+>
+> diff --git a/drivers/tee/optee/Kconfig b/drivers/tee/optee/Kconfig
+> index f121c224e682..70898bbd5809 100644
+> --- a/drivers/tee/optee/Kconfig
+> +++ b/drivers/tee/optee/Kconfig
+> @@ -7,3 +7,20 @@ config OPTEE
+>         help
+>           This implements the OP-TEE Trusted Execution Environment (TEE)
+>           driver.
+> +
+> +config OPTEE_INSECURE_LOAD_IMAGE
+> +       bool "Load OP-TEE image as firmware"
+> +       default n
+> +       depends on OPTEE && ARM64
+> +       help
+> +         This loads the BL32 image for OP-TEE as firmware when the drive=
+r is
+> +         probed. This returns -EPROBE_DEFER until the firmware is loadab=
+le from
+> +         the filesystem which is determined by checking the system_state=
+ until
+> +         it is in SYSTEM_RUNNING. This also requires enabling the corres=
+ponding
+> +         option in Trusted Firmware for Arm. The documentation there exp=
+lains
+> +         the security threat associated with enabling this as well as
+> +         mitigations at the firmware and platform level.
+> +         https://trustedfirmware-a.readthedocs.io/en/latest/threat_model=
+/threat_model.html
+> +
+> +         Additional documentation on kernel security risks are at
+> +         Documentation/staging/tee.rst.
+> diff --git a/drivers/tee/optee/optee_msg.h b/drivers/tee/optee/optee_msg.=
+h
+> index 70e9cc2ee96b..e8840a82b983 100644
+> --- a/drivers/tee/optee/optee_msg.h
+> +++ b/drivers/tee/optee/optee_msg.h
+> @@ -241,11 +241,23 @@ struct optee_msg_arg {
+>   * 384fb3e0-e7f8-11e3-af63-0002a5d5c51b.
+>   * Represented in 4 32-bit words in OPTEE_MSG_UID_0, OPTEE_MSG_UID_1,
+>   * OPTEE_MSG_UID_2, OPTEE_MSG_UID_3.
+> + *
+> + * In the case where the OP-TEE image is loaded by the kernel, this will
+> + * initially return an alternate UID to reflect that we are communicatin=
+g with
+> + * the TF-A image loading service at that time instead of OP-TEE. That U=
+ID is:
+> + * a3fbeab1-1246-315d-c7c4-06b9c03cbea4.
+> + * Represented in 4 32-bit words in OPTEE_MSG_IMAGE_LOAD_UID_0,
+> + * OPTEE_MSG_IMAGE_LOAD_UID_1, OPTEE_MSG_IMAGE_LOAD_UID_2,
+> + * OPTEE_MSG_IMAGE_LOAD_UID_3.
+>   */
+>  #define OPTEE_MSG_UID_0                        0x384fb3e0
+>  #define OPTEE_MSG_UID_1                        0xe7f811e3
+>  #define OPTEE_MSG_UID_2                        0xaf630002
+>  #define OPTEE_MSG_UID_3                        0xa5d5c51b
+> +#define OPTEE_MSG_IMAGE_LOAD_UID_0     0xa3fbeab1
+> +#define OPTEE_MSG_IMAGE_LOAD_UID_1     0x1246315d
+> +#define OPTEE_MSG_IMAGE_LOAD_UID_2     0xc7c406b9
+> +#define OPTEE_MSG_IMAGE_LOAD_UID_3     0xc03cbea4
+>  #define OPTEE_MSG_FUNCID_CALLS_UID     0xFF01
+>
+>  /*
+> diff --git a/drivers/tee/optee/optee_smc.h b/drivers/tee/optee/optee_smc.=
+h
+> index 73b5e7760d10..7d9fa426505b 100644
+> --- a/drivers/tee/optee/optee_smc.h
+> +++ b/drivers/tee/optee/optee_smc.h
+> @@ -104,6 +104,30 @@ struct optee_smc_call_get_os_revision_result {
+>         unsigned long reserved1;
+>  };
+>
+> +/*
+> + * Load Trusted OS from optee/tee.bin in the Linux firmware.
+> + *
+> + * WARNING: Use this cautiously as it could lead to insecure loading of =
+the
+> + * Trusted OS.
+> + * This SMC instructs EL3 to load a binary and execute it as the Trusted=
+ OS.
+> + *
+> + * Call register usage:
+> + * a0 SMC Function ID, OPTEE_SMC_CALL_LOAD_IMAGE
+> + * a1 Upper 32bit of a 64bit size for the payload
+> + * a2 Lower 32bit of a 64bit size for the payload
+> + * a3 Upper 32bit of the physical address for the payload
+> + * a4 Lower 32bit of the physical address for the payload
+> + *
+> + * The payload is in the OP-TEE image format.
+> + *
+> + * Returns result in a0, 0 on success and an error code otherwise.
+> + */
+> +#define OPTEE_SMC_FUNCID_LOAD_IMAGE 2
+> +#define OPTEE_SMC_CALL_LOAD_IMAGE \
+> +       ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL, ARM_SMCCC_SMC_32, \
+> +                          ARM_SMCCC_OWNER_TRUSTED_OS_END, \
+> +                          OPTEE_SMC_FUNCID_LOAD_IMAGE)
+> +
+>  /*
+>   * Call with struct optee_msg_arg as argument
+>   *
+> diff --git a/drivers/tee/optee/smc_abi.c b/drivers/tee/optee/smc_abi.c
+> index a1c1fa1a9c28..00b6b69b6f79 100644
+> --- a/drivers/tee/optee/smc_abi.c
+> +++ b/drivers/tee/optee/smc_abi.c
+> @@ -8,9 +8,11 @@
+>
+>  #include <linux/arm-smccc.h>
+>  #include <linux/errno.h>
+> +#include <linux/firmware.h>
+>  #include <linux/interrupt.h>
+>  #include <linux/io.h>
+>  #include <linux/irqdomain.h>
+> +#include <linux/kernel.h>
+>  #include <linux/mm.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> @@ -1149,6 +1151,22 @@ static bool optee_msg_api_uid_is_optee_api(optee_i=
+nvoke_fn *invoke_fn)
+>         return false;
+>  }
+>
+> +#ifdef CONFIG_OPTEE_INSECURE_LOAD_IMAGE
+> +static bool optee_msg_api_uid_is_optee_image_load(optee_invoke_fn *invok=
+e_fn)
+> +{
+> +       struct arm_smccc_res res;
+> +
+> +       invoke_fn(OPTEE_SMC_CALLS_UID, 0, 0, 0, 0, 0, 0, 0, &res);
+> +
+> +       if (res.a0 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_0 &&
+> +          res.a1 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_1 &&
+> +          res.a2 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_2 &&
+> +          res.a3 =3D=3D OPTEE_MSG_IMAGE_LOAD_UID_3)
+> +               return true;
+> +       return false;
+> +}
+> +#endif
+> +
+>  static void optee_msg_get_os_revision(optee_invoke_fn *invoke_fn)
+>  {
+>         union {
+> @@ -1354,6 +1372,81 @@ static void optee_shutdown(struct platform_device =
+*pdev)
+>                 optee_disable_shm_cache(optee);
+>  }
+>
+> +#ifdef CONFIG_OPTEE_INSECURE_LOAD_IMAGE
+> +
+> +#define OPTEE_FW_IMAGE "optee/tee.bin"
+> +
+> +static int optee_load_fw(struct platform_device *pdev,
+> +                        optee_invoke_fn *invoke_fn)
 
---------------2Q3vy6HJIm96Ptik5GhvztjE
-Content-Type: multipart/mixed; boundary="------------MsH0akIuaBxQwzn6Mj9DRLb4"
+Please align with the '(' on the line above.
 
---------------MsH0akIuaBxQwzn6Mj9DRLb4
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: base64
+> +{
+> +       const struct firmware *fw =3D NULL;
+> +       struct arm_smccc_res res;
+> +       phys_addr_t data_pa;
+> +       u8 *data_buf =3D NULL;
+> +       u64 data_size;
+> +       u32 data_pa_high, data_pa_low;
+> +       u32 data_size_high, data_size_low;
+> +       int rc;
+> +
+> +       if (!optee_msg_api_uid_is_optee_image_load(invoke_fn))
+> +               return 0;
+> +
+> +       rc =3D request_firmware(&fw, OPTEE_FW_IMAGE, &pdev->dev);
+> +       if (rc) {
+> +               /*
+> +                * The firmware in the rootfs will not be accessible unti=
+l we
+> +                * are in the SYSTEM_RUNNING state, so return EPROBE_DEFE=
+R until
+> +                * that point.
+> +                */
+> +               if (system_state < SYSTEM_RUNNING)
+> +                       return -EPROBE_DEFER;
+> +               goto fw_err;
+> +       }
+> +
+> +       data_size =3D fw->size;
+> +       /*
+> +        * This uses the GFP_DMA flag to ensure we are allocated memory i=
+n the
+> +        * 32-bit space since TF-A cannot map memory beyond the 32-bit bo=
+undary.
+> +        */
+> +       data_buf =3D kmalloc(fw->size, GFP_KERNEL | GFP_DMA);
+> +       if (!data_buf) {
+> +               rc =3D -ENOMEM;
+> +               goto fw_err;
+> +       }
+> +       memcpy(data_buf, fw->data, fw->size);
+> +       data_pa =3D virt_to_phys(data_buf);
+> +       reg_pair_from_64(&data_pa_high, &data_pa_low, data_pa);
+> +       reg_pair_from_64(&data_size_high, &data_size_low, data_size);
+> +       goto fw_load;
+> +
+> +fw_err:
+> +       pr_warn("image loading failed\n");
+> +       data_pa_high =3D data_pa_low =3D data_size_high =3D data_size_low=
+ =3D 0;
+> +
+> +fw_load:
+> +       /*
+> +        * Always invoke the SMC, even if loading the image fails, to ind=
+icate
+> +        * to EL3 that we have passed the point where it should allow inv=
+oking
+> +        * this SMC.
+> +        */
+> +       pr_warn("OP-TEE image loaded from kernel, this can be insecure");
+> +       invoke_fn(OPTEE_SMC_CALL_LOAD_IMAGE, data_size_high, data_size_lo=
+w,
+> +                 data_pa_high, data_pa_low, 0, 0, 0, &res);
+> +       if (!rc)
+> +               rc =3D res.a0;
+> +       if (fw)
+> +               release_firmware(fw);
+> +       kfree(data_buf);
+> +
+> +       return rc;
+> +}
+> +#else
+> +static inline int optee_load_fw(struct platform_device *__unused1,
+> +               optee_invoke_fn *__unused2) {
 
-T24gMTQuMDMuMjMgMTI6MTcsIEpvb3N0IFJvZWxldmVsZCB3cm90ZToNCj4+IE9uIE1vbiwg
-T2N0IDI0LCAyMDIyIGF0IDA1OjI4OjA1UE0gKzAwMDAsIEFuZHJldyBDb29wZXIgd3JvdGU6
-DQo+Pj4gSSBkb24ndCBrbm93IGV4YWN0bHkgaG93IHRoaXMgdHJhbnNsYXRlcyB0byBMaW51
-eCBpbnRlcm5hbHMsIGJ1dCBtb3N0DQo+Pj4gZGV2aWNlcyBhcmUgZmluZSBhbmQgaXQncyBy
-b3V0aW5lbHkgdGhlIG1wdDIvM3NhcyBkcml2ZXJzIHdoaWNoDQo+Pj4gZW5jb3VudGVyIHBy
-b2JsZW1zLsKgIEl0IHdvdWxkIGJlIGxvdmVseSBpZiB3ZSBjb3VsZCBnZXQgdG8gdGhlIGJv
-dHRvbSBvZg0KPj4+IHRoaXMgZm9yIG9uY2UgYW5kIGZvciBhbGwuDQo+Pg0KPj4gU28gdG8g
-c3VtbWFyaXplIG15IHR3byBtYWlsczogSSB0aGluayB0ZSB1c2Ugb2YgZG1hX2dldF9yZXF1
-aXJlZF9tYXNrDQo+PiBpbiBtcHQzc2FzIGlzIHdyb25nLCBhbmQgdGhlIGRtYV9nZXRfcmVx
-dWlyZWRfbWFzayByZXR1cm4gdmFsdWUgZnJvbQ0KPj4geGVuLXN3aW90bGIgaXMgYWxzbyB3
-cm9uZy4gRml4aW5nIGVpdGhlciBvbmUgc2hvdWxkIGZpeCB0aGlzIHByb2JsZW0sDQo+PiBh
-bmQgSSB0aGluayB3ZSBzaG91bGQgZml4IGJvdGguDQo+IA0KPiBIaSBhbGwsDQo+IA0KPiBJ
-cyB0aGVyZSBhbnl0aGluZyB0aGF0IGNhbiBiZSBkb25lIHRvIGdldCB0aGlzIGZpeGVkIGlu
-IHhlbiBhbmQgdGhlIGtlcm5lbCBzb21laG93Pw0KPiBJIGtlZXAgaGF2aW5nIHRvIG1hbnVh
-bGx5IHBhdGNoIHRoZSBtcHQzc2FzIGRyaXZlciB0byBwcmV2ZW50IGl0IGZyb20gYmVpbmcg
-YWJsZSANCj4gdG8gc3dpdGNoIHRvIDMyYml0IG1vZGUgZWFjaCB0aW1lIEkgdXBncmFkZSB0
-aGUga2VybmVsLg0KDQpKdXN0IHVzZSA1LjEwLjE3My4NCg0KDQpKdWVyZ2VuDQoNCg==
---------------MsH0akIuaBxQwzn6Mj9DRLb4
-Content-Type: application/pgp-keys; name="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Disposition: attachment; filename="OpenPGP_0xB0DE9DD628BF132F.asc"
-Content-Description: OpenPGP public key
-Content-Transfer-Encoding: quoted-printable
+Please align with the '(' on the line above. The `{` should be at the
+start of the next line.
+I'd prefer the normal names of the parameters instead even if they are unus=
+ed.
 
------BEGIN PGP PUBLIC KEY BLOCK-----
+Cheers,
+Jens
 
-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
-jR/i1DG86lem3iBDXzXsZDn8R38=3D
-=3D2wuH
------END PGP PUBLIC KEY BLOCK-----
-
---------------MsH0akIuaBxQwzn6Mj9DRLb4--
-
---------------2Q3vy6HJIm96Ptik5GhvztjE--
-
---------------OvWhcPNzpB5IFiX0ENVleu8u
-Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
-Content-Description: OpenPGP digital signature
-Content-Disposition: attachment; filename="OpenPGP_signature"
-
------BEGIN PGP SIGNATURE-----
-
-wsB5BAABCAAjFiEEhRJncuj2BJSl0Jf3sN6d1ii/Ey8FAmQQWTcFAwAAAAAACgkQsN6d1ii/Ey+T
-Dwf7B0bjjfjWFw00vV/SZ0Q0qzfpahQ13HnDoy+ltbC9n+jn9wgVXdUp0TvVA0/NAYb/0UeOlibh
-3eym1qP9oyYbhdeGmfqkg4ma7RQQN9dCFkQkHCnawnayu/xt3Zrh4qtYTsyTFm92Aowt8VwTCkYX
-UXGM+sb1Gt8eo5PWVf7R2w1XSODvMEztUHi6ItQDmXS2KHHVR5TpA780V2oStMdQzSo6dWOA7CHs
-4Pxzp5WOTiv/7sLbp12uPFPOszHt5PaQ62HYf9245lC6GTzKoHvPQJUG6UHgBsU3DVL/fwie3arJ
-PJ8f65kRx6O3+nA8Xdzk/6LLLqZKx1PXztSe2a+7wA==
-=AtOP
------END PGP SIGNATURE-----
-
---------------OvWhcPNzpB5IFiX0ENVleu8u--
+> +       return 0;
+> +}
+> +#endif
+> +
+>  static int optee_probe(struct platform_device *pdev)
+>  {
+>         optee_invoke_fn *invoke_fn;
+> @@ -1372,6 +1465,10 @@ static int optee_probe(struct platform_device *pde=
+v)
+>         if (IS_ERR(invoke_fn))
+>                 return PTR_ERR(invoke_fn);
+>
+> +       rc =3D optee_load_fw(pdev, invoke_fn);
+> +       if (rc)
+> +               return rc;
+> +
+>         if (!optee_msg_api_uid_is_optee_api(invoke_fn)) {
+>                 pr_warn("api uid mismatch\n");
+>                 return -EINVAL;
+> --
+> 2.40.0.rc1.284.g88254d51c5-goog
+>
