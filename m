@@ -2,126 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D796B89BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:43:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 704296B89C7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:46:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229800AbjCNEnp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:43:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34478 "EHLO
+        id S229454AbjCNEqi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 00:46:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCNEnm (ORCPT
+        with ESMTP id S229505AbjCNEqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:43:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B1E616336;
-        Mon, 13 Mar 2023 21:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A152DB815C6;
-        Tue, 14 Mar 2023 04:43:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E66BC4339B;
-        Tue, 14 Mar 2023 04:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678769016;
-        bh=j0UbdKLqN7PL42qby+oAyPBxzwyH7KWgVYQ0X5bqS7o=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=HSgJGh+hQmqvJlnm/85VW0rC0EGTxwtt9+wIJoEQOxFjhqNZMBueE1B0LPX4AqrPH
-         ntrOBeYLK8gDY3Yx+q1/tYOru5bU0rFZsxdcG6qNyR9xGya/UNa7HTdYtYXq6guDpP
-         i+NnxOrzwbU515uVIh3rMm3NYLCBzVyEObNxIyBGgJMEKmCKxqCCG9obFd2IsxE5Ly
-         1KHnJRvQDoTwemIchRGHRRACNiuI1RSsnvdB+77xP1A4OJmHNFSY84/jsEiDNC2gvo
-         6nE8/SKHk5/bCpKqKWtylucj+/OISjqsztuHJeF9n3L+Po8HeByJCuPAbcBmZQQQ+N
-         Poj22xw9dmyvQ==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id C9F851540395; Mon, 13 Mar 2023 21:43:35 -0700 (PDT)
-Date:   Mon, 13 Mar 2023 21:43:35 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Stephen Rothwell <sfr@canb.auug.org.au>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: Re: linux-next: build failure after merge of the rcu tree
-Message-ID: <e6bc7d01-1889-4fa0-8ce5-80a10cdab2a5@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230314122922.43c81767@canb.auug.org.au>
+        Tue, 14 Mar 2023 00:46:36 -0400
+Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E65E25FA58
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:46:33 -0700 (PDT)
+Received: by mail-pj1-x102c.google.com with SMTP id l9-20020a17090a3f0900b0023d32684e7fso323186pjc.1
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678769193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UasGxUvD/6g4IwIcOZQz9JmOw1F78bhUJX7l6AUhgEk=;
+        b=ABdMLy0qDOTqhAEOBhgimyuNWzeR/Zq5TUIKYOS3Qg/oz1Q5nV6Cu5vjpZE7o0ErJE
+         VygRD7tCfY+mb/m6T1HY1BV4iLZl17WK7INjQXz1vFJbAwPDgrH9mqIhXJEwovlPh817
+         v4KfnPuyqnKGTBW4VwbI2FAuYqWefezJqTn1wWm4bRXfQ4lmAl886AsC3YPdHUtQIOYD
+         yNXAyIyd+J+NzElYfwRWL+RJSS0FC49fJqpUiGx4tpzBKxgZF35qh5dXw3tLtRwNFxqg
+         t4NwwSppme77as7jki7UhJ4c4MFT3lpfWn688RVhVCHdN+EegQtAzgJ06V01dMBAtUxa
+         E8zw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678769193;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UasGxUvD/6g4IwIcOZQz9JmOw1F78bhUJX7l6AUhgEk=;
+        b=pJj9aJSeFW5naHx938vDrYi591W+7D2A8D6uvap/Soh8xTjJGwJKzYOYPCnwUO/yd9
+         tvaqtAiV4GbNAW6f4LVcpe6vCbF10igorus47rUC7NbWHTzLcJ8vr01xItSL3ES0p9XD
+         VPbTztexiS8L0UltAYkJGQVpW9VHfzgqxXBKfKmseMm7xMkgo9Tf2TJiJ39EFK+RWtkg
+         er96S5L5YgQ26unwcqvcYjXrxIBtC7Oe5DMU+sacQmpjAYmCeIN7Ucq90I4QN+zR4oYp
+         CMkJgzQSXdER3+n4lCoC/gX/5xwAS1cJGXLFquL2Lvn9vK05krZxbXrXpre2++m8gRlq
+         bDCw==
+X-Gm-Message-State: AO0yUKXsZPHDZy3f8q90QrNZIjbEUZmnP8Qucp77JxGhm9e/r4Q75vG2
+        M2PLRcR353eqWTX0kIYEzld3frVh7JhrTtGoLQ==
+X-Google-Smtp-Source: AK7set9w0z5ELRqjpIFXFvbpfdGQuGD93hmPVj3hFDC/IOl8akSJqOB1b6dOFR3oMdAMhNGpOXNm0Q==
+X-Received: by 2002:a17:902:c946:b0:19c:be03:d1ba with SMTP id i6-20020a170902c94600b0019cbe03d1bamr42635675pla.6.1678769193313;
+        Mon, 13 Mar 2023 21:46:33 -0700 (PDT)
+Received: from localhost.localdomain ([117.217.177.49])
+        by smtp.gmail.com with ESMTPSA id lh13-20020a170903290d00b0019c2b1c4ad4sm690125plb.6.2023.03.13.21.46.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 21:46:32 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     lpieralisi@kernel.org, kw@linux.com
+Cc:     kishon@kernel.org, bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 0/7] Add support for MHI Endpoint function driver
+Date:   Tue, 14 Mar 2023 10:16:16 +0530
+Message-Id: <20230314044623.10254-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314122922.43c81767@canb.auug.org.au>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 12:29:22PM +1100, Stephen Rothwell wrote:
-> Hi all,
-> 
-> After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-> failed like this:
-> 
-> net/mac802154/scan.c: In function 'mac802154_scan_cleanup_locked':
-> net/mac802154/scan.c:55:26: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
->    55 |         kfree_rcu(request);
->       |                          ^
-> In file included from include/linux/rbtree.h:24,
->                  from include/linux/mm_types.h:11,
->                  from include/linux/buildid.h:5,
->                  from include/linux/module.h:14,
->                  from net/mac802154/scan.c:11:
-> include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
->   984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->       | 
-> net/mac802154/scan.c:55:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
->    55 |         kfree_rcu(request);
->       |         ^~~~~~~~~
->       |         kfree_skb
-> net/mac802154/scan.c:55:9: note: each undeclared identifier is reported only once for each function it appears in
-> net/mac802154/scan.c: In function 'mac802154_stop_beacons_locked':
-> net/mac802154/scan.c:406:26: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
->   406 |         kfree_rcu(request);
->       |                          ^
-> include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
->   984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->       | 
-> net/mac802154/scan.c:406:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
->   406 |         kfree_rcu(request);
->       |         ^~~~~~~~~
->       |         kfree_skb
-> drivers/infiniband/sw/rxe/rxe_mr.c: In function 'rxe_dereg_mr':
-> drivers/infiniband/sw/rxe/rxe_mr.c:734:21: error: macro "kfree_rcu" requires 2 arguments, but only 1 given
->   734 |         kfree_rcu(mr);
->       |                     ^
-> In file included from include/linux/rculist.h:11,
->                  from include/linux/dcache.h:8,
->                  from include/linux/fs.h:8,
->                  from include/linux/highmem.h:5,
->                  from include/linux/bvec.h:10,
->                  from include/linux/blk_types.h:10,
->                  from include/linux/bio.h:10,
->                  from include/linux/libnvdimm.h:14,
->                  from drivers/infiniband/sw/rxe/rxe_mr.c:7:
-> include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
->   984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
->       | 
-> drivers/infiniband/sw/rxe/rxe_mr.c:734:9: error: 'kfree_rcu' undeclared (first use in this function); did you mean 'kfree_skb'?
->   734 |         kfree_rcu(mr);
->       |         ^~~~~~~~~
->       |         kfree_skb
-> drivers/infiniband/sw/rxe/rxe_mr.c:734:9: note: each undeclared identifier is reported only once for each function it appears in
-> 
-> Caused by commit
-> 
->   62a2ac23b35f ("rcu/kvfree: Eliminate k[v]free_rcu() single argument macro")
-> 
-> I have used the rcu tree from next-20230310 for today.
+Hello,
 
-Please accept my apologies -- I left out that revert.  I have pushed
-out an rcu/next including it.
+This series adds support for Modem Host Interface (MHI) Endpoint function
+driver and few updates to the PCI endpoint core.
 
-But I guess we now know for sure that this revert is still needed.  :-/
+MHI
+===
 
-							Thanx, Paul
+MHI is the communication protocol used by the host machines to control and
+communicate with the Qualcomm modems/WLAN devices over any high speed physical
+bus like PCIe. In Linux kernel, MHI is modeled as a bus driver [1] and there
+are two instances of MHI used in a typical setup.
+
+1. MHI host - MHI implementation for the host machines like x86/ARM64.
+2. MHI Endpoint - MHI implementation for the endpoint devices like modems.
+
+MHI EPF
+=======
+
+The MHI Endpoint function driver (MHI EPF) is used on the MHI endpoint devices
+like modems. The MHI EPF driver sits in between the PCIe EP and MHI EP bus and
+carries out all of the PCIe related activities like BAR config, PCIe Event
+handling, MMIO read/write etc,... for the MHI EP bus.
+
+Below is the simple representation of the setup:
+
+
+                 +----------------------------------------------------+
+                 |                  Endpoint CPU                      |                   
+                 |                                                    |
++------------+   |   +------------+   +-----------+   +-----------+   |
+|            |   |   |            |   |           |   |           |   |
+|            |   |   |   MHI EP   |   |           |   |           |   | PCIe Bus
+|  Modem DSP +---+---+    Bus     +---+  MHI EPF  +---+  PCIe EP  +---+---------
+|            |   |   |            |   |           |   |           |   |
+|            |   |   |            |   |           |   |           |   |
++------------+   |   +------------+   +-----------+   +-----------+   |
+                 |                                                    |
+                 |                                                    |
+                 +----------------------------------------------------+
+
+The data packets will be read from the Modem DSP by the MHI stack and will be
+transmitted to the host machine over PCIe bus with the help of MHI EPF driver.
+
+Test setup
+==========
+
+This series has been tested on Snapdragon X55 modem a.k.a SDX55 connected to
+the ARM64 host machine.
+
+Thanks,
+Mani
+
+[1] https://www.kernel.org/doc/html/latest/mhi/mhi.html
+
+Changes in v3:
+
+* Fixed the probe function of EPF_VNTB driver
+
+Changes in v2:
+
+* Rebased on top of v6.3-rc1
+* Switched to the new callback interface for passing events from EPC to EPF
+* Dropped one patch related to notifier
+
+Manivannan Sadhasivam (7):
+  PCI: endpoint: Pass EPF device ID to the probe function
+  PCI: endpoint: Warn and return if EPC is started/stopped multiple
+    times
+  PCI: endpoint: Add linkdown notifier support
+  PCI: endpoint: Add BME notifier support
+  PCI: qcom-ep: Add support for Link down notification
+  PCI: qcom-ep: Add support for BME notification
+  PCI: endpoint: Add PCI Endpoint function driver for MHI bus
+
+ drivers/pci/controller/dwc/pcie-qcom-ep.c     |   2 +
+ drivers/pci/endpoint/functions/Kconfig        |  10 +
+ drivers/pci/endpoint/functions/Makefile       |   1 +
+ drivers/pci/endpoint/functions/pci-epf-mhi.c  | 454 ++++++++++++++++++
+ drivers/pci/endpoint/functions/pci-epf-ntb.c  |   3 +-
+ drivers/pci/endpoint/functions/pci-epf-test.c |   2 +-
+ drivers/pci/endpoint/functions/pci-epf-vntb.c |   2 +-
+ drivers/pci/endpoint/pci-ep-cfs.c             |   3 +
+ drivers/pci/endpoint/pci-epc-core.c           |  52 ++
+ drivers/pci/endpoint/pci-epf-core.c           |   8 +-
+ include/linux/pci-epc.h                       |   2 +
+ include/linux/pci-epf.h                       |   8 +-
+ 12 files changed, 540 insertions(+), 7 deletions(-)
+ create mode 100644 drivers/pci/endpoint/functions/pci-epf-mhi.c
+
+-- 
+2.25.1
+
