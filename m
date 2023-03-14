@@ -2,100 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E61C6BA272
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:27:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37F846BA27C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:30:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbjCNW1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:27:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
+        id S231256AbjCNWaR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:30:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229687AbjCNW1Q (ORCPT
+        with ESMTP id S230135AbjCNWaP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:27:16 -0400
-Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6340B2A6ED
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:27:12 -0700 (PDT)
-Received: by mail-lf1-x130.google.com with SMTP id br6so3796899lfb.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:27:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678832830;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Au+ByXF+T/ttwdvk2E5GvB4Cm4Xo7Y50WRAwY8Nd3PI=;
-        b=Q2LCGvyww4ehVH+wC1KTEGhgAoSUFH1ZX0i1aWgkZRmGHiNPGRfhYGDk3RyIeDNpp9
-         HqGKE4iexBIR9tJGgeMLkaGUoyS7JJ50bgQGIiYWfo/CBSovpvVu7V2omFF8f4wXzXMX
-         qWuwutohj4c+p4kY+5ebx5J8oSYxTuAho0cqgR2RWquDkXAZtil+fH4h6K2bme2gm+oy
-         ddo6qCdr5O6fAm5nYoAZwhix/aT7bi080gRirmCrqERirzZ6ix72nm5oJoL0wsKyUXsQ
-         B2aC9tjI3KsOKzVZbmFtZ79sTI7bLHREVQcojPVagmIe+pNSdD+MHMj0f230ySgOCp/0
-         1GHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678832830;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Au+ByXF+T/ttwdvk2E5GvB4Cm4Xo7Y50WRAwY8Nd3PI=;
-        b=vIa4AxfEYHHF+hqG+M0nMLSu7ix99l12yJPeGVwWKC6ueKqbDkwfVOiuZB2k/yMl9T
-         E9hDXa/iCGjcIjDyzHdNa6t7NW0w+YJgQslchiG4gQCvbnhcygKlzDb3fnqHt3HeHg0P
-         CoUIoPUATTlIAIBVQA7eWHV7IjvbqsBnQBwpmBQsJRo/SEnNIsLWudXfeGLoPJCwPwMg
-         gR2rUENUEA+vZdg4oIPMArA+XBTnHuS2EP/1GeE1evlb6Dxo2fX17fnFsyk84tNqtJcb
-         5nll3BnfqnlP5ejOeYTGgHd/UbTzUn+v6wREtkpiyUnGLfR40PK/ov4kPHBuolWxd9t5
-         WTpg==
-X-Gm-Message-State: AO0yUKUI5KX0Vv0vMOHS67P8yUf+gJ3NwQF5uhLSa5PWF3eBXRKO9YwY
-        dH2gMontqaSrB5Kpp7KqNxGQKnCt8Gc41U1NbfM=
-X-Google-Smtp-Source: AK7set8LJmuI7xVqgISQ+Y68vWHmnkx+pjP/kmLyFsI2LuWzQ6PRiDvE6l2DC/c+HAJbShrMgoP7ow==
-X-Received: by 2002:ac2:4a91:0:b0:4cb:4374:cc78 with SMTP id l17-20020ac24a91000000b004cb4374cc78mr1497320lfp.26.1678832830643;
-        Tue, 14 Mar 2023 15:27:10 -0700 (PDT)
-Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id c11-20020a19760b000000b004ab52b0bcf9sm562373lff.207.2023.03.14.15.27.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 15:27:10 -0700 (PDT)
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
-        agross@kernel.org
-Cc:     marijn.suijten@somainline.org,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] dt-bindings: pinctrl: qcom,qcm2290-tlmm: Allow input-enable
-Date:   Tue, 14 Mar 2023 23:27:05 +0100
-Message-Id: <20230314222705.2940258-1-konrad.dybcio@linaro.org>
-X-Mailer: git-send-email 2.39.2
+        Tue, 14 Mar 2023 18:30:15 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE93F1EBD6;
+        Tue, 14 Mar 2023 15:30:12 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbpBB68pSz4x5Z;
+        Wed, 15 Mar 2023 09:30:10 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678833011;
+        bh=r3NREL+VBQJPkeJMcCS1jossad3z1IHYbb8vXt1/oR4=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TKCVR8aPVcVYDeFPrY16CoMMyeFbx2Nonec7SZkO4w4n31AmMUH3hTkHjyp8DspWp
+         FHsd3yIr/6fnAcA3JljkTMuVq8m/qKqxTyuMau015qMmm0+7hJj8NjAsYqdK6xq0gs
+         10mTUhlBdxA+r3P1eB9R+wZN0s3hfELK5ONJnM7JZqVKSKdDn5/+xuqukqA0KFm+qU
+         jHeXXo4btWEGUAysI0sTRlzQd88ZenK5ttuShKiXr59Lu74S6oTLLdWt0fxN12NFCb
+         R5CwoMwB4dwM4xPArU3uXxq4u96WIfenv26Pr7Y4N1yTjTqfkJAADPoA8O88gT+L/K
+         WC0Euvij6yRNw==
+Date:   Wed, 15 Mar 2023 09:30:08 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Ard Biesheuvel <ardb@kernel.org>
+Cc:     Huacai Chen <chenhuacai@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the loongarch tree with the efi-fixes
+ tree
+Message-ID: <20230315093008.6b0932a3@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/LR2r0/FhEHPTrFt+viiclqp";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Allow the common input-enable. This was missed with the
-initial submission.
+--Sig_/LR2r0/FhEHPTrFt+viiclqp
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Fixes: 5147022214db ("dt-bindings: pinctrl: qcom: Add QCM2290 pinctrl bindings")
-Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
----
- Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml | 1 +
- 1 file changed, 1 insertion(+)
+Hi all,
 
-diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml
-index 6271fd15e0b6..032763649336 100644
---- a/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml
-+++ b/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml
-@@ -85,6 +85,7 @@ $defs:
-       bias-pull-up: true
-       bias-disable: true
-       drive-strength: true
-+      input-enable: true
-       output-high: true
-       output-low: true
- 
--- 
-2.39.2
+Today's linux-next merge of the loongarch tree got conflicts in:
 
+  drivers/firmware/efi/libstub/efi-stub-entry.c
+  drivers/firmware/efi/libstub/efi-stub.c
+
+between commit:
+
+  ef3efc2af044 ("efi: libstub: Use relocated version of kernel's struct scr=
+een_info")
+
+from the efi-fixes tree and commit:
+
+  d34b13f27dff ("efi/libstub: Call setup_graphics() before handle_kernel_im=
+age()")
+
+from the loongarch tree.
+
+I fixed it up (I think, see below) and can carry the fix as necessary.
+This is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc drivers/firmware/efi/libstub/efi-stub-entry.c
+index 629840696ea0,c00a73a4518f..000000000000
+--- a/drivers/firmware/efi/libstub/efi-stub-entry.c
++++ b/drivers/firmware/efi/libstub/efi-stub-entry.c
+@@@ -5,19 -5,30 +5,43 @@@
+ =20
+  #include "efistub.h"
+ =20
+ +#ifndef CONFIG_ARM
+ +static struct screen_info *si;
+ +
+ +struct screen_info *alloc_screen_info(void)
+ +{
+ +	return si;
+ +}
+ +
+ +void free_screen_info(struct screen_info *si)
+ +{
+ +}
+ +#endif
+ +
++ static struct screen_info *setup_graphics(void)
++ {
++ 	unsigned long size;
++ 	efi_status_t status;
++ 	efi_guid_t gop_proto =3D EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
++ 	void **gop_handle =3D NULL;
++ 	struct screen_info *si =3D NULL;
++=20
++ 	size =3D 0;
++ 	status =3D efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
++ 			     &gop_proto, NULL, &size, gop_handle);
++ 	if (status =3D=3D EFI_BUFFER_TOO_SMALL) {
++ 		si =3D alloc_screen_info();
++ 		if (!si)
++ 			return NULL;
++ 		status =3D efi_setup_gop(si, &gop_proto, size);
++ 		if (status !=3D EFI_SUCCESS) {
++ 			free_screen_info(si);
++ 			return NULL;
++ 		}
++ 	}
++ 	return si;
++ }
++=20
+  /*
+   * EFI entry point for the generic EFI stub used by ARM, arm64, RISC-V and
+   * LoongArch. This is the entrypoint that is described in the PE/COFF hea=
+der
+@@@ -69,13 -83,10 +96,15 @@@ efi_status_t __efiapi efi_pe_entry(efi_
+  		return status;
+  	}
+ =20
+ +#ifndef CONFIG_ARM
+ +	/* point si to the relocated copy of struct screen_info */
+ +	si =3D (void *)&screen_info + image_addr - (unsigned long)image->image_b=
+ase;
+ +#endif
+ +
+  	status =3D efi_stub_common(handle, image, image_addr, cmdline_ptr);
+ =20
++ 	free_screen_info(si);
++=20
+  	efi_free(image_size, image_addr);
+  	efi_free(reserve_size, reserve_addr);
+ =20
+diff --cc drivers/firmware/efi/libstub/efi-stub.c
+index c4b9eccad0f1,bc67af721412..000000000000
+--- a/drivers/firmware/efi/libstub/efi-stub.c
++++ b/drivers/firmware/efi/libstub/efi-stub.c
+@@@ -47,30 -47,15 +47,6 @@@
+  static u64 virtmap_base =3D EFI_RT_VIRTUAL_BASE;
+  static bool flat_va_mapping =3D (EFI_RT_VIRTUAL_OFFSET !=3D 0);
+ =20
+- static struct screen_info *setup_graphics(void)
+ -struct screen_info * __weak alloc_screen_info(void)
+--{
+- 	efi_guid_t gop_proto =3D EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;
+- 	efi_status_t status;
+- 	unsigned long size;
+- 	void **gop_handle =3D NULL;
+- 	struct screen_info *si =3D NULL;
+ -	return &screen_info;
+ -}
+--
+- 	size =3D 0;
+- 	status =3D efi_bs_call(locate_handle, EFI_LOCATE_BY_PROTOCOL,
+- 			     &gop_proto, NULL, &size, gop_handle);
+- 	if (status =3D=3D EFI_BUFFER_TOO_SMALL) {
+- 		si =3D alloc_screen_info();
+- 		if (!si)
+- 			return NULL;
+- 		status =3D efi_setup_gop(si, &gop_proto, size);
+- 		if (status !=3D EFI_SUCCESS) {
+- 			free_screen_info(si);
+- 			return NULL;
+- 		}
+- 	}
+- 	return si;
+ -void __weak free_screen_info(struct screen_info *si)
+ -{
+--}
+--
+  static void install_memreserve_table(void)
+  {
+  	struct linux_efi_memreserve *rsv;
+
+--Sig_/LR2r0/FhEHPTrFt+viiclqp
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ9XEACgkQAVBC80lX
+0GxMJAgAlFXUP8uBQ1Y9JlkBUDF7xo0M3GI2smVQ49FDeDAns1/R8jz3ipkQcYWO
+gvPm6EuGKB8auLzgTsp5EJyWU6x/2ANTUP6mrAswTGLVTFfvoiJMtnW8JndHUmGh
+WSmT/qkXzDIw+HT/j3jP5ya/MRh9Ju4lRLx5PAZETMGiMLUeaF7U/uCyk5A9kGVe
+OF7uP7S5Mi4TjconLlFTf2wHWgqcRDg313gJHflJlaIF0pNn0IUxk/kKBW5kpq7v
+E9xDUFBJYk3okcqknyarNDjR9QrAfUbdOJMLRS33EhGDXZNGG7BeVlMksbU2uTR4
+PTJ3BHN7Eut8WcFmB9DvZnJMRu0wzA==
+=mCm1
+-----END PGP SIGNATURE-----
+
+--Sig_/LR2r0/FhEHPTrFt+viiclqp--
