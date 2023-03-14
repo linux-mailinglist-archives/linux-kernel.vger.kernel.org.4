@@ -2,113 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126866BA2BB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:53:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A5C096BA2BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:54:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbjCNWxD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:53:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47092 "EHLO
+        id S230004AbjCNWyZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:54:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230064AbjCNWxB (ORCPT
+        with ESMTP id S230139AbjCNWyX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:53:01 -0400
-Received: from mx.manguebit.com (mx.manguebit.com [167.235.159.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65FA510411;
-        Tue, 14 Mar 2023 15:53:00 -0700 (PDT)
-Message-Id: <8621e53ca50226823b1ee6c1ec9d40ce.pc.crab@mail.manguebit.com>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1678834375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OfTmHuG7/JVkukj6i9UvqcVneAXUFxJc9BrAXcIEPfA=;
-        b=tEVGR4CpZY6tuUOTQ+3sKHsqALva5ESHJluPSSoqSsI0dXFvQZro05N1h/xvBmw2W71ipD
-        n/bt4/sGwgCgve2usmycJaqjlobl5cnG9qnK+jumdZoginAwg6GcwMmd1tEST6UU/FdpAT
-        V0z0CZAOmzJv+T9HuAcs+9FvBCVLOhJlDCZxA+NIfb0xXFTdVEyXSMRJSk8zu5GFeusn9w
-        /pPZnDRX780vT1JMZBaz0DyzJxVy1kvlES6NnnI/9hvoGSLSVuut53xCd4KHlIpqZU99RG
-        yYD9JV8ey82aMiUkNfWjg70xKGtSmSlZb9MQWh4/fWmHuUdEWx8bwcOmt/fMtQ==
-ARC-Seal: i=1; s=dkim; d=manguebit.com; t=1678834375; a=rsa-sha256;
-        cv=none;
-        b=irWPiCIKBmyUp/1SgHmr27JoNn+cRe6BWTFWBeaWgKShG3kcum929GJ1JWT9yhB1qh1LC9
-        QYTdtvQoHWMiFUhlwfOT8tfzESQ9ixVy/pTpfkFJtaHkE3o+A8+fZcIptLJaAXml/nnAev
-        cHOiqAiBwxbx0Fgaz+N0JH+6W/rsFzns6hqlnHUoK7yKtXB9eM+3yf0rtRU3TU/epNhCNB
-        7B6iPfE4z45/+Q0gm2fvPsW2u8cWbDStCHl89r8Jit56F2EVXXqDpYArEHNRnlwnM2ksQ4
-        uRR1VBNdP84FBbPeTlXDOTY8J8PDTUDgDarTALGpMok7HdvMvDYa/MQFsTvPmw==
-ARC-Authentication-Results: i=1;
-        ORIGINATING;
-        auth=pass smtp.auth=pc@manguebit.com smtp.mailfrom=pc@manguebit.com
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=manguebit.com;
-        s=dkim; t=1678834375;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=OfTmHuG7/JVkukj6i9UvqcVneAXUFxJc9BrAXcIEPfA=;
-        b=HHNOdTIrWMStj6EtyFNq+tmH8Uc/RD1UGUqPD0NTxnJ8fVPAuTlhouw26AfWasZAGshT5C
-        INLA7884qP/NYT2whmwTIH+gvLz+uIPEUFkvxsczbw0AhSspkiLUY98GirkY70BUtRnrdt
-        PsSegNawVvpUNuBnTNWsv7bkK9lAo8Fdk9KYzLp5uaX2tEDo72TTzzzc7hIBivoKorlBJL
-        6QUS4+7Bsq3VEQl2s6+ZVsJVet21x57JzBOnqApPi7+wJPLdLW8HAtsEC1fBr56A3Lg74h
-        bB3YBIgWLoan8BmWoeUnOCnnV0cdff3t0sc1vst9D9pu9/2H5FiOZYjzchJJFQ==
-From:   Paulo Alcantara <pc@manguebit.com>
-To:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Christoph Hellwig <hch@lst.de>,
-        Steve French <smfrench@gmail.com>,
-        John Hubbard <jhubbard@nvidia.com>, linux-cifs@vger.kernel.org
-Subject: Re: [PATCH v18 08/15] cifs: Use generic_file_splice_read()
-In-Reply-To: <20230314220757.3827941-9-dhowells@redhat.com>
-References: <20230314220757.3827941-1-dhowells@redhat.com>
- <20230314220757.3827941-9-dhowells@redhat.com>
-Date:   Tue, 14 Mar 2023 19:52:49 -0300
+        Tue, 14 Mar 2023 18:54:23 -0400
+Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A26522CB4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1678834462; x=1710370462;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4mWBwFLpOe+3Lg11FkokGIfBuGEGGfu3AKmmd26Q/z8=;
+  b=nID0T+oTUUFzJDkgi/76HGS2tUEI3jFVvJ2JFCFaeM3SFkkI7UpXf46/
+   P4TO4E7rkZ9Cet9WWWHU0QEBcwBG7Xw3ub1Td3lgbJ55SbLpMrhJa3rZk
+   wxGAgnt4eCEox+clyicB4mVUly1kXmcMHEZBIMafw3TlREPyVR7URMqGt
+   xjEO0HbU2douG2Eadz35GmF4vAOAT5sOeq1KMyzHpxPC9vsGSOchXTtdp
+   XbT/9qIbHJYz1KbCYGQ7SL+cruPSXFCzykHT4PXAJymx5L9R090seIiAo
+   xsIA41yq7gcP4ypPtCvkKmIkWpBL8oQqfEFL2vhPxyQ70R3JuH8KXiOdL
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,261,1673884800"; 
+   d="scan'208";a="230589587"
+Received: from h199-255-45-15.hgst.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
+  by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2023 06:54:21 +0800
+IronPort-SDR: Zf/J+bZ2yyFHwn2yOc8Kd0rni0IuhdKbgCk670h84jkZdb3h54LfcX6TwNwTahMcWzl86G0uOT
+ zRu37dqR1zmf60DMJbI9f3QSFYDVHOvg0L1HRVvDgSkOYR9sKQy0+VFI28P6ePTlvXXY4ztXwH
+ YxBPdZATtwsMw0cslf4S4Hu7p2rCjJr4RIe9y/pkiYlRuC14TvrlSqzD7Xt5Rupvn9uFRg3we3
+ 6iPdUZU1RG1Q87rGUPxe1HrUQ0CgZO/G4YB9p0BeAx2eA6P36qXMtDLZPFHjtkEkd9rPig4r34
+ ue8=
+Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
+  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 15:05:07 -0700
+IronPort-SDR: hK5RFEuMQH7WFaHtJ0ulk7f7daapcDe9aBcwSr9lzjEDf39ELOwle1Ylkz5boeRx6hkIaJFNZo
+ wESd+1lwYB/96oQH5vMreb1KbiEnsYIX9wzHTQThsAub34jVHxSjoXfw8hGX6yiYS1y9xPsm8v
+ Qt43QFsIUHvtg8k3GGjfVnCMzdzQvA87cQg0lEiULwY1XSpubZykz8YB3A5chz+HE4HiPclLSW
+ QQZ1Ract5B6Csp1c6ugLd+bDy5wfY5yI0/9EcDby1X3kbVkhBiZ9LQwSWKDDzmMTUoc23wYxe8
+ /38=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 15:54:21 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pbpk41Xtyz1RtW0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:54:20 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1678834458; x=1681426459; bh=4mWBwFLpOe+3Lg11FkokGIfBuGEGGfu3AKm
+        md26Q/z8=; b=L3dZG1sWWAikqJiWmwg5q3YwNB+cbQ4rqZ2QbvfzfRdZou7SOQr
+        78lip1o4qHhDVm7kyyner0SSRoqWjsYLH9H8cgGIn5HxkY0fNeF5q6bUFTSAgg/e
+        DPZL2Djv2bF9/ce4aFgHx8SmSBe0TKRUZB9OxwqgoCRBoPbxSSgMRDeY4pn1ERzd
+        sXGtkzEQQXn6SWVRFRVXszUI6m9kkE8LHyn5nsakjNJrSdp30gZhwOW3BXQSiCEP
+        kMmCQKFtfhvxidNbdVQdBS2wsBmdRiFhAvJWeU0f411vGq+h9zZb8TA/XTSEHcKL
+        7d3P0WxkB0lWqwQGWF9bdKC0o288HlyG3xw==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id IqBKp1BPp2mH for <linux-kernel@vger.kernel.org>;
+        Tue, 14 Mar 2023 15:54:18 -0700 (PDT)
+Received: from [10.225.163.84] (unknown [10.225.163.84])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pbpjz2ZH9z1RtVm;
+        Tue, 14 Mar 2023 15:54:15 -0700 (PDT)
+Message-ID: <8392a7de-666a-bce6-dc9f-b60d6dd93013@opensource.wdc.com>
+Date:   Wed, 15 Mar 2023 07:54:14 +0900
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v2 0/9] PCI: rockchip: Fix RK3399 PCIe endpoint controller
+ driver
+Content-Language: en-US
+To:     Rick Wertenbroek <rick.wertenbroek@gmail.com>
+Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
+        rick.wertenbroek@heig-vd.ch, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Shawn Lin <shawn.lin@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Jani Nikula <jani.nikula@intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
+ <ecd09f27-b799-4741-2c5a-a2de99776c51@opensource.wdc.com>
+ <CAAEEuhrk4cSC312UiAL3UwoDZ=urrdDcBThcNHd1dqnAuJTzAw@mail.gmail.com>
+ <3c4ed614-f088-928f-2807-deaa5e4b668a@opensource.wdc.com>
+ <CAAEEuhqk0scWd3wFbVb9fSgHxPBKotpEPNi+YPG4GD9vLO94mw@mail.gmail.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <CAAEEuhqk0scWd3wFbVb9fSgHxPBKotpEPNi+YPG4GD9vLO94mw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-David Howells <dhowells@redhat.com> writes:
+On 3/14/23 23:53, Rick Wertenbroek wrote:
+> Hello Damien,
+> I also noticed random issues I suspect to be related to link status or power
+> state, in my case it sometimes happens that the BARs (0-6) in the config
+> space get reset to 0. This is not due to the driver because the driver never
+> ever accesses these registers (@0xfd80'0010 to 0xfd80'0024 TRM
+> 17.6.4.1.5-17.6.4.1.10).
+> I don't think the host rewrites them because lspci shows the BARs as
+> "[virtual]" which means they have been assigned by host but have 0
+> value in the endpoint device (when lspci rereads the PCI config header).
+> See https://github.com/pciutils/pciutils/blob/master/lspci.c#L422
+> 
+> So I suspect the controller detects something related to link status or
+> power state and internally (in hardware) resets those registers. It's not
+> the kernel code, it never accesses these regs. The problem occurs
+> very randomly, sometimes in a few seconds, sometimes I cannot see
+> it for a whole day.
+> 
+> Is this similar to what you are experiencing ?
 
-> Make cifs use generic_file_splice_read() rather than doing it for itself.
->
-> As a consequence, filemap_splice_read() no longer needs to be exported.
->
-> Signed-off-by: David Howells <dhowells@redhat.com>
-> Reviewed-by: Christoph Hellwig <hch@lst.de>
-> cc: Jens Axboe <axboe@kernel.dk>
-> cc: Steve French <smfrench@gmail.com>
-> cc: Al Viro <viro@zeniv.linux.org.uk>
-> cc: David Hildenbrand <david@redhat.com>
-> cc: John Hubbard <jhubbard@nvidia.com>
-> cc: linux-mm@kvack.org
-> cc: linux-block@vger.kernel.org
-> cc: linux-cifs@vger.kernel.org
-> cc: linux-fsdevel@vger.kernel.org
-> ---
->
-> Notes:
->     ver #18)
->      - Split out from change to generic_file_splice_read().
->
->  fs/cifs/cifsfs.c |  8 ++++----
->  fs/cifs/cifsfs.h |  3 ---
->  fs/cifs/file.c   | 16 ----------------
->  mm/filemap.c     |  1 -
->  4 files changed, 4 insertions(+), 24 deletions(-)
+Yes. I sometimes get NMIs after starting the function driver, when my function
+driver starts probing the bar registers after seeing the host changing one
+register. And the link also comes up with 4 lanes or 2 lanes, random.
 
-Reviewed-by: Paulo Alcantara (SUSE) <pc@manguebit.com>
+> Do you have any idea as to what could make these registers to be reset
+> (I could not find anything in the TRM, also nothing in the driver seems to
+> cause it).
+
+My thinking is that since we do not have a linkup notifier, the function driver
+starts setting things up without the link established (e.g. when the host is
+still powered down). Once the host start booting and pic link is established,
+things may be reset in the hardware... That is the only thing I can think of.
+
+And yes, there are definitely something going on with the power states too I
+think: if I let things idle for a few minutes, everything stops working: no
+activity seen on the endpoint over the BARs. I tried enabling the sys and client
+interrupts to see if I can see power state changes, or if clearing the
+interrupts helps (they are masked by default), but no change. And booting the
+host with pci_aspm=off does not help either. Also tried to change all the
+capabilities related to link & power states to "off" (not supported), and no
+change either. So currently, I am out of ideas regarding that one.
+
+I am trying to make progress on my endpoint driver (nvme function) to be sure it
+is not a bug there that breaks things. I may still have something bad because
+when I enable the BIOS native NVMe driver on the host, either the host does not
+boot, or grub crashes with memory corruptions. Overall, not yet very stable and
+still trying to sort out the root cause of that.
+
+
+> Do you want me to include this patch in the V3 series or will you
+> submit another patch series for the changes you applied on the RK3399 PCIe
+> endpoint controller ? I don't know if you prefer to build the V3
+> together or if you
+> prefer to submit another patch series on top of mine. Let me know.
+
+If it is no trouble, please include it with your series. Will be easier to
+retest everything together :)
+
+-- 
+Damien Le Moal
+Western Digital Research
+
