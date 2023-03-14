@@ -2,78 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C6A36BA247
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:18:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 919E36BA259
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:19:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCNWSe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:18:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56196 "EHLO
+        id S231374AbjCNWTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57920 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCNWS0 (ORCPT
+        with ESMTP id S231355AbjCNWS6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:18:26 -0400
-Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9A8279BF;
-        Tue, 14 Mar 2023 15:17:43 -0700 (PDT)
-Received: by mail-wm1-x329.google.com with SMTP id x22so5901612wmj.3;
-        Tue, 14 Mar 2023 15:17:43 -0700 (PDT)
+        Tue, 14 Mar 2023 18:18:58 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7709124CBA
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:18:02 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-5416b0ab0ecso203297307b3.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:18:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678832188;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0cgXw1zWR3UzIeNQHSkd/Pe/JYZucLUkg0+siqDji1Q=;
-        b=WiWabfdsc40Hw03sHacABR/DpeHPE1ytk52ltiIHJyYU96rC0iS1lraEKpFNPMr7fC
-         t88zt7gAQUBBIRqrgzPkQWQDI8IBIwbBSQ44S9GXEjINbumyhcaty1H8Wl8mk8TP7vah
-         R+sSYxV3pSFKpraUvvKNT26Tl4bm9IX1cxQTO0YuTtRAf1JyKECbjwfkxjSm3C79t2zu
-         WimroFz4zBdQaqQbKrHUb+k9u1UDe/t+bGf+sTOFdiO/SY1n3N2Yrx3e1ZAduqS48kT2
-         rVHJ3JqaH5emYPmU4Xh0N/DVVXcX1nJMZW+nmKAVSR8mX825oNgoQNZkzjKn0xyWZeQC
-         H2Bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678832188;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=linaro.org; s=google; t=1678832221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=0cgXw1zWR3UzIeNQHSkd/Pe/JYZucLUkg0+siqDji1Q=;
-        b=Ct1PlmvaVcbQoeH9hfGxx3WtOqbmA98mfvhdjtVZJgFxqMIhL0WoDVPrGTJVIrBjHC
-         nDCGFHrt9R1F0uPSlDc8KV+AeI77VNtg5zVR4Hi15nEwJ1VbpjfJxGczoWzyjoIykye/
-         ezFZLyhcW74mBDTuzOCDQbF46kKtQ7frSgqYnkQI795BKlw7Zo6CDNeDE1fWjpTkIV1N
-         yzr2au/BF9Fttzhn+zrrk2c02ta3d9Os1Fs1n9dWka1aZ0GdygDZKxO4Fxw/iGzbLzSk
-         rG8sBZ+1YKwEtWTC3RQf9FV+Zn0q6/syeGhRtg2ZJbp7QM8zCY0QKjVwiV1SFbJXzpXX
-         aBhQ==
-X-Gm-Message-State: AO0yUKXc7RD7fxrQBCEwCBBr2sPkPC81qEUilArgOjYH42IkbpRgrcHa
-        mb03ZJ4ki5YpCAIG2IRJTy0=
-X-Google-Smtp-Source: AK7set/LqyA4KOXjYW3gB61Tg1NOLoBdeKaWngQqOyAVUSHmnZgHB0VC+IljqkqXyulD+UybQrzJww==
-X-Received: by 2002:a05:600c:1546:b0:3ed:22f2:554c with SMTP id f6-20020a05600c154600b003ed22f2554cmr8549449wmg.29.1678832188560;
-        Tue, 14 Mar 2023 15:16:28 -0700 (PDT)
-Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
-        by smtp.gmail.com with ESMTPSA id 4-20020a05600c22c400b003e00c453447sm3977442wmg.48.2023.03.14.15.16.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 15:16:27 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 22:16:26 +0000
-From:   Lorenzo Stoakes <lstoakes@gmail.com>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Christoph Lameter <cl@linux.com>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        netdev@vger.kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH 4/7] mm, pagemap: remove SLOB and SLQB from comments and
- documentation
-Message-ID: <a901f00e-99df-4fed-8117-e3735ec7df59@lucifer.local>
-References: <20230310103210.22372-1-vbabka@suse.cz>
- <20230310103210.22372-5-vbabka@suse.cz>
+        bh=tgQUA3Qjd0xDMQl85AKvmwvo3UzAj5eVYeuKrfB9jKY=;
+        b=P3QbAFY4C3wMQOLu9Xc9iJsc78YVBPbhzqz6wSLJDVm/uQxMbSLzUb9TxmZ3V63b28
+         wZvLjSX6krn2yLuNJKHw5WjmoNOiULtf/MHn8KYABjQI0qocn1BlBZ/mttOKcw/tePSj
+         UsRxsw8+5mi9y3Jf4LwhivKfKCMNBxH5Nj0qZDponTNiew0x8ci8CnuAz99jj1nnJiSS
+         VMHdzA6N9RETW9gmiGTU7Uzs8RyneKJwGgl/89nWlCmZKrxULNo3bKzupwINUryAyMtE
+         dzyFh3Nrr62ryyIqs8IaBkZ5WCuyFNMWaVH1/v1gLEe7farhgnH3PLX9WvcAoGLnEUmm
+         AkzQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678832221;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tgQUA3Qjd0xDMQl85AKvmwvo3UzAj5eVYeuKrfB9jKY=;
+        b=QP0gkegs51CItoPIxFaVUoW3HLfGYDqYBuM7Rw2P8+OFMsZMVdI9bs+CGPYno0mENc
+         V/bvbwMr8vQUdvVYKKkl6gbxsqDe89aWSSF7dRHBH/4Kjnl1wUeWgxzKrVn5phUnJ9u2
+         S567MAOxNL3nrTmCCP7DjUie/LlG8WA1C/zc19HUnP/szRvKVWrOJ/FJVVHgWIEoPiD6
+         cO2k/I/r+psCQllk2QJvG4kW+XE+XxYPsmfzzDIy7QLG/1F4xlzIeqodPL+tvFlRzNc1
+         VnnS/h3dOQRjT7L9vgBW6qA2SHVgnqDoFfmVLdKiVLG5zCK+cqe0A0H5mAwIphMHVovu
+         0NgQ==
+X-Gm-Message-State: AO0yUKUuk39StQGxmReWcjKDo570co45I0XQTMHz1rHqYm8qY49yaut9
+        +cqx3AGDWrswWw1KBntRubajK7hFLats4MFEBerWJA==
+X-Google-Smtp-Source: AK7set/TEJJr4f9uFhqo+VduBSSU76xwR/4cMKOIovtYwfVxV0OUOCvYsbszh0moZBR1fIJW7w/59OW0L+x+zwoLfnM=
+X-Received: by 2002:a81:ac67:0:b0:541:753d:32f9 with SMTP id
+ z39-20020a81ac67000000b00541753d32f9mr8154484ywj.9.1678832220514; Tue, 14 Mar
+ 2023 15:17:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230310103210.22372-5-vbabka@suse.cz>
+References: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+In-Reply-To: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 14 Mar 2023 23:16:49 +0100
+Message-ID: <CACRpkdZ=1N2RF1ct3AXOy1+k1Jmjeo6OKxEUZv4Xux-smOLhmg@mail.gmail.com>
+Subject: Re: [PATCH] iio: adc: qcom-pm8xxx-xoadc: Remove useless condition in pm8xxx_xoadc_parse_channel()
+To:     Kasumov Ruslan <xhxgldhlpfy@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,66 +75,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Mar 10, 2023 at 11:32:06AM +0100, Vlastimil Babka wrote:
-> SLOB has been removed and SLQB never merged, so remove their mentions
-> from comments and documentation of pagemap.
+On Tue, Mar 14, 2023 at 8:37=E2=80=AFPM Kasumov Ruslan <xhxgldhlpfy@gmail.c=
+om> wrote:
+
+> The left side of the loop condition never becomes false.
+> hwchan cannot be NULL, because it points to elements of the
+> hw_channels array that takes one of 4 predefined values:
+> pm8018_xoadc_channels, pm8038_xoadc_channels,
+> pm8058_xoadc_channels, pm8921_xoadc_channels.
 >
-> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
-> ---
->  Documentation/admin-guide/mm/pagemap.rst | 6 +++---
->  fs/proc/page.c                           | 5 ++---
->  2 files changed, 5 insertions(+), 6 deletions(-)
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 >
-> diff --git a/Documentation/admin-guide/mm/pagemap.rst b/Documentation/admin-guide/mm/pagemap.rst
-> index b5f970dc91e7..bb4aa897a773 100644
-> --- a/Documentation/admin-guide/mm/pagemap.rst
-> +++ b/Documentation/admin-guide/mm/pagemap.rst
-> @@ -91,9 +91,9 @@ Short descriptions to the page flags
->     The page is being locked for exclusive access, e.g. by undergoing read/write
->     IO.
->  7 - SLAB
-> -   The page is managed by the SLAB/SLOB/SLUB/SLQB kernel memory allocator.
-> -   When compound page is used, SLUB/SLQB will only set this flag on the head
-> -   page; SLOB will not flag it at all.
-> +   The page is managed by the SLAB/SLUB kernel memory allocator.
-> +   When compound page is used, either will only set this flag on the head
-> +   page..
+> Fixes: 63c3ecd946d4 ("iio: adc: add a driver for Qualcomm PM8xxx HK/XOADC=
+")
+> Signed-off-by: Kasumov Ruslan <s02210418@gse.cs.msu.ru>
 
-I mean, perhaps the nittiest of nits but probably that '..' is unintended.
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
->  10 - BUDDY
->      A free memory block managed by the buddy system allocator.
->      The buddy system organizes free memory in blocks of various orders.
-> diff --git a/fs/proc/page.c b/fs/proc/page.c
-> index 6249c347809a..1356aeffd8dc 100644
-> --- a/fs/proc/page.c
-> +++ b/fs/proc/page.c
-> @@ -125,7 +125,7 @@ u64 stable_page_flags(struct page *page)
->  	/*
->  	 * pseudo flags for the well known (anonymous) memory mapped pages
->  	 *
-> -	 * Note that page->_mapcount is overloaded in SLOB/SLUB/SLQB, so the
-> +	 * Note that page->_mapcount is overloaded in SLAB/SLUB, so the
->  	 * simple test in page_mapped() is not enough.
->  	 */
->  	if (!PageSlab(page) && page_mapped(page))
-> @@ -166,8 +166,7 @@ u64 stable_page_flags(struct page *page)
->
->  	/*
->  	 * Caveats on high order pages: page->_refcount will only be set
-> -	 * -1 on the head page; SLUB/SLQB do the same for PG_slab;
-> -	 * SLOB won't set PG_slab at all on compound pages.
-> +	 * -1 on the head page; SLAB/SLUB do the same for PG_slab;
-
-Nice catch on the redundant reference to the mysterous SLQB (+ above) :)
-
->  	 */
->  	if (PageBuddy(page))
->  		u |= 1 << KPF_BUDDY;
-> --
-> 2.39.2
->
-
-Otherwise looks good to me,
-
-Acked-by: Lorenzo Stoakes <lstoakes@gmail.com>
+Yours,
+Linus Walleij
