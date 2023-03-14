@@ -2,142 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D6E36B9BE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:43:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 89D3E6B9C03
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:46:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230160AbjCNQnF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:43:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45142 "EHLO
+        id S230297AbjCNQp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:45:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCNQm6 (ORCPT
+        with ESMTP id S229888AbjCNQpz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:42:58 -0400
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::221])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D37812197B;
-        Tue, 14 Mar 2023 09:42:49 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 9C9FB240004;
-        Tue, 14 Mar 2023 16:42:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678812168;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=6zzVgwaMKBc3wjUCBmy0mhm9516M7clvhDl4lf3k+HM=;
-        b=JW7tRHyM9QYTKJDVXeJGntwXpBsOI3RaVv0sZhH2bjMfRdXBqs13bmhctRBf37O/uSx+Gg
-        x1qnQ52Ivvf439iPpNZ6LhOfru+n8E/GfodA7lvnCNNjcLuE2PmgxtY9gS+cTR0CqrIKyt
-        BnuUHhNTD5pjxKESxxUcNPvcTMq0I3/tzrhTGtraaDiV9pzNLV+STW5FxUmc9miaq4STdH
-        bApaBT0LvFdwvglUq/IR0SSFT/Ot7uCAYhc/SpwQNg28aO+hSEpWfjnOAQXn+iobG6r/cK
-        SG4giW6F1mYqDlc4t0vk2eOEdjPnmu360r+eVX8PgthZaTSX5WsPE04grdeoxg==
-Date:   Tue, 14 Mar 2023 17:45:34 +0100
-From:   =?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-To:     Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] clk: add missing of_node_put() in "assigned-clocks"
- property parsing
-Message-ID: <20230314174534.53534b25@fixe.home>
-In-Reply-To: <20230220124420.4150c767@fixe.home>
-References: <20230131083227.10990-1-clement.leger@bootlin.com>
-        <20230220124420.4150c767@fixe.home>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.36; x86_64-pc-linux-gnu)
+        Tue, 14 Mar 2023 12:45:55 -0400
+Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80565AB8B9;
+        Tue, 14 Mar 2023 09:45:46 -0700 (PDT)
+Received: by mail-il1-x12c.google.com with SMTP id bp11so3539909ilb.3;
+        Tue, 14 Mar 2023 09:45:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678812346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=jlTXumnsAyLju3X5wGhezp0gUrPj0Pftji9EY7hYkTE=;
+        b=IMbOhb4nSM3i5CqrZuMYQyk4mi0FlTaUhqJ10ufd3Zycg2LInMrGQEru5ClVhMfZiY
+         MBTA8wkxYs3c2KYTMoxKnrJ5Kdaoet53INo+0KJbWWMYRADfafbmB+FTNxreih/UUxFP
+         sljADlzOvgFOuWq2vKJgWRE6/WfqMDh3/2rgEloxv7hXosmfx0f7oG5pDnBP+HE83aF/
+         7QL1yXV2X8K2JtjI8IdwWJtckGXIUdEMPXKHAnfeJSzVfdVsGJdrKJ3b056R+slPWYAZ
+         ZiycbkXMVD6nIUVxupHIdiUR4K+B4czNcaiRn6zXjSxrW1ZoSF2r8ENe7PRUrZDJB9Ih
+         j9KQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678812346;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jlTXumnsAyLju3X5wGhezp0gUrPj0Pftji9EY7hYkTE=;
+        b=Ms5boDSCwS8BxBBDSNCNolbEZUK+sNAY0vPphoB0T/3l2q61NQCGpyTyX3DrI28Ni8
+         IY++0Wtrr/4NOFjBYxKVAUHaw+OX19MZEXx4ZB/uY/Qgkgik6gmn20WEKLKUJzep/cTH
+         wUT1rXs+iFJJr7jmEpQyRm4LhGszk+PBy2rQfBzCdGyeH3GGN9IkufdGYt2IfzgBfnEK
+         fgsrDW3diNWMGPIP3pDYNgGHoObwRlW3Orx0y4VxCHCWu+b0eE7uBz5iF0bCAIuBuBo3
+         XMtXJS/rMA2lQPzNKHpZAhFAY4uo08LcvZBXPd0cSXQw8KlzsZRaG91lArGmWu21NQxH
+         ObtA==
+X-Gm-Message-State: AO0yUKX9/2r5QeEEfP2Th/ZvlYAzRwcU0RMD/4j+V5f+CdTudsls8HCe
+        ycZI0XOzZukN8lL27+uZxhc=
+X-Google-Smtp-Source: AK7set9fbVlYa4wCf6eJNIaNXA3YZoUWFsU4AD/JnVhm0i9hauk9yIMD83SJ3S82/ISaFKioIftPGQ==
+X-Received: by 2002:a05:6e02:60e:b0:318:aa8a:6455 with SMTP id t14-20020a056e02060e00b00318aa8a6455mr2655484ils.19.1678812345622;
+        Tue, 14 Mar 2023 09:45:45 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id c22-20020a02c9d6000000b0040380d7c768sm903996jap.106.2023.03.14.09.45.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 09:45:45 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <4a4e0ef5-30f8-39ce-28cf-ade2122e2aa2@roeck-us.net>
+Date:   Tue, 14 Mar 2023 09:45:39 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>
+Cc:     Joe Tessler <jrt@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <b83d6b81-c4ec-4fb8-b626-84af80d1c4a3@roeck-us.net>
+ <74ae8afe-c537-1714-77ec-8a80d8ddad69@xs4all.nl>
+ <bafa692c-f3a3-d317-278d-2dd3b5ff8af3@linaro.org>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <bafa692c-f3a3-d317-278d-2dd3b5ff8af3@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le Mon, 20 Feb 2023 12:44:20 +0100,
-Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> a =C3=A9crit :
+On 3/14/23 09:32, Krzysztof Kozlowski wrote:
+> On 14/03/2023 09:34, Hans Verkuil wrote:
+>> On 13/03/2023 23:01, Guenter Roeck wrote:
+>>> On Sun, Mar 12, 2023 at 02:12:51PM +0100, Krzysztof Kozlowski wrote:
+>>>> The driver can match only via the DT table so the table should be always
+>>>> used and the of_match_ptr does not have any sense (this also allows ACPI
+>>>> matching via PRP0001, even though it might not be relevant here).
+>>>>
+>>>>    drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
+>>>>
+>>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>>
+>>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>>
+>>> FWIW: There is also
+>>> https://patches.linaro.org/project/linux-media/patch/20230215214724.3798917-1-linux@roeck-us.net/
+>>
+>> I superseded that patch in patchwork in favor of this patch since this is part of
+>> a larger series.
+> 
+> I am personally fan of FIFO, so Guenter's patch should go in.
+> 
 
-Gentle ping.
+FWIW, I do not care either way, I just wanted to point out that this patch
+_is_ both relevant and needed, and that it (or, rather, the original version)
+has been reviewed and tested.
 
-> Le Tue, 31 Jan 2023 09:32:27 +0100,
-> Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com> a =C3=A9crit :
->=20
-> Ping ?
->=20
-> > When returning from of_parse_phandle_with_args(), the np member of the
-> > of_phandle_args structure should be put after usage. Add missing
-> > of_node_put() calls in both __set_clk_parents() and __set_clk_rates().
-> >=20
-> > Fixes: 86be408bfbd8 ("clk: Support for clock parents and rates assigned=
- from device tree")
-> > Signed-off-by: Cl=C3=A9ment L=C3=A9ger <clement.leger@bootlin.com>
-> > ---
-> > v2:
-> >  - Add "Fixes"
-> >=20
-> >  drivers/clk/clk-conf.c | 12 ++++++++++--
-> >  1 file changed, 10 insertions(+), 2 deletions(-)
-> >=20
-> > diff --git a/drivers/clk/clk-conf.c b/drivers/clk/clk-conf.c
-> > index 2ef819606c41..1a4e6340f95c 100644
-> > --- a/drivers/clk/clk-conf.c
-> > +++ b/drivers/clk/clk-conf.c
-> > @@ -33,9 +33,12 @@ static int __set_clk_parents(struct device_node *nod=
-e, bool clk_supplier)
-> >  			else
-> >  				return rc;
-> >  		}
-> > -		if (clkspec.np =3D=3D node && !clk_supplier)
-> > +		if (clkspec.np =3D=3D node && !clk_supplier) {
-> > +			of_node_put(clkspec.np);
-> >  			return 0;
-> > +		}
-> >  		pclk =3D of_clk_get_from_provider(&clkspec);
-> > +		of_node_put(clkspec.np);
-> >  		if (IS_ERR(pclk)) {
-> >  			if (PTR_ERR(pclk) !=3D -EPROBE_DEFER)
-> >  				pr_warn("clk: couldn't get parent clock %d for %pOF\n",
-> > @@ -48,10 +51,12 @@ static int __set_clk_parents(struct device_node *no=
-de, bool clk_supplier)
-> >  		if (rc < 0)
-> >  			goto err;
-> >  		if (clkspec.np =3D=3D node && !clk_supplier) {
-> > +			of_node_put(clkspec.np);
-> >  			rc =3D 0;
-> >  			goto err;
-> >  		}
-> >  		clk =3D of_clk_get_from_provider(&clkspec);
-> > +		of_node_put(clkspec.np);
-> >  		if (IS_ERR(clk)) {
-> >  			if (PTR_ERR(clk) !=3D -EPROBE_DEFER)
-> >  				pr_warn("clk: couldn't get assigned clock %d for %pOF\n",
-> > @@ -93,10 +98,13 @@ static int __set_clk_rates(struct device_node *node=
-, bool clk_supplier)
-> >  				else
-> >  					return rc;
-> >  			}
-> > -			if (clkspec.np =3D=3D node && !clk_supplier)
-> > +			if (clkspec.np =3D=3D node && !clk_supplier) {
-> > +				of_node_put(clkspec.np);
-> >  				return 0;
-> > +			}
-> > =20
-> >  			clk =3D of_clk_get_from_provider(&clkspec);
-> > +			of_node_put(clkspec.np);
-> >  			if (IS_ERR(clk)) {
-> >  				if (PTR_ERR(clk) !=3D -EPROBE_DEFER)
-> >  					pr_warn("clk: couldn't get clock %d for %pOF\n", =20
->=20
->=20
->=20
+Thanks,
+Guenter
 
-
-
---=20
-Cl=C3=A9ment L=C3=A9ger,
-Embedded Linux and Kernel engineer at Bootlin
-https://bootlin.com
