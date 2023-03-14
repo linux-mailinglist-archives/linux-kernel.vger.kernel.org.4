@@ -2,82 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 156026B8990
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:24:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B39AC6B8996
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:27:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbjCNEY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37890 "EHLO
+        id S229535AbjCNE1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 00:27:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229842AbjCNEYP (ORCPT
+        with ESMTP id S229436AbjCNE1F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:24:15 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BE281F5CC;
-        Mon, 13 Mar 2023 21:24:14 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D35724B3;
-        Mon, 13 Mar 2023 21:24:57 -0700 (PDT)
-Received: from a077209.blr.arm.com (a077209.arm.com [10.162.42.149])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AAC733F71A;
-        Mon, 13 Mar 2023 21:24:11 -0700 (PDT)
-From:   Chaitanya S Prakash <chaitanyas.prakash@arm.com>
-To:     linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Cc:     Chaitanya S Prakash <chaitanyas.prakash@arm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org
-Subject: [PATCH 3/3] selftests: Set overcommit_policy as OVERCOMMIT_ALWAYS
-Date:   Tue, 14 Mar 2023 09:53:51 +0530
-Message-Id: <20230314042351.13134-4-chaitanyas.prakash@arm.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314042351.13134-1-chaitanyas.prakash@arm.com>
-References: <20230314042351.13134-1-chaitanyas.prakash@arm.com>
+        Tue, 14 Mar 2023 00:27:05 -0400
+Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372C53C2F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:27:03 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.101.196.174])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 602BB3F26C;
+        Tue, 14 Mar 2023 04:26:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
+        s=20210705; t=1678768017;
+        bh=S0syQkHlJN47iLJT4ST+uEEbah8U42DRtx2LS4tK5Vg=;
+        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
+        b=bkiWYTZgV4sinMnYEJdQOkid3+/Nms2uTxUytpGIb/ekLLvZRIUzCAujIcD2zbL3c
+         UbkzcQf4yE7HvTuZEczJkQzgU2vnFOJHUiN+VKTUak6CT83OpX9iceD07SIZxWqNP/
+         Stju+zH931znsjanD4fVIr6Dm6FidxArosAGI/Ef0Za0MYZVr7pNr/ZY1W5NH+qzPb
+         87SH1nT2NzY2LAzM7OhRhEfM2zegV23L7pe14BhgSWavF0XLana5SbIifiK4PJ9hTq
+         ZCC+274uRGzJEzk3MlTKRRGY2LXSjzshh8Eci1LUfoUlbBccjSX4GKqdcgH8UQ6d8c
+         3Awgn56Z/7xSQ==
+From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
+To:     alexander.deucher@amd.com, christian.koenig@amd.com,
+        Xinhui.Pan@amd.com
+Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hawking Zhang <Hawking.Zhang@amd.com>,
+        Likun Gao <Likun.Gao@amd.com>,
+        Felix Kuehling <Felix.Kuehling@amd.com>,
+        Victor Zhao <Victor.Zhao@amd.com>,
+        Jack Xiao <Jack.Xiao@amd.com>, Evan Quan <evan.quan@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Lijo Lazar <lijo.lazar@amd.com>,
+        YiPeng Chai <YiPeng.Chai@amd.com>,
+        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
+        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
+        Bokun Zhang <Bokun.Zhang@amd.com>, Leo Liu <leo.liu@amd.com>,
+        Veerabadhran Gopalakrishnan <veerabadhran.gopalakrishnan@amd.com>,
+        Richard Gong <richard.gong@amd.com>,
+        Kenneth Feng <kenneth.feng@amd.com>,
+        Jiansong Chen <Jiansong.Chen@amd.com>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] drm/amdgpu/nv: Apply ASPM quirk on Intel ADL + AMD Navi
+Date:   Tue, 14 Mar 2023 12:26:02 +0800
+Message-Id: <20230314042605.346458-1-kai.heng.feng@canonical.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel's default behaviour is to obstruct the allocation of high
-virtual address as it handles memory overcommit in a heuristic manner.
-Setting the parameter as OVERCOMMIT_ALWAYS, ensures kernel isn't
-susceptible to the availability of a platform's physical memory when
-denying a memory allocation request.
+S2idle resume freeze can be observed on Intel ADL + AMD WX5500. This is
+caused by commit 0064b0ce85bb ("drm/amd/pm: enable ASPM by default").
 
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Shuah Khan <shuah@kernel.org>
-Cc: linux-mm@kvack.org
-Cc: linux-kselftest@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
-Signed-off-by: Chaitanya S Prakash <chaitanyas.prakash@arm.com>
+The root cause is still not clear for now.
+
+So extend and apply the ASPM quirk from commit e02fe3bc7aba
+("drm/amdgpu: vi: disable ASPM on Intel Alder Lake based systems"), to
+workaround the issue on Navi cards too.
+
+Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
+Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2458
+Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
 ---
- tools/testing/selftests/mm/run_vmtests.sh | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  1 +
+ drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 15 +++++++++++++++
+ drivers/gpu/drm/amd/amdgpu/nv.c            |  2 +-
+ drivers/gpu/drm/amd/amdgpu/vi.c            | 15 ---------------
+ 4 files changed, 17 insertions(+), 16 deletions(-)
 
-diff --git a/tools/testing/selftests/mm/run_vmtests.sh b/tools/testing/selftests/mm/run_vmtests.sh
-index 8984e0bb58c7..c0f93b668c0c 100644
---- a/tools/testing/selftests/mm/run_vmtests.sh
-+++ b/tools/testing/selftests/mm/run_vmtests.sh
-@@ -220,7 +220,15 @@ CATEGORY="mremap" run_test ./mremap_test
- CATEGORY="hugetlb" run_test ./thuge-gen
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+index 164141bc8b4a..c697580f1ee4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+@@ -1272,6 +1272,7 @@ void amdgpu_device_pci_config_reset(struct amdgpu_device *adev);
+ int amdgpu_device_pci_reset(struct amdgpu_device *adev);
+ bool amdgpu_device_need_post(struct amdgpu_device *adev);
+ bool amdgpu_device_should_use_aspm(struct amdgpu_device *adev);
++bool aspm_support_quirk_check(void);
  
- if [ $VADDR64 -ne 0 ]; then
-+
-+	# set overcommit_policy as OVERCOMMIT_ALWAYS so that kernel
-+	# allows high virtual address allocation requests independent
-+	# of platform's physical memory.
-+
-+	prev_policy=$(cat /proc/sys/vm/overcommit_memory)
-+	echo 1 > /proc/sys/vm/overcommit_memory
- 	CATEGORY="hugevm" run_test ./virtual_address_range
-+	echo $prev_policy > /proc/sys/vm/overcommit_memory
+ void amdgpu_cs_report_moved_bytes(struct amdgpu_device *adev, u64 num_bytes,
+ 				  u64 num_vis_bytes);
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+index c4a4e2fe6681..c09f19385628 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
+@@ -80,6 +80,10 @@
  
- 	# virtual address 128TB switch test
- 	CATEGORY="hugevm" run_test ./va_128TBswitch.sh
+ #include <drm/drm_drv.h>
+ 
++#if IS_ENABLED(CONFIG_X86)
++#include <asm/intel-family.h>
++#endif
++
+ MODULE_FIRMWARE("amdgpu/vega10_gpu_info.bin");
+ MODULE_FIRMWARE("amdgpu/vega12_gpu_info.bin");
+ MODULE_FIRMWARE("amdgpu/raven_gpu_info.bin");
+@@ -1356,6 +1360,17 @@ bool amdgpu_device_should_use_aspm(struct amdgpu_device *adev)
+ 	return pcie_aspm_enabled(adev->pdev);
+ }
+ 
++bool aspm_support_quirk_check(void)
++{
++#if IS_ENABLED(CONFIG_X86)
++	struct cpuinfo_x86 *c = &cpu_data(0);
++
++	return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
++#else
++	return true;
++#endif
++}
++
+ /* if we get transitioned to only one device, take VGA back */
+ /**
+  * amdgpu_device_vga_set_decode - enable/disable vga decode
+diff --git a/drivers/gpu/drm/amd/amdgpu/nv.c b/drivers/gpu/drm/amd/amdgpu/nv.c
+index 855d390c41de..921adf66e3c4 100644
+--- a/drivers/gpu/drm/amd/amdgpu/nv.c
++++ b/drivers/gpu/drm/amd/amdgpu/nv.c
+@@ -578,7 +578,7 @@ static void nv_pcie_gen3_enable(struct amdgpu_device *adev)
+ 
+ static void nv_program_aspm(struct amdgpu_device *adev)
+ {
+-	if (!amdgpu_device_should_use_aspm(adev))
++	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
+ 		return;
+ 
+ 	if (!(adev->flags & AMD_IS_APU) &&
+diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
+index 12ef782eb478..e61ae372d674 100644
+--- a/drivers/gpu/drm/amd/amdgpu/vi.c
++++ b/drivers/gpu/drm/amd/amdgpu/vi.c
+@@ -81,10 +81,6 @@
+ #include "mxgpu_vi.h"
+ #include "amdgpu_dm.h"
+ 
+-#if IS_ENABLED(CONFIG_X86)
+-#include <asm/intel-family.h>
+-#endif
+-
+ #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
+ #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
+@@ -1138,17 +1134,6 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
+ 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
+ }
+ 
+-static bool aspm_support_quirk_check(void)
+-{
+-#if IS_ENABLED(CONFIG_X86)
+-	struct cpuinfo_x86 *c = &cpu_data(0);
+-
+-	return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
+-#else
+-	return true;
+-#endif
+-}
+-
+ static void vi_program_aspm(struct amdgpu_device *adev)
+ {
+ 	u32 data, data1, orig;
 -- 
-2.30.2
+2.34.1
 
