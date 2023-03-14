@@ -2,29 +2,29 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE2AD6B9DDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:06:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D343E6B9DE3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:06:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjCNSGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:06:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50810 "EHLO
+        id S230511AbjCNSGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230012AbjCNSGl (ORCPT
+        with ESMTP id S230043AbjCNSGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Mar 2023 14:06:41 -0400
 Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA8C3AF68B;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F060BAF69A;
         Tue, 14 Mar 2023 11:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
         s=20160406-ysoft-com; t=1678817198;
-        bh=gD22LXsDuJoOUZMHNihJKmJh7CtVqSFbDM6qf+BB0HA=;
+        bh=W06yoyKD/hYiM8C/5//liENYSRAYF5TmVXu7klRmnm0=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=VgYo11vfsICDsczAtcp1SMIxA3idmEfCMfx2l5iqLYc85xl+nr7k1MUlwD9eGvcwA
-         XoFpi/FOiAXivi07tkpPAMw/pQb5MuzyQHM27lIkOUbXhjqBk/We3pOJAtcWtR8wzP
-         PKrdcrlSpnDLI39nfFMNOq0nhtEvsBkC3Y4p12PM=
+        b=kQiAktvxtWYK2Hp5zWNAk2jWJVKQcUx/vX8SLzBzUcSPnOa420N+8lg1O1/yi/zkb
+         lskkLyEcbVN/rqcDIMRYDHJ5V67GucXcHAHQLtVs+DnUm5r5qwutPVy5Dtm+Ie2Jr+
+         qh1SeKk6YDVmP4/eKALzyMsK14ZdOVG51eDA00fs=
 Received: from vokac-Latitude-7410.ysoft.local (unknown [10.0.30.161])
-        by uho.ysoft.cz (Postfix) with ESMTP id BA896A052A;
-        Tue, 14 Mar 2023 19:06:37 +0100 (CET)
+        by uho.ysoft.cz (Postfix) with ESMTP id 28F3CA05BD;
+        Tue, 14 Mar 2023 19:06:38 +0100 (CET)
 From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
 To:     Shawn Guo <shawnguo@kernel.org>
 Cc:     Rob Herring <robh+dt@kernel.org>,
@@ -36,10 +36,11 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         NXP Linux Team <linux-imx@nxp.com>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
-        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-Subject: [PATCH v2 3/5] ARM: dts: imx6dl-yapp4: Remove unneeded status "okay"
-Date:   Tue, 14 Mar 2023 19:06:06 +0100
-Message-Id: <20230314180608.44482-4-michal.vokac@ysoft.com>
+        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 4/5] =?UTF-8?q?dt-bindings:=20arm:=20fsl:=20Add=20Y=20S?= =?UTF-8?q?oft=20IOTA=C2=A0Phoenix,=20Lynx,=20Pegasus=20and=20Pegasus+?=
+Date:   Tue, 14 Mar 2023 19:06:07 +0100
+Message-Id: <20230314180608.44482-5-michal.vokac@ysoft.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230314180608.44482-1-michal.vokac@ysoft.com>
 References: <20230314180608.44482-1-michal.vokac@ysoft.com>
@@ -55,36 +56,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Explicit status = "okay" is not needed as it is the default.
+These i.MX6 boards are based on a facelifted PCB from the previous designs.
+Routing for some unused parts was completely removed (uSD card, PCIe, audio
+codec) and some new parts were added (supercap backed RTC, secure element,
+PWM audio, GPIO button).
 
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
 ---
 Changes in v2:
-- new patch
+- collected Acked-by tag
 
- arch/arm/boot/dts/imx6dl-yapp4-common.dtsi | 2 --
- 1 file changed, 2 deletions(-)
+ Documentation/devicetree/bindings/arm/fsl.yaml | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-diff --git a/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi b/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi
-index 8a78a656bac0..a498f14b662d 100644
---- a/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi
-+++ b/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi
-@@ -98,7 +98,6 @@ reg_usb_otg_vbus: regulator-usb-otg-vbus {
- 		regulator-max-microvolt = <5000000>;
- 		gpio = <&gpio3 22 GPIO_ACTIVE_HIGH>;
- 		enable-active-high;
--		status = "okay";
- 	};
- };
+diff --git a/Documentation/devicetree/bindings/arm/fsl.yaml b/Documentation/devicetree/bindings/arm/fsl.yaml
+index 442ce8f4d675..bb25812baf2b 100644
+--- a/Documentation/devicetree/bindings/arm/fsl.yaml
++++ b/Documentation/devicetree/bindings/arm/fsl.yaml
+@@ -300,6 +300,7 @@ properties:
+               - variscite,dt6customboard
+               - wand,imx6q-wandboard      # Wandboard i.MX6 Quad Board
+               - ysoft,imx6q-yapp4-crux    # i.MX6 Quad Y Soft IOTA Crux board
++              - ysoft,imx6q-yapp4-pegasus # i.MX6 Quad Y Soft IOTA Pegasus board
+               - zealz,imx6q-gk802         # Zealz GK802
+               - zii,imx6q-zii-rdu2        # ZII RDU2 Board
+           - const: fsl,imx6q
+@@ -410,6 +411,7 @@ properties:
+               - prt,prtwd3                # Protonic WD3 board
+               - wand,imx6qp-wandboard     # Wandboard i.MX6 QuadPlus Board
+               - ysoft,imx6qp-yapp4-crux-plus  # i.MX6 Quad Plus Y Soft IOTA Crux+ board
++              - ysoft,imx6qp-yapp4-pegasus-plus # i.MX6 Quad Plus Y Soft IOTA Pegasus+ board
+               - zii,imx6qp-zii-rdu2       # ZII RDU2+ Board
+           - const: fsl,imx6qp
  
-@@ -302,7 +301,6 @@ eeprom@57 {
- 		compatible = "atmel,24c128";
- 		reg = <0x57>;
- 		pagesize = <64>;
--		status = "okay";
- 	};
+@@ -476,7 +478,9 @@ properties:
+               - wand,imx6dl-wandboard     # Wandboard i.MX6 Dual Lite Board
+               - ysoft,imx6dl-yapp4-draco  # i.MX6 DualLite Y Soft IOTA Draco board
+               - ysoft,imx6dl-yapp4-hydra  # i.MX6 DualLite Y Soft IOTA Hydra board
++              - ysoft,imx6dl-yapp4-lynx   # i.MX6 DualLite Y Soft IOTA Lynx board
+               - ysoft,imx6dl-yapp4-orion  # i.MX6 DualLite Y Soft IOTA Orion board
++              - ysoft,imx6dl-yapp4-phoenix  # i.MX6 DualLite Y Soft IOTA Phoenix board
+               - ysoft,imx6dl-yapp4-ursa   # i.MX6 Solo Y Soft IOTA Ursa board
+           - const: fsl,imx6dl
  
- 	touchscreen: touchscreen@5c {
 -- 
 2.25.1
 
