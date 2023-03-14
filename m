@@ -2,137 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B5FA66B8EE0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:39:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C7046B8EE4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:41:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbjCNJja (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:39:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S230402AbjCNJlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:41:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229684AbjCNJj1 (ORCPT
+        with ESMTP id S229538AbjCNJlJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:39:27 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E40AF36691;
-        Tue, 14 Mar 2023 02:39:25 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id f16so15314972ljq.10;
-        Tue, 14 Mar 2023 02:39:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678786764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zcEQOOnzszFUwCzQKIFzn1i0LJS8FFsxhSGEYxNISjk=;
-        b=fihQeiCHT56D9CQzgDogmMLYd5wUjDIjxKnQraGQ4HbU6F172pHDBvL7/i/xepC5Bz
-         oxclubpLwXHVw8GHI5vd8SJ0Ko6H6chnzQH9lUppOiT2cyV4WDePa24yN8vrPqQNOpfl
-         g5B5MfAQ8ITW1RSLZ4CBdqAR6Ie7K5zv7IiPdep2a65kM36zd2T8Zx+eaGnXSvo9dNm3
-         bFj750SKC0MPoyyYYVg5GkfuQy7Q1yZOPxpdDwsKKxseMcfqJ568NAPhZyThOKRlYVLZ
-         iLI9K7qvanJNWbi2+/BGOWQMuu0EKxJWZtXH7aSiNI3fhSbLNfeqLYLMh3mK5z+b55br
-         hPtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678786764;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=zcEQOOnzszFUwCzQKIFzn1i0LJS8FFsxhSGEYxNISjk=;
-        b=BSVscO2nY9TYMrn5TwrjF0iE5i0m+9ARrRZV/nFLbwbr6DGWrIuXmqWANvPut3aKuZ
-         R1a5jYsrk+48f2srEh1Jxamp4FUAyI+Nj2LGGid45AufTxSkDQEUIP4r8EUluDufclaV
-         kknwPP4B3G4+cqSGVUWrjGy6/yKz0xLj0hGMb0VStSOdLeIWITE+TLY0YZRpjHc6uVIX
-         m5xtCg+yyKnluABjarlHpU+pal6eAokFKSEcnVLgk9GII+oLK6ykBdQNL1r+C8L7Q60F
-         oaA0MCcN3AaSCpPer4ThhzJBtFzjBtwYS8BQC5SECOTqkOCHwRnsgJgmIGLd+wSDQQsI
-         A04w==
-X-Gm-Message-State: AO0yUKXCAnYJecoCva3ZHmp86wu+Du4hpyChu2r1083k/aztr3Fm57Sa
-        xz0RVOOvFSBIyl5J9yPmWbR/AwETjxA=
-X-Google-Smtp-Source: AK7set+II/bSQk1YmwThgclb50DANRr8kP/FCpJWXHDiz47loXRoCReqCE8/+Cg9zq/VudR1EDiBQA==
-X-Received: by 2002:a05:651c:10e:b0:295:b2a1:20ed with SMTP id a14-20020a05651c010e00b00295b2a120edmr10379603ljb.22.1678786764031;
-        Tue, 14 Mar 2023 02:39:24 -0700 (PDT)
-Received: from ?IPV6:2001:14ba:16f3:4a00::6? (dc75zzyyyyyyyyyyyyydy-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::6])
-        by smtp.gmail.com with ESMTPSA id g7-20020a2e9e47000000b002945b04e1ebsm363920ljk.94.2023.03.14.02.39.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 02:39:23 -0700 (PDT)
-Message-ID: <1161c822-ece3-4654-f11d-c775f8c64f65@gmail.com>
-Date:   Tue, 14 Mar 2023 11:39:22 +0200
+        Tue, 14 Mar 2023 05:41:09 -0400
+Received: from xry111.site (xry111.site [89.208.246.23])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CB376A6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:41:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
+        s=default; t=1678786865;
+        bh=yUNmPrhQ6SiuMNO6i2zc9N6TN7jXeXF7t1dNRXboDjM=;
+        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
+        b=i1eqIABfU88HuuoZDSREAEJdc3z0DDfSl6nqYI14FuWXwCPylP2k/PhZrIHX0JfIl
+         nOjeyei9Jwb34zSL/hDwy0+PwYExnIhTI5Hjq819Q+tT+FcG8THxLTWeAzeesUMU48
+         Kx9smfpulr5o15tvRYLa0R+cgK8j09TSKfYMZzi0=
+Received: from [192.168.124.9] (unknown [113.140.29.13])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
+        (Client did not present a certificate)
+        (Authenticated sender: xry111@xry111.site)
+        by xry111.site (Postfix) with ESMTPSA id 5FCD565A7E;
+        Tue, 14 Mar 2023 05:41:03 -0400 (EDT)
+Message-ID: <21f5aba50b7732b48d2610a5015186adf6bdfb38.camel@xry111.site>
+Subject: Re: [PATCH] LoongArch: Make WriteCombine configurable for ioremap()
+From:   Xi Ruoyao <xry111@xry111.site>
+To:     Huacai Chen <chenhuacai@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>
+Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
+        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
+Date:   Tue, 14 Mar 2023 17:40:54 +0800
+In-Reply-To: <20230314085433.4078119-1-chenhuacai@loongson.cn>
+References: <20230314085433.4078119-1-chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2 5/6] iio: light: ROHM BU27034 Ambient Light Sensor
-Content-Language: en-US, en-GB
-To:     Jonathan Cameron <jic23@kernel.org>
-Cc:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-References: <cover.1677750859.git.mazziesaccount@gmail.com>
- <874d59be98703bb58a98fea72138de5b94d71a52.1677750859.git.mazziesaccount@gmail.com>
- <20230304201720.2d554f07@jic23-huawei>
- <c16d372f-a122-16d6-ad08-1fbffb01d9ff@gmail.com>
- <20230312153655.052d5730@jic23-huawei>
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20230312153655.052d5730@jic23-huawei>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/12/23 17:36, Jonathan Cameron wrote:
-> On Sun, 5 Mar 2023 14:22:51 +0200
-> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
-> 
->> On 3/4/23 22:17, Jonathan Cameron wrote:
->>> On Thu, 2 Mar 2023 12:58:59 +0200
->>> Matti Vaittinen <mazziesaccount@gmail.com> wrote:
+On Tue, 2023-03-14 at 16:54 +0800, Huacai Chen wrote:
+> LoongArch maintains cache coherency in hardware, but when works with
+> LS7A chipsets the WUC attribute (Weak-ordered UnCached, which is similar
+> to WriteCombine) is out of the scope of cache coherency machanism for
+> PCIe devices (this is a PCIe protocol violation, may be fixed in newer
+> chipsets).
 
-//snip
+IIUC all launched LS7A models (7A1000 and 7A2000) suffers this issue?
 
->>>    
->>>> +static const struct iio_chan_spec bu27034_channels[] = {
->>>> +	{
->>>> +		.type = IIO_LIGHT,
->>>> +		.info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED) |
->>>> +				      BIT(IIO_CHAN_INFO_SCALE),
->>>
->>> What is this scale for?
->>
->> The scale is to inform users that we return data using milli lux.
->>
->>> Given the channel is computed from various different inputs, is there a
->>> clear definition of how it is scaled?  What does a write to it mean?
->>
->> Nothing. writing anything else but milli lux scale fails with -EINVAL.
->>
->> I guess I am doing something in an unusual way here :) Do you have a
->> suggestion for me?
-> 
-> Return data in lux?  Or return it as INFO_RAW - thus making it clear
-> that the reading is not in expected units and a conversion must be
-> applied by userspace.  SCALE is not applied to PROCESSED by userspace.
-> 
+> This means WUC can only used for write-only memory regions now, so this
+> option is disabled by default (means WUC falls back to SUC for ioremap).
+> You can enable this option if the kernel is ensured to run on bug-free
+> hardwares.
 
-I just noticed a thing. I used the iio_generic_buffer to test the 
-changes - and it got the channel values scaled to luxes even for the 
-PROCESSED channel. So, it seems to me the iio_generic_buffer does apply 
-the scale for PROCESSED channels too. I think that is slightly 
-misleading. Oh, and this is not intended to be a complaint - just a 
-report that there might be some room for an improvement :)
+Hmm, is it possible to make a PCI quirk so SUC/WUC will be decided
+automatically from the vendor:device ID of the PCI root controller?=20
+Then we don't need to rely on the user or distro maintainer to select an
+option.  I see there is already many architecture-dependant #if
+directives in drivers/pci/quirks.c so I guess such a quirk is acceptable
+in PCI tree...
 
-Yours,
-	-- Matti
+If a PCI quirk is not possible, then is it possible to make a kernel
+command line option, leaving this CONFIG as the default value of the
+option?  I guess in the future many LoongArch users will just install a
+binary distro, then it would be much easier to edit grub.cfg than
+rebuilding the kernel when they finally buy a compliant PCIe controller.
 
--- 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
+> Suggested-by: WANG Xuerui <kernel@xen0n.name>
+> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+> ---
+> =C2=A0arch/loongarch/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0 | 14 ++++++++++++++
+> =C2=A0arch/loongarch/include/asm/io.h |=C2=A0 5 +++++
+> =C2=A02 files changed, 19 insertions(+)
+>=20
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 0d11738a861a..e3f5c422636f 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -446,6 +446,20 @@ config ARCH_IOREMAP
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 protection support=
+. However, you can enable LoongArch DMW-based
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ioremap() for bett=
+er performance.
+> =C2=A0
+> +config ARCH_WRITECOMBINE
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "Enable WriteCombine (WUC=
+) for ioremap()"
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LoongArch maintains cac=
+he coherency in hardware, but with LS7A
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chipsets the WUC attrib=
+ute (Weak-ordered UnCached, which is similar
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to WriteCombine) is out=
+ of the scope of cache coherency machanism
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for PCIe devices (this =
+is a PCIe protocol violation, may be fixed
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 in newer chipsets).
+> +
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 This means WUC can only=
+ used for write-only memory regions now, so
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 this option is disabled=
+ by default (means WUC falls back to SUC for
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ioremap). You can enabl=
+e this option if the kernel is ensured to run
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 on bug-free hardwares.
+> +
+> =C2=A0config ARCH_STRICT_ALIGN
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "Enable -mstrict-ali=
+gn to prevent unaligned accesses" if EXPERT
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default y
+> diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm=
+/io.h
+> index 402a7d9e3a53..079ef897ed1a 100644
+> --- a/arch/loongarch/include/asm/io.h
+> +++ b/arch/loongarch/include/asm/io.h
+> @@ -54,8 +54,13 @@ static inline void __iomem *ioremap_prot(phys_addr_t o=
+ffset, unsigned long size,
+> =C2=A0 * @offset:=C2=A0=C2=A0=C2=A0 bus address of the memory
+> =C2=A0 * @size:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 size of the resource to map
+> =C2=A0 */
+> +#ifdef CONFIG_ARCH_WRITECOMBINE
+> =C2=A0#define ioremap_wc(offset, size)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0\
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ioremap_prot((offset), (s=
+ize), pgprot_val(PAGE_KERNEL_WUC))
+> +#else
+> +#define ioremap_wc(offset, size)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0\
+> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ioremap_prot((offset), (size),=
+ pgprot_val(PAGE_KERNEL_SUC))
+> +#endif
+> =C2=A0
+> =C2=A0#define ioremap_cache(offset, size)=C2=A0=C2=A0=C2=A0=C2=A0\
+> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ioremap_prot((offset), (s=
+ize), pgprot_val(PAGE_KERNEL))
 
-~~ When things go utterly wrong vim users can always type :help! ~~
-
+--=20
+Xi Ruoyao <xry111@xry111.site>
+School of Aerospace Science and Technology, Xidian University
