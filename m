@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9CDA6B8CBF
+	by mail.lfdr.de (Postfix) with ESMTP id 38AE26B8CBD
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:13:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230505AbjCNIMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:12:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50260 "EHLO
+        id S231133AbjCNIMD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:12:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229454AbjCNILG (ORCPT
+        with ESMTP id S229796AbjCNILH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:11:06 -0400
-Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 47FFB99272
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:37 -0700 (PDT)
-Received: by mail-ed1-x52c.google.com with SMTP id x3so58395003edb.10
+        Tue, 14 Mar 2023 04:11:07 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09CA899276
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:38 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id j11so58459408edq.4
         for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:09:37 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678781370;
+        d=linaro.org; s=google; t=1678781371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=VaFooc3ZqmiLvzci4fl/GeYapWLW5sp3t92Xl0ir5ig=;
-        b=Yb6sdRjE21qgkIpYWILXnkm1lGY5yV2b+fgqw86+RykRblzHE1b0uF6MW8txOqzlPI
-         SROLIDnX97wLME5XKT9Pp+u+E7mJUDrDBo6ftguehFvVY0kYq2o1tR4eMagsb+kZ4Exw
-         egX4JnfAH3pv+gV6T8iinoTwlQJZyE8YBdimgQag0cj9cnKzWzirgFZQygwOBPlryAhq
-         hOIA+qPlMjJ4LAUpRAyhfLi8IwE5JJVVUjBmBRjnVyQ+CA4h2lKiw9MA8xgFQLfQR+YH
-         uM1X1WmG9rtiDburkS4DtVMyoz2yh0FrtonxnH8NH+LLlntxrQUFkwy5DJY4fYqFMn8n
-         egzA==
+        bh=VIHAu8tErojOfd5QM6R7iQDgiVIIMil5Ve6NCJeQni8=;
+        b=sr6pnzRPpF6o2HDaiclSrB3FAy6yY+uTkyJCoUN0ng7M/YGhs67XfXhh/j7AoKPhaM
+         eRN9WWv7gyOl6B9LGMF5ek4ENi8BsFrnuuKwW9Mo0CfBC/t/MctcvYF6C3/Aipjqy0xR
+         FcydWT9EKuqVKhkr3LOunGkH526ciMMA+pKCb7QPRjY5qzBO/AhW0+dpJnjavXo41xUs
+         1F1z45MLN59o702BbapAoIF/oFjXp6LBm4j6eg/xFLgI6mAGHx7DQKn1OEEQYBPA46if
+         dV9vLZZnO4Z3R0CaZRzYpdQpGjwz5PRp4G1GtSnz+Xnwo6B9VO0svdguywwSRkF2I+PE
+         JUUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678781370;
+        d=1e100.net; s=20210112; t=1678781371;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=VaFooc3ZqmiLvzci4fl/GeYapWLW5sp3t92Xl0ir5ig=;
-        b=C5aM8KlbJ4yJ48s4kJMrRr4Kx4xAiogMqhtRN8WSy6vr211ksODir++9ErvMz45kUH
-         IHQ6moMdZPzvZOyOhKX1zlM+cyKjo2cxhLUKFODD+YwIvTPV69hJlZDsdghoXEUjdS7R
-         FQvL0ydYevp6OmCQXzz3WQnXzEMOQDRs3eVaauO48fpx5ExNA916lcyfKU5GdFKgJ5rl
-         3bujJlbCLJe61bW8O0QkeiRZVoyR3TuTsFvxGDo6xNhwYlo1qaU5PDj/IXwinLEBBnk0
-         Q9bLAXuimfCd61eYr/oVIok4Lo8aFM5lbxsX+4vIeUCDFMxRo/UqqXAheNyWXrsIhYMD
-         +8Ug==
-X-Gm-Message-State: AO0yUKWQLpe/gtWBeOsTkzO+h/N/Z3MAoJAmajhIUv671a1MilVJ2SAY
-        K4DqgAvH9bBfWKZzaCag3UC85A==
-X-Google-Smtp-Source: AK7set/APHfoUuZWf2pafjAXejZ5leY1DkdX5DUsjX2PBOWYgQ4UfykW1CWAtP7k2shcSQrXc554aw==
-X-Received: by 2002:a05:6402:12d5:b0:4fe:1b62:4741 with SMTP id k21-20020a05640212d500b004fe1b624741mr762069edx.28.1678781369949;
-        Tue, 14 Mar 2023 01:09:29 -0700 (PDT)
+        bh=VIHAu8tErojOfd5QM6R7iQDgiVIIMil5Ve6NCJeQni8=;
+        b=w6wHwT71I39TuJG1XQ44lyab3uxo3+T45p8oqjNXLPT0oJMv4g4uAarlWCm8DkmKMx
+         qzB1owoRtVKbM1Xa34k2P7ryPJ9Lkyl/Sj1v5YzTLyQz90/SjKO0iGrW9DSqZSR8vHDT
+         Aa+A2NofCmRIcOUAx51de4aw3fr2iMCnFbB/jJ9opKnfaV7q7DlSCVZFyNaf6oqSu4kI
+         I26x3ccKzyIw2X0NrWfyfJae8l+0swwz7M64bUGvBliM4VHVOUZmzx6as0Q3Pt0PQ8gu
+         GyBu8UdjZp1Kkqg8aKoWgZyJr7aY5lFi89DUHOaPY246sA2XMTM3HUrw78rS7Pf+kALd
+         kzAw==
+X-Gm-Message-State: AO0yUKWA5B8TuESuRsoqCtRK7e3DSD3Yahlq8qEcT4ZnDuvqCArhdbgb
+        qOiZueupIMYvPvXhl6WKFOIBLg==
+X-Google-Smtp-Source: AK7set+nViGSJKPBiCfrPyqc6M+zYGZLmpyG8CW6rERPFv83r0SInDvFH4CKRGOAPfI6AMrpx9mZxQ==
+X-Received: by 2002:aa7:d307:0:b0:4fc:825d:7c7f with SMTP id p7-20020aa7d307000000b004fc825d7c7fmr6293704edq.3.1678781370926;
+        Tue, 14 Mar 2023 01:09:30 -0700 (PDT)
 Received: from krzk-bin.. ([2a02:810d:15c0:828:6932:5570:6254:9edd])
-        by smtp.gmail.com with ESMTPSA id co2-20020a0564020c0200b004fce9ff4830sm584872edb.88.2023.03.14.01.09.29
+        by smtp.gmail.com with ESMTPSA id co2-20020a0564020c0200b004fce9ff4830sm584872edb.88.2023.03.14.01.09.30
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 01:09:29 -0700 (PDT)
+        Tue, 14 Mar 2023 01:09:30 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Andy Gross <agross@kernel.org>,
         Bjorn Andersson <andersson@kernel.org>,
@@ -61,9 +61,9 @@ To:     Andy Gross <agross@kernel.org>,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
         devicetree@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2 11/13] arm64: dts: qcom: qcs404: add compatible fallback to mailbox
-Date:   Tue, 14 Mar 2023 09:09:15 +0100
-Message-Id: <20230314080917.68246-12-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 12/13] arm64: dts: qcom: sc7180: add compatible fallback to mailbox
+Date:   Tue, 14 Mar 2023 09:09:16 +0100
+Message-Id: <20230314080917.68246-13-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20230314080917.68246-1-krzysztof.kozlowski@linaro.org>
 References: <20230314080917.68246-1-krzysztof.kozlowski@linaro.org>
@@ -71,35 +71,35 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-QCS404 mailbox is compatible with MSM8916.
+SC7180 mailbox is compatible with SDM845.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/qcs404.dtsi | 3 ++-
+ arch/arm64/boot/dts/qcom/sc7180.dtsi | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs404.dtsi b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-index bc2ed73afb74..e4fdc40be821 100644
---- a/arch/arm64/boot/dts/qcom/qcs404.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs404.dtsi
-@@ -1302,7 +1302,8 @@ intc: interrupt-controller@b000000 {
+diff --git a/arch/arm64/boot/dts/qcom/sc7180.dtsi b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+index ebfa21e9ed8a..61d99c02a290 100644
+--- a/arch/arm64/boot/dts/qcom/sc7180.dtsi
++++ b/arch/arm64/boot/dts/qcom/sc7180.dtsi
+@@ -3407,7 +3407,8 @@ msi-controller@17a40000 {
  		};
  
- 		apcs_glb: mailbox@b011000 {
--			compatible = "qcom,qcs404-apcs-apps-global", "syscon";
-+			compatible = "qcom,qcs404-apcs-apps-global",
-+				     "qcom,msm8916-apcs-kpss-global", "syscon";
- 			reg = <0x0b011000 0x1000>;
+ 		apss_shared: mailbox@17c00000 {
+-			compatible = "qcom,sc7180-apss-shared";
++			compatible = "qcom,sc7180-apss-shared",
++				     "qcom,sdm845-apss-shared";
+ 			reg = <0 0x17c00000 0 0x10000>;
  			#mbox-cells = <1>;
- 			clocks = <&apcs_hfpll>, <&gcc GCC_GPLL0_AO_OUT_MAIN>;
+ 		};
 -- 
 2.34.1
 
