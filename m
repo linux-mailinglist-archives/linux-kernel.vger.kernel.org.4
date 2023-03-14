@@ -2,99 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2A4CB6B8791
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D46A6B8795
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:28:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229689AbjCNBZD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 21:25:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41042 "EHLO
+        id S230195AbjCNB15 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 21:27:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43228 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCNBZA (ORCPT
+        with ESMTP id S229516AbjCNB14 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 21:25:00 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A51069CEC;
-        Mon, 13 Mar 2023 18:24:59 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p13-20020a17090a284d00b0023d2e945aebso66888pjf.0;
-        Mon, 13 Mar 2023 18:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678757099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9rQAj3RdmyLkPTq1oHtk9XKECnzrwmvjxGU7spr3bBY=;
-        b=IsUs0wHdJkILJGOuNdK4H9pKSoTih6KfR3UItAylXx0Q6bl8tgb0NJGrQQ5rIDt9CS
-         VvQly+sSQXUsPbOzMyUZ1WoLPfodkylq8BGvweIa3It6jKOU8vqhcmw4lMVddTr4CCxi
-         DY/rtelAiJiEA9BQRJiNQpBoL/4pkRP7CRJthoz5LYG0D0GVKP14rYP2JBoVh/FYYPD7
-         EhbN4XvzfVVvEPJR2tU75gFEXvHUNaxDb1IwKkLX7ap0dcGlTNSqOeksYZewF6w9LVkj
-         kOL0gIxT0tFXK2BrOVWNmScGl8wrpDfIx8z9DihSCBZgJO7rfLHvWpBkEuShHfhTrKIH
-         TRNg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678757099;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9rQAj3RdmyLkPTq1oHtk9XKECnzrwmvjxGU7spr3bBY=;
-        b=udGxMgUrM5MVY4WqhNd0DgVU0ABVBRFKlQo/XU86uDC/pouSpeCbh6Fo59/3PmPWqc
-         1oQokKaTMnR4/zu6kW4E83MXfEa82fbPEI63Jk75Oyc+RRS8D+Ir349YIAwOR7JVazVv
-         GfygRSFSRy+m6nkeZ7p+m0qR2MZQmc3UyKVUd23ao4bOzDKWmsScLHbYfpXg32JLgdcY
-         vhVVelhEVvQG9td5TOL9Ae28d1XFnTiskJ4BGWUqXPHFhz83+siKrKwGtPi1V/Wo6Jl7
-         vxXZtC9X5UQH2NpQt7mLLUchLouUjeVshwAM6JXnEuUZhNteEAIXdWjNltYELYyvGueE
-         r+1w==
-X-Gm-Message-State: AO0yUKUGfzeDbkxR4MsmpkBg3C3FGfzUsiDXh2+WUCU/0n29ezynbZ8t
-        B4Ws751Yp43ty5d4d1j5XhACWLJjpAn69uqNi2U=
-X-Google-Smtp-Source: AK7set8scFBkNmdlTDen93ONGYZBItUA1MFMdQtWl5NTgTqHlykVRUkzRW0cD7CsESKImmbhqRCkyAI7VYxNlvi3cHc=
-X-Received: by 2002:a17:902:f986:b0:1a0:4321:920e with SMTP id
- ky6-20020a170902f98600b001a04321920emr2435495plb.12.1678757098846; Mon, 13
- Mar 2023 18:24:58 -0700 (PDT)
+        Mon, 13 Mar 2023 21:27:56 -0400
+Received: from mo-csw.securemx.jp (mo-csw1115.securemx.jp [210.130.202.157])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84A7874DE3;
+        Mon, 13 Mar 2023 18:27:53 -0700 (PDT)
+Received: by mo-csw.securemx.jp (mx-mo-csw1115) id 32E1RcOP022424; Tue, 14 Mar 2023 10:27:39 +0900
+X-Iguazu-Qid: 2wHHyxo6xdj2qNxgHZ
+X-Iguazu-QSIG: v=2; s=0; t=1678757258; q=2wHHyxo6xdj2qNxgHZ; m=jUFMGdD6i8+Pcq2xlmGPGyF2McvGdZj+Mi001AENZK4=
+Received: from imx2-a.toshiba.co.jp (imx2-a.toshiba.co.jp [106.186.93.35])
+        by relay.securemx.jp (mx-mr1111) id 32E1Rash005412
+        (version=TLSv1.2 cipher=AES128-GCM-SHA256 bits=128 verify=NOT);
+        Tue, 14 Mar 2023 10:27:37 +0900
+From:   Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Samu Onkalo <samu.p.onkalo@nokia.com>
+Cc:     linux-kernel@vger.kernel.org,
+        Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+        stable@vger.kernel.org
+Subject: [PATCH] misc: apds990x: Remove unnecessary return code in apds990x_power_state_show()
+Date:   Tue, 14 Mar 2023 10:27:32 +0900
+X-TSB-HOP2: ON
+Message-Id: <20230314012732.2267077-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230311180630.4011201-1-zyytlz.wz@163.com> <20230313153904.53647ad7@kernel.org>
-In-Reply-To: <20230313153904.53647ad7@kernel.org>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Tue, 14 Mar 2023 09:24:46 +0800
-Message-ID: <CAJedcCzPGSBrR9vPHaguPCdK-_6txyQNhiMDaqxKRMNC1Ky2yg@mail.gmail.com>
-Subject: Re: [PATCH net v3] net: ravb: Fix possible UAF bug in ravb_remove
-To:     Jakub Kicinski <kuba@kernel.org>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, s.shtylyov@omp.ru,
-        davem@davemloft.net, linyunsheng@huawei.com, edumazet@google.com,
-        pabeni@redhat.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
-        alex000young@gmail.com, richardcochran@gmail.com,
-        p.zabel@pengutronix.de, Biju Das <biju.das.jz@bp.renesas.com>,
-        phil.edworthy@renesas.com,
-        Yoshihiro Shimoda <yoshihiro.shimoda.uh@renesas.com>,
-        geert+renesas@glider.be, yuehaibing@huawei.com,
-        linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jakub Kicinski <kuba@kernel.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=97=
-=A5=E5=91=A8=E4=BA=8C 06:39=E5=86=99=E9=81=93=EF=BC=9A
->
-> On Sun, 12 Mar 2023 02:06:30 +0800 Zheng Wang wrote:
-> > Fixes: c156633f1353 ("Renesas Ethernet AVB driver proper")
->
-> You must CC all people involved in a commit if you put it as Fixes.
-Hi Jakub,
+In apds990x_power_state_show(), the return value of sprintf is returned, so
+'return 0' is unnecessary. This remove 'return 0'.
 
-Get it.
+Fixes: 92b1f84d46b2 ("drivers/misc: driver for APDS990X ALS and proximity sensors")
+Cc: stable@vger.kernel.org
+Signed-off-by: Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+---
+ drivers/misc/apds990x.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-> Are you using the get_maintainer.pl script?
-> How do you call in exactly?
+diff --git a/drivers/misc/apds990x.c b/drivers/misc/apds990x.c
+index 0024503ea6db..6de6dc3c122f 100644
+--- a/drivers/misc/apds990x.c
++++ b/drivers/misc/apds990x.c
+@@ -984,7 +984,6 @@ static ssize_t apds990x_power_state_show(struct device *dev,
+ 				   struct device_attribute *attr, char *buf)
+ {
+ 	return sprintf(buf, "%d\n", !pm_runtime_suspended(dev));
+-	return 0;
+ }
+ 
+ static ssize_t apds990x_power_state_store(struct device *dev,
+-- 
+2.39.2
 
-Yes, I used this script to find developers involved but It seems that
-I unintentionally forgot to CC some people.
 
-I apologize for my offense for everyone exclued in the list.
-
-Thanks,
-Zheng
