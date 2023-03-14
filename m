@@ -2,99 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38B56B94FB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:56:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 746326B9521
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:02:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231695AbjCNM4I convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 08:56:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58602 "EHLO
+        id S232144AbjCNNCC convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 09:02:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232807AbjCNMzb (ORCPT
+        with ESMTP id S232108AbjCNNBp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:55:31 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54EFBA676D;
-        Tue, 14 Mar 2023 05:51:00 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id h7so8570179ila.5;
-        Tue, 14 Mar 2023 05:51:00 -0700 (PDT)
+        Tue, 14 Mar 2023 09:01:45 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F58AB899;
+        Tue, 14 Mar 2023 05:57:22 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id m6so1649345qvq.0;
+        Tue, 14 Mar 2023 05:57:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678798136;
+        d=1e100.net; s=20210112; t=1678798263;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=gBpmO88aubLNx5ds9k4LYpaw6LJjHZV6232nWb27C40=;
-        b=F/kw06fa4E2Ncy3YZWjTpozsk/uEjpPYL+2is5cIZC+P58OegEkgDGz8ouVWG/Q1xE
-         Et8D+rcrK0xMif92M6dEqkmX6yfko55xNYaRa/dbni5K4hnMg2kJbS4/8N5mQY5HTF7Q
-         BuNVrYExTJQKj0m847hrRMjI5hL/at2PTpDev6MFju/5YmkoW25rySdsU0UD+4d5UkNo
-         jXBkpw5/9i7PCHGZNLOZEH415wd3DX5XJX3ItX9HWYdCiie0ZC/MqygGX6ds/8v08Pbm
-         yaXtFFKw61YpJpp/62dKUu7jdJfUxdSx37XPUWZuUUVoXqX6fT4tmKAD2dnnb8j9ZqBS
-         cfHQ==
-X-Gm-Message-State: AO0yUKV7FGwu8G54frPgXfvRFHivRRVu38Rlppr/9khy6TUcYSyIfRZ9
-        eGWLIfvbg58oegOwmWkvWHM1NlT5zYRypg==
-X-Google-Smtp-Source: AK7set9uaU9BS2YJ7QMbWwxTVXrP8kR0ag9yvjORrw/DCh/YZzKu/5KzWRtQ0EXzIfXazCdoYGSwVA==
-X-Received: by 2002:a05:6e02:df2:b0:316:e39f:13f2 with SMTP id m18-20020a056e020df200b00316e39f13f2mr2007150ilj.12.1678798136649;
-        Tue, 14 Mar 2023 05:48:56 -0700 (PDT)
-Received: from mail-il1-f169.google.com (mail-il1-f169.google.com. [209.85.166.169])
-        by smtp.gmail.com with ESMTPSA id z22-20020a029f16000000b003c4920e7c74sm750704jal.57.2023.03.14.05.48.55
+        bh=PQ85EN/5uYFja9HAgTN7gmUCNqF9DS+mPJS2DQU6bkg=;
+        b=3RjCdfCLtplSGObvITNXIWUDsN7rwJhe6e3YqgPz1AMZAZFCWdhJwuWiiasMSraTtd
+         TcgPvVU9w1zaI+nYtlwPb1QiunDVCr0eApm4V/RpJATMr1g0Yg9KOj8GbsonsSkGptUO
+         APDaUFb3Rm8153RnfbBf8KN3/xAf7XYHTQ5v18rfnDxjJtvTmGu/ZEICvwbfSuOULkdD
+         5wUS8L+SH5WcsZBkYZcos0mtbp0D/ZR5Mn07rvwP4gtvbzx4e3YOtWWEjU5rzPKW8vh3
+         9lbeNk87lAxI1BDLoNSmFLP0pYnpD5Gh8yoi7n5218Dmpz26n80Xo9ByJYiXv5OiGZZ0
+         NSHw==
+X-Gm-Message-State: AO0yUKVdc5dNusT8z3n6qWMymSspTWTMbtK32MmaYQ3dHzxWhOED3ETR
+        3bTDgpHqTfVezdyPFpU9nzhgK/lwh8BFsg==
+X-Google-Smtp-Source: AK7set85FitrPer+ZpX0qiWEdR+DJqYIycx0ftgM3AR8mRQ82v0E4Pr8g5ofXY4U6cZ9lLAKL0n5tg==
+X-Received: by 2002:a05:6214:1c87:b0:537:7d76:ea7c with SMTP id ib7-20020a0562141c8700b005377d76ea7cmr18538152qvb.25.1678798262768;
+        Tue, 14 Mar 2023 05:51:02 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id s15-20020ac85ccf000000b003b0b903720esm1765318qta.13.2023.03.14.05.51.02
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 05:48:56 -0700 (PDT)
-Received: by mail-il1-f169.google.com with SMTP id i19so8550137ila.10;
-        Tue, 14 Mar 2023 05:48:55 -0700 (PDT)
-X-Received: by 2002:a05:6902:1002:b0:b48:1359:4e28 with SMTP id
- w2-20020a056902100200b00b4813594e28mr461087ybt.12.1678798114483; Tue, 14 Mar
- 2023 05:48:34 -0700 (PDT)
+        Tue, 14 Mar 2023 05:51:02 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-541a05e4124so115149717b3.1;
+        Tue, 14 Mar 2023 05:51:02 -0700 (PDT)
+X-Received: by 2002:a81:af48:0:b0:541:9b14:949e with SMTP id
+ x8-20020a81af48000000b005419b14949emr5132457ywj.4.1678798261703; Tue, 14 Mar
+ 2023 05:51:01 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230314121216.413434-1-schnelle@linux.ibm.com> <20230314121216.413434-2-schnelle@linux.ibm.com>
-In-Reply-To: <20230314121216.413434-2-schnelle@linux.ibm.com>
+References: <3b6733f683c13ac02093206e76a3e30c7d045366.1678279668.git.geert+renesas@glider.be>
+ <76456032-cc76-aede-f760-65cb999a2163@opensource.wdc.com>
+In-Reply-To: <76456032-cc76-aede-f760-65cb999a2163@opensource.wdc.com>
 From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Mar 2023 13:48:22 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdV9ZoB5XNiiVEG-zBzB9eN5RJSC42WMDD-RZfcg=2tr4g@mail.gmail.com>
-Message-ID: <CAMuHMdV9ZoB5XNiiVEG-zBzB9eN5RJSC42WMDD-RZfcg=2tr4g@mail.gmail.com>
-Subject: Re: [PATCH v3 01/38] Kconfig: introduce HAS_IOPORT option and select
- it as necessary
-To:     Niklas Schnelle <schnelle@linux.ibm.com>
-Cc:     Arnd Bergmann <arnd@arndb.de>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Michal Simek <monstr@monstr.eu>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-        Helge Deller <deller@gmx.de>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Alan Stern <stern@rowland.harvard.edu>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org
+Date:   Tue, 14 Mar 2023 13:50:49 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUiSZqyTvxCbWzvWmkjC47MepuWmTNd=x_xYGDZH3SZMw@mail.gmail.com>
+Message-ID: <CAMuHMdUiSZqyTvxCbWzvWmkjC47MepuWmTNd=x_xYGDZH3SZMw@mail.gmail.com>
+Subject: Re: [PATCH v2 resend 3] ahci: qoriq: Add platform dependencies
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     linux-ide@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
+        Li Yang <leoyang.li@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
@@ -107,24 +68,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 1:13 PM Niklas Schnelle <schnelle@linux.ibm.com> wrote:
-> We introduce a new HAS_IOPORT Kconfig option to indicate support for I/O
-> Port access. In a future patch HAS_IOPORT=n will disable compilation of
-> the I/O accessor functions inb()/outb() and friends on architectures
-> which can not meaningfully support legacy I/O spaces such as s390. Also
-> add dependencies on HAS_IOPORT for the ISA and HAVE_EISA config options
-> as these busses always go along with HAS_IOPORT.
->
-> The "depends on" relations on HAS_IOPORT in drivers as well as ifdefs
-> for HAS_IOPORT specific sections will be added in subsequent patches on
-> a per subsystem basis.
->
-> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
-> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+Hi Damien,
 
->  arch/m68k/Kconfig       | 1 +
+On Tue, Mar 14, 2023 at 1:12 PM Damien Le Moal
+<damien.lemoal@opensource.wdc.com> wrote:
+> On 3/8/23 21:49, Geert Uytterhoeven wrote:
+> > The Freescale QorIQ AHCI SATA controller is only present on Freescale
+> > Layerscape SoCs.  Add platform dependencies to the AHCI_QORIQ config
+> > symbol, to avoid asking the user about it when configuring a kernel
+> > without Layerscape support.
+> >
+> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> > Acked-by: Li Yang <leoyang.li@nxp.com>
+> > ---
+> > v2:
+> >   - Add Acked-by.
+> > ---
+> >  drivers/ata/Kconfig | 1 +
+> >  1 file changed, 1 insertion(+)
+> >
+> > diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
+> > index b56fba76b43f48f7..42b51c9812a0ebab 100644
+> > --- a/drivers/ata/Kconfig
+> > +++ b/drivers/ata/Kconfig
+> > @@ -276,6 +276,7 @@ config AHCI_XGENE
+> >  config AHCI_QORIQ
+> >       tristate "Freescale QorIQ AHCI SATA support"
+> >       depends on OF
+> > +     depends on SOC_LS1021A || ARCH_LAYERSCAPE || COMPILE_TEST
+> >       select SATA_HOST
+> >       help
+> >         This option enables support for the Freescale QorIQ AHCI SoC's
+>
+> Do you want this in fixes or queuing this for 6.4 is fine ?
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+I guess 6.4 is fine. We've been seeing this message while configuring
+our kernels for years, so a few extra weeks won't hurt ;-)
 
 Gr{oetje,eeting}s,
 
