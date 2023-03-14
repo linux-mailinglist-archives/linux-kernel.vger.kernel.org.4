@@ -2,73 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A7E9E6B9E08
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:15:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 61CE56B9E0E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:17:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229886AbjCNSPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:15:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39690 "EHLO
+        id S229538AbjCNSRV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:17:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230282AbjCNSOv (ORCPT
+        with ESMTP id S229712AbjCNSRU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:14:51 -0400
-Received: from mail-yw1-x1135.google.com (mail-yw1-x1135.google.com [IPv6:2607:f8b0:4864:20::1135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51301258F;
-        Tue, 14 Mar 2023 11:14:49 -0700 (PDT)
-Received: by mail-yw1-x1135.google.com with SMTP id 00721157ae682-5445009c26bso95532857b3.8;
-        Tue, 14 Mar 2023 11:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678817689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=44AE1w51mQu+NNfC48lEvJgM6CcI08MxIjGSfmxJVis=;
-        b=SYaU+YqMXsSXfqpTKNV3tiob6i278BQaiMqLuIEwX/BezR8Ruiu5GoMXCQ+j7ArxKh
-         uYtvoZX9tB2026M++UmvkikFXbNZKfxYBdJW/UQtbBQxsqGJdABD577fXslI0ybsO+0e
-         2gHeTggrTWI7xtj2/XsBAEIl3mXhRTkFkP0WHBC6HJd9F4gQOztTbcBklUStoJ2BJr+z
-         6FBmjTSBK9LSwmgE4TO8ZFAuBHP9ox/Q0niVoUbcx6j0wXLuM5F0Z8Dv3jjPJF0lcDhU
-         TX+B0qI42/EJOlF2CqAEFCTCfanb+sYkr+K7RSwFqdQlhSmUaxK9aCudIYaChh5yuE/9
-         75zQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678817689;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=44AE1w51mQu+NNfC48lEvJgM6CcI08MxIjGSfmxJVis=;
-        b=APO4olPZxmcdDL9AxaZI50feh8qpDiAObsKsbp9Xk7Vkjnc4/mqYkMLvpY06Yh+bbX
-         ogxErgb7b2wysRLtEjO8CboN2BKdRMPo8UEnK4pJ0VMgKc8ulf27X0ZqAl2kRPOSTF6b
-         L6CoU3rDStbphJd2LfsnxKFQVxOH5CnrDPVIKhqN3OES7njlxdwlxwI5wlVphtGyreL6
-         jOm3FV21tcF4wi+8SP1n+VgqnVRbeamLB4qp8Wk3y3oRz+YQsJ97User8Xd6PF2RjP1A
-         BXWebgt9x+O1GhWN62rfyCMdhncDtMZrppb7tC7Xq49HlLjGldmNJExe0zgqvpXbbrsc
-         jMgQ==
-X-Gm-Message-State: AO0yUKUL96+3mBYBy+IrFUrZAwL/yX4rYHUb+WsFsDO5YgKHfPEEWqy0
-        USKgYORbzklSJViAyYZc+w21PqC6tXu3mEP8hw7gOA1sE/3H1Q==
-X-Google-Smtp-Source: AK7set9XeXmGKUPH2oTgl2KxjOdNkcRKcVjDLX01NACQBmjVDRwojrFanU2LHe+PnWXZwPIuk+NJj5OwS2UHjwOzfGc=
-X-Received: by 2002:a81:ae22:0:b0:541:6fb9:c9c2 with SMTP id
- m34-20020a81ae22000000b005416fb9c9c2mr7662282ywh.2.1678817688851; Tue, 14 Mar
- 2023 11:14:48 -0700 (PDT)
+        Tue, 14 Mar 2023 14:17:20 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E60776BC37;
+        Tue, 14 Mar 2023 11:17:18 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 0C0B21F8BA;
+        Tue, 14 Mar 2023 18:17:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678817837; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YLIuIjePw0AXA6BmEraD20IliZzbWVdaCt1MG07LrQ4=;
+        b=e0fhVj3JMLZkbQKEOI9rS9zzdbQcoojjtz1n0NOR1VwvHDpdkcScPrhCdT8yVdZNXFXtCc
+        WVUJMd2vyg2471DAfdHmonAVoNTuSgagIJQq86HZNcQh2PJM6KnfLexvPg/5kM3yTqyRYX
+        sFtcZ/XKOHwNGT8CP4ZCF9aHC0FfaOE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678817837;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=YLIuIjePw0AXA6BmEraD20IliZzbWVdaCt1MG07LrQ4=;
+        b=17b05HfqhnT7UcZ6YXL7+JK0QxBOa+go5bQIUNHuvECDCEjr6Bp7X7ZhX8vT76w3iGwEdB
+        6gWRPB9+T5YB7CAA==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5F9D413A26;
+        Tue, 14 Mar 2023 18:17:16 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id dDU5BCy6EGQOIQAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Tue, 14 Mar 2023 18:17:16 +0000
+Date:   Tue, 14 Mar 2023 15:17:13 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: Re: [PATCH v7 04/10] livepatch: Add sample livepatch module
+Message-ID: <20230314181713.tgpc7t7yia5nlhil@daedalus>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+ <20230306140824.3858543-5-joe.lawrence@redhat.com>
 MIME-Version: 1.0
-References: <20230310121306.4632-1-noltari@gmail.com> <da5d150e-a2db-573d-e231-b4fd9fdaf63b@gmail.com>
- <CAOiHx=njCvfVju9BAe7gTzMq0vybQF-gy4SRZrhEJFULGLhC7w@mail.gmail.com>
- <5b4d3eef-ff80-29e8-9be0-d487aee5e4e2@broadcom.com> <a88fc41b-69d3-b042-fa91-e403d1263742@gmail.com>
- <CAKR-sGfL5_VU9uxJHGyZ-bj2P_7R6+OOfWs6Yf-ihcCF8bD2MA@mail.gmail.com>
- <e3cff853-8d5d-acdf-8e6a-3322c4de2023@gmail.com> <CAKR-sGcyMF26NGoeEApKuKDe6=14nCGKwRYx-o68LHAcmUNXhA@mail.gmail.com>
- <7517f1b0-2afb-7edf-a847-e839a410f46f@gmail.com>
-In-Reply-To: <7517f1b0-2afb-7edf-a847-e839a410f46f@gmail.com>
-From:   =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date:   Tue, 14 Mar 2023 19:14:38 +0100
-Message-ID: <CAKR-sGdOeg185sPFi0nwDxd6Fjx_SxyBgvtmFEiO9Y_50Wf2Bw@mail.gmail.com>
-Subject: Re: [PATCH] mips: bmips: BCM6358: disable arch_sync_dma_for_cpu_all()
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     William Zhang <william.zhang@broadcom.com>,
-        Jonas Gorski <jonas.gorski@gmail.com>,
-        bcm-kernel-feedback-list@broadcom.com, tsbogend@alpha.franken.de,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306140824.3858543-5-joe.lawrence@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,152 +73,140 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Florian,
+On Mon, Mar 06, 2023 at 09:08:18AM -0500, Joe Lawrence wrote:
+> Add a new livepatch sample in samples/livepatch/ to make use of symbols
+> that must be post-processed to enable load-time relocation resolution.
+> As the new sample is to be used as an example, it is annotated with
+> KLP_MODULE_RELOC and with KLP_SYMPOS macros.
+> 
+> The livepatch sample updates the function cmdline_proc_show to print the
+> string referenced by the symbol saved_command_line appended by the
+> string "livepatch=1".
+> 
+> Update livepatch-sample.c to remove livepatch MODULE_INFO statement.
 
-El lun, 13 mar 2023 a las 22:46, Florian Fainelli
-(<f.fainelli@gmail.com>) escribi=C3=B3:
->
-> (please don't top post)
->
-> On 3/13/23 14:39, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> > Hi Florian,
-> >
-> > I did another test changing from TP1 to TP0 and this is the result:
-> > [ 0.000000] Linux version 5.15.98 (noltari@atlantis)
-> > (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
-> > 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
-> > [ 0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
-> > [ 0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x2a00015
-> > [ 0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
-> >
-> > And there were no exceptions with EHCI/OHCI as opposed to TP1.
-> > So the issue is only happening when booting from TP1.
->
-> Ah, that explains it then, I was just about to ask you which TP was the
-> kernel booted on.
->
-> > Maybe it's due to the fact that BCM6358 has a shared TLB?
->
-> I think it has to do with the fact that the BMIPS_RAC_CONFIG_1 is likely
-> not enabling the RAC since that register pertains to TP1, could you dump
-> its contents, and if they do not set bit 0 and/or 1, please set them and
-> try again and see whether it works any better? The RAC provides
-> substantial performance improvements, it would be a change to keep it
-> disabled.
+LGTM:
 
-This is the code that I added to bmips_cpu_setup():
-    case CPU_BMIPS4350:
-        cfg =3D read_c0_brcm_cmt_local();
-        pr_info("bmips_cpu_setup: read_c0_brcm_cmt_local() =3D 0x%x\n", cfg=
-);
+Reviewed-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 
-        cfg =3D read_c0_brcm_config_0();
-        pr_info("bmips_cpu_setup: read_c0_brcm_config_0() =3D 0x%x\n", cfg)=
-;
-
-        cfg =3D __raw_readl(cbr + BMIPS_RAC_ADDRESS_RANGE);
-        pr_info("bmips_cpu_setup: BMIPS_RAC_ADDRESS_RANGE =3D 0x%x\n", cfg)=
-;
-
-        cfg =3D __raw_readl(cbr + BMIPS_L2_CONFIG);
-        pr_info("bmips_cpu_setup: BMIPS_L2_CONFIG =3D 0x%x\n", cfg);
-
-        cfg =3D __raw_readl(cbr + BMIPS_LMB_CONTROL);
-        pr_info("bmips_cpu_setup: BMIPS_LMB_CONTROL =3D 0x%x\n", cfg);
-
-        cfg =3D __raw_readl(cbr + BMIPS_RAC_CONFIG);
-        pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x%x\n", cfg);
-        __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
-        pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x%x\n", cfg);
-        __raw_readl(cbr + BMIPS_RAC_CONFIG);
-
-        cfg =3D __raw_readl(cbr + BMIPS_RAC_CONFIG_1);
-        pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG_1 =3D 0x%x\n", cfg);
-        __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG_1);
-        pr_info("bmips_cpu_setup: BMIPS_RAC_CONFIG_1 =3D 0x%x\n", cfg);
-        __raw_readl(cbr + BMIPS_RAC_CONFIG_1);
-        break;
-
-And this is the result:
-[    0.000000] bmips_cpu_setup: read_c0_brcm_cmt_local() =3D 0x80000000
-[    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e1006
-[    0.000000] bmips_cpu_setup: BMIPS_RAC_ADDRESS_RANGE =3D 0x277bdab0
-[    0.000000] bmips_cpu_setup: BMIPS_L2_CONFIG =3D 0x241a0008
-[    0.000000] bmips_cpu_setup: BMIPS_LMB_CONTROL =3D 0x0
-[    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x3c1b8041
-[    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG =3D 0x3c1b8041
-[    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG_1 =3D 0x3600008
-[    0.000000] bmips_cpu_setup: BMIPS_RAC_CONFIG_1 =3D 0x3600008
-
-As you can see the bit's aren't set and all the registers appear to
-have strange values and not the usual ones when initialized by the
-bootloader...
-
->
-> >
-> > Maybe the correct way of solving the issue would be by adding the
-> > following code at bcm6358_quirks():
-> > if (read_c0_brcm_cmt_local() & (1 << 31))
-> >      bmips_dma_sync_disabled =3D 1;
-> >
-> > BTW, if I understood it correctly, you want me to reverse the logic,
-> > so bmips_dma_sync_disabled instead of bmips_dma_sync_enabled.
-> > Is this correct?
->
-> Yes, I want the logic such that we need to set a variable to 1/true
-> rather setting one to 0, less change to get it wrong IMHO.
->
-> >
-> > Best regards,
-> > =C3=81lvaro.
-> >
-> >
-> > El lun, 13 mar 2023 a las 18:37, Florian Fainelli
-> > (<f.fainelli@gmail.com>) escribi=C3=B3:
-> >>
-> >> On 3/12/23 11:50, =C3=81lvaro Fern=C3=A1ndez Rojas wrote:
-> >>> Hi Florian,
-> >>>
-> >>> I tried what you suggested but it stil panics on EHCI:
-> >>>
-> >>> [    0.000000] Linux version 5.15.98 (noltari@atlantis)
-> >>> (mips-openwrt-linux-musl-gcc (OpenWrt GCC 12.2.0 r22187+1-19817fa3f5)
-> >>> 12.2.0, GNU ld (GNU Binutils) 2.40.0) #0 SMP Sun Mar 12 18:23:28 2023
-> >>> [    0.000000] bmips_cpu_setup: read_c0_brcm_config_0() =3D 0xe30e100=
-6
-> >>> [    0.000000] bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x3c1b8041
-> >>> [    0.000000] CPU0 revision is: 0002a010 (Broadcom BMIPS4350)
-> >>>
-> >>> It looks like bit 29 is set so RAC should be present.
-> >>> And RAC_I seems to be set, but not RAC_D...
-> >>>
-> >>> BTW, this is what I added to bmips_cpu_setup:
-> >>>
-> >>> case CPU_BMIPS4350:
-> >>> cfg =3D read_c0_brcm_config_0();
-> >>> pr_info("bmips_cpu_setup: read_c0_brcm_config_0() =3D 0x%x\n", cfg);
-> >>>
-> >>> cfg =3D __raw_readl(cbr + BMIPS_RAC_CONFIG);
-> >>> pr_info("bmips_cpu_setup: cbr + BMIPS_RAC_CONFIG =3D 0x%x\n", cfg);
-> >>> __raw_writel(cfg | BIT(0) | BIT(1), cbr + BMIPS_RAC_CONFIG);
-> >>> __raw_readl(cbr + BMIPS_RAC_CONFIG);
-> >>> break;
-> >>
-> >> Thanks for running those experiments, I cannot explain what you are
-> >> seeing, so there must be some sort of erratum applicable to the
-> >> BMIPS4380 revision used on the 6358 somehow...
-> >>
-> >> If you can make the suggested change to use negative logic in order to
-> >> disable the RAC flushing, that would work for me, also maybe add a
-> >> Fixes: tag so it gets backported to stable trees?
-> >>
-> >> Thanks!
-> >> --
-> >> Florian
-> >>
->
-> --
-> Florian
->
-
-=C3=81lvaro
+> 
+> Signed-off-by: Josh Poimboeuf <jpoimboe@redhat.com>
+> Signed-off-by: Joao Moreira <jmoreira@suse.de>
+> Signed-off-by: Joe Lawrence <joe.lawrence@redhat.com>
+> ---
+>  samples/livepatch/Makefile                    |  1 +
+>  .../livepatch/livepatch-annotated-sample.c    | 93 +++++++++++++++++++
+>  2 files changed, 94 insertions(+)
+>  create mode 100644 samples/livepatch/livepatch-annotated-sample.c
+> 
+> diff --git a/samples/livepatch/Makefile b/samples/livepatch/Makefile
+> index 9f853eeb6140..f2b41f4d6c16 100644
+> --- a/samples/livepatch/Makefile
+> +++ b/samples/livepatch/Makefile
+> @@ -6,3 +6,4 @@ obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-shadow-fix2.o
+>  obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-callbacks-demo.o
+>  obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-callbacks-mod.o
+>  obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-callbacks-busymod.o
+> +obj-$(CONFIG_SAMPLE_LIVEPATCH) += livepatch-annotated-sample.o
+> diff --git a/samples/livepatch/livepatch-annotated-sample.c b/samples/livepatch/livepatch-annotated-sample.c
+> new file mode 100644
+> index 000000000000..4fe0e16423c7
+> --- /dev/null
+> +++ b/samples/livepatch/livepatch-annotated-sample.c
+> @@ -0,0 +1,93 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) 2014 Seth Jennings <sjenning@redhat.com>
+> + */
+> +
+> +/*
+> + * livepatch-annotated-sample.c - Kernel Live Patching Sample Module
+> + */
+> +
+> +#define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+> +
+> +#include <linux/module.h>
+> +#include <linux/kernel.h>
+> +#include <linux/livepatch.h>
+> +
+> +/*
+> + * This (dumb) live patch overrides the function that prints the
+> + * kernel boot cmdline when /proc/cmdline is read.
+> + *
+> + * This livepatch uses the symbol saved_command_line whose relocation
+> + * must be resolved during load time. To enable that, this module
+> + * must be post-processed by a tool called klp-convert, which embeds
+> + * information to be used by the loader to solve the relocation.
+> + *
+> + * The module is annotated with KLP_MODULE_RELOC/KLP_SYMPOS macros.
+> + * These annotations are used by klp-convert to infer that the symbol
+> + * saved_command_line is in the object vmlinux.
+> + *
+> + * As saved_command_line has no other homonimous symbol across
+> + * kernel objects, this annotation is not a requirement, and can be
+> + * suppressed with no harm to klp-convert. Yet, it is kept here as an
+> + * example on how to annotate livepatch modules that contain symbols
+> + * whose names are used in more than one kernel object.
+> + *
+> + * Example:
+> + *
+> + * $ cat /proc/cmdline
+> + * <your cmdline>
+> + *
+> + * $ insmod livepatch-sample.ko
+> + * $ cat /proc/cmdline
+> + * <your cmdline> livepatch=1
+> + *
+> + * $ echo 0 > /sys/kernel/livepatch/livepatch_sample/enabled
+> + * $ cat /proc/cmdline
+> + * <your cmdline>
+> + */
+> +
+> +extern char *saved_command_line;
+> +
+> +#include <linux/seq_file.h>
+> +static int livepatch_cmdline_proc_show(struct seq_file *m, void *v)
+> +{
+> +	seq_printf(m, "%s livepatch=1\n", saved_command_line);
+> +	return 0;
+> +}
+> +
+> +KLP_MODULE_RELOC(vmlinux) vmlinux_relocs[] = {
+> +	KLP_SYMPOS(saved_command_line, 0)
+> +};
+> +
+> +static struct klp_func funcs[] = {
+> +	{
+> +		.old_name = "cmdline_proc_show",
+> +		.new_func = livepatch_cmdline_proc_show,
+> +	}, { }
+> +};
+> +
+> +static struct klp_object objs[] = {
+> +	{
+> +		/* name being NULL means vmlinux */
+> +		.funcs = funcs,
+> +	}, { }
+> +};
+> +
+> +static struct klp_patch patch = {
+> +	.mod = THIS_MODULE,
+> +	.objs = objs,
+> +};
+> +
+> +static int livepatch_init(void)
+> +{
+> +	return klp_enable_patch(&patch);
+> +}
+> +
+> +static void livepatch_exit(void)
+> +{
+> +}
+> +
+> +module_init(livepatch_init);
+> +module_exit(livepatch_exit);
+> +MODULE_LICENSE("GPL");
+> +MODULE_INFO(livepatch, "Y");
+> -- 
+> 2.39.2
+> 
