@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96F316B942C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:43:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2657E6B9433
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:43:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231553AbjCNMnA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:43:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58966 "EHLO
+        id S229815AbjCNMn3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:43:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231637AbjCNMmj (ORCPT
+        with ESMTP id S231629AbjCNMnE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:42:39 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D818C94F71
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:42:16 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id c10so9590697pfv.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:42:16 -0700 (PDT)
+        Tue, 14 Mar 2023 08:43:04 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87879A189C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:42:19 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id cn6so2661857pjb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:42:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1678797735;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=pdc7UbNBneHho9oqmigekem1agGN/vBMBnNuJZM71Vw=;
-        b=Lc4umaDTjOtkaLSsPc4M1IXUWPNZbqF5+yTINoM2IU/nhV4oARdpcU496yWvlohvRx
-         rXsWb7j1wHmB2KIu6/AeKZAlEP3K4OwrVb0zmGG0ppXvUSzPgWkas1X5VSfaJTIqM1LR
-         aPSlnmD5fkZT5PDs8UwHP4gLsNxpHotEjCj72aaJJeW41fmMZ7RtDgBo6XzThJC2U4za
-         QwUlryeriPMTLlE28OTqxTeieaxWGojXBRjf/oH+kOg4l5PRXEIJFF744U6lOkEuqK6o
-         NxabJczCwNOPnMXPHJ1KXGw+mFMQeaIw4ipNYBe75FDrl+KWubWCrFRXx7Z2yP3KcEVh
-         uJ7w==
+        d=bytedance.com; s=google; t=1678797738;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=V3vWZFEyoFMtyU6NTTWlVAUK8MBUwQjg+G+jzZCDuAk=;
+        b=Q0EWqbllJxrbZyB/Dz9VLiyjmY6OKzQ9ODkPXCtv1PHZFxEXHWUGy9j8P3QCubHPW6
+         laPUIMP5ae5R8SQ31VbcE0PP2Qxc0ZRZeq9ial6QzAMDElJuHuLPmKq8qz8iadur2NK2
+         Qc6llIatsVC/fIYVCuEaCkKpavYWo5xV0MCwYao4CrA7z5VX0new9FRvp3QEbxYXkyiI
+         SLS6EiaBUB2md6d10HaQRcz8rW8OxSMc7iQFehdRbjLPyp5kXZppj44STkAZGKtyjsmc
+         olYO/uynIoSxt0B+X/x9asOLPNhgHb9CaVT7qrMmAGPN7MuDUu025M1syzM8Q6iWO8yG
+         UYOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678797735;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=pdc7UbNBneHho9oqmigekem1agGN/vBMBnNuJZM71Vw=;
-        b=Q9WARMB5UfHM0v/8eiwQ7MhuBNK4oJ/MpldxCXqr8Y1cAeYe61GS461OMe8Pq2xnHf
-         Zb4foW3e6xBDGVdit/hkGvAgcvQa9yPXw71a0jEQ/gyDelIqSveMaSFfHp8ncW5K2eFz
-         JNhthnzs5/Fpo247PGD3HC+Fexlf/fohYWSija0T3VS0upeEwbb8WkGPLYkHxIccgpCG
-         gbdAgmXWU35OddDr+F9tOZ73vBxUo+gcfllBm8b0CNSV+fs+VfZkGSMHP3PhHVL0QEQ7
-         pWx04puUS+3lLI7YkCPBe0nv0vtHm2TN1ALMU3iQUsqA2erzGLiM2IlTFjciukGuSMfV
-         jwzQ==
-X-Gm-Message-State: AO0yUKX5wLZVo+te5+VNDuMAYbzzw5bdspW2cAqcqlyURuDvh47/Ix1f
-        dme0Dna1XEL+FHFp132YMHLsptsWdbXuB376Ok4=
-X-Google-Smtp-Source: AK7set9NbkFaKM3mIDwG+DR65lCy0qwYWOEvpNHAETvz3oGZOdr5D7ZbxTiZAQhaf7632ArGyBDNnQ==
-X-Received: by 2002:aa7:968e:0:b0:5aa:72c6:4a7d with SMTP id f14-20020aa7968e000000b005aa72c64a7dmr15664029pfk.16.1678797735679;
-        Tue, 14 Mar 2023 05:42:15 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678797738;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=V3vWZFEyoFMtyU6NTTWlVAUK8MBUwQjg+G+jzZCDuAk=;
+        b=C4ql3GXnIg8h0FzsI4z6zAv6a3hDFjLx/jEGfcpURks8dxGJPaeiSLnacmH0MtOdVP
+         hgygV1PbOTw0CRrlr3xi0GzqiqUEn/edWZMbGHyyX/q77FNsO7Vv3A5VFarau9nMuYaz
+         l002ro7RzuF2ZXQUtFrxho1B1WvxKsSuoZT1N2BwR3TXuJyxw+IM4rRZB7fabZGWAV3q
+         sHmP+AGK7M+0LtNKbn7bNoA6baYwpMqmkQ+iPq1b+aWWn62BDtfogccL6RikgM+fEA+u
+         bvThKQJi1y8TQrxh4acwdqkxg1QQpZQiMSI/2YA2rjjhuNuTip6aA1ZeH/0QdqNeTQmr
+         wo1A==
+X-Gm-Message-State: AO0yUKWmNVr5uKJ1vZ2RzM9WkY1yDd4Cv+stJcQ9CZ4IGxd6dpT6eejY
+        OJ8MCyjdmnvB3Bf6kGB7oF5hXQ==
+X-Google-Smtp-Source: AK7set9Ud5nZcxsuvhOGQRUujTT++2XEg590TsbcJ3Ds1UZrcs20nPDnaJZcfAnEuMlVPZqCfqCn0A==
+X-Received: by 2002:a05:6a20:bc97:b0:d5:74f:37a1 with SMTP id fx23-20020a056a20bc9700b000d5074f37a1mr3510720pzb.27.1678797738697;
+        Tue, 14 Mar 2023 05:42:18 -0700 (PDT)
 Received: from GL4FX4PXWL.bytedance.net ([139.177.225.234])
-        by smtp.gmail.com with ESMTPSA id s11-20020aa7828b000000b005ded5d2d571sm1509385pfm.185.2023.03.14.05.42.12
+        by smtp.gmail.com with ESMTPSA id s11-20020aa7828b000000b005ded5d2d571sm1509385pfm.185.2023.03.14.05.42.16
         (version=TLS1_3 cipher=TLS_CHACHA20_POLY1305_SHA256 bits=256/256);
-        Tue, 14 Mar 2023 05:42:15 -0700 (PDT)
+        Tue, 14 Mar 2023 05:42:18 -0700 (PDT)
 From:   Peng Zhang <zhangpeng.00@bytedance.com>
 To:     Liam.Howlett@oracle.com
 Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
         maple-tree@lists.infradead.org,
         Peng Zhang <zhangpeng.00@bytedance.com>
-Subject: [PATCH v2 0/3] Some fixes and cleanup for maple tree.
-Date:   Tue, 14 Mar 2023 20:42:00 +0800
-Message-Id: <20230314124203.91572-1-zhangpeng.00@bytedance.com>
+Subject: [PATCH v2 1/3] maple_tree: Fix get wrong data_end in mtree_lookup_walk()
+Date:   Tue, 14 Mar 2023 20:42:01 +0800
+Message-Id: <20230314124203.91572-2-zhangpeng.00@bytedance.com>
 X-Mailer: git-send-email 2.37.0 (Apple Git-136)
+In-Reply-To: <20230314124203.91572-1-zhangpeng.00@bytedance.com>
+References: <20230314124203.91572-1-zhangpeng.00@bytedance.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,27 +73,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some fixes and clean up for maple tree.
+if (likely(offset > end))
+	max = pivots[offset];
 
-The bug fixed by [PATCH v2 1/3] does not seem to be triggered due to some
-coincidences, because now the implementation of mtree_lookup_walk() scans
-pivots one by one and exits the loop early. The test cases for the bugs fixed by
-[PATCH v2 3/3] are difficult to write. If I think of how to write them later,
-I will send them out. So I send out the second edition first.
+The above code should be changed to if (likely(offset < end)), which is
+correct. This affects the correctness of ma_data_end(). Now it seems
+that the final result will not be wrong, but it is best to change it.
+This patch does not change the code as above, because it simplifies the
+code by the way.
 
-Changes since v1:
- - drop [PATCH 4/4]
- - update the commit message of [PATCH 2/4]
- - collect Reviewed-bys
- - add fixes tags
+Fixes: 54a611b60590 ("Maple Tree: add new data structure")
+Signed-off-by: Peng Zhang <zhangpeng.00@bytedance.com>
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
+---
+ lib/maple_tree.c | 15 +++++----------
+ 1 file changed, 5 insertions(+), 10 deletions(-)
 
-Peng Zhang (3):
-  maple_tree: Fix get wrong data_end in mtree_lookup_walk()
-  maple_tree: Simplify mas_wr_node_walk()
-  maple_tree: Fix a potential concurrency bug in RCU mode
-
- lib/maple_tree.c | 52 ++++++++++--------------------------------------
- 1 file changed, 11 insertions(+), 41 deletions(-)
-
+diff --git a/lib/maple_tree.c b/lib/maple_tree.c
+index 646297cae5d1..b3164266cfde 100644
+--- a/lib/maple_tree.c
++++ b/lib/maple_tree.c
+@@ -3875,18 +3875,13 @@ static inline void *mtree_lookup_walk(struct ma_state *mas)
+ 		end = ma_data_end(node, type, pivots, max);
+ 		if (unlikely(ma_dead_node(node)))
+ 			goto dead_node;
+-
+-		if (pivots[offset] >= mas->index)
+-			goto next;
+-
+ 		do {
+-			offset++;
+-		} while ((offset < end) && (pivots[offset] < mas->index));
+-
+-		if (likely(offset > end))
+-			max = pivots[offset];
++			if (pivots[offset] >= mas->index) {
++				max = pivots[offset];
++				break;
++			}
++		} while (++offset < end);
+ 
+-next:
+ 		slots = ma_slots(node, type);
+ 		next = mt_slot(mas->tree, slots, offset);
+ 		if (unlikely(ma_dead_node(node)))
 -- 
 2.20.1
+
