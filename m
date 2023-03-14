@@ -2,126 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A63E96B9D32
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:38:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 70AA86B9D3B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230208AbjCNRiu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:38:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
+        id S230072AbjCNRmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229578AbjCNRis (ORCPT
+        with ESMTP id S229847AbjCNRmP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:38:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C87683C05;
-        Tue, 14 Mar 2023 10:38:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678815526; x=1710351526;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=VgVMyqR52hv/pd5q0qh+OTN2bW5UJL20CGoQOlOBteg=;
-  b=kBbrr82Qu5e5RxNFdXQQW4nrhnG8kwmD0zRZ8spgT8F8ybHhmdfyzxoz
-   NXhULyLw6eBsMlTm+f+L5+BZTyuN0TI7THSkz1Cwb1W1gBUqN61KjV9JD
-   UqykbfVJsZJBaG2lvAv88UN6zA/RQ/dnuP3wCVhwkfiXnnCnH8g/NYQl4
-   IX93Sj82GVBUqoZ/RDxF0UK4bZGWCzhHghC+VixUFBmJTYCqXQAy0uq/t
-   JVwuQtUZ7VmX9uN9riEHJC9ml5CkjR508bxoStw6tDWAHXORms002NnFu
-   pGSktr00x9f0tIstUW4zplt0BopjScQ0jMEAawzpqxMBN7eU1aCBghvJE
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339862613"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="339862613"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 10:38:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="789458862"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="789458862"
-Received: from jstavrid-mobl.amr.corp.intel.com (HELO [10.212.216.78]) ([10.212.216.78])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 10:38:33 -0700
-Message-ID: <082f3086-b5e1-1842-6039-fb6710df6ca8@intel.com>
-Date:   Tue, 14 Mar 2023 10:38:33 -0700
+        Tue, 14 Mar 2023 13:42:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14A3A8A45;
+        Tue, 14 Mar 2023 10:42:14 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B29C8B81AB7;
+        Tue, 14 Mar 2023 17:42:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A5D1C433EF;
+        Tue, 14 Mar 2023 17:42:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678815731;
+        bh=QkIwxCBXFihogQPG33157WCr6YP7trAKxHMdphluvQw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RtA5ceaYdHCqWCzQ/SlOXCiGEwpS+dvIQhq1Es5lTHFVMPgrp3BzylxtQaibxEJe/
+         1egCfWafVCbu6zntJA/uiNk2/BnTqlJ9BZz06v5DtyZqWhELaJZ3EmLXOvWHHI6+f5
+         kF2QYzPbEDC+e/Gb5bj8DoHRhSoEdnUyqxzj9SuCN8wazz69Z5C+F/dQAhKGak06yh
+         wsF5+NGLRVq5zDt+N+n+uwVaXd8Owz7Ezv2HRDiX1aIVC2XbkOW8EMet6eQZ0msOvR
+         Bs2OKJjRrFt2dbKdRwEQtKjnSZ/YhdEAPhwxg9yZbmMmjjcsj7mQJNPMHnb6rl+pSV
+         U55rHyQI9t2lg==
+Date:   Tue, 14 Mar 2023 13:42:09 -0400
+From:   Sasha Levin <sashal@kernel.org>
+To:     Geert Uytterhoeven <geert@linux-m68k.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Wolfram Sang <wsa+renesas@sang-engineering.com>,
+        mturquette@baylibre.com, sboyd@kernel.org,
+        linux-renesas-soc@vger.kernel.org, linux-clk@vger.kernel.org
+Subject: Re: [PATCH AUTOSEL 6.2 07/16] clk: renesas: rcar-gen3: Disable R-Car
+ H3 ES1.*
+Message-ID: <ZBCx8QV/CsMxiiUu@sashalap>
+References: <20230305135207.1793266-1-sashal@kernel.org>
+ <20230305135207.1793266-7-sashal@kernel.org>
+ <CAMuHMdXLBVDPPM5ZGGV5O5uMm4R8=ZHvsgDxMxHQP2q4YKvhhA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>
-Cc:     "Huang, Kai" <kai.huang@intel.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1678111292.git.kai.huang@intel.com>
- <f150316b975b5ca22c6c4016ffd90db79d657bbf.1678111292.git.kai.huang@intel.com>
- <20230308222738.GA3419702@ls.amr.corp.intel.com>
- <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
- <20230313234916.GC3922605@ls.amr.corp.intel.com>
- <a62497059fc3f31706a532b822d6c966bd981468.camel@intel.com>
- <20230314040200.GD3922605@ls.amr.corp.intel.com>
- <902b0166-6156-8def-a7a3-f0ce8995fa9c@intel.com>
- <20230314171603.GE3922605@ls.amr.corp.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230314171603.GE3922605@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMuHMdXLBVDPPM5ZGGV5O5uMm4R8=ZHvsgDxMxHQP2q4YKvhhA@mail.gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 10:16, Isaku Yamahata wrote:
->>> TDX 1.5 spec introduced TDX_RND_NO_ENTROPY status code.  For TDX 1.0, let's
->>> postpone it to TDX 1.5 activity.
->> What the heck does this mean?
+On Sun, Mar 05, 2023 at 02:59:11PM +0100, Geert Uytterhoeven wrote:
+>Hi Sasha,
+>
+>On Sun, Mar 5, 2023 at 2:52 PM Sasha Levin <sashal@kernel.org> wrote:
+>> From: Wolfram Sang <wsa+renesas@sang-engineering.com>
 >>
->> I don't remember seeing any code here that checks for "TDX 1.0" or "TDX
->> 1.5".  That means that this code needs to work with _any_ TDX version.
+>> [ Upstream commit b1dec4e78599a2ce5bf8557056cd6dd72e1096b0 ]
 >>
->> Are features being added to new versions that break code written for old
->> versions?
-> No new feature, but new error code. TDX_RND_NO_ENTROPY, lack of entropy.
-> For TDX 1.0, some APIs return TDX_SYS_BUSY. It can be contention(lock failure)
-> or the lack of entropy.  The caller can't distinguish them.
-> For TDX 1.5, they return TDX_RND_NO_ENTROPY instead of TDX_SYS_BUSY in the case
-> of rdrand/rdseed failure.
-> 
-> Because both TDX_SYS_BUSY and TDX_RND_NO_ENTROPY are recoverable error
-> (bit 63 error=1, bit 62 non_recoverable=0), the caller can check error bit and
-> non_recoverable bit for retry.
+>> R-Car H3 ES1.* was only available to an internal development group and
+>> needed a lot of quirks and workarounds. These become a maintenance
+>> burden now, so our development group decided to remove upstream support
+>> for this SoC. Public users only have ES2 onwards.
+>>
+>> In addition to the ES1 specific removals, a check for it was added
+>> preventing the machine to boot further. It may otherwise inherit wrong
+>> clock settings from ES2 which could damage the hardware.
+>>
+>> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+>> Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> Link: https://lore.kernel.org/r/20230202092332.2504-1-wsa+renesas@sang-engineering.com
+>> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
+>> Signed-off-by: Sasha Levin <sashal@kernel.org>
+>
+>This patch disables hardware support.  Do we really want to backport
+>that to stable?
+>Perhaps backporting to v6.2.y and v6.1.y is still acceptable (the next
+>Renesas BSP will be based on v6.1.y LTS), but I would not recommend
+>backporting to older versions.
 
-Oh, that's actually really nice.  It separates out the "RDRAND is empty"
-issue from the "the VMM should have had a lock here" issue.
+Ack, I'll drop it from older trees. Thanks!
 
-For now, let's consider TDX_SYS_BUSY to basically indicate a non-fatal
-kernel bug: the kernel called TDX in a way that it shouldn't have.
-We'll treat it in the kernel as non-recoverable.  We'll return an error,
-WARN_ON(), and keep on running.
-
-A follow-on patch can add generic TDX_RND_NO_ENTROPY retry support to
-the seamcall infrastructure.
+-- 
+Thanks,
+Sasha
