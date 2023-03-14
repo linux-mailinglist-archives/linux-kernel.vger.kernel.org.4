@@ -2,272 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F0D6BA266
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:21:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E61C6BA272
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:27:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230011AbjCNWVk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:21:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56654 "EHLO
+        id S230416AbjCNW1S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:27:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230290AbjCNWVf (ORCPT
+        with ESMTP id S229687AbjCNW1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:21:35 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A94C554C81
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:20:57 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id i6so17318107ybu.8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:20:57 -0700 (PDT)
+        Tue, 14 Mar 2023 18:27:16 -0400
+Received: from mail-lf1-x130.google.com (mail-lf1-x130.google.com [IPv6:2a00:1450:4864:20::130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6340B2A6ED
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:27:12 -0700 (PDT)
+Received: by mail-lf1-x130.google.com with SMTP id br6so3796899lfb.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:27:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678832454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=prmEhq3NQgLd3x/54m3N/hnamRPai5NrclABlw05kvc=;
-        b=W+qNZdRIotMleNE57r9jiKwraAWhd5MwTIvahen0WEkE5PzTRfmpRXWqkUhrPuXIJq
-         iOnlW0h/sR5EQYT1noYI5h5qxP67NxcyQAYUBvPIaBiOTQ6INBGE5VpUu4nLVv1ZgT02
-         UaGlJgByAVV73JGmEHYNz/tvTczs8bNZngZHMdpmlwhzd0aMyKtTskgYYO5Z069HIK2B
-         cVaMa5F5P19meeZJc60/mXF3AP4vN/fYubS4IlRxhs0oMqcLwh8BqCqcUp6kNhSOb7DB
-         40YDvH/qdQ3IsnL5+jzoJFLVvdy1p1rDNpZ2WNL95MejPc/m90zkXXi/+fyynxXl5xwJ
-         oY5g==
+        d=linaro.org; s=google; t=1678832830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Au+ByXF+T/ttwdvk2E5GvB4Cm4Xo7Y50WRAwY8Nd3PI=;
+        b=Q2LCGvyww4ehVH+wC1KTEGhgAoSUFH1ZX0i1aWgkZRmGHiNPGRfhYGDk3RyIeDNpp9
+         HqGKE4iexBIR9tJGgeMLkaGUoyS7JJ50bgQGIiYWfo/CBSovpvVu7V2omFF8f4wXzXMX
+         qWuwutohj4c+p4kY+5ebx5J8oSYxTuAho0cqgR2RWquDkXAZtil+fH4h6K2bme2gm+oy
+         ddo6qCdr5O6fAm5nYoAZwhix/aT7bi080gRirmCrqERirzZ6ix72nm5oJoL0wsKyUXsQ
+         B2aC9tjI3KsOKzVZbmFtZ79sTI7bLHREVQcojPVagmIe+pNSdD+MHMj0f230ySgOCp/0
+         1GHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678832454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=prmEhq3NQgLd3x/54m3N/hnamRPai5NrclABlw05kvc=;
-        b=ILMS18pusXO4Yg5mRxj7vFIW4pT7Nsy2w/4nXT43KyIM/NMvfG2NqKxKNL19Cj6ei8
-         tHpjQDi9nEOxKr4nEw/uA6jUQj+ONsu0pn8SrfRNV04iK3pZKOx76XJqRpYTg2Hcmk6w
-         SqlrPTnZWHriLrKAtr7xyLl0EUDkOLiFEUwoqYDN50LFbM2F3DOkbS/i9wwGrua5bNrq
-         kAieMnuHhJd/y4MGeQdQRrMqm0bcMJIBJZgy2Mwq/QFHfj8+mNCnh92syeYHACoRpw05
-         4rXCMkOeH45z8Ex6E7WbAjjq7ww6jztfHx9Bsfv5Jc7mVCJuH8JcBA3UnfBRKdKUwaPq
-         juuw==
-X-Gm-Message-State: AO0yUKX6k13jx1O0nQE3QjWaKNogjGrEq0gFi/l75rsBsh0Gh0T9nMxX
-        QZx8alPzrpLlXvCfNAFi9cp/jZHGhHW6RkabpZ+AhQ==
-X-Google-Smtp-Source: AK7set8SkYGNcFnfYPsMfzR9x36zzygYapNbW6uZiul45TDLPJiNPfU+4GRchnUtuOZ+roEgbEeaRI7iP32Bln9WT6o=
-X-Received: by 2002:a5b:38a:0:b0:ac9:cb97:bd0e with SMTP id
- k10-20020a5b038a000000b00ac9cb97bd0emr19406415ybp.5.1678832453903; Tue, 14
- Mar 2023 15:20:53 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678832830;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Au+ByXF+T/ttwdvk2E5GvB4Cm4Xo7Y50WRAwY8Nd3PI=;
+        b=vIa4AxfEYHHF+hqG+M0nMLSu7ix99l12yJPeGVwWKC6ueKqbDkwfVOiuZB2k/yMl9T
+         E9hDXa/iCGjcIjDyzHdNa6t7NW0w+YJgQslchiG4gQCvbnhcygKlzDb3fnqHt3HeHg0P
+         CoUIoPUATTlIAIBVQA7eWHV7IjvbqsBnQBwpmBQsJRo/SEnNIsLWudXfeGLoPJCwPwMg
+         gR2rUENUEA+vZdg4oIPMArA+XBTnHuS2EP/1GeE1evlb6Dxo2fX17fnFsyk84tNqtJcb
+         5nll3BnfqnlP5ejOeYTGgHd/UbTzUn+v6wREtkpiyUnGLfR40PK/ov4kPHBuolWxd9t5
+         WTpg==
+X-Gm-Message-State: AO0yUKUI5KX0Vv0vMOHS67P8yUf+gJ3NwQF5uhLSa5PWF3eBXRKO9YwY
+        dH2gMontqaSrB5Kpp7KqNxGQKnCt8Gc41U1NbfM=
+X-Google-Smtp-Source: AK7set8LJmuI7xVqgISQ+Y68vWHmnkx+pjP/kmLyFsI2LuWzQ6PRiDvE6l2DC/c+HAJbShrMgoP7ow==
+X-Received: by 2002:ac2:4a91:0:b0:4cb:4374:cc78 with SMTP id l17-20020ac24a91000000b004cb4374cc78mr1497320lfp.26.1678832830643;
+        Tue, 14 Mar 2023 15:27:10 -0700 (PDT)
+Received: from localhost.localdomain (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id c11-20020a19760b000000b004ab52b0bcf9sm562373lff.207.2023.03.14.15.27.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 15:27:10 -0700 (PDT)
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+To:     linux-arm-msm@vger.kernel.org, andersson@kernel.org,
+        agross@kernel.org
+Cc:     marijn.suijten@somainline.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shawn Guo <shawn.guo@linaro.org>, linux-gpio@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] dt-bindings: pinctrl: qcom,qcm2290-tlmm: Allow input-enable
+Date:   Tue, 14 Mar 2023 23:27:05 +0100
+Message-Id: <20230314222705.2940258-1-konrad.dybcio@linaro.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-References: <20230310222002.3633162-1-rmoar@google.com> <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
-In-Reply-To: <490271eb-1429-2217-6e38-837c6e5e328b@gmail.com>
-From:   Rae Moar <rmoar@google.com>
-Date:   Tue, 14 Mar 2023 18:20:42 -0400
-Message-ID: <CA+GJov4hw7yDRo2_uYWWe0chmBEtUh+t8aYhxSDXp2zch9cYvg@mail.gmail.com>
-Subject: Re: [KTAP V2 PATCH] ktap_v2: add skip test result
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     davidgow@google.com, skhan@linuxfoundation.org,
-        keescook@chromium.org, Tim.Bird@sony.com,
-        brendanhiggins@google.com, corbet@lwn.net,
-        guillaume.tucker@collabora.com, dlatypov@google.com,
-        kernelci@groups.io, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 10:52=E2=80=AFPM Frank Rowand <frowand.list@gmail.c=
-om> wrote:
->
-> On 3/10/23 16:20, Rae Moar wrote:
-> > Add the test result "skip" to KTAP version 2 as an alternative way to
-> > indicate a test was skipped.
-> >
-> > The current spec uses the "#SKIP" directive to indicate that a test was
-> > skipped. However, the "#SKIP" directive is not always evident when quic=
-kly
-> > skimming through KTAP results.
-> >
-> > The "skip" result would provide an alternative that could make it clear=
-er
-> > that a test has not successfully passed because it was skipped.
-> >
-> > Before:
-> >
-> >  KTAP version 1
-> >  1..1
-> >    KTAP version 1
-> >    1..2
-> >    ok 1 case_1
-> >    ok 2 case_2 #SKIP
-> >  ok 1 suite
-> >
-> > After:
-> >
-> >  KTAP version 2
-> >  1..1
-> >    KTAP version 2
-> >    1..2
-> >    ok 1 case_1
-> >    skip 2 case_2
-> >  ok 1 suite
-> >
-> > Here is a link to a version of the KUnit parser that is able to parse
-> > the skip test result for KTAP version 2. Note this parser is still able
-> > to parse the "#SKIP" directive.
-> >
-> > Link: https://kunit-review.googlesource.com/c/linux/+/5689
-> >
-> > Signed-off-by: Rae Moar <rmoar@google.com>
-> > --->
-> > Note: this patch is based on Frank's ktap_spec_version_2 branch.
-> >
-> >  Documentation/dev-tools/ktap.rst | 27 ++++++++++++++++++---------
-> >  1 file changed, 18 insertions(+), 9 deletions(-)
-> >
-> > diff --git a/Documentation/dev-tools/ktap.rst b/Documentation/dev-tools=
-/ktap.rst
-> > index ff77f4aaa6ef..f48aa00db8f0 100644
-> > --- a/Documentation/dev-tools/ktap.rst
-> > +++ b/Documentation/dev-tools/ktap.rst
-> > @@ -74,7 +74,8 @@ They are required and must have the format:
-> >       <result> <number> [<description>][ # [<directive>] [<diagnostic d=
-ata>]]
-> >
-> >  The result can be either "ok", which indicates the test case passed,
-> > -or "not ok", which indicates that the test case failed.
-> > +"not ok", which indicates that the test case failed, or "skip", which =
-indicates
-> > +the test case did not run.
-> >
-> >  <number> represents the number of the test being performed. The first =
-test must
-> >  have the number 1 and the number then must increase by 1 for each addi=
-tional
-> > @@ -91,12 +92,13 @@ A directive is a keyword that indicates a different=
- outcome for a test other
-> >  than passed and failed. The directive is optional, and consists of a s=
-ingle
-> >  keyword preceding the diagnostic data. In the event that a parser enco=
-unters
-> >  a directive it doesn't support, it should fall back to the "ok" / "not=
- ok"
-> > -result.
-> > +/ "skip" result.
-> >
-> >  Currently accepted directives are:
-> >
-> > -- "SKIP", which indicates a test was skipped (note the result of the t=
-est case
-> > -  result line can be either "ok" or "not ok" if the SKIP directive is =
-used)
->
-> > +- "SKIP", which indicates a test was skipped (note this is an alternat=
-ive to
-> > +  the "skip" result type and if the SKIP directive is used, the
-> > +  result can be any type - "ok", "not ok", or "skip")
->
-> For the "SKIP" directive, result type of either "ok", or "not ok" reflect=
-s the
-> current real world usage, which is mixed.  I agree is makes sense to also
-> allow the result type of "skip" with the "SKIP directive.
->
-> I think it would be good to deprecate the "SKIP" directive, with a schedu=
-led
-> removal in the V3 specification - that would allow plenty of time for tes=
-t
-> parsers to process both V1 and V2 data, before removing processing of V1 =
-data.
->
-> If so, the deprecation plan should be documented.
->
+Allow the common input-enable. This was missed with the
+initial submission.
 
-Hi Frank!
+Fixes: 5147022214db ("dt-bindings: pinctrl: qcom: Add QCM2290 pinctrl bindings")
+Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+---
+ Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-This is a great point. I think it is necessary to add specifications
-on how the SKIP directive will be deprecated. I will be taking all of
-these suggestions when I make a v2.
+diff --git a/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml b/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml
+index 6271fd15e0b6..032763649336 100644
+--- a/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/qcom,qcm2290-tlmm.yaml
+@@ -85,6 +85,7 @@ $defs:
+       bias-pull-up: true
+       bias-disable: true
+       drive-strength: true
++      input-enable: true
+       output-high: true
+       output-low: true
+ 
+-- 
+2.39.2
 
-Also, just letting you know I am planning on sending out two more KTAP
-v2 proposals in the next few days.
-
-Thanks for your insight.
--Rae
-
-> >  - "TODO", which indicates that a test is not expected to pass at the m=
-oment,
-> >    e.g. because the feature it is testing is known to be broken. While =
-this>    directive is inherited from TAP, its use in the kernel is discoura=
-ged.
-> > @@ -110,7 +112,7 @@ Currently accepted directives are:
-> >
-> >  The diagnostic data is a plain-text field which contains any additiona=
-l details
-> >  about why this result was produced. This is typically an error message=
- for ERROR
-> > -or failed tests, or a description of missing dependencies for a SKIP r=
-esult.
-> > +or failed tests, or a description of missing dependencies for a skippe=
-d test.
-> >
-> >  The diagnostic data field is optional, and results which have neither =
-a
-> >  directive nor any diagnostic data do not need to include the "#" field
-> > @@ -130,11 +132,18 @@ The test "test_case_name" failed.
-> >
-> >  ::
-> >
-> > -     ok 1 test # SKIP necessary dependency unavailable
-> > +     skip 1 test # necessary dependency unavailable
->
-> Maybe add a note that the "skip" result method is preferred over the belo=
-w
-> "ok ... # SKIP..." example below.
->
-
-Will add this to v2.
-
-> >
-> > -The test "test" was SKIPPED with the diagnostic message "necessary dep=
-endency
-> > +The test "test" was skipped with the diagnostic message "necessary dep=
-endency
-> >  unavailable".
-> >
-> > +::
-> > +
-> > +     ok 1 test_2 # SKIP this test should not run
-> > +
-> > +The test "test_2" was skipped with the diagnostic message "this test
-> > +should not run".
->
-> Maybe add a deprecation note here.
->
-
-WIll add this to v2.
-
-> > +
-> >  ::
-> >
-> >       not ok 1 test # TIMEOUT 30 seconds
-> > @@ -225,7 +234,7 @@ An example format with multiple levels of nested te=
-sting:
-> >           not ok 1 test_1
-> >           ok 2 test_2
-> >         not ok 1 test_3
-> > -       ok 2 test_4 # SKIP
-> > +       skip 2 test_4
-> >       not ok 1 example_test_1
-> >       ok 2 example_test_2
-> >
-> > @@ -262,7 +271,7 @@ Example KTAP output
-> >         ok 1 example_test_1
-> >           KTAP version 2
-> >           1..2
-> > -         ok 1 test_1 # SKIP test_1 skipped
-> > +         skip 1 test_1 # test_1 skipped
-> >           ok 2 test_2
-> >         ok 2 example_test_2
-> >           KTAP version 2
-> >
-> > base-commit: 906f02e42adfbd5ae70d328ee71656ecb602aaf5
->
