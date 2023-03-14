@@ -2,90 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E903E6B9E2D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:21:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B1A6B9E2B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:21:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229911AbjCNSVv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:21:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49210 "EHLO
+        id S229905AbjCNSVU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:21:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCNSVt (ORCPT
+        with ESMTP id S229627AbjCNSVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:21:49 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76F0E12874
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:21:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678818062;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=mZu0RzwIJilde3oJZLOmJNiQa9ScwZN4JDJCiFaDOu0=;
-        b=fzjg0E2UfHFJbVqEnPqoPSzynwKZdmbEbuEz1e9/2QKr0AiA3zPKMpQ0uMUiaxuc997aoy
-        EgV5koipdUBTSYJ2Fd6LnCI6Cp9p7WByUAl6eIEuEJfD50pW1QkrrWdXf3V8LjUGbFeNKs
-        mV9eDzi/hFWj368GliV1UHBr+CBiYEQ=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-380-fXFSDEw8M8STJQQyKTOawQ-1; Tue, 14 Mar 2023 14:20:57 -0400
-X-MC-Unique: fXFSDEw8M8STJQQyKTOawQ-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 14 Mar 2023 14:21:18 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E0C995E2A;
+        Tue, 14 Mar 2023 11:21:18 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 84036100F90B;
-        Tue, 14 Mar 2023 18:20:54 +0000 (UTC)
-Received: from [10.22.18.199] (unknown [10.22.18.199])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id C84FB4042AC0;
-        Tue, 14 Mar 2023 18:20:53 +0000 (UTC)
-Message-ID: <176a4cfd-2902-16a2-b9e7-cb66e1c5b49c@redhat.com>
-Date:   Tue, 14 Mar 2023 14:20:53 -0400
+        by ms.lwn.net (Postfix) with ESMTPSA id DF54944A;
+        Tue, 14 Mar 2023 18:21:17 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net DF54944A
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1678818078; bh=PMcKPQGre2B2gIl2+R6vogcNUKCYa7zH3FQuapRObUs=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=HF0BY4mpmcvSKC/Z0pw65s9prNYPwYnX+160bpFrhNj8ZObEM8XC2WEPcmRV9gmIs
+         0pgjvavWLw1HI4RoIKXtKvvSd5yZ94xF9zwNCXTebltFIlMtaxh3R7mlK0CUGVpd+C
+         z0U2wNVRxmAUlOC9KO+MrEi/vccOxOlnmkt7x/8nHX2gmdbnP7EG++Ih0SiRkVYzbx
+         yBh3s9vjwmyhyPGRCY+Mi8JPv35WbCyOGZkxOrQplZIymPGkP1/j01KZQfEzgaBS5x
+         d/+K4WBvM2wnqjkiihk7ZqGly97W/IPZEab72qfikSXltamKQuTyTrJrtNJYWP+Io9
+         3iFZP6qxhBAFg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     linux-kernel@vger.kernel.org, sergio.collado@gmail.com,
+        linux-doc@vger.kernel.org, akiyks@gmail.com,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH v3] docs/sp_SP: Add translation of process/deprecated
+In-Reply-To: <20230310163651.2500175-1-carlos.bilbao@amd.com>
+References: <20230307134502.625671-1-carlos.bilbao@amd.com>
+ <20230310163651.2500175-1-carlos.bilbao@amd.com>
+Date:   Tue, 14 Mar 2023 12:21:17 -0600
+Message-ID: <87mt4fry76.fsf@meer.lwn.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 1/5] cgroup/cpuset: Skip task update if hotplug doesn't
- affect current cpuset
-Content-Language: en-US
-To:     =?UTF-8?Q?Michal_Koutn=c3=bd?= <mkoutny@suse.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-2-longman@redhat.com>
- <20230314165030.beu2ywtvqa3p45ta@blackpad>
-From:   Waiman Long <longman@redhat.com>
-In-Reply-To: <20230314165030.beu2ywtvqa3p45ta@blackpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-On 3/14/23 12:50, Michal Koutný wrote:
-> On Mon, Mar 06, 2023 at 03:08:45PM -0500, Waiman Long <longman@redhat.com> wrote:
->> If a hotplug event doesn't affect the current cpuset, there is no point
->> to call hotplug_update_tasks() or hotplug_update_tasks_legacy(). So
->> just skip it.
-> This skips "insane" modification of cs->cpus_allowed in
-> hotplug_update_tasks_legacy() but assuming cs->cpus_allowed is kept in
-> sync with cs->effective_cpus on v1, it is OK to skip the update based
-> only on effective_cpus check.
+> Translate Documentation/process/deprecated.rst into Spanish.
+>
+> Co-developed-by: Sergio Gonzalez <sergio.collado@gmail.com>
+> Signed-off-by: Sergio Gonzalez <sergio.collado@gmail.com>
+> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
+>
+> ---
+> Changes since v2:
+>  - Change SoB chain, remove From: tag
+>
+> Changes since v1:
+>  - Change commit message to avoid confusion
+>  - Add From: tag
+>
+> ---
+>  .../translations/sp_SP/process/deprecated.rst | 381 ++++++++++++++++++
+>  .../translations/sp_SP/process/index.rst      |   1 +
+>  2 files changed, 382 insertions(+)
+>  create mode 100644 Documentation/translations/sp_SP/process/deprecated.rst
 
-Yes, effective_cpus is equivalent to cpus_allowed in v1 unless you mount 
-the cpuset with the cpuset_v2_mode flag which will behave more like v2 
-where effective_cpus is still the key.
+Applied, thanks.
 
-Cheers,
-Longman
-
+jon
