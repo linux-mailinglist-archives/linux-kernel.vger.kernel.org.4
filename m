@@ -2,153 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69E846B8F0C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:56:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB5AB6B8F2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbjCNJ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:56:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
+        id S229695AbjCNKDg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:03:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCNJ4U (ORCPT
+        with ESMTP id S229475AbjCNKDe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:56:20 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5B27A93A;
-        Tue, 14 Mar 2023 02:56:10 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32E9ttUc033245;
-        Tue, 14 Mar 2023 04:55:55 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678787755;
-        bh=9HTrF/bi2rVYtl3gMRYiEks4Hl9aIrD4oAoeLmY90dc=;
-        h=From:To:CC:Subject:Date;
-        b=P09hzaCRfz+n6YOnJFi4va1+tLwaEVXRzrmyroQXStEkMYW7mggSpSx+dxyG6yZUM
-         83fsK8CBcxNEuipC+dnK89WmNM/eTYtlguNn7UohQvOXqWu5iWH5+3xsz198RersTI
-         /xWQMbKDyDq9aA51EQffyoKYHuwWVPy1awxi53X8=
-Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32E9ttIS067606
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 04:55:55 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 04:55:54 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 04:55:54 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32E9tstV003927;
-        Tue, 14 Mar 2023 04:55:54 -0500
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-To:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
-CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH v5] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Date:   Tue, 14 Mar 2023 15:25:53 +0530
-Message-ID: <20230314095553.110559-1-b-kapoor@ti.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Mar 2023 06:03:34 -0400
+Received: from mail.sgstbr.de (mail.sgstbr.de [IPv6:2a01:4f8:10b:1515::10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D452B24487;
+        Tue, 14 Mar 2023 03:03:28 -0700 (PDT)
+Received: from [IPV6:2a02:810d:ab40:2500:3b46:4127:c750:bf0] (unknown [IPv6:2a02:810d:ab40:2500:3b46:4127:c750:bf0])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-384) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: fabian@blaese.de)
+        by mail.sgstbr.de (Postfix) with ESMTPSA id 4778C248C26;
+        Tue, 14 Mar 2023 10:56:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=blaese.de; s=201803;
+        t=1678787772; bh=yWcoB4tVZlJzYKHd4ly9wNaGuCzR7+nWR+G7gkbfJvk=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=pNpDr1rBumEWK7kpBbgQwV6sZSB0iH2Uv//13GnMlr9JVyygjuCd5+TDWJbXpRQvO
+         FO05V7qcbyjT1R+UcCdQt1aThhPiVuP0bV2GQEsiFH+LJKqKJFZs+cDVGaYBjltun/
+         bGKV9N6qts6w6MSAhHmhPYf+GAQahXVetJSO+mGA/U0XG0LyGiow8PsRVO/1JnVISV
+         /SJUQz9ikMDKnvIjEtKyvNzoUOAOcLF5YqQhsaXLfPiYlFebTR+5gRoIjSDChn+jxf
+         Nvq2CtOLNW0294X4SoJ/JdgwtyZhfEMLN+KUQZlRgBW54DcJxw9Dmk5EIUvH2a9DO/
+         MuFLPed4kheqA==
+Message-ID: <cc5883b7-e48e-80a3-8797-eb941405cd17@blaese.de>
+Date:   Tue, 14 Mar 2023 10:56:09 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net v2 1/2] net: stmmac: fix PHY handle parsing
+Content-Language: de-DE
+To:     Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Ong Boon Leong <boon.leong.ong@intel.com>,
+        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Cc:     Looi Hong Aun <hong.aun.looi@intel.com>,
+        Voon Weifeng <weifeng.voon@intel.com>,
+        Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
+References: <20230314070208.3703963-1-michael.wei.hong.sit@intel.com>
+ <20230314070208.3703963-2-michael.wei.hong.sit@intel.com>
+From:   =?UTF-8?Q?Fabian_Bl=c3=a4se?= <fabian@blaese.de>
+In-Reply-To: <20230314070208.3703963-2-michael.wei.hong.sit@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-J721s2 has two instances of 8 channel ADCs in MCU domain. Add support
-for both ADC nodes.
+On 14.03.23 08:02, Michael Sit Wei Hong wrote:
+> phylink_fwnode_phy_connect returns 0 when set to MLO_AN_INBAND.
+> This causes the PHY handle parsing to skip and the PHY will not be attached
+> to the MAC.
+> 
+> Add additional check for PHY handle parsing when set to MLO_AN_INBAND.
+> 
+> Fixes: ab21cf920928 ("net: stmmac: make mdio register skips PHY scanning for fixed-link")
+> Signed-off-by: Michael Sit Wei Hong <michael.wei.hong.sit@intel.com>
+> Signed-off-by: Lai Peter Jun Ann <peter.jun.ann.lai@intel.com>
 
-Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
----
-
-Changelog v4->v5:
-- Modified commit message
-- removed status = "disabled"; from tscadc nodes
-
-Link to v4 : https://lore.kernel.org/all/20230313112834.16156-1-b-kapoor@ti.com/
-
-Testlog : https://gist.github.com/a0498981/058c009e2937b423df02349ca78b4e29
-
- .../dts/ti/k3-j721s2-common-proc-board.dts    | 12 ++++++
- .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 38 +++++++++++++++++++
- 2 files changed, 50 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-index a7aa6cf08acd..90162a0bb3e6 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
-@@ -309,3 +309,15 @@ &mcu_mcan1 {
- 	pinctrl-0 = <&mcu_mcan1_pins_default>;
- 	phys = <&transceiver2>;
- };
-+
-+&tscadc0 {
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-+
-+&tscadc1 {
-+	adc {
-+		ti,adc-channels = <0 1 2 3 4 5 6 7>;
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-index 0af242aa9816..df8be8803dcb 100644
---- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
-@@ -306,4 +306,42 @@ cpts@3d000 {
- 			ti,cpts-periodic-outputs = <2>;
- 		};
- 	};
-+
-+	tscadc0: tscadc@40200000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x00 0x40200000 0x00 0x1000>;
-+		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 0 0>;
-+		assigned-clocks = <&k3_clks 0 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "fck";
-+		dmas = <&main_udmap 0x7400>,
-+			<&main_udmap 0x7401>;
-+		dma-names = "fifo0", "fifo1";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
-+
-+	tscadc1: tscadc@40210000 {
-+		compatible = "ti,am3359-tscadc";
-+		reg = <0x00 0x40210000 0x00 0x1000>;
-+		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
-+		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
-+		clocks = <&k3_clks 1 0>;
-+		assigned-clocks = <&k3_clks 1 2>;
-+		assigned-clock-rates = <60000000>;
-+		clock-names = "fck";
-+		dmas = <&main_udmap 0x7402>,
-+			<&main_udmap 0x7403>;
-+		dma-names = "fifo0", "fifo1";
-+
-+		adc {
-+			#io-channel-cells = <1>;
-+			compatible = "ti,am3359-adc";
-+		};
-+	};
- };
--- 
-2.34.1
-
+Tested-by: Fabian Bläse <fabian@blaese.de>
