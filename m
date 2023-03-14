@@ -2,142 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185156B9161
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:17:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9CFE6B9172
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231350AbjCNLRf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:17:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51358 "EHLO
+        id S231410AbjCNLTQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:19:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbjCNLRS (ORCPT
+        with ESMTP id S231398AbjCNLS4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:17:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 076161EFD3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:16:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 264C3616FC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:16:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77F55C433D2;
-        Tue, 14 Mar 2023 11:16:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678792595;
-        bh=X79Nu2WajvAG3kli7S5MqWpdmAMN0QzyYnzwzhO4DiQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rNE0y1y2KTBBZNwv8LIEziaJnVts65bVWMcZFkN4LOMqucsm+9GLRotYVlSBKkzHq
-         LNxX3Dv8lO4mCn5e4NlsmtnCd27Djfrxvj6ar3nxsHI4YtE6GHw1soHtBRrx4GYp++
-         AmoaE00KaCYFF6XArFU+hvJ/Ex3FF17mmuW+uz9IqGpeDG8OI+V8bW4+Rs+WKhyqaf
-         zVwKLdKA/3/XeLd/YuLttb6/j+uHtyNbCcjh1uNx9dV1cWjjBtrofsL8CLHURaYsb1
-         aA76qu9Ty+5XZfkNa+iXw6Z8xIT7pW21xQD+SGZifTxZNxxozfvgyu+e2la4as6OGY
-         +gFdKkShEgBNg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1pc2ew-0006CO-B7; Tue, 14 Mar 2023 12:17:39 +0100
-Date:   Tue, 14 Mar 2023 12:17:38 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     will@kernel.org, joro@8bytes.org, robin.murphy@arm.com,
-        andersson@kernel.org, johan+linaro@kernel.org, steev@kali.org,
-        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] iommu/arm-smmu-qcom: Rework the logic finding the
- bypass quirk
-Message-ID: <ZBBX0n4S2QBYB3Pi@hovoldconsulting.com>
-References: <20230314105905.137241-1-manivannan.sadhasivam@linaro.org>
+        Tue, 14 Mar 2023 07:18:56 -0400
+Received: from mail-ed1-x52a.google.com (mail-ed1-x52a.google.com [IPv6:2a00:1450:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83B816B5C8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:18:12 -0700 (PDT)
+Received: by mail-ed1-x52a.google.com with SMTP id cn21so30334479edb.0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:18:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678792686;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BTLw347ZTk76CB3YCjWqXtSW/kYt7O7yegt9D9Y6FXA=;
+        b=DfbXKcyFf2lJtqM9kxnIwQgXX5YHPtmETobmmHOm3Xih8xuS22CBz9vhum+UjfNGnT
+         AX/sKetrvq19eNac6gFFkYcUDW6YBAVFgQXHp0yZuDLZpSYPkIMzfI0FWzowlfHnt+Vg
+         37NzIbYf2dKi907JOSf7p5gsNRdYl9kzMZYTJfbO8Hhm9o3V41bI153d7ILKIqjA6vue
+         qJxEVrZnAfIBudOJryrUnv2DX36HSLb0kv7MZFCynatG/tp0k9WpQp0YWQv6HyLnadxU
+         DzejyEjiM9TQ/0IOkDw4drPhRZBZ+wH+gSAyM8Q7/yWZ1UYuvNE0o0xX07pvvqoFd1Cq
+         1DuA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678792686;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BTLw347ZTk76CB3YCjWqXtSW/kYt7O7yegt9D9Y6FXA=;
+        b=ivek3tFeJCgZgJnuiTgJ+n86WNHCjChIZG24Zc1jessqx4WjtzeItKSQmzHiuE85nt
+         WsWmelvTc+pM0MNzVeE6WMm87bKZUB4CdItkODyJNfYC/4XDpwW6W0R2lgkICktMAJ/7
+         VrPrEfJoJOwxVMhIYu4KkgmYJDlCRtHY8+zwoU06vaoFg/Tf7qIZTbIRvqKqW3PbHXhL
+         k70PTNglH2Hf57TwZQGnNhnstpLZPbGnwa8Lo3BD6Jc8c5mVYiSv86rSLgdz3YqguZpB
+         37nLODg5PQczN0HbuV/o5Ngzto4BGqFGHbe7+MxKJ5WBRAShnhChaFHQUfk3NnfMU/hb
+         TkXQ==
+X-Gm-Message-State: AO0yUKVGIW7zlCrEAzAlKBpbZ4kk3+Jnzn2+4NYR70znto6ShRB0mJAs
+        rBlclg+M6Nd1L/mZzeb5GJ6y0g==
+X-Google-Smtp-Source: AK7set9AeqSbWbMpQSeHyDHFZ0ow4SZlOYcmpT9uXkJZMQnegdxX9KuOMQUBc32BeUqDoZUsjzpCaQ==
+X-Received: by 2002:a17:907:a0e:b0:895:58be:957 with SMTP id bb14-20020a1709070a0e00b0089558be0957mr2625143ejc.2.1678792686070;
+        Tue, 14 Mar 2023 04:18:06 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id xa13-20020a170907b9cd00b0091ec885e016sm1016273ejc.54.2023.03.14.04.18.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 04:18:05 -0700 (PDT)
+Message-ID: <4ca61aac-a901-1bfa-6cf4-8c2917621667@linaro.org>
+Date:   Tue, 14 Mar 2023 12:18:04 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314105905.137241-1-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/4] dt-bindings: PCI: dwc: Add rk3588 compatible line
+Content-Language: en-US
+To:     Lucas Tanure <lucas.tanure@collabora.com>,
+        Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Cc:     Qu Wenruo <wqu@suse.com>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Peter Geis <pgwipeout@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, kernel@collabora.com
+References: <20230313153953.422375-1-lucas.tanure@collabora.com>
+ <20230313153953.422375-2-lucas.tanure@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230313153953.422375-2-lucas.tanure@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 04:29:05PM +0530, Manivannan Sadhasivam wrote:
-> The logic used to find the quirky firmware that intercepts the writes to
-> S2CR register to replace bypass type streams with a fault, and ignore the
-> fault type, is not working with the firmware on newer SoCs like SC8280XP.
+On 13/03/2023 16:39, Lucas Tanure wrote:
+> RK3588 uses the same driver as RK3568
+
+Subject: drop line
+
+Commit msg: drop driver and focus on hardware. Missing full stop.
+
 > 
-> The current logic uses the last stream mapping group (num_mapping_groups
-> - 1) as an index for finding quirky firmware. But on SC8280XP, NUSMRG
-> reports a value of 162 (possibly emulated by the hypervisor) and logic is
-> not working for stream mapping groups > 128. (Note that the ARM SMMU
-> architecture specification defines NUMSMRG in the range of 0-127).
-> 
-> So the current logic that checks the (162-1)th S2CR entry fails to detect
-> the quirky firmware on these devices and SMMU triggers invalid context
-> fault for bypass streams.
-> 
-> To fix this issue, rework the logic to find the first non-valid (free)
-> stream mapping register group (SMR) within 128 groups and use that index
-> to access S2CR for detecting the bypass quirk. If no free groups are
-> available, then just skip the quirk detection.
-> 
-> While at it, let's move the quirk detection logic to a separate function
-> and change the local variable name from last_s2cr to free_s2cr.
-> 
-> Reviewed-by: Bjorn Andersson <andersson@kernel.org>
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
 > ---
+>  Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> Changes in v2:
-> 
-> * Limited the check to 128 groups as per ARM SMMU spec's NUMSMRG range
-> * Moved the quirk handling to its own function
-> * Collected review tag from Bjorn
-> 
->  drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c | 48 ++++++++++++++++++----
->  1 file changed, 40 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> index d1b296b95c86..48362d7ef451 100644
-> --- a/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> +++ b/drivers/iommu/arm/arm-smmu/arm-smmu-qcom.c
-> @@ -266,25 +266,49 @@ static int qcom_smmu_init_context(struct arm_smmu_domain *smmu_domain,
->  	return 0;
->  }
->  
-> -static int qcom_smmu_cfg_probe(struct arm_smmu_device *smmu)
-> +static void qcom_smmu_bypass_quirk(struct arm_smmu_device *smmu)
->  {
-> -	unsigned int last_s2cr = ARM_SMMU_GR0_S2CR(smmu->num_mapping_groups - 1);
->  	struct qcom_smmu *qsmmu = to_qcom_smmu(smmu);
-> -	u32 reg;
-> -	u32 smr;
-> +	u32 free_s2cr;
-> +	u32 reg, smr;
->  	int i;
->  
-> +	/*
-> +	 * Find the first non-valid (free) stream mapping register group and
-> +	 * use that index to access S2CR for detecting the bypass quirk.
-> +	 *
-> +	 * Note that only the first 128 stream mapping groups are considered for
-> +	 * the check. This is because the ARM SMMU architecture specification
-> +	 * defines NUMSMRG (Number of Stream Mapping Register Groups) in the
-> +	 * range of 0-127, but some Qcom platforms emulate more stream mapping
-> +	 * groups with the help of hypervisor. And those groups don't exhibit
-> +	 * the quirky behavior.
-> +	 */
-> +	for (i = 0; i < 128; i++) {
+> diff --git a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> index 2be72ae1169f..91aa9070ee31 100644
+> --- a/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> +++ b/Documentation/devicetree/bindings/pci/rockchip-dw-pcie.yaml
+> @@ -23,6 +23,7 @@ properties:
+>    compatible:
+>      items:
+>        - const: rockchip,rk3568-pcie
+> +      - const: rockchip,rk3588-pcie
 
-This may now access registers beyond smmu->num_mapping_groups. Should
-you not use the minimum of these two values here (and below)?
+According to your driver change, these are compatible, so maybe this
+should be expressed in the bindings?
 
-> +		smr = arm_smmu_gr0_read(smmu, ARM_SMMU_GR0_SMR(i));
-> +
-> +		if (!FIELD_GET(ARM_SMMU_SMR_VALID, smr))
-> +			break;
-> +	}
-> +
-> +	/* If no free stream mapping register group is available, skip the check */
-> +	if (i == 128)
-> +		return;
+Best regards,
+Krzysztof
 
-Johan
