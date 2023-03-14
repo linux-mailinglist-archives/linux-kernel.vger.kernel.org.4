@@ -2,75 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B87E06B99D5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:37:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 031C36B99E9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:38:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231862AbjCNPhr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:37:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44512 "EHLO
+        id S230466AbjCNPim (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:38:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbjCNPh0 (ORCPT
+        with ESMTP id S230261AbjCNPi1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:37:26 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE1C9AB0AB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:36:21 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id cy23so63573048edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:36:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678808157;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ev005/KuLD4nel9Kg1+/+WzgyLUtBvia3LQUdWprBvA=;
-        b=aGZBpzQ7pMlEsfaKbnnGUWxk3IUhqdMFGoFZTLIFgqUmaOxsQqXBB6Z08VYQF/9sfZ
-         5tu3nXDVRNK6vR3RxFYd8eqMfdyuxCiYkNTc1Dehefq/Yb7K7RBrPCJfLG5pZCRG5p1i
-         tmI/cVF6k53WOK3opjv9OcYYsv3+H5aQATVeGiglYBwA3qj5BjIdSzn01AoWj9vz/f5i
-         t/sLPq1T/02ahSUCIxd8bp8IBe2h/X8NhxqWgrVUCkRUi0cfa4xmxv60MYxm3qsVwyGL
-         hNYXfB0uiGokjdpn2jz8VR3I6hcgbT8n/s8xDpyTY6wgGfamU/Ukz9s6Mp4Hmogigr1+
-         d4Ng==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678808157;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ev005/KuLD4nel9Kg1+/+WzgyLUtBvia3LQUdWprBvA=;
-        b=nTPX6lRNnKh/SmMtb5TZNdTu7TNbJL77m4JF4brUl0k0HazC/yyASj56oJsJUeZrw2
-         qh7x0j1xSRj+XFwNe2EPx6oE9788JZ0uULJ6l5B57RBt6zKsnClyN/ZguUqTY4N4pEnN
-         KW4eJtON7WTTjslp9koeJlyTBxQ2rJXhA+1BtzZtOZoB5cj+6w8E1cjWKMydXp/RP3XM
-         RsXpMQfo1juRYy3mIbNffpEFJqvR2iLniOpok6RCWalj/h1QPeLVJPDvODPpDAt4DofO
-         Z6YMQHn2uScly29XOJJdNhKJRpqAto+KGihieiPNL/d1RN6BZRGBgRQe52u7cQLyKA14
-         JtzQ==
-X-Gm-Message-State: AO0yUKXbJHn1zmWu06yja10DECpLtMkfK8fUH0sGyp0a7d433mQvMQVA
-        0ppsnzjlXdrpwwuu0Bi36uf58A==
-X-Google-Smtp-Source: AK7set9F8IbQmvFhdJvbJjYaClMJwNmUEEJaEnY+uVvsDv1qaNkcLwHznxcryeTTvC4J5NTwXt18FQ==
-X-Received: by 2002:a17:906:5792:b0:922:7b95:416a with SMTP id k18-20020a170906579200b009227b95416amr2793260ejq.36.1678808156935;
-        Tue, 14 Mar 2023 08:35:56 -0700 (PDT)
-Received: from krzk-bin.. ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id g6-20020a1709064e4600b008cd1f773754sm1297838ejw.5.2023.03.14.08.35.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 08:35:56 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] arm64: dts: marvell: armada-ap810: Fix GICv3 ITS node name
-Date:   Tue, 14 Mar 2023 16:35:54 +0100
-Message-Id: <167880811569.329316.7671442810659168728.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20230207234735.201812-1-robh@kernel.org>
-References: <20230207234735.201812-1-robh@kernel.org>
+        Tue, 14 Mar 2023 11:38:27 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F224A76BD
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:37:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=WABzYTnabi3s60fKuuL2P/MSD3EcLOo9sdyabvdUrXU=; b=BbLqcx3uLE7s7/9p2tLfzn9nEN
+        5AePU0KEM3pctid1cGA0DBWojUU2rG50PKq+48M6HJhoBZvgOrnMB+688pzPDt4ztpTuDvpONFGHf
+        s0slBvKCYSzXa4lfQINa+thaVfww4trWNNCidcVRtYKNNB9iBY+xu25QHYLIEGNvCxyPvM9niRJCm
+        thx29RMt4hncZ4Zk92F7CqkNmHoSZ5Ag8tJQuTheWyVmMRzMfb9NqUPfSOufOTbz4KKLzbirVtAC1
+        qAK7VkwZ4sttzv3TBEO9wB879khie0Fogon0TELBjmaoPHP8xjXCuSso8ntLooYkMsVf3Y+CAWU0U
+        EtUsul+w==;
+Received: from [2601:1c2:980:9ec0::df2f]
+        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pc6hw-00AdKx-0Y;
+        Tue, 14 Mar 2023 15:37:00 +0000
+Message-ID: <b4e67355-efaf-e61c-03bf-e54b8790e4e1@infradead.org>
+Date:   Tue, 14 Mar 2023 08:36:57 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH] char: add driver for mps VR controller mp2891
+Content-Language: en-US
+To:     "Noah (Wensheng) Wang" <Noah.Wang@monolithicpower.com>,
+        "arnd@arndb.de" <arnd@arndb.de>,
+        "gregkh@linuxfoundation.org" <gregkh@linuxfoundation.org>
+Cc:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Luke (Lijie) Jiang" <Luke.Jiang@monolithicpower.com>,
+        pebble liang <pebble.liang@monolithicpower.com>,
+        "Eva (Ting) Ma" <Eva.Ma@monolithicpower.com>
+References: <08e7bd6ed16f4bde95b674db940783ec@monolithicpower.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <08e7bd6ed16f4bde95b674db940783ec@monolithicpower.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,17 +58,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 7 Feb 2023 17:47:35 -0600, Rob Herring wrote:
-> The GICv3 ITS is an MSI controller, therefore its node name should be
-> 'msi-controller'.
+
+
+On 3/14/23 02:18, Noah (Wensheng) Wang wrote:
+> Hi Arnd, Grey:
+> Thanks for the review.
 > 
+> This driver will be used by facebook. This driver provide a device node for userspace to get output voltage, input voltage, input current, input power, output power and temperature of mp2891 controller through I2C. This driver determine what kind of value the userspace wants through the mp2891_write interface and return the corresponding value when the interface mp2891_read is called.
 > 
+> Signed-off-by: Noah Wang <Noah.Wang@monolithicpower.com>
+> ---
+>  drivers/char/mp2891.c | 403 ++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 403 insertions(+)
+>  create mode 100644 drivers/char/mp2891.c
+>
 
-Applied, thanks! Let me know if anyone else wants to take it instead.
+No Kconfig or Makefile changes?
 
-[1/1] arm64: dts: marvell: armada-ap810: Fix GICv3 ITS node name
-      https://git.kernel.org/krzk/linux-dt/c/fce7defb8a46c31cf9384fee6e4b1e4920c46ff7
 
-Best regards,
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+~Randy
