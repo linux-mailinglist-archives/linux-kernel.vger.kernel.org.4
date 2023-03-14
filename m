@@ -2,28 +2,28 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D7126B9DDD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:06:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082D96B9DE1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:06:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbjCNSGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:06:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
+        id S229832AbjCNSGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCNSGl (ORCPT
+        with ESMTP id S229665AbjCNSGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Mar 2023 14:06:41 -0400
 Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB11AF2AB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0597AF2AC;
         Tue, 14 Mar 2023 11:06:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
-        s=20160406-ysoft-com; t=1678817196;
-        bh=Y50vybzJcxi++meRhzVjFFrYYDiXaEQgBQmDbk4WtSk=;
-        h=From:To:Cc:Subject:Date:From;
-        b=Zzkg58ovmLf6ZABdWMynLG/tNpnfACXcrcNK7SGnTWLJYYiQrPpicZXlKVV49Y6W4
-         oedbvEpHmk/z4MJVf1v7Gcr7gAuhW2Qku3H3i5DRk4uU01RKfMSrdouqRLAigAUkuV
-         CrbXBDTT7Y8snkTiX4a8xz+a7vdC2jdxU1fvrOB8=
+        s=20160406-ysoft-com; t=1678817197;
+        bh=+qx5p0cflxM7B3mowtpsT/d0u/dt2VanOfc0Y1OZzr8=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=XQaBQ4n9B+o3ja2+G369flGLabXlny4ahsExGzRg5BBb4a62y8MwdKfqe3wGcRQTe
+         JjIDZK9Vr36TiL9tFsEHQhJmXPflbUDMtRqK3Txtmas1RtUGGgVWNlN1sgV+h4+2pL
+         4h6lxhoXq628JXRWuqo3en+6BstBuS9m3hAUDS0c=
 Received: from vokac-Latitude-7410.ysoft.local (unknown [10.0.30.161])
-        by uho.ysoft.cz (Postfix) with ESMTP id 7F56DA01E0;
+        by uho.ysoft.cz (Postfix) with ESMTP id E404EA0454;
         Tue, 14 Mar 2023 19:06:36 +0100 (CET)
 From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
 To:     Shawn Guo <shawnguo@kernel.org>
@@ -37,10 +37,12 @@ Cc:     Rob Herring <robh+dt@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org,
         =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
-Subject: [PATCH v2 0/5] Add support for new boards in the imx6dl-yapp4 family
-Date:   Tue, 14 Mar 2023 19:06:03 +0100
-Message-Id: <20230314180608.44482-1-michal.vokac@ysoft.com>
+Subject: [PATCH v2 1/5] ARM: dts: imx6dl-yapp4: Move phy reset into switch node
+Date:   Tue, 14 Mar 2023 19:06:04 +0100
+Message-Id: <20230314180608.44482-2-michal.vokac@ysoft.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20230314180608.44482-1-michal.vokac@ysoft.com>
+References: <20230314180608.44482-1-michal.vokac@ysoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -53,36 +55,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+Drop the phy-reset-duration and phy-reset-gpios deprecated properties and
+move reset-gpios under the switch node.
 
-Patches 1,2,3 are new in this v2 series and fixes minor issues for
-the already supported boards. Patches 4 and 5 adds support for some
-new redesigned boards based on i.MX6 SoC.
+Signed-off-by: Michal Vokáč <michal.vokac@ysoft.com>
+---
+Changes in v2:
+- new patch 
 
-Michal Vokáč (5):
-  ARM: dts: imx6dl-yapp4: Move phy reset into switch node
-  ARM: dts: imx6dl-yapp4: Move status to the end of property list
-  ARM: dts: imx6dl-yapp4: Remove unneeded status "okay"
-  dt-bindings: arm: fsl: Add Y Soft IOTA Phoenix, Lynx, Pegasus and
-    Pegasus+
-  ARM: dts: imx6dl-yapp43: Add support for new HW revision of the
-    IOTA board
+ arch/arm/boot/dts/imx6dl-yapp4-common.dtsi | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
- .../devicetree/bindings/arm/fsl.yaml          |   4 +
- arch/arm/boot/dts/Makefile                    |   4 +
- arch/arm/boot/dts/imx6dl-yapp4-common.dtsi    |   7 +-
- arch/arm/boot/dts/imx6dl-yapp4-lynx.dts       |  58 ++
- arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts    |  42 ++
- arch/arm/boot/dts/imx6dl-yapp43-common.dtsi   | 615 ++++++++++++++++++
- arch/arm/boot/dts/imx6q-yapp4-pegasus.dts     |  58 ++
- .../boot/dts/imx6qp-yapp4-pegasus-plus.dts    |  58 ++
- 8 files changed, 841 insertions(+), 5 deletions(-)
- create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-lynx.dts
- create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts
- create mode 100644 arch/arm/boot/dts/imx6dl-yapp43-common.dtsi
- create mode 100644 arch/arm/boot/dts/imx6q-yapp4-pegasus.dts
- create mode 100644 arch/arm/boot/dts/imx6qp-yapp4-pegasus-plus.dts
-
+diff --git a/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi b/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi
+index aacbf317feea..cb1972f8e8d2 100644
+--- a/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi
++++ b/arch/arm/boot/dts/imx6dl-yapp4-common.dtsi
+@@ -106,8 +106,6 @@ &fec {
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_enet>;
+ 	phy-mode = "rgmii-id";
+-	phy-reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
+-	phy-reset-duration = <20>;
+ 	phy-supply = <&sw2_reg>;
+ 	status = "okay";
+ 
+@@ -131,6 +129,7 @@ phy_port3: phy@2 {
+ 		switch@10 {
+ 			compatible = "qca,qca8334";
+ 			reg = <10>;
++			reset-gpios = <&gpio1 25 GPIO_ACTIVE_LOW>;
+ 
+ 			switch_ports: ports {
+ 				#address-cells = <1>;
 -- 
 2.25.1
 
