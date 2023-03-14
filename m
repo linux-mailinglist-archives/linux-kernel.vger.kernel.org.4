@@ -2,158 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33EC76B883E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:17:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFB86B883F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:18:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbjCNCRy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 22:17:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36358 "EHLO
+        id S229665AbjCNCS2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:18:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229622AbjCNCRw (ORCPT
+        with ESMTP id S229622AbjCNCSZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 22:17:52 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A4DCF8B327;
-        Mon, 13 Mar 2023 19:17:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678760270; x=1710296270;
-  h=message-id:date:mime-version:cc:subject:to:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Lh56lV68VvySS648vM+XrUZMIJ/KFe+c7SBnKmBWTn8=;
-  b=nZyEQyrQmAZvu80bRsDWbY9TiQJiP8RQsB2f94ICd3ifvLC5VTq3F+zv
-   CPcrkYqitbXkb9eGm6i9y/KCZIFyE0FgHTLYG8h1gCn0nYM8dLUWbOgyy
-   iMqDvoIUn2C7+NDnQKsiAZm/1W9P1rnHYKEYumZydf+R9IYCigYc+vKgB
-   1ofnStbcqmkGBllr8H+BRE5CTju610ubqooIh51eUr41tQdVB7oGUgQXP
-   yXkuQBpX4Ymwf7RnU+Jd/GwZ24Rjp7nGRj7M6G+vd7V3Yg04PP5+uOiKB
-   m2SB6ZHA56qv7TMk/aVQWhVGzrYWzFSlhBJnm/6rOIiVZwsrAxEDCL+OM
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="339675410"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="339675410"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 19:17:50 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="924729527"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="924729527"
-Received: from allen-box.sh.intel.com (HELO [10.239.159.48]) ([10.239.159.48])
-  by fmsmga006.fm.intel.com with ESMTP; 13 Mar 2023 19:17:44 -0700
-Message-ID: <0548021d-d9b3-3a2e-8c1f-e266dedb8f1c@linux.intel.com>
-Date:   Tue, 14 Mar 2023 10:16:41 +0800
+        Mon, 13 Mar 2023 22:18:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 72A487D54D
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:17:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678760257;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=kjDBKn3JRqkY0p0pjARPVgay/DHvOTqKhwEPJ+QVeOo=;
+        b=KyruF644uVXfZUGWmJGHa07VkbNBt0nlMXM1XAjLdo3C9/DszYncCn546fWna/L4Thwt6p
+        EdOhTa8mivhoUZRye+30n3epW5PsflLynwwKpjKwTVOvBi1WT5v/cTsH77r+GS9SczKD+E
+        iZHSCskU1nqcTTFzRSQWfqV81j0AMnc=
+Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com
+ [209.85.214.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-437-YP-V1sPJNGaO9T2l7y_Ycw-1; Mon, 13 Mar 2023 22:17:36 -0400
+X-MC-Unique: YP-V1sPJNGaO9T2l7y_Ycw-1
+Received: by mail-pl1-f199.google.com with SMTP id s8-20020a170902b18800b0019c92f56a8aso8157161plr.22
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:17:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678760255;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kjDBKn3JRqkY0p0pjARPVgay/DHvOTqKhwEPJ+QVeOo=;
+        b=ZWCZ+yPPb9KcFsfBIStMUwHDJ6oh9b9IWvg3eVWgAyBh9YAfJpsWeUCmISIGNOpFeq
+         fTWre68mw1/2eeevRWd6sU/LU9+3TAO4Mmt7ttZ4aiUD8cpoPN3tRwD47qhHAdZfO/il
+         6lJsvHNTQR0DaTjgocx/0kQq84koTDKG4Csj50Xqh3ZqJpYbMgnnLnu2ogSo+9TIxt68
+         486paekOdzB4S2EpmscuT4KINuj8rwCsfxksweNoSmdBVvELowRKiYf0fVlImPKImjqQ
+         CsingTODXPQOPx/BmtyfjtI5tAleJMbyv3/JIvsgXZcxzqh/5HRLsl6KGx3e4jJEDHcO
+         1FnA==
+X-Gm-Message-State: AO0yUKVTk5lBkRvRcqlEABwv/EE2S64JD+eSPVsEpHDJoOMrVYgwreS4
+        zBIDqv03b+zge2zlB9nvFnNZYr+FhneOZ1t76cVOrvLdquYcZOrRbVFJ8F2Yi1grEc3iCOLynGg
+        MF2+qvmKYDSjA363Sh91ywW2g
+X-Received: by 2002:a05:6a20:441a:b0:d4:beda:7a48 with SMTP id ce26-20020a056a20441a00b000d4beda7a48mr3832185pzb.0.1678760254828;
+        Mon, 13 Mar 2023 19:17:34 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8q4ME6Is/JGWOqkwsBMZfnQ4pXV7orpmx5CXs5A6gnHJnjA9PePz6FyeYe7nmefAykDEHZfg==
+X-Received: by 2002:a05:6a20:441a:b0:d4:beda:7a48 with SMTP id ce26-20020a056a20441a00b000d4beda7a48mr3832168pzb.0.1678760254444;
+        Mon, 13 Mar 2023 19:17:34 -0700 (PDT)
+Received: from kernel-devel ([240d:1a:c0d:9f00:ca6:1aff:fead:cef4])
+        by smtp.gmail.com with ESMTPSA id z16-20020a631910000000b0050336b0b08csm381497pgl.19.2023.03.13.19.17.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 19:17:34 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 11:17:29 +0900
+From:   Shigeru Yoshida <syoshida@redhat.com>
+To:     Nikolay Aleksandrov <razor@blackwall.org>
+Cc:     j.vosburgh@gmail.com, andy@greyhouse.net, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nikolay Aleksandrov <nikolay@cumulusnetworks.com>,
+        syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
+Subject: Re: [PATCH net] bonding: Fix warning in default_device_exit_batch()
+Message-ID: <ZA/ZOTGGADHe8TL7@kernel-devel>
+References: <20230312152158.995043-1-syoshida@redhat.com>
+ <d7a740f1-99e9-6947-06ef-3139198730f7@blackwall.org>
+ <ZA7uTL2/IkBEIRD7@kernel-devel>
+ <45fc873b-9b71-adf2-8f2f-17134344e490@blackwall.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Cc:     baolu.lu@linux.intel.com, Will Deacon <will@kernel.org>,
-        David Woodhouse <dwmw2@infradead.org>,
-        Raj Ashok <ashok.raj@intel.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
-        "Yu, Fenghua" <fenghua.yu@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>,
-        Kirill Shutemov <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>
-Subject: Re: [PATCH v6 4/7] iommu/sva: Stop using ioasid_set for SVA
-Content-Language: en-US
-To:     Jacob Pan <jacob.jun.pan@linux.intel.com>,
-        LKML <linux-kernel@vger.kernel.org>, iommu@lists.linux.dev,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        X86 Kernel <x86@kernel.org>, bp@alien8.de,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Peter Zijlstra <peterz@infradead.org>, corbet@lwn.net,
-        vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20230313204158.1495067-1-jacob.jun.pan@linux.intel.com>
- <20230313204158.1495067-5-jacob.jun.pan@linux.intel.com>
-From:   Baolu Lu <baolu.lu@linux.intel.com>
-In-Reply-To: <20230313204158.1495067-5-jacob.jun.pan@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <45fc873b-9b71-adf2-8f2f-17134344e490@blackwall.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 4:41 AM, Jacob Pan wrote:
-> From: Jason Gunthorpe<jgg@nvidia.com>
+Hi Nik,
+
+On Mon, Mar 13, 2023 at 12:52:44PM +0200, Nikolay Aleksandrov wrote:
+> On 13/03/2023 11:35, Shigeru Yoshida wrote:
+> > Hi Nik,
+> > 
+> > On Sun, Mar 12, 2023 at 10:58:18PM +0200, Nikolay Aleksandrov wrote:
+> >> On 12/03/2023 17:21, Shigeru Yoshida wrote:
+> >>> syzbot reported warning in default_device_exit_batch() like below [1]:
+> >>>
+> >>> WARNING: CPU: 1 PID: 56 at net/core/dev.c:10867 unregister_netdevice_many_notify+0x14cf/0x19f0 net/core/dev.c:10867
+> >>> ...
+> >>> Call Trace:
+> >>>  <TASK>
+> >>>  unregister_netdevice_many net/core/dev.c:10897 [inline]
+> >>>  default_device_exit_batch+0x451/0x5b0 net/core/dev.c:11350
+> >>>  ops_exit_list+0x125/0x170 net/core/net_namespace.c:174
+> >>>  cleanup_net+0x4ee/0xb10 net/core/net_namespace.c:613
+> >>>  process_one_work+0x9bf/0x1820 kernel/workqueue.c:2390
+> >>>  worker_thread+0x669/0x1090 kernel/workqueue.c:2537
+> >>>  kthread+0x2e8/0x3a0 kernel/kthread.c:376
+> >>>  ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:308
+> >>>  </TASK>
+> >>>
+> >>> For bond devices which also has a master device, IFF_SLAVE flag is
+> >>> cleared at err_undo_flags label in bond_enslave() if it is not
+> >>> ARPHRD_ETHER type.  In this case, __bond_release_one() is not called
+> >>> when bond_netdev_event() received NETDEV_UNREGISTER event.  This
+> >>> causes the above warning.
+> >>>
+> >>> This patch fixes this issue by setting IFF_SLAVE flag at
+> >>> err_undo_flags label in bond_enslave() if the bond device has a master
+> >>> device.
+> >>>
+> >>
+> >> The proper way is to check if the bond device had the IFF_SLAVE flag before the
+> >> ether_setup() call which clears it, and restore it after.
+> >>
+> >>> Fixes: 7d5cd2ce5292 ("bonding: correctly handle bonding type change on enslave failure")
+> >>> Cc: Nikolay Aleksandrov <nikolay@cumulusnetworks.com>
+> >>> Link: https://syzkaller.appspot.com/bug?id=391c7b1f6522182899efba27d891f1743e8eb3ef [1]
+> >>> Reported-by: syzbot+9dfc3f3348729cc82277@syzkaller.appspotmail.com
+> >>> Signed-off-by: Shigeru Yoshida <syoshida@redhat.com>
+> >>> ---
+> >>>  drivers/net/bonding/bond_main.c | 2 ++
+> >>>  include/net/bonding.h           | 5 +++++
+> >>>  2 files changed, 7 insertions(+)
+> >>>
+> >>> diff --git a/drivers/net/bonding/bond_main.c b/drivers/net/bonding/bond_main.c
+> >>> index 00646aa315c3..1a8b59e1468d 100644
+> >>> --- a/drivers/net/bonding/bond_main.c
+> >>> +++ b/drivers/net/bonding/bond_main.c
+> >>> @@ -2291,6 +2291,8 @@ int bond_enslave(struct net_device *bond_dev, struct net_device *slave_dev,
+> >>>  			dev_close(bond_dev);
+> >>>  			ether_setup(bond_dev);
+> >>>  			bond_dev->flags |= IFF_MASTER;
+> >>> +			if (bond_has_master(bond))
+> >>> +				bond_dev->flags |= IFF_SLAVE;
+> >>>  			bond_dev->priv_flags &= ~IFF_TX_SKB_SHARING;
+> >>>  		}
+> >>>  	}
+> >>> diff --git a/include/net/bonding.h b/include/net/bonding.h
+> >>> index ea36ab7f9e72..ed0b49501fad 100644
+> >>> --- a/include/net/bonding.h
+> >>> +++ b/include/net/bonding.h
+> >>> @@ -57,6 +57,11 @@
+> >>>  
+> >>>  #define bond_has_slaves(bond) !list_empty(bond_slave_list(bond))
+> >>>  
+> >>> +/* master list primitives */
+> >>> +#define bond_master_list(bond) (&(bond)->dev->adj_list.upper)
+> >>> +
+> >>> +#define bond_has_master(bond) !list_empty(bond_master_list(bond))
+> >>> +
+> >>
+> >> This is not the proper way to check for a master device.
+> >>
+> >>>  /* IMPORTANT: bond_first/last_slave can return NULL in case of an empty list */
+> >>>  #define bond_first_slave(bond) \
+> >>>  	(bond_has_slaves(bond) ? \
+> >>
+> >> The device flags are wrong because of ether_setup() which clears IFF_SLAVE, we should
+> >> just check if it was present before and restore it after the ether_setup() call.
+> > 
+> > Thank you so much for your comment!  I understand your point, and
+> > agree that your approach must resolve the issue.
+> > 
+> > BTW, do you mean there is a case where a device has IFF_SLAVE flag but
+> > the upper list is empty?  I thought a device with IFF_SLAVE flag has a
+> > master device in the upper list (that is why I took the above way.)
+> > 
 > 
-> Instead SVA drivers can use a simple global IDA to allocate PASIDs for
-> each mm_struct.
+> Hi Shigeru,
+> No, that's not what I meant. It's the opposite actually, you may have an upper list
+> but you don't have a "master" device or slave flag set. Yes, you can say that if
+> a device has IFF_SLAVE set, then it must have a master upper device but that's not
+> what you're checking for, you've reversed that logic to check for an upper device instead
+> and assume there's a IFF_SLAVE flag set (which may not be true).
+> For an upper device to be considered a "master" device, it must have the master bool set to
+> true in its netdev_adjacent structure. We already have helpers to check for master devices
+> and to retrieve them, e.g. check netdev_master_upper_dev_get* in net/core/dev.c
 > 
-> Future work would be to allow drivers using the SVA APIs to reserve global
-> PASIDs from this IDA for their internal use, eg with the DMA API PASID
-> support.
+> The most robust way to fix it is to check if the flag was there prior to the ether_setup() call
+> and restore it after, also to leave a nice comment about all of this. :)
+
+Thanks for kindly explanation.  I've now understand why my fix is not
+sufficient to check a master device.  And, yes, the most robust and
+simple way to fix the issue is to check the flag before it is cleared.
+
+Thanks you~
+Shigeru
+
 > 
-> Signed-off-by: Jason Gunthorpe<jgg@nvidia.com>
-> Signed-off-by: Jacob Pan<jacob.jun.pan@linux.intel.com>
-> ---
-> v5:
-> 	- Put removing iommu_sva_find() to a separate patch (Kevin)
-> 	- Make pasid allocation range to be inclusive (Tina)
-> 	- Simplified return code handling (Baolu)
-> v4:
-> 	- Keep GFP_ATOMIC flag for PASID allocation, will changed to
-> 	GFP_KERNEL in a separate patch.
-> ---
->   drivers/iommu/iommu-sva.c | 43 ++++++++++++++-------------------------
->   drivers/iommu/iommu-sva.h |  2 --
->   2 files changed, 15 insertions(+), 30 deletions(-)
+> > Thanks,
+> > Shigeru
+> > 
 > 
-> diff --git a/drivers/iommu/iommu-sva.c b/drivers/iommu/iommu-sva.c
-> index 4f357ef14f04..d4640731727a 100644
-> --- a/drivers/iommu/iommu-sva.c
-> +++ b/drivers/iommu/iommu-sva.c
-> @@ -9,47 +9,34 @@
->   #include "iommu-sva.h"
->   
->   static DEFINE_MUTEX(iommu_sva_lock);
-> -static DECLARE_IOASID_SET(iommu_sva_pasid);
-> +static DEFINE_IDA(iommu_global_pasid_ida);
->   
-> -/**
-> - * iommu_sva_alloc_pasid - Allocate a PASID for the mm
-> - * @mm: the mm
-> - * @min: minimum PASID value (inclusive)
-> - * @max: maximum PASID value (inclusive)
-> - *
-> - * Try to allocate a PASID for this mm, or take a reference to the existing one
-> - * provided it fits within the [@min, @max] range. On success the PASID is
-> - * available in mm->pasid and will be available for the lifetime of the mm.
-> - *
-> - * Returns 0 on success and < 0 on error.
-> - */
-> -int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
-> +/* Allocate a PASID for the mm within range (inclusive) */
-> +static int iommu_sva_alloc_pasid(struct mm_struct *mm, ioasid_t min, ioasid_t max)
->   {
->   	int ret = 0;
-> -	ioasid_t pasid;
->   
-> -	if (min == INVALID_IOASID || max == INVALID_IOASID ||
-> -	    min == 0 || max < min)
-> +	if (!pasid_valid(min) || !pasid_valid(max) ||
-> +	     min == 0 || max < min)
+> Cheers,
+>  Nik
+> 
 
-I still think the last line change is unnecessary. Otherwise, you
-probably will get below CHECK warning:
-
-CHECK: Alignment should match open parenthesis
-#259: FILE: drivers/iommu/iommu-sva.c:20:
-+	if (!pasid_valid(min) || !pasid_valid(max) ||
-+	     min == 0 || max < min)
-
-Besides that,
-
-Reviewed-by: Lu Baolu <baolu.lu@linux.intel.com>
-
-Best regards,
-baolu
