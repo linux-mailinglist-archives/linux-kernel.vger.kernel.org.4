@@ -2,92 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91D446B8DE6
+	by mail.lfdr.de (Postfix) with ESMTP id E62986B8DE7
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:55:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229957AbjCNIzW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:55:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S229969AbjCNIz0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:55:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbjCNIzT (ORCPT
+        with ESMTP id S229853AbjCNIzW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:55:19 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E913A4FF00
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:55:15 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32E8t1bE014505;
-        Tue, 14 Mar 2023 03:55:01 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678784101;
-        bh=vTsFOyDWldZUEuBwAi4OeiU1vvCQfd6qTQRFPmnX+Ks=;
-        h=From:To:CC:Subject:Date;
-        b=bpQdYQX/qWMDHT/15CtGdkBab2hdWo+yLTRO+95TS9Moi57ErX5EAtyVnsWbvWjDV
-         DV38jlPFTrg8LRD2771NvlnZ0jabTzjoZ//O/Fu3iSxs/OLcc+3GRuZ3dyX/8E190x
-         lNtvDMZAV7Sh4c3M7jigMOKGQ/WoiBb9/U1G45MQ=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32E8t19J017420
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 03:55:01 -0500
-Received: from DFLE114.ent.ti.com (10.64.6.35) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 03:55:01 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 03:55:01 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32E8t0PU080880;
-        Tue, 14 Mar 2023 03:55:01 -0500
-From:   Jayesh Choudhary <j-choudhary@ti.com>
-To:     <nm@ti.com>, <ssantosh@kernel.org>
-CC:     <s-vadapalli@ti.com>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <j-choudhary@ti.com>
-Subject: [PATCH v2] soc: ti: k3-socinfo: Add entry for J784S4 SOC
-Date:   Tue, 14 Mar 2023 14:25:00 +0530
-Message-ID: <20230314085500.10597-1-j-choudhary@ti.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 14 Mar 2023 04:55:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DEBC252905;
+        Tue, 14 Mar 2023 01:55:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9A061B818A1;
+        Tue, 14 Mar 2023 08:55:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54D1BC433D2;
+        Tue, 14 Mar 2023 08:55:11 +0000 (UTC)
+Message-ID: <e704b505-86d8-c6f2-8546-adccdab72622@xs4all.nl>
+Date:   Tue, 14 Mar 2023 09:55:10 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [RFC 2/4] media: videobuf2: Replace bufs array by a list
+Content-Language: en-US
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Laurent Pinchart' <laurent.pinchart@ideasonboard.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     "tfiga@chromium.org" <tfiga@chromium.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "ming.qian@nxp.com" <ming.qian@nxp.com>,
+        "shijie.qin@nxp.com" <shijie.qin@nxp.com>,
+        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
+        "bin.liu@mediatek.com" <bin.liu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "tiffany.lin@mediatek.com" <tiffany.lin@mediatek.com>,
+        "andrew-ct.chen@mediatek.com" <andrew-ct.chen@mediatek.com>,
+        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
+        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
+        "quic_vgarodia@quicinc.com" <quic_vgarodia@quicinc.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
+        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel.almeida@collabora.com" <daniel.almeida@collabora.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
+ <20230313135916.862852-3-benjamin.gaignard@collabora.com>
+ <20230313181155.GC22646@pendragon.ideasonboard.com>
+ <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Siddharth Vadapalli <s-vadapalli@ti.com>
+On 14/03/2023 00:16, David Laight wrote:
+> From: Laurent Pinchart
+>> Sent: 13 March 2023 18:12
+>>
+>> Hi Benjamin,
+>>
+>> Thank you for the patch.
+>>
+>> On Mon, Mar 13, 2023 at 02:59:14PM +0100, Benjamin Gaignard wrote:
+>>> Replacing bufs array by a list allows to remove the 32 buffers
+>>> limit per queue.
+> 
+> Is the limit actually a problem?
+> Arrays of pointers have locking and caching advantages over
+> linked lists.
 
-J784S4 SoC's JTAG PARTNO is 0xBB80.
+I'm not so keen on using a list either. Adding or deleting buffers will
+be an infrequency operation, so using an array of pointers and reallocing
+it if needed would be perfectly fine. Buffer lookup based on the index
+should be really fast, though.
 
-Signed-off-by: Siddharth Vadapalli <s-vadapalli@ti.com>
-Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
----
+Why not start with a dynamically allocated array of 32 vb2_buffer pointers?
+And keep doubling the size (reallocing) whenever more buffers are needed,
+up to some maximum (1024 would be a good initial value for that, I think).
+This max could be even a module option.
 
-Changelog v1->v2:
-- Add correct authorship
+A simple spinlock is sufficient, I think, to regulate access to the
+struct vb2_buffer **bufs pointer in vb2_queue. From what I can see it is
+not needed in interrupt context (i.e. vb2_buffer_done).
 
- drivers/soc/ti/k3-socinfo.c | 1 +
- 1 file changed, 1 insertion(+)
+Regards,
 
-diff --git a/drivers/soc/ti/k3-socinfo.c b/drivers/soc/ti/k3-socinfo.c
-index d15764e19d96..ad97e08a25f6 100644
---- a/drivers/soc/ti/k3-socinfo.c
-+++ b/drivers/soc/ti/k3-socinfo.c
-@@ -43,6 +43,7 @@ static const struct k3_soc_id {
- 	{ 0xBB38, "AM64X" },
- 	{ 0xBB75, "J721S2"},
- 	{ 0xBB7E, "AM62X" },
-+	{ 0xBB80, "J784S4" },
- 	{ 0xBB8D, "AM62AX" },
- };
- 
--- 
-2.25.1
+	Hans
+
+> 
+> ...
+>>> @@ -1239,8 +1242,12 @@ static inline void vb2_clear_last_buffer_dequeued(struct vb2_queue *q)
+>>>  static inline struct vb2_buffer *vb2_get_buffer(struct vb2_queue *q,
+>>>  						unsigned int index)
+>>>  {
+>>> -	if (index < q->num_buffers)
+>>> -		return q->bufs[index];
+>>> +	struct vb2_buffer *vb;
+>>> +
+>>> +	list_for_each_entry(vb, &q->allocated_bufs, allocated_entry)
+>>> +		if (vb->index == index)
+>>> +			return vb;
+>>> +
+>>>  	return NULL;
+> 
+> You really don't want to be doing that....
+> 
+> There are schemes for unbounded arrays.
+> Scanning a linked list isn't a very good one.
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
 
