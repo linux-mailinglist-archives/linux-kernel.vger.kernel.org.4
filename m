@@ -2,105 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E7E96B94A8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:48:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13CAD6B94EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:52:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232299AbjCNMr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33138 "EHLO
+        id S232060AbjCNMwQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:52:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232158AbjCNMqn (ORCPT
+        with ESMTP id S232481AbjCNMvy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:46:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56C89A2F05;
-        Tue, 14 Mar 2023 05:45:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Mar 2023 08:51:54 -0400
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEB0AA8C54;
+        Tue, 14 Mar 2023 05:47:47 -0700 (PDT)
+Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EFDADB81900;
-        Tue, 14 Mar 2023 12:44:43 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2C702C433D2;
-        Tue, 14 Mar 2023 12:44:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678797882;
-        bh=AY/Ig6/D6B8kAit4w8uSAEvPz3sYAX7+kRJBXfUowsI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=jXoBFVTpLJwMt8KskJaXlxgit/bks2XHswRsOuSh8BEedqndJeMvPkegc1wOtmBmc
-         iI0IYz7lVu3xVkmcqt7Ogrfq85JFgmXrfjpRkMmdjqvz+A+yQiTH6gt56ZKlza2fAt
-         2jI/HViwaqzEMMieklhINQiksdCShkvcSp6FPxxvuk3ONwI8aOtj9cvs/R6iEuIg1d
-         ilBeUJ4xhk0FMvBFR3LH2BFFMjtpejRv+JFmz9DkX6FxwuVgYT5WATWTvwxtsT4F3b
-         GxLNhgRzqPYvg8U/ZAI6uxH2HBLVQYoaT+VxCML8LPF0/mj+HLkng04FmhwHnXX9LD
-         zvCiYTSfa9VYQ==
-From:   Sasha Levin <sashal@kernel.org>
-To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Sasha Levin <sashal@kernel.org>
-Subject: [PATCH AUTOSEL 4.14 5/5] sh: intc: Avoid spurious sizeof-pointer-div warning
-Date:   Tue, 14 Mar 2023 08:44:35 -0400
-Message-Id: <20230314124435.471553-5-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230314124435.471553-1-sashal@kernel.org>
-References: <20230314124435.471553-1-sashal@kernel.org>
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4PbYFC2xbQzyQx;
+        Tue, 14 Mar 2023 14:46:55 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1678798015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zNIkTOGZVK9lg+P67YKrsMU3zZ3VzJ0rYweBwLq8Dxw=;
+        b=CsnpN5mkjzySx2lPYqXfQDvH4jFlroc32LqoQ7YO9uzrNtLLzX/H6AErLQcYUdptPeduao
+        MAI7UvbHtfJFH/mlPVVnvwqbUnHmCXGJNItCqMElrSsoTfmUZyXo1w96rgafFwthi5/R3b
+        rtPGuyqq20Vevoo3dgsg39e+wnSXV+E=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1678798015; a=rsa-sha256; cv=none;
+        b=LI+w63Eey2sycwDbYI2durS9vK02pufQF+vGQEhbNM6zT/U8Bd6f4kt520nXfbnXRjCgOs
+        0LEIYzPz+RZ1kRJi2Uvk2bWZkvQOAFMfxKxBwDM8GhRm2vyhQxvs/Y1jt2vsgLDtjNZmek
+        enJS6uPyyqorT2qMinWWwWOYVV/mQHM=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1678798015;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=zNIkTOGZVK9lg+P67YKrsMU3zZ3VzJ0rYweBwLq8Dxw=;
+        b=fsb1XSSfAFePp6Xsg3wZ4K/N7TQGj/rNcs6DAKR/LLRIOv1YZrYAMmc+drWOYRVA/lB6Ev
+        f6vlzzf/bTDVvBsVtVwkiD3pOpKcjx1irYwSQGdMqI3uvu8jvnJJToRaBG2AYYkbAgxOdg
+        raPHCDz9wRyriSQXwY8Y8lAEvwRTMMA=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id 61E56634C92;
+        Tue, 14 Mar 2023 14:45:53 +0200 (EET)
+Date:   Tue, 14 Mar 2023 14:45:53 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Francesco Dolcini <francesco@dolcini.it>
+Cc:     Marcel Ziswiler <marcel@ziswiler.com>, linux-media@vger.kernel.org,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>, kernel@pengutronix.de,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Francesco Dolcini <francesco.dolcini@toradex.com>,
+        Jacopo Mondi <jacopo.mondi@ideasonboard.com>,
+        Aishwarya Kothari <aishwarya.kothari@toradex.com>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Steve Longerbeam <slongerbeam@gmail.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] media: i2c: ov5640: Implement get_mbus_config
+Message-ID: <ZBBsgW75Gc2FmuQ0@valkosipuli.retiisi.eu>
+References: <20230306063649.7387-1-marcel@ziswiler.com>
+ <ZBBk+h3EMSsacZ6v@valkosipuli.retiisi.eu>
+ <ZBBpUAhis8L5Dtuz@francesco-nb.int.toradex.com>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBBpUAhis8L5Dtuz@francesco-nb.int.toradex.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
+Hi Francesco,
 
-[ Upstream commit 250870824c1cf199b032b1ef889c8e8d69d9123a ]
+On Tue, Mar 14, 2023 at 01:32:16PM +0100, Francesco Dolcini wrote:
+> Hello Sakari,
+> 
+> On Tue, Mar 14, 2023 at 02:13:46PM +0200, Sakari Ailus wrote:
+> > On Mon, Mar 06, 2023 at 07:36:49AM +0100, Marcel Ziswiler wrote:
+> > > From: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+> > > 
+> > > Implement the introduced get_mbus_config operation to report the
+> > > config of the MIPI CSI-2, BT.656 and Parallel interface.
+> > > 
+> > > Signed-off-by: Aishwarya Kothari <aishwarya.kothari@toradex.com>
+> > > Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+> > > 
+> > > ---
+> > > 
+> > > Changes in v2:
+> > > - Take care of MIPI CSI-2, BT.656 and Parallel interface as
+> > >   pointed out by Jacopo. Thanks!
+> > > 
+> > >  drivers/media/i2c/ov5640.c | 19 +++++++++++++++++++
+> > >  1 file changed, 19 insertions(+)
+> > > 
+> > > diff --git a/drivers/media/i2c/ov5640.c b/drivers/media/i2c/ov5640.c
+> > > index 1536649b9e90..43373416fcba 100644
+> > > --- a/drivers/media/i2c/ov5640.c
+> > > +++ b/drivers/media/i2c/ov5640.c
+> > > @@ -3774,6 +3774,24 @@ static int ov5640_init_cfg(struct v4l2_subdev *sd,
+> > >  	return 0;
+> > >  }
+> > >  
+> > > +static int ov5640_get_mbus_config(struct v4l2_subdev *sd,
+> > > +				   unsigned int pad,
+> > > +				   struct v4l2_mbus_config *cfg)
+> > > +{
+> > > +	struct ov5640_dev *sensor = to_ov5640_dev(sd);
+> > > +
+> > > +	cfg->type = sensor->ep.bus_type;
+> > > +	if (ov5640_is_csi2(sensor)) {
+> > > +		cfg->bus.mipi_csi2.num_data_lanes =
+> > > +			sensor->ep.bus.mipi_csi2.num_data_lanes;
+> > > +		cfg->bus.mipi_csi2.flags = sensor->ep.bus.mipi_csi2.flags;
+> > > +	} else {
+> > > +		cfg->bus.parallel.flags = sensor->ep.bus.parallel.flags;
+> > > +	}
+> > > +
+> > > +	return 0;
+> > > +}
+> > > +
+> > >  static const struct v4l2_subdev_core_ops ov5640_core_ops = {
+> > >  	.log_status = v4l2_ctrl_subdev_log_status,
+> > >  	.subscribe_event = v4l2_ctrl_subdev_subscribe_event,
+> > > @@ -3794,6 +3812,7 @@ static const struct v4l2_subdev_pad_ops ov5640_pad_ops = {
+> > >  	.get_selection = ov5640_get_selection,
+> > >  	.enum_frame_size = ov5640_enum_frame_size,
+> > >  	.enum_frame_interval = ov5640_enum_frame_interval,
+> > > +	.get_mbus_config = ov5640_get_mbus_config,
+> > 
+> > What's the reasoning for this patch?
+> 
+> Without this it's not possible to use it on i.MX6,
+> drivers/staging/media/imx/imx6-mipi-csi2.c requires it, some more
+> details from Jacopo here [0].
+> 
+> Everything used to work fine up to v5.18, after that kernel version
+> various changes broke it [1][2] (I assume you are pretty much aware of
+> the history here, you commented on a few emails).
+> 
+> [0] https://lore.kernel.org/all/20230128100611.7ulsfqqqgscg54gy@uno.localdomain/
+> [1] https://lore.kernel.org/all/081cc2d3-1f3a-6c14-6dc7-53f976be7b2b@gmail.com/
+> [2] https://lore.kernel.org/all/cacfe146-101b-35b3-5f66-1a1cabfd342f@gmail.com/
+> 
+> > Drivers that don't have e.g. dynamic lane configuration shouldn't need to
+> > implement get_mbus_config.
 
-GCC warns about the pattern sizeof(void*)/sizeof(void), as it looks like
-the abuse of a pattern to calculate the array size. This pattern appears
-in the unevaluated part of the ternary operator in _INTC_ARRAY if the
-parameter is NULL.
+Not even for staging drivers. The driver should be fixed to get that
+information from the endpoint instead.
 
-The replacement uses an alternate approach to return 0 in case of NULL
-which does not generate the pattern sizeof(void*)/sizeof(void), but still
-emits the warning if _INTC_ARRAY is called with a nonarray parameter.
+I don't object having a helper in the framework to do this though. There
+are many receiver drivers that need this to work with those devices that
+have variable number of lanes.
 
-This patch is required for successful compilation with -Werror enabled.
-
-The idea to use _Generic for type distinction is taken from Comment #7
-in https://gcc.gnu.org/bugzilla/show_bug.cgi?id=108483 by Jakub Jelinek
-
-Signed-off-by: Michael Karcher <kernel@mkarcher.dialup.fu-berlin.de>
-Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
-Link: https://lore.kernel.org/r/619fa552-c988-35e5-b1d7-fe256c46a272@mkarcher.dialup.fu-berlin.de
-Signed-off-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- include/linux/sh_intc.h | 5 ++++-
- 1 file changed, 4 insertions(+), 1 deletion(-)
-
-diff --git a/include/linux/sh_intc.h b/include/linux/sh_intc.h
-index c255273b02810..37ad81058d6ae 100644
---- a/include/linux/sh_intc.h
-+++ b/include/linux/sh_intc.h
-@@ -97,7 +97,10 @@ struct intc_hw_desc {
- 	unsigned int nr_subgroups;
- };
- 
--#define _INTC_ARRAY(a) a, __same_type(a, NULL) ? 0 : sizeof(a)/sizeof(*a)
-+#define _INTC_SIZEOF_OR_ZERO(a) (_Generic(a,                 \
-+                                 typeof(NULL):  0,           \
-+                                 default:       sizeof(a)))
-+#define _INTC_ARRAY(a) a, _INTC_SIZEOF_OR_ZERO(a)/sizeof(*a)
- 
- #define INTC_HW_DESC(vectors, groups, mask_regs,	\
- 		     prio_regs,	sense_regs, ack_regs)	\
 -- 
-2.39.2
+Regards,
 
+Sakari Ailus
