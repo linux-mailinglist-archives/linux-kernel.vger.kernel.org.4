@@ -2,129 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC1156BA0F1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:44:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 619E86BA0F3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:44:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229946AbjCNUnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S230384AbjCNUoy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:44:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbjCNUno (ORCPT
+        with ESMTP id S229675AbjCNUoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:43:44 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 230077A92
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:43:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678826623; x=1710362623;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ga2eu3CIk3Nt8VVwDK0rgtUMidyK+BHycf/u5ccxd0g=;
-  b=RKPs0yXpxRVAeKsHXkbsD+Clm8XDXhWuGPNGIZURoL0vhEiM740NTsXC
-   a9V2NZhQixFlRPA/iMQhb22eHbi0GDyp4k25tuQTQogCpnbNZg/vlDkt4
-   rpHI7XINBqrb2+6UK+VmoNUS9Zdn6DWXSkWfq+G4EPtPEJMrNvj2UvSir
-   a73rye3xm2nRL/3bmtcqCKTW1S0sFtdvDDBJmEq81arryS27YX5vS5WuW
-   wUOBGMyPKJdopuI01AHUwRrXTbnyWyep/DHkbvkN3Tu5k/ODagvOjTE7J
-   5+xIEN8Ba1EWdVvDdCu+w3GzhvUjXPHDJrFoxp0qqwcghc5e3036SvEz1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="400120044"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="400120044"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 13:43:42 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="1008572533"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="1008572533"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.140.184])
-  by fmsmga005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 13:43:41 -0700
-Date:   Tue, 14 Mar 2023 13:43:40 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
-Message-ID: <ZBDcfNOXmGeN2tlb@aschofie-mobl2>
-References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
+        Tue, 14 Mar 2023 16:44:44 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C3D5F750;
+        Tue, 14 Mar 2023 13:44:43 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id fd5so33392356edb.7;
+        Tue, 14 Mar 2023 13:44:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678826682;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0F87m94ibj5BbWan5aojgmhq+wBUFnl+QKEcaFZCdV0=;
+        b=gxf/72SsrSMbLFOqatSqFflVgNt1bbnS4+ok3reZFnlxYwbj3yInQ75d4sHWLgRoWO
+         L/FfRqKco5fsXDQjSMbbxxZKu1NVdu5FxKJ/D3FuRkXWQJTc5OdaHJN6lM11LgLONoG2
+         wO5RmrthdftggE/vw43pKxRU8IuRtB+sNjHSvjaVWdISM+t9nQdHMJcK7ANDHGFsvQ8t
+         GmsVlmCSgLyBmfRbsIxbbNr6hfol60zqqjnzg4SZyZ+8h7So4R7iNuIUi/yJoROGwDh9
+         /nM8YXT8NFV1DWNN+q69s6y69XmZJR2127XJ3nsNOJtp43M+CbfGzLcKccU3StkX5q32
+         16ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678826682;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=0F87m94ibj5BbWan5aojgmhq+wBUFnl+QKEcaFZCdV0=;
+        b=zv172eoTft369aDbQPiEbTgFphOnWTcknnKBvi8S5A3TpaNpV7hOpgsMSn3ZkXHwxp
+         d/N485maU3aqJuGcwTK4GWHsy7jPmSpx4G4Xhkxb+Y2yJoEc+qPVVF98H4xOQEzYHrrb
+         l0SeexoRIA68ofidYI0TxJ0F6BrlO9fhkaEqaxcs6AHi4YJlD159JlejE3+XYMgNBDkQ
+         U5LFGPfhrmAen0ZbFkXNI2Rb+4sV/exeUnwKnmkEjcWcfhXRoqDZS/4ExqLNQQcm0ju3
+         +LBbvphkWdcEqObVdznYw1+pY1ddV1htUnrpwtERfRkW8+ZAVT3EQ5zCikfT0XolIQUW
+         s/GQ==
+X-Gm-Message-State: AO0yUKXzSTH5CMvBrM2ae3M6/2ZU5Y0ibJoy2HB0LYV+HgUjrgTOr3ZU
+        MrTJGWOQiZ1SB8JRh0ZKr0G3DRDf/LHzhmyJ
+X-Google-Smtp-Source: AK7set+FjvdA2a7hcaGhydj/SDHPqvn+qyMA9hZ9eH7e5PKlEoMwB4q6/wpeL8xinWadVWDhw9g0lw==
+X-Received: by 2002:aa7:cc92:0:b0:4fc:7352:1131 with SMTP id p18-20020aa7cc92000000b004fc73521131mr318382edt.41.1678826681783;
+        Tue, 14 Mar 2023 13:44:41 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id hd31-20020a170907969f00b0092d58e24e11sm1081680ejc.137.2023.03.14.13.44.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 13:44:41 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, Conor Dooley <conor@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Trevor Woerner <twoerner@gmail.com>
+Cc:     linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v3 2/2] riscv: dts: nezha-d1: add gpio-line-names
+Date:   Tue, 14 Mar 2023 21:44:40 +0100
+Message-ID: <2337214.NG923GbCHz@jernej-laptop>
+In-Reply-To: <20230210025132.36605-2-twoerner@gmail.com>
+References: <20230210025132.36605-1-twoerner@gmail.com>
+ <20230210025132.36605-2-twoerner@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:07:10PM +0500, Khadija Kamran wrote:
-> Module parameter, read_timeout, can only be set at the loading time. As
-> it can only be modified once, initialize read_timeout once in the probe
-> function.
-> As a result, only use read_timeout as the last argument in
-> wait_event_interruptible_timeout() call.
+Dne petek, 10. februar 2023 ob 03:51:32 CET je Trevor Woerner napisal(a):
+> Add descriptive names so users can associate specific lines with their
+> respective pins on the 40-pin header according to the schematics.
 > 
-> Same goes for write_timeout.
-> 
-> Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> Signed-off-by: Trevor Woerner <twoerner@gmail.com>
+> Link:
+> http://dl.linux-sunxi.org/D1/D1_Nezha_development_board_schematic_diagram_2
+> 0210224.pdf
+
+Applied, but next time please make sure e-mails are not linked together, as 
+Conor said.
+
+Best regards,
+Jernej
+
 > ---
-
-Looks like this is [PATCH v5] and needs a changelog.
-
-
->  drivers/staging/axis-fifo/axis-fifo.c | 18 ++++++++++++------
->  1 file changed, 12 insertions(+), 6 deletions(-)
+> changes since v2:
+> - (no changes, skip to a v3 to align with the other patch in this group)
 > 
-> diff --git a/drivers/staging/axis-fifo/axis-fifo.c b/drivers/staging/axis-fifo/axis-fifo.c
-> index dfd2b357f484..563caf155713 100644
-> --- a/drivers/staging/axis-fifo/axis-fifo.c
-> +++ b/drivers/staging/axis-fifo/axis-fifo.c
-> @@ -384,9 +384,7 @@ static ssize_t axis_fifo_read(struct file *f, char __user *buf,
->  		mutex_lock(&fifo->read_lock);
->  		ret = wait_event_interruptible_timeout(fifo->read_queue,
->  			ioread32(fifo->base_addr + XLLF_RDFO_OFFSET),
-> -				 (read_timeout >= 0) ?
-> -				  msecs_to_jiffies(read_timeout) :
-> -				  MAX_SCHEDULE_TIMEOUT);
-> +			read_timeout);
->  
->  		if (ret <= 0) {
->  			if (ret == 0) {
-> @@ -528,9 +526,7 @@ static ssize_t axis_fifo_write(struct file *f, const char __user *buf,
->  		ret = wait_event_interruptible_timeout(fifo->write_queue,
->  			ioread32(fifo->base_addr + XLLF_TDFV_OFFSET)
->  				 >= words_to_write,
-> -				 (write_timeout >= 0) ?
-> -				  msecs_to_jiffies(write_timeout) :
-> -				  MAX_SCHEDULE_TIMEOUT);
-> +			write_timeout);
->  
->  		if (ret <= 0) {
->  			if (ret == 0) {
-> @@ -815,6 +811,16 @@ static int axis_fifo_probe(struct platform_device *pdev)
->  	char *device_name;
->  	int rc = 0; /* error return value */
->  
-> +	if (read_timeout >= 0)
-> +		read_timeout = msecs_to_jiffies(read_timeout);
-> +	else
-> +		read_timeout = MAX_SCHEDULE_TIMEOUT;
+> changes since v1:
+> - this patch needs to be placed in order, and come second, after a patch to
+>   update the schema for the nxp,pcf8575, put this patch in a group where it
+>   wasn't previously
+> - use a Link: to point to the schematic
+> - add a comment section describing the rational behind the naming that was
+>   used
+> - make the spacing of each line name uniform, don't try to "line them up"
+>   vertically
+> ---
+>  .../boot/dts/allwinner/sun20i-d1-nezha.dts    | 72 +++++++++++++++++++
+>  1 file changed, 72 insertions(+)
+> 
+> diff --git a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+> b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts index
+> a0769185be97..4ed33c1e7c9c 100644
+> --- a/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+> +++ b/arch/riscv/boot/dts/allwinner/sun20i-d1-nezha.dts
+> @@ -1,6 +1,25 @@
+>  // SPDX-License-Identifier: (GPL-2.0+ or MIT)
+>  // Copyright (C) 2021-2022 Samuel Holland <samuel@sholland.org>
+> 
+> +/*
+> + * gpio line names
+> + *
+> + * The Nezha-D1 has a 40-pin IO header. Some of these pins are routed
+> + * directly to pads on the SoC, others come from an 8-bit pcf857x IO
+> + * expander. Therefore, these line names are specified in two places:
+> + * one set for the pcf857x, and one set for the pio controller.
+> + *
+> + * Lines which are routed to the 40-pin header are named as follows:
+> + *	<pin#> [<pin name>]
+> + * where:
+> + *	<pin#>		is the actual pin number of the 40-pin 
+header
+> + *	<pin name>	is the name of the pin by function/gpio#
+> + *
+> + * For details regarding pin numbers and names see the schematics (under
+> + * "IO EXPAND"):
+> + *
+> http://dl.linux-sunxi.org/D1/D1_Nezha_development_board_schematic_diagram_2
+> 0210224.pdf + */
 > +
-> +	if (write_timeout >= 0)
-> +		write_timeout = msecs_to_jiffies(write_timeout);
-> +	else
-> +		write_timeout = MAX_SCHEDULE_TIMEOUT;
+>  #include <dt-bindings/gpio/gpio.h>
+>  #include <dt-bindings/input/input.h>
+> 
+> @@ -90,6 +109,15 @@ pcf8574a: gpio@38 {
+>  		gpio-controller;
+>  		#gpio-cells = <2>;
+>  		#interrupt-cells = <2>;
+> +		gpio-line-names =
+> +			"pin13 [gpio8]",
+> +			"pin16 [gpio10]",
+> +			"pin18 [gpio11]",
+> +			"pin26 [gpio17]",
+> +			"pin22 [gpio14]",
+> +			"pin28 [gpio19]",
+> +			"pin37 [gpio23]",
+> +			"pin11 [gpio6]";
+>  	};
+>  };
+> 
+> @@ -164,3 +192,47 @@ &usbphy {
+>  	usb1_vbus-supply = <&reg_vcc>;
+>  	status = "okay";
+>  };
 > +
->  	/* ----------------------------
->  	 *     init wrapper device
->  	 * ----------------------------
-> -- 
-> 2.34.1
-> 
-> 
+> +&pio {
+> +	gpio-line-names =
+> +		/* Port A */
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		/* Port B */
+> +		"pin5 [gpio2/twi2-sck]",
+> +		"pin3 [gpio1/twi2-sda]",
+> +		"",
+> +		"pin38 [gpio24/i2s2-din]",
+> +		"pin40 [gpio25/i2s2-dout]",
+> +		"pin12 [gpio7/i2s-clk]",
+> +		"pin35 [gpio22/i2s2-lrck]",
+> +		"",
+> +		"pin8 [gpio4/uart0-txd]",
+> +		"pin10 [gpio5/uart0-rxd]",
+> +		"",
+> +		"",
+> +		"pin15 [gpio9]",
+> +		"", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		/* Port C */
+> +		"",
+> +		"pin31 [gpio21]",
+> +		"", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		"", "", "", "", "", "", "", "",
+> +		/* Port D */
+> +		"", "", "", "", "", "", "", "",
+> +		"", "",
+> +		"pin24 [gpio16/spi1-ce0]",
+> +		"pin23 [gpio15/spi1-clk]",
+> +		"pin19 [gpio12/spi1-mosi]",
+> +		"pin21 [gpio13/spi1-miso]",
+> +		"pin27 [gpio18/spi1-hold]",
+> +		"pin29 [gpio20/spi1-wp]",
+> +		"", "", "", "", "", "",
+> +		"pin7 [gpio3/pwm]";
+> +};
+
+
+
+
