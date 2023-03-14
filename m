@@ -2,168 +2,131 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4DB96B8880
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:28:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C6716B887F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 03:27:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229978AbjCNC2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 22:28:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53392 "EHLO
+        id S229901AbjCNC1c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 22:27:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229657AbjCNC2K (ORCPT
+        with ESMTP id S229836AbjCNC1a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 22:28:10 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3BED359D
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:28:07 -0700 (PDT)
-Received: from workpc.. (109-252-120-116.nat.spd-mgts.ru [109.252.120.116])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 3408D660212C;
-        Tue, 14 Mar 2023 02:28:04 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1678760886;
-        bh=D86/+gxEXTxx6rYLp7XT1FnufcJfoJJFiW7y3I6GuDs=;
-        h=From:To:Cc:Subject:Date:From;
-        b=YTXEuuKvbrJiIF7uowvIo1GjiT4LoQTV23BoZxLoqtuVlYE4XH4H5OZdKjBsZahZJ
-         j9cdjUpU5d7NTdJgcVKWt52Kp8r3Mo4F3FHGsmQ60bwcQVRNCWksONMjBQrmw82K6N
-         UfeFEoYvbsJwGQEXoUE942JRiTTP8+DWrD44LekQ2pUNhdNOpuhGhoP0A7pSUYHfiD
-         5Tych+11J2GM9ZAR3sOF4Jpi22iFD6iSC9vIZcbx6WXlsTaq8C6bMvfrG27bXhvh9u
-         qv8i/GMXSppxOQ6Tol4OAmblG5fxNNUziV2yWI7GN+Irx4vYMUh5OZKHqKJRpPrIzn
-         2qK5TJdtANRNg==
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-To:     David Airlie <airlied@gmail.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        Gurchetan Singh <gurchetansingh@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Daniel Almeida <daniel.almeida@collabora.com>,
-        Gustavo Padovan <gustavo.padovan@collabora.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Qiang Yu <yuq825@gmail.com>,
-        Steven Price <steven.price@arm.com>,
-        Alyssa Rosenzweig <alyssa.rosenzweig@collabora.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        kernel@collabora.com, virtualization@lists.linux-foundation.org,
-        intel-gfx@lists.freedesktop.org
-Subject: [PATCH v13 00/10] Add generic memory shrinker to VirtIO-GPU and Panfrost DRM drivers
-Date:   Tue, 14 Mar 2023 05:26:49 +0300
-Message-Id: <20230314022659.1816246-1-dmitry.osipenko@collabora.com>
-X-Mailer: git-send-email 2.39.2
+        Mon, 13 Mar 2023 22:27:30 -0400
+Received: from outgoing.mit.edu (outgoing-auth-1.mit.edu [18.9.28.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDB78888B5
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 19:27:28 -0700 (PDT)
+Received: from cwcc.thunk.org (pool-173-48-120-46.bstnma.fios.verizon.net [173.48.120.46])
+        (authenticated bits=0)
+        (User authenticated as tytso@ATHENA.MIT.EDU)
+        by outgoing.mit.edu (8.14.7/8.12.4) with ESMTP id 32E2QncK012949
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 13 Mar 2023 22:26:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mit.edu; s=outgoing;
+        t=1678760814; bh=8JqVxAMGDUDi2XIrrOmUQ1H1l2f992aiLDoCnA/d0IE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=OebhAS4L6gGEEt5NLSSgaHmEBRj+hXV7nDJr1Lerw48ZJpFOj1TGJgv8tdeDtAwZ2
+         m6aEMLV+yw4ykpNRZqj/0rsyTjbvxWcXWlBA0BHjWTvgsxQHqSlRIjxLH0XxynYSx5
+         2ZQ6ApErlSs3+K8O0vgJWi3Ko3rzQAdYmzGggNlTRPXfA7ZLfpSbfRLK7654Kh2fsW
+         6aoU/4s2sC7iGvyA064uLWmo8x0RybsyK6QJSR/RgyOdvgp43dkZ0XYclrWI/Bjkgh
+         j/PztTs/p0dapsX272uw8MpN4OOHC4ZUb4gYbh0OdFQImzHhUydInD3NIJC+dtojdZ
+         zlTb13p8vplJg==
+Received: by cwcc.thunk.org (Postfix, from userid 15806)
+        id 8C4FF15C5830; Mon, 13 Mar 2023 22:26:49 -0400 (EDT)
+Date:   Mon, 13 Mar 2023 22:26:49 -0400
+From:   "Theodore Ts'o" <tytso@mit.edu>
+To:     Dmitry Vyukov <dvyukov@google.com>
+Cc:     Jan Kara <jack@suse.cz>, Tudor Ambarus <tudor.ambarus@linaro.org>,
+        syzbot <syzbot+8785e41224a3afd04321@syzkaller.appspotmail.com>,
+        adilger.kernel@dilger.ca, linux-ext4@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com,
+        Lee Jones <joneslee@google.com>
+Subject: Re: [syzbot] [ext4?] KASAN: slab-out-of-bounds Read in
+ ext4_group_desc_csum
+Message-ID: <20230314022649.GM860405@mit.edu>
+References: <000000000000ef6cf905f496e40b@google.com>
+ <7e4a0f15-4d82-6026-c14b-59852ffab08e@linaro.org>
+ <20230307103958.lo6ynoypgwreqmnq@quack3>
+ <60788e5d-5c7c-1142-e554-c21d709acfd9@linaro.org>
+ <976a7f24-0446-182f-c99e-98f3b98aef49@linaro.org>
+ <20230313115728.2wxy2qj4mqpwgrx7@quack3>
+ <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CACT4Y+ZVWYX=NX4br=0MFTYxJGBE9gEQdx+YNYi1P4B1z8B0iw@mail.gmail.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This series:
+On Mon, Mar 13, 2023 at 03:53:57PM +0100, Dmitry Vyukov wrote:
+> > Long-term we are moving ext4 in a direction where we can disallow block
+> > device modifications while the fs is mounted but we are not there yet. I've
+> > discussed some shorter-term solution to avoid such known problems with syzbot
+> > developers and what seems plausible would be a kconfig option to disallow
+> > writing to a block device when it is exclusively open by someone else.
+> > But so far I didn't get to trying whether this would reasonably work. Would
+> > you be interested in having a look into this?
+> 
+> Does this affect only the loop device or also USB storage devices?
+> Say, if the USB device returns different contents during mount and on
+> subsequent reads?
 
-  1. Adds common drm-shmem memory shrinker
-  2. Enables shrinker for VirtIO-GPU driver
-  3. Switches Panfrost driver to the common shrinker
+Modifying the block device while the file system is mounted is
+something that we have to allow for now because tune2fs uses it to
+modify the superblock.  It has historically also been used (rarely) by
+people who know what they are doing to do surgery on a mounted file
+system.  If we create a way for tune2fs to be able to update the
+superblock via some kind of ioctl, we could disallow modifying the
+block device while the file system is mounted.  Of course, it would
+require waiting at least 5-6 years since sometimes people will update
+the kernel without updating userspace.  We'd also need to check to
+make sure there aren't boot loader installer (such as grub-install)
+that depend on being able to modify the block device while the root
+file system is mounted, at least in some rare cases.
 
-Changelog:
+The "how" to exclude mounted file systems is relatively easy.  The
+kernel already knows when the file system is mounted, and it is
+already a supported feature that a userspace application that wants to
+be careful can open a block device with O_EXCL, and if it is in use by
+the kernel --- mounted by a file system, being used by dm-thin, et. al
+-- the open(2) system call will fail.  From the open(2) man page.
 
-v13:- Updated virtio-gpu shrinker patch to use drm_gem_shmem_object_pin()
-      directly instead of drm_gem_pin() and dropped patch that exported
-      drm_gem_pin() functions, like was requested by Thomas Zimmermann in
-      v12.
+          In  general, the behavior of O_EXCL is undefined if it is used without
+          O_CREAT.  There is one exception: on Linux 2.6 and later,  O_EXCL  can
+          be  used without O_CREAT if pathname refers to a block device.  If the
+          block device is in use by the system  (e.g.,  mounted),  open()  fails
+          with the error EBUSY.
 
-v12:- Fixed the "no previous prototype for function" warning reported by
-      kernel build bot for v11.
+Something which the syzbot could to do today is to simply use O_EXCL
+whenever trying to open a block device.  This would avoid a class of
+syzbot false positives, since normally it requires root privileges
+and/or an experienced sysadmin to try to modify a block device while
+it is mounted and/or in use by LVM.
 
-    - Fixed the missing reservation lock reported by Intel CI for VGEM
-      driver. Other drivers using drm-shmem were affected similarly to
-      VGEM. The problem was in the dma-buf attachment code path that led
-      to drm-shmem pinning function which assumed the held reservation lock
-      by drm_gem_pin(). In the past that code path was causing trouble for
-      i915 driver and we've changed the locking scheme for the attachment
-      code path in the dma-buf core to let exporters to handle the locking
-      themselves. After a closer investigation, I realized that my assumption
-      about testing of dma-buf export code path using Panfrost driver was
-      incorrect. Now I created additional local test to exrecise the Panfrost
-      export path. I also reproduced the issue reported by the Intel CI for
-      v10. It's all fixed now by making the drm_gem_shmem_pin() to take the
-      resv lock by itself.
+      	      	     	       - Ted
 
-    - Patches are based on top of drm-tip, CC'd intel-gfx CI for testing.
+P.S.  Trivia note: Aproximately month after I started work at VA Linux
+Systems, a sysadmin intern which was given the root password to
+sourceforge.net, while trying to fix a disk-to-disk backup, ran
+mkfs.ext3 on /dev/hdXX, which was also being used as one-half of a
+RAID 0 setup on which open source code critical to the community
+(including, for example, OpenGL) was mounted and serving.  The intern
+got about 50% the way through zeroing the inode table on /dev/hdXX
+before the file system noticed and threw an error, at which point
+wiser heads stopped what the intern was doing and tried to clean up
+the mess.  Of course, there were no backups, since that was what the
+intern was trying to fix!
 
-v11:- Rebased on a recent linux-next. Added new patch as a result:
-
-        drm/shmem-helper: Export drm_gem_shmem_get_pages_sgt_locked()
-
-        It's needed by the virtio-gpu driver to swap-in/unevict shmem
-        object, previously get_pages_sgt() didn't use locking.
-
-    - Separated the "Add memory shrinker" patch into smaller parts to ease
-      the reviewing, as was requested by Thomas Zimmermann:
-
-        drm/shmem-helper: Factor out pages alloc/release from
-          drm_gem_shmem_get/put_pages()
-        drm/shmem-helper: Add pages_pin_count field
-        drm/shmem-helper: Switch drm_gem_shmem_vmap/vunmap to use pin/unpin
-        drm/shmem-helper: Factor out unpinning part from drm_gem_shmem_purge()
-
-    - Addessed the v10 review comments from Thomas Zimmermann: return errno
-      instead of bool, sort code alphabetically, rename function and etc
-      minor changes.
-
-    - Added new patch to remove the "map->is_iomem" from drm-shmem, as
-      was suggested by Thomas Zimmermann.
-
-    - Added acks and r-b's that were given to v10.
-
-v10:- Was partially applied to misc-fixes/next.
-
-      https://lore.kernel.org/dri-devel/6c16f303-81df-7ebe-85e9-51bb40a8b301@collabora.com/T/
-
-Dmitry Osipenko (10):
-  drm/shmem-helper: Switch to reservation lock
-  drm/shmem-helper: Factor out pages alloc/release from
-    drm_gem_shmem_get/put_pages()
-  drm/shmem-helper: Add pages_pin_count field
-  drm/shmem-helper: Switch drm_gem_shmem_vmap/vunmap to use pin/unpin
-  drm/shmem-helper: Factor out unpinning part from drm_gem_shmem_purge()
-  drm/shmem-helper: Add memory shrinker
-  drm/shmem-helper: Remove obsoleted is_iomem test
-  drm/shmem-helper: Export drm_gem_shmem_get_pages_sgt_locked()
-  drm/virtio: Support memory shrinking
-  drm/panfrost: Switch to generic memory shrinker
-
- drivers/gpu/drm/drm_gem_shmem_helper.c        | 613 ++++++++++++++----
- drivers/gpu/drm/lima/lima_gem.c               |   8 +-
- drivers/gpu/drm/panfrost/Makefile             |   1 -
- drivers/gpu/drm/panfrost/panfrost_device.h    |   4 -
- drivers/gpu/drm/panfrost/panfrost_drv.c       |  34 +-
- drivers/gpu/drm/panfrost/panfrost_gem.c       |  30 +-
- drivers/gpu/drm/panfrost/panfrost_gem.h       |   9 -
- .../gpu/drm/panfrost/panfrost_gem_shrinker.c  | 122 ----
- drivers/gpu/drm/panfrost/panfrost_job.c       |  18 +-
- drivers/gpu/drm/panfrost/panfrost_mmu.c       |  19 +-
- drivers/gpu/drm/virtio/virtgpu_drv.h          |  20 +-
- drivers/gpu/drm/virtio/virtgpu_gem.c          |  68 ++
- drivers/gpu/drm/virtio/virtgpu_ioctl.c        |  37 ++
- drivers/gpu/drm/virtio/virtgpu_kms.c          |   8 +
- drivers/gpu/drm/virtio/virtgpu_object.c       | 137 +++-
- drivers/gpu/drm/virtio/virtgpu_plane.c        |  17 +-
- drivers/gpu/drm/virtio/virtgpu_vq.c           |  40 ++
- include/drm/drm_device.h                      |  10 +-
- include/drm/drm_gem_shmem_helper.h            |  83 ++-
- include/uapi/drm/virtgpu_drm.h                |  14 +
- 20 files changed, 925 insertions(+), 367 deletions(-)
- delete mode 100644 drivers/gpu/drm/panfrost/panfrost_gem_shrinker.c
-
--- 
-2.39.2
-
+There are a couple of things that we could learn from this incident.
+One was that giving the root password to an untrained intern not
+familiar with the setup on the serving system was... an unfortunate
+choice.  Another was that adding the above-mentioned O_EXCL feature
+and teaching mkfs to use it was an obvious post-mortem action item to
+prevent this kind of problem in the future...
