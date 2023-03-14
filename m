@@ -2,101 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96E766B9A78
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:58:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FB206B9A7B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:01:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbjCNP6O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:58:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36654 "EHLO
+        id S229920AbjCNQA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:00:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230176AbjCNP6M (ORCPT
+        with ESMTP id S229938AbjCNQA4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:58:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 777D17FD47;
-        Tue, 14 Mar 2023 08:58:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ED00F61812;
-        Tue, 14 Mar 2023 15:58:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BD7DC433D2;
-        Tue, 14 Mar 2023 15:58:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678809488;
-        bh=BgMk4i31f2UPRQv6nUIFJd7c91enlTxExm1X254lxPc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=AKyt1qoJTB4gsbjLZHxEDHowQQtn436EZrP2hV50t/0NiSHeZUsNOHTtPT58FoLCg
-         uYmZxD99oz2/I+Uu6Jveue1B+vDhrS89M+g73W6skf926NhAZGfMU/Uze6f6kH7JlU
-         IEK7W2XKqiImCcJui4fw/phleUqYfxvMYqumhlx27uc1WkvY/xdV1ppTrCUT3T2Cft
-         JJ4/I6FoFJBW4OwRzVFBjaWdgKFHLc5k1Y1SqpGPZNVEW3kR7UM89zYrXNYmvmKOAj
-         i8EUsx7Ncvd+ChjA6L3xzRRoT0aqytkAZM0M7UIgzi8gGlrV1/jzXVV4gRNWew6PWL
-         GqXuih9vP9rpA==
-Date:   Tue, 14 Mar 2023 16:57:59 +0100
-From:   Andi Shyti <andi.shyti@kernel.org>
-To:     Wei Chen <harperchen1110@gmail.com>
-Cc:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] i2c: xgene-slimpro: Fix out-of-bounds bug in
- xgene_slimpro_i2c_xfer()
-Message-ID: <20230314155759.ej2gax7r4ek7itmh@intel.intel>
-References: <20230314135734.2792944-1-harperchen1110@gmail.com>
- <20230314141036.lnwvpputzfcyeiyz@intel.intel>
- <CAO4mrfefBKL2exRrCOzVXXzzNXFhJhHOfciJZpiAdyyC_0msxQ@mail.gmail.com>
+        Tue, 14 Mar 2023 12:00:56 -0400
+Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC9B2A161
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:00:55 -0700 (PDT)
+Received: by mail-vs1-xe36.google.com with SMTP id x14so14508673vso.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:00:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112; t=1678809654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Uby9qlcFKmMY2fsZUKJLGUq3FWjzW0DSSs7z/4wZjPc=;
+        b=DeQ6DMTwPYVJOy67swDKCZkFrTsT6aC7WKKM6LuOrsZSMHJvovMsb9sFSn8hEDS/DB
+         UzxtLwtMXOD9+lqIAQ6LO7i9mKaClTb2GhS3+mZNobCXT5SGA2DfeLlOxpUh68inj4o4
+         WI1eH/7ptO19emktw++HegtvaBvCiK7IecZ2g4Hz5oBp3tx9I/lgOYMcklqG4l1zXPly
+         SGxpBXArcOHkkMCjdoC1Hyq3sC7q6iYI4uxvS9KsyyIYZhOM/ubMaCMnBxXjkXggjTHK
+         0hccdd9mzHlBkJK1bjW3fraWcutiqJ8uHu85PrTxuoQe54fSjN4ifLx3MD8AZaKwbOjP
+         Cp4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678809654;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Uby9qlcFKmMY2fsZUKJLGUq3FWjzW0DSSs7z/4wZjPc=;
+        b=j9CundVfzlu30nSlAGuHHfvxjltB4zUwp/yw3Hru5K198qF0Im254qj5fIv7NeH6/d
+         /Rbq2VATXHXYMMZv3yssopvpebkrzPRzrlXYAn47h0/rZXMBg54K109VxpizZLB0rWej
+         CW+exDcOE74oxKG5jiy8CcD1tuhear7Rz2jaZFHJ/3DpuYDod8IMXPpETa1r8f9roL3k
+         bqgmfZOlXNLytKYeUQ9MO7KyzEuYAlHRVeIJ1y8n9pA8Zv5yEGLFaVp+CU3VT+vLQ59y
+         1g6PqHMI209Uh3J6pcs7XJ/+zvqD9pno4ghgu+UUhUDhxzxZiBM/hItvmCEL8a7uxROK
+         5Ozw==
+X-Gm-Message-State: AO0yUKUXGlOHS/cVdxmuio4bUJNUUVhe0NRnvm0bya8Bzx3Dtbirgv+x
+        vuWZCVjYEpPq5y1c/8cYGRfILsWqCETvtp8LYroyNA==
+X-Google-Smtp-Source: AK7set+JhqzS0W9CSOklKEQKTPAJWFCt+2/xyhR2xXzm6EQAcRxtGVgrMWA5Xiu7RQGE33YvU8AhvlCh5c8PM8ZXTmo=
+X-Received: by 2002:a67:d81b:0:b0:423:e7f7:bc52 with SMTP id
+ e27-20020a67d81b000000b00423e7f7bc52mr7079439vsj.2.1678809654397; Tue, 14 Mar
+ 2023 09:00:54 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO4mrfefBKL2exRrCOzVXXzzNXFhJhHOfciJZpiAdyyC_0msxQ@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+References: <20230131181820.179033-1-bgardon@google.com> <CABgObfaP7P7fk66-EGF-zPEk0H14u3YkM42FRXrEvU=hwFSYgg@mail.gmail.com>
+ <CABgObfYAStAC5FgJfGUiJ=BBFtN7drD+NGHLFJY5fP3hQzVOBw@mail.gmail.com>
+In-Reply-To: <CABgObfYAStAC5FgJfGUiJ=BBFtN7drD+NGHLFJY5fP3hQzVOBw@mail.gmail.com>
+From:   David Matlack <dmatlack@google.com>
+Date:   Tue, 14 Mar 2023 09:00:28 -0700
+Message-ID: <CALzav=c-wtJiz9M6hpPtcoBMFvFP5_2BNYoY66NzF-J+8_W6NA@mail.gmail.com>
+Subject: Re: [PATCH V5 0/2] selftests: KVM: Add a test for eager page splitting
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Peter Xu <peterx@redhat.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vipin Sharma <vipinsh@google.com>,
+        Ricardo Koller <ricarkol@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Wei,
+On Tue, Mar 14, 2023 at 7:23=E2=80=AFAM Paolo Bonzini <pbonzini@redhat.com>=
+ wrote:
+>
+> On Tue, Mar 14, 2023 at 2:27=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.co=
+m> wrote:
+> > I have finally queued it, but made a small change to allow running it
+> > with non-hugetlbfs page types.
+>
+> Oops, it fails on my AMD workstation:
+>
+> $ tools/testing/selftests/kvm/x86_64/dirty_log_page_splitting_test
+> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
+> guest physical test memory: [0x7fc7fe00000, 0x7fcffe00000)
+> =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
+>   x86_64/dirty_log_page_splitting_test.c:195: __a =3D=3D __b
+>   pid=3D1378203 tid=3D1378203 errno=3D0 - Success
+>      1    0x0000000000402d02: run_test at dirty_log_page_splitting_test.c=
+:195
+>      2    0x000000000040367c: for_each_guest_mode at guest_modes.c:100
+>      3    0x00000000004024df: main at dirty_log_page_splitting_test.c:245
+>      4    0x00007f4227c3feaf: ?? ??:0
+>      5    0x00007f4227c3ff5f: ?? ??:0
+>      6    0x0000000000402594: _start at ??:?
+>   ASSERT_EQ(stats_populated.pages_4k, stats_repopulated.pages_4k) failed.
+>     stats_populated.pages_4k is 0x413
+>     stats_repopulated.pages_4k is 0x412
+>
+> Haven't debugged it yet.
 
-On Tue, Mar 14, 2023 at 11:43:41PM +0800, Wei Chen wrote:
-> The data->block[0] variable comes from user and is a number between
-> 0-255. Without a proper check, the variable may be very large to cause
-> an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
-> 
-> Fix this bug by checking the value of writelen.
-> 
-> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
+I wonder if pages are getting swapped, especially if running on a
+workstation. If so, mlock()ing all guest memory VMAs might be
+necessary to be able to assert exact page counts.
 
-I forgot to check earlier, can you also add:
-
-Fixes: f6505fbabc42 ("i2c: add SLIMpro I2C device driver on APM X-Gene platform")
-Cc: stable@vger.kernel.org
-
-> ---
-> Changes in v2:
->  - Put length check inside slimpro_i2c_blkwr
-> 
-> drivers/i2c/busses/i2c-xgene-slimpro.c | 3 +++
-> 1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c
-> b/drivers/i2c/busses/i2c-xgene-slimpro.c
-> index bc9a3e7e0c96..0f7263e2276a 100644
-> --- a/drivers/i2c/busses/i2c-xgene-slimpro.c
-> +++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
-> @@ -308,6 +308,9 @@ static int slimpro_i2c_blkwr(struct
-> slimpro_i2c_dev *ctx, u32 chip,
-> u32 msg[3];
-> int rc;
-> + if (writelen > I2C_SMBUS_BLOCK_MAX)
-> + return -EINVAL;
-> +
-
-There is something odd looking here. Can you please fix the
-formatting and leave one blank line from the variable declaration
-and the 'if (...'.
-
-Remember, please, to run checkpatch.pl before sending the patch.
-
-Andi
+>
+> Paolo
+>
