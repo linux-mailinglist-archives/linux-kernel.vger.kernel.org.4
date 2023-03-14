@@ -2,86 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DE9E6BA001
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:50:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F1A76BA009
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:52:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230104AbjCNTuL convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 15:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
+        id S229870AbjCNTva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:51:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCNTuJ (ORCPT
+        with ESMTP id S229704AbjCNTv2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:50:09 -0400
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E1055B6;
-        Tue, 14 Mar 2023 12:50:08 -0700 (PDT)
-Received: by mail-ed1-f53.google.com with SMTP id x13so19372438edd.1;
-        Tue, 14 Mar 2023 12:50:08 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678823407;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pWbK/M0x77Xrv3ybj/Re+cbFQtzYq8yEvXF3k1BEmvY=;
-        b=4RJRfPd5RPNkJJj5YwJTo8rGmEB0qCDxCLTVv+B12w+cqQrnmu2rcdv/qFiJCnhD5K
-         M4INv1+0ApxINpoDFm0idTskbCRa//LitkRPT8A54VIHCr0N7P+UGfu5VZOZDf/O0lTW
-         TVzDPENCLROXJ6YO7aa49w4kvw7CwD/FQsJ1R/x4HtWr+OUsVm9fD1EWm6mdy0MI8/we
-         6/BdAPkKIquo5NQ+/+CyzIeTtEYSofoAcNwjBHISUrOwxJvAw1Jq0qDZ+1Ir3DSvABpm
-         IQe+DtYcGCJy5axzZUpuw4Prmiuj53m9C1ykFAhZr3xUfb9BCcDl3OxR1TvsDwh+5/Qe
-         HPeA==
-X-Gm-Message-State: AO0yUKXDTeEIOstL/d2ay3kUAz5hWBR7JG0HuWh8JQ/OJJCwpyA0q9v2
-        0ZzqhnrY5hzIaCNsylF0aqn4rZmDJQff/CvB+GE=
-X-Google-Smtp-Source: AK7set/Djlb4zJE6lSC+TyP7Pdyu5bPVjgQ1dFa2g2As+v6CEIyqKFqSzUCxjq+autyjSQRQArE2iqolCK3vDD2exTY=
-X-Received: by 2002:a50:874e:0:b0:4fb:2593:846 with SMTP id
- 14-20020a50874e000000b004fb25930846mr155813edv.3.1678823406946; Tue, 14 Mar
- 2023 12:50:06 -0700 (PDT)
-MIME-Version: 1.0
-References: <20230225115144.31212-1-W_Armin@gmx.de> <d2660362-dc25-e75f-394b-1997bd062933@gmx.de>
-In-Reply-To: <d2660362-dc25-e75f-394b-1997bd062933@gmx.de>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Mar 2023 20:49:55 +0100
-Message-ID: <CAJZ5v0itUSnsxgdvw39e+YZWe4jTHA1fLjw3HZSKHTkp+eLHwQ@mail.gmail.com>
-Subject: Re: [PATCH v2 0/4] ACPI: SBS: Fix various issues
-To:     Armin Wolf <W_Armin@gmx.de>
-Cc:     rafael@kernel.org, lenb@kernel.org, linux-acpi@vger.kernel.org,
+        Tue, 14 Mar 2023 15:51:28 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2EC2E82A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:50:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678823432;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=3M5M7uIlC8hyhww3unkjtp+hcWjh4Vt7Gzo5dt9yCXk=;
+        b=PlIDzNitNYULMVGa06UyDFNQ3ffzuSNqXlVUxzivD2gJlNfbm/uhkN9jkO0EqgLbO5Pdmm
+        bQxgOyyavaFWj9Og5oIt2qRg2/y60ZNiPG0AA5K5qrb4CuEwheWwkpEMJmVUMg+252Z/hT
+        95fit1b2GIywqZtOLFsz1VzrUsNzpWo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-404-3pv0nfEjMBCC45D0Ch-0fA-1; Tue, 14 Mar 2023 15:50:26 -0400
+X-MC-Unique: 3pv0nfEjMBCC45D0Ch-0fA-1
+Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAB8938123A8;
+        Tue, 14 Mar 2023 19:50:25 +0000 (UTC)
+Received: from redhat.com (unknown [10.2.16.147])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id E4AB540C6E67;
+        Tue, 14 Mar 2023 19:50:24 +0000 (UTC)
+Date:   Tue, 14 Mar 2023 14:50:23 -0500
+From:   Eric Blake <eblake@redhat.com>
+To:     Nir Soffer <nsoffer@redhat.com>
+Cc:     josef@toxicpanda.com, linux-block@vger.kernel.org,
+        nbd@other.debian.org, philipp.reisner@linbit.com,
+        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
+        corbet@lwn.net, linux-doc@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Subject: Re: [PATCH 2/3] uapi nbd: add cookie alias to handle
+Message-ID: <20230314195023.bsey5bfq2atz7d66@redhat.com>
+References: <20230310201525.2615385-1-eblake@redhat.com>
+ <20230310201525.2615385-3-eblake@redhat.com>
+ <CAMRbyysDE+v_D6Q3tCf_+86T0V57UE4Emw6zc_4vnUu0Yau23A@mail.gmail.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMRbyysDE+v_D6Q3tCf_+86T0V57UE4Emw6zc_4vnUu0Yau23A@mail.gmail.com>
+User-Agent: NeoMutt/20220429
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Mar 12, 2023 at 6:15 PM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 25.02.23 um 12:51 schrieb Armin Wolf:
->
-> > On my Acer Travelmate 4002WLMi, the system locks up upon
-> > suspend/shutdown. After a lot of research, it turned out
-> > that the sbs module was the culprit. The driver would not
-> > correctly mask out the value used to select a battery using
-> > the "Smart Battery Selector" (subset of the "Smart Battery Manager").
-> > This accidentally caused a invalid power source to be selected,
-> > which was automatically corrected by the selector. Upon
-> > notifing the host about the corrected power source, some batteries
-> > would be selected for re-reading, causing a endless loop.
-> > This would lead to some workqueues filling up, which caused the
-> > lockup upon suspend/shutdown.
+On Sat, Mar 11, 2023 at 02:30:39PM +0200, Nir Soffer wrote:
+> On Fri, Mar 10, 2023 at 10:16 PM Eric Blake <eblake@redhat.com> wrote:
 > >
-> > The first three patches fix a stacktrace on module removal caused
-> > by some locking issues. The last patch finally fixes the
-> > suspend/shutdown issues.
+> > The uapi <linux/nbd.h> header declares a 'char handle[8]' per request;
+> > which is overloaded in English (are you referring to "handle" the
+> > verb, such as handling a signal or writing a callback handler, or
+> > "handle" the noun, the value used in a lookup table to correlate a
+> > response back to the request).  Many client-side NBD implementations
+> > (both servers and clients) have instead used 'u64 cookie' or similar,
+> > as it is easier to directly assign an integer than to futz around with
+> > memcpy.  In fact, upstream documentation is now encouraging this shift
+> > in terminology: https://lists.debian.org/nbd/2023/03/msg00031.html
 > >
-> > As a side note: This was the first machine on which i installed Linux,
-> > to finally fixing this took ~5 years of tinkering.
->
-> What is the status of this patchset? Should i use a SRCU notifier chain
-> for the query notifiers? I would really like to see this getting fixed,
-> as it prevents me from using linux on this machine.
+> > Accomplish this by use of an anonymous union to provide the alias for
+> > anyone getting the definition from the uapi; this does not break
+> > existing clients, while exposing the nicer name for those who prefer
+> > it.  Note that block/nbd.c still uses the term handle (in fact, it
+> > actually combines a 32-bit cookie and a 32-bit tag into the 64-bit
+> > handle), but that internal usage is not changed the public uapi, since
+> > no compliant NBD server has any reason to inspect or alter the 64
+> > bits sent over the socket.
+> >
+> > Signed-off-by: Eric Blake <eblake@redhat.com>
+> > ---
+> >  include/uapi/linux/nbd.h | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/include/uapi/linux/nbd.h b/include/uapi/linux/nbd.h
+> > index 8797387caaf7..f58f2043f62e 100644
+> > --- a/include/uapi/linux/nbd.h
+> > +++ b/include/uapi/linux/nbd.h
+> > @@ -81,7 +81,10 @@ enum {
+> >  struct nbd_request {
+> >         __be32 magic;   /* NBD_REQUEST_MAGIC    */
+> >         __be32 type;    /* See NBD_CMD_*        */
+> > -       char handle[8];
+> > +       union {
+> > +               char handle[8];
+> > +               __be64 cookie;
+> > +       };
+> >         __be64 from;
+> >         __be32 len;
+> >  } __attribute__((packed));
+> > @@ -93,6 +96,9 @@ struct nbd_request {
+> >  struct nbd_reply {
+> >         __be32 magic;           /* NBD_REPLY_MAGIC      */
+> >         __be32 error;           /* 0 = ok, else error   */
+> > -       char handle[8];         /* handle you got from request  */
+> > +       union {
+> > +               char handle[8]; /* handle you got from request  */
+> > +               __be64 cookie;
+> 
+> Should we document like this?
+> 
+>     union {
+>         __be64 cookie; /* cookie you got from request */
+>         char handle[8]; /* older name */
+> 
+> I think we want future code to use the new term.
 
-I'm not entirely convinced about the query notifiers idea TBH.
+Sure, swapping the order to favor the preferred name first makes sense.
+
+I'm still not sure on whether cookie should be u64 or __be64 (it's
+opaque, so endianness over the wire doesn't matter; and previous code
+was using memcpy() onto char[8] which may behave differently depending
+on machine endianness).
+
+-- 
+Eric Blake, Principal Software Engineer
+Red Hat, Inc.           +1-919-301-3266
+Virtualization:  qemu.org | libvirt.org
+
