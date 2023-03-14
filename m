@@ -2,117 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 746326B9521
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:02:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 807D76B9506
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:58:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbjCNNCC convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 09:02:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46956 "EHLO
+        id S231565AbjCNM56 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:57:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232108AbjCNNBp (ORCPT
+        with ESMTP id S232071AbjCNM5h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:01:45 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01F58AB899;
-        Tue, 14 Mar 2023 05:57:22 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id m6so1649345qvq.0;
-        Tue, 14 Mar 2023 05:57:22 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678798263;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PQ85EN/5uYFja9HAgTN7gmUCNqF9DS+mPJS2DQU6bkg=;
-        b=3RjCdfCLtplSGObvITNXIWUDsN7rwJhe6e3YqgPz1AMZAZFCWdhJwuWiiasMSraTtd
-         TcgPvVU9w1zaI+nYtlwPb1QiunDVCr0eApm4V/RpJATMr1g0Yg9KOj8GbsonsSkGptUO
-         APDaUFb3Rm8153RnfbBf8KN3/xAf7XYHTQ5v18rfnDxjJtvTmGu/ZEICvwbfSuOULkdD
-         5wUS8L+SH5WcsZBkYZcos0mtbp0D/ZR5Mn07rvwP4gtvbzx4e3YOtWWEjU5rzPKW8vh3
-         9lbeNk87lAxI1BDLoNSmFLP0pYnpD5Gh8yoi7n5218Dmpz26n80Xo9ByJYiXv5OiGZZ0
-         NSHw==
-X-Gm-Message-State: AO0yUKVdc5dNusT8z3n6qWMymSspTWTMbtK32MmaYQ3dHzxWhOED3ETR
-        3bTDgpHqTfVezdyPFpU9nzhgK/lwh8BFsg==
-X-Google-Smtp-Source: AK7set85FitrPer+ZpX0qiWEdR+DJqYIycx0ftgM3AR8mRQ82v0E4Pr8g5ofXY4U6cZ9lLAKL0n5tg==
-X-Received: by 2002:a05:6214:1c87:b0:537:7d76:ea7c with SMTP id ib7-20020a0562141c8700b005377d76ea7cmr18538152qvb.25.1678798262768;
-        Tue, 14 Mar 2023 05:51:02 -0700 (PDT)
-Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
-        by smtp.gmail.com with ESMTPSA id s15-20020ac85ccf000000b003b0b903720esm1765318qta.13.2023.03.14.05.51.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 05:51:02 -0700 (PDT)
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-541a05e4124so115149717b3.1;
-        Tue, 14 Mar 2023 05:51:02 -0700 (PDT)
-X-Received: by 2002:a81:af48:0:b0:541:9b14:949e with SMTP id
- x8-20020a81af48000000b005419b14949emr5132457ywj.4.1678798261703; Tue, 14 Mar
- 2023 05:51:01 -0700 (PDT)
+        Tue, 14 Mar 2023 08:57:37 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D87AE15542;
+        Tue, 14 Mar 2023 05:53:02 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id D864E1C000B;
+        Tue, 14 Mar 2023 12:52:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678798325;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vkuaXd86klfX5z5UBkkpcJQxbSjcGacKOadUv840wU0=;
+        b=GLHReGkFiwl8ZclCScYGYcgHFF1aQqYZ497lEAln7rYtb4CUkp7z3wlXmzRm6eSFZkycCS
+        7anQTtpYnx0wO3U4k421K3uAplgifxxwiNXC+YuEvG4HAy7zDeKxxslIf9dovi9DIPH4fP
+        J6FNwuzyEQsZrIY4wfkTbM8mo7gWh+Yev7IWNH3xp4oRQIo1odhNxIYxuA0ZfXCYSOh/kn
+        1Li47k7SXaojwKX3xHx6eUAXPB9yfC0xxsteYcnUrlR70ZRSasHJDxjLJlkjtVGW40zKV9
+        UNPDcUCitcHOiqUQtppBZ1x70VqNFCae4MPPXnaUjEB22JH/ilqsWWfe4HT0+Q==
+Date:   Tue, 14 Mar 2023 13:52:02 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v3 28/38] rtc: add HAS_IOPORT dependencies
+Message-ID: <202303141252027ef5511a@mail.local>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-29-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-References: <3b6733f683c13ac02093206e76a3e30c7d045366.1678279668.git.geert+renesas@glider.be>
- <76456032-cc76-aede-f760-65cb999a2163@opensource.wdc.com>
-In-Reply-To: <76456032-cc76-aede-f760-65cb999a2163@opensource.wdc.com>
-From:   Geert Uytterhoeven <geert@linux-m68k.org>
-Date:   Tue, 14 Mar 2023 13:50:49 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdUiSZqyTvxCbWzvWmkjC47MepuWmTNd=x_xYGDZH3SZMw@mail.gmail.com>
-Message-ID: <CAMuHMdUiSZqyTvxCbWzvWmkjC47MepuWmTNd=x_xYGDZH3SZMw@mail.gmail.com>
-Subject: Re: [PATCH v2 resend 3] ahci: qoriq: Add platform dependencies
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     linux-ide@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-        Li Yang <leoyang.li@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314121216.413434-29-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Damien,
+Hello,
 
-On Tue, Mar 14, 2023 at 1:12 PM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
-> On 3/8/23 21:49, Geert Uytterhoeven wrote:
-> > The Freescale QorIQ AHCI SATA controller is only present on Freescale
-> > Layerscape SoCs.  Add platform dependencies to the AHCI_QORIQ config
-> > symbol, to avoid asking the user about it when configuring a kernel
-> > without Layerscape support.
-> >
-> > Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > Acked-by: Li Yang <leoyang.li@nxp.com>
-> > ---
-> > v2:
-> >   - Add Acked-by.
-> > ---
-> >  drivers/ata/Kconfig | 1 +
-> >  1 file changed, 1 insertion(+)
-> >
-> > diff --git a/drivers/ata/Kconfig b/drivers/ata/Kconfig
-> > index b56fba76b43f48f7..42b51c9812a0ebab 100644
-> > --- a/drivers/ata/Kconfig
-> > +++ b/drivers/ata/Kconfig
-> > @@ -276,6 +276,7 @@ config AHCI_XGENE
-> >  config AHCI_QORIQ
-> >       tristate "Freescale QorIQ AHCI SATA support"
-> >       depends on OF
-> > +     depends on SOC_LS1021A || ARCH_LAYERSCAPE || COMPILE_TEST
-> >       select SATA_HOST
-> >       help
-> >         This option enables support for the Freescale QorIQ AHCI SoC's
->
-> Do you want this in fixes or queuing this for 6.4 is fine ?
+On 14/03/2023 13:12:06+0100, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add HAS_IOPORT as dependency for
+> those drivers using them.
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/rtc/Kconfig | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/rtc/Kconfig b/drivers/rtc/Kconfig
+> index 5a71579af0a1..20aa77bf0a9f 100644
+> --- a/drivers/rtc/Kconfig
+> +++ b/drivers/rtc/Kconfig
+> @@ -956,6 +956,7 @@ comment "Platform RTC drivers"
+>  config RTC_DRV_CMOS
+>  	tristate "PC-style 'CMOS'"
+>  	depends on X86 || ARM || PPC || MIPS || SPARC64
+> +	depends on HAS_IOPORT
 
-I guess 6.4 is fine. We've been seeing this message while configuring
-our kernels for years, so a few extra weeks won't hurt ;-)
+Did you check that this will not break platforms that doesn't have RTC_PORT defined?
 
-Gr{oetje,eeting}s,
-
-                        Geert
+>  	default y if X86
+>  	select RTC_MC146818_LIB
+>  	help
+> @@ -976,6 +977,7 @@ config RTC_DRV_CMOS
+>  config RTC_DRV_ALPHA
+>  	bool "Alpha PC-style CMOS"
+>  	depends on ALPHA
+> +	depends on HAS_IOPORT
+>  	select RTC_MC146818_LIB
+>  	default y
+>  	help
+> @@ -1193,7 +1195,7 @@ config RTC_DRV_MSM6242
+>  
+>  config RTC_DRV_BQ4802
+>  	tristate "TI BQ4802"
+> -	depends on HAS_IOMEM
+> +	depends on HAS_IOMEM && HAS_IOPORT
+>  	help
+>  	  If you say Y here you will get support for the TI
+>  	  BQ4802 RTC chip.
+> -- 
+> 2.37.2
+> 
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
