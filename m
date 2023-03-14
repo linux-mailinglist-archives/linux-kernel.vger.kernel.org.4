@@ -2,139 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A33EE6B9066
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:44:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4DB596B9074
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229796AbjCNKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:43:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
+        id S229865AbjCNKpl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:45:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCNKn4 (ORCPT
+        with ESMTP id S229632AbjCNKpf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:43:56 -0400
-Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF05EF947
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:43:19 -0700 (PDT)
-X-KPN-MessageId: f4436f54-c254-11ed-be37-00505699b430
-Received: from smtp.kpnmail.nl (unknown [10.31.155.7])
-        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
-        id f4436f54-c254-11ed-be37-00505699b430;
-        Tue, 14 Mar 2023 11:42:44 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=xs4all.nl; s=xs4all01;
-        h=content-type:from:to:subject:mime-version:date:message-id;
-        bh=MblS3wPiejH8wWKzPlRNHbipiWFCA8kFaj7hsvg8aIw=;
-        b=IC1Bek6tsLB+ZBUNcDl3p2uU4adHKFJTNwb/AKrs331rzK40Mv+EgCYHoIV0e1MNHxxRNVpKdOH1u
-         4fu5XN5lv+mLFusQyNzts9Ul1OSCejTm+DL3yNa3jm+QZHPySDS1h5Ck/lEINQUxl6QFNeLl71zcgk
-         bi7ykaaHDON3BrkiYGV2eFa+GZaMJMBHiIS3We+44p9xpkzwLCy/0NIxxx2phxbKzkK3XuWzE060H9
-         3M6iGSBP5aEEt2s6WULeFnfSNdDcmXrfTJjDdP8sh16nPPoLkukaSgxJaL3zkdlDCxUso3P540aHLa
-         bvLdn0oCfNbUDnoIV4Ti0A8uR+4N5fg==
-X-KPN-MID: 33|FkStRVpM6778JWRbee5ORbKlr5uso33caDVGRFqX+YdM2ajMXig/EgK1pUqjMB2
- ZvpFy22o4lZ02rXeesS5Bkw==
-X-KPN-VerifiedSender: Yes
-X-CMASSUN: 33|b6x6ba6BbG6VwHaXfZoELLAJBsMWVu0BpjvVbFinw6bBbG9MWR/C5kVxOti2FHv
- KdyqhcYeHZREjXLMFQDHNlQ==
-X-Originating-IP: 173.38.220.44
-Received: from [10.47.77.214] (unknown [173.38.220.44])
-        by smtp.xs4all.nl (Halon) with ESMTPSA
-        id f52d4607-c254-11ed-a8eb-005056998788;
-        Tue, 14 Mar 2023 11:42:49 +0100 (CET)
-Message-ID: <cbf34cf1-e065-8136-8344-89ca1864f637@xs4all.nl>
-Date:   Tue, 14 Mar 2023 11:42:46 +0100
+        Tue, 14 Mar 2023 06:45:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01D9F8C5A2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:44:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678790613;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=X2qaqlNY6k4SWQVNT90AfT4Sxk3NbeQfevvHYqeFvtY=;
+        b=TY7ihTc0NH7AtB7q9AtOoeNmQfXoxCrc9/LYGH/CIYKN7J8hoHt//+w16VRayND4yJYPS+
+        VvrhQv6SuoURKAQ7N1EZUBtf8skpaDXTnRFEJUVe+UPTjfjkVoSrOAt5aviGWhwaDkuLOo
+        KyM65WuZDux+LWi6xWRgqnv0EHrdD08=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-454-EAvHKNpsN9CxgMptaQqMfg-1; Tue, 14 Mar 2023 06:43:30 -0400
+X-MC-Unique: EAvHKNpsN9CxgMptaQqMfg-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id D2D062810C08;
+        Tue, 14 Mar 2023 10:43:28 +0000 (UTC)
+Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id AFBE9400F55;
+        Tue, 14 Mar 2023 10:43:27 +0000 (UTC)
+Date:   Tue, 14 Mar 2023 18:43:24 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v19 2/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <ZBBPzKBTuzGZe4OC@MiWiFi-R3L-srv>
+References: <20230306162228.8277-1-eric.devolder@oracle.com>
+ <20230306162228.8277-3-eric.devolder@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [RFC 2/4] media: videobuf2: Replace bufs array by a list
-Content-Language: en-US
-To:     David Laight <David.Laight@ACULAB.COM>,
-        'Laurent Pinchart' <laurent.pinchart@ideasonboard.com>,
-        Benjamin Gaignard <benjamin.gaignard@collabora.com>
-Cc:     "tfiga@chromium.org" <tfiga@chromium.org>,
-        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
-        "mchehab@kernel.org" <mchehab@kernel.org>,
-        "ming.qian@nxp.com" <ming.qian@nxp.com>,
-        "shijie.qin@nxp.com" <shijie.qin@nxp.com>,
-        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
-        "bin.liu@mediatek.com" <bin.liu@mediatek.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "tiffany.lin@mediatek.com" <tiffany.lin@mediatek.com>,
-        "andrew-ct.chen@mediatek.com" <andrew-ct.chen@mediatek.com>,
-        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
-        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
-        "quic_vgarodia@quicinc.com" <quic_vgarodia@quicinc.com>,
-        "agross@kernel.org" <agross@kernel.org>,
-        "andersson@kernel.org" <andersson@kernel.org>,
-        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
-        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "daniel.almeida@collabora.com" <daniel.almeida@collabora.com>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
-        "linux-rockchip@lists.infradead.org" 
-        <linux-rockchip@lists.infradead.org>,
-        "kernel@collabora.com" <kernel@collabora.com>
-References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
- <20230313135916.862852-3-benjamin.gaignard@collabora.com>
- <20230313181155.GC22646@pendragon.ideasonboard.com>
- <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
- <e704b505-86d8-c6f2-8546-adccdab72622@xs4all.nl>
- <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
-From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
-In-Reply-To: <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230306162228.8277-3-eric.devolder@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi David,
+On 03/06/23 at 11:22am, Eric DeVolder wrote:
+......
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +#undef pr_fmt
+> +#define pr_fmt(fmt) "crash hp: " fmt
+> +/*
+> + * To accurately reflect hot un/plug changes of cpu and memory resources
+> + * (including onling and offlining of those resources), the elfcorehdr
+> + * (which is passed to the crash kernel via the elfcorehdr= parameter)
+> + * must be updated with the new list of CPUs and memories.
+> + *
+> + * In order to make changes to elfcorehdr, two conditions are needed:
+> + * First, the segment containing the elfcorehdr must be large enough
+> + * to permit a growing number of resources; the elfcorehdr memory size
+> + * is based on NR_CPUS_DEFAULT and CRASH_MAX_MEMORY_RANGES.
+> + * Second, purgatory must explicitly exclude the elfcorehdr from the
+> + * list of segments it checks (since the elfcorehdr changes and thus
+> + * would require an update to purgatory itself to update the digest).
+> + */
+> +static void crash_handle_hotplug_event(unsigned int hp_action, unsigned int cpu)
+> +{
+> +	/* Obtain lock while changing crash information */
+> +	if (kexec_trylock()) {
+> +
+> +		/* Check kdump is loaded */
+> +		if (kexec_crash_image) {
 
-On 3/14/23 11:11, David Laight wrote:
-> From: Hans Verkuil
->> Sent: 14 March 2023 08:55
-> ...
->> Why not start with a dynamically allocated array of 32 vb2_buffer pointers?
->> And keep doubling the size (reallocing) whenever more buffers are needed,
->> up to some maximum (1024 would be a good initial value for that, I think).
->> This max could be even a module option.
+If the above check failed, I would directly return or jump out becuase
+one indentation can be reduced.
+
+> +			struct kimage *image = kexec_crash_image;
+> +
+> +			if (hp_action == KEXEC_CRASH_HP_ADD_CPU ||
+> +				hp_action == KEXEC_CRASH_HP_REMOVE_CPU)
+> +				pr_debug("hp_action %u, cpu %u\n", hp_action, cpu);
+> +			else
+> +				pr_debug("hp_action %u\n", hp_action);
+> +
+> +			/*
+> +			 * When the struct kimage is allocated, the elfcorehdr_index
+> +			 * is set to -1. Find the segment containing the elfcorehdr,
+> +			 * if not already found. This works for both the kexec_load
+> +			 * and kexec_file_load paths.
+> +			 */
+> +			if (image->elfcorehdr_index < 0) {
+> +				unsigned long mem;
+> +				unsigned char *ptr;
+> +				unsigned int n;
+> +
+> +				for (n = 0; n < image->nr_segments; n++) {
+> +					mem = image->segment[n].mem;
+> +					ptr = kmap_local_page(pfn_to_page(mem >> PAGE_SHIFT));
+> +					if (ptr) {
+> +						/* The segment containing elfcorehdr */
+> +						if (memcmp(ptr, ELFMAG, SELFMAG) == 0) {
+> +							image->elfcorehdr_index = (int)n;
+> +						}
+> +						kunmap_local(ptr);
+> +					}
+> +				}
+> +			}
+> +
+> +			if (image->elfcorehdr_index < 0) {
+> +				pr_err("unable to locate elfcorehdr segment");
+> +				goto out;
+> +			}
+> +
+> +			/* Needed in order for the segments to be updated */
+> +			arch_kexec_unprotect_crashkres();
+> +
+> +			/* Differentiate between normal load and hotplug update */
+> +			image->hp_action = hp_action;
+> +
+> +			/* Now invoke arch-specific update handler */
+> +			arch_crash_handle_hotplug_event(image);
+> +
+> +			/* No longer handling a hotplug event */
+> +			image->hp_action = KEXEC_CRASH_HP_NONE;
+> +			image->elfcorehdr_updated = true;
+> +
+> +			/* Change back to read-only */
+> +			arch_kexec_protect_crashkres();
+> +		}
+> +
+> +out:
+> +		/* Release lock now that update complete */
+> +		kexec_unlock();
+> +	}
+> +}
+> +
+> +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
+> +{
+> +	switch (val) {
+> +	case MEM_ONLINE:
+> +		crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY,
+> +			KEXEC_CRASH_HP_INVALID_CPU);
+> +		break;
+> +
+> +	case MEM_OFFLINE:
+> +		crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY,
+> +			KEXEC_CRASH_HP_INVALID_CPU);
+> +		break;
+> +	}
+> +	return NOTIFY_OK;
+> +}
+> +
+> +static struct notifier_block crash_memhp_nb = {
+> +	.notifier_call = crash_memhp_notifier,
+> +	.priority = 0
+> +};
+> +
+
+Because for_each_possible_cpu() is taken in
+crash_prepare_elf64_headers(), x86 doesn't need to respond to cpu
+hotplug or doesn't do anything with this patchset. This cpu part in
+infrastructure is only for the later powerpc usage, right?
+
+> +static int crash_cpuhp_online(unsigned int cpu)
+> +{
+> +	crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_CPU, cpu);
+> +	return 0;
+> +}
+> +
+> +static int crash_cpuhp_offline(unsigned int cpu)
+> +{
+> +	crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_CPU, cpu);
+> +	return 0;
+> +}
+> +
+> +static int __init crash_hotplug_init(void)
+> +{
+> +	int result = 0;
+> +
+> +	if (IS_ENABLED(CONFIG_MEMORY_HOTPLUG))
+> +		register_memory_notifier(&crash_memhp_nb);
+> +
+> +	if (IS_ENABLED(CONFIG_HOTPLUG_CPU)) {
+> +		result = cpuhp_setup_state_nocalls(CPUHP_BP_PREPARE_DYN,
+> +			"crash/cpuhp", crash_cpuhp_online, crash_cpuhp_offline);
+> +	}
+> +
+> +	return result;
+> +}
+> +
+> +subsys_initcall(crash_hotplug_init);
+> +#endif
+> diff --git a/kernel/kexec_core.c b/kernel/kexec_core.c
+> index 969e8f52f7da..f2f9d41ce5df 100644
+> --- a/kernel/kexec_core.c
+> +++ b/kernel/kexec_core.c
+> @@ -276,6 +276,11 @@ struct kimage *do_kimage_alloc_init(void)
+>  	/* Initialize the list of unusable pages */
+>  	INIT_LIST_HEAD(&image->unusable_pages);
+>  
+> +#ifdef CONFIG_CRASH_HOTPLUG
+> +    image->elfcorehdr_index = -1;
+> +    image->elfcorehdr_updated = false;
+> +#endif
+> +
+>  	return image;
+>  }
+>  
+> -- 
+> 2.31.1
 > 
-> I don't know the typical uses (or the code at all).
-> But it might be worth having a small array in the structure itself.
-> Useful if there are typically always (say) less than 8 buffers.
-> For larger sizes use the (IIRC) kmalloc_size() to find the actual
-> size of the structure that will be allocate and set the array
-> size appropriately.
-
-The typical usage is that applications allocate N buffers with the
-VIDIOC_REQBUFS ioctl, and in most cases that's all they use. The
-current max is 32 buffers, so allocating that initially (usually
-during probe()) will cover all current cases with a single one-time
-kzalloc.
-
-Only if the application wants to allocate more than 32 buffers will
-there be a slight overhead.
-
-Regards,
-
-	Hans
-
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
 
