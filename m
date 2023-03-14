@@ -2,91 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83E4D6BA02B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:57:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD9796BA030
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:58:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229970AbjCNT52 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:57:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55944 "EHLO
+        id S229616AbjCNT6F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:58:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbjCNT5W (ORCPT
+        with ESMTP id S229572AbjCNT57 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:57:22 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3C29497EF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:57:18 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z21so1474076edb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:57:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678823837;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=aORkeEWyO4el94Bv6We6yy/BW+bw5NjQvuZusdWHXhw=;
-        b=gr18aPzM5zECvOkClsBTCdIMXKpwux+V1a6gMKvaYD7cxf8xfCzZFnwTplfRbntBe+
-         pBvDyOSmdKO8kWrmxOskVrIOGRk9Pex1nzNb0goa0jkia5LwixA+rneqPQM3iQfp0C51
-         s2EefWp9yN8cUY3QUv4nuKg6X8aM+WgZwDvIhcbzshhyPV4dqqSz9fXz9w6t6M+8lHf1
-         I+biZuTX+mYJBpYz4OZ8zOAFr99syPdi6A+eboC3FsZBfm+fU3psVzJD0aePAq5n4LZU
-         CQ3lVGIYOMc+LaWysoxc+lTzEw5+z/DKx3Gw4IqFNa9O9x/b53pkMtJIPBifAyfHBcP7
-         vw8w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678823837;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aORkeEWyO4el94Bv6We6yy/BW+bw5NjQvuZusdWHXhw=;
-        b=icM9mTjKAgawX1gxuKBP+YXXYZq9bAIALO5tgQm+yEc0tRr3NAAgr3+yKhpdlOQDrX
-         4kalKa9X7QUPGc44gMlmzUjt5iGLPLNrgaRq0Jfy68FxMrauAKRgYFnCH6BVjUDtRQ9e
-         W8Il2qY8QW/ikRI8Nl9ul6CJTuycytu9DcWKZtSiGEntvicObnPjfnCiU6un1TucCAvw
-         mD9/O7ebJgD1cy+BEER8vjjsq/hzRvDEv55rKWIvQ9KLArNy1L6F4K9QcH+ehhq5vHxL
-         38rJTzRx1uWAtpm0M1lH6hVNeVX+QlnHkgQzXhR94b/bCqFbzc0C2hl9C2NHlwRMW/by
-         o1DA==
-X-Gm-Message-State: AO0yUKVtCC84dLpshpowOeMNkqjED+JjpgJfSa3QVWGi8LGzXO+5jNJe
-        rYY/dD9zphH8VRjf97twM9jqmg==
-X-Google-Smtp-Source: AK7set/XAW5ciHQcJno6hH/Z88UfN6YapdX8vcLUOlfdJ3yyprHp0j3qR3GzULGcqsy5r/vRByYzFQ==
-X-Received: by 2002:a17:906:a0e:b0:91e:acf4:b009 with SMTP id w14-20020a1709060a0e00b0091eacf4b009mr4068970ejf.22.1678823837351;
-        Tue, 14 Mar 2023 12:57:17 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:642b:87c2:1efc:c8af? ([2a02:810d:15c0:828:642b:87c2:1efc:c8af])
-        by smtp.gmail.com with ESMTPSA id c37-20020a509fa8000000b004fb17f10326sm1514478edf.10.2023.03.14.12.57.15
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 12:57:16 -0700 (PDT)
-Message-ID: <4ac809d2-3924-3839-479f-0b4be9f18a1f@linaro.org>
-Date:   Tue, 14 Mar 2023 20:57:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] p54spi: convert to devicetree
+        Tue, 14 Mar 2023 15:57:59 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2074.outbound.protection.outlook.com [40.107.247.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3016F4A1F4;
+        Tue, 14 Mar 2023 12:57:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=KET6+gJ6+AZOZJB1/cZ9Q118GmvEzC0KaQyJ7IC+vNtBfoYFWjmhtQnKPGk2/t7Ptv6rvTw26YU8mRqlPHoUrqExm+6WAceEeklUvQoPJgK4vCiy0V9YZMfGlUHiqYVe5lTLKc/MMVbO14azsMOLlS8zVDpI2f1nXhqGh+xk50WM8ZlvAW49xWTl251NzhG19qPPbkwvrnJyxPgVChNfq8j8d7eCgJok10f93EE6pmHYyQU3iQ3FObBSZEqVFALZnfqYVhXwsy3C0szRDIDp5RrJH6wwCrz6Og5Qq5MGlzpuRuesoVhlMweOJ4rih1OV1qVROpDDaswFmDoce9LUSQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zLnwXcIx9pcs/o58kqV1+entzOi4YK7u7umLd03Wgd4=;
+ b=KrsgcKdcKEwzNbjySbCciY+HDs//PbitQz5E1IHR6M/1q6I2ueh720eUmZy0df/xsadnlJCkX2HRuXBHRoDApTXKl0U8ST7qAe7/ScIltZ1VgLhNV6ncYLY5SIgEySLyxvjc/XCfK8MofStStrEryo1pOMEVy2jaijy9GiOU3DrKs7E3UhlF03H9Ap42JdF+gUc9tVk37/6C9AxZE6FdQl+iWFHhHJb0M1+kj1M/wKYlxqlRyh10Nh/T25h/fHulmzAr2whEx2j3BrKmyufk7Q5r/8z8r+Dos9GL4JFT4CORFscx8/iOe+xLMjtkfOhrkPS6z0a7tsJNNksGyt5IKA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zLnwXcIx9pcs/o58kqV1+entzOi4YK7u7umLd03Wgd4=;
+ b=M3wOuRIv9FrDFvTNtvwgcMV40aMjw0D61jzkk46nx3YonVQb4sXSjxcxbE1JdH9UzImmEj+57Ia8puhlnfslnwcEOwMktRk022ivBACDyr951a2cEdydwyHezVwy463bGiTAESeiRPAVPki67zVjmLn3X+oEfuOxZ/VOdWxXb+I=
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com (2603:10a6:20b:4::16)
+ by PAXPR04MB9124.eurprd04.prod.outlook.com (2603:10a6:102:22f::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 19:57:43 +0000
+Received: from AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::fb2a:a683:b78e:b9b5]) by AM6PR04MB4838.eurprd04.prod.outlook.com
+ ([fe80::fb2a:a683:b78e:b9b5%4]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
+ 19:57:43 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     "M.H. Lian" <minghuan.lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        =?iso-8859-2?Q?Krzysztof_Wilczy=F1ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+CC:     "imx@lists.linux.dev" <imx@lists.linux.dev>
+Subject: RE: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
+Thread-Topic: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
+Thread-Index: AQHZJr5WwkFDleZU9E2wO25hi20GTK68DjRggBLZEQCALCl70A==
+Date:   Tue, 14 Mar 2023 19:57:43 +0000
+Message-ID: <AM6PR04MB4838A918AE988237FF6EE6AF88BE9@AM6PR04MB4838.eurprd04.prod.outlook.com>
+References: <20230112194433.1514149-1-Frank.Li@nxp.com>
+ <HE1PR0401MB233120D46B7AA9F23AFD51C688D69@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+ <HE1PR0401MB2331FFC2DB890713521DC46788A29@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+In-Reply-To: <HE1PR0401MB2331FFC2DB890713521DC46788A29@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>,
-        Christian Lamparter <chunkeey@googlemail.com>,
-        Kalle Valo <kvalo@kernel.org>
-Cc:     Linus Walleij <linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>,
-        linux-gpio@vger.kernel.org, linux-omap@vger.kernel.org,
-        Tony Lindgren <tony@atomide.com>,
-        Aaro Koskinen <aaro.koskinen@iki.fi>,
-        Felipe Balbi <balbi@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?Q?Beno=c3=aet_Cousson?= <bcousson@baylibre.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-References: <20230314163201.955689-1-arnd@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230314163201.955689-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: AM6PR04MB4838:EE_|PAXPR04MB9124:EE_
+x-ms-office365-filtering-correlation-id: 23572e3a-a41c-48a9-29fc-08db24c65ff0
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: 2rhiusJv7R3/LhCL5Yev9Qdv56HBd5C2VHuRdcnskI1jIlk7glPba8i2QZmyX8g20Iu/6136TeZnwvOIRpD7Hrnp4vlH0kvfzhcLKEjPJBvzDwhyncMlbug2+PxER945PenyOcSBr2Ab4jWx3Jt8vzB4Z0eA7EFRGebbVNcXpp5lg/C+Z4fcJRB4OMgRyZ5a4vqXiUwLWAOaiIa8db3KmI4B88F1RFxcoKdMlVncycPbrVC3etlpvkoPXWYwws5GxUzeFcgpi5+EqR0Q4vcJBgPqH5vOw/We/aCW0c7QVAkuegsCCjwCgU6UTyC+xSIgcYrQWLpcJReP5wW6W9bcEJxU1V/GEpnVYPgvi2WeA+4C35orBc85KxHggHr4+e5KjYwWjZrgf7CKYoFFlwVdwJde/kuPcKn/rPOc7vaCiRl/zsCNQk8BCl/mwqMv5W4LBNOaxcar0wzPD5DsP5QDE+QNXXujD61p2cTmea4YTTp8zymRvK1MisReZvhwdI8XD9Kd97JoOOyOmizmZafQTvLYl9BbQCp7p3NLC0HZkmV2MjZeu9+Sc8dhtsGvyS8+QPOWX9DJ+NeCHLSh2lTl7moJ2OtYx6zLFfT54Ucvk8sSpw8FSDesJLmxk7ebLh4TioC2DA4uxyHygpMF1IFzq36zBaxBfsxuXOLF4ybLbYTk7dsBhmTL+spApdy1VOI+pb7Usm72/JKS4ewga1Vhmb4PzV9g5BRB+mZ1xjvHW7c=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM6PR04MB4838.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(396003)(39860400002)(136003)(366004)(376002)(346002)(451199018)(6506007)(44832011)(7696005)(26005)(38100700002)(66446008)(4326008)(921005)(66556008)(64756008)(66946007)(76116006)(110136005)(478600001)(8676002)(122000001)(66476007)(316002)(9686003)(186003)(4744005)(5660300002)(55236004)(41300700001)(8936002)(86362001)(71200400001)(33656002)(38070700005)(83380400001)(52536014)(2906002)(55016003);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?iso-8859-2?Q?+gslsVAL/MOfYRQX1m9WsESciu1PMaHqYbnqc5P2oiXdEBzj/NeO99pNIw?=
+ =?iso-8859-2?Q?g9wTCTjyrrm2HyW9oE0+e4N86rQD98XkdHx5MMc2PGiLVWyVbyXBunvbvI?=
+ =?iso-8859-2?Q?nid6QFRdLyAEz8ftU9rDXIEG2nTOzi4wLcCtFbmN1MapwTDbdSJJ7XrJXa?=
+ =?iso-8859-2?Q?FjUvabOnog+lOEyAWTNk6P24I6aFm9mdvlQi1tkiXalkHGT/rOdJ5Lu8EO?=
+ =?iso-8859-2?Q?ydREafSLWDUcyT2rtJJcsDSAc4W4+vLVSLRlKdWD0+2+qawv+JzDFPGRNa?=
+ =?iso-8859-2?Q?R4fW/8fexOfKzgqIco/a5WmODc5gpCt36Ho4sumh3G8zvULCbORJilxvWC?=
+ =?iso-8859-2?Q?MvwXc7duBWD4k0nkQ8564yyScH+OjNDzf4dRCo3oaptQLiRNfAA405u87e?=
+ =?iso-8859-2?Q?TDgGOCmT9hXCWSH0Z3f9MszILj9Uq9I/8DcS1GyKeTjbq/3eNWdkeTN+/u?=
+ =?iso-8859-2?Q?hhDNRDLiMfMktMN0dVNVRGErozF06YG3zLVCEHmZmjuj1kMw3f+8B81TxL?=
+ =?iso-8859-2?Q?vTEBKmCnOZszEJyQvl4ypKP1TleoZ8XJFZDKx6FBSpEePqvgt149F/K7bG?=
+ =?iso-8859-2?Q?6neFRoIQY025dLflpHoJgIikavOh/ZuFcnasXhKWOzJtE2Ck8Gx1HzHfVN?=
+ =?iso-8859-2?Q?TveTt4sdU5uf6Uo5h2ccZPopvmL1s7Gg1icyiH2lGfHp2yedfv/IKJpNXq?=
+ =?iso-8859-2?Q?YOnl+0AIgjxC3kmoaj1wltj9SHZ5Ole9132tOBd0lNlTaww51xElNv7tp+?=
+ =?iso-8859-2?Q?jWdlALRIebZG0MdmCxFNY5n3ZM9160dnuLNYceyse+uAsbHjuiwpmFc1vk?=
+ =?iso-8859-2?Q?RKcgGs0PY6+Z41ojc8UnOZjgg5VLEViTX2tjR9K79rDOknj4JPEvL+P00q?=
+ =?iso-8859-2?Q?Z8o4VUpQYYKLe2a0VTv4+ox0NPPnJJpO0fLxfZaincoWcOEYNjm0W55lTW?=
+ =?iso-8859-2?Q?QfIHE6ICczgy9bxkhO29umEoHWbJ3bUtCa43FosIelROXai9TrRTXlVXK/?=
+ =?iso-8859-2?Q?fTFJKfGe2/IkbEjp5dTg14Bvqhiy6GCEZGhI65CjOGTafQrQCplK7dRr89?=
+ =?iso-8859-2?Q?0YZ55Ydt2vhryc1nlJO5of985/tGSvnIaEsscUBOQuxQ8domo50ebndlIj?=
+ =?iso-8859-2?Q?442JNJe/4T0dvdzonno95Ln6zbuw8XeXrJ7IkVFXwBr/PnAW/yLShpy33g?=
+ =?iso-8859-2?Q?Bcomx5f3BeOYStAvccJ7CMOrjIYrgKdAbBeMXUb/X2bOMRoaBhXerQQAIi?=
+ =?iso-8859-2?Q?zzN3hKT3lAU4ZhJJnkYiJsw6D87mY9S6kAZvibKFGxR7jyI2iYkBBewO/c?=
+ =?iso-8859-2?Q?nTus9OMO5FPvonoOp/n4khdKy9iswjY8768bAtxjhqNj0DPNVvizXr86gL?=
+ =?iso-8859-2?Q?yinJvgH4mkrsVoD/B/g/w4PnMPsBJuolICZFR8E00hlGdRkOljUzAw940+?=
+ =?iso-8859-2?Q?OnhI/SRnHp246E/H6a/lqFIYObEdVfzuqqfj+JSViJRFLbbGh2oSdwD4xz?=
+ =?iso-8859-2?Q?JfI2y/fxkt4Njlm9gziSexht/YKveV4mnP/Q7pqQQt5kxefbmfwdpxPVv9?=
+ =?iso-8859-2?Q?cEs7bCgqWTQFtzUnSD2VYOIstOnCxiHRQ/fqw8arn9GSVFTKhhV8kmZLWI?=
+ =?iso-8859-2?Q?dBhVbM9fQlwlM=3D?=
+Content-Type: text/plain; charset="iso-8859-2"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: AM6PR04MB4838.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 23572e3a-a41c-48a9-29fc-08db24c65ff0
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2023 19:57:43.4131
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: tiJ86czRvqv4Wn5peNPd77muJLEEbyF7fpULUqnGL2EJdatwHsN7b8kXPTYArLYU7WlYqd0w63TRdw8s4ENK0A==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB9124
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,138 +129,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 17:30, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> The Prism54 SPI driver hardcodes GPIO numbers and expects users to
-> pass them as module parameters, apparently a relic from its life as a
-> staging driver. This works because there is only one user, the Nokia
-> N8x0 tablet.
-> 
-> Convert this to the gpio descriptor interface and move the gpio
-> line information into devicetree to improve this and simplify the
-> code at the same time.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
-> As I don't have an N8x0, this is completely untested.
-> 
-> I listed the driver authors (Johannes and Christian) as the maintainers
-> of the binding document, but I don't know if they actually have this
-> hardware. It might be better to list someone who is actually using it.
-> 
-> Among the various chip identifications, I wasn't sure which one to
-> use for the compatible string and the name of the binding document.
-> I picked st,stlc4560 as that was cited as the version in the N800
-> on multiple websites.
-> ---
->  .../bindings/net/wireless/st,stlc45xx.yaml    | 64 +++++++++++++++++
 
-Please split bindings to separate patch.
+>=20
+> > -----Original Message-----
+> > From: Frank Li
+> > Subject: RE: [PATCH 1/1] PCI: layerscape: Add the workaround for A-0103=
+05
+> >
+> > > Subject: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
+> > >
+> > > From: Xiaowei Bao <xiaowei.bao@nxp.com>
+> > >
+> > > When a link down or hot reset event occurs, the PCI Express EP
+> > > controller's Link Capabilities Register should retain the values of
+> > > the Maximum Link Width and Supported Link Speed configured by RCW.
+> > >
+> > > Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> > > Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+> > > Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> > > ---
+> >
+> > Ping
+>=20
+> Friendly ping.
 
->  MAINTAINERS                                   |  1 +
->  arch/arm/boot/dts/omap2.dtsi                  |  4 ++
->  arch/arm/boot/dts/omap2420-n8x0-common.dtsi   | 12 ++++
+Ping.  No feedback for over 1 month!
 
-DTS as well...
-
->  arch/arm/mach-omap2/board-n8x0.c              | 18 -----
->  drivers/net/wireless/intersil/p54/p54spi.c    | 69 +++++++------------
->  drivers/net/wireless/intersil/p54/p54spi.h    |  3 +
->  7 files changed, 109 insertions(+), 62 deletions(-)
->  create mode 100644 Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
-> 
-> diff --git a/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml b/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
-> new file mode 100644
-> index 000000000000..45bc4fab409a
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/wireless/st,stlc45xx.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/wireless/st,stlc45xx.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: ST/Intersil/Conexant stlc45xx/p54spi/cx3110x SPI wireless device
-> +
-> +maintainers:
-> +  - Johannes Berg <johannes@sipsolutions.net>
-> +  - Christian Lamparter <chunkeey@web.de>
-> +
-> +description: |
-
-You can drop '|'.
-
-> +  The SPI variant of the Intersil Prism54 wireless device was sold
-> +  under a variety of names, including ST Microelectronics STLC5460
-> +  and Conexant CX3110x.
-> +
-> +allOf:
-> +  - $ref: ieee80211.yaml#
-> +  - $ref: /schemas/spi/spi-peripheral-props.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - st,stlc4550
-> +      - st,stlc4560
-> +      - isil,p54spi
-> +      - cnxt,3110x
-
-Order above entries by name.
-
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  power-gpios:
-
-If this is GPIO driving some power pin, then it should be
-"powerdown-gpios" (like in /bindings/gpio/gpio-consumer-common.yaml)
-
-> +    maxItems: 1
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +   gpio {
-
-Align example with above |, so four spaces. Or better indent entire
-example with four spaces.
-
-> +     gpio-controller;
-> +     #gpio-cells = <1>;
-> +     #interupt-cells = <1>;
-> +   };
-
-Drop "gpio" node. It's not needed for the example.
-
-> +   spi {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      wifi@0 {
-> +        reg = <0>;
-> +        compatible = "st,stlc4560";
-
-compatible before reg.
-
-> +        spi-max-frequency = <48000000>;
-> +        interrupts-extended = <&gpio 23>;
-> +        power-gpios = <&gpio 1>;
-> +     };
-> +   };
-
-Best regards,
-Krzysztof
+>=20
+> >
+> >
+> > >  static struct platform_driver ls_pcie_ep_driver =3D {
+> > > --
+> > > 2.34.1
 
