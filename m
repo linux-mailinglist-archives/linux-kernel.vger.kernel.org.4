@@ -2,96 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 691CC6B92AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:07:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 952F26B929C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231494AbjCNMHS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:07:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37966 "EHLO
+        id S229436AbjCNMFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37614 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231772AbjCNMHH (ORCPT
+        with ESMTP id S231768AbjCNMFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:07:07 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBFD81CBE9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:05:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678795440;
+        Tue, 14 Mar 2023 08:05:34 -0400
+Received: from lahtoruutu.iki.fi (lahtoruutu.iki.fi [IPv6:2a0b:5c81:1c1::37])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D95D71C58D;
+        Tue, 14 Mar 2023 05:05:02 -0700 (PDT)
+Received: from meesny.iki.fi (meesny.iki.fi [IPv6:2001:67c:2b0:1c1::201])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        by lahtoruutu.iki.fi (Postfix) with ESMTPS id 4PbXHw1rpRz4BKJt;
+        Tue, 14 Mar 2023 14:04:11 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=lahtoruutu;
+        t=1678795452;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=MkvZhNM1t39M096NVBy9IojYv95X5G5zpBGWQK5Uqpk=;
-        b=Bwrwo/BSiPKEVyTcBSZ2wjqmB2zDc4fAlQ5wFVrChoI4VB2EGVK/4oiSU18KOa2j1G2gux
-        NRaKIt1ofo8F34TeKR/q8O3aUiP29/TIZIsYaIqXJ5ZjayBoTClRqi206dhLsKTvFNvqmM
-        s/DXVVPiy/YaA+JLRK/a/zUlWQEYmm4=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-264-frR9oI5qOaOvDYO_c4DA6A-1; Tue, 14 Mar 2023 08:00:17 -0400
-X-MC-Unique: frR9oI5qOaOvDYO_c4DA6A-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+         in-reply-to:in-reply-to:references:references;
+        bh=qZdVO+o6NVisvLLp0fz85lQ/En55DCtDZZ8CJdoWRLw=;
+        b=Zc1R1I3rg1hRsMfrhRw1YtTL0+SD+swa8meOGKm7k1dEwbQSj16Ii5opPRmeu904Hqk8Wl
+        LHE5P8FZGrVpfCCOf8vh/65UHb1tQzt2L/gy8TBTwYlP5O+G/gvc5DtEhr1YotI5gQfdQs
+        HxmUh1SM/P4O6TkOBGK9Wt5IGrDE7+88Sq8sxmipCtZWAgNALAD3UpUTWEbjDxpUpFIdZk
+        LfTg7MulJNWvhIkOsjVaBmZyqrYALnN8Qy1tToIgzwbwvTspeAR6hOjXTDGz2AyKiqizNH
+        DaXigB1cDHSFeWBI1qap+baUm9Z6arBmJ4mcAEv68pgrRqZ+v6MqUjsA6XnN6g==
+Received: from hillosipuli.retiisi.eu (dkzbhx1tyyyyyyyyyyyyt-3.rev.dnainternet.fi [IPv6:2001:14ba:4502:69d6::1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7C75D857F43;
-        Tue, 14 Mar 2023 12:00:17 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 60BCA2A68;
-        Tue, 14 Mar 2023 12:00:17 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     seanjc@google.com
-Subject: [PATCH] KVM: nVMX: remove unnecessary #ifdef
-Date:   Tue, 14 Mar 2023 08:00:16 -0400
-Message-Id: <20230314120016.3038336-1-pbonzini@redhat.com>
+        (Authenticated sender: sailus)
+        by meesny.iki.fi (Postfix) with ESMTPSA id 4PbXFG658tzyQx;
+        Tue, 14 Mar 2023 14:01:54 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi; s=meesny;
+        t=1678795317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qZdVO+o6NVisvLLp0fz85lQ/En55DCtDZZ8CJdoWRLw=;
+        b=g4p6lmMNIEZi5Hxya3lo2eH88giekGBrGSaNMkJJA1vCIRxaWYSrvMP1xmiMOlptEyoQUs
+        3bCxMoWjbG6wbZmBPCELDT27lHPIUx1OH6sIWi6Pa8cLqNSF9oR/lH3VP+U0h0ta577kRs
+        iWilPkVEVHG8/AmclaxCkJTWVCM0/Ik=
+ARC-Seal: i=1; s=meesny; d=iki.fi; t=1678795317; a=rsa-sha256; cv=none;
+        b=BvgKPCSD9q6pUJSAxUy+VizHYYIbjg9ezjQHh5QXGQbEZT+GCzXbVU1eLEO4U391sDQS4u
+        +HPMyX5cMepisp8vRwjTRTpBuj/bxnPgc8ugDSKe5otTQLiIwOBTjlVt0BbwX3YLPs555f
+        Ud59qiYSrCYs3qTAkg6uXrJLnMsW1z8=
+ARC-Authentication-Results: i=1;
+        ORIGINATING;
+        auth=pass smtp.auth=sailus smtp.mailfrom=sakari.ailus@iki.fi
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=iki.fi;
+        s=meesny; t=1678795317;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=qZdVO+o6NVisvLLp0fz85lQ/En55DCtDZZ8CJdoWRLw=;
+        b=OkKVUPXuzmIvASe6puyQy2dN6TuBvyb+QKZfD0GrMbuycT0e4eQY84BRKIVAr1eXt3p/oW
+        sDfHnF0SOKX0niSvK1QzzepUQvH7HRfkRj4s8yJz10vSBg+ZpFQlzXt5rApHPruLKpbyez
+        SKaN1DNDcC5J3QvHiy/Ig3JeNK3EtcM=
+Received: from valkosipuli.retiisi.eu (valkosipuli.localdomain [192.168.4.2])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by hillosipuli.retiisi.eu (Postfix) with ESMTPS id CFAAB634C91;
+        Tue, 14 Mar 2023 14:00:52 +0200 (EET)
+Date:   Tue, 14 Mar 2023 14:00:52 +0200
+From:   Sakari Ailus <sakari.ailus@iki.fi>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        ~postmarketos/upstreaming@lists.sr.ht,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        devicetree@vger.kernel.org,
+        Shunqian Zheng <zhengsq@rock-chips.com>,
+        phone-devel@vger.kernel.org,
+        Helen Koike <helen.koike@collabora.com>
+Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
+Message-ID: <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
+References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
+ <167572017056.1564123.13342855865502188090.robh@kernel.org>
+ <2665862.mvXUDI8C0e@z3ntu.xyz>
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2665862.mvXUDI8C0e@z3ntu.xyz>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-nested_vmx_check_controls() has already run by the time KVM checks host state,
-so the "host address space size" exit control can only be set on x86-64 hosts.
-Simplify the condition at the cost of adding some dead code to 32-bit kernels.
+Hi Luca,
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/x86/kvm/vmx/nested.c | 8 +-------
- 1 file changed, 1 insertion(+), 7 deletions(-)
+On Thu, Feb 09, 2023 at 05:46:48PM +0100, Luca Weiss wrote:
+> +CC Helen Koike
+> 
+> On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
+> > On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
+> > > Convert the text-based dt-bindings to yaml.
+> > > 
+> > > Changes from original txt:
+> > > * Take wording for various properties from other yaml bindings, this
+> > > 
+> > >   removes e.g. volt amount from schema since it isn't really relevant
+> > >   and the datasheet is a better source.
+> > > 
+> > > * Don't make reset-gpios a required property since it can be tied to
+> > > 
+> > >   DOVDD instead.
+> > > 
+> > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> > > ---
+> > > 
+> > >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
+> > >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
+> > >  +++++++++++++++++++++ MAINTAINERS                                       
+> > >  |   1 +
+> > >  3 files changed, 102 insertions(+), 41 deletions(-)
+> > 
+> > My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> > 
+> > yamllint warnings/errors:
+> > 
+> > dtschema/dtc warnings/errors:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/medi
+> > a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required property From
+> > schema:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/i2c/ovti,ov2685.yaml
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
+> > property From schema:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/i2c/ovti,ov2685.yaml
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
+> > property From schema:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/i2c/ovti,ov2685.yaml
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
+> > property From schema:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/i2c/ovti,ov2685.yaml
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
+> > property From schema:
+> > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/med
+> > ia/i2c/ovti,ov2685.yaml
+> 
+> Looks like rockchip-isp1.yaml uses very incomplete sensor examples in their 
+> binding example, which sort of makes sense since those bindings are showing 
+> the rockchip isp bindings and contain the bare minimum to show how a sensor is 
+> connected in dt.
+> 
+> Not sure how to solve this - ov2685 is also one of three sensors that are used 
+> very abbreviated there.
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index bceb5ad409c6..535c85a332ad 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -2902,7 +2902,7 @@ static int nested_vmx_check_address_space_size(struct kvm_vcpu *vcpu,
- static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
- 				       struct vmcs12 *vmcs12)
- {
--	bool ia32e;
-+	bool ia32e = !!(vmcs12->vm_exit_controls & VM_EXIT_HOST_ADDR_SPACE_SIZE);
- 
- 	if (CC(!nested_host_cr0_valid(vcpu, vmcs12->host_cr0)) ||
- 	    CC(!nested_host_cr4_valid(vcpu, vmcs12->host_cr4)) ||
-@@ -2922,12 +2922,6 @@ static int nested_vmx_check_host_state(struct kvm_vcpu *vcpu,
- 					   vmcs12->host_ia32_perf_global_ctrl)))
- 		return -EINVAL;
- 
--#ifdef CONFIG_X86_64
--	ia32e = !!(vmcs12->vm_exit_controls & VM_EXIT_HOST_ADDR_SPACE_SIZE);
--#else
--	ia32e = false;
--#endif
--
- 	if (ia32e) {
- 		if (CC(!(vmcs12->host_cr4 & X86_CR4_PAE)))
- 			return -EINVAL;
+Could these regulators be simply made optional?
+
 -- 
-2.39.1
+Kind regards,
 
+Sakari Ailus
