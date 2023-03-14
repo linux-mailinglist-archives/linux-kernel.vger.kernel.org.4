@@ -2,138 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E28D6B8D53
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 343506B8D54
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:31:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229840AbjCNIbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:31:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60220 "EHLO
+        id S229853AbjCNIbl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:31:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60750 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229482AbjCNIbQ (ORCPT
+        with ESMTP id S229749AbjCNIbj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:31:16 -0400
-Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::228])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7196B2387A;
-        Tue, 14 Mar 2023 01:31:14 -0700 (PDT)
-Received: (Authenticated sender: herve.codina@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0F4B21BF213;
-        Tue, 14 Mar 2023 08:31:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678782672;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=jdfFUYhdjACpBVveRaAJWomc0NuqciR9U2EEWezTvMg=;
-        b=e4kux0ZWhdR5f6CpCkWuoWcd/6K8eRnFxk/IH77LYo7DY1y4rfTWniYFxwqpUKQaMrxs2M
-        NAXWLb7Imfb6JJoc1Y+xEEgUUlEyyfNRfPs0mQ1JFk4MBBJDqSi/Yxic3KEU8ZOuBuBBS1
-        d8Gn6dCVuYbhwq4+5kjQVsL6USMWUOmJ7hvtHdoYeGzLAqDVUqSb23ySUZzD2t98PWJj/F
-        P+dZqpV82oEXaAVyMZNI2TAJkSSlMxagQI6vpe10cWz3e+G7cPa6Yboq8hYhnqBJBeaNNX
-        4C8B1+cGkW1pUj9mF9MHKP7FBoz8zDyytC1olon7SuJ+zixkqT1OcUuvkjjy4A==
-Date:   Tue, 14 Mar 2023 09:31:07 +0100
-From:   Herve Codina <herve.codina@bootlin.com>
-To:     Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Cc:     Li Yang <leoyang.li@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mark Brown <broonie@kernel.org>,
-        Qiang Zhao <qiang.zhao@nxp.com>,
-        linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Subject: Re: Question about the dependency on the config SOC_FSL in CPM_QMC
-Message-ID: <20230314093107.7d150559@bootlin.com>
-In-Reply-To: <CAKXUXMwqobqZJtDXAfymF3iWmzE3EXH1q6VLddVob9q2ygzWyQ@mail.gmail.com>
-References: <CAKXUXMwwQuwssyzBrOXHOz__YRpa1Rjgqmwn5rRFjDVLBbabPA@mail.gmail.com>
-        <20230314085741.6f968e68@bootlin.com>
-        <CAKXUXMwqobqZJtDXAfymF3iWmzE3EXH1q6VLddVob9q2ygzWyQ@mail.gmail.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.37; x86_64-redhat-linux-gnu)
+        Tue, 14 Mar 2023 04:31:39 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 279835B5D0
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:31:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=SrrMtPSCVL7CXZNapSPVU/lnr45o7G/FAUywmNipyoA=; b=bhL/N2dK7N8xzpToiHwJjkz19U
+        yy8xe/UY5nBr/SxwDlMD4Vgfamc1SuFUJpcOti1rlmBrb59hjtk6LnwRJy/FiIiPK+6zWaxdGRSvf
+        hljBSmwvGNDdwaHp91WpRmb6uDn3XuMBtrfPJ8wVxGIwUIY1MmgC0IpEL7Nj/uETT/jubKH/VW9If
+        EPwP505jermzK3b2h58HrbwBg9ujNExFJLG+BBWtb8bB/qXZEKUH6WPMJdsVzWeyu99XomTgKs43s
+        OhfuYW+UnbhuEV7kd96N7LboqYpV+KYI6Xb0pr60uh5ML56w4TnlRjahguqoMAtTfisJRiMmEMSYK
+        s/6FhNyw==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pc043-00CjO6-HV; Tue, 14 Mar 2023 08:31:23 +0000
+Date:   Tue, 14 Mar 2023 08:31:23 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peng Zhang <zhangpeng362@huawei.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        akpm@linux-foundation.org, mike.kravetz@oracle.com,
+        vishal.moola@gmail.com, sidhartha.kumar@oracle.com,
+        wangkefeng.wang@huawei.com, sunnanyong@huawei.com
+Subject: Re: [PATCH 2/3] userfaultfd: convert __mcopy_atomic_hugetlb() to use
+ a folio
+Message-ID: <ZBAw21yANYPFKMi4@casper.infradead.org>
+References: <20230314033734.481904-1-zhangpeng362@huawei.com>
+ <20230314033734.481904-3-zhangpeng362@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314033734.481904-3-zhangpeng362@huawei.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Lukas, Mark,
+On Tue, Mar 14, 2023 at 03:37:33AM +0000, Peng Zhang wrote:
+> +++ b/include/linux/mm.h
+> @@ -3546,9 +3546,8 @@ extern void copy_user_huge_page(struct page *dst, struct page *src,
+>  				unsigned long addr_hint,
+>  				struct vm_area_struct *vma,
+>  				unsigned int pages_per_huge_page);
+> -extern long copy_huge_page_from_user(struct page *dst_page,
+> +extern long copy_large_folio_from_user(struct folio *dst_folio,
 
-On Tue, 14 Mar 2023 09:17:18 +0100
-Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
+You can drop the 'extern'.
 
-> On Tue, Mar 14, 2023 at 8:57=E2=80=AFAM Herve Codina <herve.codina@bootli=
-n.com> wrote:
-> >
-> > Hi Lukas,
-> >
-> > On Tue, 14 Mar 2023 08:21:50 +0100
-> > Lukas Bulwahn <lukas.bulwahn@gmail.com> wrote:
-> > =20
-> > > Dear Herve,
-> > >
-> > > In your patch below, you added the config CPM_QMC which depends on the
-> > > non-existing config SOC_FSL:
-> > >
-> > > https://lore.kernel.org/r/20230217145645.1768659-7-herve.codina@bootl=
-in.com
-> > >
-> > > Up to my knowledge, the config SOC_FSL never existed in the mainline
-> > > tree. Is this dependency really required or can the expression simply
-> > > be reduced to COMPILE_TEST and we drop the dependency to SOC_FSL?
-> > >
-> > > Note: This patch has now shown up in linux-next with commit
-> > > 3178d58e0b97. Currently, it would not be possible to compile test this
-> > > driver, as the dependency on SOC_FSL is never met.
-> > >
-> > >
-> > > Best regards,
-> > >
-> > > Lukas =20
-> >
-> > My bad :(
-> >
-> > The dependency must be FSL_SOC instead of SOC_FSL. =20
->=20
-> Herve, are you going to send a quick fix to your patch or ask Mark if
-> your original patch can simply be replaced with a new one with this
-> change added?
+> +++ b/mm/memory.c
+> @@ -5769,26 +5769,28 @@ void copy_user_huge_page(struct page *dst, struct page *src,
+>  	process_huge_page(addr_hint, pages_per_huge_page, copy_subpage, &arg);
+>  }
+>  
+> -long copy_huge_page_from_user(struct page *dst_page,
+> +long copy_large_folio_from_user(struct folio *dst_folio,
+>  				const void __user *usr_src,
+> -				unsigned int pages_per_huge_page,
+>  				bool allow_pagefault)
+>  {
+>  	void *page_kaddr;
+>  	unsigned long i, rc = 0;
+> -	unsigned long ret_val = pages_per_huge_page * PAGE_SIZE;
+> +	unsigned int nr_pages = folio_nr_pages(dst_folio);
+> +	unsigned long ret_val = nr_pages * PAGE_SIZE;
+>  	struct page *subpage;
+> +	struct folio *inner_folio;
 
-I have just sent a quick fix.
-  https://lore.kernel.org/linux-kernel/20230314082157.137176-1-herve.codina=
-@bootlin.com/
+What is an 'inner folio'?
 
-Mark, it can be squashed with
-  3178d58e0b97 ("soc: fsl: cpm1: Add support for QMC")
+> -	for (i = 0; i < pages_per_huge_page; i++) {
+> -		subpage = nth_page(dst_page, i);
+> +	for (i = 0; i < nr_pages; i++) {
+> +		subpage = folio_page(dst_folio, i);
+> +		inner_folio = page_folio(subpage);
+>  		if (allow_pagefault)
+> -			page_kaddr = kmap(subpage);
+> +			page_kaddr = kmap_local_folio(inner_folio, 0);
 
-Regards
-Herv=C3=A9
+This doesn't do what you think it does.  Did you test this?
 
->=20
-> Lukas
->=20
-> > I mean:
-> > diff --git a/drivers/soc/fsl/qe/Kconfig b/drivers/soc/fsl/qe/Kconfig
-> > index f90cfdf0c763..7268c2fbcbc1 100644
-> > --- a/drivers/soc/fsl/qe/Kconfig
-> > +++ b/drivers/soc/fsl/qe/Kconfig
-> > @@ -47,7 +47,7 @@ config CPM_TSA
-> >  config CPM_QMC
-> >         tristate "CPM QMC support"
-> >         depends on OF && HAS_IOMEM
-> > -       depends on CPM1 || (SOC_FSL && COMPILE_TEST)
-> > +       depends on CPM1 || (FSL_SOC && COMPILE_TEST)
-> >         depends on CPM_TSA
-> >         help
-> >           Freescale CPM QUICC Multichannel Controller
-> >
-> >
-> >
-> > --
-> > Herv=C3=A9 Codina, Bootlin
-> > Embedded Linux and Kernel engineering
-> > https://bootlin.com =20
+>  		else
+>  			page_kaddr = kmap_atomic(subpage);
+
+Pretty sure all this should be converted to kmap_local and the atomic
+bits should go away.
+
+>  		rc = copy_from_user(page_kaddr,
+>  				usr_src + i * PAGE_SIZE, PAGE_SIZE);
+>  		if (allow_pagefault)
+> -			kunmap(subpage);
+> +			kunmap_local(page_kaddr);
+>  		else
+>  			kunmap_atomic(page_kaddr);
+>  
+> @@ -5796,7 +5798,7 @@ long copy_huge_page_from_user(struct page *dst_page,
+>  		if (rc)
+>  			break;
+>  
+> -		flush_dcache_page(subpage);
+> +		flush_dcache_folio(inner_folio);
+
+The flush should probably be pulled outside the loop.
+
+> +			err = copy_large_folio_from_user(folio,
+> +						(const void __user *) src_addr, true);
+
+I wonder if this shouldn't be 'copy_folio_from_user()'.  after all,
+it'll work for any size folio, right?
+
