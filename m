@@ -2,63 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 114886BA12A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:09:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C0F846BA12D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:09:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230109AbjCNVI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:08:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44278 "EHLO
+        id S230307AbjCNVJH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:09:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229682AbjCNVIz (ORCPT
+        with ESMTP id S229997AbjCNVI7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:08:55 -0400
+        Tue, 14 Mar 2023 17:08:59 -0400
 Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCD9410413
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:08:52 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id d13so6654746pjh.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:08:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 26AE019691
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:08:56 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id rj10so6127835pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:08:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678828132;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g9Afvq2rE03umB9jzYmDgfACZhSPVHY7oqjJM7AVeLU=;
-        b=S+aBYA4OaqysHNuxbp1e+O/5hB1Ir4JsfC8eqDtlglOrZXKRdJiHYEQij5Idk/vvfd
-         2mUTOr3qX49+9RaPAV1ffvr45vt81oza/X1gZ6yMhSv5xPit4lZOMQtxmqjHwddx1dyQ
-         HXuxq0FaInqIPv8mtgWiaJl2/bYTZUcXddc6/rLmTtvJG8RzQRAkJUnwwYLlHDC+ueET
-         vz6QkZjW2Qf2hOYnfHSLhLxQbfFl6dnl0GTNJTPUaqRQi05pc4peEjHKVqATGx2snm6n
-         yL1a5QSv3Bm1VkftXh/4QGl7AVQ/BKn/SGKrO3hjw8sqP5GtIelEpmzVBoJWoBsWCBv3
-         yNCw==
+        d=linaro.org; s=google; t=1678828136;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=l3n0f9m7P1TRpWa333kmFfEY4nnR/IawDWid3xBuSig=;
+        b=FEW7S9D8JBnRRT2S63sX1S6TwK3hbVBf9rwgr/ZHvwq8H3KlERVoRvruh92DmwhT4c
+         /3C0qTdWqI7hTTWXH8pIJAhWAWOGg4HHkDFRQl9esqj3Vk6qFhFphrnqMHNunHhD/6ZU
+         EXd2cSOZ+RD9Y/ot6LmFU9NXXUFOkDxoAE+M+CTqM1YUXwexT0V/OB+WWWnl6On2IAEu
+         pef11b3EMIEaa4cD2Cb3ASxHRGvku6nrlDSFPutYL693h5imQVL5pZWG9xPwZUbmf3py
+         NjsYjccYLfF7EWZPQSyqIq0a7ao/BSiOGdgm/1/uTE9GBF6kK5BAT2ENJs7e5O0xsm+e
+         cNRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678828132;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g9Afvq2rE03umB9jzYmDgfACZhSPVHY7oqjJM7AVeLU=;
-        b=lDAU3XfG3sVYHou/N4wLxuGxEihj+O2J+69Ah3n4Kbwz25Gtkdr3IR4FklvTDdZZcj
-         htfaFRIARKZaG6UFY8SsJk3AaHSrnxVuIaQwsXMaPwglYQtQPktLWjx4NX4Gt5i9HWLH
-         aueRcyi3ePvZLuwSeNV39thGT29YGj+Dp33yyUHGgcTOKuxkgyoWFtQ6TFiIPvOQPvbk
-         kRg74oJtyevqRT7R9/udKN8ZZns2yWIYbn5ACV+PdakNo58oABtaLypCuvrz4TXWC5LQ
-         wwKAukNweQbgUR4Ag0s+PuPFI2Du1FkAetb+YPNBU8KYt7f/ob63ffqHir/j7Qnluvr5
-         sBiQ==
-X-Gm-Message-State: AO0yUKVS3X+oFfAWRbu8ZbBFymGQNDA6fHIiUVO6CCVA7FA/sRfU06cO
-        HzH6+5GFf/LE0mqk+iSOqcRzvg==
-X-Google-Smtp-Source: AK7set+XbqzOtGETP0+NT1OeYvKQO1910yxxR5CvJMUXIhLZ2mzV+RnFksbmOklPccPppPxE0hooUA==
-X-Received: by 2002:a17:902:c948:b0:1a0:7678:5e16 with SMTP id i8-20020a170902c94800b001a076785e16mr358428pla.67.1678828131977;
-        Tue, 14 Mar 2023 14:08:51 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678828136;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=l3n0f9m7P1TRpWa333kmFfEY4nnR/IawDWid3xBuSig=;
+        b=zYFRJdDLUyDbj88iRQxiIjnSNxIfNqDeWK+gQadeCjl4ovHIZmzKKVR9SYq4w4EyxC
+         CbZ5oX4RDAkAYCPlTP+i50adpocGmIZkm3mR+l2OJiGih/9WRwOs8azW73jL7wqvAhF2
+         YK1bayZZWcmEdCZO3HknGEbG44hypXyIzZSRIvvseHDtxBoTOVdef/Vk2X9gF687a4hR
+         XUUkhBK1tslQ0MyMoY8fLsSvuoSJo1zzHkcO7ewmAXXFSvw3o5k7+an8E33rUp20BrmK
+         EDJhl3GJUnM0+QsqZnbClHQHcWO1sPhOZD3Rk0GShdrs5CF2wCp1IOSnyz/e7rnXsMBl
+         Gctw==
+X-Gm-Message-State: AO0yUKXVwz9UAUwLF1mnJ1nJzx8+v86A0d3NcyxhGsnZ0J8ELYwj3Jng
+        GVmZnsCpydjUBER8P6c7aqRbkA==
+X-Google-Smtp-Source: AK7set9KeAwfiLSLzDwCaBtBzBLO6eqEk9kWtH6xjETBxZIxQFAfQ42+2pwsEvQAeqTF5qbcVNKIOg==
+X-Received: by 2002:a17:903:cc:b0:1a0:75bb:2803 with SMTP id x12-20020a17090300cc00b001a075bb2803mr255747plc.63.1678828136350;
+        Tue, 14 Mar 2023 14:08:56 -0700 (PDT)
 Received: from localhost.localdomain ([2401:4900:1c61:1acb:9af6:bd7f:78e7:7ae6])
-        by smtp.gmail.com with ESMTPSA id kl8-20020a170903074800b0019edc1b421asm2190150plb.163.2023.03.14.14.08.47
+        by smtp.gmail.com with ESMTPSA id kl8-20020a170903074800b0019edc1b421asm2190150plb.163.2023.03.14.14.08.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 14:08:50 -0700 (PDT)
+        Tue, 14 Mar 2023 14:08:55 -0700 (PDT)
 From:   Bhupesh Sharma <bhupesh.sharma@linaro.org>
 To:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org
 Cc:     agross@kernel.org, andersson@kernel.org, konrad.dybcio@linaro.org,
         linux-kernel@vger.kernel.org, bhupesh.linux@gmail.com,
         bhupesh.sharma@linaro.org, robh+dt@kernel.org,
         krzysztof.kozlowski@linaro.org
-Subject: [PATCH 0/2] arm64: dts: qcom: Add Qualcomm RB2 board dts
-Date:   Wed, 15 Mar 2023 02:38:26 +0530
-Message-Id: <20230314210828.2049720-1-bhupesh.sharma@linaro.org>
+Subject: [PATCH 1/2] dt-bindings: arm: qcom: Document the  Qualcomm qrb4210-rb2 board
+Date:   Wed, 15 Mar 2023 02:38:27 +0530
+Message-Id: <20230314210828.2049720-2-bhupesh.sharma@linaro.org>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20230314210828.2049720-1-bhupesh.sharma@linaro.org>
+References: <20230314210828.2049720-1-bhupesh.sharma@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,39 +74,25 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add an initial device tree for Qualcomm RB2 board (see [1]).
-Currently it enables:
-    - eMMC via SDHC1,
-    - uSD card via SDHC2,
-    - RPM regulators,
-    - Debug UART (via micro USB port).
+Document the Qualcomm qrb4210-rb2 board based on SM4250 SoC.
 
-Subsequent patchset(s) will add more peripherals like USB, etc.
+Signed-off-by: Bhupesh Sharma <bhupesh.sharma@linaro.org>
+---
+ Documentation/devicetree/bindings/arm/qcom.yaml | 1 +
+ 1 file changed, 1 insertion(+)
 
-To get a successful boot run:
-    
-   $ cat arch/arm64/boot/Image.gz arch/arm64/boot/dts/qcom/\
-    qrb4210-rb2.dtb > ./Image-adp.gz+dtb
-
-   $ mkbootimg --kernel ./Image-adp.gz+dtb \
-     --ramdisk ./some-initramfs-image.rootfs.img \
-     --output ./rb2-boot.img --pagesize 4096 \
-     --base 0x80000000 --cmdline 'SOME_CMDLINE'
-    
-   $ fastboot boot ./rb2-boot.img
-
-[1]. https://www.qualcomm.com/products/internet-of-things/industrial/industrial-automation/qualcomm-robotics-rb2-platform#Overview
-
-Bhupesh Sharma (2):
-  dt-bindings: arm: qcom: Document the  Qualcomm qrb4210-rb2 board
-  arm64: dts: qcom: Add base qrb4210-rb2 board dts
-
- .../devicetree/bindings/arm/qcom.yaml         |   1 +
- arch/arm64/boot/dts/qcom/Makefile             |   1 +
- arch/arm64/boot/dts/qcom/qrb4210-rb2.dts      | 337 ++++++++++++++++++
- 3 files changed, 339 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/qrb4210-rb2.dts
-
+diff --git a/Documentation/devicetree/bindings/arm/qcom.yaml b/Documentation/devicetree/bindings/arm/qcom.yaml
+index 1bb24d46e4ee..e3201e6c503a 100644
+--- a/Documentation/devicetree/bindings/arm/qcom.yaml
++++ b/Documentation/devicetree/bindings/arm/qcom.yaml
+@@ -846,6 +846,7 @@ properties:
+       - items:
+           - enum:
+               - oneplus,billie2
++              - qcom,qrb4210-rb2
+           - const: qcom,sm4250
+ 
+       - items:
 -- 
 2.38.1
 
