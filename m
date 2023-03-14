@@ -2,81 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0702D6B9BC0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 79E1F6B9BA8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbjCNQhS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:37:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60926 "EHLO
+        id S229473AbjCNQfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230454AbjCNQhF (ORCPT
+        with ESMTP id S230139AbjCNQek (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:37:05 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FED6B5B49;
-        Tue, 14 Mar 2023 09:36:32 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EEuYCL029403;
-        Tue, 14 Mar 2023 16:35:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=xE78rOhENvxzwN/jZO3oIOvhx6dV/6fT2Bvwxfynab4=;
- b=ZcaFvVT/u6bMROEFbQZ5gGSpzIP7YQ7MJX6kaloaQ7O9EgCgJdNFNENLioQiEA6ts7Uj
- non8071AFsWZT6Q9tUFmIdFgBD2z+C4eDIROPjyguKrkbn0Q4LU+M8Ct7E9wUL+xc4OR
- 3VW7UuITT3IazA95oNHKHPmY1d0Yr5pWTjBTOzFzaSNkwW2Ip2jmmpiXyDd8iU7a8EBK
- x/rjjDhGJDkJ63DffmKmWwtKxTqgxcZezogCEVo0oMYYrWLsZIWl417Nx7EPyYA8nUEe
- WDZQKHQOJNRZ+yxDpDvL7SvkxmwNwYJzgiFG+ZKmflZFz9ZLLgRhrJ/2UrN8TBwn+/Te Uw== 
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pau4mga0n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 16:35:59 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32EGZw6a015874
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 14 Mar 2023 16:35:58 GMT
-Received: from [10.110.64.241] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 14 Mar
- 2023 09:35:57 -0700
-Message-ID: <9dc6c74f-8982-0ccb-af1b-e6ef22276886@quicinc.com>
-Date:   Tue, 14 Mar 2023 09:35:56 -0700
+        Tue, 14 Mar 2023 12:34:40 -0400
+Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48CCDCC2B;
+        Tue, 14 Mar 2023 09:34:19 -0700 (PDT)
+Received: (Authenticated sender: clement.leger@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id C4036100006;
+        Tue, 14 Mar 2023 16:34:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1678811657;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=TF1M245wnKpVCzK6z/l3V4pcyU9Wbg1W8fUVHhSWBaU=;
+        b=EmvzN/sMZIVfEvP3J43pltTDHqYXta3rIE5/iFL9CdqgGSV2VtWvSZygIYfNdt8PRwnVS5
+        xtnKIj9RoSaT1xV5kMBWzOW/jchsgZwE1ppCl5KI7nXd1KqcCaca8q2RXHp28uFzqcMBQ5
+        lKQypUlygCg1HGbUl5rVLVMxOCjOdwfykGzZSczVhQBz0ZKC0Ror0Z+HeBh6k1fQxNdt4o
+        b8ZgeItIMfX6XXp1FhQNLtJw/BG6Kmor7xbovbC6mI8AhXQT962jmd8TFaIVUcnAe2mtFG
+        JHAoM9THkHu/wTCzqAJgVxcAgD1KXm9IGXMJn/W8vQzZWL/r2C1kE6yRZpZcrg==
+From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
+To:     Andrew Lunn <andrew@lunn.ch>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+        Herve Codina <herve.codina@bootlin.com>,
+        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
+        Milan Stevanovic <milan.stevanovic@se.com>,
+        Jimmy Lalande <jimmy.lalande@se.com>,
+        Pascal Eberhard <pascal.eberhard@se.com>,
+        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
+        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH RESEND net-next v4 0/3] net: dsa: rzn1-a5psw: add support for vlan and .port_bridge_flags
+Date:   Tue, 14 Mar 2023 17:36:48 +0100
+Message-Id: <20230314163651.242259-1-clement.leger@bootlin.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.2
-Subject: Re: [PATCH][next] drm/msm/dp: Fix spelling mistake "Capabiity" ->
- "Capability"
-Content-Language: en-US
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        <freedreno@lists.freedesktop.org>
-CC:     <kernel-janitors@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20230314082050.26331-1-colin.i.king@gmail.com>
-From:   Abhinav Kumar <quic_abhinavk@quicinc.com>
-In-Reply-To: <20230314082050.26331-1-colin.i.king@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: AixY7ideUSUqI-B9Au3qBmqNQiHVj_eP
-X-Proofpoint-ORIG-GUID: AixY7ideUSUqI-B9Au3qBmqNQiHVj_eP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
- definitions=2023-03-14_10,2023-03-14_02,2023-02-09_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- impostorscore=0 lowpriorityscore=0 phishscore=0 spamscore=0 clxscore=1011
- priorityscore=1501 bulkscore=0 suspectscore=0 malwarescore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2212070000 definitions=main-2303140137
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
         SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,29 +63,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+While adding support for VLAN, bridge_vlan_unaware.sh and
+bridge_vlan_aware.sh were executed and requires .port_bridge_flags
+to disable flooding on some specific port. Thus, this series adds
+both vlan support and .port_bridge_flags.
 
+----
+RESEND V4:
+ - Resent due to net-next being closed
 
-On 3/14/2023 1:20 AM, Colin Ian King wrote:
-> There is a spelling mistake in a drm_dbg_dp message. Fix it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+V4:
+ - Fix missing CPU port bit in a5psw->bridged_ports
+ - Use unsigned int for vlan_res_id parameters
+ - Rename a5psw_get_vlan_res_entry() to a5psw_new_vlan_res_entry()
+ - In a5psw_port_vlan_add(), return -ENOSPC when no VLAN entry is found
+ - In a5psw_port_vlan_filtering(), compute "val" from "mask"
 
-Reviewed-by: Abhinav Kumar <quic_abhinavk@quicinc.com>
+V3:
+ - Target net-next tree and correct version...
 
-> ---
->   drivers/gpu/drm/msm/dp/dp_link.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/dp/dp_link.c b/drivers/gpu/drm/msm/dp/dp_link.c
-> index 5a4817ac086f..42427129acea 100644
-> --- a/drivers/gpu/drm/msm/dp/dp_link.c
-> +++ b/drivers/gpu/drm/msm/dp/dp_link.c
-> @@ -1090,7 +1090,7 @@ int dp_link_process_request(struct dp_link *dp_link)
->   	} else if (dp_link_read_psr_error_status(link)) {
->   		DRM_ERROR("PSR IRQ_HPD received\n");
->   	} else if (dp_link_psr_capability_changed(link)) {
-> -		drm_dbg_dp(link->drm_dev, "PSR Capabiity changed");
-> +		drm_dbg_dp(link->drm_dev, "PSR Capability changed");
->   	} else {
->   		ret = dp_link_process_link_status_update(link);
->   		if (!ret) {
+V2:
+ - Fixed a few formatting errors
+ - Add .port_bridge_flags implementation
+
+Clément Léger (3):
+  net: dsa: rzn1-a5psw: use a5psw_reg_rmw() to modify flooding
+    resolution
+  net: dsa: rzn1-a5psw: add support for .port_bridge_flags
+  net: dsa: rzn1-a5psw: add vlan support
+
+ drivers/net/dsa/rzn1_a5psw.c | 223 ++++++++++++++++++++++++++++++++++-
+ drivers/net/dsa/rzn1_a5psw.h |   8 +-
+ 2 files changed, 222 insertions(+), 9 deletions(-)
+
+-- 
+2.39.0
+
