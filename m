@@ -2,65 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548386BA175
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:30:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 58CB46BA178
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:31:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229690AbjCNVaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45076 "EHLO
+        id S229875AbjCNVbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:31:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCNVaV (ORCPT
+        with ESMTP id S229571AbjCNVbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:30:21 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F3051F92F
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:30:20 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id 4so9355058ilz.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:30:20 -0700 (PDT)
+        Tue, 14 Mar 2023 17:31:15 -0400
+Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA76E36466
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:11 -0700 (PDT)
+Received: by mail-io1-xd32.google.com with SMTP id o12so1017840iow.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678829418;
+        d=chromium.org; s=google; t=1678829471;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JsMceCqob1v/eZx8VljwvrzXfHSSxRsvo6NsNcMmoXs=;
-        b=bnLAcAb45oqt2qYPf6nAybs38nR7U2n76pgqYycg2+MD2EdRQgUOgVH4SbraH5LB74
-         Yrdbe35Jvz0fVUUdcD79C+pDQ2MB6MvRuBW0RnHfO3Nd8pAc5TzAkblnuaBRmfbC0Bdc
-         zfLs+pZogwNO7kKt8HmAxkolq2Mgd0o779GXo=
+        bh=2uY427W2KMisQvhtrsSNS8I4WCl3EbKmvvrlqEop4WI=;
+        b=izMEd+OsxY4xxrDkxGN6U5fGkGDMOsNlJxa5OFwdjJTPS1dP4Atfw4uwvVdaA9RHm5
+         ATVnZrjMSwMgzwUKBhZ9kRSDQ9IAnl+6ezxPK/+ie5xa7MlhcS+9Xl42SE5BSF5+ekab
+         UY9CB/5orGFBubZbAmudNlLi3ntxXr6+h/Wy8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678829418;
+        d=1e100.net; s=20210112; t=1678829471;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JsMceCqob1v/eZx8VljwvrzXfHSSxRsvo6NsNcMmoXs=;
-        b=dG7XjGa0HN7xTWRBuUmBcCUzzYs0FSXG/X+/MwQfIFhqg/+sdpVfP/p2dlFx0JWuNu
-         IAJhI3NoU7PKinkhLOcaAxhgp+cCGvXRFMREqkFYksIkcUvIiZD+Mg1cdsiOyz0ihoNK
-         rK6SP0zfVyzOJy3sI7EoHw+m+RapLwsW0dFqFmdjBQuso8cq5OImD6UAuoP3h/ZNA2hw
-         vMxTSClL/Y6shoaB/eKGBItzEsFfE2iamb9MRnsWeWbcaZ9dzqUCaNAmeRN7t+ES3kCZ
-         SKUJdGMJHfypRnrtib1pVZ1RcTPexQ48IxfUPj5bj8ZBXt0SQCqYBCCoQoWhHaSdKxVU
-         dYgA==
-X-Gm-Message-State: AO0yUKVEMTAfST2uN0YfPbEy9rBnY3DR+cTP/zJbORIhygbwJmF+/Hh0
-        9kUr6FlzGEHx1Hjbh6K+t6mTZrJpv4P7zZo1pQ4=
-X-Google-Smtp-Source: AK7set8gBurZmvzS/PfOMaaQBGCMxfm6Tu1rrSC/vdlisT3fuw2eEAZOVVGGDWmKR+0+XIPR/KiMlA==
-X-Received: by 2002:a92:5210:0:b0:323:359:d492 with SMTP id g16-20020a925210000000b003230359d492mr2397699ilb.13.1678829418064;
-        Tue, 14 Mar 2023 14:30:18 -0700 (PDT)
-Received: from mail-io1-f43.google.com (mail-io1-f43.google.com. [209.85.166.43])
-        by smtp.gmail.com with ESMTPSA id v13-20020a02b90d000000b004007a5f29eesm1120338jan.7.2023.03.14.14.30.15
+        bh=2uY427W2KMisQvhtrsSNS8I4WCl3EbKmvvrlqEop4WI=;
+        b=aogenAAH9Tyl7No5nvbrKu6Kh869+syjOVr3Qx7RyBXk7DS4rfp8bA0zCe3pKalZXj
+         NNSnz+nhIJ2roJDPspp4GA4kTpct6xL3o+Rar0cNXe6uznRsa0+W7BPlzwktzUXkZOe4
+         sg2Qfzx6khFtl4IWuHbRmYJ3uZThtibYkOi/qEpgQuWck61LIoyBSmJlJzZNq+obHuC8
+         pRHs99jU3qxl9S53zwgZ8C1k/wwKrgpxc/yr5YmPZAPxfSEt4x8+9r8KSP6wyYHjMQy+
+         FmDCXwsGEiJWZQ/bZnvQeevzkQwoEylg5SZdTzPjTLYh+jXyK6AurlVZBZPlnXk3UlVz
+         Q9VA==
+X-Gm-Message-State: AO0yUKU8dF6mdtnPtB+f8hv1eqePYNz/n21gx6YNtHVUCgjKppSWX+xC
+        zogAYjLIr5wxEl39pZWqfd4YmDLLPonWmG8Huos=
+X-Google-Smtp-Source: AK7set9+MFFGdx1q7VF/NyWu1szDglX8YaWCTErT0+qoaARAmkexPOOLj0vuQKzckapKB645rSMqRQ==
+X-Received: by 2002:a6b:5b08:0:b0:74c:822c:a6ac with SMTP id v8-20020a6b5b08000000b0074c822ca6acmr14920705ioh.15.1678829470790;
+        Tue, 14 Mar 2023 14:31:10 -0700 (PDT)
+Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
+        by smtp.gmail.com with ESMTPSA id y1-20020a5ec801000000b0074e6f2c584dsm1107152iol.12.2023.03.14.14.31.09
         for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 14:30:16 -0700 (PDT)
-Received: by mail-io1-f43.google.com with SMTP id b5so7016750iow.0
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:30:15 -0700 (PDT)
-X-Received: by 2002:a6b:6811:0:b0:752:dd73:efde with SMTP id
- d17-20020a6b6811000000b00752dd73efdemr755170ioc.1.1678829415242; Tue, 14 Mar
- 2023 14:30:15 -0700 (PDT)
+        Tue, 14 Mar 2023 14:31:10 -0700 (PDT)
+Received: by mail-io1-f45.google.com with SMTP id bf15so6997410iob.7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:09 -0700 (PDT)
+X-Received: by 2002:a02:a106:0:b0:406:122f:76ad with SMTP id
+ f6-20020a02a106000000b00406122f76admr756559jag.1.1678829469489; Tue, 14 Mar
+ 2023 14:31:09 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230314110043.2139111-1-treapking@chromium.org> <20230314110043.2139111-2-treapking@chromium.org>
-In-Reply-To: <20230314110043.2139111-2-treapking@chromium.org>
+References: <20230314110043.2139111-1-treapking@chromium.org>
+In-Reply-To: <20230314110043.2139111-1-treapking@chromium.org>
 From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 14 Mar 2023 14:30:03 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=VuK8vK7gaur7Srv9JFOaYbi=wkNs3f4sgrcLvjZahfjw@mail.gmail.com>
-Message-ID: <CAD=FV=VuK8vK7gaur7Srv9JFOaYbi=wkNs3f4sgrcLvjZahfjw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/bridge: ps8640: Add a cache for EDID
+Date:   Tue, 14 Mar 2023 14:30:38 -0700
+X-Gmail-Original-Message-ID: <CAD=FV=W=jVsvD620wWKfniRYQNJnb7goDUKb_HhL_qVxLYGZOA@mail.gmail.com>
+Message-ID: <CAD=FV=W=jVsvD620wWKfniRYQNJnb7goDUKb_HhL_qVxLYGZOA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] drm/bridge: ps8640: Skip redundant bridge enable
 To:     Pin-yen Lin <treapking@chromium.org>
 Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         Neil Armstrong <neil.armstrong@linaro.org>,
@@ -71,7 +71,7 @@ Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
         David Airlie <airlied@gmail.com>,
         Daniel Vetter <daniel@ffwll.ch>,
         Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -89,117 +89,49 @@ Hi,
 On Tue, Mar 14, 2023 at 4:00=E2=80=AFAM Pin-yen Lin <treapking@chromium.org=
 > wrote:
 >
-> When there are multiple EDID reads, the bridge will be repeatedly
-> enabled and disabled. Add a cache for EDID to speed this up.
+> Skip the drm_bridge_chain_pre_enable call when the bridge is already
+> pre_enabled. This make pre_enable and post_disable (thus
+> pm_runtime_get/put) symmetric.
 >
+> Fixes: 46f206304db0 ("drm/bridge: ps8640: Rework power state handling")
 > Signed-off-by: Pin-yen Lin <treapking@chromium.org>
 > ---
 >
->  drivers/gpu/drm/bridge/parade-ps8640.c | 61 ++++++++++++++++----------
->  1 file changed, 37 insertions(+), 24 deletions(-)
+>  drivers/gpu/drm/bridge/parade-ps8640.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 >
 > diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bri=
 dge/parade-ps8640.c
-> index 08de501c436e..4d594be8b89c 100644
+> index 4b361d7d5e44..08de501c436e 100644
 > --- a/drivers/gpu/drm/bridge/parade-ps8640.c
 > +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-> @@ -105,6 +105,7 @@ struct ps8640 {
->         struct gpio_desc *gpio_reset;
->         struct gpio_desc *gpio_powerdown;
->         struct device_link *link;
-> +       struct edid *edid;
->         bool pre_enabled;
->         bool need_post_hpd_delay;
->  };
-> @@ -543,34 +544,37 @@ static struct edid *ps8640_bridge_get_edid(struct d=
-rm_bridge *bridge,
->  {
->         struct ps8640 *ps_bridge =3D bridge_to_ps8640(bridge);
->         bool poweroff =3D !ps_bridge->pre_enabled;
-> -       struct edid *edid;
->
-> -       /*
-> -        * When we end calling get_edid() triggered by an ioctl, i.e
-> -        *
-> -        *   drm_mode_getconnector (ioctl)
-> -        *     -> drm_helper_probe_single_connector_modes
-> -        *        -> drm_bridge_connector_get_modes
-> -        *           -> ps8640_bridge_get_edid
-> -        *
-> -        * We need to make sure that what we need is enabled before readi=
-ng
-> -        * EDID, for this chip, we need to do a full poweron, otherwise i=
+> @@ -557,7 +557,8 @@ static struct edid *ps8640_bridge_get_edid(struct drm=
+_bridge *bridge,
+>          * EDID, for this chip, we need to do a full poweron, otherwise i=
 t will
-> -        * fail.
-> -        */
-> -       if (poweroff)
-> -               drm_atomic_bridge_chain_pre_enable(bridge, connector->sta=
+>          * fail.
+>          */
+> -       drm_atomic_bridge_chain_pre_enable(bridge, connector->state->stat=
+e);
+> +       if (poweroff)
+> +               drm_atomic_bridge_chain_pre_enable(bridge, connector->sta=
 te->state);
-> +       if (!ps_bridge->edid) {
-> +               /*
-> +                * When we end calling get_edid() triggered by an ioctl, =
-i.e
-> +                *
-> +                *   drm_mode_getconnector (ioctl)
-> +                *     -> drm_helper_probe_single_connector_modes
-> +                *        -> drm_bridge_connector_get_modes
-> +                *           -> ps8640_bridge_get_edid
-> +                *
-> +                * We need to make sure that what we need is enabled befo=
-re
-> +                * reading EDID, for this chip, we need to do a full powe=
-ron,
-> +                * otherwise it will fail.
-> +                */
-> +               if (poweroff)
-> +                       drm_atomic_bridge_chain_pre_enable(bridge,
-> +                                                          connector->sta=
-te->state);
->
-> -       edid =3D drm_get_edid(connector,
-> -                           ps_bridge->page[PAGE0_DP_CNTL]->adapter);
-> +               ps_bridge->edid =3D drm_get_edid(connector,
-> +                                              ps_bridge->page[PAGE0_DP_C=
-NTL]->adapter);
->
-> -       /*
-> -        * If we call the get_edid() function without having enabled the =
-chip
-> -        * before, return the chip to its original power state.
-> -        */
-> -       if (poweroff)
-> -               drm_atomic_bridge_chain_post_disable(bridge, connector->s=
-tate->state);
-> +               /*
-> +                * If we call the get_edid() function without having enab=
-led the
-> +                * chip before, return the chip to its original power sta=
-te.
-> +                */
-> +               if (poweroff)
-> +                       drm_atomic_bridge_chain_post_disable(bridge,
-> +                                                            connector->s=
-tate->state);
-> +       }
->
-> -       return edid;
-> +       return drm_edid_duplicate(ps_bridge->edid);
->  }
->
->  static void ps8640_runtime_disable(void *data)
-> @@ -767,6 +771,14 @@ static int ps8640_probe(struct i2c_client *client)
->         return ret;
->  }
->
-> +static void ps8640_remove(struct i2c_client *client)
-> +{
-> +       struct ps8640 *ps_bridge =3D i2c_get_clientdata(client);
-> +
-> +       kfree(ps_bridge->edid);
-> +       ps_bridge->edid =3D NULL;
 
-nit: no need to clear this to NULL since the driver is exiting.
+It always seemed weird to me that this function was asymmetric, so I
+like this change, thanks!
 
-Other than the small nit:
+I also remember wondering before how this function was safe, though.
+The callpath for getting here from the ioctl is documented in the
+function and when I look at it I wonder if anything is preventing the
+bridge from being enabled / disabled through normal means at the same
+time your function is running. That could cause all sorts of badness
+if it is indeed possible. Does anyone reading this know if that's
+indeed a problem?
+
+I suppose that, if this is unsafe, it's no more unsafe now than it was
+before your patch, so I guess:
 
 Reviewed-by: Douglas Anderson <dianders@chromium.org>
+
+If there are no issues, I'll plan to land this patch and the next one
+to drm-misc-next sometime late-ish next week.
