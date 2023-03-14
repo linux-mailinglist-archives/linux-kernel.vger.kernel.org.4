@@ -2,108 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 63DE86BA136
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:10:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22D2D6BA139
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:11:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbjCNVKs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:10:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S230029AbjCNVLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:11:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229769AbjCNVKq (ORCPT
+        with ESMTP id S229456AbjCNVLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:10:46 -0400
-Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 096CC18B0D;
-        Tue, 14 Mar 2023 14:10:33 -0700 (PDT)
-Received: by mail-qv1-xf2e.google.com with SMTP id bo10so13436836qvb.12;
-        Tue, 14 Mar 2023 14:10:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678828232;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gFGKOv/gsoVIy8/SJ0JWX6aXeqfw2gjMFT5w7VG7REY=;
-        b=pcxc6CU22/fuEYmub2qnTMBjE38I2bfwMO+vN/5//rLZgB+7tjqg1jorWV8aTjG+ul
-         m27De5cQlqk7sCdxMT24ih9wxa6ZHvQWslS5ld9PT+1aOQZm09NawtWp/lZKLMehX5w+
-         j4mmK8h4+Tz2TVP66HAiuugBfNlKJuQskh5qS2kVDvv5uMixmSpmptLiw7wyMJmzN0eg
-         mV+B0D+krz4SneOEjQQoiadSQdSLzkU5JUaYhkW7Y435hbUjrC/PgnUaVhTNwAdHWk44
-         zQ8DHVbqwy2z9PTpcWibYzIMmGFWi8Wo8FYgiTLhvlXmkjBU3aKtmloxYZLVnWU3ccS4
-         ZKHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678828232;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gFGKOv/gsoVIy8/SJ0JWX6aXeqfw2gjMFT5w7VG7REY=;
-        b=fdVpZdi3D8YEZdGF9Yd+2JIghZJx8Q+1+mMX7c9zdprVf5nhfVmPtqnUMVbn5nHs/n
-         Spb8GF6DHMn2AwbDoa82wavDTnNCOpFVtnVZdCfCwQ18JJ8gUWCGY2HLM/MEqrhQNIVV
-         BqVCdCUoaUgZ1vpJ7wAuTFRF63hUtfa9zZQNskFvX5jWpcTJj6GHKBQgyM1ONySEhBUV
-         oTSJd6AQgvOAWZdj2pqSYo4XiN0JLiMlYHwRYRcE6IHmm9mVvtd9inbzX7NpiFmwGz0V
-         kUxIdRjq1qBXW9ulQ2IX6rF6yGA8okHtdk5n107e1XLJNqePoqneaA3gcAOBIIH+QHjg
-         vTDA==
-X-Gm-Message-State: AO0yUKUoWwPbitczYxysa/QyW9l/nhZbU0xuxZFczDPX/mkMRBZV15i0
-        +7iNjy0Rhr5L/tkJSb5vHIk=
-X-Google-Smtp-Source: AK7set8s5PLApjeu1ZkOkOWsjBPp5MpES5WSbkTRdnCH2mkXb8zMiahzcjThB3wmKpu24GYSRxUV+w==
-X-Received: by 2002:a05:622a:1ba6:b0:3b8:3a7c:d204 with SMTP id bp38-20020a05622a1ba600b003b83a7cd204mr61380513qtb.58.1678828232116;
-        Tue, 14 Mar 2023 14:10:32 -0700 (PDT)
-Received: from jesse-desktop.jtp-bos.lab (pool-108-26-182-112.bstnma.fios.verizon.net. [108.26.182.112])
-        by smtp.gmail.com with ESMTPSA id ef14-20020a05620a808e00b0073b967b9b35sm2429498qkb.106.2023.03.14.14.10.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 14:10:31 -0700 (PDT)
-From:   Jesse Taube <mr.bossman075@gmail.com>
-X-Google-Original-From: Jesse Taube <Mr.Bossman075@gmail.com>
-To:     linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Jesse Taube <Mr.Bossman075@gmail.com>,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>
-Subject: [PATCH v1] RISCV: CANAAN: Make K210_SYSCTL depend on CLK_K210
-Date:   Tue, 14 Mar 2023 17:10:30 -0400
-Message-Id: <20230314211030.3953195-1-Mr.Bossman075@gmail.com>
-X-Mailer: git-send-email 2.39.0
+        Tue, 14 Mar 2023 17:11:32 -0400
+Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A37F19B2;
+        Tue, 14 Mar 2023 14:11:31 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbmRK1gtyz4x5Z;
+        Wed, 15 Mar 2023 08:11:25 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678828286;
+        bh=fIQHoPSvibSHu4TS2oQgYdG05lQ5UrRwOyPQIAqWekc=;
+        h=Date:From:To:Cc:Subject:From;
+        b=X82blIAV7ew2Q04lc6Uu7b29oO9XDxdBH8mwaZDMrHhTVQlj7fBJvwQmTb28TG95R
+         3HW+JBnzlfifs6HiBCGdMwvGCoSbCpX6HFupeK4M5vO5d3r+vSREjBzHByfmBml25C
+         YMF1uz2RbUByX2PG16FZ5WLQqr/MEFRMaT3DTUwaomVLO79NP8r1m0Q+cCKE7KLZjb
+         ZMwm1fmR2hEeP11zjI4s0UGVmaviVqImpVeWUGkS6TbjJCWk766ib92A7fnnl+L+5p
+         erQdWCBxbD4OzBykCL45AWi7BNY76dhC1PJktS0Ew1zvXKjKsPUU8VOfgdUlXo1uuO
+         EGvNIuwnZI9Qg==
+Date:   Wed, 15 Mar 2023 08:11:23 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Tzafrir Cohen <nvidia@cohens.org.il>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the kbuild-current tree
+Message-ID: <20230315081123.704ad19b@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/8KcUd3sAQ9t+LWh3nI0QFip";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-CLK_K210 is no longer a dependency of SOC_CANAAN,
-but K210_SYSCTL depends on CLK_K210. This patch makes K210_SYSCTL
-depend on CLK_K210. Also fix whitespace errors.
+--Sig_/8KcUd3sAQ9t+LWh3nI0QFip
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Reported-by: Randy Dunlap <rdunlap@infradead.org>
-Link: https://lore.kernel.org/all/42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org
-Fixes: 3af577f9826f ("RISC-V: stop directly selecting drivers for SOC_CANAAN")
-Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
----
- drivers/soc/canaan/Kconfig | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+Hi all,
 
-diff --git a/drivers/soc/canaan/Kconfig b/drivers/soc/canaan/Kconfig
-index 2527cf5757ec..caf3705d8917 100644
---- a/drivers/soc/canaan/Kconfig
-+++ b/drivers/soc/canaan/Kconfig
-@@ -2,9 +2,9 @@
- 
- config SOC_K210_SYSCTL
- 	bool "Canaan Kendryte K210 SoC system controller"
--	depends on RISCV && SOC_CANAAN && OF
-+	depends on RISCV && SOC_CANAAN && OF && COMMON_CLK_K210
- 	default SOC_CANAAN
--        select PM
--        select MFD_SYSCON
-+	select PM
-+	select MFD_SYSCON
- 	help
- 	  Canaan Kendryte K210 SoC system controller driver.
--- 
-2.39.0
+In commit
 
+  51ab7ee81f5f ("Makefile: Make kernelrelease target work with M=3D")
+
+Fixes tag
+
+  Fixes: commit 1cb86b6c3136 ("kbuild: save overridden KERNELRELEASE in inc=
+lude/config/kernel.release")
+
+has these problem(s):
+
+  - leading word 'commit' unexpected
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/8KcUd3sAQ9t+LWh3nI0QFip
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ4vsACgkQAVBC80lX
+0Gz2FwgAkGjcuyCXGsXupTn65rBKzbAlFMJOf7aASOB0z7gz+psjsjrrp6npaMkQ
+9HSQAbQBpTyjhzp/iFxNqL5hNUCSk7uua3QLzSlH/p/Dz9C0WXDuRnt1kSOesYoa
+Ni3DEk68yOl8uvpF4zIiNZZ2j07KsG/BKyqzsK5N2zoT/WQZ52pkF/TZ9Z+aLyvN
+Yreip8Qr6unN/FEV/FqNpbf0wuzypkD3w2ijTmpc68vNfBMMSfzghGWx+E+QWgnn
+lQvKYkgg8NHjx72n5uDb6II0L7079fholEV2HqeYJPVlTFjFhntW2RXIODM+cikR
+k8uOC6FH1dxRmFcUQbGbTKRg8JtbBQ==
+=zY/L
+-----END PGP SIGNATURE-----
+
+--Sig_/8KcUd3sAQ9t+LWh3nI0QFip--
