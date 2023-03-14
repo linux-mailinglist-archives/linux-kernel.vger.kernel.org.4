@@ -2,174 +2,139 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 799436B907C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:46:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A33EE6B9066
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:44:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229929AbjCNKqw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:46:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49004 "EHLO
+        id S229796AbjCNKn6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:43:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44194 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229535AbjCNKqu (ORCPT
+        with ESMTP id S229704AbjCNKn4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:46:50 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5C6DAD02;
-        Tue, 14 Mar 2023 03:46:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id EB5EC5FD1B;
-        Tue, 14 Mar 2023 13:45:45 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678790746;
-        bh=3iLPJaGeMrLb7xNjIHjUqhJAp4hqvLxn8oJMxDMG6R0=;
-        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
-        b=Mh6CXTWqdb0MRZ4PqlZvkcVKvjPOONs26mLmnVxfv4NhrTfsY9r1wqzykxD4aPit4
-         /wtXJt1ZzvJey0C3GLgYxtbokw55ehCZCjkBQsUkc+v26LuMj1tWStZd3GFRjphDPB
-         LdVBdK8xq2Y7E29rkNPuZZFt9crQfMbiC3gd76iIR6fncm+tCAdjHcp6kPs+1Osh3G
-         mTSTD0wDLAuv1xAJq4ooyGUrlcwbYxBcE3qHYQq4hCiaJpSKc5KipD28eHsde2stVT
-         o6gs6TGG7JcBqW6gUSEc+w9+CiyKD1N9a6XO+r30l2T4sD43iersYND5Q5XEcSebfY
-         5FKMZW6w0XnUA==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 13:45:45 +0300 (MSK)
-Message-ID: <77841baa-47de-63e9-240a-76c76d2c0764@sberdevices.ru>
-Date:   Tue, 14 Mar 2023 13:42:36 +0300
+        Tue, 14 Mar 2023 06:43:56 -0400
+Received: from ewsoutbound.kpnmail.nl (ewsoutbound.kpnmail.nl [195.121.94.186])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DF05EF947
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 03:43:19 -0700 (PDT)
+X-KPN-MessageId: f4436f54-c254-11ed-be37-00505699b430
+Received: from smtp.kpnmail.nl (unknown [10.31.155.7])
+        by ewsoutbound.so.kpn.org (Halon) with ESMTPS
+        id f4436f54-c254-11ed-be37-00505699b430;
+        Tue, 14 Mar 2023 11:42:44 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=xs4all.nl; s=xs4all01;
+        h=content-type:from:to:subject:mime-version:date:message-id;
+        bh=MblS3wPiejH8wWKzPlRNHbipiWFCA8kFaj7hsvg8aIw=;
+        b=IC1Bek6tsLB+ZBUNcDl3p2uU4adHKFJTNwb/AKrs331rzK40Mv+EgCYHoIV0e1MNHxxRNVpKdOH1u
+         4fu5XN5lv+mLFusQyNzts9Ul1OSCejTm+DL3yNa3jm+QZHPySDS1h5Ck/lEINQUxl6QFNeLl71zcgk
+         bi7ykaaHDON3BrkiYGV2eFa+GZaMJMBHiIS3We+44p9xpkzwLCy/0NIxxx2phxbKzkK3XuWzE060H9
+         3M6iGSBP5aEEt2s6WULeFnfSNdDcmXrfTJjDdP8sh16nPPoLkukaSgxJaL3zkdlDCxUso3P540aHLa
+         bvLdn0oCfNbUDnoIV4Ti0A8uR+4N5fg==
+X-KPN-MID: 33|FkStRVpM6778JWRbee5ORbKlr5uso33caDVGRFqX+YdM2ajMXig/EgK1pUqjMB2
+ ZvpFy22o4lZ02rXeesS5Bkw==
+X-KPN-VerifiedSender: Yes
+X-CMASSUN: 33|b6x6ba6BbG6VwHaXfZoELLAJBsMWVu0BpjvVbFinw6bBbG9MWR/C5kVxOti2FHv
+ KdyqhcYeHZREjXLMFQDHNlQ==
+X-Originating-IP: 173.38.220.44
+Received: from [10.47.77.214] (unknown [173.38.220.44])
+        by smtp.xs4all.nl (Halon) with ESMTPSA
+        id f52d4607-c254-11ed-a8eb-005056998788;
+        Tue, 14 Mar 2023 11:42:49 +0100 (CET)
+Message-ID: <cbf34cf1-e065-8136-8344-89ca1864f637@xs4all.nl>
+Date:   Tue, 14 Mar 2023 11:42:46 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
+ Thunderbird/102.8.0
+Subject: Re: [RFC 2/4] media: videobuf2: Replace bufs array by a list
 Content-Language: en-US
-In-Reply-To: <34d65539-015e-23c8-cf5e-f34bd5795e52@sberdevices.ru>
-To:     Stefan Hajnoczi <stefanha@redhat.com>,
-        Stefano Garzarella <sgarzare@redhat.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Bobby Eshleman <bobby.eshleman@bytedance.com>
-CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
-        <avkrasnov@sberdevices.ru>
-From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
-Subject: [PATCH net v4 1/4] virtio/vsock: don't use skbuff state to account
- credit
-Content-Type: text/plain; charset="UTF-8"
+To:     David Laight <David.Laight@ACULAB.COM>,
+        'Laurent Pinchart' <laurent.pinchart@ideasonboard.com>,
+        Benjamin Gaignard <benjamin.gaignard@collabora.com>
+Cc:     "tfiga@chromium.org" <tfiga@chromium.org>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>,
+        "mchehab@kernel.org" <mchehab@kernel.org>,
+        "ming.qian@nxp.com" <ming.qian@nxp.com>,
+        "shijie.qin@nxp.com" <shijie.qin@nxp.com>,
+        "eagle.zhou@nxp.com" <eagle.zhou@nxp.com>,
+        "bin.liu@mediatek.com" <bin.liu@mediatek.com>,
+        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
+        "angelogioacchino.delregno@collabora.com" 
+        <angelogioacchino.delregno@collabora.com>,
+        "tiffany.lin@mediatek.com" <tiffany.lin@mediatek.com>,
+        "andrew-ct.chen@mediatek.com" <andrew-ct.chen@mediatek.com>,
+        "yunfei.dong@mediatek.com" <yunfei.dong@mediatek.com>,
+        "stanimir.k.varbanov@gmail.com" <stanimir.k.varbanov@gmail.com>,
+        "quic_vgarodia@quicinc.com" <quic_vgarodia@quicinc.com>,
+        "agross@kernel.org" <agross@kernel.org>,
+        "andersson@kernel.org" <andersson@kernel.org>,
+        "konrad.dybcio@linaro.org" <konrad.dybcio@linaro.org>,
+        "ezequiel@vanguardiasur.com.ar" <ezequiel@vanguardiasur.com.ar>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "daniel.almeida@collabora.com" <daniel.almeida@collabora.com>,
+        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-mediatek@lists.infradead.org" 
+        <linux-mediatek@lists.infradead.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "linux-rockchip@lists.infradead.org" 
+        <linux-rockchip@lists.infradead.org>,
+        "kernel@collabora.com" <kernel@collabora.com>
+References: <20230313135916.862852-1-benjamin.gaignard@collabora.com>
+ <20230313135916.862852-3-benjamin.gaignard@collabora.com>
+ <20230313181155.GC22646@pendragon.ideasonboard.com>
+ <86df05244d974416903e919d387a0a0b@AcuMS.aculab.com>
+ <e704b505-86d8-c6f2-8546-adccdab72622@xs4all.nl>
+ <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
+From:   Hans Verkuil <hverkuil-cisco@xs4all.nl>
+In-Reply-To: <dc04d48e34ed40e58f43badd001a81d0@AcuMS.aculab.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'skb->len' can vary when we partially read the data, this complicates the
-calculation of credit to be updated in 'virtio_transport_inc_rx_pkt()/
-virtio_transport_dec_rx_pkt()'.
+Hi David,
 
-Also in 'virtio_transport_dec_rx_pkt()' we were miscalculating the
-credit since 'skb->len' was redundant.
+On 3/14/23 11:11, David Laight wrote:
+> From: Hans Verkuil
+>> Sent: 14 March 2023 08:55
+> ...
+>> Why not start with a dynamically allocated array of 32 vb2_buffer pointers?
+>> And keep doubling the size (reallocing) whenever more buffers are needed,
+>> up to some maximum (1024 would be a good initial value for that, I think).
+>> This max could be even a module option.
+> 
+> I don't know the typical uses (or the code at all).
+> But it might be worth having a small array in the structure itself.
+> Useful if there are typically always (say) less than 8 buffers.
+> For larger sizes use the (IIRC) kmalloc_size() to find the actual
+> size of the structure that will be allocate and set the array
+> size appropriately.
 
-For these reasons, let's replace the use of skbuff state to calculate new
-'rx_bytes'/'fwd_cnt' values with explicit value as input argument. This
-makes code more simple, because it is not needed to change skbuff state
-before each call to update 'rx_bytes'/'fwd_cnt'.
+The typical usage is that applications allocate N buffers with the
+VIDIOC_REQBUFS ioctl, and in most cases that's all they use. The
+current max is 32 buffers, so allocating that initially (usually
+during probe()) will cover all current cases with a single one-time
+kzalloc.
 
-Fixes: 71dc9ec9ac7d ("virtio/vsock: replace virtio_vsock_pkt with sk_buff")
-Signed-off-by: Arseniy Krasnov <AVKrasnov@sberdevices.ru>
-Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
----
- net/vmw_vsock/virtio_transport_common.c | 23 +++++++++++------------
- 1 file changed, 11 insertions(+), 12 deletions(-)
+Only if the application wants to allocate more than 32 buffers will
+there be a slight overhead.
 
-diff --git a/net/vmw_vsock/virtio_transport_common.c b/net/vmw_vsock/virtio_transport_common.c
-index a1581c77cf84..618680fd9906 100644
---- a/net/vmw_vsock/virtio_transport_common.c
-+++ b/net/vmw_vsock/virtio_transport_common.c
-@@ -241,21 +241,18 @@ static int virtio_transport_send_pkt_info(struct vsock_sock *vsk,
- }
- 
- static bool virtio_transport_inc_rx_pkt(struct virtio_vsock_sock *vvs,
--					struct sk_buff *skb)
-+					u32 len)
- {
--	if (vvs->rx_bytes + skb->len > vvs->buf_alloc)
-+	if (vvs->rx_bytes + len > vvs->buf_alloc)
- 		return false;
- 
--	vvs->rx_bytes += skb->len;
-+	vvs->rx_bytes += len;
- 	return true;
- }
- 
- static void virtio_transport_dec_rx_pkt(struct virtio_vsock_sock *vvs,
--					struct sk_buff *skb)
-+					u32 len)
- {
--	int len;
--
--	len = skb_headroom(skb) - sizeof(struct virtio_vsock_hdr) - skb->len;
- 	vvs->rx_bytes -= len;
- 	vvs->fwd_cnt += len;
- }
-@@ -388,7 +385,9 @@ virtio_transport_stream_do_dequeue(struct vsock_sock *vsk,
- 		skb_pull(skb, bytes);
- 
- 		if (skb->len == 0) {
--			virtio_transport_dec_rx_pkt(vvs, skb);
-+			u32 pkt_len = le32_to_cpu(virtio_vsock_hdr(skb)->len);
-+
-+			virtio_transport_dec_rx_pkt(vvs, pkt_len);
- 			consume_skb(skb);
- 		} else {
- 			__skb_queue_head(&vvs->rx_queue, skb);
-@@ -437,17 +436,17 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
- 
- 	while (!msg_ready) {
- 		struct virtio_vsock_hdr *hdr;
-+		size_t pkt_len;
- 
- 		skb = __skb_dequeue(&vvs->rx_queue);
- 		if (!skb)
- 			break;
- 		hdr = virtio_vsock_hdr(skb);
-+		pkt_len = (size_t)le32_to_cpu(hdr->len);
- 
- 		if (dequeued_len >= 0) {
--			size_t pkt_len;
- 			size_t bytes_to_copy;
- 
--			pkt_len = (size_t)le32_to_cpu(hdr->len);
- 			bytes_to_copy = min(user_buf_len, pkt_len);
- 
- 			if (bytes_to_copy) {
-@@ -484,7 +483,7 @@ static int virtio_transport_seqpacket_do_dequeue(struct vsock_sock *vsk,
- 				msg->msg_flags |= MSG_EOR;
- 		}
- 
--		virtio_transport_dec_rx_pkt(vvs, skb);
-+		virtio_transport_dec_rx_pkt(vvs, pkt_len);
- 		kfree_skb(skb);
- 	}
- 
-@@ -1040,7 +1039,7 @@ virtio_transport_recv_enqueue(struct vsock_sock *vsk,
- 
- 	spin_lock_bh(&vvs->rx_lock);
- 
--	can_enqueue = virtio_transport_inc_rx_pkt(vvs, skb);
-+	can_enqueue = virtio_transport_inc_rx_pkt(vvs, len);
- 	if (!can_enqueue) {
- 		free_pkt = true;
- 		goto out;
--- 
-2.25.1
+Regards,
+
+	Hans
+
+> 
+> 	David
+> 
+> -
+> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+> Registration No: 1397386 (Wales)
+
