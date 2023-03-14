@@ -2,105 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 406426B9DD3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:04:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1D7126B9DDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbjCNSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
+        id S230426AbjCNSGn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:06:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbjCNSEq (ORCPT
+        with ESMTP id S229636AbjCNSGl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:04:46 -0400
-Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CB7A227E;
-        Tue, 14 Mar 2023 11:04:43 -0700 (PDT)
-Received: by mail-pj1-x1031.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so7700292pjt.5;
-        Tue, 14 Mar 2023 11:04:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678817083;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LhkqZnqi4qAtizU4572s8HvBrOs+BKkBUUx8Pw/CxoE=;
-        b=c+bqi0+JT0vFttYQOJNb2Ic8oXew+4kVrOfaOg2xmKcSnIJGx8Xdup0UqdRMf5dUL/
-         VXnIwtxX8GUo5A/VCv/a1GdjFn+bVBwjwpQWJ+cBu4m8UDKCSgyM85Tky+TPPcAKxJ5u
-         zgcblZlJgNoLW7myn3aU7skEOqxcInk7L6AutT4PaAUUVmIuwsj/OYzILLkiTg3Ba3dB
-         9hgNY7Ov7+wipUdyvfB3eIhzBOMv4ECgzsjOn8DQTTf0ARtqe/urPO5SKeQ3zyPGTElS
-         sYqbcKzAM8zqZ0nVEIAIjOcgEufwNUNZV2AlNOAa0jEIT0Uw3t31/toYwjk0pMp35RN9
-         mr0A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678817083;
-        h=in-reply-to:references:cc:to:from:subject:message-id:date
-         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=LhkqZnqi4qAtizU4572s8HvBrOs+BKkBUUx8Pw/CxoE=;
-        b=V0mFcpaPJhzdSnj75qHj9CJ9K8Ob8Ies5aVYSNB9gZGb5kt/iK39NYvrVTSCn0PiGF
-         0SotEjYZxXx1tnNX3X1ZrrYPGH3f0JTF6fWKyarqU2eX2xSoLIMAQQjBBapkwyU3I8Lk
-         gbuNzTjKd/GDJFEwUBw2DkkA4jIuXHpL7hYb7kSRhk3PdzGEPYd6DMUL/bWihsz1jFsY
-         K0G6J89cXwHvRx25g7XoC8YTHtArhzmGfFthLkDeJdjR1HSUp95SQZOdbaE3JPfVlL6b
-         iZe9im4b1NpqPx2DISYjePVW9Mg8H/daB6QfWBbIxFtyhnwJIMrFYldkOpF0iKDqA/4W
-         5CKA==
-X-Gm-Message-State: AO0yUKUi3d+rxwClt8SkFSY8ccIRirVdDbi2Izqixt5zTg3Gz+5WI0g5
-        17TWpcBTcRPoMk1BxJ2cDMFByrTdgp2rIg==
-X-Google-Smtp-Source: AK7set/Q4wjxBNdIbzLMNPHBJLoPlDOxzT2y2XfcmTUJEuKzLqd9pAGYJBuO2TmWnQULlcfzobJ/Hg==
-X-Received: by 2002:a05:6a20:3942:b0:cd:fe1b:df8 with SMTP id r2-20020a056a20394200b000cdfe1b0df8mr44681233pzg.56.1678817082638;
-        Tue, 14 Mar 2023 11:04:42 -0700 (PDT)
-Received: from localhost ([2406:7400:61:629c:58fb:a2bd:8b99:bfe0])
-        by smtp.gmail.com with ESMTPSA id d16-20020a631d10000000b004fbd021bad6sm1880819pgd.38.2023.03.14.11.04.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 11:04:42 -0700 (PDT)
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+        Tue, 14 Mar 2023 14:06:41 -0400
+Received: from uho.ysoft.cz (uho.ysoft.cz [81.19.3.130])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB11AF2AB;
+        Tue, 14 Mar 2023 11:06:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ysoft.com;
+        s=20160406-ysoft-com; t=1678817196;
+        bh=Y50vybzJcxi++meRhzVjFFrYYDiXaEQgBQmDbk4WtSk=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Zzkg58ovmLf6ZABdWMynLG/tNpnfACXcrcNK7SGnTWLJYYiQrPpicZXlKVV49Y6W4
+         oedbvEpHmk/z4MJVf1v7Gcr7gAuhW2Qku3H3i5DRk4uU01RKfMSrdouqRLAigAUkuV
+         CrbXBDTT7Y8snkTiX4a8xz+a7vdC2jdxU1fvrOB8=
+Received: from vokac-Latitude-7410.ysoft.local (unknown [10.0.30.161])
+        by uho.ysoft.cz (Postfix) with ESMTP id 7F56DA01E0;
+        Tue, 14 Mar 2023 19:06:36 +0100 (CET)
+From:   =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+To:     Shawn Guo <shawnguo@kernel.org>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        =?UTF-8?q?Michal=20Vok=C3=A1=C4=8D?= <michal.vokac@ysoft.com>
+Subject: [PATCH v2 0/5] Add support for new boards in the imx6dl-yapp4 family
+Date:   Tue, 14 Mar 2023 19:06:03 +0100
+Message-Id: <20230314180608.44482-1-michal.vokac@ysoft.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
-Date:   Tue, 14 Mar 2023 23:34:37 +0530
-Message-Id: <CR6AZI7T6X51.AX26VA80VSUW@skynet-linux>
-Subject: Re: [PATCH 1/1] net: wireless: ath: wcn36xx: add support for
- pronto-v3
-From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
-To:     "Loic Poulain" <loic.poulain@linaro.org>
-Cc:     <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <~postmarketos/upstreaming@lists.sr.ht>,
-        <linux-kernel@vger.kernel.org>,
-        "Vladimir Lypak" <vladimir.lypak@gmail.com>,
-        "Kalle Valo" <kvalo@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        "Jakub Kicinski" <kuba@kernel.org>,
-        "Paolo Abeni" <pabeni@redhat.com>
-X-Mailer: aerc 0.14.0
-References: <20230311150647.22935-1-sireeshkodali1@gmail.com>
- <20230311150647.22935-2-sireeshkodali1@gmail.com>
- <CAMZdPi_uBLutBejSV1fz5p9GYqHYd75VTAePtndUnsu=JypdTQ@mail.gmail.com>
-In-Reply-To: <CAMZdPi_uBLutBejSV1fz5p9GYqHYd75VTAePtndUnsu=JypdTQ@mail.gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue Mar 14, 2023 at 2:19 PM IST, Loic Poulain wrote:
-> On Sat, 11 Mar 2023 at 16:07, Sireesh Kodali <sireeshkodali1@gmail.com> w=
-rote:
-> >
-> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
-> >
-> > Pronto v3 has a different DXE address than prior Pronto versions. This
-> > patch changes the macro to return the correct register address based on
-> > the pronto version.
-> >
-> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
-> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
->
-> Acked-by: Loic Poulain <loic.poulain@linaro.org>
->
-> Could you also submit a change for the new 'qcom,pronto-v3-pil'
-> compatible in the related devicetree documentation ?
-> (bindings/remoteproc/qcom,wcnss-pil.txt)
+Hi,
 
-The changes to the device tree were only recently merged
-LKML link: https://lkml.org/lkml/2022/9/30/1502
+Patches 1,2,3 are new in this v2 series and fixes minor issues for
+the already supported boards. Patches 4 and 5 adds support for some
+new redesigned boards based on i.MX6 SoC.
+
+Michal Vokáč (5):
+  ARM: dts: imx6dl-yapp4: Move phy reset into switch node
+  ARM: dts: imx6dl-yapp4: Move status to the end of property list
+  ARM: dts: imx6dl-yapp4: Remove unneeded status "okay"
+  dt-bindings: arm: fsl: Add Y Soft IOTA Phoenix, Lynx, Pegasus and
+    Pegasus+
+  ARM: dts: imx6dl-yapp43: Add support for new HW revision of the
+    IOTA board
+
+ .../devicetree/bindings/arm/fsl.yaml          |   4 +
+ arch/arm/boot/dts/Makefile                    |   4 +
+ arch/arm/boot/dts/imx6dl-yapp4-common.dtsi    |   7 +-
+ arch/arm/boot/dts/imx6dl-yapp4-lynx.dts       |  58 ++
+ arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts    |  42 ++
+ arch/arm/boot/dts/imx6dl-yapp43-common.dtsi   | 615 ++++++++++++++++++
+ arch/arm/boot/dts/imx6q-yapp4-pegasus.dts     |  58 ++
+ .../boot/dts/imx6qp-yapp4-pegasus-plus.dts    |  58 ++
+ 8 files changed, 841 insertions(+), 5 deletions(-)
+ create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-lynx.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-yapp4-phoenix.dts
+ create mode 100644 arch/arm/boot/dts/imx6dl-yapp43-common.dtsi
+ create mode 100644 arch/arm/boot/dts/imx6q-yapp4-pegasus.dts
+ create mode 100644 arch/arm/boot/dts/imx6qp-yapp4-pegasus-plus.dts
+
+-- 
+2.25.1
+
