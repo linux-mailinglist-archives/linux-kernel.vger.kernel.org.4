@@ -2,307 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D25836B90F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:04:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 855856B9118
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:07:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230101AbjCNLEC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:04:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57664 "EHLO
+        id S230355AbjCNLHs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:07:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230152AbjCNLD5 (ORCPT
+        with ESMTP id S229712AbjCNLHr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:03:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4C1E62308
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:03:15 -0700 (PDT)
-Received: from dggpeml500018.china.huawei.com (unknown [172.30.72.55])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4PbVtr2WMzzHwmV;
-        Tue, 14 Mar 2023 19:00:52 +0800 (CST)
-Received: from [10.67.111.186] (10.67.111.186) by
- dggpeml500018.china.huawei.com (7.185.36.186) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 19:03:02 +0800
-Message-ID: <55754a59-a01f-206a-43f6-d07ea37300dd@huawei.com>
-Date:   Tue, 14 Mar 2023 19:03:02 +0800
+        Tue, 14 Mar 2023 07:07:47 -0400
+Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1DDB7C941;
+        Tue, 14 Mar 2023 04:07:17 -0700 (PDT)
+Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
+        by mx.sberdevices.ru (Postfix) with ESMTP id 1614A5FD60;
+        Tue, 14 Mar 2023 14:06:34 +0300 (MSK)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
+        s=mail; t=1678791994;
+        bh=uFGjRE3j4zXGby/VPz50ex9laPK7eGiO5HSk7DnBtqc=;
+        h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type;
+        b=D+6neNLvcq2F0mTaKnS3JgbC53RCnVNJaQhxTlMGHK56FI1x7H6pw4gM0Q9Yo9wVw
+         8FBDBPyCOSORW384Hxd0CM910AFcWUeaMt5oDMu1NDpvKzT1Lh2fgSUUF6agtZRpFA
+         71g8hJGb2u7IiDJJlNkAsjcEnNZFO8fxGtn4KC8oeyl2XZXsnjgs4r3GoVa+pPqWHC
+         gDggQ093V6UL04TWuUAIjOcSstYVZqzKvWw8OqPI67yLAa0DQw+e5jBTDz6zVh4EPx
+         0hCJNRQE5pJPMtYxNkGkQJ8ujuZNExoQJzZgQlzRLneFknS57LgnjrhGeqo7fgYCO2
+         Ol0Av5lsmjNXA==
+Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
+        by mx.sberdevices.ru (Postfix) with ESMTP;
+        Tue, 14 Mar 2023 14:06:33 +0300 (MSK)
+Message-ID: <1bfcb7fd-bce3-30cf-8a58-8baa57b7345c@sberdevices.ru>
+Date:   Tue, 14 Mar 2023 14:03:23 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.1.1
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-CC:     <linux-kernel@vger.kernel.org>, <mingo@redhat.com>,
-        <juri.lelli@redhat.com>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>, <rkagan@amazon.de>,
-        Peter Zijlstra <peterz@infradead.org>
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <20230309130524.GA273121@hirez.programming.kicks-ass.net>
- <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
- <20230309142825.GB273121@hirez.programming.kicks-ass.net>
- <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
- <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
- <ZAs+zV0o9ShO7nLT@vingu-book>
- <ef2f07f1-fe3a-624f-52e7-1089138dc137@huawei.com>
- <CAKfTPtBaBdxfc9uoViNT8gsWU-GdgnHrDdWPpAduadTFmu1ZGg@mail.gmail.com>
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-In-Reply-To: <CAKfTPtBaBdxfc9uoViNT8gsWU-GdgnHrDdWPpAduadTFmu1ZGg@mail.gmail.com>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Content-Language: en-US
+To:     Stefan Hajnoczi <stefanha@redhat.com>,
+        Stefano Garzarella <sgarzare@redhat.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Bobby Eshleman <bobby.eshleman@bytedance.com>
+CC:     <kvm@vger.kernel.org>, <virtualization@lists.linux-foundation.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <kernel@sberdevices.ru>, <oxffffaa@gmail.com>,
+        <avkrasnov@sberdevices.ru>
+From:   Arseniy Krasnov <avkrasnov@sberdevices.ru>
+Subject: [PATCH RESEND net v4 0/4] several updates to virtio/vsock
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.111.186]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [172.16.1.6]
+X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
+ S-MS-EXCH01.sberdevices.ru (172.16.1.4)
+X-KSMG-Rule-ID: 4
+X-KSMG-Message-Action: clean
+X-KSMG-AntiSpam-Status: not scanned, disabled by settings
+X-KSMG-AntiSpam-Interceptor-Info: not scanned
+X-KSMG-AntiPhishing: not scanned, disabled by settings
+X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
+X-KSMG-AntiVirus-Status: Clean, skipped
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
+this patchset evolved from previous v2 version (see link below). It does
+several updates to virtio/vsock:
+1) Changes 'virtio_transport_inc/dec_rx_pkt()' interface. Now instead of
+   using skbuff state ('head' and 'data' pointers) to update 'fwd_cnt'
+   and 'rx_bytes', integer value is passed as an input argument. This
+   makes code more simple, because in this case we don't need to update
+   skbuff state before calling 'virtio_transport_inc/dec_rx_pkt()'. In
+   more common words - we don't need to change skbuff state to update
+   'rx_bytes' and 'fwd_cnt' correctly.
+2) For SOCK_STREAM, when copying data to user fails, current skbuff is
+   not dropped. Next read attempt will use same skbuff and last offset.
+   Instead of 'skb_dequeue()', 'skb_peek()' + '__skb_unlink()' are used.
+   This behaviour was implemented before skbuff support.
+3) For SOCK_SEQPACKET it removes unneeded 'skb_pull()' call, because for
+   this type of socket each skbuff is used only once: after removing it
+   from socket's queue, it will be freed anyway.
 
-在 2023/3/13 22:23, Vincent Guittot 写道:
-> On Sat, 11 Mar 2023 at 10:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
->>
->>
->>
->> 在 2023/3/10 22:29, Vincent Guittot 写道:
->>> Le jeudi 09 mars 2023 à 16:14:38 (+0100), Vincent Guittot a écrit :
->>>> On Thu, 9 Mar 2023 at 15:37, Peter Zijlstra <peterz@infradead.org> wrote:
->>>>>
->>>>> On Thu, Mar 09, 2023 at 03:28:25PM +0100, Peter Zijlstra wrote:
->>>>>> On Thu, Mar 09, 2023 at 02:34:05PM +0100, Vincent Guittot wrote:
->>>>>>
->>>>>>> Then, even if we don't clear exec_start before migrating and keep
->>>>>>> current value to be used in place_entity on the new cpu, we can't
->>>>>>> compare the rq_clock_task(rq_of(cfs_rq)) of 2 different rqs AFAICT
->>>>>>
->>>>>> Blergh -- indeed, irq and steal time can skew them between CPUs :/
->>>>>> I suppose we can fudge that... wait_start (which is basically what we're
->>>>>> making it do) also does that IIRC.
->>>>>>
->>>>>> I really dislike having this placement muck spreadout like proposed.
->>>>>
->>>>> Also, I think we might be over-engineering this, we don't care about
->>>>> accuracy at all, all we really care about is 'long-time'.
->>>>
->>>> you mean taking the patch 1/2 that you mentioned here to add a
->>>> migrated field:
->>>> https://lore.kernel.org/all/68832dfbb60fda030540b5f4e39c5801942689b1.1648228023.git.tim.c.chen@linux.intel.com/T/#ma5637eb8010f3f4a4abff778af8db705429d003b
->>>>
->>>> And assume that the divergence between the rq_clock_task() can be ignored ?
->>>>
->>>> That could probably work but we need to replace the (60LL *
->>>> NSEC_PER_SEC) by ((1ULL << 63) / NICE_0_LOAD) because 60sec divergence
->>>> would not be unrealistic.
->>>> and a comment to explain why it's acceptable
->>>
->>> Zhang,
->>>
->>> Could you try the patch below ?
->>> This is a rebase/merge/update of:
->>> -patch 1/2 above and
->>> -https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
->>
->>
->> I applyed and tested this patch, and it make hackbench slower.
->> According to my previous test results. The good result is 82.1(s).
->> But the result of this patch is 108.725(s).
-> 
-> By "the result of this patch is 108.725(s)",  you mean the result of
-> https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
-> alone, don't you ?
+Test for 2) also added:
+Test tries to 'recv()' data to NULL buffer, then does 'recv()' with valid
+buffer. For SOCK_STREAM second 'recv()' must return data, because skbuff
+must not be dropped, but for SOCK_SEQPACKET skbuff will be dropped by
+kernel, and 'recv()' will return EAGAIN.
 
-No, with your patch, the test results is 108.725(s),
+Link to v1 on lore:
+https://lore.kernel.org/netdev/c2d3e204-89d9-88e9-8a15-3fe027e56b4b@sberdevices.ru/
 
-git diff:
+Link to v2 on lore:
+https://lore.kernel.org/netdev/a7ab414b-5e41-c7b6-250b-e8401f335859@sberdevices.ru/
 
-diff --git a/include/linux/sched.h b/include/linux/sched.h
-index 63d242164b1a..93a3909ae4c4 100644
---- a/include/linux/sched.h
-+++ b/include/linux/sched.h
-@@ -550,6 +550,7 @@ struct sched_entity {
-        struct rb_node                  run_node;
-        struct list_head                group_node;
-        unsigned int                    on_rq;
-+       unsigned int                    migrated;
+Link to v3 on lore:
+https://lore.kernel.org/netdev/0abeec42-a11d-3a51-453b-6acf76604f2e@sberdevices.ru/
 
-        u64                             exec_start;
-        u64                             sum_exec_runtime;
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index ff4dbbae3b10..e60defc39f6e 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -1057,6 +1057,7 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
-        /*
-         * We are starting a new run period:
-         */
-+       se->migrated = 0;
-        se->exec_start = rq_clock_task(rq_of(cfs_rq));
- }
+Change log:
 
-@@ -4690,9 +4691,9 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-         * inversed due to s64 overflow.
-         */
-        sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
--       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-+       if ((s64)sleep_time > (1ULL << 63) / scale_load_down(NICE_0_LOAD) / 2) {
-                se->vruntime = vruntime;
--       else
-+       } else
-                se->vruntime = max_vruntime(se->vruntime, vruntime);
- }
+v1 -> v2:
+ - For SOCK_SEQPACKET call 'skb_pull()' also in case of copy failure or
+   dropping skbuff (when we just waiting message end).
+ - Handle copy failure for SOCK_STREAM in the same manner (plus free
+   current skbuff).
+ - Replace bug repdroducer with new test in vsock_test.c
 
-@@ -7658,8 +7659,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
-        se->avg.last_update_time = 0;
+v2 -> v3:
+ - Replace patch which removes 'skb->len' subtraction from function
+   'virtio_transport_dec_rx_pkt()' with patch which updates functions
+   'virtio_transport_inc/dec_rx_pkt()' by passing integer argument
+   instead of skbuff pointer.
+ - Replace patch which drops skbuff when copying to user fails with
+   patch which changes this behaviour by keeping skbuff in queue until
+   it has no data.
+ - Add patch for SOCK_SEQPACKET which removes redundant 'skb_pull()'
+   call on read.
+ - I remove "Fixes" tag from all patches, because all of them now change
+   code logic, not only fix something.
 
-        /* We have migrated, no longer consider this task hot */
--       se->exec_start = 0;
--
-+       se->migrated = 1;
-        update_scan_period(p, new_cpu);
- }
+v3 -> v4:
+ - Update commit messages in all patches except test.
+ - Add "Fixes" tag to all patches except test.
 
-@@ -8343,6 +8343,8 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
+Arseniy Krasnov (4):
+  virtio/vsock: don't use skbuff state to account credit
+  virtio/vsock: remove redundant 'skb_pull()' call
+  virtio/vsock: don't drop skbuff on copy failure
+  test/vsock: copy to user failure test
 
-        if (sysctl_sched_migration_cost == 0)
-                return 0;
-+       if (p->se.migrated)
-+               return 0;
+ net/vmw_vsock/virtio_transport_common.c |  29 +++---
+ tools/testing/vsock/vsock_test.c        | 118 ++++++++++++++++++++++++
+ 2 files changed, 131 insertions(+), 16 deletions(-)
 
-        delta = rq_clock_task(env->src_rq) - p->se.exec_start;
-
-
-
-> 
->>
->>
->>> version1: v6.2
->>> version2: v6.2 + commit 829c1651e9c4
->>> version3: v6.2 + commit 829c1651e9c4 + this patch
->>>
->>> -------------------------------------------------
->>>       version1        version2        version3
->>> test1 81.0            118.1           82.1
->>> test2 82.1            116.9           80.3
->>> test3 83.2            103.9           83.3
->>> avg(s)        82.1            113.0           81.9
-> 
-> Ok, it looks like we are back to normal figures
-> 
->>>
->>> -------------------------------------------------
->>>
->>> The proposal accepts a divergence of up to 52 days between the 2 rqs.
->>>
->>> If this work, we will prepare a proper patch
->>>
->>> diff --git a/include/linux/sched.h b/include/linux/sched.h
->>> index 63d242164b1a..cb8af0a137f7 100644
->>> --- a/include/linux/sched.h
->>> +++ b/include/linux/sched.h
->>> @@ -550,6 +550,7 @@ struct sched_entity {
->>>         struct rb_node                  run_node;
->>>         struct list_head                group_node;
->>>         unsigned int                    on_rq;
->>> +       unsigned int                    migrated;
->>>
->>>         u64                             exec_start;
->>>         u64                             sum_exec_runtime;
->>> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
->>> index 7a1b1f855b96..36acd9598b40 100644
->>> --- a/kernel/sched/fair.c
->>> +++ b/kernel/sched/fair.c
->>> @@ -1057,6 +1057,7 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
->>>         /*
->>>          * We are starting a new run period:
->>>          */
->>> +       se->migrated = 0;
->>>         se->exec_start = rq_clock_task(rq_of(cfs_rq));
->>>  }
->>>
->>> @@ -4684,13 +4685,23 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->>>
->>>         /*
->>>          * Pull vruntime of the entity being placed to the base level of
->>> -        * cfs_rq, to prevent boosting it if placed backwards.  If the entity
->>> -        * slept for a long time, don't even try to compare its vruntime with
->>> -        * the base as it may be too far off and the comparison may get
->>> -        * inversed due to s64 overflow.
->>> +        * cfs_rq, to prevent boosting it if placed backwards.
->>> +        * However, min_vruntime can advance much faster than real time, with
->>> +        * the exterme being when an entity with the minimal weight always runs
->>> +        * on the cfs_rq. If the new entity slept for long, its vruntime
->>> +        * difference from min_vruntime may overflow s64 and their comparison
->>> +        * may get inversed, so ignore the entity's original vruntime in that
->>> +        * case.
->>> +        * The maximal vruntime speedup is given by the ratio of normal to
->>> +        * minimal weight: NICE_0_LOAD / MIN_SHARES, so cutting off on the
->>
->> why not is `scale_load_down(NICE_0_LOAD) / MIN_SHARES` here ?
-> 
-> yes, you are right.
-> 
->>
->>
->>> +        * sleep time of 2^63 / NICE_0_LOAD should be safe.
->>> +        * When placing a migrated waking entity, its exec_start has been set
->>> +        * from a different rq. In order to take into account a possible
->>> +        * divergence between new and prev rq's clocks task because of irq and
->>
->> This divergence might be larger, it cause `sleep_time` maybe negative.
-> 
-> AFAICT, we are safe with ((1ULL << 63) / scale_load_down(NICE_0_LOAD)
-> / 2) as long as the divergence between the 2 rqs clocks task is lower
-> than 2^52nsec. Do you expect a divergence higher than 2^52 nsec
-> (around 52 days)?
-> 
-> We can probably keep using (1ULL << 63) / scale_load_down(NICE_0_LOAD)
-> which is already half the max value if needed.
-> 
-> the fact that sleep_time can be negative is not a problem as
-> s64)sleep_time > will take care of this.
-
-In my opinion, when comparing signed with unsigned, the compiler converts the signed value to unsigned.
-So, if sleep_time < 0, "(s64)sleep_time > (1ULL << 63) / NICE_0_LOAD / 2" will be true.
-
-> 
->>
->>> +        * stolen time, we take an additional margin.
->>>          */
->>>         sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
->>> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
->>> +       if ((s64)sleep_time > (1ULL << 63) / NICE_0_LOAD / 2)>                 se->vruntime = vruntime;
->>>         else
->>>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
->>> @@ -7658,7 +7669,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->>>         se->avg.last_update_time = 0;
->>>
->>>         /* We have migrated, no longer consider this task hot */
->>> -       se->exec_start = 0;
->>> +       se->migrated = 1;
->>>
->>>         update_scan_period(p, new_cpu);
->>>  }
->>> @@ -8344,6 +8355,9 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
->>>         if (sysctl_sched_migration_cost == 0)
->>>                 return 0;
->>>
->>> +       if (p->se.migrated)
->>> +               return 0;
->>> +
->>>         delta = rq_clock_task(env->src_rq) - p->se.exec_start;
->>>
->>>         return delta < (s64)sysctl_sched_migration_cost;
->>>
->>>
->>>
->>>>
->>>>
->>>>>
->>>>>
->>> .
->>>
-> .
-> 
+-- 
+2.25.1
