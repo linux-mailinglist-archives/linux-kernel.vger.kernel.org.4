@@ -2,111 +2,224 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FB206B9A7B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:01:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 509E76B9A7E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:01:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbjCNQA6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:00:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S231493AbjCNQBH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:01:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40558 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229938AbjCNQA4 (ORCPT
+        with ESMTP id S230115AbjCNQBF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:00:56 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EC9B2A161
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:00:55 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id x14so14508673vso.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:00:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112; t=1678809654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Uby9qlcFKmMY2fsZUKJLGUq3FWjzW0DSSs7z/4wZjPc=;
-        b=DeQ6DMTwPYVJOy67swDKCZkFrTsT6aC7WKKM6LuOrsZSMHJvovMsb9sFSn8hEDS/DB
-         UzxtLwtMXOD9+lqIAQ6LO7i9mKaClTb2GhS3+mZNobCXT5SGA2DfeLlOxpUh68inj4o4
-         WI1eH/7ptO19emktw++HegtvaBvCiK7IecZ2g4Hz5oBp3tx9I/lgOYMcklqG4l1zXPly
-         SGxpBXArcOHkkMCjdoC1Hyq3sC7q6iYI4uxvS9KsyyIYZhOM/ubMaCMnBxXjkXggjTHK
-         0hccdd9mzHlBkJK1bjW3fraWcutiqJ8uHu85PrTxuoQe54fSjN4ifLx3MD8AZaKwbOjP
-         Cp4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678809654;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Uby9qlcFKmMY2fsZUKJLGUq3FWjzW0DSSs7z/4wZjPc=;
-        b=j9CundVfzlu30nSlAGuHHfvxjltB4zUwp/yw3Hru5K198qF0Im254qj5fIv7NeH6/d
-         /Rbq2VATXHXYMMZv3yssopvpebkrzPRzrlXYAn47h0/rZXMBg54K109VxpizZLB0rWej
-         CW+exDcOE74oxKG5jiy8CcD1tuhear7Rz2jaZFHJ/3DpuYDod8IMXPpETa1r8f9roL3k
-         bqgmfZOlXNLytKYeUQ9MO7KyzEuYAlHRVeIJ1y8n9pA8Zv5yEGLFaVp+CU3VT+vLQ59y
-         1g6PqHMI209Uh3J6pcs7XJ/+zvqD9pno4ghgu+UUhUDhxzxZiBM/hItvmCEL8a7uxROK
-         5Ozw==
-X-Gm-Message-State: AO0yUKUXGlOHS/cVdxmuio4bUJNUUVhe0NRnvm0bya8Bzx3Dtbirgv+x
-        vuWZCVjYEpPq5y1c/8cYGRfILsWqCETvtp8LYroyNA==
-X-Google-Smtp-Source: AK7set+JhqzS0W9CSOklKEQKTPAJWFCt+2/xyhR2xXzm6EQAcRxtGVgrMWA5Xiu7RQGE33YvU8AhvlCh5c8PM8ZXTmo=
-X-Received: by 2002:a67:d81b:0:b0:423:e7f7:bc52 with SMTP id
- e27-20020a67d81b000000b00423e7f7bc52mr7079439vsj.2.1678809654397; Tue, 14 Mar
- 2023 09:00:54 -0700 (PDT)
+        Tue, 14 Mar 2023 12:01:05 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 210996B337;
+        Tue, 14 Mar 2023 09:01:02 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id 14959604F7;
+        Tue, 14 Mar 2023 17:01:00 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678809660; bh=JUO899XbhZktRUpiZFjSvUdGkb1mGeG/QXgEEoOoKZQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=HJM5fAPnbgUKa1x6XjKtsr3EAf9v1VcDxjox2yK6fMzUTDd/iFD5/T8wFT4pwIEVg
+         tj3zBX77xi7RHHj81xGnc0b6YCPod+q6LtfxM+fZJAz3cSq0zl5zS9Kgm/Y/Hdm4Db
+         8Gf9YsRF3L+MKtwLdHi1sZL+KqiKoeXM9P4cAwfqSgEOr7xf/R5l4+K1S8bqZeAN8e
+         1duVpRZibyXnn88viBVkB/u8jAxAJrzCXlSkOAbHANgwpsAv6klAtwV2af8GBZgsOy
+         2tXSBANCNfSGHWVm23Mt6Kv0KUNPw+ULIlo1Ji+0DFiI0oWBfxJLmW1fbmOSIkvqKx
+         oWGR3Jl4ZobVA==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id xmo1QOXER_yU; Tue, 14 Mar 2023 17:00:55 +0100 (CET)
+Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
+        by domac.alu.hr (Postfix) with ESMTPSA id CF002604F0;
+        Tue, 14 Mar 2023 17:00:54 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678809655; bh=JUO899XbhZktRUpiZFjSvUdGkb1mGeG/QXgEEoOoKZQ=;
+        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+        b=YAL5JRN/0c6yEFB6pUbT/oMihbQ87TghRuPrS3IUmB0z/Qxj91TqBppBWqGm8+5tq
+         KAu59Qy/fi4F/L1aF0iP5imt657ZN+Pu945g9uWQUe+72MiDiMYK4RZz65DaEfBqsZ
+         veWG5wLGz+9fHOmjOY2LpUdrch4xiKbW0F9rD8WkXOgIQOOJOVKFO3N+5T+cX4yE41
+         2npRLw8mJl5Zj5hBunT4XFvCnGtQuhwvc379ModVC4+EANoRE2XYdSnSKFaivA3cUa
+         LviEK+JktsLEdjijOHZS6ghyTaI3Nwo0X3w5VqzavDgFvGEvA8zTDortUBgTI+3OOX
+         CEeNj1X1gFhUw==
+Message-ID: <27769d34-521c-f0ef-b6c2-6bd452e4f9bf@alu.unizg.hr>
+Date:   Tue, 14 Mar 2023 17:00:47 +0100
 MIME-Version: 1.0
-References: <20230131181820.179033-1-bgardon@google.com> <CABgObfaP7P7fk66-EGF-zPEk0H14u3YkM42FRXrEvU=hwFSYgg@mail.gmail.com>
- <CABgObfYAStAC5FgJfGUiJ=BBFtN7drD+NGHLFJY5fP3hQzVOBw@mail.gmail.com>
-In-Reply-To: <CABgObfYAStAC5FgJfGUiJ=BBFtN7drD+NGHLFJY5fP3hQzVOBw@mail.gmail.com>
-From:   David Matlack <dmatlack@google.com>
-Date:   Tue, 14 Mar 2023 09:00:28 -0700
-Message-ID: <CALzav=c-wtJiz9M6hpPtcoBMFvFP5_2BNYoY66NzF-J+8_W6NA@mail.gmail.com>
-Subject: Re: [PATCH V5 0/2] selftests: KVM: Add a test for eager page splitting
-To:     Paolo Bonzini <pbonzini@redhat.com>
-Cc:     Ben Gardon <bgardon@google.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, Peter Xu <peterx@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        Vipin Sharma <vipinsh@google.com>,
-        Ricardo Koller <ricarkol@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: BUG: selftest/net/tun: Hang in unregister_netdevice
+From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
+To:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        linux-kernel@vger.kernel.org
+References: <a0734a6b-9491-b43a-6dff-4d3498faee2e@alu.unizg.hr>
+ <d7a64812-73db-feb2-e6d6-e1d8c09a6fed@alu.unizg.hr>
+Content-Language: en-US, hr
+In-Reply-To: <d7a64812-73db-feb2-e6d6-e1d8c09a6fed@alu.unizg.hr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 7:23=E2=80=AFAM Paolo Bonzini <pbonzini@redhat.com>=
- wrote:
->
-> On Tue, Mar 14, 2023 at 2:27=E2=80=AFPM Paolo Bonzini <pbonzini@redhat.co=
-m> wrote:
-> > I have finally queued it, but made a small change to allow running it
-> > with non-hugetlbfs page types.
->
-> Oops, it fails on my AMD workstation:
->
-> $ tools/testing/selftests/kvm/x86_64/dirty_log_page_splitting_test
-> Testing guest mode: PA-bits:ANY, VA-bits:48,  4K pages
-> guest physical test memory: [0x7fc7fe00000, 0x7fcffe00000)
-> =3D=3D=3D=3D Test Assertion Failure =3D=3D=3D=3D
->   x86_64/dirty_log_page_splitting_test.c:195: __a =3D=3D __b
->   pid=3D1378203 tid=3D1378203 errno=3D0 - Success
->      1    0x0000000000402d02: run_test at dirty_log_page_splitting_test.c=
-:195
->      2    0x000000000040367c: for_each_guest_mode at guest_modes.c:100
->      3    0x00000000004024df: main at dirty_log_page_splitting_test.c:245
->      4    0x00007f4227c3feaf: ?? ??:0
->      5    0x00007f4227c3ff5f: ?? ??:0
->      6    0x0000000000402594: _start at ??:?
->   ASSERT_EQ(stats_populated.pages_4k, stats_repopulated.pages_4k) failed.
->     stats_populated.pages_4k is 0x413
->     stats_repopulated.pages_4k is 0x412
->
-> Haven't debugged it yet.
+On 3/14/23 14:52, Mirsad Todorovac wrote:
+> On 3/14/23 12:45, Mirsad Todorovac wrote:
+>> Hi, all!
+>>
+>> After running tools/testing/selftests/net/tun, there seems to be some kind of hang
+>> in test "FAIL  tun.reattach_delete_close" or "FAIL  tun.reattach_close_delete".
+>>
+>> Two tests exit by timeout, but the processes left are unkillable, even with kill -9 PID:
+>>
+>> [root@pc-mtodorov linux_torvalds]# ps -ef | grep tun
+>> root        1140       1  0 12:16 ?        00:00:00 /bin/bash /usr/sbin/ksmtuned
+>> root        1333       1  0 12:16 ?        00:00:01 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+>> root        3930    2309  0 12:20 pts/1    00:00:00 tools/testing/selftests/net/tun
+>> root        3952    2309  0 12:21 pts/1    00:00:00 tools/testing/selftests/net/tun
+>> root        4056    3765  0 12:25 pts/1    00:00:00 grep --color=auto tun
+>> [root@pc-mtodorov linux_torvalds]# kill -9 3930 3952
+>> [root@pc-mtodorov linux_torvalds]# ps -ef | grep tun
+>> root        1140       1  0 12:16 ?        00:00:00 /bin/bash /usr/sbin/ksmtuned
+>> root        1333       1  0 12:16 ?        00:00:01 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+>> root        3930    2309  0 12:20 pts/1    00:00:00 tools/testing/selftests/net/tun
+>> root        3952    2309  0 12:21 pts/1    00:00:00 tools/testing/selftests/net/tun
+>> root        4060    3765  0 12:25 pts/1    00:00:00 grep --color=auto tun
+>> [root@pc-mtodorov linux_torvalds]#
+>>
+>> The kernel seems to be stuck in some loop, and filling the log with the
+>> following messages until reboot, where it is also waiting very long on the
+>> situation to timeout, which apparently never happens.
+>>
+>> Mar 14 11:54:09 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>> Mar 14 11:54:19 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>> Mar 14 11:54:29 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>> Mar 14 11:54:40 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>> Mar 14 11:54:50 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>>
+>> The platform is kernel 6.3.0-rc2 on AlmaLinux 8.7 and a LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB
+>> (lshw output attached).
+>>
+>> The .config is here:
+>>
+>> https://domac.alu.hr/~mtodorov/linux/selftests/net-tun/config-6.3.0-rc2-mg-andy-devres-00006-gfc89d7fb499b
+>>
+>> Basically, it is a vanilla Torvalds tree kernel with MGLRU, KMEMLEAK, and CONFIG_DEBUG_KOBJECT enabled.
+>> And devres patch.
+>>
+>> Please find the strace of the net/tun run attached.
+>>
+>> I am available for additional diagnostics.
+> 
+> Hi, again!
+> 
+> I've been busy while waiting for reply, so I wondered how would a vanilla kernel
+> go through the test, considering that I've been testing a number of patches
+> lately.
+> 
+> I did a fresh git clone from repo and woa.
+> 
+> Surprisingly, the test with CONFIG_DEBUG_KOBJECT turned off passes:
+> 
+> [root@pc-mtodorov linux_torvalds]# tools/testing/selftests/net/tun
+> TAP version 13
+> 1..5
+> # Starting 5 tests from 1 test cases.
+> #  RUN           tun.delete_detach_close ...
+> #            OK  tun.delete_detach_close
+> ok 1 tun.delete_detach_close
+> #  RUN           tun.detach_delete_close ...
+> #            OK  tun.detach_delete_close
+> ok 2 tun.detach_delete_close
+> #  RUN           tun.detach_close_delete ...
+> #            OK  tun.detach_close_delete
+> ok 3 tun.detach_close_delete
+> #  RUN           tun.reattach_delete_close ...
+> #            OK  tun.reattach_delete_close
+> ok 4 tun.reattach_delete_close
+> #  RUN           tun.reattach_close_delete ...
+> #            OK  tun.reattach_close_delete
+> ok 5 tun.reattach_close_delete
+> # PASSED: 5 / 5 tests passed.
+> # Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
+> [root@pc-mtodorov linux_torvalds]#
+> 
+> So, no hanging processes that cannot be killed now.
+> 
+> If you think it is worthy to explore the lockup that occurs when turning
+> CONFIG_DEBUG_KOBJECT=y, I will rebuild once again with these turned on,
+> to clear any doubts.
 
-I wonder if pages are getting swapped, especially if running on a
-workstation. If so, mlock()ing all guest memory VMAs might be
-necessary to be able to assert exact page counts.
+Confirmed.
 
->
-> Paolo
->
+With the sole difference of:
+
+[marvin@pc-mtodorov linux_torvalds]$ grep KOBJECT /boot/config-6.3.0-rc2-vanilla-00006-gfc89d7fb499b
+CONFIG_DEBUG_KOBJECT=y
+CONFIG_DEBUG_KOBJECT_RELEASE=y
+# CONFIG_SAMPLE_KOBJECT is not set
+[marvin@pc-mtodorov linux_torvalds]$
+
+we get again unkillable processes:
+
+[root@pc-mtodorov linux_torvalds]# ps -ef | grep tun
+root        1157       1  0 16:44 ?        00:00:00 /bin/bash /usr/sbin/ksmtuned
+root        1331       1  0 16:44 ?        00:00:01 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+root        3479    2315  0 16:45 pts/1    00:00:00 tools/testing/selftests/net/tun
+root        3512    2315  0 16:45 pts/1    00:00:00 tools/testing/selftests/net/tun
+root        4091    3364  0 16:49 pts/1    00:00:00 grep --color=auto tun
+[root@pc-mtodorov linux_torvalds]# kill -9 3479 3512
+[root@pc-mtodorov linux_torvalds]# ps -ef | grep tun
+root        1157       1  0 16:44 ?        00:00:00 /bin/bash /usr/sbin/ksmtuned
+root        1331       1  0 16:44 ?        00:00:01 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
+root        3479    2315  0 16:45 pts/1    00:00:00 tools/testing/selftests/net/tun
+root        3512    2315  0 16:45 pts/1    00:00:00 tools/testing/selftests/net/tun
+root        4095    3364  0 16:50 pts/1    00:00:00 grep --color=auto tun
+[root@pc-mtodorov linux_torvalds]#
+
+Possibly the kernel /proc/cmdline is also important:
+
+[root@pc-mtodorov linux_torvalds]# cat /proc/cmdline
+BOOT_IMAGE=(hd0,gpt5)/vmlinuz-6.3.0-rc2-vanilla-00006-gfc89d7fb499b root=/dev/mapper/almalinux_desktop--mtodorov-root ro 
+crashkernel=auto resume=/dev/mapper/almalinux_desktop--mtodorov-swap rd.lvm.lv=almalinux_desktop-mtodorov/root 
+rd.lvm.lv=almalinux_desktop-mtodorov/swap loglevel=7 i915.alpha_support=1 debug devres.log=1
+[root@pc-mtodorov linux_torvalds]#
+
+After a while, kernel message start looping:
+
+  kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+
+Message from syslogd@pc-mtodorov at Mar 14 16:57:15 ...
+  kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+
+Message from syslogd@pc-mtodorov at Mar 14 16:57:24 ...
+  kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+
+Message from syslogd@pc-mtodorov at Mar 14 16:57:26 ...
+  kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+
+This hangs processes until very late stage of shutdown.
+
+I can confirm that CONFIG_DEBUG_{KOBJECT,KOBJECT_RELEASE}=y were the only changes
+to .config in between builds.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
+
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
