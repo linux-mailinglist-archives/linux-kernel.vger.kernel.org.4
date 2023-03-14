@@ -2,68 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B94E36BA05C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:03:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C6116BA061
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:05:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbjCNUDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43326 "EHLO
+        id S230464AbjCNUFA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:05:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbjCNUDs (ORCPT
+        with ESMTP id S230453AbjCNUEp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:03:48 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B67DA222E9;
-        Tue, 14 Mar 2023 13:03:12 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id eg48so7606738edb.13;
-        Tue, 14 Mar 2023 13:03:12 -0700 (PDT)
+        Tue, 14 Mar 2023 16:04:45 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7561222CB9;
+        Tue, 14 Mar 2023 13:04:15 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id eh3so10952790edb.11;
+        Tue, 14 Mar 2023 13:04:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678824189;
+        d=gmail.com; s=20210112; t=1678824253;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V84C+zNYhTlp2thKSex9zBHkOQB0B2Kt996/f1MwII0=;
-        b=pd2f42sABaBIjI1MNHhZXr6SfwcrVdAV3DKrfovymQ9je4mY71Nr9bPNeIWhMNPda4
-         Qeeh1t20fBxJqOxLei6KBdiRA0aGPv3pqBMW1kz0qlZ+1ceSdY5h3x7awC7KMsqYtt6Y
-         tH64mw5kqiO0OMloPkZ23HBMN7O/lmvSPy8EihuVcwCn2sgQkz+IqJW6s09He6njMcqH
-         5c2m7uFn9tICf4U3KZLmdL25Y59FLjOKIR5CJgnirSInsOVfc/rLmOJWQn66ysC+NES5
-         B/T7Tvbpiu7GXbDkv78MA97Ae1kQuj6riDeHwLQRk4EcFNl80RKXDYx1i11XyJccSOxU
-         2TBQ==
+        bh=FPsjGLHEk2fgihOY0CRt86zGCJvphTuiaNQiTQsSdI8=;
+        b=niwvqGj4rz9lE9IYdY/3oo8dPQUpl+arw5E1AnCutPKcaNCEP3cksSZrxw89aTHZh9
+         MImVlNjxF6RRXBEUPA23BzAj0QZJj0KoRfM0h2M6T5T6u5qO78weld3wkfTN2Ca+A3If
+         hPu7PGGeAHrftZ9QCXZTWmMzxwvReK69bRahRthU0LX/c5De42X0MdxrWSmk5Gmr93KB
+         9vNzhvNx3QjNVOqSw68H8GVSmFXaeKVB1Y8Y/0nEGjY5M9LQ3BDLZuJd1QmDSdO7xFwr
+         P0fNTtQIWFuFa+MoR4b1zDkfFalD2vqIvdhql41+DhjVShW8ZUZz8WxbXI+F9kNjI34i
+         JeNA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824189;
+        d=1e100.net; s=20210112; t=1678824253;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=V84C+zNYhTlp2thKSex9zBHkOQB0B2Kt996/f1MwII0=;
-        b=d6OBr9lEf5Qcw2d8QtCImEWFXdch4lLNlZDekH0Iu3tYSJXNlCFt0ZuBLhmidzRIxz
-         +KJj5i3+fDVnKsvmUnymgDMao30o0I6ONFw/5PfJk0BOmWLJvLVLkL37GPkuuJmGzJo4
-         YhkImbe7I5VreVgPi6Jf56RRAcq28rK75c3QYLJZRvouVo17oAg+36bEBT5VUj9o7mZ7
-         RYVsBOhEst3X9W8N/wF+MLqs5sKGnz+ct26tDnLn2xfSc11HeKrTpL+nFZBOJbF8nbZb
-         RJMRZXQ51STLrJ9v/KMnv1IkVQrHPTOQpOhUalVfMywDMqgykW2fof2QKXg1Y9QtquHx
-         2Cfg==
-X-Gm-Message-State: AO0yUKX6YTohhlb73KFaEXbnv+WyDuXDmLvonvze7AFy3t72znS8qAbG
-        48w9uYfgjNzqaBSPZqkOKKM=
-X-Google-Smtp-Source: AK7set/tGK3i4/wh7V/kGHlS+gxB46+6uCjikXR7Cf/3tLigyXQLtTyfHOLyi19AB/HefjV28ihqYA==
-X-Received: by 2002:a17:906:edcc:b0:928:a2:904e with SMTP id sb12-20020a170906edcc00b0092800a2904emr3708551ejb.54.1678824188955;
-        Tue, 14 Mar 2023 13:03:08 -0700 (PDT)
+        bh=FPsjGLHEk2fgihOY0CRt86zGCJvphTuiaNQiTQsSdI8=;
+        b=20JJW9dhWcNtXc8+6lSkrO1DE61+Ua8w2bnPfSrw5eWjWCI+k1JfabLRlWsNMq6VHF
+         +CUub4LYSS66xVA77YqL9RrmxPupTSJ6bxAPkV/RyoLtLdRcNJDObERJAb799wPScsLh
+         /vZGafPVB+cfjvdSCHJUAN3+KegCOGYwEY2/eO0TDlOHck/7N63r7YAOdMdsOO3zyw5t
+         asFFNC+hRqkLC5le6KXEqsH+490KoTrH7jsrFZVBxeu3D7kTXijH7lQy20hqaNOfGx6/
+         aDGv5/goAyhpIPjIGjidrQZfdgRVFH4U/lshu0l/V1s1UEpufwIXMOAdlvgnouurj3Lh
+         FjiA==
+X-Gm-Message-State: AO0yUKUCO6Al4andfcDQFUZycaCsBvUQK8K0GgjAE8c2bjl4kNXMLdt5
+        x94k35gufwTpjSvKDUfclGU=
+X-Google-Smtp-Source: AK7set+oYbAeJ/U09NE2UZA16bmg8V2CkrqR5DzKLghgbnkXuMEp72tKp2I0vc56SOYdAmC9FNqhOw==
+X-Received: by 2002:a17:906:9f0a:b0:92b:d4f6:7f4c with SMTP id fy10-20020a1709069f0a00b0092bd4f67f4cmr4526093ejc.2.1678824253254;
+        Tue, 14 Mar 2023 13:04:13 -0700 (PDT)
 Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id jw22-20020a17090776b600b00926a3155fd0sm1548733ejc.98.2023.03.14.13.03.07
+        by smtp.gmail.com with ESMTPSA id r9-20020a1709061ba900b0092b65c54379sm1527520ejg.104.2023.03.14.13.04.11
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 13:03:08 -0700 (PDT)
+        Tue, 14 Mar 2023 13:04:12 -0700 (PDT)
 From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
+To:     Liu Ying <victor.liu@nxp.com>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Robert Foss <rfoss@kernel.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, Chen-Yu Tsai <wens@csie.org>,
         Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] phy: Use of_property_present() for testing DT property presence
-Date:   Tue, 14 Mar 2023 21:03:07 +0100
-Message-ID: <8191654.T7Z3S40VBb@jernej-laptop>
-In-Reply-To: <20230310144720.1544600-1-robh@kernel.org>
-References: <20230310144720.1544600-1-robh@kernel.org>
+        Emma Anholt <emma@anholt.net>, Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org,
+        linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] drm: Use of_property_present() for testing DT property presence
+Date:   Tue, 14 Mar 2023 21:04:10 +0100
+Message-ID: <2217075.iZASKD2KPV@jernej-laptop>
+In-Reply-To: <20230310144705.1542207-1-robh@kernel.org>
+References: <20230310144705.1542207-1-robh@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="us-ascii"
@@ -77,7 +95,7 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 10. marec 2023 ob 15:47:20 CET je Rob Herring napisal(a):
+Dne petek, 10. marec 2023 ob 15:47:05 CET je Rob Herring napisal(a):
 > It is preferred to use typed property access functions (i.e.
 > of_property_read_<type> functions) rather than low-level
 > of_get_property/of_find_property functions for reading properties. As
@@ -87,47 +105,109 @@ Dne petek, 10. marec 2023 ob 15:47:20 CET je Rob Herring napisal(a):
 > 
 > Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->  drivers/phy/allwinner/phy-sun4i-usb.c  | 2 +-
+>  drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c | 2 +-
+>  drivers/gpu/drm/drm_mipi_dsi.c                  | 2 +-
+>  drivers/gpu/drm/msm/adreno/adreno_gpu.c         | 2 +-
+>  drivers/gpu/drm/sun4i/sun4i_backend.c           | 2 +-
+>  drivers/gpu/drm/sun4i/sun8i_mixer.c             | 2 +-
 
-for sun4i:
+For sun4i:
 Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
 Best regards,
 Jernej
 
->  drivers/phy/broadcom/phy-bcm-ns-usb2.c | 2 +-
->  2 files changed, 2 insertions(+), 2 deletions(-)
+>  drivers/gpu/drm/vc4/vc4_hdmi.c                  | 2 +-
+>  6 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/drivers/phy/allwinner/phy-sun4i-usb.c
-> b/drivers/phy/allwinner/phy-sun4i-usb.c index fbcd7014ab43..fc9f6fb447a0
-> 100644
-> --- a/drivers/phy/allwinner/phy-sun4i-usb.c
-> +++ b/drivers/phy/allwinner/phy-sun4i-usb.c
-> @@ -758,7 +758,7 @@ static int sun4i_usb_phy_probe(struct platform_device
-> *pdev) return PTR_ERR(data->vbus_det_gpio);
+> diff --git a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
+> b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c index
+> 9e5f2b4dc2e5..fab139b324af 100644
+> --- a/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
+> +++ b/drivers/gpu/drm/bridge/imx/imx8qxp-pixel-link.c
+> @@ -313,7 +313,7 @@ imx8qxp_pixel_link_find_next_bridge(struct
+> imx8qxp_pixel_link *pl) }
+> 
+>  		/* specially select the next bridge with companion 
+PXL2DPI */
+> -		if (of_find_property(remote, "fsl,companion-pxl2dpi", 
+NULL))
+> +		if (of_property_present(remote, "fsl,companion-
+pxl2dpi"))
+>  			bridge_sel = ep_cnt;
+> 
+>  		ep_cnt++;
+> diff --git a/drivers/gpu/drm/drm_mipi_dsi.c b/drivers/gpu/drm/drm_mipi_dsi.c
+> index b41aaf2bb9f1..7900a4707d7c 100644
+> --- a/drivers/gpu/drm/drm_mipi_dsi.c
+> +++ b/drivers/gpu/drm/drm_mipi_dsi.c
+> @@ -329,7 +329,7 @@ int mipi_dsi_host_register(struct mipi_dsi_host *host)
+> 
+>  	for_each_available_child_of_node(host->dev->of_node, node) {
+>  		/* skip nodes without reg property */
+> -		if (!of_find_property(node, "reg", NULL))
+> +		if (!of_property_present(node, "reg"))
+>  			continue;
+>  		of_mipi_dsi_device_add(host, node);
 >  	}
-> 
-> -	if (of_find_property(np, "usb0_vbus_power-supply", NULL)) {
-> +	if (of_property_present(np, "usb0_vbus_power-supply")) {
->  		data->vbus_power_supply = 
-devm_power_supply_get_by_phandle(dev,
->  						     
-"usb0_vbus_power-supply");
->  		if (IS_ERR(data->vbus_power_supply)) {
-> diff --git a/drivers/phy/broadcom/phy-bcm-ns-usb2.c
-> b/drivers/phy/broadcom/phy-bcm-ns-usb2.c index 6a36e187d100..269564bdf687
+> diff --git a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> b/drivers/gpu/drm/msm/adreno/adreno_gpu.c index ce6b76c45b6f..2359dca80492
 > 100644
-> --- a/drivers/phy/broadcom/phy-bcm-ns-usb2.c
-> +++ b/drivers/phy/broadcom/phy-bcm-ns-usb2.c
-> @@ -107,7 +107,7 @@ static int bcm_ns_usb2_probe(struct platform_device
-> *pdev) return -ENOMEM;
->  	usb2->dev = dev;
+> --- a/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/adreno_gpu.c
+> @@ -964,7 +964,7 @@ static void adreno_get_pwrlevels(struct device *dev,
+>  	gpu->fast_rate = 0;
 > 
-> -	if (of_find_property(dev->of_node, "brcm,syscon-clkset", NULL)) {
-> +	if (of_property_present(dev->of_node, "brcm,syscon-clkset")) {
->  		usb2->base = devm_platform_ioremap_resource(pdev, 0);
->  		if (IS_ERR(usb2->base)) {
->  			dev_err(dev, "Failed to map control reg\n");
+>  	/* You down with OPP? */
+> -	if (!of_find_property(dev->of_node, "operating-points-v2", NULL))
+> +	if (!of_property_present(dev->of_node, "operating-points-v2"))
+>  		ret = adreno_get_legacy_pwrlevels(dev);
+>  	else {
+>  		ret = devm_pm_opp_of_add_table(dev);
+> diff --git a/drivers/gpu/drm/sun4i/sun4i_backend.c
+> b/drivers/gpu/drm/sun4i/sun4i_backend.c index 38070fc261f3..b11dbd50d73e
+> 100644
+> --- a/drivers/gpu/drm/sun4i/sun4i_backend.c
+> +++ b/drivers/gpu/drm/sun4i/sun4i_backend.c
+> @@ -792,7 +792,7 @@ static int sun4i_backend_bind(struct device *dev, struct
+> device *master, dev_set_drvdata(dev, backend);
+>  	spin_lock_init(&backend->frontend_lock);
+> 
+> -	if (of_find_property(dev->of_node, "interconnects", NULL)) {
+> +	if (of_property_present(dev->of_node, "interconnects")) {
+>  		/*
+>  		 * This assume we have the same DMA constraints for all 
+our the
+>  		 * devices in our pipeline (all the backends, but also 
+the
+> diff --git a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> b/drivers/gpu/drm/sun4i/sun8i_mixer.c index bafee05f6b24..11d5244a5aa5
+> 100644
+> --- a/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> +++ b/drivers/gpu/drm/sun4i/sun8i_mixer.c
+> @@ -391,7 +391,7 @@ static int sun8i_mixer_bind(struct device *dev, struct
+> device *master, mixer->engine.ops = &sun8i_engine_ops;
+>  	mixer->engine.node = dev->of_node;
+> 
+> -	if (of_find_property(dev->of_node, "iommus", NULL)) {
+> +	if (of_property_present(dev->of_node, "iommus")) {
+>  		/*
+>  		 * This assume we have the same DMA constraints for
+>  		 * all our the mixers in our pipeline. This sounds
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> index ea22c9bf223a..bec1e0cdddb3 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -3018,7 +3018,7 @@ static int vc4_hdmi_cec_init(struct vc4_hdmi
+> *vc4_hdmi) struct device *dev = &pdev->dev;
+>  	int ret;
+> 
+> -	if (!of_find_property(dev->of_node, "interrupts", NULL)) {
+> +	if (!of_property_present(dev->of_node, "interrupts")) {
+>  		dev_warn(dev, "'interrupts' DT property is missing, no 
+CEC\n");
+>  		return 0;
+>  	}
 
 
 
