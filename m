@@ -2,44 +2,41 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A04A06B95EF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADA096B95EC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:19:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232419AbjCNNTi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:19:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52668 "EHLO
+        id S231874AbjCNNTa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:19:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjCNNTG (ORCPT
+        with ESMTP id S232391AbjCNNSr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:19:06 -0400
+        Tue, 14 Mar 2023 09:18:47 -0400
 Received: from mail.zeus03.de (www.zeus03.de [194.117.254.33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42C95279B3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:15:54 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 755B1618B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:15:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=simple; d=sang-engineering.com; h=
         from:to:cc:subject:date:message-id:in-reply-to:references
-        :mime-version:content-transfer-encoding; s=k1; bh=VjTn3E20TaRsaW
-        HsM1MQTWl0oPBdqH1Fh0HrLM/sBLQ=; b=EQCfCw6pYRkDgljCsJYRNtEbYyyLTu
-        go8Oyi1uENTxLGwzL8K5CG5Jl+he9MDhaqZsFZB78NH8WB6/Kn3YzIFuVdktfoqG
-        3WVDlFSuzWysobydUzl2tABDGnX05VuRwysFwLgGQKCk8YHpomsGfkx807wSDVK9
-        1QH62rX1QU9FM=
-Received: (qmail 3111673 invoked from network); 14 Mar 2023 14:14:57 +0100
-Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Mar 2023 14:14:57 +0100
-X-UD-Smtp-Session: l3s3148p1@5b2gA9z2ps0ujnvb
+        :mime-version:content-transfer-encoding; s=k1; bh=SsTC9UU9wdPdSI
+        0PbPhntycZBlShn3e/V5pFPLMU5/8=; b=ZvcXfLKABiDC9npZb4SVa4ELduNGUH
+        JYWlTOq5gC2b1Av3MwV0fQnLvYANm1jrF0pT40lXXp0CxRsKZsy3vYQ9Tq9h8aJr
+        28EY9RgVIc3Y//DR8263wPxS2Mdmzx+kTMLxVu0VBVJZZG9mv8UlX+qnZXcuzzXG
+        m9CExX8bF7Wg4=
+Received: (qmail 3111703 invoked from network); 14 Mar 2023 14:14:58 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 14 Mar 2023 14:14:58 +0100
+X-UD-Smtp-Session: l3s3148p1@fFKrA9z2ts0ujnvb
 From:   Wolfram Sang <wsa+renesas@sang-engineering.com>
 To:     netdev@vger.kernel.org
 Cc:     linux-renesas-soc@vger.kernel.org, kernel@pengutronix.de,
         Wolfram Sang <wsa+renesas@sang-engineering.com>,
-        Wei Fang <wei.fang@nxp.com>,
-        Shenwei Wang <shenwei.wang@nxp.com>,
-        Clark Wang <xiaoning.wang@nxp.com>,
-        NXP Linux Team <linux-imx@nxp.com>,
+        Steve Glendinning <steve.glendinning@shawell.net>,
         "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
         Jakub Kicinski <kuba@kernel.org>,
         Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next 3/4] fec: add FIXME to move 'mac_managed_pm' to probe
-Date:   Tue, 14 Mar 2023 14:14:41 +0100
-Message-Id: <20230314131443.46342-4-wsa+renesas@sang-engineering.com>
+Subject: [PATCH net-next 4/4] smsc911x: add FIXME to move 'mac_managed_pm' to probe
+Date:   Tue, 14 Mar 2023 14:14:42 +0100
+Message-Id: <20230314131443.46342-5-wsa+renesas@sang-engineering.com>
 X-Mailer: git-send-email 2.30.2
 In-Reply-To: <20230314131443.46342-1-wsa+renesas@sang-engineering.com>
 References: <20230314131443.46342-1-wsa+renesas@sang-engineering.com>
@@ -48,7 +45,7 @@ Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=unavailable autolearn_force=no version=3.4.6
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -57,26 +54,26 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Renesas hardware, we had issues because the above flag was set during
 'open'. It was concluded that it needs to be set during 'probe'. It
-looks like FEC needs the same fix but I can't test it because I don't
-have the hardware. At least, leave a note about the issue.
+looks like SMS911x needs the same fix but I can't test it because I
+don't have the hardware. At least, leave a note about the issue.
 
 Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
 ---
- drivers/net/ethernet/freescale/fec_main.c | 1 +
+ drivers/net/ethernet/smsc/smsc911x.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/net/ethernet/freescale/fec_main.c b/drivers/net/ethernet/freescale/fec_main.c
-index c73e25f8995e..b16f56208d66 100644
---- a/drivers/net/ethernet/freescale/fec_main.c
-+++ b/drivers/net/ethernet/freescale/fec_main.c
-@@ -2318,6 +2318,7 @@ static int fec_enet_mii_probe(struct net_device *ndev)
- 	fep->link = 0;
- 	fep->full_duplex = 0;
+diff --git a/drivers/net/ethernet/smsc/smsc911x.c b/drivers/net/ethernet/smsc/smsc911x.c
+index a2e511912e6a..745e0180eb34 100644
+--- a/drivers/net/ethernet/smsc/smsc911x.c
++++ b/drivers/net/ethernet/smsc/smsc911x.c
+@@ -1038,6 +1038,7 @@ static int smsc911x_mii_probe(struct net_device *dev)
+ 	}
  
+ 	/* Indicate that the MAC is responsible for managing PHY PM */
 +	/* FIXME: should be set right after mdiobus is registered */
- 	phy_dev->mac_managed_pm = true;
+ 	phydev->mac_managed_pm = true;
+ 	phy_attached_info(phydev);
  
- 	phy_attached_info(phy_dev);
 -- 
 2.30.2
 
