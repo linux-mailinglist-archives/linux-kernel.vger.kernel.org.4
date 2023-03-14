@@ -2,108 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D606B9BE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:41:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 720906B9BE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:43:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbjCNQlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42812 "EHLO
+        id S230256AbjCNQnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:43:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbjCNQll (ORCPT
+        with ESMTP id S229969AbjCNQm7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:41:41 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DB62B048B
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:41:37 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id cy23so64408817edb.12
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:41:37 -0700 (PDT)
+        Tue, 14 Mar 2023 12:42:59 -0400
+Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50F61DBB2;
+        Tue, 14 Mar 2023 09:42:52 -0700 (PDT)
+Received: by mail-il1-x133.google.com with SMTP id j6so4476624ilr.7;
+        Tue, 14 Mar 2023 09:42:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678812095;
+        d=gmail.com; s=20210112; t=1678812172;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=6SsCCJzWTBiCPh1OsbG9kK3RWsvKGZ056pX9CV7XhZA=;
-        b=jz3L9GpfUAqN42bQ+FcTiVeAwtE2XA7ccj8YMmams3WB19+ew1CZMsRhmve1uimWXX
-         lOOUFFaxymTSywBgI5YbRFn2O+5WcvF7BkM1WDqHRDZFXq/8mq1j9Lekv+ub91NwBJQ1
-         gsIDSwQzmybTLv60ZYBd9hpbqgpLAVN8zgXMZbiQXNs3lYiXeSaEdzPKgLptaEnktOsJ
-         PQmHI5n8/539//UwrNwx9w0aOwAu2QbW3znCnmDxDl38jZaPZ7kpYLT3xKqz7sNMGwMS
-         oYt56TtGG+Vl8fSOTd4SQebrhoudRvPBOwU7GpQSmWFMzC+qVYsRdI7+n08hLPumCPbP
-         i4aw==
+         :sender:from:to:cc:subject:date:message-id:reply-to;
+        bh=MxZSOfCWNDNJ14hSL1j3SL4LQ1yTeUuMdTOGWrYjnBw=;
+        b=oGkcRGoYBzfKZcwb0CVNjcvFi+97rNw0dYByC6MEe92ueoVHNJVbWoq65crX9LN+jE
+         XNVVvhDGpedmefPOAsK85HqaY5an92atQz1ehjYxBCHIBbJY5yMDCx8t/3tRzGNZZ1+o
+         g6hnBmuQQDJC5dmO2dfIVStPcuf31jmALPZaRcajXkL+zM9ILAvR5uqLKCFK521PaUzd
+         qzPMHDw2/NGXz+SbP0VgN1D7IClXoHJ4MUMBpdi/4CbQ/cfPFAS4mBnPsZ+SQU0oKkKf
+         YTgDhYvy/bheEtZFIsGLSP3OF/8PQCkNJwmcnPC9gpTUSeFQYvd2dVHnFgspnUx/QiDW
+         igIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678812095;
+        d=1e100.net; s=20210112; t=1678812172;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6SsCCJzWTBiCPh1OsbG9kK3RWsvKGZ056pX9CV7XhZA=;
-        b=Ek6I7g5IJIIJvvb/5vB9Gql/GoVzAVMJojRLA1n1JwxEQYEdekLe9gt//XNlBC26aK
-         f6XCZhiOZ+vGtTo/osWv437TrwbTXUtEoSph9Hw7irDxvvf8LsH9FVjIgCobPz2TnPAH
-         DF6p2VzmJTklCfIxxcFKXvHlPHvWvUjEcaf4ICEXMW9uRQGvukKVqe9SUeo9kdvlyGPR
-         JQwwx7H5tBhyt2ifvLMpmW9r02RSimruNFLd0FHXycygjSgIwUlDYhpcL2SxwOJ5cMAL
-         pvOwwodmvR/rnL+6VRXqIt/laHEjmG09aPJRsDymGbNCYb5m++Nd/2YQyn6ZbBQsneUM
-         kq4A==
-X-Gm-Message-State: AO0yUKUBEnqqzQVOG198euhZpnd3YK4tdA323IUY5KvbP++fsYITLHO6
-        3GzyciDMnPrlHw31EpKlaCwsuw==
-X-Google-Smtp-Source: AK7set//SoqnRRnKaLi/E2VlDshAWGHEvIdc5wTaQLtFuAdBQoKbbNHYMSgUJptpD3CmMR27puqFBg==
-X-Received: by 2002:a17:907:a0e:b0:895:58be:957 with SMTP id bb14-20020a1709070a0e00b0089558be0957mr4077263ejc.2.1678812095568;
-        Tue, 14 Mar 2023 09:41:35 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id h1-20020a50c381000000b004c0c5864cc5sm1297077edf.25.2023.03.14.09.41.34
+         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MxZSOfCWNDNJ14hSL1j3SL4LQ1yTeUuMdTOGWrYjnBw=;
+        b=6VVaU/NU9FLIRkD1ixwjhLLtiSqnI6eU6mWhDjWxiZAG17EF8Rje2jz22m/t+IRaHv
+         1WSq4qDDKwVRE2kxhBBehEzvIhMLRXyGceAS0fprTFLz2EwGPTWzDNyCYrUWpGqE8bjM
+         iC5CJMwPrvGxtY5tpfaB39h3VDqEdJ1wbJ63IDx9Mt2U4tokwDHXQE/bTO5OFmAMjjST
+         czzxWpV28O8scR6yRbOSiImqOO2DS4lUcbWb/oF7X1goGje98qRObHuKBpukYfjXn71r
+         GMT9u4cY3YkcpwxYbnLHwMddXEVym5bWnIUybWZm25V9ErdaA5xPFtsuNX9wMTYkUwSF
+         xdKg==
+X-Gm-Message-State: AO0yUKXU20K1GXwhRgXQk3oN3lJkvFaWJHOPOOiGcLfVm/Rgcs6N9+AX
+        LikRmG8g0YlLGO7lSPZ18qo=
+X-Google-Smtp-Source: AK7set/ZJ3U6nq5gMwwoKA9g01Yk0CxUBFBCBI6kWXWJBdaRmS9FzI0z0x1YW8Rx1jW6FiXKLYePow==
+X-Received: by 2002:a05:6e02:1d87:b0:323:66a:be22 with SMTP id h7-20020a056e021d8700b00323066abe22mr3095106ila.21.1678812172229;
+        Tue, 14 Mar 2023 09:42:52 -0700 (PDT)
+Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id p17-20020a056e02105100b0032301b2aa36sm923243ilj.26.2023.03.14.09.42.50
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 09:41:35 -0700 (PDT)
-Message-ID: <ed2d01ee-4e64-396b-569e-e698ea6fd5da@linaro.org>
-Date:   Tue, 14 Mar 2023 17:41:34 +0100
+        Tue, 14 Mar 2023 09:42:51 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Message-ID: <ec4259d3-a7bf-d296-7805-aac3f7480b93@roeck-us.net>
+Date:   Tue, 14 Mar 2023 09:42:49 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] arm64: dts: marvell: armada-ap810: Fix GICv3 ITS node
- name
+ Thunderbird/102.7.1
+Subject: Re: [PATCH v2] watchdog: ebc-c384_wdt: Migrate to the regmap API
 Content-Language: en-US
-To:     Andrew Lunn <andrew@lunn.ch>, Rob Herring <robh@kernel.org>
-Cc:     Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230207234735.201812-1-robh@kernel.org>
- <CAL_JsqLitc8rX4aXomgXKSPcW8ejEYe1wB_ecyAg7pgJgR=zyA@mail.gmail.com>
- <c02f83c4-3796-40ad-8087-d297ba84e5da@lunn.ch>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <c02f83c4-3796-40ad-8087-d297ba84e5da@lunn.ch>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+To:     William Breathitt Gray <william.gray@linaro.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Paul Demetrotion <pdemetrotion@winsystems.com>,
+        techsupport@winsystems.com
+References: <20230314152916.185939-1-william.gray@linaro.org>
+ <ZBCX0iVwYD4uVxwM@smile.fi.intel.com> <ZBChWA6aGLPZ/2vG@fedora>
+From:   Guenter Roeck <linux@roeck-us.net>
+In-Reply-To: <ZBChWA6aGLPZ/2vG@fedora>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 14/03/2023 17:21, Andrew Lunn wrote:
-> On Tue, Mar 14, 2023 at 10:22:40AM -0500, Rob Herring wrote:
->> On Tue, Feb 7, 2023 at 5:47 PM Rob Herring <robh@kernel.org> wrote:
->>>
->>> The GICv3 ITS is an MSI controller, therefore its node name should be
->>> 'msi-controller'.
->>>
->>> Signed-off-by: Rob Herring <robh@kernel.org>
->>> ---
->>>  arch/arm64/boot/dts/marvell/armada-ap810-ap0.dtsi | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
+On 3/14/23 09:31, William Breathitt Gray wrote:
+> On Tue, Mar 14, 2023 at 05:50:42PM +0200, Andy Shevchenko wrote:
+>> On Tue, Mar 14, 2023 at 11:29:16AM -0400, William Breathitt Gray wrote:
+>>> The regmap API supports IO port accessors so we can take advantage of
+>>> regmap abstractions rather than handling access to the device registers
+>>> directly in the driver.
 >>
->> Ping!
+>> ...
 >>
->> If not maintained, should I send a patch removing this platform instead?
+>>>   - Utilize watchdog_set_drvdata() and watchdog_get_drvdata()
+>>
+>> I'm wondering why you can't use dev_get_regmap() instead.
 > 
-> Gregory usually picks these up around -rc6.
+> We can set `wdd->parent = dev` in ebc_c384_wdt_probe(), and then use
+> `dev_get_regmap(wdev->parent)` to retrieve the regmap. The only downside
+> I see if perhaps the added latency a call to devres_find(), whereas
+> using watchdog_get_drvdata() is just a pointer dereference.
+> 
+> I'm indifferent to either choice, so if Guenter or Wim have a preference
+> here I'll follow their decision.
+> 
 
-Hm, so they stay in next for just one or two weeks before sending to
-arm-soc? Why? They should be in the next as fast as possible, why waiting?
+I am not inclined to accept a patch which calls dev_get_regmap() more
+than once. It is not just added latency, it is unnecessarily executing
+a lot of code. Maybe that call is abused nowadays, and/or maybe people do not
+care about wasting CPU cycles anymore, but that is not its intended use case.
 
-Second question, shall I drop it?
+>>
+>>>   - Map watchdog control registers based on offset 0x1 and adjust regmap
+>>>     configurations accordingly; offset 0x0 is unused in this driver so we
+>>>     should avoid unnecessary exposure of it
+>>
+>> I'm wondering what bad could happen if you expose it.
+> 
+> The WINSYSTEMS EBC-C384 documentation I have does not specify what
+> offset 0x0 does (nor offsets 0x3-0x4), so I don't know if there are side
+> effects to reading those addresses. Really, I'm just avoiding the hassle
+> of writing an explicit precious registers table for those offsets by not
+> exposing them at all.
+> 
 
-Best regards,
-Krzysztof
+Counter questions:
+- What would be the purpose of exposing register addresses if they are not needed ?
+- What bad can happen by _not_ exposing those register addresses ?
+
+Guenter
 
