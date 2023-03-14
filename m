@@ -2,141 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A816B8AA6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:39:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA4766B8AAE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:42:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbjCNFjS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:39:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55218 "EHLO
+        id S229987AbjCNFm1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:42:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbjCNFjE (ORCPT
+        with ESMTP id S229627AbjCNFmZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:39:04 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5194A88D81
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:38:41 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id nn12so14281787pjb.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:38:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678772321;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HbWxcznp0VOg1xe9D7780m5fL2MnhbImn1BuxXG45M8=;
-        b=f/YuqB9VIVepKA5532aWKRLA3ZbUAfvr/OSkm/1RU/RhHYbq/uRfIben/ZZd4SMu8g
-         dFcAnVt6j0yuSjD+Z1t97ZJdmvuarnaCAbTdtRVs9yc8ls6RCArnqUeEhwtUu3LddfyL
-         3Wr/l3R/dXpJNNxsQDkJ/Jc+Pxrv3YWmlayyGYv+5XiFZV+iq7lzR12QVGJxS2dhbUvn
-         cAfOEkXUyq2sn43d/T8ToV/YsfEmIV7JGvCBXFAykCf5CqiL8OnjXyXU6HtOqd8VkHpW
-         jZBn8yxmaVtF4rKQZjU0mxwoubSnJmJwKwXCocr9adTVQeajNCrp+iIgVwaqPSCPRKtv
-         V/Zg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678772321;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=HbWxcznp0VOg1xe9D7780m5fL2MnhbImn1BuxXG45M8=;
-        b=Cs0w0shBE61JkAWux7LpQ8Tqfexivhf8HQHxqE/x3otdZdEnDzGzH3IuElsHCTVM/t
-         BAkVzK2ffLXSndSua0Ct3MSPgMfViH+x5cj+XM3ngeacvD0VXsNpqAbRy8w6tpxogA2Y
-         GnArlktP0ozykUR81uzIpbVvA7fKnOZYCXLu8xYPfWezpTr6t/Vz6SJDYs1KVGAsnl4B
-         p8NlOkQdb6ZNrMRXJ7T5LqHF5WyWKEszZ6RoGHWi+Wwi4LaXSt3i6IZB/VCNxkscpkCG
-         I61j4Ynw9V4GfZbZiEXyynV4VM2LZvQUj1zCKQCyqgTwUxDlZLVosFu3W3JRt4GIkV6J
-         w9IQ==
-X-Gm-Message-State: AO0yUKWbxmQx5zFUr/pD1ltGSB/ZsuA9fnD1Z6ewgBGaobjisNfnLbOK
-        GPaPz/KIhUKg65twS9DwD5dA
-X-Google-Smtp-Source: AK7set+C7MGAK3C8V8kD1Nc2L5YtcDv1Nxgu4THXg0yaqQya7pcQDbJi2OcqBjF9RDyOjLVqf6cGvg==
-X-Received: by 2002:a05:6a20:734e:b0:cc:50cd:e0d7 with SMTP id v14-20020a056a20734e00b000cc50cde0d7mr37105440pzc.52.1678772320993;
-        Mon, 13 Mar 2023 22:38:40 -0700 (PDT)
-Received: from localhost.localdomain ([117.217.177.49])
-        by smtp.gmail.com with ESMTPSA id n126-20020a634084000000b005034a46fbf7sm675093pga.28.2023.03.13.22.38.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 22:38:40 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v7 13/13] soc: qcom: llcc: Do not create EDAC platform device on SDM845
-Date:   Tue, 14 Mar 2023 11:07:25 +0530
-Message-Id: <20230314053725.13623-14-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314053725.13623-1-manivannan.sadhasivam@linaro.org>
-References: <20230314053725.13623-1-manivannan.sadhasivam@linaro.org>
+        Tue, 14 Mar 2023 01:42:25 -0400
+Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A9CC134;
+        Mon, 13 Mar 2023 22:42:23 -0700 (PDT)
+Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VdqljXD_1678772540)
+          by smtp.aliyun-inc.com;
+          Tue, 14 Mar 2023 13:42:21 +0800
+From:   Yang Li <yang.lee@linux.alibaba.com>
+To:     deller@gmx.de
+Cc:     linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, Yang Li <yang.lee@linux.alibaba.com>
+Subject: [PATCH -next 1/3] video: fbdev: pxa3xx-gcu: Use devm_platform_get_and_ioremap_resource()
+Date:   Tue, 14 Mar 2023 13:42:17 +0800
+Message-Id: <20230314054219.80441-1-yang.lee@linux.alibaba.com>
+X-Mailer: git-send-email 2.20.1.7.g153144c
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platforms based on SDM845 SoC locks the access to EDAC registers in the
-bootloader. So probing the EDAC driver will result in a crash. Hence,
-disable the creation of EDAC platform device on all SDM845 devices.
+According to commit 890cc39a8799 ("drivers: provide
+devm_platform_get_and_ioremap_resource()"), convert
+platform_get_resource(), devm_ioremap_resource() to a single
+call to devm_platform_get_and_ioremap_resource(), as this is exactly
+what this function does.
 
-The issue has been observed on Lenovo Yoga C630 and DB845c.
-
-While at it, also sort the members of `struct qcom_llcc_config` to avoid
-any holes in-between.
-
-Cc: <stable@vger.kernel.org> # 5.10
-Reported-by: Steev Klimaszewski <steev@kali.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
 ---
- drivers/soc/qcom/llcc-qcom.c | 15 ++++++++++++---
- 1 file changed, 12 insertions(+), 3 deletions(-)
+ drivers/video/fbdev/pxa3xx-gcu.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 72f3f2a9aaa0..a5140f19f200 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -120,10 +120,11 @@ struct llcc_slice_config {
+diff --git a/drivers/video/fbdev/pxa3xx-gcu.c b/drivers/video/fbdev/pxa3xx-gcu.c
+index c3cd1e1cc01b..d16729215423 100644
+--- a/drivers/video/fbdev/pxa3xx-gcu.c
++++ b/drivers/video/fbdev/pxa3xx-gcu.c
+@@ -599,8 +599,7 @@ static int pxa3xx_gcu_probe(struct platform_device *pdev)
+ 	priv->misc_dev.fops	= &pxa3xx_gcu_miscdev_fops;
  
- struct qcom_llcc_config {
- 	const struct llcc_slice_config *sct_data;
--	int size;
--	bool need_llcc_cfg;
- 	const u32 *reg_offset;
- 	const struct llcc_edac_reg_offset *edac_reg_offset;
-+	int size;
-+	bool need_llcc_cfg;
-+	bool no_edac;
- };
+ 	/* handle IO resources */
+-	r = platform_get_resource(pdev, IORESOURCE_MEM, 0);
+-	priv->mmio_base = devm_ioremap_resource(dev, r);
++	priv->mmio_base = devm_platform_get_and_ioremap_resource(pdev, 0, &r);
+ 	if (IS_ERR(priv->mmio_base))
+ 		return PTR_ERR(priv->mmio_base);
  
- enum llcc_reg_offset {
-@@ -452,6 +453,7 @@ static const struct qcom_llcc_config sdm845_cfg = {
- 	.need_llcc_cfg	= false,
- 	.reg_offset	= llcc_v1_reg_offset,
- 	.edac_reg_offset = &llcc_v1_edac_reg_offset,
-+	.no_edac	= true,
- };
- 
- static const struct qcom_llcc_config sm6350_cfg = {
-@@ -1011,7 +1013,14 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 		goto err;
- 
- 	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
--	if (drv_data->ecc_irq >= 0) {
-+
-+	/*
-+	 * On some platforms, the access to EDAC registers will be locked by
-+	 * the bootloader. So probing the EDAC driver will result in a crash.
-+	 * Hence, disable the creation of EDAC platform device for the
-+	 * problematic platforms.
-+	 */
-+	if (!cfg->no_edac) {
- 		llcc_edac = platform_device_register_data(&pdev->dev,
- 						"qcom_llcc_edac", -1, drv_data,
- 						sizeof(*drv_data));
 -- 
-2.25.1
+2.20.1.7.g153144c
 
