@@ -2,309 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F0676B9BB3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:35:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E60946B9BC3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:37:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230393AbjCNQfU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:35:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57226 "EHLO
+        id S230454AbjCNQhp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:37:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjCNQet (ORCPT
+        with ESMTP id S230140AbjCNQhg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:34:49 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [IPv6:2001:4b98:dc4:8::231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8377AF6AF;
-        Tue, 14 Mar 2023 09:34:43 -0700 (PDT)
-Received: (Authenticated sender: clement.leger@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id B9282100003;
-        Tue, 14 Mar 2023 16:34:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1678811682;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=j90yhV+x+elKOsWBRA3Lnw3dkuBFcUHDxfTXDFjhB3k=;
-        b=gzBWdXyfwWshT6m3XQChRWKEDnHk45n2q30fnAjYcUqG7KgrJbzBQAymdqIBY0aqeMKspn
-        DokGk7XBLZjHkYJrZCXm1F7NSj+9r+a5xljjAtg+jE21nEFAnkkzCfOQxC1cg8TylU3jIS
-        ripgmM/1uZUTLwD1Qjf0jDHbtBeARvihO+6vY9xbtYmNkWAKwMqfqb8SoVFwZOKc+8bCW3
-        NFJVfKok6FFI57H4ibFTStKWZr13Jw95tvvtntgiyUiOhi/jJDhStUxaO5mN2IuTn5+HsS
-        AdwKXPf6B1kxLrKZ8NuKSWx27etue9ly6JqL2ImpX94d5MZVLj28IiQrxHzOjQ==
-From:   =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     =?UTF-8?q?Cl=C3=A9ment=20L=C3=A9ger?= <clement.leger@bootlin.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?UTF-8?q?Miqu=C3=A8l=20Raynal?= <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH RESEND net-next v4 3/3] net: dsa: rzn1-a5psw: add vlan support
-Date:   Tue, 14 Mar 2023 17:36:51 +0100
-Message-Id: <20230314163651.242259-4-clement.leger@bootlin.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20230314163651.242259-1-clement.leger@bootlin.com>
-References: <20230314163651.242259-1-clement.leger@bootlin.com>
+        Tue, 14 Mar 2023 12:37:36 -0400
+Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF513B5B7B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:37:07 -0700 (PDT)
+Received: by mail-ed1-x533.google.com with SMTP id o12so64461144edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:37:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678811826;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=jlGiPxrBuoe9rTT5t5btZfai4+ZRhJj1KWzKF0d0HFU=;
+        b=FQ/jOD6i4QQu8oqCAAp5ZGGmktZ2aOz+YkkM8ZFiMxN80MnfYP1emmP8nM7ymFNpyz
+         xJYIYUbYxnc/7QnSfRk+sVAS5KzuNa1L9hqn6KyvE9zOYh8H7LmYy+MNSAYfs7zgPj7L
+         ot4J620sW+6KSVfw/+kaYfsoRHI4CtDy1s+MhMyVSSiD7LAKyFmclBYkGDCow1kjyr+l
+         pOYoc4R100uTMGMrnrvA0Pcjft9D+KQ+PMzbPUGaUzG5Zwby6NcEPLrPJ2ph2XhgceH3
+         MktBbOUBaSfdw8pYBQWXQjU33gj+DMnjBRG87wKxifJcbEL8sl3s74LurRBgV1YcSC4D
+         D64g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678811826;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=jlGiPxrBuoe9rTT5t5btZfai4+ZRhJj1KWzKF0d0HFU=;
+        b=fLcgMmXe7ZNTdTg7zklHgIXsPBg5m7FO7xhMj42B8F6fWwP2UUqqjJtHx3AHQ4AU5c
+         b32j2aKQ9c2zndJU7Bk4fzkQoR/UJT/FdO+Ld8z3l2nD4rrooTnPWQbFgwiNcVwLKxUL
+         14BkBZi5l6ta2r79+E6/CFz1BH6cABW3sRXZGisU+XP7Fu1nKDvS0B95NfH0onthPYhF
+         8S350vT3HsdEzbNsQYo57M4biYN6uoK1Bhe5lWr+6ZrhASNWXSl6BRdpy2JAi1rOfPZI
+         LAboItgv1dBETxZ+HO6KqlypBoxSymgfupK+RfnK6lqlqSVg9i/GxCHWslLLeKqadmel
+         vUMw==
+X-Gm-Message-State: AO0yUKXMJpdIvgd5hQ408XBhaAA19ZfBaiOfdgFimZoptqmCKw2NlR88
+        ao2zaxkNmUP2a1j25L/lhNHPDw==
+X-Google-Smtp-Source: AK7set9lnU/c+UFm9vu8VIT38DOdPTI3d2yJvUCDcnXWxLpHH00EYbhYjyI9vtClCCGH+kKcraHy5w==
+X-Received: by 2002:a17:906:950a:b0:92a:32ac:8f3d with SMTP id u10-20020a170906950a00b0092a32ac8f3dmr2935863ejx.66.1678811825873;
+        Tue, 14 Mar 2023 09:37:05 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id mh1-20020a170906eb8100b008eddbd46d7esm1358056ejb.31.2023.03.14.09.37.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 09:37:05 -0700 (PDT)
+Message-ID: <b9b4d33d-f325-6437-4f4d-f051d2455e2d@linaro.org>
+Date:   Tue, 14 Mar 2023 17:37:04 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
+ Peripherals clkcs bindings
+Content-Language: en-US
+To:     Dmitry Rokosov <ddrokosov@sberdevices.ru>,
+        neil.armstrong@linaro.org
+Cc:     jbrunet@baylibre.com, mturquette@baylibre.com, sboyd@kernel.org,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        khilman@baylibre.com, martin.blumenstingl@googlemail.com,
+        jian.hu@amlogic.com, kernel@sberdevices.ru, rockosov@gmail.com,
+        linux-amlogic@lists.infradead.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
+ <20230313201259.19998-4-ddrokosov@sberdevices.ru>
+ <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
+ <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
+ <2d9297e9-dab7-9615-3859-79b3b2980d9a@linaro.org>
+ <20230314150107.mwcglcu2jv4ixy3r@CAB-WSD-L081021>
+ <9d176288-cd7c-7107-e180-761e372a2b6e@linaro.org>
+ <c8fecf94-2581-6cc9-955c-324efdc7c70a@linaro.org>
+ <21add21d-4afe-7840-6c49-3786f82761d9@linaro.org>
+ <6b7ae52c-d84d-8d08-139c-5c67ec363e85@linaro.org>
+ <20230314155641.6iw5vgkrrqcx22n6@CAB-WSD-L081021>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230314155641.6iw5vgkrrqcx22n6@CAB-WSD-L081021>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for vlan operation (add, del, filtering) on the RZN1
-driver. The a5psw switch supports up to 32 VLAN IDs with filtering,
-tagged/untagged VLANs and PVID for each ports.
+On 14/03/2023 16:56, Dmitry Rokosov wrote:
+> On Tue, Mar 14, 2023 at 04:40:19PM +0100, neil.armstrong@linaro.org wrote:
+>> On 14/03/2023 16:37, Krzysztof Kozlowski wrote:
+>>> On 14/03/2023 16:33, neil.armstrong@linaro.org wrote:
+>>>>> There are many ways - depend on your driver. For example like this:
+>>>>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/clk/samsung/clk-exynos5420.c#n975
+>>>>>
+>>>>> The first argument is the clock ID (or ignore).
+>>>>>
+>>>>> BTW, quite likely the problem is generic to all Meson clock drivers.
+>>>>
+>>>> This issue about "public" non-continuous defined was already discussed at https://lore.kernel.org/all/c088e01c-0714-82be-8347-6140daf56640@linaro.org/
+>>>>
+>>>> I don't see what's different with this one.
+>>>
+>>> So you are aware that all undocumented clock IDs are still allowed to
+>>> use in DTS and they are ABI? Changing them will be an ABI break.
+>>
+>> Yes of course.
+>>
+>> Neil
+>>
+>>>
+>>> Best regards,
+>>> Krzysztof
+>>>
+>>
+> 
+> Sorry, guys, I'm little bit confused.
+> In the discussion pointed by Neil not-by-one-increment ID with public and
+> private parts are acked by Krzysztof due to explicit explanation in the
+> gxbb header. Have I to comment out my situation and stay it as is?
 
-Signed-off-by: Clément Léger <clement.leger@bootlin.com>
----
- drivers/net/dsa/rzn1_a5psw.c | 164 +++++++++++++++++++++++++++++++++++
- drivers/net/dsa/rzn1_a5psw.h |   8 +-
- 2 files changed, 169 insertions(+), 3 deletions(-)
+I did not NAK your solution here. I just pointed my usual remarks that
+it has certain outcome and minuses (undocumented ABI). But it is OK.
 
-diff --git a/drivers/net/dsa/rzn1_a5psw.c b/drivers/net/dsa/rzn1_a5psw.c
-index 5059b2814cdd..a9a42a8bc7e3 100644
---- a/drivers/net/dsa/rzn1_a5psw.c
-+++ b/drivers/net/dsa/rzn1_a5psw.c
-@@ -583,6 +583,144 @@ static int a5psw_port_fdb_dump(struct dsa_switch *ds, int port,
- 	return ret;
- }
- 
-+static int a5psw_port_vlan_filtering(struct dsa_switch *ds, int port,
-+				     bool vlan_filtering,
-+				     struct netlink_ext_ack *extack)
-+{
-+	u32 mask = BIT(port + A5PSW_VLAN_VERI_SHIFT) |
-+		   BIT(port + A5PSW_VLAN_DISC_SHIFT);
-+	u32 val = vlan_filtering ? mask : 0;
-+	struct a5psw *a5psw = ds->priv;
-+
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_VERIFY, mask, val);
-+
-+	return 0;
-+}
-+
-+static int a5psw_find_vlan_entry(struct a5psw *a5psw, u16 vid)
-+{
-+	u32 vlan_res;
-+	int i;
-+
-+	/* Find vlan for this port */
-+	for (i = 0; i < A5PSW_VLAN_COUNT; i++) {
-+		vlan_res = a5psw_reg_readl(a5psw, A5PSW_VLAN_RES(i));
-+		if (FIELD_GET(A5PSW_VLAN_RES_VLANID, vlan_res) == vid)
-+			return i;
-+	}
-+
-+	return -1;
-+}
-+
-+static int a5psw_new_vlan_res_entry(struct a5psw *a5psw, u16 newvid)
-+{
-+	u32 vlan_res;
-+	int i;
-+
-+	/* Find a free VLAN entry */
-+	for (i = 0; i < A5PSW_VLAN_COUNT; i++) {
-+		vlan_res = a5psw_reg_readl(a5psw, A5PSW_VLAN_RES(i));
-+		if (!(FIELD_GET(A5PSW_VLAN_RES_PORTMASK, vlan_res))) {
-+			vlan_res = FIELD_PREP(A5PSW_VLAN_RES_VLANID, newvid);
-+			a5psw_reg_writel(a5psw, A5PSW_VLAN_RES(i), vlan_res);
-+			return i;
-+		}
-+	}
-+
-+	return -1;
-+}
-+
-+static void a5psw_port_vlan_tagged_cfg(struct a5psw *a5psw,
-+				       unsigned int vlan_res_id, int port,
-+				       bool set)
-+{
-+	u32 mask = A5PSW_VLAN_RES_WR_PORTMASK | A5PSW_VLAN_RES_RD_TAGMASK |
-+		   BIT(port);
-+	u32 vlan_res_off = A5PSW_VLAN_RES(vlan_res_id);
-+	u32 val = A5PSW_VLAN_RES_WR_TAGMASK, reg;
-+
-+	if (set)
-+		val |= BIT(port);
-+
-+	/* Toggle tag mask read */
-+	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
-+	reg = a5psw_reg_readl(a5psw, vlan_res_off);
-+	a5psw_reg_writel(a5psw, vlan_res_off, A5PSW_VLAN_RES_RD_TAGMASK);
-+
-+	reg &= ~mask;
-+	reg |= val;
-+	a5psw_reg_writel(a5psw, vlan_res_off, reg);
-+}
-+
-+static void a5psw_port_vlan_cfg(struct a5psw *a5psw, unsigned int vlan_res_id,
-+				int port, bool set)
-+{
-+	u32 mask = A5PSW_VLAN_RES_WR_TAGMASK | BIT(port);
-+	u32 reg = A5PSW_VLAN_RES_WR_PORTMASK;
-+
-+	if (set)
-+		reg |= BIT(port);
-+
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_RES(vlan_res_id), mask, reg);
-+}
-+
-+static int a5psw_port_vlan_add(struct dsa_switch *ds, int port,
-+			       const struct switchdev_obj_port_vlan *vlan,
-+			       struct netlink_ext_ack *extack)
-+{
-+	bool tagged = !(vlan->flags & BRIDGE_VLAN_INFO_UNTAGGED);
-+	bool pvid = vlan->flags & BRIDGE_VLAN_INFO_PVID;
-+	struct a5psw *a5psw = ds->priv;
-+	u16 vid = vlan->vid;
-+	int vlan_res_id;
-+
-+	dev_dbg(a5psw->dev, "Add VLAN %d on port %d, %s, %s\n",
-+		vid, port, tagged ? "tagged" : "untagged",
-+		pvid ? "PVID" : "no PVID");
-+
-+	vlan_res_id = a5psw_find_vlan_entry(a5psw, vid);
-+	if (vlan_res_id < 0) {
-+		vlan_res_id = a5psw_new_vlan_res_entry(a5psw, vid);
-+		if (vlan_res_id < 0)
-+			return -ENOSPC;
-+	}
-+
-+	a5psw_port_vlan_cfg(a5psw, vlan_res_id, port, true);
-+	if (tagged)
-+		a5psw_port_vlan_tagged_cfg(a5psw, vlan_res_id, port, true);
-+
-+	if (pvid) {
-+		a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE_ENA, BIT(port),
-+			      BIT(port));
-+		a5psw_reg_writel(a5psw, A5PSW_SYSTEM_TAGINFO(port), vid);
-+	}
-+
-+	return 0;
-+}
-+
-+static int a5psw_port_vlan_del(struct dsa_switch *ds, int port,
-+			       const struct switchdev_obj_port_vlan *vlan)
-+{
-+	struct a5psw *a5psw = ds->priv;
-+	u16 vid = vlan->vid;
-+	int vlan_res_id;
-+
-+	dev_dbg(a5psw->dev, "Removing VLAN %d on port %d\n", vid, port);
-+
-+	vlan_res_id = a5psw_find_vlan_entry(a5psw, vid);
-+	if (vlan_res_id < 0)
-+		return -EINVAL;
-+
-+	a5psw_port_vlan_cfg(a5psw, vlan_res_id, port, false);
-+	a5psw_port_vlan_tagged_cfg(a5psw, vlan_res_id, port, false);
-+
-+	/* Disable PVID if the vid is matching the port one */
-+	if (vid == a5psw_reg_readl(a5psw, A5PSW_SYSTEM_TAGINFO(port)))
-+		a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE_ENA, BIT(port), 0);
-+
-+	return 0;
-+}
-+
- static u64 a5psw_read_stat(struct a5psw *a5psw, u32 offset, int port)
- {
- 	u32 reg_lo, reg_hi;
-@@ -700,6 +838,27 @@ static void a5psw_get_eth_ctrl_stats(struct dsa_switch *ds, int port,
- 	ctrl_stats->MACControlFramesReceived = stat;
- }
- 
-+static void a5psw_vlan_setup(struct a5psw *a5psw, int port)
-+{
-+	u32 reg;
-+
-+	/* Enable TAG always mode for the port, this is actually controlled
-+	 * by VLAN_IN_MODE_ENA field which will be used for PVID insertion
-+	 */
-+	reg = A5PSW_VLAN_IN_MODE_TAG_ALWAYS;
-+	reg <<= A5PSW_VLAN_IN_MODE_PORT_SHIFT(port);
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_IN_MODE, A5PSW_VLAN_IN_MODE_PORT(port),
-+		      reg);
-+
-+	/* Set transparent mode for output frame manipulation, this will depend
-+	 * on the VLAN_RES configuration mode
-+	 */
-+	reg = A5PSW_VLAN_OUT_MODE_TRANSPARENT;
-+	reg <<= A5PSW_VLAN_OUT_MODE_PORT_SHIFT(port);
-+	a5psw_reg_rmw(a5psw, A5PSW_VLAN_OUT_MODE,
-+		      A5PSW_VLAN_OUT_MODE_PORT(port), reg);
-+}
-+
- static int a5psw_setup(struct dsa_switch *ds)
- {
- 	struct a5psw *a5psw = ds->priv;
-@@ -772,6 +931,8 @@ static int a5psw_setup(struct dsa_switch *ds)
- 		/* Enable management forward only for user ports */
- 		if (dsa_port_is_user(dp))
- 			a5psw_port_mgmtfwd_set(a5psw, port, true);
-+
-+		a5psw_vlan_setup(a5psw, port);
- 	}
- 
- 	return 0;
-@@ -801,6 +962,9 @@ static const struct dsa_switch_ops a5psw_switch_ops = {
- 	.port_bridge_flags = a5psw_port_bridge_flags,
- 	.port_stp_state_set = a5psw_port_stp_state_set,
- 	.port_fast_age = a5psw_port_fast_age,
-+	.port_vlan_filtering = a5psw_port_vlan_filtering,
-+	.port_vlan_add = a5psw_port_vlan_add,
-+	.port_vlan_del = a5psw_port_vlan_del,
- 	.port_fdb_add = a5psw_port_fdb_add,
- 	.port_fdb_del = a5psw_port_fdb_del,
- 	.port_fdb_dump = a5psw_port_fdb_dump,
-diff --git a/drivers/net/dsa/rzn1_a5psw.h b/drivers/net/dsa/rzn1_a5psw.h
-index c67abd49c013..2bad2e3edc2a 100644
---- a/drivers/net/dsa/rzn1_a5psw.h
-+++ b/drivers/net/dsa/rzn1_a5psw.h
-@@ -50,7 +50,9 @@
- #define A5PSW_VLAN_IN_MODE_TAG_ALWAYS		0x2
- 
- #define A5PSW_VLAN_OUT_MODE		0x2C
--#define A5PSW_VLAN_OUT_MODE_PORT(port)	(GENMASK(1, 0) << ((port) * 2))
-+#define A5PSW_VLAN_OUT_MODE_PORT_SHIFT(port)	((port) * 2)
-+#define A5PSW_VLAN_OUT_MODE_PORT(port)	(GENMASK(1, 0) << \
-+					A5PSW_VLAN_OUT_MODE_PORT_SHIFT(port))
- #define A5PSW_VLAN_OUT_MODE_DIS		0x0
- #define A5PSW_VLAN_OUT_MODE_STRIP	0x1
- #define A5PSW_VLAN_OUT_MODE_TAG_THROUGH	0x2
-@@ -59,7 +61,7 @@
- #define A5PSW_VLAN_IN_MODE_ENA		0x30
- #define A5PSW_VLAN_TAG_ID		0x34
- 
--#define A5PSW_SYSTEM_TAGINFO(port)	(0x200 + A5PSW_PORT_OFFSET(port))
-+#define A5PSW_SYSTEM_TAGINFO(port)	(0x200 + 4 * (port))
- 
- #define A5PSW_AUTH_PORT(port)		(0x240 + 4 * (port))
- #define A5PSW_AUTH_PORT_AUTHORIZED	BIT(0)
-@@ -68,7 +70,7 @@
- #define A5PSW_VLAN_RES_WR_PORTMASK	BIT(30)
- #define A5PSW_VLAN_RES_WR_TAGMASK	BIT(29)
- #define A5PSW_VLAN_RES_RD_TAGMASK	BIT(28)
--#define A5PSW_VLAN_RES_ID		GENMASK(16, 5)
-+#define A5PSW_VLAN_RES_VLANID		GENMASK(16, 5)
- #define A5PSW_VLAN_RES_PORTMASK		GENMASK(4, 0)
- 
- #define A5PSW_RXMATCH_CONFIG(port)	(0x3e80 + 4 * (port))
--- 
-2.39.0
+> 
+> BTW, I think changing IDs value would not affect logic, because
+> it's not connected to driver logic 'by values', but 'by constants
+
+You cannot change the IDs, neither their values nor the names (with
+exceptions). IDs - so the numbers - are ABI.
+
+"Constant names" - I assume you mean the names of defines - do not exist
+after preprocessing, so also not really relevant here...
+
+> names'. We can expose/hide anything from device tree bindings, it will
+> not change the clk driver logic.
+
+
+Best regards,
+Krzysztof
 
