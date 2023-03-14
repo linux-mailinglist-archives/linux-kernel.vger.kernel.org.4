@@ -2,226 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 391F26B97BD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4EE86B9793
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:19:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231300AbjCNOUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47110 "EHLO
+        id S229675AbjCNOTN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:19:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231299AbjCNOUt (ORCPT
+        with ESMTP id S229505AbjCNOTK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:20:49 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7FF9922DC7;
-        Tue, 14 Mar 2023 07:20:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678803605; x=1710339605;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=zyvw01nw5i24yTZdtQNlFxRGIqb6RB7teXa+DHhFniw=;
-  b=LJ+oQ+wESioxWs56yTTdhwVacYRot7rZ2+q6Hp/5GF9jeMlyCugpn7hZ
-   maF8kuqmxWaKQW0rWUy7n15aY2ApyM+HsTjrSMybWZ2m1G8++cAPRGqzq
-   FxRVPkKIxeUkzHXtntErfkjHagDaC9tpZeeAuzdOZ4Uztdr54OAYIouyZ
-   2GVoItSjxSGreiaTeTw1CTomufLIP8C6dtWtox1eFlQ3alfYq2e3w2mSR
-   fAtN6kLYKxYUFNCLg/EiI+Ms8evDsHrLZJ+a3XIATDKsrFrDkj2iUrpmK
-   kvr3zH6c0YKW/r7seyb7mMLU/cKdgDjQdhVfuiR+qKQ0aGog/djaCXSsg
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="321284940"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="321284940"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 07:19:54 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="656363306"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="656363306"
-Received: from mjtillin-mobl.ger.corp.intel.com (HELO localhost.localdomain) ([10.213.236.227])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 07:19:50 -0700
-From:   Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>
-To:     Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
-Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tejun Heo <tj@kernel.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Zefan Li <lizefan.x@bytedance.com>,
-        Dave Airlie <airlied@redhat.com>,
-        Daniel Vetter <daniel.vetter@ffwll.ch>,
-        Rob Clark <robdclark@chromium.org>,
-        =?UTF-8?q?St=C3=A9phane=20Marchesin?= <marcheu@chromium.org>,
-        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        Brian Welty <brian.welty@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@intel.com>
-Subject: [RFC 09/10] drm/i915: Wire up with drm controller GPU time query
-Date:   Tue, 14 Mar 2023 14:19:03 +0000
-Message-Id: <20230314141904.1210824-10-tvrtko.ursulin@linux.intel.com>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
-References: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
+        Tue, 14 Mar 2023 10:19:10 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7840815C85
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:19:07 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id h8so18914621ede.8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:19:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678803546;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Tzwhm0LPrsueJQUzNpmDvfEU1erjGiAua9OJJ0vez5U=;
+        b=ry8akAUPiIY8CIFco0HZfHacY9Crzbgwhm363n62QRFryL6jYzwo4m9AW3wfELkm6C
+         csHVaHnnOnAdgfbyedV7UpIY3bKxizCdcB2PevlEIAIW+BDwXmUHgNaI9X7EgdLBVzi/
+         SlJSw8aEdqp5YWGYIO5XySZ+XTFu5GhwD9Q0D9G2fmcBwkyhqgdQiaXKxV3o0lpkVobI
+         aGB4qSPsXDZZvuHyLaQeVqmlf36VZv1c0hXwAQquserj2cKTxA5fZrnEZzXDny40TGiU
+         cjhdb/500vPvavqmqLWJvEz1ZJbrQsWi5EI0J7flZ+dxXus51m5GUd2oPVHEou7t7tch
+         zNIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678803546;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tzwhm0LPrsueJQUzNpmDvfEU1erjGiAua9OJJ0vez5U=;
+        b=7VKxP+cQAY2Y02AP///tCg91unT12ylT0NBCQ5S6QtuWRX0N8LBgi7fgrTzpJovzso
+         NgzyfLtzYBIsnC1gWkhl3cABBlqPX7twjgc5DGf1nTVnZjow8ka56OhsGwDuvTZ9Ofrb
+         blhKOaQHyR+JOkfYi0OlVWxM6mezrsvz8NCX8DhK9wyKwxlP/+R+U05SjshNIHVxtaRX
+         duOAKl7nXgdhDpvLuZBVtjkPgJE8vdSWMiev56Mp7XHBWTc4KuIIrOULKO4ofy6vu2nl
+         cmgh8GrxwKxKWSY2O+sxcvVUs2CqITTYxfPFHrl1Xodwc3rmEYCQIwA8EWJJrtSC8tLz
+         yUaQ==
+X-Gm-Message-State: AO0yUKXVDjRu9clPUQPhDULAsGCL6gfXLE2C2rfUgqDV2kSD1T16nvJo
+        ZSelynFWWwuV2V4tdfnGpTqbIQ==
+X-Google-Smtp-Source: AK7set8aL4PQ9QF8IDj4skxLN9UJXh6bArs/MRV2sCe1hNkSmXxHrlrmqgg3M0MMY3Rx4aJxHiYqpg==
+X-Received: by 2002:a17:906:e093:b0:921:a224:cd15 with SMTP id gh19-20020a170906e09300b00921a224cd15mr2629062ejb.15.1678803545955;
+        Tue, 14 Mar 2023 07:19:05 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id lf28-20020a170907175c00b00923221f4062sm1208885ejc.112.2023.03.14.07.19.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 07:19:05 -0700 (PDT)
+Message-ID: <8fec16af-c8a9-36b9-ff78-f5dde944c4f0@linaro.org>
+Date:   Tue, 14 Mar 2023 15:19:04 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v3 1/3] dt-bindings: i2c: mpc: Mark "fsl,timeout" as
+ deprecated
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>, Andi Shyti <andi.shyti@kernel.org>
+Cc:     linux-i2c@vger.kernel.org, Ryan Chen <ryan_chen@aspeedtech.com>,
+        Wolfram Sang <wsa@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Chris Packham <chris.packham@alliedtelesis.co.nz>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Rob Herring <robh+dt@kernel.org>
+References: <20230312233613.303408-1-andi.shyti@kernel.org>
+ <20230312233613.303408-2-andi.shyti@kernel.org>
+ <167880254331.25515.17901856481962486896.robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <167880254331.25515.17901856481962486896.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+On 14/03/2023 15:10, Rob Herring wrote:
+> 
+> On Mon, 13 Mar 2023 00:36:11 +0100, Andi Shyti wrote:
+>> Now we have the i2c-scl-clk-low-timeout-ms property defined in
+>> the i2c schema.
+>>
+>> Mark "fsl,timeout" as deprecated and update the example.
+>>
+>> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+>> ---
+>>  Documentation/devicetree/bindings/i2c/i2c-mpc.yaml | 3 ++-
+>>  1 file changed, 2 insertions(+), 1 deletion(-)
+>>
+> 
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> 
+> yamllint warnings/errors:
+> 
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/i2c/i2c-mpc.example.dtb: i2c@3100: Unevaluated properties are not allowed ('i2c-scl-clk-low-timeout-ms' was unexpected)
 
-Implement the drm_cgroup_ops->active_time_us callback.
+That's expected as it depends on:
+https://github.com/devicetree-org/dt-schema/pull/102
 
-Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
----
- drivers/gpu/drm/i915/i915_driver.c     | 10 ++++
- drivers/gpu/drm/i915/i915_drm_client.c | 76 ++++++++++++++++++++++----
- drivers/gpu/drm/i915/i915_drm_client.h |  2 +
- 3 files changed, 78 insertions(+), 10 deletions(-)
-
-diff --git a/drivers/gpu/drm/i915/i915_driver.c b/drivers/gpu/drm/i915/i915_driver.c
-index da249337c23b..e956990a9870 100644
---- a/drivers/gpu/drm/i915/i915_driver.c
-+++ b/drivers/gpu/drm/i915/i915_driver.c
-@@ -1777,6 +1777,12 @@ static const struct drm_ioctl_desc i915_ioctls[] = {
- 	DRM_IOCTL_DEF_DRV(I915_GEM_VM_DESTROY, i915_gem_vm_destroy_ioctl, DRM_RENDER_ALLOW),
- };
- 
-+#ifdef CONFIG_CGROUP_DRM
-+static const struct drm_cgroup_ops i915_drm_cgroup_ops = {
-+	.active_time_us = i915_drm_cgroup_get_active_time_us,
-+};
-+#endif
-+
- /*
-  * Interface history:
-  *
-@@ -1805,6 +1811,10 @@ static const struct drm_driver i915_drm_driver = {
- 	.lastclose = i915_driver_lastclose,
- 	.postclose = i915_driver_postclose,
- 
-+#ifdef CONFIG_CGROUP_DRM
-+	.cg_ops = &i915_drm_cgroup_ops,
-+#endif
-+
- 	.prime_handle_to_fd = drm_gem_prime_handle_to_fd,
- 	.prime_fd_to_handle = drm_gem_prime_fd_to_handle,
- 	.gem_prime_import = i915_gem_prime_import,
-diff --git a/drivers/gpu/drm/i915/i915_drm_client.c b/drivers/gpu/drm/i915/i915_drm_client.c
-index b09d1d386574..c9754cb0277f 100644
---- a/drivers/gpu/drm/i915/i915_drm_client.c
-+++ b/drivers/gpu/drm/i915/i915_drm_client.c
-@@ -75,7 +75,7 @@ void i915_drm_clients_fini(struct i915_drm_clients *clients)
- 	xa_destroy(&clients->xarray);
- }
- 
--#ifdef CONFIG_PROC_FS
-+#if defined(CONFIG_PROC_FS) || defined(CONFIG_CGROUP_DRM)
- static const char * const uabi_class_names[] = {
- 	[I915_ENGINE_CLASS_RENDER] = "render",
- 	[I915_ENGINE_CLASS_COPY] = "copy",
-@@ -100,22 +100,78 @@ static u64 busy_add(struct i915_gem_context *ctx, unsigned int class)
- 	return total;
- }
- 
--static void
--show_client_class(struct seq_file *m,
--		  struct i915_drm_client *client,
--		  unsigned int class)
-+static u64 get_class_active_ns(struct i915_drm_client *client,
-+			       unsigned int class,
-+			       unsigned int *capacity)
- {
--	const struct list_head *list = &client->ctx_list;
--	u64 total = atomic64_read(&client->past_runtime[class]);
--	const unsigned int capacity =
--		client->clients->i915->engine_uabi_class_count[class];
- 	struct i915_gem_context *ctx;
-+	u64 total;
-+
-+	*capacity =
-+	    client->clients->i915->engine_uabi_class_count[class];
-+	if (!*capacity)
-+		return 0;
-+
-+	total = atomic64_read(&client->past_runtime[class]);
- 
- 	rcu_read_lock();
--	list_for_each_entry_rcu(ctx, list, client_link)
-+	list_for_each_entry_rcu(ctx, &client->ctx_list, client_link)
- 		total += busy_add(ctx, class);
- 	rcu_read_unlock();
- 
-+	return total;
-+}
-+#endif
-+
-+#ifdef CONFIG_CGROUP_DRM
-+static bool supports_stats(struct drm_i915_private *i915)
-+{
-+	if (GRAPHICS_VER(i915) < 8)
-+		return false;
-+
-+	/* temporary... */
-+	if (intel_uc_uses_guc_submission(&to_gt(i915)->uc))
-+		return false;
-+
-+	return true;
-+}
-+
-+u64 i915_drm_cgroup_get_active_time_us(struct drm_file *file)
-+{
-+	struct drm_i915_file_private *fpriv = file->driver_priv;
-+	struct i915_drm_client *client = fpriv->client;
-+	unsigned int i;
-+	u64 busy = 0;
-+
-+	if (!supports_stats(client->clients->i915))
-+		return 0;
-+
-+	for (i = 0; i < ARRAY_SIZE(uabi_class_names); i++) {
-+		unsigned int capacity;
-+		u64 b;
-+
-+		b = get_class_active_ns(client, i, &capacity);
-+		if (capacity) {
-+			b = DIV_ROUND_UP_ULL(b, capacity * 1000);
-+			busy += b;
-+		}
-+	}
-+
-+	return busy;
-+}
-+#endif
-+
-+#ifdef CONFIG_PROC_FS
-+static void
-+show_client_class(struct seq_file *m,
-+		  struct i915_drm_client *client,
-+		  unsigned int class)
-+{
-+	unsigned int capacity;
-+	u64 total;
-+
-+	total = get_class_active_ns(client, class, &capacity);
-+
- 	if (capacity)
- 		seq_printf(m, "drm-engine-%s:\t%llu ns\n",
- 			   uabi_class_names[class], total);
-diff --git a/drivers/gpu/drm/i915/i915_drm_client.h b/drivers/gpu/drm/i915/i915_drm_client.h
-index 69496af996d9..c8439eaa89be 100644
---- a/drivers/gpu/drm/i915/i915_drm_client.h
-+++ b/drivers/gpu/drm/i915/i915_drm_client.h
-@@ -65,4 +65,6 @@ void i915_drm_client_fdinfo(struct seq_file *m, struct file *f);
- 
- void i915_drm_clients_fini(struct i915_drm_clients *clients);
- 
-+u64 i915_drm_cgroup_get_active_time_us(struct drm_file *file);
-+
- #endif /* !__I915_DRM_CLIENT_H__ */
--- 
-2.37.2
+Best regards,
+Krzysztof
 
