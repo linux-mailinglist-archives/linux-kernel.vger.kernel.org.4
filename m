@@ -2,130 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8456D6B92B6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:08:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56B126B92B8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:09:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231755AbjCNMI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42250 "EHLO
+        id S231843AbjCNMJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231699AbjCNMIX (ORCPT
+        with ESMTP id S229538AbjCNMIs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:08:23 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 461E334F5F;
-        Tue, 14 Mar 2023 05:07:45 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id da10so61171818edb.3;
-        Tue, 14 Mar 2023 05:07:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678795636;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AGJ/J3etGXzzl0b+NHW/iN6M3fmzVQmhjKRcIxTWVds=;
-        b=ka8JGNS5D9SBcMnt4d472x2hwdFkFyldNKxnGEnO6pkvYSlUbIPqO4QQXn8NmzwyVC
-         8rk0yUI9Ytm+zUIbnPDGByyhREZTWaoVHCxqr4ft5G7ajdPtRGbMnPcEvfISWe33JRdS
-         2zRjYKlZv0ukmKIM/H+sCicuGvpuDBWpJEavqLje0lpLqJ6a2VYTridpp5gFZJJD/8JH
-         OGSN3wph8HBzAGDNII2yYIqbjNDKCH0vsLyK6uYB3NXGFwph+zJjCETmmrwsneflYZSh
-         CNI3KkJJK1fAfWwer4wZpllE82hWWa8pfYSbJKnUcfO0jTEFk/Iz//RQLwUCp3Me57+v
-         VDfA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678795636;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AGJ/J3etGXzzl0b+NHW/iN6M3fmzVQmhjKRcIxTWVds=;
-        b=CLUOrZl1slwXwTtGA6dYbTgtrI2Xy2AXViuSITlTjvZcoO2w0UbLdJ29eb2VMiPAQI
-         41q1u8VLH7lw6OP7lIfTNlhEzlPCSWdkVb92UfY0eX5fxiiXXY2bWzEuXrNtJ9Wijito
-         E1ik1JmmfZ1rehvaH3Y9hB7SIHlysSqMkmGyZzu+s7F2qzLpiQycUebiiSpj8Jyyb71r
-         Iojr7uepPBlFlZxPn6IEJIQAxpuONEOM2Pz96gJ5AmNWyEcMT4cT908/u+pOR7uFJyP3
-         zLcJV/D6aELISJ/s2zaQV3yVern005VJ1Q6J6kAE/bLyf/2RPIi///uzmRenftQ3qm/9
-         QaJA==
-X-Gm-Message-State: AO0yUKWn4aYxtqsBKLUpOrrM5FAqWk8pFlO112MzqR+BZ4VzTFS1Hp54
-        J2wfECZO/8jZ9Ubp2VgEEoY=
-X-Google-Smtp-Source: AK7set/ZXQ+XfAoC7QvC3zJZuOUeUmwsfD1u7z9CGxTW9HvRYx2Fw+SlEkD2QSWMCctkfcyjX1j1Tw==
-X-Received: by 2002:aa7:d38b:0:b0:4fb:fd9f:7375 with SMTP id x11-20020aa7d38b000000b004fbfd9f7375mr7624487edq.2.1678795636347;
-        Tue, 14 Mar 2023 05:07:16 -0700 (PDT)
-Received: from eldamar.lan (c-82-192-242-114.customer.ggaweb.ch. [82.192.242.114])
-        by smtp.gmail.com with ESMTPSA id v30-20020a50d59e000000b004af7191fe35sm948475edi.22.2023.03.14.05.07.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 05:07:15 -0700 (PDT)
-Sender: Salvatore Bonaccorso <salvatore.bonaccorso@gmail.com>
-Received: by eldamar.lan (Postfix, from userid 1000)
-        id BBA70BE2DE0; Tue, 14 Mar 2023 13:07:14 +0100 (CET)
-Date:   Tue, 14 Mar 2023 13:07:14 +0100
-From:   Salvatore Bonaccorso <carnil@debian.org>
-To:     Andrew Cooper <Andrew.Cooper3@citrix.com>
-Cc:     Juergen Gross <jgross@suse.com>,
-        Joost Roeleveld <joost@antarean.org>,
-        Christoph Hellwig <hch@infradead.org>, jejb@linux.ibm.com,
-        Sreekanth Reddy <sreekanth.reddy@broadcom.com>,
-        Bart Van Assche <bvanassche@acm.org>,
-        sathya.prakash@broadcom.com, suganath-prabu.subramani@broadcom.com,
-        "Martin K. Petersen" <martin.petersen@oracle.com>,
-        MPT-FusionLinux.pdl@broadcom.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xen-devel@lists.xenproject.org,
-        adi@kriegisch.at
-Subject: Re: Report in downstream Debian: mpt3sas broken with xen dom0 with
- update to 5.10.149 in 5.10.y.
-Message-ID: <ZBBjcu2YH9HFY06l@eldamar.lan>
-References: <Y1JkuKTjVYrOWbvm@eldamar.lan>
- <85ad4508-b979-c792-e92b-01bc16260dec@acm.org>
- <CAK=zhgr=MYn=-mrz3gKUFoXG_+EQ796bHEWSdK88o1Aqamby7g@mail.gmail.com>
- <2fd505a07bd26d76f1166761fa50905414edb7ef.camel@linux.ibm.com>
- <30a056c8-071f-4259-3253-75e718af619d@suse.com>
- <Y1bEQMS5SNTbZO/3@infradead.org>
- <858a4288-46ac-d423-a529-b3b77b7fbc8a@citrix.com>
- <20230314111752.EGroupware.TiNRv1BSroWqKL7zQtfNLJ8@_>
- <4c5de098-5cd3-116b-54cb-6972c6c06818@suse.com>
- <8cc36c16-4aa0-9c47-ab2f-c75c1e22772f@citrix.com>
+        Tue, 14 Mar 2023 08:08:48 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E1D19F13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:08:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=o1Mn/N1ayy4kj8PawONyZbvWvYwTCPVjQOan6MFzjfg=; b=ClFn0ghaY0r2VHYMRhfCG+S12I
+        /FtGN9pbgksF/MAsVIMm5wRQOaXEE3eY1zG5NvBhbjwvBhWtguLCu61S6/wckRvWh+/DJssU9GnTU
+        CIT90RNQr640R9gMeWpoxgbC5ZKLDxtMMaLTwCJ8psudDugKKEvU2c4sIF2FFtrjqkrePbekl/a6U
+        +kBltUx41DKHk24m3LbWHz06HHeoMww0BjWzinIdLb9t5nl6aZoBw1hF6Basz1L1zzFbz8HMKRAGP
+        q1LXeTxuiC67sMrMKX8L3KXvqmYiabZm6xD0llkfHsIFuDXKOfa5v500kOcPXnJAPrQGHGjbeLGpZ
+        o4Yi1iGQ==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
+        id 1pc3RA-001mAu-2v;
+        Tue, 14 Mar 2023 12:07:29 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1BD5E30030F;
+        Tue, 14 Mar 2023 13:07:26 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id D6EE7202F7F8A; Tue, 14 Mar 2023 13:07:26 +0100 (CET)
+Date:   Tue, 14 Mar 2023 13:07:26 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Vincent Guittot <vincent.guittot@linaro.org>
+Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Zhang Qiao <zhangqiao22@huawei.com>,
+        linux-kernel@vger.kernel.org, mingo@redhat.com,
+        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
+        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
+        rkagan@amazon.de
+Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
+Message-ID: <20230314120726.GG1845660@hirez.programming.kicks-ass.net>
+References: <20230306132418.50389-1-zhangqiao22@huawei.com>
+ <20230309130524.GA273121@hirez.programming.kicks-ass.net>
+ <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
+ <20230309142825.GB273121@hirez.programming.kicks-ass.net>
+ <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
+ <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
+ <ZAs+zV0o9ShO7nLT@vingu-book>
+ <02a08042-e7c4-464d-bc20-9ec4ccdab1ff@arm.com>
+ <8c093661-7431-00d8-d703-b8f7a7c8e747@arm.com>
+ <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <8cc36c16-4aa0-9c47-ab2f-c75c1e22772f@citrix.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On Tue, Mar 14, 2023 at 08:41:30AM +0100, Vincent Guittot wrote:
 
-On Tue, Mar 14, 2023 at 11:41:08AM +0000, Andrew Cooper wrote:
-> On 14/03/2023 11:23 am, Juergen Gross wrote:
-> > On 14.03.23 12:17, Joost Roeleveld wrote:
-> >>> On Mon, Oct 24, 2022 at 05:28:05PM +0000, Andrew Cooper wrote:
-> >>>> I don't know exactly how this translates to Linux internals, but most
-> >>>> devices are fine and it's routinely the mpt2/3sas drivers which
-> >>>> encounter problems.  It would be lovely if we could get to the
-> >>>> bottom of
-> >>>> this for once and for all.
-> >>>
-> >>> So to summarize my two mails: I think te use of dma_get_required_mask
-> >>> in mpt3sas is wrong, and the dma_get_required_mask return value from
-> >>> xen-swiotlb is also wrong. Fixing either one should fix this problem,
-> >>> and I think we should fix both.
-> >>
-> >> Hi all,
-> >>
-> >> Is there anything that can be done to get this fixed in xen and the
-> >> kernel somehow?
-> >> I keep having to manually patch the mpt3sas driver to prevent it from
-> >> being able to switch to 32bit mode each time I upgrade the kernel.
-> >
-> > Just use 5.10.173.
+> I'm going to use something a bit different from your proposal below by
+> merging initial and flag
+> static void place_entity(struct cfs_rq *cfs_rq, struct sched_entity
+> *se, int flags)
 > 
-> Its still broken even in 6.1
-> 
-> We've just stumbled over this yet again in XenServer.
+> with flags:
+> 0 for initial placement
+> ENQUEUE_WAKEUP for wakeup
+> ENQUEUE_MIGRATED for migrated task
 
-The mentioned commit has been backported to 6.1.16, 5.15.100 and
-5.10.173. Is the issue still reproducible with 6.1.16?
+So when a task is not running for a long time (our case at hand), then
+there's two cases:
 
-Regards,
-Salvatore
+ - it wakes up locally and place_entity() gets to reset vruntime;
+ - it wakes up remotely and migrate_task_rq_fair() can reset vruntime.
+
+So if we can rely on ENQUEUE_MIGRATED to differentiate between these
+cases, when wouldn't something like this work?
+
+---
+
+diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
+index 7a1b1f855b96..a0d00b6a8bc6 100644
+--- a/kernel/sched/fair.c
++++ b/kernel/sched/fair.c
+@@ -4648,11 +4648,31 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
+ #endif
+ }
+ 
++static bool reset_vruntime(struct cfs_rq *cfs_rq, struct sched_entity *se)
++{
++	const s64 limit = 60LL * NSEC_PER_SEC;
++	s64 sleep_time;
++
++	/*
++	 * Pull vruntime of the entity being placed to the base level of
++	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
++	 * slept for a long time, don't even try to compare its vruntime with
++	 * the base as it may be too far off and the comparison may get
++	 * inversed due to s64 overflow.
++	 */
++	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
++	if (unlikely(sleep_time > limit)) {
++		se->vruntime = cfs_rq->min_vruntime - calc_delta_fair(limit, se);
++		return true;
++	}
++
++	return false;
++}
++
+ static void
+ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+ {
+ 	u64 vruntime = cfs_rq->min_vruntime;
+-	u64 sleep_time;
+ 
+ 	/*
+ 	 * The 'current' period is already promised to the current tasks,
+@@ -4682,18 +4702,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
+ 		vruntime -= thresh;
+ 	}
+ 
+-	/*
+-	 * Pull vruntime of the entity being placed to the base level of
+-	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
+-	 * slept for a long time, don't even try to compare its vruntime with
+-	 * the base as it may be too far off and the comparison may get
+-	 * inversed due to s64 overflow.
+-	 */
+-	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
+-	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
+-		se->vruntime = vruntime;
+-	else
+-		se->vruntime = max_vruntime(se->vruntime, vruntime);
++	/* ensure we don't gain time by being placed backwards */
++	se->vruntime = max_vruntime(se->vruntime, vruntime);
+ }
+ 
+ static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
+@@ -4768,8 +4778,11 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
+ 	update_cfs_group(se);
+ 	account_entity_enqueue(cfs_rq, se);
+ 
+-	if (flags & ENQUEUE_WAKEUP)
++	if (flags & ENQUEUE_WAKEUP) {
++		if (!(flags & ENQUEUE_MIGRATED))
++			reset_vruntime(cfs_rq, se);
+ 		place_entity(cfs_rq, se, 0);
++	}
+ 
+ 	check_schedstat_required();
+ 	update_stats_enqueue_fair(cfs_rq, se, flags);
+@@ -7625,6 +7638,7 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
+ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ {
+ 	struct sched_entity *se = &p->se;
++	struct cfs_rq *cfs_rq = cfs_rq_of(se);
+ 
+ 	/*
+ 	 * As blocked tasks retain absolute vruntime the migration needs to
+@@ -7632,11 +7646,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
+ 	 * min_vruntime -- the latter is done by enqueue_entity() when placing
+ 	 * the task on the new runqueue.
+ 	 */
+-	if (READ_ONCE(p->__state) == TASK_WAKING) {
+-		struct cfs_rq *cfs_rq = cfs_rq_of(se);
+-
++	if (READ_ONCE(p->__state) == TASK_WAKING || reset_vruntime(cfs_rq, se))
+ 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
+-	}
+ 
+ 	if (!task_on_rq_migrating(p)) {
+ 		remove_entity_load_avg(se);
