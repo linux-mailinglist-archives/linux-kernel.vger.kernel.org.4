@@ -2,238 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE4BD6B9877
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:01:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E64C6B9879
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:02:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbjCNPBP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:01:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37208 "EHLO
+        id S231483AbjCNPCB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:02:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbjCNPBN (ORCPT
+        with ESMTP id S229765AbjCNPB7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:01:13 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A86386A7;
-        Tue, 14 Mar 2023 08:01:10 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id 4F4625FD07;
-        Tue, 14 Mar 2023 18:01:08 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678806068;
-        bh=VYtZNHbbMXIq+g24HuL1awnMYFh5ypx+E6yBnfNcl6A=;
-        h=Date:From:To:Subject:Message-ID:MIME-Version:Content-Type;
-        b=qsIgGNq9FJ+V3tMbZis0wrWJCHqgOAd4VH5hKqsP84sHMMyQ126g9D4n8CC8NTKJO
-         Afl9vosImnTrlWVMKzxfDPpOjxrWMdK1sk4SaFNE8dntktMxQRzU2t74V9gSwFXpKp
-         10uMAGSu1bm8lH97M+c6NOdSUeqcgM5inA2oGwOb/kRDUOG8D8aISg26bYcYDbSheg
-         kHA8dDLPO0lEC5OkuKUA9Jh2hh+nT9Bry6FSSDspRZHQvpWX4wDWH90tubUGwn4taT
-         4C/MVlZF48vOsFrnsWz6DcreHu/PcPaTfbDT2szz9BMaB+BV7e/4wxZjxBdtvOzmxu
-         4tNQ8XpHc70eg==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 18:01:07 +0300 (MSK)
-Date:   Tue, 14 Mar 2023 18:01:07 +0300
-From:   Dmitry Rokosov <ddrokosov@sberdevices.ru>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-CC:     <neil.armstrong@linaro.org>, <jbrunet@baylibre.com>,
-        <mturquette@baylibre.com>, <sboyd@kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <khilman@baylibre.com>, <martin.blumenstingl@googlemail.com>,
-        <jian.hu@amlogic.com>, <kernel@sberdevices.ru>,
-        <rockosov@gmail.com>, <linux-amlogic@lists.infradead.org>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: [PATCH v10 3/5] dt-bindings: clock: meson: add A1 PLL and
- Peripherals clkcs bindings
-Message-ID: <20230314150107.mwcglcu2jv4ixy3r@CAB-WSD-L081021>
-References: <20230313201259.19998-1-ddrokosov@sberdevices.ru>
- <20230313201259.19998-4-ddrokosov@sberdevices.ru>
- <ffebef1d-8447-181b-1890-3e638d399c62@linaro.org>
- <20230314114825.yiv4vcszr6b7m45w@CAB-WSD-L081021>
- <2d9297e9-dab7-9615-3859-79b3b2980d9a@linaro.org>
+        Tue, 14 Mar 2023 11:01:59 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F669009F;
+        Tue, 14 Mar 2023 08:01:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1678806120; x=1710342120;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-id:content-transfer-encoding:
+   mime-version;
+  bh=2VemP/wU1KePQDHuzIhNJqrDtPwrPh3VVX8fNn4P5QQ=;
+  b=ULX94V/kc7J/Z94CjtdpfWkDka9S0j3QeIvdhNRP0+woE9PFhQ2KZ34D
+   X1iNlHnXR5odv8mUIuNF1wTKYGfZwOJx+Ro7C5w+E6unuovb2hGqA5pMr
+   w9yLAWl5MVcb/o0ss6lhdac45V9nPJBWspQAj/k/JIO2r2G8xHwL8W5TJ
+   heGOosDuhPNYg/pAI41+9qSLmcCdLxf6qRBFv+1482rgCrWyHkQyDieTm
+   hK8v8X/jiQgliJVDQtJZ7AomlCvxMYnRZ1nIuG9iZyLHAA7iKSN/a3kZv
+   loWp/Dxx+m8K/TjDpeen+D23ktbL8RQEVo0xDUQUOAWEEWhvuyKI787W3
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.98,260,1673938800"; 
+   d="scan'208";a="205068953"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 14 Mar 2023 08:01:59 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 08:01:58 -0700
+Received: from NAM04-DM6-obe.outbound.protection.outlook.com (10.10.215.89) by
+ email.microchip.com (10.10.87.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 08:01:58 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Ta+HIbgWLzBV0FZX01fKccmtxymCCbgFIkn007Vb6Z94qBw5LmrV6/l7fx86MHpxgmYJYUvFrNeHo+6jrWGZYVVqsstlIugQm1MlRBehsoeEjyPIngViuHxgQNb/+4WMQCh3ve8XgchTUDYAU/1cCuwKppFQvC9C35bJJsbksI578yE8QAXP307VZWxojCxk60cTTBf7fK+8PcvYJWvWM5yicZQHVETdQewGXmFtPRGMnUtLlBNKlmataeH1d7CfYaixDRPYDts8C8XyDIPdsxF2WPEcuHjpeGJbQXLXAKbuDVVLSsQwEvAbyaDc3Fvb9s0SdJdLVG59slDX7GeiqQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2VemP/wU1KePQDHuzIhNJqrDtPwrPh3VVX8fNn4P5QQ=;
+ b=denZOfMN+nJUlvyk99zRg2wTyBpGe/YEidWsqaE1X5i/iL93rRlw7gpVn/6L8oIdKKpwmJvT6CojDZ00SvySvlUidRp4AMSJNVcVBiPe2nBaiQh0VYRW5g1hD0NSWV+ASUVtRLAEU+Uuz45eb3H9xJj2pJGV7kfqXlFM6nsZHPVaISQ0stfcKiY+ma1GTpO+VpX0/N3IqAvFuQd4ph6eNaZFEWSdApHlJdbIu03IjeBVOHScqpjnzEXL+vSXWHey9DZYINzeLv7O6JdsjcSdiykzkVCebjc36NSkjKCfmybNc3Ng6bIATs0jjRjdgxN25oVXJJR243/tuUyYu0AATA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microchip.com; dmarc=pass action=none
+ header.from=microchip.com; dkim=pass header.d=microchip.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=microchiptechnology.onmicrosoft.com;
+ s=selector2-microchiptechnology-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2VemP/wU1KePQDHuzIhNJqrDtPwrPh3VVX8fNn4P5QQ=;
+ b=qURQ+JdOsT9C8NP5AZKKWeBNopHW/6qbcxqZUDpCgjTsv09ZhW8wkeHETNhlEVaWAeYkK9Hnk8eesvtGtVtQWWzCF/GOf5qm++xswhXcuQ3/NLxgBkRBLbXjGlusYgf30qgCBBSvfpaQaXVT1iEWB3SEXaihwL9vQ2dR6yRcC/k=
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com (2603:10b6:404:105::14)
+ by DM4PR11MB8092.namprd11.prod.outlook.com (2603:10b6:8:184::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 15:01:56 +0000
+Received: from BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::6eb8:36cd:3f97:ab32]) by BN6PR11MB1953.namprd11.prod.outlook.com
+ ([fe80::6eb8:36cd:3f97:ab32%5]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
+ 15:01:56 +0000
+From:   <Claudiu.Beznea@microchip.com>
+To:     <yang.lee@linux.alibaba.com>, <mchehab@kernel.org>
+CC:     <eugen.hristev@collabora.com>, <Nicolas.Ferre@microchip.com>,
+        <alexandre.belloni@bootlin.com>, <gregkh@linuxfoundation.org>,
+        <linux-media@vger.kernel.org>, <linux-staging@lists.linux.dev>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH -next] media: atmel: atmel-isc: Use
+ devm_platform_ioremap_resource()
+Thread-Topic: [PATCH -next] media: atmel: atmel-isc: Use
+ devm_platform_ioremap_resource()
+Thread-Index: AQHZVoXrR2ZNdVebOk63w8E2SYJsMw==
+Date:   Tue, 14 Mar 2023 15:01:56 +0000
+Message-ID: <5fbd369d-03f0-8d48-d944-1e1953454dde@microchip.com>
+References: <20230314055826.103682-1-yang.lee@linux.alibaba.com>
+In-Reply-To: <20230314055826.103682-1-yang.lee@linux.alibaba.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microchip.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN6PR11MB1953:EE_|DM4PR11MB8092:EE_
+x-ms-office365-filtering-correlation-id: 335e1661-440a-41c9-5fa1-08db249d0dbc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: MYE32PY9X4zjd5AVWk2woHWtshubPg7c3rKK3DtsOR1Pxl6cJBBV4maEpbxyX0i5rH/U3CRtBb0nY3d66WLurPLEQDXFdIgfFWH3/9LAMSXe+dhFNgIkgLgk13z9RLsCqqBwIAhT/THE5Am+8qJqXsvWabA59feXQwq0gFlJnOZ/a1wyci5349CIZ/wspn307LBkHdcvwnTxARK/b5PZH0aybz9he26HdQolHxFlV2N5vak+wekM/1X+DMHgj4ZOKd45Y+K2m249BIVqaII3TA17WdBm72Mn4TLlbIwbyrFG72wGnEAs7ZvpYKLWq0Fq9u9+ItbhrAw7djEmL3HoC0R8ly0ISVs0HirJjq+QNG17UUH+8Oz7OeOaNsj4ivQynDERRBotrySGY8MFMPbRQrjukJhzm/jhuL6C0lyu6OwEimAIewh1GHCtJqZFGOihzZj+jr2V+Rl/mSe5PbwNjaLdMtndxFd7YziudvfnKmf24+Pb9jAAAaYBI4LzFxl2Mm9sLfAirUv9BWHpnHqHGP0OX1hDuTRU/KxuLdwu31dslREiek3rdypCsup6onmgaSmxwlTRtuCh0oPCbd0zh18t8hkrjZtZTlL2tFVV70Lps68QpL82gUFdwyuG3Uckg6mpwUwUoxFUuJ8E20JErm2CVykv2SFqZNYmtO4w+4/1S6urzM3gG0gISGlcUjCFHEksuPFANF7wDvrb2Bfq0oDFHtePGWD0x16RIWuURUvgrPSXDmrnO6vpteG20LGF9WwA3uS3BsKJRu6NHRStgA==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN6PR11MB1953.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(39860400002)(396003)(376002)(346002)(136003)(366004)(451199018)(86362001)(31696002)(38070700005)(36756003)(38100700002)(122000001)(2906002)(41300700001)(5660300002)(8936002)(4326008)(2616005)(6512007)(6506007)(53546011)(186003)(26005)(83380400001)(54906003)(316002)(110136005)(66556008)(66476007)(64756008)(8676002)(91956017)(66446008)(66946007)(6486002)(71200400001)(478600001)(76116006)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?OFZlTjVhUXVUQ1pSRVpydi8vaWRycUhqRUNUS2xVOTlRbjZkOFZ0Y2gyd0FQ?=
+ =?utf-8?B?WGpjZU9EMkRaUnRGcmY5eHBrVnVsN2FUN2hsTGV3bU83VFMwQ09tY0tORTU4?=
+ =?utf-8?B?NTVRamw0TVZUelYzZ2pmNGk2aWdySkNwNWNNOVVud3d1Y2dYWFNYazdqYlU5?=
+ =?utf-8?B?U295bXd6ZlJKWmVWSDhWb0IvSEg1MmdLbzE1NTBOZWs0RnpNaXdVRnJOWTFH?=
+ =?utf-8?B?cVBmV3JuUVFoaGFrUEQ2eHJzVGZ0TlhERUZPZDN0UHZpeUY3SDhoNkJnRDlw?=
+ =?utf-8?B?VzJsbUw0UWhSM1NqbHhidXlxVEdTMXhHdmZIT05oNmdIQ1ZqSDh5TGNFeWFs?=
+ =?utf-8?B?andoVU85aGpHdnpzQVF5TWl0RFlVS3I5T0xFM3c0THFEZy9RbzRzWW8zMkVX?=
+ =?utf-8?B?QkpkZVBQbHgrZlpZcDg0ZEVON2RIc0Exd2EyVGtYeDZGdEIrWE1sSXoxR3V2?=
+ =?utf-8?B?cFJOUXExeGlPeGtoZElYTEo3YmVsVHlqemRMOWdwTzFyVHUzMnZieG43MjUr?=
+ =?utf-8?B?OEIzVjlyZENGbGpuc1hUZTBIQVRxUk1QN2M4ZWx3ejdtdUdYL1J6dm5VaGRo?=
+ =?utf-8?B?Z0d5cWJHUjc0N2xJem5sU3dxS0doNzNjRmFYWVkyM0FUT3FoWmN5VVpKQWF5?=
+ =?utf-8?B?a0dvSEkvREJBeUQ3djI1OUpZWVgyaVBNMnF5cTN0bW9rbGhteUh0ZTVtVFhM?=
+ =?utf-8?B?MlM4MHdTcDBJQnI1MmV4ZkhVcWtvbEhDdDR5a1kwQzNaSlNJZTJod0lValdK?=
+ =?utf-8?B?ZmlIU05LbU5RYjBOVEdGaUtmeVN0MWxpcjF1NnBjOUwreHhLR2lkUzJaQzVI?=
+ =?utf-8?B?bGJjL3RxUi9Hd25IQlBaQjVPS2pOelBJZ3FPSCtydEFOVEJXT3ZxRnUwelNz?=
+ =?utf-8?B?N2J2MGJjMzg3MDdGRFZGZXJadkVwUUxXR0IzcWQzWmRCL05RQ2tzcUQraE92?=
+ =?utf-8?B?Vi9kbEQyTUxuZjMrLytNbTJOQTBzZ25XN2pZUHVTZnE5Z2JxWmt3cFBzMmFl?=
+ =?utf-8?B?N0dMSlgzQ0xYcVpBSzhPRHJnSmRxWWRvRnpwdVRFZ2prZ3pYN1Q2WXFmRDM5?=
+ =?utf-8?B?MG10SXNyRzZhZEQ1OWdsZXBmR2l0M2lOd0FkTGVWOE5aUEYxSGgrMXphMWdo?=
+ =?utf-8?B?VVRlbktkU3hqaTNDOVFOK1dMVTFsTXN5NGcrNWJLME9nYjlHOEo3SlY4ZExm?=
+ =?utf-8?B?aVBneVMrQmxRZHhpYlZVN3dWQnN2N3FDVHJZUW91ejFKZ09KTVlOMi95WUhz?=
+ =?utf-8?B?dHp0SGZHTlpHN05MOFJCWXFzcTRXOHpZRjFYTUFUWVE2dmZqaFBETTJSNDZj?=
+ =?utf-8?B?a2NkM254VW1nSm43b04ramhrY2xYQXJ6alVxUjViUDVnMnBiWWVjVi9YeDA0?=
+ =?utf-8?B?UXY2bFJyQkcyTzdKSXdoZ2F0WkNOZ1VHblM2TXA1eWhWNzNuV0R3czF0WXlV?=
+ =?utf-8?B?VXR6TUg3Nmt4anNteWgwVEpMeGRheHFmanJRNkJpQ1ZZSlVXWlhOK1YzZzh3?=
+ =?utf-8?B?QVBkN0ZwQUVQQXF5QzdZckRzcTlVS095aU5wMmE3enduWDdvaHVDVENwdC9y?=
+ =?utf-8?B?OG9YalgvWTJIYWcraXphSjlSbmt4Z2hKUDhwOFVTbE1BMXNQTXlPampiR1ZO?=
+ =?utf-8?B?bWNlam93eDhDV2hlUE50LzlFUSt1OGNrSENTZ09qRHV3L3d5QUtqVEkrSkcx?=
+ =?utf-8?B?K3ZoSDMvMnI1T1Z2ZGVzMEtTZUtLbW03MnBMcWlKL0pvRHZPTUpYMWk0OUdO?=
+ =?utf-8?B?UjAvVmpxWmk3WUR1UUZVQkJRSHZmYk1KbGFpbWVRa2ZTb2EvYjUzcjlkOHo3?=
+ =?utf-8?B?eHlrY0d2NEUzU01Wa1FWbitybklPZWtOemx4ZWZReWpXQk81VUt0YXdOKzRV?=
+ =?utf-8?B?ak9SekhBZmxEN1hrWWN5eDZVd2Nwc1JtVjhXaHNqaWxaUzVoc2tWYTlXbFBX?=
+ =?utf-8?B?WnR1bjlGWkYzSmgrMHFhMytuTEFjMnpmdzVJWmpLalYzUUg2d1hud2VGcldH?=
+ =?utf-8?B?dEhxOTZjaHo2UE5BNUttWGxDZnoxNmhqZzd4Q29MSC9Vd3h6Ymk1Zk9QUDZ5?=
+ =?utf-8?B?cGtsbVFvOEJkSC9PTGd5WG53bjd6YWhnZHdiZG9VeVJjbmhiUEkyWjZYdmIz?=
+ =?utf-8?B?Umk1SXpCV3VQN1IrcUw4V2NUSWx0TXJiQWo5L3YzZllXRlFRZzQxL2ZFRW02?=
+ =?utf-8?B?dVE9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <6795A0A45BD2AD4A9EC7D845F42A6067@namprd11.prod.outlook.com>
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <2d9297e9-dab7-9615-3859-79b3b2980d9a@linaro.org>
-User-Agent: NeoMutt/20220415
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH02.sberdevices.ru (172.16.1.5) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN6PR11MB1953.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 335e1661-440a-41c9-5fa1-08db249d0dbc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2023 15:01:56.1659
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 3f4057f3-b418-4d4e-ba84-d55b4e897d88
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JhuPubTxtE0s+VTHhhBOaC6XNTbR5hVaALE9ri8aJvjaYQosgXERm3+fO1BZAnaFImkQWJGORhUPvFEvNfu22L/TiElIe29+1s8OL1FzZlM=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB8092
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 03:05:48PM +0100, Krzysztof Kozlowski wrote:
-> On 14/03/2023 12:48, Dmitry Rokosov wrote:
-> > On Tue, Mar 14, 2023 at 12:28:40PM +0100, Krzysztof Kozlowski wrote:
-> >> On 13/03/2023 21:12, Dmitry Rokosov wrote:
-> > 
-> > [...]
-> > 
-> >>> +#define CLKID_SPIFC		84
-> >>> +#define CLKID_USB_BUS		85
-> >>> +#define CLKID_SD_EMMC		86
-> >>> +#define CLKID_PSRAM		87
-> >>> +#define CLKID_DMC		88
-> >>
-> >> And what is here? Between 88 and 121?
-> >>
-> > 
-> > Explained below.
-> > 
-> >>> +#define CLKID_GEN_SEL		121
-> >>> +
-> >>> +#endif /* __A1_CLKC_H */
-> >>> diff --git a/include/dt-bindings/clock/amlogic,a1-pll-clkc.h b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> >>> new file mode 100644
-> >>> index 000000000000..8e97d3fb9d30
-> >>> --- /dev/null
-> >>> +++ b/include/dt-bindings/clock/amlogic,a1-pll-clkc.h
-> >>> @@ -0,0 +1,20 @@
-> >>> +/* SPDX-License-Identifier: GPL-2.0+ */
-> >>
-> >> I found in changelog:
-> >> "fix license issue, it's GPL-2.0+ only in the current version"
-> >> and I do not understand.
-> >>
-> >> The license is wrong, so what did you fix?
-> >>
-> > 
-> > Sorry don't get you. Why is it wrong?
-> 
-> Run checkpatch - it will tell you why wrong. The license is not correct.
-> This is part of binding and should be the same as binding.
-> 
-
-I always run checkpatch before sending the next patch series. Checkpatch
-doesn't highlight this problem:
-
---------------
-$ rg SPDX a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch
-32:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-111:+# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-188:+/* SPDX-License-Identifier: GPL-2.0+ */
-294:+/* SPDX-License-Identifier: GPL-2.0+ */
-
-$ ./scripts/checkpatch.pl --strict a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch
-total: 0 errors, 0 warnings, 0 checks, 259 lines checked
-
-a1_clkc_v10/v10-0003-dt-bindings-clock-meson-add-A1-PLL-and-Periphera.patch has no obvious style problems and is ready for submission.
---------------
-
-I've got your point, will fix in the next version.
-
-> > I've changed all new source files to GPL-2.0+ except yaml, because yaml
-> > dt bindings schemas require the following license:
-> > 
-> >     # SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
-> > 
-> > I've pointed it in the changelog.
-> 
-> The only thing I found was:
-> "fix license issue, it's GPL-2.0+ only in the current version"
-> 
-> so what exactly you pointed out in changelog? What was to fix? What was
-> fixed? Correct license into incorrect? But why?
-> 
-
-By 'license issue' I meant your comment for the previous version at:
-https://lore.kernel.org/all/6a950a51-fe90-9163-b73d-0a396d7187ee@linaro.org/
-
-I thought you mentioned the problem is in two license usage in the one
-line (GPL + MIT), I've fixed it to GPL2 only, and mentioned it in the
-changelog.
-
-I didn't know about the special requirement for a dt-bindings license, I've
-just checked other clock dt-bindings and found that license is different
-in the many places:
-
-$ grep -r "SPDX" include/dt-bindings/clock | grep -v -e "GPL-2.0.*BSD-2-Clause" | wc -l
-291
-
-And Tegra Car 124 as an example for different license between yaml
-schema and binding header:
-$ grep "SPDX" include/dt-bindings/clock/tegra124-car.h
-/* SPDX-License-Identifier: GPL-2.0 */
-$ grep "SPDX" Documentation/devicetree/bindings/clock/nvidia,tegra124-car.yaml
-# SPDX-License-Identifier: (GPL-2.0+ OR BSD-2-Clause)
-
-Anyway, it's not a problem to fix the license to the same value between
-header and yaml schema, I'll fix it in the next version.
-But based on the above experiments, other clock bindings should be fixed
-as well, checkpatch behavior should be extended for dt bindings headers
-licence checking.
-
-> > 
-> >>> +/*
-> >>> + * Copyright (c) 2019 Amlogic, Inc. All rights reserved.
-> >>> + * Author: Jian Hu <jian.hu@amlogic.com>
-> >>> + *
-> >>> + * Copyright (c) 2023, SberDevices. All Rights Reserved.
-> >>> + * Author: Dmitry Rokosov <ddrokosov@sberdevices.ru>
-> >>> + */
-> >>> +
-> >>> +#ifndef __A1_PLL_CLKC_H
-> >>> +#define __A1_PLL_CLKC_H
-> >>> +
-> >>> +#define CLKID_FIXED_PLL		1
-> >>> +#define CLKID_FCLK_DIV2		6
-> >>> +#define CLKID_FCLK_DIV3		7
-> >>> +#define CLKID_FCLK_DIV5		8
-> >>> +#define CLKID_FCLK_DIV7		9
-> >>> +#define CLKID_HIFI_PLL		10
-> >>
-> >>
-> >> Probably I asked about this... why indices are not continuous? You know
-> >> that consumers are allowed to use number 2 and it will be your ABI, even
-> >> though you did not write it in the binding? That's a tricky and
-> >> confusing pattern for no real gains.
-> > 
-> > Actually, indices are continuou but splitted into two parts: public and
-> > private. The public part is located in the dt bindings and can be included
-> > from device tree sources. The private part is in the drivers/clk/meson
-> > folder, and only clk drivers can use it.
-> > I know, there is some trick when the user just inserts a digit value and
-> > doesn't use constants.
-> 
-> This is not a trick. This is how DTS works. You have only indices/numbers.
-> 
-> > But I'm starting from the assumption that such
-> > dts changes will not be approved by maintainers. In other words, the user
-> > *must* apply defined ABI constants from dt bindings; it's a strong
-> > restriction.
-> 
-> But it is not correct assumption. Defines are very important, but they
-> are just helpers. Otherwise without defines you could not use any clock?
-> We pretty often use IDs - for DTS to allow merging via different trees,
-> for DT binding examples to not rely on headers.
-> 
-> Your driver implements the ABI and the driver exposes for example clock
-> ID=2, even if it is not in the header.
-> 
-> These IDs are unfortunately undocumented ABI and you if you change them,
-> users are allowed to complain.
-> 
-> Solution: don't do this. Have all exposed clock IDs and clocks in sync
-> (and continuous).
-
-I see. But I don't understand how I can restrict access to private
-clock objects. I don't want to open ability to change system clocks
-parents, for example. Or it's under device tree developer responsibility?
-I would appreciate any assistance in determining the best path.
-
--- 
-Thank you,
-Dmitry
+T24gMTQuMDMuMjAyMyAwNzo1OCwgWWFuZyBMaSB3cm90ZToNCj4gRVhURVJOQUwgRU1BSUw6IERv
+IG5vdCBjbGljayBsaW5rcyBvciBvcGVuIGF0dGFjaG1lbnRzIHVubGVzcyB5b3Uga25vdyB0aGUg
+Y29udGVudCBpcyBzYWZlDQo+IA0KPiBBY2NvcmRpbmcgdG8gY29tbWl0IDc5NDVmOTI5ZjFhNyAo
+ImRyaXZlcnM6IHByb3ZpZGUNCj4gZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKCkiKSwg
+Y29udmVydCBwbGF0Zm9ybV9nZXRfcmVzb3VyY2UoKSwNCj4gZGV2bV9pb3JlbWFwX3Jlc291cmNl
+KCkgdG8gYSBzaW5nbGUgY2FsbCB0byBVc2UNCg0Kcy9Vc2UvdXNlDQoNCndpdGggdGhpczoNCg0K
+UmV2aWV3ZWQtYnk6IENsYXVkaXUgQmV6bmVhIDxjbGF1ZGl1LmJlem5lYUBtaWNyb2NoaXAuY29t
+Pg0KDQo+IGRldm1fcGxhdGZvcm1faW9yZW1hcF9yZXNvdXJjZSgpLCBhcyB0aGlzIGlzIGV4YWN0
+bHkgd2hhdCB0aGlzIGZ1bmN0aW9uDQo+IGRvZXMuDQo+IA0KPiBTaWduZWQtb2ZmLWJ5OiBZYW5n
+IExpIDx5YW5nLmxlZUBsaW51eC5hbGliYWJhLmNvbT4NCj4gLS0tDQo+ICBkcml2ZXJzL3N0YWdp
+bmcvbWVkaWEvZGVwcmVjYXRlZC9hdG1lbC9hdG1lbC1zYW1hNWQyLWlzYy5jIHwgNCArLS0tDQo+
+ICBkcml2ZXJzL3N0YWdpbmcvbWVkaWEvZGVwcmVjYXRlZC9hdG1lbC9hdG1lbC1zYW1hN2c1LWlz
+Yy5jIHwgNCArLS0tDQo+ICAyIGZpbGVzIGNoYW5nZWQsIDIgaW5zZXJ0aW9ucygrKSwgNiBkZWxl
+dGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvbWVkaWEvZGVwcmVj
+YXRlZC9hdG1lbC9hdG1lbC1zYW1hNWQyLWlzYy5jIGIvZHJpdmVycy9zdGFnaW5nL21lZGlhL2Rl
+cHJlY2F0ZWQvYXRtZWwvYXRtZWwtc2FtYTVkMi1pc2MuYw0KPiBpbmRleCBiYTA2MTRmOTgxYTIu
+LmVlYmIzMzZlZmNlNyAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zdGFnaW5nL21lZGlhL2RlcHJl
+Y2F0ZWQvYXRtZWwvYXRtZWwtc2FtYTVkMi1pc2MuYw0KPiArKysgYi9kcml2ZXJzL3N0YWdpbmcv
+bWVkaWEvZGVwcmVjYXRlZC9hdG1lbC9hdG1lbC1zYW1hNWQyLWlzYy5jDQo+IEBAIC0zODksNyAr
+Mzg5LDYgQEAgc3RhdGljIGludCBhdG1lbF9pc2NfcHJvYmUoc3RydWN0IHBsYXRmb3JtX2Rldmlj
+ZSAqcGRldikNCj4gIHsNCj4gICAgICAgICBzdHJ1Y3QgZGV2aWNlICpkZXYgPSAmcGRldi0+ZGV2
+Ow0KPiAgICAgICAgIHN0cnVjdCBpc2NfZGV2aWNlICppc2M7DQo+IC0gICAgICAgc3RydWN0IHJl
+c291cmNlICpyZXM7DQo+ICAgICAgICAgdm9pZCBfX2lvbWVtICppb19iYXNlOw0KPiAgICAgICAg
+IHN0cnVjdCBpc2Nfc3ViZGV2X2VudGl0eSAqc3ViZGV2X2VudGl0eTsNCj4gICAgICAgICBpbnQg
+aXJxOw0KPiBAQCAtNDAzLDggKzQwMiw3IEBAIHN0YXRpYyBpbnQgYXRtZWxfaXNjX3Byb2JlKHN0
+cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICAgICAgICAgcGxhdGZvcm1fc2V0X2RydmRh
+dGEocGRldiwgaXNjKTsNCj4gICAgICAgICBpc2MtPmRldiA9IGRldjsNCj4gDQo+IC0gICAgICAg
+cmVzID0gcGxhdGZvcm1fZ2V0X3Jlc291cmNlKHBkZXYsIElPUkVTT1VSQ0VfTUVNLCAwKTsNCj4g
+LSAgICAgICBpb19iYXNlID0gZGV2bV9pb3JlbWFwX3Jlc291cmNlKGRldiwgcmVzKTsNCj4gKyAg
+ICAgICBpb19iYXNlID0gZGV2bV9wbGF0Zm9ybV9pb3JlbWFwX3Jlc291cmNlKHBkZXYsIDApOw0K
+PiAgICAgICAgIGlmIChJU19FUlIoaW9fYmFzZSkpDQo+ICAgICAgICAgICAgICAgICByZXR1cm4g
+UFRSX0VSUihpb19iYXNlKTsNCj4gDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL3N0YWdpbmcvbWVk
+aWEvZGVwcmVjYXRlZC9hdG1lbC9hdG1lbC1zYW1hN2c1LWlzYy5jIGIvZHJpdmVycy9zdGFnaW5n
+L21lZGlhL2RlcHJlY2F0ZWQvYXRtZWwvYXRtZWwtc2FtYTdnNS1pc2MuYw0KPiBpbmRleCAwMWFi
+YWJkZmNiZDkuLmJlZWQ0MGZlM2Y5MSAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9zdGFnaW5nL21l
+ZGlhL2RlcHJlY2F0ZWQvYXRtZWwvYXRtZWwtc2FtYTdnNS1pc2MuYw0KPiArKysgYi9kcml2ZXJz
+L3N0YWdpbmcvbWVkaWEvZGVwcmVjYXRlZC9hdG1lbC9hdG1lbC1zYW1hN2c1LWlzYy5jDQo+IEBA
+IC0zNzgsNyArMzc4LDYgQEAgc3RhdGljIGludCBtaWNyb2NoaXBfeGlzY19wcm9iZShzdHJ1Y3Qg
+cGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgew0KPiAgICAgICAgIHN0cnVjdCBkZXZpY2UgKmRl
+diA9ICZwZGV2LT5kZXY7DQo+ICAgICAgICAgc3RydWN0IGlzY19kZXZpY2UgKmlzYzsNCj4gLSAg
+ICAgICBzdHJ1Y3QgcmVzb3VyY2UgKnJlczsNCj4gICAgICAgICB2b2lkIF9faW9tZW0gKmlvX2Jh
+c2U7DQo+ICAgICAgICAgc3RydWN0IGlzY19zdWJkZXZfZW50aXR5ICpzdWJkZXZfZW50aXR5Ow0K
+PiAgICAgICAgIGludCBpcnE7DQo+IEBAIC0zOTIsOCArMzkxLDcgQEAgc3RhdGljIGludCBtaWNy
+b2NoaXBfeGlzY19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPiAgICAgICAg
+IHBsYXRmb3JtX3NldF9kcnZkYXRhKHBkZXYsIGlzYyk7DQo+ICAgICAgICAgaXNjLT5kZXYgPSBk
+ZXY7DQo+IA0KPiAtICAgICAgIHJlcyA9IHBsYXRmb3JtX2dldF9yZXNvdXJjZShwZGV2LCBJT1JF
+U09VUkNFX01FTSwgMCk7DQo+IC0gICAgICAgaW9fYmFzZSA9IGRldm1faW9yZW1hcF9yZXNvdXJj
+ZShkZXYsIHJlcyk7DQo+ICsgICAgICAgaW9fYmFzZSA9IGRldm1fcGxhdGZvcm1faW9yZW1hcF9y
+ZXNvdXJjZShwZGV2LCAwKTsNCj4gICAgICAgICBpZiAoSVNfRVJSKGlvX2Jhc2UpKQ0KPiAgICAg
+ICAgICAgICAgICAgcmV0dXJuIFBUUl9FUlIoaW9fYmFzZSk7DQo+IA0KPiAtLQ0KPiAyLjIwLjEu
+Ny5nMTUzMTQ0Yw0KPiANCg0K
