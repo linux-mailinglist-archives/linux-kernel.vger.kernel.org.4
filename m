@@ -2,99 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F5466BA147
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:16:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A92EB6BA153
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230240AbjCNVQE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:16:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53880 "EHLO
+        id S230020AbjCNVRt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:17:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbjCNVQC (ORCPT
+        with ESMTP id S229742AbjCNVRq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:16:02 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DF73C7A2;
-        Tue, 14 Mar 2023 14:16:01 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 14 Mar 2023 17:17:46 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DE4541B61;
+        Tue, 14 Mar 2023 14:17:43 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbmXb1qDWz4xDp;
-        Wed, 15 Mar 2023 08:15:59 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678828559;
-        bh=k0ktuaYalzyCguU1+7hbc6HyWBUmK2Mt7aTsFgmLwTE=;
-        h=Date:From:To:Cc:Subject:From;
-        b=uVktjRNtXwqzosI48URxZ0KG9kTavB1LGru9uEMupSNoWT20xdruvwHTWI+GlM/pU
-         f4YE6IKdlZ2VxYGqWyAbI2Mj23qBDfcEGjwnLDbtFc0B8Ie/Da/ileleZGyfE7dbgG
-         Wr9SocMHovL6iE9Gia02NDX1iGw8nB3Rdbap9Gh9pX07H0lrlCzeI2lVJU/iTU81EF
-         pSC1SBZkpTxVxGc7TrDpsLBBuPf4613CbjN3VoXRjoJRKDnnNz8S2CNo66+5eh7VIt
-         J/GsAqBWgIq73gXdF3PQYwDGHHZUCVy+IoEYs+2NZNMOCqoX9VKW458VyHAqVzmqTg
-         3zGA8PdjFoQrg==
-Date:   Wed, 15 Mar 2023 08:15:58 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Andy Gross <agross@kernel.org>
-Cc:     Abel Vesa <abel.vesa@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the qcom tree
-Message-ID: <20230315081558.613c56d3@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 31229B81BAC;
+        Tue, 14 Mar 2023 21:17:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEB68C433EF;
+        Tue, 14 Mar 2023 21:17:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678828661;
+        bh=G/tHROBbLosRdwkD3HnQ+KDGL8ERnNBNYYwwcSBmlnM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=SIsDlJr6vwCZajryxKgx8JpvtrEJ3UXGk6m7S4iYNAPT3uStMQs6xQJ08hqULgaJa
+         cII7DfIodlgNIeyHsfsGo052WFIOaONMsDsvsgxyCVtF2siZ99+Qa5OiF075tHtAvf
+         HA841pv9Z61DetA7tZCDRDwWCQjvS+tgYppJ3bw4jft0drYyQhhClJCMv6dnKFSDoD
+         64EjZ2yXK+oUZ35eIsF5JygpEkedPYZKWa+J3H0YDwY0t7thnLj7iMvUVnjcYXfeCM
+         2AhEdFlVKrcBflr2W1NQJfp1x/zBM2kqykXEoFbUOpOpkMrMOzrTTvDX2gP9bqZ/78
+         dF8AL6lMRmvlQ==
+Date:   Tue, 14 Mar 2023 16:17:39 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+Cc:     Ganapatrao Kulkarni <gankulkarni@os.amperecomputing.com>,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        joro@8bytes.org, bhelgaas@google.com, robin.murphy@arm.com,
+        will@kernel.org, jean-philippe@linaro.org,
+        darren@os.amperecomputing.com, scott@os.amperecomputing.com
+Subject: Re: [PATCH v2 1/2] PCI/ATS: Add a helper function to configure ATS
+ STU of a PF
+Message-ID: <20230314211739.GA1679724@bhelgaas>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tjkS22j.O/oHWB2spP/EsfN";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <63619dd6-8e59-89f1-8e3a-766ed9501f1d@linux.intel.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tjkS22j.O/oHWB2spP/EsfN
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 14, 2023 at 11:12:11AM -0700, Sathyanarayanan Kuppuswamy wrote:
+> On 3/14/23 10:10 AM, Bjorn Helgaas wrote:
+> > On Tue, Mar 14, 2023 at 09:50:06AM -0700, Sathyanarayanan Kuppuswamy wrote:
+> >> On 3/14/23 9:02 AM, Bjorn Helgaas wrote:
+> >>> On Tue, Mar 14, 2023 at 08:06:07PM +0530, Ganapatrao Kulkarni wrote:
+> >>>> On 14-03-2023 06:22 pm, Sathyanarayanan Kuppuswamy wrote:
+> >>>>> On 3/14/23 3:08 AM, Ganapatrao Kulkarni wrote:
+> >>>>>> On 14-03-2023 04:00 am, Sathyanarayanan Kuppuswamy wrote:
+> >>>>>>> On 3/13/23 2:12 PM, Bjorn Helgaas wrote:
+> >>>>>>>> On Mon, Feb 27, 2023 at 08:21:36PM -0800, Ganapatrao Kulkarni wrote:
+> >>>>>>>>> As per PCI specification (PCI Express Base Specification
+> >>>>>>>>> Revision 6.0, Section 10.5) both PF and VFs of a PCI EP
+> >>>>>>>>> are permitted to be enabled independently for ATS
+> >>>>>>>>> capability, however the STU(Smallest Translation Unit) is
+> >>>>>>>>> shared between PF and VFs. For VFs, it is hardwired to
+> >>>>>>>>> Zero and the associated PF's value applies to VFs.
+> >>>>>>>>>
+> >>>>>>>>> In the current code, the STU is being configured while
+> >>>>>>>>> enabling the PF ATS.  Hence, it is not able to enable ATS
+> >>>>>>>>> for VFs, if it is not enabled on the associated PF
+> >>>>>>>>> already.
+> >>>>>>>>>
+> >>>>>>>>> Adding a function pci_ats_stu_configure(), which can be
+> >>>>>>>>> called to configure the STU during PF enumeration.  Latter
+> >>>>>>>>> enumerations of VFs can successfully enable ATS
+> >>>>>>>>> independently.
+> >>>
+> >>>>>>>>> @@ -46,6 +46,35 @@ bool pci_ats_supported(struct pci_dev *dev)
+> >>>>>>>>>    }
+> >>>>>>>>>    EXPORT_SYMBOL_GPL(pci_ats_supported);
+> >>>>>>>>>    +/**
+> >>>>>>>>> + * pci_ats_stu_configure - Configure STU of a PF.
+> >>>>>>>>> + * @dev: the PCI device
+> >>>>>>>>> + * @ps: the IOMMU page shift
+> >>>>>>>>> + *
+> >>>>>>>>> + * Returns 0 on success, or negative on failure.
+> >>>>>>>>> + */
+> >>>>>>>>> +int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> >>>>>>>>> +{
+> >>>>>>>>> +    u16 ctrl;
+> >>>>>>>>> +
+> >>>>>>>>> +    if (dev->ats_enabled || dev->is_virtfn)
+> >>>>>>>>> +        return 0;
+> >>>>>>>>
+> >>>>>>>> I might return an error for the VF case on the assumption
+> >>>>>>>> that it's likely an error in the caller.  I guess one could
+> >>>>>>>> argue that it simplifies the caller if it doesn't have to
+> >>>>>>>> check for PF vs VF.  But the fact that STU is shared between
+> >>>>>>>> PF and VFs is an important part of understanding how ATS
+> >>>>>>>> works, so the caller should be aware of the distinction
+> >>>>>>>> anyway.
+> >>>>>>>
+> >>>>>>> I have already asked this question. But let me repeat it.
+> >>>>>>>
+> >>>>>>> We don't have any checks for the PF case here. That means you
+> >>>>>>> can re-configure the STU as many times as you want until ATS
+> >>>>>>> is enabled in PF. So, if there are active VFs which uses this
+> >>>>>>> STU, can PF re-configure the STU at will?
+> >>>>>>
+> >>>>>> IMO, Since STU is shared, programming it multiple times is not expected from callers code do it, however we can add below check to allow to program STU once from a PF.
+> >>>>>>
+> >>>>>> diff --git a/drivers/pci/ats.c b/drivers/pci/ats.c
+> >>>>>> index 1611bfa1d5da..f7bb01068e18 100644
+> >>>>>> --- a/drivers/pci/ats.c
+> >>>>>> +++ b/drivers/pci/ats.c
+> >>>>>> @@ -60,6 +60,10 @@ int pci_ats_stu_configure(struct pci_dev *dev, int ps)
+> >>>>>>          if (dev->ats_enabled || dev->is_virtfn)
+> >>>>>>                  return 0;
+> >>>>>>
+> >>>>>> +       /* Configured already */
+> >>>>>> +       if (dev->ats_stu)
+> >>>>>> +               return 0;
+> >>>>>
+> >>>>> Theoretically, you can re-configure STU as long as no one is using
+> >>>>> it. Instead of this check, is there a way to check whether there
+> >>>>> are active VMs which enables ATS?
+> >>>>
+> >>>> Yes I agree, there is no limitation on how many times you write STU
+> >>>> bits, but practically it is happening while PF is enumerated.
+> >>>>
+> >>>> The usage of function pci_ats_stu_configure is almost
+> >>>> similar(subset) to pci_enable_ats and only difference is one does
+> >>>> ATS enable + STU program and another does only STU program.
+> >>>
+> >>> What would you think of removing the STU update feature from
+> >>> pci_enable_ats() so it always fails if pci_ats_stu_configure() has not
+> >>> been called, even when called on the PF, e.g.,
+> >>>
+> >>>   if (ps != pci_physfn(dev)->ats_stu)
+> >>>     return -EINVAL;
+> >>
+> >> If we are removing the STU update from pci_enable_ats(), why
+> >> even allow passing "ps (page shift)" parameter? IMO, we can assume that
+> >> for STU reconfigure, users will call pci_ats_stu_configure().
+> > 
+> > The reason to pass "ps" would be to verify that the STU the caller
+> > plans to use matches the actual STU.
+> 
+> Do we really need to verify it? My thinking is, by introducing
+> pci_ats_stu_configure() we are already trying to decouple the STU config
+> from pci_enable_ats(). So why again check for it when enabling ATS?
 
-Hi all,
+Yeah, maybe we don't need to.  I was thinking that STU would be
+configured by the host, while the caller of pci_enable_ats() for a VF
+might be in a guest, but I guess that's not the case, right?
 
-In commit
-
-  bdbff740e57e ("arm64: dts: qcom: sm8550: Fix PCIe PHYs and controllers no=
-des")
-
-Fixes tag
-
-  Fixes: 98a4dc3a78fa ("arm64: dts: qcom: sm8550: Add PCIe PHYs and control=
-lers nodes")
-
-has these problem(s):
-
-  - Target SHA1 does not exist
-
-Maybe you meant
-
-Fixes: 7d1158c984d3 ("arm64: dts: qcom: sm8550: Add PCIe PHYs and controlle=
-rs nodes")
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/tjkS22j.O/oHWB2spP/EsfN
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ5A4ACgkQAVBC80lX
-0GzQFwgAn1aPP0mBtk/vTzi4n7a9yBKO3sI0raHFETYJa73dxPs1UysRLbxQeJv1
-neT38HylZ5/YULDp+sum/s7rAgBp6tOB1+s/nSzfsphFacZGLuK+HqyJS3q/MSGn
-nVzeQnJCGGX07GIw4eSi7xPZ24t+ND/DWT53FR2Yezbc8ND6DXidyWAdARklDV/B
-dAB7DAcihIyEmwDwga+lIE28zN5m/zXMtoX/hqhEqqRd6YZfGpyY/hQ+ITyZkaw3
-NR7SWmD8hAE2/T/HwZA4ymCljbT9EP8hbAiKIBUkhlRnJtHbX5xOiFuep7uBwdV3
-1SKrDuxEu+xHqq/QagPZzFUmzQr4AA==
-=AFUL
------END PGP SIGNATURE-----
-
---Sig_/tjkS22j.O/oHWB2spP/EsfN--
+Bjorn
