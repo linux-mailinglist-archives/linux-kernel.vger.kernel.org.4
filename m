@@ -2,149 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86ACC6BA127
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:08:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83FA96BA131
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:09:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbjCNVIg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:08:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S230176AbjCNVJm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:09:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229545AbjCNVId (ORCPT
+        with ESMTP id S230254AbjCNVJd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:08:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4478A1BAD1;
-        Tue, 14 Mar 2023 14:08:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 00170B81ACC;
-        Tue, 14 Mar 2023 21:08:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90B1EC433EF;
-        Tue, 14 Mar 2023 21:08:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678828108;
-        bh=wWtVZBnr5R36mAJCzjqAU5RU0w6F/SDt0qf8OmGvjqk=;
-        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
-        b=n1age7LTBsb2R6tY9K2W2V9429MGozNy/EVlfAuyvM7tj2MUyWWPDXtr+Pxcjvri1
-         Ob1DT9zfhsi6P1OOhng0Gma4Z0b7otoMk+fyz0WuPQx3aaxUhEELLfoFWbghauUAHU
-         5amYzLIhUlb7Z/bRDNewf+BRidqlScLB5VqScBahNY/AuKew2xS6zcEKpLqvU4tflL
-         51ZKwrdkHu+G4RUvZOyYIt6p7uVJf1yk7ddFCUD8KeDXzMHfL5g2T1O8/SDW0K9mh0
-         5GLLgNMBsMI540Rl1LEWy7Mb2SLAaIgnxjeavbCUxplCcZKF6WjS00Ck+4JUZrT7b8
-         0rJrNfeD8xvnw==
-Received: by paulmck-ThinkPad-P72.home (Postfix, from userid 1000)
-        id 3E4FC1540395; Tue, 14 Mar 2023 14:08:28 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 14:08:28 -0700
-From:   "Paul E. McKenney" <paulmck@kernel.org>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Dave Hansen <dave.hansen@linux.intel.com>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>
-Subject: Re: [for-linus][PATCH 5/5] tracing: Make tracepoint lockdep check
- actually test something
-Message-ID: <f4f52692-9f6c-467a-8988-113aced754eb@paulmck-laptop>
-Reply-To: paulmck@kernel.org
-References: <20230314190236.203370742@goodmis.org>
- <20230314190310.486609095@goodmis.org>
+        Tue, 14 Mar 2023 17:09:33 -0400
+Received: from fanzine2.igalia.com (fanzine2.igalia.com [213.97.179.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 258B04DE12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:09:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=at3EKPja1uG1hmcCODKYPMrJbShMRNNICkl1wIPJzMY=; b=Qy7k5A1PS+h2KnPWMfTWl6/snU
+        9RckXkr3ONay6tR1mB5X3zm5L9qM9SWE+pDq7q6a6Ua5VE6Q4TdK3zSrpW714+Vqbt5Q74uqUp/kU
+        yt5qtm+8cg3U/n1Ua+yXObM1k4NDdVF8EuGedxMBf+xpv24BtvtE/QUHvEt0e9ufFiAvSLK3rB+Ex
+        mOzygRfap1Tw5wVMDoC6zKski4B8UXm2AEIgmErjD0UWfqeAJ2A6JV1WiUUVtD+oQ4piQku/+MIV2
+        vGn7fv64qzJduvcdXEnWj8HKgO5rB65xtddOm1T8/p/81XpLBoi6EMIaWsCKPpG6lLjRbWg4kQ0jV
+        042UY5GA==;
+Received: from [152.254.169.34] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1pcBtD-00ATZw-UZ; Tue, 14 Mar 2023 22:09:01 +0100
+Message-ID: <2d1ad49c-d38e-ef06-8737-766ab0566251@igalia.com>
+Date:   Tue, 14 Mar 2023 18:08:37 -0300
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314190310.486609095@goodmis.org>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4] notifiers: Add tracepoints to the notifiers
+ infrastructure
+Content-Language: en-US
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, kexec@lists.infradead.org,
+        bhe@redhat.com, pmladek@suse.com, xiyou.wangcong@gmail.com,
+        dmitry.osipenko@collabora.com, rafael.j.wysocki@intel.com,
+        bigeasy@linutronix.de, valentin.schneider@arm.com,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        Arjan van de Ven <arjan@linux.intel.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Xiaoming Ni <nixiaoming@huawei.com>
+References: <20230314200058.1326909-1-gpiccoli@igalia.com>
+ <20230314135015.789369cd9f71b39a5b7eb291@linux-foundation.org>
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20230314135015.789369cd9f71b39a5b7eb291@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 03:02:41PM -0400, Steven Rostedt wrote:
-> From: "Steven Rostedt (Google)" <rostedt@goodmis.org>
+On 14/03/2023 17:50, Andrew Morton wrote:
+> On Tue, 14 Mar 2023 17:00:58 -0300 "Guilherme G. Piccoli" <gpiccoli@igalia.com> wrote:
 > 
-> A while ago where the trace events had the following:
+>>  include/trace/events/notifiers.h | 69 ++++++++++++++++++++++++++++++++
+>>  kernel/notifier.c                |  6 +++
 > 
->    rcu_read_lock_sched_notrace();
->    rcu_dereference_sched(...);
->    rcu_read_unlock_sched_notrace();
-> 
-> If the tracepoint is enabled, it could trigger RCU issues if called in
-> the wrong place. And this warning was only triggered if lockdep was
-> enabled. If the tracepoint was never enabled with lockdep, the bug would
-> not be caught. To handle this, the above sequence was done when lockdep
-> was enabled regardless if the tracepoint was enabled or not (although the
-> always enabled code really didn't do anything, it would still trigger a
-> warning).
-> 
-> But a lot has changed since that lockdep code was added. One is, that
-> sequence no longer triggers any warning. Another is, the tracepoint when
-> enabled doesn't even do that sequence anymore.
-> 
-> The main check we care about today is whether RCU is "watching" or not.
-> So if lockdep is enabled, always check if rcu_is_watching() which will
-> trigger a warning if it is not (tracepoints require RCU to be watching).
-> 
-> Note, that old sequence did add a bit of overhead when lockdep was enabled,
-> and with the latest kernel updates, would cause the system to slow down
-> enough to trigger kernel "stalled" warnings.
-> 
-> Link: http://lore.kernel.org/lkml/20140806181801.GA4605@redhat.com
-> Link: http://lore.kernel.org/lkml/20140807175204.C257CAC5@viggo.jf.intel.com
-> Link: https://lore.kernel.org/lkml/20230307184645.521db5c9@gandalf.local.home/
-> Link: https://lore.kernel.org/linux-trace-kernel/20230310172856.77406446@gandalf.local.home
-> 
-> Cc: stable@vger.kernel.org
-> Cc: Masami Hiramatsu <mhiramat@kernel.org>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: "Paul E. McKenney" <paulmck@kernel.org>
-> Cc: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-> Cc: Joel Fernandes <joel@joelfernandes.org>
-> Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Fixes: e6753f23d961 ("tracepoint: Make rcuidle tracepoint callers use SRCU")
-> Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Perhaps the filenames should match, which means "notifier.h".
 
-Acked-by: Paul E. McKenney <paulmck@kernel.org>
+Hi Andrew, thanks!
 
-> ---
->  include/linux/tracepoint.h | 15 ++++++---------
->  1 file changed, 6 insertions(+), 9 deletions(-)
-> 
-> diff --git a/include/linux/tracepoint.h b/include/linux/tracepoint.h
-> index fa1004fcf810..2083f2d2f05b 100644
-> --- a/include/linux/tracepoint.h
-> +++ b/include/linux/tracepoint.h
-> @@ -231,12 +231,11 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->   * not add unwanted padding between the beginning of the section and the
->   * structure. Force alignment to the same alignment as the section start.
->   *
-> - * When lockdep is enabled, we make sure to always do the RCU portions of
-> - * the tracepoint code, regardless of whether tracing is on. However,
-> - * don't check if the condition is false, due to interaction with idle
-> - * instrumentation. This lets us find RCU issues triggered with tracepoints
-> - * even when this tracepoint is off. This code has no purpose other than
-> - * poking RCU a bit.
-> + * When lockdep is enabled, we make sure to always test if RCU is
-> + * "watching" regardless if the tracepoint is enabled or not. Tracepoints
-> + * require RCU to be active, and it should always warn at the tracepoint
-> + * site if it is not watching, as it will need to be active when the
-> + * tracepoint is enabled.
->   */
->  #define __DECLARE_TRACE(name, proto, args, cond, data_proto)		\
->  	extern int __traceiter_##name(data_proto);			\
-> @@ -249,9 +248,7 @@ static inline struct tracepoint *tracepoint_ptr_deref(tracepoint_ptr_t *p)
->  				TP_ARGS(args),				\
->  				TP_CONDITION(cond), 0);			\
->  		if (IS_ENABLED(CONFIG_LOCKDEP) && (cond)) {		\
-> -			rcu_read_lock_sched_notrace();			\
-> -			rcu_dereference_sched(__tracepoint_##name.funcs);\
-> -			rcu_read_unlock_sched_notrace();		\
-> +			WARN_ON_ONCE(!rcu_is_watching());		\
->  		}							\
->  	}								\
->  	__DECLARE_TRACE_RCU(name, PARAMS(proto), PARAMS(args),		\
-> -- 
-> 2.39.1
+Do you want me to re-submit? I see some emails of the patch getting
+added to "mm-nonmm-unstable" (and also a checkpatch fixes you added on
+top of that). Lemme know how should I proceed.
+
+Cheers,
+
+
+Guilherme
