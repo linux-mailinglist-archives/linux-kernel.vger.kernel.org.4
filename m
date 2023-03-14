@@ -2,135 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A86516B9AB0
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:08:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27B716B9ABE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229810AbjCNQIc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:08:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55438 "EHLO
+        id S229845AbjCNQKf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:10:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCNQI2 (ORCPT
+        with ESMTP id S229749AbjCNQKb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:08:28 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66E602B296;
-        Tue, 14 Mar 2023 09:08:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 0AD60B81A31;
-        Tue, 14 Mar 2023 16:08:26 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F2D7C4339B;
-        Tue, 14 Mar 2023 16:08:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678810104;
-        bh=wA9DCnSggZ7AMT9yojgtSsTiqRDWjhLpUyEUud8IvmE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dAbWryZpUw6TZWSzeXV/L6G7XErOuD5W4Xe6WLiyuLNeL5oEXrwhuvOWjDanp/69q
-         hgoQeZ5BmogcMEB440DbybHqh9Egk7TDdok25Z9tVdHbNLFe3es76W8aPjqv6FZ0wq
-         kUmqHRPOsl67nHr1DQqXGxnXQcqheiprkRAhmfm6xlwY6nN/6z4kGsPjPhaACjCjHk
-         cbEtMPzPOssPONhgcuAWztD9X5JkNuK+AN/wX3wPmtVss/ayeNF1dBIqjd8YBZoe+k
-         BdIy+OoFmSKUHA0dV4YWkvvGdkLgebsG+aJ8geyRfS4suXrOTRHAlII9BwhvPH6i+o
-         sBBgS3bHSLV9g==
-Date:   Tue, 14 Mar 2023 09:08:21 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Michael Riesch <michael.riesch@wolfvision.net>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Sandy Huang <hjc@rock-chips.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Sascha Hauer <sha@pengutronix.de>,
-        kernel test robot <lkp@intel.com>,
-        Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev
-Subject: Re: [PATCH v3 1/6] drm/rockchip: vop2: initialize possible_crtcs
- properly
-Message-ID: <20230314160821.GA13416@dev-arch.thelio-3990X>
-References: <20230124054706.3921383-1-michael.riesch@wolfvision.net>
- <20230124054706.3921383-2-michael.riesch@wolfvision.net>
+        Tue, 14 Mar 2023 12:10:31 -0400
+Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 71676A2F09
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:10:18 -0700 (PDT)
+Received: by mail-qv1-xf29.google.com with SMTP id jl13so7846527qvb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:10:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112; t=1678810217;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=swF9reNuKGvQlpHTaU1zvpVj42ldUq26y6vhH0wRnJM=;
+        b=Njpdpu857DRf5XH5IWnjrOSMDrwfUkeADMyzc2yqikDTvr0V8v/tPk8Y0emoyyvtgq
+         sDofUc2jncrxBfKt0mAOwLhDVDx6L4ejkgD/lgTj1jCNyazmE94U++kox4PrLs/gOCgO
+         Od5ZnITBwPMHWVEnCPF/O5YfGmr5nfAQ7FldRFigMgBiMbYywPouz0eLMDO6YXlhk4vZ
+         tPb6SzKcAaRXveagJbuEVsbrPnNa6UFmSwbKvQBQtdwd1xhXzuQX2ZtKqlKVocv79uUH
+         JUnH79Vmw0Gpqnl6ngswvA+ZvLa3fAkQNHFGj38WKKjVNGxCuzW9mzLYjIJDgUrEtx3+
+         LTAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678810217;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=swF9reNuKGvQlpHTaU1zvpVj42ldUq26y6vhH0wRnJM=;
+        b=hOqZ4FAQ3LNaP6wiU59fEc81wZswMpGHn6t6fUNkV9S33SFcj8u1WzoXOF6JtCYT1u
+         LxYcual2UXqVv7MrDP3NhXAlCc9VdrzbjpWMNMbimIdXX8CzIYQAJ39MNx6TFVYEoCTj
+         I2uWYFAReC/QOi1u7+/TxbSuzNvkcUbMtYGsVkhJws2dY5Eh+5hnn2zpgRwU6OKMA5qj
+         u7p851Rlx0z4jr32+PDvbeYOdSIhEPwwqoD5ooi432QFQiW/I31BGPWsYJ0uwkenRTPY
+         SxyP9NaFNOW8pMX+r2l/3s3lx+6CFgAQ0IcoPlokcdchkVArbdQwKip+w753egghILjk
+         IdRg==
+X-Gm-Message-State: AO0yUKXnc1bOMlK6YBnf6+S6cxn7iGarlJQu1kjyMqmuipItbCxQWqqm
+        H1TzHFFaVgvD2tePmUdkAz6I5Q==
+X-Google-Smtp-Source: AK7set/JFciJ91x3mcXmcllVskHNA7+J4VSs63iG7Hs1gUFVXHSTpvGL+51eelfHbVutEQceydlhZw==
+X-Received: by 2002:a05:622a:28a:b0:3bf:da89:1946 with SMTP id z10-20020a05622a028a00b003bfda891946mr63135622qtw.1.1678810217134;
+        Tue, 14 Mar 2023 09:10:17 -0700 (PDT)
+Received: from localhost ([2620:10d:c091:400::5:1fe3])
+        by smtp.gmail.com with ESMTPSA id l16-20020a05622a175000b003bfa932525dsm2143969qtk.51.2023.03.14.09.10.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 09:10:16 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 12:10:16 -0400
+From:   Johannes Weiner <hannes@cmpxchg.org>
+To:     Suren Baghdasaryan <surenb@google.com>
+Cc:     Domenico Cerasuolo <cerasuolodomenico@gmail.com>,
+        linux-kernel@vger.kernel.org, peterz@infradead.org,
+        brauner@kernel.org, chris@chrisdown.name
+Subject: Re: [PATCH 0/4] sched/psi: Allow unprivileged PSI polling
+Message-ID: <20230314161016.GA12250@cmpxchg.org>
+References: <20230309170756.52927-1-cerasuolodomenico@gmail.com>
+ <CAJuCfpGYrnCoAn+bUdcEZ3OS+5ujDp2iUNXBMRacxNGbJvCY-w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230124054706.3921383-2-michael.riesch@wolfvision.net>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJuCfpGYrnCoAn+bUdcEZ3OS+5ujDp2iUNXBMRacxNGbJvCY-w@mail.gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Michael,
-
-On Tue, Jan 24, 2023 at 06:47:01AM +0100, Michael Riesch wrote:
-> The variable possible_crtcs is only initialized for primary and
-> overlay planes. Since the VOP2 driver only supports these plane
-> types at the moment, the current code is safe. However, in order
-> to provide a future-proof solution, fix the initialization of
-> the variable.
+On Mon, Mar 13, 2023 at 08:29:37AM -0700, Suren Baghdasaryan wrote:
+> On Thu, Mar 9, 2023 at 9:08 AM Domenico Cerasuolo
+> <cerasuolodomenico@gmail.com> wrote:
+> >
+> > PSI offers 2 mechanisms to get information about a specific resource
+> > pressure. One is reading from /proc/pressure/<resource>, which gives
+> > average pressures aggregated every 2s. The other is creating a pollable
+> > fd for a specific resource and cgroup.
+> >
+> > The trigger creation requires CAP_SYS_RESOURCE, and gives the
+> > possibility to pick specific time window and threshold, spawing an RT
+> > thread to aggregate the data.
+> >
+> > Systemd would like to provide containers the option to monitor pressure
+> > on their own cgroup and sub-cgroups. For example, if systemd launches a
+> > container that itself then launches services, the container should have
+> > the ability to poll() for pressure in individual services. But neither
+> > the container nor the services are privileged.
 > 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Reported-by: Dan Carpenter <error27@gmail.com>
-> Signed-off-by: Michael Riesch <michael.riesch@wolfvision.net>
-> ---
-> v3:
->  - no changes
-> v2:
->  - new patch
-> 
->  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 7 ++++---
->  1 file changed, 4 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-> index 8cecf81a5ae0..374ef821b453 100644
-> --- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-> +++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
-> @@ -2322,10 +2322,11 @@ static int vop2_create_crtc(struct vop2 *vop2)
->  				/* change the unused primary window to overlay window */
->  				win->type = DRM_PLANE_TYPE_OVERLAY;
->  			}
-> -		}
-> -
-> -		if (win->type == DRM_PLANE_TYPE_OVERLAY)
-> +		} else if (win->type == DRM_PLANE_TYPE_OVERLAY) {
->  			possible_crtcs = (1 << nvps) - 1;
-> +		} else {
-> +			possible_crtcs = 0;
-> +		}
->  
->  		ret = vop2_plane_init(vop2, win, possible_crtcs);
->  		if (ret) {
-> -- 
-> 2.30.2
-> 
+> This sounds like an interesting usecase. I'll need to take a closer
+> look once I'm back from vacation later this week.
+> Thanks!
 
-This patch is now in -next as commit 368419a2d429 ("drm/rockchip: vop2:
-initialize possible_crtcs properly") and it actually appears to
-introduce a path where possible_crtcs could be used uninitialized.
+Thanks, Suren!
 
-  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2316:8: error: variable 'possible_crtcs' is used uninitialized whenever 'if' condition is false [-Werror,-Wsometimes-uninitialized]
-                          if (vp) {
-                              ^~
-  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2330:36: note: uninitialized use occurs here
-                  ret = vop2_plane_init(vop2, win, possible_crtcs);
-                                                   ^~~~~~~~~~~~~~
-  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2316:4: note: remove the 'if' if its condition is always true
-                          if (vp) {
-                          ^~~~~~~~
-  drivers/gpu/drm/rockchip/rockchip_drm_vop2.c:2298:21: note: initialize the variable 'possible_crtcs' to silence this warning
-                  u32 possible_crtcs;
-                                    ^
-                                     = 0
-  1 error generated.
+There is also the desktop monitoring usecase that Chris Down had
+inquired about some while back:
 
-Prior to this change, if that else path was hit, clang recognized based on
-the assignment that the next if statement would always be true. Now, if
-the else path is taken, the possible_crtcs assignment will be missed. Is
-that intentional?
+https://lore.kernel.org/all/CAJuCfpGnJBEvQTUeJ_U6+rHmPcMjw_pPL+QFj7Sec5fHZPH67w@mail.gmail.com/T/
 
-Cheers,
-Nathan
+The patches should help with that as well.
