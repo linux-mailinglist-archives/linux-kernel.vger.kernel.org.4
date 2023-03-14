@@ -2,141 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F1A76BA009
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:52:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3ABB76BA00C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:52:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229870AbjCNTva (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:51:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
+        id S229918AbjCNTwA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:52:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbjCNTv2 (ORCPT
+        with ESMTP id S230205AbjCNTvw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:51:28 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2EC2E82A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678823432;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=3M5M7uIlC8hyhww3unkjtp+hcWjh4Vt7Gzo5dt9yCXk=;
-        b=PlIDzNitNYULMVGa06UyDFNQ3ffzuSNqXlVUxzivD2gJlNfbm/uhkN9jkO0EqgLbO5Pdmm
-        bQxgOyyavaFWj9Og5oIt2qRg2/y60ZNiPG0AA5K5qrb4CuEwheWwkpEMJmVUMg+252Z/hT
-        95fit1b2GIywqZtOLFsz1VzrUsNzpWo=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-404-3pv0nfEjMBCC45D0Ch-0fA-1; Tue, 14 Mar 2023 15:50:26 -0400
-X-MC-Unique: 3pv0nfEjMBCC45D0Ch-0fA-1
-Received: from smtp.corp.redhat.com (int-mx02.intmail.prod.int.rdu2.redhat.com [10.11.54.2])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAB8938123A8;
-        Tue, 14 Mar 2023 19:50:25 +0000 (UTC)
-Received: from redhat.com (unknown [10.2.16.147])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id E4AB540C6E67;
-        Tue, 14 Mar 2023 19:50:24 +0000 (UTC)
-Date:   Tue, 14 Mar 2023 14:50:23 -0500
-From:   Eric Blake <eblake@redhat.com>
-To:     Nir Soffer <nsoffer@redhat.com>
-Cc:     josef@toxicpanda.com, linux-block@vger.kernel.org,
-        nbd@other.debian.org, philipp.reisner@linbit.com,
-        lars.ellenberg@linbit.com, christoph.boehmwalder@linbit.com,
-        corbet@lwn.net, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/3] uapi nbd: add cookie alias to handle
-Message-ID: <20230314195023.bsey5bfq2atz7d66@redhat.com>
-References: <20230310201525.2615385-1-eblake@redhat.com>
- <20230310201525.2615385-3-eblake@redhat.com>
- <CAMRbyysDE+v_D6Q3tCf_+86T0V57UE4Emw6zc_4vnUu0Yau23A@mail.gmail.com>
+        Tue, 14 Mar 2023 15:51:52 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81727233E0;
+        Tue, 14 Mar 2023 12:51:51 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id o12so66704036edb.9;
+        Tue, 14 Mar 2023 12:51:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678823510;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8AT8USwG5WyHMLzA6/8T0IUfb3m04Mgmj2Z9mkS5Q9k=;
+        b=VQ1Bxxrd0PI+Y36KGSR9tvLfCRNckswniNWELVaaPvUCxWivB6ajZpVwNfQPWx/bxk
+         wlyb+IDMNnHUcblddMhuEzgUKSHLuI4IYjI16P82uxBFfu+92mr4ylyALdg2BFJvB0AO
+         onmyGCP+1rgPgi7D6BPokZjuqWgag+074+OsP3gh5V8/s6Ajcuo0Ix20CPS0vWa6y38n
+         CxUj1yc60ELISGN+7y9S+Iv2DRIOmu8bGsTq9Aeo9AEahw49g7yGwjhT0f4XFogDgefs
+         /N/wuVy/EJ9AiQTL6+rT/SW6ZaLlic2kpZM0aIBubfPL2LM3uwH4k5DAmUCIPj+m+x3r
+         sfcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678823510;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8AT8USwG5WyHMLzA6/8T0IUfb3m04Mgmj2Z9mkS5Q9k=;
+        b=oJNQBJDzWpTzt/Xz5j60S+1tcI4xKoBLJiFBvILS6BOSi2T9Lp9j+L43LTGBJuPOlx
+         d0ieBRKW3FRVhraVnz7AQlzvTyz0Xh1gl5O0eOROtoFP2kyAvm4H+gXdnVD7NXykIjgW
+         ac/jX+7kpQzKyV22ALUAuYAdIQjfxxjxh+rkLj3O7hx3Pb+rrDjeUzrYCPKQDc44oTS5
+         zU5ZgO5UFw7hOFMt3vRnNebushmblQj1spP6X/f4/6UyXiRIhFOCxajjerUkLprQD4+a
+         lO1TJu2gbucSvbt9adFvVS1LHE1zbzPWBzZqxrvrKeCxoeANw0mfnXJTIcEgXRnoaoCJ
+         Rs9Q==
+X-Gm-Message-State: AO0yUKV4AVbHo1QFWf5wTIUAdq0VeDaxTD1mC+X9kjGHQvqUaFxVfPp6
+        s8cgHKlQ3PnNosVZXscH2kM=
+X-Google-Smtp-Source: AK7set/tzuvE7xTzdstMMoDin2Jn1A93J29XnBrFLWGatjpCIuLb3twRybszlAVT52/X8b7+AM6KfA==
+X-Received: by 2002:a17:906:a249:b0:92b:b4d9:3f07 with SMTP id bi9-20020a170906a24900b0092bb4d93f07mr3722129ejb.14.1678823509909;
+        Tue, 14 Mar 2023 12:51:49 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id z4-20020a170906714400b008e53874f8d8sm1509261ejj.180.2023.03.14.12.51.47
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 12:51:49 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Joe Tessler <jrt@google.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Niklas =?ISO-8859-1?Q?S=F6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH 16/28] media: platform: sun6i-csi: drop of_match_ptr for ID table
+Date:   Tue, 14 Mar 2023 20:51:46 +0100
+Message-ID: <2671303.mvXUDI8C0e@jernej-laptop>
+In-Reply-To: <20230312131318.351173-16-krzysztof.kozlowski@linaro.org>
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <20230312131318.351173-16-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRbyysDE+v_D6Q3tCf_+86T0V57UE4Emw6zc_4vnUu0Yau23A@mail.gmail.com>
-User-Agent: NeoMutt/20220429
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.2
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Mar 11, 2023 at 02:30:39PM +0200, Nir Soffer wrote:
-> On Fri, Mar 10, 2023 at 10:16 PM Eric Blake <eblake@redhat.com> wrote:
-> >
-> > The uapi <linux/nbd.h> header declares a 'char handle[8]' per request;
-> > which is overloaded in English (are you referring to "handle" the
-> > verb, such as handling a signal or writing a callback handler, or
-> > "handle" the noun, the value used in a lookup table to correlate a
-> > response back to the request).  Many client-side NBD implementations
-> > (both servers and clients) have instead used 'u64 cookie' or similar,
-> > as it is easier to directly assign an integer than to futz around with
-> > memcpy.  In fact, upstream documentation is now encouraging this shift
-> > in terminology: https://lists.debian.org/nbd/2023/03/msg00031.html
-> >
-> > Accomplish this by use of an anonymous union to provide the alias for
-> > anyone getting the definition from the uapi; this does not break
-> > existing clients, while exposing the nicer name for those who prefer
-> > it.  Note that block/nbd.c still uses the term handle (in fact, it
-> > actually combines a 32-bit cookie and a 32-bit tag into the 64-bit
-> > handle), but that internal usage is not changed the public uapi, since
-> > no compliant NBD server has any reason to inspect or alter the 64
-> > bits sent over the socket.
-> >
-> > Signed-off-by: Eric Blake <eblake@redhat.com>
-> > ---
-> >  include/uapi/linux/nbd.h | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/include/uapi/linux/nbd.h b/include/uapi/linux/nbd.h
-> > index 8797387caaf7..f58f2043f62e 100644
-> > --- a/include/uapi/linux/nbd.h
-> > +++ b/include/uapi/linux/nbd.h
-> > @@ -81,7 +81,10 @@ enum {
-> >  struct nbd_request {
-> >         __be32 magic;   /* NBD_REQUEST_MAGIC    */
-> >         __be32 type;    /* See NBD_CMD_*        */
-> > -       char handle[8];
-> > +       union {
-> > +               char handle[8];
-> > +               __be64 cookie;
-> > +       };
-> >         __be64 from;
-> >         __be32 len;
-> >  } __attribute__((packed));
-> > @@ -93,6 +96,9 @@ struct nbd_request {
-> >  struct nbd_reply {
-> >         __be32 magic;           /* NBD_REPLY_MAGIC      */
-> >         __be32 error;           /* 0 = ok, else error   */
-> > -       char handle[8];         /* handle you got from request  */
-> > +       union {
-> > +               char handle[8]; /* handle you got from request  */
-> > +               __be64 cookie;
-> 
-> Should we document like this?
-> 
->     union {
->         __be64 cookie; /* cookie you got from request */
->         char handle[8]; /* older name */
-> 
-> I think we want future code to use the new term.
+Dne nedelja, 12. marec 2023 ob 14:13:06 CET je Krzysztof Kozlowski napisal(=
+a):
+> The driver can match only via the DT table so the table should be always
+> used and the of_match_ptr does not have any sense (this also allows ACPI
+> matching via PRP0001, even though it might not be relevant here).  This
+> also fixes !CONFIG_OF error:
+>=20
+>   drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c:401:34: error:
+> =E2=80=98sun6i_csi_of_match=E2=80=99 defined but not used [-Werror=3Dunus=
+ed-const-variable=3D]
+>=20
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
 
-Sure, swapping the order to favor the preferred name first makes sense.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-I'm still not sure on whether cookie should be u64 or __be64 (it's
-opaque, so endianness over the wire doesn't matter; and previous code
-was using memcpy() onto char[8] which may behave differently depending
-on machine endianness).
+Best regards,
+Jernej
 
--- 
-Eric Blake, Principal Software Engineer
-Red Hat, Inc.           +1-919-301-3266
-Virtualization:  qemu.org | libvirt.org
+>  drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>=20
+> diff --git a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c index
+> e3e6650181c8..187a2419da96 100644
+> --- a/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> +++ b/drivers/media/platform/sunxi/sun6i-csi/sun6i_csi.c
+> @@ -429,7 +429,7 @@ static struct platform_driver sun6i_csi_platform_driv=
+er
+> =3D { .remove	=3D sun6i_csi_remove,
+>  	.driver	=3D {
+>  		.name		=3D SUN6I_CSI_NAME,
+> -		.of_match_table	=3D=20
+of_match_ptr(sun6i_csi_of_match),
+> +		.of_match_table	=3D sun6i_csi_of_match,
+>  		.pm		=3D &sun6i_csi_pm_ops,
+>  	},
+>  };
+
+
+
 
