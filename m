@@ -2,150 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 377ED6B8C9C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:08:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9AC996B8C98
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 09:07:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbjCNIHj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 04:07:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39032 "EHLO
+        id S230479AbjCNIGu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 04:06:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230510AbjCNIHI (ORCPT
+        with ESMTP id S231124AbjCNIGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 04:07:08 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE0CA984FB
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:06:16 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so5185749pjv.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:06:15 -0700 (PDT)
+        Tue, 14 Mar 2023 04:06:12 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C23027E8A1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:05:53 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id a9so15687641plh.11
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 01:05:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678781175;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=shopee.com; s=shopee.com; t=1678781153;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9I5drFJ/rMd/JOlFD+7l7aDkUVR5wTwBOoMNeSTYK2g=;
-        b=gxpv2TEWg8Y7W3WUjM9DrjNO999BKPLuVBhRigTJvZhAEz2a89xOZ0Xqzf7o2utPf4
-         1s5JEzbzo2ojCl7xq2aLvcWf1UvoMnJxi/V352UMAP/zO/I+Fz0yWF3q+YRtfKXaR7jk
-         wBps3OZK0ApuO1eysrO95nq0L2134LQtyT/Dz3+tDae8TgAeea2TXL/3xnPe8NovrrdI
-         OIrxUHQ2zhRnMu2l6AUahm7LFjh/MmFOtolvcxlYzEiiZC44/omf3GemnZD4xTDkOGKI
-         aEpOE+dIt4z/6/o4Z1UQNzRDP7S/vIMfkVKWGTCAst/e7iDzCMSycgPo8x8qYWB+8EjM
-         cZIw==
+        bh=zofjmH9Q5aLfBFZc7HV7oQNC01Mahqnpw6fc67IAu0Q=;
+        b=TqPeHLlxt+F38sKCcnkgaOT5lWLkZzxRtnCfpoXlUWquYoDTvbMD+eM86TnuaxG8B3
+         VtNATnpKMEgHr/It1hiU/FWA+IlY7IJgp0stC2njjzp+von3ODGndgtHKQuAczxg3HJX
+         YENfeINnpQwnjlH/J4VhinGw1kQZnr+HIHMwQVFpIF8AXxpxH7q3atgGxkTA3AlU6cav
+         6BRdebn3MYNCutep7ZOPqKEBX3ej9JjDLhMBBQB/EOzMNFTcTK0sBN9ddk3Loiikppp1
+         zkvcUgG1u8WeMwUauv7MpH/dBy7RfdT4Ofdsw/cvpWxdN99mJzoP6HGIgsTeWy6xBJCD
+         pULw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678781175;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9I5drFJ/rMd/JOlFD+7l7aDkUVR5wTwBOoMNeSTYK2g=;
-        b=ENXKL50JMWPMK9WE43OhlpeD0/IHjIvRn4YM7V434FRfYiwKAXGBKYL8N6nxecOjuN
-         NJJfUxZDTl6KrFCTa9VVUFX99HQ+gnrSrl1ZgyxpzGb094OJUTZXyyrtGb7D8eKCvdJW
-         JTa5Kx3xDzcu3dWLVKjmJXoyPVuEI1185twLrx2YQIS8ae4I7p/THZD7orwQdN7vdaUW
-         lWy7BrGjaevpLeRC6ekagK0VBD2HZ/ZS0JzpuR8/GCtv0l0aBYYxzAYsbllRsa6w3hO3
-         kp+XT8WNw/4n99rZM6fRgLWfdAyP/Jf2Npe59E1RrDThrCk1+6bKOC8wxMtRsyxKDUfw
-         UTcw==
-X-Gm-Message-State: AO0yUKURz7+6ep0RsB0sBmcTyGMRWqSZzEMqkGUHuTyajX6gPfw5BPqS
-        aeGwugZLr1IzQBkZiWFZ768L
-X-Google-Smtp-Source: AK7set/5deypqim9/Muj/nKoPFZ0hTR3MaxuNgHdFfFiu9LJlMOb2O+A9xX/Avw5ufiFHodRzbhE+Q==
-X-Received: by 2002:a17:902:bf4c:b0:19f:2444:409f with SMTP id u12-20020a170902bf4c00b0019f2444409fmr9364264pls.20.1678781175428;
-        Tue, 14 Mar 2023 01:06:15 -0700 (PDT)
-Received: from localhost.localdomain ([117.217.177.49])
-        by smtp.gmail.com with ESMTPSA id l8-20020a170902f68800b001994a0f3380sm1078022plg.265.2023.03.14.01.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 01:06:14 -0700 (PDT)
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
-        tony.luck@intel.com
-Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, james.morse@arm.com,
-        mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
-        quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
-        ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        stable@vger.kernel.org
-Subject: [PATCH v8 14/14] soc: qcom: llcc: Do not create EDAC platform device on SDM845
-Date:   Tue, 14 Mar 2023 13:34:43 +0530
-Message-Id: <20230314080443.64635-15-manivannan.sadhasivam@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20230314080443.64635-1-manivannan.sadhasivam@linaro.org>
-References: <20230314080443.64635-1-manivannan.sadhasivam@linaro.org>
+        d=1e100.net; s=20210112; t=1678781153;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=zofjmH9Q5aLfBFZc7HV7oQNC01Mahqnpw6fc67IAu0Q=;
+        b=7jfOnIvJtLb0Ev+ToxrgXto+YVX1ion0wtWh3PMFLi02/BK+jRKv6bJfSbzyR3IhEX
+         0+Lg98Km652jQkyIOzXRlU4lEh5sSbWrLAEWBuwzzPahScQ4sQj5bIMPE03QpYf2P7NA
+         AQ21yETZuCwIXlLX/AlpDmKnw4iIQs6xqvsRdcGvnnMbTpfaS8hvYZG8TddC3DEtEYjE
+         KD28F3+5aMhv2JlIk+ggCUp14H/s7SaJlqacMOwjmh1e2ApPXcyBSld0MDR4yTQP70/B
+         JmQMcXESEvmYFO9LC1+tH73rOqqw4W0VIAzHu2Gcp2yjflTAZFdoKw4WzS6nzMqnYryd
+         I3yw==
+X-Gm-Message-State: AO0yUKX709lc0DKq4dgGCqeg2pw+Z7E1xTfe/Yefe/NO73AfoaUhSan2
+        jHA5fUg72LJFVv43fuBCGVJ+02gwW3ZsvXkIsVZbzQ==
+X-Google-Smtp-Source: AK7set80ZkoLirdNQgNwxAYx5Ddt06terUlVQgUQ+9/FrNVH2HWodhhM0lz+fm4NourTSW9hbCS7CQ==
+X-Received: by 2002:a17:903:187:b0:19d:16fa:ba48 with SMTP id z7-20020a170903018700b0019d16faba48mr45153942plg.28.1678781153069;
+        Tue, 14 Mar 2023 01:05:53 -0700 (PDT)
+Received: from [10.54.24.141] ([143.92.118.3])
+        by smtp.gmail.com with ESMTPSA id j7-20020a170903024700b001a043e84bf0sm1091071plh.209.2023.03.14.01.05.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 01:05:52 -0700 (PDT)
+Message-ID: <b07c5e99-b251-2509-dfac-0f8e571d39d7@shopee.com>
+Date:   Tue, 14 Mar 2023 16:05:47 +0800
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.8.0
+Subject: Re: [PATCH] mm: remove redundant check in handle_mm_fault
+To:     David Hildenbrand <david@redhat.com>,
+        Matthew Wilcox <willy@infradead.org>
+Cc:     akpm@linux-foundation.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+References: <20230306024959.131468-1-haifeng.xu@shopee.com>
+ <df3997ed-a844-597b-fbb1-154caad78543@redhat.com>
+ <354360d5-dce6-a11c-ee61-d41e615bfa05@shopee.com>
+ <ZAamFX/hq6Y/iNJb@casper.infradead.org>
+ <6df72872-2829-47ab-552c-7ef8a6470e6f@shopee.com>
+ <562e9cc3-d0aa-23e9-bd19-266b5aef2ae7@redhat.com>
+From:   Haifeng Xu <haifeng.xu@shopee.com>
+In-Reply-To: <562e9cc3-d0aa-23e9-bd19-266b5aef2ae7@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The platforms based on SDM845 SoC locks the access to EDAC registers in the
-bootloader. So probing the EDAC driver will result in a crash. Hence,
-disable the creation of EDAC platform device on all SDM845 devices.
 
-The issue has been observed on Lenovo Yoga C630 and DB845c.
 
-While at it, also sort the members of `struct qcom_llcc_config` to avoid
-any holes in-between.
+On 2023/3/8 17:13, David Hildenbrand wrote:
+> On 08.03.23 10:03, Haifeng Xu wrote:
+>>
+>>
+>> On 2023/3/7 10:48, Matthew Wilcox wrote:
+>>> On Tue, Mar 07, 2023 at 10:36:55AM +0800, Haifeng Xu wrote:
+>>>> On 2023/3/6 21:49, David Hildenbrand wrote:
+>>>>> On 06.03.23 03:49, Haifeng Xu wrote:
+>>>>>> mem_cgroup_oom_synchronize() has checked whether current memcg_in_oom is
+>>>>>> set or not, so remove the check in handle_mm_fault().
+>>>>>
+>>>>> "mem_cgroup_oom_synchronize() will returned immediately if memcg_in_oom is not set, so remove the check from handle_mm_fault()".
+>>>>>
+>>>>> However, that requires now always an indirect function call -- do we care about dropping that optimization?
+>>>>>
+>>>>>
+>>>>
+>>>> If memcg_in_oom is set, we will check it twice, one is from handle_mm_fault(), the other is from mem_cgroup_oom_synchronize(). That seems a bit redundant.
+>>>>
+>>>> if memcg_in_oom is not set, mem_cgroup_oom_synchronize() returns directly. Though it's an indirect function call, but the time spent can be negligible
+>>>> compare to the whole mm user falut preocess. And that won't cause stack overflow error.
+>>>
+>>> I suggest you measure it.
+>>
+>> test steps:
+>> 1) Run command: ./mmap_anon_test(global alloc, so the memcg_in_oom is not set)
+>> 2) Calculate the quotient of cost time and page-fault counts, run 10 rounds and average the results.
+>>
+>> The test result shows that whether using indirect function call or not, the time spent in user fault
+>> is almost the same, about 2.3ms.
+> 
+> I guess most of the benchmark time is consumed by allocating fresh pages in your test (also, why exactly do you use MAP_SHARED?).
+> 
+> Is 2.3ms the total time for writing to that 1GiB of memory or how did you derive that number? Posting both results would be cleaner (with more digits ;) ).
+> 
 
-Cc: <stable@vger.kernel.org> # 5.10
-Reported-by: Steev Klimaszewski <steev@kali.org>
-Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
----
- drivers/soc/qcom/llcc-qcom.c | 24 +++++++++++++++++-------
- 1 file changed, 17 insertions(+), 7 deletions(-)
+Hi Daivd, the details of test result were posted last week. Do you have any suggestions or more concerns about this change?
 
-diff --git a/drivers/soc/qcom/llcc-qcom.c b/drivers/soc/qcom/llcc-qcom.c
-index 7b7c5a38bac6..a5140f19f200 100644
---- a/drivers/soc/qcom/llcc-qcom.c
-+++ b/drivers/soc/qcom/llcc-qcom.c
-@@ -120,10 +120,11 @@ struct llcc_slice_config {
- 
- struct qcom_llcc_config {
- 	const struct llcc_slice_config *sct_data;
--	int size;
--	bool need_llcc_cfg;
- 	const u32 *reg_offset;
- 	const struct llcc_edac_reg_offset *edac_reg_offset;
-+	int size;
-+	bool need_llcc_cfg;
-+	bool no_edac;
- };
- 
- enum llcc_reg_offset {
-@@ -452,6 +453,7 @@ static const struct qcom_llcc_config sdm845_cfg = {
- 	.need_llcc_cfg	= false,
- 	.reg_offset	= llcc_v1_reg_offset,
- 	.edac_reg_offset = &llcc_v1_edac_reg_offset,
-+	.no_edac	= true,
- };
- 
- static const struct qcom_llcc_config sm6350_cfg = {
-@@ -1012,11 +1014,19 @@ static int qcom_llcc_probe(struct platform_device *pdev)
- 
- 	drv_data->ecc_irq = platform_get_irq_optional(pdev, 0);
- 
--	llcc_edac = platform_device_register_data(&pdev->dev,
--					"qcom_llcc_edac", -1, drv_data,
--					sizeof(*drv_data));
--	if (IS_ERR(llcc_edac))
--		dev_err(dev, "Failed to register llcc edac driver\n");
-+	/*
-+	 * On some platforms, the access to EDAC registers will be locked by
-+	 * the bootloader. So probing the EDAC driver will result in a crash.
-+	 * Hence, disable the creation of EDAC platform device for the
-+	 * problematic platforms.
-+	 */
-+	if (!cfg->no_edac) {
-+		llcc_edac = platform_device_register_data(&pdev->dev,
-+						"qcom_llcc_edac", -1, drv_data,
-+						sizeof(*drv_data));
-+		if (IS_ERR(llcc_edac))
-+			dev_err(dev, "Failed to register llcc edac driver\n");
-+	}
- 
- 	return 0;
- err:
--- 
-2.25.1
-
+Thanks.
