@@ -2,121 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0F296BA2F3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:58:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7843E6BA2F6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:59:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCNW6m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:58:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58242 "EHLO
+        id S229875AbjCNW7S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:59:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjCNW6i (ORCPT
+        with ESMTP id S229545AbjCNW7Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:58:38 -0400
-Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6502850F97
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:58:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1678834696; x=1710370696;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=+E8pmmwHhgh7vdhIb+zwxnTey/wAa0W8HsUhFIWhutk=;
-  b=g7XcPCfULTxkMOLzF5M6mwBHLpzEOeKfw/34+5xw12DX7gGKArU1C0nW
-   CvoovafATQvd0QsLe72GxlTy2ALFXymyCmHZugbeUqUgDm7+6ITUFsMtP
-   SInJomsCGHvDQ80xw7VboiMdscMLRfvWBpPDjoNzxsGqXXz49yuQ9k9Hw
-   BDAReAw5wrGmnaVsJ52fk8CmxhVoNm84QFUmnpp1+L7dS8FZF5iImOGvT
-   lFN8Z54DVupxPTYmdkVbO3cGkfymud1VoBw4GwqPNS8ppxc6isLs6oaZi
-   74PiLLcp1amlSBhJSJzBPBNyZJ3ZbBuHEAEtFomH5Q1+Q5vmlxIIAgtFi
-   g==;
-X-IronPort-AV: E=Sophos;i="5.98,261,1673884800"; 
-   d="scan'208";a="223921919"
-Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
-  by ob1.hgst.iphmx.com with ESMTP; 15 Mar 2023 06:56:48 +0800
-IronPort-SDR: UzE43GcEm3QLRUPUjbUIWM1QyWIuN5KKtLZCj3UmoYMNi/zry0O7yJfFhGVl2CpJdNKX8z5JQ8
- U47+e1quvpy6m0f2VMraTtQHQOCEXcsYSlBrDImXRs4DC5HDWUdi4WvIWH6wKlmv++sj5EkFZI
- 7NdYDDxRkhGhESfhHRS4CrsGUx8o2IJu5VL5dwE2+Zbj5x7XN+mFzyiFb8m9IJBTWS99uB2jeU
- N228hYHC59J6av8ReL/Am9TFKJW5GuEi8g1YA01L0GVUXtwz9RctG2k525im/Y7uhmvYIfo816
- hBk=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 15:13:15 -0700
-IronPort-SDR: rI/8bHeLhBgAPu+eYEqe7uEZ55jYOj9pOAIKWr/FkBWbXv9/a7KZGVYdjeYGfDr7HvI/z/TR29
- V3N4heA38faZw2sPx+qf3Dlq4s+zLNSg82H3LbCaVes/4CHGQTaMnFVHTLrMG6Wv/iEgwT1IUA
- 6d0W+O0iMBY1M0wJcOuraeUJbsGeSwULqxLfXTqGxEg8z47lggn+g265uR64ZCbl6IWgaIZAzx
- Vds8fkSR0zTh8GiMrWsfhWU0yzPWehnxfNUFWkhGOei9gdtnYhllZ07dKZp7mw8ZBp0GeDdLXV
- Klc=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 14 Mar 2023 15:56:49 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4Pbpmw0nmcz1RtVt
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:56:48 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1678834607; x=1681426608; bh=+E8pmmwHhgh7vdhIb+zwxnTey/wAa0W8HsU
-        hFIWhutk=; b=pb5Ubts9uFeMDy3UPBwLFJFAL6FZv2yzDlpU/CfNTgSpj5k+KMf
-        shzvJMdo6TLqyeeUegM7dT0ya0VSgtw4Ubh5Rb5xCXiqbc4UMMUAAO7ZXIL1CFTY
-        4inbstQ+c84/Y9bT7lfIDXBnYkKhEyj9tCbhqrv5texA/lvkBuR/smueU7EGkZDj
-        lumPjmvylCfty5HRr/yu82EUadbDb7R8ZW725Yz6mpb38H51RUkIrUp4ZCeD4t/H
-        /o2AG3/RKG3fBYnnlvjtAPBTXHsFG024/hxhipjr7gQg2nUULt1J+DgmvBlRE2Q7
-        34JJWv9GpA04YPJI7IYXntrkAcayH16HEBQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id YCwC1EzU2pXV for <linux-kernel@vger.kernel.org>;
-        Tue, 14 Mar 2023 15:56:47 -0700 (PDT)
-Received: from [10.225.163.84] (unknown [10.225.163.84])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4Pbpmt099tz1RtVm;
-        Tue, 14 Mar 2023 15:56:45 -0700 (PDT)
-Message-ID: <5d4c882f-3d7b-e97b-b36c-82c928c31d25@opensource.wdc.com>
-Date:   Wed, 15 Mar 2023 07:56:44 +0900
+        Tue, 14 Mar 2023 18:59:16 -0400
+Received: from hosting.gsystem.sk (hosting.gsystem.sk [212.5.213.30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7EC0551CB4;
+        Tue, 14 Mar 2023 15:58:52 -0700 (PDT)
+Received: from gsql.ggedos.sk (off-20.infotel.telecom.sk [212.5.213.20])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+        (No client certificate requested)
+        by hosting.gsystem.sk (Postfix) with ESMTPSA id E6A2A7A0081;
+        Tue, 14 Mar 2023 23:58:11 +0100 (CET)
+From:   Ondrej Zary <linux@zary.sk>
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Cc:     Christoph Hellwig <hch@lst.de>,
+        Sergey Shtylyov <s.shtylyov@omp.ru>, linux-ide@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v3] pata_parport: fix memory leaks
+Date:   Tue, 14 Mar 2023 23:58:05 +0100
+Message-Id: <20230314225805.9124-1-linux@zary.sk>
+X-Mailer: git-send-email 2.20.1
+In-Reply-To: <cf8c7b34-3c5d-2b9e-b410-d83f4af7274a@opensource.wdc.com>
+References: <cf8c7b34-3c5d-2b9e-b410-d83f4af7274a@opensource.wdc.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v1] RISCV: CANAAN: Make K210_SYSCTL depend on CLK_K210
-Content-Language: en-US
-To:     Jesse Taube <mr.bossman075@gmail.com>,
-        linux-riscv@lists.infradead.org
-Cc:     linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Damien Le Moal <damien.lemoal@wdc.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Conor Dooley <conor@kernel.org>
-References: <20230314211030.3953195-1-Mr.Bossman075@gmail.com>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <20230314211030.3953195-1-Mr.Bossman075@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/15/23 06:10, Jesse Taube wrote:
-> CLK_K210 is no longer a dependency of SOC_CANAAN,
-> but K210_SYSCTL depends on CLK_K210. This patch makes K210_SYSCTL
-> depend on CLK_K210. Also fix whitespace errors.
-> 
-> Reported-by: Randy Dunlap <rdunlap@infradead.org>
-> Link: https://lore.kernel.org/all/42446784-a88b-df09-41e9-5f685b4df6ee@infradead.org
-> Fixes: 3af577f9826f ("RISC-V: stop directly selecting drivers for SOC_CANAAN")
-> Signed-off-by: Jesse Taube <Mr.Bossman075@gmail.com>
+When ida_alloc() fails, "pi" is not freed although the misleading
+comment says otherwise.
+Move the ida_alloc() call up so we really don't have to free "pi" in
+case of ida_alloc() failure.
 
-Reviewed-by: Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Also move ida_free() call from pi_remove_one() to
+pata_parport_dev_release(). It was dereferencing already freed dev
+pointer.
 
+Testing revealed leak even in non-failure case which was tracked down
+to missing put_device() call after bus_find_device_by_name(). As a
+result, pata_parport_dev_release() was never called.
 
+Reported-by: kernel test robot <lkp@intel.com>
+Reported-by: Dan Carpenter <error27@gmail.com>
+Link: https://lore.kernel.org/r/202303111822.IHNchbkp-lkp@intel.com/
+Signed-off-by: Ondrej Zary <linux@zary.sk>
+---
+ drivers/ata/pata_parport/pata_parport.c | 25 ++++++++++++++-----------
+ 1 file changed, 14 insertions(+), 11 deletions(-)
+
+diff --git a/drivers/ata/pata_parport/pata_parport.c b/drivers/ata/pata_parport/pata_parport.c
+index 6165ee9aa7da..dc77b4c6fcef 100644
+--- a/drivers/ata/pata_parport/pata_parport.c
++++ b/drivers/ata/pata_parport/pata_parport.c
+@@ -452,6 +452,7 @@ static void pata_parport_dev_release(struct device *dev)
+ {
+ 	struct pi_adapter *pi = container_of(dev, struct pi_adapter, dev);
+ 
++	ida_free(&pata_parport_bus_dev_ids, dev->id);
+ 	kfree(pi);
+ }
+ 
+@@ -503,23 +504,27 @@ static struct pi_adapter *pi_init_one(struct parport *parport,
+ 	if (bus_for_each_dev(&pata_parport_bus_type, NULL, &match, pi_find_dev))
+ 		return NULL;
+ 
++	id = ida_alloc(&pata_parport_bus_dev_ids, GFP_KERNEL);
++	if (id < 0)
++		return NULL;
++
+ 	pi = kzalloc(sizeof(struct pi_adapter), GFP_KERNEL);
+-	if (!pi)
++	if (!pi) {
++		ida_free(&pata_parport_bus_dev_ids, id);
+ 		return NULL;
++	}
+ 
+ 	/* set up pi->dev before pi_probe_unit() so it can use dev_printk() */
+ 	pi->dev.parent = &pata_parport_bus;
+ 	pi->dev.bus = &pata_parport_bus_type;
+ 	pi->dev.driver = &pr->driver;
+ 	pi->dev.release = pata_parport_dev_release;
+-	id = ida_alloc(&pata_parport_bus_dev_ids, GFP_KERNEL);
+-	if (id < 0)
+-		return NULL; /* pata_parport_dev_release will do kfree(pi) */
+ 	pi->dev.id = id;
+ 	dev_set_name(&pi->dev, "pata_parport.%u", pi->dev.id);
+ 	if (device_register(&pi->dev)) {
+ 		put_device(&pi->dev);
+-		goto out_ida_free;
++		/* pata_parport_dev_release will do ida_free(dev->id) and kfree(pi) */
++		return NULL;
+ 	}
+ 
+ 	pi->proto = pr;
+@@ -534,8 +539,7 @@ static struct pi_adapter *pi_init_one(struct parport *parport,
+ 	pi->port = parport->base;
+ 
+ 	par_cb.private = pi;
+-	pi->pardev = parport_register_dev_model(parport, DRV_NAME, &par_cb,
+-						pi->dev.id);
++	pi->pardev = parport_register_dev_model(parport, DRV_NAME, &par_cb, id);
+ 	if (!pi->pardev)
+ 		goto out_module_put;
+ 
+@@ -570,8 +574,7 @@ static struct pi_adapter *pi_init_one(struct parport *parport,
+ 	module_put(pi->proto->owner);
+ out_unreg_dev:
+ 	device_unregister(&pi->dev);
+-out_ida_free:
+-	ida_free(&pata_parport_bus_dev_ids, pi->dev.id);
++	/* pata_parport_dev_release will do ida_free(dev->id) and kfree(pi) */
+ 	return NULL;
+ }
+ 
+@@ -696,8 +699,7 @@ static void pi_remove_one(struct device *dev)
+ 	pi_disconnect(pi);
+ 	pi_release(pi);
+ 	device_unregister(dev);
+-	ida_free(&pata_parport_bus_dev_ids, dev->id);
+-	/* pata_parport_dev_release will do kfree(pi) */
++	/* pata_parport_dev_release will do ida_free(dev->id) and kfree(pi) */
+ }
+ 
+ static ssize_t delete_device_store(struct bus_type *bus, const char *buf,
+@@ -713,6 +715,7 @@ static ssize_t delete_device_store(struct bus_type *bus, const char *buf,
+ 	}
+ 
+ 	pi_remove_one(dev);
++	put_device(dev);
+ 	mutex_unlock(&pi_mutex);
+ 
+ 	return count;
 -- 
-Damien Le Moal
-Western Digital Research
+Ondrej Zary
 
