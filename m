@@ -2,147 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 078B56B8797
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:29:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B86D6B879F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:35:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230200AbjCNB3b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 21:29:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48022 "EHLO
+        id S229881AbjCNBfu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 21:35:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbjCNB3a (ORCPT
+        with ESMTP id S229486AbjCNBfr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 21:29:30 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CB4A7D55A;
-        Mon, 13 Mar 2023 18:29:28 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Mon, 13 Mar 2023 21:35:47 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 82C3F8F50F;
+        Mon, 13 Mar 2023 18:35:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbGCR3TP7z4x5R;
-        Tue, 14 Mar 2023 12:29:23 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678757363;
-        bh=pkeAL5uiJUZSa/Hb44Za8UEvU/rv7ezU/yxwnLIUkbo=;
-        h=Date:From:To:Cc:Subject:From;
-        b=QPANtbEePEiDze008lpeZxMjK8tHyHBVVQMRyoi9Fc2VBHy1VT4lhbYtL+Uc6q55m
-         gn3UOCdUwf9DB8TSBJeJxhvC96IN2e58hGBbrssmPAH+O1tcGfGVM7wJsoZ3n5wzlM
-         Q3iQJVZntngengSHtHJ4eAwoC2zXoyy1rGxn46C6H9BL2KhfEG1/TLOjEJQGouIpCa
-         18rWQrlhx3CbRDxCB2Nq5zPbpr/HE9rZ2gBeGl6J/uMXo8hbkOkbupugYA7hLRzZm2
-         h8gOniRgvOxFovAjJIZS1tqPnRmDUjoeqjpSil+i8ZdPBoAloq+11nIrHRbNzfoy8R
-         s1VGwjOLoddzQ==
-Date:   Tue, 14 Mar 2023 12:29:22 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     "Paul E. McKenney" <paulmck@kernel.org>
-Cc:     "Uladzislau Rezki (Sony)" <urezki@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the rcu tree
-Message-ID: <20230314122922.43c81767@canb.auug.org.au>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F3EED61572;
+        Tue, 14 Mar 2023 01:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFF61C433EF;
+        Tue, 14 Mar 2023 01:35:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678757745;
+        bh=ajascUjSBJkC6YidStXTpH1e4W+hUu+o0Jx76v8V6C4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=se0ogZ702sRMgoXN/Xp2mZuLXhrBCP8O0BpHdtrKz58h7aAnYI5hrRaXuWnhVggql
+         pfZEEs2IhUeQbs2FfloML3EJIhLjaPDKnvEhojstu+SyBINEVMug/VGzohtrgIplQK
+         6MJ5j5taAHQZKaDnUCE88AnjJeKOOkQT2jCUJ/VZ8qgdBxch6bRZVRWSjIOeRGwSOq
+         VoT8Mz7qXxiRXnGTTV68ii0ux57Pkr/Kk7ooU5MVmXy58P3ncgskiiPCM7PAW5/aRw
+         NIBlZGo5SsmKo0sKBaRU4xhdbQAL8TbvOVIUEBMx04n4b/Pv5rYsWHJgBIQnzFokeT
+         wkI/dHZfKGjCw==
+Date:   Tue, 14 Mar 2023 09:35:39 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Nick Alcock <nick.alcock@oracle.com>
+Cc:     mcgrof@kernel.org, linux-modules@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 14/24] kbuild, firmware: imx: remove MODULE_LICENSE in
+ non-modules
+Message-ID: <20230314013539.GA143566@dragon>
+References: <20230217141059.392471-1-nick.alcock@oracle.com>
+ <20230217141059.392471-15-nick.alcock@oracle.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/ys8XndELzEG0bHZWgwmL/f5";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230217141059.392471-15-nick.alcock@oracle.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/ys8XndELzEG0bHZWgwmL/f5
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Fri, Feb 17, 2023 at 02:10:49PM +0000, Nick Alcock wrote:
+> Since commit 8b41fc4454e ("kbuild: create modules.builtin without
+> Makefile.modbuiltin or tristate.conf"), MODULE_LICENSE declarations
+> are used to identify modules. As a consequence, uses of the macro
+> in non-modules will cause modprobe to misidentify their containing
+> object file as a module when it is not (false positives), and modprobe
+> might succeed rather than failing with a suitable error message.
+> 
+> So remove it in the files in this commit, none of which can be built as
+> modules.
+> 
+> Signed-off-by: Nick Alcock <nick.alcock@oracle.com>
+> Suggested-by: Luis Chamberlain <mcgrof@kernel.org>
 
-Hi all,
+Should I apply it as a fix for 6.3-rc with Cc stable tag, or can it be
+a material for -next?
 
-After merging the rcu tree, today's linux-next build (x86_64 allmodconfig)
-failed like this:
-
-net/mac802154/scan.c: In function 'mac802154_scan_cleanup_locked':
-net/mac802154/scan.c:55:26: error: macro "kfree_rcu" requires 2 arguments, =
-but only 1 given
-   55 |         kfree_rcu(request);
-      |                          ^
-In file included from include/linux/rbtree.h:24,
-                 from include/linux/mm_types.h:11,
-                 from include/linux/buildid.h:5,
-                 from include/linux/module.h:14,
-                 from net/mac802154/scan.c:11:
-include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
-  984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-      |=20
-net/mac802154/scan.c:55:9: error: 'kfree_rcu' undeclared (first use in this=
- function); did you mean 'kfree_skb'?
-   55 |         kfree_rcu(request);
-      |         ^~~~~~~~~
-      |         kfree_skb
-net/mac802154/scan.c:55:9: note: each undeclared identifier is reported onl=
-y once for each function it appears in
-net/mac802154/scan.c: In function 'mac802154_stop_beacons_locked':
-net/mac802154/scan.c:406:26: error: macro "kfree_rcu" requires 2 arguments,=
- but only 1 given
-  406 |         kfree_rcu(request);
-      |                          ^
-include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
-  984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-      |=20
-net/mac802154/scan.c:406:9: error: 'kfree_rcu' undeclared (first use in thi=
-s function); did you mean 'kfree_skb'?
-  406 |         kfree_rcu(request);
-      |         ^~~~~~~~~
-      |         kfree_skb
-drivers/infiniband/sw/rxe/rxe_mr.c: In function 'rxe_dereg_mr':
-drivers/infiniband/sw/rxe/rxe_mr.c:734:21: error: macro "kfree_rcu" require=
-s 2 arguments, but only 1 given
-  734 |         kfree_rcu(mr);
-      |                     ^
-In file included from include/linux/rculist.h:11,
-                 from include/linux/dcache.h:8,
-                 from include/linux/fs.h:8,
-                 from include/linux/highmem.h:5,
-                 from include/linux/bvec.h:10,
-                 from include/linux/blk_types.h:10,
-                 from include/linux/bio.h:10,
-                 from include/linux/libnvdimm.h:14,
-                 from drivers/infiniband/sw/rxe/rxe_mr.c:7:
-include/linux/rcupdate.h:984: note: macro "kfree_rcu" defined here
-  984 | #define kfree_rcu(ptr, rhf) kvfree_rcu_arg_2(ptr, rhf)
-      |=20
-drivers/infiniband/sw/rxe/rxe_mr.c:734:9: error: 'kfree_rcu' undeclared (fi=
-rst use in this function); did you mean 'kfree_skb'?
-  734 |         kfree_rcu(mr);
-      |         ^~~~~~~~~
-      |         kfree_skb
-drivers/infiniband/sw/rxe/rxe_mr.c:734:9: note: each undeclared identifier =
-is reported only once for each function it appears in
-
-Caused by commit
-
-  62a2ac23b35f ("rcu/kvfree: Eliminate k[v]free_rcu() single argument macro=
-")
-
-I have used the rcu tree from next-20230310 for today.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/ys8XndELzEG0bHZWgwmL/f5
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQPzfIACgkQAVBC80lX
-0GxoSQf/ZltNEVi31JVQsszCeaXEdT6AJBuLDTBR5ydFFsr5VxOhdXZNzRvxDtA1
-n2S/ipCDp7F34AF747eaQIRwcyY1wbRdYdsIba8dmp+XIRX9zw6od+Qwt2PYyMcS
-b/BFqW2feNOkAeT6b58IIqEclxCWNAq4OGtcIEZXChtFoXriUkgqfNQhzdPLb61I
-YE9L8WxzoLFvtLbJa41B1bQioNsBFlYaUO3+p/ItcBNbtnCHaM3OU+JH237yuEtT
-xtL0uok78Y+LW1g3MQolee1DF6E7+aufhmm1B0brQ2jIP1RP71HPiItOGeRdzlNu
-oj7izVh+PCgvFF3R6Ds2Nbv2jjd2jw==
-=7tRl
------END PGP SIGNATURE-----
-
---Sig_/ys8XndELzEG0bHZWgwmL/f5--
+Shawn
