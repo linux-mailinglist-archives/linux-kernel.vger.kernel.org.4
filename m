@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC1276B8A8A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:38:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3E6E6B8A8C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:38:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230087AbjCNFiI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:38:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52644 "EHLO
+        id S230107AbjCNFiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:38:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229902AbjCNFiF (ORCPT
+        with ESMTP id S230051AbjCNFiG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:38:05 -0400
-Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C866281CEB
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:37:45 -0700 (PDT)
-Received: by mail-pl1-x62a.google.com with SMTP id a2so15430296plm.4
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:37:45 -0700 (PDT)
+        Tue, 14 Mar 2023 01:38:06 -0400
+Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B8637D0AB
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:37:50 -0700 (PDT)
+Received: by mail-pj1-x1032.google.com with SMTP id h11-20020a17090a2ecb00b00237c740335cso14001244pjs.3
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:37:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678772265;
+        d=linaro.org; s=google; t=1678772270;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=E3ynFMYwQcpfXg1vBUZGiwqSjOZbWEHjnhI8PWp4GCE=;
-        b=CKgY+Md7XM2Dq1AiLHTRelpqNfgoCLeHgyr5CE0eZGmaoLW0paAx3qE3HR67mx8o27
-         RaIdjBQdHGMuUMEWzPyUHya+yzGzgiN6mGSgYqMGb4JwI6wom4ahnePuf+Z9IeoD9+dU
-         Lx1L/umvPfmE8LUfWULFgO5dfdDt4by0lxqBnUJ7ILNB1Gvltg0UabJITh+k5VcWOtT8
-         +EBQbVhUYEiWj3faoMjM7lZdW2Vn4f03oWYISD4ZL3kCLQiMk5JzgCpY5fIF7/jP5Aqa
-         IAa8s5P1mIxzGKyNNpZUbJzkqPhYZTDsY0ykLduyKMAe56pRLRog6fb7kow+lHI/Q2Gz
-         cvaQ==
+        bh=4tE4o5E5NxTGWs0FFcIpd5GaMpz3q7yKukVUL4nRPNs=;
+        b=wmJqBLe3PPzAtxKqvtVbRBPMaWvTNHEiPth7RWQgJ6zLBaUAo27PEc0oVrbGavD4dg
+         AfMSFVO+t6s1kScrp/8cp6dCvU41Dckn9S83/o3f6tTMsDANGYlEevDegEjHXPgg6O6P
+         543ezXPnfrkENqcb+YmM1OpdXpyZw0u4EEIqjlBTpzn1IqHD7vFiHiLKMVAsLWKCOMzb
+         w9zJOIloYL7lIkHmOuYninQuszhZ/PxkNwBArQt2KZmVxrCQgyp7Grkstfo7BiAOi0Jw
+         Iyg9VsspxkJNc1wo64rbpjPI9UPa9wReMhvasEmnv2pSF0jvwRlvXxHTViyOtVCt4jPN
+         xfiw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678772265;
+        d=1e100.net; s=20210112; t=1678772270;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=E3ynFMYwQcpfXg1vBUZGiwqSjOZbWEHjnhI8PWp4GCE=;
-        b=K37QX2oCMHgUytOezQFARRzAxF7RNozdCPURhGfXHfLBfZ/1NDLGP9OaVLH1k4QlMU
-         2L84UX6Ibva4kNAk8vRwA0Px80/DvnQvu1M44zNcQSmjjjp0E2tA2Z7YMylgt/+AjnFN
-         kH+mTyjVNJo/rwLwdWXVdEhBDQfB7JTJIYnnrZmNY9FhWwFRZaC8dItCifZZHW/KU4M6
-         0W1/tOtvsKTNyJn25ZQT+vUKXUJmXY6WX5mMPZzRrUzzRLz2Mrx+WcWD+W3HYGvdOyWV
-         89WIylviYzIIwVXbpFiLn7ZAKEEei5SjTjcMSOMNSiQmUxNLG089KYA5LIbS3AmyJl21
-         jTcw==
-X-Gm-Message-State: AO0yUKUwswXssJrlWE3ol3ZabazZpheeyNTTju4t17nftPyvLiARjliI
-        pARWaxC58nkaLHNeSbF1aYOf
-X-Google-Smtp-Source: AK7set+KJTFlY6G8yvIbPj2Zp9jor9UT9jln0Kx0keXKthTtTYkhhTa8OTt8TJg4VoPbK7U+aDUGgA==
-X-Received: by 2002:a17:903:1309:b0:1a0:5d0b:c31e with SMTP id iy9-20020a170903130900b001a05d0bc31emr2332917plb.44.1678772265234;
-        Mon, 13 Mar 2023 22:37:45 -0700 (PDT)
+        bh=4tE4o5E5NxTGWs0FFcIpd5GaMpz3q7yKukVUL4nRPNs=;
+        b=QQV77Ue/W6BgDPqs/8s2cDGVRe5rxYdjZgAFfDevbfh7Xl341FmE0O3sO1+o1TvbzG
+         Xlb30/+zovXi9ZUQ5iFFohrq640lZc1t83HVylUvxb/ptgMu7ta2HPmuq3xnEstkvCH/
+         EYDXDtf9BJWHUdR0E1iuaEYAndyKuQ1YC2J2vG7Ws9ByQXum0SLJonIsum+vFvgGeRf6
+         Wnv5yw3SbPsHZ8d0F8NVO8/G7TM1pwESFy4dLvChgiAzve600q614ePr3t/KqdBIoMVa
+         OkGyWakKR1MHnWMof2uzSOBCnfgvXjUcVbqi/TochQ1J+6quv8kNCo3SAEUVye9483Yv
+         zgag==
+X-Gm-Message-State: AO0yUKWPQZmEWg6UCRylKnWDSXQ+FoKXeXP6EgteuL3oJp2sdamflB9k
+        LzeKDEPUJw0aANUDetdq9Z/S
+X-Google-Smtp-Source: AK7set9lm+DL6YRwlqTJ2wxLFWg+WceL5BW8szf1VrZB3F06Rft0TKUcBhKSr5enb66she+swDtD8g==
+X-Received: by 2002:a05:6a20:8f09:b0:cb:cfb1:5009 with SMTP id b9-20020a056a208f0900b000cbcfb15009mr46167648pzk.34.1678772270021;
+        Mon, 13 Mar 2023 22:37:50 -0700 (PDT)
 Received: from localhost.localdomain ([117.217.177.49])
-        by smtp.gmail.com with ESMTPSA id n126-20020a634084000000b005034a46fbf7sm675093pga.28.2023.03.13.22.37.40
+        by smtp.gmail.com with ESMTPSA id n126-20020a634084000000b005034a46fbf7sm675093pga.28.2023.03.13.22.37.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 22:37:44 -0700 (PDT)
+        Mon, 13 Mar 2023 22:37:49 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     andersson@kernel.org, robh+dt@kernel.org,
         krzysztof.kozlowski+dt@linaro.org, bp@alien8.de,
@@ -59,11 +59,10 @@ Cc:     konrad.dybcio@linaro.org, linux-arm-msm@vger.kernel.org,
         mchehab@kernel.org, rric@kernel.org, linux-edac@vger.kernel.org,
         quic_ppareek@quicinc.com, luca.weiss@fairphone.com,
         ahalaney@redhat.com, steev@kali.org,
-        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v7 02/13] dt-bindings: arm: msm: Fix register regions used for LLCC banks
-Date:   Tue, 14 Mar 2023 11:07:14 +0530
-Message-Id: <20230314053725.13623-3-manivannan.sadhasivam@linaro.org>
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v7 03/13] arm64: dts: qcom: sdm845: Fix the base addresses of LLCC banks
+Date:   Tue, 14 Mar 2023 11:07:15 +0530
+Message-Id: <20230314053725.13623-4-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230314053725.13623-1-manivannan.sadhasivam@linaro.org>
 References: <20230314053725.13623-1-manivannan.sadhasivam@linaro.org>
@@ -71,186 +70,46 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Register regions of the LLCC banks are located at different addresses.
-Currently, the binding just lists the LLCC0 base address and tries to
-cover all the banks using a single size. This is entirely wrong as there
-are other register regions that happen to lie inside the size covered by
-the binding such as the memory controller and holes.
+The LLCC block has several banks each with a different base address
+and holes in between. So it is not a correct approach to cover these
+banks with a single offset/size. Instead, the individual bank's base
+address needs to be specified in devicetree with the exact size.
 
-So this needs to be fixed by specifying the base address of individual
-LLCC banks. This approach will break the existing users of this binding
-as the register regions are split and the drivers now cannot use
-LLCC0 register region for accessing rest of the banks (which is wrong
-anyway).
-
-But considering the fact that the binding was wrong from the day one and
-also the device drivers going wrong by the binding, this breakage is
-acceptable.
+On SDM845, the size of the LLCC bank 0 needs to be reduced to 0x4500 as
+there are LLCC BWMON registers located after this range.
 
 Reported-by: Parikshit Pareek <quic_ppareek@quicinc.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- .../bindings/arm/msm/qcom,llcc.yaml           | 125 ++++++++++++++++--
- 1 file changed, 114 insertions(+), 11 deletions(-)
+ arch/arm64/boot/dts/qcom/sdm845.dtsi | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-index 6570b808fd0d..93b977428a14 100644
---- a/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-+++ b/Documentation/devicetree/bindings/arm/msm/qcom,llcc.yaml
-@@ -33,14 +33,12 @@ properties:
-       - qcom,sm8550-llcc
+diff --git a/arch/arm64/boot/dts/qcom/sdm845.dtsi b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+index 479859bd8ab3..3bf95a12ebb9 100644
+--- a/arch/arm64/boot/dts/qcom/sdm845.dtsi
++++ b/arch/arm64/boot/dts/qcom/sdm845.dtsi
+@@ -2192,8 +2192,11 @@ uart15: serial@a9c000 {
  
-   reg:
--    items:
--      - description: LLCC base register region
--      - description: LLCC broadcast base register region
-+    minItems: 2
-+    maxItems: 9
+ 		llcc: system-cache-controller@1100000 {
+ 			compatible = "qcom,sdm845-llcc";
+-			reg = <0 0x01100000 0 0x31000>, <0 0x01300000 0 0x50000>;
+-			reg-names = "llcc_base", "llcc_broadcast_base";
++			reg = <0 0x01100000 0 0x45000>, <0 0x01180000 0 0x50000>,
++			      <0 0x01200000 0 0x50000>, <0 0x01280000 0 0x50000>,
++			      <0 0x01300000 0 0x50000>;
++			reg-names = "llcc0_base", "llcc1_base", "llcc2_base",
++				    "llcc3_base", "llcc_broadcast_base";
+ 			interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
+ 		};
  
-   reg-names:
--    items:
--      - const: llcc_base
--      - const: llcc_broadcast_base
-+    minItems: 2
-+    maxItems: 9
- 
-   interrupts:
-     maxItems: 1
-@@ -50,15 +48,120 @@ required:
-   - reg
-   - reg-names
- 
-+allOf:
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc7180-llcc
-+              - qcom,sm6350-llcc
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - description: LLCC0 base register region
-+            - description: LLCC broadcast base register region
-+        reg-names:
-+          items:
-+            - const: llcc0_base
-+            - const: llcc_broadcast_base
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc7280-llcc
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - description: LLCC0 base register region
-+            - description: LLCC1 base register region
-+            - description: LLCC broadcast base register region
-+        reg-names:
-+          items:
-+            - const: llcc0_base
-+            - const: llcc1_base
-+            - const: llcc_broadcast_base
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sc8180x-llcc
-+              - qcom,sc8280xp-llcc
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - description: LLCC0 base register region
-+            - description: LLCC1 base register region
-+            - description: LLCC2 base register region
-+            - description: LLCC3 base register region
-+            - description: LLCC4 base register region
-+            - description: LLCC5 base register region
-+            - description: LLCC6 base register region
-+            - description: LLCC7 base register region
-+            - description: LLCC broadcast base register region
-+        reg-names:
-+          items:
-+            - const: llcc0_base
-+            - const: llcc1_base
-+            - const: llcc2_base
-+            - const: llcc3_base
-+            - const: llcc4_base
-+            - const: llcc5_base
-+            - const: llcc6_base
-+            - const: llcc7_base
-+            - const: llcc_broadcast_base
-+
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            enum:
-+              - qcom,sdm845-llcc
-+              - qcom,sm8150-llcc
-+              - qcom,sm8250-llcc
-+              - qcom,sm8350-llcc
-+              - qcom,sm8450-llcc
-+    then:
-+      properties:
-+        reg:
-+          items:
-+            - description: LLCC0 base register region
-+            - description: LLCC1 base register region
-+            - description: LLCC2 base register region
-+            - description: LLCC3 base register region
-+            - description: LLCC broadcast base register region
-+        reg-names:
-+          items:
-+            - const: llcc0_base
-+            - const: llcc1_base
-+            - const: llcc2_base
-+            - const: llcc3_base
-+            - const: llcc_broadcast_base
-+
- additionalProperties: false
- 
- examples:
-   - |
-     #include <dt-bindings/interrupt-controller/arm-gic.h>
- 
--    system-cache-controller@1100000 {
--      compatible = "qcom,sdm845-llcc";
--      reg = <0x1100000 0x200000>, <0x1300000 0x50000> ;
--      reg-names = "llcc_base", "llcc_broadcast_base";
--      interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
-+    soc {
-+        #address-cells = <2>;
-+        #size-cells = <2>;
-+
-+        system-cache-controller@1100000 {
-+            compatible = "qcom,sdm845-llcc";
-+            reg = <0 0x01100000 0 0x50000>, <0 0x01180000 0 0x50000>,
-+                <0 0x01200000 0 0x50000>, <0 0x01280000 0 0x50000>,
-+                <0 0x01300000 0 0x50000>;
-+            reg-names = "llcc0_base", "llcc1_base", "llcc2_base",
-+                "llcc3_base", "llcc_broadcast_base";
-+            interrupts = <GIC_SPI 582 IRQ_TYPE_LEVEL_HIGH>;
-+        };
-     };
 -- 
 2.25.1
 
