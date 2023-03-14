@@ -2,125 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B8676B9D25
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:34:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3849C6B9D2E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:37:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbjCNReU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52836 "EHLO
+        id S229436AbjCNRhz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:37:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229691AbjCNReS (ORCPT
+        with ESMTP id S229482AbjCNRhx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:34:18 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6E492470B;
-        Tue, 14 Mar 2023 10:34:14 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        Tue, 14 Mar 2023 13:37:53 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A84BAB8BB;
+        Tue, 14 Mar 2023 10:37:53 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 5DBE621A9E;
-        Tue, 14 Mar 2023 17:34:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678815253; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=DupMteheALIYB1G+k5H2NhRA08uOKiRKtdEEzOCrJJQ=;
-        b=k0qqRYbdVDScAcQj0BLGPYfF2MNBj4I4FWvzeXohYfytIiiAVBtL/2rsaGxdMQHe0A9/zf
-        rjPH1AAdnOU8/n9XnRqmMXAJDTrNjxRPM1gSb6G5pxHmFuX38e4BZ3wDCrxeSxPb29mD1p
-        1pr7kbztFidXw/9STbEoEPDpUM8CwAw=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 25E7913A1B;
-        Tue, 14 Mar 2023 17:34:13 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id nVpGCBWwEGQQCgAAMHmgww
-        (envelope-from <mkoutny@suse.com>); Tue, 14 Mar 2023 17:34:13 +0000
-Date:   Tue, 14 Mar 2023 18:34:11 +0100
-From:   Michal =?utf-8?Q?Koutn=C3=BD?= <mkoutny@suse.com>
-To:     Waiman Long <longman@redhat.com>
-Cc:     Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Shuah Khan <shuah@kernel.org>, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH 2/5] cgroup/cpuset: Include offline CPUs when tasks'
- cpumasks in top_cpuset are updated
-Message-ID: <20230314173411.fqaxoa2tfifnj6i3@blackpad>
-References: <20230306200849.376804-1-longman@redhat.com>
- <20230306200849.376804-3-longman@redhat.com>
+        by ms.lwn.net (Postfix) with ESMTPSA id A1096823;
+        Tue, 14 Mar 2023 17:37:52 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A1096823
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1678815472; bh=UQ1CnYegaWSgM1hdGDGmxG7geI5GvTNGnjX2faKrlGg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=cm+RL8NIsC7CAb7q7Hgl/tm+e7X/wiXnguqshTeMDvfgsZMpfZ0u6L52Y5d0FHzOF
+         Xs9W4y705LfHpymnB1dqhreEx4qH5ah1HV3QK46/9Btek4OqbEwj48LLsVtuOCENyP
+         UU/5GUcu/OzUcnZFmV9lyWd8Qcfb6JCEmJWyaCwUw3HOf5cT2wUgsi1zda6y6lPXHW
+         Y+6iE0h7M1A8mIjDPjayZpFM+XAH12auRFyC7ixZy3jstq7ICQVIF7H74fGHrQRBgw
+         670EqPTYRGMcbyIvNgCRTLLX5XTMuHvj0Wxup73qLEYX7v4Nr8O9wO3ZVDx6aJt2bS
+         ac7v7VFl6iiZg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Linus Torvalds <torvalds@linuxfoundation.org>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Documentation fixes for 6.3
+Date:   Tue, 14 Mar 2023 11:37:51 -0600
+Message-ID: <874jqntes0.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="3qe72pixdf4dmzhs"
-Content-Disposition: inline
-In-Reply-To: <20230306200849.376804-3-longman@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The following changes since commit fe15c26ee26efa11741a7b632e9f23b01aca4cc6:
 
---3qe72pixdf4dmzhs
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+  Linux 6.3-rc1 (2023-03-05 14:52:03 -0800)
 
-Hello Waiman.
+are available in the Git repository at:
 
-On Mon, Mar 06, 2023 at 03:08:46PM -0500, Waiman Long <longman@redhat.com> =
-wrote:
-> -		/*
-> -		 * Percpu kthreads in top_cpuset are ignored
-> -		 */
-> -		if (top_cs && (task->flags & PF_KTHREAD) &&
-> -		    kthread_is_per_cpu(task))
-> -			continue;
-> +		const struct cpumask *possible_mask =3D task_cpu_possible_mask(task);
-> =20
-> -		cpumask_and(new_cpus, cs->effective_cpus,
-> -			    task_cpu_possible_mask(task));
-> +		if (top_cs) {
-> +			/*
-> +			 * Percpu kthreads in top_cpuset are ignored
-> +			 */
-> +			if ((task->flags & PF_KTHREAD) && kthread_is_per_cpu(task))
-> +				continue;
-> +			cpumask_andnot(new_cpus, possible_mask, cs->subparts_cpus);
-> +		} else {
-> +			cpumask_and(new_cpus, cs->effective_cpus, possible_mask);
-> +		}
+  git://git.lwn.net/linux.git tags/docs-6.3-fixes
 
-I'm wrapping my head around this slightly.
-1) I'd suggest swapping args in of cpumask_and() to have possible_mask
-   consistently first.
-2) Then I'm wondering whether two branches are truly different when
-   effective_cpus :=3D cpus_allowed - subparts_cpus
-   top_cpuset.cpus_allowed =3D=3D possible_mask        (1)
+for you to fetch changes up to d7ba3657d5162bd551e5c653f67f941c94a7dc0a:
 
-IOW, can you see a difference in what affinities are set to eligible
-top_cpuset tasks before and after this patch upon CPU hotplug?
-(Hm, (1) holds only in v2. So is this a fix for v1 only?)
+  docs: vfio: fix header path (2023-03-14 11:31:57 -0600)
 
-Thanks,
-Michal
+----------------------------------------------------------------
+A handful of fixes and minor documentation updates.
 
---3qe72pixdf4dmzhs
-Content-Type: application/pgp-signature; name="signature.asc"
+----------------------------------------------------------------
+Glenn Washburn (1):
+      docs: Correct missing "d_" prefix for dentry_operations member d_weak=
+_revalidate
 
------BEGIN PGP SIGNATURE-----
+Jiri Pirko (1):
+      docs: vfio: fix header path
 
-iHUEABYKAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCZBCwEQAKCRAkDQmsBEOq
-ucEEAP9OI9c5kJhqB0QtHzHKrGbCZbzmTOwe7E5LB65IzTMi/wD/VLC97u3WoAMa
-Fjzw23hqzv+JPbXpH+rkk6P0gvPDFQw=
-=tWCP
------END PGP SIGNATURE-----
+Miguel Ojeda (2):
+      docs: programming-language: remove mention of the Intel compiler
+      docs: programming-language: add Rust programming language section
 
---3qe72pixdf4dmzhs--
+Mike Rapoport (IBM) (2):
+      docs/mm: Physical Memory: fix a reference to a file that doesn't exist
+      docs/mm: hugetlbfs_reserv: fix a reference to a file that doesn't exi=
+st
+
+Song Shuai (1):
+      sched/doc: supplement CPU capacity with RISC-V
+
+Uwe Kleine-K=C3=B6nig (1):
+      docs: rebasing-and-merging: Drop wrong statement about git
+
+Xujun Leng (1):
+      docs: process: typo fix
+
+ Documentation/driver-api/vfio.rst                  |  2 +-
+ Documentation/filesystems/vfs.rst                  |  2 +-
+ Documentation/maintainer/rebasing-and-merging.rst  |  6 +-----
+ Documentation/mm/hugetlbfs_reserv.rst              |  8 ++++----
+ Documentation/mm/physical_memory.rst               |  2 +-
+ Documentation/process/programming-language.rst     | 24 ++++++++++++++++--=
+----
+ Documentation/process/submitting-patches.rst       |  2 +-
+ Documentation/scheduler/sched-capacity.rst         |  2 +-
+ .../translations/zh_CN/mm/hugetlbfs_reserv.rst     |  3 ++-
+ .../zh_CN/scheduler/sched-capacity.rst             |  2 +-
+ 10 files changed, 31 insertions(+), 22 deletions(-)
