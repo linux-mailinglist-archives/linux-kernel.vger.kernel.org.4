@@ -2,200 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B23046BA2A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:41:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 882C06BA2A7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231303AbjCNWlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35766 "EHLO
+        id S231400AbjCNWmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjCNWlu (ORCPT
+        with ESMTP id S231256AbjCNWl7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:41:50 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 5170D37F3D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:41:48 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 715C12F4;
-        Tue, 14 Mar 2023 15:42:31 -0700 (PDT)
-Received: from [10.57.64.116] (unknown [10.57.64.116])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 0F8C43F64C;
-        Tue, 14 Mar 2023 15:41:46 -0700 (PDT)
-Message-ID: <7d026744-6bd6-6827-0471-b5e8eae0be3f@arm.com>
-Date:   Tue, 14 Mar 2023 22:41:45 +0000
+        Tue, 14 Mar 2023 18:41:59 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6B1C37541;
+        Tue, 14 Mar 2023 15:41:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 318CF61A47;
+        Tue, 14 Mar 2023 22:41:58 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A4DC433D2;
+        Tue, 14 Mar 2023 22:41:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678833717;
+        bh=s6IlrideidXiP2FRDZyepR6OUAPx5CL/GzNBpxy/lyA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=KjWPkr1+9gglz/7YFCYrvIRAAcuskx48dxq6RXDQROZhnIya6h3HhSKYhE0nTSf5t
+         OrXC260lip8lFK8+4Pm9XfjUAdmK58eimPvgXFXtDAkozgninx/vF7g2EusBBcikjH
+         gPoES119tn804hA+3fXCBA3MZ7PDH92TbGrG28RmHkALJ9da/Qso8bLY1q1iRNxpXh
+         IH/XHB5mZKXHqu+G+uCpIQTtHpZls1IF2YzARdSxW7ixG9Y1xj9Qxn/E3+TSCqI0W6
+         a2RR35RzpZYeUWYjoOMaKOT/Ou0AioOTdSbonL+DM6YBjPaE87mt/2iF0NU79daUxN
+         DylGDWdztvrbw==
+Date:   Tue, 14 Mar 2023 23:41:54 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Linus Walleij <linus.walleij@linaro.org>
+Cc:     Alexey Khoroshilov <khoroshilov@ispras.ru>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        lvc-project@linuxtesting.org,
+        Kasumov Ruslan <xhxgldhlpfy@gmail.com>,
+        linux-arm-msm@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>,
+        linux-kernel@vger.kernel.org,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        linux-iio@vger.kernel.org, Andy Gross <agross@kernel.org>,
+        Kasumov Ruslan <s02210418@gse.cs.msu.ru>,
+        Jonathan Cameron <jic23@kernel.org>
+Subject: Re: [lvc-project] [PATCH] iio: adc: qcom-pm8xxx-xoadc: Remove
+ useless condition in pm8xxx_xoadc_parse_channel()
+Message-ID: <20230314224154.7gctfkt2mlaz3geg@intel.intel>
+References: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+ <CACRpkdan0Vt_T3aRVAK4rd=hQV=MOARm9Wq7sD8rjoisTW6Dkw@mail.gmail.com>
+ <20230314212851.hqbzs5hhed5apcv5@intel.intel>
+ <9aec4249-6457-4e3b-13dd-baf02d4fbfad@ispras.ru>
+ <CACRpkdb2CFckKo=VGb4gkyS0pXmqDrRBtJNeT1PjetctRquBVQ@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.8.0
-Content-Language: en-US
-From:   Ryan Roberts <ryan.roberts@arm.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Yury Norov <yury.norov@gmail.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        linux-arm-kernel@lists.infradead.org
-Subject: [BUG] v6.3-rc2 regresses sched_getaffinity() for arm64
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CACRpkdb2CFckKo=VGb4gkyS0pXmqDrRBtJNeT1PjetctRquBVQ@mail.gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi Alexey and Ruslan,
 
-I need to report a regression in v6.3-rc2 where sched_getaffinity() returns an
-incorrect cpu_set, at least when running on arm64. Git bisect shows this patch
-as the culprit, authored by you:
+On Tue, Mar 14, 2023 at 11:07:19PM +0100, Linus Walleij wrote:
+> On Tue, Mar 14, 2023 at 11:03 PM Alexey Khoroshilov
+> <khoroshilov@ispras.ru> wrote:
+> 
+> > As far as I can see sentinel is an "empty" element of xoadc_channel in
+> > the array, i.e. hwchan->datasheet_name works as a sentinel while hwchan
+> > is always non NULL.
+> 
+> You're right, I was unable to understand my own code :(
 
-  596ff4a09b89 cpumask: re-introduce constant-sized cpumask optimizations
+At this time of the day I got alarmed too. Happens :)
 
-Apologies if this is the wrong channel for reporting this - I couldn't find a
-suitable mail on the list for this patch to reply to. Happy to direct it
-somewhere else if appropriate.
-
-
-Details:
-
-I'm running v6.3-rc2 kernel in a VM on Ampere Altra (arm64 system). The VM is
-assigned 8 vCPUs. The kernel is defconfig and I'm booting into an Ubuntu
-user-space. `nproc` returns a value that fluctuates from call to call in the
-range ~80-100. If I run with v6.2, nproc always returns 8, as expected.
-
-nproc is calling sched_getaffinity() with a 1024 entry cpu_set mask, then adds
-up all the set bits to find the number of CPUs. I wrote a test program and can
-see that the first 8 bits are always correctly set and most of the other bits
-are always correctly 0. But bits ~64-224 are randomly set/clear from call to call.
-
-
-Test program:
-
-#define _GNU_SOURCE             /* See feature_test_macros(7) */
-#include <sched.h>
-#include <stdio.h>
-
-#define SET_SIZE 1024
-
-static void print_cpu_set(cpu_set_t *cpu_set)
-{
-	int ret, i, j, k;
-
-	printf("cpu_count=%d\n", CPU_COUNT(cpu_set));
-	for (i = 0; i < SET_SIZE;) {
-		printf("[%03d]: ", i);
-		for (k = 0; k < 8; k++) {
-			for (j = 0; j < 8; j++, i++) {
-				printf("%d", CPU_ISSET(i, cpu_set));
-			}
-			printf("  ");
-		}
-		printf("\n");
-	}
-}
-
-int main()
-{
-	int ret;
-	cpu_set_t *cpu_set;
-	size_t size;
-
-	cpu_set = CPU_ALLOC(SET_SIZE);
-	size = CPU_ALLOC_SIZE(SET_SIZE);
-	CPU_ZERO(cpu_set);
-
-	printf("before:\n");
-	print_cpu_set(cpu_set);
-	ret = sched_getaffinity(0, size, cpu_set);
-	printf("ret=%d\n", ret);
-	printf("after:\n");
-	print_cpu_set(cpu_set);
-
-	return 0;
-}
-
-
-Broken output on v6.3-rc2:
-
-before:
-cpu_count=0
-[000]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[064]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[128]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[192]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-ret=0
-after:
-cpu_count=82
-[000]: 11111111 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[064]: 00000100 10110111 00110010 01101001 11111111 11111111 00000000 00000000
-[128]: 00010101 00001101 11011111 10001110 11110001 10100101 11111111 11111111
-[192]: 00000000 00001000 00000000 00000100 00000000 00000000 00000000 00000000
-[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-
-
-Correct output in v6.2:
-
-before:
-cpu_count=0
-[000]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[064]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[128]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[192]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-ret=0
-after:
-cpu_count=8
-[000]: 11111111 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[064]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[128]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[192]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[256]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[320]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[384]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[448]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[512]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[576]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[640]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[704]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[768]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[832]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[896]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-[960]: 00000000 00000000 00000000 00000000 00000000 00000000 00000000 00000000
-
+Please ignore my previous comment but still no need for the
+Fixes: tag from the commit log as it's a cleanup and not a bug
+fix.
 
 Thanks,
-Ryan
+Andi
