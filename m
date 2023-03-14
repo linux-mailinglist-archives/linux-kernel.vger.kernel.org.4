@@ -2,77 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C58296B9B98
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:33:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C72D6B9B9B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:33:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230498AbjCNQdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:33:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
+        id S231288AbjCNQdS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:33:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230316AbjCNQc7 (ORCPT
+        with ESMTP id S230460AbjCNQdD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:32:59 -0400
-Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A18F512
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:32:41 -0700 (PDT)
-Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53d277c1834so315003047b3.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:32:41 -0700 (PDT)
+        Tue, 14 Mar 2023 12:33:03 -0400
+Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1FE4A2F2A
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:32:48 -0700 (PDT)
+Received: by mail-ed1-x531.google.com with SMTP id cy23so64301130edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=paul-moore.com; s=google; t=1678811561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b85EPB17+oEFtvuVLS7pjbvgxBH7B6j5VMNkZta2dsI=;
-        b=aRxhXZqxGJlYvW0/kbH4ymUQx8mnwM+MdFKi4TLnegF5PG3ylcN+ERc8VXhv/QO9eB
-         j7EBNDoHKyNLm4QoHGvscMy37ZBKEs+8zDRPq56DhNdnX88Cq9SpWl36b+9hGS+M3QtV
-         TB2WnDXGUh1FwFZ7hGlChkAzyR3Oakl/ltjMltcF+5rjC07tnL2Y8UpFJuTNHL9FhBhQ
-         Ns+snrvvkVBwu1nKFqhVH9a2E99hYbaPT3lBaFs+LGhQ9JAI5fSYC3gM1lK1cbZai0tZ
-         +0b0pzSvNkS6KLaVLkNHmZg0YAL2Rm+OErvfDNCqtTPBVjcWBAdW+VHSdCurQYeiKdWo
-         F+cg==
+        d=linaro.org; s=google; t=1678811567;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hZMmUYtKJ8wmH3Y0b7DE4LXgBhnyqMdRf+GRKEQEn4c=;
+        b=HOMoHJbvrS91PZJdsSoMVF4wEKhsJzukL0cbjFvfv9908EoWA62ipm8dzNSPoyH2Ha
+         7OrEZpotzbre+nBpyPdyCuM1aR627eF/GX/nRY34d9dg7fNOraC8g8rZ62ciV9E0hR8V
+         3Y+INXEIbwCT8XLueIXSFY2B6uLFjwOHG7cb+vpszvgBJ8GHEy/28Ic8maoK3PKBHVM9
+         fRqEFDoV4KXJPzGJVeUJWwCV2m6Ea2UK+eEQksGSdmaedxi7sxEBkXLx9uGM7ZPzKnWY
+         G09Xgt268QjmkKJ8+FXqyp0Z7H5o5pmGIIV/JtvItiyFAVHe5RytDR3FtLM7nk8CmKeL
+         5/xg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678811561;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b85EPB17+oEFtvuVLS7pjbvgxBH7B6j5VMNkZta2dsI=;
-        b=aP8c4OP1ImVBZzy/EMnnem0yiG/C9qQIM9i1YCWhrM0NkKwCqpCdtQYvJjM4bl3u3P
-         7A8IGtjTp8IbmqbQvQ5BiQyOBLoLnA6Bks+9ENOX2rDxlDO13bB2jAyMfiEW1Bt4FH+j
-         s6b+ASs/FxYknX3vwnCJApivp0fMNw4QG1AtXKGRZSoQNEZUAJZ6q4pJA/qOdVr4l5+f
-         oybvv/vJ7wb6rMQMORZulrvJFd7eXpvEtNlvsTN/kCpYbLaFa5LDuKjv6AirhpXkU3jF
-         mLKDQ7IRbGFC2jPvkyeCPLDFzP/5Ob7POc8xu+hUsG14hAP6KamPT5a+X80+YeCPsjPT
-         z5Vw==
-X-Gm-Message-State: AO0yUKVNAYIpDAEzWsiWSCDQWJg02HiBKcN+diNfGWKlcQtcYFZS5VmR
-        ZdvG1PKC7o9lEKMHTqEAYHVieMEXeWSWAg8m/Tpn
-X-Google-Smtp-Source: AK7set9jXAnKEIerlCQTH/fhrcZasdDtAc6VU4b20coSWiHPjprD1U1EHV3TBe1B3goWwNCo9Cs22k94pipz/rRtQkY=
-X-Received: by 2002:a81:4424:0:b0:536:3c2c:bf5e with SMTP id
- r36-20020a814424000000b005363c2cbf5emr25366437ywa.8.1678811560787; Tue, 14
- Mar 2023 09:32:40 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678811567;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hZMmUYtKJ8wmH3Y0b7DE4LXgBhnyqMdRf+GRKEQEn4c=;
+        b=4F/Pit3Xg4mdaqAC5q2yGIwL0bjLGQHmwRUgmL0hT4C/w5sxSVd0bu891a8Cohctlz
+         O1X0hbmbX8xnL8nPH2BqDC9Zt7qDxQncWKSWgsSg2TgpCY5q3Pm1N4u+XWVVVLCuC8y5
+         p1G7A2FcQT6Hs++3eT/7JvTU1V3zCPG3YS/JzzGv6h7+sypGIbYzPQ22QFBlipHNlwZq
+         73rA4zwJVI1GN/rpwDsbzIcywbWO5z3XYtMPKKdYfRiSziZYL2/Y5+SREserOeMRx0Jf
+         3Hp/td5my6G39ZY6F/rWvnlA7rjkSZ7ZEWnv/uHOJ+/AHVq0Z7VqVK1fWa6E0jiu6fFv
+         n5Cw==
+X-Gm-Message-State: AO0yUKUDE2PN2fBm0AQfBhGd9ph4Q5pp8kQTsIW2YHKoJP4Bk9xl4x7/
+        BSpetJbbp0ydEUqga3FzHx8b4Q==
+X-Google-Smtp-Source: AK7set+myyCkcdJ6jQlFEHkzUZ2F1WAxX5BcejY0gf0Rd4/49aK9Lc6ALEebeykXKuMeNvyqb5FwSA==
+X-Received: by 2002:a05:6402:74e:b0:4fd:23c9:11ed with SMTP id p14-20020a056402074e00b004fd23c911edmr5057745edy.17.1678811567132;
+        Tue, 14 Mar 2023 09:32:47 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id cd3-20020a170906b34300b00921357fb28csm1341977ejb.123.2023.03.14.09.32.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 09:32:46 -0700 (PDT)
+Message-ID: <bafa692c-f3a3-d317-278d-2dd3b5ff8af3@linaro.org>
+Date:   Tue, 14 Mar 2023 17:32:44 +0100
 MIME-Version: 1.0
-References: <20230310192614.GA528@domac.alu.hr> <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
- <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr> <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
- <ZA7tyrscjwavzY3a@smile.fi.intel.com> <CAHC9VhTMoCAFhaa36Bq7_jiKGiaeMbYTuWv7tTQP1OHpY0EUsg@mail.gmail.com>
- <ZBBU9diKqetWQztO@smile.fi.intel.com>
-In-Reply-To: <ZBBU9diKqetWQztO@smile.fi.intel.com>
-From:   Paul Moore <paul@paul-moore.com>
-Date:   Tue, 14 Mar 2023 12:32:30 -0400
-Message-ID: <CAHC9VhTenpSXwvorisXYWYGfx345ZOL9fOrwyhntoUFsLX_ENw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
-        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
-        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        Mimi Zohar <zohar@linux.ibm.com>,
-        Casey Schaufler <casey@schaufler-ca.com>,
-        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
-        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
-        Frederick Lawler <fred@cloudflare.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
+Content-Language: en-US
+To:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Guenter Roeck <linux@roeck-us.net>
+Cc:     Joe Tessler <jrt@google.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Michael Tretter <m.tretter@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Jacopo Mondi <jacopo+renesas@jmondi.org>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
+        <niklas.soderlund+renesas@ragnatech.se>,
+        Rui Miguel Silva <rmfrfs@gmail.com>,
+        Wenyou Yang <wenyou.yang@microchip.com>,
+        Bin Liu <bin.liu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
+        Houlong Wei <houlong.wei@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
+        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
+        Sylwester Nawrocki <s.nawrocki@samsung.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
+        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
+        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-rockchip@lists.infradead.org
+References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
+ <b83d6b81-c4ec-4fb8-b626-84af80d1c4a3@roeck-us.net>
+ <74ae8afe-c537-1714-77ec-8a80d8ddad69@xs4all.nl>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <74ae8afe-c537-1714-77ec-8a80d8ddad69@xs4all.nl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -81,96 +118,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 7:05=E2=80=AFAM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Mon, Mar 13, 2023 at 04:27:42PM -0400, Paul Moore wrote:
-> > On Mon, Mar 13, 2023 at 5:33=E2=80=AFAM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Sat, Mar 11, 2023 at 09:59:17AM -0500, Paul Moore wrote:
-> > > > On Fri, Mar 10, 2023 at 5:53=E2=80=AFPM Mirsad Goran Todorovac
-> > > > <mirsad.todorovac@alu.unizg.hr> wrote:
->
-> ...
->
-> > > > With that out of the way, I wanted to make a quick comment on the
-> > > > patch itself.  Currently LSMs do not support unloading, or dynamic
-> > > > loading for that matter.  There are several reasons for this, but
-> > > > perhaps the most important is that in order to help meet the securi=
-ty
-> > > > goals for several of the LSMs they need to be present in the kernel
-> > > > from the very beginning and remain until the very end.  Adding a
-> > > > proper "release" method to a LSM is going to be far more complicate=
-d
-> > > > than what you've done with this patchset, involving a lot of
-> > > > discussion both for the LSM layer itself and all of the currently
-> > > > supported LSMs, and ultimately I don't believe it is something we w=
-ill
-> > > > want to support.
-> > > >
-> > > > I appreciate your desire to help, and I want to thank you for your
-> > > > patch and the effort behind it, but I don't believe the kobject mem=
-ory
-> > > > leak you saw at kernel shutdown was a real issue (it was only "leak=
-ed"
-> > > > because the system was shutting down) and I'm not sure the current
-> > > > behavior is something we want to change in the near future.
-> > >
-> > > Currently the security module so secure that even adds an unneeded no=
-ise to
-> > > the debugging output.
-> > >
-> > > At very least it would be nice to add a stub and put a big comment
-> > > (on your taste) explaining why we do not do anything there.
-> > >
-> > > Agree?
-> >
-> > No.
->
-> Are you sure? I'm proposing to add a stub which is no-op, but with a comm=
-ent
-> inside explaining why. In such case we:
->
-> 1) shut the kobject infra up;
-> 2) keep the status quo in LSM;
-> 3) put in the code a good explanation for others on what's going on.
->
-> > At least not without a lot of additional work beyond what was
-> > presented in this patchset.  What about all of the other kobject
-> > caches created by other LSMs, this is more than just the IMA
-> > iint_cache.  I'm also skeptical that this patchset was ever tested and
-> > verified as the newly added release() method was never actually called
-> > from anywhere that I could see.
->
-> I'm not talking about this patchset, but you are right that it wasn't
-> tested.
->
-> > I think we would need to see a proper, verified fix before I could say
-> > for certain.
->
-> And continuing to spread the noise in the logs just because LSM is stubbo=
-rn?
->
-> > If you want to discuss potential designs, we can do that
-> > too, but please remember the constraints that were already mentioned
-> > about intentionally not allowing the LSMs to be unloaded (prior to
-> > system shutdown).
-> >
-> > I don't know the answer to this, but I'm guessing the LSMs aren't the
-> > only kernel subsystems to "leak" memory on system shutdown; working on
-> > the assumption that this is the case, how are those "leaked"
-> > allocations handled?
->
-> Note, I'm full for the proper fix, but the current issue is logs flooding=
- done
-> by LSM that needs to be addressed.
+On 14/03/2023 09:34, Hans Verkuil wrote:
+> On 13/03/2023 23:01, Guenter Roeck wrote:
+>> On Sun, Mar 12, 2023 at 02:12:51PM +0100, Krzysztof Kozlowski wrote:
+>>> The driver can match only via the DT table so the table should be always
+>>> used and the of_match_ptr does not have any sense (this also allows ACPI
+>>> matching via PRP0001, even though it might not be relevant here).
+>>>
+>>>   drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
+>>>
+>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>>
+>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
+>>
+>> FWIW: There is also
+>> https://patches.linaro.org/project/linux-media/patch/20230215214724.3798917-1-linux@roeck-us.net/
+> 
+> I superseded that patch in patchwork in favor of this patch since this is part of
+> a larger series.
 
-If you want to introduce a change to add a release method, do it
-properly so it does the right thing for all the LSMs and not just the
-one you happen to care about at this moment.  If you don't do the
-change properly it means I'm going to have to complete the work and
-I've got more important things relating to the LSM that need my
-attention.
+I am personally fan of FIFO, so Guenter's patch should go in.
 
---=20
-paul-moore.com
+> 
+> Krzysztof, please let me know if you will take this series yourself or want me to
+> make a PR for it.
+
+I prefer if you take entire patchset.
+
+
+Best regards,
+Krzysztof
+
