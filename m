@@ -2,166 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C38666B9EEB
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:45:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A95C6B9EAD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:35:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCNSpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S231148AbjCNSft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:35:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230100AbjCNSpq (ORCPT
+        with ESMTP id S231132AbjCNSfg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:45:46 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 899B3A401E;
-        Tue, 14 Mar 2023 11:45:12 -0700 (PDT)
-Received: from g550jk.localnet (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id D374BD2500;
-        Tue, 14 Mar 2023 18:33:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1678818788; bh=fHJza5nGl0uG6ilnr4LPPY4PLgKrXqdkOF8SQ67N1kY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=ZsiIufmMaKi3c7O3QK6sepAvzFn03uUdr3CKUT3VoXSwt4PKJlOVdFJSG6mYnRtKl
-         z6YxTjTZmVCR6xEsuDpr+/pK5lVUqEkqLk0ZCDzaXNeV3mC74pia+ELIIICuR5k8vM
-         IVjGYv/sDCA2ppaCyYavz41aREDHVP4LdFyBJuMc=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     Sakari Ailus <sakari.ailus@iki.fi>
-Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-media@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
-        devicetree@vger.kernel.org,
-        Shunqian Zheng <zhengsq@rock-chips.com>,
-        phone-devel@vger.kernel.org,
-        Helen Koike <helen.koike@collabora.com>
-Subject: Re: [PATCH] media: dt-bindings: ov2685: convert to dtschema
-Date:   Tue, 14 Mar 2023 19:33:06 +0100
-Message-ID: <5654018.DvuYhMxLoT@z3ntu.xyz>
-In-Reply-To: <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
-References: <20230206-ov2685-dtschema-v1-1-9e4da3474c10@z3ntu.xyz>
- <2665862.mvXUDI8C0e@z3ntu.xyz> <ZBBh9Euor7R24euV@valkosipuli.retiisi.eu>
+        Tue, 14 Mar 2023 14:35:36 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E32CBB5A9B;
+        Tue, 14 Mar 2023 11:35:03 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 8393E1F8C4;
+        Tue, 14 Mar 2023 18:33:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1678818814; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=0qGPjCdAtXC+XqD66XjuAi/v8OGi5D90eB+FdMZqJF4=;
+        b=JdhULJXkXMyNdDlyilRH5mWTjuWX8W63xoL7ZQRJJGxCcOiqkiWRdleW8GnbHAm050pPe7
+        mCTMJyTgkDYeCfpDOE4fv8w5FYUT+1xIsBateWg6K3b8YfoBgXr2sTO/Clhq+v7NRWWGWV
+        8Aq2YbcMiefG9VpKpNOGaRKbfhHXzu8=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 5616413A26;
+        Tue, 14 Mar 2023 18:33:34 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id c5DgE/69EGQwKQAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Tue, 14 Mar 2023 18:33:34 +0000
+From:   =?UTF-8?q?Michal=20Koutn=C3=BD?= <mkoutny@suse.com>
+To:     io-uring@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        Jens Axboe <axboe@kernel.dk>,
+        Pavel Begunkov <asml.silence@gmail.com>,
+        Daniel Dao <dqminh@cloudflare.com>,
+        Waiman Long <longman@redhat.com>
+Subject: [PATCH] io_uring/sqpoll: Do not set PF_NO_SETAFFINITY on sqpoll threads
+Date:   Tue, 14 Mar 2023 19:33:32 +0100
+Message-Id: <20230314183332.25834-1-mkoutny@suse.com>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Dienstag, 14. M=E4rz 2023 13:00:52 CET Sakari Ailus wrote:
-> Hi Luca,
->=20
-> On Thu, Feb 09, 2023 at 05:46:48PM +0100, Luca Weiss wrote:
-> > +CC Helen Koike
-> >=20
-> > On Montag, 6. Februar 2023 22:50:08 CET Rob Herring wrote:
-> > > On Mon, 06 Feb 2023 21:23:16 +0100, Luca Weiss wrote:
-> > > > Convert the text-based dt-bindings to yaml.
-> > > >=20
-> > > > Changes from original txt:
-> > > > * Take wording for various properties from other yaml bindings, this
-> > > >=20
-> > > >   removes e.g. volt amount from schema since it isn't really releva=
-nt
-> > > >   and the datasheet is a better source.
-> > > >=20
-> > > > * Don't make reset-gpios a required property since it can be tied to
-> > > >=20
-> > > >   DOVDD instead.
-> > > >=20
-> > > > Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> > > > ---
-> > > >=20
-> > > >  .../devicetree/bindings/media/i2c/ov2685.txt       |  41 ---------
-> > > >  .../devicetree/bindings/media/i2c/ovti,ov2685.yaml | 101
-> > > >  +++++++++++++++++++++ MAINTAINERS
-> > > > =20
-> > > >  |   1 +
-> > > > =20
-> > > >  3 files changed, 102 insertions(+), 41 deletions(-)
-> > >=20
-> > > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_ch=
-eck'
-> > > on your patch (DT_CHECKER_FLAGS is new in v5.13):
-> > >=20
-> > > yamllint warnings/errors:
-> > >=20
-> > > dtschema/dtc warnings/errors:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > medi a/rockchip-isp1.example.dtb: camera@3c: 'clocks' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'clock-names' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'dvdd-supply' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'avdd-supply' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/rockchip-isp1.example.dtb: camera@3c: 'dovdd-supply' is a required
-> > > property From schema:
-> > > /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindin=
-gs/
-> > > med
-> > > ia/i2c/ovti,ov2685.yaml
-> >=20
-> > Looks like rockchip-isp1.yaml uses very incomplete sensor examples in
-> > their
-> > binding example, which sort of makes sense since those bindings are
-> > showing
-> > the rockchip isp bindings and contain the bare minimum to show how a
-> > sensor is connected in dt.
-> >=20
-> > Not sure how to solve this - ov2685 is also one of three sensors that a=
-re
-> > used very abbreviated there.
->=20
-> Could these regulators be simply made optional?
+Users may specify a CPU where the sqpoll thread would run. This may
+conflict with cpuset operations because of strict PF_NO_SETAFFINITY
+requirement. That flag is unnecessary for polling "kernel" threads, see
+the reasoning in commit 01e68ce08a30 ("io_uring/io-wq: stop setting
+PF_NO_SETAFFINITY on io-wq workers"). Drop the flag on poll threads too.
 
-Sure, from driver side it would just get dummy regulators instead.
+Fixes: 01e68ce08a30 ("io_uring/io-wq: stop setting PF_NO_SETAFFINITY on io-wq workers")
+Link: https://lore.kernel.org/all/20230314162559.pnyxdllzgw7jozgx@blackpad/
+Signed-off-by: Michal Koutný <mkoutny@suse.com>
+---
+ io_uring/sqpoll.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-Still the clocks are also missing in this rockchip example. Any suggestion=
-=20
-what to do about those?
-
-Honestly I don't want to spend too much time on some ISP docs that I don't=
-=20
-really care about, would be nice if the maintainers of that could do that...
-
-Regards
-Luca
-
-
+diff --git a/io_uring/sqpoll.c b/io_uring/sqpoll.c
+index 0119d3f1a556..9db4bc1f521a 100644
+--- a/io_uring/sqpoll.c
++++ b/io_uring/sqpoll.c
+@@ -233,7 +233,6 @@ static int io_sq_thread(void *data)
+ 		set_cpus_allowed_ptr(current, cpumask_of(sqd->sq_cpu));
+ 	else
+ 		set_cpus_allowed_ptr(current, cpu_online_mask);
+-	current->flags |= PF_NO_SETAFFINITY;
+ 
+ 	mutex_lock(&sqd->lock);
+ 	while (1) {
+-- 
+2.39.2
 
