@@ -2,50 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 548356B87C0
+	by mail.lfdr.de (Postfix) with ESMTP id 0718B6B87BF
 	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:44:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbjCNBlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 21:41:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33334 "EHLO
+        id S230243AbjCNBlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 21:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230220AbjCNBlQ (ORCPT
+        with ESMTP id S230228AbjCNBlS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 21:41:16 -0400
+        Mon, 13 Mar 2023 21:41:18 -0400
 Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24C8972B10
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:41:15 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D412474336
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 18:41:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678758075; x=1710294075;
+  t=1678758076; x=1710294076;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=E1vpSUnv0GpopyC7lDUkDQqhHE9rQzhik8od9N+jq4w=;
-  b=PE3jgalQU8e0GMhkr9L3f4Dq94oqJ9+73GQmk0LYzODp+nUN/4PD2f2M
-   u9SuT+7xdbGaa3N/NVuh2i2W9DqjKplHjA+KSAiO7bF5AvVoJypSTtsWO
-   MbKkQHx98aaQkAJ0qyuGkaTJ94C/XEIYOGMK6ZFs+/vrZSrSJt8zemVkx
-   iL5aUaUQXlwgalTzt0O1VlggXYJqrza+L9yHYH3jx0c1KFjZOjwuVHjqY
-   W+eUQFwiqPBULwi0Dq4DcehMjZ/oVwF11VMBqGeVOG1jogHdO6LCFutpa
-   d+MYJLIS/7l0I9wLHq7NXq4OjdU+hHDb5icbA3dza17ZhfGvXJ6Yu+9uV
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316949233"
+  bh=hZc2EGLHxJx9i0Pailyxx3z91nn/GaDqbMywZWeyhkI=;
+  b=YLUnoCe8xt5wcRgld27H58jEcQOyK3Ck3OK8afCg2a7WDDJp56Jlx0uH
+   zy+P4siAoUA7rwMXtPKmJOcI3S3Zbkhc9NwLNI9GhNHbCm9Asy9tiyCys
+   MbUdGADjePEi2ZxqtFSIZ6ZRHCIPvGLf/yp/9oWqHtQV4Nh5XLaYkTKM0
+   2GBEPFGJvhfxFTGke+5ELuoP4G5VConNR1TXeX6RHn67MHNBKJAGOeuj6
+   GyLtdYZsBKKtyzAZEoG2A+6/f/5S+CwN6QhZTnkqnr3oLbZz36P6QZLIG
+   eBVPFmXeyaXM5H4855oPDlUBRNp+T3JWS6ic2SEnWYrpeWTFjZ270SNxZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316949239"
 X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="316949233"
+   d="scan'208";a="316949239"
 Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:41:14 -0700
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:41:16 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="711327386"
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="711327399"
 X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="711327386"
+   d="scan'208";a="711327399"
 Received: from bard-ubuntu.sh.intel.com ([10.239.185.57])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:41:12 -0700
+  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:41:14 -0700
 From:   Bard Liao <yung-chuan.liao@linux.intel.com>
 To:     alsa-devel@alsa-project.org, vkoul@kernel.org
 Cc:     vinod.koul@linaro.org, linux-kernel@vger.kernel.org,
         pierre-louis.bossart@linux.intel.com, bard.liao@intel.com
-Subject: [PATCH 04/16] soundwire: intel: remove useless abstraction
-Date:   Tue, 14 Mar 2023 09:53:58 +0800
-Message-Id: <20230314015410.487311-5-yung-chuan.liao@linux.intel.com>
+Subject: [PATCH 05/16] soundwire: intel: simplify sync_go sequence
+Date:   Tue, 14 Mar 2023 09:53:59 +0800
+Message-Id: <20230314015410.487311-6-yung-chuan.liao@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20230314015410.487311-1-yung-chuan.liao@linux.intel.com>
 References: <20230314015410.487311-1-yung-chuan.liao@linux.intel.com>
@@ -62,43 +62,51 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 
-PDM is supported in the hardware but never enabled: there are no known
-PDM-based devices. We can directly call the PCM helper.
+In the existing code, the SHIM_SYNC::SYNC_GO bit is set, and the code
+waits for it to return to zero.
+
+That second wait part is just wrong: the SYNC_GO bit is *write-only* so
+there's no way to know if it's cleared by hardware. The code works
+because the value for a read-only bit is zero, but that's really just
+luck.
+
+Simplify the sequence to a plain read-modify-write.
 
 Signed-off-by: Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>
 Reviewed-by: Rander Wang <rander.wang@intel.com>
 Signed-off-by: Bard Liao <yung-chuan.liao@linux.intel.com>
 ---
- drivers/soundwire/intel.c | 9 +--------
- 1 file changed, 1 insertion(+), 8 deletions(-)
+ drivers/soundwire/intel.c | 9 ++-------
+ 1 file changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/drivers/soundwire/intel.c b/drivers/soundwire/intel.c
-index 6c17baab7923..2c1c905f8889 100644
+index 2c1c905f8889..6fdb10117e59 100644
 --- a/drivers/soundwire/intel.c
 +++ b/drivers/soundwire/intel.c
-@@ -586,13 +586,6 @@ static int intel_pdi_stream_ch_update(struct sdw_intel *sdw,
- 	return 0;
+@@ -475,7 +475,6 @@ static int intel_shim_sync_go_unlocked(struct sdw_intel *sdw)
+ {
+ 	void __iomem *shim = sdw->link_res->shim;
+ 	u32 sync_reg;
+-	int ret;
+ 
+ 	/* Read SYNC register */
+ 	sync_reg = intel_readl(shim, SDW_SHIM_SYNC);
+@@ -487,13 +486,9 @@ static int intel_shim_sync_go_unlocked(struct sdw_intel *sdw)
+ 	 */
+ 	sync_reg |= SDW_SHIM_SYNC_SYNCGO;
+ 
+-	ret = intel_clear_bit(shim, SDW_SHIM_SYNC, sync_reg,
+-			      SDW_SHIM_SYNC_SYNCGO);
++	intel_writel(shim, SDW_SHIM_SYNC, sync_reg);
+ 
+-	if (ret < 0)
+-		dev_err(sdw->cdns.dev, "SyncGO clear failed: %d\n", ret);
+-
+-	return ret;
++	return 0;
  }
  
--static int intel_pdi_ch_update(struct sdw_intel *sdw)
--{
--	intel_pdi_stream_ch_update(sdw, &sdw->cdns.pcm);
--
--	return 0;
--}
--
- static void
- intel_pdi_shim_configure(struct sdw_intel *sdw, struct sdw_cdns_pdi *pdi)
- {
-@@ -1094,7 +1087,7 @@ static int intel_register_dai(struct sdw_intel *sdw)
- 	if (ret)
- 		return ret;
- 
--	intel_pdi_ch_update(sdw);
-+	intel_pdi_stream_ch_update(sdw, &sdw->cdns.pcm);
- 
- 	/* DAIs are created based on total number of PDIs supported */
- 	num_dai = cdns->pcm.num_pdi;
+ static int intel_shim_sync_go(struct sdw_intel *sdw)
 -- 
 2.25.1
 
