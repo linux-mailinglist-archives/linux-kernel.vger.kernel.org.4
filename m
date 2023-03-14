@@ -2,206 +2,147 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBE226B9A59
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:51:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175976B9A6F
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:56:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231302AbjCNPvR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:51:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S230491AbjCNP4H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:56:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33324 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230272AbjCNPvK (ORCPT
+        with ESMTP id S229537AbjCNP4F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:51:10 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2447419C63
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:50:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678809052; x=1710345052;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=lmj3zKUfjEw3Ftct0JN8uVNOHmN2vSM6YpYHRDqpHk8=;
-  b=Y3vuuJL6tZHOqk4bwmjjpV2oWnCpFkmvmNZRcGMoQ9NAb8CZAvzWqvG7
-   xKHJg+QQYZbAUjLv4RM7fuA3Asd1uDIHkkYECn8G4HM+YuBzeQnW7U1xa
-   NHwI5+U68yH2/b06cN/ZCMsOyu3dFjLbMyv2u041E9R/x26kzrUmntXhM
-   Mo3yZnHPGWdidfUKo/7fJ7t+Z1L/UXnLQh+9rmLIpLaRtDmCh8OyEKSG5
-   B5ksgzpdVWqZukwJ1gQkKN05i4zd0xP6JZanHsLJJwzfguxQKqabiCvZ3
-   1m56GcRkt3kgQ1wI5y3z139IFoUY55yf15yTgQgr08FL/4CbuNrS/Hi6s
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="339007312"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="339007312"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:50:29 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="709332223"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="709332223"
-Received: from jacob-builder.jf.intel.com (HELO jacob-builder) ([10.24.100.114])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:50:29 -0700
-Date:   Tue, 14 Mar 2023 08:54:24 -0700
-From:   Jacob Pan <jacob.jun.pan@linux.intel.com>
-To:     Lu Baolu <baolu.lu@linux.intel.com>
-Cc:     iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        linux-kernel@vger.kernel.org, jacob.jun.pan@linux.intel.com
-Subject: Re: [PATCH] iommu/vt-d: Remove unnecessary locking in
- intel_irq_remapping_alloc()
-Message-ID: <20230314085424.3e6141d1@jacob-builder>
-In-Reply-To: <20230314051836.23817-1-baolu.lu@linux.intel.com>
-References: <20230314051836.23817-1-baolu.lu@linux.intel.com>
-Organization: OTC
-X-Mailer: Claws Mail 3.17.5 (GTK+ 2.24.32; x86_64-pc-linux-gnu)
+        Tue, 14 Mar 2023 11:56:05 -0400
+Received: from mail-wm1-x336.google.com (mail-wm1-x336.google.com [IPv6:2a00:1450:4864:20::336])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C215261B6;
+        Tue, 14 Mar 2023 08:56:03 -0700 (PDT)
+Received: by mail-wm1-x336.google.com with SMTP id az3-20020a05600c600300b003ed2920d585so3598421wmb.2;
+        Tue, 14 Mar 2023 08:56:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678809362;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UdFrsIiMjK7zaFiXvxcoT7MBwZbH3B8JzNWjOBYQLBA=;
+        b=c9i1YHKLupsH6aV0Q0n8iAxu9I4j2VznRLgPrZIVnNZv4UmKK7RIy18hZXxnRLAGGj
+         cOXaGdQ724hFoazysdmsot1vsjuhZ6WPr98Itz+rdcPG30R+2h1gKQTNx6tO+J0Jq0AQ
+         ZhkDEvpiGMs1Rk6UGCJ5cbDyALNv/PWd7/TmfQsUdqVfhERPphR4yqwMHvIfoB57OAmX
+         KOBNsZO3yjPu19W0R0SVP2kpHRWqCkbj6aHG0XVIeFF55Ja5o6YEsd8wkZIrynr0dyzk
+         bU3483lb0Wy6/lvHokXf8TsG9nfr684HVCNXElGyTXbgrJZVmnRigh+CKicAqCOD8rla
+         gFHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678809362;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UdFrsIiMjK7zaFiXvxcoT7MBwZbH3B8JzNWjOBYQLBA=;
+        b=HfV22WsKbFkUJ4wLVFeLdBCToDRe+ahqGzJADiZ40wsawaZvfP82p9zwO2rM85Thxb
+         pIJQqjduGVhGNhDkvlhW7nBJlcA3Uba6A5o4j6UQzD+YIL4V7Sz079szT5oYdqD8tIx8
+         D+3ctsTabECl4+SJfy7JKFjhZxUl6I3y5K5J6rLLvl86DXaN4sO00mzlTdsK7MjUOSm5
+         PkEMNP1d3qL9ycHzrmSyNNycnETuLj8LWvYxJpu8KTlFb4UnqocRo51YTnXnG/qcosAr
+         WIWIb2Pyfli8ypigNiS90xilTKGlEtVR65/maZlWYi/n4thswpVtk/MjUcH/goOZYByJ
+         xdZw==
+X-Gm-Message-State: AO0yUKUC2A3imm2SrUD11QTmzlvX6GJIl5xrWQ3jYMA4MiLy9ay4vYkW
+        VKcEi6JeNkDawzJg2/oFf+A=
+X-Google-Smtp-Source: AK7set/Lgtpm4cGMphDCSdbjIzZZ7CRihdQqUuTpFwZgD8GavCor/+cPXMZElp42Yt9hHPsIQZqW9w==
+X-Received: by 2002:a05:600c:4fd1:b0:3db:15b1:fb28 with SMTP id o17-20020a05600c4fd100b003db15b1fb28mr16057636wmq.19.1678809362169;
+        Tue, 14 Mar 2023 08:56:02 -0700 (PDT)
+Received: from debian ([89.238.191.199])
+        by smtp.gmail.com with ESMTPSA id l17-20020a7bc351000000b003e21f959453sm3172879wmj.32.2023.03.14.08.55.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 08:56:01 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 16:55:47 +0100
+From:   Richard Gobert <richardbgobert@gmail.com>
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     davem@davemloft.net, kuba@kernel.org, pabeni@redhat.com,
+        dsahern@kernel.org, alexanderduyck@fb.com, lucien.xin@gmail.com,
+        lixiaoyan@google.com, iwienand@redhat.com, leon@kernel.org,
+        ye.xingchen@zte.com.cn, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] gro: optimise redundant parsing of packets
+Message-ID: <20230314155544.GA17833@debian>
+References: <20230313162520.GA17199@debian>
+ <20230313164541.GA17394@debian>
+ <CANn89i+a-d6e3_6PpKckC149_O87GWeUAhe6ztOh62b1fcvBbw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CANn89i+a-d6e3_6PpKckC149_O87GWeUAhe6ztOh62b1fcvBbw@mail.gmail.com>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi BaoLu,
+> >
+> > Currently the IPv6 extension headers are parsed twice: first in
+> > ipv6_gro_receive, and then again in ipv6_gro_complete.
+> >
+> > By using the new ->transport_proto field, and also storing the size of the
+> > network header, we can avoid parsing extension headers a second time in
+> > ipv6_gro_complete (which saves multiple memory dereferences and conditional
+> > checks inside ipv6_exthdrs_len for a varying amount of extension headers in
+> > IPv6 packets).
+> >
+> > The implementation had to handle both inner and outer layers in case of
+> > encapsulation (as they can't use the same field). I've applied a similar
+> > optimisation to Ethernet.
+> >
+> > Performance tests for TCP stream over IPv6 with a varying amount of
+> > extension headers demonstrate throughput improvement of ~0.7%.
+> >
+> > In addition, I fixed a potential future problem:
+> 
+> I would remove all this block.
+> 
+> We fix current problems, not future hypothetical ones.
+> 
 
-On Tue, 14 Mar 2023 13:18:36 +0800, Lu Baolu <baolu.lu@linux.intel.com>
-wrote:
+I agree, I did it primarily to avoid an additional branch (the logic
+remains exactly the same). I'll remove this part from the commit message.
 
-> The global rwsem dmar_global_lock was introduced by commit 3a5670e8ac932
-> ("iommu/vt-d: Introduce a rwsem to protect global data structures"). It
-> is used to protect DMAR related global data from DMAR hotplug operations.
-> 
-> Using dmar_global_lock in intel_irq_remapping_alloc() is unnecessary as
-> the DMAR global data structures are not touched there. Remove it to avoid
-> below lockdep warning.
-> 
->  ======================================================
->  WARNING: possible circular locking dependency detected
->  6.3.0-rc2 #468 Not tainted
->  ------------------------------------------------------
->  swapper/0/1 is trying to acquire lock:
->  ff1db4cb40178698 (&domain->mutex){+.+.}-{3:3},
->    at: __irq_domain_alloc_irqs+0x3b/0xa0
-> 
->  but task is already holding lock:
->  ffffffffa0c1cdf0 (dmar_global_lock){++++}-{3:3},
->    at: intel_iommu_init+0x58e/0x880
-> 
->  which lock already depends on the new lock.
-> 
->  the existing dependency chain (in reverse order) is:
-> 
->  -> #1 (dmar_global_lock){++++}-{3:3}:
->         lock_acquire+0xd6/0x320
->         down_read+0x42/0x180
->         intel_irq_remapping_alloc+0xad/0x750
->         mp_irqdomain_alloc+0xb8/0x2b0
->         irq_domain_alloc_irqs_locked+0x12f/0x2d0
->         __irq_domain_alloc_irqs+0x56/0xa0
->         alloc_isa_irq_from_domain.isra.7+0xa0/0xe0
->         mp_map_pin_to_irq+0x1dc/0x330
->         setup_IO_APIC+0x128/0x210
->         apic_intr_mode_init+0x67/0x110
->         x86_late_time_init+0x24/0x40
->         start_kernel+0x41e/0x7e0
->         secondary_startup_64_no_verify+0xe0/0xeb
-> 
->  -> #0 (&domain->mutex){+.+.}-{3:3}:
->         check_prevs_add+0x160/0xef0
->         __lock_acquire+0x147d/0x1950
->         lock_acquire+0xd6/0x320
->         __mutex_lock+0x9c/0xfc0
->         __irq_domain_alloc_irqs+0x3b/0xa0
->         dmar_alloc_hwirq+0x9e/0x120
->         iommu_pmu_register+0x11d/0x200
->         intel_iommu_init+0x5de/0x880
->         pci_iommu_init+0x12/0x40
->         do_one_initcall+0x65/0x350
->         kernel_init_freeable+0x3ca/0x610
->         kernel_init+0x1a/0x140
->         ret_from_fork+0x29/0x50
-> 
->  other info that might help us debug this:
-> 
->  Possible unsafe locking scenario:
-> 
->         CPU0                    CPU1
->         ----                    ----
->    lock(dmar_global_lock);
->                                 lock(&domain->mutex);
->                                 lock(dmar_global_lock);
->    lock(&domain->mutex);
-> 
->                 *** DEADLOCK ***
-> 
-> Fixes: 9dbb8e3452ab ("irqdomain: Switch to per-domain locking")
-> Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-> ---
->  drivers/iommu/intel/irq_remapping.c | 6 ------
->  1 file changed, 6 deletions(-)
-> 
-> diff --git a/drivers/iommu/intel/irq_remapping.c
-> b/drivers/iommu/intel/irq_remapping.c index 6d01fa078c36..df9e261af0b5
-> 100644 --- a/drivers/iommu/intel/irq_remapping.c
-> +++ b/drivers/iommu/intel/irq_remapping.c
-> @@ -311,14 +311,12 @@ static int set_ioapic_sid(struct irte *irte, int
-> apic) if (!irte)
->  		return -1;
->  
-> -	down_read(&dmar_global_lock);
->  	for (i = 0; i < MAX_IO_APICS; i++) {
->  		if (ir_ioapic[i].iommu && ir_ioapic[i].id == apic) {
->  			sid = (ir_ioapic[i].bus << 8) |
-> ir_ioapic[i].devfn; break;
->  		}
->  	}
-> -	up_read(&dmar_global_lock);
->  
->  	if (sid == 0) {
->  		pr_warn("Failed to set source-id of IOAPIC (%d)\n",
-> apic); @@ -338,14 +336,12 @@ static int set_hpet_sid(struct irte *irte,
-> u8 id) if (!irte)
->  		return -1;
->  
-> -	down_read(&dmar_global_lock);
->  	for (i = 0; i < MAX_HPET_TBS; i++) {
->  		if (ir_hpet[i].iommu && ir_hpet[i].id == id) {
->  			sid = (ir_hpet[i].bus << 8) | ir_hpet[i].devfn;
->  			break;
->  		}
->  	}
-> -	up_read(&dmar_global_lock);
->  
->  	if (sid == 0) {
->  		pr_warn("Failed to set source-id of HPET block (%d)\n",
-> id); @@ -1339,9 +1335,7 @@ static int intel_irq_remapping_alloc(struct
-> irq_domain *domain, if (!data)
->  		goto out_free_parent;
->  
-> -	down_read(&dmar_global_lock);
->  	index = alloc_irte(iommu, &data->irq_2_iommu, nr_irqs);
-> -	up_read(&dmar_global_lock);
->  	if (index < 0) {
->  		pr_warn("Failed to allocate IRTE\n");
->  		kfree(data);
-Reviewed-by: Jacob Pan <jacob.jun.pan@linux.intel.com>
 
-slightly beyond the scope of this, do we need to take dmar_global_lock
-below? shouldn't it be in single threaded context?
+> >  - The call to skb_set_inner_network_header at the beginning of
+> >    ipv6_gro_complete calculates inner_network_header based on skb->data by
+> >    calling skb_set_inner_network_header, and setting it to point to the
+> >    beginning of the ip header.
+> >  - If a packet is going to be handled by BIG TCP, the following code block
+> >    is going to shift the packet header, and skb->data is going to be
+> >    changed as well.
+> >
+> > When the two flows are combined, inner_network_header will point to the
+> > wrong place - which might happen if encapsulation of BIG TCP will be
+> > supported in the future.
+> >
+> > The fix is to place the whole encapsulation branch after the BIG TCP code
+> > block. This way, if encapsulation of BIG TCP will be supported,
+> > inner_network_header will still be calculated with the correct value of
+> > skb->data.
+> 
+> We do not support encapsulated BIG TCP yet.
+> We will do this later, and whoever does it will make sure to also support GRO.
+> 
+> > Also, by arranging the code that way, the optimisation does not
+> > add an additional branch.
+> >
+> > Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
+> > ---
+> >
+> 
+> Can you give us a good explanation of why extension headers are used exactly ?
+> 
+> I am not sure we want to add code to GRO for something that 99.99% of
+> us do not use.
 
-	down_write(&dmar_global_lock);
-	ret = dmar_dev_scope_init();
-	up_write(&dmar_global_lock);
+IMO, some common use cases that will benefit from this patch are:
+- Parsing of BIG TCP packets which include a hbh ext hdr.
+- dstopts and routing ext hdrs that are used for Mobile IPv6 features.
 
-	return ret;
-}
-rootfs_initcall(ir_dev_scope_init);
-
-Thanks,
-
-Jacob
+Generally, when a packet includes ext hdrs we will avoid the recalculation
+of the ext hdrs len. When there are no ext hdrs, we will not call the
+ipv6_exthdrs_len function so the performance isn't negatively impacted
+(potentially even saving some opcodes in ipv6_exthdrs_len).
