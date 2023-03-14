@@ -2,126 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83BB86B9760
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A20FD6B9768
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjCNOKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56810 "EHLO
+        id S232217AbjCNOLZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:11:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58222 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231916AbjCNOKp (ORCPT
+        with ESMTP id S232596AbjCNOLH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:10:45 -0400
-Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA0F2746E7;
-        Tue, 14 Mar 2023 07:10:39 -0700 (PDT)
-Received: by mail-il1-f179.google.com with SMTP id h7so8694039ila.5;
-        Tue, 14 Mar 2023 07:10:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678803039;
-        h=date:subject:message-id:references:in-reply-to:cc:to:from
-         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=eS4/esiARLcOTfS3GdLeqZGAcqprgtcpPQrawrBj7eg=;
-        b=Wof+pzJSIpP/hCNcTRLZCf8BALpfc8Kg8hF62PWzeH9cklITZwUr0Py53Y+e66ZCqc
-         XFPMkAzwU2gZSsKszOmd9/2d4XvgjbtCF+hq6I5ijPKqkkIMrWNIT9FEl76XYHKJZap0
-         dyh2U2TNswLOErHc9qH1/BA4HPqm299X0r4MIrssO4oU0K3j6LUGvQ5FklKoApuXMlUi
-         00K1uI1UspuIDru82VkTjWhRKr+czYofEjLV6Mn6dgKc3r36KKC5ABQ4YPodl4mc9M+I
-         zh/GnOVY7hoyHYDdOD/EAy4f8teU6XmLZSMxHBGQdzTqWdG86VZHQrC/5TP+avPCTKmT
-         fX9w==
-X-Gm-Message-State: AO0yUKW15Nh5iSmMcrx6vqxoaExNb/8+Wnfr1TfpF9nIvPMBLj1eZWvt
-        819YceqhI0Z5WwAgXuCvutOnHFCppQ==
-X-Google-Smtp-Source: AK7set9vurV8ePdJ3YUU8JtLsv59fy96jE59gbECky++E2PvPP3k8EJn8p4ZlNE3D5AbxhNRcvvApg==
-X-Received: by 2002:a92:ce12:0:b0:316:e6e5:f0db with SMTP id b18-20020a92ce12000000b00316e6e5f0dbmr2485972ilo.0.1678803038894;
-        Tue, 14 Mar 2023 07:10:38 -0700 (PDT)
-Received: from robh_at_kernel.org ([64.188.179.249])
-        by smtp.gmail.com with ESMTPSA id f12-20020a926a0c000000b003231580e8e2sm841024ilc.6.2023.03.14.07.10.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 07:10:37 -0700 (PDT)
-Received: (nullmailer pid 83774 invoked by uid 1000);
-        Tue, 14 Mar 2023 14:10:19 -0000
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+        Tue, 14 Mar 2023 10:11:07 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E695DA101F;
+        Tue, 14 Mar 2023 07:10:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 700A6CE1387;
+        Tue, 14 Mar 2023 14:10:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AB55C433EF;
+        Tue, 14 Mar 2023 14:10:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678803049;
+        bh=sEMn1V5G+koN0eW/Us3rxgycAcXGdhxPgCAOKL170UY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TmeKpdIpSsYdIbRYLzrYy3fHMpQAaSx/rq0QeYenQmYnSQpflnj1wnSDBudEaeeLe
+         I69lnV75yXzLq8QFOKWnGIWMbyAl9as3PjafH1kj5+1ZCqCac9EUA3eDpqC1Y0QxKy
+         WWT3sqAlvOGo0jvRsLfgSt1GEclBCyj7nxnbt1YQMsjEuM0vKbsuO73mnQxRLjJtqr
+         6jUGZA53hUIeCENblI8OaDfM2kRQWcHaSKo0X5CfS9hFNTgxxDrn0uUaoj9tzkPdvo
+         mNKu/cikzLo2VQEsNMNSJZU/oF8eum26yfJEalR9zN0aFyD/wHl9dru0ldJJwnKaRS
+         sqB4v3Er+jQNg==
+Date:   Tue, 14 Mar 2023 15:10:36 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Wei Chen <harperchen1110@gmail.com>
+Cc:     linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: xgene-slimpro: Fix out-of-bounds bug in
+ xgene_slimpro_i2c_xfer()
+Message-ID: <20230314141036.lnwvpputzfcyeiyz@intel.intel>
+References: <20230314135734.2792944-1-harperchen1110@gmail.com>
 MIME-Version: 1.0
-From:   Rob Herring <robh@kernel.org>
-To:     Joel Selvaraj <joelselvaraj.oss@gmail.com>
-Cc:     phone-devel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        linux-kernel@vger.kernel.org,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Chris Morgan <macromorgan@hotmail.com>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
-        linux-input@vger.kernel.org, Caleb Connolly <caleb@connolly.tech>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Jeff LaBundy <jeff@labundy.com>, devicetree@vger.kernel.org,
-        Jean Delvare <jdelvare@suse.de>,
-        Job Noorman <job@noorman.info>,
-        Alistair Francis <alistair@alistair23.me>,
-        Markuss Broks <markuss.broks@gmail.com>,
-        Henrik Rydberg <rydberg@bitmath.org>
-In-Reply-To: <20230312093249.1846993-2-joelselvaraj.oss@gmail.com>
-References: <20230312093249.1846993-1-joelselvaraj.oss@gmail.com>
- <20230312093249.1846993-2-joelselvaraj.oss@gmail.com>
-Message-Id: <167880254230.25342.652645660925907921.robh@kernel.org>
-Subject: Re: [PATCH 1/5] dt-bindings: input: touchscreen: add bindings for
- focaltech,fts
-Date:   Tue, 14 Mar 2023 09:10:19 -0500
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314135734.2792944-1-harperchen1110@gmail.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Wei,
 
-On Sun, 12 Mar 2023 04:32:45 -0500, Joel Selvaraj wrote:
-> Add devicetree bindings for the Focaltech FTS touchscreen drivers.
+On Tue, Mar 14, 2023 at 01:57:34PM +0000, Wei Chen wrote:
+> The data->block[0] variable comes from user and is a number between
+> 0-255. Without proper check, the variable may be very large to cause
+> an out-of-bounds when performing memcpy in slimpro_i2c_blkwr.
 > 
-> Signed-off-by: Joel Selvaraj <joelselvaraj.oss@gmail.com>
-> Signed-off-by: Caleb Connolly <caleb@connolly.tech>
+> Fix this bug by checking the value of data->block[0].
+> 
+> Signed-off-by: Wei Chen <harperchen1110@gmail.com>
 > ---
->  .../input/touchscreen/focaltech,fts.yaml      | 81 +++++++++++++++++++
->  1 file changed, 81 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/input/touchscreen/focaltech,fts.yaml
+>  drivers/i2c/busses/i2c-xgene-slimpro.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
+> diff --git a/drivers/i2c/busses/i2c-xgene-slimpro.c b/drivers/i2c/busses/i2c-xgene-slimpro.c
+> index 63259b3ea5ab..bc9a3e7e0c96 100644
+> --- a/drivers/i2c/busses/i2c-xgene-slimpro.c
+> +++ b/drivers/i2c/busses/i2c-xgene-slimpro.c
+> @@ -391,6 +391,10 @@ static int xgene_slimpro_i2c_xfer(struct i2c_adapter *adap, u16 addr,
+>  						&data->block[0]);
+>  
+>  		} else {
+> +
+> +			if (data->block[0] + 1 > I2C_SMBUS_BLOCK_MAX)
+> +				return -EINVAL;
+> +
+>  			ret = slimpro_i2c_blkwr(ctx, addr, command,
+>  						SMBUS_CMD_LEN,
+>  						SLIMPRO_IIC_SMB_PROTOCOL,
+> @@ -408,6 +412,10 @@ static int xgene_slimpro_i2c_xfer(struct i2c_adapter *adap, u16 addr,
+>  						IIC_SMB_WITHOUT_DATA_LEN,
+>  						&data->block[1]);
+>  		} else {
+> +
+> +			if (data->block[0] > I2C_SMBUS_BLOCK_MAX)
+> +				return -EINVAL;
+> +
 
-My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-on your patch (DT_CHECKER_FLAGS is new in v5.13):
+you could eventually put this check inside slimpro_i2c_blkwr() so
+that you have it once and for all, for everyone.
 
-yamllint warnings/errors:
+Andi
 
-dtschema/dtc warnings/errors:
-Error: Documentation/devicetree/bindings/input/touchscreen/focaltech,fts.example.dts:23.9-14 syntax error
-FATAL ERROR: Unable to parse input tree
-make[1]: *** [scripts/Makefile.lib:419: Documentation/devicetree/bindings/input/touchscreen/focaltech,fts.example.dtb] Error 1
-make[1]: *** Waiting for unfinished jobs....
-make: *** [Makefile:1512: dt_binding_check] Error 2
-
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20230312093249.1846993-2-joelselvaraj.oss@gmail.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+>  			ret = slimpro_i2c_blkwr(ctx, addr, command,
+>  						SMBUS_CMD_LEN,
+>  						SLIMPRO_IIC_I2C_PROTOCOL,
+> -- 
+> 2.25.1
+> 
