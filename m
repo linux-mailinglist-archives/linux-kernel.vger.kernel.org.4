@@ -2,103 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E1286B8AE2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:58:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5F46B8AE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 07:02:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229748AbjCNF6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56010 "EHLO
+        id S229827AbjCNGCq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 02:02:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCNF6d (ORCPT
+        with ESMTP id S229483AbjCNGCp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:58:33 -0400
-Received: from out30-100.freemail.mail.aliyun.com (out30-100.freemail.mail.aliyun.com [115.124.30.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06A7BDBCE;
-        Mon, 13 Mar 2023 22:58:30 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R131e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046060;MF=yang.lee@linux.alibaba.com;NM=1;PH=DS;RN=11;SR=0;TI=SMTPD_---0VdqmYya_1678773506;
-Received: from localhost(mailfrom:yang.lee@linux.alibaba.com fp:SMTPD_---0VdqmYya_1678773506)
-          by smtp.aliyun-inc.com;
-          Tue, 14 Mar 2023 13:58:27 +0800
-From:   Yang Li <yang.lee@linux.alibaba.com>
-To:     mchehab@kernel.org
-Cc:     eugen.hristev@collabora.com, nicolas.ferre@microchip.com,
-        alexandre.belloni@bootlin.com, claudiu.beznea@microchip.com,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Yang Li <yang.lee@linux.alibaba.com>
-Subject: [PATCH -next] media: atmel: atmel-isc: Use devm_platform_ioremap_resource()
-Date:   Tue, 14 Mar 2023 13:58:26 +0800
-Message-Id: <20230314055826.103682-1-yang.lee@linux.alibaba.com>
-X-Mailer: git-send-email 2.20.1.7.g153144c
+        Tue, 14 Mar 2023 02:02:45 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9574994768;
+        Mon, 13 Mar 2023 23:02:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 479B6B81854;
+        Tue, 14 Mar 2023 06:02:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7E21C433D2;
+        Tue, 14 Mar 2023 06:02:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1678773762;
+        bh=2z8L+7OUL/6MuF2OlPGvdfpv41n7u+Ie+JYlo0G7z9U=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=OeDMa9TsHbPr3SmTLaKEzZeHqoNNfJjvAa8LinvbECZFn1yaPd/gu4MBjiRQu3INs
+         +4uoGFbmwA/OjSSaqBraPYbzY9CDfblJEm41dJfTGatb1xNmXZpI6D5N7SuwMx2co1
+         +xe3FINNjhdFoi6U2Raw71kxD6PEM57KTD8jMcWc=
+Date:   Tue, 14 Mar 2023 07:02:36 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Samu Onkalo <samu.p.onkalo@nokia.com>,
+        linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] misc: apds990x: Remove unnecessary return code in
+ apds990x_power_state_show()
+Message-ID: <ZBAN/DHtskVQd2E5@kroah.com>
+References: <20230314012732.2267077-1-nobuhiro1.iwamatsu@toshiba.co.jp>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314012732.2267077-1-nobuhiro1.iwamatsu@toshiba.co.jp>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to commit 7945f929f1a7 ("drivers: provide
-devm_platform_ioremap_resource()"), convert platform_get_resource(),
-devm_ioremap_resource() to a single call to Use
-devm_platform_ioremap_resource(), as this is exactly what this function
-does.
+On Tue, Mar 14, 2023 at 10:27:32AM +0900, Nobuhiro Iwamatsu wrote:
+> In apds990x_power_state_show(), the return value of sprintf is returned, so
+> 'return 0' is unnecessary. This remove 'return 0'.
+> 
+> Fixes: 92b1f84d46b2 ("drivers/misc: driver for APDS990X ALS and proximity sensors")
+> Cc: stable@vger.kernel.org
 
-Signed-off-by: Yang Li <yang.lee@linux.alibaba.com>
----
- drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c | 4 +---
- drivers/staging/media/deprecated/atmel/atmel-sama7g5-isc.c | 4 +---
- 2 files changed, 2 insertions(+), 6 deletions(-)
+Why is this needed for stable kernels?  It's dead code removal, no
+actual functionality is changed.
 
-diff --git a/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c b/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
-index ba0614f981a2..eebb336efce7 100644
---- a/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
-+++ b/drivers/staging/media/deprecated/atmel/atmel-sama5d2-isc.c
-@@ -389,7 +389,6 @@ static int atmel_isc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct isc_device *isc;
--	struct resource *res;
- 	void __iomem *io_base;
- 	struct isc_subdev_entity *subdev_entity;
- 	int irq;
-@@ -403,8 +402,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, isc);
- 	isc->dev = dev;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	io_base = devm_ioremap_resource(dev, res);
-+	io_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(io_base))
- 		return PTR_ERR(io_base);
- 
-diff --git a/drivers/staging/media/deprecated/atmel/atmel-sama7g5-isc.c b/drivers/staging/media/deprecated/atmel/atmel-sama7g5-isc.c
-index 01ababdfcbd9..beed40fe3f91 100644
---- a/drivers/staging/media/deprecated/atmel/atmel-sama7g5-isc.c
-+++ b/drivers/staging/media/deprecated/atmel/atmel-sama7g5-isc.c
-@@ -378,7 +378,6 @@ static int microchip_xisc_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
- 	struct isc_device *isc;
--	struct resource *res;
- 	void __iomem *io_base;
- 	struct isc_subdev_entity *subdev_entity;
- 	int irq;
-@@ -392,8 +391,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, isc);
- 	isc->dev = dev;
- 
--	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
--	io_base = devm_ioremap_resource(dev, res);
-+	io_base = devm_platform_ioremap_resource(pdev, 0);
- 	if (IS_ERR(io_base))
- 		return PTR_ERR(io_base);
- 
--- 
-2.20.1.7.g153144c
+thanks,
 
+greg k-h
