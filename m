@@ -2,163 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 38D6E6B9C58
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:59:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 728DF6B9C67
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:00:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229830AbjCNQ7H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:59:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47764 "EHLO
+        id S230182AbjCNRAs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:00:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229582AbjCNQ7G (ORCPT
+        with ESMTP id S229464AbjCNRAq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:59:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CAA716A1F5;
-        Tue, 14 Mar 2023 09:59:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 645ED61864;
-        Tue, 14 Mar 2023 16:59:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6242C4339B;
-        Tue, 14 Mar 2023 16:59:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678813143;
-        bh=0iRXseBaBW3dOM2E5gQSiIHz/gPiUsuvdyPPVZrDdSI=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=GyQ3+HTIduF2/5OGLd/5o91I9/ONCFkkufOl+RMUuImql61WyeTwfKbjszGZ/FMPs
-         xBVYEDWxynKUopwTrlAGz6sm/2balrfSw2/V2J1FpBMK+g22NFqNIJLw+7TSrHxmmu
-         5ziENesTXMrfsYGDsQZKSG4tqfLyRzE4gb1Y105zWjTGwSxyq+0Qpz26JDueL9urD1
-         LNybLR4w4JBtl8W0INkMjaW+Yt1hhwoEY7Wc6LY3QF4Lbt5Jqncwv9HS59JxEXrZr3
-         OKurB1Pry5cOPiouY103vyLAvh6jtXIwOivIjnHn9JG6zXnIo37FkH84rhdmTVgujb
-         AqkkAgpirBn5Q==
-Received: by mail-lf1-f52.google.com with SMTP id x17so4756599lfu.5;
-        Tue, 14 Mar 2023 09:59:03 -0700 (PDT)
-X-Gm-Message-State: AO0yUKUoYA159tlPm5BReATm5kPD8ispH/xTnBT/txOdJmh+fzn06wmu
-        KbmhgeoB/4OJDIHrbuQFgTz52QEuNXDi6ZmbUso=
-X-Google-Smtp-Source: AK7set88LvcW/9k/fiKDKFmIEXq4h0Xa5PH3Jc4UMa6M0DvmNIegcEUnCPSAP+RgeTSpqA3BizmaAWn9z1HiJpXWH2E=
-X-Received: by 2002:ac2:50cf:0:b0:4dd:a74d:aca3 with SMTP id
- h15-20020ac250cf000000b004dda74daca3mr1005658lfm.3.1678813141872; Tue, 14 Mar
- 2023 09:59:01 -0700 (PDT)
+        Tue, 14 Mar 2023 13:00:46 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14363A6BCB
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 10:00:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678813245; x=1710349245;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=WOjIVoQLH5wDjezKUxOWulHf4jcxXSq96FWo+jaGnJg=;
+  b=aaqW4WYkkVm2ZiJ+p4uo3GARj+HnmwVUEJHXAny82qNA2UkfvpkPijDv
+   oyexYLpqzxLbSo7g7qXcBYc2EI7FEZ2nduEUWPAr6v84WWLYTEaqLjVEa
+   /fwQ1tmHzZjnCl62CK9F14PSFQWKkB3FXJ8kWoe0h32qf5zeSM71y0gbD
+   hn0r7Td4wB5yYiQmERlbWwTP/tUoR5KUGBjReX1uPbvP0B0bC0RGDv0Ux
+   u4ABq5/p5YSdGTOGrOmyeT/vSZNtWwI8gmhjnDq3Y7sqOLWCEPZjU8Dip
+   29AwbzMVnQ51JYDIOEpJiOjyUyOcuBH2mV+LhFo/P+cYg9O27hwebH1Ea
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="334971141"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="334971141"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 10:00:44 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="743379727"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="743379727"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by fmsmga008.fm.intel.com with ESMTP; 14 Mar 2023 10:00:44 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
+        linux-kernel@vger.kernel.org
+Cc:     ak@linux.intel.com, eranian@google.com,
+        Kan Liang <kan.liang@linux.intel.com>
+Subject: [PATCH 1/3] perf/x86/intel: Add Granite Rapids
+Date:   Tue, 14 Mar 2023 10:00:39 -0700
+Message-Id: <20230314170041.2967712-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20230311093148.2595222-1-yukuai1@huaweicloud.com>
- <20230311093148.2595222-6-yukuai1@huaweicloud.com> <69e04735-b3f6-2d82-9920-eac330a69792@huawei.com>
-In-Reply-To: <69e04735-b3f6-2d82-9920-eac330a69792@huawei.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 14 Mar 2023 09:58:49 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW67eNSJqtrmok14AUsRRvYKbZn=jFxDtzWLECEEQ2J=WA@mail.gmail.com>
-Message-ID: <CAPhsuW67eNSJqtrmok14AUsRRvYKbZn=jFxDtzWLECEEQ2J=WA@mail.gmail.com>
-Subject: Re: [PATCH -next 5/5] md: protect md_thread with a new disk level
- spin lock
-To:     Yu Kuai <yukuai3@huawei.com>
-Cc:     Yu Kuai <yukuai1@huaweicloud.com>, agk@redhat.com,
-        snitzer@kernel.org, linux-kernel@vger.kernel.org,
-        linux-raid@vger.kernel.org, yi.zhang@huawei.com,
-        yangerkun@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 3:54=E2=80=AFAM Yu Kuai <yukuai3@huawei.com> wrote:
->
-> Hi, song!
->
-> =E5=9C=A8 2023/03/11 17:31, Yu Kuai =E5=86=99=E9=81=93:
-> > From: Yu Kuai <yukuai3@huawei.com>
-> >
-> > Our test reports a uaf for 'mddev->sync_thread':
-> >
-> > T1                      T2
-> > md_start_sync
-> >   md_register_thread
-> >                       raid1d
-> >                        md_check_recovery
-> >                         md_reap_sync_thread
-> >                          md_unregister_thread
-> >                           kfree
-> >
-> >   md_wakeup_thread
-> >    wake_up
-> >    ->sync_thread was freed
-> >
-> > Currently, a global spinlock 'pers_lock' is borrowed to protect
-> > 'mddev->thread', this problem can be fixed likewise, however, there mig=
-ht
-> > be similar problem for other md_thread, and I really don't like the ide=
-a to
-> > borrow a global lock.
-> >
-> > This patch use a disk level spinlock to protect md_thread in relevant a=
-pis.
-> >
-> > Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-> > ---
-> >   drivers/md/md.c | 23 ++++++++++-------------
-> >   drivers/md/md.h |  1 +
-> >   2 files changed, 11 insertions(+), 13 deletions(-)
-> >
-> > diff --git a/drivers/md/md.c b/drivers/md/md.c
-> > index ab9299187cfe..a952978884a5 100644
-> > --- a/drivers/md/md.c
-> > +++ b/drivers/md/md.c
-> > @@ -663,6 +663,7 @@ void mddev_init(struct mddev *mddev)
-> >       atomic_set(&mddev->active, 1);
-> >       atomic_set(&mddev->openers, 0);
-> >       spin_lock_init(&mddev->lock);
-> > +     spin_lock_init(&mddev->thread_lock);
-> >       atomic_set(&mddev->flush_pending, 0);
-> >       init_waitqueue_head(&mddev->sb_wait);
-> >       init_waitqueue_head(&mddev->recovery_wait);
-> > @@ -801,13 +802,8 @@ void mddev_unlock(struct mddev *mddev)
-> >       } else
-> >               mutex_unlock(&mddev->reconfig_mutex);
-> >
-> > -     /* As we've dropped the mutex we need a spinlock to
-> > -      * make sure the thread doesn't disappear
-> > -      */
-> > -     spin_lock(&pers_lock);
-> >       md_wakeup_thread(&mddev->thread, mddev);
-> >       wake_up(&mddev->sb_wait);
-> > -     spin_unlock(&pers_lock);
-> >   }
-> >   EXPORT_SYMBOL_GPL(mddev_unlock);
-> >
-> > @@ -7895,13 +7891,16 @@ static int md_thread(void *arg)
-> >
-> >   void md_wakeup_thread(struct md_thread **threadp, struct mddev *mddev=
-)
-> >   {
-> > -     struct md_thread *thread =3D *threadp;
-> > +     struct md_thread *thread;
-> >
-> > +     spin_lock(&mddev->thread_lock);
-> > +     thread =3D *threadp;
-> >       if (thread) {
-> >               pr_debug("md: waking up MD thread %s.\n", thread->tsk->co=
-mm);
-> >               set_bit(THREAD_WAKEUP, &thread->flags);
-> >               wake_up(&thread->wqueue);
-> >       }
-> > +     spin_unlock(&mddev->thread_lock);
->
-> I just found that md_wakeup_thread can be called from irq context:
->
-> md_safemode_timeout
->   md_wakeup_thread
->
-> And I need to use irq safe spinlock apis here.
->
-> Can you drop this verion from md-next? I'll send a new version after I
-> verified that there are no new regression, at least for mdadm tests.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-I will drop it from md-next. Please send a new version.
+From core PMU's perspective, Granite Rapids is similar to the Sapphire
+Rapids. The key differences include:
+- Doesn't need the AUX event workaround for the mem load event.
+  (Implement in this patch).
+- Support Retire Latency (Has been implemented in the commit
+  c87a31093c70 ("perf/x86: Support Retire Latency"))
+- The event list, which will be supported in the perf tool later.
 
-Thanks,
-Song
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+---
+ arch/x86/events/intel/core.c | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index a3fb996a86a1..070cc4ef2672 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -5469,6 +5469,15 @@ pebs_is_visible(struct kobject *kobj, struct attribute *attr, int i)
+ 	return x86_pmu.pebs ? attr->mode : 0;
+ }
+ 
++static umode_t
++mem_is_visible(struct kobject *kobj, struct attribute *attr, int i)
++{
++	if (attr == &event_attr_mem_ld_aux.attr.attr)
++		return x86_pmu.flags & PMU_FL_MEM_LOADS_AUX ? attr->mode : 0;
++
++	return pebs_is_visible(kobj, attr, i);
++}
++
+ static umode_t
+ lbr_is_visible(struct kobject *kobj, struct attribute *attr, int i)
+ {
+@@ -5496,7 +5505,7 @@ static struct attribute_group group_events_td  = {
+ 
+ static struct attribute_group group_events_mem = {
+ 	.name       = "events",
+-	.is_visible = pebs_is_visible,
++	.is_visible = mem_is_visible,
+ };
+ 
+ static struct attribute_group group_events_tsx = {
+@@ -6486,6 +6495,10 @@ __init int intel_pmu_init(void)
+ 
+ 	case INTEL_FAM6_SAPPHIRERAPIDS_X:
+ 	case INTEL_FAM6_EMERALDRAPIDS_X:
++		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
++		fallthrough;
++	case INTEL_FAM6_GRANITERAPIDS_X:
++	case INTEL_FAM6_GRANITERAPIDS_D:
+ 		pmem = true;
+ 		x86_pmu.late_ack = true;
+ 		memcpy(hw_cache_event_ids, spr_hw_cache_event_ids, sizeof(hw_cache_event_ids));
+@@ -6502,7 +6515,6 @@ __init int intel_pmu_init(void)
+ 		x86_pmu.flags |= PMU_FL_HAS_RSP_1;
+ 		x86_pmu.flags |= PMU_FL_NO_HT_SHARING;
+ 		x86_pmu.flags |= PMU_FL_INSTR_LATENCY;
+-		x86_pmu.flags |= PMU_FL_MEM_LOADS_AUX;
+ 
+ 		x86_pmu.hw_config = hsw_hw_config;
+ 		x86_pmu.get_event_constraints = spr_get_event_constraints;
+-- 
+2.35.1
+
