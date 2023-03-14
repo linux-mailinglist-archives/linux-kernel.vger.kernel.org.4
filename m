@@ -2,209 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF5D46B8979
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:19:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC0156B8977
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:19:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229497AbjCNETI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:19:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59610 "EHLO
+        id S229826AbjCNETD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 00:19:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229441AbjCNETC (ORCPT
+        with ESMTP id S229496AbjCNETA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:19:02 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 375527B98A;
-        Mon, 13 Mar 2023 21:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678767540; x=1710303540;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=heHYTyn8t+tSgC0zgbCnYcSRmqoeMvBoMKjqJEgqzk0=;
-  b=bB5XMImIb0oxUEdUS2vZEdr20Jdt0Af+5Awg3fZ/xIQpaTWosrf2O7re
-   VmRs5MF+sD/7Y567khN5+cF8qd1TXt3vzPaLAV5IEsAWIjh8f/1kT0zYD
-   E81vLNu586NKp2iRuDbTYLvJ5RkcAapgi7uOGv6DrA9Jn7kTM9rJ1ebxb
-   DXsg35PMPZSMQxFudM0BF8JWcjpd3MtNJY6k2a4o3y2rZ05z05Uk1GwJb
-   9NUhPoSGuauzqEECmXgQBSD6d1dyiIoTc+d244q2A9oCysf99zcXu0x72
-   hc3kQnLPNf2dnptNMd2jrs1qaT+njcfnXKB+DjODBS2gjjxBtbYHR8oHs
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="364990275"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="364990275"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 21:18:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="743156200"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="743156200"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by fmsmga008.fm.intel.com with ESMTP; 13 Mar 2023 21:18:59 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Mon, 13 Mar 2023 21:18:58 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Mon, 13 Mar 2023 21:18:58 -0700
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (104.47.58.104)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Mon, 13 Mar 2023 21:18:22 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Hl9AKyACBhOsQxMohfadmqDVDIDpR0a0ZcxpYjH4YIPA3C+XK9+0XCBb89EOMPBPc+Z1lywMEq2dNW3LXE61dyOM3AJAp6/meUtpykj/yRQkMnMfjTwwXDQjK7KPPzqfmiW/cB8SFgrOLVsmF0K6gpjXMygwDtBH5lrlNizl1JvUYDPizKygL9+nea1vHQcjYAsPDLgdEP1m4G8CbN12ym9QlYj6C6J/bzpBmFndXHqk4+sbNlQm/QtHGOP4ou6nR7kRG9qDz/mmEeFfDR+TfCxOOa5/jiHXHLMqKKZ8L37ZE8oNNmDuoV51BbYZeVmAEV3e8mcNKZuSEnETAZTD8g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m1tq2PJ2uYVf2bfd2auIRJgUPkmkhpjmXQMYrOCBsNw=;
- b=dDvH7xkr9Sw8Qin5L2hGcIWRyTY6i0VyVjA7hp8T30533KsJbIQmN0tBOO/y6C6Hu1AAd7Z6F272sPQSHAuI/I+jHqZBbHIfrj2SIAdsSge1QSfS1rcdsLyU3eVRWr7d7QjvpZBxIxx32gYAcQxwk8AgDOB9fe748zmu4PqkgSllGbX9inT7WuarwNgw3iaKId1I+xHj25q8IPZcgo3sGQGFiYX1y8dOUbAO6VW3dz2uSKixOD7wpL0VHMGD87i1iveVjTTX3wmf/7tLx7qCeFJQ7Wu6tAkhBTfBwjylGEObApu7Celg8HxTcmsQogVLoLcaEZBQaAXTJvfFK0Fsiw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com (2603:10b6:8:141::20)
- by DM4PR11MB5469.namprd11.prod.outlook.com (2603:10b6:5:399::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.25; Tue, 14 Mar
- 2023 04:18:21 +0000
-Received: from DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::6f7:944a:aaad:301f]) by DS0PR11MB7529.namprd11.prod.outlook.com
- ([fe80::6f7:944a:aaad:301f%8]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 04:18:21 +0000
-From:   "Liu, Yi L" <yi.l.liu@intel.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-CC:     "joro@8bytes.org" <joro@8bytes.org>,
-        "alex.williamson@redhat.com" <alex.williamson@redhat.com>,
-        "Tian, Kevin" <kevin.tian@intel.com>,
-        "robin.murphy@arm.com" <robin.murphy@arm.com>,
-        "baolu.lu@linux.intel.com" <baolu.lu@linux.intel.com>,
-        "cohuck@redhat.com" <cohuck@redhat.com>,
-        "eric.auger@redhat.com" <eric.auger@redhat.com>,
-        "nicolinc@nvidia.com" <nicolinc@nvidia.com>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "mjrosato@linux.ibm.com" <mjrosato@linux.ibm.com>,
-        "chao.p.peng@linux.intel.com" <chao.p.peng@linux.intel.com>,
-        "yi.y.sun@linux.intel.com" <yi.y.sun@linux.intel.com>,
-        "peterx@redhat.com" <peterx@redhat.com>,
-        "jasowang@redhat.com" <jasowang@redhat.com>,
-        "shameerali.kolothum.thodi@huawei.com" 
-        <shameerali.kolothum.thodi@huawei.com>,
-        "lulu@redhat.com" <lulu@redhat.com>,
-        "suravee.suthikulpanit@amd.com" <suravee.suthikulpanit@amd.com>,
-        "iommu@lists.linux.dev" <iommu@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-kselftest@vger.kernel.org" <linux-kselftest@vger.kernel.org>
-Subject: RE: [PATCH 07/12] iommufd: Add IOMMU_HWPT_INVALIDATE
-Thread-Topic: [PATCH 07/12] iommufd: Add IOMMU_HWPT_INVALIDATE
-Thread-Index: AQHZUl6BWo8K/M9cuUy0397Pqa8aG670TNcAgAVllSA=
-Date:   Tue, 14 Mar 2023 04:18:21 +0000
-Message-ID: <DS0PR11MB7529853F52AE5E338A84AFE0C3BE9@DS0PR11MB7529.namprd11.prod.outlook.com>
-References: <20230309080910.607396-1-yi.l.liu@intel.com>
- <20230309080910.607396-8-yi.l.liu@intel.com> <ZAtt4F9zSZxptyZh@nvidia.com>
-In-Reply-To: <ZAtt4F9zSZxptyZh@nvidia.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DS0PR11MB7529:EE_|DM4PR11MB5469:EE_
-x-ms-office365-filtering-correlation-id: 7754de7e-6c73-45d4-4861-08db2443257e
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: OovqPJ+Wmu6ctoEaFSa33uQuf2MkygOumo3u+GJpIrRyLr1pQ+stAGAZXidUMOp/84bqTbnrP/6OP9NPQjmQUDNcG+eXNLrg/F1Q1p1wC1X7oU5MgdKih9cx7BjAP3zybLAdaRkxkWt3qiXWfCc8vQxm/iOByYwRQb7EWwTRDM8Qf8pmNBzMrtcqwxUp3TtypzAJCcEBYeIOhqL71L9Sper720bSTG21jA8vTYM3ife4N8varNjJ0lfiAeflSYhQuygAG00hox/vbOQtdHKPoN3Cbc81GP3YtmEqZOyCLtnfP9eqAHau//a5mkVG6BwPSHF+dlBP8fnfjWI//aIbGoCXWsVWIPOL5Ayd6NY7c2Y801aeTbZIeltb+K4rMMSeoG3hwRVhN2BABKiIWkjLoYHIrIX+Ao1oxP3QtvgvadYIw+saf+e7/lKR1lhCJT4CwmZPPgJH7Hovfk/R4Dd55Sm3GP0XTdIDaiDUa+aUHFM6BlJKh/x65x9hNKQqUKZwIFOXfjnTK2dyq/xyDUQ2SilMAScuXaXXYWBYU3dgY86flZT5GF3FmtfX+i4QwvDGHT7XGfuOwORFHMUihwgwWZJVzyuARYzl3akgner7DanNC+wA/fgZPNO/0tpYuMj/muWG4VK23NqYMSb3o9kmswqNGQWoj4eQQ/bmph0ovMa0F7n9e3ZD+aWeR22aVW/EWm22OE9mMEeFMt/TPknZgA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS0PR11MB7529.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(376002)(39860400002)(136003)(346002)(396003)(366004)(451199018)(5660300002)(7416002)(83380400001)(186003)(478600001)(26005)(71200400001)(6506007)(7696005)(66446008)(9686003)(54906003)(38070700005)(66476007)(8676002)(66946007)(64756008)(41300700001)(52536014)(66556008)(6916009)(33656002)(4326008)(8936002)(76116006)(316002)(86362001)(38100700002)(55016003)(82960400001)(122000001)(2906002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NcAxu0bD8W1A6XcwinXiIPHtr1UYKK11kC5oeysj3CfPmC+VCHlMWxgP0srw?=
- =?us-ascii?Q?9LQiPBJEWEHLNhjePoIWFhwg5MF6mx9hg/h/bAhmNAAczvbYWJxPCiYZDepA?=
- =?us-ascii?Q?hg832A8OpqMXPXwY2D3vi4TF7XhP5UUhEpMVjHvh+CDb6qjUzqCP6QYE8Gsf?=
- =?us-ascii?Q?C4A9SJqtXypN6f7yOa8KOKDm4lvbJ9TywnZsTfNzCPtOm+a1rjLFJYVwEyJF?=
- =?us-ascii?Q?1w07f7gie10u1e/8g1EbGLdSEqDR/FBywk+pvjBo3pIleTwZOUzGbMOh8Sun?=
- =?us-ascii?Q?CAWlUS32p2SdUwN7NldDSUDv5cFZh2ZvPq8d3u5kPCMLu8d0RvbRvuAlAzKQ?=
- =?us-ascii?Q?70Ppgl+bckaNe7VWfBnR2uV5QI3GqKo7hlB10X7ZxZtSPF5nBLRLJRRmQ42d?=
- =?us-ascii?Q?rAA6lU6Np951wyAWvh1/0eRJEklhHuhAZPNX6pSQocE8PPkntM0niN8c7DaR?=
- =?us-ascii?Q?IzrexvwEH6/8Azv0QwTjcx7A4PlQC3GdbJDYVRzHN19RTKXgzpTa8IRgIsWo?=
- =?us-ascii?Q?buN9L27KW+Q1WlqNJus4o+b0S9Mdh2zpHma2wTpT+scEHJBVK3F2iiHfjQ8V?=
- =?us-ascii?Q?kgxFSKwLk2D1xpuDAr1QP/dtbG4ReDmM/Dww0ah4w0uHJvGaYJFAkoA1znQO?=
- =?us-ascii?Q?EKuu60jdkzza99Y/Xm0NxyIbMUEa2gHSy2jaD1VSZNj2VQ4IEddZkkpuz9Ep?=
- =?us-ascii?Q?JmU6AlJgRYYRvQXgqwL7El2JQYy7fbQCoRuhqVpfZX2flMK0Or41y71Rq2kp?=
- =?us-ascii?Q?t3fSHbGQhzGC0HTgfX6/g+nzUd1ehqrbIMuWIjt9QChdzimbEjc1s566t+MA?=
- =?us-ascii?Q?+foszKj5r851RQpkuONyiH5GJsWk6bSq011HtxNM4aurI1dl39RVd/83TkI9?=
- =?us-ascii?Q?rQY+jTDVzlDOJi5v5ZbFtlctmgURIYDS+dQ6rSHmJmfcerruX9w6CBazebAC?=
- =?us-ascii?Q?pN9DJTgC2nEBRlrM7owbyoehAOVwspunqV+lCzX2TFTY0L/LF4n2HVC1bLmz?=
- =?us-ascii?Q?PLHuZxTUi8oBcu6vBkCw7AwpjpuhwJ7bsE58SYFZla9Vo1Ga00R+1SaXpkWK?=
- =?us-ascii?Q?9tJS2Z7nCjO4SaJdGqO9kboKvP34edDvHMnd+alZvstpRuCr+BnEu+aIviEb?=
- =?us-ascii?Q?TozF6LMtRuoW/Qy53aIJDqDyrlLP4TQRPoKb83APo+9HCUAoAkxUK9gpvlns?=
- =?us-ascii?Q?Ztf0FHQ6owJe9AvjGjpmJh4aqZgxrefYHZiqK17yIhRK8RujpyN2J+49EwWg?=
- =?us-ascii?Q?DB0te9Z5MBMLscOH6v/cQygV3f3ZTeXBvJp2HAMQR8kYMbHqgnMig8g/weOo?=
- =?us-ascii?Q?4uBX6DWdWEvr8xcdexn+IPw0V92myMB7P8CIIJJh7cGHf8C69tCOKvMYC02Y?=
- =?us-ascii?Q?lMOazgwt5YAvXRZkEiuXX1rJfwwg3pHJlPT4D7kGY9hsteBl5YKoDGYha1IQ?=
- =?us-ascii?Q?wyI97v+Key1Z7GpW2nkuK2zx/i+XZ6QhWWMArMBpi/cNt2muDtWRoDEbg/Yo?=
- =?us-ascii?Q?Ti05tMmhJgCsL+3bI3+szQbiD2YVx34h8MuU/6Y/H81MPHH8RCgTGzs8jzql?=
- =?us-ascii?Q?w4UG5cfJkcfxkI4reG3OemAj6Vr2Ol0QYpuWIB6e?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
-MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DS0PR11MB7529.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7754de7e-6c73-45d4-4861-08db2443257e
-X-MS-Exchange-CrossTenant-originalarrivaltime: 14 Mar 2023 04:18:21.3342
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: rq19gqdRH6DrIvPyUDjrB6XxujCdaLG7fJd8tyk+m3o07Vo7zvTRa6wcq1cEy+/RUY/0QVTyakJGmajREIOr4g==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB5469
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 00:19:00 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3895D7B48B;
+        Mon, 13 Mar 2023 21:18:56 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id j11so56945756edq.4;
+        Mon, 13 Mar 2023 21:18:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678767534;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TZ7QQfw5FkuIei/cI2/povdDw4YVh92kNRopK67KOaU=;
+        b=hf9G36pJEd0q3oRNqsR0+UcJ2hf1QLXVFpTC51sPFQz7JQUXaMrdxdJ/8smJc8kM7L
+         K7AW8Rfc1KGAa6oOIkCgzaulTIJDTYP//vMFuHWJTCqK+IGiq8FT2cSTMxcg6B0etO58
+         tdX5pV/C1iZ6w7gUJ939t/5/V91u4dfQ0BGHnturmzHVSpFS1dt9xvdCt/coUYvZv4O9
+         z1/xTpTqx3jEGOe3UJG/dCyqDqGh6VUAU3KIr6nV6U8c1sJ6cMw0QvBnU8DxKseiqAMh
+         bnuNFFd4vfiBxKFwn48pmQOhqzKm1HGQrEpecfhD9v68h8WLg7npTvwpJEv18MGsa/vr
+         nsKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678767534;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=TZ7QQfw5FkuIei/cI2/povdDw4YVh92kNRopK67KOaU=;
+        b=ygB4B++9TPrhoLpd1Hxxj1jrWBJiLVxfrnH43UoZw8H9MzJnThjvQJoPAUoxQ3kXa3
+         aprICCrfoxo3Zk3F3SqcL9GCragyrmFheyL3B/qw9KgwtsLOYUpLjaKZOaDKHkPfH1aD
+         ECNO3zALRP2GEAM58gwFO93Kdm5od1aK2uh1Nd3Bp11VvoznzCJe0rNyfuTrSXOy+NgF
+         L86E3JoTVfdeNXYQH4Qqw7KwIcX8nVf7jI00ZlECKnAS2nqtlckdhvTuDNEbk1bU55YE
+         6ZahguBfCDiNCE6VLPGMF567UDT3PajRF4i7o6QlMdLEgYfvyJZB8D8RmkzpcTixBtHe
+         /H1Q==
+X-Gm-Message-State: AO0yUKUZLw740zsJgBvcu43hRRn1mAPMiR3BHQty4B2NMvfgEFWgSsWW
+        A8eSLszgJgQs2NF0FM1Xu23mWtPoNC4r1w==
+X-Google-Smtp-Source: AK7set8WaRvILSlswipSW/7mqGRZgz1V+baskJ9GNgwqCyY6TUQFybXrFgF6FCsYW+ZBgzh+vud/EQ==
+X-Received: by 2002:a17:906:c244:b0:877:a9d2:e5e9 with SMTP id bl4-20020a170906c24400b00877a9d2e5e9mr894889ejb.42.1678767534526;
+        Mon, 13 Mar 2023 21:18:54 -0700 (PDT)
+Received: from felia.fritz.box ([2a02:810d:2a40:1104:e097:f710:4dc1:9ec4])
+        by smtp.gmail.com with ESMTPSA id zk6-20020a17090733c600b00927e0fb3e50sm540390ejb.100.2023.03.13.21.18.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 21:18:54 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Kalle Valo <kvalo@kernel.org>, linux-wireless@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] MAINTAINERS: adjust file entries after wifi driver movement
+Date:   Tue, 14 Mar 2023 05:18:48 +0100
+Message-Id: <20230314041848.5120-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Jason Gunthorpe <jgg@nvidia.com>
-> Sent: Saturday, March 11, 2023 1:50 AM
->=20
-> On Thu, Mar 09, 2023 at 12:09:05AM -0800, Yi Liu wrote:
-> > +int iommufd_hwpt_invalidate(struct iommufd_ucmd *ucmd)
-> > +{
-> > +	struct iommu_hwpt_invalidate *cmd =3D ucmd->cmd;
-> > +	struct iommufd_hw_pagetable *hwpt;
-> > +	u64 user_ptr;
-> > +	u32 user_data_len, klen;
-> > +	int rc =3D 0;
-> > +
-> > +	/*
-> > +	 * For a user-managed HWPT, type should not be
-> IOMMU_HWPT_TYPE_DEFAULT.
-> > +	 * data_len should not exceed the size of
-> iommufd_invalidate_buffer.
-> > +	 */
-> > +	if (cmd->data_type =3D=3D IOMMU_HWPT_TYPE_DEFAULT || !cmd-
-> >data_len ||
-> > +	    cmd->data_type >=3D
-> ARRAY_SIZE(iommufd_hwpt_invalidate_info_size))
-> > +		return -EOPNOTSUPP;
->=20
-> This needs to do the standard check for zeros in unknown trailing data
-> bit. Check that alloc does it too
+Commit f79cbc77abde ("wifi: move mac80211_hwsim and virt_wifi to virtual
+directory") and commit 298e50ad8eb8 ("wifi: move raycs, wl3501 and
+rndis_wlan to legacy directory") move remaining wireless drivers into
+subdirectories, but does not adjust the entries in MAINTAINERS.
 
-Maybe it has been covered by the copy_struct_from_user(). Is it?
+Hence, ./scripts/get_maintainer.pl --self-test=patterns complains about
+broken references.
 
-+	/*
-+	 * Copy the needed fields before reusing the ucmd buffer, this
-+	 * avoids memory allocation in this path.
-+	 */
-+	user_ptr =3D cmd->data_uptr;
-+	user_data_len =3D cmd->data_len;
-+
-+	rc =3D copy_struct_from_user(cmd, klen,
-+				   u64_to_user_ptr(user_ptr), user_data_len);
+Repair these file references in those wireless driver sections.
 
-Regards,
-Yi Liu=20
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ MAINTAINERS | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 25a0981c74b6..8b38772e27dc 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12309,7 +12309,7 @@ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git
+ T:	git git://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless-next.git
+ F:	Documentation/networking/mac80211-injection.rst
+ F:	Documentation/networking/mac80211_hwsim/mac80211_hwsim.rst
+-F:	drivers/net/wireless/mac80211_hwsim.[ch]
++F:	drivers/net/wireless/virtual/mac80211_hwsim.[ch]
+ F:	include/net/mac80211.h
+ F:	net/mac80211/
+ 
+@@ -17574,7 +17574,7 @@ F:	include/ras/ras_event.h
+ RAYLINK/WEBGEAR 802.11 WIRELESS LAN DRIVER
+ L:	linux-wireless@vger.kernel.org
+ S:	Orphan
+-F:	drivers/net/wireless/ray*
++F:	drivers/net/wireless/legacy/ray*
+ 
+ RC-CORE / LIRC FRAMEWORK
+ M:	Sean Young <sean@mess.org>
+@@ -21815,7 +21815,7 @@ USB WIRELESS RNDIS DRIVER (rndis_wlan)
+ M:	Jussi Kivilinna <jussi.kivilinna@iki.fi>
+ L:	linux-wireless@vger.kernel.org
+ S:	Maintained
+-F:	drivers/net/wireless/rndis_wlan.c
++F:	drivers/net/wireless/legacy/rndis_wlan.c
+ 
+ USB XHCI DRIVER
+ M:	Mathias Nyman <mathias.nyman@intel.com>
+@@ -22571,7 +22571,7 @@ F:	drivers/input/misc/wistron_btns.c
+ WL3501 WIRELESS PCMCIA CARD DRIVER
+ L:	linux-wireless@vger.kernel.org
+ S:	Odd fixes
+-F:	drivers/net/wireless/wl3501*
++F:	drivers/net/wireless/legacy/wl3501*
+ 
+ WOLFSON MICROELECTRONICS DRIVERS
+ L:	patches@opensource.cirrus.com
+-- 
+2.17.1
+
