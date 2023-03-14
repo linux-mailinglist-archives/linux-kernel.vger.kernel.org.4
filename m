@@ -2,90 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2BAEB6B8BDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:22:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 220776B8BE5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:26:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230242AbjCNHWG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 03:22:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59036 "EHLO
+        id S230255AbjCNH0G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 03:26:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjCNHWE (ORCPT
+        with ESMTP id S229797AbjCNH0D (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 03:22:04 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65E6C5D762;
-        Tue, 14 Mar 2023 00:22:03 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id r11so6443321edd.5;
-        Tue, 14 Mar 2023 00:22:03 -0700 (PDT)
+        Tue, 14 Mar 2023 03:26:03 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B06F173029;
+        Tue, 14 Mar 2023 00:26:02 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so5101076pjv.5;
+        Tue, 14 Mar 2023 00:26:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678778522;
-        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=9krYtYgrFfB+EZxwYgYFLH4M2qRAdQv9i48TyNn/Zvw=;
-        b=kJZ480KiLGQMVSncOnZGVRRx4P0N7HZDE5tLslc8GyW3aA7WqL3XWUTKlXJ+hJOarg
-         lOwW+YKeXPziRZZOYmtFTnQACP8mW49W/o7JddTQ1kGS6bDHRI5lWnrFvUxEHW1f9Ed1
-         +TwWFNcQQEo5VwIlH6DD4/S0b8GsYP45529MACcObqbIDjyc86kGBdSxpSCQ1GZHVOfY
-         VvzSvDxfcXqL/FCyvISuyWRWI0/28jqkpSQyrP8N3161bhOSCH3RGhX1s2EsMv/+m5DN
-         M3WMJtbpQyDtwE0VOU01sTF9xqIIPxFtkARdZ581774I2NtRORQMkG/dci42SXs5oDMG
-         80QQ==
+        d=gmail.com; s=20210112; t=1678778762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=P4btLFxdwo7HqZYxM4e3XDdeo+DTrgbyuCAt7JOXufA=;
+        b=lczv1+oCjA44tNBOXDuZb6ygf8VSugMU6SI4f3m4RkNiRBcKFtF/kAxXclBRAPKP8B
+         M/0j99Xagn3nWRglvofL8CNl2IX2uyNzs3OsDdxT8GkAT/ILtxTcLB+Vjamhuf0yc58z
+         hpd1OAyI2vqMtBI+oVFj2hKq7nkNYFHdmVEnU79S0Gjcorj7a6d34QqlN5bis3OyKhmk
+         kp3XzQXtVR9Ddc6fqEhJjD6nRuiePRIsAX5U8mnaXz/nnpq0CGR/c9RZvb1Ik5DfOOA0
+         S2TV3diroWan8IfHdVDY6rRKIpMvad79Rdt8/Icjq6QYxvmGhsfAtQiXQ3RHVi51gz9D
+         dF+g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678778522;
-        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9krYtYgrFfB+EZxwYgYFLH4M2qRAdQv9i48TyNn/Zvw=;
-        b=ZF5R3nuUKY900HpuwF4v/jIMLa7MV0jQ9fu+Yg+w+teBRrYKs0bQAHvk5MlXvicc4Q
-         xtzYy4qZhAIV+iZ9DOsQrlmanVKubEWvYs1xjke8w9RbYY+bcHem02umxkpHRikmurN1
-         GRRpicI94kRXniD6PUPH5HdwyvV4OArrfJ0D3GHYZPFPdisExWtr3+BpiBXKLHrjgKAd
-         0rZXKZa1Y+IzusYi2JnaK5F6e6vpglYQz7Ui2JEqDSOceXp0uqiCdWzQi8Ko+il57vEl
-         xUt98GpGsNK7WmeMuFyLqdoC75tvrLqSkvVIqcOGvkIIllon0O4S82LtgmE+bQwg7m5t
-         5XtQ==
-X-Gm-Message-State: AO0yUKXiiQhn1P5r4oSGwlEKjHMSu8GG0/bgSDjUOJouQU7SOoD4vTC+
-        17yojUd9l50RKIKY+OaxM1mk3fH3ad9lIJvjfEU=
-X-Google-Smtp-Source: AK7set8w7RHwJaqXqkb0zNbF2TQM1bbv1FN1z99erE9S9U8EuBbiRbq6QJAK5jLQk8p6wLGQEkDGieMxhqcQw/ObnTk=
-X-Received: by 2002:a17:907:e91:b0:924:32b2:e3d1 with SMTP id
- ho17-20020a1709070e9100b0092432b2e3d1mr747785ejc.3.1678778521709; Tue, 14 Mar
- 2023 00:22:01 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678778762;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=P4btLFxdwo7HqZYxM4e3XDdeo+DTrgbyuCAt7JOXufA=;
+        b=YP2JPu3BjbVqYmS/z/I6wGB5apOmZewUse3R4JVDvBG8kr4qLu9dxnJob2Pyu0//cE
+         Ag6zrxVk/6pcjEsFScjSDTddImaapFGhUYmLgru9p+zuWd5ujOpqcUlImQkQuSIoqamw
+         0St1n6d53WWOdlVDd5Zsmd6bQhYC62oA/lTCW7QKiEDMiP/C8RBRIGzYojrLdqCWAuHP
+         xsvKUjEUSh8sJurhTHdMoSkP4qevuQly3ToJKlNzOfXr0TeIqo6JTg+Qyw94nIihHXsq
+         6TrRcRtInw78Wh+6JCIKw02kNppYwHN9kMI4uixvnILNM3Ob7HdQS9asWQeB3HCVfpV9
+         Nf9A==
+X-Gm-Message-State: AO0yUKXgzsBS+UyFxLsixhn7FwV+Le8/JpEfi52EBHWqm5kQCjY4iiJ+
+        5ABCI4Yz8hD9zTNhY8I6sWU=
+X-Google-Smtp-Source: AK7set/kZq/B2QShY0y1HE88ddus1pElLywW15Ta+0oYzLvi6YuddzUADJuwEfCk9yGr65u+O8CuGQ==
+X-Received: by 2002:a05:6a21:6da6:b0:cb:e8c6:26a0 with SMTP id wl38-20020a056a216da600b000cbe8c626a0mr49148859pzb.11.1678778762183;
+        Tue, 14 Mar 2023 00:26:02 -0700 (PDT)
+Received: from localhost ([2400:8902::f03c:93ff:fe27:642a])
+        by smtp.gmail.com with ESMTPSA id l190-20020a6388c7000000b00502ea97cbc0sm888625pgd.40.2023.03.14.00.25.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 00:26:01 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 07:25:54 +0000
+From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH 3/7] mm, page_flags: remove PG_slob_free
+Message-ID: <ZBAhgpY1KSE3FwAv@localhost>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <20230310103210.22372-4-vbabka@suse.cz>
 MIME-Version: 1.0
-From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
-Date:   Tue, 14 Mar 2023 08:21:50 +0100
-Message-ID: <CAKXUXMwwQuwssyzBrOXHOz__YRpa1Rjgqmwn5rRFjDVLBbabPA@mail.gmail.com>
-Subject: Question about the dependency on the config SOC_FSL in CPM_QMC
-To:     Herve Codina <herve.codina@bootlin.com>,
-        Li Yang <leoyang.li@nxp.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Mark Brown <broonie@kernel.org>,
-        Qiang Zhao <qiang.zhao@nxp.com>
-Cc:     linuxppc-dev <linuxppc-dev@lists.ozlabs.org>,
-        Linux ARM <linux-arm-kernel@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        kernel-janitors <kernel-janitors@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230310103210.22372-4-vbabka@suse.cz>
+X-Spam-Status: No, score=3.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
+        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: ***
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Herve,
+On Fri, Mar 10, 2023 at 11:32:05AM +0100, Vlastimil Babka wrote:
+> With SLOB removed we no longer need the PG_slob_free alias for
+> PG_private. Also update tools/mm/page-types.
+> 
+> Signed-off-by: Vlastimil Babka <vbabka@suse.cz>
+> ---
+>  include/linux/page-flags.h | 4 ----
+>  tools/mm/page-types.c      | 6 +-----
+>  2 files changed, 1 insertion(+), 9 deletions(-)
+> 
+> diff --git a/include/linux/page-flags.h b/include/linux/page-flags.h
+> index a7e3a3405520..2bdc41cb0594 100644
+> --- a/include/linux/page-flags.h
+> +++ b/include/linux/page-flags.h
+> @@ -174,9 +174,6 @@ enum pageflags {
+>  	/* Remapped by swiotlb-xen. */
+>  	PG_xen_remapped = PG_owner_priv_1,
+>  
+> -	/* SLOB */
+> -	PG_slob_free = PG_private,
+> -
+>  #ifdef CONFIG_MEMORY_FAILURE
+>  	/*
+>  	 * Compound pages. Stored in first tail page's flags.
+> @@ -483,7 +480,6 @@ PAGEFLAG(Active, active, PF_HEAD) __CLEARPAGEFLAG(Active, active, PF_HEAD)
+>  PAGEFLAG(Workingset, workingset, PF_HEAD)
+>  	TESTCLEARFLAG(Workingset, workingset, PF_HEAD)
+>  __PAGEFLAG(Slab, slab, PF_NO_TAIL)
+> -__PAGEFLAG(SlobFree, slob_free, PF_NO_TAIL)
+>  PAGEFLAG(Checked, checked, PF_NO_COMPOUND)	   /* Used by some filesystems */
+>  
+>  /* Xen */
+> diff --git a/tools/mm/page-types.c b/tools/mm/page-types.c
+> index 381dcc00cb62..8d5595b6c59f 100644
+> --- a/tools/mm/page-types.c
+> +++ b/tools/mm/page-types.c
+> @@ -85,7 +85,6 @@
+>   */
+>  #define KPF_ANON_EXCLUSIVE	47
+>  #define KPF_READAHEAD		48
+> -#define KPF_SLOB_FREE		49
+>  #define KPF_SLUB_FROZEN		50
+>  #define KPF_SLUB_DEBUG		51
+>  #define KPF_FILE		61
+> @@ -141,7 +140,6 @@ static const char * const page_flag_names[] = {
+>  
+>  	[KPF_ANON_EXCLUSIVE]	= "d:anon_exclusive",
+>  	[KPF_READAHEAD]		= "I:readahead",
+> -	[KPF_SLOB_FREE]		= "P:slob_free",
+>  	[KPF_SLUB_FROZEN]	= "A:slub_frozen",
+>  	[KPF_SLUB_DEBUG]	= "E:slub_debug",
+>  
+> @@ -478,10 +476,8 @@ static uint64_t expand_overloaded_flags(uint64_t flags, uint64_t pme)
+>  	if ((flags & BIT(ANON)) && (flags & BIT(MAPPEDTODISK)))
+>  		flags ^= BIT(MAPPEDTODISK) | BIT(ANON_EXCLUSIVE);
+>  
+> -	/* SLOB/SLUB overload several page flags */
+> +	/* SLUB overloads several page flags */
+>  	if (flags & BIT(SLAB)) {
+> -		if (flags & BIT(PRIVATE))
+> -			flags ^= BIT(PRIVATE) | BIT(SLOB_FREE);
+>  		if (flags & BIT(ACTIVE))
+>  			flags ^= BIT(ACTIVE) | BIT(SLUB_FROZEN);
+>  		if (flags & BIT(ERROR))
+> -- 
+> 2.39.2
 
-In your patch below, you added the config CPM_QMC which depends on the
-non-existing config SOC_FSL:
-
-https://lore.kernel.org/r/20230217145645.1768659-7-herve.codina@bootlin.com
-
-Up to my knowledge, the config SOC_FSL never existed in the mainline
-tree. Is this dependency really required or can the expression simply
-be reduced to COMPILE_TEST and we drop the dependency to SOC_FSL?
-
-Note: This patch has now shown up in linux-next with commit
-3178d58e0b97. Currently, it would not be possible to compile test this
-driver, as the dependency on SOC_FSL is never met.
-
-
-Best regards,
-
-Lukas
+Acked-by: Hyeonggon Yoo <42.hyeyoo@gmail.com>
