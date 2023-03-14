@@ -2,55 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 501DB6B9833
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:42:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2611F6B9839
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:44:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbjCNOmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:42:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60388 "EHLO
+        id S230398AbjCNOo3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:44:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231574AbjCNOm0 (ORCPT
+        with ESMTP id S229479AbjCNOoZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:42:26 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A78889FBFC
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:42:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 041CFB819B2
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:42:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 399F2C433D2;
-        Tue, 14 Mar 2023 14:42:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678804929;
-        bh=+qRGz3nlByjZ0+ZQaaX6PF8csZcFjTN6u+w2wv4/nOA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Z/ZvIEL1VJ5Hj2GYQtrZghmf5jvOPnDiFN/B0dass2C1IUmrmkR/RERUVDMsjD2HH
-         WTe2W58YI90phZYB78JQtR3GuW5IPHKjzGNPZhqcm2x/tKx90z0E0zHOj66ooet+lk
-         2+l02I0x/EojrosB+IYLxPCTUYjOlfoP4YYDBQjKsAhUOYkNgHS3M0j5/2Z6AOodn/
-         mdLJMp3jmU/CL2baRjL6mfcDYPdx8CspgGb6NaFiWsZo4tvFlJKrT6nQ5iNzRuMD4P
-         yWWVW3R0GN1zj6FNB26Xsr5OMvETOnHoLEfe5WmhaVOBn33tCLlftnr3Rt7LieWMZ0
-         DtHLWlLZNNL+Q==
-Date:   Tue, 14 Mar 2023 07:42:07 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Khadija Kamran <kamrankhadijadj@gmail.com>
-Cc:     outreachy@lists.linux.dev, llvm@lists.linux.dev,
-        oe-kbuild-all@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
-Message-ID: <20230314144207.GA4106922@dev-arch.thelio-3990X>
-References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine>
- <202303141159.6wN9HNP9-lkp@intel.com>
- <ZBB/30ZBW9EU1QfK@khadija-virtual-machine>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+        Tue, 14 Mar 2023 10:44:25 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDCE67C979;
+        Tue, 14 Mar 2023 07:44:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678805063; x=1710341063;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=9yGeN7xfiQLFNP7+lmc9v+yVq9rkAyNNCndsDwXcIh0=;
+  b=TR8TKs81ThXmERfk4BJa6EMmvXxiAUuNKQpy6NWk4sO0CI+iLp6pN8Iw
+   7vQ1ok7W3Wp1yGXhhuzkK4EHvWMtqnwFkBz90yqG10/P7It9994JDmA1f
+   lEGZ0fb/sZcJpTAWLC6y84zXxsh3hBNCbkW6fjXM1Pw947mCZ/oJpKssS
+   zwpwnPkv6WoEUAcW/qrl4WTx6LqKg8xTyw2bADCpRaiOcUKnwgQcj8PSt
+   YnL8HX7J2AXkMuqH55FesHg7+NiAxbDZZPMbvE9oWB1sVvtNC1ltJe1WS
+   fvR3bxTuRnkCDIg8rzFxp7u4NhrbdOEByVxPnAEHA9D87hwB9bOOGmer8
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317090561"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="317090561"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 07:44:15 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="768118173"
+X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
+   d="scan'208";a="768118173"
+Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
+  by FMSMGA003.fm.intel.com with ESMTP; 14 Mar 2023 07:44:14 -0700
+Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 07:44:14 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 07:44:14 -0700
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (104.47.58.169)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.21; Tue, 14 Mar 2023 07:44:14 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mrhXt4qMaf8feR5SxIHUCkR+6vC1HP3wdhLgxf8t+qBwelO9A4sGAWrTJr3L+pDym6xwAjhc0f+IBq227eTpalQU/fDQcIxK8LPY8J/PYSIbnuOTy37a8qRKGWas4i4Z3jWgaQSKR9g4+Fv6sJP2+UAjYvAcXh1V7gPCeyoohLuHw/8mi4cU7UsY4SNm/d7ela2AbSCBqQ5OEk7xm6IlIE6OVizdHvglAhU+s5dqFmeZRsTRSRhpb48zEgECsKPgB4jhoqXJkFhwwgk/6VLMOLTGuMexOiXiDJD7yeX9bt6pvye7W/W9uQe6ynjkCVjSENxlDrKEWB0Ku+5fLGVfKA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/J/s3ribz2ilnkqHCv/o8LLSdzoq4/8ATEm82YCSXUI=;
+ b=oMq9XMFKFb+7Dt7wNjCdFl79145OTPPKJgoQ82u7cr9Qdmit+a3jXdG3SIayZ1/pCgo121/APV2jwHMZwhq3sxrOEvUvK6YxPvd7sJUmh7oswpumRkVF74GK3HF6U2vEsQhKZmyKw/9sRRoAVZZqehb7ZkR0mW81RI9eI26bU+G5Txf6P6HJQaWcIe6gi/65sCLVE8BoGOE316IyingczSVV9oD1LKxrBTuekvka67T1K4vN/TR17AU45zo96AeTIvUeOeZOfVlp7Edm57thvOIbCxMDSGpAOSdAx8B2zhd7OBkUayg+Wbnd/nUi5ogtSC4WFmLqP8trCERxW9yAHQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from PH0PR11MB7471.namprd11.prod.outlook.com (2603:10b6:510:28a::13)
+ by PH7PR11MB6794.namprd11.prod.outlook.com (2603:10b6:510:1b8::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
+ 2023 14:44:10 +0000
+Received: from PH0PR11MB7471.namprd11.prod.outlook.com
+ ([fe80::37bf:fa82:8a21:a056]) by PH0PR11MB7471.namprd11.prod.outlook.com
+ ([fe80::37bf:fa82:8a21:a056%2]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
+ 14:44:10 +0000
+Date:   Tue, 14 Mar 2023 15:44:03 +0100
+From:   Piotr Raczynski <piotr.raczynski@intel.com>
+To:     Jochen Henneberg <jh@henneberg-systemdesign.com>
+CC:     <netdev@vger.kernel.org>,
+        Giuseppe Cavallaro <peppe.cavallaro@st.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Jose Abreu <joabreu@synopsys.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        "Ong Boon Leong" <boon.leong.ong@intel.com>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH net 1/2] net: stmmac: Premature loop termination check
+ was ignored
+Message-ID: <ZBCIM//XkpFkiC4W@nimitz>
+References: <20230314123759.132521-1-jh@henneberg-systemdesign.com>
+ <20230314123759.132521-2-jh@henneberg-systemdesign.com>
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <ZBB/30ZBW9EU1QfK@khadija-virtual-machine>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+In-Reply-To: <20230314123759.132521-2-jh@henneberg-systemdesign.com>
+X-ClientProxiedBy: LO4P123CA0332.GBRP123.PROD.OUTLOOK.COM
+ (2603:10a6:600:18c::13) To PH0PR11MB7471.namprd11.prod.outlook.com
+ (2603:10b6:510:28a::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR11MB7471:EE_|PH7PR11MB6794:EE_
+X-MS-Office365-Filtering-Correlation-Id: 04a2c033-411e-4ee4-a848-08db249a91d2
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: C7cPCuzWxCaVyZGO74lSYoyrJbp0k1iplMhYNTmpBfwBZiirTudn33wxJDAnjMlFAFIVctMbFmqd8pQG9r/dvV5JEUL9XcOAhQzZtZ38gB5238bYcuw9hnI2KB9heUFnlVBIcZAQ9kFUFD9402ugjrCwRNh02DCB+3FdUxdsJDtegayN26yiJwaBwF2JkoDN3Ej/2LPeNzvATI/+bC4vwMiGYDaSHSRAT2/5w0vjbal4IiaJFyJoU4WAi5CdIi/C3nNPlZw/HKK+uZSaOfQcP591UDJmaG2kr69wthJ0R5Dva33AiR/mZ2Mw192KqNdx4+/mMza3GWg2IedMMbXfVJmsABg42YT+6YbLF1fvB1KFFBp5H5Ri2paE4RLTTS3TT21sPsO41B2FYbXxsUH2velfN0aLk+HmMYPSbFnm6vkm4ac/dsUg1ChOJHhKKah2SXZzHElTz2WKVPHTQDyLtAhdVre7kvMBbURNG4QRjso0CYwYErUSrTkJwGsmdL7BgU57Pf0fB3O1tgC/BZLC5txdGfQMHgt3BzKhn5VIMPdiU1OYMWF8i/zLuQYr8hdlYMUkBYP1/+WNo2NhipBhrhfVEVg++hDAjiQXBTlcFr4De1AdzPNP68Bia+J7I3g4uvT8lReut26O29TYAVYpCg==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR11MB7471.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(136003)(396003)(39860400002)(376002)(346002)(366004)(451199018)(86362001)(33716001)(478600001)(82960400001)(38100700002)(4326008)(66556008)(66946007)(54906003)(8676002)(6916009)(66476007)(41300700001)(8936002)(316002)(44832011)(2906002)(83380400001)(6666004)(186003)(6506007)(6512007)(26005)(9686003)(5660300002)(6486002)(7416002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?j6IHCWO5u6OEyIq3zF+PQJgBChxuqpyv8Wmsny58GfSL9VZ1JCEi8QBCpRoW?=
+ =?us-ascii?Q?W2eCpTsEYljAcUEPB+UvVhUNVTiKsTT+/EISym/+8v+4UcDT/N3boWROFKwX?=
+ =?us-ascii?Q?bERZ/WAp16BtNQno6N2JAiEqh7wXdllmfRHhG7NZo/mTUvpxb7DEW1qszTze?=
+ =?us-ascii?Q?4bLKGNDdRL5uTmIdoRUSjdf/z3XSgmtxQSE3xDoAmsl3mH9mcptvC37HCV7G?=
+ =?us-ascii?Q?xdr6APyenBchw/bjeYNYjI2p2qx2ns/ArAsHaOLPh3ESBeeYJRKWn/QR1D4O?=
+ =?us-ascii?Q?p/AbimPhq0a096/auILzE2rQ6fLh44y9DosMfLIkEPcgJpKsNSmPoqmxuos+?=
+ =?us-ascii?Q?6cHkpyznBJhwPSibRKBhubfLUopCeBiCzGrzWGKWnzyTtIbiTbdAISqJA73m?=
+ =?us-ascii?Q?xyc60oRCBp+Iue7S+/oCmFQr5K19vWHHsh3nMMlmJ9MFU8sKAw1HrN1bQ9H2?=
+ =?us-ascii?Q?1WJqb3lKC8oVgfoZ8VyJVfD3fNTQZ/8GLYJEvwg8GkCB7sfbeRnsZVVbb9It?=
+ =?us-ascii?Q?CQZ/vmfxeAptvNstwBC7UUouJQknpttArhpI23+FosgPWawJL6QtaHzWyvDf?=
+ =?us-ascii?Q?7W7snO8E/I+CLejXOSgWNyLTNDeLig5xYypFqVvyolkXxFxGYDgCQoknhNpg?=
+ =?us-ascii?Q?wHfyQLJCpawLKauNwu3b52f5MTcq9GlGRZkBl9T5rjVqDA99vBX+nNGHwoMB?=
+ =?us-ascii?Q?HQD6Cp9KamcteIdzHHf2gQVmNTuMsEo31Lv2H/K4SbLvVyJr9KCquIhNXq65?=
+ =?us-ascii?Q?qsSVDR4fFz98p4WhtaOafR/S1im6F9T7hMAyKD842cqrgoi3emdDXq6jQNBE?=
+ =?us-ascii?Q?pSj/BkBZADIqZAqFOPqxHNLkbj3H+p/PA7DTz7qb//w/Dn1LwSJrghNSEq9T?=
+ =?us-ascii?Q?7x2c6/gvB+oweqBLCk2y4eB39hAW5SPsdgsAIDAPZ27eQ2hjc9CMjQwXebzF?=
+ =?us-ascii?Q?sMsizYF1xHXm3UyAGsICqNDVnaGG9augtknuAQsbhgo+z5zFeoO30VVzH2Cv?=
+ =?us-ascii?Q?icDue8IBB2Y9HpyNg9KjQQExJYslRhsHHhDyQ+y3SltD3zKBDYcuzbQ0wZfQ?=
+ =?us-ascii?Q?HXGsjmNvZ+KcDOr0+2W3n8mnyNDfm/jow1WsDG1JwJS02OJGTovPACXp2sJw?=
+ =?us-ascii?Q?VMAlh/Olk4sKfD585l1PJgGeRzf8GRceMQ7xsVsYb+LxUROXUmZ0Zm8TgMoL?=
+ =?us-ascii?Q?2KrdcrnhSMmRaojwxkqOAtYB/dAEY4Zd+RyYkzmPqvbWd/bPma6747ugcyGH?=
+ =?us-ascii?Q?n7kxtI7NKwGwx7hbEYAHZZ5hnd8c4/u6wofbuc250fhzQfxMg00YnQ3QNSn5?=
+ =?us-ascii?Q?d2GYqaWcP2nZrHRHhfJDxNqW9s54ccEW0A3jXPiawHFFxrCsR+g+1Fz4i3sw?=
+ =?us-ascii?Q?VJZ0I4wSqNRn8+g4Z2RBl33BzbYaT3essa3tJQLzRMxQJQ03x8iTeDQoo4x1?=
+ =?us-ascii?Q?7VHK725LnSaLbnxPSw/n1z3T/ngWozfE9G5VwZvqDVPOzLQD27lglYJ+HWxb?=
+ =?us-ascii?Q?TswTHoyVkJgZrTOHjYC/R/2T9ZeNL2hmN+m+RPWFOnfsK+fuebPNAVpcb12R?=
+ =?us-ascii?Q?/CNNbvL3svdpFesG3PJ19QCqZIyV9lXq1g0XNo/Uf4RCRVo1myMKvkx0mFSH?=
+ =?us-ascii?Q?BA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 04a2c033-411e-4ee4-a848-08db249a91d2
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR11MB7471.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 14:44:09.7979
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: PSFl0vJpgy/X9pxklVes4mEQQWuwDYtbSuNl2kcs1+eG26J5doCQ709aBou+gyTU4Or8Buelb1RV18RFvnAqv/2QWSylF3uSkKn/90sfz2U=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6794
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -58,206 +159,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Khadija,
+On Tue, Mar 14, 2023 at 01:37:58PM +0100, Jochen Henneberg wrote:
+> The premature loop termination check makes sense only in case of the
+> jump to read_again where the count may have been updated. But
+> read_again did not include the check.
 
-On Tue, Mar 14, 2023 at 07:08:31PM +0500, Khadija Kamran wrote:
-> On Tue, Mar 14, 2023 at 11:45:51AM +0800, kernel test robot wrote:
-> > Hi Khadija,
-> > 
-> > Thank you for the patch! Perhaps something to improve:
-> > 
-> > [auto build test WARNING on staging/staging-testing]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
-> > patch link:    https://lore.kernel.org/r/ZA9mThZ7NyRrQAMX%40khadija-virtual-machine
-> > patch subject: [PATCH] staging: axis-fifo: initialize timeouts in probe only
-> > config: arm64-randconfig-r012-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141159.6wN9HNP9-lkp@intel.com/config)
-> > compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-> > reproduce (this is a W=1 build):
-> >         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-> >         chmod +x ~/bin/make.cross
-> >         # install arm64 cross compiling tool for clang build
-> >         # apt-get install binutils-aarch64-linux-gnu
-> >         # https://github.com/intel-lab-lkp/linux/commit/9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
-> >         git remote add linux-review https://github.com/intel-lab-lkp/linux
-> >         git fetch --no-tags linux-review Khadija-Kamran/staging-axis-fifo-initialize-timeouts-in-probe-only/20230314-020827
-> >         git checkout 9d186f6c9f9bf467b48da3e28b0e9aa31fc3faf3
-> >         # save the config file
-> >         mkdir build_dir && cp config build_dir/.config
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 olddefconfig
-> >         COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm64 SHELL=/bin/bash drivers/staging/axis-fifo/
-> > 
-> > If you fix the issue, kindly add following tag where applicable
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Link: https://lore.kernel.org/oe-kbuild-all/202303141159.6wN9HNP9-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> > >> drivers/staging/axis-fifo/axis-fifo.c:817:18: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
-> >                    read_timeout = MAX_SCHEDULE_TIMEOUT;
-> >                                 ~ ^~~~~~~~~~~~~~~~~~~~
-> >    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
-> >    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
-> >                                            ^~~~~~~~
-> >    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
-> >    #define LONG_MAX        ((long)(~0UL >> 1))
-> >                             ^~~~~~~~~~~~~~~~~
-> >    drivers/staging/axis-fifo/axis-fifo.c:822:19: warning: implicit conversion from 'long' to 'int' changes value from 9223372036854775807 to -1 [-Wconstant-conversion]
-> >                    write_timeout = MAX_SCHEDULE_TIMEOUT;
-> >                                  ~ ^~~~~~~~~~~~~~~~~~~~
-> >    include/linux/sched.h:296:31: note: expanded from macro 'MAX_SCHEDULE_TIMEOUT'
-> >    #define MAX_SCHEDULE_TIMEOUT            LONG_MAX
-> >                                            ^~~~~~~~
-> >    include/vdso/limits.h:11:19: note: expanded from macro 'LONG_MAX'
-> >    #define LONG_MAX        ((long)(~0UL >> 1))
-> >                             ^~~~~~~~~~~~~~~~~
-> >    2 warnings generated.
-> >
+Your commit titles and messages seems identical in both patches, someone
+may get confused, maybe you could change commit titles at least?
+
+Or since those are very related one liner fixes, maybe combine them into
+one?
+
+Also a question, since you in generally goto backwards here, is it guarded from
+an infinite loop (during some corner case scenario maybe)?
+
+Other than that looks fine, thanks.
+Reviewed-by: Piotr Raczynski <piotr.raczynski@intel.com>
+
 > 
-> Hi everyone!
-> Kindly let me know if I should look into these warnings.
-> Thank you!
-
-You should always avoid introducing new warnings whenever possible. In
-this case, it appears that read_timeout and write_timeout should be
-changed from 'int' to 'long' to account for the fact that
-MAX_SCHEDULE_TIMEOUT is being assigned to it directly now, versus being
-passed as a parameter to wait_event_interruptible_timeout(), which
-assigned it to 'long' anyways.
-
-If you have any other questions or need further help, let me know :)
-
-Cheers,
-Nathan
-
-> > vim +817 drivers/staging/axis-fifo/axis-fifo.c
-> > 
-> >    805	
-> >    806	static int axis_fifo_probe(struct platform_device *pdev)
-> >    807	{
-> >    808		struct resource *r_mem; /* IO mem resources */
-> >    809		struct device *dev = &pdev->dev; /* OS device (from device tree) */
-> >    810		struct axis_fifo *fifo = NULL;
-> >    811		char *device_name;
-> >    812		int rc = 0; /* error return value */
-> >    813	
-> >    814		if (read_timeout >= 0)
-> >    815			read_timeout = msecs_to_jiffies(read_timeout);
-> >    816		else
-> >  > 817			read_timeout = MAX_SCHEDULE_TIMEOUT;
-> >    818	
-> >    819		if (write_timeout >= 0)
-> >    820			write_timeout = msecs_to_jiffies(write_timeout);
-> >    821		else
-> >    822			write_timeout = MAX_SCHEDULE_TIMEOUT;
-> >    823	
-> >    824		/* ----------------------------
-> >    825		 *     init wrapper device
-> >    826		 * ----------------------------
-> >    827		 */
-> >    828	
-> >    829		device_name = devm_kzalloc(dev, 32, GFP_KERNEL);
-> >    830		if (!device_name)
-> >    831			return -ENOMEM;
-> >    832	
-> >    833		/* allocate device wrapper memory */
-> >    834		fifo = devm_kzalloc(dev, sizeof(*fifo), GFP_KERNEL);
-> >    835		if (!fifo)
-> >    836			return -ENOMEM;
-> >    837	
-> >    838		dev_set_drvdata(dev, fifo);
-> >    839		fifo->dt_device = dev;
-> >    840	
-> >    841		init_waitqueue_head(&fifo->read_queue);
-> >    842		init_waitqueue_head(&fifo->write_queue);
-> >    843	
-> >    844		mutex_init(&fifo->read_lock);
-> >    845		mutex_init(&fifo->write_lock);
-> >    846	
-> >    847		/* ----------------------------
-> >    848		 *   init device memory space
-> >    849		 * ----------------------------
-> >    850		 */
-> >    851	
-> >    852		/* get iospace for the device */
-> >    853		r_mem = platform_get_resource(pdev, IORESOURCE_MEM, 0);
-> >    854		if (!r_mem) {
-> >    855			dev_err(fifo->dt_device, "invalid address\n");
-> >    856			rc = -ENODEV;
-> >    857			goto err_initial;
-> >    858		}
-> >    859	
-> >    860		/* request physical memory */
-> >    861		fifo->base_addr = devm_ioremap_resource(fifo->dt_device, r_mem);
-> >    862		if (IS_ERR(fifo->base_addr)) {
-> >    863			rc = PTR_ERR(fifo->base_addr);
-> >    864			goto err_initial;
-> >    865		}
-> >    866	
-> >    867		dev_dbg(fifo->dt_device, "remapped memory to 0x%p\n", fifo->base_addr);
-> >    868	
-> >    869		/* create unique device name */
-> >    870		snprintf(device_name, 32, "%s_%pa", DRIVER_NAME, &r_mem->start);
-> >    871		dev_dbg(fifo->dt_device, "device name [%s]\n", device_name);
-> >    872	
-> >    873		/* ----------------------------
-> >    874		 *          init IP
-> >    875		 * ----------------------------
-> >    876		 */
-> >    877	
-> >    878		rc = axis_fifo_parse_dt(fifo);
-> >    879		if (rc)
-> >    880			goto err_initial;
-> >    881	
-> >    882		reset_ip_core(fifo);
-> >    883	
-> >    884		/* ----------------------------
-> >    885		 *    init device interrupts
-> >    886		 * ----------------------------
-> >    887		 */
-> >    888	
-> >    889		/* get IRQ resource */
-> >    890		rc = platform_get_irq(pdev, 0);
-> >    891		if (rc < 0)
-> >    892			goto err_initial;
-> >    893	
-> >    894		/* request IRQ */
-> >    895		fifo->irq = rc;
-> >    896		rc = devm_request_irq(fifo->dt_device, fifo->irq, &axis_fifo_irq, 0,
-> >    897				      DRIVER_NAME, fifo);
-> >    898		if (rc) {
-> >    899			dev_err(fifo->dt_device, "couldn't allocate interrupt %i\n",
-> >    900				fifo->irq);
-> >    901			goto err_initial;
-> >    902		}
-> >    903	
-> >    904		/* ----------------------------
-> >    905		 *      init char device
-> >    906		 * ----------------------------
-> >    907		 */
-> >    908	
-> >    909		/* create character device */
-> >    910		fifo->miscdev.fops = &fops;
-> >    911		fifo->miscdev.minor = MISC_DYNAMIC_MINOR;
-> >    912		fifo->miscdev.name = device_name;
-> >    913		fifo->miscdev.groups = axis_fifo_attrs_groups;
-> >    914		fifo->miscdev.parent = dev;
-> >    915		rc = misc_register(&fifo->miscdev);
-> >    916		if (rc < 0)
-> >    917			goto err_initial;
-> >    918	
-> >    919		dev_info(fifo->dt_device, "axis-fifo created at %pa mapped to 0x%pa, irq=%i\n",
-> >    920			 &r_mem->start, &fifo->base_addr, fifo->irq);
-> >    921	
-> >    922		return 0;
-> >    923	
-> >    924	err_initial:
-> >    925		dev_set_drvdata(dev, NULL);
-> >    926		return rc;
-> >    927	}
-> >    928	
-> > 
-> > -- 
-> > 0-DAY CI Kernel Test Service
-> > https://github.com/intel/lkp-tests
+> Fixes: ec222003bd94 ("net: stmmac: Prepare to add Split Header support")
+> Signed-off-by: Jochen Henneberg <jh@henneberg-systemdesign.com>
+> ---
+>  drivers/net/ethernet/stmicro/stmmac/stmmac_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> index e4902a7bb61e..ea51c7c93101 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
+> @@ -5221,10 +5221,10 @@ static int stmmac_rx(struct stmmac_priv *priv, int limit, u32 queue)
+>  			len = 0;
+>  		}
+>  
+> +read_again:
+>  		if (count >= limit)
+>  			break;
+>  
+> -read_again:
+>  		buf1_len = 0;
+>  		buf2_len = 0;
+>  		entry = next_entry;
+> -- 
+> 2.39.2
 > 
