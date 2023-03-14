@@ -2,79 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2B646B9F1B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:52:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B7F06B9F20
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:53:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbjCNSwH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:52:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60890 "EHLO
+        id S229797AbjCNSxW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:53:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231226AbjCNSvx (ORCPT
+        with ESMTP id S230086AbjCNSxT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:51:53 -0400
-Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15D9A19C41;
-        Tue, 14 Mar 2023 11:51:41 -0700 (PDT)
-Received: from localhost (unknown [IPv6:2601:281:8300:73::5f6])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ms.lwn.net (Postfix) with ESMTPSA id A683E7F9;
-        Tue, 14 Mar 2023 18:51:40 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net A683E7F9
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-        t=1678819900; bh=EqarAuL84CPQ/T2h5Yo0ww3HHQdh9VsTqkJjh9VIqMQ=;
-        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-        b=Kf5IaAfhwFQkArkt/+C6LbpWkUJQirPqvUfr5IhR7Ez8+KDISXFCSfgs7ZPb+CU7P
-         8ujFKZa3AUyPmJQHCdKdVit+V1q6+QY1wS2858pPmIHxkzL/HiRnndxKpCCg9Z9X09
-         yv9Eb6mHa/8F/TzGssa3VcnWAQnQVE/KF0vKHWZ04YCptkOObIcZGpDA/cP+JG/UzN
-         m90/8MPmKxwe6aHcMiYCiRR6hz+yxHb7CZjH6Xxq2Pw//xAeQRawmBqlt75MfEbkLj
-         cBWVosk8IUFtll/6apOVkI/X6/cjwGsoW19jSh4vcr+J54LsELEoCCCZZ0diMUMHvy
-         Yoq8ItTbHnI2w==
-From:   Jonathan Corbet <corbet@lwn.net>
-To:     Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     kaiwan.billimoria@gmail.com, rlove@rlove.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Subject: Re: [PATCH v2] docs: Add relevant kernel publications to list of books
-In-Reply-To: <20230222183445.3127324-1-carlos.bilbao@amd.com>
-References: <20230222183445.3127324-1-carlos.bilbao@amd.com>
-Date:   Tue, 14 Mar 2023 12:51:39 -0600
-Message-ID: <87wn3jqi84.fsf@meer.lwn.net>
+        Tue, 14 Mar 2023 14:53:19 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 953722129E;
+        Tue, 14 Mar 2023 11:52:42 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id fd5so32181330edb.7;
+        Tue, 14 Mar 2023 11:52:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678819960;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/TyElIWgexllmpdDJP4yPEqDY3bV2L7lXgcPPLwRUOY=;
+        b=UeDOTY0aX04XtbWW7DgBEXbwSH/civPFMvrDvl60KzcJlFT8kaHIARlTBja1329vf1
+         MhtQ9Tw8+PnHGNLRksLZzc+222BDWyXI1TzLC3Yd/X7NR/yVUTC8ERN2jWM3IuP4hhJA
+         bpnoBHR0y+5VPfeoHvQMymRj9w2SX1IYMrkA04LF1+pN/0kJDGLj3Jkg1maHQ8heMV8+
+         UFXf5GYKDiRcng5OXQ79cHrkb/OYTRxCDa8kTrEz3xXcSTzVSkddy1MJi8P5fZjyyEe8
+         GjH+GgJxheA8/DAwtc4jx9R9zDF6bOgLatuoahLKLlRMiv8byyiRelYNp9L4AFZCxQXM
+         z6tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678819960;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/TyElIWgexllmpdDJP4yPEqDY3bV2L7lXgcPPLwRUOY=;
+        b=jGP5xx2qoirRrUAKgU7MmdbmLhHRbT4XG+FcV19zKjBjrYIgIylhOjAQujR5kS938A
+         UYWtq1ZsYtB5vjwOGuGUMFtY7rtV3QtQo6JMwntK3i4UaF92AiT5wMDQreDJExSNJGfE
+         fIGeZLBgOn1pb1tGewJ67psl7oM7FT9rwBySSSu/ijFjumEPKK+i5fxPBI+v4lJ6ZNHG
+         Ce4TOjsMJmp8Lf2bP/IVZq2SUuq+2rjrp79UsQAPlk+H3hZwjy/ZbnlAMOs2nybubRCB
+         hG0RO3DbZ+o5WC1r3p5aVc7Iavev75vmfvanhOY5kSzueBfmt8u73mCXoGQJ8ybwq1nV
+         TEXw==
+X-Gm-Message-State: AO0yUKWSf04EAdrY6M3CyAeYsbVw4dZww2PP0ZOKHxmiA6de5FzUu9B8
+        HyhMPZImCA7h+ixY2hPjZUnwkKz5XcbO2keBrWzcav4c
+X-Google-Smtp-Source: AK7set/9zMCyA10PYR9HiyiyTZRC+Fn7ib1qNvhz/pfVTT3MgkLBj1Ci2HypROZLVLSZfmh0Psf1gnEwUkgLuBTk4Ks=
+X-Received: by 2002:a17:906:bc51:b0:923:6595:a81b with SMTP id
+ s17-20020a170906bc5100b009236595a81bmr1813215ejv.5.1678819960041; Tue, 14 Mar
+ 2023 11:52:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <CA+G9fYtBnwxAWXi2+GyNByApxnf_DtP1-6+_zOKAdJKnJBexjg@mail.gmail.com>
+In-Reply-To: <CA+G9fYtBnwxAWXi2+GyNByApxnf_DtP1-6+_zOKAdJKnJBexjg@mail.gmail.com>
+From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date:   Tue, 14 Mar 2023 11:52:27 -0700
+Message-ID: <CAEf4Bzb9_5KvWKxEAgz0V_OS0+h6PQN_Pir_rfrcviu2O80cqQ@mail.gmail.com>
+Subject: Re: next: zip.c:35:8: error: packed attribute causes inefficient
+ alignment for 'magic' [-Werror=attributes]
+To:     Naresh Kamboju <naresh.kamboju@linaro.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Ian Rogers <irogers@google.com>,
+        =?UTF-8?Q?Daniel_M=C3=BCller?= <deso@posteo.net>
+Cc:     open list <linux-kernel@vger.kernel.org>,
+        bpf <bpf@vger.kernel.org>, lkft-triage@lists.linaro.org,
+        Linux-Next Mailing List <linux-next@vger.kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Anders Roxell <anders.roxell@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Carlos Bilbao <carlos.bilbao@amd.com> writes:
+On Mon, Mar 13, 2023 at 11:38=E2=80=AFPM Naresh Kamboju
+<naresh.kamboju@linaro.org> wrote:
+>
+> perf builds failing from Linux next-20230307..next-20230314 but pass on
+> Linux mainline v6.3-rc2.
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> For the list of kernel published books, include publication covering kernel
-> debugging from August, 2022 (ISBN 978-1801075039) and one from March, 2021
-> on the topic of char device drivers and kernel synchronization (ISBN
-> 978-1801079518). Also add foundational book from Robert Love (ISBN
-> 978-1449339531) and remove extra spaces.
+Thanks for the report, but I'm not sure what's wrong here. We added
+__attribute__((packed)) attribute intentionally and want to keep it
+this way. It seems like perf itself is using packed structs (e.g.,
+struct debug_line_header in util/genelf_debug.c), so I'm wondering why
+that code doesn't cause any problems.
+
+Any hints from perf folks?
+
+
 >
-> Co-developed-by: Carlos Bilbao <carlos.bilbao@amd.com>
-> Signed-off-by: Kaiwan N Billimoria <kaiwan.billimoria@gmail.com>
-> Signed-off-by: Carlos Bilbao <carlos.bilbao@amd.com>
->
+> Build log:
 > ---
+> libbpf/staticobjs/zip.o
+> zip.c:35:8: error: packed attribute causes inefficient alignment for
+> 'magic' [-Werror=3Dattributes]
+>    35 |  __u32 magic;
+>       |        ^~~~~
+> zip.c:40:8: error: packed attribute causes inefficient alignment for
+> 'this_disk' [-Werror=3Dattributes]
+>    40 |  __u16 this_disk;
+>       |        ^~~~~~~~~
+> zip.c:45:8: error: packed attribute causes inefficient alignment for
+> 'cd_disk' [-Werror=3Dattributes]
+>    45 |  __u16 cd_disk;
+>       |        ^~~~~~~
+> zip.c:50:8: error: packed attribute causes inefficient alignment for
+> 'cd_records' [-Werror=3Dattributes]
+>    50 |  __u16 cd_records;
+>       |        ^~~~~~~~~~
+> zip.c:55:8: error: packed attribute causes inefficient alignment for
+> 'cd_records_total' [-Werror=3Dattributes]
+>    55 |  __u16 cd_records_total;
+>       |        ^~~~~~~~~~~~~~~~
+> zip.c:58:8: error: packed attribute causes inefficient alignment for
+> 'cd_size' [-Werror=3Dattributes]
+>    58 |  __u32 cd_size;
+>       |        ^~~~~~~
+> zip.c:63:8: error: packed attribute causes inefficient alignment for
+> 'cd_offset' [-Werror=3Dattributes]
+>    63 |  __u32 cd_offset;
+>       |        ^~~~~~~~~
+> zip.c:66:8: error: packed attribute causes inefficient alignment for
+> 'comment_length' [-Werror=3Dattributes]
+>    66 |  __u16 comment_length;
+>       |        ^~~~~~~~~~~~~~
+> zip.c:79:8: error: packed attribute causes inefficient alignment for
+> 'magic' [-Werror=3Dattributes]
+>    79 |  __u32 magic;
+>       |        ^~~~~
+> zip.c:80:8: error: packed attribute causes inefficient alignment for
+> 'version' [-Werror=3Dattributes]
+>    80 |  __u16 version;
+>       |        ^~~~~~~
+> zip.c:82:8: error: packed attribute causes inefficient alignment for
+> 'min_version' [-Werror=3Dattributes]
+>    82 |  __u16 min_version;
+>       |        ^~~~~~~~~~~
+> zip.c:83:8: error: packed attribute causes inefficient alignment for
+> 'flags' [-Werror=3Dattributes]
+>    83 |  __u16 flags;
+>       |        ^~~~~
+> zip.c:84:8: error: packed attribute causes inefficient alignment for
+> 'compression' [-Werror=3Dattributes]
+>    84 |  __u16 compression;
+>       |        ^~~~~~~~~~~
+> zip.c:85:8: error: packed attribute causes inefficient alignment for
+> 'last_modified_time' [-Werror=3Dattributes]
+>    85 |  __u16 last_modified_time;
+>       |        ^~~~~~~~~~~~~~~~~~
+> zip.c:86:8: error: packed attribute causes inefficient alignment for
+> 'last_modified_date' [-Werror=3Dattributes]
+>    86 |  __u16 last_modified_date;
+>       |        ^~~~~~~~~~~~~~~~~~
+> zip.c:87:8: error: packed attribute causes inefficient alignment for
+> 'crc' [-Werror=3Dattributes]
+>    87 |  __u32 crc;
+>       |        ^~~
+> zip.c:88:8: error: packed attribute causes inefficient alignment for
+> 'compressed_size' [-Werror=3Dattributes]
+>    88 |  __u32 compressed_size;
+>       |        ^~~~~~~~~~~~~~~
+> zip.c:89:8: error: packed attribute causes inefficient alignment for
+> 'uncompressed_size' [-Werror=3Dattributes]
+>    89 |  __u32 uncompressed_size;
+>       |        ^~~~~~~~~~~~~~~~~
+> zip.c:90:8: error: packed attribute causes inefficient alignment for
+> 'file_name_length' [-Werror=3Dattributes]
+>    90 |  __u16 file_name_length;
+>       |        ^~~~~~~~~~~~~~~~
+> zip.c:91:8: error: packed attribute causes inefficient alignment for
+> 'extra_field_length' [-Werror=3Dattributes]
+>    91 |  __u16 extra_field_length;
+>       |        ^~~~~~~~~~~~~~~~~~
+> zip.c:92:8: error: packed attribute causes inefficient alignment for
+> 'file_comment_length' [-Werror=3Dattributes]
+>    92 |  __u16 file_comment_length;
+>       |        ^~~~~~~~~~~~~~~~~~~
+> zip.c:94:8: error: packed attribute causes inefficient alignment for
+> 'disk' [-Werror=3Dattributes]
+>    94 |  __u16 disk;
+>       |        ^~~~
+> zip.c:95:8: error: packed attribute causes inefficient alignment for
+> 'internal_attributes' [-Werror=3Dattributes]
+>    95 |  __u16 internal_attributes;
+>       |        ^~~~~~~~~~~~~~~~~~~
+> zip.c:108:8: error: packed attribute causes inefficient alignment for
+> 'magic' [-Werror=3Dattributes]
+>   108 |  __u32 magic;
+>       |        ^~~~~
+> zip.c:110:8: error: packed attribute causes inefficient alignment for
+> 'min_version' [-Werror=3Dattributes]
+>   110 |  __u16 min_version;
+>       |        ^~~~~~~~~~~
+> zip.c:111:8: error: packed attribute causes inefficient alignment for
+> 'flags' [-Werror=3Dattributes]
+>   111 |  __u16 flags;
+>       |        ^~~~~
+> zip.c:112:8: error: packed attribute causes inefficient alignment for
+> 'compression' [-Werror=3Dattributes]
+>   112 |  __u16 compression;
+>       |        ^~~~~~~~~~~
+> zip.c:113:8: error: packed attribute causes inefficient alignment for
+> 'last_modified_time' [-Werror=3Dattributes]
+>   113 |  __u16 last_modified_time;
+>       |        ^~~~~~~~~~~~~~~~~~
+> zip.c:114:8: error: packed attribute causes inefficient alignment for
+> 'last_modified_date' [-Werror=3Dattributes]
+>   114 |  __u16 last_modified_date;
+>       |        ^~~~~~~~~~~~~~~~~~
+> zip.c:118:8: error: packed attribute causes inefficient alignment for
+> 'file_name_length' [-Werror=3Dattributes]
+>   118 |  __u16 file_name_length;
+>       |        ^~~~~~~~~~~~~~~~
+> zip.c:119:8: error: packed attribute causes inefficient alignment for
+> 'extra_field_length' [-Werror=3Dattributes]
+>   119 |  __u16 extra_field_length;
+>       |        ^~~~~~~~~~~~~~~~~~
+> cc1: all warnings being treated as errors
 >
-> Changes since v1:
+> Build links,
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2MfXEyvgh4ba9y3rkt=
+6KPf6sUMR/
 >
->  - Fix name of author Kaiwan N Billimoria.
->  - Include other book, from 2021, also authored by Kaiwan.
->  - Include Kaiwan's SoB.
 >
-> ---
->  Documentation/process/kernel-docs.rst | 36 +++++++++++++++++++++++----
->  1 file changed, 31 insertions(+), 5 deletions(-)
-
-Applied, thanks.
-
-jon
+> History link,
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20230314/=
+testrun/15564056/suite/build/test/gcc-10-lkftconfig-perf/history/
+>
+>
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
