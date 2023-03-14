@@ -2,146 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0519B6B9DD7
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406426B9DD3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:04:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230260AbjCNSF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49608 "EHLO
+        id S230435AbjCNSEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:04:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229665AbjCNSF1 (ORCPT
+        with ESMTP id S230341AbjCNSEq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:05:27 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D739DAA702;
-        Tue, 14 Mar 2023 11:05:24 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id d36so21121717lfv.8;
-        Tue, 14 Mar 2023 11:05:24 -0700 (PDT)
+        Tue, 14 Mar 2023 14:04:46 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 83CB7A227E;
+        Tue, 14 Mar 2023 11:04:43 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id f6-20020a17090ac28600b0023b9bf9eb63so7700292pjt.5;
+        Tue, 14 Mar 2023 11:04:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678817123;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=I+SJo7YeDndJJb9FcmfHJ+g0nvcfZuSS+pxPPhUkPAU=;
-        b=UGnWP9EmS66UCtKniWs1Hw5mCG0uydsiW4xUKvCUMnps5+8A3rLtdYnI9LBz/EHvKG
-         ON9M+56cNm+oTlDzbQfTfG+hN8OKOYclhTdCNKhhkNXZ+yGE86ResfD2UCtdJic+6RDz
-         rlkEt1hGzzClX4bLKtoQJRSH+Id1X3Wcg/tcxl6lW3eRBY7aReFUaVPKLcDk0h4Z8D28
-         owpkxXUoldWNG8uaF1ZgSXe2Zbs1vVlpZYoUPXAPtVvW5j7Rc3TUakFVo32A3Cn5/nbW
-         zVU+8a3nGx+U9S0045wub3gCM4SNH+sPTqw2Ef31UauC5bLLbmeRT6Qu200DC1xBPpJJ
-         RjSg==
+        d=gmail.com; s=20210112; t=1678817083;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LhkqZnqi4qAtizU4572s8HvBrOs+BKkBUUx8Pw/CxoE=;
+        b=c+bqi0+JT0vFttYQOJNb2Ic8oXew+4kVrOfaOg2xmKcSnIJGx8Xdup0UqdRMf5dUL/
+         VXnIwtxX8GUo5A/VCv/a1GdjFn+bVBwjwpQWJ+cBu4m8UDKCSgyM85Tky+TPPcAKxJ5u
+         zgcblZlJgNoLW7myn3aU7skEOqxcInk7L6AutT4PaAUUVmIuwsj/OYzILLkiTg3Ba3dB
+         9hgNY7Ov7+wipUdyvfB3eIhzBOMv4ECgzsjOn8DQTTf0ARtqe/urPO5SKeQ3zyPGTElS
+         sYqbcKzAM8zqZ0nVEIAIjOcgEufwNUNZV2AlNOAa0jEIT0Uw3t31/toYwjk0pMp35RN9
+         mr0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678817123;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I+SJo7YeDndJJb9FcmfHJ+g0nvcfZuSS+pxPPhUkPAU=;
-        b=pFQzPHO7GrWKgCfXXx0BR3wFaMR3SP3IOdwwmt82DX/LfI0wLS3sPaq25VxChCvor8
-         v1EoNDV0iMQKeaA+TJ5U/T4JdJz2370rmOwsWrd2IV0VLOIw33CH1mnumsqLo7vKnutL
-         tK5bA7MxoX2M/wOd7CUA5URkhK+/A7S64j7ebwHt6szsChKVj9fLvYEgyMj+msHXFeWw
-         AhnHwzd2stfxAFbgc0IL3GSuXVkPv+cnDb80GOQbkKUawfmjd7/Ah4kq4mg0u2Q6FezH
-         wlfIl9gxgpKtd0MAbqppEyCk0+d9PMgCoLEH4cGKZQXJYxgBnZDMaFqxmvn1cy0xMrbj
-         lzcw==
-X-Gm-Message-State: AO0yUKVdHDKj60jKeYLo14yIHeHiKhmSKpwdj3eUKVA0EzqQnsJgdf0x
-        wcpXIkzfQ+6CsdkEp3WSsCTq6jbpxsDcakPu
-X-Google-Smtp-Source: AK7set9ldhL13HwpN98o3SKvC2f9q0OhO5BPfCWqgY9EUa/hdg84oFxwbxUXj+YyZstEjC1wl6kFSg==
-X-Received: by 2002:ac2:4a83:0:b0:4e8:4a21:9ca2 with SMTP id l3-20020ac24a83000000b004e84a219ca2mr1016760lfp.3.1678817123008;
-        Tue, 14 Mar 2023 11:05:23 -0700 (PDT)
-Received: from roman-MRC-WX0.. ([2a00:1370:819a:3aea:9345:682:eb4a:aa71])
-        by smtp.gmail.com with ESMTPSA id v20-20020ac25614000000b004dc83d04840sm482915lfd.79.2023.03.14.11.05.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 11:05:22 -0700 (PDT)
-From:   Roman Danilov <romanosauce57@gmail.com>
-To:     Mimi Zohar <zohar@linux.ibm.com>
-Cc:     Roman Danilov <romanosauce57@gmail.com>,
-        Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        Paul Moore <paul@paul-moore.com>,
-        James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        Roberto Sassu <roberto.sassu@huawei.com>,
-        GUO Zihua <guozihua@huawei.com>,
-        linux-integrity@vger.kernel.org,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>
-Subject: [PATCH] ima: Fix potential NULL pointer access in ima_match_rules()
-Date:   Tue, 14 Mar 2023 21:03:08 +0300
-Message-Id: <20230314180308.17909-1-romanosauce57@gmail.com>
-X-Mailer: git-send-email 2.34.1
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+        d=1e100.net; s=20210112; t=1678817083;
+        h=in-reply-to:references:cc:to:from:subject:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=LhkqZnqi4qAtizU4572s8HvBrOs+BKkBUUx8Pw/CxoE=;
+        b=V0mFcpaPJhzdSnj75qHj9CJ9K8Ob8Ies5aVYSNB9gZGb5kt/iK39NYvrVTSCn0PiGF
+         0SotEjYZxXx1tnNX3X1ZrrYPGH3f0JTF6fWKyarqU2eX2xSoLIMAQQjBBapkwyU3I8Lk
+         gbuNzTjKd/GDJFEwUBw2DkkA4jIuXHpL7hYb7kSRhk3PdzGEPYd6DMUL/bWihsz1jFsY
+         K0G6J89cXwHvRx25g7XoC8YTHtArhzmGfFthLkDeJdjR1HSUp95SQZOdbaE3JPfVlL6b
+         iZe9im4b1NpqPx2DISYjePVW9Mg8H/daB6QfWBbIxFtyhnwJIMrFYldkOpF0iKDqA/4W
+         5CKA==
+X-Gm-Message-State: AO0yUKUi3d+rxwClt8SkFSY8ccIRirVdDbi2Izqixt5zTg3Gz+5WI0g5
+        17TWpcBTcRPoMk1BxJ2cDMFByrTdgp2rIg==
+X-Google-Smtp-Source: AK7set/Q4wjxBNdIbzLMNPHBJLoPlDOxzT2y2XfcmTUJEuKzLqd9pAGYJBuO2TmWnQULlcfzobJ/Hg==
+X-Received: by 2002:a05:6a20:3942:b0:cd:fe1b:df8 with SMTP id r2-20020a056a20394200b000cdfe1b0df8mr44681233pzg.56.1678817082638;
+        Tue, 14 Mar 2023 11:04:42 -0700 (PDT)
+Received: from localhost ([2406:7400:61:629c:58fb:a2bd:8b99:bfe0])
+        by smtp.gmail.com with ESMTPSA id d16-20020a631d10000000b004fbd021bad6sm1880819pgd.38.2023.03.14.11.04.39
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 11:04:42 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Tue, 14 Mar 2023 23:34:37 +0530
+Message-Id: <CR6AZI7T6X51.AX26VA80VSUW@skynet-linux>
+Subject: Re: [PATCH 1/1] net: wireless: ath: wcn36xx: add support for
+ pronto-v3
+From:   "Sireesh Kodali" <sireeshkodali1@gmail.com>
+To:     "Loic Poulain" <loic.poulain@linaro.org>
+Cc:     <wcn36xx@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <~postmarketos/upstreaming@lists.sr.ht>,
+        <linux-kernel@vger.kernel.org>,
+        "Vladimir Lypak" <vladimir.lypak@gmail.com>,
+        "Kalle Valo" <kvalo@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        "Eric Dumazet" <edumazet@google.com>,
+        "Jakub Kicinski" <kuba@kernel.org>,
+        "Paolo Abeni" <pabeni@redhat.com>
+X-Mailer: aerc 0.14.0
+References: <20230311150647.22935-1-sireeshkodali1@gmail.com>
+ <20230311150647.22935-2-sireeshkodali1@gmail.com>
+ <CAMZdPi_uBLutBejSV1fz5p9GYqHYd75VTAePtndUnsu=JypdTQ@mail.gmail.com>
+In-Reply-To: <CAMZdPi_uBLutBejSV1fz5p9GYqHYd75VTAePtndUnsu=JypdTQ@mail.gmail.com>
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In ima_match_rules(), when ima_lsm_copy_rule() fails, NULL pointer
-is assigned to lsm_rule. After that, in the next step of the loop
-NULL pointer is dereferenced in lsm_rule->lsm[i].rule.
+On Tue Mar 14, 2023 at 2:19 PM IST, Loic Poulain wrote:
+> On Sat, 11 Mar 2023 at 16:07, Sireesh Kodali <sireeshkodali1@gmail.com> w=
+rote:
+> >
+> > From: Vladimir Lypak <vladimir.lypak@gmail.com>
+> >
+> > Pronto v3 has a different DXE address than prior Pronto versions. This
+> > patch changes the macro to return the correct register address based on
+> > the pronto version.
+> >
+> > Signed-off-by: Vladimir Lypak <vladimir.lypak@gmail.com>
+> > Signed-off-by: Sireesh Kodali <sireeshkodali1@gmail.com>
+>
+> Acked-by: Loic Poulain <loic.poulain@linaro.org>
+>
+> Could you also submit a change for the new 'qcom,pronto-v3-pil'
+> compatible in the related devicetree documentation ?
+> (bindings/remoteproc/qcom,wcnss-pil.txt)
 
-As far as ima_match_rules() is not designed to return error code,
-add __GFP_NOFAIL to make sure memory allocation succeeds.
-
-Found by Linux Verification Center (linuxtesting.org) with SVACE.
-
-Fixes: c7423dbdbc9e ("ima: Handle -ESTALE returned by ima_filter_rule_match()")
-Signed-off-by: Roman Danilov <romanosauce57@gmail.com>
-Reviewed-by: Alexey Khoroshilov <khoroshilov@ispras.ru>
----
- security/integrity/ima/ima_policy.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
-
-diff --git a/security/integrity/ima/ima_policy.c b/security/integrity/ima/ima_policy.c
-index 3ca8b7348c2e..1b6bfcbcdeac 100644
---- a/security/integrity/ima/ima_policy.c
-+++ b/security/integrity/ima/ima_policy.c
-@@ -401,7 +401,8 @@ static void ima_free_rule(struct ima_rule_entry *entry)
- 	kfree(entry);
- }
- 
--static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
-+static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry,
-+						gfp_t gfp)
- {
- 	struct ima_rule_entry *nentry;
- 	int i;
-@@ -410,7 +411,7 @@ static struct ima_rule_entry *ima_lsm_copy_rule(struct ima_rule_entry *entry)
- 	 * Immutable elements are copied over as pointers and data; only
- 	 * lsm rules can change
- 	 */
--	nentry = kmemdup(entry, sizeof(*nentry), GFP_KERNEL);
-+	nentry = kmemdup(entry, sizeof(*nentry), gfp);
- 	if (!nentry)
- 		return NULL;
- 
-@@ -438,7 +439,7 @@ static int ima_lsm_update_rule(struct ima_rule_entry *entry)
- 	int i;
- 	struct ima_rule_entry *nentry;
- 
--	nentry = ima_lsm_copy_rule(entry);
-+	nentry = ima_lsm_copy_rule(entry, GFP_KERNEL);
- 	if (!nentry)
- 		return -ENOMEM;
- 
-@@ -664,11 +665,10 @@ static bool ima_match_rules(struct ima_rule_entry *rule,
- 		}
- 
- 		if (rc == -ESTALE && !rule_reinitialized) {
--			lsm_rule = ima_lsm_copy_rule(rule);
--			if (lsm_rule) {
--				rule_reinitialized = true;
--				goto retry;
--			}
-+			lsm_rule = ima_lsm_copy_rule(rule,
-+						     GFP_KERNEL | __GFP_NOFAIL);
-+			rule_reinitialized = true;
-+			goto retry;
- 		}
- 		if (!rc) {
- 			result = false;
--- 
-2.34.1
-
+The changes to the device tree were only recently merged
+LKML link: https://lkml.org/lkml/2022/9/30/1502
