@@ -2,228 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70DB86B9120
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:08:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 439B86B914D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230429AbjCNLIQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:08:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36994 "EHLO
+        id S230300AbjCNLOt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:14:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbjCNLH7 (ORCPT
+        with ESMTP id S230480AbjCNLOX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:07:59 -0400
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE4C121966;
-        Tue, 14 Mar 2023 04:07:24 -0700 (PDT)
-Received: from localhost.localdomain (unknown [83.149.199.65])
-        by mail.ispras.ru (Postfix) with ESMTPSA id 7411340770A0;
-        Tue, 14 Mar 2023 10:18:04 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 7411340770A0
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-        s=default; t=1678789084;
-        bh=gY7YuhexK8zA7ymGalqZTA6VC8xKe5VEjs7ijrvoUiY=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=ohWjO9fDPgEw2qcmZJ4bIY3upe0Ghf4TKGUTLgtwAp5Qeh4Bp2kcq0ufPBB0brSwh
-         M1RCHdLkvpyWJfGPBIna+0nz3uh72UiJfBfaSn/NWvSHnFMWsp7/KjFlSTbUEZZAjv
-         U6T5iRszIL2Ui3wEeG5tAmoYK+5tB10I0IffiaiQ=
-From:   Evgeniy Baskov <baskov@ispras.ru>
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     Evgeniy Baskov <baskov@ispras.ru>, Borislav Petkov <bp@alien8.de>,
-        Andy Lutomirski <luto@kernel.org>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Alexey Khoroshilov <khoroshilov@ispras.ru>,
-        Peter Jones <pjones@redhat.com>,
-        Gerd Hoffmann <kraxel@redhat.com>,
-        "Limonciello, Mario" <mario.limonciello@amd.com>,
-        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
-        x86@kernel.org, linux-efi@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
-Subject: [PATCH v5 18/27] tools/include: Add simplified version of pe.h
-Date:   Tue, 14 Mar 2023 13:13:45 +0300
-Message-Id: <b6811d01fe0f5777d759184ebba29d30a3412e29.1678785672.git.baskov@ispras.ru>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <cover.1678785672.git.baskov@ispras.ru>
-References: <cover.1678785672.git.baskov@ispras.ru>
+        Tue, 14 Mar 2023 07:14:23 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3F2C241DC;
+        Tue, 14 Mar 2023 04:13:53 -0700 (PDT)
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EAStMn011960;
+        Tue, 14 Mar 2023 10:36:26 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=iuYODt/BIaTecACDqyh4KGwhpgU9lb9OttnSUYRLZGc=;
+ b=FQNsKetSmzXdDRQ9la7L71PxnYh5hPOFcCeD5RL2x2OPicjBRFgrvZxvDHLPZJ6+hs/c
+ oyLq5ctVSDcOZkcJ95t+2KMrwdZ0pOy41LLDgUh60jNrWhZS+Iu9fcbuAJHgu200FfP9
+ My+nakQSZUHvIyLSZlG8J3y+Mg1AhSp82CF3blciHUFanmamBLTDqd+eGw48db+VmP/t
+ dPfvGRP1h8+ctFahKDWaVvYHWUu7c0I3MAd+iErUOcR9NLXlTOyaZm/jFke7YsdZSEDK
+ YgBHGucZXF9t1o+3ec1hVJoFlDe+W1ADCZhs8vMS3VdqR4tZQ/q7U3qrZzRPVV5egcge xQ== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa203ufqt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 10:36:26 +0000
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32EAaP1U032647
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 10:36:25 GMT
+Received: from [10.201.3.182] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.41; Tue, 14 Mar
+ 2023 03:36:21 -0700
+Message-ID: <e02980a9-34ca-9b9a-389a-01c599612140@quicinc.com>
+Date:   Tue, 14 Mar 2023 16:06:07 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.8.0
+Subject: Re: [PATCH v3 19/19] PCI: qcom: Expose link transition counts via
+ debugfs for v2.4.0
+Content-Language: en-US
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+        <andersson@kernel.org>, <lpieralisi@kernel.org>, <kw@linux.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <robh@kernel.org>
+CC:     <konrad.dybcio@linaro.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-pci@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230310040816.22094-1-manivannan.sadhasivam@linaro.org>
+ <20230310040816.22094-20-manivannan.sadhasivam@linaro.org>
+From:   Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <20230310040816.22094-20-manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: mVH93BPhgc0AC0-Lq2E8qKoJzNaeZ-zm
+X-Proofpoint-GUID: mVH93BPhgc0AC0-Lq2E8qKoJzNaeZ-zm
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-14_04,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 impostorscore=0
+ clxscore=1015 phishscore=0 adultscore=0 priorityscore=1501
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303140090
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is needed to remove magic numbers from x86 bzImage building tool
-(arch/x86/boot/tools/build.c).
 
-Tested-by: Mario Limonciello <mario.limonciello@amd.com>
-Signed-off-by: Evgeniy Baskov <baskov@ispras.ru>
----
- tools/include/linux/pe.h | 150 +++++++++++++++++++++++++++++++++++++++
- 1 file changed, 150 insertions(+)
- create mode 100644 tools/include/linux/pe.h
 
-diff --git a/tools/include/linux/pe.h b/tools/include/linux/pe.h
-new file mode 100644
-index 000000000000..41c09ec371d8
---- /dev/null
-+++ b/tools/include/linux/pe.h
-@@ -0,0 +1,150 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
-+/*
-+ * Simplified version of include/linux/pe.h:
-+ *  Copyright 2011 Red Hat, Inc. All rights reserved.
-+ *  Author(s): Peter Jones <pjones@redhat.com>
-+ */
-+#ifndef __LINUX_PE_H
-+#define __LINUX_PE_H
-+
-+#include <linux/types.h>
-+
-+#define	IMAGE_FILE_MACHINE_I386		0x014c
-+
-+#define IMAGE_SCN_CNT_CODE	0x00000020 /* .text */
-+#define IMAGE_SCN_CNT_INITIALIZED_DATA 0x00000040 /* .data */
-+#define IMAGE_SCN_ALIGN_4096BYTES 0x00d00000
-+#define IMAGE_SCN_MEM_DISCARDABLE 0x02000000 /* scn can be discarded */
-+#define IMAGE_SCN_MEM_EXECUTE	0x20000000 /* can be executed as code */
-+#define IMAGE_SCN_MEM_READ	0x40000000 /* readable */
-+#define IMAGE_SCN_MEM_WRITE	0x80000000 /* writeable */
-+
-+#define MZ_HEADER_PEADDR_OFFSET 0x3c
-+
-+struct pe_hdr {
-+	uint32_t magic;		/* PE magic */
-+	uint16_t machine;	/* machine type */
-+	uint16_t sections;	/* number of sections */
-+	uint32_t timestamp;	/* time_t */
-+	uint32_t symbol_table;	/* symbol table offset */
-+	uint32_t symbols;	/* number of symbols */
-+	uint16_t opt_hdr_size;	/* size of optional header */
-+	uint16_t flags;		/* flags */
-+};
-+
-+/* the fact that pe32 isn't padded where pe32+ is 64-bit means union won't
-+ * work right.  vomit. */
-+struct pe32_opt_hdr {
-+	/* "standard" header */
-+	uint16_t magic;		/* file type */
-+	uint8_t  ld_major;	/* linker major version */
-+	uint8_t  ld_minor;	/* linker minor version */
-+	uint32_t text_size;	/* size of text section(s) */
-+	uint32_t data_size;	/* size of data section(s) */
-+	uint32_t bss_size;	/* size of bss section(s) */
-+	uint32_t entry_point;	/* file offset of entry point */
-+	uint32_t code_base;	/* relative code addr in ram */
-+	uint32_t data_base;	/* relative data addr in ram */
-+	/* "windows" header */
-+	uint32_t image_base;	/* preferred load address */
-+	uint32_t section_align;	/* alignment in bytes */
-+	uint32_t file_align;	/* file alignment in bytes */
-+	uint16_t os_major;	/* major OS version */
-+	uint16_t os_minor;	/* minor OS version */
-+	uint16_t image_major;	/* major image version */
-+	uint16_t image_minor;	/* minor image version */
-+	uint16_t subsys_major;	/* major subsystem version */
-+	uint16_t subsys_minor;	/* minor subsystem version */
-+	uint32_t win32_version;	/* reserved, must be 0 */
-+	uint32_t image_size;	/* image size */
-+	uint32_t header_size;	/* header size rounded up to
-+				   file_align */
-+	uint32_t csum;		/* checksum */
-+	uint16_t subsys;	/* subsystem */
-+	uint16_t dll_flags;	/* more flags! */
-+	uint32_t stack_size_req;/* amt of stack requested */
-+	uint32_t stack_size;	/* amt of stack required */
-+	uint32_t heap_size_req;	/* amt of heap requested */
-+	uint32_t heap_size;	/* amt of heap required */
-+	uint32_t loader_flags;	/* reserved, must be 0 */
-+	uint32_t data_dirs;	/* number of data dir entries */
-+};
-+
-+struct pe32plus_opt_hdr {
-+	uint16_t magic;		/* file type */
-+	uint8_t  ld_major;	/* linker major version */
-+	uint8_t  ld_minor;	/* linker minor version */
-+	uint32_t text_size;	/* size of text section(s) */
-+	uint32_t data_size;	/* size of data section(s) */
-+	uint32_t bss_size;	/* size of bss section(s) */
-+	uint32_t entry_point;	/* file offset of entry point */
-+	uint32_t code_base;	/* relative code addr in ram */
-+	/* "windows" header */
-+	uint64_t image_base;	/* preferred load address */
-+	uint32_t section_align;	/* alignment in bytes */
-+	uint32_t file_align;	/* file alignment in bytes */
-+	uint16_t os_major;	/* major OS version */
-+	uint16_t os_minor;	/* minor OS version */
-+	uint16_t image_major;	/* major image version */
-+	uint16_t image_minor;	/* minor image version */
-+	uint16_t subsys_major;	/* major subsystem version */
-+	uint16_t subsys_minor;	/* minor subsystem version */
-+	uint32_t win32_version;	/* reserved, must be 0 */
-+	uint32_t image_size;	/* image size */
-+	uint32_t header_size;	/* header size rounded up to
-+				   file_align */
-+	uint32_t csum;		/* checksum */
-+	uint16_t subsys;	/* subsystem */
-+	uint16_t dll_flags;	/* more flags! */
-+	uint64_t stack_size_req;/* amt of stack requested */
-+	uint64_t stack_size;	/* amt of stack required */
-+	uint64_t heap_size_req;	/* amt of heap requested */
-+	uint64_t heap_size;	/* amt of heap required */
-+	uint32_t loader_flags;	/* reserved, must be 0 */
-+	uint32_t data_dirs;	/* number of data dir entries */
-+};
-+
-+struct data_dirent {
-+	uint32_t virtual_address;	/* relative to load address */
-+	uint32_t size;
-+};
-+
-+struct data_directory {
-+	struct data_dirent exports;		/* .edata */
-+	struct data_dirent imports;		/* .idata */
-+	struct data_dirent resources;		/* .rsrc */
-+	struct data_dirent exceptions;		/* .pdata */
-+	struct data_dirent certs;		/* certs */
-+	struct data_dirent base_relocations;	/* .reloc */
-+	struct data_dirent debug;		/* .debug */
-+	struct data_dirent arch;		/* reservered */
-+	struct data_dirent global_ptr;		/* global pointer reg. Size=0 */
-+	struct data_dirent tls;			/* .tls */
-+	struct data_dirent load_config;		/* load configuration structure */
-+	struct data_dirent bound_imports;	/* no idea */
-+	struct data_dirent import_addrs;	/* import address table */
-+	struct data_dirent delay_imports;	/* delay-load import table */
-+	struct data_dirent clr_runtime_hdr;	/* .cor (object only) */
-+	struct data_dirent reserved;
-+};
-+
-+struct section_header {
-+	char name[8];			/* name or "/12\0" string tbl offset */
-+	uint32_t virtual_size;		/* size of loaded section in ram */
-+	uint32_t virtual_address;	/* relative virtual address */
-+	uint32_t raw_data_size;		/* size of the section */
-+	uint32_t data_addr;		/* file pointer to first page of sec */
-+	uint32_t relocs;		/* file pointer to relocation entries */
-+	uint32_t line_numbers;		/* line numbers! */
-+	uint16_t num_relocs;		/* number of relocations */
-+	uint16_t num_lin_numbers;	/* srsly. */
-+	uint32_t flags;
-+};
-+
-+struct coff_reloc {
-+	uint32_t virtual_address;
-+	uint32_t symbol_table_index;
-+	uint16_t data;
-+};
-+
-+#endif /* __LINUX_PE_H */
--- 
-2.39.2
+On 3/10/2023 9:38 AM, Manivannan Sadhasivam wrote:
+> Qualcomm PCIe controllers of version v2.4.0 have debug registers in the
+> PARF region that count PCIe link transitions. Expose them over debugfs to
+> userspace to help debug the low power issues.
+> 
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+> ---
+>   drivers/pci/controller/dwc/pcie-qcom.c | 33 ++++++++++++++++++++++++++
+>   1 file changed, 33 insertions(+)
+> 
+> diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
+> index f99b7e7f3f73..0b41f007fa90 100644
+> --- a/drivers/pci/controller/dwc/pcie-qcom.c
+> +++ b/drivers/pci/controller/dwc/pcie-qcom.c
+> @@ -37,6 +37,7 @@
+>   /* PARF registers */
+>   #define PARF_SYS_CTRL				0x00
+>   #define PARF_PM_CTRL				0x20
+> +#define PARF_PM_STTS				0x24
+>   #define PARF_PCS_DEEMPH				0x34
+>   #define PARF_PCS_SWING				0x38
+>   #define PARF_PHY_CTRL				0x40
+> @@ -84,6 +85,12 @@
+>   /* PARF_PM_CTRL register fields */
+>   #define REQ_NOT_ENTR_L1				BIT(5)
+>   
+> +/* PARF_PM_STTS register fields */
+> +#define PM_LINKST_IN_L1SUB			BIT(8)
+> +#define PM_LINKST_IN_L0S			BIT(7)
+> +#define PM_LINKST_IN_L2				BIT(5)
+> +#define PM_LINKST_IN_L1				BIT(4)
+> +
+>   /* PARF_PCS_DEEMPH register fields */
+>   #define PCS_DEEMPH_TX_DEEMPH_GEN1(x)		FIELD_PREP(GENMASK(21, 16), x)
+>   #define PCS_DEEMPH_TX_DEEMPH_GEN2_3_5DB(x)	FIELD_PREP(GENMASK(13, 8), x)
+> @@ -737,6 +744,31 @@ static int qcom_pcie_post_init_2_4_0(struct qcom_pcie *pcie)
+>   	return 0;
+>   }
+>   
+> +static int qcom_pcie_debugfs_func_2_4_0(struct seq_file *s, void *data)
+> +{
+> +	struct qcom_pcie *pcie = (struct qcom_pcie *) dev_get_drvdata(s->private);
+> +
+> +	seq_printf(s, "L0s transition count: %u\n",
+> +		   readl_relaxed(pcie->parf + PM_LINKST_IN_L0S));
+> +
+> +	seq_printf(s, "L1 transition count: %u\n",
+> +		   readl_relaxed(pcie->parf + PM_LINKST_IN_L1));
+> +
+> +	seq_printf(s, "L1.1 transition count: %u\n",
+> +		   readl_relaxed(pcie->parf + PM_LINKST_IN_L1SUB));
+> +
+> +	seq_printf(s, "L2 transition count: %u\n",
+> +		   readl_relaxed(pcie->parf + PM_LINKST_IN_L2));
+> +
 
+  Using bitmask as register offset ? instead use PM_STTS and bitmask it ?
+
+Regards,
+  Sricharan
