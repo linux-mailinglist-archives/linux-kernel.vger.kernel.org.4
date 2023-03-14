@@ -2,155 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C7046B8EE4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:41:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A62216B8EE6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:42:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230402AbjCNJlM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:41:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39630 "EHLO
+        id S230408AbjCNJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCNJlJ (ORCPT
+        with ESMTP id S229958AbjCNJl5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:41:09 -0400
-Received: from xry111.site (xry111.site [89.208.246.23])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CB376A6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:41:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=xry111.site;
-        s=default; t=1678786865;
-        bh=yUNmPrhQ6SiuMNO6i2zc9N6TN7jXeXF7t1dNRXboDjM=;
-        h=Subject:From:To:Cc:Date:In-Reply-To:References:From;
-        b=i1eqIABfU88HuuoZDSREAEJdc3z0DDfSl6nqYI14FuWXwCPylP2k/PhZrIHX0JfIl
-         nOjeyei9Jwb34zSL/hDwy0+PwYExnIhTI5Hjq819Q+tT+FcG8THxLTWeAzeesUMU48
-         Kx9smfpulr5o15tvRYLa0R+cgK8j09TSKfYMZzi0=
-Received: from [192.168.124.9] (unknown [113.140.29.13])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature ECDSA (P-384) server-digest SHA384)
-        (Client did not present a certificate)
-        (Authenticated sender: xry111@xry111.site)
-        by xry111.site (Postfix) with ESMTPSA id 5FCD565A7E;
-        Tue, 14 Mar 2023 05:41:03 -0400 (EDT)
-Message-ID: <21f5aba50b7732b48d2610a5015186adf6bdfb38.camel@xry111.site>
-Subject: Re: [PATCH] LoongArch: Make WriteCombine configurable for ioremap()
-From:   Xi Ruoyao <xry111@xry111.site>
-To:     Huacai Chen <chenhuacai@loongson.cn>,
-        Huacai Chen <chenhuacai@kernel.org>
-Cc:     loongarch@lists.linux.dev, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        linux-kernel@vger.kernel.org, loongson-kernel@lists.loongnix.cn
-Date:   Tue, 14 Mar 2023 17:40:54 +0800
-In-Reply-To: <20230314085433.4078119-1-chenhuacai@loongson.cn>
-References: <20230314085433.4078119-1-chenhuacai@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4 
+        Tue, 14 Mar 2023 05:41:57 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610EF76A6;
+        Tue, 14 Mar 2023 02:41:55 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32E9fmdH025300;
+        Tue, 14 Mar 2023 04:41:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678786908;
+        bh=0Ua2goAJduIUgjICOozBPJ39kPi/HNT6hTzM9pINneU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=EyopEkmR1NmjUA+P7x1zjG9tO64d6ADOEttUf0X8UOKoIFJiuH86OKmzRbOvwmbY7
+         GzrYP3rxzujrqXXAHwcTIOoYe/NyhXaYibNwiXUd9mlvMkujVVucgGFCo4dOrJKPVb
+         9215+QJIUXzPhhMFOwkYtHpK5WykB16BRg6WgGLI=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32E9fmsI020877
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 04:41:48 -0500
+Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 04:41:47 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
+ (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 04:41:48 -0500
+Received: from [172.24.145.83] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32E9fj0P123695;
+        Tue, 14 Mar 2023 04:41:45 -0500
+Message-ID: <9e794431-cfa3-fed3-48e6-3c3ddf36ed92@ti.com>
+Date:   Tue, 14 Mar 2023 15:11:44 +0530
 MIME-Version: 1.0
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v4] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>
+CC:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
+        <vigneshr@ti.com>, <kristo@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20230313112834.16156-1-b-kapoor@ti.com>
+ <20230313170542.jehrem7egp6lelgf@repeater>
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+In-Reply-To: <20230313170542.jehrem7egp6lelgf@repeater>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2023-03-14 at 16:54 +0800, Huacai Chen wrote:
-> LoongArch maintains cache coherency in hardware, but when works with
-> LS7A chipsets the WUC attribute (Weak-ordered UnCached, which is similar
-> to WriteCombine) is out of the scope of cache coherency machanism for
-> PCIe devices (this is a PCIe protocol violation, may be fixed in newer
-> chipsets).
 
-IIUC all launched LS7A models (7A1000 and 7A2000) suffers this issue?
-
-> This means WUC can only used for write-only memory regions now, so this
-> option is disabled by default (means WUC falls back to SUC for ioremap).
-> You can enable this option if the kernel is ensured to run on bug-free
-> hardwares.
-
-Hmm, is it possible to make a PCI quirk so SUC/WUC will be decided
-automatically from the vendor:device ID of the PCI root controller?=20
-Then we don't need to rely on the user or distro maintainer to select an
-option.  I see there is already many architecture-dependant #if
-directives in drivers/pci/quirks.c so I guess such a quirk is acceptable
-in PCI tree...
-
-If a PCI quirk is not possible, then is it possible to make a kernel
-command line option, leaving this CONFIG as the default value of the
-option?  I guess in the future many LoongArch users will just install a
-binary distro, then it would be much easier to edit grub.cfg than
-rebuilding the kernel when they finally buy a compliant PCIe controller.
-
-> Suggested-by: WANG Xuerui <kernel@xen0n.name>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> ---
-> =C2=A0arch/loongarch/Kconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0 | 14 ++++++++++++++
-> =C2=A0arch/loongarch/include/asm/io.h |=C2=A0 5 +++++
-> =C2=A02 files changed, 19 insertions(+)
->=20
-> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
-> index 0d11738a861a..e3f5c422636f 100644
-> --- a/arch/loongarch/Kconfig
-> +++ b/arch/loongarch/Kconfig
-> @@ -446,6 +446,20 @@ config ARCH_IOREMAP
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 protection support=
-. However, you can enable LoongArch DMW-based
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ioremap() for bett=
-er performance.
-> =C2=A0
-> +config ARCH_WRITECOMBINE
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "Enable WriteCombine (WUC=
-) for ioremap()"
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0help
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 LoongArch maintains cac=
-he coherency in hardware, but with LS7A
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 chipsets the WUC attrib=
-ute (Weak-ordered UnCached, which is similar
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 to WriteCombine) is out=
- of the scope of cache coherency machanism
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 for PCIe devices (this =
-is a PCIe protocol violation, may be fixed
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 in newer chipsets).
-> +
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 This means WUC can only=
- used for write-only memory regions now, so
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 this option is disabled=
- by default (means WUC falls back to SUC for
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 ioremap). You can enabl=
-e this option if the kernel is ensured to run
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 on bug-free hardwares.
-> +
-> =C2=A0config ARCH_STRICT_ALIGN
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0bool "Enable -mstrict-ali=
-gn to prevent unaligned accesses" if EXPERT
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0default y
-> diff --git a/arch/loongarch/include/asm/io.h b/arch/loongarch/include/asm=
-/io.h
-> index 402a7d9e3a53..079ef897ed1a 100644
-> --- a/arch/loongarch/include/asm/io.h
-> +++ b/arch/loongarch/include/asm/io.h
-> @@ -54,8 +54,13 @@ static inline void __iomem *ioremap_prot(phys_addr_t o=
-ffset, unsigned long size,
-> =C2=A0 * @offset:=C2=A0=C2=A0=C2=A0 bus address of the memory
-> =C2=A0 * @size:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 size of the resource to map
-> =C2=A0 */
-> +#ifdef CONFIG_ARCH_WRITECOMBINE
-> =C2=A0#define ioremap_wc(offset, size)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0\
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ioremap_prot((offset), (s=
-ize), pgprot_val(PAGE_KERNEL_WUC))
-> +#else
-> +#define ioremap_wc(offset, size)=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0\
-> +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ioremap_prot((offset), (size),=
- pgprot_val(PAGE_KERNEL_SUC))
-> +#endif
-> =C2=A0
-> =C2=A0#define ioremap_cache(offset, size)=C2=A0=C2=A0=C2=A0=C2=A0\
-> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0ioremap_prot((offset), (s=
-ize), pgprot_val(PAGE_KERNEL))
-
---=20
-Xi Ruoyao <xry111@xry111.site>
-School of Aerospace Science and Technology, Xidian University
+On 13/03/23 22:35, Nishanth Menon wrote:
+> On 16:58-20230313, Bhavya Kapoor wrote:
+>> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
+>> for both instances of 8 channel ADCs for J721s2 SoC.
+> Drop the second line..
+Sure , i will modify the commit message in next patch.
+>
+>> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+>> ---
+>>
+>> Changelog v3->v4:
+>> - add leading zeroes to reg address to match existing convention
+>> - change clock names for adc to 'fck'
+>> - remove spaces from start of line
+> Please provide links to previous versions of the patches.
+>
+>>   .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
+>>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
+>>   2 files changed, 54 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>> index a7aa6cf08acd..3bc4f28c809f 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+>> @@ -309,3 +309,17 @@ &mcu_mcan1 {
+>>   	pinctrl-0 = <&mcu_mcan1_pins_default>;
+>>   	phys = <&transceiver2>;
+>>   };
+>> +
+>> +&tscadc0 {
+>> +	status = "okay";
+>> +	adc {
+>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+>> +	};
+>> +};
+>> +
+>> +&tscadc1 {
+>> +	status = "okay";
+> Curious: ADCs work without pinmux? any test log?
+ADC work without pinmux. Will send test log in next patch.
+>
+>> +	adc {
+>> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
+>> +	};
+>> +};
+>> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> index 0af242aa9816..5da5f0cf7009 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+>> @@ -306,4 +306,44 @@ cpts@3d000 {
+>>   			ti,cpts-periodic-outputs = <2>;
+>>   		};
+>>   	};
+>> +
+>> +	tscadc0: tscadc@40200000 {
+>> +		compatible = "ti,am3359-tscadc";
+>> +		reg = <0x00 0x40200000 0x00 0x1000>;
+>> +		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
+>> +		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
+>> +		clocks = <&k3_clks 0 0>;
+>> +		assigned-clocks = <&k3_clks 0 2>;
+>> +		assigned-clock-rates = <60000000>;
+>> +		clock-names = "fck";
+>> +		dmas = <&main_udmap 0x7400>,
+>> +			<&main_udmap 0x7401>;
+>> +		dma-names = "fifo0", "fifo1";
+>> +		status = "disabled";
+> If it works without pinmux, why disable by default?
+yea, We can keep it enabled as well
+>
+>> +
+>> +		adc {
+>> +			#io-channel-cells = <1>;
+>> +			compatible = "ti,am3359-adc";
+>> +		};
+>> +	};
+>> +
+>> +	tscadc1: tscadc@40210000 {
+>> +		compatible = "ti,am3359-tscadc";
+>> +		reg = <0x00 0x40210000 0x00 0x1000>;
+>> +		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
+>> +		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
+>> +		clocks = <&k3_clks 1 0>;
+>> +		assigned-clocks = <&k3_clks 1 2>;
+>> +		assigned-clock-rates = <60000000>;
+>> +		clock-names = "fck";
+>> +		dmas = <&main_udmap 0x7402>,
+>> +			<&main_udmap 0x7403>;
+>> +		dma-names = "fifo0", "fifo1";
+>> +		status = "disabled";
+>> +
+>> +		adc {
+>> +			#io-channel-cells = <1>;
+>> +			compatible = "ti,am3359-adc";
+>> +		};
+>> +	};
+>>   };
+>> -- 
+>> 2.34.1
+>>
