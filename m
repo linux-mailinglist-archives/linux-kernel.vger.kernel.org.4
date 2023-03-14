@@ -2,166 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DF7D6B95AE
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98F616B95B5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231149AbjCNNMb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:12:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
+        id S232214AbjCNNM6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:12:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40162 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231564AbjCNNMO (ORCPT
+        with ESMTP id S231279AbjCNNM0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:12:14 -0400
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2058.outbound.protection.outlook.com [40.107.244.58])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7ABD95E34
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:08:53 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BvIYxNWL8MylPpaeMGvVHgkapAt0bUvfPe2eU+xhQCTYP6n2Ga6u3CftZiCM3tkS3FTr0P6afMRULKPquXj8K/S4l89ylftMp6unN1lymPxPJFCeXIzaBKjat7JJ8D5AYmIIdWKmCR8h9QdMSKTOYlJOWHov+JUAbgT57vV2vn3DIHMA7Vr253lwRrno/257Tha2IAWuMxNl45TQS9HNCLdZN1dzC+/xFPqVz7vmSkkAPFNh9Xb7nW3IKecUvYmMJtObn9VOZrdnx+MYKJNYOxe/H47CntdnSQLLByzGxO+EEpmJGDRA0s0hbv/1EFWGfp1E3kQD7DqkEbaIXQxFAA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Gy/kl5XTz5vVfTpuKvbZ0ccTc8MsZ81xw9RC6nq0d8U=;
- b=RxcpZv9K6Rb/OsrUBknCUNMIfQzxj3AFP47WxLDVDiCW7JzDYcyhCmdNXps+dBxEJADBvSPnUQoEOSBYrf5N2bN9f3pY+uswBZSWmCWzaB0xefFlFAqiKRhrJk4IgKztSyReJP6QaQl95RCxaB+g2GPeLBRo0mnbukjke+uhJwaW/FL3CW3wWzc6D81pXKCBtMPcS0RMPTeLSia2yWnAEDNRUdNa+HZvjC9l2Y/ISqhu5jW3Bc0HrHd5gg8Z/IiIkShSCjX2L2KJcNDCm9pS14hgNvblcOCo6GcsvFTqvMqp4QfXgpHUfEDlOohA6BR80UJ9ezanPBRD1Qf7wVxZRg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Gy/kl5XTz5vVfTpuKvbZ0ccTc8MsZ81xw9RC6nq0d8U=;
- b=TqSwD78zCSNqaZdVidO6gRm0rgsGe5+RVNraZ5BIAPjclYawKSIZxiQSzryeY9Ybza0JVHHJaNRYPgLI4vNOKxQFRBXDBRm5EY7KARxuF/4UNdN3+2Gjm9NVph22XnOCfWMOzCRDIJynfStagDek/uo3WHZeVECNE91thnm/xNU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
- by MW4PR12MB7383.namprd12.prod.outlook.com (2603:10b6:303:219::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 13:08:14 +0000
-Received: from BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
- ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
- 13:08:14 +0000
-Message-ID: <b14b8827-7d09-c37e-0548-a30b14ffe64f@amd.com>
-Date:   Tue, 14 Mar 2023 14:08:09 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH] drm/radeon: remove unused variable rbo
-Content-Language: en-US
-To:     Tom Rix <trix@redhat.com>, alexander.deucher@amd.com,
-        Xinhui.Pan@amd.com, airlied@gmail.com, daniel@ffwll.ch
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-References: <20230314130616.2170856-1-trix@redhat.com>
-From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
-In-Reply-To: <20230314130616.2170856-1-trix@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR2P281CA0012.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a::22) To BN8PR12MB3587.namprd12.prod.outlook.com
- (2603:10b6:408:43::13)
+        Tue, 14 Mar 2023 09:12:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C94FA4B3C;
+        Tue, 14 Mar 2023 06:09:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6CD176176F;
+        Tue, 14 Mar 2023 13:08:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10D35C4339C;
+        Tue, 14 Mar 2023 13:08:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678799323;
+        bh=MUVnO8faGDZl259f7ezUt29Inv8kv+YjImpJJCLuzbY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tlRnVTf0j/4eNYoo3wa2ZEQ/4vEjd5d4b2OnZfZFlDuYbrZ4tPyvIUiQb4eZjosGo
+         rfOzDgfYJGyRiPAAOgClDTQA0vfYpeM5RarEMRVirLJZc03oT1kRXgTR5O2jWu1SBV
+         M5w32SAgbS/5UOadZR8w5MVCJaRKUeO1p0BunnrMQa1jwWqA6vyHSfOaYkWypCu39w
+         C/+D+p0RbvKKSPm+sxUfOxWU+EMwL5gl3Td5rDUapA3Rmp8CFgaKRDzt7od7WeJreP
+         CkMQJGfQukw6mp5O9ZO3mfrLPa/8fp8IZU3Ei1ndmNzZHoU008w2MrtpDU5wcas0wJ
+         ZRiiKEnc9GNRQ==
+Date:   Tue, 14 Mar 2023 15:08:21 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     Thorsten Leemhuis <regressions@leemhuis.info>,
+        James Bottomley <James.Bottomley@hansenpartnership.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Jan Dabros <jsd@semihalf.com>,
+        regressions@lists.linux.dev, LKML <linux-kernel@vger.kernel.org>,
+        linux-integrity@vger.kernel.org,
+        Dominik Brodowski <linux@dominikbrodowski.net>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Johannes Altmanninger <aclopte@gmail.com>
+Subject: Re: [REGRESSION] suspend to ram fails in 6.2-rc1 due to tpm errors
+Message-ID: <ZBBxxftnXHVOjm92@kernel.org>
+References: <7cbe96cf-e0b5-ba63-d1b4-f63d2e826efa@suse.cz>
+ <c39cc02da9f60412a0f7f7772ef3d89e4a081d38.camel@HansenPartnership.com>
+ <Y60RoP77HnwaukEA@zx2c4.com>
+ <7ebab1ff-48f1-2737-f0d3-25c72666d041@leemhuis.info>
+ <Y7w74EBYP3+FHlkw@zx2c4.com>
+ <4268d0ac-278a-28e4-66d1-e0347f011f46@leemhuis.info>
+ <ZBBmVhwsTf/URoqs@kernel.org>
+ <CAHmME9rxeE32g7nKqeVLwRodDNM8QyZUNd54cyE6mZW7FcqD-g@mail.gmail.com>
+ <ZBBxMl5rVjY9FGS9@kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|MW4PR12MB7383:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1e91a1ea-4736-49a7-69b8-08db248d2b86
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: sNH05qPkhwoe73lrz/tjdJPHDZL3g+CRjqK5EBAZeAjD61FDa255p6bQWLH2XK9PmEaZyM5s3bzYQEe2uK6FoEHKPZlM63OF8d+cxUF4StiF9e+NcyiLIdC+VCJoWXgwIMjhDxStecm/WzLGO7v2yT17iL0rQs4T7oVlhfljOfSMloZh9GLVSoQrM1bRp8Jp80/TLcgwtCvt8WYyVQtSLniiK2oZie/87iSsC33tJQUmLYxyz5NYGVTIPgtpzTDy+dmgtvPtLtC95UQ8GWjmOyWljGuV/UP0cZN6pkREF0FhPdXuf9ZDVyTeipzAY8tfpjFM9mnYFY7aHe8wSB4flq4qAA9cEcQV3KS/AqZepoRBt9QZIUcqk5pRv+49of/g9vBLH1LLQu8DOo5X6cUp72NNtPWyZdSB/5Krb/mNdOHL5oSd4AkCdarVTHQSqo9dcBbByrQ62iDqjrEnvBMKH2ZTWdiTp9Z/9G5nLL6tAiqwwh4lnhXPNMujzggmRJxM9mIdlpsg0WqSgPEqoAmqyAU4DN7ZRiH3BoUghAlUnwnC+ijHrEMsFduUWO/2lPpZFBoWzEx7tsM4YaYbkpjzcrcwRogzreT/yOt34l6a2SSBqEhBz/MXpBk/gwQEshc/ZONt00twHBpbDLN+mJLnN/XjiNafEeCoHX2wZuapEn9iVxkJALWoZ+iPbuO10ACduw49IUmnqW9ljKKP22ItuGykPjnOoVBpGzA8eFSl3Wg=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199018)(36756003)(316002)(38100700002)(83380400001)(26005)(6666004)(6506007)(478600001)(2616005)(186003)(6486002)(8936002)(41300700001)(5660300002)(2906002)(86362001)(6512007)(31696002)(66556008)(66476007)(4326008)(8676002)(66946007)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?d2dtT3N0TE1oaFkwdXloT0loa3FjMU9oTUdtejIvbGY1M1czaHVVWFZnRnNR?=
- =?utf-8?B?cFVRSmVQZm43WnlnSFFjdVNoWGpuRnV6Z3hRSFIrc0Q2dGJaMFFyUG93ZHY1?=
- =?utf-8?B?UkhtNzRRRlFEZXZScXNJdlRFL0FGRHloMmR3S3lTb2orbkdEWHRKR08wS2J4?=
- =?utf-8?B?OFByck1iTFRpdDhiTGRRTXRlM1NmTjgxT2V4eGN5Tnc3SDdrUkc4OG8xVGkz?=
- =?utf-8?B?QWxnNFpMR2hoWjN1Sys4TkdGa1l2bGx2QjhsOEM0TGI3WUNsamFvSzdLTzdL?=
- =?utf-8?B?ck4vUWhYbklCTHdMdTVqYWFZamtOME5ZVXJsZDVhYUNoNGZwRjIrMHpzdVhz?=
- =?utf-8?B?UVAxZngxTjhNeXlKSnU1c3JmNXhab1ZPYkh1UTRPd1J4MTQzclpGdDh1OU9F?=
- =?utf-8?B?U001ZXRBS29RZG4zNDNMMzJxZlpqYUZZZDlPbHhwZE4vWWF3aTFkV1V2Yk81?=
- =?utf-8?B?RVZCQmFtUU9Ha2h5MTUxUG9sK1hYUmVadzM1d1lRbjA5a2FhMDEvb201RVZx?=
- =?utf-8?B?Mkk2V25LTWczNzBMSGNJZjB4TFNDcnNkdlVBSG00OXVJNUZGV25qQ01yT0ZV?=
- =?utf-8?B?YzJQWU5oTUpVU0NKNS9LVkRiUGd6cGFmenlDUzRybXNVZXR3Q2laU2FKbEpB?=
- =?utf-8?B?WTlxcGV1ZnhodGtBRExZcE5PU2VnaFFWZTZwbUJudlNyVWJkd3d1bHlLWXBq?=
- =?utf-8?B?VVozcDgrdHZFZmpQczhmd0FDUTVQem1raWlXQlhTWkUxcEMwbWZuK2Q0YlUz?=
- =?utf-8?B?eWlQbVVvSkVyUHZtNkMvOFhIRU1tYkVLcS9WcDEwZTEyM0FiSXFVN3Z2VUxj?=
- =?utf-8?B?L1dRZFNpaXlyNUFEK3dmZnMwUU13MTFkU2lEczJRbHRKUjRTN0N2MzJGd3Ix?=
- =?utf-8?B?VmZTQlpLWEZnVC91RzNRayt6T09vSGI3Y0NRenZTOGpNeXR5L0loNTVKd0t3?=
- =?utf-8?B?d3l4L1ZXcWgvWnZGRU1ScmI2OGNyOWpmb2ZhR2ZwNHo2dWFOU2NXdzhOZkdH?=
- =?utf-8?B?TjhId1ZDZGdZRkJLdDR0Wk91QnFWNWNZUHdvaDFEVEJhbVk2WVZsdGZKUFlE?=
- =?utf-8?B?TDlmeDN3TlFpcnBGOHpRYm1WKzlyTnp1ZVA0N3FLRkVPMkNheE5QQmQzQ3pX?=
- =?utf-8?B?WS9Pc3J2cndvaTR2VnBsbzlnZ095SjhHZk9NSmhiRnNUdG1jYXhTdkMyaXV5?=
- =?utf-8?B?eXFhY28xWVRhLzZqTmxxemp5M09jd0NwZys4ejdualg0MDRqMVRzTEU0WXpV?=
- =?utf-8?B?dEtNTXoraU1HZzVMTkRGUlNJTllhRmJWQ2tWOTNjcE93SEJjQlcvUVV1R2dz?=
- =?utf-8?B?MWRRWTdROVcwV09YelpiUC9GL1VWbC81ckZoT29aQ2N4RVptbExabG9JenRR?=
- =?utf-8?B?T2RUN09qdnJYRGplcXlZNWtlc2hsYjVZYk9JT05uaUdCSXV1NEIvTW5GRC96?=
- =?utf-8?B?bmpUaEVjZ0I1NDlKTTh5WFBZM2xGSU1xNGVreFAvSXNYWFJoT0lpR202MFNu?=
- =?utf-8?B?SXMxSUhpcXJhZ29rRTlXNHdIMUlxN0dBbzRCbytJc2FtSWUxaldLTDFYS0N5?=
- =?utf-8?B?V0VsbFdsUklOUHQxS0dzU0tRU0x6L3ZSMzN0ajRRb3ppL1RReTRLVytDbWUz?=
- =?utf-8?B?VmgrYTlhVHNuQy91OTdoY0pWZ1lxUkdKTDljWThXRWxZT25WVXpZbGJPOWd5?=
- =?utf-8?B?R2wvakhCbVJ5S3hvSjBHQ0YyWTlrd05rTWp2KzlZOHJSSHd1NStXVzNwWW1r?=
- =?utf-8?B?T0ovWHNxbFFkNk9XT1NocWNQRnBLRHVsL2VGTTY0Z0xuazZyemtHRkE0MmVx?=
- =?utf-8?B?R09VL3JkSmNnNlVTbmJraTJXM1FDRnppTGtoemV3dExSdm8zVGRnUUxZN28y?=
- =?utf-8?B?NWNEaDdxZVRaeE4vMHlHbVFqQjVMZkRPK015RURtWHo1cFRpQ1liQjNxY1pu?=
- =?utf-8?B?MytzKzVORUtmOHQ5SDE2dzdReWVpTlVhK1JBdWNXWDAvb3BzNmFydllnVzI2?=
- =?utf-8?B?d0Ztbk45cTE2elN2VURmdHZmM015ZjMvazNFUGUyZjdFQmZ3dkR3N0srM2lZ?=
- =?utf-8?B?QWFaN2ZWZ2hVZW1UTXZUcmdjS3FrY05FVEpWQmJGblR4WDE5bDNtUm5ZMUtM?=
- =?utf-8?Q?tsgvGm84UXIfguK40NvKzVeKN?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1e91a1ea-4736-49a7-69b8-08db248d2b86
-X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 13:08:14.4774
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: MyjEUqgDmJlCl+d1oeE6h72mkiwLUcEqjZkIu404uAZpuONCX/LVa4CqULYvwGpU
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7383
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <ZBBxMl5rVjY9FGS9@kernel.org>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Am 14.03.23 um 14:06 schrieb Tom Rix:
-> gcc with W=1 reports this error
-> drivers/gpu/drm/radeon/radeon_ttm.c:201:27: error:
->    variable ‘rbo’ set but not used [-Werror=unused-but-set-variable]
->    201 |         struct radeon_bo *rbo;
->        |                           ^~~
->
-> rbo use was removed with
-> commit f87c1f0b7b79 ("drm/ttm: prevent moving of pinned BOs")
-> Since the variable is not used, remove it.
->
-> Signed-off-by: Tom Rix <trix@redhat.com>
+On Tue, Mar 14, 2023 at 03:06:47PM +0200, Jarkko Sakkinen wrote:
+> On Tue, Mar 14, 2023 at 01:47:38PM +0100, Jason A. Donenfeld wrote:
+> > On 3/14/23, Jarkko Sakkinen <jarkko@kernel.org> wrote:
+> > > On Tue, Mar 14, 2023 at 10:35:33AM +0100, Thorsten Leemhuis wrote:
+> > >> On 09.01.23 17:08, Jason A. Donenfeld wrote:
+> > >> > On Thu, Jan 05, 2023 at 02:59:15PM +0100, Thorsten Leemhuis wrote:
+> > >> >> On 29.12.22 05:03, Jason A. Donenfeld wrote:
+> > >> >>> On Wed, Dec 28, 2022 at 06:07:25PM -0500, James Bottomley wrote:
+> > >> >>>> On Wed, 2022-12-28 at 21:22 +0100, Vlastimil Babka wrote:
+> > >> >>>>> Ugh, while the problem [1] was fixed in 6.1, it's now happening
+> > >> >>>>> again
+> > >> >>>>> on the T460 with 6.2-rc1. Except I didn't see any oops message or
+> > >> >>>>> "tpm_try_transmit" error this time. The first indication of a
+> > >> >>>>> problem
+> > >> >>>>> is this during a resume from suspend to ram:
+> > >> >>>>> tpm tpm0: A TPM error (28) occurred continue selftest
+> > >> >>>>> and then periodically
+> > >> >>>>> tpm tpm0: A TPM error (28) occurred attempting get random
+> > >> >>>>
+> > >> >>>> That's a TPM 1.2 error which means the TPM failed the selftest.  The
+> > >> >>>> original problem was reported against TPM 2.0  because of a missing
+> > >> >>>> try_get_ops().
+> > >> >>>
+> > >> >>> No, I'm pretty sure the original bug, which was fixed by "char: tpm:
+> > >> >>> Protect tpm_pm_suspend with locks" regards 1.2 as well, especially
+> > >> >>> considering it's the same hardware from Vlastimil causing this. I
+> > >> >>> also
+> > >> >>> recall seeing this in 1.2 when I ran this with the TPM emulator. So
+> > >> >>> that's not correct.
+> > >> > [...]
+> > >> > So, this is now in rc3:
+> > >> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=1382999aa0548a171a272ca817f6c38e797c458c
+> > >> >
+> > >> > That should help avoid the worst of the issue -- laptop not sleeping.
+> > >> > But the race or whatever it is still does exist. So you might want to
+> > >> > keep this in your tracker to periodically nudge the TPM folks about it.
+> > >>
+> > >> I did, and with -rc2 out now is a good time to remind everybody about
+> > >> it. Jarkko even looked into it, but no real fix emerged afaics. Or did
+> > >> it?
+> > >
+> > > Jason's workaround was picked. I asked some questions in the thread but
+> > > have not received any responses.
+> > 
+> > As I've written several times now, that patch doesn't fix the issue.
+> > It makes it less common but it still exists and needs to be addressed.
+> > Please re-read my various messages describing this. I have nothing new
+> > at all to add; you just need to review my prior comments. There's a
+> > bug that probably needs to be fixed here by somebody who understands
+> > the tpm1 code.
+> 
+> I'll try qemu path to see if I can reproduce it with/without the already
+> merged workaround.
 
-Reviewed-by: Christian König <christian.koenig@amd.com>
+BTW, what sort of environment you had for your qemu run? I'm creating a
+simple initramfs with buildroot for this.
 
-> ---
->   drivers/gpu/drm/radeon/radeon_ttm.c | 2 --
->   1 file changed, 2 deletions(-)
->
-> diff --git a/drivers/gpu/drm/radeon/radeon_ttm.c b/drivers/gpu/drm/radeon/radeon_ttm.c
-> index 2220cdf6a3f6..0ea430ee5256 100644
-> --- a/drivers/gpu/drm/radeon/radeon_ttm.c
-> +++ b/drivers/gpu/drm/radeon/radeon_ttm.c
-> @@ -198,7 +198,6 @@ static int radeon_bo_move(struct ttm_buffer_object *bo, bool evict,
->   {
->   	struct ttm_resource *old_mem = bo->resource;
->   	struct radeon_device *rdev;
-> -	struct radeon_bo *rbo;
->   	int r;
->   
->   	if (new_mem->mem_type == TTM_PL_TT) {
-> @@ -211,7 +210,6 @@ static int radeon_bo_move(struct ttm_buffer_object *bo, bool evict,
->   	if (r)
->   		return r;
->   
-> -	rbo = container_of(bo, struct radeon_bo, tbo);
->   	rdev = radeon_get_rdev(bo->bdev);
->   	if (!old_mem || (old_mem->mem_type == TTM_PL_SYSTEM &&
->   			 bo->ttm == NULL)) {
-
+BR, Jarkko
