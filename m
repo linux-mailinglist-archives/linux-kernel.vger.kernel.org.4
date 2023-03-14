@@ -2,130 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2DA66B8770
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:08:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 175206B8775
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 02:15:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230111AbjCNBIB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 21:08:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S229896AbjCNBPE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 21:15:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230109AbjCNBHs (ORCPT
+        with ESMTP id S229537AbjCNBPC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 21:07:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 014678C810;
-        Mon, 13 Mar 2023 18:07:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678756067; x=1710292067;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=jY+UROC4mFlLoBl1P954VMj5wdgk3zqD9N3XYq4seL0=;
-  b=JoQVJpqB8TtB5RMNmFpXP92kxh874mwWyktN/9IibALGBveHqvaoxncV
-   U3Pzx7igPxhN+WyBkxFKbuRWLYQzwtWf+VC0mUItCdLGlIAhQzKabDUs8
-   cJrZDoLwR56pQfsJOhvl6BLQwS07/iJBWJSYeYUpWiR/fygzLWM5Dd+rE
-   QGZU855qvxgPdD1g252OImIhCMEeqdoQOnPAVJPzSqarIHQDkDvOBzWAh
-   WfKDt0PyVFUOLqpt4bDu/vdH0Yg7smABwpl3YMi3J7j0CVUyb6KWCtHnt
-   MhdXwgwYaCLIUyQu6KmGQ481bADtIfZe6JtNB2+0pNGny4xEd/ujzksb6
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="339664918"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="339664918"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:07:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="656156645"
-X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
-   d="scan'208";a="656156645"
-Received: from ashimabu-mobl3.amr.corp.intel.com (HELO spandruv-desk1.amr.corp.intel.com) ([10.209.60.55])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 18:07:46 -0700
-Message-ID: <06f603ab1a089e3d4dd8d91a28422d8f3300026c.camel@linux.intel.com>
-Subject: Re: [PATCH v2] Fix buffer overrun in HID-SENSOR name string
-From:   srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
-To:     todd.e.brandt@linux.intel.com, Andi Shyti <andi.shyti@kernel.org>,
-        Todd Brandt <todd.e.brandt@intel.com>
-Cc:     linux-input@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jic23@kernel.org, jikos@kernel.org,
-        p.jungkamp@gmx.net
-Date:   Mon, 13 Mar 2023 18:07:46 -0700
-In-Reply-To: <c5f67e5c49aee0ce48545a79b7295c7af779347f.camel@linux.intel.com>
-References: <20230313220653.3996-1-todd.e.brandt@intel.com>
-         <20230313230712.6xboy3w5ocrvj3vn@intel.intel>
-         <c5f67e5c49aee0ce48545a79b7295c7af779347f.camel@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.42.4 (3.42.4-2.fc35) 
+        Mon, 13 Mar 2023 21:15:02 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916074A1C5;
+        Mon, 13 Mar 2023 18:15:01 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id h8so14930806plf.10;
+        Mon, 13 Mar 2023 18:15:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678756501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SDa6BbIH7Y3VUs5F/kP/wwy9tx6ek2EPSEjYlOG3rt4=;
+        b=n9hSIEw2zg4NWFs46OHg2XBaStApSeOCiZLAl0IYwFGq1JTJAb/9MSnKvg8yb6fxhR
+         74b4pAbFvDlxodA4TdtWrDfSr5T/lTwWxNIPPlt/2ILflgmbalbV9DPZwah0TTYmwWmu
+         zd33FTjEK2jsxF0Ch0BVEbuf7MDc8OTqBu0SOHKpFXupOGMV1a7Y34WlOc1Xr7nDrNOR
+         4Ho2WLc4NCJzZQS6/a5r6Ug3zzepgmZgghZeT5C03oF/DnP6MMEjWPh+GN08mO8Toi0d
+         PBBuJfpJYKA69n6PDbU/wfbJBMsgNnj534QcXo7fWa7+BshUoP71wEcOv4tISnNTVuIE
+         bOfg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678756501;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SDa6BbIH7Y3VUs5F/kP/wwy9tx6ek2EPSEjYlOG3rt4=;
+        b=Jv6/ZKJoi6TobYbGtmofWqdtvQXIXIfO5f9IkYrI6eSwGA3Q0m1F6AiQotopExOYJ0
+         14fK2LguHt98HDRv/rl6zv4Fa8L9wh9F90t5iUMfjFh8KnvwbN6Cx6ZMWTP7ORQEWIRF
+         neO6PucsXltuvrFh37sspU9b0Uqm10MPhqCwVns2aSGwAbyECstaKW6s8FMrac+IyOdy
+         YGtELlg/OcB4YnOc/uL3tY6OL8Pu5O0q8hU0NAZ3FLoK2M2ZS1lzkTObi8sj/JI1+qeR
+         oavyVJB1fykwzoZfI1KDBer4dDpN2wPOQ5M3I4YsUDVDK3coH2NAERQYD1nqs6MA4QRT
+         vOxQ==
+X-Gm-Message-State: AO0yUKVQcdv8ZVBnByIsvjqn+on4wsM0+A/yyFHchQHJTJahqUPv0dj0
+        5SvcYEVlmJLJRS00XVXf6v8jYQCLkz+Riox3Ln8=
+X-Google-Smtp-Source: AK7set9OrlZDJMtKLveaqiRlFkI0wjed9V+Vw/w1Z1o5dQaSf4mOjk8Zc87magEhKYM6G1J6C7QQ6dT76dm/W/rG6XY=
+X-Received: by 2002:a17:903:2c1:b0:19c:d414:fe6e with SMTP id
+ s1-20020a17090302c100b0019cd414fe6emr13388793plk.12.1678756501095; Mon, 13
+ Mar 2023 18:15:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230313090002.3308025-1-zyytlz.wz@163.com> <ZA8rDCw+mJmyETEx@localhost.localdomain>
+ <20230313143054.538565ac@kernel.org> <ZA+etMBFSw/999Aq@codewreck.org>
+In-Reply-To: <ZA+etMBFSw/999Aq@codewreck.org>
+From:   Zheng Hacker <hackerzheng666@gmail.com>
+Date:   Tue, 14 Mar 2023 09:14:48 +0800
+Message-ID: <CAJedcCyH_JvVeyFq1i8Udx=W7PO7F+aYeQp+r6dbWQLqMNgy_w@mail.gmail.com>
+Subject: Re: [PATCH net v2] 9p/xen : Fix use after free bug in
+ xen_9pfs_front_remove due to race condition
+To:     asmadeus@codewreck.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        Michal Swiatkowski <michal.swiatkowski@linux.intel.com>,
+        Zheng Wang <zyytlz.wz@163.com>, ericvh@gmail.com,
+        lucho@ionkov.net, linux_oss@crudebyte.com, davem@davemloft.net,
+        edumazet@google.com, pabeni@redhat.com,
+        v9fs-developer@lists.sourceforge.net, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, 1395428693sheep@gmail.com,
+        alex000young@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2023-03-13 at 16:37 -0700, Todd Brandt wrote:
-> On Tue, 2023-03-14 at 00:07 +0100, Andi Shyti wrote:
-> > Hi Todd,
-> > 
-> > On Mon, Mar 13, 2023 at 03:06:53PM -0700, Todd Brandt wrote:
-> > > On some platforms there are some platform devices created with
-> > > invalid names. For example: "HID-SENSOR-INT-020b?.39.auto"
-> > > instead
-> > > of "HID-SENSOR-INT-020b.39.auto"
-> > > 
-> > > This string include some invalid characters, hence it will fail
-> > > to
-> > > properly load the driver which will handle this custom sensor.
-> > > Also
-> > > it is a problem for some user space tools, which parse
-s parse/parses
+<asmadeus@codewreck.org> =E4=BA=8E2023=E5=B9=B43=E6=9C=8814=E6=97=A5=E5=91=
+=A8=E4=BA=8C 06:08=E5=86=99=E9=81=93=EF=BC=9A
+>
+> Jakub Kicinski wrote on Mon, Mar 13, 2023 at 02:30:54PM -0700:
+> > On Mon, 13 Mar 2023 14:54:20 +0100 Michal Swiatkowski wrote:
+> > > >   for (i =3D 0; i < priv->num_rings; i++) {
+> > > > +         /*cancel work*/
+> > > It isn't needed I think, the function cancel_work_sync() tells everyt=
+hing
+> > > here.
+> >
+> > Note that 9p is more storage than networking, so this patch is likely
+> > to go via a different tree than us.
+>
+> Any review done is useful anyway ;)
+>
+> Either Eric or me will take the patch, but in the past such fixes have
+> sometimes also been taken into the net tree; honestly I wouldn't mind a
+> bit more "rule" here as it's a bit weird that some of our patches are Cc
+> to fsdevel@ (fs/ from fs/9p) and the other half netdev@ (net/ from
+> net/9p), but afaict the MAINTAINERS syntax doesn't have a way of
+> excluding e.g. net/9p from the `NETWORKING [GENERAL]` group so I guess
+> we just have to live with that.
 
-> > >  the device
-> > > names from ftrace and dmesg.
-> > > 
-> > > This is because the string, real_usage, is not NULL terminated
-> > > and
-> > > printed with %s to form device name.
-> > > 
-> > > To address this, we
-Remove "we"
+Dear Dominique,
 
-> > >  initialize the real_usage string with 0s.
-> > > 
-> > > Philipp Jungkamp created this fix, I'm simply submitting it. I've
-> > > verified it fixes bugzilla issue 217169
-> > > 
-You don't need the above two lines. You can add
+Sorry for my confusion and thanks for your patient explanation. I'll take c=
+are
+of it when submitting a fix to the linux kernel in the future.
 
-Original-by: Philipp Jungkamp <p.jungkamp@gmx.net>
+>
+> There's little enough volume and netdev automation sends a mail when a
+> patch is picked up, so as long as there's no conflict (large majority of
+> the cases) such fixes can go either way as far as I'm concerned.
+>
+Thanks again for your effort. Hope you have a good day :)
 
-Before your SOB.
-
-> > > Reported-and-tested-by: Todd Brandt
-> > > <todd.e.brandt@linux.intel.com>
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=217169
-> > > Signed-off-by: Todd Brandt <todd.e.brandt@intel.com>
-> > 
-> > Why is not Philip in the SoB list?
-> > 
-> Oh, sorry, I got feedback and assumed it needed more work on the
-> changelog. I also forgot to copy over Phillip's SoB line so this one
-> is
-> probably worse than the original. The original was just fine, please
-> ignore this one.
-> 
-> > Anyway the original patch made it to stable, so:
-> > 
-> > Fixes: 98c062e82451 ("HID: hid-sensor-custom: Allow more custom iio
-> > sensors")
-> > Cc: stable@vger.kernel.org
-> > 
-> > and with those you can add:
-> > 
-> > Reviewed-by: Andi Shyti <andi.shyti@kernel.org>
-> > 
-> > Andi
-> 
-
+Best regards,
+Zheng
