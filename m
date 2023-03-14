@@ -2,81 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91EBA6B9A41
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:47:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83E996B9A3D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:47:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231592AbjCNPrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:47:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S231331AbjCNPrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:47:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231667AbjCNPrf (ORCPT
+        with ESMTP id S231375AbjCNPrP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:47:35 -0400
-Received: from mail-ot1-x32b.google.com (mail-ot1-x32b.google.com [IPv6:2607:f8b0:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B30CB3702;
-        Tue, 14 Mar 2023 08:47:03 -0700 (PDT)
-Received: by mail-ot1-x32b.google.com with SMTP id f19-20020a9d5f13000000b00693ce5a2f3eso8638229oti.8;
-        Tue, 14 Mar 2023 08:47:03 -0700 (PDT)
+        Tue, 14 Mar 2023 11:47:15 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B248219C7B
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:46:42 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id r11so12191568edd.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:46:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678808794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9wkL7da/Rc4tgZfDJba08p3nQBvevz/W1pJs6r+8hiM=;
-        b=l1TKIKKkpRKwKxb/IFWMOKMfFCaiu0JzS+cCKpgDub+29WiowdhrYfMyKMGSgePP8T
-         VtV4SOfbn6MFnypcKwrLV87JX3ko2E2cLNJRJcMIIQuxJnAs6yot0sPXzw+y14Bn14tD
-         eln42spk6lykzoXPqncoI9/qODgeps8iynPmjm7LfQFceYNUgAW3fb2M7ALrymotnYHE
-         F6OzAy95qWNMhAYGnsRzzIVVxoJ0Dvi40LsN8SaK0jtAme9h47mcuXcIEG5QeO6LjF3Q
-         CXISEAsbXWP7V5SPW0Of6ENgBUx0PczcwJXvh+/XQF5uLMeFtmqZLtCOvYmC/MAlKld9
-         8CPg==
+        d=linaro.org; s=google; t=1678808783;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F24AUykmoujwlu8bPOT15t+HLTs3ektTBSdrQH1BgNE=;
+        b=ijHfhSTXyeSBzyOnBwOobVBn6aXLUp9QNdlEdC0nv5pfH35PxfBcLhGAdrG6iyqL4/
+         nMy6dZH4OGdGWCFXiLgM/hO1vEZQaWRdG/mygie3WM1BuznKD7cE/XfCZMv5w4dwx3UN
+         vOdHtSZNCmJBfV6BywNYkd8RSGtIqi0frUGpfC2RS+1aTnsHl3wxuf5vk0aPnDJxgBF3
+         t7Fm5XG9Z12OeB559JsPajSoGiOmrhrI8G9Wz/kP5+gJ4X2np7DgoHvJ/0LmjN8xTuDE
+         32ZorLaQCP9vWjwJ4ovLLJF5+2QwaOWU3zhLwNlfUp0t4b9YtT+YXUGu0cQ2602vtBtd
+         +9tQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678808794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9wkL7da/Rc4tgZfDJba08p3nQBvevz/W1pJs6r+8hiM=;
-        b=UYbRaJAqaGlnw+yq+Bmnydet99Mkf7PBGocaw43t+w0Pg1A4xIDvg2D8EGxR/XunTG
-         RkawEMRmmmAwGrh/PVZHxd8AYA2Uc1clVwWZ9KAGjjjlsPrMAWvy8v8Y6yP5YU96D6kr
-         Uc9KuCINYtYFsZZIDnG1baaJ1ojoeT5n4zPMXXTh9k1hqYcfwDRzk1RDzSmKD+yr7cUF
-         bEZrRe6OeLa9j6P0uteV415nJs4zxdyyd6b7oq+CD0Mw6/NA0ahtFZbZx4wRObYzqtkq
-         +fAjp5imD/MO+xlxXEEnM4LsbSDtwI+AeAPwWI5NaHqfUVN8cg4QBpPdl2xbvZ1cleXB
-         UXUA==
-X-Gm-Message-State: AO0yUKXydhteLucnMlWLUieHzyBTyugc1UAa0fhv7F7T4TPBmHz85Kkd
-        yaH+6kz8uTiDqBzFaEQKPF9EqHT3wXKMsq3fMHU=
-X-Google-Smtp-Source: AK7set//Z2qMLoNwWnbRcQ8l+8WelU3TiH20TsphZ7N50Gfa09Xj34+xbWP1VnWe3BCEG+e271UZKcGXir1lYpLxCZk=
-X-Received: by 2002:a9d:5a90:0:b0:688:cf52:6e18 with SMTP id
- w16-20020a9d5a90000000b00688cf526e18mr12756257oth.4.1678808792329; Tue, 14
- Mar 2023 08:46:32 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678808783;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=F24AUykmoujwlu8bPOT15t+HLTs3ektTBSdrQH1BgNE=;
+        b=qXyyoRNoSEPAUabOcfh3oD+X13U/EQEjp/3L6SrS59XlGvqfiJuu+GqdNEDVjuAmG+
+         0h3XIk8MF21XfqUrBROuP0epSZDFX+U4XmxRHXFT3nddoPnXdmm6ikhxdUrBtdOToa/t
+         sRFWpx5ZfKGmNVkomeqre4F/5sGLt7nulwdamw1jt334ikBSFUqgM5SHAy+97djhGLkv
+         LwXGPUgbLRPvp6QjQ+ZjZB8KYxggnbl74Ttm0jncSBoEE/iqF5BofoML7gpal19eGDQJ
+         pxdoxFMlWb47JwKJZqoLyvxhg36zYUfsZ1mEVotXzOBMLtUo5n1uNVoF5PUfbwdGzIhY
+         tnvA==
+X-Gm-Message-State: AO0yUKUepVE7s9HVL3z30dIdFA9qVjAltRWKylf1/PcCz3mrjTCfcuDr
+        +oY1HimNyFYMKjJ2ESCU/9wJPw==
+X-Google-Smtp-Source: AK7set/huwM8TSsgEcLmJAmj81UQJX00g4nQcBlm5bflAXgoDF1dcRvB6W3X97H7hFulTkAnNip3pQ==
+X-Received: by 2002:a17:906:12d8:b0:923:6558:84fb with SMTP id l24-20020a17090612d800b00923655884fbmr2667694ejb.3.1678808783068;
+        Tue, 14 Mar 2023 08:46:23 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id r6-20020a17090638c600b00925d50190a3sm1298371ejd.80.2023.03.14.08.46.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 08:46:22 -0700 (PDT)
+Message-ID: <c2773010-2367-ba20-e0fa-2e060cb95128@linaro.org>
+Date:   Tue, 14 Mar 2023 16:46:21 +0100
 MIME-Version: 1.0
-References: <20230214140858.1133292-1-rick.wertenbroek@gmail.com>
- <20230214140858.1133292-9-rick.wertenbroek@gmail.com> <0fa5cef4-7096-7f59-422a-98011d01437c@opensource.wdc.com>
-In-Reply-To: <0fa5cef4-7096-7f59-422a-98011d01437c@opensource.wdc.com>
-From:   Rick Wertenbroek <rick.wertenbroek@gmail.com>
-Date:   Tue, 14 Mar 2023 16:45:56 +0100
-Message-ID: <CAAEEuhpiQDRy6EQwwf0e+e6MVv893YU6+Sbyz5k+Owp2vAi-nQ@mail.gmail.com>
-Subject: Re: [PATCH v2 8/9] PCI: rockchip: Use u32 variable to access 32-bit registers
-To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Cc:     alberto.dassatti@heig-vd.ch, xxm@rock-chips.com,
-        rick.wertenbroek@heig-vd.ch, stable@vger.kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Shawn Lin <shawn.lin@rock-chips.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Jani Nikula <jani.nikula@intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Mikko Kovanen <mikko.kovanen@aavamobile.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next V3] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Content-Language: en-US
+To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org, richardcochran@gmail.com
+Cc:     krzysztof.kozlowski+dt@linaro.org, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangbo.lu@nxp.com, radhey.shyam.pandey@amd.com,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+References: <20230308054408.1353992-1-sarath.babu.naidu.gaddam@amd.com>
+ <20230308054408.1353992-2-sarath.babu.naidu.gaddam@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230308054408.1353992-2-sarath.babu.naidu.gaddam@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,112 +81,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Feb 15, 2023 at 2:34=E2=80=AFAM Damien Le Moal
-<damien.lemoal@opensource.wdc.com> wrote:
->
-> On 2/14/23 23:08, Rick Wertenbroek wrote:
-> > Previously u16 variables were used to access 32-bit registers, this
-> > resulted in not all of the data being read from the registers. Also
-> > the left shift of more than 16-bits would result in moving data out
-> > of the variable. Use u32 variables to access 32-bit registers
-> >
-> > Fixes: cf590b078391 ("PCI: rockchip: Add EP driver for Rockchip PCIe co=
-ntroller")
-> > Cc: stable@vger.kernel.org
-> > Signed-off-by: Rick Wertenbroek <rick.wertenbroek@gmail.com>
-> > ---
-> >  drivers/pci/controller/pcie-rockchip-ep.c | 10 +++++-----
-> >  drivers/pci/controller/pcie-rockchip.h    |  1 +
-> >  2 files changed, 6 insertions(+), 5 deletions(-)
-> >
-> > diff --git a/drivers/pci/controller/pcie-rockchip-ep.c b/drivers/pci/co=
-ntroller/pcie-rockchip-ep.c
-> > index ca5b363ba..b7865a94e 100644
-> > --- a/drivers/pci/controller/pcie-rockchip-ep.c
-> > +++ b/drivers/pci/controller/pcie-rockchip-ep.c
-> > @@ -292,15 +292,15 @@ static int rockchip_pcie_ep_set_msi(struct pci_ep=
-c *epc, u8 fn, u8 vfn,
-> >  {
-> >       struct rockchip_pcie_ep *ep =3D epc_get_drvdata(epc);
-> >       struct rockchip_pcie *rockchip =3D &ep->rockchip;
-> > -     u16 flags;
-> > +     u32 flags;
-> >
-> >       flags =3D rockchip_pcie_read(rockchip,
-> >                                  ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
-> >                                  ROCKCHIP_PCIE_EP_MSI_CTRL_REG);
-> >       flags &=3D ~ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_MASK;
-> >       flags |=3D
-> > -        ((multi_msg_cap << 1) <<  ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET=
-) |
-> > -        PCI_MSI_FLAGS_64BIT;
-> > +        (multi_msg_cap << ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET) |
->
-> ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET is 17 and multi_msg_cap is a u8...
-> Not nice.
->
-> Locally, I added the local variable:
->
-> u32 mmc =3D multi_msg_cap;
->
-> And use mmc instead of multi_msg_cap to avoid issues. Also,
->
-> > +        (PCI_MSI_FLAGS_64BIT << ROCKCHIP_PCIE_EP_MSI_FLAGS_OFFSET);
-> >       flags &=3D ~ROCKCHIP_PCIE_EP_MSI_CTRL_MASK_MSI_CAP;
-> >       rockchip_pcie_write(rockchip, flags,
-> >                           ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
-> > @@ -312,7 +312,7 @@ static int rockchip_pcie_ep_get_msi(struct pci_epc =
-*epc, u8 fn, u8 vfn)
-> >  {
-> >       struct rockchip_pcie_ep *ep =3D epc_get_drvdata(epc);
-> >       struct rockchip_pcie *rockchip =3D &ep->rockchip;
-> > -     u16 flags;
-> > +     u32 flags;
-> >
-> >       flags =3D rockchip_pcie_read(rockchip,
-> >                                  ROCKCHIP_PCIE_EP_FUNC_BASE(fn) +
-> > @@ -374,7 +374,7 @@ static int rockchip_pcie_ep_send_msi_irq(struct roc=
-kchip_pcie_ep *ep, u8 fn,
-> >                                        u8 interrupt_num)
-> >  {
-> >       struct rockchip_pcie *rockchip =3D &ep->rockchip;
-> > -     u16 flags, mme, data, data_mask;
-> > +     u32 flags, mme, data, data_mask;
-> >       u8 msi_count;
-> >       u64 pci_addr, pci_addr_mask =3D 0xff;
-> >       u32 r;
-> > diff --git a/drivers/pci/controller/pcie-rockchip.h b/drivers/pci/contr=
-oller/pcie-rockchip.h
-> > index e90c2a2b8..11dbf53cd 100644
-> > --- a/drivers/pci/controller/pcie-rockchip.h
-> > +++ b/drivers/pci/controller/pcie-rockchip.h
-> > @@ -227,6 +227,7 @@
-> >  #define ROCKCHIP_PCIE_EP_CMD_STATUS                  0x4
-> >  #define   ROCKCHIP_PCIE_EP_CMD_STATUS_IS             BIT(19)
-> >  #define ROCKCHIP_PCIE_EP_MSI_CTRL_REG                        0x90
-> > +#define   ROCKCHIP_PCIE_EP_MSI_FLAGS_OFFSET                  16
->
-> You are not using this macro anywhere. The name is also not very
-> descriptive. Better have it as:
->
-> #define   ROCKCHIP_PCIE_EP_MSI_CTRL_ME          BIT(16)
->
-> to match the TRM name and be clear that the bit indicates if MSI is
-> enabled or not.
->
+On 08/03/2023 06:44, Sarath Babu Naidu Gaddam wrote:
+> There is currently no standard property to pass PTP device index
+> information to ethernet driver when they are independent.
+> 
+> ptp-hardware-clock property will contain phandle to PTP clock node.
+> 
+> Its a generic (optional) property name to link to PTP phandle to
+> Ethernet node. Any future or current ethernet drivers that need
+> a reference to the PHC used on their system can simply use this
+> generic property name instead of using custom property
+> implementation in their device tree nodes."
+> 
+> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+> Acked-by: Richard Cochran <richardcochran@gmail.com>
+> ---
+> 
+> Freescale driver currently has this implementation but it will be
+> good to agree on a generic (optional) property name to link to PTP
+> phandle to Ethernet node. In future or any current ethernet driver
+> wants to use this method of reading the PHC index,they can simply use
+> this generic name and point their own PTP clock node, instead of
+> creating separate property names in each ethernet driver DT node.
 
-This is already the case, the #define is already there.
-#define ROCKCHIP_PCIE_EP_MSI_CTRL_ME BIT(16)
-The other offset is for all the MSI flags together, this offset is used
-when the flags are retrieved altogether, see rockchip_pcie_ep_set_msi()
-The ME bit is also used when we need to check the bit specifically, see
-rockchip_pcie_ep_get_msi().
+Again, I would like to see an user of this. I asked about this last time
+and nothing was provided.
 
-> >  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_OFFSET               17
-> >  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MMC_MASK         GENMASK(19, 17)
-> >  #define   ROCKCHIP_PCIE_EP_MSI_CTRL_MME_OFFSET               20
->
-> --
-> Damien Le Moal
-> Western Digital Research
->
+So basically you send the same thing hoping this time will be accepted...
+
+> 
+> axiethernet driver uses this method when PTP support is integrated.
+> 
+> Example:
+>     fman0: fman@1a00000 {
+>         ptp-hardware-clock = <&ptp_timer0>;
+>     }
+> 
+>     ptp_timer0: ptp-timer@1afe000 {
+>         compatible = "fsl,fman-ptp-timer";
+>         reg = <0x0 0x1afe000 0x0 0x1000>;
+>     }
+> 
+> DT information:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm64/boot/dts/freescale/qoriq-fman3-0.dtsi#n23
+> 
+> Freescale driver:
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/net/ethernet/freescale/dpaa/dpaa_ethtool.c#n407
+> 
+> Changes in V3:
+> 1) Updated commit description.
+> 2) Add Acked-by: Richard Cochran.
+> 
+> Changes in V2:
+> 1) Changed the ptimer-handle to ptp-hardware-clock based on
+>    Richard Cochran's comment.
+> 2) Updated commit description.
+> ---
+>  .../devicetree/bindings/net/ethernet-controller.yaml         | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/net/ethernet-controller.yaml b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> index 00be387984ac..a97ab25b07a5 100644
+> --- a/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> +++ b/Documentation/devicetree/bindings/net/ethernet-controller.yaml
+> @@ -161,6 +161,11 @@ properties:
+>        - auto
+>        - in-band-status
+>  
+> +  ptp-hardware-clock:
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +    description:
+> +      Specifies a reference to a node representing a IEEE1588 timer.
+
+
+https://lore.kernel.org/all/cfbde0da-9939-e976-52c1-88577de7d4cb@linaro.org/
+
+This is a friendly reminder during the review process.
+
+It seems my previous comments were not fully addressed. Maybe my
+feedback got lost between the quotes, maybe you just forgot to apply it.
+Please go back to the previous discussion and either implement all
+requested changes or keep discussing them.
+
+Thank you.
+
+Best regards,
+Krzysztof
+
