@@ -2,136 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58CB46BA178
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:31:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC1B46BA179
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:31:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbjCNVbR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:31:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46076 "EHLO
+        id S229986AbjCNVb3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:31:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229571AbjCNVbP (ORCPT
+        with ESMTP id S229970AbjCNVb0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:31:15 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA76E36466
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:11 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id o12so1017840iow.6
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:11 -0700 (PDT)
+        Tue, 14 Mar 2023 17:31:26 -0400
+Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B37453D9E
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:25 -0700 (PDT)
+Received: by mail-wm1-x32c.google.com with SMTP id bi20so1396498wmb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678829471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678829483;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=2uY427W2KMisQvhtrsSNS8I4WCl3EbKmvvrlqEop4WI=;
-        b=izMEd+OsxY4xxrDkxGN6U5fGkGDMOsNlJxa5OFwdjJTPS1dP4Atfw4uwvVdaA9RHm5
-         ATVnZrjMSwMgzwUKBhZ9kRSDQ9IAnl+6ezxPK/+ie5xa7MlhcS+9Xl42SE5BSF5+ekab
-         UY9CB/5orGFBubZbAmudNlLi3ntxXr6+h/Wy8=
+        bh=3kosGJCuIsihwp7ZxBszW88vqGjIeKCLRbMuquEChy4=;
+        b=HUOEJ5wA0yJ5PRwx0qukCBhFgKN2xGPawh/iC/MFtyTHMcrBq/Ekxa4mWByyM71mFd
+         GquEWoz0UpyAwyDay9Jxm6qAnoSvkyWQLY4g5DkCxzx4jsQns9O7u1jmHnksoQa2rBgu
+         JNEJQjMUhvdHgdKw9GYvWFWoYluzM6HPtLuJZqtItuqHgnuU74mjoOHM3PZnOzaf6Ubb
+         zSUMyRu8BzgKsesW8hhKylsYfkA9+KJPlVPSu0HeWXeZFjMeuIg2PCRxf4gy/YpAfZBI
+         MggcplOCWEYU+Ji3Gl6sukiPqUQ0RKyDmHftnVjqyAxHf85+fzmrOto6741Ezo2C73V/
+         MtqA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678829471;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20210112; t=1678829483;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=2uY427W2KMisQvhtrsSNS8I4WCl3EbKmvvrlqEop4WI=;
-        b=aogenAAH9Tyl7No5nvbrKu6Kh869+syjOVr3Qx7RyBXk7DS4rfp8bA0zCe3pKalZXj
-         NNSnz+nhIJ2roJDPspp4GA4kTpct6xL3o+Rar0cNXe6uznRsa0+W7BPlzwktzUXkZOe4
-         sg2Qfzx6khFtl4IWuHbRmYJ3uZThtibYkOi/qEpgQuWck61LIoyBSmJlJzZNq+obHuC8
-         pRHs99jU3qxl9S53zwgZ8C1k/wwKrgpxc/yr5YmPZAPxfSEt4x8+9r8KSP6wyYHjMQy+
-         FmDCXwsGEiJWZQ/bZnvQeevzkQwoEylg5SZdTzPjTLYh+jXyK6AurlVZBZPlnXk3UlVz
-         Q9VA==
-X-Gm-Message-State: AO0yUKU8dF6mdtnPtB+f8hv1eqePYNz/n21gx6YNtHVUCgjKppSWX+xC
-        zogAYjLIr5wxEl39pZWqfd4YmDLLPonWmG8Huos=
-X-Google-Smtp-Source: AK7set9+MFFGdx1q7VF/NyWu1szDglX8YaWCTErT0+qoaARAmkexPOOLj0vuQKzckapKB645rSMqRQ==
-X-Received: by 2002:a6b:5b08:0:b0:74c:822c:a6ac with SMTP id v8-20020a6b5b08000000b0074c822ca6acmr14920705ioh.15.1678829470790;
-        Tue, 14 Mar 2023 14:31:10 -0700 (PDT)
-Received: from mail-io1-f45.google.com (mail-io1-f45.google.com. [209.85.166.45])
-        by smtp.gmail.com with ESMTPSA id y1-20020a5ec801000000b0074e6f2c584dsm1107152iol.12.2023.03.14.14.31.09
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 14:31:10 -0700 (PDT)
-Received: by mail-io1-f45.google.com with SMTP id bf15so6997410iob.7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:31:09 -0700 (PDT)
-X-Received: by 2002:a02:a106:0:b0:406:122f:76ad with SMTP id
- f6-20020a02a106000000b00406122f76admr756559jag.1.1678829469489; Tue, 14 Mar
- 2023 14:31:09 -0700 (PDT)
+        bh=3kosGJCuIsihwp7ZxBszW88vqGjIeKCLRbMuquEChy4=;
+        b=thEjmbqmoCH9UXx2uCcqrvIl55MQM4/91nF2MOERa5mWP0cC9qCTF4ShvAGNmoRGpJ
+         Igw/pRc6v9wRKx85WUscRaqsp4vL//BvyuCD065WF7ZR0ncAQv5cWrAYtM0iiZN9QAM+
+         G+Q/334VVOxGpAYACJW8J1VgG6oLzRYUS2BFYfIPvLVdtmuWPzZF46q9PW4/0ULUgxzW
+         WQdMD8VOh9v6Gi+3Q3axRJZlMSCEFJyTQAOMQ6liGmfbuO7HQZp+aIZHXh6J+VbyQgWC
+         2iTT1opsGgc3NT3QG5NZZZoWft8XM0yQgWrWYA6lnL3L86h/6qku8+5gbQa46Ll4UY93
+         l5ug==
+X-Gm-Message-State: AO0yUKU58Q0VDXK1mGWW/h6RBilGMXffkL/m9hHk0GYtVbLAVs2JE+0n
+        85FiC/8ZtupkYX1Bjn06nxDGw76RyJtOyw==
+X-Google-Smtp-Source: AK7set9BMJIZWSpt2LeZg/JqmFIeOdAsbFqIMnDbl2gMHqQiodypTbMJRPuoI3GhGhoBCBi6tCGY6w==
+X-Received: by 2002:a05:600c:4f91:b0:3ed:2c92:9f4f with SMTP id n17-20020a05600c4f9100b003ed2c929f4fmr3277198wmq.10.1678829483291;
+        Tue, 14 Mar 2023 14:31:23 -0700 (PDT)
+Received: from suse.localnet (host-79-35-102-94.retail.telecomitalia.it. [79.35.102.94])
+        by smtp.gmail.com with ESMTPSA id z4-20020adff744000000b002c55de1c72bsm3058708wrp.62.2023.03.14.14.31.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 14:31:22 -0700 (PDT)
+From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+To:     Khadija Kamran <kamrankhadijadj@gmail.com>,
+        Alison Schofield <alison.schofield@intel.com>
+Cc:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: axis-fifo: initialize timeouts in probe only
+Date:   Tue, 14 Mar 2023 22:31:21 +0100
+Message-ID: <3376017.mWHT0XuiSF@suse>
+In-Reply-To: <ZBDcfNOXmGeN2tlb@aschofie-mobl2>
+References: <ZA9mThZ7NyRrQAMX@khadija-virtual-machine> <ZBDcfNOXmGeN2tlb@aschofie-mobl2>
 MIME-Version: 1.0
-References: <20230314110043.2139111-1-treapking@chromium.org>
-In-Reply-To: <20230314110043.2139111-1-treapking@chromium.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 14 Mar 2023 14:30:38 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=W=jVsvD620wWKfniRYQNJnb7goDUKb_HhL_qVxLYGZOA@mail.gmail.com>
-Message-ID: <CAD=FV=W=jVsvD620wWKfniRYQNJnb7goDUKb_HhL_qVxLYGZOA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] drm/bridge: ps8640: Skip redundant bridge enable
-To:     Pin-yen Lin <treapking@chromium.org>
-Cc:     Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Robert Foss <rfoss@kernel.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset="iso-8859-1"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Tue, Mar 14, 2023 at 4:00=E2=80=AFAM Pin-yen Lin <treapking@chromium.org=
-> wrote:
+On marted=EC 14 marzo 2023 21:43:40 CET Alison Schofield wrote:
+> On Mon, Mar 13, 2023 at 11:07:10PM +0500, Khadija Kamran wrote:
+> > Module parameter, read_timeout, can only be set at the loading time. As
+> > it can only be modified once, initialize read_timeout once in the probe
+> > function.
+> > As a result, only use read_timeout as the last argument in
+> > wait_event_interruptible_timeout() call.
+> >=20
+> > Same goes for write_timeout.
+> >=20
+> > Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> > Signed-off-by: Khadija Kamran <kamrankhadijadj@gmail.com>
+> > ---
+>=20
+> Looks like this is [PATCH v5] and needs a changelog.
 >
-> Skip the drm_bridge_chain_pre_enable call when the bridge is already
-> pre_enabled. This make pre_enable and post_disable (thus
-> pm_runtime_get/put) symmetric.
->
-> Fixes: 46f206304db0 ("drm/bridge: ps8640: Rework power state handling")
-> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
-> ---
->
->  drivers/gpu/drm/bridge/parade-ps8640.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bri=
-dge/parade-ps8640.c
-> index 4b361d7d5e44..08de501c436e 100644
-> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
-> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
-> @@ -557,7 +557,8 @@ static struct edid *ps8640_bridge_get_edid(struct drm=
-_bridge *bridge,
->          * EDID, for this chip, we need to do a full poweron, otherwise i=
-t will
->          * fail.
->          */
-> -       drm_atomic_bridge_chain_pre_enable(bridge, connector->state->stat=
-e);
-> +       if (poweroff)
-> +               drm_atomic_bridge_chain_pre_enable(bridge, connector->sta=
-te->state);
+Alison,
 
-It always seemed weird to me that this function was asymmetric, so I
-like this change, thanks!
+In fact, this is only the second patch that addresses Greg's suggested=20
+refactoring.=20
 
-I also remember wondering before how this function was safe, though.
-The callpath for getting here from the ioctl is documented in the
-function and when I look at it I wonder if anything is preventing the
-bridge from being enabled / disabled through normal means at the same
-time your function is running. That could cause all sorts of badness
-if it is indeed possible. Does anyone reading this know if that's
-indeed a problem?
+Khadija moved from v3 of "staging: axis-fifo: remove tabs to align argument=
+s"=20
+to v4 of this completely independent patch. And then back to v1, because (a=
+t=20
+the time of v4) I pointed out to her that she had started working on a proj=
+ect=20
+that has a completely different purpose than the previous one.
 
-I suppose that, if this is unsafe, it's no more unsafe now than it was
-before your patch, so I guess:
+The best course of action would have been to ask Greg to drop the previous=
+=20
+patches and then reset the numbering of the new job to v1. Unfortunately I =
+did=20
+not pay attention to how she then managed the numbering following my=20
+observation.
 
-Reviewed-by: Douglas Anderson <dianders@chromium.org>
+What would be the best course of action at this point?
 
-If there are no issues, I'll plan to land this patch and the next one
-to drm-misc-next sometime late-ish next week.
+=46abio
+
+
