@@ -2,572 +2,188 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC0FA6B90B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:54:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC5596B90BA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 11:55:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230091AbjCNKyf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 06:54:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38564 "EHLO
+        id S230152AbjCNKzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 06:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229978AbjCNKyd (ORCPT
+        with ESMTP id S230238AbjCNKyz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 06:54:33 -0400
-Received: from aposti.net (aposti.net [89.234.176.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3822564B0D;
-        Tue, 14 Mar 2023 03:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-        s=mail; t=1678791193;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=Vmeoq86YHeoBlPdg8TzdXyyxvnIRLUPrCjGVmMezCCk=;
-        b=1sYz4+5OggGkBtMkDkOztVBdzZfq/6U0Wxpw2kPriHOSVqZ/qmxkWYKMWc4kQb5qJcJ5/s
-        XRuymywztMhwGAXMN7u8+N5WU7WCOxw15wYfXNdYIzD69dFjjMTj5rsTgxOODPe2fgNEtT
-        ZP3zIRuEpHjNDvwTgbE8dzMyoFciGGM=
-From:   Paul Cercueil <paul@crapouillou.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>
-Cc:     michael.hennerich@analog.com, nuno.sa@analog.com,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linaro-mm-sig@lists.linaro.org,
-        Paul Cercueil <paul@crapouillou.net>
-Subject: [PATCH 2/2] usb: gadget: functionfs: Add DMABUF import interface
-Date:   Tue, 14 Mar 2023 11:52:57 +0100
-Message-Id: <20230314105257.17345-3-paul@crapouillou.net>
-In-Reply-To: <20230314105257.17345-1-paul@crapouillou.net>
-References: <20230314105257.17345-1-paul@crapouillou.net>
+        Tue, 14 Mar 2023 06:54:55 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236F610AA6;
+        Tue, 14 Mar 2023 03:54:31 -0700 (PDT)
+Received: from kwepemm600009.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PbVlC4kLBzKn3l;
+        Tue, 14 Mar 2023 18:54:15 +0800 (CST)
+Received: from [10.174.176.73] (10.174.176.73) by
+ kwepemm600009.china.huawei.com (7.193.23.164) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 18:54:28 +0800
+Subject: Re: [PATCH -next 5/5] md: protect md_thread with a new disk level
+ spin lock
+To:     Yu Kuai <yukuai1@huaweicloud.com>, <agk@redhat.com>,
+        <snitzer@kernel.org>, <song@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>, <linux-raid@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yangerkun@huawei.com>
+References: <20230311093148.2595222-1-yukuai1@huaweicloud.com>
+ <20230311093148.2595222-6-yukuai1@huaweicloud.com>
+From:   Yu Kuai <yukuai3@huawei.com>
+Message-ID: <69e04735-b3f6-2d82-9920-eac330a69792@huawei.com>
+Date:   Tue, 14 Mar 2023 18:54:27 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
+In-Reply-To: <20230311093148.2595222-6-yukuai1@huaweicloud.com>
+Content-Type: text/plain; charset="gbk"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.174.176.73]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemm600009.china.huawei.com (7.193.23.164)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch introduces three new ioctls. They all should be called on a
-data endpoint (ie. not ep0). They are:
+Hi, song!
 
-- FUNCTIONFS_DMABUF_ATTACH, which takes the file descriptor of a DMABUF
-  object to attach to the endpoint.
+ÔÚ 2023/03/11 17:31, Yu Kuai Ð´µÀ:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Our test reports a uaf for 'mddev->sync_thread':
+> 
+> T1                      T2
+> md_start_sync
+>   md_register_thread
+> 			raid1d
+> 			 md_check_recovery
+> 			  md_reap_sync_thread
+> 			   md_unregister_thread
+> 			    kfree
+> 
+>   md_wakeup_thread
+>    wake_up
+>    ->sync_thread was freed
+> 
+> Currently, a global spinlock 'pers_lock' is borrowed to protect
+> 'mddev->thread', this problem can be fixed likewise, however, there might
+> be similar problem for other md_thread, and I really don't like the idea to
+> borrow a global lock.
+> 
+> This patch use a disk level spinlock to protect md_thread in relevant apis.
+> 
+> Signed-off-by: Yu Kuai <yukuai3@huawei.com>
+> ---
+>   drivers/md/md.c | 23 ++++++++++-------------
+>   drivers/md/md.h |  1 +
+>   2 files changed, 11 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/md/md.c b/drivers/md/md.c
+> index ab9299187cfe..a952978884a5 100644
+> --- a/drivers/md/md.c
+> +++ b/drivers/md/md.c
+> @@ -663,6 +663,7 @@ void mddev_init(struct mddev *mddev)
+>   	atomic_set(&mddev->active, 1);
+>   	atomic_set(&mddev->openers, 0);
+>   	spin_lock_init(&mddev->lock);
+> +	spin_lock_init(&mddev->thread_lock);
+>   	atomic_set(&mddev->flush_pending, 0);
+>   	init_waitqueue_head(&mddev->sb_wait);
+>   	init_waitqueue_head(&mddev->recovery_wait);
+> @@ -801,13 +802,8 @@ void mddev_unlock(struct mddev *mddev)
+>   	} else
+>   		mutex_unlock(&mddev->reconfig_mutex);
+>   
+> -	/* As we've dropped the mutex we need a spinlock to
+> -	 * make sure the thread doesn't disappear
+> -	 */
+> -	spin_lock(&pers_lock);
+>   	md_wakeup_thread(&mddev->thread, mddev);
+>   	wake_up(&mddev->sb_wait);
+> -	spin_unlock(&pers_lock);
+>   }
+>   EXPORT_SYMBOL_GPL(mddev_unlock);
+>   
+> @@ -7895,13 +7891,16 @@ static int md_thread(void *arg)
+>   
+>   void md_wakeup_thread(struct md_thread **threadp, struct mddev *mddev)
+>   {
+> -	struct md_thread *thread = *threadp;
+> +	struct md_thread *thread;
+>   
+> +	spin_lock(&mddev->thread_lock);
+> +	thread = *threadp;
+>   	if (thread) {
+>   		pr_debug("md: waking up MD thread %s.\n", thread->tsk->comm);
+>   		set_bit(THREAD_WAKEUP, &thread->flags);
+>   		wake_up(&thread->wqueue);
+>   	}
+> +	spin_unlock(&mddev->thread_lock);
 
-- FUNCTIONFS_DMABUF_DETACH, which takes the file descriptor of the
-  DMABUF to detach from the endpoint. Note that closing the endpoint's
-  file descriptor will automatically detach all attached DMABUFs.
+I just found that md_wakeup_thread can be called from irq context:
 
-- FUNCTIONFS_DMABUF_TRANSFER, which requests a data transfer from / to
-  the given DMABUF. Its argument is a structure that packs the DMABUF's
-  file descriptor, the size in bytes to transfer (which should generally
-  be set to the size of the DMABUF), and a 'flags' field which is unused
-  for now.
-  Before this ioctl can be used, the related DMABUF must be attached
-  with FUNCTIONFS_DMABUF_ATTACH.
+md_safemode_timeout
+  md_wakeup_thread
 
-These three ioctls enable the FunctionFS code to transfer data between
-the USB stack and a DMABUF object, which can be provided by a driver
-from a completely different subsystem, in a zero-copy fashion.
+And I need to use irq safe spinlock apis here.
 
-Signed-off-by: Paul Cercueil <paul@crapouillou.net>
----
- drivers/usb/gadget/function/f_fs.c  | 398 ++++++++++++++++++++++++++++
- include/uapi/linux/usb/functionfs.h |  14 +-
- 2 files changed, 411 insertions(+), 1 deletion(-)
+Can you drop this verion from md-next? I'll send a new version after I
+verified that there are no new regression, at least for mdadm tests.
 
-diff --git a/drivers/usb/gadget/function/f_fs.c b/drivers/usb/gadget/function/f_fs.c
-index ddfc537c7526..365fb716f0ad 100644
---- a/drivers/usb/gadget/function/f_fs.c
-+++ b/drivers/usb/gadget/function/f_fs.c
-@@ -15,6 +15,9 @@
- /* #define VERBOSE_DEBUG */
- 
- #include <linux/blkdev.h>
-+#include <linux/dma-buf.h>
-+#include <linux/dma-fence.h>
-+#include <linux/dma-resv.h>
- #include <linux/pagemap.h>
- #include <linux/export.h>
- #include <linux/fs_parser.h>
-@@ -124,6 +127,26 @@ struct ffs_ep {
- 	u8				num;
- };
- 
-+struct ffs_dmabuf_priv {
-+	struct list_head entry;
-+	struct kref ref;
-+	struct dma_buf_attachment *attach;
-+	spinlock_t lock;
-+	u64 context;
-+};
-+
-+struct ffs_dma_fence {
-+	struct dma_fence base;
-+	struct ffs_dmabuf_priv *priv;
-+	struct sg_table *sgt;
-+	enum dma_data_direction dir;
-+};
-+
-+static inline struct ffs_dma_fence *to_ffs_dma_fence(struct dma_fence *fence)
-+{
-+	return container_of(fence, struct ffs_dma_fence, base);
-+}
-+
- struct ffs_epfile {
- 	/* Protects ep->ep and ep->req. */
- 	struct mutex			mutex;
-@@ -197,6 +220,8 @@ struct ffs_epfile {
- 	unsigned char			isoc;	/* P: ffs->eps_lock */
- 
- 	unsigned char			_pad;
-+
-+	struct list_head		dmabufs;
- };
- 
- struct ffs_buffer {
-@@ -1279,19 +1304,354 @@ static ssize_t ffs_epfile_read_iter(struct kiocb *kiocb, struct iov_iter *to)
- 	return res;
- }
- 
-+static void ffs_dmabuf_release(struct kref *ref)
-+{
-+	struct ffs_dmabuf_priv *priv = container_of(ref, struct ffs_dmabuf_priv, ref);
-+	struct dma_buf_attachment *attach = priv->attach;
-+	struct dma_buf *dmabuf = attach->dmabuf;
-+
-+	pr_debug("FFS DMABUF release\n");
-+	dma_buf_detach(attach->dmabuf, attach);
-+	dma_buf_put(dmabuf);
-+
-+	list_del(&priv->entry);
-+	kfree(priv);
-+}
-+
-+static void ffs_dmabuf_get(struct dma_buf_attachment *attach)
-+{
-+	struct ffs_dmabuf_priv *priv = attach->importer_priv;
-+
-+	kref_get(&priv->ref);
-+}
-+
-+static void ffs_dmabuf_put(struct dma_buf_attachment *attach)
-+{
-+	struct ffs_dmabuf_priv *priv = attach->importer_priv;
-+
-+	kref_put(&priv->ref, ffs_dmabuf_release);
-+}
-+
- static int
- ffs_epfile_release(struct inode *inode, struct file *file)
- {
- 	struct ffs_epfile *epfile = inode->i_private;
-+	struct ffs_dmabuf_priv *priv, *tmp;
- 
- 	ENTER();
- 
-+	/* Close all attached DMABUFs */
-+	list_for_each_entry_safe(priv, tmp, &epfile->dmabufs, entry) {
-+		ffs_dmabuf_put(priv->attach);
-+	}
-+
- 	__ffs_epfile_read_buffer_free(epfile);
- 	ffs_data_closed(epfile->ffs);
- 
- 	return 0;
- }
- 
-+static void ffs_dmabuf_signal_done(struct ffs_dma_fence *dma_fence, int ret)
-+{
-+	struct ffs_dmabuf_priv *priv = dma_fence->priv;
-+	struct dma_fence *fence = &dma_fence->base;
-+
-+	dma_fence_get(fence);
-+	fence->error = ret;
-+	dma_fence_signal(fence);
-+
-+	dma_buf_unmap_attachment(priv->attach, dma_fence->sgt, dma_fence->dir);
-+	dma_fence_put(fence);
-+	ffs_dmabuf_put(priv->attach);
-+}
-+
-+static void ffs_epfile_dmabuf_io_complete(struct usb_ep *ep,
-+					  struct usb_request *req)
-+{
-+	ENTER();
-+
-+	pr_debug("FFS: DMABUF transfer complete, status=%d\n", req->status);
-+	ffs_dmabuf_signal_done(req->context, req->status);
-+	usb_ep_free_request(ep, req);
-+}
-+
-+static const char *ffs_dmabuf_get_driver_name(struct dma_fence *fence)
-+{
-+	return "functionfs";
-+}
-+
-+static const char *ffs_dmabuf_get_timeline_name(struct dma_fence *fence)
-+{
-+	return "";
-+}
-+
-+static void ffs_dmabuf_fence_release(struct dma_fence *fence)
-+{
-+	struct ffs_dma_fence *dma_fence = to_ffs_dma_fence(fence);
-+
-+	kfree(dma_fence);
-+}
-+
-+static const struct dma_fence_ops ffs_dmabuf_fence_ops = {
-+	.get_driver_name	= ffs_dmabuf_get_driver_name,
-+	.get_timeline_name	= ffs_dmabuf_get_timeline_name,
-+	.release		= ffs_dmabuf_fence_release,
-+};
-+
-+int ffs_dma_resv_lock(struct dma_buf *dmabuf, bool nonblock)
-+{
-+	int ret;
-+
-+	ret = dma_resv_lock_interruptible(dmabuf->resv, NULL);
-+	if (ret) {
-+		if (ret != -EDEADLK)
-+			goto out;
-+		if (nonblock) {
-+			ret = -EBUSY;
-+			goto out;
-+		}
-+
-+		ret = dma_resv_lock_slow_interruptible(dmabuf->resv, NULL);
-+	}
-+
-+out:
-+	return ret;
-+}
-+
-+static struct dma_buf_attachment *
-+ffs_dmabuf_find_attachment(struct device *dev, struct dma_buf *dmabuf,
-+			   bool nonblock)
-+{
-+	struct dma_buf_attachment *elm, *attach = NULL;
-+	int ret;
-+
-+	ret = ffs_dma_resv_lock(dmabuf, nonblock);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	list_for_each_entry(elm, &dmabuf->attachments, node) {
-+		if (elm->dev == dev) {
-+			attach = elm;
-+			break;
-+		}
-+	}
-+
-+	if (attach)
-+		ffs_dmabuf_get(elm);
-+
-+	dma_resv_unlock(dmabuf->resv);
-+
-+	return attach ?: ERR_PTR(-EPERM);
-+}
-+
-+static int ffs_dmabuf_attach(struct file *file, int fd)
-+{
-+	struct ffs_epfile *epfile = file->private_data;
-+	struct usb_gadget *gadget = epfile->ffs->gadget;
-+	struct dma_buf_attachment *attach;
-+	struct ffs_dmabuf_priv *priv;
-+	struct dma_buf *dmabuf;
-+	int err;
-+
-+	if (!gadget || !gadget->sg_supported)
-+		return -EPERM;
-+
-+	dmabuf = dma_buf_get(fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	attach = dma_buf_attach(dmabuf, gadget->dev.parent);
-+	if (IS_ERR(attach)) {
-+		err = PTR_ERR(attach);
-+		goto err_dmabuf_put;
-+	}
-+
-+	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-+	if (!priv) {
-+		err = -ENOMEM;
-+		goto err_dmabuf_detach;
-+	}
-+
-+	attach->importer_priv = priv;
-+
-+	priv->attach = attach;
-+	spin_lock_init(&priv->lock);
-+	kref_init(&priv->ref);
-+	priv->context = dma_fence_context_alloc(1);
-+
-+	list_add(&priv->entry, &epfile->dmabufs);
-+
-+	return 0;
-+
-+err_dmabuf_detach:
-+	dma_buf_detach(dmabuf, attach);
-+err_dmabuf_put:
-+	dma_buf_put(dmabuf);
-+
-+	return err;
-+}
-+
-+static int ffs_dmabuf_detach(struct file *file, int fd)
-+{
-+	struct ffs_epfile *epfile = file->private_data;
-+	struct usb_gadget *gadget = epfile->ffs->gadget;
-+	bool nonblock = file->f_flags & O_NONBLOCK;
-+	struct dma_buf_attachment *attach;
-+	struct dma_buf *dmabuf;
-+	int ret = 0;
-+
-+	dmabuf = dma_buf_get(fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
-+					    dmabuf, nonblock);
-+	if (IS_ERR(attach)) {
-+		ret = PTR_ERR(attach);
-+		goto out_dmabuf_put;
-+	}
-+
-+	ffs_dmabuf_put(attach);
-+	ffs_dmabuf_put(attach);
-+
-+out_dmabuf_put:
-+	dma_buf_put(dmabuf);
-+	return ret;
-+}
-+
-+static int ffs_dmabuf_transfer(struct file *file,
-+			       const struct usb_ffs_dmabuf_transfer_req *req)
-+{
-+	bool dma_to_ram, nonblock = file->f_flags & O_NONBLOCK;
-+	struct ffs_epfile *epfile = file->private_data;
-+	struct usb_gadget *gadget = epfile->ffs->gadget;
-+	struct dma_buf_attachment *attach;
-+	struct ffs_dmabuf_priv *priv;
-+	enum dma_data_direction dir;
-+	struct ffs_dma_fence *fence;
-+	struct usb_request *usb_req;
-+	struct sg_table *sg_table;
-+	struct dma_buf *dmabuf;
-+	struct ffs_ep *ep = epfile->ep;
-+	int ret;
-+
-+	if (req->flags & ~USB_FFS_DMABUF_TRANSFER_MASK)
-+		return -EINVAL;
-+
-+	dmabuf = dma_buf_get(req->fd);
-+	if (IS_ERR(dmabuf))
-+		return PTR_ERR(dmabuf);
-+
-+	if (req->length > dmabuf->size || req->length == 0) {
-+		ret = -EINVAL;
-+		goto err_dmabuf_put;
-+	}
-+
-+	attach = ffs_dmabuf_find_attachment(gadget->dev.parent,
-+					    dmabuf, nonblock);
-+	if (IS_ERR(attach)) {
-+		ret = PTR_ERR(attach);
-+		goto err_dmabuf_put;
-+	}
-+
-+	priv = attach->importer_priv;
-+
-+	if (epfile->in)
-+		dir = DMA_FROM_DEVICE;
-+	else
-+		dir = DMA_TO_DEVICE;
-+
-+	sg_table = dma_buf_map_attachment(attach, dir);
-+	if (IS_ERR(sg_table)) {
-+		ret = PTR_ERR(sg_table);
-+		goto err_attachment_put;
-+	}
-+
-+	fence = kmalloc(sizeof(*fence), GFP_KERNEL);
-+	if (!fence) {
-+		ret = -ENOMEM;
-+		goto err_unmap_attachment;
-+	}
-+
-+	fence->sgt = sg_table;
-+	fence->dir = dir;
-+	fence->priv = priv;
-+
-+	dma_fence_init(&fence->base, &ffs_dmabuf_fence_ops,
-+		       &priv->lock, priv->context, 0);
-+
-+	usb_req = usb_ep_alloc_request(ep->ep, GFP_ATOMIC);
-+	if (!usb_req) {
-+		ret = -ENOMEM;
-+		goto err_fence_put;
-+	}
-+
-+	ret = ffs_dma_resv_lock(dmabuf, nonblock);
-+	if (ret)
-+		goto err_free_request;
-+
-+	/* Make sure we don't have writers */
-+	if (!dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_WRITE)) {
-+		pr_debug("FFS WRITE fence is not signaled\n");
-+		ret = -EBUSY;
-+		goto err_resv_unlock;
-+	}
-+
-+	dma_to_ram = dir == DMA_FROM_DEVICE;
-+
-+	/* If we're writing to the DMABUF, make sure we don't have readers */
-+	if (dma_to_ram &&
-+	    !dma_resv_test_signaled(dmabuf->resv, DMA_RESV_USAGE_READ)) {
-+		pr_debug("FFS READ fence is not signaled\n");
-+		ret = -EBUSY;
-+		goto err_resv_unlock;
-+	}
-+
-+	ret = dma_resv_reserve_fences(dmabuf->resv, 1);
-+	if (ret)
-+		goto err_resv_unlock;
-+
-+	dma_resv_add_fence(dmabuf->resv, &fence->base,
-+			   dma_resv_usage_rw(dma_to_ram));
-+	dma_resv_unlock(dmabuf->resv);
-+
-+	/* Now that the dma_fence is in place, queue the transfer. */
-+
-+	usb_req->length = req->length;
-+	usb_req->buf = NULL;
-+	usb_req->sg = sg_table->sgl;
-+	usb_req->num_sgs = sg_nents_for_len(sg_table->sgl, req->length);
-+	usb_req->sg_was_mapped = true;
-+	usb_req->context  = fence;
-+	usb_req->complete = ffs_epfile_dmabuf_io_complete;
-+
-+	ret = usb_ep_queue(ep->ep, usb_req, GFP_ATOMIC);
-+	if (ret) {
-+		pr_warn("FFS: Failed to queue DMABUF: %d\n", ret);
-+		ffs_dmabuf_signal_done(fence, ret);
-+		usb_ep_free_request(ep->ep, usb_req);
-+	}
-+
-+	dma_buf_put(dmabuf);
-+
-+	return ret;
-+
-+err_resv_unlock:
-+	dma_resv_unlock(dmabuf->resv);
-+err_free_request:
-+	usb_ep_free_request(ep->ep, usb_req);
-+err_fence_put:
-+	dma_fence_put(&fence->base);
-+err_unmap_attachment:
-+	dma_buf_unmap_attachment(attach, sg_table, dir);
-+err_attachment_put:
-+	ffs_dmabuf_put(attach);
-+err_dmabuf_put:
-+	dma_buf_put(dmabuf);
-+
-+	return ret;
-+}
-+
- static long ffs_epfile_ioctl(struct file *file, unsigned code,
- 			     unsigned long value)
- {
-@@ -1364,8 +1724,45 @@ static long ffs_epfile_ioctl(struct file *file, unsigned code,
- 			ret = -EFAULT;
- 		return ret;
- 	}
-+	case FUNCTIONFS_DMABUF_ATTACH:
-+	{
-+		int fd;
-+
-+		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		ret = ffs_dmabuf_attach(file, fd);
-+		break;
-+	}
-+	case FUNCTIONFS_DMABUF_DETACH:
-+	{
-+		int fd;
-+
-+		if (copy_from_user(&fd, (void __user *)value, sizeof(fd))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		ret = ffs_dmabuf_detach(file, fd);
-+		break;
-+	}
-+	case FUNCTIONFS_DMABUF_TRANSFER:
-+	{
-+		struct usb_ffs_dmabuf_transfer_req req;
-+
-+		if (copy_from_user(&req, (void __user *)value, sizeof(req))) {
-+			ret = -EFAULT;
-+			break;
-+		}
-+
-+		ret = ffs_dmabuf_transfer(file, &req);
-+		break;
-+	}
- 	default:
- 		ret = -ENOTTY;
-+		break;
- 	}
- 	spin_unlock_irq(&epfile->ffs->eps_lock);
- 
-@@ -1925,6 +2322,7 @@ static int ffs_epfiles_create(struct ffs_data *ffs)
- 	for (i = 1; i <= count; ++i, ++epfile) {
- 		epfile->ffs = ffs;
- 		mutex_init(&epfile->mutex);
-+		INIT_LIST_HEAD(&epfile->dmabufs);
- 		if (ffs->user_flags & FUNCTIONFS_VIRTUAL_ADDR)
- 			sprintf(epfile->name, "ep%02x", ffs->eps_addrmap[i]);
- 		else
-diff --git a/include/uapi/linux/usb/functionfs.h b/include/uapi/linux/usb/functionfs.h
-index d77ee6b65328..1412ab9f8ccc 100644
---- a/include/uapi/linux/usb/functionfs.h
-+++ b/include/uapi/linux/usb/functionfs.h
-@@ -84,6 +84,15 @@ struct usb_ext_prop_desc {
- 	__le16	wPropertyNameLength;
- } __attribute__((packed));
- 
-+/* Flags for usb_ffs_dmabuf_transfer_req->flags (none for now) */
-+#define USB_FFS_DMABUF_TRANSFER_MASK	0x0
-+
-+struct usb_ffs_dmabuf_transfer_req {
-+	int fd;
-+	__u32 flags;
-+	__u64 length;
-+} __attribute__((packed));
-+
- #ifndef __KERNEL__
- 
- /*
-@@ -288,6 +297,9 @@ struct usb_functionfs_event {
- #define	FUNCTIONFS_ENDPOINT_DESC	_IOR('g', 130, \
- 					     struct usb_endpoint_descriptor)
- 
--
-+#define FUNCTIONFS_DMABUF_ATTACH	_IOW('g', 131, int)
-+#define FUNCTIONFS_DMABUF_DETACH	_IOW('g', 132, int)
-+#define FUNCTIONFS_DMABUF_TRANSFER	_IOW('g', 133, \
-+					     struct usb_ffs_dmabuf_transfer_req)
- 
- #endif /* _UAPI__LINUX_FUNCTIONFS_H__ */
--- 
-2.39.2
-
+Thanks,
+Kuai
+>   }
+>   EXPORT_SYMBOL(md_wakeup_thread);
+>   
+> @@ -7929,7 +7928,9 @@ int md_register_thread(struct md_thread **threadp,
+>   		return err;
+>   	}
+>   
+> +	spin_lock(&mddev->thread_lock);
+>   	*threadp = thread;
+> +	spin_unlock(&mddev->thread_lock);
+>   	return 0;
+>   }
+>   EXPORT_SYMBOL(md_register_thread);
+> @@ -7938,18 +7939,14 @@ void md_unregister_thread(struct md_thread **threadp, struct mddev *mddev)
+>   {
+>   	struct md_thread *thread;
+>   
+> -	/*
+> -	 * Locking ensures that mddev_unlock does not wake_up a
+> -	 * non-existent thread
+> -	 */
+> -	spin_lock(&pers_lock);
+> +	spin_lock(&mddev->thread_lock);
+>   	thread = *threadp;
+>   	if (!thread) {
+> -		spin_unlock(&pers_lock);
+> +		spin_unlock(&mddev->thread_lock);
+>   		return;
+>   	}
+>   	*threadp = NULL;
+> -	spin_unlock(&pers_lock);
+> +	spin_unlock(&mddev->thread_lock);
+>   
+>   	pr_debug("interrupting MD-thread pid %d\n", task_pid_nr(thread->tsk));
+>   	kthread_stop(thread->tsk);
+> diff --git a/drivers/md/md.h b/drivers/md/md.h
+> index 8f4137ad2dde..ca182d21dd8d 100644
+> --- a/drivers/md/md.h
+> +++ b/drivers/md/md.h
+> @@ -367,6 +367,7 @@ struct mddev {
+>   	int				new_chunk_sectors;
+>   	int				reshape_backwards;
+>   
+> +	spinlock_t			thread_lock;
+>   	struct md_thread		*thread;	/* management thread */
+>   	struct md_thread		*sync_thread;	/* doing resync or reconstruct */
+>   
+> 
