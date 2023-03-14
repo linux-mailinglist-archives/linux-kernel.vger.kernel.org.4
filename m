@@ -2,227 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 434876B9A2E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:46:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4684F6B9A2D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231666AbjCNPqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39436 "EHLO
+        id S231657AbjCNPqA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:46:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36276 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231347AbjCNPps (ORCPT
+        with ESMTP id S230242AbjCNPpm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:45:48 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF59ACBB7
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:45:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678808716; x=1710344716;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=cITCE+UZwPbzaQ7OACY7EnfTGg/YE+v1wZg0atOm8DQ=;
-  b=as64fbpqeZwUNzFecoM/Vbscau5dGjsyT5cA1UDXHtyJKfKxrS5yE9+l
-   OhRKyGzWV7IBfRuk+N04Ud3vIGvfMkl999K4zAF5ap15IDp70Oq2RzY6v
-   Hva1ECK671fKQdD/dZ0LUXfkpUO04eDKMrKl/rt1eOQjlGmsinH3m4geH
-   r3thCMOI5PykZv3uxrsgY5OxysJ2inyEHGUnS28haRdhHJ5eMlk2ojB0J
-   aLcFWYa6+ZWr8OUpX6vadv1uuyFrJ6VDcoRueCRys84YTuL5bFDcu6vI1
-   Nzw40vnI+fRNYNuTkJNzdxnS5SlOlKUfWSw8hBMZk5PhNruxOyBv7gOdw
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="334948163"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="334948163"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:44:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="711565462"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="711565462"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO aschofie-mobl2) ([10.212.140.184])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 08:44:47 -0700
-Date:   Tue, 14 Mar 2023 08:44:45 -0700
-From:   Alison Schofield <alison.schofield@intel.com>
-To:     Kloudifold <cloudifold.3125@gmail.com>
-Cc:     teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: sm750: Rename function to avoid CamelCase
-Message-ID: <ZBCWbcJfX/Gh7hU9@aschofie-mobl2>
-References: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
+        Tue, 14 Mar 2023 11:45:42 -0400
+Received: from mail-ed1-x52e.google.com (mail-ed1-x52e.google.com [IPv6:2a00:1450:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ACBA4241D1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:45:12 -0700 (PDT)
+Received: by mail-ed1-x52e.google.com with SMTP id cy23so63687977edb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:45:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678808708;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9SCxm8iOPdeAsY0TXKkmz+2L6YqtA1AyHrADOlfOy2M=;
+        b=MMo1OJO3T9Nigf+1XIH5iFNEn34rcy5D7wJEjCFOHC0ELhrtCGc1gCr5H0WcvRV2SV
+         4VIFJIorbtD+zIdzgVpvL2gxAIsYEpFrObnIPjET/KGvx8opBDVvaze248ARPx8WXynr
+         HjL/KAjUHXMop4VvxUAK08t0piegvCbRoQ//nwYHz4sXv9f2nxffibebOYMmU+yIwO5u
+         occqSWuo6Pks4aJ6YD+exboTAcqFw/BUnMe/nQwPMR3ka3GuA0kJYJf08aSNquzbPw7x
+         WNpbyfEFxUHpQXKQynNQJSHn6OHMsGPRHsrQ6AbXkx5iFA12MZAKm4HkbpdJXRrtSxVQ
+         cF1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678808708;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=9SCxm8iOPdeAsY0TXKkmz+2L6YqtA1AyHrADOlfOy2M=;
+        b=vzXSosiCDJ1eofyvGQK07kM3vzopptC4nQx6XNCXJvl/9SwIaIw36VZUfbyWxavl11
+         yfiJw4rvBiS0j89kGGjsP6uFveFT5WlYTCK1RHLYsHzrhBlkskLZjpSoqGF9PxyrSln0
+         NfnuLsHQms4WgO8mgHfido9ew29ynnPnV1CWBsTbCyudWcJdqIQ3ljODHZj5eAUPWHl9
+         9tJbO2uAHntBPraOAsHjbbFjYPg0HgutdkKygdtBRStXVICYpWAO05hMMgeoKs3xtzvD
+         K36P+CnCQ97RF3E+QBBhBSfiWLIyWIYYfxKhtWpmh0NFcwLXv+GqNq5lNHg77qIYR7lp
+         zvCA==
+X-Gm-Message-State: AO0yUKUUj7OdWnX+JFzHlRSI+1LF9Y1M7SvTRIAv7TXU+1l6nFDttkdW
+        G4I0D8MCaTS440XWUu59TH+o3Q==
+X-Google-Smtp-Source: AK7set8h0VXGHjuQQFT+Mle8JiJQKMLwlt57Og4xS6JoJpZR63ktbj9TcT7GX03JVYWtZRtR9FLqag==
+X-Received: by 2002:a17:907:1608:b0:92b:a511:c19e with SMTP id hb8-20020a170907160800b0092ba511c19emr3656998ejc.34.1678808707877;
+        Tue, 14 Mar 2023 08:45:07 -0700 (PDT)
+Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
+        by smtp.gmail.com with ESMTPSA id w23-20020a50d797000000b004fadc041e13sm1221690edi.42.2023.03.14.08.45.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 08:45:07 -0700 (PDT)
+Message-ID: <1ee7386b-f42d-a182-f42d-c1f628fb4dda@linaro.org>
+Date:   Tue, 14 Mar 2023 16:45:06 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH net-next V3] dt-bindings: net: ethernet-controller: Add
+ ptp-hardware-clock
+Content-Language: en-US
+To:     Jakub Kicinski <kuba@kernel.org>, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
+        davem@davemloft.net, edumazet@google.com, pabeni@redhat.com,
+        richardcochran@gmail.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        yangbo.lu@nxp.com, radhey.shyam.pandey@amd.com,
+        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
+References: <20230308054408.1353992-1-sarath.babu.naidu.gaddam@amd.com>
+ <20230308054408.1353992-2-sarath.babu.naidu.gaddam@amd.com>
+ <20230313153532.2ed45ddf@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20230313153532.2ed45ddf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 04:43:20AM +0800, Kloudifold wrote:
-> The sm750 driver had some functions named in CamelCase,
-> which violates the kernel's naming convention.
-> In this patch, I rename these functions to snake case,
-> which is the expected style.
+On 13/03/2023 23:35, Jakub Kicinski wrote:
+> On Wed, 8 Mar 2023 11:14:08 +0530 Sarath Babu Naidu Gaddam wrote:
+>> There is currently no standard property to pass PTP device index
+>> information to ethernet driver when they are independent.
+>>
+>> ptp-hardware-clock property will contain phandle to PTP clock node.
+>>
+>> Its a generic (optional) property name to link to PTP phandle to
+>> Ethernet node. Any future or current ethernet drivers that need
+>> a reference to the PHC used on their system can simply use this
+>> generic property name instead of using custom property
+>> implementation in their device tree nodes."
+>>
+>> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
+>> Acked-by: Richard Cochran <richardcochran@gmail.com>
 > 
-> This v2 patch was prompted by an error reported by the
-> Linux test robot, which detected the compile error.
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+> Rob, Krzysztof, any thoughts on this one?
+> Looks like the v2 discussion was a bit inconclusive.
 
-The tags from lkp go with your tag below - 
+Anyway this did not implement changes I requested, so NAK.
 
-  Reported-by: kernel test robot <lkp@intel.com>
-  Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
-> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
-> ---
+Best regards,
+Krzysztof
 
-Your next changelog, will look something like this:
-
-Changes in v3:
-- Add this changelog (Philipp)
-- Move lkp tags and link to the correct location in commit log (Alison)
-- Update the commit msg (Philip)
-- Update the commit log (Bagas, Julia)
-
-Changes in v2:
-- Use new function names in call sites (LKP)
-
-
-
-Khadaji,
-Did you see the compile errors?  What was the deal with that?
-Thanks,
-Alison
-
-
->  drivers/staging/sm750fb/sm750.c        | 22 +++++++++++-----------
->  drivers/staging/sm750fb/sm750_cursor.c | 14 +++++++-------
->  drivers/staging/sm750fb/sm750_cursor.h | 12 ++++++------
->  3 files changed, 24 insertions(+), 24 deletions(-)
-> 
-> diff --git a/drivers/staging/sm750fb/sm750.c b/drivers/staging/sm750fb/sm750.c
-> index effc7fcc3..9ddcd7b7d 100644
-> --- a/drivers/staging/sm750fb/sm750.c
-> +++ b/drivers/staging/sm750fb/sm750.c
-> @@ -121,14 +121,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
->  
->  	sm750_hw_cursor_disable(cursor);
->  	if (fbcursor->set & FB_CUR_SETSIZE)
-> -		sm750_hw_cursor_setSize(cursor,
-> -					fbcursor->image.width,
-> -					fbcursor->image.height);
-> +		sm750_hw_cursor_set_size(cursor,
-> +					 fbcursor->image.width,
-> +					 fbcursor->image.height);
->  
->  	if (fbcursor->set & FB_CUR_SETPOS)
-> -		sm750_hw_cursor_setPos(cursor,
-> -				       fbcursor->image.dx - info->var.xoffset,
-> -				       fbcursor->image.dy - info->var.yoffset);
-> +		sm750_hw_cursor_set_pos(cursor,
-> +				        fbcursor->image.dx - info->var.xoffset,
-> +				        fbcursor->image.dy - info->var.yoffset);
->  
->  	if (fbcursor->set & FB_CUR_SETCMAP) {
->  		/* get the 16bit color of kernel means */
-> @@ -142,14 +142,14 @@ static int lynxfb_ops_cursor(struct fb_info *info, struct fb_cursor *fbcursor)
->  		     ((info->cmap.green[fbcursor->image.bg_color] & 0xfc00) >> 5) |
->  		     ((info->cmap.blue[fbcursor->image.bg_color] & 0xf800) >> 11);
->  
-> -		sm750_hw_cursor_setColor(cursor, fg, bg);
-> +		sm750_hw_cursor_set_color(cursor, fg, bg);
->  	}
->  
->  	if (fbcursor->set & (FB_CUR_SETSHAPE | FB_CUR_SETIMAGE)) {
-> -		sm750_hw_cursor_setData(cursor,
-> -					fbcursor->rop,
-> -					fbcursor->image.data,
-> -					fbcursor->mask);
-> +		sm750_hw_cursor_set_data(cursor,
-> +					 fbcursor->rop,
-> +					 fbcursor->image.data,
-> +					 fbcursor->mask);
->  	}
->  
->  	if (fbcursor->enable)
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.c b/drivers/staging/sm750fb/sm750_cursor.c
-> index 43e6f52c2..ff643e33f 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.c
-> +++ b/drivers/staging/sm750fb/sm750_cursor.c
-> @@ -58,13 +58,13 @@ void sm750_hw_cursor_disable(struct lynx_cursor *cursor)
->  	poke32(HWC_ADDRESS, 0);
->  }
->  
-> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h)
-> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h)
->  {
->  	cursor->w = w;
->  	cursor->h = h;
->  }
->  
-> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
-> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y)
->  {
->  	u32 reg;
->  
-> @@ -73,7 +73,7 @@ void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y)
->  	poke32(HWC_LOCATION, reg);
->  }
->  
-> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
-> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg)
->  {
->  	u32 reg = (fg << HWC_COLOR_12_2_RGB565_SHIFT) &
->  		HWC_COLOR_12_2_RGB565_MASK;
-> @@ -82,8 +82,8 @@ void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg)
->  	poke32(HWC_COLOR_3, 0xffe0);
->  }
->  
-> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
-> -			     const u8 *pcol, const u8 *pmsk)
-> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
-> +			      const u8 *pcol, const u8 *pmsk)
->  {
->  	int i, j, count, pitch, offset;
->  	u8 color, mask, opr;
-> @@ -132,8 +132,8 @@ void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
->  	}
->  }
->  
-> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-> -			      const u8 *pcol, const u8 *pmsk)
-> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-> +			       const u8 *pcol, const u8 *pmsk)
->  {
->  	int i, j, count, pitch, offset;
->  	u8 color, mask;
-> diff --git a/drivers/staging/sm750fb/sm750_cursor.h b/drivers/staging/sm750fb/sm750_cursor.h
-> index b59643dd6..88fa02f63 100644
-> --- a/drivers/staging/sm750fb/sm750_cursor.h
-> +++ b/drivers/staging/sm750fb/sm750_cursor.h
-> @@ -5,11 +5,11 @@
->  /* hw_cursor_xxx works for voyager,718 and 750 */
->  void sm750_hw_cursor_enable(struct lynx_cursor *cursor);
->  void sm750_hw_cursor_disable(struct lynx_cursor *cursor);
-> -void sm750_hw_cursor_setSize(struct lynx_cursor *cursor, int w, int h);
-> -void sm750_hw_cursor_setPos(struct lynx_cursor *cursor, int x, int y);
-> -void sm750_hw_cursor_setColor(struct lynx_cursor *cursor, u32 fg, u32 bg);
-> -void sm750_hw_cursor_setData(struct lynx_cursor *cursor, u16 rop,
-> -			     const u8 *data, const u8 *mask);
-> -void sm750_hw_cursor_setData2(struct lynx_cursor *cursor, u16 rop,
-> +void sm750_hw_cursor_set_size(struct lynx_cursor *cursor, int w, int h);
-> +void sm750_hw_cursor_set_pos(struct lynx_cursor *cursor, int x, int y);
-> +void sm750_hw_cursor_set_color(struct lynx_cursor *cursor, u32 fg, u32 bg);
-> +void sm750_hw_cursor_set_data(struct lynx_cursor *cursor, u16 rop,
->  			      const u8 *data, const u8 *mask);
-> +void sm750_hw_cursor_set_data2(struct lynx_cursor *cursor, u16 rop,
-> +			       const u8 *data, const u8 *mask);
->  #endif
-> -- 
-> 2.39.2
-> 
-> 
