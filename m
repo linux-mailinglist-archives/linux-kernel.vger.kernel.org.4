@@ -2,107 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3C3DC6B869C
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 11B896B86A3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:10:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230263AbjCNAIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37726 "EHLO
+        id S230071AbjCNAKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230083AbjCNAID (ORCPT
+        with ESMTP id S229540AbjCNAKU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:08:03 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D18AA3
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:08:02 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id fd5so21618518edb.7
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:08:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678752481;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A2ukH6WAZ8EttWg0OswBTEdX1j9zDdqS5u5M40aGmp0=;
-        b=Cs9Of024cqf9TlHnAmq+MlNmaZdAuCMQBfmvSXd/aDPKlzbAsdx3WuTfnmLa3rthFl
-         Jc8kCmzE7+8jXd7qYo1BzlM3P1gBRWaR6+Rvomc9EbpgoP1xFENtPOhVgqS7GOTYwPyt
-         RGRd1KskLclkuwnU/YQ5DoyAUTujpwinNMMlX5lJz21OJasErqh5Dq/s9ctc4bQhOvtu
-         nWax6M/MXri3etbTS5QvpL5f67NHi98nunD0c8+QNbSd3Xa6jUPZql7EqEs9SfF/pUUq
-         Ic8/Ovn/SfCrHWP1ZihszXcF+omWxJgjKDJ+wGEXWNhEH2DyXUxHyYhQHjwUNBmNp2TX
-         flDg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678752481;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=A2ukH6WAZ8EttWg0OswBTEdX1j9zDdqS5u5M40aGmp0=;
-        b=NfwLNbgLxL9GUBCBR7VuRB6ywfNh1Ri6hXGh6igHOCd3Es+qHWFHvE2iwlTR38sABR
-         DOvC/YFYmEAZeSWKNYWFD4GChkJvWcpm5LOA0ZX6m3DL9DHHhVCJxP+4Po5E3Gqep1LP
-         D8ekjP8o1d5uSW56RnB6ADPFuoeQAJWtMDNyvDht5euclrf9ZT+N5dAIFpomEyJKIXUM
-         XfsqTgXeSVVPmdt02llgdOheKL6oBj4QW7HqUcTkKB1tffyd/0qar5KuJcB90zwpaboB
-         w3K4Hzn+7cR610dTgdJJJ9i6DMKRVdZDHPYFYZ7ur+PafjtUz2x2Z0zd6ZYIYpF4UGh7
-         Rn6g==
-X-Gm-Message-State: AO0yUKV5DsfB/onzQ0vMTr5NWrjShtSu1RFY7DI0Ts9GgNlvtZkNEM84
-        oMh22/zJ3Po2hPom8c8XlDs=
-X-Google-Smtp-Source: AK7set9CotDXNOtvrT9WBiu6WzHL5SzfydYWqI8zVpwQyv4iOdBiMbKAW0gqEe9Ltdx9LQpoG1aHAA==
-X-Received: by 2002:a17:906:739e:b0:91d:9b07:94c3 with SMTP id f30-20020a170906739e00b0091d9b0794c3mr10493385ejl.0.1678752480654;
-        Mon, 13 Mar 2023 17:08:00 -0700 (PDT)
-Received: from [192.168.0.104] (p57935146.dip0.t-ipconnect.de. [87.147.81.70])
-        by smtp.gmail.com with ESMTPSA id cb17-20020a170906a45100b008deba75e89csm369673ejb.66.2023.03.13.17.07.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 17:08:00 -0700 (PDT)
-Message-ID: <64f9d3ca-268e-71ae-4a6d-b71315a8406e@gmail.com>
-Date:   Tue, 14 Mar 2023 01:07:59 +0100
+        Mon, 13 Mar 2023 20:10:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 717C361888;
+        Mon, 13 Mar 2023 17:10:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E0FB361570;
+        Tue, 14 Mar 2023 00:10:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3899FC433EF;
+        Tue, 14 Mar 2023 00:10:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678752618;
+        bh=lwSrZHpB/2H3KGj25BHrgbq8Bljm/f9GEWsbt/dHqTI=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oKn5ya6t2iobg/GAg+FG4/Ru8R6m48f55SKtsFOueUuCxVCaO+hiJOrYxRmlXJWZk
+         TU0ydkcxTJgta69faBgNpx5AyRKOc35Q7SQg9kkTHCAxZXiTVrfl8WBalQYPvYZl2r
+         JE+NCQQOlnkmn8oAtJhiFfnUPZkukaauznRO0MWgxxoKNQkknHXdtN/fBsqbKBPRhf
+         zeDoyitIfyBicarXLdPYRMHSTwoquxFHFcYUi1W2j0SRQyvSJiO+1h1cqyLuKNsYna
+         FNMyJv1zgQlNqiG32erH2pK/s/p10Oc6PdljqVkEPDpurAqqDOW3WEy529x8w2nPrZ
+         1Q4OFl41hzFCg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 1C6FEE66CBA;
+        Tue, 14 Mar 2023 00:10:18 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v2] staging: sm750: Rename function to avoid CamelCase
-To:     Kloudifold <cloudifold.3125@gmail.com>,
-        teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-References: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
-Content-Language: en-US
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH v3 net 1/2] net: dsa: mt7530: remove now incorrect comment
+ regarding port 5
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167875261811.15210.2328160287953861315.git-patchwork-notify@kernel.org>
+Date:   Tue, 14 Mar 2023 00:10:18 +0000
+References: <20230310073338.5836-1-arinc.unal@arinc9.com>
+In-Reply-To: <20230310073338.5836-1-arinc.unal@arinc9.com>
+To:     =?utf-8?b?QXLEsW7DpyDDnE5BTCA8YXJpbmM5LnVuYWxAZ21haWwuY29tPg==?=@ci.codeaurora.org
+Cc:     sean.wang@mediatek.com, Landen.Chao@mediatek.com, dqfext@gmail.com,
+        andrew@lunn.ch, f.fainelli@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, matthias.bgg@gmail.com,
+        angelogioacchino.delregno@collabora.com, opensource@vdorst.com,
+        rmk+kernel@armlinux.org.uk, arinc.unal@arinc9.com,
+        netdev@vger.kernel.org, erkin.bozoglu@xeront.com,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 21:43, Kloudifold wrote:
-> The sm750 driver had some functions named in CamelCase,
-> which violates the kernel's naming convention.
-> In this patch, I rename these functions to snake case,
-> which is the expected style.
+Hello:
 
-Hi,
-please make the Subject more unique. Many patches could have this name.
-Look for examples in:
-https://lore.kernel.org/linux-staging/
+This series was applied to netdev/net.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
 
-Please use your full name consisting of a given name and a family name 
-in front of your email. Or is this not possible and "Kloudifold" is both?
-
-> This v2 patch was prompted by an error reported by the
-> Linux test robot, which detected the compile error.
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@intel.com/
+On Fri, 10 Mar 2023 10:33:37 +0300 you wrote:
+> From: Arınç ÜNAL <arinc.unal@arinc9.com>
 > 
-> Signed-off-by: Kloudifold <cloudifold.3125@gmail.com>
+> Remove now incorrect comment regarding port 5 as GMAC5. This is supposed to
+> be supported since commit 38f790a80560 ("net: dsa: mt7530: Add support for
+> port 5") under mt7530_setup_port5().
+> 
+> Fixes: 38f790a80560 ("net: dsa: mt7530: Add support for port 5")
+> Signed-off-by: Arınç ÜNAL <arinc.unal@arinc9.com>
+> 
+> [...]
 
-The explanation what has changed needs to be below the ---
-but your Signed-off-by: is not allowed to be below this ---
-Look for examples of v2 in:
-https://lore.kernel.org/linux-staging/
+Here is the summary with links:
+  - [v3,net,1/2] net: dsa: mt7530: remove now incorrect comment regarding port 5
+    https://git.kernel.org/netdev/net/c/feb03fd11c56
+  - [v3,net,2/2] net: dsa: mt7530: set PLL frequency and trgmii only when trgmii is used
+    https://git.kernel.org/netdev/net/c/0b086d76e7b0
 
-Thanks
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-Bye Philipp
+
