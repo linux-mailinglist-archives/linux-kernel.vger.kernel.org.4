@@ -2,186 +2,218 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3D576B962E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:28:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D5366B9631
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:28:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229664AbjCNN2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
+        id S232469AbjCNN2j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:28:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232001AbjCNN1m (ORCPT
+        with ESMTP id S230329AbjCNN1x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:27:42 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2474D1351C;
-        Tue, 14 Mar 2023 06:25:19 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id v21so6455790ple.9;
-        Tue, 14 Mar 2023 06:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678800318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GyvhYehpeRfb9AP6vCMFo3dvMbNupDfwlDmri9F9bbA=;
-        b=bwv9wesUmgXY6fC4ncQ9XBImT0rgJniyEaPpMDLanDrxgj4Kpotl0lfDvQPGuwf1Zt
-         kacWzT3VLOOqdJ+m2qyNGR7c9mkVK1qqhVuO2njrF6g2jndXcyh2ZXeoudsIzl9rdudB
-         OLCtXtzVZjUoTSH8V7HQ1TNy5utnIHWYUCrpe6C5z9X47x+1LJ/0hnzjzLQr+RIzob1L
-         nlkUEAwzHip0Z4rfQRTpNd3rjeh1G2prkw5hmtpODIAYLhK3DTjKcGFiA6+jVIqZoJpc
-         r2MouqIzrkkCReDjbEdqrAHvsOzDLwDIEWZc0fvOv/BGoi/lzS8XKxbngPn3/0d1zCfj
-         dzQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678800318;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GyvhYehpeRfb9AP6vCMFo3dvMbNupDfwlDmri9F9bbA=;
-        b=OGsy92ZDD5Hsiu7C33Eqm/+CXqGJPgt2VXyCVLtFlamkgeO//gkFra0qdtclrUprvR
-         b/1wwvvamFqOzd813Vm63Mc3uTwNAqgbHvgrJtl3D/YWCcduVt+EZUTrWNp1IHxcCzK8
-         rBPTJGZ/UNDMpPf1fo3GrSSCNzp8Qib+UfnzEaAJ8kVwKdLMpkXW7koAntpRcOPzDbn1
-         /avYPsi+fpDsju6cySu7tUtaS+OvwO1boIM7z5ysuIz1Xb/tBj8nwSvgZ6FCkxBj4nJY
-         DQ6I4KcSNX/1P0ABldNYBMJ7ROoz/J+fC82ViXweP/vmgfUhs9z2gQjJvwf7HwmNVdxd
-         R3mw==
-X-Gm-Message-State: AO0yUKWdnuZl4Ei9x2QDpgn7lQiougWpg2ZlSKApUW7l6h3GVRjgq2nT
-        t1Bngt8U6gY4hxWgbG2Krh/Y0XHIG/0hI9n58VA=
-X-Google-Smtp-Source: AK7set88CMQ57RlAibdExv9CkBt258UFDkdCpde450Pr1sl081IJ5NjE9s9y48aftdFchax6B0pqWub/y7afiN5rJNQ=
-X-Received: by 2002:a17:902:f985:b0:19f:2802:dabb with SMTP id
- ky5-20020a170902f98500b0019f2802dabbmr3979299plb.12.1678800318488; Tue, 14
- Mar 2023 06:25:18 -0700 (PDT)
+        Tue, 14 Mar 2023 09:27:53 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80C926A1DF;
+        Tue, 14 Mar 2023 06:25:32 -0700 (PDT)
+Received: from [192.168.86.246] (cpc87451-finc19-2-0-cust61.4-2.cable.virginm.net [82.11.51.62])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: tanureal)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 6C51C660036A;
+        Tue, 14 Mar 2023 13:25:30 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1678800330;
+        bh=3Q9Wk1fkKtkxc1DaKV294b/HrXukUV6KK5bXqHC2FLQ=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Yhq4ySgX78GYfKdhwkJ4cf+2fmyAhwykSsKt51YyCkCKw4x2zGEnFzMme38fWlbEQ
+         0k+opx9wQfa+7o0Z9w95XUbbOy/1dq8Z1rwY+e47dwsZqKfQpCY8nu+jymSUawLqxP
+         ohqk6g9CQmZUY0sW4OSUbTVOzDeJf6ygS3AW32qN6iEN/KmQdznlpC5PdFUjr7k/bD
+         D7YYvFn4bzsKAQLD2ETwiLvF/IL78rg+dG93m9ZhWAWnA6aVYbKaM8gNdex5nxnjPh
+         DWG+9OKAArr1ikA0myJ6WAaSnO5OuGnXO2L+ZiT9X905vkugTZNbeOtMit77e3EoTF
+         IeDkeL3BFYZYw==
+Message-ID: <93e4d83d-9559-c987-d93b-c49572413275@collabora.com>
+Date:   Tue, 14 Mar 2023 13:25:28 +0000
 MIME-Version: 1.0
-References: <aa9567fd-38e1-7b9c-b3e1-dc2fdc055da5@molgen.mpg.de>
- <37c158cb-f527-34f5-2482-cae138bc8b07@molgen.mpg.de> <efb8d47b-ab9b-bdb9-ee2f-fb1be66343b1@molgen.mpg.de>
- <55e30408-ac63-965f-769f-18be5fd5885c@molgen.mpg.de> <d95aa962-9750-c27c-639a-2362bdb32f41@cloud.ionos.com>
- <30576384-682c-c021-ff16-bebed8251365@molgen.mpg.de> <cdc0b03c-db53-35bc-2f75-93bbca0363b5@molgen.mpg.de>
- <bc342de0-98d2-1733-39cd-cc1999777ff3@molgen.mpg.de> <c3390ab0-d038-f1c3-5544-67ae9c8408b1@cloud.ionos.com>
- <a27c5a64-62bf-592c-e547-1e8e904e3c97@molgen.mpg.de> <6c7008df-942e-13b1-2e70-a058e96ab0e9@cloud.ionos.com>
- <12f09162-c92f-8fbb-8382-cba6188bfb29@molgen.mpg.de> <6757d55d-ada8-9b7e-b7fd-2071fe905466@cloud.ionos.com>
- <93d8d623-8aec-ad91-490c-a414c4926fb2@molgen.mpg.de> <0bb7c8d8-6b96-ce70-c5ee-ba414de10561@cloud.ionos.com>
- <e271e183-20e9-8ca2-83eb-225d4d7ab5db@molgen.mpg.de> <1cdfceb6-f39b-70e1-3018-ea14dbe257d9@cloud.ionos.com>
- <7733de01-d1b0-e56f-db6a-137a752f7236@molgen.mpg.de> <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
-In-Reply-To: <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
-From:   Marc Smith <msmith626@gmail.com>
-Date:   Tue, 14 Mar 2023 09:25:07 -0400
-Message-ID: <CAH6h+hf7Y-kurBJG+pnH6WCQiaEK+Jq3KG5JOGnHJ4Uw6AbUjg@mail.gmail.com>
-Subject: Re: md_raid: mdX_raid6 looping after sync_action "check" to "idle" transition
-To:     Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
-Cc:     Donald Buczek <buczek@molgen.mpg.de>, Song Liu <song@kernel.org>,
-        linux-raid@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        it+raid@molgen.mpg.de
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 1/7] irqchip/gic-v3: Add a DMA Non-Coherent flag
+To:     Robin Murphy <robin.murphy@arm.com>,
+        Peter Geis <pgwipeout@gmail.com>
+Cc:     Vinod Koul <vkoul@kernel.org>,
+        Kishon Vijay Abraham I <kishon@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Krzysztof Wilczynski <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>, Qu Wenruo <wqu@suse.com>,
+        Piotr Oniszczuk <piotr.oniszczuk@gmail.com>,
+        Kever Yang <kever.yang@rock-chips.com>,
+        linux-phy@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, kernel@collabora.com
+References: <20230310080518.78054-1-lucas.tanure@collabora.com>
+ <20230310080518.78054-2-lucas.tanure@collabora.com>
+ <CAMdYzYpL7V6udw=T7ZChTFi0xOj1tb-5CVHb84u1pL4kj3eDZA@mail.gmail.com>
+ <3db23e11-5fac-f36e-c89e-93c4e8ac2d98@arm.com>
+Content-Language: en-US
+From:   Lucas Tanure <lucas.tanure@collabora.com>
+In-Reply-To: <3db23e11-5fac-f36e-c89e-93c4e8ac2d98@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Feb 8, 2021 at 7:49=E2=80=AFPM Guoqing Jiang
-<guoqing.jiang@cloud.ionos.com> wrote:
->
-> Hi Donald,
->
-> On 2/8/21 19:41, Donald Buczek wrote:
-> > Dear Guoqing,
-> >
-> > On 08.02.21 15:53, Guoqing Jiang wrote:
-> >>
-> >>
-> >> On 2/8/21 12:38, Donald Buczek wrote:
-> >>>> 5. maybe don't hold reconfig_mutex when try to unregister
-> >>>> sync_thread, like this.
-> >>>>
-> >>>>          /* resync has finished, collect result */
-> >>>>          mddev_unlock(mddev);
-> >>>>          md_unregister_thread(&mddev->sync_thread);
-> >>>>          mddev_lock(mddev);
-> >>>
-> >>> As above: While we wait for the sync thread to terminate, wouldn't it
-> >>> be a problem, if another user space operation takes the mutex?
-> >>
-> >> I don't think other places can be blocked while hold mutex, otherwise
-> >> these places can cause potential deadlock. Please try above two lines
-> >> change. And perhaps others have better idea.
-> >
-> > Yes, this works. No deadlock after >11000 seconds,
-> >
-> > (Time till deadlock from previous runs/seconds: 1723, 37, 434, 1265,
-> > 3500, 1136, 109, 1892, 1060, 664, 84, 315, 12, 820 )
->
-> Great. I will send a formal patch with your reported-by and tested-by.
->
+On 10-03-2023 12:04, Robin Murphy wrote:
+> On 2023-03-10 11:41, Peter Geis wrote:
+>> On Fri, Mar 10, 2023 at 3:05 AM Lucas Tanure 
+>> <lucas.tanure@collabora.com> wrote:
+>>>
+>>> The GIC600 integration in RK356x, used in rk3588, doesn't support
+>>> any of the shareability or cacheability attributes, and requires
+>>> both values to be set to 0b00 for all the ITS and Redistributor
+>>> tables.
+>>>
+>>> This is loosely based on prior work from XiaoDong Huang and
+>>> Peter Geis fixing this issue specifically for Rockchip 356x.
+>>
+>> Good Morning,
+>>
+>> Since the gic is using dma, would it be reasonable to have all memory
+>> allocations be requested with the GFP_DMA flag? Otherwise this doesn't
+>> fully solve the problem for rk356x, where only the lower 4GB range is
+>> DMA capable, but this tends to get allocated in the upper 4GB on 8GB
+>> boards.
+> 
+> Not really, because there's no fixed definition of what GFP_DMA actually 
+> means, and it may mean nothing (same for GFP_DMA32, which may or may not 
+> be meaningful depending on kernel config and platform topology). Drivers 
+> should really use the DMA API allocation functions if they care about 
+> what they get, which comes back round to the notion from years ago of 
+> converting the ITS driver to a regular platform driver, so it can 
+> benefit from regular DT concepts like "dma-ranges" automatically.
+> 
 > Thanks,
-> Guoqing
+> Robin.
+> 
+I am looking how to do that conversion to platform driver.
+But about the communication between irq-gic-v3-its and irq-gic-v3.
+Should irq-gic-v3-its be a MFD child of irq-gic-v3?
+Or use the component bind/unbind framework?
 
-I'm still hitting this issue with Linux 5.4.229 -- it looks like 1/2
-of the patches that supposedly resolve this were applied to the stable
-kernels, however, one was omitted due to a regression:
-md: don't unregister sync_thread with reconfig_mutex held (upstream
-commit 8b48ec23cc51a4e7c8dbaef5f34ebe67e1a80934)
+>>
+>> Very Respectfully,
+>> Peter Geis
+>>
+>>>
+>>> Suggested-by: Robin Murphy <robin.murphy@arm.com>
+>>> Signed-off-by: Lucas Tanure <lucas.tanure@collabora.com>
+>>> ---
+>>>   drivers/irqchip/irq-gic-v3-its.c | 22 ++++++++++++++++++++++
+>>>   1 file changed, 22 insertions(+)
+>>>
+>>> diff --git a/drivers/irqchip/irq-gic-v3-its.c 
+>>> b/drivers/irqchip/irq-gic-v3-its.c
+>>> index 973ede0197e3..1c334dfeb647 100644
+>>> --- a/drivers/irqchip/irq-gic-v3-its.c
+>>> +++ b/drivers/irqchip/irq-gic-v3-its.c
+>>> @@ -42,6 +42,7 @@
+>>>   #define ITS_FLAGS_CMDQ_NEEDS_FLUSHING          (1ULL << 0)
+>>>   #define ITS_FLAGS_WORKAROUND_CAVIUM_22375      (1ULL << 1)
+>>>   #define ITS_FLAGS_WORKAROUND_CAVIUM_23144      (1ULL << 2)
+>>> +#define ITS_FLAGS_DMA_NON_COHERENT             (1ULL << 3)
+>>>
+>>>   #define RDIST_FLAGS_PROPBASE_NEEDS_FLUSHING    (1 << 0)
+>>>   #define RDIST_FLAGS_RD_TABLES_PREALLOCATED     (1 << 1)
+>>> @@ -2359,6 +2360,13 @@ static int its_setup_baser(struct its_node 
+>>> *its, struct its_baser *baser,
+>>>          its_write_baser(its, baser, val);
+>>>          tmp = baser->val;
+>>>
+>>> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT) {
+>>> +               if (tmp & GITS_BASER_SHAREABILITY_MASK)
+>>> +                       tmp &= ~GITS_BASER_SHAREABILITY_MASK;
+>>> +               else
+>>> +                       gic_flush_dcache_to_poc(base, 
+>>> PAGE_ORDER_TO_SIZE(order));
+>>> +       }
+>>> +
+>>>          if ((val ^ tmp) & GITS_BASER_SHAREABILITY_MASK) {
+>>>                  /*
+>>>                   * Shareability didn't stick. Just use
+>>> @@ -3055,6 +3063,7 @@ static u64 its_clear_vpend_valid(void __iomem 
+>>> *vlpi_base, u64 clr, u64 set)
+>>>
+>>>   static void its_cpu_init_lpis(void)
+>>>   {
+>>> +       struct its_node *its = list_first_entry(&its_nodes, struct 
+>>> its_node, entry);
+>>>          void __iomem *rbase = gic_data_rdist_rd_base();
+>>>          struct page *pend_page;
+>>>          phys_addr_t paddr;
+>>> @@ -3096,6 +3105,9 @@ static void its_cpu_init_lpis(void)
+>>>          gicr_write_propbaser(val, rbase + GICR_PROPBASER);
+>>>          tmp = gicr_read_propbaser(rbase + GICR_PROPBASER);
+>>>
+>>> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT)
+>>> +               tmp &= ~GICR_PROPBASER_SHAREABILITY_MASK;
+>>> +
+>>>          if ((tmp ^ val) & GICR_PROPBASER_SHAREABILITY_MASK) {
+>>>                  if (!(tmp & GICR_PROPBASER_SHAREABILITY_MASK)) {
+>>>                          /*
+>>> @@ -3120,6 +3132,9 @@ static void its_cpu_init_lpis(void)
+>>>          gicr_write_pendbaser(val, rbase + GICR_PENDBASER);
+>>>          tmp = gicr_read_pendbaser(rbase + GICR_PENDBASER);
+>>>
+>>> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT)
+>>> +               tmp &= ~GICR_PENDBASER_SHAREABILITY_MASK;
+>>> +
+>>>          if (!(tmp & GICR_PENDBASER_SHAREABILITY_MASK)) {
+>>>                  /*
+>>>                   * The HW reports non-shareable, we must remove the
+>>> @@ -5005,6 +5020,7 @@ static int __init 
+>>> its_compute_its_list_map(struct resource *res,
+>>>   static int __init its_probe_one(struct resource *res,
+>>>                                  struct fwnode_handle *handle, int 
+>>> numa_node)
+>>>   {
+>>> +       struct device_node *np = to_of_node(handle);
+>>>          struct its_node *its;
+>>>          void __iomem *its_base;
+>>>          u64 baser, tmp, typer;
+>>> @@ -5076,6 +5092,9 @@ static int __init its_probe_one(struct resource 
+>>> *res,
+>>>          its->get_msi_base = its_irq_get_msi_base;
+>>>          its->msi_domain_flags = IRQ_DOMAIN_FLAG_MSI_REMAP;
+>>>
+>>> +       if (np && !of_dma_is_coherent(np))
+>>> +               its->flags |= ITS_FLAGS_DMA_NON_COHERENT;
+>>> +
+>>>          its_enable_quirks(its);
+>>>
+>>>          err = its_alloc_tables(its);
+>>> @@ -5095,6 +5114,9 @@ static int __init its_probe_one(struct resource 
+>>> *res,
+>>>          gits_write_cbaser(baser, its->base + GITS_CBASER);
+>>>          tmp = gits_read_cbaser(its->base + GITS_CBASER);
+>>>
+>>> +       if (its->flags & ITS_FLAGS_DMA_NON_COHERENT)
+>>> +               tmp &= ~GITS_CBASER_SHAREABILITY_MASK;
+>>> +
+>>>          if ((tmp ^ baser) & GITS_CBASER_SHAREABILITY_MASK) {
+>>>                  if (!(tmp & GITS_CBASER_SHAREABILITY_MASK)) {
+>>>                          /*
+>>> -- 
+>>> 2.39.2
+>>>
 
-I don't see any follow-up on the thread from June 8th 2022 asking for
-this patch to be dropped from all stable kernels since it caused a
-regression.
-
-The patch doesn't appear to be present in the current mainline kernel
-(6.3-rc2) either. So I assume this issue is still present there, or it
-was resolved differently and I just can't find the commit/patch.
-
-I can induce the issue by using Donald's script above which will
-eventually result in hangs:
-...
-147948.504621] INFO: task md_test_2.sh:68033 blocked for more than 122 seco=
-nds.
-[147948.504624]       Tainted: P           OE     5.4.229-esos.prod #1
-[147948.504624] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[147948.504625] md_test_2.sh    D    0 68033      1 0x00000004
-[147948.504627] Call Trace:
-[147948.504634]  __schedule+0x4ab/0x4f3
-[147948.504637]  ? usleep_range+0x7a/0x7a
-[147948.504638]  schedule+0x67/0x81
-[147948.504639]  schedule_timeout+0x2c/0xe5
-[147948.504643]  ? do_raw_spin_lock+0x2b/0x52
-[147948.504644]  __wait_for_common+0xc4/0x13a
-[147948.504647]  ? wake_up_q+0x40/0x40
-[147948.504649]  kthread_stop+0x9a/0x117
-[147948.504653]  md_unregister_thread+0x43/0x4d
-[147948.504655]  md_reap_sync_thread+0x1c/0x1d5
-[147948.504657]  action_store+0xc9/0x284
-[147948.504658]  md_attr_store+0x9f/0xb8
-[147948.504661]  kernfs_fop_write+0x10a/0x14c
-[147948.504664]  vfs_write+0xa0/0xdd
-[147948.504666]  ksys_write+0x71/0xba
-[147948.504668]  do_syscall_64+0x52/0x60
-[147948.504671]  entry_SYSCALL_64_after_hwframe+0x5c/0xc1
-...
-[147948.504748] INFO: task md120_resync:135315 blocked for more than
-122 seconds.
-[147948.504749]       Tainted: P           OE     5.4.229-esos.prod #1
-[147948.504749] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
-disables this message.
-[147948.504749] md120_resync    D    0 135315      2 0x80004000
-[147948.504750] Call Trace:
-[147948.504752]  __schedule+0x4ab/0x4f3
-[147948.504754]  ? printk+0x53/0x6a
-[147948.504755]  schedule+0x67/0x81
-[147948.504756]  md_do_sync+0xae7/0xdd9
-[147948.504758]  ? remove_wait_queue+0x41/0x41
-[147948.504759]  md_thread+0x128/0x151
-[147948.504761]  ? _raw_spin_lock_irqsave+0x31/0x5d
-[147948.504762]  ? md_start_sync+0xdc/0xdc
-[147948.504763]  kthread+0xe4/0xe9
-[147948.504764]  ? kthread_flush_worker+0x70/0x70
-[147948.504765]  ret_from_fork+0x35/0x40
-...
-
-This happens on 'raid6' MD RAID arrays that initially have sync_action=3D=
-=3Dresync.
-
-Any guidance would be greatly appreciated.
-
---Marc
