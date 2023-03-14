@@ -2,140 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C4F96B9CA2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:12:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D3556B9CA3
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:13:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbjCNRMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:12:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
+        id S231209AbjCNRMy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:12:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40882 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230201AbjCNRMi (ORCPT
+        with ESMTP id S231143AbjCNRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 14 Mar 2023 13:12:38 -0400
-Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BD592F23;
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F431ADC2A;
         Tue, 14 Mar 2023 10:12:34 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.west.internal (Postfix) with ESMTP id 806FF32002D8;
-        Tue, 14 Mar 2023 13:12:30 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute5.internal (MEProxy); Tue, 14 Mar 2023 13:12:31 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:content-type:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm2; t=1678813950; x=1678900350; bh=lD84THYsqEBrd
-        kTK8693PxozPe7E1dZJ3/wYEhXCQVs=; b=S53bDOrd96WOVHHFk8WwRRyNR1Ihc
-        s9/oA11McHWye2Zt/sj6AnrUDRSeu3aH/fR9vYCfQJ0YfgB+AOqJ34svl4cWI8G7
-        1zfYjva83yGi5yuqFUH4bx3juWSZFnw9n3kufjTlBlahaF/lUHwZbrLneev7yWdc
-        47iu2mYl9iQKDPIw6Y3LiPTgUlZYb+O7c6hoaZazag7nep2yUiK6VDrrYfGxw+B+
-        3WTMFM7Ljcfhw6KnHgRSkuUulpSVqR8IPVPSSwGifFqyxXiCrGOZcU2fdVBCPnkn
-        1dErgTKTzC5+fetxzrcdI093/GGeypfE6U8oSBt4qnsNInRtAfVKgqNfA==
-X-ME-Sender: <xms:_aoQZPOYKuLzl3nrLYwH0HlbwvdDj-Kr2of3DDq3q96nM2MRz8IEvw>
-    <xme:_aoQZJ-Nh5M3iTqKF9nmIrDHVDwQBZd11UKHnBVEA1BS6ke8gLpJpE-8MqX7Rv6we
-    HdGBLXyZJiR_8w>
-X-ME-Received: <xmr:_aoQZOR-6AHCq3vaggBA1_rmwrmbDeUtGjsrZ3ebtv_L17llL8TTOzWvTILLyqX5b1Jec0zyzQFfeQesy23sKRLJazA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedguddttdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
-    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesth
-    dtredttddtvdenucfhrhhomhepkfguohcuufgthhhimhhmvghluceoihguohhstghhsehi
-    ughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnhepvddufeevkeehueegfedtvdevfe
-    fgudeifeduieefgfelkeehgeelgeejjeeggefhnecuvehluhhsthgvrhfuihiivgeptden
-    ucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
-X-ME-Proxy: <xmx:_aoQZDtLEqnHuCmGga4tAGEVQa6riF0mQOqBsWNW3L8o2uKGYJ1Azg>
-    <xmx:_aoQZHfOCC0teAU5QquKduJWy8zfgQQ15WHEaqxkEOhHxJWBoNV9oA>
-    <xmx:_aoQZP1u2R7GFEeozsQbeoFH632u4snehy90qYQIyUEVuB4HcJ36lA>
-    <xmx:_qoQZJu9-0JG8ClX3L4TpAUV_19y5QtHKRCakwCXVuihfaPL-_VU7w>
-Feedback-ID: i494840e7:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 14 Mar 2023 13:12:28 -0400 (EDT)
-Date:   Tue, 14 Mar 2023 19:12:24 +0200
-From:   Ido Schimmel <idosch@idosch.org>
-To:     gaoxingwang <gaoxingwang1@huawei.com>
-Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, yoshfuji@linux-ipv6.org, kuba@kernel.org,
-        pabeni@redhat.com, shuah@kernel.org, liaichun@huawei.com,
-        yanan@huawei.com
-Subject: Re: ipv4:the same route is added repeatedly
-Message-ID: <ZBCq+KXtxWXLPFNF@shredder>
-References: <20230314144159.2354729-1-gaoxingwang1@huawei.com>
+Date:   Tue, 14 Mar 2023 18:12:31 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678813952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zoXVxWY2RdbpAngboxJV6HcjSFULgSyzrd+jPOr62qw=;
+        b=ic5qX8K28DPh4A1SReQAfb52iaiU44STnCj0r+1mF1t/9m46edlxE0jRwvafLuOzGXfujw
+        izzkcTLH+jJTrZUbSIb3EqNc5iOsUisI9F506WVyAwup0t6RfhI0MHsU2WzhkEPGAZUCiH
+        u1LvDxtNWXjX+9zgOCHxfLjPui+J1/xoq8bd8GBNOYuRjcXAOsa4eRGBy77/26vV9dM/oc
+        Q5MUaTAuE7DCw3063AJspuIt865jvU5QYqK05ZtIAnmlWJSKbUMC6cLvgbm4aQ1ZxMg/cm
+        4+X8fJpPvrKuWGXio5Xk+pRq5YciKA2a4u+rd/KTBMVfftGJiKVxQnpnT5csfQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678813952;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=zoXVxWY2RdbpAngboxJV6HcjSFULgSyzrd+jPOr62qw=;
+        b=Hm2fE8egrzz2LImXg9YyZI/bqqxdwwnc/3yBprHNJXsZ5gGkn3yB6Bhl1seDoqJ6He5CHb
+        InMunxgqbbMd4aDg==
+From:   Sebastian Andrzej Siewior <bigeasy@linutronix.de>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        linux-rt-users@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [ANNOUNCE] v6.3-rc2-rt3
+Message-ID: <20230314171231.jwtham4a@linutronix.de>
+References: <20230314170502.OHw1_FK3@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20230314144159.2354729-1-gaoxingwang1@huawei.com>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20230314170502.OHw1_FK3@linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 10:41:59PM +0800, gaoxingwang wrote:
-> When i add default route in /etc/sysconfig/static-routes, and then restart network service, it appears to add two same default route:
-> [root@localhost ~]# ip r
-> default via 9.82.0.1 dev eth0 
-> default via 9.82.0.1 dev eth0 
-> 
-> The static-routes file contents are as follows:
-> any net 0.0.0.0 netmask 0.0.0.0 gw 110.1.62.1
-> 
-> This problem seems to be related to patch f96a3d7455(ipv4: Fix incorrect route flushing when source address is deleted). When I revert this patch, the problem gets fixed.
-> Is that a known issue?
+On 2023-03-14 18:05:04 [+0100], To Thomas Gleixner wrote:
+> Dear RT folks!
+>=20
+> I'm pleased to announce the v6.3-rc2-rt3 patch set.=20
+>=20
+> Changes since v6.3-rc2-rt2:
+>=20
+>   - The i915 and other driver using io_mapping_map_atomic_wc() function
+>     could deadlock. Reported by Richard Weinberger.
+>=20
+>   - A larger printk rework by John Ogness. This printk series is based
+>     on the latest work by John and most of the patches have been
+>     submitted for upstream review.
+>     As in the previous version the concept of an atomic console
+>     remained. That means a crash (BUG(), panic(), =E2=80=A6) without a at=
+omic
+>     console driver remains invisible on PREEMPT_RT. The only available
+>     atomic console driver is the 8250 UART and has been tested on X86.
+>=20
+> Known issues
+>      - Crystal Wood reported that a filesystem (XFS) may deadlock while
+>        flushing during schedule.
+>=20
+> The delta patch against v6.3-rc2-rt2 is appended below and can be found h=
+ere:
+> =20
+>      https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/incr/patch-6=
+=2E3-rc2-rt2-rt3.patch.xz
+>=20
+> You can get this release via the git tree at:
+>=20
+>     git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-rt-devel.git v=
+6.3-rc2-rt3
+>=20
+> The RT patch against v6.3-rc2 can be found here:
+>=20
+>     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patch-6=
+=2E3-rc2-rt3.patch.xz
+>=20
+> The split quilt queue is available at:
+>=20
+>     https://cdn.kernel.org/pub/linux/kernel/projects/rt/6.3/older/patches=
+-6.3-rc2-rt3.tar.xz
 
-'fi->fib_tb_id' is initialized from 'cfg->fc_table' which is not
-initialized in the IOCTL path which I guess is what you are using given
-the syntax of the file. You can therefore end up having two identical
-routes that only differ in their FIB info due to its associated table
-ID.
-
-Can you try this fix [1]? Seems to be working for me. Tested using this
-reproducer [2].
-
-With f96a3d7455:
-
- # ./ioctl_repro.sh
- default via 192.0.2.2 dev dummy10
- default via 192.0.2.2 dev dummy10
-
-With f96a3d7455 reverted:
-
- # ./ioctl_repro.sh
- SIOCADDRT: File exists
- default via 192.0.2.2 dev dummy10
-
-With the fix:
-
- # ./ioctl_repro.sh
- SIOCADDRT: File exists
- default via 192.0.2.2 dev dummy10
-
-Thanks
-
-[1]
-diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
-index b5736ef16ed2..390f4be7f7be 100644
---- a/net/ipv4/fib_frontend.c
-+++ b/net/ipv4/fib_frontend.c
-@@ -576,6 +576,9 @@ static int rtentry_to_fib_config(struct net *net, int cmd, struct rtentry *rt,
- 			cfg->fc_scope = RT_SCOPE_UNIVERSE;
- 	}
- 
-+	if (!cfg->fc_table)
-+		cfg->fc_table = RT_TABLE_MAIN;
-+
- 	if (cmd == SIOCDELRT)
- 		return 0;
- 
-[2]
-#!/bin/bash
-
-ip link del dev dummy10 &> /dev/null
-ip link add name dummy10 up type dummy
-ip address add 192.0.2.1/24 dev dummy10
-
-ip route add default via 192.0.2.2
-route add default gw 192.0.2.2
-ip -4 r show default
+This email didn't pass the size restriction on linux-rt-users@ so this
+is just a small ping that this release happened. The whole email is in
+the archive:
+	https://lore.kernel.org/20230314170502.OHw1_FK3@linutronix.de
+=20
+Sebastian
