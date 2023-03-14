@@ -2,116 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 482DB6BA382
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:24:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F2F9E6BA387
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229735AbjCNXYC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:24:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37396 "EHLO
+        id S229794AbjCNXaK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:30:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCNXYA (ORCPT
+        with ESMTP id S229644AbjCNXaI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:24:00 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE7CD298D7;
-        Tue, 14 Mar 2023 16:23:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678836238; x=1710372238;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9JSluFsQgkYA1CSEXZw29hUEPKHlRuKNC1VLjY8g/5I=;
-  b=XPNranuZ1mISccNUwK/M1OIapBhPFta4we665n9K/S9Ju3T6u8ojIPkU
-   pqlJxDRxj2gVcyaFW4/yyHMy+6spSGLO86ccFmjYr41dlBiqYJ1UUbceC
-   4chcB4QkQKoRM+8UNyxGA3gYCT5RtcgVLY8zr7W62faNFzNppj3cOEDPU
-   EajgV7P/YwfMZBrRCkEHEdeGlN2KkvTCIr/OX6A7+qKg7nemiPKtrA9BM
-   N2bVXSDE9aoe9T+OktBj+jKL7a/zMe2Ty8M+pgU3DUGqFyzpJu62jFFAD
-   XByscWU2wrHfl/B0z7NoJKO6kyzFtUJWIXaNLzSQNteq1EcO1vXaEfchJ
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="321410900"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="321410900"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 16:23:57 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="789560177"
-X-IronPort-AV: E=Sophos;i="5.98,261,1673942400"; 
-   d="scan'208";a="789560177"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga002.fm.intel.com with ESMTP; 14 Mar 2023 16:23:54 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pcDzm-0007GC-0h;
-        Tue, 14 Mar 2023 23:23:54 +0000
-Date:   Wed, 15 Mar 2023 07:23:28 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Komal Bajaj <quic_kbajaj@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Abel Vesa <abel.vesa@linaro.org>,
-        Rishabh Bhatnagar <rishabhb@codeaurora.org>,
-        Prakash Ranjan <saiprakash.ranjan@codeaurora.org>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Andy Gross <agross@kernel.org>
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        Komal Bajaj <quic_kbajaj@quicinc.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] soc: qcom: Add LLCC support for multi channel DDR
-Message-ID: <202303150713.cMgW2Qnu-lkp@intel.com>
-References: <20230313124040.9463-5-quic_kbajaj@quicinc.com>
+        Tue, 14 Mar 2023 19:30:08 -0400
+Received: from mail-yb1-xb35.google.com (mail-yb1-xb35.google.com [IPv6:2607:f8b0:4864:20::b35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0536B58B6F
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:30:07 -0700 (PDT)
+Received: by mail-yb1-xb35.google.com with SMTP id e194so17459299ybf.1
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 16:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=joelfernandes.org; s=google; t=1678836606;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6CGx+2lSjSQDiTc7ljAgHgFH+XwnN61FRvgMDbdvIpI=;
+        b=LtB/tm8vHXf9k20eragZbnEXeIY60N3ZQdpqGBvDTrLYk0/iWOudxiRvgcvwCao4ea
+         YNVM4dQ44LwoUBJ+QhSd5Er4NF2u7SEFNjv8wQcxDY3mXrLSont2SOa4bFi2pNTzCND9
+         6UbHkT6vkJeDNuFFymBALd5IhuO8eVFY9dJAg=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678836606;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6CGx+2lSjSQDiTc7ljAgHgFH+XwnN61FRvgMDbdvIpI=;
+        b=GDCTj7NyVscP73WUV3AOuKwguoXzMrkcnQGapcxqjpJSrG5PTN2S4wa92O3Np+rCGy
+         ostwuD0wOyA/kvpv3M4UJ6SO9gQlPSFf6glYxsYjhOTfVLxznTKIUc45P1IhWP0Pp4e/
+         ZxhjOgsojBbmMtOnBR2CRkZpqYNcH90WowSPDNG/T3XleTzlSYKU/6WmIvGbY4HkXRrf
+         9LvEq44KmuZ+AEbWfHKrssbV0JfcJqJ2iUIVmRQ1LxScCvrK3ecse3sCijnWFs4TaST6
+         dNXED5qlkTU651tfq7DLwMKqd3NuWUjZ0GlVycEWYNjqVQTsKd7a5Wizb0MPe2uA6zN/
+         l1Dw==
+X-Gm-Message-State: AO0yUKXbuXFtx3C082bTvVsSlfSgTM/1Eh9cl835gJ7aGDT02NiK/D4p
+        h3BsYWqobPv+GHKTz1tESmgOgGw2pNI9PgpxLCEKqw==
+X-Google-Smtp-Source: AK7set+r2ERtVzzNLDRX38IjrWoYRr4LTlZKcSP0tMlG+fou7BMKSVDkUfAlpdnVq9IQfrsS0L2n2exK7Fax0p2trcE=
+X-Received: by 2002:a25:8f82:0:b0:b39:be7e:30c8 with SMTP id
+ u2-20020a258f82000000b00b39be7e30c8mr5642874ybl.2.1678836606112; Tue, 14 Mar
+ 2023 16:30:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313124040.9463-5-quic_kbajaj@quicinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230313080403.89290-1-qiuxu.zhuo@intel.com> <d930f2a8-4b75-4109-a303-e2fc04443693@paulmck-laptop>
+In-Reply-To: <d930f2a8-4b75-4109-a303-e2fc04443693@paulmck-laptop>
+From:   Joel Fernandes <joel@joelfernandes.org>
+Date:   Tue, 14 Mar 2023 19:29:54 -0400
+Message-ID: <CAEXW_YRxWGCuV_YVLqpFqOnGAMYAf2c+TAV1iAD8=2uVOqkf_Q@mail.gmail.com>
+Subject: Re: [PATCH 1/1] rcu/rcuscale: Stop kfree_scale_thread thread(s) after
+ unloading rcuscale
+To:     paulmck@kernel.org
+Cc:     Qiuxu Zhuo <qiuxu.zhuo@intel.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Lai Jiangshan <jiangshanlai@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Komal,
+On Tue, Mar 14, 2023 at 7:02=E2=80=AFPM Paul E. McKenney <paulmck@kernel.or=
+g> wrote:
+>
+> On Mon, Mar 13, 2023 at 04:04:03PM +0800, Qiuxu Zhuo wrote:
+> > When running the 'kfree_rcu_test' test case with commands [1] the call
+> > trace [2] was thrown. This was because the kfree_scale_thread thread(s)
+> > still run after unloading rcuscale and torture modules. Fix the call
+> > trace by invoking kfree_scale_cleanup() when removing the rcuscale modu=
+le.
+>
+> Good catch, thank you!
+>
+> > [1] modprobe torture
+> >     modprobe rcuscale kfree_rcu_test=3D1
+>
+> Given that loading the rcuscale kernel module automatically pulls in
+> the rcuscale kernel module, why the "modprobe torture"?  Is doing the
+> modprobes separately like this necessary to reproduce this bug?
+>
+> If it reproduces without manually loading and unloading the "torture"
+> kernel module, could you please update the commit log to show that
+> smaller reproducer?
+>
+> >     // After some time
+> >     rmmod rcuscale
+> >     rmmod torture
+> >
+> > [2] BUG: unable to handle page fault for address: ffffffffc0601a87
+> >     #PF: supervisor instruction fetch in kernel mode
+> >     #PF: error_code(0x0010) - not-present page
+> >     PGD 11de4f067 P4D 11de4f067 PUD 11de51067 PMD 112f4d067 PTE 0
+> >     Oops: 0010 [#1] PREEMPT SMP NOPTI
+[..]
+> >     Call Trace:
+> >      <TASK>
+> >      ? kvfree_call_rcu+0xf0/0x3a0
+> >      ? kthread+0xf3/0x120
+> >      ? kthread_complete_and_exit+0x20/0x20
+> >      ? ret_from_fork+0x1f/0x30
+> >      </TASK>
+> >     Modules linked in: rfkill sunrpc ... [last unloaded: torture]
+> >     CR2: ffffffffc0601a87
+> >     ---[ end trace 0000000000000000 ]---
+> >
+> > Fixes: e6e78b004fa7 ("rcuperf: Add kfree_rcu() performance Tests")
+> > Signed-off-by: Qiuxu Zhuo <qiuxu.zhuo@intel.com>
+> > ---
+> >  kernel/rcu/rcuscale.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/kernel/rcu/rcuscale.c b/kernel/rcu/rcuscale.c
+> > index 91fb5905a008..5e580cd08c58 100644
+> > --- a/kernel/rcu/rcuscale.c
+> > +++ b/kernel/rcu/rcuscale.c
+> > @@ -522,6 +522,8 @@ rcu_scale_print_module_parms(struct rcu_scale_ops *=
+cur_ops, const char *tag)
+> >                scale_type, tag, nrealreaders, nrealwriters, verbose, sh=
+utdown);
+> >  }
+> >
+> > +static void kfree_scale_cleanup(void);
+> > +
+>
+> I do applaud minmimizing the size of the patch, but in this case could yo=
+u
+> please pull the kfree_scale_cleanup() function ahead of its first use?
 
-Thank you for the patch! Yet something to improve:
+The only trouble with moving the function like that is, the file is
+mostly split across kfree and non-kfree functions. So moving a kfree
+function to be among the non-kfree ones would look a bit weird.
+Perhaps a better place for the function declaration could be a new
+"rcuscale.h". But I am really Ok with Paul's suggestion as well.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.3-rc2 next-20230314]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Reviewed-by: Joel Fernandes (Google) <joel@joelfernandes.org>
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-204310
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20230313124040.9463-5-quic_kbajaj%40quicinc.com
-patch subject: [PATCH v2 4/5] soc: qcom: Add LLCC support for multi channel DDR
-config: mips-randconfig-r021-20230312 (https://download.01.org/0day-ci/archive/20230315/202303150713.cMgW2Qnu-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install mips cross compiling tool for clang build
-        # apt-get install binutils-mips-linux-gnu
-        # https://github.com/intel-lab-lkp/linux/commit/fe14182092383680f24bc88d81d199261453fa71
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Komal-Bajaj/soc-qcom-llcc-Refactor-llcc-driver-to-support-multiple-configuration/20230313-204310
-        git checkout fe14182092383680f24bc88d81d199261453fa71
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=mips SHELL=/bin/bash
+thanks,
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303150713.cMgW2Qnu-lkp@intel.com/
+ - Joel
 
-All errors (new ones prefixed by >>, old ones prefixed by <<):
 
->> ERROR: modpost: "qcom_scm_io_readl" [drivers/soc/qcom/llcc-qcom.ko] undefined!
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+>
+>                                                         Thanx, Paul
+>
+> >  static void
+> >  rcu_scale_cleanup(void)
+> >  {
+> > @@ -542,6 +544,11 @@ rcu_scale_cleanup(void)
+> >       if (gp_exp && gp_async)
+> >               SCALEOUT_ERRSTRING("No expedited async GPs, so went with =
+async!");
+> >
+> > +     if (kfree_rcu_test) {
+> > +             kfree_scale_cleanup();
+> > +             return;
+> > +     }
+> > +
+> >       if (torture_cleanup_begin())
+> >               return;
+> >       if (!cur_ops) {
+> > --
+> > 2.17.1
+> >
