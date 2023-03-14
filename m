@@ -2,72 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E891A6BA037
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1BC556BA050
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbjCNT7A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:59:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59970 "EHLO
+        id S229904AbjCNUC3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:02:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbjCNT6t (ORCPT
+        with ESMTP id S229841AbjCNUCZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:58:49 -0400
-Received: from mail-lf1-x133.google.com (mail-lf1-x133.google.com [IPv6:2a00:1450:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3786019130;
-        Tue, 14 Mar 2023 12:58:44 -0700 (PDT)
-Received: by mail-lf1-x133.google.com with SMTP id r27so21502206lfe.10;
-        Tue, 14 Mar 2023 12:58:44 -0700 (PDT)
+        Tue, 14 Mar 2023 16:02:25 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9390222D1;
+        Tue, 14 Mar 2023 13:02:02 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id da10so66947276edb.3;
+        Tue, 14 Mar 2023 13:02:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678823922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LGgRX/2BUBwYcike5aUEW/Egn+pesM4WHWNRXI6B9BE=;
-        b=hhqAUsRVFCC/gjfPDgDJEsRdPp9QDcC0oERAHoeZpMbQ/josNSNCDGD/mWgNzVv1gd
-         JXnj8dSgFA7aa1lHk1DK6Cw/Fmt/74ZnKRm15TOAczptqJbzszSy4lUxlvydYD7+8FBl
-         zS88BMACUmO6hcxY2l0dmxJOItcYExC+xLm1+9deLnMMf+f+VSN6Jd5WzcSOFzFbrh6Q
-         lS9kCxoFffCaoiBTqqGAfdvxrCvAFnDtufJAbm0v1YIxdznHo8ClwbUYIhY573uJVpQr
-         HNfgpmU9Cd5DXSE6ww/Zlf5cUyPsNjzQOk2sdTMrujLnc8FF+HLzOhAEzKU+C/hohVQW
-         7Nuw==
+        d=gmail.com; s=20210112; t=1678824121;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Z2aWBeYsPOZw3VmzBEuzhxtl3VZ6kigXr5nDO9DM/2U=;
+        b=lw9U5mN5yNQ8LCsLdSPoz/LDlbOc3gdpgfgiPbj+UqVyBLryGF2SizPvnYrGuXei2B
+         8CW7NuAiXt4lKM4L9hLgAXaccTOgRMCI1EvGQWwXwoLfbSjekCLkx04ulURMT7COkO4t
+         J++Ji4mnWJ2UzCR+dvqXSdOOQb3sEJxSRc0R9uXLeMKtpVefTko8JVJiowBonJ/C3gBf
+         QQfQI+JmzBhQwe8tsP9bYsRCCsLEEdhQi0ckBlSevIeYHRThMVn730fagDOm32V7a1HE
+         ZDvYKKwjM/xqSLM7VFhMoyBfgNqbVnesZJb6FBMHIWhX9FQIa+DGEu+4K8/FRwIdyO0Q
+         eW2Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678823922;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LGgRX/2BUBwYcike5aUEW/Egn+pesM4WHWNRXI6B9BE=;
-        b=oTfpfb5dcIqc9Xu05r5oBv+0SyM+6DIWxytfodfgQbfvLffFne9aFh7xS/kqS8cfHb
-         LqMfFbCtk8bz54UzYORq5MkZgTVLVC4O0E99JGUxNsanKWy3joLH06A2wXdZvnqNc+zh
-         mdnVASkwbTQJ0UggCdpeVyt01X4JL0ACyZ+tlfcgD5c4QnrQ7haygDZFAGj5BD+X/PQr
-         O/Yjcz2p3qD19tv+c7eemyL3THAFCMmmcltU5mWeLkWQiyPBhrNqhHIgrsfKsJk8ULC2
-         EN5bNjoET6Ji3ttifeSghURSw9pwt3krXmDjwiOksfu+qOum2V3Ga/5kJDe/GGPBJxOq
-         NQkQ==
-X-Gm-Message-State: AO0yUKWeweS2cMTV9Sz44n+5QySv0LGcuIXvxS0QsT+UK0GGv+tIO8Jl
-        LJb0lTWTJhAyAEvITQbCpeG2y5ajF6/VBQ==
-X-Google-Smtp-Source: AK7set9MtwzGDW7oRn6jmNEkZEBR3MNrePLLU6xlo+h9RQ8v5YQSav4Z1FaWwspBMvAwTKW0HjumCw==
-X-Received: by 2002:ac2:48b3:0:b0:4dd:a74d:ac46 with SMTP id u19-20020ac248b3000000b004dda74dac46mr1102055lfg.0.1678823922329;
-        Tue, 14 Mar 2023 12:58:42 -0700 (PDT)
-Received: from [10.0.0.100] (host-213-145-197-218.kaisa-laajakaista.fi. [213.145.197.218])
-        by smtp.gmail.com with ESMTPSA id w12-20020a056512098c00b004e8468b92c2sm519072lft.146.2023.03.14.12.58.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 12:58:41 -0700 (PDT)
-Message-ID: <c0a50add-5c76-8e16-f65b-803d4389b36f@gmail.com>
-Date:   Tue, 14 Mar 2023 22:01:40 +0200
+        d=1e100.net; s=20210112; t=1678824121;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Z2aWBeYsPOZw3VmzBEuzhxtl3VZ6kigXr5nDO9DM/2U=;
+        b=airqhnPSRmQVg7XdXuZKmxqEDMUrCEwdYohGqwFRYcfcPPHOhnZsiy13huV7CYSlxK
+         eRhL3d0wXlr/AfxhP+ITGfx3OfSHeHqxvXY0hw2QSEIpjwpKgdrTAx+BPy3+X9YLo7pY
+         G/pkiZdyaVrib6A1RZ8FXJjio6YzPM7D/JxdGGlqN+ZNXXW/S8dh8mDZfBhzaDtcJuw5
+         hmEQAfrl67rr7sUEyQ11i31skhXxiEjIiOeD2G5sUsXooGu94CdPCLtEdKabv3HwGZrA
+         2yJpMyOGxuzGbhBa0e1hdwCPVPBKogAGbr+OhIuPBb81zSwlktExPsj8bF62aTF+yKbN
+         n71g==
+X-Gm-Message-State: AO0yUKXi3An1igKOZbO4MBHxUkKWaoOlRvYRFTi2gbE+64GE5J3ZgSjL
+        A4Izjc1cQsWc3ARlgTJoBwB7O9p+1tLHDhWd
+X-Google-Smtp-Source: AK7set9e9EO060s4bRckBVlG+IlgdCeWavxzh4N5oYIX6Pb2j4hXy67uRYvwwfD6th6kq9HthDHzWQ==
+X-Received: by 2002:a05:6402:ce:b0:4fa:96fd:797b with SMTP id i14-20020a05640200ce00b004fa96fd797bmr363385edu.6.1678824121330;
+        Tue, 14 Mar 2023 13:02:01 -0700 (PDT)
+Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
+        by smtp.gmail.com with ESMTPSA id lj6-20020a170906f9c600b008bbc9115038sm1534607ejb.56.2023.03.14.13.01.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 13:02:00 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     Sean Wang <sean.wang@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Tony Lindgren <tony@atomide.com>,
+        Haojian Zhuang <haojian.zhuang@linaro.org>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-omap@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-renesas-soc@vger.kernel.org, linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH] pinctrl: Use of_property_present() for testing DT property
+ presence
+Date:   Tue, 14 Mar 2023 21:01:59 +0100
+Message-ID: <3218406.aeNJFYEL58@jernej-laptop>
+In-Reply-To: <20230310144721.1544669-1-robh@kernel.org>
+References: <20230310144721.1544669-1-robh@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] dmaengine: ti: add null check of devm_kasprintf in
- edma_probe and udma_probe
-Content-Language: en-US
-To:     Kang Chen <void0red@gmail.com>
-Cc:     vkoul@kernel.org, dmaengine@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230226094038.3227062-1-void0red@gmail.com>
-From:   =?UTF-8?Q?P=c3=a9ter_Ujfalusi?= <peter.ujfalusi@gmail.com>
-In-Reply-To: <20230226094038.3227062-1-void0red@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -76,65 +88,165 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On 26/02/2023 11:40, Kang Chen wrote:
-> devm_kasprintf may fails, irq_name and uc->name might be null and wrong irq
-> name will be used in request.
-
-In general, I would have preferred to have separate patches for the two 
-drivers to make them easier to backport if one decides.
-
-If you decide to resend, you can add my to them:
-
-Acked-by: Peter Ujfalusi <peter.ujfalusi@gmail.com>
-
+Dne petek, 10. marec 2023 ob 15:47:20 CET je Rob Herring napisal(a):
+> It is preferred to use typed property access functions (i.e.
+> of_property_read_<type> functions) rather than low-level
+> of_get_property/of_find_property functions for reading properties. As
+> part of this, convert of_get_property/of_find_property calls to the
+> recently added of_property_present() helper when we just want to test
+> for presence of a property and nothing more.
 > 
-> Signed-off-by: Kang Chen <void0red@gmail.com>
+> Signed-off-by: Rob Herring <robh@kernel.org>
 > ---
->   drivers/dma/ti/edma.c    | 8 ++++++++
->   drivers/dma/ti/k3-udma.c | 2 ++
->   2 files changed, 10 insertions(+)
-> 
-> diff --git a/drivers/dma/ti/edma.c b/drivers/dma/ti/edma.c
-> index fa06d7e6d..85cd72b64 100644
-> --- a/drivers/dma/ti/edma.c
-> +++ b/drivers/dma/ti/edma.c
-> @@ -2413,6 +2413,10 @@ static int edma_probe(struct platform_device *pdev)
->   	if (irq >= 0) {
->   		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_ccint",
->   					  dev_name(dev));
-> +		if (!irq_name) {
-> +			ret = -ENOMEM;
-> +			goto err_disable_pm;
-> +		}
->   		ret = devm_request_irq(dev, irq, dma_irq_handler, 0, irq_name,
->   				       ecc);
->   		if (ret) {
-> @@ -2429,6 +2433,10 @@ static int edma_probe(struct platform_device *pdev)
->   	if (irq >= 0) {
->   		irq_name = devm_kasprintf(dev, GFP_KERNEL, "%s_ccerrint",
->   					  dev_name(dev));
-> +		if (!irq_name) {
-> +			ret = -ENOMEM;
-> +			goto err_disable_pm;
-> +		}
->   		ret = devm_request_irq(dev, irq, dma_ccerr_handler, 0, irq_name,
->   				       ecc);
->   		if (ret) {
-> diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-> index 7e23a6fde..692d1d25c 100644
-> --- a/drivers/dma/ti/k3-udma.c
-> +++ b/drivers/dma/ti/k3-udma.c
-> @@ -5494,6 +5494,8 @@ static int udma_probe(struct platform_device *pdev)
->   		uc->config.dir = DMA_MEM_TO_MEM;
->   		uc->name = devm_kasprintf(dev, GFP_KERNEL, "%s chan%d",
->   					  dev_name(dev), i);
-> +		if (!uc->name)
-> +			return -ENOMEM;
->   
->   		vchan_init(&uc->vc, &ud->ddev);
->   		/* Use custom vchan completion handling */
+>  drivers/pinctrl/mediatek/pinctrl-moore.c |  2 +-
+>  drivers/pinctrl/pinctrl-single.c         |  4 ++--
+>  drivers/pinctrl/pinctrl-stmfx.c          |  2 +-
+>  drivers/pinctrl/renesas/pinctrl.c        |  4 ++--
+>  drivers/pinctrl/stm32/pinctrl-stm32.c    |  2 +-
+>  drivers/pinctrl/sunxi/pinctrl-sunxi.c    | 20 ++++++++++----------
 
--- 
-Péter
+For sunxi:
+Reviewed-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+
+Best regards,
+Jernej
+
+>  6 files changed, 17 insertions(+), 17 deletions(-)
+> 
+> diff --git a/drivers/pinctrl/mediatek/pinctrl-moore.c
+> b/drivers/pinctrl/mediatek/pinctrl-moore.c index 007b98ce5631..8649a2f9d324
+> 100644
+> --- a/drivers/pinctrl/mediatek/pinctrl-moore.c
+> +++ b/drivers/pinctrl/mediatek/pinctrl-moore.c
+> @@ -586,7 +586,7 @@ static int mtk_build_gpiochip(struct mtk_pinctrl *hw)
+>  	 * Documentation/devicetree/bindings/gpio/gpio.txt on how to
+>  	 * bind pinctrl and gpio drivers via the "gpio-ranges" property.
+>  	 */
+> -	if (!of_find_property(hw->dev->of_node, "gpio-ranges", NULL)) {
+> +	if (!of_property_present(hw->dev->of_node, "gpio-ranges")) {
+>  		ret = gpiochip_add_pin_range(chip, dev_name(hw->dev), 
+0, 0,
+>  					     chip->ngpio);
+>  		if (ret < 0) {
+> diff --git a/drivers/pinctrl/pinctrl-single.c
+> b/drivers/pinctrl/pinctrl-single.c index 190923757cda..0dabbcf68b9f 100644
+> --- a/drivers/pinctrl/pinctrl-single.c
+> +++ b/drivers/pinctrl/pinctrl-single.c
+> @@ -939,11 +939,11 @@ static int pcs_parse_pinconf(struct pcs_device *pcs,
+> struct device_node *np,
+> 
+>  	/* cacluate how much properties are supported in current node */
+>  	for (i = 0; i < ARRAY_SIZE(prop2); i++) {
+> -		if (of_find_property(np, prop2[i].name, NULL))
+> +		if (of_property_present(np, prop2[i].name))
+>  			nconfs++;
+>  	}
+>  	for (i = 0; i < ARRAY_SIZE(prop4); i++) {
+> -		if (of_find_property(np, prop4[i].name, NULL))
+> +		if (of_property_present(np, prop4[i].name))
+>  			nconfs++;
+>  	}
+>  	if (!nconfs)
+> diff --git a/drivers/pinctrl/pinctrl-stmfx.c
+> b/drivers/pinctrl/pinctrl-stmfx.c index 1181c4b506b1..3c031692e44d 100644
+> --- a/drivers/pinctrl/pinctrl-stmfx.c
+> +++ b/drivers/pinctrl/pinctrl-stmfx.c
+> @@ -632,7 +632,7 @@ static int stmfx_pinctrl_probe(struct platform_device
+> *pdev) pctl->dev = &pdev->dev;
+>  	pctl->stmfx = stmfx;
+> 
+> -	if (!of_find_property(np, "gpio-ranges", NULL)) {
+> +	if (!of_property_present(np, "gpio-ranges")) {
+>  		dev_err(pctl->dev, "missing required gpio-ranges 
+property\n");
+>  		return -EINVAL;
+>  	}
+> diff --git a/drivers/pinctrl/renesas/pinctrl.c
+> b/drivers/pinctrl/renesas/pinctrl.c index b74147800319..5c71e168b370 100644
+> --- a/drivers/pinctrl/renesas/pinctrl.c
+> +++ b/drivers/pinctrl/renesas/pinctrl.c
+> @@ -125,8 +125,8 @@ static int sh_pfc_dt_subnode_to_map(struct pinctrl_dev
+> *pctldev, * inside a subnode nor across subnodes.
+>  	 */
+>  	if (!pmx->func_prop_name) {
+> -		if (of_find_property(np, "groups", NULL) ||
+> -		    of_find_property(np, "pins", NULL)) {
+> +		if (of_property_present(np, "groups")||
+> +		    of_property_present(np, "pins")) {
+>  			pmx->func_prop_name = "function";
+>  			pmx->groups_prop_name = "groups";
+>  			pmx->pins_prop_name = "pins";
+> diff --git a/drivers/pinctrl/stm32/pinctrl-stm32.c
+> b/drivers/pinctrl/stm32/pinctrl-stm32.c index cb33a23ab0c1..66a25becd8f5
+> 100644
+> --- a/drivers/pinctrl/stm32/pinctrl-stm32.c
+> +++ b/drivers/pinctrl/stm32/pinctrl-stm32.c
+> @@ -1374,7 +1374,7 @@ static struct irq_domain
+> *stm32_pctrl_get_irq_domain(struct platform_device *pde struct device_node
+> *parent;
+>  	struct irq_domain *domain;
+> 
+> -	if (!of_find_property(np, "interrupt-parent", NULL))
+> +	if (!of_property_present(np, "interrupt-parent"))
+>  		return NULL;
+> 
+>  	parent = of_irq_find_parent(np);
+> diff --git a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+> b/drivers/pinctrl/sunxi/pinctrl-sunxi.c index f35179eceb4e..1dc1882cbdd7
+> 100644
+> --- a/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+> +++ b/drivers/pinctrl/sunxi/pinctrl-sunxi.c
+> @@ -224,16 +224,16 @@ static int sunxi_pctrl_get_group_pins(struct
+> pinctrl_dev *pctldev,
+> 
+>  static bool sunxi_pctrl_has_bias_prop(struct device_node *node)
+>  {
+> -	return of_find_property(node, "bias-pull-up", NULL) ||
+> -		of_find_property(node, "bias-pull-down", NULL) ||
+> -		of_find_property(node, "bias-disable", NULL) ||
+> -		of_find_property(node, "allwinner,pull", NULL);
+> +	return of_property_present(node, "bias-pull-up") ||
+> +		of_property_present(node, "bias-pull-down") ||
+> +		of_property_present(node, "bias-disable") ||
+> +		of_property_present(node, "allwinner,pull");
+>  }
+> 
+>  static bool sunxi_pctrl_has_drive_prop(struct device_node *node)
+>  {
+> -	return of_find_property(node, "drive-strength", NULL) ||
+> -		of_find_property(node, "allwinner,drive", NULL);
+> +	return of_property_present(node, "drive-strength") ||
+> +		of_property_present(node, "allwinner,drive");
+>  }
+> 
+>  static int sunxi_pctrl_parse_bias_prop(struct device_node *node)
+> @@ -241,13 +241,13 @@ static int sunxi_pctrl_parse_bias_prop(struct
+> device_node *node) u32 val;
+> 
+>  	/* Try the new style binding */
+> -	if (of_find_property(node, "bias-pull-up", NULL))
+> +	if (of_property_present(node, "bias-pull-up"))
+>  		return PIN_CONFIG_BIAS_PULL_UP;
+> 
+> -	if (of_find_property(node, "bias-pull-down", NULL))
+> +	if (of_property_present(node, "bias-pull-down"))
+>  		return PIN_CONFIG_BIAS_PULL_DOWN;
+> 
+> -	if (of_find_property(node, "bias-disable", NULL))
+> +	if (of_property_present(node, "bias-disable"))
+>  		return PIN_CONFIG_BIAS_DISABLE;
+> 
+>  	/* And fall back to the old binding */
+> @@ -1424,7 +1424,7 @@ static int sunxi_pinctrl_setup_debounce(struct
+> sunxi_pinctrl *pctl, return 0;
+> 
+>  	/* If we don't have any setup, bail out */
+> -	if (!of_find_property(node, "input-debounce", NULL))
+> +	if (!of_property_present(node, "input-debounce"))
+>  		return 0;
+> 
+>  	losc = devm_clk_get(pctl->dev, "losc");
+
+
+
+
