@@ -2,69 +2,175 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D55A86B9B8E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:32:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C58296B9B98
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230179AbjCNQcP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:32:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51124 "EHLO
+        id S230498AbjCNQdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230252AbjCNQcL (ORCPT
+        with ESMTP id S230316AbjCNQc7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:32:11 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A73A19C7A;
-        Tue, 14 Mar 2023 09:32:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=xoOdp0YkUjLCyhucmrAncUd+xFPtepn+KugDr1Gd1jA=; b=Vp0YBavg+airyOwPHld1HkuktS
-        F7rH3XyWXoOY1VV3T8zFDL5nYXnE3l7WiZF2ibtuCxJycl7Ozq7fSQh6lAxj+KR8UsvdXC+IGCjXo
-        bP8R7cpf0oXf5fNG7Cg1a2CfI+ixJyt3ZX0At5SSyS9i5iyxLDEYZIyNyl7VDJV5QiCw=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pc7Yv-007JFW-Js; Tue, 14 Mar 2023 17:31:45 +0100
-Date:   Tue, 14 Mar 2023 17:31:45 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Vladimir Oltean <vladimir.oltean@nxp.com>
-Cc:     netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net] net: phy: mscc: fix deadlock in
- phy_ethtool_{get,set}_wol()
-Message-ID: <a9bfe427-4d76-44ea-9890-3b0c44ccb551@lunn.ch>
-References: <20230314153025.2372970-1-vladimir.oltean@nxp.com>
+        Tue, 14 Mar 2023 12:32:59 -0400
+Received: from mail-yw1-x1129.google.com (mail-yw1-x1129.google.com [IPv6:2607:f8b0:4864:20::1129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B20A18F512
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:32:41 -0700 (PDT)
+Received: by mail-yw1-x1129.google.com with SMTP id 00721157ae682-53d277c1834so315003047b3.10
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 09:32:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=paul-moore.com; s=google; t=1678811561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=b85EPB17+oEFtvuVLS7pjbvgxBH7B6j5VMNkZta2dsI=;
+        b=aRxhXZqxGJlYvW0/kbH4ymUQx8mnwM+MdFKi4TLnegF5PG3ylcN+ERc8VXhv/QO9eB
+         j7EBNDoHKyNLm4QoHGvscMy37ZBKEs+8zDRPq56DhNdnX88Cq9SpWl36b+9hGS+M3QtV
+         TB2WnDXGUh1FwFZ7hGlChkAzyR3Oakl/ltjMltcF+5rjC07tnL2Y8UpFJuTNHL9FhBhQ
+         Ns+snrvvkVBwu1nKFqhVH9a2E99hYbaPT3lBaFs+LGhQ9JAI5fSYC3gM1lK1cbZai0tZ
+         +0b0pzSvNkS6KLaVLkNHmZg0YAL2Rm+OErvfDNCqtTPBVjcWBAdW+VHSdCurQYeiKdWo
+         F+cg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678811561;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=b85EPB17+oEFtvuVLS7pjbvgxBH7B6j5VMNkZta2dsI=;
+        b=aP8c4OP1ImVBZzy/EMnnem0yiG/C9qQIM9i1YCWhrM0NkKwCqpCdtQYvJjM4bl3u3P
+         7A8IGtjTp8IbmqbQvQ5BiQyOBLoLnA6Bks+9ENOX2rDxlDO13bB2jAyMfiEW1Bt4FH+j
+         s6b+ASs/FxYknX3vwnCJApivp0fMNw4QG1AtXKGRZSoQNEZUAJZ6q4pJA/qOdVr4l5+f
+         oybvv/vJ7wb6rMQMORZulrvJFd7eXpvEtNlvsTN/kCpYbLaFa5LDuKjv6AirhpXkU3jF
+         mLKDQ7IRbGFC2jPvkyeCPLDFzP/5Ob7POc8xu+hUsG14hAP6KamPT5a+X80+YeCPsjPT
+         z5Vw==
+X-Gm-Message-State: AO0yUKVNAYIpDAEzWsiWSCDQWJg02HiBKcN+diNfGWKlcQtcYFZS5VmR
+        ZdvG1PKC7o9lEKMHTqEAYHVieMEXeWSWAg8m/Tpn
+X-Google-Smtp-Source: AK7set9jXAnKEIerlCQTH/fhrcZasdDtAc6VU4b20coSWiHPjprD1U1EHV3TBe1B3goWwNCo9Cs22k94pipz/rRtQkY=
+X-Received: by 2002:a81:4424:0:b0:536:3c2c:bf5e with SMTP id
+ r36-20020a814424000000b005363c2cbf5emr25366437ywa.8.1678811560787; Tue, 14
+ Mar 2023 09:32:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314153025.2372970-1-vladimir.oltean@nxp.com>
+References: <20230310192614.GA528@domac.alu.hr> <CAHC9VhSzppHevG_Td+hKU4KRSDgV_NYf2RSeKA06PR-rD+dJLw@mail.gmail.com>
+ <c1c1cbcc-10b6-de3f-81e8-78e6b173d46f@alu.unizg.hr> <CAHC9VhRFQtqTZku==BkW0uz1oZgG63j15GoQD1iexW4aPoAPcA@mail.gmail.com>
+ <ZA7tyrscjwavzY3a@smile.fi.intel.com> <CAHC9VhTMoCAFhaa36Bq7_jiKGiaeMbYTuWv7tTQP1OHpY0EUsg@mail.gmail.com>
+ <ZBBU9diKqetWQztO@smile.fi.intel.com>
+In-Reply-To: <ZBBU9diKqetWQztO@smile.fi.intel.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 14 Mar 2023 12:32:30 -0400
+Message-ID: <CAHC9VhTenpSXwvorisXYWYGfx345ZOL9fOrwyhntoUFsLX_ENw@mail.gmail.com>
+Subject: Re: [PATCH v1 0/2] Add destructor hook to LSM modules
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>,
+        Mirsad Goran Todorovac <mirsad.goran.todorovac@alu.hr>,
+        linux-kernel@vger.kernel.org, linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        Mimi Zohar <zohar@linux.ibm.com>,
+        Casey Schaufler <casey@schaufler-ca.com>,
+        =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+        =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        Frederick Lawler <fred@cloudflare.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 05:30:25PM +0200, Vladimir Oltean wrote:
-> Since the blamed commit, phy_ethtool_get_wol() and phy_ethtool_set_wol()
-> acquire phydev->lock, but the mscc phy driver implementations,
-> vsc85xx_wol_get() and vsc85xx_wol_set(), acquire the same lock as well,
-> resulting in a deadlock.
-> 
-> Fixes: 2f987d486610 ("net: phy: Add locks to ethtool functions")
-> Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
+On Tue, Mar 14, 2023 at 7:05=E2=80=AFAM Andy Shevchenko
+<andriy.shevchenko@linux.intel.com> wrote:
+>
+> On Mon, Mar 13, 2023 at 04:27:42PM -0400, Paul Moore wrote:
+> > On Mon, Mar 13, 2023 at 5:33=E2=80=AFAM Andy Shevchenko
+> > <andriy.shevchenko@linux.intel.com> wrote:
+> > > On Sat, Mar 11, 2023 at 09:59:17AM -0500, Paul Moore wrote:
+> > > > On Fri, Mar 10, 2023 at 5:53=E2=80=AFPM Mirsad Goran Todorovac
+> > > > <mirsad.todorovac@alu.unizg.hr> wrote:
+>
+> ...
+>
+> > > > With that out of the way, I wanted to make a quick comment on the
+> > > > patch itself.  Currently LSMs do not support unloading, or dynamic
+> > > > loading for that matter.  There are several reasons for this, but
+> > > > perhaps the most important is that in order to help meet the securi=
+ty
+> > > > goals for several of the LSMs they need to be present in the kernel
+> > > > from the very beginning and remain until the very end.  Adding a
+> > > > proper "release" method to a LSM is going to be far more complicate=
+d
+> > > > than what you've done with this patchset, involving a lot of
+> > > > discussion both for the LSM layer itself and all of the currently
+> > > > supported LSMs, and ultimately I don't believe it is something we w=
+ill
+> > > > want to support.
+> > > >
+> > > > I appreciate your desire to help, and I want to thank you for your
+> > > > patch and the effort behind it, but I don't believe the kobject mem=
+ory
+> > > > leak you saw at kernel shutdown was a real issue (it was only "leak=
+ed"
+> > > > because the system was shutting down) and I'm not sure the current
+> > > > behavior is something we want to change in the near future.
+> > >
+> > > Currently the security module so secure that even adds an unneeded no=
+ise to
+> > > the debugging output.
+> > >
+> > > At very least it would be nice to add a stub and put a big comment
+> > > (on your taste) explaining why we do not do anything there.
+> > >
+> > > Agree?
+> >
+> > No.
+>
+> Are you sure? I'm proposing to add a stub which is no-op, but with a comm=
+ent
+> inside explaining why. In such case we:
+>
+> 1) shut the kobject infra up;
+> 2) keep the status quo in LSM;
+> 3) put in the code a good explanation for others on what's going on.
+>
+> > At least not without a lot of additional work beyond what was
+> > presented in this patchset.  What about all of the other kobject
+> > caches created by other LSMs, this is more than just the IMA
+> > iint_cache.  I'm also skeptical that this patchset was ever tested and
+> > verified as the newly added release() method was never actually called
+> > from anywhere that I could see.
+>
+> I'm not talking about this patchset, but you are right that it wasn't
+> tested.
+>
+> > I think we would need to see a proper, verified fix before I could say
+> > for certain.
+>
+> And continuing to spread the noise in the logs just because LSM is stubbo=
+rn?
+>
+> > If you want to discuss potential designs, we can do that
+> > too, but please remember the constraints that were already mentioned
+> > about intentionally not allowing the LSMs to be unloaded (prior to
+> > system shutdown).
+> >
+> > I don't know the answer to this, but I'm guessing the LSMs aren't the
+> > only kernel subsystems to "leak" memory on system shutdown; working on
+> > the assumption that this is the case, how are those "leaked"
+> > allocations handled?
+>
+> Note, I'm full for the proper fix, but the current issue is logs flooding=
+ done
+> by LSM that needs to be addressed.
 
-Thanks Vladimir.
+If you want to introduce a change to add a release method, do it
+properly so it does the right thing for all the LSMs and not just the
+one you happen to care about at this moment.  If you don't do the
+change properly it means I'm going to have to complete the work and
+I've got more important things relating to the LSM that need my
+attention.
 
-[Goes and checks to see if the same problem exists for other PHY drivers]
-
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
-
-    Andrew
+--=20
+paul-moore.com
