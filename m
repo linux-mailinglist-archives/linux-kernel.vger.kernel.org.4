@@ -2,150 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA33F6B9FDA
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:37:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 102DB6B9FDD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:37:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230338AbjCNThN convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 15:37:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53288 "EHLO
+        id S230287AbjCNThZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:37:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53506 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230035AbjCNThL (ORCPT
+        with ESMTP id S230502AbjCNThU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:37:11 -0400
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAE32A6DE;
-        Tue, 14 Mar 2023 12:37:02 -0700 (PDT)
-Received: by mail-ed1-f54.google.com with SMTP id cn21so36408414edb.0;
-        Tue, 14 Mar 2023 12:37:01 -0700 (PDT)
+        Tue, 14 Mar 2023 15:37:20 -0400
+Received: from mail-lf1-x12d.google.com (mail-lf1-x12d.google.com [IPv6:2a00:1450:4864:20::12d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6886D30B10;
+        Tue, 14 Mar 2023 12:37:18 -0700 (PDT)
+Received: by mail-lf1-x12d.google.com with SMTP id m4so8451598lfj.2;
+        Tue, 14 Mar 2023 12:37:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678822636;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6n80OO2p0+yXsir8JhHPkqdbw+rH/st/LRf0u/i9phg=;
+        b=KW/skMhjVyfqHnNbh+GsnTN6Mmmbazd6Ln+DuQUYGmVqkmdrwW/k7YpdNxOW66ljf/
+         hFO3KmaQtG+Yo8GijJcttE8VgUOPiVzP2VL3gQx2UMlglwDt1VbI69FRvLVhOqbgItrL
+         6HIUrnDWQH5cXbSEJOSHBr78IqMUq8AqBbcap5d1Al8Ls0cgWXzdtH2jNZ6gHYMpoEjZ
+         G6jBaYeIe5MB1mxGExOB6walb7SbOdVGegs9YrFZYozTT/ybOOV5OlgRDMf4I7B6e5mV
+         UTh7vHhLvBBMW4GcyUAJftYQPGuqSRF/dQmv+usb3q0YH848kjFuZC5JRdGhlYnQ+J2Q
+         kpdg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678822620;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=QcgqrEEeAkKKOQl82NDw/a48a4KrmvHxuMGEj//jCFE=;
-        b=lGiGWfynM/jBFGYSd8NhCjaCVRbtUAtZ9ujELBNN3qzirSf1mOBQVw9cCibQ2bdsY1
-         8sY0thj/GODYvedi9rQfeDM8WReZsVVMqovz2IG1fzFOO+AfjvREPA8m47cpkn9fPOvB
-         jJRarDG3mkeFE5NEjYgjMyu08uXb3i91veX42zNQ0ypwt9AvVwZC8NZk5Yju3ok57LL6
-         J7h8EYqkYY+/CHtzFIHSnLOEbebopWK0vNmmz/MRk3IClunlIjL1efvRk/eoHpn2NJKk
-         QZlhxRJvN6/ExAURyPpjMmCQrMe/TD7NYyH0cKv/A0tuoO/hEMhg2zlqV6eg/L2MnXEd
-         +jOg==
-X-Gm-Message-State: AO0yUKV/4hpAru5O0xa46wn1TiWq3cfenUt5odl+Z0SKFkH/hitWG8so
-        7qdXVcTXmebqOhqdd35PrjT2UebB7jed29XdXRc=
-X-Google-Smtp-Source: AK7set+cMfoe4bsEnRmrY5E8XZQiF35wuilUo433PUun4G3b9dikVzXxdDU1zSSwxhJLUHQRdYf+f05lopA3NNj34t8=
-X-Received: by 2002:a50:8754:0:b0:4fb:c8e3:1adb with SMTP id
- 20-20020a508754000000b004fbc8e31adbmr138552edv.3.1678822620191; Tue, 14 Mar
- 2023 12:37:00 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678822636;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6n80OO2p0+yXsir8JhHPkqdbw+rH/st/LRf0u/i9phg=;
+        b=bfQPkz9txRzOx3scTgykqlqFU/za1yteozN2eWPUfNYMmfq4ineLP70AtURa1g15n2
+         xdIiu5TcLZ73CGcqxbFaNr5C2XHAMbop2MuEsQuvjl1+NAM50L+cwTQAMyKP7GMO5f3W
+         i07S/4UV5u5pTCGKJW+NVJ09MWEpjSWAFk6JyIk9dpsK7q/geTr2K8wuGUdldEwMyXIV
+         6x4jZleZyZdYdmo3uYJ+xmZF1DmkG4lAO2TRc7/BCukk9AoDtoIZ77PumX2S6yC9AMLj
+         hkccD8NhX220A25taOI54bCA/C7M6Up1Cmw0oXXjPUMCd236xXvUCGACpIFUU93g77wo
+         BKeg==
+X-Gm-Message-State: AO0yUKW1AEjPq3LYv2U/aVb8Rnewx3i37auUPMIUY4umJLkmQ5icze5O
+        XADE3n9qnOHyCcGWeVSSejk=
+X-Google-Smtp-Source: AK7set8quM8ygAx5/FCTuKrJMk0KUxoiB161DkMDpjqQkayM20GcKZn76VClTiuk/fZb/wkBOz6MkA==
+X-Received: by 2002:ac2:4a91:0:b0:4e8:3f36:414a with SMTP id l17-20020ac24a91000000b004e83f36414amr1216390lfp.55.1678822636404;
+        Tue, 14 Mar 2023 12:37:16 -0700 (PDT)
+Received: from ruslan.. ([178.176.76.61])
+        by smtp.gmail.com with ESMTPSA id p15-20020a05651238cf00b004dc4d26c30dsm513859lft.63.2023.03.14.12.37.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 12:37:15 -0700 (PDT)
+From:   Kasumov Ruslan <xhxgldhlpfy@gmail.com>
+To:     Andy Gross <agross@kernel.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+Subject: [PATCH] iio: adc: qcom-pm8xxx-xoadc: Remove useless condition in pm8xxx_xoadc_parse_channel()
+Date:   Tue, 14 Mar 2023 22:37:09 +0300
+Message-Id: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <20230308112632.1908748-1-sudeep.holla@arm.com> <d9e5fdc4-3db0-4aa7-147c-c3c6bfbeac84@arm.com>
-In-Reply-To: <d9e5fdc4-3db0-4aa7-147c-c3c6bfbeac84@arm.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Tue, 14 Mar 2023 20:36:48 +0100
-Message-ID: <CAJZ5v0h36OPPZ4tFy0cnfcYcKipGXVcRGH9dSbQDNtUd4pKVLQ@mail.gmail.com>
-Subject: Re: [PATCH] ACPI: PPTT: Fix to avoid sleep in the atomic context when
- PPTT is absent
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>
-Cc:     linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        "Rafael J . Wysocki" <rafael@kernel.org>,
-        Aishwarya TCV <aishwarya.tcv@arm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Mar 8, 2023 at 2:34 PM Pierre Gondois <pierre.gondois@arm.com> wrote:
->
-> Tested-by: Pierre Gondois <pierre.gondois@arm.com>
->
-> On 3/8/23 12:26, Sudeep Holla wrote:
-> > Commit 0c80f9e165f8 ("ACPI: PPTT: Leave the table mapped for the runtime usage")
-> > enabled to map PPTT once on the first invocation of acpi_get_pptt() and
-> > never unmapped the same allowing it to be used at runtime with out the
-> > hassle of mapping and unmapping the table. This was needed to fetch LLC
-> > information from the PPTT in the cpuhotplug path which is executed in
-> > the atomic context as the acpi_get_table() might sleep waiting for a
-> > mutex.
-> >
-> > However it missed to handle the case when there is no PPTT on the system
-> > which results in acpi_get_pptt() being called from all the secondary
-> > CPUs attempting to fetch the LLC information in the atomic context
-> > without knowing the absence of PPTT resulting in the splat like below:
-> >
-> >   | BUG: sleeping function called from invalid context at kernel/locking/semaphore.c:164
-> >   | in_atomic(): 1, irqs_disabled(): 1, non_block: 0, pid: 0, name: swapper/1
-> >   | preempt_count: 1, expected: 0
-> >   | RCU nest depth: 0, expected: 0
-> >   | no locks held by swapper/1/0.
-> >   | irq event stamp: 0
-> >   | hardirqs last  enabled at (0): 0x0
-> >   | hardirqs last disabled at (0): copy_process+0x61c/0x1b40
-> >   | softirqs last  enabled at (0): copy_process+0x61c/0x1b40
-> >   | softirqs last disabled at (0): 0x0
-> >   | CPU: 1 PID: 0 Comm: swapper/1 Not tainted 6.3.0-rc1 #1
-> >   | Call trace:
-> >   |  dump_backtrace+0xac/0x138
-> >   |  show_stack+0x30/0x48
-> >   |  dump_stack_lvl+0x60/0xb0
-> >   |  dump_stack+0x18/0x28
-> >   |  __might_resched+0x160/0x270
-> >   |  __might_sleep+0x58/0xb0
-> >   |  down_timeout+0x34/0x98
-> >   |  acpi_os_wait_semaphore+0x7c/0xc0
-> >   |  acpi_ut_acquire_mutex+0x58/0x108
-> >   |  acpi_get_table+0x40/0xe8
-> >   |  acpi_get_pptt+0x48/0xa0
-> >   |  acpi_get_cache_info+0x38/0x140
-> >   |  init_cache_level+0xf4/0x118
-> >   |  detect_cache_attributes+0x2e4/0x640
-> >   |  update_siblings_masks+0x3c/0x330
-> >   |  store_cpu_topology+0x88/0xf0
-> >   |  secondary_start_kernel+0xd0/0x168
-> >   |  __secondary_switched+0xb8/0xc0
-> >
-> > Update acpi_get_pptt() to consider the fact that PPTT is once checked and
-> > is not available on the system and return NULL avoiding any attempts to
-> > fetch PPTT and thereby avoiding any possible sleep waiting for a mutex
-> > in the atomic context.
-> >
-> > Fixes: 0c80f9e165f8 ("ACPI: PPTT: Leave the table mapped for the runtime usage")
-> > Reported-by: Aishwarya TCV <aishwarya.tcv@arm.com>
-> > Cc: Pierre Gondois <pierre.gondois@arm.com>
-> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
-> > ---
-> >   drivers/acpi/pptt.c | 5 ++++-
-> >   1 file changed, 4 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/pptt.c b/drivers/acpi/pptt.c
-> > index 10975bb603fb..a35dd0e41c27 100644
-> > --- a/drivers/acpi/pptt.c
-> > +++ b/drivers/acpi/pptt.c
-> > @@ -536,16 +536,19 @@ static int topology_get_acpi_cpu_tag(struct acpi_table_header *table,
-> >   static struct acpi_table_header *acpi_get_pptt(void)
-> >   {
-> >       static struct acpi_table_header *pptt;
-> > +     static bool is_pptt_checked;
-> >       acpi_status status;
-> >
-> >       /*
-> >        * PPTT will be used at runtime on every CPU hotplug in path, so we
-> >        * don't need to call acpi_put_table() to release the table mapping.
-> >        */
-> > -     if (!pptt) {
-> > +     if (!pptt && !is_pptt_checked) {
-> >               status = acpi_get_table(ACPI_SIG_PPTT, 0, &pptt);
-> >               if (ACPI_FAILURE(status))
-> >                       acpi_pptt_warn_missing();
-> > +
-> > +             is_pptt_checked = true;
-> >       }
-> >
-> >       return pptt;
+The left side of the loop condition never becomes false.
+hwchan cannot be NULL, because it points to elements of the
+hw_channels array that takes one of 4 predefined values:
+pm8018_xoadc_channels, pm8038_xoadc_channels,
+pm8058_xoadc_channels, pm8921_xoadc_channels.
 
-Applied as 6.3-rc material, thanks!
+Found by Linux Verification Center (linuxtesting.org) with SVACE.
+
+Fixes: 63c3ecd946d4 ("iio: adc: add a driver for Qualcomm PM8xxx HK/XOADC")
+Signed-off-by: Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+---
+ drivers/iio/adc/qcom-pm8xxx-xoadc.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/iio/adc/qcom-pm8xxx-xoadc.c b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+index eb424496ee1d..64a3aeb6261c 100644
+--- a/drivers/iio/adc/qcom-pm8xxx-xoadc.c
++++ b/drivers/iio/adc/qcom-pm8xxx-xoadc.c
+@@ -758,7 +758,7 @@ static int pm8xxx_xoadc_parse_channel(struct device *dev,
+ 	/* Find the right channel setting */
+ 	chid = 0;
+ 	hwchan = &hw_channels[0];
+-	while (hwchan && hwchan->datasheet_name) {
++	while (hwchan->datasheet_name) {
+ 		if (hwchan->pre_scale_mux == pre_scale_mux &&
+ 		    hwchan->amux_channel == amux_channel)
+ 			break;
+-- 
+2.34.1
+
