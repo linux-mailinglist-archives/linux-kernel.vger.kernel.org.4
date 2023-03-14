@@ -2,115 +2,199 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 405766B8AC8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:45:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C84FE6B8AD6
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:54:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229879AbjCNFpu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:45:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S229977AbjCNFya (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:54:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229473AbjCNFpr (ORCPT
+        with ESMTP id S229810AbjCNFy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:45:47 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6489C6507C;
-        Mon, 13 Mar 2023 22:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678772746; x=1710308746;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=epevocZi6+E2W/gaN32HI3R84I7en7SETUEfrcRwoM4=;
-  b=L56UdPYeyZEHfLOpoA4cIf+JjM2U1d/YsCIATO3RlG8O3ec1kSpuFPwt
-   7GW+GmAfPgK+4gLk7CDKOcbGqeIoWK7ki0IHGfaP0cFrdBi5en8wWAVIz
-   QBXqtrwTs3Ww6ZnafRpz6QJ4ei3aS1+zbXyve/GipYPhpUqPaDVouOzHA
-   qcJe5z+W+ZoefRFACe5LcP/7+vKQbdT2FzqbDdjcS5LvBphnoUaPgBmRT
-   t/A6MuuDvJ8FbzOVltbDaGFUTxyj28Vm2Uo/1H18PnFrWIoH4eAKRcCe6
-   dz+vH/pi3MfDQhHsHSNcRU68MVgWpHssVUIP6mTjW57fVOYzSY8M8wtru
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="339703246"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="339703246"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 22:45:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="711382097"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="711382097"
-Received: from rahulmur-mobl3.amr.corp.intel.com (HELO [10.212.195.84]) ([10.212.195.84])
-  by orsmga001-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 22:45:45 -0700
-Message-ID: <902b0166-6156-8def-a7a3-f0ce8995fa9c@intel.com>
-Date:   Mon, 13 Mar 2023 22:45:45 -0700
+        Tue, 14 Mar 2023 01:54:26 -0400
+Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB4038C957
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:54:22 -0700 (PDT)
+Received: by mail-qt1-x82d.google.com with SMTP id s12so15635154qtq.11
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1678773262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=cZUrcOEwApRsFF25slrbmDsKbhdNNu2L1mi9TI+ryy4=;
+        b=F37hpRYBwdfYrlsTtUAUMX2Zy2J+8I1jy2liucRyNHGHvGvpXQujLUWrPdvwOixeKj
+         n8//XY94bBsm1R052ih5K9lLmB9ypIXKS+CUJVvrbPXgBX+wL/LuhJMFcMKRE+yzZrXG
+         B95elN27gPHUf6+7Clk0PUfaeWkUOY9USrO0A=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678773262;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=cZUrcOEwApRsFF25slrbmDsKbhdNNu2L1mi9TI+ryy4=;
+        b=lAQrJaJ45wOeKkxKhuFZKQO+i5j0/Rk0zxnLkbe7mdgXoQ/b5VoczXZWlWyFh9ETYf
+         AJWdFJwaeL+064ATeeiW06bJUff+YfTqJMzzRhte2rPaf0FgQpFUUxzA/PxFKaX+40dx
+         +o5PYUGB4EHBeQPYR2b1f0yUV1O0FBzxWnTOACvs/IRsTVSVuPX3YFMQN3BmbDmsb0FX
+         qskOpvTJFS8sbQmVWFsHfbtzi136H2MwDaBk14tU8YaK65hrd5hBV9iBE5xdLUoxfyVR
+         qnYD+KgK3/7XxE+RkrLxq9rLcNjZCFZU0Jv0aFcAniZ10S4EOImlX5yjyjBjXrx0kPzb
+         4p3A==
+X-Gm-Message-State: AO0yUKWhUmpmgFZmUdIso1boAAB3iuJx/Ggeiv/tZ3Y4BaLdx0ay7ZfK
+        P9WfwCPfP7ZuT1P/ar/VXwhHIQ==
+X-Google-Smtp-Source: AK7set+VW1LaqfbGQnmsAVb8xqkicmPSmc61vsG1pDwfj1w6d9w3InZKLxPAzpvXf0uzNCgNP9/9sw==
+X-Received: by 2002:a05:622a:46:b0:3b8:6a20:675e with SMTP id y6-20020a05622a004600b003b86a20675emr33906851qtw.29.1678773261970;
+        Mon, 13 Mar 2023 22:54:21 -0700 (PDT)
+Received: from grundler-glapstation.lan ([70.134.62.80])
+        by smtp.gmail.com with ESMTPSA id z9-20020ac86b89000000b003b9bb59543fsm1195290qts.61.2023.03.13.22.54.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 13 Mar 2023 22:54:21 -0700 (PDT)
+From:   Grant Grundler <grundler@chromium.org>
+To:     Oleksij Rempel <linux@rempel-privat.de>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Lukas Wunner <lukas@wunner.de>
+Cc:     Eizan Miyamoto <eizan@chromium.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        netdev <netdev@vger.kernel.org>,
+        "David S . Miller" <davem@davemloft.net>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Grant Grundler <grundler@chromium.org>,
+        Anton Lundin <glance@acc.umu.se>
+Subject: [PATCHv4 net] net: asix: fix modprobe "sysfs: cannot create duplicate filename"
+Date:   Mon, 13 Mar 2023 22:54:10 -0700
+Message-Id: <20230314055410.3329480-1-grundler@chromium.org>
+X-Mailer: git-send-email 2.40.0.rc1.284.g88254d51c5-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v10 05/16] x86/virt/tdx: Add skeleton to enable TDX on
- demand
-Content-Language: en-US
-To:     Isaku Yamahata <isaku.yamahata@gmail.com>,
-        "Huang, Kai" <kai.huang@intel.com>
-Cc:     "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "david@redhat.com" <david@redhat.com>,
-        "bagasdotme@gmail.com" <bagasdotme@gmail.com>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "Wysocki, Rafael J" <rafael.j.wysocki@intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Chatre, Reinette" <reinette.chatre@intel.com>,
-        "Christopherson,, Sean" <seanjc@google.com>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "Yamahata, Isaku" <isaku.yamahata@intel.com>,
-        "kirill.shutemov@linux.intel.com" <kirill.shutemov@linux.intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "Luck, Tony" <tony.luck@intel.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "Shahar, Sagi" <sagis@google.com>,
-        "imammedo@redhat.com" <imammedo@redhat.com>,
-        "Gao, Chao" <chao.gao@intel.com>,
-        "Brown, Len" <len.brown@intel.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "Huang, Ying" <ying.huang@intel.com>,
-        "Williams, Dan J" <dan.j.williams@intel.com>
-References: <cover.1678111292.git.kai.huang@intel.com>
- <f150316b975b5ca22c6c4016ffd90db79d657bbf.1678111292.git.kai.huang@intel.com>
- <20230308222738.GA3419702@ls.amr.corp.intel.com>
- <96b56c5b8a5876aaf6d5ccbb81bab334b10983eb.camel@intel.com>
- <20230313234916.GC3922605@ls.amr.corp.intel.com>
- <a62497059fc3f31706a532b822d6c966bd981468.camel@intel.com>
- <20230314040200.GD3922605@ls.amr.corp.intel.com>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <20230314040200.GD3922605@ls.amr.corp.intel.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 21:02, Isaku Yamahata wrote:
->> Then it is a hidden behaviour of the TDX module that is not reflected in the
->> spec.  I am not sure whether we should handle because: 
->>
->> 1) This is an extremely rare case.  Kernel would be basically under attack if
->> such error happened.  In the current series we don't handle such case in
->> KEY.CONFIG either but just leave a comment (see patch 13).
->>
->> 2) Not sure whether this will be changed in the future.
->>
->> So I think we should keep as is.
-> TDX 1.5 spec introduced TDX_RND_NO_ENTROPY status code.  For TDX 1.0, let's
-> postpone it to TDX 1.5 activity.
+"modprobe asix ; rmmod asix ; modprobe asix" fails with:
+   sysfs: cannot create duplicate filename \
+   	'/devices/virtual/mdio_bus/usb-003:004'
 
-What the heck does this mean?
+Issue was originally reported by Anton Lundin on 2022-06-22 (link below).
 
-I don't remember seeing any code here that checks for "TDX 1.0" or "TDX
-1.5".  That means that this code needs to work with _any_ TDX version.
+Chrome OS team hit the same issue in Feb, 2023 when trying to find
+work arounds for other issues with AX88172 devices.
 
-Are features being added to new versions that break code written for old
-versions?
+The use of devm_mdiobus_register() with usbnet devices results in the
+MDIO data being associated with the USB device. When the asix driver
+is unloaded, the USB device continues to exist and the corresponding
+"mdiobus_unregister()" is NOT called until the USB device is unplugged
+or unauthorized. So the next "modprobe asix" will fail because the MDIO
+phy sysfs attributes still exist.
+
+The 'easy' (from a design PoV) fix is to use the non-devm variants of
+mdiobus_* functions and explicitly manage this use in the asix_bind
+and asix_unbind function calls. I've not explored trying to fix usbnet
+initialization so devm_* stuff will work.
+
+Fixes: e532a096be0e5 ("net: usb: asix: ax88772: add phylib support")
+Reported-by: Anton Lundin <glance@acc.umu.se>
+Link: https://lore.kernel.org/netdev/20220623063649.GD23685@pengutronix.de/T/
+Tested-by: Eizan Miyamoto <eizan@chromium.org>
+Signed-off-by: Grant Grundler <grundler@chromium.org>
+
+---
+ drivers/net/usb/asix_devices.c | 33 ++++++++++++++++++++++++++++-----
+ 1 file changed, 28 insertions(+), 5 deletions(-)
+
+V4: add mdio_unregister to ax88172_bind() error handling paths
+
+V3: rebase against netdev/net.git
+    remove "TEST" prefix in subject line
+    added Link: tag for Reported-by tag
+
+V2: moved mdiobus_get_phy() call back into ax88772_init_phy()
+   (Lukas Wunner is entirely correct this patch is much easier
+   to backport without this patch hunk.)
+   Added "Fixes:" tag per request from Florian Fainelli
+
+diff --git a/drivers/net/usb/asix_devices.c b/drivers/net/usb/asix_devices.c
+index 743cbf5d662c..b758010bab36 100644
+--- a/drivers/net/usb/asix_devices.c
++++ b/drivers/net/usb/asix_devices.c
+@@ -666,8 +666,9 @@ static int asix_resume(struct usb_interface *intf)
+ static int ax88772_init_mdio(struct usbnet *dev)
+ {
+ 	struct asix_common_private *priv = dev->driver_priv;
++	int ret;
+ 
+-	priv->mdio = devm_mdiobus_alloc(&dev->udev->dev);
++	priv->mdio = mdiobus_alloc();
+ 	if (!priv->mdio)
+ 		return -ENOMEM;
+ 
+@@ -679,7 +680,20 @@ static int ax88772_init_mdio(struct usbnet *dev)
+ 	snprintf(priv->mdio->id, MII_BUS_ID_SIZE, "usb-%03d:%03d",
+ 		 dev->udev->bus->busnum, dev->udev->devnum);
+ 
+-	return devm_mdiobus_register(&dev->udev->dev, priv->mdio);
++	ret = mdiobus_register(priv->mdio);
++	if (ret) {
++		netdev_err(dev->net, "Could not register MDIO bus (err %d)\n", ret);
++		mdiobus_free(priv->mdio);
++		priv->mdio = NULL;
++	}
++
++	return ret;
++}
++
++static void ax88772_mdio_unregister(struct asix_common_private *priv)
++{
++	mdiobus_unregister(priv->mdio);
++	mdiobus_free(priv->mdio);
+ }
+ 
+ static int ax88772_init_phy(struct usbnet *dev)
+@@ -690,6 +704,7 @@ static int ax88772_init_phy(struct usbnet *dev)
+ 	priv->phydev = mdiobus_get_phy(priv->mdio, priv->phy_addr);
+ 	if (!priv->phydev) {
+ 		netdev_err(dev->net, "Could not find PHY\n");
++		ax88772_mdio_unregister(priv);
+ 		return -ENODEV;
+ 	}
+ 
+@@ -896,16 +911,23 @@ static int ax88772_bind(struct usbnet *dev, struct usb_interface *intf)
+ 
+ 	ret = ax88772_init_mdio(dev);
+ 	if (ret)
+-		return ret;
++		goto mdio_err;
+ 
+ 	ret = ax88772_phylink_setup(dev);
+ 	if (ret)
+-		return ret;
++		goto phylink_err;
+ 
+ 	ret = ax88772_init_phy(dev);
+ 	if (ret)
+-		phylink_destroy(priv->phylink);
++		goto initphy_err;
+ 
++	return 0;
++
++initphy_err:
++	phylink_destroy(priv->phylink);
++phylink_err:
++	ax88772_mdio_unregister(priv);
++mdio_err:
+ 	return ret;
+ }
+ 
+@@ -926,6 +948,7 @@ static void ax88772_unbind(struct usbnet *dev, struct usb_interface *intf)
+ 	phylink_disconnect_phy(priv->phylink);
+ 	rtnl_unlock();
+ 	phylink_destroy(priv->phylink);
++	ax88772_mdio_unregister(priv);
+ 	asix_rx_fixup_common_free(dev->driver_priv);
+ }
+ 
+-- 
+2.40.0.rc1.284.g88254d51c5-goog
+
