@@ -2,73 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CB996BA07B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:13:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDEFD6BA07E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:13:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231127AbjCNUNA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:13:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55384 "EHLO
+        id S231158AbjCNUN3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:13:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbjCNUMy (ORCPT
+        with ESMTP id S230395AbjCNUNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:12:54 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1528A36453
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:12:53 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id x3so66890654edb.10
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:12:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678824771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AgTwHzZth/P2ovg4/SIXDhWMrCdYyhs06Uhyp9mdV6s=;
-        b=KrC2zofZrNiIyyk9GGjG9QFwYogUxCILqDxJiE7/QVUYPTIx0O2K3207z+zK9C3IMJ
-         a08fJAdRY+y2PjkMrnYgGvRCWwJl8GFUK/Ysh+wau54xWNwVBNKIK3PKViJG6E8dzxzU
-         tD0AIuqSaLWpKMiqFfjK/9InUQEXgZ7YajWY6MNOoqcZtQEmBzRju/noI+d4ZmSLVfGj
-         XRU8ErAZYOrrYgrHoz2sLFa5i3/TsorARVqE4/tRHz8MyCd73gWK5SYU80NYgyRgIIAK
-         H2HjAXWAUzWt5o9rcw4D5Mxzny7c4qDaQxWSahnTf5yzlYS/BVosigPCE/SR7S7wkZ0g
-         VsKQ==
+        Tue, 14 Mar 2023 16:13:22 -0400
+Received: from mail-il1-f179.google.com (mail-il1-f179.google.com [209.85.166.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BC71969E;
+        Tue, 14 Mar 2023 13:13:14 -0700 (PDT)
+Received: by mail-il1-f179.google.com with SMTP id j6so4793095ilr.7;
+        Tue, 14 Mar 2023 13:13:14 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678824771;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AgTwHzZth/P2ovg4/SIXDhWMrCdYyhs06Uhyp9mdV6s=;
-        b=11RgSHJrb5c3GOBev8U+UMBvyvsHyTvkC/uR5g5a/JqwVGVYo4at7U1mONP5x3vMsm
-         PzcTla1SSiom61UkPP92Rh0gqbUqZyWVKjgT4Gj0Jm3l8vFOGgmYfIsF4Gi7Zy5n/DYY
-         GjGQ5uGtUcYabhuJyAXiVKnO6tOA/XqyeoD3nW/FKFmNydQL8HEICHGIAqCqgPhQ2fMu
-         l7WHlv6eeyv+7PhZovcWZe+Hnf8YPxrKIg2zm9KsaXg3yJrBjN5Q3X7nBUe8y5e0r64C
-         qoD9EVXfOhgLQFrh7Ci8IV25ePKr2cW4hdKnLxA5OmF94GuySKhkwfu+KLhvTmNM6JRO
-         1ZJQ==
-X-Gm-Message-State: AO0yUKXVFNTNHCc/Tn6W3kdl34fWw2kGLGu2n0JdEkAfKkRHxe1rzSjV
-        gIWk1mQi4MJP3m6aLzCrn4MEEA==
-X-Google-Smtp-Source: AK7set9FwKmH8IWRt0oGFHXN64uPFH0geW/+oy2YAf2Rufey01dFKgJ19ytNYbdzett+AF5M5soC9w==
-X-Received: by 2002:a17:906:6945:b0:8ae:f1cd:9551 with SMTP id c5-20020a170906694500b008aef1cd9551mr3922346ejs.76.1678824771563;
-        Tue, 14 Mar 2023 13:12:51 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:642b:87c2:1efc:c8af? ([2a02:810d:15c0:828:642b:87c2:1efc:c8af])
-        by smtp.gmail.com with ESMTPSA id e12-20020a50a68c000000b004ac54d4da22sm1512106edc.71.2023.03.14.13.12.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 13:12:51 -0700 (PDT)
-Message-ID: <a0ec54c2-b11e-5f4b-eb0e-ab9a8e71b02c@linaro.org>
-Date:   Tue, 14 Mar 2023 21:12:50 +0100
+        d=1e100.net; s=20210112; t=1678824794;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CJlM3chLn2hYsljtdG2Gsvt+783JHIg7bd5IO9aY9nI=;
+        b=2gwgZdKQFNu5DSKff+6jfaXg8i+D6yAnCSA1A9jKLoWb5Y9wO2fNkCdR+90FfhZkAu
+         s74pIC/aVjtGGeoL3Pd0r2M/UimlB/nyG8HIg0AAM9tQ1n4iQSRznfj5GuEJLoRNi7XF
+         riaI31Scxt+Je7OYeWGEi2BwetTNuj6Al35V3VOn7wRCBCYqjr/eLtoQ/fQSdPrMbuk7
+         wPbM05IhhfaUOvBRJlviCcgZZhOhsWI7NeHYJyeJS0Pxa7Ft8mTxgSrjDxRVRFop7u0d
+         OYLCXjJ82v2pSalJbChOySpX1a36bJwdy/MuDzftdOK6JUWaZNrSeb3wC9aqEqbzaYck
+         ShMQ==
+X-Gm-Message-State: AO0yUKUiNDRkltLMLxsq4pN0WJAGxh5wfAqqjke5Mwnobn4zh6SryG3o
+        4r1sL+ucDPJfLzNV5QLnhY2VGPtaaw==
+X-Google-Smtp-Source: AK7set9K4OXj5mFkbJbzAE5PFyZYK2s4RSbidcBMbfRzBKgYZAYAC+nEZtrczmuTAg708d10IQiiRw==
+X-Received: by 2002:a92:7302:0:b0:315:6fc5:ea46 with SMTP id o2-20020a927302000000b003156fc5ea46mr2893332ilc.2.1678824793715;
+        Tue, 14 Mar 2023 13:13:13 -0700 (PDT)
+Received: from robh_at_kernel.org ([64.188.179.249])
+        by smtp.gmail.com with ESMTPSA id e20-20020a056638021400b0040611a31d5fsm361854jaq.80.2023.03.14.13.13.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 13:13:13 -0700 (PDT)
+Received: (nullmailer pid 995516 invoked by uid 1000);
+        Tue, 14 Mar 2023 20:13:12 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Subject: [PATCH v2 1/2] nfc: mrvl: Move platform_data struct into driver
+Date:   Tue, 14 Mar 2023 15:13:08 -0500
+Message-Id: <20230314201309.995421-1-robh@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] mmc: sdhci: add static to !OF stub
-Content-Language: en-US
-To:     Ulf Hansson <ulf.hansson@linaro.org>
-Cc:     Adrian Hunter <adrian.hunter@intel.com>, linux-mmc@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230311111238.251000-1-krzysztof.kozlowski@linaro.org>
- <CAPDyKFqaq5ysudyqOe0dB8fm=+p_ywpXdqQr33QUCq3j+Bqnrw@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAPDyKFqaq5ysudyqOe0dB8fm=+p_ywpXdqQr33QUCq3j+Bqnrw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,38 +60,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 13:49, Ulf Hansson wrote:
-> On Sat, 11 Mar 2023 at 12:12, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> The sdhci_get_compatibility() is not used outside of the unit:
->>
->>   drivers/mmc/host/sdhci-pltfm.c:76:6: error: no previous prototype for ‘sdhci_get_compatibility’ [-Werror=missing-prototypes]
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  drivers/mmc/host/sdhci-pltfm.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/mmc/host/sdhci-pltfm.c b/drivers/mmc/host/sdhci-pltfm.c
->> index 328b132bbe57..245e56324dff 100644
->> --- a/drivers/mmc/host/sdhci-pltfm.c
->> +++ b/drivers/mmc/host/sdhci-pltfm.c
->> @@ -73,7 +73,7 @@ static void sdhci_get_compatibility(struct platform_device *pdev)
->>                 host->quirks |= SDHCI_QUIRK_BROKEN_TIMEOUT_VAL;
->>  }
->>  #else
->> -void sdhci_get_compatibility(struct platform_device *pdev) {}
->> +static void sdhci_get_compatibility(struct platform_device *pdev) {}
->>  #endif /* CONFIG_OF */
-> 
-> sdhci_get_compatibility() is using OF functions with stubs for !OF.
-> 
-> Perhaps a cleaner option is to drop the #ifdef CONFIG_OF completely
-> around sdhci_get_compatibility(), thus we can drop the stub too.
+There are no users of nfcmrvl platform_data struct outside of the
+driver and none will be added, so move it into the driver.
 
-Works, indeed, better idea. I'll send v2.
+Signed-off-by: Rob Herring <robh@kernel.org>
+---
+ drivers/nfc/nfcmrvl/nfcmrvl.h         | 30 +++++++++++++++--
+ include/linux/platform_data/nfcmrvl.h | 48 ---------------------------
+ 2 files changed, 28 insertions(+), 50 deletions(-)
+ delete mode 100644 include/linux/platform_data/nfcmrvl.h
 
-Best regards,
-Krzysztof
+diff --git a/drivers/nfc/nfcmrvl/nfcmrvl.h b/drivers/nfc/nfcmrvl/nfcmrvl.h
+index 165bd0a95190..0f22b3233f73 100644
+--- a/drivers/nfc/nfcmrvl/nfcmrvl.h
++++ b/drivers/nfc/nfcmrvl/nfcmrvl.h
+@@ -8,8 +8,6 @@
+ #ifndef _NFCMRVL_H_
+ #define _NFCMRVL_H_
+ 
+-#include <linux/platform_data/nfcmrvl.h>
+-
+ #include "fw_dnld.h"
+ 
+ /* Define private flags: */
+@@ -50,6 +48,34 @@ enum nfcmrvl_phy {
+ 	NFCMRVL_PHY_SPI		= 3,
+ };
+ 
++struct nfcmrvl_platform_data {
++	/*
++	 * Generic
++	 */
++
++	/* GPIO that is wired to RESET_N signal */
++	int reset_n_io;
++	/* Tell if transport is muxed in HCI one */
++	unsigned int hci_muxed;
++
++	/*
++	 * UART specific
++	 */
++
++	/* Tell if UART needs flow control at init */
++	unsigned int flow_control;
++	/* Tell if firmware supports break control for power management */
++	unsigned int break_control;
++
++
++	/*
++	 * I2C specific
++	 */
++
++	unsigned int irq;
++	unsigned int irq_polarity;
++};
++
+ struct nfcmrvl_private {
+ 
+ 	unsigned long flags;
+diff --git a/include/linux/platform_data/nfcmrvl.h b/include/linux/platform_data/nfcmrvl.h
+deleted file mode 100644
+index 9e75ac8d19be..000000000000
+--- a/include/linux/platform_data/nfcmrvl.h
++++ /dev/null
+@@ -1,48 +0,0 @@
+-/*
+- * Copyright (C) 2015, Marvell International Ltd.
+- *
+- * This software file (the "File") is distributed by Marvell International
+- * Ltd. under the terms of the GNU General Public License Version 2, June 1991
+- * (the "License").  You may use, redistribute and/or modify this File in
+- * accordance with the terms and conditions of the License, a copy of which
+- * is available on the worldwide web at
+- * http://www.gnu.org/licenses/old-licenses/gpl-2.0.txt.
+- *
+- * THE FILE IS DISTRIBUTED AS-IS, WITHOUT WARRANTY OF ANY KIND, AND THE
+- * IMPLIED WARRANTIES OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE
+- * ARE EXPRESSLY DISCLAIMED.  The License provides additional details about
+- * this warranty disclaimer.
+- */
+-
+-#ifndef _NFCMRVL_PTF_H_
+-#define _NFCMRVL_PTF_H_
+-
+-struct nfcmrvl_platform_data {
+-	/*
+-	 * Generic
+-	 */
+-
+-	/* GPIO that is wired to RESET_N signal */
+-	int reset_n_io;
+-	/* Tell if transport is muxed in HCI one */
+-	unsigned int hci_muxed;
+-
+-	/*
+-	 * UART specific
+-	 */
+-
+-	/* Tell if UART needs flow control at init */
+-	unsigned int flow_control;
+-	/* Tell if firmware supports break control for power management */
+-	unsigned int break_control;
+-
+-
+-	/*
+-	 * I2C specific
+-	 */
+-
+-	unsigned int irq;
+-	unsigned int irq_polarity;
+-};
+-
+-#endif /* _NFCMRVL_PTF_H_ */
+-- 
+2.39.2
 
