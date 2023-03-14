@@ -2,170 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95E496B873E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:52:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0F696B8741
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:54:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229801AbjCNAwz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:52:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54324 "EHLO
+        id S229840AbjCNAx6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:53:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbjCNAwx (ORCPT
+        with ESMTP id S229704AbjCNAx5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:52:53 -0400
-Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5635B136C2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:52:52 -0700 (PDT)
-Received: by mail-il1-x12e.google.com with SMTP id r4so7881803ila.2
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:52:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678755171;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qHzjH7VglcppZFTUdFm592XUYZ3bt2CwGqlDMyOUI3s=;
-        b=WSZTts/id8ucNGvnP/AHh7ge3JvSfRpInRare3/mS+SKvXXFQ/ykW8jTykGqXl4cvG
-         iVbEyAdcJmpvwXbwWimibaY6wLlbf0QxjMkizuhido22EI9ccgaThl9YwDGZct3HBirN
-         ieul0p+M+EmM+tPDOeyT+GYG410tSXCWO5QOQFwaG1qx+M5T87zJEmP83KT0rVtgyLwS
-         W0ccIpcVn4XKCUZOSkxWi5jmLq3l8CAfJr8Y+LxjhAwPIhKlxcGSBdn2f9iu+NMcSC8A
-         zr1OstRNmGK/xqPphP7EghpxOkXTwzcXFfexe7efxjtnotS/fTyddUAT4Eq25WR432ON
-         5koQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678755171;
-        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
-         :content-language:user-agent:mime-version:date:message-id:sender
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qHzjH7VglcppZFTUdFm592XUYZ3bt2CwGqlDMyOUI3s=;
-        b=FB1QU26H/Zgm1y1Q4ZyZG5GtwZdhs+18ljOPVgZ+SkmCnsDQBgisLCBAhjqMcIPqIc
-         iE/rdDW40laiHqKTUC13hwPA/NI7n0SlZ3f74Et2IqmUL/SN9VXll61i7mmBzY42BfR3
-         Fc0svaN0d0HU+XlPQSfCHAZANUXZdxKXQfgComA7iwmVVIoAa0gSbM9n5/pHt76VjN1H
-         0o8WUezi0JilOzXGR7Vmz7Bkyuuas6CS4LYytJG5vC9igXYh8z9R7EwDm9cXxRICTcYA
-         wKDja5DWBryHRR4J2K5dMoKd12qHj8PCXK76DKqh1FLwbEX4dYVVEYqwqZdaFkoXeYwX
-         5wgg==
-X-Gm-Message-State: AO0yUKWGbZQY61HaNdcHnn+xTEEn6aqZCsLginweHcUWGWZPxDNSg0NP
-        6irob4InZtMDfiYyQ5AFDUQ=
-X-Google-Smtp-Source: AK7set96w0xlkbdEsvmQ7AFx3bUwX6ouwo0w7Bu3FALMc5QyzxgUTASVNAjAWROZKvMqrz7sCZxtog==
-X-Received: by 2002:a05:6e02:966:b0:311:1168:b9b5 with SMTP id q6-20020a056e02096600b003111168b9b5mr1052754ilt.23.1678755171634;
-        Mon, 13 Mar 2023 17:52:51 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id j2-20020a926e02000000b003230ef87bf4sm376907ilc.37.2023.03.13.17.52.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Mar 2023 17:52:50 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <dc031bc7-8ca4-7ca7-c24f-9db65b5547e4@roeck-us.net>
-Date:   Mon, 13 Mar 2023 17:52:49 -0700
+        Mon, 13 Mar 2023 20:53:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C5A624129;
+        Mon, 13 Mar 2023 17:53:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA1DFB8169C;
+        Tue, 14 Mar 2023 00:53:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25CC4C433D2;
+        Tue, 14 Mar 2023 00:53:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678755232;
+        bh=2DrJLkuUgorhS4aRsd6guPDQJPAJsGtB34wensbN/rA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WY9JzQOsxmdcp90IysXxRHkkhGV8wWNmf58MOaA+FZk4ERlXf3bMl5wQer1UN3mQv
+         yUbOm3LjT7EPmwgw2eF4yheaBO+tRFveN3uSo0x/CmbjyoEbW1ReETHZRgvcf1f9H5
+         v8ithuXN6AXXGybstjwEXOdDlAW2a4V4as9+0pQ+dXm5X2uhjejbnfTb4uD8saak86
+         cqrbREA5xHF/FyvXQIIOsydQyQgN4dcN8F1j/nhEjlMFkr7GeqhtNxko+/XLksJuAj
+         k6G/tvXzcyRPPiaU94iGBCPzSafc/7DsehDyjVDtHkYGjSd5RezGPNwf4B846tLSED
+         7cJDQaQ393rFw==
+Date:   Tue, 14 Mar 2023 08:53:45 +0800
+From:   Shawn Guo <shawnguo@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
+        <devicetree@vger.kernel.org>,
+        "moderated list:ARM/FREESCALE IMX / MXC ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 2/2] arm64: dts: freescale: imx8qxp-mek: enable cadence
+ usb3
+Message-ID: <20230314005345.GU143566@dragon>
+References: <20230213222229.686072-1-Frank.Li@nxp.com>
+ <20230213222229.686072-2-Frank.Li@nxp.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Content-Language: en-US
-To:     Frederic Weisbecker <frederic@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <CAHk-=wii6BZtVKYfvQCQqbE3+t1_yAb-ea80-3PcJ4KxgpfHkA@mail.gmail.com>
- <d915df60-d06b-47d4-8b47-8aa1bbc2aac7@roeck-us.net>
- <CAHk-=wi8xQw6eTRncbJfWWYHHi0UBG2B_AfHrzZbPr=k0V_WYQ@mail.gmail.com>
- <ZA+ttVOPBvNOYHoC@lothringen>
-From:   Guenter Roeck <linux@roeck-us.net>
-Subject: Re: Linux 6.3-rc2
-In-Reply-To: <ZA+ttVOPBvNOYHoC@lothringen>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230213222229.686072-2-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/13/23 16:11, Frederic Weisbecker wrote:
-> On Mon, Mar 13, 2023 at 11:21:44AM -0700, Linus Torvalds wrote:
-[ ... ]
-> It would be interesting to see what the IRQ is interrupting. For example does it
-> happen while softirqs are serviced or just disabled? Or are we even outside any
-> of that? Any chance we can have a deeper stack trace? If not at least a print of
-> preempt_count() would be helpful.
+On Mon, Feb 13, 2023 at 05:22:28PM -0500, Frank Li wrote:
+> Enable USB3 controller, phy and typec related nodes.
 > 
-> Both would be awesome.
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  arch/arm64/boot/dts/freescale/imx8qxp-mek.dts | 87 +++++++++++++++++++
+>  1 file changed, 87 insertions(+)
 > 
-> diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-> index 50d4863974e7..a7d1a65e5425 100644
-> --- a/kernel/locking/lockdep.c
-> +++ b/kernel/locking/lockdep.c
-> @@ -5523,6 +5523,7 @@ static noinstr void check_flags(unsigned long flags)
->   	 */
->   	if (!hardirq_count()) {
->   		if (softirq_count()) {
-> +			printk("preempt_count(): %x", preempt_count());
->   			/* like the above, but with softirqs */
->   			DEBUG_LOCKS_WARN_ON(current->softirqs_enabled);
->   		} else {
+> diff --git a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+> index afa883389456..64f20ff44ba7 100644
+> --- a/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+> +++ b/arch/arm64/boot/dts/freescale/imx8qxp-mek.dts
+> @@ -6,6 +6,7 @@
+>  /dts-v1/;
+>  
+>  #include "imx8qxp.dtsi"
+> +#include <dt-bindings/usb/pd.h>
+>  
+>  / {
+>  	model = "Freescale i.MX8QXP MEK";
+> @@ -28,6 +29,21 @@ reg_usdhc2_vmmc: usdhc2-vmmc {
+>  		gpio = <&lsio_gpio4 19 GPIO_ACTIVE_HIGH>;
+>  		enable-active-high;
+>  	};
+> +
+> +	gpio-sbu-mux {
+> +		compatible = "gpio-sbu-mux";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_typec_mux>;
+> +		select-gpios = <&lsio_gpio5 9 GPIO_ACTIVE_LOW>;
+> +		enable-gpios = <&pca9557_a 7 GPIO_ACTIVE_LOW>;
+> +		orientation-switch;
+> +
+> +		port {
+> +			usb3_data_ss: endpoint {
+> +				remote-endpoint = <&typec_con_ss>;
+> +			};
+> +		};
+> +	};
+>  };
+>  
+>  &dsp {
+> @@ -127,6 +143,44 @@ light-sensor@44 {
+>  			};
+>  		};
+>  	};
+> +
+> +	ptn5110: tcpc@50 {
+> +		compatible = "nxp,ptn5110";
+> +		pinctrl-names = "default";
+> +		pinctrl-0 = <&pinctrl_typec>;
+> +		reg = <0x50>;
+> +
+
+Unneeded newline.
+
+> +		interrupt-parent = <&lsio_gpio1>;
+> +		interrupts = <3 IRQ_TYPE_LEVEL_LOW>;
+> +		status = "okay";
+
+Unneeded "okay" status.
+
+> +
+> +		port {
+> +			typec_dr_sw: endpoint {
+> +				remote-endpoint = <&usb3_drd_sw>;
+> +			};
+> +		};
+> +
+> +		usb_con1: connector {
+> +			compatible = "usb-c-connector";
+> +			label = "USB-C";
+> +			power-role = "source";
+> +			data-role = "dual";
+> +			source-pdos = <PDO_FIXED(5000, 3000, PDO_FIXED_USB_COMM)>;
+> +
+> +			ports {
+> +				#address-cells = <1>;
+> +				#size-cells = <0>;
+> +
+> +				port@1 {
+> +					reg = <1>;
+> +						typec_con_ss: endpoint {
+
+Broken indent alignment.
+
+Shawn
+
+> +							remote-endpoint = <&usb3_data_ss>;
+> +					};
+> +				};
+> +			};
+> +		};
+> +	};
+> +
+>  };
+>  
+>  &lpuart0 {
+> @@ -204,6 +258,27 @@ &usdhc2 {
+>  	status = "okay";
+>  };
+>  
+> +&usb3_phy {
+> +	status = "okay";
+> +};
+> +
+> +&usbotg3 {
+> +	status = "okay";
+> +};
+> +
+> +&usbotg3_cdns3 {
+> +	dr_mode = "otg";
+> +	usb-role-switch;
+> +	status = "okay";
+> +
+> +	port {
+> +		usb3_drd_sw: endpoint {
+> +			remote-endpoint = <&typec_dr_sw>;
+> +		};
+> +	};
+> +};
+> +
+> +
+>  &vpu {
+>  	compatible = "nxp,imx8qxp-vpu";
+>  	status = "okay";
+> @@ -267,6 +342,18 @@ IMX8QXP_UART0_TX_ADMA_UART0_TX				0x06000020
+>  		>;
+>  	};
+>  
+> +	pinctrl_typec: typecgrp {
+> +		fsl,pins = <
+> +			IMX8QXP_SPI2_SCK_LSIO_GPIO1_IO03                        0x06000021
+> +		>;
+> +	};
+> +
+> +	pinctrl_typec_mux: typecmuxgrp {
+> +		fsl,pins = <
+> +			IMX8QXP_ENET0_REFCLK_125M_25M_LSIO_GPIO5_IO09           0x60
+> +		>;
+> +	};
+> +
+>  	pinctrl_usdhc1: usdhc1grp {
+>  		fsl,pins = <
+>  			IMX8QXP_EMMC0_CLK_CONN_EMMC0_CLK			0x06000041
+> -- 
+> 2.34.1
 > 
-
-That crashed nicely; it didn't like the unconditional printk().
-With
-
-diff --git a/kernel/locking/lockdep.c b/kernel/locking/lockdep.c
-index 50d4863974e7..ea4f76e2d815 100644
---- a/kernel/locking/lockdep.c
-+++ b/kernel/locking/lockdep.c
-@@ -5524,7 +5524,9 @@ static noinstr void check_flags(unsigned long flags)
-         if (!hardirq_count()) {
-                 if (softirq_count()) {
-                         /* like the above, but with softirqs */
--                       DEBUG_LOCKS_WARN_ON(current->softirqs_enabled);
-+                       if (DEBUG_LOCKS_WARN_ON(current->softirqs_enabled))
-+                               printk("preempt_count(): %x softirq_count(): %lx",
-+                                      preempt_count(), softirq_count());
-                 } else {
-                         /* lick the above, does it taste good? */
-                         DEBUG_LOCKS_WARN_ON(!current->softirqs_enabled);
-
-I got the following (decoded):
-
-[   11.360487] WARNING: CPU: 0 PID: 233 at kernel/locking/lockdep.c:5527 check_flags (./arch/arm/include/asm/current.h:36 (discriminator 12) ./include/asm-generic/preempt.h:11 (discriminator 12) kernel/locking/lockdep.c:5528 (discriminator 12))
-[   11.361102] DEBUG_LOCKS_WARN_ON(current->softirqs_enabled)
-[   11.361173] Modules linked in:
-[   11.361730] CPU: 0 PID: 233 Comm: rcS Tainted: G                 N 6.3.0-rc2-dirty #2
-[   11.361921] Hardware name: Freescale i.MX6 Ultralite (Device Tree)
-[   11.362303] unwind_backtrace from show_stack (arch/arm/kernel/traps.c:258)
-[   11.362441] show_stack from dump_stack_lvl (lib/dump_stack.c:107 (discriminator 4))
-[   11.362519] dump_stack_lvl from __warn (./include/linux/jump_label.h:260 ./include/linux/jump_label.h:270 ./include/trace/events/error_report.h:69 kernel/panic.c:681)
-[   11.362598] __warn from warn_slowpath_fmt (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:16 ./include/asm-generic/preempt.h:59 ./include/linux/context_tracking.h:154 kernel/panic.c:706)
-[   11.362702] warn_slowpath_fmt from check_flags (./arch/arm/include/asm/current.h:36 (discriminator 12) ./include/asm-generic/preempt.h:11 (discriminator 12) kernel/locking/lockdep.c:5528 (discriminator 12))
-[   11.362780] check_flags from lock_is_held_type (./arch/arm/include/asm/percpu.h:37 kernel/locking/lockdep.c:462 kernel/locking/lockdep.c:5713)
-[   11.362851] lock_is_held_type from rcu_read_lock_sched_held (kernel/rcu/update.c:125)
-[   11.362933] rcu_read_lock_sched_held from trace_rcu_dyntick (./include/trace/events/rcu.h:480 (discriminator 28))
-[   11.363016] trace_rcu_dyntick from ct_nmi_enter (./arch/arm/include/asm/percpu.h:37 (discriminator 4) ./include/linux/context_tracking_state.h:90 (discriminator 4) kernel/context_tracking.c:301 (discriminator 4))
-[   11.363108] ct_nmi_enter from irq_enter (kernel/softirq.c:625)
-[   11.363177] irq_enter from generic_handle_arch_irq (kernel/irq/handle.c:238)
-[   11.363251] generic_handle_arch_irq from call_with_stack (arch/arm/lib/call_with_stack.S:45)
-[   11.363339] call_with_stack from __irq_svc (arch/arm/kernel/entry-armv.S:232)
-[   11.363438] Exception stack(0xd1819f60 to 0xd1819fa8)
-[   11.363629] 9f60: ecac8b10 40000000 b6f88418 c1c2607c 00000000 40000000 c4acc00b 00000001
-[   11.363740] 9f80: 00000b00 c0101278 c4acc0f0 00000000 00000051 d1819fb0 c01011c4 c0103c1c
-[   11.363833] 9fa0: 00000013 ffffffff
-[   11.363896] __irq_svc from vfp_reload_hw (arch/arm/vfp/vfphw.S:149)
-[   11.364015] irq event stamp: 1626
-[   11.364069] hardirqs last enabled at (1625): __und_usr (arch/arm/kernel/entry-armv.S:465)
-[   11.364199] hardirqs last disabled at (1626): __irq_svc (arch/arm/kernel/entry-armv.S:221)
-[   11.364290] softirqs last enabled at (1424): __do_softirq (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:11 kernel/softirq.c:415 kernel/softirq.c:600)
-[   11.364396] softirqs last disabled at (1323): __irq_exit_rcu (kernel/softirq.c:445 kernel/softirq.c:650)
-[   11.364494] ---[ end trace 0000000000000000 ]---
-[   11.364637] preempt_count(): 201 softirq_count(): 200
-                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-[   11.364659] irq event stamp: 1626
-[   11.364757] hardirqs last enabled at (1625): __und_usr (arch/arm/kernel/entry-armv.S:465)
-[   11.364843] hardirqs last disabled at (1626): __irq_svc (arch/arm/kernel/entry-armv.S:221)
-[   11.364926] softirqs last enabled at (1424): __do_softirq (./arch/arm/include/asm/current.h:36 ./include/asm-generic/preempt.h:11 kernel/softirq.c:415 kernel/softirq.c:600)
-[   11.365014] softirqs last disabled at (1323): __irq_exit_rcu (kernel/softirq.c:445 kernel/softirq.c:650)
-
-Does that tell you anything ?
-
-Thanks,
-Guenter
-
