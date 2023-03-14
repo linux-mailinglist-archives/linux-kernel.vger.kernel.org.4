@@ -2,92 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22D2D6BA139
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:11:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D95756BA13D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:12:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230029AbjCNVLe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:11:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49258 "EHLO
+        id S230202AbjCNVMX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:12:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229456AbjCNVLc (ORCPT
+        with ESMTP id S229456AbjCNVMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:11:32 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5A37F19B2;
-        Tue, 14 Mar 2023 14:11:31 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4PbmRK1gtyz4x5Z;
-        Wed, 15 Mar 2023 08:11:25 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678828286;
-        bh=fIQHoPSvibSHu4TS2oQgYdG05lQ5UrRwOyPQIAqWekc=;
-        h=Date:From:To:Cc:Subject:From;
-        b=X82blIAV7ew2Q04lc6Uu7b29oO9XDxdBH8mwaZDMrHhTVQlj7fBJvwQmTb28TG95R
-         3HW+JBnzlfifs6HiBCGdMwvGCoSbCpX6HFupeK4M5vO5d3r+vSREjBzHByfmBml25C
-         YMF1uz2RbUByX2PG16FZ5WLQqr/MEFRMaT3DTUwaomVLO79NP8r1m0Q+cCKE7KLZjb
-         ZMwm1fmR2hEeP11zjI4s0UGVmaviVqImpVeWUGkS6TbjJCWk766ib92A7fnnl+L+5p
-         erQdWCBxbD4OzBykCL45AWi7BNY76dhC1PJktS0Ew1zvXKjKsPUU8VOfgdUlXo1uuO
-         EGvNIuwnZI9Qg==
-Date:   Wed, 15 Mar 2023 08:11:23 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Masahiro Yamada <masahiroy@kernel.org>
-Cc:     Tzafrir Cohen <nvidia@cohens.org.il>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Fixes tag needs some work in the kbuild-current tree
-Message-ID: <20230315081123.704ad19b@canb.auug.org.au>
+        Tue, 14 Mar 2023 17:12:21 -0400
+Received: from mail-yb1-xb2f.google.com (mail-yb1-xb2f.google.com [IPv6:2607:f8b0:4864:20::b2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E0283C2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:12:20 -0700 (PDT)
+Received: by mail-yb1-xb2f.google.com with SMTP id z83so13207176ybb.2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:12:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678828340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cqr+dkq3tKG1sOKc+R1dR6rEMBcdSL+6uVvzhQ5+DTc=;
+        b=Rf3B/WgrDERHLhDsxraQ9u7MIYRa2UtRzu5Fv/LEeOHwTXrql8M6zu3LlTTtMs/34p
+         5ugfXw/xlY7/K39+nDJ286rb+hsLlmnec4cFy37wBo3gXixzmy0aujVzR7HVIkOe99pV
+         7bgYZt7SdNLgjF/IY9YrEd1cByAJ5J7cHjsgsOBNQ7f+3Qyifz9v6e8uKMiCDs1GbCJW
+         CyuDlKOesBGEen4fiHLNlIe1gpDD5U2mdgU2smQ0GjJrTUE/7pOCX96ddDdOUy5Jzf/z
+         7HxUSenGJ7Xdtrh41LglFsUsgw/lZAS5gz/CS+c8qyeL+mysC+t3Jp8YWn0MGJ8leoHh
+         1G7g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678828340;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Cqr+dkq3tKG1sOKc+R1dR6rEMBcdSL+6uVvzhQ5+DTc=;
+        b=xquuE4Ysgl5oLyXe4vIauKQwbHUF8Fl7fgmK46qY829Tx4g4AUk9r3onmHGq1AClT7
+         1eGJmfIzP9W6/aJghEP+yFMRjoJSJW1tzGaLwUYHdItU5GtMlFLr7aRuLagc2iUxlkhq
+         EIb1Mlti5y1sbrlvle5+gO1SdRvFqa2BHMVyS6NjmXN3CdyTAhP4Pd6DOsWXUfPfZm35
+         XVxO9PcWEDSHBuzJD/FsS6wbuC9V08ld1G9o2FfgPIl8UlcAFh47DynT2rw6Pikd5MDG
+         k4G3NHxg0d0Nk/rcx9UWtmQ9kwkcih10hzwqSbHk/YQ1jYIXJXd5kX4HHbKHWrK2GrfD
+         ivaw==
+X-Gm-Message-State: AO0yUKX2JtOoDsvLLX7b2Rgz8TZoAwzA2V83y5KaqntYds+BTu6p0XgI
+        K2ndlmUIYRMfw+0hIyNlK9oa3R0IbV51p6Kkg8La1Q==
+X-Google-Smtp-Source: AK7set9D9hI8LpHpVG8zSymZGfcmshk7rrgZk+MQjvT9TpkhjAo/60IP+pUw8JJWZqDzH+1WvgJuAfABTWIovZKVfl8=
+X-Received: by 2002:a5b:6c8:0:b0:b36:32f8:852d with SMTP id
+ r8-20020a5b06c8000000b00b3632f8852dmr2947856ybq.4.1678828340023; Tue, 14 Mar
+ 2023 14:12:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/8KcUd3sAQ9t+LWh3nI0QFip";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+In-Reply-To: <20230314193709.15208-1-xhxgldhlpfy@gmail.com>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Tue, 14 Mar 2023 22:12:08 +0100
+Message-ID: <CACRpkdan0Vt_T3aRVAK4rd=hQV=MOARm9Wq7sD8rjoisTW6Dkw@mail.gmail.com>
+Subject: Re: [PATCH] iio: adc: qcom-pm8xxx-xoadc: Remove useless condition in pm8xxx_xoadc_parse_channel()
+To:     Kasumov Ruslan <xhxgldhlpfy@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@linaro.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, lvc-project@linuxtesting.org,
+        Kasumov Ruslan <s02210418@gse.cs.msu.ru>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/8KcUd3sAQ9t+LWh3nI0QFip
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+On Tue, Mar 14, 2023 at 8:37=E2=80=AFPM Kasumov Ruslan <xhxgldhlpfy@gmail.c=
+om> wrote:
 
-Hi all,
+> The left side of the loop condition never becomes false.
+> hwchan cannot be NULL, because it points to elements of the
+> hw_channels array that takes one of 4 predefined values:
+> pm8018_xoadc_channels, pm8038_xoadc_channels,
+> pm8058_xoadc_channels, pm8921_xoadc_channels.
+>
+> Found by Linux Verification Center (linuxtesting.org) with SVACE.
 
-In commit
+I am not impressed with that tool. See below:
 
-  51ab7ee81f5f ("Makefile: Make kernelrelease target work with M=3D")
+> Fixes: 63c3ecd946d4 ("iio: adc: add a driver for Qualcomm PM8xxx HK/XOADC=
+")
+> Signed-off-by: Kasumov Ruslan <s02210418@gse.cs.msu.ru>
 
-Fixes tag
+(...)
+>         hwchan =3D &hw_channels[0];
+> -       while (hwchan && hwchan->datasheet_name) {
+> +       while (hwchan->datasheet_name) {
+>                 if (hwchan->pre_scale_mux =3D=3D pre_scale_mux &&
+>                     hwchan->amux_channel =3D=3D amux_channel)
+>                         break;
 
-  Fixes: commit 1cb86b6c3136 ("kbuild: save overridden KERNELRELEASE in inc=
-lude/config/kernel.release")
+NAK have you tested this on a real system?
 
-has these problem(s):
+Here is the complete loop:
 
-  - leading word 'commit' unexpected
+        hwchan =3D &hw_channels[0];
+        while (hwchan && hwchan->datasheet_name) {
+                if (hwchan->pre_scale_mux =3D=3D pre_scale_mux &&
+                    hwchan->amux_channel =3D=3D amux_channel)
+                        break;
+                hwchan++;
+                chid++;
+        }
 
---=20
-Cheers,
-Stephen Rothwell
+Notice how hwchan is used as iterator in hwchan++.
 
---Sig_/8KcUd3sAQ9t+LWh3nI0QFip
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
+What you are doing will cause a zero-pointer dereference.
 
------BEGIN PGP SIGNATURE-----
+Whoever is developing "SVACE" needs to fix the tool to understand
+this kind of usage.
 
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ4vsACgkQAVBC80lX
-0Gz2FwgAkGjcuyCXGsXupTn65rBKzbAlFMJOf7aASOB0z7gz+psjsjrrp6npaMkQ
-9HSQAbQBpTyjhzp/iFxNqL5hNUCSk7uua3QLzSlH/p/Dz9C0WXDuRnt1kSOesYoa
-Ni3DEk68yOl8uvpF4zIiNZZ2j07KsG/BKyqzsK5N2zoT/WQZ52pkF/TZ9Z+aLyvN
-Yreip8Qr6unN/FEV/FqNpbf0wuzypkD3w2ijTmpc68vNfBMMSfzghGWx+E+QWgnn
-lQvKYkgg8NHjx72n5uDb6II0L7079fholEV2HqeYJPVlTFjFhntW2RXIODM+cikR
-k8uOC6FH1dxRmFcUQbGbTKRg8JtbBQ==
-=zY/L
------END PGP SIGNATURE-----
-
---Sig_/8KcUd3sAQ9t+LWh3nI0QFip--
+Yours,
+Linus Walleij
