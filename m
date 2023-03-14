@@ -2,124 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABB1C6B89ED
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:55:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29ACE6B89F9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:00:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229757AbjCNEzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50388 "EHLO
+        id S229813AbjCNFAa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:00:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229946AbjCNEzH (ORCPT
+        with ESMTP id S229624AbjCNFA2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:55:07 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BA0F26CEA
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:55:06 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id j3-20020a17090adc8300b0023d09aea4a6so4815399pjv.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:55:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678769706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V+GGb3ptBh1e6f7SZa3WUdgPGSOkMzefKbLzCNkJM7A=;
-        b=C9DBDX+gVzOuJcvEcgQmkLsriX59c0qHolTRZQgVElo7mJO9XP0XrE3e3AJLwNzWPP
-         dQmSVHpMPhhrtC2An2IfLVyxVengslpinKhVFActY2ig2nDcpJx1lgJZrIAjT0NQqVa7
-         gaKyosDjZE0GN6IikF1Hixykv/CEy5dwbraEuhpAFEw0MPVvKsUnjhROkIft3z8+NtMt
-         +2zB7bS/cZJlKg6XWXFPvqN9oTGAYhAiaV04jNVP6STCsKrLm8TcphhcPgn48B3nqGtc
-         +Uh2a0+rY0ro/KJsQXKYOS8TF+oP9GmnoeJKS2uO6/OUHP6s9vj5FGbO+uQhBNhYyv52
-         EhFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678769706;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=V+GGb3ptBh1e6f7SZa3WUdgPGSOkMzefKbLzCNkJM7A=;
-        b=SKZItjiLn5KpQLn8JEiyngDxF3uhC1nmyKW5jgUteEoWarW3TlE/0AP35xP3FqYlSt
-         oxHkv5F1vbx/Louu5AGpOBNcnPUffNiSKePTLzQ0SLQtfbmPAXF0690B06mWDzoW5Nte
-         lGeOpQXv8aYSldJ/RrpNKJz8pUR9Ct7aaq2qwezjnnBFQ9j6Qg6OSVSxwOF04g1+amyQ
-         vsZu3qbDVMZ3CKgp0cnO/l+xij8VGLqtg7E/c67CKKw/5iN5KJGfYDiu2aKe4GELag8E
-         UBFUbIONG8erR1MJc3CqmPW8fojbfmX1y53JEcsSjhK4XDagi1qDfgmvSPkq8N7WGTpQ
-         Jo4Q==
-X-Gm-Message-State: AO0yUKV3urzOrchu/o2EshL9DjYNLxCacBsI9n56lLiMAwmReDJEiQr6
-        UmkzPRmzOI9r97H+9kXO42izO2FtIXQ=
-X-Google-Smtp-Source: AK7set9M5yiG8FIOgaweAra6Tzonl3vZeHRpbzxyVm6TtU3dc099vSZEQbAG4owpeEK9wEVGsTx2CA==
-X-Received: by 2002:a05:6a20:144d:b0:cd:c79:50e8 with SMTP id a13-20020a056a20144d00b000cd0c7950e8mr44791277pzi.62.1678769706058;
-        Mon, 13 Mar 2023 21:55:06 -0700 (PDT)
-Received: from debian.me (subs02-180-214-232-88.three.co.id. [180.214.232.88])
-        by smtp.gmail.com with ESMTPSA id j11-20020a65428b000000b004d4547cc0f7sm580920pgp.18.2023.03.13.21.55.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 21:55:05 -0700 (PDT)
-Received: by debian.me (Postfix, from userid 1000)
-        id 17B811066DA; Tue, 14 Mar 2023 11:55:02 +0700 (WIB)
-Date:   Tue, 14 Mar 2023 11:55:02 +0700
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-To:     Kloudifold <cloudifold.3125@gmail.com>,
-        teddy.wang@siliconmotion.com, sudipm.mukherjee@gmail.com,
-        gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        outreachy@lists.linux.dev
-Cc:     linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: sm750: Rename function to avoid CamelCase
-Message-ID: <ZA/+JlgWfdg2wH8B@debian.me>
-References: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
+        Tue, 14 Mar 2023 01:00:28 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB5056A2CF;
+        Mon, 13 Mar 2023 22:00:26 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32E3W8W9011023;
+        Tue, 14 Mar 2023 05:00:22 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-type; s=qcppdkim1;
+ bh=VmvISJ9S+puBdzxd0tEom+iAE8DzGYP8H8n24xD8r6Q=;
+ b=V5zCB06bmC5Y5ZNEYjzJYwx2IddJWUF7GML7AihefdZZDu79pKU+2u5t0778+8tXzyi1
+ 6YnB+jdH9bkDxV21x+gLE0b5MiDOCAUKgQ9yCCiIPdly51PlI3ZiyefyTNBBfkbo2NrO
+ EcZh61XRRsxLI2epbKZSrGp7OEpfG4eT04eoGdL40/ZABP3QpFW5wuUXNfWNWaU1bxwa
+ wY7Rl61leLeChAv1TeSOyLB7r05eNshTxyRAjPsU6T6os0Nm2TaIgoTeQOBB3x3lZyMu
+ ReVKhwV39+v/4gjYO/ui5UAjITjyebcTbhczMMXRZ9OOpPFhzTTEetn40/ZHyC4d6wX7 XA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3pa44bt83m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 05:00:22 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 32E50L1N008515
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 05:00:21 GMT
+Received: from kathirav-linux.qualcomm.com (10.80.80.8) by
+ nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.41; Mon, 13 Mar 2023 22:00:18 -0700
+From:   Kathiravan T <quic_kathirav@quicinc.com>
+To:     <agross@kernel.org>, <andersson@kernel.org>,
+        <konrad.dybcio@linaro.org>, <jassisinghbrar@gmail.com>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <devicetree@vger.kernel.org>
+CC:     Kathiravan T <quic_kathirav@quicinc.com>
+Subject: [PATCH V2 0/3] rework mailbox compatibles for Qualcomm IPQ SoCs
+Date:   Tue, 14 Mar 2023 10:30:02 +0530
+Message-ID: <20230314050005.10409-1-quic_kathirav@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="Q9+2y9es+8db1Tkx"
-Content-Disposition: inline
-In-Reply-To: <ZA+K6OdPe21k8F2k@CloudiRingWorld>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: -sHzcp2EePy5KYFcqLMaioXtojIKdRbn
+X-Proofpoint-ORIG-GUID: -sHzcp2EePy5KYFcqLMaioXtojIKdRbn
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-13_13,2023-03-13_03,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 bulkscore=0
+ lowpriorityscore=0 priorityscore=1501 mlxscore=0 suspectscore=0
+ malwarescore=0 adultscore=0 phishscore=0 mlxlogscore=579 impostorscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303140044
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+As suggested by Krzysztof[1], we can use the fallback compatible to
+avoid duplicating the same device data.
 
---Q9+2y9es+8db1Tkx
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Krzysztof already submitted a series[2] for this by reworking entire
+binding and driver and it is conflicting with the Dmitry's series as
+mentioned by Krzysztof[3].
 
-On Tue, Mar 14, 2023 at 04:43:20AM +0800, Kloudifold wrote:
-> The sm750 driver had some functions named in CamelCase,
-> which violates the kernel's naming convention.
-> In this patch, I rename these functions to snake case,
-> which is the expected style.
->=20
-> This v2 patch was prompted by an error reported by the
-> Linux test robot, which detected the compile error.
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Link: https://lore.kernel.org/oe-kbuild-all/202303110849.X24WnHnM-lkp@i=
-ntel.com/
+So this series addresses IPQ SoCs alone, as I see no dependency with it.
 
-Hi,
+[1]
+https://lore.kernel.org/linux-arm-msm/1b75ab1a-44c9-c4a8-7fa4-d601fc710d2a@linaro.org/
+[2]
+https://lore.kernel.org/linux-arm-msm/20230202161856.385825-1-krzysztof.kozlowski@linaro.org/
+[3]
+https://lore.kernel.org/linux-arm-msm/fa6dc60c-3799-d384-da24-f282b7cbd3ef@linaro.org/
 
-I'd like to write the patch description as (ignore markdown):
+Kathiravan T (2):
+  dt-bindings: mailbox: qcom: use fallback for IPQ8074 SoC
+  mailbox: qcom-apcs-ipc: drop the IPQ8074 and IPQ5332 compatible
 
-```
-sm750 driver has sm750_hw_cursor_* functions, which are named in
-camelcase. Rename them to snake case to follow the function naming
-convention.
+Krzysztof Kozlowski (1):
+  arm64: dts: qcom: ipq8074: add compatible fallback to mailbox
 
-Fixes: <commit that introduces these camelcase function>
-```
+ .../devicetree/bindings/mailbox/qcom,apcs-kpss-global.yaml    | 4 +---
+ arch/arm64/boot/dts/qcom/ipq8074.dtsi                         | 3 ++-
+ drivers/mailbox/qcom-apcs-ipc-mailbox.c                       | 2 --
+ 3 files changed, 3 insertions(+), 6 deletions(-)
 
-Thanks.
+-- 
+2.17.1
 
---=20
-An old man doll... just what I always wanted! - Clara
-
---Q9+2y9es+8db1Tkx
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCZA/+JgAKCRD2uYlJVVFO
-o7VIAPsG0Of1YSDHa+Ug6knGMBl+AC/WH6UA5gFPaUapKrIcOwD/UyxwKtQxte62
-rsEOKS1MlZupf1k40EL7qlGMJGwuvgM=
-=k0dL
------END PGP SIGNATURE-----
-
---Q9+2y9es+8db1Tkx--
