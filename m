@@ -2,248 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7AFF96BA0A4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:24:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2FE36BA0AF
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:26:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230191AbjCNUYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:24:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
+        id S231322AbjCNU0I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:26:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231176AbjCNUYE (ORCPT
+        with ESMTP id S231245AbjCNU0A (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:24:04 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7372A6F8;
-        Tue, 14 Mar 2023 13:24:01 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A52B21CC8;
-        Tue, 14 Mar 2023 20:24:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1678825440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vcexmiQDIGjEczWxOqfizqF7kSZwJ4krojfVt+WhvVU=;
-        b=O623N601B3RRv/A7XI7b7CJ0bD7MjAkAzkaVWtLC/vZSYpXxVhwulhwl3s0tSdvjQT9ovO
-        w5pO0s5MYxTqu6k5oEzZQWVecBo1ZG+eJP///yXp7pRCZgFAS+I56aQEcnZdoZRZ6/mvyV
-        TlHP6dGaVJXciRDeI1diXK6E9R9873Q=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1678825440;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=vcexmiQDIGjEczWxOqfizqF7kSZwJ4krojfVt+WhvVU=;
-        b=VO4nj/9ttu8IbT70Di8v+zl8X2Rw+6w9p/gSyyCcL/G8/lwAAvptYcAYC4grbPAihBiW30
-        +mlM0bH9OT0N7OCQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65AC913A26;
-        Tue, 14 Mar 2023 20:23:59 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Fs2ECt/XEGS1XgAAMHmgww
-        (envelope-from <mpdesouza@suse.com>); Tue, 14 Mar 2023 20:23:59 +0000
-Date:   Tue, 14 Mar 2023 17:23:56 -0300
-From:   Marcos Paulo de Souza <mpdesouza@suse.de>
-To:     Joe Lawrence <joe.lawrence@redhat.com>
-Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
-        Miroslav Benes <mbenes@suse.cz>,
-        Petr Mladek <pmladek@suse.com>,
-        Marcos Paulo de Souza <mpdesouza@suse.com>
-Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
-Message-ID: <20230314202356.kal22jracaw5442y@daedalus>
-References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+        Tue, 14 Mar 2023 16:26:00 -0400
+Received: from mail-lf1-x12c.google.com (mail-lf1-x12c.google.com [IPv6:2a00:1450:4864:20::12c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 841C536FF4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:25:14 -0700 (PDT)
+Received: by mail-lf1-x12c.google.com with SMTP id n2so21571232lfb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 13:25:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678825512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Td1bebZ6aK4cMakRGNCVIAz8u4A34OSTM2iigQ6lUc=;
+        b=huBzCcE5tuvCOmYGf6ZYLhlcfxtyEVs2Z1wFE3X0IQul/+v2S4BIbVfvvacc0pqGDh
+         IAJm1IyTPdduph7Gwr7KhQQ0R/jzKdNlK/8T4f8PkxLLIZusjRNbF5fsNkj0eMBwZxS9
+         WbDBanc6eFHHseKxlVmvxcqjzQ+ms/FOUmCWZ0LhZbqlc/OINPvmigAk+2f5F1/qqSLN
+         LY2aKP3BG22xFM99IkPJgpcVy3CUh30AJxGHUnCPq+GjzNQCk1KVuVYulXmNr4ufKv/X
+         fXoUKY7UyRJ18eiC0R3AAE1ylMb2WZojng1huFDR+ekrKuDoprCVB1968T/ZsxEbOoeC
+         TWgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678825512;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Td1bebZ6aK4cMakRGNCVIAz8u4A34OSTM2iigQ6lUc=;
+        b=GQdXeCndbl4XySRr59eFP8iJaGaDJugMU1zWDj6h4OT5pDaGOEX/joN1piuyLBVim4
+         kqTRvnSaOU9A/UlmBRMm5AtZclw8jLgWFX3tPMlfkzwXh1Tsm9fXBEpqnYcThWgOnB5E
+         dzl5/pZ9qewd6+v1n3IcTVF4mWhF69u1pNru9Fc/FLNMFbjD/jXjhjwnfPgLjyHiWmfb
+         puTqZQNF5dRFuIHuee5/f4kCqYTcBdt4oD8+JOAWijiE3AMwNN1whbhf1VpeTNGsEvkp
+         NgX/ld17bBpWOzc/P7ZD9pRihp9wc8D53MAtDiWdSmimtQnV8fTsV5adE3jCS84sfzFA
+         AU3w==
+X-Gm-Message-State: AO0yUKUhjvsjSC+UGJtyeXmlVtR8ydRoj4Q6+dPjOftlus1+1Tqbooph
+        TyGAiqB6oOXpaXYVwWErysgN6g==
+X-Google-Smtp-Source: AK7set9hX7nss9bI3ZSSY0CbtJwbgcUGwmvp4NZuqCHIYpQpKEqzt7AwhMuuPB5JHg7WfW6QApK/Cg==
+X-Received: by 2002:ac2:51ab:0:b0:4d8:6577:d2bf with SMTP id f11-20020ac251ab000000b004d86577d2bfmr1059539lfk.37.1678825512663;
+        Tue, 14 Mar 2023 13:25:12 -0700 (PDT)
+Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
+        by smtp.gmail.com with ESMTPSA id w28-20020ac2443c000000b004ddef915fe4sm518770lfl.274.2023.03.14.13.25.11
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 13:25:12 -0700 (PDT)
+Message-ID: <0fc9ba28-cb78-67fb-4cef-f786c345bc19@linaro.org>
+Date:   Tue, 14 Mar 2023 21:25:10 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230306140824.3858543-1-joe.lawrence@redhat.com>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH 07/14] arm64: dts: qcom: sa8775p: add the Power On device
+ node
+Content-Language: en-US
+To:     Bartosz Golaszewski <brgl@bgdev.pl>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
+Cc:     linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20230314183043.619997-1-brgl@bgdev.pl>
+ <20230314183043.619997-8-brgl@bgdev.pl>
+From:   Konrad Dybcio <konrad.dybcio@linaro.org>
+In-Reply-To: <20230314183043.619997-8-brgl@bgdev.pl>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 06, 2023 at 09:08:14AM -0500, Joe Lawrence wrote:
-> Summary
-> -------
-> 
-> Livepatches may use symbols which are not contained in its own scope,
-> and, because of that, may end up compiled with relocations that will
-> only be resolved during module load. Yet, when the referenced symbols
-> are not exported, solving this relocation requires information on the
-> object that holds the symbol (either vmlinux or modules) and its
-> position inside the object, as an object may contain multiple symbols
-> with the same name.  Providing such information must be done accordingly
-> to what is specified in Documentation/livepatch/module-elf-format.txt.
-> 
-> Currently, there is no trivial way to embed the required information as
-> requested in the final livepatch elf object. klp-convert solves this
-> problem in two different forms: (i) by relying on a symbol map, which is
-> built during kernel compilation, to automatically infer the relocation
-> targeted symbol, and, when such inference is not possible (ii) by using
-> annotations in the elf object to convert the relocation accordingly to
-> the specification, enabling it to be handled by the livepatch loader.
-> 
-> Given the above, add support for symbol mapping in the form of a
-> symbols.klp file; add klp-convert tool; integrate klp-convert tool into
-> kbuild; make livepatch modules discernible during kernel compilation
-> pipeline; add data-structure and macros to enable users to annotate
-> livepatch source code; make modpost stage compatible with livepatches;
-> update livepatch-sample and update documentation.
-> 
-> The patch was tested under three use-cases:
-> 
-> use-case 1: There is a relocation in the lp that can be automatically
-> resolved by klp-convert.  For example. see the saved_command_line
-> variable in lib/livepatch/test_klp_convert2.c.
-> 
-> use-case 2: There is a relocation in the lp that cannot be automatically
-> resolved, as the name of the respective symbol appears in multiple
-> objects. The livepatch contains an annotation to enable a correct
-> relocation.  See the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections
-> in lib/livepatch/test_klp_convert{1,2}.c.
-> 
-> use-case 3: There is a relocation in the lp that cannot be automatically
-> resolved similarly as 2, but no annotation was provided in the
-> livepatch, triggering an error during compilation.  Reproducible by
-> removing the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections in
-> lib/livepatch/test_klp_convert{1,2}.c.
-> 
-> Selftests have been added to exercise these klp-convert use-cases
-> through several tests.
-> 
-> 
-> Testing
-> -------
-> 
-> The patchset selftests build and execute on x86_64, s390x, and ppc64le
-> for both default config (with added livepatch dependencies) and a larger
-> RHEL-9-ish config.
-> 
-> Using the Intel's Linux Kernel Performance tests's make.cross,
-> klp-convert builds and processes livepatch .ko's for x86_64 ppc64le
-> ppc32 s390 arm64 arches.
-> 
-> 
-> Summary of changes in v7
-> ------------------------
-> 
-> - rebase for v6.2
-> - combine ("livepatch: Add klp-convert tool") with ("livepatch: Add
->   klp-convert annotation helpers")
-> - combine ("kbuild: Support for symbols.klp creation") with ("modpost:
->   Integrate klp-convert") to simplify Kbuild magic [Petr, Nicolas]
-> - klp-convert: add safe_snprintf() (-Wsign-compare)
-> - klp-convert: fix -Wsign-compare warnings
-> - klp-convert: use calloc() where appropriate
-> - klp-convert: copy ELF e_flags
-> - selftests: fix various build warnings
-> - klp-convert: WARN msg simplification, failed sanity checks, and sympos
->   comment [Marcos]
-> - klp-convert: fix elf_write_file() error paths [Petr]
 
-Thanks for the new version Joe. I've run the ksefltests on my x86 laptop, and it
-succeed as expected, so
 
-Tested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+On 14.03.2023 19:30, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> 
+> Add the PON node to PMIC #0 for sa8775p platforms.
+> 
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index 77e2515a7ab9..5d73212fbd16 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -12,6 +12,13 @@ pmk8775_0: pmic@0 {
+>  		reg = <0x0 SPMI_USID>;
+>  		#address-cells = <1>;
+>  		#size-cells = <0>;
+> +
+> +		pmk8775_0_pon: pon@1200 {
+> +			compatible = "qcom,pmk8350-pon";
+> +			reg = <0x1200>, <0x800>;
+reg-names = "hlos", "pbs"
 
-> 
-> 
-> Previous versions
-> -----------------
-> 
-> RFC:
->   https://lore.kernel.org/lkml/cover.1477578530.git.jpoimboe@redhat.com/
-> v2:
->   https://lore.kernel.org/lkml/f52d29f7-7d1b-ad3d-050b-a9fa8878faf2@redhat.com/
-> v3:
->   https://lore.kernel.org/lkml/20190410155058.9437-1-joe.lawrence@redhat.com/
-> v4:
->   https://lore.kernel.org/lkml/20190509143859.9050-1-joe.lawrence@redhat.com/
-> v5:
->   (not posted)
->   https://github.com/joe-lawrence/klp-convert-tree/tree/klp-convert-v5-devel
-> v6:
->   https://lore.kernel.org/live-patching/20220216163940.228309-1-joe.lawrence@redhat.com/
-> 
-> 
-> Joe Lawrence (10):
->   livepatch: Create and include UAPI headers
->   livepatch: Add klp-convert tool
->   kbuild/modpost: create symbols.klp and integrate klp-convert
->   livepatch: Add sample livepatch module
->   documentation: Update on livepatch elf format
->   livepatch/selftests: add klp-convert
->   livepatch/selftests: test multiple sections
->   livepatch/selftests: add __asm__ symbol renaming examples
->   livepatch/selftests: add data relocations test
->   livepatch/selftests: add static keys test
-> 
->  .gitignore                                    |   2 +
->  Documentation/dontdiff                        |   1 +
->  Documentation/livepatch/livepatch.rst         |   3 +
->  Documentation/livepatch/module-elf-format.rst |  42 +-
->  MAINTAINERS                                   |   2 +
->  Makefile                                      |  16 +-
->  include/linux/livepatch.h                     |  13 +
->  include/uapi/linux/livepatch.h                |  25 +
->  kernel/livepatch/core.c                       |   4 +-
->  lib/livepatch/Makefile                        |  12 +
->  lib/livepatch/test_klp_convert.h              |  45 +
->  lib/livepatch/test_klp_convert1.c             | 121 +++
->  lib/livepatch/test_klp_convert2.c             | 110 +++
->  lib/livepatch/test_klp_convert_data.c         | 190 ++++
->  lib/livepatch/test_klp_convert_keys.c         |  91 ++
->  lib/livepatch/test_klp_convert_keys_mod.c     |  52 +
->  lib/livepatch/test_klp_convert_mod_a.c        |  31 +
->  lib/livepatch/test_klp_convert_mod_b.c        |  19 +
->  lib/livepatch/test_klp_convert_mod_c.c        |  36 +
->  lib/livepatch/test_klp_convert_sections.c     | 120 +++
->  samples/livepatch/Makefile                    |   1 +
->  .../livepatch/livepatch-annotated-sample.c    |  93 ++
->  scripts/Makefile                              |   1 +
->  scripts/Makefile.modfinal                     |  33 +
->  scripts/Makefile.modpost                      |   5 +
->  scripts/livepatch/.gitignore                  |   1 +
->  scripts/livepatch/Makefile                    |   5 +
->  scripts/livepatch/elf.c                       | 817 ++++++++++++++++
->  scripts/livepatch/elf.h                       |  74 ++
->  scripts/livepatch/klp-convert.c               | 893 ++++++++++++++++++
->  scripts/livepatch/klp-convert.h               |  47 +
->  scripts/livepatch/list.h                      | 391 ++++++++
->  scripts/mod/modpost.c                         |  28 +-
->  scripts/mod/modpost.h                         |   1 +
->  .../selftests/livepatch/test-livepatch.sh     | 403 ++++++++
->  35 files changed, 3716 insertions(+), 12 deletions(-)
->  create mode 100644 include/uapi/linux/livepatch.h
->  create mode 100644 lib/livepatch/test_klp_convert.h
->  create mode 100644 lib/livepatch/test_klp_convert1.c
->  create mode 100644 lib/livepatch/test_klp_convert2.c
->  create mode 100644 lib/livepatch/test_klp_convert_data.c
->  create mode 100644 lib/livepatch/test_klp_convert_keys.c
->  create mode 100644 lib/livepatch/test_klp_convert_keys_mod.c
->  create mode 100644 lib/livepatch/test_klp_convert_mod_a.c
->  create mode 100644 lib/livepatch/test_klp_convert_mod_b.c
->  create mode 100644 lib/livepatch/test_klp_convert_mod_c.c
->  create mode 100644 lib/livepatch/test_klp_convert_sections.c
->  create mode 100644 samples/livepatch/livepatch-annotated-sample.c
->  create mode 100644 scripts/livepatch/.gitignore
->  create mode 100644 scripts/livepatch/Makefile
->  create mode 100644 scripts/livepatch/elf.c
->  create mode 100644 scripts/livepatch/elf.h
->  create mode 100644 scripts/livepatch/klp-convert.c
->  create mode 100644 scripts/livepatch/klp-convert.h
->  create mode 100644 scripts/livepatch/list.h
-> 
-> -- 
-> 2.39.2
-> 
+Also, are you sure hlos shouldn't be @1300?
+
+Konrad
+> +			mode-recovery = <0x1>;
+> +			mode-bootloader = <0x2>;
+> +		};
+>  	};
+>  
+>  	pmk8775_1: pmic@2 {
