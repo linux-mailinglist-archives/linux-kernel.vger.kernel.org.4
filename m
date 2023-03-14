@@ -2,39 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1412A6B9F4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A13FC6B9F5D
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 20:08:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbjCNTET (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 15:04:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56352 "EHLO
+        id S231351AbjCNTIT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 15:08:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231247AbjCNTEM (ORCPT
+        with ESMTP id S231343AbjCNTIR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 15:04:12 -0400
+        Tue, 14 Mar 2023 15:08:17 -0400
 Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29087193C5;
-        Tue, 14 Mar 2023 12:03:31 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236B64FA94
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 12:08:14 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A6356B81B61;
-        Tue, 14 Mar 2023 19:03:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AFBDC433D2;
+        by ams.source.kernel.org (Postfix) with ESMTPS id 91B8EB81B60
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 19:03:12 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 62B19C433A1;
         Tue, 14 Mar 2023 19:03:11 +0000 (UTC)
 Received: from rostedt by gandalf.local.home with local (Exim 4.96)
         (envelope-from <rostedt@goodmis.org>)
-        id 1pc9vS-009tyf-0p;
+        id 1pc9vS-009tzD-1V;
         Tue, 14 Mar 2023 15:03:10 -0400
-Message-ID: <20230314190310.070032647@goodmis.org>
+Message-ID: <20230314190310.275222361@goodmis.org>
 User-Agent: quilt/0.66
-Date:   Tue, 14 Mar 2023 15:02:39 -0400
+Date:   Tue, 14 Mar 2023 15:02:40 -0400
 From:   Steven Rostedt <rostedt@goodmis.org>
 To:     linux-kernel@vger.kernel.org
 Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        stable@vger.kernel.org, Chen Zhongjin <chenzhongjin@huawei.com>
-Subject: [for-linus][PATCH 3/5] ftrace: Fix invalid address access in lookup_rec() when index is 0
+        Peter Zijlstra <peterz@infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Subject: [for-linus][PATCH 4/5] ftrace,kcfi: Define ftrace_stub_graph conditionally
 References: <20230314190236.203370742@goodmis.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
@@ -47,53 +54,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Chen Zhongjin <chenzhongjin@huawei.com>
+From: Arnd Bergmann <arnd@arndb.de>
 
-KASAN reported follow problem:
+When CONFIG_FUNCTION_GRAPH_TRACER is disabled, __kcfi_typeid_ftrace_stub_graph
+is missing, causing a link failure:
 
- BUG: KASAN: use-after-free in lookup_rec
- Read of size 8 at addr ffff000199270ff0 by task modprobe
- CPU: 2 Comm: modprobe
- Call trace:
-  kasan_report
-  __asan_load8
-  lookup_rec
-  ftrace_location
-  arch_check_ftrace_location
-  check_kprobe_address_safe
-  register_kprobe
+ ld.lld: error: undefined symbol: __kcfi_typeid_ftrace_stub_graph
+ referenced by arch/x86/kernel/ftrace_64.o:(__cfi_ftrace_stub_graph) in archive vmlinux.a
 
-When checking pg->records[pg->index - 1].ip in lookup_rec(), it can get a
-pg which is newly added to ftrace_pages_start in ftrace_process_locs().
-Before the first pg->index++, index is 0 and accessing pg->records[-1].ip
-will cause this problem.
+Mark the reference to it as conditional on the same symbol, as
+is done on arm64.
 
-Don't check the ip when pg->index is 0.
+Link: https://lore.kernel.org/linux-trace-kernel/20230131093643.3850272-1-arnd@kernel.org
 
-Link: https://lore.kernel.org/linux-trace-kernel/20230309080230.36064-1-chenzhongjin@huawei.com
-
-Cc: stable@vger.kernel.org
-Fixes: 9644302e3315 ("ftrace: Speed up search by skipping pages by address")
-Suggested-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+Cc: Peter Zijlstra <peterz@infradead.org>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
+Cc: Mark Rutland <mark.rutland@arm.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+Fixes: 883bbbffa5a4 ("ftrace,kcfi: Separate ftrace_stub() and ftrace_stub_graph()")
+See-also: 2598ac6ec493 ("arm64: ftrace: Define ftrace_stub_graph only with FUNCTION_GRAPH_TRACER")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Steven Rostedt (Google) <rostedt@goodmis.org>
 ---
- kernel/trace/ftrace.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ arch/x86/kernel/ftrace_64.S | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-index 750aa3f08b25..a47f7d93e32d 100644
---- a/kernel/trace/ftrace.c
-+++ b/kernel/trace/ftrace.c
-@@ -1537,7 +1537,8 @@ static struct dyn_ftrace *lookup_rec(unsigned long start, unsigned long end)
- 	key.flags = end;	/* overload flags, as it is unsigned long */
+diff --git a/arch/x86/kernel/ftrace_64.S b/arch/x86/kernel/ftrace_64.S
+index 1265ad519249..fb4f1e01b64a 100644
+--- a/arch/x86/kernel/ftrace_64.S
++++ b/arch/x86/kernel/ftrace_64.S
+@@ -136,10 +136,12 @@ SYM_TYPED_FUNC_START(ftrace_stub)
+ 	RET
+ SYM_FUNC_END(ftrace_stub)
  
- 	for (pg = ftrace_pages_start; pg; pg = pg->next) {
--		if (end < pg->records[0].ip ||
-+		if (pg->index == 0 ||
-+		    end < pg->records[0].ip ||
- 		    start >= (pg->records[pg->index - 1].ip + MCOUNT_INSN_SIZE))
- 			continue;
- 		rec = bsearch(&key, pg->records, pg->index,
++#ifdef CONFIG_FUNCTION_GRAPH_TRACER
+ SYM_TYPED_FUNC_START(ftrace_stub_graph)
+ 	CALL_DEPTH_ACCOUNT
+ 	RET
+ SYM_FUNC_END(ftrace_stub_graph)
++#endif
+ 
+ #ifdef CONFIG_DYNAMIC_FTRACE
+ 
 -- 
 2.39.1
