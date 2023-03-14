@@ -2,129 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA446BA1AF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:59:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DEB186BA1B1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:00:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230481AbjCNV7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:59:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
+        id S230522AbjCNWAo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:00:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230140AbjCNV7x (ORCPT
+        with ESMTP id S229987AbjCNWAl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:59:53 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B05110CD;
-        Tue, 14 Mar 2023 14:59:53 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id p6so18143170plf.0;
-        Tue, 14 Mar 2023 14:59:53 -0700 (PDT)
+        Tue, 14 Mar 2023 18:00:41 -0400
+Received: from mail-yb1-xb36.google.com (mail-yb1-xb36.google.com [IPv6:2607:f8b0:4864:20::b36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F40B1D7
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:00:39 -0700 (PDT)
+Received: by mail-yb1-xb36.google.com with SMTP id r1so4605983ybu.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:00:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678831192;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=V5oa+tnNxBRfCsHNQQwG3me8RtumyZ1n0X+cpzX6ubA=;
-        b=WvwN1155TYKVvu7tUubKWIepn90mQNjYZj5/fZlMOkRbc1xAUVIMIocLCI5/GtzpKD
-         HQNQ3EM1pqINmdm4EhCI2leugtYnwsUW9JHpqLoAtIIFXzXx2zXukJtgCvnzGUv4PZVn
-         qyXBAO0NAASGMrNMhqAT/ujDgktFpAVGSosI7D9iB4C0LAXA7nYG65TJmh2Rm5B+ff7F
-         Zc2VYhHqmCm3hjtFUuiEUmPVqrKRuy1sjn/V45Q3r2a082DxdIw7dBi+PLmhMR7f4XRt
-         BKmm/K0w8jf8dHB3NjqXOsrsvz5VPz7JZmSHaO5fpnA/y+Pnz9kk+HpHWFfeAJ0ZLCI5
-         AOxQ==
+        d=paul-moore.com; s=google; t=1678831239;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=maagjvDsBJlC+y9OhD63kuSqb+IWdYfP9/wCJDIkyks=;
+        b=HhGszPtBXTd6nPQVL9vB5aTyWQNhCOqmEp/KKZGUKmpYxEi5ZtWDX1KwK7bZZ91YN8
+         q0xwcVdvRHNBlo/QO6YxGPANCiqIS2wtH9jV8YJMe+3ugvfFYIRncyhopRjyFscaR1tP
+         YlEkhEAEUqFUTHzvoIIl7YDh9e0MWZJD0ensv249en/+lu0JZb8z5qzbc3fM93kfYI8R
+         sdLqWD21Lny5Vx9KzrcO4uvl0uaGtItx91lwGnWUAjHQAAXUQUmwZPmwPJU/DmocQoZj
+         xDgcMBfkiXTKVQvyW0DvKIf43vWY3cTJOGK/wFGNBUAcbH5m97KCTwM9IVOAdxdoVrl4
+         /ceg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831192;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V5oa+tnNxBRfCsHNQQwG3me8RtumyZ1n0X+cpzX6ubA=;
-        b=kh4Y/QMzsBLZQEiPjb3/bvKAw2Hih2T3OE42t/XvIxtEx3eR7sHQffnktVJJPapEl1
-         XmTBi6pUJyCWSE1GaOjRtTr5vH4yLc1NAQljGZaCFMhMrD0//n4DMkd2uSb4cK2sT9gY
-         3ZgM2f6TafcTzmXazVYMwWv5tRTlpOAtmkVn5BuPgy7xKgsxE4GKDTjcyTtOF4y2wLJq
-         02l/g2DbE+AbsEMePTsbpKOGQ3R+0eoJQCPDo6jiwLG9IXQ/izQvKoLTj/PYga5/o6Q2
-         1Mr+3ikjXyCnXNwu9n9CaJuV9lHVR0GaL3AS2HDHGl5DPWHN1NgHl6TPTzpRGJ5BAtIy
-         1v8w==
-X-Gm-Message-State: AO0yUKXMan+Rx2Jd8dzaXPsh+63WD0u85pEeLS8ejxeFF+F8juMZogBV
-        cQQ+05E+XkrTlKTxcyGi4Zs=
-X-Google-Smtp-Source: AK7set+NhYRdrOANDeCF454npmEVGILBi6HXfyleUWq+DGnq9ihVSM2R239W2qVt2H8t2XsK4bz94w==
-X-Received: by 2002:a17:90a:1a03:b0:233:feb4:895f with SMTP id 3-20020a17090a1a0300b00233feb4895fmr38865457pjk.44.1678831192324;
-        Tue, 14 Mar 2023 14:59:52 -0700 (PDT)
-Received: from localhost ([2600:380:7656:8258:88b9:45ff:fe37:1816])
-        by smtp.gmail.com with ESMTPSA id lk15-20020a17090308cf00b001898ee9f723sm2237528plb.2.2023.03.14.14.59.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 14:59:51 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Tue, 14 Mar 2023 11:59:49 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        kernel-team@meta.com
-Subject: [PATCH bpf/for-next] cgroup: Make current_cgns_cgroup_dfl() safe to
- call after exit_task_namespace()
-Message-ID: <ZBDuVWiFj2jiz3i8@slm.duckdns.org>
+        d=1e100.net; s=20210112; t=1678831239;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=maagjvDsBJlC+y9OhD63kuSqb+IWdYfP9/wCJDIkyks=;
+        b=o+ndBanfJjiodxwU4kGY2cf3jazBDvhjI+NXN8RpvnVzNY2eXZHGBSyM7rUHPyGEBb
+         oxUl2pGb2qqfAmJ0FsApMeDtvB7nGF8cV1ox2rPPBtLLBLl7FAIgTcnm14xW/UABfD8R
+         0NEOhbE4d0VL1PAFsPCPTkZMRy/2KqH0/K/IOOLYZ5zkx+mjkh1OrUxJn8+syd2a6O1g
+         9wrNgYuKtWTxhU0990/BtoWgUGkwCi2IhANUj1Cg3gbZYkpDCl39rAoGCgJtvVO1GnLw
+         W9ONhXGYXf716ZISd8DJShIGi1NlZaasrQY7RB+TE5PjLQj07MiXUp4/OUxVs1PZaPr8
+         7eVQ==
+X-Gm-Message-State: AO0yUKXuqqi4+1Tm8MM/OksMZPHd+0pbXuICnqs8meK8vHIP2LyV/sP8
+        LJ2Tfpciy+o78UGmAIAdWAb+BAh2+FT1J2OtVJU0
+X-Google-Smtp-Source: AK7set+ZREPOoMw6DajSAew8APbcgVxrnpt18SXhM1+x+1D3I0fnsbj8wn8d+56OfafS/HPeV85zW24B5umwryYa+58=
+X-Received: by 2002:a5b:f03:0:b0:a74:87b0:4090 with SMTP id
+ x3-20020a5b0f03000000b00a7487b04090mr17422431ybr.3.1678831238977; Tue, 14 Mar
+ 2023 15:00:38 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20230222200838.8149-1-casey@schaufler-ca.com> <20230222200838.8149-5-casey@schaufler-ca.com>
+ <405ff748-dea0-794b-fa58-18b0a4703587@digikod.net> <a504f6e7-9c67-461c-6e0e-ae6d50623613@schaufler-ca.com>
+In-Reply-To: <a504f6e7-9c67-461c-6e0e-ae6d50623613@schaufler-ca.com>
+From:   Paul Moore <paul@paul-moore.com>
+Date:   Tue, 14 Mar 2023 18:00:28 -0400
+Message-ID: <CAHC9VhStiDVn4_m5ye=T4sndK80VtzWmxBnsBFspyj41hDL+bQ@mail.gmail.com>
+Subject: Re: [PATCH v6 04/11] LSM: syscalls for current process attributes
+To:     Casey Schaufler <casey@schaufler-ca.com>
+Cc:     =?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>,
+        linux-security-module@vger.kernel.org, jmorris@namei.org,
+        keescook@chromium.org, john.johansen@canonical.com,
+        penguin-kernel@i-love.sakura.ne.jp, stephen.smalley.work@gmail.com,
+        linux-kernel@vger.kernel.org, linux-api@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-332ea1f697be ("bpf: Add bpf_cgroup_from_id() kfunc") added
-bpf_cgroup_from_id() which calls current_cgns_cgroup_dfl() through
-cgroup_get_from_id(). However, BPF programs may be attached to a point where
-current->nsproxy has already been cleared to NULL by exit_task_namespace()
-and calling bpf_cgroup_from_id() would cause an oops.
+On Wed, Mar 8, 2023 at 9:30=E2=80=AFPM Casey Schaufler <casey@schaufler-ca.=
+com> wrote:
+> On 3/7/2023 3:51 AM, Micka=C3=ABl Sala=C3=BCn wrote:
+> >
+> > On 22/02/2023 21:08, Casey Schaufler wrote:
+> >> Create a system call lsm_get_self_attr() to provide the security
+> >> module maintained attributes of the current process.
+> >> Create a system call lsm_set_self_attr() to set a security
+> >> module maintained attribute of the current process.
+> >> Historically these attributes have been exposed to user space via
+> >> entries in procfs under /proc/self/attr.
+> >>
+> >> The attribute value is provided in a lsm_ctx structure. The structure
+> >> identifys the size of the attribute, and the attribute value. The form=
+at
+> >> of the attribute value is defined by the security module. A flags fiel=
+d
+> >> is included for LSM specific information. It is currently unused and
+> >> must
+> >> be 0. The total size of the data, including the lsm_ctx structure and
+> >> any
+> >> padding, is maintained as well.
+> >>
+> >> struct lsm_ctx {
+> >>          __u64   id;
+> >>          __u64   flags;
+> >>          __u64   len;
+> >>          __u64   ctx_len;
+> >>          __u8    ctx[];
+> >> };
+> >>
+> >> Two new LSM hooks are used to interface with the LSMs.
+> >> security_getselfattr() collects the lsm_ctx values from the
+> >> LSMs that support the hook, accounting for space requirements.
+> >> security_setselfattr() identifies which LSM the attribute is
+> >> intended for and passes it along.
+> >>
+> >> Signed-off-by: Casey Schaufler <casey@schaufler-ca.com>
+> >> ---
+> >>   Documentation/userspace-api/lsm.rst |  15 ++++
+> >>   include/linux/lsm_hook_defs.h       |   4 ++
+> >>   include/linux/lsm_hooks.h           |   9 +++
+> >>   include/linux/security.h            |  19 +++++
+> >>   include/linux/syscalls.h            |   4 ++
+> >>   include/uapi/linux/lsm.h            |  33 +++++++++
+> >>   kernel/sys_ni.c                     |   4 ++
+> >>   security/Makefile                   |   1 +
+> >>   security/lsm_syscalls.c             | 104 ++++++++++++++++++++++++++=
+++
+> >>   security/security.c                 |  82 ++++++++++++++++++++++
+> >>   10 files changed, 275 insertions(+)
+> >>   create mode 100644 security/lsm_syscalls.c
+> >>
+> >
+> > [...]
+> >
+> >> +/**
+> >> + * security_setselfattr - Set an LSM attribute on the current process=
+.
+> >> + * @attr: which attribute to return
+> >> + * @ctx: the user-space source for the information
+> >> + * @size: the size of the data
+> >> + *
+> >> + * Set an LSM attribute for the current process. The LSM, attribute
+> >> + * and new value are included in @ctx.
+> >> + *
+> >> + * Returns 0 on seccess, an LSM specific value on failure.
+> >> + */
+> >> +int security_setselfattr(u64 __user attr, struct lsm_ctx __user *ctx,
+> >> +             size_t __user size)
+> >> +{
+> >> +    struct security_hook_list *hp;
+> >> +    struct lsm_ctx lctx;
+> >> +
+> >> +    if (size < sizeof(*ctx))
+> >
+> > If the lsm_ctx struct could grow in the future, we should check the
+> > size of the struct to the last field for compatibility reasons, see
+> > Landlock's copy_min_struct_from_user().
+>
+> Because the lsm_ctx structure ends with the variable length context there=
+'s
+> no way to append new fields to it. The structure can't grow.
 
-Just return the system-wide root if nsproxy has been cleared. This allows
-all cgroups to be looked up after the task passed through
-exit_task_namespace(), which semantically makes sense. Given that the only
-way to get this behavior is through BPF programs, it seems safe but let's
-see what others think.
+The lsm_ctx can grow; that was one of the reasons for having both a
+@len and @ctx_len field in the struct, the other being padding.  Of
+course any LSM wanting to place information beyond the end of @ctx
+will need to indicate that with a bit in the @flags field.
 
-Signed-off-by: Tejun Heo <tj@kernel.org>
-Cc: Alexei Starovoitov <ast@kernel.org>
-Fixes: 332ea1f697be ("bpf: Add bpf_cgroup_from_id() kfunc")
----
-Hello,
+Having said that, there are probably other ways to pass other data via
+a lsm_ctx struct, e.g. binary @ctx values, but I don't think we want
+to rule anything out at this point.
 
-Given that this is only exposed through a commit in bpf/for-next, I think
-it'd be best to route it together. If this looks okay, please apply to
-bpf/for-next.
+Also, as a reminder, just because we *can* do something, doesn't mean
+we will do something.  Any LSM that wants to pass something other than
+a string @ctx value will face a *lot* of scrutiny.
 
-Thanks.
-
- kernel/cgroup/cgroup.c | 16 ++++++++++++++--
- 1 file changed, 14 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/cgroup/cgroup.c b/kernel/cgroup/cgroup.c
-index 8bfb0e2a87ee..c0da5cb9f193 100644
---- a/kernel/cgroup/cgroup.c
-+++ b/kernel/cgroup/cgroup.c
-@@ -1465,8 +1465,20 @@ static struct cgroup *current_cgns_cgroup_dfl(void)
- {
- 	struct css_set *cset;
- 
--	cset = current->nsproxy->cgroup_ns->root_cset;
--	return __cset_cgroup_from_root(cset, &cgrp_dfl_root);
-+	if (current->nsproxy) {
-+		cset = current->nsproxy->cgroup_ns->root_cset;
-+		return __cset_cgroup_from_root(cset, &cgrp_dfl_root);
-+	} else {
-+		/*
-+		 * NOTE: This function may be called from bpf_cgroup_from_id()
-+		 * on a task which has already passed exit_task_namespace() and
-+		 * NULL nsproxy. Fall back to cgrp_dfl_root which will make all
-+		 * cgroups visible for lookups. Given that BPF progs are
-+		 * privileged, this shouldn't create security concerns but there
-+		 * may be a better way to handle this.
-+		 */
-+		return &cgrp_dfl_root.cgrp;
-+	}
- }
- 
- /* look up cgroup associated with given css_set on the specified hierarchy */
--- 
-2.39.2
-
+--=20
+paul-moore.com
