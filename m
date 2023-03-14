@@ -2,130 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 720906B9BE5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:43:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D22886B9BEC
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:43:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230256AbjCNQnC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:43:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45176 "EHLO
+        id S230312AbjCNQne (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:43:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229969AbjCNQm7 (ORCPT
+        with ESMTP id S229755AbjCNQnb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:42:59 -0400
-Received: from mail-il1-x133.google.com (mail-il1-x133.google.com [IPv6:2607:f8b0:4864:20::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50F61DBB2;
-        Tue, 14 Mar 2023 09:42:52 -0700 (PDT)
-Received: by mail-il1-x133.google.com with SMTP id j6so4476624ilr.7;
-        Tue, 14 Mar 2023 09:42:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678812172;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=MxZSOfCWNDNJ14hSL1j3SL4LQ1yTeUuMdTOGWrYjnBw=;
-        b=oGkcRGoYBzfKZcwb0CVNjcvFi+97rNw0dYByC6MEe92ueoVHNJVbWoq65crX9LN+jE
-         XNVVvhDGpedmefPOAsK85HqaY5an92atQz1ehjYxBCHIBbJY5yMDCx8t/3tRzGNZZ1+o
-         g6hnBmuQQDJC5dmO2dfIVStPcuf31jmALPZaRcajXkL+zM9ILAvR5uqLKCFK521PaUzd
-         qzPMHDw2/NGXz+SbP0VgN1D7IClXoHJ4MUMBpdi/4CbQ/cfPFAS4mBnPsZ+SQU0oKkKf
-         YTgDhYvy/bheEtZFIsGLSP3OF/8PQCkNJwmcnPC9gpTUSeFQYvd2dVHnFgspnUx/QiDW
-         igIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678812172;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MxZSOfCWNDNJ14hSL1j3SL4LQ1yTeUuMdTOGWrYjnBw=;
-        b=6VVaU/NU9FLIRkD1ixwjhLLtiSqnI6eU6mWhDjWxiZAG17EF8Rje2jz22m/t+IRaHv
-         1WSq4qDDKwVRE2kxhBBehEzvIhMLRXyGceAS0fprTFLz2EwGPTWzDNyCYrUWpGqE8bjM
-         iC5CJMwPrvGxtY5tpfaB39h3VDqEdJ1wbJ63IDx9Mt2U4tokwDHXQE/bTO5OFmAMjjST
-         czzxWpV28O8scR6yRbOSiImqOO2DS4lUcbWb/oF7X1goGje98qRObHuKBpukYfjXn71r
-         GMT9u4cY3YkcpwxYbnLHwMddXEVym5bWnIUybWZm25V9ErdaA5xPFtsuNX9wMTYkUwSF
-         xdKg==
-X-Gm-Message-State: AO0yUKXU20K1GXwhRgXQk3oN3lJkvFaWJHOPOOiGcLfVm/Rgcs6N9+AX
-        LikRmG8g0YlLGO7lSPZ18qo=
-X-Google-Smtp-Source: AK7set/ZJ3U6nq5gMwwoKA9g01Yk0CxUBFBCBI6kWXWJBdaRmS9FzI0z0x1YW8Rx1jW6FiXKLYePow==
-X-Received: by 2002:a05:6e02:1d87:b0:323:66a:be22 with SMTP id h7-20020a056e021d8700b00323066abe22mr3095106ila.21.1678812172229;
-        Tue, 14 Mar 2023 09:42:52 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id p17-20020a056e02105100b0032301b2aa36sm923243ilj.26.2023.03.14.09.42.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 09:42:51 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <ec4259d3-a7bf-d296-7805-aac3f7480b93@roeck-us.net>
-Date:   Tue, 14 Mar 2023 09:42:49 -0700
+        Tue, 14 Mar 2023 12:43:31 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 594457302E;
+        Tue, 14 Mar 2023 09:43:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
+        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+        Sender:Reply-To:Content-ID:Content-Description;
+        bh=gjXIkZzK9eKcsdx4ghLE0EciyRLq1m3GlTeawRmpUUA=; b=pK5R28ZJkzuHPxskO0nobwwjY9
+        K7ZaCEN/3XvyZSHeJweJDhKMCKdkrRA41vYQOdiUU/YRzCrFmnEBpFW916YBy7vgtxrlBFFZItIRY
+        oVxwEU1op+XlMbbixbUCsWNJjbO/ij0PTFabPTsrNfS2Jp4xk/yFKvl3nF8JD9rRBLxUE6Rmk5kTZ
+        oQJVdKhFkufEauztmeqNyoINoGgY2Jtj0GOR5iM30KtyBv+OqoHEUMhOdzvlIrLqBDwF2ROhl7J2F
+        YDWrZAZZ7CQYK5kneKa8UOEBavS4G+nW5lKSlHgDROeit/52rqKuWkh1Zwmbiie9tst61OEm3eu24
+        sdKz02Ug==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1pc7ji-00D3j5-AF; Tue, 14 Mar 2023 16:42:54 +0000
+Date:   Tue, 14 Mar 2023 16:42:54 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
+        Jeff Layton <jlayton@kernel.org>,
+        David Hildenbrand <david@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Logan Gunthorpe <logang@deltatee.com>,
+        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
+        Guenter Roeck <groeck7@gmail.com>,
+        Christoph Hellwig <hch@lst.de>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Hugh Dickins <hughd@google.com>
+Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
+Message-ID: <ZBCkDvveAIJENA0G@casper.infradead.org>
+References: <20230308165251.2078898-1-dhowells@redhat.com>
+ <20230308165251.2078898-4-dhowells@redhat.com>
+ <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH v2] watchdog: ebc-c384_wdt: Migrate to the regmap API
-Content-Language: en-US
-To:     William Breathitt Gray <william.gray@linaro.org>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Paul Demetrotion <pdemetrotion@winsystems.com>,
-        techsupport@winsystems.com
-References: <20230314152916.185939-1-william.gray@linaro.org>
- <ZBCX0iVwYD4uVxwM@smile.fi.intel.com> <ZBChWA6aGLPZ/2vG@fedora>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <ZBChWA6aGLPZ/2vG@fedora>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 09:31, William Breathitt Gray wrote:
-> On Tue, Mar 14, 2023 at 05:50:42PM +0200, Andy Shevchenko wrote:
->> On Tue, Mar 14, 2023 at 11:29:16AM -0400, William Breathitt Gray wrote:
->>> The regmap API supports IO port accessors so we can take advantage of
->>> regmap abstractions rather than handling access to the device registers
->>> directly in the driver.
->>
->> ...
->>
->>>   - Utilize watchdog_set_drvdata() and watchdog_get_drvdata()
->>
->> I'm wondering why you can't use dev_get_regmap() instead.
+On Wed, Mar 08, 2023 at 02:39:00PM -0800, Linus Torvalds wrote:
+> On Wed, Mar 8, 2023 at 8:53 AM David Howells <dhowells@redhat.com> wrote:
+> >
+> > The new filemap_splice_read() has an implicit expectation via
+> > filemap_get_pages() that ->read_folio() exists if ->readahead() doesn't
+> > fully populate the pagecache of the file it is reading from[1], potentially
+> > leading to a jump to NULL if this doesn't exist.  shmem, however, (and by
+> > extension, tmpfs, ramfs and rootfs), doesn't have ->read_folio(),
 > 
-> We can set `wdd->parent = dev` in ebc_c384_wdt_probe(), and then use
-> `dev_get_regmap(wdev->parent)` to retrieve the regmap. The only downside
-> I see if perhaps the added latency a call to devres_find(), whereas
-> using watchdog_get_drvdata() is just a pointer dereference.
+> This patch is the only one in your series that I went "Ugh, that's
+> really ugly" for.
 > 
-> I'm indifferent to either choice, so if Guenter or Wim have a preference
-> here I'll follow their decision.
+> Do we really want to basically duplicate all of filemap_splice_read()?
 > 
-
-I am not inclined to accept a patch which calls dev_get_regmap() more
-than once. It is not just added latency, it is unnecessarily executing
-a lot of code. Maybe that call is abused nowadays, and/or maybe people do not
-care about wasting CPU cycles anymore, but that is not its intended use case.
-
->>
->>>   - Map watchdog control registers based on offset 0x1 and adjust regmap
->>>     configurations accordingly; offset 0x0 is unused in this driver so we
->>>     should avoid unnecessary exposure of it
->>
->> I'm wondering what bad could happen if you expose it.
+> I get the feeling that the zeropage case just isn't so important that
+> we'd need to duplicate filemap_splice_read() just for that, and I
+> think that the code should either
 > 
-> The WINSYSTEMS EBC-C384 documentation I have does not specify what
-> offset 0x0 does (nor offsets 0x3-0x4), so I don't know if there are side
-> effects to reading those addresses. Really, I'm just avoiding the hassle
-> of writing an explicit precious registers table for those offsets by not
-> exposing them at all.
+>  (a) just make a silly "read_folio()" for shmfs that just clears the page.
 > 
+>      Ugly but maybe simple and not horrid?
 
-Counter questions:
-- What would be the purpose of exposing register addresses if they are not needed ?
-- What bad can happen by _not_ exposing those register addresses ?
+The problem is that we might have swapped out the shmem folio.  So we
+don't want to clear the page, but ask swap to fill the page.  The way
+that currently works (see shmem_get_folio_gfp()) is to fetch the swap
+entry from the page cache, allocate a new folio inside the shmem code,
+then replace the swap entry with the new folio.
 
-Guenter
+What I'd like to see is the generic code say "Ah, this is a shmem
+inode, so it's special and the xa_value entry is swap information,
+not workingset information, so I'll allocate the folio and restore
+the folio->private swap information to let the shmem_read_folio
+function do its job correctly".
 
+Either that or we completely overhaul the shmem code to store the
+location of its swapped data somewhere that's not the page cache.
+
+>  (b) teach filemap_splice_read() that a NULL 'read_folio' function
+> means "use the zero page"
+
+Same problem as (a).
+
+>  (c) go even further, and teach read_folio() in general about file
+> holes, and allow *any* filesystem to read zeroes that way in general
+> without creating a folio for it.
+
+I've had thoughts along those lines in the past.  It's pretty major
+surgery, I think.  At the moment, we allocate the pages and add them
+to the page cache in a locked state before asking the filesystem to
+populate them.  So the fs doesn't even have the file layout (eg the
+get_block or iomap info) that would tell it where the holes are until
+the page has already been allocated and inserted.  We could of course
+free the page and replace it with a special 'THIS_IS_A_HOLE' entry.
+It's just never seemed important enuogh to me to do this surgery.
+
+> in a perfect world, if done well I think shmem_file_read_iter() should
+> go away, and it could use generic_file_read_iter too.
+> 
+> I dunno. Maybe shm really is *so* special that this is the right way
+> to do things, but I did react quite negatively to this patch. So not a
+> complete NAK, but definitely a "do we _really_ have to do this?"
+
+I'd really like to see shmem have a read_folio implementation.  I
+don't know how much work it's going to be.
