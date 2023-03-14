@@ -2,311 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 569F86B9841
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:46:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4436B9842
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:49:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229986AbjCNOqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42452 "EHLO
+        id S230224AbjCNOtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229765AbjCNOqo (ORCPT
+        with ESMTP id S229888AbjCNOtM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:46:44 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A74C62310D
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:46:42 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 64E711F8AA;
-        Tue, 14 Mar 2023 14:46:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1678805201; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o3AGN1L/3ZI6Brd2UU81ywu5573sI0gYEUBsK/dPG+0=;
-        b=hIq6DBJvn5tNyeAZ+bKgif0htT4sQYK2lcOgsP37mQ0RFC4/MXFxq9BbiLs1kmHd0pHLsm
-        WIwaKUGSeNafxmnu1sneKitjSnnNfXAZPCF8RAUqFZa/H/sUBDFcrEnH9PCSUZt7V4wEPK
-        cpWrJmH1zZAOfXTy3KT6ZPgzCYk8DLU=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 427F913A26;
-        Tue, 14 Mar 2023 14:46:41 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id D+vdDtGIEGTzKAAAMHmgww
-        (envelope-from <jgross@suse.com>); Tue, 14 Mar 2023 14:46:41 +0000
-From:   Juergen Gross <jgross@suse.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     Juergen Gross <jgross@suse.com>,
-        =?UTF-8?q?Roger=20Pau=20Monn=C3=A9?= <roger.pau@citrix.com>
-Subject: [PATCH v2.1 4/4] xen/blkback: move blkif_get_x86_*_req() into blkback.c
-Date:   Tue, 14 Mar 2023 15:46:35 +0100
-Message-Id: <20230314144635.25820-1-jgross@suse.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20230314142741.24917-5-jgross@suse.com>
-References: <20230314142741.24917-5-jgross@suse.com>
+        Tue, 14 Mar 2023 10:49:12 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DEC80913
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678805305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=GWQwIVEUxODiUAPgvgj873Ly69YqVHrDDQoHbnjV5Lg=;
+        b=UF/71B/iCxOs/d53p3WxyerGDXrPlE8K4TzmMdZPZy4QwFutW+S0RuQjqFbdqlAkeQVf/Y
+        jLapw/8sVOorFtpbOwyXUcRvbXAWXemUhVJx62w3sWbTwOeVGWBmEM3VYKpGTJ6/1Qe6HF
+        HqozUBc7Kw+kCWtCJf3XZnXBUB1jRC0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-447-WY6wRthnMfeAIDF4vJeh3A-1; Tue, 14 Mar 2023 10:48:24 -0400
+X-MC-Unique: WY6wRthnMfeAIDF4vJeh3A-1
+Received: by mail-qv1-f72.google.com with SMTP id a15-20020a0562140c2f00b005ad28a23cffso432710qvd.6
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:48:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678805303;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=GWQwIVEUxODiUAPgvgj873Ly69YqVHrDDQoHbnjV5Lg=;
+        b=6hzf1gtCfj5z+WdxRs9d5F30zA8YZ0SxBNAY4GxEr0XmPBKi/DImdlpSOpF7sLZSij
+         wZ3YkLTB/2EkK2iDP/F794W/Firv7OAKLjUTStJQe9RrVVMwPTPcGFfFLv0xwKf/uB5F
+         ejhlrvl3ZRPmCCvAoR51sqIm8t55O51T22KYO6kFRQJ2SSOdTVmEHwXZzE+KB3WkTmGO
+         hnc0XWzN37NbZgr4WrHk1KVnfMxihRwBUpI2glm/JjxZE+FgDPooXlkMts485zhZeqF+
+         85ZQ2mawdkeun0//rFhho55cn1SPS6Ap6EZ8+V1CJBWAAnEx5aHCWWHBNjs7pqSDxtZL
+         w+5Q==
+X-Gm-Message-State: AO0yUKVe0fbx+aRcPpB3NZM26o+l0cQZwHJ7Xf+MHIBQ2PnAg28IEaJq
+        XhG/BcQvPaZqzc4BOE7YvWvHvwDhxKNowg4OPfZPewskJlI7ISAIveXukAyhdNr5jK2SMAjMbXk
+        lKjWdXKhNzvOH136FSL4+Oqve
+X-Received: by 2002:a05:6214:1d01:b0:56f:b28f:cc30 with SMTP id e1-20020a0562141d0100b0056fb28fcc30mr21788490qvd.4.1678805302993;
+        Tue, 14 Mar 2023 07:48:22 -0700 (PDT)
+X-Google-Smtp-Source: AK7set86DHUQlCKODKwX6vtrt+QBsX323HL8EnwcuuTSwJgeoTcuOKzLQX65s8Qw0siNi4lCn0DLcA==
+X-Received: by 2002:a05:6214:1d01:b0:56f:b28f:cc30 with SMTP id e1-20020a0562141d0100b0056fb28fcc30mr21788425qvd.4.1678805302507;
+        Tue, 14 Mar 2023 07:48:22 -0700 (PDT)
+Received: from dell-per740-01.7a2m.lab.eng.bos.redhat.com (nat-pool-bos-t.redhat.com. [66.187.233.206])
+        by smtp.gmail.com with ESMTPSA id o6-20020a375a06000000b006fa16fe93bbsm1881186qkb.15.2023.03.14.07.48.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 07:48:22 -0700 (PDT)
+From:   Tom Rix <trix@redhat.com>
+To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
+        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
+        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
+        bristot@redhat.com, vschneid@redhat.com
+Cc:     linux-kernel@vger.kernel.org, Tom Rix <trix@redhat.com>
+Subject: [PATCH] sched/topology: set varaiables sched_energy_mutex,update storage-class-specifier to static
+Date:   Tue, 14 Mar 2023 10:48:18 -0400
+Message-Id: <20230314144818.1453523-1-trix@redhat.com>
+X-Mailer: git-send-email 2.27.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is no need to have the functions blkif_get_x86_32_req() and
-blkif_get_x86_64_req() in a header file, as they are used in one place
-only.
+smatch reports
+kernel/sched/topology.c:212:1: warning:
+  symbol 'sched_energy_mutex' was not declared. Should it be static?
+kernel/sched/topology.c:213:6: warning:
+  symbol 'sched_energy_update' was not declared. Should it be static?
 
-So move them into the using source file and drop the inline qualifier.
+These variables are only used in topology.c, so should be static
 
-While at it fix some style issues, and simplify the code by variable
-reusing and using min() instead of open coding it.
-
-Instead of using barrier() use READ_ONCE() for avoiding multiple reads
-of nr_segments.
-
-Signed-off-by: Juergen Gross <jgross@suse.com>
-Acked-by: Roger Pau Monné <roger.pau@citrix.com>
+Signed-off-by: Tom Rix <trix@redhat.com>
 ---
-V2:
-- add const, use unsigned int for loop counters (Roger Pau Monné)
-V2.1:
-- do the V2 changes in blkif_get_x86_64_req(), too (Jan Beulich)
----
- drivers/block/xen-blkback/blkback.c | 104 ++++++++++++++++++++++++++++
- drivers/block/xen-blkback/common.h  |  96 -------------------------
- 2 files changed, 104 insertions(+), 96 deletions(-)
+ kernel/sched/topology.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/block/xen-blkback/blkback.c b/drivers/block/xen-blkback/blkback.c
-index 243712b59a05..c362f4ad80ab 100644
---- a/drivers/block/xen-blkback/blkback.c
-+++ b/drivers/block/xen-blkback/blkback.c
-@@ -1072,7 +1072,111 @@ static void end_block_io_op(struct bio *bio)
- 	bio_put(bio);
- }
+diff --git a/kernel/sched/topology.c b/kernel/sched/topology.c
+index 051aaf65c749..6682535e37c8 100644
+--- a/kernel/sched/topology.c
++++ b/kernel/sched/topology.c
+@@ -209,8 +209,8 @@ sd_parent_degenerate(struct sched_domain *sd, struct sched_domain *parent)
+ #if defined(CONFIG_ENERGY_MODEL) && defined(CONFIG_CPU_FREQ_GOV_SCHEDUTIL)
+ DEFINE_STATIC_KEY_FALSE(sched_energy_present);
+ static unsigned int sysctl_sched_energy_aware = 1;
+-DEFINE_MUTEX(sched_energy_mutex);
+-bool sched_energy_update;
++static DEFINE_MUTEX(sched_energy_mutex);
++static bool sched_energy_update;
  
-+static void blkif_get_x86_32_req(struct blkif_request *dst,
-+				 const struct blkif_x86_32_request *src)
-+{
-+	unsigned int i, n;
-+
-+	dst->operation = READ_ONCE(src->operation);
-+
-+	switch (dst->operation) {
-+	case BLKIF_OP_READ:
-+	case BLKIF_OP_WRITE:
-+	case BLKIF_OP_WRITE_BARRIER:
-+	case BLKIF_OP_FLUSH_DISKCACHE:
-+		dst->u.rw.nr_segments = READ_ONCE(src->u.rw.nr_segments);
-+		dst->u.rw.handle = src->u.rw.handle;
-+		dst->u.rw.id = src->u.rw.id;
-+		dst->u.rw.sector_number = src->u.rw.sector_number;
-+		n = min_t(unsigned int, BLKIF_MAX_SEGMENTS_PER_REQUEST,
-+			  dst->u.rw.nr_segments);
-+		for (i = 0; i < n; i++)
-+			dst->u.rw.seg[i] = src->u.rw.seg[i];
-+		break;
-+
-+	case BLKIF_OP_DISCARD:
-+		dst->u.discard.flag = src->u.discard.flag;
-+		dst->u.discard.id = src->u.discard.id;
-+		dst->u.discard.sector_number = src->u.discard.sector_number;
-+		dst->u.discard.nr_sectors = src->u.discard.nr_sectors;
-+		break;
-+
-+	case BLKIF_OP_INDIRECT:
-+		dst->u.indirect.indirect_op = src->u.indirect.indirect_op;
-+		dst->u.indirect.nr_segments =
-+			READ_ONCE(src->u.indirect.nr_segments);
-+		dst->u.indirect.handle = src->u.indirect.handle;
-+		dst->u.indirect.id = src->u.indirect.id;
-+		dst->u.indirect.sector_number = src->u.indirect.sector_number;
-+		n = min(MAX_INDIRECT_PAGES,
-+			INDIRECT_PAGES(dst->u.indirect.nr_segments));
-+		for (i = 0; i < n; i++)
-+			dst->u.indirect.indirect_grefs[i] =
-+				src->u.indirect.indirect_grefs[i];
-+		break;
-+
-+	default:
-+		/*
-+		 * Don't know how to translate this op. Only get the
-+		 * ID so failure can be reported to the frontend.
-+		 */
-+		dst->u.other.id = src->u.other.id;
-+		break;
-+	}
-+}
- 
-+static void blkif_get_x86_64_req(struct blkif_request *dst,
-+				 const struct blkif_x86_64_request *src)
-+{
-+	unsigned int i, n;
-+
-+	dst->operation = READ_ONCE(src->operation);
-+
-+	switch (dst->operation) {
-+	case BLKIF_OP_READ:
-+	case BLKIF_OP_WRITE:
-+	case BLKIF_OP_WRITE_BARRIER:
-+	case BLKIF_OP_FLUSH_DISKCACHE:
-+		dst->u.rw.nr_segments = READ_ONCE(src->u.rw.nr_segments);
-+		dst->u.rw.handle = src->u.rw.handle;
-+		dst->u.rw.id = src->u.rw.id;
-+		dst->u.rw.sector_number = src->u.rw.sector_number;
-+		n = min_t(unsigned int, BLKIF_MAX_SEGMENTS_PER_REQUEST,
-+			  dst->u.rw.nr_segments);
-+		for (i = 0; i < n; i++)
-+			dst->u.rw.seg[i] = src->u.rw.seg[i];
-+		break;
-+
-+	case BLKIF_OP_DISCARD:
-+		dst->u.discard.flag = src->u.discard.flag;
-+		dst->u.discard.id = src->u.discard.id;
-+		dst->u.discard.sector_number = src->u.discard.sector_number;
-+		dst->u.discard.nr_sectors = src->u.discard.nr_sectors;
-+		break;
-+
-+	case BLKIF_OP_INDIRECT:
-+		dst->u.indirect.indirect_op = src->u.indirect.indirect_op;
-+		dst->u.indirect.nr_segments =
-+			READ_ONCE(src->u.indirect.nr_segments);
-+		dst->u.indirect.handle = src->u.indirect.handle;
-+		dst->u.indirect.id = src->u.indirect.id;
-+		dst->u.indirect.sector_number = src->u.indirect.sector_number;
-+		n = min(MAX_INDIRECT_PAGES,
-+			INDIRECT_PAGES(dst->u.indirect.nr_segments));
-+		for (i = 0; i < n; i++)
-+			dst->u.indirect.indirect_grefs[i] =
-+				src->u.indirect.indirect_grefs[i];
-+		break;
-+
-+	default:
-+		/*
-+		 * Don't know how to translate this op. Only get the
-+		 * ID so failure can be reported to the frontend.
-+		 */
-+		dst->u.other.id = src->u.other.id;
-+		break;
-+	}
-+}
- 
- /*
-  * Function to copy the from the ring buffer the 'struct blkif_request'
-diff --git a/drivers/block/xen-blkback/common.h b/drivers/block/xen-blkback/common.h
-index fab8a8dee0da..40f67bfc052d 100644
---- a/drivers/block/xen-blkback/common.h
-+++ b/drivers/block/xen-blkback/common.h
-@@ -394,100 +394,4 @@ int xen_blkbk_barrier(struct xenbus_transaction xbt,
- struct xenbus_device *xen_blkbk_xenbus(struct backend_info *be);
- void xen_blkbk_unmap_purged_grants(struct work_struct *work);
- 
--static inline void blkif_get_x86_32_req(struct blkif_request *dst,
--					struct blkif_x86_32_request *src)
--{
--	int i, n = BLKIF_MAX_SEGMENTS_PER_REQUEST, j;
--	dst->operation = READ_ONCE(src->operation);
--	switch (dst->operation) {
--	case BLKIF_OP_READ:
--	case BLKIF_OP_WRITE:
--	case BLKIF_OP_WRITE_BARRIER:
--	case BLKIF_OP_FLUSH_DISKCACHE:
--		dst->u.rw.nr_segments = src->u.rw.nr_segments;
--		dst->u.rw.handle = src->u.rw.handle;
--		dst->u.rw.id = src->u.rw.id;
--		dst->u.rw.sector_number = src->u.rw.sector_number;
--		barrier();
--		if (n > dst->u.rw.nr_segments)
--			n = dst->u.rw.nr_segments;
--		for (i = 0; i < n; i++)
--			dst->u.rw.seg[i] = src->u.rw.seg[i];
--		break;
--	case BLKIF_OP_DISCARD:
--		dst->u.discard.flag = src->u.discard.flag;
--		dst->u.discard.id = src->u.discard.id;
--		dst->u.discard.sector_number = src->u.discard.sector_number;
--		dst->u.discard.nr_sectors = src->u.discard.nr_sectors;
--		break;
--	case BLKIF_OP_INDIRECT:
--		dst->u.indirect.indirect_op = src->u.indirect.indirect_op;
--		dst->u.indirect.nr_segments = src->u.indirect.nr_segments;
--		dst->u.indirect.handle = src->u.indirect.handle;
--		dst->u.indirect.id = src->u.indirect.id;
--		dst->u.indirect.sector_number = src->u.indirect.sector_number;
--		barrier();
--		j = min(MAX_INDIRECT_PAGES, INDIRECT_PAGES(dst->u.indirect.nr_segments));
--		for (i = 0; i < j; i++)
--			dst->u.indirect.indirect_grefs[i] =
--				src->u.indirect.indirect_grefs[i];
--		break;
--	default:
--		/*
--		 * Don't know how to translate this op. Only get the
--		 * ID so failure can be reported to the frontend.
--		 */
--		dst->u.other.id = src->u.other.id;
--		break;
--	}
--}
--
--static inline void blkif_get_x86_64_req(struct blkif_request *dst,
--					struct blkif_x86_64_request *src)
--{
--	int i, n = BLKIF_MAX_SEGMENTS_PER_REQUEST, j;
--	dst->operation = READ_ONCE(src->operation);
--	switch (dst->operation) {
--	case BLKIF_OP_READ:
--	case BLKIF_OP_WRITE:
--	case BLKIF_OP_WRITE_BARRIER:
--	case BLKIF_OP_FLUSH_DISKCACHE:
--		dst->u.rw.nr_segments = src->u.rw.nr_segments;
--		dst->u.rw.handle = src->u.rw.handle;
--		dst->u.rw.id = src->u.rw.id;
--		dst->u.rw.sector_number = src->u.rw.sector_number;
--		barrier();
--		if (n > dst->u.rw.nr_segments)
--			n = dst->u.rw.nr_segments;
--		for (i = 0; i < n; i++)
--			dst->u.rw.seg[i] = src->u.rw.seg[i];
--		break;
--	case BLKIF_OP_DISCARD:
--		dst->u.discard.flag = src->u.discard.flag;
--		dst->u.discard.id = src->u.discard.id;
--		dst->u.discard.sector_number = src->u.discard.sector_number;
--		dst->u.discard.nr_sectors = src->u.discard.nr_sectors;
--		break;
--	case BLKIF_OP_INDIRECT:
--		dst->u.indirect.indirect_op = src->u.indirect.indirect_op;
--		dst->u.indirect.nr_segments = src->u.indirect.nr_segments;
--		dst->u.indirect.handle = src->u.indirect.handle;
--		dst->u.indirect.id = src->u.indirect.id;
--		dst->u.indirect.sector_number = src->u.indirect.sector_number;
--		barrier();
--		j = min(MAX_INDIRECT_PAGES, INDIRECT_PAGES(dst->u.indirect.nr_segments));
--		for (i = 0; i < j; i++)
--			dst->u.indirect.indirect_grefs[i] =
--				src->u.indirect.indirect_grefs[i];
--		break;
--	default:
--		/*
--		 * Don't know how to translate this op. Only get the
--		 * ID so failure can be reported to the frontend.
--		 */
--		dst->u.other.id = src->u.other.id;
--		break;
--	}
--}
--
- #endif /* __XEN_BLKIF__BACKEND__COMMON_H__ */
+ void rebuild_sched_domains_energy(void)
+ {
 -- 
-2.35.3
+2.27.0
 
