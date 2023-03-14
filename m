@@ -2,153 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89D3E6B9C03
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:46:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E0D8D6B9C07
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 17:46:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbjCNQp5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 12:45:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51802 "EHLO
+        id S230250AbjCNQqN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 12:46:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229888AbjCNQpz (ORCPT
+        with ESMTP id S229888AbjCNQqK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 12:45:55 -0400
-Received: from mail-il1-x12c.google.com (mail-il1-x12c.google.com [IPv6:2607:f8b0:4864:20::12c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80565AB8B9;
-        Tue, 14 Mar 2023 09:45:46 -0700 (PDT)
-Received: by mail-il1-x12c.google.com with SMTP id bp11so3539909ilb.3;
-        Tue, 14 Mar 2023 09:45:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678812346;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=jlTXumnsAyLju3X5wGhezp0gUrPj0Pftji9EY7hYkTE=;
-        b=IMbOhb4nSM3i5CqrZuMYQyk4mi0FlTaUhqJ10ufd3Zycg2LInMrGQEru5ClVhMfZiY
-         MBTA8wkxYs3c2KYTMoxKnrJ5Kdaoet53INo+0KJbWWMYRADfafbmB+FTNxreih/UUxFP
-         sljADlzOvgFOuWq2vKJgWRE6/WfqMDh3/2rgEloxv7hXosmfx0f7oG5pDnBP+HE83aF/
-         7QL1yXV2X8K2JtjI8IdwWJtckGXIUdEMPXKHAnfeJSzVfdVsGJdrKJ3b056R+slPWYAZ
-         ZiycbkXMVD6nIUVxupHIdiUR4K+B4czNcaiRn6zXjSxrW1ZoSF2r8ENe7PRUrZDJB9Ih
-         j9KQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678812346;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :sender:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jlTXumnsAyLju3X5wGhezp0gUrPj0Pftji9EY7hYkTE=;
-        b=Ms5boDSCwS8BxBBDSNCNolbEZUK+sNAY0vPphoB0T/3l2q61NQCGpyTyX3DrI28Ni8
-         IY++0Wtrr/4NOFjBYxKVAUHaw+OX19MZEXx4ZB/uY/Qgkgik6gmn20WEKLKUJzep/cTH
-         wUT1rXs+iFJJr7jmEpQyRm4LhGszk+PBy2rQfBzCdGyeH3GGN9IkufdGYt2IfzgBfnEK
-         fgsrDW3diNWMGPIP3pDYNgGHoObwRlW3Orx0y4VxCHCWu+b0eE7uBz5iF0bCAIuBuBo3
-         XMtXJS/rMA2lQPzNKHpZAhFAY4uo08LcvZBXPd0cSXQw8KlzsZRaG91lArGmWu21NQxH
-         ObtA==
-X-Gm-Message-State: AO0yUKX9/2r5QeEEfP2Th/ZvlYAzRwcU0RMD/4j+V5f+CdTudsls8HCe
-        ycZI0XOzZukN8lL27+uZxhc=
-X-Google-Smtp-Source: AK7set9fbVlYa4wCf6eJNIaNXA3YZoUWFsU4AD/JnVhm0i9hauk9yIMD83SJ3S82/ISaFKioIftPGQ==
-X-Received: by 2002:a05:6e02:60e:b0:318:aa8a:6455 with SMTP id t14-20020a056e02060e00b00318aa8a6455mr2655484ils.19.1678812345622;
-        Tue, 14 Mar 2023 09:45:45 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:329c:23ff:fee3:9d7c? ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id c22-20020a02c9d6000000b0040380d7c768sm903996jap.106.2023.03.14.09.45.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 09:45:45 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <4a4e0ef5-30f8-39ce-28cf-ade2122e2aa2@roeck-us.net>
-Date:   Tue, 14 Mar 2023 09:45:39 -0700
+        Tue, 14 Mar 2023 12:46:10 -0400
+Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2089.outbound.protection.outlook.com [40.107.22.89])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8FD3A42FB;
+        Tue, 14 Mar 2023 09:45:52 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=XVWevYG97wwJxb8PXrrctrJ6im++viBdNxmT8LXESC2zO2Vijw2S3LhObgGeW6bxHeshTwmW3juefEKRhOd6HWLeSCCyZHmLA7Y73KUwt8m5XDjDWsVBaF0thCNU9sO90gYGQVU81cAbpHZQXWAsvv9wUFfH8mYhls7640PpnNkP4rtchsqeoDfNNqf6zFh4kf2Zss+tpyjTflB5IPredV9PhTa0cTmVW/eWMO5ksqqEQYYZSx9GIgbgyPDoSyNRykuSLUYqKP+tx6LD+Sv+W4OEZLsdh8vAA/oTtoG519r3mWUs6/k5TIOKgj+w3uYdhubX9naCNsq4dAIG2FZisQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=zXNpWr17owU/I2AusINgnxJPhUxSiJcyNLy9SfKKiIM=;
+ b=KGMDnruw4hTGStChFk/eDzywxtMjbb5i2G5pqlnoG9U+1ikxfh9UHzjLotz2ipAPJp9oijNF06BCwnP1LTq3vsdvBB1jTuyaLATcDQ4Yv8YabsHXG6SoSjw0wqM9lG0RV/OUX23UyfbzxUxfluFlmBfG8UQVBokPRwwQnzQJ9xgtRTGHMVpE+Z35Uk6IQqSSHbpe+e2fxhcKHQyuA0dhH+CKz4Dg65+ETfMStfN0s2nkk4ZA0PA3sAHGxvGtJJUs6Cd0/JFa7JJ3IXLhzqjAkHkNF6mMNU7gc9FhxFi5tbul0js7lk1rPo3WH305siKpUJWdX6Uu28gd4BKsNlDiAw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=zXNpWr17owU/I2AusINgnxJPhUxSiJcyNLy9SfKKiIM=;
+ b=WoXjxQVeRHfVzKSO1BxX09EOLfJQ+9I7zwbJHdXGVw07zBxDA17wXMF/74JOBOuDIf3iPJL77GC4+mGtdJgS/3cVWBtdj1SxZNFJWZ3hi9l48kn1HQLvHxfjUXYXrk6ktNSqXykrw1cW7m4bCcj8hTzfAJA3tOOwhWOg+/YMBeY=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+ by PA4PR04MB8013.eurprd04.prod.outlook.com (2603:10a6:102:c4::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 16:45:50 +0000
+Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::29a3:120c:7d42:3ca8]) by AM0PR04MB6452.eurprd04.prod.outlook.com
+ ([fe80::29a3:120c:7d42:3ca8%7]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
+ 16:45:50 +0000
+Date:   Tue, 14 Mar 2023 18:45:47 +0200
+From:   Vladimir Oltean <vladimir.oltean@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+Cc:     netdev@vger.kernel.org, Heiner Kallweit <hkallweit1@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net] net: phy: mscc: fix deadlock in
+ phy_ethtool_{get,set}_wol()
+Message-ID: <20230314164547.5s55hmoeytrdevvb@skbuf>
+References: <20230314153025.2372970-1-vladimir.oltean@nxp.com>
+ <a9bfe427-4d76-44ea-9890-3b0c44ccb551@lunn.ch>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <a9bfe427-4d76-44ea-9890-3b0c44ccb551@lunn.ch>
+X-ClientProxiedBy: AM0PR02CA0167.eurprd02.prod.outlook.com
+ (2603:10a6:20b:28d::34) To AM0PR04MB6452.eurprd04.prod.outlook.com
+ (2603:10a6:208:16d::21)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH 01/28] media: cec: ch7322: drop of_match_ptr for ID table
-Content-Language: en-US
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Joe Tessler <jrt@google.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Michael Tretter <m.tretter@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Jacopo Mondi <jacopo+renesas@jmondi.org>,
-        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        =?UTF-8?Q?Niklas_S=c3=b6derlund?= 
-        <niklas.soderlund+renesas@ragnatech.se>,
-        Rui Miguel Silva <rmfrfs@gmail.com>,
-        Wenyou Yang <wenyou.yang@microchip.com>,
-        Bin Liu <bin.liu@mediatek.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Minghsiu Tsai <minghsiu.tsai@mediatek.com>,
-        Houlong Wei <houlong.wei@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Andrzej Pietrasiewicz <andrzejtp2010@gmail.com>,
-        Jacek Anaszewski <jacek.anaszewski@gmail.com>,
-        Sylwester Nawrocki <s.nawrocki@samsung.com>,
-        Patrice Chotard <patrice.chotard@foss.st.com>,
-        Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Ezequiel Garcia <ezequiel@vanguardiasur.com.ar>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Sean Young <sean@mess.org>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-tegra@vger.kernel.org,
-        linux-mediatek@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-rockchip@lists.infradead.org
-References: <20230312131318.351173-1-krzysztof.kozlowski@linaro.org>
- <b83d6b81-c4ec-4fb8-b626-84af80d1c4a3@roeck-us.net>
- <74ae8afe-c537-1714-77ec-8a80d8ddad69@xs4all.nl>
- <bafa692c-f3a3-d317-278d-2dd3b5ff8af3@linaro.org>
-From:   Guenter Roeck <linux@roeck-us.net>
-In-Reply-To: <bafa692c-f3a3-d317-278d-2dd3b5ff8af3@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
-        autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|PA4PR04MB8013:EE_
+X-MS-Office365-Filtering-Correlation-Id: 3c868de4-8811-4c2e-760e-08db24ab91a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: gKoQc4Of1JP5FaWmqRlpm3246b6Fyonw6QSMqfZdmQ0cP8NsxrT2qzpPwmRa1uHleu+dqf0EwLL1Nze2GGyHmxXuUQHQrFao6ckbRl9Ls+o6vgvr489xQaIrNP2k4mo6jP95p+hs9kD/uCJWVkNBujJUp9AHAzqTiQYs1ubKoN+fF3/qna7DyoK8EUnyfb3PIffmGmGWJ5rNvPt55npygq2E2mu8tIkJmJj0be2W1ZZPBndkQwviUvrmuYjbVtY9qHu2RLg6mhr7GBm+HtBOVnX+cdkiswbqYX4FnNbhh9ciX7laRBForoZP49jED+mzVC5l9I9z2fTYp5zl9ybew4ubbFVNV+nMEMHfS+1vyD8hfBlt4Hssjqim6mO8WFSlPe1xUDejz7k77+9ObmaPxQUrjUYY1AUFAfiBvXzpg2YNuGueZJArmjH2t7LU+MOv/xDLEYXAllQ2wxFH8J/wn7SodOOt+ceqBX6oPNtsChbkgNDEB9QmrelxzTfFiytjTvDW2kBUec6gOs95BIX8AAsjyrhmP/vn4TeCwedjPrEXQG3Gg+f3WSDlKkCCSw9LryYFKw4QwUUtbH12Yv7s0ZYRT0gI5F4LY6cSVUWxVcY9cXfak7G6N0Xyqj8CbIvJ6QMLlU/GSBXcsERkjV13rQ==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(7916004)(4636009)(39860400002)(136003)(366004)(346002)(396003)(376002)(451199018)(54906003)(316002)(86362001)(38100700002)(83380400001)(6506007)(6512007)(1076003)(26005)(9686003)(186003)(6666004)(33716001)(5660300002)(6486002)(478600001)(41300700001)(8936002)(4744005)(2906002)(4326008)(8676002)(6916009)(66556008)(66476007)(66946007)(44832011);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?Pha5bGEFmnsj3rg7ykqLVMLiGRBLSj4KnrPyHuW57z3rN+CuBt3MmgaD8/RM?=
+ =?us-ascii?Q?+M+RRq90aJbuJdESUaHqZn/VJU/fE2lVIqQpY/5idOGyf5hLlXaBs03C0CwG?=
+ =?us-ascii?Q?n9Bfy2JlT88I8RppBRg2qtt5TASEmYueG4v+Ld25m2UC6I34ZAjU4hGoNPzz?=
+ =?us-ascii?Q?3GCSM8289zimJxVL+G25THEYmmdlbbLXmEPvglfpps18kCMu6yCRng1hHta2?=
+ =?us-ascii?Q?uhU6bYaZqJtdL4Mu0ZDIAUZzcZEVdUYfTS7JgU1H0oTpSQBjJ6QvJoJY0cay?=
+ =?us-ascii?Q?F/Lh/pmwIYSflSVvT2lTAsf6dy+II5/IUe0QRmns/66cx6qPncR8GhL5WM/2?=
+ =?us-ascii?Q?BwrzBvmSqfMc4AC98KkDq7qhI7CGnyo3vF3+3rBzCoxKRSr7kgpEFbTNR+xu?=
+ =?us-ascii?Q?xdXJpr/9kAq1YTF0med4e5pTwsvlAwmsjqw5+Ui71uZS+NsnC9vC9EqlcrGs?=
+ =?us-ascii?Q?hWkCtEtunBTsP0VKukPCjcSSp4x1rxHh9IKbePf9cBa91Lr0Nl94hED+ope/?=
+ =?us-ascii?Q?czBLQVvXDiPALMcpiGb+b6sUr9nt5Jnp0E6aVZTfUDsIFKWDAw+82a0HDjE6?=
+ =?us-ascii?Q?2P4xZadbuQ+oH3qyNEOL4dPAs4Vf4jimNzZt3PmN6T0Yk8yDeC272xpTSjcz?=
+ =?us-ascii?Q?h5p4eWWZDHAN3FUCmonepx1UXhaGSWFdvWBKknK3Ru9nSsYkb9FgIrEGeWx2?=
+ =?us-ascii?Q?xP+JdE7n72XdfDIrINoE8cBt1/vC511An+YQjn/EdoDb2MNvGScicBObtZFC?=
+ =?us-ascii?Q?naHjZRde01gewuLSkQugWFIehy4PkePCv5kTrgUCAXuMmJarAMQiRLPALEsQ?=
+ =?us-ascii?Q?DkRUbGCUoB8Vx/dBcGhZIz10PQDWhjiYvFggoyoakVGFVflKN+7OfX/FqZLa?=
+ =?us-ascii?Q?iVo0Uu7in/B918gECxOosVDrKrrWNSYfHykomuoV0PSaZFQrFSceyVg/Gdg1?=
+ =?us-ascii?Q?XZvagt3Kx8Nnc7eBTApHIzKrs8Gc/M2tWEt5bUt4HlM/VCMzen0B28cIO3t6?=
+ =?us-ascii?Q?Gph7d8gUZH4x+GB0uzXPUjfr7+BfnKXP6cYM1mAcIwSqf+21AxEAsifKwi5W?=
+ =?us-ascii?Q?JwdHrpnwK7RmfpfyBHHHmWUSP6E1ugQ4feTpYlwSPl5YXTmmbwsGQ89O4xgQ?=
+ =?us-ascii?Q?1fThp2vzeaHeXyRjMX7QLkj6keE8Fp7ou1iXInHiBPccEuilkbXrkN//dI+Z?=
+ =?us-ascii?Q?ePr0hSdAJqQba3CUwYdG5X4S71aNg5Zt3DUGuWsf9N2XCh9C4NUjMTguV3/h?=
+ =?us-ascii?Q?MP5iKEhJ8ZuZNiuS/vVdtA7pkDDiFPLDjIcSB1W2cj0r4Bz8kO8CWvvR4Q4A?=
+ =?us-ascii?Q?v1s0fA9s3WipjQW31NQkjBWRENoryYd6BjoEGaybwTnwTP9g/sz+5nhu/OAY?=
+ =?us-ascii?Q?GhA5SXujzZHsIMbp+umtryLl7fAsaFeyogoCI+X54aXI6zoAEB+L4GE/Q6v8?=
+ =?us-ascii?Q?8gmM/etCYDNimCDjzROiFPyBbIpM7301x7NR6mqL6bjGmnNEzEHFXoL5b+a/?=
+ =?us-ascii?Q?W4H0rRzHUaS6gY2b0ZLkMgKIZaGKBaqQ4fub9gIBPNDPwqw0OS0rBLdv/ogV?=
+ =?us-ascii?Q?JOTUkDrlZTlKAv7Xp4DhLTOoUnMGslU4P0OwEyliusGha79jDigfJTeMj7yA?=
+ =?us-ascii?Q?Yw=3D=3D?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3c868de4-8811-4c2e-760e-08db24ab91a5
+X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 16:45:50.6167
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 9domj+MBBa8hnN2VwxmzLWz/3K188pO1HQRHbk7K/F4esdcVZV7cutkdjVjWAIuzI+n+LMx4Z8HRn7pectDkJg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR04MB8013
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 09:32, Krzysztof Kozlowski wrote:
-> On 14/03/2023 09:34, Hans Verkuil wrote:
->> On 13/03/2023 23:01, Guenter Roeck wrote:
->>> On Sun, Mar 12, 2023 at 02:12:51PM +0100, Krzysztof Kozlowski wrote:
->>>> The driver can match only via the DT table so the table should be always
->>>> used and the of_match_ptr does not have any sense (this also allows ACPI
->>>> matching via PRP0001, even though it might not be relevant here).
->>>>
->>>>    drivers/media/cec/i2c/ch7322.c:583:34: error: ‘ch7322_of_match’ defined but not used [-Werror=unused-const-variable=]
->>>>
->>>> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>>
->>> Reviewed-by: Guenter Roeck <linux@roeck-us.net>
->>>
->>> FWIW: There is also
->>> https://patches.linaro.org/project/linux-media/patch/20230215214724.3798917-1-linux@roeck-us.net/
->>
->> I superseded that patch in patchwork in favor of this patch since this is part of
->> a larger series.
-> 
-> I am personally fan of FIFO, so Guenter's patch should go in.
-> 
+On Tue, Mar 14, 2023 at 05:31:45PM +0100, Andrew Lunn wrote:
+> [Goes and checks to see if the same problem exists for other PHY drivers]
 
-FWIW, I do not care either way, I just wanted to point out that this patch
-_is_ both relevant and needed, and that it (or, rather, the original version)
-has been reviewed and tested.
+Here's a call path I am not sure how to interpret (but doesn't look like
+there's anything preventing it).
 
-Thanks,
-Guenter
-
+linkstate_get_sqi()
+-> mutex_lock(&phydev->lock)
+   -> phydev->drv->get_sqi(phydev);
+      -> lan87xx_get_sqi()
+         -> access_ereg()
+            -> lan937x_dsp_workaround()
+               -> mutex_lock(&phydev->lock);
+               -> mutex_unlock(&phydev->lock);
+-> mutex_unlock(&phydev->lock)
