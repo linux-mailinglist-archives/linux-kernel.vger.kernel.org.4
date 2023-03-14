@@ -2,515 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3CE6B918A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:22:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53DF56B918B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbjCNLW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37980 "EHLO
+        id S229926AbjCNLWo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:22:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231161AbjCNLWY (ORCPT
+        with ESMTP id S230227AbjCNLWj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:22:24 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9257B22017
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:21:55 -0700 (PDT)
-Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.55])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4PbWHG449kz17L54;
-        Tue, 14 Mar 2023 19:18:34 +0800 (CST)
-Received: from [10.67.103.158] (10.67.103.158) by
- kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 19:21:29 +0800
-Subject: Re: [PATCH v8 3/5] hisi_acc_vfio_pci: register debugfs for hisilicon
- migration driver
-From:   liulongfang <liulongfang@huawei.com>
-To:     Alex Williamson <alex.williamson@redhat.com>
-CC:     <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
-        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
-        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
-References: <20230217084831.35783-1-liulongfang@huawei.com>
- <20230217084831.35783-4-liulongfang@huawei.com>
- <20230310164016.7888a207.alex.williamson@redhat.com>
- <fbdda52e-06b4-9e74-7880-e75df5aef546@huawei.com>
-Message-ID: <d62c93da-e0c9-ddd6-3e2b-bf1a9b62058b@huawei.com>
-Date:   Tue, 14 Mar 2023 19:21:29 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 14 Mar 2023 07:22:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CBECF93E0C
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:22:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A5FBBB818EE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:22:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6616FC433A4
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 11:22:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678792921;
+        bh=WcmHdukAAWnKHyT1lmhk8rqdI01TwcKCJXLI5msFU+o=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=bkPbngrVp5gYsluTdQdfvyyYImMJfk4GJcRKyu78v3VPa/T23esLe35kAr7fPDpNy
+         ftwr5ufj5FWV/xzRKQHSGOE/sPoHR18N6O9iiahgQn8xe9bIJPeD/AZJ7THdLf89+a
+         uQnm9dae4+l1PRj4sU/vnxFF31YInmjFejde01IUIs67wPwyny3YWdNajcaOzWUhOR
+         5HCtH+mkbonjfDJ6tIZd8FG39jPiUHtNMcJeedENU/kxerYC1IO8RpltzQY1ZLJa5U
+         n14D8HWKuuPpPNTgX209MNMmPyPcn9se2VJJ0awYkvo9OOR4rSLaVbJ1OBb6PbxD4H
+         F2Z+bHRxksQmg==
+Received: by mail-pf1-f173.google.com with SMTP id n16so3334466pfa.12
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:22:01 -0700 (PDT)
+X-Gm-Message-State: AO0yUKWt3VJyr5SKDbeUp0D/95okUzM78dgAVHunhc8KG7iOr9RQSnyC
+        xUoBp0v+4E891h+HXZxhI2nadUoVFdhLTuRQApFQiA==
+X-Google-Smtp-Source: AK7set/VAfSsBsAfO1Xryc7MK9UHJ+TtCdwj7eGXE0kxOM9mZjM2PFSoEJLc5P0UJ68ciFAv8z+hs0WGeDIFE5U2kvA=
+X-Received: by 2002:a62:1d04:0:b0:623:8a88:1bba with SMTP id
+ d4-20020a621d04000000b006238a881bbamr2817951pfd.2.1678792920917; Tue, 14 Mar
+ 2023 04:22:00 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <fbdda52e-06b4-9e74-7880-e75df5aef546@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.67.103.158]
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemm600005.china.huawei.com (7.193.23.191)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20230314110043.2139111-1-treapking@chromium.org> <20230314110043.2139111-2-treapking@chromium.org>
+In-Reply-To: <20230314110043.2139111-2-treapking@chromium.org>
+From:   Robert Foss <rfoss@kernel.org>
+Date:   Tue, 14 Mar 2023 12:21:50 +0100
+X-Gmail-Original-Message-ID: <CAN6tsi5YT6Bb85GUn3+Cit=F2doh_up9nqDNQDyMUP9Ttxb09w@mail.gmail.com>
+Message-ID: <CAN6tsi5YT6Bb85GUn3+Cit=F2doh_up9nqDNQDyMUP9Ttxb09w@mail.gmail.com>
+Subject: Re: [PATCH 2/2] drm/bridge: ps8640: Add a cache for EDID
+To:     Pin-yen Lin <treapking@chromium.org>
+Cc:     Douglas Anderson <dianders@chromium.org>,
+        Andrzej Hajda <andrzej.hajda@intel.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
+        Jonas Karlman <jonas@kwiboo.se>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Enric Balletbo i Serra <enric.balletbo@collabora.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023/3/14 19:04, liulongfang wrote:
-> On 2023/3/11 7:40, Alex Williamson wrote:
->> On Fri, 17 Feb 2023 16:48:29 +0800
->> Longfang Liu <liulongfang@huawei.com> wrote:
->>
->>> On the debugfs framework of VFIO, if the CONFIG_DEBUG_FS macro is
->>> enabled, the debug function is registered for the live migration driver
->>> of the HiSilicon accelerator device.
->>>
->>> On the basis of the original public debug function, a private debug
->>> function is added:
->>>
->>> mig_data file: used to get the migration data of the live migration device
->>> mig_attr file: used to get device attributes of the live migration device
->>> debug file: used to test for acquiring and writing device state data
->>> for VF device.
->>>
->>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
->>> ---
->>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.c    | 282 ++++++++++++++++++
->>>  .../vfio/pci/hisilicon/hisi_acc_vfio_pci.h    |  11 +
->>>  2 files changed, 293 insertions(+)
->>>
->>> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->>> index a1589947e721..a0ecb1cd5707 100644
->>> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->>> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.c
->>> @@ -15,6 +15,7 @@
->>>  #include <linux/anon_inodes.h>
->>>  
->>>  #include "hisi_acc_vfio_pci.h"
->>> +#include "../../vfio.h"
->>>  
->>>  /* Return 0 on VM acc device ready, -ETIMEDOUT hardware timeout */
->>>  static int qm_wait_dev_not_ready(struct hisi_qm *qm)
->>> @@ -606,6 +607,18 @@ hisi_acc_check_int_state(struct hisi_acc_vf_core_device *hisi_acc_vdev)
->>>  	}
->>>  }
->>>  
->>> +static void hisi_acc_vf_migf_save(struct hisi_acc_vf_migration_file *src_migf,
->>> +	struct hisi_acc_vf_migration_file *dst_migf)
->>> +{
->>> +	if (!dst_migf)
->>> +		return;
->>> +
->>> +	dst_migf->disabled = false;
->>> +	dst_migf->total_length = src_migf->total_length;
->>> +	memcpy(&dst_migf->vf_data, &src_migf->vf_data,
->>> +		    sizeof(struct acc_vf_data));
->>> +}
->>> +
->>>  static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
->>>  {
->>>  	mutex_lock(&migf->lock);
->>> @@ -618,12 +631,16 @@ static void hisi_acc_vf_disable_fd(struct hisi_acc_vf_migration_file *migf)
->>>  static void hisi_acc_vf_disable_fds(struct hisi_acc_vf_core_device *hisi_acc_vdev)
->>>  {
->>>  	if (hisi_acc_vdev->resuming_migf) {
->>> +		hisi_acc_vf_migf_save(hisi_acc_vdev->resuming_migf,
->>> +						hisi_acc_vdev->debug_migf);
->>>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->resuming_migf);
->>>  		fput(hisi_acc_vdev->resuming_migf->filp);
->>>  		hisi_acc_vdev->resuming_migf = NULL;
->>>  	}
->>>  
->>>  	if (hisi_acc_vdev->saving_migf) {
->>> +		hisi_acc_vf_migf_save(hisi_acc_vdev->saving_migf,
->>> +						hisi_acc_vdev->debug_migf);
->>>  		hisi_acc_vf_disable_fd(hisi_acc_vdev->saving_migf);
->>>  		fput(hisi_acc_vdev->saving_migf->filp);
->>>  		hisi_acc_vdev->saving_migf = NULL;
->>> @@ -1303,6 +1320,265 @@ static long hisi_acc_vfio_pci_ioctl(struct vfio_device *core_vdev, unsigned int
->>>  	return vfio_pci_core_ioctl(core_vdev, cmd, arg);
->>>  }
->>>  
->>> +static int hisi_acc_vf_debug_io(struct vfio_device *vdev)
->>> +{
->>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->>> +	struct hisi_qm *vf_qm = &hisi_acc_vdev->vf_qm;
->>> +	struct device *dev = vdev->dev;
->>> +	u64 data;
->>> +	int ret;
->>> +
->>> +	ret = qm_wait_dev_not_ready(vf_qm);
->>> +	if (ret)
->>> +		dev_err(dev, "VF device not ready!\n");
->>> +
->>> +	data = readl(vf_qm->io_base + QM_MB_CMD_SEND_BASE);
->>> +	dev_info(dev, "debug mailbox val: 0x%llx\n", data);
->>> +
->>> +	return ret;
->>> +}
->>> +
->>> +static int hisi_acc_vf_debug_resume(struct vfio_device *vdev)
->>> +{
->>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
->>> +	struct device *dev = vdev->dev;
->>> +	int ret;
->>> +
->>> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
->>> +	if (ret) {
->>> +		dev_err(dev, "failed to save device data!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	ret = vf_qm_check_match(hisi_acc_vdev, migf);
->>> +	if (ret) {
->>> +		dev_err(dev, "failed to match the VF!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	ret = vf_qm_load_data(hisi_acc_vdev, migf);
->>> +	if (ret) {
->>> +		dev_err(dev, "failed to recover the VF!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	vf_qm_fun_reset(&hisi_acc_vdev->vf_qm);
->>> +	dev_info(dev, "successful to resume device data!\n");
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int hisi_acc_vf_debug_save(struct vfio_device *vdev)
->>> +{
->>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
->>> +	struct device *dev = vdev->dev;
->>> +	int ret;
->>> +
->>> +	ret = vf_qm_state_save(hisi_acc_vdev, migf);
->>> +	if (ret) {
->>> +		dev_err(dev, "failed to save device data!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +	dev_info(dev, "successful to save device data!\n");
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int
->>> +hisi_acc_vf_debug_operate(struct vfio_device *vdev, unsigned int cmd)
->>> +{
->>> +	int ret;
->>> +
->>> +	switch (cmd) {
->>> +	case STATE_SAVE:
->>> +		ret = hisi_acc_vf_debug_save(vdev);
->>> +		if (ret)
->>> +			return ret;
->>> +		break;
->>> +	case STATE_RESUME:
->>> +		ret = hisi_acc_vf_debug_resume(vdev);
->>> +		if (ret)
->>> +			return ret;
->>> +		break;
->>> +	case RW_IO_TEST:
->>> +		ret = hisi_acc_vf_debug_io(vdev);
->>> +		if (ret)
->>> +			return ret;
->>> +		break;
->>> +	default:
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int hisi_acc_vf_debug_check(struct vfio_device *vdev)
->>> +{
->>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->>> +	struct hisi_acc_vf_migration_file *migf = hisi_acc_vdev->debug_migf;
->>> +	enum vfio_device_mig_state state;
->>> +
->>> +	if (!vdev->mig_ops || !migf) {
->>> +		dev_err(vdev->dev, "device not support debugfs!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	/* If device not opened, the debugfs operation will trigger calltrace */
->>> +	(void)vdev->mig_ops->migration_get_state(vdev, &state);
->>> +	if (state == VFIO_DEVICE_STATE_ERROR ||
->>> +	    state == VFIO_DEVICE_STATE_STOP) {
->>> +		dev_err(vdev->dev, "device not opened!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static ssize_t hisi_acc_vf_debug_write(struct file *filp, const char __user *buffer,
->>> +			    size_t count, loff_t *pos)
->>> +{
->>> +	struct vfio_device	*vdev = filp->private_data;
->>> +	char tbuf[VFIO_DEV_DBG_LEN];
->>> +	unsigned long cmd;
->>> +	int len, ret;
->>> +
->>> +	if (*pos)
->>> +		return 0;
->>> +
->>> +	if (count >= VFIO_DEV_DBG_LEN)
->>> +		return -ENOSPC;
->>> +
->>> +	ret = hisi_acc_vf_debug_check(vdev);
->>> +	if (ret)
->>> +		return -EINVAL;
->>> +
->>> +	len = simple_write_to_buffer(tbuf, VFIO_DEV_DBG_LEN - 1,
->>> +					pos, buffer, count);
->>> +	if (len < 0 || len > VFIO_DEV_DBG_LEN - 1)
->>> +		return -EINVAL;
->>> +	tbuf[len] = '\0';
->>> +	if (kstrtoul(tbuf, 0, &cmd))
->>> +		return -EFAULT;
->>> +
->>> +	ret = hisi_acc_vf_debug_operate(vdev, cmd);
->>> +	if (ret) {
->>> +		dev_err(vdev->dev, "device debug test failed!\n");
->>> +		return -EINVAL;
->>> +	}
->>> +
->>> +	return count;
->>> +}
->>> +
->>> +static const struct file_operations hisi_acc_vf_debug_fops = {
->>> +	.owner = THIS_MODULE,
->>> +	.open = simple_open,
->>> +	.write = hisi_acc_vf_debug_write,
->>> +};
->>> +
->>> +static void seq_print_hex_data(struct seq_file *seq, const void *buf, size_t len)
->>> +{
->>> +#define HEX_LINE_SIZE		131
->>> +#define HEX_ROW_SIZE		16
->>> +	unsigned char linebuf[HEX_LINE_SIZE];
->>> +	int i, linelen, remaining = len;
->>> +	const u8 *ptr = buf;
->>> +
->>> +	for (i = 0; i < len; i += HEX_ROW_SIZE) {
->>> +		linelen = min(remaining, HEX_ROW_SIZE);
->>> +		remaining -= HEX_ROW_SIZE;
->>> +
->>> +		hex_dump_to_buffer(ptr + i, linelen, HEX_ROW_SIZE, 1,
->>> +					linebuf, sizeof(linebuf), false);
->>> +
->>> +		seq_printf(seq, "%s%.8x: %s\n", "Mig Data:", i, linebuf);
->>> +	}
->>> +}
->>> +
->>> +static int hisi_acc_vf_data_read(struct seq_file *seq, void *data)
->>> +{
->>> +	struct device *vf_dev = seq->private;
->>> +	struct vfio_pci_core_device *core_device = dev_get_drvdata(vf_dev);
->>> +	struct vfio_device	*vdev = &core_device->vdev;
->>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->>> +	struct hisi_acc_vf_migration_file *debug_migf = hisi_acc_vdev->debug_migf;
->>> +	size_t vf_data_sz = offsetofend(struct acc_vf_data, padding);
->>> +
->>> +	if (debug_migf && debug_migf->total_length)
->>> +		seq_print_hex_data(seq, (unsigned char *)&debug_migf->vf_data,
->>> +				vf_data_sz);
->>> +	else
->>> +		seq_printf(seq, "%s\n", "device not migrated!");
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int hisi_acc_vf_attr_read(struct seq_file *seq, void *data)
->>> +{
->>> +	struct device *vf_dev = seq->private;
->>> +	struct vfio_pci_core_device *core_device = dev_get_drvdata(vf_dev);
->>> +	struct vfio_device	*vdev = &core_device->vdev;
->>> +	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(vdev);
->>> +	struct hisi_acc_vf_migration_file *debug_migf = hisi_acc_vdev->debug_migf;
->>> +
->>> +	if (debug_migf && debug_migf->total_length) {
->>> +		seq_printf(seq,
->>> +			 "acc device:\n"
->>> +			 "device  state: %d\n"
->>> +			 "device  ready: %u\n"
->>> +			 "data    valid: %d\n"
->>> +			 "data     size: %lu\n",
->>> +			 hisi_acc_vdev->mig_state,
->>> +			 hisi_acc_vdev->vf_qm_state,
->>> +			 debug_migf->disabled,
->>> +			 debug_migf->total_length);
->>> +	} else {
->>> +		seq_printf(seq, "%s\n", "device not migrated!");
->>> +	}
->>> +
->>> +	return 0;
->>> +}
->>> +
->>> +static int hisi_acc_vfio_debug_init(struct hisi_acc_vf_core_device *hisi_acc_vdev)
->>> +{
->>> +	struct vfio_device *vdev = &hisi_acc_vdev->core_device.vdev;
->>> +	struct device *dev = vdev->dev;
->>> +	void *migf = NULL;
->>> +
->>> +	if (!debugfs_initialized())
->>> +		return 0;
->>> +
->>> +	vfio_vf_debugfs_init(vdev);
->>> +
->>> +	migf = kzalloc(sizeof(struct hisi_acc_vf_migration_file), GFP_KERNEL);
->>> +	if (!migf)
->>> +		return -ENOMEM;
->>> +
->>> +	hisi_acc_vdev->debug_migf = migf;
->>> +
->>> +	debugfs_create_devm_seqfile(dev, "migration_data", vdev->debug_root,
->>> +				  hisi_acc_vf_data_read);
->>> +	debugfs_create_devm_seqfile(dev, "migration_attr", vdev->debug_root,
->>> +				  hisi_acc_vf_attr_read);
->>> +
->>> +	debugfs_create_file("migration_debug", 0200, vdev->debug_root,
->>> +				  vdev, &hisi_acc_vf_debug_fops);
->>> +
->>
->> All of these are going to be device specific, right?  So do we really
->> want a debugfs file structure that looks like:
->>
->> vfio
->> └── migration
->>     ├── hisi_acc
->>     │   ├── attr
->>     │   ├── data
->>     │   └── debug
->>     └── state
->>
-> 
-> According to this directory structure, I also need to change.
-> 
-> Thanks
-> Longfang.
-
-If there are multiple devices participating in live migration, their current directory structure
-is like this:
-vfio
-├── hisi_acc_1
-│     ├── attr
-│     ├── data
-│     ├── debug
-│     └── state
-│
-└── hisi_acc_2
-       ├── attr
-       ├── data
-       ├── debug
-       └── state
+On Tue, Mar 14, 2023 at 12:01=E2=80=AFPM Pin-yen Lin <treapking@chromium.or=
+g> wrote:
+>
+> When there are multiple EDID reads, the bridge will be repeatedly
+> enabled and disabled. Add a cache for EDID to speed this up.
+>
+> Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+> ---
+>
+>  drivers/gpu/drm/bridge/parade-ps8640.c | 61 ++++++++++++++++----------
+>  1 file changed, 37 insertions(+), 24 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/bridge/parade-ps8640.c b/drivers/gpu/drm/bri=
+dge/parade-ps8640.c
+> index 08de501c436e..4d594be8b89c 100644
+> --- a/drivers/gpu/drm/bridge/parade-ps8640.c
+> +++ b/drivers/gpu/drm/bridge/parade-ps8640.c
+> @@ -105,6 +105,7 @@ struct ps8640 {
+>         struct gpio_desc *gpio_reset;
+>         struct gpio_desc *gpio_powerdown;
+>         struct device_link *link;
+> +       struct edid *edid;
+>         bool pre_enabled;
+>         bool need_post_hpd_delay;
+>  };
+> @@ -543,34 +544,37 @@ static struct edid *ps8640_bridge_get_edid(struct d=
+rm_bridge *bridge,
+>  {
+>         struct ps8640 *ps_bridge =3D bridge_to_ps8640(bridge);
+>         bool poweroff =3D !ps_bridge->pre_enabled;
+> -       struct edid *edid;
+>
+> -       /*
+> -        * When we end calling get_edid() triggered by an ioctl, i.e
+> -        *
+> -        *   drm_mode_getconnector (ioctl)
+> -        *     -> drm_helper_probe_single_connector_modes
+> -        *        -> drm_bridge_connector_get_modes
+> -        *           -> ps8640_bridge_get_edid
+> -        *
+> -        * We need to make sure that what we need is enabled before readi=
+ng
+> -        * EDID, for this chip, we need to do a full poweron, otherwise i=
+t will
+> -        * fail.
+> -        */
+> -       if (poweroff)
+> -               drm_atomic_bridge_chain_pre_enable(bridge, connector->sta=
+te->state);
+> +       if (!ps_bridge->edid) {
+> +               /*
+> +                * When we end calling get_edid() triggered by an ioctl, =
+i.e
+> +                *
+> +                *   drm_mode_getconnector (ioctl)
+> +                *     -> drm_helper_probe_single_connector_modes
+> +                *        -> drm_bridge_connector_get_modes
+> +                *           -> ps8640_bridge_get_edid
+> +                *
+> +                * We need to make sure that what we need is enabled befo=
+re
+> +                * reading EDID, for this chip, we need to do a full powe=
+ron,
+> +                * otherwise it will fail.
+> +                */
+> +               if (poweroff)
+> +                       drm_atomic_bridge_chain_pre_enable(bridge,
+> +                                                          connector->sta=
+te->state);
+>
+> -       edid =3D drm_get_edid(connector,
+> -                           ps_bridge->page[PAGE0_DP_CNTL]->adapter);
+> +               ps_bridge->edid =3D drm_get_edid(connector,
+> +                                              ps_bridge->page[PAGE0_DP_C=
+NTL]->adapter);
+>
+> -       /*
+> -        * If we call the get_edid() function without having enabled the =
+chip
+> -        * before, return the chip to its original power state.
+> -        */
+> -       if (poweroff)
+> -               drm_atomic_bridge_chain_post_disable(bridge, connector->s=
+tate->state);
+> +               /*
+> +                * If we call the get_edid() function without having enab=
+led the
+> +                * chip before, return the chip to its original power sta=
+te.
+> +                */
+> +               if (poweroff)
+> +                       drm_atomic_bridge_chain_post_disable(bridge,
+> +                                                            connector->s=
+tate->state);
+> +       }
+>
+> -       return edid;
+> +       return drm_edid_duplicate(ps_bridge->edid);
+>  }
+>
+>  static void ps8640_runtime_disable(void *data)
+> @@ -767,6 +771,14 @@ static int ps8640_probe(struct i2c_client *client)
+>         return ret;
+>  }
+>
+> +static void ps8640_remove(struct i2c_client *client)
+> +{
+> +       struct ps8640 *ps_bridge =3D i2c_get_clientdata(client);
+> +
+> +       kfree(ps_bridge->edid);
+> +       ps_bridge->edid =3D NULL;
+> +}
+> +
+>  static const struct of_device_id ps8640_match[] =3D {
+>         { .compatible =3D "parade,ps8640" },
+>         { }
+> @@ -775,6 +787,7 @@ MODULE_DEVICE_TABLE(of, ps8640_match);
+>
+>  static struct i2c_driver ps8640_driver =3D {
+>         .probe_new =3D ps8640_probe,
+> +       .remove =3D ps8640_remove,
+>         .driver =3D {
+>                 .name =3D "ps8640",
+>                 .of_match_table =3D ps8640_match,
+> --
+> 2.40.0.rc1.284.g88254d51c5-goog
+>
 
 
-If you want to change to the above directory structure, which directory should the
-‘state’ file be placed in the case of multiple devices?
-vfio
- └─ migration
-     ├── hisi_acc
-     │     ├── attr
-     │     ├── data
-     │     └── debug
-     └── state
-
-Like this or other directory structure?
-vfio
-└─ migration
-    ├── hisi_acc_1
-    │     ├── attr
-    │     ├── data
-    │     └── debug
-    ├── hisi_acc_2
-    │     ├── attr
-    │     ├── data
-    │     └── debug
-    └── state
-	   ├── hisi_acc_1
-	   └── hisi_acc_2
-
-Thanks，
-Longfang.
-
->> Thanks,
->> Alex
->>
->>> +	return 0;
->>> +}
->>> +
->>> +static void hisi_acc_vf_debugfs_exit(struct hisi_acc_vf_core_device *hisi_acc_vdev)
->>> +{
->>> +	struct vfio_device *vdev = &hisi_acc_vdev->core_device.vdev;
->>> +
->>> +	if (!debugfs_initialized())
->>> +		return;
->>> +
->>> +	vfio_vf_debugfs_exit(vdev);
->>> +	kfree(hisi_acc_vdev->debug_migf);
->>> +}
->>> +
->>>  static int hisi_acc_vfio_pci_open_device(struct vfio_device *core_vdev)
->>>  {
->>>  	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_get_vf_dev(core_vdev);
->>> @@ -1416,6 +1692,9 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
->>>  	if (IS_ERR(hisi_acc_vdev))
->>>  		return PTR_ERR(hisi_acc_vdev);
->>>  
->>> +	if (ops == &hisi_acc_vfio_pci_migrn_ops)
->>> +		hisi_acc_vfio_debug_init(hisi_acc_vdev);
->>> +
->>>  	dev_set_drvdata(&pdev->dev, &hisi_acc_vdev->core_device);
->>>  	ret = vfio_pci_core_register_device(&hisi_acc_vdev->core_device);
->>>  	if (ret)
->>> @@ -1423,6 +1702,8 @@ static int hisi_acc_vfio_pci_probe(struct pci_dev *pdev, const struct pci_device
->>>  	return 0;
->>>  
->>>  out_put_vdev:
->>> +	if (ops == &hisi_acc_vfio_pci_migrn_ops)
->>> +		hisi_acc_vf_debugfs_exit(hisi_acc_vdev);
->>>  	vfio_put_device(&hisi_acc_vdev->core_device.vdev);
->>>  	return ret;
->>>  }
->>> @@ -1431,6 +1712,7 @@ static void hisi_acc_vfio_pci_remove(struct pci_dev *pdev)
->>>  {
->>>  	struct hisi_acc_vf_core_device *hisi_acc_vdev = hisi_acc_drvdata(pdev);
->>>  
->>> +	hisi_acc_vf_debugfs_exit(hisi_acc_vdev);
->>>  	vfio_pci_core_unregister_device(&hisi_acc_vdev->core_device);
->>>  	vfio_put_device(&hisi_acc_vdev->core_device.vdev);
->>>  }
->>> diff --git a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
->>> index dcabfeec6ca1..ef50b12f018d 100644
->>> --- a/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
->>> +++ b/drivers/vfio/pci/hisilicon/hisi_acc_vfio_pci.h
->>> @@ -49,6 +49,14 @@
->>>  #define QM_EQC_DW0		0X8000
->>>  #define QM_AEQC_DW0		0X8020
->>>  
->>> +#define VFIO_DEV_DBG_LEN		256
->>> +
->>> +enum mig_debug_cmd {
->>> +	STATE_SAVE,
->>> +	STATE_RESUME,
->>> +	RW_IO_TEST,
->>> +};
->>> +
->>>  struct acc_vf_data {
->>>  #define QM_MATCH_SIZE offsetofend(struct acc_vf_data, qm_rsv_state)
->>>  	/* QM match information */
->>> @@ -113,5 +121,8 @@ struct hisi_acc_vf_core_device {
->>>  	spinlock_t reset_lock;
->>>  	struct hisi_acc_vf_migration_file *resuming_migf;
->>>  	struct hisi_acc_vf_migration_file *saving_migf;
->>> +
->>> +	/* For debugfs */
->>> +	struct hisi_acc_vf_migration_file *debug_migf;
->>>  };
->>>  #endif /* HISI_ACC_VFIO_PCI_H */
->>
->> .
->>
+Reviewed-by: Robert Foss <rfoss@kernel.org>
