@@ -2,122 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5943C6B9400
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:38:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07F606B941E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:40:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbjCNMiN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:38:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47248 "EHLO
+        id S231303AbjCNMkt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:40:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55386 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230270AbjCNMiJ (ORCPT
+        with ESMTP id S231405AbjCNMki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:38:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6DF0D509
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:36:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678797350;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=ZoLxBS4sCcddIB4Qt1Fu55N4ue8UhWhYQjCpsRyp28w=;
-        b=TNkkZb0BQqiqtLRayyeeCkCca1KtR/N59JjSk9zWeKI1Ebf+evAhJbWYBi7Auxf1jD8AAG
-        G6afFrPqpyLwSfO28HyRhaB5Np7sPrXQJLiN2+8i0eLEeKl38UUVTOvuhJBEdZ5y7AGGXB
-        gIFROQQfImIU4BjU8+fvNZ4XMbuMubk=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-664-WnSoYnekPFO02XgVBCawag-1; Tue, 14 Mar 2023 08:35:45 -0400
-X-MC-Unique: WnSoYnekPFO02XgVBCawag-1
-Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AA5963855562;
-        Tue, 14 Mar 2023 12:35:44 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8B02C400F4F;
-        Tue, 14 Mar 2023 12:35:44 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     bgardon@google.com
-Subject: [PATCH] KVM: selftests: skip hugetlb tests if huge pages are not available
-Date:   Tue, 14 Mar 2023 08:35:44 -0400
-Message-Id: <20230314123544.3050347-1-pbonzini@redhat.com>
+        Tue, 14 Mar 2023 08:40:38 -0400
+Received: from sipsolutions.net (s3.sipsolutions.net [IPv6:2a01:4f8:191:4433::2])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04C4596C0A;
+        Tue, 14 Mar 2023 05:40:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
+        Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+        :Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
+        Resent-Cc:Resent-Message-ID; bh=pOg2+UYpTygnBlX1RyGCO9nWu9fsmXuoawMaiLoDXLo=;
+        t=1678797615; x=1680007215; b=JDfeqyz66j/1OSlkRo7oEl8L1nvxvq6BodO72FGLa+QNkVX
+        aHBXuz/sE64+EN/m3XGIVLLNuEsNf/YmmnF40dDsKpcC66Pdm5L5rRE7WIKYkeP9pydbwIS+MV3Cz
+        TkaKWzppMgeSjoK+de2gH5lIsLKEjP61kBEAw0v+gqLL2FUOkjeL45cduFXpAb9jhQpzmMR86WWbW
+        mhTa1koli65WDXs/25LuQ1O082uNBWPKZD/KrpQyI7p/3OdOudSYEso0DaNATgxC+wzxMWw5BI3dA
+        Y0DUmQgocQiDrndOG3IhH6cdOx2EYurOW0+mcI+Hn/uegCUYHxyPECaw/pcUTJYA==;
+Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.96)
+        (envelope-from <johannes@sipsolutions.net>)
+        id 1pc3uU-003AIF-1Y;
+        Tue, 14 Mar 2023 13:37:46 +0100
+Message-ID: <21a828bae06b97b8ca806a6b76d867902b1e0e1f.camel@sipsolutions.net>
+Subject: Re: [PATCH v3 01/38] Kconfig: introduce HAS_IOPORT option and
+ select it as necessary
+From:   Johannes Berg <johannes@sipsolutions.net>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-ia64@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+        linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org
+Date:   Tue, 14 Mar 2023 13:37:43 +0100
+In-Reply-To: <20230314121216.413434-2-schnelle@linux.ibm.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+         <20230314121216.413434-2-schnelle@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4 (3.46.4-1.fc37) 
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-malware-bazaar: not-scanned
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Right now, if KVM memory stress tests are run with hugetlb sources but hugetlb is
-not available (either in the kernel or because /proc/sys/vm/nr_hugepages is 0)
-the test will fail with a memory allocation error.
+On Tue, 2023-03-14 at 13:11 +0100, Niklas Schnelle wrote:
+> --- a/arch/um/Kconfig
+> +++ b/arch/um/Kconfig
+> @@ -56,6 +56,7 @@ config NO_IOPORT_MAP
+> =20
+>  config ISA
+>  	bool
+> +	depends on HAS_IOPORT
+>=20
 
-This makes it impossible to add tests that default to hugetlb-backed memory,
-because on a machine with a default configuration they will fail.  Therefore,
-check HugePages_Total as well and, if zero, direct the user to enable hugepages
-in procfs.  Furthermore, return KSFT_SKIP whenever hugetlb is not available.
+config ISA here is already unselectable, and nothing ever does "select
+ISA" (only in some other architectures), so is there much point in this?
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- tools/testing/selftests/kvm/lib/test_util.c | 25 +++++++++++++--------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+I'm not even sure why this exists at all.
 
-diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-index 5c22fa4c2825..b772193f6c18 100644
---- a/tools/testing/selftests/kvm/lib/test_util.c
-+++ b/tools/testing/selftests/kvm/lib/test_util.c
-@@ -165,26 +165,33 @@ size_t get_trans_hugepagesz(void)
- size_t get_def_hugetlb_pagesz(void)
- {
- 	char buf[64];
--	const char *tag = "Hugepagesize:";
-+	const char *hugepagesize = "Hugepagesize:";
-+	const char *hugepages_total = "HugePages_Total:";
- 	FILE *f;
- 
- 	f = fopen("/proc/meminfo", "r");
- 	TEST_ASSERT(f != NULL, "Error in opening /proc/meminfo");
- 
- 	while (fgets(buf, sizeof(buf), f) != NULL) {
--		if (strstr(buf, tag) == buf) {
-+		if (strstr(buf, hugepages_total) == buf) {
-+			unsigned long long total = strtoull(buf + strlen(hugepages_total), NULL, 10);
-+			if (!total) {
-+				fprintf(stderr, "HUGETLB is not enabled in /proc/sys/vm/nr_hugepages\n");
-+				exit(KSFT_SKIP);
-+			}
-+		}
-+		if (strstr(buf, hugepagesize) == buf) {
- 			fclose(f);
--			return strtoull(buf + strlen(tag), NULL, 10) << 10;
-+			return strtoull(buf + strlen(hugepagesize), NULL, 10) << 10;
- 		}
- 	}
- 
--	if (feof(f))
--		TEST_FAIL("HUGETLB is not configured in host kernel");
--	else
--		TEST_FAIL("Error in reading /proc/meminfo");
-+	if (feof(f)) {
-+		fprintf(stderr, "HUGETLB is not configured in host kernel");
-+		exit(KSFT_SKIP);
-+	}
- 
--	fclose(f);
--	return 0;
-+	TEST_FAIL("Error in reading /proc/meminfo");
- }
- 
- #define ANON_FLAGS	(MAP_PRIVATE | MAP_ANONYMOUS)
--- 
-2.39.1
+But anyway, adding a dependency to a always-false symbol doesn't make it
+less always-false :-)
 
+Acked-by: Johannes Berg <johannes@sipsolutions.net> # for ARCH=3Dum
+
+
+Certainly will be nice to get rid of this cruft for architectures that
+don't have it.
+
+johannes
