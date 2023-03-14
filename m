@@ -2,392 +2,235 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A71A6B9955
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:33:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9A2DD6B995E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:34:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231384AbjCNPdJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:33:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
+        id S231735AbjCNPec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231395AbjCNPcx (ORCPT
+        with ESMTP id S231733AbjCNPeN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:32:53 -0400
-Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 23265AD01A
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:32:25 -0700 (PDT)
-Received: by mail-wm1-x32a.google.com with SMTP id bh21-20020a05600c3d1500b003ed1ff06fb0so5029137wmb.3
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 08:32:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678807942;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=x43u9+/Ub35W3eDMQoxdhHRe2cnY3yrYkbRxkLEaov0=;
-        b=LCTyxE4j1HKxIAOQALXqOoDkYHvAHz7Bmw8Amc1d5GbUCYfLdRhmzYm4CcNhnFbowh
-         ioj+CxAdWC7uomKnKMl1VKPL28OQbccrxY/wgBxC9qHdyvLDZD1+tbk9/GbiQp9mr8Qo
-         rb5SIm2e0DRG8JsxXVBOag1vEcA/HGtH5uBYUp5rt1FbdoUL1wJ0PFRoI4xrdHyjvY6c
-         lE+f04hr52wCS/yGPbcZcYKrEiewBOk/MCf9txWqU9m72QQ2jSdPw8JZ7W1CPwZ/rJfu
-         gsP2Q2R1w+8JWvdwv+T0TviHp9bv3QYjandrzqTeP4tcaywxKkEvOdbH7nUUnPJXbkUl
-         duPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678807942;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=x43u9+/Ub35W3eDMQoxdhHRe2cnY3yrYkbRxkLEaov0=;
-        b=Yw9bxywpP5N4rw4bQdVGMMJ+ihQZRFXu+oHdRurn/6sVAXu8NnxNOXDfh+QO9+LTpB
-         dx06/7R9LC8oea86v5fKsceIkIHLZZXx9Qj1VddBFsBUj20xrbWe8k+kGcIXoGkRoD31
-         DJ5RkVJYmheIv8i7A4zIbGBnnyuig6P0/XTMyT+RLFJdfV1S94vDqs7kQ70vmuAtxIcr
-         UVHiNh6U7V7lBnP3JOGN/HMDv3G1TZREcNQRqWBMa5iIywoLycLrYGK7UPmoobSIrzbR
-         OwTBMyTGNLD4ADhVIh4AsoM2EYaXqnJR1q6ouJZQdCbEFE+zb/ebF5Z2W4ixn/BU52R4
-         R5rg==
-X-Gm-Message-State: AO0yUKUuwQoAL4u+t1MKv0dqCh/1ce0bpYh4DCJO4w7Bq0yh7xCHNNuV
-        BsGo/R/fyms9cGTRBsaDsfoW5d/HDg7i3J9Z0O8=
-X-Google-Smtp-Source: AK7set+SGbYN3sKO09DKlD3m1Z/fC1GK1MGWOA8sGcwJQOr/N4qnP9INYEu3jt5Lt4wSQ4Co3UaeDg==
-X-Received: by 2002:a05:600c:3591:b0:3e2:1dac:b071 with SMTP id p17-20020a05600c359100b003e21dacb071mr12003468wmq.13.1678807941922;
-        Tue, 14 Mar 2023 08:32:21 -0700 (PDT)
-Received: from vingu-book ([2a01:e0a:f:6020:8f82:fea:65c7:426f])
-        by smtp.gmail.com with ESMTPSA id h9-20020a1ccc09000000b003ed1f111fdesm3030159wmb.20.2023.03.14.08.32.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 08:32:21 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 16:32:19 +0100
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-To:     Zhang Qiao <zhangqiao22@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com, rkagan@amazon.de,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-Message-ID: <ZBCTg/dGAIRsldHU@vingu-book>
-References: <20230309142825.GB273121@hirez.programming.kicks-ass.net>
- <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
- <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
- <ZAs+zV0o9ShO7nLT@vingu-book>
- <ef2f07f1-fe3a-624f-52e7-1089138dc137@huawei.com>
- <CAKfTPtBaBdxfc9uoViNT8gsWU-GdgnHrDdWPpAduadTFmu1ZGg@mail.gmail.com>
- <55754a59-a01f-206a-43f6-d07ea37300dd@huawei.com>
- <CAKfTPtCCQ0__kz8UfaSm7qrpOQc47rPheD+KLoyBAbmp_tLP0w@mail.gmail.com>
- <3f43273a-5b73-0a44-a452-8a8427bb9ff2@huawei.com>
- <CAKfTPtD7g5JKDAbob0pPS8EPsHGZhjrE+JEuiEmj19moFbY1HQ@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Tue, 14 Mar 2023 11:34:13 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2049.outbound.protection.outlook.com [40.107.94.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F1219112;
+        Tue, 14 Mar 2023 08:33:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Pz/bzjD8swLWOCByB4iQorrAj8yDbJUIPSx/qov7C/cDjV1xS7BwxV4ZS2tq7tNBJ1IKfRTvK6b1hiaTt9quQfj7Xz2xbWROKPs1QzXLyfuTzDytUmIkIngQvTmyKJJH40i3UAcai2m5wYMJm+4yGEfLOdGaLtUKOlGjev9hlHo3gxdzKTtGSaGcl31B4n2qZL9qBwwWsm+lELJpdm4L3pz8ipAANdVKI8WILGjhzTsIYAMFEYdKVWTYMeOM0UBdtaToEtZ9QhDXhD4Xf9DPcKBPL97b8W4FFIOuay5dHxo+L/OhZlusm857/rmPT39s+j/Ig0eDDbEzy4AWK2+4mQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=td0zIlqL7ArQhsgOdbcIqzBidI++4ILPzBAytnV8TOc=;
+ b=UIp1hNyjDR7xDXzZ+rvtggvmTrUn08t+1sWKSDUHQYw6Nv8LnEmXyoTDCYTAo6EsISm4Ndy1SwUZyCsngGOL2wg0UgFKMCTcy+PqQojIiKMpV1RxktH4EsJo+NTxKnMrMWTkxh6XOwJr+xRPY29/5c8oO6hoSZ1Zs79IqQRCFs3PiR1O5BPzhJnMEcRPa7fI3M+BLTsoVQiE1MhofI7Lss98vOQQEGVaBr1+tO+mYMKNCuZlBk8IA1IE825BUS1aft4BHarkr62X0lymoS4fQON0nWyD/vsKzO8ZgaST7dxcibo2HXp5NU5VupKqmYuZm+V9k1+RuKRUOYHyl+TmcQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=td0zIlqL7ArQhsgOdbcIqzBidI++4ILPzBAytnV8TOc=;
+ b=1z0i0oNUdcPVdbFO4PArgcVLHe/nF7S6UDpx/WPfuy/s5mkKqNSj7Yw0HuGXetXtBLS8ub6ashw1YY4bthpW17uipnSQ8lRBEqByk1fNuNRhrVJDhU3z+ISd4hLJ84TZlNgSSkLFSRyHkglh6DB36VSwhEdmeM3ExNEJUgjyPeo=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com (2603:10b6:408:43::13)
+ by CH0PR12MB5106.namprd12.prod.outlook.com (2603:10b6:610:bd::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
+ 2023 15:33:11 +0000
+Received: from BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918]) by BN8PR12MB3587.namprd12.prod.outlook.com
+ ([fe80::d23f:bb1:df95:3918%4]) with mapi id 15.20.6178.024; Tue, 14 Mar 2023
+ 15:33:11 +0000
+Message-ID: <2d4c10c7-6406-7458-4f52-4260b415874e@amd.com>
+Date:   Tue, 14 Mar 2023 16:33:03 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.7.1
+Subject: Re: [RFC 01/10] drm: Track clients by tgid and not tid
+Content-Language: en-US
+To:     Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org
+Cc:     cgroups@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tejun Heo <tj@kernel.org>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Zefan Li <lizefan.x@bytedance.com>,
+        Dave Airlie <airlied@redhat.com>,
+        Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Rob Clark <robdclark@chromium.org>,
+        =?UTF-8?Q?St=c3=a9phane_Marchesin?= <marcheu@chromium.org>,
+        "T . J . Mercier" <tjmercier@google.com>, Kenny.Ho@amd.com,
+        Brian Welty <brian.welty@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@intel.com>,
+        Zack Rusin <zackr@vmware.com>,
+        linux-graphics-maintainer@vmware.com,
+        Alex Deucher <alexander.deucher@amd.com>
+References: <20230314141904.1210824-1-tvrtko.ursulin@linux.intel.com>
+ <20230314141904.1210824-2-tvrtko.ursulin@linux.intel.com>
+From:   =?UTF-8?Q?Christian_K=c3=b6nig?= <christian.koenig@amd.com>
+In-Reply-To: <20230314141904.1210824-2-tvrtko.ursulin@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAKfTPtD7g5JKDAbob0pPS8EPsHGZhjrE+JEuiEmj19moFbY1HQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DIET_1,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: FR3P281CA0132.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:d10:94::12) To BN8PR12MB3587.namprd12.prod.outlook.com
+ (2603:10b6:408:43::13)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8PR12MB3587:EE_|CH0PR12MB5106:EE_
+X-MS-Office365-Filtering-Correlation-Id: db5a78d4-2da1-49ad-5983-08db24a16b04
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: UHj9diJ4o82q+sjutEV80+S2+JjXlzYnXJdJBtUympYZLtW5AuYphtZJ0MQYuMox5E6jzxIp7/vpZoxQ/O4dCBj3lAjo95PMcunmERv+5b7hmu/VVzGWb+q91eDjxSeAarkFtH6GdpQv5+ltWDTdOQskzu4JD7bTSkB1Ke4e4GY3va9bv7pN+rsao23Qq8HYqaH8Hfv++Lx+KKQApQzBaH8c3NafZiZtDdqTs6vALe+zPh/p3m2EtFeafFplV3kzZj563DvPhiOSPXsBtYjDne/IwvwX/8rrz9KaFh2O1WvJlW1Y2rMzIXeYjC3wn9Gmcklnqe197+/O4KjVm41x95p02cZNFQGo1r3kMHAlEWTHzdK9dQJsFGnCvUhh4DQ6kmMYIGLDE7vRUs+V7n+01HGARtw4dhjsab4gBdtVE3K+hcCaZagWSwo0bQ/6tQAvJ6J42bK154e/R9s2UTsamRvcMuLOKyWKuqN55x+wxD2ENwcwZRJaEVPpbVOJb8c5IUo9VVvrpOHJ9D9cVgotLOYpWErvRP8A9LR6gct0Q5AKCAYys5yy6rXyy7h0iym223QjWLNyJ1naFLIJ0QLExaUn1Rtx+f0g5x7iTgqNkO1sjGcQbRx3/8AviT6w/hRiVzbfuqcxniKh9/N3ohLj6luK5UJs02jMg01oW0jhZtTgCg+UuN6TELBJwaviYp9XDuGRF0paKBestA8xEK3rcJFo7ZSMK4TSs9FNfYf/HYM=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN8PR12MB3587.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(136003)(366004)(39860400002)(396003)(376002)(346002)(451199018)(86362001)(66556008)(8676002)(66476007)(41300700001)(4326008)(66946007)(5660300002)(7416002)(83380400001)(8936002)(6486002)(186003)(66574015)(6666004)(6506007)(6512007)(54906003)(2616005)(316002)(478600001)(36756003)(2906002)(38100700002)(31686004)(31696002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?YVR1NW85clp1LzJqUGVCcWpZamt6OXNWejFMbGVkYjdySFViTFdGK0N5Ty90?=
+ =?utf-8?B?a055dGNNaVpHQ1FFa0xicTR3dENUeGRMSm5sWmY1ckprZUg1M1B4aUU5L1Rr?=
+ =?utf-8?B?YmoyN3FLSzFrT0wyKzFCU3B5WkxVYU82U3JPNUhVZFc1S2tmMnZ2V3RqTDBR?=
+ =?utf-8?B?Z0w2Y1VNLzFqWnlLY253bnF0ZW9vR2lOTG80M253OGdTWDdIQU5FWHpVWEUr?=
+ =?utf-8?B?Z1dhSUYyVytDZDNLWmhpTDhvakRWWjhmRVc4SHdZOGQ2QzdCMy9yMC9nMjJx?=
+ =?utf-8?B?SVZTK01NNzgrVzZvVEhmS0c3Z2NGZnphNWtibXI3Z0tYYzVzTjVrYTVHWlRu?=
+ =?utf-8?B?a1NGR24zeU9WaEVCRHdqNkRuWTJXd1F3SFlkWlhER0NBRHZoNE9CVlJDL0gx?=
+ =?utf-8?B?Y0htUlVlZk5IeVp6NGphNGV3SHp3eVo1eHllU3U4WkFIR3ZWY2l2bGRXbThk?=
+ =?utf-8?B?cnlpYm9MRFowNDlKYllxVlE0K012MmxhUHVmNFp2dnNMWDNxOU1NUTNUSFhK?=
+ =?utf-8?B?Q3I2N2xDbVREaTk2MTVvTGIvK1B6K0dCWm14MGw3VURINUpHdnRPQnE1WUZL?=
+ =?utf-8?B?YWpQL212dzhlT3czd05BeEllRkJhM05ZMWEvMUZLSFpFSmN5ckhFaVhSa3Rl?=
+ =?utf-8?B?MjRobElvd1d3U2JLbmp2cTc2YjVXcXpUOWtpQW1vakwwNnAwNFFPVkN2RUFB?=
+ =?utf-8?B?WkRCSHUyc09hV2dqcVg1ZUtVckNka3NhRWpnNnR1WU5zWmhNeklBeDZodnc4?=
+ =?utf-8?B?SExXcU1iazkvNnJzRFJXa0Rwb09Yc2FicHplZy8wT3hpSTV2b0ZZYndRY2dp?=
+ =?utf-8?B?SGJTOTRocXdoeElZaG8xb01UTkE0cjJVTDdZeHZwTENlS1NNOURoUTdyRks3?=
+ =?utf-8?B?UEpEV3QwTm9hRjZrblhNVzRyN1F0enBWazduendMV0VkQVFmcitkOHEwUThx?=
+ =?utf-8?B?Rld1OWhFYXJhVENBV1B1TUtWVW1wSGFmbGhJWWNXTzBiLzdmQlM2WXcvRGk1?=
+ =?utf-8?B?Qzk4cWpoN2RUT2ZoMGZ1UVFoc1FmMGZEMGJ3QUJmd1pQS3hKS0MzMWk0QUov?=
+ =?utf-8?B?QUhOZjY5Y2VpWWFSSjd6MFVyU2JZVUh5SmxoVDdMSzQ2RStIQmFkWGx2eHAy?=
+ =?utf-8?B?SFJrcmZEVGRaRUt3ZlQxTVlLZXIzMVBFcklmbDdMNk1nQlJuWVhNQWdVRlVW?=
+ =?utf-8?B?QWpzMVBQKzhZd05BS2RyVC8zc1RtdmwxMXlCZUFQMTFxNStpaE5BUnBrTUZ5?=
+ =?utf-8?B?cHJ2RFVwOE0zV29Yc3JteG0vb21jd3U1dFlxeFh0VzVvRzNxeUQ5OGppbW44?=
+ =?utf-8?B?WGVJNkxPSjY2aWMwUFN6d041eUpWS0JZZWlhN0JGMTNpdlU1QWFrSHM0dzBD?=
+ =?utf-8?B?cno0b0cwdEQza3dsSHJlTlNLcExkaHdRelJkOFNVaVpMSTBpSHI3YTUwYVFy?=
+ =?utf-8?B?MmdVcEFISStKdFdBREFKakZxNDZnWmp0UWc1TmtyL1NtWGdHRlF5aHlsenJT?=
+ =?utf-8?B?QkhYOWdhRjA1V3RUSTlPRERKNWh4Nm1FcHlHa045YzhXcmFpSmFNcE9KL1dF?=
+ =?utf-8?B?UmJqQTl2VkFISFdwcGF1Q1ovdGJwcU5tZ3l2Z08wN2NZV2dVTWhhR2tzbWRw?=
+ =?utf-8?B?V3VMaU1YR0NIOTNQUWdPNDZZSzlKcUxpV3ErMjNWdHZMRlJqdVlhME1zU1JC?=
+ =?utf-8?B?eDVjMER3eVZlbUJ6cU5DOWkyQyt0Y2RWWlBtcGZOWjdVR1NNQnF6WXA1c0xF?=
+ =?utf-8?B?WTgyc1ZJY0VZSlhFbWdJQVN5eHJNM2E3SE9rN2RkNFZGQlQ3ZzR0bGJ2ZzF3?=
+ =?utf-8?B?RytZNnk1NDgvZWt6Qysxczl0RmxtVzRBR3A1RDlKNXN3cUtHMmxOeEFNWm8r?=
+ =?utf-8?B?L3VEeGJ0dmJaYnVUdnBQU2xibTVmazdiOVVpVGNLVS9XeWtHbU0vYWpFYjds?=
+ =?utf-8?B?ejZPVCtYRzhjQm1iMmdmM29LS1JKbXhZWnlVNlRzRUdxQkcwNVM5NDd2eWhp?=
+ =?utf-8?B?ajB4T08yWFlvNFhvU09mUnF3bVN6TWRyVWhoaE53RklrcXRFZU54YTE4RGdn?=
+ =?utf-8?B?aUxkSElrcWRNS1oveEdFNXdDN0Z6cU5PeEU3SGVkVDZaQXRTUCtOcW1LcGdK?=
+ =?utf-8?B?WU1sNUxsUS9zdGdVTitkSFBOWm5XWXJ5ajNYcW1oa0FJWWtqc1ZkRnc1clY1?=
+ =?utf-8?Q?Bxe0YMjGfrTTig2sBoFLTexLgke5yvz/PT+VMs2LAY2c?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: db5a78d4-2da1-49ad-5983-08db24a16b04
+X-MS-Exchange-CrossTenant-AuthSource: BN8PR12MB3587.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:33:10.8401
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /6yZO23EDwmO7yosF4U+c17SuMPqOeU/zDnBidR/hq+hbOdsnem/mYSQION+Xo0M
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR12MB5106
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le mardi 14 mars 2023 à 14:39:49 (+0100), Vincent Guittot a écrit :
-> On Tue, 14 Mar 2023 at 14:38, Zhang Qiao <zhangqiao22@huawei.com> wrote:
-> >
-> >
-> >
-> > 在 2023/3/14 21:26, Vincent Guittot 写道:
-> > > On Tue, 14 Mar 2023 at 12:03, Zhang Qiao <zhangqiao22@huawei.com> wrote:
-> > >>
-> > >>
-> > >>
-> > >> 在 2023/3/13 22:23, Vincent Guittot 写道:
-> > >>> On Sat, 11 Mar 2023 at 10:57, Zhang Qiao <zhangqiao22@huawei.com> wrote:
-> > >>>>
-> > >>>>
-> > >>>>
-> > >>>> 在 2023/3/10 22:29, Vincent Guittot 写道:
-> > >>>>> Le jeudi 09 mars 2023 à 16:14:38 (+0100), Vincent Guittot a écrit :
-> > >>>>>> On Thu, 9 Mar 2023 at 15:37, Peter Zijlstra <peterz@infradead.org> wrote:
-> > >>>>>>>
-> > >>>>>>> On Thu, Mar 09, 2023 at 03:28:25PM +0100, Peter Zijlstra wrote:
-> > >>>>>>>> On Thu, Mar 09, 2023 at 02:34:05PM +0100, Vincent Guittot wrote:
-> > >>>>>>>>
-> > >>>>>>>>> Then, even if we don't clear exec_start before migrating and keep
-> > >>>>>>>>> current value to be used in place_entity on the new cpu, we can't
-> > >>>>>>>>> compare the rq_clock_task(rq_of(cfs_rq)) of 2 different rqs AFAICT
-> > >>>>>>>>
-> > >>>>>>>> Blergh -- indeed, irq and steal time can skew them between CPUs :/
-> > >>>>>>>> I suppose we can fudge that... wait_start (which is basically what we're
-> > >>>>>>>> making it do) also does that IIRC.
-> > >>>>>>>>
-> > >>>>>>>> I really dislike having this placement muck spreadout like proposed.
-> > >>>>>>>
-> > >>>>>>> Also, I think we might be over-engineering this, we don't care about
-> > >>>>>>> accuracy at all, all we really care about is 'long-time'.
-> > >>>>>>
-> > >>>>>> you mean taking the patch 1/2 that you mentioned here to add a
-> > >>>>>> migrated field:
-> > >>>>>> https://lore.kernel.org/all/68832dfbb60fda030540b5f4e39c5801942689b1.1648228023.git.tim.c.chen@linux.intel.com/T/#ma5637eb8010f3f4a4abff778af8db705429d003b
-> > >>>>>>
-> > >>>>>> And assume that the divergence between the rq_clock_task() can be ignored ?
-> > >>>>>>
-> > >>>>>> That could probably work but we need to replace the (60LL *
-> > >>>>>> NSEC_PER_SEC) by ((1ULL << 63) / NICE_0_LOAD) because 60sec divergence
-> > >>>>>> would not be unrealistic.
-> > >>>>>> and a comment to explain why it's acceptable
-> > >>>>>
-> > >>>>> Zhang,
-> > >>>>>
-> > >>>>> Could you try the patch below ?
-> > >>>>> This is a rebase/merge/update of:
-> > >>>>> -patch 1/2 above and
-> > >>>>> -https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
-> > >>>>
-> > >>>>
-> > >>>> I applyed and tested this patch, and it make hackbench slower.
-> > >>>> According to my previous test results. The good result is 82.1(s).
-> > >>>> But the result of this patch is 108.725(s).
-> > >>>
-> > >>> By "the result of this patch is 108.725(s)",  you mean the result of
-> > >>> https://lore.kernel.org/lkml/20230209193107.1432770-1-rkagan@amazon.de/
-> > >>> alone, don't you ?
-> > >>
-> > >> No, with your patch, the test results is 108.725(s),
-> > >
-> > > Ok
-> > >
-> > >>
-> > >> git diff:
-> > >>
-> > >> diff --git a/include/linux/sched.h b/include/linux/sched.h
-> > >> index 63d242164b1a..93a3909ae4c4 100644
-> > >> --- a/include/linux/sched.h
-> > >> +++ b/include/linux/sched.h
-> > >> @@ -550,6 +550,7 @@ struct sched_entity {
-> > >>         struct rb_node                  run_node;
-> > >>         struct list_head                group_node;
-> > >>         unsigned int                    on_rq;
-> > >> +       unsigned int                    migrated;
-> > >>
-> > >>         u64                             exec_start;
-> > >>         u64                             sum_exec_runtime;
-> > >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> > >> index ff4dbbae3b10..e60defc39f6e 100644
-> > >> --- a/kernel/sched/fair.c
-> > >> +++ b/kernel/sched/fair.c
-> > >> @@ -1057,6 +1057,7 @@ update_stats_curr_start(struct cfs_rq *cfs_rq, struct sched_entity *se)
-> > >>         /*
-> > >>          * We are starting a new run period:
-> > >>          */
-> > >> +       se->migrated = 0;
-> > >>         se->exec_start = rq_clock_task(rq_of(cfs_rq));
-> > >>  }
-> > >>
-> > >> @@ -4690,9 +4691,9 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-> > >>          * inversed due to s64 overflow.
-> > >>          */
-> > >>         sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-> > >> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-> > >> +       if ((s64)sleep_time > (1ULL << 63) / scale_load_down(NICE_0_LOAD) / 2) {
-> > >>                 se->vruntime = vruntime;
-> > >> -       else
-> > >> +       } else
-> > >>                 se->vruntime = max_vruntime(se->vruntime, vruntime);
-> > >>  }
-> > >>
-> > >> @@ -7658,8 +7659,7 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
-> > >>         se->avg.last_update_time = 0;
-> > >>
-> > >>         /* We have migrated, no longer consider this task hot */
-> > >> -       se->exec_start = 0;
-> > >> -
-> > >> +       se->migrated = 1;
-> > >>         update_scan_period(p, new_cpu);
-> > >>  }
-> > >>
-> > >> @@ -8343,6 +8343,8 @@ static int task_hot(struct task_struct *p, struct lb_env *env)
-> > >>
-> > >>         if (sysctl_sched_migration_cost == 0)
-> > >>                 return 0;
-> > >> +       if (p->se.migrated)
-> > >> +               return 0;
-> > >>
-> > >>         delta = rq_clock_task(env->src_rq) - p->se.exec_start;
-> > >>
-> > >>
-> > >>
-> > >>>
-> > >>>>
-> > >>>>
-> > >>>>> version1: v6.2
-> > >>>>> version2: v6.2 + commit 829c1651e9c4
-> > >>>>> version3: v6.2 + commit 829c1651e9c4 + this patch
-> > >>>>>
-> > >>>>> -------------------------------------------------
-> > >>>>>       version1        version2        version3
-> > >>>>> test1 81.0            118.1           82.1
-> > >>>>> test2 82.1            116.9           80.3
-> > >>>>> test3 83.2            103.9           83.3
-> > >>>>> avg(s)        82.1            113.0           81.9
-> > >>>
-> > >>> Ok, it looks like we are back to normal figures
-> > >
-> > > What do those results refer to then ?
-> >
-> > Quote from this email (https://lore.kernel.org/lkml/1cd19d3f-18c4-92f9-257a-378cc18cfbc7@huawei.com/).
-> 
-> ok.
-> 
-> Then, there is something wrong in my patch. Let me look at it more deeply
+Am 14.03.23 um 15:18 schrieb Tvrtko Ursulin:
+> From: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+>
+> Thread group id (aka pid from userspace point of view) is a more
+> interesting thing to show as an owner of a DRM fd, so track and show that
+> instead of the thread id.
+>
+> In the next patch we will make the owner updated post file descriptor
+> handover, which will also be tgid based to avoid ping-pong when multiple
+> threads access the fd.
+>
+> Signed-off-by: Tvrtko Ursulin <tvrtko.ursulin@intel.com>
+> Cc: Zack Rusin <zackr@vmware.com>
+> Cc: linux-graphics-maintainer@vmware.com
+> Cc: Alex Deucher <alexander.deucher@amd.com>
+> Cc: "Christian König" <christian.koenig@amd.com>
+> Reviewed-by: Zack Rusin <zackr@vmware.com>
 
-Coudl you try the patc below. It fixes the problem on my system
+Reviewed-by: Christian König <christian.koenig@amd.com>
 
----
- kernel/sched/fair.c | 84 +++++++++++++++++++++++++++++++--------------
- 1 file changed, 59 insertions(+), 25 deletions(-)
+Should we push the already reviewed cleanups like this one to 
+drm-misc-next? That makes sense even without the rest of the 
+functionality and reduce the amount of patches re-send.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 0f499e9a74b5..f8722e47bb0b 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4648,23 +4648,36 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
- #endif
- }
+Christian.
 
-+static inline bool entity_is_long_sleeper(struct sched_entity *se)
-+{
-+       struct cfs_rq *cfs_rq;
-+       u64 sleep_time;
-+
-+       if (se->exec_start == 0)
-+               return false;
-+
-+       cfs_rq = cfs_rq_of(se);
-+
-+       sleep_time = rq_clock_task(rq_of(cfs_rq));
-+
-+       /* Happen while migrating because of clock task divergence */
-+       if (sleep_time <= se->exec_start)
-+	       return false;
-+
-+       sleep_time -= se->exec_start;
-+       if (sleep_time > ((1ULL << 63) / scale_load_down(NICE_0_LOAD)))
-+               return true;
-+
-+       return false;
-+}
-+
- static void
--place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
-+place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- {
- 	u64 vruntime = cfs_rq->min_vruntime;
--	u64 sleep_time;
--
--	/*
--	 * The 'current' period is already promised to the current tasks,
--	 * however the extra weight of the new task will slow them down a
--	 * little, place the new task so that it fits in the slot that
--	 * stays open at the end.
--	 */
--	if (initial && sched_feat(START_DEBIT))
--		vruntime += sched_vslice(cfs_rq, se);
+> ---
+>   drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c | 2 +-
+>   drivers/gpu/drm/drm_debugfs.c           | 4 ++--
+>   drivers/gpu/drm/drm_file.c              | 2 +-
+>   drivers/gpu/drm/vmwgfx/vmwgfx_gem.c     | 2 +-
+>   4 files changed, 5 insertions(+), 5 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> index d8e683688daa..863cb668e000 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_gem.c
+> @@ -969,7 +969,7 @@ static int amdgpu_debugfs_gem_info_show(struct seq_file *m, void *unused)
+>   		 * Therefore, we need to protect this ->comm access using RCU.
+>   		 */
+>   		rcu_read_lock();
+> -		task = pid_task(file->pid, PIDTYPE_PID);
+> +		task = pid_task(file->pid, PIDTYPE_TGID);
+>   		seq_printf(m, "pid %8d command %s:\n", pid_nr(file->pid),
+>   			   task ? task->comm : "<unknown>");
+>   		rcu_read_unlock();
+> diff --git a/drivers/gpu/drm/drm_debugfs.c b/drivers/gpu/drm/drm_debugfs.c
+> index 4f643a490dc3..4855230ba2c6 100644
+> --- a/drivers/gpu/drm/drm_debugfs.c
+> +++ b/drivers/gpu/drm/drm_debugfs.c
+> @@ -80,7 +80,7 @@ static int drm_clients_info(struct seq_file *m, void *data)
+>   	seq_printf(m,
+>   		   "%20s %5s %3s master a %5s %10s\n",
+>   		   "command",
+> -		   "pid",
+> +		   "tgid",
+>   		   "dev",
+>   		   "uid",
+>   		   "magic");
+> @@ -94,7 +94,7 @@ static int drm_clients_info(struct seq_file *m, void *data)
+>   		bool is_current_master = drm_is_current_master(priv);
+>   
+>   		rcu_read_lock(); /* locks pid_task()->comm */
+> -		task = pid_task(priv->pid, PIDTYPE_PID);
+> +		task = pid_task(priv->pid, PIDTYPE_TGID);
+>   		uid = task ? __task_cred(task)->euid : GLOBAL_ROOT_UID;
+>   		seq_printf(m, "%20s %5d %3d   %c    %c %5d %10u\n",
+>   			   task ? task->comm : "<unknown>",
+> diff --git a/drivers/gpu/drm/drm_file.c b/drivers/gpu/drm/drm_file.c
+> index a51ff8cee049..c1018c470047 100644
+> --- a/drivers/gpu/drm/drm_file.c
+> +++ b/drivers/gpu/drm/drm_file.c
+> @@ -156,7 +156,7 @@ struct drm_file *drm_file_alloc(struct drm_minor *minor)
+>   	if (!file)
+>   		return ERR_PTR(-ENOMEM);
+>   
+> -	file->pid = get_pid(task_pid(current));
+> +	file->pid = get_pid(task_tgid(current));
+>   	file->minor = minor;
+>   
+>   	/* for compatibility root is always authenticated */
+> diff --git a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+> index d6baf73a6458..c0da89e16e6f 100644
+> --- a/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+> +++ b/drivers/gpu/drm/vmwgfx/vmwgfx_gem.c
+> @@ -241,7 +241,7 @@ static int vmw_debugfs_gem_info_show(struct seq_file *m, void *unused)
+>   		 * Therefore, we need to protect this ->comm access using RCU.
+>   		 */
+>   		rcu_read_lock();
+> -		task = pid_task(file->pid, PIDTYPE_PID);
+> +		task = pid_task(file->pid, PIDTYPE_TGID);
+>   		seq_printf(m, "pid %8d command %s:\n", pid_nr(file->pid),
+>   			   task ? task->comm : "<unknown>");
+>   		rcu_read_unlock();
 
- 	/* sleeps up to a single latency don't count. */
--	if (!initial) {
-+	if (flags & ENQUEUE_WAKEUP) {
- 		unsigned long thresh;
-
- 		if (se_is_idle(se))
-@@ -4680,20 +4693,43 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- 			thresh >>= 1;
-
- 		vruntime -= thresh;
-+	} else if sched_feat(START_DEBIT) {
-+		/*
-+		 * The 'current' period is already promised to the current tasks,
-+		 * however the extra weight of the new task will slow them down a
-+		 * little, place the new task so that it fits in the slot that
-+		 * stays open at the end.
-+		 */
-+		vruntime += sched_vslice(cfs_rq, se);
- 	}
-
- 	/*
- 	 * Pull vruntime of the entity being placed to the base level of
--	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
--	 * slept for a long time, don't even try to compare its vruntime with
--	 * the base as it may be too far off and the comparison may get
--	 * inversed due to s64 overflow.
--	 */
--	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
--	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-+	 * cfs_rq, to prevent boosting it if placed backwards.
-+	 * However, min_vruntime can advance much faster than real time, with
-+	 * the exterme being when an entity with the minimal weight always runs
-+	 * on the cfs_rq. If the new entity slept for long, its vruntime
-+	 * difference from min_vruntime may overflow s64 and their comparison
-+	 * may get inversed, so ignore the entity's original vruntime in that
-+	 * case.
-+	 * The maximal vruntime speedup is given by the ratio of normal to
-+	 * minimal weight: scale_load_down(NICE_0_LOAD) / MIN_SHARES.
-+	 * When placing a migrated waking entity, its exec_start has been set
-+	 * from a different rq. In order to take into account a possible
-+	 * divergence between new and prev rq's clocks task because of irq and
-+	 * stolen time, we take an additional margin.
-+	 * So, cutting off on the sleep time of
-+	 *     2^63 / scale_load_down(NICE_0_LOAD) ~ 104 days
-+	 * should be safe.
-+
-+	 */
-+	if (entity_is_long_sleeper(se))
- 		se->vruntime = vruntime;
- 	else
- 		se->vruntime = max_vruntime(se->vruntime, vruntime);
-+
-+	if (flags & ENQUEUE_MIGRATED)
-+		se->exec_start = 0;
- }
-
- static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
-@@ -4769,7 +4805,7 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 	account_entity_enqueue(cfs_rq, se);
-
- 	if (flags & ENQUEUE_WAKEUP)
--		place_entity(cfs_rq, se, 0);
-+		place_entity(cfs_rq, se, flags);
-
- 	check_schedstat_required();
- 	update_stats_enqueue_fair(cfs_rq, se, flags);
-@@ -7665,9 +7701,6 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	/* Tell new CPU we are migrated */
- 	se->avg.last_update_time = 0;
-
--	/* We have migrated, no longer consider this task hot */
--	se->exec_start = 0;
--
- 	update_scan_period(p, new_cpu);
- }
-
-@@ -11993,7 +12026,7 @@ static void task_fork_fair(struct task_struct *p)
- 		update_curr(cfs_rq);
- 		se->vruntime = curr->vruntime;
- 	}
--	place_entity(cfs_rq, se, 1);
-+	place_entity(cfs_rq, se, 0);
-
- 	if (sysctl_sched_child_runs_first && curr && entity_before(curr, se)) {
- 		/*
-@@ -12137,8 +12170,9 @@ static void detach_task_cfs_rq(struct task_struct *p)
- 		/*
- 		 * Fix up our vruntime so that the current sleep doesn't
- 		 * cause 'unlimited' sleep bonus.
-+		 * This is the same as placing a waking task.
- 		 */
--		place_entity(cfs_rq, se, 0);
-+		place_entity(cfs_rq, se, ENQUEUE_WAKEUP);
- 		se->vruntime -= cfs_rq->min_vruntime;
- 	}
-
---
-2.34.1
-
-
-> 
-> >
-> > >
