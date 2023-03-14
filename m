@@ -2,107 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3CC46B9803
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD1B66B96AD
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231396AbjCNOa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34684 "EHLO
+        id S232471AbjCNNpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:45:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231343AbjCNOaa (ORCPT
+        with ESMTP id S232695AbjCNNpS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:30:30 -0400
-Received: from mx.sberdevices.ru (mx.sberdevices.ru [45.89.227.171])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DE22C654;
-        Tue, 14 Mar 2023 07:30:24 -0700 (PDT)
-Received: from s-lin-edge02.sberdevices.ru (localhost [127.0.0.1])
-        by mx.sberdevices.ru (Postfix) with ESMTP id C80C55FD62;
-        Tue, 14 Mar 2023 15:03:00 +0300 (MSK)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=sberdevices.ru;
-        s=mail; t=1678795380;
-        bh=jjpy6DCx05VoZ+mAapsIt74dyDOi6BiXXaYW1L+8OeA=;
-        h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type;
-        b=BO+/6xXjLHbfTrjKomCsZYI90orCZj9neHT8C1hHGvIPQ5VW71qVlKae+s2OlRSaJ
-         a77fNW+BdVVSDx9ad7XeSr3DN/cUkRcKSmlZbwk9VA1eXJAhH2YaNprKhqOCQ1VoIC
-         b4zH7dn25Jpa5xOpzTKBu/n7J6QlCb+8S8SCgYrotnX6xe4kfd+Fm2cBHE0BgAEGh6
-         5kxd3g+/dswG4DrB1W1wXilDCLpmXuGYh2TfarTplCgw8h3odAe7JFS7CXc2iO9xOQ
-         hagpVkJeCAeWaMRC/Lccm4toesY7/6czghogjLGpr4ZEFA3DjZ4SoJL9yaMcsbiqQz
-         oJKpbcfXTJn1g==
-Received: from S-MS-EXCH01.sberdevices.ru (S-MS-EXCH01.sberdevices.ru [172.16.1.4])
-        by mx.sberdevices.ru (Postfix) with ESMTP;
-        Tue, 14 Mar 2023 15:02:59 +0300 (MSK)
-From:   Martin Kurbanov <mmkurbanov@sberdevices.ru>
-To:     Pavel Machek <pavel@ucw.cz>, Lee Jones <lee@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andy Shevchenko <andy.shevchenko@gmail.com>
-CC:     <linux-leds@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <kernel@sberdevices.ru>, <devicetree@vger.kernel.org>,
-        Martin Kurbanov <mmkurbanov@sberdevices.ru>
-Subject: [PATCH v3 0/2] leds: add aw20xx driver
-Date:   Tue, 14 Mar 2023 15:02:50 +0300
-Message-ID: <20230314120252.48263-1-mmkurbanov@sberdevices.ru>
-X-Mailer: git-send-email 2.37.2
+        Tue, 14 Mar 2023 09:45:18 -0400
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813E8480E;
+        Tue, 14 Mar 2023 06:42:22 -0700 (PDT)
+Received: from [192.168.0.2] (ip5f5aeb5a.dynamic.kabel-deutschland.de [95.90.235.90])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits))
+        (No client certificate requested)
+        (Authenticated sender: pmenzel)
+        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3796961CC457B;
+        Tue, 14 Mar 2023 13:03:54 +0100 (CET)
+Message-ID: <e1b0452c-4068-deba-4773-14006fd32c2a@molgen.mpg.de>
+Date:   Tue, 14 Mar 2023 13:03:53 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [172.16.1.6]
-X-ClientProxiedBy: S-MS-EXCH01.sberdevices.ru (172.16.1.4) To
- S-MS-EXCH01.sberdevices.ru (172.16.1.4)
-X-KSMG-Rule-ID: 4
-X-KSMG-Message-Action: clean
-X-KSMG-AntiSpam-Status: not scanned, disabled by settings
-X-KSMG-AntiSpam-Interceptor-Info: not scanned
-X-KSMG-AntiPhishing: not scanned, disabled by settings
-X-KSMG-AntiVirus: Kaspersky Secure Mail Gateway, version 1.1.2.30, bases: 2023/03/14 06:01:00 #20942017
-X-KSMG-AntiVirus-Status: Clean, skipped
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: [PATCH v10 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
+ support
+Content-Language: en-US
+To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
+        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
+        gregkh@linuxfoundation.org, jirislaby@kernel.org,
+        alok.a.tiwari@oracle.com, hdanton@sina.com,
+        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
+        simon.horman@corigine.com, netdev@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
+        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
+References: <20230313144028.3156825-1-neeraj.sanjaykale@nxp.com>
+ <20230313144028.3156825-3-neeraj.sanjaykale@nxp.com>
+From:   Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20230313144028.3156825-3-neeraj.sanjaykale@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch series adds support for AWINIC AW20036/AW20054/AW20072 LED
-driver programmed via an I2C interface.
+Dear Neeraj,
 
-This driver supports following AW200XX features:
-  - Individual 64-level DIM currents
 
-Datasheet:
-  aw20036 - https://www.awinic.com/en/productDetail/AW20036QNR#tech-docs
-  aw20054 - https://www.awinic.com/en/productDetail/AW20054QNR#tech-docs
-  aw20072 - https://www.awinic.com/en/productDetail/AW20072QNR#tech-docs
+Thank you for your patch.
 
-Add YAML dt-binding schema for AW200XX.
+Am 13.03.23 um 15:40 schrieb Neeraj Sanjay Kale:
+> Add binding document for NXP bluetooth chipsets attached over UART.
+> 
+> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+> v2: Resolved dt_binding_check errors. (Rob Herring)
+> v2: Modified description, added specific compatibility devices, corrected
+> indentations. (Krzysztof Kozlowski)
+> v3: Modified description, renamed file (Krzysztof Kozlowski)
+> v4: Resolved dt_binding_check errors, corrected indentation.
+> (Rob Herring, Krzysztof Kozlowski)
+> v5: Corrected serial device name in example. (Krzysztof Kozlowski)
+> ---
+>   .../net/bluetooth/nxp,88w8987-bt.yaml         | 46 +++++++++++++++++++
+>   MAINTAINERS                                   |  6 +++
+>   2 files changed, 52 insertions(+)
+>   create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> new file mode 100644
+> index 000000000000..b913ca59b489
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> @@ -0,0 +1,46 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/bluetooth/nxp,88w8987-bt.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP Bluetooth chips
+> +
+> +description:
+> +  This binding describes UART-attached NXP bluetooth chips.
+> +  These chips are dual-radio chips supporting WiFi and Bluetooth.
+> +  The bluetooth works on standard H4 protocol over 4-wire UART.
+> +  The RTS and CTS lines are used during FW download.
+> +  To enable power save mode, the host asserts break signal
+> +  over UART-TX line to put the chip into power save state.
+> +  De-asserting break wakes-up the BT chip.
 
-Changelog:
-v2 -> v3:
-  - Update datasheet links
-  - Make cosmetic changes as Andy suggested at [1]
+The verb is spelled with a space: wakes up the BT chip.
 
-v1 -> v2:
-  - Remove the hardware pattern support (I will send a separate patch)
-  - Support the 'led-max-microamp' property
+You seem to break the line whenever a sentence ends. Is that intentional?
 
-[1] https://lore.kernel.org/all/20230228211046.109693-1-mmkurbanov@sberdevices.ru/
-
-Martin Kurbanov (2):
-  dt-bindings: leds: add binding for aw200xx
-  leds: add aw20xx driver
-
- .../testing/sysfs-class-led-driver-aw200xx    |   5 +
- .../bindings/leds/awinic,aw200xx.yaml         | 126 ++++
- drivers/leds/Kconfig                          |  14 +
- drivers/leds/Makefile                         |   1 +
- drivers/leds/leds-aw200xx.c                   | 638 ++++++++++++++++++
- 5 files changed, 784 insertions(+)
- create mode 100644 Documentation/ABI/testing/sysfs-class-led-driver-aw200xx
- create mode 100644 Documentation/devicetree/bindings/leds/awinic,aw200xx.yaml
- create mode 100644 drivers/leds/leds-aw200xx.c
-
---
-2.37.2
-
+> +
+> +maintainers:
+> +  - Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,88w8987-bt
+> +      - nxp,88w8997-bt
+> +
+> +  fw-init-baudrate:
+> +    description:
+> +      Chip baudrate after FW is downloaded and initialized.
+> +      This property depends on the module vendor's
+> +      configuration. If this property is not specified,
+> +      115200 is set as default.
+> +
+> +required:
+> +  - compatible
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    serial {
+> +        bluetooth {
+> +            compatible = "nxp,88w8987-bt";
+> +            fw-init-baudrate = <3000000>;
+> +        };
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 32dd41574930..030ec6fe89df 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -22835,6 +22835,12 @@ L:	linux-mm@kvack.org
+>   S:	Maintained
+>   F:	mm/zswap.c
+>   
+> +NXP BLUETOOTH WIRELESS DRIVERS
+> +M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
+> +M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
+> +S:	Maintained
+> +F:	Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> +
+>   THE REST
+>   M:	Linus Torvalds <torvalds@linux-foundation.org>
+>   L:	linux-kernel@vger.kernel.org
