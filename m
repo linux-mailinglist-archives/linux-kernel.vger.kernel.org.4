@@ -2,263 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5532E6BA1E3
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:09:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CFAC6BA1CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:08:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231297AbjCNWJc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:09:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37706 "EHLO
+        id S230190AbjCNWIH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:08:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231218AbjCNWJO (ORCPT
+        with ESMTP id S231187AbjCNWIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:09:14 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C49819F06
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:08:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1678831699;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=heZSQWfJIKu8jtTOtaLdAQASJgWXT3zt4HqfOvFO50s=;
-        b=haAxGUn7YCAI7UIEESAG527HrrlksB9fCNYPQTUxNdDp4E65yLpoa9I9AbDdN+P3rV2NQk
-        flFpDbPxYKY5ZAgk/Mb71V/h5NVW6zDqngUBiE2tWrFFz+c1ED301prnREYznPRE9wDTA7
-        4rx4rmsVZXz5K4suuer05jRI5YhHy50=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-640-z5OC_9_mMIaJCG3_XEaAYw-1; Tue, 14 Mar 2023 18:08:16 -0400
-X-MC-Unique: z5OC_9_mMIaJCG3_XEaAYw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 14 Mar 2023 18:08:00 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C02E2ED5A;
+        Tue, 14 Mar 2023 15:07:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id EBBA5802C18;
-        Tue, 14 Mar 2023 22:08:15 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.18])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 8126C51FF;
-        Tue, 14 Mar 2023 22:08:13 +0000 (UTC)
-From:   David Howells <dhowells@redhat.com>
-To:     Jens Axboe <axboe@kernel.dk>, Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>
-Cc:     David Howells <dhowells@redhat.com>,
-        Matthew Wilcox <willy@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>,
-        Christian Brauner <brauner@kernel.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-fsdevel@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Daniel Golle <daniel@makrotopia.org>,
-        Guenter Roeck <groeck7@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: [PATCH v18 03/15] shmem: Implement splice-read
-Date:   Tue, 14 Mar 2023 22:07:45 +0000
-Message-Id: <20230314220757.3827941-4-dhowells@redhat.com>
-In-Reply-To: <20230314220757.3827941-1-dhowells@redhat.com>
-References: <20230314220757.3827941-1-dhowells@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 06E4AB81BC3;
+        Tue, 14 Mar 2023 22:07:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E55B9C433EF;
+        Tue, 14 Mar 2023 22:07:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678831669;
+        bh=D2OfKd7jJbUKN1BPwkUjrhkE9yzy/vHcXXz8xIVsUgQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hKz7xW++iuimRym7qhWdVUIgoX5aI2ImBPPphyCjxJW6O3iltNbzpKZKJ7yXtnZ5B
+         CuEuavLuvcIXhj2+uNmjJBzFmogP9FEtoww4dpDdq3kxCd9qw0B1RKy4RbrgBo+MiW
+         GHEOhzsB7KlaF1R2BiR2EGyjdqk8Ph95xbj3VVUVgYiZMUarqr+fqJOTGjBS+3eyOT
+         CuNs1jnUM1XlOrqL1mtcDymQyZORF/t+Mecv8pdLj+5woB7tJVqL13XElg7R2Dwauk
+         zXs7LSX0QCDVJZadEkaujTsJdxP9suYhEiKCr/7+pV11YROQin2/JED4VACHceQmKb
+         7ifD5rDpGTD2w==
+Date:   Tue, 14 Mar 2023 23:07:46 +0100
+From:   Andi Shyti <andi.shyti@kernel.org>
+To:     Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc:     Andi Shyti <andi.shyti@kernel.org>,
+        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Wolfram Sang <wsa@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Ryan Chen <ryan_chen@aspeedtech.com>
+Subject: Re: [PATCH v4 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
+ property
+Message-ID: <20230314220746.nplw4q6kdpzcll4a@intel.intel>
+References: <20230314215612.23741-1-andi.shyti@kernel.org>
+ <20230314215612.23741-4-andi.shyti@kernel.org>
+ <326adcc5-a9d1-d8dc-70b8-56d8f80d4d41@alliedtelesis.co.nz>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <326adcc5-a9d1-d8dc-70b8-56d8f80d4d41@alliedtelesis.co.nz>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The new filemap_splice_read() has an implicit expectation via
-filemap_get_pages() that ->read_folio() exists if ->readahead() doesn't
-fully populate the pagecache of the file it is reading from[1], potentially
-leading to a jump to NULL if this doesn't exist.  shmem, however, (and by
-extension, tmpfs, ramfs and rootfs), doesn't have ->read_folio(),
+> Just to be a pain the subject line still says "ms"
 
-Work around this by equipping shmem with its own splice-read
-implementation, based on filemap_splice_read(), but able to paste in
-zero_page when there's a page missing.
+I have changed hundreds of /ms/us/ in this last half an hour...
+of course I forgot some :)
 
-Signed-off-by: David Howells <dhowells@redhat.com>
-cc: Daniel Golle <daniel@makrotopia.org>
-cc: Guenter Roeck <groeck7@gmail.com>
-cc: Christoph Hellwig <hch@lst.de>
-cc: Jens Axboe <axboe@kernel.dk>
-cc: Al Viro <viro@zeniv.linux.org.uk>
-cc: John Hubbard <jhubbard@nvidia.com>
-cc: David Hildenbrand <david@redhat.com>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: Hugh Dickins <hughd@google.com>
-cc: linux-block@vger.kernel.org
-cc: linux-fsdevel@vger.kernel.org
-cc: linux-mm@kvack.org
-Link: https://lore.kernel.org/r/Y+pdHFFTk1TTEBsO@makrotopia.org/ [1]
----
+There is also one in the comment.
 
-Notes:
-    ver #18)
-     - Don't take/release a ref on the zero page.
+Thanks for spotting it, Chris!
 
- mm/shmem.c | 135 ++++++++++++++++++++++++++++++++++++++++++++++++++++-
- 1 file changed, 134 insertions(+), 1 deletion(-)
+Andi
 
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 448f393d8ab2..d9b60ab556fe 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2719,6 +2719,139 @@ static ssize_t shmem_file_read_iter(struct kiocb *iocb, struct iov_iter *to)
- 	return retval ? retval : error;
- }
- 
-+static bool zero_pipe_buf_get(struct pipe_inode_info *pipe,
-+			      struct pipe_buffer *buf)
-+{
-+	return true;
-+}
-+
-+static void zero_pipe_buf_release(struct pipe_inode_info *pipe,
-+				  struct pipe_buffer *buf)
-+{
-+}
-+
-+static bool zero_pipe_buf_try_steal(struct pipe_inode_info *pipe,
-+				    struct pipe_buffer *buf)
-+{
-+	return false;
-+}
-+
-+static const struct pipe_buf_operations zero_pipe_buf_ops = {
-+	.release	= zero_pipe_buf_release,
-+	.try_steal	= zero_pipe_buf_try_steal,
-+	.get		= zero_pipe_buf_get,
-+};
-+
-+static size_t splice_zeropage_into_pipe(struct pipe_inode_info *pipe,
-+					loff_t fpos, size_t size)
-+{
-+	size_t offset = fpos & ~PAGE_MASK;
-+
-+	size = min_t(size_t, size, PAGE_SIZE - offset);
-+
-+	if (!pipe_full(pipe->head, pipe->tail, pipe->max_usage)) {
-+		struct pipe_buffer *buf = pipe_head_buf(pipe);
-+
-+		*buf = (struct pipe_buffer) {
-+			.ops	= &zero_pipe_buf_ops,
-+			.page	= ZERO_PAGE(0),
-+			.offset	= offset,
-+			.len	= size,
-+		};
-+		get_page(buf->page);
-+		pipe->head++;
-+	}
-+
-+	return size;
-+}
-+
-+static ssize_t shmem_file_splice_read(struct file *in, loff_t *ppos,
-+				      struct pipe_inode_info *pipe,
-+				      size_t len, unsigned int flags)
-+{
-+	struct inode *inode = file_inode(in);
-+	struct address_space *mapping = inode->i_mapping;
-+	struct folio *folio = NULL;
-+	size_t total_spliced = 0, used, npages, n, part;
-+	loff_t isize;
-+	int error = 0;
-+
-+	/* Work out how much data we can actually add into the pipe */
-+	used = pipe_occupancy(pipe->head, pipe->tail);
-+	npages = max_t(ssize_t, pipe->max_usage - used, 0);
-+	len = min_t(size_t, len, npages * PAGE_SIZE);
-+
-+	do {
-+		if (*ppos >= i_size_read(inode))
-+			break;
-+
-+		error = shmem_get_folio(inode, *ppos / PAGE_SIZE, &folio, SGP_READ);
-+		if (error) {
-+			if (error == -EINVAL)
-+				error = 0;
-+			break;
-+		}
-+		if (folio) {
-+			folio_unlock(folio);
-+
-+			if (folio_test_hwpoison(folio)) {
-+				error = -EIO;
-+				break;
-+			}
-+		}
-+
-+		/*
-+		 * i_size must be checked after we know the pages are Uptodate.
-+		 *
-+		 * Checking i_size after the check allows us to calculate
-+		 * the correct value for "nr", which means the zero-filled
-+		 * part of the page is not copied back to userspace (unless
-+		 * another truncate extends the file - this is desired though).
-+		 */
-+		isize = i_size_read(inode);
-+		if (unlikely(*ppos >= isize))
-+			break;
-+		part = min_t(loff_t, isize - *ppos, len);
-+
-+		if (folio) {
-+			/*
-+			 * If users can be writing to this page using arbitrary
-+			 * virtual addresses, take care about potential aliasing
-+			 * before reading the page on the kernel side.
-+			 */
-+			if (mapping_writably_mapped(mapping))
-+				flush_dcache_folio(folio);
-+			folio_mark_accessed(folio);
-+			/*
-+			 * Ok, we have the page, and it's up-to-date, so we can
-+			 * now splice it into the pipe.
-+			 */
-+			n = splice_folio_into_pipe(pipe, folio, *ppos, part);
-+			folio_put(folio);
-+			folio = NULL;
-+		} else {
-+			n = splice_zeropage_into_pipe(pipe, *ppos, len);
-+		}
-+
-+		if (!n)
-+			break;
-+		len -= n;
-+		total_spliced += n;
-+		*ppos += n;
-+		in->f_ra.prev_pos = *ppos;
-+		if (pipe_full(pipe->head, pipe->tail, pipe->max_usage))
-+			break;
-+
-+		cond_resched();
-+	} while (len);
-+
-+	if (folio)
-+		folio_put(folio);
-+
-+	file_accessed(in);
-+	return total_spliced ? total_spliced : error;
-+}
-+
- static loff_t shmem_file_llseek(struct file *file, loff_t offset, int whence)
- {
- 	struct address_space *mapping = file->f_mapping;
-@@ -3938,7 +4071,7 @@ static const struct file_operations shmem_file_operations = {
- 	.read_iter	= shmem_file_read_iter,
- 	.write_iter	= generic_file_write_iter,
- 	.fsync		= noop_fsync,
--	.splice_read	= generic_file_splice_read,
-+	.splice_read	= shmem_file_splice_read,
- 	.splice_write	= iter_file_splice_write,
- 	.fallocate	= shmem_fallocate,
- #endif
-
+> On 15/03/23 10:56, Andi Shyti wrote:
+> > "fsl,timeout" is marked as deprecated and replaced by the
+> > "i2c-scl-clk-low-timeout-us" i2c property.
+> >
+> > Use this latter and, in case it is missing, for back
+> > compatibility, check whether we still have "fsl,timeout" defined.
+> >
+> > Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
+> > Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> > ---
+> >   drivers/i2c/busses/i2c-mpc.c | 12 +++++++++++-
+> >   1 file changed, 11 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
+> > index 87e5c1725750f..e8798f9c23fcc 100644
+> > --- a/drivers/i2c/busses/i2c-mpc.c
+> > +++ b/drivers/i2c/busses/i2c-mpc.c
+> > @@ -843,8 +843,18 @@ static int fsl_i2c_probe(struct platform_device *op)
+> >   			mpc_i2c_setup_8xxx(op->dev.of_node, i2c, clock);
+> >   	}
+> >   
+> > +	/*
+> > +	 * "fsl,timeout" has been marked as deprecated and, to maintain
+> > +	 * backward compatibility, we will only look for it if
+> > +	 * "i2c-scl-clk-low-timeout-ms" is not present.
+> > +	 */
+> >   	result = of_property_read_u32(op->dev.of_node,
+> > -				      "fsl,timeout", &mpc_ops.timeout);
+> > +				      "i2c-scl-clk-low-timeout-us",
+> > +				      &mpc_ops.timeout);
+> > +	if (result == -EINVAL)
+> > +		result = of_property_read_u32(op->dev.of_node,
+> > +					      "fsl,timeout", &mpc_ops.timeout);
+> > +
+> >   	if (!result) {
+> >   		mpc_ops.timeout *= HZ / 1000000;
+> >   		if (mpc_ops.timeout < 5)
