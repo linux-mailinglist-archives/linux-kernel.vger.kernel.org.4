@@ -2,77 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 02E866B97D4
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:23:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A3CC96B97E1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231216AbjCNOXc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:23:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52718 "EHLO
+        id S231370AbjCNOZG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:25:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230471AbjCNOX1 (ORCPT
+        with ESMTP id S231318AbjCNOYt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:23:27 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C906D13DC8
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:23:00 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id j11so62750977edq.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:23:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678803774;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UMxrUpznXSIBDo2JBKKZe9hAbpKqNtdthZ67TgrD304=;
-        b=GTGBBybGUCWr8NRVVOUsCyAosbwVGVWSu3bqDDbw9xDnXA+8NgqD8LwkL86aoeNrIY
-         euRoJQ9wyR2+H2vXJRuNuO3OHg1JpwxD3JhLl1nc2OR34rKiAsQFX1uuaMr/FeYwXjEx
-         Gd7QsilVuCde+S1lII2v5woiuZYFM+nJfz62WM7vF7IeGdFbiPCs0URkEfM0a4PlFg/H
-         DxEHgR1HxOocPfZzEnklSamjU0i7x7hFKSIvOdWpq77vaY3MtjXeeG5kKhrsmaPmxhW1
-         X/FEe4x7JnF3/OOxEMG5Y1uaxP7y6HDEkREp6xy3W5udTmp17M+rAQQ8w4BSwl9rGNL/
-         2eKw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678803774;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UMxrUpznXSIBDo2JBKKZe9hAbpKqNtdthZ67TgrD304=;
-        b=U3AcsHYjH7/2hVw4sCM13xwgXxi81aY2aQY0mMqdnmPEFwYVote1+IxBFcny4KHL2J
-         U6aKtYIZVSl/ZZwyhFEXBR2fIPlnl0uxk6/LlkT+Jia7CFmcqDTye7JoxPCAbu1ZhcsQ
-         aI2qN3aVu8qM8j1xPUvwv2UhdhEwXcmKu6LBy278MiAd0DUuml0JIoYohWRUBmB7P4n/
-         PXvIfiuxftZtRdWRC4iOj99xRba4EBqK7ZiYg2jXcPYk98jaXaWQsFQcKz+EtCh52JP1
-         ffbrR44BhF5jiPXtyLVGsh7ioOqPequNlYt2MRKGgmzDrkeSvhz4ADlFXNBxTwQMm3hb
-         svUg==
-X-Gm-Message-State: AO0yUKU8rZHOneJwhKphNpsgmrxOr+pMq3zLxtfWgzM5pjPfM2uMMkis
-        oY+YzfJrIOyStT3tC7VRvlP7bQ==
-X-Google-Smtp-Source: AK7set/ies7q/bxpR0JGu9kGi9/sMVrE4sF4RFClvxfUbWMiesVzIQmDyZZF9q00uf84NX1+jmFjGA==
-X-Received: by 2002:a17:906:4f8f:b0:88d:f759:15b0 with SMTP id o15-20020a1709064f8f00b0088df75915b0mr3266541eju.45.1678803774214;
-        Tue, 14 Mar 2023 07:22:54 -0700 (PDT)
-Received: from ?IPV6:2a02:810d:15c0:828:59be:4b3f:994b:e78c? ([2a02:810d:15c0:828:59be:4b3f:994b:e78c])
-        by smtp.gmail.com with ESMTPSA id b27-20020a50ccdb000000b004ad601533a3sm1125175edj.55.2023.03.14.07.22.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 07:22:53 -0700 (PDT)
-Message-ID: <ec504c7d-66d4-a4b7-547e-7272e012cdf9@linaro.org>
-Date:   Tue, 14 Mar 2023 15:22:52 +0100
+        Tue, 14 Mar 2023 10:24:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2119CA9DCE
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:23:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678803785;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=3rV/CKa5wadgKLok3eourywXXQnzSqpZ7XBoZDYaJi8=;
+        b=IHDZN1prlKUzzxqFG9SBC9CmHB0GxJJF1hWnuRZt+CDYzRHSLxHuXD4ccBU5XUnMkgsgGd
+        VLvkjzyyvMeRRXbcaSW5TvsZEBRICkBq3QAM1NhUPyA6g3IGFlVBrCm5YpVHihbQQo7kpk
+        EE2/TANA/lqNSe//8Mqt0459yi0YE0w=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-552-9Lh6L2NCPKWmtI7AoNP3mQ-1; Tue, 14 Mar 2023 10:23:00 -0400
+X-MC-Unique: 9Lh6L2NCPKWmtI7AoNP3mQ-1
+Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1B9DF2800489;
+        Tue, 14 Mar 2023 14:22:59 +0000 (UTC)
+Received: from localhost (ovpn-12-81.pek2.redhat.com [10.72.12.81])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 03B3A202701E;
+        Tue, 14 Mar 2023 14:22:57 +0000 (UTC)
+Date:   Tue, 14 Mar 2023 22:22:54 +0800
+From:   Baoquan He <bhe@redhat.com>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, vgoyal@redhat.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v19 2/7] crash: add generic infrastructure for crash
+ hotplug support
+Message-ID: <ZBCDPuTdjMY+7VrG@MiWiFi-R3L-srv>
+References: <20230306162228.8277-1-eric.devolder@oracle.com>
+ <20230306162228.8277-3-eric.devolder@oracle.com>
+ <ZBBPzKBTuzGZe4OC@MiWiFi-R3L-srv>
+ <2fd31764-b341-638a-f70e-43dc0d5b0092@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v3 3/3] i2c: mpc: Use i2c-scl-clk-low-timeout-ms i2c
- property
-Content-Language: en-US
-To:     Andi Shyti <andi.shyti@kernel.org>, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     Wolfram Sang <wsa@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        Ryan Chen <ryan_chen@aspeedtech.com>
-References: <20230312233613.303408-1-andi.shyti@kernel.org>
- <20230312233613.303408-4-andi.shyti@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20230312233613.303408-4-andi.shyti@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2fd31764-b341-638a-f70e-43dc0d5b0092@oracle.com>
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,42 +70,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 13/03/2023 00:36, Andi Shyti wrote:
-> "fsl,timeout" is marked as deprecated and replaced by the
-> "i2c-scl-clk-low-timeout-ms" i2c property.
+On 03/14/23 at 08:28am, Eric DeVolder wrote:
+......
+> > > +static int crash_memhp_notifier(struct notifier_block *nb, unsigned long val, void *v)
+> > > +{
+> > > +	switch (val) {
+> > > +	case MEM_ONLINE:
+> > > +		crash_handle_hotplug_event(KEXEC_CRASH_HP_ADD_MEMORY,
+> > > +			KEXEC_CRASH_HP_INVALID_CPU);
+> > > +		break;
+> > > +
+> > > +	case MEM_OFFLINE:
+> > > +		crash_handle_hotplug_event(KEXEC_CRASH_HP_REMOVE_MEMORY,
+> > > +			KEXEC_CRASH_HP_INVALID_CPU);
+> > > +		break;
+> > > +	}
+> > > +	return NOTIFY_OK;
+> > > +}
+> > > +
+> > > +static struct notifier_block crash_memhp_nb = {
+> > > +	.notifier_call = crash_memhp_notifier,
+> > > +	.priority = 0
+> > > +};
+> > > +
+> > 
+> > Because for_each_possible_cpu() is taken in
+> > crash_prepare_elf64_headers(), x86 doesn't need to respond to cpu
+> > hotplug or doesn't do anything with this patchset. This cpu part in
+> > infrastructure is only for the later powerpc usage, right?
 > 
-> Use this latter and, in case it is missing, for back
-> compatibility, check whether we still have "fsl,timeout" defined.
-> 
-> Signed-off-by: Andi Shyti <andi.shyti@kernel.org>
-> Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-> ---
->  drivers/i2c/busses/i2c-mpc.c | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/i2c/busses/i2c-mpc.c b/drivers/i2c/busses/i2c-mpc.c
-> index 87e5c1725750..28f11e30ac50 100644
-> --- a/drivers/i2c/busses/i2c-mpc.c
-> +++ b/drivers/i2c/busses/i2c-mpc.c
-> @@ -843,8 +843,18 @@ static int fsl_i2c_probe(struct platform_device *op)
->  			mpc_i2c_setup_8xxx(op->dev.of_node, i2c, clock);
->  	}
->  
-> +	/*
-> +	 * "fsl,timeout" has been marked as deprecated and, to maintain
-> +	 * backward compatibility, we will only look for it if
-> +	 * "i2c-scl-clk-low-timeout-ms" is not present.
-> +	 */
->  	result = of_property_read_u32(op->dev.of_node,
-> -				      "fsl,timeout", &mpc_ops.timeout);
-> +				      "i2c-scl-clk-low-timeout-ms",
-> +				      &mpc_ops.timeout);
-> +	if (result == -EINVAL)
-> +		result = of_property_read_u32(op->dev.of_node,
-> +					      "fsl,timeout", &mpc_ops.timeout);
+> That is true, yes.
 
-Wasn't old property in us and new one is in ms?
-
-Best regards,
-Krzysztof
+Given this patchset is aimed at crash hotplug on x86, while obviously it
+does't need to have the cpu hotplug support on x86 since the
+for_each_possible_cpu() adjustment. People looking into this may be
+confused if they don't follow the discussion thread of v18. Do we need
+to mention this in cover letter or somewhere else? I could miss that
+though it is has been told, please ignore this if yes.
 
