@@ -2,123 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EAB76BA165
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:23:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B19F6BA167
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230210AbjCNVXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:23:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
+        id S229797AbjCNVYZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:24:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37714 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229733AbjCNVXk (ORCPT
+        with ESMTP id S229733AbjCNVYU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:23:40 -0400
-Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B5F4FF13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:23:38 -0700 (PDT)
-Received: by mail-il1-x131.google.com with SMTP id h7so9345426ila.5
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:23:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678829017;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lxuM4RGN6BlLke1o4GIxUxY3khRpRz3CJd1nnGUC+3c=;
-        b=FQ3JQEtyeqZauYAWSK1zzIDKfI5c6KIdkTPO3eB2R9jABliTfilvQdFVO3RvBjG+vB
-         wOlvWgoUwrgGixBowbFjPQ9TH+gaZkZSs1UXYEdCHYtBDRiQbaVv9GXEq5vPq7I1YBW7
-         kmgQfUmFDDdkZWkIuXcojy/3Tgq/t6zRld/2fgBiOWyF0FyLUmd/kMJKHVX+ax2o/RG/
-         sVTD5lm9LQg0HyoX/+2cTbyUYZIe3C7pqqrRf4LEXW/2Yknxwv9gHwehQThpF8zLIhMs
-         NfNmWpITjxg5aWwj6+sUO3yULhtJMY/bOuGOA6Fglz6Pg7PfWZdwr3CXM36gKTGt2MXF
-         yu6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678829017;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lxuM4RGN6BlLke1o4GIxUxY3khRpRz3CJd1nnGUC+3c=;
-        b=2zidZuf+vkSwJAiddWHTO0WbyoMqqtxx/mEgXSLD9kUhTGCm625NVSY3D9YYPhDWMG
-         BqaprP6P+2C1kcFKeL66bcjw2wVdY8vMgOQV8Xzc8CxMH5vYqTuxfKFQlZgUaL8Me24Y
-         8AbyNpWCkouxB+MVy9dKONvCYtOpw7QFBj1L2+vttL15s9zrLqkx4qehQYLFuFRN0PGp
-         OXS5yR0cAB3L6VfiwWHYzjYNBUrMy4tmCQBo9NcqQj12BqYw2v67D0GPjJa+6WewRJs2
-         7Ck+2vHIsEUOTzmUz197BGWSgUQZKLOw/4m8x6tTCg07P5oJzZImATjepxDny74PXBCF
-         kKhw==
-X-Gm-Message-State: AO0yUKVo6HYMLhe8St/LU96He0mxQJ1zGUd1zN1m+nkELY18h9il49AT
-        NO4quh0+nJmmPtcB+yyaNL5C9w==
-X-Google-Smtp-Source: AK7set8iZsqHi6RtunD35UZRzSvRrd+rfXSMR3j/iUIMcRv6g1q8OZiJse+/unht3pdTFOIRHw4woA==
-X-Received: by 2002:a92:d5c5:0:b0:315:7fec:f1f0 with SMTP id d5-20020a92d5c5000000b003157fecf1f0mr2887363ilq.7.1678829017479;
-        Tue, 14 Mar 2023 14:23:37 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id r13-20020a92ac0d000000b003230b8aa2d6sm1071935ilh.57.2023.03.14.14.23.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 14:23:37 -0700 (PDT)
-Message-ID: <b134781b-f28f-57c0-3ebc-9dba28d51074@linaro.org>
-Date:   Tue, 14 Mar 2023 16:23:35 -0500
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.7.1
-Subject: Re: [PATCH net 0/4] net: ipa: minor bug fixes
-Content-Language: en-US
-From:   Alex Elder <elder@linaro.org>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
-        andersson@kernel.org, quic_cpratapa@quicinc.com,
-        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
-        quic_subashab@quicinc.com, elder@kernel.org,
-        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230314203841.1574172-1-elder@linaro.org>
-In-Reply-To: <20230314203841.1574172-1-elder@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 14 Mar 2023 17:24:20 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95909515D8
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:24:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2883B619BF
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 21:24:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16393C433D2;
+        Tue, 14 Mar 2023 21:24:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678829042;
+        bh=YqViZD41gexkA1fXl8jJ1gtu6PrOo8wk/cq3HkC/8tA=;
+        h=In-Reply-To:References:Date:From:To:Cc:Subject:From;
+        b=RKLEvu4ThAfJ0unmpd/t1SefIVvTTYbe8Cs2R5GKuErwrCJo7hQmtgoV6Zmp46CdI
+         z6a3imXZeAt9lUefOL8vdsqFZIewsneMK516YvlfutIbEcsR3T+ivjr88OzGyj71VR
+         DqtFmQTNXXf666PbZdE86cCGPjHwbDbl4OnDiA66PSFYLIki8c+wu9UECuUit0IpKa
+         Lff0b5EWMOsDE5KZuVMa1hKwCF+Z/fmRWCAv+zK9ICvEb4GXnuqcK2BNx3LF9Tjaj1
+         0d9XbStBvb8MunU7dIKb4Ho1VHq9lH+EdoT2GpSIJ3RrTIVlbxBrUT5DlIQaKOexp9
+         AlPoonaAxs/9w==
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailauth.nyi.internal (Postfix) with ESMTP id 05C1D27C0054;
+        Tue, 14 Mar 2023 17:24:00 -0400 (EDT)
+Received: from imap48 ([10.202.2.98])
+  by compute3.internal (MEProxy); Tue, 14 Mar 2023 17:24:01 -0400
+X-ME-Sender: <xms:8OUQZKn6AMpqGGnCFFr_ESQ3UsDJc2WEV-8QnY0aNAR9r7GQ0dAypQ>
+    <xme:8OUQZB2sYM3ClM7ZFcJBS5O6AItJ1IPkuSI8dhMxUzqK7Qg6-v8TcGdXD36Dp1rKP
+    _v0AV9xvpRExnf1t3g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgudehvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmd
+    enucfjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdet
+    nhguhicunfhuthhomhhirhhskhhifdcuoehluhhtoheskhgvrhhnvghlrdhorhhgqeenuc
+    ggtffrrghtthgvrhhnpefhhffhjefgteeiudfgledvveejvdeugfehkeevudejgffhffdt
+    veffffelhedtvdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdhgihhthhhusgdrtg
+    homhdpmhhitghrohhsohhfthdrtghomhenucevlhhushhtvghrufhiiigvpedtnecurfgr
+    rhgrmhepmhgrihhlfhhrohhmpegrnhguhidomhgvshhmthhprghuthhhphgvrhhsohhnrg
+    hlihhthidqudduiedukeehieefvddqvdeifeduieeitdekqdhluhhtoheppehkvghrnhgv
+    lhdrohhrgheslhhinhhugidrlhhuthhordhush
+X-ME-Proxy: <xmx:8OUQZIqu5xQuQvVQPudIQnU0ZRnxDtEpF217ioYbfb2sx0tl3_HMjA>
+    <xmx:8OUQZOm4kOUpymH0f8YFQMKJ1Vn7-mTUOg68yZo4g7gXdrAQ7Hpf-w>
+    <xmx:8OUQZI3Vz4VoXpO2jGBTxOaLo2kKziVeAQfaGZ0puJa1Bc87vlyUNg>
+    <xmx:8OUQZCPfRMyO6dFwPhYMmr1hgEZIAjO5Q36IwH4XHHzu-DVsjC2Kig>
+Feedback-ID: ieff94742:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2054F31A0063; Tue, 14 Mar 2023 17:24:00 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <d575db7f-bad3-477e-a501-19d2d84527cd@app.fastmail.com>
+In-Reply-To: <cover.1678785672.git.baskov@ispras.ru>
+References: <cover.1678785672.git.baskov@ispras.ru>
+Date:   Tue, 14 Mar 2023 14:23:39 -0700
+From:   "Andy Lutomirski" <luto@kernel.org>
+To:     "Evgeniy Baskov" <baskov@ispras.ru>,
+        "Ard Biesheuvel" <ardb@kernel.org>
+Cc:     "Borislav Petkov" <bp@alien8.de>,
+        "Dave Hansen" <dave.hansen@linux.intel.com>,
+        "Ingo Molnar" <mingo@redhat.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        "Thomas Gleixner" <tglx@linutronix.de>,
+        "Alexey Khoroshilov" <khoroshilov@ispras.ru>,
+        "Peter Jones" <pjones@redhat.com>,
+        "Gerd Hoffmann" <kraxel@redhat.com>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>,
+        joeyli <jlee@suse.com>, lvc-project@linuxtesting.org,
+        "the arch/x86 maintainers" <x86@kernel.org>,
+        linux-efi@vger.kernel.org,
+        "Linux Kernel Mailing List" <linux-kernel@vger.kernel.org>,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v5 00/27] x86_64: Improvements at compressed kernel stage
+Content-Type: text/plain
+X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 3:38 PM, Alex Elder wrote:
-> The four patches in this series fix some errors, though none of them
-> cause any compile or runtime problems.
-> 
-> The first changes the files included by "drivers/net/ipa/reg.h" to
-> ensure everything it requires is included with the file.  It also
-> stops unnecessarily including another file.  The prerequisites are
-> apparently satisfied other ways, currently.
-> 
-> The second adds two struct declarations to "gsi_reg.h", to ensure
-> they're declared before they're used later in the file.  Again, it
-> seems these declarations are currently resolved wherever this file
-> is included.
-> 
-> The third removes register definitions that were added for IPA v5.0
-> that are not needed.  And the last updates some validity checks for
-> IPA v5.0 registers.  No IPA v5.0 platforms are yet supported, so the
-> issues resolved here were never harmful.
+On Tue, Mar 14, 2023, at 3:13 AM, Evgeniy Baskov wrote:
+> This patchset is aimed
+> * to improve UEFI compatibility of compressed kernel code for x86_64
+> * to setup proper memory access attributes for code and rodata sections
+> * to implement W^X protection policy throughout the whole execution 
+>   of compressed kernel for EFISTUB code path. 
 
-Sorry, it seems I used the wrong hashes in some
-of my "Fixes" tags.  I will post v2 of this series
-tomorrow.
+The overall code quality seems okay, but I have some questions as to what this is for.  The early boot environment is not exposed to most sorts of attacks -- there's no userspace, there's no network, and there is not a whole lot of input that isn't implicitly completely trusted.
 
-					-Alex
+What parts of this series are actually needed to get these fancy new bootloaders to boot Linux?  And why?
 
+>
+> Kernel is made to be more compatible with PE image specification [3],
+> allowing it to be successfully loaded by stricter PE loader
+> implementations like the one from [2]. There is at least one
+> known implementation that uses that loader in production [4].
+> There are also ongoing efforts to upstream these changes.
 
-> 					-Alex
+Can you clarify 
+
+>
+> Also the patchset adds EFI_MEMORY_ATTTRIBUTE_PROTOCOL, included into
+> EFI specification since version 2.10, as a better alternative to
+> using DXE services for memory protection attributes manipulation,
+> since it is defined by the UEFI specification itself and not UEFI PI
+> specification. This protocol is not widely available so the code
+> using DXE services is kept in place as a fallback in case specific
+> implementation does not support the new protocol.
+> One of EFI implementations that already support
+> EFI_MEMORY_ATTTRIBUTE_PROTOCOL is Microsoft Project Mu [5].
+
+Maybe make this a separate series?
+
 > 
-> Alex Elder (4):
->    net: ipa: reg: include <linux/bug.h>
->    net: ipa: add two missing declarations
->    net: ipa: kill FILT_ROUT_CACHE_CFG IPA register
->    net: ipa: fix some register validity checks
-> 
->   drivers/net/ipa/gsi_reg.c |  9 ++++++++-
->   drivers/net/ipa/gsi_reg.h |  4 ++++
->   drivers/net/ipa/ipa_reg.c | 28 ++++++++++++++++++----------
->   drivers/net/ipa/ipa_reg.h | 21 ++++++---------------
->   drivers/net/ipa/reg.h     |  3 ++-
->   5 files changed, 38 insertions(+), 27 deletions(-)
-> 
+> Kernel image generation tool (tools/build.c) is refactored as a part
+> of changes that makes PE image more compatible.
+>   
+> The patchset implements memory protection for compressed kernel
+> code while executing both inside EFI boot services and outside of
+> them. For EFISTUB code path W^X protection policy is maintained
+> throughout the whole execution of compressed kernel. The latter
+> is achieved by extracting the kernel directly from EFI environment
+> and jumping to it's head immediately after exiting EFI boot services.
+> As a side effect of this change one page table rebuild and a copy of
+> the kernel image is removed.
 
+I have no problem with this, but what's it needed for?
+
+>
+> Memory protection inside EFI environment is controlled by the
+> CONFIG_DXE_MEM_ATTRIBUTES option, although with these patches this
+> option also control the use EFI_MEMORY_ATTTRIBUTE_PROTOCOL and memory
+> protection attributes of PE sections and not only DXE services as the
+> name might suggest.
+>
+
+> [1] 
+> https://lore.kernel.org/lkml/893da11995f93a7ea8f7485d17bf356a@ispras.ru/
+> [2] https://github.com/acidanthera/audk/tree/secure_pe
+
+Link is broken
+
+> [3] 
+> https://download.microsoft.com/download/9/c/5/9c5b2167-8017-4bae-9fde-d599bac8184a/pecoff_v83.docx
+
+I skimmed this very briefly, and I have no idea what I'm supposed to look at.  This is the entire PE spec!
