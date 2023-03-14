@@ -2,78 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5C1366B91C5
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:37:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707DE6B91C8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:37:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbjCNLhQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:37:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36764 "EHLO
+        id S231410AbjCNLhn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:37:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37388 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbjCNLhI (ORCPT
+        with ESMTP id S229475AbjCNLhe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:37:08 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85ABD9BA41;
-        Tue, 14 Mar 2023 04:36:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678793819; x=1710329819;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=3xqgfVi/aGQrtDm2YYR8q5XlIriMdV5gvy8RILah7HQ=;
-  b=nnviljfgqlKsZu8xkBANvJBU5FxLhP8ok8FaCEPKON6sEUKPf0FCnpem
-   6qLTPQtH9+UaEoY+Tu2EspxFxGdRhv9DPdUofLvBGvinBwxPLUgDCpgZC
-   2TC8w+RAnoH2SNtPcqNFRRB7nLNX4FzJ2fMeCGrjpfpRrfbasJMDnkyXv
-   nvHB2oX4sYLyz9vf4NQjBWK0gu08WLzddIuvkUpBKiRaDfK7oFbciUrJL
-   ZkVLxZSr0smXs2k9tFTCWsQxgaduLgu6OzXVYOHXb4nJ45DhM8Kst8bXX
-   1fcwM2gqSVrCaG3A589q+8j62XwvdlKxKcbvjQG7yaTlYMBzg5jkcHL9z
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="402266413"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="402266413"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 04:36:59 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="1008385396"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="1008385396"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 14 Mar 2023 04:36:56 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1pc2xa-003Blo-1F;
-        Tue, 14 Mar 2023 13:36:54 +0200
-Date:   Tue, 14 Mar 2023 13:36:54 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Paul Gazzillo <paul@pgazz.com>,
-        Dmitry Osipenko <dmitry.osipenko@collabora.com>,
-        Shreeya Patel <shreeya.patel@collabora.com>,
-        Zhigang Shi <Zhigang.Shi@liteon.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: [PATCH v2 2/6] iio: light: Add gain-time-scale helpers
-Message-ID: <ZBBcViaVsyQFdpkh@smile.fi.intel.com>
-References: <cover.1677750859.git.mazziesaccount@gmail.com>
- <9895826669118a1aa1db3f85c2610fa759426c33.1677750859.git.mazziesaccount@gmail.com>
- <ZAC7L8NQYgBcBTCF@smile.fi.intel.com>
- <7e537200-37ab-f6e6-c4e0-c3997128c01b@fi.rohmeurope.com>
- <ZAXK9Hn2NuQPJ7eo@smile.fi.intel.com>
- <1dbfc336-7d09-cd44-dfa2-9c4bedf257e1@gmail.com>
- <ZA81rpWgwvP2bigt@smile.fi.intel.com>
- <9d63c161-0449-7e56-5873-2909587f17af@gmail.com>
- <ZBBa+e9VXj/eyT4J@smile.fi.intel.com>
+        Tue, 14 Mar 2023 07:37:34 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E6609AFFC;
+        Tue, 14 Mar 2023 04:37:26 -0700 (PDT)
+Received: from dggpemm500005.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4PbWgz4PY9zrSgV;
+        Tue, 14 Mar 2023 19:36:31 +0800 (CST)
+Received: from [10.69.30.204] (10.69.30.204) by dggpemm500005.china.huawei.com
+ (7.185.36.74) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.21; Tue, 14 Mar
+ 2023 19:37:24 +0800
+Subject: Re: [PATCH bpf-next v3 4/4] xdp: remove unused
+ {__,}xdp_release_frame()
+To:     Alexander Lobakin <aleksander.lobakin@intel.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>
+CC:     Maciej Fijalkowski <maciej.fijalkowski@intel.com>,
+        Larysa Zaremba <larysa.zaremba@intel.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@redhat.com>,
+        Song Liu <song@kernel.org>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Menglong Dong <imagedong@tencent.com>,
+        Mykola Lysenko <mykolal@fb.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20230313215553.1045175-1-aleksander.lobakin@intel.com>
+ <20230313215553.1045175-5-aleksander.lobakin@intel.com>
+From:   Yunsheng Lin <linyunsheng@huawei.com>
+Message-ID: <42712a3f-544f-6e45-1468-9f9fae7922e8@huawei.com>
+Date:   Tue, 14 Mar 2023 19:37:23 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:52.0) Gecko/20100101
+ Thunderbird/52.2.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZBBa+e9VXj/eyT4J@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230313215553.1045175-5-aleksander.lobakin@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.69.30.204]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ dggpemm500005.china.huawei.com (7.185.36.74)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,94 +67,92 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:31:06PM +0200, Andy Shevchenko wrote:
-> On Tue, Mar 14, 2023 at 12:28:43PM +0200, Matti Vaittinen wrote:
-> > On 3/13/23 16:39, Andy Shevchenko wrote:
-> > > On Mon, Mar 13, 2023 at 01:31:42PM +0200, Matti Vaittinen wrote:
-> > > > On 3/6/23 13:13, Andy Shevchenko wrote:
-> > > > > On Fri, Mar 03, 2023 at 07:54:22AM +0000, Vaittinen, Matti wrote:
-> > > > > > On 3/2/23 17:05, Andy Shevchenko wrote:
-> > > > > > > On Thu, Mar 02, 2023 at 12:57:54PM +0200, Matti Vaittinen wrote:
+On 2023/3/14 5:55, Alexander Lobakin wrote:
+> __xdp_build_skb_from_frame() was the last user of
+> {__,}xdp_release_frame(), which detaches pages from the page_pool.
+> All the consumers now recycle Page Pool skbs and page, except mlx5,
+> stmmac and tsnep drivers, which use page_pool_release_page() directly
+> (might change one day). It's safe to assume this functionality is not
+> needed anymore and can be removed (in favor of recycling).
+> 
+> Signed-off-by: Alexander Lobakin <aleksander.lobakin@intel.com>
+> ---
+>  include/net/xdp.h | 29 -----------------------------
+>  net/core/xdp.c    | 15 ---------------
+>  2 files changed, 44 deletions(-)
+> 
+> diff --git a/include/net/xdp.h b/include/net/xdp.h
+> index d517bfac937b..5393b3ebe56e 100644
+> --- a/include/net/xdp.h
+> +++ b/include/net/xdp.h
+> @@ -317,35 +317,6 @@ void xdp_flush_frame_bulk(struct xdp_frame_bulk *bq);
+>  void xdp_return_frame_bulk(struct xdp_frame *xdpf,
+>  			   struct xdp_frame_bulk *bq);
+>  
+> -/* When sending xdp_frame into the network stack, then there is no
+> - * return point callback, which is needed to release e.g. DMA-mapping
+> - * resources with page_pool.  Thus, have explicit function to release
+> - * frame resources.
+> - */
+> -void __xdp_release_frame(void *data, struct xdp_mem_info *mem);
+> -static inline void xdp_release_frame(struct xdp_frame *xdpf)
+> -{
+> -	struct xdp_mem_info *mem = &xdpf->mem;
+> -	struct skb_shared_info *sinfo;
+> -	int i;
+> -
+> -	/* Curr only page_pool needs this */
+> -	if (mem->type != MEM_TYPE_PAGE_POOL)
+> -		return;
+> -
+> -	if (likely(!xdp_frame_has_frags(xdpf)))
+> -		goto out;
+> -
+> -	sinfo = xdp_get_shared_info_from_frame(xdpf);
+> -	for (i = 0; i < sinfo->nr_frags; i++) {
+> -		struct page *page = skb_frag_page(&sinfo->frags[i]);
+> -
+> -		__xdp_release_frame(page_address(page), mem);
+> -	}
+> -out:
+> -	__xdp_release_frame(xdpf->data, mem);
+> -}
+> -
+>  static __always_inline unsigned int xdp_get_frame_len(struct xdp_frame *xdpf)
+>  {
+>  	struct skb_shared_info *sinfo;
+> diff --git a/net/core/xdp.c b/net/core/xdp.c
+> index a2237cfca8e9..8d3ad315f18d 100644
+> --- a/net/core/xdp.c
+> +++ b/net/core/xdp.c
+> @@ -531,21 +531,6 @@ void xdp_return_buff(struct xdp_buff *xdp)
+>  }
+>  EXPORT_SYMBOL_GPL(xdp_return_buff);
+>  
+> -/* Only called for MEM_TYPE_PAGE_POOL see xdp.h */
+> -void __xdp_release_frame(void *data, struct xdp_mem_info *mem)
+> -{
+> -	struct xdp_mem_allocator *xa;
+> -	struct page *page;
+> -
+> -	rcu_read_lock();
+> -	xa = rhashtable_lookup(mem_id_ht, &mem->id, mem_id_rht_params);
+> -	page = virt_to_head_page(data);
+> -	if (xa)
+> -		page_pool_release_page(xa->page_pool, page);
 
-...
+page_pool_release_page() is only call here when xa is not NULL
+and mem->type == MEM_TYPE_PAGE_POOL.
 
-> > > > > > > > +			if (!diff) {
-> > > > > > > 
-> > > > > > > Why not positive conditional?
-> > > > > > 
-> > > > > > Because !diff is a special condition and we check explicitly for it.
-> > > > > 
-> > > > > And how my suggestion makes it different?
-> > > > 
-> > > > In example you gave we would be checking if the value is anything else but
-> > > > the specific value we are checking for. It is counter intuitive.
-> > > > 
-> > > > > (Note, it's easy to miss the ! in the conditionals, that's why positive ones
-> > > > >    are preferable.)
-> > > > 
-> > > > Thank you for explaining me the rationale behind the "positive checks". I
-> > > > didn't know missing '!' was seen as a thing.
-> > > > I still don't think being afraid of missing '!' is a good reason to switch
-> > > > to counter intuitive checks. A check "if (!foo)" is a pattern in-kernel if
-> > > > anything and in my opinion people really should be aware of it.
-> > > > 
-> > > > (I would much more say that having a constant value on left side of a
-> > > > "equality" check is beneficial as people do really occasionally miss one '='
-> > > > when meaning '=='. Still, this is not strong enough reason to make
-> > > > counter-intuitive checks. In my books 'avoiding negative checks' is much
-> > > > less of a reason as people (in my experience) do not really miss the '!'.)
-> > > 
-> > > It's not a problem when it's a common pattern (like you mentioned
-> > > if (!foo) return -ENOMEM; or alike), but in your case it's not.
-> > 
-> > I think we can find plenty of cases where the if (!foo) is used also for
-> 
-> Pleading to the quantity and not quality is not an argument, right?
-> 
-> > other type of checks. To me the argument about people easily missing the !
-> > in if () just do not sound reasonable.
-> 
-> You may theoretically discuss this, I'm telling from my review background
-> and real cases.
-> 
-> > > I would rather see if (diff == 0) which definitely shows the intention
-> > > and I wouldn't tell a word against it.
-> > 
-> > I think this depends much of the corner of the kernel you have been working
-> > with. As far as I remember, in some parts the kernel the check
-> > (foo == 0) was actually discouraged, and check (!foo) was preferred.
-> 
-> Don't you use your common sense?
-> 
-> > Personally I like !foo much more - but I can tolerate the (foo == 0) in
-> > cases where the purpose is to really see if some measure equals to zero.
-> > 
-> > Other uses where I definitely don't want to use "== 0" are for example
-> > checking if a flag is clear, pointer is NULL or "magic value" is zero.
-> > 
-> > In this case we are checking for a magic value. Having this check written
-> > as: (diff == 0), would actually falsely suggest me we are checking for the
-> > difference of gains being zero. That would really be a clever obfuscation
-> > and I am certain the code readers would fall on that trap quite easily.
-> 
-> Testing with !diff sounds like it's a boolean kind and makes a false
-> impression that all other values are almost the same meaning which is
-> not the case. Am I right? That's why diff == 0 shows the exact intention
-> here "I would like to check if diff is 0 because this is *special case*".
-> 
-> Making !diff creates less visibility on this.
-> 
-> Result: Fundamental disagreement between us.
+But skb_mark_for_recycle() is call when mem->type == MEM_TYPE_PAGE_POOL
+without checking xa, it does not seems symmetric to patch 3, if this is
+intended?
 
-JFYI:
-$ git grep -n 'diff.* == 0[^0-9]' -- drivers/ | wc -l
-45
-
-(It happens to have same variable name, but you can imagine that there are
- much more cases with different variable names in use)
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> -	rcu_read_unlock();
+> -}
+> -EXPORT_SYMBOL_GPL(__xdp_release_frame);
+> -
+>  void xdp_attachment_setup(struct xdp_attachment_info *info,
+>  			  struct netdev_bpf *bpf)
+>  {
+> 
