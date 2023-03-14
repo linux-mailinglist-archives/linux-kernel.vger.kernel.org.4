@@ -2,67 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A62216B8EE6
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:42:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 104956B8EE7
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbjCNJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40390 "EHLO
+        id S230452AbjCNJmN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:42:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229958AbjCNJl5 (ORCPT
+        with ESMTP id S229958AbjCNJmK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:41:57 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 610EF76A6;
-        Tue, 14 Mar 2023 02:41:55 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32E9fmdH025300;
-        Tue, 14 Mar 2023 04:41:48 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678786908;
-        bh=0Ua2goAJduIUgjICOozBPJ39kPi/HNT6hTzM9pINneU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=EyopEkmR1NmjUA+P7x1zjG9tO64d6ADOEttUf0X8UOKoIFJiuH86OKmzRbOvwmbY7
-         GzrYP3rxzujrqXXAHwcTIOoYe/NyhXaYibNwiXUd9mlvMkujVVucgGFCo4dOrJKPVb
-         9215+QJIUXzPhhMFOwkYtHpK5WykB16BRg6WgGLI=
-Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32E9fmsI020877
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 04:41:48 -0500
-Received: from DFLE102.ent.ti.com (10.64.6.23) by DFLE104.ent.ti.com
- (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 04:41:47 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE102.ent.ti.com
- (10.64.6.23) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 04:41:48 -0500
-Received: from [172.24.145.83] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32E9fj0P123695;
-        Tue, 14 Mar 2023 04:41:45 -0500
-Message-ID: <9e794431-cfa3-fed3-48e6-3c3ddf36ed92@ti.com>
-Date:   Tue, 14 Mar 2023 15:11:44 +0530
+        Tue, 14 Mar 2023 05:42:10 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1039693E25
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 02:42:07 -0700 (PDT)
+Received: from kwepemm600005.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4PbT7g0DdDzKmcx;
+        Tue, 14 Mar 2023 17:41:51 +0800 (CST)
+Received: from [10.67.103.158] (10.67.103.158) by
+ kwepemm600005.china.huawei.com (7.193.23.191) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.21; Tue, 14 Mar 2023 17:42:04 +0800
+Subject: Re: [PATCH v8 1/5] vfio/migration: Add debugfs to live migration
+ driver
+To:     Alex Williamson <alex.williamson@redhat.com>
+CC:     <jgg@nvidia.com>, <shameerali.kolothum.thodi@huawei.com>,
+        <jonathan.cameron@huawei.com>, <cohuck@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <linuxarm@openeuler.org>
+References: <20230217084831.35783-1-liulongfang@huawei.com>
+ <20230217084831.35783-2-liulongfang@huawei.com>
+ <20230310164007.301adce8.alex.williamson@redhat.com>
+From:   liulongfang <liulongfang@huawei.com>
+Message-ID: <34da84f8-5b3d-3195-c6fd-5c40e0205246@huawei.com>
+Date:   Tue, 14 Mar 2023 17:42:03 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.8.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>
-CC:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>,
-        <vigneshr@ti.com>, <kristo@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20230313112834.16156-1-b-kapoor@ti.com>
- <20230313170542.jehrem7egp6lelgf@repeater>
-From:   Bhavya Kapoor <b-kapoor@ti.com>
-In-Reply-To: <20230313170542.jehrem7egp6lelgf@repeater>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+In-Reply-To: <20230310164007.301adce8.alex.williamson@redhat.com>
+Content-Type: text/plain; charset="gbk"
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.67.103.158]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemm600005.china.huawei.com (7.193.23.191)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,104 +53,295 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 2023/3/11 7:40, Alex Williamson wrote:
+> On Fri, 17 Feb 2023 16:48:27 +0800
+> Longfang Liu <liulongfang@huawei.com> wrote:
+> 
+>> There are multiple devices, software and operational steps involved
+>> in the process of live migration. An error occurred on any node may
+>> cause the live migration operation to fail.
+>> This complex process makes it very difficult to locate and analyze
+>> the cause when the function fails.
+>>
+>> In order to quickly locate the cause of the problem when the
+>> live migration fails, I added a set of debugfs to the vfio
+>> live migration driver.
+>>                                +-------------------------------------------+
+>>                                |                                           |
+>>                                |                                           |
+>>                                |                  QEMU                     |
+>>                                |                                           |
+>>                                |                                           |
+>>                                +---+----------------------------+----------+
+>>                                    |      ^                     |      ^
+>>                                    |      |                     |      |
+>>  +--------+                        |      |                     |      |
+>>  |  vfio  |                        v      |                     v      |
+>>  +--------+                     +---------+--+               +---------+--+
+>>      ^                          |src vfio_dev|               |dst vfio_dev|
+>>      |                          +--+---------+               +--+---------+
+>>      |                             |      ^                     |      ^
+>>      |                             |      |                     |      |
+>>      |                             v      |                     |      |
+>>      |  +-----------+         +-----------+----+                |      |
+>>      +--+<bdf>file_x+<----+---+migration_attr  |                |      |
+>>      |  +-----------+     |   +----------------+                |      |
+>>      |                    +---+migration_data  |                |      |
+>>      |                    |   +----------------+                |      |
+>>      |                    +---+migration_debug |                |      |
+>>      |                    |   +----------------+                |      |
+>>      |                    |   +----------------+                |      |
+>>      |                    +---+migration_state |                |      |
+>>      |                        +----------------+                |      |
+>>      |                                                          |      |
+>>      |  +-----------+         +----------------+                |      |
+>>      +--+<bdf>file_y|<----+---+migration_attr  |                |      |
+>>         +-----------+     |   +----------------+                |      |
+>>                           +---+migration_data  |                |      |
+>>                           |   +----------------+<---------------+      |
+>>                           +---+migration_debug |                       |
+>>                           |   +----------------+                       |
+>>                           |   +----------------+                       |
+>>                           +---+migration_state +-----------------------+
+>>                               +----------------+
+>>
+>> The entire debugfs directory will be based on the definition of
+>> the CONFIG_DEBUG_FS macro. If this macro is not enabled, the
+>> interfaces in vfio.h will be empty definitions, and the creation
+>> and initialization of the debugfs directory will not be executed.
+>>
+>> debugfs will create a public root directory "vfio" file.
+>> then create a device <bdf> named file for each live migration device.
+> 
+> dev_name(), it's only <sbdf> for PCI devices.
+> 
+Yes, this description needs revision.
 
-On 13/03/23 22:35, Nishanth Menon wrote:
-> On 16:58-20230313, Bhavya Kapoor wrote:
->> J721s2 has two instances of 8 channel ADCs in MCU domain. Add DT nodes
->> for both instances of 8 channel ADCs for J721s2 SoC.
-> Drop the second line..
-Sure , i will modify the commit message in next patch.
->
->> Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
+>> First, create a unified state acquisition file of "migration_state"
+>> in this device directory.
+>> Then, create your own debugging files independently according to
+>> the functional requirements of each device.
+>>
+>> Here, HiSilicon accelerator creates three debug files:
+>> migration_attr: used to obtain the attribute parameters of the
+>> current live migration device.
+>> migration_data: used to get the live migration data of the current
+>> live migration device.
+>> migration_debug: Used to debug the current live migration device
+>> through commands.
+>>
+>> The live migration function of the current device can be tested by
+>> operating the debug files, and the functional status of the equipment
+>> and software at each stage can be tested step by step without
+>> performing the complete live migration function. And after the live
+>> migration is performed, the migration device data of the live migration
+>> can be obtained through the debug files.
+>>
+>> Signed-off-by: Longfang Liu <liulongfang@huawei.com>
 >> ---
+>>  drivers/vfio/Makefile       |  2 +-
+>>  drivers/vfio/vfio.h         | 14 +++++++
+>>  drivers/vfio/vfio_debugfs.c | 82 +++++++++++++++++++++++++++++++++++++
+>>  drivers/vfio/vfio_main.c    |  5 +++
+>>  include/linux/vfio.h        |  8 ++++
+>>  5 files changed, 110 insertions(+), 1 deletion(-)
+>>  create mode 100644 drivers/vfio/vfio_debugfs.c
 >>
->> Changelog v3->v4:
->> - add leading zeroes to reg address to match existing convention
->> - change clock names for adc to 'fck'
->> - remove spaces from start of line
-> Please provide links to previous versions of the patches.
->
->>   .../dts/ti/k3-j721s2-common-proc-board.dts    | 14 +++++++
->>   .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 40 +++++++++++++++++++
->>   2 files changed, 54 insertions(+)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->> index a7aa6cf08acd..3bc4f28c809f 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
->> @@ -309,3 +309,17 @@ &mcu_mcan1 {
->>   	pinctrl-0 = <&mcu_mcan1_pins_default>;
->>   	phys = <&transceiver2>;
->>   };
+>> diff --git a/drivers/vfio/Makefile b/drivers/vfio/Makefile
+>> index 70e7dcb302ef..1debcff31d30 100644
+>> --- a/drivers/vfio/Makefile
+>> +++ b/drivers/vfio/Makefile
+>> @@ -7,7 +7,7 @@ vfio-y += vfio_main.o \
+>>  vfio-$(CONFIG_IOMMUFD) += iommufd.o
+>>  vfio-$(CONFIG_VFIO_CONTAINER) += container.o
+>>  vfio-$(CONFIG_VFIO_VIRQFD) += virqfd.o
+>> -
+>> +vfio-$(CONFIG_DEBUG_FS) += vfio_debugfs.o
+>>  obj-$(CONFIG_VFIO_IOMMU_TYPE1) += vfio_iommu_type1.o
+>>  obj-$(CONFIG_VFIO_IOMMU_SPAPR_TCE) += vfio_iommu_spapr_tce.o
+>>  obj-$(CONFIG_VFIO_PCI) += pci/
+>> diff --git a/drivers/vfio/vfio.h b/drivers/vfio/vfio.h
+>> index e9721d8424bc..66c00f97e9cc 100644
+>> --- a/drivers/vfio/vfio.h
+>> +++ b/drivers/vfio/vfio.h
+>> @@ -258,4 +258,18 @@ static inline void vfio_device_put_kvm(struct vfio_device *device)
+>>  }
+>>  #endif
+>>  
+>> +#ifdef CONFIG_DEBUG_FS
+>> +void vfio_debugfs_create_root(void);
+>> +void vfio_debugfs_remove_root(void);
 >> +
->> +&tscadc0 {
->> +	status = "okay";
->> +	adc {
->> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
->> +	};
->> +};
+>> +void vfio_vf_debugfs_init(struct vfio_device *vdev);
+>> +void vfio_vf_debugfs_exit(struct vfio_device *vdev);
+> 
+> s/vf_// throughout.
+> 
+Yes, it is not vf anymore, the function name needs to be modified
+
+>> +#else
+>> +static inline void vfio_debugfs_create_root(void) { }
+>> +static inline void vfio_debugfs_remove_root(void) { }
 >> +
->> +&tscadc1 {
->> +	status = "okay";
-> Curious: ADCs work without pinmux? any test log?
-ADC work without pinmux. Will send test log in next patch.
->
->> +	adc {
->> +		ti,adc-channels = <0 1 2 3 4 5 6 7>;
->> +	};
->> +};
->> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> index 0af242aa9816..5da5f0cf7009 100644
->> --- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
->> @@ -306,4 +306,44 @@ cpts@3d000 {
->>   			ti,cpts-periodic-outputs = <2>;
->>   		};
->>   	};
+>> +static inline void vfio_vf_debugfs_init(struct vfio_device *vdev) { }
+>> +static inline void vfio_vf_debugfs_exit(struct vfio_device *vdev) { }
+>> +#endif /* CONFIG_DEBUG_FS */
 >> +
->> +	tscadc0: tscadc@40200000 {
->> +		compatible = "ti,am3359-tscadc";
->> +		reg = <0x00 0x40200000 0x00 0x1000>;
->> +		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
->> +		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
->> +		clocks = <&k3_clks 0 0>;
->> +		assigned-clocks = <&k3_clks 0 2>;
->> +		assigned-clock-rates = <60000000>;
->> +		clock-names = "fck";
->> +		dmas = <&main_udmap 0x7400>,
->> +			<&main_udmap 0x7401>;
->> +		dma-names = "fifo0", "fifo1";
->> +		status = "disabled";
-> If it works without pinmux, why disable by default?
-yea, We can keep it enabled as well
->
+>>  #endif
+>> diff --git a/drivers/vfio/vfio_debugfs.c b/drivers/vfio/vfio_debugfs.c
+>> new file mode 100644
+>> index 000000000000..c5df1496fe0e
+>> --- /dev/null
+>> +++ b/drivers/vfio/vfio_debugfs.c
+>> @@ -0,0 +1,82 @@
+>> +// SPDX-License-Identifier: GPL-2.0-only
+>> +/*
+>> + * Copyright (c) 2023, HiSilicon Ltd.
+>> + */
 >> +
->> +		adc {
->> +			#io-channel-cells = <1>;
->> +			compatible = "ti,am3359-adc";
->> +		};
->> +	};
+>> +#include <linux/device.h>
+>> +#include <linux/debugfs.h>
+>> +#include <linux/seq_file.h>
+>> +#include <linux/vfio.h>
+>> +#include "vfio.h"
 >> +
->> +	tscadc1: tscadc@40210000 {
->> +		compatible = "ti,am3359-tscadc";
->> +		reg = <0x00 0x40210000 0x00 0x1000>;
->> +		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
->> +		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
->> +		clocks = <&k3_clks 1 0>;
->> +		assigned-clocks = <&k3_clks 1 2>;
->> +		assigned-clock-rates = <60000000>;
->> +		clock-names = "fck";
->> +		dmas = <&main_udmap 0x7402>,
->> +			<&main_udmap 0x7403>;
->> +		dma-names = "fifo0", "fifo1";
->> +		status = "disabled";
+>> +static struct dentry *vfio_debugfs_root;
 >> +
->> +		adc {
->> +			#io-channel-cells = <1>;
->> +			compatible = "ti,am3359-adc";
->> +		};
->> +	};
->>   };
->> -- 
->> 2.34.1
->>
+>> +static int vfio_vf_state_read(struct seq_file *seq, void *data)
+>> +{
+>> +	struct device *vf_dev = seq->private;
+>> +	struct vfio_device *vdev = container_of(vf_dev, struct vfio_device, device);
+>> +	enum vfio_device_mig_state state;
+>> +	int ret;
+>> +
+>> +	ret = vdev->mig_ops->migration_get_state(vdev, &state);
+>> +	if (ret) {
+>> +		dev_err(vf_dev, "failed to get device migration state");
+> 
+> Isn't the errno below sufficient?  No need to add the ability to fill
+> logs as well.
+> 
+OK£¬I will remove it in the next version.
+
+>> +		return -EINVAL;
+>> +	}
+>> +
+>> +	switch (state) {
+>> +	case VFIO_DEVICE_STATE_RUNNING:
+>> +		seq_printf(seq, "%s\n", "RUNNING");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_STOP_COPY:
+>> +		seq_printf(seq, "%s\n", "STOP_COPY");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_STOP:
+>> +		seq_printf(seq, "%s\n", "STOP");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_RESUMING:
+>> +		seq_printf(seq, "%s\n", "RESUMING");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_RUNNING_P2P:
+>> +		seq_printf(seq, "%s\n", "RESUMING_P2P");
+>> +		break;
+>> +	case VFIO_DEVICE_STATE_ERROR:
+>> +		seq_printf(seq, "%s\n", "ERROR");
+>> +		break;
+>> +	default:
+>> +		seq_printf(seq, "%s\n", "Invalid");
+>> +	}
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +void vfio_vf_debugfs_init(struct vfio_device *vdev)
+>> +{
+>> +	struct device *dev = &vdev->device;
+>> +
+>> +	vdev->debug_root = debugfs_create_dir(dev_name(vdev->dev), vfio_debugfs_root);
+>> +
+>> +	debugfs_create_devm_seqfile(dev, "migration_state", vdev->debug_root,
+>> +				  vfio_vf_state_read);
+>> +}
+>> +EXPORT_SYMBOL_GPL(vfio_vf_debugfs_init);
+>> +
+>> +void vfio_vf_debugfs_exit(struct vfio_device *vdev)
+>> +{
+>> +	debugfs_remove_recursive(vdev->debug_root);
+>> +}
+>> +EXPORT_SYMBOL_GPL(vfio_vf_debugfs_exit);
+> 
+> The above two should probably be vfio_device_debugfs_{init,exit}().
+> 
+OK
+
+>> +
+>> +void  vfio_debugfs_create_root(void)
+>> +{
+>> +	vfio_debugfs_root = debugfs_create_dir("vfio", NULL);
+>> +}
+>> +EXPORT_SYMBOL_GPL(vfio_debugfs_create_root);
+>> +
+>> +void  vfio_debugfs_remove_root(void)
+>> +{
+>> +	debugfs_remove_recursive(vfio_debugfs_root);
+>> +	vfio_debugfs_root = NULL;
+>> +}
+>> +EXPORT_SYMBOL_GPL(vfio_debugfs_remove_root);
+> 
+> As Jason notes, this becomes part of the vfio module, these latter two
+> don't need to be exported to be called by vfio_main.
+> 
+
+Let me re-debug to see if I can delete the following exports
+
+> Thanks,
+> Alex
+> 
+Thanks£¬
+Longfang
+
+>> +
+>> diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
+>> index 3a597e799918..09772fd3a396 100644
+>> --- a/drivers/vfio/vfio_main.c
+>> +++ b/drivers/vfio/vfio_main.c
+>> @@ -1408,6 +1408,9 @@ static int __init vfio_init(void)
+>>  	}
+>>  
+>>  	pr_info(DRIVER_DESC " version: " DRIVER_VERSION "\n");
+>> +
+>> +	vfio_debugfs_create_root();
+>> +
+>>  	return 0;
+>>  
+>>  err_dev_class:
+>> @@ -1425,6 +1428,8 @@ static void __exit vfio_cleanup(void)
+>>  	vfio_virqfd_exit();
+>>  	vfio_group_cleanup();
+>>  	xa_destroy(&vfio_device_set_xa);
+>> +
+>> +	vfio_debugfs_remove_root();
+>>  }
+>>  
+>>  module_init(vfio_init);
+>> diff --git a/include/linux/vfio.h b/include/linux/vfio.h
+>> index 93134b023968..fa6b898ebb58 100644
+>> --- a/include/linux/vfio.h
+>> +++ b/include/linux/vfio.h
+>> @@ -63,6 +63,14 @@ struct vfio_device {
+>>  	struct iommufd_ctx *iommufd_ictx;
+>>  	bool iommufd_attached;
+>>  #endif
+>> +
+>> +#ifdef CONFIG_DEBUG_FS
+>> +	/*
+>> +	 * debug_root is a static property of the vfio_device
+>> +	 * which must be set prior to registering the vfio_device.
+>> +	 */
+>> +	struct dentry *debug_root;
+>> +#endif
+>>  };
+>>  
+>>  /**
+> 
+> .
+> 
