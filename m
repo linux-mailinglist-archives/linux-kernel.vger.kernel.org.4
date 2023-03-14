@@ -2,130 +2,248 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 44FA66BA0A1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AFF96BA0A4
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:24:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229881AbjCNUXz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:23:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42688 "EHLO
+        id S230191AbjCNUYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229464AbjCNUXw (ORCPT
+        with ESMTP id S231176AbjCNUYE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:23:52 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D483CC14B;
-        Tue, 14 Mar 2023 13:23:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678825425; x=1710361425;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=EZgemfODZdzJL//ckW8Ahf4paB+FAWm34Ie+LQVzxoU=;
-  b=Dkk/k3G8o+coc4cRQcctGLM71c3eGtUNpzFVVF1eYIqNnVc6qvpBwPTZ
-   KRDOfGpnl0OY6D8TCd2l7+OV1kYDgjiACFLfcC3Gf8i/OzUzUXjU7mGb/
-   SDPFVjfQ3UGIAEo5JZMrYA5XicAbUVuXVnXK/yIsTC/GuLZos3v4MNAKs
-   IqNY1TZmdzdo/RIemXginBz7Y1OUBbBYaoqLB9xnsapKX3KJk0q1b8VGc
-   PRT41uqlYqjEtv9HZP3d3h9mbuYkZser3WJBkFeoG3rWp+AjI9gczkp/1
-   NK4uBECZ5rEcyFqcrOOsCViMNRCaA92eabaM2TjWvcjDpOF4c2bYjT1yB
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317931144"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="317931144"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 13:23:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="748143935"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="748143935"
-Received: from agluck-desk3.sc.intel.com ([172.25.222.78])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 13:23:44 -0700
-Date:   Tue, 14 Mar 2023 13:23:43 -0700
-From:   Tony Luck <tony.luck@intel.com>
-To:     "Moger, Babu" <babu.moger@amd.com>
-Cc:     Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Peter Newman <peternewman@google.com>,
-        Jonathan Corbet <corbet@lwn.net>, x86@kernel.org,
-        Shaopeng Tan <tan.shaopeng@fujitsu.com>,
-        James Morse <james.morse@arm.com>,
-        Jamie Iles <quic_jiles@quicinc.com>,
-        linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
-        patches@lists.linux.dev
-Subject: Re: [PATCH 7/7] x86/resctrl: Determine if Sub-NUMA Cluster is
- enabled and initialize.
-Message-ID: <ZBDXzz+f1nSP1Ml0@agluck-desk3.sc.intel.com>
-References: <20230126184157.27626-1-tony.luck@intel.com>
- <20230126184157.27626-8-tony.luck@intel.com>
- <38ce210b-50f7-188b-63a9-c7b3870fa99c@amd.com>
+        Tue, 14 Mar 2023 16:24:04 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B7372A6F8;
+        Tue, 14 Mar 2023 13:24:01 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A52B21CC8;
+        Tue, 14 Mar 2023 20:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1678825440; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vcexmiQDIGjEczWxOqfizqF7kSZwJ4krojfVt+WhvVU=;
+        b=O623N601B3RRv/A7XI7b7CJ0bD7MjAkAzkaVWtLC/vZSYpXxVhwulhwl3s0tSdvjQT9ovO
+        w5pO0s5MYxTqu6k5oEzZQWVecBo1ZG+eJP///yXp7pRCZgFAS+I56aQEcnZdoZRZ6/mvyV
+        TlHP6dGaVJXciRDeI1diXK6E9R9873Q=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1678825440;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=vcexmiQDIGjEczWxOqfizqF7kSZwJ4krojfVt+WhvVU=;
+        b=VO4nj/9ttu8IbT70Di8v+zl8X2Rw+6w9p/gSyyCcL/G8/lwAAvptYcAYC4grbPAihBiW30
+        +mlM0bH9OT0N7OCQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 65AC913A26;
+        Tue, 14 Mar 2023 20:23:59 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Fs2ECt/XEGS1XgAAMHmgww
+        (envelope-from <mpdesouza@suse.com>); Tue, 14 Mar 2023 20:23:59 +0000
+Date:   Tue, 14 Mar 2023 17:23:56 -0300
+From:   Marcos Paulo de Souza <mpdesouza@suse.de>
+To:     Joe Lawrence <joe.lawrence@redhat.com>
+Cc:     live-patching@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kbuild@vger.kernel.org, Josh Poimboeuf <jpoimboe@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Marcos Paulo de Souza <mpdesouza@suse.com>
+Subject: Re: [PATCH v7 00/10] livepatch: klp-convert tool
+Message-ID: <20230314202356.kal22jracaw5442y@daedalus>
+References: <20230306140824.3858543-1-joe.lawrence@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <38ce210b-50f7-188b-63a9-c7b3870fa99c@amd.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20230306140824.3858543-1-joe.lawrence@redhat.com>
+X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Feb 28, 2023 at 01:51:32PM -0600, Moger, Babu wrote:
-> I am thinking loud here.
-> When a new monitor group is created, new RMID is assigned. This is done by
-> alloc_rmid. It does not know about the rmid_offset details. This will
-> allocate the one of the free RMIDs.
+On Mon, Mar 06, 2023 at 09:08:14AM -0500, Joe Lawrence wrote:
+> Summary
+> -------
 > 
-> When CPUs are assigned to the group, then per cpu  pqr_state is updated.
-> At that point, this RMID becomes default_rmid for that cpu.
+> Livepatches may use symbols which are not contained in its own scope,
+> and, because of that, may end up compiled with relocations that will
+> only be resolved during module load. Yet, when the referenced symbols
+> are not exported, solving this relocation requires information on the
+> object that holds the symbol (either vmlinux or modules) and its
+> position inside the object, as an object may contain multiple symbols
+> with the same name.  Providing such information must be done accordingly
+> to what is specified in Documentation/livepatch/module-elf-format.txt.
 > 
-> But CPUs can be assigned from two different Sub-NUMA nodes.
+> Currently, there is no trivial way to embed the required information as
+> requested in the final livepatch elf object. klp-convert solves this
+> problem in two different forms: (i) by relying on a symbol map, which is
+> built during kernel compilation, to automatically infer the relocation
+> targeted symbol, and, when such inference is not possible (ii) by using
+> annotations in the elf object to convert the relocation accordingly to
+> the specification, enabling it to be handled by the livepatch loader.
 > 
-> Considering same example you mentioned.
+> Given the above, add support for symbol mapping in the form of a
+> symbols.klp file; add klp-convert tool; integrate klp-convert tool into
+> kbuild; make livepatch modules discernible during kernel compilation
+> pipeline; add data-structure and macros to enable users to annotate
+> livepatch source code; make modpost stage compatible with livepatches;
+> update livepatch-sample and update documentation.
 > 
-> E.g. in 2-way Sub-NUMA cluster with 200 RMID counters there are only
-> 100 available counters to the resctrl code. When running on the first
-> SNC node RMID values 0..99 are used as before. But when running on the
-> second node, a task that is assigned resctrl rmid=10 must load 10+100
-> into IA32_PQR_ASSOC to use RMID counter 110.
+> The patch was tested under three use-cases:
 > 
-> #mount -t resctrl resctrl /sys/fs/resctrl/
-> #cd /sys/fs/resctrl/
-> #mkdir test  (Lets say RMID 1 is allocated)
-> #cd test
-> #echo 1 > cpus_list
-> #echo 101 > cpus_list
+> use-case 1: There is a relocation in the lp that can be automatically
+> resolved by klp-convert.  For example. see the saved_command_line
+> variable in lib/livepatch/test_klp_convert2.c.
 > 
-> In this case, the following code may run on two different RMIDs even
-> though it was intended to run on same RMID.
+> use-case 2: There is a relocation in the lp that cannot be automatically
+> resolved, as the name of the respective symbol appears in multiple
+> objects. The livepatch contains an annotation to enable a correct
+> relocation.  See the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections
+> in lib/livepatch/test_klp_convert{1,2}.c.
 > 
-> wrmsr(MSR_IA32_QM_EVTSEL, eventid, rmid + this_cpu_read(rmid_offset));
+> use-case 3: There is a relocation in the lp that cannot be automatically
+> resolved similarly as 2, but no annotation was provided in the
+> livepatch, triggering an error during compilation.  Reproducible by
+> removing the KLP_MODULE_RELOC / KLP_SYMPOS annotation sections in
+> lib/livepatch/test_klp_convert{1,2}.c.
 > 
-> Have you thought of this problem?
+> Selftests have been added to exercise these klp-convert use-cases
+> through several tests.
+> 
+> 
+> Testing
+> -------
+> 
+> The patchset selftests build and execute on x86_64, s390x, and ppc64le
+> for both default config (with added livepatch dependencies) and a larger
+> RHEL-9-ish config.
+> 
+> Using the Intel's Linux Kernel Performance tests's make.cross,
+> klp-convert builds and processes livepatch .ko's for x86_64 ppc64le
+> ppc32 s390 arm64 arches.
+> 
+> 
+> Summary of changes in v7
+> ------------------------
+> 
+> - rebase for v6.2
+> - combine ("livepatch: Add klp-convert tool") with ("livepatch: Add
+>   klp-convert annotation helpers")
+> - combine ("kbuild: Support for symbols.klp creation") with ("modpost:
+>   Integrate klp-convert") to simplify Kbuild magic [Petr, Nicolas]
+> - klp-convert: add safe_snprintf() (-Wsign-compare)
+> - klp-convert: fix -Wsign-compare warnings
+> - klp-convert: use calloc() where appropriate
+> - klp-convert: copy ELF e_flags
+> - selftests: fix various build warnings
+> - klp-convert: WARN msg simplification, failed sanity checks, and sympos
+>   comment [Marcos]
+> - klp-convert: fix elf_write_file() error paths [Petr]
 
-Now I've thought about this. I don't think it is a problem.
+Thanks for the new version Joe. I've run the ksefltests on my x86 laptop, and it
+succeed as expected, so
 
-With SNC enabled for two nodes per socket the available RMIDs
-are divided between the SNC nodes, but are for some purposes
-numbered [0 .. N/2) but in some cases must be viewed as two
-separate sets [0 .. N/2) on the first node and [N/2 .. N) on
-the second.
+Tested-by: Marcos Paulo de Souza <mpdesouza@suse.com>
 
-In your example RMID 1 is assigned to the group and you have
-one CPU from each node in the group. Processes on CPU1 will
-load IA32_PQR_ASSOC.RMID = 1, while processes on CPU101 will
-set IA32_PQR_ASSOC.RMID = 101. So counts of memory bandwidth
-and cache occupancy will be in two different physical RMID
-counters.
-
-To read these back the user needs to lookup which $node each CPU
-belongs to and then read from the appropriate
-mon_data/mon_L3_$node/{llc_occupancy,mbm_local_bytes,mbm_total_bytes}
-file.
-
-$ cat mon_data/mon_L3_00/llc_occupancy # reads RMID=1
-$ cat mon_data/mon_L3_01/llc_occupancy # reads RMID=101
-
--Tony
- 
+> 
+> 
+> Previous versions
+> -----------------
+> 
+> RFC:
+>   https://lore.kernel.org/lkml/cover.1477578530.git.jpoimboe@redhat.com/
+> v2:
+>   https://lore.kernel.org/lkml/f52d29f7-7d1b-ad3d-050b-a9fa8878faf2@redhat.com/
+> v3:
+>   https://lore.kernel.org/lkml/20190410155058.9437-1-joe.lawrence@redhat.com/
+> v4:
+>   https://lore.kernel.org/lkml/20190509143859.9050-1-joe.lawrence@redhat.com/
+> v5:
+>   (not posted)
+>   https://github.com/joe-lawrence/klp-convert-tree/tree/klp-convert-v5-devel
+> v6:
+>   https://lore.kernel.org/live-patching/20220216163940.228309-1-joe.lawrence@redhat.com/
+> 
+> 
+> Joe Lawrence (10):
+>   livepatch: Create and include UAPI headers
+>   livepatch: Add klp-convert tool
+>   kbuild/modpost: create symbols.klp and integrate klp-convert
+>   livepatch: Add sample livepatch module
+>   documentation: Update on livepatch elf format
+>   livepatch/selftests: add klp-convert
+>   livepatch/selftests: test multiple sections
+>   livepatch/selftests: add __asm__ symbol renaming examples
+>   livepatch/selftests: add data relocations test
+>   livepatch/selftests: add static keys test
+> 
+>  .gitignore                                    |   2 +
+>  Documentation/dontdiff                        |   1 +
+>  Documentation/livepatch/livepatch.rst         |   3 +
+>  Documentation/livepatch/module-elf-format.rst |  42 +-
+>  MAINTAINERS                                   |   2 +
+>  Makefile                                      |  16 +-
+>  include/linux/livepatch.h                     |  13 +
+>  include/uapi/linux/livepatch.h                |  25 +
+>  kernel/livepatch/core.c                       |   4 +-
+>  lib/livepatch/Makefile                        |  12 +
+>  lib/livepatch/test_klp_convert.h              |  45 +
+>  lib/livepatch/test_klp_convert1.c             | 121 +++
+>  lib/livepatch/test_klp_convert2.c             | 110 +++
+>  lib/livepatch/test_klp_convert_data.c         | 190 ++++
+>  lib/livepatch/test_klp_convert_keys.c         |  91 ++
+>  lib/livepatch/test_klp_convert_keys_mod.c     |  52 +
+>  lib/livepatch/test_klp_convert_mod_a.c        |  31 +
+>  lib/livepatch/test_klp_convert_mod_b.c        |  19 +
+>  lib/livepatch/test_klp_convert_mod_c.c        |  36 +
+>  lib/livepatch/test_klp_convert_sections.c     | 120 +++
+>  samples/livepatch/Makefile                    |   1 +
+>  .../livepatch/livepatch-annotated-sample.c    |  93 ++
+>  scripts/Makefile                              |   1 +
+>  scripts/Makefile.modfinal                     |  33 +
+>  scripts/Makefile.modpost                      |   5 +
+>  scripts/livepatch/.gitignore                  |   1 +
+>  scripts/livepatch/Makefile                    |   5 +
+>  scripts/livepatch/elf.c                       | 817 ++++++++++++++++
+>  scripts/livepatch/elf.h                       |  74 ++
+>  scripts/livepatch/klp-convert.c               | 893 ++++++++++++++++++
+>  scripts/livepatch/klp-convert.h               |  47 +
+>  scripts/livepatch/list.h                      | 391 ++++++++
+>  scripts/mod/modpost.c                         |  28 +-
+>  scripts/mod/modpost.h                         |   1 +
+>  .../selftests/livepatch/test-livepatch.sh     | 403 ++++++++
+>  35 files changed, 3716 insertions(+), 12 deletions(-)
+>  create mode 100644 include/uapi/linux/livepatch.h
+>  create mode 100644 lib/livepatch/test_klp_convert.h
+>  create mode 100644 lib/livepatch/test_klp_convert1.c
+>  create mode 100644 lib/livepatch/test_klp_convert2.c
+>  create mode 100644 lib/livepatch/test_klp_convert_data.c
+>  create mode 100644 lib/livepatch/test_klp_convert_keys.c
+>  create mode 100644 lib/livepatch/test_klp_convert_keys_mod.c
+>  create mode 100644 lib/livepatch/test_klp_convert_mod_a.c
+>  create mode 100644 lib/livepatch/test_klp_convert_mod_b.c
+>  create mode 100644 lib/livepatch/test_klp_convert_mod_c.c
+>  create mode 100644 lib/livepatch/test_klp_convert_sections.c
+>  create mode 100644 samples/livepatch/livepatch-annotated-sample.c
+>  create mode 100644 scripts/livepatch/.gitignore
+>  create mode 100644 scripts/livepatch/Makefile
+>  create mode 100644 scripts/livepatch/elf.c
+>  create mode 100644 scripts/livepatch/elf.h
+>  create mode 100644 scripts/livepatch/klp-convert.c
+>  create mode 100644 scripts/livepatch/klp-convert.h
+>  create mode 100644 scripts/livepatch/list.h
+> 
+> -- 
+> 2.39.2
+> 
