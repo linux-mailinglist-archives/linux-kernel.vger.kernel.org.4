@@ -2,75 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89B516B86DF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:27:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A863C6B86E8
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbjCNA1o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:27:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39030 "EHLO
+        id S230320AbjCNA3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43102 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229483AbjCNA1n (ORCPT
+        with ESMTP id S229842AbjCNA3B (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:27:43 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 543507DFAD;
-        Mon, 13 Mar 2023 17:27:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 02410B81690;
-        Tue, 14 Mar 2023 00:27:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 376E2C433EF;
-        Tue, 14 Mar 2023 00:27:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678753659;
-        bh=aYzPRSwIRsgKjKjCSMcQS/WUymy+zYQ+d+Ttuiy3kkc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=HccrvcwmUv4748YrOZTuRhEICineiYDDjgOsR11VUJz+i5LehYQumkS0lI30JqY85
-         rPDcX+BsrwGkQaDw2etnRtclvudVirtaFrtQlBso2w3XMdu7KqWBRfPzqR/vqk71uq
-         TQhTlPageCZSw+fBknGJhF/cLlYrsBnvfnnLrNoeKuRLfWFO9WKbqk1tHZY2AZLb2k
-         KELbwsgR5jx3H/HcfyfcKyO07DvlqHS/yXWO2TPTY9tuTLllVn1tnf8VTweceCxG8A
-         74YBLn3YGH5EjMRAufMkTaIrWoAF5dsSWwH/m+tD0we0SMuMBSXGuu0/OX9Ufbd1CQ
-         mAPtavf2ciDsA==
-Date:   Mon, 13 Mar 2023 17:27:38 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Sean Anderson <seanga2@gmail.com>
-Cc:     "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Simon Horman <simon.horman@corigine.com>,
-        debian-sparc@lists.debian.org, rescue@sunhelp.org, sparc@gentoo.org
-Subject: Re: [PATCH net-next v2 0/9] net: sunhme: Probe/IRQ cleanups
-Message-ID: <20230313172738.3508810f@kernel.org>
-In-Reply-To: <20230311181905.3593904-1-seanga2@gmail.com>
-References: <20230311181905.3593904-1-seanga2@gmail.com>
+        Mon, 13 Mar 2023 20:29:01 -0400
+Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05B56580D7;
+        Mon, 13 Mar 2023 17:28:57 -0700 (PDT)
+Authenticated-By: 
+X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 32E0ST5V0002432, This message is accepted by code: ctloc85258
+Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
+        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 32E0ST5V0002432
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=OK);
+        Tue, 14 Mar 2023 08:28:29 +0800
+Received: from RTEXDAG01.realtek.com.tw (172.21.6.100) by
+ RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.17; Tue, 14 Mar 2023 08:28:41 +0800
+Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
+ RTEXDAG01.realtek.com.tw (172.21.6.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.7; Tue, 14 Mar 2023 08:28:40 +0800
+Received: from RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02]) by
+ RTEXMBS04.realtek.com.tw ([fe80::b4a2:2bcc:48d1:8b02%5]) with mapi id
+ 15.01.2375.007; Tue, 14 Mar 2023 08:28:40 +0800
+From:   Ping-Ke Shih <pkshih@realtek.com>
+To:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+CC:     "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
+        Yan-Hsuan Chuang <tony0620emma@gmail.com>,
+        Kalle Valo <kvalo@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-mmc@vger.kernel.org" <linux-mmc@vger.kernel.org>,
+        Chris Morgan <macroalpha82@gmail.com>,
+        "Nitin Gupta" <nitin.gupta981@gmail.com>,
+        Neo Jou <neojou@gmail.com>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: RE: [PATCH v2 RFC 1/9] wifi: rtw88: Clear RTW_FLAG_POWERON early in rtw_mac_power_switch()
+Thread-Topic: [PATCH v2 RFC 1/9] wifi: rtw88: Clear RTW_FLAG_POWERON early in
+ rtw_mac_power_switch()
+Thread-Index: AQHZU48RHUVrRx5DKki3zO3RS/BQyK73/dpQgACj0ICAAM7DoA==
+Date:   Tue, 14 Mar 2023 00:28:40 +0000
+Message-ID: <0f7b543f6f1d4856af3519a5c108c202@realtek.com>
+References: <20230310202922.2459680-1-martin.blumenstingl@googlemail.com>
+ <20230310202922.2459680-2-martin.blumenstingl@googlemail.com>
+ <14619a051589472292f8270c2c291204@realtek.com>
+ <CAFBinCBpeOH4tzrqHxPQ475=HLOWDKfJYLEEigfTmTJwQbGAAw@mail.gmail.com>
+In-Reply-To: <CAFBinCBpeOH4tzrqHxPQ475=HLOWDKfJYLEEigfTmTJwQbGAAw@mail.gmail.com>
+Accept-Language: en-US, zh-TW
+Content-Language: zh-TW
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [172.21.69.188]
+x-kse-serverinfo: RTEXDAG01.realtek.com.tw, 9
+x-kse-antispam-interceptor-info: fallback
+x-kse-antivirus-interceptor-info: fallback
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-KSE-AntiSpam-Interceptor-Info: fallback
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, 11 Mar 2023 13:18:56 -0500 Sean Anderson wrote:
-> Well, I've had these patches kicking around in my tree since last October, so I
-> guess I had better get around to posting them. This series is mainly a
-> cleanup/consolidation of the probe process, with some interrupt changes as well.
-> Some of these changes are SBUS- (AKA SPARC-) specific, so this should really get
-> some testing there as well to ensure nothing breaks. I've CC'd a few SPARC
-> mailing lists in hopes that someone there can try this out. I also have an SBUS
-> card I ordered by mistake if anyone has a SPARC computer but lacks this card.
-> 
-> I had originally planned on adding phylib support to this driver in the hopes of
-> being able to use real phy drivers, but I don't think I'm going to end up doing
-> that. I wanted to be able to use an external (homegrown) phy, but as it turns
-> out you can't buy MII cables in $CURRENTYEAR for under $250 a pop, and even if
-> you could get them you can't buy the connectors either. Oh well...
-
-Doesn't apply to net-next, please note we're using the branch called
-*main* now.
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFydGluIEJsdW1lbnN0
+aW5nbCA8bWFydGluLmJsdW1lbnN0aW5nbEBnb29nbGVtYWlsLmNvbT4NCj4gU2VudDogVHVlc2Rh
+eSwgTWFyY2ggMTQsIDIwMjMgNDowOCBBTQ0KPiBUbzogUGluZy1LZSBTaGloIDxwa3NoaWhAcmVh
+bHRlay5jb20+DQo+IENjOiBsaW51eC13aXJlbGVzc0B2Z2VyLmtlcm5lbC5vcmc7IFlhbi1Ic3Vh
+biBDaHVhbmcgPHRvbnkwNjIwZW1tYUBnbWFpbC5jb20+OyBLYWxsZSBWYWxvDQo+IDxrdmFsb0Br
+ZXJuZWwub3JnPjsgVWxmIEhhbnNzb24gPHVsZi5oYW5zc29uQGxpbmFyby5vcmc+OyBsaW51eC1r
+ZXJuZWxAdmdlci5rZXJuZWwub3JnOw0KPiBuZXRkZXZAdmdlci5rZXJuZWwub3JnOyBsaW51eC1t
+bWNAdmdlci5rZXJuZWwub3JnOyBDaHJpcyBNb3JnYW4gPG1hY3JvYWxwaGE4MkBnbWFpbC5jb20+
+OyBOaXRpbiBHdXB0YQ0KPiA8bml0aW4uZ3VwdGE5ODFAZ21haWwuY29tPjsgTmVvIEpvdSA8bmVv
+am91QGdtYWlsLmNvbT47IEplcm5laiBTa3JhYmVjIDxqZXJuZWouc2tyYWJlY0BnbWFpbC5jb20+
+DQo+IFN1YmplY3Q6IFJlOiBbUEFUQ0ggdjIgUkZDIDEvOV0gd2lmaTogcnR3ODg6IENsZWFyIFJU
+V19GTEFHX1BPV0VST04gZWFybHkgaW4gcnR3X21hY19wb3dlcl9zd2l0Y2goKQ0KPiANCj4gSGVs
+bG8gUGluZy1LZSwNCj4gDQo+IE9uIE1vbiwgTWFyIDEzLCAyMDIzIGF0IDM6MjnigK9BTSBQaW5n
+LUtlIFNoaWggPHBrc2hpaEByZWFsdGVrLmNvbT4gd3JvdGU6DQo+IFsuLi5dDQo+ID4gPiArICAg
+ICAgIGlmICghcHdyX29uKQ0KPiA+ID4gKyAgICAgICAgICAgICAgIGNsZWFyX2JpdChSVFdfRkxB
+R19QT1dFUk9OLCBydHdkZXYtPmZsYWdzKTsNCj4gPiA+ICsNCj4gPiA+ICAgICAgICAgcHdyX3Nl
+cSA9IHB3cl9vbiA/IGNoaXAtPnB3cl9vbl9zZXEgOiBjaGlwLT5wd3Jfb2ZmX3NlcTsNCj4gPiA+
+ICAgICAgICAgcmV0ID0gcnR3X3B3cl9zZXFfcGFyc2VyKHJ0d2RldiwgcHdyX3NlcSk7DQo+ID4g
+PiAgICAgICAgIGlmIChyZXQpDQo+ID4NCj4gPiBUaGlzIHBhdGNoIGNoYW5nZXMgdGhlIGJlaGF2
+aW9yIGlmIHJ0d19wd3Jfc2VxX3BhcnNlcigpIHJldHVybnMgZXJyb3Igd2hpbGUNCj4gPiBkb2lu
+ZyBwb3dlci1vZmYsIGJ1dCBJIGRpZyBhbmQgdGhpbmsgZnVydGhlciBhYm91dCB0aGlzIGNhc2Ug
+aGFyZHdhcmUgc3RheXMgaW4NCj4gPiBhYm5vcm1hbCBzdGF0ZS4gSSB0aGluayBpdCB3b3VsZCBi
+ZSBmaW5lIHRvIHNlZSB0aGlzIHN0YXRlIGFzIFBPV0VSX09GRi4NCj4gPiBEbyB5b3UgYWdyZWUg
+dGhpcyBhcyB3ZWxsPw0KPiBJIGFncmVlIHdpdGggeW91LiBBbHNvIEkgdGhpbmsgSSBzaG91bGQg
+aGF2ZSBtYWRlIGl0IGNsZWFyZXIgaW4gdGhlDQo+IGRlc2NyaXB0aW9uIG9mIHRoZSBwYXRjaCB0
+aGF0IEknbSBwb3RlbnRpYWxseSBjaGFuZ2luZyB0aGUgYmVoYXZpb3INCj4gKGFuZCB0aGF0IHRo
+aXMgaXMgbm90IGFuIGlzc3VlIGluIG15IG9waW5pb24pLg0KPiBJZiB0aGVyZSdzIGFueSBwcm9i
+bGVtIGR1cmluZyB0aGUgcG93ZXIgb24vb2ZmIHNlcXVlbmNlIHRoZW4gd2UgY2FuJ3QNCj4gYmUg
+ZnVsbHkgc3VyZSBhYm91dCB0aGUgcG93ZXIgc3RhdGUuDQo+IElmIHlvdSBoYXZlIGFueSBzdWdn
+ZXN0aW9ucyBob3cgdG8gaW1wcm92ZSB0aGlzIHRoZW4gcGxlYXNlIGxldCBtZSBrbm93Lg0KPiAN
+Cg0KTm8gbW9yZSBzdWdnZXN0aW9uIGZvciBub3cuIEp1c3QgYXBwbHkgeW91ciB0aG91Z2h0LiAN
+Cg0KUGluZy1LZQ0KDQo=
