@@ -2,72 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11FC06B871B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C3336B872A
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:44:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229961AbjCNAla (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:41:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35262 "EHLO
+        id S229985AbjCNAoI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:44:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229883AbjCNAl1 (ORCPT
+        with ESMTP id S230117AbjCNAno (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:41:27 -0400
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6703292266;
-        Mon, 13 Mar 2023 17:40:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-        bh=mt11C8pG4KQZH0zH7DIbpZM/h/ioAC5wjE50g/ZfFOs=; b=bpKbcH4IyXv4pEELYoOpv8Imm3
-        6ONgJvPqEVW2sC5HoYxtTfkv3cgzKro1hNz5uaiGaGBh6ypkeJgfI1fP5jqBBDrPgSVfh7FNab/4k
-        jgNRJV9SkaR0FtOM8rxAwCzy7bZ38NJNociKOwjsMOFVjRNg6x3HWsbINx55zPpW64mU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-        (envelope-from <andrew@lunn.ch>)
-        id 1pbshb-007FHr-HR; Tue, 14 Mar 2023 01:39:43 +0100
-Date:   Tue, 14 Mar 2023 01:39:43 +0100
-From:   Andrew Lunn <andrew@lunn.ch>
-To:     Serge Semin <Sergey.Semin@baikalelectronics.ru>
-Cc:     Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-        Alexandre Torgue <alexandre.torgue@foss.st.com>,
-        Jose Abreu <joabreu@synopsys.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Serge Semin <fancer.lancer@gmail.com>,
-        Alexey Malahov <Alexey.Malahov@baikalelectronics.ru>,
-        Pavel Parkhomenko <Pavel.Parkhomenko@baikalelectronics.ru>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Biao Huang <biao.huang@mediatek.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net 01/13] net: phy: realtek: Fix events detection
- failure in LPI mode
-Message-ID: <c87c9964-af29-4885-a977-c8a4a2fe704e@lunn.ch>
-References: <20230313224237.28757-1-Sergey.Semin@baikalelectronics.ru>
- <20230313224237.28757-2-Sergey.Semin@baikalelectronics.ru>
+        Mon, 13 Mar 2023 20:43:44 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C847F9224D;
+        Mon, 13 Mar 2023 17:43:20 -0700 (PDT)
+From:   Bastian Germann <bage@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1678754582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AvoUlui3Lli1dNY50lZfhcWoWPB+F1Ho3ol5gFyweZ4=;
+        b=jYlE1HKM866OsokR0VKzQha/o8Rb1l7OZifDQ7IlGQr7/1SN1+LWn0xzmMYxfExls1W1dC
+        QNY4YAvLzyvXY9SDYuQqIaFVLGJUYNp+AzUhGq+4WoP2h2uEVE5vR5X8/BThTHMZ31F+MY
+        r7zIV4446qxT2vElv6Y2Rd6dH5vfDesFTEJ7D9iu1KyDCBLKvUo/Of/0EKOcGfAmkDip86
+        k57xMPLKPr64hKLl/K5rDSVQf/PCyhYOAeY0TsF+QsRyYT1JrPjKBKlLkosSQOurNAZm6H
+        QS2aj5vfTNGnzv82Aexl0aMBOz3pYHoIpWv5pB62NlTkmNDv6vg7KjSQBnJERg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1678754582;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=AvoUlui3Lli1dNY50lZfhcWoWPB+F1Ho3ol5gFyweZ4=;
+        b=7ret0gOMzckO1p0qRAIgTpemdK/d5EpWslRZjhYJDahlBTNN6Wr+a55GvsZBwzX23ZllpE
+        rFEEoXiKnRyX9eAQ==
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Bastian Germann <bage@linutronix.de>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/1] builddeb: Eliminate debian/arch use
+Date:   Tue, 14 Mar 2023 01:40:21 +0100
+Message-Id: <20230314004022.403937-1-bage@linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313224237.28757-2-Sergey.Semin@baikalelectronics.ru>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Signed-off-by: Serge Semin <Sergey.Semin@baikalelectronics.ru>
-> Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+The debian/arch is almost unused.
+Eliminate the last use during dpkg-buildpackage time.
 
-Since this is for net, you need to provide a Fixes: tag.
+Bastian Germann (1):
+  builddeb: Eliminate debian/arch use
 
-      Andrew
+ scripts/package/builddeb | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+-- 
+2.39.2
+
