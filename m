@@ -2,105 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9B516B86F8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:36:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1A256B8708
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 01:37:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbjCNAgf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 13 Mar 2023 20:36:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        id S230423AbjCNAhN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 13 Mar 2023 20:37:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbjCNAg1 (ORCPT
+        with ESMTP id S230356AbjCNAgr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 13 Mar 2023 20:36:27 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D02082ABC
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:36:16 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id y19so7978849pgk.5
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 17:36:16 -0700 (PDT)
+        Mon, 13 Mar 2023 20:36:47 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CA948C592;
+        Mon, 13 Mar 2023 17:36:24 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id m6so421617qvq.0;
+        Mon, 13 Mar 2023 17:36:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678754176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=vlH32Emuag8G8y9Ul5mcocRDTiGSeipNTGU5xstePhI=;
-        b=LC9WAk/kiCsVP8DZ63qBj9WES4RNUeUZHz0x915YlHbjaPh1l3J5fJy0NT+ObTGJ08
-         sPWmP+WS+kbCjhi1JhXNgK/wc/KZPWlI8vzMvW6uH/HNrHWddbpdOnG/SYvbdAUA0QoC
-         EIXxfZpCRb47Gr2HzktVuZIxIh+TNzB3UjGpMVy+N0dnFtRGcXGG7Hgoxp3jVeqECN4Q
-         TaorKyjxRuAM8gsKUtzC+GLqU8UXvNLbUGwyi4p1G/SDr/Ay2Ylot98x5f+kclK5y7e8
-         2PqekyLXOp6JRzqiMkYMYka9PZJzEN5ibhbksk7TJcb1VQ4L9w9hi6UsdTUlczTwMtAj
-         rGgA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678754176;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20210112; t=1678754183;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=vlH32Emuag8G8y9Ul5mcocRDTiGSeipNTGU5xstePhI=;
-        b=YWG30pr4URIzwc4pPXVgpkQ2gqhcp3efw72UgdhapKMHQGLMUdj72Y4FXZ2XBxChtv
-         JZVvZkxkOIHatHauuTI+DGWoNjDMkmU6k4MCZuOqcIk4w3AyxbKPoQ3jC3ugGx7TNEdE
-         TWmvRT5LAHMA3Jnj/W7DxZ7tnihRMRD9ft9WF175czIHepHQg0CQrBAqyWyHlgS3y9/0
-         eAXhOi5bzYIZYm0aGARTKo/qyvSkJ/ksEwwmzKqwUEPo7sQCMtbT0rZdG27Y9Y88LTrC
-         tAKGGh+r+PwtoQaYzUK7a5FSEiLBRd921uT00Ryup4t4WkLHSn7gRZJR1gh4sgslIbEp
-         K+Wg==
-X-Gm-Message-State: AO0yUKXzC1qKNke5w9jxggcm5gK/4VMH9ADVXvgf0wNFtXxmsDtPAMN0
-        GyXrpZt13CLts3WxgIRvqt1QCw==
-X-Google-Smtp-Source: AK7set+Oh5cn1IYOWU6yauoYsJOvLntjuV2ZQ7CGBQKzeIOFxWwEiay+rHs7xVVYnsJGnaGv7uURFQ==
-X-Received: by 2002:a62:8489:0:b0:5a9:bf42:fcc5 with SMTP id k131-20020a628489000000b005a9bf42fcc5mr40513981pfd.0.1678754175989;
-        Mon, 13 Mar 2023 17:36:15 -0700 (PDT)
-Received: from leoy-yangtze.lan ([156.59.236.112])
-        by smtp.gmail.com with ESMTPSA id s11-20020aa7828b000000b005ded5d2d571sm271368pfm.185.2023.03.13.17.36.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 13 Mar 2023 17:36:15 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 08:36:10 +0800
-From:   Leo Yan <leo.yan@linaro.org>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     James Clark <james.clark@arm.com>,
-        linux-perf-users@vger.kernel.org,
-        LAK <linux-arm-kernel@lists.infradead.org>,
-        coresight@lists.linaro.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        mathieu.poirier@linaro.org, adrian.hunter@intel.com,
-        Jiri Olsa <jolsa@kernel.org>, acme@redhat.com,
-        mike.leach@linaro.org, Will Deacon <will@kernel.org>,
-        suzuki.poulose@arm.com
-Subject: Re: [BUG] perf: No samples found when using kcore + coresight
-Message-ID: <20230314003610.GD2426758@leoy-yangtze.lan>
-References: <CAHbLzkrJQTrYBtPkf=jf3OpQ-yBcJe7XkvQstX9j2frz4WF-SQ@mail.gmail.com>
- <8ca2b07e-674e-afb6-ff12-87504f51f252@arm.com>
- <CAHbLzkpf4RUZugKdn-uXC5m3RpAQH5aDmRXdsxPZi0Cbf-yiyw@mail.gmail.com>
- <CAHbLzkq_7aXcys1cpgGFsfMDDDKMsT3e7zdNW=0jAkw7kBtJ0Q@mail.gmail.com>
- <20230309113851.GF19253@leoy-yangtze.lan>
- <CAHbLzkpvLHnyL5J5kB_ke3CWVq2=MOEdEQsGex56+Esfgqh1=g@mail.gmail.com>
- <20230313121420.GB2426758@leoy-yangtze.lan>
- <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
+        bh=MUg2QzMJL1lA1j5wto2RGOAT+HfO1sOCXGSoRe+2FbI=;
+        b=AsuqJYecuA53+MFcru+ZjyCCc9wkzivS506xH+97NFFJFbdT/WtI90A2neYLGTQf/d
+         viZGY7R8mMswLzXYl/0nA3nkd6sws/C7l1KlTpiPxa4cuf3W4cv2HiwfhIRSrqLV6btv
+         CMDyHqbAgUwFD/jwX4xIVQcXQTT82e9mTRdTsXWjsMsaPt/eArU6+a0hsyMJ0ems/FEe
+         KkrKCQZlNKG3n32Jp7o4iLtQHcjNwig2gC/hovTo31X6OTD5ado7kdIdpWBnhXbphFwO
+         ys93eDnBJ7Jmep+MxlOt/TKa/U812EZsJFr4knS71oysIpPb7D1HI9ozT8cz93gKKOkY
+         DXmA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678754183;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=MUg2QzMJL1lA1j5wto2RGOAT+HfO1sOCXGSoRe+2FbI=;
+        b=osCxVhO2oSdpYWgnQGC7S8+o2xj/8x+r8fjt4dn3mWgmBELpqi1A8L+l2PTxAooxyf
+         OvrYqSi8Y0pkyeOaY+xpD2mU3PJnqQoKCX36rV3+gfFGMEwkXzybnbjSxb46MS2rx0YD
+         kBjy3GbbZKk+Q2T2qRc3nfy4E2IICiglLdn03e90ioPPTVvLlWak1ExVhMXZVOvvGSPW
+         S0mhWlfX91Q9mmfuVzyOhzkRtHEFncUOc/HJpKD1BGWeoKjHvVCLiQvFyA4zTo9HTrOw
+         /le9+w6W9T+i3uU9kC3yA61WWecmRSkoFD0RZpg23ipw/Zi4QM3xDOKpqYNRUOZwu+Tb
+         vTAg==
+X-Gm-Message-State: AO0yUKVA4i7N8VDaC7PiE+xS8nMpVqvuxgvniUB5dG0eVxQoWM83QKPd
+        DrXU7MY0Rq+2E6F8+83SY50=
+X-Google-Smtp-Source: AK7set9CvsNjayW00Os2w+QYcHeQFTFuRyByYy+M9yQwPjev0vWePVnyHkWNb6/z2+L3ieQ33hOqbQ==
+X-Received: by 2002:ad4:5d64:0:b0:56e:9d09:5150 with SMTP id fn4-20020ad45d64000000b0056e9d095150mr19035317qvb.15.1678754183287;
+        Mon, 13 Mar 2023 17:36:23 -0700 (PDT)
+Received: from localhost (pool-173-73-95-180.washdc.fios.verizon.net. [173.73.95.180])
+        by smtp.gmail.com with UTF8SMTPSA id c186-20020a379ac3000000b007456c75edbbsm677695qke.129.2023.03.13.17.36.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Mar 2023 17:36:23 -0700 (PDT)
+From:   Sean Anderson <seanga2@gmail.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Simon Horman <simon.horman@corigine.com>,
+        linux-kernel@vger.kernel.org, Sean Anderson <seanga2@gmail.com>
+Subject: [PATCH net-next v3 7/9] net: sunhme: Clean up mac address init
+Date:   Mon, 13 Mar 2023 20:36:11 -0400
+Message-Id: <20230314003613.3874089-8-seanga2@gmail.com>
+X-Mailer: git-send-email 2.37.1
+In-Reply-To: <20230314003613.3874089-1-seanga2@gmail.com>
+References: <20230314003613.3874089-1-seanga2@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkpZjrd401DEKnnCNMdra0f6kGRe1Nh_rTovNTmyD8aBpg@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:15:44AM -0700, Yang Shi wrote:
+Clean up some oddities suggested during review.
 
-[...]
+Signed-off-by: Sean Anderson <seanga2@gmail.com>
+---
 
-> > Just a quick summary, here we have two issues:
-> >
-> > - With command:
-> >   perf record -e cs_etm/@tmc_etf63/k --kcore --per-thread \
-> >   -- taskset --cpu-list 1 uname",
-> >
-> >   perf doesn't enable "text poke" attribution.
-> 
-> No, it enables "text poke" and perf fails to decode coresight trace
-> data too. It doesn't matter whether "--kcore" is after or before "-e
-> cs/etm/@tmc_etf63/k".
+(no changes since v2)
 
-Understand now.  Thanks for correction, if so we can ignore this one.
+Changes in v2:
+- New
 
-Leo
+ drivers/net/ethernet/sun/sunhme.c | 9 ++++-----
+ 1 file changed, 4 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/net/ethernet/sun/sunhme.c b/drivers/net/ethernet/sun/sunhme.c
+index c2737f26afbe..1f27e99abf17 100644
+--- a/drivers/net/ethernet/sun/sunhme.c
++++ b/drivers/net/ethernet/sun/sunhme.c
+@@ -2348,9 +2348,7 @@ static int find_eth_addr_in_vpd(void __iomem *rom_base, int len, int index, unsi
+ 		p += 6;
+ 
+ 		if (index == 0) {
+-			int i;
+-
+-			for (i = 0; i < 6; i++)
++			for (int i = 0; i < 6; i++)
+ 				dev_addr[i] = readb(p + i);
+ 			return 1;
+ 		}
+@@ -2362,9 +2360,10 @@ static int find_eth_addr_in_vpd(void __iomem *rom_base, int len, int index, unsi
+ static void __maybe_unused get_hme_mac_nonsparc(struct pci_dev *pdev,
+ 						unsigned char *dev_addr)
+ {
++	void __iomem *p;
+ 	size_t size;
+-	void __iomem *p = pci_map_rom(pdev, &size);
+ 
++	p = pci_map_rom(pdev, &size);
+ 	if (p) {
+ 		int index = 0;
+ 		int found;
+@@ -2386,7 +2385,7 @@ static void __maybe_unused get_hme_mac_nonsparc(struct pci_dev *pdev,
+ 	dev_addr[2] = 0x20;
+ 	get_random_bytes(&dev_addr[3], 3);
+ }
+-#endif /* !(CONFIG_SPARC) */
++#endif
+ 
+ static void happy_meal_addr_init(struct happy_meal *hp,
+ 				 struct device_node *dp, int qfe_slot)
+-- 
+2.37.1
+
