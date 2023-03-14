@@ -2,74 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A68D76BA251
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:19:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4C476BA24E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:19:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231470AbjCNWTJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:19:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56696 "EHLO
+        id S229705AbjCNWTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:19:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230289AbjCNWS5 (ORCPT
+        with ESMTP id S231206AbjCNWSp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:18:57 -0400
-Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2061f.outbound.protection.outlook.com [IPv6:2a01:111:f400:7eaa::61f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43DB23DB5;
-        Tue, 14 Mar 2023 15:17:54 -0700 (PDT)
+        Tue, 14 Mar 2023 18:18:45 -0400
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on20629.outbound.protection.outlook.com [IPv6:2a01:111:f400:fe5a::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5550F1CF5C;
+        Tue, 14 Mar 2023 15:17:51 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Lb4mF/XTA2j+SShGzqv2/1F2Q9LVMjyB5DMqJtHZjdILDWFS4fgbuPbfF+pXrIlpM6fITO9SUjzo9wSRs2H8KBgiKfCwRAjsd5t890cO6qH6AFXAfSXbOT7FokfexdhEUFZM7nYfceb99v4TUcjOndPGesRcnIWsixBBDso0D2aFnaUpH+Ntnnsi7uOsQXb94LqfhR0sj6lE1jRv8mMVLC1y85jDTBARclO9LopaNnCzQGNsrnTbEkDr6A01k/ZeVp/jtE6k+JoknJv2VlHpC9GE7Crmf27J8GAveJ5Y4UVChZcDQO7jcoyWvI+hy/EigcwMB656ALuryehZ6eomnw==
+ b=KyvC7D50P3lWHBPxPNfjaJrtdnOiBR/MTBtwn1l5IxRah3ciFrefOnuCZFszhE/DX629RUPKxkd7Th7rq6C8DiIk25ce098/VkzfFi8LQtu4a2eYsWmuO7u3jvtjyGst+BvfmKhxwpb9vNTFulHWd8X53z5YnlgXkGH4bJVupAAzVCfAgNCSr7aFv9TBClQzkkc22mQ7+cDAOINDlSoIxj8cicu7R+c1Otv6T//yqcC/U+ojlsNDaSh1mvN7nBUK500779BQwoxQy41KDrdtldw68OOSUsv5UkH/xs+rNPtGiXiqdfZx7RRiXmNegZN+p99PvRDE+aTYHElEVxENrQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=DAtyzIHOQsytxJ49OKsC4/9zDeWwA4jDtVanoY7truc=;
- b=FN9gS42n4rhWtPgA0fCBZDO1l9hZEbKJIIbK6wkvWaqABpzWQ+wY2bjshHtndFPeftq/9Y6YRhdHCWh7Nk2Wvpo6CYXgPxm8mTMJV8V6qQHuZ+z3OMbP75pAbp6G+hHhM4HOz3TafEGEXxViMmpjpFtR09vnFTKcKBYwUxptUPDRJL69B+5xVwqQ5gV+PlfEsq86TCQN0kv5WV0Y2xWD02iZVy3xooq8wSsi1wZbXWKqK4Mg9iF9EURkEALkSmlgK3dravw9eQyMtHhmvvIvXixHmh6XBr0avNG6MjJcQx0QhIZpBM0qSv3O2j1OvfGiWFF/ZGqOvM7okmv5gyRQcg==
+ bh=Bv0zALneV5hrsr8yHv+OpCWVtKAJcNRqG1MD/gKDWwk=;
+ b=Z9fppDLA2jGNmch6jCpFaSW/OlUcYXezILAockHqw5GG1ihiqfs1xiGsstyHbzm/wxtrQSkNWpzlzQ1TIBxLK0YQ3FDXwm0AYQFr3dE+x4bm+9tvPas/juNBXG+LtOX2xvTBM3XHXN8mL0Fih5QQWVDdgUX97SkExP3f6byYGiQNd6VmD1OEjLL055S0aRx2tWjHeU+wPyGcBxG5Zrg/NhLHbBcKrLmAwPfrgwCaNRx+RxQhYx7zz0zZkIV19Xt+NQaOYoGM/f/cbxyZq2NFb5JtlfFdrWtBYd1CCLYyv/wGZTX8RDxHku/uDzjaVkV2HLF8vOv2SaZTdy0MJQm1BQ==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
+ 216.228.117.161) smtp.rcpttodomain=gmail.com smtp.mailfrom=nvidia.com;
  dmarc=pass (p=reject sp=reject pct=100) action=none header.from=nvidia.com;
  dkim=none (message not signed); arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
  s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=DAtyzIHOQsytxJ49OKsC4/9zDeWwA4jDtVanoY7truc=;
- b=Aobk+q+scpZql4oFHNjea6c/jnTkV6wQotIKr6TGQxft0kwNAimvKQSj55/M8dD2ifbG6rX/5sroEEIUV8rPcsFnw/K97QR2vkz6Pk5i9Qdv4bJvGaLZbz/FwTKs7AVQyUQHoli6Ruola2vdYCroaYLVZUYBCnOa90ndhfunGkO0riRqrummqyYXrHu9RarbMFJ2VdgDoFl/gfRbcD7Z/omLbpYbuzxWQX1nfg76Lq4SBXND74Fg/3SPms+AhfPAnvj9ZnPoHr5LaRDUJYXz4zpNQsUK8pSOCbpj1fMafQ44M+vElWIpMny4OLmOg3Bf1LL4htL19gFdF0ZrXR9UfQ==
-Received: from DS7PR03CA0099.namprd03.prod.outlook.com (2603:10b6:5:3b7::14)
- by BL1PR12MB5031.namprd12.prod.outlook.com (2603:10b6:208:31a::5) with
+ bh=Bv0zALneV5hrsr8yHv+OpCWVtKAJcNRqG1MD/gKDWwk=;
+ b=ZNoc2d0hlST5n/gdFKQ3Ro/73mq7IWESrA7UT3xKdNLUYR97Z/BI1CDZbLQ/LI/dM62bPY37JBi+0RXWu7dljbH23EF0Wd4PP3w81zNXL6a1dd4Qvbgc0/jXoWdyvFKhUvEUa/6+keOJT5wP9vjwWIfAF5UWp4Tw3SQ0jItIQmVKBILSDgw2+Z8VMA6A1kxRCFvUPt38XdSner/w4MuzZ8Vo8Yaif8YZmHarQPs92IV4YUFydKIuyKt1zHXAGCLG+1y1UKm/EDuaLQK+8+qKALsyvWl+/JX8jc556u9Jy9iLg9XVA17GyTDXhO3Kr/NgF5umt/9VUfFp4mrZVdBMOg==
+Received: from DM6PR02CA0144.namprd02.prod.outlook.com (2603:10b6:5:332::11)
+ by SJ2PR12MB8061.namprd12.prod.outlook.com (2603:10b6:a03:4cb::13) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26; Tue, 14 Mar
- 2023 22:16:23 +0000
-Received: from DM6NAM11FT083.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:3b7:cafe::6f) by DS7PR03CA0099.outlook.office365.com
- (2603:10b6:5:3b7::14) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
+ 2023 22:16:29 +0000
+Received: from DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:5:332:cafe::4d) by DM6PR02CA0144.outlook.office365.com
+ (2603:10b6:5:332::11) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.26 via Frontend
- Transport; Tue, 14 Mar 2023 22:16:23 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ Transport; Tue, 14 Mar 2023 22:16:29 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.161)
  smtp.mailfrom=nvidia.com; dkim=none (message not signed)
  header.d=none;dmarc=pass action=none header.from=nvidia.com;
 Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- DM6NAM11FT083.mail.protection.outlook.com (10.13.173.97) with Microsoft SMTP
+ 216.228.117.161 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.161; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.161) by
+ DM6NAM11FT076.mail.protection.outlook.com (10.13.173.204) with Microsoft SMTP
  Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.6199.11 via Frontend Transport; Tue, 14 Mar 2023 22:16:22 +0000
+ 15.20.6199.11 via Frontend Transport; Tue, 14 Mar 2023 22:16:29 +0000
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ (10.129.200.67) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.5; Tue, 14 Mar 2023
- 15:16:18 -0700
+ 15:16:21 -0700
 Received: from rnnvmail203.nvidia.com (10.129.68.9) by rnnvmail203.nvidia.com
  (10.129.68.9) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.37; Tue, 14 Mar
- 2023 15:16:17 -0700
+ 2023 15:16:21 -0700
 Received: from vdi.nvidia.com (10.127.8.14) by mail.nvidia.com (10.129.68.9)
  with Microsoft SMTP Server id 15.2.986.5 via Frontend Transport; Tue, 14 Mar
- 2023 15:16:16 -0700
+ 2023 15:16:20 -0700
 From:   Asmaa Mnebhi <asmaa@nvidia.com>
 To:     <andy.shevchenko@gmail.com>, <linus.walleij@linaro.org>,
-        <bgolaszewski@baylibre.com>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>
+        <bgolaszewski@baylibre.com>, <niyas.sait@linaro.org>,
+        <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-acpi@vger.kernel.org>
 CC:     Asmaa Mnebhi <asmaa@nvidia.com>
-Subject: [PATCH v5 1/2] gpio: gpio-mlxbf3: Add gpio driver support
-Date:   Tue, 14 Mar 2023 18:16:08 -0400
-Message-ID: <20230314221609.22433-2-asmaa@nvidia.com>
+Subject: [PATCH v5 2/2] pinctrl: pinctrl-mlxbf: Add pinctrl driver support
+Date:   Tue, 14 Mar 2023 18:16:09 -0400
+Message-ID: <20230314221609.22433-3-asmaa@nvidia.com>
 X-Mailer: git-send-email 2.30.1
 In-Reply-To: <20230314221609.22433-1-asmaa@nvidia.com>
 References: <20230314221609.22433-1-asmaa@nvidia.com>
@@ -78,23 +79,23 @@ Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
 X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT083:EE_|BL1PR12MB5031:EE_
-X-MS-Office365-Filtering-Correlation-Id: a6bcaa34-0073-43e0-c7ab-08db24d9beba
+X-MS-TrafficTypeDiagnostic: DM6NAM11FT076:EE_|SJ2PR12MB8061:EE_
+X-MS-Office365-Filtering-Correlation-Id: 485a4045-07e0-4b02-c07f-08db24d9c289
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: GPA9aZTQPOHCLSqHit74pt236Dq6Fl1IlLPonBxxZ/KwXT/rOu4IFrOUWRRoP3bU8KovQZ5lHsgtSZo4GScmJc2Ir4rowX6ECLNe5bm9ONiciK0zn1/lVUR4MBZrew5KFTF6JynJQBs0M1qa9H7U8odrGkfF+PgYvFic1Z4eWGddETUfQhWEOKtbO8EhbzjQP0iVLMVXHLct9A9nuTv8/LbdHCaVGJ/BvZEYf5FeBDHLy3VU2r+b859MRuZ9MHmA/wfL7f/3ggmMgCjLlhlo8FwTOIybb815a+z4Jf6gT4/zPXF/cwqmzTfZvfoVCKumTv6bjx2iLKWHJlhYOUAUuyLDEFaQ1p5mkGlGyWVVGiqdl+HOiVqG7IJuYhXYRbWYTkBe+zS997IY1BykQ7xjRu9SJZJpwtmbPTczVGNKSJO0HoncwycBd1VnBtiuhEhrHbD/XJq3aHi69gUjQ4vXOnOf2BWn/+B3rrCtelKnpG3GnR9cC/LYvN4kN6fTQBjU/wm3W9p9Zbbc0cjRXg/u8ad4OUIB/A6AM0o9uDoP0pLj2/bTJRNdwXlvQV5gn7jgeyhT93amsl40hpEoDL5QIWL7s4kRJgo0iM2/8pcDAb6su09i9lpMuz/nMMW3MMFi2PtWUjNokX6RJCjok4WeOQFOuEmCJ0HWq5roYZtzaFSgaKs+DudtPohoNN5N76Mw5AnQ5SEPFYzsic/Iijk9q+6mhnhhJz46EPsXCdF//XY/aISIbHagT9H4R6RoRTt8
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(136003)(346002)(376002)(396003)(39860400002)(451199018)(46966006)(36840700001)(40470700004)(5660300002)(478600001)(2616005)(7696005)(40460700003)(2906002)(336012)(40480700001)(26005)(1076003)(107886003)(6666004)(36756003)(186003)(47076005)(86362001)(426003)(41300700001)(70586007)(36860700001)(82310400005)(82740400003)(7636003)(4326008)(8676002)(70206006)(8936002)(356005)(316002)(83380400001)(110136005);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam-Message-Info: HlkweWPNY5VmpA/saexmF2etBakdE0948osilIdLq2g3/+YXO/TYDtH1Lp+GH7N+QrT6qNN8S4K1ADzSczuIZ1rwXmaS+lJFDrVmHciNkJzfrfXklE7q43/nOJkI+1cCnMQNa6gxrcrVj8piBUBgsCcas0l8reuWUI28/nrOL+o94zdZMAVcvhkIC8GUCIN5rnrJ4GY9cqhFlVXMQYdr9IRbrZRTUaB+EBPKjYfq9mIifX57fHueX+5JZDEzucVVgajvRYKhhw+zWXpagEVFC4d+gB72HDXaYPmFmG+btrRHxqbFLW1p77tCy2aQ7tEXKG+AbAMXsko53M7d47v509g/aShLP0VH/cJKxu0CqN+JU9aelATy+A758jTR1FVC8DgPTRpLznIzjhZVw0LIUvL8Jhf1sNPTUJaLsLo2CArN0oHwlhFYGzfYhZnzpCTWQ3XLG57FtpS40Ei8YKDXktqKHFbrBbY6tAnYydxFd8YJulA5rJcqEqh4o0fpywC/VRwTJQ+2jD39RsxGoQsSTFP0gJnCP1eQsPGjAQKs5EH0fCHBl5ayN4yNCnZyxm1yZfufBF08TqDKeiuQhLrDtJzx6LxtrYagDnCAK2JVJPaFvvj7uwNvY1Uk5e76MfE/i61OTcARrXdWQhjFxrT0Av5T1SU4f6CkHMSloY4HVS5H7gbPrpIeOuWEDM1xoKwuAcf78GJeTUYKGRzcyrJeyhwA8NbFjVzpHYjEsHwGaWysicq6gV6szMayS/7K86xt
+X-Forefront-Antispam-Report: CIP:216.228.117.161;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge2.nvidia.com;CAT:NONE;SFS:(13230025)(4636009)(346002)(39860400002)(376002)(396003)(136003)(451199018)(40470700004)(36840700001)(46966006)(4326008)(336012)(8936002)(5660300002)(40460700003)(41300700001)(186003)(1076003)(26005)(36756003)(82310400005)(86362001)(2616005)(36860700001)(83380400001)(426003)(2906002)(70206006)(6666004)(8676002)(70586007)(30864003)(47076005)(316002)(478600001)(7696005)(356005)(40480700001)(107886003)(110136005)(7636003)(82740400003);DIR:OUT;SFP:1101;
 X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 22:16:22.8066
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 22:16:29.1805
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a6bcaa34-0073-43e0-c7ab-08db24d9beba
+X-MS-Exchange-CrossTenant-Network-Message-Id: 485a4045-07e0-4b02-c07f-08db24d9c289
 X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT083.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.161];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT076.eop-nam11.prod.protection.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Anonymous
 X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR12MB5031
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8061
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
         SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
@@ -105,304 +106,376 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for the BlueField-3 SoC GPIO driver.
-This driver configures and handles GPIO interrupts. It also enables a user
-to manipulate certain GPIO pins via libgpiod tools or other kernel drivers.
-The usables pins are defined via the "gpio-reserved-ranges" property.
+NVIDIA BlueField-3 SoC has a few pins that can be used as GPIOs
+or take the default hardware functionality. Add a driver for
+the pin muxing.
 
 Signed-off-by: Asmaa Mnebhi <asmaa@nvidia.com>
 ---
- drivers/gpio/Kconfig       |  13 ++
- drivers/gpio/Makefile      |   1 +
- drivers/gpio/gpio-mlxbf3.c | 245 +++++++++++++++++++++++++++++++++++++
- 3 files changed, 259 insertions(+)
- create mode 100644 drivers/gpio/gpio-mlxbf3.c
+ drivers/pinctrl/Kconfig          |  13 ++
+ drivers/pinctrl/Makefile         |   1 +
+ drivers/pinctrl/pinctrl-mlxbf3.c | 318 +++++++++++++++++++++++++++++++
+ 3 files changed, 332 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-mlxbf3.c
 
-diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-index ec7cfd4f52b1..3b67e1591519 100644
---- a/drivers/gpio/Kconfig
-+++ b/drivers/gpio/Kconfig
-@@ -1534,6 +1534,19 @@ config GPIO_MLXBF2
- 	help
- 	  Say Y here if you want GPIO support on Mellanox BlueField 2 SoC.
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index 7d5f5458c72e..9009bc6adbea 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -523,6 +523,19 @@ config PINCTRL_ZYNQMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called pinctrl-zynqmp.
  
-+config GPIO_MLXBF3
-+	tristate "Mellanox BlueField 3 SoC GPIO"
++config PINCTRL_MLXBF3
++	tristate "NVIDIA BlueField-3 SoC Pinctrl driver"
 +	depends on (MELLANOX_PLATFORM && ARM64) || COMPILE_TEST
-+	select GPIO_GENERIC
++	select PINMUX
++	select GPIOLIB
 +	select GPIOLIB_IRQCHIP
++	select GPIO_MLXBF3
 +	help
-+	  Say Y if you want GPIO support on Mellanox BlueField 3 SoC.
-+	  This GPIO controller supports interrupt handling and enables the
-+	  manipulation of certain GPIO pins.
-+	  This controller should be used in parallel with pinctrl-mlxbf to
-+	  control the desired gpios.
-+	  This driver can also be built as a module called mlxbf3-gpio.
++	  Say Y to select the pinctrl driver for BlueField-3 SoCs.
++	  This pin controller allows selecting the mux function for
++	  each pin. This driver can also be built as a module called
++	  pinctrl-mlxbf3.
 +
- config GPIO_ML_IOH
- 	tristate "OKI SEMICONDUCTOR ML7213 IOH GPIO support"
- 	depends on X86 || COMPILE_TEST
-diff --git a/drivers/gpio/Makefile b/drivers/gpio/Makefile
-index 010587025fc8..76545ca31457 100644
---- a/drivers/gpio/Makefile
-+++ b/drivers/gpio/Makefile
-@@ -101,6 +101,7 @@ obj-$(CONFIG_GPIO_MERRIFIELD)		+= gpio-merrifield.o
- obj-$(CONFIG_GPIO_ML_IOH)		+= gpio-ml-ioh.o
- obj-$(CONFIG_GPIO_MLXBF)		+= gpio-mlxbf.o
- obj-$(CONFIG_GPIO_MLXBF2)		+= gpio-mlxbf2.o
-+obj-$(CONFIG_GPIO_MLXBF3)		+= gpio-mlxbf3.o
- obj-$(CONFIG_GPIO_MM_LANTIQ)		+= gpio-mm-lantiq.o
- obj-$(CONFIG_GPIO_MOCKUP)		+= gpio-mockup.o
- obj-$(CONFIG_GPIO_MOXTET)		+= gpio-moxtet.o
-diff --git a/drivers/gpio/gpio-mlxbf3.c b/drivers/gpio/gpio-mlxbf3.c
+ source "drivers/pinctrl/actions/Kconfig"
+ source "drivers/pinctrl/aspeed/Kconfig"
+ source "drivers/pinctrl/bcm/Kconfig"
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index d5939840bb2a..10dd072e8423 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -36,6 +36,7 @@ obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_SPI)	+= pinctrl-mcp23s08_spi.o
+ obj-$(CONFIG_PINCTRL_MCP23S08)	+= pinctrl-mcp23s08.o
+ obj-$(CONFIG_PINCTRL_MICROCHIP_SGPIO)	+= pinctrl-microchip-sgpio.o
++obj-$(CONFIG_PINCTRL_MLXBF3)	+= pinctrl-mlxbf3.o
+ obj-$(CONFIG_PINCTRL_OCELOT)	+= pinctrl-ocelot.o
+ obj-$(CONFIG_PINCTRL_OXNAS)	+= pinctrl-oxnas.o
+ obj-$(CONFIG_PINCTRL_PALMAS)	+= pinctrl-palmas.o
+diff --git a/drivers/pinctrl/pinctrl-mlxbf3.c b/drivers/pinctrl/pinctrl-mlxbf3.c
 new file mode 100644
-index 000000000000..4225f6d38db3
+index 000000000000..19293eddc2e8
 --- /dev/null
-+++ b/drivers/gpio/gpio-mlxbf3.c
-@@ -0,0 +1,245 @@
++++ b/drivers/pinctrl/pinctrl-mlxbf3.c
+@@ -0,0 +1,318 @@
 +// SPDX-License-Identifier: GPL-2.0-only or BSD-3-Clause
 +/* Copyright (C) 2022 NVIDIA CORPORATION & AFFILIATES */
 +
 +#include <linux/bitfield.h>
 +#include <linux/bitops.h>
-+#include <linux/device.h>
-+#include <linux/gpio/driver.h>
-+#include <linux/interrupt.h>
++#include <linux/io.h>
 +#include <linux/module.h>
++#include <linux/mod_devicetable.h>
 +#include <linux/platform_device.h>
-+#include <linux/resource.h>
-+#include <linux/spinlock.h>
-+#include <linux/types.h>
 +
-+/*
-+ * There are 2 YU GPIO blocks:
-+ * gpio[0]: HOST_GPIO0->HOST_GPIO31
-+ * gpio[1]: HOST_GPIO32->HOST_GPIO55
-+ */
-+#define MLXBF3_GPIO_MAX_PINS_PER_BLOCK 32
++#include <linux/pinctrl/pinctrl.h>
++#include <linux/pinctrl/pinmux.h>
 +
-+/*
-+ * fw_gpio[x] block registers and their offset
-+ */
-+#define MLXBF_GPIO_FW_OUTPUT_ENABLE_SET	  0x00
-+#define MLXBF_GPIO_FW_DATA_OUT_SET        0x04
++#define MLXBF3_NGPIOS_GPIO0    32
++#define MLXBF3_MAX_GPIO_PINS   56
 +
-+#define MLXBF_GPIO_FW_OUTPUT_ENABLE_CLEAR 0x00
-+#define MLXBF_GPIO_FW_DATA_OUT_CLEAR      0x04
-+
-+#define MLXBF_GPIO_CAUSE_RISE_EN          0x00
-+#define MLXBF_GPIO_CAUSE_FALL_EN          0x04
-+#define MLXBF_GPIO_READ_DATA_IN           0x08
-+
-+#define MLXBF_GPIO_CAUSE_OR_CAUSE_EVTEN0  0x00
-+#define MLXBF_GPIO_CAUSE_OR_EVTEN0        0x14
-+#define MLXBF_GPIO_CAUSE_OR_CLRCAUSE      0x18
-+
-+struct mlxbf3_gpio_context {
-+	struct gpio_chip gc;
-+
-+	/* YU GPIO block address */
-+	void __iomem *gpio_set_io;
-+	void __iomem *gpio_clr_io;
-+	void __iomem *gpio_io;
-+
-+	/* YU GPIO cause block address */
-+	void __iomem *gpio_cause_io;
++enum {
++	MLXBF3_GPIO_HW_MODE,
++	MLXBF3_GPIO_SW_MODE,
 +};
 +
-+static void mlxbf3_gpio_irq_enable(struct irq_data *irqd)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+	irq_hw_number_t offset = irqd_to_hwirq(irqd);
-+	unsigned long flags;
-+	u32 val;
++struct mlxbf3_pinctrl {
++	void __iomem *fw_ctrl_set0;
++	void __iomem *fw_ctrl_clr0;
++	void __iomem *fw_ctrl_set1;
++	void __iomem *fw_ctrl_clr1;
++	struct device *dev;
++	struct pinctrl_dev *pctl;
++	struct pinctrl_gpio_range gpio_range;
++};
 +
-+	raw_spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
-+	gpiochip_enable_irq(gc, offset);
-+	writel(BIT(offset), gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_CLRCAUSE);
-+
-+	val = readl(gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
-+	val |= BIT(offset);
-+	writel(val, gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
-+	raw_spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
-+}
-+
-+static void mlxbf3_gpio_irq_disable(struct irq_data *irqd)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+	irq_hw_number_t offset = irqd_to_hwirq(irqd);
-+	unsigned long flags;
-+	u32 val;
-+
-+	raw_spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
-+	val = readl(gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
-+	val &= ~BIT(offset);
-+	writel(val, gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_EVTEN0);
-+	gpiochip_disable_irq(gc, offset);
-+	raw_spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
-+}
-+
-+static irqreturn_t mlxbf3_gpio_irq_handler(int irq, void *ptr)
-+{
-+	struct mlxbf3_gpio_context *gs = ptr;
-+	struct gpio_chip *gc = &gs->gc;
-+	unsigned long pending;
-+	u32 level;
-+
-+	pending = readl(gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_CAUSE_EVTEN0);
-+	writel(pending, gs->gpio_cause_io + MLXBF_GPIO_CAUSE_OR_CLRCAUSE);
-+
-+	for_each_set_bit(level, &pending, gc->ngpio)
-+		generic_handle_domain_irq(gc->irq.domain, level);
-+
-+	return IRQ_RETVAL(pending);
-+}
-+
-+static int
-+mlxbf3_gpio_irq_set_type(struct irq_data *irqd, unsigned int type)
-+{
-+	struct gpio_chip *gc = irq_data_get_irq_chip_data(irqd);
-+	struct mlxbf3_gpio_context *gs = gpiochip_get_data(gc);
-+	irq_hw_number_t offset = irqd_to_hwirq(irqd);
-+	unsigned long flags;
-+	u32 val;
-+
-+	raw_spin_lock_irqsave(&gs->gc.bgpio_lock, flags);
-+
-+	switch (type & IRQ_TYPE_SENSE_MASK) {
-+	case IRQ_TYPE_EDGE_BOTH:
-+		val = readl(gs->gpio_io + MLXBF_GPIO_CAUSE_FALL_EN);
-+		val |= BIT(offset);
-+		writel(val, gs->gpio_io + MLXBF_GPIO_CAUSE_FALL_EN);
-+		val = readl(gs->gpio_io + MLXBF_GPIO_CAUSE_RISE_EN);
-+		val |= BIT(offset);
-+		writel(val, gs->gpio_io + MLXBF_GPIO_CAUSE_RISE_EN);
-+		break;
-+	case IRQ_TYPE_EDGE_RISING:
-+		val = readl(gs->gpio_io + MLXBF_GPIO_CAUSE_RISE_EN);
-+		val |= BIT(offset);
-+		writel(val, gs->gpio_io + MLXBF_GPIO_CAUSE_RISE_EN);
-+		break;
-+	case IRQ_TYPE_EDGE_FALLING:
-+		val = readl(gs->gpio_io + MLXBF_GPIO_CAUSE_FALL_EN);
-+		val |= BIT(offset);
-+		writel(val, gs->gpio_io + MLXBF_GPIO_CAUSE_FALL_EN);
-+		break;
-+	default:
-+		raw_spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
-+		return -EINVAL;
++#define MLXBF3_GPIO_RANGE(_id, _pinbase, _gpiobase, _npins)	\
++	{							\
++		.name = "mlxbf3_gpio_range",			\
++		.id = _id,					\
++		.base = _gpiobase,				\
++		.pin_base = _pinbase,				\
++		.npins = _npins,				\
 +	}
 +
-+	raw_spin_unlock_irqrestore(&gs->gc.bgpio_lock, flags);
++static struct pinctrl_gpio_range mlxbf3_pinctrl_gpio_ranges[] = {
++	MLXBF3_GPIO_RANGE(0, 0,  480, 32),
++	MLXBF3_GPIO_RANGE(1,  32, 456, 24),
++};
 +
-+	irq_set_handler_locked(irqd, handle_edge_irq);
++static const struct pinctrl_pin_desc mlxbf3_pins[] = {
++	PINCTRL_PIN(0, "gpio0"),
++	PINCTRL_PIN(1, "gpio1"),
++	PINCTRL_PIN(2, "gpio2"),
++	PINCTRL_PIN(3, "gpio3"),
++	PINCTRL_PIN(4, "gpio4"),
++	PINCTRL_PIN(5, "gpio5"),
++	PINCTRL_PIN(6, "gpio6"),
++	PINCTRL_PIN(7, "gpio7"),
++	PINCTRL_PIN(8, "gpio8"),
++	PINCTRL_PIN(9, "gpio9"),
++	PINCTRL_PIN(10, "gpio10"),
++	PINCTRL_PIN(11, "gpio11"),
++	PINCTRL_PIN(12, "gpio12"),
++	PINCTRL_PIN(13, "gpio13"),
++	PINCTRL_PIN(14, "gpio14"),
++	PINCTRL_PIN(15, "gpio15"),
++	PINCTRL_PIN(16, "gpio16"),
++	PINCTRL_PIN(17, "gpio17"),
++	PINCTRL_PIN(18, "gpio18"),
++	PINCTRL_PIN(19, "gpio19"),
++	PINCTRL_PIN(20, "gpio20"),
++	PINCTRL_PIN(21, "gpio21"),
++	PINCTRL_PIN(22, "gpio22"),
++	PINCTRL_PIN(23, "gpio23"),
++	PINCTRL_PIN(24, "gpio24"),
++	PINCTRL_PIN(25, "gpio25"),
++	PINCTRL_PIN(26, "gpio26"),
++	PINCTRL_PIN(27, "gpio27"),
++	PINCTRL_PIN(28, "gpio28"),
++	PINCTRL_PIN(29, "gpio29"),
++	PINCTRL_PIN(30, "gpio30"),
++	PINCTRL_PIN(31, "gpio31"),
++	PINCTRL_PIN(32, "gpio32"),
++	PINCTRL_PIN(33, "gpio33"),
++	PINCTRL_PIN(34, "gpio34"),
++	PINCTRL_PIN(35, "gpio35"),
++	PINCTRL_PIN(36, "gpio36"),
++	PINCTRL_PIN(37, "gpio37"),
++	PINCTRL_PIN(38, "gpio38"),
++	PINCTRL_PIN(39, "gpio39"),
++	PINCTRL_PIN(40, "gpio40"),
++	PINCTRL_PIN(41, "gpio41"),
++	PINCTRL_PIN(42, "gpio42"),
++	PINCTRL_PIN(43, "gpio43"),
++	PINCTRL_PIN(44, "gpio44"),
++	PINCTRL_PIN(45, "gpio45"),
++	PINCTRL_PIN(46, "gpio46"),
++	PINCTRL_PIN(47, "gpio47"),
++	PINCTRL_PIN(48, "gpio48"),
++	PINCTRL_PIN(49, "gpio49"),
++	PINCTRL_PIN(50, "gpio50"),
++	PINCTRL_PIN(51, "gpio51"),
++	PINCTRL_PIN(52, "gpio52"),
++	PINCTRL_PIN(53, "gpio53"),
++	PINCTRL_PIN(54, "gpio54"),
++	PINCTRL_PIN(55, "gpio55"),
++};
++
++/*
++ * All single-pin functions can be mapped to any GPIO, however pinmux applies
++ * functions to pin groups and only those groups declared as supporting that
++ * function. To make this work we must put each pin in its own dummy group so
++ * that the functions can be described as applying to all pins.
++ * We use the same name as in the datasheet.
++ */
++static const char * const mlxbf3_pinctrl_single_group_names[] = {
++	"gpio0", "gpio1",  "gpio2",  "gpio3",  "gpio4",  "gpio5",  "gpio6", "gpio7",
++	"gpio8",  "gpio9",  "gpio10", "gpio11", "gpio12", "gpio13", "gpio14", "gpio15",
++	"gpio16", "gpio17", "gpio18", "gpio19", "gpio20", "gpio21", "gpio22", "gpio23",
++	"gpio24", "gpio25", "gpio26", "gpio27", "gpio28", "gpio29", "gpio30", "gpio31",
++	"gpio32", "gpio33", "gpio34", "gpio35", "gpio36", "gpio37", "gpio38", "gpio39",
++	"gpio40", "gpio41", "gpio42", "gpio43", "gpio44", "gpio45", "gpio46", "gpio47",
++	"gpio48", "gpio49", "gpio50", "gpio51", "gpio52", "gpio53", "gpio54", "gpio55"
++};
++
++static int mlxbf3_get_groups_count(struct pinctrl_dev *pctldev)
++{
++	/* Number single-pin groups */
++	return MLXBF3_MAX_GPIO_PINS;
++}
++
++static const char *mlxbf3_get_group_name(struct pinctrl_dev *pctldev,
++					 unsigned int selector)
++{
++	return mlxbf3_pinctrl_single_group_names[selector];
++}
++
++static int mlxbf3_get_group_pins(struct pinctrl_dev *pctldev,
++				 unsigned int selector,
++				 const unsigned int **pins,
++				 unsigned int *num_pins)
++{
++	/* return the dummy group for a single pin */
++	*pins = &selector;
++	*num_pins = 1;
 +
 +	return 0;
 +}
 +
-+/* This function needs to be defined for handle_edge_irq */
-+static void mlxbf3_gpio_irq_ack(struct irq_data *data)
-+{
-+}
-+
-+static const struct irq_chip gpio_mlxbf3_irqchip = {
-+	.name = "MLNXBF33",
-+	.irq_ack = mlxbf3_gpio_irq_ack,
-+	.irq_set_type = mlxbf3_gpio_irq_set_type,
-+	.irq_enable = mlxbf3_gpio_irq_enable,
-+	.irq_disable = mlxbf3_gpio_irq_disable,
-+	.flags = IRQCHIP_IMMUTABLE,
-+	GPIOCHIP_IRQ_RESOURCE_HELPERS,
++static const struct pinctrl_ops mlxbf3_pinctrl_group_ops = {
++	.get_groups_count = mlxbf3_get_groups_count,
++	.get_group_name = mlxbf3_get_group_name,
++	.get_group_pins = mlxbf3_get_group_pins,
 +};
 +
-+static int mlxbf3_gpio_probe(struct platform_device *pdev)
++/*
++ * Only 2 functions are supported and they apply to all pins:
++ * 1) Default hardware functionality
++ * 2) Software controlled GPIO
++ */
++static const char * const mlxbf3_gpiofunc_group_names[] = { "swctrl" };
++static const char * const mlxbf3_hwfunc_group_names[]   = { "hwctrl" };
++
++struct pinfunction mlxbf3_pmx_funcs[] = {
++	PINCTRL_PINFUNCTION("hwfunc", mlxbf3_hwfunc_group_names, 1),
++	PINCTRL_PINFUNCTION("gpiofunc", mlxbf3_gpiofunc_group_names, 1),
++};
++
++static int mlxbf3_pmx_get_funcs_count(struct pinctrl_dev *pctldev)
++{
++	return ARRAY_SIZE(mlxbf3_pmx_funcs);
++}
++
++static const char *mlxbf3_pmx_get_func_name(struct pinctrl_dev *pctldev,
++					   unsigned int selector)
++{
++	return mlxbf3_pmx_funcs[selector].name;
++}
++
++static int mlxbf3_pmx_get_groups(struct pinctrl_dev *pctldev,
++				 unsigned int selector,
++				 const char * const **groups,
++				 unsigned int * const num_groups)
++{
++	*groups = mlxbf3_pmx_funcs[selector].groups;
++	*num_groups = MLXBF3_MAX_GPIO_PINS;
++
++	return 0;
++}
++
++static int mlxbf3_pmx_set(struct pinctrl_dev *pctldev,
++			      unsigned int selector,
++			      unsigned int group)
++{
++	struct mlxbf3_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
++
++	if (selector == MLXBF3_GPIO_HW_MODE) {
++		if (group < MLXBF3_NGPIOS_GPIO0)
++			writel(BIT(group), priv->fw_ctrl_clr0);
++		else
++			writel(BIT(group % MLXBF3_NGPIOS_GPIO0), priv->fw_ctrl_clr1);
++	}
++
++	if (selector == MLXBF3_GPIO_SW_MODE) {
++		if (group < MLXBF3_NGPIOS_GPIO0)
++			writel(BIT(group), priv->fw_ctrl_set0);
++		else
++			writel(BIT(group % MLXBF3_NGPIOS_GPIO0), priv->fw_ctrl_set1);
++	}
++
++	return 0;
++}
++
++static int mlxbf3_gpio_request_enable(struct pinctrl_dev *pctldev,
++				     struct pinctrl_gpio_range *range,
++				     unsigned int offset)
++{
++	struct mlxbf3_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
++
++	if (offset < MLXBF3_NGPIOS_GPIO0)
++		writel(BIT(offset), priv->fw_ctrl_set0);
++	else
++		writel(BIT(offset % MLXBF3_NGPIOS_GPIO0), priv->fw_ctrl_set1);
++
++	return 0;
++}
++
++static void mlxbf3_gpio_disable_free(struct pinctrl_dev *pctldev,
++				    struct pinctrl_gpio_range *range,
++				    unsigned int offset)
++{
++	struct mlxbf3_pinctrl *priv = pinctrl_dev_get_drvdata(pctldev);
++
++	/* disable GPIO functionality by giving control back to hardware */
++	if (offset < MLXBF3_NGPIOS_GPIO0)
++		writel(BIT(offset), priv->fw_ctrl_clr0);
++	else
++		writel(BIT(offset % MLXBF3_NGPIOS_GPIO0), priv->fw_ctrl_clr1);
++}
++
++static const struct pinmux_ops mlxbf3_pmx_ops = {
++	.get_functions_count = mlxbf3_pmx_get_funcs_count,
++	.get_function_name = mlxbf3_pmx_get_func_name,
++	.get_function_groups = mlxbf3_pmx_get_groups,
++	.set_mux = mlxbf3_pmx_set,
++	.gpio_request_enable = mlxbf3_gpio_request_enable,
++	.gpio_disable_free = mlxbf3_gpio_disable_free,
++};
++
++static struct pinctrl_desc mlxbf3_pin_desc = {
++	.name = "pinctrl-mlxbf3",
++	.pins = mlxbf3_pins,
++	.npins = ARRAY_SIZE(mlxbf3_pins),
++	.pctlops = &mlxbf3_pinctrl_group_ops,
++	.pmxops = &mlxbf3_pmx_ops,
++	.owner = THIS_MODULE,
++};
++
++static_assert(ARRAY_SIZE(mlxbf3_pinctrl_single_group_names) == MLXBF3_MAX_GPIO_PINS);
++
++static int mlxbf3_pinctrl_probe(struct platform_device *pdev)
 +{
 +	struct device *dev = &pdev->dev;
-+	struct mlxbf3_gpio_context *gs;
-+	struct gpio_irq_chip *girq;
-+	struct gpio_chip *gc;
-+	int ret, irq;
++	struct mlxbf3_pinctrl *priv;
++	int ret;
 +
-+	gs = devm_kzalloc(dev, sizeof(*gs), GFP_KERNEL);
-+	if (!gs)
++	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
++	if (!priv)
 +		return -ENOMEM;
 +
-+	gs->gpio_io = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(gs->gpio_io))
-+		return PTR_ERR(gs->gpio_io);
++	priv->dev = &pdev->dev;
 +
-+	gs->gpio_cause_io = devm_platform_ioremap_resource(pdev, 1);
-+	if (IS_ERR(gs->gpio_cause_io))
-+		return PTR_ERR(gs->gpio_cause_io);
++	priv->fw_ctrl_set0 = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(priv->fw_ctrl_set0))
++		return PTR_ERR(priv->fw_ctrl_set0);
 +
-+	gs->gpio_set_io = devm_platform_ioremap_resource(pdev, 2);
-+	if (IS_ERR(gs->gpio_set_io))
-+		return PTR_ERR(gs->gpio_set_io);
++	priv->fw_ctrl_clr0 = devm_platform_ioremap_resource(pdev, 1);
++	if (IS_ERR(priv->fw_ctrl_set0))
++		return PTR_ERR(priv->fw_ctrl_set0);
 +
-+	gs->gpio_clr_io = devm_platform_ioremap_resource(pdev, 3);
-+	if (IS_ERR(gs->gpio_clr_io))
-+		return PTR_ERR(gs->gpio_clr_io);
-+	gc = &gs->gc;
++	priv->fw_ctrl_set1 = devm_platform_ioremap_resource(pdev, 2);
++	if (IS_ERR(priv->fw_ctrl_set0))
++		return PTR_ERR(priv->fw_ctrl_set0);
 +
-+	ret = bgpio_init(gc, dev, 4,
-+			gs->gpio_io + MLXBF_GPIO_READ_DATA_IN,
-+			gs->gpio_set_io + MLXBF_GPIO_FW_DATA_OUT_SET,
-+			gs->gpio_clr_io + MLXBF_GPIO_FW_DATA_OUT_CLEAR,
-+			gs->gpio_set_io + MLXBF_GPIO_FW_OUTPUT_ENABLE_SET,
-+			gs->gpio_clr_io + MLXBF_GPIO_FW_OUTPUT_ENABLE_CLEAR, 0);
++	priv->fw_ctrl_clr1 = devm_platform_ioremap_resource(pdev, 3);
++	if (IS_ERR(priv->fw_ctrl_set0))
++		return PTR_ERR(priv->fw_ctrl_set0);
 +
-+	gc->request = gpiochip_generic_request;
-+	gc->free = gpiochip_generic_free;
-+	gc->owner = THIS_MODULE;
-+
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq >= 0) {
-+		girq = &gs->gc.irq;
-+		gpio_irq_chip_set_chip(girq, &gpio_mlxbf3_irqchip);
-+		girq->default_type = IRQ_TYPE_NONE;
-+		/* This will let us handle the parent IRQ in the driver */
-+		girq->num_parents = 0;
-+		girq->parents = NULL;
-+		girq->parent_handler = NULL;
-+		girq->handler = handle_bad_irq;
-+
-+		/*
-+		 * Directly request the irq here instead of passing
-+		 * a flow-handler because the irq is shared.
-+		 */
-+		ret = devm_request_irq(dev, irq, mlxbf3_gpio_irq_handler,
-+				       IRQF_SHARED, dev_name(dev), gs);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to request IRQ");
-+	}
-+
-+	platform_set_drvdata(pdev, gs);
-+
-+	ret = devm_gpiochip_add_data(dev, &gs->gc, gs);
++	ret = devm_pinctrl_register_and_init(dev,
++					     &mlxbf3_pin_desc,
++					     priv,
++					     &priv->pctl);
 +	if (ret)
-+		dev_err_probe(dev, ret, "Failed adding memory mapped gpiochip\n");
++		return dev_err_probe(dev, ret, "Failed to register pinctrl\n");
++
++	ret = pinctrl_enable(priv->pctl);
++	if (ret)
++		return dev_err_probe(dev, ret, "Failed to enable pinctrl\n");
++
++	pinctrl_add_gpio_ranges(priv->pctl, mlxbf3_pinctrl_gpio_ranges, 2);
 +
 +	return 0;
 +}
 +
-+static const struct acpi_device_id __maybe_unused mlxbf3_gpio_acpi_match[] = {
-+	{ "MLNXBF33", 0 },
++static const struct acpi_device_id mlxbf3_pinctrl_acpi_ids[] = {
++	{ "MLNXBF34", 0 },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(acpi, mlxbf3_gpio_acpi_match);
++MODULE_DEVICE_TABLE(acpi, mlxbf3_pinctrl_acpi_ids);
 +
-+static struct platform_driver mlxbf3_gpio_driver = {
++static struct platform_driver mlxbf3_pinctrl_driver = {
 +	.driver = {
-+		.name = "mlxbf3_gpio",
-+		.acpi_match_table = mlxbf3_gpio_acpi_match,
++		.name = "pinctrl-mlxbf3",
++		.acpi_match_table = mlxbf3_pinctrl_acpi_ids,
 +	},
-+	.probe    = mlxbf3_gpio_probe,
++	.probe = mlxbf3_pinctrl_probe,
 +};
-+module_platform_driver(mlxbf3_gpio_driver);
++module_platform_driver(mlxbf3_pinctrl_driver);
 +
-+MODULE_DESCRIPTION("NVIDIA BlueField-3 GPIO Driver");
++MODULE_DESCRIPTION("NVIDIA pinctrl driver");
 +MODULE_AUTHOR("Asmaa Mnebhi <asmaa@nvidia.com>");
 +MODULE_LICENSE("Dual BSD/GPL");
 -- 
