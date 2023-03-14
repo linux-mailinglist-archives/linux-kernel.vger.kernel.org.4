@@ -2,187 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56B126B92B8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:09:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 627296B92BE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 13:11:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231843AbjCNMJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 08:09:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42238 "EHLO
+        id S230133AbjCNMLf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 08:11:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229538AbjCNMIs (ORCPT
+        with ESMTP id S229436AbjCNMLc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 08:08:48 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13E1D19F13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 05:08:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=o1Mn/N1ayy4kj8PawONyZbvWvYwTCPVjQOan6MFzjfg=; b=ClFn0ghaY0r2VHYMRhfCG+S12I
-        /FtGN9pbgksF/MAsVIMm5wRQOaXEE3eY1zG5NvBhbjwvBhWtguLCu61S6/wckRvWh+/DJssU9GnTU
-        CIT90RNQr640R9gMeWpoxgbC5ZKLDxtMMaLTwCJ8psudDugKKEvU2c4sIF2FFtrjqkrePbekl/a6U
-        +kBltUx41DKHk24m3LbWHz06HHeoMww0BjWzinIdLb9t5nl6aZoBw1hF6Basz1L1zzFbz8HMKRAGP
-        q1LXeTxuiC67sMrMKX8L3KXvqmYiabZm6xD0llkfHsIFuDXKOfa5v500kOcPXnJAPrQGHGjbeLGpZ
-        o4Yi1iGQ==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pc3RA-001mAu-2v;
-        Tue, 14 Mar 2023 12:07:29 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 1BD5E30030F;
-        Tue, 14 Mar 2023 13:07:26 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id D6EE7202F7F8A; Tue, 14 Mar 2023 13:07:26 +0100 (CET)
-Date:   Tue, 14 Mar 2023 13:07:26 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Vincent Guittot <vincent.guittot@linaro.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rkagan@amazon.de
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-Message-ID: <20230314120726.GG1845660@hirez.programming.kicks-ass.net>
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <20230309130524.GA273121@hirez.programming.kicks-ass.net>
- <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
- <20230309142825.GB273121@hirez.programming.kicks-ass.net>
- <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
- <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
- <ZAs+zV0o9ShO7nLT@vingu-book>
- <02a08042-e7c4-464d-bc20-9ec4ccdab1ff@arm.com>
- <8c093661-7431-00d8-d703-b8f7a7c8e747@arm.com>
- <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
+        Tue, 14 Mar 2023 08:11:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5C2CDEE;
+        Tue, 14 Mar 2023 05:11:08 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id B39EC61756;
+        Tue, 14 Mar 2023 12:11:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAD42C4339B;
+        Tue, 14 Mar 2023 12:11:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678795867;
+        bh=NZIDy+e/izMTKs2l2XuI2F8iVOqN89HvXsQgLiEHzZg=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=evM1dt4QC6Z3+FdIVxUnWHZYfdb221bgCl1bg4V4GYLq+ZzqH9h6DtnIMhw1JtO9U
+         afWcybZXtM2Ct9FSz/Hs8FZEn4woKstsRkJsamNb5wAYDBYFa4B8bhfta4zLBDhlSa
+         qrK/7z/q4UmfIZ9zcVU53RLbPWJlnJvMqlfVuibaf/CL48BCFvQLDsux8AsyH9+prt
+         IkoyFyZ4wUzqa2Oe5m4kTtQKhvK9mDb6x/wcGyrYNlRwvovsMVJIt/Zl6bZwhs9s6E
+         AeEcCHMLxPLV89bCj2iJ4lHg2vaB3PbJNXRm1CMvTTq9Bn8vzyON7PG4QBSId1puUo
+         ULiPs+PgF3Nag==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id 9A0A44049F; Tue, 14 Mar 2023 09:11:04 -0300 (-03)
+Date:   Tue, 14 Mar 2023 09:11:04 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        Quentin Monnet <quentin@isovalent.com>,
+        Andres Freund <andres@anarazel.de>,
+        Tiezhu Yang <yangtiezhu@loongson.cn>,
+        Pavithra Gurushankar <gpavithrasha@gmail.com>,
+        Yang Jihong <yangjihong1@huawei.com>,
+        Adrian Hunter <adrian.hunter@intel.com>,
+        Leo Yan <leo.yan@linaro.org>,
+        Martin =?utf-8?B?TGnFoWth?= <mliska@suse.cz>,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        llvm@lists.linux.dev, Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 00/13] Perf tool build improvements
+Message-ID: <ZBBkWDFdBDC9Spt9@kernel.org>
+References: <20230311065753.3012826-1-irogers@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230311065753.3012826-1-irogers@google.com>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NUMERIC_HTTP_ADDR,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 08:41:30AM +0100, Vincent Guittot wrote:
-
-> I'm going to use something a bit different from your proposal below by
-> merging initial and flag
-> static void place_entity(struct cfs_rq *cfs_rq, struct sched_entity
-> *se, int flags)
+Em Fri, Mar 10, 2023 at 10:57:40PM -0800, Ian Rogers escreveu:
+> Make the default build options a more preferred set, such as making
+> BPF skeletons default and failing the build if jevents or libtracevent
+> dependencies fail. The binutil dependencies are opt-in given license
+> restrictions. abi::__cxa_demangle demangling support is added so that
+> libiberty, from binutils, isn't necessary for C++ demangling.
 > 
-> with flags:
-> 0 for initial placement
-> ENQUEUE_WAKEUP for wakeup
-> ENQUEUE_MIGRATED for migrated task
+> Some build/test dependencies are fixed and the code cleaned up.
 
-So when a task is not running for a long time (our case at hand), then
-there's two cases:
+I'll continue fixing more stuff, like adding NO_LIBTRACEEVENT=1 to
+things like amazonlinux devel, that still doesn't package libtraceevent,
+but so far...
 
- - it wakes up locally and place_entity() gets to reset vruntime;
- - it wakes up remotely and migrate_task_rq_fair() can reset vruntime.
+[perfbuilder@five ~]$ export BUILD_TARBALL=http://192.168.86.10/perf/perf-6.3.0-rc1.tar.xz
+[perfbuilder@five ~]$ time dm
+   1     5.58 almalinux:8                   : FAIL gcc version 8.5.0 20210514 (Red Hat 8.5.0-4) (GCC)
+   2     5.38 almalinux:9                   : FAIL gcc version 11.2.1 20220127 (Red Hat 11.2.1-9) (GCC)
+   3     4.57 alpine:3.15                   : FAIL gcc version 10.3.1 20211027 (Alpine 10.3.1_git20211027)
+   4     4.27 alpine:3.16                   : FAIL gcc version 11.2.1 20220219 (Alpine 11.2.1_git20220219)
+   5     4.27 alpine:3.17                   : FAIL gcc version 12.2.1 20220924 (Alpine 12.2.1_git20220924-r4)
+   6     4.67 alpine:edge                   : FAIL gcc version 12.2.1 20220924 (Alpine 12.2.1_git20220924-r9)
+   7     4.47 alt:p9                        : FAIL gcc version 8.4.1 20200305 (ALT p9 8.4.1-alt0.p9.1) (GCC)
+   8     4.58 alt:p10                       : FAIL gcc version 10.3.1 20210703 (ALT Sisyphus 10.3.1-alt2) (GCC)
+   9     4.57 alt:sisyphus                  : FAIL gcc version 12.1.1 20220518 (ALT Sisyphus 12.1.1-alt2) (GCC)
+  10     3.97 amazonlinux:2                 : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-15) (GCC)
+  11     5.77 amazonlinux:devel             : FAIL gcc version 11.3.1 20220421 (Red Hat 11.3.1-2) (GCC)
+  12   160.30 archlinux:base                : Ok   gcc (GCC) 12.2.0 , clang version 14.0.6
+  13     4.68 centos:8                      : FAIL gcc version 8.4.1 20200928 (Red Hat 8.4.1-1) (GCC)
+  14     5.07 centos:stream                 : FAIL gcc version 8.5.0 20210514 (Red Hat 8.5.0-18) (GCC)
+  15     5.27 clearlinux:latest             : FAIL gcc version 12.2.1 20230202 releases/gcc-12.2.0-400-gd31bd71386 (Clear Linux OS for Intel Architecture)
+  16     3.37 debian:10                     : FAIL gcc version 8.3.0 (Debian 8.3.0-6)
+  17     3.57 debian:11                     : FAIL gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+  18     4.08 debian:experimental           : FAIL gcc version 12.2.0 (Debian 12.2.0-10)
+  19     3.78 debian:experimental-x-arm64   : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
+  20     2.77 debian:experimental-x-mips    : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
+  21     3.47 debian:experimental-x-mips64  : FAIL gcc version 10.2.1 20210110 (Debian 10.2.1-6)
+  22     3.47 debian:experimental-x-mipsel  : FAIL gcc version 12.2.0 (Debian 12.2.0-14)
+  23     4.37 fedora:26                     : FAIL gcc version 7.3.1 20180130 (Red Hat 7.3.1-2) (GCC)
+  24     4.27 fedora:27                     : FAIL gcc version 7.3.1 20180712 (Red Hat 7.3.1-6) (GCC)
+  25     4.27 fedora:28                     : FAIL gcc version 8.3.1 20190223 (Red Hat 8.3.1-2) (GCC)
+  26     4.87 fedora:29                     : FAIL gcc version 8.3.1 20190223 (Red Hat 8.3.1-2) (GCC)
+  27     4.97 fedora:30                     : FAIL gcc version 9.3.1 20200408 (Red Hat 9.3.1-2) (GCC)
+  28     5.38 fedora:31                     : FAIL gcc version 9.3.1 20200408 (Red Hat 9.3.1-2) (GCC)
+  29     5.48 fedora:32                     : FAIL gcc version 10.3.1 20210422 (Red Hat 10.3.1-1) (GCC)
 
-So if we can rely on ENQUEUE_MIGRATED to differentiate between these
-cases, when wouldn't something like this work?
 
----
+Yeah, I'll take the opportunity and prune the older ones.
 
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 7a1b1f855b96..a0d00b6a8bc6 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -4648,11 +4648,31 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
- #endif
- }
- 
-+static bool reset_vruntime(struct cfs_rq *cfs_rq, struct sched_entity *se)
-+{
-+	const s64 limit = 60LL * NSEC_PER_SEC;
-+	s64 sleep_time;
-+
-+	/*
-+	 * Pull vruntime of the entity being placed to the base level of
-+	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
-+	 * slept for a long time, don't even try to compare its vruntime with
-+	 * the base as it may be too far off and the comparison may get
-+	 * inversed due to s64 overflow.
-+	 */
-+	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-+	if (unlikely(sleep_time > limit)) {
-+		se->vruntime = cfs_rq->min_vruntime - calc_delta_fair(limit, se);
-+		return true;
-+	}
-+
-+	return false;
-+}
-+
- static void
- place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- {
- 	u64 vruntime = cfs_rq->min_vruntime;
--	u64 sleep_time;
- 
- 	/*
- 	 * The 'current' period is already promised to the current tasks,
-@@ -4682,18 +4702,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
- 		vruntime -= thresh;
- 	}
- 
--	/*
--	 * Pull vruntime of the entity being placed to the base level of
--	 * cfs_rq, to prevent boosting it if placed backwards.  If the entity
--	 * slept for a long time, don't even try to compare its vruntime with
--	 * the base as it may be too far off and the comparison may get
--	 * inversed due to s64 overflow.
--	 */
--	sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
--	if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
--		se->vruntime = vruntime;
--	else
--		se->vruntime = max_vruntime(se->vruntime, vruntime);
-+	/* ensure we don't gain time by being placed backwards */
-+	se->vruntime = max_vruntime(se->vruntime, vruntime);
- }
- 
- static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
-@@ -4768,8 +4778,11 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
- 	update_cfs_group(se);
- 	account_entity_enqueue(cfs_rq, se);
- 
--	if (flags & ENQUEUE_WAKEUP)
-+	if (flags & ENQUEUE_WAKEUP) {
-+		if (!(flags & ENQUEUE_MIGRATED))
-+			reset_vruntime(cfs_rq, se);
- 		place_entity(cfs_rq, se, 0);
-+	}
- 
- 	check_schedstat_required();
- 	update_stats_enqueue_fair(cfs_rq, se, flags);
-@@ -7625,6 +7638,7 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
- static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- {
- 	struct sched_entity *se = &p->se;
-+	struct cfs_rq *cfs_rq = cfs_rq_of(se);
- 
- 	/*
- 	 * As blocked tasks retain absolute vruntime the migration needs to
-@@ -7632,11 +7646,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
- 	 * min_vruntime -- the latter is done by enqueue_entity() when placing
- 	 * the task on the new runqueue.
- 	 */
--	if (READ_ONCE(p->__state) == TASK_WAKING) {
--		struct cfs_rq *cfs_rq = cfs_rq_of(se);
--
-+	if (READ_ONCE(p->__state) == TASK_WAKING || reset_vruntime(cfs_rq, se))
- 		se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
--	}
- 
- 	if (!task_on_rq_migrating(p)) {
- 		remove_entity_load_avg(se);
+- Arnaldo
