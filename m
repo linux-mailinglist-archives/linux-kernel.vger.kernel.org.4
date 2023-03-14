@@ -2,152 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCAA26BA17E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1034E6BA180
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:37:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbjCNVgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52940 "EHLO
+        id S230334AbjCNVhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:37:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229690AbjCNVgb (ORCPT
+        with ESMTP id S229690AbjCNVhi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:36:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB1051C86;
-        Tue, 14 Mar 2023 14:36:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Mar 2023 17:37:38 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C2E53DA9;
+        Tue, 14 Mar 2023 14:37:36 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E18B061999;
-        Tue, 14 Mar 2023 21:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23BFAC433D2;
-        Tue, 14 Mar 2023 21:36:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678829788;
-        bh=N/TveHPIq2WE+Bc7VWWnzUTgWumhBYG3YPoOYW04ilE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=fPh2D+aExS+mJSqhVN/fZZq0gILyw4ZF/s4QvwhvLiJSBXrjF6hqlw6ZlC4ZrOTds
-         DocqXNji5GDVUVXboZLBjUw8Dv5/xgy/tfTfNe1X9ULVoLfnHKjCEp+gGH9jas+8c9
-         6Jjm4NbwRoSxyU1XCpu4EkkHNbJZp/AJEP+zyQi3l18DrUC39hqoD0+clA1iUUQX6e
-         RNMs7zm71rqokkEPF6b85Lk9LitMMfWciStrSEORgfAejDVM+bN2VsyUc3TDG5G8Pq
-         Oio8YFUkf2L5lrAd1VXVgpmAtgtaoSH7IVwUEISB5TqdNeSGA3ZfJ/5a5i64kkREdP
-         0h6oIyjHfWSjw==
-Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
-        id B87E24049F; Tue, 14 Mar 2023 18:36:24 -0300 (-03)
-Date:   Tue, 14 Mar 2023 18:36:24 -0300
-From:   Arnaldo Carvalho de Melo <acme@kernel.org>
-To:     Ian Rogers <irogers@google.com>
-Cc:     Thomas Richter <tmricht@linux.ibm.com>,
-        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        sumanthk@linux.ibm.com, svens@linux.ibm.com, gor@linux.ibm.com,
-        hca@linux.ibm.com
-Subject: Re: [PATCH 2/6] tools/perf/json: Add cache metrics for s390 z16
-Message-ID: <ZBDo2GiuUTrHhd2L@kernel.org>
-References: <20230313080201.2440201-1-tmricht@linux.ibm.com>
- <20230313080201.2440201-2-tmricht@linux.ibm.com>
- <CAP-5=fW=xVYzkgQ4vUyzkiK-oQjUQ=hLwcLT6D8VjtVCXH5oSQ@mail.gmail.com>
- <ZA9sYL/re/aNVpo+@kernel.org>
- <1ee6884a-2d92-68d9-0917-3ae4f5390714@linux.ibm.com>
- <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbn1V57RDz4x8y;
+        Wed, 15 Mar 2023 08:37:34 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1678829854;
+        bh=Nd2x1gG2+NtcTScVqI2c9zvK2kePXYNOFcyym9qGNug=;
+        h=Date:From:To:Cc:Subject:From;
+        b=ZJWT4IMt6bAm/afFuu6BfF+YU8G0QEdwe8JIPLoZoAlHJDsKNPze/1C9p/dtYxwqB
+         L2sRnD7Gx8gOKp3atQ/33hXkhczvttR1rPFx5SHrgnfZOz0YrpASdLfps0ApQBhZWE
+         7STvh3RuTqnRoFRfgnqT8JSxtF5xmzK8gueCx+yu2Rg8LYjIAU4fwFapSS9su0CnJS
+         H1ThW1WxKdn34Ys1YejvijV9OjG5+C8KLk4e7NttD290aa8VB/o18sHGZqdgqWerGe
+         r5xysvG0rdZ8IAmLlp9GTfvOzOGsGvpwS+37/qy4alCHbugu3FXmevC9T5Ah22iLp5
+         9hJWOi364FJcQ==
+Date:   Wed, 15 Mar 2023 08:37:33 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Robin Chen <robin.chen@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: Fixes tag needs some work in the amdgpu tree
+Message-ID: <20230315083733.352cbf84@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fUtJsvAtrhe4xESoQc8U15WJ8BWREbH51OKoA218uJLzw@mail.gmail.com>
-X-Url:  http://acmel.wordpress.com
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/2cNvZ49YqAmsSTP6cfBmj=u";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Em Tue, Mar 14, 2023 at 09:34:46AM -0700, Ian Rogers escreveu:
-> On Tue, Mar 14, 2023 at 1:20 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
-> >
-> > On 3/13/23 19:33, Arnaldo Carvalho de Melo wrote:
-> > > Em Mon, Mar 13, 2023 at 08:22:44AM -0700, Ian Rogers escreveu:
-> > >> On Mon, Mar 13, 2023 at 1:30 AM Thomas Richter <tmricht@linux.ibm.com> wrote:
-> > >>>
-> > >>> Add metrics for s390 z16
-> > >>> - Percentage sourced from Level 2 cache
-> > >>> - Percentage sourced from Level 3 on same chip cache
-> > >>> - Percentage sourced from Level 4 Local cache on same book
-> > >>> - Percentage sourced from Level 4 Remote cache on different book
-> > >>> - Percentage sourced from memory
-> > >>>
-> > >>> For details about the formulas see this documentation:
-> > >>> https://www.ibm.com/support/pages/system/files/inline-files/CPU%20MF%20Formulas%20including%20z16%20-%20May%202022_1.pdf
-> > >>>
-> > >>> Outpuf after:
-> > >>>  # ./perf stat -M l4rp -- dd if=/dev/zero of=/dev/null bs=10M count=10K
-> > >>>  .... dd output deleted
-> > >>>
-> > >>>  Performance counter stats for 'dd if=/dev/zero of=/dev/null bs=10M count=10K':
-> > >>>
-> > >>>                  0      IDCW_OFF_DRAWER_CHIP_HIT         #     0.00 l4rp
-> > >>>            431,866      L1I_DIR_WRITES
-> > >>>              2,395      IDCW_OFF_DRAWER_IV
-> > >>>                  0      ICW_OFF_DRAWER
-> > >>>                  0      IDCW_OFF_DRAWER_DRAWER_HIT
-> > >>>              1,437      DCW_OFF_DRAWER
-> > >>>        425,960,793      L1D_DIR_WRITES
-> > >>>
-> > >>>       12.165030699 seconds time elapsed
-> > >>>
-> > >>>        0.001037000 seconds user
-> > >>>       12.162140000 seconds sys
-> > >>>
-> > >>>  #
-> > >>>
-> > >>> Signed-off-by: Thomas Richter <tmricht@linux.ibm.com>
-> > >>> Acked-By: Sumanth Korikkar <sumanthk@linux.ibm.com>
-> > >>
-> > >> Acked-by: Ian Rogers <irogers@google.com>
-> > >
-> > > Thanks, applied the first two patches, please address the review
-> > > suggestions for patches 3-6 and resubmit only those.
-> > >
-> > > The patches will be in the public perf-tools-next branch later today.
-> > >
-> > > - Arnaldo
-> > >
-> >
-> > I would really prefer the current implementation without using "ScaleUnit": "100%"
-> > The reason is that these formulars are given to me from the s390 Performance team.
-> > They want to use the exact same formulars on all platforms running on s390
-> > which includes z/OS and z/VM. This way they are sure to get the same numbers.
-> >
-> > Hope this background info helps.
-> 
-> For the series:
-> Acked-by: Ian Rogers <irogers@google.com>
+--Sig_/2cNvZ49YqAmsSTP6cfBmj=u
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Thanks, applied.
+Hi all,
 
-- Arnaldo
+In commit
 
- 
-> Using ScaleUnit won't change the result. A ScaleUnit of "100%" means
-> scale the result up by multiplying by 100 and then apply the % after
-> the value. Another nit is having metrics that place their units in the
-> name, like _percent, is usually a sign the name can be better. Perhaps
-> we can follow up with some clean up.
-> 
-> Thanks,
-> Ian
-> 
-> > Thanks a lot.
-> > --
-> > Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
-> > --
-> > Vorsitzender des Aufsichtsrats: Gregor Pillen
-> > Geschäftsführung: David Faller
-> > Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
-> >
+  540359b2e8a4 ("drm/amd/display: hpd rx irq not working with eDP interface=
+")
 
--- 
+Fixes tag
 
-- Arnaldo
+  Fixes: 11ec7d8f2263 ("drm/amd/display: Allow individual control of eDP ho=
+tplug support")
+
+has these problem(s):
+
+  - Target SHA1 does not exist
+
+Maybe you meant
+
+Fixes: ab144f0b4ad6 ("drm/amd/display: Allow individual control of eDP hotp=
+lug support")
+
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/2cNvZ49YqAmsSTP6cfBmj=u
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ6R4ACgkQAVBC80lX
+0Gx06gf9EwGz8K7axGcsjMWLbz3lMlgCU6NTNV+CyOeW780ix0GBiLfieZrLZEPv
+5aVl1P9OeSVrABEw2VQZFaTidSW5cyjDThFMkObQzZkPCpKo7gCq5Bnmb/GxQ/Xb
+RlvioKKOZuoXzHmneg0wXRshzBgzbEyrqM1XdCz7+yNP+xVIh0DjV1hSUam7pXiQ
+nl2nlgdKv5KzCvpuitKTTxcvSKgnhyxX5t/hVGEJb/c6OX3RDr6s7h5l+Ci+eBZR
+QT/+H+4pQTnDNzcxw/sWxLlAuYjhUT5X0fcdud1wfO4H1a7rqjbkRc1QFPkr59/n
+/QlyhQHtcyiMbP4XMlrhELXj9ojDzw==
+=Nqk4
+-----END PGP SIGNATURE-----
+
+--Sig_/2cNvZ49YqAmsSTP6cfBmj=u--
