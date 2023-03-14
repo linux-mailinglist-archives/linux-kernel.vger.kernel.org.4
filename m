@@ -2,139 +2,153 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A7CF6B8F0A
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:55:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 69E846B8F0C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 10:56:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229665AbjCNJz4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 05:55:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60902 "EHLO
+        id S229682AbjCNJ4W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 05:56:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbjCNJzy (ORCPT
+        with ESMTP id S229436AbjCNJ4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 05:55:54 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AAA675865;
-        Tue, 14 Mar 2023 02:55:45 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 2C38A616CA;
-        Tue, 14 Mar 2023 09:55:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7487C433D2;
-        Tue, 14 Mar 2023 09:55:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678787744;
-        bh=Ml5eEB7wiPfEgRtV2rIkKaAoqJoRbyT21kgehns7Z48=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=G7m6L0kpZwkFxG1VN7QQ9eaT7lyq2OfAbj1bbpaO9NX6P+lOkstYFr9obbJzU/XDi
-         DziwewMWij7zSQAnSuzJBNCAAVL4HdeuUsFXWz28Cs4fNFJ+jq411+r7jWyG4cIjvW
-         IsGpEvhfkder/jEMC2SnohzBWR4Ot/OEIoCiOZIMmhJI38L6dJ9pUjuK2neonmL2qp
-         Ti9WbXh6RCmFe6znlXqAWZ5gC2hZ9ssAORRwM4pvkHEA8o/wxfntxhpgGCFR3O+gBF
-         DjQgPeZfXzncN+WhIKsUstfhHkVfDnuQhcdQFFzwEssZe9WIc78kVfCPmy+nGFVif1
-         CFVvB8ZZNvP+w==
-Date:   Tue, 14 Mar 2023 10:55:39 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Kirtikumar Anandrao Ramchandani <kirtiar15502@gmail.com>,
-        security@kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Linus Torvalds <torvalds@linuxfoundation.org>
-Subject: Re: Patch for a overwriting/corruption of the file system
-Message-ID: <20230314095539.zf7uy27cjflqp6kp@wittgenstein>
-References: <CADZg-m0Z+dOGfG=ddJxqPvgFwG0+OLAyP157SNzj6R6J2p7L-g@mail.gmail.com>
- <ZA734rBwf4ib2u9n@kroah.com>
- <CADZg-m04XELrO-v-uYZ4PyYHXVPX35dgWbCHBpZvwepS4XV9Ew@mail.gmail.com>
- <CADZg-m2k_L8-byX0WKYw5Cj1JPPhxk3HCBexpqPtZvcLRNY8Ug@mail.gmail.com>
- <ZA77qAuaTVCEwqHc@kroah.com>
+        Tue, 14 Mar 2023 05:56:20 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF5B27A93A;
+        Tue, 14 Mar 2023 02:56:10 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32E9ttUc033245;
+        Tue, 14 Mar 2023 04:55:55 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678787755;
+        bh=9HTrF/bi2rVYtl3gMRYiEks4Hl9aIrD4oAoeLmY90dc=;
+        h=From:To:CC:Subject:Date;
+        b=P09hzaCRfz+n6YOnJFi4va1+tLwaEVXRzrmyroQXStEkMYW7mggSpSx+dxyG6yZUM
+         83fsK8CBcxNEuipC+dnK89WmNM/eTYtlguNn7UohQvOXqWu5iWH5+3xsz198RersTI
+         /xWQMbKDyDq9aA51EQffyoKYHuwWVPy1awxi53X8=
+Received: from DFLE115.ent.ti.com (dfle115.ent.ti.com [10.64.6.36])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32E9ttIS067606
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 04:55:55 -0500
+Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 04:55:54 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 04:55:54 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32E9tstV003927;
+        Tue, 14 Mar 2023 04:55:54 -0500
+From:   Bhavya Kapoor <b-kapoor@ti.com>
+To:     <devicetree@vger.kernel.org>, <robh+dt@kernel.org>
+CC:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+Subject: [PATCH v5] arm64: dts: ti: k3-j721s2: Add support for ADC nodes
+Date:   Tue, 14 Mar 2023 15:25:53 +0530
+Message-ID: <20230314095553.110559-1-b-kapoor@ti.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <ZA77qAuaTVCEwqHc@kroah.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 11:32:08AM +0100, Greg KH wrote:
-> On Mon, Mar 13, 2023 at 03:54:55PM +0530, Kirtikumar Anandrao Ramchandani wrote:
-> > Seems like again it got rejected. I am sending it in the body if it works:
-> > 
-> > >From 839cae91705e044b49397590f2d85a5dd289f0c5 Mon Sep 17 00:00:00 2001
-> > From: KirtiRamchandani <kirtar15502@gmail.com>
-> > Date: Mon, 13 Mar 2023 15:05:08 +0530
-> > Subject: [PATCH] Fix bug in affs_rename() function. The `affs_rename()`
-> >  function in the AFFS filesystem has a bug that can cause the `retval`
-> >  variable to be overwritten before it is used. Specifically, the function
-> >  assigns `retval` a value in two separate code blocks, but then only checks
-> >  its value in one of those blocks. This commit fixes the bug by ensuring
-> > that
-> >  `retval` is properly checked in both code blocks.
-> > 
-> > Signed-off-by: KirtiRamchandani <kirtar15502@gmail.com>
-> > ---
-> >  namei.c | 4++++--
-> >  1 file changed, 4 insertions(+), 2 deletion(-)
-> > 
-> > diff --git a/fs/affs/namei.c b/fs/affs/namei.c
-> > index d1084e5..a54c700 100644
-> > --- a/fs/affs/namei.c
-> > +++ b/fs/affs/namei.c
-> > @@ -488,7 +488,8 @@ affs_xrename(struct inode *old_dir, struct dentry
-> > *old_dentry,
-> >         affs_lock_dir(new_dir);
-> >         retval = affs_insert_hash(new_dir, bh_old);
-> >         affs_unlock_dir(new_dir);
-> > -
-> > +       if (retval)
-> > +               goto done;
-> 
-> The patch is corrupted and can not be applied.
+J721s2 has two instances of 8 channel ADCs in MCU domain. Add support
+for both ADC nodes.
 
-Yeah, that patch is pretty borked. This should probably be sm like:
-
-From f3a7758bb53cc776820656c6ac66b13fb8ed9022 Mon Sep 17 00:00:00 2001
-From: KirtiRamchandani <kirtar15502@gmail.com>
-Date: Tue, 14 Mar 2023 10:49:38 +0100
-Subject: [PATCH] affs: handle errors in affs_xrename()
-
-Fix a bug in the affs_xrename() function. The affs_xrename() function in
-the AFFS filesystem has a bug that can cause the retval variable to be
-overwritten before it is used. Specifically, the function assigns retval
-a value in two separate code blocks, but then only checks its value in
-one of those blocks. This commit fixes the bug by ensuring that retval
-is properly checked in both code blocks.
-
-Signed-off-by: KirtiRamchandani <kirtar15502@gmail.com>
+Signed-off-by: Bhavya Kapoor <b-kapoor@ti.com>
 ---
- fs/affs/namei.c | 4 ++++
- 1 file changed, 4 insertions(+)
 
-diff --git a/fs/affs/namei.c b/fs/affs/namei.c
-index d12ccfd2a83d..98525d69391d 100644
---- a/fs/affs/namei.c
-+++ b/fs/affs/namei.c
-@@ -488,6 +488,8 @@ affs_xrename(struct inode *old_dir, struct dentry *old_dentry,
- 	affs_lock_dir(new_dir);
- 	retval = affs_insert_hash(new_dir, bh_old);
- 	affs_unlock_dir(new_dir);
-+	if (retval)
-+		goto done;
- 
- 	/* Insert new into the old directory with the old name. */
- 	affs_copy_name(AFFS_TAIL(sb, bh_new)->name, old_dentry);
-@@ -495,6 +497,8 @@ affs_xrename(struct inode *old_dir, struct dentry *old_dentry,
- 	affs_lock_dir(old_dir);
- 	retval = affs_insert_hash(old_dir, bh_new);
- 	affs_unlock_dir(old_dir);
-+	if (retval)
-+		goto done;
- done:
- 	mark_buffer_dirty_inode(bh_old, new_dir);
- 	mark_buffer_dirty_inode(bh_new, old_dir);
+Changelog v4->v5:
+- Modified commit message
+- removed status = "disabled"; from tscadc nodes
+
+Link to v4 : https://lore.kernel.org/all/20230313112834.16156-1-b-kapoor@ti.com/
+
+Testlog : https://gist.github.com/a0498981/058c009e2937b423df02349ca78b4e29
+
+ .../dts/ti/k3-j721s2-common-proc-board.dts    | 12 ++++++
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     | 38 +++++++++++++++++++
+ 2 files changed, 50 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+index a7aa6cf08acd..90162a0bb3e6 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-common-proc-board.dts
+@@ -309,3 +309,15 @@ &mcu_mcan1 {
+ 	pinctrl-0 = <&mcu_mcan1_pins_default>;
+ 	phys = <&transceiver2>;
+ };
++
++&tscadc0 {
++	adc {
++		ti,adc-channels = <0 1 2 3 4 5 6 7>;
++	};
++};
++
++&tscadc1 {
++	adc {
++		ti,adc-channels = <0 1 2 3 4 5 6 7>;
++	};
++};
+diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+index 0af242aa9816..df8be8803dcb 100644
+--- a/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi
+@@ -306,4 +306,42 @@ cpts@3d000 {
+ 			ti,cpts-periodic-outputs = <2>;
+ 		};
+ 	};
++
++	tscadc0: tscadc@40200000 {
++		compatible = "ti,am3359-tscadc";
++		reg = <0x00 0x40200000 0x00 0x1000>;
++		interrupts = <GIC_SPI 860 IRQ_TYPE_LEVEL_HIGH>;
++		power-domains = <&k3_pds 0 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 0 0>;
++		assigned-clocks = <&k3_clks 0 2>;
++		assigned-clock-rates = <60000000>;
++		clock-names = "fck";
++		dmas = <&main_udmap 0x7400>,
++			<&main_udmap 0x7401>;
++		dma-names = "fifo0", "fifo1";
++
++		adc {
++			#io-channel-cells = <1>;
++			compatible = "ti,am3359-adc";
++		};
++	};
++
++	tscadc1: tscadc@40210000 {
++		compatible = "ti,am3359-tscadc";
++		reg = <0x00 0x40210000 0x00 0x1000>;
++		interrupts = <GIC_SPI 861 IRQ_TYPE_LEVEL_HIGH>;
++		power-domains = <&k3_pds 1 TI_SCI_PD_EXCLUSIVE>;
++		clocks = <&k3_clks 1 0>;
++		assigned-clocks = <&k3_clks 1 2>;
++		assigned-clock-rates = <60000000>;
++		clock-names = "fck";
++		dmas = <&main_udmap 0x7402>,
++			<&main_udmap 0x7403>;
++		dma-names = "fifo0", "fifo1";
++
++		adc {
++			#io-channel-cells = <1>;
++			compatible = "ti,am3359-adc";
++		};
++	};
+ };
 -- 
 2.34.1
 
