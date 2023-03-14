@@ -2,82 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 587B36B91D8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFDC76B91DB
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 12:41:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230478AbjCNLkh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 07:40:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44892 "EHLO
+        id S231419AbjCNLlp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 07:41:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbjCNLkd (ORCPT
+        with ESMTP id S230370AbjCNLln (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 07:40:33 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9DF9C980;
-        Tue, 14 Mar 2023 04:40:32 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id e15-20020a17090ac20f00b0023d1b009f52so4769852pjt.2;
-        Tue, 14 Mar 2023 04:40:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678794032;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=eH82WTYd39GPKAXdpbYy5VSkOFc2jW21usmU+S6UzaM=;
-        b=WkXPZHabqVtCtmPiPhbTpbqbUbZAf7UDuh35/WLuHqxQ0p18Psv889vDS/yPUe1yI2
-         ggWGepP5WBzmK50RVsxuLn/LTsnoSHRXI7VSThcnCfGf6CrdN6VXb0FYTdfyz9sg2fiv
-         XDGhycxUNZa14Wmubkp+cdO+FLTGMlBF57CjDDyicxY6bry1eNQH364qoOasqilO3s2z
-         4VFgfquWKyo05UDWSslDjvS/xrX5SD6SoSS5WKD86sJadAQd2YiGmnKTzgI9FLFhFPVA
-         tbOYgkpNMEo5D5+ORWlpOT1V32oqmlKsQ88Mz6TxO3cxhWYOvxjRN9Nv3q6qM7s9Ly6v
-         vqDA==
+        Tue, 14 Mar 2023 07:41:43 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF81F9B2F2
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:40:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1678794057;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=nvUKdBCqtDsCDJokDequ8gIlKpdN3GQsgjjeCWrl9fk=;
+        b=aP+Rm59KsZmWGz5QdK5lMgPF7PheTWjmSYOLFI1RIXHD+JJrbG11BO772yPlC8yTjjeW6p
+        eIo/pcoRPjPEYo7bqmOwY9Vi/+tc4n7HjbKSdJtXc7wLMYzAaH96WMkZovvn5gx2kfF21m
+        Q4bMxkEjOD/uzZyzqikEWcvI40lQ5Ok=
+Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
+ [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-287-DKUpdB2pPT2kvTuhFqHhtg-1; Tue, 14 Mar 2023 07:40:50 -0400
+X-MC-Unique: DKUpdB2pPT2kvTuhFqHhtg-1
+Received: by mail-ua1-f72.google.com with SMTP id z1-20020ab03881000000b0068feca4ad88so7519315uav.20
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 04:40:50 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678794032;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=eH82WTYd39GPKAXdpbYy5VSkOFc2jW21usmU+S6UzaM=;
-        b=VAgtv61ObpIUQNbHozUwrNeQQ9BGKBsgOT8wNnk9NTHiSUMZsQePCE5Hjb1apSwgnN
-         YN0gFCm8vqNr20pPlK/Ta0aFZ6bk0hfJKfkM72YkPV3m3CjaxAyFGneEzCj7625ZggUL
-         F2Fu7HUtpG3sDE0zYBMuQzbugPIWzF0uW/s5isN8TJFy7QhNuYxF7urMr49wX03CTU5/
-         +0DI3Pu6EfKrGLu5Lc1Lkpow1798qQC8n7MHu5ibgVv/TyygKJNZdXjCCm2+Hm0MwADc
-         lx4iUyolpw+pa4wo1NrihJW8T5OJhIdJgrFkUEqfs9Wv2yH4OsOowB+UzJ9YpmfWFTjr
-         iOHA==
-X-Gm-Message-State: AO0yUKVXMROPbqwSu3FKLAhCC9sC1L/aBYoyVDCB7LIeg5UGXSoB+xFC
-        zt4J8lOrdFaCbGTjyKeqcCQ=
-X-Google-Smtp-Source: AK7set9ftIWNNWDAHaADJAqiYdsj9tGVmw6svnfxG3uh7QWFxSecTPu9P+X9UtwpFti87PjPTHXSNg==
-X-Received: by 2002:a17:902:f685:b0:19c:d49f:4296 with SMTP id l5-20020a170902f68500b0019cd49f4296mr45244363plg.67.1678794032284;
-        Tue, 14 Mar 2023 04:40:32 -0700 (PDT)
-Received: from Gentoo (n220246252084.netvigator.com. [220.246.252.84])
-        by smtp.gmail.com with ESMTPSA id ju17-20020a170903429100b0019cbd37a335sm1580589plb.93.2023.03.14.04.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 04:40:31 -0700 (PDT)
-Date:   Tue, 14 Mar 2023 19:40:21 +0800
-From:   Jianhua Lu <lujianhua000@gmail.com>
-To:     Sam Ravnborg <sam@ravnborg.org>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@linaro.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
-Subject: Re: [PATCH v5 2/2] drm/panel: Add driver for Novatek NT36523
-Message-ID: <ZBBdJcvR6I6HZ4MS@Gentoo>
-References: <20230311123231.20771-1-lujianhua000@gmail.com>
- <20230311123231.20771-2-lujianhua000@gmail.com>
- <904bc493-7160-32fd-9709-1dcb978ddbab@linaro.org>
- <ZAx4KqXw+an555d4@Gentoo>
- <6c02557d-372d-05b1-2998-7c2cde99fac7@linaro.org>
- <ZA9xKlScy9/LS753@ravnborg.org>
+        d=1e100.net; s=20210112; t=1678794050;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=nvUKdBCqtDsCDJokDequ8gIlKpdN3GQsgjjeCWrl9fk=;
+        b=IPGDsOgIELucwWIepf1a5tr+N5Rw1GRXDz4nFbXhuemb0mtaIlXHkHK67Kmef/+iwT
+         rzrCaiwocOrkzl0Uf1RkO3F8oaAMPxlpGHmJjFE5yC6Mlwx6SM85rp/L3amhiPkLBf7k
+         ATrWz+ueB52eVtonSdMR0PUc2TBXWS9APF05pbQrD5Lskfi/KHIgFGpJmcCPWEqlUva7
+         YFfU4okRQ8h51xajVCRoZr6QpRny2QsSGMp/AAqasuyweEUGOFlmvtDmDPcrWo7ow693
+         K2YnbKzdPBVi8VGlgV7fFQheGmCN4i2bJ0yRf1tzA+D3yGux8BdlBoY12Gy++AKsP1HO
+         rmiQ==
+X-Gm-Message-State: AO0yUKXcPGvAbX3QgTokvq17giBffH8fnCJ8KPXWQPfQYGZdn+Pu8xzL
+        VVJ0HrRFdS3y9Xw0uMOqFUTqfV6UtBEOnXk4Nuq5AZzQeAGgoVBGVhkHYVYll+Fsr2q0bwgjTHq
+        ACwUUZPbSmlKGHPa4OPQqraN441burCpWMjsBgS6qztHkcI6a7H8=
+X-Received: by 2002:a67:d08c:0:b0:425:a3a9:a6e8 with SMTP id s12-20020a67d08c000000b00425a3a9a6e8mr1680163vsi.1.1678794050023;
+        Tue, 14 Mar 2023 04:40:50 -0700 (PDT)
+X-Google-Smtp-Source: AK7set8m2YHyzZwKxEeDVZaI9vGT3421ek6caI5yO0ukBXyVOVG8nEWdZx1OXuEsVVYm6GXhA2bwA99fmZZJcza4we0=
+X-Received: by 2002:a67:d08c:0:b0:425:a3a9:a6e8 with SMTP id
+ s12-20020a67d08c000000b00425a3a9a6e8mr1680153vsi.1.1678794049787; Tue, 14 Mar
+ 2023 04:40:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ZA9xKlScy9/LS753@ravnborg.org>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20230310234304.2908714-1-pbonzini@redhat.com> <ZAvGjCqfKgsSEQhZ@google.com>
+In-Reply-To: <ZAvGjCqfKgsSEQhZ@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+Date:   Tue, 14 Mar 2023 12:40:38 +0100
+Message-ID: <CABgObfbwAe3ut18bS2u05pAgDoUvix_N9LKMb1iBcx8xNd9dMQ@mail.gmail.com>
+Subject: Re: [PATCH] KVM: nVMX: add missing consistency checks for CR0 and CR4
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Reima ISHII <ishiir@g.ecc.u-tokyo.ac.jp>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,49 +76,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Mar 13, 2023 at 07:53:30PM +0100, Sam Ravnborg wrote:
-> On Mon, Mar 13, 2023 at 09:06:50AM +0100, Neil Armstrong wrote:
-> > On 11/03/2023 13:46, Jianhua Lu wrote:
-> > > On Sat, Mar 11, 2023 at 01:38:52PM +0100, Konrad Dybcio wrote:
-> > > > 
-> > > > 
-> > > > On 11.03.2023 13:32, Jianhua Lu wrote:
-> > > > > Add a driver for panels using the Novatek NT36523 display driver IC.
-> > > > > 
-> > > > > Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> > > > > ---
-> > > > [...]
-> > > > 
-> > > > > +
-> > > > > +static int nt36523_get_modes(struct drm_panel *panel,
-> > > > > +			       struct drm_connector *connector)
-> > > > > +{
-> > > > > +	struct panel_info *pinfo = to_panel_info(panel);
-> > > > > +	int i;
-> > > > > +
-> > > > > +	for (i = 0; i < pinfo->desc->num_modes; i++) {
-> > > > > +		const struct drm_display_mode *m = &pinfo->desc->modes[i];
-> > > > > +		struct drm_display_mode *mode;
-> > > > > +
-> > > > > +		mode = drm_mode_duplicate(connector->dev, m);
-> > > > > +		if (!mode) {
-> > > > > +			dev_err(panel->dev, "failed to add mode %ux%u@%u\n",
-> > > > > +				m->hdisplay, m->vdisplay, drm_mode_vrefresh(m));
-> > > > > +			return -ENOMEM;
-> > > > > +		}
-> > > > > +
-> > > > > +		mode->type = DRM_MODE_TYPE_DRIVER;
-> > > > > +		if (pinfo->desc->num_modes == 1)
-> > > > > +			mode->type |= DRM_MODE_TYPE_PREFERRED;
-> > > > That's not quite correct, as that means "if you have more than one
-> > > > defined panel mode (say 60Hz and 120 Hz), there will be no preferred one".
-> > > This piece of code I see in the other panels, so I'm not sure if it is
-> > > correct.
-> Jianhua is correct that the same code exists in several places,
-> and from a quick browse I consider all the cases bogus.
-> 
-> It would be fine if someone volunteered to fix all the panels so we
-> avoid this bug to creep into more panel drivers.
-I'm glad to send a patch to fix it soon.
-> 
-> 	Sam
+On Sat, Mar 11, 2023 at 1:17=E2=80=AFAM Sean Christopherson <seanjc@google.=
+com> wrote:
+> > @@ -3047,6 +3047,19 @@ static int nested_vmx_check_guest_state(struct k=
+vm_vcpu *vcpu,
+> >                                          vmcs12->guest_ia32_perf_global=
+_ctrl)))
+> >               return -EINVAL;
+> >
+> > +     if (CC((vmcs12->guest_cr0 & (X86_CR0_PG | X86_CR0_PE)) =3D=3D X86=
+_CR0_PG))
+> > +             return -EINVAL;
+> > +
+> > +#ifdef CONFIG_X86_64
+>
+> The #ifdef isn't necessary, attempting to set for a 32-bit host should be=
+ rejected
+> by nested_vmx_check_controls() since nested_vmx_setup_ctls_msrs() clears =
+the bit.
+> Ditto for the host logic related to VM_EXIT_HOST_ADDR_SPACE_SIZE, which l=
+ooks
+> suspiciously similar ;-)
+
+Yeah, I noticed that too and decided that the idea could have been to
+allow some dead code elimination on 32-bit kernels, so I copied what
+the host state checks were doing. But if you prefer the more compact
+way I am absolutely not going to complain.
+
+> > +     if (CC(ia32e &&
+> > +            (!(vmcs12->guest_cr4 & X86_CR4_PAE) ||
+> > +             !(vmcs12->guest_cr0 & X86_CR0_PG))))
+> > +             return -EINVAL;
+>
+> This is a lot easier to read IMO, and has the advantage of more precisely
+> identifying the failure in the tracepoint.
+>
+>         if (CC(ia32e && !(vmcs12->guest_cr4 & X86_CR4_PAE)) ||
+>             CC(ia32e && !(vmcs12->guest_cr4 & X86_CR0_PG)))
+>                 return -EINVAL;
+
+Looks good.  I squashed everything in.
+
+Paolo
+
