@@ -2,85 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B8496B8BDF
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:23:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4045A6B8BA5
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 08:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbjCNHXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 03:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32776 "EHLO
+        id S229805AbjCNHEz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 03:04:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34326 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229949AbjCNHXj (ORCPT
+        with ESMTP id S230227AbjCNHEx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 03:23:39 -0400
-Received: from mail.belitungtimurkab.go.id (unknown [103.205.56.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 344C262FEF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 00:23:18 -0700 (PDT)
-Received: from mail.belitungtimurkab.go.id (localhost.localdomain [127.0.0.1])
-        by mail.belitungtimurkab.go.id (Postfix) with ESMTPS id 8C0698A5138;
-        Tue, 14 Mar 2023 11:49:33 +0700 (WIB)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by mail.belitungtimurkab.go.id (Postfix) with ESMTP id 41B778A50EB;
-        Tue, 14 Mar 2023 11:35:45 +0700 (WIB)
-DKIM-Filter: OpenDKIM Filter v2.10.3 mail.belitungtimurkab.go.id 41B778A50EB
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=belitungtimurkab.go.id; s=mail; t=1678768545;
-        bh=RAnbAQ7Pvt/Hl+3FtIUyxf0TU/XbXPbvlnNCTygAN7Q=;
-        h=MIME-Version:To:From:Date:Message-Id;
-        b=sCyC4kBL4SJralMA0APNu6U4uZK4uBAHDA6AMw/q7QJJPAqeED4Wx5+2w3hjrQ7dC
-         ld+SeUb2900DyV9E+BN7KQQF2tXlWdhcILyGH/vtFJy14n6RP73YyurHYW+Cztzopn
-         9lUrQ5nKA87Xws7PzNABSoxo5jkeLEnq7F6OgsKKf+oct0vCloudyjLgpkgU/AreBn
-         iyeyQF49TxRhvJT15tBtrdNN3dYJAk+YnB+ZvJ6WgxCXIxLUctDtzUOvQqM1CndeKh
-         +kX12/1/tmlSFZwb7oAEwwnx//0YBWt9N7HEA5FqhnYZF0G2GdN8K+iR5vkK6Fk/wM
-         RkgMBWiUt9ESQ==
-Received: from mail.belitungtimurkab.go.id ([127.0.0.1])
-        by localhost (mail.belitungtimurkab.go.id [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id B6mWnVzOOhAO; Tue, 14 Mar 2023 11:35:45 +0700 (WIB)
-Received: from [100.66.1.0] (unknown [223.225.7.255])
-        by mail.belitungtimurkab.go.id (Postfix) with ESMTPSA id 528888A50E2;
-        Tue, 14 Mar 2023 11:35:30 +0700 (WIB)
-Content-Type: text/plain; charset="iso-8859-1"
+        Tue, 14 Mar 2023 03:04:53 -0400
+Received: from hust.edu.cn (mail.hust.edu.cn [202.114.0.240])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F68774A6E;
+        Tue, 14 Mar 2023 00:04:51 -0700 (PDT)
+Received: from Chengziqiu-Lab-Desktop.. ([172.16.0.254])
+        (user=chengziqiu@hust.edu.cn mech=LOGIN bits=0)
+        by mx1.hust.edu.cn  with ESMTP id 32E71V5Y025436-32E71V5Z025436
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+        Tue, 14 Mar 2023 15:01:39 +0800
+From:   Cheng Ziqiu <chengziqiu@hust.edu.cn>
+To:     Eugen Hristev <eugen.hristev@collabora.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Beznea <claudiu.beznea@microchip.com>
+Cc:     Cheng Ziqiu <chengziqiu@hust.edu.cn>,
+        Dongliang Mu <dzm91@hust.edu.cn>, linux-iio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] iio: adc: at91-sama5d2_adc: remove dead code in `at91_adc_probe`
+Date:   Tue, 14 Mar 2023 15:01:30 +0800
+Message-Id: <20230314070130.60581-1-chengziqiu@hust.edu.cn>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Description: Mail message body
-Subject: =?utf-8?b?QVRFTsOHw4NP?=
-To:     Recipients <dinkesppkb@belitungtimurkab.go.id>
-From:   Administrador de Sistemas <dinkesppkb@belitungtimurkab.go.id>
-Date:   Tue, 14 Mar 2023 11:13:39 +0530
-Reply-To: sistemassadmins@mail2engineer.com
-Message-Id: <20230314043530.528888A50E2@mail.belitungtimurkab.go.id>
-X-Spam-Status: No, score=3.5 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FORGED_REPLYTO,
-        RDNS_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+Content-Transfer-Encoding: 8bit
+X-FEAS-AUTH-USER: chengziqiu@hust.edu.cn
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ATEN=C7=C3O;
+From the comment of platform_get_irq, it only returns non-zero IRQ
+number and negative error number, other than zero.
 
-Sua caixa de correio excedeu o limite de armazenamento, que =E9 de 5 GB com=
-o definido pelo administrador, que est=E1 atualmente em execu=E7=E3o no 10.=
-9GB, voc=EA pode n=E3o ser capaz de enviar ou receber novas mensagens at=E9=
- que voc=EA re-validar a sua caixa de correio. Para revalidar sua caixa de =
-correio, envie os seguintes dados abaixo:
+Fix this by removing the if condition.
 
-nome:
-Nome de usu=E1rio:
-senha:
-Confirme a Senha :
-Endere=E7o de e-mail:
-Telefone:
+Signed-off-by: Cheng Ziqiu <chengziqiu@hust.edu.cn>
+Reviewed-by: Dongliang Mu <dzm91@hust.edu.cn>
+---
+v2->v3: Change subject to make it regular.
+v1->v2: Change commit message from SoB to Reviewed-by.
+ drivers/iio/adc/at91-sama5d2_adc.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-Se voc=EA n=E3o conseguir revalidar sua caixa de correio, sua caixa postal =
-vai ser desativado!
+diff --git a/drivers/iio/adc/at91-sama5d2_adc.c b/drivers/iio/adc/at91-sama5d2_adc.c
+index 50d02e5fc6fc..168399092590 100644
+--- a/drivers/iio/adc/at91-sama5d2_adc.c
++++ b/drivers/iio/adc/at91-sama5d2_adc.c
+@@ -2400,12 +2400,8 @@ static int at91_adc_probe(struct platform_device *pdev)
+ 	st->dma_st.phys_addr = res->start;
+ 
+ 	st->irq = platform_get_irq(pdev, 0);
+-	if (st->irq <= 0) {
+-		if (!st->irq)
+-			st->irq = -ENXIO;
+-
++	if (st->irq < 0)
+ 		return st->irq;
+-	}
+ 
+ 	st->per_clk = devm_clk_get(&pdev->dev, "adc_clk");
+ 	if (IS_ERR(st->per_clk))
+-- 
+2.34.1
 
-Lamentamos o inconveniente.
-C=F3digo de verifica=E7=E3o:@ADMINWEBMAIL.WEB.PT:@>2023 @Administrador de S=
-istemas
-Correio T=E9cnico Suporte =A92023
-
-obrigado
-Administrador de Sistemas
