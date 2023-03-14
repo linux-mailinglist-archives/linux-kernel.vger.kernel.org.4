@@ -2,104 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 444626BA2C1
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:55:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF0206BA2CE
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:55:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbjCNWy4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:54:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51586 "EHLO
+        id S231360AbjCNWzo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:55:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbjCNWyx (ORCPT
+        with ESMTP id S229720AbjCNWzm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:54:53 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0EA1D3D93F;
-        Tue, 14 Mar 2023 15:54:40 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id r11so16823362edd.5;
-        Tue, 14 Mar 2023 15:54:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678834479;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=maSYtAupB9pGA9BbMf1FFCoQ9AwFyYvIGdi4zGVyIRQ=;
-        b=GS8uou+NN5ZDw4pSmDPuGE1rXQDIHcVPU2GXePNUVnMkvBkTl2c0cfJmhPjUYHrEC6
-         09KZP+C7/icM2we1BzKTz3AHjP8ZxoflNlRwwf46zHj1dNsDIUfn9x6ZDkQpQaAOZwSM
-         Td/q5BkCQ+B7WRPk5+lHYLJwdHWz2Sqa6kRs1wwkBnDa4IwCM74NdO/JXKX6LKrVXZoa
-         RON19SsRgIrM213iTpadrCbq4ZPKSTBy0UA3fYqXUtnbvJimINzdyV+cZNXV9qQEfeIU
-         hRvZ7I778pMSDBGBggWXDErnlzfuNq6zkv098rdOyiekkUMNEzPHYQAIS/jka/61FrsJ
-         GgFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678834479;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=maSYtAupB9pGA9BbMf1FFCoQ9AwFyYvIGdi4zGVyIRQ=;
-        b=XrKRhTe4ceZSLTYi1Cw/XM7JA7i2XoaUJ3V/TNWUiFu/FcOEOElw4rry8eyXCqFSWB
-         ksA2k+/dIgsVVi1Hk6bfgUQFa8utImtCtk9Fre1J82JVkLy73OA6AdaBNvcMDf816zDE
-         6AVoS6G/gt4RgQB6z6whPq6UKlHYAaIviCXJSAe5FELF7QSWPOU8ZHLMdRJ/g9YQdmQq
-         ioZ8UC0BXZtT0ZndV6PUC2Pd+BQBx73DjNHguttksPUBJf7lP9d15ZMtX79e0nJqJ8OG
-         5Wia6x2aDMK8MEQ9N7i5RdEUstgtiJ7LxG/73m3HBJfqCoIgu/V99KzDvk8UNl+J8gv0
-         m+Xg==
-X-Gm-Message-State: AO0yUKWL+SgpAXumysIQMBCjU2RABSNqf4NgcNV7IQ00a8CLKK0C/JrQ
-        qySDsniVM4gSbGbITD8PiCY=
-X-Google-Smtp-Source: AK7set/AyE9xRmthWf3MIL9RRlbaRG7FfValX8Oi9E+/ktaTfqrYZBl7Ut/CsSn/i0wcA07N++CNkA==
-X-Received: by 2002:a05:6402:53:b0:4fa:4b1c:6979 with SMTP id f19-20020a056402005300b004fa4b1c6979mr625043edu.28.1678834478987;
-        Tue, 14 Mar 2023 15:54:38 -0700 (PDT)
-Received: from skbuf ([188.27.184.189])
-        by smtp.gmail.com with ESMTPSA id co2-20020a0564020c0200b004fce9ff4830sm1594082edb.88.2023.03.14.15.54.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 15:54:38 -0700 (PDT)
-Date:   Wed, 15 Mar 2023 00:54:36 +0200
-From:   Vladimir Oltean <olteanv@gmail.com>
-To:     =?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        Herve Codina <herve.codina@bootlin.com>,
-        =?utf-8?Q?Miqu=C3=A8l?= Raynal <miquel.raynal@bootlin.com>,
-        Milan Stevanovic <milan.stevanovic@se.com>,
-        Jimmy Lalande <jimmy.lalande@se.com>,
-        Pascal Eberhard <pascal.eberhard@se.com>,
-        Arun Ramadoss <Arun.Ramadoss@microchip.com>,
-        linux-renesas-soc@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND net-next v4 1/3] net: dsa: rzn1-a5psw: use
- a5psw_reg_rmw() to modify flooding resolution
-Message-ID: <20230314225436.rrynwmdkbwsrqp3y@skbuf>
-References: <20230314163651.242259-1-clement.leger@bootlin.com>
- <20230314163651.242259-1-clement.leger@bootlin.com>
- <20230314163651.242259-2-clement.leger@bootlin.com>
- <20230314163651.242259-2-clement.leger@bootlin.com>
+        Tue, 14 Mar 2023 18:55:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966913771A;
+        Tue, 14 Mar 2023 15:55:41 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 8FB8761A4D;
+        Tue, 14 Mar 2023 22:55:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A68ACC433EF;
+        Tue, 14 Mar 2023 22:55:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678834539;
+        bh=G7IHTWYU3Hc+755n6/8M/Bh2uOhHrF8UATMy0A1uKCQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=EhRQFg+fyLNkwy3Bpcsi+mGCiJMx6YnCpAaeNGWAv8+IBINHHNxagygIh98ouTObA
+         CPEaaxuHXUk3TOqK6pSJDLniAP6LjoHqRIvxLugnLj6rttqYuM+9oOx1m3PlzgBcTu
+         kn5ML7wkd9/aL75VH2qB/SAgno0vkJGDNsdPYyY4x76As5pAZkPfLoLIPiXUOrE83+
+         dB+jPbgnhUdS7pL7UhgX/KP2PRnPV2iAAn/c72t/CZbMO4e4MBECHSN1MmPL6Kdxs4
+         aVffBTwnQhQ83ShjScGyptSverJCz8PXgKNVeEFS+2lWS9XyM/3vQkf2f/+cv3vl0E
+         6QyRZ4e47iZ1A==
+Received: by mercury (Postfix, from userid 1000)
+        id D176D10620A0; Tue, 14 Mar 2023 23:55:36 +0100 (CET)
+From:   Sebastian Reichel <sre@kernel.org>
+To:     Sebastian Reichel <sre@kernel.org>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
+        Matti Vaittinen <mazziesaccount@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org
+Subject: [PATCHv2 00/12] Add DT support for generic ADC battery
+Date:   Tue, 14 Mar 2023 23:55:23 +0100
+Message-Id: <20230314225535.1321736-1-sre@kernel.org>
+X-Mailer: git-send-email 2.39.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20230314163651.242259-2-clement.leger@bootlin.com>
- <20230314163651.242259-2-clement.leger@bootlin.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 05:36:49PM +0100, Clément Léger wrote:
-> .port_bridge_flags will be added and allows to modify the flood mask
-> independently for each port. Keeping the existing bridged_ports write
-> in a5psw_flooding_set_resolution() would potentially messed up this.
-> Use a read-modify-write to set that value and move bridged_ports
-> handling in bridge_port_join/leave.
-> 
-> Signed-off-by: Clément Léger <clement.leger@bootlin.com>
-> Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
-> ---
+Hi,
 
-Reviewed-by: Vladimir Oltean <olteanv@gmail.com>
+This series cleans up the generic ADC battery driver and adds
+devicetree support. The plan is to use the driver to add upstream
+support for a handheld thermal camera.
+
+Instead of reading and exposing the monitored battery data manually
+I started the series with an addition to the power-supply core,
+which allows automatic handling of the static battery information.
+It simplifies the generic-adc-battery driver a lot and should also
+be useful for other battery drivers.
+
+Changes since PATCHv1:
+ * collect Reviewed-by
+   (I did not collect them for the auto-exposure because of the
+   code changes)
+ * always auto expose battery data (without opt-in)
+ * update DT binding according to feedback
+ * add temperature support
+ * fix issues pointed out by the Intel build bot
+  - move power_supply_battery_info_properties to power_supply_core.c
+  - restore accidently removed EXPORT_SYMBOL for power_supply_get_property
+
+-- Sebastian
+
+Sebastian Reichel (12):
+  dt-bindings: power: supply: adc-battery: add binding
+  power: supply: core: auto-exposure of simple-battery data
+  power: supply: generic-adc-battery: convert to managed resources
+  power: supply: generic-adc-battery: fix unit scaling
+  power: supply: generic-adc-battery: drop jitter delay support
+  power: supply: generic-adc-battery: drop charge now support
+  power: supply: generic-adc-battery: drop memory alloc error message
+  power: supply: generic-adc-battery: use simple-battery API
+  power: supply: generic-adc-battery: simplify read_channel logic
+  power: supply: generic-adc-battery: add temperature support
+  power: supply: generic-adc-battery: add DT support
+  power: supply: generic-adc-battery: update copyright info
+
+ .../bindings/power/supply/adc-battery.yaml    |  70 ++++++
+ drivers/power/supply/generic-adc-battery.c    | 227 +++++-------------
+ drivers/power/supply/power_supply_core.c      | 173 +++++++++++--
+ drivers/power/supply/power_supply_sysfs.c     |  15 ++
+ include/linux/power/generic-adc-battery.h     |  23 --
+ include/linux/power_supply.h                  |   8 +
+ 6 files changed, 306 insertions(+), 210 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/adc-battery.yaml
+ delete mode 100644 include/linux/power/generic-adc-battery.h
+
+-- 
+2.39.2
+
