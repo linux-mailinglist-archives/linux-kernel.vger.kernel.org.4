@@ -2,200 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 777096B962B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:28:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3D576B962E
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:28:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230469AbjCNN1z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:27:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
+        id S229664AbjCNN2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:28:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45664 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230138AbjCNN1Z (ORCPT
+        with ESMTP id S232001AbjCNN1m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:27:25 -0400
-Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FDB6E195
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:24:50 -0700 (PDT)
-Received: by mail-pl1-x629.google.com with SMTP id a2so16584189plm.4
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 06:24:50 -0700 (PDT)
+        Tue, 14 Mar 2023 09:27:42 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2474D1351C;
+        Tue, 14 Mar 2023 06:25:19 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id v21so6455790ple.9;
+        Tue, 14 Mar 2023 06:25:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678800289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MKSRtx6Azl23x98EzA2TzDFs5vK6J7ubW9rzkz5dqq8=;
-        b=PbDgZRkRJzj81hjj+mNLTtgzQNd0vn7Pe/jMFsAkq6P1WvSdXXMJSNdvQuxTlxOZng
-         U+h53vb0WFRQYP9pimijvCZgf9lwfZVZ9SUXjP44Ck/S2YxLUOl75JnGdhOZl1N/3QYj
-         LxUt5+7i2LZhgBqcRyV17KqbF02qikkZuPyO/WcSiZSAzLHhqP+n9YIntI1+Hd+jwbOS
-         oA629Y59EpthdZfCRccg7UuZxmiuHitsryV7p7Pj1q2g7pUaISj9m8eBT2PanNux2GNt
-         uSh3dl5sURCY/oW/lUWtraoq9LeSkWn8siezyEU1Ah1g1/X+BzgRXbIuEce6VlukSX/4
-         c9rg==
+        d=gmail.com; s=20210112; t=1678800318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GyvhYehpeRfb9AP6vCMFo3dvMbNupDfwlDmri9F9bbA=;
+        b=bwv9wesUmgXY6fC4ncQ9XBImT0rgJniyEaPpMDLanDrxgj4Kpotl0lfDvQPGuwf1Zt
+         kacWzT3VLOOqdJ+m2qyNGR7c9mkVK1qqhVuO2njrF6g2jndXcyh2ZXeoudsIzl9rdudB
+         OLCtXtzVZjUoTSH8V7HQ1TNy5utnIHWYUCrpe6C5z9X47x+1LJ/0hnzjzLQr+RIzob1L
+         nlkUEAwzHip0Z4rfQRTpNd3rjeh1G2prkw5hmtpODIAYLhK3DTjKcGFiA6+jVIqZoJpc
+         r2MouqIzrkkCReDjbEdqrAHvsOzDLwDIEWZc0fvOv/BGoi/lzS8XKxbngPn3/0d1zCfj
+         dzQg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678800289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MKSRtx6Azl23x98EzA2TzDFs5vK6J7ubW9rzkz5dqq8=;
-        b=KCPtp/bnMjaONrwyJgsOQqlWJuorCThSbNKEcZ3jaEPIxUhKxloNOt6oHBmFoAm+51
-         kr0fw7cMRWl4H3Ab19x4fClfad69QOwku2y/N8yG7Iz8ydSBNHF3UT/9MWjs5aCgEEM/
-         zZJ8IFjGYdpPidx13cdD9xpXhBa8IfIfpPksk2Rnn0k8e4NXOXXkTyGX1iVhngWyXUad
-         88UcwLM+GOg+9HTjMY57ABPStXrhqXCaVZGgRJvR//4ObnRh6BJqc3+2t0lyBuljcBAk
-         X0VuDuO+/IN5Rige5hE+AEA7dirPjBlXhptYTtsJe/mbMetveN6e+bvtN+zTkogtt+g4
-         t19Q==
-X-Gm-Message-State: AO0yUKUUjUeW9aJEHWaA1/G4gCGUq7ef/af61RXDRk+CZ++MgZAu2OJt
-        Zh5c0CcrdebZBuTzIJ4XQaJAUAg704Kg29Xn3ogx3A==
-X-Google-Smtp-Source: AK7set82uTlhLzZTf45hjhRCs4Ou9nAAAQcqsxxMCfR0ShIBchrWHncsXLG+fwW7qaxFmsUlMOeDipb7+9IiAjdTag8=
-X-Received: by 2002:a17:903:449:b0:19a:87dd:9206 with SMTP id
- iw9-20020a170903044900b0019a87dd9206mr14438163plb.0.1678800289344; Tue, 14
- Mar 2023 06:24:49 -0700 (PDT)
+        d=1e100.net; s=20210112; t=1678800318;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GyvhYehpeRfb9AP6vCMFo3dvMbNupDfwlDmri9F9bbA=;
+        b=OGsy92ZDD5Hsiu7C33Eqm/+CXqGJPgt2VXyCVLtFlamkgeO//gkFra0qdtclrUprvR
+         b/1wwvvamFqOzd813Vm63Mc3uTwNAqgbHvgrJtl3D/YWCcduVt+EZUTrWNp1IHxcCzK8
+         rBPTJGZ/UNDMpPf1fo3GrSSCNzp8Qib+UfnzEaAJ8kVwKdLMpkXW7koAntpRcOPzDbn1
+         /avYPsi+fpDsju6cySu7tUtaS+OvwO1boIM7z5ysuIz1Xb/tBj8nwSvgZ6FCkxBj4nJY
+         DQ6I4KcSNX/1P0ABldNYBMJ7ROoz/J+fC82ViXweP/vmgfUhs9z2gQjJvwf7HwmNVdxd
+         R3mw==
+X-Gm-Message-State: AO0yUKWdnuZl4Ei9x2QDpgn7lQiougWpg2ZlSKApUW7l6h3GVRjgq2nT
+        t1Bngt8U6gY4hxWgbG2Krh/Y0XHIG/0hI9n58VA=
+X-Google-Smtp-Source: AK7set88CMQ57RlAibdExv9CkBt258UFDkdCpde450Pr1sl081IJ5NjE9s9y48aftdFchax6B0pqWub/y7afiN5rJNQ=
+X-Received: by 2002:a17:902:f985:b0:19f:2802:dabb with SMTP id
+ ky5-20020a170902f98500b0019f2802dabbmr3979299plb.12.1678800318488; Tue, 14
+ Mar 2023 06:25:18 -0700 (PDT)
 MIME-Version: 1.0
-References: <20230306132418.50389-1-zhangqiao22@huawei.com>
- <20230309130524.GA273121@hirez.programming.kicks-ass.net> <CAKfTPtAf5RrzZRSHtfK+r3QvnFQ-oM3+rJ-z5SB8T4+nUv1aQw@mail.gmail.com>
- <20230309142825.GB273121@hirez.programming.kicks-ass.net> <ZAnvCGdlOrWbIC/o@hirez.programming.kicks-ass.net>
- <CAKfTPtADUas2QHZCQyu0ad-JTKRQ=PcsB=o7+PuJNVxHwAzkCQ@mail.gmail.com>
- <ZAs+zV0o9ShO7nLT@vingu-book> <02a08042-e7c4-464d-bc20-9ec4ccdab1ff@arm.com>
- <8c093661-7431-00d8-d703-b8f7a7c8e747@arm.com> <CAKfTPtBw9SJxVBcN1qff7jRzE81kXSjbc-rXD6goEBFiXEwbyg@mail.gmail.com>
- <20230314120726.GG1845660@hirez.programming.kicks-ass.net>
-In-Reply-To: <20230314120726.GG1845660@hirez.programming.kicks-ass.net>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Tue, 14 Mar 2023 14:24:37 +0100
-Message-ID: <CAKfTPtBHocw4N-YMHeqfMj78Ro=aF8sJPanxVCN=tM70hr6r8g@mail.gmail.com>
-Subject: Re: [PATCH v2] sched/fair: sanitize vruntime of entity being migrated
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Zhang Qiao <zhangqiao22@huawei.com>,
-        linux-kernel@vger.kernel.org, mingo@redhat.com,
-        juri.lelli@redhat.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        rkagan@amazon.de
+References: <aa9567fd-38e1-7b9c-b3e1-dc2fdc055da5@molgen.mpg.de>
+ <37c158cb-f527-34f5-2482-cae138bc8b07@molgen.mpg.de> <efb8d47b-ab9b-bdb9-ee2f-fb1be66343b1@molgen.mpg.de>
+ <55e30408-ac63-965f-769f-18be5fd5885c@molgen.mpg.de> <d95aa962-9750-c27c-639a-2362bdb32f41@cloud.ionos.com>
+ <30576384-682c-c021-ff16-bebed8251365@molgen.mpg.de> <cdc0b03c-db53-35bc-2f75-93bbca0363b5@molgen.mpg.de>
+ <bc342de0-98d2-1733-39cd-cc1999777ff3@molgen.mpg.de> <c3390ab0-d038-f1c3-5544-67ae9c8408b1@cloud.ionos.com>
+ <a27c5a64-62bf-592c-e547-1e8e904e3c97@molgen.mpg.de> <6c7008df-942e-13b1-2e70-a058e96ab0e9@cloud.ionos.com>
+ <12f09162-c92f-8fbb-8382-cba6188bfb29@molgen.mpg.de> <6757d55d-ada8-9b7e-b7fd-2071fe905466@cloud.ionos.com>
+ <93d8d623-8aec-ad91-490c-a414c4926fb2@molgen.mpg.de> <0bb7c8d8-6b96-ce70-c5ee-ba414de10561@cloud.ionos.com>
+ <e271e183-20e9-8ca2-83eb-225d4d7ab5db@molgen.mpg.de> <1cdfceb6-f39b-70e1-3018-ea14dbe257d9@cloud.ionos.com>
+ <7733de01-d1b0-e56f-db6a-137a752f7236@molgen.mpg.de> <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
+In-Reply-To: <d92922af-f411-fc53-219f-154de855cd13@cloud.ionos.com>
+From:   Marc Smith <msmith626@gmail.com>
+Date:   Tue, 14 Mar 2023 09:25:07 -0400
+Message-ID: <CAH6h+hf7Y-kurBJG+pnH6WCQiaEK+Jq3KG5JOGnHJ4Uw6AbUjg@mail.gmail.com>
+Subject: Re: md_raid: mdX_raid6 looping after sync_action "check" to "idle" transition
+To:     Guoqing Jiang <guoqing.jiang@cloud.ionos.com>
+Cc:     Donald Buczek <buczek@molgen.mpg.de>, Song Liu <song@kernel.org>,
+        linux-raid@vger.kernel.org,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        it+raid@molgen.mpg.de
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 14 Mar 2023 at 13:07, Peter Zijlstra <peterz@infradead.org> wrote:
+On Mon, Feb 8, 2021 at 7:49=E2=80=AFPM Guoqing Jiang
+<guoqing.jiang@cloud.ionos.com> wrote:
 >
-> On Tue, Mar 14, 2023 at 08:41:30AM +0100, Vincent Guittot wrote:
+> Hi Donald,
 >
-> > I'm going to use something a bit different from your proposal below by
-> > merging initial and flag
-> > static void place_entity(struct cfs_rq *cfs_rq, struct sched_entity
-> > *se, int flags)
+> On 2/8/21 19:41, Donald Buczek wrote:
+> > Dear Guoqing,
 > >
-> > with flags:
-> > 0 for initial placement
-> > ENQUEUE_WAKEUP for wakeup
-> > ENQUEUE_MIGRATED for migrated task
+> > On 08.02.21 15:53, Guoqing Jiang wrote:
+> >>
+> >>
+> >> On 2/8/21 12:38, Donald Buczek wrote:
+> >>>> 5. maybe don't hold reconfig_mutex when try to unregister
+> >>>> sync_thread, like this.
+> >>>>
+> >>>>          /* resync has finished, collect result */
+> >>>>          mddev_unlock(mddev);
+> >>>>          md_unregister_thread(&mddev->sync_thread);
+> >>>>          mddev_lock(mddev);
+> >>>
+> >>> As above: While we wait for the sync thread to terminate, wouldn't it
+> >>> be a problem, if another user space operation takes the mutex?
+> >>
+> >> I don't think other places can be blocked while hold mutex, otherwise
+> >> these places can cause potential deadlock. Please try above two lines
+> >> change. And perhaps others have better idea.
+> >
+> > Yes, this works. No deadlock after >11000 seconds,
+> >
+> > (Time till deadlock from previous runs/seconds: 1723, 37, 434, 1265,
+> > 3500, 1136, 109, 1892, 1060, 664, 84, 315, 12, 820 )
 >
-> So when a task is not running for a long time (our case at hand), then
-> there's two cases:
+> Great. I will send a formal patch with your reported-by and tested-by.
 >
->  - it wakes up locally and place_entity() gets to reset vruntime;
->  - it wakes up remotely and migrate_task_rq_fair() can reset vruntime.
->
-> So if we can rely on ENQUEUE_MIGRATED to differentiate between these
-> cases, when wouldn't something like this work?
->
-> ---
->
-> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> index 7a1b1f855b96..a0d00b6a8bc6 100644
-> --- a/kernel/sched/fair.c
-> +++ b/kernel/sched/fair.c
-> @@ -4648,11 +4648,31 @@ static void check_spread(struct cfs_rq *cfs_rq, struct sched_entity *se)
->  #endif
->  }
->
-> +static bool reset_vruntime(struct cfs_rq *cfs_rq, struct sched_entity *se)
-> +{
-> +       const s64 limit = 60LL * NSEC_PER_SEC;
-> +       s64 sleep_time;
-> +
-> +       /*
-> +        * Pull vruntime of the entity being placed to the base level of
-> +        * cfs_rq, to prevent boosting it if placed backwards.  If the entity
-> +        * slept for a long time, don't even try to compare its vruntime with
-> +        * the base as it may be too far off and the comparison may get
-> +        * inversed due to s64 overflow.
-> +        */
-> +       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-> +       if (unlikely(sleep_time > limit)) {
-> +               se->vruntime = cfs_rq->min_vruntime - calc_delta_fair(limit, se);
-> +               return true;
-> +       }
-> +
-> +       return false;
-> +}
-> +
->  static void
->  place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->  {
->         u64 vruntime = cfs_rq->min_vruntime;
-> -       u64 sleep_time;
->
->         /*
->          * The 'current' period is already promised to the current tasks,
-> @@ -4682,18 +4702,8 @@ place_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int initial)
->                 vruntime -= thresh;
->         }
->
-> -       /*
-> -        * Pull vruntime of the entity being placed to the base level of
-> -        * cfs_rq, to prevent boosting it if placed backwards.  If the entity
-> -        * slept for a long time, don't even try to compare its vruntime with
-> -        * the base as it may be too far off and the comparison may get
-> -        * inversed due to s64 overflow.
-> -        */
-> -       sleep_time = rq_clock_task(rq_of(cfs_rq)) - se->exec_start;
-> -       if ((s64)sleep_time > 60LL * NSEC_PER_SEC)
-> -               se->vruntime = vruntime;
-> -       else
-> -               se->vruntime = max_vruntime(se->vruntime, vruntime);
-> +       /* ensure we don't gain time by being placed backwards */
-> +       se->vruntime = max_vruntime(se->vruntime, vruntime);
->  }
->
->  static void check_enqueue_throttle(struct cfs_rq *cfs_rq);
-> @@ -4768,8 +4778,11 @@ enqueue_entity(struct cfs_rq *cfs_rq, struct sched_entity *se, int flags)
->         update_cfs_group(se);
->         account_entity_enqueue(cfs_rq, se);
->
-> -       if (flags & ENQUEUE_WAKEUP)
-> +       if (flags & ENQUEUE_WAKEUP) {
-> +               if (!(flags & ENQUEUE_MIGRATED))
-> +                       reset_vruntime(cfs_rq, se);
->                 place_entity(cfs_rq, se, 0);
-> +       }
->
->         check_schedstat_required();
->         update_stats_enqueue_fair(cfs_rq, se, flags);
-> @@ -7625,6 +7638,7 @@ select_task_rq_fair(struct task_struct *p, int prev_cpu, int wake_flags)
->  static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->  {
->         struct sched_entity *se = &p->se;
-> +       struct cfs_rq *cfs_rq = cfs_rq_of(se);
->
->         /*
->          * As blocked tasks retain absolute vruntime the migration needs to
-> @@ -7632,11 +7646,8 @@ static void migrate_task_rq_fair(struct task_struct *p, int new_cpu)
->          * min_vruntime -- the latter is done by enqueue_entity() when placing
->          * the task on the new runqueue.
->          */
-> -       if (READ_ONCE(p->__state) == TASK_WAKING) {
-> -               struct cfs_rq *cfs_rq = cfs_rq_of(se);
-> -
-> +       if (READ_ONCE(p->__state) == TASK_WAKING || reset_vruntime(cfs_rq, se))
+> Thanks,
+> Guoqing
 
-That's somehow what was proposed in one of the previous proposals but
-we can't call rq_clock_task(rq_of(cfs_rq)) because rq lock might not
-be hold and rq task clock has not been updated before being used
+I'm still hitting this issue with Linux 5.4.229 -- it looks like 1/2
+of the patches that supposedly resolve this were applied to the stable
+kernels, however, one was omitted due to a regression:
+md: don't unregister sync_thread with reconfig_mutex held (upstream
+commit 8b48ec23cc51a4e7c8dbaef5f34ebe67e1a80934)
 
->                 se->vruntime -= u64_u32_load(cfs_rq->min_vruntime);
-> -       }
->
->         if (!task_on_rq_migrating(p)) {
->                 remove_entity_load_avg(se);
+I don't see any follow-up on the thread from June 8th 2022 asking for
+this patch to be dropped from all stable kernels since it caused a
+regression.
+
+The patch doesn't appear to be present in the current mainline kernel
+(6.3-rc2) either. So I assume this issue is still present there, or it
+was resolved differently and I just can't find the commit/patch.
+
+I can induce the issue by using Donald's script above which will
+eventually result in hangs:
+...
+147948.504621] INFO: task md_test_2.sh:68033 blocked for more than 122 seco=
+nds.
+[147948.504624]       Tainted: P           OE     5.4.229-esos.prod #1
+[147948.504624] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[147948.504625] md_test_2.sh    D    0 68033      1 0x00000004
+[147948.504627] Call Trace:
+[147948.504634]  __schedule+0x4ab/0x4f3
+[147948.504637]  ? usleep_range+0x7a/0x7a
+[147948.504638]  schedule+0x67/0x81
+[147948.504639]  schedule_timeout+0x2c/0xe5
+[147948.504643]  ? do_raw_spin_lock+0x2b/0x52
+[147948.504644]  __wait_for_common+0xc4/0x13a
+[147948.504647]  ? wake_up_q+0x40/0x40
+[147948.504649]  kthread_stop+0x9a/0x117
+[147948.504653]  md_unregister_thread+0x43/0x4d
+[147948.504655]  md_reap_sync_thread+0x1c/0x1d5
+[147948.504657]  action_store+0xc9/0x284
+[147948.504658]  md_attr_store+0x9f/0xb8
+[147948.504661]  kernfs_fop_write+0x10a/0x14c
+[147948.504664]  vfs_write+0xa0/0xdd
+[147948.504666]  ksys_write+0x71/0xba
+[147948.504668]  do_syscall_64+0x52/0x60
+[147948.504671]  entry_SYSCALL_64_after_hwframe+0x5c/0xc1
+...
+[147948.504748] INFO: task md120_resync:135315 blocked for more than
+122 seconds.
+[147948.504749]       Tainted: P           OE     5.4.229-esos.prod #1
+[147948.504749] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs"
+disables this message.
+[147948.504749] md120_resync    D    0 135315      2 0x80004000
+[147948.504750] Call Trace:
+[147948.504752]  __schedule+0x4ab/0x4f3
+[147948.504754]  ? printk+0x53/0x6a
+[147948.504755]  schedule+0x67/0x81
+[147948.504756]  md_do_sync+0xae7/0xdd9
+[147948.504758]  ? remove_wait_queue+0x41/0x41
+[147948.504759]  md_thread+0x128/0x151
+[147948.504761]  ? _raw_spin_lock_irqsave+0x31/0x5d
+[147948.504762]  ? md_start_sync+0xdc/0xdc
+[147948.504763]  kthread+0xe4/0xe9
+[147948.504764]  ? kthread_flush_worker+0x70/0x70
+[147948.504765]  ret_from_fork+0x35/0x40
+...
+
+This happens on 'raid6' MD RAID arrays that initially have sync_action=3D=
+=3Dresync.
+
+Any guidance would be greatly appreciated.
+
+--Marc
