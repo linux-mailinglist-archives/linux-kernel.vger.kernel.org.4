@@ -2,111 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 549896B9C9E
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:12:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C4F96B9CA2
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:12:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231126AbjCNRMU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:12:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40304 "EHLO
+        id S231193AbjCNRMs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 13:12:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbjCNRMS (ORCPT
+        with ESMTP id S230201AbjCNRMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:12:18 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC40692F23
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 10:12:17 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id b16so6684806iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 10:12:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1678813936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4WErv31ByjL+Y5MoYqCnIOK9sNV/kGFFl+v+OJaK+Hw=;
-        b=fwgtKfujDZT03JfvBhH17H4E0WnKpCSqvzpMWw1Ay+iJ6bNTu8osC4fSHj0EikKZNi
-         l+Rzl4glwPW0WoKXYxbrJjW8ciXPh+hcwug3ovIs+RRrJp1PcmnRtVTsMD0qNDju+hxN
-         Wt+PmOe3hD88G3VZZ2ABBbVDG2Hnj+6pCYS6A=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678813936;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4WErv31ByjL+Y5MoYqCnIOK9sNV/kGFFl+v+OJaK+Hw=;
-        b=hsV7t1PXacmGpXBz3FVCm7n/l6Xa4fhbf9QqSGajg1589q0/DRqOYlOxp8ID0dWZGP
-         8NseLcY9uNKUTk3SHrold0SfCKM7LpghydiFvPbpT94YsASKdWhVGHfGeMaiQ6p4wtrs
-         2XKHOQTJMdMYb04Zvu5eZhitKi7A/XnRFQRHPOF6y+mP+wka8IaZkMcurxlntzxpf6m/
-         4OfA0DknmRsi+FRfhTzstepW5h9+9VoeaAjOJ3D2KyOSLmn6at+B1PxHM9iUakze4OrI
-         cebuGbm8carUU2GAVpWbR6Sg74QzoSAEWyWBnsV/SdD83zIpWrGnoI5jvO0wOLnRSyib
-         qftQ==
-X-Gm-Message-State: AO0yUKUPLOVIsUGBwQzLkGwt0c7X/kAq1SmfFgxrVuR8T3RMZQ2yD612
-        lezy3tMEfe7wgFcjUrOEjBtrTqnhYa4nMUFLMQ4=
-X-Google-Smtp-Source: AK7set/fCrBNGeYicfcu7e9QjuenWC1/5RjmitL3Ldov6Nh18ay504+shXBixZtSDcrSLTtTAXA1ZA==
-X-Received: by 2002:a6b:d601:0:b0:74f:a1c6:762 with SMTP id w1-20020a6bd601000000b0074fa1c60762mr2329805ioa.11.1678813935763;
-        Tue, 14 Mar 2023 10:12:15 -0700 (PDT)
-Received: from mail-io1-f49.google.com (mail-io1-f49.google.com. [209.85.166.49])
-        by smtp.gmail.com with ESMTPSA id s1-20020a02c501000000b00401cf1d52d6sm928905jam.49.2023.03.14.10.12.14
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 10:12:15 -0700 (PDT)
-Received: by mail-io1-f49.google.com with SMTP id g6so6685416iov.13
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 10:12:14 -0700 (PDT)
-X-Received: by 2002:a05:6638:3489:b0:404:140b:55e3 with SMTP id
- t9-20020a056638348900b00404140b55e3mr4999457jal.0.1678813934494; Tue, 14 Mar
- 2023 10:12:14 -0700 (PDT)
+        Tue, 14 Mar 2023 13:12:38 -0400
+Received: from wout5-smtp.messagingengine.com (wout5-smtp.messagingengine.com [64.147.123.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65BD592F23;
+        Tue, 14 Mar 2023 10:12:34 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 806FF32002D8;
+        Tue, 14 Mar 2023 13:12:30 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute5.internal (MEProxy); Tue, 14 Mar 2023 13:12:31 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:content-type:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
+        :x-sasl-enc; s=fm2; t=1678813950; x=1678900350; bh=lD84THYsqEBrd
+        kTK8693PxozPe7E1dZJ3/wYEhXCQVs=; b=S53bDOrd96WOVHHFk8WwRRyNR1Ihc
+        s9/oA11McHWye2Zt/sj6AnrUDRSeu3aH/fR9vYCfQJ0YfgB+AOqJ34svl4cWI8G7
+        1zfYjva83yGi5yuqFUH4bx3juWSZFnw9n3kufjTlBlahaF/lUHwZbrLneev7yWdc
+        47iu2mYl9iQKDPIw6Y3LiPTgUlZYb+O7c6hoaZazag7nep2yUiK6VDrrYfGxw+B+
+        3WTMFM7Ljcfhw6KnHgRSkuUulpSVqR8IPVPSSwGifFqyxXiCrGOZcU2fdVBCPnkn
+        1dErgTKTzC5+fetxzrcdI093/GGeypfE6U8oSBt4qnsNInRtAfVKgqNfA==
+X-ME-Sender: <xms:_aoQZPOYKuLzl3nrLYwH0HlbwvdDj-Kr2of3DDq3q96nM2MRz8IEvw>
+    <xme:_aoQZJ-Nh5M3iTqKF9nmIrDHVDwQBZd11UKHnBVEA1BS6ke8gLpJpE-8MqX7Rv6we
+    HdGBLXyZJiR_8w>
+X-ME-Received: <xmr:_aoQZOR-6AHCq3vaggBA1_rmwrmbDeUtGjsrZ3ebtv_L17llL8TTOzWvTILLyqX5b1Jec0zyzQFfeQesy23sKRLJazA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedguddttdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfgh
+    necuuegrihhlohhuthemuceftddtnecunecujfgurhepfffhvfevuffkfhggtggujgesth
+    dtredttddtvdenucfhrhhomhepkfguohcuufgthhhimhhmvghluceoihguohhstghhsehi
+    ughoshgthhdrohhrgheqnecuggftrfgrthhtvghrnhepvddufeevkeehueegfedtvdevfe
+    fgudeifeduieefgfelkeehgeelgeejjeeggefhnecuvehluhhsthgvrhfuihiivgeptden
+    ucfrrghrrghmpehmrghilhhfrhhomhepihguohhstghhsehiughoshgthhdrohhrgh
+X-ME-Proxy: <xmx:_aoQZDtLEqnHuCmGga4tAGEVQa6riF0mQOqBsWNW3L8o2uKGYJ1Azg>
+    <xmx:_aoQZHfOCC0teAU5QquKduJWy8zfgQQ15WHEaqxkEOhHxJWBoNV9oA>
+    <xmx:_aoQZP1u2R7GFEeozsQbeoFH632u4snehy90qYQIyUEVuB4HcJ36lA>
+    <xmx:_qoQZJu9-0JG8ClX3L4TpAUV_19y5QtHKRCakwCXVuihfaPL-_VU7w>
+Feedback-ID: i494840e7:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
+ 14 Mar 2023 13:12:28 -0400 (EDT)
+Date:   Tue, 14 Mar 2023 19:12:24 +0200
+From:   Ido Schimmel <idosch@idosch.org>
+To:     gaoxingwang <gaoxingwang1@huawei.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        davem@davemloft.net, yoshfuji@linux-ipv6.org, kuba@kernel.org,
+        pabeni@redhat.com, shuah@kernel.org, liaichun@huawei.com,
+        yanan@huawei.com
+Subject: Re: ipv4:the same route is added repeatedly
+Message-ID: <ZBCq+KXtxWXLPFNF@shredder>
+References: <20230314144159.2354729-1-gaoxingwang1@huawei.com>
 MIME-Version: 1.0
-References: <20230314114451.8872-1-lujianhua000@gmail.com>
-In-Reply-To: <20230314114451.8872-1-lujianhua000@gmail.com>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Tue, 14 Mar 2023 10:12:02 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=X7K2KQoRCsr17kj-DWiPs7h_zfcYxK_cdBVnC0wR1NwA@mail.gmail.com>
-Message-ID: <CAD=FV=X7K2KQoRCsr17kj-DWiPs7h_zfcYxK_cdBVnC0wR1NwA@mail.gmail.com>
-Subject: Re: [PATCH] drm/panel: Fix panel mode type setting logic
-To:     Jianhua Lu <lujianhua000@gmail.com>
-Cc:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Sam Ravnborg <sam@ravnborg.org>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314144159.2354729-1-gaoxingwang1@huawei.com>
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Mar 14, 2023 at 10:41:59PM +0800, gaoxingwang wrote:
+> When i add default route in /etc/sysconfig/static-routes, and then restart network service, it appears to add two same default route:
+> [root@localhost ~]# ip r
+> default via 9.82.0.1 dev eth0 
+> default via 9.82.0.1 dev eth0 
+> 
+> The static-routes file contents are as follows:
+> any net 0.0.0.0 netmask 0.0.0.0 gw 110.1.62.1
+> 
+> This problem seems to be related to patch f96a3d7455(ipv4: Fix incorrect route flushing when source address is deleted). When I revert this patch, the problem gets fixed.
+> Is that a known issue?
 
-On Tue, Mar 14, 2023 at 4:45=E2=80=AFAM Jianhua Lu <lujianhua000@gmail.com>=
- wrote:
->
-> Some panels set mode type to DRM_MODE_TYPE_PREFERRED by the number
-> of modes. It isn't reasonable, so set the first mode type to
-> DRM_MODE_TYPE_PREFERRED. This should be more reasonable.
->
-> Signed-off-by: Jianhua Lu <lujianhua000@gmail.com>
-> ---
->  drivers/gpu/drm/panel/panel-abt-y030xx067a.c     | 2 +-
->  drivers/gpu/drm/panel/panel-auo-a030jtn01.c      | 2 +-
->  drivers/gpu/drm/panel/panel-edp.c                | 4 ++--
->  drivers/gpu/drm/panel/panel-innolux-ej030na.c    | 2 +-
->  drivers/gpu/drm/panel/panel-newvision-nv3051d.c  | 2 +-
->  drivers/gpu/drm/panel/panel-newvision-nv3052c.c  | 2 +-
->  drivers/gpu/drm/panel/panel-novatek-nt35950.c    | 2 +-
->  drivers/gpu/drm/panel/panel-novatek-nt39016.c    | 2 +-
->  drivers/gpu/drm/panel/panel-orisetech-ota5601a.c | 2 +-
->  drivers/gpu/drm/panel/panel-seiko-43wvf1g.c      | 4 ++--
->  drivers/gpu/drm/panel/panel-simple.c             | 4 ++--
->  11 files changed, 14 insertions(+), 14 deletions(-)
+'fi->fib_tb_id' is initialized from 'cfg->fc_table' which is not
+initialized in the IOCTL path which I guess is what you are using given
+the syntax of the file. You can therefore end up having two identical
+routes that only differ in their FIB info due to its associated table
+ID.
 
-Can you explain more about your motivation here? At least for
-panel-edp and panel-simple it seems like it would be better to leave
-the logic alone and manually add DRM_MODE_TYPE_PREFERRED to the right
-mode for the rare panel that actually has more than one mode listed.
-That feels more explicit to me.
+Can you try this fix [1]? Seems to be working for me. Tested using this
+reproducer [2].
 
--Doug
+With f96a3d7455:
+
+ # ./ioctl_repro.sh
+ default via 192.0.2.2 dev dummy10
+ default via 192.0.2.2 dev dummy10
+
+With f96a3d7455 reverted:
+
+ # ./ioctl_repro.sh
+ SIOCADDRT: File exists
+ default via 192.0.2.2 dev dummy10
+
+With the fix:
+
+ # ./ioctl_repro.sh
+ SIOCADDRT: File exists
+ default via 192.0.2.2 dev dummy10
+
+Thanks
+
+[1]
+diff --git a/net/ipv4/fib_frontend.c b/net/ipv4/fib_frontend.c
+index b5736ef16ed2..390f4be7f7be 100644
+--- a/net/ipv4/fib_frontend.c
++++ b/net/ipv4/fib_frontend.c
+@@ -576,6 +576,9 @@ static int rtentry_to_fib_config(struct net *net, int cmd, struct rtentry *rt,
+ 			cfg->fc_scope = RT_SCOPE_UNIVERSE;
+ 	}
+ 
++	if (!cfg->fc_table)
++		cfg->fc_table = RT_TABLE_MAIN;
++
+ 	if (cmd == SIOCDELRT)
+ 		return 0;
+ 
+[2]
+#!/bin/bash
+
+ip link del dev dummy10 &> /dev/null
+ip link add name dummy10 up type dummy
+ip address add 192.0.2.1/24 dev dummy10
+
+ip route add default via 192.0.2.2
+route add default gw 192.0.2.2
+ip -4 r show default
