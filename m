@@ -2,203 +2,213 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73A126B9D82
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:51:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7D326B9DA1
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 18:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230190AbjCNRvh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 13:51:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52594 "EHLO
+        id S230173AbjCNRz3 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 14 Mar 2023 13:55:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbjCNRvd (ORCPT
+        with ESMTP id S229692AbjCNRz0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 13:51:33 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 532A3B421C;
-        Tue, 14 Mar 2023 10:50:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1678816230; i=deller@gmx.de;
-        bh=hiRcwa3Bj6JP6LNEczfBcFHjplGK9+ZvNc9H7ZoMwPs=;
-        h=X-UI-Sender-Class:Date:Subject:To:Cc:References:From:In-Reply-To;
-        b=EAc0R3bNgjecoU592ZKL/GAsi5xFKouguRxsWXdi9FOTSlJvlOCPoA4Q23IdXE42A
-         xsiaiiL1wfbvpesw6kr8h/UnPPqh039w4tNxK3+8EV7pxYJr+uf6lzeXcWQD0mt0eP
-         j0jywFFss1HHvJQ/s6dzVYQIPpRrNtn3qPfwUuMo5iQ5MYDGF6rm/klDzI9flXwJGi
-         IYHtBxrdg7N7Ncew7vx4dmFNriSK+RkdKooVbYTYGJenNPIEIerryR/5xwi20HOQbz
-         mgzxSgOD3pVMK96unXtrUMm74jb0PNDDCP5j0wh7Je6ggA2UGNCft+t2ObL6E3mXIh
-         NJdLinM/NYmVg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from [192.168.20.60] ([94.134.156.222]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MiaYJ-1q8i3d2t7P-00fm7k; Tue, 14
- Mar 2023 18:50:30 +0100
-Message-ID: <8ace3dfb-a254-849f-614c-e3ab262a326a@gmx.de>
-Date:   Tue, 14 Mar 2023 18:50:29 +0100
+        Tue, 14 Mar 2023 13:55:26 -0400
+Received: from mail-io1-f52.google.com (mail-io1-f52.google.com [209.85.166.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 637DC6A7E;
+        Tue, 14 Mar 2023 10:55:25 -0700 (PDT)
+Received: by mail-io1-f52.google.com with SMTP id bf15so6753309iob.7;
+        Tue, 14 Mar 2023 10:55:25 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678816524;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=UC6SiqJv6vv+aMWv+c2O7wVq//MMLZA07pBFsShSM5s=;
+        b=xb5s8xNCTDias2b+Q7cG7pk6KBOnvuk4OCopA+Y8iJ/Yl8csITY2ezxktYI/J8ptaO
+         xrNck4Bqx1f9zomV8RLB2n0j+CB/KmNtuQI7UCsuCyRhm/A0daAlOwr+ShhrxkyrXgxd
+         eO3j9FlRI+p5oyanhWxS/wVJfsfc6vBoWmzYtbx9D50n6JYyNTqQPNxaPgA8LX6M8e86
+         U0B9h+po3s4yTHgXwzcH0xrvQ8yQXQqEzJH0dMCvw16D/CO86a0q3OsVujutqaUSpmFU
+         ZeToG9PhmAsU9b8aeeHMm5HeXGkefNJeS6bhvNBqjWOJEs6HYBxabX6Tiz++Nv1JGylT
+         1/Ow==
+X-Gm-Message-State: AO0yUKW3F215cH+2ph/J2bKiVWrOIXuIAX88Wa/TzzIa3u4GTF+goQQ+
+        bmqUZ8xWW37aV5RVVHKnmrGVxxRnIXSDYKIkVvk=
+X-Google-Smtp-Source: AK7set/mFHxf4wxT++oOO9bnKbj6PFDPNuBQQ/UlvR2FPcsP+Upe3oFecm93vcNbSOLqo2tzP0Dlcsh1GXTHObmwoQI=
+X-Received: by 2002:a5d:8d87:0:b0:744:f5bb:6e60 with SMTP id
+ b7-20020a5d8d87000000b00744f5bb6e60mr18465052ioj.1.1678816524533; Tue, 14 Mar
+ 2023 10:55:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] fbdev: omapfb: remove omap1 osk driver
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@kernel.org>
-Cc:     Arnd Bergmann <arnd@arndb.de>, Tony Lindgren <tony@atomide.com>,
-        Bartlomiej Zolnierkiewicz <b.zolnierkie@samsung.com>,
-        linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
-        linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org
-References: <20230314162720.759220-1-arnd@kernel.org>
-From:   Helge Deller <deller@gmx.de>
-In-Reply-To: <20230314162720.759220-1-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:o5cuRxTMJaH64czFiaSigYfCyUGemdhcMG6VLO5HIGBBl4kjnH/
- jO3Goz+1UkP4NilMknd10y/vj8jA7YC2U22HiffnPxeI9/Um6NRhuT6NV8c0CsXjHOdz/nG
- Ar9dSmXfcaKfCAX5ktHGI6tf1d7gR8khgJKTr112LE5GTggAnzPjDOaD9j8RSLtksrX09vg
- WeiJL0hLJdh9R0SBC29Lg==
-UI-OutboundReport: notjunk:1;M01:P0:3lGrawyPYt8=;U5APRKzheTzr2fYF/kshZ2MTMaP
- vx0a9gSExdrK6Rd8uLOYibFPOTe41iHW9NyBw39JP2J/y88TZwIGe0IA7en6SLhhsAlqQeept
- ZhKUS/vyZMzqCU7LsAR1kFynDVZyI2iXxX2CUYjGP3NKeli1cNmCZ7gY1ujEh2kYwkku80OtA
- 3wOMC9ndpnzTM92ROQQbCsfV1Zv5NfbjShml4iiZGlqOeOs+1M3moXYZK8KaTvHrebJgSSIkA
- j3ZGfVzjtl7XI8EU0tBf5GmiB25vhulTrf0eQZPVB0dj/9HUM1YX6+cCGmzMKbjEthLlNBfDD
- +ApLnNiPl+VWuR46gq3IddRVCVpPHHFlJSsQc4duTUfUNesTfSMfZQJFZFmOrsxV5L8io9W8D
- 0ZfZoLVqf4MTTpt+aeXaUUMW31kWtiXcZ+1ViY7U1hwbjinxGTU9YpcA7cnjBO4J1aQzF4ar7
- n5FbUKSKfHhl0D3pt1tjSZOl8g4/IV5oi2Bx8ctL3R0TJ2JgyHN0hw7sUtD1cGKhOHQteZgO9
- gnKgN93UHFqCHOz68afvW8vLXArrIv/6cYFjVrOPZq17qhMledwq/aF5AF3aeRzPAEdOTuldY
- pTvSSuOwQclFE5aXolr0k5HrEMn3mS7VOYKep8JuZ+9yo9J6Ev703aeJIrXmQDDZEckmPAMzo
- rZ2eoSpGW6gCBWLBOD7Xbffoa3A6WeBEhigeLukjf4/IJd8zRKdC2N4dLCUVQs9WWqj4wpLT6
- q+MN+we+rbv8Sz3KExE4pwVYYZDsyW7FHiGcfX5j7kbszc+Mq29m0eDhA6m3xy8Ko07jgruTI
- v7cN0KuSrNFyKIB8yfFvYiFnCS69rNCBKtLJu4wb+fL6b4+yf2ZAy7UW+q+WEzymCWhNkA10X
- 5KC94F6HQA6vU6iv6XEyL6JAu7dw1U20LrPkTcQP6ItSbMAO8UrI96oZOe4nGTJ7gNCADwKyt
- sf2Wfg==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+References: <20230313204825.2665483-1-namhyung@kernel.org> <ZA+ZkRYADwtFEsPt@kernel.org>
+ <ZBBnUlIQ5gLhoScx@kernel.org>
+In-Reply-To: <ZBBnUlIQ5gLhoScx@kernel.org>
+From:   Namhyung Kim <namhyung@kernel.org>
+Date:   Tue, 14 Mar 2023 10:55:13 -0700
+Message-ID: <CAM9d7cj7CSToKq7FKqYKCzpWddTfBW0GZH9ydGM2ZMdwNDGm2g@mail.gmail.com>
+Subject: Re: [PATCH 0/4] perf lock contention: Improve lock symbol display (v1)
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Jiri Olsa <jolsa@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@kernel.org>, Song Liu <song@kernel.org>,
+        Hao Luo <haoluo@google.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Will Deacon <will@kernel.org>,
+        Waiman Long <longman@redhat.com>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        Stephane Eranian <eranian@google.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        linux-perf-users@vger.kernel.org, bpf@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 17:27, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->
-> Commit 21a3e6eed423 ("ARM: omap1: remove osk-mistral add-on board
-> support") removed the platform_device definition for the "lcd_osk"
-> device, so this driver is now unused and can be removed as well.
->
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+Hi Arnaldo,
 
-applied.
+On Tue, Mar 14, 2023 at 5:23 AM Arnaldo Carvalho de Melo
+<acme@kernel.org> wrote:
+>
+> Em Mon, Mar 13, 2023 at 06:45:53PM -0300, Arnaldo Carvalho de Melo escreveu:
+> > Em Mon, Mar 13, 2023 at 01:48:21PM -0700, Namhyung Kim escreveu:
+> > > Hello,
+> > >
+> > > This patchset improves the symbolization of locks for -l/--lock-addr mode.
+> > > As of now it only shows global lock symbols present in the kallsyms.  But
+> > > we can add some more lock symbols by traversing pointers in the BPF program.
+> > >
+> > > For example, mmap_lock can be reached from the mm_struct of the current task
+> > > (task_struct->mm->mmap_lock) and we can compare the address of the give lock
+> > > with it.  Similarly I've added 'siglock' for current->sighand->siglock.
+>
+> Hey, we can go a bit further by using something like pahole's
+> --expand_types and --expand_pointers and play iterating a type members
+> and looking for locks, like:
+>
+> ⬢[acme@toolbox pahole]$ pahole task_struct | grep spinlock_t
+>         spinlock_t                 alloc_lock;           /*  3280     4 */
+>         raw_spinlock_t             pi_lock;              /*  3284     4 */
+>         seqcount_spinlock_t        mems_allowed_seq;     /*  3616     4 */
+> ⬢[acme@toolbox pahole]$
+>
+> Expand points will find mmap_lock:
+>
+> ⬢[acme@toolbox pahole]$ pahole --expand_pointers -C task_struct | grep -B10 mmap_lock
+>                                                                 } *pgd;
+>                                                                 atomic_t                       membarrier_state;
+>                                                                 atomic_t                       mm_users;
+>                                                                 atomic_t                       mm_count;
+>
+>                                                                 /* XXX 4 bytes hole, try to pack */
+>
+>                                                                 atomic_long_t                  pgtables_bytes;
+>                                                                 int                            map_count;
+>                                                                 spinlock_t                     page_table_lock;
+>                                                                 struct rw_semaphore                          mmap_lock;
+> ^C
+> ⬢[acme@toolbox pahole]$
+>
+>
+> ITs just too much expansion to see task_struct->mm, but it is there, of
+> course:
+>
+> ⬢[acme@toolbox pahole]$ pahole mm_struct | grep mmap_lock
+>                 struct rw_semaphore mmap_lock;           /*   120    40 */
+> ⬢[acme@toolbox pahole]$
+>
+> Also:
+>
+> ⬢[acme@toolbox pahole]$ pahole --contains rw_semaphore
+> address_space
+> signal_struct
+> key
+> inode
+> super_block
+> quota_info
+> user_namespace
+> blocking_notifier_head
+> backing_dev_info
+> anon_vma
+> tty_struct
+> cpufreq_policy
+> tcf_block
+> ipc_ids
+> autogroup
+> kvm_arch
+> posix_clock
+> listener_list
+> uprobe
+> kernfs_root
+> configfs_fragment
+> ext4_inode_info
+> ext4_group_info
+> btrfs_fs_info
+> extent_buffer
+> btrfs_dev_replace
+> btrfs_space_info
+> btrfs_inode
+> btrfs_block_group
+> tpm_chip
+> ib_device
+> ib_xrcd
+> blk_crypto_profile
+> controller
+> led_classdev
+> cppc_pcc_data
+> dm_snapshot
+> ⬢[acme@toolbox pahole]$
+>
+> And:
+>
+> ⬢[acme@toolbox pahole]$ pahole --find_pointers_to mm_struct
+> task_struct: mm
+> task_struct: active_mm
+> vm_area_struct: vm_mm
+> flush_tlb_info: mm
+> signal_struct: oom_mm
+> tlb_state: loaded_mm
+> linux_binprm: mm
+> mmu_gather: mm
+> trace_event_raw_xen_mmu_ptep_modify_prot: mm
+> trace_event_raw_xen_mmu_alloc_ptpage: mm
+> trace_event_raw_xen_mmu_pgd: mm
+> trace_event_raw_xen_mmu_flush_tlb_multi: mm
+> trace_event_raw_hyperv_mmu_flush_tlb_multi: mm
+> mmu_notifier: mm
+> mmu_notifier_range: mm
+> sgx_encl_mm: mm
+> rq: prev_mm
+> kvm: mm
+> cpuset_migrate_mm_work: mm
+> mmap_unlock_irq_work: mm
+> delayed_uprobe: mm
+> map_info: mm
+> trace_event_raw_mmap_lock: mm
+> trace_event_raw_mmap_lock_acquire_returned: mm
+> mm_walk: mm
+> make_exclusive_args: mm
+> mmu_interval_notifier: mm
+> mm_slot: mm
+> rmap_item: mm
+> trace_event_raw_mm_khugepaged_scan_pmd: mm
+> trace_event_raw_mm_collapse_huge_page: mm
+> trace_event_raw_mm_collapse_huge_page_swapin: mm
+> mm_slot: mm
+> move_charge_struct: mm
+> userfaultfd_ctx: mm
+> proc_maps_private: mm
+> remap_pfn: mm
+> intel_svm: mm
+> binder_alloc: vma_vm_mm
+> ⬢[acme@toolbox pahole]$
 
-Thanks!
-Helge
+This looks really cool! especially.
 
-> ---
->   drivers/video/fbdev/omap/Makefile  |  1 -
->   drivers/video/fbdev/omap/lcd_osk.c | 86 ------------------------------
->   2 files changed, 87 deletions(-)
->   delete mode 100644 drivers/video/fbdev/omap/lcd_osk.c
->
-> diff --git a/drivers/video/fbdev/omap/Makefile b/drivers/video/fbdev/oma=
-p/Makefile
-> index 504edb9c09dd..6d5082c76919 100644
-> --- a/drivers/video/fbdev/omap/Makefile
-> +++ b/drivers/video/fbdev/omap/Makefile
-> @@ -18,7 +18,6 @@ objs-y$(CONFIG_FB_OMAP_LCDC_HWA742) +=3D hwa742.o
->
->   lcds-y$(CONFIG_MACH_AMS_DELTA) +=3D lcd_ams_delta.o
->   lcds-y$(CONFIG_MACH_OMAP_PALMTE) +=3D lcd_palmte.o
-> -lcds-y$(CONFIG_MACH_OMAP_OSK) +=3D lcd_osk.o
->
->   lcds-y$(CONFIG_FB_OMAP_LCD_MIPID) +=3D lcd_mipid.o
->
-> diff --git a/drivers/video/fbdev/omap/lcd_osk.c b/drivers/video/fbdev/om=
-ap/lcd_osk.c
-> deleted file mode 100644
-> index 8168ba0d47fd..000000000000
-> --- a/drivers/video/fbdev/omap/lcd_osk.c
-> +++ /dev/null
-> @@ -1,86 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0-or-later
-> -/*
-> - * LCD panel support for the TI OMAP OSK board
-> - *
-> - * Copyright (C) 2004 Nokia Corporation
-> - * Author: Imre Deak <imre.deak@nokia.com>
-> - * Adapted for OSK by <dirk.behme@de.bosch.com>
-> - */
-> -
-> -#include <linux/module.h>
-> -#include <linux/platform_device.h>
-> -#include <linux/gpio.h>
-> -
-> -#include <linux/soc/ti/omap1-io.h>
-> -#include <linux/soc/ti/omap1-mux.h>
-> -
-> -#include "omapfb.h"
-> -
-> -static int osk_panel_enable(struct lcd_panel *panel)
-> -{
-> -	/* configure PWL pin */
-> -	omap_cfg_reg(PWL);
-> -
-> -	/* Enable PWL unit */
-> -	omap_writeb(0x01, OMAP_PWL_CLK_ENABLE);
-> -
-> -	/* Set PWL level */
-> -	omap_writeb(0xFF, OMAP_PWL_ENABLE);
-> -
-> -	/* set GPIO2 high (lcd power enabled) */
-> -	gpio_set_value(2, 1);
-> -
-> -	return 0;
-> -}
-> -
-> -static void osk_panel_disable(struct lcd_panel *panel)
-> -{
-> -	/* Set PWL level to zero */
-> -	omap_writeb(0x00, OMAP_PWL_ENABLE);
-> -
-> -	/* Disable PWL unit */
-> -	omap_writeb(0x00, OMAP_PWL_CLK_ENABLE);
-> -
-> -	/* set GPIO2 low */
-> -	gpio_set_value(2, 0);
-> -}
-> -
-> -static struct lcd_panel osk_panel =3D {
-> -	.name		=3D "osk",
-> -	.config		=3D OMAP_LCDC_PANEL_TFT,
-> -
-> -	.bpp		=3D 16,
-> -	.data_lines	=3D 16,
-> -	.x_res		=3D 240,
-> -	.y_res		=3D 320,
-> -	.pixel_clock	=3D 12500,
-> -	.hsw		=3D 40,
-> -	.hfp		=3D 40,
-> -	.hbp		=3D 72,
-> -	.vsw		=3D 1,
-> -	.vfp		=3D 1,
-> -	.vbp		=3D 0,
-> -	.pcd		=3D 12,
-> -
-> -	.enable		=3D osk_panel_enable,
-> -	.disable	=3D osk_panel_disable,
-> -};
-> -
-> -static int osk_panel_probe(struct platform_device *pdev)
-> -{
-> -	omapfb_register_panel(&osk_panel);
-> -	return 0;
-> -}
-> -
-> -static struct platform_driver osk_panel_driver =3D {
-> -	.probe		=3D osk_panel_probe,
-> -	.driver		=3D {
-> -		.name	=3D "lcd_osk",
-> -	},
-> -};
-> -
-> -module_platform_driver(osk_panel_driver);
-> -
-> -MODULE_AUTHOR("Imre Deak");
-> -MODULE_DESCRIPTION("LCD panel support for the TI OMAP OSK board");
-> -MODULE_LICENSE("GPL");
+I'm especially interested in adding super_block and kernfs_root.
+Let me see how I can add them.
 
+Thanks,
+Namhyung
