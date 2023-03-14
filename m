@@ -2,102 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3F84E6BA162
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:23:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2EAB76BA165
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 22:23:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229525AbjCNVXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 17:23:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36628 "EHLO
+        id S230210AbjCNVXn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 17:23:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbjCNVXi (ORCPT
+        with ESMTP id S229733AbjCNVXk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 17:23:38 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E8924FF26;
+        Tue, 14 Mar 2023 17:23:40 -0400
+Received: from mail-il1-x131.google.com (mail-il1-x131.google.com [IPv6:2607:f8b0:4864:20::131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48B5F4FF13
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:23:38 -0700 (PDT)
+Received: by mail-il1-x131.google.com with SMTP id h7so9345426ila.5
+        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 14:23:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1678829017;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lxuM4RGN6BlLke1o4GIxUxY3khRpRz3CJd1nnGUC+3c=;
+        b=FQ3JQEtyeqZauYAWSK1zzIDKfI5c6KIdkTPO3eB2R9jABliTfilvQdFVO3RvBjG+vB
+         wOlvWgoUwrgGixBowbFjPQ9TH+gaZkZSs1UXYEdCHYtBDRiQbaVv9GXEq5vPq7I1YBW7
+         kmgQfUmFDDdkZWkIuXcojy/3Tgq/t6zRld/2fgBiOWyF0FyLUmd/kMJKHVX+ax2o/RG/
+         sVTD5lm9LQg0HyoX/+2cTbyUYZIe3C7pqqrRf4LEXW/2Yknxwv9gHwehQThpF8zLIhMs
+         NfNmWpITjxg5aWwj6+sUO3yULhtJMY/bOuGOA6Fglz6Pg7PfWZdwr3CXM36gKTGt2MXF
+         yu6w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678829017;
+        h=content-transfer-encoding:in-reply-to:references:cc:to:from
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lxuM4RGN6BlLke1o4GIxUxY3khRpRz3CJd1nnGUC+3c=;
+        b=2zidZuf+vkSwJAiddWHTO0WbyoMqqtxx/mEgXSLD9kUhTGCm625NVSY3D9YYPhDWMG
+         BqaprP6P+2C1kcFKeL66bcjw2wVdY8vMgOQV8Xzc8CxMH5vYqTuxfKFQlZgUaL8Me24Y
+         8AbyNpWCkouxB+MVy9dKONvCYtOpw7QFBj1L2+vttL15s9zrLqkx4qehQYLFuFRN0PGp
+         OXS5yR0cAB3L6VfiwWHYzjYNBUrMy4tmCQBo9NcqQj12BqYw2v67D0GPjJa+6WewRJs2
+         7Ck+2vHIsEUOTzmUz197BGWSgUQZKLOw/4m8x6tTCg07P5oJzZImATjepxDny74PXBCF
+         kKhw==
+X-Gm-Message-State: AO0yUKVo6HYMLhe8St/LU96He0mxQJ1zGUd1zN1m+nkELY18h9il49AT
+        NO4quh0+nJmmPtcB+yyaNL5C9w==
+X-Google-Smtp-Source: AK7set8iZsqHi6RtunD35UZRzSvRrd+rfXSMR3j/iUIMcRv6g1q8OZiJse+/unht3pdTFOIRHw4woA==
+X-Received: by 2002:a92:d5c5:0:b0:315:7fec:f1f0 with SMTP id d5-20020a92d5c5000000b003157fecf1f0mr2887363ilq.7.1678829017479;
         Tue, 14 Mar 2023 14:23:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=gPFadQu3Ehoj1V6bs+RPJtYnKdX9YfE3DcFVCV27t40=; b=qopN2wrF0UFzVXcANib7yg4H4H
-        mTjv0nzDn6RgoVoWo4Uj2+iyF0vGOJjpJBNhJcFCc30DFKDhViQZBZiFN6jv6LVISJTRDU6KmQXNf
-        2RHYv2MEQ4uVocYL+D9FeV6d5nQZOVx1m0eQCNhtly9j/p5Y2oTSoebdKeIlHSQ2hX0BDTWj4b0C+
-        KOOZVVz5DzBcsn6mz2xZqRAS4ZRoSCYYnzp2hAcVAvCs0xpC73YBHxCRVfjYIWpvRRXIG+dJ1nEE0
-        v3yL0Qxil2l/E0LOnWrgJtilrhyiqNWH62MkHiEES07JPPllUOxSjlZ6yiIdJLUzNCi/n4KXhdmxI
-        We3aJtIA==;
-Received: from [2601:1c2:980:9ec0::df2f]
-        by bombadil.infradead.org with esmtpsa (Exim 4.96 #2 (Red Hat Linux))
-        id 1pcC7L-00BZu0-0e;
-        Tue, 14 Mar 2023 21:23:35 +0000
-Message-ID: <abf12edb-e541-adfc-1e5a-d06d9e1191aa@infradead.org>
-Date:   Tue, 14 Mar 2023 14:23:33 -0700
+Received: from [172.22.22.4] ([98.61.227.136])
+        by smtp.googlemail.com with ESMTPSA id r13-20020a92ac0d000000b003230b8aa2d6sm1071935ilh.57.2023.03.14.14.23.36
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 14 Mar 2023 14:23:37 -0700 (PDT)
+Message-ID: <b134781b-f28f-57c0-3ebc-9dba28d51074@linaro.org>
+Date:   Tue, 14 Mar 2023 16:23:35 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH] IMA: allow/fix UML builds
+ Thunderbird/102.7.1
+Subject: Re: [PATCH net 0/4] net: ipa: minor bug fixes
 Content-Language: en-US
-To:     Mimi Zohar <zohar@linux.ibm.com>, linux-kernel@vger.kernel.org
-Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
-        linux-integrity@vger.kernel.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Rajiv Andrade <srajiv@linux.vnet.ibm.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        linux-um@lists.infradead.org
-References: <20230224032703.7789-1-rdunlap@infradead.org>
- <ab1e29c1620ac492b9194b4c7a465b20cd39076a.camel@linux.ibm.com>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <ab1e29c1620ac492b9194b4c7a465b20cd39076a.camel@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
+From:   Alex Elder <elder@linaro.org>
+To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+Cc:     caleb.connolly@linaro.org, mka@chromium.org, evgreen@chromium.org,
+        andersson@kernel.org, quic_cpratapa@quicinc.com,
+        quic_avuyyuru@quicinc.com, quic_jponduru@quicinc.com,
+        quic_subashab@quicinc.com, elder@kernel.org,
+        netdev@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20230314203841.1574172-1-elder@linaro.org>
+In-Reply-To: <20230314203841.1574172-1-elder@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 3/14/23 11:28, Mimi Zohar wrote:
-> On Thu, 2023-02-23 at 19:27 -0800, Randy Dunlap wrote:
->> UML supports HAS_IOMEM since 0bbadafdc49d (um: allow disabling
->> NO_IOMEM).
->>
->> Current IMA build on UML fails on allmodconfig (with TCG_TPM=m):
->>
->> ld: security/integrity/ima/ima_queue.o: in function `ima_add_template_entry':
->> ima_queue.c:(.text+0x2d9): undefined reference to `tpm_pcr_extend'
->> ld: security/integrity/ima/ima_init.o: in function `ima_init':
->> ima_init.c:(.init.text+0x43f): undefined reference to `tpm_default_chip'
->> ld: security/integrity/ima/ima_crypto.o: in function `ima_calc_boot_aggregate_tfm':
->> ima_crypto.c:(.text+0x1044): undefined reference to `tpm_pcr_read'
->> ld: ima_crypto.c:(.text+0x10d8): undefined reference to `tpm_pcr_read'
->>
->> Modify the IMA Kconfig entry so that it selects TCG_TPM if HAS_IOMEM
->> is set, regardless of the UML Kconfig setting.
->> This updates TCG_TPM from =m to =y and fixes the linker errors.
->>
->> Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies")
->> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+On 3/14/23 3:38 PM, Alex Elder wrote:
+> The four patches in this series fix some errors, though none of them
+> cause any compile or runtime problems.
 > 
-> Indicating this resolves a commit which was upstreamed in linux-3.4,
-> while the fix for that commit 0bbadafdc49d ("um: allow disabling
-> NO_IOMEM") was upstreamed only in linux-5.14, leaves out an important
-> detail.
+> The first changes the files included by "drivers/net/ipa/reg.h" to
+> ensure everything it requires is included with the file.  It also
+> stops unnecessarily including another file.  The prerequisites are
+> apparently satisfied other ways, currently.
 > 
-> Is the proper way of indicating this disconnect by adding to the fixes
-> line the kernel?
-> Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies") # v5.14+
+> The second adds two struct declarations to "gsi_reg.h", to ensure
+> they're declared before they're used later in the file.  Again, it
+> seems these declarations are currently resolved wherever this file
+> is included.
+> 
+> The third removes register definitions that were added for IPA v5.0
+> that are not needed.  And the last updates some validity checks for
+> IPA v5.0 registers.  No IPA v5.0 platforms are yet supported, so the
+> issues resolved here were never harmful.
 
-Yes, that is acceptable AFAIK. Also
-Cc: stable@vger.kernel.org
+Sorry, it seems I used the wrong hashes in some
+of my "Fixes" tags.  I will post v2 of this series
+tomorrow.
 
-or AUTOSEL would probably take care of this as it is.
+					-Alex
 
--- 
-~Randy
+
+> 					-Alex
+> 
+> Alex Elder (4):
+>    net: ipa: reg: include <linux/bug.h>
+>    net: ipa: add two missing declarations
+>    net: ipa: kill FILT_ROUT_CACHE_CFG IPA register
+>    net: ipa: fix some register validity checks
+> 
+>   drivers/net/ipa/gsi_reg.c |  9 ++++++++-
+>   drivers/net/ipa/gsi_reg.h |  4 ++++
+>   drivers/net/ipa/ipa_reg.c | 28 ++++++++++++++++++----------
+>   drivers/net/ipa/ipa_reg.h | 21 ++++++---------------
+>   drivers/net/ipa/reg.h     |  3 ++-
+>   5 files changed, 38 insertions(+), 27 deletions(-)
+> 
+
