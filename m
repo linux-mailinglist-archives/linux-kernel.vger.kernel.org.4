@@ -2,72 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A44FD6B95C2
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A4686B95CA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231201AbjCNNOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:14:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40672 "EHLO
+        id S231495AbjCNNQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232242AbjCNNOI (ORCPT
+        with ESMTP id S231374AbjCNNQg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:14:08 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A41002412B;
-        Tue, 14 Mar 2023 06:10:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Tue, 14 Mar 2023 09:16:36 -0400
+Received: from relay03.th.seeweb.it (relay03.th.seeweb.it [IPv6:2001:4b7a:2000:18::164])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 359A1A0F08;
+        Tue, 14 Mar 2023 06:13:14 -0700 (PDT)
+Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 83C9D61765;
-        Tue, 14 Mar 2023 13:10:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC1B2C433D2;
-        Tue, 14 Mar 2023 13:10:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1678799403;
-        bh=y+Mm4syiQyk9+ReFkQ85/jas9rM1bCuG+6K2YWtPQMM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=eTpwhRtXO16cDj92+tDLDQSut2EbFbpjfAW7yKtUm9/EdIQjwnHpamaKp7urItELz
-         bqoGYcDEPNv7CQVGJmPIQuUI8KQFqT/4zQR8ruFhDtWRsloWNdInqYIhCnls4SzX1z
-         ZTILLZeJJTNDsJki8gCtYSA/nGuDAEmxmjeRSepi9SPCOy6diJIJw2rxUtOhRm77r+
-         V8BI3cPdgwyAdLyD4kfrILWRgbUu/+YAlukrirPUHmvu98OF/OG+dBxqDg+UpJU1kg
-         ZcH5IWclu6f5gUcj5Uuj9GikxdEiXf2/h2tuLCHlncckLNelTekpu/YLjEir4sYaEp
-         xxr8/npfmedUg==
-Date:   Tue, 14 Mar 2023 14:09:59 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     Tobias Klauser <tklauser@distanz.ch>
-Cc:     Shuah Khan <shuah@kernel.org>, linux-kselftest@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] selftests/clone3: fix number of tests in ksft_set_plan
-Message-ID: <20230314130959.7gfuagxta6k423kf@wittgenstein>
-References: <20230314115352.20623-1-tklauser@distanz.ch>
- <20230314123414.26907-1-tklauser@distanz.ch>
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id 6B2F4203B0;
+        Tue, 14 Mar 2023 14:13:11 +0100 (CET)
+Date:   Tue, 14 Mar 2023 14:13:10 +0100
+From:   Marijn Suijten <marijn.suijten@somainline.org>
+To:     Konrad Dybcio <konrad.dybcio@linaro.org>
+Cc:     Rob Clark <robdclark@gmail.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Krishna Manikandan <quic_mkrishn@quicinc.com>,
+        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4 09/10] dt-bindings: display/msm: dsi-controller-main:
+ Add SM6115
+Message-ID: <20230314131310.2yjzxfe4bqfuku3m@SoMainline.org>
+References: <20230307-topic-dsi_qcm-v4-0-54b4898189cb@linaro.org>
+ <20230307-topic-dsi_qcm-v4-9-54b4898189cb@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20230314123414.26907-1-tklauser@distanz.ch>
-X-Spam-Status: No, score=-7.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20230307-topic-dsi_qcm-v4-9-54b4898189cb@linaro.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 01:34:14PM +0100, Tobias Klauser wrote:
-> Commit 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
-> added an additional test, so the number passed to ksft_set_plan needs to
-> be bumped accordingly.
+On 2023-03-14 13:13:47, Konrad Dybcio wrote:
+> Add a compatible for the DSI on SM6115.
 > 
-> Also use ksft_finished() to print results and exit. This will catch future
-> mismatches between ksft_set_plan() and the number of tests being run.
-> 
-> Fixes: 515bddf0ec41 ("selftests/clone3: test clone3 with CLONE_NEWTIME")
-> Cc: Christian Brauner <brauner@kernel.org>
-> Signed-off-by: Tobias Klauser <tklauser@distanz.ch>
+> Acked-by: Rob Herring <robh@kernel.org>
+> Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
+
+Example is nice and tidy now, thanks!
+
+Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+
 > ---
-
-Looks good. Thanks for fixing this,
-Reviewed-by: Christian Brauner <brauner@kernel.org>
-
-Feel free to take this through the selftests tree, Shuah.
+>  .../devicetree/bindings/display/msm/dsi-controller-main.yaml   |  2 ++
+>  .../devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml      | 10 ++++++++--
+>  2 files changed, 10 insertions(+), 2 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> index 94f4cdf88c95..d534451c8f7f 100644
+> --- a/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/dsi-controller-main.yaml
+> @@ -25,6 +25,7 @@ properties:
+>                - qcom,sc7280-dsi-ctrl
+>                - qcom,sdm660-dsi-ctrl
+>                - qcom,sdm845-dsi-ctrl
+> +              - qcom,sm6115-dsi-ctrl
+>                - qcom,sm8150-dsi-ctrl
+>                - qcom,sm8250-dsi-ctrl
+>                - qcom,sm8350-dsi-ctrl
+> @@ -351,6 +352,7 @@ allOf:
+>            contains:
+>              enum:
+>                - qcom,sdm845-dsi-ctrl
+> +              - qcom,sm6115-dsi-ctrl
+>      then:
+>        properties:
+>          clocks:
+> diff --git a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
+> index 2491cb100b33..b9f83088f370 100644
+> --- a/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
+> +++ b/Documentation/devicetree/bindings/display/msm/qcom,sm6115-mdss.yaml
+> @@ -40,7 +40,13 @@ patternProperties:
+>      type: object
+>      properties:
+>        compatible:
+> -        const: qcom,dsi-ctrl-6g-qcm2290
+> +        oneOf:
+> +          - items:
+> +              - const: qcom,sm6115-dsi-ctrl
+> +              - const: qcom,mdss-dsi-ctrl
+> +          - description: Old binding, please don't use
+> +            deprecated: true
+> +            const: qcom,dsi-ctrl-6g-qcm2290
+>  
+>    "^phy@[0-9a-f]+$":
+>      type: object
+> @@ -114,7 +120,7 @@ examples:
+>          };
+>  
+>          dsi@5e94000 {
+> -            compatible = "qcom,dsi-ctrl-6g-qcm2290";
+> +            compatible = "qcom,sm6115-dsi-ctrl", "qcom,mdss-dsi-ctrl";
+>              reg = <0x05e94000 0x400>;
+>              reg-names = "dsi_ctrl";
+>  
+> 
+> -- 
+> 2.39.2
+> 
