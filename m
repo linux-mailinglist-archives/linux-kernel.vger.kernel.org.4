@@ -2,171 +2,336 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AD8036B96E8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:55:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F2D46B96EA
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:55:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231524AbjCNNzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46568 "EHLO
+        id S232084AbjCNNzM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 09:55:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46632 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230098AbjCNNy2 (ORCPT
+        with ESMTP id S231307AbjCNNyf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:54:28 -0400
-Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE1F591D3;
-        Tue, 14 Mar 2023 06:52:17 -0700 (PDT)
-Received: from localhost (localhost [127.0.0.1])
-        by domac.alu.hr (Postfix) with ESMTP id C4654604F3;
-        Tue, 14 Mar 2023 14:52:14 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678801934; bh=winiTHLb17xj2o5gjeA/xwqNuNo9qdGozG2R42TvGWI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=vQOB++GOpn2PDg+uZ/+MpAR98KnnwxrlO7UJyN57vKhsxmz48LsRXSO7+DNqbbdV3
-         KjUPaBtTEp3BA55OF8B5xrGsK78TzQIOHrOBa8gVchUT8OJjgNlQ1sqpqYZTniRW8c
-         4t3qBzDYmjcIwqDOE87qrKI5M2GMfXpr8jxgyakDvvpoxrAsLUvx/D7i1jxdIEtwgu
-         yWfGN3Uk2rl07fqK8HtYyG3mW0QsI7w+qhqkhs73PZXTNE2YpAxn1Izyu+6qm6p1Fm
-         jcskLpQULZjG43lykTCxJGUK7welwgwk2sb+FXPF3m4M/V/FkWBtLPoK0256HHX63O
-         hzEFnsIpFLyfA==
-X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
-Received: from domac.alu.hr ([127.0.0.1])
-        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
-        with ESMTP id IprvmGBEEZqw; Tue, 14 Mar 2023 14:52:12 +0100 (CET)
-Received: from [193.198.186.200] (pc-mtodorov.slava.alu.hr [193.198.186.200])
-        by domac.alu.hr (Postfix) with ESMTPSA id ED8C2604F2;
-        Tue, 14 Mar 2023 14:52:11 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
-        t=1678801932; bh=winiTHLb17xj2o5gjeA/xwqNuNo9qdGozG2R42TvGWI=;
-        h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-        b=I2lH65lLaxohUVPAJ6+77a48CoWxrboffiqTT9lhdrl2MHnJ/w1osTJVCetxd0iRf
-         WkBNbfn4eP/MsDpsAD/BdGZJpcJiI2oFH0jFsiW33XR4q3hfCfdP7bEUVYMsa+q4UK
-         Wizn+aP3dRD4lpli7+HY9h9yaPspNXnC6UpbqsI4SYTLtW+GxvpPJvkD94FD9bGkcG
-         i9651TBgNrcokZWnfZFmsGGcIolFopjsYfqIBrx4TwhCTyWFIoNF2ltNX70zT0OBYo
-         cWg5uYOlq5cVrxj6jYP2+DFCZ60081OctZajWQPRbLKZ0aSJQ/fPqVevqkSVA9VHWS
-         97nYXsu4fB9rA==
-Message-ID: <d7a64812-73db-feb2-e6d6-e1d8c09a6fed@alu.unizg.hr>
-Date:   Tue, 14 Mar 2023 14:52:07 +0100
+        Tue, 14 Mar 2023 09:54:35 -0400
+Received: from mail-oa1-x30.google.com (mail-oa1-x30.google.com [IPv6:2001:4860:4864:20::30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F624360B2;
+        Tue, 14 Mar 2023 06:52:45 -0700 (PDT)
+Received: by mail-oa1-x30.google.com with SMTP id 586e51a60fabf-177b78067ffso6186579fac.7;
+        Tue, 14 Mar 2023 06:52:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678801964;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dXM+kC2Z9enJZTkFL65kALYvwaM6+hV1n+RHvsknQ4s=;
+        b=espBuW7gnXrqbqrbjWyWs9PbqjvuIunipa3wSFPs+RV9o5fILqNlIxP3LdV5gfDuz2
+         aDtIxZ6vKj52n75V+tyAuDPd91hqVtyFAZfa7Fku+op/jGeRBLG1HihyL1BRYusrYAXg
+         miaHzmu9ESydEe4ARsonu+B8eHHjl1Kp7zuMrV4eknzpt+9s2vIDYZkBrVmvsaT2/3/t
+         duFyOhQgM2qR2RieKRx+6jNKl+aW4TQt9CEQ/gNnTpuMmj/uP+YNmGxHwLNT8iXGe1oZ
+         va1+Pxrj+X8YT+0JKq+dj8IICu/g9//Hw33vhAaFmmzNBiwqrkKDGrWRVQ/+n1sB67Nq
+         g2wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678801964;
+        h=in-reply-to:content-disposition:mime-version:references:reply-to
+         :message-id:subject:cc:to:from:date:sender:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=dXM+kC2Z9enJZTkFL65kALYvwaM6+hV1n+RHvsknQ4s=;
+        b=gU3CQu+O/TBjJHy3OhB91u2cwiOKSLkbJBWBfgXG5Sl0ydoh7EDE7nx/lvKoAPM8Kz
+         w1saVKRB336PIbyDcQPQAJdPLLRuKq7m5gNvnMekcrTxuX+EyzClgVKEgCzVynAN2FUv
+         DV6+18o1bMDjL0+UjWki9TgojmctvpgxOuy3KJYG9yK5SkLPnhnJ1m1GKleYTypkpleb
+         sNl4y8Z30yuzOA+S5GnqNT01l6Kx6rLZrlimb6IK90SILoK0S7DMjyy7Usf37eYEHKyo
+         3fwfMNHeBeNc4KYnNQfT0m045waRfUzRNZd89GqP6XIQJ+wQkb9X7PJWuJykNiBL7fC9
+         e9vA==
+X-Gm-Message-State: AO0yUKUAcjGs11lV+Js3sdJReJzzO8oEkO5hpnr/QPg1wFswYCISyMlm
+        vt6WidryJDRmfFhuqGu9MrDiAhUbhW8F
+X-Google-Smtp-Source: AK7set8YMt4CBjS/js+B29A+ykr0D7sO5qIzL0imVy6LNA3pswA0gRI/h2SlYpo3C7cqaG2KKtoeNA==
+X-Received: by 2002:a05:6870:961d:b0:177:727e:4eae with SMTP id d29-20020a056870961d00b00177727e4eaemr8101060oaq.45.1678801963862;
+        Tue, 14 Mar 2023 06:52:43 -0700 (PDT)
+Received: from serve.minyard.net (serve.minyard.net. [2001:470:b8f6:1b::1])
+        by smtp.gmail.com with ESMTPSA id t2-20020a05680800c200b003850d921b90sm1002711oic.1.2023.03.14.06.52.43
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 06:52:43 -0700 (PDT)
+Sender: Corey Minyard <tcminyard@gmail.com>
+Received: from minyard.net (unknown [IPv6:2001:470:b8f6:1b:d290:38d8:4c6f:34f2])
+        by serve.minyard.net (Postfix) with ESMTPSA id 54DEF180044;
+        Tue, 14 Mar 2023 13:52:41 +0000 (UTC)
+Date:   Tue, 14 Mar 2023 08:52:40 -0500
+From:   Corey Minyard <minyard@acm.org>
+To:     Niklas Schnelle <schnelle@linux.ibm.com>
+Cc:     Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Peter Huewe <peterhuewe@gmx.de>,
+        Jarkko Sakkinen <jarkko@kernel.org>,
+        Jason Gunthorpe <jgg@ziepe.ca>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Alan Stern <stern@rowland.harvard.edu>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-pci@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>,
+        openipmi-developer@lists.sourceforge.net,
+        linux-integrity@vger.kernel.org
+Subject: Re: [PATCH v3 03/38] char: impi, tpm: depend on HAS_IOPORT
+Message-ID: <ZBB8KCj/9QE7LOgw@minyard.net>
+Reply-To: minyard@acm.org
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
+ <20230314121216.413434-4-schnelle@linux.ibm.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: BUG: selftest/net/tun: Hang in unregister_netdevice
-From:   Mirsad Todorovac <mirsad.todorovac@alu.unizg.hr>
-To:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        linux-kernel@vger.kernel.org
-References: <a0734a6b-9491-b43a-6dff-4d3498faee2e@alu.unizg.hr>
-Content-Language: en-US, hr
-In-Reply-To: <a0734a6b-9491-b43a-6dff-4d3498faee2e@alu.unizg.hr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230314121216.413434-4-schnelle@linux.ibm.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/14/23 12:45, Mirsad Todorovac wrote:
-> Hi, all!
-> 
-> After running tools/testing/selftests/net/tun, there seems to be some kind of hang
-> in test "FAIL  tun.reattach_delete_close" or "FAIL  tun.reattach_close_delete".
-> 
-> Two tests exit by timeout, but the processes left are unkillable, even with kill -9 PID:
-> 
-> [root@pc-mtodorov linux_torvalds]# ps -ef | grep tun
-> root        1140       1  0 12:16 ?        00:00:00 /bin/bash /usr/sbin/ksmtuned
-> root        1333       1  0 12:16 ?        00:00:01 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
-> root        3930    2309  0 12:20 pts/1    00:00:00 tools/testing/selftests/net/tun
-> root        3952    2309  0 12:21 pts/1    00:00:00 tools/testing/selftests/net/tun
-> root        4056    3765  0 12:25 pts/1    00:00:00 grep --color=auto tun
-> [root@pc-mtodorov linux_torvalds]# kill -9 3930 3952
-> [root@pc-mtodorov linux_torvalds]# ps -ef | grep tun
-> root        1140       1  0 12:16 ?        00:00:00 /bin/bash /usr/sbin/ksmtuned
-> root        1333       1  0 12:16 ?        00:00:01 /usr/libexec/platform-python -Es /usr/sbin/tuned -l -P
-> root        3930    2309  0 12:20 pts/1    00:00:00 tools/testing/selftests/net/tun
-> root        3952    2309  0 12:21 pts/1    00:00:00 tools/testing/selftests/net/tun
-> root        4060    3765  0 12:25 pts/1    00:00:00 grep --color=auto tun
-> [root@pc-mtodorov linux_torvalds]#
-> 
-> The kernel seems to be stuck in some loop, and filling the log with the
-> following messages until reboot, where it is also waiting very long on the
-> situation to timeout, which apparently never happens.
-> 
-> Mar 14 11:54:09 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
-> Mar 14 11:54:19 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
-> Mar 14 11:54:29 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
-> Mar 14 11:54:40 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
-> Mar 14 11:54:50 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
-> 
-> The platform is kernel 6.3.0-rc2 on AlmaLinux 8.7 and a LENOVO_MT_10TX_BU_Lenovo_FM_V530S-07ICB
-> (lshw output attached).
-> 
-> The .config is here:
-> 
-> https://domac.alu.hr/~mtodorov/linux/selftests/net-tun/config-6.3.0-rc2-mg-andy-devres-00006-gfc89d7fb499b
-> 
-> Basically, it is a vanilla Torvalds tree kernel with MGLRU, KMEMLEAK, and CONFIG_DEBUG_KOBJECT enabled.
-> And devres patch.
-> 
-> Please find the strace of the net/tun run attached.
-> 
-> I am available for additional diagnostics.
+On Tue, Mar 14, 2023 at 01:11:41PM +0100, Niklas Schnelle wrote:
+> In a future patch HAS_IOPORT=n will result in inb()/outb() and friends
+> not being declared. We thus need to add this dependency and ifdef
+> sections of code using inb()/outb() as alternative access methods.
 
-Hi, again!
+For the IPMI portions, this looks good.
 
-I've been busy while waiting for reply, so I wondered how would a vanilla kernel
-go through the test, considering that I've been testing a number of patches
-lately.
+Acked-by: Corey Minyard <cminyard@mvista.com>
 
-I did a fresh git clone from repo and woa.
+Thanks
 
-Surprisingly, the test with CONFIG_DEBUG_KOBJECT turned off passes:
+-corey
 
-[root@pc-mtodorov linux_torvalds]# tools/testing/selftests/net/tun
-TAP version 13
-1..5
-# Starting 5 tests from 1 test cases.
-#  RUN           tun.delete_detach_close ...
-#            OK  tun.delete_detach_close
-ok 1 tun.delete_detach_close
-#  RUN           tun.detach_delete_close ...
-#            OK  tun.detach_delete_close
-ok 2 tun.detach_delete_close
-#  RUN           tun.detach_close_delete ...
-#            OK  tun.detach_close_delete
-ok 3 tun.detach_close_delete
-#  RUN           tun.reattach_delete_close ...
-#            OK  tun.reattach_delete_close
-ok 4 tun.reattach_delete_close
-#  RUN           tun.reattach_close_delete ...
-#            OK  tun.reattach_close_delete
-ok 5 tun.reattach_close_delete
-# PASSED: 5 / 5 tests passed.
-# Totals: pass:5 fail:0 xfail:0 xpass:0 skip:0 error:0
-[root@pc-mtodorov linux_torvalds]#
-
-So, no hanging processes that cannot be killed now.
-
-If you think it is worthy to explore the lockup that occurs when turning
-CONFIG_DEBUG_KOBJECT=y, I will rebuild once again with these turned on,
-to clear any doubts.
-
-Until later.
-
-Best regards,
-Mirsad
-
--- 
-Mirsad Goran Todorovac
-Sistem inženjer
-Grafički fakultet | Akademija likovnih umjetnosti
-Sveučilište u Zagrebu
-
-System engineer
-Faculty of Graphic Arts | Academy of Fine Arts
-University of Zagreb, Republic of Croatia
+> 
+> Co-developed-by: Arnd Bergmann <arnd@kernel.org>
+> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+> ---
+>  drivers/char/Kconfig             |  3 ++-
+>  drivers/char/ipmi/Makefile       | 11 ++++-------
+>  drivers/char/ipmi/ipmi_si_intf.c |  3 ++-
+>  drivers/char/ipmi/ipmi_si_pci.c  |  3 +++
+>  drivers/char/pcmcia/Kconfig      |  8 ++++----
+>  drivers/char/tpm/Kconfig         |  1 +
+>  drivers/char/tpm/tpm_infineon.c  | 14 ++++++++++----
+>  drivers/char/tpm/tpm_tis_core.c  | 19 ++++++++-----------
+>  8 files changed, 34 insertions(+), 28 deletions(-)
+> 
+> diff --git a/drivers/char/Kconfig b/drivers/char/Kconfig
+> index 30fe9848dac1..c34679c6da70 100644
+> --- a/drivers/char/Kconfig
+> +++ b/drivers/char/Kconfig
+> @@ -34,6 +34,7 @@ config TTY_PRINTK_LEVEL
+>  config PRINTER
+>  	tristate "Parallel printer support"
+>  	depends on PARPORT
+> +	depends on HAS_IOPORT
+>  	help
+>  	  If you intend to attach a printer to the parallel port of your Linux
+>  	  box (as opposed to using a serial printer; if the connector at the
+> @@ -342,7 +343,7 @@ config NVRAM
+>  
+>  config DEVPORT
+>  	bool "/dev/port character device"
+> -	depends on ISA || PCI
+> +	depends on HAS_IOPORT
+>  	default y
+>  	help
+>  	  Say Y here if you want to support the /dev/port device. The /dev/port
+> diff --git a/drivers/char/ipmi/Makefile b/drivers/char/ipmi/Makefile
+> index cb6138b8ded9..e0944547c9d0 100644
+> --- a/drivers/char/ipmi/Makefile
+> +++ b/drivers/char/ipmi/Makefile
+> @@ -5,13 +5,10 @@
+>  
+>  ipmi_si-y := ipmi_si_intf.o ipmi_kcs_sm.o ipmi_smic_sm.o ipmi_bt_sm.o \
+>  	ipmi_si_hotmod.o ipmi_si_hardcode.o ipmi_si_platform.o \
+> -	ipmi_si_port_io.o ipmi_si_mem_io.o
+> -ifdef CONFIG_PCI
+> -ipmi_si-y += ipmi_si_pci.o
+> -endif
+> -ifdef CONFIG_PARISC
+> -ipmi_si-y += ipmi_si_parisc.o
+> -endif
+> +	ipmi_si_mem_io.o
+> +ipmi_si-$(CONFIG_HAS_IOPORT) += ipmi_si_port_io.o
+> +ipmi_si-$(CONFIG_PCI) += ipmi_si_pci.o
+> +ipmi_si-$(CONFIG_PARISC) += ipmi_si_parisc.o
+>  
+>  obj-$(CONFIG_IPMI_HANDLER) += ipmi_msghandler.o
+>  obj-$(CONFIG_IPMI_DEVICE_INTERFACE) += ipmi_devintf.o
+> diff --git a/drivers/char/ipmi/ipmi_si_intf.c b/drivers/char/ipmi/ipmi_si_intf.c
+> index abddd7e43a9a..edbbdb804913 100644
+> --- a/drivers/char/ipmi/ipmi_si_intf.c
+> +++ b/drivers/char/ipmi/ipmi_si_intf.c
+> @@ -1882,7 +1882,8 @@ int ipmi_si_add_smi(struct si_sm_io *io)
+>  	}
+>  
+>  	if (!io->io_setup) {
+> -		if (io->addr_space == IPMI_IO_ADDR_SPACE) {
+> +		if (IS_ENABLED(CONFIG_HAS_IOPORT) &&
+> +		    io->addr_space == IPMI_IO_ADDR_SPACE) {
+>  			io->io_setup = ipmi_si_port_setup;
+>  		} else if (io->addr_space == IPMI_MEM_ADDR_SPACE) {
+>  			io->io_setup = ipmi_si_mem_setup;
+> diff --git a/drivers/char/ipmi/ipmi_si_pci.c b/drivers/char/ipmi/ipmi_si_pci.c
+> index 74fa2055868b..b83d55685b22 100644
+> --- a/drivers/char/ipmi/ipmi_si_pci.c
+> +++ b/drivers/char/ipmi/ipmi_si_pci.c
+> @@ -97,6 +97,9 @@ static int ipmi_pci_probe(struct pci_dev *pdev,
+>  	}
+>  
+>  	if (pci_resource_flags(pdev, 0) & IORESOURCE_IO) {
+> +		if (!IS_ENABLED(CONFIG_HAS_IOPORT))
+> +			return -ENXIO;
+> +
+>  		io.addr_space = IPMI_IO_ADDR_SPACE;
+>  		io.io_setup = ipmi_si_port_setup;
+>  	} else {
+> diff --git a/drivers/char/pcmcia/Kconfig b/drivers/char/pcmcia/Kconfig
+> index f5d589b2be44..788422627b43 100644
+> --- a/drivers/char/pcmcia/Kconfig
+> +++ b/drivers/char/pcmcia/Kconfig
+> @@ -8,7 +8,7 @@ menu "PCMCIA character devices"
+>  
+>  config SYNCLINK_CS
+>  	tristate "SyncLink PC Card support"
+> -	depends on PCMCIA && TTY
+> +	depends on PCMCIA && TTY && HAS_IOPORT
+>  	help
+>  	  Enable support for the SyncLink PC Card serial adapter, running
+>  	  asynchronous and HDLC communications up to 512Kbps. The port is
+> @@ -21,7 +21,7 @@ config SYNCLINK_CS
+>  
+>  config CARDMAN_4000
+>  	tristate "Omnikey Cardman 4000 support"
+> -	depends on PCMCIA
+> +	depends on PCMCIA && HAS_IOPORT
+>  	select BITREVERSE
+>  	help
+>  	  Enable support for the Omnikey Cardman 4000 PCMCIA Smartcard
+> @@ -33,7 +33,7 @@ config CARDMAN_4000
+>  
+>  config CARDMAN_4040
+>  	tristate "Omnikey CardMan 4040 support"
+> -	depends on PCMCIA
+> +	depends on PCMCIA && HAS_IOPORT
+>  	help
+>  	  Enable support for the Omnikey CardMan 4040 PCMCIA Smartcard
+>  	  reader.
+> @@ -57,7 +57,7 @@ config SCR24X
+>  
+>  config IPWIRELESS
+>  	tristate "IPWireless 3G UMTS PCMCIA card support"
+> -	depends on PCMCIA && NETDEVICES && TTY
+> +	depends on PCMCIA && NETDEVICES && TTY && HAS_IOPORT
+>  	select PPP
+>  	help
+>  	  This is a driver for 3G UMTS PCMCIA card from IPWireless company. In
+> diff --git a/drivers/char/tpm/Kconfig b/drivers/char/tpm/Kconfig
+> index 927088b2c3d3..418c9ed59ffd 100644
+> --- a/drivers/char/tpm/Kconfig
+> +++ b/drivers/char/tpm/Kconfig
+> @@ -149,6 +149,7 @@ config TCG_NSC
+>  config TCG_ATMEL
+>  	tristate "Atmel TPM Interface"
+>  	depends on PPC64 || HAS_IOPORT_MAP
+> +	depends on HAS_IOPORT
+>  	help
+>  	  If you have a TPM security chip from Atmel say Yes and it 
+>  	  will be accessible from within Linux.  To compile this driver 
+> diff --git a/drivers/char/tpm/tpm_infineon.c b/drivers/char/tpm/tpm_infineon.c
+> index 9c924a1440a9..2d2ae37153ba 100644
+> --- a/drivers/char/tpm/tpm_infineon.c
+> +++ b/drivers/char/tpm/tpm_infineon.c
+> @@ -51,34 +51,40 @@ static struct tpm_inf_dev tpm_dev;
+>  
+>  static inline void tpm_data_out(unsigned char data, unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		outb(data, tpm_dev.data_regs + offset);
+>  	else
+> +#endif
+>  		writeb(data, tpm_dev.mem_base + tpm_dev.data_regs + offset);
+>  }
+>  
+>  static inline unsigned char tpm_data_in(unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		return inb(tpm_dev.data_regs + offset);
+> -	else
+> -		return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
+> +#endif
+> +	return readb(tpm_dev.mem_base + tpm_dev.data_regs + offset);
+>  }
+>  
+>  static inline void tpm_config_out(unsigned char data, unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		outb(data, tpm_dev.config_port + offset);
+>  	else
+> +#endif
+>  		writeb(data, tpm_dev.mem_base + tpm_dev.index_off + offset);
+>  }
+>  
+>  static inline unsigned char tpm_config_in(unsigned char offset)
+>  {
+> +#ifdef CONFIG_HAS_IOPORT
+>  	if (tpm_dev.iotype == TPM_INF_IO_PORT)
+>  		return inb(tpm_dev.config_port + offset);
+> -	else
+> -		return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
+> +#endif
+> +	return readb(tpm_dev.mem_base + tpm_dev.index_off + offset);
+>  }
+>  
+>  /* TPM header definitions */
+> diff --git a/drivers/char/tpm/tpm_tis_core.c b/drivers/char/tpm/tpm_tis_core.c
+> index 3f98e587b3e8..e43d2a1da3ea 100644
+> --- a/drivers/char/tpm/tpm_tis_core.c
+> +++ b/drivers/char/tpm/tpm_tis_core.c
+> @@ -897,11 +897,6 @@ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value)
+>  		clkrun_val &= ~LPC_CLKRUN_EN;
+>  		iowrite32(clkrun_val, data->ilb_base_addr + LPC_CNTRL_OFFSET);
+>  
+> -		/*
+> -		 * Write any random value on port 0x80 which is on LPC, to make
+> -		 * sure LPC clock is running before sending any TPM command.
+> -		 */
+> -		outb(0xCC, 0x80);
+>  	} else {
+>  		data->clkrun_enabled--;
+>  		if (data->clkrun_enabled)
+> @@ -912,13 +907,15 @@ static void tpm_tis_clkrun_enable(struct tpm_chip *chip, bool value)
+>  		/* Enable LPC CLKRUN# */
+>  		clkrun_val |= LPC_CLKRUN_EN;
+>  		iowrite32(clkrun_val, data->ilb_base_addr + LPC_CNTRL_OFFSET);
+> -
+> -		/*
+> -		 * Write any random value on port 0x80 which is on LPC, to make
+> -		 * sure LPC clock is running before sending any TPM command.
+> -		 */
+> -		outb(0xCC, 0x80);
+>  	}
+> +
+> +#ifdef CONFIG_HAS_IOPORT
+> +	/*
+> +	 * Write any random value on port 0x80 which is on LPC, to make
+> +	 * sure LPC clock is running before sending any TPM command.
+> +	 */
+> +	outb(0xCC, 0x80);
+> +#endif
+>  }
+>  
+>  static const struct tpm_class_ops tpm_tis = {
+> -- 
+> 2.37.2
+> 
