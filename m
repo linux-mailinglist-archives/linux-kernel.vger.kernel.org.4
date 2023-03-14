@@ -2,127 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041146BA215
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:13:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A05F6BA21C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231256AbjCNWNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40500 "EHLO
+        id S229970AbjCNWNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbjCNWMo (ORCPT
+        with ESMTP id S231395AbjCNWM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:12:44 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A2C95A1BF
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:11:13 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id s22so21920727lfi.9
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 15:11:13 -0700 (PDT)
+        Tue, 14 Mar 2023 18:12:58 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D09F53700;
+        Tue, 14 Mar 2023 15:11:32 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id p16so11352122wmq.5;
+        Tue, 14 Mar 2023 15:11:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1678831842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Xa6qL+0cyQtdd06tlhVcRMFF8+ijkQsFwj/v1CH/YRY=;
-        b=DGMqSQPQuS+r9I5ntAoMsVOVOjmu/EuPgstaOB9ABRALVI14LAFehPzSOqHKG9eOT9
-         zJqBzEOouvJ16zWawVP1+pYWnAj/0BUbcH2jzF3rE516SDvyE4Ok4EThPx7urw8Tsdtu
-         L3lwgQJkXGAw+HuQltEGgpzNfovW4bf7tbtu+1Ph2f91kXlKgg/OMTvVlII+bdGeyt2n
-         xqOBVu95Bp21eag5csmSue1xiBQMVqXoKSlqZXTfa3oFkRcmPc2pZBTn9LincDMXtBaO
-         wIki9/weLTQYXMdtOCLRxBvFUTYcf4q+R9vGKeJk1QXtM/u2oKSeZn8nbJmeHwmHUV/T
-         y77w==
+        d=gmail.com; s=20210112; t=1678831847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XOm5rYLYVzCqPgdOgZlYvvxQEGH2cR4WoabHTdB2XTc=;
+        b=jEzZzddbSnH6HLoRTbU0J41xJ6EwUSMB1obXmPgFsYPLyylYewJRGT6bdusBGKQlhs
+         qqua4VFJpoPfxTvR1HAj2ErF7WaukuiWa3xN/27SorHhN6w+2zs+hdS8IGQxrKGb4UXq
+         ZAWy+j8TKthIx6xUAUTviRPkfbWcL4gBErnh1zBE/e4KVVgounC6ZJIPrAnUXKcheFpd
+         7ELASOoDJ3suifJZ+gAlKmvKs+jPUsP5a19PGWC0UaWHKgQotdcUu7cpL4l4Lg7rCtmQ
+         h4qIWHjMof6LgwHaOeTZDiaR8UEpw7aaN//D7fL413Ek3hoYAPH0iEu9vWP4J2zKdF5A
+         suoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678831842;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xa6qL+0cyQtdd06tlhVcRMFF8+ijkQsFwj/v1CH/YRY=;
-        b=6Lww9wLeeOjTYklmbBuMVyPy80RDY6sRBVsQGKCjuaOju6/yBrz5g7fs5GkM9spxgc
-         ZQVpIgmB0CPmK7Faaqb29WC3f6UFVTAU4J4SYVGl9kic2/nX7W/9oUG9BqTuV9tXfyMn
-         CkvgSkffkaJODQSBjRarKbMPl0dlM45DTYtx+Wl3WEVx9S8rnRH1Y0yc9BV/8GOB/8lW
-         q8hoR+NubC3EUZX9pJfI/6A7AVTqMr+i4sIDnsoICmPyTWw0PH4wOr6DXlPISZxdj2HH
-         dHcJhtX49oo1DKeHCFfD6K6v+VWxWbt+5szAhlvYGdprZXQb/sQZziEudjaQ2sMQo25O
-         cifQ==
-X-Gm-Message-State: AO0yUKVOLMAW5EZE0ImXVlGJ1EtstWgH7VeFQSgDJTk7wbl/smUmebbr
-        I8xarVvmrFHn7avNJjy4uEK1jw==
-X-Google-Smtp-Source: AK7set/CL8Ze4Qk9YgtnTcm6u3tNa1jyupEcdr8xxX4+Sr4/EUKmodC99ZABfJHlPuVuyJ8q2JycLQ==
-X-Received: by 2002:a05:6512:7c:b0:4cd:ae0b:9397 with SMTP id i28-20020a056512007c00b004cdae0b9397mr1176558lfo.67.1678831842680;
-        Tue, 14 Mar 2023 15:10:42 -0700 (PDT)
-Received: from [192.168.1.101] (abyj16.neoplus.adsl.tpnet.pl. [83.9.29.16])
-        by smtp.gmail.com with ESMTPSA id d2-20020ac241c2000000b004db1b99055dsm552935lfi.229.2023.03.14.15.10.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Mar 2023 15:10:42 -0700 (PDT)
-Message-ID: <68a26435-4f00-1571-88ef-1f3c0a254cef@linaro.org>
-Date:   Tue, 14 Mar 2023 23:10:40 +0100
+        d=1e100.net; s=20210112; t=1678831847;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XOm5rYLYVzCqPgdOgZlYvvxQEGH2cR4WoabHTdB2XTc=;
+        b=Mzqp8F/yWHcC3Se9aDLLEHf8/c+twWI/jnJwlVqrZtno9eyEKcCR/JcHJBT4iuJn+K
+         9s1ihKgEKu4dzhDWoxMPi7Jd1e2mYYXiGIZp0MU2VWQ42e1i89V9go3p+oSkLh25q9tO
+         BECMsZM0+kcPeO93p8YoqvKt+vf4t7pCuz0X2Yzy8RTAfo7L0VA8KOZYQyHNDzvnmgll
+         IIfjX/jGoSR9dzZDljElifZG51HMI9/EXqeIyf28Y08IGwcBqVBDwXxaYaAUxB4oGRxQ
+         a78gvwBX5oTFPD2WBpijMplavjN+mc8uHWvRmcH9gj/Yo2T4buvX8PWOj65JjwbErTiP
+         sOHg==
+X-Gm-Message-State: AO0yUKXksodV2MrbYi5QG+gLZJlY960M5gJvI6xGDDBALN3a5P2zQMe6
+        GrKb2xMajCtdYQIS+B+0tuI=
+X-Google-Smtp-Source: AK7set/LLjuI1UJN7XrwhAnLm6yhPHUm3AdRkBcTVIEVq6SVbL08lC3lUyr8ctQdrpwYwuUYEFzSvw==
+X-Received: by 2002:a05:600c:4f91:b0:3eb:29fe:7b9e with SMTP id n17-20020a05600c4f9100b003eb29fe7b9emr15098520wmq.17.1678831846616;
+        Tue, 14 Mar 2023 15:10:46 -0700 (PDT)
+Received: from localhost (host86-146-209-214.range86-146.btcentralplus.com. [86.146.209.214])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05600c3b9100b003ebff290a52sm4522859wms.28.2023.03.14.15.10.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 15:10:45 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 22:10:45 +0000
+From:   Lorenzo Stoakes <lstoakes@gmail.com>
+To:     Vlastimil Babka <vbabka@suse.cz>
+Cc:     Mike Rapoport <mike.rapoport@gmail.com>,
+        Christoph Lameter <cl@linux.com>,
+        David Rientjes <rientjes@google.com>,
+        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+        Pekka Enberg <penberg@kernel.org>,
+        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        rcu@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        netdev@vger.kernel.org, linux-doc@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Josh Triplett <josh@joshtriplett.org>,
+        Lai Jiangshan <jiangshanlai@gmail.com>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mike Rapoport <rppt@kernel.org>,
+        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 0/7] remove SLOB and allow kfree() with kmem_cache_alloc()
+Message-ID: <eeb8c896-120f-482f-97c0-0cff22a53e0f@lucifer.local>
+References: <20230310103210.22372-1-vbabka@suse.cz>
+ <ZA2gofYkXRcJ8cLA@kernel.org>
+ <93d33f35-fc5e-3ab2-1ac0-891f018b4b06@suse.cz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.8.0
-Subject: Re: [PATCH v4 3/5] arm64: dts: qcom: sm8350: add dp controller
-Content-Language: en-US
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc:     linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20230206-topic-sm8450-upstream-dp-controller-v4-0-dca33f531e0d@linaro.org>
- <20230206-topic-sm8450-upstream-dp-controller-v4-3-dca33f531e0d@linaro.org>
-From:   Konrad Dybcio <konrad.dybcio@linaro.org>
-In-Reply-To: <20230206-topic-sm8450-upstream-dp-controller-v4-3-dca33f531e0d@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_HTTP,RCVD_IN_SORBS_SOCKS,SPF_HELO_NONE,SPF_PASS,
-        URIBL_BLOCKED autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <93d33f35-fc5e-3ab2-1ac0-891f018b4b06@suse.cz>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Mon, Mar 13, 2023 at 05:36:44PM +0100, Vlastimil Babka wrote:
+> > git grep -in slob still gives a couple of matches. I've dropped the
+> > irrelevant ones it it left me with these:
 
-
-On 9.03.2023 10:19, Neil Armstrong wrote:
-> Add the Display Port controller subnode to the MDSS node.
-> 
-> Tested-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org> #SM8350-HDK
-> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
-[...]
-> +				dp_opp_table: opp-table {
-> +					compatible = "operating-points-v2";
-> +
-> +					opp-160000000 {
-> +						opp-hz = /bits/ 64 <160000000>;
-> +						required-opps = <&rpmhpd_opp_low_svs>;
-> +					};
-Downstream doesn't seem to use this lowest freq
-
-Konrad
-> +
-> +					opp-270000000 {
-> +						opp-hz = /bits/ 64 <270000000>;
-> +						required-opps = <&rpmhpd_opp_svs>;
-> +					};
-> +
-> +					opp-540000000 {
-> +						opp-hz = /bits/ 64 <540000000>;
-> +						required-opps = <&rpmhpd_opp_svs_l1>;
-> +					};
-> +
-> +					opp-810000000 {
-> +						opp-hz = /bits/ 64 <810000000>;
-> +						required-opps = <&rpmhpd_opp_nom>;
-> +					};
->  				};
->  			};
->  
-> 
+I see an #ifdef in security/tomoyo/common.h which I guess is not really
+relevant? And certainly not harmful in practice. Thought might be nice to
+eliminate the last reference to CONFIG_SLOB in the kernel :)
