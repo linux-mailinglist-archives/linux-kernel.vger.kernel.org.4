@@ -2,126 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30C266B8A13
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:08:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B95406B8A1C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 06:10:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229698AbjCNFIV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 01:08:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39902 "EHLO
+        id S229847AbjCNFKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 01:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbjCNFIS (ORCPT
+        with ESMTP id S229493AbjCNFKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 01:08:18 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B95EF149B8
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 22:08:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678770497; x=1710306497;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Bbs9+ffYl0KK+4Q+2/p1FmY+Jfc9viWy0OjDOfk+zZI=;
-  b=gU9U9X8ac8YfiKIbs2OnAejqKxYsBIjuBFQj/c0pjYg3Jc/DD+k/hVak
-   ZP0Fz31CVxbOuZinIhnuIpnKVMDOyta2/WtgiE/U+ViEQdFwf2nBOTSpP
-   tsl+gnVjNtIri4dlfnMF0i00LKGqMtIbD80GqEWwfCQei7sceOTXQ5Bmx
-   C/UMnW66jejKDjymJgWLHAKJUYRQDjDZC1i60/BcDUNyR2lFsK37Sf/Kt
-   eQnbY1SD2E3oBJYPwfMe0ew58hh0L0d/Nq8ojfJGMFl3bibzoiMRXaXhJ
-   GPzkgt4Ie/82mpagYP8RSkdNEjBrDoFIrabuQbMWfJvNIbQXpDAeQFk20
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="316978847"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="316978847"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 22:08:17 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="747864920"
-X-IronPort-AV: E=Sophos;i="5.98,259,1673942400"; 
-   d="scan'208";a="747864920"
-Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
-  by fmsmga004.fm.intel.com with ESMTP; 13 Mar 2023 22:08:15 -0700
-Received: from kbuild by b613635ddfff with local (Exim 4.96)
-        (envelope-from <lkp@intel.com>)
-        id 1pbwtS-0006Y6-1s;
-        Tue, 14 Mar 2023 05:08:14 +0000
-Date:   Tue, 14 Mar 2023 13:07:29 +0800
-From:   kernel test robot <lkp@intel.com>
-To:     Song Shuai <suagrfillet@gmail.com>, sudeep.holla@arm.com,
-        gregkh@linuxfoundation.org, rafael@kernel.org,
-        conor.dooley@microchip.com, ionela.voinescu@arm.com
-Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org, Song Shuai <suagrfillet@gmail.com>
-Subject: Re: [PATCH] arch_topology: Clear LLC sibling when cacheinfo teardown
-Message-ID: <202303141252.uMIMFRnT-lkp@intel.com>
-References: <20230313102752.1134472-1-suagrfillet@gmail.com>
+        Tue, 14 Mar 2023 01:10:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 615605D89A;
+        Mon, 13 Mar 2023 22:10:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EE0EB615D5;
+        Tue, 14 Mar 2023 05:10:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 49675C4339C;
+        Tue, 14 Mar 2023 05:10:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678770617;
+        bh=cE5/+eBhcLUf6U82GCqGZsImd9QRoYP/wn3Bjv9SLKk=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=oIMIAcokfBTRxAcX7A92g0WRno1tTK4xzA68iKpMQmvh2+6bmYlZ1JcC5PfwJ5Hm0
+         CpzNxBa8gMsjcHbETRx38RCdm2sbsKVmnoijgHoS8Am+jN/d10wqZgIVgAi3QW3x77
+         Nf5zBz2BzF4GCdLw1jl0yv9MM9aq/5CwasZ6uhrW0rxomVCdmjg75ThX1EcF23ru19
+         RcEV9I/vt3fU7sGdyTQd3bWElKAIYOFmYbJQ536yYcJ32G8hNYTdh5waQnBqh+mqxZ
+         5Q8q5+ahXvPfo1+84b0Z1efTkF3bOmSgz4W5bRcKkVlAUGz015U0tOthHdhSjClYPG
+         aJL9ZMDScJ3Aw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id 2C38DE66CB8;
+        Tue, 14 Mar 2023 05:10:17 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230313102752.1134472-1-suagrfillet@gmail.com>
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH bpf-next v4 1/2] bpf: use canonical ftrace path
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <167877061717.18868.4284758514562021959.git-patchwork-notify@kernel.org>
+Date:   Tue, 14 Mar 2023 05:10:17 +0000
+References: <20230313205628.1058720-2-zwisler@kernel.org>
+In-Reply-To: <20230313205628.1058720-2-zwisler@kernel.org>
+To:     Ross Zwisler <zwisler@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, zwisler@google.com, ast@kernel.org,
+        andrii@kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        jgg@ziepe.ca, jolsa@kernel.org, john.fastabend@gmail.com,
+        kpsingh@kernel.org, leon@kernel.org, mark.rutland@arm.com,
+        martin.lau@linux.dev, mhiramat@kernel.org, mykolal@fb.com,
+        shuah@kernel.org, song@kernel.org, sdf@google.com,
+        rostedt@goodmis.org, yhs@fb.com, bpf@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-trace-kernel@vger.kernel.org, mst@redhat.com
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Song,
+Hello:
 
-Thank you for the patch! Yet something to improve:
+This series was applied to bpf/bpf-next.git (master)
+by Alexei Starovoitov <ast@kernel.org>:
 
-[auto build test ERROR on driver-core/driver-core-testing]
-[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.3-rc2 next-20230310]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+On Mon, 13 Mar 2023 14:56:27 -0600 you wrote:
+> From: Ross Zwisler <zwisler@google.com>
+> 
+> The canonical location for the tracefs filesystem is at /sys/kernel/tracing.
+> 
+> But, from Documentation/trace/ftrace.rst:
+> 
+>   Before 4.1, all ftrace tracing control files were within the debugfs
+>   file system, which is typically located at /sys/kernel/debug/tracing.
+>   For backward compatibility, when mounting the debugfs file system,
+>   the tracefs file system will be automatically mounted at:
+> 
+> [...]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Song-Shuai/arch_topology-Clear-LLC-sibling-when-cacheinfo-teardown/20230313-182946
-patch link:    https://lore.kernel.org/r/20230313102752.1134472-1-suagrfillet%40gmail.com
-patch subject: [PATCH] arch_topology: Clear LLC sibling when cacheinfo teardown
-config: arm-randconfig-r046-20230312 (https://download.01.org/0day-ci/archive/20230314/202303141252.uMIMFRnT-lkp@intel.com/config)
-compiler: clang version 17.0.0 (https://github.com/llvm/llvm-project 67409911353323ca5edf2049ef0df54132fa1ca7)
-reproduce (this is a W=1 build):
-        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
-        chmod +x ~/bin/make.cross
-        # install arm cross compiling tool for clang build
-        # apt-get install binutils-arm-linux-gnueabi
-        # https://github.com/intel-lab-lkp/linux/commit/a9aca0a81b31b421e3bbfa08fd205a8bec651afe
-        git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Song-Shuai/arch_topology-Clear-LLC-sibling-when-cacheinfo-teardown/20230313-182946
-        git checkout a9aca0a81b31b421e3bbfa08fd205a8bec651afe
-        # save the config file
-        mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm olddefconfig
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=arm SHELL=/bin/bash drivers/base/
+Here is the summary with links:
+  - [bpf-next,v4,1/2] bpf: use canonical ftrace path
+    https://git.kernel.org/bpf/bpf-next/c/27d7fdf06fdb
+  - [bpf-next,v4,2/2] selftests/bpf: use canonical ftrace path
+    https://git.kernel.org/bpf/bpf-next/c/ab4c15feb2eb
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Link: https://lore.kernel.org/oe-kbuild-all/202303141252.uMIMFRnT-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/base/cacheinfo.c:818:2: error: call to undeclared function 'clear_llc_topology'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-           clear_llc_topology(cpu);
-           ^
-   1 error generated.
-
-
-vim +/clear_llc_topology +818 drivers/base/cacheinfo.c
-
-   811	
-   812	static int cacheinfo_cpu_pre_down(unsigned int cpu)
-   813	{
-   814		if (cpumask_test_and_clear_cpu(cpu, &cache_dev_map))
-   815			cpu_cache_sysfs_exit(cpu);
-   816	
-   817		free_cache_attributes(cpu);
- > 818		clear_llc_topology(cpu);
-   819		return 0;
-   820	}
-   821	
-
+You are awesome, thank you!
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
