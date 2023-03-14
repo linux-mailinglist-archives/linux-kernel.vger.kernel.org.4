@@ -2,144 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2FC56B973B
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:06:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A70A96B9741
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbjCNOGM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 10:06:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46608 "EHLO
+        id S232201AbjCNOGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231473AbjCNOGF (ORCPT
+        with ESMTP id S231473AbjCNOGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 10:06:05 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 244E799255
-        for <linux-kernel@vger.kernel.org>; Tue, 14 Mar 2023 07:05:52 -0700 (PDT)
-Received: from SoMainline.org (94-211-6-86.cable.dynamic.v4.ziggo.nl [94.211.6.86])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id DE01620184;
-        Tue, 14 Mar 2023 15:05:50 +0100 (CET)
+        Tue, 14 Mar 2023 10:06:14 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 170D9A569F;
+        Tue, 14 Mar 2023 07:06:13 -0700 (PDT)
+Received: from compute6.internal (compute6.nyi.internal [10.202.2.47])
+        by mailout.west.internal (Postfix) with ESMTP id 66EE23200915;
+        Tue, 14 Mar 2023 10:06:11 -0400 (EDT)
+Received: from imap51 ([10.202.2.101])
+  by compute6.internal (MEProxy); Tue, 14 Mar 2023 10:06:12 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+        :cc:content-transfer-encoding:content-type:content-type:date
+        :date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to; s=fm1; t=
+        1678802771; x=1678889171; bh=PdfK+KgXqfYYyNRjIkKag7bPoiI2QGHeotH
+        fnMzy5uI=; b=lRjz8gAgTrnap6Tbsvg1QVgqc6mc+U8iR/rghiWBlGt/3PSldo2
+        3ql0zJOXGWB2/0ZN0eEx1f4AP/dNiI3z3A++CfYn8kwNS4ymO+mr8aV6DeVLUpTS
+        445AvFcrlT+6uy86y1LzK3YOI8xWXRuAkZ4V0UB8KNbBgkpTl7ETQ+uX8ar0AKHJ
+        fwcVOMblHvKo1Htob+9okttczpE2sU94IbGqQ7kmN4rRK+ulGKtmrAull99iGETA
+        PJcAbnygwCwMjm2836O3HtmBhTpVkesIARFkuCPRpX57fBCSxIcSWdrSuEv+MMBC
+        HiYsOJ9svTIaYKvh7EuJLN0KAmjfP+Fcl9g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding
+        :content-type:content-type:date:date:feedback-id:feedback-id
+        :from:from:in-reply-to:in-reply-to:message-id:mime-version
+        :references:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
+        1678802771; x=1678889171; bh=PdfK+KgXqfYYyNRjIkKag7bPoiI2QGHeotH
+        fnMzy5uI=; b=teK+0BSFRYPnnWLZwAeeKsUTiOEAx1eqXoC0ysADEH9WTuH2KBf
+        GiYQN6UJLPyxoeMlKYLyEucj3rDazxlXMV4bBmPoQBfj7pyLJuxz7g08lwcIafIA
+        tZyk1ACiXmaCEXgUDpKsNtkT4lU1isMv4WP69/BrK7VNHqUHWPaYzzNaLxcAKbuZ
+        2koPei5dWjJ79aOL7rCUhBvbqYVmzDEkVyxnh2EzwZp7xjZwoGdRMzXAhyRXfEqE
+        ZL8u74wvvq6lujkAMU9U1nY4kM8IDBnizVwZECeIEZBO4P8Dlyv1NmkR+7MkRgO4
+        a72UqmHTz2q/jN36pvUp05p4V882tH0rilw==
+X-ME-Sender: <xms:Un8QZIkjSHHLJpVH5Zp66upFpggui2u4cvFIloxFbiduiQD_1zOHSA>
+    <xme:Un8QZH1T5uPhAVcwLGNXS7kzuaX_pxK4AqoAdZyf4ZkFrdEMldlosU60fF24IVnej
+    Fu2dwI4pheeUy7FaSA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvhedrvddviedgieduucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepofgfggfkjghffffhvfevufgtgfesthhqredtreerjeenucfhrhhomhepfdet
+    rhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrg
+    htthgvrhhnpefgkeeuleegieeghfduudeltdekfeffjeeuleehleefudettddtgfevueef
+    feeigeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvg
+X-ME-Proxy: <xmx:Un8QZGoysEz2YYLAuFxIn3qw_uL8BE9ISoqiu09qN1ur0bDRTVU96g>
+    <xmx:Un8QZEkf7J6Kga513TZD4j7g_Sxp-UpTacfl_UZun_wygq3wqGByHQ>
+    <xmx:Un8QZG2sNDBg_IUTM2oRGjnHoBZHMPRWbE14qlI8f6uIHoCx2nGpwQ>
+    <xmx:U38QZAM8V-fIt2la_6MojocqWRthSshF5NQ8bZQTAyvWB3JfEIKVRg>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2464CB60086; Tue, 14 Mar 2023 10:06:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.9.0-alpha0-221-gec32977366-fm-20230306.001-gec329773
+Mime-Version: 1.0
+Message-Id: <7ec48487-8565-4a1d-963b-5092eb5f4d15@app.fastmail.com>
+In-Reply-To: <20230314121216.413434-1-schnelle@linux.ibm.com>
+References: <20230314121216.413434-1-schnelle@linux.ibm.com>
 Date:   Tue, 14 Mar 2023 15:05:49 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Konrad Dybcio <konrad.dybcio@linaro.org>
-Cc:     Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krishna Manikandan <quic_mkrishn@quicinc.com>,
-        Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 06/10] drm/msm/dsi: Switch the QCM2290-specific
- compatible to index autodetection
-Message-ID: <20230314140549.5fk4wroviqvknvfn@SoMainline.org>
-References: <20230307-topic-dsi_qcm-v4-0-54b4898189cb@linaro.org>
- <20230307-topic-dsi_qcm-v4-6-54b4898189cb@linaro.org>
- <20230314130439.nbarj2wsdf6ishmo@SoMainline.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20230314130439.nbarj2wsdf6ishmo@SoMainline.org>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+From:   "Arnd Bergmann" <arnd@arndb.de>
+To:     "Niklas Schnelle" <schnelle@linux.ibm.com>,
+        "Richard Cochran" <richardcochran@gmail.com>,
+        "Paul Walmsley" <paul.walmsley@sifive.com>,
+        "Palmer Dabbelt" <palmer@dabbelt.com>,
+        "Albert Ou" <aou@eecs.berkeley.edu>
+Cc:     "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+        "Bjorn Helgaas" <bhelgaas@google.com>,
+        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
+        "Mauro Carvalho Chehab" <mchehab@kernel.org>,
+        "Alan Stern" <stern@rowland.harvard.edu>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        "Geert Uytterhoeven" <geert@linux-m68k.org>,
+        linux-kernel@vger.kernel.org,
+        Linux-Arch <linux-arch@vger.kernel.org>,
+        linux-pci@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
+        linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v3 00/38] Kconfig: Introduce HAS_IOPORT config option
+Content-Type: text/plain;charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2023-03-14 14:04:41, Marijn Suijten wrote:
-> On 2023-03-14 13:13:44, Konrad Dybcio wrote:
-> > Now that the logic can handle multiple sets of registers, move
-> > the QCM2290 to the common logic and mark it deprecated. This allows us
-> > to remove a couple of structs, saving some memory.
-> > 
-> > Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > Signed-off-by: Konrad Dybcio <konrad.dybcio@linaro.org>
-> > ---
-> >  drivers/gpu/drm/msm/dsi/dsi.c     |  5 +++--
-> >  drivers/gpu/drm/msm/dsi/dsi_cfg.c | 20 ++------------------
-> >  2 files changed, 5 insertions(+), 20 deletions(-)
-> > 
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi.c b/drivers/gpu/drm/msm/dsi/dsi.c
-> > index 31fdee2052be..f761973e4cba 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi.c
-> > @@ -4,7 +4,6 @@
-> >   */
-> >  
-> >  #include "dsi.h"
-> > -#include "dsi_cfg.h"
-> >  
-> >  bool msm_dsi_is_cmd_mode(struct msm_dsi *msm_dsi)
-> >  {
-> > @@ -174,7 +173,9 @@ static int dsi_dev_remove(struct platform_device *pdev)
-> >  
-> >  static const struct of_device_id dt_match[] = {
-> >  	{ .compatible = "qcom,mdss-dsi-ctrl", .data = NULL /* autodetect cfg */ },
-> > -	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = &qcm2290_dsi_cfg_handler },
-> > +
-> > +	/* Deprecated, don't use */
-> > +	{ .compatible = "qcom,dsi-ctrl-6g-qcm2290", .data = NULL },
-> >  	{}
-> >  };
-> >  
-> > diff --git a/drivers/gpu/drm/msm/dsi/dsi_cfg.c b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> > index 03d98cbcc978..29ccd755cc2e 100644
-> > --- a/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> > +++ b/drivers/gpu/drm/msm/dsi/dsi_cfg.c
-> > @@ -169,7 +169,8 @@ static const struct msm_dsi_config sdm845_dsi_cfg = {
-> >  	.bus_clk_names = dsi_v2_4_clk_names,
-> >  	.num_bus_clks = ARRAY_SIZE(dsi_v2_4_clk_names),
-> >  	.io_start = {
-> > -		{ 0xae94000, 0xae96000 }, /* SDM845 / SDM670 / SC7180 */
-> > +		{ 0xae94000, 0xae96000 }, /* SDM845 / SDM670 */
-> > +		{ 0x5e94000 }, /* QCM2290 / SM6115 / SM6125 / SM6375 */
-> >  	},
-> >  };
-> >  
-> > @@ -203,17 +204,6 @@ static const struct msm_dsi_config sc7280_dsi_cfg = {
-> >  	},
-> >  };
-> >  
-> > -static const struct msm_dsi_config qcm2290_dsi_cfg = {
-> > -	.io_offset = DSI_6G_REG_SHIFT,
-> > -	.regulator_data = dsi_v2_4_regulators,
-> > -	.num_regulators = ARRAY_SIZE(dsi_v2_4_regulators),
-> > -	.bus_clk_names = dsi_v2_4_clk_names,
-> > -	.num_bus_clks = ARRAY_SIZE(dsi_v2_4_clk_names),
-> > -	.io_start = {
-> > -		{ 0x5e94000 },
-> > -	},
-> > -};
-> > -
-> >  static const struct msm_dsi_host_cfg_ops msm_dsi_v2_host_ops = {
-> >  	.link_clk_set_rate = dsi_link_clk_set_rate_v2,
-> >  	.link_clk_enable = dsi_link_clk_enable_v2,
-> > @@ -304,9 +294,3 @@ const struct msm_dsi_cfg_handler *msm_dsi_cfg_get(u32 major, u32 minor)
-> >  
-> >  	return cfg_hnd;
-> >  }
-> > -
-> > -/*  Non autodetect configs */
-> > -const struct msm_dsi_cfg_handler qcm2290_dsi_cfg_handler = {
-> > -	.cfg = &qcm2290_dsi_cfg,
-> > -	.ops = &msm_dsi_6g_v2_host_ops,
-> > -};
-> 
-> Should be removed from dsi_cfg.h, but you did that in patch 7 instead.
+On Tue, Mar 14, 2023, at 13:11, Niklas Schnelle wrote:
+> Hello Kernel Hackers,
+>
+> Some platforms such as s390 do not support PCI I/O spaces. On such pla=
+tforms
+> I/O space accessors like inb()/outb() are stubs that can never actuall=
+y work.
+> The way these stubs are implemented in asm-generic/io.h leads to compi=
+ler
+> warnings because any use will be a NULL pointer access on these platfo=
+rms. In
+> a previous patch we tried handling this with a run-time warning on acc=
+ess. This
+> approach however was rejected by Linus[0] with the argument that this =
+really
+> should be a compile-time check and, though a much more invasive change=
+, we
+> believe that is indeed the right approach.
+>
+> This patch series aims to do exactly that by introducing a HAS_IOPORT =
+config
+> option akin to the existing HAS_IOMEM. When this is unset inb()/outb()=
+ and
+> friends may not be defined. This is also the same approach originally =
+planned by
+> Uwe Kleine-K=C3=B6nig as mentioned in commit ce816fa88cca ("Kconfig: r=
+ename
+> HAS_IOPORT to HAS_IOPORT_MAP").
+>
+> This series builds heavily on an original patch for demonstating the c=
+oncept by
+> Arnd Bergmann[1] and incoporates feedback of previous RFC versions [2]=
+ and [3].
+>
+> This version is based on v6.3-rc1 and is also available on my kernel.o=
+rg tree
+> in the has_ioport_v3 branch with the PGP signed tag has_ioport_v3_sign=
+ed:
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/niks/linux.git
 
-As discussed in patch 7 this could possibly be fixed up when Dmitry
-applies the series, rather than going through yet another resend... So
-have my r-b already just in case:
+Thanks a lot for the rebase, hopefully we can finally get this merged.
+I'll go through all patches and note everything I spot that should
+be improved. I'd like to make sure that at least the first patch
+can get merged quickly so we can continue on the rest.
 
-Reviewed-by: Marijn Suijten <marijn.suijten@somainline.org>
+Since this is all related to asm-generic/io.h and cross-architecture
+work, I can pick up anything that has nobody else maintaining it
+through the asm-generic tree.
+
+   Arnd
