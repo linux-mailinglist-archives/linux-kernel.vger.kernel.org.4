@@ -2,91 +2,272 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E29F56BA0C8
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4424D6BA0C9
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:33:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230227AbjCNUcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:32:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52820 "EHLO
+        id S230506AbjCNUc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52860 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229588AbjCNUcx (ORCPT
+        with ESMTP id S230307AbjCNUcz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:32:53 -0400
-Received: from mail-ed1-x533.google.com (mail-ed1-x533.google.com [IPv6:2a00:1450:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E8FE51F9B;
-        Tue, 14 Mar 2023 13:32:52 -0700 (PDT)
-Received: by mail-ed1-x533.google.com with SMTP id o12so67140590edb.9;
-        Tue, 14 Mar 2023 13:32:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112; t=1678825971;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DLFoyfLfdyO7ocn4I91ehlSCtw1QfcrPgCtbPrlB1lQ=;
-        b=OZQCXhqLqja/dOED9oYnGh5ZzK1T5CXLPiHRfTPuPsgIqlJxZBwyhxIkcjHXYESffT
-         GUzc7tofvBNLC2CG39cmcbO4RpIZFP1pyLyqMmR2vw4arkGWkE+a55fMpvZuTsyxQgPv
-         Ic9Urgqyvcp3g+JfyMq0u2Y2D1YCN6+tMAksRo4OcxUO7aYQ4knVnSP4hsIen78KfaGF
-         Pu6tc4goaQUKA09AMqN2pAgXHwS+y9a8WDxJ6wdoOpVwLzfLC4K+5OL8HKa08JWI/SzJ
-         SL+R938Dks+Y4QJktoWX9ze9f/ky/l39GkFrhPRFAFB/R31io1wmuPAAb/jWf66CbFDA
-         5a0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112; t=1678825971;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=DLFoyfLfdyO7ocn4I91ehlSCtw1QfcrPgCtbPrlB1lQ=;
-        b=our/r7frfstvge2In5HMW0gy8qzJOOLSHWalQjOEAqNin3BnjoiUB9qehW+DM23AVK
-         nZ068Qb0psdH9/ncMXHvaY66b1OIh8jH66+vttx9u55QtNuannS/f7uHlzNrECyTTpXd
-         YUBlK7B/qF7fTQJnwdfuJzpNIuUzxCHvSi500Tv/pssTYGp/sdk478GoGIgznPxqQddN
-         7SOh4hLHirRhxGGsTi6OYq/G3C/d8pyhY5IUxNcsdQIinKMWJ5ZEDwAiivz/RCuXi74b
-         rYxjWNHucugHUQ8u8Uc2NLJxqRHFsZZHUIb6p5iyU4UbbjaHR/i7HswVVSVZFHEY5CRU
-         CSLA==
-X-Gm-Message-State: AO0yUKXfhtjTNk+D01eFfnbP6xbteo7ytevNNOe+aTanK/af5Kp+Z3W2
-        pgucD8Rh0C3K2hBLb2l8uWFTfbJcECWC9i3d
-X-Google-Smtp-Source: AK7set++sOxBoil2fV/AYd0vkfsoNi2NQY+Xq66eS0oKEFztdyuIRLgcGbiy+VyJFSjbI5WVnmFEng==
-X-Received: by 2002:a17:907:2166:b0:8b1:7ae9:647 with SMTP id rl6-20020a170907216600b008b17ae90647mr4833331ejb.76.1678825970910;
-        Tue, 14 Mar 2023 13:32:50 -0700 (PDT)
-Received: from jernej-laptop.localnet (82-149-1-233.dynamic.telemach.net. [82.149.1.233])
-        by smtp.gmail.com with ESMTPSA id ja19-20020a170907989300b008cf8c6f5c43sm1557535ejc.83.2023.03.14.13.32.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Mar 2023 13:32:50 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     Chen-Yu Tsai <wens@csie.org>, Samuel Holland <samuel@sholland.org>,
-        Rob Herring <robh@kernel.org>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] soc: sunxi: Use of_property_present() for testing DT property
- presence
-Date:   Tue, 14 Mar 2023 21:32:49 +0100
-Message-ID: <4252460.ejJDZkT8p0@jernej-laptop>
-In-Reply-To: <20230310144724.1545223-1-robh@kernel.org>
-References: <20230310144724.1545223-1-robh@kernel.org>
+        Tue, 14 Mar 2023 16:32:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8B7351F9B;
+        Tue, 14 Mar 2023 13:32:53 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 841B5B81B96;
+        Tue, 14 Mar 2023 20:32:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E78D6C433D2;
+        Tue, 14 Mar 2023 20:32:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678825971;
+        bh=AgqlCoM5/iuM3VeFQs/UEhZ2BRcdrerQfTSev8mvG6I=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Gv5hrPOvUSFXMGHXrpf78yxXeD4DvycoRvNmUvoUJEt+Wgz82GzIDbmzngQ9U6lSh
+         5kSQkR5xHhrhD91FI3Kp5l7c/ggIsgbH9EUcDDnV6Ra6f/0ptuECuxdFzXCVcAph5+
+         JXj2vGyK/RX0Ew/9JJSn+rs6iBOMHSbZP/q0hFZAKXh0y6cgWV11sCvrXjKS7+wydf
+         I9iS/PX2wJWsSu9NMShkCDf5Hi1caJrkwV6sF3tavxHXVLEoZgLYUtDDVyhQxQ8qTh
+         QL2FU+URaGjF+p/bHVR/TJnP9IFLwDzknxZO0b7JxowCL5mpnn/GpEd24zf7mlXSpL
+         BmxUvzB1rWP+w==
+Date:   Tue, 14 Mar 2023 15:32:49 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     Minghuan Lian <minghuan.Lian@nxp.com>,
+        Mingkai Hu <mingkai.hu@nxp.com>, Roy Zang <roy.zang@nxp.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        "open list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-pci@vger.kernel.org>,
+        "moderated list:PCI DRIVER FOR FREESCALE LAYERSCAPE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>, imx@lists.linux.dev
+Subject: Re: [PATCH 1/1] PCI: layerscape: Add the workaround for A-010305
+Message-ID: <20230314203249.GA1673140@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230112194433.1514149-1-Frank.Li@nxp.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 10. marec 2023 ob 15:47:24 CET je Rob Herring napisal(a):
-> It is preferred to use typed property access functions (i.e.
-> of_property_read_<type> functions) rather than low-level
-> of_get_property/of_find_property functions for reading properties. As
-> part of this, convert of_get_property/of_find_property calls to the
-> recently added of_property_present() helper when we just want to test
-> for presence of a property and nothing more.
+On Thu, Jan 12, 2023 at 02:44:33PM -0500, Frank Li wrote:
+> From: Xiaowei Bao <xiaowei.bao@nxp.com>
 > 
-> Signed-off-by: Rob Herring <robh@kernel.org>
+> When a link down or hot reset event occurs, the PCI Express EP
+> controller's Link Capabilities Register should retain the values of
+> the Maximum Link Width and Supported Link Speed configured by RCW.
 
-Applied, thanks!
+Can you rework this to say what the patch does and why it's necessary?
 
-Best regards,
-Jernej
+Apparently it's a workaround for some issue in A-010305?  The subject
+line could also use more content.  What is A-010305?  What is the
+problem this works around?
 
+I don't see a check for A-010305; do *all* devices handled by this
+driver have this problem?
 
+The PCIe Link Capabilities is supposed to be read-only; maybe this
+device loses the value on link down or hot reset?  And I guess the
+device interrupts on link up/down and reset, and you restore the value
+then?
+
+Link Capabilities contains several things other than Max Link Width
+and Max Link Speed.  But they don't need to be restored?
+
+What is RCW?
+
+> Signed-off-by: Xiaowei Bao <xiaowei.bao@nxp.com>
+> Signed-off-by: Hou Zhiqiang <Zhiqiang.Hou@nxp.com>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+>  .../pci/controller/dwc/pci-layerscape-ep.c    | 112 +++++++++++++++++-
+>  1 file changed, 111 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-layerscape-ep.c b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> index ed5cfc9408d9..1b884854c18e 100644
+> --- a/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> +++ b/drivers/pci/controller/dwc/pci-layerscape-ep.c
+> @@ -18,6 +18,22 @@
+>  
+>  #include "pcie-designware.h"
+>  
+> +#define PCIE_LINK_CAP			0x7C	/* PCIe Link Capabilities*/
+
+Is this something you can find by searching the capability list
+instead of hard-coding the config space offset?
+
+> +#define MAX_LINK_SP_MASK		0x0F
+> +#define MAX_LINK_W_MASK			0x3F
+> +#define MAX_LINK_W_SHIFT		4
+
+These look like they should use PCI_EXP_LNKCAP_SLS and
+PCI_EXP_LNKCAP_MLW instead of defining new ones.
+
+> +/* PEX PFa PCIE pme and message interrupt registers*/
+> +#define PEX_PF0_PME_MES_DR             0xC0020
+> +#define PEX_PF0_PME_MES_DR_LUD         (1 << 7)
+> +#define PEX_PF0_PME_MES_DR_LDD         (1 << 9)
+> +#define PEX_PF0_PME_MES_DR_HRD         (1 << 10)
+> +
+> +#define PEX_PF0_PME_MES_IER            0xC0028
+> +#define PEX_PF0_PME_MES_IER_LUDIE      (1 << 7)
+> +#define PEX_PF0_PME_MES_IER_LDDIE      (1 << 9)
+> +#define PEX_PF0_PME_MES_IER_HRDIE      (1 << 10)
+> +
+>  #define to_ls_pcie_ep(x)	dev_get_drvdata((x)->dev)
+>  
+>  struct ls_pcie_ep_drvdata {
+> @@ -30,8 +46,90 @@ struct ls_pcie_ep {
+>  	struct dw_pcie			*pci;
+>  	struct pci_epc_features		*ls_epc;
+>  	const struct ls_pcie_ep_drvdata *drvdata;
+> +	u8				max_speed;
+> +	u8				max_width;
+> +	bool				big_endian;
+> +	int				irq;
+>  };
+>  
+> +static u32 ls_lut_readl(struct ls_pcie_ep *pcie, u32 offset)
+> +{
+> +	struct dw_pcie *pci = pcie->pci;
+> +
+> +	if (pcie->big_endian)
+> +		return ioread32be(pci->dbi_base + offset);
+> +	else
+> +		return ioread32(pci->dbi_base + offset);
+> +}
+> +
+> +static void ls_lut_writel(struct ls_pcie_ep *pcie, u32 offset,
+> +			  u32 value)
+> +{
+> +	struct dw_pcie *pci = pcie->pci;
+> +
+> +	if (pcie->big_endian)
+> +		iowrite32be(value, pci->dbi_base + offset);
+> +	else
+> +		iowrite32(value, pci->dbi_base + offset);
+> +}
+> +
+> +static irqreturn_t ls_pcie_ep_event_handler(int irq, void *dev_id)
+> +{
+> +	struct ls_pcie_ep *pcie = (struct ls_pcie_ep *)dev_id;
+> +	struct dw_pcie *pci = pcie->pci;
+> +	u32 val;
+> +
+> +	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_DR);
+> +	if (!val)
+> +		return IRQ_NONE;
+> +
+> +	if (val & PEX_PF0_PME_MES_DR_LUD)
+> +		dev_info(pci->dev, "Detect the link up state !\n");
+> +	else if (val & PEX_PF0_PME_MES_DR_LDD)
+> +		dev_info(pci->dev, "Detect the link down state !\n");
+> +	else if (val & PEX_PF0_PME_MES_DR_HRD)
+> +		dev_info(pci->dev, "Detect the hot reset state !\n");
+
+No space before "!".  Seems possibly more verbose than necessary,
+since the endpoint may be reset as part of normal operation.
+
+> +	dw_pcie_dbi_ro_wr_en(pci);
+> +	dw_pcie_writew_dbi(pci, PCIE_LINK_CAP,
+> +			   (pcie->max_width << MAX_LINK_W_SHIFT) |
+
+Use FIELD_PREP() so you don't need a shift.
+
+> +			   pcie->max_speed);
+> +	dw_pcie_dbi_ro_wr_dis(pci);
+> +
+> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_DR, val);
+> +
+> +	return IRQ_HANDLED;
+> +}
+> +
+> +static int ls_pcie_ep_interrupt_init(struct ls_pcie_ep *pcie,
+> +				     struct platform_device *pdev)
+> +{
+> +	u32 val;
+> +	int ret;
+> +
+> +	pcie->irq = platform_get_irq_byname(pdev, "pme");
+> +	if (pcie->irq < 0) {
+> +		dev_err(&pdev->dev, "Can't get 'pme' irq.\n");
+> +		return pcie->irq;
+> +	}
+> +
+> +	ret = devm_request_irq(&pdev->dev, pcie->irq,
+> +			       ls_pcie_ep_event_handler, IRQF_SHARED,
+> +			       pdev->name, pcie);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "Can't register PCIe IRQ.\n");
+
+Use "IRQ" consistently (it was "irq" in the message above).  No period
+needed at end.
+
+> +		return ret;
+> +	}
+> +
+> +	/* Enable interrupts */
+> +	val = ls_lut_readl(pcie, PEX_PF0_PME_MES_IER);
+> +	val |=  PEX_PF0_PME_MES_IER_LDDIE | PEX_PF0_PME_MES_IER_HRDIE |
+> +		PEX_PF0_PME_MES_IER_LUDIE;
+> +	ls_lut_writel(pcie, PEX_PF0_PME_MES_IER, val);
+> +
+> +	return 0;
+> +}
+> +
+>  static const struct pci_epc_features*
+>  ls_pcie_ep_get_features(struct dw_pcie_ep *ep)
+>  {
+> @@ -125,6 +223,7 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+>  	struct ls_pcie_ep *pcie;
+>  	struct pci_epc_features *ls_epc;
+>  	struct resource *dbi_base;
+> +	int ret;
+>  
+>  	pcie = devm_kzalloc(dev, sizeof(*pcie), GFP_KERNEL);
+>  	if (!pcie)
+> @@ -155,9 +254,20 @@ static int __init ls_pcie_ep_probe(struct platform_device *pdev)
+>  
+>  	pci->ep.ops = &ls_pcie_ep_ops;
+>  
+> +	pcie->big_endian = of_property_read_bool(dev->of_node, "big-endian");
+
+Somewhat surprising that 6c389328c985 ("dt-bindings: pci:
+layerscape-pci: Add a optional property big-endian") added this
+property a year ago, but it has been unused until now?
+
+> +	pcie->max_speed = dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) &
+> +			  MAX_LINK_SP_MASK;
+> +	pcie->max_width = (dw_pcie_readw_dbi(pci, PCIE_LINK_CAP) >>
+> +			  MAX_LINK_W_SHIFT) & MAX_LINK_W_MASK;
+
+Use FIELD_GET() instead of shifting/masking.  Or save the whole
+register instead of extracting and reconstructing the value.
+
+>  	platform_set_drvdata(pdev, pcie);
+>  
+> -	return dw_pcie_ep_init(&pci->ep);
+> +	ret = dw_pcie_ep_init(&pci->ep);
+> +	if (ret)
+> +		return  ret;
+> +
+> +	return  ls_pcie_ep_interrupt_init(pcie, pdev);
+>  }
+>  
+>  static struct platform_driver ls_pcie_ep_driver = {
+> -- 
+> 2.34.1
+> 
