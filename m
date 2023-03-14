@@ -2,104 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 61D6F6BA35E
-	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:09:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D89596BA36C
+	for <lists+linux-kernel@lfdr.de>; Wed, 15 Mar 2023 00:10:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230380AbjCNXJ0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 19:09:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47036 "EHLO
+        id S231297AbjCNXKg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 19:10:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCNXJY (ORCPT
+        with ESMTP id S231144AbjCNXKY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 19:09:24 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 916EF11E8E;
-        Tue, 14 Mar 2023 16:09:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 14 Mar 2023 19:10:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD39A2A6C2;
+        Tue, 14 Mar 2023 16:10:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4Pbq3H3qsPz4x7s;
-        Wed, 15 Mar 2023 10:09:14 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1678835355;
-        bh=zp1vOq3Z4RzomtovnhpPk+i4gmtfN2epGEyTUY+WVy4=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MG/5NmOosdQ685cX0QuNcO7oVGU90dHSIUvdzAHP4Pe5t/nCvpOwVDSJYZpKs9T1X
-         RT4r0Qo5K34XZq3YLAxNSoASjRhSkrHBOPSvxIdgqGhle5tqrVAvHQB/ADTcH1lhbY
-         dJvsiBOMYNicXZTqwbWXtzsLBiUXKQ2TRHDqmHiij7hBxy4oZXU92IPeTpFuMFVAYF
-         ymZtN7pVi77zJjmbRqPq6BM6pniLVEYuQqcR/cLZKGUwQusIvvw8/S3JecH1apdV/2
-         NGDb/phi9BM/gg3F28CDakTkvEVaqOhcvZq0Nl+vKNlRvS4tPbe0fMiEnckzKsnovT
-         JYnOXQXSr83RQ==
-Date:   Wed, 15 Mar 2023 10:09:14 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     David Miller <davem@davemloft.net>
-Cc:     Networking <netdev@vger.kernel.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Kristian Overskeid <koverskeid@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: manual merge of the net-next tree with the net tree
-Message-ID: <20230315100914.53fc1760@canb.auug.org.au>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 70514B81C1E;
+        Tue, 14 Mar 2023 23:10:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 154D7C433A1;
+        Tue, 14 Mar 2023 23:10:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1678835421;
+        bh=Y1jhSl5t1yRVm3V2cFgzlR2isIydaRbBCbb6BWOJaAo=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=iOM6W9t6T47DsH4QzF3dwMVb8wxdToWbGDk+1cIhSwCHTUZFut+TnglodwUcg4Aaj
+         y+28DddIDd0YQpFTfo9GlfNHkVmlp33gyQrS4pev5V+7n2ZQxjhtXRLEfwqU8G8Hz/
+         0HSDERZNBUvLRWhblWEGH8Xqr3QNW0OQigd2BhnoEfNQjBaBHStxhz9OtAaYZmHnbp
+         +BoNIQNmp0zfls7xjfnzGUHIyEr3DNno2fCOJ5tss6CXUECG6+CpgLTnwCDQy9tEBX
+         9Ivx1txiDyzmcrjZvjzm5nqEa9PKAhgw8at5uACM3Eg48R2HQlJ/Bepj0OYuWJulwb
+         rvQrUB42CXZaw==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id F36B8E524FE;
+        Tue, 14 Mar 2023 23:10:20 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/XpQnpy+q6oC7lPpKvksrlVx";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,
-        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 3/8] Bluetooth: hci_ldisc: Fix tty_set_termios() return value
+ assumptions
+From:   patchwork-bot+bluetooth@kernel.org
+Message-Id: <167883542099.4543.9923542324087254222.git-patchwork-notify@kernel.org>
+Date:   Tue, 14 Mar 2023 23:10:20 +0000
+References: <20230309082035.14880-4-ilpo.jarvinen@linux.intel.com>
+In-Reply-To: <20230309082035.14880-4-ilpo.jarvinen@linux.intel.com>
+To:     =?utf-8?q?Ilpo_J=C3=A4rvinen_=3Cilpo=2Ejarvinen=40linux=2Eintel=2Ecom=3E?=@ci.codeaurora.org
+Cc:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, marcel@holtmann.org, johan.hedberg@gmail.com,
+        luiz.dentz@gmail.com, linux-bluetooth@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/XpQnpy+q6oC7lPpKvksrlVx
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hello:
 
-Hi all,
+This patch was applied to bluetooth/bluetooth-next.git (master)
+by Luiz Augusto von Dentz <luiz.von.dentz@intel.com>:
 
-Today's linux-next merge of the net-next tree got a conflict in:
+On Thu,  9 Mar 2023 10:20:30 +0200 you wrote:
+> tty_set_termios() never returns anything else than 0. Make the debug
+> prints to look directly into the new termios instead to check CRTSCTS
+> state.
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  drivers/bluetooth/hci_ldisc.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-  net/hsr/hsr_framereg.c
+Here is the summary with links:
+  - [3/8] Bluetooth: hci_ldisc: Fix tty_set_termios() return value assumptions
+    https://git.kernel.org/bluetooth/bluetooth-next/c/dd41882582a9
 
-between commit:
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
-  28e8cabe80f3 ("net: hsr: Don't log netdev_err message on unknown prp dst =
-node")
 
-from the net tree and commit:
-
-  4821c186b9c3 ("net: hsr: Don't log netdev_err message on unknown prp dst =
-node")
-
-from the net-next tree.
-
-I fixed it up (I just used the latter version) and can carry the fix as
-necessary. This is now fixed as far as linux-next is concerned, but any
-non trivial conflicts should be mentioned to your upstream maintainer
-when your tree is submitted for merging.  You may also want to consider
-cooperating with the maintainer of the conflicting tree to minimise any
-particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/XpQnpy+q6oC7lPpKvksrlVx
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmQQ/poACgkQAVBC80lX
-0GyG/Qf/V5F0eZwQKjj1YA4px9e+pxaINh1a1x8V+dRn5kNq/9r2Up5Tkc6F/9m8
-bqTzJAouBoTtZ5UNajXuU5/aOlLrOBN0hw1T/FaApRH6VpwgQqZXXuTe+d1kOZEh
-s2ehRCyo7jGNvwzlGJ4jCvl/vMlaIu9Z49HAYKOWZv5N+ukGFh0NFvkMnvA8SwGf
-gud/BhanG4EYXctlks1vveiHzyv0MfxUsG+uQNJ2jXxRzzO7/6fZ7DYO4Cw+LgAa
-x2URfhgRrc2ufCs2kRkY5stViNfdXlyKL+HLCz2SMmatrarAcdv1GfRGpK3dIfA4
-FJ6FxgRm5RwrLHP8uHiaK5wKTdmjPQ==
-=k10F
------END PGP SIGNATURE-----
-
---Sig_/XpQnpy+q6oC7lPpKvksrlVx--
