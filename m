@@ -2,257 +2,559 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AF0A36B9954
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1494B6B9952
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 16:32:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230343AbjCNPc2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 11:32:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38258 "EHLO
+        id S229682AbjCNPcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 11:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229977AbjCNPcZ (ORCPT
+        with ESMTP id S229473AbjCNPcW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 11:32:25 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on20609.outbound.protection.outlook.com [IPv6:2a01:111:f400:7e1b::609])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93BDEB06C6;
-        Tue, 14 Mar 2023 08:31:42 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=SdI1BeoJHLXCo4dBgq43xzroaivPEXUo3dr9L0uszMkyTbQ04LtBqhf1a9q+yxpSu08VWNOYNGVo2ALsPA/dGnhMaiHLCHWmCBuO2yEvlH1ROW8yDkUQMie5FbMOxts4XIAtHwQPPbfEqK7d0Ofsb8grlidhjrmUt2CHsSRFJmIZycGY246XEjhTnCIPSE7Dxo+hOco1+zrQGyMDk+rCa37RnViwDIVgIaGokdA05DH89TBlkod8W7oYB5Dm4Gi2oqpYmbQdRjQlKgxED7Yhluy5JX1ePM3x2aURq4W9yLHEv4OPXfddWS5d7pEJzIdDtghLW0bwfoaiEkREUuJrnQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qk2r6KYkNOwyNXdPOcdw1X2vVAJ+TEmGL08OgQu7efA=;
- b=nCKPPYGgxRPPAROuiPEyvlpjP6j3LmV3IzBfWicvllnruQS4/slRYoE4lHGHIJrxXLBz7VjRmz9sh8LyUYD5CZT+cG4Pea6nbTSRrYZ06u2H4yktmb5x8Noc/N5WHa2nYvdm88S03O205X/riJoh95S741g+4fDhDNt8Dl/eExXiG2QDETcDDC4tZ3BE/7y7Xd0D1Nl2Vp9dLo0HJjQDdpUGVDAZ+SdKoa8g9Xe5LJj1+jgYY7YEDcV4fqFSVwO7swkqrdfwk01A2pZYuofd2E/vQlp5PAQb+2ANVVRH711lwU7rTiPuF2znizp1AgUZepXuaqpyaxa3Xd1ggQbjHA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qk2r6KYkNOwyNXdPOcdw1X2vVAJ+TEmGL08OgQu7efA=;
- b=TiaVwmWI7q6j75aE2chxIkSorX/fZ0/5VvcVZwnpus71KZAmXbGOBR6Tzknt0RyJKdkdWSVeafORa542PFhXBeaT+S4h0siiOwBmSq/xzSvVLlgWIvaPRXA+TsC2s2Gzs0FTT0lZJ7Tlonv5x+UAQxYnBxJAzT3kdRupcmUVOA8=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
- by GVXPR04MB10021.eurprd04.prod.outlook.com (2603:10a6:150:112::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 15:31:12 +0000
-Received: from AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8]) by AM0PR04MB6452.eurprd04.prod.outlook.com
- ([fe80::29a3:120c:7d42:3ca8%7]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 15:31:12 +0000
-From:   Vladimir Oltean <vladimir.oltean@nxp.com>
-To:     netdev@vger.kernel.org
-Cc:     Andrew Lunn <andrew@lunn.ch>,
-        Heiner Kallweit <hkallweit1@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
-Subject: [PATCH net] net: phy: mscc: fix deadlock in phy_ethtool_{get,set}_wol()
-Date:   Tue, 14 Mar 2023 17:30:25 +0200
-Message-Id: <20230314153025.2372970-1-vladimir.oltean@nxp.com>
-X-Mailer: git-send-email 2.34.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BEXP281CA0017.DEUP281.PROD.OUTLOOK.COM (2603:10a6:b10::27)
- To AM0PR04MB6452.eurprd04.prod.outlook.com (2603:10a6:208:16d::21)
+        Tue, 14 Mar 2023 11:32:22 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F750B04A1;
+        Tue, 14 Mar 2023 08:31:37 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id r27so20512101lfe.10;
+        Tue, 14 Mar 2023 08:31:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112; t=1678807883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tugbO6M1bVLMnJoIr/ZEHMXjyijCTYHveLUSI3WWDXA=;
+        b=h22qd2sV7BFIcMSAMfmG8jgqgG5blaHLrqsWHj9GS2H5tdpkL2cXPyMESlxhlod0zH
+         C32X2agh8NHgQoMMhhSxIG4oJcqV86w/ysUvs1i8961vzzIxez/EJ8EduQAbJKerrZHI
+         dxRm5PghDse7YJMKtih0xW3ahOfTrLvKzncrF+4THNJWJL2/dCngRkDDwe6wumDHnRQ1
+         IlIfe1EKm1E66Q8HrY1psbVCanO/C4clL+5JsjJLxpgoOQt/MXY2TgLlnuWgHnpaBzVN
+         mP0OMLZjOIU1mxnTIxlcAi8brD7ruQpE6QuPhMaL2ebA3k0AUu+TsYzAp9naSjH3rpTi
+         aPSg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112; t=1678807883;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tugbO6M1bVLMnJoIr/ZEHMXjyijCTYHveLUSI3WWDXA=;
+        b=iV+sGDeX3Y3PdDpPhjmcJqocOoS2widoL/kHICHiq6Df7H7cGci78pLTxQ+7GQtWL+
+         d12Ytx1Bg4q7ZWh2iHmX5XNMvlTmRS7rSAvXnQF0nFs7w4gNLx6p6rN8VKlt9o1hZVJV
+         pjEGfMef/kiVmPknAtulmvpTrYCIeodsOyiywS05ihZoK6lMTUhNrBdekwOBZDnAwl2D
+         HAvRvUxETvdbx0lM1eTGSbDG6izMshGWzGCCX3EaRwPepW8feQ5039rVVNh6XGCzbefP
+         wcZknRWzop3d0tsa44d4dsWyqxEWnYGlcCgLWd4K78VmPExspuIHHJjrW09lBSHDSN+X
+         K9uQ==
+X-Gm-Message-State: AO0yUKXNj6FbtA69mdux+6KB6X3xdVSOddecShNPolguqiq6zMrgXi22
+        oxHIOOK1lCcfpLSoe7AJk6w=
+X-Google-Smtp-Source: AK7set9GdZxrsy9GkqN3cH9EjyALylTe/CRPsTjwCr3WEKHsygS0kQmIy1oykYsMPS4O8JjlUBT+Bw==
+X-Received: by 2002:ac2:530f:0:b0:4dc:807a:d137 with SMTP id c15-20020ac2530f000000b004dc807ad137mr4146819lfh.4.1678807882577;
+        Tue, 14 Mar 2023 08:31:22 -0700 (PDT)
+Received: from localhost (88-115-161-74.elisa-laajakaista.fi. [88.115.161.74])
+        by smtp.gmail.com with ESMTPSA id o15-20020ac2494f000000b004a2c447598fsm438257lfi.159.2023.03.14.08.31.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Mar 2023 08:31:22 -0700 (PDT)
+Date:   Tue, 14 Mar 2023 17:31:21 +0200
+From:   Zhi Wang <zhi.wang.linux@gmail.com>
+To:     Steven Price <steven.price@arm.com>
+Cc:     kvm@vger.kernel.org, kvmarm@lists.linux.dev,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        James Morse <james.morse@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Zenghui Yu <yuzenghui@huawei.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Joey Gouly <joey.gouly@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Christoffer Dall <christoffer.dall@arm.com>,
+        Fuad Tabba <tabba@google.com>, linux-coco@lists.linux.dev
+Subject: Re: [RFC PATCH 16/28] arm64: RME: Allow populating initial contents
+Message-ID: <20230314173121.00006cfb@gmail.com>
+In-Reply-To: <6c6ff608-2314-a49a-84ee-fac883c4e227@arm.com>
+References: <20230127112248.136810-1-suzuki.poulose@arm.com>
+        <20230127112932.38045-1-steven.price@arm.com>
+        <20230127112932.38045-17-steven.price@arm.com>
+        <20230306193439.000048f2@gmail.com>
+        <6c6ff608-2314-a49a-84ee-fac883c4e227@arm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM0PR04MB6452:EE_|GVXPR04MB10021:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1a4a80f9-6825-45fa-e78c-08db24a1222f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: BcDG50/UqkpjW+k4FmcNzE62PGzNjLZR/VT0NJ2s6eUsuCX6Z9ncT6oULpZa2ssc8ivBdt0EzgllJdiPiKPSFhV/CsvBlGB0a/wgUPbOwwTJQ8wcnTmPY3kGJshE4YeHf0Umx9nvnggHW+A48FHx7oyFhOPHanswcRDb6yHReHWccXaLpLDY5LEyaSd1OvRYGHaK495NJERUuM7KxWJB7wVT96dR2UzpWD/WnkLp8snyupgnbgbwvCIIzRMiImGhTNP0Bz8nasDZZwAEZzfwzmpqV+1jt6oa9t86JwDOLEWjk7K3jyxhOFl/LjDXQDXDBbRl5//aBt8ERt/qTwdDHHGtLa6VR1zcBlPlKaqmjxBOMQ3sxvSa4bjZaL2MjhWJ2wHtYXooy96h0Kk4C7FleQSvwAO8maLaOUMlhZmbg072KXDucKQ2dHWHNy3HzgQWYaeVJ5hzY1LYi0ooLbNZfviwNRq+v8AVoXRYhBlaWDSX0KxExKRQX98plrk9v7+cpMdwfGzbO29XzPM1OwioDAWFETa4hf3d56JwkrmqLswTttQ4MT7zwf7zg73jo3aLTVeaZr/EM8j87K/ytiduAMo3VwXfOYjn0ANT6B6KWa3/TtJX2tx3zTHYtdTosaG/mOeIJE9FNzKBNFC/Z3nu4skQSTkxEWKb+8+IRWRLWX9QG9l3xr/h0+ulZaJEpfUwbHI0GABCBW2Yn8CSFJvz+w==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM0PR04MB6452.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(4636009)(346002)(366004)(136003)(396003)(39860400002)(376002)(451199018)(54906003)(41300700001)(478600001)(66556008)(66476007)(4326008)(8676002)(8936002)(66946007)(6916009)(86362001)(38350700002)(38100700002)(36756003)(26005)(6512007)(186003)(6486002)(6666004)(52116002)(1076003)(5660300002)(44832011)(2906002)(316002)(6506007)(83380400001)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IV8rTmOPtIy/VF4TcLzJRHaXHBzeTuYx3W6cUbqTWM/zuIEAdokpgjyyiA7T?=
- =?us-ascii?Q?MpHTKjfsY02JzU+E6t/I06RGDsvJuP+4KR4Ubz66skqCvfCl7kJ9EtSpe3Dq?=
- =?us-ascii?Q?wT160WLlccCviBnee1YMK+qiIQz2PR/VVYwBqSwejTUIg0FAqajP2kjHYbRQ?=
- =?us-ascii?Q?rK2d/W2aA+qA9b+1oXMiQtuA/5pSUGXENgvzeiWNn0vhGlhrzh9r0oaWLU7i?=
- =?us-ascii?Q?0AEDtir0jO8pVK+BTs37aUxVSKMj4652+8UEw/kpNSZM4EPoSZTZnwIhCal7?=
- =?us-ascii?Q?sTj/mnYOgDfPK66EKprmMD3clMedsC4yU4+k7YXTfDTPC3VMZvryB4Z+EEqt?=
- =?us-ascii?Q?168PglmIZyVcv4Tnei4wVeQTjOBg76c/8lN2kDxiQjm3vErWM/45qPKjExOV?=
- =?us-ascii?Q?lURunHi/3ErrC3iUxZVQxhdKB13SVlU9FjBY/oswx3u/teMrZ7rXuydQCIBl?=
- =?us-ascii?Q?dYPdRUOlZLGGlAXIfoNRu/s42WEx5tEe/2lybMRub0Ty/BfDjZ/7gz9yDKpD?=
- =?us-ascii?Q?9LgBiFTE2TkDu7ExQUDlu3ZVdSEZ1kAajrqkiMHUzU4bDGlrYDXumui8oqt9?=
- =?us-ascii?Q?+aDgRaO93gus2c1sMOO70raChc64s0eHtO0C3CrHy6xV2Kzf1u867sQiKD9A?=
- =?us-ascii?Q?TgRbaLf49IWOFxl7nB5wqt2hzRBq1oh+uqMPSu3l3NLIAjlAQPRldX1/GsYP?=
- =?us-ascii?Q?P4jM2i/spZ0qD32LJMu+N3JYHFaBkZSnfH14QV1v7pwFrkSnVZvnjTccHG64?=
- =?us-ascii?Q?4wu0vZeOGE9ds6Z858jiV12qvAcS1v0i3tDwGA2W+QO5nEzzU2ZC4FT26Kqk?=
- =?us-ascii?Q?+IJiYEdsttolawSjBbLye6TLmEnehLGSS+Eg434lc9FwvJrEagQiF/aEHqlz?=
- =?us-ascii?Q?K3pGRoBsFyscymcFCViJINxzqbdumezqqm+KhpIHHCOGtoNKfzLANWXOn7h4?=
- =?us-ascii?Q?or7pQo01I89byx9nQEaDr63jqLTnuHu71tT4l+D15LepJxqu6q5qOrkkm6eO?=
- =?us-ascii?Q?0HgdwXplvzW0LKJgHdq6pbYCGnnnWUoIzSpczkqc4AdSANluXNi/iVelMv5P?=
- =?us-ascii?Q?gm3YdWlCPJE26RD752B2M7Yqe6DYvxAr8sBAYm+WonfoL90YGoIPtFM2GJ52?=
- =?us-ascii?Q?QPS4n3aYI5g+IbWmb3H4bDYbzndSe27QxWvTwXnnBW/4oahz6cjduZt5EpDR?=
- =?us-ascii?Q?XMzg3HF3Hsb6hlG2QFmXPKBBRyzmdp0yCw6jaqVRn7fp3nXagqAGXWh31CAY?=
- =?us-ascii?Q?yQ+oHLTFArc3qrVHceXqHRF70hPhUnZ+CXYDZe1D6KAR0FOhYp1psZg8xNwj?=
- =?us-ascii?Q?X0voih9BSqa6HyfL45rNVemlNP0D9HFPhEoxtTVmbyCmXFwLcShzHPoim9HC?=
- =?us-ascii?Q?xR8f6XYMcMXWjKeoYAAURNvbm3I21uezS9wiT6PrJdgr956sCEBLUwJbAkB5?=
- =?us-ascii?Q?zvhEfp0fjwp7gS3y1Hv0QfT57qwvLEH487su7vhIip4DmWI8wY8iFJMB/U1p?=
- =?us-ascii?Q?aO/WATNVIj6uODKk8p5gy0fLQSxsSLxKEL/03osf5ybNwm1DWUlcwD4NPfFZ?=
- =?us-ascii?Q?BjGvIfabZrerWytwt3dE0mZnVux3j8TQDRqu8WBa9LsnE3nshSroMZZ7Q+xG?=
- =?us-ascii?Q?NA=3D=3D?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1a4a80f9-6825-45fa-e78c-08db24a1222f
-X-MS-Exchange-CrossTenant-AuthSource: AM0PR04MB6452.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 15:31:12.3548
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 9bV4kVXBgt1he6mYjzDpjJgto+IRfMOCZ+hH0h/OhfNWWu2Zsm/eLvFbBgrcEa+zrWD2tpYN9PipC/EWREcPaA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: GVXPR04MB10021
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,SPF_HELO_PASS,
-        T_SPF_PERMERROR,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since the blamed commit, phy_ethtool_get_wol() and phy_ethtool_set_wol()
-acquire phydev->lock, but the mscc phy driver implementations,
-vsc85xx_wol_get() and vsc85xx_wol_set(), acquire the same lock as well,
-resulting in a deadlock.
+On Fri, 10 Mar 2023 15:47:16 +0000
+Steven Price <steven.price@arm.com> wrote:
 
-$ ip link set swp3 down
-============================================
-WARNING: possible recursive locking detected
-mscc_felix 0000:00:00.5 swp3: Link is Down
---------------------------------------------
-ip/375 is trying to acquire lock:
-ffff3d7e82e987a8 (&dev->lock){+.+.}-{4:4}, at: vsc85xx_wol_get+0x2c/0xf4
+> On 06/03/2023 17:34, Zhi Wang wrote:
+> > On Fri, 27 Jan 2023 11:29:20 +0000
+> > Steven Price <steven.price@arm.com> wrote:
+> >   
+> >> The VMM needs to populate the realm with some data before starting (e.g.
+> >> a kernel and initrd). This is measured by the RMM and used as part of
+> >> the attestation later on.
+> >>
+> >> Signed-off-by: Steven Price <steven.price@arm.com>
+> >> ---
+> >>  arch/arm64/kvm/rme.c | 366 +++++++++++++++++++++++++++++++++++++++++++
+> >>  1 file changed, 366 insertions(+)
+> >>
+> >> diff --git a/arch/arm64/kvm/rme.c b/arch/arm64/kvm/rme.c
+> >> index 16e0bfea98b1..3405b43e1421 100644
+> >> --- a/arch/arm64/kvm/rme.c
+> >> +++ b/arch/arm64/kvm/rme.c
+> >> @@ -4,6 +4,7 @@
+> >>   */
+> >>  
+> >>  #include <linux/kvm_host.h>
+> >> +#include <linux/hugetlb.h>
+> >>  
+> >>  #include <asm/kvm_emulate.h>
+> >>  #include <asm/kvm_mmu.h>
+> >> @@ -426,6 +427,359 @@ void kvm_realm_unmap_range(struct kvm *kvm, unsigned long ipa, u64 size)
+> >>  	}
+> >>  }
+> >>  
+> >> +static int realm_create_protected_data_page(struct realm *realm,
+> >> +					    unsigned long ipa,
+> >> +					    struct page *dst_page,
+> >> +					    struct page *tmp_page)
+> >> +{
+> >> +	phys_addr_t dst_phys, tmp_phys;
+> >> +	int ret;
+> >> +
+> >> +	copy_page(page_address(tmp_page), page_address(dst_page));
+> >> +
+> >> +	dst_phys = page_to_phys(dst_page);
+> >> +	tmp_phys = page_to_phys(tmp_page);
+> >> +
+> >> +	if (rmi_granule_delegate(dst_phys))
+> >> +		return -ENXIO;
+> >> +
+> >> +	ret = rmi_data_create(dst_phys, virt_to_phys(realm->rd), ipa, tmp_phys,
+> >> +			      RMI_MEASURE_CONTENT);
+> >> +
+> >> +	if (RMI_RETURN_STATUS(ret) == RMI_ERROR_RTT) {
+> >> +		/* Create missing RTTs and retry */
+> >> +		int level = RMI_RETURN_INDEX(ret);
+> >> +
+> >> +		ret = realm_create_rtt_levels(realm, ipa, level,
+> >> +					      RME_RTT_MAX_LEVEL, NULL);
+> >> +		if (ret)
+> >> +			goto err;
+> >> +
+> >> +		ret = rmi_data_create(dst_phys, virt_to_phys(realm->rd), ipa,
+> >> +				      tmp_phys, RMI_MEASURE_CONTENT);
+> >> +	}
+> >> +
+> >> +	if (ret)
+> >> +		goto err;
+> >> +
+> >> +	return 0;
+> >> +
+> >> +err:
+> >> +	if (WARN_ON(rmi_granule_undelegate(dst_phys))) {
+> >> +		/* Page can't be returned to NS world so is lost */
+> >> +		get_page(dst_page);
+> >> +	}
+> >> +	return -ENXIO;
+> >> +}
+> >> +
+> >> +static int fold_rtt(phys_addr_t rd, unsigned long addr, int level,
+> >> +		    struct realm *realm)
+> >> +{
+> >> +	struct rtt_entry rtt;
+> >> +	phys_addr_t rtt_addr;
+> >> +
+> >> +	if (rmi_rtt_read_entry(rd, addr, level, &rtt))
+> >> +		return -ENXIO;
+> >> +
+> >> +	if (rtt.state != RMI_TABLE)
+> >> +		return -EINVAL;
+> >> +
+> >> +	rtt_addr = rmi_rtt_get_phys(&rtt);
+> >> +	if (rmi_rtt_fold(rtt_addr, rd, addr, level + 1))
+> >> +		return -ENXIO;
+> >> +
+> >> +	free_delegated_page(realm, rtt_addr);
+> >> +
+> >> +	return 0;
+> >> +}
+> >> +
+> >> +int realm_map_protected(struct realm *realm,
+> >> +			unsigned long hva,
+> >> +			unsigned long base_ipa,
+> >> +			struct page *dst_page,
+> >> +			unsigned long map_size,
+> >> +			struct kvm_mmu_memory_cache *memcache)
+> >> +{
+> >> +	phys_addr_t dst_phys = page_to_phys(dst_page);
+> >> +	phys_addr_t rd = virt_to_phys(realm->rd);
+> >> +	unsigned long phys = dst_phys;
+> >> +	unsigned long ipa = base_ipa;
+> >> +	unsigned long size;
+> >> +	int map_level;
+> >> +	int ret = 0;
+> >> +
+> >> +	if (WARN_ON(!IS_ALIGNED(ipa, map_size)))
+> >> +		return -EINVAL;
+> >> +
+> >> +	switch (map_size) {
+> >> +	case PAGE_SIZE:
+> >> +		map_level = 3;
+> >> +		break;
+> >> +	case RME_L2_BLOCK_SIZE:
+> >> +		map_level = 2;
+> >> +		break;
+> >> +	default:
+> >> +		return -EINVAL;
+> >> +	}
+> >> +
+> >> +	if (map_level < RME_RTT_MAX_LEVEL) {
+> >> +		/*
+> >> +		 * A temporary RTT is needed during the map, precreate it,
+> >> +		 * however if there is an error (e.g. missing parent tables)
+> >> +		 * this will be handled below.
+> >> +		 */
+> >> +		realm_create_rtt_levels(realm, ipa, map_level,
+> >> +					RME_RTT_MAX_LEVEL, memcache);
+> >> +	}
+> >> +
+> >> +	for (size = 0; size < map_size; size += PAGE_SIZE) {
+> >> +		if (rmi_granule_delegate(phys)) {
+> >> +			struct rtt_entry rtt;
+> >> +
+> >> +			/*
+> >> +			 * It's possible we raced with another VCPU on the same
+> >> +			 * fault. If the entry exists and matches then exit
+> >> +			 * early and assume the other VCPU will handle the
+> >> +			 * mapping.
+> >> +			 */
+> >> +			if (rmi_rtt_read_entry(rd, ipa, RME_RTT_MAX_LEVEL, &rtt))
+> >> +				goto err;
+> >> +
+> >> +			// FIXME: For a block mapping this could race at level
+> >> +			// 2 or 3...
+> >> +			if (WARN_ON((rtt.walk_level != RME_RTT_MAX_LEVEL ||
+> >> +				     rtt.state != RMI_ASSIGNED ||
+> >> +				     rtt.desc != phys))) {
+> >> +				goto err;
+> >> +			}
+> >> +
+> >> +			return 0;
+> >> +		}
+> >> +
+> >> +		ret = rmi_data_create_unknown(phys, rd, ipa);
+> >> +
+> >> +		if (RMI_RETURN_STATUS(ret) == RMI_ERROR_RTT) {
+> >> +			/* Create missing RTTs and retry */
+> >> +			int level = RMI_RETURN_INDEX(ret);
+> >> +
+> >> +			ret = realm_create_rtt_levels(realm, ipa, level,
+> >> +						      RME_RTT_MAX_LEVEL,
+> >> +						      memcache);
+> >> +			WARN_ON(ret);
+> >> +			if (ret)
+> >> +				goto err_undelegate;
+> >> +
+> >> +			ret = rmi_data_create_unknown(phys, rd, ipa);
+> >> +		}
+> >> +		WARN_ON(ret);
+> >> +
+> >> +		if (ret)
+> >> +			goto err_undelegate;
+> >> +
+> >> +		phys += PAGE_SIZE;
+> >> +		ipa += PAGE_SIZE;
+> >> +	}
+> >> +
+> >> +	if (map_size == RME_L2_BLOCK_SIZE)
+> >> +		ret = fold_rtt(rd, base_ipa, map_level, realm);
+> >> +	if (WARN_ON(ret))
+> >> +		goto err;
+> >> +
+> >> +	return 0;
+> >> +
+> >> +err_undelegate:
+> >> +	if (WARN_ON(rmi_granule_undelegate(phys))) {
+> >> +		/* Page can't be returned to NS world so is lost */
+> >> +		get_page(phys_to_page(phys));
+> >> +	}
+> >> +err:
+> >> +	while (size > 0) {
+> >> +		phys -= PAGE_SIZE;
+> >> +		size -= PAGE_SIZE;
+> >> +		ipa -= PAGE_SIZE;
+> >> +
+> >> +		rmi_data_destroy(rd, ipa);
+> >> +
+> >> +		if (WARN_ON(rmi_granule_undelegate(phys))) {
+> >> +			/* Page can't be returned to NS world so is lost */
+> >> +			get_page(phys_to_page(phys));
+> >> +		}
+> >> +	}
+> >> +	return -ENXIO;
+> >> +}
+> >> +  
+> > 
+> > There seems no caller to the function above. Better move it to the related
+> > patch.  
+> 
+> Indeed this should really be in the next patch - will move as it's very
+> confusing having it in this patch (sorry about that).
+> 
+> >> +static int populate_par_region(struct kvm *kvm,
+> >> +			       phys_addr_t ipa_base,
+> >> +			       phys_addr_t ipa_end)
+> >> +{
+> >> +	struct realm *realm = &kvm->arch.realm;
+> >> +	struct kvm_memory_slot *memslot;
+> >> +	gfn_t base_gfn, end_gfn;
+> >> +	int idx;
+> >> +	phys_addr_t ipa;
+> >> +	int ret = 0;
+> >> +	struct page *tmp_page;
+> >> +	phys_addr_t rd = virt_to_phys(realm->rd);
+> >> +
+> >> +	base_gfn = gpa_to_gfn(ipa_base);
+> >> +	end_gfn = gpa_to_gfn(ipa_end);
+> >> +
+> >> +	idx = srcu_read_lock(&kvm->srcu);
+> >> +	memslot = gfn_to_memslot(kvm, base_gfn);
+> >> +	if (!memslot) {
+> >> +		ret = -EFAULT;
+> >> +		goto out;
+> >> +	}
+> >> +
+> >> +	/* We require the region to be contained within a single memslot */
+> >> +	if (memslot->base_gfn + memslot->npages < end_gfn) {
+> >> +		ret = -EINVAL;
+> >> +		goto out;
+> >> +	}
+> >> +
+> >> +	tmp_page = alloc_page(GFP_KERNEL);
+> >> +	if (!tmp_page) {
+> >> +		ret = -ENOMEM;
+> >> +		goto out;
+> >> +	}
+> >> +
+> >> +	mmap_read_lock(current->mm);
+> >> +
+> >> +	ipa = ipa_base;
+> >> +
+> >> +	while (ipa < ipa_end) {
+> >> +		struct vm_area_struct *vma;
+> >> +		unsigned long map_size;
+> >> +		unsigned int vma_shift;
+> >> +		unsigned long offset;
+> >> +		unsigned long hva;
+> >> +		struct page *page;
+> >> +		kvm_pfn_t pfn;
+> >> +		int level;
+> >> +
+> >> +		hva = gfn_to_hva_memslot(memslot, gpa_to_gfn(ipa));
+> >> +		vma = vma_lookup(current->mm, hva);
+> >> +		if (!vma) {
+> >> +			ret = -EFAULT;
+> >> +			break;
+> >> +		}
+> >> +
+> >> +		if (is_vm_hugetlb_page(vma))
+> >> +			vma_shift = huge_page_shift(hstate_vma(vma));
+> >> +		else
+> >> +			vma_shift = PAGE_SHIFT;
+> >> +
+> >> +		map_size = 1 << vma_shift;
+> >> +
+> >> +		/*
+> >> +		 * FIXME: This causes over mapping, but there's no good
+> >> +		 * solution here with the ABI as it stands
+> >> +		 */
+> >> +		ipa = ALIGN_DOWN(ipa, map_size);
+> >> +
+> >> +		switch (map_size) {
+> >> +		case RME_L2_BLOCK_SIZE:
+> >> +			level = 2;
+> >> +			break;
+> >> +		case PAGE_SIZE:
+> >> +			level = 3;
+> >> +			break;
+> >> +		default:
+> >> +			WARN_ONCE(1, "Unsupport vma_shift %d", vma_shift);
+> >> +			ret = -EFAULT;
+> >> +			break;
+> >> +		}
+> >> +
+> >> +		pfn = gfn_to_pfn_memslot(memslot, gpa_to_gfn(ipa));
+> >> +
+> >> +		if (is_error_pfn(pfn)) {
+> >> +			ret = -EFAULT;
+> >> +			break;
+> >> +		}
+> >> +
+> >> +		ret = rmi_rtt_init_ripas(rd, ipa, level);
+> >> +		if (RMI_RETURN_STATUS(ret) == RMI_ERROR_RTT) {
+> >> +			ret = realm_create_rtt_levels(realm, ipa,
+> >> +						      RMI_RETURN_INDEX(ret),
+> >> +						      level, NULL);
+> >> +			if (ret)
+> >> +				break;
+> >> +			ret = rmi_rtt_init_ripas(rd, ipa, level);
+> >> +			if (ret) {
+> >> +				ret = -ENXIO;
+> >> +				break;
+> >> +			}
+> >> +		}
+> >> +
+> >> +		if (level < RME_RTT_MAX_LEVEL) {
+> >> +			/*
+> >> +			 * A temporary RTT is needed during the map, precreate
+> >> +			 * it, however if there is an error (e.g. missing
+> >> +			 * parent tables) this will be handled in the
+> >> +			 * realm_create_protected_data_page() call.
+> >> +			 */
+> >> +			realm_create_rtt_levels(realm, ipa, level,
+> >> +						RME_RTT_MAX_LEVEL, NULL);
+> >> +		}
+> >> +
+> >> +		page = pfn_to_page(pfn);
+> >> +
+> >> +		for (offset = 0; offset < map_size && !ret;
+> >> +		     offset += PAGE_SIZE, page++) {
+> >> +			phys_addr_t page_ipa = ipa + offset;
+> >> +
+> >> +			ret = realm_create_protected_data_page(realm, page_ipa,
+> >> +							       page, tmp_page);
+> >> +		}
+> >> +		if (ret)
+> >> +			goto err_release_pfn;
+> >> +
+> >> +		if (level == 2) {
+> >> +			ret = fold_rtt(rd, ipa, level, realm);
+> >> +			if (ret)
+> >> +				goto err_release_pfn;
+> >> +		}
+> >> +
+> >> +		ipa += map_size;  
+> >   
+> >> +		kvm_set_pfn_accessed(pfn);
+> >> +		kvm_set_pfn_dirty(pfn);  
+> > 
+> > kvm_release_pfn_dirty() has already called kvm_set_pfn_{accessed, dirty}().  
+> 
+> Will remove those calls.
+> 
+> >> +		kvm_release_pfn_dirty(pfn);
+> >> +err_release_pfn:
+> >> +		if (ret) {
+> >> +			kvm_release_pfn_clean(pfn);
+> >> +			break;
+> >> +		}
+> >> +	}
+> >> +
+> >> +	mmap_read_unlock(current->mm);
+> >> +	__free_page(tmp_page);
+> >> +
+> >> +out:
+> >> +	srcu_read_unlock(&kvm->srcu, idx);
+> >> +	return ret;
+> >> +}
+> >> +
+> >> +static int kvm_populate_realm(struct kvm *kvm,
+> >> +			      struct kvm_cap_arm_rme_populate_realm_args *args)
+> >> +{
+> >> +	phys_addr_t ipa_base, ipa_end;
+> >> +  
+> > 
+> > Check kvm_is_realm(kvm) here or in the kvm_realm_enable_cap().  
+> 
+> I'm going to update kvm_vm_ioctl_enable_cap() to check kvm_is_realm() so
+> we won't get here.
+> 
+> >> +	if (kvm_realm_state(kvm) != REALM_STATE_NEW)
+> >> +		return -EBUSY;  
+> > 
+> > Maybe -EINVAL? The realm hasn't been created (RMI_REALM_CREATE is not called
+> > yet). The userspace shouldn't reach this path.  
+> 
+> Well user space can attempt to populate in the ACTIVE state - which is
+> where the idea of 'busy' comes from. Admittedly it's a little confusing
+> when RMI_REALM_CREATE hasn't been called.
+> 
+> I'm not particularly bothered about the return code, but it's useful to
+> have a different code to -EINVAL as it's not an invalid argument, but
+> calling at the wrong time. I can't immediately see a better error code
+> though.
+> 
+The reason why I feel -EBUSY is little bit off is EBUSY usually indicates
+something is already initialized and currently running, then another
+calling path wanna to operate it. 
 
-but task is already holding lock:
-ffff3d7e82e987a8 (&dev->lock){+.+.}-{4:4}, at: phy_ethtool_get_wol+0x3c/0x6c
+I took a look on the ioctls in arch/arm64/kvm/arm.c. It seems people have
+different opinions for calling execution path at a wrong time:
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
+For example:
 
-       CPU0
-       ----
-  lock(&dev->lock);
-  lock(&dev->lock);
+long kvm_arch_vcpu_ioctl()
+...
+        case KVM_GET_REG_LIST: {
+                struct kvm_reg_list __user *user_list = argp;
+                struct kvm_reg_list reg_list;
+                unsigned n;
 
- *** DEADLOCK ***
+                r = -ENOEXEC;
+                if (unlikely(!kvm_vcpu_initialized(vcpu)))
+                        break;
 
- May be due to missing lock nesting notation
+                r = -EPERM;
+                if (!kvm_arm_vcpu_is_finalized(vcpu))
+                        break;
 
-2 locks held by ip/375:
- #0: ffffd43b2a955788 (rtnl_mutex){+.+.}-{4:4}, at: rtnetlink_rcv_msg+0x144/0x58c
- #1: ffff3d7e82e987a8 (&dev->lock){+.+.}-{4:4}, at: phy_ethtool_get_wol+0x3c/0x6c
+If we have to choose one, I prefer -ENOEXEC as -EPERM is stranger. But
+personally my vote goes to -EINVAL.
 
-Call trace:
- __mutex_lock+0x98/0x454
- mutex_lock_nested+0x2c/0x38
- vsc85xx_wol_get+0x2c/0xf4
- phy_ethtool_get_wol+0x50/0x6c
- phy_suspend+0x84/0xcc
- phy_state_machine+0x1b8/0x27c
- phy_stop+0x70/0x154
- phylink_stop+0x34/0xc0
- dsa_port_disable_rt+0x2c/0xa4
- dsa_slave_close+0x38/0xec
- __dev_close_many+0xc8/0x16c
- __dev_change_flags+0xdc/0x218
- dev_change_flags+0x24/0x6c
- do_setlink+0x234/0xea4
- __rtnl_newlink+0x46c/0x878
- rtnl_newlink+0x50/0x7c
- rtnetlink_rcv_msg+0x16c/0x58c
-
-Removing the mutex_lock(&phydev->lock) calls from the driver restores
-the functionality.
-
-Fixes: 2f987d486610 ("net: phy: Add locks to ethtool functions")
-Signed-off-by: Vladimir Oltean <vladimir.oltean@nxp.com>
----
- drivers/net/phy/mscc/mscc_main.c | 24 ++++++++----------------
- 1 file changed, 8 insertions(+), 16 deletions(-)
-
-diff --git a/drivers/net/phy/mscc/mscc_main.c b/drivers/net/phy/mscc/mscc_main.c
-index 8a13b1ad9a33..62bf99e45af1 100644
---- a/drivers/net/phy/mscc/mscc_main.c
-+++ b/drivers/net/phy/mscc/mscc_main.c
-@@ -280,12 +280,9 @@ static int vsc85xx_wol_set(struct phy_device *phydev,
- 	u16 pwd[3] = {0, 0, 0};
- 	struct ethtool_wolinfo *wol_conf = wol;
- 
--	mutex_lock(&phydev->lock);
- 	rc = phy_select_page(phydev, MSCC_PHY_PAGE_EXTENDED_2);
--	if (rc < 0) {
--		rc = phy_restore_page(phydev, rc, rc);
--		goto out_unlock;
--	}
-+	if (rc < 0)
-+		return phy_restore_page(phydev, rc, rc);
- 
- 	if (wol->wolopts & WAKE_MAGIC) {
- 		/* Store the device address for the magic packet */
-@@ -323,7 +320,7 @@ static int vsc85xx_wol_set(struct phy_device *phydev,
- 
- 	rc = phy_restore_page(phydev, rc, rc > 0 ? 0 : rc);
- 	if (rc < 0)
--		goto out_unlock;
-+		return rc;
- 
- 	if (wol->wolopts & WAKE_MAGIC) {
- 		/* Enable the WOL interrupt */
-@@ -331,22 +328,19 @@ static int vsc85xx_wol_set(struct phy_device *phydev,
- 		reg_val |= MII_VSC85XX_INT_MASK_WOL;
- 		rc = phy_write(phydev, MII_VSC85XX_INT_MASK, reg_val);
- 		if (rc)
--			goto out_unlock;
-+			return rc;
- 	} else {
- 		/* Disable the WOL interrupt */
- 		reg_val = phy_read(phydev, MII_VSC85XX_INT_MASK);
- 		reg_val &= (~MII_VSC85XX_INT_MASK_WOL);
- 		rc = phy_write(phydev, MII_VSC85XX_INT_MASK, reg_val);
- 		if (rc)
--			goto out_unlock;
-+			return rc;
- 	}
- 	/* Clear WOL iterrupt status */
- 	reg_val = phy_read(phydev, MII_VSC85XX_INT_STATUS);
- 
--out_unlock:
--	mutex_unlock(&phydev->lock);
--
--	return rc;
-+	return 0;
- }
- 
- static void vsc85xx_wol_get(struct phy_device *phydev,
-@@ -358,10 +352,9 @@ static void vsc85xx_wol_get(struct phy_device *phydev,
- 	u16 pwd[3] = {0, 0, 0};
- 	struct ethtool_wolinfo *wol_conf = wol;
- 
--	mutex_lock(&phydev->lock);
- 	rc = phy_select_page(phydev, MSCC_PHY_PAGE_EXTENDED_2);
- 	if (rc < 0)
--		goto out_unlock;
-+		goto out_restore_page;
- 
- 	reg_val = __phy_read(phydev, MSCC_PHY_WOL_MAC_CONTROL);
- 	if (reg_val & SECURE_ON_ENABLE)
-@@ -377,9 +370,8 @@ static void vsc85xx_wol_get(struct phy_device *phydev,
- 		}
- 	}
- 
--out_unlock:
-+out_restore_page:
- 	phy_restore_page(phydev, rc, rc > 0 ? 0 : rc);
--	mutex_unlock(&phydev->lock);
- }
- 
- #if IS_ENABLED(CONFIG_OF_MDIO)
--- 
-2.34.1
+> Steve
+> 
+> >> +
+> >> +	if (!IS_ALIGNED(args->populate_ipa_base, PAGE_SIZE) ||
+> >> +	    !IS_ALIGNED(args->populate_ipa_size, PAGE_SIZE))
+> >> +		return -EINVAL;
+> >> +
+> >> +	ipa_base = args->populate_ipa_base;
+> >> +	ipa_end = ipa_base + args->populate_ipa_size;
+> >> +
+> >> +	if (ipa_end < ipa_base)
+> >> +		return -EINVAL;
+> >> +
+> >> +	return populate_par_region(kvm, ipa_base, ipa_end);
+> >> +}
+> >> +
+> >>  static int set_ipa_state(struct kvm_vcpu *vcpu,
+> >>  			 unsigned long ipa,
+> >>  			 unsigned long end,
+> >> @@ -748,6 +1102,18 @@ int kvm_realm_enable_cap(struct kvm *kvm, struct kvm_enable_cap *cap)
+> >>  		r = kvm_init_ipa_range_realm(kvm, &args);
+> >>  		break;
+> >>  	}
+> >> +	case KVM_CAP_ARM_RME_POPULATE_REALM: {
+> >> +		struct kvm_cap_arm_rme_populate_realm_args args;
+> >> +		void __user *argp = u64_to_user_ptr(cap->args[1]);
+> >> +
+> >> +		if (copy_from_user(&args, argp, sizeof(args))) {
+> >> +			r = -EFAULT;
+> >> +			break;
+> >> +		}
+> >> +
+> >> +		r = kvm_populate_realm(kvm, &args);
+> >> +		break;
+> >> +	}
+> >>  	default:
+> >>  		r = -EINVAL;
+> >>  		break;  
+> >   
+> 
 
