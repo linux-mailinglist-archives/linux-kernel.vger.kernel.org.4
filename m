@@ -2,198 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 22CC06B9E4D
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:27:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3B0FB6B9E5C
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 19:29:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230205AbjCNS1R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 14:27:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59606 "EHLO
+        id S230388AbjCNS3Z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 14:29:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35392 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbjCNS1L (ORCPT
+        with ESMTP id S230123AbjCNS3O (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 14:27:11 -0400
-Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52970A54EE;
-        Tue, 14 Mar 2023 11:27:10 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1678818430; x=1710354430;
-  h=date:from:to:cc:subject:message-id:references:
-   in-reply-to:mime-version;
-  bh=Imeq+cQGUhPzG4Vp6GsYp+fgb1GldCsZlAUBAi3HA+g=;
-  b=HGSxbIopoPw62amfSvEdgGsU1Vxef52LRbdTnrAeW4JFrrNgv8zkePbF
-   zfmRp/zuvane/2jcgK4Hp6FE097fOxR7UeB7uY1tPvDQFXtDFOIMvdmJS
-   FSd0tjIDSbKsxBSuNftoz6740Zqif5bqGggCDtqMWRju4vtCS6C1HjLYH
-   FEyjsy5SxJbjy8QnP6EnUIC+uuuvrPCRezdPbnKD43Fr4fSs8e7nZ6NWB
-   Hw4hP9Y4ZAduvXB6oZLRJAaPzTjdx/cNc6Y9/102vNZ4bOUFVUZt6Kj6Z
-   lckkyxnB/6kIzTjr7nmwXCF1/OsSWpyI4PL24XqUgZTNz4E8nIPSINLti
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="317160417"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="317160417"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Mar 2023 11:27:09 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10649"; a="802968255"
-X-IronPort-AV: E=Sophos;i="5.98,260,1673942400"; 
-   d="scan'208";a="802968255"
-Received: from orsmsx603.amr.corp.intel.com ([10.22.229.16])
-  by orsmga004.jf.intel.com with ESMTP; 14 Mar 2023 11:27:09 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX603.amr.corp.intel.com (10.22.229.16) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21; Tue, 14 Mar 2023 11:27:09 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.21 via Frontend Transport; Tue, 14 Mar 2023 11:27:09 -0700
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (104.47.55.177)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.21; Tue, 14 Mar 2023 11:27:08 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=BOu9pydGWCvDeWHhjSszIxcbXDcKSlAhYQvv+xfYEeEAm9OfcrA+v9tclJH22tEFkq9lYaDsxkQgPSn20CfKJVldZG2Cfa52lKtJvj7JW/ay+Z6fJK5PnJIKjgi2/nV5Y0dHRiGtm0+eUMBP7Nz8T3pLbp/xFW7LktixEbaq2Ut6UqA2+Q04A8U1T/lSLUNh0RWl4OISoHd3fr2p6bnQS4/+ZCh/zLTxdQUgRlDXVjt4vqMxHmTSEN3eDcU0+pE4NLc+0jRxqcJgDacSrG95Ou0CcWmjodaJjohgAUe28wZyOIMTTUypFnve5BRKp794Yvqu80NitmmsTEaQnlc2Fg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qvL4wbbJ7gECL/8nZkKTe6nKAjl2gwEE9yyeVOlCr0c=;
- b=Nc99yozQ5+JjSLsu50ECnMIfpEaVFTyYaNz7AEHzX903JdnxQB+RayOnrXjmb5IGOe3zMSqomTcqqud9aB7bBINQ6OIYNomGod2nK7imlA7pVw3IcMVzDmoQUhsMHxylJlVpkSnGftC2fsPYkk9mFJ+7xrc4Ba4uqx6Na4ZSOojix02GFalDPPaH0Pm2bffbYmuoR3vAdTkJqJp8qLJ4R5I7gdtgXZphYNsUZQq+VEwj1VgvX30+9kc9lDJnTbf7VciJIngZ49syS6s2PYzZCndEL0rps/okGmOOpWVcTNsFREoKKoqS79KkIW11M2S+/xAAZJVBqIXYPQE6mB0Duw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB2937.namprd11.prod.outlook.com (2603:10b6:5:62::13) by
- SA2PR11MB5067.namprd11.prod.outlook.com (2603:10b6:806:111::14) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.6178.24; Tue, 14 Mar
- 2023 18:27:06 +0000
-Received: from DM6PR11MB2937.namprd11.prod.outlook.com
- ([fe80::cece:5e80:b74f:9448]) by DM6PR11MB2937.namprd11.prod.outlook.com
- ([fe80::cece:5e80:b74f:9448%7]) with mapi id 15.20.6178.026; Tue, 14 Mar 2023
- 18:27:06 +0000
-Date:   Tue, 14 Mar 2023 19:26:59 +0100
-From:   Michal Kubiak <michal.kubiak@intel.com>
-To:     Markus Schneider-Pargmann <msp@baylibre.com>
-CC:     Marc Kleine-Budde <mkl@pengutronix.de>,
-        Chandrasekar Ramakrishnan <rcsekar@samsung.com>,
-        Wolfgang Grandegger <wg@grandegger.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vincent MAILHOL <mailhol.vincent@wanadoo.fr>,
-        Simon Horman <simon.horman@corigine.com>,
-        <linux-can@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/5] can: tcan4x5x: Introduce tcan4552/4553
-Message-ID: <ZBC8cw/yLiv9L9OM@localhost.localdomain>
-References: <20230314151201.2317134-1-msp@baylibre.com>
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20230314151201.2317134-1-msp@baylibre.com>
-X-ClientProxiedBy: FR3P281CA0041.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:4a::17) To DM6PR11MB2937.namprd11.prod.outlook.com
- (2603:10b6:5:62::13)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB2937:EE_|SA2PR11MB5067:EE_
-X-MS-Office365-Filtering-Correlation-Id: ab2cc1f8-bc8c-45e6-1833-08db24b9b723
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: /gTgmzUETSvCrUeTXIyHYxHAzQOfVBBpelPH8FHKplCtNHI5jtGKCIck5ca00LS0+XQi+AzoNN3T0LRNtkB6/J0NAhsn0c9iLvPZZrClLJYRK9K8xhQ2LW+V4c9oas2CxRi7aESsEFNL64WfJGze6yT18Utwrf8V/2l5wg2A293XI5UlWBdO3Gsz/K3nMNNeiLsAgJbaJ+sBPZfEGCtl6B0tAbI91dMGEuYD26ULD0zpH7wiO3pYc5hbB7v4ME+4dUp/7rjayfqR3WwrsARsnP+CNaCN07KnPIJQiZP+7lgmlA6LZxzreiuDMuTS1/gHcgy4R8jJcy0VKKM/52eKIyV6TqpbgNzhaByTerro/itlumnp1vQyFNNq8iNh+K1aI8kjw63WyEoI8UGV3V97Oo9g2amGITe9WFFIEGCtsNdBkzqa/nog7K/1FPID7nz4Cf+u1/VA2u/JFo8ZaxtVroWyGdbdlQXsSutQATOLwdb2mbfIuqXqTK5Z2CT1IR2wSftuXmctmXpkvZISoFEw0LYQJWMtFYNsf/u2WTYMxg1trl4Dhh8XxOW4qNDVXUPJLbELkr6gonJcZiELGDpYKc0eXAz7uqAQMqj1Sc575fPBPhHiB7rvJtX0w5/3mH59
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB2937.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230025)(136003)(39860400002)(376002)(366004)(396003)(346002)(451199018)(82960400001)(38100700002)(2906002)(86362001)(478600001)(6666004)(54906003)(6512007)(6506007)(316002)(4326008)(41300700001)(66556008)(8676002)(26005)(66946007)(6916009)(66476007)(7416002)(9686003)(186003)(6486002)(966005)(8936002)(5660300002)(83380400001)(44832011);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?+afvQfoKXddudUbku7UdX2l1oD5yIiiZi4uRK5LPo3PAT1nqJZWBxLrWPvDy?=
- =?us-ascii?Q?btzbjPrlAQN2C19F/LbxgXRFhRQ/qbysy1veHJhspX2WkjCM55jLrxDSZGvQ?=
- =?us-ascii?Q?kcdjhTFKK9In+OzRjVilYMAGrkf8KJM2y8H8ek0vjav4uGk+xbJsEVdkqp3r?=
- =?us-ascii?Q?U2cD6gMfVpHpHDEl6idc9l9o1Djx3RWwa1tCTpSJZ2G30/6fVwFlPlq/GkpU?=
- =?us-ascii?Q?mUuFjGYfWBxogdulpmueywkSL6ub0UKazsUp4n1fiTJJMRYowTA0m/V0BVIQ?=
- =?us-ascii?Q?9nBquEFSEdd7/Hyloo93K2+UVFaxv+FgyMdGV4vUK90rmmeyed5EKBLvMaTS?=
- =?us-ascii?Q?YIzXRUPKuqXkEZMAJKJ/4aHE3J5sf4tp7TqePJLUhZmgEhImLvma3z/WXAKn?=
- =?us-ascii?Q?g4eu+N9NoErVEKt9zwqGUFlLy3r/jfLeiTCLNppc94m4mk6w/BjhEpF5KcQd?=
- =?us-ascii?Q?62CT0DacJb6w7un5S1dd8MQOcwCXCs9fn8nGqnw625+2mrvZsVQPzcSN2RVx?=
- =?us-ascii?Q?4L7ievOK37nKAtQ3pOKQUo+7/V+5SuG7JWI9YuFxsa+AJJo0ws3QHA3S5Oem?=
- =?us-ascii?Q?Ed5VLJQbOmnl5Kum0slM8SpR6ysHyItBegbVIy3ac3zZ9RIcnBUPeJyCCRPe?=
- =?us-ascii?Q?0IqThHWsXzbMmZC6M0qyUB6q/LpWA7FWx4knBo2B6Y7GRaQxwmCeYSq82pru?=
- =?us-ascii?Q?9oyg8rFwSSPcUkyIHfHg8EINISjF6I8FyBDt4T6HAhsIJJOvgyvh1xCMSl5A?=
- =?us-ascii?Q?WNKgzIjPQMg7ajVjddQu3QvaBftFzoc22+vCrXBw1hMVD7VFLDroPG5D6ukZ?=
- =?us-ascii?Q?b/ceRigbHKb0L9uCFTQfDD3M3HyXvIISOds2x6frJ11u4sbG0wHrsGhd3eVc?=
- =?us-ascii?Q?Qh8DpZXUt59Eri3zlvjlw2VoVZE9ijWe9wleHEm1H5gV3evMs4m4JZbwap0f?=
- =?us-ascii?Q?2AEQmwekn4vqSN4UxKw1U0EH/NxorbInbH7MxfYdaT2D7T6jwyQDbodH8CuN?=
- =?us-ascii?Q?ewyfEZFPMUDi4EePq03dOEBaxqxUuCB3Z8OxegmQGqJdw2wa6wqUuF+KPYMQ?=
- =?us-ascii?Q?R1us2CtHrEUMtsBAKEUUNB/7xwJl36EQO0zxV8+rNS4JFFPeAMT4cm6Xlq57?=
- =?us-ascii?Q?AdK64WpXBCE7NnpEgGR74Zt9gIqZGyEYiAOfvMPBD7LBr6uNNOC7LgivdeaW?=
- =?us-ascii?Q?ML8oot7VruAoKuS2vYeXTYqLxbAHLgVVxqHzqI0BDlcUi5qk4Vr3MusbBGUU?=
- =?us-ascii?Q?o+wuWH7iNGQ/sVyCDF6cCEFTwVnQ/LT+0Y+Tuel9o7paA6rLES5QsqliESQo?=
- =?us-ascii?Q?s/RFtxFsNrxQziQaqMwHWSYTg3faku6OO8HfCKRA7xAa/BWH5tRIV4gMoCZ0?=
- =?us-ascii?Q?OXmp8wWq0L2VPNoVSEfed0Yz2g9HQnxLu/ePblOAMBoTvaJLcuC0gw8sv+DC?=
- =?us-ascii?Q?3BSz1WSb0Zmi4q5tC5COrtlQ1o/e/3Qp0l9K16sZRFnFCwZoaHzN67kVjflT?=
- =?us-ascii?Q?yHCNDNl8dBTr0I43lWzVhiY5LdNEMVrYv8djzK4G1jXF2cJMpneMZV+6P9i1?=
- =?us-ascii?Q?fCqyleAcl/mvmQ/UNEWUCgIcZCKXDY7ZzZUXQsspUo/ekCusO83jXhibUfud?=
- =?us-ascii?Q?8w=3D=3D?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ab2cc1f8-bc8c-45e6-1833-08db24b9b723
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB2937.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Mar 2023 18:27:06.4855
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: rgMAVQw3wM3reBgGsnDzIOyGe5uZJhRuAzrGYKRPy1hpIo9wVuFGVvbq9wjJc4KqLQH9U5p4NmKL/NR/5v1VIQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5067
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 14 Mar 2023 14:29:14 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3DDA96C06;
+        Tue, 14 Mar 2023 11:28:51 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 32EGx4M5002703;
+        Tue, 14 Mar 2023 18:28:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=MoBys2a5a2aIW+4UTVOsTIdo1J8fju5GYhkuW+NpRrs=;
+ b=AhRn3PYDkXKDiEEBaHHLN05n34zaWMpzc5kzMtp78yAtviLF7q7NglMV53OqyZJ/ABZ/
+ 0ZmvWe7oOMki3VKYfO4unaX7Eo8r/fqIH+l2Sf+A6ljMz5q0tgv0iEqUIQ7n3wQwUbJH
+ ivJ0qUFETPJhv9v9hjR/XVtuOr9o64/ciKODKHDwCxYQwGw00y8XOIRXiLKw9qjdNhUw
+ XjwWq7KhoCrazef4UDUsNkuyge4OHYljFROQmc3cTsgJ22YXlG+SBbCnJ3oyYUOjl/FX
+ DeeTXOytRxXkVVfHc1V1lKn60L48mcCi0zG7l9XyzQYg9UpJEORO907+pewMdOj4CI0i aw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pampv303j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 18:28:33 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 32EHlh6o037756;
+        Tue, 14 Mar 2023 18:28:33 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3pampv303a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 18:28:33 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.17.1.19/8.17.1.19) with ESMTP id 32EICdbJ004888;
+        Tue, 14 Mar 2023 18:28:32 GMT
+Received: from smtprelay01.wdc07v.mail.ibm.com ([9.208.129.119])
+        by ppma02dal.us.ibm.com (PPS) with ESMTPS id 3p8h97tg1r-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 14 Mar 2023 18:28:32 +0000
+Received: from smtpav05.wdc07v.mail.ibm.com (smtpav05.wdc07v.mail.ibm.com [10.39.53.232])
+        by smtprelay01.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 32EISVVI39518754
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 14 Mar 2023 18:28:31 GMT
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1AE8158066;
+        Tue, 14 Mar 2023 18:28:31 +0000 (GMT)
+Received: from smtpav05.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 9540358043;
+        Tue, 14 Mar 2023 18:28:29 +0000 (GMT)
+Received: from sig-9-65-194-57.ibm.com (unknown [9.65.194.57])
+        by smtpav05.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Tue, 14 Mar 2023 18:28:29 +0000 (GMT)
+Message-ID: <ab1e29c1620ac492b9194b4c7a465b20cd39076a.camel@linux.ibm.com>
+Subject: Re: [PATCH] IMA: allow/fix UML builds
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
+Cc:     Dmitry Kasatkin <dmitry.kasatkin@gmail.com>,
+        linux-integrity@vger.kernel.org,
+        Fabio Estevam <festevam@gmail.com>,
+        Rajiv Andrade <srajiv@linux.vnet.ibm.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        linux-um@lists.infradead.org
+Date:   Tue, 14 Mar 2023 14:28:29 -0400
+In-Reply-To: <20230224032703.7789-1-rdunlap@infradead.org>
+References: <20230224032703.7789-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: DLevhJuZLcRgOUMV72YS6jyn3vaayjw1
+X-Proofpoint-GUID: uMGPTO-j01lF7ok9TnXILXgamzP26jVA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.254,Aquarius:18.0.942,Hydra:6.0.573,FMLib:17.11.170.22
+ definitions=2023-03-14_10,2023-03-14_02,2023-02-09_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ malwarescore=0 impostorscore=0 suspectscore=0 mlxscore=0 clxscore=1011
+ priorityscore=1501 bulkscore=0 mlxlogscore=999 spamscore=0 adultscore=0
+ phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2212070000 definitions=main-2303140144
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 04:11:56PM +0100, Markus Schneider-Pargmann wrote:
-> Hi Marc and everyone,
+On Thu, 2023-02-23 at 19:27 -0800, Randy Dunlap wrote:
+> UML supports HAS_IOMEM since 0bbadafdc49d (um: allow disabling
+> NO_IOMEM).
 > 
-> This series introduces two new chips tcan-4552 and tcan-4553. The
-> generic driver works in general but needs a few small changes. These are
-> caused by the removal of wake and state pins.
+> Current IMA build on UML fails on allmodconfig (with TCG_TPM=m):
 > 
-> I included two patches from the optimization series and will remove them
-> from the optimization series. Hopefully it avoids conflicts and not
-> polute the other series with tcan4552/4553 stuff.
+> ld: security/integrity/ima/ima_queue.o: in function `ima_add_template_entry':
+> ima_queue.c:(.text+0x2d9): undefined reference to `tpm_pcr_extend'
+> ld: security/integrity/ima/ima_init.o: in function `ima_init':
+> ima_init.c:(.init.text+0x43f): undefined reference to `tpm_default_chip'
+> ld: security/integrity/ima/ima_crypto.o: in function `ima_calc_boot_aggregate_tfm':
+> ima_crypto.c:(.text+0x1044): undefined reference to `tpm_pcr_read'
+> ld: ima_crypto.c:(.text+0x10d8): undefined reference to `tpm_pcr_read'
 > 
-> Best,
-> Markus
+> Modify the IMA Kconfig entry so that it selects TCG_TPM if HAS_IOMEM
+> is set, regardless of the UML Kconfig setting.
+> This updates TCG_TPM from =m to =y and fixes the linker errors.
 > 
-> optimization series:
-> https://lore.kernel.org/lkml/20221221152537.751564-1-msp@baylibre.com
-> 
-> Markus Schneider-Pargmann (5):
->   dt-bindings: can: tcan4x5x: Add tcan4552 and tcan4553 variants
->   can: tcan4x5x: Remove reserved register 0x814 from writable table
->   can: tcan4x5x: Check size of mram configuration
->   can: tcan4x5x: Rename ID registers to match datasheet
->   can: tcan4x5x: Add support for tcan4552/4553
-> 
->  .../devicetree/bindings/net/can/tcan4x5x.txt  |  11 +-
->  drivers/net/can/m_can/m_can.c                 |  16 +++
->  drivers/net/can/m_can/m_can.h                 |   1 +
->  drivers/net/can/m_can/tcan4x5x-core.c         | 122 ++++++++++++++----
->  drivers/net/can/m_can/tcan4x5x-regmap.c       |   1 -
->  5 files changed, 121 insertions(+), 30 deletions(-)
->
+> Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
 
-The logic and coding style looks OK to me, but CAN-specific stuff should
-be reviewed by someone else.
-Just one nitpick in the last patch.
+Indicating this resolves a commit which was upstreamed in linux-3.4,
+while the fix for that commit 0bbadafdc49d ("um: allow disabling
+NO_IOMEM") was upstreamed only in linux-5.14, leaves out an important
+detail.
 
-Thanks,
-Michal
+Is the proper way of indicating this disconnect by adding to the fixes
+line the kernel?
+Fixes: f4a0391dfa91 ("ima: fix Kconfig dependencies") # v5.14+
 
-For entire series:
-Reviewed-by: Michal Kubiak <michal.kubiak@intel.com>
+-- 
+thanks,
 
-> -- 
-> 2.39.2
-> 
+Mimi
+
+
