@@ -2,54 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BD1B66B96AD
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 14:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEF166B9808
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 15:32:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232471AbjCNNpt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 09:45:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51860 "EHLO
+        id S230310AbjCNOco (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 10:32:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43526 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232695AbjCNNpS (ORCPT
+        with ESMTP id S229999AbjCNOcl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 09:45:18 -0400
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6813E8480E;
-        Tue, 14 Mar 2023 06:42:22 -0700 (PDT)
-Received: from [192.168.0.2] (ip5f5aeb5a.dynamic.kabel-deutschland.de [95.90.235.90])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits))
-        (No client certificate requested)
-        (Authenticated sender: pmenzel)
-        by mx.molgen.mpg.de (Postfix) with ESMTPSA id 3796961CC457B;
-        Tue, 14 Mar 2023 13:03:54 +0100 (CET)
-Message-ID: <e1b0452c-4068-deba-4773-14006fd32c2a@molgen.mpg.de>
-Date:   Tue, 14 Mar 2023 13:03:53 +0100
+        Tue, 14 Mar 2023 10:32:41 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716F03AA6;
+        Tue, 14 Mar 2023 07:32:40 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EC4afX053264;
+        Tue, 14 Mar 2023 07:04:36 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1678795476;
+        bh=6l53nnX4K+pDVrp9K4RLIv0cfIZwxtsHwbhTfPUcPQs=;
+        h=Date:CC:Subject:To:References:From:In-Reply-To;
+        b=qUT9KKkRrQzKwqNUxv83bIjmSU5Q0jyYACHJ0WYff3t55Aiut4+B0FqnNzSHcAzCl
+         OfWRMO6sVv9fI/tW+49iYHMpHTS5QeLg9WTJReHAHHTOg7L1HnPj3MbctceAaVGhJb
+         nK+I3jV+B3LjxuW2U7QfRz0sRdF7KC5CXQmE09Ew=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EC4aS0008855
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Tue, 14 Mar 2023 07:04:36 -0500
+Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
+ Mar 2023 07:04:35 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE108.ent.ti.com
+ (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
+ Frontend Transport; Tue, 14 Mar 2023 07:04:35 -0500
+Received: from [10.250.151.56] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EC4Viu121153;
+        Tue, 14 Mar 2023 07:04:32 -0500
+Message-ID: <e112ada0-ae7d-8f5e-cdf9-9844bf42a9a0@ti.com>
+Date:   Tue, 14 Mar 2023 17:34:31 +0530
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
  Thunderbird/102.8.0
-Subject: Re: [PATCH v10 2/3] dt-bindings: net: bluetooth: Add NXP bluetooth
- support
+CC:     <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <srk@ti.com>,
+        <s-vadapalli@ti.com>
+Subject: Re: [PATCH 0/2] Enable MCU CPSW2G on J7AHP
+To:     <nm@ti.com>, <vigneshr@ti.com>, <kristo@kernel.org>,
+        <robh+dt@kernel.org>, <krzysztof.kozlowski@linaro.org>,
+        <krzysztof.kozlowski+dt@linaro.org>
+References: <20230314104055.1475054-1-s-vadapalli@ti.com>
 Content-Language: en-US
-To:     Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, marcel@holtmann.org,
-        johan.hedberg@gmail.com, luiz.dentz@gmail.com,
-        gregkh@linuxfoundation.org, jirislaby@kernel.org,
-        alok.a.tiwari@oracle.com, hdanton@sina.com,
-        ilpo.jarvinen@linux.intel.com, leon@kernel.org,
-        simon.horman@corigine.com, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-bluetooth@vger.kernel.org, linux-serial@vger.kernel.org,
-        amitkumar.karwar@nxp.com, rohit.fule@nxp.com, sherry.sun@nxp.com
-References: <20230313144028.3156825-1-neeraj.sanjaykale@nxp.com>
- <20230313144028.3156825-3-neeraj.sanjaykale@nxp.com>
-From:   Paul Menzel <pmenzel@molgen.mpg.de>
-In-Reply-To: <20230313144028.3156825-3-neeraj.sanjaykale@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From:   Siddharth Vadapalli <s-vadapalli@ti.com>
+In-Reply-To: <20230314104055.1475054-1-s-vadapalli@ti.com>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,URIBL_BLOCKED autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,101 +69,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear Neeraj,
+Hello,
 
-
-Thank you for your patch.
-
-Am 13.03.23 um 15:40 schrieb Neeraj Sanjay Kale:
-> Add binding document for NXP bluetooth chipsets attached over UART.
+On 14-03-2023 16:10, Siddharth Vadapalli wrote:
+> Hello,
 > 
-> Signed-off-by: Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> ---
-> v2: Resolved dt_binding_check errors. (Rob Herring)
-> v2: Modified description, added specific compatibility devices, corrected
-> indentations. (Krzysztof Kozlowski)
-> v3: Modified description, renamed file (Krzysztof Kozlowski)
-> v4: Resolved dt_binding_check errors, corrected indentation.
-> (Rob Herring, Krzysztof Kozlowski)
-> v5: Corrected serial device name in example. (Krzysztof Kozlowski)
-> ---
->   .../net/bluetooth/nxp,88w8987-bt.yaml         | 46 +++++++++++++++++++
->   MAINTAINERS                                   |  6 +++
->   2 files changed, 52 insertions(+)
->   create mode 100644 Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
+> This series adds missing device id property in mcu_navss device-tree node.
+> Also, the device-tree support for enabling MCU CPSW2G is added.
 > 
-> diff --git a/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> new file mode 100644
-> index 000000000000..b913ca59b489
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> @@ -0,0 +1,46 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/bluetooth/nxp,88w8987-bt.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: NXP Bluetooth chips
-> +
-> +description:
-> +  This binding describes UART-attached NXP bluetooth chips.
-> +  These chips are dual-radio chips supporting WiFi and Bluetooth.
-> +  The bluetooth works on standard H4 protocol over 4-wire UART.
-> +  The RTS and CTS lines are used during FW download.
-> +  To enable power save mode, the host asserts break signal
-> +  over UART-TX line to put the chip into power save state.
-> +  De-asserting break wakes-up the BT chip.
+> ---
+> NOTE: While this series does not depend on any other series for being,
+> merged it depends on the following series for MCU CPSW2G functionality:
+> 1. https://lore.kernel.org/r/20230314085500.10597-1-j-choudhary@ti.com/
+> 2. https://lore.kernel.org/r/20230308201513.116638-1-j-choudhary@ti.com/
 
-The verb is spelled with a space: wakes up the BT chip.
+Please do not merge this series until the above two series have been
+merged. Otherwise, it will result in an indefinite probe deferral during
+boot. By saying that this series does not depend on other series for
+being merged, I meant to say that this series will apply cleanly without
+any dependencies.
 
-You seem to break the line whenever a sentence ends. Is that intentional?
+Regards,
+Siddharth.
 
-> +
-> +maintainers:
-> +  - Neeraj Sanjay Kale <neeraj.sanjaykale@nxp.com>
-> +
-> +properties:
-> +  compatible:
-> +    enum:
-> +      - nxp,88w8987-bt
-> +      - nxp,88w8997-bt
-> +
-> +  fw-init-baudrate:
-> +    description:
-> +      Chip baudrate after FW is downloaded and initialized.
-> +      This property depends on the module vendor's
-> +      configuration. If this property is not specified,
-> +      115200 is set as default.
-> +
-> +required:
-> +  - compatible
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    serial {
-> +        bluetooth {
-> +            compatible = "nxp,88w8987-bt";
-> +            fw-init-baudrate = <3000000>;
-> +        };
-> +    };
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 32dd41574930..030ec6fe89df 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -22835,6 +22835,12 @@ L:	linux-mm@kvack.org
->   S:	Maintained
->   F:	mm/zswap.c
->   
-> +NXP BLUETOOTH WIRELESS DRIVERS
-> +M:	Amitkumar Karwar <amitkumar.karwar@nxp.com>
-> +M:	Neeraj Kale <neeraj.sanjaykale@nxp.com>
-> +S:	Maintained
-> +F:	Documentation/devicetree/bindings/net/bluetooth/nxp,88w8987-bt.yaml
-> +
->   THE REST
->   M:	Linus Torvalds <torvalds@linux-foundation.org>
->   L:	linux-kernel@vger.kernel.org
+> 
+> Siddharth Vadapalli (2):
+>   arm64: dts: ti: k3-j784s4-mcu-wakeup: Add device id property for
+>     mcu_navss
+>   arm64: dts: ti: k3-j784s4-evm: Enable MCU CPSW2G
+> 
+>  arch/arm64/boot/dts/ti/k3-j784s4-evm.dts      | 47 +++++++++++++++++++
+>  .../boot/dts/ti/k3-j784s4-mcu-wakeup.dtsi     |  2 +
+>  2 files changed, 49 insertions(+)
+> 
