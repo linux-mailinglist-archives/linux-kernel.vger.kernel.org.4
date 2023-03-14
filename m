@@ -2,67 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B39AC6B8996
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:27:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B6C16B8997
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 05:27:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229535AbjCNE1G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 00:27:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42426 "EHLO
+        id S229961AbjCNE1g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 00:27:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbjCNE1F (ORCPT
+        with ESMTP id S229436AbjCNE1Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 00:27:05 -0400
-Received: from smtp-relay-canonical-0.canonical.com (smtp-relay-canonical-0.canonical.com [185.125.188.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 372C53C2F
-        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:27:03 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.101.196.174])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by smtp-relay-canonical-0.canonical.com (Postfix) with ESMTPSA id 602BB3F26C;
-        Tue, 14 Mar 2023 04:26:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-        s=20210705; t=1678768017;
-        bh=S0syQkHlJN47iLJT4ST+uEEbah8U42DRtx2LS4tK5Vg=;
-        h=From:To:Cc:Subject:Date:Message-Id:MIME-Version;
-        b=bkiWYTZgV4sinMnYEJdQOkid3+/Nms2uTxUytpGIb/ekLLvZRIUzCAujIcD2zbL3c
-         UbkzcQf4yE7HvTuZEczJkQzgU2vnFOJHUiN+VKTUak6CT83OpX9iceD07SIZxWqNP/
-         Stju+zH931znsjanD4fVIr6Dm6FidxArosAGI/Ef0Za0MYZVr7pNr/ZY1W5NH+qzPb
-         87SH1nT2NzY2LAzM7OhRhEfM2zegV23L7pe14BhgSWavF0XLana5SbIifiK4PJ9hTq
-         ZCC+274uRGzJEzk3MlTKRRGY2LXSjzshh8Eci1LUfoUlbBccjSX4GKqdcgH8UQ6d8c
-         3Awgn56Z/7xSQ==
-From:   Kai-Heng Feng <kai.heng.feng@canonical.com>
-To:     alexander.deucher@amd.com, christian.koenig@amd.com,
-        Xinhui.Pan@amd.com
-Cc:     Kai-Heng Feng <kai.heng.feng@canonical.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Likun Gao <Likun.Gao@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Victor Zhao <Victor.Zhao@amd.com>,
-        Jack Xiao <Jack.Xiao@amd.com>, Evan Quan <evan.quan@amd.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Lijo Lazar <lijo.lazar@amd.com>,
-        YiPeng Chai <YiPeng.Chai@amd.com>,
-        Andrey Grodzovsky <andrey.grodzovsky@amd.com>,
-        Somalapuram Amaranath <Amaranath.Somalapuram@amd.com>,
-        Bokun Zhang <Bokun.Zhang@amd.com>, Leo Liu <leo.liu@amd.com>,
-        Veerabadhran Gopalakrishnan <veerabadhran.gopalakrishnan@amd.com>,
-        Richard Gong <richard.gong@amd.com>,
-        Kenneth Feng <kenneth.feng@amd.com>,
-        Jiansong Chen <Jiansong.Chen@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] drm/amdgpu/nv: Apply ASPM quirk on Intel ADL + AMD Navi
-Date:   Tue, 14 Mar 2023 12:26:02 +0800
-Message-Id: <20230314042605.346458-1-kai.heng.feng@canonical.com>
-X-Mailer: git-send-email 2.34.1
+        Tue, 14 Mar 2023 00:27:25 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 938D35D26F
+        for <linux-kernel@vger.kernel.org>; Mon, 13 Mar 2023 21:27:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1678768037; x=1710304037;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RYd0fa8XsBGMhyX7/+YBW2CDfeQLQYaPilVAlKkbo/I=;
+  b=Honjwmt7cH6/0V2Zbta71sGiPSF1DnDuZq4s3ZRF9NcQprniMr4DB0wr
+   FVvYZV4h4riAw3xjMJHCMrrBY5Aiz9nRRf/gGeyzAm9x02l2J8fOVj5II
+   Sn0RD85o+W6RW8th8o+I9FUnwp7f7/cheRcZ/jFAPMkYoPKNbP9TLuRQH
+   0nS98pEvYBAa9Hib3BekYDJ4koV353qvxX0o1dfaJ62luDVGqojy4YhKP
+   ZPpU6QPCXpRNikZ3dJkNYYePAjJsbPk6k4SMCWlpwMbmlNnd3mF6/z6JX
+   rUaXCmUY58Hr+nVN/zLxHnq/Nhxh2zfcp/4LBXtjKnJP2sBviy8j3rXMH
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="423597282"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="423597282"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Mar 2023 21:27:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10648"; a="709128172"
+X-IronPort-AV: E=Sophos;i="5.98,258,1673942400"; 
+   d="scan'208";a="709128172"
+Received: from lkp-server01.sh.intel.com (HELO b613635ddfff) ([10.239.97.150])
+  by orsmga008.jf.intel.com with ESMTP; 13 Mar 2023 21:27:14 -0700
+Received: from kbuild by b613635ddfff with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1pbwFl-0006X6-2t;
+        Tue, 14 Mar 2023 04:27:13 +0000
+Date:   Tue, 14 Mar 2023 12:26:41 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     Song Shuai <suagrfillet@gmail.com>, sudeep.holla@arm.com,
+        gregkh@linuxfoundation.org, rafael@kernel.org,
+        conor.dooley@microchip.com, ionela.voinescu@arm.com
+Cc:     llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Song Shuai <suagrfillet@gmail.com>
+Subject: Re: [PATCH] arch_topology: Clear LLC sibling when cacheinfo teardown
+Message-ID: <202303141253.k5dETDoR-lkp@intel.com>
+References: <20230313102752.1134472-1-suagrfillet@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20230313102752.1134472-1-suagrfillet@gmail.com>
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS,URIBL_BLOCKED autolearn=ham autolearn_force=no
+        SPF_HELO_NONE,SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,116 +67,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-S2idle resume freeze can be observed on Intel ADL + AMD WX5500. This is
-caused by commit 0064b0ce85bb ("drm/amd/pm: enable ASPM by default").
+Hi Song,
 
-The root cause is still not clear for now.
+Thank you for the patch! Yet something to improve:
 
-So extend and apply the ASPM quirk from commit e02fe3bc7aba
-("drm/amdgpu: vi: disable ASPM on Intel Alder Lake based systems"), to
-workaround the issue on Navi cards too.
+[auto build test ERROR on driver-core/driver-core-testing]
+[also build test ERROR on driver-core/driver-core-next driver-core/driver-core-linus linus/master v6.3-rc2 next-20230310]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Fixes: 0064b0ce85bb ("drm/amd/pm: enable ASPM by default")
-Link: https://gitlab.freedesktop.org/drm/amd/-/issues/2458
-Signed-off-by: Kai-Heng Feng <kai.heng.feng@canonical.com>
----
- drivers/gpu/drm/amd/amdgpu/amdgpu.h        |  1 +
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c | 15 +++++++++++++++
- drivers/gpu/drm/amd/amdgpu/nv.c            |  2 +-
- drivers/gpu/drm/amd/amdgpu/vi.c            | 15 ---------------
- 4 files changed, 17 insertions(+), 16 deletions(-)
+url:    https://github.com/intel-lab-lkp/linux/commits/Song-Shuai/arch_topology-Clear-LLC-sibling-when-cacheinfo-teardown/20230313-182946
+patch link:    https://lore.kernel.org/r/20230313102752.1134472-1-suagrfillet%40gmail.com
+patch subject: [PATCH] arch_topology: Clear LLC sibling when cacheinfo teardown
+config: x86_64-randconfig-a014-20230313 (https://download.01.org/0day-ci/archive/20230314/202303141253.k5dETDoR-lkp@intel.com/config)
+compiler: clang version 14.0.6 (https://github.com/llvm/llvm-project f28c006a5895fc0e329fe15fead81e37457cb1d1)
+reproduce (this is a W=1 build):
+        wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
+        chmod +x ~/bin/make.cross
+        # https://github.com/intel-lab-lkp/linux/commit/a9aca0a81b31b421e3bbfa08fd205a8bec651afe
+        git remote add linux-review https://github.com/intel-lab-lkp/linux
+        git fetch --no-tags linux-review Song-Shuai/arch_topology-Clear-LLC-sibling-when-cacheinfo-teardown/20230313-182946
+        git checkout a9aca0a81b31b421e3bbfa08fd205a8bec651afe
+        # save the config file
+        mkdir build_dir && cp config build_dir/.config
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 olddefconfig
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=clang make.cross W=1 O=build_dir ARCH=x86_64 SHELL=/bin/bash drivers/
 
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-index 164141bc8b4a..c697580f1ee4 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-@@ -1272,6 +1272,7 @@ void amdgpu_device_pci_config_reset(struct amdgpu_device *adev);
- int amdgpu_device_pci_reset(struct amdgpu_device *adev);
- bool amdgpu_device_need_post(struct amdgpu_device *adev);
- bool amdgpu_device_should_use_aspm(struct amdgpu_device *adev);
-+bool aspm_support_quirk_check(void);
- 
- void amdgpu_cs_report_moved_bytes(struct amdgpu_device *adev, u64 num_bytes,
- 				  u64 num_vis_bytes);
-diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-index c4a4e2fe6681..c09f19385628 100644
---- a/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-+++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_device.c
-@@ -80,6 +80,10 @@
- 
- #include <drm/drm_drv.h>
- 
-+#if IS_ENABLED(CONFIG_X86)
-+#include <asm/intel-family.h>
-+#endif
-+
- MODULE_FIRMWARE("amdgpu/vega10_gpu_info.bin");
- MODULE_FIRMWARE("amdgpu/vega12_gpu_info.bin");
- MODULE_FIRMWARE("amdgpu/raven_gpu_info.bin");
-@@ -1356,6 +1360,17 @@ bool amdgpu_device_should_use_aspm(struct amdgpu_device *adev)
- 	return pcie_aspm_enabled(adev->pdev);
- }
- 
-+bool aspm_support_quirk_check(void)
-+{
-+#if IS_ENABLED(CONFIG_X86)
-+	struct cpuinfo_x86 *c = &cpu_data(0);
-+
-+	return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
-+#else
-+	return true;
-+#endif
-+}
-+
- /* if we get transitioned to only one device, take VGA back */
- /**
-  * amdgpu_device_vga_set_decode - enable/disable vga decode
-diff --git a/drivers/gpu/drm/amd/amdgpu/nv.c b/drivers/gpu/drm/amd/amdgpu/nv.c
-index 855d390c41de..921adf66e3c4 100644
---- a/drivers/gpu/drm/amd/amdgpu/nv.c
-+++ b/drivers/gpu/drm/amd/amdgpu/nv.c
-@@ -578,7 +578,7 @@ static void nv_pcie_gen3_enable(struct amdgpu_device *adev)
- 
- static void nv_program_aspm(struct amdgpu_device *adev)
- {
--	if (!amdgpu_device_should_use_aspm(adev))
-+	if (!amdgpu_device_should_use_aspm(adev) || !aspm_support_quirk_check())
- 		return;
- 
- 	if (!(adev->flags & AMD_IS_APU) &&
-diff --git a/drivers/gpu/drm/amd/amdgpu/vi.c b/drivers/gpu/drm/amd/amdgpu/vi.c
-index 12ef782eb478..e61ae372d674 100644
---- a/drivers/gpu/drm/amd/amdgpu/vi.c
-+++ b/drivers/gpu/drm/amd/amdgpu/vi.c
-@@ -81,10 +81,6 @@
- #include "mxgpu_vi.h"
- #include "amdgpu_dm.h"
- 
--#if IS_ENABLED(CONFIG_X86)
--#include <asm/intel-family.h>
--#endif
--
- #define ixPCIE_LC_L1_PM_SUBSTATE	0x100100C6
- #define PCIE_LC_L1_PM_SUBSTATE__LC_L1_SUBSTATES_OVERRIDE_EN_MASK	0x00000001L
- #define PCIE_LC_L1_PM_SUBSTATE__LC_PCI_PM_L1_2_OVERRIDE_MASK	0x00000002L
-@@ -1138,17 +1134,6 @@ static void vi_enable_aspm(struct amdgpu_device *adev)
- 		WREG32_PCIE(ixPCIE_LC_CNTL, data);
- }
- 
--static bool aspm_support_quirk_check(void)
--{
--#if IS_ENABLED(CONFIG_X86)
--	struct cpuinfo_x86 *c = &cpu_data(0);
--
--	return !(c->x86 == 6 && c->x86_model == INTEL_FAM6_ALDERLAKE);
--#else
--	return true;
--#endif
--}
--
- static void vi_program_aspm(struct amdgpu_device *adev)
- {
- 	u32 data, data1, orig;
+If you fix the issue, kindly add following tag where applicable
+| Reported-by: kernel test robot <lkp@intel.com>
+| Link: https://lore.kernel.org/oe-kbuild-all/202303141253.k5dETDoR-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/base/cacheinfo.c:818:2: error: implicit declaration of function 'clear_llc_topology' is invalid in C99 [-Werror,-Wimplicit-function-declaration]
+           clear_llc_topology(cpu);
+           ^
+   1 error generated.
+
+
+vim +/clear_llc_topology +818 drivers/base/cacheinfo.c
+
+   811	
+   812	static int cacheinfo_cpu_pre_down(unsigned int cpu)
+   813	{
+   814		if (cpumask_test_and_clear_cpu(cpu, &cache_dev_map))
+   815			cpu_cache_sysfs_exit(cpu);
+   816	
+   817		free_cache_attributes(cpu);
+ > 818		clear_llc_topology(cpu);
+   819		return 0;
+   820	}
+   821	
+
 -- 
-2.34.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests
