@@ -2,58 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 800FB6BA289
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:32:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9880D6BA28B
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 23:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231397AbjCNWcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 18:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51494 "EHLO
+        id S229765AbjCNWct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 18:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229960AbjCNWcK (ORCPT
+        with ESMTP id S229540AbjCNWcq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 18:32:10 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAFA497D5;
-        Tue, 14 Mar 2023 15:32:04 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EMVtI4058100;
-        Tue, 14 Mar 2023 17:31:55 -0500
+        Tue, 14 Mar 2023 18:32:46 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 864A64A1D8;
+        Tue, 14 Mar 2023 15:32:31 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 32EMWHsb064993;
+        Tue, 14 Mar 2023 17:32:17 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1678833115;
-        bh=DhzlH4GzY1LO8CmnlmnsPPW1iitsgQan4vs6erUI454=;
+        s=ti-com-17Q1; t=1678833137;
+        bh=GQqHwyqCtwVa92bHH7eV7/KUpPO84Jr0Ue9kxmkBlrA=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=JDfhQiHy+YcXDsxFZn6iOsE6kZ1Ul5L1KjM9xqJLvPJ+pj2OUbEI4OccoknZ8dnWI
-         WL0FZItxuiUJ+ezs8Aru/SmYDThdMnck7gIjfFd+agkCuuah+NaMpyMFCjDizf5wiE
-         0ii0Y3uW973O3UL13CPtasM5ULMbxciUkakIoVkI=
-Received: from DFLE114.ent.ti.com (dfle114.ent.ti.com [10.64.6.35])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EMVtYD092235
+        b=Ak+HXIhutYrdTTIzgl6Pv3UAGBiVStApyAhC0JbNBEWbKlKjkdaBQYUyOncT5pU0u
+         5yvf9NwlQxCZI8nzXhSxU2pqR009QAoCmTG4K7aYSe9MmPELNd7EKe0svxQp+Q9IuN
+         6mtRfg9mz6L+i0GUGrRvAIt1bOaUZcLTSE77i+dI=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 32EMWG7t019074
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Tue, 14 Mar 2023 17:31:55 -0500
-Received: from DFLE105.ent.ti.com (10.64.6.26) by DFLE114.ent.ti.com
- (10.64.6.35) with Microsoft SMTP Server (version=TLS1_2,
+        Tue, 14 Mar 2023 17:32:16 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16; Tue, 14
- Mar 2023 17:31:55 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DFLE105.ent.ti.com
- (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ Mar 2023 17:32:16 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.16 via
- Frontend Transport; Tue, 14 Mar 2023 17:31:55 -0500
+ Frontend Transport; Tue, 14 Mar 2023 17:32:16 -0500
 Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EMVtjt024054;
-        Tue, 14 Mar 2023 17:31:55 -0500
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 32EMWG7b016126;
+        Tue, 14 Mar 2023 17:32:16 -0500
 From:   Nishanth Menon <nm@ti.com>
-To:     <vigneshr@ti.com>, <devarsht@ti.com>, <bb@ti.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <kristo@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <hnagalla@ti.com>, <j-luthra@ti.com>,
-        <praneeth@ti.com>, <a-bhatia1@ti.com>
-Subject: Re: [PATCH v3] arm64: dts: ti: k3-am62a7-sk: Fix DDR size to full 4GB
-Date:   Tue, 14 Mar 2023 17:31:54 -0500
-Message-ID: <167883309637.2460.7423926194678720333.b4-ty@ti.com>
+To:     <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>, <b-kapoor@ti.com>,
+        <linux-kernel@vger.kernel.org>
+CC:     Nishanth Menon <nm@ti.com>, <robh+dt@kernel.org>,
+        <kristo@kernel.org>, <a-govindraju@ti.com>, <vigneshr@ti.com>,
+        <krzysztof.kozlowski+dt@linaro.org>, <u-kumar1@ti.com>,
+        <kishon@ti.com>
+Subject: Re: [PATCH v3] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel property
+Date:   Tue, 14 Mar 2023 17:32:15 -0500
+Message-ID: <167883312312.2564.13311755073974811403.b4-ty@ti.com>
 X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20230314094645.3411599-1-devarsht@ti.com>
-References: <20230314094645.3411599-1-devarsht@ti.com>
+In-Reply-To: <20230203073724.29529-1-b-kapoor@ti.com>
+References: <20230203073724.29529-1-b-kapoor@ti.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
@@ -68,24 +68,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Devarsh Thakkar,
+Hi Bhavya Kapoor,
 
-On Tue, 14 Mar 2023 15:16:45 +0530, Devarsh Thakkar wrote:
-> All revisions of AM62A7-SK board have 4GB LPDDR4 Micron
-> MT53E2G32D4DE-046 AUT:B memory. Commit 38c4a08c820c ("arm64: dts: ti:
-> Add support for AM62A7-SK") enabled just 2GB due to a schematics error
-> in early revision of the board. Fix it by enabling full 4GB available on
-> the platform.
+On Fri, 3 Feb 2023 13:07:24 +0530, Bhavya Kapoor wrote:
+> According to latest errata of J721e [1], (i2024) 'MMCSD: Peripherals
+> Do Not Support HS400' which applies to MMCSD0 subsystem. Speed modes
+> supported has been already updated in commit eb8f6194e807 ("arm64: dts: ti: k3-j721e-main: Update the speed modes supported and their itap delay values for MMCSD subsystems")
+> but it missed dropping 'ti,strobe-sel' property which is only required
+> by HS400 speed mode.
 > 
-> Design docs: Link: https://www.ti.com/lit/zip/sprr459
+> Thus, drop 'ti,strobe-sel' property from kernel dtsi for J721e SoC.
 > 
 > [...]
 
 I have applied the following to branch ti-k3-dts-next on [1].
 Thank you!
 
-[1/1] arm64: dts: ti: k3-am62a7-sk: Fix DDR size to full 4GB
-      commit: a1bc0d6084dba8a31831c65318a8a8e46f00906f
+[1/1] arm64: dts: ti: k3-j721e-main: Remove ti,strobe-sel property
+      commit: 4f4b30a777d3e61603119297965343a37be36435
 
 All being well this means that it will be integrated into the linux-next
 tree (usually sometime in the next 24 hours) and sent up the chain during
