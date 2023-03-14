@@ -2,189 +2,367 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 18F7D6BA072
-	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:09:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 304A96BA075
+	for <lists+linux-kernel@lfdr.de>; Tue, 14 Mar 2023 21:11:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbjCNUJX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 14 Mar 2023 16:09:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52298 "EHLO
+        id S230502AbjCNULO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 14 Mar 2023 16:11:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54036 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230346AbjCNUJV (ORCPT
+        with ESMTP id S230051AbjCNULL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 14 Mar 2023 16:09:21 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF83D22013;
-        Tue, 14 Mar 2023 13:09:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-        Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-        Sender:Reply-To:Content-ID:Content-Description;
-        bh=IaZ/Ro/ijOLAt3RzYQfBauDHIMb1QN04KckKloToQhQ=; b=H/OzrV4ZZOdQ766rINvqXhx3Uz
-        DE5Ya4WI3WaejSgHW4GSEdlGfwC0K4ktwYnNkBk4L+TDz5TruL3iXen7Xmt1UDAFY7rF0xZ418wzN
-        cql632ZS1KbI0zaDvhisw6wF200LC2ayvUqscm3z8DxN6yRCRSz4iuMeoBctga4b74Dg2+NrhMnSJ
-        s7zZdegBZ6tpHLq6CKItzi9PlmTsIzltgYbuE0vzrn2PAm0Urtp7bkugiePcGDG0XOfSDbT3BlKDY
-        ghLxTQg2eVkNAQYj9wF5Lbl7X3Fs3Iu7AtMARyxsIlkJswSTnVSoc1/tbtEZvBO+dt/Qk4EfaBvS6
-        4x5cqx7Q==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1pcAwy-00DCLc-6R; Tue, 14 Mar 2023 20:08:48 +0000
-Date:   Tue, 14 Mar 2023 20:08:48 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     David Howells <dhowells@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Christoph Hellwig <hch@infradead.org>, Jan Kara <jack@suse.cz>,
-        Jeff Layton <jlayton@kernel.org>,
-        David Hildenbrand <david@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Logan Gunthorpe <logang@deltatee.com>,
-        Hillf Danton <hdanton@sina.com>, linux-fsdevel@vger.kernel.org,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Daniel Golle <daniel@makrotopia.org>,
-        Guenter Roeck <groeck7@gmail.com>,
-        Christoph Hellwig <hch@lst.de>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH v17 03/14] shmem: Implement splice-read
-Message-ID: <ZBDUUAGO9HbZG8EW@casper.infradead.org>
-References: <20230308165251.2078898-1-dhowells@redhat.com>
- <20230308165251.2078898-4-dhowells@redhat.com>
- <CAHk-=wjYR3h5Q-_i3Q2Et=P8WsrjwNA20fYpEQf9nafHwBNALA@mail.gmail.com>
- <ZBCkDvveAIJENA0G@casper.infradead.org>
- <CAHk-=wiO-Z7QdKnA+yeLCROiVVE6dBK=TaE7wz4hMc0gE2SPRw@mail.gmail.com>
+        Tue, 14 Mar 2023 16:11:11 -0400
+Received: from domac.alu.hr (domac.alu.unizg.hr [161.53.235.3])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5426B168A0;
+        Tue, 14 Mar 2023 13:11:08 -0700 (PDT)
+Received: from localhost (localhost [127.0.0.1])
+        by domac.alu.hr (Postfix) with ESMTP id DBCB8604F7;
+        Tue, 14 Mar 2023 21:11:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678824665; bh=5kcXTSkgYUUoUVIK1nOhMOEpYpLIqELNd1sc4GcGIb8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=Uy5z9Pd9Nz6e9EC4hOcz1EBxaJHqkyFXQsqNW28LxXIOZoU6iS5//89VcrC9kfXO8
+         5Qr2tOUbc0QZ/E+ba2MQD0r0YvJftdQQfhOhY+xZBBH8oC5tgWfnwGwoaQvF2CZgju
+         wYbfYEeGKEAa+1E0+/C4eRjUjeqKi7JC2AViMI79y8cwiIOAQyxW0TqgXd6vARvJRD
+         IWDsLPg6wz7wxLNorcrnwYSqCOiOdUiIHMsuNeVkdqrfYEjn0zs8IDwPImkk9fJm3Q
+         Rvgl7DXqJCscGrxCgoYh7mWZRB5WkYtx8Jyhcb+Ij09BwIqvRg0vqf4OP0T05V1GS/
+         WfVmcTHxknkew==
+X-Virus-Scanned: Debian amavisd-new at domac.alu.hr
+Received: from domac.alu.hr ([127.0.0.1])
+        by localhost (domac.alu.hr [127.0.0.1]) (amavisd-new, port 10024)
+        with ESMTP id TeKHyCoNftv9; Tue, 14 Mar 2023 21:11:02 +0100 (CET)
+Received: from [192.168.1.4] (unknown [77.237.109.125])
+        by domac.alu.hr (Postfix) with ESMTPSA id 9BF0F604F3;
+        Tue, 14 Mar 2023 21:11:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=alu.unizg.hr; s=mail;
+        t=1678824662; bh=5kcXTSkgYUUoUVIK1nOhMOEpYpLIqELNd1sc4GcGIb8=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cWDFELt/X0fIYp7BqlRDJtvTSy5w1LXiuDLQoox8bmZqYwWqmfkozc+jaJR1ePAMJ
+         7Rpz7Jhzj01wMtR9h7+bSEXOnaDjXlCG+z7+kMxku0VqC1M1JYRHCSpH1k8XEqudgt
+         XgV8/WQvW0tbhOdJjJ83cgw9QII10txxFhEYTjr065hzAl1fKQt1Pw2LV3Ygm2NJGd
+         ouf4jsgI2Kvgn5iAFjgEIt1cxNbCJrW2ZTgLcfYJgwR+drAsqm9hP43SGLTueAKA4l
+         tzL5/b/AP3HSh1DnFnrbR2LRzSpR2aQakHm6PS+/Xy7SB9KlLEs07ZuMWfv+Inw1CH
+         fyzHtY9bk92vg==
+Message-ID: <910f9616-fdcc-51bd-786d-8ecc9f4b5179@alu.unizg.hr>
+Date:   Tue, 14 Mar 2023 21:10:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.8.0
+Subject: Re: BUG: selftest/net/tun: Hang in unregister_netdevice
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Shuah Khan <shuah@kernel.org>,
+        linux-kernel@vger.kernel.org
+References: <a0734a6b-9491-b43a-6dff-4d3498faee2e@alu.unizg.hr>
+ <d7a64812-73db-feb2-e6d6-e1d8c09a6fed@alu.unizg.hr>
+ <27769d34-521c-f0ef-b6c2-6bd452e4f9bf@alu.unizg.hr>
+ <CANn89iKi67YScgt5R0nHNAobjnSubBK6KsR9Ryoqu5ai4Opyrw@mail.gmail.com>
+Content-Language: en-US, hr
+From:   Mirsad Goran Todorovac <mirsad.todorovac@alu.unizg.hr>
+In-Reply-To: <CANn89iKi67YScgt5R0nHNAobjnSubBK6KsR9Ryoqu5ai4Opyrw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAHk-=wiO-Z7QdKnA+yeLCROiVVE6dBK=TaE7wz4hMc0gE2SPRw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE,URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,NICE_REPLY_A,SPF_HELO_NONE,SPF_PASS,
+        URIBL_BLOCKED autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Mar 14, 2023 at 11:02:40AM -0700, Linus Torvalds wrote:
-> On Tue, Mar 14, 2023 at 9:43 AM Matthew Wilcox <willy@infradead.org> wrote:
-> >
-> > The problem is that we might have swapped out the shmem folio.  So we
-> > don't want to clear the page, but ask swap to fill the page.
+On 14. 03. 2023. 17:02, Eric Dumazet wrote:
+> On Tue, Mar 14, 2023 at 9:01 AM Mirsad Todorovac
+> <mirsad.todorovac@alu.unizg.hr> wrote:
 > 
-> Doesn't shmem_swapin_folio() already basically do all that work?
+>> After a while, kernel message start looping:
+>>
+>>   kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>>
+>> Message from syslogd@pc-mtodorov at Mar 14 16:57:15 ...
+>>   kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>>
+>> Message from syslogd@pc-mtodorov at Mar 14 16:57:24 ...
+>>   kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>>
+>> Message from syslogd@pc-mtodorov at Mar 14 16:57:26 ...
+>>   kernel:unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+>>
+>> This hangs processes until very late stage of shutdown.
+>>
+>> I can confirm that CONFIG_DEBUG_{KOBJECT,KOBJECT_RELEASE}=y were the only changes
+>> to .config in between builds.
+>>
+>> Best regards,
+>> Mirsad
+>>
 > 
-> The real oddity with shmem - compared to other filesystems - is that
-> the xarray has a value entry instead of being a real folio. And yes,
-> the current filemap code will then just ignore such entries as
-> "doesn't exist", and so the regular read iterators will all fail on
-> it.
+> Try adding in your config
 > 
-> But while filemap_get_read_batch() will stop at a value-folio, I feel
-> like filemap_create_folio() should be able to turn a value page into a
-> "real" page. Right now it already allocates said page, but then I
-> think filemap_add_folio() will return -EEXIST when said entry exists
-> as a value.
+> CONFIG_NET_DEV_REFCNT_TRACKER=y
+> CONFIG_NET_NS_REFCNT_TRACKER=y
 > 
-> But *if* instead of -EEXIST we could just replace the value with the
-> (already locked) page, and have some sane way to pass that value
-> (which is the swap entry data) to readpage(), I think that should just
-> do it all.
+> Thanks.
 
-This was basically what I had in mind:
+Not at all.
 
-I don't think this will handle a case like:
+According to the info here: https://cateee.net/lkddb/web-lkddb/NET_DEV_REFCNT_TRACKER.html
+no kerenel param was needed.
 
-Alloc order-0 folio at index 4
-Alloc order-0 folio at index 7
-Swap out both folios
-Alloc order-9 folio at indices 0-511
+I have got the same hang, and additional debug information appears to be this
+(in /var/log/messages):
 
-But I don't see where shmem currently handles that either.  Maybe it
-falls back to order-0 folios instead of the crude BUG_ON I put in.
-Hugh?
+Mar 14 20:58:20 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:20 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:20 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:20 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:20 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:20 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:20 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:20 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:20 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:20 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:20 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:20 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:20 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:20 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:20 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:20 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:20 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:20 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:20 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:20 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:20 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:20 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:20 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:20 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:20 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:20 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:20 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:20 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:20 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:20 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:20 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:20 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:20 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:20 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:20 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:20 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:20 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:20 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:30 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:30 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:30 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:30 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:30 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:30 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:30 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:30 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:30 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:30 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:30 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:30 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:30 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:30 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:30 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:30 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:30 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:30 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:30 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:30 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:30 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:30 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:30 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:30 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:30 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:30 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:30 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:30 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:30 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:30 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:30 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:30 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:30 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:30 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:30 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:30 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:30 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:30 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:40 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:40 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:40 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:40 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:40 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:40 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:40 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:40 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:40 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:40 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:40 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:40 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:40 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:40 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:40 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:40 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:40 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:40 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:40 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:40 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:40 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:40 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:40 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:40 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:40 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:40 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:40 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:40 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:40 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:40 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:40 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:40 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:40 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:40 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:40 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:40 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:40 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:40 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:50 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:50 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:50 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:50 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:50 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:50 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:50 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:50 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:50 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:50 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:50 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:50 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:50 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:50 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:50 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:50 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:50 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:50 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:50 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:50 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:58:50 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:50 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:58:50 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:58:50 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:58:50 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:50 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:50 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:50 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:50 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:50 pc-mtodorov kernel: leaked reference.
+Mar 14 20:58:50 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:58:50 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:58:50 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:58:50 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:58:50 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:58:50 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:58:50 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:58:50 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:58:57 pc-mtodorov kernel: kmemleak: 1 new suspected memory leaks (see /sys/kernel/debug/kmemleak)
+Mar 14 20:59:00 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:59:00 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:00 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:59:00 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:59:00 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:59:00 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:00 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:00 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:00 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:00 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:00 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:00 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:59:00 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:59:00 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:59:00 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:00 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:00 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:00 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:00 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:01 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:59:01 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:01 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:59:01 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:59:01 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:59:01 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:01 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:01 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:01 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:01 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:01 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:01 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:59:01 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:59:01 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:59:01 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:01 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:01 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:01 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:01 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:10 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:59:10 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:10 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:59:10 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:59:10 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:59:10 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:10 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:10 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:10 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:10 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:10 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:10 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:59:10 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:59:10 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:59:10 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:10 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:10 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:10 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:10 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:11 pc-mtodorov kernel: unregister_netdevice: waiting for tap0 to become free. Usage count = 3
+Mar 14 20:59:11 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:11 pc-mtodorov kernel: net_rx_queue_update_kobjects+0x75/0x1d0
+Mar 14 20:59:11 pc-mtodorov kernel: netif_set_real_num_rx_queues+0x5b/0xb0
+Mar 14 20:59:11 pc-mtodorov kernel: tun_attach+0x1ec/0x5a0
+Mar 14 20:59:11 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:11 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:11 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:11 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:11 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+Mar 14 20:59:11 pc-mtodorov kernel: leaked reference.
+Mar 14 20:59:11 pc-mtodorov kernel: netdev_queue_update_kobjects+0x86/0x190
+Mar 14 20:59:11 pc-mtodorov kernel: netif_set_real_num_tx_queues+0x86/0x250
+Mar 14 20:59:11 pc-mtodorov kernel: tun_attach+0x1d7/0x5a0
+Mar 14 20:59:11 pc-mtodorov kernel: __tun_chr_ioctl+0xa58/0x17d0
+Mar 14 20:59:11 pc-mtodorov kernel: tun_chr_ioctl+0x17/0x20
+Mar 14 20:59:11 pc-mtodorov kernel: __x64_sys_ioctl+0x97/0xd0
+Mar 14 20:59:11 pc-mtodorov kernel: do_syscall_64+0x5c/0x90
+Mar 14 20:59:11 pc-mtodorov kernel: entry_SYSCALL_64_after_hwframe+0x72/0xdc
+[root@pc-mtodorov marvin]# 
 
-diff --git a/include/linux/shmem_fs.h b/include/linux/shmem_fs.h
-index 82c1262f396f..30f2502314de 100644
---- a/include/linux/shmem_fs.h
-+++ b/include/linux/shmem_fs.h
-@@ -114,12 +114,6 @@ int shmem_get_folio(struct inode *inode, pgoff_t index, struct folio **foliop,
- struct folio *shmem_read_folio_gfp(struct address_space *mapping,
- 		pgoff_t index, gfp_t gfp);
+I see those "leaked reference" lines are being printed here:
+https://elixir.bootlin.com/linux/v6.3-rc2/source/lib/ref_tracker.c#L55
+
+However, it is beyond the scope of my knowledge to track the actual leak.
+
+Hope this helps.
+
+Best regards,
+Mirsad
+
+-- 
+Mirsad Goran Todorovac
+Sistem inženjer
+Grafički fakultet | Akademija likovnih umjetnosti
+Sveučilište u Zagrebu
  
--static inline struct folio *shmem_read_folio(struct address_space *mapping,
--		pgoff_t index)
--{
--	return shmem_read_folio_gfp(mapping, index, mapping_gfp_mask(mapping));
--}
--
- static inline struct page *shmem_read_mapping_page(
- 				struct address_space *mapping, pgoff_t index)
- {
-diff --git a/mm/filemap.c b/mm/filemap.c
-index 57c1b154fb5a..8e4f95c5b65a 100644
---- a/mm/filemap.c
-+++ b/mm/filemap.c
-@@ -877,6 +877,8 @@ noinline int __filemap_add_folio(struct address_space *mapping,
- 					order, gfp);
- 		xas_lock_irq(&xas);
- 		xas_for_each_conflict(&xas, entry) {
-+			if (old)
-+				BUG_ON(shmem_mapping(mapping));
- 			old = entry;
- 			if (!xa_is_value(entry)) {
- 				xas_set_err(&xas, -EEXIST);
-@@ -885,7 +887,12 @@ noinline int __filemap_add_folio(struct address_space *mapping,
- 		}
- 
- 		if (old) {
--			if (shadowp)
-+			if (shmem_mapping(mapping)) {
-+				folio_set_swap_entry(folio,
-+						radix_to_swp_entry(old));
-+				folio_set_swapcache(folio);
-+				folio_set_swapbacked(folio);
-+			} else if (shadowp)
- 				*shadowp = old;
- 			/* entry may have been split before we acquired lock */
- 			order = xa_get_order(xas.xa, xas.xa_index);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 8e60826e4246..ea75c7dcf5ec 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -2059,6 +2059,18 @@ int shmem_get_folio(struct inode *inode, pgoff_t index, struct folio **foliop,
- 			mapping_gfp_mask(inode->i_mapping), NULL, NULL, NULL);
- }
- 
-+static int shmem_read_folio(struct file *file, struct folio *folio)
-+{
-+	if (folio_test_swapcache(folio)) {
-+		swap_readpage(&folio->page, true, NULL);
-+	} else {
-+		folio_zero_segment(folio, 0, folio_size(folio));
-+		folio_mark_uptodate(folio);
-+		folio_unlock(folio);
-+	}
-+	return 0;
-+}
-+
- /*
-  * This is like autoremove_wake_function, but it removes the wait queue
-  * entry unconditionally - even if something else had already woken the
-@@ -2396,7 +2408,8 @@ static int shmem_fadvise_willneed(struct address_space *mapping,
- 	xa_for_each_range(&mapping->i_pages, index, folio, start, end) {
- 		if (!xa_is_value(folio))
- 			continue;
--		folio = shmem_read_folio(mapping, index);
-+		folio = shmem_read_folio_gfp(mapping, index,
-+						mapping_gfp_mask(mapping));
- 		if (!IS_ERR(folio))
- 			folio_put(folio);
- 	}
-@@ -4037,6 +4050,7 @@ static int shmem_error_remove_page(struct address_space *mapping,
- }
- 
- const struct address_space_operations shmem_aops = {
-+	.read_folio	= shmem_read_folio,
- 	.writepage	= shmem_writepage,
- 	.dirty_folio	= noop_dirty_folio,
- #ifdef CONFIG_TMPFS
+System engineer
+Faculty of Graphic Arts | Academy of Fine Arts
+University of Zagreb, Republic of Croatia
+The European Union
+
